@@ -1,17 +1,18 @@
 #!/usr/bin/env node
 /*
- * Regenerates the coverage tables inside README.md (between the
- * <!-- coverage:start --> / <!-- coverage:end --> markers): every official UI5
- * demo kit sample of every library, marked with whether an abap2UI5 port exists.
+ * Regenerates two docs: every official UI5 demo kit sample of every library,
+ * marked with whether an abap2UI5 port exists.
+ *   - api.md      coverage report (Javascript / ABAP / Link columns)
+ *   - OVERVIEW.md same tables plus a rightmost System column that launches the
+ *                 app in the abap2UI5 system
  *
  * Universe of samples : an OpenUI5 checkout (env OPENUI5_DIR, default ./openui5)
  *                       src/<lib>/test/<lib>/demokit/sample/<Name>/
  * Ported samples      : this repo's src/**\/*.clas.abap, each carrying
  *                       "! Rebuild of the UI5 demo kit sample: <url>.../sample/<lib>.sample.<Name>
  *
- * All table links are external (absolute): Javascript -> the ui5/ template
- * folder on GitHub, ABAP -> the .clas.abap on GitHub, Link -> the live demo
- * kit sample app.
+ * All table links are external (absolute). Env: OPENUI5_DIR, REPO, REF,
+ * DEMOKIT, SYSTEM.
  *
  * Run:  OPENUI5_DIR=../openui5 node scripts/generate-coverage.mjs
  */
@@ -22,21 +23,24 @@ import path from 'path';
 const ROOT = path.join(path.dirname(new URL(import.meta.url).pathname), '..');
 const SRC = path.join(ROOT, 'src');
 const OPENUI5_DIR = process.env.OPENUI5_DIR || path.join(ROOT, 'openui5');
-const README = path.join(ROOT, 'README.md');
-const START = '<!-- coverage:start -->';
-const END = '<!-- coverage:end -->';
+const COVERAGE = path.join(ROOT, 'api.md');
+const OVERVIEW = path.join(ROOT, 'OVERVIEW.md');
 
 // link targets (overridable via env) — all links are external/absolute
 const REPO = process.env.REPO || 'abap2UI5/api';   // owner/name
 const REF = process.env.REF || 'main';             // branch the links resolve on
 const GH = `https://github.com/${REPO}`;
 const DEMOKIT = process.env.DEMOKIT || 'https://sapui5.hana.ondemand.com/sdk/#';
+// abap2UI5 system that serves the apps — set SYSTEM to your deployment host
+const SYSTEM = process.env.SYSTEM || 'https://your-system.example.com/sap/bc/z2ui5';
 // live demo kit sample app (needs the entity the sample belongs to)
 const demokitUrl = (entity, sampleId) => `${DEMOKIT}/entity/${entity}/sample/${sampleId}`;
 // collected JS template folder under ui5/
 const templateUrl = (lib, cls) => `${GH}/tree/${REF}/ui5/${lib}/${cls}`;
 // generated abap2UI5 class file under src/
 const abapUrl = (file) => `${GH}/blob/${REF}/${file.split(path.sep).join('/')}`;
+// start the app in the abap2UI5 system
+const systemUrl = (cls) => `${SYSTEM}?app_start=${cls.toUpperCase()}`;
 
 function walk(dir, out = []) {
   for (const name of fs.readdirSync(dir)) {
@@ -111,10 +115,6 @@ const bar = (n, d) => {
   return '█'.repeat(filled) + '░'.repeat(10 - filled);
 };
 
-let totalSamples = 0;
-let totalPorted = 0;
-const out = [];
-
 // summary — sort by coverage desc, then library name
 const summary = libs
   .map((l) => {
@@ -123,56 +123,73 @@ const summary = libs
   })
   .sort((a, b) => (b.ported / b.total) - (a.ported / a.total) || a.lib.localeCompare(b.lib));
 
+let totalSamples = 0;
+let totalPorted = 0;
 for (const s of summary) { totalSamples += s.total; totalPorted += s.ported; }
 
-out.push(`Every official UI5 demo kit sample per library, marked ✅ ported / ❌ missing.`);
-out.push(`Overall **${totalPorted} / ${totalSamples}** (${pct(totalPorted, totalSamples)}).`);
-out.push('');
-
-out.push('### Coverage per module');
-out.push('');
-out.push('| Module | Samples | Ported | Coverage | |');
-out.push('|--------|--------:|-------:|---------:|---|');
-for (const s of summary) {
-  out.push(`| \`${s.lib}\` | ${s.total} | ${s.ported} | ${pct(s.ported, s.total)} | ${bar(s.ported, s.total)} |`);
-}
-out.push(`| **Total** | **${totalSamples}** | **${totalPorted}** | **${pct(totalPorted, totalSamples)}** | ${bar(totalPorted, totalSamples)} |`);
-out.push('');
-
-// detail per library — libraries in the same coverage-desc order
-out.push('### Samples per module');
-out.push('');
-out.push('All links are external: **Javascript** → the collected UI5 template');
-out.push('(`ui5/` folder), **ABAP** → the generated class, **Link** → the live');
-out.push('demo kit sample app.');
-out.push('');
-for (const { lib } of summary) {
-  const entry = libs.find((l) => l.lib === lib);
-  const p = entry.samples.filter((s) => s.port).length;
-  out.push(`#### \`${lib}\` — ${p}/${entry.samples.length} (${pct(p, entry.samples.length)})`);
-  out.push('');
-  out.push('| | Javascript | ABAP | Link |');
-  out.push('|---|-----------|------|------|');
-  for (const s of entry.samples) {
-    const js = s.port
-      ? `[\`${s.name}\`](${templateUrl(lib, s.port.cls)})`
-      : `\`${s.name}\``;
-    const abap = s.port ? `[\`${s.port.cls}\`](${abapUrl(s.port.file)})` : '—';
-    const link = s.entity
-      ? `[demo kit ↗](${demokitUrl(s.entity, `${lib}.sample.${s.name}`)})`
-      : '—';
-    out.push(`| ${s.port ? '✅' : '❌'} | ${js} | ${abap} | ${link} |`);
+// shared summary block (coverage per module)
+function summaryLines() {
+  const l = [];
+  l.push(`Every official UI5 demo kit sample per library, marked ✅ ported / ❌ missing.`);
+  l.push(`Overall **${totalPorted} / ${totalSamples}** (${pct(totalPorted, totalSamples)}).`);
+  l.push('');
+  l.push('## Coverage per module');
+  l.push('');
+  l.push('| Module | Samples | Ported | Coverage | |');
+  l.push('|--------|--------:|-------:|---------:|---|');
+  for (const s of summary) {
+    l.push(`| \`${s.lib}\` | ${s.total} | ${s.ported} | ${pct(s.ported, s.total)} | ${bar(s.ported, s.total)} |`);
   }
-  out.push('');
+  l.push(`| **Total** | **${totalSamples}** | **${totalPorted}** | **${pct(totalPorted, totalSamples)}** | ${bar(totalPorted, totalSamples)} |`);
+  l.push('');
+  return l;
 }
 
-// splice the block into README.md between the markers
-let readme = fs.readFileSync(README, 'utf8');
-if (!readme.includes(START) || !readme.includes(END)) {
-  console.error(`README.md is missing the ${START} / ${END} markers.`);
-  process.exit(1);
+// per-library detail tables; withSystem adds a rightmost launch-link column
+function detailLines(withSystem) {
+  const l = [];
+  l.push('## Samples per module');
+  l.push('');
+  l.push('All links are external: **Javascript** → the collected UI5 template');
+  l.push('(`ui5/` folder), **ABAP** → the generated class, **Link** → the live');
+  l.push(withSystem
+    ? 'demo kit sample app, **System** → starts the app in the abap2UI5 system.'
+    : 'demo kit sample app.');
+  l.push('');
+  const head = withSystem ? '| | Javascript | ABAP | Link | System |' : '| | Javascript | ABAP | Link |';
+  const sep = withSystem ? '|---|-----------|------|------|--------|' : '|---|-----------|------|------|';
+  for (const { lib } of summary) {
+    const entry = libs.find((e) => e.lib === lib);
+    const p = entry.samples.filter((s) => s.port).length;
+    l.push(`### \`${lib}\` — ${p}/${entry.samples.length} (${pct(p, entry.samples.length)})`);
+    l.push('');
+    l.push(head);
+    l.push(sep);
+    for (const s of entry.samples) {
+      const js = s.port ? `[\`${s.name}\`](${templateUrl(lib, s.port.cls)})` : `\`${s.name}\``;
+      const abap = s.port ? `[\`${s.port.cls}\`](${abapUrl(s.port.file)})` : '—';
+      const link = s.entity ? `[demo kit ↗](${demokitUrl(s.entity, `${lib}.sample.${s.name}`)})` : '—';
+      let row = `| ${s.port ? '✅' : '❌'} | ${js} | ${abap} | ${link} |`;
+      if (withSystem) row += ` ${s.port ? `[start ▶](${systemUrl(s.port.cls)})` : '—'} |`;
+      l.push(row);
+    }
+    l.push('');
+  }
+  return l;
 }
-const block = `${START}\n\n${out.join('\n').trimEnd()}\n\n${END}`;
-readme = readme.replace(new RegExp(`${START}[\\s\\S]*?${END}`), () => block);
-fs.writeFileSync(README, readme);
-console.log(`README.md coverage: ${totalPorted}/${totalSamples} ported across ${libs.length} libraries`);
+
+const coverage = ['# abap2UI5 — UI5 demo kit sample coverage', '', ...summaryLines(), ...detailLines(false)];
+fs.writeFileSync(COVERAGE, coverage.join('\n').trimEnd() + '\n');
+
+const overview = [
+  '# abap2UI5 — app overview',
+  '',
+  'Same as the [coverage](api.md) report, with a **System** column to launch each',
+  'ported app directly in the abap2UI5 system.',
+  '',
+  ...summaryLines(),
+  ...detailLines(true),
+];
+fs.writeFileSync(OVERVIEW, overview.join('\n').trimEnd() + '\n');
+
+console.log(`api.md + OVERVIEW.md: ${totalPorted}/${totalSamples} ported across ${libs.length} libraries`);

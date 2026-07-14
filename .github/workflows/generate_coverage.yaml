@@ -33,7 +33,7 @@ jobs:
     - name: Shallow clone OpenUI5 (sample universe)
       run: git clone --depth 1 https://github.com/SAP/openui5.git openui5
 
-    - name: Regenerate coverage tables in README
+    - name: Regenerate api.md and OVERVIEW.md
       env:
         OPENUI5_DIR: ./openui5
         REF: main
@@ -50,7 +50,10 @@ jobs:
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v8
       with:
-        add-paths: README.md
+        add-paths: |
+          api.md
+          OVERVIEW.md
+          README.md
         commit-message: Regenerate sample coverage
         author: 'github-actions[bot] <github-actions[bot]@users.noreply.github.com>'
         committer: 'github-actions[bot] <github-actions[bot]@users.noreply.github.com>'
