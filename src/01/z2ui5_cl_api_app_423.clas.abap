@@ -105,17 +105,28 @@ CLASS z2ui5_cl_api_app_423 IMPLEMENTATION.
     " the original sorts the items by text via a model sorter - the data is sorted in ABAP instead
     SORT t_countries BY text.
 
-    DATA(page) = z2ui5_cl_xml_view=>factory( ).
+    DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
-    page->page(
-        showheader = abap_false
-        class      = `sapUiContentPadding`
-        )->combobox( items = client->_bind( t_countries )
-            )->item(
-                key  = `{KEY}`
-                text = `{TEXT}` ).
+    " the original binds items with a model sorter { path: 'text' } - the data is sorted in ABAP instead
+    view->open( n = `View` ns = `mvc`
+        )->attr( n = `height`     v = `100%`
+        )->attr( n = `xmlns:core` v = `sap.ui.core`
+        )->attr( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
+        )->attr( n = `xmlns`      v = `sap.m`
 
-    client->view_display( page->stringify( ) ).
+        )->open( `Page`
+            )->attr( n = `showHeader` v = `false`
+            )->attr( n = `class`      v = `sapUiContentPadding`
+
+            )->open( `content`
+                )->open( `ComboBox`
+                    )->attr( n = `items` v = client->_bind( t_countries )
+
+                    )->leaf( n = `Item` ns = `core`
+                        )->attr( n = `key`  v = `{KEY}`
+                        )->attr( n = `text` v = `{TEXT}` ).
+
+    client->view_display( view->stringify( ) ).
 
   ENDMETHOD.
 

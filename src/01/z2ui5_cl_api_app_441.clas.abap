@@ -27,18 +27,22 @@ CLASS z2ui5_cl_api_app_441 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(page) = z2ui5_cl_xml_view=>factory( ).
+    DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
-    " The headerLevel property of the original sample is omitted here (available only since UI5 1.117)
-    page->list(
-           headertext = `Products`
-           items      = client->_bind( t_products )
-           )->items(
-               )->standard_list_item(
-                   title   = `{NAME}`
-                   counter = `{QUANTITY}` ).
+    " headerLevel="H2" of the original sample is omitted here (available only since UI5 1.117)
+    view->open( n = `View` ns = `mvc`
+        )->attr( n = `xmlns:mvc` v = `sap.ui.core.mvc`
+        )->attr( n = `xmlns`     v = `sap.m`
 
-    client->view_display( page->stringify( ) ).
+        )->open( `List`
+            )->attr( n = `headerText` v = `Products`
+            )->attr( n = `items`      v = client->_bind( t_products )
+
+            )->leaf( `StandardListItem`
+                )->attr( n = `title`   v = `{NAME}`
+                )->attr( n = `counter` v = `{QUANTITY}` ).
+
+    client->view_display( view->stringify( ) ).
 
   ENDMETHOD.
 
