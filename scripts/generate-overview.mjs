@@ -35,19 +35,33 @@ const apps = [];
 for (const f of walk(SRC)) {
   if (!f.endsWith('.clas.abap')) continue;
   const cls = path.basename(f, '.clas.abap');
-  const m = fs.readFileSync(f, 'utf8')
-    .match(/entity\/([^/\s]+)\/sample\/(\S+)/);
+  const content = fs.readFileSync(f, 'utf8');
+  const m = content.match(/entity\/([^/\s]+)\/sample\/(\S+)/);
   if (!m) continue;
   const entity = m[1];
   const id = m[2];
   const i = id.indexOf('.sample.');
   if (i === -1) continue;
+  // the header "! NOTES (generation): block, flattened to bullets joined by " // "
+  let notes = '';
+  const nm = content.match(/"! NOTES \(generation\):\n((?:"!.*\n)+?)CLASS /);
+  if (nm) {
+    const bullets = [];
+    for (const raw of nm[1].split('\n')) {
+      if (!raw.startsWith('"!')) continue;
+      const t = raw.replace(/^"!\s?/, '').replace(/\s+$/, '');
+      if (t.startsWith('- ')) bullets.push(t.slice(2));
+      else if (bullets.length) bullets[bullets.length - 1] += ' ' + t.trim();
+    }
+    notes = bullets.join(' // ');
+  }
   apps.push({
     module: id.slice(0, i),
     control: entity,
     name: id.slice(i + '.sample.'.length),
     cls,
     file: path.relative(ROOT, f).split(path.sep).join('/'),
+    notes,
   });
 }
 // order by module, then control, then sample name (case-insensitive)
@@ -60,19 +74,42 @@ apps.sort((a, b) =>
 // at runtime in view_display (the abap2UI5 start URL needs the system origin)
 const w = (k) => Math.max(...apps.map((a) => a[k].length));
 const wm = w('module'), wc = w('control'), wn = w('name'), wl = w('cls'), wf = w('file');
-const rows = apps.map((a) =>
-  `      ( module = \`${a.module}\`${' '.repeat(wm - a.module.length)}` +
-  ` control = \`${a.control}\`${' '.repeat(wc - a.control.length)}` +
-  ` name = \`${a.name}\`${' '.repeat(wn - a.name.length)}` +
-  ` class = \`${a.cls}\`${' '.repeat(wl - a.cls.length)}` +
-  ` path = \`${a.file}\`${' '.repeat(wf - a.file.length)} )`);
+// render a string as an ABAP backtick literal, splitting long text with && to stay < 255 cols
+const abapStr = (s) => {
+  const q = (x) => '`' + x + '`';
+  const esc = s.replace(/`/g, '``');
+  if (esc.length <= 200) return q(esc);
+  const parts = [];
+  let rest = esc;
+  while (rest.length > 200) {
+    let cut = rest.lastIndexOf(' ', 200);
+    if (cut < 100) cut = 200;
+    parts.push(rest.slice(0, cut));
+    rest = rest.slice(cut);
+  }
+  parts.push(rest);
+  return parts.map(q).join(' &&\n                 ');
+};
+const rows = apps.map((a) => {
+  const base =
+    `      ( module = \`${a.module}\`${' '.repeat(wm - a.module.length)}` +
+    ` control = \`${a.control}\`${' '.repeat(wc - a.control.length)}` +
+    ` name = \`${a.name}\`${' '.repeat(wn - a.name.length)}` +
+    ` class = \`${a.cls}\`${' '.repeat(wl - a.cls.length)}` +
+    ` path = \`${a.file}\`${' '.repeat(wf - a.file.length)}`;
+  return a.notes ? `${base}\n        notes = ${abapStr(a.notes)} )` : `${base} )`;
+});
 
 const abap = `"! Generated overview app - lists every abap2UI5 api sample app in a table.
 "! In the Sample column the name links the OpenUI5 source and the ↗ starts the
 "! live OpenUI5 sample; in the abap2UI5 column the class name links the generated
 "! ABAP class and the ↗ starts the app; Control links the OpenUI5 API - all
-"! opening in a new browser tab. Do not edit by hand - regenerate with
+"! opening in a new browser tab. The Note column shows a popover with the port's
+"! generation caveats when present. Do not edit by hand - regenerate with
 "! scripts/generate-overview.mjs
+"! NOTES (generation):
+"! - LIVE-TEST: the Note popover anchors to the pressed control via the event arg
+"!   \$event.oSource.sId; confirm it resolves the anchor in a running system.
 CLASS ${CLASS} DEFINITION PUBLIC.
 
   PUBLIC SECTION.
@@ -91,6 +128,8 @@ CLASS ${CLASS} DEFINITION PUBLIC.
         ui5_url   TYPE string,
         abap_url  TYPE string,
         start_url TYPE string,
+        notes     TYPE string,
+        has_notes TYPE abap_bool,
       END OF ty_s_app.
     TYPES ty_t_app TYPE STANDARD TABLE OF ty_s_app WITH DEFAULT KEY.
 
@@ -100,6 +139,7 @@ CLASS ${CLASS} DEFINITION PUBLIC.
     DATA client TYPE REF TO z2ui5_if_client.
 
     METHODS view_display.
+    METHODS on_event.
     METHODS get_catalog
       RETURNING
         VALUE(result) TYPE ty_t_app.
@@ -117,7 +157,39 @@ CLASS ${CLASS} IMPLEMENTATION.
       view_display( ).
     ELSEIF client->check_on_navigated( ).
       view_display( ).
+    ELSEIF client->check_on_event( ).
+      on_event( ).
     ENDIF.
+
+  ENDMETHOD.
+
+
+  METHOD on_event.
+
+    CASE client->get( )-event.
+
+      WHEN \`SHOW_NOTES\`.
+        " arg1 = the row's NOTES text, arg2 = the pressed control id (popover anchor)
+        SPLIT client->get_event_arg( 1 ) AT \` // \` INTO TABLE DATA(lt_line).
+
+        DATA(popover) = z2ui5_cl_api_xml=>factory( ).
+        DATA(box) = popover->open( \`Popover\`
+            )->attr( n = \`title\`        v = \`Generation notes\`
+            )->attr( n = \`placement\`    v = \`Auto\`
+            )->attr( n = \`contentWidth\` v = \`32rem\`
+
+            )->open( \`VBox\`
+                )->attr( n = \`class\` v = \`sapUiContentPadding\` ).
+
+        LOOP AT lt_line INTO DATA(lv_line).
+          box->leaf( \`Text\`
+              )->attr( n = \`text\` v = lv_line ).
+        ENDLOOP.
+
+        client->popover_display( xml   = popover->stringify( )
+                                 by_id = client->get_event_arg( 2 ) ).
+
+    ENDCASE.
 
   ENDMETHOD.
 
@@ -147,6 +219,7 @@ CLASS ${CLASS} IMPLEMENTATION.
                         |&sap-ui-xx-sample-lib={ <app>-module }|.
       <app>-abap_url  = |https://github.com/abap2UI5/api/blob/main/{ <app>-path }|.
       <app>-start_url = |{ start }{ to_upper( <app>-class ) }|.
+      <app>-has_notes = xsdbool( <app>-notes IS NOT INITIAL ).
 
     ENDLOOP.
 
@@ -186,7 +259,12 @@ CLASS ${CLASS} IMPLEMENTATION.
                             )->leaf( \`Text\`
                                 )->attr( n = \`text\` v = \`abap2UI5\`
 
-                    )->shut(
+                        )->shut(
+                        )->open( \`Column\`
+                            )->leaf( \`Text\`
+                                )->attr( n = \`text\` v = \`Note\`
+
+                        )->shut(
                     )->shut(
 
                     )->open( \`items\`
@@ -222,7 +300,16 @@ CLASS ${CLASS} IMPLEMENTATION.
                                     )->leaf( \`Link\`
                                         )->attr( n = \`text\`   v = \`↗\`
                                         )->attr( n = \`href\`   v = \`{START_URL}\`
-                                        )->attr( n = \`target\` v = \`_blank\` ).
+                                        )->attr( n = \`target\` v = \`_blank\`
+
+                                )->shut(
+                                )->leaf( \`Button\`
+                                    )->attr( n = \`icon\`    v = \`sap-icon://hint\`
+                                    )->attr( n = \`type\`    v = \`Transparent\`
+                                    )->attr( n = \`tooltip\` v = \`Generation notes\`
+                                    )->attr( n = \`visible\` v = \`{HAS_NOTES}\`
+                                    )->attr( n = \`press\`   v = client->_event( val   = \`SHOW_NOTES\`
+                                                                               t_arg = VALUE #( ( \`{NOTES}\` ) ( \`$event.oSource.sId\` ) ) ) ).
 
     client->view_display( view->stringify( ) ).
 
