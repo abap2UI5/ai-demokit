@@ -44,9 +44,12 @@ CLASS z2ui5_cl_api_app_448 IMPLEMENTATION.
 
   METHOD on_event.
 
-    IF client->check_on_event( `SHOW_MESSAGE_TOAST` ).
-      client->message_toast_display( |Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy\r\n eirmod.| ).
-    ENDIF.
+    CASE client->get( )-event.
+
+      WHEN `SHOW_MESSAGE_TOAST`.
+        client->message_toast_display( |Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy\r\n eirmod.| ).
+
+    ENDCASE.
 
   ENDMETHOD.
 
