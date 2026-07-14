@@ -76,11 +76,12 @@ Rules:
   deprecated control/property. If the sample needs anything newer or
   deprecated, stop and report the gap instead of porting.
 - Must pass abaplint for ABAP_STANDARD, ABAP_CLOUD and ABAP_702 (downport).
-- Add ABAP Doc above the class (the demo kit url is the OpenUI5 one on
-  sdk.openui5.org, never the commercial SAPUI5 host):
-    "! Generated port of a UI5 demo kit sample - not yet manually reviewed
-    "! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/<entity>/sample/<lib>.sample.<Name>
-    "! <full sample description>
+- Add ABAP Doc above the class (line 1 fixed; line 2 `<entity> - <SampleName>`;
+  line 3 the OpenUI5 demo kit url on sdk.openui5.org, never the commercial
+  SAPUI5 host):
+    "! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+    "! <entity> - <SampleName>
+    "! https://sdk.openui5.org/entity/<entity>/sample/<lib>.sample.<Name>
 - Any runtime asset URLs the sample uses (test-resources / resources images)
   also point at the OpenUI5 host (sdk.openui5.org), never SAPUI5.
 - Set the abapGit <DESCRIPT> to `<entity> - <demo kit description>`.

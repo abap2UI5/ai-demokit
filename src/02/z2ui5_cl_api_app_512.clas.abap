@@ -1,7 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.ui.layout.BlockLayout/sample/sap.ui.layout.sample.BlockLayoutDefault
-"! The BlockLayout is intended to be used with rows and cells. The cells have predefined width, the
-"! rows have predefined rendering modes - scrollable/vertical/horizontal.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.ui.layout.BlockLayout - BlockLayoutDefault
+"! https://sdk.openui5.org/entity/sap.ui.layout.BlockLayout/sample/sap.ui.layout.sample.BlockLayoutDefault
 CLASS z2ui5_cl_api_app_512 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

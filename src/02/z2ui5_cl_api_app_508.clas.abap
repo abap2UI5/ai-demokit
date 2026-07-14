@@ -1,6 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.ui.model.type.Integer/sample/sap.ui.core.sample.TypeInteger
-"! Formats and parses only the integer digits. The decimal digits are ignored.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.ui.model.type.Integer - TypeInteger
+"! https://sdk.openui5.org/entity/sap.ui.model.type.Integer/sample/sap.ui.core.sample.TypeInteger
 CLASS z2ui5_cl_api_app_508 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

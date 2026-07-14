@@ -1,7 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.MessageToast/sample/sap.m.sample.MessageToast
-"! The Message Toast displays the message text as an overlay to the current screen. It closes
-"! automatically after some time without requiring further user interaction.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.MessageToast - MessageToast
+"! https://sdk.openui5.org/entity/sap.m.MessageToast/sample/sap.m.sample.MessageToast
 CLASS z2ui5_cl_api_app_448 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

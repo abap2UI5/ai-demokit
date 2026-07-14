@@ -11,8 +11,8 @@
  *
  * Universe of samples : an OpenUI5 checkout (env OPENUI5_DIR, default ./openui5)
  *                       src/<lib>/test/<lib>/demokit/sample/<Name>/
- * Ported samples      : this repo's src/**\/*.clas.abap, each carrying
- *                       "! Rebuild of the UI5 demo kit sample: <url>.../sample/<lib>.sample.<Name>
+ * Ported samples      : this repo's src/**\/*.clas.abap, each carrying a header
+ *                       "! <url>.../entity/<entity>/sample/<lib>.sample.<Name>
  *
  * All table links are external (absolute) and point at OpenUI5 — the demo kit
  * (sdk.openui5.org) and the source repo (github.com/SAP/openui5); only the ABAP
@@ -69,7 +69,7 @@ for (const f of walk(SRC)) {
   const cls = path.basename(f, '.clas.abap');
   // ...#/entity/<entity>/sample/<lib>.sample.<Name>
   const m = fs.readFileSync(f, 'utf8')
-    .match(/Rebuild of the UI5 demo kit sample:\s*\S*?(?:entity\/([^/\s]+)\/)?sample\/(\S+)/);
+    .match(/(?:entity\/([^/\s]+)\/)?sample\/(\S+)/);
   if (!m) continue;
   const entity = m[1] || null;
   const id = m[2];                       // e.g. sap.m.sample.FacetFilterLight

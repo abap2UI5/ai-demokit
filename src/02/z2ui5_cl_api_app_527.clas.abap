@@ -1,6 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.ui.unified.Currency/sample/sap.ui.unified.sample.CurrencyInTable
-"! Display Currencies in Table
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.ui.unified.Currency - CurrencyInTable
+"! https://sdk.openui5.org/entity/sap.ui.unified.Currency/sample/sap.ui.unified.sample.CurrencyInTable
 CLASS z2ui5_cl_api_app_527 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

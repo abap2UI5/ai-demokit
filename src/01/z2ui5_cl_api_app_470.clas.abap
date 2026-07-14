@@ -1,9 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.Page/sample/sap.m.sample.PageStandardClasses
-"! This page implements the same sample as in 'Fiori Sample Page - sapUiFioriObjectPage' using
-"! standard margin classes. In contrast to using 'sapUiFioriObjectPage', the margins used for form,
-"! list, table and panel are responsive: they adapt to the available screen width. For more
-"! information, please search for 'Standard Margins' and take a look at our samples.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.Page - PageStandardClasses
+"! https://sdk.openui5.org/entity/sap.m.Page/sample/sap.m.sample.PageStandardClasses
 CLASS z2ui5_cl_api_app_470 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

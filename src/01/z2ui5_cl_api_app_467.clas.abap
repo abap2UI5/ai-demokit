@@ -1,7 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.ObjectNumber/sample/sap.m.sample.ObjectNumber
-"! The object number is a small building block representing an important, numerical attribute of an
-"! object together with it's unit. Often it is used in the last column of a table.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.ObjectNumber - ObjectNumber
+"! https://sdk.openui5.org/entity/sap.m.ObjectNumber/sample/sap.m.sample.ObjectNumber
 CLASS z2ui5_cl_api_app_467 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

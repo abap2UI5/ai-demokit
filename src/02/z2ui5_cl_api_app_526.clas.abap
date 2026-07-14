@@ -1,6 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.ui.unified.Currency/sample/sap.ui.unified.sample.Currency
-"! Display Currencies with proper Alignment
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.ui.unified.Currency - Currency
+"! https://sdk.openui5.org/entity/sap.ui.unified.Currency/sample/sap.ui.unified.sample.Currency
 CLASS z2ui5_cl_api_app_526 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

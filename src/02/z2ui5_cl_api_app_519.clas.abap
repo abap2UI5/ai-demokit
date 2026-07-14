@@ -1,8 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.ui.layout.HorizontalLayout/sample/sap.ui.layout.sample.HorizontalLayout
-"! The Horizontal Layout control is a simple way to align multiple controls horizontally. By default
-"! the contained controls are not wrapped. If you want more sophisticated layout options, consider
-"! Grid or Flex Box based layouts.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.ui.layout.HorizontalLayout - HorizontalLayout
+"! https://sdk.openui5.org/entity/sap.ui.layout.HorizontalLayout/sample/sap.ui.layout.sample.HorizontalLayout
 CLASS z2ui5_cl_api_app_519 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

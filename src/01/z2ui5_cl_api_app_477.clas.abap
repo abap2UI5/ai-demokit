@@ -1,6 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.StandardListItem/sample/sap.m.sample.StandardListItem
-"! This list item offers a standardized user interface for list content with only title.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.StandardListItem - StandardListItem
+"! https://sdk.openui5.org/entity/sap.m.StandardListItem/sample/sap.m.sample.StandardListItem
 CLASS z2ui5_cl_api_app_477 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

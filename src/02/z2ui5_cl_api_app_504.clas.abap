@@ -1,7 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.ui.model.type.Date/sample/sap.ui.core.sample.TypeDateAsDate
-"! This sample explains the formatting options of the Date type with the date being available as date
-"! object.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.ui.model.type.Date - TypeDateAsDate
+"! https://sdk.openui5.org/entity/sap.ui.model.type.Date/sample/sap.ui.core.sample.TypeDateAsDate
 CLASS z2ui5_cl_api_app_504 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

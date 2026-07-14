@@ -1,6 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.ui.integration.widgets.Card/sample/sap.ui.integration.sample.CardExplorer
-"! Card Explorer is the application where you can learn more about integration cards.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.ui.integration.widgets.Card - CardExplorer
+"! https://sdk.openui5.org/entity/sap.ui.integration.widgets.Card/sample/sap.ui.integration.sample.CardExplorer
 CLASS z2ui5_cl_api_app_510 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

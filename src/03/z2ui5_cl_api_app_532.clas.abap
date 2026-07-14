@@ -1,7 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.uxap.ObjectPageLayout/sample/sap.uxap.sample.AnchorBarWithNumbers
-"! This example shows how to visualize numbers in parenthesis after the corresponding section titles
-"! in the AnchorBar
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.uxap.ObjectPageLayout - AnchorBarWithNumbers
+"! https://sdk.openui5.org/entity/sap.uxap.ObjectPageLayout/sample/sap.uxap.sample.AnchorBarWithNumbers
 CLASS z2ui5_cl_api_app_532 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

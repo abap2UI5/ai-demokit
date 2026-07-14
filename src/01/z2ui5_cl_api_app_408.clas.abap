@@ -1,7 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.Text/sample/sap.m.sample.Text
-"! The text control can be used for embedding longer paragraphs of text into your application, that
-"! need text wrapping.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.Text - Text
+"! https://sdk.openui5.org/entity/sap.m.Text/sample/sap.m.sample.Text
 CLASS z2ui5_cl_api_app_408 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

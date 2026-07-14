@@ -1,8 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.List/sample/sap.m.sample.ListNavType
-"! If only a subset of the list items are navigable you should indicate those by setting their 'type'
-"! to 'Navigation'. This displays an navigation arrow. Do not show arrows if all items are navigable.
-"! This achieved by setting the 'type' to 'Active'.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.List - ListNavType
+"! https://sdk.openui5.org/entity/sap.m.List/sample/sap.m.sample.ListNavType
 CLASS z2ui5_cl_api_app_444 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

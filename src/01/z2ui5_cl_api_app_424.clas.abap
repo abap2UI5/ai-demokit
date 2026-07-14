@@ -1,7 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.ComboBox/sample/sap.m.sample.ComboBox2Columns
-"! Use the combo box dropdown list with two columns layout if you need to display additional
-"! information to your options, like e.g. currencies to countries or abbreviations to systems.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.ComboBox - ComboBox2Columns
+"! https://sdk.openui5.org/entity/sap.m.ComboBox/sample/sap.m.sample.ComboBox2Columns
 CLASS z2ui5_cl_api_app_424 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

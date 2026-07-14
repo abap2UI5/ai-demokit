@@ -1,6 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.uxap.ObjectPageSection/sample/sap.uxap.sample.ObjectPageSection
-"! This example explains the rules for the rendering of sections
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.uxap.ObjectPageSection - ObjectPageSection
+"! https://sdk.openui5.org/entity/sap.uxap.ObjectPageSection/sample/sap.uxap.sample.ObjectPageSection
 CLASS z2ui5_cl_api_app_414 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

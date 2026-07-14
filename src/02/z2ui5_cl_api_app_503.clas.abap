@@ -1,8 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.ui.model.type.Currency/sample/sap.ui.core.sample.TypeCurrency
-"! Formats the number by using the parameters defined for the given currency code. Either currency
-"! symbol, currency code or none of them can be included in the final formatted string. It parses the
-"! given string into an array which contains both the currency number and currency code.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.ui.model.type.Currency - TypeCurrency
+"! https://sdk.openui5.org/entity/sap.ui.model.type.Currency/sample/sap.ui.core.sample.TypeCurrency
 CLASS z2ui5_cl_api_app_503 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,7 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.ScrollContainer/sample/sap.m.sample.ScrollContainer
-"! The Scroll Container is a control that can display arbitrary content within a limited screen area
-"! and provides touch scrolling to make all content accessible.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.ScrollContainer - ScrollContainer
+"! https://sdk.openui5.org/entity/sap.m.ScrollContainer/sample/sap.m.sample.ScrollContainer
 CLASS z2ui5_cl_api_app_473 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

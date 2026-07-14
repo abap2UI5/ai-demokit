@@ -1,7 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.uxap.ObjectPageLayout/sample/sap.uxap.sample.AnchorBarNoPopover
-"! This example shows how to change the default behavior in order to be able to navigate to sections
-"! instead of subsections, using the Anchor Bar
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.uxap.ObjectPageLayout - AnchorBarNoPopover
+"! https://sdk.openui5.org/entity/sap.uxap.ObjectPageLayout/sample/sap.uxap.sample.AnchorBarNoPopover
 CLASS z2ui5_cl_api_app_413 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

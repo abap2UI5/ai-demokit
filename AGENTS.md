@@ -95,17 +95,20 @@ generator's job. `ui5/` is the generator's local input store; the `api.md`
 Each generated port carries ABAP Doc directly above `CLASS ... DEFINITION`:
 
 ```abap
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: <demo kit url>
-"! <full, untruncated sample description>
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! <entity> - <SampleName>
+"! <demo kit url>
 ```
 
-- The `<demo kit url>` is the **OpenUI5** demo kit link
+- Line 1 is fixed and literal. Line 2 is `<entity> - <SampleName>`, e.g.
+  `sap.m.CheckBox - CheckBoxTriState` (the `<SampleName>` is the sample id tail
+  after `.sample.`).
+- Line 3 `<demo kit url>` is the **OpenUI5** demo kit link
   (`https://sdk.openui5.org/entity/<entity>/sample/<lib>.sample.<Name>`) — its
-  `.../entity/<entity>/sample/<lib>.sample.<Name>` tail is what the coverage
-  generator parses to match a port to its source sample (§7). Always use the
-  OpenUI5 host (`sdk.openui5.org`), never the commercial SAPUI5 one. **Never
-  remove or reword this line.**
+  `.../entity/<entity>/sample/<lib>.sample.<Name>` tail is what the coverage and
+  overview generators parse to match a port to its source sample (§7). Always use
+  the OpenUI5 host (`sdk.openui5.org`), never the commercial SAPUI5 one. **Never
+  remove or reword this URL line.**
 - The abapGit `<DESCRIPT>` follows `<entity> - <demo kit description>`
   (e.g. `sap.m.Switch - Some say it is only a switch...`), truncated to 60 chars.
 - Use **only** controls and properties available since UI5 1.71; never a
@@ -378,12 +381,12 @@ node scripts/generate-overview.mjs                          # the overview app (
 
 - **Universe of samples** — every `demokit/sample/<Name>` directory in the
   OpenUI5 checkout at `$OPENUI5_DIR` (default `./openui5`).
-- **Ported set** — parsed from each `src/**/*.clas.abap` port's
-  `Rebuild of the UI5 demo kit sample: .../sample/<lib>.sample.<Name>` line.
+- **Ported set** — parsed from each `src/**/*.clas.abap` port's header URL line
+  `"! .../entity/<entity>/sample/<lib>.sample.<Name>`.
 - A port matches a sample on `(library, Name)`.
 - **Control (entity) for grouping / the demo kit link** — from each library's
   `demokit/docuindex.json` (`explored.entities[].samples[]`), with the port's
-  Rebuild URL (`.../entity/<entity>/sample/...`) as fallback.
+  header URL (`.../entity/<entity>/sample/...`) as fallback.
 - **api.md links are external** (absolute URLs, overridable via env) and point
   at **OpenUI5** — only the ABAP column links back to this repo:
   Control → the control's OpenUI5 API reference

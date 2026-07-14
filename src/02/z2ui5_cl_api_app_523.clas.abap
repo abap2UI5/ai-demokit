@@ -1,6 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.ui.layout.form.Form/sample/sap.ui.layout.sample.FormToolbar
-"! A form that uses Toolbars as Form header and FormContainer headers.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.ui.layout.form.Form - FormToolbar
+"! https://sdk.openui5.org/entity/sap.ui.layout.form.Form/sample/sap.ui.layout.sample.FormToolbar
 CLASS z2ui5_cl_api_app_523 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

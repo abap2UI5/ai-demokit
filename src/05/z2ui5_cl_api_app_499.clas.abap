@@ -1,6 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.tnt.SideNavigation/sample/sap.tnt.sample.SideNavigation
-"! SideNavigation in container with fixed width.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.tnt.SideNavigation - SideNavigation
+"! https://sdk.openui5.org/entity/sap.tnt.SideNavigation/sample/sap.tnt.sample.SideNavigation
 CLASS z2ui5_cl_api_app_499 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,7 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.GenericTag/sample/sap.uxap.sample.ObjectPageHeaderActionButtons
-"! This example demonstrates ObjectPage with ObjectPageHeaderActionButtons and a GenericTag in the
-"! header.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.GenericTag - ObjectPageHeaderActionButtons
+"! https://sdk.openui5.org/entity/sap.m.GenericTag/sample/sap.uxap.sample.ObjectPageHeaderActionButtons
 CLASS z2ui5_cl_api_app_411 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

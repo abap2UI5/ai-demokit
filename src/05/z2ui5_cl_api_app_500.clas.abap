@@ -1,7 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.tnt.ToolHeader/sample/sap.tnt.sample.ToolHeaderIconTabHeader
-"! ToolHeader can contain IconTabHeader. When both controls are combined, the IconTabHeader supports
-"! only inline text. No icons can be used.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.tnt.ToolHeader - ToolHeaderIconTabHeader
+"! https://sdk.openui5.org/entity/sap.tnt.ToolHeader/sample/sap.tnt.sample.ToolHeaderIconTabHeader
 CLASS z2ui5_cl_api_app_500 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

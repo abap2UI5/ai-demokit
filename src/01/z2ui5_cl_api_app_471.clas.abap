@@ -1,7 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.Panel/sample/sap.m.sample.PanelExpanded
-"! Panels also have the possibility to expand/collapse their content (including the infoToolbar if
-"! available). [since rel. 1.22]
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.Panel - PanelExpanded
+"! https://sdk.openui5.org/entity/sap.m.Panel/sample/sap.m.sample.PanelExpanded
 CLASS z2ui5_cl_api_app_471 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

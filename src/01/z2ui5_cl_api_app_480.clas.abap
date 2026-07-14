@@ -1,8 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.StandardListItem/sample/sap.m.sample.StandardListItemTitle
-"! By default the title size adapts to the available space and gets bigger if the description is
-"! empty. List items with and without descriptions results in titles with different sizes. In this
-"! cases it is better to switch the size adaption off.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.StandardListItem - StandardListItemTitle
+"! https://sdk.openui5.org/entity/sap.m.StandardListItem/sample/sap.m.sample.StandardListItemTitle
 CLASS z2ui5_cl_api_app_480 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

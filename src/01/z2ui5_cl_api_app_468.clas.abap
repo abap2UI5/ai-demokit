@@ -1,7 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.OverflowToolbar/sample/sap.m.sample.ToolbarEnabled
-"! The Enabled property can be used to enable or disable all the controls inside the
-"! OverflowToolbar/Toolbar.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.OverflowToolbar - ToolbarEnabled
+"! https://sdk.openui5.org/entity/sap.m.OverflowToolbar/sample/sap.m.sample.ToolbarEnabled
 CLASS z2ui5_cl_api_app_468 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

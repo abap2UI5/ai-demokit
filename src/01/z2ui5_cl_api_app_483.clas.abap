@@ -1,6 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.Table/sample/sap.m.sample.TableContextualWidthStatic
-"! This example shows the container-based pop-in behavior. The container has static width.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.Table - TableContextualWidthStatic
+"! https://sdk.openui5.org/entity/sap.m.Table/sample/sap.m.sample.TableContextualWidthStatic
 CLASS z2ui5_cl_api_app_483 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

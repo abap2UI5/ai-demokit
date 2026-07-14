@@ -1,6 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.DisplayListItem/sample/sap.m.sample.DisplayListItem
-"! Use the Display List Item for showing name/value pairs.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.DisplayListItem - DisplayListItem
+"! https://sdk.openui5.org/entity/sap.m.DisplayListItem/sample/sap.m.sample.DisplayListItem
 CLASS z2ui5_cl_api_app_430 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,6 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.ui.layout.FixFlex/sample/sap.ui.layout.sample.FixFlexMinFlexSize
-"! Shows a FixFlex control where the minFlexSize is set to 400px.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.ui.layout.FixFlex - FixFlexMinFlexSize
+"! https://sdk.openui5.org/entity/sap.ui.layout.FixFlex/sample/sap.ui.layout.sample.FixFlexMinFlexSize
 CLASS z2ui5_cl_api_app_515 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

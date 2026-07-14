@@ -1,7 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.Table/sample/sap.m.sample.TableAlternateRowColors
-"! Table with alternating light and dark background colors. Note: The effect of this feature is only
-"! visible in some themes (e.g. SAP Belize or SAP Quartz).
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.Table - TableAlternateRowColors
+"! https://sdk.openui5.org/entity/sap.m.Table/sample/sap.m.sample.TableAlternateRowColors
 CLASS z2ui5_cl_api_app_482 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

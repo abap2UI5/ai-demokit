@@ -1,6 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.ObjectHeader/sample/sap.m.sample.ObjectHeaderResponsiveV
-"! This is a responsive Object Header without a number and with a Title, 3 Statuses/Attributes.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.ObjectHeader - ObjectHeaderResponsiveV
+"! https://sdk.openui5.org/entity/sap.m.ObjectHeader/sample/sap.m.sample.ObjectHeaderResponsiveV
 CLASS z2ui5_cl_api_app_465 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

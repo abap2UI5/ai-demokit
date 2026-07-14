@@ -1,9 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.SegmentedButton/sample/sap.m.sample.SegmentedButton
-"! The Segmented Button allows the user to pick one out of many options for displaying the content of
-"! the current page. It is a UI pattern from iOS, now also available for other platforms. Putting the
-"! Segmented Button to a Bar control on non-iOS platforms will result in something very close to a
-"! tab.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.SegmentedButton - SegmentedButton
+"! https://sdk.openui5.org/entity/sap.m.SegmentedButton/sample/sap.m.sample.SegmentedButton
 CLASS z2ui5_cl_api_app_474 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,6 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.ui.layout.cssgrid.CSSGrid/sample/sap.ui.layout.sample.NestedGrids
-"! CSSGrid example nested grids.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.ui.layout.cssgrid.CSSGrid - NestedGrids
+"! https://sdk.openui5.org/entity/sap.ui.layout.cssgrid.CSSGrid/sample/sap.ui.layout.sample.NestedGrids
 CLASS z2ui5_cl_api_app_522 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

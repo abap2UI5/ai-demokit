@@ -1,7 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.Toolbar/sample/sap.m.sample.ToolbarShrinkable
-"! Toolbar items can shrink/expand when the toolbar is resized. This behavior is enabled/disabled via
-"! the ToolbarLayoutData layout. It is also possible to set min/max width for shrinkable items.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.Toolbar - ToolbarShrinkable
+"! https://sdk.openui5.org/entity/sap.m.Toolbar/sample/sap.m.sample.ToolbarShrinkable
 CLASS z2ui5_cl_api_app_486 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

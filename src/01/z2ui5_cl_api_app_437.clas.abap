@@ -1,6 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.Input/sample/sap.m.sample.InputGrouping
-"! Items in the Input could be grouped by a property
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.Input - InputGrouping
+"! https://sdk.openui5.org/entity/sap.m.Input/sample/sap.m.sample.InputGrouping
 CLASS z2ui5_cl_api_app_437 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

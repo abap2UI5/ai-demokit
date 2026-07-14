@@ -1,7 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.ui.core.theming/sample/sap.ui.core.sample.BasicThemeParameters
-"! Sample provides a link to the Theme Parameter Toolbox. There you can easily search, preview, and
-"! filter semantic theme parameters.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.ui.core.theming - BasicThemeParameters
+"! https://sdk.openui5.org/entity/sap.ui.core.theming/sample/sap.ui.core.sample.BasicThemeParameters
 CLASS z2ui5_cl_api_app_502 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

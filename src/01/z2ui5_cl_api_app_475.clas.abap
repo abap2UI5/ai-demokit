@@ -1,6 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.SelectList/sample/sap.m.sample.SelectList
-"! A SelectList allows the user to select one item from a list of choices.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.SelectList - SelectList
+"! https://sdk.openui5.org/entity/sap.m.SelectList/sample/sap.m.sample.SelectList
 CLASS z2ui5_cl_api_app_475 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

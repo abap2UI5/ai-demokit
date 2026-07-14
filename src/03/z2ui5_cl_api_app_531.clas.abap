@@ -1,6 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.uxap.ObjectPageHeaderContent/sample/sap.uxap.sample.HeaderContent
-"! This is an example of an ObjectPageHeaderContent.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.uxap.ObjectPageHeaderContent - HeaderContent
+"! https://sdk.openui5.org/entity/sap.uxap.ObjectPageHeaderContent/sample/sap.uxap.sample.HeaderContent
 CLASS z2ui5_cl_api_app_531 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

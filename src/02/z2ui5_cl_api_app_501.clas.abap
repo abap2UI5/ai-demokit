@@ -1,7 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.ui.core.Icon/sample/sap.ui.core.sample.Icon
-"! Built with an embedded font, icons scale well, and can be altered with CSS. They can also fire a
-"! press event. See the Icon Explorer for more icons.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.ui.core.Icon - Icon
+"! https://sdk.openui5.org/entity/sap.ui.core.Icon/sample/sap.ui.core.sample.Icon
 CLASS z2ui5_cl_api_app_501 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

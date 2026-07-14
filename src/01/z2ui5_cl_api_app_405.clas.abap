@@ -1,7 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.FlexBox/sample/sap.m.sample.FlexBoxSizeAdjustments
-"! Automatic size adjustments can be achieved for Flex Items with the use of Flex Item Data settings
-"! on the contained controls.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.FlexBox - FlexBoxSizeAdjustments
+"! https://sdk.openui5.org/entity/sap.m.FlexBox/sample/sap.m.sample.FlexBoxSizeAdjustments
 CLASS z2ui5_cl_api_app_405 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

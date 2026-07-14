@@ -1,6 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.MultiInput/sample/sap.m.sample.MultiInput
-"! MultiInput provides functionality to add / remove / enter tokens.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.MultiInput - MultiInput
+"! https://sdk.openui5.org/entity/sap.m.MultiInput/sample/sap.m.sample.MultiInput
 CLASS z2ui5_cl_api_app_454 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,7 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.ui.core.StandardMargins/sample/sap.m.sample.StandardNoMargins
-"! Use our standard 'No-Margins' classes to remove existing margins from your control. You can either
-"! remove all margins at once or remove the margin on one or more sides.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.ui.core.StandardMargins - StandardNoMargins
+"! https://sdk.openui5.org/entity/sap.ui.core.StandardMargins/sample/sap.m.sample.StandardNoMargins
 CLASS z2ui5_cl_api_app_497 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

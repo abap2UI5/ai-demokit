@@ -1,7 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.List/sample/sap.m.sample.ListCounter
-"! The counter of an item quickly shows how many detail entries are related, without having to
-"! navigate to the detail page.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.List - ListCounter
+"! https://sdk.openui5.org/entity/sap.m.List/sample/sap.m.sample.ListCounter
 CLASS z2ui5_cl_api_app_441 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

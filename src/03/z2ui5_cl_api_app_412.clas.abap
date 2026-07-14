@@ -1,7 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.uxap.ObjectPageHeaderContent/sample/sap.uxap.sample.ObjectPageHeaderContentPriorities
-"! The sample shows how to set priorities of the ObjectPageHeader content items by using the
-"! ObjectPageHeaderContentLayoutData element
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.uxap.ObjectPageHeaderContent - ObjectPageHeaderContentPriorities
+"! https://sdk.openui5.org/entity/sap.uxap.ObjectPageHeaderContent/sample/sap.uxap.sample.ObjectPageHeaderContentPriorities
 CLASS z2ui5_cl_api_app_412 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

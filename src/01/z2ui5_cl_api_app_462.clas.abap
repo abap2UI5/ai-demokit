@@ -1,8 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.ObjectHeader/sample/sap.m.sample.ObjectHeaderImage
-"! An Object Header will also make space for an image if one is specified, via a URL for the 'icon'
-"! property. Note: This example shows the image inside ObjectHeader with the responsive property set
-"! to false. On phone in portrait mode, the image remains visible.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.ObjectHeader - ObjectHeaderImage
+"! https://sdk.openui5.org/entity/sap.m.ObjectHeader/sample/sap.m.sample.ObjectHeaderImage
 CLASS z2ui5_cl_api_app_462 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

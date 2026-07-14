@@ -1,6 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.SelectList/sample/sap.m.sample.SelectListWithIcons
-"! A SelectList with icons.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.SelectList - SelectListWithIcons
+"! https://sdk.openui5.org/entity/sap.m.SelectList/sample/sap.m.sample.SelectListWithIcons
 CLASS z2ui5_cl_api_app_476 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

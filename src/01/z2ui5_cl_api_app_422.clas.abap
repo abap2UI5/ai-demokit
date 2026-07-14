@@ -1,6 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.ColorPalette/sample/sap.m.sample.ColorPalette
-"! The standalone ColorPalette in a container (sap.ui.layout.SimpleForm).
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.ColorPalette - ColorPalette
+"! https://sdk.openui5.org/entity/sap.m.ColorPalette/sample/sap.m.sample.ColorPalette
 CLASS z2ui5_cl_api_app_422 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

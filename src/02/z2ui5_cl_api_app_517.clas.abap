@@ -1,8 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.ui.layout.Grid/sample/sap.ui.layout.sample.GridInfo
-"! You can use the Grid control to make responsive table-free layouts; here we are using a default
-"! indent and span, and specifying the Small settings such that the image and text will stack on a
-"! small display.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.ui.layout.Grid - GridInfo
+"! https://sdk.openui5.org/entity/sap.ui.layout.Grid/sample/sap.ui.layout.sample.GridInfo
 CLASS z2ui5_cl_api_app_517 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,7 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.f.ShellBar/sample/sap.f.sample.ShellBar
-"! Shell Bar example showing the control title as part of a mega menu, configurable by the app
-"! developer.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.f.ShellBar - ShellBar
+"! https://sdk.openui5.org/entity/sap.f.ShellBar/sample/sap.f.sample.ShellBar
 CLASS z2ui5_cl_api_app_419 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

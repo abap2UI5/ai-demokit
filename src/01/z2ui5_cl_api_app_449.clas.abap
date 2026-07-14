@@ -1,6 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.MessageView/sample/sap.m.sample.MessageViewMessageManager
-"! A sample showing how you can connect the MessageView with MessageManager.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.MessageView - MessageViewMessageManager
+"! https://sdk.openui5.org/entity/sap.m.MessageView/sample/sap.m.sample.MessageViewMessageManager
 CLASS z2ui5_cl_api_app_449 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

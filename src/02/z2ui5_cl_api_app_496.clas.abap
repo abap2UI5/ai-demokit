@@ -1,9 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.ui.core.StandardMargins/sample/sap.m.sample.StandardMarginsTwoSided
-"! Clear the space to the left and right, top and bottom of your control. Choose a size ('Tiny',
-"! 'Small', 'Medium' or 'Large', which stands for 8px (0.5rem), 16px (1rem), 32px (2rem) or 48px
-"! (3rem) respectively) and an orientation ('BeginEnd', 'TopBottom'). If you would like to clear a
-"! 32px space to the left and right, you would add class 'sapUiMediumMarginBeginEnd'.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.ui.core.StandardMargins - StandardMarginsTwoSided
+"! https://sdk.openui5.org/entity/sap.ui.core.StandardMargins/sample/sap.m.sample.StandardMarginsTwoSided
 CLASS z2ui5_cl_api_app_496 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

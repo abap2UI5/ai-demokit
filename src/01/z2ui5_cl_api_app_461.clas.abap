@@ -1,6 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.ObjectHeader/sample/sap.m.sample.ObjectHeaderCondensed
-"! The Object Header is shown in condensed mode with title, number, number unit and one attribute.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.ObjectHeader - ObjectHeaderCondensed
+"! https://sdk.openui5.org/entity/sap.m.ObjectHeader/sample/sap.m.sample.ObjectHeaderCondensed
 CLASS z2ui5_cl_api_app_461 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,7 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.ui.layout.FixFlex/sample/sap.ui.layout.sample.FixFlexFixedSize
-"! Shows a FixFlex control where fixContentSize is set to a specific value(200px) and
-"! sap.m.scrollContainer is enabling vertical scrolling.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.ui.layout.FixFlex - FixFlexFixedSize
+"! https://sdk.openui5.org/entity/sap.ui.layout.FixFlex/sample/sap.ui.layout.sample.FixFlexFixedSize
 CLASS z2ui5_cl_api_app_410 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,6 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.Carousel/sample/sap.m.sample.CarouselWithControls
-"! With the Carousel a user can browse through multi-page content by swiping left or right.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.Carousel - CarouselWithControls
+"! https://sdk.openui5.org/entity/sap.m.Carousel/sample/sap.m.sample.CarouselWithControls
 CLASS z2ui5_cl_api_app_420 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

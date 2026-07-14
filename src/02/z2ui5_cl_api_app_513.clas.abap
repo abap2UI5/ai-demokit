@@ -1,6 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.ui.layout.BlockLayout/sample/sap.ui.layout.sample.BlockLayoutLinkTitle
-"! The BlockLayout Cells can have links as titles. The link text overwrites the title text.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.ui.layout.BlockLayout - BlockLayoutLinkTitle
+"! https://sdk.openui5.org/entity/sap.ui.layout.BlockLayout/sample/sap.ui.layout.sample.BlockLayoutLinkTitle
 CLASS z2ui5_cl_api_app_513 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

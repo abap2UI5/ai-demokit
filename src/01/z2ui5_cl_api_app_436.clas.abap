@@ -1,6 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.Input/sample/sap.m.sample.InputAssistedTwoValues
-"! This example shows how to easily implement an assisted input with two-value suggestions.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.Input - InputAssistedTwoValues
+"! https://sdk.openui5.org/entity/sap.m.Input/sample/sap.m.sample.InputAssistedTwoValues
 CLASS z2ui5_cl_api_app_436 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

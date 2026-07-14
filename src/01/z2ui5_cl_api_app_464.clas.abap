@@ -1,7 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.ObjectHeader/sample/sap.m.sample.ObjectHeaderResponsiveII
-"! This is a responsive Object Header with a Title, 2 Statuses/Attributes rendered below the title in
-"! a Master/Detail mode (fullScreenOptimized = false).
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.ObjectHeader - ObjectHeaderResponsiveII
+"! https://sdk.openui5.org/entity/sap.m.ObjectHeader/sample/sap.m.sample.ObjectHeaderResponsiveII
 CLASS z2ui5_cl_api_app_464 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

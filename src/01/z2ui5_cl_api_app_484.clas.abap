@@ -1,9 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.TextArea/sample/sap.m.sample.TextAreaValueUpdate
-"! Since 1.30 the value property of sap.m.TextArea is not updated on every keystroke, but first when
-"! the user presses Enter or leaves the input. The change was necessary to fully support the standard
-"! UI5 data binding with formatters and types. If you still need immediate update you have 2 options:
-"! Handle liveChange events or enable the boolean property valueLiveUpdate.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.TextArea - TextAreaValueUpdate
+"! https://sdk.openui5.org/entity/sap.m.TextArea/sample/sap.m.sample.TextAreaValueUpdate
 CLASS z2ui5_cl_api_app_484 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

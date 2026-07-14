@@ -1,7 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.ui.layout.VerticalLayout/sample/sap.ui.layout.sample.VerticalLayout
-"! The Vertical Layout control is a simple way to align multiple controls vertically. If you want more
-"! sophisticated layout options, consider Grid or Flex Box based layouts.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.ui.layout.VerticalLayout - VerticalLayout
+"! https://sdk.openui5.org/entity/sap.ui.layout.VerticalLayout/sample/sap.ui.layout.sample.VerticalLayout
 CLASS z2ui5_cl_api_app_520 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

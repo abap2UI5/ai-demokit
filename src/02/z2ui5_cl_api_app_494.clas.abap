@@ -1,6 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.ui.core.StandardMargins/sample/sap.m.sample.StandardMarginsResponsive
-"! Clear the space around your control, where the margin depends on the device your are using.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.ui.core.StandardMargins - StandardMarginsResponsive
+"! https://sdk.openui5.org/entity/sap.ui.core.StandardMargins/sample/sap.m.sample.StandardMarginsResponsive
 CLASS z2ui5_cl_api_app_494 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

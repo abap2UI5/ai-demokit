@@ -1,7 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.ObjectIdentifier/sample/sap.m.sample.ObjectIdentifier
-"! The object identifier is a small building block representing an object by a title and short
-"! description. Often it is used in the first column of a table.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.ObjectIdentifier - ObjectIdentifier
+"! https://sdk.openui5.org/entity/sap.m.ObjectIdentifier/sample/sap.m.sample.ObjectIdentifier
 CLASS z2ui5_cl_api_app_466 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

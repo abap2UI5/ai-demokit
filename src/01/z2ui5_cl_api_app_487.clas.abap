@@ -1,6 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.Tree/sample/sap.m.sample.Tree
-"! Tree displays data in hierarchical structure.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.Tree - Tree
+"! https://sdk.openui5.org/entity/sap.m.Tree/sample/sap.m.sample.Tree
 CLASS z2ui5_cl_api_app_487 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

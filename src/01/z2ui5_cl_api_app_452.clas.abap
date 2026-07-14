@@ -1,6 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.MultiComboBox/sample/sap.m.sample.MultiComboBoxGrouping
-"! Items in the MultiComboBox could be grouped by a property
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.MultiComboBox - MultiComboBoxGrouping
+"! https://sdk.openui5.org/entity/sap.m.MultiComboBox/sample/sap.m.sample.MultiComboBoxGrouping
 CLASS z2ui5_cl_api_app_452 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,7 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.ComboBox/sample/sap.m.sample.ComboBox
-"! The combo box control provides a list box with items and a text field allowing the user to either
-"! type a value directly into the control or choose from the list of existing items.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.ComboBox - ComboBox
+"! https://sdk.openui5.org/entity/sap.m.ComboBox/sample/sap.m.sample.ComboBox
 CLASS z2ui5_cl_api_app_423 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,7 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.TextArea/sample/sap.m.sample.TextArea
-"! The Text Area allows to enter multi-line text and automatically breaks to a new line for overflow
-"! text. If the text gets too big to be displayed at once the user can scroll up and down.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.TextArea - TextArea
+"! https://sdk.openui5.org/entity/sap.m.TextArea/sample/sap.m.sample.TextArea
 CLASS z2ui5_cl_api_app_409 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

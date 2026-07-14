@@ -1,9 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.List/sample/sap.m.sample.ListGrowing
-"! The Growing feature helps if your content is too big to be loaded/shown at once. It paginates the
-"! content into smaller chunks - aka pages - which are loaded/shown one after another. Random access
-"! to pages (e.g jumping to the end) is not possible. Depending on the model the content is loaded
-"! on demand (OData) or shown on demand (JSON).
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.List - ListGrowing
+"! https://sdk.openui5.org/entity/sap.m.List/sample/sap.m.sample.ListGrowing
 CLASS z2ui5_cl_api_app_443 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

@@ -1,6 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.ui.layout.form.SimpleForm/sample/sap.ui.layout.sample.SimpleFormToolbar
-"! A SimpleForm that uses Toolbars as Form header and FormContainer headers.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.ui.layout.form.SimpleForm - SimpleFormToolbar
+"! https://sdk.openui5.org/entity/sap.ui.layout.form.SimpleForm/sample/sap.ui.layout.sample.SimpleFormToolbar
 CLASS z2ui5_cl_api_app_524 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

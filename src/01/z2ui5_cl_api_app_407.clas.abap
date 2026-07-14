@@ -1,8 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.Page/sample/sap.m.sample.PageListReportToolbar
-"! This page shows flexible sizing with a Toolbar. The upper part extends with its content, but
-"! doesn't react to viewport changes. The lower part reacts to the viewport size. The table inside
-"! takes the available space. If the minimum size of the table is reached, the page begins to scroll.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.Page - PageListReportToolbar
+"! https://sdk.openui5.org/entity/sap.m.Page/sample/sap.m.sample.PageListReportToolbar
 CLASS z2ui5_cl_api_app_407 DEFINITION PUBLIC.
 
   PUBLIC SECTION.

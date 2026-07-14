@@ -37,7 +37,7 @@ for (const f of walk(SRC)) {
   if (!f.endsWith('.clas.abap')) continue;
   const cls = path.basename(f, '.clas.abap');
   const m = fs.readFileSync(f, 'utf8')
-    .match(/Rebuild of the UI5 demo kit sample:\s*\S*?entity\/([^/\s]+)\/sample\/(\S+)/);
+    .match(/entity\/([^/\s]+)\/sample\/(\S+)/);
   if (!m) continue;
   const entity = m[1];
   const id = m[2];

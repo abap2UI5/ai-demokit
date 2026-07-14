@@ -1,8 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.List/sample/sap.m.sample.ListSelection
-"! 'Single selection' forces the user to choose exactly one out of many items. With the 'multi'
-"! selection the user can pick multiple items at the same time. This is helpful for e.g. batch
-"! processing. With 'includeItem' the selection is also changed when pressing the item.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.List - ListSelection
+"! https://sdk.openui5.org/entity/sap.m.List/sample/sap.m.sample.ListSelection
 CLASS z2ui5_cl_api_app_446 DEFINITION PUBLIC.
 
   PUBLIC SECTION.
