@@ -2,7 +2,6 @@
 [![ABAP_CLOUD](https://github.com/abap2UI5/api/actions/workflows/ABAP_CLOUD.yaml/badge.svg)](https://github.com/abap2UI5/api/actions/workflows/ABAP_CLOUD.yaml)
 [![ABAP_702](https://github.com/abap2UI5/api/actions/workflows/ABAP_702.yaml/badge.svg)](https://github.com/abap2UI5/api/actions/workflows/ABAP_702.yaml)
 <br>
-[![auto_cloud](https://github.com/abap2UI5/api/actions/workflows/auto_cloud.yaml/badge.svg)](https://github.com/abap2UI5/api/actions/workflows/auto_cloud.yaml)
 [![auto_downport](https://github.com/abap2UI5/api/actions/workflows/auto_downport.yaml/badge.svg)](https://github.com/abap2UI5/api/actions/workflows/auto_downport.yaml)
 <br>
 [![generate_coverage](https://github.com/abap2UI5/api/actions/workflows/generate_coverage.yaml/badge.svg)](https://github.com/abap2UI5/api/actions/workflows/generate_coverage.yaml)
@@ -10,8 +9,6 @@
 # abap2UI5-api
 
 _Last generated: <!-- last-run -->2026-07-14 09:00 UTC<!-- /last-run -->_
-
-## What this repo does
 
 > **This repository is AI-generated.** From *every* official UI5 demo kit sample
 > it automatically builds an abap2UI5 app — so **functional gaps** between what
