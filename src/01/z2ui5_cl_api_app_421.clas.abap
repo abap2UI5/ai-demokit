@@ -14,12 +14,9 @@ CLASS z2ui5_cl_api_app_421 DEFINITION PUBLIC.
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
 
-    METHODS view_display
-      IMPORTING
-        client TYPE REF TO z2ui5_if_client.
-    METHODS on_event
-      IMPORTING
-        client TYPE REF TO z2ui5_if_client.
+    METHODS data_init.
+    METHODS view_display.
+    METHODS on_event.
 
   PRIVATE SECTION.
 ENDCLASS.
@@ -27,53 +24,67 @@ ENDCLASS.
 
 CLASS z2ui5_cl_api_app_421 IMPLEMENTATION.
 
-  METHOD view_display.
+  METHOD data_init.
 
     child1 = abap_true.
     child2 = abap_false.
     child3 = abap_true.
 
+  ENDMETHOD.
+
+
+  METHOD view_display.
+
     DATA(child1_bind) = client->_bind_edit( child1 ).
     DATA(child2_bind) = client->_bind_edit( child2 ).
     DATA(child3_bind) = client->_bind_edit( child3 ).
 
-    DATA(page) = z2ui5_cl_xml_view=>factory( ).
+    DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
-    page->vertical_layout(
-        )->text( `Which languages(s) do you speak?`
-        )->checkbox(
-            text              = `select / deselect all`
-            selected          = |\{= ${ child1_bind } \|\| ${ child2_bind } \|\| ${ child3_bind } \}|
-            partiallyselected = |\{= !(${ child1_bind } && ${ child2_bind } && ${ child3_bind })\}|
-            select            = client->_event( val = `PARENT_CLICKED` t_arg = VALUE #( ( `${$parameters>/selected}` ) ) )
-        )->html( `<hr>`
-        )->get_parent(
-        )->checkbox(
-            text     = `English`
-            selected = child1_bind
-        )->checkbox(
-            text     = `German`
-            selected = child2_bind
-        )->checkbox(
-            text     = `French`
-            selected = child3_bind ).
+    view->open( n = `View` ns = `mvc`
+        )->attr( n = `xmlns:c`   v = `sap.ui.core`
+        )->attr( n = `xmlns:l`   v = `sap.ui.layout`
+        )->attr( n = `xmlns:mvc` v = `sap.ui.core.mvc`
+        )->attr( n = `xmlns`     v = `sap.m`
 
-    client->view_display( page->stringify( ) ).
+        )->open( n = `VerticalLayout` ns = `l`
+            )->leaf( `Text`
+                )->attr( n = `text` v = `Which languages(s) do you speak?`
+            )->leaf( `CheckBox`
+                )->attr( n = `text`              v = `select / deselect all`
+                )->attr( n = `selected`          v = |\{= ${ child1_bind } \|\| ${ child2_bind } \|\| ${ child3_bind } \}|
+                )->attr( n = `partiallySelected` v = |\{= !(${ child1_bind } && ${ child2_bind } && ${ child3_bind })\}|
+                )->attr( n = `select`            v = client->_event( val   = `PARENT_CLICKED`
+                                                                     t_arg = VALUE #( ( `${$parameters>/selected}` ) ) )
+            )->leaf( n = `HTML` ns = `c`
+                )->attr( n = `content` v = `<hr>`
+            )->leaf( `CheckBox`
+                )->attr( n = `text`     v = `English`
+                )->attr( n = `selected` v = child1_bind
+            )->leaf( `CheckBox`
+                )->attr( n = `text`     v = `German`
+                )->attr( n = `selected` v = child2_bind
+            )->leaf( `CheckBox`
+                )->attr( n = `text`     v = `French`
+                )->attr( n = `selected` v = child3_bind ).
+
+    client->view_display( view->stringify( ) ).
 
   ENDMETHOD.
 
 
   METHOD on_event.
 
-    IF client->check_on_event( `PARENT_CLICKED` ).
+    CASE client->get( )-event.
 
-      DATA(selected) = xsdbool( client->get_event_arg( 1 ) = `true` ).
-      child1 = selected.
-      child2 = selected.
-      child3 = selected.
-      client->view_model_update( ).
+      WHEN `PARENT_CLICKED`.
+        DATA(selected) = xsdbool( client->get_event_arg( 1 ) = `true` ).
+        child1 = selected.
+        child2 = selected.
+        child3 = selected.
+        client->view_model_update( ).
 
-    ENDIF.
+    ENDCASE.
 
   ENDMETHOD.
 
@@ -81,12 +92,12 @@ CLASS z2ui5_cl_api_app_421 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-
     IF client->check_on_init( ).
-      view_display( client ).
+      data_init( ).
+      view_display( ).
+    ELSEIF client->check_on_event( ).
+      on_event( ).
     ENDIF.
-
-    on_event( client ).
 
   ENDMETHOD.
 
