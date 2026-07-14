@@ -144,10 +144,11 @@ function summaryLines() {
 // api.md — one table per module (library); Control is a column.
 function controlLines() {
   const l = [];
-  l.push('One table per module. Each row is a UI5 demo kit sample, marked ✅ ported /');
-  l.push('❌ missing (last column). Links are external: **Control** → the demo kit');
-  l.push('entity, **Javascript** → the collected UI5 template (`ui5/`), **ABAP** → the');
-  l.push('generated class. See the [README](README.md#coverage) for the per-module summary.');
+  l.push('One table per module, one row per UI5 demo kit sample. **Control** is the');
+  l.push('demo kit entity (plain), **Javascript** links to the collected UI5 template');
+  l.push('(`ui5/`), **ABAP** to the generated class. A missing ABAP link (`—`) means');
+  l.push('the sample is not ported yet. See the [README](README.md#coverage) for the');
+  l.push('per-module summary.');
   l.push('');
 
   for (const { lib } of summary) {
@@ -155,8 +156,8 @@ function controlLines() {
     const lp = entry.samples.filter((s) => s.port).length;
     l.push(`## \`${lib}\` — ${lp}/${entry.samples.length} (${pct(lp, entry.samples.length)})`);
     l.push('');
-    l.push('| Control | Javascript | ABAP | |');
-    l.push('|---------|-----------|------|---|');
+    l.push('| Control | Javascript | ABAP |');
+    l.push('|---------|-----------|------|');
 
     // sort by control (entity), then sample name; entity-less rows last
     const rows = [...entry.samples].sort((a, b) =>
@@ -164,10 +165,10 @@ function controlLines() {
       (a.entity || '').toLowerCase().localeCompare((b.entity || '').toLowerCase()) ||
       a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
     for (const s of rows) {
-      const control = s.entity ? `[\`${s.entity}\`](${demokitUrl(s.entity, `${lib}.sample.${s.name}`)})` : '—';
+      const control = s.entity ? `\`${s.entity}\`` : '—';
       const js = s.port ? `[\`${s.name}\`](${templateUrl(lib, s.port.cls)})` : `\`${s.name}\``;
       const abap = s.port ? `[\`${s.port.cls}\`](${abapUrl(s.port.file)})` : '—';
-      l.push(`| ${control} | ${js} | ${abap} | ${s.port ? '✅' : '❌'} |`);
+      l.push(`| ${control} | ${js} | ${abap} |`);
     }
     l.push('');
   }
