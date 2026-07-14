@@ -27,6 +27,11 @@ ENDCLASS.
 
 CLASS z2ui5_cl_api_app_530 IMPLEMENTATION.
 
+  " NOTES (generation):
+  " - LIVE-TEST: the link press reads the clicked link's text via the event arg
+  "   ${$source>/text}. This $source> form is not used anywhere else in the repo
+  "   and is unverified - confirm it delivers the text in a running system.
+
   METHOD data_init.
 
     " Rows built in the original onInit from the sap.m BreadcrumbsSeparatorStyle enum

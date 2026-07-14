@@ -18,6 +18,14 @@ ENDCLASS.
 
 CLASS z2ui5_cl_api_app_529 IMPLEMENTATION.
 
+  " NOTES (generation):
+  " - 1.71: ObjectStatus states Indication06-Indication20 are newer than UI5 1.71
+  "   (added ~1.130). The controls are kept but their state is set to "None", so
+  "   the indication colours differ from the original - verify if relevant.
+  " - IMPROVISED: the active status press originally opens a controller-built
+  "   Dialog; replaced with message_toast_display, since a Dialog is not a 1:1
+  "   view element.
+
   METHOD z2ui5_if_app~main.
 
     me->client = client.

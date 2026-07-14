@@ -18,6 +18,11 @@ ENDCLASS.
 
 CLASS z2ui5_cl_api_app_526 IMPLEMENTATION.
 
+  " NOTES (generation):
+  " - IMPROVISED: the original press handler toasts oEvent.getSource().getId()
+  "   - a client-side control id that does not exist server-side. All presses
+  "   collapse to one event that shows a static text instead.
+
   METHOD z2ui5_if_app~main.
 
     me->client = client.

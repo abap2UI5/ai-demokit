@@ -302,6 +302,27 @@ stay compatible with UI5 1.71`) if the sample still works without it, or — if 
 sample's whole point needs the newer/deprecated control — **do not port it** and
 leave it as an ❌ gap. Never silently substitute a different control.
 
+#### Generation notes — record every caveat in the port
+
+When the port is **not** a clean 1:1 — you improvised, dropped/downgraded
+something for 1.71, replaced a controller-only behaviour, or relied on a
+binding/event form you could not verify — record it as a `" NOTES (generation):`
+comment block at the **top of the class `IMPLEMENTATION`** (right after
+`CLASS … IMPLEMENTATION.`, before the first method), one bullet per caveat,
+tagged so a reviewer can scan them:
+
+- `LIVE-TEST:` needs checking in a running system — an unverified binding/event
+  path, or uncertain rendering (e.g. app 530's `${$source>/text}` event arg).
+- `IMPROVISED:` deviates from the sample — e.g. a controller-built Dialog shown
+  as a `message_toast_display` instead (app 529), or an event that reads a
+  client-only value replaced with a static one (app 526).
+- `1.71:` a control / property / enum value newer than 1.71 was dropped or
+  downgraded (app 529's `Indication06`+ states set to `None`).
+
+Keep the block **only** when there is something to flag — omit it for a faithful
+1:1 port. Still add the inline `"` comment at the exact spot of each deviation;
+the NOTES block is the scannable summary of those.
+
 #### Worked references
 
 Three PoC ports show the full range — read them before writing a new one:
