@@ -114,25 +114,25 @@ CLASS ${CLASS} IMPLEMENTATION.
     DATA(prev_control) = \`\`.
     LOOP AT t_catalog INTO DATA(app).
 
-      IF app-control <> prev_control.
-
-        page->title(
-            text  = app-control
-            level = \`H3\`
-            class = \`sapUiSmallMarginTop\` ).
-        prev_control = app-control.
-
-      ENDIF.
+      " every row starts with its control; a new control opens a new block,
+      " set off from the previous one by a blank line (top margin)
+      DATA(css) = COND string( WHEN prev_control IS NOT INITIAL AND app-control <> prev_control
+                               THEN \`sapUiTinyMarginBegin sapUiMediumMarginTop\`
+                               ELSE \`sapUiTinyMarginBegin\` ).
+      prev_control = app-control.
 
       DATA(url) = |https://sapui5.hana.ondemand.com/sdk/#/entity/{ app-control }/sample/{ app-lib }.sample.{ app-name }|.
       page->hbox( alignitems = \`Center\`
-                  class      = \`sapUiTinyMarginBegin\`
+                  class      = css
+          )->text(
+              text  = app-control
+              class = \`sapUiTinyMarginEnd\`
           )->link(
               text  = app-name
               press = client->_event_client( val   = client->cs_event-open_new_tab
                                              t_arg = VALUE #( ( |{ start }{ to_upper( app-app ) }| ) ) )
           )->link(
-              text   = \`demo kit\`
+              text   = \`->\`
               href   = url
               target = \`_blank\`
               class  = \`sapUiSmallMarginBegin\` ).

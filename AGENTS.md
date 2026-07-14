@@ -338,9 +338,11 @@ scripts.**
   kit sample app next to it) · **ABAP** (link to the generated class,
   `—` = not ported).
 - **`src/z2ui5_cl_api_app_overview.clas.*`** — the in-system overview **app**:
-  an abap2UI5 app that lists every ported app grouped by control, opens it in a
-  **new browser tab** (`_event_client( cs_event-open_new_tab )`) and links its
-  demo kit page. Mirrors `api.md`'s layout.
+  an abap2UI5 app that lists every ported app, one row per sample. Each row
+  starts with its **control**, then the sample name (opens the app in a **new
+  browser tab** via `_event_client( cs_event-open_new_tab )`), then a `->` link
+  to its demo kit page. Rows of the same control form a block, separated from
+  the next control by a blank line (a top margin on the first row of each block).
 
 ```bash
 OPENUI5_DIR=../openui5 node scripts/generate-coverage.mjs   # README + api.md
