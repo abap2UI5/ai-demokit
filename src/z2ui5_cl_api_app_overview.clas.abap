@@ -74,9 +74,7 @@ CLASS z2ui5_cl_api_app_overview IMPLEMENTATION.
                         |/test/{ libpath }/demokit/sample/{ <app>-name }|.
       <app>-ui5_url   = |https://sdk.openui5.org/resources/sap/ui/documentation/sdk/index.html| &&
                         |?sap-ui-xx-sample-id={ <app>-module }.sample.{ <app>-name }| &&
-                        |&sap-ui-xx-sample-lib={ <app>-module }&sap-ui-xx-sample-origin=.| &&
-                        |&sap-ui-xx-dk-origin=https%3A%2F%2Fsdk.openui5.org| &&
-                        |&sap-ui-theme=sap_horizon&sap-ui-rtl=false&sap-ui-density=sapUiSizeCompact|.
+                        |&sap-ui-xx-sample-lib={ <app>-module }|.
       <app>-abap_url  = |https://github.com/abap2UI5/api/blob/main/{ <app>-path }|.
       <app>-start_url = |{ start }{ to_upper( <app>-class ) }|.
 
