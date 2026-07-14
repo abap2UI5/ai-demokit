@@ -20,6 +20,13 @@ Generated abap2UI5 ports of the official UI5 demo kit samples, split by library:
 Every app is ABAP Cloud ready and downportable to 7.02 — validated by the three
 CI checks below.
 
+#### Compatibility
+
+* Every control and property used is available since **UI5 1.71** (16 Jan 2020),
+  so the samples run on old UI5 versions too.
+* No sample uses an obsolete (deprecated) control or property.
+* All samples run on both **SAPUI5** and **OpenUI5**.
+
 #### Checks
 
 | Build            | What it does                                                    |
