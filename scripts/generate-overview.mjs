@@ -150,46 +150,79 @@ CLASS ${CLASS} IMPLEMENTATION.
 
     ENDLOOP.
 
-    DATA(view) = z2ui5_cl_xml_view=>factory( ).
-    DATA(tab) = view->shell(
-        )->page(
-            title          = \`abap2UI5 - api\`
-            navbuttonpress = client->_event_nav_app_leave( )
-            shownavbutton  = client->check_app_prev_stack( )
-        )->table(
-            sticky = \`ColumnHeaders\`
-            items  = client->_bind( t_app ) ).
+    DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
-    tab->columns(
-        )->column( )->text( \`Module\` )->get_parent(
-        )->column( )->text( \`Control\` )->get_parent(
-        )->column( )->text( \`Sample\` )->get_parent(
-        )->column( )->text( \`abap2UI5\` ).
+    view->open( n = \`View\` ns = \`mvc\`
+        )->attr( n = \`xmlns\`     v = \`sap.m\`
+        )->attr( n = \`xmlns:mvc\` v = \`sap.ui.core.mvc\`
 
-    tab->items(
-        )->column_list_item(
-            )->cells(
-                )->text( \`{MODULE}\`
-                )->link( text   = \`{CTRL_NAME}\`
-                         href   = \`{API_URL}\`
-                         target = \`_blank\`
-                )->hbox(
-                    )->link( text   = \`{NAME}\`
-                             href   = \`{JS_URL}\`
-                             target = \`_blank\`
-                    )->text( \` \`
-                    )->link( text   = \`↗\`
-                             href   = \`{UI5_URL}\`
-                             target = \`_blank\`
-                    )->get_parent(
-                )->hbox(
-                    )->link( text   = \`{CLASS}\`
-                             href   = \`{ABAP_URL}\`
-                             target = \`_blank\`
-                    )->text( \` \`
-                    )->link( text   = \`↗\`
-                             href   = \`{START_URL}\`
-                             target = \`_blank\` ).
+        )->open( \`Shell\`
+            )->open( \`Page\`
+                )->attr( n = \`title\`          v = \`abap2UI5 - api\`
+                )->attr( n = \`navButtonPress\` v = client->_event_nav_app_leave( )
+                )->attr( n = \`showNavButton\`  v = z2ui5_cl_api_xml=>as_bool( client->check_app_prev_stack( ) )
+
+                )->open( \`Table\`
+                    )->attr( n = \`sticky\` v = \`ColumnHeaders\`
+                    )->attr( n = \`items\`  v = client->_bind( t_app )
+
+                    )->open( \`columns\`
+                        )->open( \`Column\`
+                            )->leaf( \`Text\`
+                                )->attr( n = \`text\` v = \`Module\`
+
+                        )->shut(
+                        )->open( \`Column\`
+                            )->leaf( \`Text\`
+                                )->attr( n = \`text\` v = \`Control\`
+
+                        )->shut(
+                        )->open( \`Column\`
+                            )->leaf( \`Text\`
+                                )->attr( n = \`text\` v = \`Sample\`
+
+                        )->shut(
+                        )->open( \`Column\`
+                            )->leaf( \`Text\`
+                                )->attr( n = \`text\` v = \`abap2UI5\`
+
+                    )->shut(
+                    )->shut(
+
+                    )->open( \`items\`
+                        )->open( \`ColumnListItem\`
+                            )->open( \`cells\`
+                                )->leaf( \`Text\`
+                                    )->attr( n = \`text\` v = \`{MODULE}\`
+                                )->leaf( \`Link\`
+                                    )->attr( n = \`text\`   v = \`{CTRL_NAME}\`
+                                    )->attr( n = \`href\`   v = \`{API_URL}\`
+                                    )->attr( n = \`target\` v = \`_blank\`
+
+                                )->open( \`HBox\`
+                                    )->leaf( \`Link\`
+                                        )->attr( n = \`text\`   v = \`{NAME}\`
+                                        )->attr( n = \`href\`   v = \`{JS_URL}\`
+                                        )->attr( n = \`target\` v = \`_blank\`
+                                    )->leaf( \`Text\`
+                                        )->attr( n = \`text\` v = \` \`
+                                    )->leaf( \`Link\`
+                                        )->attr( n = \`text\`   v = \`↗\`
+                                        )->attr( n = \`href\`   v = \`{UI5_URL}\`
+                                        )->attr( n = \`target\` v = \`_blank\`
+
+                                )->shut(
+                                )->open( \`HBox\`
+                                    )->leaf( \`Link\`
+                                        )->attr( n = \`text\`   v = \`{CLASS}\`
+                                        )->attr( n = \`href\`   v = \`{ABAP_URL}\`
+                                        )->attr( n = \`target\` v = \`_blank\`
+                                    )->leaf( \`Text\`
+                                        )->attr( n = \`text\` v = \` \`
+                                    )->leaf( \`Link\`
+                                        )->attr( n = \`text\`   v = \`↗\`
+                                        )->attr( n = \`href\`   v = \`{START_URL}\`
+                                        )->attr( n = \`target\` v = \`_blank\` ).
 
     client->view_display( view->stringify( ) ).
 
