@@ -11,7 +11,9 @@ CLASS z2ui5_cl_api_app_486 DEFINITION PUBLIC.
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
 
+    METHODS data_init.
     METHODS view_display.
+    METHODS on_event.
 
   PRIVATE SECTION.
 ENDCLASS.
@@ -19,109 +21,157 @@ ENDCLASS.
 
 CLASS z2ui5_cl_api_app_486 IMPLEMENTATION.
 
+  " NOTES (generation):
+  " - IMPROVISED: the sample's controller onSliderLiveChange resizes the toolbars
+  "   in JS; there is no width in the source XML. Rebuilt as a bound width on each
+  "   Toolbar fed by the SLIDER_CHANGE liveChange event - this width binding is an
+  "   addition not present in Toolbar.view.xml.
+
   METHOD z2ui5_if_app~main.
 
     me->client = client.
     IF client->check_on_init( ).
-
-      toolbar_width = `100%`.
+      data_init( ).
       view_display( ).
-
-    ELSEIF client->check_on_event( `SLIDER_CHANGE` ).
-
-      toolbar_width = |{ client->get_event_arg( 1 ) }%|.
-      client->view_model_update( ).
+    ELSEIF client->check_on_event( ).
+      on_event( ).
     ENDIF.
+
+  ENDMETHOD.
+
+
+  METHOD data_init.
+
+    toolbar_width = `100%`.
 
   ENDMETHOD.
 
 
   METHOD view_display.
 
-    DATA(page) = z2ui5_cl_xml_view=>factory( ).
+    DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
-    page->slider(
-        livechange = client->_event( val   = `SLIDER_CHANGE`
-                                     t_arg = VALUE #( ( `${$parameters>/value}` ) ) )
-        step       = `20`
-        value      = `100` ).
+    view->open( n = `View` ns = `mvc`
+        )->attr( n = `height`    v = `100%`
+        )->attr( n = `xmlns`     v = `sap.m`
+        )->attr( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
-    page->message_strip(
-        text  = `By default, Toolbar items are shrinkable if they have percent-based width (e.g. Input, Slider)` &&
-                ` or implement the IShrinkable interface (e.g. Text, Label).`
-        class = `sapUiTinyMargin` ).
+        )->open( `Page`
+            )->attr( n = `showHeader` v = `false`
 
-    " the toolbar style class is not part of the typed view API - added via the generic property helper
-    page->toolbar(
-            id    = `toolbar1`
-            width = client->_bind( toolbar_width )
-            )->_generic_property( VALUE #( n = `class` v = `sapUiMediumMarginTop` )
-            )->label( `I am a text control, so I will shrink whenever the toolbar overflows.`
-            )->toolbar_spacer(
-            )->button( text = `Non-shrinkable button`
-            )->toolbar_spacer(
-            )->search_field(
-                width       = `100%`
-                placeholder = `My width is 100%, so I should shrink.` ).
+            )->leaf( `Slider`
+                )->attr( n = `liveChange` v = client->_event( val   = `SLIDER_CHANGE`
+                                                              t_arg = VALUE #( ( `${$parameters>/value}` ) ) )
+                )->attr( n = `step`       v = `20`
+                )->attr( n = `value`      v = `100`
 
-    page->message_strip(
-        text  = `You can configure the item's shrinking-related properties by providing ToolbarLayoutData.`
-        class = `sapUiTinyMargin` ).
+            )->leaf( `MessageStrip`
+                )->attr( n = `text`  v = `By default, Toolbar items are shrinkable if they have percent-based width (e.g. Input, Slider)` &&
+                                        ` or implement the IShrinkable interface (e.g. Text, Label).`
+                )->attr( n = `class` v = `sapUiTinyMargin`
 
-    page->toolbar(
-            id    = `toolbar2`
-            width = client->_bind( toolbar_width )
-            )->_generic_property( VALUE #( n = `class` v = `sapUiMediumMarginTop` )
-            )->label( `I am a non-shrinkable text.`
-            )->get(
-                )->layout_data( ``
-                    )->toolbar_layout_data( shrinkable = abap_false
-                    )->get_parent(
-                )->get_parent(
-            )->get_parent(
-            )->toolbar_spacer(
-            )->button( text = `I am a shrinkable button, so I will shrink whenever the toolbar overflows.`
-            )->get(
-                )->layout_data( ``
-                    )->toolbar_layout_data( shrinkable = abap_true
-                    )->get_parent(
-                )->get_parent(
-            )->get_parent(
-            )->toolbar_spacer(
-            )->search_field(
-                width       = `200px`
-                placeholder = `I have a fixed width (200px), so I cannot shrink.` ).
+            )->open( `Toolbar`
+                )->attr( n = `class` v = `sapUiMediumMarginTop`
+                )->attr( n = `id`    v = `toolbar1`
+                )->attr( n = `width` v = client->_bind( toolbar_width )
 
-    page->message_strip(
-        text  = `You can determine to what extent an item shrinks by setting minWidth/maxWidth via ToolbarLayoutData.` &&
-                ` By default, minWidth is 48px in the Blue Crystal theme.`
-        class = `sapUiTinyMargin` ).
+                )->leaf( `Label`
+                    )->attr( n = `text` v = `I am a text control, so I will shrink whenever the toolbar overflows.`
+                )->leaf( `ToolbarSpacer`
+                )->leaf( `Button`
+                    )->attr( n = `text` v = `Non-shrinkable button`
+                )->leaf( `ToolbarSpacer`
+                )->leaf( `SearchField`
+                    )->attr( n = `width`       v = `100%`
+                    )->attr( n = `placeholder` v = `My width is 100%, so I should shrink.`
 
-    page->toolbar(
-            id    = `toolbar3`
-            width = client->_bind( toolbar_width )
-            )->_generic_property( VALUE #( n = `class` v = `sapUiMediumMarginTop` )
-            )->label( `I should not shrink by more than 200px, because I am an important text.`
-            )->get(
-                )->layout_data( ``
-                    )->toolbar_layout_data(
-                        shrinkable = abap_true
-                        minwidth   = `200px`
-                    )->get_parent(
-                )->get_parent(
-            )->get_parent(
-            )->toolbar_spacer(
-            )->button( text = `I cannot be wider than 400px, but I can shrink up to the theme's default minimum width.`
-            )->get(
-                )->layout_data( ``
-                    )->toolbar_layout_data(
-                        shrinkable = abap_true
-                        maxwidth   = `400px`
-                    )->get_parent(
-                )->get_parent(
-            )->get_parent( ).
+            )->shut(
 
-    client->view_display( page->stringify( ) ).
+            )->leaf( `MessageStrip`
+                )->attr( n = `text`  v = `You can configure the item's shrinking-related properties by providing ToolbarLayoutData.`
+                )->attr( n = `class` v = `sapUiTinyMargin`
+
+            )->open( `Toolbar`
+                )->attr( n = `class` v = `sapUiMediumMarginTop`
+                )->attr( n = `id`    v = `toolbar2`
+                )->attr( n = `width` v = client->_bind( toolbar_width )
+
+                )->open( `Label`
+                    )->attr( n = `text` v = `I am a non-shrinkable text.`
+
+                    )->open( `layoutData`
+                        )->leaf( `ToolbarLayoutData`
+                            )->attr( n = `shrinkable` v = `false`
+
+                    )->shut(
+                )->shut(
+                )->leaf( `ToolbarSpacer`
+                )->open( `Button`
+                    )->attr( n = `text` v = `I am a shrinkable button, so I will shrink whenever the toolbar overflows.`
+
+                    )->open( `layoutData`
+                        )->leaf( `ToolbarLayoutData`
+                            )->attr( n = `shrinkable` v = `true`
+
+                    )->shut(
+                )->shut(
+                )->leaf( `ToolbarSpacer`
+                )->leaf( `SearchField`
+                    )->attr( n = `width`       v = `200px`
+                    )->attr( n = `placeholder` v = `I have a fixed width (200px), so I cannot shrink.`
+
+            )->shut(
+
+            )->leaf( `MessageStrip`
+                )->attr( n = `text`  v = `You can determine to what extent an item shrinks by setting minWidth/maxWidth via ToolbarLayoutData.` &&
+                                        ` By default, minWidth is 48px in the Blue Crystal theme.`
+                )->attr( n = `class` v = `sapUiTinyMargin`
+
+            )->open( `Toolbar`
+                )->attr( n = `class` v = `sapUiMediumMarginTop`
+                )->attr( n = `id`    v = `toolbar3`
+                )->attr( n = `width` v = client->_bind( toolbar_width )
+
+                )->open( `Label`
+                    )->attr( n = `text` v = `I should not shrink by more than 200px, because I am an important text.`
+
+                    )->open( `layoutData`
+                        )->leaf( `ToolbarLayoutData`
+                            )->attr( n = `shrinkable` v = `true`
+                            )->attr( n = `minWidth`   v = `200px`
+
+                    )->shut(
+                )->shut(
+                )->leaf( `ToolbarSpacer`
+                )->open( `Button`
+                    )->attr( n = `text` v = `I cannot be wider than 400px, but I can shrink up to the theme's default minimum width.`
+
+                    )->open( `layoutData`
+                        )->leaf( `ToolbarLayoutData`
+                            )->attr( n = `shrinkable` v = `true`
+                            )->attr( n = `maxWidth`   v = `400px`
+
+                    )->shut(
+                )->shut(
+
+            )->shut(
+
+        )->shut( ).
+
+    client->view_display( view->stringify( ) ).
+
+  ENDMETHOD.
+
+
+  METHOD on_event.
+
+    CASE client->get( )-event.
+
+      WHEN `SLIDER_CHANGE`.
+        toolbar_width = |{ client->get_event_arg( 1 ) }%|.
+        client->view_model_update( ).
+
+    ENDCASE.
 
   ENDMETHOD.
 
