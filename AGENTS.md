@@ -20,8 +20,8 @@ The pipeline (run by a coding agent):
    kit sample at `src/<library>/test/<library>/demokit/sample/<Name>/`.
 2. **Generate** — rebuild each sample 1:1 as an abap2UI5 app (a class
    implementing `z2ui5_if_app`), filed by library under `src/`.
-3. **Store templates** — keep the untouched original UI5 JS/XML templates on the
-   [`ui5`](https://github.com/abap2UI5/api/tree/ui5) branch.
+3. **Store templates** — keep the untouched original UI5 JS/XML templates in the
+   `ui5/` folder.
 4. **Report** — regenerate `COVERAGE.md`: every sample marked ✅ ported /
    ❌ missing, with a coverage figure per module.
 
@@ -31,14 +31,17 @@ machine-generated and carries the "not yet manually reviewed" marker (§5).
 
 ---
 
-## 2. Branches
+## 2. Layout — two trees in one branch
 
-| Branch  | Content |
+Everything lives on the working branch, in two separate top-level trees:
+
+| Path    | Content |
 |---------|---------|
-| default / working | The generated abap2UI5 ports (`src/**/*.clas.abap`) + tooling. |
-| `ui5`   | The original UI5 demo kit templates (JS/XML/manifest), one folder per port. |
+| `src/`  | The generated abap2UI5 ports (`*.clas.abap`) — the abapGit project (§3). |
+| `ui5/`  | The original UI5 demo kit templates (JS/XML/manifest), one folder per port (§4). |
 
-Never mix the two: ABAP ports live on the working branch, JS originals on `ui5`.
+Keep them separate: only `src/` is the abapGit / abaplint scope; `ui5/` is
+plain JS/XML held for reference and to feed the generator.
 
 ---
 
@@ -64,22 +67,23 @@ class between folders needs no rename.
 ### Class naming
 
 Ports are named `z2ui5_cl_demo_app_<n>` (lowercase). `<n>` is a stable, unique
-number; it is the app's identity across both branches (see §4).
+number; it is the app's identity linking a port to its template (see §4).
 
 ---
 
-## 4. The `ui5` branch — original templates
+## 4. The `ui5/` folder — original templates
 
-Every port has its source template collected on the `ui5` branch. **The template
-folder is named after the port class**, filed by source library:
+Every port's source template is collected under `ui5/`. **The template folder is
+named after the port class**, filed by source library:
 
 ```
-src/<library>/<z2ui5_cl_demo_app_n>/   ← original Component.js, *.view.xml,
+ui5/<library>/<z2ui5_cl_demo_app_n>/   ← original Component.js, *.view.xml,
                                           manifest.json, controllers, resources
 ```
 
-`README.md` on that branch holds the class ↔ original-sample-name mapping. The
-folder name (class) is the join key between the two branches.
+The folder name (class) is the join key between a port (`src/`) and its template
+(`ui5/`). Templates are held verbatim — never edited to fit ABAP; that is the
+generator's job. `COVERAGE.md` links the two together (§7).
 
 ---
 

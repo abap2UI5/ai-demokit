@@ -23,16 +23,11 @@ const OPENUI5_DIR = process.env.OPENUI5_DIR || path.join(ROOT, 'openui5');
 const OUT = path.join(ROOT, 'COVERAGE.md');
 
 // link targets (overridable via env)
-const REPO = process.env.REPO || 'abap2UI5/api';           // this repo, owner/name
-const UI5_BRANCH = process.env.UI5_BRANCH || 'ui5';        // branch holding the JS templates
-const OPENUI5_REPO = process.env.OPENUI5_REPO || 'SAP/openui5';
-const OPENUI5_BRANCH = process.env.OPENUI5_BRANCH || 'master';
-// upstream demo kit source folder for a (lib, name)
-const ui5SourceUrl = (lib, name) =>
-  `https://github.com/${OPENUI5_REPO}/tree/${OPENUI5_BRANCH}/src/${lib}/test/${lib.replace(/\./g, '/')}/demokit/sample/${name}`;
-// collected JS template folder on the ui5 branch (only exists for ported samples)
-const templateUrl = (lib, cls) =>
-  `https://github.com/${REPO}/tree/${UI5_BRANCH}/src/${lib}/${cls}`;
+const DEMOKIT = process.env.DEMOKIT || 'https://sapui5.hana.ondemand.com/sdk/#';
+// live demo kit sample app (needs the entity the sample belongs to)
+const demokitUrl = (entity, sampleId) => `${DEMOKIT}/entity/${entity}/sample/${sampleId}`;
+// collected JS template folder — relative, lives in this branch under ui5/
+const templateUrl = (lib, cls) => `ui5/${lib}/${cls}`;
 
 function walk(dir, out = []) {
   for (const name of fs.readdirSync(dir)) {
@@ -43,20 +38,22 @@ function walk(dir, out = []) {
   return out;
 }
 
-// --- 1. ported set: (lib, name) -> { cls, file } --------------------------
-const ported = new Map(); // key `${lib}\t${name}` -> { cls, file }
+// --- 1. ported set: (lib, name) -> { cls, file, entity } ------------------
+const ported = new Map(); // key `${lib}\t${name}` -> { cls, file, entity }
 for (const f of walk(SRC)) {
   if (!f.endsWith('.clas.abap')) continue;
   const cls = path.basename(f, '.clas.abap');
+  // ...#/entity/<entity>/sample/<lib>.sample.<Name>
   const m = fs.readFileSync(f, 'utf8')
-    .match(/Rebuild of the UI5 demo kit sample:\s*\S*\/sample\/(\S+)/);
+    .match(/Rebuild of the UI5 demo kit sample:\s*\S*?(?:entity\/([^/\s]+)\/)?sample\/(\S+)/);
   if (!m) continue;
-  const id = m[1];                       // e.g. sap.m.sample.FacetFilterLight
+  const entity = m[1] || null;
+  const id = m[2];                       // e.g. sap.m.sample.FacetFilterLight
   const i = id.indexOf('.sample.');
   if (i === -1) continue;
   const lib = id.slice(0, i);
   const name = id.slice(i + '.sample.'.length);
-  ported.set(`${lib}\t${name}`, { cls, file: path.relative(ROOT, f) });
+  ported.set(`${lib}\t${name}`, { cls, file: path.relative(ROOT, f), entity });
 }
 
 // --- 2. universe: all demo kit samples in the OpenUI5 checkout -------------
@@ -65,14 +62,35 @@ if (!fs.existsSync(OPENUI5_DIR)) {
   process.exit(1);
 }
 
-const libs = []; // { lib, samples: [{ name, class|null }] }
+// sample id -> owning entity, parsed from each library's demokit docuindex.json
+// (explored.entities[].samples[]). First entity that lists a sample wins.
+function entityMap(demokitDir) {
+  const map = new Map(); // sampleId -> entity
+  const p = path.join(demokitDir, 'docuindex.json');
+  if (!fs.existsSync(p)) return map;
+  let doc;
+  try { doc = JSON.parse(fs.readFileSync(p, 'utf8')); } catch { return map; }
+  const entities = (doc.explored && doc.explored.entities) || doc.entities || [];
+  for (const e of entities) {
+    for (const sid of e.samples || []) if (!map.has(sid)) map.set(sid, e.id);
+  }
+  return map;
+}
+
+const libs = []; // { lib, samples: [{ name, port, entity }] }
 for (const lib of fs.readdirSync(path.join(OPENUI5_DIR, 'src')).sort()) {
-  const sampleDir = path.join(OPENUI5_DIR, 'src', lib, 'test', lib.replace(/\./g, '/'), 'demokit', 'sample');
+  const demokitDir = path.join(OPENUI5_DIR, 'src', lib, 'test', lib.replace(/\./g, '/'), 'demokit');
+  const sampleDir = path.join(demokitDir, 'sample');
   if (!fs.existsSync(sampleDir)) continue;
+  const entOf = entityMap(demokitDir);
   const samples = fs.readdirSync(sampleDir)
     .filter((n) => fs.statSync(path.join(sampleDir, n)).isDirectory())
     .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
-    .map((name) => ({ name, port: ported.get(`${lib}\t${name}`) || null }));
+    .map((name) => {
+      const port = ported.get(`${lib}\t${name}`) || null;
+      const entity = entOf.get(`${lib}.sample.${name}`) || (port && port.entity) || null;
+      return { name, port, entity };
+    });
   if (samples.length) libs.push({ lib, samples });
 }
 
@@ -119,24 +137,27 @@ out.push('');
 // detail per library — libraries in the same coverage-desc order
 out.push('## Samples per module');
 out.push('');
-out.push('The **Sample** name links to the collected UI5 template folder (`ui5`');
-out.push('branch), **UI5 source** to the original demo kit sample in OpenUI5, and');
-out.push('**abap2UI5 class** to the generated ABAP class.');
+out.push('- **Javascript** — the collected UI5 template (`ui5/` folder); links');
+out.push('  only where a port exists.');
+out.push('- **ABAP** — the generated abap2UI5 class.');
+out.push('- **Link** — the live demo kit sample app.');
 out.push('');
 for (const { lib } of summary) {
   const entry = libs.find((l) => l.lib === lib);
   const p = entry.samples.filter((s) => s.port).length;
   out.push(`### \`${lib}\` — ${p}/${entry.samples.length} (${pct(p, entry.samples.length)})`);
   out.push('');
-  out.push('| | Sample | UI5 source | abap2UI5 class |');
-  out.push('|---|--------|------------|----------------|');
+  out.push('| | Javascript | ABAP | Link |');
+  out.push('|---|-----------|------|------|');
   for (const s of entry.samples) {
-    const sample = s.port
+    const js = s.port
       ? `[\`${s.name}\`](${templateUrl(lib, s.port.cls)})`
       : `\`${s.name}\``;
-    const source = `[source](${ui5SourceUrl(lib, s.name)})`;
-    const cls = s.port ? `[\`${s.port.cls}\`](${s.port.file})` : '—';
-    out.push(`| ${s.port ? '✅' : '❌'} | ${sample} | ${source} | ${cls} |`);
+    const abap = s.port ? `[\`${s.port.cls}\`](${s.port.file})` : '—';
+    const link = s.entity
+      ? `[demo kit ↗](${demokitUrl(s.entity, `${lib}.sample.${s.name}`)})`
+      : '—';
+    out.push(`| ${s.port ? '✅' : '❌'} | ${js} | ${abap} | ${link} |`);
   }
   out.push('');
 }

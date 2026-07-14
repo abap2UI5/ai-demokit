@@ -1,0 +1,18 @@
+<mvc:View
+	controllerName="sap.m.sample.ObjectHeaderCondensed.C"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m">
+	<ObjectHeader
+		binding="{/ProductCollection/0}"
+		title="{Name}"
+		condensed="true"
+		number="{
+			parts:[{path:'Price'},{path:'CurrencyCode'}],
+			type: 'sap.ui.model.type.Currency',
+			formatOptions: {showMeasure: false}
+		}"
+		numberUnit="{CurrencyCode}"
+		class="sapUiResponsivePadding--header" >
+		<ObjectAttribute text="{WeightMeasure} {WeightUnit} {Width} x {Depth} x {Height} {DimUnit}" />
+	</ObjectHeader>
+</mvc:View>

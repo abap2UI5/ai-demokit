@@ -24,782 +24,783 @@ abap2UI5 port exists in this repository (✅) or not yet (❌).
 
 ## Samples per module
 
-The **Sample** name links to the collected UI5 template folder (`ui5`
-branch), **UI5 source** to the original demo kit sample in OpenUI5, and
-**abap2UI5 class** to the generated ABAP class.
+- **Javascript** — the collected UI5 template (`ui5/` folder); links
+  only where a port exists.
+- **ABAP** — the generated abap2UI5 class.
+- **Link** — the live demo kit sample app.
 
 ### `sap.uxap` — 14/47 (29.8 %)
 
-| | Sample | UI5 source | abap2UI5 class |
-|---|--------|------------|----------------|
-| ❌ | `AlternativeProfileObjectPageHeader` | [source](https://github.com/SAP/openui5/tree/master/src/sap.uxap/test/sap/uxap/demokit/sample/AlternativeProfileObjectPageHeader) | — |
-| ❌ | `AnchorBar` | [source](https://github.com/SAP/openui5/tree/master/src/sap.uxap/test/sap/uxap/demokit/sample/AnchorBar) | — |
-| ✅ | [`AnchorBarNoPopover`](https://github.com/abap2UI5/api/tree/ui5/src/sap.uxap/z2ui5_cl_demo_app_413) | [source](https://github.com/SAP/openui5/tree/master/src/sap.uxap/test/sap/uxap/demokit/sample/AnchorBarNoPopover) | [`z2ui5_cl_demo_app_413`](src/03/z2ui5_cl_demo_app_413.clas.abap) |
-| ✅ | [`AnchorBarWithNumbers`](https://github.com/abap2UI5/api/tree/ui5/src/sap.uxap/z2ui5_cl_demo_app_532) | [source](https://github.com/SAP/openui5/tree/master/src/sap.uxap/test/sap/uxap/demokit/sample/AnchorBarWithNumbers) | [`z2ui5_cl_demo_app_532`](src/03/z2ui5_cl_demo_app_532.clas.abap) |
-| ❌ | `BlockBaseBlockInBlock` | [source](https://github.com/SAP/openui5/tree/master/src/sap.uxap/test/sap/uxap/demokit/sample/BlockBaseBlockInBlock) | — |
-| ❌ | `BlockBaseEventing` | [source](https://github.com/SAP/openui5/tree/master/src/sap.uxap/test/sap/uxap/demokit/sample/BlockBaseEventing) | — |
-| ❌ | `BoundModelMapping` | [source](https://github.com/SAP/openui5/tree/master/src/sap.uxap/test/sap/uxap/demokit/sample/BoundModelMapping) | — |
-| ❌ | `ChildObjectPage` | [source](https://github.com/SAP/openui5/tree/master/src/sap.uxap/test/sap/uxap/demokit/sample/ChildObjectPage) | — |
-| ✅ | [`HeaderContent`](https://github.com/abap2UI5/api/tree/ui5/src/sap.uxap/z2ui5_cl_demo_app_531) | [source](https://github.com/SAP/openui5/tree/master/src/sap.uxap/test/sap/uxap/demokit/sample/HeaderContent) | [`z2ui5_cl_demo_app_531`](src/03/z2ui5_cl_demo_app_531.clas.abap) |
-| ✅ | [`KPIObjectPageHeader`](https://github.com/abap2UI5/api/tree/ui5/src/sap.uxap/z2ui5_cl_demo_app_529) | [source](https://github.com/SAP/openui5/tree/master/src/sap.uxap/test/sap/uxap/demokit/sample/KPIObjectPageHeader) | [`z2ui5_cl_demo_app_529`](src/03/z2ui5_cl_demo_app_529.clas.abap) |
-| ❌ | `MPModelMapping` | [source](https://github.com/SAP/openui5/tree/master/src/sap.uxap/test/sap/uxap/demokit/sample/MPModelMapping) | — |
-| ❌ | `ObjectPageBeforeNavigate` | [source](https://github.com/SAP/openui5/tree/master/src/sap.uxap/test/sap/uxap/demokit/sample/ObjectPageBeforeNavigate) | — |
-| ❌ | `ObjectPageBlockBase` | [source](https://github.com/SAP/openui5/tree/master/src/sap.uxap/test/sap/uxap/demokit/sample/ObjectPageBlockBase) | — |
-| ❌ | `ObjectPageBlockViewTypes` | [source](https://github.com/SAP/openui5/tree/master/src/sap.uxap/test/sap/uxap/demokit/sample/ObjectPageBlockViewTypes) | — |
-| ❌ | `ObjectPageDynamicSideContentBtn` | [source](https://github.com/SAP/openui5/tree/master/src/sap.uxap/test/sap/uxap/demokit/sample/ObjectPageDynamicSideContentBtn) | — |
-| ❌ | `ObjectPageFormFocusableInput` | [source](https://github.com/SAP/openui5/tree/master/src/sap.uxap/test/sap/uxap/demokit/sample/ObjectPageFormFocusableInput) | — |
-| ❌ | `ObjectPageFormLayout` | [source](https://github.com/SAP/openui5/tree/master/src/sap.uxap/test/sap/uxap/demokit/sample/ObjectPageFormLayout) | — |
-| ✅ | [`ObjectPageHeaderActionButtons`](https://github.com/abap2UI5/api/tree/ui5/src/sap.uxap/z2ui5_cl_demo_app_411) | [source](https://github.com/SAP/openui5/tree/master/src/sap.uxap/test/sap/uxap/demokit/sample/ObjectPageHeaderActionButtons) | [`z2ui5_cl_demo_app_411`](src/01/z2ui5_cl_demo_app_411.clas.abap) |
-| ❌ | `ObjectPageHeaderBackgroundDesign` | [source](https://github.com/SAP/openui5/tree/master/src/sap.uxap/test/sap/uxap/demokit/sample/ObjectPageHeaderBackgroundDesign) | — |
-| ✅ | [`ObjectPageHeaderContentPriorities`](https://github.com/abap2UI5/api/tree/ui5/src/sap.uxap/z2ui5_cl_demo_app_412) | [source](https://github.com/SAP/openui5/tree/master/src/sap.uxap/test/sap/uxap/demokit/sample/ObjectPageHeaderContentPriorities) | [`z2ui5_cl_demo_app_412`](src/03/z2ui5_cl_demo_app_412.clas.abap) |
-| ✅ | [`ObjectPageHeaderExpanded`](https://github.com/abap2UI5/api/tree/ui5/src/sap.uxap/z2ui5_cl_demo_app_533) | [source](https://github.com/SAP/openui5/tree/master/src/sap.uxap/test/sap/uxap/demokit/sample/ObjectPageHeaderExpanded) | [`z2ui5_cl_demo_app_533`](src/03/z2ui5_cl_demo_app_533.clas.abap) |
-| ❌ | `ObjectPageHeaderWithAllControls` | [source](https://github.com/SAP/openui5/tree/master/src/sap.uxap/test/sap/uxap/demokit/sample/ObjectPageHeaderWithAllControls) | — |
-| ✅ | [`ObjectPageLazyLoadingWithoutBlocks`](https://github.com/abap2UI5/api/tree/ui5/src/sap.uxap/z2ui5_cl_demo_app_534) | [source](https://github.com/SAP/openui5/tree/master/src/sap.uxap/test/sap/uxap/demokit/sample/ObjectPageLazyLoadingWithoutBlocks) | [`z2ui5_cl_demo_app_534`](src/03/z2ui5_cl_demo_app_534.clas.abap) |
-| ❌ | `ObjectPageOnJSON` | [source](https://github.com/SAP/openui5/tree/master/src/sap.uxap/test/sap/uxap/demokit/sample/ObjectPageOnJSON) | — |
-| ✅ | [`ObjectPageOnJSONWithLazyLoading`](https://github.com/abap2UI5/api/tree/ui5/src/sap.uxap/z2ui5_cl_demo_app_535) | [source](https://github.com/SAP/openui5/tree/master/src/sap.uxap/test/sap/uxap/demokit/sample/ObjectPageOnJSONWithLazyLoading) | [`z2ui5_cl_demo_app_535`](src/03/z2ui5_cl_demo_app_535.clas.abap) |
-| ❌ | `ObjectPageProgressRatingIndicators` | [source](https://github.com/SAP/openui5/tree/master/src/sap.uxap/test/sap/uxap/demokit/sample/ObjectPageProgressRatingIndicators) | — |
-| ❌ | `ObjectPageResetSelectedSection` | [source](https://github.com/SAP/openui5/tree/master/src/sap.uxap/test/sap/uxap/demokit/sample/ObjectPageResetSelectedSection) | — |
-| ❌ | `ObjectPageResponsiveAvatar` | [source](https://github.com/SAP/openui5/tree/master/src/sap.uxap/test/sap/uxap/demokit/sample/ObjectPageResponsiveAvatar) | — |
-| ✅ | [`ObjectPageSection`](https://github.com/abap2UI5/api/tree/ui5/src/sap.uxap/z2ui5_cl_demo_app_414) | [source](https://github.com/SAP/openui5/tree/master/src/sap.uxap/test/sap/uxap/demokit/sample/ObjectPageSection) | [`z2ui5_cl_demo_app_414`](src/03/z2ui5_cl_demo_app_414.clas.abap) |
-| ❌ | `ObjectPageSectionShowTitle` | [source](https://github.com/SAP/openui5/tree/master/src/sap.uxap/test/sap/uxap/demokit/sample/ObjectPageSectionShowTitle) | — |
-| ✅ | [`ObjectPageSelectedSection`](https://github.com/abap2UI5/api/tree/ui5/src/sap.uxap/z2ui5_cl_demo_app_536) | [source](https://github.com/SAP/openui5/tree/master/src/sap.uxap/test/sap/uxap/demokit/sample/ObjectPageSelectedSection) | [`z2ui5_cl_demo_app_536`](src/03/z2ui5_cl_demo_app_536.clas.abap) |
-| ❌ | `ObjectPageState` | [source](https://github.com/SAP/openui5/tree/master/src/sap.uxap/test/sap/uxap/demokit/sample/ObjectPageState) | — |
-| ❌ | `ObjectPageSubSection` | [source](https://github.com/SAP/openui5/tree/master/src/sap.uxap/test/sap/uxap/demokit/sample/ObjectPageSubSection) | — |
-| ❌ | `ObjectPageSubSectionBackground` | [source](https://github.com/SAP/openui5/tree/master/src/sap.uxap/test/sap/uxap/demokit/sample/ObjectPageSubSectionBackground) | — |
-| ❌ | `ObjectPageSubSectionHiddenTitle` | [source](https://github.com/SAP/openui5/tree/master/src/sap.uxap/test/sap/uxap/demokit/sample/ObjectPageSubSectionHiddenTitle) | — |
-| ❌ | `ObjectPageSubSectionMultiView` | [source](https://github.com/SAP/openui5/tree/master/src/sap.uxap/test/sap/uxap/demokit/sample/ObjectPageSubSectionMultiView) | — |
-| ❌ | `ObjectPageSubSectionSized` | [source](https://github.com/SAP/openui5/tree/master/src/sap.uxap/test/sap/uxap/demokit/sample/ObjectPageSubSectionSized) | — |
-| ✅ | [`ObjectPageSubSectionWithActions`](https://github.com/abap2UI5/api/tree/ui5/src/sap.uxap/z2ui5_cl_demo_app_415) | [source](https://github.com/SAP/openui5/tree/master/src/sap.uxap/test/sap/uxap/demokit/sample/ObjectPageSubSectionWithActions) | [`z2ui5_cl_demo_app_415`](src/03/z2ui5_cl_demo_app_415.clas.abap) |
-| ✅ | [`ObjectPageTabNavigationMode`](https://github.com/abap2UI5/api/tree/ui5/src/sap.uxap/z2ui5_cl_demo_app_537) | [source](https://github.com/SAP/openui5/tree/master/src/sap.uxap/test/sap/uxap/demokit/sample/ObjectPageTabNavigationMode) | [`z2ui5_cl_demo_app_537`](src/03/z2ui5_cl_demo_app_537.clas.abap) |
-| ❌ | `ObjectPageTitleOnLeft` | [source](https://github.com/SAP/openui5/tree/master/src/sap.uxap/test/sap/uxap/demokit/sample/ObjectPageTitleOnLeft) | — |
-| ❌ | `ObjectPageWithHeaderContainer` | [source](https://github.com/SAP/openui5/tree/master/src/sap.uxap/test/sap/uxap/demokit/sample/ObjectPageWithHeaderContainer) | — |
-| ❌ | `ObjectPageWithLinksAndObjectStatus` | [source](https://github.com/SAP/openui5/tree/master/src/sap.uxap/test/sap/uxap/demokit/sample/ObjectPageWithLinksAndObjectStatus) | — |
-| ❌ | `ObjectPageXML` | [source](https://github.com/SAP/openui5/tree/master/src/sap.uxap/test/sap/uxap/demokit/sample/ObjectPageXML) | — |
-| ✅ | [`ProfileObjectPageHeader`](https://github.com/abap2UI5/api/tree/ui5/src/sap.uxap/z2ui5_cl_demo_app_530) | [source](https://github.com/SAP/openui5/tree/master/src/sap.uxap/test/sap/uxap/demokit/sample/ProfileObjectPageHeader) | [`z2ui5_cl_demo_app_530`](src/03/z2ui5_cl_demo_app_530.clas.abap) |
-| ❌ | `SharedBlocks` | [source](https://github.com/SAP/openui5/tree/master/src/sap.uxap/test/sap/uxap/demokit/sample/SharedBlocks) | — |
-| ❌ | `SharedJSONData` | [source](https://github.com/SAP/openui5/tree/master/src/sap.uxap/test/sap/uxap/demokit/sample/SharedJSONData) | — |
-| ❌ | `SingleView` | [source](https://github.com/SAP/openui5/tree/master/src/sap.uxap/test/sap/uxap/demokit/sample/SingleView) | — |
+| | Javascript | ABAP | Link |
+|---|-----------|------|------|
+| ❌ | `AlternativeProfileObjectPageHeader` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.uxap.ObjectPageHeader/sample/sap.uxap.sample.AlternativeProfileObjectPageHeader) |
+| ❌ | `AnchorBar` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.uxap.ObjectPageLayout/sample/sap.uxap.sample.AnchorBar) |
+| ✅ | [`AnchorBarNoPopover`](ui5/sap.uxap/z2ui5_cl_demo_app_413) | [`z2ui5_cl_demo_app_413`](src/03/z2ui5_cl_demo_app_413.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.uxap.ObjectPageLayout/sample/sap.uxap.sample.AnchorBarNoPopover) |
+| ✅ | [`AnchorBarWithNumbers`](ui5/sap.uxap/z2ui5_cl_demo_app_532) | [`z2ui5_cl_demo_app_532`](src/03/z2ui5_cl_demo_app_532.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.uxap.ObjectPageLayout/sample/sap.uxap.sample.AnchorBarWithNumbers) |
+| ❌ | `BlockBaseBlockInBlock` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.uxap.BlockBase/sample/sap.uxap.sample.BlockBaseBlockInBlock) |
+| ❌ | `BlockBaseEventing` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.uxap.BlockBase/sample/sap.uxap.sample.BlockBaseEventing) |
+| ❌ | `BoundModelMapping` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.uxap.ModelMapping/sample/sap.uxap.sample.BoundModelMapping) |
+| ❌ | `ChildObjectPage` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.uxap.ObjectPageHeader/sample/sap.uxap.sample.ChildObjectPage) |
+| ✅ | [`HeaderContent`](ui5/sap.uxap/z2ui5_cl_demo_app_531) | [`z2ui5_cl_demo_app_531`](src/03/z2ui5_cl_demo_app_531.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.uxap.ObjectPageHeaderContent/sample/sap.uxap.sample.HeaderContent) |
+| ✅ | [`KPIObjectPageHeader`](ui5/sap.uxap/z2ui5_cl_demo_app_529) | [`z2ui5_cl_demo_app_529`](src/03/z2ui5_cl_demo_app_529.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.uxap.ObjectPageHeader/sample/sap.uxap.sample.KPIObjectPageHeader) |
+| ❌ | `MPModelMapping` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.uxap.ModelMapping/sample/sap.uxap.sample.MPModelMapping) |
+| ❌ | `ObjectPageBeforeNavigate` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.uxap.ObjectPageLayout/sample/sap.uxap.sample.ObjectPageBeforeNavigate) |
+| ❌ | `ObjectPageBlockBase` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.uxap.BlockBase/sample/sap.uxap.sample.ObjectPageBlockBase) |
+| ❌ | `ObjectPageBlockViewTypes` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.uxap.ObjectPageLayout/sample/sap.uxap.sample.ObjectPageBlockViewTypes) |
+| ❌ | `ObjectPageDynamicSideContentBtn` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.uxap.ObjectPageHeader/sample/sap.uxap.sample.ObjectPageDynamicSideContentBtn) |
+| ❌ | `ObjectPageFormFocusableInput` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.uxap.ObjectPageLayout/sample/sap.uxap.sample.ObjectPageFormFocusableInput) |
+| ❌ | `ObjectPageFormLayout` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.uxap.ObjectPageLayout/sample/sap.uxap.sample.ObjectPageFormLayout) |
+| ✅ | [`ObjectPageHeaderActionButtons`](ui5/sap.uxap/z2ui5_cl_demo_app_411) | [`z2ui5_cl_demo_app_411`](src/01/z2ui5_cl_demo_app_411.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.GenericTag/sample/sap.uxap.sample.ObjectPageHeaderActionButtons) |
+| ❌ | `ObjectPageHeaderBackgroundDesign` | — | — |
+| ✅ | [`ObjectPageHeaderContentPriorities`](ui5/sap.uxap/z2ui5_cl_demo_app_412) | [`z2ui5_cl_demo_app_412`](src/03/z2ui5_cl_demo_app_412.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.uxap.ObjectPageHeaderContent/sample/sap.uxap.sample.ObjectPageHeaderContentPriorities) |
+| ✅ | [`ObjectPageHeaderExpanded`](ui5/sap.uxap/z2ui5_cl_demo_app_533) | [`z2ui5_cl_demo_app_533`](src/03/z2ui5_cl_demo_app_533.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.uxap.ObjectPageLayout/sample/sap.uxap.sample.ObjectPageHeaderExpanded) |
+| ❌ | `ObjectPageHeaderWithAllControls` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.uxap.ObjectPageHeader/sample/sap.uxap.sample.ObjectPageHeaderWithAllControls) |
+| ✅ | [`ObjectPageLazyLoadingWithoutBlocks`](ui5/sap.uxap/z2ui5_cl_demo_app_534) | [`z2ui5_cl_demo_app_534`](src/03/z2ui5_cl_demo_app_534.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.uxap.ObjectPageLayout/sample/sap.uxap.sample.ObjectPageLazyLoadingWithoutBlocks) |
+| ❌ | `ObjectPageOnJSON` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.uxap.ObjectPageLayout/sample/sap.uxap.sample.ObjectPageOnJSON) |
+| ✅ | [`ObjectPageOnJSONWithLazyLoading`](ui5/sap.uxap/z2ui5_cl_demo_app_535) | [`z2ui5_cl_demo_app_535`](src/03/z2ui5_cl_demo_app_535.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.uxap.ObjectPageLayout/sample/sap.uxap.sample.ObjectPageOnJSONWithLazyLoading) |
+| ❌ | `ObjectPageProgressRatingIndicators` | — | — |
+| ❌ | `ObjectPageResetSelectedSection` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.uxap.ObjectPageLayout/sample/sap.uxap.sample.ObjectPageResetSelectedSection) |
+| ❌ | `ObjectPageResponsiveAvatar` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.uxap.ObjectPageLayout/sample/sap.uxap.sample.ObjectPageResponsiveAvatar) |
+| ✅ | [`ObjectPageSection`](ui5/sap.uxap/z2ui5_cl_demo_app_414) | [`z2ui5_cl_demo_app_414`](src/03/z2ui5_cl_demo_app_414.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.uxap.ObjectPageSection/sample/sap.uxap.sample.ObjectPageSection) |
+| ❌ | `ObjectPageSectionShowTitle` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.uxap.HeaderFacetPattern/sample/sap.uxap.sample.ObjectPageSectionShowTitle) |
+| ✅ | [`ObjectPageSelectedSection`](ui5/sap.uxap/z2ui5_cl_demo_app_536) | [`z2ui5_cl_demo_app_536`](src/03/z2ui5_cl_demo_app_536.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.uxap.ObjectPageLayout/sample/sap.uxap.sample.ObjectPageSelectedSection) |
+| ❌ | `ObjectPageState` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.uxap.ObjectPageLayout/sample/sap.uxap.sample.ObjectPageState) |
+| ❌ | `ObjectPageSubSection` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.uxap.ObjectPageSubSection/sample/sap.uxap.sample.ObjectPageSubSection) |
+| ❌ | `ObjectPageSubSectionBackground` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.uxap.ObjectPageSubSection/sample/sap.uxap.sample.ObjectPageSubSectionBackground) |
+| ❌ | `ObjectPageSubSectionHiddenTitle` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.uxap.ObjectPageSubSection/sample/sap.uxap.sample.ObjectPageSubSectionHiddenTitle) |
+| ❌ | `ObjectPageSubSectionMultiView` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.uxap.ObjectPageSubSection/sample/sap.uxap.sample.ObjectPageSubSectionMultiView) |
+| ❌ | `ObjectPageSubSectionSized` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.uxap.ObjectPageSubSection/sample/sap.uxap.sample.ObjectPageSubSectionSized) |
+| ✅ | [`ObjectPageSubSectionWithActions`](ui5/sap.uxap/z2ui5_cl_demo_app_415) | [`z2ui5_cl_demo_app_415`](src/03/z2ui5_cl_demo_app_415.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.uxap.ObjectPageSubSection/sample/sap.uxap.sample.ObjectPageSubSectionWithActions) |
+| ✅ | [`ObjectPageTabNavigationMode`](ui5/sap.uxap/z2ui5_cl_demo_app_537) | [`z2ui5_cl_demo_app_537`](src/03/z2ui5_cl_demo_app_537.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.uxap.ObjectPageLayout/sample/sap.uxap.sample.ObjectPageTabNavigationMode) |
+| ❌ | `ObjectPageTitleOnLeft` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.uxap.ObjectPageLayout/sample/sap.uxap.sample.ObjectPageTitleOnLeft) |
+| ❌ | `ObjectPageWithHeaderContainer` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.uxap.ObjectPageLayout/sample/sap.uxap.sample.ObjectPageWithHeaderContainer) |
+| ❌ | `ObjectPageWithLinksAndObjectStatus` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.uxap.HeaderFacetPattern/sample/sap.uxap.sample.ObjectPageWithLinksAndObjectStatus) |
+| ❌ | `ObjectPageXML` | — | — |
+| ✅ | [`ProfileObjectPageHeader`](ui5/sap.uxap/z2ui5_cl_demo_app_530) | [`z2ui5_cl_demo_app_530`](src/03/z2ui5_cl_demo_app_530.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.uxap.ObjectPageHeader/sample/sap.uxap.sample.ProfileObjectPageHeader) |
+| ❌ | `SharedBlocks` | — | — |
+| ❌ | `SharedJSONData` | — | — |
+| ❌ | `SingleView` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.uxap.BlockBase/sample/sap.uxap.sample.SingleView) |
 
 ### `sap.ui.integration` — 1/4 (25.0 %)
 
-| | Sample | UI5 source | abap2UI5 class |
-|---|--------|------------|----------------|
-| ✅ | [`CardExplorer`](https://github.com/abap2UI5/api/tree/ui5/src/sap.ui.integration/z2ui5_cl_demo_app_510) | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.integration/test/sap/ui/integration/demokit/sample/CardExplorer) | [`z2ui5_cl_demo_app_510`](src/02/z2ui5_cl_demo_app_510.clas.abap) |
-| ❌ | `CardsLayout` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.integration/test/sap/ui/integration/demokit/sample/CardsLayout) | — |
-| ❌ | `CardsLoading` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.integration/test/sap/ui/integration/demokit/sample/CardsLoading) | — |
-| ❌ | `LazyLoading` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.integration/test/sap/ui/integration/demokit/sample/LazyLoading) | — |
+| | Javascript | ABAP | Link |
+|---|-----------|------|------|
+| ✅ | [`CardExplorer`](ui5/sap.ui.integration/z2ui5_cl_demo_app_510) | [`z2ui5_cl_demo_app_510`](src/02/z2ui5_cl_demo_app_510.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.integration.widgets.Card/sample/sap.ui.integration.sample.CardExplorer) |
+| ❌ | `CardsLayout` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.integration.widgets.Card/sample/sap.ui.integration.sample.CardsLayout) |
+| ❌ | `CardsLoading` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.integration.widgets.Card/sample/sap.ui.integration.sample.CardsLoading) |
+| ❌ | `LazyLoading` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.integration.widgets.Card/sample/sap.ui.integration.sample.LazyLoading) |
 
 ### `sap.ui.layout` — 15/62 (24.2 %)
 
-| | Sample | UI5 source | abap2UI5 class |
-|---|--------|------------|----------------|
-| ✅ | [`BlockLayoutCustomBackground`](https://github.com/abap2UI5/api/tree/ui5/src/sap.ui.layout/z2ui5_cl_demo_app_511) | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/BlockLayoutCustomBackground) | [`z2ui5_cl_demo_app_511`](src/02/z2ui5_cl_demo_app_511.clas.abap) |
-| ❌ | `BlockLayoutCustomBackgroundPerCell` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/BlockLayoutCustomBackgroundPerCell) | — |
-| ✅ | [`BlockLayoutDefault`](https://github.com/abap2UI5/api/tree/ui5/src/sap.ui.layout/z2ui5_cl_demo_app_512) | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/BlockLayoutDefault) | [`z2ui5_cl_demo_app_512`](src/02/z2ui5_cl_demo_app_512.clas.abap) |
-| ✅ | [`BlockLayoutLinkTitle`](https://github.com/abap2UI5/api/tree/ui5/src/sap.ui.layout/z2ui5_cl_demo_app_513) | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/BlockLayoutLinkTitle) | [`z2ui5_cl_demo_app_513`](src/02/z2ui5_cl_demo_app_513.clas.abap) |
-| ✅ | [`CSSGrid`](https://github.com/abap2UI5/api/tree/ui5/src/sap.ui.layout/z2ui5_cl_demo_app_521) | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/CSSGrid) | [`z2ui5_cl_demo_app_521`](src/02/z2ui5_cl_demo_app_521.clas.abap) |
-| ❌ | `DynamicSideContent` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/DynamicSideContent) | — |
-| ❌ | `DynamicSideContentEqualSplit` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/DynamicSideContentEqualSplit) | — |
-| ❌ | `DynamicSideContentPosition` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/DynamicSideContentPosition) | — |
-| ❌ | `DynamicSideContentProduct` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/DynamicSideContentProduct) | — |
-| ✅ | [`FixFlexFixedSize`](https://github.com/abap2UI5/api/tree/ui5/src/sap.ui.layout/z2ui5_cl_demo_app_410) | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/FixFlexFixedSize) | [`z2ui5_cl_demo_app_410`](src/02/z2ui5_cl_demo_app_410.clas.abap) |
-| ✅ | [`FixFlexHorizontal`](https://github.com/abap2UI5/api/tree/ui5/src/sap.ui.layout/z2ui5_cl_demo_app_514) | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/FixFlexHorizontal) | [`z2ui5_cl_demo_app_514`](src/02/z2ui5_cl_demo_app_514.clas.abap) |
-| ✅ | [`FixFlexMinFlexSize`](https://github.com/abap2UI5/api/tree/ui5/src/sap.ui.layout/z2ui5_cl_demo_app_515) | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/FixFlexMinFlexSize) | [`z2ui5_cl_demo_app_515`](src/02/z2ui5_cl_demo_app_515.clas.abap) |
-| ✅ | [`FixFlexVertical`](https://github.com/abap2UI5/api/tree/ui5/src/sap.ui.layout/z2ui5_cl_demo_app_516) | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/FixFlexVertical) | [`z2ui5_cl_demo_app_516`](src/02/z2ui5_cl_demo_app_516.clas.abap) |
-| ❌ | `Form_Column_oneGroup` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/Form_Column_oneGroup) | — |
-| ❌ | `Form_Column_oneGroup234` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/Form_Column_oneGroup234) | — |
-| ❌ | `Form_Column_threeGroups234` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/Form_Column_threeGroups234) | — |
-| ❌ | `Form_Column_threeGroups346` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/Form_Column_threeGroups346) | — |
-| ❌ | `Form_Column_twoGroups234` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/Form_Column_twoGroups234) | — |
-| ❌ | `Form354` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/Form354) | — |
-| ❌ | `Form354wide` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/Form354wide) | — |
-| ❌ | `Form354wideDual` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/Form354wideDual) | — |
-| ❌ | `Form471` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/Form471) | — |
-| ❌ | `Form480` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/Form480) | — |
-| ❌ | `Form480_12120` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/Form480_12120) | — |
-| ❌ | `Form480_12120Dual` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/Form480_12120Dual) | — |
-| ❌ | `Form480_Trial` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/Form480_Trial) | — |
-| ✅ | [`FormToolbar`](https://github.com/abap2UI5/api/tree/ui5/src/sap.ui.layout/z2ui5_cl_demo_app_523) | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/FormToolbar) | [`z2ui5_cl_demo_app_523`](src/02/z2ui5_cl_demo_app_523.clas.abap) |
-| ❌ | `GridAutoFlow` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/GridAutoFlow) | — |
-| ❌ | `GridAutoRows` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/GridAutoRows) | — |
-| ❌ | `GridData` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/GridData) | — |
-| ❌ | `GridGap` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/GridGap) | — |
-| ✅ | [`GridInfo`](https://github.com/abap2UI5/api/tree/ui5/src/sap.ui.layout/z2ui5_cl_demo_app_517) | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/GridInfo) | [`z2ui5_cl_demo_app_517`](src/02/z2ui5_cl_demo_app_517.clas.abap) |
-| ❌ | `GridProperties` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/GridProperties) | — |
-| ❌ | `GridResponsiveColumnLayout` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/GridResponsiveColumnLayout) | — |
-| ❌ | `GridResponsiveness` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/GridResponsiveness) | — |
-| ❌ | `GridTemplateRows` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/GridTemplateRows) | — |
-| ✅ | [`GridXL`](https://github.com/abap2UI5/api/tree/ui5/src/sap.ui.layout/z2ui5_cl_demo_app_518) | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/GridXL) | [`z2ui5_cl_demo_app_518`](src/02/z2ui5_cl_demo_app_518.clas.abap) |
-| ✅ | [`HorizontalLayout`](https://github.com/abap2UI5/api/tree/ui5/src/sap.ui.layout/z2ui5_cl_demo_app_519) | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/HorizontalLayout) | [`z2ui5_cl_demo_app_519`](src/02/z2ui5_cl_demo_app_519.clas.abap) |
-| ✅ | [`NestedGrids`](https://github.com/abap2UI5/api/tree/ui5/src/sap.ui.layout/z2ui5_cl_demo_app_522) | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/NestedGrids) | [`z2ui5_cl_demo_app_522`](src/02/z2ui5_cl_demo_app_522.clas.abap) |
-| ❌ | `ProductHomeLayout` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/ProductHomeLayout) | — |
-| ❌ | `ResponsiveSplitter` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/ResponsiveSplitter) | — |
-| ❌ | `SimpleForm_Column_oneGroup` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/SimpleForm_Column_oneGroup) | — |
-| ❌ | `SimpleForm_Column_oneGroup234` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/SimpleForm_Column_oneGroup234) | — |
-| ❌ | `SimpleForm_Column_threeGroups234` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/SimpleForm_Column_threeGroups234) | — |
-| ❌ | `SimpleForm_Column_threeGroups346` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/SimpleForm_Column_threeGroups346) | — |
-| ❌ | `SimpleForm_Column_twoGroups234` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/SimpleForm_Column_twoGroups234) | — |
-| ❌ | `SimpleForm354` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/SimpleForm354) | — |
-| ❌ | `SimpleForm354wide` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/SimpleForm354wide) | — |
-| ❌ | `SimpleForm354wideDual` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/SimpleForm354wideDual) | — |
-| ❌ | `SimpleForm471` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/SimpleForm471) | — |
-| ❌ | `SimpleForm480` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/SimpleForm480) | — |
-| ❌ | `SimpleForm480_12120` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/SimpleForm480_12120) | — |
-| ❌ | `SimpleForm480_12120Dual` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/SimpleForm480_12120Dual) | — |
-| ❌ | `SimpleForm480_Trial` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/SimpleForm480_Trial) | — |
-| ✅ | [`SimpleFormToolbar`](https://github.com/abap2UI5/api/tree/ui5/src/sap.ui.layout/z2ui5_cl_demo_app_524) | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/SimpleFormToolbar) | [`z2ui5_cl_demo_app_524`](src/02/z2ui5_cl_demo_app_524.clas.abap) |
-| ❌ | `Splitter` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/Splitter) | — |
-| ❌ | `Splitter2` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/Splitter2) | — |
-| ❌ | `Splitter3` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/Splitter3) | — |
-| ❌ | `Splitter4` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/Splitter4) | — |
-| ❌ | `SplitterNested1` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/SplitterNested1) | — |
-| ❌ | `tests` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/tests) | — |
-| ✅ | [`VerticalLayout`](https://github.com/abap2UI5/api/tree/ui5/src/sap.ui.layout/z2ui5_cl_demo_app_520) | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.layout/test/sap/ui/layout/demokit/sample/VerticalLayout) | [`z2ui5_cl_demo_app_520`](src/02/z2ui5_cl_demo_app_520.clas.abap) |
+| | Javascript | ABAP | Link |
+|---|-----------|------|------|
+| ✅ | [`BlockLayoutCustomBackground`](ui5/sap.ui.layout/z2ui5_cl_demo_app_511) | [`z2ui5_cl_demo_app_511`](src/02/z2ui5_cl_demo_app_511.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.BlockLayout/sample/sap.ui.layout.sample.BlockLayoutCustomBackground) |
+| ❌ | `BlockLayoutCustomBackgroundPerCell` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.BlockLayout/sample/sap.ui.layout.sample.BlockLayoutCustomBackgroundPerCell) |
+| ✅ | [`BlockLayoutDefault`](ui5/sap.ui.layout/z2ui5_cl_demo_app_512) | [`z2ui5_cl_demo_app_512`](src/02/z2ui5_cl_demo_app_512.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.BlockLayout/sample/sap.ui.layout.sample.BlockLayoutDefault) |
+| ✅ | [`BlockLayoutLinkTitle`](ui5/sap.ui.layout/z2ui5_cl_demo_app_513) | [`z2ui5_cl_demo_app_513`](src/02/z2ui5_cl_demo_app_513.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.BlockLayout/sample/sap.ui.layout.sample.BlockLayoutLinkTitle) |
+| ✅ | [`CSSGrid`](ui5/sap.ui.layout/z2ui5_cl_demo_app_521) | [`z2ui5_cl_demo_app_521`](src/02/z2ui5_cl_demo_app_521.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.cssgrid.CSSGrid/sample/sap.ui.layout.sample.CSSGrid) |
+| ❌ | `DynamicSideContent` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.DynamicSideContent/sample/sap.ui.layout.sample.DynamicSideContent) |
+| ❌ | `DynamicSideContentEqualSplit` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.DynamicSideContent/sample/sap.ui.layout.sample.DynamicSideContentEqualSplit) |
+| ❌ | `DynamicSideContentPosition` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.DynamicSideContent/sample/sap.ui.layout.sample.DynamicSideContentPosition) |
+| ❌ | `DynamicSideContentProduct` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.DynamicSideContent/sample/sap.ui.layout.sample.DynamicSideContentProduct) |
+| ✅ | [`FixFlexFixedSize`](ui5/sap.ui.layout/z2ui5_cl_demo_app_410) | [`z2ui5_cl_demo_app_410`](src/02/z2ui5_cl_demo_app_410.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.FixFlex/sample/sap.ui.layout.sample.FixFlexFixedSize) |
+| ✅ | [`FixFlexHorizontal`](ui5/sap.ui.layout/z2ui5_cl_demo_app_514) | [`z2ui5_cl_demo_app_514`](src/02/z2ui5_cl_demo_app_514.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.FixFlex/sample/sap.ui.layout.sample.FixFlexHorizontal) |
+| ✅ | [`FixFlexMinFlexSize`](ui5/sap.ui.layout/z2ui5_cl_demo_app_515) | [`z2ui5_cl_demo_app_515`](src/02/z2ui5_cl_demo_app_515.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.FixFlex/sample/sap.ui.layout.sample.FixFlexMinFlexSize) |
+| ✅ | [`FixFlexVertical`](ui5/sap.ui.layout/z2ui5_cl_demo_app_516) | [`z2ui5_cl_demo_app_516`](src/02/z2ui5_cl_demo_app_516.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.FixFlex/sample/sap.ui.layout.sample.FixFlexVertical) |
+| ❌ | `Form_Column_oneGroup` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.form.Form/sample/sap.ui.layout.sample.Form_Column_oneGroup) |
+| ❌ | `Form_Column_oneGroup234` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.form.Form/sample/sap.ui.layout.sample.Form_Column_oneGroup234) |
+| ❌ | `Form_Column_threeGroups234` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.form.Form/sample/sap.ui.layout.sample.Form_Column_threeGroups234) |
+| ❌ | `Form_Column_threeGroups346` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.form.Form/sample/sap.ui.layout.sample.Form_Column_threeGroups346) |
+| ❌ | `Form_Column_twoGroups234` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.form.Form/sample/sap.ui.layout.sample.Form_Column_twoGroups234) |
+| ❌ | `Form354` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.form.Form/sample/sap.ui.layout.sample.Form354) |
+| ❌ | `Form354wide` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.form.Form/sample/sap.ui.layout.sample.Form354wide) |
+| ❌ | `Form354wideDual` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.form.Form/sample/sap.ui.layout.sample.Form354wideDual) |
+| ❌ | `Form471` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.form.Form/sample/sap.ui.layout.sample.Form471) |
+| ❌ | `Form480` | — | — |
+| ❌ | `Form480_12120` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.form.Form/sample/sap.ui.layout.sample.Form480_12120) |
+| ❌ | `Form480_12120Dual` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.form.Form/sample/sap.ui.layout.sample.Form480_12120Dual) |
+| ❌ | `Form480_Trial` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.form.Form/sample/sap.ui.layout.sample.Form480_Trial) |
+| ✅ | [`FormToolbar`](ui5/sap.ui.layout/z2ui5_cl_demo_app_523) | [`z2ui5_cl_demo_app_523`](src/02/z2ui5_cl_demo_app_523.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.form.Form/sample/sap.ui.layout.sample.FormToolbar) |
+| ❌ | `GridAutoFlow` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.cssgrid.CSSGrid/sample/sap.ui.layout.sample.GridAutoFlow) |
+| ❌ | `GridAutoRows` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.cssgrid.CSSGrid/sample/sap.ui.layout.sample.GridAutoRows) |
+| ❌ | `GridData` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.Grid/sample/sap.ui.layout.sample.GridData) |
+| ❌ | `GridGap` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.cssgrid.CSSGrid/sample/sap.ui.layout.sample.GridGap) |
+| ✅ | [`GridInfo`](ui5/sap.ui.layout/z2ui5_cl_demo_app_517) | [`z2ui5_cl_demo_app_517`](src/02/z2ui5_cl_demo_app_517.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.Grid/sample/sap.ui.layout.sample.GridInfo) |
+| ❌ | `GridProperties` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.Grid/sample/sap.ui.layout.sample.GridProperties) |
+| ❌ | `GridResponsiveColumnLayout` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.cssgrid.CSSGrid/sample/sap.ui.layout.sample.GridResponsiveColumnLayout) |
+| ❌ | `GridResponsiveness` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.cssgrid.CSSGrid/sample/sap.ui.layout.sample.GridResponsiveness) |
+| ❌ | `GridTemplateRows` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.cssgrid.CSSGrid/sample/sap.ui.layout.sample.GridTemplateRows) |
+| ✅ | [`GridXL`](ui5/sap.ui.layout/z2ui5_cl_demo_app_518) | [`z2ui5_cl_demo_app_518`](src/02/z2ui5_cl_demo_app_518.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.Grid/sample/sap.ui.layout.sample.GridXL) |
+| ✅ | [`HorizontalLayout`](ui5/sap.ui.layout/z2ui5_cl_demo_app_519) | [`z2ui5_cl_demo_app_519`](src/02/z2ui5_cl_demo_app_519.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.HorizontalLayout/sample/sap.ui.layout.sample.HorizontalLayout) |
+| ✅ | [`NestedGrids`](ui5/sap.ui.layout/z2ui5_cl_demo_app_522) | [`z2ui5_cl_demo_app_522`](src/02/z2ui5_cl_demo_app_522.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.cssgrid.CSSGrid/sample/sap.ui.layout.sample.NestedGrids) |
+| ❌ | `ProductHomeLayout` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.cssgrid.CSSGrid/sample/sap.ui.layout.sample.ProductHomeLayout) |
+| ❌ | `ResponsiveSplitter` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.ResponsiveSplitter/sample/sap.ui.layout.sample.ResponsiveSplitter) |
+| ❌ | `SimpleForm_Column_oneGroup` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.form.SimpleForm/sample/sap.ui.layout.sample.SimpleForm_Column_oneGroup) |
+| ❌ | `SimpleForm_Column_oneGroup234` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.form.SimpleForm/sample/sap.ui.layout.sample.SimpleForm_Column_oneGroup234) |
+| ❌ | `SimpleForm_Column_threeGroups234` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.form.SimpleForm/sample/sap.ui.layout.sample.SimpleForm_Column_threeGroups234) |
+| ❌ | `SimpleForm_Column_threeGroups346` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.form.SimpleForm/sample/sap.ui.layout.sample.SimpleForm_Column_threeGroups346) |
+| ❌ | `SimpleForm_Column_twoGroups234` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.form.SimpleForm/sample/sap.ui.layout.sample.SimpleForm_Column_twoGroups234) |
+| ❌ | `SimpleForm354` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.form.SimpleForm/sample/sap.ui.layout.sample.SimpleForm354) |
+| ❌ | `SimpleForm354wide` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.form.SimpleForm/sample/sap.ui.layout.sample.SimpleForm354wide) |
+| ❌ | `SimpleForm354wideDual` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.form.SimpleForm/sample/sap.ui.layout.sample.SimpleForm354wideDual) |
+| ❌ | `SimpleForm471` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.form.SimpleForm/sample/sap.ui.layout.sample.SimpleForm471) |
+| ❌ | `SimpleForm480` | — | — |
+| ❌ | `SimpleForm480_12120` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.form.SimpleForm/sample/sap.ui.layout.sample.SimpleForm480_12120) |
+| ❌ | `SimpleForm480_12120Dual` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.form.SimpleForm/sample/sap.ui.layout.sample.SimpleForm480_12120Dual) |
+| ❌ | `SimpleForm480_Trial` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.form.SimpleForm/sample/sap.ui.layout.sample.SimpleForm480_Trial) |
+| ✅ | [`SimpleFormToolbar`](ui5/sap.ui.layout/z2ui5_cl_demo_app_524) | [`z2ui5_cl_demo_app_524`](src/02/z2ui5_cl_demo_app_524.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.form.SimpleForm/sample/sap.ui.layout.sample.SimpleFormToolbar) |
+| ❌ | `Splitter` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.Splitter/sample/sap.ui.layout.sample.Splitter) |
+| ❌ | `Splitter2` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.Splitter/sample/sap.ui.layout.sample.Splitter2) |
+| ❌ | `Splitter3` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.Splitter/sample/sap.ui.layout.sample.Splitter3) |
+| ❌ | `Splitter4` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.Splitter/sample/sap.ui.layout.sample.Splitter4) |
+| ❌ | `SplitterNested1` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.Splitter/sample/sap.ui.layout.sample.SplitterNested1) |
+| ❌ | `tests` | — | — |
+| ✅ | [`VerticalLayout`](ui5/sap.ui.layout/z2ui5_cl_demo_app_520) | [`z2ui5_cl_demo_app_520`](src/02/z2ui5_cl_demo_app_520.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.layout.VerticalLayout/sample/sap.ui.layout.sample.VerticalLayout) |
 
 ### `sap.ui.core` — 9/48 (18.8 %)
 
-| | Sample | UI5 source | abap2UI5 class |
-|---|--------|------------|----------------|
-| ✅ | [`BasicThemeParameters`](https://github.com/abap2UI5/api/tree/ui5/src/sap.ui.core/z2ui5_cl_demo_app_502) | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.core/test/sap/ui/core/demokit/sample/BasicThemeParameters) | [`z2ui5_cl_demo_app_502`](src/02/z2ui5_cl_demo_app_502.clas.abap) |
-| ❌ | `BoundFilters` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.core/test/sap/ui/core/demokit/sample/BoundFilters) | — |
-| ❌ | `BusyIndicator` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.core/test/sap/ui/core/demokit/sample/BusyIndicator) | — |
-| ❌ | `Commands` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.core/test/sap/ui/core/demokit/sample/Commands) | — |
-| ❌ | `common` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.core/test/sap/ui/core/demokit/sample/common) | — |
-| ❌ | `ControlBusyIndicator` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.core/test/sap/ui/core/demokit/sample/ControlBusyIndicator) | — |
-| ❌ | `ControllerExtension` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.core/test/sap/ui/core/demokit/sample/ControllerExtension) | — |
-| ❌ | `FieldGroup` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.core/test/sap/ui/core/demokit/sample/FieldGroup) | — |
-| ❌ | `gherkin` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.core/test/sap/ui/core/demokit/sample/gherkin) | — |
-| ❌ | `Html` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.core/test/sap/ui/core/demokit/sample/Html) | — |
-| ❌ | `HyphenationAPI` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.core/test/sap/ui/core/demokit/sample/HyphenationAPI) | — |
-| ✅ | [`Icon`](https://github.com/abap2UI5/api/tree/ui5/src/sap.ui.core/z2ui5_cl_demo_app_501) | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.core/test/sap/ui/core/demokit/sample/Icon) | [`z2ui5_cl_demo_app_501`](src/02/z2ui5_cl_demo_app_501.clas.abap) |
-| ❌ | `InvisibleMessage` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.core/test/sap/ui/core/demokit/sample/InvisibleMessage) | — |
-| ❌ | `InvisibleText` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.core/test/sap/ui/core/demokit/sample/InvisibleText) | — |
-| ❌ | `matcher` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.core/test/sap/ui/core/demokit/sample/matcher) | — |
-| ❌ | `Messaging` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.core/test/sap/ui/core/demokit/sample/Messaging) | — |
-| ❌ | `odata` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.core/test/sap/ui/core/demokit/sample/odata) | — |
-| ❌ | `OpaAction` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.core/test/sap/ui/core/demokit/sample/OpaAction) | — |
-| ❌ | `OpaAutoWaitParams` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.core/test/sap/ui/core/demokit/sample/OpaAutoWaitParams) | — |
-| ❌ | `OpaBusyIndicator` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.core/test/sap/ui/core/demokit/sample/OpaBusyIndicator) | — |
-| ❌ | `OpaById` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.core/test/sap/ui/core/demokit/sample/OpaById) | — |
-| ❌ | `OpaDynamicWait` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.core/test/sap/ui/core/demokit/sample/OpaDynamicWait) | — |
-| ❌ | `OpaGetStarted` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.core/test/sap/ui/core/demokit/sample/OpaGetStarted) | — |
-| ❌ | `OpaMatchers` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.core/test/sap/ui/core/demokit/sample/OpaMatchers) | — |
-| ❌ | `OpaPageObject` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.core/test/sap/ui/core/demokit/sample/OpaPageObject) | — |
-| ❌ | `OpaStartup` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.core/test/sap/ui/core/demokit/sample/OpaStartup) | — |
-| ❌ | `OpaStaticAreaControls` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.core/test/sap/ui/core/demokit/sample/OpaStaticAreaControls) | — |
-| ❌ | `OpaTableAction` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.core/test/sap/ui/core/demokit/sample/OpaTableAction) | — |
-| ❌ | `OpaTestLibrary` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.core/test/sap/ui/core/demokit/sample/OpaTestLibrary) | — |
-| ❌ | `OpaURLParameters` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.core/test/sap/ui/core/demokit/sample/OpaURLParameters) | — |
-| ❌ | `OpaWithSupportAssistant` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.core/test/sap/ui/core/demokit/sample/OpaWithSupportAssistant) | — |
-| ❌ | `PatternMatching` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.core/test/sap/ui/core/demokit/sample/PatternMatching) | — |
-| ❌ | `RoutingFullscreen` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.core/test/sap/ui/core/demokit/sample/RoutingFullscreen) | — |
-| ❌ | `RoutingMasterDetail` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.core/test/sap/ui/core/demokit/sample/RoutingMasterDetail) | — |
-| ❌ | `RoutingNestedComponent` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.core/test/sap/ui/core/demokit/sample/RoutingNestedComponent) | — |
-| ❌ | `TargetsStandalone` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.core/test/sap/ui/core/demokit/sample/TargetsStandalone) | — |
-| ❌ | `ThemeCustomClasses` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.core/test/sap/ui/core/demokit/sample/ThemeCustomClasses) | — |
-| ✅ | [`TypeCurrency`](https://github.com/abap2UI5/api/tree/ui5/src/sap.ui.core/z2ui5_cl_demo_app_503) | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.core/test/sap/ui/core/demokit/sample/TypeCurrency) | [`z2ui5_cl_demo_app_503`](src/02/z2ui5_cl_demo_app_503.clas.abap) |
-| ✅ | [`TypeDateAsDate`](https://github.com/abap2UI5/api/tree/ui5/src/sap.ui.core/z2ui5_cl_demo_app_504) | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.core/test/sap/ui/core/demokit/sample/TypeDateAsDate) | [`z2ui5_cl_demo_app_504`](src/02/z2ui5_cl_demo_app_504.clas.abap) |
-| ✅ | [`TypeDateAsString`](https://github.com/abap2UI5/api/tree/ui5/src/sap.ui.core/z2ui5_cl_demo_app_505) | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.core/test/sap/ui/core/demokit/sample/TypeDateAsString) | [`z2ui5_cl_demo_app_505`](src/02/z2ui5_cl_demo_app_505.clas.abap) |
-| ❌ | `TypeDateTime` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.core/test/sap/ui/core/demokit/sample/TypeDateTime) | — |
-| ✅ | [`TypeFileSize`](https://github.com/abap2UI5/api/tree/ui5/src/sap.ui.core/z2ui5_cl_demo_app_506) | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.core/test/sap/ui/core/demokit/sample/TypeFileSize) | [`z2ui5_cl_demo_app_506`](src/02/z2ui5_cl_demo_app_506.clas.abap) |
-| ✅ | [`TypeFloat`](https://github.com/abap2UI5/api/tree/ui5/src/sap.ui.core/z2ui5_cl_demo_app_507) | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.core/test/sap/ui/core/demokit/sample/TypeFloat) | [`z2ui5_cl_demo_app_507`](src/02/z2ui5_cl_demo_app_507.clas.abap) |
-| ✅ | [`TypeInteger`](https://github.com/abap2UI5/api/tree/ui5/src/sap.ui.core/z2ui5_cl_demo_app_508) | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.core/test/sap/ui/core/demokit/sample/TypeInteger) | [`z2ui5_cl_demo_app_508`](src/02/z2ui5_cl_demo_app_508.clas.abap) |
-| ✅ | [`TypeTimeAsTime`](https://github.com/abap2UI5/api/tree/ui5/src/sap.ui.core/z2ui5_cl_demo_app_509) | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.core/test/sap/ui/core/demokit/sample/TypeTimeAsTime) | [`z2ui5_cl_demo_app_509`](src/02/z2ui5_cl_demo_app_509.clas.abap) |
-| ❌ | `View` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.core/test/sap/ui/core/demokit/sample/View) | — |
-| ❌ | `ViewTemplate` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.core/test/sap/ui/core/demokit/sample/ViewTemplate) | — |
-| ❌ | `XMLComposite` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.core/test/sap/ui/core/demokit/sample/XMLComposite) | — |
+| | Javascript | ABAP | Link |
+|---|-----------|------|------|
+| ✅ | [`BasicThemeParameters`](ui5/sap.ui.core/z2ui5_cl_demo_app_502) | [`z2ui5_cl_demo_app_502`](src/02/z2ui5_cl_demo_app_502.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.core.theming/sample/sap.ui.core.sample.BasicThemeParameters) |
+| ❌ | `BoundFilters` | — | — |
+| ❌ | `BusyIndicator` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.core.BusyIndicator/sample/sap.ui.core.sample.BusyIndicator) |
+| ❌ | `Commands` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.core.CommandExecution/sample/sap.ui.core.sample.Commands) |
+| ❌ | `common` | — | — |
+| ❌ | `ControlBusyIndicator` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.core.Control/sample/sap.ui.core.sample.ControlBusyIndicator) |
+| ❌ | `ControllerExtension` | — | — |
+| ❌ | `FieldGroup` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.core.Control/sample/sap.ui.core.sample.FieldGroup) |
+| ❌ | `gherkin` | — | — |
+| ❌ | `Html` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.core.HTML/sample/sap.ui.core.sample.Html) |
+| ❌ | `HyphenationAPI` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.core.hyphenation.Hyphenation/sample/sap.ui.core.sample.HyphenationAPI) |
+| ✅ | [`Icon`](ui5/sap.ui.core/z2ui5_cl_demo_app_501) | [`z2ui5_cl_demo_app_501`](src/02/z2ui5_cl_demo_app_501.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.core.Icon/sample/sap.ui.core.sample.Icon) |
+| ❌ | `InvisibleMessage` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.core.InvisibleMessage/sample/sap.ui.core.sample.InvisibleMessage) |
+| ❌ | `InvisibleText` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.core.InvisibleText/sample/sap.ui.core.sample.InvisibleText) |
+| ❌ | `matcher` | — | — |
+| ❌ | `Messaging` | — | — |
+| ❌ | `odata` | — | — |
+| ❌ | `OpaAction` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.test.Opa5/sample/sap.ui.core.sample.OpaAction) |
+| ❌ | `OpaAutoWaitParams` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.test.Opa5/sample/sap.ui.core.sample.OpaAutoWaitParams) |
+| ❌ | `OpaBusyIndicator` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.test.Opa5/sample/sap.ui.core.sample.OpaBusyIndicator) |
+| ❌ | `OpaById` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.test.Opa5/sample/sap.ui.core.sample.OpaById) |
+| ❌ | `OpaDynamicWait` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.test.Opa5/sample/sap.ui.core.sample.OpaDynamicWait) |
+| ❌ | `OpaGetStarted` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.test.Opa5/sample/sap.ui.core.sample.OpaGetStarted) |
+| ❌ | `OpaMatchers` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.test.Opa5/sample/sap.ui.core.sample.OpaMatchers) |
+| ❌ | `OpaPageObject` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.test.Opa5/sample/sap.ui.core.sample.OpaPageObject) |
+| ❌ | `OpaStartup` | — | — |
+| ❌ | `OpaStaticAreaControls` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.test.Opa5/sample/sap.ui.core.sample.OpaStaticAreaControls) |
+| ❌ | `OpaTableAction` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.test.Opa5/sample/sap.ui.core.sample.OpaTableAction) |
+| ❌ | `OpaTestLibrary` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.test.Opa5/sample/sap.ui.core.sample.OpaTestLibrary) |
+| ❌ | `OpaURLParameters` | — | — |
+| ❌ | `OpaWithSupportAssistant` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.test.Opa5/sample/sap.ui.core.sample.OpaWithSupportAssistant) |
+| ❌ | `PatternMatching` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.core.routing.Route/sample/sap.ui.core.sample.PatternMatching) |
+| ❌ | `RoutingFullscreen` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.core.routing.Router/sample/sap.ui.core.sample.RoutingFullscreen) |
+| ❌ | `RoutingMasterDetail` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.core.routing.Router/sample/sap.ui.core.sample.RoutingMasterDetail) |
+| ❌ | `RoutingNestedComponent` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.core.routing.Router/sample/sap.ui.core.sample.RoutingNestedComponent) |
+| ❌ | `TargetsStandalone` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.core.routing.Targets/sample/sap.ui.core.sample.TargetsStandalone) |
+| ❌ | `ThemeCustomClasses` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.core.theming/sample/sap.ui.core.sample.ThemeCustomClasses) |
+| ✅ | [`TypeCurrency`](ui5/sap.ui.core/z2ui5_cl_demo_app_503) | [`z2ui5_cl_demo_app_503`](src/02/z2ui5_cl_demo_app_503.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.model.type.Currency/sample/sap.ui.core.sample.TypeCurrency) |
+| ✅ | [`TypeDateAsDate`](ui5/sap.ui.core/z2ui5_cl_demo_app_504) | [`z2ui5_cl_demo_app_504`](src/02/z2ui5_cl_demo_app_504.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.model.type.Date/sample/sap.ui.core.sample.TypeDateAsDate) |
+| ✅ | [`TypeDateAsString`](ui5/sap.ui.core/z2ui5_cl_demo_app_505) | [`z2ui5_cl_demo_app_505`](src/02/z2ui5_cl_demo_app_505.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.model.type.Date/sample/sap.ui.core.sample.TypeDateAsString) |
+| ❌ | `TypeDateTime` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.model.type.DateTime/sample/sap.ui.core.sample.TypeDateTime) |
+| ✅ | [`TypeFileSize`](ui5/sap.ui.core/z2ui5_cl_demo_app_506) | [`z2ui5_cl_demo_app_506`](src/02/z2ui5_cl_demo_app_506.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.model.type.FileSize/sample/sap.ui.core.sample.TypeFileSize) |
+| ✅ | [`TypeFloat`](ui5/sap.ui.core/z2ui5_cl_demo_app_507) | [`z2ui5_cl_demo_app_507`](src/02/z2ui5_cl_demo_app_507.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.model.type.Float/sample/sap.ui.core.sample.TypeFloat) |
+| ✅ | [`TypeInteger`](ui5/sap.ui.core/z2ui5_cl_demo_app_508) | [`z2ui5_cl_demo_app_508`](src/02/z2ui5_cl_demo_app_508.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.model.type.Integer/sample/sap.ui.core.sample.TypeInteger) |
+| ✅ | [`TypeTimeAsTime`](ui5/sap.ui.core/z2ui5_cl_demo_app_509) | [`z2ui5_cl_demo_app_509`](src/02/z2ui5_cl_demo_app_509.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.model.type.Time/sample/sap.ui.core.sample.TypeTimeAsTime) |
+| ❌ | `View` | — | — |
+| ❌ | `ViewTemplate` | — | — |
+| ❌ | `XMLComposite` | — | — |
 
 ### `sap.m` — 83/446 (18.6 %)
 
-| | Sample | UI5 source | abap2UI5 class |
-|---|--------|------------|----------------|
-| ❌ | `ActionListItem` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ActionListItem) | — |
-| ❌ | `ActionSelect` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ActionSelect) | — |
-| ❌ | `ActionSheet` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ActionSheet) | — |
-| ❌ | `AIIntegration` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/AIIntegration) | — |
-| ❌ | `Avatar` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/Avatar) | — |
-| ❌ | `AvatarActiveState` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/AvatarActiveState) | — |
-| ❌ | `AvatarBadgeIconColor` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/AvatarBadgeIconColor) | — |
-| ❌ | `AvatarValueState` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/AvatarValueState) | — |
-| ❌ | `AvatarWithAffordance` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/AvatarWithAffordance) | — |
-| ❌ | `Breadcrumbs` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/Breadcrumbs) | — |
-| ❌ | `BreadcrumbsWithCurrentPageLink` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/BreadcrumbsWithCurrentPageLink) | — |
-| ❌ | `BreadcrumbsWithoutCurrentPage` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/BreadcrumbsWithoutCurrentPage) | — |
-| ❌ | `BusyDialog` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/BusyDialog) | — |
-| ❌ | `BusyDialogLight` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/BusyDialogLight) | — |
-| ❌ | `BusyIndicator` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/BusyIndicator) | — |
-| ❌ | `Button` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/Button) | — |
-| ❌ | `ButtonWithBadge` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ButtonWithBadge) | — |
-| ❌ | `Carousel` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/Carousel) | — |
-| ❌ | `CarouselEmptyMessages` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/CarouselEmptyMessages) | — |
-| ✅ | [`CarouselWithControls`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_420) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/CarouselWithControls) | [`z2ui5_cl_demo_app_420`](src/01/z2ui5_cl_demo_app_420.clas.abap) |
-| ❌ | `CarouselWithDisplayOptions` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/CarouselWithDisplayOptions) | — |
-| ❌ | `CarouselWithMorePages` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/CarouselWithMorePages) | — |
-| ❌ | `CheckBox` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/CheckBox) | — |
-| ✅ | [`CheckBoxTriState`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_421) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/CheckBoxTriState) | [`z2ui5_cl_demo_app_421`](src/01/z2ui5_cl_demo_app_421.clas.abap) |
-| ✅ | [`ColorPalette`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_422) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ColorPalette) | [`z2ui5_cl_demo_app_422`](src/01/z2ui5_cl_demo_app_422.clas.abap) |
-| ❌ | `ColorPalettePopover` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ColorPalettePopover) | — |
-| ✅ | [`ComboBox`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_423) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ComboBox) | [`z2ui5_cl_demo_app_423`](src/01/z2ui5_cl_demo_app_423.clas.abap) |
-| ✅ | [`ComboBox2Columns`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_424) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ComboBox2Columns) | [`z2ui5_cl_demo_app_424`](src/01/z2ui5_cl_demo_app_424.clas.abap) |
-| ❌ | `ComboBoxClearIcon` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ComboBoxClearIcon) | — |
-| ✅ | [`ComboBoxDefaultFiltering`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_425) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ComboBoxDefaultFiltering) | [`z2ui5_cl_demo_app_425`](src/01/z2ui5_cl_demo_app_425.clas.abap) |
-| ❌ | `ComboBoxFilteringContains` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ComboBoxFilteringContains) | — |
-| ❌ | `ComboBoxFilteringStartsWith` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ComboBoxFilteringStartsWith) | — |
-| ✅ | [`ComboBoxGrouping`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_428) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ComboBoxGrouping) | [`z2ui5_cl_demo_app_428`](src/01/z2ui5_cl_demo_app_428.clas.abap) |
-| ❌ | `ComboBoxLazyLoading` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ComboBoxLazyLoading) | — |
-| ❌ | `ComboBoxMaxPickerHeight` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ComboBoxMaxPickerHeight) | — |
-| ❌ | `ComboBoxSearchBoth` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ComboBoxSearchBoth) | — |
-| ❌ | `ComboBoxValidation` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ComboBoxValidation) | — |
-| ❌ | `ComboBoxValueState` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ComboBoxValueState) | — |
-| ❌ | `ComboBoxWrapping` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ComboBoxWrapping) | — |
-| ❌ | `ComparisonPattern` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ComparisonPattern) | — |
-| ✅ | [`ContainerNoPadding`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_488) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ContainerNoPadding) | [`z2ui5_cl_demo_app_488`](src/02/z2ui5_cl_demo_app_488.clas.abap) |
-| ❌ | `ContainerPadding` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ContainerPadding) | — |
-| ✅ | [`ContainerPaddingAndMargin`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_489) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ContainerPaddingAndMargin) | [`z2ui5_cl_demo_app_489`](src/02/z2ui5_cl_demo_app_489.clas.abap) |
-| ✅ | [`ContainerResponsivePadding`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_490) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ContainerResponsivePadding) | [`z2ui5_cl_demo_app_490`](src/02/z2ui5_cl_demo_app_490.clas.abap) |
-| ❌ | `CookieSettingsDialogPattern` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/CookieSettingsDialogPattern) | — |
-| ❌ | `CustomListItem` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/CustomListItem) | — |
-| ❌ | `CustomMessageStripDesign` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/CustomMessageStripDesign) | — |
-| ✅ | [`CustomTreeItem`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_429) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/CustomTreeItem) | [`z2ui5_cl_demo_app_429`](src/01/z2ui5_cl_demo_app_429.clas.abap) |
-| ❌ | `DatePicker` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/DatePicker) | — |
-| ❌ | `DatePickerHidden` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/DatePickerHidden) | — |
-| ❌ | `DatePickerMassEdit` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/DatePickerMassEdit) | — |
-| ❌ | `DatePickerValueState` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/DatePickerValueState) | — |
-| ❌ | `DateRangeSelection` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/DateRangeSelection) | — |
-| ❌ | `DateRangeSelectionHidden` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/DateRangeSelectionHidden) | — |
-| ❌ | `DateRangeSelectionValueState` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/DateRangeSelectionValueState) | — |
-| ❌ | `DateTimeInput` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/DateTimeInput) | — |
-| ❌ | `DateTimePicker` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/DateTimePicker) | — |
-| ❌ | `DateTimePickerHidden` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/DateTimePickerHidden) | — |
-| ❌ | `DateTimePickerValueState` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/DateTimePickerValueState) | — |
-| ❌ | `Dialog` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/Dialog) | — |
-| ❌ | `DialogConfirm` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/DialogConfirm) | — |
-| ❌ | `DialogFullScreen` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/DialogFullScreen) | — |
-| ❌ | `DialogMessage` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/DialogMessage) | — |
-| ❌ | `DialogSearch` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/DialogSearch) | — |
-| ❌ | `DialogWithinArea` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/DialogWithinArea) | — |
-| ❌ | `DialogWithMessagePopover` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/DialogWithMessagePopover) | — |
-| ✅ | [`DisplayListItem`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_430) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/DisplayListItem) | [`z2ui5_cl_demo_app_430`](src/01/z2ui5_cl_demo_app_430.clas.abap) |
-| ❌ | `DraftIndicator` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/DraftIndicator) | — |
-| ❌ | `DynamicDateRange` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/DynamicDateRange) | — |
-| ❌ | `DynamicDateRangeAndCalendarWeekNumbering` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/DynamicDateRangeAndCalendarWeekNumbering) | — |
-| ❌ | `DynamicDateRangeHidden` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/DynamicDateRangeHidden) | — |
-| ❌ | `DynamicDateRangeWithCustomOptions` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/DynamicDateRangeWithCustomOptions) | — |
-| ❌ | `DynamicMessageStripGenerator` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/DynamicMessageStripGenerator) | — |
-| ❌ | `ExpandableText` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ExpandableText) | — |
-| ❌ | `FacetFilterCustomFilters` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/FacetFilterCustomFilters) | — |
-| ✅ | [`FacetFilterLight`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_401) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/FacetFilterLight) | [`z2ui5_cl_demo_app_401`](src/01/z2ui5_cl_demo_app_401.clas.abap) |
-| ❌ | `FacetFilterSimple` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/FacetFilterSimple) | — |
-| ❌ | `Feed` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/Feed) | — |
-| ❌ | `FeedContent` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/FeedContent) | — |
-| ❌ | `FeedInput` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/FeedInput) | — |
-| ❌ | `FeedListItem` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/FeedListItem) | — |
-| ❌ | `FlexBoxBasicAlignment` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/FlexBoxBasicAlignment) | — |
-| ✅ | [`FlexBoxCols`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_402) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/FlexBoxCols) | [`z2ui5_cl_demo_app_402`](src/01/z2ui5_cl_demo_app_402.clas.abap) |
-| ❌ | `FlexBoxDirectionOrder` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/FlexBoxDirectionOrder) | — |
-| ❌ | `FlexBoxGap` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/FlexBoxGap) | — |
-| ✅ | [`FlexBoxNav`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_403) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/FlexBoxNav) | [`z2ui5_cl_demo_app_403`](src/01/z2ui5_cl_demo_app_403.clas.abap) |
-| ✅ | [`FlexBoxNested`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_404) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/FlexBoxNested) | [`z2ui5_cl_demo_app_404`](src/01/z2ui5_cl_demo_app_404.clas.abap) |
-| ❌ | `FlexBoxOpposingAlignment` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/FlexBoxOpposingAlignment) | — |
-| ❌ | `FlexBoxRenderType` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/FlexBoxRenderType) | — |
-| ✅ | [`FlexBoxSizeAdjustments`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_405) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/FlexBoxSizeAdjustments) | [`z2ui5_cl_demo_app_405`](src/01/z2ui5_cl_demo_app_405.clas.abap) |
-| ❌ | `FormattedText` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/FormattedText) | — |
-| ❌ | `GenericTag` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/GenericTag) | — |
-| ❌ | `GenericTileAsFeedTile` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/GenericTileAsFeedTile) | — |
-| ✅ | [`GenericTileAsKPITile`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_431) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/GenericTileAsKPITile) | [`z2ui5_cl_demo_app_431`](src/01/z2ui5_cl_demo_app_431.clas.abap) |
-| ❌ | `GenericTileAsLaunchTile` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/GenericTileAsLaunchTile) | — |
-| ❌ | `GenericTileAsMonitorTile` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/GenericTileAsMonitorTile) | — |
-| ❌ | `GenericTileLineMode` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/GenericTileLineMode) | — |
-| ❌ | `GenericTileStates` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/GenericTileStates) | — |
-| ❌ | `HeaderContainer` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/HeaderContainer) | — |
-| ❌ | `HeaderContainerLazyLoading` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/HeaderContainerLazyLoading) | — |
-| ❌ | `HeaderContainerNoDividers` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/HeaderContainerNoDividers) | — |
-| ❌ | `HeaderContainerOH` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/HeaderContainerOH) | — |
-| ❌ | `HeaderContainerVM` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/HeaderContainerVM) | — |
-| ❌ | `IconTabBar` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/IconTabBar) | — |
-| ❌ | `IconTabBarBackgroundDesign` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/IconTabBarBackgroundDesign) | — |
-| ❌ | `IconTabBarBadges` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/IconTabBarBadges) | — |
-| ❌ | `IconTabBarDragDrop` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/IconTabBarDragDrop) | — |
-| ❌ | `IconTabBarFiori2` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/IconTabBarFiori2) | — |
-| ❌ | `IconTabBarInlineIcons` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/IconTabBarInlineIcons) | — |
-| ❌ | `IconTabBarInlineMode` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/IconTabBarInlineMode) | — |
-| ❌ | `IconTabBarMulti` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/IconTabBarMulti) | — |
-| ❌ | `IconTabBarNoIcons` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/IconTabBarNoIcons) | — |
-| ✅ | [`IconTabBarOverflowSelectList`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_432) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/IconTabBarOverflowSelectList) | [`z2ui5_cl_demo_app_432`](src/01/z2ui5_cl_demo_app_432.clas.abap) |
-| ❌ | `IconTabBarProcess` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/IconTabBarProcess) | — |
-| ❌ | `IconTabBarResponsivePadding` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/IconTabBarResponsivePadding) | — |
-| ❌ | `IconTabBarStartAndEndOverflow` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/IconTabBarStartAndEndOverflow) | — |
-| ✅ | [`IconTabBarStretchContent`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_433) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/IconTabBarStretchContent) | [`z2ui5_cl_demo_app_433`](src/01/z2ui5_cl_demo_app_433.clas.abap) |
-| ❌ | `IconTabBarSubTabs` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/IconTabBarSubTabs) | — |
-| ❌ | `IconTabBarTabDensityMode` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/IconTabBarTabDensityMode) | — |
-| ❌ | `IconTabHeader` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/IconTabHeader) | — |
-| ❌ | `IconTabSeparator` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/IconTabSeparator) | — |
-| ❌ | `IllustratedMessageEVR` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/IllustratedMessageEVR) | — |
-| ❌ | `IllustratedMessageInAppCustom` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/IllustratedMessageInAppCustom) | — |
-| ❌ | `IllustratedMessageInCardNoActivities` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/IllustratedMessageInCardNoActivities) | — |
-| ❌ | `IllustratedMessageInCardNoEmail` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/IllustratedMessageInCardNoEmail) | — |
-| ❌ | `IllustratedMessageInDialog` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/IllustratedMessageInDialog) | — |
-| ❌ | `IllustratedMessageInPage` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/IllustratedMessageInPage) | — |
-| ❌ | `IllustratedMessageInPageCustom` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/IllustratedMessageInPageCustom) | — |
-| ❌ | `IllustratedMessageInPageTNT` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/IllustratedMessageInPageTNT) | — |
-| ❌ | `IllustratedMessageInPageWithURI` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/IllustratedMessageInPageWithURI) | — |
-| ❌ | `IllustratedMessageSessionTimeout` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/IllustratedMessageSessionTimeout) | — |
-| ❌ | `Image` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/Image) | — |
-| ❌ | `ImageContent` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ImageContent) | — |
-| ❌ | `ImageErrorWithIllustration` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ImageErrorWithIllustration) | — |
-| ✅ | [`ImageModeBackground`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_434) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ImageModeBackground) | [`z2ui5_cl_demo_app_434`](src/01/z2ui5_cl_demo_app_434.clas.abap) |
-| ❌ | `InitialPagePattern` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/InitialPagePattern) | — |
-| ❌ | `InputAssisted` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/InputAssisted) | — |
-| ✅ | [`InputAssistedTabularSuggestions`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_435) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/InputAssistedTabularSuggestions) | [`z2ui5_cl_demo_app_435`](src/01/z2ui5_cl_demo_app_435.clas.abap) |
-| ✅ | [`InputAssistedTwoValues`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_436) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/InputAssistedTwoValues) | [`z2ui5_cl_demo_app_436`](src/01/z2ui5_cl_demo_app_436.clas.abap) |
-| ❌ | `InputChecked` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/InputChecked) | — |
-| ❌ | `InputCustomValueHelpIcon` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/InputCustomValueHelpIcon) | — |
-| ❌ | `InputDescription` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/InputDescription) | — |
-| ✅ | [`InputGrouping`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_437) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/InputGrouping) | [`z2ui5_cl_demo_app_437`](src/01/z2ui5_cl_demo_app_437.clas.abap) |
-| ❌ | `InputKeyValue` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/InputKeyValue) | — |
-| ❌ | `InputKeyValueTabularSuggestions` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/InputKeyValueTabularSuggestions) | — |
-| ❌ | `InputListItem` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/InputListItem) | — |
-| ❌ | `InputModelUpdate` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/InputModelUpdate) | — |
-| ❌ | `InputPassword` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/InputPassword) | — |
-| ❌ | `InputStates` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/InputStates) | — |
-| ✅ | [`InputSuggestionsCustomFilter`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_438) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/InputSuggestionsCustomFilter) | [`z2ui5_cl_demo_app_438`](src/01/z2ui5_cl_demo_app_438.clas.abap) |
-| ❌ | `InputSuggestionsDynamic` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/InputSuggestionsDynamic) | — |
-| ❌ | `InputSuggestionsOpenSearch` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/InputSuggestionsOpenSearch) | — |
-| ❌ | `InputTypes` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/InputTypes) | — |
-| ✅ | [`InputValueState`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_439) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/InputValueState) | [`z2ui5_cl_demo_app_439`](src/01/z2ui5_cl_demo_app_439.clas.abap) |
-| ❌ | `InputValueUpdate` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/InputValueUpdate) | — |
-| ❌ | `InputWrapping` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/InputWrapping) | — |
-| ❌ | `Label` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/Label) | — |
-| ❌ | `LabelProperties` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/LabelProperties) | — |
-| ❌ | `LightBox` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/LightBox) | — |
-| ❌ | `Link` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/Link) | — |
-| ✅ | [`LinkEmphasized`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_440) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/LinkEmphasized) | [`z2ui5_cl_demo_app_440`](src/01/z2ui5_cl_demo_app_440.clas.abap) |
-| ❌ | `LinkSubtle` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/LinkSubtle) | — |
-| ❌ | `ListActions` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ListActions) | — |
-| ✅ | [`ListCounter`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_441) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ListCounter) | [`z2ui5_cl_demo_app_441`](src/01/z2ui5_cl_demo_app_441.clas.abap) |
-| ❌ | `ListDeletion` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ListDeletion) | — |
-| ✅ | [`ListFooter`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_442) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ListFooter) | [`z2ui5_cl_demo_app_442`](src/01/z2ui5_cl_demo_app_442.clas.abap) |
-| ❌ | `ListGrouping` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ListGrouping) | — |
-| ✅ | [`ListGrowing`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_443) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ListGrowing) | [`z2ui5_cl_demo_app_443`](src/01/z2ui5_cl_demo_app_443.clas.abap) |
-| ❌ | `ListGrowingUpwards` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ListGrowingUpwards) | — |
-| ❌ | `ListItemTypes` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ListItemTypes) | — |
-| ❌ | `ListLoading` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ListLoading) | — |
-| ✅ | [`ListNavType`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_444) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ListNavType) | [`z2ui5_cl_demo_app_444`](src/01/z2ui5_cl_demo_app_444.clas.abap) |
-| ✅ | [`ListNoData`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_445) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ListNoData) | [`z2ui5_cl_demo_app_445`](src/01/z2ui5_cl_demo_app_445.clas.abap) |
-| ✅ | [`ListSelection`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_446) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ListSelection) | [`z2ui5_cl_demo_app_446`](src/01/z2ui5_cl_demo_app_446.clas.abap) |
-| ❌ | `ListSelectionSearch` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ListSelectionSearch) | — |
-| ❌ | `ListSwipe` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ListSwipe) | — |
-| ❌ | `ListToolbar` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ListToolbar) | — |
-| ❌ | `ListUnread` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ListUnread) | — |
-| ❌ | `MaskInput` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/MaskInput) | — |
-| ❌ | `MaxNumberOfNotificationsReached` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/MaxNumberOfNotificationsReached) | — |
-| ❌ | `Menu` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/Menu) | — |
-| ❌ | `MenuButton` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/MenuButton) | — |
-| ❌ | `MenuEndContent` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/MenuEndContent) | — |
-| ❌ | `MenuSelectable` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/MenuSelectable) | — |
-| ❌ | `MessageBox` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/MessageBox) | — |
-| ❌ | `MessageBoxInfo` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/MessageBoxInfo) | — |
-| ✅ | [`MessageBoxInitialFocus`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_447) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/MessageBoxInitialFocus) | [`z2ui5_cl_demo_app_447`](src/01/z2ui5_cl_demo_app_447.clas.abap) |
-| ❌ | `MessagePage` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/MessagePage) | — |
-| ❌ | `MessagePageWithButtons` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/MessagePageWithButtons) | — |
-| ❌ | `MessagePopover` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/MessagePopover) | — |
-| ❌ | `MessagePopoverAsyncMessageHandling` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/MessagePopoverAsyncMessageHandling) | — |
-| ❌ | `MessagePopoverMessageHandling` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/MessagePopoverMessageHandling) | — |
-| ❌ | `MessageStrip` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/MessageStrip) | — |
-| ❌ | `MessageStripWithEnableFormattedText` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/MessageStripWithEnableFormattedText) | — |
-| ✅ | [`MessageToast`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_448) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/MessageToast) | [`z2ui5_cl_demo_app_448`](src/01/z2ui5_cl_demo_app_448.clas.abap) |
-| ❌ | `MessageViewInsideDialog` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/MessageViewInsideDialog) | — |
-| ❌ | `MessageViewInsidePopover` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/MessageViewInsidePopover) | — |
-| ❌ | `MessageViewInsideResponsivePopover` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/MessageViewInsideResponsivePopover) | — |
-| ✅ | [`MessageViewMessageManager`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_449) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/MessageViewMessageManager) | [`z2ui5_cl_demo_app_449`](src/01/z2ui5_cl_demo_app_449.clas.abap) |
-| ❌ | `MessageViewWithGrouping` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/MessageViewWithGrouping) | — |
-| ❌ | `MultiComboBox` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/MultiComboBox) | — |
-| ❌ | `MultiComboBoxClearIcon` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/MultiComboBoxClearIcon) | — |
-| ❌ | `MultiComboBoxCustomFiltering` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/MultiComboBoxCustomFiltering) | — |
-| ✅ | [`MultiComboBoxDefaultFiltering`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_451) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/MultiComboBoxDefaultFiltering) | [`z2ui5_cl_demo_app_451`](src/01/z2ui5_cl_demo_app_451.clas.abap) |
-| ✅ | [`MultiComboBoxGrouping`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_452) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/MultiComboBoxGrouping) | [`z2ui5_cl_demo_app_452`](src/01/z2ui5_cl_demo_app_452.clas.abap) |
-| ❌ | `MultiComboBoxMaxPickerHeight` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/MultiComboBoxMaxPickerHeight) | — |
-| ❌ | `MultiComboBoxSelectAll` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/MultiComboBoxSelectAll) | — |
-| ❌ | `MultiComboBoxSuggestionsAndValueState` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/MultiComboBoxSuggestionsAndValueState) | — |
-| ✅ | [`MultiComboBoxTwoColumnsLayout`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_453) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/MultiComboBoxTwoColumnsLayout) | [`z2ui5_cl_demo_app_453`](src/01/z2ui5_cl_demo_app_453.clas.abap) |
-| ❌ | `MultiComboBoxWrapping` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/MultiComboBoxWrapping) | — |
-| ✅ | [`MultiInput`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_454) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/MultiInput) | [`z2ui5_cl_demo_app_454`](src/01/z2ui5_cl_demo_app_454.clas.abap) |
-| ❌ | `MultiInputCustomFiltering` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/MultiInputCustomFiltering) | — |
-| ✅ | [`MultiInputDatabinding`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_456) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/MultiInputDatabinding) | [`z2ui5_cl_demo_app_456`](src/01/z2ui5_cl_demo_app_456.clas.abap) |
-| ❌ | `MultiInputFilteringSuggestions` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/MultiInputFilteringSuggestions) | — |
-| ✅ | [`MultiInputGrouping`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_457) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/MultiInputGrouping) | [`z2ui5_cl_demo_app_457`](src/01/z2ui5_cl_demo_app_457.clas.abap) |
-| ✅ | [`MultiInputMaxTokens`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_458) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/MultiInputMaxTokens) | [`z2ui5_cl_demo_app_458`](src/01/z2ui5_cl_demo_app_458.clas.abap) |
-| ❌ | `MultiInputModelUpdate` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/MultiInputModelUpdate) | — |
-| ❌ | `MultiInputTokenUpdate` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/MultiInputTokenUpdate) | — |
-| ❌ | `MultiInputValidators` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/MultiInputValidators) | — |
-| ❌ | `MultiInputValueHelp` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/MultiInputValueHelp) | — |
-| ❌ | `MultiInputValueStates` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/MultiInputValueStates) | — |
-| ❌ | `MultiInputWrapping` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/MultiInputWrapping) | — |
-| ❌ | `NavContainer` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/NavContainer) | — |
-| ❌ | `NewsContent` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/NewsContent) | — |
-| ❌ | `NotificationListGroup` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/NotificationListGroup) | — |
-| ❌ | `NotificationListGroupBindings` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/NotificationListGroupBindings) | — |
-| ❌ | `NotificationListGroupLazyLoading` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/NotificationListGroupLazyLoading) | — |
-| ❌ | `NotificationListItem` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/NotificationListItem) | — |
-| ❌ | `NumericContentDifColors` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/NumericContentDifColors) | — |
-| ❌ | `NumericContentIcon` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/NumericContentIcon) | — |
-| ❌ | `NumericContentWithoutMargin` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/NumericContentWithoutMargin) | — |
-| ❌ | `ObjectAttributeInTable` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ObjectAttributeInTable) | — |
-| ❌ | `ObjectAttributes` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ObjectAttributes) | — |
-| ✅ | [`ObjectHeader`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_460) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ObjectHeader) | [`z2ui5_cl_demo_app_460`](src/01/z2ui5_cl_demo_app_460.clas.abap) |
-| ❌ | `ObjectHeaderActiveAttributes` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ObjectHeaderActiveAttributes) | — |
-| ❌ | `ObjectHeaderCircleImage` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ObjectHeaderCircleImage) | — |
-| ✅ | [`ObjectHeaderCondensed`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_461) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ObjectHeaderCondensed) | [`z2ui5_cl_demo_app_461`](src/01/z2ui5_cl_demo_app_461.clas.abap) |
-| ✅ | [`ObjectHeaderImage`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_462) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ObjectHeaderImage) | [`z2ui5_cl_demo_app_462`](src/01/z2ui5_cl_demo_app_462.clas.abap) |
-| ✅ | [`ObjectHeaderMarkers`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_463) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ObjectHeaderMarkers) | [`z2ui5_cl_demo_app_463`](src/01/z2ui5_cl_demo_app_463.clas.abap) |
-| ✅ | [`ObjectHeaderResponsiveI`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_459) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ObjectHeaderResponsiveI) | [`z2ui5_cl_demo_app_459`](src/01/z2ui5_cl_demo_app_459.clas.abap) |
-| ✅ | [`ObjectHeaderResponsiveII`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_464) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ObjectHeaderResponsiveII) | [`z2ui5_cl_demo_app_464`](src/01/z2ui5_cl_demo_app_464.clas.abap) |
-| ❌ | `ObjectHeaderResponsiveIII` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ObjectHeaderResponsiveIII) | — |
-| ❌ | `ObjectHeaderResponsiveIV` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ObjectHeaderResponsiveIV) | — |
-| ✅ | [`ObjectHeaderResponsiveV`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_465) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ObjectHeaderResponsiveV) | [`z2ui5_cl_demo_app_465`](src/01/z2ui5_cl_demo_app_465.clas.abap) |
-| ❌ | `ObjectHeaderResponsiveVI` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ObjectHeaderResponsiveVI) | — |
-| ❌ | `ObjectHeaderTitleActive` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ObjectHeaderTitleActive) | — |
-| ❌ | `ObjectHeaderTitleSel` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ObjectHeaderTitleSel) | — |
-| ✅ | [`ObjectIdentifier`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_466) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ObjectIdentifier) | [`z2ui5_cl_demo_app_466`](src/01/z2ui5_cl_demo_app_466.clas.abap) |
-| ❌ | `ObjectListItem` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ObjectListItem) | — |
-| ❌ | `ObjectListItemMarkers` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ObjectListItemMarkers) | — |
-| ❌ | `ObjectMarker` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ObjectMarker) | — |
-| ✅ | [`ObjectNumber`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_467) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ObjectNumber) | [`z2ui5_cl_demo_app_467`](src/01/z2ui5_cl_demo_app_467.clas.abap) |
-| ❌ | `ObjectStatus` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ObjectStatus) | — |
-| ❌ | `OverflowToolbarDifferentControls` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/OverflowToolbarDifferentControls) | — |
-| ❌ | `OverflowToolbarFooter` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/OverflowToolbarFooter) | — |
-| ❌ | `OverflowToolbarSimple` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/OverflowToolbarSimple) | — |
-| ❌ | `OverflowToolbarTokenizer` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/OverflowToolbarTokenizer) | — |
-| ❌ | `p13n` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/p13n) | — |
-| ❌ | `Page` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/Page) | — |
-| ❌ | `PageFloatingFooter` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/PageFloatingFooter) | — |
-| ✅ | [`PageListReportIconTabBar`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_406) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/PageListReportIconTabBar) | [`z2ui5_cl_demo_app_406`](src/01/z2ui5_cl_demo_app_406.clas.abap) |
-| ✅ | [`PageListReportToolbar`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_407) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/PageListReportToolbar) | [`z2ui5_cl_demo_app_407`](src/01/z2ui5_cl_demo_app_407.clas.abap) |
-| ✅ | [`PageStandardClasses`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_470) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/PageStandardClasses) | [`z2ui5_cl_demo_app_470`](src/01/z2ui5_cl_demo_app_470.clas.abap) |
-| ❌ | `Panel` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/Panel) | — |
-| ❌ | `PanelBackgroundDesign` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/PanelBackgroundDesign) | — |
-| ✅ | [`PanelExpanded`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_471) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/PanelExpanded) | [`z2ui5_cl_demo_app_471`](src/01/z2ui5_cl_demo_app_471.clas.abap) |
-| ❌ | `PanelSticky` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/PanelSticky) | — |
-| ❌ | `PDFViewerEmbedded` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/PDFViewerEmbedded) | — |
-| ❌ | `PDFViewerMultiple` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/PDFViewerMultiple) | — |
-| ✅ | [`PDFViewerPopup`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_469) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/PDFViewerPopup) | [`z2ui5_cl_demo_app_469`](src/01/z2ui5_cl_demo_app_469.clas.abap) |
-| ❌ | `PlanningCalendar` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/PlanningCalendar) | — |
-| ❌ | `PlanningCalendarAppointmentSizes` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/PlanningCalendarAppointmentSizes) | — |
-| ❌ | `PlanningCalendarDnD` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/PlanningCalendarDnD) | — |
-| ❌ | `PlanningCalendarMinMax` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/PlanningCalendarMinMax) | — |
-| ❌ | `PlanningCalendarModifyAppointments` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/PlanningCalendarModifyAppointments) | — |
-| ❌ | `PlanningCalendarMulti` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/PlanningCalendarMulti) | — |
-| ❌ | `PlanningCalendarOneLine` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/PlanningCalendarOneLine) | — |
-| ❌ | `PlanningCalendarRecurringItem` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/PlanningCalendarRecurringItem) | — |
-| ❌ | `PlanningCalendarRelativeViews` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/PlanningCalendarRelativeViews) | — |
-| ❌ | `PlanningCalendarSingle` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/PlanningCalendarSingle) | — |
-| ❌ | `PlanningCalendarViews` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/PlanningCalendarViews) | — |
-| ❌ | `PlanningCalendarWeekNumbering` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/PlanningCalendarWeekNumbering) | — |
-| ❌ | `PlanningCalendarWithLegend` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/PlanningCalendarWithLegend) | — |
-| ❌ | `PlanningCalendarWithStickyHeader` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/PlanningCalendarWithStickyHeader) | — |
-| ❌ | `Popover` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/Popover) | — |
-| ❌ | `PopoverControllingCloseBehavior` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/PopoverControllingCloseBehavior) | — |
-| ❌ | `PopoverNavCon` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/PopoverNavCon) | — |
-| ❌ | `PopoverWithinArea` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/PopoverWithinArea) | — |
-| ❌ | `ProgressIndicator` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ProgressIndicator) | — |
-| ❌ | `ProgressIndicatorWithAnnouncement` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ProgressIndicatorWithAnnouncement) | — |
-| ❌ | `PullToRefresh` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/PullToRefresh) | — |
-| ❌ | `QuickView` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/QuickView) | — |
-| ❌ | `QuickViewAvatarConfiguration` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/QuickViewAvatarConfiguration) | — |
-| ❌ | `QuickViewCard` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/QuickViewCard) | — |
-| ❌ | `QuickViewCardScrollBar` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/QuickViewCardScrollBar) | — |
-| ❌ | `QuickViewNavOrigin` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/QuickViewNavOrigin) | — |
-| ❌ | `RadioButton` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/RadioButton) | — |
-| ❌ | `RadioButtonGroup` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/RadioButtonGroup) | — |
-| ✅ | [`RangeSlider`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_472) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/RangeSlider) | [`z2ui5_cl_demo_app_472`](src/01/z2ui5_cl_demo_app_472.clas.abap) |
-| ❌ | `RatingIndicator` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/RatingIndicator) | — |
-| ❌ | `RefreshResponsive` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/RefreshResponsive) | — |
-| ❌ | `ResponsivePopover` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ResponsivePopover) | — |
-| ✅ | [`ScrollContainer`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_473) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ScrollContainer) | [`z2ui5_cl_demo_app_473`](src/01/z2ui5_cl_demo_app_473.clas.abap) |
-| ❌ | `SearchField` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/SearchField) | — |
-| ❌ | `SearchFieldSuggestions` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/SearchFieldSuggestions) | — |
-| ✅ | [`SegmentedButton`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_474) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/SegmentedButton) | [`z2ui5_cl_demo_app_474`](src/01/z2ui5_cl_demo_app_474.clas.abap) |
-| ❌ | `SegmentedButtonContentModes` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/SegmentedButtonContentModes) | — |
-| ❌ | `SegmentedButtonDialog` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/SegmentedButtonDialog) | — |
-| ❌ | `SegmentedButtonLI` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/SegmentedButtonLI) | — |
-| ❌ | `SegmentedButtonVSD` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/SegmentedButtonVSD) | — |
-| ❌ | `Select` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/Select) | — |
-| ❌ | `Select2Columns` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/Select2Columns) | — |
-| ❌ | `SelectChangeEvents` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/SelectChangeEvents) | — |
-| ❌ | `SelectDialog` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/SelectDialog) | — |
-| ❌ | `SelectDialogLazyLoading` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/SelectDialogLazyLoading) | — |
-| ✅ | [`SelectList`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_475) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/SelectList) | [`z2ui5_cl_demo_app_475`](src/01/z2ui5_cl_demo_app_475.clas.abap) |
-| ✅ | [`SelectListWithIcons`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_476) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/SelectListWithIcons) | [`z2ui5_cl_demo_app_476`](src/01/z2ui5_cl_demo_app_476.clas.abap) |
-| ❌ | `SelectValueState` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/SelectValueState) | — |
-| ❌ | `SelectWithIcons` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/SelectWithIcons) | — |
-| ❌ | `SelectWithWrappedItemText` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/SelectWithWrappedItemText) | — |
-| ❌ | `SemanticPage` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/SemanticPage) | — |
-| ❌ | `SemanticPageDraftIndicator` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/SemanticPageDraftIndicator) | — |
-| ❌ | `SemanticPageFloatingFooter` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/SemanticPageFloatingFooter) | — |
-| ❌ | `SemanticPageFullScreen` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/SemanticPageFullScreen) | — |
-| ❌ | `SinglePlanningCalendar` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/SinglePlanningCalendar) | — |
-| ❌ | `SinglePlanningCalendarCreateApp` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/SinglePlanningCalendarCreateApp) | — |
-| ❌ | `SinglePlanningCalendarDateSelection` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/SinglePlanningCalendarDateSelection) | — |
-| ❌ | `SinglePlanningCalendarDND` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/SinglePlanningCalendarDND) | — |
-| ❌ | `SinglePlanningCalendarRecurringItem` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/SinglePlanningCalendarRecurringItem) | — |
-| ❌ | `SinglePlanningCalendarSnappingHeader` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/SinglePlanningCalendarSnappingHeader) | — |
-| ❌ | `SinglePlanningCalendarWeekNumbering` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/SinglePlanningCalendarWeekNumbering) | — |
-| ❌ | `SinglePlanningCalendarWithCustomViews` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/SinglePlanningCalendarWithCustomViews) | — |
-| ❌ | `SinglePlanningCalendarWithLegend` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/SinglePlanningCalendarWithLegend) | — |
-| ❌ | `SinglePlanningCalendarWithZoomInZoomOut` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/SinglePlanningCalendarWithZoomInZoomOut) | — |
-| ❌ | `Slider` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/Slider) | — |
-| ❌ | `SlideTile` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/SlideTile) | — |
-| ❌ | `SplitApp` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/SplitApp) | — |
-| ❌ | `SplitContainer` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/SplitContainer) | — |
-| ✅ | [`StandardListItem`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_477) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/StandardListItem) | [`z2ui5_cl_demo_app_477`](src/01/z2ui5_cl_demo_app_477.clas.abap) |
-| ❌ | `StandardListItemAvatar` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/StandardListItemAvatar) | — |
-| ✅ | [`StandardListItemDescription`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_478) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/StandardListItemDescription) | [`z2ui5_cl_demo_app_478`](src/01/z2ui5_cl_demo_app_478.clas.abap) |
-| ✅ | [`StandardListItemIcon`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_479) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/StandardListItemIcon) | [`z2ui5_cl_demo_app_479`](src/01/z2ui5_cl_demo_app_479.clas.abap) |
-| ❌ | `StandardListItemInfo` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/StandardListItemInfo) | — |
-| ❌ | `StandardListItemInfoStateInverted` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/StandardListItemInfoStateInverted) | — |
-| ❌ | `StandardListItemNavigated` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/StandardListItemNavigated) | — |
-| ✅ | [`StandardListItemTitle`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_480) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/StandardListItemTitle) | [`z2ui5_cl_demo_app_480`](src/01/z2ui5_cl_demo_app_480.clas.abap) |
-| ❌ | `StandardListItemWrapping` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/StandardListItemWrapping) | — |
-| ✅ | [`StandardMarginsAll`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_491) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/StandardMarginsAll) | [`z2ui5_cl_demo_app_491`](src/02/z2ui5_cl_demo_app_491.clas.abap) |
-| ✅ | [`StandardMarginsCollapse`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_492) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/StandardMarginsCollapse) | [`z2ui5_cl_demo_app_492`](src/02/z2ui5_cl_demo_app_492.clas.abap) |
-| ✅ | [`StandardMarginsEnforceWidthAuto`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_493) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/StandardMarginsEnforceWidthAuto) | [`z2ui5_cl_demo_app_493`](src/02/z2ui5_cl_demo_app_493.clas.abap) |
-| ✅ | [`StandardMarginsResponsive`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_494) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/StandardMarginsResponsive) | [`z2ui5_cl_demo_app_494`](src/02/z2ui5_cl_demo_app_494.clas.abap) |
-| ✅ | [`StandardMarginsSingleSided`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_495) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/StandardMarginsSingleSided) | [`z2ui5_cl_demo_app_495`](src/02/z2ui5_cl_demo_app_495.clas.abap) |
-| ✅ | [`StandardMarginsTwoSided`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_496) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/StandardMarginsTwoSided) | [`z2ui5_cl_demo_app_496`](src/02/z2ui5_cl_demo_app_496.clas.abap) |
-| ❌ | `StandardNegativeMarginsTwoSided` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/StandardNegativeMarginsTwoSided) | — |
-| ✅ | [`StandardNoMargins`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_497) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/StandardNoMargins) | [`z2ui5_cl_demo_app_497`](src/02/z2ui5_cl_demo_app_497.clas.abap) |
-| ✅ | [`StepInput`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_481) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/StepInput) | [`z2ui5_cl_demo_app_481`](src/01/z2ui5_cl_demo_app_481.clas.abap) |
-| ❌ | `StepInputValueState` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/StepInputValueState) | — |
-| ❌ | `Switch` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/Switch) | — |
-| ❌ | `TabContainer` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TabContainer) | — |
-| ❌ | `TabContainerIcons` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TabContainerIcons) | — |
-| ❌ | `TabContainerMHC` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TabContainerMHC) | — |
-| ❌ | `Table` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/Table) | — |
-| ✅ | [`TableAlternateRowColors`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_482) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TableAlternateRowColors) | [`z2ui5_cl_demo_app_482`](src/01/z2ui5_cl_demo_app_482.clas.abap) |
-| ❌ | `TableAutoPopin` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TableAutoPopin) | — |
-| ❌ | `TableBreadcrumb` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TableBreadcrumb) | — |
-| ❌ | `TableColumnWidth` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TableColumnWidth) | — |
-| ❌ | `TableContextualWidthDynamic` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TableContextualWidthDynamic) | — |
-| ✅ | [`TableContextualWidthStatic`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_483) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TableContextualWidthStatic) | [`z2ui5_cl_demo_app_483`](src/01/z2ui5_cl_demo_app_483.clas.abap) |
-| ❌ | `TableDnD` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TableDnD) | — |
-| ❌ | `TableEditable` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TableEditable) | — |
-| ❌ | `TableIColumnHeaderMenu` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TableIColumnHeaderMenu) | — |
-| ❌ | `TableLayout` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TableLayout) | — |
-| ❌ | `TableMergeCells` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TableMergeCells) | — |
-| ❌ | `TableMultiSelectMode` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TableMultiSelectMode) | — |
-| ❌ | `TableNavigated` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TableNavigated) | — |
-| ❌ | `TableOutdated` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TableOutdated) | — |
-| ❌ | `TableScrollToIndex` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TableScrollToIndex) | — |
-| ❌ | `TableSelectCopy` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TableSelectCopy) | — |
-| ❌ | `TableSelectDialog` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TableSelectDialog) | — |
-| ❌ | `TableSelectDialogGrowing` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TableSelectDialogGrowing) | — |
-| ❌ | `TableStrictLayout` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TableStrictLayout) | — |
-| ❌ | `TableTest` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TableTest) | — |
-| ❌ | `TableVerticalAlignment` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TableVerticalAlignment) | — |
-| ❌ | `TableViewSettingsDialog` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TableViewSettingsDialog) | — |
-| ✅ | [`Text`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_408) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/Text) | [`z2ui5_cl_demo_app_408`](src/01/z2ui5_cl_demo_app_408.clas.abap) |
-| ✅ | [`TextArea`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_409) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TextArea) | [`z2ui5_cl_demo_app_409`](src/01/z2ui5_cl_demo_app_409.clas.abap) |
-| ❌ | `TextAreaGrowing` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TextAreaGrowing) | — |
-| ❌ | `TextAreaMaxLength` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TextAreaMaxLength) | — |
-| ❌ | `TextAreaValueStates` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TextAreaValueStates) | — |
-| ✅ | [`TextAreaValueUpdate`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_484) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TextAreaValueUpdate) | [`z2ui5_cl_demo_app_484`](src/01/z2ui5_cl_demo_app_484.clas.abap) |
-| ❌ | `TextEmptyIndicator` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TextEmptyIndicator) | — |
-| ❌ | `TextHyphenation` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TextHyphenation) | — |
-| ❌ | `TextMaxLines` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TextMaxLines) | — |
-| ❌ | `TextRenderWhitespace` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TextRenderWhitespace) | — |
-| ❌ | `TileContainer` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TileContainer) | — |
-| ❌ | `TileContent` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TileContent) | — |
-| ❌ | `TimePicker` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TimePicker) | — |
-| ❌ | `TimePickerHidden` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TimePickerHidden) | — |
-| ❌ | `TimePickerSliders` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TimePickerSliders) | — |
-| ❌ | `TimePickerValueState` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TimePickerValueState) | — |
-| ✅ | [`Title`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_485) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/Title) | [`z2ui5_cl_demo_app_485`](src/01/z2ui5_cl_demo_app_485.clas.abap) |
-| ❌ | `TitleLink` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TitleLink) | — |
-| ❌ | `TitleToolBar` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TitleToolBar) | — |
-| ❌ | `TitleWrapping` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TitleWrapping) | — |
-| ❌ | `ToggleButton` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ToggleButton) | — |
-| ❌ | `TokenizerBasic` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TokenizerBasic) | — |
-| ❌ | `TokenizerMultiLine` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TokenizerMultiLine) | — |
-| ❌ | `ToolbarActive` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ToolbarActive) | — |
-| ❌ | `ToolbarAlignment` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ToolbarAlignment) | — |
-| ❌ | `ToolbarDesign` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ToolbarDesign) | — |
-| ✅ | [`ToolbarEnabled`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_468) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ToolbarEnabled) | [`z2ui5_cl_demo_app_468`](src/01/z2ui5_cl_demo_app_468.clas.abap) |
-| ❌ | `ToolbarResponsive` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ToolbarResponsive) | — |
-| ✅ | [`ToolbarShrinkable`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_486) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ToolbarShrinkable) | [`z2ui5_cl_demo_app_486`](src/01/z2ui5_cl_demo_app_486.clas.abap) |
-| ❌ | `ToolbarVsBar` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ToolbarVsBar) | — |
-| ✅ | [`Tree`](https://github.com/abap2UI5/api/tree/ui5/src/sap.m/z2ui5_cl_demo_app_487) | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/Tree) | [`z2ui5_cl_demo_app_487`](src/01/z2ui5_cl_demo_app_487.clas.abap) |
-| ❌ | `TreeDnD` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TreeDnD) | — |
-| ❌ | `TreeExpandMulti` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TreeExpandMulti) | — |
-| ❌ | `TreeExpandTo` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TreeExpandTo) | — |
-| ❌ | `TreeIcon` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TreeIcon) | — |
-| ❌ | `TreeJSONLazyLoading` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TreeJSONLazyLoading) | — |
-| ❌ | `TreeOData` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TreeOData) | — |
-| ❌ | `TreeSelection` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TreeSelection) | — |
-| ❌ | `TsHelloWorld` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/TsHelloWorld) | — |
-| ❌ | `UploadCollection` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/UploadCollection) | — |
-| ❌ | `UploadCollectionFolderHierarchy` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/UploadCollectionFolderHierarchy) | — |
-| ❌ | `UploadCollectionForPendingUpload` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/UploadCollectionForPendingUpload) | — |
-| ❌ | `UploadCollectionSortingFiltering` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/UploadCollectionSortingFiltering) | — |
-| ❌ | `UploadCollectionVersioning` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/UploadCollectionVersioning) | — |
-| ❌ | `UploadSet` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/UploadSet) | — |
-| ❌ | `UploadSetCloudUpload` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/UploadSetCloudUpload) | — |
-| ❌ | `UploadSetCustomUploader` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/UploadSetCustomUploader) | — |
-| ❌ | `UploadSetDirectoryUploads` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/UploadSetDirectoryUploads) | — |
-| ❌ | `UploadSetGroupingSortingFiltering` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/UploadSetGroupingSortingFiltering) | — |
-| ❌ | `UploadSetwithTablePlugin` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/UploadSetwithTablePlugin) | — |
-| ❌ | `UrlHelper` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/UrlHelper) | — |
-| ❌ | `UXCIntegration` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/UXCIntegration) | — |
-| ❌ | `VariantManagement` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/VariantManagement) | — |
-| ❌ | `ViewSettingsDialog` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ViewSettingsDialog) | — |
-| ❌ | `ViewSettingsDialogCustom` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ViewSettingsDialogCustom) | — |
-| ❌ | `ViewSettingsDialogCustomFilterDetails` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ViewSettingsDialogCustomFilterDetails) | — |
-| ❌ | `ViewSettingsDialogCustomTabs` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/ViewSettingsDialogCustomTabs) | — |
-| ❌ | `WhitespacePattern` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/WhitespacePattern) | — |
-| ❌ | `Wizard` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/Wizard) | — |
-| ❌ | `WizardBranching` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/WizardBranching) | — |
-| ❌ | `WizardCurrentStep` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/WizardCurrentStep) | — |
-| ❌ | `WizardSingleStep` | [source](https://github.com/SAP/openui5/tree/master/src/sap.m/test/sap/m/demokit/sample/WizardSingleStep) | — |
+| | Javascript | ABAP | Link |
+|---|-----------|------|------|
+| ❌ | `ActionListItem` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ActionListItem/sample/sap.m.sample.ActionListItem) |
+| ❌ | `ActionSelect` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ActionSelect/sample/sap.m.sample.ActionSelect) |
+| ❌ | `ActionSheet` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ActionSheet/sample/sap.m.sample.ActionSheet) |
+| ❌ | `AIIntegration` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.sample.AIIntegration/sample/sap.m.sample.AIIntegration) |
+| ❌ | `Avatar` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Avatar/sample/sap.m.sample.Avatar) |
+| ❌ | `AvatarActiveState` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Avatar/sample/sap.m.sample.AvatarActiveState) |
+| ❌ | `AvatarBadgeIconColor` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Avatar/sample/sap.m.sample.AvatarBadgeIconColor) |
+| ❌ | `AvatarValueState` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Avatar/sample/sap.m.sample.AvatarValueState) |
+| ❌ | `AvatarWithAffordance` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Avatar/sample/sap.m.sample.AvatarWithAffordance) |
+| ❌ | `Breadcrumbs` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Breadcrumbs/sample/sap.m.sample.Breadcrumbs) |
+| ❌ | `BreadcrumbsWithCurrentPageLink` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Breadcrumbs/sample/sap.m.sample.BreadcrumbsWithCurrentPageLink) |
+| ❌ | `BreadcrumbsWithoutCurrentPage` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Breadcrumbs/sample/sap.m.sample.BreadcrumbsWithoutCurrentPage) |
+| ❌ | `BusyDialog` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.BusyDialog/sample/sap.m.sample.BusyDialog) |
+| ❌ | `BusyDialogLight` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.BusyDialog/sample/sap.m.sample.BusyDialogLight) |
+| ❌ | `BusyIndicator` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.BusyIndicator/sample/sap.m.sample.BusyIndicator) |
+| ❌ | `Button` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Button/sample/sap.m.sample.Button) |
+| ❌ | `ButtonWithBadge` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Button/sample/sap.m.sample.ButtonWithBadge) |
+| ❌ | `Carousel` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Carousel/sample/sap.m.sample.Carousel) |
+| ❌ | `CarouselEmptyMessages` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Carousel/sample/sap.m.sample.CarouselEmptyMessages) |
+| ✅ | [`CarouselWithControls`](ui5/sap.m/z2ui5_cl_demo_app_420) | [`z2ui5_cl_demo_app_420`](src/01/z2ui5_cl_demo_app_420.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Carousel/sample/sap.m.sample.CarouselWithControls) |
+| ❌ | `CarouselWithDisplayOptions` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Carousel/sample/sap.m.sample.CarouselWithDisplayOptions) |
+| ❌ | `CarouselWithMorePages` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Carousel/sample/sap.m.sample.CarouselWithMorePages) |
+| ❌ | `CheckBox` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.CheckBox/sample/sap.m.sample.CheckBox) |
+| ✅ | [`CheckBoxTriState`](ui5/sap.m/z2ui5_cl_demo_app_421) | [`z2ui5_cl_demo_app_421`](src/01/z2ui5_cl_demo_app_421.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.CheckBox/sample/sap.m.sample.CheckBoxTriState) |
+| ✅ | [`ColorPalette`](ui5/sap.m/z2ui5_cl_demo_app_422) | [`z2ui5_cl_demo_app_422`](src/01/z2ui5_cl_demo_app_422.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ColorPalette/sample/sap.m.sample.ColorPalette) |
+| ❌ | `ColorPalettePopover` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ColorPalette/sample/sap.m.sample.ColorPalettePopover) |
+| ✅ | [`ComboBox`](ui5/sap.m/z2ui5_cl_demo_app_423) | [`z2ui5_cl_demo_app_423`](src/01/z2ui5_cl_demo_app_423.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ComboBox/sample/sap.m.sample.ComboBox) |
+| ✅ | [`ComboBox2Columns`](ui5/sap.m/z2ui5_cl_demo_app_424) | [`z2ui5_cl_demo_app_424`](src/01/z2ui5_cl_demo_app_424.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ComboBox/sample/sap.m.sample.ComboBox2Columns) |
+| ❌ | `ComboBoxClearIcon` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ComboBox/sample/sap.m.sample.ComboBoxClearIcon) |
+| ✅ | [`ComboBoxDefaultFiltering`](ui5/sap.m/z2ui5_cl_demo_app_425) | [`z2ui5_cl_demo_app_425`](src/01/z2ui5_cl_demo_app_425.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ComboBox/sample/sap.m.sample.ComboBoxDefaultFiltering) |
+| ❌ | `ComboBoxFilteringContains` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ComboBox/sample/sap.m.sample.ComboBoxFilteringContains) |
+| ❌ | `ComboBoxFilteringStartsWith` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ComboBox/sample/sap.m.sample.ComboBoxFilteringStartsWith) |
+| ✅ | [`ComboBoxGrouping`](ui5/sap.m/z2ui5_cl_demo_app_428) | [`z2ui5_cl_demo_app_428`](src/01/z2ui5_cl_demo_app_428.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ComboBox/sample/sap.m.sample.ComboBoxGrouping) |
+| ❌ | `ComboBoxLazyLoading` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ComboBox/sample/sap.m.sample.ComboBoxLazyLoading) |
+| ❌ | `ComboBoxMaxPickerHeight` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ComboBox/sample/sap.m.sample.ComboBoxMaxPickerHeight) |
+| ❌ | `ComboBoxSearchBoth` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ComboBox/sample/sap.m.sample.ComboBoxSearchBoth) |
+| ❌ | `ComboBoxValidation` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ComboBox/sample/sap.m.sample.ComboBoxValidation) |
+| ❌ | `ComboBoxValueState` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ComboBox/sample/sap.m.sample.ComboBoxValueState) |
+| ❌ | `ComboBoxWrapping` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ComboBox/sample/sap.m.sample.ComboBoxWrapping) |
+| ❌ | `ComparisonPattern` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ComparisonPattern/sample/sap.m.sample.ComparisonPattern) |
+| ✅ | [`ContainerNoPadding`](ui5/sap.m/z2ui5_cl_demo_app_488) | [`z2ui5_cl_demo_app_488`](src/02/z2ui5_cl_demo_app_488.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.core.ContainerPadding/sample/sap.m.sample.ContainerNoPadding) |
+| ❌ | `ContainerPadding` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.core.ContainerPadding/sample/sap.m.sample.ContainerPadding) |
+| ✅ | [`ContainerPaddingAndMargin`](ui5/sap.m/z2ui5_cl_demo_app_489) | [`z2ui5_cl_demo_app_489`](src/02/z2ui5_cl_demo_app_489.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.core.ContainerPadding/sample/sap.m.sample.ContainerPaddingAndMargin) |
+| ✅ | [`ContainerResponsivePadding`](ui5/sap.m/z2ui5_cl_demo_app_490) | [`z2ui5_cl_demo_app_490`](src/02/z2ui5_cl_demo_app_490.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.core.ContainerPadding/sample/sap.m.sample.ContainerResponsivePadding) |
+| ❌ | `CookieSettingsDialogPattern` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.CookieSettingsDialogPattern/sample/sap.m.sample.CookieSettingsDialogPattern) |
+| ❌ | `CustomListItem` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.CustomListItem/sample/sap.m.sample.CustomListItem) |
+| ❌ | `CustomMessageStripDesign` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.MessageStrip/sample/sap.m.sample.CustomMessageStripDesign) |
+| ✅ | [`CustomTreeItem`](ui5/sap.m/z2ui5_cl_demo_app_429) | [`z2ui5_cl_demo_app_429`](src/01/z2ui5_cl_demo_app_429.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.CustomTreeItem/sample/sap.m.sample.CustomTreeItem) |
+| ❌ | `DatePicker` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.DatePicker/sample/sap.m.sample.DatePicker) |
+| ❌ | `DatePickerHidden` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.DatePicker/sample/sap.m.sample.DatePickerHidden) |
+| ❌ | `DatePickerMassEdit` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.DatePicker/sample/sap.m.sample.DatePickerMassEdit) |
+| ❌ | `DatePickerValueState` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.DatePicker/sample/sap.m.sample.DatePickerValueState) |
+| ❌ | `DateRangeSelection` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.DateRangeSelection/sample/sap.m.sample.DateRangeSelection) |
+| ❌ | `DateRangeSelectionHidden` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.DateRangeSelection/sample/sap.m.sample.DateRangeSelectionHidden) |
+| ❌ | `DateRangeSelectionValueState` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.DateRangeSelection/sample/sap.m.sample.DateRangeSelectionValueState) |
+| ❌ | `DateTimeInput` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.DateTimeInput/sample/sap.m.sample.DateTimeInput) |
+| ❌ | `DateTimePicker` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.DateTimePicker/sample/sap.m.sample.DateTimePicker) |
+| ❌ | `DateTimePickerHidden` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.DateTimePicker/sample/sap.m.sample.DateTimePickerHidden) |
+| ❌ | `DateTimePickerValueState` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.DateTimePicker/sample/sap.m.sample.DateTimePickerValueState) |
+| ❌ | `Dialog` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Dialog/sample/sap.m.sample.Dialog) |
+| ❌ | `DialogConfirm` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Dialog/sample/sap.m.sample.DialogConfirm) |
+| ❌ | `DialogFullScreen` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Dialog/sample/sap.m.sample.DialogFullScreen) |
+| ❌ | `DialogMessage` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Dialog/sample/sap.m.sample.DialogMessage) |
+| ❌ | `DialogSearch` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.SearchField/sample/sap.m.sample.DialogSearch) |
+| ❌ | `DialogWithinArea` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Dialog/sample/sap.m.sample.DialogWithinArea) |
+| ❌ | `DialogWithMessagePopover` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Dialog/sample/sap.m.sample.DialogWithMessagePopover) |
+| ✅ | [`DisplayListItem`](ui5/sap.m/z2ui5_cl_demo_app_430) | [`z2ui5_cl_demo_app_430`](src/01/z2ui5_cl_demo_app_430.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.DisplayListItem/sample/sap.m.sample.DisplayListItem) |
+| ❌ | `DraftIndicator` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.DraftIndicator/sample/sap.m.sample.DraftIndicator) |
+| ❌ | `DynamicDateRange` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.DynamicDateRange/sample/sap.m.sample.DynamicDateRange) |
+| ❌ | `DynamicDateRangeAndCalendarWeekNumbering` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.DynamicDateRange/sample/sap.m.sample.DynamicDateRangeAndCalendarWeekNumbering) |
+| ❌ | `DynamicDateRangeHidden` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.DynamicDateRange/sample/sap.m.sample.DynamicDateRangeHidden) |
+| ❌ | `DynamicDateRangeWithCustomOptions` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.DynamicDateRange/sample/sap.m.sample.DynamicDateRangeWithCustomOptions) |
+| ❌ | `DynamicMessageStripGenerator` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.MessageStrip/sample/sap.m.sample.DynamicMessageStripGenerator) |
+| ❌ | `ExpandableText` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ExpandableText/sample/sap.m.sample.ExpandableText) |
+| ❌ | `FacetFilterCustomFilters` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.FacetFilter/sample/sap.m.sample.FacetFilterCustomFilters) |
+| ✅ | [`FacetFilterLight`](ui5/sap.m/z2ui5_cl_demo_app_401) | [`z2ui5_cl_demo_app_401`](src/01/z2ui5_cl_demo_app_401.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.FacetFilter/sample/sap.m.sample.FacetFilterLight) |
+| ❌ | `FacetFilterSimple` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.FacetFilter/sample/sap.m.sample.FacetFilterSimple) |
+| ❌ | `Feed` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.FeedInput/sample/sap.m.sample.Feed) |
+| ❌ | `FeedContent` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.FeedContent/sample/sap.m.sample.FeedContent) |
+| ❌ | `FeedInput` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.FeedInput/sample/sap.m.sample.FeedInput) |
+| ❌ | `FeedListItem` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.FeedListItem/sample/sap.m.sample.FeedListItem) |
+| ❌ | `FlexBoxBasicAlignment` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.FlexBox/sample/sap.m.sample.FlexBoxBasicAlignment) |
+| ✅ | [`FlexBoxCols`](ui5/sap.m/z2ui5_cl_demo_app_402) | [`z2ui5_cl_demo_app_402`](src/01/z2ui5_cl_demo_app_402.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.FlexBox/sample/sap.m.sample.FlexBoxCols) |
+| ❌ | `FlexBoxDirectionOrder` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.FlexBox/sample/sap.m.sample.FlexBoxDirectionOrder) |
+| ❌ | `FlexBoxGap` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.FlexBox/sample/sap.m.sample.FlexBoxGap) |
+| ✅ | [`FlexBoxNav`](ui5/sap.m/z2ui5_cl_demo_app_403) | [`z2ui5_cl_demo_app_403`](src/01/z2ui5_cl_demo_app_403.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.FlexBox/sample/sap.m.sample.FlexBoxNav) |
+| ✅ | [`FlexBoxNested`](ui5/sap.m/z2ui5_cl_demo_app_404) | [`z2ui5_cl_demo_app_404`](src/01/z2ui5_cl_demo_app_404.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.FlexBox/sample/sap.m.sample.FlexBoxNested) |
+| ❌ | `FlexBoxOpposingAlignment` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.FlexBox/sample/sap.m.sample.FlexBoxOpposingAlignment) |
+| ❌ | `FlexBoxRenderType` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.FlexBox/sample/sap.m.sample.FlexBoxRenderType) |
+| ✅ | [`FlexBoxSizeAdjustments`](ui5/sap.m/z2ui5_cl_demo_app_405) | [`z2ui5_cl_demo_app_405`](src/01/z2ui5_cl_demo_app_405.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.FlexBox/sample/sap.m.sample.FlexBoxSizeAdjustments) |
+| ❌ | `FormattedText` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.FormattedText/sample/sap.m.sample.FormattedText) |
+| ❌ | `GenericTag` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.GenericTag/sample/sap.m.sample.GenericTag) |
+| ❌ | `GenericTileAsFeedTile` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.GenericTile/sample/sap.m.sample.GenericTileAsFeedTile) |
+| ✅ | [`GenericTileAsKPITile`](ui5/sap.m/z2ui5_cl_demo_app_431) | [`z2ui5_cl_demo_app_431`](src/01/z2ui5_cl_demo_app_431.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.GenericTile/sample/sap.m.sample.GenericTileAsKPITile) |
+| ❌ | `GenericTileAsLaunchTile` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.GenericTile/sample/sap.m.sample.GenericTileAsLaunchTile) |
+| ❌ | `GenericTileAsMonitorTile` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.GenericTile/sample/sap.m.sample.GenericTileAsMonitorTile) |
+| ❌ | `GenericTileLineMode` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.GenericTile/sample/sap.m.sample.GenericTileLineMode) |
+| ❌ | `GenericTileStates` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.GenericTile/sample/sap.m.sample.GenericTileStates) |
+| ❌ | `HeaderContainer` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.HeaderContainer/sample/sap.m.sample.HeaderContainer) |
+| ❌ | `HeaderContainerLazyLoading` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.HeaderContainer/sample/sap.m.sample.HeaderContainerLazyLoading) |
+| ❌ | `HeaderContainerNoDividers` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.HeaderContainer/sample/sap.m.sample.HeaderContainerNoDividers) |
+| ❌ | `HeaderContainerOH` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.HeaderContainer/sample/sap.m.sample.HeaderContainerOH) |
+| ❌ | `HeaderContainerVM` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.HeaderContainer/sample/sap.m.sample.HeaderContainerVM) |
+| ❌ | `IconTabBar` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.IconTabBar/sample/sap.m.sample.IconTabBar) |
+| ❌ | `IconTabBarBackgroundDesign` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.IconTabBar/sample/sap.m.sample.IconTabBarBackgroundDesign) |
+| ❌ | `IconTabBarBadges` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.IconTabBar/sample/sap.m.sample.IconTabBarBadges) |
+| ❌ | `IconTabBarDragDrop` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.IconTabBar/sample/sap.m.sample.IconTabBarDragDrop) |
+| ❌ | `IconTabBarFiori2` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.IconTabBar/sample/sap.m.sample.IconTabBarFiori2) |
+| ❌ | `IconTabBarInlineIcons` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.IconTabBar/sample/sap.m.sample.IconTabBarInlineIcons) |
+| ❌ | `IconTabBarInlineMode` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.IconTabBar/sample/sap.m.sample.IconTabBarInlineMode) |
+| ❌ | `IconTabBarMulti` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.IconTabBar/sample/sap.m.sample.IconTabBarMulti) |
+| ❌ | `IconTabBarNoIcons` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.IconTabBar/sample/sap.m.sample.IconTabBarNoIcons) |
+| ✅ | [`IconTabBarOverflowSelectList`](ui5/sap.m/z2ui5_cl_demo_app_432) | [`z2ui5_cl_demo_app_432`](src/01/z2ui5_cl_demo_app_432.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.IconTabBar/sample/sap.m.sample.IconTabBarOverflowSelectList) |
+| ❌ | `IconTabBarProcess` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.IconTabBar/sample/sap.m.sample.IconTabBarProcess) |
+| ❌ | `IconTabBarResponsivePadding` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.IconTabBar/sample/sap.m.sample.IconTabBarResponsivePadding) |
+| ❌ | `IconTabBarStartAndEndOverflow` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.IconTabBar/sample/sap.m.sample.IconTabBarStartAndEndOverflow) |
+| ✅ | [`IconTabBarStretchContent`](ui5/sap.m/z2ui5_cl_demo_app_433) | [`z2ui5_cl_demo_app_433`](src/01/z2ui5_cl_demo_app_433.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.IconTabBar/sample/sap.m.sample.IconTabBarStretchContent) |
+| ❌ | `IconTabBarSubTabs` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.IconTabBar/sample/sap.m.sample.IconTabBarSubTabs) |
+| ❌ | `IconTabBarTabDensityMode` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.IconTabBar/sample/sap.m.sample.IconTabBarTabDensityMode) |
+| ❌ | `IconTabHeader` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.IconTabHeader/sample/sap.m.sample.IconTabHeader) |
+| ❌ | `IconTabSeparator` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.IconTabBar/sample/sap.m.sample.IconTabSeparator) |
+| ❌ | `IllustratedMessageEVR` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.IllustratedMessage/sample/sap.m.sample.IllustratedMessageEVR) |
+| ❌ | `IllustratedMessageInAppCustom` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.IllustratedMessage/sample/sap.m.sample.IllustratedMessageInAppCustom) |
+| ❌ | `IllustratedMessageInCardNoActivities` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.IllustratedMessage/sample/sap.m.sample.IllustratedMessageInCardNoActivities) |
+| ❌ | `IllustratedMessageInCardNoEmail` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.IllustratedMessage/sample/sap.m.sample.IllustratedMessageInCardNoEmail) |
+| ❌ | `IllustratedMessageInDialog` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.IllustratedMessage/sample/sap.m.sample.IllustratedMessageInDialog) |
+| ❌ | `IllustratedMessageInPage` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.IllustratedMessage/sample/sap.m.sample.IllustratedMessageInPage) |
+| ❌ | `IllustratedMessageInPageCustom` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.IllustratedMessage/sample/sap.m.sample.IllustratedMessageInPageCustom) |
+| ❌ | `IllustratedMessageInPageTNT` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.IllustratedMessage/sample/sap.m.sample.IllustratedMessageInPageTNT) |
+| ❌ | `IllustratedMessageInPageWithURI` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.IllustratedMessage/sample/sap.m.sample.IllustratedMessageInPageWithURI) |
+| ❌ | `IllustratedMessageSessionTimeout` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.IllustratedMessage/sample/sap.m.sample.IllustratedMessageSessionTimeout) |
+| ❌ | `Image` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Image/sample/sap.m.sample.Image) |
+| ❌ | `ImageContent` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ImageContent/sample/sap.m.sample.ImageContent) |
+| ❌ | `ImageErrorWithIllustration` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Image/sample/sap.m.sample.ImageErrorWithIllustration) |
+| ✅ | [`ImageModeBackground`](ui5/sap.m/z2ui5_cl_demo_app_434) | [`z2ui5_cl_demo_app_434`](src/01/z2ui5_cl_demo_app_434.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Image/sample/sap.m.sample.ImageModeBackground) |
+| ❌ | `InitialPagePattern` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.InitialPagePattern/sample/sap.m.sample.InitialPagePattern) |
+| ❌ | `InputAssisted` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Input/sample/sap.m.sample.InputAssisted) |
+| ✅ | [`InputAssistedTabularSuggestions`](ui5/sap.m/z2ui5_cl_demo_app_435) | [`z2ui5_cl_demo_app_435`](src/01/z2ui5_cl_demo_app_435.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Input/sample/sap.m.sample.InputAssistedTabularSuggestions) |
+| ✅ | [`InputAssistedTwoValues`](ui5/sap.m/z2ui5_cl_demo_app_436) | [`z2ui5_cl_demo_app_436`](src/01/z2ui5_cl_demo_app_436.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Input/sample/sap.m.sample.InputAssistedTwoValues) |
+| ❌ | `InputChecked` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Input/sample/sap.m.sample.InputChecked) |
+| ❌ | `InputCustomValueHelpIcon` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Input/sample/sap.m.sample.InputCustomValueHelpIcon) |
+| ❌ | `InputDescription` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Input/sample/sap.m.sample.InputDescription) |
+| ✅ | [`InputGrouping`](ui5/sap.m/z2ui5_cl_demo_app_437) | [`z2ui5_cl_demo_app_437`](src/01/z2ui5_cl_demo_app_437.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Input/sample/sap.m.sample.InputGrouping) |
+| ❌ | `InputKeyValue` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Input/sample/sap.m.sample.InputKeyValue) |
+| ❌ | `InputKeyValueTabularSuggestions` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Input/sample/sap.m.sample.InputKeyValueTabularSuggestions) |
+| ❌ | `InputListItem` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.InputListItem/sample/sap.m.sample.InputListItem) |
+| ❌ | `InputModelUpdate` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.InputModelUpdate/sample/sap.m.sample.InputModelUpdate) |
+| ❌ | `InputPassword` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Input/sample/sap.m.sample.InputPassword) |
+| ❌ | `InputStates` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Input/sample/sap.m.sample.InputStates) |
+| ✅ | [`InputSuggestionsCustomFilter`](ui5/sap.m/z2ui5_cl_demo_app_438) | [`z2ui5_cl_demo_app_438`](src/01/z2ui5_cl_demo_app_438.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Input/sample/sap.m.sample.InputSuggestionsCustomFilter) |
+| ❌ | `InputSuggestionsDynamic` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Input/sample/sap.m.sample.InputSuggestionsDynamic) |
+| ❌ | `InputSuggestionsOpenSearch` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Input/sample/sap.m.sample.InputSuggestionsOpenSearch) |
+| ❌ | `InputTypes` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Input/sample/sap.m.sample.InputTypes) |
+| ✅ | [`InputValueState`](ui5/sap.m/z2ui5_cl_demo_app_439) | [`z2ui5_cl_demo_app_439`](src/01/z2ui5_cl_demo_app_439.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Input/sample/sap.m.sample.InputValueState) |
+| ❌ | `InputValueUpdate` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Input/sample/sap.m.sample.InputValueUpdate) |
+| ❌ | `InputWrapping` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Input/sample/sap.m.sample.InputWrapping) |
+| ❌ | `Label` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Label/sample/sap.m.sample.Label) |
+| ❌ | `LabelProperties` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Label/sample/sap.m.sample.LabelProperties) |
+| ❌ | `LightBox` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.LightBox/sample/sap.m.sample.LightBox) |
+| ❌ | `Link` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Link/sample/sap.m.sample.Link) |
+| ✅ | [`LinkEmphasized`](ui5/sap.m/z2ui5_cl_demo_app_440) | [`z2ui5_cl_demo_app_440`](src/01/z2ui5_cl_demo_app_440.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Link/sample/sap.m.sample.LinkEmphasized) |
+| ❌ | `LinkSubtle` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Link/sample/sap.m.sample.LinkSubtle) |
+| ❌ | `ListActions` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.List/sample/sap.m.sample.ListActions) |
+| ✅ | [`ListCounter`](ui5/sap.m/z2ui5_cl_demo_app_441) | [`z2ui5_cl_demo_app_441`](src/01/z2ui5_cl_demo_app_441.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.List/sample/sap.m.sample.ListCounter) |
+| ❌ | `ListDeletion` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.List/sample/sap.m.sample.ListDeletion) |
+| ✅ | [`ListFooter`](ui5/sap.m/z2ui5_cl_demo_app_442) | [`z2ui5_cl_demo_app_442`](src/01/z2ui5_cl_demo_app_442.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.List/sample/sap.m.sample.ListFooter) |
+| ❌ | `ListGrouping` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.List/sample/sap.m.sample.ListGrouping) |
+| ✅ | [`ListGrowing`](ui5/sap.m/z2ui5_cl_demo_app_443) | [`z2ui5_cl_demo_app_443`](src/01/z2ui5_cl_demo_app_443.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.List/sample/sap.m.sample.ListGrowing) |
+| ❌ | `ListGrowingUpwards` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.List/sample/sap.m.sample.ListGrowingUpwards) |
+| ❌ | `ListItemTypes` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.List/sample/sap.m.sample.ListItemTypes) |
+| ❌ | `ListLoading` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.List/sample/sap.m.sample.ListLoading) |
+| ✅ | [`ListNavType`](ui5/sap.m/z2ui5_cl_demo_app_444) | [`z2ui5_cl_demo_app_444`](src/01/z2ui5_cl_demo_app_444.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.List/sample/sap.m.sample.ListNavType) |
+| ✅ | [`ListNoData`](ui5/sap.m/z2ui5_cl_demo_app_445) | [`z2ui5_cl_demo_app_445`](src/01/z2ui5_cl_demo_app_445.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.List/sample/sap.m.sample.ListNoData) |
+| ✅ | [`ListSelection`](ui5/sap.m/z2ui5_cl_demo_app_446) | [`z2ui5_cl_demo_app_446`](src/01/z2ui5_cl_demo_app_446.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.List/sample/sap.m.sample.ListSelection) |
+| ❌ | `ListSelectionSearch` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.List/sample/sap.m.sample.ListSelectionSearch) |
+| ❌ | `ListSwipe` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.List/sample/sap.m.sample.ListSwipe) |
+| ❌ | `ListToolbar` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.List/sample/sap.m.sample.ListToolbar) |
+| ❌ | `ListUnread` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.List/sample/sap.m.sample.ListUnread) |
+| ❌ | `MaskInput` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.MaskInput/sample/sap.m.sample.MaskInput) |
+| ❌ | `MaxNumberOfNotificationsReached` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.NotificationListGroup/sample/sap.m.sample.MaxNumberOfNotificationsReached) |
+| ❌ | `Menu` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Menu/sample/sap.m.sample.Menu) |
+| ❌ | `MenuButton` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.MenuButton/sample/sap.m.sample.MenuButton) |
+| ❌ | `MenuEndContent` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Menu/sample/sap.m.sample.MenuEndContent) |
+| ❌ | `MenuSelectable` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Menu/sample/sap.m.sample.MenuSelectable) |
+| ❌ | `MessageBox` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.MessageBox/sample/sap.m.sample.MessageBox) |
+| ❌ | `MessageBoxInfo` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.MessageBox/sample/sap.m.sample.MessageBoxInfo) |
+| ✅ | [`MessageBoxInitialFocus`](ui5/sap.m/z2ui5_cl_demo_app_447) | [`z2ui5_cl_demo_app_447`](src/01/z2ui5_cl_demo_app_447.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.MessageBox/sample/sap.m.sample.MessageBoxInitialFocus) |
+| ❌ | `MessagePage` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.MessagePage/sample/sap.m.sample.MessagePage) |
+| ❌ | `MessagePageWithButtons` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.MessagePage/sample/sap.m.sample.MessagePageWithButtons) |
+| ❌ | `MessagePopover` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.MessagePopover/sample/sap.m.sample.MessagePopover) |
+| ❌ | `MessagePopoverAsyncMessageHandling` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.MessagePopover/sample/sap.m.sample.MessagePopoverAsyncMessageHandling) |
+| ❌ | `MessagePopoverMessageHandling` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.MessagePopover/sample/sap.m.sample.MessagePopoverMessageHandling) |
+| ❌ | `MessageStrip` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.MessageStrip/sample/sap.m.sample.MessageStrip) |
+| ❌ | `MessageStripWithEnableFormattedText` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.MessageStrip/sample/sap.m.sample.MessageStripWithEnableFormattedText) |
+| ✅ | [`MessageToast`](ui5/sap.m/z2ui5_cl_demo_app_448) | [`z2ui5_cl_demo_app_448`](src/01/z2ui5_cl_demo_app_448.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.MessageToast/sample/sap.m.sample.MessageToast) |
+| ❌ | `MessageViewInsideDialog` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.MessageView/sample/sap.m.sample.MessageViewInsideDialog) |
+| ❌ | `MessageViewInsidePopover` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.MessageView/sample/sap.m.sample.MessageViewInsidePopover) |
+| ❌ | `MessageViewInsideResponsivePopover` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.MessageView/sample/sap.m.sample.MessageViewInsideResponsivePopover) |
+| ✅ | [`MessageViewMessageManager`](ui5/sap.m/z2ui5_cl_demo_app_449) | [`z2ui5_cl_demo_app_449`](src/01/z2ui5_cl_demo_app_449.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.MessageView/sample/sap.m.sample.MessageViewMessageManager) |
+| ❌ | `MessageViewWithGrouping` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.MessageView/sample/sap.m.sample.MessageViewWithGrouping) |
+| ❌ | `MultiComboBox` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.MultiComboBox/sample/sap.m.sample.MultiComboBox) |
+| ❌ | `MultiComboBoxClearIcon` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.MultiComboBox/sample/sap.m.sample.MultiComboBoxClearIcon) |
+| ❌ | `MultiComboBoxCustomFiltering` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.MultiComboBox/sample/sap.m.sample.MultiComboBoxCustomFiltering) |
+| ✅ | [`MultiComboBoxDefaultFiltering`](ui5/sap.m/z2ui5_cl_demo_app_451) | [`z2ui5_cl_demo_app_451`](src/01/z2ui5_cl_demo_app_451.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.MultiComboBox/sample/sap.m.sample.MultiComboBoxDefaultFiltering) |
+| ✅ | [`MultiComboBoxGrouping`](ui5/sap.m/z2ui5_cl_demo_app_452) | [`z2ui5_cl_demo_app_452`](src/01/z2ui5_cl_demo_app_452.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.MultiComboBox/sample/sap.m.sample.MultiComboBoxGrouping) |
+| ❌ | `MultiComboBoxMaxPickerHeight` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.MultiComboBox/sample/sap.m.sample.MultiComboBoxMaxPickerHeight) |
+| ❌ | `MultiComboBoxSelectAll` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.MultiComboBox/sample/sap.m.sample.MultiComboBoxSelectAll) |
+| ❌ | `MultiComboBoxSuggestionsAndValueState` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.MultiComboBox/sample/sap.m.sample.MultiComboBoxSuggestionsAndValueState) |
+| ✅ | [`MultiComboBoxTwoColumnsLayout`](ui5/sap.m/z2ui5_cl_demo_app_453) | [`z2ui5_cl_demo_app_453`](src/01/z2ui5_cl_demo_app_453.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.MultiComboBox/sample/sap.m.sample.MultiComboBoxTwoColumnsLayout) |
+| ❌ | `MultiComboBoxWrapping` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.MultiComboBox/sample/sap.m.sample.MultiComboBoxWrapping) |
+| ✅ | [`MultiInput`](ui5/sap.m/z2ui5_cl_demo_app_454) | [`z2ui5_cl_demo_app_454`](src/01/z2ui5_cl_demo_app_454.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.MultiInput/sample/sap.m.sample.MultiInput) |
+| ❌ | `MultiInputCustomFiltering` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.MultiInput/sample/sap.m.sample.MultiInputCustomFiltering) |
+| ✅ | [`MultiInputDatabinding`](ui5/sap.m/z2ui5_cl_demo_app_456) | [`z2ui5_cl_demo_app_456`](src/01/z2ui5_cl_demo_app_456.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.MultiInput/sample/sap.m.sample.MultiInputDatabinding) |
+| ❌ | `MultiInputFilteringSuggestions` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.MultiInput/sample/sap.m.sample.MultiInputFilteringSuggestions) |
+| ✅ | [`MultiInputGrouping`](ui5/sap.m/z2ui5_cl_demo_app_457) | [`z2ui5_cl_demo_app_457`](src/01/z2ui5_cl_demo_app_457.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.MultiInput/sample/sap.m.sample.MultiInputGrouping) |
+| ✅ | [`MultiInputMaxTokens`](ui5/sap.m/z2ui5_cl_demo_app_458) | [`z2ui5_cl_demo_app_458`](src/01/z2ui5_cl_demo_app_458.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.MultiInput/sample/sap.m.sample.MultiInputMaxTokens) |
+| ❌ | `MultiInputModelUpdate` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.MultiInput/sample/sap.m.sample.MultiInputModelUpdate) |
+| ❌ | `MultiInputTokenUpdate` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.MultiInput/sample/sap.m.sample.MultiInputTokenUpdate) |
+| ❌ | `MultiInputValidators` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.MultiInput/sample/sap.m.sample.MultiInputValidators) |
+| ❌ | `MultiInputValueHelp` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.MultiInput/sample/sap.m.sample.MultiInputValueHelp) |
+| ❌ | `MultiInputValueStates` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.MultiInput/sample/sap.m.sample.MultiInputValueStates) |
+| ❌ | `MultiInputWrapping` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.MultiInput/sample/sap.m.sample.MultiInputWrapping) |
+| ❌ | `NavContainer` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.NavContainer/sample/sap.m.sample.NavContainer) |
+| ❌ | `NewsContent` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.NewsContent/sample/sap.m.sample.NewsContent) |
+| ❌ | `NotificationListGroup` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.NotificationListGroup/sample/sap.m.sample.NotificationListGroup) |
+| ❌ | `NotificationListGroupBindings` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.NotificationListGroup/sample/sap.m.sample.NotificationListGroupBindings) |
+| ❌ | `NotificationListGroupLazyLoading` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.NotificationListGroup/sample/sap.m.sample.NotificationListGroupLazyLoading) |
+| ❌ | `NotificationListItem` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.NotificationListItem/sample/sap.m.sample.NotificationListItem) |
+| ❌ | `NumericContentDifColors` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.NumericContent/sample/sap.m.sample.NumericContentDifColors) |
+| ❌ | `NumericContentIcon` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.NumericContent/sample/sap.m.sample.NumericContentIcon) |
+| ❌ | `NumericContentWithoutMargin` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.NumericContent/sample/sap.m.sample.NumericContentWithoutMargin) |
+| ❌ | `ObjectAttributeInTable` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ObjectAttribute/sample/sap.m.sample.ObjectAttributeInTable) |
+| ❌ | `ObjectAttributes` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ObjectAttribute/sample/sap.m.sample.ObjectAttributes) |
+| ✅ | [`ObjectHeader`](ui5/sap.m/z2ui5_cl_demo_app_460) | [`z2ui5_cl_demo_app_460`](src/01/z2ui5_cl_demo_app_460.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ObjectHeader/sample/sap.m.sample.ObjectHeader) |
+| ❌ | `ObjectHeaderActiveAttributes` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ObjectAttribute/sample/sap.m.sample.ObjectHeaderActiveAttributes) |
+| ❌ | `ObjectHeaderCircleImage` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ObjectHeader/sample/sap.m.sample.ObjectHeaderCircleImage) |
+| ✅ | [`ObjectHeaderCondensed`](ui5/sap.m/z2ui5_cl_demo_app_461) | [`z2ui5_cl_demo_app_461`](src/01/z2ui5_cl_demo_app_461.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ObjectHeader/sample/sap.m.sample.ObjectHeaderCondensed) |
+| ✅ | [`ObjectHeaderImage`](ui5/sap.m/z2ui5_cl_demo_app_462) | [`z2ui5_cl_demo_app_462`](src/01/z2ui5_cl_demo_app_462.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ObjectHeader/sample/sap.m.sample.ObjectHeaderImage) |
+| ✅ | [`ObjectHeaderMarkers`](ui5/sap.m/z2ui5_cl_demo_app_463) | [`z2ui5_cl_demo_app_463`](src/01/z2ui5_cl_demo_app_463.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ObjectHeader/sample/sap.m.sample.ObjectHeaderMarkers) |
+| ✅ | [`ObjectHeaderResponsiveI`](ui5/sap.m/z2ui5_cl_demo_app_459) | [`z2ui5_cl_demo_app_459`](src/01/z2ui5_cl_demo_app_459.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ObjectAttribute/sample/sap.m.sample.ObjectHeaderResponsiveI) |
+| ✅ | [`ObjectHeaderResponsiveII`](ui5/sap.m/z2ui5_cl_demo_app_464) | [`z2ui5_cl_demo_app_464`](src/01/z2ui5_cl_demo_app_464.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ObjectHeader/sample/sap.m.sample.ObjectHeaderResponsiveII) |
+| ❌ | `ObjectHeaderResponsiveIII` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ObjectHeader/sample/sap.m.sample.ObjectHeaderResponsiveIII) |
+| ❌ | `ObjectHeaderResponsiveIV` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ObjectHeader/sample/sap.m.sample.ObjectHeaderResponsiveIV) |
+| ✅ | [`ObjectHeaderResponsiveV`](ui5/sap.m/z2ui5_cl_demo_app_465) | [`z2ui5_cl_demo_app_465`](src/01/z2ui5_cl_demo_app_465.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ObjectHeader/sample/sap.m.sample.ObjectHeaderResponsiveV) |
+| ❌ | `ObjectHeaderResponsiveVI` | — | — |
+| ❌ | `ObjectHeaderTitleActive` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ObjectHeader/sample/sap.m.sample.ObjectHeaderTitleActive) |
+| ❌ | `ObjectHeaderTitleSel` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ObjectHeader/sample/sap.m.sample.ObjectHeaderTitleSel) |
+| ✅ | [`ObjectIdentifier`](ui5/sap.m/z2ui5_cl_demo_app_466) | [`z2ui5_cl_demo_app_466`](src/01/z2ui5_cl_demo_app_466.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ObjectIdentifier/sample/sap.m.sample.ObjectIdentifier) |
+| ❌ | `ObjectListItem` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ObjectListItem/sample/sap.m.sample.ObjectListItem) |
+| ❌ | `ObjectListItemMarkers` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ObjectListItem/sample/sap.m.sample.ObjectListItemMarkers) |
+| ❌ | `ObjectMarker` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ObjectMarker/sample/sap.m.sample.ObjectMarker) |
+| ✅ | [`ObjectNumber`](ui5/sap.m/z2ui5_cl_demo_app_467) | [`z2ui5_cl_demo_app_467`](src/01/z2ui5_cl_demo_app_467.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ObjectNumber/sample/sap.m.sample.ObjectNumber) |
+| ❌ | `ObjectStatus` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ObjectStatus/sample/sap.m.sample.ObjectStatus) |
+| ❌ | `OverflowToolbarDifferentControls` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.OverflowToolbar/sample/sap.m.sample.OverflowToolbarDifferentControls) |
+| ❌ | `OverflowToolbarFooter` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.OverflowToolbar/sample/sap.m.sample.OverflowToolbarFooter) |
+| ❌ | `OverflowToolbarSimple` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.GenericTag/sample/sap.m.sample.OverflowToolbarSimple) |
+| ❌ | `OverflowToolbarTokenizer` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.OverflowToolbarTokenizer/sample/sap.m.sample.OverflowToolbarTokenizer) |
+| ❌ | `p13n` | — | — |
+| ❌ | `Page` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Bar/sample/sap.m.sample.Page) |
+| ❌ | `PageFloatingFooter` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Page/sample/sap.m.sample.PageFloatingFooter) |
+| ✅ | [`PageListReportIconTabBar`](ui5/sap.m/z2ui5_cl_demo_app_406) | [`z2ui5_cl_demo_app_406`](src/01/z2ui5_cl_demo_app_406.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Page/sample/sap.m.sample.PageListReportIconTabBar) |
+| ✅ | [`PageListReportToolbar`](ui5/sap.m/z2ui5_cl_demo_app_407) | [`z2ui5_cl_demo_app_407`](src/01/z2ui5_cl_demo_app_407.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Page/sample/sap.m.sample.PageListReportToolbar) |
+| ✅ | [`PageStandardClasses`](ui5/sap.m/z2ui5_cl_demo_app_470) | [`z2ui5_cl_demo_app_470`](src/01/z2ui5_cl_demo_app_470.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Page/sample/sap.m.sample.PageStandardClasses) |
+| ❌ | `Panel` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Panel/sample/sap.m.sample.Panel) |
+| ❌ | `PanelBackgroundDesign` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Panel/sample/sap.m.sample.PanelBackgroundDesign) |
+| ✅ | [`PanelExpanded`](ui5/sap.m/z2ui5_cl_demo_app_471) | [`z2ui5_cl_demo_app_471`](src/01/z2ui5_cl_demo_app_471.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Panel/sample/sap.m.sample.PanelExpanded) |
+| ❌ | `PanelSticky` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Panel/sample/sap.m.sample.PanelSticky) |
+| ❌ | `PDFViewerEmbedded` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.PDFViewer/sample/sap.m.sample.PDFViewerEmbedded) |
+| ❌ | `PDFViewerMultiple` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.PDFViewer/sample/sap.m.sample.PDFViewerMultiple) |
+| ✅ | [`PDFViewerPopup`](ui5/sap.m/z2ui5_cl_demo_app_469) | [`z2ui5_cl_demo_app_469`](src/01/z2ui5_cl_demo_app_469.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.PDFViewer/sample/sap.m.sample.PDFViewerPopup) |
+| ❌ | `PlanningCalendar` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.PlanningCalendar/sample/sap.m.sample.PlanningCalendar) |
+| ❌ | `PlanningCalendarAppointmentSizes` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.PlanningCalendar/sample/sap.m.sample.PlanningCalendarAppointmentSizes) |
+| ❌ | `PlanningCalendarDnD` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.PlanningCalendar/sample/sap.m.sample.PlanningCalendarDnD) |
+| ❌ | `PlanningCalendarMinMax` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.PlanningCalendar/sample/sap.m.sample.PlanningCalendarMinMax) |
+| ❌ | `PlanningCalendarModifyAppointments` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.PlanningCalendar/sample/sap.m.sample.PlanningCalendarModifyAppointments) |
+| ❌ | `PlanningCalendarMulti` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.PlanningCalendar/sample/sap.m.sample.PlanningCalendarMulti) |
+| ❌ | `PlanningCalendarOneLine` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.PlanningCalendar/sample/sap.m.sample.PlanningCalendarOneLine) |
+| ❌ | `PlanningCalendarRecurringItem` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.PlanningCalendar/sample/sap.m.sample.PlanningCalendarRecurringItem) |
+| ❌ | `PlanningCalendarRelativeViews` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.PlanningCalendar/sample/sap.m.sample.PlanningCalendarRelativeViews) |
+| ❌ | `PlanningCalendarSingle` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.PlanningCalendar/sample/sap.m.sample.PlanningCalendarSingle) |
+| ❌ | `PlanningCalendarViews` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.PlanningCalendar/sample/sap.m.sample.PlanningCalendarViews) |
+| ❌ | `PlanningCalendarWeekNumbering` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.PlanningCalendar/sample/sap.m.sample.PlanningCalendarWeekNumbering) |
+| ❌ | `PlanningCalendarWithLegend` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.PlanningCalendar/sample/sap.m.sample.PlanningCalendarWithLegend) |
+| ❌ | `PlanningCalendarWithStickyHeader` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.PlanningCalendar/sample/sap.m.sample.PlanningCalendarWithStickyHeader) |
+| ❌ | `Popover` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Popover/sample/sap.m.sample.Popover) |
+| ❌ | `PopoverControllingCloseBehavior` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Popover/sample/sap.m.sample.PopoverControllingCloseBehavior) |
+| ❌ | `PopoverNavCon` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Popover/sample/sap.m.sample.PopoverNavCon) |
+| ❌ | `PopoverWithinArea` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Popover/sample/sap.m.sample.PopoverWithinArea) |
+| ❌ | `ProgressIndicator` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ProgressIndicator/sample/sap.m.sample.ProgressIndicator) |
+| ❌ | `ProgressIndicatorWithAnnouncement` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ProgressIndicator/sample/sap.m.sample.ProgressIndicatorWithAnnouncement) |
+| ❌ | `PullToRefresh` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.PullToRefresh/sample/sap.m.sample.PullToRefresh) |
+| ❌ | `QuickView` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.QuickView/sample/sap.m.sample.QuickView) |
+| ❌ | `QuickViewAvatarConfiguration` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.QuickView/sample/sap.m.sample.QuickViewAvatarConfiguration) |
+| ❌ | `QuickViewCard` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.QuickViewCard/sample/sap.m.sample.QuickViewCard) |
+| ❌ | `QuickViewCardScrollBar` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.QuickViewCard/sample/sap.m.sample.QuickViewCardScrollBar) |
+| ❌ | `QuickViewNavOrigin` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.QuickView/sample/sap.m.sample.QuickViewNavOrigin) |
+| ❌ | `RadioButton` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.RadioButton/sample/sap.m.sample.RadioButton) |
+| ❌ | `RadioButtonGroup` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.RadioButtonGroup/sample/sap.m.sample.RadioButtonGroup) |
+| ✅ | [`RangeSlider`](ui5/sap.m/z2ui5_cl_demo_app_472) | [`z2ui5_cl_demo_app_472`](src/01/z2ui5_cl_demo_app_472.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.RangeSlider/sample/sap.m.sample.RangeSlider) |
+| ❌ | `RatingIndicator` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.RatingIndicator/sample/sap.m.sample.RatingIndicator) |
+| ❌ | `RefreshResponsive` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.PullToRefresh/sample/sap.m.sample.RefreshResponsive) |
+| ❌ | `ResponsivePopover` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ResponsivePopover/sample/sap.m.sample.ResponsivePopover) |
+| ✅ | [`ScrollContainer`](ui5/sap.m/z2ui5_cl_demo_app_473) | [`z2ui5_cl_demo_app_473`](src/01/z2ui5_cl_demo_app_473.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ScrollContainer/sample/sap.m.sample.ScrollContainer) |
+| ❌ | `SearchField` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.SearchField/sample/sap.m.sample.SearchField) |
+| ❌ | `SearchFieldSuggestions` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.SearchField/sample/sap.m.sample.SearchFieldSuggestions) |
+| ✅ | [`SegmentedButton`](ui5/sap.m/z2ui5_cl_demo_app_474) | [`z2ui5_cl_demo_app_474`](src/01/z2ui5_cl_demo_app_474.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.SegmentedButton/sample/sap.m.sample.SegmentedButton) |
+| ❌ | `SegmentedButtonContentModes` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.SegmentedButton/sample/sap.m.sample.SegmentedButtonContentModes) |
+| ❌ | `SegmentedButtonDialog` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.SegmentedButton/sample/sap.m.sample.SegmentedButtonDialog) |
+| ❌ | `SegmentedButtonLI` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.SegmentedButton/sample/sap.m.sample.SegmentedButtonLI) |
+| ❌ | `SegmentedButtonVSD` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.SegmentedButton/sample/sap.m.sample.SegmentedButtonVSD) |
+| ❌ | `Select` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Select/sample/sap.m.sample.Select) |
+| ❌ | `Select2Columns` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Select/sample/sap.m.sample.Select2Columns) |
+| ❌ | `SelectChangeEvents` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Select/sample/sap.m.sample.SelectChangeEvents) |
+| ❌ | `SelectDialog` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.SelectDialog/sample/sap.m.sample.SelectDialog) |
+| ❌ | `SelectDialogLazyLoading` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.SelectDialog/sample/sap.m.sample.SelectDialogLazyLoading) |
+| ✅ | [`SelectList`](ui5/sap.m/z2ui5_cl_demo_app_475) | [`z2ui5_cl_demo_app_475`](src/01/z2ui5_cl_demo_app_475.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.SelectList/sample/sap.m.sample.SelectList) |
+| ✅ | [`SelectListWithIcons`](ui5/sap.m/z2ui5_cl_demo_app_476) | [`z2ui5_cl_demo_app_476`](src/01/z2ui5_cl_demo_app_476.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.SelectList/sample/sap.m.sample.SelectListWithIcons) |
+| ❌ | `SelectValueState` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Select/sample/sap.m.sample.SelectValueState) |
+| ❌ | `SelectWithIcons` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Select/sample/sap.m.sample.SelectWithIcons) |
+| ❌ | `SelectWithWrappedItemText` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Select/sample/sap.m.sample.SelectWithWrappedItemText) |
+| ❌ | `SemanticPage` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.semantic.SemanticPage/sample/sap.m.sample.SemanticPage) |
+| ❌ | `SemanticPageDraftIndicator` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.DraftIndicator/sample/sap.m.sample.SemanticPageDraftIndicator) |
+| ❌ | `SemanticPageFloatingFooter` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.semantic.SemanticPage/sample/sap.m.sample.SemanticPageFloatingFooter) |
+| ❌ | `SemanticPageFullScreen` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.semantic.SemanticPage/sample/sap.m.sample.SemanticPageFullScreen) |
+| ❌ | `SinglePlanningCalendar` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.SinglePlanningCalendar/sample/sap.m.sample.SinglePlanningCalendar) |
+| ❌ | `SinglePlanningCalendarCreateApp` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.SinglePlanningCalendar/sample/sap.m.sample.SinglePlanningCalendarCreateApp) |
+| ❌ | `SinglePlanningCalendarDateSelection` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.SinglePlanningCalendar/sample/sap.m.sample.SinglePlanningCalendarDateSelection) |
+| ❌ | `SinglePlanningCalendarDND` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.SinglePlanningCalendar/sample/sap.m.sample.SinglePlanningCalendarDND) |
+| ❌ | `SinglePlanningCalendarRecurringItem` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.SinglePlanningCalendar/sample/sap.m.sample.SinglePlanningCalendarRecurringItem) |
+| ❌ | `SinglePlanningCalendarSnappingHeader` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.SinglePlanningCalendar/sample/sap.m.sample.SinglePlanningCalendarSnappingHeader) |
+| ❌ | `SinglePlanningCalendarWeekNumbering` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.SinglePlanningCalendar/sample/sap.m.sample.SinglePlanningCalendarWeekNumbering) |
+| ❌ | `SinglePlanningCalendarWithCustomViews` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.SinglePlanningCalendar/sample/sap.m.sample.SinglePlanningCalendarWithCustomViews) |
+| ❌ | `SinglePlanningCalendarWithLegend` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.SinglePlanningCalendar/sample/sap.m.sample.SinglePlanningCalendarWithLegend) |
+| ❌ | `SinglePlanningCalendarWithZoomInZoomOut` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.SinglePlanningCalendar/sample/sap.m.sample.SinglePlanningCalendarWithZoomInZoomOut) |
+| ❌ | `Slider` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Slider/sample/sap.m.sample.Slider) |
+| ❌ | `SlideTile` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.SlideTile/sample/sap.m.sample.SlideTile) |
+| ❌ | `SplitApp` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.SplitApp/sample/sap.m.sample.SplitApp) |
+| ❌ | `SplitContainer` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.SplitContainer/sample/sap.m.sample.SplitContainer) |
+| ✅ | [`StandardListItem`](ui5/sap.m/z2ui5_cl_demo_app_477) | [`z2ui5_cl_demo_app_477`](src/01/z2ui5_cl_demo_app_477.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.StandardListItem/sample/sap.m.sample.StandardListItem) |
+| ❌ | `StandardListItemAvatar` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.StandardListItem/sample/sap.m.sample.StandardListItemAvatar) |
+| ✅ | [`StandardListItemDescription`](ui5/sap.m/z2ui5_cl_demo_app_478) | [`z2ui5_cl_demo_app_478`](src/01/z2ui5_cl_demo_app_478.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.StandardListItem/sample/sap.m.sample.StandardListItemDescription) |
+| ✅ | [`StandardListItemIcon`](ui5/sap.m/z2ui5_cl_demo_app_479) | [`z2ui5_cl_demo_app_479`](src/01/z2ui5_cl_demo_app_479.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.StandardListItem/sample/sap.m.sample.StandardListItemIcon) |
+| ❌ | `StandardListItemInfo` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.StandardListItem/sample/sap.m.sample.StandardListItemInfo) |
+| ❌ | `StandardListItemInfoStateInverted` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.StandardListItem/sample/sap.m.sample.StandardListItemInfoStateInverted) |
+| ❌ | `StandardListItemNavigated` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.StandardListItem/sample/sap.m.sample.StandardListItemNavigated) |
+| ✅ | [`StandardListItemTitle`](ui5/sap.m/z2ui5_cl_demo_app_480) | [`z2ui5_cl_demo_app_480`](src/01/z2ui5_cl_demo_app_480.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.StandardListItem/sample/sap.m.sample.StandardListItemTitle) |
+| ❌ | `StandardListItemWrapping` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.StandardListItem/sample/sap.m.sample.StandardListItemWrapping) |
+| ✅ | [`StandardMarginsAll`](ui5/sap.m/z2ui5_cl_demo_app_491) | [`z2ui5_cl_demo_app_491`](src/02/z2ui5_cl_demo_app_491.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.core.StandardMargins/sample/sap.m.sample.StandardMarginsAll) |
+| ✅ | [`StandardMarginsCollapse`](ui5/sap.m/z2ui5_cl_demo_app_492) | [`z2ui5_cl_demo_app_492`](src/02/z2ui5_cl_demo_app_492.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.core.StandardMargins/sample/sap.m.sample.StandardMarginsCollapse) |
+| ✅ | [`StandardMarginsEnforceWidthAuto`](ui5/sap.m/z2ui5_cl_demo_app_493) | [`z2ui5_cl_demo_app_493`](src/02/z2ui5_cl_demo_app_493.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.core.StandardMargins/sample/sap.m.sample.StandardMarginsEnforceWidthAuto) |
+| ✅ | [`StandardMarginsResponsive`](ui5/sap.m/z2ui5_cl_demo_app_494) | [`z2ui5_cl_demo_app_494`](src/02/z2ui5_cl_demo_app_494.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.core.StandardMargins/sample/sap.m.sample.StandardMarginsResponsive) |
+| ✅ | [`StandardMarginsSingleSided`](ui5/sap.m/z2ui5_cl_demo_app_495) | [`z2ui5_cl_demo_app_495`](src/02/z2ui5_cl_demo_app_495.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.core.StandardMargins/sample/sap.m.sample.StandardMarginsSingleSided) |
+| ✅ | [`StandardMarginsTwoSided`](ui5/sap.m/z2ui5_cl_demo_app_496) | [`z2ui5_cl_demo_app_496`](src/02/z2ui5_cl_demo_app_496.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.core.StandardMargins/sample/sap.m.sample.StandardMarginsTwoSided) |
+| ❌ | `StandardNegativeMarginsTwoSided` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.core.StandardMargins/sample/sap.m.sample.StandardNegativeMarginsTwoSided) |
+| ✅ | [`StandardNoMargins`](ui5/sap.m/z2ui5_cl_demo_app_497) | [`z2ui5_cl_demo_app_497`](src/02/z2ui5_cl_demo_app_497.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.core.StandardMargins/sample/sap.m.sample.StandardNoMargins) |
+| ✅ | [`StepInput`](ui5/sap.m/z2ui5_cl_demo_app_481) | [`z2ui5_cl_demo_app_481`](src/01/z2ui5_cl_demo_app_481.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.StepInput/sample/sap.m.sample.StepInput) |
+| ❌ | `StepInputValueState` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.StepInput/sample/sap.m.sample.StepInputValueState) |
+| ❌ | `Switch` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Switch/sample/sap.m.sample.Switch) |
+| ❌ | `TabContainer` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.TabContainer/sample/sap.m.sample.TabContainer) |
+| ❌ | `TabContainerIcons` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.TabContainer/sample/sap.m.sample.TabContainerIcons) |
+| ❌ | `TabContainerMHC` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.TabContainer/sample/sap.m.sample.TabContainerMHC) |
+| ❌ | `Table` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Column/sample/sap.m.sample.Table) |
+| ✅ | [`TableAlternateRowColors`](ui5/sap.m/z2ui5_cl_demo_app_482) | [`z2ui5_cl_demo_app_482`](src/01/z2ui5_cl_demo_app_482.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Table/sample/sap.m.sample.TableAlternateRowColors) |
+| ❌ | `TableAutoPopin` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Table/sample/sap.m.sample.TableAutoPopin) |
+| ❌ | `TableBreadcrumb` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Table/sample/sap.m.sample.TableBreadcrumb) |
+| ❌ | `TableColumnWidth` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Table/sample/sap.m.sample.TableColumnWidth) |
+| ❌ | `TableContextualWidthDynamic` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Table/sample/sap.m.sample.TableContextualWidthDynamic) |
+| ✅ | [`TableContextualWidthStatic`](ui5/sap.m/z2ui5_cl_demo_app_483) | [`z2ui5_cl_demo_app_483`](src/01/z2ui5_cl_demo_app_483.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Table/sample/sap.m.sample.TableContextualWidthStatic) |
+| ❌ | `TableDnD` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Table/sample/sap.m.sample.TableDnD) |
+| ❌ | `TableEditable` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Table/sample/sap.m.sample.TableEditable) |
+| ❌ | `TableIColumnHeaderMenu` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Table/sample/sap.m.sample.TableIColumnHeaderMenu) |
+| ❌ | `TableLayout` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Table/sample/sap.m.sample.TableLayout) |
+| ❌ | `TableMergeCells` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Table/sample/sap.m.sample.TableMergeCells) |
+| ❌ | `TableMultiSelectMode` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Table/sample/sap.m.sample.TableMultiSelectMode) |
+| ❌ | `TableNavigated` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Table/sample/sap.m.sample.TableNavigated) |
+| ❌ | `TableOutdated` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Table/sample/sap.m.sample.TableOutdated) |
+| ❌ | `TableScrollToIndex` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Table/sample/sap.m.sample.TableScrollToIndex) |
+| ❌ | `TableSelectCopy` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Table/sample/sap.m.sample.TableSelectCopy) |
+| ❌ | `TableSelectDialog` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.TableSelectDialog/sample/sap.m.sample.TableSelectDialog) |
+| ❌ | `TableSelectDialogGrowing` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.TableSelectDialog/sample/sap.m.sample.TableSelectDialogGrowing) |
+| ❌ | `TableStrictLayout` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Table/sample/sap.m.sample.TableStrictLayout) |
+| ❌ | `TableTest` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ColumnListItem/sample/sap.m.sample.TableTest) |
+| ❌ | `TableVerticalAlignment` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Table/sample/sap.m.sample.TableVerticalAlignment) |
+| ❌ | `TableViewSettingsDialog` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Table/sample/sap.m.sample.TableViewSettingsDialog) |
+| ✅ | [`Text`](ui5/sap.m/z2ui5_cl_demo_app_408) | [`z2ui5_cl_demo_app_408`](src/01/z2ui5_cl_demo_app_408.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Text/sample/sap.m.sample.Text) |
+| ✅ | [`TextArea`](ui5/sap.m/z2ui5_cl_demo_app_409) | [`z2ui5_cl_demo_app_409`](src/01/z2ui5_cl_demo_app_409.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.TextArea/sample/sap.m.sample.TextArea) |
+| ❌ | `TextAreaGrowing` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.TextArea/sample/sap.m.sample.TextAreaGrowing) |
+| ❌ | `TextAreaMaxLength` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.TextArea/sample/sap.m.sample.TextAreaMaxLength) |
+| ❌ | `TextAreaValueStates` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.TextArea/sample/sap.m.sample.TextAreaValueStates) |
+| ✅ | [`TextAreaValueUpdate`](ui5/sap.m/z2ui5_cl_demo_app_484) | [`z2ui5_cl_demo_app_484`](src/01/z2ui5_cl_demo_app_484.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.TextArea/sample/sap.m.sample.TextAreaValueUpdate) |
+| ❌ | `TextEmptyIndicator` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Text/sample/sap.m.sample.TextEmptyIndicator) |
+| ❌ | `TextHyphenation` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Text/sample/sap.m.sample.TextHyphenation) |
+| ❌ | `TextMaxLines` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Text/sample/sap.m.sample.TextMaxLines) |
+| ❌ | `TextRenderWhitespace` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Text/sample/sap.m.sample.TextRenderWhitespace) |
+| ❌ | `TileContainer` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.StandardTile/sample/sap.m.sample.TileContainer) |
+| ❌ | `TileContent` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.TileContent/sample/sap.m.sample.TileContent) |
+| ❌ | `TimePicker` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.TimePicker/sample/sap.m.sample.TimePicker) |
+| ❌ | `TimePickerHidden` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.TimePicker/sample/sap.m.sample.TimePickerHidden) |
+| ❌ | `TimePickerSliders` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.TimePickerSliders/sample/sap.m.sample.TimePickerSliders) |
+| ❌ | `TimePickerValueState` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.TimePicker/sample/sap.m.sample.TimePickerValueState) |
+| ✅ | [`Title`](ui5/sap.m/z2ui5_cl_demo_app_485) | [`z2ui5_cl_demo_app_485`](src/01/z2ui5_cl_demo_app_485.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Title/sample/sap.m.sample.Title) |
+| ❌ | `TitleLink` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Title/sample/sap.m.sample.TitleLink) |
+| ❌ | `TitleToolBar` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.OverflowToolbar/sample/sap.m.sample.TitleToolBar) |
+| ❌ | `TitleWrapping` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Title/sample/sap.m.sample.TitleWrapping) |
+| ❌ | `ToggleButton` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ToggleButton/sample/sap.m.sample.ToggleButton) |
+| ❌ | `TokenizerBasic` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Tokenizer/sample/sap.m.sample.TokenizerBasic) |
+| ❌ | `TokenizerMultiLine` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Tokenizer/sample/sap.m.sample.TokenizerMultiLine) |
+| ❌ | `ToolbarActive` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.OverflowToolbar/sample/sap.m.sample.ToolbarActive) |
+| ❌ | `ToolbarAlignment` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.OverflowToolbar/sample/sap.m.sample.ToolbarAlignment) |
+| ❌ | `ToolbarDesign` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.OverflowToolbar/sample/sap.m.sample.ToolbarDesign) |
+| ✅ | [`ToolbarEnabled`](ui5/sap.m/z2ui5_cl_demo_app_468) | [`z2ui5_cl_demo_app_468`](src/01/z2ui5_cl_demo_app_468.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.OverflowToolbar/sample/sap.m.sample.ToolbarEnabled) |
+| ❌ | `ToolbarResponsive` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Toolbar/sample/sap.m.sample.ToolbarResponsive) |
+| ✅ | [`ToolbarShrinkable`](ui5/sap.m/z2ui5_cl_demo_app_486) | [`z2ui5_cl_demo_app_486`](src/01/z2ui5_cl_demo_app_486.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Toolbar/sample/sap.m.sample.ToolbarShrinkable) |
+| ❌ | `ToolbarVsBar` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Bar/sample/sap.m.sample.ToolbarVsBar) |
+| ✅ | [`Tree`](ui5/sap.m/z2ui5_cl_demo_app_487) | [`z2ui5_cl_demo_app_487`](src/01/z2ui5_cl_demo_app_487.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Tree/sample/sap.m.sample.Tree) |
+| ❌ | `TreeDnD` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Tree/sample/sap.m.sample.TreeDnD) |
+| ❌ | `TreeExpandMulti` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Tree/sample/sap.m.sample.TreeExpandMulti) |
+| ❌ | `TreeExpandTo` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Tree/sample/sap.m.sample.TreeExpandTo) |
+| ❌ | `TreeIcon` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Tree/sample/sap.m.sample.TreeIcon) |
+| ❌ | `TreeJSONLazyLoading` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Tree/sample/sap.m.sample.TreeJSONLazyLoading) |
+| ❌ | `TreeOData` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Tree/sample/sap.m.sample.TreeOData) |
+| ❌ | `TreeSelection` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Tree/sample/sap.m.sample.TreeSelection) |
+| ❌ | `TsHelloWorld` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.sample.TsHelloWorld/sample/sap.m.sample.TsHelloWorld) |
+| ❌ | `UploadCollection` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.UploadCollection/sample/sap.m.sample.UploadCollection) |
+| ❌ | `UploadCollectionFolderHierarchy` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.UploadCollection/sample/sap.m.sample.UploadCollectionFolderHierarchy) |
+| ❌ | `UploadCollectionForPendingUpload` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.UploadCollection/sample/sap.m.sample.UploadCollectionForPendingUpload) |
+| ❌ | `UploadCollectionSortingFiltering` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.UploadCollection/sample/sap.m.sample.UploadCollectionSortingFiltering) |
+| ❌ | `UploadCollectionVersioning` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.UploadCollection/sample/sap.m.sample.UploadCollectionVersioning) |
+| ❌ | `UploadSet` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.upload.UploadSet/sample/sap.m.sample.UploadSet) |
+| ❌ | `UploadSetCloudUpload` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.upload.UploadSet/sample/sap.m.sample.UploadSetCloudUpload) |
+| ❌ | `UploadSetCustomUploader` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.upload.UploadSet/sample/sap.m.sample.UploadSetCustomUploader) |
+| ❌ | `UploadSetDirectoryUploads` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.upload.UploadSet/sample/sap.m.sample.UploadSetDirectoryUploads) |
+| ❌ | `UploadSetGroupingSortingFiltering` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.upload.UploadSet/sample/sap.m.sample.UploadSetGroupingSortingFiltering) |
+| ❌ | `UploadSetwithTablePlugin` | — | — |
+| ❌ | `UrlHelper` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.URLHelper/sample/sap.m.sample.UrlHelper) |
+| ❌ | `UXCIntegration` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.sample.UXCIntegration/sample/sap.m.sample.UXCIntegration) |
+| ❌ | `VariantManagement` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.VariantManagement/sample/sap.m.sample.VariantManagement) |
+| ❌ | `ViewSettingsDialog` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ViewSettingsDialog/sample/sap.m.sample.ViewSettingsDialog) |
+| ❌ | `ViewSettingsDialogCustom` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ViewSettingsDialog/sample/sap.m.sample.ViewSettingsDialogCustom) |
+| ❌ | `ViewSettingsDialogCustomFilterDetails` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ViewSettingsDialog/sample/sap.m.sample.ViewSettingsDialogCustomFilterDetails) |
+| ❌ | `ViewSettingsDialogCustomTabs` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.ViewSettingsDialog/sample/sap.m.sample.ViewSettingsDialogCustomTabs) |
+| ❌ | `WhitespacePattern` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.WhitespacePattern/sample/sap.m.sample.WhitespacePattern) |
+| ❌ | `Wizard` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Wizard/sample/sap.m.sample.Wizard) |
+| ❌ | `WizardBranching` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Wizard/sample/sap.m.sample.WizardBranching) |
+| ❌ | `WizardCurrentStep` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Wizard/sample/sap.m.sample.WizardCurrentStep) |
+| ❌ | `WizardSingleStep` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.m.Wizard/sample/sap.m.sample.WizardSingleStep) |
 
 ### `sap.tnt` — 3/17 (17.6 %)
 
-| | Sample | UI5 source | abap2UI5 class |
-|---|--------|------------|----------------|
-| ❌ | `InfoLabel` | [source](https://github.com/SAP/openui5/tree/master/src/sap.tnt/test/sap/tnt/demokit/sample/InfoLabel) | — |
-| ❌ | `InfoLabelInDynamicPage` | [source](https://github.com/SAP/openui5/tree/master/src/sap.tnt/test/sap/tnt/demokit/sample/InfoLabelInDynamicPage) | — |
-| ❌ | `InfoLabelInTable` | [source](https://github.com/SAP/openui5/tree/master/src/sap.tnt/test/sap/tnt/demokit/sample/InfoLabelInTable) | — |
-| ✅ | [`NavigationList`](https://github.com/abap2UI5/api/tree/ui5/src/sap.tnt/z2ui5_cl_demo_app_498) | [source](https://github.com/SAP/openui5/tree/master/src/sap.tnt/test/sap/tnt/demokit/sample/NavigationList) | [`z2ui5_cl_demo_app_498`](src/05/z2ui5_cl_demo_app_498.clas.abap) |
-| ✅ | [`SideNavigation`](https://github.com/abap2UI5/api/tree/ui5/src/sap.tnt/z2ui5_cl_demo_app_499) | [source](https://github.com/SAP/openui5/tree/master/src/sap.tnt/test/sap/tnt/demokit/sample/SideNavigation) | [`z2ui5_cl_demo_app_499`](src/05/z2ui5_cl_demo_app_499.clas.abap) |
-| ❌ | `SideNavigationActions` | [source](https://github.com/SAP/openui5/tree/master/src/sap.tnt/test/sap/tnt/demokit/sample/SideNavigationActions) | — |
-| ❌ | `SideNavigationOverlayMode` | [source](https://github.com/SAP/openui5/tree/master/src/sap.tnt/test/sap/tnt/demokit/sample/SideNavigationOverlayMode) | — |
-| ❌ | `SideNavigationPressEvent` | [source](https://github.com/SAP/openui5/tree/master/src/sap.tnt/test/sap/tnt/demokit/sample/SideNavigationPressEvent) | — |
-| ❌ | `SideNavigationSearch` | [source](https://github.com/SAP/openui5/tree/master/src/sap.tnt/test/sap/tnt/demokit/sample/SideNavigationSearch) | — |
-| ❌ | `SideNavigationUnselectableParents` | [source](https://github.com/SAP/openui5/tree/master/src/sap.tnt/test/sap/tnt/demokit/sample/SideNavigationUnselectableParents) | — |
-| ❌ | `SideNavigationWithTags` | [source](https://github.com/SAP/openui5/tree/master/src/sap.tnt/test/sap/tnt/demokit/sample/SideNavigationWithTags) | — |
-| ❌ | `SideNavigationWrapping` | [source](https://github.com/SAP/openui5/tree/master/src/sap.tnt/test/sap/tnt/demokit/sample/SideNavigationWrapping) | — |
-| ❌ | `ToolHeader` | [source](https://github.com/SAP/openui5/tree/master/src/sap.tnt/test/sap/tnt/demokit/sample/ToolHeader) | — |
-| ✅ | [`ToolHeaderIconTabHeader`](https://github.com/abap2UI5/api/tree/ui5/src/sap.tnt/z2ui5_cl_demo_app_500) | [source](https://github.com/SAP/openui5/tree/master/src/sap.tnt/test/sap/tnt/demokit/sample/ToolHeaderIconTabHeader) | [`z2ui5_cl_demo_app_500`](src/05/z2ui5_cl_demo_app_500.clas.abap) |
-| ❌ | `ToolPage` | [source](https://github.com/SAP/openui5/tree/master/src/sap.tnt/test/sap/tnt/demokit/sample/ToolPage) | — |
-| ❌ | `ToolPageHorizontalNavigation` | [source](https://github.com/SAP/openui5/tree/master/src/sap.tnt/test/sap/tnt/demokit/sample/ToolPageHorizontalNavigation) | — |
-| ❌ | `ToolPageNavigation` | [source](https://github.com/SAP/openui5/tree/master/src/sap.tnt/test/sap/tnt/demokit/sample/ToolPageNavigation) | — |
+| | Javascript | ABAP | Link |
+|---|-----------|------|------|
+| ❌ | `InfoLabel` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.tnt.InfoLabel/sample/sap.tnt.sample.InfoLabel) |
+| ❌ | `InfoLabelInDynamicPage` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.tnt.InfoLabel/sample/sap.tnt.sample.InfoLabelInDynamicPage) |
+| ❌ | `InfoLabelInTable` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.tnt.InfoLabel/sample/sap.tnt.sample.InfoLabelInTable) |
+| ✅ | [`NavigationList`](ui5/sap.tnt/z2ui5_cl_demo_app_498) | [`z2ui5_cl_demo_app_498`](src/05/z2ui5_cl_demo_app_498.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.tnt.NavigationList/sample/sap.tnt.sample.NavigationList) |
+| ✅ | [`SideNavigation`](ui5/sap.tnt/z2ui5_cl_demo_app_499) | [`z2ui5_cl_demo_app_499`](src/05/z2ui5_cl_demo_app_499.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.tnt.SideNavigation/sample/sap.tnt.sample.SideNavigation) |
+| ❌ | `SideNavigationActions` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.tnt.SideNavigation/sample/sap.tnt.sample.SideNavigationActions) |
+| ❌ | `SideNavigationOverlayMode` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.tnt.SideNavigation/sample/sap.tnt.sample.SideNavigationOverlayMode) |
+| ❌ | `SideNavigationPressEvent` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.tnt.SideNavigation/sample/sap.tnt.sample.SideNavigationPressEvent) |
+| ❌ | `SideNavigationSearch` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.tnt.SideNavigation/sample/sap.tnt.sample.SideNavigationSearch) |
+| ❌ | `SideNavigationUnselectableParents` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.tnt.SideNavigation/sample/sap.tnt.sample.SideNavigationUnselectableParents) |
+| ❌ | `SideNavigationWithTags` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.tnt.SideNavigation/sample/sap.tnt.sample.SideNavigationWithTags) |
+| ❌ | `SideNavigationWrapping` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.tnt.SideNavigation/sample/sap.tnt.sample.SideNavigationWrapping) |
+| ❌ | `ToolHeader` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.tnt.ToolHeader/sample/sap.tnt.sample.ToolHeader) |
+| ✅ | [`ToolHeaderIconTabHeader`](ui5/sap.tnt/z2ui5_cl_demo_app_500) | [`z2ui5_cl_demo_app_500`](src/05/z2ui5_cl_demo_app_500.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.tnt.ToolHeader/sample/sap.tnt.sample.ToolHeaderIconTabHeader) |
+| ❌ | `ToolPage` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.tnt.ToolPage/sample/sap.tnt.sample.ToolPage) |
+| ❌ | `ToolPageHorizontalNavigation` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.tnt.ToolPage/sample/sap.tnt.sample.ToolPageHorizontalNavigation) |
+| ❌ | `ToolPageNavigation` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.tnt.ToolPage/sample/sap.tnt.sample.ToolPageNavigation) |
 
 ### `sap.f` — 4/42 (9.5 %)
 
-| | Sample | UI5 source | abap2UI5 class |
-|---|--------|------------|----------------|
-| ❌ | `AvatarGroup` | [source](https://github.com/SAP/openui5/tree/master/src/sap.f/test/sap/f/demokit/sample/AvatarGroup) | — |
-| ❌ | `Card` | [source](https://github.com/SAP/openui5/tree/master/src/sap.f/test/sap/f/demokit/sample/Card) | — |
-| ❌ | `DynamicPageAnalyticalTable` | [source](https://github.com/SAP/openui5/tree/master/src/sap.f/test/sap/f/demokit/sample/DynamicPageAnalyticalTable) | — |
-| ❌ | `DynamicPageFreeStyle` | [source](https://github.com/SAP/openui5/tree/master/src/sap.f/test/sap/f/demokit/sample/DynamicPageFreeStyle) | — |
-| ❌ | `DynamicPageResponsiveAvatar` | [source](https://github.com/SAP/openui5/tree/master/src/sap.f/test/sap/f/demokit/sample/DynamicPageResponsiveAvatar) | — |
-| ❌ | `DynamicPageWithStickySubheader` | [source](https://github.com/SAP/openui5/tree/master/src/sap.f/test/sap/f/demokit/sample/DynamicPageWithStickySubheader) | — |
-| ❌ | `DynamicPageWithWizard` | [source](https://github.com/SAP/openui5/tree/master/src/sap.f/test/sap/f/demokit/sample/DynamicPageWithWizard) | — |
-| ❌ | `FlexibleColumnLayoutColumnResize` | [source](https://github.com/SAP/openui5/tree/master/src/sap.f/test/sap/f/demokit/sample/FlexibleColumnLayoutColumnResize) | — |
-| ❌ | `FlexibleColumnLayoutLandmarkInfo` | [source](https://github.com/SAP/openui5/tree/master/src/sap.f/test/sap/f/demokit/sample/FlexibleColumnLayoutLandmarkInfo) | — |
-| ❌ | `FlexibleColumnLayoutLandmarkInfoArrow` | [source](https://github.com/SAP/openui5/tree/master/src/sap.f/test/sap/f/demokit/sample/FlexibleColumnLayoutLandmarkInfoArrow) | — |
-| ❌ | `FlexibleColumnLayoutSimple` | [source](https://github.com/SAP/openui5/tree/master/src/sap.f/test/sap/f/demokit/sample/FlexibleColumnLayoutSimple) | — |
-| ❌ | `FlexibleColumnLayoutWithFullscreenPage` | [source](https://github.com/SAP/openui5/tree/master/src/sap.f/test/sap/f/demokit/sample/FlexibleColumnLayoutWithFullscreenPage) | — |
-| ❌ | `FlexibleColumnLayoutWithOneColumnStart` | [source](https://github.com/SAP/openui5/tree/master/src/sap.f/test/sap/f/demokit/sample/FlexibleColumnLayoutWithOneColumnStart) | — |
-| ❌ | `FlexibleColumnLayoutWithTwoColumnStart` | [source](https://github.com/SAP/openui5/tree/master/src/sap.f/test/sap/f/demokit/sample/FlexibleColumnLayoutWithTwoColumnStart) | — |
-| ❌ | `GridContainer` | [source](https://github.com/SAP/openui5/tree/master/src/sap.f/test/sap/f/demokit/sample/GridContainer) | — |
-| ❌ | `GridContainerDragAndDrop` | [source](https://github.com/SAP/openui5/tree/master/src/sap.f/test/sap/f/demokit/sample/GridContainerDragAndDrop) | — |
-| ❌ | `GridContainerDragAndDropFromList` | [source](https://github.com/SAP/openui5/tree/master/src/sap.f/test/sap/f/demokit/sample/GridContainerDragAndDropFromList) | — |
-| ❌ | `GridContainersNavigation` | [source](https://github.com/SAP/openui5/tree/master/src/sap.f/test/sap/f/demokit/sample/GridContainersNavigation) | — |
-| ✅ | [`GridListBasic`](https://github.com/abap2UI5/api/tree/ui5/src/sap.f/z2ui5_cl_demo_app_416) | [source](https://github.com/SAP/openui5/tree/master/src/sap.f/test/sap/f/demokit/sample/GridListBasic) | [`z2ui5_cl_demo_app_416`](src/04/z2ui5_cl_demo_app_416.clas.abap) |
-| ✅ | [`GridListBoxContainer`](https://github.com/abap2UI5/api/tree/ui5/src/sap.f/z2ui5_cl_demo_app_417) | [source](https://github.com/SAP/openui5/tree/master/src/sap.f/test/sap/f/demokit/sample/GridListBoxContainer) | [`z2ui5_cl_demo_app_417`](src/04/z2ui5_cl_demo_app_417.clas.abap) |
-| ✅ | [`GridListBoxContainerGrouping`](https://github.com/abap2UI5/api/tree/ui5/src/sap.f/z2ui5_cl_demo_app_418) | [source](https://github.com/SAP/openui5/tree/master/src/sap.f/test/sap/f/demokit/sample/GridListBoxContainerGrouping) | [`z2ui5_cl_demo_app_418`](src/04/z2ui5_cl_demo_app_418.clas.abap) |
-| ❌ | `GridListBoxContainerReal` | [source](https://github.com/SAP/openui5/tree/master/src/sap.f/test/sap/f/demokit/sample/GridListBoxContainerReal) | — |
-| ❌ | `GridListBreakPoints` | [source](https://github.com/SAP/openui5/tree/master/src/sap.f/test/sap/f/demokit/sample/GridListBreakPoints) | — |
-| ❌ | `GridListDragAndDrop` | [source](https://github.com/SAP/openui5/tree/master/src/sap.f/test/sap/f/demokit/sample/GridListDragAndDrop) | — |
-| ❌ | `GridListKeyboardArrowsNavigation` | [source](https://github.com/SAP/openui5/tree/master/src/sap.f/test/sap/f/demokit/sample/GridListKeyboardArrowsNavigation) | — |
-| ❌ | `GridListModes` | [source](https://github.com/SAP/openui5/tree/master/src/sap.f/test/sap/f/demokit/sample/GridListModes) | — |
-| ❌ | `GridListResponsiveColumnLayout` | [source](https://github.com/SAP/openui5/tree/master/src/sap.f/test/sap/f/demokit/sample/GridListResponsiveColumnLayout) | — |
-| ❌ | `MomentInPage` | [source](https://github.com/SAP/openui5/tree/master/src/sap.f/test/sap/f/demokit/sample/MomentInPage) | — |
-| ❌ | `ProductSwitchItemWithImageSrc` | [source](https://github.com/SAP/openui5/tree/master/src/sap.f/test/sap/f/demokit/sample/ProductSwitchItemWithImageSrc) | — |
-| ❌ | `ProductSwitchNavigation` | [source](https://github.com/SAP/openui5/tree/master/src/sap.f/test/sap/f/demokit/sample/ProductSwitchNavigation) | — |
-| ❌ | `SemanticPage` | [source](https://github.com/SAP/openui5/tree/master/src/sap.f/test/sap/f/demokit/sample/SemanticPage) | — |
-| ❌ | `SemanticPageFreeStyle` | [source](https://github.com/SAP/openui5/tree/master/src/sap.f/test/sap/f/demokit/sample/SemanticPageFreeStyle) | — |
-| ✅ | [`ShellBar`](https://github.com/abap2UI5/api/tree/ui5/src/sap.f/z2ui5_cl_demo_app_419) | [source](https://github.com/SAP/openui5/tree/master/src/sap.f/test/sap/f/demokit/sample/ShellBar) | [`z2ui5_cl_demo_app_419`](src/04/z2ui5_cl_demo_app_419.clas.abap) |
-| ❌ | `ShellBarProductSwitch` | [source](https://github.com/SAP/openui5/tree/master/src/sap.f/test/sap/f/demokit/sample/ShellBarProductSwitch) | — |
-| ❌ | `ShellBarWithFlexibleColumnLayout` | [source](https://github.com/SAP/openui5/tree/master/src/sap.f/test/sap/f/demokit/sample/ShellBarWithFlexibleColumnLayout) | — |
-| ❌ | `ShellBarWithMenuButton` | [source](https://github.com/SAP/openui5/tree/master/src/sap.f/test/sap/f/demokit/sample/ShellBarWithMenuButton) | — |
-| ❌ | `ShellBarWithSearch` | [source](https://github.com/SAP/openui5/tree/master/src/sap.f/test/sap/f/demokit/sample/ShellBarWithSearch) | — |
-| ❌ | `ShellBarWithSplitApp` | [source](https://github.com/SAP/openui5/tree/master/src/sap.f/test/sap/f/demokit/sample/ShellBarWithSplitApp) | — |
-| ❌ | `SidePanel` | [source](https://github.com/SAP/openui5/tree/master/src/sap.f/test/sap/f/demokit/sample/SidePanel) | — |
-| ❌ | `SidePanelOverflow` | [source](https://github.com/SAP/openui5/tree/master/src/sap.f/test/sap/f/demokit/sample/SidePanelOverflow) | — |
-| ❌ | `SidePanelResizable` | [source](https://github.com/SAP/openui5/tree/master/src/sap.f/test/sap/f/demokit/sample/SidePanelResizable) | — |
-| ❌ | `SidePanelSingle` | [source](https://github.com/SAP/openui5/tree/master/src/sap.f/test/sap/f/demokit/sample/SidePanelSingle) | — |
+| | Javascript | ABAP | Link |
+|---|-----------|------|------|
+| ❌ | `AvatarGroup` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.f.AvatarGroup/sample/sap.f.sample.AvatarGroup) |
+| ❌ | `Card` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.f.Card/sample/sap.f.sample.Card) |
+| ❌ | `DynamicPageAnalyticalTable` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.f.DynamicPage/sample/sap.f.sample.DynamicPageAnalyticalTable) |
+| ❌ | `DynamicPageFreeStyle` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.f.DynamicPage/sample/sap.f.sample.DynamicPageFreeStyle) |
+| ❌ | `DynamicPageResponsiveAvatar` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.f.DynamicPage/sample/sap.f.sample.DynamicPageResponsiveAvatar) |
+| ❌ | `DynamicPageWithStickySubheader` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.f.DynamicPage/sample/sap.f.sample.DynamicPageWithStickySubheader) |
+| ❌ | `DynamicPageWithWizard` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.f.DynamicPage/sample/sap.f.sample.DynamicPageWithWizard) |
+| ❌ | `FlexibleColumnLayoutColumnResize` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.f.FlexibleColumnLayout/sample/sap.f.sample.FlexibleColumnLayoutColumnResize) |
+| ❌ | `FlexibleColumnLayoutLandmarkInfo` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.f.FlexibleColumnLayout/sample/sap.f.sample.FlexibleColumnLayoutLandmarkInfo) |
+| ❌ | `FlexibleColumnLayoutLandmarkInfoArrow` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.f.FlexibleColumnLayout/sample/sap.f.sample.FlexibleColumnLayoutLandmarkInfoArrow) |
+| ❌ | `FlexibleColumnLayoutSimple` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.f.FlexibleColumnLayout/sample/sap.f.sample.FlexibleColumnLayoutSimple) |
+| ❌ | `FlexibleColumnLayoutWithFullscreenPage` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.f.FlexibleColumnLayout/sample/sap.f.sample.FlexibleColumnLayoutWithFullscreenPage) |
+| ❌ | `FlexibleColumnLayoutWithOneColumnStart` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.f.FlexibleColumnLayout/sample/sap.f.sample.FlexibleColumnLayoutWithOneColumnStart) |
+| ❌ | `FlexibleColumnLayoutWithTwoColumnStart` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.f.FlexibleColumnLayout/sample/sap.f.sample.FlexibleColumnLayoutWithTwoColumnStart) |
+| ❌ | `GridContainer` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.f.GridContainer/sample/sap.f.sample.GridContainer) |
+| ❌ | `GridContainerDragAndDrop` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.f.GridContainer/sample/sap.f.sample.GridContainerDragAndDrop) |
+| ❌ | `GridContainerDragAndDropFromList` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.f.GridContainer/sample/sap.f.sample.GridContainerDragAndDropFromList) |
+| ❌ | `GridContainersNavigation` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.f.GridContainer/sample/sap.f.sample.GridContainersNavigation) |
+| ✅ | [`GridListBasic`](ui5/sap.f/z2ui5_cl_demo_app_416) | [`z2ui5_cl_demo_app_416`](src/04/z2ui5_cl_demo_app_416.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.f.GridList/sample/sap.f.sample.GridListBasic) |
+| ✅ | [`GridListBoxContainer`](ui5/sap.f/z2ui5_cl_demo_app_417) | [`z2ui5_cl_demo_app_417`](src/04/z2ui5_cl_demo_app_417.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.f.GridList/sample/sap.f.sample.GridListBoxContainer) |
+| ✅ | [`GridListBoxContainerGrouping`](ui5/sap.f/z2ui5_cl_demo_app_418) | [`z2ui5_cl_demo_app_418`](src/04/z2ui5_cl_demo_app_418.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.f.GridList/sample/sap.f.sample.GridListBoxContainerGrouping) |
+| ❌ | `GridListBoxContainerReal` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.f.GridList/sample/sap.f.sample.GridListBoxContainerReal) |
+| ❌ | `GridListBreakPoints` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.f.GridList/sample/sap.f.sample.GridListBreakPoints) |
+| ❌ | `GridListDragAndDrop` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.f.GridList/sample/sap.f.sample.GridListDragAndDrop) |
+| ❌ | `GridListKeyboardArrowsNavigation` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.f.GridList/sample/sap.f.sample.GridListKeyboardArrowsNavigation) |
+| ❌ | `GridListModes` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.f.GridList/sample/sap.f.sample.GridListModes) |
+| ❌ | `GridListResponsiveColumnLayout` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.f.GridList/sample/sap.f.sample.GridListResponsiveColumnLayout) |
+| ❌ | `MomentInPage` | — | — |
+| ❌ | `ProductSwitchItemWithImageSrc` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.f.ProductSwitch/sample/sap.f.sample.ProductSwitchItemWithImageSrc) |
+| ❌ | `ProductSwitchNavigation` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.f.ProductSwitch/sample/sap.f.sample.ProductSwitchNavigation) |
+| ❌ | `SemanticPage` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.f.semantic.SemanticPage/sample/sap.f.sample.SemanticPage) |
+| ❌ | `SemanticPageFreeStyle` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.f.semantic.SemanticPage/sample/sap.f.sample.SemanticPageFreeStyle) |
+| ✅ | [`ShellBar`](ui5/sap.f/z2ui5_cl_demo_app_419) | [`z2ui5_cl_demo_app_419`](src/04/z2ui5_cl_demo_app_419.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.f.ShellBar/sample/sap.f.sample.ShellBar) |
+| ❌ | `ShellBarProductSwitch` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.f.ShellBar/sample/sap.f.sample.ShellBarProductSwitch) |
+| ❌ | `ShellBarWithFlexibleColumnLayout` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.f.FlexibleColumnLayout/sample/sap.f.sample.ShellBarWithFlexibleColumnLayout) |
+| ❌ | `ShellBarWithMenuButton` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.f.ShellBar/sample/sap.f.sample.ShellBarWithMenuButton) |
+| ❌ | `ShellBarWithSearch` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.f.ShellBar/sample/sap.f.sample.ShellBarWithSearch) |
+| ❌ | `ShellBarWithSplitApp` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.f.ShellBar/sample/sap.f.sample.ShellBarWithSplitApp) |
+| ❌ | `SidePanel` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.f.SidePanel/sample/sap.f.sample.SidePanel) |
+| ❌ | `SidePanelOverflow` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.f.SidePanel/sample/sap.f.sample.SidePanelOverflow) |
+| ❌ | `SidePanelResizable` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.f.SidePanel/sample/sap.f.sample.SidePanelResizable) |
+| ❌ | `SidePanelSingle` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.f.SidePanel/sample/sap.f.sample.SidePanelSingle) |
 
 ### `sap.ui.unified` — 2/21 (9.5 %)
 
-| | Sample | UI5 source | abap2UI5 class |
-|---|--------|------------|----------------|
-| ❌ | `CalendarCalendarType` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.unified/test/sap/ui/unified/demokit/sample/CalendarCalendarType) | — |
-| ❌ | `CalendarDateDeselection` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.unified/test/sap/ui/unified/demokit/sample/CalendarDateDeselection) | — |
-| ❌ | `CalendarDateIntervalBasic` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.unified/test/sap/ui/unified/demokit/sample/CalendarDateIntervalBasic) | — |
-| ❌ | `CalendarLegendNavigation` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.unified/test/sap/ui/unified/demokit/sample/CalendarLegendNavigation) | — |
-| ❌ | `CalendarMinMax` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.unified/test/sap/ui/unified/demokit/sample/CalendarMinMax) | — |
-| ❌ | `CalendarMultipleDaySelection` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.unified/test/sap/ui/unified/demokit/sample/CalendarMultipleDaySelection) | — |
-| ❌ | `CalendarMultipleMonth` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.unified/test/sap/ui/unified/demokit/sample/CalendarMultipleMonth) | — |
-| ❌ | `CalendarSingleDaySelection` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.unified/test/sap/ui/unified/demokit/sample/CalendarSingleDaySelection) | — |
-| ❌ | `CalendarSingleIntervalSelection` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.unified/test/sap/ui/unified/demokit/sample/CalendarSingleIntervalSelection) | — |
-| ❌ | `CalendarSpecialDaysLegend` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.unified/test/sap/ui/unified/demokit/sample/CalendarSpecialDaysLegend) | — |
-| ❌ | `ColorPicker` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.unified/test/sap/ui/unified/demokit/sample/ColorPicker) | — |
-| ❌ | `ColorPickerLarge` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.unified/test/sap/ui/unified/demokit/sample/ColorPickerLarge) | — |
-| ❌ | `ColorPickerPopover` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.unified/test/sap/ui/unified/demokit/sample/ColorPickerPopover) | — |
-| ❌ | `ColorPickerSimplified` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.unified/test/sap/ui/unified/demokit/sample/ColorPickerSimplified) | — |
-| ✅ | [`Currency`](https://github.com/abap2UI5/api/tree/ui5/src/sap.ui.unified/z2ui5_cl_demo_app_526) | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.unified/test/sap/ui/unified/demokit/sample/Currency) | [`z2ui5_cl_demo_app_526`](src/02/z2ui5_cl_demo_app_526.clas.abap) |
-| ✅ | [`CurrencyInTable`](https://github.com/abap2UI5/api/tree/ui5/src/sap.ui.unified/z2ui5_cl_demo_app_527) | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.unified/test/sap/ui/unified/demokit/sample/CurrencyInTable) | [`z2ui5_cl_demo_app_527`](src/02/z2ui5_cl_demo_app_527.clas.abap) |
-| ❌ | `FileUploaderBasic` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.unified/test/sap/ui/unified/demokit/sample/FileUploaderBasic) | — |
-| ❌ | `FileUploaderComplex` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.unified/test/sap/ui/unified/demokit/sample/FileUploaderComplex) | — |
-| ❌ | `MenuItemEventing` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.unified/test/sap/ui/unified/demokit/sample/MenuItemEventing) | — |
-| ❌ | `MenuMenuEventing` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.unified/test/sap/ui/unified/demokit/sample/MenuMenuEventing) | — |
-| ❌ | `MenuSelectable` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.unified/test/sap/ui/unified/demokit/sample/MenuSelectable) | — |
+| | Javascript | ABAP | Link |
+|---|-----------|------|------|
+| ❌ | `CalendarCalendarType` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.unified.Calendar/sample/sap.ui.unified.sample.CalendarCalendarType) |
+| ❌ | `CalendarDateDeselection` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.unified.Calendar/sample/sap.ui.unified.sample.CalendarDateDeselection) |
+| ❌ | `CalendarDateIntervalBasic` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.unified.CalendarDateInterval/sample/sap.ui.unified.sample.CalendarDateIntervalBasic) |
+| ❌ | `CalendarLegendNavigation` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.unified.Calendar/sample/sap.ui.unified.sample.CalendarLegendNavigation) |
+| ❌ | `CalendarMinMax` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.unified.Calendar/sample/sap.ui.unified.sample.CalendarMinMax) |
+| ❌ | `CalendarMultipleDaySelection` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.unified.Calendar/sample/sap.ui.unified.sample.CalendarMultipleDaySelection) |
+| ❌ | `CalendarMultipleMonth` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.unified.Calendar/sample/sap.ui.unified.sample.CalendarMultipleMonth) |
+| ❌ | `CalendarSingleDaySelection` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.unified.Calendar/sample/sap.ui.unified.sample.CalendarSingleDaySelection) |
+| ❌ | `CalendarSingleIntervalSelection` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.unified.Calendar/sample/sap.ui.unified.sample.CalendarSingleIntervalSelection) |
+| ❌ | `CalendarSpecialDaysLegend` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.unified.Calendar/sample/sap.ui.unified.sample.CalendarSpecialDaysLegend) |
+| ❌ | `ColorPicker` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.unified.ColorPicker/sample/sap.ui.unified.sample.ColorPicker) |
+| ❌ | `ColorPickerLarge` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.unified.ColorPicker/sample/sap.ui.unified.sample.ColorPickerLarge) |
+| ❌ | `ColorPickerPopover` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.unified.ColorPicker/sample/sap.ui.unified.sample.ColorPickerPopover) |
+| ❌ | `ColorPickerSimplified` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.unified.ColorPicker/sample/sap.ui.unified.sample.ColorPickerSimplified) |
+| ✅ | [`Currency`](ui5/sap.ui.unified/z2ui5_cl_demo_app_526) | [`z2ui5_cl_demo_app_526`](src/02/z2ui5_cl_demo_app_526.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.unified.Currency/sample/sap.ui.unified.sample.Currency) |
+| ✅ | [`CurrencyInTable`](ui5/sap.ui.unified/z2ui5_cl_demo_app_527) | [`z2ui5_cl_demo_app_527`](src/02/z2ui5_cl_demo_app_527.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.unified.Currency/sample/sap.ui.unified.sample.CurrencyInTable) |
+| ❌ | `FileUploaderBasic` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.unified.FileUploader/sample/sap.ui.unified.sample.FileUploaderBasic) |
+| ❌ | `FileUploaderComplex` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.unified.FileUploader/sample/sap.ui.unified.sample.FileUploaderComplex) |
+| ❌ | `MenuItemEventing` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.unified.Menu/sample/sap.ui.unified.sample.MenuItemEventing) |
+| ❌ | `MenuMenuEventing` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.unified.Menu/sample/sap.ui.unified.sample.MenuMenuEventing) |
+| ❌ | `MenuSelectable` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.unified.Menu/sample/sap.ui.unified.sample.MenuSelectable) |
 
 ### `sap.ui.table` — 1/18 (5.6 %)
 
-| | Sample | UI5 source | abap2UI5 class |
-|---|--------|------------|----------------|
-| ❌ | `Aggregations` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.table/test/sap/ui/table/demokit/sample/Aggregations) | — |
-| ❌ | `Basic` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.table/test/sap/ui/table/demokit/sample/Basic) | — |
-| ❌ | `ColumnResizing` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.table/test/sap/ui/table/demokit/sample/ColumnResizing) | — |
-| ❌ | `DnD` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.table/test/sap/ui/table/demokit/sample/DnD) | — |
-| ❌ | `Filtering` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.table/test/sap/ui/table/demokit/sample/Filtering) | — |
-| ❌ | `Menus` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.table/test/sap/ui/table/demokit/sample/Menus) | — |
-| ✅ | [`MultiHeader`](https://github.com/abap2UI5/api/tree/ui5/src/sap.ui.table/z2ui5_cl_demo_app_525) | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.table/test/sap/ui/table/demokit/sample/MultiHeader) | [`z2ui5_cl_demo_app_525`](src/02/z2ui5_cl_demo_app_525.clas.abap) |
-| ❌ | `MultiSelectionPlugin` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.table/test/sap/ui/table/demokit/sample/MultiSelectionPlugin) | — |
-| ❌ | `OData` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.table/test/sap/ui/table/demokit/sample/OData) | — |
-| ❌ | `OData2` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.table/test/sap/ui/table/demokit/sample/OData2) | — |
-| ❌ | `RowAction` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.table/test/sap/ui/table/demokit/sample/RowAction) | — |
-| ❌ | `RowHighlights` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.table/test/sap/ui/table/demokit/sample/RowHighlights) | — |
-| ❌ | `RowModes` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.table/test/sap/ui/table/demokit/sample/RowModes) | — |
-| ❌ | `SelectCopyPaste` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.table/test/sap/ui/table/demokit/sample/SelectCopyPaste) | — |
-| ❌ | `Selection` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.table/test/sap/ui/table/demokit/sample/Selection) | — |
-| ❌ | `Sorting` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.table/test/sap/ui/table/demokit/sample/Sorting) | — |
-| ❌ | `TableFreeze` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.table/test/sap/ui/table/demokit/sample/TableFreeze) | — |
-| ❌ | `TreeTable` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.table/test/sap/ui/table/demokit/sample/TreeTable) | — |
+| | Javascript | ABAP | Link |
+|---|-----------|------|------|
+| ❌ | `Aggregations` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.table.Table/sample/sap.ui.table.sample.Aggregations) |
+| ❌ | `Basic` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.table.Table/sample/sap.ui.table.sample.Basic) |
+| ❌ | `ColumnResizing` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.table.Table/sample/sap.ui.table.sample.ColumnResizing) |
+| ❌ | `DnD` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.table.Table/sample/sap.ui.table.sample.DnD) |
+| ❌ | `Filtering` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.table.Table/sample/sap.ui.table.sample.Filtering) |
+| ❌ | `Menus` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.table.Table/sample/sap.ui.table.sample.Menus) |
+| ✅ | [`MultiHeader`](ui5/sap.ui.table/z2ui5_cl_demo_app_525) | [`z2ui5_cl_demo_app_525`](src/02/z2ui5_cl_demo_app_525.clas.abap) | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.table.Table/sample/sap.ui.table.sample.MultiHeader) |
+| ❌ | `MultiSelectionPlugin` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.table.Table/sample/sap.ui.table.sample.MultiSelectionPlugin) |
+| ❌ | `OData` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.table.Table/sample/sap.ui.table.sample.OData) |
+| ❌ | `OData2` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.table.Table/sample/sap.ui.table.sample.OData2) |
+| ❌ | `RowAction` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.table.Table/sample/sap.ui.table.sample.RowAction) |
+| ❌ | `RowHighlights` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.table.Table/sample/sap.ui.table.sample.RowHighlights) |
+| ❌ | `RowModes` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.table.Table/sample/sap.ui.table.sample.RowModes) |
+| ❌ | `SelectCopyPaste` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.table.Table/sample/sap.ui.table.sample.SelectCopyPaste) |
+| ❌ | `Selection` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.table.Table/sample/sap.ui.table.sample.Selection) |
+| ❌ | `Sorting` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.table.Table/sample/sap.ui.table.sample.Sorting) |
+| ❌ | `TableFreeze` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.table.Table/sample/sap.ui.table.sample.TableFreeze) |
+| ❌ | `TreeTable` | — | — |
 
 ### `sap.ui.codeeditor` — 0/2 (0.0 %)
 
-| | Sample | UI5 source | abap2UI5 class |
-|---|--------|------------|----------------|
-| ❌ | `CodeEditor` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.codeeditor/test/sap/ui/codeeditor/demokit/sample/CodeEditor) | — |
-| ❌ | `CodeEditorIconTabHeader` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.codeeditor/test/sap/ui/codeeditor/demokit/sample/CodeEditorIconTabHeader) | — |
+| | Javascript | ABAP | Link |
+|---|-----------|------|------|
+| ❌ | `CodeEditor` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.codeeditor.CodeEditor/sample/sap.ui.codeeditor.sample.CodeEditor) |
+| ❌ | `CodeEditorIconTabHeader` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.codeeditor.CodeEditor/sample/sap.ui.codeeditor.sample.CodeEditorIconTabHeader) |
 
 ### `sap.ui.mdc` — 0/13 (0.0 %)
 
-| | Sample | UI5 source | abap2UI5 class |
-|---|--------|------------|----------------|
-| ❌ | `Chart` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.mdc/test/sap/ui/mdc/demokit/sample/Chart) | — |
-| ❌ | `FieldCustomContent` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.mdc/test/sap/ui/mdc/demokit/sample/FieldCustomContent) | — |
-| ❌ | `FieldTypes` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.mdc/test/sap/ui/mdc/demokit/sample/FieldTypes) | — |
-| ❌ | `FieldValueHelpJson` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.mdc/test/sap/ui/mdc/demokit/sample/FieldValueHelpJson) | — |
-| ❌ | `FieldValueHelpTypes` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.mdc/test/sap/ui/mdc/demokit/sample/FieldValueHelpTypes) | — |
-| ❌ | `FilterbarCustomContent` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.mdc/test/sap/ui/mdc/demokit/sample/FilterbarCustomContent) | — |
-| ❌ | `FilterbarCustomOperators` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.mdc/test/sap/ui/mdc/demokit/sample/FilterbarCustomOperators) | — |
-| ❌ | `FilterbarTypes` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.mdc/test/sap/ui/mdc/demokit/sample/FilterbarTypes) | — |
-| ❌ | `FilterbarVisualizeValidationState` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.mdc/test/sap/ui/mdc/demokit/sample/FilterbarVisualizeValidationState) | — |
-| ❌ | `LinkPayloadJson` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.mdc/test/sap/ui/mdc/demokit/sample/LinkPayloadJson) | — |
-| ❌ | `MultiValueField` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.mdc/test/sap/ui/mdc/demokit/sample/MultiValueField) | — |
-| ❌ | `table` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.mdc/test/sap/ui/mdc/demokit/sample/table) | — |
-| ❌ | `TableFilterBarJson` | [source](https://github.com/SAP/openui5/tree/master/src/sap.ui.mdc/test/sap/ui/mdc/demokit/sample/TableFilterBarJson) | — |
+| | Javascript | ABAP | Link |
+|---|-----------|------|------|
+| ❌ | `Chart` | — | — |
+| ❌ | `FieldCustomContent` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.mdc.sample.Field/sample/sap.ui.mdc.sample.FieldCustomContent) |
+| ❌ | `FieldTypes` | — | [demo kit ↗](https://sapui5.hana.ondemand.com/sdk/#/entity/sap.ui.mdc.sample.Field/sample/sap.ui.mdc.sample.FieldTypes) |
+| ❌ | `FieldValueHelpJson` | — | — |
+| ❌ | `FieldValueHelpTypes` | — | — |
+| ❌ | `FilterbarCustomContent` | — | — |
+| ❌ | `FilterbarCustomOperators` | — | — |
+| ❌ | `FilterbarTypes` | — | — |
+| ❌ | `FilterbarVisualizeValidationState` | — | — |
+| ❌ | `LinkPayloadJson` | — | — |
+| ❌ | `MultiValueField` | — | — |
+| ❌ | `table` | — | — |
+| ❌ | `TableFilterBarJson` | — | — |
 

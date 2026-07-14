@@ -23,8 +23,8 @@ A coding agent runs the pipeline:
    demo kit sample (`src/<library>/test/<library>/demokit/sample/<Name>/`).
 2. **Generate** — rebuild each sample 1:1 as an abap2UI5 app (`z2ui5_if_app`),
    filed by library under `src/01`…`src/05`.
-3. **Store templates** — keep the original UI5 JS/XML templates on the
-   [`ui5`](https://github.com/abap2UI5/api/tree/ui5) branch, one folder per port.
+3. **Store templates** — keep the original UI5 JS/XML templates in the
+   [`ui5/`](ui5) folder, one folder per port (named after the port class).
 4. **Report** — regenerate [COVERAGE.md](COVERAGE.md): every sample marked
    ✅ ported / ❌ missing, with a coverage figure per module. The ❌ rows are
    the backlog.
