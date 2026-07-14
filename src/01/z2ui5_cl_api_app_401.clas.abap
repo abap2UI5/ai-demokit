@@ -26,13 +26,14 @@ CLASS z2ui5_cl_api_app_401 DEFINITION PUBLIC.
         count TYPE i,
       END OF ty_s_facet.
     TYPES ty_t_facet TYPE STANDARD TABLE OF ty_s_facet WITH EMPTY KEY.
-    DATA t_products     TYPE ty_t_product.
-    DATA t_products_all TYPE ty_t_product.
-    DATA t_categories   TYPE ty_t_facet.
-    DATA t_suppliers    TYPE ty_t_facet.
+    DATA t_products   TYPE ty_t_product.
+    DATA t_categories TYPE ty_t_facet.
+    DATA t_suppliers  TYPE ty_t_facet.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
+    " not bound - kept out of PUBLIC so the round-trip model scan stays small
+    DATA t_products_all   TYPE ty_t_product.
     DATA t_range_category TYPE RANGE OF string.
     DATA t_range_supplier TYPE RANGE OF string.
 

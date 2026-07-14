@@ -138,6 +138,9 @@ CLASS z2ui5_cl_api_app_<n> DEFINITION PUBLIC.       " lowercase, not FINAL
     " bindings live here, so the framework can serialise them across round-trips
     TYPES: BEGIN OF ty_s_item, ... END OF ty_s_item.
     DATA t_items TYPE STANDARD TABLE OF ty_s_item WITH EMPTY KEY.
+    " ONLY bound DATA belongs in PUBLIC: the round-trip model scan walks the
+    " public instance attributes, so every non-bound helper/backup kept here
+    " just slows the binding search. Put such state in PROTECTED (see below).
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
