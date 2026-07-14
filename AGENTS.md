@@ -252,11 +252,13 @@ client->view_display( view->stringify( ) ).
   `shut` sits at the same column as the `open` it closes.
 - **A control's `attr()` lines sit one level (4 spaces) in from the control's
   own `)->` line**; align the `v =` column across them.
-- **Blank lines follow the structural verb, attrs don't count:** a blank line
-  between two controls whose verb **differs** (`open`↔`leaf`, and before every
-  `shut`); **no** blank between same-verb controls (`open`/`open`, `leaf`/`leaf`,
-  consecutive `shut`s), **none directly after** a `shut`, and **none** between a
-  control and its `attr()`s.
+- **Blank lines** (attrs never count — they belong to their control):
+  - **never** between consecutive `leaf`s, and **never** after a **one-liner
+    `open`** (an aggregation/container with no attrs) before its first child;
+  - a blank **does** separate an `open` that *has* attrs from its first child,
+    and separates a new `open`/`leaf` block from the previous sibling;
+  - a blank **before** every `shut`; **none** after a `shut` or between `shut`s;
+  - **none** between a control and its own `attr()`s.
 - Long text/binding values split with `&&` at ~255 chars max per line (§6).
 
 #### Data binding & events

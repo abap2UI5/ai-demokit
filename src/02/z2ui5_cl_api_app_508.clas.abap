@@ -56,10 +56,8 @@ CLASS z2ui5_cl_api_app_508 IMPLEMENTATION.
             )->attr( n = `title`      v = `Number Input`
 
             )->open( n = `content` ns = `form`
-
                 )->leaf( `Label`
                     )->attr( n = `text` v = `Number`
-
                 )->leaf( `Input`
                     )->attr( n = `value` v = `{ path: '` && path && `', type: 'sap.ui.model.type.Integer' }`
 
@@ -78,16 +76,12 @@ CLASS z2ui5_cl_api_app_508 IMPLEMENTATION.
             )->attr( n = `title`      v = `Min Integer Digits (minimal number of non-fraction digits)`
 
             )->open( n = `content` ns = `form`
-
                 )->leaf( `Label`
                     )->attr( n = `text` v = `3 digits`
-
                 )->leaf( `Text`
                     )->attr( n = `text` v = `{ path: '` && path && `', type: 'sap.ui.model.type.Integer', formatOptions: { minIntegerDigits: 3 } }`
-
                 )->leaf( `Label`
                     )->attr( n = `text` v = `5 digits`
-
                 )->leaf( `Text`
                     )->attr( n = `text` v = `{ path: '` && path && `', type: 'sap.ui.model.type.Integer', formatOptions: { minIntegerDigits: 5 } }`
 
@@ -106,16 +100,12 @@ CLASS z2ui5_cl_api_app_508 IMPLEMENTATION.
             )->attr( n = `title`      v = `Max Integer Digits (maximal number of non-fraction digits)`
 
             )->open( n = `content` ns = `form`
-
                 )->leaf( `Label`
                     )->attr( n = `text` v = `2 digits`
-
                 )->leaf( `Text`
                     )->attr( n = `text` v = `{ path: '` && path && `', type: 'sap.ui.model.type.Integer', formatOptions: { maxIntegerDigits: 2 } }`
-
                 )->leaf( `Label`
                     )->attr( n = `text` v = `5 digits`
-
                 )->leaf( `Text`
                     )->attr( n = `text` v = `{ path: '` && path && `', type: 'sap.ui.model.type.Integer', formatOptions: { maxIntegerDigits: 5 } }` ).
 

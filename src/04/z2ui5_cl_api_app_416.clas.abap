@@ -110,7 +110,6 @@ CLASS z2ui5_cl_api_app_416 IMPLEMENTATION.
                     )->open( `VBox`
                         )->attr( n = `class` v = `sapUiSmallMargin`
                         )->open( `layoutData`
-
                             )->leaf( `FlexItemData`
                                 )->attr( n = `growFactor`   v = `1`
                                 )->attr( n = `shrinkFactor` v = `0`

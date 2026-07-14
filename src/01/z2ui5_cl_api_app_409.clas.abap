@@ -42,7 +42,6 @@ CLASS z2ui5_cl_api_app_409 IMPLEMENTATION.
             )->attr( n = `width` v = `100%`
 
             )->open( n = `content` ns = `l`
-
                 )->leaf( `TextArea`
                     )->attr( n = `value`
                              v = `Lorem ipsum dolor st amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, ` &&
