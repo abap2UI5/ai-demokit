@@ -30,11 +30,6 @@ const README = path.join(ROOT, 'README.md');
 const START = '<!-- coverage:start -->';
 const END = '<!-- coverage:end -->';
 
-// free-text notes, keyed by "<lib>.sample.<Name>" — persisted here because
-// api.md is generated (edit comments.json, not the table)
-let comments = {};
-try { comments = JSON.parse(fs.readFileSync(path.join(ROOT, 'comments.json'), 'utf8')); } catch { /* none */ }
-
 // link targets (overridable via env) — all links are external/absolute
 const REPO = process.env.REPO || 'abap2UI5/api';   // owner/name
 const REF = process.env.REF || 'main';             // branch the links resolve on
@@ -152,20 +147,19 @@ function summaryLines() {
 function controlLines() {
   const l = [];
   l.push('One table per module, one row per UI5 demo kit sample. **Name** is the demo');
-  l.push('kit control (plain); **Javascript** links to the collected UI5 template');
-  l.push('(`ui5/`), **API** to the control\'s UI5 API reference, **Demo** to the live');
-  l.push('demo kit app, **ABAP** to the generated class (`—` = not ported yet).');
-  l.push('**Comment** is free text from `comments.json`. See the');
+  l.push('kit control; **Javascript** links to the collected UI5 template (`ui5/`),');
+  l.push('**API** to the control\'s UI5 API reference, **Demo** to the live demo kit');
+  l.push('app, **ABAP** to the generated class (`—` = not ported yet). See the');
   l.push('[README](README.md#coverage) for the per-module summary.');
   l.push('');
 
   for (const { lib } of summary) {
     const entry = libs.find((e) => e.lib === lib);
     const lp = entry.samples.filter((s) => s.port).length;
-    l.push(`## \`${lib}\` — ${lp}/${entry.samples.length} (${pct(lp, entry.samples.length)})`);
+    l.push(`## ${lib} — ${lp}/${entry.samples.length} (${pct(lp, entry.samples.length)})`);
     l.push('');
-    l.push('| Name | Javascript | API | Demo | ABAP | Comment |');
-    l.push('|------|-----------|-----|------|------|---------|');
+    l.push('| Name | Javascript | API | Demo | ABAP |');
+    l.push('|------|-----------|-----|------|------|');
 
     // sort by control (entity), then sample name; entity-less rows last
     const rows = [...entry.samples].sort((a, b) =>
@@ -173,13 +167,12 @@ function controlLines() {
       (a.entity || '').toLowerCase().localeCompare((b.entity || '').toLowerCase()) ||
       a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
     for (const s of rows) {
-      const name = s.entity ? `\`${s.entity}\`` : '—';
-      const js = s.port ? `[\`${s.name}\`](${templateUrl(lib, s.port.cls)})` : `\`${s.name}\``;
-      const api = s.entity ? `[api ↗](${apiUrl(s.entity)})` : '—';
-      const demo = s.entity ? `[demo ↗](${demokitUrl(s.entity, `${lib}.sample.${s.name}`)})` : '—';
-      const abap = s.port ? `[\`${s.port.cls}\`](${abapUrl(s.port.file)})` : '—';
-      const comment = (comments[`${lib}.sample.${s.name}`] || '').replace(/\|/g, '\\|').replace(/\n/g, ' ');
-      l.push(`| ${name} | ${js} | ${api} | ${demo} | ${abap} | ${comment} |`);
+      const name = s.entity || '—';
+      const js = s.port ? `[${s.name}](${templateUrl(lib, s.port.cls)})` : s.name;
+      const api = s.entity ? `[↗](${apiUrl(s.entity)})` : '—';
+      const demo = s.entity ? `[↗](${demokitUrl(s.entity, `${lib}.sample.${s.name}`)})` : '—';
+      const abap = s.port ? `[${s.port.cls}](${abapUrl(s.port.file)})` : '—';
+      l.push(`| ${name} | ${js} | ${api} | ${demo} | ${abap} |`);
     }
     l.push('');
   }
