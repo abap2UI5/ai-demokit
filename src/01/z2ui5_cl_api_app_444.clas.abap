@@ -1,0 +1,63 @@
+"! Generated port of a UI5 demo kit sample - not yet manually reviewed
+"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.List/sample/sap.m.sample.ListNavType
+"! If only a subset of the list items are navigable you should indicate those by setting their 'type'
+"! to 'Navigation'. This displays an navigation arrow. Do not show arrows if all items are navigable.
+"! This achieved by setting the 'type' to 'Active'.
+CLASS z2ui5_cl_api_app_444 DEFINITION PUBLIC.
+
+  PUBLIC SECTION.
+    INTERFACES z2ui5_if_app.
+
+  PROTECTED SECTION.
+    METHODS view_display
+      IMPORTING
+        client TYPE REF TO z2ui5_if_client.
+
+  PRIVATE SECTION.
+ENDCLASS.
+
+
+CLASS z2ui5_cl_api_app_444 IMPLEMENTATION.
+
+  METHOD view_display.
+
+    DATA(pic_url) = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/`.
+
+    DATA(page) = z2ui5_cl_xml_view=>factory( ).
+
+    " The iconDensityAware property of the original sample is not available in the view API and is omitted here
+    page->list(
+           headertext = `Products`
+           )->items(
+               )->standard_list_item(
+                   title       = `Notebook Basic 15`
+                   description = `HT-1000`
+                   icon        = pic_url && `HT-1000.jpg`
+                   iconinset   = abap_false
+                   type        = `Navigation`
+               )->standard_list_item(
+                   title       = `Notebook Basic 17`
+                   description = `HT-1001`
+                   icon        = pic_url && `HT-1001.jpg`
+                   iconinset   = abap_false
+                   type        = `Navigation`
+               )->standard_list_item(
+                   title       = `Notebook Basic 18`
+                   description = `HT-1002`
+                   icon        = pic_url && `HT-1002.jpg`
+                   iconinset   = abap_false ).
+
+    client->view_display( page->stringify( ) ).
+
+  ENDMETHOD.
+
+
+  METHOD z2ui5_if_app~main.
+
+    IF client->check_on_init( ).
+      view_display( client ).
+    ENDIF.
+
+  ENDMETHOD.
+
+ENDCLASS.

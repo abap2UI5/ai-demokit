@@ -1,0 +1,23 @@
+name: auto_downport
+
+# Rebuilds the 702 branch via auto_branch.yaml: downports the sources,
+# lints with the 702 config and force-pushes.
+
+on:
+  push:
+    branches: [standard]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: auto_downport
+  cancel-in-progress: false
+
+jobs:
+  auto_downport:
+    uses: ./.github/workflows/auto_branch.yaml
+    with:
+      branch: '702'
+      do_downport: true
+      lint_config: .github/abaplint/abap_702.jsonc

@@ -1,0 +1,15 @@
+<mvc:View
+	controllerName="sap.m.sample.ListCounter.List"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m">
+	<List
+		headerText="Products"
+		headerLevel="H2"
+		items="{
+			path: '/ProductCollection'
+		}" >
+		<StandardListItem
+			title="{Name}"
+			counter="{Quantity}"/>
+	</List>
+</mvc:View>
