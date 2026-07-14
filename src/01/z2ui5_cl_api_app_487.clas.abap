@@ -36,7 +36,7 @@ CLASS z2ui5_cl_api_app_487 DEFINITION PUBLIC.
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
 
-    METHODS on_init.
+    METHODS data_init.
     METHODS view_display.
 
   PRIVATE SECTION.
@@ -45,17 +45,25 @@ ENDCLASS.
 
 CLASS z2ui5_cl_api_app_487 IMPLEMENTATION.
 
+  " NOTES (generation):
+  " - LIVE-TEST: the sample's view is flat (one Tree bound to '/', one
+  "   StandardTreeItem template); the hierarchy is carried entirely by the
+  "   model. Each row's nested `nodes` sub-table (5 levels deep) is what UI5's
+  "   JSONModel tree binding walks to build the child nodes - confirm the nested
+  "   tables render as expandable levels in a running system.
+
   METHOD z2ui5_if_app~main.
 
     me->client = client.
     IF client->check_on_init( ).
-      on_init( ).
+      data_init( ).
+      view_display( ).
     ENDIF.
 
   ENDMETHOD.
 
 
-  METHOD on_init.
+  METHOD data_init.
 
     t_nodes = VALUE #(
         ( text  = `Node1`
@@ -83,22 +91,26 @@ CLASS z2ui5_cl_api_app_487 IMPLEMENTATION.
         ( text = `Node2`
           ref  = `sap-icon://customer-financial-fact-sheet` ) ).
 
-    view_display( ).
-
   ENDMETHOD.
 
 
   METHOD view_display.
 
-    DATA(page) = z2ui5_cl_xml_view=>factory( ).
+    DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
-    page->tree(
-           id    = `Tree`
-           items = client->_bind( t_nodes )
-           )->items(
-               )->standard_tree_item( title = `{TEXT}` ).
+    view->open( n = `View` ns = `mvc`
+        )->attr( n = `xmlns`     v = `sap.m`
+        )->attr( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
-    client->view_display( page->stringify( ) ).
+        )->open( `Tree`
+            )->attr( n = `id`    v = `Tree`
+            " '{path: '/'}' -> bind the root table; the nested `nodes` drive the depth
+            )->attr( n = `items` v = client->_bind( t_nodes )
+
+            )->leaf( `StandardTreeItem`
+                )->attr( n = `title` v = `{TEXT}` ).
+
+    client->view_display( view->stringify( ) ).
 
   ENDMETHOD.
 
