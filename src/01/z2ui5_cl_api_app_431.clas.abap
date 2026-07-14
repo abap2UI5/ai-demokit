@@ -10,6 +10,7 @@ CLASS z2ui5_cl_api_app_431 DEFINITION PUBLIC.
     DATA client TYPE REF TO z2ui5_if_client.
 
     METHODS view_display.
+    METHODS on_event.
 
   PRIVATE SECTION.
 ENDCLASS.
@@ -17,13 +18,23 @@ ENDCLASS.
 
 CLASS z2ui5_cl_api_app_431 IMPLEMENTATION.
 
+  " NOTES (generation):
+  " - 1.71: frameType OneByHalf / TwoByHalf dropped on several tiles - both enum
+  "   values were added in UI5 1.83; OneByOne / TwoByOne (1.71) are kept.
+  " - 1.71: systemInfo and appShortcut dropped - both added in UI5 1.92.
+  " - 1.71: url dropped on the link tiles - added in UI5 1.76.
+  " - IMPROVISED: the custom CSS class tileLayout is dropped from the class
+  "   attribute - the sample's style.css (float: left) cannot be injected here.
+  " - IMPROVISED: the relative test-resources image and backgroundImage paths are
+  "   resolved to absolute sdk.openui5.org URLs so the tile images load standalone.
+
   METHOD z2ui5_if_app~main.
 
     me->client = client.
     IF client->check_on_init( ).
       view_display( ).
-    ELSEIF client->check_on_event( `PRESS` ).
-      client->message_toast_display( `The tile is pressed.` ).
+    ELSEIF client->check_on_event( ).
+      on_event( ).
     ENDIF.
 
   ENDMETHOD.
@@ -31,225 +42,342 @@ CLASS z2ui5_cl_api_app_431 IMPLEMENTATION.
 
   METHOD view_display.
 
-    " custom CSS class tileLayout (float: left) omitted - native CSS is not supported here
-    " frameType OneByHalf / TwoByHalf omitted on all tiles - introduced with UI5 1.83 (after 1.71)
-    " systemInfo and appShortcut omitted - introduced with UI5 1.92 (after 1.71)
-    " url omitted on the link tiles - introduced with UI5 1.76 (after 1.71)
+    " see the NOTES block above for the tileLayout, frameType, systemInfo,
+    " appShortcut, url and image-path deviations applied throughout this view
+    DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
-    DATA(page) = z2ui5_cl_xml_view=>factory( ).
+    view->open( n = `View` ns = `mvc`
+        )->attr( n = `xmlns`     v = `sap.m`
+        )->attr( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
-    page->generic_tile(
-        class     = `sapUiTinyMarginBegin sapUiTinyMarginTop`
-        header    = `Country-Specific Profit Margin`
-        subheader = `Expenses`
-        press     = client->_event( `PRESS` )
-        )->tile_content(
-            unit   = `EUR`
-            footer = `Current Quarter`
-            )->numeric_content(
-                scale      = `M`
-                value      = `1.96`
-                valuecolor = `Error`
-                indicator  = `Up`
-                withmargin = abap_false ).
+        )->open( `GenericTile`
+            )->attr( n = `class`     v = `sapUiTinyMarginBegin sapUiTinyMarginTop`
+            )->attr( n = `header`    v = `Country-Specific Profit Margin`
+            )->attr( n = `subheader` v = `Expenses`
+            )->attr( n = `press`     v = client->_event( `PRESS` )
 
-    page->generic_tile(
-        class  = `sapUiTinyMarginBegin sapUiTinyMarginTop`
-        header = `US Profit Margin`
-        press  = client->_event( `PRESS` )
-        )->tile_content( unit = `Unit`
-            )->numeric_content(
-                scale      = `%`
-                value      = `12`
-                valuecolor = `Critical`
-                indicator  = `Up`
-                withmargin = abap_false ).
+            )->open( `TileContent`
+                )->attr( n = `unit`   v = `EUR`
+                )->attr( n = `footer` v = `Current Quarter`
 
-    page->generic_tile(
-        class     = `sapUiTinyMarginBegin sapUiTinyMarginTop`
-        header    = `Sales Fulfillment Application Title`
-        subheader = `Subtitle`
-        press     = client->_event( `PRESS` )
-        )->tile_content(
-            unit   = `EUR`
-            footer = `Current Quarter`
-            )->image_content( src = `sap-icon://home-share` ).
+                )->leaf( `NumericContent`
+                    )->attr( n = `scale`      v = `M`
+                    )->attr( n = `value`      v = `1.96`
+                    )->attr( n = `valueColor` v = `Error`
+                    )->attr( n = `indicator`  v = `Up`
+                    )->attr( n = `withMargin` v = `false`
 
-    page->generic_tile(
-        class     = `sapUiTinyMarginBegin sapUiTinyMarginTop`
-        header    = `Manage Activity Master Data Type`
-        subheader = `Subtitle`
-        press     = client->_event( `PRESS` )
-        )->tile_content(
-            )->image_content( src = `https://sdk.openui5.org/test-resources/sap/m/demokit/sample/GenericTileAsLaunchTile/images/SAPLogoLargeTile_28px_height.png` ).
+            )->shut(
+        )->shut(
 
-    page->generic_tile(
-        class     = `sapUiTinyMarginBegin sapUiTinyMarginTop`
-        header    = `Manage Activity Master Data Type With a Long Title Without an Icon`
-        subheader = `Subtitle Launch Tile`
-        mode      = `HeaderMode`
-        press     = client->_event( `PRESS` )
-        )->tile_content(
-            unit   = `EUR`
-            footer = `Current Quarter` ).
+        )->open( `GenericTile`
+            )->attr( n = `class`  v = `sapUiTinyMarginBegin sapUiTinyMarginTop`
+            )->attr( n = `header` v = `US Profit Margin`
+            )->attr( n = `press`  v = client->_event( `PRESS` )
 
-    page->generic_tile(
-        class     = `sapUiTinyMarginBegin sapUiTinyMarginTop`
-        header    = `Jessica D. Prince Senior Consultant`
-        subheader = `Department`
-        press     = client->_event( `PRESS` )
-        )->tile_content(
-            )->image_content( src = `https://sdk.openui5.org/test-resources/sap/m/demokit/sample/GenericTileAsLaunchTile/images/ProfileImage_LargeGenTile.png` ).
+            )->open( `TileContent`
+                )->attr( n = `unit` v = `Unit`
 
-    page->generic_tile(
-        class           = `sapUiTinyMarginBegin sapUiTinyMarginTop`
-        backgroundimage = `https://sdk.openui5.org/test-resources/sap/m/images/NewsImage1.png`
-        frametype       = `OneByOne`
-        press           = client->_event( `PRESS` )
-        )->tile_content(
-            footer    = `Report Available`
-            frametype = `OneByOne`
-            )->news_content(
-                contenttext = `Realtime Business Service Analytics`
-                subheader   = `SAP Analytics Cloud` ).
+                )->leaf( `NumericContent`
+                    )->attr( n = `scale`      v = `%`
+                    )->attr( n = `value`      v = `12`
+                    )->attr( n = `valueColor` v = `Critical`
+                    )->attr( n = `indicator`  v = `Up`
+                    )->attr( n = `withMargin` v = `false`
 
-    page->generic_tile(
-        class           = `sapUiTinyMarginBegin sapUiTinyMarginTop`
-        backgroundimage = `https://sdk.openui5.org/test-resources/sap/m/demokit/sample/SlideTile/images/NewsImage1.png`
-        frametype       = `TwoByOne`
-        press           = client->_event( `PRESS` )
-        )->tile_content( footer = `August 21, 2016`
-            )->news_content(
-                contenttext = `Wind Map: Monitoring Real-Time and Forecasted Wind Conditions across the Globe`
-                subheader   = `Today, SAP News` ).
+            )->shut(
+        )->shut(
 
-    page->generic_tile(
-        class     = `sapUiTinyMarginBegin sapUiTinyMarginTop`
-        header    = `Country-Specific Profit Margin`
-        subheader = `Expenses`
-        press     = client->_event( `PRESS` )
-        )->tile_content(
-            unit   = `EUR`
-            footer = `Current Quarter`
-            )->numeric_content(
-                scale      = `M`
-                value      = `1.96`
-                valuecolor = `Error`
-                indicator  = `Up`
-                withmargin = abap_false ).
+        )->open( `GenericTile`
+            )->attr( n = `class`     v = `sapUiTinyMarginBegin sapUiTinyMarginTop`
+            )->attr( n = `header`    v = `Sales Fulfillment Application Title`
+            )->attr( n = `subheader` v = `Subtitle`
+            )->attr( n = `press`     v = client->_event( `PRESS` )
 
-    DATA(slide_tile) = page->slide_tile(
-                           class          = `sapUiTinyMarginBegin sapUiTinyMarginTop`
-                           transitiontime = `250`
-                           displaytime    = `2500` ).
-    slide_tile->generic_tile(
-        backgroundimage = `https://sdk.openui5.org/test-resources/sap/m/demokit/sample/SlideTile/images/NewsImage1.png`
-        frametype       = `TwoByOne`
-        press           = client->_event( `PRESS` )
-        )->tile_content( footer = `August 21, 2016`
-            )->news_content(
-                contenttext = `Wind Map: Monitoring Real-Time and Forecasted Wind Conditions across the Globe`
-                subheader   = `Today, SAP News` ).
-    slide_tile->generic_tile(
-        backgroundimage = `https://sdk.openui5.org/test-resources/sap/m/demokit/sample/SlideTile/images/NewsImage2.png`
-        frametype       = `TwoByOne`
-        state           = `Failed`
-        )->tile_content( footer = `August 21, 2016`
-            )->news_content(
-                contenttext = `SAP Unveils Powerful New Player Comparision Tool Exclusively on NFL.com`
-                subheader   = `Today, SAP News` ).
+            )->open( `TileContent`
+                )->attr( n = `unit`   v = `EUR`
+                )->attr( n = `footer` v = `Current Quarter`
 
-    page->generic_tile(
-        class     = `sapUiTinyMarginBegin sapUiTinyMarginTop`
-        header    = `Feed Tile that shows updates of the last feeds given to a specific topic:`
-        frametype = `TwoByOne`
-        press     = client->_event( `PRESS` )
-        )->tile_content( footer = `New Notifications`
-            )->feed_content(
-                contenttext = `@@notify Great outcome of the Presentation today. New functionality well received.`
-                subheader   = `About 1 minute ago in Computer Market`
-                value       = `352` ).
+                )->leaf( `ImageContent`
+                    )->attr( n = `src` v = `sap-icon://home-share`
 
-    page->generic_tile(
-        class  = `sapUiTinyMarginBegin sapUiTinyMarginTop`
-        header = `Country-Specific Profit Margin`
-        press  = client->_event( `PRESS` )
-        )->tile_content(
-            unit   = `EUR`
-            footer = `Current Quarter`
-            )->numeric_content(
-                scale      = `M`
-                value      = `1.96`
-                valuecolor = `Error`
-                indicator  = `Up`
-                withmargin = abap_false ).
+            )->shut(
+        )->shut(
 
-    page->generic_tile(
-        class     = `sapUiTinyMarginBegin sapUiTinyMarginTop`
-        header    = `Cumulative Totals`
-        subheader = `Expenses`
-        press     = client->_event( `PRESS` )
-        )->tile_content(
-            unit   = `Unit`
-            footer = `Footer Text`
-            )->numeric_content(
-                value      = `1762`
-                icon       = `sap-icon://line-charts`
-                withmargin = abap_false ).
+        )->open( `GenericTile`
+            )->attr( n = `class`     v = `sapUiTinyMarginBegin sapUiTinyMarginTop`
+            )->attr( n = `header`    v = `Manage Activity Master Data Type`
+            )->attr( n = `subheader` v = `Subtitle`
+            )->attr( n = `press`     v = client->_event( `PRESS` )
 
-    page->generic_tile(
-        class     = `sapUiTinyMarginBegin sapUiTinyMarginTop`
-        header    = `Right click to open in new tab`
-        subheader = `Link tile`
-        press     = client->_event( `PRESS` )
-        )->tile_content(
-            )->image_content( src = `https://sdk.openui5.org/test-resources/sap/m/demokit/sample/GenericTileAsLaunchTile/images/SAPLogoLargeTile_28px_height.png` ).
+            )->open( `TileContent`
+                )->leaf( `ImageContent`
+                    )->attr( n = `src` v = `https://sdk.openui5.org/test-resources/sap/m/demokit/sample/GenericTileAsLaunchTile/images/SAPLogoLargeTile_28px_height.png`
 
-    page->generic_tile(
-        class  = `sapUiTinyMarginBegin sapUiTinyMarginTop`
-        header = `US Profit Margin`
-        press  = client->_event( `PRESS` )
-        )->tile_content( unit = `Unit`
-            )->numeric_content(
-                scale      = `%`
-                value      = `12`
-                valuecolor = `Critical`
-                indicator  = `Up`
-                withmargin = abap_false ).
+            )->shut(
+        )->shut(
 
-    page->generic_tile(
-        class     = `sapUiTinyMarginBegin sapUiTinyMarginTop`
-        header    = `Sales Fulfillment Application Title`
-        subheader = `Subtitle`
-        press     = client->_event( `PRESS` )
-        )->tile_content(
-            unit   = `EUR`
-            footer = `Current Quarter`
-            )->image_content( src = `sap-icon://home-share` ).
+        )->open( `GenericTile`
+            )->attr( n = `class`     v = `sapUiTinyMarginBegin sapUiTinyMarginTop`
+            )->attr( n = `header`    v = `Manage Activity Master Data Type With a Long Title Without an Icon`
+            )->attr( n = `subheader` v = `Subtitle Launch Tile`
+            )->attr( n = `mode`      v = `HeaderMode`
+            )->attr( n = `press`     v = client->_event( `PRESS` )
 
-    page->generic_tile(
-        class     = `sapUiTinyMarginBegin sapUiTinyMarginTop`
-        header    = `Cumulative Totals`
-        subheader = `Expenses`
-        press     = client->_event( `PRESS` )
-        )->tile_content(
-            unit   = `Unit`
-            footer = `Footer Text`
-            )->numeric_content(
-                value      = `1762`
-                icon       = `sap-icon://line-charts`
-                withmargin = abap_false ).
+            )->leaf( `TileContent`
+                )->attr( n = `unit`   v = `EUR`
+                )->attr( n = `footer` v = `Current Quarter`
 
-    page->generic_tile(
-        class     = `sapUiTinyMarginBegin sapUiTinyMarginTop`
-        header    = `Right click to open in new tab`
-        subheader = `Link tile`
-        press     = client->_event( `PRESS` )
-        frametype = `TwoByOne`
-        )->tile_content(
-            )->image_content( src = `https://sdk.openui5.org/test-resources/sap/m/demokit/sample/GenericTileAsLaunchTile/images/SAPLogoLargeTile_28px_height.png` ).
+        )->shut(
 
-    client->view_display( page->stringify( ) ).
+        )->open( `GenericTile`
+            )->attr( n = `class`     v = `sapUiTinyMarginBegin sapUiTinyMarginTop`
+            )->attr( n = `header`    v = `Jessica D. Prince Senior Consultant`
+            )->attr( n = `subheader` v = `Department`
+            )->attr( n = `press`     v = client->_event( `PRESS` )
+
+            )->open( `TileContent`
+                )->leaf( `ImageContent`
+                    )->attr( n = `src` v = `https://sdk.openui5.org/test-resources/sap/m/demokit/sample/GenericTileAsLaunchTile/images/ProfileImage_LargeGenTile.png`
+
+            )->shut(
+        )->shut(
+
+        )->open( `GenericTile`
+            )->attr( n = `class`           v = `sapUiTinyMarginBegin sapUiTinyMarginTop`
+            )->attr( n = `backgroundImage` v = `https://sdk.openui5.org/test-resources/sap/m/images/NewsImage1.png`
+            )->attr( n = `frameType`       v = `OneByOne`
+            )->attr( n = `press`           v = client->_event( `PRESS` )
+
+            )->open( `TileContent`
+                )->attr( n = `footer`    v = `Report Available`
+                )->attr( n = `frameType` v = `OneByOne`
+
+                )->leaf( `NewsContent`
+                    )->attr( n = `contentText` v = `Realtime Business Service Analytics`
+                    )->attr( n = `subheader`   v = `SAP Analytics Cloud`
+
+            )->shut(
+        )->shut(
+
+        )->open( `GenericTile`
+            )->attr( n = `class`           v = `sapUiTinyMarginBegin sapUiTinyMarginTop`
+            )->attr( n = `backgroundImage` v = `https://sdk.openui5.org/test-resources/sap/m/demokit/sample/SlideTile/images/NewsImage1.png`
+            )->attr( n = `frameType`       v = `TwoByOne`
+            )->attr( n = `press`           v = client->_event( `PRESS` )
+
+            )->open( `TileContent`
+                )->attr( n = `footer` v = `August 21, 2016`
+
+                )->leaf( `NewsContent`
+                    )->attr( n = `contentText` v = `Wind Map: Monitoring Real-Time and Forecasted Wind Conditions across the Globe`
+                    )->attr( n = `subheader`   v = `Today, SAP News`
+
+            )->shut(
+        )->shut(
+
+        )->open( `GenericTile`
+            )->attr( n = `class`     v = `sapUiTinyMarginBegin sapUiTinyMarginTop`
+            )->attr( n = `header`    v = `Country-Specific Profit Margin`
+            )->attr( n = `subheader` v = `Expenses`
+            )->attr( n = `press`     v = client->_event( `PRESS` )
+
+            )->open( `TileContent`
+                )->attr( n = `unit`   v = `EUR`
+                )->attr( n = `footer` v = `Current Quarter`
+
+                )->leaf( `NumericContent`
+                    )->attr( n = `scale`      v = `M`
+                    )->attr( n = `value`      v = `1.96`
+                    )->attr( n = `valueColor` v = `Error`
+                    )->attr( n = `indicator`  v = `Up`
+                    )->attr( n = `withMargin` v = `false`
+
+            )->shut(
+        )->shut(
+
+        )->open( `SlideTile`
+            )->attr( n = `class`          v = `sapUiTinyMarginBegin sapUiTinyMarginTop`
+            )->attr( n = `transitionTime` v = `250`
+            )->attr( n = `displayTime`    v = `2500`
+
+            )->open( `GenericTile`
+                )->attr( n = `backgroundImage` v = `https://sdk.openui5.org/test-resources/sap/m/demokit/sample/SlideTile/images/NewsImage1.png`
+                )->attr( n = `frameType`       v = `TwoByOne`
+                )->attr( n = `press`           v = client->_event( `PRESS` )
+
+                )->open( `TileContent`
+                    )->attr( n = `footer` v = `August 21, 2016`
+
+                    )->leaf( `NewsContent`
+                        )->attr( n = `contentText` v = `Wind Map: Monitoring Real-Time and Forecasted Wind Conditions across the Globe`
+                        )->attr( n = `subheader`   v = `Today, SAP News`
+
+                )->shut(
+            )->shut(
+
+            )->open( `GenericTile`
+                )->attr( n = `backgroundImage` v = `https://sdk.openui5.org/test-resources/sap/m/demokit/sample/SlideTile/images/NewsImage2.png`
+                )->attr( n = `frameType`       v = `TwoByOne`
+                )->attr( n = `state`           v = `Failed`
+
+                )->open( `TileContent`
+                    )->attr( n = `footer` v = `August 21, 2016`
+
+                    )->leaf( `NewsContent`
+                        )->attr( n = `contentText` v = `SAP Unveils Powerful New Player Comparision Tool Exclusively on NFL.com`
+                        )->attr( n = `subheader`   v = `Today, SAP News`
+
+                )->shut(
+            )->shut(
+        )->shut(
+
+        )->open( `GenericTile`
+            )->attr( n = `class`     v = `sapUiTinyMarginBegin sapUiTinyMarginTop`
+            )->attr( n = `header`    v = `Feed Tile that shows updates of the last feeds given to a specific topic:`
+            )->attr( n = `frameType` v = `TwoByOne`
+            )->attr( n = `press`     v = client->_event( `PRESS` )
+
+            )->open( `TileContent`
+                )->attr( n = `footer` v = `New Notifications`
+
+                )->leaf( `FeedContent`
+                    )->attr( n = `contentText` v = `@@notify Great outcome of the Presentation today. New functionality well received.`
+                    )->attr( n = `subheader`   v = `About 1 minute ago in Computer Market`
+                    )->attr( n = `value`       v = `352`
+
+            )->shut(
+        )->shut(
+
+        )->open( `GenericTile`
+            )->attr( n = `class`  v = `sapUiTinyMarginBegin sapUiTinyMarginTop`
+            )->attr( n = `header` v = `Country-Specific Profit Margin`
+            )->attr( n = `press`  v = client->_event( `PRESS` )
+
+            )->open( `TileContent`
+                )->attr( n = `unit`   v = `EUR`
+                )->attr( n = `footer` v = `Current Quarter`
+
+                )->leaf( `NumericContent`
+                    )->attr( n = `scale`      v = `M`
+                    )->attr( n = `value`      v = `1.96`
+                    )->attr( n = `valueColor` v = `Error`
+                    )->attr( n = `indicator`  v = `Up`
+                    )->attr( n = `withMargin` v = `false`
+
+            )->shut(
+        )->shut(
+
+        )->open( `GenericTile`
+            )->attr( n = `class`     v = `sapUiTinyMarginBegin sapUiTinyMarginTop`
+            )->attr( n = `header`    v = `Cumulative Totals`
+            )->attr( n = `subheader` v = `Expenses`
+            )->attr( n = `press`     v = client->_event( `PRESS` )
+
+            )->open( `TileContent`
+                )->attr( n = `unit`   v = `Unit`
+                )->attr( n = `footer` v = `Footer Text`
+
+                )->leaf( `NumericContent`
+                    )->attr( n = `value`      v = `1762`
+                    )->attr( n = `icon`       v = `sap-icon://line-charts`
+                    )->attr( n = `withMargin` v = `false`
+
+            )->shut(
+        )->shut(
+
+        )->open( `GenericTile`
+            )->attr( n = `class`     v = `sapUiTinyMarginBegin sapUiTinyMarginTop`
+            )->attr( n = `header`    v = `Right click to open in new tab`
+            )->attr( n = `subheader` v = `Link tile`
+            )->attr( n = `press`     v = client->_event( `PRESS` )
+
+            )->open( `TileContent`
+                )->leaf( `ImageContent`
+                    )->attr( n = `src` v = `https://sdk.openui5.org/test-resources/sap/m/demokit/sample/GenericTileAsLaunchTile/images/SAPLogoLargeTile_28px_height.png`
+
+            )->shut(
+        )->shut(
+
+        )->open( `GenericTile`
+            )->attr( n = `class`  v = `sapUiTinyMarginBegin sapUiTinyMarginTop`
+            )->attr( n = `header` v = `US Profit Margin`
+            )->attr( n = `press`  v = client->_event( `PRESS` )
+
+            )->open( `TileContent`
+                )->attr( n = `unit` v = `Unit`
+
+                )->leaf( `NumericContent`
+                    )->attr( n = `scale`      v = `%`
+                    )->attr( n = `value`      v = `12`
+                    )->attr( n = `valueColor` v = `Critical`
+                    )->attr( n = `indicator`  v = `Up`
+                    )->attr( n = `withMargin` v = `false`
+
+            )->shut(
+        )->shut(
+
+        )->open( `GenericTile`
+            )->attr( n = `class`     v = `sapUiTinyMarginBegin sapUiTinyMarginTop`
+            )->attr( n = `header`    v = `Sales Fulfillment Application Title`
+            )->attr( n = `subheader` v = `Subtitle`
+            )->attr( n = `press`     v = client->_event( `PRESS` )
+
+            )->open( `TileContent`
+                )->attr( n = `unit`   v = `EUR`
+                )->attr( n = `footer` v = `Current Quarter`
+
+                )->leaf( `ImageContent`
+                    )->attr( n = `src` v = `sap-icon://home-share`
+
+            )->shut(
+        )->shut(
+
+        )->open( `GenericTile`
+            )->attr( n = `class`     v = `sapUiTinyMarginBegin sapUiTinyMarginTop`
+            )->attr( n = `header`    v = `Cumulative Totals`
+            )->attr( n = `subheader` v = `Expenses`
+            )->attr( n = `press`     v = client->_event( `PRESS` )
+
+            )->open( `TileContent`
+                )->attr( n = `unit`   v = `Unit`
+                )->attr( n = `footer` v = `Footer Text`
+
+                )->leaf( `NumericContent`
+                    )->attr( n = `value`      v = `1762`
+                    )->attr( n = `icon`       v = `sap-icon://line-charts`
+                    )->attr( n = `withMargin` v = `false`
+
+            )->shut(
+        )->shut(
+
+        )->open( `GenericTile`
+            )->attr( n = `class`     v = `sapUiTinyMarginBegin sapUiTinyMarginTop`
+            )->attr( n = `header`    v = `Right click to open in new tab`
+            )->attr( n = `subheader` v = `Link tile`
+            )->attr( n = `frameType` v = `TwoByOne`
+            )->attr( n = `press`     v = client->_event( `PRESS` )
+
+            )->open( `TileContent`
+                )->leaf( `ImageContent`
+                    )->attr( n = `src` v = `https://sdk.openui5.org/test-resources/sap/m/demokit/sample/GenericTileAsLaunchTile/images/SAPLogoLargeTile_28px_height.png`
+
+            )->shut(
+        )->shut( ).
+
+    client->view_display( view->stringify( ) ).
+
+  ENDMETHOD.
+
+
+  METHOD on_event.
+
+    CASE client->get( )-event.
+
+      WHEN `PRESS`.
+        client->message_toast_display( `The tile is pressed.` ).
+
+    ENDCASE.
 
   ENDMETHOD.
 

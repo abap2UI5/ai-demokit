@@ -9,12 +9,8 @@ CLASS z2ui5_cl_api_app_422 DEFINITION PUBLIC.
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
 
-    METHODS view_display
-      IMPORTING
-        client TYPE REF TO z2ui5_if_client.
-    METHODS on_event
-      IMPORTING
-        client TYPE REF TO z2ui5_if_client.
+    METHODS view_display.
+    METHODS on_event.
 
   PRIVATE SECTION.
 ENDCLASS.
@@ -24,33 +20,46 @@ CLASS z2ui5_cl_api_app_422 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(page) = z2ui5_cl_xml_view=>factory( ).
+    DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
-    page->simple_form(
-        editable                = abap_true
-        backgrounddesign        = `Transparent`
-        singlecontainerfullsize = abap_true
-        layout                  = `ResponsiveGridLayout`
-        )->toolbar( ns = `form`
-            )->toolbar(
-                )->title( `Color Palette in a Form`
-            )->get_parent(
-        )->get_parent(
-        )->content( `form`
-            )->label( `Choose Color`
-            )->color_palette( colorselect = client->_event( val   = `COLOR_SELECT`
-                                                            t_arg = VALUE #( ( `${$parameters>/value}` ) ( `${$parameters>/defaultAction}` ) ) ) ).
+    view->open( n = `View` ns = `mvc`
+        )->attr( n = `xmlns`      v = `sap.m`
+        )->attr( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
+        )->attr( n = `xmlns:form` v = `sap.ui.layout.form`
 
-    client->view_display( page->stringify( ) ).
+        )->open( n = `SimpleForm` ns = `form`
+            )->attr( n = `editable`                v = `true`
+            )->attr( n = `backgroundDesign`        v = `Transparent`
+            )->attr( n = `singleContainerFullSize` v = `true`
+            )->attr( n = `layout`                  v = `ResponsiveGridLayout`
+
+            )->open( n = `toolbar` ns = `form`
+                )->open( `Toolbar`
+                    )->leaf( `Title`
+                        )->attr( n = `text` v = `Color Palette in a Form`
+
+                )->shut(
+            )->shut(
+
+            )->leaf( `Label`
+                )->attr( n = `text` v = `Choose Color`
+            )->leaf( `ColorPalette`
+                )->attr( n = `colorSelect` v = client->_event( val   = `COLOR_SELECT`
+                                                               t_arg = VALUE #( ( `${$parameters>/value}` ) ( `${$parameters>/defaultAction}` ) ) ) ).
+
+    client->view_display( view->stringify( ) ).
 
   ENDMETHOD.
 
 
   METHOD on_event.
 
-    IF client->check_on_event( `COLOR_SELECT` ).
-      client->message_toast_display( |Color Selected: value - { client->get_event_arg( 1 ) }, \n defaultAction - { client->get_event_arg( 2 ) }| ).
-    ENDIF.
+    CASE client->get( )-event.
+
+      WHEN `COLOR_SELECT`.
+        client->message_toast_display( |Color Selected: value - { client->get_event_arg( 1 ) }, \n defaultAction - { client->get_event_arg( 2 ) }| ).
+
+    ENDCASE.
 
   ENDMETHOD.
 
@@ -58,12 +67,11 @@ CLASS z2ui5_cl_api_app_422 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-
     IF client->check_on_init( ).
-      view_display( client ).
+      view_display( ).
+    ELSEIF client->check_on_event( ).
+      on_event( ).
     ENDIF.
-
-    on_event( client ).
 
   ENDMETHOD.
 
