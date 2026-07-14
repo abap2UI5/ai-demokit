@@ -17,9 +17,8 @@ CLASS z2ui5_cl_api_app_423 DEFINITION PUBLIC.
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
 
-    METHODS view_display
-      IMPORTING
-        client TYPE REF TO z2ui5_if_client.
+    METHODS data_init.
+    METHODS view_display.
 
   PRIVATE SECTION.
 ENDCLASS.
@@ -27,7 +26,7 @@ ENDCLASS.
 
 CLASS z2ui5_cl_api_app_423 IMPLEMENTATION.
 
-  METHOD view_display.
+  METHOD data_init.
 
     " Data of the mock model sap/ui/demo/mock/countriesExtendedCollection.json used by the original sample
     t_countries = VALUE #(
@@ -102,12 +101,16 @@ CLASS z2ui5_cl_api_app_423 IMPLEMENTATION.
       ( key = `GB` text = `United Kingdom` )
       ( key = `YE` text = `Yemen` ) ).
 
-    " the original sorts the items by text via a model sorter - the data is sorted in ABAP instead
+    " the original binds items with a model sorter { path: 'text' } - the data is sorted in ABAP instead
     SORT t_countries BY text.
+
+  ENDMETHOD.
+
+
+  METHOD view_display.
 
     DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
-    " the original binds items with a model sorter { path: 'text' } - the data is sorted in ABAP instead
     view->open( n = `View` ns = `mvc`
         )->attr( n = `height`     v = `100%`
         )->attr( n = `xmlns:core` v = `sap.ui.core`
@@ -134,9 +137,9 @@ CLASS z2ui5_cl_api_app_423 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-
     IF client->check_on_init( ).
-      view_display( client ).
+      data_init( ).
+      view_display( ).
     ENDIF.
 
   ENDMETHOD.

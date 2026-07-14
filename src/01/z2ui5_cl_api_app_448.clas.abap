@@ -10,12 +10,8 @@ CLASS z2ui5_cl_api_app_448 DEFINITION PUBLIC.
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
 
-    METHODS view_display
-      IMPORTING
-        client TYPE REF TO z2ui5_if_client.
-    METHODS on_event
-      IMPORTING
-        client TYPE REF TO z2ui5_if_client.
+    METHODS view_display.
+    METHODS on_event.
 
   PRIVATE SECTION.
 ENDCLASS.
@@ -58,12 +54,11 @@ CLASS z2ui5_cl_api_app_448 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-
     IF client->check_on_init( ).
-      view_display( client ).
+      view_display( ).
+    ELSEIF client->check_on_event( ).
+      on_event( ).
     ENDIF.
-
-    on_event( client ).
 
   ENDMETHOD.
 

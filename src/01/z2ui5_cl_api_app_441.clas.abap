@@ -15,15 +15,34 @@ CLASS z2ui5_cl_api_app_441 DEFINITION PUBLIC.
     DATA t_products TYPE TABLE OF ty_s_product.
 
   PROTECTED SECTION.
-    METHODS view_display
-      IMPORTING
-        client TYPE REF TO z2ui5_if_client.
+    DATA client TYPE REF TO z2ui5_if_client.
+
+    METHODS data_init.
+    METHODS view_display.
 
   PRIVATE SECTION.
 ENDCLASS.
 
 
 CLASS z2ui5_cl_api_app_441 IMPLEMENTATION.
+
+  METHOD data_init.
+
+    t_products = VALUE #(
+      ( name = `Notebook Basic 15`        quantity = 10 )
+      ( name = `Notebook Basic 17`        quantity = 20 )
+      ( name = `Notebook Basic 18`        quantity = 10 )
+      ( name = `Notebook Basic 19`        quantity = 15 )
+      ( name = `ITelO Vault`              quantity = 15 )
+      ( name = `Notebook Professional 15` quantity = 16 )
+      ( name = `Notebook Professional 17` quantity = 17 )
+      ( name = `ITelO Vault Net`          quantity = 14 )
+      ( name = `ITelO Vault SAT`          quantity = 50 )
+      ( name = `Comfort Easy`             quantity = 30 )
+      ( name = `Comfort Senior`           quantity = 24 ) ).
+
+  ENDMETHOD.
+
 
   METHOD view_display.
 
@@ -49,23 +68,10 @@ CLASS z2ui5_cl_api_app_441 IMPLEMENTATION.
 
   METHOD z2ui5_if_app~main.
 
+    me->client = client.
     IF client->check_on_init( ).
-
-      t_products = VALUE #(
-        ( name = `Notebook Basic 15`        quantity = 10 )
-        ( name = `Notebook Basic 17`        quantity = 20 )
-        ( name = `Notebook Basic 18`        quantity = 10 )
-        ( name = `Notebook Basic 19`        quantity = 15 )
-        ( name = `ITelO Vault`              quantity = 15 )
-        ( name = `Notebook Professional 15` quantity = 16 )
-        ( name = `Notebook Professional 17` quantity = 17 )
-        ( name = `ITelO Vault Net`          quantity = 14 )
-        ( name = `ITelO Vault SAT`          quantity = 50 )
-        ( name = `Comfort Easy`             quantity = 30 )
-        ( name = `Comfort Senior`           quantity = 24 ) ).
-
-      view_display( client ).
-
+      data_init( ).
+      view_display( ).
     ENDIF.
 
   ENDMETHOD.
