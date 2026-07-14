@@ -181,7 +181,8 @@ function controlLines() {
     const control = s.entity ? `[${bareControl(s.entity)}](${apiUrl(s.entity)})` : '—';
     const js = `[↗](${sampleSrcUrl(s.lib, s.name)})`;
     const ui5 = `[↗](${fullscreenUrl(s.lib, s.name)})`;
-    const abap = s.port ? `[↗](${abapUrl(s.port.file)})` : '—';
+    // keep the ABAP code link, named by its class (that's the app you pull & start)
+    const abap = s.port ? `[${s.port.cls}](${abapUrl(s.port.file)})` : '—';
     l.push(`| ${s.lib} | ${control} | ${s.name} | ${js} | ${ui5} | ${abap} |`);
   }
   l.push('');
