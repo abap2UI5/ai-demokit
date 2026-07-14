@@ -26,6 +26,9 @@ CI checks below.
   so the samples run on old UI5 versions too.
 * No sample uses an obsolete (deprecated) control or property.
 * All samples run on both **SAPUI5** and **OpenUI5**.
+* All samples can be booted with the UI5 **legacy-free** runtime.
+* All samples run on both **ABAP Cloud** and **ABAP Standard**.
+* All samples can be **downported** with abaplint (down to 7.02).
 
 #### Checks
 
