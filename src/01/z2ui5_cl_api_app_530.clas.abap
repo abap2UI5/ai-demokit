@@ -54,65 +54,65 @@ CLASS z2ui5_cl_api_app_530 IMPLEMENTATION.
     DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
-        )->attr( n = `xmlns`      v = `sap.m`
-        )->attr( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
-        )->attr( n = `xmlns:l`    v = `sap.ui.layout`
-        )->attr( n = `xmlns:core` v = `sap.ui.core`
+        )->a( n = `xmlns`      v = `sap.m`
+        )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
+        )->a( n = `xmlns:l`    v = `sap.ui.layout`
+        )->a( n = `xmlns:core` v = `sap.ui.core`
 
         )->open( n = `VerticalLayout` ns = `l`
-            )->attr( n = `class` v = `sapUiContentPadding`
-            )->attr( n = `width` v = `100%`
+            )->a( n = `class` v = `sapUiContentPadding`
+            )->a( n = `width` v = `100%`
 
             )->open( n = `content` ns = `l`
                 )->open( `Breadcrumbs`
-                    )->attr( n = `currentLocationText` v = `Laptop`
-                    )->attr( n = `separatorStyle`      v = client->_bind_edit( selected )
+                    )->a( n = `currentLocationText` v = `Laptop`
+                    )->a( n = `separatorStyle`      v = client->_bind_edit( selected )
 
                     )->leaf( `Link`
-                        )->attr( n = `press` v = client->_event( val   = `LINK_PRESS`
+                        )->a( n = `press` v = client->_event( val   = `LINK_PRESS`
                                                                  t_arg = VALUE #( ( `${$source>/text}` ) ) )
-                        )->attr( n = `text`  v = `Products`
+                        )->a( n = `text`  v = `Products`
                     )->leaf( `Link`
-                        )->attr( n = `press` v = client->_event( val   = `LINK_PRESS`
+                        )->a( n = `press` v = client->_event( val   = `LINK_PRESS`
                                                                  t_arg = VALUE #( ( `${$source>/text}` ) ) )
-                        )->attr( n = `text`  v = `Suppliers`
+                        )->a( n = `text`  v = `Suppliers`
                     )->leaf( `Link`
-                        )->attr( n = `press` v = client->_event( val   = `LINK_PRESS`
+                        )->a( n = `press` v = client->_event( val   = `LINK_PRESS`
                                                                  t_arg = VALUE #( ( `${$source>/text}` ) ) )
-                        )->attr( n = `text`  v = `Titanium`
+                        )->a( n = `text`  v = `Titanium`
                     )->leaf( `Link`
-                        )->attr( n = `press` v = client->_event( val   = `LINK_PRESS`
+                        )->a( n = `press` v = client->_event( val   = `LINK_PRESS`
                                                                  t_arg = VALUE #( ( `${$source>/text}` ) ) )
-                        )->attr( n = `text`  v = `Ultra portable`
+                        )->a( n = `text`  v = `Ultra portable`
                     )->leaf( `Link`
-                        )->attr( n = `press` v = client->_event( val   = `LINK_PRESS`
+                        )->a( n = `press` v = client->_event( val   = `LINK_PRESS`
                                                                  t_arg = VALUE #( ( `${$source>/text}` ) ) )
-                        )->attr( n = `text`  v = `12 inch`
+                        )->a( n = `text`  v = `12 inch`
                     )->leaf( `Link`
-                        )->attr( n = `press` v = client->_event( val   = `LINK_PRESS`
+                        )->a( n = `press` v = client->_event( val   = `LINK_PRESS`
                                                                  t_arg = VALUE #( ( `${$source>/text}` ) ) )
-                        )->attr( n = `text`  v = `Super portable deluxe`
+                        )->a( n = `text`  v = `Super portable deluxe`
 
                 )->shut(
                 )->open( `HBox`
-                    )->attr( n = `alignItems` v = `Center`
+                    )->a( n = `alignItems` v = `Center`
 
                     )->open( `items`
                         )->leaf( `Label`
-                            )->attr( n = `labelFor` v = `separatorSelect`
-                            )->attr( n = `text`     v = `Change separator style`
+                            )->a( n = `labelFor` v = `separatorSelect`
+                            )->a( n = `text`     v = `Change separator style`
 
                         )->open( `Select`
-                            )->attr( n = `class`       v = `sapUiSmallMarginBegin`
-                            )->attr( n = `id`          v = `separatorSelect`
-                            )->attr( n = `selectedKey` v = client->_bind_edit( selected )
-                            )->attr( n = `change`      v = client->_event( val   = `SEP_CHANGE`
+                            )->a( n = `class`       v = `sapUiSmallMarginBegin`
+                            )->a( n = `id`          v = `separatorSelect`
+                            )->a( n = `selectedKey` v = client->_bind_edit( selected )
+                            )->a( n = `change`      v = client->_event( val   = `SEP_CHANGE`
                                                                            t_arg = VALUE #( ( `${$parameters>/selectedItem/mProperties/key}` ) ) )
-                            )->attr( n = `items`       v = client->_bind_edit( t_items )
+                            )->a( n = `items`       v = client->_bind_edit( t_items )
 
                             )->leaf( n = `Item` ns = `core`
-                                )->attr( n = `key`  v = `{TEXT}`
-                                )->attr( n = `text` v = `{KEY}` ).
+                                )->a( n = `key`  v = `{TEXT}`
+                                )->a( n = `text` v = `{KEY}` ).
 
     client->view_display( view->stringify( ) ).
 

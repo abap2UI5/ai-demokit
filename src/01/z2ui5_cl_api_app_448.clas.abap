@@ -23,18 +23,18 @@ CLASS z2ui5_cl_api_app_448 IMPLEMENTATION.
     DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
-        )->attr( n = `xmlns:l`   v = `sap.ui.layout`
-        )->attr( n = `xmlns:mvc` v = `sap.ui.core.mvc`
-        )->attr( n = `xmlns`     v = `sap.m`
+        )->a( n = `xmlns:l`   v = `sap.ui.layout`
+        )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
+        )->a( n = `xmlns`     v = `sap.m`
 
         )->open( n = `VerticalLayout` ns = `l`
-            )->attr( n = `class` v = `sapUiContentPadding`
-            )->attr( n = `width` v = `100%`
+            )->a( n = `class` v = `sapUiContentPadding`
+            )->a( n = `width` v = `100%`
 
             )->open( n = `content` ns = `l`
                 )->leaf( `Button`
-                    )->attr( n = `text`  v = `Show Message Toast`
-                    )->attr( n = `press` v = client->_event( `SHOW_MESSAGE_TOAST` ) ).
+                    )->a( n = `text`  v = `Show Message Toast`
+                    )->a( n = `press` v = client->_event( `SHOW_MESSAGE_TOAST` ) ).
 
     client->view_display( view->stringify( ) ).
 

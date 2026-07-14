@@ -32,13 +32,13 @@ CLASS z2ui5_cl_api_app_445 IMPLEMENTATION.
     DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
-        )->attr( n = `xmlns:l`   v = `sap.ui.layout`
-        )->attr( n = `xmlns:mvc` v = `sap.ui.core.mvc`
-        )->attr( n = `xmlns`     v = `sap.m`
+        )->a( n = `xmlns:l`   v = `sap.ui.layout`
+        )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
+        )->a( n = `xmlns`     v = `sap.m`
 
         )->leaf( `List`
-            )->attr( n = `headerText` v = `Products`
-            )->attr( n = `noDataText` v = |No products found!\nPlease change your filter settings.| ).
+            )->a( n = `headerText` v = `Products`
+            )->a( n = `noDataText` v = |No products found!\nPlease change your filter settings.| ).
 
     client->view_display( view->stringify( ) ).
 

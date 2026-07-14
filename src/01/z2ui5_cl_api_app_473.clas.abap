@@ -38,20 +38,20 @@ CLASS z2ui5_cl_api_app_473 IMPLEMENTATION.
     DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
-        )->attr( n = `height`    v = `100%`
-        )->attr( n = `width`     v = `100%`
-        )->attr( n = `xmlns`     v = `sap.m`
-        )->attr( n = `xmlns:mvc` v = `sap.ui.core.mvc`
+        )->a( n = `height`    v = `100%`
+        )->a( n = `width`     v = `100%`
+        )->a( n = `xmlns`     v = `sap.m`
+        )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
         )->open( `ScrollContainer`
-            )->attr( n = `height`    v = `100%`
-            )->attr( n = `width`     v = `100%`
-            )->attr( n = `vertical`  v = `true`
-            )->attr( n = `focusable` v = `true`
+            )->a( n = `height`    v = `100%`
+            )->a( n = `width`     v = `100%`
+            )->a( n = `vertical`  v = `true`
+            )->a( n = `focusable` v = `true`
 
             )->leaf( `Image`
-                )->attr( n = `src`   v = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-7777-large.jpg`
-                )->attr( n = `width` v = client->_bind_edit( width ) ).
+                )->a( n = `src`   v = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-7777-large.jpg`
+                )->a( n = `width` v = client->_bind_edit( width ) ).
 
     client->view_display( view->stringify( ) ).
 

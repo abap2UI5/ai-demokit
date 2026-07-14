@@ -32,23 +32,23 @@ CLASS z2ui5_cl_api_app_409 IMPLEMENTATION.
     DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
-        )->attr( n = `xmlns:l`   v = `sap.ui.layout`
-        )->attr( n = `xmlns:mvc` v = `sap.ui.core.mvc`
-        )->attr( n = `xmlns`     v = `sap.m`
+        )->a( n = `xmlns:l`   v = `sap.ui.layout`
+        )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
+        )->a( n = `xmlns`     v = `sap.m`
 
         )->open( n = `VerticalLayout` ns = `l`
-            )->attr( n = `class` v = `sapUiContentPadding`
-            )->attr( n = `width` v = `100%`
+            )->a( n = `class` v = `sapUiContentPadding`
+            )->a( n = `width` v = `100%`
 
             )->open( n = `content` ns = `l`
                 )->leaf( `TextArea`
-                    )->attr( n = `value`
+                    )->a( n = `value`
                              v = `Lorem ipsum dolor st amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, ` &&
                                  `sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est ` &&
                                  `Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore ` &&
                                  `et dolore magna aliquyam erat, sed diam voluptua. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod ` &&
                                  `tempor invidunt ut labore et dolore magna aliquyam erat`
-                    )->attr( n = `rows` v = `8` ).
+                    )->a( n = `rows` v = `8` ).
 
     client->view_display( view->stringify( ) ).
 

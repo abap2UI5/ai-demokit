@@ -41,31 +41,31 @@ CLASS z2ui5_cl_api_app_421 IMPLEMENTATION.
     DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
-        )->attr( n = `xmlns:c`   v = `sap.ui.core`
-        )->attr( n = `xmlns:l`   v = `sap.ui.layout`
-        )->attr( n = `xmlns:mvc` v = `sap.ui.core.mvc`
-        )->attr( n = `xmlns`     v = `sap.m`
+        )->a( n = `xmlns:c`   v = `sap.ui.core`
+        )->a( n = `xmlns:l`   v = `sap.ui.layout`
+        )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
+        )->a( n = `xmlns`     v = `sap.m`
 
         )->open( n = `VerticalLayout` ns = `l`
             )->leaf( `Text`
-                )->attr( n = `text` v = `Which languages(s) do you speak?`
+                )->a( n = `text` v = `Which languages(s) do you speak?`
             )->leaf( `CheckBox`
-                )->attr( n = `text`              v = `select / deselect all`
-                )->attr( n = `selected`          v = |\{= ${ child1_bind } \|\| ${ child2_bind } \|\| ${ child3_bind } \}|
-                )->attr( n = `partiallySelected` v = |\{= !(${ child1_bind } && ${ child2_bind } && ${ child3_bind })\}|
-                )->attr( n = `select`            v = client->_event( val   = `PARENT_CLICKED`
+                )->a( n = `text`              v = `select / deselect all`
+                )->a( n = `selected`          v = |\{= ${ child1_bind } \|\| ${ child2_bind } \|\| ${ child3_bind } \}|
+                )->a( n = `partiallySelected` v = |\{= !(${ child1_bind } && ${ child2_bind } && ${ child3_bind })\}|
+                )->a( n = `select`            v = client->_event( val   = `PARENT_CLICKED`
                                                                      t_arg = VALUE #( ( `${$parameters>/selected}` ) ) )
             )->leaf( n = `HTML` ns = `c`
-                )->attr( n = `content` v = `<hr>`
+                )->a( n = `content` v = `<hr>`
             )->leaf( `CheckBox`
-                )->attr( n = `text`     v = `English`
-                )->attr( n = `selected` v = child1_bind
+                )->a( n = `text`     v = `English`
+                )->a( n = `selected` v = child1_bind
             )->leaf( `CheckBox`
-                )->attr( n = `text`     v = `German`
-                )->attr( n = `selected` v = child2_bind
+                )->a( n = `text`     v = `German`
+                )->a( n = `selected` v = child2_bind
             )->leaf( `CheckBox`
-                )->attr( n = `text`     v = `French`
-                )->attr( n = `selected` v = child3_bind ).
+                )->a( n = `text`     v = `French`
+                )->a( n = `selected` v = child3_bind ).
 
     client->view_display( view->stringify( ) ).
 

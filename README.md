@@ -51,8 +51,8 @@ Rules:
 - Build the view with the generic builder z2ui5_cl_api_xml, translating the
   sample's XML 1:1 (open = descend into a container, leaf = childless
   control/stay, shut = ascend). Attributes are added with
-  attr( n = `key` v = `value` ) chained right after the control's open/leaf;
-  attr targets that control, and v is any string expression (literal, a
+  a( n = `key` v = `value` ) chained right after the control's open/leaf;
+  a targets that control, and v is any string expression (literal, a
   client->_bind_edit/_event result, a || template). factory( ) returns an empty root
   - open the <mvc:View> and declare its xmlns namespaces yourself. Blank line
   between controls whose verb differs (open<->leaf, before shut); none between

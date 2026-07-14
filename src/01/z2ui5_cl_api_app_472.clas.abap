@@ -55,110 +55,110 @@ CLASS z2ui5_cl_api_app_472 IMPLEMENTATION.
     DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
-        )->attr( n = `xmlns`     v = `sap.m`
-        )->attr( n = `xmlns:mvc` v = `sap.ui.core.mvc`
-        )->attr( n = `xmlns:l`   v = `sap.ui.layout`
+        )->a( n = `xmlns`     v = `sap.m`
+        )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
+        )->a( n = `xmlns:l`   v = `sap.ui.layout`
 
         )->open( n = `VerticalLayout` ns = `l`
-            )->attr( n = `class` v = `sapUiContentPadding`
-            )->attr( n = `width` v = `100%`
+            )->a( n = `class` v = `sapUiContentPadding`
+            )->a( n = `width` v = `100%`
 
             )->leaf( `Text`
-                )->attr( n = `text`  v = `RangeSlider with text fields`
-                )->attr( n = `class` v = `sapUiSmallMarginBottom`
+                )->a( n = `text`  v = `RangeSlider with text fields`
+                )->a( n = `class` v = `sapUiSmallMarginBottom`
             )->leaf( `RangeSlider`
-                )->attr( n = `showAdvancedTooltip` v = `true`
-                )->attr( n = `value`               v = client->_bind_edit( rs1_value )
-                )->attr( n = `value2`              v = client->_bind_edit( rs1_value2 )
-                )->attr( n = `min`                 v = `0`
-                )->attr( n = `max`                 v = `100`
-                )->attr( n = `width`               v = `80%`
-                )->attr( n = `class`               v = `sapUiMediumMarginBottom`
+                )->a( n = `showAdvancedTooltip` v = `true`
+                )->a( n = `value`               v = client->_bind_edit( rs1_value )
+                )->a( n = `value2`              v = client->_bind_edit( rs1_value2 )
+                )->a( n = `min`                 v = `0`
+                )->a( n = `max`                 v = `100`
+                )->a( n = `width`               v = `80%`
+                )->a( n = `class`               v = `sapUiMediumMarginBottom`
             )->leaf( `RangeSlider`
-                )->attr( n = `showAdvancedTooltip` v = `true`
-                )->attr( n = `value`               v = client->_bind_edit( rs2_value )
-                )->attr( n = `value2`              v = client->_bind_edit( rs2_value2 )
-                )->attr( n = `min`                 v = `-50`
-                )->attr( n = `max`                 v = `50`
-                )->attr( n = `width`               v = `10rem`
-                )->attr( n = `class`               v = `sapUiMediumMarginBottom`
+                )->a( n = `showAdvancedTooltip` v = `true`
+                )->a( n = `value`               v = client->_bind_edit( rs2_value )
+                )->a( n = `value2`              v = client->_bind_edit( rs2_value2 )
+                )->a( n = `min`                 v = `-50`
+                )->a( n = `max`                 v = `50`
+                )->a( n = `width`               v = `10rem`
+                )->a( n = `class`               v = `sapUiMediumMarginBottom`
             )->leaf( `RangeSlider`
-                )->attr( n = `showAdvancedTooltip` v = `true`
-                )->attr( n = `value`               v = client->_bind_edit( rs3_value )
-                )->attr( n = `value2`              v = client->_bind_edit( rs3_value2 )
-                )->attr( n = `min`                 v = `0`
-                )->attr( n = `max`                 v = `100`
-                )->attr( n = `width`               v = `10rem`
-                )->attr( n = `class`               v = `sapUiMediumMarginBottom`
+                )->a( n = `showAdvancedTooltip` v = `true`
+                )->a( n = `value`               v = client->_bind_edit( rs3_value )
+                )->a( n = `value2`              v = client->_bind_edit( rs3_value2 )
+                )->a( n = `min`                 v = `0`
+                )->a( n = `max`                 v = `100`
+                )->a( n = `width`               v = `10rem`
+                )->a( n = `class`               v = `sapUiMediumMarginBottom`
             )->leaf( `RangeSlider`
-                )->attr( n = `showAdvancedTooltip` v = `true`
-                )->attr( n = `value`               v = client->_bind_edit( rs4_value )
-                )->attr( n = `value2`              v = client->_bind_edit( rs4_value2 )
-                )->attr( n = `min`                 v = `-1000`
-                )->attr( n = `max`                 v = `1000`
-                )->attr( n = `width`               v = `100%`
-                )->attr( n = `class`               v = `sapUiMediumMarginBottom`
+                )->a( n = `showAdvancedTooltip` v = `true`
+                )->a( n = `value`               v = client->_bind_edit( rs4_value )
+                )->a( n = `value2`              v = client->_bind_edit( rs4_value2 )
+                )->a( n = `min`                 v = `-1000`
+                )->a( n = `max`                 v = `1000`
+                )->a( n = `width`               v = `100%`
+                )->a( n = `class`               v = `sapUiMediumMarginBottom`
             )->leaf( `RangeSlider`
-                )->attr( n = `showAdvancedTooltip` v = `true`
-                )->attr( n = `value`               v = client->_bind_edit( rs5_value )
-                )->attr( n = `value2`              v = client->_bind_edit( rs5_value2 )
-                )->attr( n = `min`                 v = `0`
-                )->attr( n = `max`                 v = `500`
-                )->attr( n = `width`               v = `100%`
-                )->attr( n = `class`               v = `sapUiLargeMarginBottom`
+                )->a( n = `showAdvancedTooltip` v = `true`
+                )->a( n = `value`               v = client->_bind_edit( rs5_value )
+                )->a( n = `value2`              v = client->_bind_edit( rs5_value2 )
+                )->a( n = `min`                 v = `0`
+                )->a( n = `max`                 v = `500`
+                )->a( n = `width`               v = `100%`
+                )->a( n = `class`               v = `sapUiLargeMarginBottom`
             )->leaf( `Text`
-                )->attr( n = `text`  v = `RangeSlider with inputs`
-                )->attr( n = `class` v = `sapUiSmallMarginBottom`
+                )->a( n = `text`  v = `RangeSlider with inputs`
+                )->a( n = `class` v = `sapUiSmallMarginBottom`
             )->leaf( `RangeSlider`
-                )->attr( n = `showAdvancedTooltip` v = `true`
-                )->attr( n = `value`               v = `0`
-                )->attr( n = `value2`              v = `100`
-                )->attr( n = `min`                 v = `0`
-                )->attr( n = `max`                 v = `500`
-                )->attr( n = `width`               v = `100%`
-                )->attr( n = `showHandleTooltip`   v = `false`
-                )->attr( n = `inputsAsTooltips`    v = `true`
-                )->attr( n = `class`               v = `sapUiLargeMarginBottom`
+                )->a( n = `showAdvancedTooltip` v = `true`
+                )->a( n = `value`               v = `0`
+                )->a( n = `value2`              v = `100`
+                )->a( n = `min`                 v = `0`
+                )->a( n = `max`                 v = `500`
+                )->a( n = `width`               v = `100%`
+                )->a( n = `showHandleTooltip`   v = `false`
+                )->a( n = `inputsAsTooltips`    v = `true`
+                )->a( n = `class`               v = `sapUiLargeMarginBottom`
             )->leaf( `Text`
-                )->attr( n = `text`  v = `RangeSlider with tickmarks`
-                )->attr( n = `class` v = `sapUiSmallMarginBottom`
+                )->a( n = `text`  v = `RangeSlider with tickmarks`
+                )->a( n = `class` v = `sapUiSmallMarginBottom`
             )->leaf( `RangeSlider`
-                )->attr( n = `showAdvancedTooltip` v = `true`
-                )->attr( n = `enableTickmarks`     v = `true`
-                )->attr( n = `value`               v = `0`
-                )->attr( n = `value2`              v = `10`
-                )->attr( n = `min`                 v = `0`
-                )->attr( n = `max`                 v = `10`
-                )->attr( n = `class`               v = `sapUiMediumMarginBottom`
+                )->a( n = `showAdvancedTooltip` v = `true`
+                )->a( n = `enableTickmarks`     v = `true`
+                )->a( n = `value`               v = `0`
+                )->a( n = `value2`              v = `10`
+                )->a( n = `min`                 v = `0`
+                )->a( n = `max`                 v = `10`
+                )->a( n = `class`               v = `sapUiMediumMarginBottom`
             )->leaf( `RangeSlider`
-                )->attr( n = `showAdvancedTooltip` v = `true`
-                )->attr( n = `enableTickmarks`     v = `true`
-                )->attr( n = `class`               v = `sapUiMediumMarginBottom`
+                )->a( n = `showAdvancedTooltip` v = `true`
+                )->a( n = `enableTickmarks`     v = `true`
+                )->a( n = `class`               v = `sapUiMediumMarginBottom`
             )->leaf( `Text`
-                )->attr( n = `text`  v = `RangeSlider with tickmarks and step '5'`
-                )->attr( n = `class` v = `sapUiSmallMarginBottom`
+                )->a( n = `text`  v = `RangeSlider with tickmarks and step '5'`
+                )->a( n = `class` v = `sapUiSmallMarginBottom`
             )->leaf( `RangeSlider`
-                )->attr( n = `showAdvancedTooltip` v = `true`
-                )->attr( n = `enableTickmarks`     v = `true`
-                )->attr( n = `min`                 v = `-100`
-                )->attr( n = `max`                 v = `100`
-                )->attr( n = `step`                v = `5`
-                )->attr( n = `class`               v = `sapUiLargeMarginBottom`
+                )->a( n = `showAdvancedTooltip` v = `true`
+                )->a( n = `enableTickmarks`     v = `true`
+                )->a( n = `min`                 v = `-100`
+                )->a( n = `max`                 v = `100`
+                )->a( n = `step`                v = `5`
+                )->a( n = `class`               v = `sapUiLargeMarginBottom`
             )->leaf( `Text`
-                )->attr( n = `text`  v = `RangeSlider with tickmarks and labels`
-                )->attr( n = `class` v = `sapUiSmallMarginBottom`
+                )->a( n = `text`  v = `RangeSlider with tickmarks and labels`
+                )->a( n = `class` v = `sapUiSmallMarginBottom`
 
             )->open( `RangeSlider`
-                )->attr( n = `showAdvancedTooltip` v = `true`
-                )->attr( n = `min`                 v = `0`
-                )->attr( n = `max`                 v = `30`
-                )->attr( n = `value`               v = `5`
-                )->attr( n = `value2`              v = `20`
-                )->attr( n = `enableTickmarks`     v = `true`
-                )->attr( n = `class`               v = `sapUiSmallMarginBottom`
+                )->a( n = `showAdvancedTooltip` v = `true`
+                )->a( n = `min`                 v = `0`
+                )->a( n = `max`                 v = `30`
+                )->a( n = `value`               v = `5`
+                )->a( n = `value2`              v = `20`
+                )->a( n = `enableTickmarks`     v = `true`
+                )->a( n = `class`               v = `sapUiSmallMarginBottom`
 
                 )->leaf( `ResponsiveScale`
-                    )->attr( n = `tickmarksBetweenLabels` v = `3` ).
+                    )->a( n = `tickmarksBetweenLabels` v = `3` ).
 
     client->view_display( view->stringify( ) ).
 

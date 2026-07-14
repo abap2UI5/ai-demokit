@@ -40,91 +40,91 @@ CLASS z2ui5_cl_api_app_404 IMPLEMENTATION.
     DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
-        )->attr( n = `xmlns`      v = `sap.m`
-        )->attr( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
-        )->attr( n = `xmlns:core` v = `sap.ui.core`
+        )->a( n = `xmlns`      v = `sap.m`
+        )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
+        )->a( n = `xmlns:core` v = `sap.ui.core`
 
         )->open( `HBox`
-            )->attr( n = `fitContainer` v = `true`
-            )->attr( n = `alignItems`   v = `Stretch`
-            )->attr( n = `class`        v = `sapUiSmallMargin nestedFlexboxes`
+            )->a( n = `fitContainer` v = `true`
+            )->a( n = `alignItems`   v = `Stretch`
+            )->a( n = `class`        v = `sapUiSmallMargin nestedFlexboxes`
 
             )->open( n = `HTML` ns = `core`
-                )->attr( n = `content` v = `<h2>1</h2>`
+                )->a( n = `content` v = `<h2>1</h2>`
 
                 )->open( n = `layoutData` ns = `core`
                     )->leaf( `FlexItemData`
-                        )->attr( n = `growFactor` v = `2`
-                        )->attr( n = `styleClass` v = `item1`
+                        )->a( n = `growFactor` v = `2`
+                        )->a( n = `styleClass` v = `item1`
 
                 )->shut(
             )->shut(
             )->open( n = `HTML` ns = `core`
-                )->attr( n = `content` v = `<h2>2</h2>`
+                )->a( n = `content` v = `<h2>2</h2>`
 
                 )->open( n = `layoutData` ns = `core`
                     )->leaf( `FlexItemData`
-                        )->attr( n = `growFactor` v = `3`
-                        )->attr( n = `styleClass` v = `item2`
+                        )->a( n = `growFactor` v = `3`
+                        )->a( n = `styleClass` v = `item2`
 
                 )->shut(
             )->shut(
             )->open( `VBox`
-                )->attr( n = `fitContainer` v = `true`
+                )->a( n = `fitContainer` v = `true`
 
                 )->open( `layoutData`
                     )->leaf( `FlexItemData`
-                        )->attr( n = `growFactor` v = `7`
+                        )->a( n = `growFactor` v = `7`
 
                 )->shut(
                 )->open( n = `HTML` ns = `core`
-                    )->attr( n = `content` v = `<h2>3</h2>`
+                    )->a( n = `content` v = `<h2>3</h2>`
 
                     )->open( n = `layoutData` ns = `core`
                         )->leaf( `FlexItemData`
-                            )->attr( n = `growFactor` v = `5`
-                            )->attr( n = `styleClass` v = `item3`
+                            )->a( n = `growFactor` v = `5`
+                            )->a( n = `styleClass` v = `item3`
 
                     )->shut(
                 )->shut(
                 )->open( `HBox`
-                    )->attr( n = `fitContainer` v = `true`
-                    )->attr( n = `alignItems`   v = `Stretch`
+                    )->a( n = `fitContainer` v = `true`
+                    )->a( n = `alignItems`   v = `Stretch`
 
                     )->open( `layoutData`
                         )->leaf( `FlexItemData`
-                            )->attr( n = `growFactor` v = `3`
+                            )->a( n = `growFactor` v = `3`
 
                     )->shut(
                     )->open( n = `HTML` ns = `core`
-                        )->attr( n = `content` v = `<h2>4</h2>`
+                        )->a( n = `content` v = `<h2>4</h2>`
 
                         )->open( n = `layoutData` ns = `core`
                             )->leaf( `FlexItemData`
-                                )->attr( n = `growFactor` v = `1`
-                                )->attr( n = `styleClass` v = `item4`
+                                )->a( n = `growFactor` v = `1`
+                                )->a( n = `styleClass` v = `item4`
 
                         )->shut(
                     )->shut(
                     )->open( n = `HTML` ns = `core`
-                        )->attr( n = `content` v = `<h2>5</h2>`
+                        )->a( n = `content` v = `<h2>5</h2>`
 
                         )->open( n = `layoutData` ns = `core`
                             )->leaf( `FlexItemData`
-                                )->attr( n = `growFactor` v = `1`
-                                )->attr( n = `styleClass` v = `item5`
+                                )->a( n = `growFactor` v = `1`
+                                )->a( n = `styleClass` v = `item5`
 
                         )->shut(
                     )->shut(
                 )->shut(
             )->shut(
             )->open( n = `HTML` ns = `core`
-                )->attr( n = `content` v = `<h2>6</h2>`
+                )->a( n = `content` v = `<h2>6</h2>`
 
                 )->open( n = `layoutData` ns = `core`
                     )->leaf( `FlexItemData`
-                        )->attr( n = `growFactor` v = `5`
-                        )->attr( n = `styleClass` v = `item6` ).
+                        )->a( n = `growFactor` v = `5`
+                        )->a( n = `styleClass` v = `item6` ).
 
     client->view_display( view->stringify( ) ).
 

@@ -127,62 +127,62 @@ CLASS z2ui5_cl_api_app_440 IMPLEMENTATION.
     DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
-        )->attr( n = `xmlns`     v = `sap.m`
-        )->attr( n = `xmlns:mvc` v = `sap.ui.core.mvc`
+        )->a( n = `xmlns`     v = `sap.m`
+        )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
         )->open( `Table`
-            )->attr( n = `id`    v = `idProductsTable`
-            )->attr( n = `inset` v = `false`
-            )->attr( n = `items` v = client->_bind_edit( t_products )
+            )->a( n = `id`    v = `idProductsTable`
+            )->a( n = `inset` v = `false`
+            )->a( n = `items` v = client->_bind_edit( t_products )
 
             )->open( `headerToolbar`
                 )->open( `Toolbar`
                     )->leaf( `Title`
-                        )->attr( n = `text`  v = `Products`
-                        )->attr( n = `level` v = `H2`
+                        )->a( n = `text`  v = `Products`
+                        )->a( n = `level` v = `H2`
 
                 )->shut(
             )->shut(
 
             )->open( `columns`
                 )->open( `Column`
-                    )->attr( n = `width` v = `12em`
+                    )->a( n = `width` v = `12em`
 
                     )->leaf( `Text`
-                        )->attr( n = `text` v = `Product`
+                        )->a( n = `text` v = `Product`
 
                 )->shut(
                 )->open( `Column`
-                    )->attr( n = `minScreenWidth` v = `Tablet`
-                    )->attr( n = `demandPopin`    v = `true`
+                    )->a( n = `minScreenWidth` v = `Tablet`
+                    )->a( n = `demandPopin`    v = `true`
 
                     )->leaf( `Text`
-                        )->attr( n = `text` v = `Supplier`
+                        )->a( n = `text` v = `Supplier`
 
                 )->shut(
                 )->open( `Column`
-                    )->attr( n = `minScreenWidth` v = `Tablet`
-                    )->attr( n = `demandPopin`    v = `true`
-                    )->attr( n = `hAlign`         v = `End`
+                    )->a( n = `minScreenWidth` v = `Tablet`
+                    )->a( n = `demandPopin`    v = `true`
+                    )->a( n = `hAlign`         v = `End`
 
                     )->leaf( `Text`
-                        )->attr( n = `text` v = `Dimensions`
+                        )->a( n = `text` v = `Dimensions`
 
                 )->shut(
                 )->open( `Column`
-                    )->attr( n = `minScreenWidth` v = `Tablet`
-                    )->attr( n = `demandPopin`    v = `true`
-                    )->attr( n = `hAlign`         v = `End`
+                    )->a( n = `minScreenWidth` v = `Tablet`
+                    )->a( n = `demandPopin`    v = `true`
+                    )->a( n = `hAlign`         v = `End`
 
                     )->leaf( `Text`
-                        )->attr( n = `text` v = `Weight`
+                        )->a( n = `text` v = `Weight`
 
                 )->shut(
                 )->open( `Column`
-                    )->attr( n = `hAlign` v = `End`
+                    )->a( n = `hAlign` v = `End`
 
                     )->leaf( `Text`
-                        )->attr( n = `text` v = `Price`
+                        )->a( n = `text` v = `Price`
 
                 )->shut(
             )->shut(
@@ -191,19 +191,19 @@ CLASS z2ui5_cl_api_app_440 IMPLEMENTATION.
                 )->open( `ColumnListItem`
                     )->open( `cells`
                         )->leaf( `Link`
-                            )->attr( n = `text`       v = `{PRODUCT_ID}`
-                            )->attr( n = `emphasized` v = `true`
-                            )->attr( n = `href`       v = `{PIC_URL}`
+                            )->a( n = `text`       v = `{PRODUCT_ID}`
+                            )->a( n = `emphasized` v = `true`
+                            )->a( n = `href`       v = `{PIC_URL}`
                         )->leaf( `Text`
-                            )->attr( n = `text` v = `{SUPPLIER_NAME}`
+                            )->a( n = `text` v = `{SUPPLIER_NAME}`
                         )->leaf( `Text`
-                            )->attr( n = `text` v = `{WIDTH} x {DEPTH} x {HEIGHT} {DIM_UNIT}`
+                            )->a( n = `text` v = `{WIDTH} x {DEPTH} x {HEIGHT} {DIM_UNIT}`
                         )->leaf( `ObjectNumber`
-                            )->attr( n = `number` v = `{WEIGHT_MEASURE}`
-                            )->attr( n = `unit`   v = `{WEIGHT_UNIT}`
+                            )->a( n = `number` v = `{WEIGHT_MEASURE}`
+                            )->a( n = `unit`   v = `{WEIGHT_UNIT}`
                         )->leaf( `ObjectNumber`
-                            )->attr( n = `number` v = `{PRICE}`
-                            )->attr( n = `unit`   v = `{CURRENCY_CODE}` ).
+                            )->a( n = `number` v = `{PRICE}`
+                            )->a( n = `unit`   v = `{CURRENCY_CODE}` ).
 
     client->view_display( view->stringify( ) ).
 

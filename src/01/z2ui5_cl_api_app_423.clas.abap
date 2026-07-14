@@ -111,22 +111,22 @@ CLASS z2ui5_cl_api_app_423 IMPLEMENTATION.
     DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
-        )->attr( n = `height`     v = `100%`
-        )->attr( n = `xmlns:core` v = `sap.ui.core`
-        )->attr( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
-        )->attr( n = `xmlns`      v = `sap.m`
+        )->a( n = `height`     v = `100%`
+        )->a( n = `xmlns:core` v = `sap.ui.core`
+        )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
+        )->a( n = `xmlns`      v = `sap.m`
 
         )->open( `Page`
-            )->attr( n = `showHeader` v = `false`
-            )->attr( n = `class`      v = `sapUiContentPadding`
+            )->a( n = `showHeader` v = `false`
+            )->a( n = `class`      v = `sapUiContentPadding`
 
             )->open( `content`
                 )->open( `ComboBox`
-                    )->attr( n = `items` v = client->_bind_edit( t_countries )
+                    )->a( n = `items` v = client->_bind_edit( t_countries )
 
                     )->leaf( n = `Item` ns = `core`
-                        )->attr( n = `key`  v = `{KEY}`
-                        )->attr( n = `text` v = `{TEXT}` ).
+                        )->a( n = `key`  v = `{KEY}`
+                        )->a( n = `text` v = `{TEXT}` ).
 
     client->view_display( view->stringify( ) ).
 

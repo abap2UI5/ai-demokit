@@ -45,98 +45,98 @@ CLASS z2ui5_cl_api_app_434 IMPLEMENTATION.
     DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
-        )->attr( n = `xmlns`     v = `sap.m`
-        )->attr( n = `xmlns:l`   v = `sap.ui.layout`
-        )->attr( n = `xmlns:mvc` v = `sap.ui.core.mvc`
+        )->a( n = `xmlns`     v = `sap.m`
+        )->a( n = `xmlns:l`   v = `sap.ui.layout`
+        )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
         )->open( n = `VerticalLayout` ns = `l`
-            )->attr( n = `class` v = `sapUiContentPadding`
-            )->attr( n = `width` v = `100%`
+            )->a( n = `class` v = `sapUiContentPadding`
+            )->a( n = `width` v = `100%`
 
             )->open( n = `content` ns = `l`
                 )->open( n = `Grid` ns = `l`
-                    )->attr( n = `defaultSpan` v = `XL3 L3 M6 S12`
+                    )->a( n = `defaultSpan` v = `XL3 L3 M6 S12`
 
                     )->open( n = `content` ns = `l`
                         )->open( `VBox`
-                            )->attr( n = `alignItems` v = `Center`
+                            )->a( n = `alignItems` v = `Center`
 
                             " image size is device dependent in the original (5em on a phone) - fixed to 10em here
                             )->open( `Image`
-                                )->attr( n = `src`    v = pic1
-                                )->attr( n = `mode`   v = `Background`
-                                )->attr( n = `height` v = `10em`
-                                )->attr( n = `width`  v = `10em`
+                                )->a( n = `src`    v = pic1
+                                )->a( n = `mode`   v = `Background`
+                                )->a( n = `height` v = `10em`
+                                )->a( n = `width`  v = `10em`
 
                                 )->open( `layoutData`
                                     )->leaf( `FlexItemData`
-                                        )->attr( n = `growFactor` v = `1`
+                                        )->a( n = `growFactor` v = `1`
                                 )->shut(
                             )->shut(
                             )->leaf( `Text`
-                                )->attr( n = `text`  v = `Background covers the entire container`
-                                )->attr( n = `class` v = `sapUiSmallMarginTop`
+                                )->a( n = `text`  v = `Background covers the entire container`
+                                )->a( n = `class` v = `sapUiSmallMarginTop`
 
                         )->shut(
                         )->open( `VBox`
-                            )->attr( n = `alignItems` v = `Center`
+                            )->a( n = `alignItems` v = `Center`
 
                             )->open( `Image`
-                                )->attr( n = `src`                v = pic1
-                                )->attr( n = `mode`               v = `Background`
-                                )->attr( n = `height`             v = `10em`
-                                )->attr( n = `backgroundSize`     v = `5em 5em`
-                                )->attr( n = `backgroundPosition` v = `center`
-                                )->attr( n = `width`              v = `10em`
+                                )->a( n = `src`                v = pic1
+                                )->a( n = `mode`               v = `Background`
+                                )->a( n = `height`             v = `10em`
+                                )->a( n = `backgroundSize`     v = `5em 5em`
+                                )->a( n = `backgroundPosition` v = `center`
+                                )->a( n = `width`              v = `10em`
 
                                 )->open( `layoutData`
                                     )->leaf( `FlexItemData`
-                                        )->attr( n = `growFactor` v = `1`
+                                        )->a( n = `growFactor` v = `1`
                                 )->shut(
                             )->shut(
                             )->leaf( `Text`
-                                )->attr( n = `text`  v = `Center placed background`
-                                )->attr( n = `class` v = `sapUiSmallMarginTop`
+                                )->a( n = `text`  v = `Center placed background`
+                                )->a( n = `class` v = `sapUiSmallMarginTop`
 
                         )->shut(
                         )->open( `VBox`
-                            )->attr( n = `alignItems` v = `Center`
+                            )->a( n = `alignItems` v = `Center`
 
                             )->open( `Image`
-                                )->attr( n = `src`              v = pic1
-                                )->attr( n = `mode`             v = `Background`
-                                )->attr( n = `height`           v = `10em`
-                                )->attr( n = `backgroundSize`   v = `2em 2em`
-                                )->attr( n = `backgroundRepeat` v = `repeat`
-                                )->attr( n = `width`            v = `10em`
+                                )->a( n = `src`              v = pic1
+                                )->a( n = `mode`             v = `Background`
+                                )->a( n = `height`           v = `10em`
+                                )->a( n = `backgroundSize`   v = `2em 2em`
+                                )->a( n = `backgroundRepeat` v = `repeat`
+                                )->a( n = `width`            v = `10em`
 
                                 )->open( `layoutData`
                                     )->leaf( `FlexItemData`
-                                        )->attr( n = `growFactor` v = `1`
+                                        )->a( n = `growFactor` v = `1`
                                 )->shut(
                             )->shut(
                             )->leaf( `Text`
-                                )->attr( n = `text`  v = `Repeating background`
-                                )->attr( n = `class` v = `sapUiSmallMarginTop`
+                                )->a( n = `text`  v = `Repeating background`
+                                )->a( n = `class` v = `sapUiSmallMarginTop`
 
                         )->shut(
                         )->open( `VBox`
-                            )->attr( n = `alignItems` v = `Center`
+                            )->a( n = `alignItems` v = `Center`
 
                             " custom CSS class imageContainer (light blue background) of the HBox omitted - stylesheet not available in abap2UI5
                             )->open( `HBox`
                                 )->leaf( `Image`
-                                    )->attr( n = `src`                v = pic3
-                                    )->attr( n = `mode`               v = `Background`
-                                    )->attr( n = `height`             v = `10em`
-                                    )->attr( n = `backgroundSize`     v = `contain`
-                                    )->attr( n = `backgroundPosition` v = `center center`
-                                    )->attr( n = `width`              v = `6em`
+                                    )->a( n = `src`                v = pic3
+                                    )->a( n = `mode`               v = `Background`
+                                    )->a( n = `height`             v = `10em`
+                                    )->a( n = `backgroundSize`     v = `contain`
+                                    )->a( n = `backgroundPosition` v = `center center`
+                                    )->a( n = `width`              v = `6em`
 
                             )->shut(
                             )->leaf( `Text`
-                                )->attr( n = `text`  v = `The background adjusts its lower dimension in order to fit in the container`
-                                )->attr( n = `class` v = `sapUiSmallMarginTop`
+                                )->a( n = `text`  v = `The background adjusts its lower dimension in order to fit in the container`
+                                )->a( n = `class` v = `sapUiSmallMarginTop`
 
                         )->shut( ).
 

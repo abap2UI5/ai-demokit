@@ -51,104 +51,104 @@ CLASS z2ui5_cl_api_app_486 IMPLEMENTATION.
     DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
-        )->attr( n = `height`    v = `100%`
-        )->attr( n = `xmlns`     v = `sap.m`
-        )->attr( n = `xmlns:mvc` v = `sap.ui.core.mvc`
+        )->a( n = `height`    v = `100%`
+        )->a( n = `xmlns`     v = `sap.m`
+        )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
         )->open( `Page`
-            )->attr( n = `showHeader` v = `false`
+            )->a( n = `showHeader` v = `false`
 
             )->leaf( `Slider`
-                )->attr( n = `liveChange` v = client->_event( val   = `SLIDER_CHANGE`
+                )->a( n = `liveChange` v = client->_event( val   = `SLIDER_CHANGE`
                                                               t_arg = VALUE #( ( `${$parameters>/value}` ) ) )
-                )->attr( n = `step`       v = `20`
-                )->attr( n = `value`      v = `100`
+                )->a( n = `step`       v = `20`
+                )->a( n = `value`      v = `100`
 
             )->leaf( `MessageStrip`
-                )->attr( n = `text`  v = `By default, Toolbar items are shrinkable if they have percent-based width (e.g. Input, Slider)` &&
+                )->a( n = `text`  v = `By default, Toolbar items are shrinkable if they have percent-based width (e.g. Input, Slider)` &&
                                         ` or implement the IShrinkable interface (e.g. Text, Label).`
-                )->attr( n = `class` v = `sapUiTinyMargin`
+                )->a( n = `class` v = `sapUiTinyMargin`
 
             )->open( `Toolbar`
-                )->attr( n = `class` v = `sapUiMediumMarginTop`
-                )->attr( n = `id`    v = `toolbar1`
-                )->attr( n = `width` v = client->_bind_edit( toolbar_width )
+                )->a( n = `class` v = `sapUiMediumMarginTop`
+                )->a( n = `id`    v = `toolbar1`
+                )->a( n = `width` v = client->_bind_edit( toolbar_width )
 
                 )->leaf( `Label`
-                    )->attr( n = `text` v = `I am a text control, so I will shrink whenever the toolbar overflows.`
+                    )->a( n = `text` v = `I am a text control, so I will shrink whenever the toolbar overflows.`
                 )->leaf( `ToolbarSpacer`
                 )->leaf( `Button`
-                    )->attr( n = `text` v = `Non-shrinkable button`
+                    )->a( n = `text` v = `Non-shrinkable button`
                 )->leaf( `ToolbarSpacer`
                 )->leaf( `SearchField`
-                    )->attr( n = `width`       v = `100%`
-                    )->attr( n = `placeholder` v = `My width is 100%, so I should shrink.`
+                    )->a( n = `width`       v = `100%`
+                    )->a( n = `placeholder` v = `My width is 100%, so I should shrink.`
 
             )->shut(
 
             )->leaf( `MessageStrip`
-                )->attr( n = `text`  v = `You can configure the item's shrinking-related properties by providing ToolbarLayoutData.`
-                )->attr( n = `class` v = `sapUiTinyMargin`
+                )->a( n = `text`  v = `You can configure the item's shrinking-related properties by providing ToolbarLayoutData.`
+                )->a( n = `class` v = `sapUiTinyMargin`
 
             )->open( `Toolbar`
-                )->attr( n = `class` v = `sapUiMediumMarginTop`
-                )->attr( n = `id`    v = `toolbar2`
-                )->attr( n = `width` v = client->_bind_edit( toolbar_width )
+                )->a( n = `class` v = `sapUiMediumMarginTop`
+                )->a( n = `id`    v = `toolbar2`
+                )->a( n = `width` v = client->_bind_edit( toolbar_width )
 
                 )->open( `Label`
-                    )->attr( n = `text` v = `I am a non-shrinkable text.`
+                    )->a( n = `text` v = `I am a non-shrinkable text.`
 
                     )->open( `layoutData`
                         )->leaf( `ToolbarLayoutData`
-                            )->attr( n = `shrinkable` v = `false`
+                            )->a( n = `shrinkable` v = `false`
 
                     )->shut(
                 )->shut(
                 )->leaf( `ToolbarSpacer`
                 )->open( `Button`
-                    )->attr( n = `text` v = `I am a shrinkable button, so I will shrink whenever the toolbar overflows.`
+                    )->a( n = `text` v = `I am a shrinkable button, so I will shrink whenever the toolbar overflows.`
 
                     )->open( `layoutData`
                         )->leaf( `ToolbarLayoutData`
-                            )->attr( n = `shrinkable` v = `true`
+                            )->a( n = `shrinkable` v = `true`
 
                     )->shut(
                 )->shut(
                 )->leaf( `ToolbarSpacer`
                 )->leaf( `SearchField`
-                    )->attr( n = `width`       v = `200px`
-                    )->attr( n = `placeholder` v = `I have a fixed width (200px), so I cannot shrink.`
+                    )->a( n = `width`       v = `200px`
+                    )->a( n = `placeholder` v = `I have a fixed width (200px), so I cannot shrink.`
 
             )->shut(
 
             )->leaf( `MessageStrip`
-                )->attr( n = `text`  v = `You can determine to what extent an item shrinks by setting minWidth/maxWidth via ToolbarLayoutData.` &&
+                )->a( n = `text`  v = `You can determine to what extent an item shrinks by setting minWidth/maxWidth via ToolbarLayoutData.` &&
                                         ` By default, minWidth is 48px in the Blue Crystal theme.`
-                )->attr( n = `class` v = `sapUiTinyMargin`
+                )->a( n = `class` v = `sapUiTinyMargin`
 
             )->open( `Toolbar`
-                )->attr( n = `class` v = `sapUiMediumMarginTop`
-                )->attr( n = `id`    v = `toolbar3`
-                )->attr( n = `width` v = client->_bind_edit( toolbar_width )
+                )->a( n = `class` v = `sapUiMediumMarginTop`
+                )->a( n = `id`    v = `toolbar3`
+                )->a( n = `width` v = client->_bind_edit( toolbar_width )
 
                 )->open( `Label`
-                    )->attr( n = `text` v = `I should not shrink by more than 200px, because I am an important text.`
+                    )->a( n = `text` v = `I should not shrink by more than 200px, because I am an important text.`
 
                     )->open( `layoutData`
                         )->leaf( `ToolbarLayoutData`
-                            )->attr( n = `shrinkable` v = `true`
-                            )->attr( n = `minWidth`   v = `200px`
+                            )->a( n = `shrinkable` v = `true`
+                            )->a( n = `minWidth`   v = `200px`
 
                     )->shut(
                 )->shut(
                 )->leaf( `ToolbarSpacer`
                 )->open( `Button`
-                    )->attr( n = `text` v = `I cannot be wider than 400px, but I can shrink up to the theme's default minimum width.`
+                    )->a( n = `text` v = `I cannot be wider than 400px, but I can shrink up to the theme's default minimum width.`
 
                     )->open( `layoutData`
                         )->leaf( `ToolbarLayoutData`
-                            )->attr( n = `shrinkable` v = `true`
-                            )->attr( n = `maxWidth`   v = `400px`
+                            )->a( n = `shrinkable` v = `true`
+                            )->a( n = `maxWidth`   v = `400px`
 
                     )->shut(
                 )->shut(

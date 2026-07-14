@@ -37,29 +37,29 @@ CLASS z2ui5_cl_api_app_474 IMPLEMENTATION.
     DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
-        )->attr( n = `height`    v = `100%`
-        )->attr( n = `xmlns`     v = `sap.m`
-        )->attr( n = `xmlns:mvc` v = `sap.ui.core.mvc`
+        )->a( n = `height`    v = `100%`
+        )->a( n = `xmlns`     v = `sap.m`
+        )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
         )->open( `Page`
-            )->attr( n = `showHeader` v = `false`
-            )->attr( n = `class`      v = `sapUiContentPadding`
+            )->a( n = `showHeader` v = `false`
+            )->a( n = `class`      v = `sapUiContentPadding`
 
             )->open( `subHeader`
                 )->open( `OverflowToolbar`
                     )->leaf( `ToolbarSpacer`
 
                     )->open( `SegmentedButton`
-                        )->attr( n = `selectedKey` v = `kids`
+                        )->a( n = `selectedKey` v = `kids`
 
                         )->open( `items`
                             )->leaf( `SegmentedButtonItem`
-                                )->attr( n = `text` v = `Kids`
-                                )->attr( n = `key`  v = `kids`
+                                )->a( n = `text` v = `Kids`
+                                )->a( n = `key`  v = `kids`
                             )->leaf( `SegmentedButtonItem`
-                                )->attr( n = `text` v = `Adults`
+                                )->a( n = `text` v = `Adults`
                             )->leaf( `SegmentedButtonItem`
-                                )->attr( n = `text` v = `Seniors`
+                                )->a( n = `text` v = `Seniors`
 
                         )->shut(
                     )->shut(
@@ -69,71 +69,71 @@ CLASS z2ui5_cl_api_app_474 IMPLEMENTATION.
             )->shut(
 
             )->open( `VBox`
-                )->attr( n = `width` v = `100%`
+                )->a( n = `width` v = `100%`
 
                 )->open( `SegmentedButton`
-                    )->attr( n = `selectedKey` v = `satellite`
-                    )->attr( n = `class`       v = `sapUiSmallMarginBottom`
+                    )->a( n = `selectedKey` v = `satellite`
+                    )->a( n = `class`       v = `sapUiSmallMarginBottom`
 
                     )->open( `items`
                         )->leaf( `SegmentedButtonItem`
-                            )->attr( n = `text` v = `Map`
+                            )->a( n = `text` v = `Map`
                         )->leaf( `SegmentedButtonItem`
-                            )->attr( n = `text` v = `Satellite`
-                            )->attr( n = `key`  v = `satellite`
+                            )->a( n = `text` v = `Satellite`
+                            )->a( n = `key`  v = `satellite`
                         )->leaf( `SegmentedButtonItem`
-                            )->attr( n = `text` v = `Hybrid`
+                            )->a( n = `text` v = `Hybrid`
 
                     )->shut(
                 )->shut(
                 )->open( `SegmentedButton`
-                    )->attr( n = `selectedKey` v = `competitor`
-                    )->attr( n = `class`       v = `sapUiSmallMarginBottom`
+                    )->a( n = `selectedKey` v = `competitor`
+                    )->a( n = `class`       v = `sapUiSmallMarginBottom`
 
                     )->open( `items`
                         )->leaf( `SegmentedButtonItem`
-                            )->attr( n = `icon` v = `sap-icon://taxi`
+                            )->a( n = `icon` v = `sap-icon://taxi`
                         )->leaf( `SegmentedButtonItem`
-                            )->attr( n = `icon` v = `sap-icon://lab`
+                            )->a( n = `icon` v = `sap-icon://lab`
                         )->leaf( `SegmentedButtonItem`
-                            )->attr( n = `icon` v = `sap-icon://competitor`
-                            )->attr( n = `key`  v = `competitor`
+                            )->a( n = `icon` v = `sap-icon://competitor`
+                            )->a( n = `key`  v = `competitor`
 
                     )->shut(
                 )->shut(
                 )->open( `SegmentedButton`
-                    )->attr( n = `class` v = `sapUiSmallMarginBottom`
+                    )->a( n = `class` v = `sapUiSmallMarginBottom`
 
                     )->open( `items`
                         )->leaf( `SegmentedButtonItem`
-                            )->attr( n = `text` v = `Selected`
+                            )->a( n = `text` v = `Selected`
                         )->leaf( `SegmentedButtonItem`
-                            )->attr( n = `text` v = `Enabled`
+                            )->a( n = `text` v = `Enabled`
                         )->leaf( `SegmentedButtonItem`
-                            )->attr( n = `text`    v = `Disabled`
-                            )->attr( n = `enabled` v = `false`
+                            )->a( n = `text`    v = `Disabled`
+                            )->a( n = `enabled` v = `false`
 
                     )->shut(
                 )->shut(
                 )->leaf( `Label`
-                    )->attr( n = `text` v = `Fire selectionChange event`
+                    )->a( n = `text` v = `Fire selectionChange event`
 
                 )->open( `SegmentedButton`
-                    )->attr( n = `selectionChange` v = client->_event( val   = `SELECTION_CHANGE`
+                    )->a( n = `selectionChange` v = client->_event( val   = `SELECTION_CHANGE`
                                                                        t_arg = VALUE #( ( `${$parameters>/item/mProperties/text}` ) ) )
 
                     )->open( `items`
                         )->leaf( `SegmentedButtonItem`
-                            )->attr( n = `text` v = `One`
+                            )->a( n = `text` v = `One`
                         )->leaf( `SegmentedButtonItem`
-                            )->attr( n = `text` v = `Two`
+                            )->a( n = `text` v = `Two`
                         )->leaf( `SegmentedButtonItem`
-                            )->attr( n = `text` v = `Three`
+                            )->a( n = `text` v = `Three`
 
                     )->shut(
                 )->shut(
                 )->leaf( `Text`
-                    )->attr( n = `text` v = client->_bind_edit( selected_item_text )
+                    )->a( n = `text` v = client->_bind_edit( selected_item_text )
 
             )->shut(
 
@@ -142,16 +142,16 @@ CLASS z2ui5_cl_api_app_474 IMPLEMENTATION.
                     )->leaf( `ToolbarSpacer`
 
                     )->open( `SegmentedButton`
-                        )->attr( n = `selectedKey` v = `small`
+                        )->a( n = `selectedKey` v = `small`
 
                         )->open( `items`
                             )->leaf( `SegmentedButtonItem`
-                                )->attr( n = `text` v = `Small`
-                                )->attr( n = `key`  v = `small`
+                                )->a( n = `text` v = `Small`
+                                )->a( n = `key`  v = `small`
                             )->leaf( `SegmentedButtonItem`
-                                )->attr( n = `text` v = `Medium`
+                                )->a( n = `text` v = `Medium`
                             )->leaf( `SegmentedButtonItem`
-                                )->attr( n = `text` v = `Large`
+                                )->a( n = `text` v = `Large`
 
                         )->shut(
                     )->shut(

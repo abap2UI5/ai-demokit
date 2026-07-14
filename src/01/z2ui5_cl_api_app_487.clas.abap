@@ -98,16 +98,16 @@ CLASS z2ui5_cl_api_app_487 IMPLEMENTATION.
     DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
-        )->attr( n = `xmlns`     v = `sap.m`
-        )->attr( n = `xmlns:mvc` v = `sap.ui.core.mvc`
+        )->a( n = `xmlns`     v = `sap.m`
+        )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
         )->open( `Tree`
-            )->attr( n = `id`    v = `Tree`
+            )->a( n = `id`    v = `Tree`
             " '{path: '/'}' -> bind the root table; the nested `nodes` drive the depth
-            )->attr( n = `items` v = client->_bind_edit( t_nodes )
+            )->a( n = `items` v = client->_bind_edit( t_nodes )
 
             )->leaf( `StandardTreeItem`
-                )->attr( n = `title` v = `{TEXT}` ).
+                )->a( n = `title` v = `{TEXT}` ).
 
     client->view_display( view->stringify( ) ).
 

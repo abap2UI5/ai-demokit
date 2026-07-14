@@ -198,13 +198,13 @@ the `)->` arrows line up:
 | `open( n ns a )` | open a container tag `<X>` | add child **and descend** into it | the new child |
 | `leaf( n ns a )` | a self-closing tag `<X/>` | add child, **stay** on current node | the same node |
 | `shut( )` | the closing `</X>` | **ascend** to the parent | the parent |
-| `attr( n v )` | one `name="value"` | add an attribute to the control just opened/leaf'd | the same node |
+| `a( n v )` | one `name="value"` | add an attribute to the control just opened/leaf'd | the same node |
 
 Arguments: `n` = tag name, `ns` = namespace **prefix** (literal `f`, `l`, `core`,
 `mvc` — omitted for the default `sap.m` namespace).
 
-**Attributes go through `attr( n = `key` v = `value` )`**, chained right after the
-control's `open`/`leaf`. `attr` always targets that control (the last-added child,
+**Attributes go through `a( n = `key` v = `value` )`**, chained right after the
+control's `open`/`leaf`. `a` always targets that control (the last-added child,
 or the node itself if none yet), so it works after both `open` and `leaf`. `v` is
 any string expression — a literal, a `client->_bind_edit( … )` / `_event( … )` result,
 or a `|…|` template. (An `open`/`leaf` also accepts an up-front `a = VALUE #( ( `key=value` ) … )`
@@ -223,20 +223,20 @@ other control:
 DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
 view->open( n = `View` ns = `mvc`
-    )->attr( n = `xmlns`     v = `sap.m`
-    )->attr( n = `xmlns:mvc` v = `sap.ui.core.mvc`
-    )->attr( n = `xmlns:f`   v = `sap.f`
+    )->a( n = `xmlns`     v = `sap.m`
+    )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
+    )->a( n = `xmlns:f`   v = `sap.f`
 
     )->leaf( `Slider`
-        )->attr( n = `value`      v = client->_bind_edit( slider_value )
-        )->attr( n = `liveChange` v = client->_event( `SLIDER_MOVED` )
+        )->a( n = `value`      v = client->_bind_edit( slider_value )
+        )->a( n = `liveChange` v = client->_event( `SLIDER_MOVED` )
 
     )->open( `Panel`
-        )->attr( n = `width` v = client->_bind_edit( panel_width )
+        )->a( n = `width` v = client->_bind_edit( panel_width )
         )->open( `headerToolbar`
             )->open( `Toolbar`
                 )->leaf( `Title`
-                    )->attr( n = `text` v = `Header`
+                    )->a( n = `text` v = `Header`
 
             )->shut(
         )->shut( ).
@@ -251,12 +251,12 @@ client->view_display( view->stringify( ) ).
 
 - **The closing paren rides with the arrow.** Never leave a `)` alone at a line
   end; carry it to the **start of the next segment** so it always reads `)->`.
-  With the `attr()` chain there is no nested `VALUE`, so the whole view ends in a
+  With the `a()` chain there is no nested `VALUE`, so the whole view ends in a
   single `` ).`` (not `) ).`).
 - **Indent after every `open`.** Each `open( )` shifts its children's `)->` one
   level (4 spaces) to the right; `shut( )` shifts back left. The `)->` of a
   `shut` sits at the same column as the `open` it closes.
-- **A control's `attr()` lines sit one level (4 spaces) in from the control's
+- **A control's `a()` lines sit one level (4 spaces) in from the control's
   own `)->` line**; align the `v =` column across them.
 - **Blank lines** (attrs never count — they belong to their control):
   - **never** between consecutive `leaf`s, and **never** after a **one-liner
@@ -264,18 +264,18 @@ client->view_display( view->stringify( ) ).
   - a blank **does** separate an `open` that *has* attrs from its first child,
     and separates a new `open`/`leaf` block from the previous sibling;
   - a blank **before** every `shut`; **none** after a `shut` or between `shut`s;
-  - **none** between a control and its own `attr()`s.
+  - **none** between a control and its own `a()`s.
 - Long text/binding values split with `&&` at ~255 chars max per line (§6).
 
 #### Data binding & events
 
 - `client->_bind_edit( var )` — bind an ABAP `DATA` member two-way (the value
   flows back into `var` on the next round-trip), e.g.
-  `)->attr( n = `items` v = client->_bind_edit( t_items )`. **`client->_bind( )`
+  `)->a( n = `items` v = client->_bind_edit( t_items )`. **`client->_bind( )`
   (one-way) is obsolete — always use `_bind_edit`, even for display-only
   bindings.**
 - Inside a bound aggregation, child properties use UI5 binding braces on the
-  upper-cased field name: `)->attr( n = `text` v = `{TITLE}``.
+  upper-cased field name: `)->a( n = `text` v = `{TITLE}``.
 - `client->_event( \`NAME\` )` — wire a control event (press, liveChange…) to an
   event named `NAME`. **Always** dispatch in `on_event( )` with a
   `CASE client->get( )-event.` … `WHEN \`NAME\`.` … `ENDCASE` — even for a single
@@ -289,9 +289,9 @@ client->view_display( view->stringify( ) ).
 
 #### Booleans
 
-A literal boolean is just `)->attr( n = `editable` v = `true``. **Only** when the
+A literal boolean is just `)->a( n = `editable` v = `true``. **Only** when the
 value comes from an ABAP boolean variable, wrap it with `as_bool( )`:
-`)->attr( n = `editable` v = z2ui5_cl_api_xml=>as_bool( flag )` — a raw
+`)->a( n = `editable` v = z2ui5_cl_api_xml=>as_bool( flag )` — a raw
 `abap_false` would otherwise serialise to an empty string. Never feed
 `abap_true`/`abap_false` straight into an attribute value.
 

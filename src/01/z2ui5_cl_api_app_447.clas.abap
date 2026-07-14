@@ -32,28 +32,28 @@ CLASS z2ui5_cl_api_app_447 IMPLEMENTATION.
 
     " ariaHasPopup="Dialog" on both buttons is omitted (available only since UI5 1.84)
     view->open( n = `View` ns = `mvc`
-        )->attr( n = `xmlns`     v = `sap.m`
-        )->attr( n = `xmlns:mvc` v = `sap.ui.core.mvc`
-        )->attr( n = `xmlns:l`   v = `sap.ui.layout`
+        )->a( n = `xmlns`     v = `sap.m`
+        )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
+        )->a( n = `xmlns:l`   v = `sap.ui.layout`
 
         )->open( n = `VerticalLayout` ns = `l`
-            )->attr( n = `class` v = `sapUiContentPadding`
-            )->attr( n = `width` v = `100%`
+            )->a( n = `class` v = `sapUiContentPadding`
+            )->a( n = `width` v = `100%`
 
             )->leaf( `Text`
-                )->attr( n = `text` v = `Different approaches to set Initial focus`
+                )->a( n = `text` v = `Different approaches to set Initial focus`
 
             )->leaf( `Button`
-                )->attr( n = `text`  v = `Action`
-                )->attr( n = `class` v = `sapUiSmallMarginBottom`
-                )->attr( n = `press` v = client->_event( `INITIAL_FOCUS_ON_ACTION` )
-                )->attr( n = `width` v = `250px`
+                )->a( n = `text`  v = `Action`
+                )->a( n = `class` v = `sapUiSmallMarginBottom`
+                )->a( n = `press` v = client->_event( `INITIAL_FOCUS_ON_ACTION` )
+                )->a( n = `width` v = `250px`
 
             )->leaf( `Button`
-                )->attr( n = `text`  v = `Custom action`
-                )->attr( n = `class` v = `sapUiSmallMarginBottom`
-                )->attr( n = `press` v = client->_event( `INITIAL_FOCUS_ON_CUSTOM_ACTION` )
-                )->attr( n = `width` v = `250px` ).
+                )->a( n = `text`  v = `Custom action`
+                )->a( n = `class` v = `sapUiSmallMarginBottom`
+                )->a( n = `press` v = client->_event( `INITIAL_FOCUS_ON_CUSTOM_ACTION` )
+                )->a( n = `width` v = `250px` ).
 
     client->view_display( view->stringify( ) ).
 

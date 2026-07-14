@@ -63,56 +63,56 @@ CLASS z2ui5_cl_api_app_420 IMPLEMENTATION.
     DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
-        )->attr( n = `height`    v = `100%`
-        )->attr( n = `xmlns`     v = `sap.m`
-        )->attr( n = `xmlns:l`   v = `sap.ui.layout`
-        )->attr( n = `xmlns:mvc` v = `sap.ui.core.mvc`
+        )->a( n = `height`    v = `100%`
+        )->a( n = `xmlns`     v = `sap.m`
+        )->a( n = `xmlns:l`   v = `sap.ui.layout`
+        )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
         )->leaf( `Title`
-            )->attr( n = `id`    v = `carouselTitle`
-            )->attr( n = `class` v = `sapUiSmallMarginTop`
-            )->attr( n = `text`  v = `Carousel with Different Controls`
+            )->a( n = `id`    v = `carouselTitle`
+            )->a( n = `class` v = `sapUiSmallMarginTop`
+            )->a( n = `text`  v = `Carousel with Different Controls`
 
         )->open( `Carousel`
-            )->attr( n = `ariaLabelledBy` v = `carouselTitle`
-            )->attr( n = `class`          v = `sapUiContentPadding`
+            )->a( n = `ariaLabelledBy` v = `carouselTitle`
+            )->a( n = `class`          v = `sapUiContentPadding`
 
             )->open( n = `VerticalLayout` ns = `l`
                 )->leaf( `Image`
-                    )->attr( n = `src` v = base_url && `HT-7777-large.jpg`
-                    )->attr( n = `alt` v = `Example picture of speakers`
+                    )->a( n = `src` v = base_url && `HT-7777-large.jpg`
+                    )->a( n = `alt` v = `Example picture of speakers`
 
             )->shut(
             )->leaf( `Image`
-                )->attr( n = `src` v = base_url && `HT-6120-large.jpg`
-                )->attr( n = `alt` v = `Example picture of USB flash drive`
+                )->a( n = `src` v = base_url && `HT-6120-large.jpg`
+                )->a( n = `alt` v = `Example picture of USB flash drive`
 
             )->leaf( `Text`
-                )->attr( n = `class` v = `sapUiSmallMargin`
-                )->attr( n = `text`  v = lorem
+                )->a( n = `class` v = `sapUiSmallMargin`
+                )->a( n = `text`  v = lorem
 
             )->open( `ScrollContainer`
-                )->attr( n = `height`     v = `100%`
-                )->attr( n = `width`      v = `100%`
-                )->attr( n = `horizontal` v = `false`
-                )->attr( n = `vertical`   v = `true`
+                )->a( n = `height`     v = `100%`
+                )->a( n = `width`      v = `100%`
+                )->a( n = `horizontal` v = `false`
+                )->a( n = `vertical`   v = `true`
 
                 )->open( `List`
-                    )->attr( n = `headerText` v = `Some List Content 1`
-                    )->attr( n = `items`      v = client->_bind_edit( t_products )
+                    )->a( n = `headerText` v = `Some List Content 1`
+                    )->a( n = `items`      v = client->_bind_edit( t_products )
 
                     )->leaf( `StandardListItem`
-                        )->attr( n = `title`            v = `{NAME}`
-                        )->attr( n = `description`      v = `{PRODUCT_ID}`
-                        )->attr( n = `icon`             v = `{PRODUCT_PIC_URL}`
-                        )->attr( n = `iconDensityAware` v = `false`
-                        )->attr( n = `iconInset`        v = `false`
+                        )->a( n = `title`            v = `{NAME}`
+                        )->a( n = `description`      v = `{PRODUCT_ID}`
+                        )->a( n = `icon`             v = `{PRODUCT_PIC_URL}`
+                        )->a( n = `iconDensityAware` v = `false`
+                        )->a( n = `iconInset`        v = `false`
 
                 )->shut(
             )->shut(
             )->leaf( `Image`
-                )->attr( n = `src` v = base_url && `HT-6100-large.jpg`
-                )->attr( n = `alt` v = `Example picture of spotlight` ).
+                )->a( n = `src` v = base_url && `HT-6100-large.jpg`
+                )->a( n = `alt` v = `Example picture of spotlight` ).
 
     client->view_display( view->stringify( ) ).
 

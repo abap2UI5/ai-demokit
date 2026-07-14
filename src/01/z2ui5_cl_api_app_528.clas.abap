@@ -32,11 +32,11 @@ CLASS z2ui5_cl_api_app_528 IMPLEMENTATION.
     DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
-        )->attr( n = `xmlns`     v = `sap.m`
-        )->attr( n = `xmlns:mvc` v = `sap.ui.core.mvc`
+        )->a( n = `xmlns`     v = `sap.m`
+        )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
         )->open( `VBox`
-            )->attr( n = `class` v = `sapUiSmallMargin`
+            )->a( n = `class` v = `sapUiSmallMargin`
 
             )->open( `HBox`
                 )->open( n = `Switch` a = VALUE #( ( `state=true` ) )

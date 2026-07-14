@@ -100,59 +100,59 @@ CLASS z2ui5_cl_api_app_401 IMPLEMENTATION.
     DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
-        )->attr( n = `xmlns`     v = `sap.m`
-        )->attr( n = `xmlns:mvc` v = `sap.ui.core.mvc`
+        )->a( n = `xmlns`     v = `sap.m`
+        )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
         )->open( `VBox`
-            )->attr( n = `id` v = `idVBox`
+            )->a( n = `id` v = `idVBox`
 
             )->open( `FacetFilter`
-                )->attr( n = `id`                  v = `idFacetFilter`
-                )->attr( n = `type`                v = `Light`
-                )->attr( n = `showPersonalization` v = `true`
-                )->attr( n = `showReset`           v = `true`
-                )->attr( n = `reset`               v = client->_event( `RESET` )
+                )->a( n = `id`                  v = `idFacetFilter`
+                )->a( n = `type`                v = `Light`
+                )->a( n = `showPersonalization` v = `true`
+                )->a( n = `showReset`           v = `true`
+                )->a( n = `reset`               v = client->_event( `RESET` )
 
                 )->open( `FacetFilterList`
-                    )->attr( n = `title`     v = `Category`
-                    )->attr( n = `key`       v = `Category`
-                    )->attr( n = `mode`      v = `MultiSelect`
-                    )->attr( n = `listClose` v = client->_event( val   = `LIST_CLOSE_CATEGORY`
+                    )->a( n = `title`     v = `Category`
+                    )->a( n = `key`       v = `Category`
+                    )->a( n = `mode`      v = `MultiSelect`
+                    )->a( n = `listClose` v = client->_event( val   = `LIST_CLOSE_CATEGORY`
                                                                  t_arg = VALUE #( ( `$event.mParameters.selectedItems` ) ) )
-                    )->attr( n = `items`     v = client->_bind_edit( t_categories )
+                    )->a( n = `items`     v = client->_bind_edit( t_categories )
 
                     )->leaf( `FacetFilterItem`
-                        )->attr( n = `text`    v = `{TEXT}`
-                        )->attr( n = `key`     v = `{TEXT}`
-                        )->attr( n = `counter` v = `{COUNT}`
+                        )->a( n = `text`    v = `{TEXT}`
+                        )->a( n = `key`     v = `{TEXT}`
+                        )->a( n = `counter` v = `{COUNT}`
 
                 )->shut(
                 )->open( `FacetFilterList`
-                    )->attr( n = `title`     v = `SupplierName`
-                    )->attr( n = `key`       v = `SupplierName`
-                    )->attr( n = `mode`      v = `MultiSelect`
-                    )->attr( n = `listClose` v = client->_event( val   = `LIST_CLOSE_SUPPLIER`
+                    )->a( n = `title`     v = `SupplierName`
+                    )->a( n = `key`       v = `SupplierName`
+                    )->a( n = `mode`      v = `MultiSelect`
+                    )->a( n = `listClose` v = client->_event( val   = `LIST_CLOSE_SUPPLIER`
                                                                  t_arg = VALUE #( ( `$event.mParameters.selectedItems` ) ) )
-                    )->attr( n = `items`     v = client->_bind_edit( t_suppliers )
+                    )->a( n = `items`     v = client->_bind_edit( t_suppliers )
 
                     )->leaf( `FacetFilterItem`
-                        )->attr( n = `text`    v = `{TEXT}`
-                        )->attr( n = `key`     v = `{TEXT}`
-                        )->attr( n = `counter` v = `{COUNT}`
+                        )->a( n = `text`    v = `{TEXT}`
+                        )->a( n = `key`     v = `{TEXT}`
+                        )->a( n = `counter` v = `{COUNT}`
 
                 )->shut(
             )->shut(
 
             )->open( `Table`
-                )->attr( n = `id`    v = `idProductsTable`
-                )->attr( n = `inset` v = `false`
-                )->attr( n = `items` v = client->_bind_edit( t_products )
+                )->a( n = `id`    v = `idProductsTable`
+                )->a( n = `inset` v = `false`
+                )->a( n = `items` v = client->_bind_edit( t_products )
 
                 )->open( `headerToolbar`
                     )->open( `OverflowToolbar`
                         )->leaf( `Title`
-                            )->attr( n = `text`  v = `Products`
-                            )->attr( n = `level` v = `H2`
+                            )->a( n = `text`  v = `Products`
+                            )->a( n = `level` v = `H2`
                         )->leaf( `ToolbarSpacer`
 
                     )->shut(
@@ -160,66 +160,66 @@ CLASS z2ui5_cl_api_app_401 IMPLEMENTATION.
 
                 )->open( `columns`
                     )->open( `Column`
-                        )->attr( n = `width` v = `12em`
+                        )->a( n = `width` v = `12em`
 
                         )->leaf( `Text`
-                            )->attr( n = `text` v = `Product`
+                            )->a( n = `text` v = `Product`
 
                     )->shut(
                     )->open( `Column`
-                        )->attr( n = `minScreenWidth` v = `Tablet`
-                        )->attr( n = `demandPopin`    v = `true`
+                        )->a( n = `minScreenWidth` v = `Tablet`
+                        )->a( n = `demandPopin`    v = `true`
 
                         )->leaf( `Text`
-                            )->attr( n = `text` v = `Supplier`
+                            )->a( n = `text` v = `Supplier`
 
                     )->shut(
                     )->open( `Column`
-                        )->attr( n = `minScreenWidth` v = `Desktop`
-                        )->attr( n = `demandPopin`    v = `true`
-                        )->attr( n = `hAlign`         v = `End`
+                        )->a( n = `minScreenWidth` v = `Desktop`
+                        )->a( n = `demandPopin`    v = `true`
+                        )->a( n = `hAlign`         v = `End`
 
                         )->leaf( `Text`
-                            )->attr( n = `text` v = `Dimensions`
+                            )->a( n = `text` v = `Dimensions`
 
                     )->shut(
                     )->open( `Column`
-                        )->attr( n = `minScreenWidth` v = `Desktop`
-                        )->attr( n = `demandPopin`    v = `true`
-                        )->attr( n = `hAlign`         v = `Center`
+                        )->a( n = `minScreenWidth` v = `Desktop`
+                        )->a( n = `demandPopin`    v = `true`
+                        )->a( n = `hAlign`         v = `Center`
 
                         )->leaf( `Text`
-                            )->attr( n = `text` v = `Weight`
+                            )->a( n = `text` v = `Weight`
 
                     )->shut(
                     )->open( `Column`
-                        )->attr( n = `hAlign` v = `End`
+                        )->a( n = `hAlign` v = `End`
 
                         )->leaf( `Text`
-                            )->attr( n = `text` v = `Price`
+                            )->a( n = `text` v = `Price`
 
                     )->shut(
                 )->shut(
 
                 )->open( `items`
                     )->open( `ColumnListItem`
-                        )->attr( n = `vAlign` v = `Middle`
+                        )->a( n = `vAlign` v = `Middle`
 
                         )->open( `cells`
                             )->leaf( `ObjectIdentifier`
-                                )->attr( n = `title` v = `{NAME}`
-                                )->attr( n = `text`  v = `{CATEGORY}`
+                                )->a( n = `title` v = `{NAME}`
+                                )->a( n = `text`  v = `{CATEGORY}`
                             )->leaf( `Text`
-                                )->attr( n = `text` v = `{SUPPLIER_NAME}`
+                                )->a( n = `text` v = `{SUPPLIER_NAME}`
                             )->leaf( `Text`
-                                )->attr( n = `text` v = `{DIMENSIONS}`
+                                )->a( n = `text` v = `{DIMENSIONS}`
                             )->leaf( `ObjectNumber`
-                                )->attr( n = `number` v = `{WEIGHT_MEASURE}`
-                                )->attr( n = `unit`   v = `{WEIGHT_UNIT}`
-                                )->attr( n = `state`  v = `{WEIGHT_STATE}`
+                                )->a( n = `number` v = `{WEIGHT_MEASURE}`
+                                )->a( n = `unit`   v = `{WEIGHT_UNIT}`
+                                )->a( n = `state`  v = `{WEIGHT_STATE}`
                             )->leaf( `ObjectNumber`
-                                )->attr( n = `number` v = `{PRICE}`
-                                )->attr( n = `unit`   v = `{CURRENCY_CODE}` ).
+                                )->a( n = `number` v = `{PRICE}`
+                                )->a( n = `unit`   v = `{CURRENCY_CODE}` ).
 
     client->view_display( view->stringify( ) ).
 

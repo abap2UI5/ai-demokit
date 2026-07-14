@@ -39,30 +39,30 @@ CLASS z2ui5_cl_api_app_526 IMPLEMENTATION.
     DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
-        )->attr( n = `xmlns`      v = `sap.m`
-        )->attr( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
-        )->attr( n = `xmlns:core` v = `sap.ui.core`
-        )->attr( n = `height`     v = `100%`
+        )->a( n = `xmlns`      v = `sap.m`
+        )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
+        )->a( n = `xmlns:core` v = `sap.ui.core`
+        )->a( n = `height`     v = `100%`
 
         )->open( `Page`
-            )->attr( n = `title` v = `Page`
-            )->attr( n = `class` v = `sapUiContentPadding`
+            )->a( n = `title` v = `Page`
+            )->a( n = `class` v = `sapUiContentPadding`
 
             )->open( `customHeader`
                 )->open( `Toolbar`
                     )->leaf( `Button`
-                        )->attr( n = `type`  v = `Back`
-                        )->attr( n = `press` v = client->_event( `PRESS` )
+                        )->a( n = `type`  v = `Back`
+                        )->a( n = `press` v = client->_event( `PRESS` )
                     )->leaf( `ToolbarSpacer`
                     )->leaf( `Title`
-                        )->attr( n = `text`  v = `Title`
-                        )->attr( n = `level` v = `H2`
+                        )->a( n = `text`  v = `Title`
+                        )->a( n = `level` v = `H2`
                     )->leaf( `ToolbarSpacer`
                     )->leaf( `Button`
-                        )->attr( n = `icon`          v = `sap-icon://edit`
-                        )->attr( n = `type`          v = `Transparent`
-                        )->attr( n = `press`         v = client->_event( `PRESS` )
-                        )->attr( n = `ariaLabelledBy` v = `editButtonLabel`
+                        )->a( n = `icon`          v = `sap-icon://edit`
+                        )->a( n = `type`          v = `Transparent`
+                        )->a( n = `press`         v = client->_event( `PRESS` )
+                        )->a( n = `ariaLabelledBy` v = `editButtonLabel`
 
                 )->shut(
             )->shut(
@@ -71,17 +71,17 @@ CLASS z2ui5_cl_api_app_526 IMPLEMENTATION.
                 )->open( `Toolbar`
                     )->leaf( `ToolbarSpacer`
                     )->leaf( `Button`
-                        )->attr( n = `text`  v = `Default`
-                        )->attr( n = `press` v = client->_event( `PRESS` )
+                        )->a( n = `text`  v = `Default`
+                        )->a( n = `press` v = client->_event( `PRESS` )
                     )->leaf( `Button`
-                        )->attr( n = `type`  v = `Reject`
-                        )->attr( n = `text`  v = `Reject`
-                        )->attr( n = `press` v = client->_event( `PRESS` )
+                        )->a( n = `type`  v = `Reject`
+                        )->a( n = `text`  v = `Reject`
+                        )->a( n = `press` v = client->_event( `PRESS` )
                     )->leaf( `Button`
-                        )->attr( n = `icon`           v = `sap-icon://action`
-                        )->attr( n = `type`           v = `Transparent`
-                        )->attr( n = `press`          v = client->_event( `PRESS` )
-                        )->attr( n = `ariaLabelledBy` v = `actionButtonLabel`
+                        )->a( n = `icon`           v = `sap-icon://action`
+                        )->a( n = `type`           v = `Transparent`
+                        )->a( n = `press`          v = client->_event( `PRESS` )
+                        )->a( n = `ariaLabelledBy` v = `actionButtonLabel`
                     )->leaf( `ToolbarSpacer`
 
                 )->shut(
@@ -90,49 +90,49 @@ CLASS z2ui5_cl_api_app_526 IMPLEMENTATION.
             )->open( `content`
                 )->open( `HBox`
                     )->open( `Button`
-                        )->attr( n = `text`           v = `Default`
-                        )->attr( n = `press`          v = client->_event( `PRESS` )
-                        )->attr( n = `ariaDescribedBy` v = `defaultButtonDescription genericButtonDescription`
+                        )->a( n = `text`           v = `Default`
+                        )->a( n = `press`          v = client->_event( `PRESS` )
+                        )->a( n = `ariaDescribedBy` v = `defaultButtonDescription genericButtonDescription`
 
                         )->open( `layoutData`
                             )->leaf( `FlexItemData`
-                                )->attr( n = `growFactor` v = `1`
+                                )->a( n = `growFactor` v = `1`
 
                         )->shut(
                     )->shut(
                     )->open( `Button`
-                        )->attr( n = `type`            v = `Accept`
-                        )->attr( n = `text`            v = `Accept`
-                        )->attr( n = `press`           v = client->_event( `PRESS` )
-                        )->attr( n = `ariaDescribedBy` v = `acceptButtonDescription genericButtonDescription`
+                        )->a( n = `type`            v = `Accept`
+                        )->a( n = `text`            v = `Accept`
+                        )->a( n = `press`           v = client->_event( `PRESS` )
+                        )->a( n = `ariaDescribedBy` v = `acceptButtonDescription genericButtonDescription`
 
                         )->open( `layoutData`
                             )->leaf( `FlexItemData`
-                                )->attr( n = `growFactor` v = `1`
+                                )->a( n = `growFactor` v = `1`
 
                         )->shut(
                     )->shut(
                     )->open( `Button`
-                        )->attr( n = `type`            v = `Reject`
-                        )->attr( n = `text`            v = `Reject`
-                        )->attr( n = `press`           v = client->_event( `PRESS` )
-                        )->attr( n = `ariaDescribedBy` v = `rejectButtonDescription genericButtonDescription`
+                        )->a( n = `type`            v = `Reject`
+                        )->a( n = `text`            v = `Reject`
+                        )->a( n = `press`           v = client->_event( `PRESS` )
+                        )->a( n = `ariaDescribedBy` v = `rejectButtonDescription genericButtonDescription`
 
                         )->open( `layoutData`
                             )->leaf( `FlexItemData`
-                                )->attr( n = `growFactor` v = `1`
+                                )->a( n = `growFactor` v = `1`
 
                         )->shut(
                     )->shut(
                     )->open( `Button`
-                        )->attr( n = `text`            v = `Coming Soon`
-                        )->attr( n = `press`           v = client->_event( `PRESS` )
-                        )->attr( n = `ariaDescribedBy` v = `comingSoonButtonDescription genericButtonDescription`
-                        )->attr( n = `enabled`         v = `false`
+                        )->a( n = `text`            v = `Coming Soon`
+                        )->a( n = `press`           v = client->_event( `PRESS` )
+                        )->a( n = `ariaDescribedBy` v = `comingSoonButtonDescription genericButtonDescription`
+                        )->a( n = `enabled`         v = `false`
 
                         )->open( `layoutData`
                             )->leaf( `FlexItemData`
-                                )->attr( n = `growFactor` v = `1`
+                                )->a( n = `growFactor` v = `1`
 
                         )->shut(
                     )->shut(
@@ -141,26 +141,26 @@ CLASS z2ui5_cl_api_app_526 IMPLEMENTATION.
 
                 " Collection of labels (some invisible) providing ARIA descriptions for the buttons
                 )->leaf( `Label`
-                    )->attr( n = `id`   v = `genericButtonDescription`
-                    )->attr( n = `text` v = `Note: The buttons in this sample display MessageToast when pressed.`
+                    )->a( n = `id`   v = `genericButtonDescription`
+                    )->a( n = `text` v = `Note: The buttons in this sample display MessageToast when pressed.`
                 )->leaf( n = `InvisibleText` ns = `core`
-                    )->attr( n = `id`   v = `defaultButtonDescription`
-                    )->attr( n = `text` v = `Description of default button goes here.`
+                    )->a( n = `id`   v = `defaultButtonDescription`
+                    )->a( n = `text` v = `Description of default button goes here.`
                 )->leaf( n = `InvisibleText` ns = `core`
-                    )->attr( n = `id`   v = `acceptButtonDescription`
-                    )->attr( n = `text` v = `Description of accept button goes here.`
+                    )->a( n = `id`   v = `acceptButtonDescription`
+                    )->a( n = `text` v = `Description of accept button goes here.`
                 )->leaf( n = `InvisibleText` ns = `core`
-                    )->attr( n = `id`   v = `rejectButtonDescription`
-                    )->attr( n = `text` v = `Description of reject button goes here.`
+                    )->a( n = `id`   v = `rejectButtonDescription`
+                    )->a( n = `text` v = `Description of reject button goes here.`
                 )->leaf( n = `InvisibleText` ns = `core`
-                    )->attr( n = `id`   v = `comingSoonButtonDescription`
-                    )->attr( n = `text` v = `This feature is not active just now.`
+                    )->a( n = `id`   v = `comingSoonButtonDescription`
+                    )->a( n = `text` v = `This feature is not active just now.`
                 )->leaf( n = `InvisibleText` ns = `core`
-                    )->attr( n = `id`   v = `editButtonLabel`
-                    )->attr( n = `text` v = `Edit Button Label`
+                    )->a( n = `id`   v = `editButtonLabel`
+                    )->a( n = `text` v = `Edit Button Label`
                 )->leaf( n = `InvisibleText` ns = `core`
-                    )->attr( n = `id`   v = `actionButtonLabel`
-                    )->attr( n = `text` v = `Action Button Label`
+                    )->a( n = `id`   v = `actionButtonLabel`
+                    )->a( n = `text` v = `Action Button Label`
 
             )->shut(
 
@@ -168,16 +168,16 @@ CLASS z2ui5_cl_api_app_526 IMPLEMENTATION.
                 )->open( `Toolbar`
                     )->leaf( `ToolbarSpacer`
                     )->leaf( `Button`
-                        )->attr( n = `type`  v = `Emphasized`
-                        )->attr( n = `text`  v = `Emphasized`
-                        )->attr( n = `press` v = client->_event( `PRESS` )
+                        )->a( n = `type`  v = `Emphasized`
+                        )->a( n = `text`  v = `Emphasized`
+                        )->a( n = `press` v = client->_event( `PRESS` )
                     )->leaf( `Button`
-                        )->attr( n = `text`  v = `Default`
-                        )->attr( n = `press` v = client->_event( `PRESS` )
+                        )->a( n = `text`  v = `Default`
+                        )->a( n = `press` v = client->_event( `PRESS` )
                     )->leaf( `Button`
-                        )->attr( n = `icon`  v = `sap-icon://action`
-                        )->attr( n = `type`  v = `Transparent`
-                        )->attr( n = `press` v = client->_event( `PRESS` ) ).
+                        )->a( n = `icon`  v = `sap-icon://action`
+                        )->a( n = `type`  v = `Transparent`
+                        )->a( n = `press` v = client->_event( `PRESS` ) ).
 
     client->view_display( view->stringify( ) ).
 

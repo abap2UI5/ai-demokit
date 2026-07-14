@@ -23,28 +23,28 @@ CLASS z2ui5_cl_api_app_422 IMPLEMENTATION.
     DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
-        )->attr( n = `xmlns`      v = `sap.m`
-        )->attr( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
-        )->attr( n = `xmlns:form` v = `sap.ui.layout.form`
+        )->a( n = `xmlns`      v = `sap.m`
+        )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
+        )->a( n = `xmlns:form` v = `sap.ui.layout.form`
 
         )->open( n = `SimpleForm` ns = `form`
-            )->attr( n = `editable`                v = `true`
-            )->attr( n = `backgroundDesign`        v = `Transparent`
-            )->attr( n = `singleContainerFullSize` v = `true`
-            )->attr( n = `layout`                  v = `ResponsiveGridLayout`
+            )->a( n = `editable`                v = `true`
+            )->a( n = `backgroundDesign`        v = `Transparent`
+            )->a( n = `singleContainerFullSize` v = `true`
+            )->a( n = `layout`                  v = `ResponsiveGridLayout`
 
             )->open( n = `toolbar` ns = `form`
                 )->open( `Toolbar`
                     )->leaf( `Title`
-                        )->attr( n = `text` v = `Color Palette in a Form`
+                        )->a( n = `text` v = `Color Palette in a Form`
 
                 )->shut(
             )->shut(
 
             )->leaf( `Label`
-                )->attr( n = `text` v = `Choose Color`
+                )->a( n = `text` v = `Choose Color`
             )->leaf( `ColorPalette`
-                )->attr( n = `colorSelect` v = client->_event( val   = `COLOR_SELECT`
+                )->a( n = `colorSelect` v = client->_event( val   = `COLOR_SELECT`
                                                                t_arg = VALUE #( ( `${$parameters>/value}` ) ( `${$parameters>/defaultAction}` ) ) ) ).
 
     client->view_display( view->stringify( ) ).

@@ -66,48 +66,48 @@ CLASS z2ui5_cl_api_app_454 IMPLEMENTATION.
 
     " showClearIcon (UI5 1.94) is omitted to stay compatible with UI5 1.71
     view->open( n = `View` ns = `mvc`
-        )->attr( n = `xmlns`      v = `sap.m`
-        )->attr( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
-        )->attr( n = `xmlns:l`    v = `sap.ui.layout`
-        )->attr( n = `xmlns:core` v = `sap.ui.core`
+        )->a( n = `xmlns`      v = `sap.m`
+        )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
+        )->a( n = `xmlns:l`    v = `sap.ui.layout`
+        )->a( n = `xmlns:core` v = `sap.ui.core`
 
         )->open( n = `VerticalLayout` ns = `l`
-            )->attr( n = `class` v = `sapUiContentPadding`
-            )->attr( n = `width` v = `100%`
+            )->a( n = `class` v = `sapUiContentPadding`
+            )->a( n = `width` v = `100%`
 
             )->leaf( `Label`
-                )->attr( n = `text`     v = `Enter a search term, e.g. “Notebook”, and add matching products as tokens`
-                )->attr( n = `width`    v = `100%`
-                )->attr( n = `labelFor` v = `multiInput`
+                )->a( n = `text`     v = `Enter a search term, e.g. “Notebook”, and add matching products as tokens`
+                )->a( n = `width`    v = `100%`
+                )->a( n = `labelFor` v = `multiInput`
 
             )->open( `MultiInput`
-                )->attr( n = `width`           v = `70%`
-                )->attr( n = `id`              v = `multiInput`
-                )->attr( n = `suggestionItems` v = client->_bind_edit( t_products )
-                )->attr( n = `placeholder`     v = `Products...`
-                )->attr( n = `showValueHelp`   v = `false`
+                )->a( n = `width`           v = `70%`
+                )->a( n = `id`              v = `multiInput`
+                )->a( n = `suggestionItems` v = client->_bind_edit( t_products )
+                )->a( n = `placeholder`     v = `Products...`
+                )->a( n = `showValueHelp`   v = `false`
 
                 )->leaf( n = `Item` ns = `core`
-                    )->attr( n = `key`  v = `{PRODUCT_ID}`
-                    )->attr( n = `text` v = `{NAME}`
+                    )->a( n = `key`  v = `{PRODUCT_ID}`
+                    )->a( n = `text` v = `{NAME}`
 
             )->shut(
             )->leaf( `Label`
-                )->attr( n = `text`     v = `MultiInput with pre-selected tokens`
-                )->attr( n = `labelFor` v = `multiInput1`
+                )->a( n = `text`     v = `MultiInput with pre-selected tokens`
+                )->a( n = `labelFor` v = `multiInput1`
             )->leaf( `MultiInput`
-                )->attr( n = `id`             v = `multiInput1`
-                )->attr( n = `showSuggestion` v = `false`
-                )->attr( n = `width`          v = `70%`
-                )->attr( n = `showValueHelp`  v = `false`
+                )->a( n = `id`             v = `multiInput1`
+                )->a( n = `showSuggestion` v = `false`
+                )->a( n = `width`          v = `70%`
+                )->a( n = `showValueHelp`  v = `false`
             )->leaf( `Label`
-                )->attr( n = `text`     v = `MultiInput with single long token`
-                )->attr( n = `labelFor` v = `multiInput2`
+                )->a( n = `text`     v = `MultiInput with single long token`
+                )->a( n = `labelFor` v = `multiInput2`
             )->leaf( `MultiInput`
-                )->attr( n = `id`             v = `multiInput2`
-                )->attr( n = `showSuggestion` v = `false`
-                )->attr( n = `width`          v = `300px`
-                )->attr( n = `showValueHelp`  v = `false` ).
+                )->a( n = `id`             v = `multiInput2`
+                )->a( n = `showSuggestion` v = `false`
+                )->a( n = `width`          v = `300px`
+                )->a( n = `showValueHelp`  v = `false` ).
 
     client->view_display( view->stringify( ) ).
 

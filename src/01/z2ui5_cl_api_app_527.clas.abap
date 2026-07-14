@@ -76,26 +76,26 @@ CLASS z2ui5_cl_api_app_527 IMPLEMENTATION.
     DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
-        )->attr( n = `height`     v = `100%`
-        )->attr( n = `xmlns:core` v = `sap.ui.core`
-        )->attr( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
-        )->attr( n = `xmlns`      v = `sap.m`
+        )->a( n = `height`     v = `100%`
+        )->a( n = `xmlns:core` v = `sap.ui.core`
+        )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
+        )->a( n = `xmlns`      v = `sap.m`
 
         )->open( `Page`
-            )->attr( n = `showHeader` v = `false`
-            )->attr( n = `class`      v = `sapUiContentPadding`
+            )->a( n = `showHeader` v = `false`
+            )->a( n = `class`      v = `sapUiContentPadding`
 
             )->open( `subHeader`
                 )->open( `Toolbar`
                     )->leaf( `ToolbarSpacer`
                     )->open( `Select`
-                        )->attr( n = `forceSelection` v = `false`
-                        )->attr( n = `selectedKey`    v = client->_bind_edit( selected_product )
-                        )->attr( n = `items`          v = client->_bind_edit( t_products )
+                        )->a( n = `forceSelection` v = `false`
+                        )->a( n = `selectedKey`    v = client->_bind_edit( selected_product )
+                        )->a( n = `items`          v = client->_bind_edit( t_products )
 
                         )->leaf( n = `Item` ns = `core`
-                            )->attr( n = `key`  v = `{PRODUCT_ID}`
-                            )->attr( n = `text` v = `{NAME}`
+                            )->a( n = `key`  v = `{PRODUCT_ID}`
+                            )->a( n = `text` v = `{NAME}`
 
                     )->shut(
                 )->shut(
@@ -103,42 +103,42 @@ CLASS z2ui5_cl_api_app_527 IMPLEMENTATION.
 
             )->open( `content`
                 )->open( `HBox`
-                    )->attr( n = `justifyContent` v = `SpaceAround`
+                    )->a( n = `justifyContent` v = `SpaceAround`
 
                     )->open( `Select`
-                        )->attr( n = `enabled`        v = client->_bind_edit( enabled )
-                        )->attr( n = `editable`       v = client->_bind_edit( editable )
-                        )->attr( n = `forceSelection` v = `false`
-                        )->attr( n = `selectedKey`    v = client->_bind_edit( selected_product2 )
-                        )->attr( n = `items`          v = client->_bind_edit( t_products2 )
+                        )->a( n = `enabled`        v = client->_bind_edit( enabled )
+                        )->a( n = `editable`       v = client->_bind_edit( editable )
+                        )->a( n = `forceSelection` v = `false`
+                        )->a( n = `selectedKey`    v = client->_bind_edit( selected_product2 )
+                        )->a( n = `items`          v = client->_bind_edit( t_products2 )
 
                         )->leaf( n = `Item` ns = `core`
-                            )->attr( n = `key`  v = `{PRODUCT_ID}`
-                            )->attr( n = `text` v = `{NAME}`
+                            )->a( n = `key`  v = `{PRODUCT_ID}`
+                            )->a( n = `text` v = `{NAME}`
 
                     )->shut(
 
                     )->open( `VBox`
                         )->open( `HBox`
-                            )->attr( n = `alignItems` v = `Center`
+                            )->a( n = `alignItems` v = `Center`
 
                             )->leaf( `Label`
-                                )->attr( n = `text`  v = `Enabled:`
-                                )->attr( n = `class` v = `sapUiTinyMarginEnd`
+                                )->a( n = `text`  v = `Enabled:`
+                                )->a( n = `class` v = `sapUiTinyMarginEnd`
                             )->leaf( `Switch`
-                                )->attr( n = `type`  v = `AcceptReject`
-                                )->attr( n = `state` v = client->_bind_edit( enabled )
+                                )->a( n = `type`  v = `AcceptReject`
+                                )->a( n = `state` v = client->_bind_edit( enabled )
 
                         )->shut(
                         )->open( `HBox`
-                            )->attr( n = `alignItems` v = `Center`
+                            )->a( n = `alignItems` v = `Center`
 
                             )->leaf( `Label`
-                                )->attr( n = `text`  v = `Editable:`
-                                )->attr( n = `class` v = `sapUiTinyMarginEnd`
+                                )->a( n = `text`  v = `Editable:`
+                                )->a( n = `class` v = `sapUiTinyMarginEnd`
                             )->leaf( `Switch`
-                                )->attr( n = `type`  v = `AcceptReject`
-                                )->attr( n = `state` v = client->_bind_edit( editable )
+                                )->a( n = `type`  v = `AcceptReject`
+                                )->a( n = `state` v = client->_bind_edit( editable )
 
                         )->shut(
                     )->shut(
@@ -149,16 +149,16 @@ CLASS z2ui5_cl_api_app_527 IMPLEMENTATION.
                 )->open( `Toolbar`
                     )->leaf( `ToolbarSpacer`
                     )->open( `Select`
-                        )->attr( n = `forceSelection`  v = `false`
-                        )->attr( n = `selectedKey`     v = client->_bind_edit( selected_product3 )
-                        )->attr( n = `type`            v = `IconOnly`
-                        )->attr( n = `icon`            v = `sap-icon://filter`
-                        )->attr( n = `autoAdjustWidth` v = `true`
-                        )->attr( n = `items`           v = client->_bind_edit( t_products3 )
+                        )->a( n = `forceSelection`  v = `false`
+                        )->a( n = `selectedKey`     v = client->_bind_edit( selected_product3 )
+                        )->a( n = `type`            v = `IconOnly`
+                        )->a( n = `icon`            v = `sap-icon://filter`
+                        )->a( n = `autoAdjustWidth` v = `true`
+                        )->a( n = `items`           v = client->_bind_edit( t_products3 )
 
                         )->leaf( n = `Item` ns = `core`
-                            )->attr( n = `key`  v = `{PRODUCT_ID}`
-                            )->attr( n = `text` v = `{NAME}` ).
+                            )->a( n = `key`  v = `{PRODUCT_ID}`
+                            )->a( n = `text` v = `{NAME}` ).
 
     client->view_display( view->stringify( ) ).
 

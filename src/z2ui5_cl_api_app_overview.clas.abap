@@ -88,43 +88,43 @@ CLASS z2ui5_cl_api_app_overview IMPLEMENTATION.
     DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
-        )->attr( n = `xmlns`     v = `sap.m`
-        )->attr( n = `xmlns:mvc` v = `sap.ui.core.mvc`
+        )->a( n = `xmlns`     v = `sap.m`
+        )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
         )->open( `Shell`
             )->open( `Page`
-                )->attr( n = `title`          v = `abap2UI5 - api`
-                )->attr( n = `navButtonPress` v = client->_event_nav_app_leave( )
-                )->attr( n = `showNavButton`  v = z2ui5_cl_api_xml=>as_bool( client->check_app_prev_stack( ) )
+                )->a( n = `title`          v = `abap2UI5 - api`
+                )->a( n = `navButtonPress` v = client->_event_nav_app_leave( )
+                )->a( n = `showNavButton`  v = z2ui5_cl_api_xml=>as_bool( client->check_app_prev_stack( ) )
 
                 )->open( `Table`
-                    )->attr( n = `sticky` v = `ColumnHeaders`
-                    )->attr( n = `items`  v = client->_bind_edit( t_app )
+                    )->a( n = `sticky` v = `ColumnHeaders`
+                    )->a( n = `items`  v = client->_bind_edit( t_app )
 
                     )->open( `columns`
                         )->open( `Column`
                             )->leaf( `Text`
-                                )->attr( n = `text` v = `Module`
+                                )->a( n = `text` v = `Module`
 
                         )->shut(
                         )->open( `Column`
                             )->leaf( `Text`
-                                )->attr( n = `text` v = `Control`
+                                )->a( n = `text` v = `Control`
 
                         )->shut(
                         )->open( `Column`
                             )->leaf( `Text`
-                                )->attr( n = `text` v = `Sample`
+                                )->a( n = `text` v = `Sample`
 
                         )->shut(
                         )->open( `Column`
                             )->leaf( `Text`
-                                )->attr( n = `text` v = `abap2UI5`
+                                )->a( n = `text` v = `abap2UI5`
 
                         )->shut(
                         )->open( `Column`
                             )->leaf( `Text`
-                                )->attr( n = `text` v = `Note`
+                                )->a( n = `text` v = `Note`
 
                         )->shut(
                     )->shut(
@@ -133,43 +133,43 @@ CLASS z2ui5_cl_api_app_overview IMPLEMENTATION.
                         )->open( `ColumnListItem`
                             )->open( `cells`
                                 )->leaf( `Text`
-                                    )->attr( n = `text` v = `{MODULE}`
+                                    )->a( n = `text` v = `{MODULE}`
                                 )->leaf( `Link`
-                                    )->attr( n = `text`   v = `{CTRL_NAME}`
-                                    )->attr( n = `href`   v = `{API_URL}`
-                                    )->attr( n = `target` v = `_blank`
+                                    )->a( n = `text`   v = `{CTRL_NAME}`
+                                    )->a( n = `href`   v = `{API_URL}`
+                                    )->a( n = `target` v = `_blank`
 
                                 )->open( `HBox`
                                     )->leaf( `Link`
-                                        )->attr( n = `text`   v = `{NAME}`
-                                        )->attr( n = `href`   v = `{JS_URL}`
-                                        )->attr( n = `target` v = `_blank`
+                                        )->a( n = `text`   v = `{NAME}`
+                                        )->a( n = `href`   v = `{JS_URL}`
+                                        )->a( n = `target` v = `_blank`
                                     )->leaf( `Text`
-                                        )->attr( n = `text` v = ` `
+                                        )->a( n = `text` v = ` `
                                     )->leaf( `Link`
-                                        )->attr( n = `text`   v = `↗`
-                                        )->attr( n = `href`   v = `{UI5_URL}`
-                                        )->attr( n = `target` v = `_blank`
+                                        )->a( n = `text`   v = `↗`
+                                        )->a( n = `href`   v = `{UI5_URL}`
+                                        )->a( n = `target` v = `_blank`
 
                                 )->shut(
                                 )->open( `HBox`
                                     )->leaf( `Link`
-                                        )->attr( n = `text`   v = `{CLASS}`
-                                        )->attr( n = `href`   v = `{ABAP_URL}`
-                                        )->attr( n = `target` v = `_blank`
+                                        )->a( n = `text`   v = `{CLASS}`
+                                        )->a( n = `href`   v = `{ABAP_URL}`
+                                        )->a( n = `target` v = `_blank`
                                     )->leaf( `Text`
-                                        )->attr( n = `text` v = ` `
+                                        )->a( n = `text` v = ` `
                                     )->leaf( `Link`
-                                        )->attr( n = `text`   v = `↗`
-                                        )->attr( n = `href`   v = `{START_URL}`
-                                        )->attr( n = `target` v = `_blank`
+                                        )->a( n = `text`   v = `↗`
+                                        )->a( n = `href`   v = `{START_URL}`
+                                        )->a( n = `target` v = `_blank`
 
                                 )->shut(
                                 )->leaf( `Button`
-                                    )->attr( n = `icon`    v = `sap-icon://hint`
-                                    )->attr( n = `type`    v = `Transparent`
-                                    )->attr( n = `tooltip` v = `{NOTES}`
-                                    )->attr( n = `visible` v = `{HAS_NOTES}` ).
+                                    )->a( n = `icon`    v = `sap-icon://hint`
+                                    )->a( n = `type`    v = `Transparent`
+                                    )->a( n = `tooltip` v = `{NOTES}`
+                                    )->a( n = `visible` v = `{HAS_NOTES}` ).
 
     client->view_display( view->stringify( ) ).
 

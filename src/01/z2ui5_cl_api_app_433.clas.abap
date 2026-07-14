@@ -50,60 +50,60 @@ CLASS z2ui5_cl_api_app_433 IMPLEMENTATION.
     DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
-        )->attr( n = `xmlns`     v = `sap.m`
-        )->attr( n = `xmlns:mvc` v = `sap.ui.core.mvc`
+        )->a( n = `xmlns`     v = `sap.m`
+        )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
         )->open( `IconTabBar`
-            )->attr( n = `id`                   v = `idIconTabBarStretchContent`
-            )->attr( n = `stretchContentHeight` v = `true`
-            )->attr( n = `backgroundDesign`     v = `Transparent`
-            )->attr( n = `applyContentPadding`  v = `false`
+            )->a( n = `id`                   v = `idIconTabBarStretchContent`
+            )->a( n = `stretchContentHeight` v = `true`
+            )->a( n = `backgroundDesign`     v = `Transparent`
+            )->a( n = `applyContentPadding`  v = `false`
             " expanded="{device>/isNoPhone}" omitted - device model binding not available in abap2UI5
-            )->attr( n = `class`                v = `sapUiResponsiveContentPadding`
+            )->a( n = `class`                v = `sapUiResponsiveContentPadding`
 
             )->open( `items`
                 )->open( `IconTabFilter`
-                    )->attr( n = `text` v = `Products`
-                    )->attr( n = `key`  v = `products`
+                    )->a( n = `text` v = `Products`
+                    )->a( n = `key`  v = `products`
 
                     )->open( `ScrollContainer`
-                        )->attr( n = `height`     v = `100%`
-                        )->attr( n = `width`      v = `100%`
-                        )->attr( n = `horizontal` v = `false`
-                        )->attr( n = `vertical`   v = `true`
+                        )->a( n = `height`     v = `100%`
+                        )->a( n = `width`      v = `100%`
+                        )->a( n = `horizontal` v = `false`
+                        )->a( n = `vertical`   v = `true`
 
                         )->open( `List`
-                            )->attr( n = `items` v = client->_bind_edit( t_products )
+                            )->a( n = `items` v = client->_bind_edit( t_products )
 
                             )->leaf( `StandardListItem`
-                                )->attr( n = `title`   v = `{NAME}`
-                                )->attr( n = `counter` v = `{QUANTITY}`
+                                )->a( n = `title`   v = `{NAME}`
+                                )->a( n = `counter` v = `{QUANTITY}`
 
                         )->shut(
                     )->shut(
                 )->shut(
                 )->open( `IconTabFilter`
-                    )->attr( n = `text` v = `Attachments`
-                    )->attr( n = `key`  v = `attachments`
+                    )->a( n = `text` v = `Attachments`
+                    )->a( n = `key`  v = `attachments`
 
                     )->leaf( `Text`
-                        )->attr( n = `text` v = `Attachments go here ...`
+                        )->a( n = `text` v = `Attachments go here ...`
 
                 )->shut(
                 )->open( `IconTabFilter`
-                    )->attr( n = `text` v = `Notes`
-                    )->attr( n = `key`  v = `notes`
+                    )->a( n = `text` v = `Notes`
+                    )->a( n = `key`  v = `notes`
 
                     )->leaf( `Text`
-                        )->attr( n = `text` v = `Notes go here ...`
+                        )->a( n = `text` v = `Notes go here ...`
 
                 )->shut(
                 )->open( `IconTabFilter`
-                    )->attr( n = `text` v = `People`
-                    )->attr( n = `key`  v = `people`
+                    )->a( n = `text` v = `People`
+                    )->a( n = `key`  v = `people`
 
                     )->leaf( `Text`
-                        )->attr( n = `text` v = `People content goes here ...` ).
+                        )->a( n = `text` v = `People content goes here ...` ).
 
     client->view_display( view->stringify( ) ).
 

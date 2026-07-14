@@ -59,22 +59,22 @@ CLASS z2ui5_cl_api_app_449 IMPLEMENTATION.
     DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
-        )->attr( n = `height`    v = `100%`
-        )->attr( n = `xmlns`     v = `sap.m`
-        )->attr( n = `xmlns:mvc` v = `sap.ui.core.mvc`
+        )->a( n = `height`    v = `100%`
+        )->a( n = `xmlns`     v = `sap.m`
+        )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
         )->open( `Page`
-            )->attr( n = `id`         v = `messageHandlingPage`
-            )->attr( n = `showHeader` v = `false`
+            )->a( n = `id`         v = `messageHandlingPage`
+            )->a( n = `showHeader` v = `false`
 
             )->open( `MessageView`
-                )->attr( n = `items` v = client->_bind_edit( t_messages )
+                )->a( n = `items` v = client->_bind_edit( t_messages )
 
                 )->leaf( `MessageItem`
-                    )->attr( n = `type`        v = `{TYPE}`
-                    )->attr( n = `title`       v = `{MESSAGE}`
-                    )->attr( n = `subtitle`    v = `{ADDITIONAL_TEXT}`
-                    )->attr( n = `description` v = `{DESCRIPTION}` ).
+                    )->a( n = `type`        v = `{TYPE}`
+                    )->a( n = `title`       v = `{MESSAGE}`
+                    )->a( n = `subtitle`    v = `{ADDITIONAL_TEXT}`
+                    )->a( n = `description` v = `{DESCRIPTION}` ).
 
     client->view_display( view->stringify( ) ).
 

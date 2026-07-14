@@ -49,16 +49,16 @@ CLASS z2ui5_cl_api_app_441 IMPLEMENTATION.
 
     " headerLevel="H2" of the original sample is omitted here (available only since UI5 1.117)
     view->open( n = `View` ns = `mvc`
-        )->attr( n = `xmlns:mvc` v = `sap.ui.core.mvc`
-        )->attr( n = `xmlns`     v = `sap.m`
+        )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
+        )->a( n = `xmlns`     v = `sap.m`
 
         )->open( `List`
-            )->attr( n = `headerText` v = `Products`
-            )->attr( n = `items`      v = client->_bind_edit( t_products )
+            )->a( n = `headerText` v = `Products`
+            )->a( n = `items`      v = client->_bind_edit( t_products )
 
             )->leaf( `StandardListItem`
-                )->attr( n = `title`   v = `{NAME}`
-                )->attr( n = `counter` v = `{QUANTITY}` ).
+                )->a( n = `title`   v = `{NAME}`
+                )->a( n = `counter` v = `{QUANTITY}` ).
 
     client->view_display( view->stringify( ) ).
 

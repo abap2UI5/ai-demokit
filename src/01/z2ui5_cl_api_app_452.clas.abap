@@ -80,18 +80,18 @@ CLASS z2ui5_cl_api_app_452 IMPLEMENTATION.
     DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
     DATA(combo) = view->open( n = `View` ns = `mvc`
-        )->attr( n = `height`     v = `100%`
-        )->attr( n = `xmlns:l`    v = `sap.ui.layout`
-        )->attr( n = `xmlns:core` v = `sap.ui.core`
-        )->attr( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
-        )->attr( n = `xmlns`      v = `sap.m`
+        )->a( n = `height`     v = `100%`
+        )->a( n = `xmlns:l`    v = `sap.ui.layout`
+        )->a( n = `xmlns:core` v = `sap.ui.core`
+        )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
+        )->a( n = `xmlns`      v = `sap.m`
 
         )->open( n = `VerticalLayout` ns = `l`
-            )->attr( n = `class` v = `sapUiContentPadding`
-            )->attr( n = `width` v = `100%`
+            )->a( n = `class` v = `sapUiContentPadding`
+            )->a( n = `width` v = `100%`
 
             )->open( `MultiComboBox`
-                )->attr( n = `width` v = `500px` ).
+                )->a( n = `width` v = `500px` ).
 
     " group header factory / sorter grouping is not available in abap2UI5 - insert
     " a core:SeparatorItem whenever the supplier changes, then the items below it
@@ -100,12 +100,12 @@ CLASS z2ui5_cl_api_app_452 IMPLEMENTATION.
       IF s_product-supplier_name <> supplier.
         supplier = s_product-supplier_name.
         combo->leaf( n = `SeparatorItem` ns = `core`
-            )->attr( n = `text` v = s_product-supplier_name ).
+            )->a( n = `text` v = s_product-supplier_name ).
       ENDIF.
 
       combo->leaf( n = `Item` ns = `core`
-          )->attr( n = `key`  v = s_product-product_id
-          )->attr( n = `text` v = s_product-name ).
+          )->a( n = `key`  v = s_product-product_id
+          )->a( n = `text` v = s_product-name ).
 
     ENDLOOP.
 
