@@ -146,8 +146,8 @@ function controlLines() {
   const l = [];
   l.push('One table per module, one row per UI5 demo kit sample. **Control** is the');
   l.push('demo kit entity (plain), **Javascript** links to the collected UI5 template');
-  l.push('(`ui5/`), **ABAP** to the generated class. A missing ABAP link (`—`) means');
-  l.push('the sample is not ported yet. See the [README](README.md#coverage) for the');
+  l.push('(`ui5/`), **ABAP** to the generated class (`—` = not ported yet), **Demo** to');
+  l.push('the live demo kit sample app. See the [README](README.md#coverage) for the');
   l.push('per-module summary.');
   l.push('');
 
@@ -156,8 +156,8 @@ function controlLines() {
     const lp = entry.samples.filter((s) => s.port).length;
     l.push(`## \`${lib}\` — ${lp}/${entry.samples.length} (${pct(lp, entry.samples.length)})`);
     l.push('');
-    l.push('| Control | Javascript | ABAP |');
-    l.push('|---------|-----------|------|');
+    l.push('| Control | Javascript | ABAP | Demo |');
+    l.push('|---------|-----------|------|------|');
 
     // sort by control (entity), then sample name; entity-less rows last
     const rows = [...entry.samples].sort((a, b) =>
@@ -168,7 +168,8 @@ function controlLines() {
       const control = s.entity ? `\`${s.entity}\`` : '—';
       const js = s.port ? `[\`${s.name}\`](${templateUrl(lib, s.port.cls)})` : `\`${s.name}\``;
       const abap = s.port ? `[\`${s.port.cls}\`](${abapUrl(s.port.file)})` : '—';
-      l.push(`| ${control} | ${js} | ${abap} |`);
+      const demo = s.entity ? `[demo kit ↗](${demokitUrl(s.entity, `${lib}.sample.${s.name}`)})` : '—';
+      l.push(`| ${control} | ${js} | ${abap} | ${demo} |`);
     }
     l.push('');
   }
