@@ -141,14 +141,13 @@ function summaryLines() {
   return l;
 }
 
-// api.md — grouped by module (library), then by control (demo kit entity).
+// api.md — one table per module (library); Control is a column.
 function controlLines() {
   const l = [];
-  l.push('Every UI5 demo kit sample by **module** and **control** (entity), marked');
-  l.push('✅ ported / ❌ missing (last column). Links are external: **Javascript** →');
-  l.push('the collected UI5 template (`ui5/`), **ABAP** → the generated class,');
-  l.push('**Link** → the live demo kit sample app. See the [README](README.md#coverage)');
-  l.push('for the per-module summary.');
+  l.push('One table per module. Each row is a UI5 demo kit sample, marked ✅ ported /');
+  l.push('❌ missing (last column). Links are external: **Control** → the demo kit');
+  l.push('entity, **Javascript** → the collected UI5 template (`ui5/`), **ABAP** → the');
+  l.push('generated class. See the [README](README.md#coverage) for the per-module summary.');
   l.push('');
 
   for (const { lib } of summary) {
@@ -156,32 +155,21 @@ function controlLines() {
     const lp = entry.samples.filter((s) => s.port).length;
     l.push(`## \`${lib}\` — ${lp}/${entry.samples.length} (${pct(lp, entry.samples.length)})`);
     l.push('');
+    l.push('| Control | Javascript | ABAP | |');
+    l.push('|---------|-----------|------|---|');
 
-    // group this module's samples by control (entity); entity-less bucket last
-    const byControl = new Map();
-    for (const s of entry.samples) {
-      const key = s.entity || '';
-      if (!byControl.has(key)) byControl.set(key, []);
-      byControl.get(key).push(s);
+    // sort by control (entity), then sample name; entity-less rows last
+    const rows = [...entry.samples].sort((a, b) =>
+      (a.entity ? 0 : 1) - (b.entity ? 0 : 1) ||
+      (a.entity || '').toLowerCase().localeCompare((b.entity || '').toLowerCase()) ||
+      a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
+    for (const s of rows) {
+      const control = s.entity ? `[\`${s.entity}\`](${demokitUrl(s.entity, `${lib}.sample.${s.name}`)})` : '—';
+      const js = s.port ? `[\`${s.name}\`](${templateUrl(lib, s.port.cls)})` : `\`${s.name}\``;
+      const abap = s.port ? `[\`${s.port.cls}\`](${abapUrl(s.port.file)})` : '—';
+      l.push(`| ${control} | ${js} | ${abap} | ${s.port ? '✅' : '❌'} |`);
     }
-    const controls = [...byControl.keys()].filter(Boolean).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
-    if (byControl.has('')) controls.push('');
-
-    for (const key of controls) {
-      const rows = byControl.get(key).sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
-      const cp = rows.filter((s) => s.port).length;
-      l.push(`### ${key ? `\`${key}\`` : '(no demo kit entity)'} — ${cp}/${rows.length} (${pct(cp, rows.length)})`);
-      l.push('');
-      l.push('| Javascript | ABAP | Link | |');
-      l.push('|-----------|------|------|---|');
-      for (const s of rows) {
-        const js = s.port ? `[\`${s.name}\`](${templateUrl(lib, s.port.cls)})` : `\`${s.name}\``;
-        const abap = s.port ? `[\`${s.port.cls}\`](${abapUrl(s.port.file)})` : '—';
-        const link = s.entity ? `[demo kit ↗](${demokitUrl(s.entity, `${lib}.sample.${s.name}`)})` : '—';
-        l.push(`| ${js} | ${abap} | ${link} | ${s.port ? '✅' : '❌'} |`);
-      }
-      l.push('');
-    }
+    l.push('');
   }
   return l;
 }

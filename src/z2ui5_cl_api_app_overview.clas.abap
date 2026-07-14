@@ -18,7 +18,6 @@ CLASS z2ui5_cl_api_app_overview DEFINITION PUBLIC.
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
 
-    METHODS on_event.
     METHODS view_display.
     METHODS get_catalog
       RETURNING
@@ -37,22 +36,7 @@ CLASS z2ui5_cl_api_app_overview IMPLEMENTATION.
       view_display( ).
     ELSEIF client->check_on_navigated( ).
       view_display( ).
-    ELSEIF client->check_on_event( ).
-      on_event( ).
     ENDIF.
-
-  ENDMETHOD.
-
-
-  METHOD on_event.
-
-    TRY.
-        DATA(classname) = to_upper( client->get( )-event ).
-        DATA li_app TYPE REF TO z2ui5_if_app.
-        CREATE OBJECT li_app TYPE (classname).
-        client->nav_app_call( li_app ).
-      CATCH cx_root ##NO_HANDLER.
-    ENDTRY.
 
   ENDMETHOD.
 
@@ -60,6 +44,9 @@ CLASS z2ui5_cl_api_app_overview IMPLEMENTATION.
   METHOD view_display.
 
     DATA(t_catalog) = get_catalog( ).
+
+    " base url to launch an app in a new browser tab
+    DATA(start) = |{ client->get( )-s_config-origin }{ client->get( )-s_config-pathname }?app_start=|.
 
     DATA(view) = z2ui5_cl_xml_view=>factory( ).
     DATA(page) = view->shell(
@@ -86,7 +73,8 @@ CLASS z2ui5_cl_api_app_overview IMPLEMENTATION.
                   class      = `sapUiTinyMarginBegin`
           )->link(
               text  = app-name
-              press = client->_event( app-app )
+              press = client->_event_client( val   = client->cs_event-open_new_tab
+                                             t_arg = VALUE #( ( |{ start }{ to_upper( app-app ) }| ) ) )
           )->link(
               text   = `demo kit`
               href   = url

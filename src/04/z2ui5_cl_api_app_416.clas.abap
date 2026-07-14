@@ -85,43 +85,43 @@ CLASS z2ui5_cl_api_app_416 IMPLEMENTATION.
                              ( n = `xmlns:mvc` v = `sap.ui.core.mvc` )
                              ( n = `xmlns:f`   v = `sap.f` ) )
 
-       )->leaf( n = `Slider`
-                a = VALUE #( ( n = `value`      v = client->_bind_edit( slider_value ) )
-                             ( n = `liveChange` v = client->_event( `SLIDER_MOVED` ) ) )
+        )->leaf( n = `Slider`
+                 a = VALUE #( ( n = `value`      v = client->_bind_edit( slider_value ) )
+                              ( n = `liveChange` v = client->_event( `SLIDER_MOVED` ) ) )
 
-       )->open( n = `Panel`
-                a = VALUE #( ( n = `id`               v = `panelForGridList` )
-                             ( n = `backgroundDesign` v = `Transparent` )
-                             ( n = `width`            v = client->_bind( panel_width ) ) )
-          )->open( `headerToolbar`
-             )->open( n = `Toolbar`
-                      a = VALUE #( ( n = `height` v = `3rem` ) )
+        )->open( n = `Panel`
+                 a = VALUE #( ( n = `id`               v = `panelForGridList` )
+                              ( n = `backgroundDesign` v = `Transparent` )
+                              ( n = `width`            v = client->_bind( panel_width ) ) )
+            )->open( `headerToolbar`
+                )->open( n = `Toolbar`
+                         a = VALUE #( ( n = `height` v = `3rem` ) )
 
-                )->leaf( n = `Title`
-                         a = VALUE #( ( n = `text` v = `GridList with default grid layout` ) )
+                    )->leaf( n = `Title`
+                             a = VALUE #( ( n = `text` v = `GridList with default grid layout` ) )
 
-             )->shut(
-          )->shut(
-          )->open( n = `GridList` ns = `f`
-                   a = VALUE #( ( n = `id`         v = `gridList` )
-                                ( n = `headerText` v = `GridList header` )
-                                ( n = `items`      v = client->_bind( t_items ) ) )
-             )->open( n = `GridListItem` ns = `f`
-                )->open( n = `VBox`
-                         a = VALUE #( ( n = `class` v = `sapUiSmallMargin` ) )
-                   )->open( `layoutData`
+                )->shut(
+            )->shut(
+            )->open( n = `GridList` ns = `f`
+                     a = VALUE #( ( n = `id`         v = `gridList` )
+                                  ( n = `headerText` v = `GridList header` )
+                                  ( n = `items`      v = client->_bind( t_items ) ) )
+                )->open( n = `GridListItem` ns = `f`
+                    )->open( n = `VBox`
+                             a = VALUE #( ( n = `class` v = `sapUiSmallMargin` ) )
+                        )->open( `layoutData`
 
-                      )->leaf( n = `FlexItemData`
-                               a = VALUE #( ( n = `growFactor`   v = `1` )
-                                            ( n = `shrinkFactor` v = `0` ) )
+                            )->leaf( n = `FlexItemData`
+                                     a = VALUE #( ( n = `growFactor`   v = `1` )
+                                                  ( n = `shrinkFactor` v = `0` ) )
 
-                   )->shut(
-                   )->leaf( n = `Title`
-                            a = VALUE #( ( n = `text`     v = `{TITLE}` )
-                                         ( n = `wrapping` v = `true` ) )
-                   )->leaf( n = `Label`
-                            a = VALUE #( ( n = `text`     v = `{SUBTITLE}` )
-                                         ( n = `wrapping` v = `true` ) ) ).
+                        )->shut(
+                        )->leaf( n = `Title`
+                                 a = VALUE #( ( n = `text`     v = `{TITLE}` )
+                                              ( n = `wrapping` v = `true` ) )
+                        )->leaf( n = `Label`
+                                 a = VALUE #( ( n = `text`     v = `{SUBTITLE}` )
+                                              ( n = `wrapping` v = `true` ) ) ).
 
     client->view_display( view->stringify( ) ).
 
