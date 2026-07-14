@@ -62,45 +62,50 @@ CLASS z2ui5_cl_api_app_454 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_api_xml=>factory( VALUE #( ( n = `xmlns` v = `sap.m` )
-                                                     ( n = `xmlns:mvc` v = `sap.ui.core.mvc` )
-                                                     ( n = `xmlns:l` v = `sap.ui.layout` )
-                                                     ( n = `xmlns:core` v = `sap.ui.core` ) ) ).
+    DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
     " showClearIcon (UI5 1.94) is omitted to stay compatible with UI5 1.71
-    view->open( n = `VerticalLayout` ns = `l`
+    view->open( n = `View` ns = `mvc`
+                a = VALUE #( ( n = `xmlns` v = `sap.m` )
+                             ( n = `xmlns:mvc` v = `sap.ui.core.mvc` )
+                             ( n = `xmlns:l` v = `sap.ui.layout` )
+                             ( n = `xmlns:core` v = `sap.ui.core` ) )
+
+       )->open( n = `VerticalLayout` ns = `l`
                 a = VALUE #( ( n = `class` v = `sapUiContentPadding` )
                              ( n = `width` v = `100%` ) )
-        )->leaf( n = `Label`
-                 a = VALUE #( ( n = `text`     v = `Enter a search term, e.g. “Notebook”, and add matching products as tokens` )
-                              ( n = `width`    v = `100%` )
-                              ( n = `labelFor` v = `multiInput` ) )
-        )->open( n = `MultiInput`
-                 a = VALUE #( ( n = `width`           v = `70%` )
-                              ( n = `id`              v = `multiInput` )
-                              ( n = `suggestionItems` v = client->_bind( t_products ) )
-                              ( n = `placeholder`     v = `Products...` )
-                              ( n = `showValueHelp`   v = z2ui5_cl_api_xml=>as_bool( abap_false ) ) )
-            )->leaf( n = `Item` ns = `core`
-                     a = VALUE #( ( n = `key`  v = `{PRODUCT_ID}` )
-                                  ( n = `text` v = `{NAME}` ) )
-        )->shut(
-        )->leaf( n = `Label`
-                 a = VALUE #( ( n = `text`     v = `MultiInput with pre-selected tokens` )
-                              ( n = `labelFor` v = `multiInput1` ) )
-        )->leaf( n = `MultiInput`
-                 a = VALUE #( ( n = `id`             v = `multiInput1` )
-                              ( n = `showSuggestion` v = z2ui5_cl_api_xml=>as_bool( abap_false ) )
-                              ( n = `width`          v = `70%` )
-                              ( n = `showValueHelp`  v = z2ui5_cl_api_xml=>as_bool( abap_false ) ) )
-        )->leaf( n = `Label`
-                 a = VALUE #( ( n = `text`     v = `MultiInput with single long token` )
-                              ( n = `labelFor` v = `multiInput2` ) )
-        )->leaf( n = `MultiInput`
-                 a = VALUE #( ( n = `id`             v = `multiInput2` )
-                              ( n = `showSuggestion` v = z2ui5_cl_api_xml=>as_bool( abap_false ) )
-                              ( n = `width`          v = `300px` )
-                              ( n = `showValueHelp`  v = z2ui5_cl_api_xml=>as_bool( abap_false ) ) ) ).
+
+          )->leaf( n = `Label`
+                   a = VALUE #( ( n = `text`     v = `Enter a search term, e.g. “Notebook”, and add matching products as tokens` )
+                                ( n = `width`    v = `100%` )
+                                ( n = `labelFor` v = `multiInput` ) )
+          )->open( n = `MultiInput`
+                   a = VALUE #( ( n = `width`           v = `70%` )
+                                ( n = `id`              v = `multiInput` )
+                                ( n = `suggestionItems` v = client->_bind( t_products ) )
+                                ( n = `placeholder`     v = `Products...` )
+                                ( n = `showValueHelp`   v = `false` ) )
+
+             )->leaf( n = `Item` ns = `core`
+                      a = VALUE #( ( n = `key`  v = `{PRODUCT_ID}` )
+                                   ( n = `text` v = `{NAME}` ) )
+          )->shut(
+          )->leaf( n = `Label`
+                   a = VALUE #( ( n = `text`     v = `MultiInput with pre-selected tokens` )
+                                ( n = `labelFor` v = `multiInput1` ) )
+          )->leaf( n = `MultiInput`
+                   a = VALUE #( ( n = `id`             v = `multiInput1` )
+                                ( n = `showSuggestion` v = `false` )
+                                ( n = `width`          v = `70%` )
+                                ( n = `showValueHelp`  v = `false` ) )
+          )->leaf( n = `Label`
+                   a = VALUE #( ( n = `text`     v = `MultiInput with single long token` )
+                                ( n = `labelFor` v = `multiInput2` ) )
+          )->leaf( n = `MultiInput`
+                   a = VALUE #( ( n = `id`             v = `multiInput2` )
+                                ( n = `showSuggestion` v = `false` )
+                                ( n = `width`          v = `300px` )
+                                ( n = `showValueHelp`  v = `false` ) ) ).
 
     client->view_display( view->stringify( ) ).
 

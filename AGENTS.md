@@ -112,13 +112,20 @@ Each generated port carries ABAP Doc directly above `CLASS ... DEFINITION`:
 
 Build the view with the generic builder **`z2ui5_cl_api_xml`** (`open` = descend
 into a container, `leaf` = childless control/stay, `shut` = ascend, `attr` = one
-attribute — all verbs 4 chars so chains align),
-translating the sample's XML 1:1 — every control / property / namespace maps
-directly, nothing is approximated. A literal boolean is just `` `true` `` /
-`` `false` ``; when the value comes from an ABAP boolean variable, wrap it with
-`z2ui5_cl_api_xml=>as_bool( flag )` (renders `true` / `false`) — a raw
-`abap_false` would otherwise serialise to an empty string. Structure
-`z2ui5_if_app~main` as a dispatcher:
+attribute — all verbs 4 chars so chains align), translating the sample's XML 1:1
+— every control / property / namespace maps directly, nothing is approximated.
+
+- **`factory( )` returns an empty root** — open the `<mvc:View>` and declare its
+  `xmlns` namespaces yourself, exactly like any other control. `ns` is the literal
+  prefix (`f`, `l`, `core`, `mvc`).
+- **Formatting**: `)->` continuations align the arrow under the head's `->`;
+  leave one **blank line after every `open( )`** before the block's content.
+- **Booleans**: a literal is just `` `true` `` / `` `false` ``; only when the
+  value comes from an ABAP boolean variable, wrap it with
+  `z2ui5_cl_api_xml=>as_bool( flag )` (a raw `abap_false` would otherwise
+  serialise to an empty string).
+
+Structure `z2ui5_if_app~main` as a dispatcher:
 
 ```abap
 METHOD z2ui5_if_app~main.

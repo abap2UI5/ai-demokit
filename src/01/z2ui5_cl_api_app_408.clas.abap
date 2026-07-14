@@ -30,17 +30,21 @@ CLASS z2ui5_cl_api_app_408 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_api_xml=>factory( VALUE #( ( n = `xmlns` v = `sap.m` )
-                                                     ( n = `xmlns:mvc` v = `sap.ui.core.mvc` ) ) ).
+    DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
-    view->open( n = `VBox`
+    view->open( n = `View` ns = `mvc`
+                a = VALUE #( ( n = `xmlns` v = `sap.m` )
+                             ( n = `xmlns:mvc` v = `sap.ui.core.mvc` ) )
+
+       )->open( n = `VBox`
                 a = VALUE #( ( n = `class` v = `sapUiSmallMargin` ) )
-        )->leaf( n = `Text`
-                 a = VALUE #( ( n = `text`
-                                v = `Lorem ipsum dolor st amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. ` &&
-                                    `At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. ` &&
-                                    `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. ` &&
-                                    `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat` ) ) ).
+
+          )->leaf( n = `Text`
+                   a = VALUE #( ( n = `text`
+                                  v = `Lorem ipsum dolor st amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. ` &&
+                                      `At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. ` &&
+                                      `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. ` &&
+                                      `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat` ) ) ).
 
     client->view_display( view->stringify( ) ).
 

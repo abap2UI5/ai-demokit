@@ -27,12 +27,12 @@ CLASS z2ui5_cl_api_xml DEFINITION PUBLIC CREATE PRIVATE.
       RETURNING
         VALUE(result) TYPE string.
 
-    "! root <mvc:View>; pass its attributes incl. the xmlns declarations, e.g.
-    "! factory( VALUE #( ( n = `xmlns` v = `sap.m` )
-    "!                   ( n = `xmlns:mvc` v = `sap.ui.core.mvc` ) ) )
+    "! returns an empty builder root; open the <mvc:View> and declare the xmlns
+    "! namespaces yourself, exactly like any other control:
+    "!   DATA(view) = z2ui5_cl_api_xml=>factory( ).
+    "!   view->open( n = `View` ns = `mvc`
+    "!               a = VALUE #( ( n = `xmlns` v = `sap.m` ) ... ) ) ...
     CLASS-METHODS factory
-      IMPORTING
-        a             TYPE ty_t_attr OPTIONAL
       RETURNING
         VALUE(result) TYPE REF TO z2ui5_cl_api_xml.
 
@@ -112,9 +112,6 @@ CLASS z2ui5_cl_api_xml IMPLEMENTATION.
 
     result = NEW #( ).
     result->root = result.
-    result->name = `View`.
-    result->prefix = `mvc`.
-    result->t_attr = a.
 
   ENDMETHOD.
 
@@ -168,8 +165,17 @@ CLASS z2ui5_cl_api_xml IMPLEMENTATION.
 
   METHOD render.
 
-    DATA(qname) = COND string( WHEN prefix IS INITIAL THEN name ELSE |{ prefix }:{ name }| ).
+    DATA(inner) = ``.
+    LOOP AT t_child INTO DATA(child).
+      inner = |{ inner }{ child->render( ) }|.
+    ENDLOOP.
 
+    IF name IS INITIAL.       " empty builder root - render only the children
+      result = inner.
+      RETURN.
+    ENDIF.
+
+    DATA(qname) = COND string( WHEN prefix IS INITIAL THEN name ELSE |{ prefix }:{ name }| ).
     DATA(attrs) = ``.
     LOOP AT t_attr INTO DATA(at).
       attrs = |{ attrs } { at-n }="{ xml_escape( at-v ) }"|.
@@ -177,14 +183,9 @@ CLASS z2ui5_cl_api_xml IMPLEMENTATION.
 
     IF t_child IS INITIAL.
       result = |<{ qname }{ attrs }/>|.
-      RETURN.
+    ELSE.
+      result = |<{ qname }{ attrs }>{ inner }</{ qname }>|.
     ENDIF.
-
-    DATA(inner) = ``.
-    LOOP AT t_child INTO DATA(child).
-      inner = |{ inner }{ child->render( ) }|.
-    ENDLOOP.
-    result = |<{ qname }{ attrs }>{ inner }</{ qname }>|.
 
   ENDMETHOD.
 

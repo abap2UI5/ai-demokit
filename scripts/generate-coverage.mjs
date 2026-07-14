@@ -141,48 +141,53 @@ function summaryLines() {
   return l;
 }
 
-// api.md — control-level detail: one section per control (demo kit entity),
-// each listing its samples. Purely by control, not by library.
+// api.md — grouped by module (library), then by control (demo kit entity).
 function controlLines() {
   const l = [];
-  l.push('Every UI5 control (demo kit entity) and its samples, marked ✅ ported /');
-  l.push('❌ missing. Links are external: **Javascript** → the collected UI5 template');
-  l.push('(`ui5/`), **ABAP** → the generated class, **Link** → the live demo kit');
-  l.push('sample app. See the [README](README.md#coverage) for the per-module summary.');
+  l.push('Every UI5 demo kit sample by **module** and **control** (entity), marked');
+  l.push('✅ ported / ❌ missing (last column). Links are external: **Javascript** →');
+  l.push('the collected UI5 template (`ui5/`), **ABAP** → the generated class,');
+  l.push('**Link** → the live demo kit sample app. See the [README](README.md#coverage)');
+  l.push('for the per-module summary.');
   l.push('');
 
-  // flatten all samples (keeping their source library) and group by control
-  const byControl = new Map(); // entity -> [{ lib, ...sample }]
-  for (const { lib, samples } of libs) {
-    for (const s of samples) {
+  for (const { lib } of summary) {
+    const entry = libs.find((e) => e.lib === lib);
+    const lp = entry.samples.filter((s) => s.port).length;
+    l.push(`## \`${lib}\` — ${lp}/${entry.samples.length} (${pct(lp, entry.samples.length)})`);
+    l.push('');
+
+    // group this module's samples by control (entity); entity-less bucket last
+    const byControl = new Map();
+    for (const s of entry.samples) {
       const key = s.entity || '';
       if (!byControl.has(key)) byControl.set(key, []);
-      byControl.get(key).push({ lib, ...s });
+      byControl.get(key).push(s);
     }
-  }
-  const controls = [...byControl.keys()].filter(Boolean).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
-  if (byControl.has('')) controls.push('');
+    const controls = [...byControl.keys()].filter(Boolean).sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()));
+    if (byControl.has('')) controls.push('');
 
-  for (const key of controls) {
-    const rows = byControl.get(key).sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
-    const cp = rows.filter((s) => s.port).length;
-    l.push(`## ${key ? `\`${key}\`` : '(no demo kit entity)'} — ${cp}/${rows.length} (${pct(cp, rows.length)})`);
-    l.push('');
-    l.push('| | Javascript | ABAP | Link |');
-    l.push('|---|-----------|------|------|');
-    for (const s of rows) {
-      const js = s.port ? `[\`${s.name}\`](${templateUrl(s.lib, s.port.cls)})` : `\`${s.name}\``;
-      const abap = s.port ? `[\`${s.port.cls}\`](${abapUrl(s.port.file)})` : '—';
-      const link = s.entity ? `[demo kit ↗](${demokitUrl(s.entity, `${s.lib}.sample.${s.name}`)})` : '—';
-      l.push(`| ${s.port ? '✅' : '❌'} | ${js} | ${abap} | ${link} |`);
+    for (const key of controls) {
+      const rows = byControl.get(key).sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
+      const cp = rows.filter((s) => s.port).length;
+      l.push(`### ${key ? `\`${key}\`` : '(no demo kit entity)'} — ${cp}/${rows.length} (${pct(cp, rows.length)})`);
+      l.push('');
+      l.push('| Javascript | ABAP | Link | |');
+      l.push('|-----------|------|------|---|');
+      for (const s of rows) {
+        const js = s.port ? `[\`${s.name}\`](${templateUrl(lib, s.port.cls)})` : `\`${s.name}\``;
+        const abap = s.port ? `[\`${s.port.cls}\`](${abapUrl(s.port.file)})` : '—';
+        const link = s.entity ? `[demo kit ↗](${demokitUrl(s.entity, `${lib}.sample.${s.name}`)})` : '—';
+        l.push(`| ${js} | ${abap} | ${link} | ${s.port ? '✅' : '❌'} |`);
+      }
+      l.push('');
     }
-    l.push('');
   }
   return l;
 }
 
-// api.md — control-level detail
-const coverage = ['# abap2UI5 — coverage by control', '', ...controlLines()];
+// api.md — module -> control detail
+const coverage = ['# abap2UI5 — sample coverage', '', ...controlLines()];
 fs.writeFileSync(COVERAGE, coverage.join('\n').trimEnd() + '\n');
 
 // README — splice the per-module summary between the coverage markers
