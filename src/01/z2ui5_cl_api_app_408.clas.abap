@@ -33,7 +33,7 @@ CLASS z2ui5_cl_api_app_408 IMPLEMENTATION.
     DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
-                a = VALUE #( ( n = `xmlns` v = `sap.m` )
+                a = VALUE #( ( n = `xmlns`     v = `sap.m` )
                              ( n = `xmlns:mvc` v = `sap.ui.core.mvc` ) )
 
        )->open( n = `VBox`

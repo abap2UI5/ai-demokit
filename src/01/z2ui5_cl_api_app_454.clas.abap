@@ -66,9 +66,9 @@ CLASS z2ui5_cl_api_app_454 IMPLEMENTATION.
 
     " showClearIcon (UI5 1.94) is omitted to stay compatible with UI5 1.71
     view->open( n = `View` ns = `mvc`
-                a = VALUE #( ( n = `xmlns` v = `sap.m` )
-                             ( n = `xmlns:mvc` v = `sap.ui.core.mvc` )
-                             ( n = `xmlns:l` v = `sap.ui.layout` )
+                a = VALUE #( ( n = `xmlns`      v = `sap.m` )
+                             ( n = `xmlns:mvc`  v = `sap.ui.core.mvc` )
+                             ( n = `xmlns:l`    v = `sap.ui.layout` )
                              ( n = `xmlns:core` v = `sap.ui.core` ) )
 
        )->open( n = `VerticalLayout` ns = `l`

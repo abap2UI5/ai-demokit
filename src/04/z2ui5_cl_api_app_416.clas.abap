@@ -81,9 +81,9 @@ CLASS z2ui5_cl_api_app_416 IMPLEMENTATION.
     DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
-                a = VALUE #( ( n = `xmlns` v = `sap.m` )
+                a = VALUE #( ( n = `xmlns`     v = `sap.m` )
                              ( n = `xmlns:mvc` v = `sap.ui.core.mvc` )
-                             ( n = `xmlns:f` v = `sap.f` ) )
+                             ( n = `xmlns:f`   v = `sap.f` ) )
 
        )->leaf( n = `Slider`
                 a = VALUE #( ( n = `value`      v = client->_bind_edit( slider_value ) )
