@@ -104,9 +104,9 @@ const abap = `"! Generated overview app - lists every abap2UI5 api sample app in
 "! In the Sample column the name links the OpenUI5 source and the ↗ starts the
 "! live OpenUI5 sample; in the abap2UI5 column the class name links the generated
 "! ABAP class and the ↗ starts the app; Control links the OpenUI5 API - all
-"! opening in a new browser tab. The Note column shows a hint button whose
-"! tooltip carries the port's generation caveats when present. Do not edit by
-"! hand - regenerate with scripts/generate-overview.mjs
+"! opening in a new browser tab. The Note column shows a hint button that opens
+"! a popup with the port's generation caveats when present. Do not edit by hand -
+"! regenerate with scripts/generate-overview.mjs
 CLASS ${CLASS} DEFINITION PUBLIC.
 
   PUBLIC SECTION.
@@ -136,6 +136,7 @@ CLASS ${CLASS} DEFINITION PUBLIC.
     DATA client TYPE REF TO z2ui5_if_client.
 
     METHODS view_display.
+    METHODS on_event.
     METHODS get_catalog
       RETURNING
         VALUE(result) TYPE ty_t_app.
@@ -153,7 +154,46 @@ CLASS ${CLASS} IMPLEMENTATION.
       view_display( ).
     ELSEIF client->check_on_navigated( ).
       view_display( ).
+    ELSEIF client->check_on_event( ).
+      on_event( ).
     ENDIF.
+
+  ENDMETHOD.
+
+
+  METHOD on_event.
+
+    CASE client->get( )-event.
+
+      WHEN \`SHOW_NOTES\`.
+        " one Text per bullet of the clicked row's generation notes
+        SPLIT client->get_event_arg( 1 ) AT \` // \` INTO TABLE DATA(lt_line).
+
+        DATA(popup) = z2ui5_cl_api_xml=>factory( ).
+        DATA(box) = popup->open( n = \`FragmentDefinition\` ns = \`core\`
+            )->a( n = \`xmlns\`      v = \`sap.m\`
+            )->a( n = \`xmlns:core\` v = \`sap.ui.core\`
+
+            )->open( \`Dialog\`
+                )->a( n = \`title\`        v = \`Generation notes\`
+                )->a( n = \`contentWidth\` v = \`34rem\`
+
+                )->open( \`VBox\`
+                    )->a( n = \`class\` v = \`sapUiContentPadding\` ).
+
+        LOOP AT lt_line INTO DATA(lv_line).
+          box->leaf( \`Text\`
+              )->a( n = \`text\` v = lv_line ).
+        ENDLOOP.
+
+        box->shut( )->open( \`endButton\`
+            )->leaf( \`Button\`
+                )->a( n = \`text\`  v = \`Close\`
+                )->a( n = \`press\` v = client->_event_client( client->cs_event-popup_close ) ).
+
+        client->popup_display( popup->stringify( ) ).
+
+    ENDCASE.
 
   ENDMETHOD.
 
@@ -271,7 +311,8 @@ CLASS ${CLASS} IMPLEMENTATION.
                                     )->a( n = \`icon\`    v = \`sap-icon://hint\`
                                     )->a( n = \`type\`    v = \`Transparent\`
                                     )->a( n = \`tooltip\` v = \`{NOTES}\`
-                                    )->a( n = \`visible\` v = \`{HAS_NOTES}\` ).
+                                    )->a( n = \`visible\` v = \`{HAS_NOTES}\`
+                                    )->a( n = \`press\`   v = client->_event( val = \`SHOW_NOTES\` t_arg = VALUE #( ( \`{NOTES}\` ) ) ) ).
 
     client->view_display( view->stringify( ) ).
 
