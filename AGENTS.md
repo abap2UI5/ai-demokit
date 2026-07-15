@@ -502,6 +502,10 @@ the ports share that style. Essentials:
   `check_on_navigated( )` branch.
 - Build views with `z2ui5_cl_xml_view` (typed) or `z2ui5_cl_util_xml` (generic);
   `client->view_display( view->stringify( ) )` as a standalone final statement.
+- **ABAP Doc (`"!`) is parsed as HTML.** A raw `<…>` is read as an HTML tag, so
+  never put a literal UI5 element (`<mvc:View>`) or any other `<tag>` in a `"!`
+  comment — write it plain (`mvc:View element`). A `<tag>` there is flagged as an
+  unsupported *and* unclosed HTML tag (was a warning on `z2ui5_cl_api_xml`).
 
 **Run `abaplint` after every change — 0 issues before committing.**
 
@@ -511,3 +515,40 @@ the ports share that style. Essentials:
 
 * [abap2UI5](https://github.com/abap2UI5/abap2UI5) — the framework the ports run on.
 * [OpenUI5](https://github.com/SAP/openui5) — the source of the demo kit samples.
+
+---
+
+## 10. Lessons learned — capture them, never repeat them
+
+**This file is the project's memory. Whenever you discover and fix a non-obvious
+mistake, write the rule back here in the same change — before you finish.** That
+is the only mechanism that stops the next agent (or you, next session) from
+making it again: every agent reads this file first, nothing else is guaranteed to
+be read. No automation can judge what is worth recording, so this is a manual
+discipline, not a background job.
+
+What counts as worth capturing: a CI/linter rule you did not know, a framework
+quirk, a wrong assumption you had to unlearn, a tool that behaved destructively.
+What does not: a one-off typo, anything already stated above.
+
+How to record it:
+
+- Put the rule where an agent will hit it — a **step-specific** lesson goes in
+  that step's section (e.g. an event-arg rule in §5 "Data binding & events"); a
+  **cross-cutting** one goes in the list below or §8.
+- Write the **rule**, not the war story: one line on what to do / avoid, and a
+  short why. Reference the app or class where it bit us, so it can be checked.
+- Keep it deduplicated — extend the existing bullet rather than adding a second.
+
+### Known gotchas (cross-cutting)
+
+- **`npm run downport` rewrites the working tree in place** — it runs
+  `abaplint --fix` over every `src/**` file *and overwrites `abaplint.jsonc`* with
+  the 702 config. Never run it on the tree you intend to commit; run it in a
+  throwaway `git worktree` (or copy) and check `abap_702.jsonc` there. If you did
+  run it in place, `git checkout -- .` to restore before committing.
+- **ABAP Doc (`"!`) is HTML** — no raw `<tag>` (e.g. `<mvc:View>`); see §8.
+- **Event args need the `$`-prefixed form** (`${COL}`, `$event.oSource.sId`), not
+  a bare `{COL}` — see §5 "Data binding & events".
+- **abap2UI5 has only one default model** — flatten any named-model binding into
+  it — see §5 "`model_init` — the model".
