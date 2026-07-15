@@ -1,23 +1,46 @@
 name: auto_downport
 
-# Rebuilds the 702 branch via auto_branch.yaml: downports the sources,
-# lints with the 702 config and force-pushes.
+# Rebuilds the 702 branch: downports the sources, lints with the 702 config
+# and force-pushes the result to the 702 branch.
 
 on:
   push:
     branches: [main]
 
-permissions:
-  contents: write
-
 concurrency:
   group: auto_downport
   cancel-in-progress: false
 
+permissions:
+  contents: read
+
 jobs:
   auto_downport:
-    uses: ./.github/workflows/auto_branch.yaml
-    with:
-      branch: '702'
-      do_downport: true
-      lint_config: .github/abaplint/abap_702.jsonc
+    if: github.repository == 'abap2UI5/api'
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
+
+    - name: Set up Node.js
+      uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e # v6.4.0
+      with:
+        node-version: '22'
+        cache: 'npm'
+
+    - run: npm ci
+    - run: npm run downport
+    - run: npx abaplint .github/abaplint/abap_702.jsonc
+
+    - name: Commit and Push Changes
+      run: |
+        git config --global user.name 'github-actions[bot]'
+        git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+        git add .
+        git diff --staged --quiet || git commit -m "Downport changes"
+        git push --force origin HEAD:702
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
