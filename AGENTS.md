@@ -286,6 +286,28 @@ client->view_display( view->stringify( ) ).
   `selected`, `${$parameters>/selected}`) already arrives as `abap_bool`
   (`X` / space), **not** the string `` `true` `` — assign it straight into an
   `abap_bool` field (`flag = client->get_event_arg( 1 ).`); never test `… = \`true\``.
+- **Passing a value *into* an event uses the `$`-prefixed form — never a bare
+  `{…}`.** The runtime (`z2ui5_cl_core_srv_event=>get_t_arg`) sends every
+  `t_arg` entry that starts with `$` or `{` to the frontend **verbatim** and
+  wraps everything else in quotes as a string literal. Only a **`$`-prefixed**
+  arg is then resolved by UI5 (against the row's binding context / the event
+  object) before the round-trip; a bare-brace `{…}` is *not* resolved and the
+  value reaches `get_event_arg( )` empty. So the same model column that is a
+  correct **property** binding as `` `{NOTES}` `` in an attribute
+  (`)->a( n = \`tooltip\` v = \`{NOTES}\``) must be written `` `${NOTES}` `` in a
+  `t_arg` (`t_arg = VALUE #( ( \`${NOTES}\` ) )`). This exact confusion was the
+  overview-app bug (`{NOTES}` → `${NOTES}`) — the property-binding brace form
+  was wrongly reused as an event arg. The same `$`-prefix rule covers the UI5
+  event object: `` `$event.oSource.sId` `` (the pressed control's id — app 526),
+  `` `${$source>/text}` `` (a bound property of the event source — app 530),
+  `` `$event.mParameters.selectedItems` `` (app 401).
+- **Don't fake a value you can actually read from the event.** When the original
+  controller reads something off the event/source (`evt.getSource().getId()`,
+  `evt.getParameter(...)`), transport it with the `$event.…` arg above and read
+  it back with `get_event_arg( )` — do **not** substitute a static placeholder.
+  App 526 originally toasted a hard-coded `` `Button Pressed` `` on the wrong
+  assumption that the client-side control id could not reach the backend; it can,
+  via `` `$event.oSource.sId` ``.
 
 #### Booleans
 
