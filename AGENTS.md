@@ -186,6 +186,16 @@ filled with `VALUE #( ( … ) ( … ) )`. Field names are the JSON keys, upper-c
 by ABAP; bindings reference them in braces (`{TITLE}`, `{PRODUCT_ID}`). Keep the
 data verbatim from the sample (same rows, same text). See app 416 / 454.
 
+**abap2UI5 serves a single default model — there are no named models.** A sample
+that binds against a named model (`img>/products/pic1`, a separate `JSONModel`,
+`sap/ui/demo/mock/*.json`) must be **flattened** into the one default model:
+merge the extra model's fields into the row type, or — for pure display assets
+like image URLs that are the same for every row — inline them as literals /
+build them from a shared base (a non-bound `base_url` kept in `PROTECTED`, not
+`PUBLIC`, so the round-trip model scan stays small). Record the flattening as an
+`IMPROVISED:` note. Worked example: app 420 (`sap.m.Carousel`, `img>` model →
+static image URLs).
+
 #### `view_display` — the view via `z2ui5_cl_api_xml`
 
 Build the view with the generic builder **`z2ui5_cl_api_xml`**. It translates a
@@ -308,6 +318,17 @@ client->view_display( view->stringify( ) ).
   App 526 originally toasted a hard-coded `` `Button Pressed` `` on the wrong
   assumption that the client-side control id could not reach the backend; it can,
   via `` `$event.oSource.sId` ``.
+- **A property computed from several bound values → a UI5 expression binding
+  `{= … }`.** Capture each bind handle once
+  (`DATA(child1_bind) = client->_bind_edit( child1 ).`), reuse it both as a plain
+  binding (`v = child1_bind`) and inside the expression, embedding every handle
+  with `${ … }`. Build the expression with an ABAP string template, escaping the
+  UI5 braces and any pipes: e.g. a "select all"/"partially selected" pair —
+  `` v = |\{= ${ child1_bind } \|\| ${ child2_bind } \|\| ${ child3_bind } \}| `` (OR)
+  and `` v = |\{= !(${ child1_bind } && ${ child2_bind } && ${ child3_bind })\}| ``
+  (NOT-AND). Worked example: app 421 (`sap.m.CheckBox` tri-state parent). Do the
+  logic in the binding, not by round-tripping — no event needed to keep the
+  parent box in sync.
 
 #### Booleans
 

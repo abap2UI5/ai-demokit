@@ -1,6 +1,8 @@
 "! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
 "! sap.m.CheckBox - CheckBoxTriState
 "! https://sdk.openui5.org/entity/sap.m.CheckBox/sample/sap.m.sample.CheckBoxTriState
+"! CHECKED (2026-07-15): manually verified in a running system - the select-all
+"! parent checkbox and its tri-state expression bindings behave like the original.
 CLASS z2ui5_cl_api_app_421 DEFINITION PUBLIC.
 
   PUBLIC SECTION.
