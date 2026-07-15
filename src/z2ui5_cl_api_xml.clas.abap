@@ -1,12 +1,12 @@
 "! Generic UI5 XML view builder - translate a UI5 XML view 1:1 by method
-"! chaining. Navigate the tree with (all verbs 4 chars, so chains align):
+"! chaining. Navigate the tree with:
 "!   open  - add a child control/aggregation and DESCEND into it (returns child)
 "!   leaf  - add a childless control but STAY on the current node (returns same)
 "!   shut  - ASCEND to the parent (returns parent)
-"!   attr  - add one attribute to the control just opened/leaf'd (returns same)
+"!   a     - add one attribute to the control just opened/leaf'd (returns same)
 "! Element = n (name), namespace prefix = ns (e.g. `f`, `core`, `l`).
-"! Attributes are added with attr( n = `key` v = `value` ) chained right after
-"! the control's open/leaf - attr always targets that control (the last child,
+"! Attributes are added with a( n = `key` v = `value` ) chained right after
+"! the control's open/leaf - a always targets that control (the last child,
 "! or the node itself). `v` may be any string expression (literal, a client
 "! bind/event, || template). Alternatively pass attributes up front to open/leaf
 "! via a = a flat table of `key=value` strings (split on the first `=`).
@@ -32,8 +32,8 @@ CLASS z2ui5_cl_api_xml DEFINITION PUBLIC CREATE PRIVATE.
     "! namespaces yourself, exactly like any other control:
     "!   DATA(view) = z2ui5_cl_api_xml=>factory( ).
     "!   view->open( n = `View` ns = `mvc`
-    "!       )->attr( n = `xmlns`     v = `sap.m`
-    "!       )->attr( n = `xmlns:mvc` v = `sap.ui.core.mvc` ) ...
+    "!       )->a( n = `xmlns`     v = `sap.m`
+    "!       )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc` ) ...
     CLASS-METHODS factory
       RETURNING
         VALUE(result) TYPE REF TO z2ui5_cl_api_xml.
@@ -54,7 +54,7 @@ CLASS z2ui5_cl_api_xml DEFINITION PUBLIC CREATE PRIVATE.
       RETURNING
         VALUE(result) TYPE REF TO z2ui5_cl_api_xml.
 
-    METHODS attr
+    METHODS a
       IMPORTING
         n             TYPE string
         v             TYPE string
@@ -178,7 +178,7 @@ CLASS z2ui5_cl_api_xml IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD attr.
+  METHOD a.
 
     " set the attribute on the element the chain is currently pointing at:
     " the just-added child (after open/leaf) or - if none yet - this node

@@ -1,7 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.FacetFilter/sample/sap.m.sample.FacetFilterLight
-"! This is a 'Light' version of the Facet Filter. It is for small displays where only a selectable
-"! summary bar is shown, and a dialog is shown for setting the facet values.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.FacetFilter - FacetFilterLight
+"! https://sdk.openui5.org/entity/sap.m.FacetFilter/sample/sap.m.sample.FacetFilterLight
 CLASS z2ui5_cl_api_app_401 DEFINITION PUBLIC.
 
   PUBLIC SECTION.
@@ -26,18 +25,20 @@ CLASS z2ui5_cl_api_app_401 DEFINITION PUBLIC.
         count TYPE i,
       END OF ty_s_facet.
     TYPES ty_t_facet TYPE STANDARD TABLE OF ty_s_facet WITH EMPTY KEY.
-    DATA t_products     TYPE ty_t_product.
-    DATA t_products_all TYPE ty_t_product.
-    DATA t_categories   TYPE ty_t_facet.
-    DATA t_suppliers    TYPE ty_t_facet.
+    DATA t_products   TYPE ty_t_product.
+    DATA t_categories TYPE ty_t_facet.
+    DATA t_suppliers  TYPE ty_t_facet.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
+    " not bound - kept out of PUBLIC so the round-trip model scan stays small
+    DATA t_products_all   TYPE ty_t_product.
     DATA t_range_category TYPE RANGE OF string.
     DATA t_range_supplier TYPE RANGE OF string.
 
-    METHODS set_data.
+    METHODS data_init.
     METHODS view_display.
+    METHODS on_event.
     METHODS on_event_list_close
       IMPORTING
         facet TYPE string.
@@ -52,27 +53,16 @@ CLASS z2ui5_cl_api_app_401 IMPLEMENTATION.
 
     me->client = client.
     IF client->check_on_init( ).
-
-      set_data( ).
+      data_init( ).
       view_display( ).
-
-    ELSEIF client->check_on_event( `RESET` ).
-
-      t_range_category = VALUE #( ).
-      t_range_supplier = VALUE #( ).
-      t_products = t_products_all.
-      client->view_model_update( ).
-
-    ELSEIF client->check_on_event( `LIST_CLOSE_CATEGORY` ).
-      on_event_list_close( `CATEGORY` ).
-    ELSEIF client->check_on_event( `LIST_CLOSE_SUPPLIER` ).
-      on_event_list_close( `SUPPLIER` ).
+    ELSEIF client->check_on_event( ).
+      on_event( ).
     ENDIF.
 
   ENDMETHOD.
 
 
-  METHOD set_data.
+  METHOD data_init.
 
     " Data taken from the shared mock data sap/ui/demo/mock/products.json of the original sample
     t_products = VALUE #(
@@ -105,69 +95,154 @@ CLASS z2ui5_cl_api_app_401 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_xml_view=>factory( ).
-    DATA(vbox) = view->vbox( id = `idVBox` ).
+    " The bound lists collection of the original is unrolled into two static facet filter lists;
+    " the original controller appends the demo table of sap.m.sample.Table with an adjusted first column.
+    DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
-    " The bound lists collection of the original is unrolled into two static facet filter lists
-    vbox->facet_filter( id                  = `idFacetFilter`
-                        type                = `Light`
-                        showpersonalization = abap_true
-                        showreset           = abap_true
-                        reset               = client->_event( `RESET` )
-        )->facet_filter_list( title     = `Category`
-                              key       = `Category`
-                              mode      = `MultiSelect`
-                              listclose = client->_event( val   = `LIST_CLOSE_CATEGORY`
-                                                          t_arg = VALUE #( ( `$event.mParameters.selectedItems` ) ) )
-                              items     = client->_bind( t_categories )
-            )->facet_filter_item( text    = `{TEXT}`
-                                  key     = `{TEXT}`
-                                  counter = `{COUNT}` )->get_parent( )->get_parent(
-        )->facet_filter_list( title     = `SupplierName`
-                              key       = `SupplierName`
-                              mode      = `MultiSelect`
-                              listclose = client->_event( val   = `LIST_CLOSE_SUPPLIER`
-                                                          t_arg = VALUE #( ( `$event.mParameters.selectedItems` ) ) )
-                              items     = client->_bind( t_suppliers )
-            )->facet_filter_item( text    = `{TEXT}`
-                                  key     = `{TEXT}`
-                                  counter = `{COUNT}` ).
+    view->open( n = `View` ns = `mvc`
+        )->a( n = `xmlns`     v = `sap.m`
+        )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
-    " The original controller appends the demo table of sap.m.sample.Table with an adjusted first column
-    DATA(tab) = vbox->table( id    = `idProductsTable`
-                             inset = abap_false
-                             items = client->_bind( t_products ) ).
+        )->open( `VBox`
+            )->a( n = `id` v = `idVBox`
 
-    tab->header_toolbar(
-       )->overflow_toolbar(
-           )->title( text  = `Products`
-                     level = `H2`
-           )->toolbar_spacer( ).
+            )->open( `FacetFilter`
+                )->a( n = `id`                  v = `idFacetFilter`
+                )->a( n = `type`                v = `Light`
+                )->a( n = `showPersonalization` v = `true`
+                )->a( n = `showReset`           v = `true`
+                )->a( n = `reset`               v = client->_event( `RESET` )
 
-    DATA(columns) = tab->columns( ).
-    columns->column( `12em` )->text( `Product` ).
-    columns->column( minscreenwidth = `Tablet`
-                     demandpopin    = abap_true )->text( `Supplier` ).
-    columns->column( minscreenwidth = `Desktop`
-                     demandpopin    = abap_true
-                     halign         = `End` )->text( `Dimensions` ).
-    columns->column( minscreenwidth = `Desktop`
-                     demandpopin    = abap_true
-                     halign         = `Center` )->text( `Weight` ).
-    columns->column( halign = `End` )->text( `Price` ).
+                )->open( `FacetFilterList`
+                    )->a( n = `title`     v = `Category`
+                    )->a( n = `key`       v = `Category`
+                    )->a( n = `mode`      v = `MultiSelect`
+                    )->a( n = `listClose` v = client->_event( val   = `LIST_CLOSE_CATEGORY`
+                                                                 t_arg = VALUE #( ( `$event.mParameters.selectedItems` ) ) )
+                    )->a( n = `items`     v = client->_bind_edit( t_categories )
 
-    DATA(cells) = tab->items( )->column_list_item( valign = `Middle` )->cells( ).
-    cells->object_identifier( title = `{NAME}`
-                              text  = `{CATEGORY}` )->get_parent( ).
-    cells->text( `{SUPPLIER_NAME}` ).
-    cells->text( `{DIMENSIONS}` ).
-    cells->object_number( number = `{WEIGHT_MEASURE}`
-                          unit   = `{WEIGHT_UNIT}`
-                          state  = `{WEIGHT_STATE}` ).
-    cells->object_number( number = `{PRICE}`
-                          unit   = `{CURRENCY_CODE}` ).
+                    )->leaf( `FacetFilterItem`
+                        )->a( n = `text`    v = `{TEXT}`
+                        )->a( n = `key`     v = `{TEXT}`
+                        )->a( n = `counter` v = `{COUNT}`
+
+                )->shut(
+                )->open( `FacetFilterList`
+                    )->a( n = `title`     v = `SupplierName`
+                    )->a( n = `key`       v = `SupplierName`
+                    )->a( n = `mode`      v = `MultiSelect`
+                    )->a( n = `listClose` v = client->_event( val   = `LIST_CLOSE_SUPPLIER`
+                                                                 t_arg = VALUE #( ( `$event.mParameters.selectedItems` ) ) )
+                    )->a( n = `items`     v = client->_bind_edit( t_suppliers )
+
+                    )->leaf( `FacetFilterItem`
+                        )->a( n = `text`    v = `{TEXT}`
+                        )->a( n = `key`     v = `{TEXT}`
+                        )->a( n = `counter` v = `{COUNT}`
+
+                )->shut(
+            )->shut(
+
+            )->open( `Table`
+                )->a( n = `id`    v = `idProductsTable`
+                )->a( n = `inset` v = `false`
+                )->a( n = `items` v = client->_bind_edit( t_products )
+
+                )->open( `headerToolbar`
+                    )->open( `OverflowToolbar`
+                        )->leaf( `Title`
+                            )->a( n = `text`  v = `Products`
+                            )->a( n = `level` v = `H2`
+                        )->leaf( `ToolbarSpacer`
+
+                    )->shut(
+                )->shut(
+
+                )->open( `columns`
+                    )->open( `Column`
+                        )->a( n = `width` v = `12em`
+
+                        )->leaf( `Text`
+                            )->a( n = `text` v = `Product`
+
+                    )->shut(
+                    )->open( `Column`
+                        )->a( n = `minScreenWidth` v = `Tablet`
+                        )->a( n = `demandPopin`    v = `true`
+
+                        )->leaf( `Text`
+                            )->a( n = `text` v = `Supplier`
+
+                    )->shut(
+                    )->open( `Column`
+                        )->a( n = `minScreenWidth` v = `Desktop`
+                        )->a( n = `demandPopin`    v = `true`
+                        )->a( n = `hAlign`         v = `End`
+
+                        )->leaf( `Text`
+                            )->a( n = `text` v = `Dimensions`
+
+                    )->shut(
+                    )->open( `Column`
+                        )->a( n = `minScreenWidth` v = `Desktop`
+                        )->a( n = `demandPopin`    v = `true`
+                        )->a( n = `hAlign`         v = `Center`
+
+                        )->leaf( `Text`
+                            )->a( n = `text` v = `Weight`
+
+                    )->shut(
+                    )->open( `Column`
+                        )->a( n = `hAlign` v = `End`
+
+                        )->leaf( `Text`
+                            )->a( n = `text` v = `Price`
+
+                    )->shut(
+                )->shut(
+
+                )->open( `items`
+                    )->open( `ColumnListItem`
+                        )->a( n = `vAlign` v = `Middle`
+
+                        )->open( `cells`
+                            )->leaf( `ObjectIdentifier`
+                                )->a( n = `title` v = `{NAME}`
+                                )->a( n = `text`  v = `{CATEGORY}`
+                            )->leaf( `Text`
+                                )->a( n = `text` v = `{SUPPLIER_NAME}`
+                            )->leaf( `Text`
+                                )->a( n = `text` v = `{DIMENSIONS}`
+                            )->leaf( `ObjectNumber`
+                                )->a( n = `number` v = `{WEIGHT_MEASURE}`
+                                )->a( n = `unit`   v = `{WEIGHT_UNIT}`
+                                )->a( n = `state`  v = `{WEIGHT_STATE}`
+                            )->leaf( `ObjectNumber`
+                                )->a( n = `number` v = `{PRICE}`
+                                )->a( n = `unit`   v = `{CURRENCY_CODE}` ).
 
     client->view_display( view->stringify( ) ).
+
+  ENDMETHOD.
+
+
+  METHOD on_event.
+
+    CASE client->get( )-event.
+
+      WHEN `RESET`.
+        t_range_category = VALUE #( ).
+        t_range_supplier = VALUE #( ).
+        t_products = t_products_all.
+        client->view_model_update( ).
+
+      WHEN `LIST_CLOSE_CATEGORY`.
+        on_event_list_close( `CATEGORY` ).
+
+      WHEN `LIST_CLOSE_SUPPLIER`.
+        on_event_list_close( `SUPPLIER` ).
+
+    ENDCASE.
 
   ENDMETHOD.
 

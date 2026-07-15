@@ -1,7 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.ComboBox/sample/sap.m.sample.ComboBox
-"! The combo box control provides a list box with items and a text field allowing the user to either
-"! type a value directly into the control or choose from the list of existing items.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.ComboBox - ComboBox
+"! https://sdk.openui5.org/entity/sap.m.ComboBox/sample/sap.m.sample.ComboBox
 CLASS z2ui5_cl_api_app_423 DEFINITION PUBLIC.
 
   PUBLIC SECTION.
@@ -17,9 +16,8 @@ CLASS z2ui5_cl_api_app_423 DEFINITION PUBLIC.
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
 
-    METHODS view_display
-      IMPORTING
-        client TYPE REF TO z2ui5_if_client.
+    METHODS data_init.
+    METHODS view_display.
 
   PRIVATE SECTION.
 ENDCLASS.
@@ -27,7 +25,7 @@ ENDCLASS.
 
 CLASS z2ui5_cl_api_app_423 IMPLEMENTATION.
 
-  METHOD view_display.
+  METHOD data_init.
 
     " Data of the mock model sap/ui/demo/mock/countriesExtendedCollection.json used by the original sample
     t_countries = VALUE #(
@@ -102,20 +100,35 @@ CLASS z2ui5_cl_api_app_423 IMPLEMENTATION.
       ( key = `GB` text = `United Kingdom` )
       ( key = `YE` text = `Yemen` ) ).
 
-    " the original sorts the items by text via a model sorter - the data is sorted in ABAP instead
+    " the original binds items with a model sorter { path: 'text' } - the data is sorted in ABAP instead
     SORT t_countries BY text.
 
-    DATA(page) = z2ui5_cl_xml_view=>factory( ).
+  ENDMETHOD.
 
-    page->page(
-        showheader = abap_false
-        class      = `sapUiContentPadding`
-        )->combobox( items = client->_bind( t_countries )
-            )->item(
-                key  = `{KEY}`
-                text = `{TEXT}` ).
 
-    client->view_display( page->stringify( ) ).
+  METHOD view_display.
+
+    DATA(view) = z2ui5_cl_api_xml=>factory( ).
+
+    view->open( n = `View` ns = `mvc`
+        )->a( n = `height`     v = `100%`
+        )->a( n = `xmlns:core` v = `sap.ui.core`
+        )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
+        )->a( n = `xmlns`      v = `sap.m`
+
+        )->open( `Page`
+            )->a( n = `showHeader` v = `false`
+            )->a( n = `class`      v = `sapUiContentPadding`
+
+            )->open( `content`
+                )->open( `ComboBox`
+                    )->a( n = `items` v = client->_bind_edit( t_countries )
+
+                    )->leaf( n = `Item` ns = `core`
+                        )->a( n = `key`  v = `{KEY}`
+                        )->a( n = `text` v = `{TEXT}` ).
+
+    client->view_display( view->stringify( ) ).
 
   ENDMETHOD.
 
@@ -123,9 +136,9 @@ CLASS z2ui5_cl_api_app_423 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-
     IF client->check_on_init( ).
-      view_display( client ).
+      data_init( ).
+      view_display( ).
     ENDIF.
 
   ENDMETHOD.

@@ -1,22 +1,27 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.PDFViewer/sample/sap.m.sample.PDFViewerPopup
-"! A PDF viewer opening as a popup dialog.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.PDFViewer - PDFViewerPopup
+"! https://sdk.openui5.org/entity/sap.m.PDFViewer/sample/sap.m.sample.PDFViewerPopup
+"! NOTES (generation):
+"! - IMPROVISED: the sample's onInit gives each Image its own JSONModel and onPress
+"!   opens a controller-created sap.m.PDFViewer in popup mode via JavaScript. Here the
+"!   per-image Source/Preview URLs are resolved statically and the PDFViewer is embedded
+"!   into a sap.m.Dialog opened on the press event instead.
+"! - 1.71: the PDFViewer property isTrustedSource of the original is omitted - it is
+"!   available only in UI5 releases higher than 1.71.
+"! - LIVE-TEST: confirm the PDFViewer renders inside the dialog at height 100% in a
+"!   running system.
 CLASS z2ui5_cl_api_app_469 DEFINITION PUBLIC.
 
   PUBLIC SECTION.
     INTERFACES z2ui5_if_app.
 
-    DATA pdf_source TYPE string.
-
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
+    " not bound - helper state kept out of PUBLIC so the round-trip model scan stays small
+    DATA pdf_source TYPE string.
 
-    METHODS view_display
-      IMPORTING
-        client TYPE REF TO z2ui5_if_client.
-    METHODS on_event
-      IMPORTING
-        client TYPE REF TO z2ui5_if_client.
+    METHODS view_display.
+    METHODS on_event.
     METHODS popup_display.
 
   PRIVATE SECTION.
@@ -30,20 +35,28 @@ CLASS z2ui5_cl_api_app_469 IMPLEMENTATION.
     " images and PDF files of the original sample sap/m/demokit/sample/PDFViewerPopup
     DATA(base_url) = `https://sdk.openui5.org/test-resources/sap/m/demokit/sample/PDFViewerPopup/`.
 
-    DATA(view) = z2ui5_cl_xml_view=>factory( ).
-    view->carousel(
-        class = `sapUiContentPadding`
-        loop  = abap_true
-        )->image(
-            id    = `image1`
-            src   = base_url && `sample1.jpg`
-            alt   = `Example Picture 1`
-            press = client->_event( val = `SHOW_PDF` t_arg = VALUE #( ( `sample1.pdf` ) ) )
-        )->image(
-            id    = `image2`
-            src   = base_url && `sample2.jpg`
-            alt   = `Example Picture 2`
-            press = client->_event( val = `SHOW_PDF` t_arg = VALUE #( ( `sample2.pdf` ) ) ) ).
+    DATA(view) = z2ui5_cl_api_xml=>factory( ).
+
+    view->open( n = `View` ns = `mvc`
+        )->a( n = `xmlns`     v = `sap.m`
+        )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
+        )->a( n = `height`    v = `100%`
+
+        )->open( `Carousel`
+            )->a( n = `class` v = `sapUiContentPadding`
+            )->a( n = `loop`  v = `true`
+
+            )->open( `pages`
+                )->leaf( `Image`
+                    )->a( n = `id`    v = `image1`
+                    )->a( n = `src`   v = base_url && `sample1.jpg`
+                    )->a( n = `alt`   v = `Example Picture 1`
+                    )->a( n = `press` v = client->_event( val = `SHOW_PDF` t_arg = VALUE #( ( `sample1.pdf` ) ) )
+                )->leaf( `Image`
+                    )->a( n = `id`    v = `image2`
+                    )->a( n = `src`   v = base_url && `sample2.jpg`
+                    )->a( n = `alt`   v = `Example Picture 2`
+                    )->a( n = `press` v = client->_event( val = `SHOW_PDF` t_arg = VALUE #( ( `sample2.pdf` ) ) ) ).
 
     client->view_display( view->stringify( ) ).
 
@@ -52,36 +65,40 @@ CLASS z2ui5_cl_api_app_469 IMPLEMENTATION.
 
   METHOD on_event.
 
-    IF client->check_on_event( `SHOW_PDF` ).
+    CASE client->get( )-event.
 
-      pdf_source = `https://sdk.openui5.org/test-resources/sap/m/demokit/sample/PDFViewerPopup/` && client->get_event_arg( 1 ).
+      WHEN `SHOW_PDF`.
+        pdf_source = `https://sdk.openui5.org/test-resources/sap/m/demokit/sample/PDFViewerPopup/` && client->get_event_arg( 1 ).
+        popup_display( ).
 
-      popup_display( ).
-
-    ENDIF.
+    ENDCASE.
 
   ENDMETHOD.
 
 
   METHOD popup_display.
 
-    " the original opens the PDFViewer in popup mode via JavaScript - here the PDF viewer is embedded into a dialog
-    DATA(popup) = z2ui5_cl_xml_view=>factory_popup( ).
-    DATA(dialog) = popup->dialog(
-        title         = `My Custom Title`
-        contentwidth  = `760px`
-        contentheight = `600px`
-        afterclose    = client->_event_client( client->cs_event-popup_close ) ).
+    DATA(popup) = z2ui5_cl_api_xml=>factory( ).
 
-    " property isTrustedSource of the original omitted - available only in UI5 releases higher than 1.71
-    dialog->_generic(
-        name   = `PDFViewer`
-        t_prop = VALUE #( ( n = `source` v = pdf_source )
-                          ( n = `height` v = `100%` ) ) ).
+    popup->open( n = `FragmentDefinition` ns = `core`
+        )->a( n = `xmlns`      v = `sap.m`
+        )->a( n = `xmlns:core` v = `sap.ui.core`
 
-    dialog->end_button( )->button(
-        text  = `Close`
-        press = client->_event_client( client->cs_event-popup_close ) ).
+        )->open( `Dialog`
+            )->a( n = `title`         v = `My Custom Title`
+            )->a( n = `contentWidth`  v = `760px`
+            )->a( n = `contentHeight` v = `600px`
+            )->a( n = `afterClose`    v = client->_event_client( client->cs_event-popup_close )
+
+            " the original opens the PDFViewer in popup mode via JavaScript - here the PDF viewer is embedded into the dialog
+            )->leaf( `PDFViewer`
+                )->a( n = `source` v = pdf_source
+                )->a( n = `height` v = `100%`
+
+            )->open( `endButton`
+                )->leaf( `Button`
+                    )->a( n = `text`  v = `Close`
+                    )->a( n = `press` v = client->_event_client( client->cs_event-popup_close ) ).
 
     client->popup_display( popup->stringify( ) ).
 
@@ -91,12 +108,11 @@ CLASS z2ui5_cl_api_app_469 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-
     IF client->check_on_init( ).
-      view_display( client ).
+      view_display( ).
+    ELSEIF client->check_on_event( ).
+      on_event( ).
     ENDIF.
-
-    on_event( client ).
 
   ENDMETHOD.
 

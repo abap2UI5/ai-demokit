@@ -1,15 +1,19 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.Input/sample/sap.m.sample.InputValueState
-"! This example shows different input value states.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.Input - InputValueState
+"! https://sdk.openui5.org/entity/sap.m.Input/sample/sap.m.sample.InputValueState
+"! NOTES (generation):
+"! - 1.71: Input property showClearIcon (since UI5 1.94) dropped from three inputs.
+"! - 1.71: the two formattedValueStateText aggregations (a FormattedText carrying
+"!   Links, since UI5 1.78) omitted; valueState/valueStateText still render the state.
 CLASS z2ui5_cl_api_app_439 DEFINITION PUBLIC.
 
   PUBLIC SECTION.
     INTERFACES z2ui5_if_app.
 
   PROTECTED SECTION.
-    METHODS view_display
-      IMPORTING
-        client TYPE REF TO z2ui5_if_client.
+    DATA client TYPE REF TO z2ui5_if_client.
+
+    METHODS view_display.
 
   PRIVATE SECTION.
 ENDCLASS.
@@ -23,50 +27,63 @@ CLASS z2ui5_cl_api_app_439 IMPLEMENTATION.
                          `Extra long text used as a warning message - 3. Extra long text used as a warning message - 4. ` &&
                          `Extra long text used as a warning message - 5.`.
 
-    DATA(page) = z2ui5_cl_xml_view=>factory( ).
+    DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
-    DATA(box) = page->vbox( `sapUiSmallMargin` ).
+    view->open( n = `View` ns = `mvc`
+        )->a( n = `xmlns`     v = `sap.m`
+        )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
-    box->input( value = `Value state None`
-                class = `sapUiSmallMarginTopBottom` ).
+        )->open( `VBox`
+            )->a( n = `class` v = `sapUiSmallMargin`
 
-    " property showClearIcon="true" omitted - only available since UI5 1.94
-    box->input( valuestate = `Success`
-                value      = `Value state Success`
-                class      = `sapUiSmallMarginTopBottom` ).
+            )->leaf( `Input`
+                )->a( n = `value` v = `Value state None`
+                )->a( n = `class` v = `sapUiSmallMarginTopBottom`
 
-    box->input( valuestate     = `Warning`
-                valuestatetext = warning_text
-                value          = `Value state Warning.`
-                class          = `sapUiSmallMarginTopBottom` ).
+            " showClearIcon="true" omitted - Input property only available since UI5 1.94
+            )->leaf( `Input`
+                )->a( n = `valueState` v = `Success`
+                )->a( n = `value`      v = `Value state Success`
+                )->a( n = `class`      v = `sapUiSmallMarginTopBottom`
 
-    " aggregation formattedValueStateText with a link omitted - only available since UI5 1.78
-    box->input( valuestate = `Warning`
-                value      = `Value state Warning with message containing a link.`
-                class      = `sapUiSmallMarginTopBottom` ).
+            )->leaf( `Input`
+                )->a( n = `valueState`     v = `Warning`
+                )->a( n = `valueStateText` v = warning_text
+                )->a( n = `value`          v = `Value state Warning.`
+                )->a( n = `class`          v = `sapUiSmallMarginTopBottom`
 
-    box->input( valuestate = `Error`
-                value      = `Value state Error`
-                class      = `sapUiSmallMarginTopBottom` ).
+            " formattedValueStateText (FormattedText with a Link) omitted - only available since UI5 1.78
+            )->leaf( `Input`
+                )->a( n = `valueState` v = `Warning`
+                )->a( n = `value`      v = `Value state Warning with message containing a link.`
+                )->a( n = `class`      v = `sapUiSmallMarginTopBottom`
 
-    box->input( valuestate = `Information`
-                value      = `Value state Information`
-                class      = `sapUiSmallMarginTopBottom` ).
+            )->leaf( `Input`
+                )->a( n = `valueState` v = `Error`
+                )->a( n = `value`      v = `Value state Error`
+                )->a( n = `class`      v = `sapUiSmallMarginTopBottom`
 
-    " aggregation formattedValueStateText with multiple links omitted - only available since UI5 1.78
-    box->input( valuestate = `Information`
-                value      = `Value state Information with message containing multiple links.`
-                class      = `sapUiSmallMarginTopBottom` ).
+            )->leaf( `Input`
+                )->a( n = `valueState` v = `Information`
+                )->a( n = `value`      v = `Value state Information`
+                )->a( n = `class`      v = `sapUiSmallMarginTopBottom`
 
-    client->view_display( page->stringify( ) ).
+            " formattedValueStateText (FormattedText with multiple Links) omitted - only available since UI5 1.78
+            )->leaf( `Input`
+                )->a( n = `valueState` v = `Information`
+                )->a( n = `value`      v = `Value state Information with message containing multiple links.`
+                )->a( n = `class`      v = `sapUiSmallMarginTopBottom` ).
+
+    client->view_display( view->stringify( ) ).
 
   ENDMETHOD.
 
 
   METHOD z2ui5_if_app~main.
 
+    me->client = client.
     IF client->check_on_init( ).
-      view_display( client ).
+      view_display( ).
     ENDIF.
 
   ENDMETHOD.

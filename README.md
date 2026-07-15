@@ -4,31 +4,34 @@
 <br>
 [![auto_downport](https://github.com/abap2UI5/api/actions/workflows/auto_downport.yaml/badge.svg)](https://github.com/abap2UI5/api/actions/workflows/auto_downport.yaml)
 <br>
-[![generate_coverage](https://github.com/abap2UI5/api/actions/workflows/generate_coverage.yaml/badge.svg)](https://github.com/abap2UI5/api/actions/workflows/generate_coverage.yaml)
+[![generate_result](https://github.com/abap2UI5/api/actions/workflows/generate_result.yaml/badge.svg)](https://github.com/abap2UI5/api/actions/workflows/generate_result.yaml)
 
 # abap2UI5-api
 
 _Last generated: <!-- last-run -->2026-07-14 09:00 UTC<!-- /last-run -->_
 
-> **This repository is AI-generated.** From *every* official UI5 demo kit sample
-> it automatically builds an abap2UI5 app — so **functional gaps** between what
-> UI5 offers and what abap2UI5 can already express are revealed and can be closed.
+> **This repository is AI-generated.** From *every* official **`sap.m`** UI5 demo
+> kit sample it automatically builds an abap2UI5 app, exposing the **functional
+> gaps** between what UI5 offers and what abap2UI5 can already express — so they
+> can be closed. Other UI5 libraries follow later.
 >
-> See the result in **[api.md](api.md)**. To try it live, **pull this repo into
-> your ABAP system and start the app `z2ui5_cl_api_app_overview`** — it lists
-> every generated sample and launches it right in your system.
+> See the result in **[api.md](api.md)**, or try it live: pull this repo into
+> your ABAP system and start **`z2ui5_cl_api_app_overview`**, which lists every
+> generated sample and launches it right in your system.
+
+## Pipeline
 
 A coding agent runs the pipeline:
 
 1. **Read** — clone [OpenUI5](https://github.com/SAP/openui5) and scan every
-   demo kit sample (`src/<library>/test/<library>/demokit/sample/<Name>/`).
+   `sap.m` demo kit sample (`src/sap.m/test/sap/m/demokit/sample/<Name>/`).
 2. **Generate** — rebuild each sample 1:1 as an abap2UI5 app (`z2ui5_if_app`),
-   filed by library under `src/01`…`src/05`.
-3. **Store templates** — keep the original UI5 JS/XML templates in the
-   [`ui5/`](ui5) folder, one folder per port (named after the port class).
-4. **Report** — regenerate the [coverage](#coverage) (README + [api.md](api.md))
-   and the in-system overview app: every sample marked ✅ ported / ❌ missing,
-   with a coverage figure per module. The ❌ rows are the backlog.
+   filed under `src/01`.
+3. **Store templates** — keep the original UI5 JS/XML templates in
+   [`ui5/`](ui5), one folder per port (named after the port class).
+4. **Report** — regenerate the [coverage](#coverage) tables and the in-system
+   overview app, marking every sample ✅ ported or ❌ missing. The ❌ rows are
+   the backlog.
 
 Reviewed, curated samples graduate to the hand-maintained
 [abap2UI5/samples](https://github.com/abap2UI5/samples) repository.
@@ -48,9 +51,9 @@ Rules:
 - Build the view with the generic builder z2ui5_cl_api_xml, translating the
   sample's XML 1:1 (open = descend into a container, leaf = childless
   control/stay, shut = ascend). Attributes are added with
-  attr( n = `key` v = `value` ) chained right after the control's open/leaf;
-  attr targets that control, and v is any string expression (literal, a
-  client->_bind/_event result, a || template). factory( ) returns an empty root
+  a( n = `key` v = `value` ) chained right after the control's open/leaf;
+  a targets that control, and v is any string expression (literal, a
+  client->_bind_edit/_event result, a || template). factory( ) returns an empty root
   - open the <mvc:View> and declare its xmlns namespaces yourself. Blank line
   between controls whose verb differs (open<->leaf, before shut); none between
   same-verb controls, none right after a shut, none between a control and its
@@ -67,17 +70,19 @@ Rules:
     ENDIF.
   Add data_init / on_event only when the app actually has data / events.
 - Move the sample's JSON model data into ABAP (VALUE #( ... )) and bind it
-  with client->_bind / _bind_edit.
+  with client->_bind_edit (the one-way client->_bind is obsolete - always use
+  _bind_edit).
 - Map controller event handlers to check_on_event( ) branches.
 - Use ONLY controls and properties available since UI5 1.71; never use a
   deprecated control/property. If the sample needs anything newer or
   deprecated, stop and report the gap instead of porting.
 - Must pass abaplint for ABAP_STANDARD, ABAP_CLOUD and ABAP_702 (downport).
-- Add ABAP Doc above the class (the demo kit url is the OpenUI5 one on
-  sdk.openui5.org, never the commercial SAPUI5 host):
-    "! Generated port of a UI5 demo kit sample - not yet manually reviewed
-    "! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/<entity>/sample/<lib>.sample.<Name>
-    "! <full sample description>
+- Add ABAP Doc above the class (line 1 fixed; line 2 `<entity> - <SampleName>`;
+  line 3 the OpenUI5 demo kit url on sdk.openui5.org, never the commercial
+  SAPUI5 host):
+    "! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+    "! <entity> - <SampleName>
+    "! https://sdk.openui5.org/entity/<entity>/sample/<lib>.sample.<Name>
 - Any runtime asset URLs the sample uses (test-resources / resources images)
   also point at the OpenUI5 host (sdk.openui5.org), never SAPUI5.
 - Set the abapGit <DESCRIPT> to `<entity> - <demo kit description>`.
@@ -86,30 +91,19 @@ Rules:
 
 </details>
 
-Generated abap2UI5 ports of the official UI5 demo kit samples, split by library:
+The focus is currently on **`sap.m`** — all ports live under `src/01`. Other UI5
+libraries are brought back in later.
 
-| Folder    | Library    |
-|-----------|------------|
-| `src/01`  | `sap.m`    |
-| `src/02`  | `sap.ui`   |
-| `src/03`  | `sap.uxap` |
-| `src/04`  | `sap.f`    |
-| `src/05`  | `sap.tnt`  |
+## Compatibility
 
-Every app is ABAP Cloud ready and downportable to 7.02 — validated by the three
-CI checks below.
+Every app is ABAP Cloud ready and downportable to 7.02. In detail, every app:
 
-#### Compatibility
+* uses only controls and properties available since **UI5 1.71** (16 Jan 2020),
+  none of them deprecated — so it runs on old UI5 versions too;
+* runs on **SAPUI5** and **OpenUI5**, including the **legacy-free** runtime;
+* runs on **ABAP Cloud** and **ABAP Standard**, and downports to **7.02**.
 
-* Every control and property used is available since **UI5 1.71** (16 Jan 2020),
-  so the samples run on old UI5 versions too.
-* No sample uses an obsolete (deprecated) control or property.
-* All samples run on both **SAPUI5** and **OpenUI5**.
-* All samples can be booted with the UI5 **legacy-free** runtime.
-* All samples run on both **ABAP Cloud** and **ABAP Standard**.
-* All samples can be **downported** with abaplint (down to 7.02).
-
-#### Checks
+CI enforces this on every change:
 
 | Build            | What it does                                                    |
 |------------------|----------------------------------------------------------------|
@@ -124,39 +118,25 @@ have an abap2UI5 port.
 
 <!-- coverage:start -->
 
-Overall **132 / 720** demo kit samples ported (18.3 %).
+Overall **34 / 446** demo kit samples ported (7.6 %).
 
 | Module | Samples | Ported | Coverage | |
 |--------|--------:|-------:|---------:|---|
-| `sap.uxap` | 47 | 14 | 29.8 % | ███░░░░░░░ |
-| `sap.ui.integration` | 4 | 1 | 25.0 % | ███░░░░░░░ |
-| `sap.ui.layout` | 62 | 15 | 24.2 % | ██░░░░░░░░ |
-| `sap.ui.core` | 48 | 9 | 18.8 % | ██░░░░░░░░ |
-| `sap.m` | 446 | 83 | 18.6 % | ██░░░░░░░░ |
-| `sap.tnt` | 17 | 3 | 17.6 % | ██░░░░░░░░ |
-| `sap.f` | 42 | 4 | 9.5 % | █░░░░░░░░░ |
-| `sap.ui.unified` | 21 | 2 | 9.5 % | █░░░░░░░░░ |
-| `sap.ui.table` | 18 | 1 | 5.6 % | █░░░░░░░░░ |
-| `sap.ui.codeeditor` | 2 | 0 | 0.0 % | ░░░░░░░░░░ |
-| `sap.ui.mdc` | 13 | 0 | 0.0 % | ░░░░░░░░░░ |
-| **Total** | **720** | **132** | **18.3 %** | ██░░░░░░░░ |
+| `sap.m` | 446 | 34 | 7.6 % | █░░░░░░░░░ |
+| **Total** | **446** | **34** | **7.6 %** | █░░░░░░░░░ |
 
 <!-- coverage:end -->
 
-Detailed, **control-level** view — one table per module, one row per sample:
+For the full **control-level** view — one row per sample (Module · Control ·
+Sample · JavaScript · UI5 App · ABAP), every link pointing at OpenUI5 — see
+**[api.md](api.md)**, or the in-system overview app `z2ui5_cl_api_app_overview`,
+where the **Sample** column links the OpenUI5 source (its ↗ opens the live
+sample) and the **abap2UI5** column links the generated class (its ↗ starts the
+app in the system).
 
-* [**api.md**](api.md) — one flat table mirroring the overview app: Module ·
-  Control (→ OpenUI5 API) · Sample · JavaScript (→ OpenUI5 repo source) · UI5 App
-  (→ live OpenUI5 fullscreen sample) · ABAP (→ generated class). All source links
-  point at OpenUI5; only the "start the app" column is dropped (static page).
-* **Overview app** (`z2ui5_cl_api_app_overview`) — an abap2UI5 app in `src/`
-  that lists every ported app as a table (Module · Control · Sample ·
-  JavaScript · UI5 App · ABAP · abap2UI5 App), each link opening in a new tab
-  and the last one **starting the app in the system**
-  (generated by `scripts/generate-overview.mjs`).
-
-The coverage summary and `api.md` are regenerated by the `generate_coverage`
-workflow (`scripts/generate-coverage.mjs`) from the latest OpenUI5 demo kit
+The coverage summary and `api.md` are generated by the `generate_result`
+workflow (`scripts/generate-coverage.mjs`), and the overview app by
+`scripts/generate-overview.mjs`, both from the latest OpenUI5 demo kit
 samples — do not edit them by hand.
 
 #### Dependencies

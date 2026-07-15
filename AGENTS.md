@@ -95,17 +95,20 @@ generator's job. `ui5/` is the generator's local input store; the `api.md`
 Each generated port carries ABAP Doc directly above `CLASS ... DEFINITION`:
 
 ```abap
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: <demo kit url>
-"! <full, untruncated sample description>
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! <entity> - <SampleName>
+"! <demo kit url>
 ```
 
-- The `<demo kit url>` is the **OpenUI5** demo kit link
+- Line 1 is fixed and literal. Line 2 is `<entity> - <SampleName>`, e.g.
+  `sap.m.CheckBox - CheckBoxTriState` (the `<SampleName>` is the sample id tail
+  after `.sample.`).
+- Line 3 `<demo kit url>` is the **OpenUI5** demo kit link
   (`https://sdk.openui5.org/entity/<entity>/sample/<lib>.sample.<Name>`) — its
-  `.../entity/<entity>/sample/<lib>.sample.<Name>` tail is what the coverage
-  generator parses to match a port to its source sample (§7). Always use the
-  OpenUI5 host (`sdk.openui5.org`), never the commercial SAPUI5 one. **Never
-  remove or reword this line.**
+  `.../entity/<entity>/sample/<lib>.sample.<Name>` tail is what the coverage and
+  overview generators parse to match a port to its source sample (§7). Always use
+  the OpenUI5 host (`sdk.openui5.org`), never the commercial SAPUI5 one. **Never
+  remove or reword this URL line.**
 - The abapGit `<DESCRIPT>` follows `<entity> - <demo kit description>`
   (e.g. `sap.m.Switch - Some say it is only a switch...`), truncated to 60 chars.
 - Use **only** controls and properties available since UI5 1.71; never a
@@ -138,6 +141,9 @@ CLASS z2ui5_cl_api_app_<n> DEFINITION PUBLIC.       " lowercase, not FINAL
     " bindings live here, so the framework can serialise them across round-trips
     TYPES: BEGIN OF ty_s_item, ... END OF ty_s_item.
     DATA t_items TYPE STANDARD TABLE OF ty_s_item WITH EMPTY KEY.
+    " ONLY bound DATA belongs in PUBLIC: the round-trip model scan walks the
+    " public instance attributes, so every non-bound helper/backup kept here
+    " just slows the binding search. Put such state in PROTECTED (see below).
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -192,15 +198,15 @@ the `)->` arrows line up:
 | `open( n ns a )` | open a container tag `<X>` | add child **and descend** into it | the new child |
 | `leaf( n ns a )` | a self-closing tag `<X/>` | add child, **stay** on current node | the same node |
 | `shut( )` | the closing `</X>` | **ascend** to the parent | the parent |
-| `attr( n v )` | one `name="value"` | add an attribute to the control just opened/leaf'd | the same node |
+| `a( n v )` | one `name="value"` | add an attribute to the control just opened/leaf'd | the same node |
 
 Arguments: `n` = tag name, `ns` = namespace **prefix** (literal `f`, `l`, `core`,
 `mvc` — omitted for the default `sap.m` namespace).
 
-**Attributes go through `attr( n = `key` v = `value` )`**, chained right after the
-control's `open`/`leaf`. `attr` always targets that control (the last-added child,
+**Attributes go through `a( n = `key` v = `value` )`**, chained right after the
+control's `open`/`leaf`. `a` always targets that control (the last-added child,
 or the node itself if none yet), so it works after both `open` and `leaf`. `v` is
-any string expression — a literal, a `client->_bind( … )` / `_event( … )` result,
+any string expression — a literal, a `client->_bind_edit( … )` / `_event( … )` result,
 or a `|…|` template. (An `open`/`leaf` also accepts an up-front `a = VALUE #( ( `key=value` ) … )`
 string table, split on the first `=` — handy for attributes built in a loop.)
 
@@ -217,20 +223,20 @@ other control:
 DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
 view->open( n = `View` ns = `mvc`
-    )->attr( n = `xmlns`     v = `sap.m`
-    )->attr( n = `xmlns:mvc` v = `sap.ui.core.mvc`
-    )->attr( n = `xmlns:f`   v = `sap.f`
+    )->a( n = `xmlns`     v = `sap.m`
+    )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
+    )->a( n = `xmlns:f`   v = `sap.f`
 
     )->leaf( `Slider`
-        )->attr( n = `value`      v = client->_bind_edit( slider_value )
-        )->attr( n = `liveChange` v = client->_event( `SLIDER_MOVED` )
+        )->a( n = `value`      v = client->_bind_edit( slider_value )
+        )->a( n = `liveChange` v = client->_event( `SLIDER_MOVED` )
 
     )->open( `Panel`
-        )->attr( n = `width` v = client->_bind( panel_width )
+        )->a( n = `width` v = client->_bind_edit( panel_width )
         )->open( `headerToolbar`
             )->open( `Toolbar`
                 )->leaf( `Title`
-                    )->attr( n = `text` v = `Header`
+                    )->a( n = `text` v = `Header`
 
             )->shut(
         )->shut( ).
@@ -245,12 +251,12 @@ client->view_display( view->stringify( ) ).
 
 - **The closing paren rides with the arrow.** Never leave a `)` alone at a line
   end; carry it to the **start of the next segment** so it always reads `)->`.
-  With the `attr()` chain there is no nested `VALUE`, so the whole view ends in a
+  With the `a()` chain there is no nested `VALUE`, so the whole view ends in a
   single `` ).`` (not `) ).`).
 - **Indent after every `open`.** Each `open( )` shifts its children's `)->` one
   level (4 spaces) to the right; `shut( )` shifts back left. The `)->` of a
   `shut` sits at the same column as the `open` it closes.
-- **A control's `attr()` lines sit one level (4 spaces) in from the control's
+- **A control's `a()` lines sit one level (4 spaces) in from the control's
   own `)->` line**; align the `v =` column across them.
 - **Blank lines** (attrs never count — they belong to their control):
   - **never** between consecutive `leaf`s, and **never** after a **one-liner
@@ -258,26 +264,34 @@ client->view_display( view->stringify( ) ).
   - a blank **does** separate an `open` that *has* attrs from its first child,
     and separates a new `open`/`leaf` block from the previous sibling;
   - a blank **before** every `shut`; **none** after a `shut` or between `shut`s;
-  - **none** between a control and its own `attr()`s.
+  - **none** between a control and its own `a()`s.
 - Long text/binding values split with `&&` at ~255 chars max per line (§6).
 
 #### Data binding & events
 
-- `client->_bind( var )` — one-way bind (display); `client->_bind_edit( var )` —
-  two-way bind (the value flows back into `var` on the next round-trip). Bind the
-  ABAP `DATA` member, e.g. `)->attr( n = `items` v = client->_bind( t_items )`.
+- `client->_bind_edit( var )` — bind an ABAP `DATA` member two-way (the value
+  flows back into `var` on the next round-trip), e.g.
+  `)->a( n = `items` v = client->_bind_edit( t_items )`. **`client->_bind( )`
+  (one-way) is obsolete — always use `_bind_edit`, even for display-only
+  bindings.**
 - Inside a bound aggregation, child properties use UI5 binding braces on the
-  upper-cased field name: `)->attr( n = `text` v = `{TITLE}``.
+  upper-cased field name: `)->a( n = `text` v = `{TITLE}``.
 - `client->_event( \`NAME\` )` — wire a control event (press, liveChange…) to an
-  event named `NAME`; handle it in `on_event( )` with
-  `IF client->check_on_event( \`NAME\` ).`. After changing bound data in an
-  event, call `client->view_model_update( )` to push it back (no full redraw).
+  event named `NAME`. **Always** dispatch in `on_event( )` with a
+  `CASE client->get( )-event.` … `WHEN \`NAME\`.` … `ENDCASE` — even for a single
+  event (never an `IF check_on_event( )`). After changing bound data in an event,
+  call `client->view_model_update( )` to push it back (no full redraw).
+- Read event parameters (declared via `_event( … t_arg = … )`) with
+  `client->get_event_arg( n )`. A **boolean** parameter (e.g. a CheckBox
+  `selected`, `${$parameters>/selected}`) already arrives as `abap_bool`
+  (`X` / space), **not** the string `` `true` `` — assign it straight into an
+  `abap_bool` field (`flag = client->get_event_arg( 1 ).`); never test `… = \`true\``.
 
 #### Booleans
 
-A literal boolean is just `)->attr( n = `editable` v = `true``. **Only** when the
+A literal boolean is just `)->a( n = `editable` v = `true``. **Only** when the
 value comes from an ABAP boolean variable, wrap it with `as_bool( )`:
-`)->attr( n = `editable` v = z2ui5_cl_api_xml=>as_bool( flag )` — a raw
+`)->a( n = `editable` v = z2ui5_cl_api_xml=>as_bool( flag )` — a raw
 `abap_false` would otherwise serialise to an empty string. Never feed
 `abap_true`/`abap_false` straight into an attribute value.
 
@@ -289,6 +303,39 @@ with a one-line comment (see app 454: `showClearIcon` dropped, `" … omitted to
 stay compatible with UI5 1.71`) if the sample still works without it, or — if the
 sample's whole point needs the newer/deprecated control — **do not port it** and
 leave it as an ❌ gap. Never silently substitute a different control.
+
+#### Generation notes — record every caveat in the port
+
+When the port is **not** a clean 1:1 — you improvised, dropped/downgraded
+something for 1.71, replaced a controller-only behaviour, or relied on a
+binding/event form you could not verify — record it in the **header ABAP Doc**,
+as extra `"! ` lines appended **right after the three fixed header lines** (the
+`GENERATED …` / `<entity> - <SampleName>` / url lines) and before
+`CLASS … DEFINITION`:
+
+```abap
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! <entity> - <SampleName>
+"! <demo kit url>
+"! NOTES (generation):
+"! - IMPROVISED: …
+"! - 1.71: …
+CLASS z2ui5_cl_api_app_<n> DEFINITION PUBLIC.
+```
+
+One bullet per caveat, tagged so a reviewer can scan them:
+
+- `LIVE-TEST:` needs checking in a running system — an unverified binding/event
+  path, or uncertain rendering (e.g. app 530's `${$source>/text}` event arg).
+- `IMPROVISED:` deviates from the sample — e.g. a controller-built Dialog shown
+  as a `message_toast_display` instead (app 529), or an event that reads a
+  client-only value replaced with a static one (app 526).
+- `1.71:` a control / property / enum value newer than 1.71 was dropped or
+  downgraded (app 529's `Indication06`+ states set to `None`).
+
+Keep the block **only** when there is something to flag — omit it for a faithful
+1:1 port. Still add the inline `"` comment at the exact spot of each deviation;
+the NOTES block is the scannable summary of those.
 
 #### Worked references
 
@@ -369,12 +416,12 @@ node scripts/generate-overview.mjs                          # the overview app (
 
 - **Universe of samples** — every `demokit/sample/<Name>` directory in the
   OpenUI5 checkout at `$OPENUI5_DIR` (default `./openui5`).
-- **Ported set** — parsed from each `src/**/*.clas.abap` port's
-  `Rebuild of the UI5 demo kit sample: .../sample/<lib>.sample.<Name>` line.
+- **Ported set** — parsed from each `src/**/*.clas.abap` port's header URL line
+  `"! .../entity/<entity>/sample/<lib>.sample.<Name>`.
 - A port matches a sample on `(library, Name)`.
 - **Control (entity) for grouping / the demo kit link** — from each library's
   `demokit/docuindex.json` (`explored.entities[].samples[]`), with the port's
-  Rebuild URL (`.../entity/<entity>/sample/...`) as fallback.
+  header URL (`.../entity/<entity>/sample/...`) as fallback.
 - **api.md links are external** (absolute URLs, overridable via env) and point
   at **OpenUI5** — only the ABAP column links back to this repo:
   Control → the control's OpenUI5 API reference
@@ -385,7 +432,7 @@ node scripts/generate-overview.mjs                          # the overview app (
   (`DEMOKIT`/resources/…/index.html?sap-ui-xx-sample-id=…&sap-ui-xx-sample-lib=…),
   ABAP → the generated `.clas.abap` (`REPO`/`REF`).
 
-The `generate_coverage` workflow (`workflow_dispatch` + weekly) shallow-clones
+The `generate_result` workflow (`workflow_dispatch` + weekly) shallow-clones
 OpenUI5, runs both scripts, stamps the `<!-- last-run -->` timestamp into
 `README.md`, and opens a pull request. The overview app must stay abaplint-clean
 (§6) — it lives in `src/` and is part of every CI build.

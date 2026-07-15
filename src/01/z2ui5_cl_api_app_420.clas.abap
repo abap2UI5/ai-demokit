@@ -1,6 +1,10 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.Carousel/sample/sap.m.sample.CarouselWithControls
-"! With the Carousel a user can browse through multi-page content by swiping left or right.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.Carousel - CarouselWithControls
+"! https://sdk.openui5.org/entity/sap.m.Carousel/sample/sap.m.sample.CarouselWithControls
+"! NOTES (generation):
+"! - IMPROVISED: the three carousel images bind to a separate named model in the
+"!   original (img>/products/pic1..3 from sap/ui/demo/mock/img.json); resolved
+"!   here to static image URLs, as abap2UI5 serves a single default model.
 CLASS z2ui5_cl_api_app_420 DEFINITION PUBLIC.
 
   PUBLIC SECTION.
@@ -16,10 +20,11 @@ CLASS z2ui5_cl_api_app_420 DEFINITION PUBLIC.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
+    " not bound - the shared image base URL, kept out of PUBLIC so the round-trip model scan stays small
+    DATA base_url TYPE string.
 
-    METHODS view_display
-      IMPORTING
-        client TYPE REF TO z2ui5_if_client.
+    METHODS data_init.
+    METHODS view_display.
 
   PRIVATE SECTION.
 ENDCLASS.
@@ -27,10 +32,10 @@ ENDCLASS.
 
 CLASS z2ui5_cl_api_app_420 IMPLEMENTATION.
 
-  METHOD view_display.
+  METHOD data_init.
 
     " Image URLs of the mock models sap/ui/demo/mock/img.json and products.json used by the original sample
-    DATA(base_url) = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/`.
+    base_url = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/`.
 
     " Subset of the mock model sap/ui/demo/mock/products.json used by the original sample
     t_products = VALUE #(
@@ -45,47 +50,71 @@ CLASS z2ui5_cl_api_app_420 IMPLEMENTATION.
       ( name = `ITelO Vault SAT` product_id = `HT-1021` product_pic_url = base_url && `HT-1021.jpg` )
       ( name = `Comfort Easy` product_id = `HT-1022` product_pic_url = base_url && `HT-1022.jpg` ) ).
 
+  ENDMETHOD.
+
+
+  METHOD view_display.
+
     DATA(lorem) = `Lorem ipsum dolor st amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.` &&
       ` At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.` &&
       ` Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.` &&
       ` Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat`.
 
-    DATA(page) = z2ui5_cl_xml_view=>factory( ).
+    DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
-    page->title( id    = `carouselTitle`
-                 class = `sapUiSmallMarginTop`
-                 text  = `Carousel with Different Controls` ).
+    view->open( n = `View` ns = `mvc`
+        )->a( n = `height`    v = `100%`
+        )->a( n = `xmlns`     v = `sap.m`
+        )->a( n = `xmlns:l`   v = `sap.ui.layout`
+        )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
-    " ariaLabelledBy association of the original sample is omitted here - not supported by the abap2UI5 view API
-    page->carousel( class = `sapUiContentPadding`
-        )->vertical_layout(
-            )->image( src = base_url && `HT-7777-large.jpg`
-                      alt = `Example picture of speakers`
-        )->get_parent(
-        )->image( src = base_url && `HT-6120-large.jpg`
-                  alt = `Example picture of USB flash drive`
-        )->text( class = `sapUiSmallMargin`
-                 text  = lorem
-        )->scroll_container(
-            height     = `100%`
-            width      = `100%`
-            horizontal = abap_false
-            vertical   = abap_true
-            )->list(
-                headertext = `Some List Content 1`
-                items      = client->_bind( t_products )
-                " iconDensityAware of the original sample is omitted here - not supported by the abap2UI5 view API
-                )->standard_list_item(
-                    title       = `{NAME}`
-                    description = `{PRODUCT_ID}`
-                    icon        = `{PRODUCT_PIC_URL}`
-                    iconinset   = abap_false
-            )->get_parent(
-        )->get_parent(
-        )->image( src = base_url && `HT-6100-large.jpg`
-                  alt = `Example picture of spotlight` ).
+        )->leaf( `Title`
+            )->a( n = `id`    v = `carouselTitle`
+            )->a( n = `class` v = `sapUiSmallMarginTop`
+            )->a( n = `text`  v = `Carousel with Different Controls`
 
-    client->view_display( page->stringify( ) ).
+        )->open( `Carousel`
+            )->a( n = `ariaLabelledBy` v = `carouselTitle`
+            )->a( n = `class`          v = `sapUiContentPadding`
+
+            )->open( n = `VerticalLayout` ns = `l`
+                )->leaf( `Image`
+                    )->a( n = `src` v = base_url && `HT-7777-large.jpg`
+                    )->a( n = `alt` v = `Example picture of speakers`
+
+            )->shut(
+            )->leaf( `Image`
+                )->a( n = `src` v = base_url && `HT-6120-large.jpg`
+                )->a( n = `alt` v = `Example picture of USB flash drive`
+
+            )->leaf( `Text`
+                )->a( n = `class` v = `sapUiSmallMargin`
+                )->a( n = `text`  v = lorem
+
+            )->open( `ScrollContainer`
+                )->a( n = `height`     v = `100%`
+                )->a( n = `width`      v = `100%`
+                )->a( n = `horizontal` v = `false`
+                )->a( n = `vertical`   v = `true`
+
+                )->open( `List`
+                    )->a( n = `headerText` v = `Some List Content 1`
+                    )->a( n = `items`      v = client->_bind_edit( t_products )
+
+                    )->leaf( `StandardListItem`
+                        )->a( n = `title`            v = `{NAME}`
+                        )->a( n = `description`      v = `{PRODUCT_ID}`
+                        )->a( n = `icon`             v = `{PRODUCT_PIC_URL}`
+                        )->a( n = `iconDensityAware` v = `false`
+                        )->a( n = `iconInset`        v = `false`
+
+                )->shut(
+            )->shut(
+            )->leaf( `Image`
+                )->a( n = `src` v = base_url && `HT-6100-large.jpg`
+                )->a( n = `alt` v = `Example picture of spotlight` ).
+
+    client->view_display( view->stringify( ) ).
 
   ENDMETHOD.
 
@@ -93,9 +122,9 @@ CLASS z2ui5_cl_api_app_420 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-
     IF client->check_on_init( ).
-      view_display( client ).
+      data_init( ).
+      view_display( ).
     ENDIF.
 
   ENDMETHOD.

@@ -1,7 +1,11 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.Link/sample/sap.m.sample.LinkEmphasized
-"! Usually you use an Object Identifier in the first column of a table. But if you need an active
-"! identifier you should use an 'emphasized' link instead.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.Link - LinkEmphasized
+"! https://sdk.openui5.org/entity/sap.m.Link/sample/sap.m.sample.LinkEmphasized
+"! NOTES (generation):
+"! - IMPROVISED: the last column's original number binding is a
+"!   sap.ui.model.type.Currency formatter (parts Price/CurrencyCode,
+"!   formatOptions showMeasure:false); it is replaced by a plain ObjectNumber
+"!   with a preformatted price text (number={PRICE} unit={CURRENCY_CODE}).
 CLASS z2ui5_cl_api_app_440 DEFINITION PUBLIC.
 
   PUBLIC SECTION.
@@ -25,9 +29,10 @@ CLASS z2ui5_cl_api_app_440 DEFINITION PUBLIC.
     DATA t_products TYPE STANDARD TABLE OF ty_s_product WITH EMPTY KEY.
 
   PROTECTED SECTION.
-    METHODS view_display
-      IMPORTING
-        client TYPE REF TO z2ui5_if_client.
+    DATA client TYPE REF TO z2ui5_if_client.
+
+    METHODS data_init.
+    METHODS view_display.
 
   PRIVATE SECTION.
 ENDCLASS.
@@ -35,138 +40,182 @@ ENDCLASS.
 
 CLASS z2ui5_cl_api_app_440 IMPLEMENTATION.
 
+  METHOD data_init.
+
+    t_products = VALUE #(
+        ( product_id     = `HT-1000`
+          name           = `Notebook Basic 15`
+          supplier_name  = `Very Best Screens`
+          width          = `30`
+          depth          = `18`
+          height         = `3`
+          dim_unit       = `cm`
+          weight_measure = `4.2`
+          weight_unit    = `KG`
+          price          = `956.00`
+          currency_code  = `EUR`
+          pic_url        = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1000.jpg` )
+        ( product_id     = `HT-1001`
+          name           = `Notebook Basic 17`
+          supplier_name  = `Very Best Screens`
+          width          = `29`
+          depth          = `17`
+          height         = `3.1`
+          dim_unit       = `cm`
+          weight_measure = `4.5`
+          weight_unit    = `KG`
+          price          = `1249.00`
+          currency_code  = `EUR`
+          pic_url        = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1001.jpg` )
+        ( product_id     = `HT-1003`
+          name           = `Notebook Basic 19`
+          supplier_name  = `Smartcards`
+          width          = `32`
+          depth          = `21`
+          height         = `4`
+          dim_unit       = `cm`
+          weight_measure = `4.2`
+          weight_unit    = `KG`
+          price          = `1650.00`
+          currency_code  = `EUR`
+          pic_url        = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1003.jpg` )
+        ( product_id     = `HT-1007`
+          name           = `ITelO Vault`
+          supplier_name  = `Technocom`
+          width          = `32`
+          depth          = `22`
+          height         = `3`
+          dim_unit       = `cm`
+          weight_measure = `0.2`
+          weight_unit    = `KG`
+          price          = `299.00`
+          currency_code  = `EUR`
+          pic_url        = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1007.jpg` )
+        ( product_id     = `HT-1010`
+          name           = `Notebook Professional 15`
+          supplier_name  = `Very Best Screens`
+          width          = `33`
+          depth          = `20`
+          height         = `3`
+          dim_unit       = `cm`
+          weight_measure = `4.3`
+          weight_unit    = `KG`
+          price          = `1999.00`
+          currency_code  = `EUR`
+          pic_url        = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1010.jpg` )
+        ( product_id     = `HT-1020`
+          name           = `ITelO Vault Net`
+          supplier_name  = `Technocom`
+          width          = `10`
+          depth          = `1.8`
+          height         = `17`
+          dim_unit       = `cm`
+          weight_measure = `0.16`
+          weight_unit    = `KG`
+          price          = `459.00`
+          currency_code  = `EUR`
+          pic_url        = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1020.jpg` ) ).
+
+    " the original view sorts the table items by name via a binding sorter
+    SORT t_products BY name ASCENDING.
+
+  ENDMETHOD.
+
+
   METHOD view_display.
 
-    DATA(page) = z2ui5_cl_xml_view=>factory( ).
+    DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
-    DATA(tab) = page->table( id    = `idProductsTable`
-                             inset = abap_false
-                             items = client->_bind( t_products ) ).
+    view->open( n = `View` ns = `mvc`
+        )->a( n = `xmlns`     v = `sap.m`
+        )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
-    tab->header_toolbar(
-        )->toolbar(
-            )->title( text  = `Products`
-                      level = `H2` ).
+        )->open( `Table`
+            )->a( n = `id`    v = `idProductsTable`
+            )->a( n = `inset` v = `false`
+            )->a( n = `items` v = client->_bind_edit( t_products )
 
-    tab->columns(
-        )->column( `12em`
-            )->text( `Product` )->get_parent(
-        )->column( minscreenwidth = `Tablet`
-                   demandpopin    = abap_true
-            )->text( `Supplier` )->get_parent(
-        )->column( minscreenwidth = `Tablet`
-                   demandpopin    = abap_true
-                   halign         = `End`
-            )->text( `Dimensions` )->get_parent(
-        )->column( minscreenwidth = `Tablet`
-                   demandpopin    = abap_true
-                   halign         = `End`
-            )->text( `Weight` )->get_parent(
-        )->column( halign = `End`
-            )->text( `Price` ).
+            )->open( `headerToolbar`
+                )->open( `Toolbar`
+                    )->leaf( `Title`
+                        )->a( n = `text`  v = `Products`
+                        )->a( n = `level` v = `H2`
 
-    " the sap.ui.model.type.Currency formatter of the original is replaced by a preformatted price text
-    tab->items(
-        )->column_list_item(
-            )->cells(
-                )->link( text       = `{PRODUCT_ID}`
-                         emphasized = abap_true
-                         href       = `{PIC_URL}`
-                )->text( `{SUPPLIER_NAME}`
-                )->text( `{WIDTH} x {DEPTH} x {HEIGHT} {DIM_UNIT}`
-                )->object_number( number = `{WEIGHT_MEASURE}`
-                                  unit   = `{WEIGHT_UNIT}`
-                )->object_number( number = `{PRICE}`
-                                  unit   = `{CURRENCY_CODE}` ).
+                )->shut(
+            )->shut(
 
-    client->view_display( page->stringify( ) ).
+            )->open( `columns`
+                )->open( `Column`
+                    )->a( n = `width` v = `12em`
+
+                    )->leaf( `Text`
+                        )->a( n = `text` v = `Product`
+
+                )->shut(
+                )->open( `Column`
+                    )->a( n = `minScreenWidth` v = `Tablet`
+                    )->a( n = `demandPopin`    v = `true`
+
+                    )->leaf( `Text`
+                        )->a( n = `text` v = `Supplier`
+
+                )->shut(
+                )->open( `Column`
+                    )->a( n = `minScreenWidth` v = `Tablet`
+                    )->a( n = `demandPopin`    v = `true`
+                    )->a( n = `hAlign`         v = `End`
+
+                    )->leaf( `Text`
+                        )->a( n = `text` v = `Dimensions`
+
+                )->shut(
+                )->open( `Column`
+                    )->a( n = `minScreenWidth` v = `Tablet`
+                    )->a( n = `demandPopin`    v = `true`
+                    )->a( n = `hAlign`         v = `End`
+
+                    )->leaf( `Text`
+                        )->a( n = `text` v = `Weight`
+
+                )->shut(
+                )->open( `Column`
+                    )->a( n = `hAlign` v = `End`
+
+                    )->leaf( `Text`
+                        )->a( n = `text` v = `Price`
+
+                )->shut(
+            )->shut(
+
+            )->open( `items`
+                )->open( `ColumnListItem`
+                    )->open( `cells`
+                        )->leaf( `Link`
+                            )->a( n = `text`       v = `{PRODUCT_ID}`
+                            )->a( n = `emphasized` v = `true`
+                            )->a( n = `href`       v = `{PIC_URL}`
+                        )->leaf( `Text`
+                            )->a( n = `text` v = `{SUPPLIER_NAME}`
+                        )->leaf( `Text`
+                            )->a( n = `text` v = `{WIDTH} x {DEPTH} x {HEIGHT} {DIM_UNIT}`
+                        )->leaf( `ObjectNumber`
+                            )->a( n = `number` v = `{WEIGHT_MEASURE}`
+                            )->a( n = `unit`   v = `{WEIGHT_UNIT}`
+                        )->leaf( `ObjectNumber`
+                            )->a( n = `number` v = `{PRICE}`
+                            )->a( n = `unit`   v = `{CURRENCY_CODE}` ).
+
+    client->view_display( view->stringify( ) ).
 
   ENDMETHOD.
 
 
   METHOD z2ui5_if_app~main.
 
+    me->client = client.
     IF client->check_on_init( ).
-
-      t_products = VALUE #(
-          ( product_id     = `HT-1000`
-            name           = `Notebook Basic 15`
-            supplier_name  = `Very Best Screens`
-            width          = `30`
-            depth          = `18`
-            height         = `3`
-            dim_unit       = `cm`
-            weight_measure = `4.2`
-            weight_unit    = `KG`
-            price          = `956.00`
-            currency_code  = `EUR`
-            pic_url        = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1000.jpg` )
-          ( product_id     = `HT-1001`
-            name           = `Notebook Basic 17`
-            supplier_name  = `Very Best Screens`
-            width          = `29`
-            depth          = `17`
-            height         = `3.1`
-            dim_unit       = `cm`
-            weight_measure = `4.5`
-            weight_unit    = `KG`
-            price          = `1249.00`
-            currency_code  = `EUR`
-            pic_url        = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1001.jpg` )
-          ( product_id     = `HT-1003`
-            name           = `Notebook Basic 19`
-            supplier_name  = `Smartcards`
-            width          = `32`
-            depth          = `21`
-            height         = `4`
-            dim_unit       = `cm`
-            weight_measure = `4.2`
-            weight_unit    = `KG`
-            price          = `1650.00`
-            currency_code  = `EUR`
-            pic_url        = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1003.jpg` )
-          ( product_id     = `HT-1007`
-            name           = `ITelO Vault`
-            supplier_name  = `Technocom`
-            width          = `32`
-            depth          = `22`
-            height         = `3`
-            dim_unit       = `cm`
-            weight_measure = `0.2`
-            weight_unit    = `KG`
-            price          = `299.00`
-            currency_code  = `EUR`
-            pic_url        = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1007.jpg` )
-          ( product_id     = `HT-1010`
-            name           = `Notebook Professional 15`
-            supplier_name  = `Very Best Screens`
-            width          = `33`
-            depth          = `20`
-            height         = `3`
-            dim_unit       = `cm`
-            weight_measure = `4.3`
-            weight_unit    = `KG`
-            price          = `1999.00`
-            currency_code  = `EUR`
-            pic_url        = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1010.jpg` )
-          ( product_id     = `HT-1020`
-            name           = `ITelO Vault Net`
-            supplier_name  = `Technocom`
-            width          = `10`
-            depth          = `1.8`
-            height         = `17`
-            dim_unit       = `cm`
-            weight_measure = `0.16`
-            weight_unit    = `KG`
-            price          = `459.00`
-            currency_code  = `EUR`
-            pic_url        = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1020.jpg` ) ).
-
-      " the original view sorts the table items by name via a binding sorter
-      SORT t_products BY name ASCENDING.
-
-      view_display( client ).
-
+      data_init( ).
+      view_display( ).
     ENDIF.
 
   ENDMETHOD.

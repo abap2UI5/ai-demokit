@@ -1,9 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.SegmentedButton/sample/sap.m.sample.SegmentedButton
-"! The Segmented Button allows the user to pick one out of many options for displaying the content of
-"! the current page. It is a UI pattern from iOS, now also available for other platforms. Putting the
-"! Segmented Button to a Bar control on non-iOS platforms will result in something very close to a
-"! tab.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.SegmentedButton - SegmentedButton
+"! https://sdk.openui5.org/entity/sap.m.SegmentedButton/sample/sap.m.sample.SegmentedButton
 CLASS z2ui5_cl_api_app_474 DEFINITION PUBLIC.
 
   PUBLIC SECTION.
@@ -15,6 +12,7 @@ CLASS z2ui5_cl_api_app_474 DEFINITION PUBLIC.
     DATA client TYPE REF TO z2ui5_if_client.
 
     METHODS view_display.
+    METHODS on_event.
 
   PRIVATE SECTION.
 ENDCLASS.
@@ -27,13 +25,8 @@ CLASS z2ui5_cl_api_app_474 IMPLEMENTATION.
     me->client = client.
     IF client->check_on_init( ).
       view_display( ).
-
-    ELSEIF client->check_on_event( `SELECTION_CHANGE` ).
-
-      client->message_toast_display( |oEvent.getParameter('item').getText(): '{ client->get_event_arg( 1 ) }' selected| ).
-      selected_item_text = |getSelectedItem(): { client->get_event_arg( 1 ) }|.
-      client->view_model_update( ).
-
+    ELSEIF client->check_on_event( ).
+      on_event( ).
     ENDIF.
 
   ENDMETHOD.
@@ -41,86 +34,147 @@ CLASS z2ui5_cl_api_app_474 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_xml_view=>factory( ).
-    DATA(page2) = view->page(
-        showheader = abap_false
-        class      = `sapUiContentPadding` ).
+    DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
-    page2->sub_header(
-        )->overflow_toolbar(
-            )->toolbar_spacer(
-            )->segmented_button( `kids`
-                )->items(
-                    )->segmented_button_item(
-                        text = `Kids`
-                        key  = `kids`
-                    )->segmented_button_item( text = `Adults`
-                    )->segmented_button_item( text = `Seniors`
-                )->get_parent(
-            )->get_parent(
-            )->toolbar_spacer( ).
+    view->open( n = `View` ns = `mvc`
+        )->a( n = `height`    v = `100%`
+        )->a( n = `xmlns`     v = `sap.m`
+        )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
-    DATA(vbox) = page2->vbox( width = `100%` ).
+        )->open( `Page`
+            )->a( n = `showHeader` v = `false`
+            )->a( n = `class`      v = `sapUiContentPadding`
 
-    vbox->_generic(
-        name   = `SegmentedButton`
-        t_prop = VALUE #( ( n = `selectedKey` v = `satellite` )
-                          ( n = `class`       v = `sapUiSmallMarginBottom` ) )
-        )->items(
-            )->segmented_button_item( text = `Map`
-            )->segmented_button_item(
-                text = `Satellite`
-                key  = `satellite`
-            )->segmented_button_item( text = `Hybrid` ).
+            )->open( `subHeader`
+                )->open( `OverflowToolbar`
+                    )->leaf( `ToolbarSpacer`
 
-    vbox->_generic(
-        name   = `SegmentedButton`
-        t_prop = VALUE #( ( n = `selectedKey` v = `competitor` )
-                          ( n = `class`       v = `sapUiSmallMarginBottom` ) )
-        )->items(
-            )->segmented_button_item( icon = `sap-icon://taxi`
-            )->segmented_button_item( icon = `sap-icon://lab`
-            )->segmented_button_item(
-                icon = `sap-icon://competitor`
-                key  = `competitor` ).
+                    )->open( `SegmentedButton`
+                        )->a( n = `selectedKey` v = `kids`
 
-    vbox->_generic(
-        name   = `SegmentedButton`
-        t_prop = VALUE #( ( n = `class` v = `sapUiSmallMarginBottom` ) )
-        )->items(
-            )->segmented_button_item( text = `Selected`
-            )->segmented_button_item( text = `Enabled`
-            )->segmented_button_item(
-                text    = `Disabled`
-                enabled = abap_false ).
+                        )->open( `items`
+                            )->leaf( `SegmentedButtonItem`
+                                )->a( n = `text` v = `Kids`
+                                )->a( n = `key`  v = `kids`
+                            )->leaf( `SegmentedButtonItem`
+                                )->a( n = `text` v = `Adults`
+                            )->leaf( `SegmentedButtonItem`
+                                )->a( n = `text` v = `Seniors`
 
-    vbox->label( `Fire selectionChange event` ).
+                        )->shut(
+                    )->shut(
+                    )->leaf( `ToolbarSpacer`
 
-    vbox->segmented_button( selection_change = client->_event(
-                                val   = `SELECTION_CHANGE`
-                                t_arg = VALUE #( ( `${$parameters>/item/mProperties/text}` ) ) )
-        )->items(
-            )->segmented_button_item( text = `One`
-            )->segmented_button_item( text = `Two`
-            )->segmented_button_item( text = `Three` ).
+                )->shut(
+            )->shut(
 
-    vbox->text( client->_bind( selected_item_text ) ).
+            )->open( `VBox`
+                )->a( n = `width` v = `100%`
 
-    page2->footer(
-        )->overflow_toolbar(
-            )->toolbar_spacer(
-            )->segmented_button( `small`
-                )->items(
-                    )->segmented_button_item(
-                        text = `Small`
-                        key  = `small`
-                    )->segmented_button_item( text = `Medium`
-                    )->segmented_button_item( text = `Large`
-                )->get_parent(
-            )->get_parent(
-            )->toolbar_spacer( ).
+                )->open( `SegmentedButton`
+                    )->a( n = `selectedKey` v = `satellite`
+                    )->a( n = `class`       v = `sapUiSmallMarginBottom`
+
+                    )->open( `items`
+                        )->leaf( `SegmentedButtonItem`
+                            )->a( n = `text` v = `Map`
+                        )->leaf( `SegmentedButtonItem`
+                            )->a( n = `text` v = `Satellite`
+                            )->a( n = `key`  v = `satellite`
+                        )->leaf( `SegmentedButtonItem`
+                            )->a( n = `text` v = `Hybrid`
+
+                    )->shut(
+                )->shut(
+                )->open( `SegmentedButton`
+                    )->a( n = `selectedKey` v = `competitor`
+                    )->a( n = `class`       v = `sapUiSmallMarginBottom`
+
+                    )->open( `items`
+                        )->leaf( `SegmentedButtonItem`
+                            )->a( n = `icon` v = `sap-icon://taxi`
+                        )->leaf( `SegmentedButtonItem`
+                            )->a( n = `icon` v = `sap-icon://lab`
+                        )->leaf( `SegmentedButtonItem`
+                            )->a( n = `icon` v = `sap-icon://competitor`
+                            )->a( n = `key`  v = `competitor`
+
+                    )->shut(
+                )->shut(
+                )->open( `SegmentedButton`
+                    )->a( n = `class` v = `sapUiSmallMarginBottom`
+
+                    )->open( `items`
+                        )->leaf( `SegmentedButtonItem`
+                            )->a( n = `text` v = `Selected`
+                        )->leaf( `SegmentedButtonItem`
+                            )->a( n = `text` v = `Enabled`
+                        )->leaf( `SegmentedButtonItem`
+                            )->a( n = `text`    v = `Disabled`
+                            )->a( n = `enabled` v = `false`
+
+                    )->shut(
+                )->shut(
+                )->leaf( `Label`
+                    )->a( n = `text` v = `Fire selectionChange event`
+
+                )->open( `SegmentedButton`
+                    )->a( n = `selectionChange` v = client->_event( val   = `SELECTION_CHANGE`
+                                                                       t_arg = VALUE #( ( `${$parameters>/item/mProperties/text}` ) ) )
+
+                    )->open( `items`
+                        )->leaf( `SegmentedButtonItem`
+                            )->a( n = `text` v = `One`
+                        )->leaf( `SegmentedButtonItem`
+                            )->a( n = `text` v = `Two`
+                        )->leaf( `SegmentedButtonItem`
+                            )->a( n = `text` v = `Three`
+
+                    )->shut(
+                )->shut(
+                )->leaf( `Text`
+                    )->a( n = `text` v = client->_bind_edit( selected_item_text )
+
+            )->shut(
+
+            )->open( `footer`
+                )->open( `OverflowToolbar`
+                    )->leaf( `ToolbarSpacer`
+
+                    )->open( `SegmentedButton`
+                        )->a( n = `selectedKey` v = `small`
+
+                        )->open( `items`
+                            )->leaf( `SegmentedButtonItem`
+                                )->a( n = `text` v = `Small`
+                                )->a( n = `key`  v = `small`
+                            )->leaf( `SegmentedButtonItem`
+                                )->a( n = `text` v = `Medium`
+                            )->leaf( `SegmentedButtonItem`
+                                )->a( n = `text` v = `Large`
+
+                        )->shut(
+                    )->shut(
+                    )->leaf( `ToolbarSpacer`
+
+                )->shut(
+            )->shut( ).
 
     client->view_display( view->stringify( ) ).
+
+  ENDMETHOD.
+
+
+  METHOD on_event.
+
+    CASE client->get( )-event.
+
+      WHEN `SELECTION_CHANGE`.
+        client->message_toast_display( |oEvent.getParameter('item').getText(): '{ client->get_event_arg( 1 ) }' selected| ).
+        selected_item_text = |getSelectedItem(): { client->get_event_arg( 1 ) }|.
+        client->view_model_update( ).
+
+    ENDCASE.
 
   ENDMETHOD.
 

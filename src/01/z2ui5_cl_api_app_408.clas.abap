@@ -1,7 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.Text/sample/sap.m.sample.Text
-"! The text control can be used for embedding longer paragraphs of text into your application, that
-"! need text wrapping.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.Text - Text
+"! https://sdk.openui5.org/entity/sap.m.Text/sample/sap.m.sample.Text
 CLASS z2ui5_cl_api_app_408 DEFINITION PUBLIC.
 
   PUBLIC SECTION.
@@ -33,14 +32,14 @@ CLASS z2ui5_cl_api_app_408 IMPLEMENTATION.
     DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
-        )->attr( n = `xmlns`     v = `sap.m`
-        )->attr( n = `xmlns:mvc` v = `sap.ui.core.mvc`
+        )->a( n = `xmlns`     v = `sap.m`
+        )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
         )->open( `VBox`
-            )->attr( n = `class` v = `sapUiSmallMargin`
+            )->a( n = `class` v = `sapUiSmallMargin`
 
             )->leaf( `Text`
-                )->attr( n = `text`
+                )->a( n = `text`
                          v = `Lorem ipsum dolor st amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. ` &&
                              `At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. ` &&
                              `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. ` &&

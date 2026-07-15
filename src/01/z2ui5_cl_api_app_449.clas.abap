@@ -1,6 +1,9 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.MessageView/sample/sap.m.sample.MessageViewMessageManager
-"! A sample showing how you can connect the MessageView with MessageManager.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.MessageView - MessageViewMessageManager
+"! https://sdk.openui5.org/entity/sap.m.MessageView/sample/sap.m.sample.MessageViewMessageManager
+"! NOTES (generation):
+"! - IMPROVISED: the MessageManager/message model of the original is not
+"!   available in abap2UI5 - the messages are bound from a hardcoded table instead.
 CLASS z2ui5_cl_api_app_449 DEFINITION PUBLIC.
 
   PUBLIC SECTION.
@@ -16,9 +19,10 @@ CLASS z2ui5_cl_api_app_449 DEFINITION PUBLIC.
     DATA t_messages TYPE STANDARD TABLE OF ty_s_message WITH EMPTY KEY.
 
   PROTECTED SECTION.
-    METHODS view_display
-      IMPORTING
-        client TYPE REF TO z2ui5_if_client.
+    DATA client TYPE REF TO z2ui5_if_client.
+
+    METHODS data_init.
+    METHODS view_display.
 
   PRIVATE SECTION.
 ENDCLASS.
@@ -26,47 +30,63 @@ ENDCLASS.
 
 CLASS z2ui5_cl_api_app_449 IMPLEMENTATION.
 
+  METHOD data_init.
+
+    " messages the original registers on the sap.ui.core.message.MessageManager
+    t_messages = VALUE #(
+      ( type            = `Error`
+        message         = `Error message`
+        additional_text = `Example of additionalText`
+        description     = `Example of description` )
+      ( type            = `Information`
+        message         = `Information message`
+        additional_text = `Example of additionalText`
+        description     = `Example of description` )
+      ( type            = `Success`
+        message         = `Success message`
+        additional_text = `Example of additionalText`
+        description     = `Example of description` )
+      ( type            = `Warning`
+        message         = `Warning message`
+        additional_text = `Example of additionalText`
+        description     = `Example of description` ) ).
+
+  ENDMETHOD.
+
+
   METHOD view_display.
 
-    DATA(page) = z2ui5_cl_xml_view=>factory( ).
+    DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
-    " the MessageManager/message model is not available in abap2UI5 - the messages are bound from a hardcoded table instead
-    page->message_view( items = client->_bind( t_messages )
-        )->message_item(
-            type        = `{TYPE}`
-            title       = `{MESSAGE}`
-            subtitle    = `{ADDITIONAL_TEXT}`
-            description = `{DESCRIPTION}` ).
+    view->open( n = `View` ns = `mvc`
+        )->a( n = `height`    v = `100%`
+        )->a( n = `xmlns`     v = `sap.m`
+        )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
-    client->view_display( page->stringify( ) ).
+        )->open( `Page`
+            )->a( n = `id`         v = `messageHandlingPage`
+            )->a( n = `showHeader` v = `false`
+
+            )->open( `MessageView`
+                )->a( n = `items` v = client->_bind_edit( t_messages )
+
+                )->leaf( `MessageItem`
+                    )->a( n = `type`        v = `{TYPE}`
+                    )->a( n = `title`       v = `{MESSAGE}`
+                    )->a( n = `subtitle`    v = `{ADDITIONAL_TEXT}`
+                    )->a( n = `description` v = `{DESCRIPTION}` ).
+
+    client->view_display( view->stringify( ) ).
 
   ENDMETHOD.
 
 
   METHOD z2ui5_if_app~main.
 
+    me->client = client.
     IF client->check_on_init( ).
-
-      t_messages = VALUE #(
-        ( type            = `Error`
-          message         = `Error message`
-          additional_text = `Example of additionalText`
-          description     = `Example of description` )
-        ( type            = `Information`
-          message         = `Information message`
-          additional_text = `Example of additionalText`
-          description     = `Example of description` )
-        ( type            = `Success`
-          message         = `Success message`
-          additional_text = `Example of additionalText`
-          description     = `Example of description` )
-        ( type            = `Warning`
-          message         = `Warning message`
-          additional_text = `Example of additionalText`
-          description     = `Example of description` ) ).
-
-      view_display( client ).
-
+      data_init( ).
+      view_display( ).
     ENDIF.
 
   ENDMETHOD.

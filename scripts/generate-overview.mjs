@@ -2,10 +2,10 @@
 /*
  * Generates the in-system overview app src/z2ui5_cl_api_app_overview.clas.*
  * — an abap2UI5 app that lists every ported sample as one row of a table with
- * columns: Module, Control (-> OpenUI5 API), Sample, JavaScript (-> OpenUI5
- * repo source), UI5 App (-> live OpenUI5 fullscreen sample), ABAP (-> generated
- * class on GitHub) and abap2UI5 App (-> starts the app). Every link opens in a
- * NEW browser tab (target="_blank"; the abap2UI5 App uses the ?app_start= URL).
+ * columns: Module, Control (-> OpenUI5 API), Sample (name -> OpenUI5 repo
+ * source, ↗ -> live OpenUI5 fullscreen sample) and abap2UI5 (class name ->
+ * generated class on GitHub, ↗ -> starts the app). Every link opens in a NEW
+ * browser tab (target="_blank"; the ↗ start link uses the ?app_start= URL).
  * Depends only on src/ (no OpenUI5 checkout needed).
  *
  * Run:  node scripts/generate-overview.mjs
@@ -35,19 +35,33 @@ const apps = [];
 for (const f of walk(SRC)) {
   if (!f.endsWith('.clas.abap')) continue;
   const cls = path.basename(f, '.clas.abap');
-  const m = fs.readFileSync(f, 'utf8')
-    .match(/Rebuild of the UI5 demo kit sample:\s*\S*?entity\/([^/\s]+)\/sample\/(\S+)/);
+  const content = fs.readFileSync(f, 'utf8');
+  const m = content.match(/entity\/([^/\s]+)\/sample\/(\S+)/);
   if (!m) continue;
   const entity = m[1];
   const id = m[2];
   const i = id.indexOf('.sample.');
   if (i === -1) continue;
+  // the header "! NOTES (generation): block, flattened to bullets joined by " // "
+  let notes = '';
+  const nm = content.match(/"! NOTES \(generation\):\n((?:"!.*\n)+?)CLASS /);
+  if (nm) {
+    const bullets = [];
+    for (const raw of nm[1].split('\n')) {
+      if (!raw.startsWith('"!')) continue;
+      const t = raw.replace(/^"!\s?/, '').replace(/\s+$/, '');
+      if (t.startsWith('- ')) bullets.push(t.slice(2));
+      else if (bullets.length) bullets[bullets.length - 1] += ' ' + t.trim();
+    }
+    notes = bullets.join(' // ');
+  }
   apps.push({
     module: id.slice(0, i),
     control: entity,
     name: id.slice(i + '.sample.'.length),
     cls,
     file: path.relative(ROOT, f).split(path.sep).join('/'),
+    notes,
   });
 }
 // order by module, then control, then sample name (case-insensitive)
@@ -60,17 +74,38 @@ apps.sort((a, b) =>
 // at runtime in view_display (the abap2UI5 start URL needs the system origin)
 const w = (k) => Math.max(...apps.map((a) => a[k].length));
 const wm = w('module'), wc = w('control'), wn = w('name'), wl = w('cls'), wf = w('file');
-const rows = apps.map((a) =>
-  `      ( module = \`${a.module}\`${' '.repeat(wm - a.module.length)}` +
-  ` control = \`${a.control}\`${' '.repeat(wc - a.control.length)}` +
-  ` name = \`${a.name}\`${' '.repeat(wn - a.name.length)}` +
-  ` class = \`${a.cls}\`${' '.repeat(wl - a.cls.length)}` +
-  ` path = \`${a.file}\`${' '.repeat(wf - a.file.length)} )`);
+// render a string as an ABAP backtick literal, splitting long text with && to stay < 255 cols
+const abapStr = (s) => {
+  const q = (x) => '`' + x + '`';
+  const esc = s.replace(/`/g, '``');
+  if (esc.length <= 200) return q(esc);
+  const parts = [];
+  let rest = esc;
+  while (rest.length > 200) {
+    let cut = rest.lastIndexOf(' ', 200);
+    if (cut < 100) cut = 200;
+    parts.push(rest.slice(0, cut));
+    rest = rest.slice(cut);
+  }
+  parts.push(rest);
+  return parts.map(q).join(' &&\n                 ');
+};
+const rows = apps.map((a) => {
+  const base =
+    `      ( module = \`${a.module}\`${' '.repeat(wm - a.module.length)}` +
+    ` control = \`${a.control}\`${' '.repeat(wc - a.control.length)}` +
+    ` name = \`${a.name}\`${' '.repeat(wn - a.name.length)}` +
+    ` class = \`${a.cls}\`${' '.repeat(wl - a.cls.length)}` +
+    ` path = \`${a.file}\`${' '.repeat(wf - a.file.length)}`;
+  return a.notes ? `${base}\n        notes = ${abapStr(a.notes)} )` : `${base} )`;
+});
 
 const abap = `"! Generated overview app - lists every abap2UI5 api sample app in a table.
-"! Each row links the OpenUI5 control API, the OpenUI5 sample source, the live
-"! OpenUI5 fullscreen sample, the generated ABAP class and a start link for the
-"! abap2UI5 app - all opening in a new browser tab. Do not edit by hand -
+"! In the Sample column the name links the OpenUI5 source and the ↗ starts the
+"! live OpenUI5 sample; in the abap2UI5 column the class name links the generated
+"! ABAP class and the ↗ starts the app; Control links the OpenUI5 API - all
+"! opening in a new browser tab. The Note column shows a hint button that opens
+"! a popup with the port's generation caveats when present. Do not edit by hand -
 "! regenerate with scripts/generate-overview.mjs
 CLASS ${CLASS} DEFINITION PUBLIC.
 
@@ -90,6 +125,8 @@ CLASS ${CLASS} DEFINITION PUBLIC.
         ui5_url   TYPE string,
         abap_url  TYPE string,
         start_url TYPE string,
+        notes     TYPE string,
+        has_notes TYPE abap_bool,
       END OF ty_s_app.
     TYPES ty_t_app TYPE STANDARD TABLE OF ty_s_app WITH DEFAULT KEY.
 
@@ -99,6 +136,7 @@ CLASS ${CLASS} DEFINITION PUBLIC.
     DATA client TYPE REF TO z2ui5_if_client.
 
     METHODS view_display.
+    METHODS on_event.
     METHODS get_catalog
       RETURNING
         VALUE(result) TYPE ty_t_app.
@@ -116,7 +154,46 @@ CLASS ${CLASS} IMPLEMENTATION.
       view_display( ).
     ELSEIF client->check_on_navigated( ).
       view_display( ).
+    ELSEIF client->check_on_event( ).
+      on_event( ).
     ENDIF.
+
+  ENDMETHOD.
+
+
+  METHOD on_event.
+
+    CASE client->get( )-event.
+
+      WHEN \`SHOW_NOTES\`.
+        " one Text per bullet of the clicked row's generation notes
+        SPLIT client->get_event_arg( 1 ) AT \` // \` INTO TABLE DATA(lt_line).
+
+        DATA(popup) = z2ui5_cl_api_xml=>factory( ).
+        DATA(box) = popup->open( n = \`FragmentDefinition\` ns = \`core\`
+            )->a( n = \`xmlns\`      v = \`sap.m\`
+            )->a( n = \`xmlns:core\` v = \`sap.ui.core\`
+
+            )->open( \`Dialog\`
+                )->a( n = \`title\`        v = \`Generation notes\`
+                )->a( n = \`contentWidth\` v = \`34rem\`
+
+                )->open( \`VBox\`
+                    )->a( n = \`class\` v = \`sapUiContentPadding\` ).
+
+        LOOP AT lt_line INTO DATA(lv_line).
+          box->leaf( \`Text\`
+              )->a( n = \`text\` v = lv_line ).
+        ENDLOOP.
+
+        box->shut( )->open( \`endButton\`
+            )->leaf( \`Button\`
+                )->a( n = \`text\`  v = \`Close\`
+                )->a( n = \`press\` v = client->_event_client( client->cs_event-popup_close ) ).
+
+        client->popup_display( popup->stringify( ) ).
+
+    ENDCASE.
 
   ENDMETHOD.
 
@@ -146,48 +223,96 @@ CLASS ${CLASS} IMPLEMENTATION.
                         |&sap-ui-xx-sample-lib={ <app>-module }|.
       <app>-abap_url  = |https://github.com/abap2UI5/api/blob/main/{ <app>-path }|.
       <app>-start_url = |{ start }{ to_upper( <app>-class ) }|.
+      <app>-has_notes = xsdbool( <app>-notes IS NOT INITIAL ).
 
     ENDLOOP.
 
-    DATA(view) = z2ui5_cl_xml_view=>factory( ).
-    DATA(tab) = view->shell(
-        )->page(
-            title          = \`abap2UI5 - api\`
-            navbuttonpress = client->_event_nav_app_leave( )
-            shownavbutton  = client->check_app_prev_stack( )
-        )->table(
-            sticky = \`ColumnHeaders\`
-            items  = client->_bind( t_app ) ).
+    DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
-    tab->columns(
-        )->column( )->text( \`Module\` )->get_parent(
-        )->column( )->text( \`Control\` )->get_parent(
-        )->column( )->text( \`Sample\` )->get_parent(
-        )->column( )->text( \`JavaScript\` )->get_parent(
-        )->column( )->text( \`UI5 App\` )->get_parent(
-        )->column( )->text( \`ABAP\` )->get_parent(
-        )->column( )->text( \`abap2UI5 App\` ).
+    view->open( n = \`View\` ns = \`mvc\`
+        )->a( n = \`xmlns\`     v = \`sap.m\`
+        )->a( n = \`xmlns:mvc\` v = \`sap.ui.core.mvc\`
 
-    tab->items(
-        )->column_list_item(
-            )->cells(
-                )->text( \`{MODULE}\`
-                )->link( text   = \`{CTRL_NAME}\`
-                         href   = \`{API_URL}\`
-                         target = \`_blank\`
-                )->text( \`{NAME}\`
-                )->link( text   = \`↗\`
-                         href   = \`{JS_URL}\`
-                         target = \`_blank\`
-                )->link( text   = \`↗\`
-                         href   = \`{UI5_URL}\`
-                         target = \`_blank\`
-                )->link( text   = \`↗\`
-                         href   = \`{ABAP_URL}\`
-                         target = \`_blank\`
-                )->link( text   = \`↗\`
-                         href   = \`{START_URL}\`
-                         target = \`_blank\` ).
+        )->open( \`Shell\`
+            )->open( \`Page\`
+                )->a( n = \`title\`          v = \`abap2UI5 - api\`
+                )->a( n = \`navButtonPress\` v = client->_event_nav_app_leave( )
+                )->a( n = \`showNavButton\`  v = z2ui5_cl_api_xml=>as_bool( client->check_app_prev_stack( ) )
+
+                )->open( \`Table\`
+                    )->a( n = \`sticky\` v = \`ColumnHeaders\`
+                    )->a( n = \`items\`  v = client->_bind_edit( t_app )
+
+                    )->open( \`columns\`
+                        )->open( \`Column\`
+                            )->leaf( \`Text\`
+                                )->a( n = \`text\` v = \`Module\`
+
+                        )->shut(
+                        )->open( \`Column\`
+                            )->leaf( \`Text\`
+                                )->a( n = \`text\` v = \`Control\`
+
+                        )->shut(
+                        )->open( \`Column\`
+                            )->leaf( \`Text\`
+                                )->a( n = \`text\` v = \`Sample\`
+
+                        )->shut(
+                        )->open( \`Column\`
+                            )->leaf( \`Text\`
+                                )->a( n = \`text\` v = \`abap2UI5\`
+
+                        )->shut(
+                        )->open( \`Column\`
+                            )->leaf( \`Text\`
+                                )->a( n = \`text\` v = \`Note\`
+
+                        )->shut(
+                    )->shut(
+
+                    )->open( \`items\`
+                        )->open( \`ColumnListItem\`
+                            )->open( \`cells\`
+                                )->leaf( \`Text\`
+                                    )->a( n = \`text\` v = \`{MODULE}\`
+                                )->leaf( \`Link\`
+                                    )->a( n = \`text\`   v = \`{CTRL_NAME}\`
+                                    )->a( n = \`href\`   v = \`{API_URL}\`
+                                    )->a( n = \`target\` v = \`_blank\`
+
+                                )->open( \`HBox\`
+                                    )->leaf( \`Link\`
+                                        )->a( n = \`text\`   v = \`{NAME}\`
+                                        )->a( n = \`href\`   v = \`{JS_URL}\`
+                                        )->a( n = \`target\` v = \`_blank\`
+                                    )->leaf( \`Text\`
+                                        )->a( n = \`text\` v = \` \`
+                                    )->leaf( \`Link\`
+                                        )->a( n = \`text\`   v = \`↗\`
+                                        )->a( n = \`href\`   v = \`{UI5_URL}\`
+                                        )->a( n = \`target\` v = \`_blank\`
+
+                                )->shut(
+                                )->open( \`HBox\`
+                                    )->leaf( \`Link\`
+                                        )->a( n = \`text\`   v = \`{CLASS}\`
+                                        )->a( n = \`href\`   v = \`{ABAP_URL}\`
+                                        )->a( n = \`target\` v = \`_blank\`
+                                    )->leaf( \`Text\`
+                                        )->a( n = \`text\` v = \` \`
+                                    )->leaf( \`Link\`
+                                        )->a( n = \`text\`   v = \`↗\`
+                                        )->a( n = \`href\`   v = \`{START_URL}\`
+                                        )->a( n = \`target\` v = \`_blank\`
+
+                                )->shut(
+                                )->leaf( \`Button\`
+                                    )->a( n = \`icon\`    v = \`sap-icon://hint\`
+                                    )->a( n = \`type\`    v = \`Transparent\`
+                                    )->a( n = \`tooltip\` v = \`{NOTES}\`
+                                    )->a( n = \`visible\` v = \`{HAS_NOTES}\`
+                                    )->a( n = \`press\`   v = client->_event( val = \`SHOW_NOTES\` t_arg = VALUE #( ( \`{NOTES}\` ) ) ) ).
 
     client->view_display( view->stringify( ) ).
 

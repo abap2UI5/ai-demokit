@@ -1,7 +1,6 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.MessageToast/sample/sap.m.sample.MessageToast
-"! The Message Toast displays the message text as an overlay to the current screen. It closes
-"! automatically after some time without requiring further user interaction.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.MessageToast - MessageToast
+"! https://sdk.openui5.org/entity/sap.m.MessageToast/sample/sap.m.sample.MessageToast
 CLASS z2ui5_cl_api_app_448 DEFINITION PUBLIC.
 
   PUBLIC SECTION.
@@ -10,12 +9,8 @@ CLASS z2ui5_cl_api_app_448 DEFINITION PUBLIC.
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
 
-    METHODS view_display
-      IMPORTING
-        client TYPE REF TO z2ui5_if_client.
-    METHODS on_event
-      IMPORTING
-        client TYPE REF TO z2ui5_if_client.
+    METHODS view_display.
+    METHODS on_event.
 
   PRIVATE SECTION.
 ENDCLASS.
@@ -25,24 +20,35 @@ CLASS z2ui5_cl_api_app_448 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(page) = z2ui5_cl_xml_view=>factory( ).
+    DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
-    page->vertical_layout( class = `sapUiContentPadding`
-                           width = `100%`
-        )->button(
-            text  = `Show Message Toast`
-            press = client->_event( `SHOW_MESSAGE_TOAST` ) ).
+    view->open( n = `View` ns = `mvc`
+        )->a( n = `xmlns:l`   v = `sap.ui.layout`
+        )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
+        )->a( n = `xmlns`     v = `sap.m`
 
-    client->view_display( page->stringify( ) ).
+        )->open( n = `VerticalLayout` ns = `l`
+            )->a( n = `class` v = `sapUiContentPadding`
+            )->a( n = `width` v = `100%`
+
+            )->open( n = `content` ns = `l`
+                )->leaf( `Button`
+                    )->a( n = `text`  v = `Show Message Toast`
+                    )->a( n = `press` v = client->_event( `SHOW_MESSAGE_TOAST` ) ).
+
+    client->view_display( view->stringify( ) ).
 
   ENDMETHOD.
 
 
   METHOD on_event.
 
-    IF client->check_on_event( `SHOW_MESSAGE_TOAST` ).
-      client->message_toast_display( |Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy\r\n eirmod.| ).
-    ENDIF.
+    CASE client->get( )-event.
+
+      WHEN `SHOW_MESSAGE_TOAST`.
+        client->message_toast_display( |Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy\r\n eirmod.| ).
+
+    ENDCASE.
 
   ENDMETHOD.
 
@@ -50,12 +56,11 @@ CLASS z2ui5_cl_api_app_448 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-
     IF client->check_on_init( ).
-      view_display( client ).
+      view_display( ).
+    ELSEIF client->check_on_event( ).
+      on_event( ).
     ENDIF.
-
-    on_event( client ).
 
   ENDMETHOD.
 

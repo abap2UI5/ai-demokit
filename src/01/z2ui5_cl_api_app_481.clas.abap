@@ -1,7 +1,12 @@
-"! Generated port of a UI5 demo kit sample - not yet manually reviewed
-"! Rebuild of the UI5 demo kit sample: https://sdk.openui5.org/entity/sap.m.StepInput/sample/sap.m.sample.StepInput
-"! The StepInput allows the user to change stepwise a value by a predefined step and also to set
-"! additional description, such as units of measurement and currencies after the input field.
+"! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
+"! sap.m.StepInput - StepInput
+"! https://sdk.openui5.org/entity/sap.m.StepInput/sample/sap.m.sample.StepInput
+"! NOTES (generation):
+"! - IMPROVISED: the sample binds a List to the JSON model /modelData and renders
+"!   one templated CustomListItem per row. The rows are unrolled into static list
+"!   items here because every row sets a different subset of the StepInput
+"!   properties - an empty ABAP model field would bind as "" instead of leaving
+"!   the property at its default, so a bound template would not render 1:1.
 CLASS z2ui5_cl_api_app_481 DEFINITION PUBLIC.
 
   PUBLIC SECTION.
@@ -11,12 +16,13 @@ CLASS z2ui5_cl_api_app_481 DEFINITION PUBLIC.
     DATA client TYPE REF TO z2ui5_if_client.
 
     METHODS view_display.
+    METHODS on_event.
     METHODS render_item
       IMPORTING
-        list          TYPE REF TO z2ui5_cl_xml_view
+        list          TYPE REF TO z2ui5_cl_api_xml
         label         TYPE string
       RETURNING
-        VALUE(result) TYPE REF TO z2ui5_cl_xml_view.
+        VALUE(result) TYPE REF TO z2ui5_cl_api_xml.
 
   PRIVATE SECTION.
 ENDCLASS.
@@ -29,161 +35,182 @@ CLASS z2ui5_cl_api_app_481 IMPLEMENTATION.
     me->client = client.
     IF client->check_on_init( ).
       view_display( ).
-    ELSEIF client->check_on_event( `CHANGE` ).
-      client->message_toast_display( |Value changed to '{ client->get_event_arg( 1 ) }'| ).
+    ELSEIF client->check_on_event( ).
+      on_event( ).
     ENDIF.
-
-  ENDMETHOD.
-
-
-  METHOD render_item.
-
-    result = list->custom_list_item(
-        )->hbox( class          = `sapUiTinyMargin`
-                 justifycontent = `SpaceBetween`
-                 alignitems     = `Center`
-            )->vbox( `sapUiSmallMarginEnd`
-                )->label( text     = label
-                          wrapping = abap_true
-            )->get_parent(
-            )->vbox( ).
 
   ENDMETHOD.
 
 
   METHOD view_display.
 
-    DATA(page) = z2ui5_cl_xml_view=>factory( ).
+    DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
     DATA(change) = client->_event( val   = `CHANGE`
                                    t_arg = VALUE #( ( `${$parameters>/value}` ) ) ).
 
-    " the original binds the rows from a JSON model - the items are rendered statically here
-    " because every row sets a different subset of the StepInput properties
-    DATA(list) = page->list( id = `idTable` ).
+    DATA(list) = view->open( n = `View` ns = `mvc`
+            )->a( n = `xmlns`     v = `sap.m`
+            )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
+
+            )->open( `List`
+                )->a( n = `id` v = `idTable` ).
 
     render_item( list  = list
                  label = `Step = 1 (default); value = 6, min = 5, max = 15, width = 120px`
-        )->step_input(
-            value  = `6`
-            min    = `5`
-            max    = `15`
-            width  = `120px`
-            change = change ).
+        )->leaf( `StepInput`
+            )->a( n = `value`  v = `6`
+            )->a( n = `min`    v = `5`
+            )->a( n = `max`    v = `15`
+            )->a( n = `width`  v = `120px`
+            )->a( n = `change` v = change ).
 
     render_item( list  = list
                  label = `Step = 1 (default); value = 6, min = 5, max = 15, width = 120px, with validation on LiveChange`
-        )->step_input(
-            value          = `6`
-            min            = `5`
-            max            = `15`
-            width          = `120px`
-            validationmode = `LiveChange`
-            change         = change ).
+        )->leaf( `StepInput`
+            )->a( n = `value`          v = `6`
+            )->a( n = `min`            v = `5`
+            )->a( n = `max`            v = `15`
+            )->a( n = `width`          v = `120px`
+            )->a( n = `validationMode` v = `LiveChange`
+            )->a( n = `change`         v = change ).
 
     render_item( list  = list
                  label = `Step = 5, no value, no min, no max, width = 120px`
-        )->step_input(
-            step   = `5`
-            width  = `120px`
-            change = change ).
+        )->leaf( `StepInput`
+            )->a( n = `step`   v = `5`
+            )->a( n = `width`  v = `120px`
+            )->a( n = `change` v = change ).
 
     render_item( list  = list
                  label = `Step = 5, no value, no min, no max, width = 120px, largerStep = 3`
-        )->step_input(
-            step       = `5`
-            width      = `120px`
-            largerstep = `3`
-            change     = change ).
+        )->leaf( `StepInput`
+            )->a( n = `step`       v = `5`
+            )->a( n = `width`      v = `120px`
+            )->a( n = `largerStep` v = `3`
+            )->a( n = `change`     v = change ).
 
     render_item( list  = list
                  label = `Step = 1.1, no value, displayValuePrecision = 1, min = -6, max = 23.5, width = 120px`
-        )->step_input(
-            step                  = `1.1`
-            min                   = `-6`
-            max                   = `23.5`
-            width                 = `120px`
-            displayvalueprecision = `1`
-            change                = change ).
+        )->leaf( `StepInput`
+            )->a( n = `step`                  v = `1.1`
+            )->a( n = `min`                   v = `-6`
+            )->a( n = `max`                   v = `23.5`
+            )->a( n = `width`                 v = `120px`
+            )->a( n = `displayValuePrecision` v = `1`
+            )->a( n = `change`                v = change ).
 
     render_item( list  = list
                  label = `Disabled, value = 12.3, displayValuePrecision = 1, width = 120px`
-        )->step_input(
-            value                 = `12.3`
-            enabled               = abap_false
-            width                 = `120px`
-            displayvalueprecision = `1`
-            change                = change ).
+        )->leaf( `StepInput`
+            )->a( n = `value`                 v = `12.3`
+            )->a( n = `enabled`               v = `false`
+            )->a( n = `width`                 v = `120px`
+            )->a( n = `displayValuePrecision` v = `1`
+            )->a( n = `change`                v = change ).
 
     render_item( list  = list
                  label = `Read only, value = 123, default width of 100%`
-        )->step_input(
-            value    = `123`
-            editable = abap_false
-            change   = change ).
+        )->leaf( `StepInput`
+            )->a( n = `value`    v = `123`
+            )->a( n = `editable` v = `false`
+            )->a( n = `change`   v = change ).
 
     render_item( list  = list
                  label = `Step = 0.05; value = 1.32, displayValuePrecision = 3, min = -5, max = 15`
-        )->step_input(
-            value                 = `1.32`
-            step                  = `0.05`
-            min                   = `-5`
-            max                   = `15`
-            displayvalueprecision = `3`
-            change                = change ).
+        )->leaf( `StepInput`
+            )->a( n = `value`                 v = `1.32`
+            )->a( n = `step`                  v = `0.05`
+            )->a( n = `min`                   v = `-5`
+            )->a( n = `max`                   v = `15`
+            )->a( n = `displayValuePrecision` v = `3`
+            )->a( n = `change`                v = change ).
 
     render_item( list  = list
                  label = `Step = 1.05; value = 1.5675, displayValuePrecision = 2, no Min and Max`
-        )->step_input(
-            value                 = `1.5675`
-            step                  = `1.05`
-            displayvalueprecision = `2`
-            change                = change ).
+        )->leaf( `StepInput`
+            )->a( n = `value`                 v = `1.5675`
+            )->a( n = `step`                  v = `1.05`
+            )->a( n = `displayValuePrecision` v = `2`
+            )->a( n = `change`                v = change ).
 
     render_item( list  = list
                  label = `Step = -1 (which becomes 1), value = 20, width = 120px`
-        )->step_input(
-            value  = `20`
-            step   = `-1`
-            width  = `120px`
-            change = change ).
+        )->leaf( `StepInput`
+            )->a( n = `value`  v = `20`
+            )->a( n = `step`   v = `-1`
+            )->a( n = `width`  v = `120px`
+            )->a( n = `change` v = change ).
 
     render_item( list  = list
                  label = `Step = 1 (default); value = 6, min = 5, max = 15, width = 240px, with added description and default fieldWidth 50%`
-        )->step_input(
-            value       = `6`
-            min         = `5`
-            max         = `15`
-            width       = `240px`
-            description = `EUR`
-            change      = change ).
+        )->leaf( `StepInput`
+            )->a( n = `value`       v = `6`
+            )->a( n = `min`         v = `5`
+            )->a( n = `max`         v = `15`
+            )->a( n = `width`       v = `240px`
+            )->a( n = `description` v = `EUR`
+            )->a( n = `change`      v = change ).
 
     render_item( list  = list
                  label = `Step = 1 (default); value = 160, with added description and fieldWidth set to 70%`
-        )->step_input(
-            value       = `160`
-            fieldwidth  = `70%`
-            description = `EUR`
-            change      = change ).
+        )->leaf( `StepInput`
+            )->a( n = `value`       v = `160`
+            )->a( n = `fieldWidth`  v = `70%`
+            )->a( n = `description` v = `EUR`
+            )->a( n = `change`      v = change ).
 
     render_item( list  = list
                  label = `Step = 1 (default); value = 160, align:Center`
-        )->step_input(
-            value     = `160`
-            textalign = `Center`
-            change    = change ).
+        )->leaf( `StepInput`
+            )->a( n = `value`     v = `160`
+            )->a( n = `textAlign` v = `Center`
+            )->a( n = `change`    v = change ).
 
     render_item( list  = list
                  label = `Step = 5, stepMode = Multiple, min = -40, max = 100, value = 10,`
-        )->step_input(
-            value    = `10`
-            step     = `5`
-            max      = `100`
-            min      = `-40`
-            stepmode = `Multiple`
-            change   = change ).
+        )->leaf( `StepInput`
+            )->a( n = `value`    v = `10`
+            )->a( n = `step`     v = `5`
+            )->a( n = `max`      v = `100`
+            )->a( n = `min`      v = `-40`
+            )->a( n = `stepMode` v = `Multiple`
+            )->a( n = `change`   v = change ).
 
-    client->view_display( page->stringify( ) ).
+    client->view_display( view->stringify( ) ).
+
+  ENDMETHOD.
+
+
+  METHOD render_item.
+
+    result = list->open( `CustomListItem`
+        )->open( `HBox`
+            )->a( n = `class`          v = `sapUiTinyMargin`
+            )->a( n = `justifyContent` v = `SpaceBetween`
+            )->a( n = `alignItems`     v = `Center`
+
+            )->open( `VBox`
+                )->a( n = `class` v = `sapUiSmallMarginEnd`
+
+                )->leaf( `Label`
+                    )->a( n = `text`     v = label
+                    )->a( n = `wrapping` v = `true`
+
+            )->shut(
+            )->open( `VBox` ).
+
+  ENDMETHOD.
+
+
+  METHOD on_event.
+
+    CASE client->get( )-event.
+
+      WHEN `CHANGE`.
+        client->message_toast_display( |Value changed to '{ client->get_event_arg( 1 ) }'| ).
+
+    ENDCASE.
 
   ENDMETHOD.
 
