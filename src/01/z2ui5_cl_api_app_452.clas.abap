@@ -25,7 +25,7 @@ CLASS z2ui5_cl_api_app_452 DEFINITION PUBLIC.
     " view_display); kept out of PUBLIC so the round-trip model scan stays small
     DATA t_products TYPE STANDARD TABLE OF ty_s_product WITH EMPTY KEY.
 
-    METHODS data_init.
+    METHODS model_init.
     METHODS view_display.
 
   PRIVATE SECTION.
@@ -38,14 +38,14 @@ CLASS z2ui5_cl_api_app_452 IMPLEMENTATION.
 
     me->client = client.
     IF client->check_on_init( ).
-      data_init( ).
+      model_init( ).
       view_display( ).
     ENDIF.
 
   ENDMETHOD.
 
 
-  METHOD data_init.
+  METHOD model_init.
 
     " Data of the mock model /ProductCollection used by the original sample
     t_products = VALUE #(

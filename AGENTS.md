@@ -147,7 +147,7 @@ CLASS z2ui5_cl_api_app_<n> DEFINITION PUBLIC.       " lowercase, not FINAL
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
-    METHODS data_init.       " only if the app has model data
+    METHODS model_init.       " only if the app has model data
     METHODS on_event.        " only if the app reacts to events
     METHODS view_display.
 
@@ -162,7 +162,7 @@ METHOD z2ui5_if_app~main.
 
   me->client = client.
   IF client->check_on_init( ).
-    data_init( ).
+    model_init( ).
     view_display( ).
   ELSEIF client->check_on_event( ).
     on_event( ).
@@ -173,13 +173,13 @@ ENDMETHOD.
 
 - `check_on_init( )` fires once when the app starts — seed the data, draw the view.
 - `check_on_event( )` fires on every user interaction — dispatch in `on_event( )`.
-- Add `data_init( )` / `on_event( )` **only when the app actually has data /
+- Add `model_init( )` / `on_event( )` **only when the app actually has data /
   events** — never a pass-through method with a single statement. A static app
   (like app 408) has just `view_display( )` under `check_on_init( )`.
 - If the sample re-displays on navigation, add an
   `ELSEIF client->check_on_navigated( ). view_display( ).` branch.
 
-#### `data_init` — the model
+#### `model_init` — the model
 
 The sample's JSON model becomes ABAP: one `ty_s_`/`ty_t_` type per JSON array,
 filled with `VALUE #( ( … ) ( … ) )`. Field names are the JSON keys, upper-cased

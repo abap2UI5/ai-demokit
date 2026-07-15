@@ -36,7 +36,7 @@ CLASS z2ui5_cl_api_app_401 DEFINITION PUBLIC.
     DATA t_range_category TYPE RANGE OF string.
     DATA t_range_supplier TYPE RANGE OF string.
 
-    METHODS data_init.
+    METHODS model_init.
     METHODS view_display.
     METHODS on_event.
     METHODS on_event_list_close
@@ -53,7 +53,7 @@ CLASS z2ui5_cl_api_app_401 IMPLEMENTATION.
 
     me->client = client.
     IF client->check_on_init( ).
-      data_init( ).
+      model_init( ).
       view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
@@ -62,7 +62,7 @@ CLASS z2ui5_cl_api_app_401 IMPLEMENTATION.
   ENDMETHOD.
 
 
-  METHOD data_init.
+  METHOD model_init.
 
     " Data taken from the shared mock data sap/ui/demo/mock/products.json of the original sample
     t_products = VALUE #(

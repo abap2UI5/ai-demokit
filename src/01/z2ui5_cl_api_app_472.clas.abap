@@ -25,7 +25,7 @@ CLASS z2ui5_cl_api_app_472 DEFINITION PUBLIC.
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
 
-    METHODS data_init.
+    METHODS model_init.
     METHODS view_display.
 
   PRIVATE SECTION.
@@ -34,7 +34,7 @@ ENDCLASS.
 
 CLASS z2ui5_cl_api_app_472 IMPLEMENTATION.
 
-  METHOD data_init.
+  METHOD model_init.
 
     rs1_value  = `0`.
     rs1_value2 = `100`.
@@ -169,7 +169,7 @@ CLASS z2ui5_cl_api_app_472 IMPLEMENTATION.
 
     me->client = client.
     IF client->check_on_init( ).
-      data_init( ).
+      model_init( ).
       view_display( ).
     ENDIF.
 

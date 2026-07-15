@@ -20,7 +20,7 @@ CLASS z2ui5_cl_api_app_530 DEFINITION PUBLIC.
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
 
-    METHODS data_init.
+    METHODS model_init.
     METHODS view_display.
     METHODS on_event.
 
@@ -30,7 +30,7 @@ ENDCLASS.
 
 CLASS z2ui5_cl_api_app_530 IMPLEMENTATION.
 
-  METHOD data_init.
+  METHOD model_init.
 
     " Rows built in the original onInit from the sap.m BreadcrumbsSeparatorStyle enum
     " (UI5 1.71): key = enum name, text = enum value (value equals name here)
@@ -138,7 +138,7 @@ CLASS z2ui5_cl_api_app_530 IMPLEMENTATION.
 
     me->client = client.
     IF client->check_on_init( ).
-      data_init( ).
+      model_init( ).
       view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).

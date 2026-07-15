@@ -63,12 +63,12 @@ Rules:
 - Structure z2ui5_if_app~main as a dispatcher:
     me->client = client.
     IF client->check_on_init( ).
-      data_init( ).
+      model_init( ).
       view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
     ENDIF.
-  Add data_init / on_event only when the app actually has data / events.
+  Add model_init / on_event only when the app actually has data / events.
 - Move the sample's JSON model data into ABAP (VALUE #( ... )) and bind it
   with client->_bind_edit (the one-way client->_bind is obsolete - always use
   _bind_edit).

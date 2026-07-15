@@ -16,7 +16,7 @@ CLASS z2ui5_cl_api_app_473 DEFINITION PUBLIC.
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
 
-    METHODS data_init.
+    METHODS model_init.
     METHODS view_display.
 
   PRIVATE SECTION.
@@ -25,7 +25,7 @@ ENDCLASS.
 
 CLASS z2ui5_cl_api_app_473 IMPLEMENTATION.
 
-  METHOD data_init.
+  METHOD model_init.
 
     " original uses 50em on phone devices (sap/ui/Device is not available server-side)
     width = `100em`.
@@ -62,7 +62,7 @@ CLASS z2ui5_cl_api_app_473 IMPLEMENTATION.
 
     me->client = client.
     IF client->check_on_init( ).
-      data_init( ).
+      model_init( ).
       view_display( ).
     ENDIF.
 
