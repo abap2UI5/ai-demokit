@@ -210,7 +210,8 @@ CLASS z2ui5_cl_api_app_overview IMPLEMENTATION.
                                     )->a( n = `type`    v = `Transparent`
                                     )->a( n = `tooltip` v = `{NOTES}`
                                     )->a( n = `visible` v = `{HAS_NOTES}`
-                                    )->a( n = `press`   v = client->_event( val = `SHOW_NOTES` t_arg = VALUE #( ( `{NOTES}` ) ) ) ).
+                                    )->a( n = `press`   v = client->_event( val = `SHOW_NOTES` t_arg = VALUE #( ( `${NOTES}` ) )
+                                         ) ).
 
     client->view_display( view->stringify( ) ).
 
