@@ -1,10 +1,9 @@
 "! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
 "! sap.m.Button - Button
 "! https://sdk.openui5.org/entity/sap.m.Button/sample/sap.m.sample.Button
-"! NOTES (generation):
-"! - IMPROVISED: the original press handler toasts oEvent.getSource().getId()
-"!   - a client-side control id that does not exist server-side. All presses
-"!   collapse to one event that shows a static text instead.
+"! CHECKED (2026-07-15): manually verified in a running system - each press
+"! toasts the pressed button's client-side control id, read via the event arg
+"! $event.oSource.sId, exactly like the original.
 CLASS z2ui5_cl_api_app_526 DEFINITION PUBLIC.
 
   PUBLIC SECTION.
@@ -52,7 +51,7 @@ CLASS z2ui5_cl_api_app_526 IMPLEMENTATION.
                 )->open( `Toolbar`
                     )->leaf( `Button`
                         )->a( n = `type`  v = `Back`
-                        )->a( n = `press` v = client->_event( `PRESS` )
+                        )->a( n = `press` v = client->_event( val = `PRESS` t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
                     )->leaf( `ToolbarSpacer`
                     )->leaf( `Title`
                         )->a( n = `text`  v = `Title`
@@ -61,7 +60,7 @@ CLASS z2ui5_cl_api_app_526 IMPLEMENTATION.
                     )->leaf( `Button`
                         )->a( n = `icon`          v = `sap-icon://edit`
                         )->a( n = `type`          v = `Transparent`
-                        )->a( n = `press`         v = client->_event( `PRESS` )
+                        )->a( n = `press`         v = client->_event( val = `PRESS` t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
                         )->a( n = `ariaLabelledBy` v = `editButtonLabel`
 
                 )->shut(
@@ -72,15 +71,15 @@ CLASS z2ui5_cl_api_app_526 IMPLEMENTATION.
                     )->leaf( `ToolbarSpacer`
                     )->leaf( `Button`
                         )->a( n = `text`  v = `Default`
-                        )->a( n = `press` v = client->_event( `PRESS` )
+                        )->a( n = `press` v = client->_event( val = `PRESS` t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
                     )->leaf( `Button`
                         )->a( n = `type`  v = `Reject`
                         )->a( n = `text`  v = `Reject`
-                        )->a( n = `press` v = client->_event( `PRESS` )
+                        )->a( n = `press` v = client->_event( val = `PRESS` t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
                     )->leaf( `Button`
                         )->a( n = `icon`           v = `sap-icon://action`
                         )->a( n = `type`           v = `Transparent`
-                        )->a( n = `press`          v = client->_event( `PRESS` )
+                        )->a( n = `press`          v = client->_event( val = `PRESS` t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
                         )->a( n = `ariaLabelledBy` v = `actionButtonLabel`
                     )->leaf( `ToolbarSpacer`
 
@@ -91,7 +90,7 @@ CLASS z2ui5_cl_api_app_526 IMPLEMENTATION.
                 )->open( `HBox`
                     )->open( `Button`
                         )->a( n = `text`           v = `Default`
-                        )->a( n = `press`          v = client->_event( `PRESS` )
+                        )->a( n = `press`          v = client->_event( val = `PRESS` t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
                         )->a( n = `ariaDescribedBy` v = `defaultButtonDescription genericButtonDescription`
 
                         )->open( `layoutData`
@@ -103,7 +102,7 @@ CLASS z2ui5_cl_api_app_526 IMPLEMENTATION.
                     )->open( `Button`
                         )->a( n = `type`            v = `Accept`
                         )->a( n = `text`            v = `Accept`
-                        )->a( n = `press`           v = client->_event( `PRESS` )
+                        )->a( n = `press`           v = client->_event( val = `PRESS` t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
                         )->a( n = `ariaDescribedBy` v = `acceptButtonDescription genericButtonDescription`
 
                         )->open( `layoutData`
@@ -115,7 +114,7 @@ CLASS z2ui5_cl_api_app_526 IMPLEMENTATION.
                     )->open( `Button`
                         )->a( n = `type`            v = `Reject`
                         )->a( n = `text`            v = `Reject`
-                        )->a( n = `press`           v = client->_event( `PRESS` )
+                        )->a( n = `press`           v = client->_event( val = `PRESS` t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
                         )->a( n = `ariaDescribedBy` v = `rejectButtonDescription genericButtonDescription`
 
                         )->open( `layoutData`
@@ -126,7 +125,7 @@ CLASS z2ui5_cl_api_app_526 IMPLEMENTATION.
                     )->shut(
                     )->open( `Button`
                         )->a( n = `text`            v = `Coming Soon`
-                        )->a( n = `press`           v = client->_event( `PRESS` )
+                        )->a( n = `press`           v = client->_event( val = `PRESS` t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
                         )->a( n = `ariaDescribedBy` v = `comingSoonButtonDescription genericButtonDescription`
                         )->a( n = `enabled`         v = `false`
 
@@ -170,14 +169,14 @@ CLASS z2ui5_cl_api_app_526 IMPLEMENTATION.
                     )->leaf( `Button`
                         )->a( n = `type`  v = `Emphasized`
                         )->a( n = `text`  v = `Emphasized`
-                        )->a( n = `press` v = client->_event( `PRESS` )
+                        )->a( n = `press` v = client->_event( val = `PRESS` t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
                     )->leaf( `Button`
                         )->a( n = `text`  v = `Default`
-                        )->a( n = `press` v = client->_event( `PRESS` )
+                        )->a( n = `press` v = client->_event( val = `PRESS` t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
                     )->leaf( `Button`
                         )->a( n = `icon`  v = `sap-icon://action`
                         )->a( n = `type`  v = `Transparent`
-                        )->a( n = `press` v = client->_event( `PRESS` ) ).
+                        )->a( n = `press` v = client->_event( val = `PRESS` t_arg = VALUE #( ( `$event.oSource.sId` ) ) ) ).
 
     client->view_display( view->stringify( ) ).
 
@@ -189,9 +188,9 @@ CLASS z2ui5_cl_api_app_526 IMPLEMENTATION.
     CASE client->get( )-event.
 
       WHEN `PRESS`.
-        " Original controller shows evt.getSource().getId() + " Pressed";
-        " the control id is client-side only, so the static toast text is shown.
-        client->message_toast_display( `Button Pressed` ).
+        " like the original: evt.getSource().getId() + " Pressed" -
+        " the client-side control id arrives as event arg $event.oSource.sId
+        client->message_toast_display( |{ client->get_event_arg( ) } Pressed| ).
 
     ENDCASE.
 

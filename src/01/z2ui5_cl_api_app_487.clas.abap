@@ -42,7 +42,7 @@ CLASS z2ui5_cl_api_app_487 DEFINITION PUBLIC.
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
 
-    METHODS data_init.
+    METHODS model_init.
     METHODS view_display.
 
   PRIVATE SECTION.
@@ -55,14 +55,14 @@ CLASS z2ui5_cl_api_app_487 IMPLEMENTATION.
 
     me->client = client.
     IF client->check_on_init( ).
-      data_init( ).
+      model_init( ).
       view_display( ).
     ENDIF.
 
   ENDMETHOD.
 
 
-  METHOD data_init.
+  METHOD model_init.
 
     t_nodes = VALUE #(
         ( text  = `Node1`

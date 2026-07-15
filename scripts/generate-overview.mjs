@@ -42,6 +42,15 @@ for (const f of walk(SRC)) {
   const id = m[2];
   const i = id.indexOf('.sample.');
   if (i === -1) continue;
+  // the optional "! CHECKED (<yyyy-mm-dd>): ... header marker (incl. its plain
+  // "! continuation lines) — set when the port was manually verified in a
+  // running system; shown as a green check in the overview
+  let checked = '';
+  const cm = content.match(/"! (CHECKED \(\d{4}-\d{2}-\d{2}\):.*\n(?:"! (?!NOTES \(generation\):|- ).*\n)*)/);
+  if (cm) {
+    checked = cm[1].split('\n').filter(Boolean)
+      .map((l) => l.replace(/^"!\s?/, '').trim()).join(' ');
+  }
   // the header "! NOTES (generation): block, flattened to bullets joined by " // "
   let notes = '';
   const nm = content.match(/"! NOTES \(generation\):\n((?:"!.*\n)+?)CLASS /);
@@ -61,6 +70,7 @@ for (const f of walk(SRC)) {
     name: id.slice(i + '.sample.'.length),
     cls,
     file: path.relative(ROOT, f).split(path.sep).join('/'),
+    checked,
     notes,
   });
 }
@@ -97,14 +107,18 @@ const rows = apps.map((a) => {
     ` name = \`${a.name}\`${' '.repeat(wn - a.name.length)}` +
     ` class = \`${a.cls}\`${' '.repeat(wl - a.cls.length)}` +
     ` path = \`${a.file}\`${' '.repeat(wf - a.file.length)}`;
-  return a.notes ? `${base}\n        notes = ${abapStr(a.notes)} )` : `${base} )`;
+  const extras = [];
+  if (a.checked) extras.push(`checked = ${abapStr(a.checked)}`);
+  if (a.notes) extras.push(`notes = ${abapStr(a.notes)}`);
+  return extras.length ? `${base}\n        ${extras.join('\n        ')} )` : `${base} )`;
 });
 
 const abap = `"! Generated overview app - lists every abap2UI5 api sample app in a table.
 "! In the Sample column the name links the OpenUI5 source and the ↗ starts the
 "! live OpenUI5 sample; in the abap2UI5 column the class name links the generated
 "! ABAP class and the ↗ starts the app; Control links the OpenUI5 API - all
-"! opening in a new browser tab. The Note column shows a hint button that opens
+"! opening in a new browser tab. The Note column shows a green check when the
+"! port was manually verified in a running system, and a hint button that opens
 "! a popup with the port's generation caveats when present. Do not edit by hand -
 "! regenerate with scripts/generate-overview.mjs
 CLASS ${CLASS} DEFINITION PUBLIC.
@@ -125,6 +139,8 @@ CLASS ${CLASS} DEFINITION PUBLIC.
         ui5_url   TYPE string,
         abap_url  TYPE string,
         start_url TYPE string,
+        checked   TYPE string,
+        has_check TYPE abap_bool,
         notes     TYPE string,
         has_notes TYPE abap_bool,
       END OF ty_s_app.
@@ -223,6 +239,7 @@ CLASS ${CLASS} IMPLEMENTATION.
                         |&sap-ui-xx-sample-lib={ <app>-module }|.
       <app>-abap_url  = |https://github.com/abap2UI5/api/blob/main/{ <app>-path }|.
       <app>-start_url = |{ start }{ to_upper( <app>-class ) }|.
+      <app>-has_check = xsdbool( <app>-checked IS NOT INITIAL ).
       <app>-has_notes = xsdbool( <app>-notes IS NOT INITIAL ).
 
     ENDLOOP.
@@ -230,8 +247,9 @@ CLASS ${CLASS} IMPLEMENTATION.
     DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
     view->open( n = \`View\` ns = \`mvc\`
-        )->a( n = \`xmlns\`     v = \`sap.m\`
-        )->a( n = \`xmlns:mvc\` v = \`sap.ui.core.mvc\`
+        )->a( n = \`xmlns\`      v = \`sap.m\`
+        )->a( n = \`xmlns:mvc\`  v = \`sap.ui.core.mvc\`
+        )->a( n = \`xmlns:core\` v = \`sap.ui.core\`
 
         )->open( \`Shell\`
             )->open( \`Page\`
@@ -307,12 +325,20 @@ CLASS ${CLASS} IMPLEMENTATION.
                                         )->a( n = \`target\` v = \`_blank\`
 
                                 )->shut(
-                                )->leaf( \`Button\`
-                                    )->a( n = \`icon\`    v = \`sap-icon://hint\`
-                                    )->a( n = \`type\`    v = \`Transparent\`
-                                    )->a( n = \`tooltip\` v = \`{NOTES}\`
-                                    )->a( n = \`visible\` v = \`{HAS_NOTES}\`
-                                    )->a( n = \`press\`   v = client->_event( val = \`SHOW_NOTES\` t_arg = VALUE #( ( \`{NOTES}\` ) ) ) ).
+                                )->open( \`HBox\`
+                                    )->a( n = \`alignItems\` v = \`Center\`
+
+                                    )->leaf( \`core:Icon\`
+                                        )->a( n = \`src\`     v = \`sap-icon://accept\`
+                                        )->a( n = \`color\`   v = \`#107e3e\`
+                                        )->a( n = \`tooltip\` v = \`{CHECKED}\`
+                                        )->a( n = \`visible\` v = \`{HAS_CHECK}\`
+                                    )->leaf( \`Button\`
+                                        )->a( n = \`icon\`    v = \`sap-icon://hint\`
+                                        )->a( n = \`type\`    v = \`Transparent\`
+                                        )->a( n = \`tooltip\` v = \`{NOTES}\`
+                                        )->a( n = \`visible\` v = \`{HAS_NOTES}\`
+                                        )->a( n = \`press\`   v = client->_event( val = \`SHOW_NOTES\` t_arg = VALUE #( ( \`\${NOTES}\` ) ) ) ).
 
     client->view_display( view->stringify( ) ).
 

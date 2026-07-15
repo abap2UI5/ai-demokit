@@ -5,7 +5,7 @@ name: auto_downport
 
 on:
   push:
-    branches: [standard]
+    branches: [main]
 
 permissions:
   contents: write

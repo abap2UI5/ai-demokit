@@ -1,6 +1,8 @@
 "! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
 "! sap.m.CheckBox - CheckBoxTriState
 "! https://sdk.openui5.org/entity/sap.m.CheckBox/sample/sap.m.sample.CheckBoxTriState
+"! CHECKED (2026-07-15): manually verified in a running system - the select-all
+"! parent checkbox and its tri-state expression bindings behave like the original.
 CLASS z2ui5_cl_api_app_421 DEFINITION PUBLIC.
 
   PUBLIC SECTION.
@@ -13,7 +15,7 @@ CLASS z2ui5_cl_api_app_421 DEFINITION PUBLIC.
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
 
-    METHODS data_init.
+    METHODS model_init.
     METHODS view_display.
     METHODS on_event.
 
@@ -23,7 +25,7 @@ ENDCLASS.
 
 CLASS z2ui5_cl_api_app_421 IMPLEMENTATION.
 
-  METHOD data_init.
+  METHOD model_init.
 
     child1 = abap_true.
     child2 = abap_false.
@@ -91,7 +93,7 @@ CLASS z2ui5_cl_api_app_421 IMPLEMENTATION.
 
     me->client = client.
     IF client->check_on_init( ).
-      data_init( ).
+      model_init( ).
       view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).

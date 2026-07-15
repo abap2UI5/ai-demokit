@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "statusMessage": "Loading AGENTS.md lessons-learned reminder",
+            "command": "jq -n --arg c 'AGENTS.md is this project memory. Per section 10 (Lessons learned): whenever you discover and fix a non-obvious mistake - an unknown CI or linter rule, a framework quirk, a wrong assumption you had to unlearn, a tool that behaved destructively - record the rule back in AGENTS.md in the SAME change, before you finish. Put a step-specific lesson in that step section; a cross-cutting one in section 10 (Known gotchas) or section 8. Write the rule, not the story, and name the app or class where it bit us. Ask yourself at the end of the task: did I learn something the next agent would otherwise repeat?' '{hookSpecificOutput:{hookEventName:\"SessionStart\",additionalContext:$c}}'"
+          }
+        ]
+      }
+    ]
+  }
+}

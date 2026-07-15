@@ -2,7 +2,8 @@
 "! In the Sample column the name links the OpenUI5 source and the ↗ starts the
 "! live OpenUI5 sample; in the abap2UI5 column the class name links the generated
 "! ABAP class and the ↗ starts the app; Control links the OpenUI5 API - all
-"! opening in a new browser tab. The Note column shows a hint button that opens
+"! opening in a new browser tab. The Note column shows a green check when the
+"! port was manually verified in a running system, and a hint button that opens
 "! a popup with the port's generation caveats when present. Do not edit by hand -
 "! regenerate with scripts/generate-overview.mjs
 CLASS z2ui5_cl_api_app_overview DEFINITION PUBLIC.
@@ -23,6 +24,8 @@ CLASS z2ui5_cl_api_app_overview DEFINITION PUBLIC.
         ui5_url   TYPE string,
         abap_url  TYPE string,
         start_url TYPE string,
+        checked   TYPE string,
+        has_check TYPE abap_bool,
         notes     TYPE string,
         has_notes TYPE abap_bool,
       END OF ty_s_app.
@@ -121,6 +124,7 @@ CLASS z2ui5_cl_api_app_overview IMPLEMENTATION.
                         |&sap-ui-xx-sample-lib={ <app>-module }|.
       <app>-abap_url  = |https://github.com/abap2UI5/api/blob/main/{ <app>-path }|.
       <app>-start_url = |{ start }{ to_upper( <app>-class ) }|.
+      <app>-has_check = xsdbool( <app>-checked IS NOT INITIAL ).
       <app>-has_notes = xsdbool( <app>-notes IS NOT INITIAL ).
 
     ENDLOOP.
@@ -128,8 +132,9 @@ CLASS z2ui5_cl_api_app_overview IMPLEMENTATION.
     DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
-        )->a( n = `xmlns`     v = `sap.m`
-        )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
+        )->a( n = `xmlns`      v = `sap.m`
+        )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
+        )->a( n = `xmlns:core` v = `sap.ui.core`
 
         )->open( `Shell`
             )->open( `Page`
@@ -205,13 +210,20 @@ CLASS z2ui5_cl_api_app_overview IMPLEMENTATION.
                                         )->a( n = `target` v = `_blank`
 
                                 )->shut(
-                                )->leaf( `Button`
-                                    )->a( n = `icon`    v = `sap-icon://hint`
-                                    )->a( n = `type`    v = `Transparent`
-                                    )->a( n = `tooltip` v = `{NOTES}`
-                                    )->a( n = `visible` v = `{HAS_NOTES}`
-                                    )->a( n = `press`   v = client->_event( val = `SHOW_NOTES` t_arg = VALUE #( ( `${NOTES}` ) )
-                                         ) ).
+                                )->open( `HBox`
+                                    )->a( n = `alignItems` v = `Center`
+
+                                    )->leaf( `core:Icon`
+                                        )->a( n = `src`     v = `sap-icon://accept`
+                                        )->a( n = `color`   v = `#107e3e`
+                                        )->a( n = `tooltip` v = `{CHECKED}`
+                                        )->a( n = `visible` v = `{HAS_CHECK}`
+                                    )->leaf( `Button`
+                                        )->a( n = `icon`    v = `sap-icon://hint`
+                                        )->a( n = `type`    v = `Transparent`
+                                        )->a( n = `tooltip` v = `{NOTES}`
+                                        )->a( n = `visible` v = `{HAS_NOTES}`
+                                        )->a( n = `press`   v = client->_event( val = `SHOW_NOTES` t_arg = VALUE #( ( `${NOTES}` ) ) ) ).
 
     client->view_display( view->stringify( ) ).
 
@@ -222,14 +234,15 @@ CLASS z2ui5_cl_api_app_overview IMPLEMENTATION.
 
     result = VALUE #(
       ( module = `sap.m` control = `sap.m.Breadcrumbs`     name = `Breadcrumbs`               class = `z2ui5_cl_api_app_530` path = `src/01/z2ui5_cl_api_app_530.clas.abap`
-        notes = `LIVE-TEST: the link press reads the clicked link's text via the event arg ${$source>/text}. This $source> form is not used anywhere else in the repo and is unverified - confirm it delivers the text in` &&
-                 ` a running system.` )
+        checked = `CHECKED (2026-07-15): manually verified in a running system - the ${$source>/text} event arg delivers the clicked link's text as expected, everything works like the original.` )
       ( module = `sap.m` control = `sap.m.Button`          name = `Button`                    class = `z2ui5_cl_api_app_526` path = `src/01/z2ui5_cl_api_app_526.clas.abap`
-        notes = `IMPROVISED: the original press handler toasts oEvent.getSource().getId() - a client-side control id that does not exist server-side. All presses collapse to one event that shows a static text instead.` )
+        checked = `CHECKED (2026-07-15): manually verified in a running system - each press toasts the pressed button's client-side control id, read via the event arg $event.oSource.sId, exactly like the original.` )
       ( module = `sap.m` control = `sap.m.Carousel`        name = `CarouselWithControls`      class = `z2ui5_cl_api_app_420` path = `src/01/z2ui5_cl_api_app_420.clas.abap`
+        checked = `CHECKED (2026-07-15): manually verified in a running system - renders and scrolls like the original (see the note below on the flattened image model).`
         notes = `IMPROVISED: the three carousel images bind to a separate named model in the original (img>/products/pic1..3 from sap/ui/demo/mock/img.json); resolved here to static image URLs, as abap2UI5 serves a` &&
                  ` single default model.` )
-      ( module = `sap.m` control = `sap.m.CheckBox`        name = `CheckBoxTriState`          class = `z2ui5_cl_api_app_421` path = `src/01/z2ui5_cl_api_app_421.clas.abap` )
+      ( module = `sap.m` control = `sap.m.CheckBox`        name = `CheckBoxTriState`          class = `z2ui5_cl_api_app_421` path = `src/01/z2ui5_cl_api_app_421.clas.abap`
+        checked = `CHECKED (2026-07-15): manually verified in a running system - the select-all parent checkbox and its tri-state expression bindings behave like the original.` )
       ( module = `sap.m` control = `sap.m.ColorPalette`    name = `ColorPalette`              class = `z2ui5_cl_api_app_422` path = `src/01/z2ui5_cl_api_app_422.clas.abap` )
       ( module = `sap.m` control = `sap.m.ComboBox`        name = `ComboBox`                  class = `z2ui5_cl_api_app_423` path = `src/01/z2ui5_cl_api_app_423.clas.abap` )
       ( module = `sap.m` control = `sap.m.FacetFilter`     name = `FacetFilterLight`          class = `z2ui5_cl_api_app_401` path = `src/01/z2ui5_cl_api_app_401.clas.abap` )

@@ -147,7 +147,7 @@ CLASS z2ui5_cl_api_app_<n> DEFINITION PUBLIC.       " lowercase, not FINAL
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
-    METHODS data_init.       " only if the app has model data
+    METHODS model_init.       " only if the app has model data
     METHODS on_event.        " only if the app reacts to events
     METHODS view_display.
 
@@ -162,7 +162,7 @@ METHOD z2ui5_if_app~main.
 
   me->client = client.
   IF client->check_on_init( ).
-    data_init( ).
+    model_init( ).
     view_display( ).
   ELSEIF client->check_on_event( ).
     on_event( ).
@@ -173,18 +173,28 @@ ENDMETHOD.
 
 - `check_on_init( )` fires once when the app starts — seed the data, draw the view.
 - `check_on_event( )` fires on every user interaction — dispatch in `on_event( )`.
-- Add `data_init( )` / `on_event( )` **only when the app actually has data /
+- Add `model_init( )` / `on_event( )` **only when the app actually has data /
   events** — never a pass-through method with a single statement. A static app
   (like app 408) has just `view_display( )` under `check_on_init( )`.
 - If the sample re-displays on navigation, add an
   `ELSEIF client->check_on_navigated( ). view_display( ).` branch.
 
-#### `data_init` — the model
+#### `model_init` — the model
 
 The sample's JSON model becomes ABAP: one `ty_s_`/`ty_t_` type per JSON array,
 filled with `VALUE #( ( … ) ( … ) )`. Field names are the JSON keys, upper-cased
 by ABAP; bindings reference them in braces (`{TITLE}`, `{PRODUCT_ID}`). Keep the
 data verbatim from the sample (same rows, same text). See app 416 / 454.
+
+**abap2UI5 serves a single default model — there are no named models.** A sample
+that binds against a named model (`img>/products/pic1`, a separate `JSONModel`,
+`sap/ui/demo/mock/*.json`) must be **flattened** into the one default model:
+merge the extra model's fields into the row type, or — for pure display assets
+like image URLs that are the same for every row — inline them as literals /
+build them from a shared base (a non-bound `base_url` kept in `PROTECTED`, not
+`PUBLIC`, so the round-trip model scan stays small). Record the flattening as an
+`IMPROVISED:` note. Worked example: app 420 (`sap.m.Carousel`, `img>` model →
+static image URLs).
 
 #### `view_display` — the view via `z2ui5_cl_api_xml`
 
@@ -286,6 +296,39 @@ client->view_display( view->stringify( ) ).
   `selected`, `${$parameters>/selected}`) already arrives as `abap_bool`
   (`X` / space), **not** the string `` `true` `` — assign it straight into an
   `abap_bool` field (`flag = client->get_event_arg( 1 ).`); never test `… = \`true\``.
+- **Passing a value *into* an event uses the `$`-prefixed form — never a bare
+  `{…}`.** The runtime (`z2ui5_cl_core_srv_event=>get_t_arg`) sends every
+  `t_arg` entry that starts with `$` or `{` to the frontend **verbatim** and
+  wraps everything else in quotes as a string literal. Only a **`$`-prefixed**
+  arg is then resolved by UI5 (against the row's binding context / the event
+  object) before the round-trip; a bare-brace `{…}` is *not* resolved and the
+  value reaches `get_event_arg( )` empty. So the same model column that is a
+  correct **property** binding as `` `{NOTES}` `` in an attribute
+  (`)->a( n = \`tooltip\` v = \`{NOTES}\``) must be written `` `${NOTES}` `` in a
+  `t_arg` (`t_arg = VALUE #( ( \`${NOTES}\` ) )`). This exact confusion was the
+  overview-app bug (`{NOTES}` → `${NOTES}`) — the property-binding brace form
+  was wrongly reused as an event arg. The same `$`-prefix rule covers the UI5
+  event object: `` `$event.oSource.sId` `` (the pressed control's id — app 526),
+  `` `${$source>/text}` `` (a bound property of the event source — app 530),
+  `` `$event.mParameters.selectedItems` `` (app 401).
+- **Don't fake a value you can actually read from the event.** When the original
+  controller reads something off the event/source (`evt.getSource().getId()`,
+  `evt.getParameter(...)`), transport it with the `$event.…` arg above and read
+  it back with `get_event_arg( )` — do **not** substitute a static placeholder.
+  App 526 originally toasted a hard-coded `` `Button Pressed` `` on the wrong
+  assumption that the client-side control id could not reach the backend; it can,
+  via `` `$event.oSource.sId` ``.
+- **A property computed from several bound values → a UI5 expression binding
+  `{= … }`.** Capture each bind handle once
+  (`DATA(child1_bind) = client->_bind_edit( child1 ).`), reuse it both as a plain
+  binding (`v = child1_bind`) and inside the expression, embedding every handle
+  with `${ … }`. Build the expression with an ABAP string template, escaping the
+  UI5 braces and any pipes: e.g. a "select all"/"partially selected" pair —
+  `` v = |\{= ${ child1_bind } \|\| ${ child2_bind } \|\| ${ child3_bind } \}| `` (OR)
+  and `` v = |\{= !(${ child1_bind } && ${ child2_bind } && ${ child3_bind })\}| ``
+  (NOT-AND). Worked example: app 421 (`sap.m.CheckBox` tri-state parent). Do the
+  logic in the binding, not by round-tripping — no event needed to keep the
+  parent box in sync.
 
 #### Booleans
 
@@ -459,6 +502,10 @@ the ports share that style. Essentials:
   `check_on_navigated( )` branch.
 - Build views with `z2ui5_cl_xml_view` (typed) or `z2ui5_cl_util_xml` (generic);
   `client->view_display( view->stringify( ) )` as a standalone final statement.
+- **ABAP Doc (`"!`) is parsed as HTML.** A raw `<…>` is read as an HTML tag, so
+  never put a literal UI5 element (`<mvc:View>`) or any other `<tag>` in a `"!`
+  comment — write it plain (`mvc:View element`). A `<tag>` there is flagged as an
+  unsupported *and* unclosed HTML tag (was a warning on `z2ui5_cl_api_xml`).
 
 **Run `abaplint` after every change — 0 issues before committing.**
 
@@ -468,3 +515,40 @@ the ports share that style. Essentials:
 
 * [abap2UI5](https://github.com/abap2UI5/abap2UI5) — the framework the ports run on.
 * [OpenUI5](https://github.com/SAP/openui5) — the source of the demo kit samples.
+
+---
+
+## 10. Lessons learned — capture them, never repeat them
+
+**This file is the project's memory. Whenever you discover and fix a non-obvious
+mistake, write the rule back here in the same change — before you finish.** That
+is the only mechanism that stops the next agent (or you, next session) from
+making it again: every agent reads this file first, nothing else is guaranteed to
+be read. No automation can judge what is worth recording, so this is a manual
+discipline, not a background job.
+
+What counts as worth capturing: a CI/linter rule you did not know, a framework
+quirk, a wrong assumption you had to unlearn, a tool that behaved destructively.
+What does not: a one-off typo, anything already stated above.
+
+How to record it:
+
+- Put the rule where an agent will hit it — a **step-specific** lesson goes in
+  that step's section (e.g. an event-arg rule in §5 "Data binding & events"); a
+  **cross-cutting** one goes in the list below or §8.
+- Write the **rule**, not the war story: one line on what to do / avoid, and a
+  short why. Reference the app or class where it bit us, so it can be checked.
+- Keep it deduplicated — extend the existing bullet rather than adding a second.
+
+### Known gotchas (cross-cutting)
+
+- **`npm run downport` rewrites the working tree in place** — it runs
+  `abaplint --fix` over every `src/**` file *and overwrites `abaplint.jsonc`* with
+  the 702 config. Never run it on the tree you intend to commit; run it in a
+  throwaway `git worktree` (or copy) and check `abap_702.jsonc` there. If you did
+  run it in place, `git checkout -- .` to restore before committing.
+- **ABAP Doc (`"!`) is HTML** — no raw `<tag>` (e.g. `<mvc:View>`); see §8.
+- **Event args need the `$`-prefixed form** (`${COL}`, `$event.oSource.sId`), not
+  a bare `{COL}` — see §5 "Data binding & events".
+- **abap2UI5 has only one default model** — flatten any named-model binding into
+  it — see §5 "`model_init` — the model".

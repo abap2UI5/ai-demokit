@@ -10,7 +10,7 @@
 "! or the node itself). `v` may be any string expression (literal, a client
 "! bind/event, || template). Alternatively pass attributes up front to open/leaf
 "! via a = a flat table of `key=value` strings (split on the first `=`).
-"! The root <mvc:View> and its xmlns declarations are written by hand, exactly
+"! The root mvc:View element and its xmlns declarations are written by hand, exactly
 "! like a real UI5 view. For a boolean from an ABAP variable, use as_bool( ).
 CLASS z2ui5_cl_api_xml DEFINITION PUBLIC CREATE PRIVATE.
 
@@ -28,7 +28,7 @@ CLASS z2ui5_cl_api_xml DEFINITION PUBLIC CREATE PRIVATE.
       RETURNING
         VALUE(result) TYPE string.
 
-    "! returns an empty builder root; open the <mvc:View> and declare the xmlns
+    "! returns an empty builder root; open the mvc:View element and declare the xmlns
     "! namespaces yourself, exactly like any other control:
     "!   DATA(view) = z2ui5_cl_api_xml=>factory( ).
     "!   view->open( n = `View` ns = `mvc`

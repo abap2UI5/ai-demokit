@@ -63,16 +63,21 @@ Rules:
 - Structure z2ui5_if_app~main as a dispatcher:
     me->client = client.
     IF client->check_on_init( ).
-      data_init( ).
+      model_init( ).
       view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
     ENDIF.
-  Add data_init / on_event only when the app actually has data / events.
+  Add model_init / on_event only when the app actually has data / events.
 - Move the sample's JSON model data into ABAP (VALUE #( ... )) and bind it
   with client->_bind_edit (the one-way client->_bind is obsolete - always use
   _bind_edit).
-- Map controller event handlers to check_on_event( ) branches.
+- Map controller event handlers to check_on_event( ) branches. To pass a value
+  into an event, use the `$`-prefixed form in t_arg (a model column as
+  `${COL}`, the event object as `$event.oSource.sId` / `${$source>/text}`) and
+  read it back with get_event_arg( ) - a bare `{COL}` (the attribute
+  property-binding form) is NOT resolved there. Transport real event/source
+  values this way instead of faking a static placeholder.
 - Use ONLY controls and properties available since UI5 1.71; never use a
   deprecated control/property. If the sample needs anything newer or
   deprecated, stop and report the gap instead of porting.

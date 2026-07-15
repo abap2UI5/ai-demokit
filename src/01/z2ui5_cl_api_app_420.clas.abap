@@ -1,6 +1,8 @@
 "! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
 "! sap.m.Carousel - CarouselWithControls
 "! https://sdk.openui5.org/entity/sap.m.Carousel/sample/sap.m.sample.CarouselWithControls
+"! CHECKED (2026-07-15): manually verified in a running system - renders and
+"! scrolls like the original (see the note below on the flattened image model).
 "! NOTES (generation):
 "! - IMPROVISED: the three carousel images bind to a separate named model in the
 "!   original (img>/products/pic1..3 from sap/ui/demo/mock/img.json); resolved
@@ -23,7 +25,7 @@ CLASS z2ui5_cl_api_app_420 DEFINITION PUBLIC.
     " not bound - the shared image base URL, kept out of PUBLIC so the round-trip model scan stays small
     DATA base_url TYPE string.
 
-    METHODS data_init.
+    METHODS model_init.
     METHODS view_display.
 
   PRIVATE SECTION.
@@ -32,7 +34,7 @@ ENDCLASS.
 
 CLASS z2ui5_cl_api_app_420 IMPLEMENTATION.
 
-  METHOD data_init.
+  METHOD model_init.
 
     " Image URLs of the mock models sap/ui/demo/mock/img.json and products.json used by the original sample
     base_url = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/`.
@@ -123,7 +125,7 @@ CLASS z2ui5_cl_api_app_420 IMPLEMENTATION.
 
     me->client = client.
     IF client->check_on_init( ).
-      data_init( ).
+      model_init( ).
       view_display( ).
     ENDIF.
 

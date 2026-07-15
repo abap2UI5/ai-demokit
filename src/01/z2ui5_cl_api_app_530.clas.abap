@@ -1,10 +1,9 @@
 "! GENERATED ABAP CODE BASED ON UI5 DEMO KIT SAMPLE
 "! sap.m.Breadcrumbs - Breadcrumbs
 "! https://sdk.openui5.org/entity/sap.m.Breadcrumbs/sample/sap.m.sample.Breadcrumbs
-"! NOTES (generation):
-"! - LIVE-TEST: the link press reads the clicked link's text via the event arg
-"!   ${$source>/text}. This $source> form is not used anywhere else in the repo
-"!   and is unverified - confirm it delivers the text in a running system.
+"! CHECKED (2026-07-15): manually verified in a running system - the
+"! ${$source>/text} event arg delivers the clicked link's text as expected,
+"! everything works like the original.
 CLASS z2ui5_cl_api_app_530 DEFINITION PUBLIC.
 
   PUBLIC SECTION.
@@ -21,7 +20,7 @@ CLASS z2ui5_cl_api_app_530 DEFINITION PUBLIC.
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
 
-    METHODS data_init.
+    METHODS model_init.
     METHODS view_display.
     METHODS on_event.
 
@@ -31,7 +30,7 @@ ENDCLASS.
 
 CLASS z2ui5_cl_api_app_530 IMPLEMENTATION.
 
-  METHOD data_init.
+  METHOD model_init.
 
     " Rows built in the original onInit from the sap.m BreadcrumbsSeparatorStyle enum
     " (UI5 1.71): key = enum name, text = enum value (value equals name here)
@@ -139,7 +138,7 @@ CLASS z2ui5_cl_api_app_530 IMPLEMENTATION.
 
     me->client = client.
     IF client->check_on_init( ).
-      data_init( ).
+      model_init( ).
       view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
