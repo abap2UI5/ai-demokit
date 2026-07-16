@@ -10,10 +10,12 @@
 
 _Last generated: <!-- last-run -->2026-07-14 09:00 UTC<!-- /last-run -->_
 
-> **This repository is AI-generated.** From *every* official **`sap.m`** UI5 demo
-> kit sample it automatically builds an abap2UI5 app, exposing the **functional
-> gaps** between what UI5 offers and what abap2UI5 can already express — so they
-> can be closed. Other UI5 libraries follow later.
+> **This repository is AI-generated.** From every official **`sap.m`** UI5 demo
+> kit sample whose control **exists since UI5 1.71** and is **not deprecated**
+> (legacy-free ready) it automatically builds an abap2UI5 app, exposing the
+> **functional gaps** between what UI5 offers and what abap2UI5 can already
+> express — so they can be closed. Deprecated or newer controls are listed as
+> out of scope; other UI5 libraries follow later.
 >
 > See the result in **[api.md](api.md)**, or try it live: pull this repo into
 > your ABAP system and start **`z2ui5_cl_api_app_overview`**, which lists every
@@ -124,13 +126,15 @@ have an abap2UI5 port.
 
 <!-- coverage:start -->
 
-Overall **34 / 446** demo kit samples ported (7.6 %).
+Overall **34 / 403** in-scope demo kit samples ported (8.4 %).
+**In scope**: samples whose control exists since **UI5 1.71** and is **not deprecated** (legacy-free ready).
+Out of scope: 43 of 446 samples — 16 on deprecated controls, 21 on controls newer than 1.71, 6 without control metadata.
 Control metadata from OpenUI5 **1.151.0**.
 
-| Module | Samples | Ported | Coverage | |
-|--------|--------:|-------:|---------:|---|
-| `sap.m` | 446 | 34 | 7.6 % | █░░░░░░░░░ |
-| **Total** | **446** | **34** | **7.6 %** | █░░░░░░░░░ |
+| Module | Samples | In scope | Ported | Coverage | |
+|--------|--------:|---------:|-------:|---------:|---|
+| `sap.m` | 446 | 403 | 34 | 8.4 % | █░░░░░░░░░ |
+| **Total** | **446** | **403** | **34** | **8.4 %** | █░░░░░░░░░ |
 
 <!-- coverage:end -->
 

@@ -64,6 +64,20 @@ const fullscreenUrl = (lib, name) =>
 const apiUrl = (entity) => `${DEMOKIT}/api/${entity}`;
 // bare control name without its namespace (sap.f.GridList -> GridList)
 const bareControl = (entity) => entity.slice(entity.lastIndexOf('.') + 1);
+// the porting scope (§7 AGENTS.md): a sample is IN SCOPE when its control
+// existed by UI5 1.71 (empty since = older than tracking) and is not
+// deprecated (legacy-free ready). Everything else is listed but not ported.
+const sinceLeq171 = (since) => {
+  if (!since) return true;
+  const m = String(since).match(/^(\d+)\.(\d+)/);
+  return m ? (+m[1] < 1 || (+m[1] === 1 && +m[2] <= 71)) : false;
+};
+// -> 'in' | 'deprecated' | 'newer' | 'unknown'. An entity containing
+// '.sample.' is the sample id itself (demo apps without an owning control,
+// e.g. AIIntegration) — no control metadata, so scope is unknown.
+const scopeOf = (s) =>
+  !s.entity || s.entity.includes('.sample.') ? 'unknown'
+    : s.deprecated ? 'deprecated' : sinceLeq171(s.since) ? 'in' : 'newer';
 // turn a JSDoc doclet into plain text: resolve {@link sym text} to its display
 // text (or the symbol), collapse whitespace, trim.
 const cleanDoc = (t) => String(t || '')
@@ -161,8 +175,31 @@ if (fs.existsSync(OPENUI5_DIR)) {
 const release = universe.release;
 const libs = universe.libs.map((e) => ({
   lib: e.lib,
-  samples: e.samples.map((s) => ({ ...s, port: ported.get(`${e.lib}\t${s.name}`) || null })),
+  samples: e.samples.map((s) => ({
+    ...s,
+    port: ported.get(`${e.lib}\t${s.name}`) || null,
+    scope: scopeOf(s),
+  })),
 }));
+
+// a ported sample outside the scope is a rule violation — warn loudly
+for (const e of libs) {
+  for (const s of e.samples) {
+    if (s.port && s.scope !== 'in') {
+      console.warn(`WARNING: ported sample ${e.lib}.sample.${s.name} is out of scope (${s.scope})`);
+    }
+  }
+}
+
+// --backlog: print the in-scope, unported samples (batch planning input)
+if (process.argv.includes('--backlog')) {
+  for (const e of libs) {
+    for (const s of e.samples) {
+      if (s.scope === 'in' && !s.port) console.log(`${e.lib}\t${s.entity}\t${s.name}`);
+    }
+  }
+  process.exit(0);
+}
 
 // integrity: a port that matches no universe sample would silently vanish
 // from the coverage — report it loudly instead
@@ -182,25 +219,35 @@ const bar = (n, d) => {
 };
 
 const summary = libs
-  .map((l) => ({ lib: l.lib, total: l.samples.length, ported: l.samples.filter((s) => s.port).length }))
-  .sort((a, b) => (b.ported / b.total) - (a.ported / a.total) || a.lib.localeCompare(b.lib));
+  .map((l) => ({
+    lib: l.lib,
+    total: l.samples.length,
+    inScope: l.samples.filter((s) => s.scope === 'in').length,
+    ported: l.samples.filter((s) => s.port).length,
+  }))
+  .sort((a, b) => (b.ported / b.inScope) - (a.ported / a.inScope) || a.lib.localeCompare(b.lib));
 
 let totalSamples = 0;
+let totalInScope = 0;
 let totalPorted = 0;
-for (const s of summary) { totalSamples += s.total; totalPorted += s.ported; }
+const outBy = { deprecated: 0, newer: 0, unknown: 0 };
+for (const s of summary) { totalSamples += s.total; totalInScope += s.inScope; totalPorted += s.ported; }
+for (const e of libs) for (const s of e.samples) if (s.scope !== 'in') outBy[s.scope]++;
 
 // README block: overall figure + coverage-per-module summary table
 function summaryLines() {
   const l = [];
-  l.push(`Overall **${totalPorted} / ${totalSamples}** demo kit samples ported (${pct(totalPorted, totalSamples)}).`);
+  l.push(`Overall **${totalPorted} / ${totalInScope}** in-scope demo kit samples ported (${pct(totalPorted, totalInScope)}).`);
+  l.push(`**In scope**: samples whose control exists since **UI5 1.71** and is **not deprecated** (legacy-free ready).`);
+  l.push(`Out of scope: ${totalSamples - totalInScope} of ${totalSamples} samples — ${outBy.deprecated} on deprecated controls, ${outBy.newer} on controls newer than 1.71, ${outBy.unknown} without control metadata.`);
   if (release) l.push(`Control metadata from OpenUI5 **${release}**.`);
   l.push('');
-  l.push('| Module | Samples | Ported | Coverage | |');
-  l.push('|--------|--------:|-------:|---------:|---|');
+  l.push('| Module | Samples | In scope | Ported | Coverage | |');
+  l.push('|--------|--------:|---------:|-------:|---------:|---|');
   for (const s of summary) {
-    l.push(`| \`${s.lib}\` | ${s.total} | ${s.ported} | ${pct(s.ported, s.total)} | ${bar(s.ported, s.total)} |`);
+    l.push(`| \`${s.lib}\` | ${s.total} | ${s.inScope} | ${s.ported} | ${pct(s.ported, s.inScope)} | ${bar(s.ported, s.inScope)} |`);
   }
-  l.push(`| **Total** | **${totalSamples}** | **${totalPorted}** | **${pct(totalPorted, totalSamples)}** | ${bar(totalPorted, totalSamples)} |`);
+  l.push(`| **Total** | **${totalSamples}** | **${totalInScope}** | **${totalPorted}** | **${pct(totalPorted, totalInScope)}** | ${bar(totalPorted, totalInScope)} |`);
   return l;
 }
 
@@ -212,8 +259,11 @@ function controlLines() {
   l.push('carries the deprecation version and the replacement hint from the');
   l.push('release\'s `api.json` (empty = not deprecated), **Sample** links the');
   l.push('source in the [OpenUI5 repository](https://github.com/SAP/openui5) and');
-  l.push('its ↗ opens the live fullscreen sample, **ABAP** is the generated class');
-  l.push('(`—` = not ported yet — those rows are the backlog).');
+  l.push('its ↗ opens the live fullscreen sample, **ABAP** is the generated class.');
+  l.push('`—` = in scope, not ported yet — those rows are the backlog.');
+  l.push('`✗` = **out of scope**: the control is deprecated or newer than UI5 1.71');
+  l.push('(not legacy-free ready / not 1.71-compatible) — these samples are listed');
+  l.push('for completeness but are not ported.');
   l.push('See the [README](README.md#coverage) for the per-module coverage summary.');
   if (release) {
     l.push('');
@@ -241,7 +291,9 @@ function controlLines() {
       ? `${s.deprecated.since || ''}${s.deprecated.text ? ` — ${s.deprecated.text.replace(/\|/g, '/')}` : ''}`.trim()
       : '';
     const sample = `[${s.name}](${sampleSrcUrl(s.lib, s.name)}) [↗](${fullscreenUrl(s.lib, s.name)})`;
-    const abap = s.port ? `[${s.port.cls}](${abapUrl(s.port.file)})` : '—';
+    const abap = s.port
+      ? `[${s.port.cls}](${abapUrl(s.port.file)})`
+      : (s.scope === 'in' ? '—' : '✗');
     l.push(`| ${s.lib} | ${control} | ${s.since || ''} | ${deprecated} | ${sample} | ${abap} |`);
   }
   l.push('');

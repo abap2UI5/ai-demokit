@@ -39,8 +39,11 @@ Work happens in batches of ~10 related samples (one control family), each in
 its own subpackage `src/01/b<nn>` (= one ABAP package in the system) and one
 PR. Per batch:
 
-1. **Generate** — the agent ports the batch into a new `b<nn>` folder, prompt
-   fed with AGENTS.md, CAPABILITIES.md and the 2–3 nearest `golden` ports.
+1. **Generate** — the agent picks ~10 related samples from the in-scope
+   backlog (`node scripts/generate-coverage.mjs --backlog` — only controls that
+   exist since UI5 1.71 and are not deprecated, see AGENTS §1) and ports them
+   into a new `b<nn>` folder, prompt fed with AGENTS.md, CAPABILITIES.md and
+   the 2–3 nearest `golden` ports.
 2. **Machine-verify until green** — abaplint ×3, `generate-meta`,
    `structural-diff --strict`, plus an adversarial AI review pass. The agent
    fixes its own findings. Human time is the scarcest resource in this loop —

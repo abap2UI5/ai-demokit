@@ -14,6 +14,13 @@ rebuild it as an abap2UI5 sample**. Doing that systematically reveals the gaps
 between what UI5 ships and what abap2UI5 can already express — and those gaps
 become the backlog to close.
 
+**Porting scope**: a sample is in scope when its **control exists since UI5
+1.71** and is **not deprecated** in the current release (legacy-free ready) —
+computed per sample from `ui5/universe.json` by `generate-coverage.mjs`
+(`scopeOf`). Out-of-scope samples stay listed in `api.md` (marked `✗`) but are
+never ported; `node scripts/generate-coverage.mjs --backlog` prints the
+in-scope, unported samples for batch planning.
+
 The pipeline (run by a coding agent):
 
 1. **Read** — clone [OpenUI5](https://github.com/SAP/openui5), scan every demo
@@ -138,8 +145,10 @@ source of truth:
 - The abapGit `<DESCRIPT>` follows `<entity> - <demo kit description>`
   (e.g. `sap.m.Switch - Some say it is only a switch...`), truncated to 60 chars.
 - Use **only** controls and properties available since UI5 1.71; never a
-  deprecated one. If a sample needs anything newer or deprecated, **do not
-  port it** — leave it as an ❌ gap in the coverage report.
+  deprecated one. Samples whose **control** is newer than 1.71 or deprecated
+  are **out of scope** (§1) and never enter a batch. When an in-scope sample
+  merely uses a newer *optional property*, drop it with a `DROPPED_171`
+  deviation.
 - **Before declaring any sample feature inexpressible, check `CAPABILITIES.md`**
   — the map of what abap2UI5 can express, each entry backed by a port that
   proves it. Never improvise around a feature it marks ✅/🔶 (app 529 replaced a
