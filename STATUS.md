@@ -13,7 +13,7 @@ CAPABILITIES.md._
 | CI | ABAP_STANDARD, ABAP_CLOUD, ABAP_702 all green |
 | Structural view diff | **0 undeclared differences** across all 34 ports (`node scripts/structural-diff.mjs --strict`) |
 | Pattern lint | **0 errors, 0 warnings, empty baseline** (`node scripts/pattern-lint.mjs`) |
-| Meta sidecars | 34 in `meta/` — status: 30 `generated`, 4 `checked`; deviations: 35 IMPROVISED, 11 DROPPED_171, 10 LIVE_TEST |
+| Meta sidecars | 34 in `meta/` — status: 30 `generated`, 4 `checked`; deviations: 26 IMPROVISED, 12 LIVE_TEST, 11 DROPPED_171, 7 SUBSET_DATA, 1 NOTE |
 | Manually verified in a running system | 420, 421, 526, 530 (`CHECKED`) |
 | Archive | `ui5/sap.m/<SampleName>/` — full originals for the 34 ported samples (+2 cross-referenced: `FacetFilterSimple`, `Table`); mock snapshot in `ui5/mock/`. Unported samples are copied over batch by batch. |
 
@@ -71,7 +71,8 @@ reviewers), followed by fixes:
 - **420/433/440/441/452**: mock-data subsets declared per port (the mock has
   123 rows — full unrolls add no demo value); **423/527**: sorter→`SORT`
   declared; **440**: `pic_url` renamed to convention (`product_pic_url`).
-- Idiom: **526** captures the shared press event once + `get_event_arg( 1 )`;
+- Idiom: **526** captures the shared press event once + indexed event args
+  (later simplified to `get_event_arg( )` when the convention inverted);
   **528/434** blank-line fixes — pattern-lint is at 0/0 with an empty baseline.
 
 ## Open findings (backlog)

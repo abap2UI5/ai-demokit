@@ -12,7 +12,7 @@ Status legend: ✅ direct 1:1 · 🔶 expressible with a documented workaround �
 
 Verification levels in the Evidence column: **live-verified** = seen in a
 running system; **source-verified** = traced in the abap2UI5 framework source
-(/workspace clone, 2026-07-16 pass) — strong enough to generate against, a
+(2026-07-16 pass; clone the repos per TRAINING.md "Reference repositories") — strong enough to generate against, a
 live check remains the final confirmation for rendering.
 
 Maintenance rule (same discipline as AGENTS.md §10): whenever a port proves a
@@ -86,5 +86,5 @@ Also available: nested view slots (`nest_view_display`), `popover_display(
 by_id )` anchored to any control, app-stack navigation with typed results
 (`nav_app_call/leave` + `get_app_prev`), and bundled custom controls
 (`z2ui5.cc`: Timer, Storage, Focus, Geolocation, History, Tree,
-FileUploader, CameraPicture, …). Details: framework clone
-`/workspace/abap2ui5`, `z2ui5_if_client` + `z2ui5_cl_app_frontendaction_js`.
+FileUploader, CameraPicture, …). Details: the abap2UI5/abap2UI5 sources
+`z2ui5_if_client` + `z2ui5_cl_app_frontendaction_js`.

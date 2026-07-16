@@ -13,7 +13,7 @@
       "what": "headerLevel=\"H2\" on the List (since UI5 1.117) is dropped."
     },
     {
-      "type": "IMPROVISED",
+      "type": "SUBSET_DATA",
       "what": "the bound /ProductCollection shows a 11-row subset of the 123-row mock (ui5/mock/products.json) - a full unroll adds no demo value."
     }
   ]

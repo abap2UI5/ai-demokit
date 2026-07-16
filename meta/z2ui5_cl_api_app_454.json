@@ -17,7 +17,7 @@
       "what": "the controller's addValidator (typing free text + Enter creates a token client-side) is dropped - abap2UI5 has no client-side validator hook."
     },
     {
-      "type": "IMPROVISED",
+      "type": "SUBSET_DATA",
       "what": "the suggestion data is a 16-row subset of the mock /ProductCollection (ui5/mock/products.json)."
     },
     {

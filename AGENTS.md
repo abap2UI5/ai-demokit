@@ -58,13 +58,13 @@ plain JS/XML held for reference and to feed the generator.
 abapGit project, `FOLDER_LOGIC=PREFIX`, `STARTING_FOLDER=/src/`. Ports are split
 by the UI5 **library** of the demo kit sample they rebuild:
 
-| Folder   | CTEXT (`package.devc.xml`) | Library namespace |
-|----------|----------------------------|-------------------|
-| `src/01` | `sap.m`    | `sap.m`    |
-| `src/02` | `sap.ui`   | `sap.ui.*` (core, layout, unified, table, integration, model.type) |
-| `src/03` | `sap.uxap` | `sap.uxap` |
-| `src/04` | `sap.f`    | `sap.f`    |
-| `src/05` | `sap.tnt`  | `sap.tnt`  |
+| Folder   | CTEXT (`package.devc.xml`) | Library namespace | Status |
+|----------|----------------------------|-------------------|--------|
+| `src/01` | `sap.m`    | `sap.m`    | exists |
+| `src/02` | `sap.ui`   | `sap.ui.*` (core, layout, unified, table, integration, model.type) | planned |
+| `src/03` | `sap.uxap` | `sap.uxap` | planned |
+| `src/04` | `sap.f`    | `sap.f`    | planned |
+| `src/05` | `sap.tnt`  | `sap.tnt`  | planned |
 
 The split key is the **second-level namespace** of the sample's entity. New
 libraries get the next free `src/NN` folder with a matching `package.devc.xml`.
@@ -464,8 +464,8 @@ stays off deliberately.
 
 Every sample must be **ABAP Cloud ready** *and* **downportable to 7.02** — there
 is no `src/00` "restricted" area here (unlike abap2UI5/samples); everything must
-survive all three builds. The `auto_cloud` / `auto_downport` workflows rebuild
-the `cloud` / `702` branches via `auto_branch.yaml`.
+survive all three builds. The self-contained `auto_downport.yaml` workflow
+rebuilds the `702` branch on every push to `main`.
 
 A fourth workflow, `checks`, runs three deterministic gates on every PR:
 
@@ -473,7 +473,7 @@ A fourth workflow, `checks`, runs three deterministic gates on every PR:
 |-----|---------|------------|
 | `pattern_lint` | `node scripts/pattern-lint.mjs` | a known-bad pattern reappears (each rule encodes a distilled §10 lesson; known open findings live in the script's BASELINE and in STATUS.md) |
 | `structural_diff` | `node scripts/structural-diff.mjs --strict` | a port's rendered view deviates from the original `view.xml` without a declared deviation |
-| `generated_in_sync` | regenerate `meta/` + overview, `git diff --exit-code` | a change forgot to regenerate the generated artifacts |
+| `meta_valid` | `validate-meta.mjs` + regenerate the overview, `git diff --exit-code -- src` | an invalid sidecar, or a change forgot to regenerate the overview app |
 
 **When a distilled lesson is greppable, add it as a pattern-lint rule in the
 same change** — that is what makes a lesson unrepeatable rather than advisory.
@@ -482,8 +482,10 @@ same change** — that is what makes a lesson unrepeatable rather than advisory.
 ```bash
 npm ci
 npx abaplint ./abaplint.jsonc          # expect 0 issues
+node scripts/validate-meta.mjs         # sidecar schema + referential integrity
 node scripts/pattern-lint.mjs          # expect 0 errors
 node scripts/structural-diff.mjs --strict
+node scripts/generate-overview.mjs     # then: git diff must stay clean
 ```
 
 ### abapGit file format (all serialized files)
@@ -511,12 +513,12 @@ scripts.**
 - **`src/z2ui5_cl_api_app_overview.clas.*`** — the in-system overview **app**:
   an abap2UI5 app that lists every ported app as one row of a `sap.m.Table`,
   sorted by module → control → sample. Columns:
-  **Module** (text) · **Control** (link → OpenUI5 API) · **Sample** (text) ·
-  **JavaScript** (↗ → OpenUI5 repo source) · **UI5 App** (↗ → live OpenUI5
-  **fullscreen** sample runner) · **ABAP** (↗ → generated class on GitHub) ·
-  **abap2UI5 App** (↗ → starts the app). **Every link opens in a new browser
-  tab** (`target="_blank"`; the abap2UI5 App link is the `?app_start=<CLASS>`
-  URL). All source links point at OpenUI5; only ABAP + the start link are local.
+  **Module** (text) · **Control** (link → OpenUI5 API) · **Sample** (name →
+  OpenUI5 repo source, ↗ → live fullscreen sample) · **abap2UI5** (class →
+  generated class on GitHub, ↗ → starts the app via `?app_start=<CLASS>`) ·
+  **Note** (green check when live-verified; hint button opens the deviations
+  popup). **Every link opens in a new browser tab** (`target="_blank"`). All
+  source links point at OpenUI5; only the class + start links are local.
   The per-row URLs are built in `view_display` (the start URL needs the runtime
   system origin), the static facts come from `get_catalog`.
 

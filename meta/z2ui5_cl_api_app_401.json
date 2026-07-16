@@ -29,7 +29,7 @@
       "what": "the appended table's header toolbar keeps only Title and ToolbarSpacer - the sample's popin-layout ComboBox (with core:Item entries), the sticky CheckBoxes with their Label and the Hide/Show ToggleButton drive client-side table APIs (setSticky, popin layout) with no abap2UI5 equivalent; the infoToolbar (an OverflowToolbar with a Label) and the p:ColumnAIAction column plugin (newer than UI5 1.71) are dropped as well."
     },
     {
-      "type": "IMPROVISED",
+      "type": "SUBSET_DATA",
       "what": "data is a 10-row subset of the mock /ProductCollection (ui5/mock/products.json), facet counters recomputed for the subset."
     }
   ]

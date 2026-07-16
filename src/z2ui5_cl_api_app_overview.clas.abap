@@ -242,7 +242,7 @@ CLASS z2ui5_cl_api_app_overview IMPLEMENTATION.
       ( module = `sap.m` control = `sap.m.Carousel`        name = `CarouselWithControls`      class = `z2ui5_cl_api_app_420` path = `src/01/b04/z2ui5_cl_api_app_420.clas.abap`
         checked = `CHECKED (2026-07-15): manually verified in a running system - renders and scrolls like the original (see the note below on the flattened image model).`
         notes = `IMPROVISED: the three carousel images bind to a separate named model in the original (img>/products/pic1..3 from sap/ui/demo/mock/img.json); resolved here to static image URLs, as abap2UI5 serves a` &&
-                 ` single default model. // IMPROVISED: the bound /ProductCollection shows a 10-row subset of the 123-row mock (ui5/mock/products.json) - a full unroll adds no demo value.` )
+                 ` single default model. // SUBSET: the bound /ProductCollection shows a 10-row subset of the 123-row mock (ui5/mock/products.json) - a full unroll adds no demo value.` )
       ( module = `sap.m` control = `sap.m.CheckBox`        name = `CheckBoxTriState`          class = `z2ui5_cl_api_app_421` path = `src/01/b02/z2ui5_cl_api_app_421.clas.abap`
         checked = `CHECKED (2026-07-15): manually verified in a running system - the select-all parent checkbox and its tri-state expression bindings behave like the original.` )
       ( module = `sap.m` control = `sap.m.ColorPalette`    name = `ColorPalette`              class = `z2ui5_cl_api_app_422` path = `src/01/b02/z2ui5_cl_api_app_422.clas.abap` )
@@ -255,8 +255,8 @@ CLASS z2ui5_cl_api_app_overview IMPLEMENTATION.
                  ` client-side). // IMPROVISED: the original controller appends the sap.m.sample.Table component's table with its first cell swapped for an ObjectIdentifier {Name}/{Category}; that table is rebuilt` &&
                  ` inline, its Currency-formatter price column preformatted (PRICE text) and Formatter.js weightState precomputed in WEIGHT_STATE. // IMPROVISED: the appended table's header toolbar keeps only Title and` &&
                  ` ToolbarSpacer - the sample's popin-layout ComboBox (with core:Item entries), the sticky CheckBoxes with their Label and the Hide/Show ToggleButton drive client-side table APIs (setSticky, popin` &&
-                 ` layout) with no abap2UI5 equivalent; the infoToolbar (an OverflowToolbar with a Label) and the p:ColumnAIAction column plugin (newer than UI5 1.71) are dropped as well. // IMPROVISED: data is a` &&
-                 ` 10-row subset of the mock /ProductCollection (ui5/mock/products.json), facet counters recomputed for the subset.` )
+                 ` layout) with no abap2UI5 equivalent; the infoToolbar (an OverflowToolbar with a Label) and the p:ColumnAIAction column plugin (newer than UI5 1.71) are dropped as well. // SUBSET: data is a 10-row` &&
+                 ` subset of the mock /ProductCollection (ui5/mock/products.json), facet counters recomputed for the subset.` )
       ( module = `sap.m` control = `sap.m.FlexBox`         name = `FlexBoxNested`             class = `z2ui5_cl_api_app_404` path = `src/01/b04/z2ui5_cl_api_app_404.clas.abap`
         notes = `LIVE-TEST: the original colours .item1..item6 and the h2 headings via a separate style.css; here it is injected as a core:HTML content attribute (a style tag, minified - see CAPABILITIES.md). Confirm` &&
                  ` the flex items render with their background colours in a running system.` )
@@ -267,8 +267,8 @@ CLASS z2ui5_cl_api_app_overview IMPLEMENTATION.
                  ` URLs so the tile images load standalone.` )
       ( module = `sap.m` control = `sap.m.IconTabBar`      name = `IconTabBarStretchContent`  class = `z2ui5_cl_api_app_433` path = `src/01/b04/z2ui5_cl_api_app_433.clas.abap`
         notes = `LIVE-TEST: the original binds expanded="{device>/isNoPhone}" (a demo-kit helper model); restored 2026-07-16 as the expression {= !${device>/system/phone} } over the framework's device> model` &&
-                 ` (source-verified available in main views) - confirm the tab bar collapses on phones. // IMPROVISED: the bound /ProductCollection shows a 8-row subset of the 123-row mock (ui5/mock/products.json) - a` &&
-                 ` full unroll adds no demo value.` )
+                 ` (source-verified available in main views) - confirm the tab bar collapses on phones. // SUBSET: the bound /ProductCollection shows a 8-row subset of the 123-row mock (ui5/mock/products.json) - a full` &&
+                 ` unroll adds no demo value.` )
       ( module = `sap.m` control = `sap.m.Image`           name = `ImageModeBackground`       class = `z2ui5_cl_api_app_434` path = `src/01/b01/z2ui5_cl_api_app_434.clas.abap`
         notes = `IMPROVISED: the original binds src/mode/height/width to a JSONModel (img>/products, /imageMode, /imageHeight, /imageWidth); the fixed sample values are inlined here as literals (mode Background, the` &&
                  ` HT-7777 / HT-6100 demo images). // IMPROVISED: image height/width are device dependent in the original (5em on a phone) - fixed to 10em here. // IMPROVISED: the custom CSS class imageContainer (light` &&
@@ -278,11 +278,11 @@ CLASS z2ui5_cl_api_app_overview IMPLEMENTATION.
                  ` valueState/valueStateText still render the state.` )
       ( module = `sap.m` control = `sap.m.Link`            name = `LinkEmphasized`            class = `z2ui5_cl_api_app_440` path = `src/01/b01/z2ui5_cl_api_app_440.clas.abap`
         notes = `IMPROVISED: the last column's original number binding is a sap.ui.model.type.Currency formatter (parts Price/CurrencyCode, formatOptions showMeasure:false); it is replaced by a plain ObjectNumber with` &&
-                 ` a preformatted price text (number={PRICE} unit={CURRENCY_CODE}). // IMPROVISED: the bound /ProductCollection shows a 6-row subset of the 123-row mock (ui5/mock/products.json); HT-1002 is not part of` &&
-                 ` the subset. // IMPROVISED: the binding sorter (path Name) is replaced by a one-time ABAP SORT - equivalent for this static data.` )
+                 ` a preformatted price text (number={PRICE} unit={CURRENCY_CODE}). // SUBSET: the bound /ProductCollection shows a 6-row subset of the 123-row mock (ui5/mock/products.json); HT-1002 is not part of the` &&
+                 ` subset. // IMPROVISED: the binding sorter (path Name) is replaced by a one-time ABAP SORT - equivalent for this static data.` )
       ( module = `sap.m` control = `sap.m.List`            name = `ListCounter`               class = `z2ui5_cl_api_app_441` path = `src/01/b04/z2ui5_cl_api_app_441.clas.abap`
-        notes = `1.71: headerLevel="H2" on the List (since UI5 1.117) is dropped. // IMPROVISED: the bound /ProductCollection shows a 11-row subset of the 123-row mock (ui5/mock/products.json) - a full unroll adds no` &&
-                 ` demo value.` )
+        notes = `1.71: headerLevel="H2" on the List (since UI5 1.117) is dropped. // SUBSET: the bound /ProductCollection shows a 11-row subset of the 123-row mock (ui5/mock/products.json) - a full unroll adds no demo` &&
+                 ` value.` )
       ( module = `sap.m` control = `sap.m.List`            name = `ListNoData`                class = `z2ui5_cl_api_app_445` path = `src/01/b04/z2ui5_cl_api_app_445.clas.abap` )
       ( module = `sap.m` control = `sap.m.MessageBox`      name = `MessageBoxInitialFocus`    class = `z2ui5_cl_api_app_447` path = `src/01/b03/z2ui5_cl_api_app_447.clas.abap`
         notes = `IMPROVISED: the sample opens a sap.m.MessageBox from its controller; there is no such control in the view. It is mapped to abap2UI5's client->message_box_display, driven by two buttons wired to` &&
@@ -293,14 +293,14 @@ CLASS z2ui5_cl_api_app_overview IMPLEMENTATION.
         notes = `IMPROVISED: the MessageManager/message model of the original is not available in abap2UI5 - the messages are bound from a hardcoded table instead.` )
       ( module = `sap.m` control = `sap.m.MultiComboBox`   name = `MultiComboBoxGrouping`     class = `z2ui5_cl_api_app_452` path = `src/01/b02/z2ui5_cl_api_app_452.clas.abap`
         notes = `IMPROVISED: the custom groupHeaderFactory '.getGroupHeader' (controller code) is replaced by UI5's default group headers - the sample's factory builds a SeparatorItem with the group key, which is what` &&
-                 ` the default renders anyway. The items are a bound template with the original's sorter (path SUPPLIER_NAME, group: true) as a raw binding-info string. // IMPROVISED: 16-row subset of the 123-row mock` &&
+                 ` the default renders anyway. The items are a bound template with the original's sorter (path SUPPLIER_NAME, group: true) as a raw binding-info string. // SUBSET: 16-row subset of the 123-row mock` &&
                  ` (ui5/mock/products.json). // LIVE-TEST: confirm the group SeparatorItem headers render per supplier in the MultiComboBox picker (bound template + group sorter, converted 2026-07-16; string` &&
                  ` pass-through source-verified).` )
       ( module = `sap.m` control = `sap.m.MultiInput`      name = `MultiInput`                class = `z2ui5_cl_api_app_454` path = `src/01/b02/z2ui5_cl_api_app_454.clas.abap`
         notes = `IMPROVISED: the controller's onInit pre-sets the tokens on both MultiInputs (Token 1..6 and one long token); they are declared statically in the view's tokens aggregation instead - same rendering. //` &&
-                 ` IMPROVISED: the controller's addValidator (typing free text + Enter creates a token client-side) is dropped - abap2UI5 has no client-side validator hook. // IMPROVISED: the suggestion data is a` &&
-                 ` 16-row subset of the mock /ProductCollection (ui5/mock/products.json). // NOTE: The original's stray placeholder attributes on the two Labels (not a Label property) are dropped. // 1.71:` &&
-                 ` showClearIcon (since UI5 1.94) dropped from the suggestion MultiInput.` )
+                 ` IMPROVISED: the controller's addValidator (typing free text + Enter creates a token client-side) is dropped - abap2UI5 has no client-side validator hook. // SUBSET: the suggestion data is a 16-row` &&
+                 ` subset of the mock /ProductCollection (ui5/mock/products.json). // NOTE: The original's stray placeholder attributes on the two Labels (not a Label property) are dropped. // 1.71: showClearIcon` &&
+                 ` (since UI5 1.94) dropped from the suggestion MultiInput.` )
       ( module = `sap.m` control = `sap.m.ObjectHeader`    name = `ObjectHeader`              class = `z2ui5_cl_api_app_460` path = `src/01/b01/z2ui5_cl_api_app_460.clas.abap`
         notes = `IMPROVISED: the sample binds the ObjectHeader to {/ProductCollection/0} and its title/number/attributes to model fields (with a Currency type formatter on number). The port carries no model, so those` &&
                  ` bindings are resolved to the static values of the first ProductCollection product (Notebook Basic 15).` )

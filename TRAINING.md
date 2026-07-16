@@ -4,10 +4,10 @@
 `scripts/validate-meta.mjs`) are the source of truth, the port classes carry
 no ABAP Doc header at all (stage-2 inversion done 2026-07-16, enforced by
 pattern-lint), and the structural view diff (`scripts/structural-diff.mjs`)
-runs clean. This file
-describes how the repo is meant to make the generating agent better over time. "Training" here means improving the system
-around the agent — rules, golden examples, verification loops — not (yet)
-fine-tuning model weights.
+runs clean. This file describes how the repo is meant to make the generating
+agent better over time. "Training" here means improving the system around the
+agent — rules, golden examples, verification loops — not (yet) fine-tuning
+model weights.
 
 ## The flywheel
 
@@ -68,8 +68,9 @@ ports go into the next `b<nn>`.
 
 ## Reference repositories
 
-Two read-only reference clones feed the loop (policy since 2026-07-16; clone
-them into the session when generating or reviewing):
+Three read-only reference sources feed the loop (policy since 2026-07-16; two
+standing clones plus OpenUI5 on demand — clone them into the session when
+generating or reviewing):
 
 - **`abap2UI5/abap2UI5`** (framework, main) — the truth about what is
   *possible*. Capability questions are answered by reading the source
@@ -123,17 +124,20 @@ edited directly in the sidecar. The shape:
 
 ```jsonc
 {
+  "class":   "z2ui5_cl_api_app_454",
   "sample":  "sap.m.sample.MultiInput",
   "entity":  "sap.m.MultiInput",
+  "file":    "src/01/b02/z2ui5_cl_api_app_454.clas.abap",
+  "batch":   "b02",
+  "audit":   "(a) frontend_action (_event_client): NO | (b) event t_arg: NO",
   "status":  "generated",              // generated | reviewed | checked | golden
   "checked": { "date": "2026-07-15", "note": "verified in a running system - ..." },
   "deviations": [
-    { "type": "DROPPED_171",  "what": "showClearIcon", "since": "1.94" },
-    { "type": "IMPROVISED",   "what": "validator",     "why": "no client-side validator hook" },
-    { "type": "SUBSET_DATA",  "what": "ProductCollection", "rows": "16 of 20" },
-    { "type": "LIVE_TEST",    "what": "tree binding over nested tables" }
-  ],
-  "lessons": ["event-arg-dollar-prefix"]   // AGENTS/CAPABILITIES anchors this port taught
+    { "type": "DROPPED_171", "what": "showClearIcon (since UI5 1.94) dropped ..." },
+    { "type": "IMPROVISED",  "what": "the controller's addValidator is dropped ..." },
+    { "type": "SUBSET_DATA", "what": "16-row subset of the 123-row mock ..." },
+    { "type": "LIVE_TEST",   "what": "confirm ... in a running system" }
+  ]
 }
 ```
 

@@ -16,7 +16,9 @@ each new generation batch copies its samples over from the OpenUI5 checkout
 sample > files`, resolving `../<OtherSample>/` references into that sample's
 own folder — which is why a few unported folders like `Table/` exist: they are
 referenced by a ported sample). Shared demo kit mock data is snapshotted once
-in [`mock/`](mock/) (provenance in its README).
+in [`mock/`](mock/) (provenance in its README), and [`universe.json`](universe.json)
+is the committed snapshot of the full demo kit sample universe (entity, Since,
+deprecation per sample) that coverage regenerates from offline (AGENTS §7).
 
 These files are held verbatim for reference and to feed the generator and the
 structural diff — they are outside the abapGit / abaplint scope (`src/` only)
