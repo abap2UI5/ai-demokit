@@ -124,6 +124,7 @@ have an abap2UI5 port.
 <!-- coverage:start -->
 
 Overall **34 / 446** demo kit samples ported (7.6 %).
+Control metadata from OpenUI5 **1.151.0**.
 
 | Module | Samples | Ported | Coverage | |
 |--------|--------:|-------:|---------:|---|

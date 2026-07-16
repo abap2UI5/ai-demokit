@@ -3,6 +3,8 @@ name: generate_result
 # Regenerates the coverage tables in README.md: every UI5 demo kit sample per
 # library, marked with whether an abap2UI5 port exists. The sample universe
 # comes from a shallow OpenUI5 checkout; the ported set is read from *.clas.abap.
+# Control metadata (Since, deprecation, release version) comes from the api.json
+# that `grunt jsdoc:library-<lib>` generates in that checkout.
 
 on:
   workflow_dispatch:
@@ -33,9 +35,21 @@ jobs:
     - name: Shallow clone OpenUI5 (sample universe)
       run: git clone --depth 1 https://github.com/SAP/openui5.git openui5
 
+    # Control metadata source. Keep the built libraries in sync with FOCUS_LIBS
+    # in scripts/generate-coverage.mjs. The jsdoc task may exit non-zero on
+    # cross-library type warnings while still writing a valid api.json, so we
+    # tolerate the exit code and assert the artifact exists instead.
+    - name: Build control metadata (api.json) for focused libraries
+      working-directory: openui5
+      run: |
+        npm ci
+        npx grunt jsdoc:library-sap.m || true
+        test -f target/openui5-sdk/test-resources/sap/m/designtime/api.json
+
     - name: Regenerate coverage (README + api.md)
       env:
         OPENUI5_DIR: ./openui5
+        APIJSON_ROOT: ./openui5/target/openui5-sdk/test-resources
         REF: main
       run: node scripts/generate-coverage.mjs
 
