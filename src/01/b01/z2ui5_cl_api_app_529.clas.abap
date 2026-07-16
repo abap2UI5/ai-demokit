@@ -187,19 +187,18 @@ CLASS z2ui5_cl_api_app_529 IMPLEMENTATION.
                                 )->a( n = `class` v = `sapUiSmallMarginBottom`
                                 )->a( n = `text`  v = `Indication 5`
                                 )->a( n = `state` v = `Indication05`
-                            " state None: original states Indication06-Indication20 were added after UI5 1.71 (since 1.130)
                             )->leaf( `ObjectStatus`
                                 )->a( n = `class` v = `sapUiSmallMarginBottom`
                                 )->a( n = `text`  v = `Indication 6`
-                                )->a( n = `state` v = `None`
+                                )->a( n = `state` v = `Indication06`
                             )->leaf( `ObjectStatus`
                                 )->a( n = `class` v = `sapUiSmallMarginBottom`
                                 )->a( n = `text`  v = `Indication 7`
-                                )->a( n = `state` v = `None`
+                                )->a( n = `state` v = `Indication07`
                             )->leaf( `ObjectStatus`
                                 )->a( n = `class` v = `sapUiSmallMarginBottom`
                                 )->a( n = `text`  v = `Indication 8`
-                                )->a( n = `state` v = `None`
+                                )->a( n = `state` v = `Indication08`
 
                         )->shut(
                     )->shut(
@@ -240,37 +239,36 @@ CLASS z2ui5_cl_api_app_529 IMPLEMENTATION.
                                 )->a( n = `inverted` v = `true`
                                 )->a( n = `active`   v = `true`
                                 )->a( n = `state`    v = `Indication05`
-                            " state None: original IndicationNN (>Indication05) is newer than UI5 1.71
                             )->leaf( `ObjectStatus`
                                 )->a( n = `class`    v = `sapUiSmallMarginBottom`
                                 )->a( n = `text`     v = `Inverted Indication6 active`
                                 )->a( n = `active`   v = `true`
                                 )->a( n = `inverted` v = `true`
                                 )->a( n = `icon`     v = `sap-icon://attachment`
-                                )->a( n = `state`    v = `None`
+                                )->a( n = `state`    v = `Indication06`
                             )->leaf( `ObjectStatus`
                                 )->a( n = `class`    v = `sapUiSmallMarginBottom`
                                 )->a( n = `text`     v = `Inverted Indication7 active`
                                 )->a( n = `active`   v = `true`
                                 )->a( n = `inverted` v = `true`
-                                )->a( n = `state`    v = `None`
+                                )->a( n = `state`    v = `Indication07`
                             )->leaf( `ObjectStatus`
                                 )->a( n = `class`    v = `sapUiSmallMarginBottom`
                                 )->a( n = `text`     v = `Inverted Indication8 active`
                                 )->a( n = `active`   v = `true`
                                 )->a( n = `inverted` v = `true`
-                                )->a( n = `state`    v = `None`
+                                )->a( n = `state`    v = `Indication08`
                             )->leaf( `ObjectStatus`
                                 )->a( n = `class`    v = `sapUiSmallMarginBottom`
                                 )->a( n = `text`     v = `Inverted Indication9 active`
                                 )->a( n = `active`   v = `true`
                                 )->a( n = `inverted` v = `true`
-                                )->a( n = `state`    v = `None`
+                                )->a( n = `state`    v = `Indication09`
                             )->leaf( `ObjectStatus`
                                 )->a( n = `class`    v = `sapUiSmallMarginBottom`
                                 )->a( n = `text`     v = `Inverted Indication10`
                                 )->a( n = `inverted` v = `true`
-                                )->a( n = `state`    v = `None`
+                                )->a( n = `state`    v = `Indication10`
 
                         )->shut(
                     )->shut(
@@ -283,64 +281,63 @@ CLASS z2ui5_cl_api_app_529 IMPLEMENTATION.
                                 )->a( n = `design`   v = `Bold`
                                 )->a( n = `wrapping` v = `true`
                                 )->a( n = `class`    v = `sapUiSmallMarginBottom`
-                            " state None: original IndicationNN (>Indication05) is newer than UI5 1.71
                             )->leaf( `ObjectStatus`
                                 )->a( n = `class`    v = `sapUiSmallMarginBottom`
                                 )->a( n = `text`     v = `Inverted Indication11`
                                 )->a( n = `inverted` v = `true`
-                                )->a( n = `state`    v = `None`
+                                )->a( n = `state`    v = `Indication11`
                             )->leaf( `ObjectStatus`
                                 )->a( n = `class`    v = `sapUiSmallMarginBottom`
                                 )->a( n = `text`     v = `Inverted Indication12 active`
                                 )->a( n = `active`   v = `true`
                                 )->a( n = `inverted` v = `true`
-                                )->a( n = `state`    v = `None`
+                                )->a( n = `state`    v = `Indication12`
                             )->leaf( `ObjectStatus`
                                 )->a( n = `class`    v = `sapUiSmallMarginBottom`
                                 )->a( n = `text`     v = `Inverted Indication13 active`
                                 )->a( n = `active`   v = `true`
                                 )->a( n = `inverted` v = `true`
-                                )->a( n = `state`    v = `None`
+                                )->a( n = `state`    v = `Indication13`
                             )->leaf( `ObjectStatus`
                                 )->a( n = `class`    v = `sapUiSmallMarginBottom`
                                 )->a( n = `text`     v = `Inverted Indication14 active`
                                 )->a( n = `active`   v = `true`
                                 )->a( n = `inverted` v = `true`
                                 )->a( n = `icon`     v = `sap-icon://notes`
-                                )->a( n = `state`    v = `None`
+                                )->a( n = `state`    v = `Indication14`
                             )->leaf( `ObjectStatus`
                                 )->a( n = `class`    v = `sapUiSmallMarginBottom`
                                 )->a( n = `text`     v = `Inverted Indication15 active`
                                 )->a( n = `active`   v = `true`
                                 )->a( n = `inverted` v = `true`
-                                )->a( n = `state`    v = `None`
+                                )->a( n = `state`    v = `Indication15`
                             )->leaf( `ObjectStatus`
                                 )->a( n = `class`    v = `sapUiSmallMarginBottom`
                                 )->a( n = `text`     v = `Inverted Indication16`
                                 )->a( n = `inverted` v = `true`
-                                )->a( n = `state`    v = `None`
+                                )->a( n = `state`    v = `Indication16`
                             )->leaf( `ObjectStatus`
                                 )->a( n = `class`    v = `sapUiSmallMarginBottom`
                                 )->a( n = `text`     v = `Inverted Indication17 active`
                                 )->a( n = `active`   v = `true`
                                 )->a( n = `inverted` v = `true`
-                                )->a( n = `state`    v = `None`
+                                )->a( n = `state`    v = `Indication17`
                             )->leaf( `ObjectStatus`
                                 )->a( n = `class`    v = `sapUiSmallMarginBottom`
                                 )->a( n = `text`     v = `Inverted Indication18`
                                 )->a( n = `inverted` v = `true`
-                                )->a( n = `state`    v = `None`
+                                )->a( n = `state`    v = `Indication18`
                             )->leaf( `ObjectStatus`
                                 )->a( n = `class`    v = `sapUiSmallMarginBottom`
                                 )->a( n = `text`     v = `Inverted Indication19 active`
                                 )->a( n = `active`   v = `true`
                                 )->a( n = `inverted` v = `true`
-                                )->a( n = `state`    v = `None`
+                                )->a( n = `state`    v = `Indication19`
                             )->leaf( `ObjectStatus`
                                 )->a( n = `class`    v = `sapUiSmallMarginBottom`
                                 )->a( n = `text`     v = `Inverted Indication20`
                                 )->a( n = `inverted` v = `true`
-                                )->a( n = `state`    v = `None`
+                                )->a( n = `state`    v = `Indication20`
 
                         )->shut(
                     )->shut(

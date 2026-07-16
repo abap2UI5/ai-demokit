@@ -329,19 +329,22 @@ CLASS z2ui5_cl_api_app_overview IMPLEMENTATION.
         notes = `IMPROVISED: the sample binds the ObjectHeader to {/ProductCollection/0} and its title/number/attributes to model fields (with a Currency type formatter on number). The port carries no model, so those` &&
                  ` bindings are resolved to the static values of the first ProductCollection product (Notebook Basic 15).` )
       ( module = `sap.m` control = `sap.m.ObjectStatus`    name = `ObjectStatus`              class = `z2ui5_cl_api_app_529` path = `src/01/b01/z2ui5_cl_api_app_529.clas.abap`
-        notes = `1.71: ObjectStatus states Indication06-Indication20 are newer than UI5 1.71 (added ~1.130). The controls are kept but their state is set to "None", so the indication colours differ from the original -` &&
-                 ` verify if relevant. // LIVE-TEST: the active status press opens the controller-built Dialog 1:1 (core:FragmentDefinition + popup_display, per CAPABILITIES.md): a Dialog with a VBox, a Text and an OK` &&
-                 ` Button - these popup controls are extra to the view XML. Confirm the popup opens and closes in a running system.` )
+        notes = `POST-1.71: the ObjectStatus state values Indication06-Indication08 (since UI5 1.75) and Indication09-Indication20 (since UI5 1.120) are newer than 1.71 but kept for the 1:1 port - the app needs a UI5` &&
+                 ` release >= 1.120 to render them all (>= 1.75 for Indication06-Indication08). // LIVE-TEST: the active status press opens the controller-built Dialog 1:1 (core:FragmentDefinition + popup_display, per` &&
+                 ` CAPABILITIES.md): a Dialog with a VBox, a Text and an OK Button - these popup controls are extra to the view XML. Confirm the popup opens and closes in a running system.`
+        post171 = `the ObjectStatus state values Indication06-Indication08 (since UI5 1.75) and Indication09-Indication20 (since UI5 1.120) are newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >=` &&
+                 ` 1.120 to render them all (>= 1.75 for Indication06-Indication08).` )
       ( module = `sap.m` control = `sap.m.Panel`           name = `PanelExpanded`             class = `z2ui5_cl_api_app_471` path = `src/01/b04/z2ui5_cl_api_app_471.clas.abap`
         notes = `IMPROVISED: the original controller toggles the third panel imperatively (onOverflowToolbarPress -> oPanel.setExpanded(!oPanel.getExpanded())). It is reproduced with a two-way bound ``expanded``` &&
                  ` property plus a TOOLBAR_PRESSED event that flips it - the view therefore carries an ``expanded`` binding and a ``press`` the original view.xml does not have.` )
       ( module = `sap.m` control = `sap.m.PDFViewer`       name = `PDFViewerPopup`            class = `z2ui5_cl_api_app_469` path = `src/01/b03/z2ui5_cl_api_app_469.clas.abap`
         notes = `IMPROVISED: the sample's onInit gives each Image its own JSONModel and onPress opens a controller-created sap.m.PDFViewer in popup mode via JavaScript. Here the per-image Source/Preview URLs are` &&
                  ` resolved statically and the PDFViewer is embedded into a sap.m.Dialog opened on the press event instead, closed by an added OK Button (the popup-mode PDFViewer brings its own close button). //` &&
-                 ` POST-1.71: the PDFViewer property isTrustedSource (since UI5 1.133, isTrustedSource: true in the original controller) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >=` &&
-                 ` 1.133 to render it. // LIVE-TEST: confirm the PDFViewer renders inside the dialog at height 100% in a running system.`
-        post171 = `the PDFViewer property isTrustedSource (since UI5 1.133, isTrustedSource: true in the original controller) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.133 to render` &&
-                 ` it.` )
+                 ` POST-1.71: the PDFViewer property isTrustedSource (since UI5 1.121, backported to maintenance patches down to 1.71.63; the original controller passes isTrustedSource: true) is newer than 1.71 but` &&
+                 ` kept for the 1:1 port - the app needs a UI5 release >= 1.121 (or a patched maintenance release) to render it. // LIVE-TEST: confirm the PDFViewer renders inside the dialog at height 100% in a running` &&
+                 ` system.`
+        post171 = `the PDFViewer property isTrustedSource (since UI5 1.121, backported to maintenance patches down to 1.71.63; the original controller passes isTrustedSource: true) is newer than 1.71 but kept for the` &&
+                 ` 1:1 port - the app needs a UI5 release >= 1.121 (or a patched maintenance release) to render it.` )
       ( module = `sap.m` control = `sap.m.RangeSlider`     name = `RangeSlider`               class = `z2ui5_cl_api_app_472` path = `src/01/b02/z2ui5_cl_api_app_472.clas.abap`
         notes = `IMPROVISED: the sample binds the composite RangeSlider "range" property (an array [low, high] - range="{/RS1}" / range="0,100"). abap2UI5 binds scalar ABAP fields, so each range is expressed as the` &&
                  ` equivalent value / value2 properties the control keeps in sync - identical rendering.` )

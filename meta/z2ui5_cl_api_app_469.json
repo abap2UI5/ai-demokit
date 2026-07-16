@@ -14,7 +14,7 @@
     },
     {
       "type": "POST_171",
-      "what": "the PDFViewer property isTrustedSource (since UI5 1.133, isTrustedSource: true in the original controller) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.133 to render it."
+      "what": "the PDFViewer property isTrustedSource (since UI5 1.121, backported to maintenance patches down to 1.71.63; the original controller passes isTrustedSource: true) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.121 (or a patched maintenance release) to render it."
     },
     {
       "type": "LIVE_TEST",
