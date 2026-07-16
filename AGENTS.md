@@ -452,6 +452,16 @@ Three abaplint checks run on every pull request; all must report **0 issues**:
 | `ABAP_CLOUD`    | `abaplint .github/abaplint/abap_cloud.jsonc`    | `Cloud` |
 | `ABAP_702`      | `npm run downport` → `abaplint .github/abaplint/abap_702.jsonc` | `v702` |
 
+The **root** `abaplint.jsonc` carries the full curated rule set (correctness +
+style aligned with §8: `keyword_case`, `types_naming ^TY_`,
+`object_naming ^Z2UI5_CL_API_`, `unused_*`, `obsolete_statement`,
+`avoid_use` incl. `defaultKey` — always `WITH EMPTY KEY`, `commented_code`,
+`definitions_top`, `whitespace_end`, …). The cloud/702 configs stay on the
+correctness core, because the 702 config also drives `abaplint --fix` in the
+downport. When adding a rule, run all three builds — a rule that fights the
+generated view-chain style (e.g. `empty_line_in_statement`, `double_space`)
+stays off deliberately.
+
 Every sample must be **ABAP Cloud ready** *and* **downportable to 7.02** — there
 is no `src/00` "restricted" area here (unlike abap2UI5/samples); everything must
 survive all three builds. The `auto_cloud` / `auto_downport` workflows rebuild

@@ -126,7 +126,7 @@ CLASS ${CLASS} DEFINITION PUBLIC.
         notes     TYPE string,
         has_notes TYPE abap_bool,
       END OF ty_s_app.
-    TYPES ty_t_app TYPE STANDARD TABLE OF ty_s_app WITH DEFAULT KEY.
+    TYPES ty_t_app TYPE STANDARD TABLE OF ty_s_app WITH EMPTY KEY.
 
     DATA t_app TYPE ty_t_app.
 

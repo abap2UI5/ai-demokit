@@ -29,7 +29,7 @@ CLASS z2ui5_cl_api_app_overview DEFINITION PUBLIC.
         notes     TYPE string,
         has_notes TYPE abap_bool,
       END OF ty_s_app.
-    TYPES ty_t_app TYPE STANDARD TABLE OF ty_s_app WITH DEFAULT KEY.
+    TYPES ty_t_app TYPE STANDARD TABLE OF ty_s_app WITH EMPTY KEY.
 
     DATA t_app TYPE ty_t_app.
 
@@ -266,8 +266,9 @@ CLASS z2ui5_cl_api_app_overview IMPLEMENTATION.
                  ` attribute (see CAPABILITIES.md) - confirm the float layout in a running system. // IMPROVISED: the relative test-resources image and backgroundImage paths are resolved to absolute sdk.openui5.org` &&
                  ` URLs so the tile images load standalone.` )
       ( module = `sap.m` control = `sap.m.IconTabBar`      name = `IconTabBarStretchContent`  class = `z2ui5_cl_api_app_433` path = `src/01/b04/z2ui5_cl_api_app_433.clas.abap`
-        notes = `IMPROVISED: the IconTabBar property expanded="{device>/isNoPhone}" is dropped - abap2UI5 has no device model, so the phone/non-phone binding cannot be expressed. The tab bar stays expanded. //` &&
-                 ` IMPROVISED: the bound /ProductCollection shows a 8-row subset of the 123-row mock (ui5/mock/products.json) - a full unroll adds no demo value.` )
+        notes = `LIVE-TEST: the original binds expanded="{device>/isNoPhone}" (a demo-kit helper model); restored 2026-07-16 as the expression {= !${device>/system/phone} } over the framework's device> model` &&
+                 ` (source-verified available in main views) - confirm the tab bar collapses on phones. // IMPROVISED: the bound /ProductCollection shows a 8-row subset of the 123-row mock (ui5/mock/products.json) - a` &&
+                 ` full unroll adds no demo value.` )
       ( module = `sap.m` control = `sap.m.Image`           name = `ImageModeBackground`       class = `z2ui5_cl_api_app_434` path = `src/01/b01/z2ui5_cl_api_app_434.clas.abap`
         notes = `IMPROVISED: the original binds src/mode/height/width to a JSONModel (img>/products, /imageMode, /imageHeight, /imageWidth); the fixed sample values are inlined here as literals (mode Background, the` &&
                  ` HT-7777 / HT-6100 demo images). // IMPROVISED: image height/width are device dependent in the original (5em on a phone) - fixed to 10em here. // IMPROVISED: the custom CSS class imageContainer (light` &&
@@ -291,9 +292,10 @@ CLASS z2ui5_cl_api_app_overview IMPLEMENTATION.
       ( module = `sap.m` control = `sap.m.MessageView`     name = `MessageViewMessageManager` class = `z2ui5_cl_api_app_449` path = `src/01/b03/z2ui5_cl_api_app_449.clas.abap`
         notes = `IMPROVISED: the MessageManager/message model of the original is not available in abap2UI5 - the messages are bound from a hardcoded table instead.` )
       ( module = `sap.m` control = `sap.m.MultiComboBox`   name = `MultiComboBoxGrouping`     class = `z2ui5_cl_api_app_452` path = `src/01/b02/z2ui5_cl_api_app_452.clas.abap`
-        notes = `IMPROVISED: the original binds items with a model sorter (group: true) and a custom groupHeaderFactory (the latter not expressible in abap2UI5) - so the grouped items are rendered statically as` &&
-                 ` core:SeparatorItem headers + core:Item entries, built in a LOOP over the ABAP data instead of a bound aggregation. // IMPROVISED: 16-row subset of the 123-row mock (ui5/mock/products.json). //` &&
-                 ` LIVE-TEST: a bound items template with a raw sorter binding-info string ({path, sorter: {path, group: true}}) may replace the static unroll - see CAPABILITIES.md, needs an in-system check.` )
+        notes = `IMPROVISED: the custom groupHeaderFactory '.getGroupHeader' (controller code) is replaced by UI5's default group headers - the sample's factory builds a SeparatorItem with the group key, which is what` &&
+                 ` the default renders anyway. The items are a bound template with the original's sorter (path SUPPLIER_NAME, group: true) as a raw binding-info string. // IMPROVISED: 16-row subset of the 123-row mock` &&
+                 ` (ui5/mock/products.json). // LIVE-TEST: confirm the group SeparatorItem headers render per supplier in the MultiComboBox picker (bound template + group sorter, converted 2026-07-16; string` &&
+                 ` pass-through source-verified).` )
       ( module = `sap.m` control = `sap.m.MultiInput`      name = `MultiInput`                class = `z2ui5_cl_api_app_454` path = `src/01/b02/z2ui5_cl_api_app_454.clas.abap`
         notes = `IMPROVISED: the controller's onInit pre-sets the tokens on both MultiInputs (Token 1..6 and one long token); they are declared statically in the view's tokens aggregation instead - same rendering. //` &&
                  ` IMPROVISED: the controller's addValidator (typing free text + Enter creates a token client-side) is dropped - abap2UI5 has no client-side validator hook. // IMPROVISED: the suggestion data is a` &&
@@ -318,8 +320,9 @@ CLASS z2ui5_cl_api_app_overview IMPLEMENTATION.
         notes = `IMPROVISED: the sample binds the composite RangeSlider "range" property (an array [low, high] - range="{/RS1}" / range="0,100"). abap2UI5 binds scalar ABAP fields, so each range is expressed as the` &&
                  ` equivalent value / value2 properties the control keeps in sync - identical rendering.` )
       ( module = `sap.m` control = `sap.m.ScrollContainer` name = `ScrollContainer`           class = `z2ui5_cl_api_app_473` path = `src/01/b04/z2ui5_cl_api_app_473.clas.abap`
-        notes = `IMPROVISED: the Image src binds {img>/products/pic1} in the original, a JSON image model not available server-side; a static demo image URL is used instead. // IMPROVISED: the original narrows the` &&
-                 ` width to 50em on phone devices via sap/ui/Device (not available server-side); a fixed 100em is used.` )
+        notes = `IMPROVISED: the Image src binds {img>/products/pic1} in the original, a JSON image model not available server-side; a static demo image URL is used instead. // LIVE-TEST: the original narrows the` &&
+                 ` width to 50em on phones via sap/ui/Device in the controller; restored 2026-07-16 as the expression {= ${device>/system/phone} ? '50em' : '100em' } over the framework's device> model (source-verified` &&
+                 ` available in main views) - confirm the width switches on a phone.` )
       ( module = `sap.m` control = `sap.m.SegmentedButton` name = `SegmentedButton`           class = `z2ui5_cl_api_app_474` path = `src/01/b03/z2ui5_cl_api_app_474.clas.abap`
         notes = `IMPROVISED: the original reads the selected item via oEvent.getParameter("item").getText() / getSelectedItem(). Here the items get keys (one/two/three - an addition, SB1 has none in the sample) and` &&
                  ` selectedKey is two-way bound, so the selection arrives with the event and no private event path is needed (see CAPABILITIES.md). // LIVE-TEST: confirm the two-way bound selectedKey is updated before` &&
