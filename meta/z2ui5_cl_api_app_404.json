@@ -1,0 +1,14 @@
+{
+  "class": "z2ui5_cl_api_app_404",
+  "sample": "sap.m.sample.FlexBoxNested",
+  "entity": "sap.m.FlexBox",
+  "file": "src/01/z2ui5_cl_api_app_404.clas.abap",
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "the original sample colours .item1..item6 and the h2 headings via a separate style.css; the previous port injected it through an html:style block. z2ui5_cl_api_xml has no raw-text/CDATA node, so that CSS cannot be emitted - the styleClass attributes are ported 1:1 but the flex items render without their background colours. Dropped."
+    }
+  ]
+}

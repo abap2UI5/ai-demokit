@@ -1,0 +1,30 @@
+{
+  "class": "z2ui5_cl_api_app_454",
+  "sample": "sap.m.sample.MultiInput",
+  "entity": "sap.m.MultiInput",
+  "file": "src/01/z2ui5_cl_api_app_454.clas.abap",
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "the controller's onInit pre-sets the tokens on both MultiInputs (Token 1..6 and one long token); they are declared statically in the view's tokens aggregation instead - same rendering."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "the controller's addValidator (typing free text + Enter creates a token client-side) is dropped - abap2UI5 has no client-side validator hook."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "the suggestion data is a 16-row subset of the mock /ProductCollection (ui5/mock/products.json)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The original's stray placeholder attributes on the two Labels (not a Label property) are dropped."
+    },
+    {
+      "type": "DROPPED_171",
+      "what": "showClearIcon (since UI5 1.94) dropped from the suggestion MultiInput."
+    }
+  ]
+}

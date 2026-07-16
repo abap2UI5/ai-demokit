@@ -1,0 +1,22 @@
+{
+  "class": "z2ui5_cl_api_app_447",
+  "sample": "sap.m.sample.MessageBoxInitialFocus",
+  "entity": "sap.m.MessageBox",
+  "file": "src/01/z2ui5_cl_api_app_447.clas.abap",
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "the sample opens a sap.m.MessageBox from its controller; there is no such control in the view. It is mapped to abap2UI5's client->message_box_display, driven by two buttons wired to events."
+    },
+    {
+      "type": "DROPPED_171",
+      "what": "the buttons' ariaHasPopup=\"Dialog\" is dropped (available only since UI5 1.84)."
+    },
+    {
+      "type": "DROPPED_171",
+      "what": "the MessageBox emphasizedAction / dependentOn options of the original are dropped (available only since UI5 1.75 / 1.124)."
+    }
+  ]
+}

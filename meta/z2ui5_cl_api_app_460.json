@@ -1,0 +1,14 @@
+{
+  "class": "z2ui5_cl_api_app_460",
+  "sample": "sap.m.sample.ObjectHeader",
+  "entity": "sap.m.ObjectHeader",
+  "file": "src/01/z2ui5_cl_api_app_460.clas.abap",
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "the sample binds the ObjectHeader to {/ProductCollection/0} and its title/number/attributes to model fields (with a Currency type formatter on number). The port carries no model, so those bindings are resolved to the static values of the first ProductCollection product (Notebook Basic 15)."
+    }
+  ]
+}

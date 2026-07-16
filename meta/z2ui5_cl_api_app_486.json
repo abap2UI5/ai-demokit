@@ -1,0 +1,14 @@
+{
+  "class": "z2ui5_cl_api_app_486",
+  "sample": "sap.m.sample.ToolbarShrinkable",
+  "entity": "sap.m.Toolbar",
+  "file": "src/01/z2ui5_cl_api_app_486.clas.abap",
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "the sample's controller onSliderLiveChange resizes the toolbars in JS; there is no width in the source XML. Rebuilt as a bound width on each Toolbar fed by the SLIDER_CHANGE liveChange event - this width binding is an addition not present in Toolbar.view.xml."
+    }
+  ]
+}

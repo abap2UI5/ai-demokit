@@ -1,0 +1,14 @@
+{
+  "class": "z2ui5_cl_api_app_433",
+  "sample": "sap.m.sample.IconTabBarStretchContent",
+  "entity": "sap.m.IconTabBar",
+  "file": "src/01/z2ui5_cl_api_app_433.clas.abap",
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "the IconTabBar property expanded=\"{device>/isNoPhone}\" is dropped - abap2UI5 has no device model, so the phone/non-phone binding cannot be expressed. The tab bar stays expanded."
+    }
+  ]
+}

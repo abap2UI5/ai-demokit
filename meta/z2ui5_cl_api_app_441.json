@@ -1,0 +1,14 @@
+{
+  "class": "z2ui5_cl_api_app_441",
+  "sample": "sap.m.sample.ListCounter",
+  "entity": "sap.m.List",
+  "file": "src/01/z2ui5_cl_api_app_441.clas.abap",
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "DROPPED_171",
+      "what": "headerLevel=\"H2\" on the List (since UI5 1.117) is dropped."
+    }
+  ]
+}

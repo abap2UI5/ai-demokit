@@ -1,0 +1,14 @@
+{
+  "class": "z2ui5_cl_api_app_487",
+  "sample": "sap.m.sample.Tree",
+  "entity": "sap.m.Tree",
+  "file": "src/01/z2ui5_cl_api_app_487.clas.abap",
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "LIVE_TEST",
+      "what": "the sample's view is flat (one Tree bound to '/', one StandardTreeItem template); the hierarchy is carried entirely by the model. Each row's nested `nodes` sub-table (5 levels deep) is what UI5's JSONModel tree binding walks to build the child nodes - confirm the nested tables render as expandable levels in a running system."
+    }
+  ]
+}

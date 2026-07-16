@@ -1,0 +1,14 @@
+{
+  "class": "z2ui5_cl_api_app_452",
+  "sample": "sap.m.sample.MultiComboBoxGrouping",
+  "entity": "sap.m.MultiComboBox",
+  "file": "src/01/z2ui5_cl_api_app_452.clas.abap",
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "the original binds items with a model sorter (group: true) and a groupHeaderFactory, neither of which is expressible in abap2UI5 - so the grouped items are rendered statically as core:SeparatorItem headers + core:Item entries, built in a LOOP over the ABAP data instead of a bound aggregation."
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "class": "z2ui5_cl_api_app_440",
+  "sample": "sap.m.sample.LinkEmphasized",
+  "entity": "sap.m.Link",
+  "file": "src/01/z2ui5_cl_api_app_440.clas.abap",
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "the last column's original number binding is a sap.ui.model.type.Currency formatter (parts Price/CurrencyCode, formatOptions showMeasure:false); it is replaced by a plain ObjectNumber with a preformatted price text (number={PRICE} unit={CURRENCY_CODE})."
+    }
+  ]
+}

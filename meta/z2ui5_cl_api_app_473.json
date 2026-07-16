@@ -1,0 +1,18 @@
+{
+  "class": "z2ui5_cl_api_app_473",
+  "sample": "sap.m.sample.ScrollContainer",
+  "entity": "sap.m.ScrollContainer",
+  "file": "src/01/z2ui5_cl_api_app_473.clas.abap",
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "the Image src binds {img>/products/pic1} in the original, a JSON image model not available server-side; a static demo image URL is used instead."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "the original narrows the width to 50em on phone devices via sap/ui/Device (not available server-side); a fixed 100em is used."
+    }
+  ]
+}
