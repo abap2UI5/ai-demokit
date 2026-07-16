@@ -12,8 +12,8 @@ Status legend: ✅ direct 1:1 · 🔶 expressible with a documented workaround �
 
 Maintenance rule (same discipline as AGENTS.md §10): whenever a port proves a
 new technique, or disproves a ❌, update this table **in the same change** and
-reference the port. Never write an `IMPROVISED:`/dropped note for a feature this
-table marks ✅/🔶.
+reference the port. Never declare an `IMPROVISED`/`DROPPED_171` deviation for a
+feature this table marks ✅/🔶.
 
 ## Views & controls
 
@@ -43,9 +43,9 @@ table marks ✅/🔶.
 | Expression bindings (`{= … }`) over bound paths | ✅ | compose the captured `_bind_edit` handle into the expression string | app 421 (the AGENTS §5 worked example) |
 | Imperative controller logic that only derives view state (setWidth/setExpanded from a control value) | 🔶 | prefer a pure expression binding over an event round-trip (`{= ${slider} + '%' }`) | app 421 is the pattern; the avoidable round-trips in 486/530 were removed 2026-07-16 (LIVE-TEST pending) |
 | Nested tables / tree binding (`items="{path: '/'}"` over nested `nodes`) | 🧪 | nested ABAP table types serialize into the default model | app 487 (LIVE-TEST pending) |
-| Named models (`img>`, `device>`, `mvc` view models) | ❌ | one default model only — flatten into it or resolve statically, always with an `IMPROVISED:` note | apps 420, 433, 434, 473 |
+| Named models (`img>`, `device>`, `mvc` view models) | ❌ | one default model only — flatten into it or resolve statically, always with an IMPROVISED deviation in the sidecar | apps 420, 433, 434, 473 |
 | `sap.ui.Device` / device model bindings | ❌ | not available server-side — fix the value, note it | apps 433, 473 |
-| Binding `sorter` (no grouping, static data) | 🔶 | `SORT` the ABAP table once + inline comment + NOTES bullet | apps 440, 527 |
+| Binding `sorter` (no grouping, static data) | 🔶 | `SORT` the ABAP table once + inline comment + IMPROVISED deviation in the sidecar | apps 440, 527 |
 | Binding `sorter` with `group: true` + default group headers | 🧪 | keep a raw binding-info string `{path: '…', sorter: {path: '…', group: true}}` — UI5 parses it client-side; only a *custom* `groupHeaderFactory` is out | app 452 unrolled statically instead; worth a LIVE-TEST |
 | Composite binding types / formatters (`sap.ui.model.type.Currency`, `Formatter.js`) | ❌ | preformat the value in ABAP, bind the result; note it | apps 440, 460 |
 | MessageManager / `message>` model | ❌ | bind an equivalent hardcoded table | app 449 |

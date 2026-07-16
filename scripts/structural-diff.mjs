@@ -3,7 +3,7 @@
  * Structural view diff — compares every port's emitted view structure against
  * the original demo kit view.xml files, and matches each difference against
  * the deviations declared in the port's meta/<class>.json sidecar
- * (regenerate those first with scripts/generate-meta.mjs).
+ * (the meta/ sidecars are the source of truth — see scripts/validate-meta.mjs).
  *
  *   node scripts/structural-diff.mjs            advisory report
  *   node scripts/structural-diff.mjs --strict   exit 1 on undeclared diffs

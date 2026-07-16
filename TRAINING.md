@@ -44,8 +44,9 @@ PR. Per batch:
    exist since UI5 1.71 and are not deprecated, see AGENTS §1) and ports them
    into a new `b<nn>` folder, prompt fed with AGENTS.md, CAPABILITIES.md and
    the 2–3 nearest `golden` ports.
-2. **Machine-verify until green** — abaplint ×3, `generate-meta`,
-   `structural-diff --strict`, plus an adversarial AI review pass. The agent
+2. **Machine-verify until green** — abaplint ×3, `validate-meta`,
+   `structural-diff --strict`, `pattern-lint`, plus an adversarial AI review
+   pass. The agent
    fixes its own findings. Human time is the scarcest resource in this loop —
    it must only be spent on what machines cannot see.
 3. **Human live check** — pull the batch package via abapGit, start every app,
@@ -74,7 +75,7 @@ references and only they graduate to the curated samples repo.
 |---|---|---|
 | `generated` | fresh from the pipeline | abaplint ×3 green |
 | `reviewed` | AI review found nothing undeclared | review pass with zero open findings |
-| `checked` | manually verified in a running system | today's `"! CHECKED (date):` marker |
+| `checked` | manually verified in a running system | `checked {date, note}` set in the sidecar |
 | `golden` | checked + exemplary style, safe to imitate | human judgement |
 
 ## Per-port metadata
