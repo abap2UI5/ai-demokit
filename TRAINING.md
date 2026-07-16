@@ -89,6 +89,15 @@ them into the session when generating or reviewing):
   (we: always CASE in `on_event`), and their view builder is the typed
   `z2ui5_cl_xml_view` (we: generic `z2ui5_cl_api_xml`) — view-building idiom
   does not transfer. Where the two conflict, THIS repo's AGENTS.md wins.
+- **`UI5/openui5`** (upstream, on demand) — the truth about what **UI5**
+  does. Do NOT keep a standing full clone; use a sparse, blob-filtered
+  checkout of what a question needs (`git clone --depth 1 --filter=blob:none
+  --sparse …`, then `git sparse-checkout set src/sap.m/src/sap/m …`).
+  Three uses: (a) copy each new batch's sample originals into
+  `ui5/<lib>/<Name>/`, (b) verify UI5-side behavior claims in the control
+  sources (e.g. the default group header in `ComboBoxBase`, the
+  `EventHandlerResolver` for `$`-args — both verified 2026-07-16),
+  (c) property-level `@since` metadata for a future 1.71 property check.
 
 ## Quality ladder
 
