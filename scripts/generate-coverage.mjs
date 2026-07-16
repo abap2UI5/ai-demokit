@@ -1,47 +1,49 @@
 #!/usr/bin/env node
 /*
- * Regenerates the coverage docs: every official UI5 demo kit sample of every
- * library, marked with whether an abap2UI5 port exists.
- *   - api.md    control-level detail: per library -> per control (entity) -> its
- *               samples (Javascript / ABAP / Link columns)
+ * Regenerates the coverage docs: every official UI5 demo kit sample of the
+ * focused libraries, marked with whether an abap2UI5 port exists.
+ *   - api.md    ONE flat table — one row per sample: Module · Control · Since ·
+ *               Deprecated (since + replacement hint) · Sample (source + live
+ *               links) · ABAP (ported class or —)
  *   - README.md per-module coverage summary (between the coverage markers)
  *
  * The in-system overview app (src/) is generated separately by
  * scripts/generate-overview.mjs.
  *
- * Universe of samples : an OpenUI5 checkout (env OPENUI5_DIR, default ./openui5)
- *                       src/<lib>/test/<lib>/demokit/sample/<Name>/
- * Ported samples      : this repo's src/**\/*.clas.abap, each carrying a header
- *                       "! <url>.../entity/<entity>/sample/<lib>.sample.<Name>
- * Control metadata    : the release's generated api.json (Since, deprecation,
- *                       library version). Built per library with
- *                       `grunt jsdoc:library-<lib>` in the OpenUI5 checkout,
- *                       landing at target/openui5-sdk/test-resources/<lib>/
- *                       designtime/api.json (env APIJSON_ROOT overrides the
- *                       root). Optional: if absent, the Since column stays
- *                       blank and no version is stamped.
+ * Universe of samples : ui5/universe.json — a snapshot of the demo kit sample
+ *                       list + control metadata (entity, since, deprecation,
+ *                       release). When an OpenUI5 checkout is present (env
+ *                       OPENUI5_DIR, default ./openui5), the snapshot is
+ *                       REBUILT from it (sample dirs + docuindex.json +
+ *                       api.json from `grunt jsdoc:library-<lib>`, root
+ *                       overridable via APIJSON_ROOT) and written back; without
+ *                       a checkout the snapshot is read as-is, so the docs
+ *                       regenerate fully offline.
+ * Ported samples      : meta/<class>.json sidecars (the source of truth) —
+ *                       matched to the universe by <lib>.sample.<Name>. Ports
+ *                       that match no universe sample are reported as orphans.
  *
  * All table links are external (absolute) and point at OpenUI5 — the demo kit
  * (sdk.openui5.org) and the source repo (github.com/SAP/openui5); only the ABAP
  * column links back to this repo. Env: OPENUI5_DIR, APIJSON_ROOT, REPO, REF,
  * DEMOKIT, OPENUI5.
  *
- * Run:  # 1. build the api.json for each focused library (in the OpenUI5 checkout)
- *       #    npx grunt jsdoc:library-sap.m
- *       # 2. regenerate the docs
- *       OPENUI5_DIR=../openui5 node scripts/generate-coverage.mjs
+ * Run:  node scripts/generate-coverage.mjs                     # offline, from the snapshot
+ *       OPENUI5_DIR=../openui5 node scripts/generate-coverage.mjs   # refresh snapshot too
  */
 
 import fs from 'fs';
 import path from 'path';
+import { fileURLToPath } from 'url';
 
-const ROOT = path.join(path.dirname(new URL(import.meta.url).pathname), '..');
-const SRC = path.join(ROOT, 'src');
+const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
+const META = path.join(ROOT, 'meta');
 const OPENUI5_DIR = process.env.OPENUI5_DIR || path.join(ROOT, 'openui5');
 // root that holds the generated api.json files (one per library), i.e. the
 // SDK build output of `grunt jsdoc:library-<lib>` in the OpenUI5 checkout.
 const APIJSON_ROOT = process.env.APIJSON_ROOT ||
   path.join(OPENUI5_DIR, 'target', 'openui5-sdk', 'test-resources');
+const SNAPSHOT = path.join(ROOT, 'ui5', 'universe.json');
 const COVERAGE = path.join(ROOT, 'api.md');
 const README = path.join(ROOT, 'README.md');
 const START = '<!-- coverage:start -->';
@@ -74,72 +76,45 @@ const sampleSrcUrl = (lib, name) =>
 // generated abap2UI5 class file under src/ (this repo)
 const abapUrl = (file) => `${GH}/blob/${REF}/${file.split(path.sep).join('/')}`;
 
-function walk(dir, out = []) {
-  for (const name of fs.readdirSync(dir)) {
-    const full = path.join(dir, name);
-    if (fs.statSync(full).isDirectory()) walk(full, out);
-    else out.push(full);
-  }
-  return out;
-}
+// Focus: only these UI5 libraries are in scope right now (§7 AGENTS.md); the
+// others are brought back in later. Set to null to cover every library again.
+const FOCUS_LIBS = ['sap.m'];
 
-// --- 1. ported set: (lib, name) -> { cls, file, entity } ------------------
-const ported = new Map(); // key `${lib}\t${name}` -> { cls, file, entity }
-for (const f of walk(SRC)) {
-  if (!f.endsWith('.clas.abap')) continue;
-  const cls = path.basename(f, '.clas.abap');
-  // ...#/entity/<entity>/sample/<lib>.sample.<Name>
-  const m = fs.readFileSync(f, 'utf8')
-    .match(/(?:entity\/([^/\s]+)\/)?sample\/(\S+)/);
-  if (!m) continue;
-  const entity = m[1] || null;
-  const id = m[2];                       // e.g. sap.m.sample.FacetFilterLight
-  const i = id.indexOf('.sample.');
+// --- 1. ported set from the meta/ sidecars ---------------------------------
+const ported = new Map(); // `${lib}\t${name}` -> { cls, file }
+for (const mf of fs.readdirSync(META)) {
+  if (!mf.endsWith('.json')) continue;
+  const m = JSON.parse(fs.readFileSync(path.join(META, mf), 'utf8'));
+  const i = m.sample.indexOf('.sample.');
   if (i === -1) continue;
-  const lib = id.slice(0, i);
-  const name = id.slice(i + '.sample.'.length);
-  ported.set(`${lib}\t${name}`, { cls, file: path.relative(ROOT, f), entity });
+  ported.set(`${m.sample.slice(0, i)}\t${m.sample.slice(i + '.sample.'.length)}`,
+    { cls: m.class, file: m.file });
 }
 
-// --- 2. universe: all demo kit samples in the OpenUI5 checkout -------------
-if (!fs.existsSync(OPENUI5_DIR)) {
-  console.error(`OpenUI5 checkout not found at ${OPENUI5_DIR} (set OPENUI5_DIR).`);
-  process.exit(1);
-}
+// --- 2. universe: from the OpenUI5 checkout (refreshing the snapshot), or
+//        offline from ui5/universe.json --------------------------------------
 
-// entity (fully-qualified control name) -> control metadata, read from the
-// release's generated api.json (symbols[]). Also yields the library version.
-// The sample->entity link lives in docuindex.json, not here — api.json knows
-// controls, not samples — so this only enriches entities we already resolved.
+// entity -> control metadata from the release's generated api.json (symbols[])
 function loadApi(lib) {
   const p = path.join(APIJSON_ROOT, lib.replace(/\./g, '/'), 'designtime', 'api.json');
-  const meta = new Map(); // entity name -> { since, deprecated, experimental, kind, visibility }
+  const meta = new Map();
   if (!fs.existsSync(p)) return { version: null, meta };
   let doc;
   try { doc = JSON.parse(fs.readFileSync(p, 'utf8')); } catch { return { version: null, meta }; }
   for (const s of doc.symbols || []) {
     meta.set(s.name, {
       since: s.since || null,
-      // { since, text } when deprecated (text carries the replacement hint), else null
       deprecated: s.deprecated
         ? { since: s.deprecated.since || null, text: cleanDoc(s.deprecated.text) }
         : null,
-      experimental: !!s.experimental,
-      kind: s.kind || null,
-      visibility: s.visibility || null,
     });
   }
   return { version: doc.version || null, meta };
 }
 
-// OpenUI5 release the control metadata was generated from (first api.json that
-// carries a version); null when no api.json is available.
-let release = null;
-
 // sample id -> owning entity, parsed from each library's demokit docuindex.json
-// (explored.entities[].samples[]). First entity that lists a sample wins.
 function entityMap(demokitDir) {
-  const map = new Map(); // sampleId -> entity
+  const map = new Map();
   const p = path.join(demokitDir, 'docuindex.json');
   if (!fs.existsSync(p)) return map;
   let doc;
@@ -151,32 +126,54 @@ function entityMap(demokitDir) {
   return map;
 }
 
-// Focus: only these UI5 libraries are in scope right now; the others are brought
-// back in later. Set to null to cover every OpenUI5 library again.
-const FOCUS_LIBS = ['sap.m'];
-
-const libs = []; // { lib, samples: [{ name, port, entity }] }
-for (const lib of fs.readdirSync(path.join(OPENUI5_DIR, 'src')).sort()) {
-  if (FOCUS_LIBS && !FOCUS_LIBS.includes(lib)) continue;
-  const demokitDir = path.join(OPENUI5_DIR, 'src', lib, 'test', lib.replace(/\./g, '/'), 'demokit');
-  const sampleDir = path.join(demokitDir, 'sample');
-  if (!fs.existsSync(sampleDir)) continue;
-  const entOf = entityMap(demokitDir);
-  const api = loadApi(lib);
-  if (api.version && !release) release = api.version;
-  const samples = fs.readdirSync(sampleDir)
-    .filter((n) => fs.statSync(path.join(sampleDir, n)).isDirectory())
-    .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
-    .map((name) => {
-      const port = ported.get(`${lib}\t${name}`) || null;
-      const entity = entOf.get(`${lib}.sample.${name}`) || (port && port.entity) || null;
-      const meta = (entity && api.meta.get(entity)) || null;
-      return { name, port, entity, meta };
-    });
-  if (samples.length) libs.push({ lib, samples });
+let universe; // { release, libs: [{ lib, samples: [{ name, entity, since, deprecated }] }] }
+if (fs.existsSync(OPENUI5_DIR)) {
+  let release = null;
+  const ulibs = [];
+  for (const lib of fs.readdirSync(path.join(OPENUI5_DIR, 'src')).sort()) {
+    if (FOCUS_LIBS && !FOCUS_LIBS.includes(lib)) continue;
+    const demokitDir = path.join(OPENUI5_DIR, 'src', lib, 'test', lib.replace(/\./g, '/'), 'demokit');
+    const sampleDir = path.join(demokitDir, 'sample');
+    if (!fs.existsSync(sampleDir)) continue;
+    const entOf = entityMap(demokitDir);
+    const api = loadApi(lib);
+    if (api.version && !release) release = api.version;
+    const samples = fs.readdirSync(sampleDir)
+      .filter((n) => fs.statSync(path.join(sampleDir, n)).isDirectory())
+      .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
+      .map((name) => {
+        const entity = entOf.get(`${lib}.sample.${name}`) || null;
+        const m = (entity && api.meta.get(entity)) || {};
+        return { name, entity, since: m.since || null, deprecated: m.deprecated || null };
+      });
+    if (samples.length) ulibs.push({ lib, samples });
+  }
+  universe = { release, libs: ulibs };
+  fs.writeFileSync(SNAPSHOT, JSON.stringify(universe, null, 1) + '\n');
+  console.log(`universe snapshot refreshed from ${OPENUI5_DIR} -> ${path.relative(ROOT, SNAPSHOT)}`);
+} else if (fs.existsSync(SNAPSHOT)) {
+  universe = JSON.parse(fs.readFileSync(SNAPSHOT, 'utf8'));
+} else {
+  console.error(`neither an OpenUI5 checkout (${OPENUI5_DIR}) nor ${path.relative(ROOT, SNAPSHOT)} found.`);
+  process.exit(1);
 }
 
-// --- 3. render ------------------------------------------------------------
+const release = universe.release;
+const libs = universe.libs.map((e) => ({
+  lib: e.lib,
+  samples: e.samples.map((s) => ({ ...s, port: ported.get(`${e.lib}\t${s.name}`) || null })),
+}));
+
+// integrity: a port that matches no universe sample would silently vanish
+// from the coverage — report it loudly instead
+const matched = new Set(libs.flatMap((e) => e.samples.map((s) => `${e.lib}\t${s.name}`)));
+for (const key of ported.keys()) {
+  if (!matched.has(key)) {
+    console.warn(`WARNING: orphan port ${key.replace('\t', '.sample.')} — not in the sample universe (renamed/removed upstream, or outside FOCUS_LIBS?)`);
+  }
+}
+
+// --- 3. render --------------------------------------------------------------
 const pct = (n, d) => (d === 0 ? '—' : `${((n / d) * 100).toFixed(1)} %`);
 const bar = (n, d) => {
   if (d === 0) return '';
@@ -184,12 +181,8 @@ const bar = (n, d) => {
   return '█'.repeat(filled) + '░'.repeat(10 - filled);
 };
 
-// summary — sort by coverage desc, then library name
 const summary = libs
-  .map((l) => {
-    const p = l.samples.filter((s) => s.port).length;
-    return { lib: l.lib, total: l.samples.length, ported: p };
-  })
+  .map((l) => ({ lib: l.lib, total: l.samples.length, ported: l.samples.filter((s) => s.port).length }))
   .sort((a, b) => (b.ported / b.total) - (a.ported / a.total) || a.lib.localeCompare(b.lib));
 
 let totalSamples = 0;
@@ -211,32 +204,27 @@ function summaryLines() {
   return l;
 }
 
-// api.md — one flat table, mirroring the in-system overview app (same columns,
-// minus the "start the app" link). One row per UI5 demo kit sample.
+// api.md — ONE flat table, one row per sample, deprecation inline
 function controlLines() {
   const l = [];
-  l.push('One row per UI5 demo kit sample, based on the in-system overview app');
-  l.push('(`z2ui5_cl_api_app_overview`) — the "start the app" link is dropped');
-  l.push('(this is a static page) and a **Since** column is added from the');
-  l.push('release\'s `api.json`. **Control** links to the OpenUI5 API,');
-  l.push('**Since** is the version the control was introduced, **JavaScript**');
-  l.push('the sample source in the');
-  l.push('[OpenUI5 repository](https://github.com/SAP/openui5), **UI5 App** the');
-  l.push('live OpenUI5 fullscreen sample, **ABAP** the generated class');
-  l.push('(`—` = not ported yet). ~~Struck-through~~ controls are deprecated');
-  l.push('(hover the control for the replacement hint; see also');
-  l.push('[Deprecated controls](#deprecated-controls-legacy-free-readiness) below).');
+  l.push('One row per UI5 demo kit sample. **Control** links to the OpenUI5 API,');
+  l.push('**Since** is the version the control was introduced, **Deprecated**');
+  l.push('carries the deprecation version and the replacement hint from the');
+  l.push('release\'s `api.json` (empty = not deprecated), **Sample** links the');
+  l.push('source in the [OpenUI5 repository](https://github.com/SAP/openui5) and');
+  l.push('its ↗ opens the live fullscreen sample, **ABAP** is the generated class');
+  l.push('(`—` = not ported yet — those rows are the backlog).');
   l.push('See the [README](README.md#coverage) for the per-module coverage summary.');
   if (release) {
     l.push('');
     l.push(`_Control metadata (Since, deprecation) from the OpenUI5 **${release}** \`api.json\`._`);
   }
   l.push('');
-  l.push('| Module | Control | Since | Sample | JavaScript | UI5 App | ABAP |');
-  l.push('|--------|---------|:-----:|--------|:----------:|:-------:|:----:|');
+  l.push('| Module | Control | Since | Deprecated | Sample | ABAP |');
+  l.push('|--------|---------|:-----:|------------|--------|:----:|');
 
-  // flatten all samples, sort by module -> control (entity) -> sample name;
-  // samples without a known control sort last within their module
+  // one row per sample, sorted module -> control -> sample name; samples
+  // without a known control sort last within their module
   const rows = libs.flatMap((e) => e.samples.map((s) => ({ ...s, lib: e.lib })));
   rows.sort((a, b) =>
     a.lib.toLowerCase().localeCompare(b.lib.toLowerCase()) ||
@@ -245,72 +233,22 @@ function controlLines() {
     a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
 
   for (const s of rows) {
-    // deprecated controls (per api.json) are struck through, with the
-    // deprecation/replacement hint as a hover tooltip on the link
     const label = s.entity ? bareControl(s.entity) : null;
-    const dep = s.meta && s.meta.deprecated;
-    const shown = label && dep ? `~~${label}~~` : label;
-    // link title (hover tooltip); strip inner double quotes from the hint
-    const title = dep
-      ? ` "deprecated${dep.since ? ' since ' + dep.since : ''}${dep.text ? ' — ' + dep.text.replace(/"/g, "'") : ''}"`
+    const control = label
+      ? `[${s.deprecated ? `~~${label}~~` : label}](${apiUrl(s.entity)})`
+      : '—';
+    const deprecated = s.deprecated
+      ? `${s.deprecated.since || ''}${s.deprecated.text ? ` — ${s.deprecated.text.replace(/\|/g, '/')}` : ''}`.trim()
       : '';
-    const control = s.entity ? `[${shown}](${apiUrl(s.entity)}${title})` : '—';
-    const since = s.meta && s.meta.since ? s.meta.since : '';
-    const js = `[↗](${sampleSrcUrl(s.lib, s.name)})`;
-    const ui5 = `[↗](${fullscreenUrl(s.lib, s.name)})`;
-    // keep the ABAP code link, named by its class (that's the app you pull & start)
+    const sample = `[${s.name}](${sampleSrcUrl(s.lib, s.name)}) [↗](${fullscreenUrl(s.lib, s.name)})`;
     const abap = s.port ? `[${s.port.cls}](${abapUrl(s.port.file)})` : '—';
-    l.push(`| ${s.lib} | ${control} | ${since} | ${s.name} | ${js} | ${ui5} | ${abap} |`);
+    l.push(`| ${s.lib} | ${control} | ${s.since || ''} | ${deprecated} | ${sample} | ${abap} |`);
   }
   l.push('');
   return l;
 }
 
-// api.md — deprecated controls that still carry demo kit samples: the
-// legacy-free readiness list. One row per deprecated control (not per sample),
-// with the replacement hint from the api.json deprecation text and how many of
-// its samples are ported. Empty when no api.json / no deprecated controls.
-function deprecatedLines() {
-  // collect distinct deprecated entities in scope -> { lib, entity, dep, total, ported }
-  const byEntity = new Map();
-  for (const e of libs) {
-    for (const s of e.samples) {
-      const dep = s.meta && s.meta.deprecated;
-      if (!s.entity || !dep) continue;
-      const cur = byEntity.get(s.entity) ||
-        { lib: e.lib, entity: s.entity, dep, total: 0, ported: 0 };
-      cur.total += 1;
-      if (s.port) cur.ported += 1;
-      byEntity.set(s.entity, cur);
-    }
-  }
-  if (!byEntity.size) return [];
-
-  const rows = [...byEntity.values()].sort((a, b) =>
-    a.lib.toLowerCase().localeCompare(b.lib.toLowerCase()) ||
-    a.entity.toLowerCase().localeCompare(b.entity.toLowerCase()));
-
-  const l = [];
-  l.push('## Deprecated controls (legacy-free readiness)');
-  l.push('');
-  l.push(`${rows.length} control(s) with demo kit samples are deprecated in this`);
-  l.push('release and will not survive the legacy-free UI5 2.x line. **Replaced by**');
-  l.push('is the hint from the control\'s `api.json` deprecation note; **Samples**');
-  l.push('counts how many of its samples are already ported.');
-  l.push('');
-  l.push('| Module | Control | Deprecated since | Replaced by | Samples |');
-  l.push('|--------|---------|:----------------:|-------------|:-------:|');
-  for (const r of rows) {
-    const control = `[${bareControl(r.entity)}](${apiUrl(r.entity)})`;
-    const replaced = r.dep.text || '—';
-    l.push(`| ${r.lib} | ${control} | ${r.dep.since || ''} | ${replaced} | ${r.ported}/${r.total} |`);
-  }
-  l.push('');
-  return l;
-}
-
-// api.md — module -> control detail, then the deprecated-controls readiness list
-const coverage = ['# abap2UI5 — sample coverage', '', ...controlLines(), ...deprecatedLines()];
+const coverage = ['# abap2UI5 — sample coverage', '', ...controlLines()];
 fs.writeFileSync(COVERAGE, coverage.join('\n').trimEnd() + '\n');
 
 // README — splice the per-module summary between the coverage markers

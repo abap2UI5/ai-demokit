@@ -93,10 +93,12 @@ Idiom / style (low):
   first) — cosmetic, postponed.
 
 Infrastructure:
-- [ ] **generate-coverage.mjs**: `FOCUS_LIBS` filter undocumented /
-  contradicts AGENTS.md §7; orphan ports vanish from coverage silently (add a
-  warning); anchor the ported-set regex to the header URL line like the other
-  scripts.
+- [x] ~~generate-coverage.mjs: `FOCUS_LIBS` undocumented; orphan ports vanish
+  silently; header-regex fragility~~ — done 2026-07-16: ported set comes from
+  `meta/`, the universe from the committed `ui5/universe.json` snapshot
+  (refreshed by generate_result from the checkout), orphan ports are warned
+  about, `FOCUS_LIBS` documented in AGENTS §7; api.md is one flat table with
+  the deprecation info inline.
 - [ ] Builder hardening: `a()` on the empty root is silently dropped; `shut()`
   past the root null-refs; duplicate attribute names render invalid XML.
 - [x] ~~TRAINING.md stage 2: generate the header block from `meta/`

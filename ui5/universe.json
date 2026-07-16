@@ -1,0 +1,2734 @@
+{
+ "release": "1.151.0",
+ "libs": [
+  {
+   "lib": "sap.m",
+   "samples": [
+    {
+     "name": "ActionListItem",
+     "entity": "sap.m.ActionListItem",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ActionSelect",
+     "entity": "sap.m.ActionSelect",
+     "since": "1.16",
+     "deprecated": {
+      "since": "1.111",
+      "text": "with no replacement. The control is no longer considered part of the Fiori concept."
+     }
+    },
+    {
+     "name": "ActionSheet",
+     "entity": "sap.m.ActionSheet",
+     "since": "1.9.1",
+     "deprecated": {
+      "since": "1.149",
+      "text": "use sap.m.Menu / sap.m.MenuItem instead."
+     }
+    },
+    {
+     "name": "AIIntegration",
+     "entity": "sap.m.sample.AIIntegration",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "Avatar",
+     "entity": "sap.m.Avatar",
+     "since": "1.73",
+     "deprecated": null
+    },
+    {
+     "name": "AvatarActiveState",
+     "entity": "sap.m.Avatar",
+     "since": "1.73",
+     "deprecated": null
+    },
+    {
+     "name": "AvatarBadgeIconColor",
+     "entity": "sap.m.Avatar",
+     "since": "1.73",
+     "deprecated": null
+    },
+    {
+     "name": "AvatarValueState",
+     "entity": "sap.m.Avatar",
+     "since": "1.73",
+     "deprecated": null
+    },
+    {
+     "name": "AvatarWithAffordance",
+     "entity": "sap.m.Avatar",
+     "since": "1.73",
+     "deprecated": null
+    },
+    {
+     "name": "Breadcrumbs",
+     "entity": "sap.m.Breadcrumbs",
+     "since": "1.34",
+     "deprecated": null
+    },
+    {
+     "name": "BreadcrumbsWithCurrentPageLink",
+     "entity": "sap.m.Breadcrumbs",
+     "since": "1.34",
+     "deprecated": null
+    },
+    {
+     "name": "BreadcrumbsWithoutCurrentPage",
+     "entity": "sap.m.Breadcrumbs",
+     "since": "1.34",
+     "deprecated": null
+    },
+    {
+     "name": "BusyDialog",
+     "entity": "sap.m.BusyDialog",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "BusyDialogLight",
+     "entity": "sap.m.BusyDialog",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "BusyIndicator",
+     "entity": "sap.m.BusyIndicator",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "Button",
+     "entity": "sap.m.Button",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ButtonWithBadge",
+     "entity": "sap.m.Button",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "Carousel",
+     "entity": "sap.m.Carousel",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "CarouselEmptyMessages",
+     "entity": "sap.m.Carousel",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "CarouselWithControls",
+     "entity": "sap.m.Carousel",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "CarouselWithDisplayOptions",
+     "entity": "sap.m.Carousel",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "CarouselWithMorePages",
+     "entity": "sap.m.Carousel",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "CheckBox",
+     "entity": "sap.m.CheckBox",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "CheckBoxTriState",
+     "entity": "sap.m.CheckBox",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ColorPalette",
+     "entity": "sap.m.ColorPalette",
+     "since": "1.54",
+     "deprecated": null
+    },
+    {
+     "name": "ColorPalettePopover",
+     "entity": "sap.m.ColorPalette",
+     "since": "1.54",
+     "deprecated": null
+    },
+    {
+     "name": "ComboBox",
+     "entity": "sap.m.ComboBox",
+     "since": "1.22",
+     "deprecated": null
+    },
+    {
+     "name": "ComboBox2Columns",
+     "entity": "sap.m.ComboBox",
+     "since": "1.22",
+     "deprecated": null
+    },
+    {
+     "name": "ComboBoxClearIcon",
+     "entity": "sap.m.ComboBox",
+     "since": "1.22",
+     "deprecated": null
+    },
+    {
+     "name": "ComboBoxDefaultFiltering",
+     "entity": "sap.m.ComboBox",
+     "since": "1.22",
+     "deprecated": null
+    },
+    {
+     "name": "ComboBoxFilteringContains",
+     "entity": "sap.m.ComboBox",
+     "since": "1.22",
+     "deprecated": null
+    },
+    {
+     "name": "ComboBoxFilteringStartsWith",
+     "entity": "sap.m.ComboBox",
+     "since": "1.22",
+     "deprecated": null
+    },
+    {
+     "name": "ComboBoxGrouping",
+     "entity": "sap.m.ComboBox",
+     "since": "1.22",
+     "deprecated": null
+    },
+    {
+     "name": "ComboBoxLazyLoading",
+     "entity": "sap.m.ComboBox",
+     "since": "1.22",
+     "deprecated": null
+    },
+    {
+     "name": "ComboBoxMaxPickerHeight",
+     "entity": "sap.m.ComboBox",
+     "since": "1.22",
+     "deprecated": null
+    },
+    {
+     "name": "ComboBoxSearchBoth",
+     "entity": "sap.m.ComboBox",
+     "since": "1.22",
+     "deprecated": null
+    },
+    {
+     "name": "ComboBoxValidation",
+     "entity": "sap.m.ComboBox",
+     "since": "1.22",
+     "deprecated": null
+    },
+    {
+     "name": "ComboBoxValueState",
+     "entity": "sap.m.ComboBox",
+     "since": "1.22",
+     "deprecated": null
+    },
+    {
+     "name": "ComboBoxWrapping",
+     "entity": "sap.m.ComboBox",
+     "since": "1.22",
+     "deprecated": null
+    },
+    {
+     "name": "ComparisonPattern",
+     "entity": "sap.m.ComparisonPattern",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ContainerNoPadding",
+     "entity": "sap.ui.core.ContainerPadding",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ContainerPadding",
+     "entity": "sap.ui.core.ContainerPadding",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ContainerPaddingAndMargin",
+     "entity": "sap.ui.core.ContainerPadding",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ContainerResponsivePadding",
+     "entity": "sap.ui.core.ContainerPadding",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "CookieSettingsDialogPattern",
+     "entity": "sap.m.CookieSettingsDialogPattern",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "CustomListItem",
+     "entity": "sap.m.CustomListItem",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "CustomMessageStripDesign",
+     "entity": "sap.m.MessageStrip",
+     "since": "1.30",
+     "deprecated": null
+    },
+    {
+     "name": "CustomTreeItem",
+     "entity": "sap.m.CustomTreeItem",
+     "since": "1.48.0",
+     "deprecated": null
+    },
+    {
+     "name": "DatePicker",
+     "entity": "sap.m.DatePicker",
+     "since": "1.22.0",
+     "deprecated": null
+    },
+    {
+     "name": "DatePickerHidden",
+     "entity": "sap.m.DatePicker",
+     "since": "1.22.0",
+     "deprecated": null
+    },
+    {
+     "name": "DatePickerMassEdit",
+     "entity": "sap.m.DatePicker",
+     "since": "1.22.0",
+     "deprecated": null
+    },
+    {
+     "name": "DatePickerValueState",
+     "entity": "sap.m.DatePicker",
+     "since": "1.22.0",
+     "deprecated": null
+    },
+    {
+     "name": "DateRangeSelection",
+     "entity": "sap.m.DateRangeSelection",
+     "since": "1.22.0",
+     "deprecated": null
+    },
+    {
+     "name": "DateRangeSelectionHidden",
+     "entity": "sap.m.DateRangeSelection",
+     "since": "1.22.0",
+     "deprecated": null
+    },
+    {
+     "name": "DateRangeSelectionValueState",
+     "entity": "sap.m.DateRangeSelection",
+     "since": "1.22.0",
+     "deprecated": null
+    },
+    {
+     "name": "DateTimeInput",
+     "entity": "sap.m.DateTimeInput",
+     "since": "1.9.1",
+     "deprecated": {
+      "since": "1.32.8",
+      "text": "replaced by sap.m.DatePicker, sap.m.TimePicker or sap.m.DateTimePicker"
+     }
+    },
+    {
+     "name": "DateTimePicker",
+     "entity": "sap.m.DateTimePicker",
+     "since": "1.38.0",
+     "deprecated": null
+    },
+    {
+     "name": "DateTimePickerHidden",
+     "entity": "sap.m.DateTimePicker",
+     "since": "1.38.0",
+     "deprecated": null
+    },
+    {
+     "name": "DateTimePickerValueState",
+     "entity": "sap.m.DateTimePicker",
+     "since": "1.38.0",
+     "deprecated": null
+    },
+    {
+     "name": "Dialog",
+     "entity": "sap.m.Dialog",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "DialogConfirm",
+     "entity": "sap.m.Dialog",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "DialogFullScreen",
+     "entity": "sap.m.Dialog",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "DialogMessage",
+     "entity": "sap.m.Dialog",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "DialogSearch",
+     "entity": "sap.m.SearchField",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "DialogWithinArea",
+     "entity": "sap.m.Dialog",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "DialogWithMessagePopover",
+     "entity": "sap.m.Dialog",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "DisplayListItem",
+     "entity": "sap.m.DisplayListItem",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "DraftIndicator",
+     "entity": "sap.m.DraftIndicator",
+     "since": "1.32.0",
+     "deprecated": null
+    },
+    {
+     "name": "DynamicDateRange",
+     "entity": "sap.m.DynamicDateRange",
+     "since": "1.92.0",
+     "deprecated": null
+    },
+    {
+     "name": "DynamicDateRangeAndCalendarWeekNumbering",
+     "entity": "sap.m.DynamicDateRange",
+     "since": "1.92.0",
+     "deprecated": null
+    },
+    {
+     "name": "DynamicDateRangeHidden",
+     "entity": "sap.m.DynamicDateRange",
+     "since": "1.92.0",
+     "deprecated": null
+    },
+    {
+     "name": "DynamicDateRangeWithCustomOptions",
+     "entity": "sap.m.DynamicDateRange",
+     "since": "1.92.0",
+     "deprecated": null
+    },
+    {
+     "name": "DynamicMessageStripGenerator",
+     "entity": "sap.m.MessageStrip",
+     "since": "1.30",
+     "deprecated": null
+    },
+    {
+     "name": "ExpandableText",
+     "entity": "sap.m.ExpandableText",
+     "since": "1.87",
+     "deprecated": null
+    },
+    {
+     "name": "FacetFilterCustomFilters",
+     "entity": "sap.m.FacetFilter",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "FacetFilterLight",
+     "entity": "sap.m.FacetFilter",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "FacetFilterSimple",
+     "entity": "sap.m.FacetFilter",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "Feed",
+     "entity": "sap.m.FeedInput",
+     "since": "1.22",
+     "deprecated": null
+    },
+    {
+     "name": "FeedContent",
+     "entity": "sap.m.FeedContent",
+     "since": "1.34",
+     "deprecated": null
+    },
+    {
+     "name": "FeedInput",
+     "entity": "sap.m.FeedInput",
+     "since": "1.22",
+     "deprecated": null
+    },
+    {
+     "name": "FeedListItem",
+     "entity": "sap.m.FeedListItem",
+     "since": "1.12",
+     "deprecated": null
+    },
+    {
+     "name": "FlexBoxBasicAlignment",
+     "entity": "sap.m.FlexBox",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "FlexBoxCols",
+     "entity": "sap.m.FlexBox",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "FlexBoxDirectionOrder",
+     "entity": "sap.m.FlexBox",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "FlexBoxGap",
+     "entity": "sap.m.FlexBox",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "FlexBoxNav",
+     "entity": "sap.m.FlexBox",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "FlexBoxNested",
+     "entity": "sap.m.FlexBox",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "FlexBoxOpposingAlignment",
+     "entity": "sap.m.FlexBox",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "FlexBoxRenderType",
+     "entity": "sap.m.FlexBox",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "FlexBoxSizeAdjustments",
+     "entity": "sap.m.FlexBox",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "FormattedText",
+     "entity": "sap.m.FormattedText",
+     "since": "1.38.0",
+     "deprecated": null
+    },
+    {
+     "name": "GenericTag",
+     "entity": "sap.m.GenericTag",
+     "since": "1.62.0",
+     "deprecated": null
+    },
+    {
+     "name": "GenericTileAsFeedTile",
+     "entity": "sap.m.GenericTile",
+     "since": "1.34.0",
+     "deprecated": null
+    },
+    {
+     "name": "GenericTileAsKPITile",
+     "entity": "sap.m.GenericTile",
+     "since": "1.34.0",
+     "deprecated": null
+    },
+    {
+     "name": "GenericTileAsLaunchTile",
+     "entity": "sap.m.GenericTile",
+     "since": "1.34.0",
+     "deprecated": null
+    },
+    {
+     "name": "GenericTileAsMonitorTile",
+     "entity": "sap.m.GenericTile",
+     "since": "1.34.0",
+     "deprecated": null
+    },
+    {
+     "name": "GenericTileLineMode",
+     "entity": "sap.m.GenericTile",
+     "since": "1.34.0",
+     "deprecated": null
+    },
+    {
+     "name": "GenericTileStates",
+     "entity": "sap.m.GenericTile",
+     "since": "1.34.0",
+     "deprecated": null
+    },
+    {
+     "name": "HeaderContainer",
+     "entity": "sap.m.HeaderContainer",
+     "since": "1.44.0",
+     "deprecated": null
+    },
+    {
+     "name": "HeaderContainerLazyLoading",
+     "entity": "sap.m.HeaderContainer",
+     "since": "1.44.0",
+     "deprecated": null
+    },
+    {
+     "name": "HeaderContainerNoDividers",
+     "entity": "sap.m.HeaderContainer",
+     "since": "1.44.0",
+     "deprecated": null
+    },
+    {
+     "name": "HeaderContainerOH",
+     "entity": "sap.m.HeaderContainer",
+     "since": "1.44.0",
+     "deprecated": null
+    },
+    {
+     "name": "HeaderContainerVM",
+     "entity": "sap.m.HeaderContainer",
+     "since": "1.44.0",
+     "deprecated": null
+    },
+    {
+     "name": "IconTabBar",
+     "entity": "sap.m.IconTabBar",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "IconTabBarBackgroundDesign",
+     "entity": "sap.m.IconTabBar",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "IconTabBarBadges",
+     "entity": "sap.m.IconTabBar",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "IconTabBarDragDrop",
+     "entity": "sap.m.IconTabBar",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "IconTabBarFiori2",
+     "entity": "sap.m.IconTabBar",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "IconTabBarInlineIcons",
+     "entity": "sap.m.IconTabBar",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "IconTabBarInlineMode",
+     "entity": "sap.m.IconTabBar",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "IconTabBarMulti",
+     "entity": "sap.m.IconTabBar",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "IconTabBarNoIcons",
+     "entity": "sap.m.IconTabBar",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "IconTabBarOverflowSelectList",
+     "entity": "sap.m.IconTabBar",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "IconTabBarProcess",
+     "entity": "sap.m.IconTabBar",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "IconTabBarResponsivePadding",
+     "entity": "sap.m.IconTabBar",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "IconTabBarStartAndEndOverflow",
+     "entity": "sap.m.IconTabBar",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "IconTabBarStretchContent",
+     "entity": "sap.m.IconTabBar",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "IconTabBarSubTabs",
+     "entity": "sap.m.IconTabBar",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "IconTabBarTabDensityMode",
+     "entity": "sap.m.IconTabBar",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "IconTabHeader",
+     "entity": "sap.m.IconTabHeader",
+     "since": "1.15",
+     "deprecated": null
+    },
+    {
+     "name": "IconTabSeparator",
+     "entity": "sap.m.IconTabBar",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "IllustratedMessageEVR",
+     "entity": "sap.m.IllustratedMessage",
+     "since": "1.98",
+     "deprecated": null
+    },
+    {
+     "name": "IllustratedMessageInAppCustom",
+     "entity": "sap.m.IllustratedMessage",
+     "since": "1.98",
+     "deprecated": null
+    },
+    {
+     "name": "IllustratedMessageInCardNoActivities",
+     "entity": "sap.m.IllustratedMessage",
+     "since": "1.98",
+     "deprecated": null
+    },
+    {
+     "name": "IllustratedMessageInCardNoEmail",
+     "entity": "sap.m.IllustratedMessage",
+     "since": "1.98",
+     "deprecated": null
+    },
+    {
+     "name": "IllustratedMessageInDialog",
+     "entity": "sap.m.IllustratedMessage",
+     "since": "1.98",
+     "deprecated": null
+    },
+    {
+     "name": "IllustratedMessageInPage",
+     "entity": "sap.m.IllustratedMessage",
+     "since": "1.98",
+     "deprecated": null
+    },
+    {
+     "name": "IllustratedMessageInPageCustom",
+     "entity": "sap.m.IllustratedMessage",
+     "since": "1.98",
+     "deprecated": null
+    },
+    {
+     "name": "IllustratedMessageInPageTNT",
+     "entity": "sap.m.IllustratedMessage",
+     "since": "1.98",
+     "deprecated": null
+    },
+    {
+     "name": "IllustratedMessageInPageWithURI",
+     "entity": "sap.m.IllustratedMessage",
+     "since": "1.98",
+     "deprecated": null
+    },
+    {
+     "name": "IllustratedMessageSessionTimeout",
+     "entity": "sap.m.IllustratedMessage",
+     "since": "1.98",
+     "deprecated": null
+    },
+    {
+     "name": "Image",
+     "entity": "sap.m.Image",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ImageContent",
+     "entity": "sap.m.ImageContent",
+     "since": "1.38",
+     "deprecated": null
+    },
+    {
+     "name": "ImageErrorWithIllustration",
+     "entity": "sap.m.Image",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ImageModeBackground",
+     "entity": "sap.m.Image",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "InitialPagePattern",
+     "entity": "sap.m.InitialPagePattern",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "InputAssisted",
+     "entity": "sap.m.Input",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "InputAssistedTabularSuggestions",
+     "entity": "sap.m.Input",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "InputAssistedTwoValues",
+     "entity": "sap.m.Input",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "InputChecked",
+     "entity": "sap.m.Input",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "InputCustomValueHelpIcon",
+     "entity": "sap.m.Input",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "InputDescription",
+     "entity": "sap.m.Input",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "InputGrouping",
+     "entity": "sap.m.Input",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "InputKeyValue",
+     "entity": "sap.m.Input",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "InputKeyValueTabularSuggestions",
+     "entity": "sap.m.Input",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "InputListItem",
+     "entity": "sap.m.InputListItem",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "InputModelUpdate",
+     "entity": "sap.m.InputModelUpdate",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "InputPassword",
+     "entity": "sap.m.Input",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "InputStates",
+     "entity": "sap.m.Input",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "InputSuggestionsCustomFilter",
+     "entity": "sap.m.Input",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "InputSuggestionsDynamic",
+     "entity": "sap.m.Input",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "InputSuggestionsOpenSearch",
+     "entity": "sap.m.Input",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "InputTypes",
+     "entity": "sap.m.Input",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "InputValueState",
+     "entity": "sap.m.Input",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "InputValueUpdate",
+     "entity": "sap.m.Input",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "InputWrapping",
+     "entity": "sap.m.Input",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "Label",
+     "entity": "sap.m.Label",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "LabelProperties",
+     "entity": "sap.m.Label",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "LightBox",
+     "entity": "sap.m.LightBox",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "Link",
+     "entity": "sap.m.Link",
+     "since": "1.12",
+     "deprecated": null
+    },
+    {
+     "name": "LinkEmphasized",
+     "entity": "sap.m.Link",
+     "since": "1.12",
+     "deprecated": null
+    },
+    {
+     "name": "LinkSubtle",
+     "entity": "sap.m.Link",
+     "since": "1.12",
+     "deprecated": null
+    },
+    {
+     "name": "ListActions",
+     "entity": "sap.m.List",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ListCounter",
+     "entity": "sap.m.List",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ListDeletion",
+     "entity": "sap.m.List",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ListFooter",
+     "entity": "sap.m.List",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ListGrouping",
+     "entity": "sap.m.List",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ListGrowing",
+     "entity": "sap.m.List",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ListGrowingUpwards",
+     "entity": "sap.m.List",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ListItemTypes",
+     "entity": "sap.m.List",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ListLoading",
+     "entity": "sap.m.List",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ListNavType",
+     "entity": "sap.m.List",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ListNoData",
+     "entity": "sap.m.List",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ListSelection",
+     "entity": "sap.m.List",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ListSelectionSearch",
+     "entity": "sap.m.List",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ListSwipe",
+     "entity": "sap.m.List",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ListToolbar",
+     "entity": "sap.m.List",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ListUnread",
+     "entity": "sap.m.List",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "MaskInput",
+     "entity": "sap.m.MaskInput",
+     "since": "1.34.0",
+     "deprecated": null
+    },
+    {
+     "name": "MaxNumberOfNotificationsReached",
+     "entity": "sap.m.NotificationListGroup",
+     "since": "1.34",
+     "deprecated": null
+    },
+    {
+     "name": "Menu",
+     "entity": "sap.m.Menu",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "MenuButton",
+     "entity": "sap.m.MenuButton",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "MenuEndContent",
+     "entity": "sap.m.Menu",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "MenuSelectable",
+     "entity": "sap.m.Menu",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "MessageBox",
+     "entity": "sap.m.MessageBox",
+     "since": "1.21.2",
+     "deprecated": null
+    },
+    {
+     "name": "MessageBoxInfo",
+     "entity": "sap.m.MessageBox",
+     "since": "1.21.2",
+     "deprecated": null
+    },
+    {
+     "name": "MessageBoxInitialFocus",
+     "entity": "sap.m.MessageBox",
+     "since": "1.21.2",
+     "deprecated": null
+    },
+    {
+     "name": "MessagePage",
+     "entity": "sap.m.MessagePage",
+     "since": "1.28",
+     "deprecated": {
+      "since": "1.112",
+      "text": "Use the sap.m.IllustratedMessage instead."
+     }
+    },
+    {
+     "name": "MessagePageWithButtons",
+     "entity": "sap.m.MessagePage",
+     "since": "1.28",
+     "deprecated": {
+      "since": "1.112",
+      "text": "Use the sap.m.IllustratedMessage instead."
+     }
+    },
+    {
+     "name": "MessagePopover",
+     "entity": "sap.m.MessagePopover",
+     "since": "1.28",
+     "deprecated": null
+    },
+    {
+     "name": "MessagePopoverAsyncMessageHandling",
+     "entity": "sap.m.MessagePopover",
+     "since": "1.28",
+     "deprecated": null
+    },
+    {
+     "name": "MessagePopoverMessageHandling",
+     "entity": "sap.m.MessagePopover",
+     "since": "1.28",
+     "deprecated": null
+    },
+    {
+     "name": "MessageStrip",
+     "entity": "sap.m.MessageStrip",
+     "since": "1.30",
+     "deprecated": null
+    },
+    {
+     "name": "MessageStripWithEnableFormattedText",
+     "entity": "sap.m.MessageStrip",
+     "since": "1.30",
+     "deprecated": null
+    },
+    {
+     "name": "MessageToast",
+     "entity": "sap.m.MessageToast",
+     "since": "1.9.2",
+     "deprecated": null
+    },
+    {
+     "name": "MessageViewInsideDialog",
+     "entity": "sap.m.MessageView",
+     "since": "1.46",
+     "deprecated": null
+    },
+    {
+     "name": "MessageViewInsidePopover",
+     "entity": "sap.m.MessageView",
+     "since": "1.46",
+     "deprecated": null
+    },
+    {
+     "name": "MessageViewInsideResponsivePopover",
+     "entity": "sap.m.MessageView",
+     "since": "1.46",
+     "deprecated": null
+    },
+    {
+     "name": "MessageViewMessageManager",
+     "entity": "sap.m.MessageView",
+     "since": "1.46",
+     "deprecated": null
+    },
+    {
+     "name": "MessageViewWithGrouping",
+     "entity": "sap.m.MessageView",
+     "since": "1.46",
+     "deprecated": null
+    },
+    {
+     "name": "MultiComboBox",
+     "entity": "sap.m.MultiComboBox",
+     "since": "1.22.0",
+     "deprecated": null
+    },
+    {
+     "name": "MultiComboBoxClearIcon",
+     "entity": "sap.m.MultiComboBox",
+     "since": "1.22.0",
+     "deprecated": null
+    },
+    {
+     "name": "MultiComboBoxCustomFiltering",
+     "entity": "sap.m.MultiComboBox",
+     "since": "1.22.0",
+     "deprecated": null
+    },
+    {
+     "name": "MultiComboBoxDefaultFiltering",
+     "entity": "sap.m.MultiComboBox",
+     "since": "1.22.0",
+     "deprecated": null
+    },
+    {
+     "name": "MultiComboBoxGrouping",
+     "entity": "sap.m.MultiComboBox",
+     "since": "1.22.0",
+     "deprecated": null
+    },
+    {
+     "name": "MultiComboBoxMaxPickerHeight",
+     "entity": "sap.m.MultiComboBox",
+     "since": "1.22.0",
+     "deprecated": null
+    },
+    {
+     "name": "MultiComboBoxSelectAll",
+     "entity": "sap.m.MultiComboBox",
+     "since": "1.22.0",
+     "deprecated": null
+    },
+    {
+     "name": "MultiComboBoxSuggestionsAndValueState",
+     "entity": "sap.m.MultiComboBox",
+     "since": "1.22.0",
+     "deprecated": null
+    },
+    {
+     "name": "MultiComboBoxTwoColumnsLayout",
+     "entity": "sap.m.MultiComboBox",
+     "since": "1.22.0",
+     "deprecated": null
+    },
+    {
+     "name": "MultiComboBoxWrapping",
+     "entity": "sap.m.MultiComboBox",
+     "since": "1.22.0",
+     "deprecated": null
+    },
+    {
+     "name": "MultiInput",
+     "entity": "sap.m.MultiInput",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "MultiInputCustomFiltering",
+     "entity": "sap.m.MultiInput",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "MultiInputDatabinding",
+     "entity": "sap.m.MultiInput",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "MultiInputFilteringSuggestions",
+     "entity": "sap.m.MultiInput",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "MultiInputGrouping",
+     "entity": "sap.m.MultiInput",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "MultiInputMaxTokens",
+     "entity": "sap.m.MultiInput",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "MultiInputModelUpdate",
+     "entity": "sap.m.MultiInput",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "MultiInputTokenUpdate",
+     "entity": "sap.m.MultiInput",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "MultiInputValidators",
+     "entity": "sap.m.MultiInput",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "MultiInputValueHelp",
+     "entity": "sap.m.MultiInput",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "MultiInputValueStates",
+     "entity": "sap.m.MultiInput",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "MultiInputWrapping",
+     "entity": "sap.m.MultiInput",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "NavContainer",
+     "entity": "sap.m.NavContainer",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "NewsContent",
+     "entity": "sap.m.NewsContent",
+     "since": "1.34",
+     "deprecated": null
+    },
+    {
+     "name": "NotificationListGroup",
+     "entity": "sap.m.NotificationListGroup",
+     "since": "1.34",
+     "deprecated": null
+    },
+    {
+     "name": "NotificationListGroupBindings",
+     "entity": "sap.m.NotificationListGroup",
+     "since": "1.34",
+     "deprecated": null
+    },
+    {
+     "name": "NotificationListGroupLazyLoading",
+     "entity": "sap.m.NotificationListGroup",
+     "since": "1.34",
+     "deprecated": null
+    },
+    {
+     "name": "NotificationListItem",
+     "entity": "sap.m.NotificationListItem",
+     "since": "1.34",
+     "deprecated": null
+    },
+    {
+     "name": "NumericContentDifColors",
+     "entity": "sap.m.NumericContent",
+     "since": "1.34",
+     "deprecated": null
+    },
+    {
+     "name": "NumericContentIcon",
+     "entity": "sap.m.NumericContent",
+     "since": "1.34",
+     "deprecated": null
+    },
+    {
+     "name": "NumericContentWithoutMargin",
+     "entity": "sap.m.NumericContent",
+     "since": "1.34",
+     "deprecated": null
+    },
+    {
+     "name": "ObjectAttributeInTable",
+     "entity": "sap.m.ObjectAttribute",
+     "since": "1.12",
+     "deprecated": null
+    },
+    {
+     "name": "ObjectAttributes",
+     "entity": "sap.m.ObjectAttribute",
+     "since": "1.12",
+     "deprecated": null
+    },
+    {
+     "name": "ObjectHeader",
+     "entity": "sap.m.ObjectHeader",
+     "since": "1.12",
+     "deprecated": null
+    },
+    {
+     "name": "ObjectHeaderActiveAttributes",
+     "entity": "sap.m.ObjectAttribute",
+     "since": "1.12",
+     "deprecated": null
+    },
+    {
+     "name": "ObjectHeaderCircleImage",
+     "entity": "sap.m.ObjectHeader",
+     "since": "1.12",
+     "deprecated": null
+    },
+    {
+     "name": "ObjectHeaderCondensed",
+     "entity": "sap.m.ObjectHeader",
+     "since": "1.12",
+     "deprecated": null
+    },
+    {
+     "name": "ObjectHeaderImage",
+     "entity": "sap.m.ObjectHeader",
+     "since": "1.12",
+     "deprecated": null
+    },
+    {
+     "name": "ObjectHeaderMarkers",
+     "entity": "sap.m.ObjectHeader",
+     "since": "1.12",
+     "deprecated": null
+    },
+    {
+     "name": "ObjectHeaderResponsiveI",
+     "entity": "sap.m.ObjectAttribute",
+     "since": "1.12",
+     "deprecated": null
+    },
+    {
+     "name": "ObjectHeaderResponsiveII",
+     "entity": "sap.m.ObjectHeader",
+     "since": "1.12",
+     "deprecated": null
+    },
+    {
+     "name": "ObjectHeaderResponsiveIII",
+     "entity": "sap.m.ObjectHeader",
+     "since": "1.12",
+     "deprecated": null
+    },
+    {
+     "name": "ObjectHeaderResponsiveIV",
+     "entity": "sap.m.ObjectHeader",
+     "since": "1.12",
+     "deprecated": null
+    },
+    {
+     "name": "ObjectHeaderResponsiveV",
+     "entity": "sap.m.ObjectHeader",
+     "since": "1.12",
+     "deprecated": null
+    },
+    {
+     "name": "ObjectHeaderResponsiveVI",
+     "entity": null,
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ObjectHeaderTitleActive",
+     "entity": "sap.m.ObjectHeader",
+     "since": "1.12",
+     "deprecated": null
+    },
+    {
+     "name": "ObjectHeaderTitleSel",
+     "entity": "sap.m.ObjectHeader",
+     "since": "1.12",
+     "deprecated": null
+    },
+    {
+     "name": "ObjectIdentifier",
+     "entity": "sap.m.ObjectIdentifier",
+     "since": "1.12",
+     "deprecated": null
+    },
+    {
+     "name": "ObjectListItem",
+     "entity": "sap.m.ObjectListItem",
+     "since": "1.12",
+     "deprecated": null
+    },
+    {
+     "name": "ObjectListItemMarkers",
+     "entity": "sap.m.ObjectListItem",
+     "since": "1.12",
+     "deprecated": null
+    },
+    {
+     "name": "ObjectMarker",
+     "entity": "sap.m.ObjectMarker",
+     "since": "1.38",
+     "deprecated": null
+    },
+    {
+     "name": "ObjectNumber",
+     "entity": "sap.m.ObjectNumber",
+     "since": "1.12",
+     "deprecated": null
+    },
+    {
+     "name": "ObjectStatus",
+     "entity": "sap.m.ObjectStatus",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "OverflowToolbarDifferentControls",
+     "entity": "sap.m.OverflowToolbar",
+     "since": "1.28",
+     "deprecated": null
+    },
+    {
+     "name": "OverflowToolbarFooter",
+     "entity": "sap.m.OverflowToolbar",
+     "since": "1.28",
+     "deprecated": null
+    },
+    {
+     "name": "OverflowToolbarSimple",
+     "entity": "sap.m.GenericTag",
+     "since": "1.62.0",
+     "deprecated": null
+    },
+    {
+     "name": "OverflowToolbarTokenizer",
+     "entity": "sap.m.OverflowToolbarTokenizer",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "p13n",
+     "entity": null,
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "Page",
+     "entity": "sap.m.Bar",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "PageFloatingFooter",
+     "entity": "sap.m.Page",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "PageListReportIconTabBar",
+     "entity": "sap.m.Page",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "PageListReportToolbar",
+     "entity": "sap.m.Page",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "PageStandardClasses",
+     "entity": "sap.m.Page",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "Panel",
+     "entity": "sap.m.Panel",
+     "since": "1.16",
+     "deprecated": null
+    },
+    {
+     "name": "PanelBackgroundDesign",
+     "entity": "sap.m.Panel",
+     "since": "1.16",
+     "deprecated": null
+    },
+    {
+     "name": "PanelExpanded",
+     "entity": "sap.m.Panel",
+     "since": "1.16",
+     "deprecated": null
+    },
+    {
+     "name": "PanelSticky",
+     "entity": "sap.m.Panel",
+     "since": "1.16",
+     "deprecated": null
+    },
+    {
+     "name": "PDFViewerEmbedded",
+     "entity": "sap.m.PDFViewer",
+     "since": "1.48",
+     "deprecated": null
+    },
+    {
+     "name": "PDFViewerMultiple",
+     "entity": "sap.m.PDFViewer",
+     "since": "1.48",
+     "deprecated": null
+    },
+    {
+     "name": "PDFViewerPopup",
+     "entity": "sap.m.PDFViewer",
+     "since": "1.48",
+     "deprecated": null
+    },
+    {
+     "name": "PlanningCalendar",
+     "entity": "sap.m.PlanningCalendar",
+     "since": "1.34",
+     "deprecated": null
+    },
+    {
+     "name": "PlanningCalendarAppointmentSizes",
+     "entity": "sap.m.PlanningCalendar",
+     "since": "1.34",
+     "deprecated": null
+    },
+    {
+     "name": "PlanningCalendarDnD",
+     "entity": "sap.m.PlanningCalendar",
+     "since": "1.34",
+     "deprecated": null
+    },
+    {
+     "name": "PlanningCalendarMinMax",
+     "entity": "sap.m.PlanningCalendar",
+     "since": "1.34",
+     "deprecated": null
+    },
+    {
+     "name": "PlanningCalendarModifyAppointments",
+     "entity": "sap.m.PlanningCalendar",
+     "since": "1.34",
+     "deprecated": null
+    },
+    {
+     "name": "PlanningCalendarMulti",
+     "entity": "sap.m.PlanningCalendar",
+     "since": "1.34",
+     "deprecated": null
+    },
+    {
+     "name": "PlanningCalendarOneLine",
+     "entity": "sap.m.PlanningCalendar",
+     "since": "1.34",
+     "deprecated": null
+    },
+    {
+     "name": "PlanningCalendarRecurringItem",
+     "entity": "sap.m.PlanningCalendar",
+     "since": "1.34",
+     "deprecated": null
+    },
+    {
+     "name": "PlanningCalendarRelativeViews",
+     "entity": "sap.m.PlanningCalendar",
+     "since": "1.34",
+     "deprecated": null
+    },
+    {
+     "name": "PlanningCalendarSingle",
+     "entity": "sap.m.PlanningCalendar",
+     "since": "1.34",
+     "deprecated": null
+    },
+    {
+     "name": "PlanningCalendarViews",
+     "entity": "sap.m.PlanningCalendar",
+     "since": "1.34",
+     "deprecated": null
+    },
+    {
+     "name": "PlanningCalendarWeekNumbering",
+     "entity": "sap.m.PlanningCalendar",
+     "since": "1.34",
+     "deprecated": null
+    },
+    {
+     "name": "PlanningCalendarWithLegend",
+     "entity": "sap.m.PlanningCalendar",
+     "since": "1.34",
+     "deprecated": null
+    },
+    {
+     "name": "PlanningCalendarWithStickyHeader",
+     "entity": "sap.m.PlanningCalendar",
+     "since": "1.34",
+     "deprecated": null
+    },
+    {
+     "name": "Popover",
+     "entity": "sap.m.Popover",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "PopoverControllingCloseBehavior",
+     "entity": "sap.m.Popover",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "PopoverNavCon",
+     "entity": "sap.m.Popover",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "PopoverWithinArea",
+     "entity": "sap.m.Popover",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ProgressIndicator",
+     "entity": "sap.m.ProgressIndicator",
+     "since": "1.13.1",
+     "deprecated": null
+    },
+    {
+     "name": "ProgressIndicatorWithAnnouncement",
+     "entity": "sap.m.ProgressIndicator",
+     "since": "1.13.1",
+     "deprecated": null
+    },
+    {
+     "name": "PullToRefresh",
+     "entity": "sap.m.PullToRefresh",
+     "since": "1.9.2",
+     "deprecated": null
+    },
+    {
+     "name": "QuickView",
+     "entity": "sap.m.QuickView",
+     "since": "1.28.11",
+     "deprecated": null
+    },
+    {
+     "name": "QuickViewAvatarConfiguration",
+     "entity": "sap.m.QuickView",
+     "since": "1.28.11",
+     "deprecated": null
+    },
+    {
+     "name": "QuickViewCard",
+     "entity": "sap.m.QuickViewCard",
+     "since": "1.28.11",
+     "deprecated": null
+    },
+    {
+     "name": "QuickViewCardScrollBar",
+     "entity": "sap.m.QuickViewCard",
+     "since": "1.28.11",
+     "deprecated": null
+    },
+    {
+     "name": "QuickViewNavOrigin",
+     "entity": "sap.m.QuickView",
+     "since": "1.28.11",
+     "deprecated": null
+    },
+    {
+     "name": "RadioButton",
+     "entity": "sap.m.RadioButton",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "RadioButtonGroup",
+     "entity": "sap.m.RadioButtonGroup",
+     "since": "1.25.0",
+     "deprecated": null
+    },
+    {
+     "name": "RangeSlider",
+     "entity": "sap.m.RangeSlider",
+     "since": "1.38",
+     "deprecated": null
+    },
+    {
+     "name": "RatingIndicator",
+     "entity": "sap.m.RatingIndicator",
+     "since": "1.14",
+     "deprecated": null
+    },
+    {
+     "name": "RefreshResponsive",
+     "entity": "sap.m.PullToRefresh",
+     "since": "1.9.2",
+     "deprecated": null
+    },
+    {
+     "name": "ResponsivePopover",
+     "entity": "sap.m.ResponsivePopover",
+     "since": "1.15.1",
+     "deprecated": null
+    },
+    {
+     "name": "ScrollContainer",
+     "entity": "sap.m.ScrollContainer",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SearchField",
+     "entity": "sap.m.SearchField",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SearchFieldSuggestions",
+     "entity": "sap.m.SearchField",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SegmentedButton",
+     "entity": "sap.m.SegmentedButton",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SegmentedButtonContentModes",
+     "entity": "sap.m.SegmentedButton",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SegmentedButtonDialog",
+     "entity": "sap.m.SegmentedButton",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SegmentedButtonLI",
+     "entity": "sap.m.SegmentedButton",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SegmentedButtonVSD",
+     "entity": "sap.m.SegmentedButton",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "Select",
+     "entity": "sap.m.Select",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "Select2Columns",
+     "entity": "sap.m.Select",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SelectChangeEvents",
+     "entity": "sap.m.Select",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SelectDialog",
+     "entity": "sap.m.SelectDialog",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SelectDialogLazyLoading",
+     "entity": "sap.m.SelectDialog",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SelectList",
+     "entity": "sap.m.SelectList",
+     "since": "1.26.0",
+     "deprecated": null
+    },
+    {
+     "name": "SelectListWithIcons",
+     "entity": "sap.m.SelectList",
+     "since": "1.26.0",
+     "deprecated": null
+    },
+    {
+     "name": "SelectValueState",
+     "entity": "sap.m.Select",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SelectWithIcons",
+     "entity": "sap.m.Select",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SelectWithWrappedItemText",
+     "entity": "sap.m.Select",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SemanticPage",
+     "entity": "sap.m.semantic.SemanticPage",
+     "since": "1.30.0",
+     "deprecated": null
+    },
+    {
+     "name": "SemanticPageDraftIndicator",
+     "entity": "sap.m.DraftIndicator",
+     "since": "1.32.0",
+     "deprecated": null
+    },
+    {
+     "name": "SemanticPageFloatingFooter",
+     "entity": "sap.m.semantic.SemanticPage",
+     "since": "1.30.0",
+     "deprecated": null
+    },
+    {
+     "name": "SemanticPageFullScreen",
+     "entity": "sap.m.semantic.SemanticPage",
+     "since": "1.30.0",
+     "deprecated": null
+    },
+    {
+     "name": "SinglePlanningCalendar",
+     "entity": "sap.m.SinglePlanningCalendar",
+     "since": "1.61",
+     "deprecated": null
+    },
+    {
+     "name": "SinglePlanningCalendarCreateApp",
+     "entity": "sap.m.SinglePlanningCalendar",
+     "since": "1.61",
+     "deprecated": null
+    },
+    {
+     "name": "SinglePlanningCalendarDateSelection",
+     "entity": "sap.m.SinglePlanningCalendar",
+     "since": "1.61",
+     "deprecated": null
+    },
+    {
+     "name": "SinglePlanningCalendarDND",
+     "entity": "sap.m.SinglePlanningCalendar",
+     "since": "1.61",
+     "deprecated": null
+    },
+    {
+     "name": "SinglePlanningCalendarRecurringItem",
+     "entity": "sap.m.SinglePlanningCalendar",
+     "since": "1.61",
+     "deprecated": null
+    },
+    {
+     "name": "SinglePlanningCalendarSnappingHeader",
+     "entity": "sap.m.SinglePlanningCalendar",
+     "since": "1.61",
+     "deprecated": null
+    },
+    {
+     "name": "SinglePlanningCalendarWeekNumbering",
+     "entity": "sap.m.SinglePlanningCalendar",
+     "since": "1.61",
+     "deprecated": null
+    },
+    {
+     "name": "SinglePlanningCalendarWithCustomViews",
+     "entity": "sap.m.SinglePlanningCalendar",
+     "since": "1.61",
+     "deprecated": null
+    },
+    {
+     "name": "SinglePlanningCalendarWithLegend",
+     "entity": "sap.m.SinglePlanningCalendar",
+     "since": "1.61",
+     "deprecated": null
+    },
+    {
+     "name": "SinglePlanningCalendarWithZoomInZoomOut",
+     "entity": "sap.m.SinglePlanningCalendar",
+     "since": "1.61",
+     "deprecated": null
+    },
+    {
+     "name": "Slider",
+     "entity": "sap.m.Slider",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SlideTile",
+     "entity": "sap.m.SlideTile",
+     "since": "1.34",
+     "deprecated": null
+    },
+    {
+     "name": "SplitApp",
+     "entity": "sap.m.SplitApp",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SplitContainer",
+     "entity": "sap.m.SplitContainer",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "StandardListItem",
+     "entity": "sap.m.StandardListItem",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "StandardListItemAvatar",
+     "entity": "sap.m.StandardListItem",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "StandardListItemDescription",
+     "entity": "sap.m.StandardListItem",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "StandardListItemIcon",
+     "entity": "sap.m.StandardListItem",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "StandardListItemInfo",
+     "entity": "sap.m.StandardListItem",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "StandardListItemInfoStateInverted",
+     "entity": "sap.m.StandardListItem",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "StandardListItemNavigated",
+     "entity": "sap.m.StandardListItem",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "StandardListItemTitle",
+     "entity": "sap.m.StandardListItem",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "StandardListItemWrapping",
+     "entity": "sap.m.StandardListItem",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "StandardMarginsAll",
+     "entity": "sap.ui.core.StandardMargins",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "StandardMarginsCollapse",
+     "entity": "sap.ui.core.StandardMargins",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "StandardMarginsEnforceWidthAuto",
+     "entity": "sap.ui.core.StandardMargins",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "StandardMarginsResponsive",
+     "entity": "sap.ui.core.StandardMargins",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "StandardMarginsSingleSided",
+     "entity": "sap.ui.core.StandardMargins",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "StandardMarginsTwoSided",
+     "entity": "sap.ui.core.StandardMargins",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "StandardNegativeMarginsTwoSided",
+     "entity": "sap.ui.core.StandardMargins",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "StandardNoMargins",
+     "entity": "sap.ui.core.StandardMargins",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "StepInput",
+     "entity": "sap.m.StepInput",
+     "since": "1.40",
+     "deprecated": null
+    },
+    {
+     "name": "StepInputValueState",
+     "entity": "sap.m.StepInput",
+     "since": "1.40",
+     "deprecated": null
+    },
+    {
+     "name": "Switch",
+     "entity": "sap.m.Switch",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "TabContainer",
+     "entity": "sap.m.TabContainer",
+     "since": "1.34",
+     "deprecated": null
+    },
+    {
+     "name": "TabContainerIcons",
+     "entity": "sap.m.TabContainer",
+     "since": "1.34",
+     "deprecated": null
+    },
+    {
+     "name": "TabContainerMHC",
+     "entity": "sap.m.TabContainer",
+     "since": "1.34",
+     "deprecated": null
+    },
+    {
+     "name": "Table",
+     "entity": "sap.m.Column",
+     "since": "1.12",
+     "deprecated": null
+    },
+    {
+     "name": "TableAlternateRowColors",
+     "entity": "sap.m.Table",
+     "since": "1.16",
+     "deprecated": null
+    },
+    {
+     "name": "TableAutoPopin",
+     "entity": "sap.m.Table",
+     "since": "1.16",
+     "deprecated": null
+    },
+    {
+     "name": "TableBreadcrumb",
+     "entity": "sap.m.Table",
+     "since": "1.16",
+     "deprecated": null
+    },
+    {
+     "name": "TableColumnWidth",
+     "entity": "sap.m.Table",
+     "since": "1.16",
+     "deprecated": null
+    },
+    {
+     "name": "TableContextualWidthDynamic",
+     "entity": "sap.m.Table",
+     "since": "1.16",
+     "deprecated": null
+    },
+    {
+     "name": "TableContextualWidthStatic",
+     "entity": "sap.m.Table",
+     "since": "1.16",
+     "deprecated": null
+    },
+    {
+     "name": "TableDnD",
+     "entity": "sap.m.Table",
+     "since": "1.16",
+     "deprecated": null
+    },
+    {
+     "name": "TableEditable",
+     "entity": "sap.m.Table",
+     "since": "1.16",
+     "deprecated": null
+    },
+    {
+     "name": "TableIColumnHeaderMenu",
+     "entity": "sap.m.Table",
+     "since": "1.16",
+     "deprecated": null
+    },
+    {
+     "name": "TableLayout",
+     "entity": "sap.m.Table",
+     "since": "1.16",
+     "deprecated": null
+    },
+    {
+     "name": "TableMergeCells",
+     "entity": "sap.m.Table",
+     "since": "1.16",
+     "deprecated": null
+    },
+    {
+     "name": "TableMultiSelectMode",
+     "entity": "sap.m.Table",
+     "since": "1.16",
+     "deprecated": null
+    },
+    {
+     "name": "TableNavigated",
+     "entity": "sap.m.Table",
+     "since": "1.16",
+     "deprecated": null
+    },
+    {
+     "name": "TableOutdated",
+     "entity": "sap.m.Table",
+     "since": "1.16",
+     "deprecated": null
+    },
+    {
+     "name": "TableScrollToIndex",
+     "entity": "sap.m.Table",
+     "since": "1.16",
+     "deprecated": null
+    },
+    {
+     "name": "TableSelectCopy",
+     "entity": "sap.m.Table",
+     "since": "1.16",
+     "deprecated": null
+    },
+    {
+     "name": "TableSelectDialog",
+     "entity": "sap.m.TableSelectDialog",
+     "since": "1.16",
+     "deprecated": null
+    },
+    {
+     "name": "TableSelectDialogGrowing",
+     "entity": "sap.m.TableSelectDialog",
+     "since": "1.16",
+     "deprecated": null
+    },
+    {
+     "name": "TableStrictLayout",
+     "entity": "sap.m.Table",
+     "since": "1.16",
+     "deprecated": null
+    },
+    {
+     "name": "TableTest",
+     "entity": "sap.m.ColumnListItem",
+     "since": "1.12",
+     "deprecated": null
+    },
+    {
+     "name": "TableVerticalAlignment",
+     "entity": "sap.m.Table",
+     "since": "1.16",
+     "deprecated": null
+    },
+    {
+     "name": "TableViewSettingsDialog",
+     "entity": "sap.m.Table",
+     "since": "1.16",
+     "deprecated": null
+    },
+    {
+     "name": "Text",
+     "entity": "sap.m.Text",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "TextArea",
+     "entity": "sap.m.TextArea",
+     "since": "1.9.0",
+     "deprecated": null
+    },
+    {
+     "name": "TextAreaGrowing",
+     "entity": "sap.m.TextArea",
+     "since": "1.9.0",
+     "deprecated": null
+    },
+    {
+     "name": "TextAreaMaxLength",
+     "entity": "sap.m.TextArea",
+     "since": "1.9.0",
+     "deprecated": null
+    },
+    {
+     "name": "TextAreaValueStates",
+     "entity": "sap.m.TextArea",
+     "since": "1.9.0",
+     "deprecated": null
+    },
+    {
+     "name": "TextAreaValueUpdate",
+     "entity": "sap.m.TextArea",
+     "since": "1.9.0",
+     "deprecated": null
+    },
+    {
+     "name": "TextEmptyIndicator",
+     "entity": "sap.m.Text",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "TextHyphenation",
+     "entity": "sap.m.Text",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "TextMaxLines",
+     "entity": "sap.m.Text",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "TextRenderWhitespace",
+     "entity": "sap.m.Text",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "TileContainer",
+     "entity": "sap.m.StandardTile",
+     "since": "1.12",
+     "deprecated": {
+      "since": "1.50",
+      "text": "replaced by sap.m.GenericTile"
+     }
+    },
+    {
+     "name": "TileContent",
+     "entity": "sap.m.TileContent",
+     "since": "1.34.0",
+     "deprecated": null
+    },
+    {
+     "name": "TimePicker",
+     "entity": "sap.m.TimePicker",
+     "since": "1.32",
+     "deprecated": null
+    },
+    {
+     "name": "TimePickerHidden",
+     "entity": "sap.m.TimePicker",
+     "since": "1.32",
+     "deprecated": null
+    },
+    {
+     "name": "TimePickerSliders",
+     "entity": "sap.m.TimePickerSliders",
+     "since": "1.54",
+     "deprecated": null
+    },
+    {
+     "name": "TimePickerValueState",
+     "entity": "sap.m.TimePicker",
+     "since": "1.32",
+     "deprecated": null
+    },
+    {
+     "name": "Title",
+     "entity": "sap.m.Title",
+     "since": "1.27.0",
+     "deprecated": null
+    },
+    {
+     "name": "TitleLink",
+     "entity": "sap.m.Title",
+     "since": "1.27.0",
+     "deprecated": null
+    },
+    {
+     "name": "TitleToolBar",
+     "entity": "sap.m.OverflowToolbar",
+     "since": "1.28",
+     "deprecated": null
+    },
+    {
+     "name": "TitleWrapping",
+     "entity": "sap.m.Title",
+     "since": "1.27.0",
+     "deprecated": null
+    },
+    {
+     "name": "ToggleButton",
+     "entity": "sap.m.ToggleButton",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "TokenizerBasic",
+     "entity": "sap.m.Tokenizer",
+     "since": "1.22",
+     "deprecated": null
+    },
+    {
+     "name": "TokenizerMultiLine",
+     "entity": "sap.m.Tokenizer",
+     "since": "1.22",
+     "deprecated": null
+    },
+    {
+     "name": "ToolbarActive",
+     "entity": "sap.m.OverflowToolbar",
+     "since": "1.28",
+     "deprecated": null
+    },
+    {
+     "name": "ToolbarAlignment",
+     "entity": "sap.m.OverflowToolbar",
+     "since": "1.28",
+     "deprecated": null
+    },
+    {
+     "name": "ToolbarDesign",
+     "entity": "sap.m.OverflowToolbar",
+     "since": "1.28",
+     "deprecated": null
+    },
+    {
+     "name": "ToolbarEnabled",
+     "entity": "sap.m.OverflowToolbar",
+     "since": "1.28",
+     "deprecated": null
+    },
+    {
+     "name": "ToolbarResponsive",
+     "entity": "sap.m.Toolbar",
+     "since": "1.16",
+     "deprecated": null
+    },
+    {
+     "name": "ToolbarShrinkable",
+     "entity": "sap.m.Toolbar",
+     "since": "1.16",
+     "deprecated": null
+    },
+    {
+     "name": "ToolbarVsBar",
+     "entity": "sap.m.Bar",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "Tree",
+     "entity": "sap.m.Tree",
+     "since": "1.42",
+     "deprecated": null
+    },
+    {
+     "name": "TreeDnD",
+     "entity": "sap.m.Tree",
+     "since": "1.42",
+     "deprecated": null
+    },
+    {
+     "name": "TreeExpandMulti",
+     "entity": "sap.m.Tree",
+     "since": "1.42",
+     "deprecated": null
+    },
+    {
+     "name": "TreeExpandTo",
+     "entity": "sap.m.Tree",
+     "since": "1.42",
+     "deprecated": null
+    },
+    {
+     "name": "TreeIcon",
+     "entity": "sap.m.Tree",
+     "since": "1.42",
+     "deprecated": null
+    },
+    {
+     "name": "TreeJSONLazyLoading",
+     "entity": "sap.m.Tree",
+     "since": "1.42",
+     "deprecated": null
+    },
+    {
+     "name": "TreeOData",
+     "entity": "sap.m.Tree",
+     "since": "1.42",
+     "deprecated": null
+    },
+    {
+     "name": "TreeSelection",
+     "entity": "sap.m.Tree",
+     "since": "1.42",
+     "deprecated": null
+    },
+    {
+     "name": "TsHelloWorld",
+     "entity": "sap.m.sample.TsHelloWorld",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "UploadCollection",
+     "entity": "sap.m.UploadCollection",
+     "since": null,
+     "deprecated": {
+      "since": "1.88",
+      "text": "replaced by sap.m.upload.UploadSet"
+     }
+    },
+    {
+     "name": "UploadCollectionFolderHierarchy",
+     "entity": "sap.m.UploadCollection",
+     "since": null,
+     "deprecated": {
+      "since": "1.88",
+      "text": "replaced by sap.m.upload.UploadSet"
+     }
+    },
+    {
+     "name": "UploadCollectionForPendingUpload",
+     "entity": "sap.m.UploadCollection",
+     "since": null,
+     "deprecated": {
+      "since": "1.88",
+      "text": "replaced by sap.m.upload.UploadSet"
+     }
+    },
+    {
+     "name": "UploadCollectionSortingFiltering",
+     "entity": "sap.m.UploadCollection",
+     "since": null,
+     "deprecated": {
+      "since": "1.88",
+      "text": "replaced by sap.m.upload.UploadSet"
+     }
+    },
+    {
+     "name": "UploadCollectionVersioning",
+     "entity": "sap.m.UploadCollection",
+     "since": null,
+     "deprecated": {
+      "since": "1.88",
+      "text": "replaced by sap.m.upload.UploadSet"
+     }
+    },
+    {
+     "name": "UploadSet",
+     "entity": "sap.m.upload.UploadSet",
+     "since": "1.63",
+     "deprecated": {
+      "since": "1.129",
+      "text": "replaced by sap.m.plugins.UploadSetwithTable"
+     }
+    },
+    {
+     "name": "UploadSetCloudUpload",
+     "entity": "sap.m.upload.UploadSet",
+     "since": "1.63",
+     "deprecated": {
+      "since": "1.129",
+      "text": "replaced by sap.m.plugins.UploadSetwithTable"
+     }
+    },
+    {
+     "name": "UploadSetCustomUploader",
+     "entity": "sap.m.upload.UploadSet",
+     "since": "1.63",
+     "deprecated": {
+      "since": "1.129",
+      "text": "replaced by sap.m.plugins.UploadSetwithTable"
+     }
+    },
+    {
+     "name": "UploadSetDirectoryUploads",
+     "entity": "sap.m.upload.UploadSet",
+     "since": "1.63",
+     "deprecated": {
+      "since": "1.129",
+      "text": "replaced by sap.m.plugins.UploadSetwithTable"
+     }
+    },
+    {
+     "name": "UploadSetGroupingSortingFiltering",
+     "entity": "sap.m.upload.UploadSet",
+     "since": "1.63",
+     "deprecated": {
+      "since": "1.129",
+      "text": "replaced by sap.m.plugins.UploadSetwithTable"
+     }
+    },
+    {
+     "name": "UploadSetwithTablePlugin",
+     "entity": null,
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "UrlHelper",
+     "entity": "sap.m.URLHelper",
+     "since": "1.10",
+     "deprecated": null
+    },
+    {
+     "name": "UXCIntegration",
+     "entity": "sap.m.sample.UXCIntegration",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "VariantManagement",
+     "entity": "sap.m.VariantManagement",
+     "since": "1.103",
+     "deprecated": null
+    },
+    {
+     "name": "ViewSettingsDialog",
+     "entity": "sap.m.ViewSettingsDialog",
+     "since": "1.16",
+     "deprecated": null
+    },
+    {
+     "name": "ViewSettingsDialogCustom",
+     "entity": "sap.m.ViewSettingsDialog",
+     "since": "1.16",
+     "deprecated": null
+    },
+    {
+     "name": "ViewSettingsDialogCustomFilterDetails",
+     "entity": "sap.m.ViewSettingsDialog",
+     "since": "1.16",
+     "deprecated": null
+    },
+    {
+     "name": "ViewSettingsDialogCustomTabs",
+     "entity": "sap.m.ViewSettingsDialog",
+     "since": "1.16",
+     "deprecated": null
+    },
+    {
+     "name": "WhitespacePattern",
+     "entity": "sap.m.WhitespacePattern",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "Wizard",
+     "entity": "sap.m.Wizard",
+     "since": "1.30",
+     "deprecated": null
+    },
+    {
+     "name": "WizardBranching",
+     "entity": "sap.m.Wizard",
+     "since": "1.30",
+     "deprecated": null
+    },
+    {
+     "name": "WizardCurrentStep",
+     "entity": "sap.m.Wizard",
+     "since": "1.30",
+     "deprecated": null
+    },
+    {
+     "name": "WizardSingleStep",
+     "entity": "sap.m.Wizard",
+     "since": "1.30",
+     "deprecated": null
+    }
+   ]
+  }
+ ]
+}

@@ -1,10 +1,10 @@
 name: generate_result
 
-# Regenerates the coverage tables in README.md: every UI5 demo kit sample per
-# library, marked with whether an abap2UI5 port exists. The sample universe
-# comes from a shallow OpenUI5 checkout; the ported set is read from *.clas.abap.
-# Control metadata (Since, deprecation, release version) comes from the api.json
-# that `grunt jsdoc:library-<lib>` generates in that checkout.
+# Regenerates the coverage docs (README.md summary + api.md table): every UI5
+# demo kit sample per focused library, marked with whether an abap2UI5 port
+# exists. The sample universe snapshot ui5/universe.json is REFRESHED from a
+# shallow OpenUI5 checkout (sample dirs + api.json via `grunt jsdoc`); the
+# ported set is read from the meta/ sidecars.
 
 on:
   workflow_dispatch:
@@ -70,6 +70,7 @@ jobs:
         add-paths: |
           api.md
           README.md
+          ui5/universe.json
           src/z2ui5_cl_api_app_overview.clas.abap
           src/z2ui5_cl_api_app_overview.clas.xml
         commit-message: Regenerate sample coverage

@@ -95,7 +95,7 @@ The join key between a port (`src/`) and its template is `meta/<class>.json` →
 its samples over from the OpenUI5 checkout when the batch is generated — the
 446-sample universe is not mirrored here. Templates are held verbatim — never
 edited to fit ABAP; that is the generator's job. `ui5/` is the generator's
-local input store; the `api.md` **Javascript** column links to the sample's
+local input store; the `api.md` **Sample** column links to the sample's
 source in the upstream
 [OpenUI5 repository](https://github.com/SAP/openui5), not to this copy (§7).
 
@@ -156,8 +156,8 @@ Follow it exactly so every port looks the same and stays maintainable.
 **Inputs** — the sample's original files from the OpenUI5 checkout: the
 `*.view.xml` (the UI), the controller (`*.controller.js` — event handlers),
 `Component.js` / `manifest.json` (which model data is loaded), plus any local
-`*.json` mock data. All of these are also copied verbatim into the port's
-`ui5/<library>/<class>/` folder (§4).
+`*.json` mock data. All of these are also copied verbatim into the sample's
+`ui5/<library>/<SampleName>/` folder (§4).
 
 **Output** — one class `z2ui5_cl_api_app_<n>` implementing `z2ui5_if_app`, whose
 view is a **1:1** rebuild of the sample's XML.
@@ -475,12 +475,13 @@ scripts.**
 
 - **`README.md`** (between the `<!-- coverage:start/end -->` markers) — the
   per-module coverage summary.
-- **`api.md`** — one flat table, the same layout as the overview app (minus its
-  "start the app" link, since api.md is static). One row per UI5 demo kit sample,
-  sorted module → control → sample. Columns: **Module** · **Control** (→ OpenUI5
-  API) · **Sample** · **JavaScript** (↗ → OpenUI5 repo source) · **UI5 App**
-  (↗ → live OpenUI5 fullscreen sample) · **ABAP** (↗ → generated class,
-  `—` = not ported).
+- **`api.md`** — ONE flat table, one row per UI5 demo kit sample, sorted
+  module → control → sample. Columns: **Module** · **Control** (→ OpenUI5 API,
+  ~~struck~~ when deprecated) · **Since** · **Deprecated** (deprecation version
+  + replacement hint from the release's `api.json`, empty = not deprecated) ·
+  **Sample** (→ OpenUI5 repo source, ↗ → live fullscreen sample) · **ABAP**
+  (→ generated class, `—` = not ported; those rows are the backlog). There is
+  no separate deprecated-controls section — everything sits in this table.
 - **`src/z2ui5_cl_api_app_overview.clas.*`** — the in-system overview **app**:
   an abap2UI5 app that lists every ported app as one row of a `sap.m.Table`,
   sorted by module → control → sample. Columns:
@@ -494,44 +495,45 @@ scripts.**
   system origin), the static facts come from `get_catalog`.
 
 ```bash
-OPENUI5_DIR=../openui5 node scripts/generate-coverage.mjs   # README + api.md
-node scripts/generate-overview.mjs                          # the overview app (src only)
-node scripts/generate-meta.mjs                              # meta/<class>.json sidecars
-node scripts/structural-diff.mjs [--strict]                 # port vs original view check
+node scripts/generate-coverage.mjs          # README + api.md (offline, from ui5/universe.json)
+node scripts/generate-overview.mjs          # the overview app (src only, from meta/)
+node scripts/validate-meta.mjs              # sidecar schema + referential integrity
+node scripts/structural-diff.mjs [--strict] # port vs original view check
+node scripts/pattern-lint.mjs               # distilled-lesson gate
 ```
 
-- **`generate-meta.mjs`** derives one typed sidecar per port (`meta/<class>.json`
-  — status, CHECKED, deviations typed as `IMPROVISED`/`DROPPED_171`/`LIVE_TEST`)
-  from the header ABAP Doc; regenerate after any header change. The headers stay
-  the source of truth; `meta/` sits outside `src/` so abapGit ignores it. See
-  TRAINING.md.
+- **`validate-meta.mjs`** checks the `meta/<class>.json` sidecars — the source
+  of truth for sample/entity/status/checked/deviations (§5); `meta/` sits
+  outside `src/` so abapGit ignores it. See TRAINING.md.
 - **`structural-diff.mjs`** compares each port's builder-emitted view structure
   (controls + attribute names) against its archived original view.xml and fails
   (`--strict`) on any difference not covered by a declared deviation — run it
-  (after `generate-meta.mjs`) before committing a new or changed port; every
-  hit means: fix the port or declare the deviation in the header NOTES.
+  before committing a new or changed port; every hit means: fix the port or
+  declare the deviation in the sidecar.
 
-- **Universe of samples** — every `demokit/sample/<Name>` directory in the
-  OpenUI5 checkout at `$OPENUI5_DIR` (default `./openui5`).
-- **Ported set** — parsed from each `src/**/*.clas.abap` port's header URL line
-  `"! .../entity/<entity>/sample/<lib>.sample.<Name>`.
-- A port matches a sample on `(library, Name)`.
-- **Control (entity) for grouping / the demo kit link** — from each library's
-  `demokit/docuindex.json` (`explored.entities[].samples[]`), with the port's
-  header URL (`.../entity/<entity>/sample/...`) as fallback.
+- **Universe of samples** — `ui5/universe.json`, a committed snapshot of every
+  `demokit/sample/<Name>` of the focused libraries (`FOCUS_LIBS` in
+  `generate-coverage.mjs`, currently `sap.m`) with entity/Since/deprecation
+  from the release's `api.json`. When an OpenUI5 checkout is present
+  (`$OPENUI5_DIR`), `generate-coverage.mjs` REBUILDS the snapshot from it (the
+  weekly `generate_result` workflow does exactly that); offline it reads the
+  snapshot, so coverage regenerates without a checkout.
+- **Ported set** — the `meta/<class>.json` sidecars; a port matches a sample on
+  `(library, Name)` from `meta.sample`. Ports matching no universe sample are
+  reported as orphans (rename/removal upstream, or outside `FOCUS_LIBS`).
 - **api.md links are external** (absolute URLs, overridable via env) and point
   at **OpenUI5** — only the ABAP column links back to this repo:
   Control → the control's OpenUI5 API reference
   (`DEMOKIT`=`https://sdk.openui5.org`/api/`<entity>`),
-  JavaScript → the sample's source folder in the OpenUI5 repository
+  Sample → the sample's source folder in the OpenUI5 repository
   (`OPENUI5`=`https://github.com/SAP/openui5`/tree/`OPENUI5_REF`/src/…/demokit/sample/`<Name>`),
-  UI5 App → the live OpenUI5 fullscreen sample runner
+  Sample ↗ → the live OpenUI5 fullscreen sample runner
   (`DEMOKIT`/resources/…/index.html?sap-ui-xx-sample-id=…&sap-ui-xx-sample-lib=…),
   ABAP → the generated `.clas.abap` (`REPO`/`REF`).
 
 The `generate_result` workflow (`workflow_dispatch` + weekly) shallow-clones
-OpenUI5, runs both scripts, stamps the `<!-- last-run -->` timestamp into
-`README.md`, and opens a pull request. The overview app must stay abaplint-clean
+OpenUI5, refreshes `ui5/universe.json`, regenerates coverage + overview, stamps
+the `<!-- last-run -->` timestamp into `README.md`, and opens a pull request. The overview app must stay abaplint-clean
 (§6) — it lives in `src/` and is part of every CI build.
 
 ---
