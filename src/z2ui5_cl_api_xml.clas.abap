@@ -235,6 +235,12 @@ CLASS z2ui5_cl_api_xml IMPLEMENTATION.
     result = replace( val = result sub = `<` with = `&lt;` occ = 0 ).
     result = replace( val = result sub = `>` with = `&gt;` occ = 0 ).
     result = replace( val = result sub = `"` with = `&quot;` occ = 0 ).
+    " whitespace as character references - a literal LF/CR/TAB in an attribute
+    " value is turned into a plain space by XML attribute-value normalization,
+    " so line breaks (e.g. a two-line noDataText) would silently disappear
+    result = replace( val = result sub = cl_abap_char_utilities=>newline        with = `&#xA;` occ = 0 ).
+    result = replace( val = result sub = cl_abap_char_utilities=>cr_lf(1)       with = `&#xD;` occ = 0 ).
+    result = replace( val = result sub = cl_abap_char_utilities=>horizontal_tab with = `&#x9;` occ = 0 ).
 
   ENDMETHOD.
 
