@@ -59,7 +59,7 @@ CLASS z2ui5_cl_api_app_460 IMPLEMENTATION.
                 )->a( n = `text`   v = `www.sap.com`
                 )->a( n = `active` v = `true`
                 )->a( n = `press`  v = client->_event_client( val   = client->cs_event-open_new_tab
-                                                                 t_arg = VALUE #( ( `http://www.sap.com` ) ) ) ).
+                                                              t_arg = VALUE #( ( `http://www.sap.com` ) ) ) ).
 
     client->view_display( view->stringify( ) ).
 

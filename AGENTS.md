@@ -640,6 +640,16 @@ How to record it:
   a bare `{COL}` — see §5 "Data binding & events".
 - **abap2UI5 has only one default model** — flatten any named-model binding into
   it — see §5 "`model_init` — the model".
+- **`_bind_edit( val = x path = abap_true )` returns the bare model path**
+  (no braces) — use it when composing raw binding-info strings
+  (`{ path: '...', sorter: ... }`); never reconstruct the path with substring
+  tricks. Human-taught fix in app 452, 2026-07-16.
+- **abapGit pushes from a system can carry stale generated files** — a human
+  who pulled before the latest repo change and pushes back from the system
+  silently reverts it (happened to the overview app's SUBSET labels,
+  2026-07-16). After every human push: regenerate the overview
+  (`node scripts/generate-overview.mjs`) and diff; the `meta_valid` CI job
+  catches it on PRs, direct pushes need the manual regen.
 - **Port classes carry no ABAP Doc header** — everything (sample, entity,
   status, checked, deviations, audit) lives in `meta/<class>.json`; edit the
   sidecar, never write `"!` lines into a port (pattern-lint blocks them, and
