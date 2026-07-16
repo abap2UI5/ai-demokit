@@ -114,6 +114,12 @@ Each generated port carries ABAP Doc directly above `CLASS ... DEFINITION`:
 - Use **only** controls and properties available since UI5 1.71; never a
   deprecated one. If a sample needs anything newer or deprecated, **do not
   port it** — leave it as an ❌ gap in the coverage report.
+- **Before declaring any sample feature inexpressible, check `CAPABILITIES.md`**
+  — the map of what abap2UI5 can express, each entry backed by a port that
+  proves it. Never improvise around a feature it marks ✅/🔶 (app 529 replaced a
+  Dialog with a toast although app 469 shows Dialogs work 1:1 via
+  `popup_display`). When a port proves a new technique or disproves a ❌,
+  update `CAPABILITIES.md` in the same change.
 - Every port must pass all three CI checks (§6).
 
 ### App skeleton — how a port is built
@@ -370,9 +376,11 @@ One bullet per caveat, tagged so a reviewer can scan them:
 
 - `LIVE-TEST:` needs checking in a running system — an unverified binding/event
   path, or uncertain rendering (e.g. app 530's `${$source>/text}` event arg).
-- `IMPROVISED:` deviates from the sample — e.g. a controller-built Dialog shown
-  as a `message_toast_display` instead (app 529), or an event that reads a
-  client-only value replaced with a static one (app 526).
+- `IMPROVISED:` deviates from the sample — e.g. a named model flattened to
+  static values (app 420), or a MessageManager replaced by a hardcoded message
+  table (app 449). Only improvise what `CAPABILITIES.md` does not mark
+  expressible — app 529's Dialog→toast substitution was a wrong improvisation;
+  app 469 shows the 1:1 way (`popup_display`).
 - `1.71:` a control / property / enum value newer than 1.71 was dropped or
   downgraded (app 529's `Indication06`+ states set to `None`).
 
@@ -552,9 +560,12 @@ How to record it:
   a bare `{COL}` — see §5 "Data binding & events".
 - **abap2UI5 has only one default model** — flatten any named-model binding into
   it — see §5 "`model_init` — the model".
-- **A new header `"!` line must sit right after the URL line (line 3), before any
-  `CHECKED`/`NOTES (generation):` block** — `generate-overview.mjs` greedily
-  captures the `"!` continuation lines that *follow* those markers into the port's
-  overview popup, so a header line placed after them leaks into the app catalog.
-  The "API USAGE AUDIT" line (frontend_action / event t_arg per port) is inserted
-  exactly there for this reason.
+- **Header markers are `ALL-CAPS ...:` lines** — `generate-overview.mjs` parses
+  the header line by line: a `"! MARKER:` line (e.g. `CHECKED (...)`, `NOTES
+  (generation):`, `API USAGE AUDIT:`) starts/ends a section, plain `"!` lines
+  continue the current one. So a new marker line may sit anywhere in the header
+  (the old "must be line 4" rule is gone), but its *continuation* lines must not
+  themselves start with an all-caps `WORD:` or they end the section. Keep the
+  convention of URL line 3 first, then AUDIT, then CHECKED, then NOTES. Also note
+  the demo kit URL is only recognized on a `"!` header line (anchored match), and
+  a blank line before `CLASS` no longer drops the NOTES.
