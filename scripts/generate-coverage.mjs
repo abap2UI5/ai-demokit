@@ -62,6 +62,12 @@ const fullscreenUrl = (lib, name) =>
 const apiUrl = (entity) => `${DEMOKIT}/api/${entity}`;
 // bare control name without its namespace (sap.f.GridList -> GridList)
 const bareControl = (entity) => entity.slice(entity.lastIndexOf('.') + 1);
+// turn a JSDoc doclet into plain text: resolve {@link sym text} to its display
+// text (or the symbol), collapse whitespace, trim.
+const cleanDoc = (t) => String(t || '')
+  .replace(/\{@link\s+([^}\s]+)(?:\s+([^}]+))?\}/g, (_, sym, disp) => (disp ? disp.trim() : sym))
+  .replace(/\s+/g, ' ')
+  .trim();
 // the sample's source folder in the OpenUI5 repository
 const sampleSrcUrl = (lib, name) =>
   `${OPENUI5}/tree/${OPENUI5_REF}/src/${lib}/test/${lib.replace(/\./g, '/')}/demokit/sample/${name}`;
@@ -114,7 +120,10 @@ function loadApi(lib) {
   for (const s of doc.symbols || []) {
     meta.set(s.name, {
       since: s.since || null,
-      deprecated: !!s.deprecated,
+      // { since, text } when deprecated (text carries the replacement hint), else null
+      deprecated: s.deprecated
+        ? { since: s.deprecated.since || null, text: cleanDoc(s.deprecated.text) }
+        : null,
       experimental: !!s.experimental,
       kind: s.kind || null,
       visibility: s.visibility || null,
@@ -214,7 +223,9 @@ function controlLines() {
   l.push('the sample source in the');
   l.push('[OpenUI5 repository](https://github.com/SAP/openui5), **UI5 App** the');
   l.push('live OpenUI5 fullscreen sample, **ABAP** the generated class');
-  l.push('(`—` = not ported yet). ~~Struck-through~~ controls are deprecated.');
+  l.push('(`—` = not ported yet). ~~Struck-through~~ controls are deprecated');
+  l.push('(hover the control for the replacement hint; see also');
+  l.push('[Deprecated controls](#deprecated-controls-legacy-free-readiness) below).');
   l.push('See the [README](README.md#coverage) for the per-module coverage summary.');
   if (release) {
     l.push('');
@@ -234,10 +245,16 @@ function controlLines() {
     a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
 
   for (const s of rows) {
-    // deprecated controls (per api.json) are struck through in the link text
+    // deprecated controls (per api.json) are struck through, with the
+    // deprecation/replacement hint as a hover tooltip on the link
     const label = s.entity ? bareControl(s.entity) : null;
-    const shown = label && s.meta && s.meta.deprecated ? `~~${label}~~` : label;
-    const control = s.entity ? `[${shown}](${apiUrl(s.entity)})` : '—';
+    const dep = s.meta && s.meta.deprecated;
+    const shown = label && dep ? `~~${label}~~` : label;
+    // link title (hover tooltip); strip inner double quotes from the hint
+    const title = dep
+      ? ` "deprecated${dep.since ? ' since ' + dep.since : ''}${dep.text ? ' — ' + dep.text.replace(/"/g, "'") : ''}"`
+      : '';
+    const control = s.entity ? `[${shown}](${apiUrl(s.entity)}${title})` : '—';
     const since = s.meta && s.meta.since ? s.meta.since : '';
     const js = `[↗](${sampleSrcUrl(s.lib, s.name)})`;
     const ui5 = `[↗](${fullscreenUrl(s.lib, s.name)})`;
@@ -249,8 +266,51 @@ function controlLines() {
   return l;
 }
 
-// api.md — module -> control detail
-const coverage = ['# abap2UI5 — sample coverage', '', ...controlLines()];
+// api.md — deprecated controls that still carry demo kit samples: the
+// legacy-free readiness list. One row per deprecated control (not per sample),
+// with the replacement hint from the api.json deprecation text and how many of
+// its samples are ported. Empty when no api.json / no deprecated controls.
+function deprecatedLines() {
+  // collect distinct deprecated entities in scope -> { lib, entity, dep, total, ported }
+  const byEntity = new Map();
+  for (const e of libs) {
+    for (const s of e.samples) {
+      const dep = s.meta && s.meta.deprecated;
+      if (!s.entity || !dep) continue;
+      const cur = byEntity.get(s.entity) ||
+        { lib: e.lib, entity: s.entity, dep, total: 0, ported: 0 };
+      cur.total += 1;
+      if (s.port) cur.ported += 1;
+      byEntity.set(s.entity, cur);
+    }
+  }
+  if (!byEntity.size) return [];
+
+  const rows = [...byEntity.values()].sort((a, b) =>
+    a.lib.toLowerCase().localeCompare(b.lib.toLowerCase()) ||
+    a.entity.toLowerCase().localeCompare(b.entity.toLowerCase()));
+
+  const l = [];
+  l.push('## Deprecated controls (legacy-free readiness)');
+  l.push('');
+  l.push(`${rows.length} control(s) with demo kit samples are deprecated in this`);
+  l.push('release and will not survive the legacy-free UI5 2.x line. **Replaced by**');
+  l.push('is the hint from the control\'s `api.json` deprecation note; **Samples**');
+  l.push('counts how many of its samples are already ported.');
+  l.push('');
+  l.push('| Module | Control | Deprecated since | Replaced by | Samples |');
+  l.push('|--------|---------|:----------------:|-------------|:-------:|');
+  for (const r of rows) {
+    const control = `[${bareControl(r.entity)}](${apiUrl(r.entity)})`;
+    const replaced = r.dep.text || '—';
+    l.push(`| ${r.lib} | ${control} | ${r.dep.since || ''} | ${replaced} | ${r.ported}/${r.total} |`);
+  }
+  l.push('');
+  return l;
+}
+
+// api.md — module -> control detail, then the deprecated-controls readiness list
+const coverage = ['# abap2UI5 — sample coverage', '', ...controlLines(), ...deprecatedLines()];
 fs.writeFileSync(COVERAGE, coverage.join('\n').trimEnd() + '\n');
 
 // README — splice the per-module summary between the coverage markers
