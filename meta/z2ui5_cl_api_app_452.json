@@ -10,7 +10,7 @@
   "deviations": [
     {
       "type": "IMPROVISED",
-      "what": "the original binds items with a model sorter (group: true) and a custom groupHeaderFactory (the latter not expressible in abap2UI5) - so the grouped items are rendered statically as core:SeparatorItem headers + core:Item entries, built in a LOOP over the ABAP data instead of a bound aggregation."
+      "what": "the custom groupHeaderFactory '.getGroupHeader' (controller code) is replaced by UI5's default group headers - the sample's factory builds a SeparatorItem with the group key, which is what the default renders anyway. The items are a bound template with the original's sorter (path SUPPLIER_NAME, group: true) as a raw binding-info string."
     },
     {
       "type": "IMPROVISED",
@@ -18,7 +18,7 @@
     },
     {
       "type": "LIVE_TEST",
-      "what": "a bound items template with a raw sorter binding-info string ({path, sorter: {path, group: true}}) may replace the static unroll - see CAPABILITIES.md, needs an in-system check."
+      "what": "confirm the group SeparatorItem headers render per supplier in the MultiComboBox picker (bound template + group sorter, converted 2026-07-16; string pass-through source-verified)."
     }
   ]
 }
