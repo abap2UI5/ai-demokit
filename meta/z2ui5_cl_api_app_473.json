@@ -2,7 +2,8 @@
   "class": "z2ui5_cl_api_app_473",
   "sample": "sap.m.sample.ScrollContainer",
   "entity": "sap.m.ScrollContainer",
-  "file": "src/01/z2ui5_cl_api_app_473.clas.abap",
+  "file": "src/01/b04/z2ui5_cl_api_app_473.clas.abap",
+  "batch": "b04",
   "status": "generated",
   "checked": null,
   "deviations": [

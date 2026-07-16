@@ -2,7 +2,8 @@
   "class": "z2ui5_cl_api_app_526",
   "sample": "sap.m.sample.Button",
   "entity": "sap.m.Button",
-  "file": "src/01/z2ui5_cl_api_app_526.clas.abap",
+  "file": "src/01/b03/z2ui5_cl_api_app_526.clas.abap",
+  "batch": "b03",
   "status": "checked",
   "checked": {
     "date": "2026-07-15",

@@ -2,7 +2,8 @@
   "class": "z2ui5_cl_api_app_441",
   "sample": "sap.m.sample.ListCounter",
   "entity": "sap.m.List",
-  "file": "src/01/z2ui5_cl_api_app_441.clas.abap",
+  "file": "src/01/b04/z2ui5_cl_api_app_441.clas.abap",
+  "batch": "b04",
   "status": "generated",
   "checked": null,
   "deviations": [

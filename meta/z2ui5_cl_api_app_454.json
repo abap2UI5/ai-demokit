@@ -2,7 +2,8 @@
   "class": "z2ui5_cl_api_app_454",
   "sample": "sap.m.sample.MultiInput",
   "entity": "sap.m.MultiInput",
-  "file": "src/01/z2ui5_cl_api_app_454.clas.abap",
+  "file": "src/01/b02/z2ui5_cl_api_app_454.clas.abap",
+  "batch": "b02",
   "status": "generated",
   "checked": null,
   "deviations": [

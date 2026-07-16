@@ -62,6 +62,14 @@ by the UI5 **library** of the demo kit sample they rebuild:
 The split key is the **second-level namespace** of the sample's entity. New
 libraries get the next free `src/NN` folder with a matching `package.devc.xml`.
 
+Inside a library folder, ports are grouped into **batch subpackages**
+`src/<NN>/b<nn>/` — one folder per generation/review batch (~10 related
+samples, e.g. `b01` display & navigation), each with its own
+`package.devc.xml`, so every batch is a separate ABAP package in the system
+and one PR in git. A port's batch is recorded in its `meta/<class>.json`
+(derived from the path). New ports always go into a new batch folder, never
+into a closed one — see TRAINING.md for the batch process.
+
 Because `FOLDER_LOGIC=PREFIX`, class names never encode the folder — moving a
 class between folders needs no rename.
 
@@ -198,7 +206,8 @@ ENDMETHOD.
 The sample's JSON model becomes ABAP: one `ty_s_`/`ty_t_` type per JSON array,
 filled with `VALUE #( ( … ) ( … ) )`. Field names are the JSON keys, upper-cased
 by ABAP; bindings reference them in braces (`{TITLE}`, `{PRODUCT_ID}`). Keep the
-data verbatim from the sample (same rows, same text). See app 416 / 454.
+data verbatim from the sample (same rows, same text); a row subset needs an
+IMPROVISED note (checkable against `ui5/mock/`). See app 454.
 
 **abap2UI5 serves a single default model — there are no named models.** A sample
 that binds against a named model (`img>/products/pic1`, a separate `JSONModel`,
@@ -402,9 +411,9 @@ Three PoC ports show the full range — read them before writing a new one:
 
 | App | Sample | Shows |
 |-----|--------|-------|
-| `src/01/z2ui5_cl_api_app_408` | `sap.m.Text` | static view, no data/events, `&&`-split text |
-| `src/04/z2ui5_cl_api_app_416` | `sap.f.GridList` | data + two-way bind + `liveChange` event + `view_model_update` |
-| `src/01/z2ui5_cl_api_app_454` | `sap.m.MultiInput` | data, bound aggregation, `core:Item`, 1.71 omission comment |
+| `src/01/b01/z2ui5_cl_api_app_408` | `sap.m.Text` | static view, no data/events, `&&`-split text |
+| `src/01/b02/z2ui5_cl_api_app_421` | `sap.m.CheckBox` | two-way bind, expression bindings, boolean event arg (CHECKED in-system) |
+| `src/01/b02/z2ui5_cl_api_app_454` | `sap.m.MultiInput` | data, bound aggregation, `core:Item`, tokens, NOTES block |
 
 ### Generation prompt
 
@@ -529,8 +538,9 @@ the ports share that style. Essentials:
 - Lifecycle: chain `check_on_init( )` / `check_on_navigated( )` /
   `check_on_event( )` with `ELSEIF`. Re-display the view in the
   `check_on_navigated( )` branch.
-- Build views with `z2ui5_cl_xml_view` (typed) or `z2ui5_cl_util_xml` (generic);
-  `client->view_display( view->stringify( ) )` as a standalone final statement.
+- Build views with `z2ui5_cl_api_xml` (see §5 — the only view builder in this
+  repo); `client->view_display( view->stringify( ) )` as a standalone final
+  statement.
 - **ABAP Doc (`"!`) is parsed as HTML.** A raw `<…>` is read as an HTML tag, so
   never put a literal UI5 element (`<mvc:View>`) or any other `<tag>` in a `"!`
   comment — write it plain (`mvc:View element`). A `<tag>` there is flagged as an

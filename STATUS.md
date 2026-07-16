@@ -16,6 +16,22 @@ CAPABILITIES.md._
 | Manually verified in a running system | 420, 421, 526, 530 (`CHECKED`) |
 | Archive | `ui5/` complete incl. shared mock data snapshot (`ui5/mock/`, provenance in its README) |
 
+## Batches
+
+The 34 existing ports are retro-grouped into review batches — one subpackage
+`src/01/b<nn>` = one ABAP package = one review unit (recorded per port in
+`meta/<class>.json` as `batch`):
+
+| Batch | Theme | Apps | Live-checked |
+|---|---|---|---|
+| `b01` | Display & navigation | 408, 409, 431, 434, 440, 460, 529, 530 | 530 |
+| `b02` | Selection & input | 421, 422, 423, 439, 452, 454, 472, 481, 527, 528 | 421 |
+| `b03` | Actions, toolbars & popups | 447, 448, 449, 469, 474, 486, 526 | 526 |
+| `b04` | Layout, lists & data | 401, 404, 420, 433, 441, 445, 471, 473, 487 | 420 |
+
+New generation batches continue as `b05`, `b06`, … per the process in
+TRAINING.md.
+
 ## Verified fixed (2026-07-16)
 
 An AI cross-review of all 34 ports against their JS/XML originals (5 parallel
@@ -86,6 +102,6 @@ Infrastructure:
   past the root null-refs; duplicate attribute names render invalid XML.
 - [ ] TRAINING.md stage 2: generate the header block from `meta/` (inversion).
 - [ ] Run `structural-diff.mjs --strict` in CI.
-- [ ] AGENTS.md §5 "Worked references" points at nonexistent
-  `src/04/z2ui5_cl_api_app_416`; §8 names the wrong builder classes
-  (`z2ui5_cl_xml_view`/`z2ui5_cl_util_xml` instead of `z2ui5_cl_api_xml`).
+- [x] ~~AGENTS.md §5 "Worked references" points at nonexistent
+  `src/04/z2ui5_cl_api_app_416`; §8 names the wrong builder classes~~ — fixed
+  2026-07-16 (416 row replaced by app 421, §8 corrected to `z2ui5_cl_api_xml`).

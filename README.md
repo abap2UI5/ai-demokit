@@ -26,7 +26,8 @@ A coding agent runs the pipeline:
 1. **Read** — clone [OpenUI5](https://github.com/SAP/openui5) and scan every
    `sap.m` demo kit sample (`src/sap.m/test/sap/m/demokit/sample/<Name>/`).
 2. **Generate** — rebuild each sample 1:1 as an abap2UI5 app (`z2ui5_if_app`),
-   filed under `src/01`.
+   filed under `src/01` in batch subpackages (`b01`, `b02`, …) — one batch of
+   related samples per package.
 3. **Store templates** — keep the original UI5 JS/XML templates in
    [`ui5/`](ui5), one folder per port (named after the port class).
 4. **Report** — regenerate the [coverage](#coverage) tables and the in-system
@@ -96,8 +97,9 @@ Rules:
 
 </details>
 
-The focus is currently on **`sap.m`** — all ports live under `src/01`. Other UI5
-libraries are brought back in later.
+The focus is currently on **`sap.m`** — all ports live under `src/01`, grouped
+into batch subpackages `src/01/b<nn>` (one generation/review batch = one ABAP
+package). Other UI5 libraries are brought back in later.
 
 ## Compatibility
 

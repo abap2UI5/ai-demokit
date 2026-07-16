@@ -2,7 +2,8 @@
   "class": "z2ui5_cl_api_app_474",
   "sample": "sap.m.sample.SegmentedButton",
   "entity": "sap.m.SegmentedButton",
-  "file": "src/01/z2ui5_cl_api_app_474.clas.abap",
+  "file": "src/01/b03/z2ui5_cl_api_app_474.clas.abap",
+  "batch": "b03",
   "status": "generated",
   "checked": null,
   "deviations": []

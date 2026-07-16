@@ -2,7 +2,8 @@
   "class": "z2ui5_cl_api_app_440",
   "sample": "sap.m.sample.LinkEmphasized",
   "entity": "sap.m.Link",
-  "file": "src/01/z2ui5_cl_api_app_440.clas.abap",
+  "file": "src/01/b01/z2ui5_cl_api_app_440.clas.abap",
+  "batch": "b01",
   "status": "generated",
   "checked": null,
   "deviations": [

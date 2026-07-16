@@ -32,6 +32,34 @@ generate  →  verify (CI + structural diff)  →  AI review  →  live check (h
 **Distillation is a mandatory step, not a habit.** A manual correction that does
 not flow back as (a) a rule and (b) a golden example is wasted training signal.
 
+## The batch process
+
+Work happens in batches of ~10 related samples (one control family), each in
+its own subpackage `src/01/b<nn>` (= one ABAP package in the system) and one
+PR. Per batch:
+
+1. **Generate** — the agent ports the batch into a new `b<nn>` folder, prompt
+   fed with AGENTS.md, CAPABILITIES.md and the 2–3 nearest `golden` ports.
+2. **Machine-verify until green** — abaplint ×3, `generate-meta`,
+   `structural-diff --strict`, plus an adversarial AI review pass. The agent
+   fixes its own findings. Human time is the scarcest resource in this loop —
+   it must only be spent on what machines cannot see.
+3. **Human live check** — pull the batch package via abapGit, start every app,
+   correct in the system, push corrections back as their own commits
+   (separate from generation, so the diff *is* the training signal).
+4. **Distill** — the agent classifies every human correction: fidelity bug →
+   rule in AGENTS/CAPABILITIES **and, where greppable, a deterministic check**
+   (structural diff / pattern lint), style → convention update, new technique →
+   CAPABILITIES row. Corrected ports become `checked`/`golden`; STATUS.md is
+   updated in the same change.
+5. **Regression probe** (every few batches) — re-generate a handful of
+   `golden` ports plus the hold-out set from scratch with the current setup
+   and diff: a re-appearing old mistake means the rule was too weak.
+   Corrections-per-batch is the improvement curve; it must trend down.
+
+A batch folder is closed once merged — follow-ups amend the port in place, new
+ports go into the next `b<nn>`.
+
 ## Quality ladder
 
 Every port sits on exactly one rung; only `golden` ports may be used as prompt

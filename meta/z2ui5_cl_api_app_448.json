@@ -2,7 +2,8 @@
   "class": "z2ui5_cl_api_app_448",
   "sample": "sap.m.sample.MessageToast",
   "entity": "sap.m.MessageToast",
-  "file": "src/01/z2ui5_cl_api_app_448.clas.abap",
+  "file": "src/01/b03/z2ui5_cl_api_app_448.clas.abap",
+  "batch": "b03",
   "status": "generated",
   "checked": null,
   "deviations": []

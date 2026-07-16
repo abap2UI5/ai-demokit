@@ -2,7 +2,8 @@
   "class": "z2ui5_cl_api_app_530",
   "sample": "sap.m.sample.Breadcrumbs",
   "entity": "sap.m.Breadcrumbs",
-  "file": "src/01/z2ui5_cl_api_app_530.clas.abap",
+  "file": "src/01/b01/z2ui5_cl_api_app_530.clas.abap",
+  "batch": "b01",
   "status": "checked",
   "checked": {
     "date": "2026-07-15",

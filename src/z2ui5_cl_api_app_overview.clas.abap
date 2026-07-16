@@ -233,19 +233,19 @@ CLASS z2ui5_cl_api_app_overview IMPLEMENTATION.
   METHOD get_catalog.
 
     result = VALUE #(
-      ( module = `sap.m` control = `sap.m.Breadcrumbs`     name = `Breadcrumbs`               class = `z2ui5_cl_api_app_530` path = `src/01/z2ui5_cl_api_app_530.clas.abap`
+      ( module = `sap.m` control = `sap.m.Breadcrumbs`     name = `Breadcrumbs`               class = `z2ui5_cl_api_app_530` path = `src/01/b01/z2ui5_cl_api_app_530.clas.abap`
         checked = `CHECKED (2026-07-15): manually verified in a running system - the ${$source>/text} event arg delivers the clicked link's text as expected, everything works like the original.` )
-      ( module = `sap.m` control = `sap.m.Button`          name = `Button`                    class = `z2ui5_cl_api_app_526` path = `src/01/z2ui5_cl_api_app_526.clas.abap`
+      ( module = `sap.m` control = `sap.m.Button`          name = `Button`                    class = `z2ui5_cl_api_app_526` path = `src/01/b03/z2ui5_cl_api_app_526.clas.abap`
         checked = `CHECKED (2026-07-15): manually verified in a running system - each press toasts the pressed button's client-side control id, read via the event arg $event.oSource.sId, exactly like the original.` )
-      ( module = `sap.m` control = `sap.m.Carousel`        name = `CarouselWithControls`      class = `z2ui5_cl_api_app_420` path = `src/01/z2ui5_cl_api_app_420.clas.abap`
+      ( module = `sap.m` control = `sap.m.Carousel`        name = `CarouselWithControls`      class = `z2ui5_cl_api_app_420` path = `src/01/b04/z2ui5_cl_api_app_420.clas.abap`
         checked = `CHECKED (2026-07-15): manually verified in a running system - renders and scrolls like the original (see the note below on the flattened image model).`
         notes = `IMPROVISED: the three carousel images bind to a separate named model in the original (img>/products/pic1..3 from sap/ui/demo/mock/img.json); resolved here to static image URLs, as abap2UI5 serves a` &&
                  ` single default model.` )
-      ( module = `sap.m` control = `sap.m.CheckBox`        name = `CheckBoxTriState`          class = `z2ui5_cl_api_app_421` path = `src/01/z2ui5_cl_api_app_421.clas.abap`
+      ( module = `sap.m` control = `sap.m.CheckBox`        name = `CheckBoxTriState`          class = `z2ui5_cl_api_app_421` path = `src/01/b02/z2ui5_cl_api_app_421.clas.abap`
         checked = `CHECKED (2026-07-15): manually verified in a running system - the select-all parent checkbox and its tri-state expression bindings behave like the original.` )
-      ( module = `sap.m` control = `sap.m.ColorPalette`    name = `ColorPalette`              class = `z2ui5_cl_api_app_422` path = `src/01/z2ui5_cl_api_app_422.clas.abap` )
-      ( module = `sap.m` control = `sap.m.ComboBox`        name = `ComboBox`                  class = `z2ui5_cl_api_app_423` path = `src/01/z2ui5_cl_api_app_423.clas.abap` )
-      ( module = `sap.m` control = `sap.m.FacetFilter`     name = `FacetFilterLight`          class = `z2ui5_cl_api_app_401` path = `src/01/z2ui5_cl_api_app_401.clas.abap`
+      ( module = `sap.m` control = `sap.m.ColorPalette`    name = `ColorPalette`              class = `z2ui5_cl_api_app_422` path = `src/01/b02/z2ui5_cl_api_app_422.clas.abap` )
+      ( module = `sap.m` control = `sap.m.ComboBox`        name = `ComboBox`                  class = `z2ui5_cl_api_app_423` path = `src/01/b02/z2ui5_cl_api_app_423.clas.abap` )
+      ( module = `sap.m` control = `sap.m.FacetFilter`     name = `FacetFilterLight`          class = `z2ui5_cl_api_app_401` path = `src/01/b04/z2ui5_cl_api_app_401.clas.abap`
         notes = `IMPROVISED: the bound lists="{/ProductCollectionStats/Filters}" collection is unrolled into two static FacetFilterLists (Category, SupplierName); the facet values inside each list stay bound. //` &&
                  ` IMPROVISED: selection transport - every FacetFilterItem binds selected two-way; on listClose/reset the backend reads/clears the flags and re-filters (the original filters client-side via` &&
                  ` sap.ui.model.Filter). // LIVE-TEST: confirm in a running system that clearing the bound selected flags on Reset also unchecks the facet popover checkboxes (FacetFilterList caches its selection` &&
@@ -254,76 +254,76 @@ CLASS z2ui5_cl_api_app_overview IMPLEMENTATION.
                  ` ToolbarSpacer - the sample's popin-layout ComboBox (with core:Item entries), the sticky CheckBoxes with their Label and the Hide/Show ToggleButton drive client-side table APIs (setSticky, popin` &&
                  ` layout) with no abap2UI5 equivalent; the infoToolbar (an OverflowToolbar with a Label) and the p:ColumnAIAction column plugin (newer than UI5 1.71) are dropped as well. // IMPROVISED: data is a` &&
                  ` 10-row subset of the mock /ProductCollection (ui5/mock/products.json), facet counters recomputed for the subset.` )
-      ( module = `sap.m` control = `sap.m.FlexBox`         name = `FlexBoxNested`             class = `z2ui5_cl_api_app_404` path = `src/01/z2ui5_cl_api_app_404.clas.abap`
+      ( module = `sap.m` control = `sap.m.FlexBox`         name = `FlexBoxNested`             class = `z2ui5_cl_api_app_404` path = `src/01/b04/z2ui5_cl_api_app_404.clas.abap`
         notes = `IMPROVISED: the original sample colours .item1..item6 and the h2 headings via a separate style.css; the previous port injected it through an html:style block. z2ui5_cl_api_xml has no raw-text/CDATA` &&
                  ` node, so that CSS cannot be emitted - the styleClass attributes are ported 1:1 but the flex items render without their background colours. Dropped.` )
-      ( module = `sap.m` control = `sap.m.GenericTile`     name = `GenericTileAsKPITile`      class = `z2ui5_cl_api_app_431` path = `src/01/z2ui5_cl_api_app_431.clas.abap`
+      ( module = `sap.m` control = `sap.m.GenericTile`     name = `GenericTileAsKPITile`      class = `z2ui5_cl_api_app_431` path = `src/01/b01/z2ui5_cl_api_app_431.clas.abap`
         notes = `1.71: frameType OneByHalf / TwoByHalf dropped on several tiles - both enum values were added in UI5 1.83; OneByOne / TwoByOne (1.71) are kept. // 1.71: systemInfo and appShortcut dropped - both added` &&
                  ` in UI5 1.92. // 1.71: url dropped on the link tiles - added in UI5 1.76. // IMPROVISED: the custom CSS class tileLayout is dropped from the class attribute - the sample's style.css (float: left)` &&
                  ` cannot be injected here. // IMPROVISED: the relative test-resources image and backgroundImage paths are resolved to absolute sdk.openui5.org URLs so the tile images load standalone.` )
-      ( module = `sap.m` control = `sap.m.IconTabBar`      name = `IconTabBarStretchContent`  class = `z2ui5_cl_api_app_433` path = `src/01/z2ui5_cl_api_app_433.clas.abap`
+      ( module = `sap.m` control = `sap.m.IconTabBar`      name = `IconTabBarStretchContent`  class = `z2ui5_cl_api_app_433` path = `src/01/b04/z2ui5_cl_api_app_433.clas.abap`
         notes = `IMPROVISED: the IconTabBar property expanded="{device>/isNoPhone}" is dropped - abap2UI5 has no device model, so the phone/non-phone binding cannot be expressed. The tab bar stays expanded.` )
-      ( module = `sap.m` control = `sap.m.Image`           name = `ImageModeBackground`       class = `z2ui5_cl_api_app_434` path = `src/01/z2ui5_cl_api_app_434.clas.abap`
+      ( module = `sap.m` control = `sap.m.Image`           name = `ImageModeBackground`       class = `z2ui5_cl_api_app_434` path = `src/01/b01/z2ui5_cl_api_app_434.clas.abap`
         notes = `IMPROVISED: the original binds src/mode/height/width to a JSONModel (img>/products, /imageMode, /imageHeight, /imageWidth); the fixed sample values are inlined here as literals (mode Background, the` &&
                  ` HT-7777 / HT-6100 demo images). // IMPROVISED: image height/width are device dependent in the original (5em on a phone) - fixed to 10em here. // IMPROVISED: the custom CSS class imageContainer (light` &&
                  ` blue background) of the box4 HBox is dropped - its stylesheet is not available in abap2UI5.` )
-      ( module = `sap.m` control = `sap.m.Input`           name = `InputValueState`           class = `z2ui5_cl_api_app_439` path = `src/01/z2ui5_cl_api_app_439.clas.abap`
+      ( module = `sap.m` control = `sap.m.Input`           name = `InputValueState`           class = `z2ui5_cl_api_app_439` path = `src/01/b02/z2ui5_cl_api_app_439.clas.abap`
         notes = `1.71: Input property showClearIcon (since UI5 1.94) dropped from three inputs. // 1.71: the two formattedValueStateText aggregations (a FormattedText carrying Links, since UI5 1.78) omitted;` &&
                  ` valueState/valueStateText still render the state.` )
-      ( module = `sap.m` control = `sap.m.Link`            name = `LinkEmphasized`            class = `z2ui5_cl_api_app_440` path = `src/01/z2ui5_cl_api_app_440.clas.abap`
+      ( module = `sap.m` control = `sap.m.Link`            name = `LinkEmphasized`            class = `z2ui5_cl_api_app_440` path = `src/01/b01/z2ui5_cl_api_app_440.clas.abap`
         notes = `IMPROVISED: the last column's original number binding is a sap.ui.model.type.Currency formatter (parts Price/CurrencyCode, formatOptions showMeasure:false); it is replaced by a plain ObjectNumber with` &&
                  ` a preformatted price text (number={PRICE} unit={CURRENCY_CODE}).` )
-      ( module = `sap.m` control = `sap.m.List`            name = `ListCounter`               class = `z2ui5_cl_api_app_441` path = `src/01/z2ui5_cl_api_app_441.clas.abap`
+      ( module = `sap.m` control = `sap.m.List`            name = `ListCounter`               class = `z2ui5_cl_api_app_441` path = `src/01/b04/z2ui5_cl_api_app_441.clas.abap`
         notes = `1.71: headerLevel="H2" on the List (since UI5 1.117) is dropped.` )
-      ( module = `sap.m` control = `sap.m.List`            name = `ListNoData`                class = `z2ui5_cl_api_app_445` path = `src/01/z2ui5_cl_api_app_445.clas.abap` )
-      ( module = `sap.m` control = `sap.m.MessageBox`      name = `MessageBoxInitialFocus`    class = `z2ui5_cl_api_app_447` path = `src/01/z2ui5_cl_api_app_447.clas.abap`
+      ( module = `sap.m` control = `sap.m.List`            name = `ListNoData`                class = `z2ui5_cl_api_app_445` path = `src/01/b04/z2ui5_cl_api_app_445.clas.abap` )
+      ( module = `sap.m` control = `sap.m.MessageBox`      name = `MessageBoxInitialFocus`    class = `z2ui5_cl_api_app_447` path = `src/01/b03/z2ui5_cl_api_app_447.clas.abap`
         notes = `IMPROVISED: the sample opens a sap.m.MessageBox from its controller; there is no such control in the view. It is mapped to abap2UI5's client->message_box_display, driven by two buttons wired to` &&
                  ` events. // 1.71: the buttons' ariaHasPopup="Dialog" is dropped (available only since UI5 1.84). // 1.71: the MessageBox emphasizedAction / dependentOn options of the original are dropped (available` &&
                  ` only since UI5 1.75 / 1.124).` )
-      ( module = `sap.m` control = `sap.m.MessageToast`    name = `MessageToast`              class = `z2ui5_cl_api_app_448` path = `src/01/z2ui5_cl_api_app_448.clas.abap` )
-      ( module = `sap.m` control = `sap.m.MessageView`     name = `MessageViewMessageManager` class = `z2ui5_cl_api_app_449` path = `src/01/z2ui5_cl_api_app_449.clas.abap`
+      ( module = `sap.m` control = `sap.m.MessageToast`    name = `MessageToast`              class = `z2ui5_cl_api_app_448` path = `src/01/b03/z2ui5_cl_api_app_448.clas.abap` )
+      ( module = `sap.m` control = `sap.m.MessageView`     name = `MessageViewMessageManager` class = `z2ui5_cl_api_app_449` path = `src/01/b03/z2ui5_cl_api_app_449.clas.abap`
         notes = `IMPROVISED: the MessageManager/message model of the original is not available in abap2UI5 - the messages are bound from a hardcoded table instead.` )
-      ( module = `sap.m` control = `sap.m.MultiComboBox`   name = `MultiComboBoxGrouping`     class = `z2ui5_cl_api_app_452` path = `src/01/z2ui5_cl_api_app_452.clas.abap`
+      ( module = `sap.m` control = `sap.m.MultiComboBox`   name = `MultiComboBoxGrouping`     class = `z2ui5_cl_api_app_452` path = `src/01/b02/z2ui5_cl_api_app_452.clas.abap`
         notes = `IMPROVISED: the original binds items with a model sorter (group: true) and a groupHeaderFactory, neither of which is expressible in abap2UI5 - so the grouped items are rendered statically as` &&
                  ` core:SeparatorItem headers + core:Item entries, built in a LOOP over the ABAP data instead of a bound aggregation.` )
-      ( module = `sap.m` control = `sap.m.MultiInput`      name = `MultiInput`                class = `z2ui5_cl_api_app_454` path = `src/01/z2ui5_cl_api_app_454.clas.abap`
+      ( module = `sap.m` control = `sap.m.MultiInput`      name = `MultiInput`                class = `z2ui5_cl_api_app_454` path = `src/01/b02/z2ui5_cl_api_app_454.clas.abap`
         notes = `IMPROVISED: the controller's onInit pre-sets the tokens on both MultiInputs (Token 1..6 and one long token); they are declared statically in the view's tokens aggregation instead - same rendering. //` &&
                  ` IMPROVISED: the controller's addValidator (typing free text + Enter creates a token client-side) is dropped - abap2UI5 has no client-side validator hook. // IMPROVISED: the suggestion data is a` &&
                  ` 16-row subset of the mock /ProductCollection (ui5/mock/products.json). // The original's stray placeholder attributes on the two Labels (not a Label property) are dropped. // 1.71: showClearIcon` &&
                  ` (since UI5 1.94) dropped from the suggestion MultiInput.` )
-      ( module = `sap.m` control = `sap.m.ObjectHeader`    name = `ObjectHeader`              class = `z2ui5_cl_api_app_460` path = `src/01/z2ui5_cl_api_app_460.clas.abap`
+      ( module = `sap.m` control = `sap.m.ObjectHeader`    name = `ObjectHeader`              class = `z2ui5_cl_api_app_460` path = `src/01/b01/z2ui5_cl_api_app_460.clas.abap`
         notes = `IMPROVISED: the sample binds the ObjectHeader to {/ProductCollection/0} and its title/number/attributes to model fields (with a Currency type formatter on number). The port carries no model, so those` &&
                  ` bindings are resolved to the static values of the first ProductCollection product (Notebook Basic 15).` )
-      ( module = `sap.m` control = `sap.m.ObjectStatus`    name = `ObjectStatus`              class = `z2ui5_cl_api_app_529` path = `src/01/z2ui5_cl_api_app_529.clas.abap`
+      ( module = `sap.m` control = `sap.m.ObjectStatus`    name = `ObjectStatus`              class = `z2ui5_cl_api_app_529` path = `src/01/b01/z2ui5_cl_api_app_529.clas.abap`
         notes = `1.71: ObjectStatus states Indication06-Indication20 are newer than UI5 1.71 (added ~1.130). The controls are kept but their state is set to "None", so the indication colours differ from the original -` &&
                  ` verify if relevant. // IMPROVISED: the active status press originally opens a controller-built Dialog; replaced with message_toast_display, since a Dialog is not a 1:1 view element.` )
-      ( module = `sap.m` control = `sap.m.Panel`           name = `PanelExpanded`             class = `z2ui5_cl_api_app_471` path = `src/01/z2ui5_cl_api_app_471.clas.abap`
+      ( module = `sap.m` control = `sap.m.Panel`           name = `PanelExpanded`             class = `z2ui5_cl_api_app_471` path = `src/01/b04/z2ui5_cl_api_app_471.clas.abap`
         notes = `IMPROVISED: the original controller toggles the third panel imperatively (onOverflowToolbarPress -> oPanel.setExpanded(!oPanel.getExpanded())). It is reproduced with a two-way bound ``expanded``` &&
                  ` property plus a TOOLBAR_PRESSED event that flips it - the view therefore carries an ``expanded`` binding and a ``press`` the original view.xml does not have.` )
-      ( module = `sap.m` control = `sap.m.PDFViewer`       name = `PDFViewerPopup`            class = `z2ui5_cl_api_app_469` path = `src/01/z2ui5_cl_api_app_469.clas.abap`
+      ( module = `sap.m` control = `sap.m.PDFViewer`       name = `PDFViewerPopup`            class = `z2ui5_cl_api_app_469` path = `src/01/b03/z2ui5_cl_api_app_469.clas.abap`
         notes = `IMPROVISED: the sample's onInit gives each Image its own JSONModel and onPress opens a controller-created sap.m.PDFViewer in popup mode via JavaScript. Here the per-image Source/Preview URLs are` &&
                  ` resolved statically and the PDFViewer is embedded into a sap.m.Dialog opened on the press event instead, closed by an added OK Button (the popup-mode PDFViewer brings its own close button). // 1.71:` &&
                  ` the PDFViewer property isTrustedSource of the original is omitted - it is available only in UI5 releases higher than 1.71. // LIVE-TEST: confirm the PDFViewer renders inside the dialog at height 100%` &&
                  ` in a running system.` )
-      ( module = `sap.m` control = `sap.m.RangeSlider`     name = `RangeSlider`               class = `z2ui5_cl_api_app_472` path = `src/01/z2ui5_cl_api_app_472.clas.abap`
+      ( module = `sap.m` control = `sap.m.RangeSlider`     name = `RangeSlider`               class = `z2ui5_cl_api_app_472` path = `src/01/b02/z2ui5_cl_api_app_472.clas.abap`
         notes = `IMPROVISED: the sample binds the composite RangeSlider "range" property (an array [low, high] - range="{/RS1}" / range="0,100"). abap2UI5 binds scalar ABAP fields, so each range is expressed as the` &&
                  ` equivalent value / value2 properties the control keeps in sync - identical rendering.` )
-      ( module = `sap.m` control = `sap.m.ScrollContainer` name = `ScrollContainer`           class = `z2ui5_cl_api_app_473` path = `src/01/z2ui5_cl_api_app_473.clas.abap`
+      ( module = `sap.m` control = `sap.m.ScrollContainer` name = `ScrollContainer`           class = `z2ui5_cl_api_app_473` path = `src/01/b04/z2ui5_cl_api_app_473.clas.abap`
         notes = `IMPROVISED: the Image src binds {img>/products/pic1} in the original, a JSON image model not available server-side; a static demo image URL is used instead. // IMPROVISED: the original narrows the` &&
                  ` width to 50em on phone devices via sap/ui/Device (not available server-side); a fixed 100em is used.` )
-      ( module = `sap.m` control = `sap.m.SegmentedButton` name = `SegmentedButton`           class = `z2ui5_cl_api_app_474` path = `src/01/z2ui5_cl_api_app_474.clas.abap` )
-      ( module = `sap.m` control = `sap.m.Select`          name = `Select`                    class = `z2ui5_cl_api_app_527` path = `src/01/z2ui5_cl_api_app_527.clas.abap` )
-      ( module = `sap.m` control = `sap.m.StepInput`       name = `StepInput`                 class = `z2ui5_cl_api_app_481` path = `src/01/z2ui5_cl_api_app_481.clas.abap`
+      ( module = `sap.m` control = `sap.m.SegmentedButton` name = `SegmentedButton`           class = `z2ui5_cl_api_app_474` path = `src/01/b03/z2ui5_cl_api_app_474.clas.abap` )
+      ( module = `sap.m` control = `sap.m.Select`          name = `Select`                    class = `z2ui5_cl_api_app_527` path = `src/01/b02/z2ui5_cl_api_app_527.clas.abap` )
+      ( module = `sap.m` control = `sap.m.StepInput`       name = `StepInput`                 class = `z2ui5_cl_api_app_481` path = `src/01/b02/z2ui5_cl_api_app_481.clas.abap`
         notes = `IMPROVISED: the sample binds a List to the JSON model /modelData and renders one templated CustomListItem per row. The rows are unrolled into static list items here because every row sets a different` &&
                  ` subset of the StepInput properties - an empty ABAP model field would bind as "" instead of leaving the property at its default, so a bound template would not render 1:1. Template properties no row` &&
                  ` ever sets (valueState) are dropped with it.` )
-      ( module = `sap.m` control = `sap.m.Switch`          name = `Switch`                    class = `z2ui5_cl_api_app_528` path = `src/01/z2ui5_cl_api_app_528.clas.abap` )
-      ( module = `sap.m` control = `sap.m.Text`            name = `Text`                      class = `z2ui5_cl_api_app_408` path = `src/01/z2ui5_cl_api_app_408.clas.abap` )
-      ( module = `sap.m` control = `sap.m.TextArea`        name = `TextArea`                  class = `z2ui5_cl_api_app_409` path = `src/01/z2ui5_cl_api_app_409.clas.abap` )
-      ( module = `sap.m` control = `sap.m.Toolbar`         name = `ToolbarShrinkable`         class = `z2ui5_cl_api_app_486` path = `src/01/z2ui5_cl_api_app_486.clas.abap`
+      ( module = `sap.m` control = `sap.m.Switch`          name = `Switch`                    class = `z2ui5_cl_api_app_528` path = `src/01/b02/z2ui5_cl_api_app_528.clas.abap` )
+      ( module = `sap.m` control = `sap.m.Text`            name = `Text`                      class = `z2ui5_cl_api_app_408` path = `src/01/b01/z2ui5_cl_api_app_408.clas.abap` )
+      ( module = `sap.m` control = `sap.m.TextArea`        name = `TextArea`                  class = `z2ui5_cl_api_app_409` path = `src/01/b01/z2ui5_cl_api_app_409.clas.abap` )
+      ( module = `sap.m` control = `sap.m.Toolbar`         name = `ToolbarShrinkable`         class = `z2ui5_cl_api_app_486` path = `src/01/b03/z2ui5_cl_api_app_486.clas.abap`
         notes = `IMPROVISED: the sample's controller onSliderLiveChange resizes the toolbars in JS; there is no width in the source XML. Rebuilt as a bound width on each Toolbar fed by the SLIDER_CHANGE liveChange` &&
                  ` event - this width binding is an addition not present in Toolbar.view.xml.` )
-      ( module = `sap.m` control = `sap.m.Tree`            name = `Tree`                      class = `z2ui5_cl_api_app_487` path = `src/01/z2ui5_cl_api_app_487.clas.abap`
+      ( module = `sap.m` control = `sap.m.Tree`            name = `Tree`                      class = `z2ui5_cl_api_app_487` path = `src/01/b04/z2ui5_cl_api_app_487.clas.abap`
         notes = `LIVE-TEST: the sample's view is flat (one Tree bound to '/', one StandardTreeItem template); the hierarchy is carried entirely by the model. Each row's nested ``nodes`` sub-table (5 levels deep) is` &&
                  ` what UI5's JSONModel tree binding walks to build the child nodes - confirm the nested tables render as expandable levels in a running system.` ) ).
 

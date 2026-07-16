@@ -87,11 +87,15 @@ for (const f of walk(SRC)) {
   if (['reviewed', 'golden'].includes(previous.status) && !parsed.checked) status = previous.status;
   if (previous.status === 'golden' && parsed.checked) status = 'golden';
 
+  const file = path.relative(ROOT, f).split(path.sep).join('/');
+  // batch = the b<nn> subpackage the port lives in (src/<lib>/b<nn>/...)
+  const batch = file.match(/^src\/[^/]+\/(b\d+)\//)?.[1] ?? null;
   const meta = {
     class: cls,
     sample: parsed.sample,
     entity: parsed.entity,
-    file: path.relative(ROOT, f).split(path.sep).join('/'),
+    file,
+    batch,
     status,
     checked: parsed.checked,
     deviations: parsed.bullets.map((b) => {

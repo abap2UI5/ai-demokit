@@ -2,7 +2,8 @@
   "class": "z2ui5_cl_api_app_449",
   "sample": "sap.m.sample.MessageViewMessageManager",
   "entity": "sap.m.MessageView",
-  "file": "src/01/z2ui5_cl_api_app_449.clas.abap",
+  "file": "src/01/b03/z2ui5_cl_api_app_449.clas.abap",
+  "batch": "b03",
   "status": "generated",
   "checked": null,
   "deviations": [
