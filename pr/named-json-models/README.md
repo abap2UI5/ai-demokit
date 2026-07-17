@@ -11,11 +11,11 @@ those into the default model or freeze them to literals.
 
 In [abap2UI5/api](https://github.com/abap2UI5/api) the ports of
 [Carousel](https://sdk.openui5.org/entity/sap.m.Carousel/sample/sap.m.sample.CarouselWithControls)
-(`z2ui5_cl_api_app_420`),
+(`z2ui5_cl_ai_app_420`),
 [Image](https://sdk.openui5.org/entity/sap.m.Image/sample/sap.m.sample.ImageModeBackground)
-(`z2ui5_cl_api_app_434`) and
+(`z2ui5_cl_ai_app_434`) and
 [ScrollContainer](https://sdk.openui5.org/entity/sap.m.ScrollContainer/sample/sap.m.sample.ScrollContainer)
-(`z2ui5_cl_api_app_473`) all had to resolve `img>/...` bindings statically —
+(`z2ui5_cl_ai_app_473`) all had to resolve `img>/...` bindings statically —
 each carries an IMPROVISED deviation for it. The capability map of that repo
 (CAPABILITIES.md) tracks "named JSON models fed from ABAP" as ❌.
 

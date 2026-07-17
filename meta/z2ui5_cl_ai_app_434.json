@@ -1,0 +1,24 @@
+{
+  "class": "z2ui5_cl_ai_app_434",
+  "sample": "sap.m.sample.ImageModeBackground",
+  "entity": "sap.m.Image",
+  "file": "src/01/b01/z2ui5_cl_ai_app_434.clas.abap",
+  "batch": "b01",
+  "audit": "(a) frontend_action (_event_client): NO | (b) event t_arg: NO",
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "the original binds src/mode/height/width to a JSONModel (img>/products, /imageMode, /imageHeight, /imageWidth); the fixed sample values are inlined here as literals (mode Background, the HT-7777 / HT-6100 demo images)."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "image height/width are device dependent in the original (5em on a phone) - fixed to 10em here."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "the custom CSS class imageContainer (light blue background) of the box4 HBox is dropped - its stylesheet is not available in abap2UI5."
+    }
+  ]
+}

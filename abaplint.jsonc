@@ -73,7 +73,7 @@
     },
     "object_naming": {
       "patternKind": "required",
-      "clas": "^Z2UI5_CL_API_",
+      "clas": "^Z2UI5_CL_AI_",
       "intf": "^Z2UI5_IF_API_"
     },
     "functional_writing": true,

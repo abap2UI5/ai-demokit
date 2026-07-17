@@ -1,0 +1,11 @@
+{
+  "class": "z2ui5_cl_ai_app_409",
+  "sample": "sap.m.sample.TextArea",
+  "entity": "sap.m.TextArea",
+  "file": "src/01/b01/z2ui5_cl_ai_app_409.clas.abap",
+  "batch": "b01",
+  "audit": "(a) frontend_action (_event_client): NO | (b) event t_arg: NO",
+  "status": "generated",
+  "checked": null,
+  "deviations": []
+}

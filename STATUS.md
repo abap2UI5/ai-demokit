@@ -42,7 +42,7 @@ reviewers), followed by fixes:
   before `CLASS` no longer drops the NOTES, later header markers no longer leak
   into the CHECKED text, literal chunking can no longer split a doubled
   backtick. Output byte-identical on the existing 34 ports.
-- **Builder `z2ui5_cl_api_xml`** — LF/CR/TAB in attribute values now escape to
+- **Builder `z2ui5_cl_ai_xml`** — LF/CR/TAB in attribute values now escape to
   `&#xA;`/`&#xD;`/`&#x9;` (fixes app 445's lost noDataText line break at the
   root).
 - **App 401 (FacetFilter)** — Reset now really resets (two-way `selected`
@@ -148,5 +148,5 @@ Infrastructure:
   `checks` workflow runs pattern-lint, structural-diff --strict and a
   generated-artifacts sync check on every PR.
 - [x] ~~AGENTS.md §5 "Worked references" points at nonexistent
-  `src/04/z2ui5_cl_api_app_416`; §8 names the wrong builder classes~~ — fixed
-  2026-07-16 (416 row replaced by app 421, §8 corrected to `z2ui5_cl_api_xml`).
+  `src/04/z2ui5_cl_ai_app_416`; §8 names the wrong builder classes~~ — fixed
+  2026-07-16 (416 row replaced by app 421, §8 corrected to `z2ui5_cl_ai_xml`).

@@ -1,0 +1,20 @@
+{
+  "class": "z2ui5_cl_ai_app_474",
+  "sample": "sap.m.sample.SegmentedButton",
+  "entity": "sap.m.SegmentedButton",
+  "file": "src/01/b03/z2ui5_cl_ai_app_474.clas.abap",
+  "batch": "b03",
+  "audit": "(a) frontend_action (_event_client): NO | (b) event t_arg: NO",
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "the original reads the selected item via oEvent.getParameter(\"item\").getText() / getSelectedItem(). Here the items get keys (one/two/three - an addition, SB1 has none in the sample) and selectedKey is two-way bound, so the selection arrives with the event and no private event path is needed (see CAPABILITIES.md)."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "confirm the two-way bound selectedKey is updated before on_event runs, so the toast shows the newly selected item."
+    }
+  ]
+}

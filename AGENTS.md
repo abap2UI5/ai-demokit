@@ -82,7 +82,7 @@ class between folders needs no rename.
 
 ### Class naming
 
-Ports are named `z2ui5_cl_api_app_<n>` (lowercase). `<n>` is a stable, unique
+Ports are named `z2ui5_cl_ai_app_<n>` (lowercase). `<n>` is a stable, unique
 number; it is the app's identity linking a port to its template (see §4).
 
 ---
@@ -125,10 +125,10 @@ source of truth:
 
 ```jsonc
 {
-  "class":   "z2ui5_cl_api_app_421",
+  "class":   "z2ui5_cl_ai_app_421",
   "sample":  "sap.m.sample.CheckBoxTriState",   // join key to ui5/<lib>/<Name>/
   "entity":  "sap.m.CheckBox",
-  "file":    "src/01/b02/z2ui5_cl_api_app_421.clas.abap",
+  "file":    "src/01/b02/z2ui5_cl_ai_app_421.clas.abap",
   "batch":   "b02",
   "audit":   "(a) frontend_action (_event_client): NO | (b) event t_arg: YES",
   "status":  "generated",                       // generated|reviewed|checked|golden
@@ -177,13 +177,13 @@ Follow it exactly so every port looks the same and stays maintainable.
 `*.json` mock data. All of these are also copied verbatim into the sample's
 `ui5/<library>/<SampleName>/` folder (§4).
 
-**Output** — one class `z2ui5_cl_api_app_<n>` implementing `z2ui5_if_app`, whose
+**Output** — one class `z2ui5_cl_ai_app_<n>` implementing `z2ui5_if_app`, whose
 view is a **1:1** rebuild of the sample's XML.
 
 #### Class layout
 
 ```abap
-CLASS z2ui5_cl_api_app_<n> DEFINITION PUBLIC.       " lowercase, not FINAL
+CLASS z2ui5_cl_ai_app_<n> DEFINITION PUBLIC.       " lowercase, not FINAL
 
   PUBLIC SECTION.
     INTERFACES z2ui5_if_app.
@@ -252,9 +252,9 @@ build them from a shared base (a non-bound `base_url` kept in `PROTECTED`, not
 `IMPROVISED:` note. Worked example: app 420 (`sap.m.Carousel`, `img>` model →
 static image URLs).
 
-#### `view_display` — the view via `z2ui5_cl_api_xml`
+#### `view_display` — the view via `z2ui5_cl_ai_xml`
 
-Build the view with the generic builder **`z2ui5_cl_api_xml`**. It translates a
+Build the view with the generic builder **`z2ui5_cl_ai_xml`**. It translates a
 UI5 XML view 1:1 by method chaining — every control, property and namespace maps
 directly, nothing is approximated. The four navigation verbs are all 4 chars so
 the `)->` arrows line up:
@@ -286,7 +286,7 @@ the `<mvc:View>` and declare its `xmlns` namespaces yourself, exactly like any
 other control:
 
 ```abap
-DATA(view) = z2ui5_cl_api_xml=>factory( ).
+DATA(view) = z2ui5_cl_ai_xml=>factory( ).
 
 view->open( n = `View` ns = `mvc`
     )->a( n = `xmlns`     v = `sap.m`
@@ -397,7 +397,7 @@ client->view_display( view->stringify( ) ).
 
 A literal boolean is just `)->a( n = `editable` v = `true``. **Only** when the
 value comes from an ABAP boolean variable, wrap it with `as_bool( )`:
-`)->a( n = `editable` v = z2ui5_cl_api_xml=>as_bool( flag )` — a raw
+`)->a( n = `editable` v = z2ui5_cl_ai_xml=>as_bool( flag )` — a raw
 `abap_false` would otherwise serialise to an empty string. Never feed
 `abap_true`/`abap_false` straight into an attribute value.
 
@@ -444,9 +444,9 @@ Three PoC ports show the full range — read them before writing a new one:
 
 | App | Sample | Shows |
 |-----|--------|-------|
-| `src/01/b01/z2ui5_cl_api_app_408` | `sap.m.Text` | static view, no data/events, `&&`-split text |
-| `src/01/b02/z2ui5_cl_api_app_421` | `sap.m.CheckBox` | two-way bind, expression bindings, boolean event arg (CHECKED in-system) |
-| `src/01/b02/z2ui5_cl_api_app_454` | `sap.m.MultiInput` | data, bound aggregation, `core:Item`, tokens, NOTES block |
+| `src/01/b01/z2ui5_cl_ai_app_408` | `sap.m.Text` | static view, no data/events, `&&`-split text |
+| `src/01/b02/z2ui5_cl_ai_app_421` | `sap.m.CheckBox` | two-way bind, expression bindings, boolean event arg (CHECKED in-system) |
+| `src/01/b02/z2ui5_cl_ai_app_454` | `sap.m.MultiInput` | data, bound aggregation, `core:Item`, tokens, NOTES block |
 
 ### Generation prompt
 
@@ -468,7 +468,7 @@ Three abaplint checks run on every pull request; all must report **0 issues**:
 
 The **root** `abaplint.jsonc` carries the full curated rule set (correctness +
 style aligned with §8: `keyword_case`, `types_naming ^TY_`,
-`object_naming ^Z2UI5_CL_API_`, `unused_*`, `obsolete_statement`,
+`object_naming ^Z2UI5_CL_AI_`, `unused_*`, `obsolete_statement`,
 `avoid_use` incl. `defaultKey` — always `WITH EMPTY KEY`, `commented_code`,
 `definitions_top`, `whitespace_end`, …). The cloud/702 configs stay on the
 correctness core, because the 702 config also drives `abaplint --fix` in the
@@ -526,7 +526,7 @@ scripts.**
   **Sample** (→ OpenUI5 repo source, ↗ → live fullscreen sample) · **ABAP**
   (→ generated class, `—` = not ported; those rows are the backlog). There is
   no separate deprecated-controls section — everything sits in this table.
-- **`src/z2ui5_cl_api_app_overview.clas.*`** — the in-system overview **app**:
+- **`src/z2ui5_cl_ai_app_overview.clas.*`** — the in-system overview **app**:
   an abap2UI5 app that lists every ported app as one row of a `sap.m.Table`,
   sorted by module → control → sample. Columns:
   **Module** (text) · **Control** (link → OpenUI5 API) · **Sample** (name →
@@ -612,13 +612,13 @@ the ports share that style. Essentials:
 - Lifecycle: chain `check_on_init( )` / `check_on_navigated( )` /
   `check_on_event( )` with `ELSEIF`. Re-display the view in the
   `check_on_navigated( )` branch.
-- Build views with `z2ui5_cl_api_xml` (see §5 — the only view builder in this
+- Build views with `z2ui5_cl_ai_xml` (see §5 — the only view builder in this
   repo); `client->view_display( view->stringify( ) )` as a standalone final
   statement.
 - **ABAP Doc (`"!`) is parsed as HTML.** A raw `<…>` is read as an HTML tag, so
   never put a literal UI5 element (`<mvc:View>`) or any other `<tag>` in a `"!`
   comment — write it plain (`mvc:View element`). A `<tag>` there is flagged as an
-  unsupported *and* unclosed HTML tag (was a warning on `z2ui5_cl_api_xml`).
+  unsupported *and* unclosed HTML tag (was a warning on `z2ui5_cl_ai_xml`).
 
 **Run `abaplint` after every change — 0 issues before committing.**
 

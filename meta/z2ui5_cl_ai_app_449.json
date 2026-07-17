@@ -1,0 +1,16 @@
+{
+  "class": "z2ui5_cl_ai_app_449",
+  "sample": "sap.m.sample.MessageViewMessageManager",
+  "entity": "sap.m.MessageView",
+  "file": "src/01/b03/z2ui5_cl_ai_app_449.clas.abap",
+  "batch": "b03",
+  "audit": "(a) frontend_action (_event_client): NO | (b) event t_arg: NO",
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "the MessageManager/message model of the original is not available in abap2UI5 - the messages are bound from a hardcoded table instead."
+    }
+  ]
+}

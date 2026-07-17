@@ -18,7 +18,7 @@ _Last generated: <!-- last-run -->2026-07-14 09:00 UTC<!-- /last-run -->_
 > out of scope; other UI5 libraries follow later.
 >
 > See the result in **[api.md](api.md)**, or try it live: pull this repo into
-> your ABAP system and start **`z2ui5_cl_api_app_overview`**, which lists every
+> your ABAP system and start **`z2ui5_cl_ai_app_overview`**, which lists every
 > generated sample and launches it right in your system.
 
 ## Pipeline
@@ -48,11 +48,11 @@ You are porting one official UI5 demo kit sample to abap2UI5.
 
 Input:  the sample's original files (Component.js, *.view.xml, controller,
         manifest.json) from the OpenUI5 checkout.
-Output: one ABAP class z2ui5_cl_api_app_<n> implementing z2ui5_if_app, that
+Output: one ABAP class z2ui5_cl_ai_app_<n> implementing z2ui5_if_app, that
         rebuilds the sample's UI and behaviour 1:1.
 
 Rules:
-- Build the view with the generic builder z2ui5_cl_api_xml, translating the
+- Build the view with the generic builder z2ui5_cl_ai_xml, translating the
   sample's XML 1:1 (open = descend into a container, leaf = childless
   control/stay, shut = ascend). Attributes are added with
   a( n = `key` v = `value` ) chained right after the control's open/leaf;
@@ -62,7 +62,7 @@ Rules:
   yourself. Blank line between controls whose verb differs (open<->leaf,
   before shut); none between same-verb controls, none right after a shut,
   none between a control and its attrs; the whole view ends in a single ).
-  Booleans: literal v = `true`/`false`, or v = z2ui5_cl_api_xml=>as_bool( flag )
+  Booleans: literal v = `true`/`false`, or v = z2ui5_cl_ai_xml=>as_bool( flag )
   when fed from an ABAP boolean variable.
 - BEFORE declaring any sample feature inexpressible, check CAPABILITIES.md -
   the map of what abap2UI5 can express, each entry backed by a proving port.
@@ -95,7 +95,7 @@ Rules:
   POST_171 deviation naming the member (the property gate checks this).
 - Must pass abaplint for ABAP_STANDARD, ABAP_CLOUD and ABAP_702 (downport).
 - The class carries NO ABAP Doc header. Write the port's sidecar
-  meta/z2ui5_cl_api_app_<n>.json instead (sample, entity, file, batch, audit,
+  meta/z2ui5_cl_ai_app_<n>.json instead (sample, entity, file, batch, audit,
   status, deviations) - see AGENTS.md section 5; validate with
   node scripts/validate-meta.mjs.
 - Any runtime asset URLs the sample uses (test-resources / resources images)
@@ -167,7 +167,7 @@ Control metadata from OpenUI5 **1.151.0**.
 
 For the full **control-level** view — one row per sample (Module · Control ·
 Since · Deprecated · Sample · ABAP), every link pointing at OpenUI5 — see
-**[api.md](api.md)**, or the in-system overview app `z2ui5_cl_api_app_overview`,
+**[api.md](api.md)**, or the in-system overview app `z2ui5_cl_ai_app_overview`,
 where the **Sample** column links the OpenUI5 source (its ↗ opens the live
 sample) and the **abap2UI5** column links the generated class (its ↗ starts the
 app in the system).

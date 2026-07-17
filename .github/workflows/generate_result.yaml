@@ -77,8 +77,8 @@ jobs:
           README.md
           ui5/universe.json
           ui5/properties.json
-          src/z2ui5_cl_api_app_overview.clas.abap
-          src/z2ui5_cl_api_app_overview.clas.xml
+          src/z2ui5_cl_ai_app_overview.clas.abap
+          src/z2ui5_cl_ai_app_overview.clas.xml
         commit-message: Regenerate sample coverage
         author: 'github-actions[bot] <github-actions[bot]@users.noreply.github.com>'
         committer: 'github-actions[bot] <github-actions[bot]@users.noreply.github.com>'

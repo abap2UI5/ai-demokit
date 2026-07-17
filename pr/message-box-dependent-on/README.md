@@ -22,8 +22,8 @@ The official demo kit sample
 [sap.m.sample.MessageBoxInitialFocus](https://sdk.openui5.org/entity/sap.m.MessageBox/sample/sap.m.sample.MessageBoxInitialFocus)
 passes `dependentOn` in both `MessageBox.show/confirm` calls. Its 1:1 rebuild
 in [abap2UI5/api](https://github.com/abap2UI5/api)
-(`z2ui5_cl_api_app_447`) can restore every other option but has to declare
-this one as not expressible (deviation in `meta/z2ui5_cl_api_app_447.json`).
+(`z2ui5_cl_ai_app_447`) can restore every other option but has to declare
+this one as not expressible (deviation in `meta/z2ui5_cl_ai_app_447.json`).
 
 ## Current behavior
 

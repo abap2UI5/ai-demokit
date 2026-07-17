@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_ai_app_530",
+  "sample": "sap.m.sample.Breadcrumbs",
+  "entity": "sap.m.Breadcrumbs",
+  "file": "src/01/b01/z2ui5_cl_ai_app_530.clas.abap",
+  "batch": "b01",
+  "audit": "(a) frontend_action (_event_client): NO | (b) event t_arg: YES",
+  "status": "checked",
+  "checked": {
+    "date": "2026-07-15",
+    "note": "manually verified in a running system - the ${$source>/text} event arg delivers the clicked link's text as expected, everything works like the original."
+  },
+  "deviations": [
+    {
+      "type": "LIVE_TEST",
+      "what": "the SEP_CHANGE round-trip (which read a private UI5-internal event path) was removed 2026-07-16 - selectedKey and separatorStyle share one two-way bound path, so the separator switches client-side. Confirm the instant separator change in a running system."
+    }
+  ]
+}

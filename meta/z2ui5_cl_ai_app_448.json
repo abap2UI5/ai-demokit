@@ -1,0 +1,11 @@
+{
+  "class": "z2ui5_cl_ai_app_448",
+  "sample": "sap.m.sample.MessageToast",
+  "entity": "sap.m.MessageToast",
+  "file": "src/01/b03/z2ui5_cl_ai_app_448.clas.abap",
+  "batch": "b03",
+  "audit": "(a) frontend_action (_event_client): NO | (b) event t_arg: NO",
+  "status": "generated",
+  "checked": null,
+  "deviations": []
+}

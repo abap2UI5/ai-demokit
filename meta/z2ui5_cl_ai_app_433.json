@@ -1,0 +1,20 @@
+{
+  "class": "z2ui5_cl_ai_app_433",
+  "sample": "sap.m.sample.IconTabBarStretchContent",
+  "entity": "sap.m.IconTabBar",
+  "file": "src/01/b04/z2ui5_cl_ai_app_433.clas.abap",
+  "batch": "b04",
+  "audit": "(a) frontend_action (_event_client): NO | (b) event t_arg: NO",
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "LIVE_TEST",
+      "what": "the original binds expanded=\"{device>/isNoPhone}\" (a demo-kit helper model); restored 2026-07-16 as the expression {= !${device>/system/phone} } over the framework's device> model (source-verified available in main views) - confirm the tab bar collapses on phones."
+    },
+    {
+      "type": "SUBSET_DATA",
+      "what": "the bound /ProductCollection shows a 8-row subset of the 123-row mock (ui5/mock/products.json) - a full unroll adds no demo value."
+    }
+  ]
+}

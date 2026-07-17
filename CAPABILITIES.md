@@ -24,12 +24,12 @@ feature this table marks ✅/🔶.
 
 | UI5 feature | Status | How in abap2UI5 | Evidence |
 |---|---|---|---|
-| Any XML view structure (containers, aggregations, namespaces) | ✅ | `z2ui5_cl_api_xml` open/leaf/shut + `a()` | all ports |
+| Any XML view structure (containers, aggregations, namespaces) | ✅ | `z2ui5_cl_ai_xml` open/leaf/shut + `a()` | all ports |
 | Aggregations filled by the controller in `onInit` (e.g. pre-set `tokens` on MultiInput) | ✅ | declare the aggregation in the view: `open( 'tokens' )` → `leaf( 'Token' )` per entry | missed in app 454 — the tokens aggregation is public since 1.16; do not skip these |
 | Custom CSS (`style.css`, `html:style` blocks) | 🔶 | `core:HTML` leaf with the `content` **attribute** carrying `<style>…</style>` — the builder escapes attribute values, no CDATA node needed | apps 404/431 inject their sample `style.css` exactly this way (restored 2026-07-16, LIVE-TEST pending); 404 also uses `content` for `<h2>…</h2>` markup |
 | Composite/array properties (RangeSlider `range="[lo,hi]"`) | 🔶 | split into the scalar sibling properties the control keeps in sync (`value`/`value2`) | app 472 |
 | Literal line breaks inside attribute values (`&#xA;` in the original) | ✅ | write the break as `\n` in a `\|...\|` template — `xml_escape` emits it as `&#xA;`/`&#xD;`/`&#x9;` so it survives XML attribute-value normalization | app 445 (`noDataText`); builder fix 2026-07-16 |
-| Raw text / CDATA child nodes | ❌ | `z2ui5_cl_api_xml` has element+attribute nodes only; for markup/CSS use the `core:HTML` `content` attribute (row above) | app 404 NOTES |
+| Raw text / CDATA child nodes | ❌ | `z2ui5_cl_ai_xml` has element+attribute nodes only; for markup/CSS use the `core:HTML` `content` attribute (row above) | app 404 NOTES |
 
 ## Popups & messages
 

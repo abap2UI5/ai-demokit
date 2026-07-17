@@ -1,0 +1,11 @@
+{
+  "class": "z2ui5_cl_ai_app_422",
+  "sample": "sap.m.sample.ColorPalette",
+  "entity": "sap.m.ColorPalette",
+  "file": "src/01/b02/z2ui5_cl_ai_app_422.clas.abap",
+  "batch": "b02",
+  "audit": "(a) frontend_action (_event_client): NO | (b) event t_arg: YES",
+  "status": "generated",
+  "checked": null,
+  "deviations": []
+}

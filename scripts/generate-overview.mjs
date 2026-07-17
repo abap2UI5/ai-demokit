@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /*
- * Generates the in-system overview app src/z2ui5_cl_api_app_overview.clas.*
+ * Generates the in-system overview app src/z2ui5_cl_ai_app_overview.clas.*
  * — an abap2UI5 app that lists every ported sample as one row of a table with
  * columns: Module, Control (-> OpenUI5 API), Sample (name -> OpenUI5 repo
  * source, ↗ -> live OpenUI5 fullscreen sample), abap2UI5 (class name ->
@@ -21,7 +21,7 @@ import { fileURLToPath } from 'url';
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = path.join(ROOT, 'src');
 const META = path.join(ROOT, 'meta');
-const CLASS = 'z2ui5_cl_api_app_overview';
+const CLASS = 'z2ui5_cl_ai_app_overview';
 const OUT_ABAP = path.join(SRC, `${CLASS}.clas.abap`);
 const OUT_XML = path.join(SRC, `${CLASS}.clas.xml`);
 
@@ -173,7 +173,7 @@ CLASS ${CLASS} IMPLEMENTATION.
         " one Text per bullet of the clicked row's generation notes
         SPLIT client->get_event_arg( ) AT \` // \` INTO TABLE DATA(lt_line).
 
-        DATA(popup) = z2ui5_cl_api_xml=>factory( ).
+        DATA(popup) = z2ui5_cl_ai_xml=>factory( ).
         DATA(box) = popup->open( n = \`FragmentDefinition\` ns = \`core\`
             )->a( n = \`xmlns\`      v = \`sap.m\`
             )->a( n = \`xmlns:core\` v = \`sap.ui.core\`
@@ -233,7 +233,7 @@ CLASS ${CLASS} IMPLEMENTATION.
 
     ENDLOOP.
 
-    DATA(view) = z2ui5_cl_api_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
 
     view->open( n = \`View\` ns = \`mvc\`
         )->a( n = \`xmlns\`      v = \`sap.m\`
@@ -244,7 +244,7 @@ CLASS ${CLASS} IMPLEMENTATION.
             )->open( \`Page\`
                 )->a( n = \`title\`          v = \`abap2UI5 - api\`
                 )->a( n = \`navButtonPress\` v = client->_event_nav_app_leave( )
-                )->a( n = \`showNavButton\`  v = z2ui5_cl_api_xml=>as_bool( client->check_app_prev_stack( ) )
+                )->a( n = \`showNavButton\`  v = z2ui5_cl_ai_xml=>as_bool( client->check_app_prev_stack( ) )
 
                 )->open( \`Table\`
                     )->a( n = \`sticky\` v = \`ColumnHeaders\`

@@ -18,8 +18,8 @@ and nested views.
 Demo kit samples use device bindings for responsive behavior (e.g.
 [IconTabBarStretchContent](https://sdk.openui5.org/entity/sap.m.IconTabBar/sample/sap.m.sample.IconTabBarStretchContent)
 `expanded="{device>/isNoPhone}"`). The 1:1 ports in
-[abap2UI5/api](https://github.com/abap2UI5/api) (`z2ui5_cl_api_app_433`,
-`z2ui5_cl_api_app_473`) now use `{device>...}` expressions in main views —
+[abap2UI5/api](https://github.com/abap2UI5/api) (`z2ui5_cl_ai_app_433`,
+`z2ui5_cl_ai_app_473`) now use `{device>...}` expressions in main views —
 but the same pattern inside a popup fragment would break, which is a trap
 for anyone reusing the pattern.
 

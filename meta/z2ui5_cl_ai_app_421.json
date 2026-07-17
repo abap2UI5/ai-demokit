@@ -1,0 +1,14 @@
+{
+  "class": "z2ui5_cl_ai_app_421",
+  "sample": "sap.m.sample.CheckBoxTriState",
+  "entity": "sap.m.CheckBox",
+  "file": "src/01/b02/z2ui5_cl_ai_app_421.clas.abap",
+  "batch": "b02",
+  "audit": "(a) frontend_action (_event_client): NO | (b) event t_arg: YES",
+  "status": "checked",
+  "checked": {
+    "date": "2026-07-15",
+    "note": "manually verified in a running system - the select-all parent checkbox and its tri-state expression bindings behave like the original."
+  },
+  "deviations": []
+}

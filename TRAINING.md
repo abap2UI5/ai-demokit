@@ -89,7 +89,7 @@ generating or reviewing):
   (we: always `_bind_edit`), require an ABAP Doc header (we: forbidden —
   sidecar instead), use inline `check_on_event( 'X' )` for few events
   (we: always CASE in `on_event`), and their view builder is the typed
-  `z2ui5_cl_xml_view` (we: generic `z2ui5_cl_api_xml`) — view-building idiom
+  `z2ui5_cl_xml_view` (we: generic `z2ui5_cl_ai_xml`) — view-building idiom
   does not transfer. Where the two conflict, THIS repo's AGENTS.md wins.
 - **`UI5/openui5`** (upstream, on demand) — the truth about what **UI5**
   does. Do NOT keep a standing full clone; use a sparse, blob-filtered
@@ -126,10 +126,10 @@ edited directly in the sidecar. The shape:
 
 ```jsonc
 {
-  "class":   "z2ui5_cl_api_app_454",
+  "class":   "z2ui5_cl_ai_app_454",
   "sample":  "sap.m.sample.MultiInput",
   "entity":  "sap.m.MultiInput",
-  "file":    "src/01/b02/z2ui5_cl_api_app_454.clas.abap",
+  "file":    "src/01/b02/z2ui5_cl_ai_app_454.clas.abap",
   "batch":   "b02",
   "audit":   "(a) frontend_action (_event_client): NO | (b) event t_arg: NO",
   "status":  "generated",              // generated | reviewed | checked | golden
