@@ -17,7 +17,7 @@ CLASS z2ui5_cl_api_app_434 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -27,10 +27,15 @@ CLASS z2ui5_cl_api_app_434 IMPLEMENTATION.
   METHOD view_display.
 
     " fixed values of the original img JSONModel (/products/pic1, /products/pic3)
-    DATA(pic1) = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-7777-large.jpg`.
-    DATA(pic3) = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6100-large.jpg`.
+    DATA pic1 TYPE string.
+    DATA pic3 TYPE string.
+    DATA view TYPE REF TO z2ui5_cl_api_xml.
+    pic1 = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-7777-large.jpg`.
+    
+    pic3 = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6100-large.jpg`.
 
-    DATA(view) = z2ui5_cl_api_xml=>factory( ).
+    
+    view = z2ui5_cl_api_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`

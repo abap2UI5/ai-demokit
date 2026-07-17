@@ -17,7 +17,7 @@ CLASS z2ui5_cl_api_app_404 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -28,7 +28,9 @@ CLASS z2ui5_cl_api_app_404 IMPLEMENTATION.
 
     " the sample's style.css, injected via a core:HTML content attribute
     " (see CAPABILITIES.md) - placed before the HBox so it is no flex item
-    DATA(css) = `<style>.nestedFlexboxes .item1{padding:1rem;background-color:#d1dbbd}` &&
+    DATA css TYPE string.
+    DATA view TYPE REF TO z2ui5_cl_api_xml.
+    css = `<style>.nestedFlexboxes .item1{padding:1rem;background-color:#d1dbbd}` &&
                 `.nestedFlexboxes .item2{padding:1rem;background-color:#7D8A2E}` &&
                 `.nestedFlexboxes .item3{padding:1rem;background-color:#C9D787}` &&
                 `.nestedFlexboxes .item4{padding:1rem;background-color:#FFFFFF}` &&
@@ -36,7 +38,8 @@ CLASS z2ui5_cl_api_app_404 IMPLEMENTATION.
                 `.nestedFlexboxes .item6{padding:1rem;background-color:#FF8598}` &&
                 `.nestedFlexboxes h2{color:#32363a}</style>`.
 
-    DATA(view) = z2ui5_cl_api_xml=>factory( ).
+    
+    view = z2ui5_cl_api_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
         )->a( n = `xmlns`      v = `sap.m`

@@ -9,7 +9,7 @@ CLASS z2ui5_cl_api_app_420 DEFINITION PUBLIC.
         product_id      TYPE string,
         product_pic_url TYPE string,
       END OF ty_s_product.
-    DATA t_products TYPE STANDARD TABLE OF ty_s_product WITH EMPTY KEY.
+    DATA t_products TYPE STANDARD TABLE OF ty_s_product WITH DEFAULT KEY.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -28,7 +28,7 @@ CLASS z2ui5_cl_api_app_420 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
     ENDIF.
@@ -37,34 +37,72 @@ CLASS z2ui5_cl_api_app_420 IMPLEMENTATION.
 
 
   METHOD model_init.
+    DATA temp1 LIKE t_products.
+    DATA temp2 LIKE LINE OF temp1.
 
     " Image URLs of the mock models sap/ui/demo/mock/img.json and products.json used by the original sample
     base_url = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/`.
 
     " Subset of the mock model sap/ui/demo/mock/products.json used by the original sample
-    t_products = VALUE #(
-      ( name = `Notebook Basic 15` product_id = `HT-1000` product_pic_url = base_url && `HT-1000.jpg` )
-      ( name = `Notebook Basic 17` product_id = `HT-1001` product_pic_url = base_url && `HT-1001.jpg` )
-      ( name = `Notebook Basic 18` product_id = `HT-1002` product_pic_url = base_url && `HT-1002.jpg` )
-      ( name = `Notebook Basic 19` product_id = `HT-1003` product_pic_url = base_url && `HT-1003.jpg` )
-      ( name = `ITelO Vault` product_id = `HT-1007` product_pic_url = base_url && `HT-1007.jpg` )
-      ( name = `Notebook Professional 15` product_id = `HT-1010` product_pic_url = base_url && `HT-1010.jpg` )
-      ( name = `Notebook Professional 17` product_id = `HT-1011` product_pic_url = base_url && `HT-1011.jpg` )
-      ( name = `ITelO Vault Net` product_id = `HT-1020` product_pic_url = base_url && `HT-1020.jpg` )
-      ( name = `ITelO Vault SAT` product_id = `HT-1021` product_pic_url = base_url && `HT-1021.jpg` )
-      ( name = `Comfort Easy` product_id = `HT-1022` product_pic_url = base_url && `HT-1022.jpg` ) ).
+    
+    CLEAR temp1.
+    
+    temp2-name = `Notebook Basic 15`.
+    temp2-product_id = `HT-1000`.
+    temp2-product_pic_url = base_url && `HT-1000.jpg`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Notebook Basic 17`.
+    temp2-product_id = `HT-1001`.
+    temp2-product_pic_url = base_url && `HT-1001.jpg`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Notebook Basic 18`.
+    temp2-product_id = `HT-1002`.
+    temp2-product_pic_url = base_url && `HT-1002.jpg`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Notebook Basic 19`.
+    temp2-product_id = `HT-1003`.
+    temp2-product_pic_url = base_url && `HT-1003.jpg`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `ITelO Vault`.
+    temp2-product_id = `HT-1007`.
+    temp2-product_pic_url = base_url && `HT-1007.jpg`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Notebook Professional 15`.
+    temp2-product_id = `HT-1010`.
+    temp2-product_pic_url = base_url && `HT-1010.jpg`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Notebook Professional 17`.
+    temp2-product_id = `HT-1011`.
+    temp2-product_pic_url = base_url && `HT-1011.jpg`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `ITelO Vault Net`.
+    temp2-product_id = `HT-1020`.
+    temp2-product_pic_url = base_url && `HT-1020.jpg`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `ITelO Vault SAT`.
+    temp2-product_id = `HT-1021`.
+    temp2-product_pic_url = base_url && `HT-1021.jpg`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Comfort Easy`.
+    temp2-product_id = `HT-1022`.
+    temp2-product_pic_url = base_url && `HT-1022.jpg`.
+    INSERT temp2 INTO TABLE temp1.
+    t_products = temp1.
 
   ENDMETHOD.
 
 
   METHOD view_display.
 
-    DATA(lorem) = `Lorem ipsum dolor st amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.` &&
+    DATA lorem TYPE string.
+    DATA view TYPE REF TO z2ui5_cl_api_xml.
+    lorem = `Lorem ipsum dolor st amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.` &&
       ` At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.` &&
       ` Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.` &&
       ` Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat`.
 
-    DATA(view) = z2ui5_cl_api_xml=>factory( ).
+    
+    view = z2ui5_cl_api_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
         )->a( n = `height`    v = `100%`

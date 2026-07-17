@@ -8,7 +8,7 @@ CLASS z2ui5_cl_api_app_454 DEFINITION PUBLIC.
         product_id TYPE string,
         name       TYPE string,
       END OF ty_s_product.
-    DATA t_products TYPE STANDARD TABLE OF ty_s_product WITH EMPTY KEY.
+    DATA t_products TYPE STANDARD TABLE OF ty_s_product WITH DEFAULT KEY.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -25,7 +25,7 @@ CLASS z2ui5_cl_api_app_454 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
     ENDIF.
@@ -35,23 +35,59 @@ CLASS z2ui5_cl_api_app_454 IMPLEMENTATION.
 
   METHOD model_init.
 
-    t_products = VALUE #(
-      ( product_id = `HT-1000` name = `Notebook Basic 15` )
-      ( product_id = `HT-1001` name = `Notebook Basic 17` )
-      ( product_id = `HT-1002` name = `Notebook Basic 18` )
-      ( product_id = `HT-1003` name = `Notebook Basic 19` )
-      ( product_id = `HT-1007` name = `ITelO Vault` )
-      ( product_id = `HT-1010` name = `Notebook Professional 15` )
-      ( product_id = `HT-1011` name = `Notebook Professional 17` )
-      ( product_id = `HT-1020` name = `ITelO Vault Net` )
-      ( product_id = `HT-1021` name = `ITelO Vault SAT` )
-      ( product_id = `HT-1022` name = `Comfort Easy` )
-      ( product_id = `HT-1023` name = `Comfort Senior` )
-      ( product_id = `HT-1030` name = `Ergo Screen E-I` )
-      ( product_id = `HT-1031` name = `Ergo Screen E-II` )
-      ( product_id = `HT-1032` name = `Ergo Screen E-III` )
-      ( product_id = `HT-1035` name = `Flat Basic` )
-      ( product_id = `HT-1036` name = `Flat Future` ) ).
+    DATA temp1 LIKE t_products.
+    DATA temp2 LIKE LINE OF temp1.
+    CLEAR temp1.
+    
+    temp2-product_id = `HT-1000`.
+    temp2-name = `Notebook Basic 15`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-product_id = `HT-1001`.
+    temp2-name = `Notebook Basic 17`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-product_id = `HT-1002`.
+    temp2-name = `Notebook Basic 18`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-product_id = `HT-1003`.
+    temp2-name = `Notebook Basic 19`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-product_id = `HT-1007`.
+    temp2-name = `ITelO Vault`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-product_id = `HT-1010`.
+    temp2-name = `Notebook Professional 15`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-product_id = `HT-1011`.
+    temp2-name = `Notebook Professional 17`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-product_id = `HT-1020`.
+    temp2-name = `ITelO Vault Net`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-product_id = `HT-1021`.
+    temp2-name = `ITelO Vault SAT`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-product_id = `HT-1022`.
+    temp2-name = `Comfort Easy`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-product_id = `HT-1023`.
+    temp2-name = `Comfort Senior`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-product_id = `HT-1030`.
+    temp2-name = `Ergo Screen E-I`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-product_id = `HT-1031`.
+    temp2-name = `Ergo Screen E-II`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-product_id = `HT-1032`.
+    temp2-name = `Ergo Screen E-III`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-product_id = `HT-1035`.
+    temp2-name = `Flat Basic`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-product_id = `HT-1036`.
+    temp2-name = `Flat Future`.
+    INSERT temp2 INTO TABLE temp1.
+    t_products = temp1.
     SORT t_products BY name.
 
   ENDMETHOD.
@@ -59,7 +95,8 @@ CLASS z2ui5_cl_api_app_454 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_api_xml=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_api_xml.
+    view = z2ui5_cl_api_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
         )->a( n = `height`     v = `100%`

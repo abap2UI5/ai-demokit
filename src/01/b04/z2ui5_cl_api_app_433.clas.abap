@@ -8,7 +8,7 @@ CLASS z2ui5_cl_api_app_433 DEFINITION PUBLIC.
         name     TYPE string,
         quantity TYPE string,
       END OF ty_s_product.
-    DATA t_products TYPE STANDARD TABLE OF ty_s_product WITH EMPTY KEY.
+    DATA t_products TYPE STANDARD TABLE OF ty_s_product WITH DEFAULT KEY.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -25,7 +25,7 @@ CLASS z2ui5_cl_api_app_433 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
     ENDIF.
@@ -36,22 +36,43 @@ CLASS z2ui5_cl_api_app_433 IMPLEMENTATION.
   METHOD model_init.
 
     " Data taken from the shared mock data sap/ui/demo/mock/products.json of the original sample
-    t_products = VALUE #(
-        ( name = `Notebook Basic 15`        quantity = `10` )
-        ( name = `Notebook Basic 17`        quantity = `20` )
-        ( name = `Notebook Basic 18`        quantity = `10` )
-        ( name = `Notebook Basic 19`        quantity = `15` )
-        ( name = `ITelO Vault`              quantity = `15` )
-        ( name = `Notebook Professional 15` quantity = `16` )
-        ( name = `Notebook Professional 17` quantity = `17` )
-        ( name = `ITelO Vault Net`          quantity = `14` ) ).
+    DATA temp1 LIKE t_products.
+    DATA temp2 LIKE LINE OF temp1.
+    CLEAR temp1.
+    
+    temp2-name = `Notebook Basic 15`.
+    temp2-quantity = `10`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Notebook Basic 17`.
+    temp2-quantity = `20`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Notebook Basic 18`.
+    temp2-quantity = `10`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Notebook Basic 19`.
+    temp2-quantity = `15`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `ITelO Vault`.
+    temp2-quantity = `15`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Notebook Professional 15`.
+    temp2-quantity = `16`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Notebook Professional 17`.
+    temp2-quantity = `17`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `ITelO Vault Net`.
+    temp2-quantity = `14`.
+    INSERT temp2 INTO TABLE temp1.
+    t_products = temp1.
 
   ENDMETHOD.
 
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_api_xml=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_api_xml.
+    view = z2ui5_cl_api_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`

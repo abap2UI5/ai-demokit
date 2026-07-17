@@ -21,9 +21,9 @@ CLASS z2ui5_cl_api_app_474 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -32,7 +32,8 @@ CLASS z2ui5_cl_api_app_474 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_api_xml=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_api_xml.
+    view = z2ui5_cl_api_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
         )->a( n = `height`    v = `100%`
@@ -169,15 +170,24 @@ CLASS z2ui5_cl_api_app_474 IMPLEMENTATION.
 
 
   METHOD on_event.
+        DATA temp1 TYPE string.
+        DATA text LIKE temp1.
 
     CASE client->get( )-event.
 
       WHEN `SELECTION_CHANGE`.
         " map the two-way bound key back to the item text
-        DATA(text) = SWITCH string( selected_key
-                       WHEN `one`   THEN `One`
-                       WHEN `two`   THEN `Two`
-                       WHEN `three` THEN `Three` ).
+        
+        CASE selected_key.
+          WHEN `one`.
+            temp1 = `One`.
+          WHEN `two`.
+            temp1 = `Two`.
+          WHEN `three`.
+            temp1 = `Three`.
+        ENDCASE.
+        
+        text = temp1.
         client->message_toast_display( |oEvent.getParameter('item').getText(): '{ text }' selected| ).
         selected_item_text = |getSelectedItem(): { text }|.
         client->view_model_update( ).

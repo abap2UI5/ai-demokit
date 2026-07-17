@@ -10,7 +10,7 @@ CLASS z2ui5_cl_api_app_449 DEFINITION PUBLIC.
         additional_text TYPE string,
         description     TYPE string,
       END OF ty_s_message.
-    DATA t_messages TYPE STANDARD TABLE OF ty_s_message WITH EMPTY KEY.
+    DATA t_messages TYPE STANDARD TABLE OF ty_s_message WITH DEFAULT KEY.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -27,7 +27,7 @@ CLASS z2ui5_cl_api_app_449 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
     ENDIF.
@@ -38,30 +38,39 @@ CLASS z2ui5_cl_api_app_449 IMPLEMENTATION.
   METHOD model_init.
 
     " messages the original registers on the sap.ui.core.message.MessageManager
-    t_messages = VALUE #(
-      ( type            = `Error`
-        message         = `Error message`
-        additional_text = `Example of additionalText`
-        description     = `Example of description` )
-      ( type            = `Information`
-        message         = `Information message`
-        additional_text = `Example of additionalText`
-        description     = `Example of description` )
-      ( type            = `Success`
-        message         = `Success message`
-        additional_text = `Example of additionalText`
-        description     = `Example of description` )
-      ( type            = `Warning`
-        message         = `Warning message`
-        additional_text = `Example of additionalText`
-        description     = `Example of description` ) ).
+    DATA temp1 LIKE t_messages.
+    DATA temp2 LIKE LINE OF temp1.
+    CLEAR temp1.
+    
+    temp2-type = `Error`.
+    temp2-message = `Error message`.
+    temp2-additional_text = `Example of additionalText`.
+    temp2-description = `Example of description`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-type = `Information`.
+    temp2-message = `Information message`.
+    temp2-additional_text = `Example of additionalText`.
+    temp2-description = `Example of description`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-type = `Success`.
+    temp2-message = `Success message`.
+    temp2-additional_text = `Example of additionalText`.
+    temp2-description = `Example of description`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-type = `Warning`.
+    temp2-message = `Warning message`.
+    temp2-additional_text = `Example of additionalText`.
+    temp2-description = `Example of description`.
+    INSERT temp2 INTO TABLE temp1.
+    t_messages = temp1.
 
   ENDMETHOD.
 
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_api_xml=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_api_xml.
+    view = z2ui5_cl_api_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
         )->a( n = `height`    v = `100%`

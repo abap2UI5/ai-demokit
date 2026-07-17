@@ -18,9 +18,9 @@ CLASS z2ui5_cl_api_app_447 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -29,7 +29,8 @@ CLASS z2ui5_cl_api_app_447 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_api_xml=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_api_xml.
+    view = z2ui5_cl_api_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
@@ -63,18 +64,24 @@ CLASS z2ui5_cl_api_app_447 IMPLEMENTATION.
 
 
   METHOD on_event.
+        DATA temp1 TYPE string_table.
+        DATA temp3 TYPE string_table.
 
     CASE client->get( )-event.
 
       WHEN `INITIAL_FOCUS_ON_ACTION`.
 
         " the original dependentOn option is omitted - message_box_display does not expose it
+        
+        CLEAR temp1.
+        INSERT `OK` INTO TABLE temp1.
+        INSERT `CANCEL` INTO TABLE temp1.
         client->message_box_display(
           text             = |Initial button focus is set by attribute \n initialFocus: sap.m.MessageBox.Action.CANCEL|
           type             = `warning`
           icon             = `WARNING`
           title            = `Focus on a Button`
-          actions          = VALUE #( ( `OK` ) ( `CANCEL` ) )
+          actions          = temp1
           emphasizedaction = `OK`
           initialfocus     = `CANCEL`
           styleclass       = `sapUiResponsivePadding--header sapUiResponsivePadding--content sapUiResponsivePadding--footer` ).
@@ -82,12 +89,17 @@ CLASS z2ui5_cl_api_app_447 IMPLEMENTATION.
       WHEN `INITIAL_FOCUS_ON_CUSTOM_ACTION`.
 
         " the original dependentOn option is omitted - message_box_display does not expose it
+        
+        CLEAR temp3.
+        INSERT `YES` INTO TABLE temp3.
+        INSERT `NO` INTO TABLE temp3.
+        INSERT `Custom Action` INTO TABLE temp3.
         client->message_box_display(
           text             = |Initial button focus is set by attribute \n initialFocus: "Custom button" \n Note: The name is not case sensitive|
           type             = `show`
           icon             = `WARNING`
           title            = `Focus on a Custom Action`
-          actions          = VALUE #( ( `YES` ) ( `NO` ) ( `Custom Action` ) )
+          actions          = temp3
           emphasizedaction = `Custom Action`
           initialfocus     = `Custom Action`
           styleclass       = `sapUiResponsivePadding--header sapUiResponsivePadding--content sapUiResponsivePadding--footer` ).

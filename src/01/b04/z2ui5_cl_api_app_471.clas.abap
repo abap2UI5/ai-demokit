@@ -20,9 +20,9 @@ CLASS z2ui5_cl_api_app_471 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -32,12 +32,15 @@ CLASS z2ui5_cl_api_app_471 IMPLEMENTATION.
   METHOD view_display.
 
     " placeholder text reused by all three panels of the original sample
-    DATA(lorem) = `Lorem ipsum dolor st amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. ` &&
+    DATA lorem TYPE string.
+    DATA view TYPE REF TO z2ui5_cl_api_xml.
+    lorem = `Lorem ipsum dolor st amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. ` &&
       `At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. ` &&
       `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. ` &&
       `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat`.
 
-    DATA(view) = z2ui5_cl_api_xml=>factory( ).
+    
+    view = z2ui5_cl_api_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
@@ -113,11 +116,14 @@ CLASS z2ui5_cl_api_app_471 IMPLEMENTATION.
 
 
   METHOD on_event.
+        DATA temp1 TYPE xsdboolean.
 
     CASE client->get( )-event.
 
       WHEN `TOOLBAR_PRESSED`.
-        expanded = xsdbool( expanded = abap_false ).
+        
+        temp1 = boolc( expanded = abap_false ).
+        expanded = temp1.
         client->view_model_update( ).
 
     ENDCASE.

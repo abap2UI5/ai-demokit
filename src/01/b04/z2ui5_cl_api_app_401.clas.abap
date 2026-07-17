@@ -15,14 +15,14 @@ CLASS z2ui5_cl_api_app_401 DEFINITION PUBLIC.
         price          TYPE string,
         currency_code  TYPE string,
       END OF ty_s_product.
-    TYPES ty_t_product TYPE STANDARD TABLE OF ty_s_product WITH EMPTY KEY.
+    TYPES ty_t_product TYPE STANDARD TABLE OF ty_s_product WITH DEFAULT KEY.
     TYPES:
       BEGIN OF ty_s_facet,
         text     TYPE string,
         count    TYPE i,
         selected TYPE abap_bool,
       END OF ty_s_facet.
-    TYPES ty_t_facet TYPE STANDARD TABLE OF ty_s_facet WITH EMPTY KEY.
+    TYPES ty_t_facet TYPE STANDARD TABLE OF ty_s_facet WITH DEFAULT KEY.
     DATA t_products   TYPE ty_t_product.
     DATA t_categories TYPE ty_t_facet.
     DATA t_suppliers  TYPE ty_t_facet.
@@ -46,10 +46,10 @@ CLASS z2ui5_cl_api_app_401 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_event( ).
+    ELSEIF client->check_on_event( ) IS NOT INITIAL.
       on_event( ).
     ENDIF.
 
@@ -59,31 +59,147 @@ CLASS z2ui5_cl_api_app_401 IMPLEMENTATION.
   METHOD model_init.
 
     " Data taken from the shared mock data sap/ui/demo/mock/products.json of the original sample
-    t_products = VALUE #(
-        ( name = `Comfort Easy` category = `Accessories` supplier_name = `Technocom` dimensions = `84 x 1.5 x 14 cm` weight_measure = `0.2` weight_unit = `KG` weight_state = `Success` price = `1679.00` currency_code = `EUR` )
-        ( name = `Comfort Senior` category = `Accessories` supplier_name = `Technocom` dimensions = `80 x 1.6 x 13 cm` weight_measure = `0.8` weight_unit = `KG` weight_state = `Success` price = `512.00` currency_code = `EUR` )
-        ( name = `Ergo Screen E-I` category = `Flat Screen Monitors` supplier_name = `Very Best Screens` dimensions = `37 x 12 x 36 cm` weight_measure = `21` weight_unit = `KG` weight_state = `Error` price = `230.00` currency_code = `EUR` )
-        ( name = `ITelO Vault` category = `Accessories` supplier_name = `Technocom` dimensions = `32 x 22 x 3 cm` weight_measure = `0.2` weight_unit = `KG` weight_state = `Success` price = `299.00` currency_code = `EUR` )
-        ( name = `ITelO Vault Net` category = `Accessories` supplier_name = `Technocom` dimensions = `10 x 1.8 x 17 cm` weight_measure = `0.16` weight_unit = `KG` weight_state = `Success` price = `459.00` currency_code = `EUR` )
-        ( name = `ITelO Vault SAT` category = `Accessories` supplier_name = `Technocom` dimensions = `11 x 1.7 x 18 cm` weight_measure = `0.18` weight_unit = `KG` weight_state = `Success` price = `149.00` currency_code = `EUR` )
-        ( name = `Notebook Basic 15` category = `Laptops` supplier_name = `Very Best Screens` dimensions = `30 x 18 x 3 cm` weight_measure = `4.2` weight_unit = `KG` weight_state = `Warning` price = `956.00` currency_code = `EUR` )
-        ( name = `Notebook Basic 17` category = `Laptops` supplier_name = `Very Best Screens` dimensions = `29 x 17 x 3.1 cm` weight_measure = `4.5` weight_unit = `KG` weight_state = `Warning` price = `1249.00` currency_code = `EUR` )
-        ( name = `Notebook Basic 19` category = `Laptops` supplier_name = `Smartcards` dimensions = `32 x 21 x 4 cm` weight_measure = `4.2` weight_unit = `KG` weight_state = `Warning` price = `1650.00` currency_code = `EUR` )
-        ( name = `Notebook Professional 15` category = `Accessories` supplier_name = `Very Best Screens` dimensions = `33 x 20 x 3 cm` weight_measure = `4.3` weight_unit = `KG` weight_state = `Warning` price = `1999.00` currency_code = `EUR` ) ).
+    DATA temp1 TYPE z2ui5_cl_api_app_401=>ty_t_product.
+    DATA temp2 LIKE LINE OF temp1.
+    DATA temp3 TYPE z2ui5_cl_api_app_401=>ty_t_facet.
+    DATA temp4 LIKE LINE OF temp3.
+    DATA temp5 TYPE z2ui5_cl_api_app_401=>ty_t_facet.
+    DATA temp6 LIKE LINE OF temp5.
+    CLEAR temp1.
+    
+    temp2-name = `Comfort Easy`.
+    temp2-category = `Accessories`.
+    temp2-supplier_name = `Technocom`.
+    temp2-dimensions = `84 x 1.5 x 14 cm`.
+    temp2-weight_measure = `0.2`.
+    temp2-weight_unit = `KG`.
+    temp2-weight_state = `Success`.
+    temp2-price = `1679.00`.
+    temp2-currency_code = `EUR`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Comfort Senior`.
+    temp2-category = `Accessories`.
+    temp2-supplier_name = `Technocom`.
+    temp2-dimensions = `80 x 1.6 x 13 cm`.
+    temp2-weight_measure = `0.8`.
+    temp2-weight_unit = `KG`.
+    temp2-weight_state = `Success`.
+    temp2-price = `512.00`.
+    temp2-currency_code = `EUR`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Ergo Screen E-I`.
+    temp2-category = `Flat Screen Monitors`.
+    temp2-supplier_name = `Very Best Screens`.
+    temp2-dimensions = `37 x 12 x 36 cm`.
+    temp2-weight_measure = `21`.
+    temp2-weight_unit = `KG`.
+    temp2-weight_state = `Error`.
+    temp2-price = `230.00`.
+    temp2-currency_code = `EUR`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `ITelO Vault`.
+    temp2-category = `Accessories`.
+    temp2-supplier_name = `Technocom`.
+    temp2-dimensions = `32 x 22 x 3 cm`.
+    temp2-weight_measure = `0.2`.
+    temp2-weight_unit = `KG`.
+    temp2-weight_state = `Success`.
+    temp2-price = `299.00`.
+    temp2-currency_code = `EUR`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `ITelO Vault Net`.
+    temp2-category = `Accessories`.
+    temp2-supplier_name = `Technocom`.
+    temp2-dimensions = `10 x 1.8 x 17 cm`.
+    temp2-weight_measure = `0.16`.
+    temp2-weight_unit = `KG`.
+    temp2-weight_state = `Success`.
+    temp2-price = `459.00`.
+    temp2-currency_code = `EUR`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `ITelO Vault SAT`.
+    temp2-category = `Accessories`.
+    temp2-supplier_name = `Technocom`.
+    temp2-dimensions = `11 x 1.7 x 18 cm`.
+    temp2-weight_measure = `0.18`.
+    temp2-weight_unit = `KG`.
+    temp2-weight_state = `Success`.
+    temp2-price = `149.00`.
+    temp2-currency_code = `EUR`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Notebook Basic 15`.
+    temp2-category = `Laptops`.
+    temp2-supplier_name = `Very Best Screens`.
+    temp2-dimensions = `30 x 18 x 3 cm`.
+    temp2-weight_measure = `4.2`.
+    temp2-weight_unit = `KG`.
+    temp2-weight_state = `Warning`.
+    temp2-price = `956.00`.
+    temp2-currency_code = `EUR`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Notebook Basic 17`.
+    temp2-category = `Laptops`.
+    temp2-supplier_name = `Very Best Screens`.
+    temp2-dimensions = `29 x 17 x 3.1 cm`.
+    temp2-weight_measure = `4.5`.
+    temp2-weight_unit = `KG`.
+    temp2-weight_state = `Warning`.
+    temp2-price = `1249.00`.
+    temp2-currency_code = `EUR`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Notebook Basic 19`.
+    temp2-category = `Laptops`.
+    temp2-supplier_name = `Smartcards`.
+    temp2-dimensions = `32 x 21 x 4 cm`.
+    temp2-weight_measure = `4.2`.
+    temp2-weight_unit = `KG`.
+    temp2-weight_state = `Warning`.
+    temp2-price = `1650.00`.
+    temp2-currency_code = `EUR`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-name = `Notebook Professional 15`.
+    temp2-category = `Accessories`.
+    temp2-supplier_name = `Very Best Screens`.
+    temp2-dimensions = `33 x 20 x 3 cm`.
+    temp2-weight_measure = `4.3`.
+    temp2-weight_unit = `KG`.
+    temp2-weight_state = `Warning`.
+    temp2-price = `1999.00`.
+    temp2-currency_code = `EUR`.
+    INSERT temp2 INTO TABLE temp1.
+    t_products = temp1.
 
     SORT t_products BY name.
     t_products_all = t_products.
 
     " Facet values with counters recomputed for the 10-row subset above
     " (the original binds the precomputed /ProductCollectionStats/Filters)
-    t_categories = VALUE #(
-        ( text = `Accessories` count = 6 )
-        ( text = `Flat Screen Monitors` count = 1 )
-        ( text = `Laptops` count = 3 ) ).
-    t_suppliers = VALUE #(
-        ( text = `Smartcards` count = 1 )
-        ( text = `Technocom` count = 5 )
-        ( text = `Very Best Screens` count = 4 ) ).
+    
+    CLEAR temp3.
+    
+    temp4-text = `Accessories`.
+    temp4-count = 6.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-text = `Flat Screen Monitors`.
+    temp4-count = 1.
+    INSERT temp4 INTO TABLE temp3.
+    temp4-text = `Laptops`.
+    temp4-count = 3.
+    INSERT temp4 INTO TABLE temp3.
+    t_categories = temp3.
+    
+    CLEAR temp5.
+    
+    temp6-text = `Smartcards`.
+    temp6-count = 1.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-text = `Technocom`.
+    temp6-count = 5.
+    INSERT temp6 INTO TABLE temp5.
+    temp6-text = `Very Best Screens`.
+    temp6-count = 4.
+    INSERT temp6 INTO TABLE temp5.
+    t_suppliers = temp5.
 
   ENDMETHOD.
 
@@ -92,7 +208,8 @@ CLASS z2ui5_cl_api_app_401 IMPLEMENTATION.
 
     " The bound lists collection of the original is unrolled into two static facet filter lists;
     " the original controller appends the demo table of sap.m.sample.Table with an adjusted first column.
-    DATA(view) = z2ui5_cl_api_xml=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_api_xml.
+    view = z2ui5_cl_api_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
@@ -221,16 +338,20 @@ CLASS z2ui5_cl_api_app_401 IMPLEMENTATION.
 
 
   METHOD on_event.
+        FIELD-SYMBOLS <category> LIKE LINE OF t_categories.
+        FIELD-SYMBOLS <supplier> LIKE LINE OF t_suppliers.
 
     CASE client->get( )-event.
 
       WHEN `RESET`.
         " like handleFacetFilterReset: clear every list's selection (via the
         " two-way bound flags) and drop the table filter
-        LOOP AT t_categories ASSIGNING FIELD-SYMBOL(<category>).
+        
+        LOOP AT t_categories ASSIGNING <category>.
           <category>-selected = abap_false.
         ENDLOOP.
-        LOOP AT t_suppliers ASSIGNING FIELD-SYMBOL(<supplier>).
+        
+        LOOP AT t_suppliers ASSIGNING <supplier>.
           <supplier>-selected = abap_false.
         ENDLOOP.
         apply_filter( ).
@@ -250,15 +371,26 @@ CLASS z2ui5_cl_api_app_401 IMPLEMENTATION.
 
     " the two-way bound selected flags arrive with the event - build one range
     " per facet group from them
-    LOOP AT t_categories INTO DATA(category) WHERE selected = abap_true.
-      APPEND VALUE #( sign   = `I`
-                      option = `EQ`
-                      low    = category-text ) TO t_range_category.
+    DATA category LIKE LINE OF t_categories.
+      DATA temp7 LIKE LINE OF t_range_category.
+    DATA supplier LIKE LINE OF t_suppliers.
+      DATA temp8 LIKE LINE OF t_range_supplier.
+    LOOP AT t_categories INTO category WHERE selected = abap_true.
+      
+      CLEAR temp7.
+      temp7-sign = `I`.
+      temp7-option = `EQ`.
+      temp7-low = category-text.
+      APPEND temp7 TO t_range_category.
     ENDLOOP.
-    LOOP AT t_suppliers INTO DATA(supplier) WHERE selected = abap_true.
-      APPEND VALUE #( sign   = `I`
-                      option = `EQ`
-                      low    = supplier-text ) TO t_range_supplier.
+    
+    LOOP AT t_suppliers INTO supplier WHERE selected = abap_true.
+      
+      CLEAR temp8.
+      temp8-sign = `I`.
+      temp8-option = `EQ`.
+      temp8-low = supplier-text.
+      APPEND temp8 TO t_range_supplier.
     ENDLOOP.
 
     " like _filterModel: ANDs between the facet groups, ORs inside a group -

@@ -9,7 +9,7 @@ CLASS z2ui5_cl_api_app_452 DEFINITION PUBLIC.
         name          TYPE string,
         supplier_name TYPE string,
       END OF ty_s_product.
-    DATA t_products TYPE STANDARD TABLE OF ty_s_product WITH EMPTY KEY.
+    DATA t_products TYPE STANDARD TABLE OF ty_s_product WITH DEFAULT KEY.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -26,7 +26,7 @@ CLASS z2ui5_cl_api_app_452 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
     ENDIF.
@@ -37,30 +37,83 @@ CLASS z2ui5_cl_api_app_452 IMPLEMENTATION.
   METHOD model_init.
 
     " Data of the mock model /ProductCollection used by the original sample
-    t_products = VALUE #(
-      ( product_id = `HT-1000` name = `Notebook Basic 15`        supplier_name = `Very Best Screens` )
-      ( product_id = `HT-1001` name = `Notebook Basic 17`        supplier_name = `Very Best Screens` )
-      ( product_id = `HT-1002` name = `Notebook Basic 18`        supplier_name = `Very Best Screens` )
-      ( product_id = `HT-1003` name = `Notebook Basic 19`        supplier_name = `Smartcards` )
-      ( product_id = `HT-1007` name = `ITelO Vault`              supplier_name = `Technocom` )
-      ( product_id = `HT-1010` name = `Notebook Professional 15` supplier_name = `Very Best Screens` )
-      ( product_id = `HT-1011` name = `Notebook Professional 17` supplier_name = `Very Best Screens` )
-      ( product_id = `HT-1020` name = `ITelO Vault Net`          supplier_name = `Technocom` )
-      ( product_id = `HT-1021` name = `ITelO Vault SAT`          supplier_name = `Technocom` )
-      ( product_id = `HT-1022` name = `Comfort Easy`             supplier_name = `Technocom` )
-      ( product_id = `HT-1023` name = `Comfort Senior`           supplier_name = `Technocom` )
-      ( product_id = `HT-1030` name = `Ergo Screen E-I`          supplier_name = `Very Best Screens` )
-      ( product_id = `HT-1031` name = `Ergo Screen E-II`         supplier_name = `Very Best Screens` )
-      ( product_id = `HT-1032` name = `Ergo Screen E-III`        supplier_name = `Very Best Screens` )
-      ( product_id = `HT-1035` name = `Flat Basic`               supplier_name = `Very Best Screens` )
-      ( product_id = `HT-1036` name = `Flat Future`              supplier_name = `Very Best Screens` ) ).
+    DATA temp1 LIKE t_products.
+    DATA temp2 LIKE LINE OF temp1.
+    CLEAR temp1.
+    
+    temp2-product_id = `HT-1000`.
+    temp2-name = `Notebook Basic 15`.
+    temp2-supplier_name = `Very Best Screens`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-product_id = `HT-1001`.
+    temp2-name = `Notebook Basic 17`.
+    temp2-supplier_name = `Very Best Screens`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-product_id = `HT-1002`.
+    temp2-name = `Notebook Basic 18`.
+    temp2-supplier_name = `Very Best Screens`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-product_id = `HT-1003`.
+    temp2-name = `Notebook Basic 19`.
+    temp2-supplier_name = `Smartcards`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-product_id = `HT-1007`.
+    temp2-name = `ITelO Vault`.
+    temp2-supplier_name = `Technocom`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-product_id = `HT-1010`.
+    temp2-name = `Notebook Professional 15`.
+    temp2-supplier_name = `Very Best Screens`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-product_id = `HT-1011`.
+    temp2-name = `Notebook Professional 17`.
+    temp2-supplier_name = `Very Best Screens`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-product_id = `HT-1020`.
+    temp2-name = `ITelO Vault Net`.
+    temp2-supplier_name = `Technocom`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-product_id = `HT-1021`.
+    temp2-name = `ITelO Vault SAT`.
+    temp2-supplier_name = `Technocom`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-product_id = `HT-1022`.
+    temp2-name = `Comfort Easy`.
+    temp2-supplier_name = `Technocom`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-product_id = `HT-1023`.
+    temp2-name = `Comfort Senior`.
+    temp2-supplier_name = `Technocom`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-product_id = `HT-1030`.
+    temp2-name = `Ergo Screen E-I`.
+    temp2-supplier_name = `Very Best Screens`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-product_id = `HT-1031`.
+    temp2-name = `Ergo Screen E-II`.
+    temp2-supplier_name = `Very Best Screens`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-product_id = `HT-1032`.
+    temp2-name = `Ergo Screen E-III`.
+    temp2-supplier_name = `Very Best Screens`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-product_id = `HT-1035`.
+    temp2-name = `Flat Basic`.
+    temp2-supplier_name = `Very Best Screens`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-product_id = `HT-1036`.
+    temp2-name = `Flat Future`.
+    temp2-supplier_name = `Very Best Screens`.
+    INSERT temp2 INTO TABLE temp1.
+    t_products = temp1.
 
   ENDMETHOD.
 
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_api_xml=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_api_xml.
+    view = z2ui5_cl_api_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
         )->a( n = `height`     v = `100%`

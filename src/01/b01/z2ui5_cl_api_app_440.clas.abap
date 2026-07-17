@@ -18,7 +18,7 @@ CLASS z2ui5_cl_api_app_440 DEFINITION PUBLIC.
         currency_code   TYPE string,
         product_pic_url TYPE string,
       END OF ty_s_product.
-    DATA t_products TYPE STANDARD TABLE OF ty_s_product WITH EMPTY KEY.
+    DATA t_products TYPE STANDARD TABLE OF ty_s_product WITH DEFAULT KEY.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -35,7 +35,7 @@ CLASS z2ui5_cl_api_app_440 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       model_init( ).
       view_display( ).
     ENDIF.
@@ -45,86 +45,97 @@ CLASS z2ui5_cl_api_app_440 IMPLEMENTATION.
 
   METHOD model_init.
 
-    t_products = VALUE #(
-        ( product_id      = `HT-1000`
-          name            = `Notebook Basic 15`
-          supplier_name   = `Very Best Screens`
-          width           = `30`
-          depth           = `18`
-          height          = `3`
-          dim_unit        = `cm`
-          weight_measure  = `4.2`
-          weight_unit     = `KG`
-          price           = `956.00`
-          currency_code   = `EUR`
-          product_pic_url = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1000.jpg` )
-        ( product_id      = `HT-1001`
-          name            = `Notebook Basic 17`
-          supplier_name   = `Very Best Screens`
-          width           = `29`
-          depth           = `17`
-          height          = `3.1`
-          dim_unit        = `cm`
-          weight_measure  = `4.5`
-          weight_unit     = `KG`
-          price           = `1249.00`
-          currency_code   = `EUR`
-          product_pic_url = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1001.jpg` )
-        ( product_id      = `HT-1003`
-          name            = `Notebook Basic 19`
-          supplier_name   = `Smartcards`
-          width           = `32`
-          depth           = `21`
-          height          = `4`
-          dim_unit        = `cm`
-          weight_measure  = `4.2`
-          weight_unit     = `KG`
-          price           = `1650.00`
-          currency_code   = `EUR`
-          product_pic_url = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1003.jpg` )
-        ( product_id      = `HT-1007`
-          name            = `ITelO Vault`
-          supplier_name   = `Technocom`
-          width           = `32`
-          depth           = `22`
-          height          = `3`
-          dim_unit        = `cm`
-          weight_measure  = `0.2`
-          weight_unit     = `KG`
-          price           = `299.00`
-          currency_code   = `EUR`
-          product_pic_url = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1007.jpg` )
-        ( product_id      = `HT-1010`
-          name            = `Notebook Professional 15`
-          supplier_name   = `Very Best Screens`
-          width           = `33`
-          depth           = `20`
-          height          = `3`
-          dim_unit        = `cm`
-          weight_measure  = `4.3`
-          weight_unit     = `KG`
-          price           = `1999.00`
-          currency_code   = `EUR`
-          product_pic_url = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1010.jpg` )
-        ( product_id      = `HT-1020`
-          name            = `ITelO Vault Net`
-          supplier_name   = `Technocom`
-          width           = `10`
-          depth           = `1.8`
-          height          = `17`
-          dim_unit        = `cm`
-          weight_measure  = `0.16`
-          weight_unit     = `KG`
-          price           = `459.00`
-          currency_code   = `EUR`
-          product_pic_url = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1020.jpg` ) ).
+    DATA temp1 LIKE t_products.
+    DATA temp2 LIKE LINE OF temp1.
+    CLEAR temp1.
+    
+    temp2-product_id = `HT-1000`.
+    temp2-name = `Notebook Basic 15`.
+    temp2-supplier_name = `Very Best Screens`.
+    temp2-width = `30`.
+    temp2-depth = `18`.
+    temp2-height = `3`.
+    temp2-dim_unit = `cm`.
+    temp2-weight_measure = `4.2`.
+    temp2-weight_unit = `KG`.
+    temp2-price = `956.00`.
+    temp2-currency_code = `EUR`.
+    temp2-product_pic_url = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1000.jpg`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-product_id = `HT-1001`.
+    temp2-name = `Notebook Basic 17`.
+    temp2-supplier_name = `Very Best Screens`.
+    temp2-width = `29`.
+    temp2-depth = `17`.
+    temp2-height = `3.1`.
+    temp2-dim_unit = `cm`.
+    temp2-weight_measure = `4.5`.
+    temp2-weight_unit = `KG`.
+    temp2-price = `1249.00`.
+    temp2-currency_code = `EUR`.
+    temp2-product_pic_url = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1001.jpg`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-product_id = `HT-1003`.
+    temp2-name = `Notebook Basic 19`.
+    temp2-supplier_name = `Smartcards`.
+    temp2-width = `32`.
+    temp2-depth = `21`.
+    temp2-height = `4`.
+    temp2-dim_unit = `cm`.
+    temp2-weight_measure = `4.2`.
+    temp2-weight_unit = `KG`.
+    temp2-price = `1650.00`.
+    temp2-currency_code = `EUR`.
+    temp2-product_pic_url = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1003.jpg`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-product_id = `HT-1007`.
+    temp2-name = `ITelO Vault`.
+    temp2-supplier_name = `Technocom`.
+    temp2-width = `32`.
+    temp2-depth = `22`.
+    temp2-height = `3`.
+    temp2-dim_unit = `cm`.
+    temp2-weight_measure = `0.2`.
+    temp2-weight_unit = `KG`.
+    temp2-price = `299.00`.
+    temp2-currency_code = `EUR`.
+    temp2-product_pic_url = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1007.jpg`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-product_id = `HT-1010`.
+    temp2-name = `Notebook Professional 15`.
+    temp2-supplier_name = `Very Best Screens`.
+    temp2-width = `33`.
+    temp2-depth = `20`.
+    temp2-height = `3`.
+    temp2-dim_unit = `cm`.
+    temp2-weight_measure = `4.3`.
+    temp2-weight_unit = `KG`.
+    temp2-price = `1999.00`.
+    temp2-currency_code = `EUR`.
+    temp2-product_pic_url = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1010.jpg`.
+    INSERT temp2 INTO TABLE temp1.
+    temp2-product_id = `HT-1020`.
+    temp2-name = `ITelO Vault Net`.
+    temp2-supplier_name = `Technocom`.
+    temp2-width = `10`.
+    temp2-depth = `1.8`.
+    temp2-height = `17`.
+    temp2-dim_unit = `cm`.
+    temp2-weight_measure = `0.16`.
+    temp2-weight_unit = `KG`.
+    temp2-price = `459.00`.
+    temp2-currency_code = `EUR`.
+    temp2-product_pic_url = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1020.jpg`.
+    INSERT temp2 INTO TABLE temp1.
+    t_products = temp1.
 
   ENDMETHOD.
 
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_api_xml=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_api_xml.
+    view = z2ui5_cl_api_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`

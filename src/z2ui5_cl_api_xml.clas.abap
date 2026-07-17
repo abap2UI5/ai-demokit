@@ -18,7 +18,7 @@ CLASS z2ui5_cl_api_xml DEFINITION PUBLIC CREATE PRIVATE.
 
     "! attribute list - one `key=value` string per attribute, e.g.
     "! a = VALUE #( ( `text=Hello` ) ( `width=100%` ) ). Split on the first `=`.
-    TYPES ty_t_attr TYPE STANDARD TABLE OF string WITH EMPTY KEY.
+    TYPES ty_t_attr TYPE STANDARD TABLE OF string WITH DEFAULT KEY.
 
     "! render an ABAP boolean as the UI5 attribute value `true` / `false`,
     "! e.g. a = VALUE #( |visible={ z2ui5_cl_api_xml=>as_bool( flag ) }| )
@@ -70,13 +70,13 @@ CLASS z2ui5_cl_api_xml DEFINITION PUBLIC CREATE PRIVATE.
         VALUE(result) TYPE string.
 
   PROTECTED SECTION.
-    TYPES ty_t_node TYPE STANDARD TABLE OF REF TO z2ui5_cl_api_xml WITH EMPTY KEY.
+    TYPES ty_t_node TYPE STANDARD TABLE OF REF TO z2ui5_cl_api_xml WITH DEFAULT KEY.
     TYPES:
       BEGIN OF ty_s_pair,
         n TYPE string,
         v TYPE string,
       END OF ty_s_pair.
-    TYPES ty_t_pair TYPE STANDARD TABLE OF ty_s_pair WITH EMPTY KEY.
+    TYPES ty_t_pair TYPE STANDARD TABLE OF ty_s_pair WITH DEFAULT KEY.
 
     DATA name   TYPE string.
     DATA prefix TYPE string.
@@ -118,14 +118,20 @@ CLASS z2ui5_cl_api_xml IMPLEMENTATION.
 
   METHOD as_bool.
 
-    result = COND #( WHEN val = abap_true THEN `true` ELSE `false` ).
+    DATA temp1 TYPE string.
+    IF val = abap_true.
+      temp1 = `true`.
+    ELSE.
+      temp1 = `false`.
+    ENDIF.
+    result = temp1.
 
   ENDMETHOD.
 
 
   METHOD factory.
 
-    result = NEW #( ).
+    CREATE OBJECT result.
     result->root = result.
 
   ENDMETHOD.
@@ -133,7 +139,8 @@ CLASS z2ui5_cl_api_xml IMPLEMENTATION.
 
   METHOD parse_attr.
 
-    DATA(off) = find( val = kv sub = `=` ).
+    DATA off TYPE i.
+    off = find( val = kv sub = `=` ).
     IF off < 0.
       result-n = condense( kv ).
     ELSE.
@@ -145,13 +152,15 @@ CLASS z2ui5_cl_api_xml IMPLEMENTATION.
 
 
   METHOD elem.
+    DATA kv LIKE LINE OF a.
 
-    result = NEW #( ).
+    CREATE OBJECT result.
     result->root = root.
     result->parent = me.
     result->name = n.
     result->prefix = ns.
-    LOOP AT a INTO DATA(kv).
+    
+    LOOP AT a INTO kv.
       APPEND parse_attr( kv ) TO result->t_pair.
     ENDLOOP.
     APPEND result TO t_child.
@@ -179,15 +188,37 @@ CLASS z2ui5_cl_api_xml IMPLEMENTATION.
 
 
   METHOD a.
+      DATA temp2 TYPE z2ui5_cl_api_xml=>ty_s_pair.
+      DATA target LIKE LINE OF t_child.
+      DATA temp1 LIKE LINE OF t_child.
+      DATA temp4 LIKE sy-tabix.
+      DATA temp3 TYPE z2ui5_cl_api_xml=>ty_s_pair.
 
     " set the attribute on the element the chain is currently pointing at:
     " the just-added child (after open/leaf) or - if none yet - this node
     " itself (so attributes can be attached right after open/leaf/shut).
     IF t_child IS INITIAL.
-      APPEND VALUE #( n = n v = v ) TO t_pair.
+      
+      CLEAR temp2.
+      temp2-n = n.
+      temp2-v = v.
+      APPEND temp2 TO t_pair.
     ELSE.
-      DATA(target) = t_child[ lines( t_child ) ].
-      APPEND VALUE #( n = n v = v ) TO target->t_pair.
+      
+      
+      
+      temp4 = sy-tabix.
+      READ TABLE t_child INDEX lines( t_child ) INTO temp1.
+      sy-tabix = temp4.
+      IF sy-subrc <> 0.
+        ASSERT 1 = 0.
+      ENDIF.
+      target = temp1.
+      
+      CLEAR temp3.
+      temp3-n = n.
+      temp3-v = v.
+      APPEND temp3 TO target->t_pair.
     ENDIF.
     result = me.
 
@@ -203,8 +234,15 @@ CLASS z2ui5_cl_api_xml IMPLEMENTATION.
 
   METHOD render.
 
-    DATA(inner) = ``.
-    LOOP AT t_child INTO DATA(child).
+    DATA inner TYPE string.
+    DATA child LIKE LINE OF t_child.
+    DATA temp4 TYPE string.
+    DATA qname LIKE temp4.
+    DATA attrs TYPE string.
+    DATA pair LIKE LINE OF t_pair.
+    inner = ``.
+    
+    LOOP AT t_child INTO child.
       inner = |{ inner }{ child->render( ) }|.
     ENDLOOP.
 
@@ -213,9 +251,18 @@ CLASS z2ui5_cl_api_xml IMPLEMENTATION.
       RETURN.
     ENDIF.
 
-    DATA(qname) = COND string( WHEN prefix IS INITIAL THEN name ELSE |{ prefix }:{ name }| ).
-    DATA(attrs) = ``.
-    LOOP AT t_pair INTO DATA(pair).
+    
+    IF prefix IS INITIAL.
+      temp4 = name.
+    ELSE.
+      temp4 = |{ prefix }:{ name }|.
+    ENDIF.
+    
+    qname = temp4.
+    
+    attrs = ``.
+    
+    LOOP AT t_pair INTO pair.
       attrs = |{ attrs } { pair-n }="{ xml_escape( pair-v ) }"|.
     ENDLOOP.
 

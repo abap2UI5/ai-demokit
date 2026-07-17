@@ -17,7 +17,7 @@ CLASS z2ui5_cl_api_app_460 IMPLEMENTATION.
   METHOD z2ui5_if_app~main.
 
     me->client = client.
-    IF client->check_on_init( ).
+    IF client->check_on_init( ) IS NOT INITIAL.
       view_display( ).
     ENDIF.
 
@@ -26,9 +26,14 @@ CLASS z2ui5_cl_api_app_460 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_api_xml=>factory( ).
+    DATA view TYPE REF TO z2ui5_cl_api_xml.
+    DATA temp1 TYPE string_table.
+    view = z2ui5_cl_api_xml=>factory( ).
 
     " binding {/ProductCollection/0} + field bindings resolved to literals (see NOTES)
+    
+    CLEAR temp1.
+    INSERT `http://www.sap.com` INTO TABLE temp1.
     view->open( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
@@ -59,7 +64,7 @@ CLASS z2ui5_cl_api_app_460 IMPLEMENTATION.
                 )->a( n = `text`   v = `www.sap.com`
                 )->a( n = `active` v = `true`
                 )->a( n = `press`  v = client->_event_client( val   = client->cs_event-open_new_tab
-                                                              t_arg = VALUE #( ( `http://www.sap.com` ) ) ) ).
+                                                              t_arg = temp1 ) ).
 
     client->view_display( view->stringify( ) ).
 
