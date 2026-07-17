@@ -55,14 +55,14 @@ CLASS z2ui5_cl_api_app_441 IMPLEMENTATION.
 
     DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
-    " headerLevel="H2" of the original sample is omitted here (available only since UI5 1.117)
     view->open( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
 
         )->open( `List`
-            )->a( n = `headerText` v = `Products`
-            )->a( n = `items`      v = client->_bind_edit( t_products )
+            )->a( n = `headerText`  v = `Products`
+            )->a( n = `headerLevel` v = `H2`
+            )->a( n = `items`       v = client->_bind_edit( t_products )
 
             )->leaf( `StandardListItem`
                 )->a( n = `title`   v = `{NAME}`

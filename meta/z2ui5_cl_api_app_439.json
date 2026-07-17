@@ -9,12 +9,16 @@
   "checked": null,
   "deviations": [
     {
-      "type": "DROPPED_171",
-      "what": "Input property showClearIcon (since UI5 1.94) dropped from three inputs."
+      "type": "POST_171",
+      "what": "showClearIcon (since UI5 1.94) on three inputs is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.94 to render it."
     },
     {
-      "type": "DROPPED_171",
-      "what": "the two formattedValueStateText aggregations (a FormattedText carrying Links, since UI5 1.78) omitted; valueState/valueStateText still render the state."
+      "type": "POST_171",
+      "what": "the two formattedValueStateText aggregations (a FormattedText carrying Links, since UI5 1.78) are newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.78 to render them."
+    },
+    {
+      "type": "NOTE",
+      "what": "the Links' press (.onFormattedTextLinkPress) round-trips as event LINK_PRESS and shows the controller's toast text; the original docks the MessageToast at CenterCenter and calls preventDefault - not expressible via message_toast_display, the toast appears at the default position."
     }
   ]
 }

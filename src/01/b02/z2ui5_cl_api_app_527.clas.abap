@@ -71,11 +71,6 @@ CLASS z2ui5_cl_api_app_527 IMPLEMENTATION.
       ( product_id = `HT-1003` name = `Notebook Basic 19` )
       ( product_id = `HT-1007` name = `ITelO Vault` ) ).
 
-    " the original binds items with a model sorter { path: 'Name' } - the data is sorted in ABAP instead
-    SORT t_products  BY name.
-    SORT t_products2 BY name.
-    SORT t_products3 BY name.
-
   ENDMETHOD.
 
 
@@ -99,7 +94,7 @@ CLASS z2ui5_cl_api_app_527 IMPLEMENTATION.
                     )->open( `Select`
                         )->a( n = `forceSelection` v = `false`
                         )->a( n = `selectedKey`    v = client->_bind_edit( selected_product )
-                        )->a( n = `items`          v = client->_bind_edit( t_products )
+                        )->a( n = `items`          v = |\{ path: '{ client->_bind_edit( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
 
                         )->leaf( n = `Item` ns = `core`
                             )->a( n = `key`  v = `{PRODUCT_ID}`
@@ -118,7 +113,7 @@ CLASS z2ui5_cl_api_app_527 IMPLEMENTATION.
                         )->a( n = `editable`       v = client->_bind_edit( editable )
                         )->a( n = `forceSelection` v = `false`
                         )->a( n = `selectedKey`    v = client->_bind_edit( selected_product2 )
-                        )->a( n = `items`          v = client->_bind_edit( t_products2 )
+                        )->a( n = `items`          v = |\{ path: '{ client->_bind_edit( val = t_products2 path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
 
                         )->leaf( n = `Item` ns = `core`
                             )->a( n = `key`  v = `{PRODUCT_ID}`
@@ -162,7 +157,7 @@ CLASS z2ui5_cl_api_app_527 IMPLEMENTATION.
                         )->a( n = `type`            v = `IconOnly`
                         )->a( n = `icon`            v = `sap-icon://filter`
                         )->a( n = `autoAdjustWidth` v = `true`
-                        )->a( n = `items`           v = client->_bind_edit( t_products3 )
+                        )->a( n = `items`           v = |\{ path: '{ client->_bind_edit( val = t_products3 path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
 
                         )->leaf( n = `Item` ns = `core`
                             )->a( n = `key`  v = `{PRODUCT_ID}`

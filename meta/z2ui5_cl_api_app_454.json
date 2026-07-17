@@ -17,7 +17,7 @@
       "what": "the controller's addValidator (typing free text + Enter creates a token client-side) is dropped - abap2UI5 has no client-side validator hook."
     },
     {
-      "type": "IMPROVISED",
+      "type": "SUBSET_DATA",
       "what": "the suggestion data is a 16-row subset of the mock /ProductCollection (ui5/mock/products.json)."
     },
     {
@@ -25,8 +25,8 @@
       "what": "The original's stray placeholder attributes on the two Labels (not a Label property) are dropped."
     },
     {
-      "type": "DROPPED_171",
-      "what": "showClearIcon (since UI5 1.94) dropped from the suggestion MultiInput."
+      "type": "POST_171",
+      "what": "showClearIcon (since UI5 1.94) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.94 to render it."
     }
   ]
 }

@@ -13,8 +13,8 @@
       "what": "the Image src binds {img>/products/pic1} in the original, a JSON image model not available server-side; a static demo image URL is used instead."
     },
     {
-      "type": "IMPROVISED",
-      "what": "the original narrows the width to 50em on phone devices via sap/ui/Device (not available server-side); a fixed 100em is used."
+      "type": "LIVE_TEST",
+      "what": "the original narrows the width to 50em on phones via sap/ui/Device in the controller; restored 2026-07-16 as the expression {= ${device>/system/phone} ? '50em' : '100em' } over the framework's device> model (source-verified available in main views) - confirm the width switches on a phone."
     }
   ]
 }

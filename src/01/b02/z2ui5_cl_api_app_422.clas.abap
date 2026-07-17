@@ -54,7 +54,7 @@ CLASS z2ui5_cl_api_app_422 IMPLEMENTATION.
                 )->a( n = `text` v = `Choose Color`
             )->leaf( `ColorPalette`
                 )->a( n = `colorSelect` v = client->_event( val   = `COLOR_SELECT`
-                                                               t_arg = VALUE #( ( `${$parameters>/value}` ) ( `${$parameters>/defaultAction}` ) ) ) ).
+                                                            t_arg = VALUE #( ( `${$parameters>/value}` ) ( `${$parameters>/defaultAction}` ) ) ) ).
 
     client->view_display( view->stringify( ) ).
 

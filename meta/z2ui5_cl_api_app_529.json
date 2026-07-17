@@ -9,8 +9,8 @@
   "checked": null,
   "deviations": [
     {
-      "type": "DROPPED_171",
-      "what": "ObjectStatus states Indication06-Indication20 are newer than UI5 1.71 (added ~1.130). The controls are kept but their state is set to \"None\", so the indication colours differ from the original - verify if relevant."
+      "type": "POST_171",
+      "what": "the ObjectStatus state values Indication06-Indication08 (since UI5 1.75) and Indication09-Indication20 (since UI5 1.120) are newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.120 to render them all (>= 1.75 for Indication06-Indication08)."
     },
     {
       "type": "LIVE_TEST",

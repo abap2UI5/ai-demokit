@@ -18,7 +18,7 @@ CLASS z2ui5_cl_api_xml DEFINITION PUBLIC CREATE PRIVATE.
 
     "! attribute list - one `key=value` string per attribute, e.g.
     "! a = VALUE #( ( `text=Hello` ) ( `width=100%` ) ). Split on the first `=`.
-    TYPES ty_t_attr TYPE STANDARD TABLE OF string WITH DEFAULT KEY.
+    TYPES ty_t_attr TYPE STANDARD TABLE OF string WITH EMPTY KEY.
 
     "! render an ABAP boolean as the UI5 attribute value `true` / `false`,
     "! e.g. a = VALUE #( |visible={ z2ui5_cl_api_xml=>as_bool( flag ) }| )
@@ -70,13 +70,13 @@ CLASS z2ui5_cl_api_xml DEFINITION PUBLIC CREATE PRIVATE.
         VALUE(result) TYPE string.
 
   PROTECTED SECTION.
-    TYPES ty_t_node TYPE STANDARD TABLE OF REF TO z2ui5_cl_api_xml WITH DEFAULT KEY.
+    TYPES ty_t_node TYPE STANDARD TABLE OF REF TO z2ui5_cl_api_xml WITH EMPTY KEY.
     TYPES:
       BEGIN OF ty_s_pair,
         n TYPE string,
         v TYPE string,
       END OF ty_s_pair.
-    TYPES ty_t_pair TYPE STANDARD TABLE OF ty_s_pair WITH DEFAULT KEY.
+    TYPES ty_t_pair TYPE STANDARD TABLE OF ty_s_pair WITH EMPTY KEY.
 
     DATA name   TYPE string.
     DATA prefix TYPE string.

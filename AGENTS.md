@@ -58,13 +58,13 @@ plain JS/XML held for reference and to feed the generator.
 abapGit project, `FOLDER_LOGIC=PREFIX`, `STARTING_FOLDER=/src/`. Ports are split
 by the UI5 **library** of the demo kit sample they rebuild:
 
-| Folder   | CTEXT (`package.devc.xml`) | Library namespace |
-|----------|----------------------------|-------------------|
-| `src/01` | `sap.m`    | `sap.m`    |
-| `src/02` | `sap.ui`   | `sap.ui.*` (core, layout, unified, table, integration, model.type) |
-| `src/03` | `sap.uxap` | `sap.uxap` |
-| `src/04` | `sap.f`    | `sap.f`    |
-| `src/05` | `sap.tnt`  | `sap.tnt`  |
+| Folder   | CTEXT (`package.devc.xml`) | Library namespace | Status |
+|----------|----------------------------|-------------------|--------|
+| `src/01` | `sap.m`    | `sap.m`    | exists |
+| `src/02` | `sap.ui`   | `sap.ui.*` (core, layout, unified, table, integration, model.type) | planned |
+| `src/03` | `sap.uxap` | `sap.uxap` | planned |
+| `src/04` | `sap.f`    | `sap.f`    | planned |
+| `src/05` | `sap.tnt`  | `sap.tnt`  | planned |
 
 The split key is the **second-level namespace** of the sample's entity. New
 libraries get the next free `src/NN` folder with a matching `package.devc.xml`.
@@ -144,17 +144,26 @@ source of truth:
   directly in the sidecar; `reviewed`/`golden` are manual promotions too.
 - The abapGit `<DESCRIPT>` follows `<entity> - <demo kit description>`
   (e.g. `sap.m.Switch - Some say it is only a switch...`), truncated to 60 chars.
-- Use **only** controls and properties available since UI5 1.71; never a
-  deprecated one. Samples whose **control** is newer than 1.71 or deprecated
-  are **out of scope** (§1) and never enter a batch. When an in-scope sample
-  merely uses a newer *optional property*, drop it with a `DROPPED_171`
-  deviation.
+- The **control** must exist since UI5 1.71 and not be deprecated — samples
+  whose control is newer or deprecated are **out of scope** (§1) and never
+  enter a batch. **Members (properties/aggregations/associations/events)
+  newer than 1.71 ARE kept when the original uses them — 1:1 fidelity wins**
+  (policy decision 2026-07-16). Every such member must be declared with a
+  `POST_171` deviation naming it (the `property_gate` enforces this via
+  `ui5/properties.json`); the app then needs a UI5 release ≥ that member's
+  version to render it. `DROPPED_171` remains only for the rare member that
+  genuinely cannot be expressed.
 - **Before declaring any sample feature inexpressible, check `CAPABILITIES.md`**
   — the map of what abap2UI5 can express, each entry backed by a port that
   proves it. Never improvise around a feature it marks ✅/🔶 (app 529 replaced a
   Dialog with a toast although app 469 shows Dialogs work 1:1 via
   `popup_display`). When a port proves a new technique or disproves a ❌,
   update `CAPABILITIES.md` in the same change.
+- **Every improvement idea for the abap2UI5 framework goes into `pr/`** — one
+  folder per request with a self-contained, forwardable README (motivation
+  with the sample/port that hit it, current behavior with source references,
+  proposed change, example). Add it in the same change that discovers the
+  gap; see `pr/README.md`.
 - Every port must pass all three CI checks (§6).
 
 ### App skeleton — how a port is built
@@ -338,6 +347,11 @@ client->view_display( view->stringify( ) ).
   `CASE client->get( )-event.` … `WHEN \`NAME\`.` … `ENDCASE` — even for a single
   event (never an `IF check_on_event( )`). After changing bound data in an event,
   call `client->view_model_update( )` to push it back (no full redraw).
+- **Client handle strings (`_event`, `_bind_edit`, `_event_client`, …) are
+  written inline at each control — never captured in a variable**, even when
+  the same call repeats on many controls and even inside expression bindings
+  (human decision 2026-07-17, apps 526/486/421; pattern-lint blocks
+  `DATA(x) = client->_…(`).
 - Read event parameters (declared via `_event( … t_arg = … )`) with
   `client->get_event_arg( )` — the index defaults to 1; **write it only for
   position 2+** (`get_event_arg( 2 )`), never `get_event_arg( 1 )`
@@ -452,10 +466,20 @@ Three abaplint checks run on every pull request; all must report **0 issues**:
 | `ABAP_CLOUD`    | `abaplint .github/abaplint/abap_cloud.jsonc`    | `Cloud` |
 | `ABAP_702`      | `npm run downport` → `abaplint .github/abaplint/abap_702.jsonc` | `v702` |
 
+The **root** `abaplint.jsonc` carries the full curated rule set (correctness +
+style aligned with §8: `keyword_case`, `types_naming ^TY_`,
+`object_naming ^Z2UI5_CL_API_`, `unused_*`, `obsolete_statement`,
+`avoid_use` incl. `defaultKey` — always `WITH EMPTY KEY`, `commented_code`,
+`definitions_top`, `whitespace_end`, …). The cloud/702 configs stay on the
+correctness core, because the 702 config also drives `abaplint --fix` in the
+downport. When adding a rule, run all three builds — a rule that fights the
+generated view-chain style (e.g. `empty_line_in_statement`, `double_space`)
+stays off deliberately.
+
 Every sample must be **ABAP Cloud ready** *and* **downportable to 7.02** — there
 is no `src/00` "restricted" area here (unlike abap2UI5/samples); everything must
-survive all three builds. The `auto_cloud` / `auto_downport` workflows rebuild
-the `cloud` / `702` branches via `auto_branch.yaml`.
+survive all three builds. The self-contained `auto_downport.yaml` workflow
+rebuilds the `702` branch on every push to `main`.
 
 A fourth workflow, `checks`, runs three deterministic gates on every PR:
 
@@ -463,7 +487,8 @@ A fourth workflow, `checks`, runs three deterministic gates on every PR:
 |-----|---------|------------|
 | `pattern_lint` | `node scripts/pattern-lint.mjs` | a known-bad pattern reappears (each rule encodes a distilled §10 lesson; known open findings live in the script's BASELINE and in STATUS.md) |
 | `structural_diff` | `node scripts/structural-diff.mjs --strict` | a port's rendered view deviates from the original `view.xml` without a declared deviation |
-| `generated_in_sync` | regenerate `meta/` + overview, `git diff --exit-code` | a change forgot to regenerate the generated artifacts |
+| `meta_valid` | `validate-meta.mjs` + regenerate the overview, `git diff --exit-code -- src` | an invalid sidecar, or a change forgot to regenerate the overview app |
+| `property_gate` | `node scripts/property-check.mjs` | a port uses a control member introduced after UI5 1.71 (per-member `@since` from `ui5/properties.json`) without declaring it in a `POST_171` deviation |
 
 **When a distilled lesson is greppable, add it as a pattern-lint rule in the
 same change** — that is what makes a lesson unrepeatable rather than advisory.
@@ -472,8 +497,11 @@ same change** — that is what makes a lesson unrepeatable rather than advisory.
 ```bash
 npm ci
 npx abaplint ./abaplint.jsonc          # expect 0 issues
+node scripts/validate-meta.mjs         # sidecar schema + referential integrity
 node scripts/pattern-lint.mjs          # expect 0 errors
 node scripts/structural-diff.mjs --strict
+node scripts/property-check.mjs        # no member newer than UI5 1.71
+node scripts/generate-overview.mjs     # then: git diff must stay clean
 ```
 
 ### abapGit file format (all serialized files)
@@ -501,12 +529,12 @@ scripts.**
 - **`src/z2ui5_cl_api_app_overview.clas.*`** — the in-system overview **app**:
   an abap2UI5 app that lists every ported app as one row of a `sap.m.Table`,
   sorted by module → control → sample. Columns:
-  **Module** (text) · **Control** (link → OpenUI5 API) · **Sample** (text) ·
-  **JavaScript** (↗ → OpenUI5 repo source) · **UI5 App** (↗ → live OpenUI5
-  **fullscreen** sample runner) · **ABAP** (↗ → generated class on GitHub) ·
-  **abap2UI5 App** (↗ → starts the app). **Every link opens in a new browser
-  tab** (`target="_blank"`; the abap2UI5 App link is the `?app_start=<CLASS>`
-  URL). All source links point at OpenUI5; only ABAP + the start link are local.
+  **Module** (text) · **Control** (link → OpenUI5 API) · **Sample** (name →
+  OpenUI5 repo source, ↗ → live fullscreen sample) · **abap2UI5** (class →
+  generated class on GitHub, ↗ → starts the app via `?app_start=<CLASS>`) ·
+  **Note** (green check when live-verified; hint button opens the deviations
+  popup). **Every link opens in a new browser tab** (`target="_blank"`). All
+  source links point at OpenUI5; only the class + start links are local.
   The per-row URLs are built in `view_display` (the start URL needs the runtime
   system origin), the static facts come from `get_catalog`.
 
@@ -565,6 +593,15 @@ the ports share that style. Essentials:
 - **Always the simplest possible notation**: omit parameters that equal the
   default (`get_event_arg( )`, not `get_event_arg( 1 )`), no pass-through
   methods, no explicit forms where the implicit one reads the same.
+- **Derive values from the data when the original does** — `selected =
+  t_items[ 1 ]-text.` like the sample's `oMData[0].text`, never the resolved
+  literal (human fix in app 530, 2026-07-17).
+- **`VALUE #( )` alignment is all-or-nothing**: one field per line with every
+  `=` in the same column — and after renaming a field, re-align the WHOLE
+  block including the TYPES definition (human fix in app 440, 2026-07-17).
+- **Inline comments stay minimal**: one line at the exact spot of a deviation;
+  multi-line rationale belongs in the sidecar, not the code (human deletion
+  in app 452, 2026-07-17).
 - Class names **lowercase** in `DEFINITION` and `IMPLEMENTATION`; not `FINAL`;
   `DEFINITION PUBLIC.` (never `CREATE PUBLIC`).
 - Always include `PROTECTED SECTION.` and `PRIVATE SECTION.` (keep `PRIVATE`
@@ -628,6 +665,16 @@ How to record it:
   a bare `{COL}` — see §5 "Data binding & events".
 - **abap2UI5 has only one default model** — flatten any named-model binding into
   it — see §5 "`model_init` — the model".
+- **`_bind_edit( val = x path = abap_true )` returns the bare model path**
+  (no braces) — use it when composing raw binding-info strings
+  (`{ path: '...', sorter: ... }`); never reconstruct the path with substring
+  tricks. Human-taught fix in app 452, 2026-07-16.
+- **abapGit pushes from a system can carry stale generated files** — a human
+  who pulled before the latest repo change and pushes back from the system
+  silently reverts it (happened to the overview app's SUBSET labels,
+  2026-07-16). After every human push: regenerate the overview
+  (`node scripts/generate-overview.mjs`) and diff; the `meta_valid` CI job
+  catches it on PRs, direct pushes need the manual regen.
 - **Port classes carry no ABAP Doc header** — everything (sample, entity,
   status, checked, deviations, audit) lives in `meta/<class>.json`; edit the
   sidecar, never write `"!` lines into a port (pattern-lint blocks them, and

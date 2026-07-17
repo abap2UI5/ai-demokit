@@ -21,6 +21,17 @@ jobs:
         node-version: '22'
     - run: node scripts/pattern-lint.mjs
 
+  property_gate:
+    # every member a port uses must exist by UI5 1.71 (ui5/properties.json)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+    - uses: actions/checkout@v7
+    - uses: actions/setup-node@v6
+      with:
+        node-version: '22'
+    - run: node scripts/property-check.mjs
+
   structural_diff:
     runs-on: ubuntu-latest
     timeout-minutes: 10

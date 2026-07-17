@@ -50,7 +50,7 @@ CLASS z2ui5_cl_api_app_530 IMPLEMENTATION.
       ( key = `GreaterThan`       text = `GreaterThan` ) ).
 
     " original: selected = oMData[0].text -> the first item's text
-    selected = `Slash`.
+    selected = t_items[ 1 ]-text.
 
   ENDMETHOD.
 
@@ -76,27 +76,27 @@ CLASS z2ui5_cl_api_app_530 IMPLEMENTATION.
 
                     )->leaf( `Link`
                         )->a( n = `press` v = client->_event( val   = `LINK_PRESS`
-                                                                 t_arg = VALUE #( ( `${$source>/text}` ) ) )
+                                                              t_arg = VALUE #( ( `${$source>/text}` ) ) )
                         )->a( n = `text`  v = `Products`
                     )->leaf( `Link`
                         )->a( n = `press` v = client->_event( val   = `LINK_PRESS`
-                                                                 t_arg = VALUE #( ( `${$source>/text}` ) ) )
+                                                              t_arg = VALUE #( ( `${$source>/text}` ) ) )
                         )->a( n = `text`  v = `Suppliers`
                     )->leaf( `Link`
                         )->a( n = `press` v = client->_event( val   = `LINK_PRESS`
-                                                                 t_arg = VALUE #( ( `${$source>/text}` ) ) )
+                                                              t_arg = VALUE #( ( `${$source>/text}` ) ) )
                         )->a( n = `text`  v = `Titanium`
                     )->leaf( `Link`
                         )->a( n = `press` v = client->_event( val   = `LINK_PRESS`
-                                                                 t_arg = VALUE #( ( `${$source>/text}` ) ) )
+                                                              t_arg = VALUE #( ( `${$source>/text}` ) ) )
                         )->a( n = `text`  v = `Ultra portable`
                     )->leaf( `Link`
                         )->a( n = `press` v = client->_event( val   = `LINK_PRESS`
-                                                                 t_arg = VALUE #( ( `${$source>/text}` ) ) )
+                                                              t_arg = VALUE #( ( `${$source>/text}` ) ) )
                         )->a( n = `text`  v = `12 inch`
                     )->leaf( `Link`
                         )->a( n = `press` v = client->_event( val   = `LINK_PRESS`
-                                                                 t_arg = VALUE #( ( `${$source>/text}` ) ) )
+                                                              t_arg = VALUE #( ( `${$source>/text}` ) ) )
                         )->a( n = `text`  v = `Super portable deluxe`
 
                 )->shut(

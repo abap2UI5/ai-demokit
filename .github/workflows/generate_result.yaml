@@ -46,6 +46,11 @@ jobs:
         npx grunt jsdoc:library-sap.m || true
         test -f target/openui5-sdk/test-resources/sap/m/designtime/api.json
 
+    - name: Refresh the 1.71 property snapshot
+      env:
+        OPENUI5_DIR: ./openui5
+      run: node scripts/generate-properties.mjs
+
     - name: Regenerate coverage (README + api.md)
       env:
         OPENUI5_DIR: ./openui5
@@ -71,6 +76,7 @@ jobs:
           api.md
           README.md
           ui5/universe.json
+          ui5/properties.json
           src/z2ui5_cl_api_app_overview.clas.abap
           src/z2ui5_cl_api_app_overview.clas.xml
         commit-message: Regenerate sample coverage

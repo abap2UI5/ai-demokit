@@ -9,11 +9,11 @@
   "checked": null,
   "deviations": [
     {
-      "type": "IMPROVISED",
-      "what": "the IconTabBar property expanded=\"{device>/isNoPhone}\" is dropped - abap2UI5 has no device model, so the phone/non-phone binding cannot be expressed. The tab bar stays expanded."
+      "type": "LIVE_TEST",
+      "what": "the original binds expanded=\"{device>/isNoPhone}\" (a demo-kit helper model); restored 2026-07-16 as the expression {= !${device>/system/phone} } over the framework's device> model (source-verified available in main views) - confirm the tab bar collapses on phones."
     },
     {
-      "type": "IMPROVISED",
+      "type": "SUBSET_DATA",
       "what": "the bound /ProductCollection shows a 8-row subset of the 123-row mock (ui5/mock/products.json) - a full unroll adds no demo value."
     }
   ]

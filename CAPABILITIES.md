@@ -10,6 +10,11 @@ proves it, so claims stay checkable.
 Status legend: ✅ direct 1:1 · 🔶 expressible with a documented workaround ·
 🧪 plausible, needs a LIVE-TEST port to confirm · ❌ not expressible today.
 
+Verification levels in the Evidence column: **live-verified** = seen in a
+running system; **source-verified** = traced in the abap2UI5 framework source
+(2026-07-16 pass; clone the repos per TRAINING.md "Reference repositories") — strong enough to generate against, a
+live check remains the final confirmation for rendering.
+
 Maintenance rule (same discipline as AGENTS.md §10): whenever a port proves a
 new technique, or disproves a ❌, update this table **in the same change** and
 reference the port. Never declare an `IMPROVISED`/`DROPPED_171` deviation for a
@@ -40,13 +45,13 @@ feature this table marks ✅/🔶.
 |---|---|---|---|
 | JSON model data | ✅ | ABAP `VALUE #( … )` + `client->_bind_edit` (never `_bind`) — keep the data verbatim, full row set | AGENTS §5; silent row subsets bit apps 433/440/441 |
 | Two-way property binding incl. live client-side updates | ✅ | shared `_bind_edit` path on both controls — no event round-trip needed | app 527 (Switch↔Select), app 471 |
-| Expression bindings (`{= … }`) over bound paths | ✅ | compose the captured `_bind_edit` handle into the expression string | app 421 (the AGENTS §5 worked example) |
+| Expression bindings (`{= … }`) over bound paths | ✅ | inline `client->_bind_edit( var )` calls composed into the expression string template — never captured in a variable | app 421 (the AGENTS §5 worked example) |
 | Imperative controller logic that only derives view state (setWidth/setExpanded from a control value) | 🔶 | prefer a pure expression binding over an event round-trip (`{= ${slider} + '%' }`) | app 421 is the pattern; the avoidable round-trips in 486/530 were removed 2026-07-16 (LIVE-TEST pending) |
-| Nested tables / tree binding (`items="{path: '/'}"` over nested `nodes`) | 🧪 | nested ABAP table types serialize into the default model | app 487 (LIVE-TEST pending) |
-| Named models (`img>`, `device>`, `mvc` view models) | ❌ | one default model only — flatten into it or resolve statically, always with an IMPROVISED deviation in the sidecar | apps 420, 433, 434, 473 |
-| `sap.ui.Device` / device model bindings | ❌ | not available server-side — fix the value, note it | apps 433, 473 |
-| Binding `sorter` (no grouping, static data) | 🔶 | `SORT` the ABAP table once + inline comment + IMPROVISED deviation in the sidecar | apps 440, 527 |
-| Binding `sorter` with `group: true` + default group headers | 🧪 | keep a raw binding-info string `{path: '…', sorter: {path: '…', group: true}}` — UI5 parses it client-side; only a *custom* `groupHeaderFactory` is out | app 452 unrolled statically instead; worth a LIVE-TEST |
+| Nested tables / tree binding (`items="{path: '/'}"` over nested `nodes`) | ✅ | nested ABAP table types serialize into nested JSON arrays; two-way delta write-back is nested-aware; the framework even ships a `z2ui5.cc.Tree` control preserving expand state | source-verified: ajson `convert_table` recursion + `delta_apply_nodes` (z2ui5_cl_core_srv_model); app 487 renders it (visual LIVE-TEST pending) |
+| Named JSON models fed from ABAP (`img>`, view models) | ❌ | no second ABAP-fed JSON model — flatten into the default model or resolve statically, with an IMPROVISED deviation. But note what DOES exist: `device>` (row below), named OData models via `cs_event-set_odata_model`, the default model switched to OData with the ABAP model re-attached as `http>` (`view_display( switch_default_model_path = ... )`), and a `template>` preprocessor model for XML templating | source-verified (frontendaction/view1_js); apps 420, 434 flattened correctly |
+| `sap.ui.Device` / device model bindings | 🔶 | the `device>` named model (JSONModel over sap.ui.Device) IS set on the **main** view — `{device>/system/phone}` bindings work there; NOT set on popup/popover fragments; the same data is mirrored server-side in `client->get( )-s_device` | source-verified: view1_js `oView.setModel(..., "device")`; apps 433/473 dropped it unnecessarily — restore + LIVE-TEST |
+| Binding `sorter` (no grouping) | ✅ | keep the original binding-info string: `\|\{ path: '{ client->_bind_edit( val = t path = abap_true ) }', sorter: \{ path: 'COL' \} \}\|` — no ABAP SORT, no deviation needed | apps 423/440/527 converted 2026-07-17; same pass-through as the group-sorter row below |
+| Binding `sorter` with `group: true` + default group headers | ✅ | keep a raw binding-info string `{path: '…', sorter: {path: '…', group: true}}` — get the bare model path via `client->_bind_edit( val = t_products path = abap_true )` (human-taught 2026-07-16); only a *custom* `groupHeaderFactory` is out | source-verified on BOTH sides: abap2UI5 passes attribute values to `XMLView.create` unmangled, and UI5's default group header IS `new SeparatorItem({text: group.text \|\| group.key})` (openui5 `ComboBoxBase.addItemGroup`); app 452 converted 2026-07-16 (LIVE-TEST pending) |
 | Composite binding types / formatters (`sap.ui.model.type.Currency`, `Formatter.js`) | ❌ | preformat the value in ABAP, bind the result; note it | apps 440, 460 |
 | MessageManager / `message>` model | ❌ | bind an equivalent hardcoded table | app 449 |
 
@@ -55,9 +60,31 @@ feature this table marks ✅/🔶.
 | UI5 feature | Status | How in abap2UI5 | Evidence |
 |---|---|---|---|
 | Controller event handlers | ✅ | `client->_event( val = 'NAME' … )` + `check_on_event( )` CASE branches | all interactive ports |
-| Passing event/source values to the backend | ✅ | `$`-prefixed `t_arg` forms: `${COL}`, `$event.oSource.sId`, `${$parameters>/value}` — never a bare `{COL}` | AGENTS §5; apps 486, 526 |
-| Boolean event parameters | 🔶 | arrive as `abap_bool` (`X`/space) — map back to `true`/`false` when echoing to the UI | app 421 (correct), app 422 (echoes raw `X`) |
+| Passing event/source values to the backend | ✅ | `$`-prefixed `t_arg` forms: `${COL}`, `$event.oSource.sId`, `${$parameters>/value}` — never a bare `{COL}` | source-verified on both sides: abap2UI5 passes `$`/`{`-prefixed args raw (z2ui5_cl_core_srv_event `get_t_arg`), and UI5's `EventHandlerResolver` parses `${…}` via `BindingParser.parseExpression` — a bare `{COL}` is no binding there; apps 486, 526 |
+| Boolean event parameters | 🔶 | arrive as `abap_bool` (`X`/space) — map back to `true`/`false` when echoing to the UI | source-verified (z2ui5_cl_core_handler `request_parse_event_args`); app 421 (correct), app 422 fixed |
 | Reading control-internal state via `$parameters>/…/mProperties/…` | ❌ | private UI5 internals, fragile across patches — restructure to a two-way binding or a public parameter instead | apps 401/474/530 were all migrated off it (2026-07-16); pattern-lint blocks any new use |
-| Controller-read list selection (`getSelectedItems`, FacetFilter/List multi-select) | 🧪 | bind `selected="{FLAG}"` two-way on the items — the flags arrive with every event, and clearing them server-side resets the selection; no event payload needed | app 401 (selected flags), app 474 (two-way selectedKey) — both LIVE-TEST pending |
+| Controller-read list selection (`getSelectedItems`, FacetFilter/List multi-select) | ✅ | bind `selected="{FLAG}"` / `selectedKey` two-way — the incoming model is applied to the app object BEFORE `on_event` runs, so handlers read post-interaction state; clearing server-side + `view_model_update` resets the client | source-verified: `factory_by_frontend` applies `model_json_parse` before recording the event (z2ui5_cl_core_action:55-77); apps 401/474 (visual LIVE-TEST pending) |
 | Opening external URLs (`URLHelper.redirect`) | ✅ | `client->_event_client( client->cs_event-open_new_tab, t_arg = ( url ) )` | app 460 |
 | Client-side-only behaviour with no backend effect | ✅ | `client->_event_client( … )` frontend actions | overview app popup close |
+| Post-render actions (focus, scroll, …) | ✅ | `client->follow_up_action( val = client->cs_event-… )` — queued to run AFTER the response is rendered, so the DOM exists | source-verified (z2ui5_cl_core_client:43-55) |
+| Timers / polling | ✅ | `cs_event-start_timer` (callbackEvent, delayMs) + `_event( s_ctrl = VALUE #( check_allow_multi_req = abap_true ) )` for events during a running round-trip | source-verified (frontendaction:348-362) |
+| Rich event payloads beyond strings | ✅ | `_event( r_data = ref )` snapshots ABAP data at render time; read back via `client->get( )-r_event_data` | source-verified (core_client:404-414) |
+
+## Frontend-action catalog (source-verified 2026-07-16)
+
+`client->_event_client( client->cs_event-… )` / `follow_up_action` support far
+more than the ports use so far — relevant when a sample's controller does
+browser things: `popup_close`, `popover_close`, `open_new_tab`,
+`location_reload`, `history_back`, `set_focus`, `scroll_to`,
+`scroll_into_view`, `set_title(_launchpad)`, `clipboard_copy`,
+`download_b64_file`, `urlhelper` (redirect / email / sms / tel),
+`store_data` (session/local storage), `play_audio`, `start_timer`,
+`display_message_box` / `display_message_toast` (options object 1:1),
+`wizard_set_next_step`, `set_size_limit`, `set_odata_model`, nav-container
+`*_nav_container_to` per view slot, `z2ui5` (call registered custom JS).
+Also available: nested view slots (`nest_view_display`), `popover_display(
+by_id )` anchored to any control, app-stack navigation with typed results
+(`nav_app_call/leave` + `get_app_prev`), and bundled custom controls
+(`z2ui5.cc`: Timer, Storage, Focus, Geolocation, History, Tree,
+FileUploader, CameraPicture, …). Details: the abap2UI5/abap2UI5 sources
+`z2ui5_if_client` + `z2ui5_cl_app_frontendaction_js`.

@@ -25,7 +25,7 @@ const META = path.join(ROOT, 'meta');
 const UI5 = path.join(ROOT, 'ui5');
 
 const STATUS = ['generated', 'reviewed', 'checked', 'golden'];
-const DEV_TYPES = ['IMPROVISED', 'DROPPED_171', 'LIVE_TEST', 'SUBSET_DATA', 'NOTE'];
+const DEV_TYPES = ['IMPROVISED', 'POST_171', 'DROPPED_171', 'LIVE_TEST', 'SUBSET_DATA', 'NOTE'];
 
 let errors = 0;
 const err = (m) => { console.log(`ERROR ${m}`); errors++; };

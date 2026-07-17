@@ -102,7 +102,7 @@ for (const mf of fs.readdirSync(META)) {
   const i = m.sample.indexOf('.sample.');
   if (i === -1) continue;
   ported.set(`${m.sample.slice(0, i)}\t${m.sample.slice(i + '.sample.'.length)}`,
-    { cls: m.class, file: m.file });
+    { cls: m.class, file: m.file, post171: (m.deviations || []).some((d) => d.type === 'POST_171') });
 }
 
 // --- 2. universe: from the OpenUI5 checkout (refreshing the snapshot), or
@@ -263,7 +263,9 @@ function controlLines() {
   l.push('`—` = in scope, not ported yet — those rows are the backlog.');
   l.push('`✗` = **out of scope**: the control is deprecated or newer than UI5 1.71');
   l.push('(not legacy-free ready / not 1.71-compatible) — these samples are listed');
-  l.push('for completeness but are not ported.');
+  l.push('for completeness but are not ported. A **⁺** after the class marks ports');
+  l.push('that keep members newer than UI5 1.71 for 1:1 fidelity (declared as');
+  l.push('POST_171 in the sidecar) — they need a correspondingly recent UI5.');
   l.push('See the [README](README.md#coverage) for the per-module coverage summary.');
   if (release) {
     l.push('');
@@ -292,7 +294,7 @@ function controlLines() {
       : '';
     const sample = `[${s.name}](${sampleSrcUrl(s.lib, s.name)}) [↗](${fullscreenUrl(s.lib, s.name)})`;
     const abap = s.port
-      ? `[${s.port.cls}](${abapUrl(s.port.file)})`
+      ? `[${s.port.cls}](${abapUrl(s.port.file)})${s.port.post171 ? ' **⁺**' : ''}`
       : (s.scope === 'in' ? '—' : '✗');
     l.push(`| ${s.lib} | ${control} | ${s.since || ''} | ${deprecated} | ${sample} | ${abap} |`);
   }

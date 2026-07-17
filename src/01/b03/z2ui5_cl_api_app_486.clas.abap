@@ -37,10 +37,6 @@ CLASS z2ui5_cl_api_app_486 IMPLEMENTATION.
 
   METHOD view_display.
 
-    " the toolbars derive their width from the slider purely client-side
-    " via an expression binding - no event round-trip (see CAPABILITIES.md)
-    DATA(slider_bind) = client->_bind_edit( slider_value ).
-
     DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
@@ -53,7 +49,7 @@ CLASS z2ui5_cl_api_app_486 IMPLEMENTATION.
 
             )->leaf( `Slider`
                 )->a( n = `step`  v = `20`
-                )->a( n = `value` v = slider_bind
+                )->a( n = `value` v = client->_bind_edit( slider_value )
 
             )->leaf( `MessageStrip`
                 )->a( n = `text`  v = `By default, Toolbar items are shrinkable if they have percent-based width (e.g. Input, Slider)` &&
@@ -63,7 +59,7 @@ CLASS z2ui5_cl_api_app_486 IMPLEMENTATION.
             )->open( `Toolbar`
                 )->a( n = `class` v = `sapUiMediumMarginTop`
                 )->a( n = `id`    v = `toolbar1`
-                )->a( n = `width` v = |\{= ${ slider_bind } + '%' \}|
+                )->a( n = `width` v = |\{= ${ client->_bind_edit( slider_value ) } + '%' \}|
 
                 )->leaf( `Label`
                     )->a( n = `text` v = `I am a text control, so I will shrink whenever the toolbar overflows.`
@@ -84,7 +80,7 @@ CLASS z2ui5_cl_api_app_486 IMPLEMENTATION.
             )->open( `Toolbar`
                 )->a( n = `class` v = `sapUiMediumMarginTop`
                 )->a( n = `id`    v = `toolbar2`
-                )->a( n = `width` v = |\{= ${ slider_bind } + '%' \}|
+                )->a( n = `width` v = |\{= ${ client->_bind_edit( slider_value ) } + '%' \}|
 
                 )->open( `Label`
                     )->a( n = `text` v = `I am a non-shrinkable text.`
@@ -120,7 +116,7 @@ CLASS z2ui5_cl_api_app_486 IMPLEMENTATION.
             )->open( `Toolbar`
                 )->a( n = `class` v = `sapUiMediumMarginTop`
                 )->a( n = `id`    v = `toolbar3`
-                )->a( n = `width` v = |\{= ${ slider_bind } + '%' \}|
+                )->a( n = `width` v = |\{= ${ client->_bind_edit( slider_value ) } + '%' \}|
 
                 )->open( `Label`
                     )->a( n = `text` v = `I should not shrink by more than 200px, because I am an important text.`

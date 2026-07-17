@@ -29,8 +29,9 @@ CLASS z2ui5_cl_api_app_431 IMPLEMENTATION.
 
   METHOD view_display.
 
-    " see meta/z2ui5_cl_api_app_431.json for the tileLayout, frameType,
-    " systemInfo, appShortcut, url and image-path deviations in this view
+    " see meta/z2ui5_cl_api_app_431.json for the tileLayout and image-path
+    " deviations and the post-1.71 properties (frameType OneByHalf/TwoByHalf,
+    " systemInfo, appShortcut, url) kept for the 1:1 port
     DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
@@ -45,6 +46,7 @@ CLASS z2ui5_cl_api_app_431 IMPLEMENTATION.
         )->open( `GenericTile`
             )->a( n = `class`     v = `sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout`
             )->a( n = `header`    v = `Country-Specific Profit Margin`
+            )->a( n = `frameType` v = `OneByHalf`
             )->a( n = `subheader` v = `Expenses`
             )->a( n = `press`     v = client->_event( `PRESS` )
 
@@ -63,9 +65,10 @@ CLASS z2ui5_cl_api_app_431 IMPLEMENTATION.
         )->shut(
 
         )->open( `GenericTile`
-            )->a( n = `class`  v = `sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout`
-            )->a( n = `header` v = `US Profit Margin`
-            )->a( n = `press`  v = client->_event( `PRESS` )
+            )->a( n = `class`     v = `sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout`
+            )->a( n = `header`    v = `US Profit Margin`
+            )->a( n = `press`     v = client->_event( `PRESS` )
+            )->a( n = `frameType` v = `OneByHalf`
 
             )->open( `TileContent`
                 )->a( n = `unit` v = `Unit`
@@ -85,6 +88,7 @@ CLASS z2ui5_cl_api_app_431 IMPLEMENTATION.
             )->a( n = `header`    v = `Sales Fulfillment Application Title`
             )->a( n = `subheader` v = `Subtitle`
             )->a( n = `press`     v = client->_event( `PRESS` )
+            )->a( n = `frameType` v = `TwoByHalf`
 
             )->open( `TileContent`
                 )->a( n = `unit`   v = `EUR`
@@ -101,6 +105,7 @@ CLASS z2ui5_cl_api_app_431 IMPLEMENTATION.
             )->a( n = `header`    v = `Manage Activity Master Data Type`
             )->a( n = `subheader` v = `Subtitle`
             )->a( n = `press`     v = client->_event( `PRESS` )
+            )->a( n = `frameType` v = `OneByHalf`
 
             )->open( `TileContent`
                 )->leaf( `ImageContent`
@@ -169,10 +174,12 @@ CLASS z2ui5_cl_api_app_431 IMPLEMENTATION.
         )->shut(
 
         )->open( `GenericTile`
-            )->a( n = `class`     v = `sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout`
-            )->a( n = `header`    v = `Country-Specific Profit Margin`
-            )->a( n = `subheader` v = `Expenses`
-            )->a( n = `press`     v = client->_event( `PRESS` )
+            )->a( n = `class`       v = `sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout`
+            )->a( n = `header`      v = `Country-Specific Profit Margin`
+            )->a( n = `subheader`   v = `Expenses`
+            )->a( n = `press`       v = client->_event( `PRESS` )
+            )->a( n = `systemInfo`  v = `system info`
+            )->a( n = `appShortcut` v = `app shortcut`
 
             )->open( `TileContent`
                 )->a( n = `unit`   v = `EUR`
@@ -242,9 +249,10 @@ CLASS z2ui5_cl_api_app_431 IMPLEMENTATION.
         )->shut(
 
         )->open( `GenericTile`
-            )->a( n = `class`  v = `sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout`
-            )->a( n = `header` v = `Country-Specific Profit Margin`
-            )->a( n = `press`  v = client->_event( `PRESS` )
+            )->a( n = `class`     v = `sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout`
+            )->a( n = `header`    v = `Country-Specific Profit Margin`
+            )->a( n = `press`     v = client->_event( `PRESS` )
+            )->a( n = `frameType` v = `TwoByHalf`
 
             )->open( `TileContent`
                 )->a( n = `unit`   v = `EUR`
@@ -265,6 +273,7 @@ CLASS z2ui5_cl_api_app_431 IMPLEMENTATION.
             )->a( n = `header`    v = `Cumulative Totals`
             )->a( n = `subheader` v = `Expenses`
             )->a( n = `press`     v = client->_event( `PRESS` )
+            )->a( n = `frameType` v = `OneByHalf`
 
             )->open( `TileContent`
                 )->a( n = `unit`   v = `Unit`
@@ -283,6 +292,8 @@ CLASS z2ui5_cl_api_app_431 IMPLEMENTATION.
             )->a( n = `header`    v = `Right click to open in new tab`
             )->a( n = `subheader` v = `Link tile`
             )->a( n = `press`     v = client->_event( `PRESS` )
+            )->a( n = `url`       v = `https://www.sap.com/`
+            )->a( n = `frameType` v = `TwoByHalf`
 
             )->open( `TileContent`
                 )->leaf( `ImageContent`
@@ -310,10 +321,12 @@ CLASS z2ui5_cl_api_app_431 IMPLEMENTATION.
         )->shut(
 
         )->open( `GenericTile`
-            )->a( n = `class`     v = `sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout`
-            )->a( n = `header`    v = `Sales Fulfillment Application Title`
-            )->a( n = `subheader` v = `Subtitle`
-            )->a( n = `press`     v = client->_event( `PRESS` )
+            )->a( n = `class`       v = `sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout`
+            )->a( n = `header`      v = `Sales Fulfillment Application Title`
+            )->a( n = `subheader`   v = `Subtitle`
+            )->a( n = `press`       v = client->_event( `PRESS` )
+            )->a( n = `systemInfo`  v = `system`
+            )->a( n = `appShortcut` v = `shortcut`
 
             )->open( `TileContent`
                 )->a( n = `unit`   v = `EUR`
@@ -347,8 +360,9 @@ CLASS z2ui5_cl_api_app_431 IMPLEMENTATION.
             )->a( n = `class`     v = `sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout`
             )->a( n = `header`    v = `Right click to open in new tab`
             )->a( n = `subheader` v = `Link tile`
-            )->a( n = `frameType` v = `TwoByOne`
             )->a( n = `press`     v = client->_event( `PRESS` )
+            )->a( n = `url`       v = `https://www.sap.com/`
+            )->a( n = `frameType` v = `TwoByOne`
 
             )->open( `TileContent`
                 )->leaf( `ImageContent`

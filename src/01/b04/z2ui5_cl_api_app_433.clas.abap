@@ -62,7 +62,9 @@ CLASS z2ui5_cl_api_app_433 IMPLEMENTATION.
             )->a( n = `stretchContentHeight` v = `true`
             )->a( n = `backgroundDesign`     v = `Transparent`
             )->a( n = `applyContentPadding`  v = `false`
-            " expanded="{device>/isNoPhone}" omitted - device model binding not available in abap2UI5
+            " the sample's device model isNoPhone is a demo-kit helper; the framework's
+            " device> model exposes raw sap.ui.Device, so !phone expresses the same
+            )->a( n = `expanded`             v = `{= !${device>/system/phone} }`
             )->a( n = `class`                v = `sapUiResponsiveContentPadding`
 
             )->open( `items`

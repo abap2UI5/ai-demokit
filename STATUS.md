@@ -13,7 +13,7 @@ CAPABILITIES.md._
 | CI | ABAP_STANDARD, ABAP_CLOUD, ABAP_702 all green |
 | Structural view diff | **0 undeclared differences** across all 34 ports (`node scripts/structural-diff.mjs --strict`) |
 | Pattern lint | **0 errors, 0 warnings, empty baseline** (`node scripts/pattern-lint.mjs`) |
-| Meta sidecars | 34 in `meta/` — status: 30 `generated`, 4 `checked`; deviations: 35 IMPROVISED, 11 DROPPED_171, 10 LIVE_TEST |
+| Meta sidecars | 34 in `meta/` — status: 30 `generated`, 4 `checked`; deviations: 27 IMPROVISED, 12 POST_171 (8 apps carry the orange 1.71+ badge), 12 LIVE_TEST, 7 SUBSET_DATA, 2 NOTE — DROPPED_171 is empty since the 1:1 restoration |
 | Manually verified in a running system | 420, 421, 526, 530 (`CHECKED`) |
 | Archive | `ui5/sap.m/<SampleName>/` — full originals for the 34 ported samples (+2 cross-referenced: `FacetFilterSimple`, `Table`); mock snapshot in `ui5/mock/`. Unported samples are copied over batch by batch. |
 
@@ -71,22 +71,49 @@ reviewers), followed by fixes:
 - **420/433/440/441/452**: mock-data subsets declared per port (the mock has
   123 rows — full unrolls add no demo value); **423/527**: sorter→`SORT`
   declared; **440**: `pic_url` renamed to convention (`product_pic_url`).
-- Idiom: **526** captures the shared press event once + `get_event_arg( 1 )`;
+- Idiom: **526** captures the shared press event once + indexed event args
+  (later simplified to `get_event_arg( )` when the convention inverted);
   **528/434** blank-line fixes — pattern-lint is at 0/0 with an empty baseline.
+
+## Distilled from human fixes (2026-07-17)
+
+Two human correction commits so far; every change fed back as a rule:
+
+- `_bind_edit( path = abap_true )` for bare model paths (452) → CAPABILITIES.
+- `t_arg` continuations align under `val` (421/422) → pattern-lint warn rule.
+- Client handles (bind AND event) inline at each control, never captured —
+  even repeated, even in expression bindings (526, then 486; 481/421 aligned
+  accordingly) → pattern-lint error rule + AGENTS §5. Process lesson: my
+  first distillation scoped the rule too narrowly (events only, bind handles
+  exempted citing app 421) — the human had to fix the same error class twice.
+  When distilling, prefer the GENERAL principle over the narrowest reading.
+- Derive values from data like the original (530 `t_items[ 1 ]-text`),
+  all-or-nothing `VALUE #( )` alignment after renames (440), minimal inline
+  comments (452) → AGENTS §8.
+- Trap: abapGit pushes from a stale system state can revert newer generated
+  files (overview, twice) → AGENTS §10 gotcha; regenerate + diff after every
+  human push.
 
 ## Open findings (backlog)
 
-Live tests pending (in-system):
-- [ ] **401** — Reset unchecks the facet popover checkboxes (two-way selected).
+Live tests pending (in-system) — the 2026-07-16 framework source pass
+(CAPABILITIES.md) already confirmed the *mechanics* of several; what remains
+is visual/UX confirmation:
+- [ ] **401** — Reset unchecks the facet popover checkboxes (mechanics
+  source-verified: model applied before on_event).
 - [ ] **469** — PDFViewer renders inside the Dialog at height 100%.
-- [ ] **487** — 5-level nested tree binding renders expandable levels.
+- [ ] **487** — nested tree binding renders expandable levels (serialization
+  source-verified; framework ships z2ui5.cc.Tree).
 - [ ] **529** — the press Dialog opens/closes (popup_display).
 - [ ] **404/431** — injected CSS styles the flex items / floats the tiles.
 - [ ] **486** — expression-bound toolbar widths follow the slider.
 - [ ] **530** — separator switches instantly via the shared two-way path.
-- [ ] **474** — two-way selectedKey is updated before on_event runs.
-- [ ] **452** — try the bound-template variant with a raw binding-info string
-  (`sorter: { group: true }`) instead of the static unroll.
+- [ ] **474** — toast shows the newly selected item (timing source-verified).
+- [ ] **452** — convert to the bound-template variant with a raw binding-info
+  string (pass-through source-verified) — then LIVE-TEST the group headers.
+- [ ] **433/473** — NEW: the `device>` model IS available in main views
+  (source-verified) — restore the original `{device>/…}` bindings that were
+  dropped as "not expressible", then LIVE-TEST.
 
 Idiom / style (low):
 - [x] ~~`main` method placed last in several ports~~ — done 2026-07-16: new
@@ -96,6 +123,15 @@ Idiom / style (low):
   position 2+ — the earlier index-1 rule was inverted by decision).
 
 Infrastructure:
+- [x] ~~Property-level 1.71 gate~~ — done 2026-07-16:
+  `scripts/generate-properties.mjs` parses per-member `@since` from the
+  OpenUI5 sources into `ui5/properties.json` (refreshed weekly by
+  generate_result); `scripts/property-check.mjs` runs in CI. Policy decision
+  same day: **1:1 beats 1.71-purity** — post-1.71 members are KEPT when the
+  original uses them and must be declared as `POST_171` (the gate enforces
+  the declaration); the previously dropped members were restored. First
+  catch: app 420's Carousel `ariaLabelledBy` (association only since 1.125)
+  had been silently copied without any declaration.
 - [x] ~~generate-coverage.mjs: `FOCUS_LIBS` undocumented; orphan ports vanish
   silently; header-regex fragility~~ — done 2026-07-16: ported set comes from
   `meta/`, the universe from the committed `ui5/universe.json` snapshot

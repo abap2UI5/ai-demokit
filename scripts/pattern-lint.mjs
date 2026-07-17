@@ -111,6 +111,30 @@ const RULES = [
     find: grepLines(/^"!/),
   },
   {
+    id: 'client-handle-capture',
+    level: 'error',
+    doc: 'client handle strings (_event, _bind_edit, _event_client, ...) are written inline at each control, never captured in a variable - even when repeated, even in expression bindings (human decision 2026-07-17, apps 526/486/421)',
+    find: grepLines(/DATA\(\w+\)\s*=\s*client->_\w+\(/),
+  },
+  {
+    id: 'param-continuation-align',
+    level: 'warn',
+    doc: 'a t_arg continuation line must start in the same column as the val parameter above it — human-taught alignment fix, 2026-07-16 (apps 421/422)',
+    find(content) {
+      const out = [];
+      const lines = content.split('\n');
+      lines.forEach((l, i) => {
+        const m = l.match(/^(\s+)t_arg =/);
+        if (!m || i === 0) return;
+        const vm = lines[i - 1].match(/^(.*?)\bval\s+=/);
+        if (vm && m[1].length !== vm[1].length) {
+          out.push({ line: i + 1, text: `t_arg at col ${m[1].length + 1}, val at col ${vm[1].length + 1}` });
+        }
+      });
+      return out;
+    },
+  },
+  {
     id: 'blank-between-shuts',
     level: 'warn',
     doc: 'blank line between two )->shut( lines — §5 formatting: none after a shut or between shuts (a blank before the next open/leaf sibling block is fine)',

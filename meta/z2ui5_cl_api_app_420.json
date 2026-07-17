@@ -16,8 +16,12 @@
       "what": "the three carousel images bind to a separate named model in the original (img>/products/pic1..3 from sap/ui/demo/mock/img.json); resolved here to static image URLs, as abap2UI5 serves a single default model."
     },
     {
-      "type": "IMPROVISED",
+      "type": "SUBSET_DATA",
       "what": "the bound /ProductCollection shows a 10-row subset of the 123-row mock (ui5/mock/products.json) - a full unroll adds no demo value."
+    },
+    {
+      "type": "POST_171",
+      "what": "ariaLabelledBy on the Carousel (since UI5 1.125) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.125 to render it."
     }
   ]
 }

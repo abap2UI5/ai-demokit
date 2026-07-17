@@ -44,10 +44,6 @@ CLASS z2ui5_cl_api_app_421 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(child1_bind) = client->_bind_edit( child1 ).
-    DATA(child2_bind) = client->_bind_edit( child2 ).
-    DATA(child3_bind) = client->_bind_edit( child3 ).
-
     DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
@@ -61,21 +57,21 @@ CLASS z2ui5_cl_api_app_421 IMPLEMENTATION.
                 )->a( n = `text` v = `Which languages(s) do you speak?`
             )->leaf( `CheckBox`
                 )->a( n = `text`              v = `select / deselect all`
-                )->a( n = `selected`          v = |\{= ${ child1_bind } \|\| ${ child2_bind } \|\| ${ child3_bind } \}|
-                )->a( n = `partiallySelected` v = |\{= !(${ child1_bind } && ${ child2_bind } && ${ child3_bind })\}|
+                )->a( n = `selected`          v = |\{= ${ client->_bind_edit( child1 ) } \|\| ${ client->_bind_edit( child2 ) } \|\| ${ client->_bind_edit( child3 ) } \}|
+                )->a( n = `partiallySelected` v = |\{= !(${ client->_bind_edit( child1 ) } && ${ client->_bind_edit( child2 ) } && ${ client->_bind_edit( child3 ) })\}|
                 )->a( n = `select`            v = client->_event( val   = `PARENT_CLICKED`
-                                                                     t_arg = VALUE #( ( `${$parameters>/selected}` ) ) )
+                                                                  t_arg = VALUE #( ( `${$parameters>/selected}` ) ) )
             )->leaf( n = `HTML` ns = `c`
                 )->a( n = `content` v = `<hr>`
             )->leaf( `CheckBox`
                 )->a( n = `text`     v = `English`
-                )->a( n = `selected` v = child1_bind
+                )->a( n = `selected` v = client->_bind_edit( child1 )
             )->leaf( `CheckBox`
                 )->a( n = `text`     v = `German`
-                )->a( n = `selected` v = child2_bind
+                )->a( n = `selected` v = client->_bind_edit( child2 )
             )->leaf( `CheckBox`
                 )->a( n = `text`     v = `French`
-                )->a( n = `selected` v = child3_bind ).
+                )->a( n = `selected` v = client->_bind_edit( child3 ) ).
 
     client->view_display( view->stringify( ) ).
 

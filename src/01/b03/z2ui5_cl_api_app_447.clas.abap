@@ -31,7 +31,6 @@ CLASS z2ui5_cl_api_app_447 IMPLEMENTATION.
 
     DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
-    " ariaHasPopup="Dialog" on both buttons is omitted (available only since UI5 1.84)
     view->open( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
@@ -45,16 +44,18 @@ CLASS z2ui5_cl_api_app_447 IMPLEMENTATION.
                 )->a( n = `text` v = `Different approaches to set Initial focus`
 
             )->leaf( `Button`
-                )->a( n = `text`  v = `Action`
-                )->a( n = `class` v = `sapUiSmallMarginBottom`
-                )->a( n = `press` v = client->_event( `INITIAL_FOCUS_ON_ACTION` )
-                )->a( n = `width` v = `250px`
+                )->a( n = `text`         v = `Action`
+                )->a( n = `class`        v = `sapUiSmallMarginBottom`
+                )->a( n = `press`        v = client->_event( `INITIAL_FOCUS_ON_ACTION` )
+                )->a( n = `width`        v = `250px`
+                )->a( n = `ariaHasPopup` v = `Dialog`
 
             )->leaf( `Button`
-                )->a( n = `text`  v = `Custom action`
-                )->a( n = `class` v = `sapUiSmallMarginBottom`
-                )->a( n = `press` v = client->_event( `INITIAL_FOCUS_ON_CUSTOM_ACTION` )
-                )->a( n = `width` v = `250px` ).
+                )->a( n = `text`         v = `Custom action`
+                )->a( n = `class`        v = `sapUiSmallMarginBottom`
+                )->a( n = `press`        v = client->_event( `INITIAL_FOCUS_ON_CUSTOM_ACTION` )
+                )->a( n = `width`        v = `250px`
+                )->a( n = `ariaHasPopup` v = `Dialog` ).
 
     client->view_display( view->stringify( ) ).
 
@@ -67,27 +68,29 @@ CLASS z2ui5_cl_api_app_447 IMPLEMENTATION.
 
       WHEN `INITIAL_FOCUS_ON_ACTION`.
 
-        " the original emphasizedAction option (since UI5 1.75) is omitted here
+        " the original dependentOn option is omitted - message_box_display does not expose it
         client->message_box_display(
-          text         = |Initial button focus is set by attribute \n initialFocus: sap.m.MessageBox.Action.CANCEL|
-          type         = `warning`
-          icon         = `WARNING`
-          title        = `Focus on a Button`
-          actions      = VALUE #( ( `OK` ) ( `CANCEL` ) )
-          initialfocus = `CANCEL`
-          styleclass   = `sapUiResponsivePadding--header sapUiResponsivePadding--content sapUiResponsivePadding--footer` ).
+          text             = |Initial button focus is set by attribute \n initialFocus: sap.m.MessageBox.Action.CANCEL|
+          type             = `warning`
+          icon             = `WARNING`
+          title            = `Focus on a Button`
+          actions          = VALUE #( ( `OK` ) ( `CANCEL` ) )
+          emphasizedaction = `OK`
+          initialfocus     = `CANCEL`
+          styleclass       = `sapUiResponsivePadding--header sapUiResponsivePadding--content sapUiResponsivePadding--footer` ).
 
       WHEN `INITIAL_FOCUS_ON_CUSTOM_ACTION`.
 
-        " the original dependentOn option (since UI5 1.124) is omitted here
+        " the original dependentOn option is omitted - message_box_display does not expose it
         client->message_box_display(
-          text         = |Initial button focus is set by attribute \n initialFocus: "Custom button" \n Note: The name is not case sensitive|
-          type         = `show`
-          icon         = `WARNING`
-          title        = `Focus on a Custom Action`
-          actions      = VALUE #( ( `YES` ) ( `NO` ) ( `Custom Action` ) )
-          initialfocus = `Custom Action`
-          styleclass   = `sapUiResponsivePadding--header sapUiResponsivePadding--content sapUiResponsivePadding--footer` ).
+          text             = |Initial button focus is set by attribute \n initialFocus: "Custom button" \n Note: The name is not case sensitive|
+          type             = `show`
+          icon             = `WARNING`
+          title            = `Focus on a Custom Action`
+          actions          = VALUE #( ( `YES` ) ( `NO` ) ( `Custom Action` ) )
+          emphasizedaction = `Custom Action`
+          initialfocus     = `Custom Action`
+          styleclass       = `sapUiResponsivePadding--header sapUiResponsivePadding--content sapUiResponsivePadding--footer` ).
 
     ENDCASE.
 

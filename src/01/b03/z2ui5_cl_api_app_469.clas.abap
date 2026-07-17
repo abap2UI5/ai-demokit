@@ -92,8 +92,9 @@ CLASS z2ui5_cl_api_app_469 IMPLEMENTATION.
 
             " the original opens the PDFViewer in popup mode via JavaScript - here the PDF viewer is embedded into the dialog
             )->leaf( `PDFViewer`
-                )->a( n = `source` v = pdf_source
-                )->a( n = `height` v = `100%`
+                )->a( n = `source`          v = pdf_source
+                )->a( n = `isTrustedSource` v = `true`
+                )->a( n = `height`          v = `100%`
 
             )->open( `endButton`
                 )->leaf( `Button`

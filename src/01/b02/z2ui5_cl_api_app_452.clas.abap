@@ -3,18 +3,16 @@ CLASS z2ui5_cl_api_app_452 DEFINITION PUBLIC.
   PUBLIC SECTION.
     INTERFACES z2ui5_if_app.
 
-  PROTECTED SECTION.
     TYPES:
       BEGIN OF ty_s_product,
         product_id    TYPE string,
         name          TYPE string,
         supplier_name TYPE string,
       END OF ty_s_product.
-
-    DATA client TYPE REF TO z2ui5_if_client.
-    " not bound - the grouped items are rendered statically into the view (see
-    " view_display); kept out of PUBLIC so the round-trip model scan stays small
     DATA t_products TYPE STANDARD TABLE OF ty_s_product WITH EMPTY KEY.
+
+  PROTECTED SECTION.
+    DATA client TYPE REF TO z2ui5_if_client.
 
     METHODS model_init.
     METHODS view_display.
@@ -57,20 +55,14 @@ CLASS z2ui5_cl_api_app_452 IMPLEMENTATION.
       ( product_id = `HT-1035` name = `Flat Basic`               supplier_name = `Very Best Screens` )
       ( product_id = `HT-1036` name = `Flat Future`              supplier_name = `Very Best Screens` ) ).
 
-    " the original groups the items by SupplierName - the data is sorted in ABAP
-    " so the static group headers come out in the right order
-    SORT t_products BY supplier_name.
-
   ENDMETHOD.
 
 
   METHOD view_display.
 
-    DATA supplier TYPE string.
-
     DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
-    DATA(combo) = view->open( n = `View` ns = `mvc`
+    view->open( n = `View` ns = `mvc`
         )->a( n = `height`     v = `100%`
         )->a( n = `xmlns:l`    v = `sap.ui.layout`
         )->a( n = `xmlns:core` v = `sap.ui.core`
@@ -82,23 +74,12 @@ CLASS z2ui5_cl_api_app_452 IMPLEMENTATION.
             )->a( n = `width` v = `100%`
 
             )->open( `MultiComboBox`
-                )->a( n = `width` v = `500px` ).
+                )->a( n = `width` v = `500px`
+                )->a( n = `items` v = |\{ path: '{ client->_bind_edit( val = t_products path = abap_true ) }', sorter: \{ path: 'SUPPLIER_NAME', descending: false, group: true \} \}|
 
-    " group header factory / sorter grouping is not available in abap2UI5 - insert
-    " a core:SeparatorItem whenever the supplier changes, then the items below it
-    LOOP AT t_products INTO DATA(s_product).
-
-      IF s_product-supplier_name <> supplier.
-        supplier = s_product-supplier_name.
-        combo->leaf( n = `SeparatorItem` ns = `core`
-            )->a( n = `text` v = s_product-supplier_name ).
-      ENDIF.
-
-      combo->leaf( n = `Item` ns = `core`
-          )->a( n = `key`  v = s_product-product_id
-          )->a( n = `text` v = s_product-name ).
-
-    ENDLOOP.
+                )->leaf( n = `Item` ns = `core`
+                    )->a( n = `key`  v = `{PRODUCT_ID}`
+                    )->a( n = `text` v = `{NAME}` ).
 
     client->view_display( view->stringify( ) ).
 

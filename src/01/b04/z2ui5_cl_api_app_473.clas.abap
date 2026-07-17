@@ -3,12 +3,9 @@ CLASS z2ui5_cl_api_app_473 DEFINITION PUBLIC.
   PUBLIC SECTION.
     INTERFACES z2ui5_if_app.
 
-    DATA width TYPE string.
-
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
 
-    METHODS model_init.
     METHODS view_display.
 
   PRIVATE SECTION.
@@ -21,17 +18,8 @@ CLASS z2ui5_cl_api_app_473 IMPLEMENTATION.
 
     me->client = client.
     IF client->check_on_init( ).
-      model_init( ).
       view_display( ).
     ENDIF.
-
-  ENDMETHOD.
-
-
-  METHOD model_init.
-
-    " original uses 50em on phone devices (sap/ui/Device is not available server-side)
-    width = `100em`.
 
   ENDMETHOD.
 
@@ -54,7 +42,9 @@ CLASS z2ui5_cl_api_app_473 IMPLEMENTATION.
 
             )->leaf( `Image`
                 )->a( n = `src`   v = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-7777-large.jpg`
-                )->a( n = `width` v = client->_bind_edit( width ) ).
+                " the original computes 50em/100em from sap/ui/Device in the controller -
+                " expressed client-side over the framework's device> model
+                )->a( n = `width` v = `{= ${device>/system/phone} ? '50em' : '100em' }` ).
 
     client->view_display( view->stringify( ) ).
 

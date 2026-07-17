@@ -9,16 +9,16 @@
   "checked": null,
   "deviations": [
     {
-      "type": "DROPPED_171",
-      "what": "frameType OneByHalf / TwoByHalf dropped on several tiles - both enum values were added in UI5 1.83; OneByOne / TwoByOne (1.71) are kept."
+      "type": "POST_171",
+      "what": "frameType values OneByHalf / TwoByHalf (since UI5 1.83) are newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.83 to render them; OneByOne / TwoByOne (1.71) were never affected."
     },
     {
-      "type": "DROPPED_171",
-      "what": "systemInfo and appShortcut dropped - both added in UI5 1.92."
+      "type": "POST_171",
+      "what": "systemInfo and appShortcut (since UI5 1.92) are newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.92 to render them."
     },
     {
-      "type": "DROPPED_171",
-      "what": "url dropped on the link tiles - added in UI5 1.76."
+      "type": "POST_171",
+      "what": "url on the link tiles (since UI5 1.76) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.76 to render it."
     },
     {
       "type": "LIVE_TEST",

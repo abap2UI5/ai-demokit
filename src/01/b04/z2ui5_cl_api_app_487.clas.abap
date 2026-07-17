@@ -11,24 +11,24 @@ CLASS z2ui5_cl_api_app_487 DEFINITION PUBLIC.
       BEGIN OF ty_s_node_level4,
         text  TYPE string,
         ref   TYPE string,
-        nodes TYPE STANDARD TABLE OF ty_s_node_level5 WITH DEFAULT KEY,
+        nodes TYPE STANDARD TABLE OF ty_s_node_level5 WITH EMPTY KEY,
       END OF ty_s_node_level4,
       BEGIN OF ty_s_node_level3,
         text  TYPE string,
         ref   TYPE string,
-        nodes TYPE STANDARD TABLE OF ty_s_node_level4 WITH DEFAULT KEY,
+        nodes TYPE STANDARD TABLE OF ty_s_node_level4 WITH EMPTY KEY,
       END OF ty_s_node_level3,
       BEGIN OF ty_s_node_level2,
         text  TYPE string,
         ref   TYPE string,
-        nodes TYPE STANDARD TABLE OF ty_s_node_level3 WITH DEFAULT KEY,
+        nodes TYPE STANDARD TABLE OF ty_s_node_level3 WITH EMPTY KEY,
       END OF ty_s_node_level2,
       BEGIN OF ty_s_node_level1,
         text  TYPE string,
         ref   TYPE string,
-        nodes TYPE STANDARD TABLE OF ty_s_node_level2 WITH DEFAULT KEY,
+        nodes TYPE STANDARD TABLE OF ty_s_node_level2 WITH EMPTY KEY,
       END OF ty_s_node_level1.
-    DATA t_nodes TYPE STANDARD TABLE OF ty_s_node_level1 WITH DEFAULT KEY.
+    DATA t_nodes TYPE STANDARD TABLE OF ty_s_node_level1 WITH EMPTY KEY.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.

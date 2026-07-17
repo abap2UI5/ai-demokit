@@ -61,7 +61,6 @@ CLASS z2ui5_cl_api_app_454 IMPLEMENTATION.
 
     DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
-    " showClearIcon (UI5 1.94) is omitted to stay compatible with UI5 1.71
     view->open( n = `View` ns = `mvc`
         )->a( n = `height`     v = `100%`
         )->a( n = `xmlns`      v = `sap.m`
@@ -80,6 +79,7 @@ CLASS z2ui5_cl_api_app_454 IMPLEMENTATION.
 
             )->open( `MultiInput`
                 )->a( n = `width`           v = `70%`
+                )->a( n = `showClearIcon`   v = `true`
                 )->a( n = `id`              v = `multiInput`
                 )->a( n = `suggestionItems` v = client->_bind_edit( t_products )
                 )->a( n = `placeholder`     v = `Products...`

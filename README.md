@@ -34,8 +34,8 @@ A coding agent runs the pipeline:
    [`ui5/`](ui5), one folder per sample — only ported samples are archived;
    each batch copies its samples over from the OpenUI5 checkout.
 4. **Report** — regenerate the [coverage](#coverage) tables and the in-system
-   overview app, marking every sample ✅ ported or ❌ missing. The ❌ rows are
-   the backlog.
+   overview app. In api.md, `—` marks an in-scope sample not yet ported (the
+   backlog) and `✗` an out-of-scope one (deprecated / newer than UI5 1.71).
 
 Reviewed, curated samples graduate to the hand-maintained
 [abap2UI5/samples](https://github.com/abap2UI5/samples) repository.
@@ -57,13 +57,16 @@ Rules:
   control/stay, shut = ascend). Attributes are added with
   a( n = `key` v = `value` ) chained right after the control's open/leaf;
   a targets that control, and v is any string expression (literal, a
-  client->_bind_edit/_event result, a || template). factory( ) returns an empty root
-  - open the <mvc:View> and declare its xmlns namespaces yourself. Blank line
-  between controls whose verb differs (open<->leaf, before shut); none between
-  same-verb controls, none right after a shut, none between a control and its
-  attrs; the whole view ends in a single ). Booleans: literal
-  v = `true`/`false`, or v = z2ui5_cl_api_xml=>as_bool( flag ) when fed from an
-  ABAP boolean variable.
+  client->_bind_edit/_event result, a |...| string template). factory( )
+  returns an empty root: open the mvc:View and declare its xmlns namespaces
+  yourself. Blank line between controls whose verb differs (open<->leaf,
+  before shut); none between same-verb controls, none right after a shut,
+  none between a control and its attrs; the whole view ends in a single ).
+  Booleans: literal v = `true`/`false`, or v = z2ui5_cl_api_xml=>as_bool( flag )
+  when fed from an ABAP boolean variable.
+- BEFORE declaring any sample feature inexpressible, check CAPABILITIES.md -
+  the map of what abap2UI5 can express, each entry backed by a proving port.
+  Never improvise around a feature it marks expressible.
 - Structure z2ui5_if_app~main as a dispatcher:
     me->client = client.
     IF client->check_on_init( ).
@@ -73,6 +76,10 @@ Rules:
       on_event( ).
     ENDIF.
   Add model_init / on_event only when the app actually has data / events.
+  z2ui5_if_app~main is always the FIRST method in the implementation; the
+  remaining methods follow in the order they are called from main.
+- Always the simplest possible notation: omit parameters that equal the
+  default - get_event_arg( ) not get_event_arg( 1 ) (index only for 2+).
 - Move the sample's JSON model data into ABAP (VALUE #( ... )) and bind it
   with client->_bind_edit (the one-way client->_bind is obsolete - always use
   _bind_edit).
@@ -82,9 +89,10 @@ Rules:
   read it back with get_event_arg( ) - a bare `{COL}` (the attribute
   property-binding form) is NOT resolved there. Transport real event/source
   values this way instead of faking a static placeholder.
-- Use ONLY controls and properties available since UI5 1.71; never use a
-  deprecated control/property. If the sample needs anything newer or
-  deprecated, stop and report the gap instead of porting.
+- The sample's CONTROL must exist since UI5 1.71 and not be deprecated
+  (out-of-scope samples are never ported). Members newer than 1.71 are KEPT
+  1:1 when the original uses them - declare each in the sidecar as a
+  POST_171 deviation naming the member (the property gate checks this).
 - Must pass abaplint for ABAP_STANDARD, ABAP_CLOUD and ABAP_702 (downport).
 - The class carries NO ABAP Doc header. Write the port's sidecar
   meta/z2ui5_cl_api_app_<n>.json instead (sample, entity, file, batch, audit,
@@ -106,8 +114,10 @@ package). Other UI5 libraries are brought back in later.
 
 Every app is ABAP Cloud ready and downportable to 7.02. In detail, every app:
 
-* uses only controls and properties available since **UI5 1.71** (16 Jan 2020),
-  none of them deprecated — so it runs on old UI5 versions too;
+* uses only **controls** available since **UI5 1.71** (16 Jan 2020), none of
+  them deprecated (legacy-free ready). Individual *members* newer than 1.71
+  are kept where the original sample uses them — declared per port
+  (`POST_171`), so those apps need a correspondingly recent UI5;
 * runs on **SAPUI5** and **OpenUI5**, including the **legacy-free** runtime;
 * runs on **ABAP Cloud** and **ABAP Standard**, and downports to **7.02**.
 
@@ -118,6 +128,23 @@ CI enforces this on every change:
 | `ABAP_STANDARD`  | `abaplint ./abaplint.jsonc` (syntax `v750`)                    |
 | `ABAP_CLOUD`     | `abaplint .github/abaplint/abap_cloud.jsonc` (syntax `Cloud`)  |
 | `ABAP_702`       | `npm run downport` → `abaplint .github/abaplint/abap_702.jsonc` |
+| `checks`         | `pattern-lint` (distilled lessons), `structural-diff --strict` (port vs original view, undeclared deviations fail), `validate-meta` + overview sync |
+
+Every port also carries a machine-readable sidecar `meta/<class>.json`
+(sample, status, declared deviations) — the source of truth the overview app,
+the coverage and the structural diff read from.
+
+## Repo map
+
+| File | What it is |
+|------|------------|
+| [`AGENTS.md`](AGENTS.md) | The complete generation rulebook (conventions, skeleton, gates) |
+| [`CAPABILITIES.md`](CAPABILITIES.md) | What abap2UI5 can express — each entry backed by a proving port or a source-verified trace |
+| [`TRAINING.md`](TRAINING.md) | The improvement loop: batches, quality ladder, reference repositories |
+| [`STATUS.md`](STATUS.md) | Point-in-time state + the open findings backlog |
+| [`api.md`](api.md) | One row per demo kit sample: ported, backlog or out of scope |
+| [`meta/`](meta) | One sidecar per port — status, checked, typed deviations |
+| [`pr/`](pr) | Forwardable improvement requests for the abap2UI5 framework, distilled from porting gaps |
 
 ## Coverage
 
@@ -139,7 +166,7 @@ Control metadata from OpenUI5 **1.151.0**.
 <!-- coverage:end -->
 
 For the full **control-level** view — one row per sample (Module · Control ·
-Sample · JavaScript · UI5 App · ABAP), every link pointing at OpenUI5 — see
+Since · Deprecated · Sample · ABAP), every link pointing at OpenUI5 — see
 **[api.md](api.md)**, or the in-system overview app `z2ui5_cl_api_app_overview`,
 where the **Sample** column links the OpenUI5 source (its ↗ opens the live
 sample) and the **abap2UI5** column links the generated class (its ↗ starts the
