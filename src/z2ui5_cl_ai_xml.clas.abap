@@ -152,7 +152,9 @@ CLASS z2ui5_cl_ai_xml IMPLEMENTATION.
     result->name = n.
     result->prefix = ns.
     LOOP AT a INTO DATA(kv).
-      APPEND parse_attr( kv ) TO result->t_pair.
+      DATA(pair) = parse_attr( kv ).
+      ASSERT NOT line_exists( result->t_pair[ n = pair-n ] ).
+      APPEND pair TO result->t_pair.
     ENDLOOP.
     APPEND result TO t_child.
 
@@ -183,10 +185,15 @@ CLASS z2ui5_cl_ai_xml IMPLEMENTATION.
     " set the attribute on the element the chain is currently pointing at:
     " the just-added child (after open/leaf) or - if none yet - this node
     " itself (so attributes can be attached right after open/leaf/shut).
+    " fail fast instead of dropping silently: on the empty factory root there
+    " is no element to attach to, and a duplicate name renders invalid XML
+    ASSERT name IS NOT INITIAL OR t_child IS NOT INITIAL.
     IF t_child IS INITIAL.
+      ASSERT NOT line_exists( t_pair[ n = n ] ).
       APPEND VALUE #( n = n v = v ) TO t_pair.
     ELSE.
       DATA(target) = t_child[ lines( t_child ) ].
+      ASSERT NOT line_exists( target->t_pair[ n = n ] ).
       APPEND VALUE #( n = n v = v ) TO target->t_pair.
     ENDIF.
     result = me.
@@ -196,6 +203,9 @@ CLASS z2ui5_cl_ai_xml IMPLEMENTATION.
 
   METHOD shut.
 
+    " fail fast: a shut( ) past the mvc:View root would hand back a null
+    " reference that only crashes at the next chained call, far from the bug
+    ASSERT parent IS BOUND.
     result = parent.
 
   ENDMETHOD.
