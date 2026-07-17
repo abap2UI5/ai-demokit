@@ -79,7 +79,6 @@ CLASS z2ui5_cl_ai_app_529 IMPLEMENTATION.
                                 )->a( n = `class` v = `sapUiSmallMarginBottom`
                                 )->a( n = `text`  v = `Product Damaged`
                                 )->a( n = `state` v = `Error`
-                            " original .handleStatusPressed opens a Dialog; here the press is wired to a message toast
                             )->leaf( `ObjectStatus`
                                 )->a( n = `class`  v = `sapUiSmallMarginBottom`
                                 )->a( n = `title`  v = `Product status`

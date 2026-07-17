@@ -8,7 +8,7 @@ CLASS z2ui5_cl_ai_app_441 DEFINITION PUBLIC.
         name     TYPE string,
         quantity TYPE i,
       END OF ty_s_product.
-    DATA t_products TYPE TABLE OF ty_s_product.
+    DATA t_products TYPE STANDARD TABLE OF ty_s_product WITH EMPTY KEY.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.

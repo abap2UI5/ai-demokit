@@ -17,8 +17,8 @@
       "what": "image height/width are device dependent in the original (imageHeight/imageWidth = 5em on a phone, 10em otherwise); restored as the expression {= ${device>/system/phone} ? '5em' : '10em' } over the framework's device> model (image 4 keeps its fixed 6em width, exactly as the original) - confirm the images shrink on a phone."
     },
     {
-      "type": "IMPROVISED",
-      "what": "the custom CSS class imageContainer (light blue background) of the box4 HBox is dropped - its stylesheet is not available in abap2UI5."
+      "type": "LIVE_TEST",
+      "what": "the custom CSS class imageContainer (light blue background) of the box4 HBox is kept and the sample's styles.css (.imageContainer{background-color:#A9EAFF}) injected via a core:HTML content attribute (CAPABILITIES.md CSS row, as apps 431/404) - confirm the light-blue background renders behind image 4."
     }
   ]
 }

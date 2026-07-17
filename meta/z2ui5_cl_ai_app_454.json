@@ -9,12 +9,12 @@
   "checked": null,
   "deviations": [
     {
-      "type": "IMPROVISED",
-      "what": "the controller's onInit pre-sets the tokens on both MultiInputs (Token 1..6 and one long token); they are declared statically in the view's tokens aggregation instead - same rendering."
+      "type": "NOTE",
+      "what": "the controller's onInit pre-sets the tokens on both MultiInputs (Token 1..6 and one long token); they are declared statically in the view's tokens aggregation instead - same rendering (CAPABILITIES.md marks controller-filled aggregations as expressible, the tokens aggregation is public since UI5 1.16), so this is a faithful 1:1, not a workaround."
     },
     {
-      "type": "IMPROVISED",
-      "what": "the controller's addValidator (typing free text + Enter creates a token client-side) is dropped - abap2UI5 has no client-side validator hook."
+      "type": "NOTE",
+      "what": "the controller's addValidator (typing free text + Enter creates a token client-side) is omitted here as a deliberate simplification - NOT a gap: the bundled custom control z2ui5.cc.MultiInputExt installs exactly this validator (addValidator(({text}) => new Token({key:text, text})), source-verified in app/webapp/cc/MultiInputExt.js), see CAPABILITIES.md. Wiring it would be the first cc-control usage in these ports, so it is left for a live-tested follow-up."
     },
     {
       "type": "SUBSET_DATA",

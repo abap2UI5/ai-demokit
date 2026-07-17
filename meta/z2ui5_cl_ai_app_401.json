@@ -9,12 +9,12 @@
   "checked": null,
   "deviations": [
     {
-      "type": "IMPROVISED",
-      "what": "the bound lists=\"{/ProductCollectionStats/Filters}\" collection is unrolled into two static FacetFilterLists (Category, SupplierName); the facet values inside each list stay bound."
+      "type": "NOTE",
+      "what": "the bound lists=\"{/ProductCollectionStats/Filters}\" collection is represented as two static FacetFilterLists (Category, SupplierName) - the original's stats model yields exactly these two lists, so this is a faithful equivalent; the facet values inside each list stay bound to a FacetFilterItem template. A doubly-nested variant (bind the FacetFilter lists aggregation to a nested table, FacetFilterList template with a relative items binding over each filter's values) is source-plausible now that nested binding is expressible, but no port proves that aggregation-of-aggregation template shape yet - LIVE_TEST before adopting it."
     },
     {
-      "type": "IMPROVISED",
-      "what": "selection transport - every FacetFilterItem binds selected two-way; on listClose/reset the backend reads/clears the flags and re-filters (the original filters client-side via sap.ui.model.Filter)."
+      "type": "NOTE",
+      "what": "selection transport - every FacetFilterItem binds selected two-way; on listClose/reset the backend reads/clears the flags and re-filters. This is the documented 1:1 path (CAPABILITIES.md marks controller-read FacetFilter/List multi-select as expressible with app 401 as its evidence port), not a workaround; the model is applied before on_event runs."
     },
     {
       "type": "LIVE_TEST",
@@ -22,7 +22,7 @@
     },
     {
       "type": "IMPROVISED",
-      "what": "the original controller appends the sap.m.sample.Table component's table with its first cell swapped for an ObjectIdentifier {Name}/{Category}; that table is rebuilt inline, its Currency-formatter price column preformatted (PRICE text) and Formatter.js weightState precomputed in WEIGHT_STATE."
+      "what": "the original controller appends the sap.m.sample.Table component's table with its first cell swapped for an ObjectIdentifier {Name}/{Category}; that table is rebuilt inline. The price column keeps the original sap.ui.model.type.Currency composite binding 1:1 (raw binding-info string over a numeric PRICE field); only the custom Formatter.js weightState (a client-side JS formatter function, genuinely not expressible) is precomputed in WEIGHT_STATE."
     },
     {
       "type": "IMPROVISED",

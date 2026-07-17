@@ -117,6 +117,36 @@ const RULES = [
     find: grepLines(/DATA\(\w+\)\s*=\s*client->_\w+\(/),
   },
   {
+    id: 'default-key-table',
+    level: 'error',
+    doc: 'bare `TYPE TABLE OF` gives an implicit default key — declare it explicitly as `TYPE STANDARD TABLE OF ... WITH EMPTY KEY` (AGENTS §8; slipped the abaplint defaultKey gate, which only catches explicit DEFAULT KEY, in app 441)',
+    find: grepLines(/\bTYPE\s+TABLE\s+OF\b/),
+  },
+  {
+    id: 'numeric-bound-as-string',
+    level: 'error',
+    doc: 'a model field that is bound to a control and only ever assigned numeric literals is TYPE string — UI5 2.x strict-type validation rejects a string on a numeric property (Slider/RangeSlider/StepInput value); type it numerically (TYPE i / p / decfloat) — AGENTS §10, apps 486/472',
+    find(content) {
+      const out = [];
+      const decl = /^\s*DATA\s+(\w+)\s+TYPE\s+string\s*\.\s*$/gm;
+      let m;
+      while ((m = decl.exec(content))) {
+        const name = m[1];
+        if (!new RegExp(`_bind(?:_edit)?\\(\\s*${name}\\s*\\)`).test(content)) continue;
+        const asn = new RegExp(`\\b${name}\\s*=\\s*\`([^\`]*)\``, 'g');
+        let a, any = false, allNumeric = true;
+        while ((a = asn.exec(content))) {
+          any = true;
+          if (!/^-?\d+(\.\d+)?$/.test(a[1].trim())) { allNumeric = false; break; }
+        }
+        if (any && allNumeric) {
+          out.push({ line: lineOf(content, m.index), text: `${name} TYPE string, bound, only numeric literals assigned` });
+        }
+      }
+      return out;
+    },
+  },
+  {
     id: 'param-continuation-align',
     level: 'warn',
     doc: 'a t_arg continuation line must start in the same column as the val parameter above it — human-taught alignment fix, 2026-07-16 (apps 421/422)',

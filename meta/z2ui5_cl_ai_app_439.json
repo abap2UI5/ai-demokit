@@ -18,7 +18,7 @@
     },
     {
       "type": "NOTE",
-      "what": "the Links' press (.onFormattedTextLinkPress) round-trips as event LINK_PRESS and shows the controller's toast text; the original docks the MessageToast at CenterCenter and calls preventDefault - not expressible via message_toast_display, the toast appears at the default position."
+      "what": "the Links' press (.onFormattedTextLinkPress) round-trips as event LINK_PRESS and shows the controller's toast text, docked at CenterCenter 1:1 via message_toast_display( my = 'center center' at = 'center center' ) (the client method exposes the MessageToast options object - source-verified in Messages.js). The original's preventDefault is not needed: the Links carry no href, so there is no default navigation to suppress."
     }
   ]
 }

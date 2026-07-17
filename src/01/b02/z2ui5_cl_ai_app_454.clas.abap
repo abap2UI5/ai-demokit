@@ -52,7 +52,6 @@ CLASS z2ui5_cl_ai_app_454 IMPLEMENTATION.
       ( product_id = `HT-1032` name = `Ergo Screen E-III` )
       ( product_id = `HT-1035` name = `Flat Basic` )
       ( product_id = `HT-1036` name = `Flat Future` ) ).
-    SORT t_products BY name.
 
   ENDMETHOD.
 
@@ -81,7 +80,7 @@ CLASS z2ui5_cl_ai_app_454 IMPLEMENTATION.
                 )->a( n = `width`           v = `70%`
                 )->a( n = `showClearIcon`   v = `true`
                 )->a( n = `id`              v = `multiInput`
-                )->a( n = `suggestionItems` v = client->_bind_edit( t_products )
+                )->a( n = `suggestionItems` v = |\{ path: '{ client->_bind_edit( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
                 )->a( n = `placeholder`     v = `Products...`
                 )->a( n = `showValueHelp`   v = `false`
 

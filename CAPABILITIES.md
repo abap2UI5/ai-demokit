@@ -26,6 +26,7 @@ feature this table marks ✅/🔶.
 |---|---|---|---|
 | Any XML view structure (containers, aggregations, namespaces) | ✅ | `z2ui5_cl_ai_xml` open/leaf/shut + `a()` | all ports |
 | Aggregations filled by the controller in `onInit` (e.g. pre-set `tokens` on MultiInput) | ✅ | declare the aggregation in the view: `open( 'tokens' )` → `leaf( 'Token' )` per entry | missed in app 454 — the tokens aggregation is public since 1.16; do not skip these |
+| MultiInput `addValidator` (free text + Enter → a new Token) | 🔶 | the bundled custom control `z2ui5.cc.MultiInputExt` (companion control referencing the MultiInput by id) installs exactly this validator — `addValidator(({text}) => new Token({key:text, text}))` — and mirrors added/removed tokens back via `addedTokens`/`removedTokens` + a `change` event | source-verified in `app/webapp/cc/MultiInputExt.js`; **not** a gap — app 454 currently omits it (would be the first cc-control usage in these ports, LIVE-TEST pending) |
 | Custom CSS (`style.css`, `html:style` blocks) | 🔶 | `core:HTML` leaf with the `content` **attribute** carrying `<style>…</style>` — the builder escapes attribute values, no CDATA node needed | apps 404/431 inject their sample `style.css` exactly this way (restored 2026-07-16, LIVE-TEST pending); 404 also uses `content` for `<h2>…</h2>` markup |
 | Composite/array properties (RangeSlider `range="[lo,hi]"`) | 🔶 | split into the scalar sibling properties the control keeps in sync (`value`/`value2`) | app 472 |
 | Literal line breaks inside attribute values (`&#xA;` in the original) | ✅ | write the break as `\n` in a `\|...\|` template — `xml_escape` emits it as `&#xA;`/`&#xD;`/`&#x9;` so it survives XML attribute-value normalization | app 445 (`noDataText`); builder fix 2026-07-16 |
@@ -37,7 +38,7 @@ feature this table marks ✅/🔶.
 |---|---|---|---|
 | Controller-built `sap.m.Dialog` (`new Dialog({...}).open()`) | ✅ | build a `core:FragmentDefinition` → `Dialog` with the same builder, show with `client->popup_display( )`, close via `client->_event_client( client->cs_event-popup_close )` | app 469; app 529 now builds its error Dialog the same way (its earlier toast substitution was a wrong improvisation) |
 | `sap.m.MessageBox` | ✅ | `client->message_box_display` (actions, initialFocus, styleClass, and now `dependentOn` + `contentWidth` supported) | app 447 |
-| `sap.m.MessageToast` | ✅ | `client->message_toast_display` | apps 448, 526 |
+| `sap.m.MessageToast` (incl. the options object: `my`/`at`/`of`/`offset`/`collision` docking, `duration`, `width`, `class`) | ✅ | `client->message_toast_display( text = … my = 'center center' at = 'center center' … )` — the client method exposes the full MessageToast options object; dock strings ("center center", "begin top", …) are resolved in `Messages.js` | apps 448, 526; docking proven by app 439 (source-verified in `app/webapp/core/Messages.js`) |
 
 ## Models & binding
 
@@ -52,7 +53,8 @@ feature this table marks ✅/🔶.
 | `sap.ui.Device` / device model bindings | ✅ | the `device>` named model (JSONModel over sap.ui.Device) is set on **every** view slot — main, popup, popover and nested views — so `{device>/system/phone}` bindings work everywhere; the same data is also mirrored server-side in `client->get( )-s_device` | source-verified: view1_js binds the one shared model in all slot factories (displayFragment/displayPopover/displayNestedView) plus the main view; apps 433/473 use it in main views (LIVE-TEST pending) |
 | Binding `sorter` (no grouping) | ✅ | keep the original binding-info string: `\|\{ path: '{ client->_bind_edit( val = t path = abap_true ) }', sorter: \{ path: 'COL' \} \}\|` — no ABAP SORT, no deviation needed | apps 423/440/527 converted 2026-07-17; same pass-through as the group-sorter row below |
 | Binding `sorter` with `group: true` + default group headers | ✅ | keep a raw binding-info string `{path: '…', sorter: {path: '…', group: true}}` — get the bare model path via `client->_bind_edit( val = t_products path = abap_true )` (human-taught 2026-07-16); only a *custom* `groupHeaderFactory` is out | source-verified on BOTH sides: abap2UI5 passes attribute values to `XMLView.create` unmangled, and UI5's default group header IS `new SeparatorItem({text: group.text \|\| group.key})` (openui5 `ComboBoxBase.addItemGroup`); app 452 converted 2026-07-16 (LIVE-TEST pending) |
-| Composite binding types / formatters (`sap.ui.model.type.Currency`, `Formatter.js`) | ❌ | preformat the value in ABAP, bind the result; note it | apps 440, 460 |
+| Standard composite binding **types** (`sap.ui.model.type.Currency`, Date/Number types) | ✅ | keep the original binding-info string 1:1 — `\|\{ parts:[\{path:'PRICE'\},\{path:'CURRENCY_CODE'\}], type:'sap.ui.model.type.Currency', formatOptions:\{showMeasure:false\} \}\|` — over a numeric ABAP field (`price TYPE p`); the type is a client-side standard resolved on the frontend, and abap2UI5 passes the attribute value to `XMLView.create` unmangled (the same pass-through as the sorter rows) | apps 440/401 converted 2026-07-17 (LIVE-TEST pending); same idiom as curated samples `z2ui5_cl_demo_app_369` / `_172`. App 460 keeps a static single-record resolution for an unrelated reason ({/ProductCollection/0}), not because the type is inexpressible |
+| Custom JS formatter **functions** (`Formatter.js`, a `formatter: '.fn'` controller method) | ❌ | preformat the value in ABAP, bind the result; note it | app 401 `Formatter.js` weightState (a client-side JS function, no server equivalent) |
 | MessageManager / `message>` model | ❌ | bind an equivalent hardcoded table | app 449 |
 
 ## Events
@@ -91,5 +93,6 @@ Also available: nested view slots (`nest_view_display`), `popover_display(
 by_id )` anchored to any control, app-stack navigation with typed results
 (`nav_app_call/leave` + `get_app_prev`), and bundled custom controls
 (`z2ui5.cc`: Timer, Storage, Focus, Geolocation, History, Tree,
-FileUploader, CameraPicture, …). Details: the abap2UI5/abap2UI5 sources
+FileUploader, CameraPicture, MultiInputExt / SmartMultiInputExt,
+UploadSetExt, …). Details: the abap2UI5/abap2UI5 sources
 `z2ui5_if_client` + `z2ui5_cl_app_frontendaction_js`.

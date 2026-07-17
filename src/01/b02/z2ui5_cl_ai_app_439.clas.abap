@@ -123,7 +123,10 @@ CLASS z2ui5_cl_ai_app_439 IMPLEMENTATION.
     CASE client->get( )-event.
 
       WHEN `LINK_PRESS`.
-        client->message_toast_display( `You have pressed a link in value state message` ).
+        client->message_toast_display(
+          text = `You have pressed a link in value state message`
+          my   = `center center`
+          at   = `center center` ).
 
     ENDCASE.
 

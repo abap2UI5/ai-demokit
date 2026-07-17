@@ -37,9 +37,14 @@ CLASS z2ui5_cl_ai_app_434 IMPLEMENTATION.
     DATA(view) = z2ui5_cl_ai_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
-        )->a( n = `xmlns`     v = `sap.m`
-        )->a( n = `xmlns:l`   v = `sap.ui.layout`
-        )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
+        )->a( n = `xmlns`      v = `sap.m`
+        )->a( n = `xmlns:l`    v = `sap.ui.layout`
+        )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
+        )->a( n = `xmlns:core` v = `sap.ui.core`
+
+        " the sample's styles.css, injected via a core:HTML content attribute (see CAPABILITIES.md)
+        )->leaf( n = `HTML` ns = `core`
+            )->a( n = `content` v = `<style>.imageContainer{background-color:#A9EAFF}</style>`
 
         )->open( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
@@ -117,8 +122,9 @@ CLASS z2ui5_cl_ai_app_434 IMPLEMENTATION.
                         )->open( `VBox`
                             )->a( n = `alignItems` v = `Center`
 
-                            " custom CSS class imageContainer (light blue background) of the HBox omitted - stylesheet not available in abap2UI5
                             )->open( `HBox`
+                                )->a( n = `class` v = `imageContainer`
+
                                 )->leaf( `Image`
                                     )->a( n = `src`                v = pic3
                                     )->a( n = `mode`               v = `Background`

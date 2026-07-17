@@ -13,7 +13,7 @@ CAPABILITIES.md._
 | CI | ABAP_STANDARD, ABAP_CLOUD, ABAP_702 all green |
 | Structural view diff | **0 undeclared differences** across all 34 ports (`node scripts/structural-diff.mjs --strict`) |
 | Pattern lint | **0 errors, 0 warnings, empty baseline** (`node scripts/pattern-lint.mjs`) |
-| Meta sidecars | 34 in `meta/` — status: 30 `generated`, 4 `checked`; deviations: 27 IMPROVISED, 12 POST_171 (8 apps carry the orange 1.71+ badge), 12 LIVE_TEST, 7 SUBSET_DATA, 2 NOTE — DROPPED_171 is empty since the 1:1 restoration |
+| Meta sidecars | 34 in `meta/` — status: 30 `generated`, 4 `checked`; deviations: 14 IMPROVISED, 13 POST_171, 15 LIVE_TEST, 7 SUBSET_DATA, 8 NOTE — DROPPED_171 is empty since the 1:1 restoration |
 | Manually verified in a running system | 420, 421, 526, 530 (`CHECKED`) |
 | Archive | `ui5/sap.m/<SampleName>/` — full originals for the 34 ported samples (+2 cross-referenced: `FacetFilterSimple`, `Table`); mock snapshot in `ui5/mock/`. Unported samples are copied over batch by batch. |
 
@@ -93,6 +93,91 @@ Two human correction commits so far; every change fed back as a rule:
 - Trap: abapGit pushes from a stale system state can revert newer generated
   files (overview, twice) → AGENTS §10 gotcha; regenerate + diff after every
   human push.
+
+## Full-port audit (2026-07-17)
+
+A framework-aware re-review of all 34 ports (4 parallel reviewers, one per
+batch) against their JS/XML originals, the current AGENTS/CAPABILITIES rules,
+and the latest abap2UI5 changes (`control_call`/`control_call_by_id`,
+`message_box_display` `dependentOn`/`contentWidth`, the `device>` model on
+every view slot, nested-table deltas, `_bind`→two-way). Result: 25 ports
+unchanged (incl. the golden set 420/421/526 confirmed still-current), 9 would
+be generated differently. Fixed in this change:
+
+- **472 (RangeSlider)** — the ten bound `value`/`value2` fields were `TYPE
+  string` seeded with numeric literals; UI5 2.x strict-type validation rejects
+  a string on a numeric property (the same class as the app-486 Slider gotcha,
+  AGENTS §10). Retyped to `TYPE i`. **No gate caught this** → new pattern-lint
+  rule `numeric-bound-as-string`.
+- **441 (ListCounter)** — `DATA t_products TYPE TABLE OF ...` (implicit default
+  key), the only occurrence in `src/`; it slipped the abaplint `defaultKey`
+  gate, which only matches an explicit `DEFAULT KEY`. Fixed to `TYPE STANDARD
+  TABLE OF ... WITH EMPTY KEY` → new pattern-lint rule `default-key-table`.
+- **529 (ObjectStatus)** — a stale inline comment claimed the press "is wired
+  to a message toast"; the code builds the original Dialog via `popup_display`.
+  Comment removed.
+- **447 / 452** — the self-referential `IMPROVISED` deviations reclassified to
+  `NOTE`: `message_box_display` (447) and the default group header (452) are
+  the documented 1:1 paths in CAPABILITIES.md, not workarounds.
+
+Second pass — the four remaining audit items worked off (2026-07-17):
+- [x] **434** — the `imageContainer` background-color CSS is kept and the
+  sample's `styles.css` injected via a `core:HTML` `content` attribute (as
+  431/404); deviation IMPROVISED→LIVE_TEST. Structural diff still 0 (the EXTRA
+  `core:HTML` is matched by the declaration).
+- [x] **454** — `suggestionItems` converted to the raw `sorter` binding-info
+  string (`{ path: '…', sorter: {path: 'NAME'} }`), the ABAP `SORT` dropped;
+  the pre-set-tokens deviation IMPROVISED→NOTE (a ✅ capability, not a
+  workaround).
+- [x] **439** — the CenterCenter toast is now docked 1:1 via
+  `message_toast_display( my = 'center center' at = 'center center' )` — the
+  client method exposes the full MessageToast options object (source-verified
+  in `Messages.js`). New CAPABILITIES row; the "not expressible" NOTE corrected.
+- [x] **401** — reclassified the two mislabeled IMPROVISED deviations to NOTE
+  (the two-way FacetFilter multi-select is CAPABILITIES ✅ with 401 as its own
+  evidence port; the two static lists are a faithful equivalent). The
+  structural rewrite into a doubly-nested `lists` aggregation-template was
+  **deliberately not done**: no port proves that aggregation-of-aggregation
+  shape and it cannot be live-tested here — recorded as a LIVE_TEST option, not
+  shipped blind on a working source-verified port.
+
+## Framework requests + capability wins from the audit (2026-07-17)
+
+Two ideas the audit surfaced, handled per their true nature:
+
+- **`pr/control-call-whitelist`** (new, open) — a genuine framework gap: the
+  `control_call_by_id` whitelist (`to/back/focus/scrollToIndex/scrollTo`) does
+  not include the imperative methods two 1:1 ports need — `PDFViewer.open()`
+  (469) and `Panel.setExpanded()` (471). Written up as a forwardable request to
+  broaden the list (its own comment already scopes it to "imperative methods
+  with no binding equivalent"). `addValidator` (454) is explicitly out of scope
+  (a client callback, not a one-shot call).
+- **Composite `Currency` type — NOT a framework gap** — a source + samples
+  check showed `sap.ui.model.type.Currency` is a client-side standard type and
+  the curated samples (`z2ui5_cl_demo_app_369`/`_172`) already bind it via a raw
+  binding-info string; the builder only XML-escapes attribute values, so it
+  passes through to `XMLView.create` unmangled — exactly the sorter story. So a
+  framework PR would be wrong. Instead: CAPABILITIES.md row split (standard
+  composite **types** ✅ via raw binding-info string; only custom JS formatter
+  **functions** stay ❌), and ports **440**/**401** converted to keep the
+  original Currency binding 1:1 over a numeric `PRICE` (`TYPE p`) field —
+  IMPROVISED dropped, LIVE_TEST added. App 460 keeps its static single-record
+  resolution (an unrelated deviation), not blocked by the type.
+- **MultiInput `addValidator` — NOT a framework gap either** — the bundled
+  custom control `z2ui5.cc.MultiInputExt` installs exactly the sample's
+  free-text→token validator (`addValidator(({text}) => new Token({key:text,
+  text}))`, source-verified in `app/webapp/cc/MultiInputExt.js`) and mirrors
+  token changes back via `addedTokens`/`removedTokens` + `change`. CAPABILITIES
+  row added (🔶) and the app-454 deviation corrected IMPROVISED→NOTE. The code
+  is not rewritten: wiring `z2ui5.cc.MultiInputExt` through the generic builder
+  would be the first cc-control usage in these ports and needs a live check —
+  left as a LIVE_TEST follow-up rather than shipped blind.
+
+**Pattern worth noting:** of the four framework ideas the audit raised, only
+one (`control_call` whitelist) is a real gap; the composite `Currency` type
+and the MultiInput validator were both already in the framework — the map/ports
+had wrongly treated them as ❌. Exactly the "declared impossible although it
+already works" failure mode CAPABILITIES.md opens by warning against.
 
 ## Open findings (backlog)
 

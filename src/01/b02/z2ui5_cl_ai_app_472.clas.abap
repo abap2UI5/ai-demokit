@@ -3,16 +3,16 @@ CLASS z2ui5_cl_ai_app_472 DEFINITION PUBLIC.
   PUBLIC SECTION.
     INTERFACES z2ui5_if_app.
 
-    DATA rs1_value  TYPE string.
-    DATA rs1_value2 TYPE string.
-    DATA rs2_value  TYPE string.
-    DATA rs2_value2 TYPE string.
-    DATA rs3_value  TYPE string.
-    DATA rs3_value2 TYPE string.
-    DATA rs4_value  TYPE string.
-    DATA rs4_value2 TYPE string.
-    DATA rs5_value  TYPE string.
-    DATA rs5_value2 TYPE string.
+    DATA rs1_value  TYPE i.
+    DATA rs1_value2 TYPE i.
+    DATA rs2_value  TYPE i.
+    DATA rs2_value2 TYPE i.
+    DATA rs3_value  TYPE i.
+    DATA rs3_value2 TYPE i.
+    DATA rs4_value  TYPE i.
+    DATA rs4_value2 TYPE i.
+    DATA rs5_value  TYPE i.
+    DATA rs5_value2 TYPE i.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -39,16 +39,16 @@ CLASS z2ui5_cl_ai_app_472 IMPLEMENTATION.
 
   METHOD model_init.
 
-    rs1_value  = `0`.
-    rs1_value2 = `100`.
-    rs2_value  = `-50`.
-    rs2_value2 = `50`.
-    rs3_value  = `20`.
-    rs3_value2 = `80`.
-    rs4_value  = `-500`.
-    rs4_value2 = `500`.
-    rs5_value  = `0`.
-    rs5_value2 = `500`.
+    rs1_value  = 0.
+    rs1_value2 = 100.
+    rs2_value  = -50.
+    rs2_value2 = 50.
+    rs3_value  = 20.
+    rs3_value2 = 80.
+    rs4_value  = -500.
+    rs4_value2 = 500.
+    rs5_value  = 0.
+    rs5_value2 = 500.
 
   ENDMETHOD.
 

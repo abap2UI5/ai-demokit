@@ -16,6 +16,7 @@ README and update CAPABILITIES.md.
 
 | Request | Status |
 |---------|--------|
+| [control-call-whitelist](control-call-whitelist/README.md) | open |
 | [message-box-dependent-on](message-box-dependent-on/README.md) | implemented |
 | [named-json-models](named-json-models/README.md) | open |
 | [device-model-in-popups](device-model-in-popups/README.md) | implemented |
