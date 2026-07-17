@@ -37,6 +37,7 @@ CLASS z2ui5_cl_api_app_447 IMPLEMENTATION.
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
 
         )->open( n = `VerticalLayout` ns = `l`
+            )->a( n = `id`    v = `messageBoxHost`
             )->a( n = `class` v = `sapUiContentPadding`
             )->a( n = `width` v = `100%`
 
@@ -68,7 +69,8 @@ CLASS z2ui5_cl_api_app_447 IMPLEMENTATION.
 
       WHEN `INITIAL_FOCUS_ON_ACTION`.
 
-        " the original dependentOn option is omitted - message_box_display does not expose it
+        " dependentOn ties the message box to the view's layout lifecycle
+        " (original: dependentOn: this.getView())
         client->message_box_display(
           text             = |Initial button focus is set by attribute \n initialFocus: sap.m.MessageBox.Action.CANCEL|
           type             = `warning`
@@ -77,11 +79,13 @@ CLASS z2ui5_cl_api_app_447 IMPLEMENTATION.
           actions          = VALUE #( ( `OK` ) ( `CANCEL` ) )
           emphasizedaction = `OK`
           initialfocus     = `CANCEL`
+          dependenton      = `messageBoxHost`
           styleclass       = `sapUiResponsivePadding--header sapUiResponsivePadding--content sapUiResponsivePadding--footer` ).
 
       WHEN `INITIAL_FOCUS_ON_CUSTOM_ACTION`.
 
-        " the original dependentOn option is omitted - message_box_display does not expose it
+        " dependentOn ties the message box to the view's layout lifecycle
+        " (original: dependentOn: this.getView())
         client->message_box_display(
           text             = |Initial button focus is set by attribute \n initialFocus: "Custom button" \n Note: The name is not case sensitive|
           type             = `show`
@@ -90,6 +94,7 @@ CLASS z2ui5_cl_api_app_447 IMPLEMENTATION.
           actions          = VALUE #( ( `YES` ) ( `NO` ) ( `Custom Action` ) )
           emphasizedaction = `Custom Action`
           initialfocus     = `Custom Action`
+          dependenton      = `messageBoxHost`
           styleclass       = `sapUiResponsivePadding--header sapUiResponsivePadding--content sapUiResponsivePadding--footer` ).
 
     ENDCASE.

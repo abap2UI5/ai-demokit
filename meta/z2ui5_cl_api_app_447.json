@@ -21,8 +21,8 @@
       "what": "the MessageBox emphasizedAction option (since UI5 1.75) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.75 to render it."
     },
     {
-      "type": "IMPROVISED",
-      "what": "the MessageBox dependentOn option (since UI5 1.124) of the original is not restored - the abap2UI5 API does not expose it (message_box_display in z2ui5_if_client has no such parameter)."
+      "type": "POST_171",
+      "what": "the MessageBox dependentOn option (since UI5 1.124) is restored via message_box_display's dependenton parameter, pointing at the view layout (id messageBoxHost); the app needs a UI5 release >= 1.124 to render it."
     }
   ]
 }
