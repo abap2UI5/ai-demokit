@@ -108,9 +108,6 @@ CLASS z2ui5_cl_api_app_423 IMPLEMENTATION.
       ( key = `GB` text = `United Kingdom` )
       ( key = `YE` text = `Yemen` ) ).
 
-    " the original binds items with a model sorter { path: 'text' } - the data is sorted in ABAP instead
-    SORT t_countries BY text.
-
   ENDMETHOD.
 
 
@@ -130,7 +127,7 @@ CLASS z2ui5_cl_api_app_423 IMPLEMENTATION.
 
             )->open( `content`
                 )->open( `ComboBox`
-                    )->a( n = `items` v = client->_bind_edit( t_countries )
+                    )->a( n = `items` v = |\{ path: '{ client->_bind_edit( val = t_countries path = abap_true ) }', sorter: \{ path: 'TEXT' \} \}|
 
                     )->leaf( n = `Item` ns = `core`
                         )->a( n = `key`  v = `{KEY}`

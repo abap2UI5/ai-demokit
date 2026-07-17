@@ -119,9 +119,6 @@ CLASS z2ui5_cl_api_app_440 IMPLEMENTATION.
           currency_code  = `EUR`
           product_pic_url        = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1020.jpg` ) ).
 
-    " the original view sorts the table items by name via a binding sorter
-    SORT t_products BY name ASCENDING.
-
   ENDMETHOD.
 
 
@@ -136,7 +133,7 @@ CLASS z2ui5_cl_api_app_440 IMPLEMENTATION.
         )->open( `Table`
             )->a( n = `id`    v = `idProductsTable`
             )->a( n = `inset` v = `false`
-            )->a( n = `items` v = client->_bind_edit( t_products )
+            )->a( n = `items` v = |\{ path: '{ client->_bind_edit( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
 
             )->open( `headerToolbar`
                 )->open( `Toolbar`

@@ -7,10 +7,5 @@
   "audit": "(a) frontend_action (_event_client): NO | (b) event t_arg: NO",
   "status": "generated",
   "checked": null,
-  "deviations": [
-    {
-      "type": "IMPROVISED",
-      "what": "the binding sorter (path Name) is replaced by a one-time ABAP SORT - equivalent for this static data."
-    }
-  ]
+  "deviations": []
 }

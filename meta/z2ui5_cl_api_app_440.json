@@ -15,10 +15,6 @@
     {
       "type": "SUBSET_DATA",
       "what": "the bound /ProductCollection shows a 6-row subset of the 123-row mock (ui5/mock/products.json); HT-1002 is not part of the subset."
-    },
-    {
-      "type": "IMPROVISED",
-      "what": "the binding sorter (path Name) is replaced by a one-time ABAP SORT - equivalent for this static data."
     }
   ]
 }
