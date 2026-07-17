@@ -13,7 +13,7 @@ CAPABILITIES.md._
 | CI | ABAP_STANDARD, ABAP_CLOUD, ABAP_702 all green |
 | Structural view diff | **0 undeclared differences** across all 34 ports (`node scripts/structural-diff.mjs --strict`) |
 | Pattern lint | **0 errors, 0 warnings, empty baseline** (`node scripts/pattern-lint.mjs`) |
-| Meta sidecars | 34 in `meta/` — status: 30 `generated`, 4 `checked`; deviations: 27 IMPROVISED, 12 POST_171 (8 apps carry the orange 1.71+ badge), 12 LIVE_TEST, 7 SUBSET_DATA, 2 NOTE — DROPPED_171 is empty since the 1:1 restoration |
+| Meta sidecars | 34 in `meta/` — status: 30 `generated`, 4 `checked`; deviations: 20 IMPROVISED, 13 POST_171, 13 LIVE_TEST, 7 SUBSET_DATA, 4 NOTE — DROPPED_171 is empty since the 1:1 restoration |
 | Manually verified in a running system | 420, 421, 526, 530 (`CHECKED`) |
 | Archive | `ui5/sap.m/<SampleName>/` — full originals for the 34 ported samples (+2 cross-referenced: `FacetFilterSimple`, `Table`); mock snapshot in `ui5/mock/`. Unported samples are copied over batch by batch. |
 
@@ -93,6 +93,43 @@ Two human correction commits so far; every change fed back as a rule:
 - Trap: abapGit pushes from a stale system state can revert newer generated
   files (overview, twice) → AGENTS §10 gotcha; regenerate + diff after every
   human push.
+
+## Full-port audit (2026-07-17)
+
+A framework-aware re-review of all 34 ports (4 parallel reviewers, one per
+batch) against their JS/XML originals, the current AGENTS/CAPABILITIES rules,
+and the latest abap2UI5 changes (`control_call`/`control_call_by_id`,
+`message_box_display` `dependentOn`/`contentWidth`, the `device>` model on
+every view slot, nested-table deltas, `_bind`→two-way). Result: 25 ports
+unchanged (incl. the golden set 420/421/526 confirmed still-current), 9 would
+be generated differently. Fixed in this change:
+
+- **472 (RangeSlider)** — the ten bound `value`/`value2` fields were `TYPE
+  string` seeded with numeric literals; UI5 2.x strict-type validation rejects
+  a string on a numeric property (the same class as the app-486 Slider gotcha,
+  AGENTS §10). Retyped to `TYPE i`. **No gate caught this** → new pattern-lint
+  rule `numeric-bound-as-string`.
+- **441 (ListCounter)** — `DATA t_products TYPE TABLE OF ...` (implicit default
+  key), the only occurrence in `src/`; it slipped the abaplint `defaultKey`
+  gate, which only matches an explicit `DEFAULT KEY`. Fixed to `TYPE STANDARD
+  TABLE OF ... WITH EMPTY KEY` → new pattern-lint rule `default-key-table`.
+- **529 (ObjectStatus)** — a stale inline comment claimed the press "is wired
+  to a message toast"; the code builds the original Dialog via `popup_display`.
+  Comment removed.
+- **447 / 452** — the self-referential `IMPROVISED` deviations reclassified to
+  `NOTE`: `message_box_display` (447) and the default group header (452) are
+  the documented 1:1 paths in CAPABILITIES.md, not workarounds.
+
+Still open from the audit (need judgement or a live check, not done here):
+- [ ] **434** — drops the trivial `imageContainer` background-color CSS as "not
+  expressible" although `core:HTML` can carry it (the exact anti-pattern
+  CAPABILITIES warns about; sibling 431 already injects its `style.css`).
+- [ ] **401** — the hand-unrolled two `FacetFilterList`s could become a bound
+  template over a nested table now that nested binding is ✅.
+- [ ] **454** — `suggestionItems` still uses an undeclared ABAP `SORT` instead
+  of the raw `sorter` binding-info string (missed in the 2026-07-17 conversion).
+- [ ] **439** — the CenterCenter-docked toast may be expressible via the
+  `display_message_toast` options object rather than declared inexpressible.
 
 ## Open findings (backlog)
 
