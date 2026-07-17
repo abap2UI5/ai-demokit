@@ -50,7 +50,7 @@ CLASS z2ui5_cl_api_app_530 IMPLEMENTATION.
       ( key = `GreaterThan`       text = `GreaterThan` ) ).
 
     " original: selected = oMData[0].text -> the first item's text
-    selected = `Slash`.
+    selected = t_items[ 1 ]-text.
 
   ENDMETHOD.
 

@@ -5,18 +5,18 @@ CLASS z2ui5_cl_api_app_440 DEFINITION PUBLIC.
 
     TYPES:
       BEGIN OF ty_s_product,
-        product_id     TYPE string,
-        name           TYPE string,
-        supplier_name  TYPE string,
-        width          TYPE string,
-        depth          TYPE string,
-        height         TYPE string,
-        dim_unit       TYPE string,
-        weight_measure TYPE string,
-        weight_unit    TYPE string,
-        price          TYPE string,
-        currency_code  TYPE string,
-        product_pic_url        TYPE string,
+        product_id      TYPE string,
+        name            TYPE string,
+        supplier_name   TYPE string,
+        width           TYPE string,
+        depth           TYPE string,
+        height          TYPE string,
+        dim_unit        TYPE string,
+        weight_measure  TYPE string,
+        weight_unit     TYPE string,
+        price           TYPE string,
+        currency_code   TYPE string,
+        product_pic_url TYPE string,
       END OF ty_s_product.
     DATA t_products TYPE STANDARD TABLE OF ty_s_product WITH EMPTY KEY.
 
@@ -46,78 +46,78 @@ CLASS z2ui5_cl_api_app_440 IMPLEMENTATION.
   METHOD model_init.
 
     t_products = VALUE #(
-        ( product_id     = `HT-1000`
-          name           = `Notebook Basic 15`
-          supplier_name  = `Very Best Screens`
-          width          = `30`
-          depth          = `18`
-          height         = `3`
-          dim_unit       = `cm`
-          weight_measure = `4.2`
-          weight_unit    = `KG`
-          price          = `956.00`
-          currency_code  = `EUR`
-          product_pic_url        = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1000.jpg` )
-        ( product_id     = `HT-1001`
-          name           = `Notebook Basic 17`
-          supplier_name  = `Very Best Screens`
-          width          = `29`
-          depth          = `17`
-          height         = `3.1`
-          dim_unit       = `cm`
-          weight_measure = `4.5`
-          weight_unit    = `KG`
-          price          = `1249.00`
-          currency_code  = `EUR`
-          product_pic_url        = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1001.jpg` )
-        ( product_id     = `HT-1003`
-          name           = `Notebook Basic 19`
-          supplier_name  = `Smartcards`
-          width          = `32`
-          depth          = `21`
-          height         = `4`
-          dim_unit       = `cm`
-          weight_measure = `4.2`
-          weight_unit    = `KG`
-          price          = `1650.00`
-          currency_code  = `EUR`
-          product_pic_url        = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1003.jpg` )
-        ( product_id     = `HT-1007`
-          name           = `ITelO Vault`
-          supplier_name  = `Technocom`
-          width          = `32`
-          depth          = `22`
-          height         = `3`
-          dim_unit       = `cm`
-          weight_measure = `0.2`
-          weight_unit    = `KG`
-          price          = `299.00`
-          currency_code  = `EUR`
-          product_pic_url        = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1007.jpg` )
-        ( product_id     = `HT-1010`
-          name           = `Notebook Professional 15`
-          supplier_name  = `Very Best Screens`
-          width          = `33`
-          depth          = `20`
-          height         = `3`
-          dim_unit       = `cm`
-          weight_measure = `4.3`
-          weight_unit    = `KG`
-          price          = `1999.00`
-          currency_code  = `EUR`
-          product_pic_url        = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1010.jpg` )
-        ( product_id     = `HT-1020`
-          name           = `ITelO Vault Net`
-          supplier_name  = `Technocom`
-          width          = `10`
-          depth          = `1.8`
-          height         = `17`
-          dim_unit       = `cm`
-          weight_measure = `0.16`
-          weight_unit    = `KG`
-          price          = `459.00`
-          currency_code  = `EUR`
-          product_pic_url        = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1020.jpg` ) ).
+        ( product_id      = `HT-1000`
+          name            = `Notebook Basic 15`
+          supplier_name   = `Very Best Screens`
+          width           = `30`
+          depth           = `18`
+          height          = `3`
+          dim_unit        = `cm`
+          weight_measure  = `4.2`
+          weight_unit     = `KG`
+          price           = `956.00`
+          currency_code   = `EUR`
+          product_pic_url = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1000.jpg` )
+        ( product_id      = `HT-1001`
+          name            = `Notebook Basic 17`
+          supplier_name   = `Very Best Screens`
+          width           = `29`
+          depth           = `17`
+          height          = `3.1`
+          dim_unit        = `cm`
+          weight_measure  = `4.5`
+          weight_unit     = `KG`
+          price           = `1249.00`
+          currency_code   = `EUR`
+          product_pic_url = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1001.jpg` )
+        ( product_id      = `HT-1003`
+          name            = `Notebook Basic 19`
+          supplier_name   = `Smartcards`
+          width           = `32`
+          depth           = `21`
+          height          = `4`
+          dim_unit        = `cm`
+          weight_measure  = `4.2`
+          weight_unit     = `KG`
+          price           = `1650.00`
+          currency_code   = `EUR`
+          product_pic_url = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1003.jpg` )
+        ( product_id      = `HT-1007`
+          name            = `ITelO Vault`
+          supplier_name   = `Technocom`
+          width           = `32`
+          depth           = `22`
+          height          = `3`
+          dim_unit        = `cm`
+          weight_measure  = `0.2`
+          weight_unit     = `KG`
+          price           = `299.00`
+          currency_code   = `EUR`
+          product_pic_url = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1007.jpg` )
+        ( product_id      = `HT-1010`
+          name            = `Notebook Professional 15`
+          supplier_name   = `Very Best Screens`
+          width           = `33`
+          depth           = `20`
+          height          = `3`
+          dim_unit        = `cm`
+          weight_measure  = `4.3`
+          weight_unit     = `KG`
+          price           = `1999.00`
+          currency_code   = `EUR`
+          product_pic_url = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1010.jpg` )
+        ( product_id      = `HT-1020`
+          name            = `ITelO Vault Net`
+          supplier_name   = `Technocom`
+          width           = `10`
+          depth           = `1.8`
+          height          = `17`
+          dim_unit        = `cm`
+          weight_measure  = `0.16`
+          weight_unit     = `KG`
+          price           = `459.00`
+          currency_code   = `EUR`
+          product_pic_url = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1020.jpg` ) ).
 
   ENDMETHOD.
 

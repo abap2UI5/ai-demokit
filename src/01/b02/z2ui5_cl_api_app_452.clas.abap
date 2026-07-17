@@ -60,11 +60,6 @@ CLASS z2ui5_cl_api_app_452 IMPLEMENTATION.
 
   METHOD view_display.
 
-    " bound items template with the original's group sorter as a raw binding-info
-    " string (see CAPABILITIES.md - attribute values reach UI5 unmangled). The
-    " custom groupHeaderFactory of the sample builds a SeparatorItem with the
-    " group key, which is exactly what UI5's default group header renders.
-
     DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
