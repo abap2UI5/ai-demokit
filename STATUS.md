@@ -13,7 +13,7 @@ CAPABILITIES.md._
 | CI | ABAP_STANDARD, ABAP_CLOUD, ABAP_702 all green |
 | Structural view diff | **0 undeclared differences** across all 34 ports (`node scripts/structural-diff.mjs --strict`) |
 | Pattern lint | **0 errors, 0 warnings, empty baseline** (`node scripts/pattern-lint.mjs`) |
-| Meta sidecars | 34 in `meta/` — status: 30 `generated`, 4 `checked`; deviations: 16 IMPROVISED, 13 POST_171, 14 LIVE_TEST, 7 SUBSET_DATA, 7 NOTE — DROPPED_171 is empty since the 1:1 restoration |
+| Meta sidecars | 34 in `meta/` — status: 30 `generated`, 4 `checked`; deviations: 15 IMPROVISED, 13 POST_171, 15 LIVE_TEST, 7 SUBSET_DATA, 7 NOTE — DROPPED_171 is empty since the 1:1 restoration |
 | Manually verified in a running system | 420, 421, 526, 530 (`CHECKED`) |
 | Archive | `ui5/sap.m/<SampleName>/` — full originals for the 34 ported samples (+2 cross-referenced: `FacetFilterSimple`, `Table`); mock snapshot in `ui5/mock/`. Unported samples are copied over batch by batch. |
 
@@ -140,6 +140,29 @@ Second pass — the four remaining audit items worked off (2026-07-17):
   **deliberately not done**: no port proves that aggregation-of-aggregation
   shape and it cannot be live-tested here — recorded as a LIVE_TEST option, not
   shipped blind on a working source-verified port.
+
+## Framework requests + capability wins from the audit (2026-07-17)
+
+Two ideas the audit surfaced, handled per their true nature:
+
+- **`pr/control-call-whitelist`** (new, open) — a genuine framework gap: the
+  `control_call_by_id` whitelist (`to/back/focus/scrollToIndex/scrollTo`) does
+  not include the imperative methods two 1:1 ports need — `PDFViewer.open()`
+  (469) and `Panel.setExpanded()` (471). Written up as a forwardable request to
+  broaden the list (its own comment already scopes it to "imperative methods
+  with no binding equivalent"). `addValidator` (454) is explicitly out of scope
+  (a client callback, not a one-shot call).
+- **Composite `Currency` type — NOT a framework gap** — a source + samples
+  check showed `sap.ui.model.type.Currency` is a client-side standard type and
+  the curated samples (`z2ui5_cl_demo_app_369`/`_172`) already bind it via a raw
+  binding-info string; the builder only XML-escapes attribute values, so it
+  passes through to `XMLView.create` unmangled — exactly the sorter story. So a
+  framework PR would be wrong. Instead: CAPABILITIES.md row split (standard
+  composite **types** ✅ via raw binding-info string; only custom JS formatter
+  **functions** stay ❌), and ports **440**/**401** converted to keep the
+  original Currency binding 1:1 over a numeric `PRICE` (`TYPE p`) field —
+  IMPROVISED dropped, LIVE_TEST added. App 460 keeps its static single-record
+  resolution (an unrelated deviation), not blocked by the type.
 
 ## Open findings (backlog)
 

@@ -9,8 +9,8 @@
   "checked": null,
   "deviations": [
     {
-      "type": "IMPROVISED",
-      "what": "the last column's original number binding is a sap.ui.model.type.Currency formatter (parts Price/CurrencyCode, formatOptions showMeasure:false); it is replaced by a plain ObjectNumber with a preformatted price text (number={PRICE} unit={CURRENCY_CODE})."
+      "type": "LIVE_TEST",
+      "what": "the last column keeps the original sap.ui.model.type.Currency composite binding 1:1 - number={ parts:[{path:'PRICE'},{path:'CURRENCY_CODE'}], type:'sap.ui.model.type.Currency', formatOptions:{showMeasure:false} } over a numeric PRICE field (TYPE p) - via a raw binding-info string (client-side standard type, no framework change; the same idiom the curated samples use, e.g. z2ui5_cl_demo_app_369). Confirm the price renders formatted per currency."
     },
     {
       "type": "SUBSET_DATA",

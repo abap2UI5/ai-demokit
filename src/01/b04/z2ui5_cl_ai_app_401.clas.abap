@@ -12,7 +12,7 @@ CLASS z2ui5_cl_ai_app_401 DEFINITION PUBLIC.
         weight_measure TYPE string,
         weight_unit    TYPE string,
         weight_state   TYPE string,
-        price          TYPE string,
+        price          TYPE p LENGTH 14 DECIMALS 2,
         currency_code  TYPE string,
       END OF ty_s_product.
     TYPES ty_t_product TYPE STANDARD TABLE OF ty_s_product WITH EMPTY KEY.
@@ -212,7 +212,7 @@ CLASS z2ui5_cl_ai_app_401 IMPLEMENTATION.
                                 )->a( n = `unit`   v = `{WEIGHT_UNIT}`
                                 )->a( n = `state`  v = `{WEIGHT_STATE}`
                             )->leaf( `ObjectNumber`
-                                )->a( n = `number` v = `{PRICE}`
+                                )->a( n = `number` v = |\{ parts:[\{path:'PRICE'\},\{path:'CURRENCY_CODE'\}], type:'sap.ui.model.type.Currency', formatOptions:\{showMeasure:false\} \}|
                                 )->a( n = `unit`   v = `{CURRENCY_CODE}` ).
 
     client->view_display( view->stringify( ) ).

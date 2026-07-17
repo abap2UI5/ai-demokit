@@ -265,11 +265,12 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` template shape yet - LIVE_TEST before adopting it. // NOTE: selection transport - every FacetFilterItem binds selected two-way; on listClose/reset the backend reads/clears the flags and re-filters.` &&
                  ` This is the documented 1:1 path (CAPABILITIES.md marks controller-read FacetFilter/List multi-select as expressible with app 401 as its evidence port), not a workaround; the model is applied before` &&
                  ` on_event runs. // LIVE-TEST: confirm in a running system that clearing the bound selected flags on Reset also unchecks the facet popover checkboxes (FacetFilterList caches its selection client-side).` &&
-                 ` // IMPROVISED: the original controller appends the sap.m.sample.Table component's table with its first cell swapped for an ObjectIdentifier {Name}/{Category}; that table is rebuilt inline, its` &&
-                 ` Currency-formatter price column preformatted (PRICE text) and Formatter.js weightState precomputed in WEIGHT_STATE. // IMPROVISED: the appended table's header toolbar keeps only Title and` &&
-                 ` ToolbarSpacer - the sample's popin-layout ComboBox (with core:Item entries), the sticky CheckBoxes with their Label and the Hide/Show ToggleButton drive client-side table APIs (setSticky, popin` &&
-                 ` layout) with no abap2UI5 equivalent; the infoToolbar (an OverflowToolbar with a Label) and the p:ColumnAIAction column plugin (newer than UI5 1.71) are dropped as well. // SUBSET: data is a 10-row` &&
-                 ` subset of the mock /ProductCollection (ui5/mock/products.json), facet counters recomputed for the subset.` )
+                 ` // IMPROVISED: the original controller appends the sap.m.sample.Table component's table with its first cell swapped for an ObjectIdentifier {Name}/{Category}; that table is rebuilt inline. The price` &&
+                 ` column keeps the original sap.ui.model.type.Currency composite binding 1:1 (raw binding-info string over a numeric PRICE field); only the custom Formatter.js weightState (a client-side JS formatter` &&
+                 ` function, genuinely not expressible) is precomputed in WEIGHT_STATE. // IMPROVISED: the appended table's header toolbar keeps only Title and ToolbarSpacer - the sample's popin-layout ComboBox (with` &&
+                 ` core:Item entries), the sticky CheckBoxes with their Label and the Hide/Show ToggleButton drive client-side table APIs (setSticky, popin layout) with no abap2UI5 equivalent; the infoToolbar (an` &&
+                 ` OverflowToolbar with a Label) and the p:ColumnAIAction column plugin (newer than UI5 1.71) are dropped as well. // SUBSET: data is a 10-row subset of the mock /ProductCollection` &&
+                 ` (ui5/mock/products.json), facet counters recomputed for the subset.` )
       ( module = `sap.m` control = `sap.m.FlexBox`         name = `FlexBoxNested`             class = `z2ui5_cl_ai_app_404` path = `src/01/b04/z2ui5_cl_ai_app_404.clas.abap`
         notes = `LIVE-TEST: the original colours .item1..item6 and the h2 headings via a separate style.css; here it is injected as a core:HTML content attribute (a style tag, minified - see CAPABILITIES.md). Confirm` &&
                  ` the flex items render with their background colours in a running system.` )
@@ -301,9 +302,10 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         post171 = `showClearIcon (since UI5 1.94) on three inputs is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.94 to render it. // the two formattedValueStateText aggregations (a` &&
                  ` FormattedText carrying Links, since UI5 1.78) are newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.78 to render them.` )
       ( module = `sap.m` control = `sap.m.Link`            name = `LinkEmphasized`            class = `z2ui5_cl_ai_app_440` path = `src/01/b01/z2ui5_cl_ai_app_440.clas.abap`
-        notes = `IMPROVISED: the last column's original number binding is a sap.ui.model.type.Currency formatter (parts Price/CurrencyCode, formatOptions showMeasure:false); it is replaced by a plain ObjectNumber with` &&
-                 ` a preformatted price text (number={PRICE} unit={CURRENCY_CODE}). // SUBSET: the bound /ProductCollection shows a 6-row subset of the 123-row mock (ui5/mock/products.json); HT-1002 is not part of the` &&
-                 ` subset.` )
+        notes = `LIVE-TEST: the last column keeps the original sap.ui.model.type.Currency composite binding 1:1 - number={ parts:[{path:'PRICE'},{path:'CURRENCY_CODE'}], type:'sap.ui.model.type.Currency',` &&
+                 ` formatOptions:{showMeasure:false} } over a numeric PRICE field (TYPE p) - via a raw binding-info string (client-side standard type, no framework change; the same idiom the curated samples use, e.g.` &&
+                 ` z2ui5_cl_demo_app_369). Confirm the price renders formatted per currency. // SUBSET: the bound /ProductCollection shows a 6-row subset of the 123-row mock (ui5/mock/products.json); HT-1002 is not` &&
+                 ` part of the subset.` )
       ( module = `sap.m` control = `sap.m.List`            name = `ListCounter`               class = `z2ui5_cl_ai_app_441` path = `src/01/b04/z2ui5_cl_ai_app_441.clas.abap`
         notes = `POST-1.71: headerLevel="H2" on the List (since UI5 1.117) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.117 to render it. // SUBSET: the bound /ProductCollection` &&
                  ` shows a 11-row subset of the 123-row mock (ui5/mock/products.json) - a full unroll adds no demo value.`

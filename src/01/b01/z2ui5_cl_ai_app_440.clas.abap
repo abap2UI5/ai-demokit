@@ -14,7 +14,7 @@ CLASS z2ui5_cl_ai_app_440 DEFINITION PUBLIC.
         dim_unit        TYPE string,
         weight_measure  TYPE string,
         weight_unit     TYPE string,
-        price           TYPE string,
+        price           TYPE p LENGTH 14 DECIMALS 2,
         currency_code   TYPE string,
         product_pic_url TYPE string,
       END OF ty_s_product.
@@ -202,7 +202,7 @@ CLASS z2ui5_cl_ai_app_440 IMPLEMENTATION.
                             )->a( n = `number` v = `{WEIGHT_MEASURE}`
                             )->a( n = `unit`   v = `{WEIGHT_UNIT}`
                         )->leaf( `ObjectNumber`
-                            )->a( n = `number` v = `{PRICE}`
+                            )->a( n = `number` v = |\{ parts:[\{path:'PRICE'\},\{path:'CURRENCY_CODE'\}], type:'sap.ui.model.type.Currency', formatOptions:\{showMeasure:false\} \}|
                             )->a( n = `unit`   v = `{CURRENCY_CODE}` ).
 
     client->view_display( view->stringify( ) ).

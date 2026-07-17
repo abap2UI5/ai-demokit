@@ -22,7 +22,7 @@
     },
     {
       "type": "IMPROVISED",
-      "what": "the original controller appends the sap.m.sample.Table component's table with its first cell swapped for an ObjectIdentifier {Name}/{Category}; that table is rebuilt inline, its Currency-formatter price column preformatted (PRICE text) and Formatter.js weightState precomputed in WEIGHT_STATE."
+      "what": "the original controller appends the sap.m.sample.Table component's table with its first cell swapped for an ObjectIdentifier {Name}/{Category}; that table is rebuilt inline. The price column keeps the original sap.ui.model.type.Currency composite binding 1:1 (raw binding-info string over a numeric PRICE field); only the custom Formatter.js weightState (a client-side JS formatter function, genuinely not expressible) is precomputed in WEIGHT_STATE."
     },
     {
       "type": "IMPROVISED",
