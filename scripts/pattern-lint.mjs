@@ -111,6 +111,12 @@ const RULES = [
     find: grepLines(/^"!/),
   },
   {
+    id: 'event-handle-capture',
+    level: 'error',
+    doc: 'event handlers are written inline at each control, never captured in a variable - even when repeated (human decision 2026-07-17, app 526; bind handles for expression bindings stay allowed)',
+    find: grepLines(/DATA\(\w+\)\s*=\s*client->_event\(/),
+  },
+  {
     id: 'param-continuation-align',
     level: 'warn',
     doc: 'a t_arg continuation line must start in the same column as the val parameter above it — human-taught alignment fix, 2026-07-16 (apps 421/422)',

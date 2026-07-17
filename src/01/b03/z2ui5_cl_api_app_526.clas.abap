@@ -29,8 +29,6 @@ CLASS z2ui5_cl_api_app_526 IMPLEMENTATION.
 
   METHOD view_display.
 
-    " every button fires the same event, passing the pressed control's id
-
     DATA(view) = z2ui5_cl_api_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`

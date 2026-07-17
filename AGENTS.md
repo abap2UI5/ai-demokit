@@ -347,6 +347,10 @@ client->view_display( view->stringify( ) ).
   `CASE client->get( )-event.` … `WHEN \`NAME\`.` … `ENDCASE` — even for a single
   event (never an `IF check_on_event( )`). After changing bound data in an event,
   call `client->view_model_update( )` to push it back (no full redraw).
+- **Event handlers are written inline at each control — never captured in a
+  variable**, even when the same call repeats on many controls (human decision
+  2026-07-17, apps 526/481; pattern-lint blocks `DATA(x) = client->_event(`).
+  Captured **bind** handles for expression bindings (app 421) stay allowed.
 - Read event parameters (declared via `_event( … t_arg = … )`) with
   `client->get_event_arg( )` — the index defaults to 1; **write it only for
   position 2+** (`get_event_arg( 2 )`), never `get_event_arg( 1 )`
@@ -588,6 +592,15 @@ the ports share that style. Essentials:
 - **Always the simplest possible notation**: omit parameters that equal the
   default (`get_event_arg( )`, not `get_event_arg( 1 )`), no pass-through
   methods, no explicit forms where the implicit one reads the same.
+- **Derive values from the data when the original does** — `selected =
+  t_items[ 1 ]-text.` like the sample's `oMData[0].text`, never the resolved
+  literal (human fix in app 530, 2026-07-17).
+- **`VALUE #( )` alignment is all-or-nothing**: one field per line with every
+  `=` in the same column — and after renaming a field, re-align the WHOLE
+  block including the TYPES definition (human fix in app 440, 2026-07-17).
+- **Inline comments stay minimal**: one line at the exact spot of a deviation;
+  multi-line rationale belongs in the sidecar, not the code (human deletion
+  in app 452, 2026-07-17).
 - Class names **lowercase** in `DEFINITION` and `IMPLEMENTATION`; not `FINAL`;
   `DEFINITION PUBLIC.` (never `CREATE PUBLIC`).
 - Always include `PROTECTED SECTION.` and `PRIVATE SECTION.` (keep `PRIVATE`

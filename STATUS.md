@@ -75,6 +75,21 @@ reviewers), followed by fixes:
   (later simplified to `get_event_arg( )` when the convention inverted);
   **528/434** blank-line fixes — pattern-lint is at 0/0 with an empty baseline.
 
+## Distilled from human fixes (2026-07-17)
+
+Two human correction commits so far; every change fed back as a rule:
+
+- `_bind_edit( path = abap_true )` for bare model paths (452) → CAPABILITIES.
+- `t_arg` continuations align under `val` (421/422) → pattern-lint warn rule.
+- Event handlers inline at each control, never captured — even repeated
+  (526, and 481 aligned accordingly) → pattern-lint error rule + AGENTS §5.
+- Derive values from data like the original (530 `t_items[ 1 ]-text`),
+  all-or-nothing `VALUE #( )` alignment after renames (440), minimal inline
+  comments (452) → AGENTS §8.
+- Trap: abapGit pushes from a stale system state can revert newer generated
+  files (overview, twice) → AGENTS §10 gotcha; regenerate + diff after every
+  human push.
+
 ## Open findings (backlog)
 
 Live tests pending (in-system) — the 2026-07-16 framework source pass
