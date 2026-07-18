@@ -147,6 +147,21 @@ const RULES = [
     },
   },
   {
+    id: 'unescaped-brace-in-style-content',
+    level: 'error',
+    doc: 'literal { } inside a <style> content literal must be escaped as \\{ \\} — the XMLView binding parser reads unescaped braces in attribute values as a binding and crashes (render-smoke caught app 431; apps 404/434 were the same class)',
+    find(content) {
+      const out = [];
+      content.split('\n').forEach((l, i) => {
+        for (const m of l.matchAll(/`((?:[^`]|``)*)`/g)) {
+          if (!m[1].includes('<style>')) continue;
+          if (/(?<!\\)[{}]/.test(m[1])) out.push({ line: i + 1, text: m[1].slice(0, 80) });
+        }
+      });
+      return out;
+    },
+  },
+  {
     id: 'param-continuation-align',
     level: 'warn',
     doc: 'a t_arg continuation line must start in the same column as the val parameter above it — human-taught alignment fix, 2026-07-16 (apps 421/422)',

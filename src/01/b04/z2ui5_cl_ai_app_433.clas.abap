@@ -6,7 +6,9 @@ CLASS z2ui5_cl_ai_app_433 DEFINITION PUBLIC.
     TYPES:
       BEGIN OF ty_s_product,
         name     TYPE string,
-        quantity TYPE string,
+        " numeric - StandardListItem.counter is an int property; a string
+        " value is rejected by UI5's strict property-type validation
+        quantity TYPE i,
       END OF ty_s_product.
     DATA t_products TYPE STANDARD TABLE OF ty_s_product WITH EMPTY KEY.
 
@@ -37,14 +39,14 @@ CLASS z2ui5_cl_ai_app_433 IMPLEMENTATION.
 
     " Data taken from the shared mock data sap/ui/demo/mock/products.json of the original sample
     t_products = VALUE #(
-        ( name = `Notebook Basic 15`        quantity = `10` )
-        ( name = `Notebook Basic 17`        quantity = `20` )
-        ( name = `Notebook Basic 18`        quantity = `10` )
-        ( name = `Notebook Basic 19`        quantity = `15` )
-        ( name = `ITelO Vault`              quantity = `15` )
-        ( name = `Notebook Professional 15` quantity = `16` )
-        ( name = `Notebook Professional 17` quantity = `17` )
-        ( name = `ITelO Vault Net`          quantity = `14` ) ).
+        ( name = `Notebook Basic 15`        quantity = 10 )
+        ( name = `Notebook Basic 17`        quantity = 20 )
+        ( name = `Notebook Basic 18`        quantity = 10 )
+        ( name = `Notebook Basic 19`        quantity = 15 )
+        ( name = `ITelO Vault`              quantity = 15 )
+        ( name = `Notebook Professional 15` quantity = 16 )
+        ( name = `Notebook Professional 17` quantity = 17 )
+        ( name = `ITelO Vault Net`          quantity = 14 ) ).
 
   ENDMETHOD.
 

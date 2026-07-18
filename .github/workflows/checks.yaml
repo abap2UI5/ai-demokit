@@ -42,6 +42,20 @@ jobs:
         node-version: '22'
     - run: node scripts/structural-diff.mjs --strict
 
+  render_smoke:
+    # headless rendering gate: every port's reconstructed view must load in a
+    # real XMLView.create against the OpenUI5 runtime (npm packages, offline)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+    - uses: actions/checkout@v7
+    - uses: actions/setup-node@v6
+      with:
+        node-version: '22'
+    - run: npm ci
+    - run: npx playwright install --with-deps chromium
+    - run: node scripts/render-smoke.mjs --strict
+
   meta_valid:
     # meta/ sidecars are the source of truth (schema + referential integrity),
     # and the overview app is generated from them — fail on invalid sidecars

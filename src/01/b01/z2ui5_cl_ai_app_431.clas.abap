@@ -41,7 +41,9 @@ CLASS z2ui5_cl_ai_app_431 IMPLEMENTATION.
 
         " the sample's style.css, injected via a core:HTML content attribute (see CAPABILITIES.md)
         )->leaf( n = `HTML` ns = `core`
-            )->a( n = `content` v = `<style>.tileLayout{float:left}</style>`
+            " literal braces escaped as \{ \} - the XMLView binding parser
+            " reads unescaped braces in attribute values as a binding
+            )->a( n = `content` v = `<style>.tileLayout\{float:left\}</style>`
 
         )->open( `GenericTile`
             )->a( n = `class`     v = `sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout`

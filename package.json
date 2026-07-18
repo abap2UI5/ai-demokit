@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "description": "Generated abap2UI5 ports of the official UI5 demo kit samples.",
   "scripts": {
+    "smoke": "node scripts/render-smoke.mjs --strict",
     "syfixes": "find . -type f -name '*.abap' -exec sed -i -e 's/ RAISE EXCEPTION TYPE cx_sy_itab_line_not_found/ ASSERT 1 = 0/g' {} + ",
     "abaplintpathfix": "sed -i 's|\"files\": \"/\\.\\.\\/\\.\\.\\/src\\/\\*\\*\\/\\*\\.\\*\"|\"files\": \"/src/**/*.*\"|g' abaplint.jsonc",
     "downport": "abaplint --fix .github/abaplint/abap_702.jsonc && npm run syfixes && cp -f .github/abaplint/abap_702.jsonc abaplint.jsonc && npm run abaplintpathfix"
@@ -18,7 +19,13 @@
   },
   "homepage": "https://github.com/abap2UI5/api#readme",
   "devDependencies": {
-    "@abaplint/cli": "^2.120.3"
+    "@abaplint/cli": "^2.120.3",
+    "@openui5/sap.m": "^1.150.0",
+    "@openui5/sap.ui.core": "^1.150.0",
+    "@openui5/sap.ui.layout": "^1.150.0",
+    "@openui5/sap.ui.unified": "^1.150.0",
+    "@openui5/themelib_sap_horizon": "^1.150.0",
+    "playwright": "^1.61.1"
   },
   "engines": {
     "node": ">=22"

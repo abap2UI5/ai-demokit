@@ -44,7 +44,9 @@ CLASS z2ui5_cl_ai_app_434 IMPLEMENTATION.
 
         " the sample's styles.css, injected via a core:HTML content attribute (see CAPABILITIES.md)
         )->leaf( n = `HTML` ns = `core`
-            )->a( n = `content` v = `<style>.imageContainer{background-color:#A9EAFF}</style>`
+            " literal braces escaped as \{ \} - the XMLView binding parser
+            " reads unescaped braces in attribute values as a binding
+            )->a( n = `content` v = `<style>.imageContainer\{background-color:#A9EAFF\}</style>`
 
         )->open( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`

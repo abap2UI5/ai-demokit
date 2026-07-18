@@ -28,13 +28,15 @@ CLASS z2ui5_cl_ai_app_404 IMPLEMENTATION.
 
     " the sample's style.css, injected via a core:HTML content attribute
     " (see CAPABILITIES.md) - placed before the HBox so it is no flex item
-    DATA(css) = `<style>.nestedFlexboxes .item1{padding:1rem;background-color:#d1dbbd}` &&
-                `.nestedFlexboxes .item2{padding:1rem;background-color:#7D8A2E}` &&
-                `.nestedFlexboxes .item3{padding:1rem;background-color:#C9D787}` &&
-                `.nestedFlexboxes .item4{padding:1rem;background-color:#FFFFFF}` &&
-                `.nestedFlexboxes .item5{padding:1rem;background-color:#FFC0A9}` &&
-                `.nestedFlexboxes .item6{padding:1rem;background-color:#FF8598}` &&
-                `.nestedFlexboxes h2{color:#32363a}</style>`.
+    " literal braces escaped as \{ \} - the XMLView binding parser reads
+    " unescaped braces in attribute values as a binding
+    DATA(css) = `<style>.nestedFlexboxes .item1\{padding:1rem;background-color:#d1dbbd\}` &&
+                `.nestedFlexboxes .item2\{padding:1rem;background-color:#7D8A2E\}` &&
+                `.nestedFlexboxes .item3\{padding:1rem;background-color:#C9D787\}` &&
+                `.nestedFlexboxes .item4\{padding:1rem;background-color:#FFFFFF\}` &&
+                `.nestedFlexboxes .item5\{padding:1rem;background-color:#FFC0A9\}` &&
+                `.nestedFlexboxes .item6\{padding:1rem;background-color:#FF8598\}` &&
+                `.nestedFlexboxes h2\{color:#32363a\}</style>`.
 
     DATA(view) = z2ui5_cl_ai_xml=>factory( ).
 
