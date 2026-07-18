@@ -347,6 +347,24 @@ resolution proof).
   still navigate INTO themselves (sibling needs `get_parent( )`); rule
   documented in the samples AGENTS.md (bit sample 453).
 
+## message> model, DnD reorder, roundtrip e2e (2026-07-18, second round)
+
+- **pr/message-model implemented** — every view slot now carries the UI5
+  message model as `message>` with `handleValidation` registration;
+  CAPABILITIES flipped the "MessageManager auto-collection" row ❌→✅
+  (seventh "already/nearly free" case). Unlocks the MessagePopover family
+  (4–5 samples); beta sample 458.
+- **DnD reorder confirmed framework-complete** — no gap: `dnd:DragDropInfo`
+  + `$`-arg indexes + ABAP reorder covers the pattern (samples 307/459);
+  CAPABILITIES row added. The TableDnD/TreeDnD family ports need no
+  framework change.
+- **Transpiled-backend roundtrip limitation was stale** — the Node backend
+  renders view XML (typed-variable fix in `check_on_init` took effect);
+  abap2UI5's `roundtrip.spec.js` now asserts view XML on init, the
+  model-delta-before-on_event contract and the browser-rendered message
+  box. Relevant here: the wire contract the ports rely on is now
+  regression-tested upstream.
+
 ## Open findings (backlog)
 
 Live tests pending (in-system) — the 2026-07-16 framework source pass

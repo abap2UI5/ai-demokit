@@ -23,3 +23,4 @@ README and update CAPABILITIES.md.
 | [formatter-registry](formatter-registry/README.md) | implemented |
 | [formatter-demokit-pack](formatter-demokit-pack/README.md) | implemented |
 | [binding-call](binding-call/README.md) | implemented |
+| [message-model](message-model/README.md) | implemented |
