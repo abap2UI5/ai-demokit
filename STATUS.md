@@ -319,6 +319,34 @@ CAPABILITIES rows added/extended; live checks of 453/454/455 are the next
 LIVE_TEST candidates (sample 455 is the first `_event_client` + `$`-arg
 resolution proof).
 
+## Date-object properties probed + arg-serializer bug fixed (2026-07-18)
+
+- **Calendar date properties** (`CalendarAppointment.startDate` etc.,
+  `type: "object"`) demand real JS `Date`s — a headless probe against the
+  OpenUI5 runtime (`scripts/probes/date-object-probe.mjs`) proved: plain
+  string binding crashes view creation, binding types throw
+  (`Date.formatValue` has no `object` target), but a
+  `formatter: 'Formatter.DateCreateObject'` binding renders identically to
+  a real-Date model. CAPABILITIES row added; beta sample 456
+  (abap2UI5/samples) demos the pattern. A model-level `utclong`
+  auto-reviver was considered and **rejected** (it would retype every
+  timestamp field, changing unrelated plain bindings); a per-path opt-in
+  reviver remains an option only if the modify/DnD calendar samples prove
+  the `$event`-arg write-back insufficient. Unlocks the ~25
+  PlanningCalendar/SinglePlanningCalendar display samples.
+- **`get_t_arg` positional bug found live and fixed upstream**: the arg
+  serializer dropped every empty argument, shifting the following ones —
+  a `control_call_by_id` without `view` sent its method name in the view
+  slot (`method 'X' not allowed`, beta samples 448/449). Fixed in
+  abap2UI5 (inner empties kept as `''`, trailing empties still trimmed;
+  unit-tested). **Ports 469/471 were affected** — their pending
+  `control_call_by_id` LIVE_TESTs ran against the broken serializer and
+  can now be re-tested.
+- Same-day builder lesson from the live checks: `z2ui5_cl_xml_view`
+  navigation is per-method — child-less controls like `object_status`
+  still navigate INTO themselves (sibling needs `get_parent( )`); rule
+  documented in the samples AGENTS.md (bit sample 453).
+
 ## Open findings (backlog)
 
 Live tests pending (in-system) — the 2026-07-16 framework source pass
