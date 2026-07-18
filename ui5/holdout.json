@@ -1,0 +1,30 @@
+{
+ "comment": "Hold-out set (TRAINING.md): these samples are NEVER used as prompt references and are kept out of regular batch planning - they are regenerated from scratch with the current rules/references to measure the generator (CI-green on first try, structural-diff violations, review findings per app). Ported hold-out apps must not be promoted to golden.",
+ "samples": [
+  "sap.m.sample.BusyIndicator",
+  "sap.m.sample.Label",
+  "sap.m.sample.Title",
+  "sap.m.sample.FormattedText",
+  "sap.m.sample.ObjectMarker",
+  "sap.m.sample.DatePicker",
+  "sap.m.sample.MaskInput",
+  "sap.m.sample.RadioButtonGroup",
+  "sap.m.sample.RatingIndicator",
+  "sap.m.sample.SearchField",
+  "sap.m.sample.TimePicker",
+  "sap.m.sample.TableAlternateRowColors",
+  "sap.m.sample.StandardListItem",
+  "sap.m.sample.ViewSettingsDialog",
+  "sap.m.sample.SelectDialog",
+  "sap.m.sample.Dialog",
+  "sap.m.sample.Popover",
+  "sap.m.sample.MessagePopover",
+  "sap.m.sample.QuickView",
+  "sap.m.sample.ResponsivePopover",
+  "sap.m.sample.PageFloatingFooter",
+  "sap.m.sample.NavContainer",
+  "sap.m.sample.OverflowToolbarDifferentControls",
+  "sap.m.sample.Wizard",
+  "sap.m.sample.MessageStrip"
+ ]
+}

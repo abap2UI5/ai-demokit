@@ -43,7 +43,10 @@ PR. Per batch:
    backlog (`node scripts/generate-coverage.mjs --backlog` — only controls that
    exist since UI5 1.71 and are not deprecated, see AGENTS §1) and ports them
    into a new `b<nn>` folder, prompt fed with AGENTS.md, CAPABILITIES.md and
-   the 2–3 nearest `golden` ports.
+   the 2–3 nearest `golden` ports. Pick **breadth-first**: `NEW-CONTROL` rows
+   (control not covered by any port yet) before further samples of covered
+   controls, and never rows marked `HOLDOUT` (see below) — one port per
+   control maximizes gap discovery per port (AGENTS §1).
 2. **Machine-verify until green** — abaplint ×3, `validate-meta`,
    `structural-diff --strict`, `pattern-lint`, plus an adversarial AI review
    pass. The agent
@@ -166,10 +169,17 @@ looped controls. Values are not compared — that stays with review/live checks.
 
 ## Measuring progress
 
-- **Hold-out set:** ~20–30 samples that are never used as prompt references.
-  Regenerate them periodically with the current rules/references and score:
-  CI green on first try, structural-diff violations, review findings per app.
-  Improvement becomes a number per generation run.
+- **Hold-out set — defined in [`ui5/holdout.json`](ui5/holdout.json):**
+  25 samples spread across control families and complexity (display, input,
+  lists/tables, popups, navigation). Rules: they are **never used as prompt
+  references**, they stay **out of regular batch planning** (`--backlog`
+  marks them `HOLDOUT`), and a hold-out port is never promoted to `golden`.
+  A regeneration probe = generate them from scratch with the current
+  rules/references and score: CI green on first try, structural-diff
+  violations, render-smoke failures, review findings per app. Improvement
+  becomes a number per generation run. **Run the first probe before batch
+  b05 lands** — without a baseline the corrections-per-batch curve has no
+  anchor.
 - **Regeneration diff:** re-run old ports with the improved setup and diff
   against their golden version.
 

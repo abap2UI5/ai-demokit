@@ -191,13 +191,33 @@ for (const e of libs) {
   }
 }
 
-// --backlog: print the in-scope, unported samples (batch planning input)
+// --backlog: print the in-scope, unported samples (batch planning input).
+// BREADTH-FIRST order: samples whose CONTROL has no port at all come first —
+// one port per control maximizes gap discovery per port; near-duplicate
+// samples of an already-covered control come after (AGENTS §1). Samples in
+// the hold-out set (ui5/holdout.json, see TRAINING.md) are marked HOLDOUT and
+// stay out of regular batch planning.
 if (process.argv.includes('--backlog')) {
-  for (const e of libs) {
-    for (const s of e.samples) {
-      if (s.scope === 'in' && !s.port) console.log(`${e.lib}\t${s.entity}\t${s.name}`);
-    }
+  const holdoutFile = path.join(ROOT, 'ui5', 'holdout.json');
+  const holdout = fs.existsSync(holdoutFile)
+    ? new Set(JSON.parse(fs.readFileSync(holdoutFile, 'utf8')).samples)
+    : new Set();
+  const portedEntities = new Set(
+    libs.flatMap((e) => e.samples.filter((s) => s.port && s.entity).map((s) => s.entity)));
+  const rows = libs.flatMap((e) => e.samples
+    .filter((s) => s.scope === 'in' && !s.port)
+    .map((s) => ({
+      lib: e.lib, entity: s.entity, name: s.name,
+      newControl: !portedEntities.has(s.entity),
+      holdout: holdout.has(`${e.lib}.sample.${s.name}`),
+    })));
+  rows.sort((a, b) => (b.newControl - a.newControl)
+    || a.entity.localeCompare(b.entity) || a.name.localeCompare(b.name));
+  for (const r of rows) {
+    console.log(`${r.lib}\t${r.entity}\t${r.name}\t${r.newControl ? 'NEW-CONTROL' : 'covered-control'}${r.holdout ? '\tHOLDOUT' : ''}`);
   }
+  const n = rows.filter((r) => r.newControl && !r.holdout).length;
+  console.log(`# ${rows.length} in-scope unported samples; ${n} on uncovered controls (plan these first, HOLDOUT excluded)`);
   process.exit(0);
 }
 

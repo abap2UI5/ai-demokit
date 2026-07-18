@@ -21,6 +21,16 @@ computed per sample from `ui5/universe.json` by `generate-coverage.mjs`
 never ported; `node scripts/generate-coverage.mjs --backlog` prints the
 in-scope, unported samples for batch planning.
 
+**Batch planning is breadth-first.** The mission is gap discovery, and the
+gap yield of a port drops sharply once its control is covered — many samples
+are near-duplicates on the same control. So: port **one sample per
+uncovered control first**; only when every in-scope control has at least one
+port does depth (more samples per control) pay. `--backlog` encodes this:
+rows are sorted `NEW-CONTROL` first (control has no port at all), then
+`covered-control`; pick batches from the top. Rows marked `HOLDOUT` belong
+to the hold-out set (`ui5/holdout.json`, TRAINING.md) and stay out of
+regular batch planning.
+
 The pipeline (run by a coding agent):
 
 1. **Read** — clone [OpenUI5](https://github.com/SAP/openui5), scan every demo
