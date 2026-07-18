@@ -6,8 +6,7 @@
   "batch": "b04",
   "audit": {
     "frontend_action": false,
-    "event_t_arg": false,
-    "note": "client->register_formatter ships the weightState body; no _event_client usage"
+    "event_t_arg": false
   },
   "status": "generated",
   "checked": null,
@@ -30,11 +29,11 @@
     },
     {
       "type": "NOTE",
-      "what": "the weight column's custom Formatter.js weightState is restored 1:1 since register_formatter landed upstream (2026-07-18, see pr/formatter-registry): the function body is registered via client->register_formatter and the ObjectNumber state keeps the original parts binding with formatter: 'z2ui5.fmt.weightState' - the earlier precomputed WEIGHT_STATE column is gone (the ValueState enum values are inlined as their string literals, the only textual difference to the original body)."
+      "what": "the weight column's custom Formatter.js weightState is reproduced behavior-identically as a CSP-safe expression binding on the ObjectNumber state (same thresholds: NaN/negative -> None, unit G -> /1000, <1 Success, <5 Warning, else Error) - the expression parser whitelists parseFloat/isNaN, no eval involved. The earlier precomputed WEIGHT_STATE column is gone; the formatter FUNCTION mechanism itself stays inexpressible (an eval-based register_formatter was implemented and reverted the same day for security, see pr/formatter-registry - open)."
     },
     {
       "type": "LIVE_TEST",
-      "what": "confirm the weight states render Success/Warning/Error per row via the registered z2ui5.fmt.weightState (first port using register_formatter; requires a CSP allowing unsafe-eval, otherwise the state falls back unformatted)."
+      "what": "confirm the weight states render Success/Warning/Error per row via the expression binding (converted from the precomputed column 2026-07-18)."
     },
     {
       "type": "IMPROVISED",

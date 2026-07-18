@@ -456,13 +456,6 @@ const HARNESS = `<!DOCTYPE html>
 <script>
   window.uiErrors = [];
   window.addEventListener('error', function (e) { window.uiErrors.push('PAGEERROR: ' + e.message); });
-  // Mirror the framework contract for XML formatter strings: abap2UI5
-  // publishes the z2ui5.Util and z2ui5.fmt globals (the latter filled by
-  // client->register_formatter before view creation). The harness cannot run
-  // the apps' registered bodies, so any name resolves to an identity
-  // function - enough for XMLView.create to parse and fire the binding.
-  window.z2ui5 = window.z2ui5 || {};
-  window.z2ui5.fmt = new Proxy({}, { get: function () { return function (v) { return v; }; } });
 </script>
 <script id="sap-ui-bootstrap" src="/resources/sap-ui-core.js"
   data-sap-ui-libs="sap.m,sap.ui.layout"

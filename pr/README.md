@@ -20,4 +20,4 @@ README and update CAPABILITIES.md.
 | [message-box-dependent-on](message-box-dependent-on/README.md) | implemented |
 | [named-json-models](named-json-models/README.md) | open |
 | [device-model-in-popups](device-model-in-popups/README.md) | implemented |
-| [formatter-registry](formatter-registry/README.md) | implemented |
+| [formatter-registry](formatter-registry/README.md) | open |

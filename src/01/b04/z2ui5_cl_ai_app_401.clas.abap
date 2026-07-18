@@ -89,21 +89,6 @@ CLASS z2ui5_cl_ai_app_401 IMPLEMENTATION.
 
   METHOD view_display.
 
-    " the appended table's Formatter.js weightState, registered 1:1 as a
-    " client-side function (compiled before the view is created, referenced
-    " below as formatter: 'z2ui5.fmt.weightState'); the ValueState enum of
-    " the original resolves to its string literals
-    client->register_formatter(
-        name = `weightState`
-        js   = `(fMeasure, sUnit) => {`                                      &&
-               ` var fAdjustedMeasure = parseFloat(fMeasure);`               &&
-               ` if (isNaN(fAdjustedMeasure)) { return "None"; }`            &&
-               ` if (sUnit === "G") { fAdjustedMeasure = fMeasure / 1000; }` &&
-               ` if (fAdjustedMeasure < 0) { return "None"; }`               &&
-               ` if (fAdjustedMeasure < 1) { return "Success"; }`            &&
-               ` if (fAdjustedMeasure < 5) { return "Warning"; }`            &&
-               ` return "Error"; }` ).
-
     " The bound lists collection of the original is unrolled into two static facet filter lists;
     " the original controller appends the demo table of sap.m.sample.Table with an adjusted first column.
     DATA(view) = z2ui5_cl_ai_xml=>factory( ).
@@ -221,10 +206,17 @@ CLASS z2ui5_cl_ai_app_401 IMPLEMENTATION.
                                 )->a( n = `text` v = `{SUPPLIER_NAME}`
                             )->leaf( `Text`
                                 )->a( n = `text` v = `{DIMENSIONS}`
+                            " the original binds state over Formatter.js weightState; the same
+                            " thresholds (NaN/negative -> None, G -> /1000, <1 Success, <5
+                            " Warning, else Error) as a CSP-safe expression binding - the
+                            " expression parser whitelists parseFloat/isNaN, no eval involved
                             )->leaf( `ObjectNumber`
                                 )->a( n = `number` v = `{WEIGHT_MEASURE}`
                                 )->a( n = `unit`   v = `{WEIGHT_UNIT}`
-                                )->a( n = `state`  v = |\{ parts:[\{path:'WEIGHT_MEASURE'\},\{path:'WEIGHT_UNIT'\}], formatter: 'z2ui5.fmt.weightState' \}|
+                                )->a( n = `state`  v = `{= isNaN(parseFloat(${WEIGHT_MEASURE})) ? 'None' :`                                                       &&
+                                                       ` (${WEIGHT_UNIT} === 'G' ? parseFloat(${WEIGHT_MEASURE}) / 1000 : parseFloat(${WEIGHT_MEASURE})) < 0 ? 'None' :`    &&
+                                                       ` (${WEIGHT_UNIT} === 'G' ? parseFloat(${WEIGHT_MEASURE}) / 1000 : parseFloat(${WEIGHT_MEASURE})) < 1 ? 'Success' :` &&
+                                                       ` (${WEIGHT_UNIT} === 'G' ? parseFloat(${WEIGHT_MEASURE}) / 1000 : parseFloat(${WEIGHT_MEASURE})) < 5 ? 'Warning' : 'Error' }`
                             )->leaf( `ObjectNumber`
                                 )->a( n = `number` v = |\{ parts:[\{path:'PRICE'\},\{path:'CURRENCY_CODE'\}], type:'sap.ui.model.type.Currency', formatOptions:\{showMeasure:false\} \}|
                                 )->a( n = `unit`   v = `{CURRENCY_CODE}` ).

@@ -243,24 +243,28 @@ specs extended). Follow-through in this repo, same change:
   The view now matches the original `view.xml` exactly; IMPROVISED dropped.
 - CAPABILITIES.md: new rows for popup-mode controls in `mvc:dependents` and
   for imperative one-shot control methods; frontend-action catalog updated.
-- **`pr/formatter-registry`** (new; **implemented upstream 2026-07-18**, same
-  day) — the next-most-common remaining ❌ category: app-supplied client-side
-  formatter functions. Upstream now ships
-  `client->register_formatter( name js )`: the bodies travel as their own
-  `T_FORMATTER` response field and the new `core/Formatters.js` compiles them
-  BEFORE view creation, published as the `z2ui5.fmt` global (mirroring
-  `z2ui5.Util`). Deliberately NOT routed through the follow-up custom-JS
-  path (`_runCustomJs`) — that runs after render and is deprecated.
-  Follow-through here:
-  - **401** — the appended table's `Formatter.js` `weightState` is restored
-    1:1: the body is registered via `register_formatter`, the ObjectNumber
-    keeps the original `parts` + `formatter: 'z2ui5.fmt.weightState'`
-    binding, and the precomputed `WEIGHT_STATE` column is gone.
-  - render-smoke harness mirrors the new contract with an identity-function
-    `z2ui5.fmt` proxy, so formatter bindings parse in the gate without
-    executing app JS.
-  - Scope note: value formatters only — `groupHeaderFactory`/item factories
-    (452, 481) return controls and stay ❌.
+- **`pr/formatter-registry`** (new, open — with a lesson): app-supplied
+  client-side formatter functions, the next-most-common remaining gap. An
+  eval-based first design (`register_formatter` shipping JS strings, compiled
+  client-side with the `Function` constructor before view creation) was
+  implemented upstream and **reverted the same day as a security decision**
+  (human review 2026-07-18): it required `unsafe-eval` in the CSP — against
+  the framework's strict-CSP direction (security headers, `_runCustomJs`
+  deprecation) — and an official register-a-JS-string API invites building
+  formatter bodies from data, a server-mediated XSS foot-gun. The trust-model
+  argument ("the server ships all frontend code anyway") does not justify the
+  *mechanism class*. Outcome:
+  - **401** — the appended table's `Formatter.js` `weightState` is reproduced
+    behavior-identically as a **CSP-safe expression binding** (the expression
+    parser whitelists `parseFloat`/`isNaN`; same thresholds, no eval); the
+    precomputed `WEIGHT_STATE` column is gone. No framework change needed.
+  - CAPABILITIES.md formatter row is now 🔶: expression binding where the
+    whitelist suffices, ABAP preformatting otherwise; factories returning
+    controls stay ❌.
+  - The request write-up stays open, now with an explicit design constraint:
+    no runtime code generation — a future implementation should serve real
+    formatter modules as same-origin script resources (preload mechanics,
+    like `z2ui5.Util`), registration at deployment/bootstrap time.
 
 ## Open findings (backlog)
 
@@ -270,8 +274,8 @@ is visual/UX confirmation:
 - [ ] **401** — Reset unchecks the facet popover checkboxes (mechanics
   source-verified: model applied before on_event).
 - [ ] **401** — the weight states render Success/Warning/Error via the
-  registered `z2ui5.fmt.weightState` (first `register_formatter` port,
-  converted 2026-07-18; needs a CSP allowing unsafe-eval).
+  CSP-safe expression binding (converted from the precomputed column
+  2026-07-18).
 - [ ] **469** — the popup-mode PDFViewer opens via the whitelisted
   `control_call_by_id( 'open' )` and shows the clicked PDF (converted
   2026-07-18; the earlier Dialog check is obsolete).
