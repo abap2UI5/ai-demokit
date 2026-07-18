@@ -43,6 +43,7 @@ Reviewed, curated samples graduate to the hand-maintained
 <details>
 <summary><b>Generation prompt</b> (UI5 sample → abap2UI5 app)</summary>
 
+<!-- prompt:start -->
 ```
 You are porting one official UI5 demo kit sample to abap2UI5.
 
@@ -103,6 +104,7 @@ Rules:
 - Set the abapGit <DESCRIPT> to `<entity> - <demo kit description>`.
 - Follow all ABAP conventions in AGENTS.md.
 ```
+<!-- prompt:end -->
 
 </details>
 

@@ -460,9 +460,12 @@ Three PoC ports show the full range — read them before writing a new one:
 
 ### Generation prompt
 
-A condensed version of the recipe above, phrased as a porting task, is kept in
-`README.md` (the "Generation prompt" section). **Keep the two in sync** — this
-§5 is the authoritative long form.
+A condensed version of the recipe above, phrased as a porting task, lives in
+**`scripts/generation-prompt.txt`** — the single source; `generate-coverage.mjs`
+splices it into `README.md` between the `<!-- prompt:start/end -->` markers
+(never edit the README block by hand). When this §5 changes in substance,
+update the prompt file in the same change — this §5 is the authoritative
+long form.
 
 ---
 

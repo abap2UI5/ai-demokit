@@ -1,0 +1,58 @@
+You are porting one official UI5 demo kit sample to abap2UI5.
+
+Input:  the sample's original files (Component.js, *.view.xml, controller,
+        manifest.json) from the OpenUI5 checkout.
+Output: one ABAP class z2ui5_cl_ai_app_<n> implementing z2ui5_if_app, that
+        rebuilds the sample's UI and behaviour 1:1.
+
+Rules:
+- Build the view with the generic builder z2ui5_cl_ai_xml, translating the
+  sample's XML 1:1 (open = descend into a container, leaf = childless
+  control/stay, shut = ascend). Attributes are added with
+  a( n = `key` v = `value` ) chained right after the control's open/leaf;
+  a targets that control, and v is any string expression (literal, a
+  client->_bind_edit/_event result, a |...| string template). factory( )
+  returns an empty root: open the mvc:View and declare its xmlns namespaces
+  yourself. Blank line between controls whose verb differs (open<->leaf,
+  before shut); none between same-verb controls, none right after a shut,
+  none between a control and its attrs; the whole view ends in a single ).
+  Booleans: literal v = `true`/`false`, or v = z2ui5_cl_ai_xml=>as_bool( flag )
+  when fed from an ABAP boolean variable.
+- BEFORE declaring any sample feature inexpressible, check CAPABILITIES.md -
+  the map of what abap2UI5 can express, each entry backed by a proving port.
+  Never improvise around a feature it marks expressible.
+- Structure z2ui5_if_app~main as a dispatcher:
+    me->client = client.
+    IF client->check_on_init( ).
+      model_init( ).
+      view_display( ).
+    ELSEIF client->check_on_event( ).
+      on_event( ).
+    ENDIF.
+  Add model_init / on_event only when the app actually has data / events.
+  z2ui5_if_app~main is always the FIRST method in the implementation; the
+  remaining methods follow in the order they are called from main.
+- Always the simplest possible notation: omit parameters that equal the
+  default - get_event_arg( ) not get_event_arg( 1 ) (index only for 2+).
+- Move the sample's JSON model data into ABAP (VALUE #( ... )) and bind it
+  with client->_bind_edit (the one-way client->_bind is obsolete - always use
+  _bind_edit).
+- Map controller event handlers to check_on_event( ) branches. To pass a value
+  into an event, use the `$`-prefixed form in t_arg (a model column as
+  `${COL}`, the event object as `$event.oSource.sId` / `${$source>/text}`) and
+  read it back with get_event_arg( ) - a bare `{COL}` (the attribute
+  property-binding form) is NOT resolved there. Transport real event/source
+  values this way instead of faking a static placeholder.
+- The sample's CONTROL must exist since UI5 1.71 and not be deprecated
+  (out-of-scope samples are never ported). Members newer than 1.71 are KEPT
+  1:1 when the original uses them - declare each in the sidecar as a
+  POST_171 deviation naming the member (the property gate checks this).
+- Must pass abaplint for ABAP_STANDARD, ABAP_CLOUD and ABAP_702 (downport).
+- The class carries NO ABAP Doc header. Write the port's sidecar
+  meta/z2ui5_cl_ai_app_<n>.json instead (sample, entity, file, batch, audit,
+  status, deviations) - see AGENTS.md section 5; validate with
+  node scripts/validate-meta.mjs.
+- Any runtime asset URLs the sample uses (test-resources / resources images)
+  also point at the OpenUI5 host (sdk.openui5.org), never SAPUI5.
+- Set the abapGit <DESCRIPT> to `<entity> - <demo kit description>`.
+- Follow all ABAP conventions in AGENTS.md.

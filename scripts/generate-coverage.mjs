@@ -333,6 +333,20 @@ if (!readme.includes(START) || !readme.includes(END)) {
 }
 const block = `${START}\n\n${summaryLines().join('\n').trimEnd()}\n\n${END}`;
 readme = readme.replace(new RegExp(`${START}[\\s\\S]*?${END}`), () => block);
+
+// README — splice the generation prompt from its single source
+// (scripts/generation-prompt.txt; AGENTS §5 stays the authoritative long form)
+const PROMPT_START = '<!-- prompt:start -->';
+const PROMPT_END = '<!-- prompt:end -->';
+const promptFile = path.join(ROOT, 'scripts', 'generation-prompt.txt');
+if (readme.includes(PROMPT_START) && readme.includes(PROMPT_END)) {
+  const prompt = fs.readFileSync(promptFile, 'utf8');
+  const pblock = `${PROMPT_START}\n\`\`\`\n${prompt.replace(/\n*$/, '\n')}\`\`\`\n${PROMPT_END}`;
+  readme = readme.replace(new RegExp(`${PROMPT_START}[\\s\\S]*?${PROMPT_END}`), () => pblock);
+} else {
+  console.error(`README.md is missing the ${PROMPT_START} / ${PROMPT_END} markers.`);
+  process.exit(1);
+}
 fs.writeFileSync(README, readme);
 
 console.log(`api.md + README: ${totalPorted}/${totalSamples} ported across ${libs.length} libraries` +

@@ -69,4 +69,5 @@ jobs:
         node-version: '22'
     - run: node scripts/validate-meta.mjs
     - run: node scripts/generate-overview.mjs
-    - run: git diff --exit-code -- src
+    - run: node scripts/generate-coverage.mjs
+    - run: git diff --exit-code -- src README.md api.md
