@@ -184,6 +184,20 @@ and the MultiInput validator were both already in the framework — the map/port
 had wrongly treated them as ❌. Exactly the "declared impossible although it
 already works" failure mode CAPABILITIES.md opens by warning against.
 
+**Same failure mode again — `sap.m.MessageView` (2026-07-18):** app 449 was
+marked `IMPROVISED` / the map carried "MessageManager / `message>` model ❌",
+yet the port already renders the MessageView 1:1 by binding the messages as a
+plain ABAP table on the `items` aggregation with a `MessageItem` template — the
+documented idiomatic path, not a workaround. The curated sample
+`z2ui5_cl_demo_app_038` (abap2UI5/samples) proves the full set incl. grouping,
+Dialog and MessagePopover. Corrected: app-449 deviation `IMPROVISED`→`NOTE`, and
+the CAPABILITIES row split — `sap.m.MessageView`/`MessageItem`/`MessagePopover`
+is ✅, only the MessageManager **auto-collection** of client-side control
+validation messages stays ❌ (a separate, rarely-needed mechanism, not required
+to render a MessageView). Fourth "already works" case after Currency,
+MultiInput validator and the popup-mode controls — the map is consistently more
+pessimistic than the framework.
+
 ## Verification & process upgrades (2026-07-18)
 
 A hardening pass over the pipeline itself (builder, gates, planning):

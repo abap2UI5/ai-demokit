@@ -329,7 +329,11 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` dependenton parameter, pointing at the view layout (id messageBoxHost); the app needs a UI5 release >= 1.124 to render it.` )
       ( module = `sap.m` control = `sap.m.MessageToast`    name = `MessageToast`              class = `z2ui5_cl_ai_app_448` path = `src/01/b03/z2ui5_cl_ai_app_448.clas.abap` )
       ( module = `sap.m` control = `sap.m.MessageView`     name = `MessageViewMessageManager` class = `z2ui5_cl_ai_app_449` path = `src/01/b03/z2ui5_cl_ai_app_449.clas.abap`
-        notes = `IMPROVISED: the MessageManager/message model of the original is not available in abap2UI5 - the messages are bound from a hardcoded table instead.` )
+        notes = `NOTE: the original registers its four messages on the sap.ui.core.message.MessageManager and the MessageView binds them via the message> model; abap2UI5 has no MessageManager auto-collection model,` &&
+                 ` but that is not needed to render a MessageView - the messages are bound as a plain ABAP table on MessageView items with a MessageItem template (client->_bind_edit( t_messages )), which is the` &&
+                 ` documented 1:1 path (CAPABILITIES.md), not a workaround. Same rendering as the original's static message set. The framework MessageManager auto-collection (gathering control validation messages` &&
+                 ` client-side) is a separate, rarely-needed mechanism and out of scope for this render-only sample. Proven by the curated sample z2ui5_cl_demo_app_038 (MessageView + MessageItem + MessagePopover over a` &&
+                 ` bound table).` )
       ( module = `sap.m` control = `sap.m.MultiComboBox`   name = `MultiComboBoxGrouping`     class = `z2ui5_cl_ai_app_452` path = `src/01/b02/z2ui5_cl_ai_app_452.clas.abap`
         notes = `NOTE: the custom groupHeaderFactory '.getGroupHeader' (controller code) is replaced by UI5's default group headers - the sample's factory builds a SeparatorItem with the group key, which is exactly` &&
                  ` what the default renders anyway (CAPABILITIES.md group-sorter row, source-verified on both sides), so this is a faithful 1:1, not a workaround. The items are a bound template with the original's` &&
