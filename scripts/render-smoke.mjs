@@ -488,6 +488,27 @@ const HARNESS = `<!DOCTYPE html>
       // without the framework being served - register the mirror above as
       // the named module before any view is created.
       sap.ui.define('z2ui5/model/formatter', [], function () { return window.z2ui5.Formatter; });
+      // Metadata-only mirror of the bundled custom control
+      // z2ui5.cc.MultiInputExt (invisible companion installing the
+      // free-text->token validator on the MultiInput it references). The
+      // harness only validates view creation, so properties/renderer
+      // suffice - no behavior. Keep the metadata in sync with abap2UI5
+      // app/webapp/cc/MultiInputExt.js.
+      sap.ui.define('z2ui5/cc/MultiInputExt', ['sap/ui/core/Control'], function (Control) {
+        return Control.extend('z2ui5.cc.MultiInputExt', {
+          metadata: {
+            properties: {
+              MultiInputId: { type: 'string' },
+              MultiInputName: { type: 'string' },
+              addedTokens: { type: 'object' },
+              checkInit: { type: 'boolean', defaultValue: false },
+              removedTokens: { type: 'object' },
+            },
+            events: { change: { allowPreventDefault: true, parameters: {} } },
+          },
+          renderer: { apiVersion: 2, render: function () {} },
+        });
+      });
       sap.ui.require(['sap/ui/core/Core', 'sap/base/Log'], function (Core, Log) {
         Log.addLogListener({ onLogEntry: function (e) {
           if (e.level <= Log.Level.ERROR) window.uiErrors.push('LOG: ' + e.message);

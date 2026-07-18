@@ -170,10 +170,13 @@ Two ideas the audit surfaced, handled per their true nature:
   free-text→token validator (`addValidator(({text}) => new Token({key:text,
   text}))`, source-verified in `app/webapp/cc/MultiInputExt.js`) and mirrors
   token changes back via `addedTokens`/`removedTokens` + `change`. CAPABILITIES
-  row added (🔶) and the app-454 deviation corrected IMPROVISED→NOTE. The code
-  is not rewritten: wiring `z2ui5.cc.MultiInputExt` through the generic builder
-  would be the first cc-control usage in these ports and needs a live check —
-  left as a LIVE_TEST follow-up rather than shipped blind.
+  row added (🔶) and the app-454 deviation corrected IMPROVISED→NOTE. Initially
+  left unwired (first cc-control usage needs a live check); **wired 2026-07-18**
+  (human direction): app 454 now declares `xmlns:z2ui5="z2ui5.cc"` and one
+  `z2ui5:MultiInputExt` leaf per token input (`multiInput1`/`multiInput2`,
+  matching the original's two addValidator calls); the render-smoke harness
+  carries a metadata-only mirror of the cc control so view creation stays
+  gate-checked, the behavior check remains a LIVE_TEST.
 
 **Pattern worth noting:** of the four framework ideas the audit raised, only
 one (`control_call` whitelist) is a real gap; the composite `Currency` type
@@ -300,6 +303,9 @@ is visual/UX confirmation:
 - [ ] **486** — expression-bound toolbar widths follow the slider.
 - [ ] **530** — separator switches instantly via the shared two-way path.
 - [ ] **474** — toast shows the newly selected item (timing source-verified).
+- [ ] **454** — free text + Enter creates a token on both multiInput1 and
+  multiInput2 via the `z2ui5.cc.MultiInputExt` companions (first cc-control
+  usage in these ports, wired 2026-07-18).
 - [ ] **452** — convert to the bound-template variant with a raw binding-info
   string (pass-through source-verified) — then LIVE-TEST the group headers.
 - [ ] **433/473** — NEW: the `device>` model IS available in main views

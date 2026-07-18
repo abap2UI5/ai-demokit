@@ -337,12 +337,13 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` render per supplier in the MultiComboBox picker (bound template + group sorter, converted 2026-07-16; string pass-through source-verified).` )
       ( module = `sap.m` control = `sap.m.MultiInput`      name = `MultiInput`                class = `z2ui5_cl_ai_app_454` path = `src/01/b02/z2ui5_cl_ai_app_454.clas.abap`
         notes = `NOTE: the controller's onInit pre-sets the tokens on both MultiInputs (Token 1..6 and one long token); they are declared statically in the view's tokens aggregation instead - same rendering` &&
-                 ` (CAPABILITIES.md marks controller-filled aggregations as expressible, the tokens aggregation is public since UI5 1.16), so this is a faithful 1:1, not a workaround. // NOTE: the controller's` &&
-                 ` addValidator (typing free text + Enter creates a token client-side) is omitted here as a deliberate simplification - NOT a gap: the bundled custom control z2ui5.cc.MultiInputExt installs exactly this` &&
-                 ` validator (addValidator(({text}) => new Token({key:text, text})), source-verified in app/webapp/cc/MultiInputExt.js), see CAPABILITIES.md. Wiring it would be the first cc-control usage in these` &&
-                 ` ports, so it is left for a live-tested follow-up. // SUBSET: the suggestion data is a 16-row subset of the mock /ProductCollection (ui5/mock/products.json). // NOTE: The original's stray placeholder` &&
-                 ` attributes on the two Labels (not a Label property) are dropped. // POST-1.71: showClearIcon (since UI5 1.94) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.94 to` &&
-                 ` render it.`
+                 ` (CAPABILITIES.md marks controller-filled aggregations as expressible, the tokens aggregation is public since UI5 1.16), so this is a faithful 1:1, not a workaround. // NOTE: the controller's onInit` &&
+                 ` addValidator on multiInput1 and multiInput2 (typing free text + Enter -> new Token({key: text, text})) is wired via the bundled invisible companion control z2ui5.cc.MultiInputExt` &&
+                 ` (xmlns:z2ui5="z2ui5.cc"): one MultiInputExt per input, referencing it by MultiInputId - the control installs exactly the original's validator (source-verified in app/webapp/cc/MultiInputExt.js). The` &&
+                 ` two MultiInputExt elements are extra vs the original view.xml (there the validator lives in the controller); first cc-control usage in these ports (converted 2026-07-18). // LIVE-TEST: confirm free` &&
+                 ` text + Enter creates a token on both multiInput1 and multiInput2 via the z2ui5.cc.MultiInputExt companions (first cc-control usage in these ports). // SUBSET: the suggestion data is a 16-row subset` &&
+                 ` of the mock /ProductCollection (ui5/mock/products.json). // NOTE: The original's stray placeholder attributes on the two Labels (not a Label property) are dropped. // POST-1.71: showClearIcon (since` &&
+                 ` UI5 1.94) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.94 to render it.`
         post171 = `showClearIcon (since UI5 1.94) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.94 to render it.` )
       ( module = `sap.m` control = `sap.m.ObjectHeader`    name = `ObjectHeader`              class = `z2ui5_cl_ai_app_460` path = `src/01/b01/z2ui5_cl_ai_app_460.clas.abap`
         notes = `IMPROVISED: the sample binds the ObjectHeader to {/ProductCollection/0} and its title/number/attributes to model fields (with a Currency type formatter on number). The port carries no model, so those` &&
