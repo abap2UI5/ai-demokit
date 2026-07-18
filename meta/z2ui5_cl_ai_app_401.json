@@ -25,7 +25,19 @@
     },
     {
       "type": "IMPROVISED",
-      "what": "the original controller appends the sap.m.sample.Table component's table with its first cell swapped for an ObjectIdentifier {Name}/{Category}; that table is rebuilt inline. The price column keeps the original sap.ui.model.type.Currency composite binding 1:1 (raw binding-info string over a numeric PRICE field); only the custom Formatter.js weightState (a client-side JS formatter function, genuinely not expressible) is precomputed in WEIGHT_STATE."
+      "what": "the original controller appends the sap.m.sample.Table component's table with its first cell swapped for an ObjectIdentifier {Name}/{Category}; that table is rebuilt inline. The price column keeps the original sap.ui.model.type.Currency composite binding 1:1 (raw binding-info string over a numeric PRICE field)."
+    },
+    {
+      "type": "NOTE",
+      "what": "the weight column keeps the original parts+formatter binding 1:1: the framework ships the sample's weightState in its curated formatter module (standard app layout model/formatter.js, a served script, CSP-clean - see pr/formatter-registry, implemented 2026-07-18 after an eval-based register_formatter was rejected for security). The view requires it like the original controller requires './Formatter': core:require=\"{Formatter: 'z2ui5/model/formatter'}\" on the view root, state binds { parts: [WEIGHT_MEASURE, WEIGHT_UNIT], formatter: 'Formatter.weightState' } - the alias reference mirrors the original's '.formatter.weightState'. The earlier precomputed WEIGHT_STATE column stays gone."
+    },
+    {
+      "type": "POST_171",
+      "what": "core:require on the view root (since UI5 1.74) is newer than 1.71 but used for the formatter wiring - the app needs a UI5 release >= 1.74; on older releases reference the published global instead (formatter: 'z2ui5.Formatter.weightState')."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "confirm the weight states render Success/Warning/Error per row via the core:require'd Formatter.weightState (first port referencing the curated formatter module, converted 2026-07-18)."
     },
     {
       "type": "IMPROVISED",

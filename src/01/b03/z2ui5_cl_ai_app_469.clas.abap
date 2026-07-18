@@ -3,14 +3,14 @@ CLASS z2ui5_cl_ai_app_469 DEFINITION PUBLIC.
   PUBLIC SECTION.
     INTERFACES z2ui5_if_app.
 
+    " original: onPress feeds the popup-mode PDFViewer via setSource
+    DATA pdf_source TYPE string.
+
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
-    " not bound - helper state kept out of PUBLIC so the round-trip model scan stays small
-    DATA pdf_source TYPE string.
 
     METHODS view_display.
     METHODS on_event.
-    METHODS popup_display.
 
   PRIVATE SECTION.
 ENDCLASS.
@@ -42,6 +42,18 @@ CLASS z2ui5_cl_ai_app_469 IMPLEMENTATION.
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `height`    v = `100%`
 
+        " original onInit: new PDFViewer({isTrustedSource: true}) added as a view
+        " dependent - declared here in the view's dependents aggregation; the
+        " constant title onPress sets imperatively is declared alongside
+        )->open( n = `dependents` ns = `mvc`
+            )->leaf( `PDFViewer`
+                )->a( n = `id`              v = `pdfViewer`
+                )->a( n = `source`          v = client->_bind_edit( pdf_source )
+                )->a( n = `title`           v = `My Custom Title`
+                )->a( n = `isTrustedSource` v = `true`
+
+        )->shut(
+
         )->open( `Carousel`
             )->a( n = `class` v = `sapUiContentPadding`
             )->a( n = `loop`  v = `true`
@@ -68,40 +80,14 @@ CLASS z2ui5_cl_ai_app_469 IMPLEMENTATION.
     CASE client->get( )-event.
 
       WHEN `SHOW_PDF`.
+        " original onPress: setSource + open() on the popup-mode viewer -
+        " update the bound source, then the whitelisted open runs after render
         pdf_source = `https://sdk.openui5.org/test-resources/sap/m/demokit/sample/PDFViewerPopup/` && client->get_event_arg( ).
-        popup_display( ).
+        client->view_model_update( ).
+        client->control_call_by_id( id     = `pdfViewer`
+                                    method = `open` ).
 
     ENDCASE.
-
-  ENDMETHOD.
-
-
-  METHOD popup_display.
-
-    DATA(popup) = z2ui5_cl_ai_xml=>factory( ).
-
-    popup->open( n = `FragmentDefinition` ns = `core`
-        )->a( n = `xmlns`      v = `sap.m`
-        )->a( n = `xmlns:core` v = `sap.ui.core`
-
-        )->open( `Dialog`
-            )->a( n = `title`         v = `My Custom Title`
-            )->a( n = `contentWidth`  v = `760px`
-            )->a( n = `contentHeight` v = `600px`
-            )->a( n = `afterClose`    v = client->_event_client( client->cs_event-popup_close )
-
-            " the original opens the PDFViewer in popup mode via JavaScript - here the PDF viewer is embedded into the dialog
-            )->leaf( `PDFViewer`
-                )->a( n = `source`          v = pdf_source
-                )->a( n = `isTrustedSource` v = `true`
-                )->a( n = `height`          v = `100%`
-
-            )->open( `endButton`
-                )->leaf( `Button`
-                    )->a( n = `text`  v = `Close`
-                    )->a( n = `press` v = client->_event_client( client->cs_event-popup_close ) ).
-
-    client->popup_display( popup->stringify( ) ).
 
   ENDMETHOD.
 

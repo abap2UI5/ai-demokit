@@ -61,11 +61,12 @@ CLASS z2ui5_cl_ai_app_454 IMPLEMENTATION.
     DATA(view) = z2ui5_cl_ai_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
-        )->a( n = `height`     v = `100%`
-        )->a( n = `xmlns`      v = `sap.m`
-        )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
-        )->a( n = `xmlns:l`    v = `sap.ui.layout`
-        )->a( n = `xmlns:core` v = `sap.ui.core`
+        )->a( n = `height`      v = `100%`
+        )->a( n = `xmlns`       v = `sap.m`
+        )->a( n = `xmlns:mvc`   v = `sap.ui.core.mvc`
+        )->a( n = `xmlns:l`     v = `sap.ui.layout`
+        )->a( n = `xmlns:core`  v = `sap.ui.core`
+        )->a( n = `xmlns:z2ui5` v = `z2ui5.cc`
 
         )->open( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
@@ -122,6 +123,12 @@ CLASS z2ui5_cl_ai_app_454 IMPLEMENTATION.
 
                 )->shut(
             )->shut(
+            " the original's onInit addValidator(fnValidator) on multiInput1
+            " (free text + Enter -> new Token({key: text, text})): the bundled
+            " invisible companion control z2ui5.cc.MultiInputExt installs
+            " exactly this validator on the MultiInput it references by id
+            )->leaf( n = `MultiInputExt` ns = `z2ui5`
+                )->a( n = `MultiInputId` v = `multiInput1`
             )->leaf( `Label`
                 )->a( n = `text`     v = `MultiInput with single long token`
                 )->a( n = `labelFor` v = `multiInput2`
@@ -135,7 +142,13 @@ CLASS z2ui5_cl_ai_app_454 IMPLEMENTATION.
                 )->open( `tokens`
                     )->leaf( `Token`
                         )->a( n = `key`  v = `longText`
-                        )->a( n = `text` v = `Very long long long long long long long text` ).
+                        )->a( n = `text` v = `Very long long long long long long long text`
+
+                )->shut(
+            )->shut(
+            " same validator on multiInput2, as in the original onInit
+            )->leaf( n = `MultiInputExt` ns = `z2ui5`
+                )->a( n = `MultiInputId` v = `multiInput2` ).
 
     client->view_display( view->stringify( ) ).
 

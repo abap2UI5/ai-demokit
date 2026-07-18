@@ -6,14 +6,19 @@
   "batch": "b03",
   "audit": {
     "frontend_action": true,
-    "event_t_arg": true
+    "event_t_arg": true,
+    "note": "control_call_by_id (method open) as a follow-up action after the SHOW_PDF round-trip"
   },
   "status": "generated",
   "checked": null,
   "deviations": [
     {
+      "type": "NOTE",
+      "what": "the original onInit creates a popup-mode sap.m.PDFViewer and adds it as a view dependent; it is declared 1:1 in the view's mvc:dependents aggregation (an extra PDFViewer element vs the original view.xml, which never carries it - there it lives in the controller). onPress' setSource/setTitle/open() becomes a bound source updated per click, the constant title declared in the view, and the whitelisted open via client->control_call_by_id after render - popup mode 1:1, the earlier Dialog embedding workaround is gone (whitelist extended upstream 2026-07-18, see pr/control-call-whitelist)."
+    },
+    {
       "type": "IMPROVISED",
-      "what": "the sample's onInit gives each Image its own JSONModel and onPress opens a controller-created sap.m.PDFViewer in popup mode via JavaScript. Here the per-image Source/Preview URLs are resolved statically and the PDFViewer is embedded into a sap.m.Dialog opened on the press event instead, closed by an added OK Button (the popup-mode PDFViewer brings its own close button)."
+      "what": "the per-image JSONModels of onInit (a Source/Preview URL pair per Image) have no server-side equivalent; the Image src (original {/Preview}) is resolved to static absolute sdk.openui5.org URLs and the Source travels through the one bound pdf_source field - same family as pr/named-json-models."
     },
     {
       "type": "POST_171",
@@ -21,7 +26,7 @@
     },
     {
       "type": "LIVE_TEST",
-      "what": "confirm the PDFViewer renders inside the dialog at height 100% in a running system."
+      "what": "confirm the popup-mode PDFViewer opens after the SHOW_PDF round-trip (view_model_update applies the new source before the follow-up open runs) and shows the clicked PDF in a running system - first port using the extended control_call_by_id whitelist."
     }
   ]
 }

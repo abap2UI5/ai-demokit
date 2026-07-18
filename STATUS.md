@@ -146,7 +146,8 @@ Second pass — the four remaining audit items worked off (2026-07-17):
 
 Two ideas the audit surfaced, handled per their true nature:
 
-- **`pr/control-call-whitelist`** (new, open) — a genuine framework gap: the
+- **`pr/control-call-whitelist`** (new; **implemented upstream 2026-07-18**,
+  see the section below) — a genuine framework gap: the
   `control_call_by_id` whitelist (`to/back/focus/scrollToIndex/scrollTo`) does
   not include the imperative methods two 1:1 ports need — `PDFViewer.open()`
   (469) and `Panel.setExpanded()` (471). Written up as a forwardable request to
@@ -169,16 +170,33 @@ Two ideas the audit surfaced, handled per their true nature:
   free-text→token validator (`addValidator(({text}) => new Token({key:text,
   text}))`, source-verified in `app/webapp/cc/MultiInputExt.js`) and mirrors
   token changes back via `addedTokens`/`removedTokens` + `change`. CAPABILITIES
-  row added (🔶) and the app-454 deviation corrected IMPROVISED→NOTE. The code
-  is not rewritten: wiring `z2ui5.cc.MultiInputExt` through the generic builder
-  would be the first cc-control usage in these ports and needs a live check —
-  left as a LIVE_TEST follow-up rather than shipped blind.
+  row added (🔶) and the app-454 deviation corrected IMPROVISED→NOTE. Initially
+  left unwired (first cc-control usage needs a live check); **wired 2026-07-18**
+  (human direction): app 454 now declares `xmlns:z2ui5="z2ui5.cc"` and one
+  `z2ui5:MultiInputExt` leaf per token input (`multiInput1`/`multiInput2`,
+  matching the original's two addValidator calls); the render-smoke harness
+  carries a metadata-only mirror of the cc control so view creation stays
+  gate-checked, the behavior check remains a LIVE_TEST.
 
 **Pattern worth noting:** of the four framework ideas the audit raised, only
 one (`control_call` whitelist) is a real gap; the composite `Currency` type
 and the MultiInput validator were both already in the framework — the map/ports
 had wrongly treated them as ❌. Exactly the "declared impossible although it
 already works" failure mode CAPABILITIES.md opens by warning against.
+
+**Same failure mode again — `sap.m.MessageView` (2026-07-18):** app 449 was
+marked `IMPROVISED` / the map carried "MessageManager / `message>` model ❌",
+yet the port already renders the MessageView 1:1 by binding the messages as a
+plain ABAP table on the `items` aggregation with a `MessageItem` template — the
+documented idiomatic path, not a workaround. The curated sample
+`z2ui5_cl_demo_app_038` (abap2UI5/samples) proves the full set incl. grouping,
+Dialog and MessagePopover. Corrected: app-449 deviation `IMPROVISED`→`NOTE`, and
+the CAPABILITIES row split — `sap.m.MessageView`/`MessageItem`/`MessagePopover`
+is ✅, only the MessageManager **auto-collection** of client-side control
+validation messages stays ❌ (a separate, rarely-needed mechanism, not required
+to render a MessageView). Fourth "already works" case after Currency,
+MultiInput validator and the popup-mode controls — the map is consistently more
+pessimistic than the framework.
 
 ## Verification & process upgrades (2026-07-18)
 
@@ -222,6 +240,60 @@ A hardening pass over the pipeline itself (builder, gates, planning):
 - **Sidecar `audit` structured** — `{ frontend_action, event_t_arg, note? }`,
   enforced by validate-meta.
 
+## Whitelist request implemented + ports converted (2026-07-18)
+
+The `pr/control-call-whitelist` request was implemented upstream in
+[abap2UI5/abap2UI5](https://github.com/abap2UI5/abap2UI5): `CONTROL_METHODS`
+in `app/webapp/core/FrontendAction.js` now also whitelists `open: []`,
+`close: []` and `setExpanded: ["bool"]` (embedded frontend regenerated, unit
+specs extended). Follow-through in this repo, same change:
+
+- **469** — converted from the Dialog-embedding workaround to the original's
+  popup mode: the `PDFViewer` is declared in the view's `mvc:dependents`
+  aggregation (the `addDependent` equivalent), `source` is bound, and
+  `SHOW_PDF` runs `view_model_update` + `control_call_by_id( method = 'open' )`.
+  IMPROVISED narrowed to the per-image JSONModel flattening (named-models
+  family); the Dialog deviation is gone.
+- **471** — converted from the two-way bound `expanded` + `view_model_update`
+  workaround to the original's imperative toggle: `TOOLBAR_PRESSED` inverts a
+  server-side mirror and calls `control_call_by_id( method = 'setExpanded' )`.
+  The view now matches the original `view.xml` exactly; IMPROVISED dropped.
+- CAPABILITIES.md: new rows for popup-mode controls in `mvc:dependents` and
+  for imperative one-shot control methods; frontend-action catalog updated.
+- **`pr/formatter-registry`** (new; **implemented 2026-07-18 as a curated
+  module — after a security detour worth recording**): app-supplied
+  client-side formatter functions, the next-most-common remaining gap. An
+  eval-based first design (`register_formatter` shipping JS strings, compiled
+  client-side with the `Function` constructor before view creation) was
+  implemented upstream and **reverted the same day as a security decision**
+  (human review 2026-07-18): it required `unsafe-eval` in the CSP — against
+  the framework's strict-CSP direction (security headers, `_runCustomJs`
+  deprecation) — and an official register-a-JS-string API invites building
+  formatter bodies from data, a server-mediated XSS foot-gun. The trust-model
+  argument ("the server ships all frontend code anyway") does not justify the
+  *mechanism class*. The shipped design instead mirrors an original UI5 app's
+  **formatter file** (human direction 2026-07-18): abap2UI5 now serves a
+  curated formatter module in the standard app layout —
+  `app/webapp/model/formatter.js`, next to `model/models.js` — a real script
+  resource, no ABAP API change, growth via framework PRs only (the
+  `control_call_by_id` whitelist model). Views wire it via
+  `core:require="{Formatter: 'z2ui5/model/formatter'}"` (UI5 ≥ 1.74,
+  POST_171 in ports; the published `z2ui5.Formatter` global covers older
+  releases). It re-exports the `z2ui5.Util` date helpers so Util can fold in
+  over time. Outcome:
+  - **401** — the appended table's weight state keeps the original
+    parts+formatter binding: the view requires the module like the original
+    controller requires `./Formatter`, and binds
+    `formatter: 'Formatter.weightState'` — the alias reference mirrors the
+    original's `.formatter.weightState`. The interim expression-binding
+    version and the precomputed `WEIGHT_STATE` column are both gone.
+  - render-smoke harness mirrors the module's fixed contract (faithful
+    `weightState` registered as the named module `z2ui5/model/formatter`,
+    kept in sync with abap2UI5).
+  - CAPABILITIES.md formatter row is 🔶: curated-module reference first,
+    expression binding for app-specific one-offs, ABAP preformatting as the
+    fallback; factories returning controls stay ❌.
+
 ## Open findings (backlog)
 
 Live tests pending (in-system) — the 2026-07-16 framework source pass
@@ -229,7 +301,15 @@ Live tests pending (in-system) — the 2026-07-16 framework source pass
 is visual/UX confirmation:
 - [ ] **401** — Reset unchecks the facet popover checkboxes (mechanics
   source-verified: model applied before on_event).
-- [ ] **469** — PDFViewer renders inside the Dialog at height 100%.
+- [ ] **401** — the weight states render Success/Warning/Error via the
+  core:require'd `Formatter.weightState` (first port referencing the
+  curated formatter module, converted 2026-07-18).
+- [ ] **469** — the popup-mode PDFViewer opens via the whitelisted
+  `control_call_by_id( 'open' )` and shows the clicked PDF (converted
+  2026-07-18; the earlier Dialog check is obsolete).
+- [ ] **471** — the third panel toggles via the whitelisted
+  `control_call_by_id( 'setExpanded' )` on each toolbar press (converted
+  2026-07-18).
 - [ ] **487** — nested tree binding renders expandable levels (serialization
   source-verified; framework ships z2ui5.cc.Tree).
 - [ ] **529** — the press Dialog opens/closes (popup_display).
@@ -237,6 +317,9 @@ is visual/UX confirmation:
 - [ ] **486** — expression-bound toolbar widths follow the slider.
 - [ ] **530** — separator switches instantly via the shared two-way path.
 - [ ] **474** — toast shows the newly selected item (timing source-verified).
+- [ ] **454** — free text + Enter creates a token on both multiInput1 and
+  multiInput2 via the `z2ui5.cc.MultiInputExt` companions (first cc-control
+  usage in these ports, wired 2026-07-18).
 - [ ] **452** — convert to the bound-template variant with a raw binding-info
   string (pass-through source-verified) — then LIVE-TEST the group headers.
 - [ ] **433/473** — NEW: the `device>` model IS available in main views

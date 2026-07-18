@@ -1,5 +1,13 @@
 # Broaden the `control_call_by_id` whitelist to a few more imperative methods
 
+> **Status: implemented upstream (2026-07-18).** `CONTROL_METHODS` in
+> `app/webapp/core/FrontendAction.js` now carries `open: []`, `close: []`
+> and `setExpanded: ["bool"]` exactly as proposed below; the embedded
+> frontend was regenerated and the frontendAction unit specs extended. The
+> ports 469 (popup-mode PDFViewer `open`) and 471 (Panel `setExpanded`)
+> were converted in the same change and dropped their IMPROVISED
+> deviations; CAPABILITIES.md is updated.
+
 ## Summary
 
 `z2ui5_if_client=>control_call_by_id( id method … )` calls a **whitelisted**

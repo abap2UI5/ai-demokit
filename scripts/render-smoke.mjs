@@ -456,6 +456,25 @@ const HARNESS = `<!DOCTYPE html>
 <script>
   window.uiErrors = [];
   window.addEventListener('error', function (e) { window.uiErrors.push('PAGEERROR: ' + e.message); });
+  // Mirror of the framework's curated formatter module (standard app layout
+  // model/formatter.js; served as a real script upstream, CSP-clean). The
+  // functions are a fixed public contract, so mirroring them faithfully here
+  // is legitimate - like the device model the harness also provides. Keep in
+  // sync with abap2UI5 app/webapp/model/formatter.js. Registered as the
+  // named module z2ui5/model/formatter in boot() below (for core:require)
+  // and published as the z2ui5.Formatter global (the pre-1.74 reference).
+  window.z2ui5 = window.z2ui5 || {};
+  window.z2ui5.Formatter = {
+    weightState: function (measure, unit) {
+      var adjusted = parseFloat(measure);
+      if (isNaN(adjusted)) return 'None';
+      if (unit === 'G') adjusted = measure / 1000;
+      if (adjusted < 0) return 'None';
+      if (adjusted < 1) return 'Success';
+      if (adjusted < 5) return 'Warning';
+      return 'Error';
+    },
+  };
 </script>
 <script id="sap-ui-bootstrap" src="/resources/sap-ui-core.js"
   data-sap-ui-libs="sap.m,sap.ui.layout"
@@ -465,6 +484,31 @@ const HARNESS = `<!DOCTYPE html>
 <script>
   window.uiReady = new Promise(function (resolve) {
     function boot() {
+      // core:require="{Formatter: 'z2ui5/model/formatter'}" must resolve
+      // without the framework being served - register the mirror above as
+      // the named module before any view is created.
+      sap.ui.define('z2ui5/model/formatter', [], function () { return window.z2ui5.Formatter; });
+      // Metadata-only mirror of the bundled custom control
+      // z2ui5.cc.MultiInputExt (invisible companion installing the
+      // free-text->token validator on the MultiInput it references). The
+      // harness only validates view creation, so properties/renderer
+      // suffice - no behavior. Keep the metadata in sync with abap2UI5
+      // app/webapp/cc/MultiInputExt.js.
+      sap.ui.define('z2ui5/cc/MultiInputExt', ['sap/ui/core/Control'], function (Control) {
+        return Control.extend('z2ui5.cc.MultiInputExt', {
+          metadata: {
+            properties: {
+              MultiInputId: { type: 'string' },
+              MultiInputName: { type: 'string' },
+              addedTokens: { type: 'object' },
+              checkInit: { type: 'boolean', defaultValue: false },
+              removedTokens: { type: 'object' },
+            },
+            events: { change: { allowPreventDefault: true, parameters: {} } },
+          },
+          renderer: { apiVersion: 2, render: function () {} },
+        });
+      });
       sap.ui.require(['sap/ui/core/Core', 'sap/base/Log'], function (Core, Log) {
         Log.addLogListener({ onLogEntry: function (e) {
           if (e.level <= Log.Level.ERROR) window.uiErrors.push('LOG: ' + e.message);

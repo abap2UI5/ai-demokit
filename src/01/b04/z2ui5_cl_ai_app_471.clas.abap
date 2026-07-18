@@ -3,10 +3,11 @@ CLASS z2ui5_cl_ai_app_471 DEFINITION PUBLIC.
   PUBLIC SECTION.
     INTERFACES z2ui5_if_app.
 
-    DATA expanded TYPE abap_bool.
-
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
+    " not bound - mirrors the panel state so the toggle can invert it
+    " (original: oPanel.getExpanded())
+    DATA expanded TYPE abap_bool.
 
     METHODS view_display.
     METHODS on_event.
@@ -83,8 +84,6 @@ CLASS z2ui5_cl_ai_app_471 IMPLEMENTATION.
         )->open( `Panel`
             )->a( n = `id`         v = `expandablePanel`
             )->a( n = `expandable` v = `true`
-            " original: onOverflowToolbarPress toggles the panel's expanded state
-            )->a( n = `expanded`   v = client->_bind_edit( expanded )
             )->a( n = `width`      v = `auto`
             )->a( n = `class`      v = `sapUiResponsiveMargin`
 
@@ -117,8 +116,12 @@ CLASS z2ui5_cl_ai_app_471 IMPLEMENTATION.
     CASE client->get( )-event.
 
       WHEN `TOOLBAR_PRESSED`.
+        " original: oPanel.setExpanded(!oPanel.getExpanded()) - the same
+        " imperative call, client-side via the whitelisted setExpanded
         expanded = xsdbool( expanded = abap_false ).
-        client->view_model_update( ).
+        client->control_call_by_id( id     = `expandablePanel`
+                                    method = `setExpanded`
+                                    params = VALUE #( ( CONV string( expanded ) ) ) ).
 
     ENDCASE.
 
