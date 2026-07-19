@@ -42,9 +42,7 @@ CLASS z2ui5_cl_ai_app_469 IMPLEMENTATION.
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `height`    v = `100%`
 
-        " original onInit: new PDFViewer({isTrustedSource: true}) added as a view
-        " dependent - declared here in the view's dependents aggregation; the
-        " constant title onPress sets imperatively is declared alongside
+        " original onInit's controller-created PDFViewer, declared in the view's dependents aggregation instead
         )->open( n = `dependents` ns = `mvc`
             )->leaf( `PDFViewer`
                 )->a( n = `id`              v = `pdfViewer`
@@ -80,9 +78,7 @@ CLASS z2ui5_cl_ai_app_469 IMPLEMENTATION.
     CASE client->get( )-event.
 
       WHEN `SHOW_PDF`.
-        " original onPress: setSource + open() on the popup-mode viewer -
-        " update the bound source, then the whitelisted open runs after render.
-        " t_arg is positional: id, view (`` = global lookup), method
+        " original onPress setSource + open(): update the bound source, then the whitelisted open runs after render (t_arg positional: id, view - `` = global lookup -, method)
         pdf_source = `https://sdk.openui5.org/test-resources/sap/m/demokit/sample/PDFViewerPopup/` && client->get_event_arg( ).
         client->view_model_update( ).
         client->follow_up_action( val   = z2ui5_if_client=>cs_event-control_by_id

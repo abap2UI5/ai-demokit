@@ -69,8 +69,7 @@ CLASS z2ui5_cl_ai_app_447 IMPLEMENTATION.
 
       WHEN `INITIAL_FOCUS_ON_ACTION`.
 
-        " dependentOn ties the message box to the view's layout lifecycle
-        " (original: dependentOn: this.getView())
+        " dependentOn ties the message box to the view's layout lifecycle (original: this.getView())
         client->message_box_display(
           text             = |Initial button focus is set by attribute \n initialFocus: sap.m.MessageBox.Action.CANCEL|
           type             = `warning`
@@ -84,8 +83,7 @@ CLASS z2ui5_cl_ai_app_447 IMPLEMENTATION.
 
       WHEN `INITIAL_FOCUS_ON_CUSTOM_ACTION`.
 
-        " dependentOn ties the message box to the view's layout lifecycle
-        " (original: dependentOn: this.getView())
+        " dependentOn as above
         client->message_box_display(
           text             = |Initial button focus is set by attribute \n initialFocus: "Custom button" \n Note: The name is not case sensitive|
           type             = `show`

@@ -116,6 +116,11 @@ references and only they graduate to the curated samples repo.
 | `checked` | manually verified in a running system | `checked {date, note}` set in the sidecar |
 | `golden` | checked + exemplary style, safe to imitate | human judgement |
 
+A promotion certifies the **code at check time**: any behavioral rework of a
+`checked`/`golden` port drops it back to `generated` (keep the old check as
+context in a `LIVE_TEST` deviation) until a fresh live run restamps it —
+see the AGENTS §10 gotcha (app 530, 2026-07-19).
+
 ## Per-port metadata
 
 **Implemented (stage 2):** `meta/<class>.json` is the source of truth — the

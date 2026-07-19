@@ -12,8 +12,8 @@
   "checked": null,
   "deviations": [
     {
-      "type": "IMPROVISED",
-      "what": "the original reads the selected item via oEvent.getParameter(\"item\").getText() / getSelectedItem(). Here the items get keys (one/two/three - an addition, SB1 has none in the sample) and selectedKey is two-way bound, so the selection arrives with the event and no private event path is needed (see CAPABILITIES.md)."
+      "type": "NOTE",
+      "what": "the original reads the selected item via oEvent.getParameter(\"item\").getText() / getSelectedItem(). Here the items get keys (one/two/three - an addition, SB1 has none in the sample) and selectedKey is two-way bound, so the selection arrives with the event and no private event path is needed - the documented 1:1 path for controller-read selection (CAPABILITIES.md), not a workaround."
     },
     {
       "type": "LIVE_TEST",

@@ -17,7 +17,9 @@ on the details live upstream and in CAPABILITIES.md/STATUS.md.
 
 ## Open
 
-Currently none.
+| Request | Motivation |
+|---------|------------|
+| [binding-call-compound-filters](binding-call-compound-filters/README.md) | the `BINDING_CALL` filter builds exactly one path/operator/value `Filter`; the standard multi-facet AND-of-ORs pattern (FacetFilter, ViewSettingsDialog) is not expressible, so port 401 falls back to ABAP-side model filtering |
 
 ## Declined / deferred (folder removed 2026-07-19)
 

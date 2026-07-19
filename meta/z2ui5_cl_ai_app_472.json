@@ -12,7 +12,7 @@
   "checked": null,
   "deviations": [
     {
-      "type": "IMPROVISED",
+      "type": "NOTE",
       "what": "the sample binds the composite RangeSlider \"range\" property (an array [low, high] - range=\"{/RS1}\" / range=\"0,100\"). abap2UI5 binds scalar ABAP fields, so each range is expressed as the equivalent value / value2 properties the control keeps in sync - identical rendering."
     }
   ]

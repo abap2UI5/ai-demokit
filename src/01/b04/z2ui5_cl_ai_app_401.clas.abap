@@ -8,7 +8,10 @@ CLASS z2ui5_cl_ai_app_401 DEFINITION PUBLIC.
         name           TYPE string,
         category       TYPE string,
         supplier_name  TYPE string,
-        dimensions     TYPE string,
+        width          TYPE string,
+        depth          TYPE string,
+        height         TYPE string,
+        dim_unit       TYPE string,
         weight_measure TYPE string,
         weight_unit    TYPE string,
         price          TYPE p LENGTH 14 DECIMALS 2,
@@ -22,9 +25,11 @@ CLASS z2ui5_cl_ai_app_401 DEFINITION PUBLIC.
         selected TYPE abap_bool,
       END OF ty_s_facet.
     TYPES ty_t_facet TYPE STANDARD TABLE OF ty_s_facet WITH EMPTY KEY.
-    DATA t_products   TYPE ty_t_product.
-    DATA t_categories TYPE ty_t_facet.
-    DATA t_suppliers  TYPE ty_t_facet.
+    DATA t_products          TYPE ty_t_product.
+    DATA t_categories        TYPE ty_t_facet.
+    DATA t_suppliers         TYPE ty_t_facet.
+    DATA popin_layout        TYPE string.
+    DATA info_toolbar_hidden TYPE abap_bool.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -59,18 +64,17 @@ CLASS z2ui5_cl_ai_app_401 IMPLEMENTATION.
 
     " Data taken from the shared mock data sap/ui/demo/mock/products.json of the original sample
     t_products = VALUE #(
-        ( name = `Comfort Easy` category = `Accessories` supplier_name = `Technocom` dimensions = `84 x 1.5 x 14 cm` weight_measure = `0.2` weight_unit = `KG` price = `1679.00` currency_code = `EUR` )
-        ( name = `Comfort Senior` category = `Accessories` supplier_name = `Technocom` dimensions = `80 x 1.6 x 13 cm` weight_measure = `0.8` weight_unit = `KG` price = `512.00` currency_code = `EUR` )
-        ( name = `Ergo Screen E-I` category = `Flat Screen Monitors` supplier_name = `Very Best Screens` dimensions = `37 x 12 x 36 cm` weight_measure = `21` weight_unit = `KG` price = `230.00` currency_code = `EUR` )
-        ( name = `ITelO Vault` category = `Accessories` supplier_name = `Technocom` dimensions = `32 x 22 x 3 cm` weight_measure = `0.2` weight_unit = `KG` price = `299.00` currency_code = `EUR` )
-        ( name = `ITelO Vault Net` category = `Accessories` supplier_name = `Technocom` dimensions = `10 x 1.8 x 17 cm` weight_measure = `0.16` weight_unit = `KG` price = `459.00` currency_code = `EUR` )
-        ( name = `ITelO Vault SAT` category = `Accessories` supplier_name = `Technocom` dimensions = `11 x 1.7 x 18 cm` weight_measure = `0.18` weight_unit = `KG` price = `149.00` currency_code = `EUR` )
-        ( name = `Notebook Basic 15` category = `Laptops` supplier_name = `Very Best Screens` dimensions = `30 x 18 x 3 cm` weight_measure = `4.2` weight_unit = `KG` price = `956.00` currency_code = `EUR` )
-        ( name = `Notebook Basic 17` category = `Laptops` supplier_name = `Very Best Screens` dimensions = `29 x 17 x 3.1 cm` weight_measure = `4.5` weight_unit = `KG` price = `1249.00` currency_code = `EUR` )
-        ( name = `Notebook Basic 19` category = `Laptops` supplier_name = `Smartcards` dimensions = `32 x 21 x 4 cm` weight_measure = `4.2` weight_unit = `KG` price = `1650.00` currency_code = `EUR` )
-        ( name = `Notebook Professional 15` category = `Accessories` supplier_name = `Very Best Screens` dimensions = `33 x 20 x 3 cm` weight_measure = `4.3` weight_unit = `KG` price = `1999.00` currency_code = `EUR` ) ).
+        ( name = `Comfort Easy` category = `Accessories` supplier_name = `Technocom` width = `84` depth = `1.5` height = `14` dim_unit = `cm` weight_measure = `0.2` weight_unit = `KG` price = `1679.00` currency_code = `EUR` )
+        ( name = `Comfort Senior` category = `Accessories` supplier_name = `Technocom` width = `80` depth = `1.6` height = `13` dim_unit = `cm` weight_measure = `0.8` weight_unit = `KG` price = `512.00` currency_code = `EUR` )
+        ( name = `Ergo Screen E-I` category = `Flat Screen Monitors` supplier_name = `Very Best Screens` width = `37` depth = `12` height = `36` dim_unit = `cm` weight_measure = `21` weight_unit = `KG` price = `230.00` currency_code = `EUR` )
+        ( name = `ITelO Vault` category = `Accessories` supplier_name = `Technocom` width = `32` depth = `22` height = `3` dim_unit = `cm` weight_measure = `0.2` weight_unit = `KG` price = `299.00` currency_code = `EUR` )
+        ( name = `ITelO Vault Net` category = `Accessories` supplier_name = `Technocom` width = `10` depth = `1.8` height = `17` dim_unit = `cm` weight_measure = `0.16` weight_unit = `KG` price = `459.00` currency_code = `EUR` )
+        ( name = `ITelO Vault SAT` category = `Accessories` supplier_name = `Technocom` width = `11` depth = `1.7` height = `18` dim_unit = `cm` weight_measure = `0.18` weight_unit = `KG` price = `149.00` currency_code = `EUR` )
+        ( name = `Notebook Basic 15` category = `Laptops` supplier_name = `Very Best Screens` width = `30` depth = `18` height = `3` dim_unit = `cm` weight_measure = `4.2` weight_unit = `KG` price = `956.00` currency_code = `EUR` )
+        ( name = `Notebook Basic 17` category = `Laptops` supplier_name = `Very Best Screens` width = `29` depth = `17` height = `3.1` dim_unit = `cm` weight_measure = `4.5` weight_unit = `KG` price = `1249.00` currency_code = `EUR` )
+        ( name = `Notebook Basic 19` category = `Laptops` supplier_name = `Smartcards` width = `32` depth = `21` height = `4` dim_unit = `cm` weight_measure = `4.2` weight_unit = `KG` price = `1650.00` currency_code = `EUR` )
+        ( name = `Notebook Professional 15` category = `Accessories` supplier_name = `Very Best Screens` width = `33` depth = `20` height = `3` dim_unit = `cm` weight_measure = `4.3` weight_unit = `KG` price = `1999.00` currency_code = `EUR` ) ).
 
-    SORT t_products BY name.
     t_products_all = t_products.
 
     " Facet values with counters recomputed for the 10-row subset above
@@ -89,17 +93,14 @@ CLASS z2ui5_cl_ai_app_401 IMPLEMENTATION.
 
   METHOD view_display.
 
-    " The bound lists collection of the original is unrolled into two static facet filter lists;
-    " the original controller appends the demo table of sap.m.sample.Table with an adjusted first column.
+    " bound lists collection unrolled into two static facet filter lists; the appended demo table of sap.m.sample.Table is rebuilt inline
     DATA(view) = z2ui5_cl_ai_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns:core` v = `sap.ui.core`
-        " the framework's formatter module (standard app layout model/formatter.js),
-        " wired like an original UI5 app wires its formatter: required into the
-        " view and referenced by alias below (core:require needs UI5 >= 1.74)
+        " the framework's curated formatter module, wired like the original wires './Formatter' (core:require needs UI5 >= 1.74)
         )->a( n = `core:require` v = `{Formatter: 'z2ui5/model/formatter'}`
 
         )->open( `VBox`
@@ -112,8 +113,7 @@ CLASS z2ui5_cl_ai_app_401 IMPLEMENTATION.
                 )->a( n = `showReset`           v = `true`
                 )->a( n = `reset`               v = client->_event( `RESET` )
 
-                " each item binds selected two-way - listClose only signals the
-                " backend to read the flags, no event payload needed
+                " each item binds selected two-way - listClose only signals the backend to read the flags
                 )->open( `FacetFilterList`
                     )->a( n = `title`     v = `Category`
                     )->a( n = `key`       v = `Category`
@@ -144,9 +144,11 @@ CLASS z2ui5_cl_ai_app_401 IMPLEMENTATION.
                 )->shut(
             )->shut(
             )->open( `Table`
-                )->a( n = `id`    v = `idProductsTable`
-                )->a( n = `inset` v = `false`
-                )->a( n = `items` v = client->_bind( t_products )
+                )->a( n = `id`          v = `idProductsTable`
+                )->a( n = `inset`       v = `false`
+                " popinLayout mirrors the original's setPopinLayout controller switch - an empty ComboBox selection maps to the Block default
+                )->a( n = `popinLayout` v = |\{= ${ client->_bind( popin_layout ) } \|\| 'Block' \}|
+                )->a( n = `items`       v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
 
                 )->open( `headerToolbar`
                     )->open( `OverflowToolbar`
@@ -154,6 +156,41 @@ CLASS z2ui5_cl_ai_app_401 IMPLEMENTATION.
                             )->a( n = `text`  v = `Products`
                             )->a( n = `level` v = `H2`
                         )->leaf( `ToolbarSpacer`
+
+                        )->open( `ComboBox`
+                            )->a( n = `id`          v = `idPopinLayout`
+                            )->a( n = `placeholder` v = `Popin layout options`
+                            " two-way selectedKey replaces the original's change handler (a pure key-to-property pass-through)
+                            )->a( n = `selectedKey` v = client->_bind( popin_layout )
+
+                            )->open( `items`
+                                )->leaf( n = `Item` ns = `core`
+                                    )->a( n = `text` v = `Block`
+                                    )->a( n = `key`  v = `Block`
+                                )->leaf( n = `Item` ns = `core`
+                                    )->a( n = `text` v = `Grid Large`
+                                    )->a( n = `key`  v = `GridLarge`
+                                )->leaf( n = `Item` ns = `core`
+                                    )->a( n = `text` v = `Grid Small`
+                                    )->a( n = `key`  v = `GridSmall`
+
+                            )->shut(
+                        )->shut(
+                        " the original's sticky Label + CheckBoxes are dropped - Table.sticky is an array property with no binding path
+                        )->leaf( `ToggleButton`
+                            )->a( n = `id`      v = `toggleInfoToolbar`
+                            )->a( n = `text`    v = `Hide/Show InfoToolbar`
+                            " two-way pressed replaces the original's press handler - the infoToolbar visibility is a pure expression over it
+                            )->a( n = `pressed` v = client->_bind( info_toolbar_hidden )
+
+                    )->shut(
+                )->shut(
+                )->open( `infoToolbar`
+                    )->open( `OverflowToolbar`
+                        )->a( n = `visible` v = |\{= !${ client->_bind( info_toolbar_hidden ) } \}|
+
+                        )->leaf( `Label`
+                            )->a( n = `text` v = `Wide range of available products`
 
                     )->shut(
                 )->shut(
@@ -210,11 +247,8 @@ CLASS z2ui5_cl_ai_app_401 IMPLEMENTATION.
                             )->leaf( `Text`
                                 )->a( n = `text` v = `{SUPPLIER_NAME}`
                             )->leaf( `Text`
-                                )->a( n = `text` v = `{DIMENSIONS}`
-                            " the original requires './Formatter' in the controller and binds
-                            " '.formatter.weightState'; here the framework's curated formatter
-                            " module is required into the view (core:require above) and the
-                            " parts+formatter binding survives 1:1 under the same alias idea
+                                )->a( n = `text` v = `{WIDTH} x {DEPTH} x {HEIGHT} {DIM_UNIT}`
+                            " parts+formatter binding kept 1:1 - the curated formatter module is required into the view (core:require above)
                             )->leaf( `ObjectNumber`
                                 )->a( n = `number` v = `{WEIGHT_MEASURE}`
                                 )->a( n = `unit`   v = `{WEIGHT_UNIT}`
@@ -233,8 +267,7 @@ CLASS z2ui5_cl_ai_app_401 IMPLEMENTATION.
     CASE client->get( )-event.
 
       WHEN `RESET`.
-        " like handleFacetFilterReset: clear every list's selection (via the
-        " two-way bound flags) and drop the table filter
+        " like handleFacetFilterReset: clear the two-way bound selection flags and re-filter
         LOOP AT t_categories ASSIGNING FIELD-SYMBOL(<category>).
           <category>-selected = abap_false.
         ENDLOOP.
@@ -256,8 +289,7 @@ CLASS z2ui5_cl_ai_app_401 IMPLEMENTATION.
     DATA t_range_category TYPE RANGE OF string.
     DATA t_range_supplier TYPE RANGE OF string.
 
-    " the two-way bound selected flags arrive with the event - build one range
-    " per facet group from them
+    " the two-way bound selected flags arrive with the event - one range per facet group
     LOOP AT t_categories INTO DATA(category) WHERE selected = abap_true.
       APPEND VALUE #( sign   = `I`
                       option = `EQ`
@@ -269,8 +301,7 @@ CLASS z2ui5_cl_ai_app_401 IMPLEMENTATION.
                       low    = supplier-text ) TO t_range_supplier.
     ENDLOOP.
 
-    " like _filterModel: ANDs between the facet groups, ORs inside a group -
-    " an empty range matches all rows, like a list without selections is skipped
+    " like _filterModel (ORs inside a group, ANDs between groups) - the nested filter exceeds the binding_call whitelist, so the model is filtered ABAP-side
     t_products = t_products_all.
     DELETE t_products WHERE category NOT IN t_range_category OR supplier_name NOT IN t_range_supplier.
 

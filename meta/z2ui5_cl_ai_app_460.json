@@ -12,8 +12,16 @@
   "checked": null,
   "deviations": [
     {
-      "type": "IMPROVISED",
-      "what": "the sample binds the ObjectHeader to {/ProductCollection/0} and its title/number/attributes to model fields (with a Currency type formatter on number). The port carries no model, so those bindings are resolved to the static values of the first ProductCollection product (Notebook Basic 15) - incl. the ObjectAttribute texts ({Description}, weight, dimensions, www.sap.com) and the numberUnit {CurrencyCode}."
+      "type": "NOTE",
+      "what": "the ObjectHeader keeps the original element binding and relative field bindings 1:1 (title, numberUnit, the ObjectAttribute composite texts and the sap.ui.model.type.Currency number binding); only the binding context path changes - a one-record structure /S_PRODUCT in the default model instead of {/ProductCollection/0}, since the port does not carry the whole collection."
+    },
+    {
+      "type": "SUBSET_DATA",
+      "what": "the model holds exactly the bound record /ProductCollection/0 (Notebook Basic 15) of ui5/mock/products.json, verbatim."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "confirm in a running system that the element binding (binding=\"{/S_PRODUCT}\") resolves the relative field bindings against the default model - first port using a binding= context; source-plausible via the attribute pass-through, converted from full static resolution 2026-07-19."
     }
   ]
 }

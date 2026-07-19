@@ -30,8 +30,7 @@ CLASS z2ui5_cl_ai_app_434 IMPLEMENTATION.
     DATA(pic1) = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-7777-large.jpg`.
     DATA(pic3) = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6100-large.jpg`.
 
-    " image height/width are device dependent in the original (5em on a phone,
-    " 10em otherwise) - expressed client-side over the framework's device> model
+    " the original's device-dependent image size (5em phone / 10em otherwise), expressed over the framework's device> model
     DATA(size) = `{= ${device>/system/phone} ? '5em' : '10em' }`.
 
     DATA(view) = z2ui5_cl_ai_xml=>factory( ).
@@ -44,8 +43,7 @@ CLASS z2ui5_cl_ai_app_434 IMPLEMENTATION.
 
         " the sample's styles.css, injected via a core:HTML content attribute (see CAPABILITIES.md)
         )->leaf( n = `HTML` ns = `core`
-            " literal braces escaped as \{ \} - the XMLView binding parser
-            " reads unescaped braces in attribute values as a binding
+            " literal braces escaped \{ \} - the XMLView binding parser reads unescaped braces as a binding
             )->a( n = `content` v = `<style>.imageContainer\{background-color:#A9EAFF\}</style>`
 
         )->open( n = `VerticalLayout` ns = `l`

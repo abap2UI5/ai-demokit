@@ -393,13 +393,13 @@ client->view_display( view->stringify( ) ).
   assumption that the client-side control id could not reach the backend; it can,
   via `` `$event.oSource.sId` ``.
 - **A property computed from several bound values → a UI5 expression binding
-  `{= … }`.** Capture each bind handle once
-  (`DATA(child1_bind) = client->_bind( child1 ).`), reuse it both as a plain
-  binding (`v = child1_bind`) and inside the expression, embedding every handle
-  with `${ … }`. Build the expression with an ABAP string template, escaping the
-  UI5 braces and any pipes: e.g. a "select all"/"partially selected" pair —
-  `` v = |\{= ${ child1_bind } \|\| ${ child2_bind } \|\| ${ child3_bind } \}| `` (OR)
-  and `` v = |\{= !(${ child1_bind } && ${ child2_bind } && ${ child3_bind })\}| ``
+  `{= … }`.** Write every `client->_bind( … )` call inline, embedded with
+  `${ … }` — the never-capture rule above applies inside expression bindings
+  too (repeated calls to `_bind` on the same variable return the same handle).
+  Build the expression with an ABAP string template, escaping the UI5 braces
+  and any pipes: e.g. a "select all"/"partially selected" pair —
+  `` v = |\{= ${ client->_bind( child1 ) } \|\| ${ client->_bind( child2 ) } \|\| ${ client->_bind( child3 ) } \}| `` (OR)
+  and `` v = |\{= !(${ client->_bind( child1 ) } && ${ client->_bind( child2 ) } && ${ client->_bind( child3 ) })\}| ``
   (NOT-AND). Worked example: app 421 (`sap.m.CheckBox` tri-state parent). Do the
   logic in the binding, not by round-tripping — no event needed to keep the
   parent box in sync.
@@ -711,6 +711,13 @@ How to record it:
   (`z2ui5.cc.Geolocation` / `CameraPicture`) silently do nothing over plain
   HTTP; `getCurrentPosition` / `getUserMedia` fail with a secure-origin error
   (logged via `Lib.logError`). Test over HTTPS or `localhost`, not `http://`.
+- **A code change to a `checked` port invalidates the check** — `checked`
+  certifies the code that was live-verified, not the class name. Any
+  behavioral rework of a `checked` port resets `status` to `generated`
+  (keep the historical check as context inside a `LIVE_TEST` deviation) or
+  restamps `checked` after a fresh live run. App 530 carried a 07-15 check
+  across its 07-16 round-trip removal and showed green in the overview while
+  its central interaction path was unverified (found 2026-07-19).
 - **Prefer a bindable property over a frontend action / round-trip** — if a
   control exposes its state as a property (`IconTabBar.selectedKey`,
   `visible="{= … }"`, the `device>` model), bind it (two-way) instead of
