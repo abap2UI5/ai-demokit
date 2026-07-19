@@ -7,18 +7,18 @@
   "audit": {
     "frontend_action": true,
     "event_t_arg": false,
-    "note": "control_call_by_id (method setExpanded) as a follow-up action after the TOOLBAR_PRESSED round-trip"
+    "note": "follow_up_action( cs_event-control_by_id, method setExpanded ) after the TOOLBAR_PRESSED round-trip"
   },
   "status": "generated",
   "checked": null,
   "deviations": [
     {
       "type": "NOTE",
-      "what": "the original controller toggles the third panel imperatively (onOverflowToolbarPress -> oPanel.setExpanded(!oPanel.getExpanded())). Reproduced 1:1 since the whitelist extension (2026-07-18, see pr/control-call-whitelist): the TOOLBAR_PRESSED handler inverts a server-side mirror of the state and calls client->control_call_by_id( method = setExpanded ) on the panel - the view no longer carries the improvised two-way `expanded` binding, matching the original view.xml exactly."
+      "what": "the original controller toggles the third panel imperatively (onOverflowToolbarPress -> oPanel.setExpanded(!oPanel.getExpanded())). Reproduced 1:1 since the whitelist extension (2026-07-18, see pr/control-call-whitelist): the TOOLBAR_PRESSED handler inverts a server-side mirror of the state and calls the whitelisted setExpanded on the panel via client->follow_up_action( cs_event-control_by_id ) - the view no longer carries the improvised two-way `expanded` binding, matching the original view.xml exactly."
     },
     {
       "type": "LIVE_TEST",
-      "what": "confirm the third panel expands/collapses on each toolbar press (the follow-up setExpanded runs after the round-trip) - together with app 469 the first ports using the extended control_call_by_id whitelist."
+      "what": "confirm the third panel expands/collapses on each toolbar press (the follow-up setExpanded runs after the round-trip) - together with app 469 the first ports using the extended CONTROL_BY_ID whitelist."
     }
   ]
 }

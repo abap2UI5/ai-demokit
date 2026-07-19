@@ -7,14 +7,14 @@
   "audit": {
     "frontend_action": true,
     "event_t_arg": true,
-    "note": "control_call_by_id (method open) as a follow-up action after the SHOW_PDF round-trip"
+    "note": "follow_up_action( cs_event-control_by_id, method open ) after the SHOW_PDF round-trip"
   },
   "status": "generated",
   "checked": null,
   "deviations": [
     {
       "type": "NOTE",
-      "what": "the original onInit creates a popup-mode sap.m.PDFViewer and adds it as a view dependent; it is declared 1:1 in the view's mvc:dependents aggregation (an extra PDFViewer element vs the original view.xml, which never carries it - there it lives in the controller). onPress' setSource/setTitle/open() becomes a bound source updated per click, the constant title declared in the view, and the whitelisted open via client->control_call_by_id after render - popup mode 1:1, the earlier Dialog embedding workaround is gone (whitelist extended upstream 2026-07-18, see pr/control-call-whitelist)."
+      "what": "the original onInit creates a popup-mode sap.m.PDFViewer and adds it as a view dependent; it is declared 1:1 in the view's mvc:dependents aggregation (an extra PDFViewer element vs the original view.xml, which never carries it - there it lives in the controller). onPress' setSource/setTitle/open() becomes a bound source updated per click, the constant title declared in the view, and the whitelisted open via client->follow_up_action( cs_event-control_by_id ) after render - popup mode 1:1, the earlier Dialog embedding workaround is gone (whitelist extended upstream 2026-07-18, see pr/control-call-whitelist)."
     },
     {
       "type": "IMPROVISED",
@@ -26,7 +26,7 @@
     },
     {
       "type": "LIVE_TEST",
-      "what": "confirm the popup-mode PDFViewer opens after the SHOW_PDF round-trip (view_model_update applies the new source before the follow-up open runs) and shows the clicked PDF in a running system - first port using the extended control_call_by_id whitelist."
+      "what": "confirm the popup-mode PDFViewer opens after the SHOW_PDF round-trip (view_model_update applies the new source before the follow-up open runs) and shows the clicked PDF in a running system - first port using the extended CONTROL_BY_ID whitelist."
     }
   ]
 }

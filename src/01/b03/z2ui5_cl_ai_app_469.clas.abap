@@ -81,11 +81,14 @@ CLASS z2ui5_cl_ai_app_469 IMPLEMENTATION.
 
       WHEN `SHOW_PDF`.
         " original onPress: setSource + open() on the popup-mode viewer -
-        " update the bound source, then the whitelisted open runs after render
+        " update the bound source, then the whitelisted open runs after render.
+        " t_arg is positional: id, view (`` = global lookup), method
         pdf_source = `https://sdk.openui5.org/test-resources/sap/m/demokit/sample/PDFViewerPopup/` && client->get_event_arg( ).
         client->view_model_update( ).
-        client->control_call_by_id( id     = `pdfViewer`
-                                    method = `open` ).
+        client->follow_up_action( val   = z2ui5_if_client=>cs_event-control_by_id
+                                  t_arg = VALUE #( ( `pdfViewer` )
+                                                   ( `` )
+                                                   ( `open` ) ) ).
 
     ENDCASE.
 

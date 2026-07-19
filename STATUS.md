@@ -1,6 +1,6 @@
 # STATUS.md — current state & open findings
 
-_Point-in-time summary, last updated **2026-07-18**. Update this file whenever
+_Point-in-time summary, last updated **2026-07-19**. Update this file whenever
 findings are fixed or new ones land (same-change discipline as AGENTS.md §10).
 For the process itself see TRAINING.md; for what abap2UI5 can express see
 CAPABILITIES.md._
@@ -365,6 +365,19 @@ resolution proof).
   box. Relevant here: the wire contract the ports rely on is now
   regression-tested upstream.
 
+## Control/binding calls consolidated into follow_up_action (2026-07-19)
+
+The interim client methods `control_call`, `control_call_by_id` and
+`binding_call_by_id` (branch-only, never released) were removed upstream;
+their events are now public `cs_event` constants (`control_global`,
+`control_by_id`, `binding_call`) scheduled via `follow_up_action` with
+positional `t_arg` (`control_by_id`: id, view — `''` keeps the slot —,
+method, params; `control_global`: object, method, params; `binding_call`:
+id, aggregation, method, params). Wire format and frontend whitelist are
+unchanged, so no LIVE_TEST result is invalidated. Follow-through here:
+ports 469/471 migrated to the event-based calls, meta sidecars + overview
+regenerated, CAPABILITIES rows reworded.
+
 ## Open findings (backlog)
 
 Live tests pending (in-system) — the 2026-07-16 framework source pass
@@ -376,11 +389,12 @@ is visual/UX confirmation:
   core:require'd `Formatter.weightState` (first port referencing the
   curated formatter module, converted 2026-07-18).
 - [ ] **469** — the popup-mode PDFViewer opens via the whitelisted
-  `control_call_by_id( 'open' )` and shows the clicked PDF (converted
-  2026-07-18; the earlier Dialog check is obsolete).
-- [ ] **471** — the third panel toggles via the whitelisted
-  `control_call_by_id( 'setExpanded' )` on each toolbar press (converted
-  2026-07-18).
+  CONTROL_BY_ID `open` (`follow_up_action( cs_event-control_by_id )`) and
+  shows the clicked PDF (converted 2026-07-18; the earlier Dialog check is
+  obsolete).
+- [ ] **471** — the third panel toggles via the whitelisted CONTROL_BY_ID
+  `setExpanded` (`follow_up_action( cs_event-control_by_id )`) on each
+  toolbar press (converted 2026-07-18).
 - [ ] **487** — nested tree binding renders expandable levels (serialization
   source-verified; framework ships z2ui5.cc.Tree).
 - [ ] **529** — the press Dialog opens/closes (popup_display).
