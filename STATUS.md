@@ -294,6 +294,77 @@ specs extended). Follow-through in this repo, same change:
     expression binding for app-specific one-offs, ABAP preformatting as the
     fallback; factories returning controls stay ❌.
 
+## Formatter pack + binding_call implemented (2026-07-18)
+
+A demo kit census (all 446 sap.m samples: ~45 use formatters, 35 in scope,
+three different `weightState` variants under one name; 61 controllers call
+`getBinding(...)`) led to two framework additions, both implemented upstream
+the same day and demoed by beta samples in abap2UI5/samples `src/00/08`:
+
+- **pr/formatter-demokit-pack** — six curated functions in
+  `z2ui5/model/formatter` (`weightStateByValue`, `stockStatusState`/`-Icon`,
+  `round2DP`, `dimensions`, `deliveryStatusState`); with the existing
+  `weightState` every unported in-scope sample with a dedicated formatter
+  file now ports with its original `formatter:` binding structure (renamed
+  references need a `NOTE` deviation). Beta sample 453.
+- **pr/binding-call** — declarative filter/sort on an aggregation binding
+  (`binding_call_by_id` after a backend event, or roundtrip-free via
+  `_event_client` + `cs_event-binding_call` with `${$parameters>/…}` args);
+  closes the `oBinding.filter(...)` controller pattern 1:1, model untouched.
+  Beta samples 454 (backend) / 455 (live, no roundtrip). Unlocks the
+  SearchField/SelectDialog/ViewSettingsDialog/ListSelectionSearch families
+  (~15–20 backlog samples) without IMPROVISED model filtering.
+
+CAPABILITIES rows added/extended; live checks of 453/454/455 are the next
+LIVE_TEST candidates (sample 455 is the first `_event_client` + `$`-arg
+resolution proof).
+
+## Date-object properties probed + arg-serializer bug fixed (2026-07-18)
+
+- **Calendar date properties** (`CalendarAppointment.startDate` etc.,
+  `type: "object"`) demand real JS `Date`s — a headless probe against the
+  OpenUI5 runtime (`scripts/probes/date-object-probe.mjs`) proved: plain
+  string binding crashes view creation, binding types throw
+  (`Date.formatValue` has no `object` target), but a
+  `formatter: 'Formatter.DateCreateObject'` binding renders identically to
+  a real-Date model. CAPABILITIES row added; beta sample 456
+  (abap2UI5/samples) demos the pattern. A model-level `utclong`
+  auto-reviver was considered and **rejected** (it would retype every
+  timestamp field, changing unrelated plain bindings); a per-path opt-in
+  reviver remains an option only if the modify/DnD calendar samples prove
+  the `$event`-arg write-back insufficient. Unlocks the ~25
+  PlanningCalendar/SinglePlanningCalendar display samples.
+- **`get_t_arg` positional bug found live and fixed upstream**: the arg
+  serializer dropped every empty argument, shifting the following ones —
+  a `control_call_by_id` without `view` sent its method name in the view
+  slot (`method 'X' not allowed`, beta samples 448/449). Fixed in
+  abap2UI5 (inner empties kept as `''`, trailing empties still trimmed;
+  unit-tested). **Ports 469/471 were affected** — their pending
+  `control_call_by_id` LIVE_TESTs ran against the broken serializer and
+  can now be re-tested.
+- Same-day builder lesson from the live checks: `z2ui5_cl_xml_view`
+  navigation is per-method — child-less controls like `object_status`
+  still navigate INTO themselves (sibling needs `get_parent( )`); rule
+  documented in the samples AGENTS.md (bit sample 453).
+
+## message> model, DnD reorder, roundtrip e2e (2026-07-18, second round)
+
+- **pr/message-model implemented** — every view slot now carries the UI5
+  message model as `message>` with `handleValidation` registration;
+  CAPABILITIES flipped the "MessageManager auto-collection" row ❌→✅
+  (seventh "already/nearly free" case). Unlocks the MessagePopover family
+  (4–5 samples); beta sample 458.
+- **DnD reorder confirmed framework-complete** — no gap: `dnd:DragDropInfo`
+  + `$`-arg indexes + ABAP reorder covers the pattern (samples 307/459);
+  CAPABILITIES row added. The TableDnD/TreeDnD family ports need no
+  framework change.
+- **Transpiled-backend roundtrip limitation was stale** — the Node backend
+  renders view XML (typed-variable fix in `check_on_init` took effect);
+  abap2UI5's `roundtrip.spec.js` now asserts view XML on init, the
+  model-delta-before-on_event contract and the browser-rendered message
+  box. Relevant here: the wire contract the ports rely on is now
+  regression-tested upstream.
+
 ## Open findings (backlog)
 
 Live tests pending (in-system) — the 2026-07-16 framework source pass

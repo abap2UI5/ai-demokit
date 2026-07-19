@@ -21,3 +21,6 @@ README and update CAPABILITIES.md.
 | [named-json-models](named-json-models/README.md) | open |
 | [device-model-in-popups](device-model-in-popups/README.md) | implemented |
 | [formatter-registry](formatter-registry/README.md) | implemented |
+| [formatter-demokit-pack](formatter-demokit-pack/README.md) | implemented |
+| [binding-call](binding-call/README.md) | implemented |
+| [message-model](message-model/README.md) | implemented |
