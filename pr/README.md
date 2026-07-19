@@ -17,9 +17,13 @@ on the details live upstream and in CAPABILITIES.md/STATUS.md.
 
 ## Open
 
-| Request | Status |
-|---------|--------|
-| [named-json-models](named-json-models/README.md) | open — `_bind`/`_bind_edit` still have no named-model parameter (verified against `z2ui5_if_client` 2026-07-19) |
+Currently none.
+
+## Declined / deferred (folder removed 2026-07-19)
+
+| Request | Decision |
+|---------|----------|
+| named-json-models | **Too complicated with the current abap2UI5 approach** — every view slot serializes exactly one ABAP-fed default JSONModel per roundtrip; a second named model would have to be carried through bind, serialization and model-update on every slot. Declined for now, possibly worth re-discussing in the future if the model layer changes. Workaround stays: flatten into the default model or resolve statically (IMPROVISED deviation, apps 420/434/473, same family app 469) |
 
 ## Implemented (folders removed 2026-07-19)
 
