@@ -442,8 +442,10 @@ each distilled in the same change:
   `popover-display-val`, prompt updated.
 - `CONTROL_METHODS` arg-kinds ignored (2 apps: `to` transition /
   ViewSettingsDialog `open` page silently dropped, mis-filed as LIVE_TEST)
-  → AGENTS §10 gotcha + CAPABILITIES row warning + **pr/control-method-args**
-  (to/open/goToStep).
+  → AGENTS §10 gotcha + CAPABILITIES row warning + pr/control-method-args
+  (**implemented upstream same day**: `to [transitionName]`,
+  `open [pageKey]`, `goToStep [controlId, bool]`; `castArgs` no longer pads
+  missing trailing args — folder removed, see pr/README Implemented).
 - Empty-string flattening breaks enum properties / overrides defaults
   (1 app, QuickView) → AGENTS §5 model rule, prompt updated.
 
