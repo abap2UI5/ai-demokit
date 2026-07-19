@@ -73,7 +73,7 @@ feature this table marks ✅/🔶.
 | Opening external URLs (`URLHelper.redirect`) | ✅ | `client->_event_client( client->cs_event-open_new_tab, t_arg = ( url ) )` | app 460 |
 | Client-side-only behaviour with no backend effect | ✅ | `client->_event_client( … )` frontend actions | overview app popup close |
 | Post-render actions (focus, scroll, …) | ✅ | `client->follow_up_action( val = client->cs_event-… )` — queued to run AFTER the response is rendered, so the DOM exists | source-verified (z2ui5_cl_core_client:43-55) |
-| Imperative one-shot control methods with no binding equivalent (`open`, `close`, `setExpanded`, `scrollToIndex`, `scrollTo`, `focus`, NavContainer `to`/`back`) | ✅ | `client->follow_up_action( val = cs_event-control_by_id t_arg = id/view/method/params… )` — whitelisted per method with arg-kind casting (`bool` takes the ABAP `X`/space), runs client-side after render; `open`/`close`/`setExpanded` added 2026-07-18 (pr/control-call-whitelist) | apps 469 (`open`) and 471 (`setExpanded`), LIVE-TEST pending; source-verified in `app/webapp/core/FrontendAction.js` `CONTROL_METHODS` |
+| Imperative one-shot control methods with no binding equivalent (`open`, `close`, `setExpanded`, `scrollToIndex`, `scrollTo`, `focus`, NavContainer `to`/`back`) | ✅ | `client->follow_up_action( val = cs_event-control_by_id t_arg = id/view/method/params… )` — whitelisted per method with arg-kind casting (`bool` takes the ABAP `X`/space), runs client-side after render; `open`/`close`/`setExpanded` added 2026-07-18 (pr/control-call-whitelist). **Arguments beyond the method's declared kinds are silently dropped** (`castArgs` maps over `kinds`) — check `CONTROL_METHODS` BEFORE wiring a parametrized call; a needed-but-unlisted arg is a declared deviation + pr/ request, never a LIVE_TEST hope (probe apps 609 `to` transition / 624 ViewSettingsDialog `open` page, 2026-07-19 — pr/control-method-args) | apps 469 (`open`) and 471 (`setExpanded`), LIVE-TEST pending; source-verified in `app/webapp/core/FrontendAction.js` `CONTROL_METHODS` |
 | Drag & drop reorder (`dnd:DragDropInfo`, controller reorders the model on `drop`) | ✅ | declarative dnd config in the view; the drop event ships dragged/drop index and position via client-side resolved `$`-args (`${$parameters>/draggedControl/oParent}.indexOfItem(${$parameters>/draggedControl})`, `${$parameters>/dropPosition}`), ABAP reorders the table + `view_model_update` | shipped samples in abap2UI5/samples: 307 (GridList, 01/08/02) and 459 (sap.m.Table incl. `dropPosition=Between`, 01/02); view structure probe-verified |
 | Timers / polling | ✅ | `cs_event-start_timer` (callbackEvent, delayMs) + `_event( s_ctrl = VALUE #( check_allow_multi_req = abap_true ) )` for events during a running round-trip | source-verified (frontendaction:348-362) |
 | Rich event payloads beyond strings | ✅ | `_event( r_data = ref )` snapshots ABAP data at render time; read back via `client->get( )-r_event_data` | source-verified (core_client:404-414) |
@@ -104,7 +104,10 @@ id/view/method/params, `control_global`: object/method/params,
 `_event_client` (the interim `control_call*`/`binding_call_by_id` wrapper
 methods were consolidated into `follow_up_action`, 2026-07-19).
 Also available: nested view slots (`nest_view_display`), `popover_display(
-by_id )` anchored to any control, app-stack navigation with typed results
+xml = … by_id = … )` anchored to any control — note the XML parameter is
+named **`xml`**, unlike `popup_display( val )`; guessing `val` by analogy
+was the single biggest first-try error of the 2026-07-19 hold-out probe
+(3 of 25 apps, does not compile; pattern-lint gates it now), app-stack navigation with typed results
 (`nav_app_call/leave` + `get_app_prev`), and bundled custom controls
 (`z2ui5.cc`: Timer, Storage, Focus, Geolocation, History, Tree,
 FileUploader, CameraPicture, MultiInputExt / SmartMultiInputExt,

@@ -427,6 +427,31 @@ produce; two were regenerated, plus hygiene. All changes in this pass:
   `control_by_id` empty-view wording corrected to the framework behavior
   (global lookup, not "keeps the slot").
 
+## Hold-out regeneration probe #1 (2026-07-19) — baseline set
+
+The first TRAINING.md regeneration probe ran: all 25 hold-out samples
+generated from scratch, first-try, scored by every gate plus a 5-reviewer
+adversarial pass. Full protocol and per-app numbers:
+**`probes/holdout-2026-07-19.md`**. Headlines: 21/25 CI-green on first try,
+23/25 structural-diff-clean, 0 genuine render failures, review 14 CLEAN /
+5 MINOR / 6 MAJOR with only **three root causes** behind all MAJORs —
+each distilled in the same change:
+
+- `popover_display( val = )` guessed by analogy (3 apps, does not compile)
+  → exact signature in CAPABILITIES, pattern-lint rule
+  `popover-display-val`, prompt updated.
+- `CONTROL_METHODS` arg-kinds ignored (2 apps: `to` transition /
+  ViewSettingsDialog `open` page silently dropped, mis-filed as LIVE_TEST)
+  → AGENTS §10 gotcha + CAPABILITIES row warning + **pr/control-method-args**
+  (to/open/goToStep).
+- Empty-string flattening breaks enum properties / overrides defaults
+  (1 app, QuickView) → AGENTS §5 model rule, prompt updated.
+
+Probe-found infrastructure fixes (landed 2026-07-19): render-smoke
+formatter mirror synced to the full upstream contract; `resolveExpr` now
+resolves `&&`-chained templates. The probe ports themselves are never
+merged (hold-out discipline); the worktree snapshot exists only locally.
+
 ## Open findings (backlog)
 
 Live tests pending (in-system) — the 2026-07-16 framework source pass
@@ -507,6 +532,12 @@ Infrastructure:
   past the root null-refs; duplicate attribute names render invalid XML~~ —
   done 2026-07-18: all three ASSERT (fail fast at the call site), plus a local
   unit test class on `z2ui5_cl_ai_xml`.
+- [ ] property-check blind spot (hold-out probe 2026-07-19): the gate only
+  scans `a( n = … )` attributes, so a post-1.71 **event parameter** read via
+  `${$parameters>/…}` in a `t_arg` slips through undeclared (probe app 618,
+  SearchField `searchButtonPressed` since 1.114). Teach the gate to match
+  `$parameters>/<name>` against the entity's member list, or accept and
+  keep the AGENTS §10 rule as the only guard.
 - [ ] pattern-lint stays regex-based **by decision** (2026-07-18): the rule
   set is green and each rule is small; a rewrite on the abaplint AST API only
   pays once regex rules start producing false positives/negatives in

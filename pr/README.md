@@ -20,6 +20,7 @@ on the details live upstream and in CAPABILITIES.md/STATUS.md.
 | Request | Motivation |
 |---------|------------|
 | [binding-call-compound-filters](binding-call-compound-filters/README.md) | the `BINDING_CALL` filter builds exactly one path/operator/value `Filter`; the standard multi-facet AND-of-ORs pattern (FacetFilter, ViewSettingsDialog) is not expressible, so port 401 falls back to ABAP-side model filtering |
+| [control-method-args](control-method-args/README.md) | `CONTROL_METHODS` drops every argument beyond the declared kinds: `to` loses the transition animation, ViewSettingsDialog `open` loses the page key, Wizard `goToStep` is missing entirely (found by the 2026-07-19 hold-out probe, apps 609/624/625) |
 
 ## Declined / deferred (folder removed 2026-07-19)
 

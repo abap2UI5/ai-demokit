@@ -39,6 +39,18 @@ const lineOf = (content, idx) => content.slice(0, idx).split('\n').length;
 
 const RULES = [
   {
+    id: 'popover-display-val',
+    level: 'error',
+    doc: 'popover_display imports `xml` (not `val`, unlike popup_display) — guessed-by-analogy `val =` does not compile; hold-out probe apps 607/613/617, 2026-07-19',
+    find(content) {
+      const out = [];
+      for (const m of content.matchAll(/popover_display\(\s*val\s*=/g)) {
+        out.push({ line: lineOf(content, m.index), text: m[0] });
+      }
+      return out;
+    },
+  },
+  {
     id: 'event-arg-bare-brace',
     level: 'error',
     doc: 'event t_arg uses a bare `{COL}` — not resolved by get_event_arg; use the $-prefixed form (${COL}) — AGENTS §5, bit us in app 526',

@@ -260,8 +260,19 @@ merge the extra model's fields into the row type, or — for pure display assets
 like image URLs that are the same for every row — inline them as literals /
 build them from a shared base (a non-bound `base_url` kept in `PROTECTED`, not
 `PUBLIC`, so the round-trip model scan stays small). Record the flattening as an
-`IMPROVISED:` note. Worked example: app 420 (`sap.m.Carousel`, `img>` model →
+`IMPROVISED:` note — also when it merely drops unbound columns of a shared
+mock model. Worked example: app 420 (`sap.m.Carousel`, `img>` model →
 static image URLs).
+
+**Absent JSON properties must not become empty strings.** A flat ABAP row
+serializes every field on every row; where the original JSON simply omits a
+property, the port sends `""` — and UI5 rejects `""` on **enum**-typed
+properties (`validateProperty` throws where the original's `undefined`
+picked the default) and overrides non-empty property **defaults** (e.g.
+`Link.target` `_blank`). Fill the UI5 default value explicitly in the ABAP
+data, or split the aggregation into per-shape templates. Found by the
+2026-07-19 hold-out probe (QuickView port: `QuickViewGroupElementType`/
+`AvatarShape` crashed every page).
 
 #### `view_display` — the view via `z2ui5_cl_ai_xml`
 
@@ -724,3 +735,17 @@ How to record it:
   driving it imperatively. Only methods with no bindable equivalent
   (`NavContainer.to`, `focus`, `scrollToIndex`) need a frontend action.
   Compare app 088 (NavContainer + action) with the IconTabBar samples.
+- **A whitelisted control method silently drops arguments beyond its
+  declared kinds** — `castArgs` in `FrontendAction.js` maps over the
+  `CONTROL_METHODS` kinds list, so a `to` transition name or a
+  ViewSettingsDialog `open` page key never reaches the method; the call
+  "works" and the behavior is quietly wrong. Verify the method's kinds in
+  the framework source BEFORE wiring a parametrized call; if the sample
+  needs the arg, that is a declared deviation **plus a pr/ request in the
+  same change** — never a LIVE_TEST for something source-decidable
+  (hold-out probe apps 609/624, 2026-07-19; pr/control-method-args).
+- **POST_171 covers event *parameters* too** — a post-1.71 event parameter
+  read via `${$parameters>/…}` (e.g. SearchField `searchButtonPressed`,
+  since 1.114) needs its POST_171 deviation exactly like a bound member;
+  `property-check.mjs` only scans `a( n = … )` attributes and cannot see
+  t_arg usage (gate blind spot found 2026-07-19, STATUS backlog).

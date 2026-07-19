@@ -181,9 +181,14 @@ looped controls. Values are not compared — that stays with review/live checks.
   A regeneration probe = generate them from scratch with the current
   rules/references and score: CI green on first try, structural-diff
   violations, render-smoke failures, review findings per app. Improvement
-  becomes a number per generation run. **Run the first probe before batch
-  b05 lands** — without a baseline the corrections-per-batch curve has no
-  anchor.
+  becomes a number per generation run. ~~Run the first probe before batch
+  b05 lands~~ — **probe #1 ran 2026-07-19**; the baseline (protocol + all
+  numbers: 21/25 CI-green first try, 4 undeclared structural diffs,
+  0 genuine render failures, 6 MAJOR / 5 MINOR review findings across
+  3 root causes) lives in
+  [`probes/holdout-2026-07-19.md`](probes/holdout-2026-07-19.md). Repeat
+  the protocol identically for every future probe and compare against that
+  file.
 - **Regeneration diff:** re-run old ports with the improved setup and diff
   against their golden version.
 
