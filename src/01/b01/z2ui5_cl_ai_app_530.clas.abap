@@ -72,7 +72,7 @@ CLASS z2ui5_cl_ai_app_530 IMPLEMENTATION.
             )->open( n = `content` ns = `l`
                 )->open( `Breadcrumbs`
                     )->a( n = `currentLocationText` v = `Laptop`
-                    )->a( n = `separatorStyle`      v = client->_bind_edit( selected )
+                    )->a( n = `separatorStyle`      v = client->_bind( selected )
 
                     )->leaf( `Link`
                         )->a( n = `press` v = client->_event( val   = `LINK_PRESS`
@@ -113,8 +113,8 @@ CLASS z2ui5_cl_ai_app_530 IMPLEMENTATION.
                         )->open( `Select`
                             )->a( n = `class`       v = `sapUiSmallMarginBegin`
                             )->a( n = `id`          v = `separatorSelect`
-                            )->a( n = `selectedKey` v = client->_bind_edit( selected )
-                            )->a( n = `items`       v = client->_bind_edit( t_items )
+                            )->a( n = `selectedKey` v = client->_bind( selected )
+                            )->a( n = `items`       v = client->_bind( t_items )
 
                             )->leaf( n = `Item` ns = `core`
                                 )->a( n = `key`  v = `{TEXT}`

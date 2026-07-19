@@ -248,7 +248,7 @@ CLASS ${CLASS} IMPLEMENTATION.
 
                 )->open( \`Table\`
                     )->a( n = \`sticky\` v = \`ColumnHeaders\`
-                    )->a( n = \`items\`  v = client->_bind_edit( t_app )
+                    )->a( n = \`items\`  v = client->_bind( t_app )
 
                     )->open( \`columns\`
                         )->open( \`Column\`

@@ -127,7 +127,7 @@ CLASS z2ui5_cl_ai_app_423 IMPLEMENTATION.
 
             )->open( `content`
                 )->open( `ComboBox`
-                    )->a( n = `items` v = |\{ path: '{ client->_bind_edit( val = t_countries path = abap_true ) }', sorter: \{ path: 'TEXT' \} \}|
+                    )->a( n = `items` v = |\{ path: '{ client->_bind( val = t_countries path = abap_true ) }', sorter: \{ path: 'TEXT' \} \}|
 
                     )->leaf( n = `Item` ns = `core`
                         )->a( n = `key`  v = `{KEY}`

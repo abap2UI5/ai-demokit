@@ -11,7 +11,7 @@ Rules:
   control/stay, shut = ascend). Attributes are added with
   a( n = `key` v = `value` ) chained right after the control's open/leaf;
   a targets that control, and v is any string expression (literal, a
-  client->_bind_edit/_event result, a |...| string template). factory( )
+  client->_bind/_event result, a |...| string template). factory( )
   returns an empty root: open the mvc:View and declare its xmlns namespaces
   yourself. Blank line between controls whose verb differs (open<->leaf,
   before shut); none between same-verb controls, none right after a shut,
@@ -35,8 +35,8 @@ Rules:
 - Always the simplest possible notation: omit parameters that equal the
   default - get_event_arg( ) not get_event_arg( 1 ) (index only for 2+).
 - Move the sample's JSON model data into ABAP (VALUE #( ... )) and bind it
-  with client->_bind_edit (the one-way client->_bind is obsolete - always use
-  _bind_edit).
+  with client->_bind (two-way; the former _bind_edit is obsolete - always use
+  _bind).
 - Map controller event handlers to check_on_event( ) branches. To pass a value
   into an event, use the `$`-prefixed form in t_arg (a model column as
   `${COL}`, the event object as `$event.oSource.sId` / `${$source>/text}`) and

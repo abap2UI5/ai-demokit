@@ -75,7 +75,7 @@ CLASS z2ui5_cl_ai_app_452 IMPLEMENTATION.
 
             )->open( `MultiComboBox`
                 )->a( n = `width` v = `500px`
-                )->a( n = `items` v = |\{ path: '{ client->_bind_edit( val = t_products path = abap_true ) }', sorter: \{ path: 'SUPPLIER_NAME', descending: false, group: true \} \}|
+                )->a( n = `items` v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'SUPPLIER_NAME', descending: false, group: true \} \}|
 
                 )->leaf( n = `Item` ns = `core`
                     )->a( n = `key`  v = `{PRODUCT_ID}`

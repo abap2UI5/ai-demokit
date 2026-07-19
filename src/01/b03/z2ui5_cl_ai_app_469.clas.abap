@@ -48,7 +48,7 @@ CLASS z2ui5_cl_ai_app_469 IMPLEMENTATION.
         )->open( n = `dependents` ns = `mvc`
             )->leaf( `PDFViewer`
                 )->a( n = `id`              v = `pdfViewer`
-                )->a( n = `source`          v = client->_bind_edit( pdf_source )
+                )->a( n = `source`          v = client->_bind( pdf_source )
                 )->a( n = `title`           v = `My Custom Title`
                 )->a( n = `isTrustedSource` v = `true`
 

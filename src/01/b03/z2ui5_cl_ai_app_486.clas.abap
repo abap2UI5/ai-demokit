@@ -49,7 +49,7 @@ CLASS z2ui5_cl_ai_app_486 IMPLEMENTATION.
 
             )->leaf( `Slider`
                 )->a( n = `step`  v = `20`
-                )->a( n = `value` v = client->_bind_edit( slider_value )
+                )->a( n = `value` v = client->_bind( slider_value )
 
             )->leaf( `MessageStrip`
                 )->a( n = `text`  v = `By default, Toolbar items are shrinkable if they have percent-based width (e.g. Input, Slider)` &&
@@ -59,7 +59,7 @@ CLASS z2ui5_cl_ai_app_486 IMPLEMENTATION.
             )->open( `Toolbar`
                 )->a( n = `class` v = `sapUiMediumMarginTop`
                 )->a( n = `id`    v = `toolbar1`
-                )->a( n = `width` v = |\{= ${ client->_bind_edit( slider_value ) } + '%' \}|
+                )->a( n = `width` v = |\{= ${ client->_bind( slider_value ) } + '%' \}|
 
                 )->leaf( `Label`
                     )->a( n = `text` v = `I am a text control, so I will shrink whenever the toolbar overflows.`
@@ -80,7 +80,7 @@ CLASS z2ui5_cl_ai_app_486 IMPLEMENTATION.
             )->open( `Toolbar`
                 )->a( n = `class` v = `sapUiMediumMarginTop`
                 )->a( n = `id`    v = `toolbar2`
-                )->a( n = `width` v = |\{= ${ client->_bind_edit( slider_value ) } + '%' \}|
+                )->a( n = `width` v = |\{= ${ client->_bind( slider_value ) } + '%' \}|
 
                 )->open( `Label`
                     )->a( n = `text` v = `I am a non-shrinkable text.`
@@ -116,7 +116,7 @@ CLASS z2ui5_cl_ai_app_486 IMPLEMENTATION.
             )->open( `Toolbar`
                 )->a( n = `class` v = `sapUiMediumMarginTop`
                 )->a( n = `id`    v = `toolbar3`
-                )->a( n = `width` v = |\{= ${ client->_bind_edit( slider_value ) } + '%' \}|
+                )->a( n = `width` v = |\{= ${ client->_bind( slider_value ) } + '%' \}|
 
                 )->open( `Label`
                     )->a( n = `text` v = `I should not shrink by more than 200px, because I am an important text.`

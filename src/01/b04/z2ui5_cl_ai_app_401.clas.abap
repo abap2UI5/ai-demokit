@@ -119,7 +119,7 @@ CLASS z2ui5_cl_ai_app_401 IMPLEMENTATION.
                     )->a( n = `key`       v = `Category`
                     )->a( n = `mode`      v = `MultiSelect`
                     )->a( n = `listClose` v = client->_event( `LIST_CLOSE` )
-                    )->a( n = `items`     v = client->_bind_edit( t_categories )
+                    )->a( n = `items`     v = client->_bind( t_categories )
 
                     )->leaf( `FacetFilterItem`
                         )->a( n = `text`     v = `{TEXT}`
@@ -133,7 +133,7 @@ CLASS z2ui5_cl_ai_app_401 IMPLEMENTATION.
                     )->a( n = `key`       v = `SupplierName`
                     )->a( n = `mode`      v = `MultiSelect`
                     )->a( n = `listClose` v = client->_event( `LIST_CLOSE` )
-                    )->a( n = `items`     v = client->_bind_edit( t_suppliers )
+                    )->a( n = `items`     v = client->_bind( t_suppliers )
 
                     )->leaf( `FacetFilterItem`
                         )->a( n = `text`     v = `{TEXT}`
@@ -146,7 +146,7 @@ CLASS z2ui5_cl_ai_app_401 IMPLEMENTATION.
             )->open( `Table`
                 )->a( n = `id`    v = `idProductsTable`
                 )->a( n = `inset` v = `false`
-                )->a( n = `items` v = client->_bind_edit( t_products )
+                )->a( n = `items` v = client->_bind( t_products )
 
                 )->open( `headerToolbar`
                     )->open( `OverflowToolbar`

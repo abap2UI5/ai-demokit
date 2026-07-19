@@ -88,8 +88,7 @@ generating or reviewing):
   `src/01/08/00/z2ui5_cl_demo_app_022` (lifecycle + scalar state),
   `…_app_038` (popup/popover), `…_app_375` (full dispatcher + event args).
   **Do NOT imitate** where samples conflict with this repo's rules: samples
-  put `main` last (we: first, call-order), still use one-way `_bind`
-  (we: always `_bind_edit`), require an ABAP Doc header (we: forbidden —
+  put `main` last (we: first, call-order), require an ABAP Doc header (we: forbidden —
   sidecar instead), use inline `check_on_event( 'X' )` for few events
   (we: always CASE in `on_event`), and their view builder is the typed
   `z2ui5_cl_xml_view` (we: generic `z2ui5_cl_ai_xml`) — view-building idiom

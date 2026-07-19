@@ -18,8 +18,8 @@
  *
  * Substitutions while reconstructing (the harness controls both sides, so
  * exact framework path names do not matter):
- *   client->_bind_edit( var )                        -> {/VAR}
- *   client->_bind_edit( val = var path = abap_true ) -> /VAR   (bare path)
+ *   client->_bind( var )                        -> {/VAR}
+ *   client->_bind( val = var path = abap_true ) -> /VAR   (bare path)
  *   client->_event*( ... )                           -> attribute dropped
  *   z2ui5_cl_ai_xml=>as_bool( ... )                  -> true
  *   |...{ expr }...| templates, `lit` && var chains  -> resolved statically
@@ -161,11 +161,11 @@ function makeResolver(content, boundVars, notes) {
   const resolveSub = (sub) => {
     const s = sub.trim();
     let m;
-    if ((m = s.match(/^client->_bind_edit\(\s*val\s*=\s*(\w+)\s+path\s*=\s*abap_true\s*\)$/))) {
+    if ((m = s.match(/^client->_bind\(\s*val\s*=\s*(\w+)\s+path\s*=\s*abap_true\s*\)$/))) {
       boundVars.add(m[1]);
       return `/${up(m[1])}`;
     }
-    if ((m = s.match(/^client->_bind_edit\(\s*(\w+)\s*\)$/))) {
+    if ((m = s.match(/^client->_bind\(\s*(\w+)\s*\)$/))) {
       boundVars.add(m[1]);
       return `{/${up(m[1])}}`;
     }
@@ -203,11 +203,11 @@ function makeResolver(content, boundVars, notes) {
     if (/client->_event\b|client->_event_client\b/.test(e)) return SKIP;
     if (/^\|/.test(e)) return resolveTemplate(e);
     let m;
-    if ((m = e.match(/^client->_bind_edit\(\s*(\w+)\s*\)$/))) {
+    if ((m = e.match(/^client->_bind\(\s*(\w+)\s*\)$/))) {
       boundVars.add(m[1]);
       return `{/${up(m[1])}}`;
     }
-    if ((m = e.match(/^client->_bind_edit\(\s*val\s*=\s*(\w+)\s+path\s*=\s*abap_true\s*\)$/))) {
+    if ((m = e.match(/^client->_bind\(\s*val\s*=\s*(\w+)\s+path\s*=\s*abap_true\s*\)$/))) {
       boundVars.add(m[1]);
       return `/${up(m[1])}`;
     }

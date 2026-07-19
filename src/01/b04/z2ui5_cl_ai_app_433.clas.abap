@@ -81,7 +81,7 @@ CLASS z2ui5_cl_ai_app_433 IMPLEMENTATION.
                         )->a( n = `vertical`   v = `true`
 
                         )->open( `List`
-                            )->a( n = `items` v = client->_bind_edit( t_products )
+                            )->a( n = `items` v = client->_bind( t_products )
 
                             )->leaf( `StandardListItem`
                                 )->a( n = `title`   v = `{NAME}`

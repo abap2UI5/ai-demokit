@@ -93,8 +93,8 @@ CLASS z2ui5_cl_ai_app_527 IMPLEMENTATION.
                     )->leaf( `ToolbarSpacer`
                     )->open( `Select`
                         )->a( n = `forceSelection` v = `false`
-                        )->a( n = `selectedKey`    v = client->_bind_edit( selected_product )
-                        )->a( n = `items`          v = |\{ path: '{ client->_bind_edit( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
+                        )->a( n = `selectedKey`    v = client->_bind( selected_product )
+                        )->a( n = `items`          v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
 
                         )->leaf( n = `Item` ns = `core`
                             )->a( n = `key`  v = `{PRODUCT_ID}`
@@ -109,11 +109,11 @@ CLASS z2ui5_cl_ai_app_527 IMPLEMENTATION.
                     )->a( n = `justifyContent` v = `SpaceAround`
 
                     )->open( `Select`
-                        )->a( n = `enabled`        v = client->_bind_edit( enabled )
-                        )->a( n = `editable`       v = client->_bind_edit( editable )
+                        )->a( n = `enabled`        v = client->_bind( enabled )
+                        )->a( n = `editable`       v = client->_bind( editable )
                         )->a( n = `forceSelection` v = `false`
-                        )->a( n = `selectedKey`    v = client->_bind_edit( selected_product2 )
-                        )->a( n = `items`          v = |\{ path: '{ client->_bind_edit( val = t_products2 path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
+                        )->a( n = `selectedKey`    v = client->_bind( selected_product2 )
+                        )->a( n = `items`          v = |\{ path: '{ client->_bind( val = t_products2 path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
 
                         )->leaf( n = `Item` ns = `core`
                             )->a( n = `key`  v = `{PRODUCT_ID}`
@@ -130,7 +130,7 @@ CLASS z2ui5_cl_ai_app_527 IMPLEMENTATION.
                                 )->a( n = `class` v = `sapUiTinyMarginEnd`
                             )->leaf( `Switch`
                                 )->a( n = `type`  v = `AcceptReject`
-                                )->a( n = `state` v = client->_bind_edit( enabled )
+                                )->a( n = `state` v = client->_bind( enabled )
 
                         )->shut(
                         )->open( `HBox`
@@ -141,7 +141,7 @@ CLASS z2ui5_cl_ai_app_527 IMPLEMENTATION.
                                 )->a( n = `class` v = `sapUiTinyMarginEnd`
                             )->leaf( `Switch`
                                 )->a( n = `type`  v = `AcceptReject`
-                                )->a( n = `state` v = client->_bind_edit( editable )
+                                )->a( n = `state` v = client->_bind( editable )
 
                         )->shut(
                     )->shut(
@@ -153,11 +153,11 @@ CLASS z2ui5_cl_ai_app_527 IMPLEMENTATION.
                     )->leaf( `ToolbarSpacer`
                     )->open( `Select`
                         )->a( n = `forceSelection`  v = `false`
-                        )->a( n = `selectedKey`     v = client->_bind_edit( selected_product3 )
+                        )->a( n = `selectedKey`     v = client->_bind( selected_product3 )
                         )->a( n = `type`            v = `IconOnly`
                         )->a( n = `icon`            v = `sap-icon://filter`
                         )->a( n = `autoAdjustWidth` v = `true`
-                        )->a( n = `items`           v = |\{ path: '{ client->_bind_edit( val = t_products3 path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
+                        )->a( n = `items`           v = |\{ path: '{ client->_bind( val = t_products3 path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
 
                         )->leaf( n = `Item` ns = `core`
                             )->a( n = `key`  v = `{PRODUCT_ID}`

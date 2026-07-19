@@ -133,7 +133,7 @@ CLASS z2ui5_cl_ai_app_440 IMPLEMENTATION.
         )->open( `Table`
             )->a( n = `id`    v = `idProductsTable`
             )->a( n = `inset` v = `false`
-            )->a( n = `items` v = |\{ path: '{ client->_bind_edit( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
+            )->a( n = `items` v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
 
             )->open( `headerToolbar`
                 )->open( `Toolbar`

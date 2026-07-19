@@ -66,10 +66,10 @@ const RULES = [
     find: grepLines(/mProperties/),
   },
   {
-    id: 'obsolete-bind',
+    id: 'obsolete-bind-edit',
     level: 'error',
-    doc: 'client->_bind( is obsolete — always use _bind_edit — AGENTS §5',
-    find: grepLines(/->_bind\(/),
+    doc: 'client->_bind_edit( is obsolete — always use _bind (two-way) — AGENTS §5',
+    find: grepLines(/->_bind_edit\(/),
   },
   {
     id: 'event-arg-default-index',
@@ -113,7 +113,7 @@ const RULES = [
   {
     id: 'client-handle-capture',
     level: 'error',
-    doc: 'client handle strings (_event, _bind_edit, _event_client, ...) are written inline at each control, never captured in a variable - even when repeated, even in expression bindings (human decision 2026-07-17, apps 526/486/421)',
+    doc: 'client handle strings (_event, _bind, _event_client, ...) are written inline at each control, never captured in a variable - even when repeated, even in expression bindings (human decision 2026-07-17, apps 526/486/421)',
     find: grepLines(/DATA\(\w+\)\s*=\s*client->_\w+\(/),
   },
   {

@@ -13,7 +13,7 @@
   "deviations": [
     {
       "type": "NOTE",
-      "what": "the original registers its four messages on the sap.ui.core.message.MessageManager and the MessageView binds them via the message> model; abap2UI5 has no MessageManager auto-collection model, but that is not needed to render a MessageView - the messages are bound as a plain ABAP table on MessageView items with a MessageItem template (client->_bind_edit( t_messages )), which is the documented 1:1 path (CAPABILITIES.md), not a workaround. Same rendering as the original's static message set. The framework MessageManager auto-collection (gathering control validation messages client-side) is a separate, rarely-needed mechanism and out of scope for this render-only sample. Proven by the curated sample z2ui5_cl_demo_app_038 (MessageView + MessageItem + MessagePopover over a bound table)."
+      "what": "the original registers its four messages on the sap.ui.core.message.MessageManager and the MessageView binds them via the message> model; abap2UI5 has no MessageManager auto-collection model, but that is not needed to render a MessageView - the messages are bound as a plain ABAP table on MessageView items with a MessageItem template (client->_bind( t_messages )), which is the documented 1:1 path (CAPABILITIES.md), not a workaround. Same rendering as the original's static message set. The framework MessageManager auto-collection (gathering control validation messages client-side) is a separate, rarely-needed mechanism and out of scope for this render-only sample. Proven by the curated sample z2ui5_cl_demo_app_038 (MessageView + MessageItem + MessagePopover over a bound table)."
     }
   ]
 }

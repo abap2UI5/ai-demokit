@@ -62,7 +62,7 @@ CLASS z2ui5_cl_ai_app_441 IMPLEMENTATION.
         )->open( `List`
             )->a( n = `headerText`  v = `Products`
             )->a( n = `headerLevel` v = `H2`
-            )->a( n = `items`       v = client->_bind_edit( t_products )
+            )->a( n = `items`       v = client->_bind( t_products )
 
             )->leaf( `StandardListItem`
                 )->a( n = `title`   v = `{NAME}`

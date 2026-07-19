@@ -57,21 +57,21 @@ CLASS z2ui5_cl_ai_app_421 IMPLEMENTATION.
                 )->a( n = `text` v = `Which languages(s) do you speak?`
             )->leaf( `CheckBox`
                 )->a( n = `text`              v = `select / deselect all`
-                )->a( n = `selected`          v = |\{= ${ client->_bind_edit( child1 ) } \|\| ${ client->_bind_edit( child2 ) } \|\| ${ client->_bind_edit( child3 ) } \}|
-                )->a( n = `partiallySelected` v = |\{= !(${ client->_bind_edit( child1 ) } && ${ client->_bind_edit( child2 ) } && ${ client->_bind_edit( child3 ) })\}|
+                )->a( n = `selected`          v = |\{= ${ client->_bind( child1 ) } \|\| ${ client->_bind( child2 ) } \|\| ${ client->_bind( child3 ) } \}|
+                )->a( n = `partiallySelected` v = |\{= !(${ client->_bind( child1 ) } && ${ client->_bind( child2 ) } && ${ client->_bind( child3 ) })\}|
                 )->a( n = `select`            v = client->_event( val   = `PARENT_CLICKED`
                                                                   t_arg = VALUE #( ( `${$parameters>/selected}` ) ) )
             )->leaf( n = `HTML` ns = `c`
                 )->a( n = `content` v = `<hr>`
             )->leaf( `CheckBox`
                 )->a( n = `text`     v = `English`
-                )->a( n = `selected` v = client->_bind_edit( child1 )
+                )->a( n = `selected` v = client->_bind( child1 )
             )->leaf( `CheckBox`
                 )->a( n = `text`     v = `German`
-                )->a( n = `selected` v = client->_bind_edit( child2 )
+                )->a( n = `selected` v = client->_bind( child2 )
             )->leaf( `CheckBox`
                 )->a( n = `text`     v = `French`
-                )->a( n = `selected` v = client->_bind_edit( child3 ) ).
+                )->a( n = `selected` v = client->_bind( child3 ) ).
 
     client->view_display( view->stringify( ) ).
 

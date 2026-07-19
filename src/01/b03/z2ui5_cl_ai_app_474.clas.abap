@@ -119,7 +119,7 @@ CLASS z2ui5_cl_ai_app_474 IMPLEMENTATION.
                 " selectedKey two-way bound + item keys (port addition) so the
                 " selection is read server-side without a private event path
                 )->open( `SegmentedButton`
-                    )->a( n = `selectedKey`     v = client->_bind_edit( selected_key )
+                    )->a( n = `selectedKey`     v = client->_bind( selected_key )
                     )->a( n = `selectionChange` v = client->_event( `SELECTION_CHANGE` )
 
                     )->open( `items`
@@ -136,7 +136,7 @@ CLASS z2ui5_cl_ai_app_474 IMPLEMENTATION.
                     )->shut(
                 )->shut(
                 )->leaf( `Text`
-                    )->a( n = `text` v = client->_bind_edit( selected_item_text )
+                    )->a( n = `text` v = client->_bind( selected_item_text )
 
             )->shut(
 

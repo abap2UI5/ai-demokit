@@ -19,7 +19,7 @@
  *    match on their last segment — `{/products/0/name}` ~ `{NAME}`). This is
  *    the {COL}-vs-static-placeholder / lost-binding failure class that
  *    name-level checks cannot see. Port values that are ABAP expressions
- *    (client->_bind_edit, |...| templates) are not statically comparable and
+ *    (client->_bind, |...| templates) are not statically comparable and
  *    stay with review/live checks.
  * A difference is "declared" when the control/attribute name (or, for binding
  * values, the binding's last path segment) appears in one of the port's

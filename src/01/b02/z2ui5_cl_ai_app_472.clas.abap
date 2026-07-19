@@ -71,40 +71,40 @@ CLASS z2ui5_cl_ai_app_472 IMPLEMENTATION.
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
             )->leaf( `RangeSlider`
                 )->a( n = `showAdvancedTooltip` v = `true`
-                )->a( n = `value`               v = client->_bind_edit( rs1_value )
-                )->a( n = `value2`              v = client->_bind_edit( rs1_value2 )
+                )->a( n = `value`               v = client->_bind( rs1_value )
+                )->a( n = `value2`              v = client->_bind( rs1_value2 )
                 )->a( n = `min`                 v = `0`
                 )->a( n = `max`                 v = `100`
                 )->a( n = `width`               v = `80%`
                 )->a( n = `class`               v = `sapUiMediumMarginBottom`
             )->leaf( `RangeSlider`
                 )->a( n = `showAdvancedTooltip` v = `true`
-                )->a( n = `value`               v = client->_bind_edit( rs2_value )
-                )->a( n = `value2`              v = client->_bind_edit( rs2_value2 )
+                )->a( n = `value`               v = client->_bind( rs2_value )
+                )->a( n = `value2`              v = client->_bind( rs2_value2 )
                 )->a( n = `min`                 v = `-50`
                 )->a( n = `max`                 v = `50`
                 )->a( n = `width`               v = `10rem`
                 )->a( n = `class`               v = `sapUiMediumMarginBottom`
             )->leaf( `RangeSlider`
                 )->a( n = `showAdvancedTooltip` v = `true`
-                )->a( n = `value`               v = client->_bind_edit( rs3_value )
-                )->a( n = `value2`              v = client->_bind_edit( rs3_value2 )
+                )->a( n = `value`               v = client->_bind( rs3_value )
+                )->a( n = `value2`              v = client->_bind( rs3_value2 )
                 )->a( n = `min`                 v = `0`
                 )->a( n = `max`                 v = `100`
                 )->a( n = `width`               v = `10rem`
                 )->a( n = `class`               v = `sapUiMediumMarginBottom`
             )->leaf( `RangeSlider`
                 )->a( n = `showAdvancedTooltip` v = `true`
-                )->a( n = `value`               v = client->_bind_edit( rs4_value )
-                )->a( n = `value2`              v = client->_bind_edit( rs4_value2 )
+                )->a( n = `value`               v = client->_bind( rs4_value )
+                )->a( n = `value2`              v = client->_bind( rs4_value2 )
                 )->a( n = `min`                 v = `-1000`
                 )->a( n = `max`                 v = `1000`
                 )->a( n = `width`               v = `100%`
                 )->a( n = `class`               v = `sapUiMediumMarginBottom`
             )->leaf( `RangeSlider`
                 )->a( n = `showAdvancedTooltip` v = `true`
-                )->a( n = `value`               v = client->_bind_edit( rs5_value )
-                )->a( n = `value2`              v = client->_bind_edit( rs5_value2 )
+                )->a( n = `value`               v = client->_bind( rs5_value )
+                )->a( n = `value2`              v = client->_bind( rs5_value2 )
                 )->a( n = `min`                 v = `0`
                 )->a( n = `max`                 v = `500`
                 )->a( n = `width`               v = `100%`

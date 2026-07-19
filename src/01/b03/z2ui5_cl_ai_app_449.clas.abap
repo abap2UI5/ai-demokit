@@ -73,7 +73,7 @@ CLASS z2ui5_cl_ai_app_449 IMPLEMENTATION.
             )->a( n = `showHeader` v = `false`
 
             )->open( `MessageView`
-                )->a( n = `items` v = client->_bind_edit( t_messages )
+                )->a( n = `items` v = client->_bind( t_messages )
 
                 )->leaf( `MessageItem`
                     )->a( n = `type`        v = `{TYPE}`

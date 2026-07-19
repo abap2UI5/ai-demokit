@@ -283,7 +283,7 @@ Arguments: `n` = tag name, `ns` = namespace **prefix** (literal `f`, `l`, `core`
 **Attributes go through `a( n = `key` v = `value` )`**, chained right after the
 control's `open`/`leaf`. `a` always targets that control (the last-added child,
 or the node itself if none yet), so it works after both `open` and `leaf`. `v` is
-any string expression — a literal, a `client->_bind_edit( … )` / `_event( … )` result,
+any string expression — a literal, a `client->_bind( … )` / `_event( … )` result,
 or a `|…|` template. (An `open`/`leaf` also accepts an up-front `a = VALUE #( ( `key=value` ) … )`
 string table, split on the first `=` — handy for attributes built in a loop.)
 
@@ -305,11 +305,11 @@ view->open( n = `View` ns = `mvc`
     )->a( n = `xmlns:f`   v = `sap.f`
 
     )->leaf( `Slider`
-        )->a( n = `value`      v = client->_bind_edit( slider_value )
+        )->a( n = `value`      v = client->_bind( slider_value )
         )->a( n = `liveChange` v = client->_event( `SLIDER_MOVED` )
 
     )->open( `Panel`
-        )->a( n = `width` v = client->_bind_edit( panel_width )
+        )->a( n = `width` v = client->_bind( panel_width )
         )->open( `headerToolbar`
             )->open( `Toolbar`
                 )->leaf( `Title`
@@ -346,11 +346,11 @@ client->view_display( view->stringify( ) ).
 
 #### Data binding & events
 
-- `client->_bind_edit( var )` — bind an ABAP `DATA` member two-way (the value
+- `client->_bind( var )` — bind an ABAP `DATA` member two-way (the value
   flows back into `var` on the next round-trip), e.g.
-  `)->a( n = `items` v = client->_bind_edit( t_items )`. **`client->_bind( )`
-  (one-way) is obsolete — always use `_bind_edit`, even for display-only
-  bindings.**
+  `)->a( n = `items` v = client->_bind( t_items )`. **`client->_bind_edit( )`
+  is obsolete — `_bind` is two-way; always use `_bind`, including for
+  display-only bindings.**
 - Inside a bound aggregation, child properties use UI5 binding braces on the
   upper-cased field name: `)->a( n = `text` v = `{TITLE}``.
 - `client->_event( \`NAME\` )` — wire a control event (press, liveChange…) to an
@@ -358,7 +358,7 @@ client->view_display( view->stringify( ) ).
   `CASE client->get( )-event.` … `WHEN \`NAME\`.` … `ENDCASE` — even for a single
   event (never an `IF check_on_event( )`). After changing bound data in an event,
   call `client->view_model_update( )` to push it back (no full redraw).
-- **Client handle strings (`_event`, `_bind_edit`, `_event_client`, …) are
+- **Client handle strings (`_event`, `_bind`, `_event_client`, …) are
   written inline at each control — never captured in a variable**, even when
   the same call repeats on many controls and even inside expression bindings
   (human decision 2026-07-17, apps 526/486/421; pattern-lint blocks
@@ -394,7 +394,7 @@ client->view_display( view->stringify( ) ).
   via `` `$event.oSource.sId` ``.
 - **A property computed from several bound values → a UI5 expression binding
   `{= … }`.** Capture each bind handle once
-  (`DATA(child1_bind) = client->_bind_edit( child1 ).`), reuse it both as a plain
+  (`DATA(child1_bind) = client->_bind( child1 ).`), reuse it both as a plain
   binding (`v = child1_bind`) and inside the expression, embedding every handle
   with `${ … }`. Build the expression with an ABAP string template, escaping the
   UI5 braces and any pipes: e.g. a "select all"/"partially selected" pair —
@@ -687,7 +687,7 @@ How to record it:
   a bare `{COL}` — see §5 "Data binding & events".
 - **abap2UI5 has only one default model** — flatten any named-model binding into
   it — see §5 "`model_init` — the model".
-- **`_bind_edit( val = x path = abap_true )` returns the bare model path**
+- **`_bind( val = x path = abap_true )` returns the bare model path**
   (no braces) — use it when composing raw binding-info strings
   (`{ path: '...', sorter: ... }`); never reconstruct the path with substring
   tricks. Human-taught fix in app 452, 2026-07-16.

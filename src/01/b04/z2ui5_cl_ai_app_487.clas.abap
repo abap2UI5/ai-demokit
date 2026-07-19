@@ -95,7 +95,7 @@ CLASS z2ui5_cl_ai_app_487 IMPLEMENTATION.
         )->open( `Tree`
             )->a( n = `id`    v = `Tree`
             " '{path: '/'}' -> bind the root table; the nested `nodes` drive the depth
-            )->a( n = `items` v = client->_bind_edit( t_nodes )
+            )->a( n = `items` v = client->_bind( t_nodes )
 
             )->leaf( `StandardTreeItem`
                 )->a( n = `title` v = `{TEXT}` ).
