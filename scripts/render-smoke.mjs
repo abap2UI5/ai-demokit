@@ -198,22 +198,32 @@ function makeResolver(content, boundVars, notes) {
     return out;
   };
 
-  return function resolveExpr(expr) {
-    const e = expr.trim().replace(/\)\s*\.?\s*$/, (t) => t); // keep as-is; trailing parens belong to the region
-    if (/client->_event\b|client->_event_client\b/.test(e)) return SKIP;
-    if (/^\|/.test(e)) return resolveTemplate(e);
+  // one chain piece: a template, a _bind form, as_bool, or a plain literal.
+  // Returns null when the piece cannot be resolved statically.
+  const resolveOne = (piece) => {
+    const s = piece.trim();
     let m;
-    if ((m = e.match(/^client->_bind\(\s*(\w+)\s*\)$/))) {
+    if (/^\|/.test(s)) return resolveTemplate(s);
+    if ((m = s.match(/^client->_bind\(\s*(\w+)\s*\)$/))) {
       boundVars.add(m[1]);
       return `{/${up(m[1])}}`;
     }
-    if ((m = e.match(/^client->_bind\(\s*val\s*=\s*(\w+)\s+path\s*=\s*abap_true\s*\)$/))) {
+    if ((m = s.match(/^client->_bind\(\s*val\s*=\s*(\w+)\s+path\s*=\s*abap_true\s*\)$/))) {
       boundVars.add(m[1]);
       return `/${up(m[1])}`;
     }
-    if (/^z2ui5_cl_ai_xml=>as_bool\(/.test(e)) return 'true';
-    // concatenation chain of literals / literal-assigned vars / char utilities
-    const pieces = topSplit(e, '&&').map(resolvePiece);
+    if (/^z2ui5_cl_ai_xml=>as_bool\(/.test(s)) return 'true';
+    return resolvePiece(s);
+  };
+
+  return function resolveExpr(expr) {
+    const e = expr.trim().replace(/\)\s*\.?\s*$/, (t) => t); // keep as-is; trailing parens belong to the region
+    if (/client->_event\b|client->_event_client\b/.test(e)) return SKIP;
+    // split any && chain FIRST (topSplit is template-aware, so a && inside a
+    // |...| template - e.g. an expression binding - never splits); a template
+    // that continues over && pieces was previously mis-read as ONE template
+    // and leaked literal `| &&` into the value (probe app 602, 2026-07-19).
+    const pieces = topSplit(e, '&&').map(resolveOne);
     if (pieces.length && pieces.every((p) => p !== null)) return pieces.join('');
     notes.push(`unresolved value expression dropped: ${e.slice(0, 70)}`);
     return SKIP;
@@ -464,17 +474,66 @@ const HARNESS = `<!DOCTYPE html>
   // named module z2ui5/model/formatter in boot() below (for core:require)
   // and published as the z2ui5.Formatter global (the pre-1.74 reference).
   window.z2ui5 = window.z2ui5 || {};
-  window.z2ui5.Formatter = {
-    weightState: function (measure, unit) {
-      var adjusted = parseFloat(measure);
-      if (isNaN(adjusted)) return 'None';
-      if (unit === 'G') adjusted = measure / 1000;
-      if (adjusted < 0) return 'None';
-      if (adjusted < 1) return 'Success';
-      if (adjusted < 5) return 'Warning';
-      return 'Error';
-    },
-  };
+  (function () {
+    function parseYmd(d) {
+      return [Number(d.slice(0, 4)), Number(d.slice(4, 6)) - 1, Number(d.slice(6, 8))];
+    }
+    var STOCK_STATUS = {
+      'Available': { state: 'Success', icon: 'sap-icon://accept' },
+      'Out of Stock': { state: 'Warning', icon: 'sap-icon://alert' },
+      'Discontinued': { state: 'Error', icon: 'sap-icon://decline' },
+    };
+    window.z2ui5.Formatter = {
+      DateCreateObject: function (s) { return new Date(s); },
+      DateAbapDateToDateObject: function (d) {
+        var p = parseYmd(d); return new Date(p[0], p[1], p[2]);
+      },
+      DateAbapDateTimeToDateObject: function (d, t) {
+        t = t || '000000';
+        var p = parseYmd(d);
+        return new Date(p[0], p[1], p[2], Number(t.slice(0, 2)), Number(t.slice(2, 4)), Number(t.slice(4, 6)));
+      },
+      weightState: function (measure, unit) {
+        var adjusted = parseFloat(measure);
+        if (isNaN(adjusted)) return 'None';
+        if (unit === 'G') adjusted = measure / 1000;
+        if (adjusted < 0) return 'None';
+        if (adjusted < 1) return 'Success';
+        if (adjusted < 5) return 'Warning';
+        return 'Error';
+      },
+      weightStateByValue: function (value) {
+        var adjusted = parseFloat(value);
+        if (isNaN(adjusted) || adjusted < 0) return 'None';
+        if (adjusted < 1000) return 'Success';
+        if (adjusted < 2000) return 'Warning';
+        return 'Error';
+      },
+      stockStatusState: function (status) {
+        return (STOCK_STATUS[status] || {}).state || 'None';
+      },
+      stockStatusIcon: function (status) {
+        return (STOCK_STATUS[status] || {}).icon || null;
+      },
+      round2DP: function (value) {
+        var n = parseFloat(value);
+        if (isNaN(n)) return '';
+        return (Math.round(n * 100) / 100).toFixed(2);
+      },
+      dimensions: function (width, depth, height, unit) {
+        var display = [width, depth, height]
+          .filter(function (c) { return c != null && c !== ''; })
+          .join(' x ');
+        if (display && unit != null && unit !== '') display += ' ' + unit;
+        return display;
+      },
+      deliveryStatusState: function (status) {
+        if (status === 'Shipped') return 'Success';
+        if (status === 'Failed Shipping') return 'Error';
+        return 'None';
+      },
+    };
+  })();
 </script>
 <script id="sap-ui-bootstrap" src="/resources/sap-ui-core.js"
   data-sap-ui-libs="sap.m,sap.ui.layout"

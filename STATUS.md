@@ -516,6 +516,14 @@ Infrastructure:
   methods — not statically reconstructable). Either teach the reconstructor
   simple single-level helper inlining, or accept the skip; never let skips
   grow silently (the run prints them).
+- [x] ~~render-smoke harness gaps found by the 2026-07-19 hold-out probe~~ —
+  fixed same day: (a) the inline formatter mirror had only `weightState`
+  while upstream `model/formatter.js` had grown the date helpers + demo kit
+  pack — now mirrors the full curated contract; (b) `resolveExpr` treated a
+  value starting with `|` as ONE template, so a template continued with `&&`
+  leaked literal `| &&` into the attribute — now the (template-aware) `&&`
+  split runs first and each piece resolves independently. Existing 34 ports
+  unaffected (0 failing / 1 skipped before and after).
 - [x] ~~TRAINING.md stage 2: generate the header block from `meta/`
   (inversion)~~ — done 2026-07-16, stricter than planned: port classes carry
   no header at all; `meta/` is the source of truth (validate-meta in CI,
