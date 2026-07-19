@@ -11,11 +11,11 @@ CAPABILITIES.md._
 |---|---|
 | Ports | 34 / **403 in-scope** `sap.m` samples (8.4 %) — in scope = control exists since UI5 1.71 and is not deprecated; 43 of 446 samples are out of scope (16 deprecated, 21 newer, 6 without control metadata) |
 | CI | ABAP_STANDARD, ABAP_CLOUD, ABAP_702 all green |
-| Structural view diff | **0 undeclared differences** across all 34 ports (`node scripts/structural-diff.mjs --strict`) — now including simple **binding values**, not just names |
+| Structural view diff | **0 undeclared differences** across all 34 ports (`node scripts/structural-diff.mjs --strict`) — including simple **binding values** and, since 2026-07-19, **`id` attributes** (name-level per control type; dropped original ids must be restored or declared) |
 | Render smoke | **0 failing / 1 skipped** (`npm run smoke`): every reconstructable port's view loads in a real headless `XMLView.create` (app 481 skipped — helper-method view building is not statically reconstructable) |
 | Pattern lint | **0 errors, 0 warnings, empty baseline** (`node scripts/pattern-lint.mjs`) |
-| Meta sidecars | 34 in `meta/` — status: 30 `generated`, 4 `checked`; deviations: 14 IMPROVISED, 13 POST_171, 15 LIVE_TEST, 7 SUBSET_DATA, 8 NOTE — DROPPED_171 is empty since the 1:1 restoration. `audit` is a structured object since 2026-07-18 |
-| Manually verified in a running system | 420, 421, 526, 530 (`CHECKED`) |
+| Meta sidecars | 34 in `meta/` — status: 31 `generated`, 3 `checked` (530 reset 2026-07-19 per the checked-invalidation rule); deviations: 9 IMPROVISED, 14 POST_171, 20 LIVE_TEST, 8 SUBSET_DATA, 17 NOTE, 1 DROPPED_171 (app 401's `p:ColumnAIAction` plugin — a whole control newer than 1.71, unlike the restorable members). `audit` is a structured object since 2026-07-18 |
+| Manually verified in a running system | 420, 421, 526 (`CHECKED`); 530's 07-15 check was invalidated by its 07-16 rework — restamp pending |
 | Archive | `ui5/sap.m/<SampleName>/` — full originals for the 34 ported samples (+2 cross-referenced: `FacetFilterSimple`, `Table`); mock snapshot in `ui5/mock/`. Unported samples are copied over batch by batch. |
 
 ## Batches
@@ -26,7 +26,7 @@ The 34 existing ports are retro-grouped into review batches — one subpackage
 
 | Batch | Theme | Apps | Live-checked |
 |---|---|---|---|
-| `b01` | Display & navigation | 408, 409, 431, 434, 440, 460, 529, 530 | 530 |
+| `b01` | Display & navigation | 408, 409, 431, 434, 440, 460, 529, 530 | — (530 restamp pending) |
 | `b02` | Selection & input | 421, 422, 423, 439, 452, 454, 472, 481, 527, 528 | 421 |
 | `b03` | Actions, toolbars & popups | 447, 448, 449, 469, 474, 486, 526 | 526 |
 | `b04` | Layout, lists & data | 401, 404, 420, 433, 441, 445, 471, 473, 487 | 420 |
@@ -371,12 +371,61 @@ The interim client methods `control_call`, `control_call_by_id` and
 `binding_call_by_id` (branch-only, never released) were removed upstream;
 their events are now public `cs_event` constants (`control_global`,
 `control_by_id`, `binding_call`) scheduled via `follow_up_action` with
-positional `t_arg` (`control_by_id`: id, view — `''` keeps the slot —,
-method, params; `control_global`: object, method, params; `binding_call`:
-id, aggregation, method, params). Wire format and frontend whitelist are
+positional `t_arg` (`control_by_id`: id, view — `''` = global lookup: all
+slots' local ids are searched, then the global element registry
+(`ViewSlots.resolveById`) —, method, params; `control_global`: object,
+method, params; `binding_call`: id, aggregation, method, params). Wire format and frontend whitelist are
 unchanged, so no LIVE_TEST result is invalidated. Follow-through here:
 ports 469/471 migrated to the event-based calls, meta sidecars + overview
 regenerated, CAPABILITIES rows reworded.
+
+## Full re-review against the current rule set (2026-07-19)
+
+A "would this be generated differently today?" pass over all 34 ports
+(4 parallel reviewers, one per batch, against the archived originals and the
+current AGENTS/CAPABILITIES). 32 of 34 ports were already what today's rules
+produce; two were regenerated, plus hygiene. All changes in this pass:
+
+- **401 (FacetFilterLight)** — four upgrades: (1) the appended table's
+  `items` keeps the original `sorter` binding-info string, the ABAP `SORT`
+  is gone (the 2026-07-17 conversion wave had missed this port); (2) the
+  Dimensions cell binds the original composite
+  `{WIDTH} x {DEPTH} x {HEIGHT} {DIM_UNIT}` over real columns instead of a
+  precomputed `DIMENSIONS` string; (3) the header toolbar is restored — the
+  popin-layout ComboBox (two-way `selectedKey`; the Table's added
+  `popinLayout` expression maps empty→Block like the controller default) and
+  the Hide/Show ToggleButton (two-way `pressed`; the restored infoToolbar's
+  `visible` is a pure expression) — only the sticky Label/CheckBoxes stay
+  IMPROVISED (array property) and `p:ColumnAIAction` is now a proper
+  DROPPED_171; (4) the ABAP-side model filtering is now **declared**: the
+  nested AND-of-ORs filter exceeds the single-filter `binding_call`
+  whitelist — CAPABILITIES row scoped accordingly, forwardable request
+  **pr/binding-call-compound-filters** opened.
+- **460 (ObjectHeader)** — converted from full static resolution to the
+  original element binding + relative field bindings 1:1 (`binding=` on a
+  one-record `/S_PRODUCT` structure, Currency number binding kept); only
+  the context path deviates. First `binding=` context port, LIVE_TEST.
+- **Self-referential deviations reclassified** IMPROVISED→NOTE in 472
+  (range→value/value2), 486 (expression-bound widths), 474 (two-way
+  selectedKey) — same class the 2026-07-17 audit fixed for 447/452/454/449;
+  the counts above now reflect it. App 449's NOTE no longer claims "no
+  MessageManager model" (stale since pr/message-model).
+- **Checked-invalidation rule** (new, AGENTS §10 + TRAINING): a code change
+  to a `checked` port resets the status until restamped. Applied to 530
+  (07-15 check vs 07-16 rework).
+- **Structural diff now compares `id` attributes** (name-level per control
+  type): app 474 had dropped the original `SB1`/`selectedItemPreview` ids —
+  restored; the gate keeps it from recurring. Extra port-added ids stay
+  unflagged.
+- **Style normalized**: 528 rewritten from the one-off `a = VALUE #( )`
+  string-table form to the canonical chained `a()` calls; 526 `v =` columns
+  realigned (golden reference); 486 double blank line removed; multi-line
+  inline comments compressed to the §8 one-liner in 422/431/434/447/454/469.
+- **AGENTS §5 fixed**: the expression-binding paragraph still instructed
+  "capture each bind handle once" — contradicting the never-capture rule and
+  pattern-lint; now shows the inline form (421's actual code). STATUS's
+  `control_by_id` empty-view wording corrected to the framework behavior
+  (global lookup, not "keeps the slot").
 
 ## Open findings (backlog)
 
@@ -400,16 +449,28 @@ is visual/UX confirmation:
 - [ ] **529** — the press Dialog opens/closes (popup_display).
 - [ ] **404/431** — injected CSS styles the flex items / floats the tiles.
 - [ ] **486** — expression-bound toolbar widths follow the slider.
-- [ ] **530** — separator switches instantly via the shared two-way path.
 - [ ] **474** — toast shows the newly selected item (timing source-verified).
 - [ ] **454** — free text + Enter creates a token on both multiInput1 and
   multiInput2 via the `z2ui5.cc.MultiInputExt` companions (first cc-control
   usage in these ports, wired 2026-07-18).
-- [ ] **452** — convert to the bound-template variant with a raw binding-info
-  string (pass-through source-verified) — then LIVE-TEST the group headers.
-- [ ] **433/473** — NEW: the `device>` model IS available in main views
-  (source-verified) — restore the original `{device>/…}` bindings that were
-  dropped as "not expressible", then LIVE-TEST.
+- [ ] **452** — the bound-template + group-sorter binding-info conversion
+  shipped 2026-07-16; what remains is the LIVE-TEST of the default group
+  headers.
+- [ ] **433/473** — the `{device>/…}` bindings are restored in code
+  (433 `expanded`, 473 `width` expressions); what remains is the LIVE-TEST.
+- [ ] **434** — injected CSS colors the imageContainer background AND the
+  device-dependent image size expression follows phone/desktop.
+- [ ] **440** — the Currency composite binding renders the formatted price
+  (raw binding-info string over `price TYPE p`, converted 2026-07-17).
+- [ ] **401** — the popin layout switches via the two-way ComboBox
+  selectedKey and the ToggleButton hides/shows the restored infoToolbar via
+  the visible expression binding (restored 2026-07-19).
+- [ ] **460** — the element binding (`binding="{/S_PRODUCT}"`) resolves the
+  relative field bindings incl. the Currency number (first `binding=`
+  context port, converted from full static resolution 2026-07-19).
+- [ ] **530** — RESTAMP: the 07-15 live check predates the 07-16 rework and
+  was reset 2026-07-19; re-verify the clicked-link toast and the instant
+  separator switch, then set `checked` again.
 
 Idiom / style (low):
 - [x] ~~`main` method placed last in several ports~~ — done 2026-07-16: new

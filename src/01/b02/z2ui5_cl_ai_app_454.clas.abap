@@ -123,10 +123,7 @@ CLASS z2ui5_cl_ai_app_454 IMPLEMENTATION.
 
                 )->shut(
             )->shut(
-            " the original's onInit addValidator(fnValidator) on multiInput1
-            " (free text + Enter -> new Token({key: text, text})): the bundled
-            " invisible companion control z2ui5.cc.MultiInputExt installs
-            " exactly this validator on the MultiInput it references by id
+            " original onInit addValidator on multiInput1, installed by the invisible z2ui5.cc.MultiInputExt companion
             )->leaf( n = `MultiInputExt` ns = `z2ui5`
                 )->a( n = `MultiInputId` v = `multiInput1`
             )->leaf( `Label`

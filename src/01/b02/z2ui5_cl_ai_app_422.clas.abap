@@ -66,8 +66,7 @@ CLASS z2ui5_cl_ai_app_422 IMPLEMENTATION.
     CASE client->get( )-event.
 
       WHEN `COLOR_SELECT`.
-        " the boolean defaultAction parameter arrives as abap_bool (X/space) -
-        " render it as true/false, like the original controller's string output
+        " boolean event parameter arrives as abap_bool - echoed as true/false like the original's string output
         DATA(default_action) = COND string( WHEN client->get_event_arg( 2 ) = abap_true
                                             THEN `true`
                                             ELSE `false` ).

@@ -52,9 +52,9 @@ CLASS z2ui5_cl_ai_app_526 IMPLEMENTATION.
                         )->a( n = `level` v = `H2`
                     )->leaf( `ToolbarSpacer`
                     )->leaf( `Button`
-                        )->a( n = `icon`          v = `sap-icon://edit`
-                        )->a( n = `type`          v = `Transparent`
-                        )->a( n = `press`         v = client->_event( val = `PRESS` t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
+                        )->a( n = `icon`           v = `sap-icon://edit`
+                        )->a( n = `type`           v = `Transparent`
+                        )->a( n = `press`          v = client->_event( val = `PRESS` t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
                         )->a( n = `ariaLabelledBy` v = `editButtonLabel`
 
                 )->shut(
@@ -83,8 +83,8 @@ CLASS z2ui5_cl_ai_app_526 IMPLEMENTATION.
             )->open( `content`
                 )->open( `HBox`
                     )->open( `Button`
-                        )->a( n = `text`           v = `Default`
-                        )->a( n = `press`          v = client->_event( val = `PRESS` t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
+                        )->a( n = `text`            v = `Default`
+                        )->a( n = `press`           v = client->_event( val = `PRESS` t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
                         )->a( n = `ariaDescribedBy` v = `defaultButtonDescription genericButtonDescription`
 
                         )->open( `layoutData`

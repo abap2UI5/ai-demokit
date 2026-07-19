@@ -29,9 +29,6 @@ CLASS z2ui5_cl_ai_app_431 IMPLEMENTATION.
 
   METHOD view_display.
 
-    " see meta/z2ui5_cl_ai_app_431.json for the tileLayout and image-path
-    " deviations and the post-1.71 properties (frameType OneByHalf/TwoByHalf,
-    " systemInfo, appShortcut, url) kept for the 1:1 port
     DATA(view) = z2ui5_cl_ai_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
@@ -41,8 +38,7 @@ CLASS z2ui5_cl_ai_app_431 IMPLEMENTATION.
 
         " the sample's style.css, injected via a core:HTML content attribute (see CAPABILITIES.md)
         )->leaf( n = `HTML` ns = `core`
-            " literal braces escaped as \{ \} - the XMLView binding parser
-            " reads unescaped braces in attribute values as a binding
+            " literal braces escaped \{ \} - the XMLView binding parser reads unescaped braces as a binding
             )->a( n = `content` v = `<style>.tileLayout\{float:left\}</style>`
 
         )->open( `GenericTile`

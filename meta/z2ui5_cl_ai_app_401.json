@@ -40,12 +40,28 @@
       "what": "confirm the weight states render Success/Warning/Error per row via the core:require'd Formatter.weightState (first port referencing the curated formatter module, converted 2026-07-18)."
     },
     {
+      "type": "NOTE",
+      "what": "the appended table's header toolbar is restored except for the sticky controls: the popin-layout ComboBox keeps its core:Item entries and binds selectedKey two-way in place of the original's change handler (the controller switch is a pure key-to-property pass-through; the Table's added popinLayout expression binding maps an empty selection to the Block default), and the Hide/Show ToggleButton binds pressed two-way in place of its press handler, with the restored infoToolbar's OverflowToolbar carrying a visible expression binding over the same flag - both per the prefer-a-bindable-property rule, no round-trip."
+    },
+    {
       "type": "IMPROVISED",
-      "what": "the appended table's header toolbar keeps only Title and ToolbarSpacer - the sample's popin-layout ComboBox (with core:Item entries), the sticky CheckBoxes with their Label and the Hide/Show ToggleButton drive client-side table APIs (setSticky, popin layout) with no abap2UI5 equivalent; the infoToolbar (an OverflowToolbar with a Label) and the p:ColumnAIAction column plugin (newer than UI5 1.71) are dropped as well."
+      "what": "the sticky options Label and the three sticky CheckBox controls (with their select handlers) are dropped - Table.sticky is an array-valued property the controller mutates via setSticky, and neither an array property binding nor a setSticky whitelist entry is a proven path; a bound-array LIVE_TEST port could disprove this later."
+    },
+    {
+      "type": "DROPPED_171",
+      "what": "the p:ColumnAIAction column plugin (sap.m.plugins, far newer than UI5 1.71) is dropped with its dependents aggregation and press toast - the plugin class does not exist on a 1.71 runtime, so keeping it would crash view creation there."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "the original filters the items binding client-side (nested Filter: ORs inside each facet group, AND across the two groups, model untouched); the declarative cs_event-binding_call whitelist only builds a single path/operator/value filter, so the port filters the model ABAP-side instead (t_products rebuilt from a full copy on each event) - see pr/binding-call-compound-filters."
     },
     {
       "type": "SUBSET_DATA",
       "what": "data is a 10-row subset of the mock /ProductCollection (ui5/mock/products.json), facet counters recomputed for the subset."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "confirm in a running system that the popin layout switches via the two-way ComboBox selectedKey and that the ToggleButton hides/shows the infoToolbar via the visible expression binding (restored 2026-07-19)."
     }
   ]
 }

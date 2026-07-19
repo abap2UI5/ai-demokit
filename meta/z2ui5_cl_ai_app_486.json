@@ -12,8 +12,8 @@
   "checked": null,
   "deviations": [
     {
-      "type": "IMPROVISED",
-      "what": "the sample's controller onSliderLiveChange resizes the toolbars in JS; there is no width in the source XML. Rebuilt as a client-side expression binding {= slider + '%' } on each Toolbar width - no event round-trip, resizes instantly like the original (see CAPABILITIES.md)."
+      "type": "NOTE",
+      "what": "the sample's controller onSliderLiveChange resizes the toolbars in JS; there is no width in the source XML (the port adds the width attribute, the original wires liveChange instead). Rebuilt as a client-side expression binding {= slider + '%' } on each Toolbar width - no event round-trip, resizes instantly like the original; the documented preferred path (CAPABILITIES.md), not a workaround."
     },
     {
       "type": "LIVE_TEST",

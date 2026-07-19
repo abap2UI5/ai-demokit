@@ -243,9 +243,9 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
 
     result = VALUE #(
       ( module = `sap.m` control = `sap.m.Breadcrumbs`     name = `Breadcrumbs`               class = `z2ui5_cl_ai_app_530` path = `src/01/b01/z2ui5_cl_ai_app_530.clas.abap`
-        checked = `CHECKED (2026-07-15): manually verified in a running system - the ${$source>/text} event arg delivers the clicked link's text as expected, everything works like the original.`
         notes = `LIVE-TEST: the SEP_CHANGE round-trip (which read a private UI5-internal event path) was removed 2026-07-16 - selectedKey and separatorStyle share one two-way bound path, so the separator switches` &&
-                 ` client-side. Confirm the instant separator change in a running system.` )
+                 ` client-side. Confirm the instant separator change in a running system. NOTE: an earlier version of this port WAS live-checked 2026-07-15 (the ${$source>/text} event arg delivered the clicked link's` &&
+                 ` text), but that check predates this rework, so the checked status was reset 2026-07-19 per the checked-invalidation rule (AGENTS.md §10) - re-verify and restamp.` )
       ( module = `sap.m` control = `sap.m.Button`          name = `Button`                    class = `z2ui5_cl_ai_app_526` path = `src/01/b03/z2ui5_cl_ai_app_526.clas.abap`
         checked = `CHECKED (2026-07-15): manually verified in a running system - each press toasts the pressed button's client-side control id, read via the event arg $event.oSource.sId, exactly like the original.` )
       ( module = `sap.m` control = `sap.m.Carousel`        name = `CarouselWithControls`      class = `z2ui5_cl_ai_app_420` path = `src/01/b04/z2ui5_cl_ai_app_420.clas.abap`
@@ -272,10 +272,17 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` 'z2ui5/model/formatter'}" on the view root, state binds { parts: [WEIGHT_MEASURE, WEIGHT_UNIT], formatter: 'Formatter.weightState' } - the alias reference mirrors the original's` &&
                  ` '.formatter.weightState'. The earlier precomputed WEIGHT_STATE column stays gone. // POST-1.71: core:require on the view root (since UI5 1.74) is newer than 1.71 but used for the formatter wiring -` &&
                  ` the app needs a UI5 release >= 1.74; on older releases reference the published global instead (formatter: 'z2ui5.Formatter.weightState'). // LIVE-TEST: confirm the weight states render` &&
-                 ` Success/Warning/Error per row via the core:require'd Formatter.weightState (first port referencing the curated formatter module, converted 2026-07-18). // IMPROVISED: the appended table's header` &&
-                 ` toolbar keeps only Title and ToolbarSpacer - the sample's popin-layout ComboBox (with core:Item entries), the sticky CheckBoxes with their Label and the Hide/Show ToggleButton drive client-side table` &&
-                 ` APIs (setSticky, popin layout) with no abap2UI5 equivalent; the infoToolbar (an OverflowToolbar with a Label) and the p:ColumnAIAction column plugin (newer than UI5 1.71) are dropped as well. //` &&
-                 ` SUBSET: data is a 10-row subset of the mock /ProductCollection (ui5/mock/products.json), facet counters recomputed for the subset.`
+                 ` Success/Warning/Error per row via the core:require'd Formatter.weightState (first port referencing the curated formatter module, converted 2026-07-18). // NOTE: the appended table's header toolbar is` &&
+                 ` restored except for the sticky controls: the popin-layout ComboBox keeps its core:Item entries and binds selectedKey two-way in place of the original's change handler (the controller switch is a pure` &&
+                 ` key-to-property pass-through; the Table's added popinLayout expression binding maps an empty selection to the Block default), and the Hide/Show ToggleButton binds pressed two-way in place of its` &&
+                 ` press handler, with the restored infoToolbar's OverflowToolbar carrying a visible expression binding over the same flag - both per the prefer-a-bindable-property rule, no round-trip. // IMPROVISED:` &&
+                 ` the sticky options Label and the three sticky CheckBox controls (with their select handlers) are dropped - Table.sticky is an array-valued property the controller mutates via setSticky, and neither` &&
+                 ` an array property binding nor a setSticky whitelist entry is a proven path; a bound-array LIVE_TEST port could disprove this later. // 1.71: the p:ColumnAIAction column plugin (sap.m.plugins, far` &&
+                 ` newer than UI5 1.71) is dropped with its dependents aggregation and press toast - the plugin class does not exist on a 1.71 runtime, so keeping it would crash view creation there. // IMPROVISED: the` &&
+                 ` original filters the items binding client-side (nested Filter: ORs inside each facet group, AND across the two groups, model untouched); the declarative cs_event-binding_call whitelist only builds a` &&
+                 ` single path/operator/value filter, so the port filters the model ABAP-side instead (t_products rebuilt from a full copy on each event) - see pr/binding-call-compound-filters. // SUBSET: data is a` &&
+                 ` 10-row subset of the mock /ProductCollection (ui5/mock/products.json), facet counters recomputed for the subset. // LIVE-TEST: confirm in a running system that the popin layout switches via the` &&
+                 ` two-way ComboBox selectedKey and that the ToggleButton hides/shows the infoToolbar via the visible expression binding (restored 2026-07-19).`
         post171 = `core:require on the view root (since UI5 1.74) is newer than 1.71 but used for the formatter wiring - the app needs a UI5 release >= 1.74; on older releases reference the published global instead` &&
                  ` (formatter: 'z2ui5.Formatter.weightState').` )
       ( module = `sap.m` control = `sap.m.FlexBox`         name = `FlexBoxNested`             class = `z2ui5_cl_ai_app_404` path = `src/01/b04/z2ui5_cl_ai_app_404.clas.abap`
@@ -329,10 +336,10 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` dependenton parameter, pointing at the view layout (id messageBoxHost); the app needs a UI5 release >= 1.124 to render it.` )
       ( module = `sap.m` control = `sap.m.MessageToast`    name = `MessageToast`              class = `z2ui5_cl_ai_app_448` path = `src/01/b03/z2ui5_cl_ai_app_448.clas.abap` )
       ( module = `sap.m` control = `sap.m.MessageView`     name = `MessageViewMessageManager` class = `z2ui5_cl_ai_app_449` path = `src/01/b03/z2ui5_cl_ai_app_449.clas.abap`
-        notes = `NOTE: the original registers its four messages on the sap.ui.core.message.MessageManager and the MessageView binds them via the message> model; abap2UI5 has no MessageManager auto-collection model,` &&
-                 ` but that is not needed to render a MessageView - the messages are bound as a plain ABAP table on MessageView items with a MessageItem template (client->_bind( t_messages )), which is the documented` &&
-                 ` 1:1 path (CAPABILITIES.md), not a workaround. Same rendering as the original's static message set. The framework MessageManager auto-collection (gathering control validation messages client-side) is` &&
-                 ` a separate, rarely-needed mechanism and out of scope for this render-only sample. Proven by the curated sample z2ui5_cl_demo_app_038 (MessageView + MessageItem + MessagePopover over a bound table).` )
+        notes = `NOTE: the original registers its four messages on the sap.ui.core.message.MessageManager and the MessageView binds them via the message> model. abap2UI5 DOES carry the message> model on every view` &&
+                 ` slot since pr/message-model (2026-07-18, auto-collecting control validation messages), but there is no ABAP API to push an arbitrary static message set into it - so for this render-only sample the` &&
+                 ` messages are bound as a plain ABAP table on MessageView items with a MessageItem template (client->_bind( t_messages )), the path CAPABILITIES.md explicitly endorses for static message sets. Same` &&
+                 ` rendering as the original. Proven by the curated sample z2ui5_cl_demo_app_038 (MessageView + MessageItem + MessagePopover over a bound table).` )
       ( module = `sap.m` control = `sap.m.MultiComboBox`   name = `MultiComboBoxGrouping`     class = `z2ui5_cl_ai_app_452` path = `src/01/b02/z2ui5_cl_ai_app_452.clas.abap`
         notes = `NOTE: the custom groupHeaderFactory '.getGroupHeader' (controller code) is replaced by UI5's default group headers - the sample's factory builds a SeparatorItem with the group key, which is exactly` &&
                  ` what the default renders anyway (CAPABILITIES.md group-sorter row, source-verified on both sides), so this is a faithful 1:1, not a workaround. The items are a bound template with the original's` &&
@@ -349,9 +356,11 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` UI5 1.94) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.94 to render it.`
         post171 = `showClearIcon (since UI5 1.94) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.94 to render it.` )
       ( module = `sap.m` control = `sap.m.ObjectHeader`    name = `ObjectHeader`              class = `z2ui5_cl_ai_app_460` path = `src/01/b01/z2ui5_cl_ai_app_460.clas.abap`
-        notes = `IMPROVISED: the sample binds the ObjectHeader to {/ProductCollection/0} and its title/number/attributes to model fields (with a Currency type formatter on number). The port carries no model, so those` &&
-                 ` bindings are resolved to the static values of the first ProductCollection product (Notebook Basic 15) - incl. the ObjectAttribute texts ({Description}, weight, dimensions, www.sap.com) and the` &&
-                 ` numberUnit {CurrencyCode}.` )
+        notes = `NOTE: the ObjectHeader keeps the original element binding and relative field bindings 1:1 (title, numberUnit, the ObjectAttribute composite texts and the sap.ui.model.type.Currency number binding);` &&
+                 ` only the binding context path changes - a one-record structure /S_PRODUCT in the default model instead of {/ProductCollection/0}, since the port does not carry the whole collection. // SUBSET: the` &&
+                 ` model holds exactly the bound record /ProductCollection/0 (Notebook Basic 15) of ui5/mock/products.json, verbatim. // LIVE-TEST: confirm in a running system that the element binding` &&
+                 ` (binding="{/S_PRODUCT}") resolves the relative field bindings against the default model - first port using a binding= context; source-plausible via the attribute pass-through, converted from full` &&
+                 ` static resolution 2026-07-19.` )
       ( module = `sap.m` control = `sap.m.ObjectStatus`    name = `ObjectStatus`              class = `z2ui5_cl_ai_app_529` path = `src/01/b01/z2ui5_cl_ai_app_529.clas.abap`
         notes = `POST-1.71: the ObjectStatus state values Indication06-Indication08 (since UI5 1.75) and Indication09-Indication20 (since UI5 1.120) are newer than 1.71 but kept for the 1:1 port - the app needs a UI5` &&
                  ` release >= 1.120 to render them all (>= 1.75 for Indication06-Indication08). // LIVE-TEST: the active status press opens the controller-built Dialog 1:1 (core:FragmentDefinition + popup_display, per` &&
@@ -375,16 +384,16 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         post171 = `the PDFViewer property isTrustedSource (since UI5 1.121, backported to maintenance patches down to 1.71.63; the original controller passes isTrustedSource: true) is newer than 1.71 but kept for the` &&
                  ` 1:1 port - the app needs a UI5 release >= 1.121 (or a patched maintenance release) to render it.` )
       ( module = `sap.m` control = `sap.m.RangeSlider`     name = `RangeSlider`               class = `z2ui5_cl_ai_app_472` path = `src/01/b02/z2ui5_cl_ai_app_472.clas.abap`
-        notes = `IMPROVISED: the sample binds the composite RangeSlider "range" property (an array [low, high] - range="{/RS1}" / range="0,100"). abap2UI5 binds scalar ABAP fields, so each range is expressed as the` &&
+        notes = `NOTE: the sample binds the composite RangeSlider "range" property (an array [low, high] - range="{/RS1}" / range="0,100"). abap2UI5 binds scalar ABAP fields, so each range is expressed as the` &&
                  ` equivalent value / value2 properties the control keeps in sync - identical rendering.` )
       ( module = `sap.m` control = `sap.m.ScrollContainer` name = `ScrollContainer`           class = `z2ui5_cl_ai_app_473` path = `src/01/b04/z2ui5_cl_ai_app_473.clas.abap`
         notes = `IMPROVISED: the Image src binds {img>/products/pic1} in the original, a JSON image model not available server-side; a static demo image URL is used instead. // LIVE-TEST: the original narrows the` &&
                  ` width to 50em on phones via sap/ui/Device in the controller; restored 2026-07-16 as the expression {= ${device>/system/phone} ? '50em' : '100em' } over the framework's device> model (source-verified` &&
                  ` available in main views) - confirm the width switches on a phone.` )
       ( module = `sap.m` control = `sap.m.SegmentedButton` name = `SegmentedButton`           class = `z2ui5_cl_ai_app_474` path = `src/01/b03/z2ui5_cl_ai_app_474.clas.abap`
-        notes = `IMPROVISED: the original reads the selected item via oEvent.getParameter("item").getText() / getSelectedItem(). Here the items get keys (one/two/three - an addition, SB1 has none in the sample) and` &&
-                 ` selectedKey is two-way bound, so the selection arrives with the event and no private event path is needed (see CAPABILITIES.md). // LIVE-TEST: confirm the two-way bound selectedKey is updated before` &&
-                 ` on_event runs, so the toast shows the newly selected item.` )
+        notes = `NOTE: the original reads the selected item via oEvent.getParameter("item").getText() / getSelectedItem(). Here the items get keys (one/two/three - an addition, SB1 has none in the sample) and` &&
+                 ` selectedKey is two-way bound, so the selection arrives with the event and no private event path is needed - the documented 1:1 path for controller-read selection (CAPABILITIES.md), not a workaround.` &&
+                 ` // LIVE-TEST: confirm the two-way bound selectedKey is updated before on_event runs, so the toast shows the newly selected item.` )
       ( module = `sap.m` control = `sap.m.Select`          name = `Select`                    class = `z2ui5_cl_ai_app_527` path = `src/01/b02/z2ui5_cl_ai_app_527.clas.abap` )
       ( module = `sap.m` control = `sap.m.StepInput`       name = `StepInput`                 class = `z2ui5_cl_ai_app_481` path = `src/01/b02/z2ui5_cl_ai_app_481.clas.abap`
         notes = `IMPROVISED: the sample binds a List to the JSON model /modelData and renders one templated CustomListItem per row. The rows are unrolled into static list items here because every row sets a different` &&
@@ -394,8 +403,9 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.m` control = `sap.m.Text`            name = `Text`                      class = `z2ui5_cl_ai_app_408` path = `src/01/b01/z2ui5_cl_ai_app_408.clas.abap` )
       ( module = `sap.m` control = `sap.m.TextArea`        name = `TextArea`                  class = `z2ui5_cl_ai_app_409` path = `src/01/b01/z2ui5_cl_ai_app_409.clas.abap` )
       ( module = `sap.m` control = `sap.m.Toolbar`         name = `ToolbarShrinkable`         class = `z2ui5_cl_ai_app_486` path = `src/01/b03/z2ui5_cl_ai_app_486.clas.abap`
-        notes = `IMPROVISED: the sample's controller onSliderLiveChange resizes the toolbars in JS; there is no width in the source XML. Rebuilt as a client-side expression binding {= slider + '%' } on each Toolbar` &&
-                 ` width - no event round-trip, resizes instantly like the original (see CAPABILITIES.md). // LIVE-TEST: confirm the expression-bound widths follow the slider in a running system.` )
+        notes = `NOTE: the sample's controller onSliderLiveChange resizes the toolbars in JS; there is no width in the source XML (the port adds the width attribute, the original wires liveChange instead). Rebuilt as` &&
+                 ` a client-side expression binding {= slider + '%' } on each Toolbar width - no event round-trip, resizes instantly like the original; the documented preferred path (CAPABILITIES.md), not a workaround.` &&
+                 ` // LIVE-TEST: confirm the expression-bound widths follow the slider in a running system.` )
       ( module = `sap.m` control = `sap.m.Tree`            name = `Tree`                      class = `z2ui5_cl_ai_app_487` path = `src/01/b04/z2ui5_cl_ai_app_487.clas.abap`
         notes = `LIVE-TEST: the sample's view is flat (one Tree bound to '/', one StandardTreeItem template); the hierarchy is carried entirely by the model. Each row's nested ``nodes`` sub-table (5 levels deep) is` &&
                  ` what UI5's JSONModel tree binding walks to build the child nodes - confirm the nested tables render as expandable levels in a running system.` ) ).
