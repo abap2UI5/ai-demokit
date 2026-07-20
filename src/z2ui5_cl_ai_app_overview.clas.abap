@@ -271,6 +271,8 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                         )->leaf( `SearchField`
                             )->a( n = `placeholder` v = `Search the table - module, control, sample, class, notes...`
                             )->a( n = `width`       v = `24rem`
+                            " disabled while the tree is shown (search filters only the table)
+                            )->a( n = `enabled`     v = |\{= !${ client->_bind( show_tree ) } \}|
                             )->a( n = `liveChange`  v = client->_event_client( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `filter` ) ( `FILTER` ) ( `Contains` ) ( `${$parameters>/newValue}` ) ) )
                             )->a( n = `search`      v = client->_event_client( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `filter` ) ( `FILTER` ) ( `Contains` ) ( `${$parameters>/query}` ) ) )
                         )->leaf( `ToolbarSpacer`
