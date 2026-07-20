@@ -39,14 +39,6 @@ function walk(dir, out = []) {
 const uni = JSON.parse(fs.readFileSync(path.join(ROOT, 'ui5', 'universe.json'), 'utf8'));
 const uniMap = new Map();
 for (const lib of uni.libs) for (const s of lib.samples) uniMap.set(`${lib.lib}|${s.name}`, s);
-// a control is in-scope (green) when it existed by UI5 1.71 (empty since = older
-// than tracking); newer than 1.71 is yellow; deprecated is red (§7 AGENTS.md)
-const sinceLeq171 = (since) => {
-  if (!since) return true;
-  const m = String(since).match(/^(\d+)\.(\d+)/);
-  if (!m) return true;
-  return +m[1] < 1 || (+m[1] === 1 && +m[2] <= 71);
-};
 
 // collect ported apps: control (entity), module (library), sample name, class,
 // and the repo-relative path of the generated class (for the ABAP GitHub link)
@@ -72,7 +64,6 @@ for (const mf of fs.readdirSync(META)) {
     post171: (m.deviations || []).filter((d) => d.type === 'POST_171').map((d) => d.what).join(' // '),
     golden: m.status === 'golden',
     since: u.since || '',
-    is_newer: Boolean(u.since && !sinceLeq171(u.since)),
     dep_text: dep ? `Deprecated since ${dep.since}: ${dep.text}` : '',
   });
 }
@@ -117,7 +108,6 @@ const rows = apps.map((a) => {
   const extras = [];
   if (a.golden) extras.push('golden = abap_true');
   if (a.since) extras.push(`since = \`${a.since}\``);
-  if (a.is_newer) extras.push('is_newer = abap_true');
   if (a.dep_text) extras.push(`dep_text = ${abapStr(a.dep_text)}`);
   if (a.checked) extras.push(`checked = ${abapStr(a.checked)}`);
   if (a.notes) extras.push(`notes = ${abapStr(a.notes)}`);
@@ -179,10 +169,10 @@ const columnsBlock = [
 ].join('\n');
 
 const abap = `"! Generated overview app - lists every abap2UI5 api sample app in a table.
-"! The Control name and the Since column (the UI5 release the control appeared
-"! in) are coloured by availability: green when the control existed by UI5 1.71,
-"! yellow when it is newer, red + strikethrough when deprecated (inline-styled
-"! FormattedText, so the colour varies per row); the source is ui5/universe.json.
+"! The Since column shows the UI5 release the control appeared in (from
+"! ui5/universe.json; blank when older than tracking). Text is never coloured;
+"! a deprecated control's name is struck through (FormattedText htmlText, so the
+"! strikethrough can vary per row).
 "! The Module / Control / Sample / abap2UI5 columns are plain text; every link
 "! (OpenUI5 API, OpenUI5 source, live fullscreen sample, the generated ABAP
 "! class on GitHub, and starting the app) lives in the trailing Open column: its
@@ -221,10 +211,8 @@ CLASS ${CLASS} DEFINITION PUBLIC.
         has_p171  TYPE abap_bool,
         golden    TYPE abap_bool,
         since     TYPE string,
-        is_newer  TYPE abap_bool,
         dep_text  TYPE string,
         ctrl_html TYPE string,
-        since_html TYPE string,
         filter    TYPE string,
       END OF ty_s_app.
     TYPES ty_t_app TYPE STANDARD TABLE OF ty_s_app WITH EMPTY KEY.
@@ -376,16 +364,13 @@ CLASS ${CLASS} IMPLEMENTATION.
       <app>-has_notes = xsdbool( <app>-notes IS NOT INITIAL ).
       <app>-has_p171  = xsdbool( <app>-post171 IS NOT INITIAL ).
 
-      " control-availability colouring: green when the control existed by UI5 1.71,
-      " yellow when it is newer, red + strikethrough when deprecated - carried as an
-      " inline-styled FormattedText htmlText so the colour can vary per row
-      DATA(lv_since) = COND string( WHEN <app>-since IS INITIAL THEN \`<= 1.71\` ELSE <app>-since ).
-      DATA(lv_color) = COND string( WHEN <app>-dep_text IS NOT INITIAL THEN \`#bb0000\`
-                                    WHEN <app>-is_newer = abap_true      THEN \`#b8860b\`
-                                    ELSE                                      \`#107e3e\` ).
-      DATA(lv_deco)  = COND string( WHEN <app>-dep_text IS NOT INITIAL THEN \`;text-decoration:line-through\` ELSE \`\` ).
-      <app>-ctrl_html  = |<span style="color:{ lv_color }{ lv_deco }">{ <app>-ctrl_name }</span>|.
-      <app>-since_html = |<span style="color:{ lv_color }">{ lv_since }</span>|.
+      " control name: struck through when the control is deprecated, otherwise
+      " plain - never coloured (carried as FormattedText htmlText so the
+      " strikethrough can vary per row); a plain control is rendered as-is
+      <app>-ctrl_html = COND string(
+          WHEN <app>-dep_text IS NOT INITIAL
+          THEN |<span style="text-decoration:line-through">{ <app>-ctrl_name }</span>|
+          ELSE <app>-ctrl_name ).
 
       " one searchable blob per row, bound as the FILTER column that the search
       " field's client-side Contains filter (binding_call) matches against - so
@@ -436,15 +421,15 @@ ${columnsBlock}
                             )->open( \`cells\`
                                 )->leaf( \`Text\`
                                     )->a( n = \`text\` v = \`{MODULE}\`
-                                " control name coloured by availability (green <=1.71 /
-                                " yellow newer / red + strikethrough deprecated), and the
-                                " release it appeared in - both inline-styled FormattedText
+                                " control name, struck through when deprecated (never
+                                " coloured); FormattedText so the strikethrough can vary per row
                                 )->leaf( \`FormattedText\`
                                     )->a( n = \`htmlText\` v = \`{CTRL_HTML}\`
                                     )->a( n = \`tooltip\`  v = \`{DEP_TEXT}\`
-                                )->leaf( \`FormattedText\`
-                                    )->a( n = \`htmlText\` v = \`{SINCE_HTML}\`
-                                    )->a( n = \`tooltip\`  v = \`{DEP_TEXT}\`
+                                " release the control appeared in (plain number)
+                                )->leaf( \`Text\`
+                                    )->a( n = \`text\`    v = \`{SINCE}\`
+                                    )->a( n = \`tooltip\` v = \`{DEP_TEXT}\`
                                 )->leaf( \`Text\`
                                     )->a( n = \`text\` v = \`{NAME}\`
                                 )->leaf( \`Text\`
