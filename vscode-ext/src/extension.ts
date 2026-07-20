@@ -312,11 +312,23 @@ async function runApp(
     return;
   }
 
+  // Cursor-Position merken, um den Fokus danach zurückzugeben.
+  const sourceColumn = editor.viewColumn;
+  const sourceSelection = editor.selection;
+
   if (openMode === "panel") {
     await provider.show(frameUrl, externalUrl);
   } else {
     showInTab(frameUrl, externalUrl, `abap2UI5: ${className}`);
   }
+
+  // Fokus zurück in den Quelltext an dieselbe Stelle (F9 soll nicht aus dem
+  // Editor herausspringen).
+  await vscode.window.showTextDocument(editor.document, {
+    viewColumn: sourceColumn,
+    selection: sourceSelection,
+    preserveFocus: false,
+  });
 }
 
 // ---------------------------------------------------------------------------

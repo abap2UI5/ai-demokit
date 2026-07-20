@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.4.1
+
+- F9 gibt den Fokus nach dem Start/Reload wieder an den Quelltext zurück –
+  der Cursor bleibt an derselben Stelle, du kannst direkt weiterschreiben.
+
 ## 0.4.0
 
 - **F9 aktualisiert** jetzt zuverlässig den bestehenden Tab/Panel (Reload der

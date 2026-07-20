@@ -2,7 +2,7 @@
   "name": "abap2ui5-demokit",
   "displayName": "abap2UI5 Demokit Helper",
   "description": "Helfer-Extension rund um abap2UI5: F9 startet eine z2ui5_if_app-Klasse im eingebetteten Browser-Panel, plus Snippets.",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "publisher": "abap2ui5-local",
   "license": "MIT",
   "private": true,
