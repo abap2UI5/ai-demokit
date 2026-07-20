@@ -5,12 +5,34 @@ Gedacht zum **privaten Teilen** (du + Freunde) – ganz **ohne Marketplace**.
 
 ## Features
 
-- **Command "abap2UI5: Neue App-Vorlage einfügen"** – fügt ein App-Klassen-Skelett
-  in den aktiven Editor ein.
+- **F9 startet die App** – Steht der Cursor in einer ABAP-Klasse, die
+  `z2ui5_if_app` implementiert, öffnet **F9** die App **unten im Panel**
+  (neben Terminal/Output) in einem eingebetteten Browser.
+  Ist die Klasse *keine* z2ui5-App, verhält sich F9 wie gewohnt
+  (Breakpoint umschalten).
+- **Command "abap2UI5: Neue App-Vorlage einfügen"** – App-Klassen-Skelett.
 - **Command "abap2UI5: Demokit im Browser öffnen"** – öffnet das abap2UI5-Repo.
 - **Snippets** (in ABAP-Dateien): `z2ui5app`, `z2ui5button`.
 
 Befehle findest du über die Command Palette (`Ctrl/Cmd + Shift + P`).
+
+## Einrichtung der Launch-URL
+
+Beim ersten F9 wirst du nach der Launch-URL gefragt. `{class}` ist der
+Platzhalter für den Klassennamen, z. B.:
+
+```
+https://host:44300/sap/bc/z2ui5?app_start={class}&sap-client=100
+```
+
+Die URL wird gespeichert und lässt sich jederzeit ändern:
+Settings → `abap2ui5.launchUrlTemplate` (oder in `settings.json`).
+
+> **Wichtig – Einbettung im Panel:** VS Code lädt die Seite per `<iframe>`.
+> Sendet dein SAP-Server `X-Frame-Options` / CSP `frame-ancestors` (häufig),
+> oder ist das Zertifikat nicht vertrauenswürdig, bleibt der eingebettete
+> Bereich leer. Dafür gibt es oben im Panel den Button **"Extern öffnen"**,
+> der die App im normalen Browser startet.
 
 ---
 
