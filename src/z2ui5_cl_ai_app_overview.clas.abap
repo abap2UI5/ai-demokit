@@ -387,11 +387,13 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` press handler, with the restored infoToolbar's OverflowToolbar carrying a visible expression binding over the same flag - both per the prefer-a-bindable-property rule, no round-trip. // IMPROVISED:` &&
                  ` the sticky options Label and the three sticky CheckBox controls (with their select handlers) are dropped - Table.sticky is an array-valued property the controller mutates via setSticky, and neither` &&
                  ` an array property binding nor a setSticky whitelist entry is a proven path; a bound-array LIVE_TEST port could disprove this later. // 1.71: the p:ColumnAIAction column plugin (sap.m.plugins, far` &&
-                 ` newer than UI5 1.71) is dropped with its dependents aggregation and press toast - the plugin class does not exist on a 1.71 runtime, so keeping it would crash view creation there. // IMPROVISED: the` &&
-                 ` original filters the items binding client-side (nested Filter: ORs inside each facet group, AND across the two groups, model untouched); the declarative cs_event-binding_call whitelist only builds a` &&
-                 ` single path/operator/value filter, so the port filters the model ABAP-side instead (t_products rebuilt from a full copy on each event) - see pr/binding-call-compound-filters. // SUBSET: data is a` &&
-                 ` 10-row subset of the mock /ProductCollection (ui5/mock/products.json), facet counters recomputed for the subset. // LIVE-TEST: confirm in a running system that the popin layout switches via the` &&
-                 ` two-way ComboBox selectedKey and that the ToggleButton hides/shows the infoToolbar via the visible expression binding (restored 2026-07-19).`
+                 ` newer than UI5 1.71) is dropped with its dependents aggregation and press toast - the plugin class does not exist on a 1.71 runtime, so keeping it would crash view creation there. // NOTE: the` &&
+                 ` original's nested items-binding filter (ORs inside each facet group, AND across the groups, model untouched) is expressed 1:1 as a declarative compound filter: apply_filter builds the groups JSON` &&
+                 ` from the two-way bound selected flags and schedules follow_up_action cs_event-binding_call filter on idProductsTable/items (compound groups implemented upstream 2026-07-20,` &&
+                 ` pr/binding-call-compound-filters); the earlier ABAP-side model rebuild and the t_products_all mirror are gone. // LIVE-TEST: confirm the compound facet filter in a running system: selecting` &&
+                 ` categories/suppliers filters the table (OR inside a facet, AND across facets), clearing all selections shows every row, and rows deselected by the filter keep their client-side state (the` &&
+                 ` model-untouched advantage). // SUBSET: data is a 10-row subset of the mock /ProductCollection (ui5/mock/products.json), facet counters recomputed for the subset. // LIVE-TEST: confirm in a running` &&
+                 ` system that the popin layout switches via the two-way ComboBox selectedKey and that the ToggleButton hides/shows the infoToolbar via the visible expression binding (restored 2026-07-19).`
         post171 = `core:require on the view root (since UI5 1.74) is newer than 1.71 but used for the formatter wiring - the app needs a UI5 release >= 1.74; on older releases reference the published global instead` &&
                  ` (formatter: 'z2ui5.Formatter.weightState').` )
       ( module = `sap.m` control = `sap.m.FlexBox`                     name = `FlexBoxNested`               class = `z2ui5_cl_ai_app_404` path = `src/01/b04/z2ui5_cl_ai_app_404.clas.abap`

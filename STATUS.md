@@ -492,6 +492,19 @@ formatter mirror synced to the full upstream contract; `resolveExpr` now
 resolves `&&`-chained templates. The probe ports themselves are never
 merged (hold-out discipline); the worktree snapshot exists only locally.
 
+## Compound binding_call filters implemented + 401 converted (2026-07-20)
+
+The last open framework request, pr/binding-call-compound-filters, was
+implemented upstream (`BINDING_METHODS.filter` accepts a JSON groups
+payload: OR inside each group, AND across groups, whitelisted operators,
+empty clears; the positional single-filter form is unchanged). Port 401
+now expresses the original's nested FacetFilter exactly — apply_filter
+builds the groups JSON from the two-way bound selected flags and schedules
+`cs_event-binding_call`; the ABAP-side model rebuild and the
+`t_products_all` mirror are gone (deviation IMPROVISED→NOTE, new
+LIVE_TEST). **pr/ is empty again** — every request implemented or
+declined; see pr/README.
+
 ## Open findings (backlog)
 
 Live tests pending (in-system) — the 2026-07-16 framework source pass

@@ -5,8 +5,9 @@
   "file": "src/01/b04/z2ui5_cl_ai_app_401.clas.abap",
   "batch": "b04",
   "audit": {
-    "frontend_action": false,
-    "event_t_arg": false
+    "frontend_action": true,
+    "event_t_arg": false,
+    "note": "follow_up_action cs_event-binding_call: compound filter groups on the items binding (apply_filter)"
   },
   "status": "generated",
   "checked": null,
@@ -52,8 +53,12 @@
       "what": "the p:ColumnAIAction column plugin (sap.m.plugins, far newer than UI5 1.71) is dropped with its dependents aggregation and press toast - the plugin class does not exist on a 1.71 runtime, so keeping it would crash view creation there."
     },
     {
-      "type": "IMPROVISED",
-      "what": "the original filters the items binding client-side (nested Filter: ORs inside each facet group, AND across the two groups, model untouched); the declarative cs_event-binding_call whitelist only builds a single path/operator/value filter, so the port filters the model ABAP-side instead (t_products rebuilt from a full copy on each event) - see pr/binding-call-compound-filters."
+      "type": "NOTE",
+      "what": "the original's nested items-binding filter (ORs inside each facet group, AND across the groups, model untouched) is expressed 1:1 as a declarative compound filter: apply_filter builds the groups JSON from the two-way bound selected flags and schedules follow_up_action cs_event-binding_call filter on idProductsTable/items (compound groups implemented upstream 2026-07-20, pr/binding-call-compound-filters); the earlier ABAP-side model rebuild and the t_products_all mirror are gone."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "confirm the compound facet filter in a running system: selecting categories/suppliers filters the table (OR inside a facet, AND across facets), clearing all selections shows every row, and rows deselected by the filter keep their client-side state (the model-untouched advantage)."
     },
     {
       "type": "SUBSET_DATA",

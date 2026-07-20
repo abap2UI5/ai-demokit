@@ -33,8 +33,6 @@ CLASS z2ui5_cl_ai_app_401 DEFINITION PUBLIC.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
-    " not bound - kept out of PUBLIC so the round-trip model scan stays small
-    DATA t_products_all TYPE ty_t_product.
 
     METHODS model_init.
     METHODS view_display.
@@ -74,8 +72,6 @@ CLASS z2ui5_cl_ai_app_401 IMPLEMENTATION.
         ( name = `Notebook Basic 17` category = `Laptops` supplier_name = `Very Best Screens` width = `29` depth = `17` height = `3.1` dim_unit = `cm` weight_measure = `4.5` weight_unit = `KG` price = `1249.00` currency_code = `EUR` )
         ( name = `Notebook Basic 19` category = `Laptops` supplier_name = `Smartcards` width = `32` depth = `21` height = `4` dim_unit = `cm` weight_measure = `4.2` weight_unit = `KG` price = `1650.00` currency_code = `EUR` )
         ( name = `Notebook Professional 15` category = `Accessories` supplier_name = `Very Best Screens` width = `33` depth = `20` height = `3` dim_unit = `cm` weight_measure = `4.3` weight_unit = `KG` price = `1999.00` currency_code = `EUR` ) ).
-
-    t_products_all = t_products.
 
     " Facet values with counters recomputed for the 10-row subset above
     " (the original binds the precomputed /ProductCollectionStats/Filters)
@@ -286,25 +282,38 @@ CLASS z2ui5_cl_ai_app_401 IMPLEMENTATION.
 
   METHOD apply_filter.
 
-    DATA t_range_category TYPE RANGE OF string.
-    DATA t_range_supplier TYPE RANGE OF string.
+    DATA rows_category TYPE string.
+    DATA rows_supplier TYPE string.
 
-    " the two-way bound selected flags arrive with the event - one range per facet group
+    " the two-way bound selected flags arrive with the event - one JSON group per facet list with selections (values are static demo texts, no escaping needed)
     LOOP AT t_categories INTO DATA(category) WHERE selected = abap_true.
-      APPEND VALUE #( sign   = `I`
-                      option = `EQ`
-                      low    = category-text ) TO t_range_category.
+      IF rows_category IS NOT INITIAL.
+        rows_category = rows_category && `,`.
+      ENDIF.
+      rows_category = rows_category && |["CATEGORY","EQ","{ category-text }"]|.
     ENDLOOP.
     LOOP AT t_suppliers INTO DATA(supplier) WHERE selected = abap_true.
-      APPEND VALUE #( sign   = `I`
-                      option = `EQ`
-                      low    = supplier-text ) TO t_range_supplier.
+      IF rows_supplier IS NOT INITIAL.
+        rows_supplier = rows_supplier && `,`.
+      ENDIF.
+      rows_supplier = rows_supplier && |["SUPPLIER_NAME","EQ","{ supplier-text }"]|.
     ENDLOOP.
 
-    " like _filterModel (ORs inside a group, ANDs between groups) - the nested filter exceeds the binding_call whitelist, so the model is filtered ABAP-side
-    t_products = t_products_all.
-    DELETE t_products WHERE category NOT IN t_range_category OR supplier_name NOT IN t_range_supplier.
+    DATA(json_groups) = `[`.
+    IF rows_category IS NOT INITIAL.
+      json_groups = json_groups && |[{ rows_category }]|.
+    ENDIF.
+    IF rows_supplier IS NOT INITIAL.
+      IF rows_category IS NOT INITIAL.
+        json_groups = json_groups && `,`.
+      ENDIF.
+      json_groups = json_groups && |[{ rows_supplier }]|.
+    ENDIF.
+    json_groups = json_groups && `]`.
 
+    " like _filterModel (ORs inside a group, AND across the groups) - declarative compound filter on the items binding, model untouched
+    client->follow_up_action( val   = client->cs_event-binding_call
+                              t_arg = VALUE #( ( `idProductsTable` ) ( `items` ) ( `filter` ) ( json_groups ) ) ).
     client->view_model_update( ).
 
   ENDMETHOD.
