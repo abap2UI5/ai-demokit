@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_ai_app_545",
+  "sample": "sap.m.sample.DraftIndicator",
+  "entity": "sap.m.DraftIndicator",
+  "file": "src/01/b06/z2ui5_cl_ai_app_545.clas.abap",
+  "batch": "b06",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "the controller's imperative DraftIndicator calls (showDraftSaving/showDraftSaved/clearDraftState on byId('draftIndi')) are not in the FrontendAction CONTROL_METHODS whitelist; per AGENTS 'prefer a bindable property over a frontend action' the port two-way binds the control's public state property (sap.m.DraftIndicatorState, since 1.32) and sets Saving/Saved/Clear in the three event handlers. Source-verified equivalent: a binding update calls the public mutator (ManagedObjectBindingSupport.updateProperty -> _sMutator), and DraftIndicator.setState queues exactly what the three methods queue (setState('Saving') queues Saving+Clear like showDraftSaving, sap/m/DraftIndicator.js). Adds the state attribute on the DraftIndicator vs the original view.xml."
+    },
+    {
+      "type": "NOTE",
+      "what": "pressing the same button twice in direct succession does not re-run the indicator - the model value is unchanged, so no binding change fires and setState is not called again (the original re-queues on every method call); pressing a different button in between restores the behaviour."
+    }
+  ]
+}

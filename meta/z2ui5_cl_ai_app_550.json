@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_ai_app_550",
+  "sample": "sap.m.sample.HeaderContainer",
+  "entity": "sap.m.HeaderContainer",
+  "file": "src/01/b06/z2ui5_cl_ai_app_550.clas.abap",
+  "batch": "b06",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "the Select's literal selectedKey=\"1\" is replaced by a two-way binding {SELECTED_KEY} (seeded with '1') so the SCROLL_CHANGED handler can read the chosen key on the backend - the CAPABILITIES-approved controller-read-selection pattern (bind selectedKey two-way; the incoming model is applied before on_event runs). The original controller reads oEvent.getParameter('selectedItem').getKey(), which has no public $parameters path (selectedItem is a control; mProperties access is banned)."
+    },
+    {
+      "type": "NOTE",
+      "what": "the controller's container1/container2 .setScrollStepByItem(0 | Number(key)) calls are expressed as a two-way binding of the public scrollStepByItem property (HeaderContainer, since UI5 1.62) on both HeaderContainers to one shared field SCROLL_STEP_BY_ITEM (typed i so the model carries a real JSON number), updated in the SCROLL_CHANGED event + view_model_update - the prefer-a-bindable-property rule; setScrollStepByItem is not in the CONTROL_METHODS whitelist of FrontendAction.js. This adds a scrollStepByItem attribute (initial 0 = the UI5 default = the original's initial state) that the original view.xml does not carry."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "confirm the scroll-step switching end to end: changing the Select round-trips SCROLL_CHANGED, updates SCROLL_STEP_BY_ITEM in the model, and both HeaderContainers then scroll by 1/2/3 items resp. 200px like the original's setScrollStepByItem calls."
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "class": "z2ui5_cl_ai_app_546",
+  "sample": "sap.m.sample.FeedContent",
+  "entity": "sap.m.FeedContent",
+  "file": "src/01/b06/z2ui5_cl_ai_app_546.clas.abap",
+  "batch": "b06",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": []
+}

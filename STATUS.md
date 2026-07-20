@@ -9,12 +9,12 @@ CAPABILITIES.md._
 
 | Aspect | State |
 |---|---|
-| Ports | 44 / **403 in-scope** `sap.m` samples (10.9 %) — in scope = control exists since UI5 1.71 and is not deprecated; 43 of 446 samples are out of scope (16 deprecated, 21 newer, 6 without control metadata) |
+| Ports | 54 / **403 in-scope** `sap.m` samples (13.4 %) — in scope = control exists since UI5 1.71 and is not deprecated; 43 of 446 samples are out of scope (16 deprecated, 21 newer, 6 without control metadata) |
 | CI | ABAP_STANDARD, ABAP_CLOUD, ABAP_702 all green |
-| Structural view diff | **0 undeclared differences** across all 44 ports (`node scripts/structural-diff.mjs --strict`) — including simple **binding values** and, since 2026-07-19, **`id` attributes** (name-level per control type; dropped original ids must be restored or declared) |
+| Structural view diff | **0 undeclared differences** across all 54 ports (`node scripts/structural-diff.mjs --strict`) — including simple **binding values** and, since 2026-07-19, **`id` attributes** (name-level per control type; dropped original ids must be restored or declared) |
 | Render smoke | **0 failing / 1 skipped** (`npm run smoke`): every reconstructable port's view loads in a real headless `XMLView.create` (app 481 skipped — helper-method view building is not statically reconstructable); harness carries `sap.f` and mocks scalar-row tables as empty arrays since b05 |
 | Pattern lint | **0 errors, 0 warnings, empty baseline** (`node scripts/pattern-lint.mjs`) |
-| Meta sidecars | 44 in `meta/` — status: 36 `generated`, 8 `checked` (530 reset 2026-07-19 per the checked-invalidation rule); deviations: 26 IMPROVISED, 19 POST_171, 20 LIVE_TEST, 9 SUBSET_DATA, 36 NOTE, 2 DROPPED_171 (the `p:ColumnAIAction` plugin in apps 401 and 534 — a whole control newer than 1.71, unlike the restorable members). `audit` is a structured object since 2026-07-18 |
+| Meta sidecars | 54 in `meta/` — status: 46 `generated`, 8 `checked` (530 reset 2026-07-19 per the checked-invalidation rule); deviations: 30 IMPROVISED, 27 POST_171, 28 LIVE_TEST, 9 SUBSET_DATA, 56 NOTE, 2 DROPPED_171 (the `p:ColumnAIAction` plugin in apps 401 and 534 — a whole control newer than 1.71, unlike the restorable members). `audit` is a structured object since 2026-07-18 |
 | Manually verified in a running system | 420, 421, 526 (`CHECKED` interactively); 404, 431, 440, 460, 487 (`CHECKED` via the human visual pass 2026-07-19 — their only pending questions were visual); 530's 07-15 check was invalidated by its 07-16 rework — restamp pending |
 | Archive | `ui5/sap.m/<SampleName>/` — full originals for the 34 ported samples (+2 cross-referenced: `FacetFilterSimple`, `Table`); mock snapshot in `ui5/mock/`. Unported samples are copied over batch by batch. |
 
@@ -31,9 +31,27 @@ The 34 existing ports are retro-grouped into review batches — one subpackage
 | `b03` | Actions, toolbars & popups | 447, 448, 449, 469, 474, 486, 526 | 526 |
 | `b04` | Layout, lists & data | 401, 404, 420, 433, 441, 445, 471, 473, 487 | 404, 420, 487 |
 | `b05` | Backlog top: bars, tables, custom items & patterns | 531, 532, 533, 534, 535, 536, 537, 538, 539, 540 | — (generated 2026-07-19) |
+| `b06` | Date pickers, dialogs, feeds & tiles | 541, 542, 543, 544, 545, 546, 547, 548, 549, 550 | — (generated 2026-07-20) |
 
-New generation batches continue as `b06`, `b07`, … per the process in
+New generation batches continue as `b07`, `b08`, … per the process in
 TRAINING.md.
+
+## Batch b06 generated (2026-07-20)
+
+The next 10 backlog-top NEW-CONTROL samples (breadth-first): 541
+DateRangeSelection, 542 DateTimePicker, 543 DialogConfirm, 544
+DisplayListItem, 545 DraftIndicator, 546 FeedContent, 547 Feed
+(FeedInput), 548 FeedListItem, 549 GenericTag, 550 HeaderContainer.
+Machine-verified to green (abaplint ×3, validate-meta, pattern-lint,
+structural-diff --strict, render-smoke --strict, property-check);
+generation fixes: 544 chain-end paren, 541 t_arg alignment, 543 fragment
+extras declared. **The adversarial AI review pass is running** — its
+findings land in a follow-up commit before the human live check.
+Notables: 545 replaces the un-whitelisted DraftIndicator show* calls with
+a source-verified equivalent two-way `state` binding; 542/541 carry the
+full date-type battery (source patterns, DateTimeWithTimezone V4
+constraints, DateCreateObject); 544 fetched the un-snapshotted
+supplier.json from upstream and noted it.
 
 ## Batch b05 generated (2026-07-19) — first post-probe batch
 

@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_ai_app_544",
+  "sample": "sap.m.sample.DisplayListItem",
+  "entity": "sap.m.DisplayListItem",
+  "file": "src/01/b06/z2ui5_cl_ai_app_544.clas.abap",
+  "batch": "b06",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "the shared mock model sap/ui/demo/mock/supplier.json is flattened into the default model: the row type keeps only the six bound columns (SupplierName, Street, HouseNumber, ZIPCode, City, Country) of the single /SupplierCollection record and drops the unbound columns (Url, Twitter, Tel, Sms, Mobile, Pager, Fax, Email, Rating, Prime, Disposable); the record itself is kept verbatim."
+    },
+    {
+      "type": "NOTE",
+      "what": "supplier.json is not snapshotted under ui5/mock/ - the data was fetched 2026-07-20 from upstream UI5/openui5 (master, src/sap.ui.documentation/test/sap/ui/documentation/sdk/supplier.json) through the text-extraction proxy; upstream /SupplierCollection contains exactly one entry (Red Point Stores), so the port's one-row table is the full row set, not a subset."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "first use of an element binding (binding=\"{/T_SUPPLIERS/0}\") in these ports - the attribute value passes to XMLView.create unmangled (source-verified) and the bound table serializes as a JSON array, but confirm in a running system that the four relative DisplayListItem value bindings resolve against the element binding context."
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+<mvc:View
+	controllerName="sap.m.sample.DialogConfirm.C"
+	xmlns:l="sap.ui.layout"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m">
+	<l:VerticalLayout class="sapUiContentPadding" width="100%">
+		<Button
+			text="Approve"
+			width="230px"
+			press=".onApproveDialogPress"
+			class="sapUiSmallMarginBottom" />
+		<Button
+			text="Reject"
+			width="230px"
+			press=".onRejectDialogPress"
+			class="sapUiSmallMarginBottom" />
+		<Button
+			text="Submit (mandatory note)"
+			width="230px"
+			press=".onSubmitDialogPress"
+			class="sapUiSmallMarginBottom" />
+		<Button
+			text="Confirm (optional note)"
+			width="230px"
+			press=".onConfirmDialogPress"
+			class="sapUiSmallMarginBottom" />
+	</l:VerticalLayout>
+</mvc:View>

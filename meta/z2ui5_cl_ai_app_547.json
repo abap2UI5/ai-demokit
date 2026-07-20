@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_ai_app_547",
+  "sample": "sap.m.sample.Feed",
+  "entity": "sap.m.FeedInput",
+  "file": "src/01/b06/z2ui5_cl_ai_app_547.clas.abap",
+  "batch": "b06",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "the controller's client-side DateFormat.getDateTimeInstance({ style: 'medium' }).format(new Date()) for the new entry's Date is rebuilt server-side in ABAP from sy-datum/sy-uzeit as an English medium-style timestamp (e.g. 'Jul 20, 2026, 1:23:45 PM') - the locale-dependent client formatter is not available in the backend round-trip; the value is a plain model string exactly like in the original."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "the senderPress/iconPress toasts read the pressed FeedListItem's sender via the client-side resolved event arg ${$source>/sender} (the getSource().getSender() equivalent, same pattern as app 530's ${$source>/text}) - confirm the sender name arrives in the toast in a running system."
+    }
+  ]
+}

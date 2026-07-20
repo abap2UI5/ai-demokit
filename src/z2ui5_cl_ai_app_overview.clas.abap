@@ -367,6 +367,67 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         post171 = `Button.ariaHasPopup (since UI5 1.84) is newer than 1.71 but kept for the 1:1 port on both Buttons - the app needs a UI5 release >= 1.84 to render it. // Link.ariaHasPopup (since UI5 1.86) is newer` &&
                  ` than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.86 to render it. // DatePicker.hideInput (since UI5 1.97) is newer than 1.71 but kept for the 1:1 port - the sample's central` &&
                  ` property (the picker input stays hidden, opened only via the anchor controls); openBy is also since 1.97, so the app needs a UI5 release >= 1.97 to render this sample's behavior.` )
+      ( module = `sap.m` control = `sap.m.DateRangeSelection`          name = `DateRangeSelection`          class = `z2ui5_cl_ai_app_541` path = `src/01/b06/z2ui5_cl_ai_app_541.clas.abap`
+        notes = `NOTE: the original controller's JSON model carries UI5Date objects; the ABAP model carries the same dates as ISO 'yyyy-MM-dd' strings, and each sap.ui.model.type.Date part of the DateInterval value` &&
+                 ` bindings gets an added formatOptions.source pattern 'yyyy-MM-dd' so the strings are parsed to Dates and written back as strings (source-verified: DateInterval sets bUseInternalValues and` &&
+                 ` Date.getModelFormat returns the source format; CAPABILITIES: Date types over ISO strings need a source pattern). Same rows/values as the sample, only the value type differs. // NOTE: the original` &&
+                 ` controller's onInit oDRS2.setMinDate(2016-01-01)/setMaxDate(2016-12-31) become minDate/maxDate view attributes on DRS2, bound over ISO strings with formatter 'Formatter.DateCreateObject'` &&
+                 ` (CAPABILITIES date-object-properties row) - two extra attributes vs the original view.xml. // POST-1.71: core:require (UI5 >= 1.74) on the view root loads z2ui5/model/formatter for the DRS2` &&
+                 ` minDate/maxDate Formatter.DateCreateObject bindings - the app needs a UI5 release >= 1.74 to render it. // POST-1.71: showCurrentDateButton (since UI5 1.95) on DRS3 is newer than 1.71 but kept for` &&
+                 ` the 1:1 port - the app needs a UI5 release >= 1.95 to render it. // NOTE: the change handler's imperative oEventSource.setValueState(None/Error) becomes a two-way bound valueState attribute on each` &&
+                 ` of the five DateRangeSelections (prefer a bindable property over imperative calls); the backend maps the event-source id to the matching field - five extra valueState attributes vs the original` &&
+                 ` view.xml, initialized to 'None' (enum property, never an empty string). // NOTE: the change handler's imperative oText.setText(...) becomes a bound text attribute on the TextEvent Text - one extra` &&
+                 ` attribute vs the original view.xml (there the Text has no text attribute). // NOTE: the controller's _iEvent counter is omitted - it is incremented in handleChange but never displayed or otherwise` &&
+                 ` used in the sample. // LIVE-TEST: confirm the CHANGE round-trip: $event.oSource.sId plus ${$parameters>/from|/to|/valid} reach get_event_arg and the valueState updates; note the from/to Date` &&
+                 ` parameters are JSON-serialized on the wire, so the Text shows ISO timestamp strings where the original shows the JS Date toString format.`
+        post171 = `core:require (UI5 >= 1.74) on the view root loads z2ui5/model/formatter for the DRS2 minDate/maxDate Formatter.DateCreateObject bindings - the app needs a UI5 release >= 1.74 to render it. //` &&
+                 ` showCurrentDateButton (since UI5 1.95) on DRS3 is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.95 to render it.` )
+      ( module = `sap.m` control = `sap.m.DateTimePicker`              name = `DateTimePicker`              class = `z2ui5_cl_ai_app_542` path = `src/01/b06/z2ui5_cl_ai_app_542.clas.abap`
+        notes = `IMPROVISED: the JSON model's UI5Date instances become date strings in the flat ABAP model: the sap.ui.model.type.DateTime bindings (DTP2/3/4/5/8) get an added source pattern 'yyyy-MM-dd HH:mm:ss'` &&
+                 ` format option so the type parses the model string (CAPABILITIES: Date types over ISO strings need a source pattern), and the sap.ui.model.odata.type.DateTimeOffset parts of DTP10/DTP11 get added` &&
+                 ` constraints {V4: true} so the DateTimeWithTimezone composite receives a parsed Date internal value (source-verified in DateTimeOffset.js getModelFormat/CompositeBinding internal values); valueDTP10` &&
+                 ` is the UTC string '2023-03-31T10:32:30Z' instead of the original's local-time UI5Date, and DTP3/DTP5 'now' comes from server sy-datum/sy-uzeit instead of the browser clock. // IMPROVISED: the` &&
+                 ` controller's byId('DTP6').setInitialFocusedDateValue(UI5Date.getInstance(2017, 5, 13, 11, 12, 13)) is expressed as a bound initialFocusedDateValue property with the Formatter.DateCreateObject module` &&
+                 ` formatter over the model string '2017-06-13T11:12:13' (CAPABILITIES date-object row) - extra initialFocusedDateValue attribute on DTP6 plus xmlns:core and core:require on the view root vs the` &&
+                 ` original view.xml. // IMPROVISED: the controller's handleChange becomes a CHANGE round-trip: the source control id, entered value and valid flag travel via $event.oSource.sId / ${$parameters>/value}` &&
+                 ` / ${$parameters>/valid}; the textResult Text.text becomes a binding and every change-firing picker (DTP1/2/3/4/6/7) gets an added bound valueState attribute, initialized to 'None' so no empty string` &&
+                 ` reaches the enum-typed property - the original sets both imperatively on the controls. // NOTE: the view-level attachParseError/attachValidationSuccess handlers of the original controller (valueState` &&
+                 ` Error/None on binding parse errors in the data-binding panel) are covered by the framework's automatic handleValidation registration on every view slot (CAPABILITIES MessageManager row,` &&
+                 ` pr/message-model) - no port code needed. // NOTE: model flattening: the original model's valueDTP9 is bound by no control in the view and is dropped; valueDTP11 (null in the original) serializes as` &&
+                 ` an empty string in the flat ABAP model, which the V4 DateTimeOffset model format parses back to null, so DTP11 renders timezone-only like the original. // POST-1.71: showCurrentDateButton (since UI5` &&
+                 ` 1.95) on DTP2 is kept for the 1:1 port. // POST-1.71: showCurrentTimeButton (since UI5 1.98) on DTP2 and DTP11 is kept for the 1:1 port. // POST-1.71: showTimezone (since UI5 1.99) on DTP8 and DTP11` &&
+                 ` is kept for the 1:1 port. // POST-1.71: timezone (since UI5 1.99) on DTP8 is kept for the 1:1 port. // POST-1.71: core:require of the z2ui5/model/formatter module on the view root needs UI5 >= 1.74,` &&
+                 ` and the sap.ui.model.odata.type.DateTimeWithTimezone binding type of DTP10/DTP11 (since UI5 1.99) is kept 1:1 - the app needs a UI5 release >= 1.99 overall. // LIVE-TEST: verify in a running system:` &&
+                 ` the DateTimeWithTimezone composites over string model parts (V4 internal-value conversion, empty-string DTP11 rendering timezone-only), the Islamic + secondary Gregorian calendar rendering of DTP4,` &&
+                 ` and the CHANGE round-trip (result text with the frontend control id, per-picker valueState from the valid flag).`
+        post171 = `showCurrentDateButton (since UI5 1.95) on DTP2 is kept for the 1:1 port. // showCurrentTimeButton (since UI5 1.98) on DTP2 and DTP11 is kept for the 1:1 port. // showTimezone (since UI5 1.99) on DTP8` &&
+                 ` and DTP11 is kept for the 1:1 port. // timezone (since UI5 1.99) on DTP8 is kept for the 1:1 port. // core:require of the z2ui5/model/formatter module on the view root needs UI5 >= 1.74, and the` &&
+                 ` sap.ui.model.odata.type.DateTimeWithTimezone binding type of DTP10/DTP11 (since UI5 1.99) is kept 1:1 - the app needs a UI5 release >= 1.99 overall.` )
+      ( module = `sap.m` control = `sap.m.Dialog`                      name = `DialogConfirm`               class = `z2ui5_cl_ai_app_543` path = `src/01/b06/z2ui5_cl_ai_app_543.clas.abap`
+        notes = `NOTE: the original builds its four Dialogs imperatively in the controller (new Dialog({...}).open()); the port expresses each as a core:FragmentDefinition popup shown via client->popup_display on the` &&
+                 ` button press event - the CAPABILITIES.md 1:1 path for controller-built Dialogs. The four Dialog fragments are therefore extra vs the archived V.view.xml, which holds only the four trigger Buttons;` &&
+                 ` every fragment control is EXTRA vs the archived V.view.xml (only the four trigger Buttons exist there): Dialog, Text, TextArea, Label, Button and the l:VerticalLayout / l:HorizontalLayout wrappers` &&
+                 ` inside the dialogs. // NOTE: the controller reads each note imperatively (Element.getElementById(...).getValue()); the port two-way binds the three TextArea values` &&
+                 ` (reject_note/submit_note/confirm_note) and builds the 'Note is: ...' toasts from the synced ABAP fields in on_event - an extra value attribute per TextArea vs the original construction. // NOTE: the` &&
+                 ` submission dialog's liveChange handler (enable the Submit button while the note is non-empty, enabled: false initially) is replaced round-trip-free by valueLiveUpdate=true on the TextArea plus an` &&
+                 ` expression binding {= ${...}.length > 0 } on the begin button's enabled - same behavior, starts disabled with the empty note (CAPABILITIES.md: prefer a pure expression binding over an event` &&
+                 ` round-trip). // NOTE: Cancel: the approve dialog (no inputs) closes client-side via _event_client popup_close; the three note dialogs cancel through a backend DIALOG_CANCEL event + popup_destroy so` &&
+                 ` the two-way model sync keeps the typed note across a reopen, matching the original's reused cached dialog instances. // LIVE-TEST: verify the four popup dialogs open/close correctly, the toast texts` &&
+                 ` (Submit pressed! / Note is: ...), the note retention across cancel+reopen, and the live enabling of the mandatory-note Submit button via valueLiveUpdate + expression binding.` )
+      ( module = `sap.m` control = `sap.m.DisplayListItem`             name = `DisplayListItem`             class = `z2ui5_cl_ai_app_544` path = `src/01/b06/z2ui5_cl_ai_app_544.clas.abap`
+        notes = `IMPROVISED: the shared mock model sap/ui/demo/mock/supplier.json is flattened into the default model: the row type keeps only the six bound columns (SupplierName, Street, HouseNumber, ZIPCode, City,` &&
+                 ` Country) of the single /SupplierCollection record and drops the unbound columns (Url, Twitter, Tel, Sms, Mobile, Pager, Fax, Email, Rating, Prime, Disposable); the record itself is kept verbatim. //` &&
+                 ` NOTE: supplier.json is not snapshotted under ui5/mock/ - the data was fetched 2026-07-20 from upstream UI5/openui5 (master, src/sap.ui.documentation/test/sap/ui/documentation/sdk/supplier.json)` &&
+                 ` through the text-extraction proxy; upstream /SupplierCollection contains exactly one entry (Red Point Stores), so the port's one-row table is the full row set, not a subset. // LIVE-TEST: first use` &&
+                 ` of an element binding (binding="{/T_SUPPLIERS/0}") in these ports - the attribute value passes to XMLView.create unmangled (source-verified) and the bound table serializes as a JSON array, but` &&
+                 ` confirm in a running system that the four relative DisplayListItem value bindings resolve against the element binding context.` )
+      ( module = `sap.m` control = `sap.m.DraftIndicator`              name = `DraftIndicator`              class = `z2ui5_cl_ai_app_545` path = `src/01/b06/z2ui5_cl_ai_app_545.clas.abap`
+        notes = `IMPROVISED: the controller's imperative DraftIndicator calls (showDraftSaving/showDraftSaved/clearDraftState on byId('draftIndi')) are not in the FrontendAction CONTROL_METHODS whitelist; per AGENTS` &&
+                 ` 'prefer a bindable property over a frontend action' the port two-way binds the control's public state property (sap.m.DraftIndicatorState, since 1.32) and sets Saving/Saved/Clear in the three event` &&
+                 ` handlers. Source-verified equivalent: a binding update calls the public mutator (ManagedObjectBindingSupport.updateProperty -> _sMutator), and DraftIndicator.setState queues exactly what the three` &&
+                 ` methods queue (setState('Saving') queues Saving+Clear like showDraftSaving, sap/m/DraftIndicator.js). Adds the state attribute on the DraftIndicator vs the original view.xml. // NOTE: pressing the` &&
+                 ` same button twice in direct succession does not re-run the indicator - the model value is unchanged, so no binding change fires and setState is not called again (the original re-queues on every` &&
+                 ` method call); pressing a different button in between restores the behaviour.` )
       ( module = `sap.m` control = `sap.m.FacetFilter`                 name = `FacetFilterLight`            class = `z2ui5_cl_ai_app_401` path = `src/01/b04/z2ui5_cl_ai_app_401.clas.abap`
         notes = `NOTE: the bound lists="{/ProductCollectionStats/Filters}" collection is represented as two static FacetFilterLists (Category, SupplierName) - the original's stats model yields exactly these two lists,` &&
                  ` so this is a faithful equivalent; the facet values inside each list stay bound to a FacetFilterItem template. A doubly-nested variant (bind the FacetFilter lists aggregation to a nested table,` &&
@@ -396,11 +457,30 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` system that the popin layout switches via the two-way ComboBox selectedKey and that the ToggleButton hides/shows the infoToolbar via the visible expression binding (restored 2026-07-19).`
         post171 = `core:require on the view root (since UI5 1.74) is newer than 1.71 but used for the formatter wiring - the app needs a UI5 release >= 1.74; on older releases reference the published global instead` &&
                  ` (formatter: 'z2ui5.Formatter.weightState').` )
+      ( module = `sap.m` control = `sap.m.FeedContent`                 name = `FeedContent`                 class = `z2ui5_cl_ai_app_546` path = `src/01/b06/z2ui5_cl_ai_app_546.clas.abap` )
+      ( module = `sap.m` control = `sap.m.FeedInput`                   name = `Feed`                        class = `z2ui5_cl_ai_app_547` path = `src/01/b06/z2ui5_cl_ai_app_547.clas.abap`
+        notes = `IMPROVISED: the controller's client-side DateFormat.getDateTimeInstance({ style: 'medium' }).format(new Date()) for the new entry's Date is rebuilt server-side in ABAP from sy-datum/sy-uzeit as an` &&
+                 ` English medium-style timestamp (e.g. 'Jul 20, 2026, 1:23:45 PM') - the locale-dependent client formatter is not available in the backend round-trip; the value is a plain model string exactly like in` &&
+                 ` the original. // LIVE-TEST: the senderPress/iconPress toasts read the pressed FeedListItem's sender via the client-side resolved event arg ${$source>/sender} (the getSource().getSender() equivalent,` &&
+                 ` same pattern as app 530's ${$source>/text}) - confirm the sender name arrives in the toast in a running system.` )
+      ( module = `sap.m` control = `sap.m.FeedListItem`                name = `FeedListItem`                class = `z2ui5_cl_ai_app_548` path = `src/01/b06/z2ui5_cl_ai_app_548.clas.abap`
+        notes = `LIVE-TEST: confirm the ACTION_PRESSED event args resolve as expected: ``${KEY}`` against the FeedListItemAction's Actions-row binding context, and the deleted entry's index via` &&
+                 ` ``${$parameters>/item/oParent}.indexOfItem(${$parameters>/item})`` (the DnD-sample-proven method-call $-arg form over the press event's ``item`` parameter) - delete must remove the right feed entry;` &&
+                 ` also confirm ``${AUTHOR}`` reaches the PRESSED toast from both senderPress and iconPress. // NOTE: the original's removeItem derives the entry index from the item's binding-context path` &&
+                 ` (getBindingContext().getPath().split('/').pop()); the port transports the List's indexOfItem(item) instead - the aggregation index equals the model index for this bound list, so the spliced row is` &&
+                 ` the same. // NOTE: feed.json entries 2 and 4 have no Actions property; the flat ABAP row type serializes ACTIONS as an empty array ([] instead of undefined) - the actions aggregation renders no` &&
+                 ` actions either way, and an empty array is not an empty-string/enum hazard. // NOTE: the relative AuthorPicUrl asset paths (test-resources/sap/m/images/*.jpg) are rewritten to absolute` &&
+                 ` https://sdk.openui5.org/test-resources/... per the project rule for runtime asset URLs.` )
       ( module = `sap.m` control = `sap.m.FlexBox`                     name = `FlexBoxNested`               class = `z2ui5_cl_ai_app_404` path = `src/01/b04/z2ui5_cl_ai_app_404.clas.abap`
         checked = `CHECKED (2026-07-19): verified in a running system - human visual pass 2026-07-19 over all apps: the six flex items and the h2 headings render with their injected-CSS background colours like the` &&
                  ` original.`
         notes = `NOTE: the original colours .item1..item6 and the h2 headings via a separate style.css; here it is injected as a core:HTML content attribute (a style tag, minified - see CAPABILITIES.md; the EXTRA` &&
                  ` core:HTML control vs the original view). Confirmed rendering via the human visual pass 2026-07-19.` )
+      ( module = `sap.m` control = `sap.m.GenericTag`                  name = `GenericTag`                  class = `z2ui5_cl_ai_app_549` path = `src/01/b06/z2ui5_cl_ai_app_549.clas.abap`
+        notes = `POST-1.71: ariaLabelledBy (since UI5 1.97) on the labeled GenericTag is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.97 to render it. // NOTE: the sample's` &&
+                 ` Page.controller.js defines a press handler (MessageToast 'The GenericTag is pressed.') that is not referenced anywhere in Page.view.xml - no GenericTag carries a press attribute - so the port wires` &&
+                 ` no event; the rendered view is a faithful 1:1 rebuild.`
+        post171 = `ariaLabelledBy (since UI5 1.97) on the labeled GenericTag is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.97 to render it.` )
       ( module = `sap.m` control = `sap.m.GenericTile`                 name = `GenericTileAsKPITile`        class = `z2ui5_cl_ai_app_431` path = `src/01/b01/z2ui5_cl_ai_app_431.clas.abap`
         checked = `CHECKED (2026-07-19): verified in a running system - human visual pass 2026-07-19 over all apps: the KPI tiles float left via the injected tileLayout CSS and render like the original.`
         notes = `POST-1.71: frameType values OneByHalf / TwoByHalf (since UI5 1.83) are newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.83 to render them; OneByOne / TwoByOne (1.71) were` &&
@@ -411,6 +491,15 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         post171 = `frameType values OneByHalf / TwoByHalf (since UI5 1.83) are newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.83 to render them; OneByOne / TwoByOne (1.71) were never` &&
                  ` affected. // systemInfo and appShortcut (since UI5 1.92) are newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.92 to render them. // url on the link tiles (since UI5 1.76)` &&
                  ` is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.76 to render it.` )
+      ( module = `sap.m` control = `sap.m.HeaderContainer`             name = `HeaderContainer`             class = `z2ui5_cl_ai_app_550` path = `src/01/b06/z2ui5_cl_ai_app_550.clas.abap`
+        notes = `NOTE: the Select's literal selectedKey="1" is replaced by a two-way binding {SELECTED_KEY} (seeded with '1') so the SCROLL_CHANGED handler can read the chosen key on the backend - the` &&
+                 ` CAPABILITIES-approved controller-read-selection pattern (bind selectedKey two-way; the incoming model is applied before on_event runs). The original controller reads` &&
+                 ` oEvent.getParameter('selectedItem').getKey(), which has no public $parameters path (selectedItem is a control; mProperties access is banned). // NOTE: the controller's container1/container2` &&
+                 ` .setScrollStepByItem(0 | Number(key)) calls are expressed as a two-way binding of the public scrollStepByItem property (HeaderContainer, since UI5 1.62) on both HeaderContainers to one shared field` &&
+                 ` SCROLL_STEP_BY_ITEM (typed i so the model carries a real JSON number), updated in the SCROLL_CHANGED event + view_model_update - the prefer-a-bindable-property rule; setScrollStepByItem is not in the` &&
+                 ` CONTROL_METHODS whitelist of FrontendAction.js. This adds a scrollStepByItem attribute (initial 0 = the UI5 default = the original's initial state) that the original view.xml does not carry. //` &&
+                 ` LIVE-TEST: confirm the scroll-step switching end to end: changing the Select round-trips SCROLL_CHANGED, updates SCROLL_STEP_BY_ITEM in the model, and both HeaderContainers then scroll by 1/2/3 items` &&
+                 ` resp. 200px like the original's setScrollStepByItem calls.` )
       ( module = `sap.m` control = `sap.m.IconTabBar`                  name = `IconTabBarStretchContent`    class = `z2ui5_cl_ai_app_433` path = `src/01/b04/z2ui5_cl_ai_app_433.clas.abap`
         notes = `LIVE-TEST: the original binds expanded="{device>/isNoPhone}" (a demo-kit helper model); restored 2026-07-16 as the expression {= !${device>/system/phone} } over the framework's device> model` &&
                  ` (source-verified available in main views) - confirm the tab bar collapses on phones. // SUBSET: the bound /ProductCollection shows a 8-row subset of the 123-row mock (ui5/mock/products.json) - a full` &&

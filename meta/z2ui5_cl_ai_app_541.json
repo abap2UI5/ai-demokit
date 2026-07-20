@@ -1,0 +1,47 @@
+{
+  "class": "z2ui5_cl_ai_app_541",
+  "sample": "sap.m.sample.DateRangeSelection",
+  "entity": "sap.m.DateRangeSelection",
+  "file": "src/01/b06/z2ui5_cl_ai_app_541.clas.abap",
+  "batch": "b06",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "the original controller's JSON model carries UI5Date objects; the ABAP model carries the same dates as ISO 'yyyy-MM-dd' strings, and each sap.ui.model.type.Date part of the DateInterval value bindings gets an added formatOptions.source pattern 'yyyy-MM-dd' so the strings are parsed to Dates and written back as strings (source-verified: DateInterval sets bUseInternalValues and Date.getModelFormat returns the source format; CAPABILITIES: Date types over ISO strings need a source pattern). Same rows/values as the sample, only the value type differs."
+    },
+    {
+      "type": "NOTE",
+      "what": "the original controller's onInit oDRS2.setMinDate(2016-01-01)/setMaxDate(2016-12-31) become minDate/maxDate view attributes on DRS2, bound over ISO strings with formatter 'Formatter.DateCreateObject' (CAPABILITIES date-object-properties row) - two extra attributes vs the original view.xml."
+    },
+    {
+      "type": "POST_171",
+      "what": "core:require (UI5 >= 1.74) on the view root loads z2ui5/model/formatter for the DRS2 minDate/maxDate Formatter.DateCreateObject bindings - the app needs a UI5 release >= 1.74 to render it."
+    },
+    {
+      "type": "POST_171",
+      "what": "showCurrentDateButton (since UI5 1.95) on DRS3 is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.95 to render it."
+    },
+    {
+      "type": "NOTE",
+      "what": "the change handler's imperative oEventSource.setValueState(None/Error) becomes a two-way bound valueState attribute on each of the five DateRangeSelections (prefer a bindable property over imperative calls); the backend maps the event-source id to the matching field - five extra valueState attributes vs the original view.xml, initialized to 'None' (enum property, never an empty string)."
+    },
+    {
+      "type": "NOTE",
+      "what": "the change handler's imperative oText.setText(...) becomes a bound text attribute on the TextEvent Text - one extra attribute vs the original view.xml (there the Text has no text attribute)."
+    },
+    {
+      "type": "NOTE",
+      "what": "the controller's _iEvent counter is omitted - it is incremented in handleChange but never displayed or otherwise used in the sample."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "confirm the CHANGE round-trip: $event.oSource.sId plus ${$parameters>/from|/to|/valid} reach get_event_arg and the valueState updates; note the from/to Date parameters are JSON-serialized on the wire, so the Text shows ISO timestamp strings where the original shows the JS Date toString format."
+    }
+  ]
+}
