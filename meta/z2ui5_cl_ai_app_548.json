@@ -1,0 +1,31 @@
+{
+  "class": "z2ui5_cl_ai_app_548",
+  "sample": "sap.m.sample.FeedListItem",
+  "entity": "sap.m.FeedListItem",
+  "file": "src/01/b06/z2ui5_cl_ai_app_548.clas.abap",
+  "batch": "b06",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "LIVE_TEST",
+      "what": "confirm the ACTION_PRESSED event args resolve as expected: `${KEY}` against the FeedListItemAction's Actions-row binding context, and the deleted entry's index via `${$parameters>/item/oParent}.indexOfItem(${$parameters>/item})` (the DnD-sample-proven method-call $-arg form over the press event's `item` parameter) - delete must remove the right feed entry; also confirm `${AUTHOR}` reaches the PRESSED toast from both senderPress and iconPress."
+    },
+    {
+      "type": "NOTE",
+      "what": "the original's removeItem derives the entry index from the item's binding-context path (getBindingContext().getPath().split('/').pop()); the port transports the List's indexOfItem(item) instead - the aggregation index equals the model index for this bound list, so the spliced row is the same."
+    },
+    {
+      "type": "NOTE",
+      "what": "feed.json entries 2 and 4 have no Actions property; the flat ABAP row type serializes ACTIONS as an empty array ([] instead of undefined) - the actions aggregation renders no actions either way, and an empty array is not an empty-string/enum hazard."
+    },
+    {
+      "type": "NOTE",
+      "what": "the relative AuthorPicUrl asset paths (test-resources/sap/m/images/*.jpg) are rewritten to absolute https://sdk.openui5.org/test-resources/... per the project rule for runtime asset URLs."
+    }
+  ]
+}
