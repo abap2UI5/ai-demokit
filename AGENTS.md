@@ -462,13 +462,18 @@ these entries.
 
 #### Worked references
 
-Three PoC ports show the full range — read them before writing a new one:
+Read the 2–3 nearest ones before writing a new port. Since 2026-07-20 the
+repo has `golden` ports (live-checked + exemplary, the only ports allowed
+as prompt references per TRAINING.md):
 
 | App | Sample | Shows |
 |-----|--------|-------|
 | `src/01/b01/z2ui5_cl_ai_app_408` | `sap.m.Text` | static view, no data/events, `&&`-split text |
-| `src/01/b02/z2ui5_cl_ai_app_421` | `sap.m.CheckBox` | two-way bind, expression bindings, boolean event arg (CHECKED in-system) |
-| `src/01/b02/z2ui5_cl_ai_app_454` | `sap.m.MultiInput` | data, bound aggregation, `core:Item`, tokens, NOTES block |
+| `src/01/b02/z2ui5_cl_ai_app_421` | `sap.m.CheckBox` | two-way bind, expression bindings, boolean event arg (GOLDEN) |
+| `src/01/b02/z2ui5_cl_ai_app_454` | `sap.m.MultiInput` | data, bound aggregation, `core:Item`, tokens, cc control `z2ui5.cc.MultiInputExt` (GOLDEN) |
+| `src/01/b04/z2ui5_cl_ai_app_401` | `sap.m.FacetFilter` | compound `binding_call` filter, curated formatter module, two-way facet selection (GOLDEN) |
+| `src/01/b06/z2ui5_cl_ai_app_543` | `sap.m.Dialog` | fragment-popup dialogs, roundtrip-free live-enable expression, both popup_close paths (GOLDEN) |
+| `src/01/b05/z2ui5_cl_ai_app_540` | `sap.m.DatePicker` | frontend action (`openBy`/domRef), `$event.oSource.sId` anchor transport, POST_171 discipline (GOLDEN) |
 
 ### Generation prompt
 

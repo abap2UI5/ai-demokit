@@ -14,7 +14,7 @@ CAPABILITIES.md._
 | Structural view diff | **0 undeclared differences** across all 54 ports (`node scripts/structural-diff.mjs --strict`) — including simple **binding values** and, since 2026-07-19, **`id` attributes** (name-level per control type; dropped original ids must be restored or declared) |
 | Render smoke | **0 failing / 1 skipped** (`npm run smoke`): every reconstructable port's view loads in a real headless `XMLView.create` (app 481 skipped — helper-method view building is not statically reconstructable); harness carries `sap.f` and mocks scalar-row tables as empty arrays since b05 |
 | Pattern lint | **0 errors, 0 warnings, empty baseline** (`node scripts/pattern-lint.mjs`) |
-| Meta sidecars | 54 in `meta/` — status: 14 `generated`, **40 `checked`** (live check 2026-07-20); deviations: 30 IMPROVISED, 27 POST_171, **0 LIVE_TEST**, 9 SUBSET_DATA, 57 NOTE, 2 DROPPED_171 (the `p:ColumnAIAction` plugin in apps 401 and 534 — a whole control newer than 1.71, unlike the restorable members). `audit` is a structured object since 2026-07-18 |
+| Meta sidecars | 54 in `meta/` — status: 14 `generated`, 35 `checked`, **5 `golden`** (401, 421, 454, 540, 543 — promoted 2026-07-20 after the full live check); deviations: 30 IMPROVISED, 27 POST_171, **0 LIVE_TEST**, 9 SUBSET_DATA, 57 NOTE, 2 DROPPED_171 (the `p:ColumnAIAction` plugin in apps 401 and 534 — a whole control newer than 1.71, unlike the restorable members). `audit` is a structured object since 2026-07-18 |
 | Manually verified in a running system | **40 of 54 ports** — 2026-07-20 human live check per the interaction checklist (all b05/b06 + every port that carried an open question, incl. the 530 restamp); previously: 420/421/526 interactive, 404/431/440/460/487 visual 2026-07-19. The 14 remaining `generated` ports are b01–b04 apps that never carried an open question |
 | Archive | `ui5/sap.m/<SampleName>/` — full originals for the 34 ported samples (+2 cross-referenced: `FacetFilterSimple`, `Table`); mock snapshot in `ui5/mock/`. Unported samples are copied over batch by batch. |
 
@@ -44,9 +44,11 @@ merged openBy/compound-filter paths, the review-fixed 550 scroll step, the
 device> phone checks and the 530 restamp) and confirmed every item. All
 LIVE_TEST deviations are closed, **40 of 54 ports are `checked`** — the
 14 remaining `generated` ports are b01–b04 apps that never carried an open
-question. Next: `golden` promotions are now possible (human judgement per
-TRAINING.md) to widen the generation-prompt reference set beyond
-408/421/454.
+question. Follow-up same day: **five ports promoted to `golden`** (401 compound
+filter + formatter, 421 expression bindings, 454 cc-control tokens,
+540 frontend action, 543 dialog flows) — the generation-prompt reference
+set in AGENTS §5 now spans six worked references across the technique
+range.
 
 ## Human visual pass over b05+b06 (2026-07-20, earlier the same day)
 
