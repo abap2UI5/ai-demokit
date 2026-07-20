@@ -34,6 +34,11 @@ Data values were verified instead:
 - `img.json` — image URL model (`products/pic1..3`, `images`, …), fetched the
   same way. Referenced by the Carousel-style samples; the port resolves these
   bindings to static URLs (see `meta/z2ui5_cl_ai_app_420.json`).
+- `supplier.json` — `SupplierCollection` (one record, Red Point Stores).
+  Snapshotted 2026-07-20 from a git sparse checkout of SAP/openui5 `master`
+  (same sdk path) — **byte-identical to upstream**, unlike the
+  proxy-normalized files above. Used by the DisplayListItem sample
+  (`src/01/b06/z2ui5_cl_ai_app_544.clas.abap`, six bound columns).
 
 Like everything under `ui5/`, these files are reference material outside the
 abapGit / abaplint scope and are never edited to fit ABAP.

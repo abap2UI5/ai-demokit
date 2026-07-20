@@ -17,11 +17,11 @@
     },
     {
       "type": "NOTE",
-      "what": "supplier.json is not snapshotted under ui5/mock/ - the data was fetched 2026-07-20 from upstream UI5/openui5 (master, src/sap.ui.documentation/test/sap/ui/documentation/sdk/supplier.json) through the text-extraction proxy; upstream /SupplierCollection contains exactly one entry (Red Point Stores), so the port's one-row table is the full row set, not a subset."
+      "what": "the sample controller loads the shared mock sap/ui/demo/mock/supplier.json - snapshotted byte-identical into ui5/mock/supplier.json (2026-07-20, git sparse checkout of SAP/openui5 master); one SupplierCollection record, full row set, values verifiable offline."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "first use of an element binding (binding=\"{/T_SUPPLIERS/0}\") in these ports - the attribute value passes to XMLView.create unmangled (source-verified) and the bound table serializes as a JSON array, but confirm in a running system that the four relative DisplayListItem value bindings resolve against the element binding context."
+      "type": "NOTE",
+      "what": "element binding binding=\"{/T_SUPPLIERS/0}\" with relative DisplayListItem value bindings - the binding= context mechanism is already live-verified via app 460 (checked 2026-07-19); the /0 array-index path variant is a plain JSONModel path resolution, source-decidable, so no LIVE_TEST is carried."
     }
   ]
 }

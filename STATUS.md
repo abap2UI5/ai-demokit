@@ -45,8 +45,19 @@ DisplayListItem, 545 DraftIndicator, 546 FeedContent, 547 Feed
 Machine-verified to green (abaplint ×3, validate-meta, pattern-lint,
 structural-diff --strict, render-smoke --strict, property-check);
 generation fixes: 544 chain-end paren, 541 t_arg alignment, 543 fragment
-extras declared. **The adversarial AI review pass is running** — its
-findings land in a follow-up commit before the human live check.
+extras declared. Adversarial AI review (2 reviewers × 5 apps): **7 CLEAN,
+2 MINOR, 1 MAJOR** — the MAJOR was a real behavior bug in 550
+(`scrollStepByItem` seeded 0 instead of the UI5 default 1: initial arrow
+scroll was 200 px instead of one item, with a sidecar note asserting the
+wrong default as fact — fixed, seeded 1). MINORs fixed: 544's
+supplier.json is now snapshotted byte-identical in `ui5/mock/` (the
+AGENTS §4 offline-verifiability lesson) and its false "first element
+binding" LIVE_TEST rewrote to a NOTE (app 460 already proved the
+mechanism); 547's date-rebuild note now names the server-vs-browser
+timezone delta. The reviewers source-verified the heavy claims: 541/542's
+date-type bindings (source patterns, DateTimeWithTimezone V4
+constraints), 545's DraftIndicator setter-equivalence, and 548's
+`.indexOfItem(...)` method-call event arg (legal per ExpressionParser).
 Notables: 545 replaces the un-whitelisted DraftIndicator show* calls with
 a source-verified equivalent two-way `state` binding; 542/541 carry the
 full date-type battery (source patterns, DateTimeWithTimezone V4

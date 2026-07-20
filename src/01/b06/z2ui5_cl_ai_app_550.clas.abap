@@ -35,7 +35,8 @@ CLASS z2ui5_cl_ai_app_550 IMPLEMENTATION.
   METHOD model_init.
 
     selected_key = `1`.
-    scroll_step_by_item = 0.
+    " the UI5 property default is 1 (scroll by one item), matching the Select's initial "1 item"
+    scroll_step_by_item = 1.
 
   ENDMETHOD.
 

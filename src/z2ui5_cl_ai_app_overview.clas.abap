@@ -417,10 +417,9 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.m` control = `sap.m.DisplayListItem`             name = `DisplayListItem`             class = `z2ui5_cl_ai_app_544` path = `src/01/b06/z2ui5_cl_ai_app_544.clas.abap`
         notes = `IMPROVISED: the shared mock model sap/ui/demo/mock/supplier.json is flattened into the default model: the row type keeps only the six bound columns (SupplierName, Street, HouseNumber, ZIPCode, City,` &&
                  ` Country) of the single /SupplierCollection record and drops the unbound columns (Url, Twitter, Tel, Sms, Mobile, Pager, Fax, Email, Rating, Prime, Disposable); the record itself is kept verbatim. //` &&
-                 ` NOTE: supplier.json is not snapshotted under ui5/mock/ - the data was fetched 2026-07-20 from upstream UI5/openui5 (master, src/sap.ui.documentation/test/sap/ui/documentation/sdk/supplier.json)` &&
-                 ` through the text-extraction proxy; upstream /SupplierCollection contains exactly one entry (Red Point Stores), so the port's one-row table is the full row set, not a subset. // LIVE-TEST: first use` &&
-                 ` of an element binding (binding="{/T_SUPPLIERS/0}") in these ports - the attribute value passes to XMLView.create unmangled (source-verified) and the bound table serializes as a JSON array, but` &&
-                 ` confirm in a running system that the four relative DisplayListItem value bindings resolve against the element binding context.` )
+                 ` NOTE: the sample controller loads the shared mock sap/ui/demo/mock/supplier.json - snapshotted byte-identical into ui5/mock/supplier.json (2026-07-20, git sparse checkout of SAP/openui5 master); one` &&
+                 ` SupplierCollection record, full row set, values verifiable offline. // NOTE: element binding binding="{/T_SUPPLIERS/0}" with relative DisplayListItem value bindings - the binding= context mechanism` &&
+                 ` is already live-verified via app 460 (checked 2026-07-19); the /0 array-index path variant is a plain JSONModel path resolution, source-decidable, so no LIVE_TEST is carried.` )
       ( module = `sap.m` control = `sap.m.DraftIndicator`              name = `DraftIndicator`              class = `z2ui5_cl_ai_app_545` path = `src/01/b06/z2ui5_cl_ai_app_545.clas.abap`
         notes = `IMPROVISED: the controller's imperative DraftIndicator calls (showDraftSaving/showDraftSaved/clearDraftState on byId('draftIndi')) are not in the FrontendAction CONTROL_METHODS whitelist; per AGENTS` &&
                  ` 'prefer a bindable property over a frontend action' the port two-way binds the control's public state property (sap.m.DraftIndicatorState, since 1.32) and sets Saving/Saved/Clear in the three event` &&
@@ -461,8 +460,9 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.m` control = `sap.m.FeedInput`                   name = `Feed`                        class = `z2ui5_cl_ai_app_547` path = `src/01/b06/z2ui5_cl_ai_app_547.clas.abap`
         notes = `IMPROVISED: the controller's client-side DateFormat.getDateTimeInstance({ style: 'medium' }).format(new Date()) for the new entry's Date is rebuilt server-side in ABAP from sy-datum/sy-uzeit as an` &&
                  ` English medium-style timestamp (e.g. 'Jul 20, 2026, 1:23:45 PM') - the locale-dependent client formatter is not available in the backend round-trip; the value is a plain model string exactly like in` &&
-                 ` the original. // LIVE-TEST: the senderPress/iconPress toasts read the pressed FeedListItem's sender via the client-side resolved event arg ${$source>/sender} (the getSource().getSender() equivalent,` &&
-                 ` same pattern as app 530's ${$source>/text}) - confirm the sender name arrives in the toast in a running system.` )
+                 ` the original; note the source differs too: sy-datum/sy-uzeit is the SERVER date/time and timezone, while the original renders the browser-local new Date() - around midnight or across timezones the` &&
+                 ` displayed timestamp of a new entry can differ from a client-side clock. // LIVE-TEST: the senderPress/iconPress toasts read the pressed FeedListItem's sender via the client-side resolved event arg` &&
+                 ` ${$source>/sender} (the getSource().getSender() equivalent, same pattern as app 530's ${$source>/text}) - confirm the sender name arrives in the toast in a running system.` )
       ( module = `sap.m` control = `sap.m.FeedListItem`                name = `FeedListItem`                class = `z2ui5_cl_ai_app_548` path = `src/01/b06/z2ui5_cl_ai_app_548.clas.abap`
         notes = `LIVE-TEST: confirm the ACTION_PRESSED event args resolve as expected: ``${KEY}`` against the FeedListItemAction's Actions-row binding context, and the deleted entry's index via` &&
                  ` ``${$parameters>/item/oParent}.indexOfItem(${$parameters>/item})`` (the DnD-sample-proven method-call $-arg form over the press event's ``item`` parameter) - delete must remove the right feed entry;` &&
@@ -494,12 +494,12 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.m` control = `sap.m.HeaderContainer`             name = `HeaderContainer`             class = `z2ui5_cl_ai_app_550` path = `src/01/b06/z2ui5_cl_ai_app_550.clas.abap`
         notes = `NOTE: the Select's literal selectedKey="1" is replaced by a two-way binding {SELECTED_KEY} (seeded with '1') so the SCROLL_CHANGED handler can read the chosen key on the backend - the` &&
                  ` CAPABILITIES-approved controller-read-selection pattern (bind selectedKey two-way; the incoming model is applied before on_event runs). The original controller reads` &&
-                 ` oEvent.getParameter('selectedItem').getKey(), which has no public $parameters path (selectedItem is a control; mProperties access is banned). // NOTE: the controller's container1/container2` &&
-                 ` .setScrollStepByItem(0 | Number(key)) calls are expressed as a two-way binding of the public scrollStepByItem property (HeaderContainer, since UI5 1.62) on both HeaderContainers to one shared field` &&
-                 ` SCROLL_STEP_BY_ITEM (typed i so the model carries a real JSON number), updated in the SCROLL_CHANGED event + view_model_update - the prefer-a-bindable-property rule; setScrollStepByItem is not in the` &&
-                 ` CONTROL_METHODS whitelist of FrontendAction.js. This adds a scrollStepByItem attribute (initial 0 = the UI5 default = the original's initial state) that the original view.xml does not carry. //` &&
-                 ` LIVE-TEST: confirm the scroll-step switching end to end: changing the Select round-trips SCROLL_CHANGED, updates SCROLL_STEP_BY_ITEM in the model, and both HeaderContainers then scroll by 1/2/3 items` &&
-                 ` resp. 200px like the original's setScrollStepByItem calls.` )
+                 ` oEvent.getParameter('selectedItem').getKey(), which has no public $parameters path (selectedItem is a control; reading private control internals is banned). // NOTE: the controller's` &&
+                 ` setScrollStepByItem(0 | Number(key)) calls on both containers expressed as a shared two-way scrollStepByItem binding (typed i for a real JSON number; the method is not in the CONTROL_METHODS` &&
+                 ` whitelist and the prefer-a-bindable-property rule applies). Seeded 1 - the UI5 property default (HeaderContainer.js defaultValue: 1; the property carries no @since, present since the control) - so` &&
+                 ` the initial arrow scroll is one item, exactly the original's untouched state; selecting px sets 0 (px stepping via scrollStep), like the controller. // LIVE-TEST: confirm the scroll-step switching` &&
+                 ` end to end: changing the Select round-trips SCROLL_CHANGED, updates SCROLL_STEP_BY_ITEM in the model, and both HeaderContainers then scroll by 1/2/3 items resp. 200px like the original's` &&
+                 ` setScrollStepByItem calls.` )
       ( module = `sap.m` control = `sap.m.IconTabBar`                  name = `IconTabBarStretchContent`    class = `z2ui5_cl_ai_app_433` path = `src/01/b04/z2ui5_cl_ai_app_433.clas.abap`
         notes = `LIVE-TEST: the original binds expanded="{device>/isNoPhone}" (a demo-kit helper model); restored 2026-07-16 as the expression {= !${device>/system/phone} } over the framework's device> model` &&
                  ` (source-verified available in main views) - confirm the tab bar collapses on phones. // SUBSET: the bound /ProductCollection shows a 8-row subset of the 123-row mock (ui5/mock/products.json) - a full` &&
