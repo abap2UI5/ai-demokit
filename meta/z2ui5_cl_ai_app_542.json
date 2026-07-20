@@ -53,7 +53,7 @@
     },
     {
       "type": "LIVE_TEST",
-      "what": "verify in a running system: the DateTimeWithTimezone composites over string model parts (V4 internal-value conversion, empty-string DTP11 rendering timezone-only), the Islamic + secondary Gregorian calendar rendering of DTP4, and the CHANGE round-trip (result text with the frontend control id, per-picker valueState from the valid flag)."
+      "what": "REMAINS after the 2026-07-20 visual pass (rendering of the DateTimeWithTimezone composites, the empty-string DTP11 timezone-only display and the Islamic secondary calendar on DTP4 all confirmed on screen): the CHANGE round-trip - $event.oSource.sId / ${$parameters>/value} / valid reach get_event_arg, textResult and the per-picker valueState update."
     }
   ]
 }

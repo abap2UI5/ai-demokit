@@ -36,6 +36,16 @@ The 34 existing ports are retro-grouped into review batches — one subpackage
 New generation batches continue as `b07`, `b08`, … per the process in
 TRAINING.md.
 
+## Human visual pass over b05+b06 (2026-07-20)
+
+All 20 new ports were started in a running system and render without
+errors (apps opened and looked at; interactions not exercised). Closed on
+that basis: 401's weight-state colors and 542's date-type rendering half
+(DateTimeWithTimezone composites, empty-string DTP11, Islamic calendar).
+The interaction LIVE_TESTs stay open — a prioritized detail-check list
+was handed to the human (top of the list: 454 tokens, 540 openBy,
+401 compound filter, 469/471, 550's fixed initial scroll step).
+
 ## Batch b06 generated (2026-07-20)
 
 The next 10 backlog-top NEW-CONTROL samples (breadth-first): 541
