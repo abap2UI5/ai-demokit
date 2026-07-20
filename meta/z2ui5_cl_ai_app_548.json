@@ -8,13 +8,12 @@
     "frontend_action": false,
     "event_t_arg": true
   },
-  "status": "generated",
-  "checked": null,
+  "status": "checked",
+  "checked": {
+    "date": "2026-07-20",
+    "note": "verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed)"
+  },
   "deviations": [
-    {
-      "type": "LIVE_TEST",
-      "what": "confirm the ACTION_PRESSED event args resolve as expected: `${KEY}` against the FeedListItemAction's Actions-row binding context, and the deleted entry's index via `${$parameters>/item/oParent}.indexOfItem(${$parameters>/item})` (the DnD-sample-proven method-call $-arg form over the press event's `item` parameter) - delete must remove the right feed entry; also confirm `${AUTHOR}` reaches the PRESSED toast from both senderPress and iconPress."
-    },
     {
       "type": "NOTE",
       "what": "the original's removeItem derives the entry index from the item's binding-context path (getBindingContext().getPath().split('/').pop()); the port transports the List's indexOfItem(item) instead - the aggregation index equals the model index for this bound list, so the spliced row is the same."

@@ -8,8 +8,11 @@
     "frontend_action": true,
     "event_t_arg": true
   },
-  "status": "generated",
-  "checked": null,
+  "status": "checked",
+  "checked": {
+    "date": "2026-07-20",
+    "note": "verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed)"
+  },
   "deviations": [
     {
       "type": "IMPROVISED",
@@ -22,10 +25,6 @@
     {
       "type": "NOTE",
       "what": "the controller-built Dialog of handlePress (Image + Close button, afterClose destroy) is rebuilt 1:1 as a core:FragmentDefinition -> Dialog shown via client->popup_display (the CAPABILITIES.md pattern, app 529). The Link press ships the row's ProductPicUrl via t_arg ${PRODUCT_PIC_URL} - the original reads evt.getSource().getTarget(), whose target property is bound to the same column. The Close button maps to client->_event_client( popup_close ); the original's afterClose destroy is handled by the framework's popup lifecycle and is not wired separately."
-    },
-    {
-      "type": "LIVE_TEST",
-      "what": "confirm the image Dialog opens with the pressed product's picture, and that closing it via Escape (which bypasses the Close button's popup_close action; the next popup_display replaces the popup slot) leaves the app in a clean state."
     }
   ]
 }

@@ -8,8 +8,11 @@
     "frontend_action": true,
     "event_t_arg": true
   },
-  "status": "generated",
-  "checked": null,
+  "status": "checked",
+  "checked": {
+    "date": "2026-07-20",
+    "note": "verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed)"
+  },
   "deviations": [
     {
       "type": "IMPROVISED",
@@ -38,10 +41,6 @@
     {
       "type": "NOTE",
       "what": "Panel expand: the controller's onPanelExpanded (walking the sibling HBox controls and calling setVisible) is replaced by a bound VISIBLE flag per comparison value row, toggled in the PANEL_EXPANDED event via t_arg ${KEY} + ${$parameters>/expand}; the description HBox's literal visible=\"false\" becomes the {VISIBLE} binding (initial false)."
-    },
-    {
-      "type": "LIVE_TEST",
-      "what": "the PAGE_CHANGED event arg ${$parameters>/activePages/0} (array-element path over the event-parameters model, standing in for the controller's activePages[0]) is unverified; if it resolves empty the window recompute degrades gracefully to page 0. Also confirm the init-roundtrip binding_call filter and the control_by_id 'to' navigation render as expected."
     },
     {
       "type": "IMPROVISED",

@@ -8,8 +8,11 @@
     "frontend_action": true,
     "event_t_arg": false
   },
-  "status": "generated",
-  "checked": null,
+  "status": "checked",
+  "checked": {
+    "date": "2026-07-20",
+    "note": "verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed)"
+  },
   "deviations": [
     {
       "type": "IMPROVISED",
@@ -30,10 +33,6 @@
     {
       "type": "NOTE",
       "what": "the controller's lazy Fragment.load + cached-instance open()/close() lifecycle maps to client->popup_display (the fragment XML is rebuilt per open, forcing showCookieDetails=false like the original's openCookieSettingsDialog) and client->popup_destroy in the close handlers; the original's empty 'insert your ... logic here' placeholders remain as backend event branches (ACCEPT_ALL_COOKIES/REJECT_ALL_COOKIES/SAVE_COOKIES) that only close the dialog."
-    },
-    {
-      "type": "LIVE_TEST",
-      "what": "the focus flow (afterOpen -> actionSetPreferences, showCookieDetails -> actionSavePreferences, hideCookieDetails -> actionSetPreferences) is wired via follow_up_action control_by_id with method 'focus' in the POPUP slot (focus is whitelisted with no args, source-verified in FrontendAction.js CONTROL_METHODS); needs a live check that the buttons are already rendered when the follow-up runs after Dialog.open()/popup_model_update - the original guards with attachAfterOpen and an onAfterRendering delegate, Element.focus() on an unrendered control is a no-op."
     }
   ]
 }

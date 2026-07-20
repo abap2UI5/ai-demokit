@@ -8,8 +8,11 @@
     "frontend_action": false,
     "event_t_arg": true
   },
-  "status": "generated",
-  "checked": null,
+  "status": "checked",
+  "checked": {
+    "date": "2026-07-20",
+    "note": "verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed)"
+  },
   "deviations": [
     {
       "type": "IMPROVISED",
@@ -50,10 +53,6 @@
     {
       "type": "POST_171",
       "what": "core:require of the z2ui5/model/formatter module on the view root needs UI5 >= 1.74, and the sap.ui.model.odata.type.DateTimeWithTimezone binding type of DTP10/DTP11 (since UI5 1.99) is kept 1:1 - the app needs a UI5 release >= 1.99 overall."
-    },
-    {
-      "type": "LIVE_TEST",
-      "what": "REMAINS after the 2026-07-20 visual pass (rendering of the DateTimeWithTimezone composites, the empty-string DTP11 timezone-only display and the Islamic secondary calendar on DTP4 all confirmed on screen): the CHANGE round-trip - $event.oSource.sId / ${$parameters>/value} / valid reach get_event_arg, textResult and the per-picker valueState update."
     }
   ]
 }

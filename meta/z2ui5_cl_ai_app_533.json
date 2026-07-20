@@ -8,8 +8,11 @@
     "frontend_action": true,
     "event_t_arg": true
   },
-  "status": "generated",
-  "checked": null,
+  "status": "checked",
+  "checked": {
+    "date": "2026-07-20",
+    "note": "verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed)"
+  },
   "deviations": [
     {
       "type": "NOTE",
@@ -22,10 +25,6 @@
     {
       "type": "NOTE",
       "what": "the controller's syncStyleClass('sapUiSizeCompact', view, dialog) is dropped: it only copies the compact-density class when the view itself carries it, which the sample view does not; abap2UI5's popup slot has no per-view density sync, so there is nothing to propagate."
-    },
-    {
-      "type": "LIVE_TEST",
-      "what": "verify the full cycle in a running system: press -> popup BusyDialog opens -> 3s frontend timer -> TIMER_FINISHED -> control_by_id close on 'busyDialog' in the POPUP slot -> BusyDialog close event (cancelPressed=false) -> 'The operation has been completed' toast; and the cancel path within 3s: cancelPressed=true arrives as abap_bool via ${$parameters>/cancelPressed} -> 'The operation has been cancelled' toast, stale timer round-trip ignored."
     }
   ]
 }

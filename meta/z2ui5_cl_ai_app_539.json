@@ -8,8 +8,11 @@
     "frontend_action": false,
     "event_t_arg": false
   },
-  "status": "generated",
-  "checked": null,
+  "status": "checked",
+  "checked": {
+    "date": "2026-07-20",
+    "note": "verified in a running system - human pass 2026-07-20: app starts and renders like the original; no interaction paths were open for this port"
+  },
   "deviations": [
     {
       "type": "NOTE",

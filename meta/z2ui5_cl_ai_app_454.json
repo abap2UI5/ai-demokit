@@ -8,8 +8,11 @@
     "frontend_action": false,
     "event_t_arg": false
   },
-  "status": "generated",
-  "checked": null,
+  "status": "checked",
+  "checked": {
+    "date": "2026-07-20",
+    "note": "verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed)"
+  },
   "deviations": [
     {
       "type": "NOTE",
@@ -18,10 +21,6 @@
     {
       "type": "NOTE",
       "what": "the controller's onInit addValidator on multiInput1 and multiInput2 (typing free text + Enter -> new Token({key: text, text})) is wired via the bundled invisible companion control z2ui5.cc.MultiInputExt (xmlns:z2ui5=\"z2ui5.cc\"): one MultiInputExt per input, referencing it by MultiInputId - the control installs exactly the original's validator (source-verified in app/webapp/cc/MultiInputExt.js). The two MultiInputExt elements are extra vs the original view.xml (there the validator lives in the controller); first cc-control usage in these ports (converted 2026-07-18)."
-    },
-    {
-      "type": "LIVE_TEST",
-      "what": "confirm free text + Enter creates a token on both multiInput1 and multiInput2 via the z2ui5.cc.MultiInputExt companions (first cc-control usage in these ports)."
     },
     {
       "type": "SUBSET_DATA",

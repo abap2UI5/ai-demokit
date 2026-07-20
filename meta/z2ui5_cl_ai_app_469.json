@@ -9,8 +9,11 @@
     "event_t_arg": true,
     "note": "follow_up_action( cs_event-control_by_id, method open ) after the SHOW_PDF round-trip"
   },
-  "status": "generated",
-  "checked": null,
+  "status": "checked",
+  "checked": {
+    "date": "2026-07-20",
+    "note": "verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed)"
+  },
   "deviations": [
     {
       "type": "NOTE",
@@ -23,10 +26,6 @@
     {
       "type": "POST_171",
       "what": "the PDFViewer property isTrustedSource (since UI5 1.121, backported to maintenance patches down to 1.71.63; the original controller passes isTrustedSource: true) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.121 (or a patched maintenance release) to render it."
-    },
-    {
-      "type": "LIVE_TEST",
-      "what": "confirm the popup-mode PDFViewer opens after the SHOW_PDF round-trip (view_model_update applies the new source before the follow-up open runs) and shows the clicked PDF in a running system - first port using the extended CONTROL_BY_ID whitelist."
     }
   ]
 }

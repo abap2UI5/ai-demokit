@@ -9,8 +9,11 @@
     "event_t_arg": false,
     "note": "follow_up_action cs_event-binding_call: compound filter groups on the items binding (apply_filter)"
   },
-  "status": "generated",
-  "checked": null,
+  "status": "checked",
+  "checked": {
+    "date": "2026-07-20",
+    "note": "verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed)"
+  },
   "deviations": [
     {
       "type": "NOTE",
@@ -19,10 +22,6 @@
     {
       "type": "NOTE",
       "what": "selection transport - every FacetFilterItem binds selected two-way; on listClose/reset the backend reads/clears the flags and re-filters. This is the documented 1:1 path (CAPABILITIES.md marks controller-read FacetFilter/List multi-select as expressible with app 401 as its evidence port), not a workaround; the model is applied before on_event runs."
-    },
-    {
-      "type": "LIVE_TEST",
-      "what": "confirm in a running system that clearing the bound selected flags on Reset also unchecks the facet popover checkboxes (FacetFilterList caches its selection client-side)."
     },
     {
       "type": "IMPROVISED",
@@ -53,16 +52,8 @@
       "what": "the original's nested items-binding filter (ORs inside each facet group, AND across the groups, model untouched) is expressed 1:1 as a declarative compound filter: apply_filter builds the groups JSON from the two-way bound selected flags and schedules follow_up_action cs_event-binding_call filter on idProductsTable/items (compound groups implemented upstream 2026-07-20, pr/binding-call-compound-filters); the earlier ABAP-side model rebuild and the t_products_all mirror are gone."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "confirm the compound facet filter in a running system: selecting categories/suppliers filters the table (OR inside a facet, AND across facets), clearing all selections shows every row, and rows deselected by the filter keep their client-side state (the model-untouched advantage)."
-    },
-    {
       "type": "SUBSET_DATA",
       "what": "data is a 10-row subset of the mock /ProductCollection (ui5/mock/products.json), facet counters recomputed for the subset."
-    },
-    {
-      "type": "LIVE_TEST",
-      "what": "confirm in a running system that the popin layout switches via the two-way ComboBox selectedKey and that the ToggleButton hides/shows the infoToolbar via the visible expression binding (restored 2026-07-19)."
     }
   ]
 }

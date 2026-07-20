@@ -1,6 +1,6 @@
 # STATUS.md — current state & open findings
 
-_Point-in-time summary, last updated **2026-07-19**. Update this file whenever
+_Point-in-time summary, last updated **2026-07-20**. Update this file whenever
 findings are fixed or new ones land (same-change discipline as AGENTS.md §10).
 For the process itself see TRAINING.md; for what abap2UI5 can express see
 CAPABILITIES.md._
@@ -14,8 +14,8 @@ CAPABILITIES.md._
 | Structural view diff | **0 undeclared differences** across all 54 ports (`node scripts/structural-diff.mjs --strict`) — including simple **binding values** and, since 2026-07-19, **`id` attributes** (name-level per control type; dropped original ids must be restored or declared) |
 | Render smoke | **0 failing / 1 skipped** (`npm run smoke`): every reconstructable port's view loads in a real headless `XMLView.create` (app 481 skipped — helper-method view building is not statically reconstructable); harness carries `sap.f` and mocks scalar-row tables as empty arrays since b05 |
 | Pattern lint | **0 errors, 0 warnings, empty baseline** (`node scripts/pattern-lint.mjs`) |
-| Meta sidecars | 54 in `meta/` — status: 46 `generated`, 8 `checked` (530 reset 2026-07-19 per the checked-invalidation rule); deviations: 30 IMPROVISED, 27 POST_171, 28 LIVE_TEST, 9 SUBSET_DATA, 56 NOTE, 2 DROPPED_171 (the `p:ColumnAIAction` plugin in apps 401 and 534 — a whole control newer than 1.71, unlike the restorable members). `audit` is a structured object since 2026-07-18 |
-| Manually verified in a running system | 420, 421, 526 (`CHECKED` interactively); 404, 431, 440, 460, 487 (`CHECKED` via the human visual pass 2026-07-19 — their only pending questions were visual); 530's 07-15 check was invalidated by its 07-16 rework — restamp pending |
+| Meta sidecars | 54 in `meta/` — status: 14 `generated`, **40 `checked`** (live check 2026-07-20); deviations: 30 IMPROVISED, 27 POST_171, **0 LIVE_TEST**, 9 SUBSET_DATA, 57 NOTE, 2 DROPPED_171 (the `p:ColumnAIAction` plugin in apps 401 and 534 — a whole control newer than 1.71, unlike the restorable members). `audit` is a structured object since 2026-07-18 |
+| Manually verified in a running system | **40 of 54 ports** — 2026-07-20 human live check per the interaction checklist (all b05/b06 + every port that carried an open question, incl. the 530 restamp); previously: 420/421/526 interactive, 404/431/440/460/487 visual 2026-07-19. The 14 remaining `generated` ports are b01–b04 apps that never carried an open question |
 | Archive | `ui5/sap.m/<SampleName>/` — full originals for the 34 ported samples (+2 cross-referenced: `FacetFilterSimple`, `Table`); mock snapshot in `ui5/mock/`. Unported samples are copied over batch by batch. |
 
 ## Batches
@@ -26,17 +26,29 @@ The 34 existing ports are retro-grouped into review batches — one subpackage
 
 | Batch | Theme | Apps | Live-checked |
 |---|---|---|---|
-| `b01` | Display & navigation | 408, 409, 431, 434, 440, 460, 529, 530 | 431, 440, 460 (530 restamp pending) |
-| `b02` | Selection & input | 421, 422, 423, 439, 452, 454, 472, 481, 527, 528 | 421 |
-| `b03` | Actions, toolbars & popups | 447, 448, 449, 469, 474, 486, 526 | 526 |
-| `b04` | Layout, lists & data | 401, 404, 420, 433, 441, 445, 471, 473, 487 | 404, 420, 487 |
-| `b05` | Backlog top: bars, tables, custom items & patterns | 531, 532, 533, 534, 535, 536, 537, 538, 539, 540 | — (generated 2026-07-19) |
-| `b06` | Date pickers, dialogs, feeds & tiles | 541, 542, 543, 544, 545, 546, 547, 548, 549, 550 | — (generated 2026-07-20) |
+| `b01` | Display & navigation | 408, 409, 431, 434, 440, 460, 529, 530 | 431, 434, 440, 460, 529, 530 |
+| `b02` | Selection & input | 421, 422, 423, 439, 452, 454, 472, 481, 527, 528 | 421, 452, 454 |
+| `b03` | Actions, toolbars & popups | 447, 448, 449, 469, 474, 486, 526 | 469, 474, 486, 526 |
+| `b04` | Layout, lists & data | 401, 404, 420, 433, 441, 445, 471, 473, 487 | 401, 404, 420, 433, 471, 473, 487 |
+| `b05` | Backlog top: bars, tables, custom items & patterns | 531, 532, 533, 534, 535, 536, 537, 538, 539, 540 | all (2026-07-20) |
+| `b06` | Date pickers, dialogs, feeds & tiles | 541, 542, 543, 544, 545, 546, 547, 548, 549, 550 | all (2026-07-20) |
 
 New generation batches continue as `b07`, `b08`, … per the process in
 TRAINING.md.
 
-## Human visual pass over b05+b06 (2026-07-20)
+## Full human live check (2026-07-20) — every open question cleared
+
+The human worked through the complete interaction checklist in a running
+system (batches b01–b06, all framework-mechanism firsts incl. the freshly
+merged openBy/compound-filter paths, the review-fixed 550 scroll step, the
+device> phone checks and the 530 restamp) and confirmed every item. All
+LIVE_TEST deviations are closed, **40 of 54 ports are `checked`** — the
+14 remaining `generated` ports are b01–b04 apps that never carried an open
+question. Next: `golden` promotions are now possible (human judgement per
+TRAINING.md) to widen the generation-prompt reference set beyond
+408/421/454.
+
+## Human visual pass over b05+b06 (2026-07-20, earlier the same day)
 
 All 20 new ports were started in a running system and render without
 errors (apps opened and looked at; interactions not exercised). Closed on
@@ -546,56 +558,18 @@ declined; see pr/README.
 
 ## Open findings (backlog)
 
-Live tests pending (in-system) — the 2026-07-16 framework source pass
-(CAPABILITIES.md) already confirmed the *mechanics* of several; what remains
-is visual/UX confirmation. **A human visual pass over all 34 apps ran
-2026-07-19** (apps opened and looked at, interactions NOT exercised): it
-closed every purely visual item below (struck through, sidecars promoted to
-`checked`); the interaction items stay open for an interactive session:
-- [ ] **401** — Reset unchecks the facet popover checkboxes (mechanics
-  source-verified: model applied before on_event).
-- [ ] **401** — the weight states render Success/Warning/Error via the
-  core:require'd `Formatter.weightState` (first port referencing the
-  curated formatter module, converted 2026-07-18).
-- [ ] **469** — the popup-mode PDFViewer opens via the whitelisted
-  CONTROL_BY_ID `open` (`follow_up_action( cs_event-control_by_id )`) and
-  shows the clicked PDF (converted 2026-07-18; the earlier Dialog check is
-  obsolete).
-- [ ] **471** — the third panel toggles via the whitelisted CONTROL_BY_ID
-  `setExpanded` (`follow_up_action( cs_event-control_by_id )`) on each
-  toolbar press (converted 2026-07-18).
-- [x] ~~**487** — nested tree binding renders expandable levels~~ — visual
-  pass 2026-07-19; sidecar `checked`.
-- [ ] **529** — the press Dialog opens/closes (popup_display).
-- [x] ~~**404/431** — injected CSS styles the flex items / floats the
-  tiles~~ — visual pass 2026-07-19; sidecars `checked`.
-- [ ] **486** — expression-bound toolbar widths follow the slider.
-- [ ] **474** — toast shows the newly selected item (timing source-verified).
-- [ ] **454** — free text + Enter creates a token on both multiInput1 and
-  multiInput2 via the `z2ui5.cc.MultiInputExt` companions (first cc-control
-  usage in these ports, wired 2026-07-18).
-- [ ] **452** — the bound-template + group-sorter binding-info conversion
-  shipped 2026-07-16; what remains is the LIVE-TEST of the default group
-  headers.
-- [ ] **433/473** — the `{device>/…}` bindings are restored in code
-  (433 `expanded`, 473 `width` expressions); what remains is the LIVE-TEST.
-- [ ] **434** — ~~injected CSS colors the imageContainer background~~ (visual
-  pass 2026-07-19) — REMAINS: the device-dependent image size expression
-  follows phone/desktop (needs a phone/emulated-phone check; sidecar stays
-  `generated`).
-- [x] ~~**440** — the Currency composite binding renders the formatted price
-  (raw binding-info string over `price TYPE p`)~~ — visual pass 2026-07-19;
-  sidecar `checked`.
-- [ ] **401** — the popin layout switches via the two-way ComboBox
-  selectedKey and the ToggleButton hides/shows the restored infoToolbar via
-  the visible expression binding (restored 2026-07-19).
-- [x] ~~**460** — the element binding (`binding="{/S_PRODUCT}"`) resolves the
-  relative field bindings incl. the Currency number (first `binding=`
-  context port)~~ — visual pass 2026-07-19 (ObjectHeader renders fully
-  populated); sidecar `checked`.
-- [ ] **530** — RESTAMP: the 07-15 live check predates the 07-16 rework and
-  was reset 2026-07-19; re-verify the clicked-link toast and the instant
-  separator switch, then set `checked` again.
+Live tests: **ALL CLEARED 2026-07-20** — the human live check followed the
+interaction checklist through batches b01–b06 (facet compound filter + Reset
++ popin toggle 401, MultiInputExt tokens 454, popup PDFViewer 469, panel
+toggle 471, group headers 452, slider widths 486, selection toast 474,
+press Dialog 529, BusyDialog timer cycle 533, sticky round-trip 534,
+ComparisonPattern navigation 536, cookie focus flow 537, image dialog 538,
+hidden-DatePicker openBy 540, date-picker CHANGE round-trips 541/542,
+dialog flows 543, feed sender args 547/548, scroll-step switching 550, the
+device> phone checks 433/434/473, and the 530 RESTAMP). Every LIVE_TEST
+deviation is closed and the apps are promoted to `checked` in their
+sidecars; 40 of 54 ports are now live-verified (the remaining 14 are
+b01–b04 ports that never carried an open question).
 
 Idiom / style (low):
 - [x] ~~`main` method placed last in several ports~~ — done 2026-07-16: new

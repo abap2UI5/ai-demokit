@@ -8,8 +8,11 @@
     "frontend_action": true,
     "event_t_arg": false
   },
-  "status": "generated",
-  "checked": null,
+  "status": "checked",
+  "checked": {
+    "date": "2026-07-20",
+    "note": "verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed)"
+  },
   "deviations": [
     {
       "type": "NOTE",
@@ -26,10 +29,6 @@
     {
       "type": "NOTE",
       "what": "Cancel: the approve dialog (no inputs) closes client-side via _event_client popup_close; the three note dialogs cancel through a backend DIALOG_CANCEL event + popup_destroy so the two-way model sync keeps the typed note across a reopen, matching the original's reused cached dialog instances."
-    },
-    {
-      "type": "LIVE_TEST",
-      "what": "verify the four popup dialogs open/close correctly, the toast texts (Submit pressed! / Note is: ...), the note retention across cancel+reopen, and the live enabling of the mandatory-note Submit button via valueLiveUpdate + expression binding."
     }
   ]
 }

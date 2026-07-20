@@ -8,12 +8,15 @@
     "frontend_action": false,
     "event_t_arg": true
   },
-  "status": "generated",
-  "checked": null,
+  "status": "checked",
+  "checked": {
+    "date": "2026-07-20",
+    "note": "verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed); RESTAMP after the 2026-07-16 rework (link toast + instant separator switch confirmed)"
+  },
   "deviations": [
     {
-      "type": "LIVE_TEST",
-      "what": "the SEP_CHANGE round-trip (which read a private UI5-internal event path) was removed 2026-07-16 - selectedKey and separatorStyle share one two-way bound path, so the separator switches client-side. Confirm the instant separator change in a running system. NOTE: an earlier version of this port WAS live-checked 2026-07-15 (the ${$source>/text} event arg delivered the clicked link's text), but that check predates this rework, so the checked status was reset 2026-07-19 per the checked-invalidation rule (AGENTS.md §10) - re-verify and restamp."
+      "type": "NOTE",
+      "what": "the original wires a change handler on the separator Select (SEP_CHANGE round-trip, removed 2026-07-16): selectedKey and separatorStyle share one two-way model path, so the Select.change attribute is deliberately MISSING vs the original view. Instant switching confirmed in the 2026-07-20 live check (restamp)."
     }
   ]
 }

@@ -8,8 +8,11 @@
     "frontend_action": false,
     "event_t_arg": false
   },
-  "status": "generated",
-  "checked": null,
+  "status": "checked",
+  "checked": {
+    "date": "2026-07-20",
+    "note": "verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed)"
+  },
   "deviations": [
     {
       "type": "NOTE",
@@ -18,10 +21,6 @@
     {
       "type": "NOTE",
       "what": "the controller's setScrollStepByItem(0 | Number(key)) calls on both containers expressed as a shared two-way scrollStepByItem binding (typed i for a real JSON number; the method is not in the CONTROL_METHODS whitelist and the prefer-a-bindable-property rule applies). Seeded 1 - the UI5 property default (HeaderContainer.js defaultValue: 1; the property carries no @since, present since the control) - so the initial arrow scroll is one item, exactly the original's untouched state; selecting px sets 0 (px stepping via scrollStep), like the controller."
-    },
-    {
-      "type": "LIVE_TEST",
-      "what": "confirm the scroll-step switching end to end: changing the Select round-trips SCROLL_CHANGED, updates SCROLL_STEP_BY_ITEM in the model, and both HeaderContainers then scroll by 1/2/3 items resp. 200px like the original's setScrollStepByItem calls."
     }
   ]
 }

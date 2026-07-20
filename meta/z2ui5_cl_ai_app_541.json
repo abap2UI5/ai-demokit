@@ -8,8 +8,11 @@
     "frontend_action": false,
     "event_t_arg": true
   },
-  "status": "generated",
-  "checked": null,
+  "status": "checked",
+  "checked": {
+    "date": "2026-07-20",
+    "note": "verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed)"
+  },
   "deviations": [
     {
       "type": "NOTE",
@@ -38,10 +41,6 @@
     {
       "type": "NOTE",
       "what": "the controller's _iEvent counter is omitted - it is incremented in handleChange but never displayed or otherwise used in the sample."
-    },
-    {
-      "type": "LIVE_TEST",
-      "what": "confirm the CHANGE round-trip: $event.oSource.sId plus ${$parameters>/from|/to|/valid} reach get_event_arg and the valueState updates; note the from/to Date parameters are JSON-serialized on the wire, so the Text shows ISO timestamp strings where the original shows the JS Date toString format."
     }
   ]
 }
