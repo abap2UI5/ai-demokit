@@ -6,7 +6,7 @@
   "batch": "b05",
   "audit": {
     "frontend_action": true,
-    "event_t_arg": true
+    "event_t_arg": false
   },
   "status": "generated",
   "checked": null,
@@ -17,11 +17,7 @@
     },
     {
       "type": "IMPROVISED",
-      "what": "the controller's onPopinLayoutChanged (byId(idProductsTable).setPopinLayout per the ComboBox selectedKey switch) is expressed as a bound popinLayout property on the Table (extra attribute vs the original view.xml), set in on_event from the ComboBox change event - the prefer-a-bindable-property-over-a-frontend-action rule (setPopinLayout is not a whitelisted CONTROL_METHODS entry); popin_layout is initialized to Block (the property default and the controller's default branch) so the enum-typed property never binds an empty string."
-    },
-    {
-      "type": "LIVE_TEST",
-      "what": "confirm the ComboBox change t_arg ${$source>/selectedKey} resolves to the selected key on the round-trip (same $source> event-arg form as app 530's ${$source>/text})."
+      "what": "the controller's onPopinLayoutChanged (byId(idProductsTable).setPopinLayout per the ComboBox selectedKey switch) is a pure client-side path: two-way bound ComboBox selectedKey feeding a popinLayout expression binding with the same GridLarge/GridSmall-else-Block fallback (extra attributes vs the original view, original change handler dropped) - no round-trip, same pattern as app 534; the expression can never emit an empty enum value."
     },
     {
       "type": "NOTE",
@@ -37,7 +33,7 @@
     },
     {
       "type": "IMPROVISED",
-      "what": "model flattening: the local products.json (the 123-row /ProductCollection, same row set as the shared mock ui5/mock/products.json) is moved into the default model with only the bound columns kept - the unbound Category, MainCategory, TaxTarifCode, Description, ProductPicUrl, Status, Quantity and UoM columns are dropped; all 123 rows are kept verbatim."
+      "what": "model flattening: the sample's LOCAL applicationUnderTest/products.json (123 rows) is moved into the default model verbatim, unbound columns dropped. Note: the local file is NOT identical to the shared mock ui5/mock/products.json - same 123 ProductIds, but HT-9995 differs in content (local: Smartphone Cover / 15 EUR vs mock: Tablet Pouch / 20 EUR); the port follows the local file, the sample's actual model source."
     }
   ]
 }

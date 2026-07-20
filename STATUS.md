@@ -38,11 +38,18 @@ TRAINING.md.
 ## Batch b05 generated (2026-07-19) — first post-probe batch
 
 The first 10 backlog-top NEW-CONTROL samples (breadth-first per AGENTS §1),
-generated with the probe-hardened rule set and machine-verified to green
+generated with the probe-hardened rule set, machine-verified to green
 (abaplint ×3, validate-meta, pattern-lint, structural-diff --strict,
-render-smoke --strict, property-check). **The adversarial AI review pass
-is still pending** (TRAINING step 2 second half) — run it before the human
-live check. Highlights:
+render-smoke --strict, property-check) and adversarially AI-reviewed
+(2 reviewers × 5 apps): **7 CLEAN, 3 MINOR, 0 MAJOR, no BUG-class
+findings** — none of the probe's three MAJOR root causes recurred. Review
+findings fixed in-place: ComparisonPattern archive completed
+(formatter.js/manifest.json beyond the sample's own incomplete `files`
+list), 536/540 sidecar prose now references the filed pr, 534's four
+numeric mock fields retyped packed (batch-consistent with 535), 535's
+popinLayout round-trip converted to the 534 expression-binding form, and
+535's sidecar corrected on the local-vs-shared products.json difference
+(HT-9995 differs in content). Highlights:
 
 - The probe's distilled rules visibly held: no `popover_display( val = )`
   recurrence, flattening declared everywhere, app 539 explicitly reasoned

@@ -49,9 +49,6 @@ CLASS z2ui5_cl_ai_app_535 IMPLEMENTATION.
 
   METHOD model_init.
 
-    " the Table's popinLayout default - the enum-typed property must never bind an empty string
-    popin_layout = `Block`.
-
     t_products = VALUE #(
       ( product_id = `HT-1000` supplier_name = `Very Best Screens` weight_measure = '4.2' weight_unit = `KG` name = `Notebook Basic 15` currency_code = `EUR` price = '956' width = '30' depth = '18' height = '3' dim_unit = `cm` )
       ( product_id = `HT-1001` supplier_name = `Very Best Screens` weight_measure = '4.5' weight_unit = `KG` name = `Notebook Basic 17` currency_code = `EUR` price = '1249' width = '29' depth = '17' height = '3.1' dim_unit = `cm` )
@@ -194,8 +191,8 @@ CLASS z2ui5_cl_ai_app_535 IMPLEMENTATION.
             )->a( n = `id`          v = `idProductsTable`
             )->a( n = `inset`       v = `false`
             )->a( n = `items`       v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
-            " the controller's onPopinLayoutChanged setPopinLayout, expressed as a bound popinLayout property
-            )->a( n = `popinLayout` v = client->_bind( popin_layout )
+            " the controller's onPopinLayoutChanged switch lives in this expression binding (as app 534) - never emits an empty enum value
+            )->a( n = `popinLayout` v = |\{= ${ client->_bind( popin_layout ) } === 'GridLarge' \|\| ${ client->_bind( popin_layout ) } === 'GridSmall' ? ${ client->_bind( popin_layout ) } : 'Block' \}|
 
             )->open( `headerToolbar`
                 )->open( `Toolbar`
@@ -208,8 +205,8 @@ CLASS z2ui5_cl_ai_app_535 IMPLEMENTATION.
                         )->open( `ComboBox`
                             )->a( n = `id`          v = `idPopinLayout`
                             )->a( n = `placeholder` v = `Popin layout options`
-                            )->a( n = `change`      v = client->_event( val   = `POPIN_LAYOUT_CHANGED`
-                                                                        t_arg = VALUE #( ( `${$source>/selectedKey}` ) ) )
+                            " original change handler dropped - the two-way selectedKey feeds the popinLayout expression binding
+                            )->a( n = `selectedKey` v = client->_bind( popin_layout )
 
                             )->open( `items`
                                 )->leaf( n = `Item` ns = `core`
@@ -298,14 +295,6 @@ CLASS z2ui5_cl_ai_app_535 IMPLEMENTATION.
   METHOD on_event.
 
     CASE client->get( )-event.
-
-      WHEN `POPIN_LAYOUT_CHANGED`.
-        popin_layout = client->get_event_arg( ).
-        " the controller's switch: anything but the two grid layouts falls back to Block
-        IF popin_layout <> `GridLarge` AND popin_layout <> `GridSmall`.
-          popin_layout = `Block`.
-        ENDIF.
-        client->view_model_update( ).
 
       WHEN `MESSAGE_DIALOG_PRESS`.
         popup_message_display( ).

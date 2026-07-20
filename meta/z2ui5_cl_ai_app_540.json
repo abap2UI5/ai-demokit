@@ -25,7 +25,7 @@
     },
     {
       "type": "POST_171",
-      "what": "DatePicker.openBy(domRef) is NOT in the CONTROL_METHODS whitelist (source-verified in app/webapp/core/FrontendAction.js); the port keeps the 1:1 wiring (press -> backend event -> follow_up_action control_by_id HiddenDP//openBy/<anchorId>), which the frontend rejects with a logged error until the whitelist grows - the picker does not open and the change toast cannot fire. Requested in pr/control-methods-openby-setactivepage (needs a new domRef-resolving arg kind; cites this port). No alternative exists: DatePicker has no public open() and no bindable open-state property (verified in sap/m/DatePicker.js)."
+      "what": "DatePicker.hideInput (since UI5 1.97) is newer than 1.71 but kept for the 1:1 port - the sample's central property (the picker input stays hidden, opened only via the anchor controls); openBy is also since 1.97, so the app needs a UI5 release >= 1.97 to render this sample's behavior."
     }
   ]
 }

@@ -290,18 +290,17 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.m` control = `sap.m.ColumnListItem`              name = `TableTest`                   class = `z2ui5_cl_ai_app_535` path = `src/01/b05/z2ui5_cl_ai_app_535.clas.abap`
         notes = `NOTE: the sample is an OPA-test demo: only the UI app under applicationUnderTest/ (Table.view.xml, Table.controller.js, Formatter.js, products.json) is ported 1:1; the qunit/OPA harness files` &&
                  ` (OpaTableTest.qunit.js, Test.qunit.html, testsuite.qunit.*) are test infrastructure without UI and are not ported. // IMPROVISED: the controller's onPopinLayoutChanged` &&
-                 ` (byId(idProductsTable).setPopinLayout per the ComboBox selectedKey switch) is expressed as a bound popinLayout property on the Table (extra attribute vs the original view.xml), set in on_event from` &&
-                 ` the ComboBox change event - the prefer-a-bindable-property-over-a-frontend-action rule (setPopinLayout is not a whitelisted CONTROL_METHODS entry); popin_layout is initialized to Block (the property` &&
-                 ` default and the controller's default branch) so the enum-typed property never binds an empty string. // LIVE-TEST: confirm the ComboBox change t_arg ${$source>/selectedKey} resolves to the selected` &&
-                 ` key on the round-trip (same $source> event-arg form as app 530's ${$source>/text}). // NOTE: the controller-built sap.m.Dialog of onMessageDialogPress (title Message, type Message, a Text 'Success'` &&
-                 ` as content, an OK beginButton Button that closes it) is rebuilt 1:1 as a core:FragmentDefinition shown via client->popup_display on the ColumnListItem press event; the OK Button closes roundtrip-free` &&
-                 ` via the frontend action _event_client( cs_event-popup_close ), and the original's afterClose destroy is the framework's popup lifecycle. The Dialog, its Text and its Button are extra controls vs the` &&
-                 ` original view.xml (controller-created there). // NOTE: the sample's local Formatter.weightState is byte-identical in behavior to the framework formatter module's weightState (sap.m.sample.Table` &&
-                 ` shape, source-verified in abap2UI5 app/webapp/model/formatter.js), so the state binding string formatter: 'Formatter.weightState' stays 1:1; only the view root's core:require value points at` &&
-                 ` z2ui5/model/formatter instead of the sample's own Formatter module path. // POST-1.71: core:require on the view root (since UI5 1.74) wires the formatter module - the app needs a UI5 release >= 1.74` &&
-                 ` to render it (pre-1.74 the published global z2ui5.Formatter.weightState would be the fallback). // IMPROVISED: model flattening: the local products.json (the 123-row /ProductCollection, same row set` &&
-                 ` as the shared mock ui5/mock/products.json) is moved into the default model with only the bound columns kept - the unbound Category, MainCategory, TaxTarifCode, Description, ProductPicUrl, Status,` &&
-                 ` Quantity and UoM columns are dropped; all 123 rows are kept verbatim.`
+                 ` (byId(idProductsTable).setPopinLayout per the ComboBox selectedKey switch) is a pure client-side path: two-way bound ComboBox selectedKey feeding a popinLayout expression binding with the same` &&
+                 ` GridLarge/GridSmall-else-Block fallback (extra attributes vs the original view, original change handler dropped) - no round-trip, same pattern as app 534; the expression can never emit an empty enum` &&
+                 ` value. // NOTE: the controller-built sap.m.Dialog of onMessageDialogPress (title Message, type Message, a Text 'Success' as content, an OK beginButton Button that closes it) is rebuilt 1:1 as a` &&
+                 ` core:FragmentDefinition shown via client->popup_display on the ColumnListItem press event; the OK Button closes roundtrip-free via the frontend action _event_client( cs_event-popup_close ), and the` &&
+                 ` original's afterClose destroy is the framework's popup lifecycle. The Dialog, its Text and its Button are extra controls vs the original view.xml (controller-created there). // NOTE: the sample's` &&
+                 ` local Formatter.weightState is byte-identical in behavior to the framework formatter module's weightState (sap.m.sample.Table shape, source-verified in abap2UI5 app/webapp/model/formatter.js), so the` &&
+                 ` state binding string formatter: 'Formatter.weightState' stays 1:1; only the view root's core:require value points at z2ui5/model/formatter instead of the sample's own Formatter module path. //` &&
+                 ` POST-1.71: core:require on the view root (since UI5 1.74) wires the formatter module - the app needs a UI5 release >= 1.74 to render it (pre-1.74 the published global z2ui5.Formatter.weightState` &&
+                 ` would be the fallback). // IMPROVISED: model flattening: the sample's LOCAL applicationUnderTest/products.json (123 rows) is moved into the default model verbatim, unbound columns dropped. Note: the` &&
+                 ` local file is NOT identical to the shared mock ui5/mock/products.json - same 123 ProductIds, but HT-9995 differs in content (local: Smartphone Cover / 15 EUR vs mock: Tablet Pouch / 20 EUR); the port` &&
+                 ` follows the local file, the sample's actual model source.`
         post171 = `core:require on the view root (since UI5 1.74) wires the formatter module - the app needs a UI5 release >= 1.74 to render it (pre-1.74 the published global z2ui5.Formatter.weightState would be the` &&
                  ` fallback).` )
       ( module = `sap.m` control = `sap.m.ComboBox`                    name = `ComboBox`                    class = `z2ui5_cl_ai_app_423` path = `src/01/b02/z2ui5_cl_ai_app_423.clas.abap` )
@@ -362,16 +361,12 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` follow_up_action control_by_id HiddenDP//openBy/<anchorId>), which the frontend rejects with a logged error until the whitelist grows - the picker does not open and the change toast cannot fire.` &&
                  ` Requested in pr/control-methods-openby-setactivepage (needs a new domRef-resolving arg kind; cites this port). No alternative exists: DatePicker has no public open() and no bindable open-state` &&
                  ` property (verified in sap/m/DatePicker.js). // POST-1.71: Button.ariaHasPopup (since UI5 1.84) is newer than 1.71 but kept for the 1:1 port on both Buttons - the app needs a UI5 release >= 1.84 to` &&
-                 ` render it. // POST-1.71: Link.ariaHasPopup (since UI5 1.86) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.86 to render it. // POST-1.71: DatePicker.openBy(domRef) is` &&
-                 ` NOT in the CONTROL_METHODS whitelist (source-verified in app/webapp/core/FrontendAction.js); the port keeps the 1:1 wiring (press -> backend event -> follow_up_action control_by_id` &&
-                 ` HiddenDP//openBy/<anchorId>), which the frontend rejects with a logged error until the whitelist grows - the picker does not open and the change toast cannot fire. Requested in` &&
-                 ` pr/control-methods-openby-setactivepage (needs a new domRef-resolving arg kind; cites this port). No alternative exists: DatePicker has no public open() and no bindable open-state property (verified` &&
-                 ` in sap/m/DatePicker.js).`
+                 ` render it. // POST-1.71: Link.ariaHasPopup (since UI5 1.86) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.86 to render it. // POST-1.71: DatePicker.hideInput (since` &&
+                 ` UI5 1.97) is newer than 1.71 but kept for the 1:1 port - the sample's central property (the picker input stays hidden, opened only via the anchor controls); openBy is also since 1.97, so the app` &&
+                 ` needs a UI5 release >= 1.97 to render this sample's behavior.`
         post171 = `Button.ariaHasPopup (since UI5 1.84) is newer than 1.71 but kept for the 1:1 port on both Buttons - the app needs a UI5 release >= 1.84 to render it. // Link.ariaHasPopup (since UI5 1.86) is newer` &&
-                 ` than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.86 to render it. // DatePicker.openBy(domRef) is NOT in the CONTROL_METHODS whitelist (source-verified in` &&
-                 ` app/webapp/core/FrontendAction.js); the port keeps the 1:1 wiring (press -> backend event -> follow_up_action control_by_id HiddenDP//openBy/<anchorId>), which the frontend rejects with a logged` &&
-                 ` error until the whitelist grows - the picker does not open and the change toast cannot fire. Requested in pr/control-methods-openby-setactivepage (needs a new domRef-resolving arg kind; cites this` &&
-                 ` port). No alternative exists: DatePicker has no public open() and no bindable open-state property (verified in sap/m/DatePicker.js).` )
+                 ` than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.86 to render it. // DatePicker.hideInput (since UI5 1.97) is newer than 1.71 but kept for the 1:1 port - the sample's central` &&
+                 ` property (the picker input stays hidden, opened only via the anchor controls); openBy is also since 1.97, so the app needs a UI5 release >= 1.97 to render this sample's behavior.` )
       ( module = `sap.m` control = `sap.m.FacetFilter`                 name = `FacetFilterLight`            class = `z2ui5_cl_ai_app_401` path = `src/01/b04/z2ui5_cl_ai_app_401.clas.abap`
         notes = `NOTE: the bound lists="{/ProductCollectionStats/Filters}" collection is represented as two static FacetFilterLists (Category, SupplierName) - the original's stats model yields exactly these two lists,` &&
                  ` so this is a faithful equivalent; the facet values inside each list stay bound to a FacetFilterItem template. A doubly-nested variant (bind the FacetFilter lists aggregation to a nested table,` &&
