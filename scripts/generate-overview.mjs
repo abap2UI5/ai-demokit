@@ -191,7 +191,8 @@ const abap = `"! Generated overview app - lists every abap2UI5 api sample app in
 "! and exemplary), a green check when the port was manually verified in a
 "! running system, and a hint icon that opens a popup with the port's generation
 "! caveats when present. The search field above the table filters all rows by a
-"! substring over every column, and each column header carries ascending/
+"! substring over the five visible columns (module, control, since, sample,
+"! class) only, and each column header carries ascending/
 "! descending sort icons - both run entirely on the frontend
 "! (cs_event-binding_call via _event_client, no server round-trip). Do not edit
 "! by hand - regenerate with scripts/generate-overview.mjs
@@ -413,10 +414,12 @@ CLASS ${CLASS} IMPLEMENTATION.
           ELSE <app>-ctrl_name ).
 
       " one blob per row, bound as the FILTER column that the table search's
-      " client-side Contains filter (binding_call) matches against
-      <app>-filter = <app>-module   && \` \` && <app>-control && \` \` && <app>-ctrl_name && \` \` &&
-                     <app>-name     && \` \` && <app>-class   && \` \` && <app>-since     && \` \` &&
-                     <app>-notes    && \` \` && <app>-checked && \` \` && <app>-post171.
+      " client-side Contains filter (binding_call) matches against. Only the
+      " five VISIBLE table columns feed it - Module, Control (bare name), Since,
+      " Sample, abap2UI5 (class) - so a query like "Date" no longer matches
+      " hidden text buried in the notes/checked/post-1.71 fields
+      <app>-filter = <app>-module && \` \` && <app>-ctrl_name && \` \` &&
+                     <app>-since  && \` \` && <app>-name      && \` \` && <app>-class.
 
     ENDLOOP.
 
@@ -442,7 +445,7 @@ CLASS ${CLASS} IMPLEMENTATION.
                         " a binding_call Contains filter via _event_client (no round-trip);
                         " the tree is intentionally left unfiltered
                         )->leaf( \`SearchField\`
-                            )->a( n = \`placeholder\` v = \`Search the table - module, control, sample, class, notes...\`
+                            )->a( n = \`placeholder\` v = \`Search the table - module, control, since, sample, class\`
                             )->a( n = \`width\`       v = \`24rem\`
                             " disabled while the tree is shown (search filters only the table)
                             )->a( n = \`enabled\`     v = |\\{= !\${ client->_bind( show_tree ) } \\}|
