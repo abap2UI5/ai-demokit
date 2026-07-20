@@ -363,27 +363,36 @@ ${columnsBlock}
                                 )->shut(
                                 )->open( \`HBox\`
                                     )->a( n = \`alignItems\` v = \`Center\`
+                                    )->a( n = \`class\`      v = \`sapUiTinyMarginBegin\`
 
-                                    " gold star marks a golden port (live-checked and exemplary)
+                                    " gold star - golden port (live-checked and exemplary)
                                     )->leaf( \`core:Icon\`
                                         )->a( n = \`src\`     v = \`sap-icon://favorite\`
+                                        )->a( n = \`size\`    v = \`1rem\`
                                         )->a( n = \`color\`   v = \`#e9730c\`
                                         )->a( n = \`tooltip\` v = \`Golden sample - live-checked and exemplary\`
                                         )->a( n = \`visible\` v = \`{GOLDEN}\`
+                                        )->a( n = \`class\`   v = \`sapUiTinyMarginEnd\`
+                                    " green check - verified live in a running system
                                     )->leaf( \`core:Icon\`
                                         )->a( n = \`src\`     v = \`sap-icon://accept\`
+                                        )->a( n = \`size\`    v = \`1rem\`
                                         )->a( n = \`color\`   v = \`#107e3e\`
                                         )->a( n = \`tooltip\` v = \`{CHECKED}\`
                                         )->a( n = \`visible\` v = \`{HAS_CHECK}\`
-                                    " orange badge when the port keeps members newer than UI5 1.71 (POST_171)
+                                        )->a( n = \`class\`   v = \`sapUiTinyMarginEnd\`
+                                    " orange badge - keeps members newer than UI5 1.71 (POST_171)
                                     )->leaf( \`ObjectStatus\`
                                         )->a( n = \`text\`    v = \`1.71+\`
                                         )->a( n = \`state\`   v = \`Warning\`
                                         )->a( n = \`tooltip\` v = \`{POST171}\`
                                         )->a( n = \`visible\` v = \`{HAS_P171}\`
-                                    )->leaf( \`Button\`
-                                        )->a( n = \`icon\`    v = \`sap-icon://hint\`
-                                        )->a( n = \`type\`    v = \`Transparent\`
+                                        )->a( n = \`class\`   v = \`sapUiTinyMarginEnd\`
+                                    " info hint - opens a popup with the port's generation caveats
+                                    )->leaf( \`core:Icon\`
+                                        )->a( n = \`src\`     v = \`sap-icon://hint\`
+                                        )->a( n = \`size\`    v = \`1rem\`
+                                        )->a( n = \`color\`   v = \`#0a6ed1\`
                                         )->a( n = \`tooltip\` v = \`{NOTES}\`
                                         )->a( n = \`visible\` v = \`{HAS_NOTES}\`
                                         )->a( n = \`press\`   v = client->_event( val = \`SHOW_NOTES\` t_arg = VALUE #( ( \`\${NOTES}\` ) ) ) ).
