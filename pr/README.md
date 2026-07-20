@@ -17,13 +17,16 @@ on the details live upstream and in CAPABILITIES.md/STATUS.md.
 
 ## Open
 
-Currently none.
+| Request | Summary | Priority |
+|---------|---------|----------|
+| [`menu-item-selected-path`](menu-item-selected-path/) | A resolvable payload for the selected menu item's ancestor-text breadcrumb (`Create New Site > Official Store`), or a documented capability boundary. From b07 apps 060/061; today only the leaf `${$parameters>/item/text}` is transportable. **Deferred** (2026-07-20, user decision) — cosmetic (toast text) and likely resolves as a documented boundary rather than a framework change; kept for a later call | low — deferred |
 
 ## Declined / deferred (folder removed 2026-07-19)
 
 | Request | Decision |
 |---------|----------|
 | named-json-models | **Too complicated with the current abap2UI5 approach** — every view slot serializes exactly one ABAP-fed default JSONModel per roundtrip; a second named model would have to be carried through bind, serialization and model-update on every slot. Declined for now, possibly worth re-discussing in the future if the model layer changes. Workaround stays: flatten into the default model or resolve statically (IMPROVISED deviation, apps 006/031/046, same family app 044) |
+| message-manager-binding | **Half already covered, half implemented** — first recorded (b07) as "not filed, already covered": reading messages IS covered by the `message>` auto-collection (2026-07-18) and the plain-table MessagePopover (app 038). But porting `MessagePopoverMessageHandling` (b08) showed the **write** half — the controller's `MessageManager.addMessages` with custom text/target — was not expressible. Implemented 2026-07-20 as the `z2ui5.cc.MessageManager` companion control (see Implemented table) |
 
 ## Implemented (folders removed 2026-07-19)
 
@@ -40,3 +43,6 @@ Currently none.
 | control-methods-openby-setactivepage | 2026-07-20 | new `domRef` arg kind (control id → DOM element, control fallback) + `openBy: [domRef]` (unblocks app 016's hidden DatePicker; covers the TimePicker/Menu anchored-open family) and `setActivePage: [controlId]`. Found by batch b05 (apps 016/012). Note: 536's Carousel re-sync stays dropped — template-clone page ids are not backend-addressable; an index-based page resolution would be a new request if more samples need it |
 | binding-call-compound-filters | 2026-07-20 | `BINDING_CALL` `filter` accepts a JSON groups payload — OR inside each group, AND across groups, operators whitelisted, empty clears; the positional single-filter form is unchanged (a path can never start with `[`). Port 401 converted to the compound form — the ABAP-side model rebuild and its `t_products_all` mirror are gone |
 | tree-expand-collapse | 2026-07-20 | `expandToLevel: ["int"]` and `collapseAll: []` added to the `CONTROL_BY_ID` whitelist (`app/webapp/core/FrontendAction.js` `CONTROL_METHODS`) for `sap.m.Tree` / `sap.ui.table.TreeTable`; the overview app's tree gains client-side Expand-all / Collapse-all buttons via `_event_client( cs_event-control_by_id … )` |
+| menu-toggle-openby | 2026-07-20 | `toggleBy: ["domRef"]` added to `CONTROL_METHODS` — like `openBy`, but `control.isOpen() ? close() : openBy(anchor)`, so a press-to-toggle popup (`sap.m.Menu`) round-trips 1:1 without the backend mirroring open state. Unit tests added; b07 app 060 converted (openBy → toggleBy), IMPROVISED toggle-reduction dropped |
+| message-manager-write (z2ui5.cc.MessageManager) | 2026-07-20 | new companion control `app/webapp/cc/MessageManager.js` bridging the UI5 message manager to a two-way bound ABAP table (`items`): app-authored rows are reconciled into the manager as `sap.ui.core.message.Message` (target + view model as processor → field valueState), the control's own rows removed when gone, auto-collected validation left untouched. Mirrors the MultiInputExt pattern; unit-tested; in the preload. Unblocks b08 app 065 (`MessagePopoverMessageHandling`) |
+| formatter-inline-icon | 2026-07-20 | `expandInlineIcons(text)` added to the curated `model/formatter.js`: replaces `%%icon:sap-icon://<name>%%` placeholders with the `sapMMsgStripInlineIcon` markup (glyph via `IconPool`), the `MessageStripUtilities.getInlineIcon` equivalent — CSP-clean, no ABAP API. Unit tests added; b07 app 062's inlineIconsHelper converted (placeholders + `core:require` formatter binding), guessed-codepoint IMPROVISED dropped |

@@ -1,0 +1,14 @@
+{
+  "class": "z2ui5_cl_ai_app_057",
+  "sample": "sap.m.sample.InputListItem",
+  "entity": "sap.m.InputListItem",
+  "file": "src/01/b07/z2ui5_cl_ai_app_057.clas.abap",
+  "batch": "b07",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": []
+}

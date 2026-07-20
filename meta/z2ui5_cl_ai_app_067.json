@@ -1,0 +1,36 @@
+{
+  "class": "z2ui5_cl_ai_app_067",
+  "sample": "sap.m.sample.MessagePopoverAsyncMessageHandling",
+  "entity": "sap.m.MessagePopover",
+  "file": "src/01/b08/z2ui5_cl_ai_app_067.clas.abap",
+  "batch": "b08",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "control_by_id toggleBy anchored to the button"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "Button.ariaHasPopup (since UI5 1.84) kept on the message-popover button; the Button.type value 'Negative' is a sap.m.ButtonType value since 1.73. MessageItem.markupDescription (renders the HTML description) is kept for the async sample's rich-text messages."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "the MessagePopover (built in the controller) is declared 1:1 in the button's `dependents`; the controller's toggle(button) becomes client->follow_up_action( cs_event-control_by_id, toggleBy ) anchored to $event.oSource.sId."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "the sample's oMessagePopover.setAsyncURLHandler(...) - a client-side JS callback that asynchronously validates each link URL (disabling absolute http links, allowing relative ones) before navigation - has no abap2UI5 equivalent and is dropped; the messages and their markupDescription HTML (with the two demo <a> links) render, but the async URL-validation gate is not reproduced."
+    },
+    {
+      "type": "NOTE",
+      "what": "the three severity formatters are precomputed in ABAP from the static mock (error icon, Negative type, count 2); the root-array JSON model is carried under /T_MESSAGES on the single default model."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "confirm the button toggles the MessagePopover (toggleBy) and the first Error message renders its HTML markupDescription (h2/p/ul/ol + links); activeTitlePress toasts."
+    }
+  ]
+}

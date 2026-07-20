@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_ai_app_064",
+  "sample": "sap.m.sample.NumericContentIcon",
+  "entity": "sap.m.NumericContent",
+  "file": "src/01/b07/z2ui5_cl_ai_app_064.clas.abap",
+  "batch": "b07",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "the second NumericContent keeps the sample's original demokit test-resources image path (test-resources/sap/m/demokit/sample/NumericContentIcon/images/grass.jpg) as the icon literal 1:1; abap2UI5 does not serve that static asset, so it does not render offline (the first tile's sap-icon://travel-expense does). The image is archived under ui5/sap.m/NumericContentIcon/images/."
+    }
+  ]
+}

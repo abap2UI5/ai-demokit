@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_ai_app_058",
+  "sample": "sap.m.sample.LabelProperties",
+  "entity": "sap.m.Label",
+  "file": "src/01/b07/z2ui5_cl_ai_app_058.clas.abap",
+  "batch": "b07",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "the four controller handlers (onDisplayOnlyChange/onWrappingChange/onHyphenationChange/onWidthChange) are replaced by a roundtrip-free binding model, so the Switch `change` and Slider `liveChange` event attributes are dropped: the three Switches bind their `state` two-way to display_only/wrapping/hyphenation, the two result Labels bind `displayOnly` and `wrapping` to the same variables, and `wrappingType` (added on the two Labels, not present in the sample view) plus both container `width` values derive live via `{= }` expression bindings (wrappingType = hyphenation ? 'Hyphenated' : 'Normal'; width = slider_value + '%'). Same technique as app 007."
+    }
+  ]
+}

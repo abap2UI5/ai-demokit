@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_ai_app_059",
+  "sample": "sap.m.sample.LightBox",
+  "entity": "sap.m.LightBox",
+  "file": "src/01/b07/z2ui5_cl_ai_app_059.clas.abap",
+  "batch": "b07",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "the Image src and LightBoxItem imageSrc keep the sample's original demokit sdk asset paths (test-resources/sap/ui/documentation/sdk/images/...) as literals 1:1; abap2UI5 does not serve those static assets, so the thumbnails/large images do not display offline. The LightBox still opens on image click (built-in Image.detailBox behaviour, no controller). The last item deliberately points imageSrc at a non-existent file to show the LightBox load-error state, exactly as in the sample."
+    },
+    {
+      "type": "NOTE",
+      "what": "the six identical filler paragraphs use the same ABAP literal via a local `lorem` variable; XML attribute whitespace (newlines/tabs in the sample's indented multi-line text) is normalised to single spaces (visually identical)."
+    }
+  ]
+}

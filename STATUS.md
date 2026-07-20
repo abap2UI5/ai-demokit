@@ -9,14 +9,14 @@ CAPABILITIES.md._
 
 | Aspect | State |
 |---|---|
-| Ports | 54 / **403 in-scope** `sap.m` samples (13.4 %) — in scope = control exists since UI5 1.71 and is not deprecated; 43 of 446 samples are out of scope (16 deprecated, 21 newer, 6 without control metadata) |
+| Ports | 67 / **403 in-scope** `sap.m` samples (16.6 %) — in scope = control exists since UI5 1.71 and is not deprecated; 43 of 446 samples are out of scope (16 deprecated, 21 newer, 6 without control metadata) |
 | CI | ABAP_STANDARD, ABAP_CLOUD, ABAP_702 all green |
-| Structural view diff | **0 undeclared differences** across all 54 ports (`node scripts/structural-diff.mjs --strict`) — including simple **binding values** and, since 2026-07-19, **`id` attributes** (name-level per control type; dropped original ids must be restored or declared) |
-| Render smoke | **0 failing / 1 skipped** (`npm run smoke`): every reconstructable port's view loads in a real headless `XMLView.create` (app 049 skipped — helper-method view building is not statically reconstructable); harness carries `sap.f` and mocks scalar-row tables as empty arrays since b05 |
+| Structural view diff | **0 undeclared differences** across all 64 ports (`node scripts/structural-diff.mjs --strict`) — including simple **binding values** and, since 2026-07-19, **`id` attributes** (name-level per control type; dropped original ids must be restored or declared) |
+| Render smoke | **0 failing / 1 skipped** (`npm run smoke`): every reconstructable port's view loads in a real headless `XMLView.create`; app 049's skip is now a **declared, CI-enforced** `render_smoke.skip` (helper-method view building is not statically reconstructable — an undeclared non-reconstructable port now FAILS); harness carries `sap.f` and mocks scalar-row tables as empty arrays since b05 |
 | Pattern lint | **0 errors, 0 warnings, empty baseline** (`node scripts/pattern-lint.mjs`) |
-| Meta sidecars | 54 in `meta/` — status: 14 `generated`, 35 `checked`, **5 `golden`** (401, 421, 454, 540, 543 — promoted 2026-07-20 after the full live check); deviations: 30 IMPROVISED, 27 POST_171, **0 LIVE_TEST**, 9 SUBSET_DATA, 57 NOTE, 2 DROPPED_171 (the `p:ColumnAIAction` plugin in apps 022 and 534 — a whole control newer than 1.71, unlike the restorable members). `audit` is a structured object since 2026-07-18 |
-| Manually verified in a running system | **40 of 54 ports** — 2026-07-20 human live check per the interaction checklist (all b05/b06 + every port that carried an open question, incl. the 530 restamp); previously: 420/421/526 interactive, 404/431/440/460/487 visual 2026-07-19. The 14 remaining `generated` ports are b01–b04 apps that never carried an open question |
-| Archive | `ui5/sap.m/<SampleName>/` — full originals for the 34 ported samples (+2 cross-referenced: `FacetFilterSimple`, `Table`); mock snapshot in `ui5/mock/`. Unported samples are copied over batch by batch. |
+| Meta sidecars | 67 in `meta/` — status: 27 `generated`, 35 `checked`, **5 `golden`** (401, 421, 454, 540, 543 — promoted 2026-07-20 after the full live check); deviations: 35 IMPROVISED, 30 POST_171, 2 LIVE_TEST (b07 apps 060/061 menu item args), 9 SUBSET_DATA, 66 NOTE, 2 DROPPED_171 (the `p:ColumnAIAction` plugin in apps 022 and 534 — a whole control newer than 1.71, unlike the restorable members). `audit` is a structured object since 2026-07-18 |
+| Manually verified in a running system | **40 of 64 ports** — 2026-07-20 human live check per the interaction checklist (all b05/b06 + every port that carried an open question, incl. the 530 restamp); previously: 420/421/526 interactive, 404/431/440/460/487 visual 2026-07-19. The 24 remaining `generated` ports are the b01–b04 apps that never carried an open question plus the 10 fresh b07 ports (machine-verified only) |
+| Archive | `ui5/sap.m/<SampleName>/` — full originals for the 44 ported samples (+2 cross-referenced: `FacetFilterSimple`, `Table`); mock snapshot in `ui5/mock/`. Unported samples are copied over batch by batch. |
 
 ## Batches
 
@@ -32,9 +32,123 @@ The 34 existing ports are retro-grouped into review batches — one subpackage
 | `b04` | Layout, lists & data | 401, 404, 420, 433, 441, 445, 471, 473, 487 | 401, 404, 420, 433, 471, 473, 487 |
 | `b05` | Backlog top: bars, tables, custom items & patterns | 531, 532, 533, 534, 535, 536, 537, 538, 539, 540 | all (2026-07-20) |
 | `b06` | Date pickers, dialogs, feeds & tiles | 541, 542, 543, 544, 545, 546, 547, 548, 549, 550 | all (2026-07-20) |
+| `b07` | Icon tabs, tile content, menus, list items & message strips | IconTabHeader, ImageContent, InputListItem, LabelProperties, LightBox, Menu, MenuButton, MessageStrip, NewsContent, NumericContent (classes 055–064) | — (machine-verified only) |
+| `b08` | Message popover (all three MessagePopover samples) | MessagePopoverMessageHandling (065), MessagePopover (066), MessagePopoverAsyncMessageHandling (067) | — (machine-verified only) |
 
-New generation batches continue as `b07`, `b08`, … per the process in
+New generation batches continue as `b08`, `b09`, … per the process in
 TRAINING.md.
+
+## Batch b08 generated (2026-07-20) — the whole MessagePopover family (3 ports)
+
+All three `sap.m.MessagePopover` demo-kit samples, so the control has no
+ambiguous representative. To port the canonical simple one, **`sap.m.sample.
+MessagePopover` was taken out of the hold-out set** (`ui5/holdout.json`,
+25 → 24; user decision 2026-07-20) — it is the clean base demo, so it earns a
+port rather than staying a regression reference.
+
+- **066 MessagePopover** (base) — the canonical demo: an empty Page + a footer
+  button that toggles a MessagePopover listing five static messages
+  (Error/Warning/Success/Error/Information) with a MessageItem `link`. The
+  MessagePopover (built in the sample's controller) is declared in the button's
+  `dependents`; `oMessagePopover.toggle(button)` becomes the new `toggleBy`
+  frontend action anchored to `$event.oSource.sId`; the three severity
+  formatters (icon/type/count) are precomputed from the static mock. app-038
+  plain-table shape — no cc, no `message>` needed.
+- **067 MessagePopoverAsyncMessageHandling** — same shape with
+  `markupDescription=true` and an HTML-rich first message; the controller's
+  `setAsyncURLHandler` (client-side async URL validation) has no equivalent and
+  is dropped (declared).
+- **065 MessagePopoverMessageHandling** — the message-model app, ported on a
+  **new `z2ui5.cc.MessageManager`** companion control (abap2UI5, this branch)
+  that bridges the UI5 message manager to a two-way bound ABAP table:
+  app-authored messages (`items`) are reconciled into the manager with a target
+  + the view's model as processor (field valueState), while binding-type/
+  constraint validation still auto-collects into `message>`. The cc mirrors the
+  MultiInputExt pattern, is unit-tested (add/dedup/remove-own/leave-foreign/
+  defer) and in the preload. So the earlier "message-manager-binding already
+  covered" note was only half-right: reading was covered by `message>`,
+  **writing** needed this cc. Port: two forms bound to `/T_FORMS` (3-row
+  subset) + `/T_EMPLOYMENT` with typed value bindings + constraints
+  (auto-collection), MessagePopover on `{message>/}`, the cc on `/T_MESSAGES`,
+  Save authors a demo message. Controller-only severity/group/scroll/
+  CommandExecution dropped (declared).
+
+All three machine-verified green (abaplint STANDARD+CLOUD, validate-meta,
+pattern-lint, structural-diff `--strict`, render-smoke `--strict` with a new
+`z2ui5.cc.MessageManager` harness mirror + empty `message>` model,
+property-check). The message-manager runtime (065's auto-collection + cc
+reconcile + valueState; the toggleBy toggle; activeTitlePress) stays LIVE_TEST
+— unverifiable headlessly. Render-smoke bugs fixed while porting 065: a missing
+Button-closing `shut` (MessagePopover leaked as a direct Button child), the
+email regex needing `\\`-escaped backslashes for the binding parser, and
+`DATA … TYPE <named-table-type>` not recognised as a table by the
+reconstructor (switched to inline `STANDARD TABLE OF`, the AGENTS §5
+convention).
+
+## Batch b07 generated (2026-07-20)
+
+The next 10 backlog-top NEW-CONTROL samples, breadth-first (one port per
+uncovered control), classes **055–064**: 055 IconTabHeader, 056 ImageContent,
+057 InputListItem, 058 LabelProperties (`sap.m.Label`), 059 LightBox,
+060 Menu, 061 MenuButton, 062 MessageStripWithEnableFormattedText,
+063 NewsContent, 064 NumericContentIcon. Machine-verified to green
+(abaplint ×STANDARD+CLOUD, validate-meta, pattern-lint, structural-diff
+`--strict`, render-smoke `--strict`, property-check). Adversarial AI review
+(2 reviewers × 5 apps): **9 CLEAN, 1 MINOR, 0 MAJOR** — the MINOR was app 060's
+press handler dropping the sample's toggle (close-if-open) branch; the menu's
+open/closed state lives client-side and is not reliably mirrorable
+server-side, so the port always (re-)opens and the reduction is now declared
+in the sidecar.
+
+Three controls at the top of the backlog were **deferred** rather than forced
+into a lossy 1:1 (AGENTS §5 "if the sample's whole point needs an
+inexpressible feature, do not port it"): **InitialPagePattern** (an
+app-level pattern — seven fragments, value-help dialog, IllustratedMessage,
+client filtering), **InputModelUpdate** (its whole point is oData v2 late
+binding via `bindElement`/`dataReceived`, and abap2UI5 serves a single
+default model), and **MessagePopoverMessageHandling** (built on the UI5
+MessageManager / message model). They stay `NEW-CONTROL` in the backlog for a
+later dedicated effort.
+
+Techniques worth noting: **060 Menu** reuses the golden app-016 openBy
+frontend action — the Menu is declared in the Button's `dependents`
+aggregation and opened via `control_by_id`/`openBy` anchored to
+`$event.oSource.sId`. **058 LabelProperties** is roundtrip-free: the four
+controller handlers become two-way `state` binds (displayOnly/wrapping) plus
+`{= }` expression bindings (`wrappingType = hyphenation ? 'Hyphenated' :
+'Normal'`, container `width = slider_value + '%'`), the app-007 pattern.
+**062 MessageStrip** keeps the post-1.71 `controls` multi-link aggregation
+(1.129, declared) and the `enableFormattedText` HTML strips. New POST_171
+firsts this batch: `Button.ariaHasPopup` (1.84, app 060),
+`MenuButton.beforeMenuOpen` (1.94, app 061), `MessageStrip.controls` (1.129,
+app 062). The b07 ports are `generated` (no human live check yet); the menu
+item-arg paths (`${$parameters>/item/text}`) and the openBy anchoring are the
+open LIVE_TESTs.
+
+**Framework gaps from b07 — two implemented upstream, one deferred:**
+- **`menu-toggle-openby` → implemented 2026-07-20**: `toggleBy: ["domRef"]`
+  added to `CONTROL_METHODS` (`control.isOpen() ? close() : openBy(anchor)`,
+  no server-side open state). App 060 converted openBy→toggleBy — the
+  press-to-toggle menu is now 1:1 (the IMPROVISED toggle-reduction is gone).
+  Framework unit tests added.
+- **`formatter-inline-icon` → implemented 2026-07-20**: `expandInlineIcons`
+  added to the curated `model/formatter.js` (replaces `%%icon:sap-icon://…%%`
+  placeholders with the `sapMMsgStripInlineIcon` markup via `IconPool`, the
+  `getInlineIcon` equivalent). App 062's inlineIconsHelper converted to
+  placeholders + a `core:require` formatter binding — no more guessed
+  codepoints. Framework unit tests added; the render-smoke harness formatter
+  mirror gained `expandInlineIcons`.
+- **`menu-item-selected-path` → deferred** (user decision): the selected menu
+  item's ancestor breadcrumb for 060/061; cosmetic (toast text), likely a
+  documented boundary rather than a framework change. Folder kept under `pr/`.
+
+Both implemented requests removed their `pr/` folders and moved to the
+`pr/README` Implemented table; CAPABILITIES.md updated (toggleBy row, formatter
+`expandInlineIcons`). A fourth idea, exposing the MessageManager for the
+deferred `MessagePopoverMessageHandling`, was **investigated and not filed** —
+the `message>` model (2026-07-18) and the plain-table approach (app 038)
+already cover the MessagePopover family, so that sample is a porting task, not
+a framework gap.
 
 ## Full human live check (2026-07-20) — every open question cleared
 
@@ -321,8 +435,9 @@ A hardening pass over the pipeline itself (builder, gates, planning):
 - **Breadth-first batch planning** — `--backlog` sorts samples on uncovered
   controls (`NEW-CONTROL`) first; one port per control before depth
   (AGENTS §1). 190 of 369 backlog samples sit on uncovered controls.
-- **Hold-out set defined** — `ui5/holdout.json`, 25 samples across control
-  families; marked `HOLDOUT` in `--backlog`, never prompt references, never
+- **Hold-out set defined** — `ui5/holdout.json`, 24 samples across control
+  families (was 25 until `sap.m.sample.MessagePopover` was ported in b08,
+  2026-07-20); marked `HOLDOUT` in `--backlog`, never prompt references, never
   `golden`. First regeneration probe is due **before batch b05**.
 - **Generation prompt single-sourced** — `scripts/generation-prompt.txt`,
   spliced into README by `generate-coverage.mjs`; the `meta_valid` job also
@@ -599,21 +714,44 @@ Infrastructure:
   past the root null-refs; duplicate attribute names render invalid XML~~ —
   done 2026-07-18: all three ASSERT (fail fast at the call site), plus a local
   unit test class on `z2ui5_cl_ai_xml`.
-- [ ] property-check blind spot (hold-out probe 2026-07-19): the gate only
+- [x] ~~property-check blind spot (hold-out probe 2026-07-19): the gate only
   scans `a( n = … )` attributes, so a post-1.71 **event parameter** read via
   `${$parameters>/…}` in a `t_arg` slips through undeclared (probe app 618,
-  SearchField `searchButtonPressed` since 1.114). Teach the gate to match
-  `$parameters>/<name>` against the entity's member list, or accept and
-  keep the AGENTS §10 rule as the only guard.
+  SearchField `searchButtonPressed` since 1.114)~~ — done 2026-07-20:
+  `usedMembers` now also scans each control slice for `$parameters>/<name>`
+  and resolves the first path segment against the same flat member map
+  (event parameters already carry their `@since` in `properties.json`, e.g.
+  `sap.m.SearchField.searchButtonPressed` = 1.114), attributing the ref to
+  the control that fired it (the one carrying the event `a()`, = last
+  opened). Error message names it as an event parameter and a `POST_171`
+  deviation clears it, exactly like a property. Zero new errors on the 54
+  live ports (every existing `$parameters` ref is ≤ 1.71); verified with a
+  throwaway SearchField probe that the undeclared→declared transition flips
+  exit 1→0. Deeper path segments (`item/oParent`) are runtime object fields,
+  not metadata, and stay unchecked by design.
 - [ ] pattern-lint stays regex-based **by decision** (2026-07-18): the rule
   set is green and each rule is small; a rewrite on the abaplint AST API only
   pays once regex rules start producing false positives/negatives in
   practice. Revisit when a rule needs real syntax awareness (first candidate:
   anything that must distinguish strings from code).
-- [ ] render-smoke: app 049 is SKIPped (view built via `render_item` helper
+- [x] ~~render-smoke: app 049 is SKIPped (view built via `render_item` helper
   methods — not statically reconstructable). Either teach the reconstructor
   simple single-level helper inlining, or accept the skip; never let skips
-  grow silently (the run prints them).
+  grow silently~~ — resolved 2026-07-20 by making the skip an explicit,
+  CI-enforced decision (the second option). Single-level inlining does not
+  actually suffice: the builder is handle-based (`open`/`shut` navigate a
+  tree via held node refs, not one global stack), so app 049's `render_item`
+  passes the List handle in and chains a returned handle out — faithfully
+  rebuilding it needs a handle-tracking interpreter, and a wrong-but-rendering
+  reconstruction would be a *false pass*, strictly worse than a visible skip.
+  So: a port may declare `"render_smoke": { "skip": true, "reason": "…" }` in
+  its sidecar (validated by validate-meta); render-smoke SKIPs a declared
+  port but now **FAILS** an undeclared non-reconstructable one (helper-method
+  builder calls with no declaration) *and* FAILS a stale declaration (a port
+  that reconstructs but still declares skip). Skips can no longer grow
+  silently — a new helper-built port fails CI until a human consciously
+  declares or reconstructs it. app 049 carries the declaration; run stays
+  **0 failing / 1 skipped**.
 - [x] ~~render-smoke harness gaps found by the 2026-07-19 hold-out probe~~ —
   fixed same day: (a) the inline formatter mirror had only `weightState`
   while upstream `model/formatter.js` had grown the date helpers + demo kit

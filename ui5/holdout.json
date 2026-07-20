@@ -18,7 +18,6 @@
   "sap.m.sample.SelectDialog",
   "sap.m.sample.Dialog",
   "sap.m.sample.Popover",
-  "sap.m.sample.MessagePopover",
   "sap.m.sample.QuickView",
   "sap.m.sample.ResponsivePopover",
   "sap.m.sample.PageFloatingFooter",

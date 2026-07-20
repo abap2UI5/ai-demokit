@@ -1,0 +1,79 @@
+<mvc:View
+	xmlns:l="sap.ui.layout"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m"
+	controllerName="sap.m.sample.MessageStripWithEnableFormattedText.controller.MessageStripWithEnableFormattedText">
+	<l:VerticalLayout
+		class="sapUiContentPadding"
+		width="100%">
+		<l:content>
+
+			<MessageStrip
+				text="{/default}"
+				enableFormattedText="true"
+				showIcon="true"
+				showCloseButton="true"
+				class="sapUiMediumMarginBottom">
+			</MessageStrip>
+
+			<MessageStrip
+				text="{/error}"
+				type="Error"
+				enableFormattedText="true"
+				showIcon="true"
+				showCloseButton="true"
+				class="sapUiMediumMarginBottom">
+			</MessageStrip>
+
+			<MessageStrip
+				text="{/warning}"
+				type="Warning"
+				enableFormattedText="true"
+				showIcon="true"
+				showCloseButton="true"
+				class="sapUiMediumMarginBottom">
+			</MessageStrip>
+
+			<MessageStrip
+				text="{/success}"
+				type="Success"
+				enableFormattedText="true"
+				showIcon="true"
+				showCloseButton="true"
+				class="sapUiMediumMarginBottom">
+			</MessageStrip>
+
+			<MessageStrip
+				text="Information with multiple links %%0 %%1 %%2"
+				enableFormattedText="true"
+				showIcon="true"
+				showCloseButton="true"
+				class="sapUiMediumMarginBottom"
+			>
+				<controls>
+					<Link href="http://www.sap.com" text="Link 1" />
+					<Link href="http://www.sap.com" text="Link 2" />
+					<Link href="http://www.sap.com" text="Link 3" />
+				</controls>
+			</MessageStrip>
+
+			<MessageStrip
+				text="{/inlineIconsUnicode}"
+				type="Warning"
+				enableFormattedText="true"
+				showIcon="true"
+				showCloseButton="true"
+				class="sapUiMediumMarginBottom">
+			</MessageStrip>
+
+			<MessageStrip
+				text="{/inlineIconsHelper}"
+				type="Success"
+				enableFormattedText="true"
+				showIcon="true"
+				showCloseButton="true"
+				class="sapUiMediumMarginBottom">
+			</MessageStrip>
+		</l:content>
+	</l:VerticalLayout>
+</mvc:View>

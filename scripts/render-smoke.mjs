@@ -16,6 +16,15 @@
  * renderer crashes. What it cannot catch: event round-trips, visual/UX
  * fidelity — those stay with the human live check.
  *
+ * Reconstructability: the reconstructor follows the linear factory-chain idiom
+ * (one descend/ascend stack). A port that builds view parts in HELPER methods
+ * — passing a held node handle in and chaining a returned handle out (app 049)
+ * — is not statically reconstructable this way. Such a port must DECLARE the
+ * skip in its sidecar (`"render_smoke": { "skip": true, "reason": "…" }`);
+ * an UNDECLARED non-reconstructable port is a FAILURE, not a silent skip, and
+ * a declaration that has gone stale (the port now reconstructs) is a FAILURE
+ * too — so the skip set can never drift.
+ *
  * Substitutions while reconstructing (the harness controls both sides, so
  * exact framework path names do not matter):
  *   client->_bind( var )                        -> {/VAR}
@@ -537,6 +546,16 @@ const HARNESS = `<!DOCTYPE html>
         if (status === 'Failed Shipping') return 'Error';
         return 'None';
       },
+      expandInlineIcons: function (text) {
+        if (!text) return '';
+        var IconPool = sap.ui.require('sap/ui/core/IconPool');
+        var re = new RegExp('%%icon:(sap-icon://[^%]+)%%', 'g');
+        return String(text).replace(re, function (m, uri) {
+          var info = IconPool && IconPool.getIconInfo(uri);
+          if (!info) return '';
+          return '<span class="sapMMsgStripInlineIcon" style="font-family:' + info.fontFamily + '">' + info.content + '</span>';
+        });
+      },
     };
   })();
 </script>
@@ -573,6 +592,22 @@ const HARNESS = `<!DOCTYPE html>
           renderer: { apiVersion: 2, render: function () {} },
         });
       });
+      // Metadata-only mirror of z2ui5.cc.MessageManager (invisible companion
+      // that bridges the UI5 message manager to a two-way bound items table).
+      // The harness only validates view creation. Keep in sync with abap2UI5
+      // app/webapp/cc/MessageManager.js.
+      sap.ui.define('z2ui5/cc/MessageManager', ['sap/ui/core/Control'], function (Control) {
+        return Control.extend('z2ui5.cc.MessageManager', {
+          metadata: {
+            properties: {
+              items: { type: 'object' },
+              checkInit: { type: 'boolean', defaultValue: false },
+            },
+            events: { change: { allowPreventDefault: true, parameters: {} } },
+          },
+          renderer: { apiVersion: 2, render: function () {} },
+        });
+      });
       sap.ui.require(['sap/ui/core/Core', 'sap/base/Log'], function (Core, Log) {
         Log.addLogListener({ onLogEntry: function (e) {
           if (e.level <= Log.Level.ERROR) window.uiErrors.push('LOG: ' + e.message);
@@ -603,6 +638,9 @@ const HARNESS = `<!DOCTYPE html>
       } else {
         var view = await XMLView.create({ definition: input.xml });
         view.setModel(model); view.setModel(device, 'device');
+        // empty message model so {message>/} bindings (MessagePopover /
+        // z2ui5.cc.MessageManager ports) resolve like the framework's slot
+        view.setModel(new JSONModel([]), 'message');
         view.placeAt('content');
         await new Promise(function (r) { setTimeout(r, 120); });
         view.destroy();
@@ -669,11 +707,28 @@ let failed = 0;
 let skipped = 0;
 for (const meta of metas) {
   const { cls, docs, model, notes, helperTokens } = preparePort(meta);
+  const declaredSkip = meta.render_smoke?.skip === true;
   if (helperTokens > 0) {
-    // view parts built in helper methods are not statically attributable —
-    // report loudly instead of rendering a wrong reconstruction
-    skipped++;
-    console.log(`SKIP  ${cls}  (${helperTokens} builder call(s) in helper methods — not statically reconstructable)`);
+    // view parts built in helper methods are not statically attributable (the
+    // reconstructor models one descend/ascend stack, not held node-handle
+    // re-entry across method calls). A skip is legitimate ONLY when the
+    // sidecar declares it — otherwise it is a FAILURE, so skips can never
+    // grow silently: a new helper-built port fails CI until a human either
+    // reconstructs it or consciously declares render_smoke.skip with a reason.
+    if (declaredSkip) {
+      skipped++;
+      console.log(`SKIP  ${cls}  (declared render_smoke.skip: ${helperTokens} builder call(s) in helper methods)`);
+    } else {
+      failed++;
+      console.log(`FAIL  ${cls}  (${helperTokens} builder call(s) in helper methods — not statically reconstructable and no render_smoke.skip declared in meta)`);
+    }
+    continue;
+  }
+  if (declaredSkip) {
+    // the declaration has gone stale — the port now reconstructs, so the skip
+    // must be removed and the port actually smoke-tested
+    failed++;
+    console.log(`FAIL  ${cls}  (meta declares render_smoke.skip but the view reconstructs — remove the stale declaration)`);
     continue;
   }
   const errs = [];

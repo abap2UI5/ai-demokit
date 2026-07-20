@@ -1,0 +1,32 @@
+{
+  "class": "z2ui5_cl_ai_app_066",
+  "sample": "sap.m.sample.MessagePopover",
+  "entity": "sap.m.MessagePopover",
+  "file": "src/01/b08/z2ui5_cl_ai_app_066.clas.abap",
+  "batch": "b08",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "control_by_id toggleBy anchored to the button"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "Button.ariaHasPopup (since UI5 1.84) kept on the message-popover button. The Button.type value 'Negative' (a sap.m.ButtonType value since 1.73) is what the sample's buttonTypeFormatter returns for the highest-severity Error message."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "the MessagePopover (built in the controller and addDependent'ed to the button) is declared 1:1 in the button's `dependents` aggregation; the controller's oMessagePopover.toggle(button) becomes client->follow_up_action( cs_event-control_by_id, toggleBy ) anchored to the button's DOM ref ($event.oSource.sId) - open-if-closed / close-if-open."
+    },
+    {
+      "type": "NOTE",
+      "what": "the sample's three severity formatters (buttonIconFormatter/buttonTypeFormatter/highestSeverityMessages) compute the button icon/type/count from the highest-severity message; the mock data is static, so the results are precomputed in ABAP (error icon, Negative type, count 2 for the two Error messages) and bound as scalars. The sample's root-array JSON model (items path '/') is carried under a /T_MESSAGES field of the single default model."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "confirm in a running system that the button toggles the MessagePopover open/closed (toggleBy) and lists the five messages with their MessageItem link, and that activeTitlePress toasts on the active (first Error) title."
+    }
+  ]
+}

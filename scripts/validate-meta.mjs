@@ -73,6 +73,20 @@ for (const sf of sidecars.sort()) {
       }
     }
   }
+  // optional render_smoke escape hatch: { skip: true, reason: "…" } marks a
+  // port the static reconstructor cannot rebuild (helper-method view building)
+  if (m.render_smoke !== undefined) {
+    const rs = m.render_smoke;
+    if (typeof rs !== 'object' || rs === null || Array.isArray(rs)) {
+      err(`${sf}: render_smoke must be an object { skip: true, reason }`);
+    } else {
+      if (rs.skip !== true) err(`${sf}: render_smoke.skip must be true when present (drop the field otherwise)`);
+      if (!rs.reason || typeof rs.reason !== 'string') err(`${sf}: render_smoke.reason must be a non-empty string`);
+      for (const k of Object.keys(rs)) {
+        if (!['skip', 'reason'].includes(k)) err(`${sf}: unknown render_smoke field "${k}"`);
+      }
+    }
+  }
   if (m.class && m.class !== name) err(`${sf}: class "${m.class}" does not match filename`);
   if (m.status && !STATUS.includes(m.status)) err(`${sf}: unknown status "${m.status}"`);
   if (['checked', 'golden'].includes(m.status) && !m.checked?.date) {

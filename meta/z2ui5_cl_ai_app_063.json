@@ -1,0 +1,14 @@
+{
+  "class": "z2ui5_cl_ai_app_063",
+  "sample": "sap.m.sample.NewsContent",
+  "entity": "sap.m.NewsContent",
+  "file": "src/01/b07/z2ui5_cl_ai_app_063.clas.abap",
+  "batch": "b07",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": []
+}

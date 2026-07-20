@@ -1,0 +1,32 @@
+{
+  "class": "z2ui5_cl_ai_app_060",
+  "sample": "sap.m.sample.Menu",
+  "entity": "sap.m.Menu",
+  "file": "src/01/b07/z2ui5_cl_ai_app_060.clas.abap",
+  "batch": "b07",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "control_by_id openBy anchored to the button (same as golden app 016)"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "Button.ariaHasPopup (since UI5 1.84) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.84 to render it."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "the sample loads the Menu from Menu.fragment.xml on first press and toggles it in the controller (oMenu.isOpen() ? close() : openBy(button)). The port declares the Menu 1:1 inside the Button's `dependents` aggregation and toggles it via client->follow_up_action( cs_event-control_by_id, toggleBy ) anchored to the button's DOM ref ($event.oSource.sId) - toggleBy (open-if-closed / close-if-open) was added upstream 2026-07-20 (pr/menu-toggle-openby) precisely so the client-side open state need not be mirrored server-side, making the press-to-toggle 1:1. Frontend-action pattern as golden app 016."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "onMenuAction builds a breadcrumb path by walking the selected MenuItem's parent chain (e.g. 'Create New Site > Official Store'); the server cannot walk the client-side control tree, so the toast shows only the selected item's own text, transported via ${$parameters>/item/text}."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "confirm in a running system that the Menu opens anchored to the button (openBy) and that ${$parameters>/item/text} delivers the clicked MenuItem's text to the toast."
+    }
+  ]
+}

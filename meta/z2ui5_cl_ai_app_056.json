@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_ai_app_056",
+  "sample": "sap.m.sample.ImageContent",
+  "entity": "sap.m.ImageContent",
+  "file": "src/01/b07/z2ui5_cl_ai_app_056.clas.abap",
+  "batch": "b07",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "the profile-image and logo ImageContent keep the sample's original demokit test-resources asset paths (test-resources/sap/m/demokit/sample/ImageContent/images/*.png) as the src literal 1:1; abap2UI5 does not serve those static assets, so only the first (sap-icon://area-chart) icon renders offline. The images are archived under ui5/sap.m/ImageContent/images/."
+    }
+  ]
+}

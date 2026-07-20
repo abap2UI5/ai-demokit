@@ -10,6 +10,10 @@
   },
   "status": "generated",
   "checked": null,
+  "render_smoke": {
+    "skip": true,
+    "reason": "view is assembled through the render_item( ) helper: the List handle is passed in and a fresh node handle is returned and chained per item. The static reconstructor models one descend/ascend stack, not held node-handle re-entry across method calls, so it cannot rebuild this view faithfully — an honest declared skip beats a wrong-but-rendering reconstruction (a false pass). Revisit if a handle-based reconstructor is ever built."
+  },
   "deviations": [
     {
       "type": "IMPROVISED",
