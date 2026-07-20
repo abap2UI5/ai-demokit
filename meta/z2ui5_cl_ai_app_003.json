@@ -1,0 +1,22 @@
+{
+  "class": "z2ui5_cl_ai_app_003",
+  "sample": "sap.m.sample.Breadcrumbs",
+  "entity": "sap.m.Breadcrumbs",
+  "file": "src/01/b01/z2ui5_cl_ai_app_003.clas.abap",
+  "batch": "b01",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "checked",
+  "checked": {
+    "date": "2026-07-20",
+    "note": "verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed); RESTAMP after the 2026-07-16 rework (link toast + instant separator switch confirmed)"
+  },
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "the original wires a change handler on the separator Select (SEP_CHANGE round-trip, removed 2026-07-16): selectedKey and separatorStyle share one two-way model path, so the Select.change attribute is deliberately MISSING vs the original view. Instant switching confirmed in the 2026-07-20 live check (restamp)."
+    }
+  ]
+}

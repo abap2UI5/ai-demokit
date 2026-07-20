@@ -52,6 +52,7 @@ for (const mf of fs.readdirSync(META)) {
     checked: m.checked ? `CHECKED (${m.checked.date}): ${m.checked.note}` : '',
     notes: (m.deviations || []).map((d) => `${DEV_LABEL[d.type] ?? d.type}: ${d.what}`).join(' // '),
     post171: (m.deviations || []).filter((d) => d.type === 'POST_171').map((d) => d.what).join(' // '),
+    golden: m.status === 'golden',
   });
 }
 // order by module, then control, then sample name (case-insensitive)
@@ -93,6 +94,7 @@ const rows = apps.map((a) => {
     ` class = \`${a.cls}\`${' '.repeat(wl - a.cls.length)}` +
     ` path = \`${a.file}\`${' '.repeat(wf - a.file.length)}`;
   const extras = [];
+  if (a.golden) extras.push('golden = abap_true');
   if (a.checked) extras.push(`checked = ${abapStr(a.checked)}`);
   if (a.notes) extras.push(`notes = ${abapStr(a.notes)}`);
   if (a.post171) extras.push(`post171 = ${abapStr(a.post171)}`);
@@ -103,10 +105,12 @@ const abap = `"! Generated overview app - lists every abap2UI5 api sample app in
 "! In the Sample column the name links the OpenUI5 source and the ↗ starts the
 "! live OpenUI5 sample; in the abap2UI5 column the class name links the generated
 "! ABAP class and the ↗ starts the app; Control links the OpenUI5 API - all
-"! opening in a new browser tab. The Note column shows a green check when the
-"! port was manually verified in a running system, and a hint button that opens
-"! a popup with the port's generation caveats when present. Do not edit by hand -
-"! regenerate with scripts/generate-overview.mjs
+"! opening in a new browser tab. The Note column shows a gold star for golden
+"! ports (live-checked and exemplary), a green check when the port was manually
+"! verified in a running system, and a hint button that opens a popup with the
+"! port's generation caveats when present. The search field above the table
+"! filters all rows by a case-insensitive substring over every column. Do not
+"! edit by hand - regenerate with scripts/generate-overview.mjs
 CLASS ${CLASS} DEFINITION PUBLIC.
 
   PUBLIC SECTION.
@@ -131,16 +135,21 @@ CLASS ${CLASS} DEFINITION PUBLIC.
         has_notes TYPE abap_bool,
         post171   TYPE string,
         has_p171  TYPE abap_bool,
+        golden    TYPE abap_bool,
+        filter    TYPE string,
       END OF ty_s_app.
     TYPES ty_t_app TYPE STANDARD TABLE OF ty_s_app WITH EMPTY KEY.
 
     DATA t_app TYPE ty_t_app.
+    DATA search TYPE string.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
+    DATA t_app_all TYPE ty_t_app.
 
     METHODS view_display.
     METHODS on_event.
+    METHODS apply_filter.
     METHODS get_catalog
       RETURNING
         VALUE(result) TYPE ty_t_app.
@@ -168,6 +177,10 @@ CLASS ${CLASS} IMPLEMENTATION.
   METHOD on_event.
 
     CASE client->get( )-event.
+
+      WHEN \`SEARCH\`.
+        apply_filter( ).
+        client->view_model_update( ).
 
       WHEN \`SHOW_NOTES\`.
         " one Text per bullet of the clicked row's generation notes
@@ -202,13 +215,27 @@ CLASS ${CLASS} IMPLEMENTATION.
   ENDMETHOD.
 
 
+  METHOD apply_filter.
+
+    " one big case-insensitive substring search over every column of every row
+    DATA(term) = to_lower( search ).
+    IF term IS INITIAL.
+      t_app = t_app_all.
+    ELSE.
+      t_app = VALUE #( FOR ls_app IN t_app_all
+                       WHERE ( filter CS term ) ( ls_app ) ).
+    ENDIF.
+
+  ENDMETHOD.
+
+
   METHOD view_display.
 
     " base url to launch an abap2UI5 app in a new browser tab
     DATA(start) = |{ client->get( )-s_config-origin }{ client->get( )-s_config-pathname }?app_start=|.
 
-    t_app = get_catalog( ).
-    LOOP AT t_app ASSIGNING FIELD-SYMBOL(<app>).
+    t_app_all = get_catalog( ).
+    LOOP AT t_app_all ASSIGNING FIELD-SYMBOL(<app>).
 
       DATA(libpath) = replace( val = <app>-module
                                sub = \`.\`
@@ -231,7 +258,15 @@ CLASS ${CLASS} IMPLEMENTATION.
       <app>-has_notes = xsdbool( <app>-notes IS NOT INITIAL ).
       <app>-has_p171  = xsdbool( <app>-post171 IS NOT INITIAL ).
 
+      " lower-cased blob of every column, backing the search field's substring filter
+      <app>-filter = to_lower( <app>-module   && \` \` && <app>-control && \` \` && <app>-ctrl_name && \` \` &&
+                               <app>-name     && \` \` && <app>-class   && \` \` && <app>-notes     && \` \` &&
+                               <app>-checked  && \` \` && <app>-post171 ).
+
     ENDLOOP.
+
+    " keep the current search term applied across re-displays (navigation)
+    apply_filter( ).
 
     DATA(view) = z2ui5_cl_ai_xml=>factory( ).
 
@@ -245,6 +280,18 @@ CLASS ${CLASS} IMPLEMENTATION.
                 )->a( n = \`title\`          v = \`abap2UI5 - api\`
                 )->a( n = \`navButtonPress\` v = client->_event_nav_app_leave( )
                 )->a( n = \`showNavButton\`  v = z2ui5_cl_ai_xml=>as_bool( client->check_app_prev_stack( ) )
+
+                )->open( \`subHeader\`
+                    )->open( \`Toolbar\`
+                        )->leaf( \`SearchField\`
+                            )->a( n = \`value\`       v = client->_bind( search )
+                            )->a( n = \`placeholder\` v = \`Search across all samples - module, control, sample, class, notes...\`
+                            )->a( n = \`search\`      v = client->_event( \`SEARCH\` )
+                            )->a( n = \`liveChange\`  v = client->_event( \`SEARCH\` )
+                            )->a( n = \`width\`       v = \`100%\`
+
+                    )->shut(
+                )->shut(
 
                 )->open( \`Table\`
                     )->a( n = \`sticky\` v = \`ColumnHeaders\`
@@ -317,6 +364,12 @@ CLASS ${CLASS} IMPLEMENTATION.
                                 )->open( \`HBox\`
                                     )->a( n = \`alignItems\` v = \`Center\`
 
+                                    " gold star marks a golden port (live-checked and exemplary)
+                                    )->leaf( \`core:Icon\`
+                                        )->a( n = \`src\`     v = \`sap-icon://favorite\`
+                                        )->a( n = \`color\`   v = \`#e9730c\`
+                                        )->a( n = \`tooltip\` v = \`Golden sample - live-checked and exemplary\`
+                                        )->a( n = \`visible\` v = \`{GOLDEN}\`
                                     )->leaf( \`core:Icon\`
                                         )->a( n = \`src\`     v = \`sap-icon://accept\`
                                         )->a( n = \`color\`   v = \`#107e3e\`

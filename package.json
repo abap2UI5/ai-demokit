@@ -4,6 +4,9 @@
   "version": "1.0.0",
   "description": "Generated abap2UI5 ports of the official UI5 demo kit samples.",
   "scripts": {
+    "prepare": "git config core.hooksPath .githooks || true",
+    "overview": "node scripts/generate-overview.mjs",
+    "coverage": "node scripts/generate-coverage.mjs",
     "smoke": "node scripts/render-smoke.mjs --strict",
     "syfixes": "find . -type f -name '*.abap' -exec sed -i -e 's/ RAISE EXCEPTION TYPE cx_sy_itab_line_not_found/ ASSERT 1 = 0/g' {} + ",
     "abaplintpathfix": "sed -i 's|\"files\": \"/\\.\\.\\/\\.\\.\\/src\\/\\*\\*\\/\\*\\.\\*\"|\"files\": \"/src/**/*.*\"|g' abaplint.jsonc",

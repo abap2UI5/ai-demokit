@@ -1,0 +1,31 @@
+{
+  "class": "z2ui5_cl_ai_app_036",
+  "sample": "sap.m.sample.MessageBoxInitialFocus",
+  "entity": "sap.m.MessageBox",
+  "file": "src/01/b03/z2ui5_cl_ai_app_036.clas.abap",
+  "batch": "b03",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "the sample opens a sap.m.MessageBox from its controller; there is no such control in the view. It is driven by two buttons wired to events that call client->message_box_display - the documented 1:1 path (CAPABILITIES.md marks sap.m.MessageBox as expressible with app 036 as its evidence port), not a workaround."
+    },
+    {
+      "type": "POST_171",
+      "what": "ariaHasPopup=\"Dialog\" on both buttons (since UI5 1.84) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.84 to render it."
+    },
+    {
+      "type": "POST_171",
+      "what": "the MessageBox emphasizedAction option (since UI5 1.75) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.75 to render it."
+    },
+    {
+      "type": "POST_171",
+      "what": "the MessageBox dependentOn option (since UI5 1.124) is restored via message_box_display's dependenton parameter, pointing at the view layout (id messageBoxHost); the app needs a UI5 release >= 1.124 to render it."
+    }
+  ]
+}

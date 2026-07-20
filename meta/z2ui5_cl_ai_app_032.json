@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_ai_app_032",
+  "sample": "sap.m.sample.InputValueState",
+  "entity": "sap.m.Input",
+  "file": "src/01/b02/z2ui5_cl_ai_app_032.clas.abap",
+  "batch": "b02",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "showClearIcon (since UI5 1.94) on three inputs is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.94 to render it."
+    },
+    {
+      "type": "POST_171",
+      "what": "the two formattedValueStateText aggregations (a FormattedText carrying Links, since UI5 1.78) are newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.78 to render them."
+    },
+    {
+      "type": "NOTE",
+      "what": "the Links' press (.onFormattedTextLinkPress) round-trips as event LINK_PRESS and shows the controller's toast text, docked at CenterCenter 1:1 via message_toast_display( my = 'center center' at = 'center center' ) (the client method exposes the MessageToast options object - source-verified in Messages.js). The original's preventDefault is not needed: the Links carry no href, so there is no default navigation to suppress."
+    }
+  ]
+}

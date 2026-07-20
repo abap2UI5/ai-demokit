@@ -53,7 +53,7 @@ const RULES = [
   {
     id: 'event-arg-bare-brace',
     level: 'error',
-    doc: 'event t_arg uses a bare `{COL}` — not resolved by get_event_arg; use the $-prefixed form (${COL}) — AGENTS §5, bit us in app 526',
+    doc: 'event t_arg uses a bare `{COL}` — not resolved by get_event_arg; use the $-prefixed form (${COL}) — AGENTS §5, bit us in app 005',
     find(content) {
       const out = [];
       const re = /t_arg\s*=/g;
@@ -125,19 +125,19 @@ const RULES = [
   {
     id: 'client-handle-capture',
     level: 'error',
-    doc: 'client handle strings (_event, _bind, _event_client, ...) are written inline at each control, never captured in a variable - even when repeated, even in expression bindings (human decision 2026-07-17, apps 526/486/421)',
+    doc: 'client handle strings (_event, _bind, _event_client, ...) are written inline at each control, never captured in a variable - even when repeated, even in expression bindings (human decision 2026-07-17, apps 005/053/007)',
     find: grepLines(/DATA\(\w+\)\s*=\s*client->_\w+\(/),
   },
   {
     id: 'default-key-table',
     level: 'error',
-    doc: 'bare `TYPE TABLE OF` gives an implicit default key — declare it explicitly as `TYPE STANDARD TABLE OF ... WITH EMPTY KEY` (AGENTS §8; slipped the abaplint defaultKey gate, which only catches explicit DEFAULT KEY, in app 441)',
+    doc: 'bare `TYPE TABLE OF` gives an implicit default key — declare it explicitly as `TYPE STANDARD TABLE OF ... WITH EMPTY KEY` (AGENTS §8; slipped the abaplint defaultKey gate, which only catches explicit DEFAULT KEY, in app 034)',
     find: grepLines(/\bTYPE\s+TABLE\s+OF\b/),
   },
   {
     id: 'numeric-bound-as-string',
     level: 'error',
-    doc: 'a model field that is bound to a control and only ever assigned numeric literals is TYPE string — UI5 2.x strict-type validation rejects a string on a numeric property (Slider/RangeSlider/StepInput value); type it numerically (TYPE i / p / decfloat) — AGENTS §10, apps 486/472',
+    doc: 'a model field that is bound to a control and only ever assigned numeric literals is TYPE string — UI5 2.x strict-type validation rejects a string on a numeric property (Slider/RangeSlider/StepInput value); type it numerically (TYPE i / p / decfloat) — AGENTS §10, apps 053/045',
     find(content) {
       const out = [];
       const decl = /^\s*DATA\s+(\w+)\s+TYPE\s+string\s*\.\s*$/gm;
@@ -161,7 +161,7 @@ const RULES = [
   {
     id: 'unescaped-brace-in-style-content',
     level: 'error',
-    doc: 'literal { } inside a <style> content literal must be escaped as \\{ \\} — the XMLView binding parser reads unescaped braces in attribute values as a binding and crashes (render-smoke caught app 431; apps 404/434 were the same class)',
+    doc: 'literal { } inside a <style> content literal must be escaped as \\{ \\} — the XMLView binding parser reads unescaped braces in attribute values as a binding and crashes (render-smoke caught app 028; apps 026/031 were the same class)',
     find(content) {
       const out = [];
       content.split('\n').forEach((l, i) => {
@@ -176,7 +176,7 @@ const RULES = [
   {
     id: 'param-continuation-align',
     level: 'warn',
-    doc: 'a t_arg continuation line must start in the same column as the val parameter above it — human-taught alignment fix, 2026-07-16 (apps 421/422)',
+    doc: 'a t_arg continuation line must start in the same column as the val parameter above it — human-taught alignment fix, 2026-07-16 (apps 007/008)',
     find(content) {
       const out = [];
       const lines = content.split('\n');

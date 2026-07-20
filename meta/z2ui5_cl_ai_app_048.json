@@ -1,0 +1,14 @@
+{
+  "class": "z2ui5_cl_ai_app_048",
+  "sample": "sap.m.sample.Select",
+  "entity": "sap.m.Select",
+  "file": "src/01/b02/z2ui5_cl_ai_app_048.clas.abap",
+  "batch": "b02",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": []
+}

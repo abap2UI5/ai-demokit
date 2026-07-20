@@ -1,0 +1,22 @@
+{
+  "class": "z2ui5_cl_ai_app_053",
+  "sample": "sap.m.sample.ToolbarShrinkable",
+  "entity": "sap.m.Toolbar",
+  "file": "src/01/b03/z2ui5_cl_ai_app_053.clas.abap",
+  "batch": "b03",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "checked",
+  "checked": {
+    "date": "2026-07-20",
+    "note": "verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed)"
+  },
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "the sample's controller onSliderLiveChange resizes the toolbars in JS; there is no width in the source XML (the port adds the width attribute, the original wires liveChange instead). Rebuilt as a client-side expression binding {= slider + '%' } on each Toolbar width - no event round-trip, resizes instantly like the original; the documented preferred path (CAPABILITIES.md), not a workaround."
+    }
+  ]
+}

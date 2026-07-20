@@ -412,7 +412,7 @@ function buildModel(content, boundVars, types, vars, notes) {
           ? [Object.fromEntries(types.structs.get(rowType).map((f) => [up(f.name), scalarDefault(f.type)]))]
           // scalar-row table (TYPE STANDARD TABLE OF string, bound to an
           // array property like Table.sticky): an empty array — a {} row
-          // would fail strict property validation (b05 app 534)
+          // would fail strict property validation (b05 app 009)
           : [];
     } else {
       const t = decl.type;

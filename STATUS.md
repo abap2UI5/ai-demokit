@@ -12,9 +12,9 @@ CAPABILITIES.md._
 | Ports | 54 / **403 in-scope** `sap.m` samples (13.4 %) — in scope = control exists since UI5 1.71 and is not deprecated; 43 of 446 samples are out of scope (16 deprecated, 21 newer, 6 without control metadata) |
 | CI | ABAP_STANDARD, ABAP_CLOUD, ABAP_702 all green |
 | Structural view diff | **0 undeclared differences** across all 54 ports (`node scripts/structural-diff.mjs --strict`) — including simple **binding values** and, since 2026-07-19, **`id` attributes** (name-level per control type; dropped original ids must be restored or declared) |
-| Render smoke | **0 failing / 1 skipped** (`npm run smoke`): every reconstructable port's view loads in a real headless `XMLView.create` (app 481 skipped — helper-method view building is not statically reconstructable); harness carries `sap.f` and mocks scalar-row tables as empty arrays since b05 |
+| Render smoke | **0 failing / 1 skipped** (`npm run smoke`): every reconstructable port's view loads in a real headless `XMLView.create` (app 049 skipped — helper-method view building is not statically reconstructable); harness carries `sap.f` and mocks scalar-row tables as empty arrays since b05 |
 | Pattern lint | **0 errors, 0 warnings, empty baseline** (`node scripts/pattern-lint.mjs`) |
-| Meta sidecars | 54 in `meta/` — status: 14 `generated`, 35 `checked`, **5 `golden`** (401, 421, 454, 540, 543 — promoted 2026-07-20 after the full live check); deviations: 30 IMPROVISED, 27 POST_171, **0 LIVE_TEST**, 9 SUBSET_DATA, 57 NOTE, 2 DROPPED_171 (the `p:ColumnAIAction` plugin in apps 401 and 534 — a whole control newer than 1.71, unlike the restorable members). `audit` is a structured object since 2026-07-18 |
+| Meta sidecars | 54 in `meta/` — status: 14 `generated`, 35 `checked`, **5 `golden`** (401, 421, 454, 540, 543 — promoted 2026-07-20 after the full live check); deviations: 30 IMPROVISED, 27 POST_171, **0 LIVE_TEST**, 9 SUBSET_DATA, 57 NOTE, 2 DROPPED_171 (the `p:ColumnAIAction` plugin in apps 022 and 534 — a whole control newer than 1.71, unlike the restorable members). `audit` is a structured object since 2026-07-18 |
 | Manually verified in a running system | **40 of 54 ports** — 2026-07-20 human live check per the interaction checklist (all b05/b06 + every port that carried an open question, incl. the 530 restamp); previously: 420/421/526 interactive, 404/431/440/460/487 visual 2026-07-19. The 14 remaining `generated` ports are b01–b04 apps that never carried an open question |
 | Archive | `ui5/sap.m/<SampleName>/` — full originals for the 34 ported samples (+2 cross-referenced: `FacetFilterSimple`, `Table`); mock snapshot in `ui5/mock/`. Unported samples are copied over batch by batch. |
 
@@ -76,7 +76,7 @@ scroll was 200 px instead of one item, with a sidecar note asserting the
 wrong default as fact — fixed, seeded 1). MINORs fixed: 544's
 supplier.json is now snapshotted byte-identical in `ui5/mock/` (the
 AGENTS §4 offline-verifiability lesson) and its false "first element
-binding" LIVE_TEST rewrote to a NOTE (app 460 already proved the
+binding" LIVE_TEST rewrote to a NOTE (app 041 already proved the
 mechanism); 547's date-rebuild note now names the server-vs-browser
 timezone delta. The reviewers source-verified the heavy claims: 541/542's
 date-type bindings (source patterns, DateTimeWithTimezone V4
@@ -105,22 +105,21 @@ popinLayout round-trip converted to the 534 expression-binding form, and
 (HT-9995 differs in content). Highlights:
 
 - The probe's distilled rules visibly held: no `popover_display( val = )`
-  recurrence, flattening declared everywhere, app 539 explicitly reasoned
-  the empty-string/enum rule, app 535 seeded `popinLayout` non-empty.
-- **App 534** re-applies the app-401 `DROPPED_171` decision for
+  recurrence, flattening declared everywhere, app 015 explicitly reasoned
+  the empty-string/enum rule, app 010 seeded `popinLayout` non-empty.
+- **App 009** re-applies the app-401 `DROPPED_171` decision for
   `p:ColumnAIAction` (plugin class newer than 1.71 — dropped, not POST_171).
 - **Two new framework gaps** → pr/control-methods-openby-setactivepage,
   **implemented upstream 2026-07-20** (new `domRef` arg kind, `openBy`,
-  `setActivePage`; folder archived in pr/README Implemented): app 540's
-  hidden-DatePicker wiring is now valid (IMPROVISED→LIVE_TEST). App 536's
+  `setActivePage`; folder archived in pr/README Implemented): app 016's
+  hidden-DatePicker wiring is now valid (IMPROVISED→LIVE_TEST). App 012's
   Carousel re-sync stays dropped — aggregation-template clone ids are not
   backend-addressable (recorded in the sidecar + CAPABILITIES; an
   index-based page resolution would be a new request if more samples need
   it).
 - Render-smoke harness extended for b05: `sap.f` library loaded
   (DynamicPage/GridList/Card in 536/537) and scalar-row tables
-  (`TABLE OF string` bound to array properties like `Table.sticky`, app
-  534) mocked as empty arrays instead of `{}` rows.
+  (`TABLE OF string` bound to array properties like `Table.sticky`, app 009) mocked as empty arrays instead of `{}` rows.
 - New LIVE_TESTs are tracked in the b05 sidecars (popup/timer cycle 533,
   image dialog 538, `$source>/selectedKey` arg 535, sticky round-trip 534,
   binding_call-on-init + `to` navigation 536, popup focus flow 537).
@@ -135,17 +134,17 @@ reviewers), followed by fixes:
   into the CHECKED text, literal chunking can no longer split a doubled
   backtick. Output byte-identical on the existing 34 ports.
 - **Builder `z2ui5_cl_ai_xml`** — LF/CR/TAB in attribute values now escape to
-  `&#xA;`/`&#xD;`/`&#x9;` (fixes app 445's lost noDataText line break at the
+  `&#xA;`/`&#xD;`/`&#x9;` (fixes app 035's lost noDataText line break at the
   root).
-- **App 401 (FacetFilter)** — Reset now really resets (two-way `selected`
+- **App 022 (FacetFilter)** — Reset now really resets (two-way `selected`
   binding per FacetFilterItem) and the fragile JSON parse of
   `$event.mParameters.selectedItems` (private internals, silent CATCH) is gone;
   full NOTES block added. LIVE-TEST pending.
-- **App 454 (MultiInput)** — the 6+1 pre-set tokens from `onInit` render again
+- **App 040 (MultiInput)** — the 6+1 pre-set tokens from `onInit` render again
   (tokens aggregation), View height restored, NOTES block added.
-- **App 422 (ColorPalette)** — boolean `defaultAction` echoed as `true`/`false`
+- **App 008 (ColorPalette)** — boolean `defaultAction` echoed as `true`/`false`
   instead of raw `X`/space.
-- **Apps 441/469/481** — existing deviations declared in the header NOTES.
+- **Apps 034/044/049** — existing deviations declared in the header NOTES.
 
 ## Verified fixed (2026-07-16, second pass — fidelity backlog)
 
@@ -177,7 +176,7 @@ Two human correction commits so far; every change fed back as a rule:
   even repeated, even in expression bindings (526, then 486; 481/421 aligned
   accordingly) → pattern-lint error rule + AGENTS §5. Process lesson: my
   first distillation scoped the rule too narrowly (events only, bind handles
-  exempted citing app 421) — the human had to fix the same error class twice.
+  exempted citing app 007) — the human had to fix the same error class twice.
   When distilling, prefer the GENERAL principle over the narrowest reading.
 - Derive values from data like the original (530 `t_items[ 1 ]-text`),
   all-or-nothing `VALUE #( )` alignment after renames (440), minimal inline
@@ -254,7 +253,7 @@ Two ideas the audit surfaced, handled per their true nature:
   composite **types** ✅ via raw binding-info string; only custom JS formatter
   **functions** stay ❌), and ports **440**/**401** converted to keep the
   original Currency binding 1:1 over a numeric `PRICE` (`TYPE p`) field —
-  IMPROVISED dropped, LIVE_TEST added. App 460 keeps its static single-record
+  IMPROVISED dropped, LIVE_TEST added. App 041 keeps its static single-record
   resolution (an unrelated deviation), not blocked by the type.
 - **MultiInput `addValidator` — NOT a framework gap either** — the bundled
   custom control `z2ui5.cc.MultiInputExt` installs exactly the sample's
@@ -263,7 +262,7 @@ Two ideas the audit surfaced, handled per their true nature:
   token changes back via `addedTokens`/`removedTokens` + `change`. CAPABILITIES
   row added (🔶) and the app-454 deviation corrected IMPROVISED→NOTE. Initially
   left unwired (first cc-control usage needs a live check); **wired 2026-07-18**
-  (human direction): app 454 now declares `xmlns:z2ui5="z2ui5.cc"` and one
+  (human direction): app 040 now declares `xmlns:z2ui5="z2ui5.cc"` and one
   `z2ui5:MultiInputExt` leaf per token input (`multiInput1`/`multiInput2`,
   matching the original's two addValidator calls); the render-smoke harness
   carries a metadata-only mirror of the cc control so view creation stays
@@ -275,7 +274,7 @@ and the MultiInput validator were both already in the framework — the map/port
 had wrongly treated them as ❌. Exactly the "declared impossible although it
 already works" failure mode CAPABILITIES.md opens by warning against.
 
-**Same failure mode again — `sap.m.MessageView` (2026-07-18):** app 449 was
+**Same failure mode again — `sap.m.MessageView` (2026-07-18):** app 038 was
 marked `IMPROVISED` / the map carried "MessageManager / `message>` model ❌",
 yet the port already renders the MessageView 1:1 by binding the messages as a
 plain ABAP table on the `items` aggregation with a `MessageItem` template — the
@@ -499,13 +498,13 @@ produce; two were regenerated, plus hygiene. All changes in this pass:
 - **Self-referential deviations reclassified** IMPROVISED→NOTE in 472
   (range→value/value2), 486 (expression-bound widths), 474 (two-way
   selectedKey) — same class the 2026-07-17 audit fixed for 447/452/454/449;
-  the counts above now reflect it. App 449's NOTE no longer claims "no
+  the counts above now reflect it. App 038's NOTE no longer claims "no
   MessageManager model" (stale since pr/message-model).
 - **Checked-invalidation rule** (new, AGENTS §10 + TRAINING): a code change
   to a `checked` port resets the status until restamped. Applied to 530
   (07-15 check vs 07-16 rework).
 - **Structural diff now compares `id` attributes** (name-level per control
-  type): app 474 had dropped the original `SB1`/`selectedItemPreview` ids —
+  type): app 047 had dropped the original `SB1`/`selectedItemPreview` ids —
   restored; the gate keeps it from recurring. Extra port-added ids stay
   unflagged.
 - **Style normalized**: 528 rewritten from the one-off `a = VALUE #( )`
@@ -588,7 +587,7 @@ Infrastructure:
   same day: **1:1 beats 1.71-purity** — post-1.71 members are KEPT when the
   original uses them and must be declared as `POST_171` (the gate enforces
   the declaration); the previously dropped members were restored. First
-  catch: app 420's Carousel `ariaLabelledBy` (association only since 1.125)
+  catch: app 006's Carousel `ariaLabelledBy` (association only since 1.125)
   had been silently copied without any declaration.
 - [x] ~~generate-coverage.mjs: `FOCUS_LIBS` undocumented; orphan ports vanish
   silently; header-regex fragility~~ — done 2026-07-16: ported set comes from
@@ -611,7 +610,7 @@ Infrastructure:
   pays once regex rules start producing false positives/negatives in
   practice. Revisit when a rule needs real syntax awareness (first candidate:
   anything that must distinguish strings from code).
-- [ ] render-smoke: app 481 is SKIPped (view built via `render_item` helper
+- [ ] render-smoke: app 049 is SKIPped (view built via `render_item` helper
   methods — not statically reconstructable). Either teach the reconstructor
   simple single-level helper inlining, or accept the skip; never let skips
   grow silently (the run prints them).
@@ -632,4 +631,4 @@ Infrastructure:
   generated-artifacts sync check on every PR.
 - [x] ~~AGENTS.md §5 "Worked references" points at nonexistent
   `src/04/z2ui5_cl_ai_app_416`; §8 names the wrong builder classes~~ — fixed
-  2026-07-16 (416 row replaced by app 421, §8 corrected to `z2ui5_cl_ai_xml`).
+  2026-07-16 (416 row replaced by app 007, §8 corrected to `z2ui5_cl_ai_xml`).

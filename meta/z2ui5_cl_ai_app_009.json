@@ -1,0 +1,46 @@
+{
+  "class": "z2ui5_cl_ai_app_009",
+  "sample": "sap.m.sample.Table",
+  "entity": "sap.m.Column",
+  "file": "src/01/b05/z2ui5_cl_ai_app_009.clas.abap",
+  "batch": "b05",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "checked",
+  "checked": {
+    "date": "2026-07-20",
+    "note": "verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed)"
+  },
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "the shared demo kit mock model sap/ui/demo/mock/products.json (/ProductCollection, snapshotted in ui5/mock/products.json) is flattened into the default model: all 123 rows are kept verbatim, but only the bound columns (ProductId, Name, SupplierName, WeightMeasure, WeightUnit, Width, Depth, Height, DimUnit, Price, CurrencyCode) are ported - the unbound columns (Category, MainCategory, TaxTarifCode, Description, DateOfSale, ProductPicUrl, Status, Quantity, UoM) of the shared mock model are dropped."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "the controller's onPopinLayoutChanged (ComboBox change handler running a PopinLayout switch with a Block default) is expressed as bound properties instead of a round-trip (AGENTS 'prefer a bindable property'): the ComboBox's change attribute is dropped, its selectedKey is bound two-way, and the Table gains a popinLayout expression binding that reproduces the switch including its Block default."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "the controller's onToggleInfoToolbar (ToggleButton press handler calling getInfoToolbar().setVisible(!pressed)) is expressed as bound properties instead of a round-trip: the ToggleButton's press attribute is dropped, its pressed property is bound two-way, and the infoToolbar's OverflowToolbar gains a visible={= !pressed } expression binding."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "the controller's onSelect (imperative oTable.setSticky array maintenance from the CheckBox text + selected parameter) becomes a sticky property on the Table bound to a plain string table: each CheckBox select event round-trips ${$source>/text} and ${$parameters>/selected}, the ABAP handler inserts/removes that option and pushes the model back via view_model_update."
+    },
+    {
+      "type": "POST_171",
+      "what": "core:require (since UI5 1.74) on the view root loads the curated formatter module z2ui5/model/formatter for the weightState binding - the app needs a UI5 release >= 1.74 to render it."
+    },
+    {
+      "type": "NOTE",
+      "what": "the original's local Formatter.js is referenced as formatter: '.formatter.weightState'; the port keeps the identical parts binding but references the framework's curated formatter module as 'Formatter.weightState' (same thresholds/logic, source-verified in abap2UI5 app/webapp/model/formatter.js)."
+    },
+    {
+      "type": "DROPPED_171",
+      "what": "the p:ColumnAIAction column plugin (sap.m.plugins, since UI5 1.136 - far newer than 1.71) is dropped with its dependents aggregation, the xmlns:p namespace and the press toast - the plugin class does not exist on a 1.71 runtime, so keeping it would break view creation there (same decision as app 022)."
+    }
+  ]
+}

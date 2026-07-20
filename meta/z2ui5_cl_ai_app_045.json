@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_ai_app_045",
+  "sample": "sap.m.sample.RangeSlider",
+  "entity": "sap.m.RangeSlider",
+  "file": "src/01/b02/z2ui5_cl_ai_app_045.clas.abap",
+  "batch": "b02",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "the sample binds the composite RangeSlider \"range\" property (an array [low, high] - range=\"{/RS1}\" / range=\"0,100\"). abap2UI5 binds scalar ABAP fields, so each range is expressed as the equivalent value / value2 properties the control keeps in sync - identical rendering."
+    }
+  ]
+}

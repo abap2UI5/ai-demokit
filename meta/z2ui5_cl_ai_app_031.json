@@ -1,0 +1,26 @@
+{
+  "class": "z2ui5_cl_ai_app_031",
+  "sample": "sap.m.sample.ImageModeBackground",
+  "entity": "sap.m.Image",
+  "file": "src/01/b01/z2ui5_cl_ai_app_031.clas.abap",
+  "batch": "b01",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "checked",
+  "checked": {
+    "date": "2026-07-20",
+    "note": "verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed); incl. the phone-emulation device> check"
+  },
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "the original binds src/mode to a JSONModel (img>/products, /imageMode); these fixed sample values are inlined here as literals (mode Background, the HT-7777 / HT-6100 demo images). height/width are restored over the device> model, see below."
+    },
+    {
+      "type": "NOTE",
+      "what": "the custom CSS class imageContainer (light blue background) of the box4 HBox is kept and the sample's styles.css injected via a core:HTML content attribute (CAPABILITIES.md CSS row, as apps 028/026; the EXTRA core:HTML control vs the original view). Confirmed rendering via the human visual pass 2026-07-19."
+    }
+  ]
+}

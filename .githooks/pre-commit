@@ -1,0 +1,26 @@
+#!/bin/sh
+# Auto-regenerate the in-system overview app and the coverage docs so they are
+# never stale in a commit — the overview app is generated from the meta/
+# sidecars (scripts/generate-overview.mjs) and must always match them (the CI
+# meta_valid job fails a PR otherwise). This hook keeps that in sync locally on
+# every commit and stages the regenerated files into the same commit.
+#
+# Enable it with:  git config core.hooksPath .githooks
+# (npm ci / npm install does this automatically via the "prepare" script.)
+set -e
+
+if ! command -v node >/dev/null 2>&1; then
+  echo "pre-commit: node not found — skipping overview/coverage regeneration"
+  exit 0
+fi
+
+DIR="$(git rev-parse --show-toplevel)"
+
+node "$DIR/scripts/generate-overview.mjs" >/dev/null
+node "$DIR/scripts/generate-coverage.mjs" >/dev/null
+
+git add -- \
+  "$DIR/src/z2ui5_cl_ai_app_overview.clas.abap" \
+  "$DIR/src/z2ui5_cl_ai_app_overview.clas.xml" \
+  "$DIR/api.md" \
+  "$DIR/README.md"

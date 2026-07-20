@@ -1,0 +1,58 @@
+{
+  "class": "z2ui5_cl_ai_app_018",
+  "sample": "sap.m.sample.DateTimePicker",
+  "entity": "sap.m.DateTimePicker",
+  "file": "src/01/b06/z2ui5_cl_ai_app_018.clas.abap",
+  "batch": "b06",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "checked",
+  "checked": {
+    "date": "2026-07-20",
+    "note": "verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed)"
+  },
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "the JSON model's UI5Date instances become date strings in the flat ABAP model: the sap.ui.model.type.DateTime bindings (DTP2/3/4/5/8) get an added source pattern 'yyyy-MM-dd HH:mm:ss' format option so the type parses the model string (CAPABILITIES: Date types over ISO strings need a source pattern), and the sap.ui.model.odata.type.DateTimeOffset parts of DTP10/DTP11 get added constraints {V4: true} so the DateTimeWithTimezone composite receives a parsed Date internal value (source-verified in DateTimeOffset.js getModelFormat/CompositeBinding internal values); valueDTP10 is the UTC string '2023-03-31T10:32:30Z' instead of the original's local-time UI5Date, and DTP3/DTP5 'now' comes from server sy-datum/sy-uzeit instead of the browser clock."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "the controller's byId('DTP6').setInitialFocusedDateValue(UI5Date.getInstance(2017, 5, 13, 11, 12, 13)) is expressed as a bound initialFocusedDateValue property with the Formatter.DateCreateObject module formatter over the model string '2017-06-13T11:12:13' (CAPABILITIES date-object row) - extra initialFocusedDateValue attribute on DTP6 plus xmlns:core and core:require on the view root vs the original view.xml."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "the controller's handleChange becomes a CHANGE round-trip: the source control id, entered value and valid flag travel via $event.oSource.sId / ${$parameters>/value} / ${$parameters>/valid}; the textResult Text.text becomes a binding and every change-firing picker (DTP1/2/3/4/6/7) gets an added bound valueState attribute, initialized to 'None' so no empty string reaches the enum-typed property - the original sets both imperatively on the controls."
+    },
+    {
+      "type": "NOTE",
+      "what": "the view-level attachParseError/attachValidationSuccess handlers of the original controller (valueState Error/None on binding parse errors in the data-binding panel) are covered by the framework's automatic handleValidation registration on every view slot (CAPABILITIES MessageManager row, pr/message-model) - no port code needed."
+    },
+    {
+      "type": "NOTE",
+      "what": "model flattening: the original model's valueDTP9 is bound by no control in the view and is dropped; valueDTP11 (null in the original) serializes as an empty string in the flat ABAP model, which the V4 DateTimeOffset model format parses back to null, so DTP11 renders timezone-only like the original."
+    },
+    {
+      "type": "POST_171",
+      "what": "showCurrentDateButton (since UI5 1.95) on DTP2 is kept for the 1:1 port."
+    },
+    {
+      "type": "POST_171",
+      "what": "showCurrentTimeButton (since UI5 1.98) on DTP2 and DTP11 is kept for the 1:1 port."
+    },
+    {
+      "type": "POST_171",
+      "what": "showTimezone (since UI5 1.99) on DTP8 and DTP11 is kept for the 1:1 port."
+    },
+    {
+      "type": "POST_171",
+      "what": "timezone (since UI5 1.99) on DTP8 is kept for the 1:1 port."
+    },
+    {
+      "type": "POST_171",
+      "what": "core:require of the z2ui5/model/formatter module on the view root needs UI5 >= 1.74, and the sap.ui.model.odata.type.DateTimeWithTimezone binding type of DTP10/DTP11 (since UI5 1.99) is kept 1:1 - the app needs a UI5 release >= 1.99 overall."
+    }
+  ]
+}

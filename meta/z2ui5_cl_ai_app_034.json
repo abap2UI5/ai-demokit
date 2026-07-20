@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_ai_app_034",
+  "sample": "sap.m.sample.ListCounter",
+  "entity": "sap.m.List",
+  "file": "src/01/b04/z2ui5_cl_ai_app_034.clas.abap",
+  "batch": "b04",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "headerLevel=\"H2\" on the List (since UI5 1.117) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.117 to render it."
+    },
+    {
+      "type": "SUBSET_DATA",
+      "what": "the bound /ProductCollection shows a 11-row subset of the 123-row mock (ui5/mock/products.json) - a full unroll adds no demo value."
+    }
+  ]
+}

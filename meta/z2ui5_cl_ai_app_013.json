@@ -1,0 +1,38 @@
+{
+  "class": "z2ui5_cl_ai_app_013",
+  "sample": "sap.m.sample.CookieSettingsDialogPattern",
+  "entity": "sap.m.CookieSettingsDialogPattern",
+  "file": "src/01/b05/z2ui5_cl_ai_app_013.clas.abap",
+  "batch": "b05",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": false
+  },
+  "status": "checked",
+  "checked": {
+    "date": "2026-07-20",
+    "note": "verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed)"
+  },
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "the i18n> ResourceModel (i18n/i18n.properties) has no framework i18n mechanism here - all texts (dialog title, section titles/summaries/details, button labels) are inlined as the resolved English literals from the properties file; this covers every i18n>-bound text incl. the Panel headerText 'More Info'."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "the cookieData> named JSON model is flattened into the default model: /showCookieDetails becomes the bound abap_bool show_cookie_details; every visible binding and expression binding keeps its original shape over the flattened path (named ABAP-fed JSON models are not expressible, CAPABILITIES.md)."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "custom:DivContainer (xmlns:custom=\"sap.ui.documentation\", a demo-kit-internal plain-div wrapper control not shipped in any UI5 library) is rebuilt as a sap.m.VBox with the same class sapUiSmallMargin."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "the controller's toggleStyleClass/addStyleClass/removeStyleClass('cookiesDetailedView') on the dialog is dropped: the class's CSS is not part of the sample's shipped files (manifest references css/style.css but does not list it under sample files, and it is not archived) and no whitelisted frontend action toggles style classes."
+    },
+    {
+      "type": "NOTE",
+      "what": "the controller's lazy Fragment.load + cached-instance open()/close() lifecycle maps to client->popup_display (the fragment XML is rebuilt per open, forcing showCookieDetails=false like the original's openCookieSettingsDialog) and client->popup_destroy in the close handlers; the original's empty 'insert your ... logic here' placeholders remain as backend event branches (ACCEPT_ALL_COOKIES/REJECT_ALL_COOKIES/SAVE_COOKIES) that only close the dialog."
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "class": "z2ui5_cl_ai_app_033",
+  "sample": "sap.m.sample.LinkEmphasized",
+  "entity": "sap.m.Link",
+  "file": "src/01/b01/z2ui5_cl_ai_app_033.clas.abap",
+  "batch": "b01",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "checked",
+  "checked": {
+    "date": "2026-07-19",
+    "note": "verified in a running system - human visual pass 2026-07-19 over all apps: the Currency composite binding renders the formatted price per currency (raw binding-info string over PRICE TYPE p)."
+  },
+  "deviations": [
+    {
+      "type": "SUBSET_DATA",
+      "what": "the bound /ProductCollection shows a 6-row subset of the 123-row mock (ui5/mock/products.json); HT-1002 is not part of the subset."
+    }
+  ]
+}

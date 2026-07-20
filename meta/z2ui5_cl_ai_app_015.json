@@ -1,0 +1,26 @@
+{
+  "class": "z2ui5_cl_ai_app_015",
+  "sample": "sap.m.sample.CustomTreeItem",
+  "entity": "sap.m.CustomTreeItem",
+  "file": "src/01/b05/z2ui5_cl_ai_app_015.clas.abap",
+  "batch": "b05",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "checked",
+  "checked": {
+    "date": "2026-07-20",
+    "note": "verified in a running system - human pass 2026-07-20: app starts and renders like the original; no interaction paths were open for this port"
+  },
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "the original binds the Tree's items to the whole JSON model root (items=\"{path: '/'}\", the model IS the node array from Tree.json); abap2UI5 serves a single default model, so the array is flattened into it as the bound table T_TREE and the binding-info keeps its shape with the bound path substituted for '/' (nested tree binding is expressible per CAPABILITIES.md, proven by app 054)."
+    },
+    {
+      "type": "NOTE",
+      "what": "the flat ABAP row types serialize an empty NODES array on leaf rows where the original Tree.json simply omits the 'nodes' property (levels 1-4; the level-5 row type carries no NODES field at all); ClientTreeBinding treats an empty child array as a childless node, so the rendered tree matches. TEXT and REF are present on every original node - no absent-property/empty-string enum risk."
+    }
+  ]
+}

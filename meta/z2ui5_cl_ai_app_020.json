@@ -1,0 +1,30 @@
+{
+  "class": "z2ui5_cl_ai_app_020",
+  "sample": "sap.m.sample.DisplayListItem",
+  "entity": "sap.m.DisplayListItem",
+  "file": "src/01/b06/z2ui5_cl_ai_app_020.clas.abap",
+  "batch": "b06",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "checked",
+  "checked": {
+    "date": "2026-07-20",
+    "note": "verified in a running system - human pass 2026-07-20: app starts and renders like the original; no interaction paths were open for this port"
+  },
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "the shared mock model sap/ui/demo/mock/supplier.json is flattened into the default model: the row type keeps only the six bound columns (SupplierName, Street, HouseNumber, ZIPCode, City, Country) of the single /SupplierCollection record and drops the unbound columns (Url, Twitter, Tel, Sms, Mobile, Pager, Fax, Email, Rating, Prime, Disposable); the record itself is kept verbatim."
+    },
+    {
+      "type": "NOTE",
+      "what": "the sample controller loads the shared mock sap/ui/demo/mock/supplier.json - snapshotted byte-identical into ui5/mock/supplier.json (2026-07-20, git sparse checkout of SAP/openui5 master); one SupplierCollection record, full row set, values verifiable offline."
+    },
+    {
+      "type": "NOTE",
+      "what": "element binding binding=\"{/T_SUPPLIERS/0}\" with relative DisplayListItem value bindings - the binding= context mechanism is already live-verified via app 041 (checked 2026-07-19); the /0 array-index path variant is a plain JSONModel path resolution, source-decidable, so no LIVE_TEST is carried."
+    }
+  ]
+}

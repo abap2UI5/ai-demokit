@@ -42,7 +42,7 @@ const UI5 = path.join(ROOT, 'ui5', 'sap.m');
 const STRICT = process.argv.includes('--strict');
 
 // attribute names that never carry over 1:1. NOTE: `id` is compared like any
-// other attribute (name-level, per control type) since 2026-07-19 — app 474
+// other attribute (name-level, per control type) since 2026-07-19 — app 047
 // had silently dropped two original ids while every other port kept them.
 // Ids the port ADDS are fine (extra attrs are never flagged); ids the
 // original has and the port lacks must be restored or declared.

@@ -119,7 +119,7 @@ references and only they graduate to the curated samples repo.
 A promotion certifies the **code at check time**: any behavioral rework of a
 `checked`/`golden` port drops it back to `generated` (keep the old check as
 context in a `LIVE_TEST` deviation) until a fresh live run restamps it —
-see the AGENTS §10 gotcha (app 530, 2026-07-19).
+see the AGENTS §10 gotcha (app 003, 2026-07-19).
 
 ## Per-port metadata
 
@@ -133,10 +133,10 @@ edited directly in the sidecar. The shape:
 
 ```jsonc
 {
-  "class":   "z2ui5_cl_ai_app_454",
+  "class":   "z2ui5_cl_ai_app_040",
   "sample":  "sap.m.sample.MultiInput",
   "entity":  "sap.m.MultiInput",
-  "file":    "src/01/b02/z2ui5_cl_ai_app_454.clas.abap",
+  "file":    "src/01/b02/z2ui5_cl_ai_app_040.clas.abap",
   "batch":   "b02",
   "audit":   { "frontend_action": false, "event_t_arg": false },
   "status":  "generated",              // generated | reviewed | checked | golden
@@ -158,7 +158,7 @@ the agent improvise unnecessarily" becomes a query, not an impression.
 ## Verification: structural view diff
 
 abaplint proves syntax, not fidelity — a port can be CI-green and render an
-empty control (it happened: app 454 lost its pre-set tokens).
+empty control (it happened: app 040 lost its pre-set tokens).
 **Implemented:** `scripts/structural-diff.mjs` compares the original
 `view.xml` control structure (control multiset + attribute-name sets) against
 the builder calls parsed from the ABAP port, and matches every difference

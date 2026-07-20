@@ -1,0 +1,30 @@
+{
+  "class": "z2ui5_cl_ai_app_014",
+  "sample": "sap.m.sample.CustomListItem",
+  "entity": "sap.m.CustomListItem",
+  "file": "src/01/b05/z2ui5_cl_ai_app_014.clas.abap",
+  "batch": "b05",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "checked",
+  "checked": {
+    "date": "2026-07-20",
+    "note": "verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed)"
+  },
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "the shared mock model /ProductCollection (ui5/mock/products.json) is flattened into the default model with only the three bound columns (ProductId, Name, ProductPicUrl); all unbound columns are dropped. The full 123-row set is kept verbatim."
+    },
+    {
+      "type": "NOTE",
+      "what": "the ProductPicUrl values point at the OpenUI5 host (https://sdk.openui5.org/test-resources/...) per the asset-URL rule; they are rebuilt per row from ProductId in a LOOP in model_init - path and file name are identical to the mock values, only the host prefix is added."
+    },
+    {
+      "type": "NOTE",
+      "what": "the controller-built Dialog of handlePress (Image + Close button, afterClose destroy) is rebuilt 1:1 as a core:FragmentDefinition -> Dialog shown via client->popup_display (the CAPABILITIES.md pattern, app 042). The Link press ships the row's ProductPicUrl via t_arg ${PRODUCT_PIC_URL} - the original reads evt.getSource().getTarget(), whose target property is bound to the same column. The Close button maps to client->_event_client( popup_close ); the original's afterClose destroy is handled by the framework's popup lifecycle and is not wired separately."
+    }
+  ]
+}

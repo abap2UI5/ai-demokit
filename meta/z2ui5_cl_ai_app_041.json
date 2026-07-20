@@ -1,0 +1,26 @@
+{
+  "class": "z2ui5_cl_ai_app_041",
+  "sample": "sap.m.sample.ObjectHeader",
+  "entity": "sap.m.ObjectHeader",
+  "file": "src/01/b01/z2ui5_cl_ai_app_041.clas.abap",
+  "batch": "b01",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "checked",
+  "checked": {
+    "date": "2026-07-19",
+    "note": "verified in a running system - human visual pass 2026-07-19 over all apps: the element binding {/S_PRODUCT} resolves all relative field bindings incl. the Currency number - the ObjectHeader renders fully populated."
+  },
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "the ObjectHeader keeps the original element binding and relative field bindings 1:1 (title, numberUnit, the ObjectAttribute composite texts and the sap.ui.model.type.Currency number binding); only the binding context path changes - a one-record structure /S_PRODUCT in the default model instead of {/ProductCollection/0}, since the port does not carry the whole collection."
+    },
+    {
+      "type": "SUBSET_DATA",
+      "what": "the model holds exactly the bound record /ProductCollection/0 (Notebook Basic 15) of ui5/mock/products.json, verbatim."
+    }
+  ]
+}
