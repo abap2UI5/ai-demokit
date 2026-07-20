@@ -1,0 +1,55 @@
+{
+  "name": "abap2ui5-demokit",
+  "displayName": "abap2UI5 Demokit Helper",
+  "description": "Kleine Helfer-Extension rund um abap2UI5: Snippets und Befehle zum schnellen Erstellen von abap2UI5-Apps.",
+  "version": "0.0.1",
+  "publisher": "abap2ui5-local",
+  "license": "MIT",
+  "private": true,
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Snippets",
+    "Other"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/abap2UI5/ai-demokit.git"
+  },
+  "main": "./dist/extension.js",
+  "activationEvents": [],
+  "contributes": {
+    "commands": [
+      {
+        "command": "abap2ui5-demokit.newApp",
+        "title": "abap2UI5: Neue App-Vorlage einfügen"
+      },
+      {
+        "command": "abap2ui5-demokit.openDemokit",
+        "title": "abap2UI5: Demokit im Browser öffnen"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "abap",
+        "path": "./snippets/abap2ui5.code-snippets"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run package",
+    "compile": "node esbuild.js",
+    "watch": "node esbuild.js --watch",
+    "package": "node esbuild.js --production",
+    "vsix": "vsce package --allow-missing-repository",
+    "lint": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.0",
+    "@types/vscode": "^1.85.0",
+    "@vscode/vsce": "^2.24.0",
+    "esbuild": "^0.20.0",
+    "typescript": "^5.3.0"
+  }
+}
