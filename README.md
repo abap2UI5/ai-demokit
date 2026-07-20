@@ -8,7 +8,7 @@
 
 # abap2UI5-api
 
-_Last generated: <!-- last-run -->2026-07-14 09:00 UTC<!-- /last-run -->_
+_Last generated: <!-- last-run -->2026-07-20 06:21 UTC<!-- /last-run -->_
 
 > **This repository is AI-generated.** From every official **`sap.m`** UI5 demo
 > kit sample whose control **exists since UI5 1.71** and is **not deprecated**
