@@ -77,17 +77,30 @@ app 062). The b07 ports are `generated` (no human live check yet); the menu
 item-arg paths (`${$parameters>/item/text}`) and the openBy anchoring are the
 open LIVE_TESTs.
 
-**Framework gaps filed (`pr/` no longer empty):** three forwardable requests
-from b07 — `formatter-inline-icon` (a curated `inlineIcon` helper so app 062's
-MessageStrip inline icons render 1:1 instead of guessed codepoints; medium
-priority, clean win), `menu-toggle-openby` (a client-side `toggleBy` so app
-060's press-to-toggle menu is 1:1; low), and `menu-item-selected-path` (the
-selected menu item's ancestor breadcrumb for 060/061, or a documented
-boundary; low). A fourth idea, exposing the MessageManager for the deferred
-`MessagePopoverMessageHandling`, was **investigated and not filed** — the
-`message>` model (implemented 2026-07-18) and the plain-table approach
-(app 038) already cover the MessagePopover family, so that sample is a porting
-task, not a framework gap (recorded in `pr/README`).
+**Framework gaps from b07 — two implemented upstream, one deferred:**
+- **`menu-toggle-openby` → implemented 2026-07-20**: `toggleBy: ["domRef"]`
+  added to `CONTROL_METHODS` (`control.isOpen() ? close() : openBy(anchor)`,
+  no server-side open state). App 060 converted openBy→toggleBy — the
+  press-to-toggle menu is now 1:1 (the IMPROVISED toggle-reduction is gone).
+  Framework unit tests added.
+- **`formatter-inline-icon` → implemented 2026-07-20**: `expandInlineIcons`
+  added to the curated `model/formatter.js` (replaces `%%icon:sap-icon://…%%`
+  placeholders with the `sapMMsgStripInlineIcon` markup via `IconPool`, the
+  `getInlineIcon` equivalent). App 062's inlineIconsHelper converted to
+  placeholders + a `core:require` formatter binding — no more guessed
+  codepoints. Framework unit tests added; the render-smoke harness formatter
+  mirror gained `expandInlineIcons`.
+- **`menu-item-selected-path` → deferred** (user decision): the selected menu
+  item's ancestor breadcrumb for 060/061; cosmetic (toast text), likely a
+  documented boundary rather than a framework change. Folder kept under `pr/`.
+
+Both implemented requests removed their `pr/` folders and moved to the
+`pr/README` Implemented table; CAPABILITIES.md updated (toggleBy row, formatter
+`expandInlineIcons`). A fourth idea, exposing the MessageManager for the
+deferred `MessagePopoverMessageHandling`, was **investigated and not filed** —
+the `message>` model (2026-07-18) and the plain-table approach (app 038)
+already cover the MessagePopover family, so that sample is a porting task, not
+a framework gap.
 
 ## Full human live check (2026-07-20) — every open question cleared
 

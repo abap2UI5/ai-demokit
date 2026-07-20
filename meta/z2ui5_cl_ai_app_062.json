@@ -16,8 +16,12 @@
       "what": "the MessageStrip `controls` aggregation (since UI5 1.129) is kept 1:1 for the fifth strip's %%0/%%1/%%2 multi-link formatted text (three sap.m.Link). enableFormattedText itself is since 1.50 (<= 1.71)."
     },
     {
-      "type": "IMPROVISED",
-      "what": "the inlineIconsHelper text is built in the controller from sap.m.MessageStripUtilities.getInlineIcon() (a JS utility with no abap2UI5 equivalent); it is replaced by equivalent hardcoded inline-icon markup (<span class='sapMMsgStripInlineIcon'>&#x....;</span>), matching the sample's rendering approach. The icon codepoints are illustrative."
+      "type": "POST_171",
+      "what": "core:require=\"{Formatter: 'z2ui5/model/formatter'}\" wires the curated formatter module (since UI5 1.74) so the inlineIconsHelper strip can use Formatter.expandInlineIcons; the two added namespace decls (xmlns:core, core:require on the view root) are not in the sample view."
+    },
+    {
+      "type": "NOTE",
+      "what": "the sample's controller builds inlineIconsHelper from sap.m.MessageStripUtilities.getInlineIcon() concatenations; the port stores the text with %%icon:sap-icon://<name>%% placeholders (the real icon names message-success/sys-enter-2/stethoscope) and binds it through formatter 'Formatter.expandInlineIcons' - added upstream 2026-07-20 (pr/formatter-inline-icon), it resolves each glyph via IconPool and emits the same sapMMsgStripInlineIcon markup, so no icon codepoints are guessed. The inlineIconsUnicode strip keeps the sample's own literal &#x....; entities 1:1."
     },
     {
       "type": "NOTE",

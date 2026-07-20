@@ -18,7 +18,7 @@
     },
     {
       "type": "IMPROVISED",
-      "what": "the sample loads the Menu from Menu.fragment.xml on first press and calls oMenu.openBy(button) in the controller. The port declares the Menu 1:1 inside the Button's `dependents` aggregation and opens it via client->follow_up_action( cs_event-control_by_id, openBy ) anchored to the button's DOM ref ($event.oSource.sId), the same frontend-action pattern as golden app 016. The sample's press handler additionally TOGGLES (closes the menu if it is already open, via the client-side isOpen() check); the port always (re-)opens, because the menu's open/closed state lives client-side (an item click or outside click closes it without notifying the backend) and cannot be reliably mirrored server-side."
+      "what": "the sample loads the Menu from Menu.fragment.xml on first press and toggles it in the controller (oMenu.isOpen() ? close() : openBy(button)). The port declares the Menu 1:1 inside the Button's `dependents` aggregation and toggles it via client->follow_up_action( cs_event-control_by_id, toggleBy ) anchored to the button's DOM ref ($event.oSource.sId) - toggleBy (open-if-closed / close-if-open) was added upstream 2026-07-20 (pr/menu-toggle-openby) precisely so the client-side open state need not be mirrored server-side, making the press-to-toggle 1:1. Frontend-action pattern as golden app 016."
     },
     {
       "type": "IMPROVISED",

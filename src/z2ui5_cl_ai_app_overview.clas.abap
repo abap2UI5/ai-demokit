@@ -829,12 +829,12 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.m` control = `sap.m.List`                        name = `ListNoData`                          class = `z2ui5_cl_ai_app_035` path = `src/01/b04/z2ui5_cl_ai_app_035.clas.abap` )
       ( module = `sap.m` control = `sap.m.Menu`                        name = `Menu`                                class = `z2ui5_cl_ai_app_060` path = `src/01/b07/z2ui5_cl_ai_app_060.clas.abap`
         notes = `POST-1.71: Button.ariaHasPopup (since UI5 1.84) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.84 to render it. // IMPROVISED: the sample loads the Menu from` &&
-                 ` Menu.fragment.xml on first press and calls oMenu.openBy(button) in the controller. The port declares the Menu 1:1 inside the Button's ``dependents`` aggregation and opens it via` &&
-                 ` client->follow_up_action( cs_event-control_by_id, openBy ) anchored to the button's DOM ref ($event.oSource.sId), the same frontend-action pattern as golden app 016. The sample's press handler` &&
-                 ` additionally TOGGLES (closes the menu if it is already open, via the client-side isOpen() check); the port always (re-)opens, because the menu's open/closed state lives client-side (an item click or` &&
-                 ` outside click closes it without notifying the backend) and cannot be reliably mirrored server-side. // IMPROVISED: onMenuAction builds a breadcrumb path by walking the selected MenuItem's parent` &&
-                 ` chain (e.g. 'Create New Site > Official Store'); the server cannot walk the client-side control tree, so the toast shows only the selected item's own text, transported via ${$parameters>/item/text}.` &&
-                 ` // LIVE-TEST: confirm in a running system that the Menu opens anchored to the button (openBy) and that ${$parameters>/item/text} delivers the clicked MenuItem's text to the toast.`
+                 ` Menu.fragment.xml on first press and toggles it in the controller (oMenu.isOpen() ? close() : openBy(button)). The port declares the Menu 1:1 inside the Button's ``dependents`` aggregation and` &&
+                 ` toggles it via client->follow_up_action( cs_event-control_by_id, toggleBy ) anchored to the button's DOM ref ($event.oSource.sId) - toggleBy (open-if-closed / close-if-open) was added upstream` &&
+                 ` 2026-07-20 (pr/menu-toggle-openby) precisely so the client-side open state need not be mirrored server-side, making the press-to-toggle 1:1. Frontend-action pattern as golden app 016. // IMPROVISED:` &&
+                 ` onMenuAction builds a breadcrumb path by walking the selected MenuItem's parent chain (e.g. 'Create New Site > Official Store'); the server cannot walk the client-side control tree, so the toast` &&
+                 ` shows only the selected item's own text, transported via ${$parameters>/item/text}. // LIVE-TEST: confirm in a running system that the Menu opens anchored to the button (openBy) and that` &&
+                 ` ${$parameters>/item/text} delivers the clicked MenuItem's text to the toast.`
         post171 = `Button.ariaHasPopup (since UI5 1.84) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.84 to render it.` )
       ( module = `sap.m` control = `sap.m.MenuButton`                  name = `MenuButton`                          class = `z2ui5_cl_ai_app_061` path = `src/01/b07/z2ui5_cl_ai_app_061.clas.abap`
         notes = `POST-1.71: the MenuButton ``beforeMenuOpen`` event (since UI5 1.94) is kept 1:1 on the split-mode buttons that use it. menuPosition (1.56), buttonMode and useDefaultActionOnly are <= 1.71. //` &&
@@ -856,12 +856,16 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.m` control = `sap.m.MessageStrip`                name = `MessageStripWithEnableFormattedText` class = `z2ui5_cl_ai_app_062` path = `src/01/b07/z2ui5_cl_ai_app_062.clas.abap`
         since = `1.30`
         notes = `POST-1.71: the MessageStrip ``controls`` aggregation (since UI5 1.129) is kept 1:1 for the fifth strip's %%0/%%1/%%2 multi-link formatted text (three sap.m.Link). enableFormattedText itself is since` &&
-                 ` 1.50 (<= 1.71). // IMPROVISED: the inlineIconsHelper text is built in the controller from sap.m.MessageStripUtilities.getInlineIcon() (a JS utility with no abap2UI5 equivalent); it is replaced by` &&
-                 ` equivalent hardcoded inline-icon markup (<span class='sapMMsgStripInlineIcon'>&#x....;</span>), matching the sample's rendering approach. The icon codepoints are illustrative. // NOTE: the sample's` &&
-                 ` JSONModel of static formatted-text strings is rebuilt as ABAP string fields on the single default model and bound 1:1 (text={/...}); field names differ from the JSON keys (default->default_text etc.)` &&
-                 ` but values are display-only, so the binding-value diff does not apply.`
+                 ` 1.50 (<= 1.71). // POST-1.71: core:require="{Formatter: 'z2ui5/model/formatter'}" wires the curated formatter module (since UI5 1.74) so the inlineIconsHelper strip can use` &&
+                 ` Formatter.expandInlineIcons; the two added namespace decls (xmlns:core, core:require on the view root) are not in the sample view. // NOTE: the sample's controller builds inlineIconsHelper from` &&
+                 ` sap.m.MessageStripUtilities.getInlineIcon() concatenations; the port stores the text with %%icon:sap-icon://<name>%% placeholders (the real icon names message-success/sys-enter-2/stethoscope) and` &&
+                 ` binds it through formatter 'Formatter.expandInlineIcons' - added upstream 2026-07-20 (pr/formatter-inline-icon), it resolves each glyph via IconPool and emits the same sapMMsgStripInlineIcon markup,` &&
+                 ` so no icon codepoints are guessed. The inlineIconsUnicode strip keeps the sample's own literal &#x....; entities 1:1. // NOTE: the sample's JSONModel of static formatted-text strings is rebuilt as` &&
+                 ` ABAP string fields on the single default model and bound 1:1 (text={/...}); field names differ from the JSON keys (default->default_text etc.) but values are display-only, so the binding-value diff` &&
+                 ` does not apply.`
         post171 = `the MessageStrip ``controls`` aggregation (since UI5 1.129) is kept 1:1 for the fifth strip's %%0/%%1/%%2 multi-link formatted text (three sap.m.Link). enableFormattedText itself is since 1.50 (<=` &&
-                 ` 1.71).` )
+                 ` 1.71). // core:require="{Formatter: 'z2ui5/model/formatter'}" wires the curated formatter module (since UI5 1.74) so the inlineIconsHelper strip can use Formatter.expandInlineIcons; the two added` &&
+                 ` namespace decls (xmlns:core, core:require on the view root) are not in the sample view.` )
       ( module = `sap.m` control = `sap.m.MessageToast`                name = `MessageToast`                        class = `z2ui5_cl_ai_app_037` path = `src/01/b03/z2ui5_cl_ai_app_037.clas.abap`
         since = `1.9.2` )
       ( module = `sap.m` control = `sap.m.MessageView`                 name = `MessageViewMessageManager`           class = `z2ui5_cl_ai_app_038` path = `src/01/b03/z2ui5_cl_ai_app_038.clas.abap`

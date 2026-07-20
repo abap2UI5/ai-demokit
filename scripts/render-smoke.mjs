@@ -546,6 +546,16 @@ const HARNESS = `<!DOCTYPE html>
         if (status === 'Failed Shipping') return 'Error';
         return 'None';
       },
+      expandInlineIcons: function (text) {
+        if (!text) return '';
+        var IconPool = sap.ui.require('sap/ui/core/IconPool');
+        var re = new RegExp('%%icon:(sap-icon://[^%]+)%%', 'g');
+        return String(text).replace(re, function (m, uri) {
+          var info = IconPool && IconPool.getIconInfo(uri);
+          if (!info) return '';
+          return '<span class="sapMMsgStripInlineIcon" style="font-family:' + info.fontFamily + '">' + info.content + '</span>';
+        });
+      },
     };
   })();
 </script>

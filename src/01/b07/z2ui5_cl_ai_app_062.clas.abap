@@ -38,9 +38,11 @@ CLASS z2ui5_cl_ai_app_062 IMPLEMENTATION.
     DATA(view) = z2ui5_cl_ai_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
-        )->a( n = `xmlns:l`   v = `sap.ui.layout`
-        )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
-        )->a( n = `xmlns`     v = `sap.m`
+        )->a( n = `xmlns:l`      v = `sap.ui.layout`
+        )->a( n = `xmlns:core`   v = `sap.ui.core`
+        )->a( n = `xmlns:mvc`    v = `sap.ui.core.mvc`
+        )->a( n = `xmlns`        v = `sap.m`
+        )->a( n = `core:require` v = `{Formatter: 'z2ui5/model/formatter'}`
 
         )->open( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
@@ -104,7 +106,7 @@ CLASS z2ui5_cl_ai_app_062 IMPLEMENTATION.
                     )->a( n = `showCloseButton`     v = `true`
                     )->a( n = `class`               v = `sapUiMediumMarginBottom`
                 )->leaf( `MessageStrip`
-                    )->a( n = `text`                v = client->_bind( inline_icons_helper )
+                    )->a( n = `text`                v = `{ path: '/INLINE_ICONS_HELPER', formatter: 'Formatter.expandInlineIcons' }`
                     )->a( n = `type`                v = `Success`
                     )->a( n = `enableFormattedText` v = `true`
                     )->a( n = `showIcon`            v = `true`
@@ -130,9 +132,9 @@ CLASS z2ui5_cl_ai_app_062 IMPLEMENTATION.
                            `<span class='sapMMsgStripInlineIcon'>&#xe049;</span> in module ` &&
                            `<span class='sapMMsgStripInlineIcon'>&#xe126;</span> configuration.`.
 
-    inline_icons_helper = `<strong>Deployment successful!</strong> <span class='sapMMsgStripInlineIcon'>&#xe05b;</span> All services ` &&
-                          `<span class='sapMMsgStripInlineIcon'>&#xe1c1;</span> are running. <em>Check status</em> ` &&
-                          `<span class='sapMMsgStripInlineIcon'>&#xe174;</span>`.
+    inline_icons_helper = `<strong>Deployment successful!</strong> %%icon:sap-icon://message-success%% All services ` &&
+                          `%%icon:sap-icon://sys-enter-2%% are running. <em>Check status</em> ` &&
+                          `%%icon:sap-icon://stethoscope%%`.
 
   ENDMETHOD.
 
