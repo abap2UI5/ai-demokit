@@ -246,7 +246,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
 
         )->open( `Shell`
             )->open( `Page`
-                )->a( n = `title`          v = `abap2UI5 - api`
+                )->a( n = `title`          v = `abap2UI5 - Demokit`
                 )->a( n = `navButtonPress` v = client->_event_nav_app_leave( )
                 )->a( n = `showNavButton`  v = z2ui5_cl_ai_xml=>as_bool( client->check_app_prev_stack( ) )
 
