@@ -94,7 +94,7 @@ CLASS z2ui5_cl_ai_app_016 IMPLEMENTATION.
       WHEN `OPEN_DATE_PICKER`.
         " original: byId('HiddenDP').openBy(evt.getSource().getDomRef()) - openBy is not in the CONTROL_METHODS whitelist yet, the frontend rejects the call
         client->follow_up_action( val   = client->cs_event-control_by_id
-                                  t_arg = VALUE #( ( `HiddenDP` ) ( `` ) ( `openBy` ) ( client->get_event_arg( ) ) ) ).
+                                  t_arg = VALUE #( ( `HiddenDP` ) ( `openBy` ) ( client->get_event_arg( ) ) ) ).
 
       WHEN `DATE_CHANGED`.
         client->message_toast_display( |Date selected: { client->get_event_arg( ) }| ).

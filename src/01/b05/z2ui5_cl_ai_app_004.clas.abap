@@ -69,7 +69,8 @@ CLASS z2ui5_cl_ai_app_004 IMPLEMENTATION.
       WHEN `TIMER_FINISHED`.
         IF check_busy = abap_true.
           client->follow_up_action( val   = client->cs_event-control_by_id
-                                    t_arg = VALUE #( ( `busyDialog` ) ( client->cs_view-popup ) ( `close` ) ) ).
+                                    view  = client->cs_view-popup
+                                    t_arg = VALUE #( ( `busyDialog` ) ( `close` ) ) ).
         ENDIF.
 
       WHEN `DIALOG_CLOSED`.

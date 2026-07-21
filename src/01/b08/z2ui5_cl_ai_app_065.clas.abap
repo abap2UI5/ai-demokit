@@ -270,7 +270,7 @@ CLASS z2ui5_cl_ai_app_065 IMPLEMENTATION.
       WHEN `SHOW_MESSAGES`.
         " original: this.oMP.toggle(oEvent.getSource()) - toggle open/close anchored to the button
         client->follow_up_action( val   = client->cs_event-control_by_id
-                                  t_arg = VALUE #( ( `messagePopover` ) ( `` ) ( `toggleBy` ) ( client->get_event_arg( ) ) ) ).
+                                  t_arg = VALUE #( ( `messagePopover` ) ( `toggleBy` ) ( client->get_event_arg( ) ) ) ).
 
       WHEN `ACTIVE_TITLE`.
         " original: activeTitlePress scrolls to the message's target control, closes the popover
@@ -281,7 +281,7 @@ CLASS z2ui5_cl_ai_app_065 IMPLEMENTATION.
           client->follow_up_action( val   = client->cs_event-scroll_into_view
                                     t_arg = VALUE #( ( lv_control_id ) ) ).
           client->follow_up_action( val   = client->cs_event-control_by_id
-                                    t_arg = VALUE #( ( `messagePopover` ) ( `` ) ( `close` ) ) ).
+                                    t_arg = VALUE #( ( `messagePopover` ) ( `close` ) ) ).
           client->follow_up_action( val   = client->cs_event-set_focus
                                     t_arg = VALUE #( ( lv_control_id ) ) ).
         ENDIF.
@@ -315,7 +315,7 @@ CLASS z2ui5_cl_ai_app_065 IMPLEMENTATION.
         client->view_model_update( ).
         " original: oMP.openBy(oButton) after the values are set - open the popover anchored to the button
         client->follow_up_action( val   = client->cs_event-control_by_id
-                                  t_arg = VALUE #( ( `messagePopover` ) ( `` ) ( `openBy` ) ( `messagePopoverBtn` ) ) ).
+                                  t_arg = VALUE #( ( `messagePopover` ) ( `openBy` ) ( `messagePopoverBtn` ) ) ).
 
       WHEN `CHANGE`.
         " the sample's onChange manually adds/removes required-field and constraint messages; here

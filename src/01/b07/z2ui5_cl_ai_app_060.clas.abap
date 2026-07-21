@@ -92,7 +92,7 @@ CLASS z2ui5_cl_ai_app_060 IMPLEMENTATION.
       WHEN `OPEN_MENU`.
         " toggle: open the menu anchored to the button if closed, close it if open (1:1 with the sample's isOpen() check)
         client->follow_up_action( val   = client->cs_event-control_by_id
-                                  t_arg = VALUE #( ( `theMenu` ) ( `` ) ( `toggleBy` ) ( client->get_event_arg( ) ) ) ).
+                                  t_arg = VALUE #( ( `theMenu` ) ( `toggleBy` ) ( client->get_event_arg( ) ) ) ).
 
       WHEN `MENU_ACTION`.
         client->message_toast_display( |Action triggered on item: { client->get_event_arg( ) }| ).

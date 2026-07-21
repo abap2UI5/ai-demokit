@@ -112,7 +112,7 @@ CLASS z2ui5_cl_ai_app_066 IMPLEMENTATION.
       WHEN `SHOW_MESSAGES`.
         " original: oMessagePopover.toggle(evt.getSource()) - toggle open/close anchored to the button
         client->follow_up_action( val   = client->cs_event-control_by_id
-                                  t_arg = VALUE #( ( `messagePopover` ) ( `` ) ( `toggleBy` ) ( client->get_event_arg( ) ) ) ).
+                                  t_arg = VALUE #( ( `messagePopover` ) ( `toggleBy` ) ( client->get_event_arg( ) ) ) ).
 
       WHEN `ACTIVE_TITLE`.
         client->message_toast_display( `Active title is pressed` ).

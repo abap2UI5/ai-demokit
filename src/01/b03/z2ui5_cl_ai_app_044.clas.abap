@@ -78,12 +78,11 @@ CLASS z2ui5_cl_ai_app_044 IMPLEMENTATION.
     CASE client->get( )-event.
 
       WHEN `SHOW_PDF`.
-        " original onPress setSource + open(): update the bound source, then the whitelisted open runs after render (t_arg positional: id, view - `` = global lookup -, method)
+        " original onPress setSource + open(): update the bound source, then the whitelisted open runs after render (t_arg positional: id, method; the view defaults to cs_view-main)
         pdf_source = `https://sdk.openui5.org/test-resources/sap/m/demokit/sample/PDFViewerPopup/` && client->get_event_arg( ).
         client->view_model_update( ).
         client->follow_up_action( val   = z2ui5_if_client=>cs_event-control_by_id
                                   t_arg = VALUE #( ( `pdfViewer` )
-                                                   ( `` )
                                                    ( `open` ) ) ).
 
     ENDCASE.

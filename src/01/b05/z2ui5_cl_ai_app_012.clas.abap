@@ -447,7 +447,7 @@ CLASS z2ui5_cl_ai_app_012 IMPLEMENTATION.
         comparison_build( ).
         " the router's navTo("page2") mapped to the NavContainer `to` frontend action
         client->follow_up_action( val   = client->cs_event-control_by_id
-                                  t_arg = VALUE #( ( `rootControl` ) ( `` ) ( `to` ) ( `page-comparison` ) ) ).
+                                  t_arg = VALUE #( ( `rootControl` ) ( `to` ) ( `page-comparison` ) ) ).
         client->view_model_update( ).
 
       WHEN `PAGE_CHANGED`.

@@ -118,11 +118,10 @@ CLASS z2ui5_cl_ai_app_043 IMPLEMENTATION.
       WHEN `TOOLBAR_PRESSED`.
         " original: oPanel.setExpanded(!oPanel.getExpanded()) - the same
         " imperative call, client-side via the whitelisted setExpanded.
-        " t_arg is positional: id, view (`` = global lookup), method, params
+        " t_arg is positional: id, method, params (the view defaults to cs_view-main)
         expanded = xsdbool( expanded = abap_false ).
         client->follow_up_action( val   = z2ui5_if_client=>cs_event-control_by_id
                                   t_arg = VALUE #( ( `expandablePanel` )
-                                                   ( `` )
                                                    ( `setExpanded` )
                                                    ( CONV string( expanded ) ) ) ).
 
