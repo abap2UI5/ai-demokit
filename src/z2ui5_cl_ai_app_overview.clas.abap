@@ -885,6 +885,9 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` description) is kept for the async sample's rich-text messages.` )
       ( module = `sap.m` control = `sap.m.MessagePopover`              name = `MessagePopoverMessageHandling`       class = `z2ui5_cl_ai_app_065` path = `src/01/b08/z2ui5_cl_ai_app_065.clas.abap`
         since = `1.28`
+        checked = `CHECKED (2026-07-21): verified in a running system - human live check 2026-07-21: startup toast at native height; Save opens the MessagePopover with 3 Errors + 1 Warning marking John Miller (Name) /` &&
+                 ` Stefan Bosch (ZIP) / Maria Fontes (Email) + employment weekly hours; group headers Personal, Information / Personal, Contact; message-title press scrolls to and focuses the field; toggleBy` &&
+                 ` opens/closes. Known cosmetic gap: the injected non-numeric ZIP shows empty (not "AAA") because the Integer-typed field cannot format it via the model->view path.`
         notes = `POST-1.71: two post-1.71 members are kept for the 1:1 port: Button.ariaHasPopup (since UI5 1.84) on the MessagePopover button, and MessagePopover.groupItems (since UI5 1.73). // IMPROVISED: the` &&
                  ` controller's manual MessageManager handling is replaced by two framework mechanisms: (1) the typed value bindings with constraints (sap.ui.model.type.Integer/String, ZIP_CODE Integer, WEEKLYHOURS` &&
                  ` Integer maximum 40, EMAIL search regex) collect/clear their validation messages AUTOMATICALLY into the message> model (no app code) - replacing onChange/handleRequiredField/checkInputConstraints; (2)` &&
@@ -906,9 +909,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` the view-prefixed id. // NOTE: onInit's MessageToast.show('Press "Save" to trigger validation.') is ported as client->message_toast_display( ... ) in the check_on_init branch. // NOTE: MessageItem` &&
                  ` grouping (groupItems=true + the 'Personal, <section>' group headers) is RESTORED: the original derives groupName by walking the control tree (getGroupName -> form title + group subtitle), which the` &&
                  ` server cannot do, so groupName is derived data-driven via an expression binding on the field label ({= ${message>additionalText} === 'Email' ? 'Personal, Contact' : 'Personal, Information' }) - only` &&
-                 ` Email sits in the Contact group, all others in Information, matching the original's headers (verified headless). // LIVE-TEST: confirm in a running system: the startup toast ('Press "Save" to trigger` &&
-                 ` validation.') shows; Save injects the four invalid values and the MessagePopover opens listing 3 Errors + 1 Warning (Name / ZIP / Email / Standard Weekly Hours); the count badge reads 3; a message` &&
-                 ` title press scrolls to and focuses its field (activeTitlePress); toggleBy opens/closes the popover.`
+                 ` Email sits in the Contact group, all others in Information, matching the original's headers (verified headless).`
         post171 = `two post-1.71 members are kept for the 1:1 port: Button.ariaHasPopup (since UI5 1.84) on the MessagePopover button, and MessagePopover.groupItems (since UI5 1.73).` )
       ( module = `sap.m` control = `sap.m.MessageStrip`                name = `MessageStripWithEnableFormattedText` class = `z2ui5_cl_ai_app_062` path = `src/01/b07/z2ui5_cl_ai_app_062.clas.abap`
         since = `1.30`
