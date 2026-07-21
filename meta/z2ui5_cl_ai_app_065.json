@@ -33,6 +33,10 @@
       "what": "3 of the 8 mock form rows are kept (incl. John Miller's invalid ZIP 'AAA' that trips the Integer validation on render); the single employment row is kept 1:1. Checkable against ui5/sap.m/MessagePopoverMessageHandling/localService/mockdata/FormsModel.json."
     },
     {
+      "type": "NOTE",
+      "what": "the controller's handleMessagePopoverPress (this.oMP.toggle(oEvent.getSource())) becomes the SHOW_MESSAGES event -> client->follow_up_action( cs_event-control_by_id, toggleBy ) anchored to the button's DOM ref ($event.oSource.sId), the MessagePopover carrying id=messagePopover - open-if-closed / close-if-open, same frontend-action pattern as apps 066/067."
+    },
+    {
       "type": "LIVE_TEST",
       "what": "confirm in a running system: the Integer/email constraint bindings auto-collect their errors into the message> model (invalid ZIP 'AAA', >40 weekly hours, malformed email) and set the field valueState; the MessagePopover button shows/hides on {message>/} and lists them; and the Save-authored message flows through z2ui5.cc.MessageManager into the MessagePopover 1:1."
     }

@@ -216,11 +216,13 @@ CLASS z2ui5_cl_ai_app_065 IMPLEMENTATION.
                         )->a( n = `text`         v = |\{= $\{message>/\}.length \}|
                         )->a( n = `type`         v = `Emphasized`
                         )->a( n = `ariaHasPopup` v = `Dialog`
-                        )->a( n = `press`        v = client->_event( `SHOW_MESSAGES` )
+                        )->a( n = `press`        v = client->_event( val   = `SHOW_MESSAGES`
+                                                                     t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
 
                         )->open( `dependents`
                             )->open( `MessagePopover`
-                                )->a( n = `items` v = `{message>/}`
+                                )->a( n = `id`         v = `messagePopover`
+                                )->a( n = `items`      v = `{message>/}`
                                 )->a( n = `groupItems` v = `true`
                                 )->leaf( `MessageItem`
                                     )->a( n = `title`       v = `{message>message}`
@@ -252,6 +254,11 @@ CLASS z2ui5_cl_ai_app_065 IMPLEMENTATION.
   METHOD on_event.
 
     CASE client->get( )-event.
+
+      WHEN `SHOW_MESSAGES`.
+        " original: this.oMP.toggle(oEvent.getSource()) - toggle open/close anchored to the button
+        client->follow_up_action( val   = client->cs_event-control_by_id
+                                  t_arg = VALUE #( ( `messagePopover` ) ( `` ) ( `toggleBy` ) ( client->get_event_arg( ) ) ) ).
 
       WHEN `SAVE`.
         " original: generateInvalidUserInput() sets invalid values to trigger validation and the
