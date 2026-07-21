@@ -237,6 +237,10 @@ CLASS z2ui5_cl_ai_app_065 IMPLEMENTATION.
                                     )->a( n = `type`        v = `{message>type}`
                                     )->a( n = `description` v = `{message>message}`
                                     )->a( n = `activeTitle` v = `true`
+                                    " group name (Personal, <section>): the original's getGroupName walks the
+                                    " control tree; the server can't, so derive the section from the field -
+                                    " only Email sits in the Contact group, the rest in Information
+                                    )->a( n = `groupName`   v = |\{= $\{message>additionalText\} === 'Email' ? 'Personal, Contact' : 'Personal, Information' \}|
 
                             )->shut(
                         )->shut(

@@ -26,7 +26,7 @@
     },
     {
       "type": "DROPPED_171",
-      "what": "controller-only pieces with no view/binding equivalent are dropped: buttonIconFormatter/buttonTypeFormatter/highestSeverityMessages (the button's severity-based icon/type/count) is reduced to text={=${message>/}.length}, type=Emphasized; the MessageItem groupName formatter (the server cannot walk the client control tree to build per-form group names); core:CommandExecution (the Ctrl+Shift+M focus shortcut); isPositionable."
+      "what": "controller-only pieces with no view/binding equivalent are dropped: buttonIconFormatter/buttonTypeFormatter/highestSeverityMessages (the button's severity-based icon/type/count) is reduced to text={=${message>/}.length}, type=Emphasized; core:CommandExecution (the Ctrl+Shift+M focus shortcut); isPositionable."
     },
     {
       "type": "NOTE",
@@ -43,6 +43,10 @@
     {
       "type": "NOTE",
       "what": "onInit's MessageToast.show('Press \"Save\" to trigger validation.') is ported as client->message_toast_display( ... ) in the check_on_init branch."
+    },
+    {
+      "type": "NOTE",
+      "what": "MessageItem grouping (groupItems=true + the 'Personal, <section>' group headers) is RESTORED: the original derives groupName by walking the control tree (getGroupName -> form title + group subtitle), which the server cannot do, so groupName is derived data-driven via an expression binding on the field label ({= ${message>additionalText} === 'Email' ? 'Personal, Contact' : 'Personal, Information' }) - only Email sits in the Contact group, all others in Information, matching the original's headers (verified headless)."
     },
     {
       "type": "LIVE_TEST",

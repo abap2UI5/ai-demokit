@@ -895,18 +895,20 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` messagePopoverBtn. // IMPROVISED: the sample's nested JSON model (street/name, zip/code, phone/number) is flattened into a flat ABAP row (STREET_NAME, ZIP_CODE, PHONE_NUMBER, ...) - abap2UI5 serves` &&
                  ` one default model; the bindings use the flattened field names. The three f:ColumnElementData layoutData hints (cellsSmall/cellsLarge column spans on the street-number, zip-code and one employment` &&
                  ` Input) are dropped - responsive-span cosmetics with no data/behaviour. // 1.71: controller-only pieces with no view/binding equivalent are dropped:` &&
-                 ` buttonIconFormatter/buttonTypeFormatter/highestSeverityMessages (the button's severity-based icon/type/count) is reduced to text={=${message>/}.length}, type=Emphasized; the MessageItem groupName` &&
-                 ` formatter (the server cannot walk the client control tree to build per-form group names); core:CommandExecution (the Ctrl+Shift+M focus shortcut); isPositionable. // NOTE: the controller's` &&
-                 ` handleMessagePopoverPress (this.oMP.toggle(oEvent.getSource())) becomes the SHOW_MESSAGES event -> client->follow_up_action( cs_event-control_by_id, toggleBy ) anchored to the button's DOM ref` &&
-                 ` ($event.oSource.sId), the MessagePopover carrying id=messagePopover - open-if-closed / close-if-open, same frontend-action pattern as apps 066/067. // NOTE: all 8 forms of the mock FormsModel.json` &&
-                 ` are loaded verbatim (Julie Armstrong, Denise Smith, Richard Wilson, Gerd Becker, John Miller with the built-in invalid ZIP AAA, Stefan Bosch, Maria Fontes with empty email + malformed website,` &&
-                 ` Antonio Ferrari) plus the single employment row - the full data set, not a subset. // NOTE: activeTitlePress scroll-to-control navigation is RESTORED (activeTitle=true): pressing a message title` &&
-                 ` fires ACTIVE_TITLE with the message's target control id (${$parameters>/item}.getBindingContext('message').getObject().getControlIds()[0]), and the handler runs follow_up_action( scroll_into_view ) +` &&
-                 ` control_by_id close + set_focus on it - the 1:1 equivalent of the sample's scrollToElement + close + focus. Needs the upstream fix that lets SET_FOCUS/SCROLL_INTO_VIEW resolve a fully-qualified` &&
-                 ` control id (resolveById), since a UI5 Message carries the view-prefixed id. // NOTE: onInit's MessageToast.show('Press "Save" to trigger validation.') is ported as client->message_toast_display( ...` &&
-                 ` ) in the check_on_init branch. // LIVE-TEST: confirm in a running system: the startup toast ('Press "Save" to trigger validation.') shows; Save injects the four invalid values and the MessagePopover` &&
-                 ` opens listing 3 Errors + 1 Warning (Name / ZIP / Email / Standard Weekly Hours); the count badge reads 3; a message title press scrolls to and focuses its field (activeTitlePress); toggleBy` &&
-                 ` opens/closes the popover.`
+                 ` buttonIconFormatter/buttonTypeFormatter/highestSeverityMessages (the button's severity-based icon/type/count) is reduced to text={=${message>/}.length}, type=Emphasized; core:CommandExecution (the` &&
+                 ` Ctrl+Shift+M focus shortcut); isPositionable. // NOTE: the controller's handleMessagePopoverPress (this.oMP.toggle(oEvent.getSource())) becomes the SHOW_MESSAGES event -> client->follow_up_action(` &&
+                 ` cs_event-control_by_id, toggleBy ) anchored to the button's DOM ref ($event.oSource.sId), the MessagePopover carrying id=messagePopover - open-if-closed / close-if-open, same frontend-action pattern` &&
+                 ` as apps 066/067. // NOTE: all 8 forms of the mock FormsModel.json are loaded verbatim (Julie Armstrong, Denise Smith, Richard Wilson, Gerd Becker, John Miller with the built-in invalid ZIP AAA,` &&
+                 ` Stefan Bosch, Maria Fontes with empty email + malformed website, Antonio Ferrari) plus the single employment row - the full data set, not a subset. // NOTE: activeTitlePress scroll-to-control` &&
+                 ` navigation is RESTORED (activeTitle=true): pressing a message title fires ACTIVE_TITLE with the message's target control id` &&
+                 ` (${$parameters>/item}.getBindingContext('message').getObject().getControlIds()[0]), and the handler runs follow_up_action( scroll_into_view ) + control_by_id close + set_focus on it - the 1:1` &&
+                 ` equivalent of the sample's scrollToElement + close + focus. Needs the upstream fix that lets SET_FOCUS/SCROLL_INTO_VIEW resolve a fully-qualified control id (resolveById), since a UI5 Message carries` &&
+                 ` the view-prefixed id. // NOTE: onInit's MessageToast.show('Press "Save" to trigger validation.') is ported as client->message_toast_display( ... ) in the check_on_init branch. // NOTE: MessageItem` &&
+                 ` grouping (groupItems=true + the 'Personal, <section>' group headers) is RESTORED: the original derives groupName by walking the control tree (getGroupName -> form title + group subtitle), which the` &&
+                 ` server cannot do, so groupName is derived data-driven via an expression binding on the field label ({= ${message>additionalText} === 'Email' ? 'Personal, Contact' : 'Personal, Information' }) - only` &&
+                 ` Email sits in the Contact group, all others in Information, matching the original's headers (verified headless). // LIVE-TEST: confirm in a running system: the startup toast ('Press "Save" to trigger` &&
+                 ` validation.') shows; Save injects the four invalid values and the MessagePopover opens listing 3 Errors + 1 Warning (Name / ZIP / Email / Standard Weekly Hours); the count badge reads 3; a message` &&
+                 ` title press scrolls to and focuses its field (activeTitlePress); toggleBy opens/closes the popover.`
         post171 = `two post-1.71 members are kept for the 1:1 port: Button.ariaHasPopup (since UI5 1.84) on the MessagePopover button, and MessagePopover.groupItems (since UI5 1.73).` )
       ( module = `sap.m` control = `sap.m.MessageStrip`                name = `MessageStripWithEnableFormattedText` class = `z2ui5_cl_ai_app_062` path = `src/01/b07/z2ui5_cl_ai_app_062.clas.abap`
         since = `1.30`
