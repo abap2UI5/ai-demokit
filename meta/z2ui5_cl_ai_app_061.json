@@ -17,15 +17,19 @@
     },
     {
       "type": "IMPROVISED",
-      "what": "onMenuAction builds a breadcrumb path by walking the selected MenuItem's parent chain (e.g. 'basic > add'); the server cannot walk the client-side control tree, so the toast shows only the selected item's own text, transported via ${$parameters>/item/text}."
+      "what": "onMenuAction builds a breadcrumb path by walking the selected MenuItem's parent chain (e.g. 'basic > add'); the server cannot walk the client-side control tree, so the toast shows only the selected item's own text, transported via ${$parameters>/item}.getText()."
     },
     {
       "type": "NOTE",
       "what": "onPress toasts the pressed MenuItem's control id (the sample's evt.getSource().getId() + ' Pressed'), transported via $event.oSource.sId. The Edit item's core:CustomData (key=target, value=p1) is kept 1:1 as inert view metadata."
     },
     {
+      "type": "NOTE",
+      "what": "the selected item's text is read with ${$parameters>/item}.getText() (a method call on the resolved MenuItem control), NOT ${$parameters>/item/text}: the $parameters model exposes 'item' as the control object and UI5 keeps properties in mProperties, so the path .../item/text reads an undefined direct field and the toast arrives empty."
+    },
+    {
       "type": "LIVE_TEST",
-      "what": "confirm in a running system that itemSelected/press/defaultAction/beforeMenuOpen all fire their toasts and that ${$parameters>/item/text} delivers the selected MenuItem text."
+      "what": "confirm in a running system that itemSelected/press/defaultAction/beforeMenuOpen all fire their toasts and that ${$parameters>/item}.getText() delivers the selected MenuItem text."
     }
   ]
 }

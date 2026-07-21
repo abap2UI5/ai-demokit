@@ -80,7 +80,7 @@ CLASS z2ui5_cl_ai_app_061 IMPLEMENTATION.
                 )->open( `menu`
                     )->open( `Menu`
                         )->a( n = `itemSelected` v = client->_event( val   = `MENU_ACTION`
-                                                                     t_arg = VALUE #( ( `${$parameters>/item/text}` ) ) )
+                                                                     t_arg = VALUE #( ( `${$parameters>/item}.getText()` ) ) )
                         )->open( `MenuItem`
                             )->a( n = `text` v = `basic`
                             )->a( n = `icon` v = `sap-icon://chalkboard`
@@ -127,7 +127,7 @@ CLASS z2ui5_cl_ai_app_061 IMPLEMENTATION.
                 )->open( `menu`
                     )->open( `Menu`
                         )->a( n = `itemSelected` v = client->_event( val   = `MENU_ACTION`
-                                                                     t_arg = VALUE #( ( `${$parameters>/item/text}` ) ) )
+                                                                     t_arg = VALUE #( ( `${$parameters>/item}.getText()` ) ) )
                         )->open( `MenuItem`
                             )->a( n = `text` v = `basic`
                             )->a( n = `icon` v = `sap-icon://chalkboard`
@@ -165,7 +165,7 @@ CLASS z2ui5_cl_ai_app_061 IMPLEMENTATION.
                 )->open( `menu`
                     )->open( `Menu`
                         )->a( n = `itemSelected` v = client->_event( val   = `MENU_ACTION`
-                                                                     t_arg = VALUE #( ( `${$parameters>/item/text}` ) ) )
+                                                                     t_arg = VALUE #( ( `${$parameters>/item}.getText()` ) ) )
                         )->leaf( `MenuItem`
                             )->a( n = `text` v = `Edit`
                             )->a( n = `icon` v = `sap-icon://edit`
@@ -190,7 +190,7 @@ CLASS z2ui5_cl_ai_app_061 IMPLEMENTATION.
                 )->open( `menu`
                     )->open( `Menu`
                         )->a( n = `itemSelected` v = client->_event( val   = `MENU_ACTION`
-                                                                     t_arg = VALUE #( ( `${$parameters>/item/text}` ) ) )
+                                                                     t_arg = VALUE #( ( `${$parameters>/item}.getText()` ) ) )
                         )->leaf( `MenuItem`
                             )->a( n = `text` v = `Edit`
                             )->a( n = `icon` v = `sap-icon://edit`
@@ -215,7 +215,7 @@ CLASS z2ui5_cl_ai_app_061 IMPLEMENTATION.
                 )->open( `menu`
                     )->open( `Menu`
                         )->a( n = `itemSelected` v = client->_event( val   = `MENU_ACTION`
-                                                                     t_arg = VALUE #( ( `${$parameters>/item/text}` ) ) )
+                                                                     t_arg = VALUE #( ( `${$parameters>/item}.getText()` ) ) )
                         )->leaf( `MenuItem`
                             )->a( n = `text` v = `Edit`
                             )->a( n = `icon` v = `sap-icon://edit`
@@ -241,7 +241,7 @@ CLASS z2ui5_cl_ai_app_061 IMPLEMENTATION.
                 )->open( `menu`
                     )->open( `Menu`
                         )->a( n = `itemSelected` v = client->_event( val   = `MENU_ACTION`
-                                                                     t_arg = VALUE #( ( `${$parameters>/item/text}` ) ) )
+                                                                     t_arg = VALUE #( ( `${$parameters>/item}.getText()` ) ) )
                         )->leaf( `MenuItem`
                             )->a( n = `text` v = `Edit`
                             )->a( n = `icon` v = `sap-icon://edit`
@@ -268,7 +268,7 @@ CLASS z2ui5_cl_ai_app_061 IMPLEMENTATION.
                 )->open( `menu`
                     )->open( `Menu`
                         )->a( n = `itemSelected` v = client->_event( val   = `MENU_ACTION`
-                                                                     t_arg = VALUE #( ( `${$parameters>/item/text}` ) ) )
+                                                                     t_arg = VALUE #( ( `${$parameters>/item}.getText()` ) ) )
                         )->leaf( `MenuItem`
                             )->a( n = `text` v = `Send the response now`
                             )->a( n = `icon` v = `sap-icon://response`
@@ -294,7 +294,7 @@ CLASS z2ui5_cl_ai_app_061 IMPLEMENTATION.
                 )->open( `menu`
                     )->open( `Menu`
                         )->a( n = `itemSelected` v = client->_event( val   = `MENU_ACTION`
-                                                                     t_arg = VALUE #( ( `${$parameters>/item/text}` ) ) )
+                                                                     t_arg = VALUE #( ( `${$parameters>/item}.getText()` ) ) )
                         )->leaf( `MenuItem`
                             )->a( n = `text` v = `Edit`
                             )->a( n = `icon` v = `sap-icon://edit`
@@ -318,7 +318,7 @@ CLASS z2ui5_cl_ai_app_061 IMPLEMENTATION.
                 )->open( `menu`
                     )->open( `Menu`
                         )->a( n = `itemSelected` v = client->_event( val   = `MENU_ACTION`
-                                                                     t_arg = VALUE #( ( `${$parameters>/item/text}` ) ) )
+                                                                     t_arg = VALUE #( ( `${$parameters>/item}.getText()` ) ) )
                         )->open( `MenuItem`
                             )->a( n = `text` v = `basic`
                             )->a( n = `icon` v = `sap-icon://chalkboard`

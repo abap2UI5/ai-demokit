@@ -29,7 +29,7 @@
  * exact framework path names do not matter):
  *   client->_bind( var )                        -> {/VAR}
  *   client->_bind( val = var path = abap_true ) -> /VAR   (bare path)
- *   client->_event*( ... )                           -> attribute dropped
+ *   client->_event*( ... )                           -> .eB()  (stub handler)
  *   z2ui5_cl_ai_xml=>as_bool( ... )                  -> true
  *   |...{ expr }...| templates, `lit` && var chains  -> resolved statically
  * The device> model is provided (JSONModel over sap.ui.Device), like the
@@ -227,7 +227,12 @@ function makeResolver(content, boundVars, notes) {
 
   return function resolveExpr(expr) {
     const e = expr.trim().replace(/\)\s*\.?\s*$/, (t) => t); // keep as-is; trailing parens belong to the region
-    if (/client->_event\b|client->_event_client\b/.test(e)) return SKIP;
+    // Keep event handlers as a resolvable stub reference (.eB() resolves
+    // against the smoke's stub controller) instead of dropping them, so UI5
+    // future mode still validates the event NAME against the control - this is
+    // what catches an event declared on the wrong control (e.g.
+    // activeTitlePress on MessageItem instead of MessagePopover).
+    if (/client->_event\b|client->_event_client\b/.test(e)) return '.eB()';
     // split any && chain FIRST (topSplit is template-aware, so a && inside a
     // |...| template - e.g. an expression binding - never splits); a template
     // that continues over && pieces was previously mis-read as ONE template
@@ -624,26 +629,43 @@ const HARNESS = `<!DOCTYPE html>
     try {
       var mods = await new Promise(function (res, rej) {
         sap.ui.require(['sap/ui/core/mvc/XMLView', 'sap/ui/core/Fragment',
-          'sap/ui/model/json/JSONModel', 'sap/ui/Device'], function () { res(arguments); }, rej);
+          'sap/ui/model/json/JSONModel', 'sap/ui/Device',
+          'sap/ui/core/mvc/Controller', 'sap/base/future'], function () { res(arguments); }, rej);
       });
       var XMLView = mods[0], Fragment = mods[1], JSONModel = mods[2], Device = mods[3];
+      var Controller = mods[4], future = mods[5];
+      // A stub controller carrying the two abap2UI5 event entry points (eB/eF)
+      // so declarative event handlers resolve. With that in place we can turn
+      // on UI5 'future' mode around view creation, which upgrades otherwise
+      // silent "[FUTURE FATAL] unknown setting" warnings (a property/event put
+      // on the wrong control - e.g. activeTitlePress on MessageItem) into a
+      // thrown error the smoke reports. Without the stub, future mode would
+      // also throw on the unresolvable eB/eF handlers themselves.
+      window._smokeCtl = window._smokeCtl ||
+        Controller.extend('z2ui5.smoke.StubController', { eB: function () {}, eF: function () {} });
       var model = new JSONModel(input.model);
       var device = new JSONModel(Device); device.setDefaultBindingMode('OneWay');
-      if (input.kind === 'fragment') {
-        var res = await Fragment.load({ definition: input.xml });
-        (Array.isArray(res) ? res : [res]).forEach(function (c) {
-          if (c.setModel) { c.setModel(model); c.setModel(device, 'device'); }
-          c.destroy();
-        });
-      } else {
-        var view = await XMLView.create({ definition: input.xml });
-        view.setModel(model); view.setModel(device, 'device');
-        // empty message model so {message>/} bindings (MessagePopover /
-        // z2ui5.cc.MessageManager ports) resolve like the framework's slot
-        view.setModel(new JSONModel([]), 'message');
-        view.placeAt('content');
-        await new Promise(function (r) { setTimeout(r, 120); });
-        view.destroy();
+      var prevFuture = future.active;
+      future.active = true;
+      try {
+        if (input.kind === 'fragment') {
+          var res = await Fragment.load({ definition: input.xml, controller: new window._smokeCtl() });
+          (Array.isArray(res) ? res : [res]).forEach(function (c) {
+            if (c.setModel) { c.setModel(model); c.setModel(device, 'device'); }
+            c.destroy();
+          });
+        } else {
+          var view = await XMLView.create({ definition: input.xml, controller: new window._smokeCtl() });
+          view.setModel(model); view.setModel(device, 'device');
+          // empty message model so {message>/} bindings (MessagePopover /
+          // z2ui5.cc.MessageManager ports) resolve like the framework's slot
+          view.setModel(new JSONModel([]), 'message');
+          view.placeAt('content');
+          await new Promise(function (r) { setTimeout(r, 120); });
+          view.destroy();
+        }
+      } finally {
+        future.active = prevFuture;
       }
     } catch (e) {
       errs.push('CREATE: ' + (e && e.message ? e.message : String(e)));

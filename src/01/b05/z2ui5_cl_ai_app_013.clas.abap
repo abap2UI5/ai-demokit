@@ -67,7 +67,7 @@ CLASS z2ui5_cl_ai_app_013 IMPLEMENTATION.
         client->popup_model_update( ).
         " the original moves the focus to the Save Preferences action
         client->follow_up_action( val   = client->cs_event-control_by_id
-                                  t_arg = VALUE #( ( `actionSavePreferences` ) ( `POPUP` ) ( `focus` ) ) ).
+                                  t_arg = VALUE #( ( `actionSavePreferences` ) ( client->cs_view-popup ) ( `focus` ) ) ).
 
       WHEN `ACCEPT_ALL_COOKIES`.
         " insert your accept all logic here
@@ -90,7 +90,7 @@ CLASS z2ui5_cl_ai_app_013 IMPLEMENTATION.
           show_cookie_details = abap_false.
           client->popup_model_update( ).
           client->follow_up_action( val   = client->cs_event-control_by_id
-                                    t_arg = VALUE #( ( `actionSetPreferences` ) ( `POPUP` ) ( `focus` ) ) ).
+                                    t_arg = VALUE #( ( `actionSetPreferences` ) ( client->cs_view-popup ) ( `focus` ) ) ).
         ENDIF.
 
     ENDCASE.
@@ -239,7 +239,7 @@ CLASS z2ui5_cl_ai_app_013 IMPLEMENTATION.
 
     " the original's afterOpen handler moves the focus to the Set Preferences action
     client->follow_up_action( val   = client->cs_event-control_by_id
-                              t_arg = VALUE #( ( `actionSetPreferences` ) ( `POPUP` ) ( `focus` ) ) ).
+                              t_arg = VALUE #( ( `actionSetPreferences` ) ( client->cs_view-popup ) ( `focus` ) ) ).
 
   ENDMETHOD.
 

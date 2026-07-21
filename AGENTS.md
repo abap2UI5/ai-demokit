@@ -667,6 +667,12 @@ the ports share that style. Essentials:
 - **Inline comments stay minimal**: one line at the exact spot of a deviation;
   multi-line rationale belongs in the sidecar, not the code (human deletion
   in app 039, 2026-07-17).
+- **Named view slots go through the `cs_view-*` constants, never a literal.**
+  In a `control_by_id` `t_arg` the second positional is the view slot — pass
+  `client->cs_view-popup` (`-main` / `-nested` / `-nested2` / `-popover`), not
+  the plain string `` `POPUP` `` (pattern of app 004; app 013 fixed 2026-07-21).
+  The only exception is the empty string `` ( `` ) `` — that is a global lookup
+  across all slots, not a view name, and has no constant.
 - Class names **lowercase** in `DEFINITION` and `IMPLEMENTATION`; not `FINAL`;
   `DEFINITION PUBLIC.` (never `CREATE PUBLIC`).
 - Always include `PROTECTED SECTION.` and `PRIVATE SECTION.` (keep `PRIVATE`

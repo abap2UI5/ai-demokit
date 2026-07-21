@@ -49,7 +49,7 @@ CLASS z2ui5_cl_ai_app_060 IMPLEMENTATION.
                     )->open( `Menu`
                         )->a( n = `id`           v = `theMenu`
                         )->a( n = `itemSelected` v = client->_event( val   = `MENU_ACTION`
-                                                                     t_arg = VALUE #( ( `${$parameters>/item/text}` ) ) )
+                                                                     t_arg = VALUE #( ( `${$parameters>/item}.getText()` ) ) )
 
                         )->leaf( `MenuItem`
                             )->a( n = `text` v = `Hide Existing Sites`

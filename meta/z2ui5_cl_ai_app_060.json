@@ -22,11 +22,15 @@
     },
     {
       "type": "IMPROVISED",
-      "what": "onMenuAction builds a breadcrumb path by walking the selected MenuItem's parent chain (e.g. 'Create New Site > Official Store'); the server cannot walk the client-side control tree, so the toast shows only the selected item's own text, transported via ${$parameters>/item/text}."
+      "what": "onMenuAction builds a breadcrumb path by walking the selected MenuItem's parent chain (e.g. 'Create New Site > Official Store'); the server cannot walk the client-side control tree, so the toast shows only the selected item's own text, transported via ${$parameters>/item}.getText()."
+    },
+    {
+      "type": "NOTE",
+      "what": "the selected item's text is read with ${$parameters>/item}.getText() (a method call on the resolved MenuItem control), NOT ${$parameters>/item/text}: the $parameters model exposes 'item' as the control object and UI5 keeps properties in mProperties, so the path .../item/text reads an undefined direct field and the toast arrives empty."
     },
     {
       "type": "LIVE_TEST",
-      "what": "confirm in a running system that the Menu opens anchored to the button (openBy) and that ${$parameters>/item/text} delivers the clicked MenuItem's text to the toast."
+      "what": "confirm in a running system that the Menu opens anchored to the button (openBy) and that ${$parameters>/item}.getText() delivers the clicked MenuItem's text to the toast."
     }
   ]
 }

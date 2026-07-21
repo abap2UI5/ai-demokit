@@ -826,8 +826,9 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` PRICE TYPE p).`
         notes = `SUBSET: the bound /ProductCollection shows a 6-row subset of the 123-row mock (ui5/mock/products.json); HT-1002 is not part of the subset.` )
       ( module = `sap.m` control = `sap.m.List`                        name = `ListCounter`                         class = `z2ui5_cl_ai_app_034` path = `src/01/b04/z2ui5_cl_ai_app_034.clas.abap`
+        checked = `CHECKED (2026-07-21): verified in a running system - human visual check 2026-07-21: the Products list renders the 11 rows with their Quantity counters (display-only app, no interaction to exercise).`
         notes = `POST-1.71: headerLevel="H2" on the List (since UI5 1.117) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.117 to render it. // SUBSET: the bound /ProductCollection` &&
-                 ` shows a 11-row subset of the 123-row mock (ui5/mock/products.json) - a full unroll adds no demo value.`
+                 ` shows the first 11 rows of the 123-row mock (ui5/mock/products.json) verbatim - Name and Quantity match the mock 1:1 (Notebook Basic 15/10 ... Comfort Senior/24); a full unroll adds no demo value.`
         post171 = `headerLevel="H2" on the List (since UI5 1.117) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.117 to render it.` )
       ( module = `sap.m` control = `sap.m.List`                        name = `ListNoData`                          class = `z2ui5_cl_ai_app_035` path = `src/01/b04/z2ui5_cl_ai_app_035.clas.abap` )
       ( module = `sap.m` control = `sap.m.Menu`                        name = `Menu`                                class = `z2ui5_cl_ai_app_060` path = `src/01/b07/z2ui5_cl_ai_app_060.clas.abap`
@@ -836,15 +837,19 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` toggles it via client->follow_up_action( cs_event-control_by_id, toggleBy ) anchored to the button's DOM ref ($event.oSource.sId) - toggleBy (open-if-closed / close-if-open) was added upstream` &&
                  ` 2026-07-20 (pr/menu-toggle-openby) precisely so the client-side open state need not be mirrored server-side, making the press-to-toggle 1:1. Frontend-action pattern as golden app 016. // IMPROVISED:` &&
                  ` onMenuAction builds a breadcrumb path by walking the selected MenuItem's parent chain (e.g. 'Create New Site > Official Store'); the server cannot walk the client-side control tree, so the toast` &&
-                 ` shows only the selected item's own text, transported via ${$parameters>/item/text}. // LIVE-TEST: confirm in a running system that the Menu opens anchored to the button (openBy) and that` &&
-                 ` ${$parameters>/item/text} delivers the clicked MenuItem's text to the toast.`
+                 ` shows only the selected item's own text, transported via ${$parameters>/item}.getText(). // NOTE: the selected item's text is read with ${$parameters>/item}.getText() (a method call on the resolved` &&
+                 ` MenuItem control), NOT ${$parameters>/item/text}: the $parameters model exposes 'item' as the control object and UI5 keeps properties in mProperties, so the path .../item/text reads an undefined` &&
+                 ` direct field and the toast arrives empty. // LIVE-TEST: confirm in a running system that the Menu opens anchored to the button (openBy) and that ${$parameters>/item}.getText() delivers the clicked` &&
+                 ` MenuItem's text to the toast.`
         post171 = `Button.ariaHasPopup (since UI5 1.84) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.84 to render it.` )
       ( module = `sap.m` control = `sap.m.MenuButton`                  name = `MenuButton`                          class = `z2ui5_cl_ai_app_061` path = `src/01/b07/z2ui5_cl_ai_app_061.clas.abap`
         notes = `POST-1.71: the MenuButton ``beforeMenuOpen`` event (since UI5 1.94) is kept 1:1 on the split-mode buttons that use it. menuPosition (1.56), buttonMode and useDefaultActionOnly are <= 1.71. //` &&
                  ` IMPROVISED: onMenuAction builds a breadcrumb path by walking the selected MenuItem's parent chain (e.g. 'basic > add'); the server cannot walk the client-side control tree, so the toast shows only` &&
-                 ` the selected item's own text, transported via ${$parameters>/item/text}. // NOTE: onPress toasts the pressed MenuItem's control id (the sample's evt.getSource().getId() + ' Pressed'), transported via` &&
-                 ` $event.oSource.sId. The Edit item's core:CustomData (key=target, value=p1) is kept 1:1 as inert view metadata. // LIVE-TEST: confirm in a running system that` &&
-                 ` itemSelected/press/defaultAction/beforeMenuOpen all fire their toasts and that ${$parameters>/item/text} delivers the selected MenuItem text.`
+                 ` the selected item's own text, transported via ${$parameters>/item}.getText(). // NOTE: onPress toasts the pressed MenuItem's control id (the sample's evt.getSource().getId() + ' Pressed'),` &&
+                 ` transported via $event.oSource.sId. The Edit item's core:CustomData (key=target, value=p1) is kept 1:1 as inert view metadata. // NOTE: the selected item's text is read with` &&
+                 ` ${$parameters>/item}.getText() (a method call on the resolved MenuItem control), NOT ${$parameters>/item/text}: the $parameters model exposes 'item' as the control object and UI5 keeps properties in` &&
+                 ` mProperties, so the path .../item/text reads an undefined direct field and the toast arrives empty. // LIVE-TEST: confirm in a running system that itemSelected/press/defaultAction/beforeMenuOpen all` &&
+                 ` fire their toasts and that ${$parameters>/item}.getText() delivers the selected MenuItem text.`
         post171 = `the MenuButton ``beforeMenuOpen`` event (since UI5 1.94) is kept 1:1 on the split-mode buttons that use it. menuPosition (1.56), buttonMode and useDefaultActionOnly are <= 1.71.` )
       ( module = `sap.m` control = `sap.m.MessageBox`                  name = `MessageBoxInitialFocus`              class = `z2ui5_cl_ai_app_036` path = `src/01/b03/z2ui5_cl_ai_app_036.clas.abap`
         since = `1.21.2`
@@ -883,16 +888,27 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         notes = `POST-1.71: two post-1.71 members are kept for the 1:1 port: Button.ariaHasPopup (since UI5 1.84) on the MessagePopover button, and MessagePopover.groupItems (since UI5 1.73). // IMPROVISED: the` &&
                  ` controller's manual MessageManager handling is replaced by two framework mechanisms: (1) the typed value bindings with constraints (sap.ui.model.type.Integer/String, ZIP_CODE Integer, WEEKLYHOURS` &&
                  ` Integer maximum 40, EMAIL search regex) collect/clear their validation messages AUTOMATICALLY into the message> model (no app code) - replacing onChange/handleRequiredField/checkInputConstraints; (2)` &&
-                 ` app-authored messages (the Save 'A mandatory field is required') go through the new z2ui5.cc.MessageManager companion control (items bound to /T_MESSAGES), which reconciles them into the message` &&
-                 ` manager with a target + processor. Save stands in for generateInvalidUserInput. // IMPROVISED: the sample's nested JSON model (street/name, zip/code, phone/number) is flattened into a flat ABAP row` &&
-                 ` (STREET_NAME, ZIP_CODE, PHONE_NUMBER, ...) - abap2UI5 serves one default model; the bindings use the flattened field names. The three f:ColumnElementData layoutData hints (cellsSmall/cellsLarge` &&
-                 ` column spans on the street-number, zip-code and one employment Input) are dropped - responsive-span cosmetics with no data/behaviour. // 1.71: controller-only pieces with no view/binding equivalent` &&
-                 ` are dropped: buttonIconFormatter/buttonTypeFormatter/highestSeverityMessages (the button's severity-based icon/type/count) is reduced to text={=${message>/}.length}, type=Emphasized; the MessageItem` &&
-                 ` groupName/activeTitle formatters and activeTitlePress scroll-to-control navigation; core:CommandExecution (the Ctrl+Shift+M focus shortcut); isPositionable. // SUBSET: 3 of the 8 mock form rows are` &&
-                 ` kept (incl. John Miller's invalid ZIP 'AAA' that trips the Integer validation on render); the single employment row is kept 1:1. Checkable against` &&
-                 ` ui5/sap.m/MessagePopoverMessageHandling/localService/mockdata/FormsModel.json. // LIVE-TEST: confirm in a running system: the Integer/email constraint bindings auto-collect their errors into the` &&
-                 ` message> model (invalid ZIP 'AAA', >40 weekly hours, malformed email) and set the field valueState; the MessagePopover button shows/hides on {message>/} and lists them; and the Save-authored message` &&
-                 ` flows through z2ui5.cc.MessageManager into the MessagePopover 1:1.`
+                 ` app-authored messages go through the new z2ui5.cc.MessageManager companion control (items bound to /T_MESSAGES), which reconciles them into the message manager with a target + processor. Save ports` &&
+                 ` generateInvalidUserInput 1:1 in effect: since abap2UI5 auto-collects validation messages only from USER input (not from programmatically-set model values), Save INJECTS the four demo issues on the` &&
+                 ` SAME rows the original targets (formContainer.getItems()[4/5/6] = John Miller Name empty, Stefan Bosch ZIP 'AAA', Maria Fontes email malformed, plus the employment weekly hours 400) AND authors the` &&
+                 ` matching four messages (3 Errors + 1 Warning) with their /T_FORMS/4|5|6 and /T_EMPLOYMENT/0 targets, then opens the MessagePopover via follow_up_action( control_by_id openBy ) anchored to` &&
+                 ` messagePopoverBtn. // IMPROVISED: the sample's nested JSON model (street/name, zip/code, phone/number) is flattened into a flat ABAP row (STREET_NAME, ZIP_CODE, PHONE_NUMBER, ...) - abap2UI5 serves` &&
+                 ` one default model; the bindings use the flattened field names. The three f:ColumnElementData layoutData hints (cellsSmall/cellsLarge column spans on the street-number, zip-code and one employment` &&
+                 ` Input) are dropped - responsive-span cosmetics with no data/behaviour. // 1.71: controller-only pieces with no view/binding equivalent are dropped:` &&
+                 ` buttonIconFormatter/buttonTypeFormatter/highestSeverityMessages (the button's severity-based icon/type/count) is reduced to text={=${message>/}.length}, type=Emphasized; core:CommandExecution (the` &&
+                 ` Ctrl+Shift+M focus shortcut); isPositionable. // NOTE: the controller's handleMessagePopoverPress (this.oMP.toggle(oEvent.getSource())) becomes the SHOW_MESSAGES event -> client->follow_up_action(` &&
+                 ` cs_event-control_by_id, toggleBy ) anchored to the button's DOM ref ($event.oSource.sId), the MessagePopover carrying id=messagePopover - open-if-closed / close-if-open, same frontend-action pattern` &&
+                 ` as apps 066/067. // NOTE: all 8 forms of the mock FormsModel.json are loaded verbatim (Julie Armstrong, Denise Smith, Richard Wilson, Gerd Becker, John Miller with the built-in invalid ZIP AAA,` &&
+                 ` Stefan Bosch, Maria Fontes with empty email + malformed website, Antonio Ferrari) plus the single employment row - the full data set, not a subset. // NOTE: activeTitlePress scroll-to-control` &&
+                 ` navigation is RESTORED (activeTitle=true): pressing a message title fires ACTIVE_TITLE with the message's target control id` &&
+                 ` (${$parameters>/item}.getBindingContext('message').getObject().getControlIds()[0]), and the handler runs follow_up_action( scroll_into_view ) + control_by_id close + set_focus on it - the 1:1` &&
+                 ` equivalent of the sample's scrollToElement + close + focus. Needs the upstream fix that lets SET_FOCUS/SCROLL_INTO_VIEW resolve a fully-qualified control id (resolveById), since a UI5 Message carries` &&
+                 ` the view-prefixed id. // NOTE: onInit's MessageToast.show('Press "Save" to trigger validation.') is ported as client->message_toast_display( ... ) in the check_on_init branch. // NOTE: MessageItem` &&
+                 ` grouping (groupItems=true + the 'Personal, <section>' group headers) is RESTORED: the original derives groupName by walking the control tree (getGroupName -> form title + group subtitle), which the` &&
+                 ` server cannot do, so groupName is derived data-driven via an expression binding on the field label ({= ${message>additionalText} === 'Email' ? 'Personal, Contact' : 'Personal, Information' }) - only` &&
+                 ` Email sits in the Contact group, all others in Information, matching the original's headers (verified headless). // LIVE-TEST: confirm in a running system: the startup toast ('Press "Save" to trigger` &&
+                 ` validation.') shows; Save injects the four invalid values and the MessagePopover opens listing 3 Errors + 1 Warning (Name / ZIP / Email / Standard Weekly Hours); the count badge reads 3; a message` &&
+                 ` title press scrolls to and focuses its field (activeTitlePress); toggleBy opens/closes the popover.`
         post171 = `two post-1.71 members are kept for the 1:1 port: Button.ariaHasPopup (since UI5 1.84) on the MessagePopover button, and MessagePopover.groupItems (since UI5 1.73).` )
       ( module = `sap.m` control = `sap.m.MessageStrip`                name = `MessageStripWithEnableFormattedText` class = `z2ui5_cl_ai_app_062` path = `src/01/b07/z2ui5_cl_ai_app_062.clas.abap`
         since = `1.30`

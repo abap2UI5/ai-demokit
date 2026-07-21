@@ -8,8 +8,11 @@
     "frontend_action": false,
     "event_t_arg": false
   },
-  "status": "generated",
-  "checked": null,
+  "status": "checked",
+  "checked": {
+    "date": "2026-07-21",
+    "note": "verified in a running system - human visual check 2026-07-21: the Products list renders the 11 rows with their Quantity counters (display-only app, no interaction to exercise)."
+  },
   "deviations": [
     {
       "type": "POST_171",
@@ -17,7 +20,7 @@
     },
     {
       "type": "SUBSET_DATA",
-      "what": "the bound /ProductCollection shows a 11-row subset of the 123-row mock (ui5/mock/products.json) - a full unroll adds no demo value."
+      "what": "the bound /ProductCollection shows the first 11 rows of the 123-row mock (ui5/mock/products.json) verbatim - Name and Quantity match the mock 1:1 (Notebook Basic 15/10 ... Comfort Senior/24); a full unroll adds no demo value."
     }
   ]
 }

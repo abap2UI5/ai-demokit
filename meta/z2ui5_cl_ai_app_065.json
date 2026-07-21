@@ -18,7 +18,7 @@
     },
     {
       "type": "IMPROVISED",
-      "what": "the controller's manual MessageManager handling is replaced by two framework mechanisms: (1) the typed value bindings with constraints (sap.ui.model.type.Integer/String, ZIP_CODE Integer, WEEKLYHOURS Integer maximum 40, EMAIL search regex) collect/clear their validation messages AUTOMATICALLY into the message> model (no app code) - replacing onChange/handleRequiredField/checkInputConstraints; (2) app-authored messages (the Save 'A mandatory field is required') go through the new z2ui5.cc.MessageManager companion control (items bound to /T_MESSAGES), which reconciles them into the message manager with a target + processor. Save stands in for generateInvalidUserInput."
+      "what": "the controller's manual MessageManager handling is replaced by two framework mechanisms: (1) the typed value bindings with constraints (sap.ui.model.type.Integer/String, ZIP_CODE Integer, WEEKLYHOURS Integer maximum 40, EMAIL search regex) collect/clear their validation messages AUTOMATICALLY into the message> model (no app code) - replacing onChange/handleRequiredField/checkInputConstraints; (2) app-authored messages go through the new z2ui5.cc.MessageManager companion control (items bound to /T_MESSAGES), which reconciles them into the message manager with a target + processor. Save ports generateInvalidUserInput 1:1 in effect: since abap2UI5 auto-collects validation messages only from USER input (not from programmatically-set model values), Save INJECTS the four demo issues on the SAME rows the original targets (formContainer.getItems()[4/5/6] = John Miller Name empty, Stefan Bosch ZIP 'AAA', Maria Fontes email malformed, plus the employment weekly hours 400) AND authors the matching four messages (3 Errors + 1 Warning) with their /T_FORMS/4|5|6 and /T_EMPLOYMENT/0 targets, then opens the MessagePopover via follow_up_action( control_by_id openBy ) anchored to messagePopoverBtn."
     },
     {
       "type": "IMPROVISED",
@@ -26,15 +26,31 @@
     },
     {
       "type": "DROPPED_171",
-      "what": "controller-only pieces with no view/binding equivalent are dropped: buttonIconFormatter/buttonTypeFormatter/highestSeverityMessages (the button's severity-based icon/type/count) is reduced to text={=${message>/}.length}, type=Emphasized; the MessageItem groupName/activeTitle formatters and activeTitlePress scroll-to-control navigation; core:CommandExecution (the Ctrl+Shift+M focus shortcut); isPositionable."
+      "what": "controller-only pieces with no view/binding equivalent are dropped: buttonIconFormatter/buttonTypeFormatter/highestSeverityMessages (the button's severity-based icon/type/count) is reduced to text={=${message>/}.length}, type=Emphasized; core:CommandExecution (the Ctrl+Shift+M focus shortcut); isPositionable."
     },
     {
-      "type": "SUBSET_DATA",
-      "what": "3 of the 8 mock form rows are kept (incl. John Miller's invalid ZIP 'AAA' that trips the Integer validation on render); the single employment row is kept 1:1. Checkable against ui5/sap.m/MessagePopoverMessageHandling/localService/mockdata/FormsModel.json."
+      "type": "NOTE",
+      "what": "the controller's handleMessagePopoverPress (this.oMP.toggle(oEvent.getSource())) becomes the SHOW_MESSAGES event -> client->follow_up_action( cs_event-control_by_id, toggleBy ) anchored to the button's DOM ref ($event.oSource.sId), the MessagePopover carrying id=messagePopover - open-if-closed / close-if-open, same frontend-action pattern as apps 066/067."
+    },
+    {
+      "type": "NOTE",
+      "what": "all 8 forms of the mock FormsModel.json are loaded verbatim (Julie Armstrong, Denise Smith, Richard Wilson, Gerd Becker, John Miller with the built-in invalid ZIP AAA, Stefan Bosch, Maria Fontes with empty email + malformed website, Antonio Ferrari) plus the single employment row - the full data set, not a subset."
+    },
+    {
+      "type": "NOTE",
+      "what": "activeTitlePress scroll-to-control navigation is RESTORED (activeTitle=true): pressing a message title fires ACTIVE_TITLE with the message's target control id (${$parameters>/item}.getBindingContext('message').getObject().getControlIds()[0]), and the handler runs follow_up_action( scroll_into_view ) + control_by_id close + set_focus on it - the 1:1 equivalent of the sample's scrollToElement + close + focus. Needs the upstream fix that lets SET_FOCUS/SCROLL_INTO_VIEW resolve a fully-qualified control id (resolveById), since a UI5 Message carries the view-prefixed id."
+    },
+    {
+      "type": "NOTE",
+      "what": "onInit's MessageToast.show('Press \"Save\" to trigger validation.') is ported as client->message_toast_display( ... ) in the check_on_init branch."
+    },
+    {
+      "type": "NOTE",
+      "what": "MessageItem grouping (groupItems=true + the 'Personal, <section>' group headers) is RESTORED: the original derives groupName by walking the control tree (getGroupName -> form title + group subtitle), which the server cannot do, so groupName is derived data-driven via an expression binding on the field label ({= ${message>additionalText} === 'Email' ? 'Personal, Contact' : 'Personal, Information' }) - only Email sits in the Contact group, all others in Information, matching the original's headers (verified headless)."
     },
     {
       "type": "LIVE_TEST",
-      "what": "confirm in a running system: the Integer/email constraint bindings auto-collect their errors into the message> model (invalid ZIP 'AAA', >40 weekly hours, malformed email) and set the field valueState; the MessagePopover button shows/hides on {message>/} and lists them; and the Save-authored message flows through z2ui5.cc.MessageManager into the MessagePopover 1:1."
+      "what": "confirm in a running system: the startup toast ('Press \"Save\" to trigger validation.') shows; Save injects the four invalid values and the MessagePopover opens listing 3 Errors + 1 Warning (Name / ZIP / Email / Standard Weekly Hours); the count badge reads 3; a message title press scrolls to and focuses its field (activeTitlePress); toggleBy opens/closes the popover."
     }
   ]
 }
