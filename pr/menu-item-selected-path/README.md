@@ -16,7 +16,7 @@ up its parent chain in the `itemSelected` handler:
   ```
 
 This repo's **apps 060 and 061** transport the selected item via
-`${$parameters>/item/text}` and toast **only the selected item's own text**
+`${$parameters>/item}.getText()` and toast **only the selected item's own text**
 (e.g. `Official Store`, not `Create New Site > Official Store`). The
 parent-chain walk happens on the client control tree and has no
 server-reachable equivalent — recorded as an `IMPROVISED` deviation on both
@@ -24,9 +24,13 @@ ports.
 
 ## Current behavior
 
-- Event args starting with `$` are resolved client-side before the round-trip
+- Event args starting with `$` are resolved client-side before dispatch
   (`z2ui5_cl_core_srv_event=>get_t_arg` / the `EventHandlerResolver`), so
-  `${$parameters>/item/text}` delivers the clicked item's **own** `text`.
+  `${$parameters>/item}.getText()` delivers the clicked item's **own** `text`.
+  It is a **method call** on the resolved `MenuItem` control, not the path
+  `${$parameters>/item/text}` — the `$parameters` model exposes `item` as the
+  control object and UI5 keeps properties in the control's internal store, so
+  `.../item/text` reads an undefined direct field and the toast arrives empty.
 - There is no expression that yields the item's **ancestors' texts joined**,
   because that needs a loop over `getParent()` on the live control, not a
   single binding path.
@@ -47,12 +51,14 @@ lightest first:
 ## Example (port side)
 
 ```abap
-" today (leaf text only):
-)->a( n = `itemSelected` v = client->_event(
-        val = `MENU_ACTION`
-        t_arg = VALUE #( ( `${$parameters>/item/text}` ) ) )
-" wanted (full breadcrumb):
-        t_arg = VALUE #( ( `${$menuItemPath}` ) ) )
+" today (leaf text only) - 060/061 compose the toast roundtrip-free:
+)->a( n = `itemSelected` v = client->_event_client(
+        val   = client->cs_event-control_global
+        t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` )
+                         ( `Action triggered on item: {0}` )
+                         ( `${$parameters>/item}.getText()` ) ) )
+" wanted (full breadcrumb): a resolver that yields the joined ancestor texts,
+" e.g. ( `${$menuItemPath}` ) in place of the .getText() arg
 ```
 
 ## Scope / notes

@@ -11,7 +11,7 @@ existing `control_global` dispatch.
 > `z2ui5_cl_app_frontendaction_js`) now composes single-string
 > `control_global` methods from a template; `get_t_arg`
 > (`z2ui5_cl_core_srv_event`) quotes a leading `{0}` placeholder; 6 node tests
-> added. Ports **005** and **060** converted (both now init-only).
+> added. Ports **005, 060, 061, 077** converted (each now init-only).
 
 ## Motivation
 
@@ -90,6 +90,8 @@ Both apps lose their `on_event` entirely and become **init-only**.
   round-trip `message_toast_display` / `message_box_display` when needed.
 - Placeholders are substituted verbatim (`String(value)`); an out-of-range
   `{n}` is left in place.
-- Remaining dynamic-text toasts across the ports (e.g. 061, 077) whose value is
-  already a client `$`-expression are follow-up conversions; toasts whose text
-  is computed server-side (019, 024, …) correctly keep their round-trip.
+- Converted so far: **005, 060, 061, 077** (all init-only). Further client-arg
+  toasts (003, 025, 049, 074, 076, 091) are straightforward follow-ups — each
+  adds a `LIVE_TEST`, so they are left for a batch pass. Toasts whose text is
+  computed server-side or drives a model mutation (008, 019, 024, 047, 080, 085)
+  correctly keep their round-trip.

@@ -42,8 +42,10 @@ rejects them.
 
 Add to `CONTROL_METHODS`:
 
-- `setHiddenInPopin: ["stringArray"]` — `sap.m.Table.setHiddenInPopin(aKeys)`
-  (the importance keys `None|Low|Medium|High`);
+- `setHiddenInPopin: ["object"]` — `sap.m.Table.setHiddenInPopin(aKeys)`
+  (the importance keys `None|Low|Medium|High`, passed as a JSON array the
+  client `JSON.parse`s — the same `object` arg kind `setContextualWidth`-style
+  payloads and `binding_call` filter groups already use);
 - optionally `setContextualWidth: ["string"]` — `sap.m.Table.setContextualWidth`
   (for the slider-driven width, or a documented boundary if width-by-slider is
   considered cosmetic).
@@ -56,8 +58,8 @@ client->follow_up_action( val   = client->cs_event-control_by_id
                           t_arg = VALUE #( ( `idProductsTable` ) ( `setHiddenInPopin` ) ( selected_keys_json ) ) ).
 ```
 
-The `stringArray` arg kind (a JSON array of keys) already exists for
-`binding_call` filter groups, so the payload shape is precedented.
+> **As shipped:** `setHiddenInPopin` is whitelisted as `["object"]` (JSON array
+> parsed on the client), exactly the form above.
 
 ## Result once implemented
 
