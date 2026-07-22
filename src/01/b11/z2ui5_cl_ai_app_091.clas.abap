@@ -47,7 +47,7 @@ CLASS z2ui5_cl_ai_app_091 IMPLEMENTATION.
             )->leaf( `Button`
                 )->a( n = `ariaHasPopup` v = `Dialog`
                 )->a( n = `text`         v = `Open Time Picker`
-                )->a( n = `press`        v = client->_event_client( val = client->cs_event-control_by_id t_arg = VALUE #( ( `HiddenTP` ) ( `` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
+                )->a( n = `press`        v = client->_event_client( val = client->cs_event-control_by_id t_arg = VALUE #( ( `HiddenTP` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
 
         )->shut(
         )->open( `VBox`
@@ -58,7 +58,7 @@ CLASS z2ui5_cl_ai_app_091 IMPLEMENTATION.
                 )->a( n = `ariaHasPopup` v = `Dialog`
                 )->a( n = `tooltip`      v = `Open Time Picker`
                 )->a( n = `icon`         v = `sap-icon://time-entry-request`
-                )->a( n = `press`        v = client->_event_client( val = client->cs_event-control_by_id t_arg = VALUE #( ( `HiddenTP` ) ( `` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
+                )->a( n = `press`        v = client->_event_client( val = client->cs_event-control_by_id t_arg = VALUE #( ( `HiddenTP` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
 
         )->shut(
         )->open( `VBox`
@@ -68,7 +68,7 @@ CLASS z2ui5_cl_ai_app_091 IMPLEMENTATION.
             )->leaf( `Link`
                 )->a( n = `ariaHasPopup` v = `Dialog`
                 )->a( n = `text`         v = `Open Time Picker`
-                )->a( n = `press`        v = client->_event_client( val = client->cs_event-control_by_id t_arg = VALUE #( ( `HiddenTP` ) ( `` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
+                )->a( n = `press`        v = client->_event_client( val = client->cs_event-control_by_id t_arg = VALUE #( ( `HiddenTP` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
 
         )->shut(
 

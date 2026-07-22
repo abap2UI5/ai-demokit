@@ -678,11 +678,11 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                                 )->leaf( `Button`
                                     )->a( n = `text`  v = `Expand all`
                                     )->a( n = `icon`  v = `sap-icon://expand-group`
-                                    )->a( n = `press` v = client->_event_client( val = client->cs_event-control_by_id t_arg = VALUE #( ( `idOverviewTree` ) ( `` ) ( `expandToLevel` ) ( `10` ) ) )
+                                    )->a( n = `press` v = client->_event_client( val = client->cs_event-control_by_id t_arg = VALUE #( ( `idOverviewTree` ) ( `expandToLevel` ) ( `10` ) ) )
                                 )->leaf( `Button`
                                     )->a( n = `text`  v = `Collapse all`
                                     )->a( n = `icon`  v = `sap-icon://collapse-group`
-                                    )->a( n = `press` v = client->_event_client( val = client->cs_event-control_by_id t_arg = VALUE #( ( `idOverviewTree` ) ( `` ) ( `collapseAll` ) ) )
+                                    )->a( n = `press` v = client->_event_client( val = client->cs_event-control_by_id t_arg = VALUE #( ( `idOverviewTree` ) ( `collapseAll` ) ) )
 
                             )->shut(
                         )->shut(
