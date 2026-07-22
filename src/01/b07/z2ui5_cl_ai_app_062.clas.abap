@@ -106,7 +106,7 @@ CLASS z2ui5_cl_ai_app_062 IMPLEMENTATION.
                     )->a( n = `showCloseButton`     v = `true`
                     )->a( n = `class`               v = `sapUiMediumMarginBottom`
                 )->leaf( `MessageStrip`
-                    )->a( n = `text`                v = `{ path: '/INLINE_ICONS_HELPER', formatter: 'Formatter.expandInlineIcons' }`
+                    )->a( n = `text`                v = |\{ path: '{ client->_bind( val = inline_icons_helper path = abap_true ) }', formatter: 'Formatter.expandInlineIcons' \}|
                     )->a( n = `type`                v = `Success`
                     )->a( n = `enableFormattedText` v = `true`
                     )->a( n = `showIcon`            v = `true`

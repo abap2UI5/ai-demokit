@@ -57,26 +57,26 @@ CLASS z2ui5_cl_ai_app_087 IMPLEMENTATION.
             )->open( `items`
                 )->leaf( `IconTabFilter`
                     )->a( n = `showAll` v = `true`
-                    )->a( n = `count`   v = `{/TOTAL}`
+                    )->a( n = `count`   v = client->_bind( total )
                     )->a( n = `text`    v = `Products`
                     )->a( n = `key`     v = `All`
                 )->leaf( `IconTabSeparator`
                 )->leaf( `IconTabFilter`
                     )->a( n = `icon`      v = `sap-icon://begin`
                     )->a( n = `iconColor` v = `Positive`
-                    )->a( n = `count`     v = `{/OK}`
+                    )->a( n = `count`     v = client->_bind( ok )
                     )->a( n = `text`      v = `Ok`
                     )->a( n = `key`       v = `Ok`
                 )->leaf( `IconTabFilter`
                     )->a( n = `icon`      v = `sap-icon://compare`
                     )->a( n = `iconColor` v = `Critical`
-                    )->a( n = `count`     v = `{/HEAVY}`
+                    )->a( n = `count`     v = client->_bind( heavy )
                     )->a( n = `text`      v = `Heavy`
                     )->a( n = `key`       v = `Heavy`
                 )->leaf( `IconTabFilter`
                     )->a( n = `icon`      v = `sap-icon://inventory`
                     )->a( n = `iconColor` v = `Negative`
-                    )->a( n = `count`     v = `{/OVERWEIGHT}`
+                    )->a( n = `count`     v = client->_bind( overweight )
                     )->a( n = `text`      v = `Overweight`
                     )->a( n = `key`       v = `Overweight`
 

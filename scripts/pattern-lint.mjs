@@ -84,6 +84,23 @@ const RULES = [
     find: grepLines(/->_bind_edit\(/),
   },
   {
+    id: 'hardcoded-binding-path',
+    level: 'error',
+    portsOnly: true,
+    doc: "an absolute binding path is hard-coded as text (`{/PATH}` or `path: '/PATH'`) — derive it from client->_bind( var ) (raw path: _bind( val = var path = abap_true )) so it moves with a variable rename; relative field bindings (`{FIELD}`) are the allowed exception (AGENTS §5 'Data binding & events')",
+    find(content) {
+      const out = [];
+      content.split('\n').forEach((l, i) => {
+        const t = l.trimStart();
+        if (t.startsWith('"') || t.startsWith('*')) return; // ABAP comment line
+        if (/\{\//.test(l) || /\bpath\s*:\s*'\//.test(l)) {
+          out.push({ line: i + 1, text: l.trim().slice(0, 90) });
+        }
+      });
+      return out;
+    },
+  },
+  {
     id: 'event-arg-default-index',
     level: 'error',
     doc: 'get_event_arg( 1 ) spells out the default — simplest notation is get_event_arg( ); only pass an index for position 2+ (AGENTS §8)',

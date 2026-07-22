@@ -152,6 +152,11 @@ CLASS z2ui5_cl_ai_app_094 IMPLEMENTATION.
     CASE client->get( )-event.
       WHEN `DRILL`.
         client->message_toast_display( `Drill down activated.` ).
+      WHEN `ACTION`.
+        " the popover's Action button: toast + close (1:1 with the original
+        " handleActionPress - MessageToast.show + myPopover.close())
+        client->message_toast_display( `Action has been pressed` ).
+        client->follow_up_action( client->cs_event-popover_close ).
       WHEN `POPOVER`.
         " the original opens a Popover bound to the pressed row (title=ProductId,
         " Name + Image). Instead of copying each field into an event arg, the
@@ -175,7 +180,7 @@ CLASS z2ui5_cl_ai_app_094 IMPLEMENTATION.
                         )->leaf( `Button`
                             )->a( n = `id`    v = `action`
                             )->a( n = `text`  v = `Action`
-                            )->a( n = `press` v = client->_event_client( client->cs_event-popover_close )
+                            )->a( n = `press` v = client->_event( `ACTION` )
 
                     )->shut(
                 )->shut(
