@@ -84,8 +84,17 @@ function main() {
   fs.writeFileSync(cfg, JSON.stringify(base, null, 2));
   console.log('e2e-build: downporting the copy to v702 …');
   for (let i = 0; i < 3; i++) fix(`npx abaplint e2e-downport.jsonc --fix`);
-  sh(`find ${downport} -type f -name '*.abap' -exec sed -i -e 's/ RAISE EXCEPTION TYPE cx_sy_itab_line_not_found/ ASSERT 1 = 0/g' {} +`);
-  sh(`find ${downport} -type f -name '*.abap' -exec sed -i 's/[[:space:]]\\+$//' {} +`);
+  // the framework's two fixups, done in Node so they are portable (BSD/macOS sed
+  // differs from GNU sed on -i and \+): the transpiler can't emit
+  // `RAISE EXCEPTION TYPE cx_sy_itab_line_not_found`, so map it to `ASSERT 1 = 0`;
+  // then strip trailing whitespace the downport may leave behind.
+  for (const f of walk(downport)) {
+    if (!f.endsWith('.abap')) continue;
+    const fixed = fs.readFileSync(f, 'utf8')
+      .replace(/ RAISE EXCEPTION TYPE cx_sy_itab_line_not_found/g, ' ASSERT 1 = 0')
+      .replace(/[ \t]+$/gm, '');
+    fs.writeFileSync(f, fixed);
+  }
   fs.rmSync(cfg, { force: true });
 
   // 4. transpile the downported copy with the framework's own config
