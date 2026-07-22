@@ -4,24 +4,38 @@ The ports are ABAP apps. With the abap2UI5 transpiler they run on a **Node
 backend** (open-abap runtime + express), so you can start any port and click
 through it in a normal browser — no SAP system needed.
 
-## Prerequisites (once)
-
-- An **abap2UI5 checkout** next to this repo (`../abap2UI5`), or point at it with
-  `A2UI5_HOME`. Install its deps there once:
-  ```sh
-  cd ../abap2UI5 && npm ci && cd -
-  ```
-- This repo's deps: `npm ci`.
-
-## Build + start
+## Quick start (two commands)
 
 ```sh
-# 1. transpile the framework + all ports into the backend (a few minutes)
-npm run e2e:build
-
-# 2. start the Node backend on http://localhost:3000
-npm run e2e:serve            #  == node <abap2UI5>/node/srv/express.mjs
+npm run node:setup     # once: clone abap2UI5 into .abap2UI5, install everything, build
+npm run node:serve     # start the Node backend on http://localhost:3000
 ```
+
+Then open <http://localhost:3000/?app_start=z2ui5_cl_ai_app_overview>.
+
+`node:setup` clones abap2UI5 into `.abap2UI5` (in-repo, git-ignored), runs
+`npm ci` there and here, and builds the backend. Re-run it any time to pull the
+latest abap2UI5 and rebuild. After editing ports, rebuild with `npm run
+node:build` (no re-clone). All Node commands need Node ≥ 22 and, for the clone,
+`git` + internet.
+
+<details>
+<summary>Manual setup (own abap2UI5 checkout)</summary>
+
+Prefer your own checkout instead of the in-repo clone? Point at it with
+`A2UI5_HOME` (it wins over `.abap2UI5`), install its deps and this repo's once,
+then build + serve:
+
+```sh
+cd ../abap2UI5 && npm ci && cd -   # framework deps
+npm ci                             # this repo's deps
+A2UI5_HOME=../abap2UI5 npm run node:build
+A2UI5_HOME=../abap2UI5 npm run node:serve
+```
+
+The checkout is resolved in this order: `A2UI5_HOME`, then `.abap2UI5`, then a
+sibling `../abap2UI5`.
+</details>
 
 ## Open the overview (front door — lists every port)
 

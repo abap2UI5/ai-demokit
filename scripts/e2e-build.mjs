@@ -24,18 +24,14 @@ import { execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { resolveA2UI5 } from './lib-a2ui5.mjs';
 
 const AIDEMOKIT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 
-function resolveA2UI5() {
-  const cands = [process.env.A2UI5_HOME, path.join(AIDEMOKIT, '..', 'abap2UI5'), '/home/user/abap2UI5'];
-  for (const c of cands) {
-    if (c && fs.existsSync(path.join(c, 'node/srv/express.mjs'))) return path.resolve(c);
-  }
-  throw new Error('abap2UI5 checkout not found — set A2UI5_HOME to a checkout with node_modules installed');
-}
-
 const A2 = resolveA2UI5();
+if (!A2) {
+  throw new Error('abap2UI5 checkout not found — run `npm run node:setup` (clones it into .abap2UI5) or set A2UI5_HOME to a checkout with node_modules installed');
+}
 const sh = (cmd, opts = {}) => execSync(cmd, { cwd: A2, stdio: 'inherit', ...opts });
 // abaplint --fix exits non-zero while issues remain (expected during iterative
 // downport); run it for its side effect and ignore the status
