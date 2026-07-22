@@ -131,7 +131,14 @@ column is removed**; its info (checked status, post-1.71 note, generation notes)
 moved **into the links popover**, which also carries the four reference links. The
 two Open buttons are **swapped** (links-popover first, app-launch second), on the
 table and the tree. The `Tree`-nested-in-`Table` startup crash from the first cut
-is fixed (missing `shut()` restored).
+is fixed (missing `shut()` restored). The popover's generation notes render as an
+**HTML bullet list** (`FormattedText`, one `<li>` per bullet, the type label in
+bold; the note text is HTML-escaped, then the builder's `xml_escape` + UI5's
+single un-escape show it verbatim). The **sample-since version parser** was fixed:
+it now takes the max of *all* version tokens in the POST_171 texts (the old
+`since X.Y` regex missed the common `since UI5 1.84` phrasing, so the column was
+nearly always blank); 28 rows now carry a sample-since (matching the 28 post-1.71
+ports).
 
 ## Batch b11 generated (2026-07-22) — pages, pickers, tables & popovers (7 ports)
 

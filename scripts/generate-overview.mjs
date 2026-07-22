@@ -120,8 +120,12 @@ for (const mf of fs.readdirSync(META)) {
   // own since (otherwise it just repeats it), so a same-or-lower value is blanked.
   const since = u.since || '';
   let release = since;
+  // the sample's required release = the highest version mentioned across ALL its
+  // POST_171 deviation texts (every kept newer-than-1.71 member notes its @since).
+  // Take every X.Y(.Z) token, not just "since X.Y" - the texts phrase it many ways
+  // ("since UI5 1.84", "(since 1.97)", ">= 1.74", "OneByOne / TwoByOne (1.71)").
   for (const d of devs.filter((x) => x.type === 'POST_171')) {
-    for (const mm of d.what.matchAll(/since\s+(\d+\.\d+)/gi)) release = verMax(release, mm[1]);
+    for (const mm of d.what.matchAll(/\b(\d+\.\d+(?:\.\d+)?)\b/g)) release = verMax(release, mm[1]);
   }
   const releaseShown = (release !== '' && verCmp(release, since) > 0) ? release : '';
   // a since value is coloured orange when it is newer than UI5 1.71
@@ -535,12 +539,29 @@ CLASS ${CLASS} IMPLEMENTATION.
               )->a( n = \`text\`  v = \`Generation notes\`
               )->a( n = \`level\` v = \`H5\`
               )->a( n = \`class\` v = \`sapUiSmallMarginTop\` ).
+          " render the notes as an HTML bullet list (FormattedText): each
+          " \` // \`-separated bullet becomes one <li> with its leading LABEL
+          " (NOTE / IMPROVISED / POST-1.71 / ...) in bold. The note text is
+          " HTML-escaped first (it can contain <, >, & - e.g. id="x", a<b, or a
+          " literal <strong> mention); the builder's xml_escape escapes it a
+          " second time and UI5 un-escapes once, so FormattedText shows it verbatim.
           SPLIT lv_notes AT \` // \` INTO TABLE DATA(lt_line).
+          DATA(lv_html) = \`<ul>\`.
           LOOP AT lt_line INTO DATA(lv_line).
-            box->leaf( \`Text\`
-                )->a( n = \`text\`  v = lv_line
-                )->a( n = \`class\` v = \`sapUiTinyMarginTop\` ).
+            DATA(lv_esc) = lv_line.
+            REPLACE ALL OCCURRENCES OF \`&\` IN lv_esc WITH \`&amp;\`.
+            REPLACE ALL OCCURRENCES OF \`<\` IN lv_esc WITH \`&lt;\`.
+            REPLACE ALL OCCURRENCES OF \`>\` IN lv_esc WITH \`&gt;\`.
+            DATA(lv_col) = find( val = lv_esc sub = \`:\` ).
+            IF lv_col > 0.
+              lv_html = |{ lv_html }<li><strong>{ substring( val = lv_esc len = lv_col + 1 ) }</strong>{ substring( val = lv_esc off = lv_col + 1 ) }</li>|.
+            ELSE.
+              lv_html = |{ lv_html }<li>{ lv_esc }</li>|.
+            ENDIF.
           ENDLOOP.
+          lv_html = |{ lv_html }</ul>|.
+          box->leaf( \`FormattedText\`
+              )->a( n = \`htmlText\` v = lv_html ).
         ENDIF.
 
         client->popover_display( xml   = links->stringify( )

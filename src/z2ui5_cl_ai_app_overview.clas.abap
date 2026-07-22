@@ -230,12 +230,29 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
               )->a( n = `text`  v = `Generation notes`
               )->a( n = `level` v = `H5`
               )->a( n = `class` v = `sapUiSmallMarginTop` ).
+          " render the notes as an HTML bullet list (FormattedText): each
+          " ` // `-separated bullet becomes one <li> with its leading LABEL
+          " (NOTE / IMPROVISED / POST-1.71 / ...) in bold. The note text is
+          " HTML-escaped first (it can contain <, >, & - e.g. id="x", a<b, or a
+          " literal <strong> mention); the builder's xml_escape escapes it a
+          " second time and UI5 un-escapes once, so FormattedText shows it verbatim.
           SPLIT lv_notes AT ` // ` INTO TABLE DATA(lt_line).
+          DATA(lv_html) = `<ul>`.
           LOOP AT lt_line INTO DATA(lv_line).
-            box->leaf( `Text`
-                )->a( n = `text`  v = lv_line
-                )->a( n = `class` v = `sapUiTinyMarginTop` ).
+            DATA(lv_esc) = lv_line.
+            REPLACE ALL OCCURRENCES OF `&` IN lv_esc WITH `&amp;`.
+            REPLACE ALL OCCURRENCES OF `<` IN lv_esc WITH `&lt;`.
+            REPLACE ALL OCCURRENCES OF `>` IN lv_esc WITH `&gt;`.
+            DATA(lv_col) = find( val = lv_esc sub = `:` ).
+            IF lv_col > 0.
+              lv_html = |{ lv_html }<li><strong>{ substring( val = lv_esc len = lv_col + 1 ) }</strong>{ substring( val = lv_esc off = lv_col + 1 ) }</li>|.
+            ELSE.
+              lv_html = |{ lv_html }<li>{ lv_esc }</li>|.
+            ENDIF.
           ENDLOOP.
+          lv_html = |{ lv_html }</ul>|.
+          box->leaf( `FormattedText`
+              )->a( n = `htmlText` v = lv_html ).
         ENDIF.
 
         client->popover_display( xml   = links->stringify( )
@@ -738,6 +755,8 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.m` control = `sap.m.Carousel`                    name = `CarouselWithControls`                class = `z2ui5_cl_ai_app_006` path = `src/01/b04/z2ui5_cl_ai_app_006.clas.abap`
         score = 3
         score_tip = `Deviation from the original sample: 3 of 10 (1 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
+        release = `1.125`
+        release_post171 = abap_true
         is_post171 = abap_true
         checked = `CHECKED (2026-07-15): manually verified in a running system - renders and scrolls like the original (see the note below on the flattened image model).`
         notes = `IMPROVISED: the three carousel images bind to a separate named model in the original (img>/products/pic1..3 from sap/ui/demo/mock/img.json); resolved here to static image URLs, as abap2UI5 serves a` &&
@@ -758,6 +777,8 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 10
         score_tip = `Deviation from the original sample: 10 of 10 (4 improvised, 1 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.12`
+        release = `1.74`
+        release_post171 = abap_true
         is_post171 = abap_true
         checked = `CHECKED (2026-07-20): verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed)`
         notes = `IMPROVISED: the shared demo kit mock model sap/ui/demo/mock/products.json (/ProductCollection, snapshotted in ui5/mock/products.json) is flattened into the default model: all 123 rows are kept` &&
@@ -779,6 +800,8 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 5
         score_tip = `Deviation from the original sample: 5 of 10 (2 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.12`
+        release = `1.74`
+        release_post171 = abap_true
         is_post171 = abap_true
         checked = `CHECKED (2026-07-20): verified in a running system - human pass 2026-07-20: app starts and renders like the original; no interaction paths were open for this port`
         notes = `NOTE: the sample is an OPA-test demo: only the UI app under applicationUnderTest/ (Table.view.xml, Table.controller.js, Formatter.js, products.json) is ported 1:1; the qunit/OPA harness files` &&
@@ -897,6 +920,8 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 1
         score_tip = `Deviation from the original sample: 1 of 10 (0 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.22.0`
+        release = `1.95`
+        release_post171 = abap_true
         is_post171 = abap_true
         checked = `CHECKED (2026-07-20): verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed)`
         notes = `NOTE: the original controller's JSON model carries UI5Date objects; the ABAP model carries the same dates as ISO 'yyyy-MM-dd' strings, and each sap.ui.model.type.Date part of the DateInterval value` &&
@@ -916,6 +941,8 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 7
         score_tip = `Deviation from the original sample: 7 of 10 (3 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.38.0`
+        release = `1.99`
+        release_post171 = abap_true
         is_post171 = abap_true
         checked = `CHECKED (2026-07-20): verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed)`
         notes = `IMPROVISED: the JSON model's UI5Date instances become date strings in the flat ABAP model: the sap.ui.model.type.DateTime bindings (DTP2/3/4/5/8) get an added source pattern 'yyyy-MM-dd HH:mm:ss'` &&
@@ -978,6 +1005,8 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 7
         score_tip = `Deviation from the original sample: 7 of 10 (2 improvised, 1 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         golden = abap_true
+        release = `1.74`
+        release_post171 = abap_true
         is_post171 = abap_true
         checked = `CHECKED (2026-07-20): verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed); promoted to golden 2026-07-20 (human decision) -` &&
                  ` exemplary for: compound binding_call filter, curated formatter module, two-way facet selection`
@@ -1043,6 +1072,8 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 1
         score_tip = `Deviation from the original sample: 1 of 10 (0 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.62.0`
+        release = `1.97`
+        release_post171 = abap_true
         is_post171 = abap_true
         checked = `CHECKED (2026-07-20): verified in a running system - human pass 2026-07-20: app starts and renders like the original; no interaction paths were open for this port`
         notes = `POST-1.71: ariaLabelledBy (since UI5 1.97) on the labeled GenericTag is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.97 to render it. // NOTE: the sample's` &&
@@ -1053,6 +1084,8 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 3
         score_tip = `Deviation from the original sample: 3 of 10 (1 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.34.0`
+        release = `1.92`
+        release_post171 = abap_true
         is_post171 = abap_true
         checked = `CHECKED (2026-07-19): verified in a running system - human visual pass 2026-07-19 over all apps: the KPI tiles float left via the injected tileLayout CSS and render like the original.`
         notes = `POST-1.71: frameType values OneByHalf / TwoByHalf (since UI5 1.83) are newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.83 to render them; OneByOne / TwoByOne (1.71) were` &&
@@ -1101,6 +1134,8 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.m` control = `sap.m.Input`                       name = `InputValueState`                     class = `z2ui5_cl_ai_app_032` path = `src/01/b02/z2ui5_cl_ai_app_032.clas.abap`
         score = 1
         score_tip = `Deviation from the original sample: 1 of 10 (0 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
+        release = `1.94`
+        release_post171 = abap_true
         is_post171 = abap_true
         notes = `POST-1.71: showClearIcon (since UI5 1.94) on three inputs is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.94 to render it. // POST-1.71: the two formattedValueStateText` &&
                  ` aggregations (a FormattedText carrying Links, since UI5 1.78) are newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.78 to render them. // NOTE: the Links' press` &&
@@ -1136,6 +1171,8 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.m` control = `sap.m.List`                        name = `ListCounter`                         class = `z2ui5_cl_ai_app_034` path = `src/01/b04/z2ui5_cl_ai_app_034.clas.abap`
         score = 1
         score_tip = `Deviation from the original sample: 1 of 10 (0 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
+        release = `1.117`
+        release_post171 = abap_true
         is_post171 = abap_true
         checked = `CHECKED (2026-07-21): verified in a running system - human visual check 2026-07-21: the Products list renders the 11 rows with their Quantity counters (display-only app, no interaction to exercise).`
         notes = `POST-1.71: headerLevel="H2" on the List (since UI5 1.117) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.117 to render it.`
@@ -1147,6 +1184,8 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.m` control = `sap.m.Menu`                        name = `Menu`                                class = `z2ui5_cl_ai_app_060` path = `src/01/b07/z2ui5_cl_ai_app_060.clas.abap`
         score = 5
         score_tip = `Deviation from the original sample: 5 of 10 (2 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
+        release = `1.84`
+        release_post171 = abap_true
         is_post171 = abap_true
         checked = `CHECKED (2026-07-22): verified in a running system 2026-07-22: the Menu opens anchored to the button (openBy) and the selected item text resolves via ${$parameters>/item}.getText().`
         notes = `POST-1.71: Button.ariaHasPopup (since UI5 1.84) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.84 to render it. // IMPROVISED: the sample loads the Menu from` &&
@@ -1164,6 +1203,8 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.m` control = `sap.m.MenuButton`                  name = `MenuButton`                          class = `z2ui5_cl_ai_app_061` path = `src/01/b07/z2ui5_cl_ai_app_061.clas.abap`
         score = 3
         score_tip = `Deviation from the original sample: 3 of 10 (1 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
+        release = `1.94`
+        release_post171 = abap_true
         is_post171 = abap_true
         checked = `CHECKED (2026-07-22): verified in a running system 2026-07-22: itemSelected/press/defaultAction/beforeMenuOpen all fire their toasts and the item text resolves.`
         notes = `POST-1.71: the MenuButton ``beforeMenuOpen`` event (since UI5 1.94) is kept 1:1 on the split-mode buttons that use it. menuPosition (1.56), buttonMode and useDefaultActionOnly are <= 1.71. //` &&
@@ -1178,6 +1219,8 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 1
         score_tip = `Deviation from the original sample: 1 of 10 (0 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.21.2`
+        release = `1.124`
+        release_post171 = abap_true
         is_post171 = abap_true
         notes = `NOTE: the sample opens a sap.m.MessageBox from its controller; there is no such control in the view. It is driven by two buttons wired to events that call client->message_box_display - the documented` &&
                  ` 1:1 path (CAPABILITIES.md marks sap.m.MessageBox as expressible with app 036 as its evidence port), not a workaround. // POST-1.71: ariaHasPopup="Dialog" on both buttons (since UI5 1.84) is newer` &&
@@ -1191,7 +1234,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 3
         score_tip = `Deviation from the original sample: 3 of 10 (1 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.28`
-        release = `1.73`
+        release = `1.84`
         release_post171 = abap_true
         is_post171 = abap_true
         checked = `CHECKED (2026-07-22): verified in a running system 2026-07-22: the button toggles the MessagePopover open/closed (toggleBy) and lists the five messages.`
@@ -1211,7 +1254,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 5
         score_tip = `Deviation from the original sample: 5 of 10 (2 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.28`
-        release = `1.73`
+        release = `1.84`
         release_post171 = abap_true
         is_post171 = abap_true
         checked = `CHECKED (2026-07-22): verified in a running system 2026-07-22: the button toggles the MessagePopover (toggleBy) and the first Error message renders its HTML markupDescription.`
@@ -1231,6 +1274,8 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 7
         score_tip = `Deviation from the original sample: 7 of 10 (2 improvised, 1 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.28`
+        release = `1.84`
+        release_post171 = abap_true
         is_post171 = abap_true
         checked = `CHECKED (2026-07-21): verified in a running system - human live check 2026-07-21: startup toast at native height; Save opens the MessagePopover with 3 Errors + 1 Warning marking John Miller (Name) /` &&
                  ` Stefan Bosch (ZIP) / Maria Fontes (Email) + employment weekly hours; group headers Personal, Information / Personal, Contact; message-title press scrolls to and focuses the field; toggleBy` &&
@@ -1265,7 +1310,8 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 1
         score_tip = `Deviation from the original sample: 1 of 10 (0 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.30`
-        release = `1.50`
+        release = `1.129`
+        release_post171 = abap_true
         is_post171 = abap_true
         notes = `POST-1.71: the MessageStrip ``controls`` aggregation (since UI5 1.129) is kept 1:1 for the fifth strip's %%0/%%1/%%2 multi-link formatted text (three sap.m.Link). enableFormattedText itself is since` &&
                  ` 1.50 (<= 1.71). // POST-1.71: core:require="{Formatter: 'z2ui5/model/formatter'}" wires the curated formatter module (since UI5 1.74) so the inlineIconsHelper strip can use` &&
@@ -1304,6 +1350,8 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 1
         score_tip = `Deviation from the original sample: 1 of 10 (0 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         golden = abap_true
+        release = `1.94`
+        release_post171 = abap_true
         is_post171 = abap_true
         checked = `CHECKED (2026-07-20): verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed); promoted to golden 2026-07-20 (human decision) -` &&
                  ` exemplary for: cc control (MultiInputExt), bound aggregation, tokens, sorter binding-info`
@@ -1342,6 +1390,8 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 3
         score_tip = `Deviation from the original sample: 3 of 10 (1 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.12`
+        release = `1.97`
+        release_post171 = abap_true
         is_post171 = abap_true
         notes = `NOTE: element binding kept 1:1 - the two display ObjectAttributes bind a one-record structure /S_PRODUCT instead of {/ProductCollection/0}; record 0 fields verbatim. // IMPROVISED:` &&
                  ` handleSAPLinkPressed's URLHelper.redirect maps to the URLHELPER REDIRECT frontend action (cs_event-urlhelper); handleFeedbacklinkPressed's Dialog (a RatingIndicator + TextArea with Submit/Cancel` &&
@@ -1383,6 +1433,8 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 1
         score_tip = `Deviation from the original sample: 1 of 10 (0 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.12`
+        release = `1.86`
+        release_post171 = abap_true
         is_post171 = abap_true
         notes = `NOTE: the original binds records {/ProductCollection/0..5} of the shared mock; the port carries exactly those 6 records as a default-model table T_PRODUCTS and element-binds each ObjectNumber to` &&
                  ` /T_PRODUCTS/0..5 (index binding), Price+CurrencyCode verbatim. // POST-1.71: ObjectNumber.inverted, ObjectNumber.active and ObjectNumber.press (all since UI5 1.86) are kept 1:1 for the` &&
@@ -1392,6 +1444,8 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.m` control = `sap.m.ObjectStatus`                name = `ObjectStatus`                        class = `z2ui5_cl_ai_app_042` path = `src/01/b01/z2ui5_cl_ai_app_042.clas.abap`
         score = 1
         score_tip = `Deviation from the original sample: 1 of 10 (0 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
+        release = `1.120`
+        release_post171 = abap_true
         is_post171 = abap_true
         checked = `CHECKED (2026-07-20): verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed)`
         notes = `POST-1.71: the ObjectStatus state values Indication06-Indication08 (since UI5 1.75) and Indication09-Indication20 (since UI5 1.120) are newer than 1.71 but kept for the 1:1 port - the app needs a UI5` &&
@@ -1428,6 +1482,8 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 3
         score_tip = `Deviation from the original sample: 3 of 10 (1 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.48`
+        release = `1.121`
+        release_post171 = abap_true
         is_post171 = abap_true
         checked = `CHECKED (2026-07-20): verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed)`
         notes = `NOTE: the original onInit creates a popup-mode sap.m.PDFViewer and adds it as a view dependent; it is declared 1:1 in the view's mvc:dependents aggregation (an extra PDFViewer element vs the original` &&
@@ -1460,6 +1516,8 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 3
         score_tip = `Deviation from the original sample: 3 of 10 (1 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.13.1`
+        release = `1.73`
+        release_post171 = abap_true
         is_post171 = abap_true
         notes = `IMPROVISED: the two interactive ProgressIndicators (pi-with-animation / pi-without-animation) are set to 0/100 via two-way bound percentValue/displayValue fields updated in a SET event, replacing the` &&
                  ` original's controller byId(...).setPercentValue/setDisplayValue calls. // POST-1.71: ProgressIndicator.displayAnimation (since UI5 1.73) is kept 1:1 on the no-animation ProgressIndicator; needs UI5` &&
@@ -1475,6 +1533,8 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.m` control = `sap.m.RadioButton`                 name = `RadioButton`                         class = `z2ui5_cl_ai_app_069` path = `src/01/b09/z2ui5_cl_ai_app_069.clas.abap`
         score = 1
         score_tip = `Deviation from the original sample: 1 of 10 (0 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
+        release = `1.126`
+        release_post171 = abap_true
         is_post171 = abap_true
         notes = `POST-1.71: RadioButton.wrapping and RadioButton.wrappingType (both since UI5 1.126) are kept 1:1 on the wrapping-demo group; the app needs a UI5 release >= 1.126 to render them.`
         post171 = `RadioButton.wrapping and RadioButton.wrappingType (both since UI5 1.126) are kept 1:1 on the wrapping-demo group; the app needs a UI5 release >= 1.126 to render them.` )
