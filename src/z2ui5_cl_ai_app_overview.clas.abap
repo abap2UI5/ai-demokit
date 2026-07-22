@@ -1595,6 +1595,45 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         notes = `NOTE: the incremental backend load is reproduced 1:1: the model starts with the first product and each pull-to-refresh (REFRESH) appends the next until the full /ProductCollection is shown (fill_all +` &&
                  ` shown counter).`
         use_name = abap_true )
+      ( module = `sap.m` control = `sap.m.QuickView`                   name = `QuickView`                           class = `z2ui5_cl_ai_app_100` path = `src/01/b12/z2ui5_cl_ai_app_100.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.28.11`
+        release = `1.84`
+        release_post171 = abap_true
+        is_post171 = abap_true
+        notes = `IMPROVISED: The original binds four separate named JSONModels (CompanyModel / EmployeeModel / GenericModel / GenericModelNoHeader) and swaps the model on the shared QuickView before openBy. abap2UI5` &&
+                 ` serves a single default model, so the four data sets are flattened into four ABAP tables (kept in PROTECTED) and the pressed button copies the relevant one into the bound t_pages before the popover` &&
+                 ` is opened. Named ABAP-fed JSON models are not expressible (CAPABILITIES). // NOTE: The QuickView popover is built per press and shown 1:1 via client->popover_display( xml, by_id ), anchored to the` &&
+                 ` pressed button (the original oQuickView.openBy(oButton)). The nested pages/groups/elements are a nested ABAP table; relative child aggregations (groups, elements) keep the original binding-info form.` &&
+                 ` // NOTE: The navigate toast is simplified to a fixed message (the original shows the clicked link's text via navOrigin, a control reference that is not transportable as an event arg). Elements` &&
+                 ` without an elementType (Generic pages, and the Address/Slogan rows) get the QuickViewGroupElementType default 'text', and pages without displayShape (Generic) get the AvatarShape default 'Circle', so` &&
+                 ` no enum property serializes as an empty string. The EmployeeData icon (a test-resources image) points at the OpenUI5 host. // POST-1.71: sap.m.Avatar (and the QuickViewPage avatar aggregation) is` &&
+                 ` since 1.73; it is kept 1:1 as the page icon, so the app needs UI5 >= 1.73 to render the avatar. // POST-1.71: sap.m.Button.ariaHasPopup (since 1.84) is kept 1:1 on the four trigger buttons; needs UI5` &&
+                 ` >= 1.84.`
+        post171 = `sap.m.Avatar (and the QuickViewPage avatar aggregation) is since 1.73; it is kept 1:1 as the page icon, so the app needs UI5 >= 1.73 to render the avatar. // sap.m.Button.ariaHasPopup (since 1.84) is` &&
+                 ` kept 1:1 on the four trigger buttons; needs UI5 >= 1.84.`
+        use_popover = abap_true
+        use_name = abap_true )
+      ( module = `sap.m` control = `sap.m.QuickViewCard`               name = `QuickViewCard`                       class = `z2ui5_cl_ai_app_099` path = `src/01/b12/z2ui5_cl_ai_app_099.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.28.11`
+        release = `1.73`
+        release_post171 = abap_true
+        is_post171 = abap_true
+        notes = `NOTE: The QuickViewCard fragment is inlined into the main view instead of a separate core:Fragment include, so the port has no core:Fragment control. The nested pages/groups/elements are a nested ABAP` &&
+                 ` table (t_pages) bound 1:1; relative child aggregations (groups, elements) keep the original binding-info form. // NOTE: The external Navigate-Back button drives the card 1:1 via follow_up_action(` &&
+                 ` cs_event-control_by_id, navigateBack ) — navigateBack was whitelisted in the paired abap2UI5 change. afterNavigate forwards the public isTopPage parameter and enables the button while the card is not` &&
+                 ` on its top page. The navigate toast is simplified to a fixed message (the original distinguishes the clicked link's text vs the back button via navOrigin, a control reference that is not` &&
+                 ` transportable as an event arg). // NOTE: Elements without an elementType in the source JSON (Address, Slogan) are filled with the QuickViewGroupElementType default 'text' so the enum-typed type` &&
+                 ` property never serializes as an empty string (which validateProperty rejects). onAfterRendering's 320px maxWidth tweak is dropped. // POST-1.71: sap.m.Avatar (and the QuickViewPage avatar` &&
+                 ` aggregation) is since 1.73; it is kept 1:1 as the page icon, so the app needs UI5 >= 1.73 to render the avatar.`
+        post171 = `sap.m.Avatar (and the QuickViewPage avatar aggregation) is since 1.73; it is kept 1:1 as the page icon, so the app needs UI5 >= 1.73 to render the avatar.`
+        use_fua = abap_true
+        use_fua_arg = abap_true
+        use_name = abap_true )
       ( module = `sap.m` control = `sap.m.RadioButton`                 name = `RadioButton`                         class = `z2ui5_cl_ai_app_069` path = `src/01/b09/z2ui5_cl_ai_app_069.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
