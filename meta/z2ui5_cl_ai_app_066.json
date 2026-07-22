@@ -9,8 +9,11 @@
     "event_t_arg": true,
     "note": "control_by_id toggleBy anchored to the button"
   },
-  "status": "generated",
-  "checked": null,
+  "status": "checked",
+  "checked": {
+    "date": "2026-07-22",
+    "note": "verified in a running system 2026-07-22: the button toggles the MessagePopover open/closed (toggleBy) and lists the five messages."
+  },
   "deviations": [
     {
       "type": "POST_171",
@@ -25,8 +28,8 @@
       "what": "the sample's three severity formatters (buttonIconFormatter/buttonTypeFormatter/highestSeverityMessages) compute the button icon/type/count from the highest-severity message; the mock data is static, so the results are precomputed in ABAP (error icon, Negative type, count 2 for the two Error messages) and bound as scalars. The sample's root-array JSON model (items path '/') is carried under a /T_MESSAGES field of the single default model."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "confirm in a running system that the button toggles the MessagePopover open/closed (toggleBy) and lists the five messages with their MessageItem link, and that activeTitlePress toasts on the active (first Error) title."
+      "type": "NOTE",
+      "what": "live-verified 2026-07-22 - confirm in a running system that the button toggles the MessagePopover open/closed (toggleBy) and lists the five messages with their MessageItem link, and that activeTitlePress toasts on the active (first Error) title."
     }
   ]
 }

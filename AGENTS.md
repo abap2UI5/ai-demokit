@@ -254,8 +254,14 @@ ENDMETHOD.
 The sample's JSON model becomes ABAP: one `ty_s_`/`ty_t_` type per JSON array,
 filled with `VALUE #( ( … ) ( … ) )`. Field names are the JSON keys, upper-cased
 by ABAP; bindings reference them in braces (`{TITLE}`, `{PRODUCT_ID}`). Keep the
-data verbatim from the sample (same rows, same text); a row subset needs an
-IMPROVISED note (checkable against `ui5/mock/`). See app 040.
+data verbatim from the sample — **the full row set, no subsetting**: inline every
+row of the referenced mock array (e.g. all 123 `/ProductCollection` rows of
+`ui5/mock/products.json`), byte-identical to the mock (`SUBSET_DATA` is no longer
+an accepted deviation — user decision 2026-07-22). Where the original itself
+binds a single record (`{/ProductCollection/0}`) or a precomputed stats array
+(`/ProductCollectionStats/Filters`), reproduce exactly that — that is the 1:1
+data, not a shortening. A packed field must carry enough `DECIMALS` for the mock
+(e.g. `Price` has 2-decimal values, so `TYPE p … DECIMALS 2`).
 
 **abap2UI5 serves a single default model — there are no named models.** A sample
 that binds against a named model (`img>/products/pic1`, a separate `JSONModel`,
@@ -454,8 +460,9 @@ with a closed `type` vocabulary so deviations stay countable:
   app 044 shows the 1:1 way (`popup_display`).
 - `DROPPED_171` — a control / property / enum value newer than 1.71 was
   dropped or downgraded (app 042's `Indication06`+ states set to `None`).
-- `SUBSET_DATA` — the port binds a row subset of the sample's mock data
-  (checkable against `ui5/mock/`).
+- `SUBSET_DATA` — **retired (2026-07-22): no longer accepted.** Ports inline the
+  full mock row set (see `model_init` above); `validate-meta` now rejects this
+  type. Kept in the vocabulary only so historical diffs stay readable.
 - `NOTE` — anything else worth flagging.
 
 The `what` text carries the full explanation. Keep the array **empty** for a

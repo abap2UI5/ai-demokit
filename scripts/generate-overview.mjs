@@ -53,6 +53,23 @@ for (const mf of fs.readdirSync(META)) {
   const name = m.sample.slice(i + '.sample.'.length);
   const u = uniMap.get(`${module}|${name}`) || {};
   const dep = u.deprecated || null;
+  // deviation score (1-5): how far the port is from the original sample. Only the
+  // real behavioural divergence counts - IMPROVISED (a non-1:1 substitution) and
+  // DROPPED_171 (a feature/control left out) weigh 2 each, a SUBSET_DATA row cut 1.
+  // POST_171 does NOT count: keeping a member newer than 1.71 is still a 1:1 port
+  // (it only needs a newer UI5). LIVE_TEST / NOTE are neutral. 1 = faithful 1:1,
+  // 5 = heavily reworked. Kept in sync with STATUS.md / AGENTS.md §5.
+  const devs = m.deviations || [];
+  const nImpr = devs.filter((d) => d.type === 'IMPROVISED').length;
+  const nDrop = devs.filter((d) => d.type === 'DROPPED_171').length;
+  const nSub = devs.filter((d) => d.type === 'SUBSET_DATA').length;
+  const raw = 2 * nImpr + 2 * nDrop + nSub;
+  const score = raw === 0 ? 1 : raw <= 2 ? 2 : raw <= 4 ? 3 : raw <= 6 ? 4 : 5;
+  const scoreState = score <= 2 ? 'Success' : score === 3 ? 'Warning' : 'Error';
+  const drivers = [`${nImpr} improvised`, `${nDrop} dropped`];
+  if (nSub) drivers.push(`${nSub} subset`);
+  const scoreTip = `Deviation from the original sample: ${score} of 5 ` +
+    `(${drivers.join(', ')}). 1 = faithful 1:1, 5 = heavily reworked.`;
   apps.push({
     module,
     control: m.entity,
@@ -65,6 +82,9 @@ for (const mf of fs.readdirSync(META)) {
     golden: m.status === 'golden',
     since: u.since || '',
     dep_text: dep ? `Deprecated since ${dep.since}: ${dep.text}` : '',
+    score,
+    score_state: scoreState,
+    score_tip: scoreTip,
   });
 }
 // order by module, then control, then sample name (case-insensitive)
@@ -106,6 +126,9 @@ const rows = apps.map((a) => {
     ` class = \`${a.cls}\`${' '.repeat(wl - a.cls.length)}` +
     ` path = \`${a.file}\`${' '.repeat(wf - a.file.length)}`;
   const extras = [];
+  extras.push(`score = ${a.score}`);
+  extras.push(`score_state = \`${a.score_state}\``);
+  extras.push(`score_tip = ${abapStr(a.score_tip)}`);
   if (a.golden) extras.push('golden = abap_true');
   if (a.since) extras.push(`since = \`${a.since}\``);
   if (a.dep_text) extras.push(`dep_text = ${abapStr(a.dep_text)}`);
@@ -167,6 +190,7 @@ const columnsBlock = [
   plainColumn('Since', [['width', '6rem']]),
   sortableColumn('Sample', 'NAME'),
   sortableColumn('abap2UI5', 'CLASS'),
+  sortableColumn('Deviation', 'SCORE'),
   plainColumn('Note'),
   plainColumn('Open', [['width', '5rem'], ['hAlign', 'Center']]),
 ].join('\n');
@@ -187,12 +211,16 @@ const abap = `"! Generated overview app - lists every abap2UI5 api sample app in
 "! (OpenUI5 API, OpenUI5 source, live fullscreen sample, the generated ABAP
 "! class on GitHub, and starting the app) lives in the trailing Open column: its
 "! button opens an anchored popover of all those links, each opening in a new
-"! browser tab. The Note column shows a gold star for golden ports (live-checked
+"! browser tab. The Deviation column is a 1-5 score of how far the port is from
+"! the original sample (green 1-2, orange 3, red 4-5) - IMPROVISED and DROPPED_171
+"! deviations weigh 2 each, SUBSET_DATA 1, POST_171 counts as 0 (still a 1:1 port);
+"! sort it descending to surface the samples worth a closer manual look. The Note
+"! column shows a gold star for golden ports (live-checked
 "! and exemplary), a green check when the port was manually verified in a
 "! running system, and a hint icon that opens a popup with the port's generation
 "! caveats when present. The search field above the table filters all rows by a
-"! substring over the five visible columns (module, control, since, sample,
-"! class) only, and each column header carries ascending/
+"! substring over the five text columns (module, control, since, sample,
+"! class) only, and each sortable column header carries ascending/
 "! descending sort icons - both run entirely on the frontend
 "! (cs_event-binding_call via _event_client, no server round-trip). Do not edit
 "! by hand - regenerate with scripts/generate-overview.mjs
@@ -224,6 +252,9 @@ CLASS ${CLASS} DEFINITION PUBLIC.
         since     TYPE string,
         dep_text  TYPE string,
         ctrl_html TYPE string,
+        score       TYPE i,
+        score_state TYPE string,
+        score_tip   TYPE string,
         filter    TYPE string,
       END OF ty_s_app.
     TYPES ty_t_app TYPE STANDARD TABLE OF ty_s_app WITH EMPTY KEY.
@@ -491,6 +522,12 @@ ${columnsBlock}
                                     )->a( n = \`text\` v = \`{NAME}\`
                                 )->leaf( \`Text\`
                                     )->a( n = \`text\` v = \`{CLASS}\`
+                                " deviation score 1-5: how far the port is from the original
+                                " (green 1-2, orange 3, red 4-5); tooltip lists the drivers
+                                )->leaf( \`ObjectStatus\`
+                                    )->a( n = \`text\`    v = \`{SCORE} / 5\`
+                                    )->a( n = \`state\`   v = \`{SCORE_STATE}\`
+                                    )->a( n = \`tooltip\` v = \`{SCORE_TIP}\`
 
                                 )->open( \`HBox\`
                                     )->a( n = \`alignItems\` v = \`Center\`

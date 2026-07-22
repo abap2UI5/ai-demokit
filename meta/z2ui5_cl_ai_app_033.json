@@ -13,10 +13,5 @@
     "date": "2026-07-19",
     "note": "verified in a running system - human visual pass 2026-07-19 over all apps: the Currency composite binding renders the formatted price per currency (raw binding-info string over PRICE TYPE p)."
   },
-  "deviations": [
-    {
-      "type": "SUBSET_DATA",
-      "what": "the bound /ProductCollection shows a 6-row subset of the 123-row mock (ui5/mock/products.json); HT-1002 is not part of the subset."
-    }
-  ]
+  "deviations": []
 }

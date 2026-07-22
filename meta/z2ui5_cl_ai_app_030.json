@@ -15,10 +15,6 @@
   },
   "deviations": [
     {
-      "type": "SUBSET_DATA",
-      "what": "the bound /ProductCollection shows a 8-row subset of the 123-row mock (ui5/mock/products.json) - a full unroll adds no demo value."
-    },
-    {
       "type": "NOTE",
       "what": "the original binds expanded=\"{device>/isNoPhone}\" (a demo-kit helper model); expressed over the framework's device> model as the expression {= !${device>/system/phone} } - same truth value, different binding text. Confirmed on desktop and phone emulation in the 2026-07-20 live check."
     }

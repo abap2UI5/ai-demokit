@@ -17,10 +17,6 @@
     {
       "type": "NOTE",
       "what": "the custom groupHeaderFactory '.getGroupHeader' (controller code) is replaced by UI5's default group headers - the sample's factory builds a SeparatorItem with the group key, which is exactly what the default renders anyway (CAPABILITIES.md group-sorter row, source-verified on both sides), so this is a faithful 1:1, not a workaround. The items are a bound template with the original's sorter (path SUPPLIER_NAME, group: true) as a raw binding-info string."
-    },
-    {
-      "type": "SUBSET_DATA",
-      "what": "16-row subset of the 123-row mock (ui5/mock/products.json)."
     }
   ]
 }

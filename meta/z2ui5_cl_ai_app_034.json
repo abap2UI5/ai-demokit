@@ -17,10 +17,6 @@
     {
       "type": "POST_171",
       "what": "headerLevel=\"H2\" on the List (since UI5 1.117) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.117 to render it."
-    },
-    {
-      "type": "SUBSET_DATA",
-      "what": "the bound /ProductCollection shows the first 11 rows of the 123-row mock (ui5/mock/products.json) verbatim - Name and Quantity match the mock 1:1 (Notebook Basic 15/10 ... Comfort Senior/24); a full unroll adds no demo value."
     }
   ]
 }

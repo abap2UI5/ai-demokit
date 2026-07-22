@@ -9,8 +9,11 @@
     "event_t_arg": true,
     "note": "control_by_id toggleBy anchored to the button"
   },
-  "status": "generated",
-  "checked": null,
+  "status": "checked",
+  "checked": {
+    "date": "2026-07-22",
+    "note": "verified in a running system 2026-07-22: the button toggles the MessagePopover (toggleBy) and the first Error message renders its HTML markupDescription."
+  },
   "deviations": [
     {
       "type": "POST_171",
@@ -29,8 +32,8 @@
       "what": "the three severity formatters are precomputed in ABAP from the static mock (error icon, Negative type, count 2); the root-array JSON model is carried under /T_MESSAGES on the single default model."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "confirm the button toggles the MessagePopover (toggleBy) and the first Error message renders its HTML markupDescription (h2/p/ul/ol + links); activeTitlePress toasts."
+      "type": "NOTE",
+      "what": "live-verified 2026-07-22 - confirm the button toggles the MessagePopover (toggleBy) and the first Error message renders its HTML markupDescription (h2/p/ul/ol + links); activeTitlePress toasts."
     }
   ]
 }

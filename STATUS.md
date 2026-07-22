@@ -14,9 +14,39 @@ CAPABILITIES.md._
 | Structural view diff | **0 undeclared differences** across all 64 ports (`node scripts/structural-diff.mjs --strict`) — including simple **binding values** and, since 2026-07-19, **`id` attributes** (name-level per control type; dropped original ids must be restored or declared) |
 | Render smoke | **0 failing / 1 skipped** (`npm run smoke`): every reconstructable port's view loads in a real headless `XMLView.create`; app 049's skip is now a **declared, CI-enforced** `render_smoke.skip` (helper-method view building is not statically reconstructable — an undeclared non-reconstructable port now FAILS); harness carries `sap.f` and mocks scalar-row tables as empty arrays since b05 |
 | Pattern lint | **0 errors, 0 warnings, empty baseline** (`node scripts/pattern-lint.mjs`) |
-| Meta sidecars | 67 in `meta/` — status: 27 `generated`, 35 `checked`, **5 `golden`** (401, 421, 454, 540, 543 — promoted 2026-07-20 after the full live check); deviations: 35 IMPROVISED, 30 POST_171, 2 LIVE_TEST (b07 apps 060/061 menu item args), 9 SUBSET_DATA, 66 NOTE, 2 DROPPED_171 (the `p:ColumnAIAction` plugin in apps 022 and 534 — a whole control newer than 1.71, unlike the restorable members). `audit` is a structured object since 2026-07-18 |
-| Manually verified in a running system | **40 of 64 ports** — 2026-07-20 human live check per the interaction checklist (all b05/b06 + every port that carried an open question, incl. the 530 restamp); previously: 420/421/526 interactive, 404/431/440/460/487 visual 2026-07-19. The 24 remaining `generated` ports are the b01–b04 apps that never carried an open question plus the 10 fresh b07 ports (machine-verified only) |
+| Meta sidecars | 67 in `meta/` — status: 21 `generated`, 41 `checked`, **5 `golden`** (401, 421, 454, 540, 543 — promoted 2026-07-20 after the full live check); deviations: 39 IMPROVISED, 34 POST_171, 81 NOTE, 3 DROPPED_171 (the `p:ColumnAIAction` plugin in apps 009/022/534 — a whole control newer than 1.71, unlike the restorable members). **0 LIVE_TEST** (b07/b08 menu + message-popover paths live-checked 2026-07-22) and **0 SUBSET_DATA** (retired 2026-07-22 — every port now inlines the full mock row set). `audit` is a structured object since 2026-07-18 |
+| Manually verified in a running system | **46 of 67 ports** — adds 060/061/066/067 (menu + MessagePopover, human live check 2026-07-22) to the 2026-07-20 checked set; the 21 remaining `generated` ports are b01–b04 apps that never carried an open question (machine-verified only) |
 | Archive | `ui5/sap.m/<SampleName>/` — full originals for the 44 ported samples (+2 cross-referenced: `FacetFilterSimple`, `Table`); mock snapshot in `ui5/mock/`. Unported samples are copied over batch by batch. |
+
+## Full mock data + deviation score (2026-07-22)
+
+Two user decisions this day:
+
+- **No more data subsetting.** The nine `SUBSET_DATA` ports were rebuilt to
+  inline the **full mock row set** (all 123 `/ProductCollection` rows of
+  `ui5/mock/products.json`), byte-identical to the mock: **006, 030, 033, 034,
+  039, 040** (product lists), **012** (all 123 rows loaded, the table binding
+  still filters to `Category = Laptops` as the original does client-side; `price`
+  bumped to `DECIMALS 2` so the 19 non-integer prices stay exact) and **022**
+  (full products + the precomputed `/ProductCollectionStats/Filters` counters —
+  16 categories / 12 suppliers — which is what the original binds). **041** keeps
+  its single `/ProductCollection/0` binding (that is the original's own
+  single-record binding, not a subset) — its tag was relabelled `NOTE`. The
+  `SUBSET_DATA` deviation type is **retired**: `validate-meta` now rejects it and
+  `AGENTS.md §model_init` requires the full row set. All checks stay green
+  (abaplint, structural-diff `--strict`, validate-meta, pattern-lint,
+  property-check, render-smoke `--strict`).
+- **Deviation score (1–5) in the overview app.** A new sortable **Deviation**
+  column in `z2ui5_cl_ai_app_overview` scores how far each port is from its
+  original — `IMPROVISED` and `DROPPED_171` weigh 2 each, `SUBSET_DATA` 1,
+  `POST_171` 0 (a newer member is still a 1:1 port); `raw=0→1, ≤2→2, ≤4→3, ≤6→4,
+  else 5`, shown green/orange/red with a tooltip listing the drivers. Sort it
+  descending to find the samples worth a closer manual look. Computed in
+  `scripts/generate-overview.mjs`. Current spread: **45×1, 13×2, 3×3, 3×4, 3×5**.
+- **Four LIVE_TESTs closed.** 060 Menu, 061 MenuButton, 066 MessagePopover,
+  067 MessagePopoverAsync were human live-checked (open/toggle + item paths) and
+  promoted `generated → checked`; their `LIVE_TEST` entries became live-verified
+  `NOTE`s. **0 open LIVE_TESTs** remain.
 
 ## Batches
 

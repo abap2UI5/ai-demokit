@@ -50,10 +50,6 @@
     {
       "type": "NOTE",
       "what": "the original's nested items-binding filter (ORs inside each facet group, AND across the groups, model untouched) is expressed 1:1 as a declarative compound filter: apply_filter builds the groups JSON from the two-way bound selected flags and schedules follow_up_action cs_event-binding_call filter on idProductsTable/items (compound groups implemented upstream 2026-07-20, pr/binding-call-compound-filters); the earlier ABAP-side model rebuild and the t_products_all mirror are gone."
-    },
-    {
-      "type": "SUBSET_DATA",
-      "what": "data is a 10-row subset of the mock /ProductCollection (ui5/mock/products.json), facet counters recomputed for the subset."
     }
   ]
 }

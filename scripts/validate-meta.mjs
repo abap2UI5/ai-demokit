@@ -100,6 +100,8 @@ for (const sf of sidecars.sort()) {
   }
   for (const d of m.deviations || []) {
     if (!DEV_TYPES.includes(d.type)) err(`${sf}: unknown deviation type "${d.type}"`);
+    // SUBSET_DATA retired 2026-07-22: ports must inline the full mock row set
+    if (d.type === 'SUBSET_DATA') err(`${sf}: SUBSET_DATA is retired - inline the full mock row set instead`);
     if (!d.what) err(`${sf}: deviation without "what" text`);
   }
   if (m.file) {
