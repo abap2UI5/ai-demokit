@@ -87,10 +87,11 @@ const RULES = [
         const region = parenRegion(content, open);
         for (const lit of region.matchAll(/`([^`]*)`/g)) {
           // a bare leading `{COL}` is the bug (unresolved binding); a pure
-          // positional placeholder `{0}`, `{1}`, ... is legitimate — it is the
-          // client-composed MessageToast/MessageBox template arg, filled from
-          // the following client-resolved values (a field name is never digits).
-          if (/^\{/.test(lit[1]) && !/^\{\d+\}/.test(lit[1])) {
+          // positional placeholder `{0}` / conditional `{0?a:b}` is legitimate —
+          // it is the client-composed MessageToast/MessageBox template arg,
+          // filled from the following client-resolved values (a field name is
+          // never digits).
+          if (/^\{/.test(lit[1]) && !/^\{\d+[?}]/.test(lit[1])) {
             out.push({ line: lineOf(content, open + lit.index), text: '`' + lit[1] + '`' });
           }
         }

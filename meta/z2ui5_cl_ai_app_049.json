@@ -5,8 +5,9 @@
   "file": "src/01/b02/z2ui5_cl_ai_app_049.clas.abap",
   "batch": "b02",
   "audit": {
-    "frontend_action": false,
-    "event_t_arg": true
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "each StepInput change toasts `Value changed to '{0}'` roundtrip-free via control_global MESSAGE_TOAST.show ({0} filled by ${$parameters>/value}); the single quotes rely on get_t_arg's ' -> \\' escaping (abap2UI5 branch); the app is now init-only"
   },
   "status": "generated",
   "checked": null,
@@ -18,6 +19,10 @@
     {
       "type": "IMPROVISED",
       "what": "the sample binds a List to the JSON model /modelData and renders one templated CustomListItem per row. The rows are unrolled into static list items here because every row sets a different subset of the StepInput properties - an empty ABAP model field would bind as \"\" instead of leaving the property at its default, so a bound template would not render 1:1. Template properties no row ever sets (valueState) are dropped with it."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "the change toast was switched to a roundtrip-free client-composed toast on 2026-07-22 (control_global MESSAGE_TOAST.show, template `Value changed to '{0}'` with get_t_arg single-quote escaping; on_event dropped, init-only) - re-verify changing a StepInput toasts \"Value changed to '<value>'\" with the quotes intact."
     }
   ]
 }

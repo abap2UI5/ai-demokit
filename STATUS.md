@@ -269,6 +269,17 @@ and becomes **init-only**. Toasts whose text is computed server-side (019, 024,
 …) correctly keep their round-trip. All gates green; the four converted ports
 carry a `LIVE_TEST` for the new mechanism.
 
+Follow-ups (same day): **003, 016, 074, 076, 091** converted (all init-only;
+016 also moved its openBy from a round-trip to `_event_client`). Then two
+framework additions closed the last gaps — a **conditional placeholder**
+`{N?trueText:falseText}` (truthiness of the value) and **single-quote escaping**
+in `get_t_arg` (`'` → `\'`) — which unblocked **080** (ToggleButton,
+`{0} {1?Pressed:Unpressed}` from `getPressed()`), **049** (StepInput,
+`Value changed to '{0}'`) and **008** (ColorPalette, two args incl. a `\n`).
+Twelve ports total are now client-composed/init-only. Kept on their round-trip
+by design: server-computed or model-mutating toasts (019, 024, 025's action
+branch, 047, 085).
+
 ## control_by_id view-slot fix + golden category retired (2026-07-22)
 
 - **Runtime bug fixed.** After the framework moved the view to its own `view`

@@ -5,10 +5,16 @@
   "file": "src/01/b02/z2ui5_cl_ai_app_008.clas.abap",
   "batch": "b02",
   "audit": {
-    "frontend_action": false,
-    "event_t_arg": true
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "colorSelect toasts `Color Selected: value - {0}, \\n defaultAction - {1}` roundtrip-free via control_global MESSAGE_TOAST.show ({0}=${$parameters>/value}, {1}=${$parameters>/defaultAction}; the boolean defaultAction stringifies to true/false natively, so no server COND is needed); the app is now init-only"
   },
   "status": "generated",
   "checked": null,
-  "deviations": []
+  "deviations": [
+    {
+      "type": "LIVE_TEST",
+      "what": "the color-select toast was switched to a roundtrip-free client-composed toast on 2026-07-22 (control_global MESSAGE_TOAST.show, template with {0}/{1} filled by ${$parameters>/value} and ${$parameters>/defaultAction}; on_event dropped, init-only) - re-verify selecting a color toasts the value and true/false defaultAction."
+    }
+  ]
 }

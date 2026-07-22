@@ -7,7 +7,6 @@ CLASS z2ui5_cl_ai_app_008 DEFINITION PUBLIC.
     DATA client TYPE REF TO z2ui5_if_client.
 
     METHODS view_display.
-    METHODS on_event.
 
   PRIVATE SECTION.
 ENDCLASS.
@@ -20,8 +19,6 @@ CLASS z2ui5_cl_ai_app_008 IMPLEMENTATION.
     me->client = client.
     IF client->check_on_init( ).
       view_display( ).
-    ELSEIF client->check_on_event( ).
-      on_event( ).
     ENDIF.
 
   ENDMETHOD.
@@ -53,26 +50,10 @@ CLASS z2ui5_cl_ai_app_008 IMPLEMENTATION.
             )->leaf( `Label`
                 )->a( n = `text` v = `Choose Color`
             )->leaf( `ColorPalette`
-                )->a( n = `colorSelect` v = client->_event( val   = `COLOR_SELECT`
-                                                            t_arg = VALUE #( ( `${$parameters>/value}` ) ( `${$parameters>/defaultAction}` ) ) ) ).
+                )->a( n = `colorSelect` v = client->_event_client( val   = client->cs_event-control_global
+                                                                   t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Color Selected: value - {0}, \n defaultAction - {1}` ) ( `${$parameters>/value}` ) ( `${$parameters>/defaultAction}` ) ) ) ).
 
     client->view_display( view->stringify( ) ).
-
-  ENDMETHOD.
-
-
-  METHOD on_event.
-
-    CASE client->get( )-event.
-
-      WHEN `COLOR_SELECT`.
-        " boolean event parameter arrives as abap_bool - echoed as true/false like the original's string output
-        DATA(default_action) = COND string( WHEN client->get_event_arg( 2 ) = abap_true
-                                            THEN `true`
-                                            ELSE `false` ).
-        client->message_toast_display( |Color Selected: value - { client->get_event_arg( ) }, \n defaultAction - { default_action }| ).
-
-    ENDCASE.
 
   ENDMETHOD.
 

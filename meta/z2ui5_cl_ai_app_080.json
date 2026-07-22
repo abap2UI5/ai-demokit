@@ -5,8 +5,9 @@
   "file": "src/01/b10/z2ui5_cl_ai_app_080.clas.abap",
   "batch": "b10",
   "audit": {
-    "frontend_action": false,
-    "event_t_arg": true
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "each toggle press toasts `{0} {1?Pressed:Unpressed}` roundtrip-free via control_global MESSAGE_TOAST.show ({0} = $event.oSource.sId, {1} = $event.oSource.getPressed() mapped Pressed/Unpressed by the conditional placeholder); the app is now init-only"
   },
   "status": "generated",
   "checked": null,
@@ -14,6 +15,10 @@
     {
       "type": "NOTE",
       "what": "onPress toasts the source control id + Pressed/Unpressed; both arrive via $event.oSource (sId and getPressed()) - the earlier ${$source>/pressed} binding did not resolve at runtime."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "the press toast was switched to a roundtrip-free client-composed toast on 2026-07-22 using the conditional placeholder (control_global MESSAGE_TOAST.show, template `{0} {1?Pressed:Unpressed}`; on_event dropped, init-only) - re-verify pressing a ToggleButton toasts \"<id> Pressed\" when down and \"<id> Unpressed\" when up."
     }
   ]
 }

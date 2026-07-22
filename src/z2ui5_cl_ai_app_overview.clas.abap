@@ -783,9 +783,13 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         checked = `CHECKED (2026-07-15): manually verified in a running system - the select-all parent checkbox and its tri-state expression bindings behave like the original.; live-checked reference example for:` &&
                  ` expression bindings, two-way bind, boolean event arg` )
       ( module = `sap.m` control = `sap.m.ColorPalette`                name = `ColorPalette`                        class = `z2ui5_cl_ai_app_008` path = `src/01/b02/z2ui5_cl_ai_app_008.clas.abap`
-        score = 2
-        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        since = `1.54` )
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.54`
+        notes = `LIVE-TEST: the color-select toast was switched to a roundtrip-free client-composed toast on 2026-07-22 (control_global MESSAGE_TOAST.show, template with {0}/{1} filled by ${$parameters>/value} and` &&
+                 ` ${$parameters>/defaultAction}; on_event dropped, init-only) - re-verify selecting a color toasts the value and true/false defaultAction.`
+        use_ec = abap_true
+        use_ec_arg = abap_true )
       ( module = `sap.m` control = `sap.m.Column`                      name = `Table`                               class = `z2ui5_cl_ai_app_009` path = `src/01/b05/z2ui5_cl_ai_app_009.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 5 reworked, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
@@ -1663,12 +1667,16 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `NOTE: the List element binding {/ProductCollection} and the items' index paths ({0/Name}..{3/Name}) are kept 1:1 against the default-model table /T_PRODUCTS (full 123-row mock inlined).` )
       ( module = `sap.m` control = `sap.m.StepInput`                   name = `StepInput`                           class = `z2ui5_cl_ai_app_049` path = `src/01/b02/z2ui5_cl_ai_app_049.clas.abap`
-        score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
         since = `1.40`
         notes = `IMPROVISED: the sample binds a List to the JSON model /modelData and renders one templated CustomListItem per row. The rows are unrolled into static list items here because every row sets a different` &&
                  ` subset of the StepInput properties - an empty ABAP model field would bind as "" instead of leaving the property at its default, so a bound template would not render 1:1. Template properties no row` &&
-                 ` ever sets (valueState) are dropped with it.` )
+                 ` ever sets (valueState) are dropped with it. // LIVE-TEST: the change toast was switched to a roundtrip-free client-composed toast on 2026-07-22 (control_global MESSAGE_TOAST.show, template ``Value` &&
+                 ` changed to '{0}'`` with get_t_arg single-quote escaping; on_event dropped, init-only) - re-verify changing a StepInput toasts "Value changed to '<value>'" with the quotes intact.`
+        use_ec = abap_true
+        use_ec_arg = abap_true )
       ( module = `sap.m` control = `sap.m.Switch`                      name = `Switch`                              class = `z2ui5_cl_ai_app_050` path = `src/01/b02/z2ui5_cl_ai_app_050.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
@@ -1732,9 +1740,13 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         use_ec_arg = abap_true
         use_name = abap_true )
       ( module = `sap.m` control = `sap.m.ToggleButton`                name = `ToggleButton`                        class = `z2ui5_cl_ai_app_080` path = `src/01/b10/z2ui5_cl_ai_app_080.clas.abap`
-        score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        notes = `NOTE: onPress toasts the source control id + Pressed/Unpressed; both arrive via $event.oSource (sId and getPressed()) - the earlier ${$source>/pressed} binding did not resolve at runtime.` )
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `NOTE: onPress toasts the source control id + Pressed/Unpressed; both arrive via $event.oSource (sId and getPressed()) - the earlier ${$source>/pressed} binding did not resolve at runtime. //` &&
+                 ` LIVE-TEST: the press toast was switched to a roundtrip-free client-composed toast on 2026-07-22 using the conditional placeholder (control_global MESSAGE_TOAST.show, template ``{0}` &&
+                 ` {1?Pressed:Unpressed}``; on_event dropped, init-only) - re-verify pressing a ToggleButton toasts "<id> Pressed" when down and "<id> Unpressed" when up.`
+        use_ec = abap_true
+        use_ec_arg = abap_true )
       ( module = `sap.m` control = `sap.m.Tokenizer`                   name = `TokenizerBasic`                      class = `z2ui5_cl_ai_app_085` path = `src/01/b10/z2ui5_cl_ai_app_085.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
