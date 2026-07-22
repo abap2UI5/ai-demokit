@@ -35,8 +35,8 @@ method parameters, just a new frontend action value:
 client->follow_up_action(
     val   = client->cs_event-bind_element               " new frontend action
     view  = client->cs_view-popover                     " or cs_view-popup
-    t_arg = VALUE #( ( idx )                                                     " model-row index
-                     ( client->_bind( val = mt_tab path = abap_true ) ) ) ).     " registered path
+    t_arg = VALUE #( ( idx )                    " model-row index
+                     ( client->_bind( mt_tab ) ) ) ).   " registered table binding
 ```
 
 Then the fragment simply binds relative:
@@ -48,26 +48,28 @@ Then the fragment simply binds relative:
 
 ### Why this shape
 
-The second `t_arg` is **`client->_bind( val = mt_tab path = abap_true )`**, not a
-hand-written `|/T_PRODUCTS/{ idx }|`. That call already:
+The second `t_arg` is **`client->_bind( mt_tab )`**, not a hand-written
+`|/T_PRODUCTS/{ idx }|`. That call already:
 
 - **registers** `mt_tab` into the model (so the popup/popover slot actually
   carries the table), and
-- **returns its model path as a value**, derived from the ABAP variable —
-  rename-safe and model-consistent (the whole reason `_bind` exists instead of
-  writing `{/VAR}` by hand). Renaming `mt_tab` moves the path with it; a text
-  binding would silently break.
+- **returns its binding reference** (e.g. `{/MT_TAB}`), derived from the ABAP
+  variable — rename-safe and model-consistent (the whole reason `_bind` exists
+  instead of writing `{/VAR}` by hand). Renaming `mt_tab` moves the path with it;
+  a text binding would silently break.
 
-The `BIND_ELEMENT` action then builds `<path>/<idx>` and sets it as the target
-slot's element binding (`bindElement` / `setBindingContext`), routed to the
-`popup` / `popover` slot via the existing `view` parameter (the same slot
-routing `control_by_id` already uses in `get_event_client`).
+The `BIND_ELEMENT` action normalizes that reference (strips the `{ }`), appends
+`/<idx>`, and sets it as the target slot's element binding (`bindElement` /
+`setBindingContext`), routed to the `popup` / `popover` slot via the existing
+`view` parameter (the same slot routing `control_by_id` already uses in
+`get_event_client`).
 
 ## Implementation sketch (framework)
 
 - ABAP: add `cs_event-bind_element VALUE 'BIND_ELEMENT'`; no new client method.
-- JS `FrontendAction.js`: `BIND_ELEMENT: (c, args) => resolveSlotView(args).bindElement(path + '/' + idx)`,
-  reading the slot from the injected `view` arg and `idx` + `path` from `t_arg`.
+- JS `FrontendAction.js`: `BIND_ELEMENT: (c, args) => resolveSlotView(args).bindElement(stripBraces(binding) + '/' + idx)`,
+  reading the slot from the injected `view` arg and `idx` + the `{…}` binding
+  from `t_arg`.
 
 ## Note — `idx` is the model index
 
