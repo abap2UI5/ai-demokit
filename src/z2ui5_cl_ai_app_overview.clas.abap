@@ -1171,6 +1171,17 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.m` control = `sap.m.InputListItem`               name = `InputListItem`                       class = `z2ui5_cl_ai_app_057` path = `src/01/b07/z2ui5_cl_ai_app_057.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
+      ( module = `sap.m` control = `sap.m.InputModelUpdate`            name = `InputModelUpdate`                    class = `z2ui5_cl_ai_app_102` path = `src/01/b12/z2ui5_cl_ai_app_102.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        ui5_only = abap_true
+        notes = `IMPROVISED: The original demonstrates late binding of an Input over an OData v2 mock server: fnRebind calls view.bindElement('/Employees(1)') and, on dataReceived (~3s), rebinds the input to FirstName` &&
+                 ` if the value is still untouched. abap2UI5 has no ODataModel roundtrip here, so the OData mock is reduced to ABAP: the button starts a 3s timer (cs_event-start_timer) and the callback sets the bound` &&
+                 ` value to the Employees(1) FirstName ('Nancy') only when the input still equals its initial value ('Martin'), reproducing the initialValue===currentValue guard. // NOTE: The input value is a two-way` &&
+                 ` binding on the single default model (the original's named 'initialData' JSONModel /currentValue is flattened). liveChange is wired but the current value already flows back via the two-way binding on` &&
+                 ` each roundtrip, so the handler is a no-op (the original setProperty('/currentValue', ...) keeps it live between keystrokes).`
+        use_fua = abap_true
+        use_fua_arg = abap_true )
       ( module = `sap.m` control = `sap.m.Label`                       name = `LabelProperties`                     class = `z2ui5_cl_ai_app_058` path = `src/01/b07/z2ui5_cl_ai_app_058.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`

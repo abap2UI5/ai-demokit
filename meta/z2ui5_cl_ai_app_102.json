@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_ai_app_102",
+  "sample": "sap.m.sample.InputModelUpdate",
+  "entity": "sap.m.InputModelUpdate",
+  "file": "src/01/b12/z2ui5_cl_ai_app_102.clas.abap",
+  "batch": "b12",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "The original demonstrates late binding of an Input over an OData v2 mock server: fnRebind calls view.bindElement('/Employees(1)') and, on dataReceived (~3s), rebinds the input to FirstName if the value is still untouched. abap2UI5 has no ODataModel roundtrip here, so the OData mock is reduced to ABAP: the button starts a 3s timer (cs_event-start_timer) and the callback sets the bound value to the Employees(1) FirstName ('Nancy') only when the input still equals its initial value ('Martin'), reproducing the initialValue===currentValue guard."
+    },
+    {
+      "type": "NOTE",
+      "what": "The input value is a two-way binding on the single default model (the original's named 'initialData' JSONModel /currentValue is flattened). liveChange is wired but the current value already flows back via the two-way binding on each roundtrip, so the handler is a no-op (the original setProperty('/currentValue', ...) keeps it live between keystrokes)."
+    }
+  ]
+}
