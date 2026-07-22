@@ -9,7 +9,7 @@ CAPABILITIES.md._
 
 | Aspect | State |
 |---|---|
-| Ports | 87 / **403 in-scope** `sap.m` samples (21.6 %) — in scope = control exists since UI5 1.71 and is not deprecated; 43 of 446 samples are out of scope (16 deprecated, 21 newer, 6 without control metadata) |
+| Ports | 94 / **403 in-scope** `sap.m` samples (23.3 %) — in scope = control exists since UI5 1.71 and is not deprecated; 43 of 446 samples are out of scope (16 deprecated, 21 newer, 6 without control metadata) |
 | CI | ABAP_STANDARD, ABAP_CLOUD, ABAP_702 all green |
 | Structural view diff | **0 undeclared differences** across all 64 ports (`node scripts/structural-diff.mjs --strict`) — including simple **binding values** and, since 2026-07-19, **`id` attributes** (name-level per control type; dropped original ids must be restored or declared) |
 | Render smoke | **0 failing / 1 skipped** (`npm run smoke`): every reconstructable port's view loads in a real headless `XMLView.create`; app 049's skip is now a **declared, CI-enforced** `render_smoke.skip` (helper-method view building is not statically reconstructable — an undeclared non-reconstructable port now FAILS); harness carries `sap.f` and mocks scalar-row tables as empty arrays since b05 |
@@ -17,6 +17,31 @@ CAPABILITIES.md._
 | Meta sidecars | 67 in `meta/` — status: 21 `generated`, 41 `checked`, **5 `golden`** (401, 421, 454, 540, 543 — promoted 2026-07-20 after the full live check); deviations: 39 IMPROVISED, 34 POST_171, 81 NOTE, 3 DROPPED_171 (the `p:ColumnAIAction` plugin in apps 009/022/534 — a whole control newer than 1.71, unlike the restorable members). **0 LIVE_TEST** (b07/b08 menu + message-popover paths live-checked 2026-07-22) and **0 SUBSET_DATA** (retired 2026-07-22 — every port now inlines the full mock row set). `audit` is a structured object since 2026-07-18 |
 | Manually verified in a running system | **46 of 67 ports** — adds 060/061/066/067 (menu + MessagePopover, human live check 2026-07-22) to the 2026-07-20 checked set; the 21 remaining `generated` ports are b01–b04 apps that never carried an open question (machine-verified only) |
 | Archive | `ui5/sap.m/<SampleName>/` — full originals for the 44 ported samples (+2 cross-referenced: `FacetFilterSimple`, `Table`); mock snapshot in `ui5/mock/`. Unported samples are copied over batch by batch. |
+
+## Batch b11 generated (2026-07-22) — pages, pickers, tables & popovers (7 ports)
+
+Classes **088–094**, breadth-first NEW-CONTROL: 088 StandardMarginsAll
+(`sap.ui.core.StandardMargins`), 089 PageStandardClasses (`sap.m.Page`),
+090 DialogSearch (`sap.m.SearchField`), 091 TimePickerHidden (`sap.m.TimePicker`),
+092 TableAutoPopin (`sap.m.Table`), 093 TabContainer, 094
+PopoverControllingCloseBehavior (`sap.m.Popover`). Machine-verified green
+(abaplint, validate-meta, pattern-lint, structural-diff `--strict`,
+property-check, render-smoke `--strict`); status `generated`.
+
+Notables: **091** reuses the golden app-016 openBy pattern (source `sId` via
+`$event.oSource.sId` → `control_by_id`/`openBy` follow-up); **092** keeps the
+declarative `autoPopinMode` + `Column.importance` 1:1 (the imperative
+setWidth/setHiddenInPopin handlers dropped) and reuses the curated
+`Formatter.weightState`; **090** and **094** build their dialog/popover via
+`popup_display`/`popover_display` in `on_event` (094 passes the row values as
+event args and anchors by `sId`). **This batch is 7 ports, not 10**: the three
+remaining backlog-top controls were **deferred** as too lossy for a 1:1 port
+(AGENTS §5) — **SemanticPage** (semantic-page landmark aggregations),
+**QuickView/QuickViewCard** (multi-page card navigation + navOrigin), and
+**ViewSettingsDialog** (custom sort/filter/group tabs). They stay NEW-CONTROL in
+the backlog for a dedicated effort, alongside the calendar family
+(PlanningCalendar / SinglePlanningCalendar) and SplitApp/SplitContainer that now
+dominate the backlog top.
 
 ## Batch b10 generated (2026-07-22) — toolbars, tiles & lists (10 ports)
 
@@ -117,6 +142,7 @@ The 34 existing ports are retro-grouped into review batches — one subpackage
 | `b08` | Message popover (all three MessagePopover samples) | MessagePopoverMessageHandling (065), MessagePopover (066), MessagePopoverAsyncMessageHandling (067) | 065–067 (2026-07-22) |
 | `b09` | Objects, inputs & notifications | Slider, RadioButton, ProgressIndicator, ObjectIdentifier, ObjectNumber, ObjectAttributes, ObjectListItem, SelectList, NotificationListItem, NotificationListGroup (classes 068–077) | — (machine-verified only) |
 | `b10` | Toolbars, tiles & lists | TileContent, TitleLink, ToggleButton, PullToRefresh, SlideTile, StandardListItemAvatar, UrlHelper, TokenizerBasic, ToolbarDesign, ContainerNoPadding (classes 078–087) | — (machine-verified only) |
+| `b11` | Pages, pickers, tables & popovers | StandardMarginsAll, PageStandardClasses, DialogSearch, TimePickerHidden, TableAutoPopin, TabContainer, PopoverControllingCloseBehavior (classes 088–094) | — (machine-verified only) |
 
 New generation batches continue as `b08`, `b09`, … per the process in
 TRAINING.md.

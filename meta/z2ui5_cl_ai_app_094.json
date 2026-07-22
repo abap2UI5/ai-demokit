@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_ai_app_094",
+  "sample": "sap.m.sample.PopoverControllingCloseBehavior",
+  "entity": "sap.m.Popover",
+  "file": "src/01/b11/z2ui5_cl_ai_app_094.clas.abap",
+  "batch": "b11",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "the row Popover (bindElement to the pressed row in the original) is built per-press via popover_display from the row values passed as event args (ProductId/Name/ProductPicUrl), anchored by $event.oSource.sId; the disable/enable-pointer-events-while-open behavior is dropped."
+    },
+    {
+      "type": "POST_171",
+      "what": "Link.ariaHasPopup (since 1.86) is kept 1:1 on the popover link; needs UI5 >= 1.86."
+    }
+  ]
+}

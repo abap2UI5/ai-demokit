@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_ai_app_091",
+  "sample": "sap.m.sample.TimePickerHidden",
+  "entity": "sap.m.TimePicker",
+  "file": "src/01/b11/z2ui5_cl_ai_app_091.clas.abap",
+  "batch": "b11",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "openTimePicker (byId('HiddenTP').openBy(source.getDomRef())) is the app-016 openBy pattern: the source sId is transported via $event.oSource.sId and replayed as a control_by_id/openBy follow-up action."
+    },
+    {
+      "type": "POST_171",
+      "what": "Button.ariaHasPopup (since 1.84), Link.ariaHasPopup (since 1.86) and TimePicker.hideInput (since 1.97) are kept 1:1; needs a UI5 release providing them."
+    }
+  ]
+}

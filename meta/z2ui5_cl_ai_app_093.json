@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_ai_app_093",
+  "sample": "sap.m.sample.TabContainer",
+  "entity": "sap.m.TabContainer",
+  "file": "src/01/b11/z2ui5_cl_ai_app_093.clas.abap",
+  "batch": "b11",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "addNewButtonPress appends an empty employee (bound /T_EMPLOYEES); itemClose in the original calls preventDefault (keeps the tab) and would confirm - here it toasts and the tab is kept."
+    }
+  ]
+}

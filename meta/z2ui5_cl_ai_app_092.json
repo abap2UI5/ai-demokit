@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_ai_app_092",
+  "sample": "sap.m.sample.TableAutoPopin",
+  "entity": "sap.m.Table",
+  "file": "src/01/b11/z2ui5_cl_ai_app_092.clas.abap",
+  "batch": "b11",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "onSliderMoved (setWidth) and onSelectionFinish (setHiddenInPopin) are imperative controller calls with no bound equivalent and are dropped (the slider/MultiComboBox render but do not resize/hide); autoPopinMode itself is declarative and kept 1:1."
+    },
+    {
+      "type": "NOTE",
+      "what": "the ObjectNumber weight state uses the curated formatter module (Formatter.weightState, core:require) - the same wiring as app 022."
+    },
+    {
+      "type": "POST_171",
+      "what": "Table.popinChanged (since 1.77) and Column.importance (since 1.76), the core of the auto-pop-in demo, are kept 1:1; needs UI5 >= 1.77."
+    }
+  ]
+}

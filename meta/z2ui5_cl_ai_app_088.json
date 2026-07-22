@@ -1,0 +1,14 @@
+{
+  "class": "z2ui5_cl_ai_app_088",
+  "sample": "sap.m.sample.StandardMarginsAll",
+  "entity": "sap.ui.core.StandardMargins",
+  "file": "src/01/b11/z2ui5_cl_ai_app_088.clas.abap",
+  "batch": "b11",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": []
+}

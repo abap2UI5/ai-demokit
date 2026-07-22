@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_ai_app_090",
+  "sample": "sap.m.sample.DialogSearch",
+  "entity": "sap.m.SearchField",
+  "file": "src/01/b11/z2ui5_cl_ai_app_090.clas.abap",
+  "batch": "b11",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "the Dialog (loaded from a fragment in the original) is built and shown via popup_display on the button press; its content is static text, so the bindElement /ProductCollection/0 is a no-op and dropped."
+    }
+  ]
+}

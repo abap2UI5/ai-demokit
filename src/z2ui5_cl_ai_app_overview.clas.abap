@@ -1217,6 +1217,11 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         since = `1.28`
         notes = `IMPROVISED: the Select ``change`` handlers onSelectDesign/onSelectStyle (setDesign/setStyle) become two-way bound design/style; bActionContext (design != Info) becomes an expression binding on the` &&
                  ` Buttons' visible.` )
+      ( module = `sap.m` control = `sap.m.Page`                        name = `PageStandardClasses`                 class = `z2ui5_cl_ai_app_089` path = `src/01/b11/z2ui5_cl_ai_app_089.clas.abap`
+        score = 1
+        score_state = `Success`
+        score_tip = `Deviation from the original sample: 1 of 5 (0 improvised, 0 dropped). 1 = faithful 1:1, 5 = heavily reworked.`
+        notes = `NOTE: element binding kept 1:1 - a one-record structure /S_PRODUCT instead of {/ProductCollection/0}; the IconTabBar expanded stays bound to {device>/isNoPhone} (runtime device model).` )
       ( module = `sap.m` control = `sap.m.Panel`                       name = `PanelExpanded`                       class = `z2ui5_cl_ai_app_043` path = `src/01/b04/z2ui5_cl_ai_app_043.clas.abap`
         score = 1
         score_state = `Success`
@@ -1241,6 +1246,13 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` (or a patched maintenance release) to render it.`
         post171 = `the PDFViewer property isTrustedSource (since UI5 1.121, backported to maintenance patches down to 1.71.63; the original controller passes isTrustedSource: true) is newer than 1.71 but kept for the` &&
                  ` 1:1 port - the app needs a UI5 release >= 1.121 (or a patched maintenance release) to render it.` )
+      ( module = `sap.m` control = `sap.m.Popover`                     name = `PopoverControllingCloseBehavior`     class = `z2ui5_cl_ai_app_094` path = `src/01/b11/z2ui5_cl_ai_app_094.clas.abap`
+        score = 2
+        score_state = `Success`
+        score_tip = `Deviation from the original sample: 2 of 5 (1 improvised, 0 dropped). 1 = faithful 1:1, 5 = heavily reworked.`
+        notes = `IMPROVISED: the row Popover (bindElement to the pressed row in the original) is built per-press via popover_display from the row values passed as event args (ProductId/Name/ProductPicUrl), anchored by` &&
+                 ` $event.oSource.sId; the disable/enable-pointer-events-while-open behavior is dropped. // POST-1.71: Link.ariaHasPopup (since 1.86) is kept 1:1 on the popover link; needs UI5 >= 1.86.`
+        post171 = `Link.ariaHasPopup (since 1.86) is kept 1:1 on the popover link; needs UI5 >= 1.86.` )
       ( module = `sap.m` control = `sap.m.ProgressIndicator`           name = `ProgressIndicator`                   class = `z2ui5_cl_ai_app_070` path = `src/01/b09/z2ui5_cl_ai_app_070.clas.abap`
         score = 2
         score_state = `Success`
@@ -1276,6 +1288,12 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score_tip = `Deviation from the original sample: 2 of 5 (1 improvised, 0 dropped). 1 = faithful 1:1, 5 = heavily reworked.`
         checked = `CHECKED (2026-07-20): verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed); incl. the phone-emulation device> check`
         notes = `IMPROVISED: the Image src binds {img>/products/pic1} in the original, a JSON image model not available server-side; a static demo image URL is used instead.` )
+      ( module = `sap.m` control = `sap.m.SearchField`                 name = `DialogSearch`                        class = `z2ui5_cl_ai_app_090` path = `src/01/b11/z2ui5_cl_ai_app_090.clas.abap`
+        score = 1
+        score_state = `Success`
+        score_tip = `Deviation from the original sample: 1 of 5 (0 improvised, 0 dropped). 1 = faithful 1:1, 5 = heavily reworked.`
+        notes = `NOTE: the Dialog (loaded from a fragment in the original) is built and shown via popup_display on the button press; its content is static text, so the bindElement /ProductCollection/0 is a no-op and` &&
+                 ` dropped.` )
       ( module = `sap.m` control = `sap.m.SegmentedButton`             name = `SegmentedButton`                     class = `z2ui5_cl_ai_app_047` path = `src/01/b03/z2ui5_cl_ai_app_047.clas.abap`
         score = 1
         score_state = `Success`
@@ -1319,6 +1337,21 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 1
         score_state = `Success`
         score_tip = `Deviation from the original sample: 1 of 5 (0 improvised, 0 dropped). 1 = faithful 1:1, 5 = heavily reworked.` )
+      ( module = `sap.m` control = `sap.m.TabContainer`                name = `TabContainer`                        class = `z2ui5_cl_ai_app_093` path = `src/01/b11/z2ui5_cl_ai_app_093.clas.abap`
+        score = 1
+        score_state = `Success`
+        score_tip = `Deviation from the original sample: 1 of 5 (0 improvised, 0 dropped). 1 = faithful 1:1, 5 = heavily reworked.`
+        since = `1.34`
+        notes = `NOTE: addNewButtonPress appends an empty employee (bound /T_EMPLOYEES); itemClose in the original calls preventDefault (keeps the tab) and would confirm - here it toasts and the tab is kept.` )
+      ( module = `sap.m` control = `sap.m.Table`                       name = `TableAutoPopin`                      class = `z2ui5_cl_ai_app_092` path = `src/01/b11/z2ui5_cl_ai_app_092.clas.abap`
+        score = 2
+        score_state = `Success`
+        score_tip = `Deviation from the original sample: 2 of 5 (1 improvised, 0 dropped). 1 = faithful 1:1, 5 = heavily reworked.`
+        since = `1.16`
+        notes = `IMPROVISED: onSliderMoved (setWidth) and onSelectionFinish (setHiddenInPopin) are imperative controller calls with no bound equivalent and are dropped (the slider/MultiComboBox render but do not` &&
+                 ` resize/hide); autoPopinMode itself is declarative and kept 1:1. // NOTE: the ObjectNumber weight state uses the curated formatter module (Formatter.weightState, core:require) - the same wiring as app` &&
+                 ` 022. // POST-1.71: Table.popinChanged (since 1.77) and Column.importance (since 1.76), the core of the auto-pop-in demo, are kept 1:1; needs UI5 >= 1.77.`
+        post171 = `Table.popinChanged (since 1.77) and Column.importance (since 1.76), the core of the auto-pop-in demo, are kept 1:1; needs UI5 >= 1.77.` )
       ( module = `sap.m` control = `sap.m.Text`                        name = `Text`                                class = `z2ui5_cl_ai_app_051` path = `src/01/b01/z2ui5_cl_ai_app_051.clas.abap`
         score = 1
         score_state = `Success`
@@ -1333,6 +1366,14 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score_state = `Success`
         score_tip = `Deviation from the original sample: 1 of 5 (0 improvised, 0 dropped). 1 = faithful 1:1, 5 = heavily reworked.`
         since = `1.34.0` )
+      ( module = `sap.m` control = `sap.m.TimePicker`                  name = `TimePickerHidden`                    class = `z2ui5_cl_ai_app_091` path = `src/01/b11/z2ui5_cl_ai_app_091.clas.abap`
+        score = 1
+        score_state = `Success`
+        score_tip = `Deviation from the original sample: 1 of 5 (0 improvised, 0 dropped). 1 = faithful 1:1, 5 = heavily reworked.`
+        since = `1.32`
+        notes = `NOTE: openTimePicker (byId('HiddenTP').openBy(source.getDomRef())) is the app-016 openBy pattern: the source sId is transported via $event.oSource.sId and replayed as a control_by_id/openBy follow-up` &&
+                 ` action. // POST-1.71: Button.ariaHasPopup (since 1.84), Link.ariaHasPopup (since 1.86) and TimePicker.hideInput (since 1.97) are kept 1:1; needs a UI5 release providing them.`
+        post171 = `Button.ariaHasPopup (since 1.84), Link.ariaHasPopup (since 1.86) and TimePicker.hideInput (since 1.97) are kept 1:1; needs a UI5 release providing them.` )
       ( module = `sap.m` control = `sap.m.Title`                       name = `TitleLink`                           class = `z2ui5_cl_ai_app_079` path = `src/01/b10/z2ui5_cl_ai_app_079.clas.abap`
         score = 1
         score_state = `Success`
@@ -1375,7 +1416,11 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 1
         score_state = `Success`
         score_tip = `Deviation from the original sample: 1 of 5 (0 improvised, 0 dropped). 1 = faithful 1:1, 5 = heavily reworked.`
-        notes = `NOTE: the /ProductCollectionStats/Counts values are flattened to the default model fields /TOTAL, /OK, /HEAVY, /OVERWEIGHT (verbatim counts).` ) ).
+        notes = `NOTE: the /ProductCollectionStats/Counts values are flattened to the default model fields /TOTAL, /OK, /HEAVY, /OVERWEIGHT (verbatim counts).` )
+      ( module = `sap.m` control = `sap.ui.core.StandardMargins`       name = `StandardMarginsAll`                  class = `z2ui5_cl_ai_app_088` path = `src/01/b11/z2ui5_cl_ai_app_088.clas.abap`
+        score = 1
+        score_state = `Success`
+        score_tip = `Deviation from the original sample: 1 of 5 (0 improvised, 0 dropped). 1 = faithful 1:1, 5 = heavily reworked.` ) ).
 
   ENDMETHOD.
 
