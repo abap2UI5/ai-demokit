@@ -1844,6 +1844,21 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` shows the filterString), so only the three visible preset filter options are reproduced. This adds 3 ViewSettingsItem over the original fragment count.`
         use_fua = abap_true
         use_fua_arg = abap_true )
+      ( module = `sap.m` control = `sap.m.Wizard`                      name = `Wizard`                              class = `z2ui5_cl_ai_app_101` path = `src/01/b12/z2ui5_cl_ai_app_101.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.30`
+        notes = `IMPROVISED: Step validation (additionalInfoValidation) is reproduced in ABAP: on the ProductName/ProductWeight liveChange (and ProductInfoStep activate) the name-length>=6 / weight-numeric checks set` &&
+                 ` the two valueStates and the ProductInfoStep validated property, which is bound two-way (step2_validated) instead of the original imperative validateStep/invalidateStep. The other steps keep their` &&
+                 ` literal validated='true'. // NOTE: The step-1 SegmentedButton gets item keys (Mobile/Desktop/Other) and a two-way selectedKey binding so the chosen product type reaches the model directly; the` &&
+                 ` original reads evt.getParameters().item.getText() in setProductTypeFromSegmented. selectionChange is still wired. The PricingStep activate/complete handlers (which only toggle the unused` &&
+                 ` navApiEnabled flag) are wired for fidelity but do nothing. // NOTE: Navigation is 1:1 via follow_up_action( cs_event-control_by_id ): Wizard complete -> NavContainer 'to' the review page; each Edit` &&
+                 ` link -> 'to' the content page then Wizard 'goToStep' the target step (whitelisted). Cancel and Submit open a MessageBox (warning/confirm) with YES/NO; on YES the wizard resets via 'to' the content` &&
+                 ` page + 'discardProgress' ProductTypeStep, matching _handleMessageBoxOpen. // LIVE-TEST: The full wizard flow — step validation gating the Next button, complete/edit navigation, the goToStep scroll` &&
+                 ` and the cancel/submit reset — needs an in-system check; machine gates only verify the view is valid.`
+        use_fua = abap_true
+        use_fua_arg = abap_true )
       ( module = `sap.m` control = `sap.ui.core.ContainerPadding`      name = `ContainerNoPadding`                  class = `z2ui5_cl_ai_app_087` path = `src/01/b10/z2ui5_cl_ai_app_087.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
