@@ -13,7 +13,7 @@
   "deviations": [
     {
       "type": "NOTE",
-      "what": "the pressed state arrives via ${$source>/pressed}; the toast drops the source control id (the original shows id + Pressed/Unpressed)."
+      "what": "onPress toasts the source control id + Pressed/Unpressed; both arrive via $event.oSource (sId and getPressed()) - the earlier ${$source>/pressed} binding did not resolve at runtime."
     }
   ]
 }

@@ -13,7 +13,11 @@
   "deviations": [
     {
       "type": "IMPROVISED",
-      "what": "the tokens are kept as static XML (matching the original's initial tokens 1:1); the original's CheckBox `select` handler becomes a live two-way `selected`/editable bind, but Add and tokenDelete are shown as toasts (they do not mutate the static aggregation - a bound token model would be a port addition)."
+      "what": "the first Tokenizer's tokens are now model-bound (t_tokens): onAddToken appends the input value, onTokenDelete removes by key (the deleted key arrives via $event.getParameter('tokens')[0].getKey()); the second, disabled Tokenizer keeps its 3 static tokens, so the port shows one bound Token template + 3 static Token vs the original's 3+3."
+    },
+    {
+      "type": "NOTE",
+      "what": "the CheckBox select handler becomes a live two-way selected/editable bind on the first Tokenizer."
     }
   ]
 }

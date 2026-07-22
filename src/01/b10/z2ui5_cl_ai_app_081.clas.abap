@@ -10,6 +10,7 @@ CLASS z2ui5_cl_ai_app_081 DEFINITION PUBLIC.
         product_pic_url TYPE string,
       END OF ty_s_product.
     DATA t_products TYPE STANDARD TABLE OF ty_s_product WITH EMPTY KEY.
+    DATA shown      TYPE i.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -17,6 +18,7 @@ CLASS z2ui5_cl_ai_app_081 DEFINITION PUBLIC.
     METHODS view_display.
     METHODS on_event.
     METHODS model_init.
+    METHODS fill_all RETURNING VALUE(result) LIKE t_products.
 
   PRIVATE SECTION.
 ENDCLASS.
@@ -77,17 +79,22 @@ CLASS z2ui5_cl_ai_app_081 IMPLEMENTATION.
 
     CASE client->get( )-event.
       WHEN `REFRESH`.
-        " the original simulates an incremental backend load (pushes one more product per pull); here the full collection is already bound, so refresh only hides the indicator
-        client->message_toast_display( `Refreshed` ).
+        " _pushNewProduct: each pull-to-refresh appends the next product until the full collection is shown
+        DATA(all) = fill_all( ).
+        IF shown < lines( all ).
+          shown = shown + 1.
+        ENDIF.
+        t_products = VALUE #( FOR i = 1 WHILE i <= shown ( all[ i ] ) ).
+        client->view_model_update( ).
     ENDCASE.
 
   ENDMETHOD.
 
 
-  METHOD model_init.
+  METHOD fill_all.
 
     " full mock /ProductCollection (sap/ui/demo/mock/products.json); ProductPicUrl resolved to absolute OpenUI5 URLs
-    t_products = VALUE #(
+    result = VALUE #(
       ( name = `Notebook Basic 15`                                  product_id = `HT-1000` product_pic_url = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1000.jpg` )
       ( name = `Notebook Basic 17`                                  product_id = `HT-1001` product_pic_url = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1001.jpg` )
       ( name = `Notebook Basic 18`                                  product_id = `HT-1002` product_pic_url = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1002.jpg` )
@@ -214,4 +221,13 @@ CLASS z2ui5_cl_ai_app_081 IMPLEMENTATION.
 
   ENDMETHOD.
 
+
+  METHOD model_init.
+
+    " the original starts with an empty model and pushes the first product on init
+    shown = 1.
+    DATA(all) = fill_all( ).
+    t_products = VALUE #( ( all[ 1 ] ) ).
+
+  ENDMETHOD.
 ENDCLASS.

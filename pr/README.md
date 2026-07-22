@@ -19,6 +19,9 @@ on the details live upstream and in CAPABILITIES.md/STATUS.md.
 
 | Request | Summary | Priority |
 |---------|---------|----------|
+| [`urlhelper-abap-api`](urlhelper-abap-api/) | Make the existing `URLHELPER` frontend action (`REDIRECT` / `TRIGGER_TEL` / `_SMS` / `_EMAIL`) callable from ABAP — it needs a params **object** that `_event_client`/`follow_up_action` can't pass today. `open_new_tab` is same-origin-only (`isValidRedirectURL`) so it can't stand in. From live check of app 084 (also affects 041/073 external links). | **high** |
+| [`table-hidden-in-popin`](table-hidden-in-popin/) | Whitelist `setHiddenInPopin` (+ optionally `setContextualWidth`) in `CONTROL_METHODS`, like the `openBy`/`setActivePage`/`toggleBy` family, so the auto-pop-in demo's MultiComboBox works. From app 092. | medium |
+| [`popover-bind-element`](popover-bind-element/) | Optional `bind_element` path on `popover_display`/`popup_display` so a row → detail popover can use relative bindings instead of transporting every field as an event arg. Enhancement — the arg workaround already renders correctly (app 094). | low |
 | [`menu-item-selected-path`](menu-item-selected-path/) | A resolvable payload for the selected menu item's ancestor-text breadcrumb (`Create New Site > Official Store`), or a documented capability boundary. From b07 apps 060/061; today only the leaf `${$parameters>/item/text}` is transportable. **Deferred** (2026-07-20, user decision) — cosmetic (toast text) and likely resolves as a documented boundary rather than a framework change; kept for a later call | low — deferred |
 
 ## Declined / deferred (folder removed 2026-07-19)

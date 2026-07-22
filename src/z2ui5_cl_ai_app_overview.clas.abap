@@ -1250,8 +1250,9 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 2
         score_state = `Success`
         score_tip = `Deviation from the original sample: 2 of 5 (1 improvised, 0 dropped). 1 = faithful 1:1, 5 = heavily reworked.`
-        notes = `IMPROVISED: the row Popover (bindElement to the pressed row in the original) is built per-press via popover_display from the row values passed as event args (ProductId/Name/ProductPicUrl), anchored by` &&
-                 ` $event.oSource.sId; the disable/enable-pointer-events-while-open behavior is dropped. // POST-1.71: Link.ariaHasPopup (since 1.86) is kept 1:1 on the popover link; needs UI5 >= 1.86.`
+        notes = `POST-1.71: Link.ariaHasPopup (since 1.86) is kept 1:1 on the popover link; needs UI5 >= 1.86. // IMPROVISED: the row Popover (bindElement to the pressed row in the original) is built per-press via` &&
+                 ` popover_display from the row values passed as event args (ProductId/Name/ProductPicUrl), anchored by $event.oSource.sId; the Action button closes it via cs_event-popover_close; the` &&
+                 ` disable/enable-pointer-events-while-open behavior is dropped.`
         post171 = `Link.ariaHasPopup (since 1.86) is kept 1:1 on the popover link; needs UI5 >= 1.86.` )
       ( module = `sap.m` control = `sap.m.ProgressIndicator`           name = `ProgressIndicator`                   class = `z2ui5_cl_ai_app_070` path = `src/01/b09/z2ui5_cl_ai_app_070.clas.abap`
         score = 2
@@ -1263,12 +1264,12 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` >= 1.73.`
         post171 = `ProgressIndicator.displayAnimation (since UI5 1.73) is kept 1:1 on the no-animation ProgressIndicator; needs UI5 >= 1.73.` )
       ( module = `sap.m` control = `sap.m.PullToRefresh`               name = `PullToRefresh`                       class = `z2ui5_cl_ai_app_081` path = `src/01/b10/z2ui5_cl_ai_app_081.clas.abap`
-        score = 2
+        score = 1
         score_state = `Success`
-        score_tip = `Deviation from the original sample: 2 of 5 (1 improvised, 0 dropped). 1 = faithful 1:1, 5 = heavily reworked.`
+        score_tip = `Deviation from the original sample: 1 of 5 (0 improvised, 0 dropped). 1 = faithful 1:1, 5 = heavily reworked.`
         since = `1.9.2`
-        notes = `IMPROVISED: the original simulates an incremental backend load (each pull pushes one more product into an initially empty model); the port binds the full /ProductCollection up front and refresh only` &&
-                 ` toasts (the timed re-load + hide() is dropped).` )
+        notes = `NOTE: the incremental backend load is reproduced 1:1: the model starts with the first product and each pull-to-refresh (REFRESH) appends the next until the full /ProductCollection is shown (fill_all +` &&
+                 ` shown counter).` )
       ( module = `sap.m` control = `sap.m.RadioButton`                 name = `RadioButton`                         class = `z2ui5_cl_ai_app_069` path = `src/01/b09/z2ui5_cl_ai_app_069.clas.abap`
         score = 1
         score_state = `Success`
@@ -1348,9 +1349,10 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score_state = `Success`
         score_tip = `Deviation from the original sample: 2 of 5 (1 improvised, 0 dropped). 1 = faithful 1:1, 5 = heavily reworked.`
         since = `1.16`
-        notes = `IMPROVISED: onSliderMoved (setWidth) and onSelectionFinish (setHiddenInPopin) are imperative controller calls with no bound equivalent and are dropped (the slider/MultiComboBox render but do not` &&
-                 ` resize/hide); autoPopinMode itself is declarative and kept 1:1. // NOTE: the ObjectNumber weight state uses the curated formatter module (Formatter.weightState, core:require) - the same wiring as app` &&
-                 ` 022. // POST-1.71: Table.popinChanged (since 1.77) and Column.importance (since 1.76), the core of the auto-pop-in demo, are kept 1:1; needs UI5 >= 1.77.`
+        notes = `POST-1.71: Table.popinChanged (since 1.77) and Column.importance (since 1.76), the core of the auto-pop-in demo, are kept 1:1; needs UI5 >= 1.77. // IMPROVISED: onSliderMoved (setWidth) and` &&
+                 ` onSelectionFinish (setHiddenInPopin) are imperative controller calls with no bound equivalent; the Slider liveChange and MultiComboBox selectionFinish server round-trips are dropped (they returned an` &&
+                 ` empty response and blanked the view), so both controls render but are inert. autoPopinMode + Column.importance stay declarative and 1:1; popinChanged still toasts. // NOTE: the ObjectNumber weight` &&
+                 ` state uses the curated formatter module (Formatter.weightState, core:require) - the same wiring as app 022.`
         post171 = `Table.popinChanged (since 1.77) and Column.importance (since 1.76), the core of the auto-pop-in demo, are kept 1:1; needs UI5 >= 1.77.` )
       ( module = `sap.m` control = `sap.m.Text`                        name = `Text`                                class = `z2ui5_cl_ai_app_051` path = `src/01/b01/z2ui5_cl_ai_app_051.clas.abap`
         score = 1
@@ -1383,14 +1385,15 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 1
         score_state = `Success`
         score_tip = `Deviation from the original sample: 1 of 5 (0 improvised, 0 dropped). 1 = faithful 1:1, 5 = heavily reworked.`
-        notes = `NOTE: the pressed state arrives via ${$source>/pressed}; the toast drops the source control id (the original shows id + Pressed/Unpressed).` )
+        notes = `NOTE: onPress toasts the source control id + Pressed/Unpressed; both arrive via $event.oSource (sId and getPressed()) - the earlier ${$source>/pressed} binding did not resolve at runtime.` )
       ( module = `sap.m` control = `sap.m.Tokenizer`                   name = `TokenizerBasic`                      class = `z2ui5_cl_ai_app_085` path = `src/01/b10/z2ui5_cl_ai_app_085.clas.abap`
         score = 2
         score_state = `Success`
         score_tip = `Deviation from the original sample: 2 of 5 (1 improvised, 0 dropped). 1 = faithful 1:1, 5 = heavily reworked.`
         since = `1.22`
-        notes = `IMPROVISED: the tokens are kept as static XML (matching the original's initial tokens 1:1); the original's CheckBox ``select`` handler becomes a live two-way ``selected``/editable bind, but Add and` &&
-                 ` tokenDelete are shown as toasts (they do not mutate the static aggregation - a bound token model would be a port addition).` )
+        notes = `IMPROVISED: the first Tokenizer's tokens are now model-bound (t_tokens): onAddToken appends the input value, onTokenDelete removes by key (the deleted key arrives via` &&
+                 ` $event.getParameter('tokens')[0].getKey()); the second, disabled Tokenizer keeps its 3 static tokens, so the port shows one bound Token template + 3 static Token vs the original's 3+3. // NOTE: the` &&
+                 ` CheckBox select handler becomes a live two-way selected/editable bind on the first Tokenizer.` )
       ( module = `sap.m` control = `sap.m.Toolbar`                     name = `ToolbarShrinkable`                   class = `z2ui5_cl_ai_app_053` path = `src/01/b03/z2ui5_cl_ai_app_053.clas.abap`
         score = 1
         score_state = `Success`
@@ -1410,8 +1413,9 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score_state = `Success`
         score_tip = `Deviation from the original sample: 2 of 5 (1 improvised, 0 dropped). 1 = faithful 1:1, 5 = heavily reworked.`
         since = `1.10`
-        notes = `NOTE: element binding kept 1:1 - a one-record structure /S_SUPPLIER instead of {/SupplierCollection/0}. // IMPROVISED: URLHelper.triggerTel/triggerSms/triggerEmail have no server-side equivalent and` &&
-                 ` become toasts; URLHelper.redirect (website) becomes the open_new_tab frontend action.` )
+        notes = `NOTE: element binding kept 1:1 - a one-record structure /S_SUPPLIER instead of {/SupplierCollection/0}. // IMPROVISED: URLHelper.triggerTel/triggerSms/triggerEmail and the external redirect have no` &&
+                 ` ABAP-callable path yet: the JS URLHELPER frontend action + cs_event-urlhelper exist, but its params object (URL/EMAIL/SUBJECT) cannot be passed via _event_client/follow_up_action, and open_new_tab is` &&
+                 ` same-origin-only (isValidRedirectURL). Kept as toasts; see pr/urlhelper-abap-api.` )
       ( module = `sap.m` control = `sap.ui.core.ContainerPadding`      name = `ContainerNoPadding`                  class = `z2ui5_cl_ai_app_087` path = `src/01/b10/z2ui5_cl_ai_app_087.clas.abap`
         score = 1
         score_state = `Success`

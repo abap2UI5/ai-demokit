@@ -173,7 +173,7 @@ CLASS z2ui5_cl_ai_app_094 IMPLEMENTATION.
                         )->leaf( `Button`
                             )->a( n = `id`    v = `action`
                             )->a( n = `text`  v = `Action`
-                            )->a( n = `press` v = client->_event_client( client->cs_event-popup_close )
+                            )->a( n = `press` v = client->_event_client( client->cs_event-popover_close )
 
                     )->shut(
                 )->shut(

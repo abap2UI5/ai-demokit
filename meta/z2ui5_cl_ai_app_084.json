@@ -17,7 +17,7 @@
     },
     {
       "type": "IMPROVISED",
-      "what": "URLHelper.triggerTel/triggerSms/triggerEmail have no server-side equivalent and become toasts; URLHelper.redirect (website) becomes the open_new_tab frontend action."
+      "what": "URLHelper.triggerTel/triggerSms/triggerEmail and the external redirect have no ABAP-callable path yet: the JS URLHELPER frontend action + cs_event-urlhelper exist, but its params object (URL/EMAIL/SUBJECT) cannot be passed via _event_client/follow_up_action, and open_new_tab is same-origin-only (isValidRedirectURL). Kept as toasts; see pr/urlhelper-abap-api."
     }
   ]
 }

@@ -71,7 +71,6 @@ CLASS z2ui5_cl_ai_app_092 IMPLEMENTATION.
         )->leaf( `Slider`
             )->a( n = `id`         v = `widthSlider`
             )->a( n = `value`      v = `100`
-            )->a( n = `liveChange` v = client->_event( `SLIDER` )
 
         )->open( `Table`
             )->a( n = `id`              v = `idProductsTable`
@@ -92,7 +91,6 @@ CLASS z2ui5_cl_ai_app_092 IMPLEMENTATION.
                     )->open( `MultiComboBox`
                         )->a( n = `id`              v = `idMultiComboBox`
                         )->a( n = `width`           v = `10rem`
-                        )->a( n = `selectionFinish` v = client->_event( `HIDE` )
                         )->open( `items`
                             )->leaf( n = `Item` ns = `core`
                                 )->a( n = `key`  v = `None`
@@ -222,9 +220,8 @@ CLASS z2ui5_cl_ai_app_092 IMPLEMENTATION.
 
     CASE client->get( )-event.
       WHEN `POPIN`.
+        " popinChanged: report the number of columns currently in pop-in
         client->message_toast_display( `Pop-in layout changed` ).
-      WHEN `SLIDER` OR `HIDE`.
-        " onSliderMoved (setWidth) and onSelectionFinish (setHiddenInPopin) are imperative controller calls with no bound equivalent - autoPopinMode still demonstrates the control
     ENDCASE.
 
   ENDMETHOD.

@@ -18,6 +18,33 @@ CAPABILITIES.md._
 | Manually verified in a running system | **46 of 67 ports** — adds 060/061/066/067 (menu + MessagePopover, human live check 2026-07-22) to the 2026-07-20 checked set; the 21 remaining `generated` ports are b01–b04 apps that never carried an open question (machine-verified only) |
 | Archive | `ui5/sap.m/<SampleName>/` — full originals for the 44 ported samples (+2 cross-referenced: `FacetFilterSimple`, `Table`); mock snapshot in `ui5/mock/`. Unported samples are copied over batch by batch. |
 
+## Live-check fixes on b09–b11 (2026-07-22) + three new pr requests
+
+Human live check surfaced six runtime issues (machine checks can't see them);
+all fixed, all six checks still green:
+
+- **094** — the popover's Action button used `cs_event-popup_close` (destroys
+  the `POPUP` slot), so a `POPOVER` never closed → **`cs_event-popover_close`**.
+- **080** — `${$source>/pressed}` did not resolve at runtime; the source id +
+  pressed state now arrive via **`$event.oSource.sId`** and
+  **`$event.oSource.getPressed()`** (the proven `$event.oSource.*` path).
+- **092** — the `Slider.liveChange` / `MultiComboBox.selectionFinish` server
+  round-trips returned an empty response and **blanked the view**; those events
+  are dropped (controls render inert, declared), `popinChanged` still toasts.
+- **085** — the first Tokenizer's tokens are now **model-bound** (`t_tokens`);
+  add appends, delete removes by key (`$event.getParameter('tokens')[0].getKey()`).
+- **081** — the incremental backend load is now reproduced 1:1 (start with one
+  product, each pull appends the next via `fill_all` + a `shown` counter) instead
+  of binding the full 123 up front.
+- **084** — **cannot be fixed in the port**: the correct `URLHELPER` frontend
+  action exists in JS + as `cs_event-urlhelper`, but has no ABAP-callable path
+  for its params object, and `open_new_tab` is same-origin-only. Filed as a pr.
+
+Three new **`pr/`** requests distilled from the checks:
+[`urlhelper-abap-api`](../pr/urlhelper-abap-api/) (high — blocks 084, affects
+041/073), [`table-hidden-in-popin`](../pr/table-hidden-in-popin/) (medium, 092),
+[`popover-bind-element`](../pr/popover-bind-element/) (low, 094 enhancement).
+
 ## Batch b11 generated (2026-07-22) — pages, pickers, tables & popovers (7 ports)
 
 Classes **088–094**, breadth-first NEW-CONTROL: 088 StandardMarginsAll

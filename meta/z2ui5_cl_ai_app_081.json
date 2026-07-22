@@ -12,8 +12,8 @@
   "checked": null,
   "deviations": [
     {
-      "type": "IMPROVISED",
-      "what": "the original simulates an incremental backend load (each pull pushes one more product into an initially empty model); the port binds the full /ProductCollection up front and refresh only toasts (the timed re-load + hide() is dropped)."
+      "type": "NOTE",
+      "what": "the incremental backend load is reproduced 1:1: the model starts with the first product and each pull-to-refresh (REFRESH) appends the next until the full /ProductCollection is shown (fill_all + shown counter)."
     }
   ]
 }

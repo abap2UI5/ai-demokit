@@ -52,7 +52,7 @@ CLASS z2ui5_cl_ai_app_080 IMPLEMENTATION.
                     )->open( `contentRight`
                         )->leaf( `ToggleButton`
                             )->a( n = `icon`  v = `sap-icon://edit`
-                            )->a( n = `press` v = client->_event( val = `PRESS` t_arg = VALUE #( ( `${$source>/pressed}` ) ) )
+                            )->a( n = `press` v = client->_event( val = `PRESS` t_arg = VALUE #( ( `$event.oSource.sId` ) ( `$event.oSource.getPressed()` ) ) )
 
                     )->shut(
                 )->shut(
@@ -65,22 +65,22 @@ CLASS z2ui5_cl_ai_app_080 IMPLEMENTATION.
                             )->a( n = `text`    v = `Pressed`
                             )->a( n = `enabled` v = `true`
                             )->a( n = `pressed` v = `true`
-                            )->a( n = `press`   v = client->_event( val = `PRESS` t_arg = VALUE #( ( `${$source>/pressed}` ) ) )
+                            )->a( n = `press`   v = client->_event( val = `PRESS` t_arg = VALUE #( ( `$event.oSource.sId` ) ( `$event.oSource.getPressed()` ) ) )
                         )->leaf( `ToggleButton`
                             )->a( n = `text`    v = `Pressed & Disabled`
                             )->a( n = `enabled` v = `false`
                             )->a( n = `pressed` v = `true`
-                            )->a( n = `press`   v = client->_event( val = `PRESS` t_arg = VALUE #( ( `${$source>/pressed}` ) ) )
+                            )->a( n = `press`   v = client->_event( val = `PRESS` t_arg = VALUE #( ( `$event.oSource.sId` ) ( `$event.oSource.getPressed()` ) ) )
 
                     )->shut(
                     )->open( `contentRight`
                         )->leaf( `ToggleButton`
                             )->a( n = `icon`  v = `sap-icon://action`
-                            )->a( n = `press` v = client->_event( val = `PRESS` t_arg = VALUE #( ( `${$source>/pressed}` ) ) )
+                            )->a( n = `press` v = client->_event( val = `PRESS` t_arg = VALUE #( ( `$event.oSource.sId` ) ( `$event.oSource.getPressed()` ) ) )
                         )->leaf( `ToggleButton`
                             )->a( n = `icon`    v = `sap-icon://home`
                             )->a( n = `enabled` v = `false`
-                            )->a( n = `press`   v = client->_event( val = `PRESS` t_arg = VALUE #( ( `${$source>/pressed}` ) ) )
+                            )->a( n = `press`   v = client->_event( val = `PRESS` t_arg = VALUE #( ( `$event.oSource.sId` ) ( `$event.oSource.getPressed()` ) ) )
 
                     )->shut(
                 )->shut(
@@ -90,7 +90,7 @@ CLASS z2ui5_cl_ai_app_080 IMPLEMENTATION.
                 )->open( `ToggleButton`
                     )->a( n = `text`    v = `Disabled`
                     )->a( n = `enabled` v = `false`
-                    )->a( n = `press`   v = client->_event( val = `PRESS` t_arg = VALUE #( ( `${$source>/pressed}` ) ) )
+                    )->a( n = `press`   v = client->_event( val = `PRESS` t_arg = VALUE #( ( `$event.oSource.sId` ) ( `$event.oSource.getPressed()` ) ) )
                     )->open( `layoutData`
                         )->leaf( `FlexItemData`
                             )->a( n = `growFactor` v = `1`
@@ -101,7 +101,7 @@ CLASS z2ui5_cl_ai_app_080 IMPLEMENTATION.
                     )->a( n = `text`    v = `Pressed`
                     )->a( n = `enabled` v = `true`
                     )->a( n = `pressed` v = `true`
-                    )->a( n = `press`   v = client->_event( val = `PRESS` t_arg = VALUE #( ( `${$source>/pressed}` ) ) )
+                    )->a( n = `press`   v = client->_event( val = `PRESS` t_arg = VALUE #( ( `$event.oSource.sId` ) ( `$event.oSource.getPressed()` ) ) )
                     )->open( `layoutData`
                         )->leaf( `FlexItemData`
                             )->a( n = `growFactor` v = `1`
@@ -111,7 +111,7 @@ CLASS z2ui5_cl_ai_app_080 IMPLEMENTATION.
                 )->open( `ToggleButton`
                     )->a( n = `icon`    v = `sap-icon://action`
                     )->a( n = `enabled` v = `true`
-                    )->a( n = `press`   v = client->_event( val = `PRESS` t_arg = VALUE #( ( `${$source>/pressed}` ) ) )
+                    )->a( n = `press`   v = client->_event( val = `PRESS` t_arg = VALUE #( ( `$event.oSource.sId` ) ( `$event.oSource.getPressed()` ) ) )
                     )->open( `layoutData`
                         )->leaf( `FlexItemData`
                             )->a( n = `growFactor` v = `1`
@@ -127,10 +127,10 @@ CLASS z2ui5_cl_ai_app_080 IMPLEMENTATION.
                             )->a( n = `text`    v = `Pressed & Disabled`
                             )->a( n = `enabled` v = `false`
                             )->a( n = `pressed` v = `true`
-                            )->a( n = `press`   v = client->_event( val = `PRESS` t_arg = VALUE #( ( `${$source>/pressed}` ) ) )
+                            )->a( n = `press`   v = client->_event( val = `PRESS` t_arg = VALUE #( ( `$event.oSource.sId` ) ( `$event.oSource.getPressed()` ) ) )
                         )->leaf( `ToggleButton`
                             )->a( n = `icon`  v = `sap-icon://action`
-                            )->a( n = `press` v = client->_event( val = `PRESS` t_arg = VALUE #( ( `${$source>/pressed}` ) ) )
+                            )->a( n = `press` v = client->_event( val = `PRESS` t_arg = VALUE #( ( `$event.oSource.sId` ) ( `$event.oSource.getPressed()` ) ) )
 
                     )->shut(
                 )->shut(
@@ -146,12 +146,10 @@ CLASS z2ui5_cl_ai_app_080 IMPLEMENTATION.
 
     CASE client->get( )-event.
       WHEN `PRESS`.
-        " the original toasts the button id + Pressed/Unpressed; the pressed state arrives via $source>/pressed
-        IF client->get_event_arg( ) = `true`.
-          client->message_toast_display( `Pressed` ).
-        ELSE.
-          client->message_toast_display( `Unpressed` ).
-        ENDIF.
+        " the original toasts the source id + Pressed/Unpressed; both arrive via $event.oSource (sId + getPressed())
+        DATA(id)      = client->get_event_arg( ).
+        DATA(pressed) = client->get_event_arg( 2 ).
+        client->message_toast_display( |{ id } { COND #( WHEN pressed = `true` THEN `Pressed` ELSE `Unpressed` ) }| ).
     ENDCASE.
 
   ENDMETHOD.
