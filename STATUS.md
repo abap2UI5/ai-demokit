@@ -122,6 +122,17 @@ generated class at generation time):
   reference-links popover, now trimmed to the four external links (OpenUI5 API,
   source, live sample, ABAP class). The same two buttons sit on every tree leaf.
 
+Follow-up refinements (2026-07-22): the **Release** column is renamed **Since**
+and only shows a value when higher than the control's own since (otherwise it
+just repeats it); **both Since columns are sortable and coloured orange**
+(`ObjectStatus` Warning via a `{= … ? 'Warning' : 'None' }` expression) when newer
+than 1.71. **UI5 only → Version** (still the orange SAPUI5 badge). The **Note
+column is removed**; its info (checked status, post-1.71 note, generation notes)
+moved **into the links popover**, which also carries the four reference links. The
+two Open buttons are **swapped** (links-popover first, app-launch second), on the
+table and the tree. The `Tree`-nested-in-`Table` startup crash from the first cut
+is fixed (missing `shut()` restored).
+
 ## Batch b11 generated (2026-07-22) — pages, pickers, tables & popovers (7 ports)
 
 Classes **088–094**, breadth-first NEW-CONTROL: 088 StandardMarginsAll

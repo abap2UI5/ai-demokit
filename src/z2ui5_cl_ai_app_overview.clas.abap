@@ -6,37 +6,37 @@
 "! search field filters the table on the client (binding_call Contains, no
 "! round-trip); the tree is not filtered. Each tree leaf has the same jump
 "! popover as the table's Open column.
-"! The title carries the ported-app count in parentheses. The Since column shows
-"! the UI5 release the CONTROL appeared in (from ui5/universe.json; blank when
-"! older than tracking / since forever); the Release column, next to Sample, shows
-"! the direct release the whole SAMPLE needs (control since raised by any kept
-"! post-1.71 member). Text is never coloured; a deprecated control's name is
+"! The title carries the ported-app count in parentheses. There are two sortable
+"! Since columns: the first (next to Control) shows the UI5 release the CONTROL
+"! appeared in (from ui5/universe.json; blank when older than tracking / since
+"! forever); the second (next to Sample) shows the direct release the whole SAMPLE
+"! needs (control since raised by any kept post-1.71 member) and is shown only when
+"! HIGHER than the control's own since. Both since values are coloured orange
+"! (ObjectStatus Warning) when newer than UI5 1.71; a deprecated control's name is
 "! struck through (FormattedText htmlText, so the strikethrough can vary per row).
-"! The UI5 only column badges rows whose control is not part of OpenUI5. Three
-"! header checkboxes (default all on) filter the table entirely on the client via
-"! each row's visible expression: Hide non-OpenUI5, Hide newer than 1.71 (2020),
-"! Hide deprecated. A Shell switch toggles the sap.m.Shell letterboxing
-"! (appWidthLimited), a Tree view switch toggles table vs tree - both client-side.
-"! The Module / Control / Sample / abap2UI5 columns are plain text; navigation
-"! lives in the trailing Open column, which carries two buttons: the first starts
-"! this abap2UI5 app directly in a new tab (open_new_tab; the start URL is
-"! same-origin), the second opens an anchored popover with the four reference
+"! The Version column badges rows whose control is not part of OpenUI5 with an
+"! orange SAPUI5 status. Three header checkboxes (default all on) filter the table
+"! entirely on the client via each row's visible expression: Hide non-OpenUI5,
+"! Hide newer than 1.71 (2020), Hide deprecated. A Shell switch toggles the
+"! sap.m.Shell letterboxing (appWidthLimited), a Tree view switch toggles table vs
+"! tree - both client-side. Navigation lives in the trailing Open column, which
+"! carries two buttons: the first opens an anchored popover with the four reference
 "! links (OpenUI5 API, OpenUI5 source, live fullscreen sample, the generated ABAP
-"! class on GitHub), each opening in a new browser tab. The same two buttons sit
-"! on every tree sample leaf. The Deviation column is a 1-10 score of how far the port is from
-"! the original sample (not coloured) - IMPROVISED and DROPPED_171 deviations weigh
-"! 2 each, SUBSET_DATA 1, POST_171 counts as 0 (still a 1:1 port), score =
-"! min(10, 1 + that); sort it descending to surface the samples worth a closer
-"! manual look. The Audit
+"! class on GitHub, each opening in a new tab) AND the port's generation info -
+"! checked status, a post-1.71 note, and the generation notes; the second starts
+"! this abap2UI5 app directly in a new tab (open_new_tab; the start URL is
+"! same-origin). The same two buttons sit on every tree sample leaf (links only,
+"! the tree model carries no info). The Deviation column is a 1-10 score of how far
+"! the port is from the original sample (not coloured) - IMPROVISED and DROPPED_171
+"! deviations weigh 2 each, SUBSET_DATA 1, POST_171 counts as 0 (still a 1:1 port),
+"! score = min(10, 1 + that); sort it descending to surface the samples worth a
+"! closer manual look. The Audit
 "! column shows, always, one badge per framework-wiring fact the port uses (read
 "! from its ABAP source): _event_client and its t_arg form, follow_up_action and
 "! its t_arg form, whether it opens a Popup or Popover, and whether it binds a
-"! path by literal name in clear text ({FIELD}/{/Path}) rather than via _bind. The Note
-"! column shows a gold star for golden ports (live-checked
-"! and exemplary), a green check when the port was manually verified in a
-"! running system, and a hint icon that opens a popup with the port's generation
-"! caveats when present. The search field above the table filters all rows by a
-"! substring over the five text columns (module, control, since, sample,
+"! path by literal name in clear text ({FIELD}/{/Path}) rather than via _bind.
+"! The search field above the table filters all rows by a
+"! substring over the text columns (module, control, since, sample, release,
 "! class) only, and each sortable column header carries ascending/
 "! descending sort icons - both run entirely on the frontend
 "! (cs_event-binding_call via _event_client, no server round-trip). Do not edit
@@ -66,8 +66,10 @@ CLASS z2ui5_cl_ai_app_overview DEFINITION PUBLIC.
         post171   TYPE string,
         has_p171  TYPE abap_bool,
         golden    TYPE abap_bool,
-        since     TYPE string,
+        since         TYPE string,
+        since_post171 TYPE abap_bool,
         release       TYPE string,
+        release_post171 TYPE abap_bool,
         ui5_only      TYPE abap_bool,
         is_post171    TYPE abap_bool,
         is_deprecated TYPE abap_bool,
@@ -165,77 +167,79 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
     CASE client->get( )-event.
 
       WHEN `LINKS`.
-        " the four reference links for the pressed row (starting the app itself is
-        " the separate direct-launch button); resolved client-side and passed in
-        " via t_arg, opened in a popover anchored to the pressed button (arg 5)
-        DATA(lv_api)   = client->get_event_arg( ).
-        DATA(lv_js)    = client->get_event_arg( 2 ).
-        DATA(lv_ui5)   = client->get_event_arg( 3 ).
-        DATA(lv_abap)  = client->get_event_arg( 4 ).
+        " the four reference links plus the port's generation info (checked /
+        " post-1.71 / notes) for the pressed row; resolved client-side and passed
+        " via t_arg, opened in a popover anchored to the pressed button (arg 8)
+        DATA(lv_api)     = client->get_event_arg( ).
+        DATA(lv_js)      = client->get_event_arg( 2 ).
+        DATA(lv_ui5)     = client->get_event_arg( 3 ).
+        DATA(lv_abap)    = client->get_event_arg( 4 ).
+        DATA(lv_checked) = client->get_event_arg( 5 ).
+        DATA(lv_post171) = client->get_event_arg( 6 ).
+        DATA(lv_notes)   = client->get_event_arg( 7 ).
 
         DATA(links) = z2ui5_cl_ai_xml=>factory( ).
-        links->open( n = `FragmentDefinition` ns = `core`
+        DATA(box) = links->open( n = `FragmentDefinition` ns = `core`
             )->a( n = `xmlns`      v = `sap.m`
             )->a( n = `xmlns:core` v = `sap.ui.core`
 
             )->open( `Popover`
-                )->a( n = `title`       v = `Open in a new tab`
-                )->a( n = `placement`   v = `Auto`
-                )->a( n = `contentWidth` v = `22rem`
-
-                )->open( `VBox`
-                    )->a( n = `class` v = `sapUiContentPadding`
-
-                    )->leaf( `Link`
-                        )->a( n = `text`   v = `Control - OpenUI5 API reference`
-                        )->a( n = `href`   v = lv_api
-                        )->a( n = `target` v = `_blank`
-                        )->a( n = `class`  v = `sapUiTinyMarginBottom`
-                    )->leaf( `Link`
-                        )->a( n = `text`   v = `Sample - OpenUI5 source`
-                        )->a( n = `href`   v = lv_js
-                        )->a( n = `target` v = `_blank`
-                        )->a( n = `class`  v = `sapUiTinyMarginBottom`
-                    )->leaf( `Link`
-                        )->a( n = `text`   v = `Sample - live fullscreen runner`
-                        )->a( n = `href`   v = lv_ui5
-                        )->a( n = `target` v = `_blank`
-                        )->a( n = `class`  v = `sapUiTinyMarginBottom`
-                    )->leaf( `Link`
-                        )->a( n = `text`   v = `abap2UI5 - class on GitHub`
-                        )->a( n = `href`   v = lv_abap
-                        )->a( n = `target` v = `_blank` ).
-
-        client->popover_display( xml   = links->stringify( )
-                                 by_id = client->get_event_arg( 5 ) ).
-
-      WHEN `SHOW_NOTES`.
-        " one Text per bullet of the clicked row's generation notes
-        SPLIT client->get_event_arg( ) AT ` // ` INTO TABLE DATA(lt_line).
-
-        DATA(popup) = z2ui5_cl_ai_xml=>factory( ).
-        DATA(box) = popup->open( n = `FragmentDefinition` ns = `core`
-            )->a( n = `xmlns`      v = `sap.m`
-            )->a( n = `xmlns:core` v = `sap.ui.core`
-
-            )->open( `Dialog`
-                )->a( n = `title`        v = `Generation notes`
-                )->a( n = `contentWidth` v = `34rem`
+                )->a( n = `title`        v = `Links & info`
+                )->a( n = `placement`    v = `Auto`
+                )->a( n = `contentWidth` v = `26rem`
 
                 )->open( `VBox`
                     )->a( n = `class` v = `sapUiContentPadding` ).
 
-        LOOP AT lt_line INTO DATA(lv_line).
-          box->leaf( `Text`
-              )->a( n = `text` v = lv_line ).
-        ENDLOOP.
+        box->leaf( `Link`
+            )->a( n = `text`   v = `Control - OpenUI5 API reference`
+            )->a( n = `href`   v = lv_api
+            )->a( n = `target` v = `_blank`
+            )->a( n = `class`  v = `sapUiTinyMarginBottom` ).
+        box->leaf( `Link`
+            )->a( n = `text`   v = `Sample - OpenUI5 source`
+            )->a( n = `href`   v = lv_js
+            )->a( n = `target` v = `_blank`
+            )->a( n = `class`  v = `sapUiTinyMarginBottom` ).
+        box->leaf( `Link`
+            )->a( n = `text`   v = `Sample - live fullscreen runner`
+            )->a( n = `href`   v = lv_ui5
+            )->a( n = `target` v = `_blank`
+            )->a( n = `class`  v = `sapUiTinyMarginBottom` ).
+        box->leaf( `Link`
+            )->a( n = `text`   v = `abap2UI5 - class on GitHub`
+            )->a( n = `href`   v = lv_abap
+            )->a( n = `target` v = `_blank` ).
 
-        box->shut( )->open( `endButton`
-            )->leaf( `Button`
-                )->a( n = `text`  v = `Close`
-                )->a( n = `press` v = client->_event_client( client->cs_event-popup_close ) ).
+        IF lv_checked IS NOT INITIAL.
+          box->leaf( `ObjectStatus`
+              )->a( n = `text`  v = lv_checked
+              )->a( n = `state` v = `Success`
+              )->a( n = `class` v = `sapUiSmallMarginTop` ).
+        ENDIF.
 
-        client->popup_display( popup->stringify( ) ).
+        IF lv_post171 IS NOT INITIAL.
+          box->leaf( `ObjectStatus`
+              )->a( n = `text`  v = |Needs a UI5 release newer than 1.71: { lv_post171 }|
+              )->a( n = `state` v = `Warning`
+              )->a( n = `class` v = `sapUiTinyMarginTop` ).
+        ENDIF.
+
+        IF lv_notes IS NOT INITIAL.
+          box->leaf( `Title`
+              )->a( n = `text`  v = `Generation notes`
+              )->a( n = `level` v = `H5`
+              )->a( n = `class` v = `sapUiSmallMarginTop` ).
+          SPLIT lv_notes AT ` // ` INTO TABLE DATA(lt_line).
+          LOOP AT lt_line INTO DATA(lv_line).
+            box->leaf( `Text`
+                )->a( n = `text`  v = lv_line
+                )->a( n = `class` v = `sapUiTinyMarginTop` ).
+          ENDLOOP.
+        ENDIF.
+
+        client->popover_display( xml   = links->stringify( )
+                                 by_id = client->get_event_arg( 8 ) ).
 
     ENDCASE.
 
@@ -401,11 +405,22 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                             )->shut(
                         )->shut(
                         )->open( `Column`
-                            )->a( n = `width` v = `5rem`
+                            )->open( `HBox`
+                                )->a( n = `alignItems` v = `Center`
 
-                            )->leaf( `Text`
-                                )->a( n = `text` v = `Since`
+                                )->leaf( `Text`
+                                    )->a( n = `text` v = `Since`
+                                )->leaf( `core:Icon`
+                                    )->a( n = `src`     v = `sap-icon://sort-ascending`
+                                    )->a( n = `tooltip` v = `Sort by Since ascending`
+                                    )->a( n = `class`   v = `sapUiTinyMarginBegin`
+                                    )->a( n = `press`   v = client->_event_client( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `sort` ) ( `SINCE` ) ) )
+                                )->leaf( `core:Icon`
+                                    )->a( n = `src`     v = `sap-icon://sort-descending`
+                                    )->a( n = `tooltip` v = `Sort by Since descending`
+                                    )->a( n = `press`   v = client->_event_client( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `sort` ) ( `SINCE` ) ( `X` ) ) )
 
+                            )->shut(
                         )->shut(
                         )->open( `Column`
                             )->open( `HBox`
@@ -426,11 +441,22 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                             )->shut(
                         )->shut(
                         )->open( `Column`
-                            )->a( n = `width` v = `5rem`
+                            )->open( `HBox`
+                                )->a( n = `alignItems` v = `Center`
 
-                            )->leaf( `Text`
-                                )->a( n = `text` v = `Release`
+                                )->leaf( `Text`
+                                    )->a( n = `text` v = `Since`
+                                )->leaf( `core:Icon`
+                                    )->a( n = `src`     v = `sap-icon://sort-ascending`
+                                    )->a( n = `tooltip` v = `Sort by Since ascending`
+                                    )->a( n = `class`   v = `sapUiTinyMarginBegin`
+                                    )->a( n = `press`   v = client->_event_client( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `sort` ) ( `RELEASE` ) ) )
+                                )->leaf( `core:Icon`
+                                    )->a( n = `src`     v = `sap-icon://sort-descending`
+                                    )->a( n = `tooltip` v = `Sort by Since descending`
+                                    )->a( n = `press`   v = client->_event_client( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `sort` ) ( `RELEASE` ) ( `X` ) ) )
 
+                            )->shut(
                         )->shut(
                         )->open( `Column`
                             )->open( `HBox`
@@ -455,7 +481,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                             )->a( n = `hAlign` v = `Center`
 
                             )->leaf( `Text`
-                                )->a( n = `text` v = `UI5 only`
+                                )->a( n = `text` v = `Version`
 
                         )->shut(
                         )->open( `Column`
@@ -484,12 +510,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
 
                         )->shut(
                         )->open( `Column`
-                            )->leaf( `Text`
-                                )->a( n = `text` v = `Note`
-
-                        )->shut(
-                        )->open( `Column`
-                            )->a( n = `width` v = `5rem`
+                            )->a( n = `width` v = `7rem`
                             )->a( n = `hAlign` v = `Center`
 
                             )->leaf( `Text`
@@ -514,21 +535,24 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                                 )->leaf( `FormattedText`
                                     )->a( n = `htmlText` v = `{CTRL_HTML}`
                                     )->a( n = `tooltip`  v = `{DEP_TEXT}`
-                                " release the control appeared in (plain number)
-                                )->leaf( `Text`
+                                " Since: the release the control appeared in; coloured orange
+                                " (Warning) when it is newer than UI5 1.71
+                                )->leaf( `ObjectStatus`
                                     )->a( n = `text`    v = `{SINCE}`
+                                    )->a( n = `state`   v = |\{= $\{SINCE_POST171\} ? 'Warning' : 'None' \}|
                                     )->a( n = `tooltip` v = `{DEP_TEXT}`
                                 )->leaf( `Text`
                                     )->a( n = `text` v = `{NAME}`
-                                " sample min release: the direct UI5 release the whole sample
-                                " needs (control since raised by any kept post-1.71 member);
-                                " blank = available since forever
-                                )->leaf( `Text`
-                                    )->a( n = `text` v = `{RELEASE}`
+                                " second Since: the direct UI5 release the whole sample needs,
+                                " shown only when higher than the control's own since; same
+                                " orange-when-newer-than-1.71 colouring
+                                )->leaf( `ObjectStatus`
+                                    )->a( n = `text`  v = `{RELEASE}`
+                                    )->a( n = `state` v = |\{= $\{RELEASE_POST171\} ? 'Warning' : 'None' \}|
                                 )->leaf( `Text`
                                     )->a( n = `text` v = `{CLASS}`
-                                " UI5 only: the control does not exist in OpenUI5 (SAPUI5- /
-                                " demo-kit-only); a badge only on those rows
+                                " Version: the control does not exist in OpenUI5 (SAPUI5- /
+                                " demo-kit-only); an orange SAPUI5 badge only on those rows
                                 )->leaf( `ObjectStatus`
                                     )->a( n = `text`    v = `SAPUI5`
                                     )->a( n = `state`   v = `Warning`
@@ -593,61 +617,25 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                                         )->a( n = `class`   v = `sapUiTinyMarginEnd`
 
                                 )->shut(
-
+                                " Open column: two buttons. First opens an anchored popover with
+                                " the reference links AND the port's generation info (checked,
+                                " post-1.71, notes) - the pressed button's runtime id
+                                " ($event.oSource.sId) anchors it; second launches the abap2UI5
+                                " app directly in a new tab (open_new_tab - the start URL is
+                                " same-origin, so it passes isValidRedirectURL)
                                 )->open( `HBox`
-                                    )->a( n = `alignItems` v = `Center`
-                                    )->a( n = `class`      v = `sapUiTinyMarginBegin`
-
-                                    " gold star - golden port (live-checked and exemplary)
-                                    )->leaf( `core:Icon`
-                                        )->a( n = `src`     v = `sap-icon://favorite`
-                                        )->a( n = `size`    v = `1rem`
-                                        )->a( n = `color`   v = `#e9730c`
-                                        )->a( n = `tooltip` v = `Golden sample - live-checked and exemplary`
-                                        )->a( n = `visible` v = `{GOLDEN}`
-                                        )->a( n = `class`   v = `sapUiTinyMarginEnd`
-                                    " green check - verified live in a running system
-                                    )->leaf( `core:Icon`
-                                        )->a( n = `src`     v = `sap-icon://accept`
-                                        )->a( n = `size`    v = `1rem`
-                                        )->a( n = `color`   v = `#107e3e`
-                                        )->a( n = `tooltip` v = `{CHECKED}`
-                                        )->a( n = `visible` v = `{HAS_CHECK}`
-                                        )->a( n = `class`   v = `sapUiTinyMarginEnd`
-                                    " orange badge - keeps members newer than UI5 1.71 (POST_171)
-                                    )->leaf( `ObjectStatus`
-                                        )->a( n = `text`    v = `1.71+`
-                                        )->a( n = `state`   v = `Warning`
-                                        )->a( n = `tooltip` v = `{POST171}`
-                                        )->a( n = `visible` v = `{HAS_P171}`
-                                        )->a( n = `class`   v = `sapUiTinyMarginEnd`
-                                    " info hint - opens a popup with the port's generation caveats
-                                    )->leaf( `core:Icon`
-                                        )->a( n = `src`     v = `sap-icon://hint`
-                                        )->a( n = `size`    v = `1rem`
-                                        )->a( n = `color`   v = `#0a6ed1`
-                                        )->a( n = `tooltip` v = `{NOTES}`
-                                        )->a( n = `visible` v = `{HAS_NOTES}`
-                                        )->a( n = `press`   v = client->_event( val = `SHOW_NOTES` t_arg = VALUE #( ( `${NOTES}` ) ) )
-
-                                )->shut(
-                                " Open column: two buttons. First launches the abap2UI5 app
-                                " directly in a new tab (open_new_tab - the start URL is
-                                " same-origin, so it passes isValidRedirectURL); second opens an
-                                " anchored popover with the four reference links (OpenUI5 API,
-                                " source, live sample, ABAP class), the pressed button's runtime
-                                " id ($event.oSource.sId) anchors the popover
-                                )->open( `HBox`
+                                    )->leaf( `Button`
+                                        )->a( n = `icon`    v = `sap-icon://chain-link`
+                                        )->a( n = `type`    v = `Transparent`
+                                        )->a( n = `tooltip` v = `Reference links & info: OpenUI5 API, source, live sample, ABAP class, generation notes`
+                                        )->a( n = `press`   v = client->_event( val = `LINKS` t_arg = VALUE #(
+                                            ( `${API_URL}` ) ( `${JS_URL}` ) ( `${UI5_URL}` ) ( `${ABAP_URL}` )
+                                            ( `${CHECKED}` ) ( `${POST171}` ) ( `${NOTES}` ) ( `$event.oSource.sId` ) ) )
                                     )->leaf( `Button`
                                         )->a( n = `icon`    v = `sap-icon://action`
                                         )->a( n = `type`    v = `Transparent`
                                         )->a( n = `tooltip` v = `Start this abap2UI5 app in a new tab`
                                         )->a( n = `press`   v = client->_event_client( val = client->cs_event-open_new_tab t_arg = VALUE #( ( `${START_URL}` ) ) )
-                                    )->leaf( `Button`
-                                        )->a( n = `icon`    v = `sap-icon://chain-link`
-                                        )->a( n = `type`    v = `Transparent`
-                                        )->a( n = `tooltip` v = `Reference links: OpenUI5 API, source, live sample, ABAP class`
-                                        )->a( n = `press`   v = client->_event( val = `LINKS` t_arg = VALUE #( ( `${API_URL}` ) ( `${JS_URL}` ) ( `${UI5_URL}` ) ( `${ABAP_URL}` ) ( `$event.oSource.sId` ) ) )
 
                                 )->shut(
                             )->shut(
@@ -686,20 +674,22 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                                 )->leaf( `Text`
                                     )->a( n = `text` v = `{TEXT}`
                                 " same two buttons as the table's Open column - only on sample
-                                " leaves: direct app launch + the reference-links popover
-                                )->leaf( `Button`
-                                    )->a( n = `icon`    v = `sap-icon://action`
-                                    )->a( n = `type`    v = `Transparent`
-                                    )->a( n = `tooltip` v = `Start this abap2UI5 app in a new tab`
-                                    )->a( n = `class`   v = `sapUiTinyMarginBegin`
-                                    )->a( n = `visible` v = `{HAS_LINK}`
-                                    )->a( n = `press`   v = client->_event_client( val = client->cs_event-open_new_tab t_arg = VALUE #( ( `${START_URL}` ) ) )
+                                " leaves: the reference-links popover, then the direct app launch.
+                                " The tree model carries no notes/checked, so the info args are
+                                " empty (the popover then just shows the four links).
                                 )->leaf( `Button`
                                     )->a( n = `icon`    v = `sap-icon://chain-link`
                                     )->a( n = `type`    v = `Transparent`
                                     )->a( n = `tooltip` v = `Reference links: OpenUI5 API, source, live sample, ABAP class`
+                                    )->a( n = `class`   v = `sapUiTinyMarginBegin`
                                     )->a( n = `visible` v = `{HAS_LINK}`
-                                    )->a( n = `press`   v = client->_event( val = `LINKS` t_arg = VALUE #( ( `${API_URL}` ) ( `${JS_URL}` ) ( `${UI5_URL}` ) ( `${ABAP_URL}` ) ( `$event.oSource.sId` ) ) ) ).
+                                    )->a( n = `press`   v = client->_event( val = `LINKS` t_arg = VALUE #( ( `${API_URL}` ) ( `${JS_URL}` ) ( `${UI5_URL}` ) ( `${ABAP_URL}` ) ( `` ) ( `` ) ( `` ) ( `$event.oSource.sId` ) ) )
+                                )->leaf( `Button`
+                                    )->a( n = `icon`    v = `sap-icon://action`
+                                    )->a( n = `type`    v = `Transparent`
+                                    )->a( n = `tooltip` v = `Start this abap2UI5 app in a new tab`
+                                    )->a( n = `visible` v = `{HAS_LINK}`
+                                    )->a( n = `press`   v = client->_event_client( val = client->cs_event-open_new_tab t_arg = VALUE #( ( `${START_URL}` ) ) ) ).
 
     client->view_display( view->stringify( ) ).
 
@@ -721,7 +711,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 1
         score_tip = `Deviation from the original sample: 1 of 10 (0 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.34`
-        release = `1.34`
         checked = `CHECKED (2026-07-20): verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed); RESTAMP after the 2026-07-16 rework (link toast +` &&
                  ` instant separator switch confirmed)`
         notes = `NOTE: the original wires a change handler on the separator Select (SEP_CHANGE round-trip, removed 2026-07-16): selectedKey and separatorStyle share one two-way model path, so the Select.change` &&
@@ -764,13 +753,11 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.m` control = `sap.m.ColorPalette`                name = `ColorPalette`                        class = `z2ui5_cl_ai_app_008` path = `src/01/b02/z2ui5_cl_ai_app_008.clas.abap`
         score = 1
         score_tip = `Deviation from the original sample: 1 of 10 (0 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
-        since = `1.54`
-        release = `1.54` )
+        since = `1.54` )
       ( module = `sap.m` control = `sap.m.Column`                      name = `Table`                               class = `z2ui5_cl_ai_app_009` path = `src/01/b05/z2ui5_cl_ai_app_009.clas.abap`
         score = 10
         score_tip = `Deviation from the original sample: 10 of 10 (4 improvised, 1 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.12`
-        release = `1.12`
         is_post171 = abap_true
         checked = `CHECKED (2026-07-20): verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed)`
         notes = `IMPROVISED: the shared demo kit mock model sap/ui/demo/mock/products.json (/ProductCollection, snapshotted in ui5/mock/products.json) is flattened into the default model: all 123 rows are kept` &&
@@ -792,7 +779,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 5
         score_tip = `Deviation from the original sample: 5 of 10 (2 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.12`
-        release = `1.12`
         is_post171 = abap_true
         checked = `CHECKED (2026-07-20): verified in a running system - human pass 2026-07-20: app starts and renders like the original; no interaction paths were open for this port`
         notes = `NOTE: the sample is an OPA-test demo: only the UI app under applicationUnderTest/ (Table.view.xml, Table.controller.js, Formatter.js, products.json) is ported 1:1; the qunit/OPA harness files` &&
@@ -817,7 +803,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 1
         score_tip = `Deviation from the original sample: 1 of 10 (0 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.22`
-        release = `1.22`
         use_name = abap_true )
       ( module = `sap.m` control = `sap.m.ComparisonPattern`           name = `ComparisonPattern`                   class = `z2ui5_cl_ai_app_012` path = `src/01/b05/z2ui5_cl_ai_app_012.clas.abap`
         score = 10
@@ -883,7 +868,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 1
         score_tip = `Deviation from the original sample: 1 of 10 (0 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.48.0`
-        release = `1.48.0`
         checked = `CHECKED (2026-07-20): verified in a running system - human pass 2026-07-20: app starts and renders like the original; no interaction paths were open for this port`
         notes = `NOTE: the original binds the Tree's items to the whole JSON model root (items="{path: '/'}", the model IS the node array from Tree.json); abap2UI5 serves a single default model, so the array is` &&
                  ` flattened into it as the bound table T_TREE and the binding-info keeps its shape with the bound path substituted for '/' (nested tree binding is expressible per CAPABILITIES.md, proven by app 054).` &&
@@ -896,6 +880,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         golden = abap_true
         since = `1.22.0`
         release = `1.97`
+        release_post171 = abap_true
         is_post171 = abap_true
         checked = `CHECKED (2026-07-20): verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed); promoted to golden 2026-07-20 (human decision) -` &&
                  ` exemplary for: frontend action (openBy/domRef), $event.oSource.sId anchor transport, POST_171 discipline`
@@ -912,7 +897,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 1
         score_tip = `Deviation from the original sample: 1 of 10 (0 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.22.0`
-        release = `1.22.0`
         is_post171 = abap_true
         checked = `CHECKED (2026-07-20): verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed)`
         notes = `NOTE: the original controller's JSON model carries UI5Date objects; the ABAP model carries the same dates as ISO 'yyyy-MM-dd' strings, and each sap.ui.model.type.Date part of the DateInterval value` &&
@@ -932,7 +916,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 7
         score_tip = `Deviation from the original sample: 7 of 10 (3 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.38.0`
-        release = `1.38.0`
         is_post171 = abap_true
         checked = `CHECKED (2026-07-20): verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed)`
         notes = `IMPROVISED: the JSON model's UI5Date instances become date strings in the flat ABAP model: the sap.ui.model.type.DateTime bindings (DTP2/3/4/5/8) get an added source pattern 'yyyy-MM-dd HH:mm:ss'` &&
@@ -984,7 +967,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 3
         score_tip = `Deviation from the original sample: 3 of 10 (1 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.32.0`
-        release = `1.32.0`
         checked = `CHECKED (2026-07-20): verified in a running system - human pass 2026-07-20: app starts and renders like the original; no interaction paths were open for this port`
         notes = `IMPROVISED: the controller's imperative DraftIndicator calls (showDraftSaving/showDraftSaved/clearDraftState on byId('draftIndi')) are not in the FrontendAction CONTROL_METHODS whitelist; per AGENTS` &&
                  ` 'prefer a bindable property over a frontend action' the port two-way binds the control's public state property (sap.m.DraftIndicatorState, since 1.32) and sets Saving/Saved/Clear in the three event` &&
@@ -1029,13 +1011,11 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 1
         score_tip = `Deviation from the original sample: 1 of 10 (0 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.34`
-        release = `1.34`
         checked = `CHECKED (2026-07-20): verified in a running system - human pass 2026-07-20: app starts and renders like the original; no interaction paths were open for this port` )
       ( module = `sap.m` control = `sap.m.FeedInput`                   name = `Feed`                                class = `z2ui5_cl_ai_app_024` path = `src/01/b06/z2ui5_cl_ai_app_024.clas.abap`
         score = 3
         score_tip = `Deviation from the original sample: 3 of 10 (1 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.22`
-        release = `1.22`
         checked = `CHECKED (2026-07-20): verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed)`
         notes = `IMPROVISED: the controller's client-side DateFormat.getDateTimeInstance({ style: 'medium' }).format(new Date()) for the new entry's Date is rebuilt server-side in ABAP from sy-datum/sy-uzeit as an` &&
                  ` English medium-style timestamp (e.g. 'Jul 20, 2026, 1:23:45 PM') - the locale-dependent client formatter is not available in the backend round-trip; the value is a plain model string exactly like in` &&
@@ -1046,7 +1026,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 1
         score_tip = `Deviation from the original sample: 1 of 10 (0 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.12`
-        release = `1.12`
         checked = `CHECKED (2026-07-20): verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed)`
         notes = `NOTE: the original's removeItem derives the entry index from the item's binding-context path (getBindingContext().getPath().split('/').pop()); the port transports the List's indexOfItem(item) instead` &&
                  ` - the aggregation index equals the model index for this bound list, so the spliced row is the same. // NOTE: feed.json entries 2 and 4 have no Actions property; the flat ABAP row type serializes` &&
@@ -1064,7 +1043,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 1
         score_tip = `Deviation from the original sample: 1 of 10 (0 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.62.0`
-        release = `1.62.0`
         is_post171 = abap_true
         checked = `CHECKED (2026-07-20): verified in a running system - human pass 2026-07-20: app starts and renders like the original; no interaction paths were open for this port`
         notes = `POST-1.71: ariaLabelledBy (since UI5 1.97) on the labeled GenericTag is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.97 to render it. // NOTE: the sample's` &&
@@ -1075,7 +1053,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 3
         score_tip = `Deviation from the original sample: 3 of 10 (1 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.34.0`
-        release = `1.34.0`
         is_post171 = abap_true
         checked = `CHECKED (2026-07-19): verified in a running system - human visual pass 2026-07-19 over all apps: the KPI tiles float left via the injected tileLayout CSS and render like the original.`
         notes = `POST-1.71: frameType values OneByHalf / TwoByHalf (since UI5 1.83) are newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.83 to render them; OneByOne / TwoByOne (1.71) were` &&
@@ -1090,7 +1067,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 1
         score_tip = `Deviation from the original sample: 1 of 10 (0 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.44.0`
-        release = `1.44.0`
         checked = `CHECKED (2026-07-20): verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed)`
         notes = `NOTE: the Select's literal selectedKey="1" is replaced by a two-way binding {SELECTED_KEY} (seeded with '1') so the SCROLL_CHANGED handler can read the chosen key on the backend - the` &&
                  ` CAPABILITIES-approved controller-read-selection pattern (bind selectedKey two-way; the incoming model is applied before on_event runs). The original controller reads` &&
@@ -1108,8 +1084,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.m` control = `sap.m.IconTabHeader`               name = `IconTabHeader`                       class = `z2ui5_cl_ai_app_055` path = `src/01/b07/z2ui5_cl_ai_app_055.clas.abap`
         score = 1
         score_tip = `Deviation from the original sample: 1 of 10 (0 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
-        since = `1.15`
-        release = `1.15` )
+        since = `1.15` )
       ( module = `sap.m` control = `sap.m.Image`                       name = `ImageModeBackground`                 class = `z2ui5_cl_ai_app_031` path = `src/01/b01/z2ui5_cl_ai_app_031.clas.abap`
         score = 3
         score_tip = `Deviation from the original sample: 3 of 10 (1 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
@@ -1121,7 +1096,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 1
         score_tip = `Deviation from the original sample: 1 of 10 (0 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.38`
-        release = `1.38`
         notes = `NOTE: the profile-image and logo ImageContent keep the sample's original demokit test-resources asset paths (test-resources/sap/m/demokit/sample/ImageContent/images/*.png) as the src literal 1:1;` &&
                  ` abap2UI5 does not serve those static assets, so only the first (sap-icon://area-chart) icon renders offline. The images are archived under ui5/sap.m/ImageContent/images/.` )
       ( module = `sap.m` control = `sap.m.Input`                       name = `InputValueState`                     class = `z2ui5_cl_ai_app_032` path = `src/01/b02/z2ui5_cl_ai_app_032.clas.abap`
@@ -1156,7 +1130,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 1
         score_tip = `Deviation from the original sample: 1 of 10 (0 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.12`
-        release = `1.12`
         checked = `CHECKED (2026-07-19): verified in a running system - human visual pass 2026-07-19 over all apps: the Currency composite binding renders the formatted price per currency (raw binding-info string over` &&
                  ` PRICE TYPE p).`
         use_name = abap_true )
@@ -1205,7 +1178,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 1
         score_tip = `Deviation from the original sample: 1 of 10 (0 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.21.2`
-        release = `1.21.2`
         is_post171 = abap_true
         notes = `NOTE: the sample opens a sap.m.MessageBox from its controller; there is no such control in the view. It is driven by two buttons wired to events that call client->message_box_display - the documented` &&
                  ` 1:1 path (CAPABILITIES.md marks sap.m.MessageBox as expressible with app 036 as its evidence port), not a workaround. // POST-1.71: ariaHasPopup="Dialog" on both buttons (since UI5 1.84) is newer` &&
@@ -1220,6 +1192,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score_tip = `Deviation from the original sample: 3 of 10 (1 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.28`
         release = `1.73`
+        release_post171 = abap_true
         is_post171 = abap_true
         checked = `CHECKED (2026-07-22): verified in a running system 2026-07-22: the button toggles the MessagePopover open/closed (toggleBy) and lists the five messages.`
         notes = `POST-1.71: Button.ariaHasPopup (since UI5 1.84) kept on the message-popover button. The Button.type value 'Negative' (a sap.m.ButtonType value since 1.73) is what the sample's buttonTypeFormatter` &&
@@ -1239,6 +1212,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score_tip = `Deviation from the original sample: 5 of 10 (2 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.28`
         release = `1.73`
+        release_post171 = abap_true
         is_post171 = abap_true
         checked = `CHECKED (2026-07-22): verified in a running system 2026-07-22: the button toggles the MessagePopover (toggleBy) and the first Error message renders its HTML markupDescription.`
         notes = `POST-1.71: Button.ariaHasPopup (since UI5 1.84) kept on the message-popover button; the Button.type value 'Negative' is a sap.m.ButtonType value since 1.73. MessageItem.markupDescription (renders the` &&
@@ -1257,7 +1231,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 7
         score_tip = `Deviation from the original sample: 7 of 10 (2 improvised, 1 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.28`
-        release = `1.28`
         is_post171 = abap_true
         checked = `CHECKED (2026-07-21): verified in a running system - human live check 2026-07-21: startup toast at native height; Save opens the MessagePopover with 3 Errors + 1 Warning marking John Miller (Name) /` &&
                  ` Stefan Bosch (ZIP) / Maria Fontes (Email) + employment weekly hours; group headers Personal, Information / Personal, Contact; message-title press scrolls to and focuses the field; toggleBy` &&
@@ -1308,13 +1281,11 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.m` control = `sap.m.MessageToast`                name = `MessageToast`                        class = `z2ui5_cl_ai_app_037` path = `src/01/b03/z2ui5_cl_ai_app_037.clas.abap`
         score = 1
         score_tip = `Deviation from the original sample: 1 of 10 (0 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
-        since = `1.9.2`
-        release = `1.9.2` )
+        since = `1.9.2` )
       ( module = `sap.m` control = `sap.m.MessageView`                 name = `MessageViewMessageManager`           class = `z2ui5_cl_ai_app_038` path = `src/01/b03/z2ui5_cl_ai_app_038.clas.abap`
         score = 1
         score_tip = `Deviation from the original sample: 1 of 10 (0 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.46`
-        release = `1.46`
         notes = `NOTE: the original registers its four messages on the sap.ui.core.message.MessageManager and the MessageView binds them via the message> model. abap2UI5 DOES carry the message> model on every view` &&
                  ` slot since pr/message-model (2026-07-18, auto-collecting control validation messages), but there is no ABAP API to push an arbitrary static message set into it - so for this render-only sample the` &&
                  ` messages are bound as a plain ABAP table on MessageView items with a MessageItem template (client->_bind( t_messages )), the path CAPABILITIES.md explicitly endorses for static message sets. Same` &&
@@ -1324,7 +1295,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 1
         score_tip = `Deviation from the original sample: 1 of 10 (0 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.22.0`
-        release = `1.22.0`
         checked = `CHECKED (2026-07-20): verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed)`
         notes = `NOTE: the custom groupHeaderFactory '.getGroupHeader' (controller code) is replaced by UI5's default group headers - the sample's factory builds a SeparatorItem with the group key, which is exactly` &&
                  ` what the default renders anyway (CAPABILITIES.md group-sorter row, source-verified on both sides), so this is a faithful 1:1, not a workaround. The items are a bound template with the original's` &&
@@ -1349,34 +1319,29 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.m` control = `sap.m.NewsContent`                 name = `NewsContent`                         class = `z2ui5_cl_ai_app_063` path = `src/01/b07/z2ui5_cl_ai_app_063.clas.abap`
         score = 1
         score_tip = `Deviation from the original sample: 1 of 10 (0 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
-        since = `1.34`
-        release = `1.34` )
+        since = `1.34` )
       ( module = `sap.m` control = `sap.m.NotificationListGroup`       name = `NotificationListGroup`               class = `z2ui5_cl_ai_app_077` path = `src/01/b09/z2ui5_cl_ai_app_077.clas.abap`
         score = 3
         score_tip = `Deviation from the original sample: 3 of 10 (1 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.34`
-        release = `1.34`
         notes = `IMPROVISED: static notifications: onItemClose's client-side removeItem is not mirrored (toast only); group 3's onAcceptErrors is simplified to the accept toast. // NOTE: the original's` &&
                  ` showCloseButton="falseue" typo on two items is corrected to false, otherwise UI5 boolean parsing rejects it.` )
       ( module = `sap.m` control = `sap.m.NotificationListItem`        name = `NotificationListItem`                class = `z2ui5_cl_ai_app_076` path = `src/01/b09/z2ui5_cl_ai_app_076.clas.abap`
         score = 3
         score_tip = `Deviation from the original sample: 3 of 10 (1 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.34`
-        release = `1.34`
         notes = `IMPROVISED: the notifications are static (not model-bound), so onItemClose's client-side removeItem is not mirrored (close fires a toast only); onErrorPress's setProcessingMessage MessageStrip on the` &&
                  ` item is shown as a toast.` )
       ( module = `sap.m` control = `sap.m.NumericContent`              name = `NumericContentIcon`                  class = `z2ui5_cl_ai_app_064` path = `src/01/b07/z2ui5_cl_ai_app_064.clas.abap`
         score = 1
         score_tip = `Deviation from the original sample: 1 of 10 (0 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.34`
-        release = `1.34`
         notes = `NOTE: the second NumericContent keeps the sample's original demokit test-resources image path (test-resources/sap/m/demokit/sample/NumericContentIcon/images/grass.jpg) as the icon literal 1:1;` &&
                  ` abap2UI5 does not serve that static asset, so it does not render offline (the first tile's sap-icon://travel-expense does). The image is archived under ui5/sap.m/NumericContentIcon/images/.` )
       ( module = `sap.m` control = `sap.m.ObjectAttribute`             name = `ObjectAttributes`                    class = `z2ui5_cl_ai_app_073` path = `src/01/b09/z2ui5_cl_ai_app_073.clas.abap`
         score = 3
         score_tip = `Deviation from the original sample: 3 of 10 (1 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.12`
-        release = `1.12`
         is_post171 = abap_true
         notes = `NOTE: element binding kept 1:1 - the two display ObjectAttributes bind a one-record structure /S_PRODUCT instead of {/ProductCollection/0}; record 0 fields verbatim. // IMPROVISED:` &&
                  ` handleSAPLinkPressed's URLHelper.redirect maps to the URLHELPER REDIRECT frontend action (cs_event-urlhelper); handleFeedbacklinkPressed's Dialog (a RatingIndicator + TextArea with Submit/Cancel` &&
@@ -1391,7 +1356,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 1
         score_tip = `Deviation from the original sample: 1 of 10 (0 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.12`
-        release = `1.12`
         checked = `CHECKED (2026-07-19): verified in a running system - human visual pass 2026-07-19 over all apps: the element binding {/S_PRODUCT} resolves all relative field bindings incl. the Currency number - the` &&
                  ` ObjectHeader renders fully populated.`
         notes = `NOTE: the ObjectHeader keeps the original element binding and relative field bindings 1:1 (title, numberUnit, the ObjectAttribute composite texts and the sap.ui.model.type.Currency number binding);` &&
@@ -1406,7 +1370,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 1
         score_tip = `Deviation from the original sample: 1 of 10 (0 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.12`
-        release = `1.12`
         notes = `NOTE: element binding kept 1:1 - the VerticalLayout binds a one-record structure /S_PRODUCT in the default model instead of {/ProductCollection/0}; titleClicked's MessageBox.alert becomes` &&
                  ` message_box_display. // NOTE: the model holds exactly the bound record /ProductCollection/0 (Notebook Basic 15) of ui5/mock/products.json, verbatim - the original's own single-record binding.`
         use_name = abap_true )
@@ -1414,14 +1377,12 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 3
         score_tip = `Deviation from the original sample: 3 of 10 (1 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.12`
-        release = `1.12`
         notes = `IMPROVISED: the ObjectStatus '.formatter.status' (Status -> ValueState) is precomputed into the STATUS_STATE model field (Available->Success, Out of Stock->Warning, Discontinued->Error, else None).`
         use_name = abap_true )
       ( module = `sap.m` control = `sap.m.ObjectNumber`                name = `ObjectNumber`                        class = `z2ui5_cl_ai_app_072` path = `src/01/b09/z2ui5_cl_ai_app_072.clas.abap`
         score = 1
         score_tip = `Deviation from the original sample: 1 of 10 (0 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.12`
-        release = `1.12`
         is_post171 = abap_true
         notes = `NOTE: the original binds records {/ProductCollection/0..5} of the shared mock; the port carries exactly those 6 records as a default-model table T_PRODUCTS and element-binds each ObjectNumber to` &&
                  ` /T_PRODUCTS/0..5 (index binding), Price+CurrencyCode verbatim. // POST-1.71: ObjectNumber.inverted, ObjectNumber.active and ObjectNumber.press (all since UI5 1.86) are kept 1:1 for the` &&
@@ -1445,7 +1406,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 3
         score_tip = `Deviation from the original sample: 3 of 10 (1 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.28`
-        release = `1.28`
         notes = `IMPROVISED: the Select ``change`` handlers onSelectDesign/onSelectStyle (setDesign/setStyle) become two-way bound design/style; bActionContext (design != Info) becomes an expression binding on the` &&
                  ` Buttons' visible.`
         use_name = abap_true )
@@ -1458,7 +1418,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 1
         score_tip = `Deviation from the original sample: 1 of 10 (0 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.16`
-        release = `1.16`
         checked = `CHECKED (2026-07-20): verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed)`
         notes = `NOTE: the original controller toggles the third panel imperatively (onOverflowToolbarPress -> oPanel.setExpanded(!oPanel.getExpanded())). Reproduced 1:1 since the whitelist extension (2026-07-18, see` &&
                  ` pr/control-call-whitelist): the TOOLBAR_PRESSED handler inverts a server-side mirror of the state and calls the whitelisted setExpanded on the panel via client->follow_up_action(` &&
@@ -1469,7 +1428,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 3
         score_tip = `Deviation from the original sample: 3 of 10 (1 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.48`
-        release = `1.48`
         is_post171 = abap_true
         checked = `CHECKED (2026-07-20): verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed)`
         notes = `NOTE: the original onInit creates a popup-mode sap.m.PDFViewer and adds it as a view dependent; it is declared 1:1 in the view's mvc:dependents aggregation (an extra PDFViewer element vs the original` &&
@@ -1487,6 +1445,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 3
         score_tip = `Deviation from the original sample: 3 of 10 (1 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         release = `1.86`
+        release_post171 = abap_true
         is_post171 = abap_true
         notes = `POST-1.71: Link.ariaHasPopup (since 1.86) is kept 1:1 on the popover link; needs UI5 >= 1.86. // IMPROVISED: the row Popover reproduces the original bindElement: it is built per-press with relative` &&
                  ` bindings ({PRODUCT_ID} title, {NAME}, {PRODUCT_PIC_URL}) and follow_up_action( cs_event-bind_element, view=cs_view-popover ) element-binds the popover slot to t_products/<index>, where the index` &&
@@ -1501,7 +1460,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 3
         score_tip = `Deviation from the original sample: 3 of 10 (1 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.13.1`
-        release = `1.13.1`
         is_post171 = abap_true
         notes = `IMPROVISED: the two interactive ProgressIndicators (pi-with-animation / pi-without-animation) are set to 0/100 via two-way bound percentValue/displayValue fields updated in a SET event, replacing the` &&
                  ` original's controller byId(...).setPercentValue/setDisplayValue calls. // POST-1.71: ProgressIndicator.displayAnimation (since UI5 1.73) is kept 1:1 on the no-animation ProgressIndicator; needs UI5` &&
@@ -1511,7 +1469,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 1
         score_tip = `Deviation from the original sample: 1 of 10 (0 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.9.2`
-        release = `1.9.2`
         notes = `NOTE: the incremental backend load is reproduced 1:1: the model starts with the first product and each pull-to-refresh (REFRESH) appends the next until the full /ProductCollection is shown (fill_all +` &&
                  ` shown counter).`
         use_name = abap_true )
@@ -1525,7 +1482,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 1
         score_tip = `Deviation from the original sample: 1 of 10 (0 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.38`
-        release = `1.38`
         notes = `NOTE: the sample binds the composite RangeSlider "range" property (an array [low, high] - range="{/RS1}" / range="0,100"). abap2UI5 binds scalar ABAP fields, so each range is expressed as the` &&
                  ` equivalent value / value2 properties the control keeps in sync - identical rendering.` )
       ( module = `sap.m` control = `sap.m.ScrollContainer`             name = `ScrollContainer`                     class = `z2ui5_cl_ai_app_046` path = `src/01/b04/z2ui5_cl_ai_app_046.clas.abap`
@@ -1554,7 +1510,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 1
         score_tip = `Deviation from the original sample: 1 of 10 (0 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.26.0`
-        release = `1.26.0`
         use_name = abap_true )
       ( module = `sap.m` control = `sap.m.Slider`                      name = `Slider`                              class = `z2ui5_cl_ai_app_068` path = `src/01/b09/z2ui5_cl_ai_app_068.clas.abap`
         score = 1
@@ -1563,7 +1518,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 1
         score_tip = `Deviation from the original sample: 1 of 10 (0 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.34`
-        release = `1.34`
         notes = `NOTE: the sample's demo-kit backgroundImage paths are resolved to absolute sdk.openui5.org URLs.` )
       ( module = `sap.m` control = `sap.m.StandardListItem`            name = `StandardListItemAvatar`              class = `z2ui5_cl_ai_app_083` path = `src/01/b10/z2ui5_cl_ai_app_083.clas.abap`
         score = 1
@@ -1573,7 +1527,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 3
         score_tip = `Deviation from the original sample: 3 of 10 (1 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.40`
-        release = `1.40`
         notes = `IMPROVISED: the sample binds a List to the JSON model /modelData and renders one templated CustomListItem per row. The rows are unrolled into static list items here because every row sets a different` &&
                  ` subset of the StepInput properties - an empty ABAP model field would bind as "" instead of leaving the property at its default, so a bound template would not render 1:1. Template properties no row` &&
                  ` ever sets (valueState) are dropped with it.` )
@@ -1584,7 +1537,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 1
         score_tip = `Deviation from the original sample: 1 of 10 (0 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.34`
-        release = `1.34`
         notes = `NOTE: addNewButtonPress appends an empty employee (bound /T_EMPLOYEES); itemClose in the original calls preventDefault (keeps the tab) and would confirm - here it toasts and the tab is kept.`
         use_name = abap_true )
       ( module = `sap.m` control = `sap.m.Table`                       name = `TableAutoPopin`                      class = `z2ui5_cl_ai_app_092` path = `src/01/b11/z2ui5_cl_ai_app_092.clas.abap`
@@ -1592,6 +1544,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score_tip = `Deviation from the original sample: 3 of 10 (1 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.16`
         release = `1.77`
+        release_post171 = abap_true
         is_post171 = abap_true
         notes = `POST-1.71: Table.popinChanged (since 1.77) and Column.importance (since 1.76), the core of the auto-pop-in demo, are kept 1:1; needs UI5 >= 1.77. // IMPROVISED: onSelectionFinish` &&
                  ` (setHiddenInPopin(getSelectedKeys())) is reproduced 1:1: the MultiComboBox selectedKeys are two-way bound to t_hidden and the selectionFinish round-trip forwards them as a JSON Priority array through` &&
@@ -1608,18 +1561,17 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.m` control = `sap.m.TextArea`                    name = `TextArea`                            class = `z2ui5_cl_ai_app_052` path = `src/01/b01/z2ui5_cl_ai_app_052.clas.abap`
         score = 1
         score_tip = `Deviation from the original sample: 1 of 10 (0 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
-        since = `1.9.0`
-        release = `1.9.0` )
+        since = `1.9.0` )
       ( module = `sap.m` control = `sap.m.TileContent`                 name = `TileContent`                         class = `z2ui5_cl_ai_app_078` path = `src/01/b10/z2ui5_cl_ai_app_078.clas.abap`
         score = 1
         score_tip = `Deviation from the original sample: 1 of 10 (0 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
-        since = `1.34.0`
-        release = `1.34.0` )
+        since = `1.34.0` )
       ( module = `sap.m` control = `sap.m.TimePicker`                  name = `TimePickerHidden`                    class = `z2ui5_cl_ai_app_091` path = `src/01/b11/z2ui5_cl_ai_app_091.clas.abap`
         score = 1
         score_tip = `Deviation from the original sample: 1 of 10 (0 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.32`
         release = `1.97`
+        release_post171 = abap_true
         is_post171 = abap_true
         notes = `NOTE: openTimePicker (byId('HiddenTP').openBy(source.getDomRef())) is the app-016 openBy pattern: the source sId is transported via $event.oSource.sId and replayed as a control_by_id/openBy follow-up` &&
                  ` action. // POST-1.71: Button.ariaHasPopup (since 1.84), Link.ariaHasPopup (since 1.86) and TimePicker.hideInput (since 1.97) are kept 1:1; needs a UI5 release providing them.`
@@ -1630,7 +1582,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 1
         score_tip = `Deviation from the original sample: 1 of 10 (0 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.27.0`
-        release = `1.27.0`
         use_name = abap_true )
       ( module = `sap.m` control = `sap.m.ToggleButton`                name = `ToggleButton`                        class = `z2ui5_cl_ai_app_080` path = `src/01/b10/z2ui5_cl_ai_app_080.clas.abap`
         score = 1
@@ -1640,7 +1591,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 3
         score_tip = `Deviation from the original sample: 3 of 10 (1 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.22`
-        release = `1.22`
         notes = `IMPROVISED: the first Tokenizer's tokens are now model-bound (t_tokens): onAddToken appends the input value, onTokenDelete removes by key (the deleted key arrives via` &&
                  ` $event.getParameter('tokens')[0].getKey()); the second, disabled Tokenizer keeps its 3 static tokens, so the port shows one bound Token template + 3 static Token vs the original's 3+3. // NOTE: the` &&
                  ` CheckBox select handler becomes a live two-way selected/editable bind on the first Tokenizer.`
@@ -1649,7 +1599,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 1
         score_tip = `Deviation from the original sample: 1 of 10 (0 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.16`
-        release = `1.16`
         checked = `CHECKED (2026-07-20): verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed)`
         notes = `NOTE: the sample's controller onSliderLiveChange resizes the toolbars in JS; there is no width in the source XML (the port adds the width attribute, the original wires liveChange instead). Rebuilt as` &&
                  ` a client-side expression binding {= slider + '%' } on each Toolbar width - no event round-trip, resizes instantly like the original; the documented preferred path (CAPABILITIES.md), not a workaround.` )
@@ -1657,14 +1606,12 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 1
         score_tip = `Deviation from the original sample: 1 of 10 (0 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.42`
-        release = `1.42`
         checked = `CHECKED (2026-07-19): verified in a running system - human visual pass 2026-07-19 over all apps: the nested-table hierarchy renders as an expandable Tree like the original.`
         use_name = abap_true )
       ( module = `sap.m` control = `sap.m.URLHelper`                   name = `UrlHelper`                           class = `z2ui5_cl_ai_app_084` path = `src/01/b10/z2ui5_cl_ai_app_084.clas.abap`
         score = 1
         score_tip = `Deviation from the original sample: 1 of 10 (0 improvised, 0 dropped). 1 = faithful 1:1, 10 = heavily reworked.`
         since = `1.10`
-        release = `1.10`
         notes = `NOTE: element binding kept 1:1 - a one-record structure /S_SUPPLIER instead of {/SupplierCollection/0}. // NOTE: URLHelper.triggerTel/triggerSms/triggerEmail/redirect map 1:1 to the URLHELPER frontend` &&
                  ` action (cs_event-urlhelper): TRIGGER_TEL/TRIGGER_SMS take the number as a plain string param, TRIGGER_EMAIL/REDIRECT take a { EMAIL/URL, ... } object-literal t_arg (get_t_arg emits {-prefixed args` &&
                  ` raw as UI5 event-handler object literals). open_new_tab is NOT used - it is same-origin-only (isValidRedirectURL).`
