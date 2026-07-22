@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_ai_app_095",
+  "sample": "sap.m.sample.TimePickerSliders",
+  "entity": "sap.m.TimePickerSliders",
+  "file": "src/01/b12/z2ui5_cl_ai_app_095.clas.abap",
+  "batch": "b12",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The picked time is transported to the backend via a two-way value binding on TimePickerSliders (an extra attribute; the original reads it imperatively with oTP.getValue()). OK composes the result text from the current time_value, Cancel restores the pre-open value captured on OPEN_DIALOG (the attachAfterOpen equivalent)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The result text uses the static control id 'TPS2' because the original's runtime-generated oTP.getId() cannot be reproduced. The cosmetic collapseAll() on the sliders as the dialog closes is dropped (no visible effect on a closing dialog)."
+    }
+  ]
+}
