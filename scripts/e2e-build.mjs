@@ -24,30 +24,26 @@ import { execSync } from 'child_process';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { resolveA2UI5 } from './lib-a2ui5.mjs';
 
 const AIDEMOKIT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 
-function resolveA2UI5() {
-  const cands = [process.env.A2UI5_HOME, path.join(AIDEMOKIT, '..', 'abap2UI5'), '/home/user/abap2UI5'];
-  for (const c of cands) {
-    if (c && fs.existsSync(path.join(c, 'node/srv/express.mjs'))) return path.resolve(c);
-  }
-  throw new Error('abap2UI5 checkout not found — set A2UI5_HOME to a checkout with node_modules installed');
-}
-
 const A2 = resolveA2UI5();
+if (!A2) {
+  throw new Error('abap2UI5 checkout not found — run `npm run node:setup` (clones it into .abap2UI5) or set A2UI5_HOME to a checkout with node_modules installed');
+}
 const sh = (cmd, opts = {}) => execSync(cmd, { cwd: A2, stdio: 'inherit', ...opts });
 // abaplint --fix exits non-zero while issues remain (expected during iterative
 // downport); run it for its side effect and ignore the status
 const fix = (cmd) => { try { execSync(cmd, { cwd: A2, stdio: ['ignore', 'ignore', 'ignore'] }); } catch { /* remaining issues are fixed across passes */ } };
 
 // classes that don't transpile (excluded from the served backend, logged so the
-// skip is never silent). The overview/coverage helper apps are meta tools, not
-// ports under test; add a port here only with a reason if the transpiler
-// chokes on it.
-const EXCLUDE = new Set([
-  'z2ui5_cl_ai_app_overview', // meta app (the generated overview), not a demo-kit port
-]);
+// skip is never silent). Add a port here only with a reason if the transpiler
+// chokes on it. The overview app IS served — it is the local front door,
+// listing every port with a ?app_start= launch link (open
+// ?app_start=z2ui5_cl_ai_app_overview). It is not a numbered port, so
+// e2e-smoke never picks it up.
+const EXCLUDE = new Set([]);
 
 function main() {
   console.log(`e2e-build: abap2UI5 at ${A2}`);

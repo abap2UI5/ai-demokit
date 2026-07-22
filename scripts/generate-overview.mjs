@@ -290,11 +290,14 @@ const ID_TABLE = 'idOverviewTable';
 const filterCall = (valExpr) =>
   'client->_event_client( val = client->cs_event-binding_call' +
   ` t_arg = VALUE #( ( \`${ID_TABLE}\` ) ( \`items\` ) ( \`filter\` ) ( \`FILTER\` ) ( \`Contains\` ) ( \`${valExpr}\` ) ) )`;
-// a Sorter on one column path; descending passes abap_true (the framework reads
-// this positional t_arg element as an abap_bool - X/space), ascending omits it
+// a Sorter on one column path; descending passes the string `X` (the framework
+// reads this positional t_arg element as an abap_bool - X/space), ascending omits
+// it. t_arg is a STRING_TABLE, so the element must be a string literal, not the
+// char-typed abap_true (`abap_true` and a string row are incompatible under the
+// strict ABAP syntax check).
 const sortCall = (path, desc) =>
   'client->_event_client( val = client->cs_event-binding_call' +
-  ` t_arg = VALUE #( ( \`${ID_TABLE}\` ) ( \`items\` ) ( \`sort\` ) ( \`${path}\` )${desc ? ' ( abap_true )' : ''} ) )`;
+  ` t_arg = VALUE #( ( \`${ID_TABLE}\` ) ( \`items\` ) ( \`sort\` ) ( \`${path}\` )${desc ? ' ( `X` )' : ''} ) )`;
 
 // a sortable column: header label + ascending/descending sort icons (client-side)
 const sortableColumn = (label, path) => `                        )->open( \`Column\`
@@ -918,15 +921,35 @@ ${rows.join('\n')} ).
   METHOD build_tree.
 
     " group the (already module/control/sample-sorted) apps into the nested tree;
-    " each sample leaf keeps the links so its popover can jump the same places
+    " each sample leaf keeps the links so its popover can jump the same places.
+    " Read the last row only after an explicit lines( ) > 0 guard on its own
+    " statement - a table expression behind a short-circuit OR ( result IS
+    " INITIAL OR result[ ... ] ) is hoisted ahead of the guard by the 7.02
+    " downport, which then reads the still-empty table on the first pass and
+    " dumps. build_tree runs on the transpiled Node backend too, so keep the
+    " emptiness check separate.
     LOOP AT it_app INTO DATA(ls_app).
 
-      IF result IS INITIAL OR result[ lines( result ) ]-text <> ls_app-module.
+      DATA(lv_new_module) = abap_true.
+      IF lines( result ) > 0.
+        ASSIGN result[ lines( result ) ] TO FIELD-SYMBOL(<last_module>).
+        IF <last_module>-text = ls_app-module.
+          lv_new_module = abap_false.
+        ENDIF.
+      ENDIF.
+      IF lv_new_module = abap_true.
         APPEND VALUE #( text = ls_app-module ) TO result.
       ENDIF.
       ASSIGN result[ lines( result ) ] TO FIELD-SYMBOL(<module>).
 
-      IF <module>-nodes IS INITIAL OR <module>-nodes[ lines( <module>-nodes ) ]-text <> ls_app-ctrl_name.
+      DATA(lv_new_control) = abap_true.
+      IF lines( <module>-nodes ) > 0.
+        ASSIGN <module>-nodes[ lines( <module>-nodes ) ] TO FIELD-SYMBOL(<last_control>).
+        IF <last_control>-text = ls_app-ctrl_name.
+          lv_new_control = abap_false.
+        ENDIF.
+      ENDIF.
+      IF lv_new_control = abap_true.
         APPEND VALUE #( text = ls_app-ctrl_name ) TO <module>-nodes.
       ENDIF.
       ASSIGN <module>-nodes[ lines( <module>-nodes ) ] TO FIELD-SYMBOL(<control>).

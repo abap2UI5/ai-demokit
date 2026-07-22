@@ -400,7 +400,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                                 )->leaf( `core:Icon`
                                     )->a( n = `src`     v = `sap-icon://sort-descending`
                                     )->a( n = `tooltip` v = `Sort by Module descending`
-                                    )->a( n = `press`   v = client->_event_client( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `sort` ) ( `MODULE` ) ( abap_true ) ) )
+                                    )->a( n = `press`   v = client->_event_client( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `sort` ) ( `MODULE` ) ( `X` ) ) )
 
                             )->shut(
                         )->shut(
@@ -418,7 +418,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                                 )->leaf( `core:Icon`
                                     )->a( n = `src`     v = `sap-icon://sort-descending`
                                     )->a( n = `tooltip` v = `Sort by Control descending`
-                                    )->a( n = `press`   v = client->_event_client( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `sort` ) ( `CTRL_NAME` ) ( abap_true ) ) )
+                                    )->a( n = `press`   v = client->_event_client( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `sort` ) ( `CTRL_NAME` ) ( `X` ) ) )
 
                             )->shut(
                         )->shut(
@@ -436,7 +436,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                                 )->leaf( `core:Icon`
                                     )->a( n = `src`     v = `sap-icon://sort-descending`
                                     )->a( n = `tooltip` v = `Sort by Since descending`
-                                    )->a( n = `press`   v = client->_event_client( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `sort` ) ( `SINCE` ) ( abap_true ) ) )
+                                    )->a( n = `press`   v = client->_event_client( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `sort` ) ( `SINCE` ) ( `X` ) ) )
 
                             )->shut(
                         )->shut(
@@ -454,7 +454,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                                 )->leaf( `core:Icon`
                                     )->a( n = `src`     v = `sap-icon://sort-descending`
                                     )->a( n = `tooltip` v = `Sort by Sample descending`
-                                    )->a( n = `press`   v = client->_event_client( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `sort` ) ( `NAME` ) ( abap_true ) ) )
+                                    )->a( n = `press`   v = client->_event_client( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `sort` ) ( `NAME` ) ( `X` ) ) )
 
                             )->shut(
                         )->shut(
@@ -472,7 +472,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                                 )->leaf( `core:Icon`
                                     )->a( n = `src`     v = `sap-icon://sort-descending`
                                     )->a( n = `tooltip` v = `Sort by Since descending`
-                                    )->a( n = `press`   v = client->_event_client( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `sort` ) ( `RELEASE` ) ( abap_true ) ) )
+                                    )->a( n = `press`   v = client->_event_client( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `sort` ) ( `RELEASE` ) ( `X` ) ) )
 
                             )->shut(
                         )->shut(
@@ -490,7 +490,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                                 )->leaf( `core:Icon`
                                     )->a( n = `src`     v = `sap-icon://sort-descending`
                                     )->a( n = `tooltip` v = `Sort by abap2UI5 descending`
-                                    )->a( n = `press`   v = client->_event_client( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `sort` ) ( `CLASS` ) ( abap_true ) ) )
+                                    )->a( n = `press`   v = client->_event_client( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `sort` ) ( `CLASS` ) ( `X` ) ) )
 
                             )->shut(
                         )->shut(
@@ -516,7 +516,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                                 )->leaf( `core:Icon`
                                     )->a( n = `src`     v = `sap-icon://sort-descending`
                                     )->a( n = `tooltip` v = `Sort by Rating descending`
-                                    )->a( n = `press`   v = client->_event_client( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `sort` ) ( `SCORE` ) ( abap_true ) ) )
+                                    )->a( n = `press`   v = client->_event_client( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `sort` ) ( `SCORE` ) ( `X` ) ) )
 
                             )->shut(
                         )->shut(
@@ -1776,15 +1776,35 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
   METHOD build_tree.
 
     " group the (already module/control/sample-sorted) apps into the nested tree;
-    " each sample leaf keeps the links so its popover can jump the same places
+    " each sample leaf keeps the links so its popover can jump the same places.
+    " Read the last row only after an explicit lines( ) > 0 guard on its own
+    " statement - a table expression behind a short-circuit OR ( result IS
+    " INITIAL OR result[ ... ] ) is hoisted ahead of the guard by the 7.02
+    " downport, which then reads the still-empty table on the first pass and
+    " dumps. build_tree runs on the transpiled Node backend too, so keep the
+    " emptiness check separate.
     LOOP AT it_app INTO DATA(ls_app).
 
-      IF result IS INITIAL OR result[ lines( result ) ]-text <> ls_app-module.
+      DATA(lv_new_module) = abap_true.
+      IF lines( result ) > 0.
+        ASSIGN result[ lines( result ) ] TO FIELD-SYMBOL(<last_module>).
+        IF <last_module>-text = ls_app-module.
+          lv_new_module = abap_false.
+        ENDIF.
+      ENDIF.
+      IF lv_new_module = abap_true.
         APPEND VALUE #( text = ls_app-module ) TO result.
       ENDIF.
       ASSIGN result[ lines( result ) ] TO FIELD-SYMBOL(<module>).
 
-      IF <module>-nodes IS INITIAL OR <module>-nodes[ lines( <module>-nodes ) ]-text <> ls_app-ctrl_name.
+      DATA(lv_new_control) = abap_true.
+      IF lines( <module>-nodes ) > 0.
+        ASSIGN <module>-nodes[ lines( <module>-nodes ) ] TO FIELD-SYMBOL(<last_control>).
+        IF <last_control>-text = ls_app-ctrl_name.
+          lv_new_control = abap_false.
+        ENDIF.
+      ENDIF.
+      IF lv_new_control = abap_true.
         APPEND VALUE #( text = ls_app-ctrl_name ) TO <module>-nodes.
       ENDIF.
       ASSIGN <module>-nodes[ lines( <module>-nodes ) ] TO FIELD-SYMBOL(<control>).

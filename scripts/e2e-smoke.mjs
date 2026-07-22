@@ -28,6 +28,7 @@ import http from 'http';
 import { spawn } from 'child_process';
 import { fileURLToPath } from 'url';
 import { chromium } from 'playwright';
+import { resolveA2UI5 } from './lib-a2ui5.mjs';
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const META = path.join(ROOT, 'meta');
@@ -35,9 +36,8 @@ const STRICT = process.argv.includes('--strict');
 const HEADED = process.argv.includes('--headed');
 const ONLY = process.argv.includes('--only') ? process.argv[process.argv.indexOf('--only') + 1] : null;
 
-const A2 = [process.env.A2UI5_HOME, path.join(ROOT, '..', 'abap2UI5'), '/home/user/abap2UI5']
-  .find((c) => c && fs.existsSync(path.join(c, 'node/srv/express.mjs')));
-if (!A2) { console.error('abap2UI5 checkout not found (set A2UI5_HOME)'); process.exit(1); }
+const A2 = resolveA2UI5();
+if (!A2) { console.error('abap2UI5 checkout not found — run `npm run node:setup` or set A2UI5_HOME'); process.exit(1); }
 
 // local OpenUI5 sources (same packages render-smoke serves)
 const LIB_ROOTS = ['sap.ui.core', 'sap.m', 'sap.ui.layout', 'sap.ui.unified', 'sap.f', 'themelib_sap_horizon']
