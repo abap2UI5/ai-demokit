@@ -1,6 +1,6 @@
 # STATUS.md — current state & open findings
 
-_Point-in-time summary, last updated **2026-07-20**. Update this file whenever
+_Point-in-time summary, last updated **2026-07-22**. Update this file whenever
 findings are fixed or new ones land (same-change discipline as AGENTS.md §10).
 For the process itself see TRAINING.md; for what abap2UI5 can express see
 CAPABILITIES.md._
@@ -9,7 +9,7 @@ CAPABILITIES.md._
 
 | Aspect | State |
 |---|---|
-| Ports | 94 / **403 in-scope** `sap.m` samples (23.3 %) — in scope = control exists since UI5 1.71 and is not deprecated; 43 of 446 samples are out of scope (16 deprecated, 21 newer, 6 without control metadata) |
+| Ports | 104 / **403 in-scope** `sap.m` samples (25.8 %) — in scope = control exists since UI5 1.71 and is not deprecated; 43 of 446 samples are out of scope (16 deprecated, 21 newer, 6 without control metadata) |
 | CI | ABAP_STANDARD, ABAP_CLOUD, ABAP_702 all green |
 | Structural view diff | **0 undeclared differences** across all 64 ports (`node scripts/structural-diff.mjs --strict`) — including simple **binding values** and, since 2026-07-19, **`id` attributes** (name-level per control type; dropped original ids must be restored or declared) |
 | Render smoke | **0 failing / 0 skipped** (`npm run smoke`): every port's view loads in a real headless `XMLView.create` — incl. app 049, now reconstructed by the **handle-aware path** (`extractDocsWithHelpers`: a builder handle is a stack snapshot, a captured handle passed into a builder-returning helper is inlined re-anchored per call). The declared-skip mechanism stays as a CI-enforced safety net for any future idiom the reconstructor cannot rebuild (undeclared non-reconstructable = FAIL, stale declaration = FAIL); harness carries `sap.f` and mocks scalar-row tables as empty arrays since b05 |
@@ -17,6 +17,29 @@ CAPABILITIES.md._
 | Meta sidecars | 67 in `meta/` — status: 21 `generated`, 41 `checked`, **5 `golden`** (401, 421, 454, 540, 543 — promoted 2026-07-20 after the full live check); deviations: 39 IMPROVISED, 34 POST_171, 81 NOTE, 3 DROPPED_171 (the `p:ColumnAIAction` plugin in apps 009/022/534 — a whole control newer than 1.71, unlike the restorable members). **0 LIVE_TEST** (b07/b08 menu + message-popover paths live-checked 2026-07-22) and **0 SUBSET_DATA** (retired 2026-07-22 — every port now inlines the full mock row set). `audit` is a structured object since 2026-07-18 |
 | Manually verified in a running system | **46 of 67 ports** — adds 060/061/066/067 (menu + MessagePopover, human live check 2026-07-22) to the 2026-07-20 checked set; the 21 remaining `generated` ports are b01–b04 apps that never carried an open question (machine-verified only) |
 | Archive | `ui5/sap.m/<SampleName>/` — full originals for the 44 ported samples (+2 cross-referenced: `FacetFilterSimple`, `Table`); mock snapshot in `ui5/mock/`. Unported samples are copied over batch by batch. |
+
+## Batch b12 generated (2026-07-22) — dialogs, pickers & master-detail (10 ports)
+
+Ten breadth-first `NEW-CONTROL` ports (095–104), each machine-green (abaplint
+STANDARD/CLOUD/702, validate-meta, pattern-lint, structural-diff `--strict`,
+property-check, render-smoke `--strict`): **095** TimePickerSliders (dialog +
+sliders), **096** SplitContainer, **097** SplitApp (master-detail),
+**098** ViewSettingsDialog (sort/group/filter, 3 dialogs in `mvc:dependents`,
+`open [pageKey]`), **099** QuickViewCard + **100** QuickView (nested
+pages/groups/elements; QuickView flattens 4 named models into 4 ABAP tables),
+**101** Wizard (4 steps + review NavContainer, validation in ABAP,
+`goToStep`/`discardProgress`), **102** InputModelUpdate (OData mock → ABAP
+timer), **103** SelectDialog + **104** TableSelectDialog (per-button config via
+bound properties, full 123-row ProductCollection, client-side `binding_call`
+search). All interactive navigation/selection paths are flagged `LIVE_TEST`.
+
+**Paired framework change** (abap2UI5 branch
+`claude/ai-demokit-next-batches-rq9sfy`, [`pr/split-container-nav`](../pr/split-container-nav/)):
+six control methods whitelisted in `CONTROL_METHODS` (both `FrontendAction.js`
+and the ABAP mirror `z2ui5_cl_app_frontendaction_js`) so the ports drive them
+1:1 — `toDetail`/`toMaster`/`backDetail`/`backMaster`/`setMode`
+(SplitApp/SplitContainer) and `navigateBack` (QuickView/QuickViewCard); 4 new
+node tests (41 pass), abaplint clean.
 
 ## Real-app e2e smoke — runs every port as the actual app (2026-07-22)
 
