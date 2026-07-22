@@ -26,7 +26,7 @@
     },
     {
       "type": "NOTE",
-      "what": "the selected item's text is read with ${$parameters>/item}.getText() (a method call on the resolved MenuItem control), NOT ${$parameters>/item/text}: the $parameters model exposes 'item' as the control object and UI5 keeps properties in mProperties, so the path .../item/text reads an undefined direct field and the toast arrives empty."
+      "what": "the selected item's text is read with ${$parameters>/item}.getText() (a method call on the resolved MenuItem control), NOT ${$parameters>/item/text}: the $parameters model exposes 'item' as the control object and UI5 keeps properties in the control's internal property store, so the path .../item/text reads an undefined direct field and the toast arrives empty."
     },
     {
       "type": "LIVE_TEST",
