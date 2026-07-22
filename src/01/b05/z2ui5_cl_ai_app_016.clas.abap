@@ -7,7 +7,6 @@ CLASS z2ui5_cl_ai_app_016 DEFINITION PUBLIC.
     DATA client TYPE REF TO z2ui5_if_client.
 
     METHODS view_display.
-    METHODS on_event.
 
   PRIVATE SECTION.
 ENDCLASS.
@@ -20,8 +19,6 @@ CLASS z2ui5_cl_ai_app_016 IMPLEMENTATION.
     me->client = client.
     IF client->check_on_init( ).
       view_display( ).
-    ELSEIF client->check_on_event( ).
-      on_event( ).
     ENDIF.
 
   ENDMETHOD.
@@ -47,8 +44,7 @@ CLASS z2ui5_cl_ai_app_016 IMPLEMENTATION.
             )->leaf( `Button`
                 )->a( n = `ariaHasPopup` v = `Dialog`
                 )->a( n = `text`         v = `Open Date Picker`
-                )->a( n = `press`        v = client->_event( val   = `OPEN_DATE_PICKER`
-                                                             t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
+                )->a( n = `press`        v = client->_event_client( val = client->cs_event-control_by_id t_arg = VALUE #( ( `HiddenDP` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
 
         )->shut(
         )->open( `VBox`
@@ -60,8 +56,7 @@ CLASS z2ui5_cl_ai_app_016 IMPLEMENTATION.
                 )->a( n = `ariaHasPopup` v = `Dialog`
                 )->a( n = `tooltip`      v = `Open Date Picker`
                 )->a( n = `icon`         v = `sap-icon://appointment-2`
-                )->a( n = `press`        v = client->_event( val   = `OPEN_DATE_PICKER`
-                                                             t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
+                )->a( n = `press`        v = client->_event_client( val = client->cs_event-control_by_id t_arg = VALUE #( ( `HiddenDP` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
 
         )->shut(
         )->open( `VBox`
@@ -72,34 +67,15 @@ CLASS z2ui5_cl_ai_app_016 IMPLEMENTATION.
             )->leaf( `Link`
                 )->a( n = `ariaHasPopup` v = `Dialog`
                 )->a( n = `text`         v = `Open Date Picker`
-                )->a( n = `press`        v = client->_event( val   = `OPEN_DATE_PICKER`
-                                                             t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
+                )->a( n = `press`        v = client->_event_client( val = client->cs_event-control_by_id t_arg = VALUE #( ( `HiddenDP` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
 
         )->shut(
         )->leaf( `DatePicker`
             )->a( n = `id`        v = `HiddenDP`
             )->a( n = `hideInput` v = `true`
-            )->a( n = `change`    v = client->_event( val   = `DATE_CHANGED`
-                                                      t_arg = VALUE #( ( `${$parameters>/value}` ) ) ) ).
+            )->a( n = `change`    v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Date selected: {0}` ) ( `${$parameters>/value}` ) ) ) ).
 
     client->view_display( view->stringify( ) ).
-
-  ENDMETHOD.
-
-
-  METHOD on_event.
-
-    CASE client->get( )-event.
-
-      WHEN `OPEN_DATE_PICKER`.
-        " original: byId('HiddenDP').openBy(evt.getSource().getDomRef()) - openBy is whitelisted in CONTROL_METHODS (domRef arg kind), so the anchor id resolves to its DOM element client-side
-        client->follow_up_action( val   = client->cs_event-control_by_id
-                                  t_arg = VALUE #( ( `HiddenDP` ) ( `openBy` ) ( client->get_event_arg( ) ) ) ).
-
-      WHEN `DATE_CHANGED`.
-        client->message_toast_display( |Date selected: { client->get_event_arg( ) }| ).
-
-    ENDCASE.
 
   ENDMETHOD.
 

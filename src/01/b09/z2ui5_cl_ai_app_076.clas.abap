@@ -7,7 +7,6 @@ CLASS z2ui5_cl_ai_app_076 DEFINITION PUBLIC.
     DATA client TYPE REF TO z2ui5_if_client.
 
     METHODS view_display.
-    METHODS on_event.
 
   PRIVATE SECTION.
 ENDCLASS.
@@ -20,8 +19,6 @@ CLASS z2ui5_cl_ai_app_076 IMPLEMENTATION.
     me->client = client.
     IF client->check_on_init( ).
       view_display( ).
-    ELSEIF client->check_on_event( ).
-      on_event( ).
     ENDIF.
 
   ENDMETHOD.
@@ -56,17 +53,17 @@ CLASS z2ui5_cl_ai_app_076 IMPLEMENTATION.
                     )->a( n = `datetime`        v = `1 hour`
                     )->a( n = `unread`          v = `true`
                     )->a( n = `priority`        v = `None`
-                    )->a( n = `close`           v = client->_event( val = `CLOSE` t_arg = VALUE #( ( `${$source>/title}` ) ) )
-                    )->a( n = `press`           v = client->_event( val = `PRESS` t_arg = VALUE #( ( `${$source>/title}` ) ) )
+                    )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Closed: {0}` ) ( `${$source>/title}` ) ) )
+                    )->a( n = `press`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                     )->a( n = `authorName`      v = `Jean Doe`
                     )->a( n = `authorPicture`   v = `test-resources/sap/m/images/Woman_04.png`
                     )->open( `buttons`
                         )->leaf( `Button`
                             )->a( n = `text`  v = `Accept All Requested Information`
-                            )->a( n = `press` v = client->_event( `ACCEPT` )
+                            )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Accept Button Pressed` ) ) )
                         )->leaf( `Button`
                             )->a( n = `text`  v = `Reject All Requested Information`
-                            )->a( n = `press` v = client->_event( `REJECT` )
+                            )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Reject Button Pressed` ) ) )
 
                     )->shut(
                 )->shut(
@@ -78,8 +75,8 @@ CLASS z2ui5_cl_ai_app_076 IMPLEMENTATION.
                     )->a( n = `datetime`        v = `3 days`
                     )->a( n = `unread`          v = `true`
                     )->a( n = `priority`        v = `High`
-                    )->a( n = `close`           v = client->_event( val = `CLOSE` t_arg = VALUE #( ( `${$source>/title}` ) ) )
-                    )->a( n = `press`           v = client->_event( val = `PRESS` t_arg = VALUE #( ( `${$source>/title}` ) ) )
+                    )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Closed: {0}` ) ( `${$source>/title}` ) ) )
+                    )->a( n = `press`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                     )->a( n = `authorName`      v = `Office Notification`
                     )->a( n = `authorPicture`   v = `sap-icon://group`
 
@@ -90,19 +87,19 @@ CLASS z2ui5_cl_ai_app_076 IMPLEMENTATION.
                     )->a( n = `unread`            v = `false`
                     )->a( n = `datetime`          v = `3 days`
                     )->a( n = `priority`          v = `High`
-                    )->a( n = `close`             v = client->_event( val = `CLOSE` t_arg = VALUE #( ( `${$source>/title}` ) ) )
-                    )->a( n = `press`             v = client->_event( val = `PRESS` t_arg = VALUE #( ( `${$source>/title}` ) ) )
+                    )->a( n = `close`             v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Closed: {0}` ) ( `${$source>/title}` ) ) )
+                    )->a( n = `press`             v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                     )->a( n = `authorName`        v = `Patricia Clark`
                     )->a( n = `authorInitials`    v = `PC`
                     )->a( n = `authorAvatarColor` v = `Accent8`
                     )->open( `buttons`
                         )->leaf( `Button`
                             )->a( n = `text`  v = `Accept`
-                            )->a( n = `press` v = client->_event( `ACCEPT` )
+                            )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Accept Button Pressed` ) ) )
                             )->a( n = `icon`  v = `sap-icon://accept`
                         )->leaf( `Button`
                             )->a( n = `text`  v = `Reject`
-                            )->a( n = `press` v = client->_event( `REJECT` )
+                            )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Reject Button Pressed` ) ) )
                             )->a( n = `icon`  v = `sap-icon://sys-cancel`
 
                     )->shut(
@@ -116,8 +113,8 @@ CLASS z2ui5_cl_ai_app_076 IMPLEMENTATION.
                     )->a( n = `datetime`          v = `3 days`
                     )->a( n = `unread`            v = `true`
                     )->a( n = `priority`          v = `Medium`
-                    )->a( n = `close`             v = client->_event( val = `CLOSE` t_arg = VALUE #( ( `${$source>/title}` ) ) )
-                    )->a( n = `press`             v = client->_event( val = `PRESS` t_arg = VALUE #( ( `${$source>/title}` ) ) )
+                    )->a( n = `close`             v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Closed: {0}` ) ( `${$source>/title}` ) ) )
+                    )->a( n = `press`             v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                     )->a( n = `authorName`        v = `John Smith`
                     )->a( n = `authorInitials`    v = `JS`
                     )->a( n = `authorAvatarColor` v = `Accent4`
@@ -131,8 +128,8 @@ CLASS z2ui5_cl_ai_app_076 IMPLEMENTATION.
                     )->a( n = `datetime`        v = `3 days`
                     )->a( n = `unread`          v = `true`
                     )->a( n = `priority`        v = `Low`
-                    )->a( n = `close`           v = client->_event( val = `CLOSE` t_arg = VALUE #( ( `${$source>/title}` ) ) )
-                    )->a( n = `press`           v = client->_event( val = `PRESS` t_arg = VALUE #( ( `${$source>/title}` ) ) )
+                    )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Closed: {0}` ) ( `${$source>/title}` ) ) )
+                    )->a( n = `press`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                     )->a( n = `authorName`      v = `John Smith`
                     )->a( n = `authorPicture`   v = `test-resources/sap/m/images/headerImg2.jpg`
 
@@ -147,15 +144,15 @@ CLASS z2ui5_cl_ai_app_076 IMPLEMENTATION.
                     )->a( n = `datetime`        v = `2 day`
                     )->a( n = `unread`          v = `false`
                     )->a( n = `priority`        v = `Low`
-                    )->a( n = `close`           v = client->_event( val = `CLOSE` t_arg = VALUE #( ( `${$source>/title}` ) ) )
-                    )->a( n = `press`           v = client->_event( val = `PRESS` t_arg = VALUE #( ( `${$source>/title}` ) ) )
+                    )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Closed: {0}` ) ( `${$source>/title}` ) ) )
+                    )->a( n = `press`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                     )->a( n = `authorName`      v = `Jean Doe`
                     )->a( n = `authorPicture`   v = `test-resources/sap/m/images/Woman_04.png`
                     )->a( n = `truncate`        v = `false`
                     )->open( `buttons`
                         )->leaf( `Button`
                             )->a( n = `text`  v = `Accept`
-                            )->a( n = `press` v = client->_event( `ACCEPT` )
+                            )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Accept Button Pressed` ) ) )
 
                     )->shut(
                 )->shut(
@@ -171,8 +168,8 @@ CLASS z2ui5_cl_ai_app_076 IMPLEMENTATION.
                     )->a( n = `datetime`           v = `2 day`
                     )->a( n = `unread`             v = `false`
                     )->a( n = `priority`           v = `Low`
-                    )->a( n = `close`              v = client->_event( val = `CLOSE` t_arg = VALUE #( ( `${$source>/title}` ) ) )
-                    )->a( n = `press`              v = client->_event( val = `PRESS` t_arg = VALUE #( ( `${$source>/title}` ) ) )
+                    )->a( n = `close`              v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Closed: {0}` ) ( `${$source>/title}` ) ) )
+                    )->a( n = `press`              v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                     )->a( n = `authorName`         v = `Jean Doe`
                     )->a( n = `authorPicture`      v = `test-resources/sap/m/images/Woman_04.png`
                     )->a( n = `hideShowMoreButton` v = `true`
@@ -180,10 +177,10 @@ CLASS z2ui5_cl_ai_app_076 IMPLEMENTATION.
                     )->open( `buttons`
                         )->leaf( `Button`
                             )->a( n = `text`  v = `Accept`
-                            )->a( n = `press` v = client->_event( `ACCEPT` )
+                            )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Accept Button Pressed` ) ) )
                         )->leaf( `Button`
                             )->a( n = `text`  v = `Reject`
-                            )->a( n = `press` v = client->_event( `REJECT` )
+                            )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Reject Button Pressed` ) ) )
 
                     )->shut(
                 )->shut(
@@ -194,22 +191,22 @@ CLASS z2ui5_cl_ai_app_076 IMPLEMENTATION.
                     )->a( n = `unread`          v = `false`
                     )->a( n = `datetime`        v = `3 days`
                     )->a( n = `priority`        v = `High`
-                    )->a( n = `close`           v = client->_event( val = `CLOSE` t_arg = VALUE #( ( `${$source>/title}` ) ) )
-                    )->a( n = `press`           v = client->_event( val = `PRESS` t_arg = VALUE #( ( `${$source>/title}` ) ) )
+                    )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Closed: {0}` ) ( `${$source>/title}` ) ) )
+                    )->a( n = `press`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                     )->a( n = `authorName`      v = `Patricia Clark`
                     )->a( n = `authorPicture`   v = `test-resources/sap/m/images/female_BaySu.jpg`
                     )->open( `buttons`
                         )->leaf( `Button`
                             )->a( n = `text`  v = `Accept`
-                            )->a( n = `press` v = client->_event( `ACCEPT` )
+                            )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Accept Button Pressed` ) ) )
                             )->a( n = `icon`  v = `sap-icon://accept`
                         )->leaf( `Button`
                             )->a( n = `text`  v = `Reject`
-                            )->a( n = `press` v = client->_event( `REJECT` )
+                            )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Reject Button Pressed` ) ) )
                             )->a( n = `icon`  v = `sap-icon://sys-cancel`
                         )->leaf( `Button`
                             )->a( n = `text`  v = `Get Error`
-                            )->a( n = `press` v = client->_event( `ERROR` )
+                            )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Error: Something went wrong.` ) ) )
                             )->a( n = `icon`  v = `sap-icon://sys-cancel`
 
                     )->shut(
@@ -221,33 +218,13 @@ CLASS z2ui5_cl_ai_app_076 IMPLEMENTATION.
                     )->a( n = `unread`          v = `false`
                     )->a( n = `datetime`        v = `3 days`
                     )->a( n = `priority`        v = `High`
-                    )->a( n = `close`           v = client->_event( val = `CLOSE` t_arg = VALUE #( ( `${$source>/title}` ) ) )
-                    )->a( n = `press`           v = client->_event( val = `PRESS` t_arg = VALUE #( ( `${$source>/title}` ) ) )
+                    )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Closed: {0}` ) ( `${$source>/title}` ) ) )
+                    )->a( n = `press`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
 
             )->shut(
         )->shut( ).
 
     client->view_display( view->stringify( ) ).
-
-  ENDMETHOD.
-
-
-  METHOD on_event.
-
-    CASE client->get( )-event.
-      WHEN `PRESS`.
-        client->message_toast_display( |Item Pressed: { client->get_event_arg( ) }| ).
-      WHEN `CLOSE`.
-        " the original's onItemClose also removes the item from the list (client-side removeItem) - not mirrored server-side for the static list
-        client->message_toast_display( |Item Closed: { client->get_event_arg( ) }| ).
-      WHEN `ACCEPT`.
-        client->message_toast_display( `Accept Button Pressed` ).
-      WHEN `REJECT`.
-        client->message_toast_display( `Reject Button Pressed` ).
-      WHEN `ERROR`.
-        " the original's onErrorPress attaches a processingMessage MessageStrip to the item - shown here as a toast
-        client->message_toast_display( `Error: Something went wrong.` ).
-    ENDCASE.
 
   ENDMETHOD.
 

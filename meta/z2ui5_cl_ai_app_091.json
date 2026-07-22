@@ -6,7 +6,8 @@
   "batch": "b11",
   "audit": {
     "frontend_action": true,
-    "event_t_arg": true
+    "event_t_arg": true,
+    "note": "openBy is roundtrip-free via _event_client( control_by_id, openBy ) and the change toast composes `Time selected: {0}` via control_global MESSAGE_TOAST.show - both roundtrip-free, so the app is init-only"
   },
   "status": "generated",
   "checked": null,
@@ -21,11 +22,15 @@
     },
     {
       "type": "NOTE",
-      "what": "the hidden TimePicker openBy is wired roundtrip-free via client->_event_client( cs_event-control_by_id, openBy ) on each anchor press ($event.oSource.sId) - the original's byId('HiddenTP').openBy(getDomRef()) 1:1; only the change toast keeps its round-trip."
+      "what": "the hidden TimePicker openBy is wired roundtrip-free via client->_event_client( cs_event-control_by_id, openBy ) on each anchor press ($event.oSource.sId) - the original's byId('HiddenTP').openBy(getDomRef()) 1:1; the change toast is now roundtrip-free too (control_global MESSAGE_TOAST.show), so the app is init-only."
     },
     {
       "type": "LIVE_TEST",
       "what": "the openBy was switched to roundtrip-free _event_client on 2026-07-22 - re-verify each anchor opens the hidden TimePicker."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "the change toast was switched to a roundtrip-free client-composed toast on 2026-07-22 (control_global MESSAGE_TOAST.show, template `Time selected: {0}` filled by ${$parameters>/value}; on_event dropped, init-only) - re-verify picking a time toasts \"Time selected: <value>\"."
     }
   ]
 }

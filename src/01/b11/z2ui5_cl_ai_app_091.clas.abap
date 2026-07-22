@@ -7,7 +7,6 @@ CLASS z2ui5_cl_ai_app_091 DEFINITION PUBLIC.
     DATA client TYPE REF TO z2ui5_if_client.
 
     METHODS view_display.
-    METHODS on_event.
 
   PRIVATE SECTION.
 ENDCLASS.
@@ -20,8 +19,6 @@ CLASS z2ui5_cl_ai_app_091 IMPLEMENTATION.
     me->client = client.
     IF client->check_on_init( ).
       view_display( ).
-    ELSEIF client->check_on_event( ).
-      on_event( ).
     ENDIF.
 
   ENDMETHOD.
@@ -75,19 +72,9 @@ CLASS z2ui5_cl_ai_app_091 IMPLEMENTATION.
         )->leaf( `TimePicker`
             )->a( n = `id`        v = `HiddenTP`
             )->a( n = `hideInput` v = `true`
-            )->a( n = `change`    v = client->_event( val = `CHANGE` t_arg = VALUE #( ( `${$parameters>/value}` ) ) ) ).
+            )->a( n = `change`    v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Time selected: {0}` ) ( `${$parameters>/value}` ) ) ) ).
 
     client->view_display( view->stringify( ) ).
-
-  ENDMETHOD.
-
-
-  METHOD on_event.
-
-    CASE client->get( )-event.
-      WHEN `CHANGE`.
-        client->message_toast_display( |Time selected: { client->get_event_arg( ) }| ).
-    ENDCASE.
 
   ENDMETHOD.
 

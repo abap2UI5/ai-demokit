@@ -5,8 +5,9 @@
   "file": "src/01/b01/z2ui5_cl_ai_app_003.clas.abap",
   "batch": "b01",
   "audit": {
-    "frontend_action": false,
-    "event_t_arg": true
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "each breadcrumb link toasts `{0} has been activated` roundtrip-free via control_global MESSAGE_TOAST.show ({0} filled by ${$source>/text}); the app is now init-only"
   },
   "status": "checked",
   "checked": {
@@ -17,6 +18,10 @@
     {
       "type": "NOTE",
       "what": "the original wires a change handler on the separator Select (SEP_CHANGE round-trip, removed 2026-07-16): selectedKey and separatorStyle share one two-way model path, so the Select.change attribute is deliberately MISSING vs the original view. Instant switching confirmed in the 2026-07-20 live check (restamp)."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "the link toast was switched from a message_toast_display round-trip to a roundtrip-free client-composed toast on 2026-07-22 (control_global MESSAGE_TOAST.show, template `{0} has been activated` filled by ${$source>/text}; on_event dropped) - re-verify each breadcrumb link toasts \"<text> has been activated\"."
     }
   ]
 }

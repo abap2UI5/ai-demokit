@@ -90,8 +90,11 @@ Both apps lose their `on_event` entirely and become **init-only**.
   round-trip `message_toast_display` / `message_box_display` when needed.
 - Placeholders are substituted verbatim (`String(value)`); an out-of-range
   `{n}` is left in place.
-- Converted so far: **005, 060, 061, 077** (all init-only). Further client-arg
-  toasts (003, 025, 049, 074, 076, 091) are straightforward follow-ups — each
-  adds a `LIVE_TEST`, so they are left for a batch pass. Toasts whose text is
-  computed server-side or drives a model mutation (008, 019, 024, 047, 080, 085)
-  correctly keep their round-trip.
+- Converted so far (all init-only): **003, 005, 016, 060, 061, 074, 076, 077,
+  091**. Kept on their round-trip on purpose: text computed server-side or
+  driving a model mutation (008, 019, 024, 025's action branch, 047, 080, 085);
+  and **049** — its template `Value changed to '{0}'` contains single quotes,
+  which `get_t_arg`'s `'…'` JS-string wrapping does not escape, so it would emit
+  broken JS. Escaping `'`/`\` in `get_t_arg`'s quoted branch is a small, general
+  robustness fix that would unblock 049 (and any toast with an apostrophe) —
+  filed here as the next framework step.

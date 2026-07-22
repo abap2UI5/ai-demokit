@@ -15,7 +15,6 @@ CLASS z2ui5_cl_ai_app_003 DEFINITION PUBLIC.
     DATA client TYPE REF TO z2ui5_if_client.
 
     METHODS view_display.
-    METHODS on_event.
     METHODS model_init.
 
   PRIVATE SECTION.
@@ -30,8 +29,6 @@ CLASS z2ui5_cl_ai_app_003 IMPLEMENTATION.
     IF client->check_on_init( ).
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_event( ).
-      on_event( ).
     ENDIF.
 
   ENDMETHOD.
@@ -57,28 +54,22 @@ CLASS z2ui5_cl_ai_app_003 IMPLEMENTATION.
                     )->a( n = `separatorStyle`      v = client->_bind( selected )
 
                     )->leaf( `Link`
-                        )->a( n = `press` v = client->_event( val   = `LINK_PRESS`
-                                                              t_arg = VALUE #( ( `${$source>/text}` ) ) )
+                        )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} has been activated` ) ( `${$source>/text}` ) ) )
                         )->a( n = `text`  v = `Products`
                     )->leaf( `Link`
-                        )->a( n = `press` v = client->_event( val   = `LINK_PRESS`
-                                                              t_arg = VALUE #( ( `${$source>/text}` ) ) )
+                        )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} has been activated` ) ( `${$source>/text}` ) ) )
                         )->a( n = `text`  v = `Suppliers`
                     )->leaf( `Link`
-                        )->a( n = `press` v = client->_event( val   = `LINK_PRESS`
-                                                              t_arg = VALUE #( ( `${$source>/text}` ) ) )
+                        )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} has been activated` ) ( `${$source>/text}` ) ) )
                         )->a( n = `text`  v = `Titanium`
                     )->leaf( `Link`
-                        )->a( n = `press` v = client->_event( val   = `LINK_PRESS`
-                                                              t_arg = VALUE #( ( `${$source>/text}` ) ) )
+                        )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} has been activated` ) ( `${$source>/text}` ) ) )
                         )->a( n = `text`  v = `Ultra portable`
                     )->leaf( `Link`
-                        )->a( n = `press` v = client->_event( val   = `LINK_PRESS`
-                                                              t_arg = VALUE #( ( `${$source>/text}` ) ) )
+                        )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} has been activated` ) ( `${$source>/text}` ) ) )
                         )->a( n = `text`  v = `12 inch`
                     )->leaf( `Link`
-                        )->a( n = `press` v = client->_event( val   = `LINK_PRESS`
-                                                              t_arg = VALUE #( ( `${$source>/text}` ) ) )
+                        )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} has been activated` ) ( `${$source>/text}` ) ) )
                         )->a( n = `text`  v = `Super portable deluxe`
 
                 )->shut(
@@ -103,18 +94,6 @@ CLASS z2ui5_cl_ai_app_003 IMPLEMENTATION.
                                 )->a( n = `text` v = `{TEXT}` ).
 
     client->view_display( view->stringify( ) ).
-
-  ENDMETHOD.
-
-
-  METHOD on_event.
-
-    CASE client->get( )-event.
-
-      WHEN `LINK_PRESS`.
-        client->message_toast_display( |{ client->get_event_arg( ) } has been activated| ).
-
-    ENDCASE.
 
   ENDMETHOD.
 

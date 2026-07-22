@@ -5,8 +5,9 @@
   "file": "src/01/b09/z2ui5_cl_ai_app_076.clas.abap",
   "batch": "b09",
   "audit": {
-    "frontend_action": false,
-    "event_t_arg": true
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "press/close compose `Item Pressed: {0}`/`Item Closed: {0}` (+ ${$source>/title}); accept/reject/error are static control_global toasts - all roundtrip-free, so the app is init-only"
   },
   "status": "generated",
   "checked": null,
@@ -14,6 +15,10 @@
     {
       "type": "IMPROVISED",
       "what": "the notifications are static (not model-bound), so onItemClose's client-side removeItem is not mirrored (close fires a toast only); onErrorPress's setProcessingMessage MessageStrip on the item is shown as a toast."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "all toasts were switched to roundtrip-free client-composed control_global toasts on 2026-07-22 (the app is now init-only) - re-verify press/close/accept/reject/error each toast their text."
     }
   ]
 }

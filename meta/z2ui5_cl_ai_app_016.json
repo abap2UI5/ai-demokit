@@ -6,7 +6,8 @@
   "batch": "b05",
   "audit": {
     "frontend_action": true,
-    "event_t_arg": true
+    "event_t_arg": true,
+    "note": "openBy is now wired roundtrip-free in the view via _event_client( control_by_id, openBy, $event.oSource.sId ) (was a follow_up_action round-trip); the date-changed toast composes `Date selected: {0}` via control_global MESSAGE_TOAST.show - so the app is init-only"
   },
   "status": "checked",
   "checked": {
@@ -14,6 +15,10 @@
     "note": "verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed); live-checked reference example for: frontend action (openBy/domRef), $event.oSource.sId anchor transport, POST_171 discipline"
   },
   "deviations": [
+    {
+      "type": "LIVE_TEST",
+      "what": "on 2026-07-22 both interactions went roundtrip-free (openBy via _event_client instead of follow_up_action; date-changed toast client-composed via control_global) and the app became init-only - re-verify each anchor opens the hidden DatePicker and picking a date toasts \"Date selected: <value>\"."
+    },
     {
       "type": "POST_171",
       "what": "Button.ariaHasPopup (since UI5 1.84) is newer than 1.71 but kept for the 1:1 port on both Buttons - the app needs a UI5 release >= 1.84 to render it."

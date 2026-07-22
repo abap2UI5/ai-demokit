@@ -5,8 +5,9 @@
   "file": "src/01/b09/z2ui5_cl_ai_app_074.clas.abap",
   "batch": "b09",
   "audit": {
-    "frontend_action": false,
-    "event_t_arg": true
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "the list-item press toasts `Pressed : {0}` roundtrip-free via control_global MESSAGE_TOAST.show ({0} filled by ${NAME}); the app is now init-only"
   },
   "status": "generated",
   "checked": null,
@@ -14,6 +15,10 @@
     {
       "type": "IMPROVISED",
       "what": "the ObjectStatus '.formatter.status' (Status -> ValueState) is precomputed into the STATUS_STATE model field (Available->Success, Out of Stock->Warning, Discontinued->Error, else None)."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "the press toast was switched to a roundtrip-free client-composed toast on 2026-07-22 (control_global MESSAGE_TOAST.show, template `Pressed : {0}` filled by ${NAME}; on_event dropped, init-only) - re-verify pressing an item toasts \"Pressed : <name>\"."
     }
   ]
 }

@@ -23,7 +23,6 @@ CLASS z2ui5_cl_ai_app_074 DEFINITION PUBLIC.
     DATA client TYPE REF TO z2ui5_if_client.
 
     METHODS view_display.
-    METHODS on_event.
     METHODS model_init.
 
   PRIVATE SECTION.
@@ -38,8 +37,6 @@ CLASS z2ui5_cl_ai_app_074 IMPLEMENTATION.
     IF client->check_on_init( ).
       model_init( ).
       view_display( ).
-    ELSEIF client->check_on_event( ).
-      on_event( ).
     ENDIF.
 
   ENDMETHOD.
@@ -60,7 +57,7 @@ CLASS z2ui5_cl_ai_app_074 IMPLEMENTATION.
             )->open( `ObjectListItem`
                 )->a( n = `title`      v = `{NAME}`
                 )->a( n = `type`       v = `Active`
-                )->a( n = `press`      v = client->_event( val = `PRESS` t_arg = VALUE #( ( `${NAME}` ) ) )
+                )->a( n = `press`      v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Pressed : {0}` ) ( `${NAME}` ) ) )
                 )->a( n = `number`     v = |\{ parts:[\{path:'PRICE'\},\{path:'CURRENCY_CODE'\}], type: 'sap.ui.model.type.Currency', formatOptions: \{showMeasure: false\} \}|
                 )->a( n = `numberUnit` v = `{CURRENCY_CODE}`
 
@@ -80,17 +77,6 @@ CLASS z2ui5_cl_ai_app_074 IMPLEMENTATION.
         )->shut( ).
 
     client->view_display( view->stringify( ) ).
-
-  ENDMETHOD.
-
-
-  METHOD on_event.
-
-    CASE client->get( )-event.
-      WHEN `PRESS`.
-        " the original's onListItemPress - MessageToast.show("Pressed : " + title)
-        client->message_toast_display( |Pressed : { client->get_event_arg( ) }| ).
-    ENDCASE.
 
   ENDMETHOD.
 
