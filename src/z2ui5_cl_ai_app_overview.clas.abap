@@ -653,11 +653,13 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                             )->shut(
                         )->shut(
                     )->shut(
+                )->shut(
 
-                    " tree view (module -> control -> sample) - shown instead of the
-                    " table when the header Switch is on (client-side visible binding);
-                    " numberOfExpandedLevels expands every level by default
-                    )->open( `Tree`
+                " tree view (module -> control -> sample) - shown instead of the
+                " table when the header Switch is on (client-side visible binding);
+                " numberOfExpandedLevels expands every level by default; sibling of
+                " the Table under the Page (NOT nested in the Table's items)
+                )->open( `Tree`
                         )->a( n = `id`      v = `idOverviewTree`
                         )->a( n = `visible` v = |\{= ${ client->_bind( show_tree ) } \}|
                         )->a( n = `items`   v = |\{ path: '{ client->_bind( val = t_tree path = abap_true ) }', parameters: \{ numberOfExpandedLevels: 10 \} \}|
