@@ -9,6 +9,7 @@
     "coverage": "node scripts/generate-coverage.mjs",
     "smoke": "node scripts/render-smoke.mjs --strict",
     "e2e:build": "node scripts/e2e-build.mjs",
+    "e2e:serve": "node ${A2UI5_HOME:-../abap2UI5}/node/srv/express.mjs",
     "e2e": "node scripts/e2e-smoke.mjs --strict",
     "syfixes": "find . -type f -name '*.abap' -exec sed -i -e 's/ RAISE EXCEPTION TYPE cx_sy_itab_line_not_found/ ASSERT 1 = 0/g' {} + ",
     "abaplintpathfix": "sed -i 's|\"files\": \"/\\.\\.\\/\\.\\.\\/src\\/\\*\\*\\/\\*\\.\\*\"|\"files\": \"/src/**/*.*\"|g' abaplint.jsonc",
