@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_ai_app_083",
+  "sample": "sap.m.sample.StandardListItemAvatar",
+  "entity": "sap.m.StandardListItem",
+  "file": "src/01/b10/z2ui5_cl_ai_app_083.clas.abap",
+  "batch": "b10",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "the List element binding {/ProductCollection} and the items' index paths ({0/Name}..{3/Name}) are kept 1:1 against the default-model table /T_PRODUCTS (full 123-row mock inlined)."
+    }
+  ]
+}

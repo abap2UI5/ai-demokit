@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_ai_app_087",
+  "sample": "sap.m.sample.ContainerNoPadding",
+  "entity": "sap.ui.core.ContainerPadding",
+  "file": "src/01/b10/z2ui5_cl_ai_app_087.clas.abap",
+  "batch": "b10",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "the /ProductCollectionStats/Counts values are flattened to the default model fields /TOTAL, /OK, /HEAVY, /OVERWEIGHT (verbatim counts)."
+    }
+  ]
+}

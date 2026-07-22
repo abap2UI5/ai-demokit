@@ -9,7 +9,7 @@ CAPABILITIES.md._
 
 | Aspect | State |
 |---|---|
-| Ports | 77 / **403 in-scope** `sap.m` samples (19.1 %) — in scope = control exists since UI5 1.71 and is not deprecated; 43 of 446 samples are out of scope (16 deprecated, 21 newer, 6 without control metadata) |
+| Ports | 87 / **403 in-scope** `sap.m` samples (21.6 %) — in scope = control exists since UI5 1.71 and is not deprecated; 43 of 446 samples are out of scope (16 deprecated, 21 newer, 6 without control metadata) |
 | CI | ABAP_STANDARD, ABAP_CLOUD, ABAP_702 all green |
 | Structural view diff | **0 undeclared differences** across all 64 ports (`node scripts/structural-diff.mjs --strict`) — including simple **binding values** and, since 2026-07-19, **`id` attributes** (name-level per control type; dropped original ids must be restored or declared) |
 | Render smoke | **0 failing / 1 skipped** (`npm run smoke`): every reconstructable port's view loads in a real headless `XMLView.create`; app 049's skip is now a **declared, CI-enforced** `render_smoke.skip` (helper-method view building is not statically reconstructable — an undeclared non-reconstructable port now FAILS); harness carries `sap.f` and mocks scalar-row tables as empty arrays since b05 |
@@ -17,6 +17,28 @@ CAPABILITIES.md._
 | Meta sidecars | 67 in `meta/` — status: 21 `generated`, 41 `checked`, **5 `golden`** (401, 421, 454, 540, 543 — promoted 2026-07-20 after the full live check); deviations: 39 IMPROVISED, 34 POST_171, 81 NOTE, 3 DROPPED_171 (the `p:ColumnAIAction` plugin in apps 009/022/534 — a whole control newer than 1.71, unlike the restorable members). **0 LIVE_TEST** (b07/b08 menu + message-popover paths live-checked 2026-07-22) and **0 SUBSET_DATA** (retired 2026-07-22 — every port now inlines the full mock row set). `audit` is a structured object since 2026-07-18 |
 | Manually verified in a running system | **46 of 67 ports** — adds 060/061/066/067 (menu + MessagePopover, human live check 2026-07-22) to the 2026-07-20 checked set; the 21 remaining `generated` ports are b01–b04 apps that never carried an open question (machine-verified only) |
 | Archive | `ui5/sap.m/<SampleName>/` — full originals for the 44 ported samples (+2 cross-referenced: `FacetFilterSimple`, `Table`); mock snapshot in `ui5/mock/`. Unported samples are copied over batch by batch. |
+
+## Batch b10 generated (2026-07-22) — toolbars, tiles & lists (10 ports)
+
+Classes **078–087**, breadth-first NEW-CONTROL: 078 TileContent,
+079 TitleLink (`sap.m.Title`), 080 ToggleButton, 081 PullToRefresh,
+082 SlideTile, 083 StandardListItemAvatar (`sap.m.StandardListItem`),
+084 UrlHelper (`sap.m.URLHelper`), 085 TokenizerBasic (`sap.m.Tokenizer`),
+086 ToolbarDesign (`sap.m.OverflowToolbar`), 087 ContainerNoPadding
+(`sap.ui.core.ContainerPadding`, an IconTabBar demo). Machine-verified green
+(abaplint, validate-meta, pattern-lint, structural-diff `--strict`,
+property-check, render-smoke `--strict`); status `generated`.
+
+Notables: **083** keeps the original's `{/ProductCollection}` List element
+binding + `{0/Name}..{3/Name}` index item bindings against the full 123-row
+default-model table; **084** flattens `/SupplierCollection/0` to a `/S_SUPPLIER`
+record and maps the URLHelper tel/sms/email triggers to toasts (website →
+open_new_tab); **086** turns the Select `change` design/style handlers into
+two-way binds + an expression-binding `visible`; **087** flattens the
+`/ProductCollectionStats/Counts` to `/TOTAL /OK /HEAVY /OVERWEIGHT`.
+The two heaviest OverflowToolbar samples (OverflowToolbarFooter, full table +
+menu; OverflowToolbarTokenizer, many tokenizers + DateTimePicker/SegmentedButton)
+were left in the backlog for a dedicated effort rather than forced in.
 
 ## Batch b09 generated (2026-07-22) — objects, inputs & notifications (10 ports)
 
@@ -94,6 +116,7 @@ The 34 existing ports are retro-grouped into review batches — one subpackage
 | `b07` | Icon tabs, tile content, menus, list items & message strips | IconTabHeader, ImageContent, InputListItem, LabelProperties, LightBox, Menu, MenuButton, MessageStrip, NewsContent, NumericContent (classes 055–064) | — (machine-verified only) |
 | `b08` | Message popover (all three MessagePopover samples) | MessagePopoverMessageHandling (065), MessagePopover (066), MessagePopoverAsyncMessageHandling (067) | 065–067 (2026-07-22) |
 | `b09` | Objects, inputs & notifications | Slider, RadioButton, ProgressIndicator, ObjectIdentifier, ObjectNumber, ObjectAttributes, ObjectListItem, SelectList, NotificationListItem, NotificationListGroup (classes 068–077) | — (machine-verified only) |
+| `b10` | Toolbars, tiles & lists | TileContent, TitleLink, ToggleButton, PullToRefresh, SlideTile, StandardListItemAvatar, UrlHelper, TokenizerBasic, ToolbarDesign, ContainerNoPadding (classes 078–087) | — (machine-verified only) |
 
 New generation batches continue as `b08`, `b09`, … per the process in
 TRAINING.md.

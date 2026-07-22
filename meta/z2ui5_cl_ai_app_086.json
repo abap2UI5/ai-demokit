@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_ai_app_086",
+  "sample": "sap.m.sample.ToolbarDesign",
+  "entity": "sap.m.OverflowToolbar",
+  "file": "src/01/b10/z2ui5_cl_ai_app_086.clas.abap",
+  "batch": "b10",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "the Select `change` handlers onSelectDesign/onSelectStyle (setDesign/setStyle) become two-way bound design/style; bActionContext (design != Info) becomes an expression binding on the Buttons' visible."
+    }
+  ]
+}

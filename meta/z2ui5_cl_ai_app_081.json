@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_ai_app_081",
+  "sample": "sap.m.sample.PullToRefresh",
+  "entity": "sap.m.PullToRefresh",
+  "file": "src/01/b10/z2ui5_cl_ai_app_081.clas.abap",
+  "batch": "b10",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "the original simulates an incremental backend load (each pull pushes one more product into an initially empty model); the port binds the full /ProductCollection up front and refresh only toasts (the timed re-load + hide() is dropped)."
+    }
+  ]
+}

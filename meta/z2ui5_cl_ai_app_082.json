@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_ai_app_082",
+  "sample": "sap.m.sample.SlideTile",
+  "entity": "sap.m.SlideTile",
+  "file": "src/01/b10/z2ui5_cl_ai_app_082.clas.abap",
+  "batch": "b10",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "the sample's demo-kit backgroundImage paths are resolved to absolute sdk.openui5.org URLs."
+    }
+  ]
+}

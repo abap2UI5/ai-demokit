@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_ai_app_080",
+  "sample": "sap.m.sample.ToggleButton",
+  "entity": "sap.m.ToggleButton",
+  "file": "src/01/b10/z2ui5_cl_ai_app_080.clas.abap",
+  "batch": "b10",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "the pressed state arrives via ${$source>/pressed}; the toast drops the source control id (the original shows id + Pressed/Unpressed)."
+    }
+  ]
+}

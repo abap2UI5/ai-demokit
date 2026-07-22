@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_ai_app_084",
+  "sample": "sap.m.sample.UrlHelper",
+  "entity": "sap.m.URLHelper",
+  "file": "src/01/b10/z2ui5_cl_ai_app_084.clas.abap",
+  "batch": "b10",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "element binding kept 1:1 - a one-record structure /S_SUPPLIER instead of {/SupplierCollection/0}."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "URLHelper.triggerTel/triggerSms/triggerEmail have no server-side equivalent and become toasts; URLHelper.redirect (website) becomes the open_new_tab frontend action."
+    }
+  ]
+}

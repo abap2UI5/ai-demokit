@@ -1,0 +1,14 @@
+{
+  "class": "z2ui5_cl_ai_app_079",
+  "sample": "sap.m.sample.TitleLink",
+  "entity": "sap.m.Title",
+  "file": "src/01/b10/z2ui5_cl_ai_app_079.clas.abap",
+  "batch": "b10",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": []
+}

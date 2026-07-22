@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_ai_app_085",
+  "sample": "sap.m.sample.TokenizerBasic",
+  "entity": "sap.m.Tokenizer",
+  "file": "src/01/b10/z2ui5_cl_ai_app_085.clas.abap",
+  "batch": "b10",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "the tokens are kept as static XML (matching the original's initial tokens 1:1); the original's CheckBox `select` handler becomes a live two-way `selected`/editable bind, but Add and tokenDelete are shown as toasts (they do not mutate the static aggregation - a bound token model would be a port addition)."
+    }
+  ]
+}

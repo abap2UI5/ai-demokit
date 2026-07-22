@@ -1210,6 +1210,13 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` working in the 2026-07-20 live check.`
         post171 = `the ObjectStatus state values Indication06-Indication08 (since UI5 1.75) and Indication09-Indication20 (since UI5 1.120) are newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >=` &&
                  ` 1.120 to render them all (>= 1.75 for Indication06-Indication08).` )
+      ( module = `sap.m` control = `sap.m.OverflowToolbar`             name = `ToolbarDesign`                       class = `z2ui5_cl_ai_app_086` path = `src/01/b10/z2ui5_cl_ai_app_086.clas.abap`
+        score = 2
+        score_state = `Success`
+        score_tip = `Deviation from the original sample: 2 of 5 (1 improvised, 0 dropped). 1 = faithful 1:1, 5 = heavily reworked.`
+        since = `1.28`
+        notes = `IMPROVISED: the Select ``change`` handlers onSelectDesign/onSelectStyle (setDesign/setStyle) become two-way bound design/style; bActionContext (design != Info) becomes an expression binding on the` &&
+                 ` Buttons' visible.` )
       ( module = `sap.m` control = `sap.m.Panel`                       name = `PanelExpanded`                       class = `z2ui5_cl_ai_app_043` path = `src/01/b04/z2ui5_cl_ai_app_043.clas.abap`
         score = 1
         score_state = `Success`
@@ -1243,6 +1250,13 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` original's controller byId(...).setPercentValue/setDisplayValue calls. // POST-1.71: ProgressIndicator.displayAnimation (since UI5 1.73) is kept 1:1 on the no-animation ProgressIndicator; needs UI5` &&
                  ` >= 1.73.`
         post171 = `ProgressIndicator.displayAnimation (since UI5 1.73) is kept 1:1 on the no-animation ProgressIndicator; needs UI5 >= 1.73.` )
+      ( module = `sap.m` control = `sap.m.PullToRefresh`               name = `PullToRefresh`                       class = `z2ui5_cl_ai_app_081` path = `src/01/b10/z2ui5_cl_ai_app_081.clas.abap`
+        score = 2
+        score_state = `Success`
+        score_tip = `Deviation from the original sample: 2 of 5 (1 improvised, 0 dropped). 1 = faithful 1:1, 5 = heavily reworked.`
+        since = `1.9.2`
+        notes = `IMPROVISED: the original simulates an incremental backend load (each pull pushes one more product into an initially empty model); the port binds the full /ProductCollection up front and refresh only` &&
+                 ` toasts (the timed re-load + hide() is dropped).` )
       ( module = `sap.m` control = `sap.m.RadioButton`                 name = `RadioButton`                         class = `z2ui5_cl_ai_app_069` path = `src/01/b09/z2ui5_cl_ai_app_069.clas.abap`
         score = 1
         score_state = `Success`
@@ -1282,6 +1296,17 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 1
         score_state = `Success`
         score_tip = `Deviation from the original sample: 1 of 5 (0 improvised, 0 dropped). 1 = faithful 1:1, 5 = heavily reworked.` )
+      ( module = `sap.m` control = `sap.m.SlideTile`                   name = `SlideTile`                           class = `z2ui5_cl_ai_app_082` path = `src/01/b10/z2ui5_cl_ai_app_082.clas.abap`
+        score = 1
+        score_state = `Success`
+        score_tip = `Deviation from the original sample: 1 of 5 (0 improvised, 0 dropped). 1 = faithful 1:1, 5 = heavily reworked.`
+        since = `1.34`
+        notes = `NOTE: the sample's demo-kit backgroundImage paths are resolved to absolute sdk.openui5.org URLs.` )
+      ( module = `sap.m` control = `sap.m.StandardListItem`            name = `StandardListItemAvatar`              class = `z2ui5_cl_ai_app_083` path = `src/01/b10/z2ui5_cl_ai_app_083.clas.abap`
+        score = 1
+        score_state = `Success`
+        score_tip = `Deviation from the original sample: 1 of 5 (0 improvised, 0 dropped). 1 = faithful 1:1, 5 = heavily reworked.`
+        notes = `NOTE: the List element binding {/ProductCollection} and the items' index paths ({0/Name}..{3/Name}) are kept 1:1 against the default-model table /T_PRODUCTS (full 123-row mock inlined).` )
       ( module = `sap.m` control = `sap.m.StepInput`                   name = `StepInput`                           class = `z2ui5_cl_ai_app_049` path = `src/01/b02/z2ui5_cl_ai_app_049.clas.abap`
         score = 2
         score_state = `Success`
@@ -1303,6 +1328,28 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score_state = `Success`
         score_tip = `Deviation from the original sample: 1 of 5 (0 improvised, 0 dropped). 1 = faithful 1:1, 5 = heavily reworked.`
         since = `1.9.0` )
+      ( module = `sap.m` control = `sap.m.TileContent`                 name = `TileContent`                         class = `z2ui5_cl_ai_app_078` path = `src/01/b10/z2ui5_cl_ai_app_078.clas.abap`
+        score = 1
+        score_state = `Success`
+        score_tip = `Deviation from the original sample: 1 of 5 (0 improvised, 0 dropped). 1 = faithful 1:1, 5 = heavily reworked.`
+        since = `1.34.0` )
+      ( module = `sap.m` control = `sap.m.Title`                       name = `TitleLink`                           class = `z2ui5_cl_ai_app_079` path = `src/01/b10/z2ui5_cl_ai_app_079.clas.abap`
+        score = 1
+        score_state = `Success`
+        score_tip = `Deviation from the original sample: 1 of 5 (0 improvised, 0 dropped). 1 = faithful 1:1, 5 = heavily reworked.`
+        since = `1.27.0` )
+      ( module = `sap.m` control = `sap.m.ToggleButton`                name = `ToggleButton`                        class = `z2ui5_cl_ai_app_080` path = `src/01/b10/z2ui5_cl_ai_app_080.clas.abap`
+        score = 1
+        score_state = `Success`
+        score_tip = `Deviation from the original sample: 1 of 5 (0 improvised, 0 dropped). 1 = faithful 1:1, 5 = heavily reworked.`
+        notes = `NOTE: the pressed state arrives via ${$source>/pressed}; the toast drops the source control id (the original shows id + Pressed/Unpressed).` )
+      ( module = `sap.m` control = `sap.m.Tokenizer`                   name = `TokenizerBasic`                      class = `z2ui5_cl_ai_app_085` path = `src/01/b10/z2ui5_cl_ai_app_085.clas.abap`
+        score = 2
+        score_state = `Success`
+        score_tip = `Deviation from the original sample: 2 of 5 (1 improvised, 0 dropped). 1 = faithful 1:1, 5 = heavily reworked.`
+        since = `1.22`
+        notes = `IMPROVISED: the tokens are kept as static XML (matching the original's initial tokens 1:1); the original's CheckBox ``select`` handler becomes a live two-way ``selected``/editable bind, but Add and` &&
+                 ` tokenDelete are shown as toasts (they do not mutate the static aggregation - a bound token model would be a port addition).` )
       ( module = `sap.m` control = `sap.m.Toolbar`                     name = `ToolbarShrinkable`                   class = `z2ui5_cl_ai_app_053` path = `src/01/b03/z2ui5_cl_ai_app_053.clas.abap`
         score = 1
         score_state = `Success`
@@ -1316,7 +1363,19 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score_state = `Success`
         score_tip = `Deviation from the original sample: 1 of 5 (0 improvised, 0 dropped). 1 = faithful 1:1, 5 = heavily reworked.`
         since = `1.42`
-        checked = `CHECKED (2026-07-19): verified in a running system - human visual pass 2026-07-19 over all apps: the nested-table hierarchy renders as an expandable Tree like the original.` ) ).
+        checked = `CHECKED (2026-07-19): verified in a running system - human visual pass 2026-07-19 over all apps: the nested-table hierarchy renders as an expandable Tree like the original.` )
+      ( module = `sap.m` control = `sap.m.URLHelper`                   name = `UrlHelper`                           class = `z2ui5_cl_ai_app_084` path = `src/01/b10/z2ui5_cl_ai_app_084.clas.abap`
+        score = 2
+        score_state = `Success`
+        score_tip = `Deviation from the original sample: 2 of 5 (1 improvised, 0 dropped). 1 = faithful 1:1, 5 = heavily reworked.`
+        since = `1.10`
+        notes = `NOTE: element binding kept 1:1 - a one-record structure /S_SUPPLIER instead of {/SupplierCollection/0}. // IMPROVISED: URLHelper.triggerTel/triggerSms/triggerEmail have no server-side equivalent and` &&
+                 ` become toasts; URLHelper.redirect (website) becomes the open_new_tab frontend action.` )
+      ( module = `sap.m` control = `sap.ui.core.ContainerPadding`      name = `ContainerNoPadding`                  class = `z2ui5_cl_ai_app_087` path = `src/01/b10/z2ui5_cl_ai_app_087.clas.abap`
+        score = 1
+        score_state = `Success`
+        score_tip = `Deviation from the original sample: 1 of 5 (0 improvised, 0 dropped). 1 = faithful 1:1, 5 = heavily reworked.`
+        notes = `NOTE: the /ProductCollectionStats/Counts values are flattened to the default model fields /TOTAL, /OK, /HEAVY, /OVERWEIGHT (verbatim counts).` ) ).
 
   ENDMETHOD.
 
