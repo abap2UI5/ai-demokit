@@ -9,7 +9,7 @@ CAPABILITIES.md._
 
 | Aspect | State |
 |---|---|
-| Ports | 104 / **403 in-scope** `sap.m` samples (25.8 %) — in scope = control exists since UI5 1.71 and is not deprecated; 43 of 446 samples are out of scope (16 deprecated, 21 newer, 6 without control metadata) |
+| Ports | 107 / **403 in-scope** `sap.m` samples (26.6 %) — in scope = control exists since UI5 1.71 and is not deprecated; 43 of 446 samples are out of scope (16 deprecated, 21 newer, 6 without control metadata) |
 | CI | ABAP_STANDARD, ABAP_CLOUD, ABAP_702 all green |
 | Structural view diff | **0 undeclared differences** across all 64 ports (`node scripts/structural-diff.mjs --strict`) — including simple **binding values** and, since 2026-07-19, **`id` attributes** (name-level per control type; dropped original ids must be restored or declared) |
 | Render smoke | **0 failing / 0 skipped** (`npm run smoke`): every port's view loads in a real headless `XMLView.create` — incl. app 049, now reconstructed by the **handle-aware path** (`extractDocsWithHelpers`: a builder handle is a stack snapshot, a captured handle passed into a builder-returning helper is inlined re-anchored per call). The declared-skip mechanism stays as a CI-enforced safety net for any future idiom the reconstructor cannot rebuild (undeclared non-reconstructable = FAIL, stale declaration = FAIL); harness carries `sap.f` and mocks scalar-row tables as empty arrays since b05 |
@@ -17,6 +17,21 @@ CAPABILITIES.md._
 | Meta sidecars | 67 in `meta/` — status: 21 `generated`, 41 `checked`, **5 `golden`** (401, 421, 454, 540, 543 — promoted 2026-07-20 after the full live check); deviations: 39 IMPROVISED, 34 POST_171, 81 NOTE, 3 DROPPED_171 (the `p:ColumnAIAction` plugin in apps 009/022/534 — a whole control newer than 1.71, unlike the restorable members). **0 LIVE_TEST** (b07/b08 menu + message-popover paths live-checked 2026-07-22) and **0 SUBSET_DATA** (retired 2026-07-22 — every port now inlines the full mock row set). `audit` is a structured object since 2026-07-18 |
 | Manually verified in a running system | **46 of 67 ports** — adds 060/061/066/067 (menu + MessagePopover, human live check 2026-07-22) to the 2026-07-20 checked set; the 21 remaining `generated` ports are b01–b04 apps that never carried an open question (machine-verified only) |
 | Archive | `ui5/sap.m/<SampleName>/` — full originals for the 44 ported samples (+2 cross-referenced: `FacetFilterSimple`, `Table`); mock snapshot in `ui5/mock/`. Unported samples are copied over batch by batch. |
+
+## Batch b13 generated (2026-07-22) — sap.m.semantic pages (3 ports)
+
+The `sap.m.semantic` page family, all machine-green: **105**
+SemanticPageFullScreen (`FullscreenPage` + the full semantic-action set),
+**107** SemanticPage (`SplitContainer` master/detail with SortSelect bound to a
+2-row filter-type table, PagingButton, custom footer/share content) and **106**
+SemanticPageFloatingFooter (same with `floatingFooter='true'`). Each semantic
+action toasts its class name (passed as a t_arg literal); `positionChange` and
+custom-button presses transport `${$parameters>/newPosition}` /
+`$event.oSource.sId`. All interactive paths `LIVE_TEST`. No framework change
+needed. **Remaining in-scope NEW controls**: only the `PlanningCalendar` and
+`SinglePlanningCalendar` families are left — both need the date-object property
+support (CAPABILITIES 🔶, per-binding `Formatter.DateCreateObject`) and warrant
+a dedicated batch.
 
 ## Batch b12 generated (2026-07-22) — dialogs, pickers & master-detail (10 ports)
 
