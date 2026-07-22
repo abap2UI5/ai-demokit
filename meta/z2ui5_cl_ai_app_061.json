@@ -5,8 +5,9 @@
   "file": "src/01/b07/z2ui5_cl_ai_app_061.clas.abap",
   "batch": "b07",
   "audit": {
-    "frontend_action": false,
-    "event_t_arg": true
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "every event (press, itemSelected, defaultAction/-Accept, beforeMenuOpen) toasts roundtrip-free via control_global MESSAGE_TOAST.show - the two dynamic ones compose a template (`{0} Pressed` + $event.oSource.sId, `Action triggered on item: {0}` + ${$parameters>/item}.getText()), so the app is init-only"
   },
   "status": "checked",
   "checked": {
@@ -33,6 +34,10 @@
     {
       "type": "NOTE",
       "what": "live-verified 2026-07-22 - confirm in a running system that itemSelected/press/defaultAction/beforeMenuOpen all fire their toasts and that ${$parameters>/item}.getText() delivers the selected MenuItem text."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "all toasts were switched from message_toast_display round-trips to roundtrip-free client-composed control_global toasts on 2026-07-22 (the app is now init-only) - re-verify each button/menu still toasts its text."
     }
   ]
 }

@@ -5,8 +5,9 @@
   "file": "src/01/b09/z2ui5_cl_ai_app_077.clas.abap",
   "batch": "b09",
   "audit": {
-    "frontend_action": false,
-    "event_t_arg": true
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "press/close/accept/reject all toast roundtrip-free via control_global MESSAGE_TOAST.show - press/close compose a template (`Item Pressed: {0}`/`Closed: {0}` + ${$source>/title}), so the app is init-only (the client-side removeItem on close is still not mirrored, see below)"
   },
   "status": "generated",
   "checked": null,

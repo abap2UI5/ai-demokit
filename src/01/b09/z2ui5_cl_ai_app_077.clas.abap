@@ -7,7 +7,6 @@ CLASS z2ui5_cl_ai_app_077 DEFINITION PUBLIC.
     DATA client TYPE REF TO z2ui5_if_client.
 
     METHODS view_display.
-    METHODS on_event.
 
   PRIVATE SECTION.
 ENDCLASS.
@@ -20,8 +19,6 @@ CLASS z2ui5_cl_ai_app_077 IMPLEMENTATION.
     me->client = client.
     IF client->check_on_init( ).
       view_display( ).
-    ELSEIF client->check_on_event( ).
-      on_event( ).
     ENDIF.
 
   ENDMETHOD.
@@ -52,11 +49,11 @@ CLASS z2ui5_cl_ai_app_077 IMPLEMENTATION.
                 )->open( `NotificationListGroup`
                     )->a( n = `title`           v = `Orders`
                     )->a( n = `showCloseButton` v = `true`
-                    )->a( n = `close`           v = client->_event( val = `CLOSE` t_arg = VALUE #( ( `${$source>/title}` ) ) )
+                    )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Closed: {0}` ) ( `${$source>/title}` ) ) )
                     )->open( `buttons`
                         )->leaf( `Button`
                             )->a( n = `text`  v = `Accept All`
-                            )->a( n = `press` v = client->_event( `ACCEPT` )
+                            )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Accept Button Pressed` ) ) )
 
                     )->shut(
                     )->leaf( `NotificationListItem`
@@ -66,8 +63,8 @@ CLASS z2ui5_cl_ai_app_077 IMPLEMENTATION.
                         )->a( n = `datetime`        v = `1 hour`
                         )->a( n = `unread`          v = `true`
                         )->a( n = `priority`        v = `None`
-                        )->a( n = `close`           v = client->_event( val = `CLOSE` t_arg = VALUE #( ( `${$source>/title}` ) ) )
-                        )->a( n = `press`           v = client->_event( val = `PRESS` t_arg = VALUE #( ( `${$source>/title}` ) ) )
+                        )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Closed: {0}` ) ( `${$source>/title}` ) ) )
+                        )->a( n = `press`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                         )->a( n = `authorPicture`   v = `sap-icon://car-rental`
                         )->a( n = `authorAvatarColor` v = `Accent8`
                     )->open( `NotificationListItem`
@@ -78,17 +75,17 @@ CLASS z2ui5_cl_ai_app_077 IMPLEMENTATION.
                         )->a( n = `datetime`        v = `3 days`
                         )->a( n = `unread`          v = `true`
                         )->a( n = `priority`        v = `High`
-                        )->a( n = `close`           v = client->_event( val = `CLOSE` t_arg = VALUE #( ( `${$source>/title}` ) ) )
-                        )->a( n = `press`           v = client->_event( val = `PRESS` t_arg = VALUE #( ( `${$source>/title}` ) ) )
+                        )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Closed: {0}` ) ( `${$source>/title}` ) ) )
+                        )->a( n = `press`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                         )->a( n = `authorInitials`  v = `SF`
                         )->a( n = `authorAvatarColor` v = `Random`
                         )->open( `buttons`
                             )->leaf( `Button`
                                 )->a( n = `text`  v = `Accept`
-                                )->a( n = `press` v = client->_event( `ACCEPT` )
+                                )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Accept Button Pressed` ) ) )
                             )->leaf( `Button`
                                 )->a( n = `text`  v = `Reject`
-                                )->a( n = `press` v = client->_event( `REJECT` )
+                                )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Reject Button Pressed` ) ) )
 
                         )->shut(
                     )->shut(
@@ -99,17 +96,17 @@ CLASS z2ui5_cl_ai_app_077 IMPLEMENTATION.
                         )->a( n = `unread`          v = `false`
                         )->a( n = `datetime`        v = `3 days`
                         )->a( n = `priority`        v = `High`
-                        )->a( n = `close`           v = client->_event( val = `CLOSE` t_arg = VALUE #( ( `${$source>/title}` ) ) )
-                        )->a( n = `press`           v = client->_event( val = `PRESS` t_arg = VALUE #( ( `${$source>/title}` ) ) )
+                        )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Closed: {0}` ) ( `${$source>/title}` ) ) )
+                        )->a( n = `press`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                         )->a( n = `authorInitials`  v = `YR`
                         )->a( n = `authorAvatarColor` v = `Accent7`
                         )->open( `buttons`
                             )->leaf( `Button`
                                 )->a( n = `text`  v = `Accept`
-                                )->a( n = `press` v = client->_event( `ACCEPT` )
+                                )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Accept Button Pressed` ) ) )
                             )->leaf( `Button`
                                 )->a( n = `text`  v = `Reject`
-                                )->a( n = `press` v = client->_event( `REJECT` )
+                                )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Reject Button Pressed` ) ) )
 
                         )->shut(
                     )->shut(
@@ -119,14 +116,14 @@ CLASS z2ui5_cl_ai_app_077 IMPLEMENTATION.
                     )->a( n = `title`           v = `Orders`
                     )->a( n = `showCloseButton` v = `true`
                     )->a( n = `collapsed`       v = `true`
-                    )->a( n = `close`           v = client->_event( val = `CLOSE` t_arg = VALUE #( ( `${$source>/title}` ) ) )
+                    )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Closed: {0}` ) ( `${$source>/title}` ) ) )
                     )->open( `buttons`
                         )->leaf( `Button`
                             )->a( n = `text`  v = `Accept All`
-                            )->a( n = `press` v = client->_event( `ACCEPT` )
+                            )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Accept Button Pressed` ) ) )
                         )->leaf( `Button`
                             )->a( n = `text`  v = `Reject All`
-                            )->a( n = `press` v = client->_event( `REJECT` )
+                            )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Reject Button Pressed` ) ) )
 
                     )->shut(
                     )->leaf( `NotificationListItem`
@@ -136,8 +133,8 @@ CLASS z2ui5_cl_ai_app_077 IMPLEMENTATION.
                         )->a( n = `datetime`        v = `1 hour`
                         )->a( n = `unread`          v = `true`
                         )->a( n = `priority`        v = `None`
-                        )->a( n = `close`           v = client->_event( val = `CLOSE` t_arg = VALUE #( ( `${$source>/title}` ) ) )
-                        )->a( n = `press`           v = client->_event( val = `PRESS` t_arg = VALUE #( ( `${$source>/title}` ) ) )
+                        )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Closed: {0}` ) ( `${$source>/title}` ) ) )
+                        )->a( n = `press`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                         )->a( n = `authorInitials`  v = `BN`
                     )->open( `NotificationListItem`
                         )->a( n = `title`           v = `New order (#2524)`
@@ -146,16 +143,16 @@ CLASS z2ui5_cl_ai_app_077 IMPLEMENTATION.
                         )->a( n = `datetime`        v = `3 days`
                         )->a( n = `unread`          v = `true`
                         )->a( n = `priority`        v = `High`
-                        )->a( n = `close`           v = client->_event( val = `CLOSE` t_arg = VALUE #( ( `${$source>/title}` ) ) )
-                        )->a( n = `press`           v = client->_event( val = `PRESS` t_arg = VALUE #( ( `${$source>/title}` ) ) )
+                        )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Closed: {0}` ) ( `${$source>/title}` ) ) )
+                        )->a( n = `press`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                         )->a( n = `authorPicture`   v = `sap-icon://car-rental`
                         )->open( `buttons`
                             )->leaf( `Button`
                                 )->a( n = `text`  v = `Accept`
-                                )->a( n = `press` v = client->_event( `ACCEPT` )
+                                )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Accept Button Pressed` ) ) )
                             )->leaf( `Button`
                                 )->a( n = `text`  v = `Reject`
-                                )->a( n = `press` v = client->_event( `REJECT` )
+                                )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Reject Button Pressed` ) ) )
 
                         )->shut(
                     )->shut(
@@ -166,17 +163,17 @@ CLASS z2ui5_cl_ai_app_077 IMPLEMENTATION.
                         )->a( n = `unread`          v = `false`
                         )->a( n = `datetime`        v = `3 days`
                         )->a( n = `priority`        v = `High`
-                        )->a( n = `close`           v = client->_event( val = `CLOSE` t_arg = VALUE #( ( `${$source>/title}` ) ) )
-                        )->a( n = `press`           v = client->_event( val = `PRESS` t_arg = VALUE #( ( `${$source>/title}` ) ) )
+                        )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Closed: {0}` ) ( `${$source>/title}` ) ) )
+                        )->a( n = `press`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                         )->a( n = `authorInitials`  v = `YR`
                         )->a( n = `authorAvatarColor` v = `Accent7`
                         )->open( `buttons`
                             )->leaf( `Button`
                                 )->a( n = `text`  v = `Accept`
-                                )->a( n = `press` v = client->_event( `ACCEPT` )
+                                )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Accept Button Pressed` ) ) )
                             )->leaf( `Button`
                                 )->a( n = `text`  v = `Reject`
-                                )->a( n = `press` v = client->_event( `REJECT` )
+                                )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Reject Button Pressed` ) ) )
 
                         )->shut(
                     )->shut(
@@ -185,14 +182,14 @@ CLASS z2ui5_cl_ai_app_077 IMPLEMENTATION.
                 )->open( `NotificationListGroup`
                     )->a( n = `title`           v = `When 'Accept All' is pressed some of the notifications will show an error`
                     )->a( n = `showCloseButton` v = `true`
-                    )->a( n = `close`           v = client->_event( val = `CLOSE` t_arg = VALUE #( ( `${$source>/title}` ) ) )
+                    )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Closed: {0}` ) ( `${$source>/title}` ) ) )
                     )->open( `buttons`
                         )->leaf( `Button`
                             )->a( n = `text`  v = `Accept All`
-                            )->a( n = `press` v = client->_event( `ACCEPT` )
+                            )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Accept Button Pressed` ) ) )
                         )->leaf( `Button`
                             )->a( n = `text`  v = `Reject All`
-                            )->a( n = `press` v = client->_event( `REJECT` )
+                            )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Reject Button Pressed` ) ) )
 
                     )->shut(
                     )->leaf( `NotificationListItem`
@@ -202,8 +199,8 @@ CLASS z2ui5_cl_ai_app_077 IMPLEMENTATION.
                         )->a( n = `datetime`        v = `1 hour`
                         )->a( n = `unread`          v = `true`
                         )->a( n = `priority`        v = `None`
-                        )->a( n = `close`           v = client->_event( val = `CLOSE` t_arg = VALUE #( ( `${$source>/title}` ) ) )
-                        )->a( n = `press`           v = client->_event( val = `PRESS` t_arg = VALUE #( ( `${$source>/title}` ) ) )
+                        )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Closed: {0}` ) ( `${$source>/title}` ) ) )
+                        )->a( n = `press`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                         )->a( n = `authorPicture`   v = `sap-icon://car-rental`
                         )->a( n = `authorAvatarColor` v = `Accent8`
                     )->open( `NotificationListItem`
@@ -213,14 +210,14 @@ CLASS z2ui5_cl_ai_app_077 IMPLEMENTATION.
                         )->a( n = `datetime`        v = `3 days`
                         )->a( n = `unread`          v = `true`
                         )->a( n = `priority`        v = `High`
-                        )->a( n = `close`           v = client->_event( val = `CLOSE` t_arg = VALUE #( ( `${$source>/title}` ) ) )
-                        )->a( n = `press`           v = client->_event( val = `PRESS` t_arg = VALUE #( ( `${$source>/title}` ) ) )
+                        )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Closed: {0}` ) ( `${$source>/title}` ) ) )
+                        )->a( n = `press`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                         )->a( n = `authorPicture`   v = `sap-icon://car-rental`
                         )->a( n = `authorAvatarColor` v = `Accent8`
                         )->open( `buttons`
                             )->leaf( `Button`
                                 )->a( n = `text`  v = `Accept`
-                                )->a( n = `press` v = client->_event( `ACCEPT` )
+                                )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Accept Button Pressed` ) ) )
 
                         )->shut(
                     )->shut(
@@ -231,16 +228,16 @@ CLASS z2ui5_cl_ai_app_077 IMPLEMENTATION.
                         )->a( n = `unread`          v = `false`
                         )->a( n = `datetime`        v = `3 days`
                         )->a( n = `priority`        v = `High`
-                        )->a( n = `close`           v = client->_event( val = `CLOSE` t_arg = VALUE #( ( `${$source>/title}` ) ) )
-                        )->a( n = `press`           v = client->_event( val = `PRESS` t_arg = VALUE #( ( `${$source>/title}` ) ) )
+                        )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Closed: {0}` ) ( `${$source>/title}` ) ) )
+                        )->a( n = `press`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                         )->a( n = `authorInitials`  v = `BN`
                         )->open( `buttons`
                             )->leaf( `Button`
                                 )->a( n = `text`  v = `Accept`
-                                )->a( n = `press` v = client->_event( `ACCEPT` )
+                                )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Accept Button Pressed` ) ) )
                             )->leaf( `Button`
                                 )->a( n = `text`  v = `Reject`
-                                )->a( n = `press` v = client->_event( `REJECT` )
+                                )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Reject Button Pressed` ) ) )
 
                         )->shut(
                     )->shut(
@@ -249,7 +246,7 @@ CLASS z2ui5_cl_ai_app_077 IMPLEMENTATION.
                 )->open( `NotificationListGroup`
                     )->a( n = `title`           v = `Group with notifications without footer buttons`
                     )->a( n = `showCloseButton` v = `true`
-                    )->a( n = `close`           v = client->_event( val = `CLOSE` t_arg = VALUE #( ( `${$source>/title}` ) ) )
+                    )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Closed: {0}` ) ( `${$source>/title}` ) ) )
                     )->leaf( `NotificationListItem`
                         )->a( n = `title`           v = `New order (#2525)`
                         )->a( n = `description`     v = desc_long
@@ -257,8 +254,8 @@ CLASS z2ui5_cl_ai_app_077 IMPLEMENTATION.
                         )->a( n = `datetime`        v = `1 hour`
                         )->a( n = `unread`          v = `true`
                         )->a( n = `priority`        v = `None`
-                        )->a( n = `close`           v = client->_event( val = `CLOSE` t_arg = VALUE #( ( `${$source>/title}` ) ) )
-                        )->a( n = `press`           v = client->_event( val = `PRESS` t_arg = VALUE #( ( `${$source>/title}` ) ) )
+                        )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Closed: {0}` ) ( `${$source>/title}` ) ) )
+                        )->a( n = `press`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                         )->a( n = `authorPicture`   v = `sap-icon://car-rental`
                         )->a( n = `authorAvatarColor` v = `Accent8`
                     )->open( `NotificationListItem`
@@ -268,16 +265,16 @@ CLASS z2ui5_cl_ai_app_077 IMPLEMENTATION.
                         )->a( n = `datetime`        v = `3 days`
                         )->a( n = `unread`          v = `true`
                         )->a( n = `priority`        v = `High`
-                        )->a( n = `close`           v = client->_event( val = `CLOSE` t_arg = VALUE #( ( `${$source>/title}` ) ) )
-                        )->a( n = `press`           v = client->_event( val = `PRESS` t_arg = VALUE #( ( `${$source>/title}` ) ) )
+                        )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Closed: {0}` ) ( `${$source>/title}` ) ) )
+                        )->a( n = `press`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                         )->a( n = `authorInitials`  v = `BN`
                         )->open( `buttons`
                             )->leaf( `Button`
                                 )->a( n = `text`  v = `Accept`
-                                )->a( n = `press` v = client->_event( `ACCEPT` )
+                                )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Accept Button Pressed` ) ) )
                             )->leaf( `Button`
                                 )->a( n = `text`  v = `Reject`
-                                )->a( n = `press` v = client->_event( `REJECT` )
+                                )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Reject Button Pressed` ) ) )
 
                         )->shut(
                     )->shut(
@@ -286,24 +283,6 @@ CLASS z2ui5_cl_ai_app_077 IMPLEMENTATION.
         )->shut( ).
 
     client->view_display( view->stringify( ) ).
-
-  ENDMETHOD.
-
-
-  METHOD on_event.
-
-    CASE client->get( )-event.
-      WHEN `PRESS`.
-        client->message_toast_display( |Item Pressed: { client->get_event_arg( ) }| ).
-      WHEN `CLOSE`.
-        " the original's onItemClose also removes the item (client-side removeItem) - not mirrored server-side for the static list
-        client->message_toast_display( |Closed: { client->get_event_arg( ) }| ).
-      WHEN `ACCEPT`.
-        " group 3's 'Accept All' uses onAcceptErrors in the original (shows errors on some items) - simplified to the accept toast
-        client->message_toast_display( `Accept Button Pressed` ).
-      WHEN `REJECT`.
-        client->message_toast_display( `Reject Button Pressed` ).
-    ENDCASE.
 
   ENDMETHOD.
 

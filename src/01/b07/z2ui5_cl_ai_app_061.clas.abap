@@ -7,7 +7,6 @@ CLASS z2ui5_cl_ai_app_061 DEFINITION PUBLIC.
     DATA client TYPE REF TO z2ui5_if_client.
 
     METHODS view_display.
-    METHODS on_event.
 
   PRIVATE SECTION.
 ENDCLASS.
@@ -20,8 +19,6 @@ CLASS z2ui5_cl_ai_app_061 IMPLEMENTATION.
     me->client = client.
     IF client->check_on_init( ).
       view_display( ).
-    ELSEIF client->check_on_event( ).
-      on_event( ).
     ENDIF.
 
   ENDMETHOD.
@@ -49,8 +46,7 @@ CLASS z2ui5_cl_ai_app_061 IMPLEMENTATION.
                         )->open( `MenuItem`
                             )->a( n = `text`  v = `Edit`
                             )->a( n = `icon`  v = `sap-icon://edit`
-                            )->a( n = `press` v = client->_event( val   = `PRESS`
-                                                                  t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
+                            )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} Pressed` ) ( `$event.oSource.sId` ) ) )
                             )->open( `customData`
                                 )->leaf( n = `CustomData` ns = `core`
                                     )->a( n = `key`   v = `target`
@@ -61,13 +57,11 @@ CLASS z2ui5_cl_ai_app_061 IMPLEMENTATION.
                         )->leaf( `MenuItem`
                             )->a( n = `text`  v = `Save`
                             )->a( n = `icon`  v = `sap-icon://save`
-                            )->a( n = `press` v = client->_event( val   = `PRESS`
-                                                                  t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
+                            )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} Pressed` ) ( `$event.oSource.sId` ) ) )
                         )->leaf( `MenuItem`
                             )->a( n = `text`  v = `Open`
                             )->a( n = `icon`  v = `sap-icon://open-folder`
-                            )->a( n = `press` v = client->_event( val   = `PRESS`
-                                                                  t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
+                            )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} Pressed` ) ( `$event.oSource.sId` ) ) )
 
                     )->shut(
                 )->shut(
@@ -79,8 +73,7 @@ CLASS z2ui5_cl_ai_app_061 IMPLEMENTATION.
                 )->a( n = `useDefaultActionOnly` v = `true`
                 )->open( `menu`
                     )->open( `Menu`
-                        )->a( n = `itemSelected` v = client->_event( val   = `MENU_ACTION`
-                                                                     t_arg = VALUE #( ( `${$parameters>/item}.getText()` ) ) )
+                        )->a( n = `itemSelected` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` ) ( `${$parameters>/item}.getText()` ) ) )
                         )->open( `MenuItem`
                             )->a( n = `text` v = `basic`
                             )->a( n = `icon` v = `sap-icon://chalkboard`
@@ -126,8 +119,7 @@ CLASS z2ui5_cl_ai_app_061 IMPLEMENTATION.
                 )->a( n = `useDefaultActionOnly` v = `true`
                 )->open( `menu`
                     )->open( `Menu`
-                        )->a( n = `itemSelected` v = client->_event( val   = `MENU_ACTION`
-                                                                     t_arg = VALUE #( ( `${$parameters>/item}.getText()` ) ) )
+                        )->a( n = `itemSelected` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` ) ( `${$parameters>/item}.getText()` ) ) )
                         )->open( `MenuItem`
                             )->a( n = `text` v = `basic`
                             )->a( n = `icon` v = `sap-icon://chalkboard`
@@ -164,8 +156,7 @@ CLASS z2ui5_cl_ai_app_061 IMPLEMENTATION.
                 )->a( n = `text` v = `File`
                 )->open( `menu`
                     )->open( `Menu`
-                        )->a( n = `itemSelected` v = client->_event( val   = `MENU_ACTION`
-                                                                     t_arg = VALUE #( ( `${$parameters>/item}.getText()` ) ) )
+                        )->a( n = `itemSelected` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` ) ( `${$parameters>/item}.getText()` ) ) )
                         )->leaf( `MenuItem`
                             )->a( n = `text` v = `Edit`
                             )->a( n = `icon` v = `sap-icon://edit`
@@ -185,12 +176,11 @@ CLASS z2ui5_cl_ai_app_061 IMPLEMENTATION.
             )->open( `MenuButton`
                 )->a( n = `text`           v = `File Menu`
                 )->a( n = `buttonMode`     v = `Split`
-                )->a( n = `defaultAction`  v = client->_event( `DEFAULT_ACTION` )
-                )->a( n = `beforeMenuOpen` v = client->_event( `BEFORE_MENU_OPEN` )
+                )->a( n = `defaultAction`  v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Default action triggered` ) ) )
+                )->a( n = `beforeMenuOpen` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `beforeMenuOpen is fired` ) ) )
                 )->open( `menu`
                     )->open( `Menu`
-                        )->a( n = `itemSelected` v = client->_event( val   = `MENU_ACTION`
-                                                                     t_arg = VALUE #( ( `${$parameters>/item}.getText()` ) ) )
+                        )->a( n = `itemSelected` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` ) ( `${$parameters>/item}.getText()` ) ) )
                         )->leaf( `MenuItem`
                             )->a( n = `text` v = `Edit`
                             )->a( n = `icon` v = `sap-icon://edit`
@@ -210,12 +200,11 @@ CLASS z2ui5_cl_ai_app_061 IMPLEMENTATION.
             )->open( `MenuButton`
                 )->a( n = `text`           v = `File Menu`
                 )->a( n = `buttonMode`     v = `Split`
-                )->a( n = `defaultAction`  v = client->_event( `DEFAULT_ACTION` )
-                )->a( n = `beforeMenuOpen` v = client->_event( `BEFORE_MENU_OPEN` )
+                )->a( n = `defaultAction`  v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Default action triggered` ) ) )
+                )->a( n = `beforeMenuOpen` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `beforeMenuOpen is fired` ) ) )
                 )->open( `menu`
                     )->open( `Menu`
-                        )->a( n = `itemSelected` v = client->_event( val   = `MENU_ACTION`
-                                                                     t_arg = VALUE #( ( `${$parameters>/item}.getText()` ) ) )
+                        )->a( n = `itemSelected` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` ) ( `${$parameters>/item}.getText()` ) ) )
                         )->leaf( `MenuItem`
                             )->a( n = `text` v = `Edit`
                             )->a( n = `icon` v = `sap-icon://edit`
@@ -235,13 +224,12 @@ CLASS z2ui5_cl_ai_app_061 IMPLEMENTATION.
             )->open( `MenuButton`
                 )->a( n = `text`                v = `File Menu`
                 )->a( n = `buttonMode`          v = `Split`
-                )->a( n = `defaultAction`       v = client->_event( `DEFAULT_ACTION` )
-                )->a( n = `beforeMenuOpen`      v = client->_event( `BEFORE_MENU_OPEN` )
+                )->a( n = `defaultAction`       v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Default action triggered` ) ) )
+                )->a( n = `beforeMenuOpen`      v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `beforeMenuOpen is fired` ) ) )
                 )->a( n = `useDefaultActionOnly` v = `true`
                 )->open( `menu`
                     )->open( `Menu`
-                        )->a( n = `itemSelected` v = client->_event( val   = `MENU_ACTION`
-                                                                     t_arg = VALUE #( ( `${$parameters>/item}.getText()` ) ) )
+                        )->a( n = `itemSelected` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` ) ( `${$parameters>/item}.getText()` ) ) )
                         )->leaf( `MenuItem`
                             )->a( n = `text` v = `Edit`
                             )->a( n = `icon` v = `sap-icon://edit`
@@ -262,13 +250,12 @@ CLASS z2ui5_cl_ai_app_061 IMPLEMENTATION.
                 )->a( n = `text`                v = `Accept`
                 )->a( n = `buttonMode`          v = `Split`
                 )->a( n = `type`                v = `Accept`
-                )->a( n = `defaultAction`       v = client->_event( `DEFAULT_ACTION_ACCEPT` )
-                )->a( n = `beforeMenuOpen`      v = client->_event( `BEFORE_MENU_OPEN` )
+                )->a( n = `defaultAction`       v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Accepted` ) ) )
+                )->a( n = `beforeMenuOpen`      v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `beforeMenuOpen is fired` ) ) )
                 )->a( n = `useDefaultActionOnly` v = `true`
                 )->open( `menu`
                     )->open( `Menu`
-                        )->a( n = `itemSelected` v = client->_event( val   = `MENU_ACTION`
-                                                                     t_arg = VALUE #( ( `${$parameters>/item}.getText()` ) ) )
+                        )->a( n = `itemSelected` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` ) ( `${$parameters>/item}.getText()` ) ) )
                         )->leaf( `MenuItem`
                             )->a( n = `text` v = `Send the response now`
                             )->a( n = `icon` v = `sap-icon://response`
@@ -287,14 +274,13 @@ CLASS z2ui5_cl_ai_app_061 IMPLEMENTATION.
                 )->a( n = `text` v = `Menu button with menuPosition set to Right Bottom which in RTL will stay on the Right`
             )->open( `MenuButton`
                 )->a( n = `text`                v = `File Menu`
-                )->a( n = `defaultAction`       v = client->_event( `DEFAULT_ACTION` )
-                )->a( n = `beforeMenuOpen`      v = client->_event( `BEFORE_MENU_OPEN` )
+                )->a( n = `defaultAction`       v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Default action triggered` ) ) )
+                )->a( n = `beforeMenuOpen`      v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `beforeMenuOpen is fired` ) ) )
                 )->a( n = `useDefaultActionOnly` v = `true`
                 )->a( n = `menuPosition`        v = `RightBottom`
                 )->open( `menu`
                     )->open( `Menu`
-                        )->a( n = `itemSelected` v = client->_event( val   = `MENU_ACTION`
-                                                                     t_arg = VALUE #( ( `${$parameters>/item}.getText()` ) ) )
+                        )->a( n = `itemSelected` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` ) ( `${$parameters>/item}.getText()` ) ) )
                         )->leaf( `MenuItem`
                             )->a( n = `text` v = `Edit`
                             )->a( n = `icon` v = `sap-icon://edit`
@@ -317,8 +303,7 @@ CLASS z2ui5_cl_ai_app_061 IMPLEMENTATION.
                 )->a( n = `menuPosition`        v = `BeginBottom`
                 )->open( `menu`
                     )->open( `Menu`
-                        )->a( n = `itemSelected` v = client->_event( val   = `MENU_ACTION`
-                                                                     t_arg = VALUE #( ( `${$parameters>/item}.getText()` ) ) )
+                        )->a( n = `itemSelected` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` ) ( `${$parameters>/item}.getText()` ) ) )
                         )->open( `MenuItem`
                             )->a( n = `text` v = `basic`
                             )->a( n = `icon` v = `sap-icon://chalkboard`
@@ -351,30 +336,6 @@ CLASS z2ui5_cl_ai_app_061 IMPLEMENTATION.
         )->shut( ).
 
     client->view_display( view->stringify( ) ).
-
-  ENDMETHOD.
-
-
-  METHOD on_event.
-
-    CASE client->get( )-event.
-
-      WHEN `PRESS`.
-        client->message_toast_display( |{ client->get_event_arg( ) } Pressed| ).
-
-      WHEN `MENU_ACTION`.
-        client->message_toast_display( |Action triggered on item: { client->get_event_arg( ) }| ).
-
-      WHEN `DEFAULT_ACTION`.
-        client->message_toast_display( `Default action triggered` ).
-
-      WHEN `DEFAULT_ACTION_ACCEPT`.
-        client->message_toast_display( `Accepted` ).
-
-      WHEN `BEFORE_MENU_OPEN`.
-        client->message_toast_display( `beforeMenuOpen is fired` ).
-
-    ENDCASE.
 
   ENDMETHOD.
 
