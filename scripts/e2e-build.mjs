@@ -42,12 +42,12 @@ const sh = (cmd, opts = {}) => execSync(cmd, { cwd: A2, stdio: 'inherit', ...opt
 const fix = (cmd) => { try { execSync(cmd, { cwd: A2, stdio: ['ignore', 'ignore', 'ignore'] }); } catch { /* remaining issues are fixed across passes */ } };
 
 // classes that don't transpile (excluded from the served backend, logged so the
-// skip is never silent). The overview/coverage helper apps are meta tools, not
-// ports under test; add a port here only with a reason if the transpiler
-// chokes on it.
-const EXCLUDE = new Set([
-  'z2ui5_cl_ai_app_overview', // meta app (the generated overview), not a demo-kit port
-]);
+// skip is never silent). Add a port here only with a reason if the transpiler
+// chokes on it. The overview app IS served — it is the local front door,
+// listing every port with a ?app_start= launch link (open
+// ?app_start=z2ui5_cl_ai_app_overview). It is not a numbered port, so
+// e2e-smoke never picks it up.
+const EXCLUDE = new Set([]);
 
 function main() {
   console.log(`e2e-build: abap2UI5 at ${A2}`);

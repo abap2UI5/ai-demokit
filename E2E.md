@@ -23,7 +23,17 @@ npm run e2e:build
 npm run e2e:serve            #  == node <abap2UI5>/node/srv/express.mjs
 ```
 
-## Open a port in the browser
+## Open the overview (front door — lists every port)
+
+The simplest entry point is the overview app: it lists all ported samples in a
+table and a tree, and every row has a **Start this abap2UI5 app in a new tab**
+button that launches the port right there.
+
+```
+http://localhost:3000/?app_start=z2ui5_cl_ai_app_overview
+```
+
+## Open a single port directly
 
 Start any port via the `?app_start=<class>` query parameter:
 
