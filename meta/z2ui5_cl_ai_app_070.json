@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_ai_app_070",
+  "sample": "sap.m.sample.ProgressIndicator",
+  "entity": "sap.m.ProgressIndicator",
+  "file": "src/01/b09/z2ui5_cl_ai_app_070.clas.abap",
+  "batch": "b09",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "the two interactive ProgressIndicators (pi-with-animation / pi-without-animation) are set to 0/100 via two-way bound percentValue/displayValue fields updated in a SET event, replacing the original's controller byId(...).setPercentValue/setDisplayValue calls."
+    },
+    {
+      "type": "POST_171",
+      "what": "ProgressIndicator.displayAnimation (since UI5 1.73) is kept 1:1 on the no-animation ProgressIndicator; needs UI5 >= 1.73."
+    }
+  ]
+}

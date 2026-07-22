@@ -1136,6 +1136,20 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score_state = `Success`
         score_tip = `Deviation from the original sample: 1 of 5 (0 improvised, 0 dropped). 1 = faithful 1:1, 5 = heavily reworked.`
         since = `1.34` )
+      ( module = `sap.m` control = `sap.m.NotificationListGroup`       name = `NotificationListGroup`               class = `z2ui5_cl_ai_app_077` path = `src/01/b09/z2ui5_cl_ai_app_077.clas.abap`
+        score = 2
+        score_state = `Success`
+        score_tip = `Deviation from the original sample: 2 of 5 (1 improvised, 0 dropped). 1 = faithful 1:1, 5 = heavily reworked.`
+        since = `1.34`
+        notes = `IMPROVISED: static notifications: onItemClose's client-side removeItem is not mirrored (toast only); group 3's onAcceptErrors is simplified to the accept toast. // NOTE: the original's` &&
+                 ` showCloseButton="falseue" typo on two items is corrected to false, otherwise UI5 boolean parsing rejects it.` )
+      ( module = `sap.m` control = `sap.m.NotificationListItem`        name = `NotificationListItem`                class = `z2ui5_cl_ai_app_076` path = `src/01/b09/z2ui5_cl_ai_app_076.clas.abap`
+        score = 2
+        score_state = `Success`
+        score_tip = `Deviation from the original sample: 2 of 5 (1 improvised, 0 dropped). 1 = faithful 1:1, 5 = heavily reworked.`
+        since = `1.34`
+        notes = `IMPROVISED: the notifications are static (not model-bound), so onItemClose's client-side removeItem is not mirrored (close fires a toast only); onErrorPress's setProcessingMessage MessageStrip on the` &&
+                 ` item is shown as a toast.` )
       ( module = `sap.m` control = `sap.m.NumericContent`              name = `NumericContentIcon`                  class = `z2ui5_cl_ai_app_064` path = `src/01/b07/z2ui5_cl_ai_app_064.clas.abap`
         score = 1
         score_state = `Success`
@@ -1143,6 +1157,15 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         since = `1.34`
         notes = `NOTE: the second NumericContent keeps the sample's original demokit test-resources image path (test-resources/sap/m/demokit/sample/NumericContentIcon/images/grass.jpg) as the icon literal 1:1;` &&
                  ` abap2UI5 does not serve that static asset, so it does not render offline (the first tile's sap-icon://travel-expense does). The image is archived under ui5/sap.m/NumericContentIcon/images/.` )
+      ( module = `sap.m` control = `sap.m.ObjectAttribute`             name = `ObjectAttributes`                    class = `z2ui5_cl_ai_app_073` path = `src/01/b09/z2ui5_cl_ai_app_073.clas.abap`
+        score = 2
+        score_state = `Success`
+        score_tip = `Deviation from the original sample: 2 of 5 (1 improvised, 0 dropped). 1 = faithful 1:1, 5 = heavily reworked.`
+        since = `1.12`
+        notes = `NOTE: element binding kept 1:1 - the two display ObjectAttributes bind a one-record structure /S_PRODUCT instead of {/ProductCollection/0}; record 0 fields verbatim. // IMPROVISED:` &&
+                 ` handleSAPLinkPressed's URLHelper.redirect becomes the open_new_tab frontend action; handleFeedbacklinkPressed's Dialog (RatingIndicator + TextArea + Submit/Cancel) is rebuilt via popup_display, the` &&
+                 ` Submit button's 2s setBusy delay before the toast is dropped. // POST-1.71: ObjectAttribute.ariaHasPopup (since UI5 1.97) is kept 1:1 on the feedback attribute; needs UI5 >= 1.97.`
+        post171 = `ObjectAttribute.ariaHasPopup (since UI5 1.97) is kept 1:1 on the feedback attribute; needs UI5 >= 1.97.` )
       ( module = `sap.m` control = `sap.m.ObjectHeader`                name = `ObjectHeader`                        class = `z2ui5_cl_ai_app_041` path = `src/01/b01/z2ui5_cl_ai_app_041.clas.abap`
         score = 1
         score_state = `Success`
@@ -1154,6 +1177,28 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` only the binding context path changes - a one-record structure /S_PRODUCT in the default model instead of {/ProductCollection/0}, since the port does not carry the whole collection. // NOTE: the` &&
                  ` model holds exactly the bound record /ProductCollection/0 (Notebook Basic 15) of ui5/mock/products.json, verbatim - this is the original sample's own single-record binding {/ProductCollection/0}, not` &&
                  ` a shortened data set.` )
+      ( module = `sap.m` control = `sap.m.ObjectIdentifier`            name = `ObjectIdentifier`                    class = `z2ui5_cl_ai_app_071` path = `src/01/b09/z2ui5_cl_ai_app_071.clas.abap`
+        score = 1
+        score_state = `Success`
+        score_tip = `Deviation from the original sample: 1 of 5 (0 improvised, 0 dropped). 1 = faithful 1:1, 5 = heavily reworked.`
+        since = `1.12`
+        notes = `NOTE: element binding kept 1:1 - the VerticalLayout binds a one-record structure /S_PRODUCT in the default model instead of {/ProductCollection/0}; titleClicked's MessageBox.alert becomes` &&
+                 ` message_box_display. // NOTE: the model holds exactly the bound record /ProductCollection/0 (Notebook Basic 15) of ui5/mock/products.json, verbatim - the original's own single-record binding.` )
+      ( module = `sap.m` control = `sap.m.ObjectListItem`              name = `ObjectListItem`                      class = `z2ui5_cl_ai_app_074` path = `src/01/b09/z2ui5_cl_ai_app_074.clas.abap`
+        score = 2
+        score_state = `Success`
+        score_tip = `Deviation from the original sample: 2 of 5 (1 improvised, 0 dropped). 1 = faithful 1:1, 5 = heavily reworked.`
+        since = `1.12`
+        notes = `IMPROVISED: the ObjectStatus '.formatter.status' (Status -> ValueState) is precomputed into the STATUS_STATE model field (Available->Success, Out of Stock->Warning, Discontinued->Error, else None).` )
+      ( module = `sap.m` control = `sap.m.ObjectNumber`                name = `ObjectNumber`                        class = `z2ui5_cl_ai_app_072` path = `src/01/b09/z2ui5_cl_ai_app_072.clas.abap`
+        score = 1
+        score_state = `Success`
+        score_tip = `Deviation from the original sample: 1 of 5 (0 improvised, 0 dropped). 1 = faithful 1:1, 5 = heavily reworked.`
+        since = `1.12`
+        notes = `NOTE: the original binds records {/ProductCollection/0..5} of the shared mock; the port carries exactly those 6 records as a default-model table T_PRODUCTS and element-binds each ObjectNumber to` &&
+                 ` /T_PRODUCTS/0..5 (index binding), Price+CurrencyCode verbatim. // POST-1.71: ObjectNumber.inverted, ObjectNumber.active and ObjectNumber.press (all since UI5 1.86) are kept 1:1 for the` &&
+                 ` inverted/interactive variants; needs UI5 >= 1.86.`
+        post171 = `ObjectNumber.inverted, ObjectNumber.active and ObjectNumber.press (all since UI5 1.86) are kept 1:1 for the inverted/interactive variants; needs UI5 >= 1.86.` )
       ( module = `sap.m` control = `sap.m.ObjectStatus`                name = `ObjectStatus`                        class = `z2ui5_cl_ai_app_042` path = `src/01/b01/z2ui5_cl_ai_app_042.clas.abap`
         score = 1
         score_state = `Success`
@@ -1189,6 +1234,21 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` (or a patched maintenance release) to render it.`
         post171 = `the PDFViewer property isTrustedSource (since UI5 1.121, backported to maintenance patches down to 1.71.63; the original controller passes isTrustedSource: true) is newer than 1.71 but kept for the` &&
                  ` 1:1 port - the app needs a UI5 release >= 1.121 (or a patched maintenance release) to render it.` )
+      ( module = `sap.m` control = `sap.m.ProgressIndicator`           name = `ProgressIndicator`                   class = `z2ui5_cl_ai_app_070` path = `src/01/b09/z2ui5_cl_ai_app_070.clas.abap`
+        score = 2
+        score_state = `Success`
+        score_tip = `Deviation from the original sample: 2 of 5 (1 improvised, 0 dropped). 1 = faithful 1:1, 5 = heavily reworked.`
+        since = `1.13.1`
+        notes = `IMPROVISED: the two interactive ProgressIndicators (pi-with-animation / pi-without-animation) are set to 0/100 via two-way bound percentValue/displayValue fields updated in a SET event, replacing the` &&
+                 ` original's controller byId(...).setPercentValue/setDisplayValue calls. // POST-1.71: ProgressIndicator.displayAnimation (since UI5 1.73) is kept 1:1 on the no-animation ProgressIndicator; needs UI5` &&
+                 ` >= 1.73.`
+        post171 = `ProgressIndicator.displayAnimation (since UI5 1.73) is kept 1:1 on the no-animation ProgressIndicator; needs UI5 >= 1.73.` )
+      ( module = `sap.m` control = `sap.m.RadioButton`                 name = `RadioButton`                         class = `z2ui5_cl_ai_app_069` path = `src/01/b09/z2ui5_cl_ai_app_069.clas.abap`
+        score = 1
+        score_state = `Success`
+        score_tip = `Deviation from the original sample: 1 of 5 (0 improvised, 0 dropped). 1 = faithful 1:1, 5 = heavily reworked.`
+        notes = `POST-1.71: RadioButton.wrapping and RadioButton.wrappingType (both since UI5 1.126) are kept 1:1 on the wrapping-demo group; the app needs a UI5 release >= 1.126 to render them.`
+        post171 = `RadioButton.wrapping and RadioButton.wrappingType (both since UI5 1.126) are kept 1:1 on the wrapping-demo group; the app needs a UI5 release >= 1.126 to render them.` )
       ( module = `sap.m` control = `sap.m.RangeSlider`                 name = `RangeSlider`                         class = `z2ui5_cl_ai_app_045` path = `src/01/b02/z2ui5_cl_ai_app_045.clas.abap`
         score = 1
         score_state = `Success`
@@ -1210,6 +1270,15 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         notes = `NOTE: the original reads the selected item via oEvent.getParameter("item").getText() / getSelectedItem(). Here the items get keys (one/two/three - an addition, SB1 has none in the sample) and` &&
                  ` selectedKey is two-way bound, so the selection arrives with the event and no private event path is needed - the documented 1:1 path for controller-read selection (CAPABILITIES.md), not a workaround.` )
       ( module = `sap.m` control = `sap.m.Select`                      name = `Select`                              class = `z2ui5_cl_ai_app_048` path = `src/01/b02/z2ui5_cl_ai_app_048.clas.abap`
+        score = 1
+        score_state = `Success`
+        score_tip = `Deviation from the original sample: 1 of 5 (0 improvised, 0 dropped). 1 = faithful 1:1, 5 = heavily reworked.` )
+      ( module = `sap.m` control = `sap.m.SelectList`                  name = `SelectList`                          class = `z2ui5_cl_ai_app_075` path = `src/01/b09/z2ui5_cl_ai_app_075.clas.abap`
+        score = 1
+        score_state = `Success`
+        score_tip = `Deviation from the original sample: 1 of 5 (0 improvised, 0 dropped). 1 = faithful 1:1, 5 = heavily reworked.`
+        since = `1.26.0` )
+      ( module = `sap.m` control = `sap.m.Slider`                      name = `Slider`                              class = `z2ui5_cl_ai_app_068` path = `src/01/b09/z2ui5_cl_ai_app_068.clas.abap`
         score = 1
         score_state = `Success`
         score_tip = `Deviation from the original sample: 1 of 5 (0 improvised, 0 dropped). 1 = faithful 1:1, 5 = heavily reworked.` )

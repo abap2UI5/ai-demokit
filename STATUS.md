@@ -9,7 +9,7 @@ CAPABILITIES.md._
 
 | Aspect | State |
 |---|---|
-| Ports | 67 / **403 in-scope** `sap.m` samples (16.6 %) — in scope = control exists since UI5 1.71 and is not deprecated; 43 of 446 samples are out of scope (16 deprecated, 21 newer, 6 without control metadata) |
+| Ports | 77 / **403 in-scope** `sap.m` samples (19.1 %) — in scope = control exists since UI5 1.71 and is not deprecated; 43 of 446 samples are out of scope (16 deprecated, 21 newer, 6 without control metadata) |
 | CI | ABAP_STANDARD, ABAP_CLOUD, ABAP_702 all green |
 | Structural view diff | **0 undeclared differences** across all 64 ports (`node scripts/structural-diff.mjs --strict`) — including simple **binding values** and, since 2026-07-19, **`id` attributes** (name-level per control type; dropped original ids must be restored or declared) |
 | Render smoke | **0 failing / 1 skipped** (`npm run smoke`): every reconstructable port's view loads in a real headless `XMLView.create`; app 049's skip is now a **declared, CI-enforced** `render_smoke.skip` (helper-method view building is not statically reconstructable — an undeclared non-reconstructable port now FAILS); harness carries `sap.f` and mocks scalar-row tables as empty arrays since b05 |
@@ -17,6 +17,35 @@ CAPABILITIES.md._
 | Meta sidecars | 67 in `meta/` — status: 21 `generated`, 41 `checked`, **5 `golden`** (401, 421, 454, 540, 543 — promoted 2026-07-20 after the full live check); deviations: 39 IMPROVISED, 34 POST_171, 81 NOTE, 3 DROPPED_171 (the `p:ColumnAIAction` plugin in apps 009/022/534 — a whole control newer than 1.71, unlike the restorable members). **0 LIVE_TEST** (b07/b08 menu + message-popover paths live-checked 2026-07-22) and **0 SUBSET_DATA** (retired 2026-07-22 — every port now inlines the full mock row set). `audit` is a structured object since 2026-07-18 |
 | Manually verified in a running system | **46 of 67 ports** — adds 060/061/066/067 (menu + MessagePopover, human live check 2026-07-22) to the 2026-07-20 checked set; the 21 remaining `generated` ports are b01–b04 apps that never carried an open question (machine-verified only) |
 | Archive | `ui5/sap.m/<SampleName>/` — full originals for the 44 ported samples (+2 cross-referenced: `FacetFilterSimple`, `Table`); mock snapshot in `ui5/mock/`. Unported samples are copied over batch by batch. |
+
+## Batch b09 generated (2026-07-22) — objects, inputs & notifications (10 ports)
+
+The next 10 backlog-top NEW-CONTROL samples, breadth-first (one port per
+uncovered control), classes **068–077**: 068 Slider, 069 RadioButton,
+070 ProgressIndicator, 071 ObjectIdentifier, 072 ObjectNumber,
+073 ObjectAttributes (`sap.m.ObjectAttribute`), 074 ObjectListItem,
+075 SelectList, 076 NotificationListItem, 077 NotificationListGroup.
+Machine-verified to green (abaplint ×STANDARD, validate-meta, pattern-lint,
+structural-diff `--strict`, property-check, render-smoke `--strict`). Status
+`generated` (no human live check yet).
+
+Notables: the list ports (**074**, **075**) inline the full 123-row mock
+per the 2026-07-22 no-subset rule; **074** precomputes the `.formatter.status`
+ValueState into a `STATUS_STATE` field (the app-038/545 pattern). The
+single-record display ports (**071**, **073**) reproduce the original's
+`{/ProductCollection/0}` element binding as a one-record `/S_PRODUCT` structure
+(the 041 pattern); **072** carries records 0–5 as a 6-row table and
+element-binds each ObjectNumber to `/T_PRODUCTS/0..5` (index binding, inlined
+`_bind` per control). **070**'s two interactive ProgressIndicators are set via
+two-way bound percentValue/displayValue + a SET event (replacing the
+controller's byId setters). New POST_171 firsts: `RadioButton.wrapping`/
+`wrappingType` (1.126), `ProgressIndicator.displayAnimation` (1.73),
+`ObjectNumber.inverted`/`active`/`press` (1.86), `ObjectAttribute.ariaHasPopup`
+(1.97). The notification ports are static declarations (close's client-side
+`removeItem` is not mirrored → toast; declared). Open LIVE_TESTs (machine-only):
+the `${$source>/title}` event args (076/077), the interactive PI SET round-trip
+(070), the feedback popup + open_new_tab (073), the ObjectNumber index bindings
+(072).
 
 ## Full mock data + deviation score (2026-07-22)
 
@@ -63,7 +92,8 @@ The 34 existing ports are retro-grouped into review batches — one subpackage
 | `b05` | Backlog top: bars, tables, custom items & patterns | 531, 532, 533, 534, 535, 536, 537, 538, 539, 540 | all (2026-07-20) |
 | `b06` | Date pickers, dialogs, feeds & tiles | 541, 542, 543, 544, 545, 546, 547, 548, 549, 550 | all (2026-07-20) |
 | `b07` | Icon tabs, tile content, menus, list items & message strips | IconTabHeader, ImageContent, InputListItem, LabelProperties, LightBox, Menu, MenuButton, MessageStrip, NewsContent, NumericContent (classes 055–064) | — (machine-verified only) |
-| `b08` | Message popover (all three MessagePopover samples) | MessagePopoverMessageHandling (065), MessagePopover (066), MessagePopoverAsyncMessageHandling (067) | — (machine-verified only) |
+| `b08` | Message popover (all three MessagePopover samples) | MessagePopoverMessageHandling (065), MessagePopover (066), MessagePopoverAsyncMessageHandling (067) | 065–067 (2026-07-22) |
+| `b09` | Objects, inputs & notifications | Slider, RadioButton, ProgressIndicator, ObjectIdentifier, ObjectNumber, ObjectAttributes, ObjectListItem, SelectList, NotificationListItem, NotificationListGroup (classes 068–077) | — (machine-verified only) |
 
 New generation batches continue as `b08`, `b09`, … per the process in
 TRAINING.md.

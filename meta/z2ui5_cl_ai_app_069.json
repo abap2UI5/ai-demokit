@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_ai_app_069",
+  "sample": "sap.m.sample.RadioButton",
+  "entity": "sap.m.RadioButton",
+  "file": "src/01/b09/z2ui5_cl_ai_app_069.clas.abap",
+  "batch": "b09",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "RadioButton.wrapping and RadioButton.wrappingType (both since UI5 1.126) are kept 1:1 on the wrapping-demo group; the app needs a UI5 release >= 1.126 to render them."
+    }
+  ]
+}

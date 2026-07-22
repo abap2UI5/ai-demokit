@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_ai_app_073",
+  "sample": "sap.m.sample.ObjectAttributes",
+  "entity": "sap.m.ObjectAttribute",
+  "file": "src/01/b09/z2ui5_cl_ai_app_073.clas.abap",
+  "batch": "b09",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "element binding kept 1:1 - the two display ObjectAttributes bind a one-record structure /S_PRODUCT instead of {/ProductCollection/0}; record 0 fields verbatim."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "handleSAPLinkPressed's URLHelper.redirect becomes the open_new_tab frontend action; handleFeedbacklinkPressed's Dialog (RatingIndicator + TextArea + Submit/Cancel) is rebuilt via popup_display, the Submit button's 2s setBusy delay before the toast is dropped."
+    },
+    {
+      "type": "POST_171",
+      "what": "ObjectAttribute.ariaHasPopup (since UI5 1.97) is kept 1:1 on the feedback attribute; needs UI5 >= 1.97."
+    }
+  ]
+}

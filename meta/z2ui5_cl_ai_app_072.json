@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_ai_app_072",
+  "sample": "sap.m.sample.ObjectNumber",
+  "entity": "sap.m.ObjectNumber",
+  "file": "src/01/b09/z2ui5_cl_ai_app_072.clas.abap",
+  "batch": "b09",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "the original binds records {/ProductCollection/0..5} of the shared mock; the port carries exactly those 6 records as a default-model table T_PRODUCTS and element-binds each ObjectNumber to /T_PRODUCTS/0..5 (index binding), Price+CurrencyCode verbatim."
+    },
+    {
+      "type": "POST_171",
+      "what": "ObjectNumber.inverted, ObjectNumber.active and ObjectNumber.press (all since UI5 1.86) are kept 1:1 for the inverted/interactive variants; needs UI5 >= 1.86."
+    }
+  ]
+}

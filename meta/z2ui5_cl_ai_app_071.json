@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_ai_app_071",
+  "sample": "sap.m.sample.ObjectIdentifier",
+  "entity": "sap.m.ObjectIdentifier",
+  "file": "src/01/b09/z2ui5_cl_ai_app_071.clas.abap",
+  "batch": "b09",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "element binding kept 1:1 - the VerticalLayout binds a one-record structure /S_PRODUCT in the default model instead of {/ProductCollection/0}; titleClicked's MessageBox.alert becomes message_box_display."
+    },
+    {
+      "type": "NOTE",
+      "what": "the model holds exactly the bound record /ProductCollection/0 (Notebook Basic 15) of ui5/mock/products.json, verbatim - the original's own single-record binding."
+    }
+  ]
+}

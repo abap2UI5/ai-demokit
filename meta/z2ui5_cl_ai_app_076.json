@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_ai_app_076",
+  "sample": "sap.m.sample.NotificationListItem",
+  "entity": "sap.m.NotificationListItem",
+  "file": "src/01/b09/z2ui5_cl_ai_app_076.clas.abap",
+  "batch": "b09",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "the notifications are static (not model-bound), so onItemClose's client-side removeItem is not mirrored (close fires a toast only); onErrorPress's setProcessingMessage MessageStrip on the item is shown as a toast."
+    }
+  ]
+}

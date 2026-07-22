@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_ai_app_077",
+  "sample": "sap.m.sample.NotificationListGroup",
+  "entity": "sap.m.NotificationListGroup",
+  "file": "src/01/b09/z2ui5_cl_ai_app_077.clas.abap",
+  "batch": "b09",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "static notifications: onItemClose's client-side removeItem is not mirrored (toast only); group 3's onAcceptErrors is simplified to the accept toast."
+    },
+    {
+      "type": "NOTE",
+      "what": "the original's showCloseButton=\"falseue\" typo on two items is corrected to false, otherwise UI5 boolean parsing rejects it."
+    }
+  ]
+}
