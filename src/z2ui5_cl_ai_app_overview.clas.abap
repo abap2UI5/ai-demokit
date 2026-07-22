@@ -1342,9 +1342,9 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` scroll_into_view ) + control_by_id close + set_focus on it - the 1:1 equivalent of the sample's scrollToElement + close + focus. Needs the upstream fix that lets SET_FOCUS/SCROLL_INTO_VIEW resolve a` &&
                  ` fully-qualified control id (resolveById), since a UI5 Message carries the view-prefixed id. // NOTE: onInit's MessageToast.show('Press "Save" to trigger validation.') is ported as` &&
                  ` client->message_toast_display( ... ) in the check_on_init branch. // NOTE: MessageItem grouping (groupItems=true + the 'Personal, <section>' group headers) is RESTORED: the original derives groupName` &&
-                 ` by walking the control tree (getGroupName -> form title + group subtitle), which the server cannot do, so groupName is derived data-driven via an expression binding on the field label ({=` &&
-                 ` ${message>additionalText} === 'Email' ? 'Personal, Contact' : 'Personal, Information' }) - only Email sits in the Contact group, all others in Information, matching the original's headers (verified` &&
-                 ` headless).`
+                 ` in its controller (getGroupName). That is a domain classification, so - abap2UI5 being a thin frontend - it is computed in the ABAP backend (COND on additionaltext: Email -> 'Personal, Contact', else` &&
+                 ` 'Personal, Information') and carried on the Message code field (sap.ui.core.message.Message has no groupName slot), bound groupName="{message>code}" - no frontend expression. Only Email sits in the` &&
+                 ` Contact group, all others in Information, matching the original's headers.`
         post171 = `two post-1.71 members are kept for the 1:1 port: Button.ariaHasPopup (since UI5 1.84) on the MessagePopover button, and MessagePopover.groupItems (since UI5 1.73).`
         use_ec = abap_true
         use_ec_arg = abap_true

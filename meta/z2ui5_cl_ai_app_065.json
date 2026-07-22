@@ -49,7 +49,7 @@
     },
     {
       "type": "NOTE",
-      "what": "MessageItem grouping (groupItems=true + the 'Personal, <section>' group headers) is RESTORED: the original derives groupName by walking the control tree (getGroupName -> form title + group subtitle), which the server cannot do, so groupName is derived data-driven via an expression binding on the field label ({= ${message>additionalText} === 'Email' ? 'Personal, Contact' : 'Personal, Information' }) - only Email sits in the Contact group, all others in Information, matching the original's headers (verified headless)."
+      "what": "MessageItem grouping (groupItems=true + the 'Personal, <section>' group headers) is RESTORED: the original derives groupName in its controller (getGroupName). That is a domain classification, so - abap2UI5 being a thin frontend - it is computed in the ABAP backend (COND on additionaltext: Email -> 'Personal, Contact', else 'Personal, Information') and carried on the Message code field (sap.ui.core.message.Message has no groupName slot), bound groupName=\"{message>code}\" - no frontend expression. Only Email sits in the Contact group, all others in Information, matching the original's headers."
     }
   ]
 }

@@ -34,6 +34,7 @@ CLASS z2ui5_cl_ai_app_065 DEFINITION PUBLIC.
         type           TYPE string,
         target         TYPE string,
         additionaltext TYPE string,
+        code           TYPE string,
       END OF ty_s_message.
 
     DATA t_forms      TYPE STANDARD TABLE OF ty_s_form WITH EMPTY KEY.
@@ -239,10 +240,11 @@ CLASS z2ui5_cl_ai_app_065 IMPLEMENTATION.
                                     )->a( n = `type`        v = `{message>type}`
                                     )->a( n = `description` v = `{message>message}`
                                     )->a( n = `activeTitle` v = `true`
-                                    " group name (Personal, <section>): the original's getGroupName walks the
-                                    " control tree; the server can't, so derive the section from the field -
-                                    " only Email sits in the Contact group, the rest in Information
-                                    )->a( n = `groupName`   v = |\{= $\{message>additionalText\} === 'Email' ? 'Personal, Contact' : 'Personal, Information' \}|
+                                    " group name (Personal, <section>): a domain classification computed in
+                                    " the backend (see model above) and carried on the Message code field,
+                                    " NOT a frontend expression - the original derives it in its controller's
+                                    " getGroupName; only Email sits in the Contact group, the rest in Information
+                                    )->a( n = `groupName`   v = `{message>code}`
 
                             )->shut(
                         )->shut(
@@ -309,6 +311,14 @@ CLASS z2ui5_cl_ai_app_065 IMPLEMENTATION.
           ( message = `The value should not exceed 40` type = `Warning` additionaltext = `Standard Weekly Hours`
             description = `The value of the working hours field should not exceed 40 hours.`
             target = `/T_EMPLOYMENT/0/WEEKLYHOURS` ) ).
+        " the message group (Personal, <section>) is a domain classification, so
+        " it is computed in the backend (thin frontend) and rides on the Message
+        " code field - the original derives it in its controller's getGroupName.
+        LOOP AT t_messages REFERENCE INTO DATA(lr_msg).
+          lr_msg->code = COND #( WHEN lr_msg->additionaltext = `Email`
+                                 THEN `Personal, Contact`
+                                 ELSE `Personal, Information` ).
+        ENDLOOP.
         client->view_model_update( ).
         " original: oMP.openBy(oButton) after the values are set - open the popover anchored to the button
         client->follow_up_action( val   = client->cs_event-control_by_id
