@@ -1763,6 +1763,31 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         use_fua = abap_true
         use_fua_arg = abap_true
         use_name = abap_true )
+      ( module = `sap.m` control = `sap.m.TableSelectDialog`           name = `TableSelectDialog`                   class = `z2ui5_cl_ai_app_104` path = `src/01/b12/z2ui5_cl_ai_app_104.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.16`
+        release = `1.110`
+        release_post171 = abap_true
+        is_post171 = abap_true
+        notes = `IMPROVISED: The original configures a single shared dialog imperatively per button (oButton.data() CustomData ->` &&
+                 ` setMultiSelect/setDraggable/setResizable/setRememberSelections/setConfirmButtonText/addStyleClass). abap2UI5 binds those SelectDialog properties two-way and each button's handler sets them before` &&
+                 ` opening (responsivePadding toggles the style class via control_by_id addStyleClass/removeStyleClass). The core:CustomData is kept on the buttons for fidelity; the dialog is declared once in` &&
+                 ` mvc:dependents and opened via follow_up_action( cs_event-control_by_id, open ). // IMPROVISED: The ObjectNumber weightState is business logic (parseFloat thresholds), so it is computed in ABAP` &&
+                 ` (WEIGHT_STATE, thin-frontend principle) and bound state='{WEIGHT_STATE}' instead of the frontend Formatter.weightState; core:require is therefore dropped and the Currency binding keeps the full` &&
+                 ` standard type path 'sap.ui.model.type.Currency' 1:1. The full 123-row /ProductCollection is inlined (ProductPicUrl is not needed — the table cells carry no icon). // NOTE: Search filters the dialog's` &&
+                 ` items binding client-side via _event_client( cs_event-binding_call, filter NAME Contains ${$parameters>/value} ). The valueHelpRequest opens a second TableSelectDialog (also in dependents) after` &&
+                 ` preselecting the row matching the input value. The confirm/valueHelpClose toasts are simplified — selectedContexts / selectedItem are control references not transportable as event args (original` &&
+                 ` composes the chosen product names / copies the selected title into the input). // LIVE-TEST: The per-button dialog configuration, the client-side search filter, multi-select confirm and the` &&
+                 ` value-help selection copy-back need an in-system check; machine gates only verify the views are valid. // POST-1.71: sap.m.TableSelectDialog.searchPlaceholder (since 1.110) is kept 1:1 on the` &&
+                 ` value-help dialog; needs UI5 >= 1.110.`
+        post171 = `sap.m.TableSelectDialog.searchPlaceholder (since 1.110) is kept 1:1 on the value-help dialog; needs UI5 >= 1.110.`
+        use_ec = abap_true
+        use_ec_arg = abap_true
+        use_fua = abap_true
+        use_fua_arg = abap_true
+        use_name = abap_true )
       ( module = `sap.m` control = `sap.m.Text`                        name = `Text`                                class = `z2ui5_cl_ai_app_051` path = `src/01/b01/z2ui5_cl_ai_app_051.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
