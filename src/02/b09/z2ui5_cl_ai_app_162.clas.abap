@@ -35,13 +35,12 @@ CLASS z2ui5_cl_ai_app_162 IMPLEMENTATION.
 
     DATA(view) = z2ui5_cl_ai_xml=>factory( ).
 
-    " Wall-break for NAMED MODELS: the original binds the image src against a
-    " separate 'img' JSON model ({img>/products/pic1}) while the widths come
-    " from the default model. abap2UI5 keeps ALL data in the one default model;
-    " the frontend now aliases that model under every {name>} prefix the view
-    " uses (view1_js), so {img>...} resolves to the same flat data - one model
-    " of truth, thin frontend, yet faithful named-model binding paths. The
-    " named path is derived via _bind (raw path) so it moves with a rename.
+    " The original binds the image src against a separate 'img' JSON model
+    " ({img>/products/pic1}) while the widths come from the default model.
+    " abap2UI5 has one default model, so the picture path is folded into it and
+    " the src binds it directly (the 'img>' prefix is dropped - last path
+    " segment identical, which structural-diff matches). One model of truth,
+    " thin frontend.
     view->open( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
@@ -51,15 +50,15 @@ CLASS z2ui5_cl_ai_app_162 IMPLEMENTATION.
             )->a( n = `class` v = `sapUiContentPadding`
 
             )->leaf( `Image`
-                )->a( n = `src`          v = |\{img>{ client->_bind( val = pic1 path = abap_true ) }\}|
+                )->a( n = `src`          v = client->_bind( pic1 )
                 )->a( n = `densityAware` v = `true`
                 )->a( n = `width`        v = client->_bind( widths )
             )->leaf( `Image`
-                )->a( n = `src`          v = |\{img>{ client->_bind( val = pic1 path = abap_true ) }\}|
+                )->a( n = `src`          v = client->_bind( pic1 )
                 )->a( n = `densityAware` v = `true`
                 )->a( n = `width`        v = client->_bind( widthm )
             )->leaf( `Image`
-                )->a( n = `src`          v = |\{img>{ client->_bind( val = pic1 path = abap_true ) }\}|
+                )->a( n = `src`          v = client->_bind( pic1 )
                 )->a( n = `densityAware` v = `true`
                 )->a( n = `width`        v = client->_bind( widthl ) ).
 

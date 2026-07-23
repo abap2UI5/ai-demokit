@@ -841,16 +841,6 @@ const HARNESS = `<!DOCTYPE html>
           // empty message model so {message>/} bindings (MessagePopover /
           // z2ui5.cc.MessageManager ports) resolve like the framework's slot
           view.setModel(new JSONModel([]), 'message');
-          // named-model aliases: mirror the framework (view1_js) — every
-          // {name>/...} prefix the view uses (other than device/message/http)
-          // is served by the SAME default model, so a port keeps its data flat
-          // in one model yet uses faithful named-model binding paths.
-          new Set([...String(input.xml).matchAll(/\{([A-Za-z]\w*)>/g)].map(function (x) { return x[1]; }))
-            .forEach(function (nm) {
-              if (nm !== 'device' && nm !== 'message' && nm !== 'http' && !view.getModel(nm)) {
-                view.setModel(model, nm);
-              }
-            });
           view.placeAt('content');
           await new Promise(function (r) { setTimeout(r, 120); });
           view.destroy();

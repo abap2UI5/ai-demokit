@@ -13,11 +13,11 @@ CLASS z2ui5_cl_ai_app_164 DEFINITION PUBLIC.
       END OF ty_row.
     DATA productcollection TYPE STANDARD TABLE OF ty_row WITH EMPTY KEY.
 
-    " Named-model field: the original drives the row mode from a separate 'ui'
-    " JSON model ({ui>/rowMode}); here it lives flat in the one default model
-    " and the frontend aliases that model under 'ui' (view1_js), so both the
-    " Table.rowMode aggregation and the SegmentedButton.selectedKey resolve to
-    " the same field - one model of truth, thin frontend.
+    " The original drives the row mode from a separate 'ui' JSON model
+    " ({ui>/rowMode}). abap2UI5 has one default model, so the row mode lives
+    " flat here and both the Table.rowMode aggregation and the footer
+    " SegmentedButton.selectedKey bind the same field on the default model -
+    " one model of truth, thin frontend.
     DATA rowmode TYPE string.
 
   PROTECTED SECTION.
@@ -47,11 +47,11 @@ CLASS z2ui5_cl_ai_app_164 IMPLEMENTATION.
 
     DATA(view) = z2ui5_cl_ai_xml=>factory( ).
 
-    " sap.ui.table grid Table (RowModes sample). Wall-break for NAMED MODELS:
-    " rowMode and the footer SegmentedButton both bind {ui>/rowMode}. The 'ui'
-    " model is aliased onto the default model by the frontend, so the faithful
-    " {ui>/...} paths resolve against the flat 'rowmode' field. The named path
-    " is derived via _bind (raw path) so it survives a rename.
+    " sap.ui.table grid Table (RowModes sample). The original splits UI state
+    " into a separate 'ui' JSON model ({ui>/rowMode}); with abap2UI5's single
+    " default model that field is folded into the default model and rowMode /
+    " selectedKey bind it directly (the 'ui>' prefix is dropped - last path
+    " segment identical, which structural-diff matches).
     view->open( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.ui.table`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
@@ -69,7 +69,7 @@ CLASS z2ui5_cl_ai_app_164 IMPLEMENTATION.
                     )->a( n = `id`             v = `table`
                     )->a( n = `selectionMode`  v = `MultiToggle`
                     )->a( n = `rows`           v = client->_bind( productcollection )
-                    )->a( n = `rowMode`        v = |\{ui>{ client->_bind( val = rowmode path = abap_true ) }\}|
+                    )->a( n = `rowMode`        v = client->_bind( rowmode )
                     )->a( n = `ariaLabelledBy` v = `title`
 
                     )->open( `extension`
@@ -149,7 +149,7 @@ CLASS z2ui5_cl_ai_app_164 IMPLEMENTATION.
                                 )->a( n = `labelFor` v = `rowMode`
                             )->open( n = `SegmentedButton` ns = `m`
                                 )->a( n = `id`          v = `rowMode`
-                                )->a( n = `selectedKey` v = |\{ui>{ client->_bind( val = rowmode path = abap_true ) }\}|
+                                )->a( n = `selectedKey` v = client->_bind( rowmode )
                                 )->open( n = `items` ns = `m`
                                     )->leaf( n = `SegmentedButtonItem` ns = `m`
                                         )->a( n = `icon`    v = `sap-icon://locked`

@@ -1639,11 +1639,11 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         use_name = abap_true )
       ( module = `sap.m`              control = `sap.m.OverflowToolbar`               name = `ToolbarResponsive`                   class = `z2ui5_cl_ai_app_163` path = `src/01/b17/z2ui5_cl_ai_app_163.clas.abap`
         score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16`
-        notes = `IMPROVISED: Named-model wall-break: the original drives the footer toolbar button visibility from a separate 'range' media JSON model ({range>/isNoPhone}, isNotPhoneOrTablet, isTablet,` &&
-                 ` isPhoneOrTablet). abap2UI5 keeps the flags flat in the one default model; the frontend (view1_js) aliases that model under 'range', so the faithful {range>/...} paths resolve. Values use the desktop` &&
-                 ` media ranges (the original filled them from Device.media - a client-only decision). Button presses show client toasts (original onPress/onOpen).`
+        notes = `NOTE: The original drives the footer toolbar button visibility from a separate 'range' media JSON model ({range>/isNoPhone}, isNotPhoneOrTablet, isTablet, isPhoneOrTablet). abap2UI5 has one default` &&
+                 ` model, so the flags live flat in it and visible binds them directly - the 'range>' prefix is dropped; the last path segment is identical, which structural-diff matches. Values use the desktop media` &&
+                 ` ranges (the original filled them from Device.media - a client-only decision). Button presses show client toasts (original onPress/onOpen).`
         use_ec = abap_true
         use_ec_arg = abap_true )
       ( module = `sap.m`              control = `sap.m.Page`                          name = `PageStandardClasses`                 class = `z2ui5_cl_ai_app_089` path = `src/01/b11/z2ui5_cl_ai_app_089.clas.abap`
@@ -2255,10 +2255,10 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         use_name = abap_true )
       ( module = `sap.ui.layout`      control = `sap.ui.layout.HorizontalLayout`      name = `HorizontalLayout`                    class = `z2ui5_cl_ai_app_162` path = `src/02/b09/z2ui5_cl_ai_app_162.clas.abap`
         score = 2
-        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        notes = `IMPROVISED: Wall-break for NAMED MODELS: the original uses a separate 'img' JSON model for the image src ({img>/products/pic1}) alongside the default model for the widths. abap2UI5 keeps all data in` &&
-                 ` one default model; the frontend (view1_js) now aliases that model under every {name>} prefix the view uses, so {img>...} resolves to the same flat data. The image path is a single flat field (pic1)` &&
-                 ` instead of the original's /products/pic1 nesting (last-segment identical). Widths use the desktop values (the original's phone branch is a client-only Device decision).` )
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `NOTE: The original uses a separate 'img' JSON model for the image src ({img>/products/pic1}) alongside the default model for the widths. abap2UI5 has one default model, so the picture path is folded` &&
+                 ` into it and the src binds it directly - the 'img>' prefix is dropped and the path flattened to a single field (pic1); the last path segment is identical, which structural-diff matches. Widths use the` &&
+                 ` desktop values (the original's phone branch is a client-only Device decision).` )
       ( module = `sap.ui.layout`      control = `sap.ui.layout.Splitter`              name = `Splitter2`                           class = `z2ui5_cl_ai_app_125` path = `src/02/b02/z2ui5_cl_ai_app_125.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
@@ -2276,14 +2276,13 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         use_name = abap_true )
       ( module = `sap.ui.table`       control = `sap.ui.table.Table`                  name = `RowModes`                            class = `z2ui5_cl_ai_app_164` path = `src/02/b10/z2ui5_cl_ai_app_164.clas.abap`
         score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        notes = `IMPROVISED: Wall-break for NAMED MODELS on sap.ui.table: the original binds the row mode against a separate 'ui' JSON model ({ui>/rowMode}) in two places - the Table's rowMode aggregation and the` &&
-                 ` footer SegmentedButton's selectedKey - while the grid rows come from the default model ({/ProductCollection}). abap2UI5 keeps all data in the one default model; the frontend (view1_js) aliases that` &&
-                 ` model under every {name>} prefix the view uses, so {ui>/rowMode} resolves to the same flat data. The named path is derived via _bind (raw path) so it moves with a rename. rowMode is a single flat` &&
-                 ` field instead of the original's /rowMode object nesting (last-segment identical). // NOTE: The shared 123-row demo ProductCollection (sap/ui/demo/mock/products.json) is inlined into model_init with` &&
-                 ` the five columns the sample binds (Name, Category, ProductPicUrl, Quantity, DeliveryDate). The original computes DeliveryDate from Date.now() with an i-mod-10 offset; a fixed base date (2026-07-23)` &&
-                 ` is used here so the port is deterministic - a client-only display decision. The Quantity and DeliveryDate columns keep the original typed complex bindings (sap.ui.model.type.Integer / .Date with` &&
-                 ` timestamp source).`
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `NOTE: The original splits UI state into a separate 'ui' JSON model and binds the row mode from it ({ui>/rowMode}) in two places - the Table's rowMode aggregation and the footer SegmentedButton's` &&
+                 ` selectedKey - while the grid rows come from the default model ({/ProductCollection}). abap2UI5 has one default model, so the row mode is folded into it and both places bind it directly - the 'ui>'` &&
+                 ` prefix is dropped and the path flattened to a single field (rowMode); the last path segment is identical, which structural-diff matches. // NOTE: The shared 123-row demo ProductCollection` &&
+                 ` (sap/ui/demo/mock/products.json) is inlined into model_init with the five columns the sample binds (Name, Category, ProductPicUrl, Quantity, DeliveryDate). The original computes DeliveryDate from` &&
+                 ` Date.now() with an i-mod-10 offset; a fixed base date (2026-07-23) is used here so the port is deterministic - a client-only display decision. The Quantity and DeliveryDate columns keep the original` &&
+                 ` typed complex bindings (sap.ui.model.type.Integer / .Date with timestamp source).`
         use_name = abap_true )
       ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`             name = `CalendarCalendarType`                class = `z2ui5_cl_ai_app_151` path = `src/02/b08/z2ui5_cl_ai_app_151.clas.abap`
         score = 2

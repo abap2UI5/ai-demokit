@@ -35,10 +35,11 @@ CLASS z2ui5_cl_ai_app_163 IMPLEMENTATION.
 
     DATA(view) = z2ui5_cl_ai_xml=>factory( ).
 
-    " Named-model wall-break: the original drives the overflow toolbar's button
-    " visibility from a separate 'range' media model ({range>/isNoPhone} ...).
-    " Here those flags live flat in the one default model; the frontend aliases
-    " it under 'range', so the faithful {range>/...} paths resolve.
+    " The original drives the overflow toolbar's button visibility from a
+    " separate 'range' media model ({range>/isNoPhone} ...). abap2UI5 has one
+    " default model, so those flags live flat in it and visible binds them
+    " directly (the 'range>' prefix is dropped - last path segment identical,
+    " which structural-diff matches).
     view->open( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
@@ -69,31 +70,31 @@ CLASS z2ui5_cl_ai_app_163 IMPLEMENTATION.
                     )->leaf( `Button`
                         )->a( n = `text`    v = `Mark as Favorite`
                         )->a( n = `press`   v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Mark as Favorite` ) ) )
-                        )->a( n = `visible` v = |\{range>{ client->_bind( val = isnophone path = abap_true ) }\}|
+                        )->a( n = `visible` v = client->_bind( isnophone )
                     )->leaf( `Button`
                         )->a( n = `text`    v = `Send Email`
                         )->a( n = `press`   v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Send Email` ) ) )
-                        )->a( n = `visible` v = |\{range>{ client->_bind( val = isnophone path = abap_true ) }\}|
+                        )->a( n = `visible` v = client->_bind( isnophone )
                     )->leaf( `Button`
                         )->a( n = `text`    v = `Share`
                         )->a( n = `press`   v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Share` ) ) )
-                        )->a( n = `visible` v = |\{range>{ client->_bind( val = isnophone path = abap_true ) }\}|
+                        )->a( n = `visible` v = client->_bind( isnophone )
                     )->leaf( `Button`
                         )->a( n = `text`    v = `Print`
                         )->a( n = `press`   v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Print` ) ) )
-                        )->a( n = `visible` v = |\{range>{ client->_bind( val = isnotphoneortablet path = abap_true ) }\}|
+                        )->a( n = `visible` v = client->_bind( isnotphoneortablet )
                     )->leaf( `Button`
                         )->a( n = `icon`    v = `sap-icon://print`
                         )->a( n = `press`   v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Print` ) ) )
-                        )->a( n = `visible` v = |\{range>{ client->_bind( val = istablet path = abap_true ) }\}|
+                        )->a( n = `visible` v = client->_bind( istablet )
                     )->leaf( `Button`
                         )->a( n = `text`    v = `Export as Excel`
                         )->a( n = `press`   v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Export as Excel` ) ) )
-                        )->a( n = `visible` v = |\{range>{ client->_bind( val = isnotphoneortablet path = abap_true ) }\}|
+                        )->a( n = `visible` v = client->_bind( isnotphoneortablet )
                     )->leaf( `Button`
                         )->a( n = `icon`    v = `sap-icon://overflow`
                         )->a( n = `press`   v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Overflow` ) ) )
-                        )->a( n = `visible` v = |\{range>{ client->_bind( val = isphoneortablet path = abap_true ) }\}| ).
+                        )->a( n = `visible` v = client->_bind( isphoneortablet ) ).
 
     client->view_display( view->stringify( ) ).
 
