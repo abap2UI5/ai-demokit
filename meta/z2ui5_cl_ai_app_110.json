@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_ai_app_110",
+  "sample": "sap.f.sample.ShellBar",
+  "entity": "sap.f.ShellBar",
+  "file": "src/04/b01/z2ui5_cl_ai_app_110.clas.abap",
+  "batch": "b01",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "First sap.f port. Static ShellBar with a sap.m Menu and a profile Avatar; the homeIcon points at the OpenUI5 host. No controller events are wired in the original view."
+    }
+  ]
+}

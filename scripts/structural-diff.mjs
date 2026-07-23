@@ -38,7 +38,7 @@ import { fileURLToPath } from 'url';
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const META = path.join(ROOT, 'meta');
-const UI5 = path.join(ROOT, 'ui5', 'sap.m');
+const UI5 = path.join(ROOT, 'ui5');
 const STRICT = process.argv.includes('--strict');
 
 // attribute names that never carry over 1:1. NOTE: `id` is compared like any
@@ -140,8 +140,11 @@ const lastSeg = (t) => normBind(t).replace(/[{}]/g, '').split(/[/>]/).pop();
 
 // ---------- per-port original views: everything the manifest lists ----------
 // join key: the sample name (ui5/sap.m/<SampleName>/), derived from meta.sample
-function originalViews(sampleName) {
-  const dir = path.join(UI5, sampleName);
+function originalViews(sample) {
+  // sample = "<lib>.sample.<Name>" -> ui5/<lib>/<Name> (the archived template folder)
+  const lib = sample.includes('.sample.') ? sample.slice(0, sample.indexOf('.sample.')) : 'sap.m';
+  const sampleName = sample.includes('.sample.') ? sample.slice(sample.indexOf('.sample.') + '.sample.'.length) : sample;
+  const dir = path.join(UI5, lib, sampleName);
   if (!fs.existsSync(dir)) return [];
   const files = [];
   const walk = (d) => {
@@ -176,7 +179,7 @@ for (const metaFile of fs.readdirSync(META).sort()) {
   if (!fs.existsSync(abapPath)) continue;
   apps++;
 
-  const views = originalViews(meta.sample.split('.sample.')[1] ?? meta.sample);
+  const views = originalViews(meta.sample);
   if (!views.length) {
     lines.push(`${meta.class} (${meta.sample}): no original view.xml archived — SKIPPED`);
     continue;

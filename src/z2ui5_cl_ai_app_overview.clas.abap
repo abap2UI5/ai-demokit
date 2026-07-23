@@ -718,6 +718,10 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
   METHOD get_catalog.
 
     result = VALUE #(
+      ( module = `sap.f` control = `sap.f.ShellBar`                    name = `ShellBar`                            class = `z2ui5_cl_ai_app_110` path = `src/04/b01/z2ui5_cl_ai_app_110.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `NOTE: First sap.f port. Static ShellBar with a sap.m Menu and a profile Avatar; the homeIcon points at the OpenUI5 host. No controller events are wired in the original view.` )
       ( module = `sap.m` control = `sap.m.ActionListItem`              name = `ActionListItem`                      class = `z2ui5_cl_ai_app_001` path = `src/01/b05/z2ui5_cl_ai_app_001.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
