@@ -2274,6 +2274,17 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         notes = `NOTE: sap.ui.table grid Table with multi-level column headers (multiLabels + headerSpan '3,2'/'2') and an extension OverflowToolbar. The 5 contact rows are inlined from the controller's JSON model;` &&
                  ` column templates bind {SUPPLIER}/{STREET}/{CITY}/{PHONE}/{OPENORDERS} 1:1.`
         use_name = abap_true )
+      ( module = `sap.ui.table`       control = `sap.ui.table.Table`                  name = `RowModes`                            class = `z2ui5_cl_ai_app_164` path = `src/02/b10/z2ui5_cl_ai_app_164.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `IMPROVISED: Wall-break for NAMED MODELS on sap.ui.table: the original binds the row mode against a separate 'ui' JSON model ({ui>/rowMode}) in two places - the Table's rowMode aggregation and the` &&
+                 ` footer SegmentedButton's selectedKey - while the grid rows come from the default model ({/ProductCollection}). abap2UI5 keeps all data in the one default model; the frontend (view1_js) aliases that` &&
+                 ` model under every {name>} prefix the view uses, so {ui>/rowMode} resolves to the same flat data. The named path is derived via _bind (raw path) so it moves with a rename. rowMode is a single flat` &&
+                 ` field instead of the original's /rowMode object nesting (last-segment identical). // NOTE: The shared 123-row demo ProductCollection (sap/ui/demo/mock/products.json) is inlined into model_init with` &&
+                 ` the five columns the sample binds (Name, Category, ProductPicUrl, Quantity, DeliveryDate). The original computes DeliveryDate from Date.now() with an i-mod-10 offset; a fixed base date (2026-07-23)` &&
+                 ` is used here so the port is deterministic - a client-only display decision. The Quantity and DeliveryDate columns keep the original typed complex bindings (sap.ui.model.type.Integer / .Date with` &&
+                 ` timestamp source).`
+        use_name = abap_true )
       ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`             name = `CalendarCalendarType`                class = `z2ui5_cl_ai_app_151` path = `src/02/b08/z2ui5_cl_ai_app_151.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
