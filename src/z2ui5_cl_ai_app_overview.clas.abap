@@ -729,6 +729,13 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         notes = `NOTE: The Slider drives the panel width via a roundtrip-free expression binding ({= ${slider} + '%' }) over the two-way slider value, instead of the original onSliderMoved setWidth handler;` &&
                  ` Slider.liveChange is therefore not wired (the width tracks the slider client-side). The full 27-row item set is inlined.`
         use_name = abap_true )
+      ( module = `sap.f`              control = `sap.f.GridList`                    name = `GridListBoxContainer`                class = `z2ui5_cl_ai_app_144` path = `src/04/b04/z2ui5_cl_ai_app_144.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `LIVE-TEST: The Slider liveChange recomputes the host Panel.width (bound) as value + '%' server-side; the original set byId('panelForGridList').setWidth imperatively. Slider.value carries a binding to` &&
+                 ` carry the value back. // NOTE: GridList with a grid:GridBoxLayout (boxMinWidth 17rem) and a GridListItem template (VBox + FlexItemData, Title, Label). The 27 items are inlined from model/items.json;` &&
+                 ` the template binds {TITLE}/{SUBTITLE} 1:1.`
+        use_name = abap_true )
       ( module = `sap.f`              control = `sap.f.GridList`                    name = `GridListModes`                       class = `z2ui5_cl_ai_app_133` path = `src/04/b02/z2ui5_cl_ai_app_133.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -2024,6 +2031,12 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.m`              control = `sap.ui.core.StandardMargins`       name = `StandardMarginsAll`                  class = `z2ui5_cl_ai_app_088` path = `src/01/b11/z2ui5_cl_ai_app_088.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
+      ( module = `sap.tnt`            control = `sap.f.DynamicPage`                 name = `InfoLabelInDynamicPage`              class = `z2ui5_cl_ai_app_143` path = `src/05/b05/z2ui5_cl_ai_app_143.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `LIVE-TEST: The 'Edit' (toggleAreaPriority) and 'Toggle Footer' actions are wired to backend events; the original toggled title-area priority and footer visibility imperatively — not reproduced` &&
+                 ` server-side. // NOTE: f:DynamicPage with title (heading, expanded/snapped tnt:InfoLabel, actions), pinnable header (ObjectAttributes), content (two long Texts) and footer. The footer message Button` &&
+                 ` binds text and visible='{= !!${/MESSAGESLENGTH}}' to a model field (initial 0), reproducing the original {/messagesLength} wiring.` )
       ( module = `sap.tnt`            control = `sap.tnt.InfoLabel`                 name = `InfoLabel`                           class = `z2ui5_cl_ai_app_113` path = `src/05/b01/z2ui5_cl_ai_app_113.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -2126,6 +2139,12 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` round-trip. The original set Slider.value=100 statically and drove byId('gridLayout').setWidth imperatively; here value and width carry bindings to carry that behaviour. // NOTE: The five core:HTML` &&
                  ` tiles carry raw HTML in the content attribute (the builder xml-escapes it, matching the original's escaped &lt;header&gt;/&lt;aside&gt;/&lt;article&gt;/&lt;footer&gt; content 1:1, including the` &&
                  ` original's quirks: the double space in '<aside  ...>Navigation</aside >' and the mismatched '<aside ...>Related Links</article>' close tag).` )
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.cssgrid.CSSGrid`     name = `GridAutoFlow`                        class = `z2ui5_cl_ai_app_145` path = `src/02/b06/z2ui5_cl_ai_app_145.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `LIVE-TEST: The RadioButtonGroup select is wired to a backend event; the original switched CSSGrid.gridAutoFlow (Column/ColumnDense/Row/RowDense) imperatively per selected index. The 'Reveal Grid'` &&
+                 ` ToggleButton used a demo-only RevealGrid helper module (grid outline overlay) — reduced to a backend event. // NOTE: grid:CSSGrid with gridAutoFlow + 10 VBox demo boxes, four carrying` &&
+                 ` GridItemLayoutData row/column spans, 1:1.` )
       ( module = `sap.ui.layout`      control = `sap.ui.layout.DynamicSideContent`  name = `DynamicSideContent`                  class = `z2ui5_cl_ai_app_138` path = `src/02/b05/z2ui5_cl_ai_app_138.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -2136,6 +2155,12 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `IMPROVISED: Breadth-probe: sap.ui.layout.FixFlex (fixed image + flexible text). The named-model image path (img>/products/pic1) is resolved to a static OpenUI5 product image.` )
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`           name = `FormToolbar`                         class = `z2ui5_cl_ai_app_142` path = `src/02/b06/z2ui5_cl_ai_app_142.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `NOTE: sap.ui.layout.form.Form with two FormContainers, per-container toolbars, ResponsiveGridLayout, FormElements with GridData layoutData and a Select. The original bound an element context` &&
+                 ` (/SupplierCollection/0 from the shared demo supplier.json); flattened here to top-level model fields the {…} bindings resolve against.`
+        use_name = abap_true )
       ( module = `sap.ui.layout`      control = `sap.ui.layout.Splitter`            name = `Splitter2`                           class = `z2ui5_cl_ai_app_125` path = `src/02/b02/z2ui5_cl_ai_app_125.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
