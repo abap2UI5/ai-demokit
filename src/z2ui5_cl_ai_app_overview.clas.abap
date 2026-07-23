@@ -729,6 +729,17 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         notes = `NOTE: The Slider drives the panel width via a roundtrip-free expression binding ({= ${slider} + '%' }) over the two-way slider value, instead of the original onSliderMoved setWidth handler;` &&
                  ` Slider.liveChange is therefore not wired (the width tracks the slider client-side). The full 27-row item set is inlined.`
         use_name = abap_true )
+      ( module = `sap.f`              control = `sap.f.GridList`                    name = `GridListModes`                       class = `z2ui5_cl_ai_app_133` path = `src/04/b02/z2ui5_cl_ai_app_133.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `LIVE-TEST: SegmentedButton.selectionChange reproduces onModeChange server-side: GridList.mode is two-way bound to the same field as SegmentedButton.selectedKey and the headerText (bound) is recomputed` &&
+                 ` as 'GridList with mode ' + key on a backend round-trip. The GridList delete / selectionChange and the GridListItem press / detailPress are wired to client-side MessageToasts (the original toasted the` &&
+                 ` affected item's runtime id). mode/headerText/selectedKey carry bindings the original set statically. // NOTE: The 11 product rows are inlined from the sample's model/data.json. Fields the original` &&
+                 ` JSON omits are given their UI5 defaults so the bound enum-ish properties stay valid: GridListItem.type -> 'Inactive' (8 rows), highlight/Status -> 'None' (5 rows). Both render identically to the` &&
+                 ` original's undefined values; structural-diff compares only binding paths, not data.`
+        use_ec = abap_true
+        use_ec_arg = abap_true
+        use_name = abap_true )
       ( module = `sap.f`              control = `sap.f.ShellBar`                    name = `ShellBar`                            class = `z2ui5_cl_ai_app_110` path = `src/04/b01/z2ui5_cl_ai_app_110.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -2022,11 +2033,22 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         notes = `LIVE-TEST: The two buttons reproduce the controller behaviour server-side: 'Toggle Collapse/Expand' flips SideNavigation.expanded (bound to a boolean model field, initial false as in the original) and` &&
                  ` 'Show/Hide "Walked"' flips the 'walked' NavigationListItem.visible. The original used byId().setExpanded/setVisible; here the properties are two-way bound and toggled on a backend round-trip. The` &&
                  ` 'visible' attribute added to the walked item carries that binding (the original toggled it imperatively).` )
+      ( module = `sap.tnt`            control = `sap.tnt.SideNavigation`            name = `SideNavigationWithTags`              class = `z2ui5_cl_ai_app_132` path = `src/05/b03/z2ui5_cl_ai_app_132.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `LIVE-TEST: The 'Toggle Collapse/Expand' button flips SideNavigation.expanded (bound to a boolean model field, initial true as in the original). The original toggled it imperatively via` &&
+                 ` byId().setExpanded; the property is two-way bound here and toggled on a backend round-trip. Every tnt:tag ObjectStatus (IndicationColor states 15-20, inverted) and the NavigationListGroup / fixedItem` &&
+                 ` structure are reproduced 1:1.` )
       ( module = `sap.ui.codeeditor`  control = `sap.ui.codeeditor.CodeEditor`      name = `CodeEditor`                          class = `z2ui5_cl_ai_app_114` path = `src/02/b01/z2ui5_cl_ai_app_114.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `NOTE: Breadth-probe: the ACE-based sap.ui.codeeditor CodeEditor (a wrapped third-party editor). JSON value shortened to a representative snippet; literal braces escaped so the XMLView parser does not` &&
                  ` read them as a binding.` )
+      ( module = `sap.ui.core`        control = `sap.ui.core.Control`               name = `ControlBusyIndicator`                class = `z2ui5_cl_ai_app_130` path = `src/02/b03/z2ui5_cl_ai_app_130.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `LIVE-TEST: The 'Toggle Busy State' button flips a boolean model field bound to Panel1.busy and the Icon.busy (both added to carry the binding; the original set busy imperatively via byId().setBusy).` &&
+                 ` The original set both busy=true then cleared them after a 5s setTimeout; the client-side auto-reset is simplified to a server-side toggle.` )
       ( module = `sap.ui.core`        control = `sap.ui.core.HTML`                  name = `Html`                                class = `z2ui5_cl_ai_app_120` path = `src/02/b01/z2ui5_cl_ai_app_120.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -2046,6 +2068,15 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` targets are reproduced 1:1.`
         use_ec = abap_true
         use_ec_arg = abap_true )
+      ( module = `sap.ui.core`        control = `sap.ui.core.theming.Parameters`    name = `BasicThemeParameters`                class = `z2ui5_cl_ai_app_131` path = `src/02/b03/z2ui5_cl_ai_app_131.clas.abap`
+        score = 1
+        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `NOTE: The sample itself is just a MessageStrip + Link pointing at the Theme Parameter Toolbox (the real demo content lives in that external tool); reproduced 1:1.` )
+      ( module = `sap.ui.core`        control = `sap.ui.model.type.Integer`         name = `TypeInteger`                         class = `z2ui5_cl_ai_app_129` path = `src/02/b03/z2ui5_cl_ai_app_129.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `NOTE: Data-type binding paradigm: the Integer type module is pulled in with core:require='{IntegerType: sap/ui/model/type/Integer}' and the Input/Text bindings carry type:'IntegerType' plus` &&
+                 ` formatOptions (min/maxIntegerDigits) 1:1. The single model field 'number' (initial '123') is serialized by abap2UI5 as /NUMBER, so the original raw '/number' paths are written as '/NUMBER'.` )
       ( module = `sap.ui.integration` control = `sap.ui.integration.Card`           name = `CardsLayout`                         class = `z2ui5_cl_ai_app_118` path = `src/02/b01/z2ui5_cl_ai_app_118.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`

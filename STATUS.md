@@ -18,6 +18,39 @@ CAPABILITIES.md._
 | Manually verified in a running system | **46 of 67 ports** — adds 060/061/066/067 (menu + MessagePopover, human live check 2026-07-22) to the 2026-07-20 checked set; the 21 remaining `generated` ports are b01–b04 apps that never carried an open question (machine-verified only) |
 | Archive | `ui5/sap.m/<SampleName>/` — full originals for the 44 ported samples (+2 cross-referenced: `FacetFilterSimple`, `Table`); mock snapshot in `ui5/mock/`. Unported samples are copied over batch by batch. |
 
+## Batch b03 — faithful diverse cross-library ports (2026-07-23) — 5 ports
+
+Second diverse faithful batch, three libraries, chosen for paradigms b02 didn't
+touch. All machine-green (abaplint STANDARD/CLOUD/702, validate-meta,
+pattern-lint, structural-diff `--strict` **0 diffs each**, property-check,
+render-smoke):
+
+- **129** `sap.ui.model.type.Integer` (`sap.ui.core` TypeInteger) — the
+  **data-type binding** paradigm: `core:require` pulls in the Integer type and
+  `form:SimpleForm` Inputs/Texts bind `{path, type:'IntegerType', formatOptions}`
+  (min/maxIntegerDigits) 1:1. The path is generated via `_bind(val=… path=X)`
+  (never hardcoded — a pattern-lint rule), which also puts the field in the
+  render-smoke mock model.
+- **130** `sap.ui.core` ControlBusyIndicator — `busy` state on a Panel + Icon,
+  toggled server-side (bound boolean); the original's 5 s setTimeout auto-reset
+  is simplified to a toggle.
+- **131** `sap.ui.core` BasicThemeParameters — MessageStrip + Link (the sample
+  is just a pointer to the external Theme Parameter Toolbox).
+- **132** `sap.tnt.SideNavigation` WithTags — richer than b02's 128: every
+  `tnt:tag` carries an `ObjectStatus` badge (IndicationColor 15-20, inverted),
+  plus `NavigationListGroup` + `fixedItem`; expand toggled server-side.
+- **133** `sap.f.GridList` Modes — the **data-bound list** paradigm: 11 product
+  rows inlined from `model/data.json`, a `GridListItem` template with
+  `counter`/`highlight`/`type` bindings + `{= …}` expression-bound visibility,
+  a `SegmentedButton` whose `selectionChange` drives `mode` + `headerText`
+  server-side, `f:customLayout` → `GridBasicLayout`. Absent enum-ish JSON
+  fields are seeded with their UI5 defaults (`type→Inactive`, `Status→None`) so
+  the bound enum properties stay valid — renders identically, and
+  structural-diff compares only binding paths.
+
+New batch folders `src/02/b03`, `src/05/b03`, `src/04/b02`. Coverage: **133**
+ports across 10 libraries.
+
 ## Batch b02 — faithful diverse cross-library ports (2026-07-23) — 7 ports
 
 First **faithful** (structurally verified, not probe) batch that spans past
