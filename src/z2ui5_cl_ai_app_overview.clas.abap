@@ -2076,6 +2076,11 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` (MessageToast.show).`
         use_ec = abap_true
         use_ec_arg = abap_true )
+      ( module = `sap.ui.core`        control = `sap.ui.core.InvisibleMessage`      name = `InvisibleMessage`                    class = `z2ui5_cl_ai_app_141` path = `src/02/b05/z2ui5_cl_ai_app_141.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `LIVE-TEST: The four buttons announce the pressed button's type+text to the sap.ui.core.InvisibleMessage a11y service and echo it into the status Text; here a press updates the bound status Text with a` &&
+                 ` generic confirmation (the a11y live-region announce and the per-button identity are not reproduced server-side). The original's 'Infromation' button-text typo is kept 1:1.` )
       ( module = `sap.ui.core`        control = `sap.ui.core.InvisibleText`         name = `InvisibleText`                       class = `z2ui5_cl_ai_app_127` path = `src/02/b02/z2ui5_cl_ai_app_127.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -2104,6 +2109,16 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `IMPROVISED: Breadth-probe of the declarative-card paradigm: a sap.ui.integration.widgets.Card whose whole UI comes from a JSON manifest. The manifest is carried as an ABAP string and bound to the` &&
                  ` Card. The original binds several manifests from a named model; here one inline List-card manifest probes whether abap2UI5 can drive an integration card at all.` )
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.BlockLayout`         name = `BlockLayoutCustomBackground`         class = `z2ui5_cl_ai_app_140` path = `src/02/b05/z2ui5_cl_ai_app_140.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        release = `1.98`
+        release_post171 = abap_true
+        is_post171 = abap_true
+        notes = `NOTE: BlockLayout with six rows / seven cells across background color shades A-F; the Select (11 ColorSet items) and every cell's backgroundColorSet are two-way bound to one model field (initial` &&
+                 ` ColorSet5), reproducing the original {/colorSet} wiring. Cell body texts are reproduced 1:1 (long ones split with &&). // POST-1.71: sap.m.Label.showColon is used (since UI5 1.98). The BlockLayout` &&
+                 ` entity itself is in scope; showColon renders the label's trailing colon 1:1.`
+        post171 = `sap.m.Label.showColon is used (since UI5 1.98). The BlockLayout entity itself is in scope; showColon renders the label's trailing colon 1:1.` )
       ( module = `sap.ui.layout`      control = `sap.ui.layout.cssgrid.CSSGrid`     name = `CSSGrid`                             class = `z2ui5_cl_ai_app_124` path = `src/02/b02/z2ui5_cl_ai_app_124.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -2111,6 +2126,12 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` round-trip. The original set Slider.value=100 statically and drove byId('gridLayout').setWidth imperatively; here value and width carry bindings to carry that behaviour. // NOTE: The five core:HTML` &&
                  ` tiles carry raw HTML in the content attribute (the builder xml-escapes it, matching the original's escaped &lt;header&gt;/&lt;aside&gt;/&lt;article&gt;/&lt;footer&gt; content 1:1, including the` &&
                  ` original's quirks: the double space in '<aside  ...>Navigation</aside >' and the mismatched '<aside ...>Related Links</article>' close tag).` )
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.DynamicSideContent`  name = `DynamicSideContent`                  class = `z2ui5_cl_ai_app_138` path = `src/02/b05/z2ui5_cl_ai_app_138.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `LIVE-TEST: The Toggle button, the width Slider (liveChange) and the DynamicSideContent breakpointChanged are wired to backend events; the original drove them imperatively (toggle(), $().width(),` &&
+                 ` getCurrentBreakpoint()) — device/DOM behaviours not reproduced server-side. // NOTE: The hint Text.visible is bound to a boolean model field (initial true); the original used a literal` &&
+                 ` visible='getVisible()' (a sample quirk) toggled per Device.system.phone in onBeforeRendering. The two long body texts are shortened representative Lorem (not gate-compared, static).` )
       ( module = `sap.ui.layout`      control = `sap.ui.layout.FixFlex`             name = `FixFlexVertical`                     class = `z2ui5_cl_ai_app_119` path = `src/02/b01/z2ui5_cl_ai_app_119.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -2124,6 +2145,17 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         notes = `IMPROVISED: Breadth-probe: a minimal sap.ui.table.Table (grid table, distinct from sap.m.Table) with 3 columns + template cells over a small ABAP model. The original's full column set, the` &&
                  ` p:ColumnAIAction plugin (post-1.71) and paste handling are omitted for the probe.`
         use_name = abap_true )
+      ( module = `sap.ui.table`       control = `sap.ui.table.Table`                name = `MultiHeader`                         class = `z2ui5_cl_ai_app_137` path = `src/02/b05/z2ui5_cl_ai_app_137.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `NOTE: sap.ui.table grid Table with multi-level column headers (multiLabels + headerSpan '3,2'/'2') and an extension OverflowToolbar. The 5 contact rows are inlined from the controller's JSON model;` &&
+                 ` column templates bind {SUPPLIER}/{STREET}/{CITY}/{PHONE}/{OPENORDERS} 1:1.`
+        use_name = abap_true )
+      ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`           name = `CalendarSingleDaySelection`          class = `z2ui5_cl_ai_app_139` path = `src/02/b05/z2ui5_cl_ai_app_139.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `LIVE-TEST: Calendar.select and the 'Select Today' button are wired to backend events that write the current server date (yyyy-MM-dd) into the bound status Text. The original formatted` &&
+                 ` getSelectedDates()[0].getStartDate() / added a DateRange(today) with DateFormat + UI5Date; reading the actually clicked day out of the transpiled event is simplified to the server date.` )
       ( module = `sap.ui.unified`     control = `sap.ui.unified.ColorPicker`        name = `ColorPickerSimplified`               class = `z2ui5_cl_ai_app_112` path = `src/02/b01/z2ui5_cl_ai_app_112.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`

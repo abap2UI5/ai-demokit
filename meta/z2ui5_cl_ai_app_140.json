@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_ai_app_140",
+  "sample": "sap.ui.layout.sample.BlockLayoutCustomBackground",
+  "entity": "sap.ui.layout.BlockLayout",
+  "file": "src/02/b05/z2ui5_cl_ai_app_140.clas.abap",
+  "batch": "b05",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "BlockLayout with six rows / seven cells across background color shades A-F; the Select (11 ColorSet items) and every cell's backgroundColorSet are two-way bound to one model field (initial ColorSet5), reproducing the original {/colorSet} wiring. Cell body texts are reproduced 1:1 (long ones split with &&)."
+    },
+    {
+      "type": "POST_171",
+      "what": "sap.m.Label.showColon is used (since UI5 1.98). The BlockLayout entity itself is in scope; showColon renders the label's trailing colon 1:1."
+    }
+  ]
+}

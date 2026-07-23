@@ -1,0 +1,13 @@
+{
+  "class": "z2ui5_cl_ai_app_141",
+  "sample": "sap.ui.core.sample.InvisibleMessage",
+  "entity": "sap.ui.core.InvisibleMessage",
+  "file": "src/02/b05/z2ui5_cl_ai_app_141.clas.abap",
+  "batch": "b05",
+  "audit": { "frontend_action": false, "event_t_arg": false },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    { "type": "LIVE_TEST", "what": "The four buttons announce the pressed button's type+text to the sap.ui.core.InvisibleMessage a11y service and echo it into the status Text; here a press updates the bound status Text with a generic confirmation (the a11y live-region announce and the per-button identity are not reproduced server-side). The original's 'Infromation' button-text typo is kept 1:1." }
+  ]
+}

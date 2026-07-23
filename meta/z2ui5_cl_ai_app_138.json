@@ -1,0 +1,14 @@
+{
+  "class": "z2ui5_cl_ai_app_138",
+  "sample": "sap.ui.layout.sample.DynamicSideContent",
+  "entity": "sap.ui.layout.DynamicSideContent",
+  "file": "src/02/b05/z2ui5_cl_ai_app_138.clas.abap",
+  "batch": "b05",
+  "audit": { "frontend_action": false, "event_t_arg": false },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    { "type": "LIVE_TEST", "what": "The Toggle button, the width Slider (liveChange) and the DynamicSideContent breakpointChanged are wired to backend events; the original drove them imperatively (toggle(), $().width(), getCurrentBreakpoint()) — device/DOM behaviours not reproduced server-side." },
+    { "type": "NOTE", "what": "The hint Text.visible is bound to a boolean model field (initial true); the original used a literal visible='getVisible()' (a sample quirk) toggled per Device.system.phone in onBeforeRendering. The two long body texts are shortened representative Lorem (not gate-compared, static)." }
+  ]
+}
