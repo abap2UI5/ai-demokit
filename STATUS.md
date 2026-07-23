@@ -18,6 +18,31 @@ CAPABILITIES.md._
 | Manually verified in a running system | **46 of 67 ports** — adds 060/061/066/067 (menu + MessagePopover, human live check 2026-07-22) to the 2026-07-20 checked set; the 21 remaining `generated` ports are b01–b04 apps that never carried an open question (machine-verified only) |
 | Archive | `ui5/sap.m/<SampleName>/` — full originals for the 44 ported samples (+2 cross-referenced: `FacetFilterSimple`, `Table`); mock snapshot in `ui5/mock/`. Unported samples are copied over batch by batch. |
 
+## Batch b04 — faithful diverse cross-library ports (2026-07-23) — 3 ports
+
+Third diverse faithful batch, three libraries. All machine-green (abaplint
+STANDARD/CLOUD/702, validate-meta, pattern-lint, structural-diff `--strict`
+**0 diffs each**, property-check, render-smoke):
+
+- **134** `sap.tnt.ToolHeader` — a shell-like app header: two ToolHeaders in a
+  ScrollContainer with `OverflowToolbarButton`s, `ToolHeaderUtilitySeparator`,
+  Avatar/Image, each item carrying `OverflowToolbarLayoutData`
+  priorities/groups. Logo/Avatar presses → client toasts; the original's
+  `Device.media` responsive-visibility handler is a device behaviour not
+  reproduced server-side.
+- **135** `sap.ui.model.type.Currency` (`sap.ui.core` TypeCurrency) — the
+  **composite** data-type binding: every Input/Text binds
+  `parts:['/amount','/currency']` with `type:'CurrencyType'` + formatOptions
+  (showMeasure/showNumber/preserveDecimals/currencyCode/style). Paths generated
+  via `_bind` (both fields land in the render-smoke mock model).
+- **136** `sap.f.SidePanel` Single — a docked side panel: `f:mainContent`
+  (buttons, veto Switches, ten body Texts) + `f:items` → `SidePanelItem`.
+  `toggle` → client toast (the original's preventDefault veto by the two
+  switches is a live interaction, not reproduced).
+
+New batch folders `src/05/b04`, `src/02/b04`, `src/04/b03`. Coverage: **136**
+ports across 10 libraries.
+
 ## Batch b03 — faithful diverse cross-library ports (2026-07-23) — 5 ports
 
 Second diverse faithful batch, three libraries, chosen for paradigms b02 didn't

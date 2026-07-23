@@ -1,0 +1,13 @@
+{
+  "class": "z2ui5_cl_ai_app_136",
+  "sample": "sap.f.sample.SidePanelSingle",
+  "entity": "sap.f.SidePanel",
+  "file": "src/04/b03/z2ui5_cl_ai_app_136.clas.abap",
+  "batch": "b03",
+  "audit": { "frontend_action": false, "event_t_arg": false },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    { "type": "LIVE_TEST", "what": "SidePanel.toggle shows a client-side MessageToast. The original onToggle inspected the preventExpand/preventCollapse switches and called event.preventDefault() to veto the expand/collapse; that veto logic is a live interaction not reproduced here (the switches are kept as static controls)." }
+  ]
+}
