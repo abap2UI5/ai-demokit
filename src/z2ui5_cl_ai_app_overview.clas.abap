@@ -1132,6 +1132,10 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` ACTIONS as an empty array ([] instead of undefined) - the actions aggregation renders no actions either way, and an empty array is not an empty-string/enum hazard. // NOTE: the relative AuthorPicUrl` &&
                  ` asset paths (test-resources/sap/m/images/*.jpg) are rewritten to absolute https://sdk.openui5.org/test-resources/... per the project rule for runtime asset URLs.`
         use_name = abap_true )
+      ( module = `sap.m`              control = `sap.m.FlexBox`                       name = `FlexBoxGap`                          class = `z2ui5_cl_ai_app_158` path = `src/01/b16/z2ui5_cl_ai_app_158.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `NOTE: Three Panels demonstrating FlexBox gap / columnGap / rowGap (wrap=Wrap), each with nine typed Buttons, reproduced 1:1.` )
       ( module = `sap.m`              control = `sap.m.FlexBox`                       name = `FlexBoxNested`                       class = `z2ui5_cl_ai_app_026` path = `src/01/b04/z2ui5_cl_ai_app_026.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -1190,6 +1194,14 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` that selecting an item/px still changes the arrow scroll step on both containers and that pressing a NumericContent still toasts 'Fire press'.`
         use_ec = abap_true
         use_ec_arg = abap_true )
+      ( module = `sap.m`              control = `sap.m.HeaderContainer`               name = `HeaderContainerVM`                   class = `z2ui5_cl_ai_app_157` path = `src/01/b16/z2ui5_cl_ai_app_157.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.44.0`
+        notes = `LIVE-TEST: NumericContent presses show a client MessageToast (original press handler). Two vertical HeaderContainers — one of eight NumericContents, one of five TileContents (each wrapping a` &&
+                 ` NumericContent) — reproduced 1:1.`
+        use_ec = abap_true
+        use_ec_arg = abap_true )
       ( module = `sap.m`              control = `sap.m.IconTabBar`                    name = `IconTabBarStretchContent`            class = `z2ui5_cl_ai_app_030` path = `src/01/b04/z2ui5_cl_ai_app_030.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -1217,6 +1229,10 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` abap2UI5 does not serve those static assets, so only the first (sap-icon://area-chart) icon renders offline. The images are archived under ui5/sap.m/ImageContent/images/.`
         use_ec = abap_true
         use_ec_arg = abap_true )
+      ( module = `sap.m`              control = `sap.m.Input`                         name = `InputTypes`                          class = `z2ui5_cl_ai_app_159` path = `src/01/b16/z2ui5_cl_ai_app_159.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `NOTE: Five Inputs demonstrating the input types Text / Email / Tel / Number / Url with labelFor Labels, reproduced 1:1.` )
       ( module = `sap.m`              control = `sap.m.Input`                         name = `InputValueState`                     class = `z2ui5_cl_ai_app_032` path = `src/01/b02/z2ui5_cl_ai_app_032.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -1258,6 +1274,14 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` static assets, so the thumbnails/large images do not display offline. The LightBox still opens on image click (built-in Image.detailBox behaviour, no controller). The last item deliberately points` &&
                  ` imageSrc at a non-existent file to show the LightBox load-error state, exactly as in the sample. // NOTE: the six identical filler paragraphs use the same ABAP literal via a local ``lorem`` variable;` &&
                  ` XML attribute whitespace (newlines/tabs in the sample's indented multi-line text) is normalised to single spaces (visually identical).` )
+      ( module = `sap.m`              control = `sap.m.Link`                          name = `Link`                                class = `z2ui5_cl_ai_app_160` path = `src/01/b16/z2ui5_cl_ai_app_160.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.12`
+        notes = `LIVE-TEST: The 'Open message box' / 'Show more information' link presses show a client MessageToast (original handleLinkPress opened a MessageBox). Six Links across two layouts — plain, disabled,` &&
+                 ` href/target, and icon/endIcon variants — reproduced 1:1.`
+        use_ec = abap_true
+        use_ec_arg = abap_true )
       ( module = `sap.m`              control = `sap.m.Link`                          name = `LinkEmphasized`                      class = `z2ui5_cl_ai_app_033` path = `src/01/b01/z2ui5_cl_ai_app_033.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`

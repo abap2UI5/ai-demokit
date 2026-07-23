@@ -1,0 +1,2 @@
+{ "class": "z2ui5_cl_ai_app_158", "sample": "sap.m.sample.FlexBoxGap", "entity": "sap.m.FlexBox", "file": "src/01/b16/z2ui5_cl_ai_app_158.clas.abap", "batch": "b16", "audit": { "frontend_action": false, "event_t_arg": false }, "status": "generated", "checked": null,
+  "deviations": [ { "type": "NOTE", "what": "Three Panels demonstrating FlexBox gap / columnGap / rowGap (wrap=Wrap), each with nine typed Buttons, reproduced 1:1." } ] }
