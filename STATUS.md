@@ -18,6 +18,41 @@ CAPABILITIES.md._
 | Manually verified in a running system | **46 of 67 ports** — adds 060/061/066/067 (menu + MessagePopover, human live check 2026-07-22) to the 2026-07-20 checked set; the 21 remaining `generated` ports are b01–b04 apps that never carried an open question (machine-verified only) |
 | Archive | `ui5/sap.m/<SampleName>/` — full originals for the 44 ported samples (+2 cross-referenced: `FacetFilterSimple`, `Table`); mock snapshot in `ui5/mock/`. Unported samples are copied over batch by batch. |
 
+## Batch b02 — faithful diverse cross-library ports (2026-07-23) — 7 ports
+
+First **faithful** (structurally verified, not probe) batch that spans past
+`sap.m`, picked for maximal control diversity across four libraries. All seven
+are machine-green (abaplint STANDARD/CLOUD/702, validate-meta, pattern-lint,
+structural-diff `--strict` with **0 diffs each**, property-check, render-smoke):
+
+- **122** `sap.ui.core.Icon` — icon-font gallery (`core:Icon` × 5 in an HBox,
+  each with `FlexItemData` layoutData; stethoscope press → client toast).
+- **123** `sap.tnt.NavigationList` — nav tree with nested items; the two toolbar
+  buttons flip `expanded` / a sub-item's `visible` server-side (boolean model
+  fields, `view_model_update`).
+- **124** `sap.ui.layout.cssgrid.CSSGrid` — CSS-grid page layout, five
+  `core:HTML` tiles (raw HTML in `content`, escaped 1:1 incl. the original's
+  quirks) + `GridItemLayoutData`; Slider `liveChange` → panel width roundtrip.
+- **125** `sap.ui.layout.Splitter` — resizable split panes with
+  `SplitterLayoutData` (fully static, no controller).
+- **126** `sap.ui.unified.FileUploader` — file uploader + upload button
+  (upload cycle reduced to client toasts — endpoint-dependent, LIVE_TEST).
+- **127** `sap.ui.core.InvisibleText` — ARIA-description Page (12 buttons across
+  customHeader/subHeader/content/footer, six `core:InvisibleText` targets,
+  `ariaLabelledBy`/`ariaDescribedBy` associations 1:1).
+- **128** `sap.tnt.SideNavigation` — side nav with `NavigationListGroup`s +
+  `fixedItem`, external-link items; expand/hide toggles server-side.
+
+New batch folders `src/02/b02` (sap.ui.* → 122/124/125/126/127) and
+`src/05/b02` (sap.tnt → 123/128). Coverage: **128** ports across 10 libraries.
+Two render-smoke lessons re-confirmed: (a) a nested aggregation (`layoutData`)
+needs its **own** `shut()` plus one for the parent control before a sibling —
+one missing `shut()` silently nests the next control inside the previous one;
+(b) a bound property whose `DATA` uses an inline `VALUE` clause is invisible to
+render-smoke's typed-model derivation (it only reads assignment seeds), so such
+fields mock as empty string and fail strict boolean/numeric property typing —
+seed them with a plain assignment on init instead.
+
 ## Beyond sap.m: sap.f library started (2026-07-22) — src/04/b01
 
 First expansion past `sap.m`. **sap.f** (Fiori flagship) is now a second library

@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_ai_app_123",
+  "sample": "sap.tnt.sample.NavigationList",
+  "entity": "sap.tnt.NavigationList",
+  "file": "src/05/b02/z2ui5_cl_ai_app_123.clas.abap",
+  "batch": "b02",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "LIVE_TEST",
+      "what": "The two toolbar buttons reproduce the original controller behaviour server-side: 'Toggle Collapse/Expand' flips NavigationList.expanded (bound to a boolean model field), 'Show/Hide SubItem 3' flips subItemThree.visible. The original used byId().setExpanded/setVisible; here the properties are two-way bound and toggled on a backend round-trip. The 'expanded' attribute on NavigationList and the 'visible' attribute on subItemThree are added to carry these bindings (the original set them imperatively)."
+    }
+  ]
+}

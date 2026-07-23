@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_ai_app_122",
+  "sample": "sap.ui.core.sample.Icon",
+  "entity": "sap.ui.core.Icon",
+  "file": "src/02/b02/z2ui5_cl_ai_app_122.clas.abap",
+  "batch": "b02",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "LIVE_TEST",
+      "what": "The stethoscope Icon press is wired client-side to MessageToast.show('Over budget!') via the control_global frontend action, matching the original controller's handleStethoscopePress (MessageToast.show)."
+    }
+  ]
+}
