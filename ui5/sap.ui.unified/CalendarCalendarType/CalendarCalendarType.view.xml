@@ -1,0 +1,27 @@
+<mvc:View
+		controllerName="sap.ui.unified.sample.CalendarCalendarType.CalendarCalendarType"
+		xmlns:l="sap.ui.layout"
+		xmlns:u="sap.ui.unified"
+		xmlns:mvc="sap.ui.core.mvc"
+		xmlns="sap.m"
+		class="viewPadding">
+	<l:VerticalLayout class="sapUiContentPadding">
+		<u:Calendar
+			id="calendar"
+			primaryCalendarType="Islamic"
+			secondaryCalendarType="Gregorian"
+			select=".handleCalendarSelect" />
+		<l:HorizontalLayout allowWrapping="true">
+			<Button
+				press=".handleFocusToday"
+				text="Focus Today"
+				class="sapUiSmallMarginEnd"/>
+			<Label
+				text="Selected Date (yyyy-mm-dd):"
+				class="sapUiSmallMarginEnd"/>
+			<Text
+				id="selectedDate"
+				text="No Date Selected"/>
+		</l:HorizontalLayout>
+	</l:VerticalLayout>
+</mvc:View>

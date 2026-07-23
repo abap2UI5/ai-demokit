@@ -1,0 +1,2 @@
+{ "class": "z2ui5_cl_ai_app_152", "sample": "sap.f.sample.ShellBarWithMenuButton", "entity": "sap.f.ShellBar", "file": "src/04/b06/z2ui5_cl_ai_app_152.clas.abap", "batch": "b06", "audit": { "frontend_action": false, "event_t_arg": false }, "status": "generated", "checked": null,
+  "deviations": [ { "type": "NOTE", "what": "Static sap.f.ShellBar with menu/nav/search/notifications/copilot toggles, homeIcon, notificationsNumber and a profile Avatar (initials), reproduced 1:1." } ] }

@@ -1,0 +1,2 @@
+{ "class": "z2ui5_cl_ai_app_150", "sample": "sap.ui.codeeditor.sample.CodeEditorIconTabHeader", "entity": "sap.ui.codeeditor.CodeEditor", "file": "src/02/b08/z2ui5_cl_ai_app_150.clas.abap", "batch": "b08", "audit": { "frontend_action": false, "event_t_arg": false }, "status": "generated", "checked": null,
+  "deviations": [ { "type": "LIVE_TEST", "what": "The IconTabHeader select is wired to a backend event; the original swapped the CodeEditor content per selected tab (A/B) imperatively. The ce:CodeEditor (javascript) renders 1:1." } ] }

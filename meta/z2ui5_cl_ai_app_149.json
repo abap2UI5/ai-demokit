@@ -1,0 +1,2 @@
+{ "class": "z2ui5_cl_ai_app_149", "sample": "sap.ui.integration.sample.CardExplorer", "entity": "sap.ui.integration.widgets.Card", "file": "src/02/b08/z2ui5_cl_ai_app_149.clas.abap", "batch": "b08", "audit": { "frontend_action": false, "event_t_arg": false }, "status": "generated", "checked": null,
+  "deviations": [ { "type": "NOTE", "what": "The sample itself is a Link + Image pointing at the Card Explorer tool (the actual integration Cards live in that tool); reproduced 1:1. The Image press shows a client MessageToast (original onImagePress opened the tool)." } ] }
