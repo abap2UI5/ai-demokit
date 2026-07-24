@@ -2195,6 +2195,19 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         use_fua = abap_true
         use_fua_arg = abap_true
         use_name = abap_true )
+      ( module = `sap.m`              control = `sap.m.Table`                         name = `TableStrictLayout`                   class = `z2ui5_cl_ai_app_225` path = `src/01/b17/z2ui5_cl_ai_app_225.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.16`
+        release = `1.91`
+        release_post171 = abap_true
+        is_post171 = abap_true
+        notes = `POST-1.71: sap.m.Table autoPopinMode (since UI5 1.76) kept 1:1 from the original; needs a UI5 release >= 1.76 to render. // POST-1.71: sap.m.plugins.ColumnResizer (since UI5 1.91) kept 1:1 in the` &&
+                 ` Table dependents aggregation; needs a UI5 release >= 1.91 to render. // LIVE-TEST: The sorter binding ({path:'/ProductCollection', sorter:{path:'NAME'}}) and the sap.ui.model.type.Currency composite` &&
+                 ` binding on Price/CurrencyCode are passed through 1:1 as raw binding-info strings; the sorted order and currency formatting are not yet verified in a running system.`
+        post171 = `sap.m.Table autoPopinMode (since UI5 1.76) kept 1:1 from the original; needs a UI5 release >= 1.76 to render. // sap.m.plugins.ColumnResizer (since UI5 1.91) kept 1:1 in the Table dependents` &&
+                 ` aggregation; needs a UI5 release >= 1.91 to render.`
+        use_name = abap_true )
       ( module = `sap.m`              control = `sap.m.TableSelectDialog`             name = `TableSelectDialog`                   class = `z2ui5_cl_ai_app_104` path = `src/01/b12/z2ui5_cl_ai_app_104.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
@@ -2684,6 +2697,14 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.ui.layout`      control = `sap.ui.layout.Grid`                  name = `GridInfo`                            class = `z2ui5_cl_ai_app_194` path = `src/02/b10/z2ui5_cl_ai_app_194.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.Grid`                  name = `GridXL`                              class = `z2ui5_cl_ai_app_226` path = `src/02/b10/z2ui5_cl_ai_app_226.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `NOTE: The original binds against the default JSONModel (no named model); the InformationCollection array is reproduced 1:1 on the one abap2UI5 default model. The Grid binding={/InformationCollection}` &&
+                 ` element-binding and the index-relative child bindings ({0/introText1}, {3/ProductPicUrl2}, {1/ProductPicUrl}, {2/ProductPicUrl}, {1/ProductPicUrl2}, {0/Description1}, {0/Description2}) are kept` &&
+                 ` verbatim with upper-cased field names. // NOTE: Image asset URLs are host-prefixed to https://sdk.openui5.org/ per the project asset-URL rule: the static demoAppsTeaser.png src, and the bound` &&
+                 ` ProductPicUrl/ProductPicUrl2 values seeded in model_init (originally host-relative test-resources/ paths). // LIVE-TEST: The Grid element-binding to an array path plus index-relative child bindings` &&
+                 ` render in the static headless harness (render-smoke green); the actual runtime data resolution of {0/INTROTEXT1} etc. against the serialized default model is not yet verified in a running system.` )
       ( module = `sap.ui.layout`      control = `sap.ui.layout.HorizontalLayout`      name = `HorizontalLayout`                    class = `z2ui5_cl_ai_app_162` path = `src/02/b09/z2ui5_cl_ai_app_162.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`

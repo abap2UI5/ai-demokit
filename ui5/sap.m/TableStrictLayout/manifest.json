@@ -1,0 +1,31 @@
+{
+	"_version": "2.0.0",
+	"sap.app": {
+		"id": "sap.m.sample.TableStrictLayout",
+		"applicationVersion": {
+			"version": "1.0.0"
+		},
+		"type": "application",
+		"title": "Application 'TableStrictLayout'"
+	},
+	"sap.ui": {
+		"technology": "UI5",
+		"deviceTypes": {
+			"desktop": true,
+			"tablet": true,
+			"phone": true
+		}
+	},
+	"sap.ui5": {
+		"rootView": "sap.m.sample.TableStrictLayout.Table",
+		"config": {
+			"sample": {
+				"files": [
+					"Table.view.xml",
+					"Table.controller.js",
+					"manifest.json"
+				]
+			}
+		}
+	}
+}
