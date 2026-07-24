@@ -2551,6 +2551,24 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` '(Upload Success)'). The uploadUrl='upload/' is kept 1:1.`
         use_ec = abap_true
         use_ec_arg = abap_true )
+      ( module = `sap.uxap`           control = `sap.uxap.ObjectPageHeaderContent`    name = `ObjectPageHeaderContentPriorities`   class = `z2ui5_cl_ai_app_188` path = `src/03/b02/z2ui5_cl_ai_app_188.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `IMPROVISED: Block->content inlining (app 178/161 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the original blocks aggregations each hold a custom BlockBase` &&
+                 ` control goals:GoalsBlock (from the sample's SharedBlocks JS, xmlns:goals='sap.uxap.sample.SharedBlocks.goals'), used 4 times in the four ObjectPageSubSection blocks aggregations. A BlockBase is only` &&
+                 ` a lazy-loading wrapper around a view; GoalsBlock's rendered content is a sap.ui.layout.form.SimpleForm (editable='false' layout='ColumnLayout') holding three Label/Text goal pairs. Since` &&
+                 ` ObjectPageSubSection.blocks accepts any sap.ui.core.Control, each goals:GoalsBlock is inlined here as that SimpleForm (form:SimpleForm) with its m:Label/m:Text content - the whole ObjectPage renders` &&
+                 ` with the thin generic frontend, no custom JS control. Consequently all four goals:GoalsBlock controls are absent from the port and four form:SimpleForm controls (with their Label/Text children) are` &&
+                 ` present in their place. GoalsBlock has no controller behaviour to port.` )
+      ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`           name = `AnchorBarNoPopover`                  class = `z2ui5_cl_ai_app_187` path = `src/03/b02/z2ui5_cl_ai_app_187.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `IMPROVISED: Block->content inlining (app 178/161 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the original blocks aggregations each hold a custom BlockBase` &&
+                 ` control blockcolor:BlockBlue (from the sample's SharedBlocks JS, xmlns:blockcolor='sap.uxap.sample.SharedBlocks'), used 4 times with the id attributes bbt1/bbt2/bbt3/bbt4. A BlockBase is only a` &&
+                 ` lazy-loading wrapper around a view; BlockBlue's rendered content is a single coloured div (<html:div style='height:4em; background-color: #A9EAFF ;'/>). Since ObjectPageSubSection.blocks accepts any` &&
+                 ` sap.ui.core.Control, each blockcolor:BlockBlue is inlined as a core:HTML leaf carrying that div in its content attribute - the whole ObjectPage renders with the thin generic frontend, no custom JS` &&
+                 ` control. Consequently all four blockcolor:BlockBlue controls (and their id attributes bbt1/bbt2/bbt3/bbt4) are absent from the port and four core:HTML controls are present in their place. The empty` &&
+                 ` BlockBlueCtrl controller (a no-op onParentBlockModeChange stub) carries no behaviour to port.` )
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`           name = `ObjectPageSubSection`                class = `z2ui5_cl_ai_app_116` path = `src/03/b01/z2ui5_cl_ai_app_116.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
