@@ -2599,6 +2599,14 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         notes = `LIVE-TEST: The Toggle button, the width Slider (liveChange) and the DynamicSideContent breakpointChanged are wired to backend events; the original drove them imperatively (toggle(), $().width(),` &&
                  ` getCurrentBreakpoint()) — device/DOM behaviours not reproduced server-side. // NOTE: The hint Text.visible is bound to a boolean model field (initial true); the original used a literal` &&
                  ` visible='getVisible()' (a sample quirk) toggled per Device.system.phone in onBeforeRendering. The two long body texts are shortened representative Lorem (not gate-compared, static).` )
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.FixFlex`               name = `FixFlexHorizontal`                   class = `z2ui5_cl_ai_app_219` path = `src/02/b10/z2ui5_cl_ai_app_219.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `NOTE: The original binds the Image src against a separate 'img' JSON model ({img>/products/pic1}) loaded from sap/ui/demo/mock/img.json. abap2UI5 serves one default model, so the picture path is` &&
+                 ` folded into it and the src binds it directly (client->_bind( pic1 )) - the 'img>' prefix is dropped and the last path segment is identical, which structural-diff matches. The mock's host-relative` &&
+                 ` path is resolved to the OpenUI5 host (sdk.openui5.org) per the asset-URL rule. // NOTE: The sample's style.css (background colours on the FixFlex fixed/flexible areas, referenced by` &&
+                 ` class='fixFlexHorizontal') is loaded via the manifest in the original; abap2UI5 ships no separate css file, so it is injected via a core:HTML <style> node with the CSS braces escaped. This adds a` &&
+                 ` core:HTML control not present in the original view (extra controls are not flagged by structural-diff).` )
       ( module = `sap.ui.layout`      control = `sap.ui.layout.FixFlex`               name = `FixFlexMinFlexSize`                  class = `z2ui5_cl_ai_app_215` path = `src/02/b10/z2ui5_cl_ai_app_215.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -2714,6 +2722,25 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `LIVE-TEST: Calendar with primaryCalendarType Islamic / secondaryCalendarType Gregorian. select and 'Focus Today' are wired to backend events that write the current server date (Gregorian yyyy-MM-dd)` &&
                  ` into the bound Text; the original formatted the selected day / focused today via DateFormat + UI5Date.` )
+      ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`             name = `CalendarMinMax`                      class = `z2ui5_cl_ai_app_220` path = `src/02/b10/z2ui5_cl_ai_app_220.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        release = `1.74`
+        release_post171 = abap_true
+        is_post171 = abap_true
+        notes = `NOTE: The object-typed calendar date properties (Calendar.minDate, Calendar.maxDate and the disabledDates DateRange startDate/endDate) are fed from plain ISO strings in the model and converted at the` &&
+                 ` point of use with Formatter.DateCreateObject from the curated module (core:require='{Formatter: z2ui5/model/formatter}'). A plain string binding would crash view creation (Date must be a JS/UI5Date` &&
+                 ` object). The original's UI5Date.getInstance(year, month0, day) values are normalized to ISO 1:1 (month is 0-based: minDate 2000-01-01, maxDate 2050-12-31, disabled ranges 2016-01-04..2016-01-10 and` &&
+                 ` 2016-01-15). The second disabled range omits endDate in the original (a single day); it serializes here as an empty end field. // IMPROVISED: The Calendar select handler (handleCalendarSelect)` &&
+                 ` formats the picked day with DateFormat and writes it into the 'selectedDate' Text; this is imperative presentation with no bindable equivalent (the select event parameter is a DateRange control` &&
+                 ` reference, not a value that can be transported), so the select attribute is dropped and the selectedDate Text keeps its initial 'No Date Selected' text. // NOTE: The original Switch (state='true')` &&
+                 ` toggles Calendar week numbers via an imperative change handler (setShowWeekNumbers). This is folded into a two-way binding shared by the Switch state and a Calendar showWeekNumbers property (both` &&
+                 ` bound to show_week_numbers, seeded true), so the toggle runs on the client with no round-trip - the thin-frontend move. The Switch change attribute is therefore dropped and a showWeekNumbers` &&
+                 ` attribute (absent from the original view) is added. // POST-1.71: Formatter.DateCreateObject is referenced via core:require, which needs UI5 >= 1.74. sap.ui.unified.Calendar itself and its` &&
+                 ` minDate/maxDate/disabledDates/showWeekNumbers members are all <= 1.71 (in scope).`
+        post171 = `Formatter.DateCreateObject is referenced via core:require, which needs UI5 >= 1.74. sap.ui.unified.Calendar itself and its minDate/maxDate/disabledDates/showWeekNumbers members are all <= 1.71 (in` &&
+                 ` scope).`
+        use_name = abap_true )
       ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`             name = `CalendarSingleDaySelection`          class = `z2ui5_cl_ai_app_139` path = `src/02/b05/z2ui5_cl_ai_app_139.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
