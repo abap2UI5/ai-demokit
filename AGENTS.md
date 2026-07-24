@@ -557,17 +557,27 @@ with a closed `type` vocabulary so deviations stay countable:
 - `LIVE_TEST` — needs checking in a running system: an unverified
   binding/event path, or uncertain rendering (e.g. app 003's `${$source>/text}`
   event arg).
-- `IMPROVISED` — deviates from the sample: e.g. a named model flattened to
-  static values (app 006), or a MessageManager replaced by a hardcoded message
-  table (app 038). Only improvise what `CAPABILITIES.md` does not mark
-  expressible — app 042's Dialog→toast substitution was a wrong improvisation;
-  app 044 shows the 1:1 way (`popup_display`).
+- `IMPROVISED` — **materially deviates** from the sample: the port loses or
+  changes something. A named model flattened to **static values** (app 006's
+  `img>`→hardcoded URLs), a MessageManager replaced by a hardcoded message table
+  (app 038), a fold that **drops bound columns** or resolves a live model
+  statically. Only improvise what `CAPABILITIES.md` does not mark expressible —
+  app 042's Dialog→toast substitution was a wrong improvisation; app 044 shows
+  the 1:1 way (`popup_display`).
 - `DROPPED_171` — a control / property / enum value newer than 1.71 was
   dropped or downgraded (app 042's `Indication06`+ states set to `None`).
 - `SUBSET_DATA` — **retired (2026-07-22): no longer accepted.** Ports inline the
   full mock row set (see `model_init` above); `validate-meta` now rejects this
   type. Kept in the vocabulary only so historical diffs stay readable.
-- `NOTE` — anything else worth flagging.
+- `NOTE` — a faithful port with a caveat worth recording but **no loss**. This
+  is the type for a **pure named-model prefix-drop that renders identically** —
+  same data, same leaf name, `structural-diff` 0 diffs (`{ui>/rowMode}`→`{/ROWMODE}`,
+  `{img>/pic1}`→`{/PIC1}` with the real value); the model layer differs, the
+  output does not, so it is not IMPROVISED. Also: a deterministic-date
+  substitution, a device-branch simplification, anything else worth flagging.
+  **Settled policy (2026-07-24):** NOTE for a same-data prefix-drop, IMPROVISED
+  only for a lossy/static fold — this ends the earlier IMPROVISED/NOTE
+  inconsistency the cold-read probes kept hitting.
 
 The `what` text carries the full explanation. Keep the array **empty** for a
 faithful 1:1 port. Still add the inline `"` comment at the exact spot of each
