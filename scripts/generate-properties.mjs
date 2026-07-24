@@ -9,10 +9,12 @@
  * needs to know when each member was introduced. Members without @since are
  * older than version tracking and count as always-available.
  *
- * Source: an OpenUI5 checkout (env OPENUI5_DIR, default ./openui5) — a sparse,
- * blob-filtered clone with src/sap.m/src/sap/m checked out is enough (see
- * TRAINING.md "Reference repositories"). Controls outside the checkout are
- * simply absent from the snapshot; the checker skips unknown controls.
+ * Source: an OpenUI5 checkout (env OPENUI5_DIR, default ./openui5) — the
+ * generate_result CI step clones the full repo, so every ported library's
+ * src/ is present (see LIBS below); each is scanned recursively (nested
+ * controls incl.). A lib dir absent from a partial local checkout is skipped
+ * with a warning. Controls outside the checkout are simply absent from the
+ * snapshot; the checker skips unknown controls.
  *
  * Run:  OPENUI5_DIR=/workspace/openui5 node scripts/generate-properties.mjs
  */
@@ -25,9 +27,30 @@ const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OPENUI5_DIR = process.env.OPENUI5_DIR || path.join(ROOT, 'openui5');
 const OUT = path.join(ROOT, 'ui5', 'properties.json');
 
-const LIB_DIRS = [
-  ['sap/m', path.join(OPENUI5_DIR, 'src', 'sap.m', 'src', 'sap', 'm')],
+// every library the repo ports (src/01..05) — the property gate must see them
+// all, not just sap.m. The generate_result CI step clones the FULL OpenUI5 repo
+// (git clone --depth 1), so every lib's src/ is present; a lib dir that is
+// absent (a partial local checkout) is skipped with a warning, not fatal.
+const LIBS = [
+  'sap.m', 'sap.f', 'sap.ui.core', 'sap.ui.layout', 'sap.ui.table',
+  'sap.ui.unified', 'sap.uxap', 'sap.tnt', 'sap.ui.codeeditor', 'sap.ui.integration',
 ];
+const LIB_DIRS = LIBS.map((lib) => {
+  const libPath = lib.replace(/\./g, '/'); // sap.ui.layout -> sap/ui/layout
+  return [libPath, path.join(OPENUI5_DIR, 'src', lib, 'src', ...libPath.split('/'))];
+});
+
+// recursively collect [file, moduleBaseOfItsDir] — controls live in nested
+// subdirs too (sap.ui.layout/form/SimpleForm, sap.f/cards/NumericHeader,
+// sap.m/semantic/*). moduleBase is the file's DIRECTORY module path so a
+// relative `./X` dep resolves correctly in parseControl.
+function collect(dir, moduleBase, acc) {
+  for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+    const p = path.join(dir, e.name);
+    if (e.isDirectory()) collect(p, `${moduleBase}/${e.name}`, acc);
+    else if (e.name.endsWith('.js') && !e.name.endsWith('Renderer.js')) acc.push([p, moduleBase]);
+  }
+}
 
 // module path (sap/m/Button, or ./Input relative to the lib base) -> dotted name
 const dotted = (p, base) => {
@@ -79,18 +102,25 @@ function parseControl(file, base) {
 
 const controls = {};
 let files = 0;
+let libsSeen = 0;
 for (const [base, dir] of LIB_DIRS) {
   if (!fs.existsSync(dir)) {
-    console.error(`control source dir not found: ${dir} (set OPENUI5_DIR)`);
-    process.exit(1);
+    console.error(`WARNING: control source dir not found, skipping: ${dir}`);
+    continue;
   }
-  for (const f of fs.readdirSync(dir)) {
-    if (!f.endsWith('.js') || f.endsWith('Renderer.js')) continue;
-    const c = parseControl(path.join(dir, f), base);
+  libsSeen++;
+  const acc = [];
+  collect(dir, base, acc);
+  for (const [file, fileBase] of acc) {
+    const c = parseControl(file, fileBase);
     if (!c) continue;
     controls[c.name] = { parent: c.parent, members: c.members };
     files++;
   }
+}
+if (!libsSeen) {
+  console.error(`no control source dirs found under ${OPENUI5_DIR} (set OPENUI5_DIR to an OpenUI5 checkout)`);
+  process.exit(1);
 }
 
 fs.writeFileSync(OUT, JSON.stringify({

@@ -186,21 +186,23 @@ source of truth:
   `ui5/properties.json`); the app then needs a UI5 release ≥ that member's
   version to render it. `DROPPED_171` remains only for the rare member that
   genuinely cannot be expressed.
-  **Gate coverage caveat — `ui5/properties.json` currently holds `sap.m`
-  controls only** (`generate-properties.mjs` `LIB_DIRS` = `sap/m`). For a port
-  in any other library (`sap.f`, `sap.ui.layout`, `sap.ui.unified`,
-  `sap.ui.table`, `sap.uxap`, `sap.tnt`, `sap.ui.core` — i.e. `src/02`–`src/05`)
-  the property gate can enforce **nothing** and passes silently, so its green is
-  hollow there. You must **@since-check every non-`sap.m` member by hand**
-  against the OpenUI5 source (`src/<lib>/src/<path>/<Control>.js`, grep the
-  member's `@since`) and declare `POST_171` yourself. Two rules for reading the
-  source: **(a)** an inherited member lives in the **parent class file**, not the
-  control's — if `<Control>.js` doesn't define it, follow the `X.extend(...)`
-  chain up (e.g. `CalendarDateInterval` → `Calendar.js` for `width`/`select`);
-  **(b)** a member with **no `@since` tag at all** is base-version (predates the
-  tag), i.e. ≤ 1.71 — no `POST_171`. (Found by the app-171/177 cold-read probes,
-  2026-07-24; extending `LIB_DIRS` to the other libs is a worthwhile follow-up
-  but the `generate_result` CI checkout must then include those libs' `src/`.)
+  **Gate coverage — the property gate now covers ALL ported libraries**
+  (`sap.m`, `sap.f`, `sap.ui.core/layout/table/unified`, `sap.uxap`, `sap.tnt`, …
+  — extended 2026-07-24). `generate-properties.mjs` scans every lib's source
+  **recursively** (nested controls too — `form/SimpleForm`, `cards/NumericHeader`)
+  into `ui5/properties.json` (831 controls), and `property-check.mjs` resolves
+  each control via the port's own `xmlns` declarations and walks the parent
+  chain — so a post-1.71 member in any library is now caught automatically. The
+  `generate_result` CI step clones the full OpenUI5 repo, so this holds in CI.
+  You no longer need to `@since`-check by hand — but two facts about how the
+  generator reads `@since` still matter if you're verifying a flag: **(a)** an
+  inherited member's `@since` lives in the **parent class file** (the gate walks
+  `X.extend(...)` up, e.g. `CalendarDateInterval` → `Calendar.js`); **(b)** a
+  member with **no `@since` tag** is base-version (≤ 1.71). Two residual limits:
+  enum *values* newer than 1.71 (e.g. `ObjectStatus` `Indication06`) are
+  invisible at the attribute-name level, and a member **relocated to a newer base
+  class** reads as that base's version (e.g. `NavigationListItem.expanded` shows
+  1.121 though the property predates 1.71 — declare it with that note).
 - **Before declaring any sample feature inexpressible, check `CAPABILITIES.md`**
   — the map of what abap2UI5 can express, each entry backed by a port that
   proves it. Never improvise around a feature it marks ✅/🔶 (app 042 replaced a
@@ -672,7 +674,7 @@ A fourth workflow, `checks`, runs three deterministic gates on every PR:
 | `render_smoke` | `node scripts/render-smoke.mjs --strict` (`npm run smoke`) | a port's reconstructed view fails a real headless `XMLView.create` against the OpenUI5 runtime (invalid XML, unknown control/property, strict property-type violation, broken expression binding). Helper-method-built views (a captured node handle passed into a builder-returning helper and chained out — app 049) are reconstructed by the handle-aware path (`extractDocsWithHelpers`; a handle is a stack snapshot, each helper call inlined re-anchored to its argument). A port the reconstructor still cannot rebuild must declare `"render_smoke": { "skip": true, "reason": "…" }` in its sidecar — an **undeclared** non-reconstructable port FAILS. The same declared skip also covers a **reconstructable** port whose view genuinely does not render in the static headless harness — a control whose runtime layout/resource behaviour the reconstruction cannot satisfy (`sap.f.AvatarGroup`'s overflow measurement loops with no real layout box; an `sap.ui.integration` Card needs an external manifest). Every skip is **verified against the actual render each run**: it is honoured only while the view still errors, and the moment it renders clean the declaration is **stale** and FAILS — so the skip set can never drift (a render-hostile skip can never outlive its reason). Render-hostile ports must still pass every other gate (structural-diff, abaplint, e2e) |
 | `e2e_smoke` (heavy, on-demand) | `npm run e2e:build` then `npm run e2e` (`scripts/e2e-build.mjs` + `e2e-smoke.mjs`) | a port fails to run as the **real app**: it starts the transpiled abap2UI5 backend (framework + all ports via `?app_start=<class>`, needs an abap2UI5 checkout — `A2UI5_HOME`), boots each port in headless Chromium (UI5 served from the local `@openui5` packages), and fails if it does not boot+render or if a backend request 4xx/5xx or a JS exception fires. Unlike `render_smoke` (static view reconstruction) this exercises the actual backend roundtrip, Component boot and event wiring. Not in the fast gate set (multi-minute transpile + browser); run before a release or when touching the framework wire/runtime. A small `INTERACTIONS` map adds real click→assert checks (e.g. 005 press→client-composed toast) |
 | `meta_valid` | `validate-meta.mjs` + regenerate overview & coverage, `git diff --exit-code -- src README.md api.md` | an invalid sidecar, or a change forgot to regenerate the overview app / coverage docs |
-| `property_gate` | `node scripts/property-check.mjs` | a port uses a control member introduced after UI5 1.71 (per-member `@since` from `ui5/properties.json`) without declaring it in a `POST_171` deviation — this covers both `a( n = … )` attributes **and** event parameters consumed via `${$parameters>/<name>}` in a `t_arg`. **Covers `sap.m` only** — `properties.json` holds no other library's controls, so for `src/02`–`src/05` ports this gate passes vacuously and members must be `@since`-checked by hand (see §5) |
+| `property_gate` | `node scripts/property-check.mjs` | a port uses a control member introduced after UI5 1.71 (per-member `@since` from `ui5/properties.json`) without declaring it in a `POST_171` deviation — this covers both `a( n = … )` attributes **and** event parameters consumed via `${$parameters>/<name>}` in a `t_arg`. **Covers every ported library** (2026-07-24): `properties.json` is generated recursively from all libs' sources and the check resolves each control via the port's `xmlns` map + the parent chain, so `src/02`–`src/05` members are enforced too |
 
 **When a distilled lesson is greppable, add it as a pattern-lint rule in the
 same change** — that is what makes a lesson unrepeatable rather than advisory.

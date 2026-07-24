@@ -48,11 +48,25 @@ function sinceOf(control, member) {
   return null;
 }
 
+// prefix -> namespace map from the port's own xmlns declarations
+// (`a( n = `xmlns` v = `sap.m` )`, `a( n = `xmlns:f` v = `sap.f` )`). The empty
+// key is the default namespace. Lets a control's full name be resolved for ANY
+// library, not just sap.m.
+function nsMapOf(abap) {
+  const map = {};
+  for (const m of abap.matchAll(/->\s*a\(\s*n\s*=\s*`xmlns(?::(\w+))?`\s+v\s*=\s*`([\w.]+)`/g)) {
+    map[m[1] || ''] = m[2];
+  }
+  return map;
+}
+
 // controls + their attribute names out of the builder calls (same contract as
 // structural-diff: a() targets the element created last). `kind` distinguishes
 // a plain attribute from an event parameter (`${$parameters>/<name>}`) so the
-// error message can name what slipped through.
-function usedMembers(abap) {
+// error message can name what slipped through. The control's namespace prefix
+// (`ns=` or a `prefix:Name`) is resolved to its full dotted name via nsMap, so
+// every library is checked — not only sap.m (the snapshot now holds them all).
+function usedMembers(abap, nsMap) {
   const out = []; // { control, attr, line, kind }
   const elemRe = /->\s*(open|leaf)\(\s*(?:n\s*=\s*)?`([\w:.-]+)`(?:\s+ns\s*=\s*`(\w+)`)?/g;
   const marks = [];
@@ -64,9 +78,10 @@ function usedMembers(abap) {
     const { at, name, ns } = marks[i];
     const simple = name.split(':').pop();
     if (!/^[A-Z]/.test(simple)) continue;              // aggregations: lowercase
-    if (ns && ns !== 'sap.m') continue;                // only sap.m is in the snapshot
-    const control = `sap.m.${simple}`;
-    if (!DATA[control]) continue;
+    const namespace = nsMap[ns || ''];                 // resolve the prefix
+    if (!namespace) continue;                          // undeclared prefix: skip
+    const control = `${namespace}.${simple}`;
+    if (!DATA[control]) continue;                      // unknown/absent control
     const slice = abap.slice(at, i + 1 < marks.length ? marks[i + 1].at : undefined);
     for (const a of slice.matchAll(/->\s*a\(\s*n\s*=\s*`([\w.:-]+)`/g)) {
       if (a[1].startsWith('xmlns')) continue;
@@ -96,7 +111,7 @@ for (const mf of fs.readdirSync(META).sort()) {
   const abap = fs.readFileSync(abapPath, 'utf8');
   const declared = (meta.deviations || []).map((d) => d.what).join(' ').toLowerCase();
   const reported = new Set();
-  for (const { control, attr, line, kind } of usedMembers(abap)) {
+  for (const { control, attr, line, kind } of usedMembers(abap, nsMapOf(abap))) {
     const since = sinceOf(control, attr);
     if (since && !leq171(since) && !declared.includes(attr.toLowerCase())) {
       const key = `${control}.${kind}.${attr}`;

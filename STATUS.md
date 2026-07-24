@@ -5,6 +5,33 @@ findings are fixed or new ones land (same-change discipline as AGENTS.md §10).
 For the process itself see TRAINING.md; for what abap2UI5 can express see
 CAPABILITIES.md._
 
+## Property gate extended to all libraries (2026-07-24) — blind spot closed
+
+The systemic follow-up (the property gate was `sap.m`-only, so post-1.71 members
+in every other library passed vacuously — the root cause of the POST_171 debt
+swept earlier). Fixed for real:
+
+- **`generate-properties.mjs`**: `LIB_DIRS` now covers all ten ported libraries
+  and scans each **recursively** (nested controls: `form/SimpleForm`,
+  `cards/NumericHeader`, `sap.m/semantic/*`, …). `ui5/properties.json` grew
+  263 → **831 controls**. A missing lib dir is skipped with a warning (not fatal).
+  CI-safe: `generate_result` clones the full OpenUI5 repo, so all libs' `src/`
+  are present (verified in `generate_result.yaml`).
+- **`property-check.mjs`**: builds a prefix→namespace map from each port's own
+  `xmlns` declarations and resolves every control's full dotted name (not just
+  `sap.m.<X>`), then walks the parent chain as before. The `sap.m`-only skip is
+  gone.
+- **Two members the manual audit had missed/deferred, now caught and declared**:
+  app 108 `CalendarAppointment.ariaHasPopup` (1.150.0, genuinely in the original
+  view) and app 167 `NavigationListItem.expanded` (reads 1.121 — a base-class
+  relocation, property predates 1.71; declared with that note). `property-check`
+  is green across all 178 ports; the gate now enforces POST_171 for every library
+  automatically, so this class of debt cannot silently return.
+
+Residual limits (documented in §5): enum *values* newer than 1.71 stay invisible
+at the attribute-name level; a member relocated to a newer base class reads as
+that base's version.
+
 ## Subagent cold-read probe (2026-07-24) — app 178 (sap.uxap ObjectPage, BlockBase inlining)
 
 Eighth cold-read port and the hardest so far: `sap.uxap.sample.ObjectPageSubSectionWithActions`
