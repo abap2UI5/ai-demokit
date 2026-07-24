@@ -723,6 +723,17 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `IMPROVISED: Breadth-probe: sap.f.Card with a sap.f.cards.Header and a simplified content body (the original's named-model From/To ComboBoxes + DatePicker are represented by a Text + Button for the` &&
                  ` render probe).` )
+      ( module = `sap.f`              control = `sap.f.GridContainer`                 name = `GridContainer`                       class = `z2ui5_cl_ai_app_168` path = `src/04/b07/z2ui5_cl_ai_app_168.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `IMPROVISED: The original binds two named models inside the cards (cities> for the ComboBoxes, products> for the revenue List); abap2UI5 keeps one default model, so those bind directly` &&
+                 ` ({cities>/cities} -> {/CITIES}, {products>/productItems} -> {/PRODUCTITEMS}, prefix dropped, last segment identical). The RevealGrid toggle, the three property Switches, the GridContainer` &&
+                 ` columnsChange, the GenericTile press and the f:Card header press are controller handlers in the original; here each raises a client MESSAGE_TOAST. // NOTE: The ComboBox items keep a plain {/CITIES}` &&
+                 ` binding (the original's sorter:{path:'text'} is a client-only ordering, dropped). The sap.ui.integration Card keeps its original external manifest reference (cardManifest.json). The two long` &&
+                 ` lorem-ipsum filler Texts are abbreviated to short placeholders. cities.json (7) and products.json (3) are inlined in full.`
+        use_ec = abap_true
+        use_ec_arg = abap_true
+        use_name = abap_true )
       ( module = `sap.f`              control = `sap.f.GridList`                      name = `GridListBasic`                       class = `z2ui5_cl_ai_app_111` path = `src/04/b01/z2ui5_cl_ai_app_111.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`

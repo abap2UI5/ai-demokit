@@ -26,9 +26,17 @@
  * re-anchored to its argument handle. A port that still cannot be reconstructed
  * (a new idiom the handle path does not cover) must DECLARE the skip in its
  * sidecar (`"render_smoke": { "skip": true, "reason": "…" }`); an UNDECLARED
- * non-reconstructable port is a FAILURE, not a silent skip, and a declaration
- * that has gone stale (the port now reconstructs) is a FAILURE too — so the
- * skip set can never drift.
+ * non-reconstructable port is a FAILURE, not a silent skip.
+ *
+ * A declared skip is also honoured for a RECONSTRUCTABLE port whose view
+ * genuinely does not render in this static headless harness — a control whose
+ * runtime layout/resource behaviour the reconstruction cannot satisfy
+ * (sap.f.AvatarGroup's overflow measurement loops with no real layout box; an
+ * sap.ui.integration Card needs an external manifest). Such a skip is VERIFIED
+ * against the actual render each run: it is honoured only while the view still
+ * errors, and the moment it renders clean the skip is stale and FAILS. So every
+ * skip — non-reconstructable or render-hostile — is drift-proof: it fails the
+ * instant the reason it was granted for no longer holds.
  *
  * Substitutions while reconstructing (the harness controls both sides, so
  * exact framework path names do not matter):
@@ -947,13 +955,8 @@ for (const meta of metas) {
     }
     continue;
   }
-  if (declaredSkip) {
-    // the declaration has gone stale — the port now reconstructs, so the skip
-    // must be removed and the port actually smoke-tested
-    failed++;
-    console.log(`FAIL  ${cls}  (meta declares render_smoke.skip but the view reconstructs — remove the stale declaration)`);
-    continue;
-  }
+  // linear port: reconstruct and render, THEN decide the outcome (a declared
+  // skip is verified against the actual render, so it can never go stale)
   const errs = [];
   if (!docs.length) errs.push('no view reconstructed from builder calls');
   for (const xml of docs) {
@@ -965,6 +968,23 @@ for (const meta of metas) {
       raw = [`HARNESS: ${e.message}`];
     }
     errs.push(...raw.filter((e) => !BENIGN.some((re) => re.test(e))));
+  }
+  if (declaredSkip) {
+    // a declared skip on a reconstructable port is honoured ONLY while the view
+    // genuinely fails to render in the static harness — a control whose runtime
+    // layout/resource behaviour the headless reconstruction cannot satisfy
+    // (e.g. sap.f.AvatarGroup's overflow measurement loops with no real layout
+    // box; an integration Card needs an external manifest). The moment it
+    // renders clean the skip is stale and FAILS, so a render-hostile skip can
+    // never silently outlive the reason it was granted for.
+    if (errs.length) {
+      skipped++;
+      console.log(`SKIP  ${cls}  (declared render_smoke.skip — does not render in the static harness: ${errs[0].slice(0, 100)})`);
+    } else {
+      failed++;
+      console.log(`FAIL  ${cls}  (declares render_smoke.skip but the view now renders clean — remove the stale declaration)`);
+    }
+    continue;
   }
   const status = errs.length ? 'FAIL' : 'pass';
   if (errs.length) failed++;

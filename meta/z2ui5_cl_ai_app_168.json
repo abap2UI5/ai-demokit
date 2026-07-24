@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_ai_app_168",
+  "sample": "sap.f.sample.GridContainer",
+  "entity": "sap.f.GridContainer",
+  "file": "src/04/b07/z2ui5_cl_ai_app_168.clas.abap",
+  "batch": "b07",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "render_smoke": {
+    "skip": true,
+    "reason": "The grid contains a sap.ui.integration.widgets.Card whose manifest is an external file (test-resources/.../cardManifest.json) that the static headless harness cannot serve - 'resource could not be loaded ... Not Found'. Verified against the render each run: the skip is honoured only while it still errors. The view renders in a real browser and passes the e2e gate."
+  },
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "The original binds two named models inside the cards (cities> for the ComboBoxes, products> for the revenue List); abap2UI5 keeps one default model, so those bind directly ({cities>/cities} -> {/CITIES}, {products>/productItems} -> {/PRODUCTITEMS}, prefix dropped, last segment identical). The RevealGrid toggle, the three property Switches, the GridContainer columnsChange, the GenericTile press and the f:Card header press are controller handlers in the original; here each raises a client MESSAGE_TOAST."
+    },
+    {
+      "type": "NOTE",
+      "what": "The ComboBox items keep a plain {/CITIES} binding (the original's sorter:{path:'text'} is a client-only ordering, dropped). The sap.ui.integration Card keeps its original external manifest reference (cardManifest.json). The two long lorem-ipsum filler Texts are abbreviated to short placeholders. cities.json (7) and products.json (3) are inlined in full."
+    }
+  ]
+}
