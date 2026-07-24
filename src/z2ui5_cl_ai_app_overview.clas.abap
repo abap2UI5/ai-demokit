@@ -1992,6 +1992,11 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.26.0`
         use_name = abap_true )
+      ( module = `sap.m`              control = `sap.m.SelectList`                    name = `SelectListWithIcons`                 class = `z2ui5_cl_ai_app_211` path = `src/01/b17/z2ui5_cl_ai_app_211.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.26.0`
+        use_name = abap_true )
       ( module = `sap.m`              control = `sap.m.semantic.SemanticPage`         name = `SemanticPage`                        class = `z2ui5_cl_ai_app_107` path = `src/01/b13/z2ui5_cl_ai_app_107.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -2066,6 +2071,10 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` the control_by_id navigation (to/toDetail/toMaster/backDetail/backMaster/setMode) need an in-system check — machine gates only verify view validity, not the runtime navigation roundtrip.`
         use_fua = abap_true
         use_fua_arg = abap_true )
+      ( module = `sap.m`              control = `sap.m.StandardListItem`              name = `StandardListItem`                    class = `z2ui5_cl_ai_app_212` path = `src/01/b17/z2ui5_cl_ai_app_212.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        use_name = abap_true )
       ( module = `sap.m`              control = `sap.m.StandardListItem`              name = `StandardListItemAvatar`              class = `z2ui5_cl_ai_app_083` path = `src/01/b10/z2ui5_cl_ai_app_083.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
