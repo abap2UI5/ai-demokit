@@ -5,6 +5,30 @@ findings are fixed or new ones land (same-change discipline as AGENTS.md §10).
 For the process itself see TRAINING.md; for what abap2UI5 can express see
 CAPABILITIES.md._
 
+## Subagent cold-read probe (2026-07-24) — app 175 (first SimpleForm) + ref bug
+
+Fifth cold-read port: `sap.ui.layout.sample.SimpleFormToolbar` (app 175, first
+`sap.ui.layout.form.SimpleForm` — a new control), machine-green, **0 structural
+diffs**. Coverage **175**, `sap.ui.layout` 10→11. All SimpleForm members
+@since-checked by hand (≤ 1.71, no POST_171).
+
+- **app 142 fixed** — like 162, its nearest-neighbour data was wrong: it seeded
+  `Titanium`/`Walldorf`/`Star Street`… but its sample `bindElement`s
+  `/SupplierCollection/0` and the mock's only row is `Red Point Stores` / `Main
+  St 1618` / `Maintown`. Corrected all address fields to the real row-0 values.
+- **Recurring IMPROVISED-vs-NOTE confusion resolved in §5** (surfaced by 173/175
+  and flagged earlier): a pure prefix-drop that renders identically (0 diffs) is
+  `NOTE`; `IMPROVISED` only when the fold loses/changes data. Also documented the
+  `bindElement('/X/0')` → seed-fields-at-default-model-root idiom, and that
+  seeded values must be the actual mock row, verified — not a neighbour's.
+- **§5**: a camelCase JSON key mirrors verbatim into the ABAP field / binding
+  (`SupplierName`→`{SUPPLIERNAME}`, never `SUPPLIER_NAME`).
+
+Pattern across the probes: the written spec builds correct ports, but several
+**existing ports carry wrong seeded data copied from neighbours** (162, 142) —
+the "verify against the sample's own mock, not the nearest port" caution (§5) is
+now doubly proven; a data-fidelity audit of older ports is a worthwhile follow-up.
+
 ## Subagent cold-read probe (2026-07-24) — app 174 + json-to-abap truncation fix
 
 Fourth cold-read port: `sap.ui.table.sample.RowHighlights` (app 174), machine-green

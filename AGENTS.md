@@ -297,7 +297,10 @@ ENDMETHOD.
 
 The sample's JSON model becomes ABAP: one `ty_s_`/`ty_t_` type per JSON array,
 filled with `VALUE #( ( … ) ( … ) )`. Field names are the JSON keys, upper-cased
-by ABAP; bindings reference them in braces (`{TITLE}`, `{PRODUCT_ID}`). Keep the
+by ABAP; bindings reference them in braces (`{TITLE}`, `{PRODUCT_ID}`). **A
+camelCase key mirrors verbatim — do not insert underscores**: `SupplierName` →
+field `suppliername`, binding `{SUPPLIERNAME}` (never `SUPPLIER_NAME`);
+structural-diff case-normalizes but an inserted underscore would not match. Keep the
 data verbatim from the sample — **the full row set, no subsetting**: inline every
 row of the referenced mock array (e.g. all 123 `/ProductCollection` rows of
 `ui5/mock/products.json`), byte-identical to the mock (`SUBSET_DATA` is no longer
@@ -313,10 +316,20 @@ that binds against a named model (`img>/products/pic1`, a separate `JSONModel`,
 merge the extra model's fields into the row type, or — for pure display assets
 like image URLs that are the same for every row — inline them as literals /
 build them from a shared base (a non-bound `base_url` kept in `PROTECTED`, not
-`PUBLIC`, so the round-trip model scan stays small). Record the flattening as an
-`IMPROVISED:` note — also when it merely drops unbound columns of a shared
-mock model. Worked example: app 006 (`sap.m.Carousel`, `img>` model →
-static image URLs).
+`PUBLIC`, so the round-trip model scan stays small).
+**Deviation type for the flattening — the rule that ends the IMPROVISED/NOTE
+confusion:** a **pure prefix-drop that renders identically** — same data, same
+leaf name, `structural-diff` 0 diffs (`{ui>/rowMode}`→`{/ROWMODE}`,
+`{img>/products/pic1}`→`{/PIC1}` with the real value) — is faithful → **`NOTE`**.
+Use **`IMPROVISED`** only when the fold actually *loses or changes* something:
+drops bound columns, resolves a live model statically, or substitutes values
+(app 006's `img>`→static URLs). When binding a single record the original
+`bindElement`s (`/SupplierCollection/0`), seed those fields at the **default-model
+root** so the view's *relative* child bindings (`{SupplierName}`) resolve — and
+seed the **actual mock row-0 values**, verified against the mock, not a
+neighbour port (app 162/142 had copied wrong values). Worked example: app 006
+(`sap.m.Carousel`, `img>` → static URLs, `IMPROVISED`); app 175 (`SimpleForm`,
+supplier row-0 flatten).
 
 **Absent JSON properties must not become empty strings.** A flat ABAP row
 serializes every field on every row; where the original JSON simply omits a

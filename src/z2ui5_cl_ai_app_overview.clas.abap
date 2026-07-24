@@ -2362,6 +2362,12 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         notes = `NOTE: sap.ui.layout.form.Form with two FormContainers, per-container toolbars, ResponsiveGridLayout, FormElements with GridData layoutData and a Select. The original bound an element context` &&
                  ` (/SupplierCollection/0 from the shared demo supplier.json); flattened here to top-level model fields the {…} bindings resolve against.`
         use_name = abap_true )
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`       name = `SimpleFormToolbar`                   class = `z2ui5_cl_ai_app_175` path = `src/02/b10/z2ui5_cl_ai_app_175.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `IMPROVISED: The original controller loads the shared demo supplier.json and element-binds a single record (/SupplierCollection/0); flattened here to top-level default-model fields the {…} SimpleForm` &&
+                 ` bindings resolve against. Values are supplier.json SupplierCollection row 0 (Red Point Stores, Maintown); unbound columns (Tel, Sms, Rating, …) are dropped.`
+        use_name = abap_true )
       ( module = `sap.ui.layout`      control = `sap.ui.layout.Grid`                  name = `GridData`                            class = `z2ui5_cl_ai_app_169` path = `src/02/b10/z2ui5_cl_ai_app_169.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`

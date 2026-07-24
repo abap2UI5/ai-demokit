@@ -1,0 +1,16 @@
+{
+  "class": "z2ui5_cl_ai_app_175",
+  "sample": "sap.ui.layout.sample.SimpleFormToolbar",
+  "entity": "sap.ui.layout.form.SimpleForm",
+  "file": "src/02/b10/z2ui5_cl_ai_app_175.clas.abap",
+  "batch": "b10",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    { "type": "IMPROVISED", "what": "The original controller loads the shared demo supplier.json and element-binds a single record (/SupplierCollection/0); flattened here to top-level default-model fields the {…} SimpleForm bindings resolve against. Values are supplier.json SupplierCollection row 0 (Red Point Stores, Maintown); unbound columns (Tel, Sms, Rating, …) are dropped." }
+  ]
+}
