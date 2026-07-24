@@ -5,6 +5,33 @@ findings are fixed or new ones land (same-change discipline as AGENTS.md §10).
 For the process itself see TRAINING.md; for what abap2UI5 can express see
 CAPABILITIES.md._
 
+## Subagent cold-read probe (2026-07-24) — app 173 + a bug in its reference
+
+Third cold-read port: `sap.ui.layout.sample.VerticalLayout` (app 173, first
+`sap.ui.layout.VerticalLayout`), machine-green all gates. Coverage **173**,
+`sap.ui.layout` 9→10. The written spec was sufficient to build a correct port —
+the friction was that the **nearest reference (app 162, HorizontalLayout)
+contradicted the spec**, and the probe caught a real bug in it:
+
+- **app 162 fixed** — it seeded `pic1 = …/HT-1000.jpg` (host-relative), but the
+  shared demo mock `sap/ui/demo/mock/img.json` has `products.pic1 =
+  …/HT-7777-large.jpg`. Wrong image id **and** a relative URL against the
+  `sdk.openui5.org` asset-host rule. Corrected to the absolute `HT-7777-large`
+  URL (a model-seed value; no gate saw it — render-smoke mocks the model,
+  structural-diff ignores data). app 173 seeded the correct value.
+- **Doc fix** — §5 "Worked references" now warns that a reference shows an idiom,
+  not ground truth: the spec/CAPABILITIES/sample-source win on conflict, and
+  seeded data values must be checked against the sample's own mock, not the
+  neighbour.
+
+**Open maintainer question flagged by the probe:** the deviation *type* for a
+named-model prefix-fold is inconsistent across the corpus — §5 says `IMPROVISED`,
+CAPABILITIES frames a pure prefix-drop as the faithful standard (0 diffs), and
+ports split (006/173 `IMPROVISED`, 162 `NOTE`). A one-line policy — `NOTE` for a
+pure same-data prefix-drop, `IMPROVISED` only when the fold loses columns or
+resolves statically — would make it countable. Left for a maintainer decision,
+not rewritten unilaterally.
+
 ## Non-sap.m POST_171 audit (2026-07-24) — systemic debt swept
 
 Prompted by the 128/132 finding, a full `@since` audit of all 61 non-`sap.m`

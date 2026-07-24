@@ -1,4 +1,4 @@
-CLASS z2ui5_cl_ai_app_162 DEFINITION PUBLIC.
+CLASS z2ui5_cl_ai_app_173 DEFINITION PUBLIC.
 
   PUBLIC SECTION.
     INTERFACES z2ui5_if_app.
@@ -18,7 +18,7 @@ CLASS z2ui5_cl_ai_app_162 DEFINITION PUBLIC.
 ENDCLASS.
 
 
-CLASS z2ui5_cl_ai_app_162 IMPLEMENTATION.
+CLASS z2ui5_cl_ai_app_173 IMPLEMENTATION.
 
   METHOD z2ui5_if_app~main.
 
@@ -46,7 +46,7 @@ CLASS z2ui5_cl_ai_app_162 IMPLEMENTATION.
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
 
-        )->open( n = `HorizontalLayout` ns = `l`
+        )->open( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
 
             )->leaf( `Image`
@@ -74,6 +74,7 @@ CLASS z2ui5_cl_ai_app_162 IMPLEMENTATION.
     widths = `5em`.
     widthm = `10em`.
     widthl = `15em`.
+    " img>/products/pic1 of the sample's sap/ui/demo/mock/img.json, on the OpenUI5 host
     pic1   = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-7777-large.jpg`.
 
   ENDMETHOD.

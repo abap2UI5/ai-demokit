@@ -582,6 +582,14 @@ pack (business logic goes to `model_init`, per the thin-frontend principle).
 
 #### Worked references
 
+> **A reference shows an *idiom*, not ground truth. When a nearby port conflicts
+> with this §5, `CAPABILITIES.md`, or the sample's own source/mock, the spec and
+> the source win — never copy a reference's *data values* blindly.** A cold-read
+> probe (app 173, 2026-07-24) found its nearest reference (app 162) had copied
+> the wrong mock image id (`HT-1000` instead of the mock's `HT-7777-large`) and a
+> host-relative asset URL against the `sdk.openui5.org` rule — verify each seeded
+> value against the sample's actual mock, not the neighbour.
+
 Read the 2–3 nearest ones before writing a new port. Prefer `checked` ports
 (live-verified) as references — several were previously flagged `golden`
 (a category retired 2026-07-22; they stay good examples, just without the label):
