@@ -27,7 +27,17 @@ diffs**. Coverage **175**, `sap.ui.layout` 10→11. All SimpleForm members
 Pattern across the probes: the written spec builds correct ports, but several
 **existing ports carry wrong seeded data copied from neighbours** (162, 142) —
 the "verify against the sample's own mock, not the nearest port" caution (§5) is
-now doubly proven; a data-fidelity audit of older ports is a worthwhile follow-up.
+now doubly proven.
+
+**Data-fidelity audit run (2026-07-24):** all 175 ports scanned, the
+single-record-flatten / named-model-scalar class verified value-by-value against
+each sample's actual mock. Result: **one more bug — app 119 (FixFlexVertical)**
+seeded `HT-1000.jpg` where its `{img>/products/pic1}` binding resolves to
+`HT-7777-large.jpg` (same wrong-neighbour copy as 162). Fixed. Everything else
+verified correct (image ports 006/031/046/162/173; supplier flatteners
+020/084/142/175; product flatteners 041/071/073/087/089/048; date/wizard
+017/018/101). The corpus is otherwise data-clean; multi-row verbatim tables were
+spot-checked only (row 0 correct) and are lower-risk.
 
 ## Subagent cold-read probe (2026-07-24) — app 174 + json-to-abap truncation fix
 

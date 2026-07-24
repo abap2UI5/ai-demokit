@@ -26,7 +26,7 @@ CLASS z2ui5_cl_ai_app_119 IMPLEMENTATION.
             )->a( n = `class` v = `fixFlexVertical`
             )->open( n = `fixContent` ns = `l`
                 )->leaf( `Image`
-                    )->a( n = `src`          v = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1000.jpg`
+                    )->a( n = `src`          v = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-7777-large.jpg`
                     )->a( n = `densityAware` v = `true`
 
             )->shut(
