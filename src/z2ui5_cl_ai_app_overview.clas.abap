@@ -2164,15 +2164,46 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.tnt`            control = `sap.tnt.SideNavigation`              name = `SideNavigation`                      class = `z2ui5_cl_ai_app_128` path = `src/05/b02/z2ui5_cl_ai_app_128.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        release = `1.116`
+        release_post171 = abap_true
+        is_post171 = abap_true
         notes = `LIVE-TEST: The two buttons reproduce the controller behaviour server-side: 'Toggle Collapse/Expand' flips SideNavigation.expanded (bound to a boolean model field, initial false as in the original) and` &&
                  ` 'Show/Hide "Walked"' flips the 'walked' NavigationListItem.visible. The original used byId().setExpanded/setVisible; here the properties are two-way bound and toggled on a backend round-trip. The` &&
-                 ` 'visible' attribute added to the walked item carries that binding (the original toggled it imperatively).` )
+                 ` 'visible' attribute added to the walked item carries that binding (the original toggled it imperatively). // POST-1.71: NavigationListItem.selectable (@since 1.116) is kept 1:1 from the original` &&
+                 ` (selectable=false on the parent items). Newer than UI5 1.71; declared per the property-171 policy. Was previously undeclared because the property gate is blind to sap.tnt (properties.json holds sap.m` &&
+                 ` only); found and corrected by the app-172 cold-read probe 2026-07-24.`
+        post171 = `NavigationListItem.selectable (@since 1.116) is kept 1:1 from the original (selectable=false on the parent items). Newer than UI5 1.71; declared per the property-171 policy. Was previously undeclared` &&
+                 ` because the property gate is blind to sap.tnt (properties.json holds sap.m only); found and corrected by the app-172 cold-read probe 2026-07-24.` )
+      ( module = `sap.tnt`            control = `sap.tnt.SideNavigation`              name = `SideNavigationUnselectableParents`   class = `z2ui5_cl_ai_app_172` path = `src/05/b06/z2ui5_cl_ai_app_172.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        release = `1.116`
+        release_post171 = abap_true
+        is_post171 = abap_true
+        notes = `POST-1.71: sap.tnt.NavigationListItem.selectable (@since 1.116) is used 1:1 on the unselectable parent items (Building/Mileage/Transport) and the fixed External Link item - it is the whole point of` &&
+                 ` this sample. Kept per the members-newer-than-1.71 fidelity policy; @since verified by hand against fork-openui5/src/sap.tnt/src/sap/tnt/NavigationListItem.js line 101-103 (property gate is blind to` &&
+                 ` sap.tnt). Requires a UI5 release >= 1.116 to render. // LIVE-TEST: onCollapseExpandPress reproduced server-side: SideNavigation.expanded is two-way bound (initial false as in the original` &&
+                 ` expanded="false") and flipped on a backend round-trip (TOGGLE_EXPAND) instead of the original imperative byId().setExpanded(!expanded). Same technique as app 128. The literal expanded="false"` &&
+                 ` becoming a {/EXPANDED} binding needs a live render check. // LIVE-TEST: onItemSelect reproduced roundtrip-free: the SideNavigation itemSelect event fires a client-composed MessageToast` &&
+                 ` (control_global MESSAGE_TOAST/show, template 'Item selected: {0}' filled by the client-resolved ${$parameters>/item}.getText()) - the 1:1 equivalent of the original MessageToast.show(``Item selected:` &&
+                 ` ${sText}``). Same idiom as app 060; CAPABILITIES marks it expressible, live render/click check pending.`
+        post171 = `sap.tnt.NavigationListItem.selectable (@since 1.116) is used 1:1 on the unselectable parent items (Building/Mileage/Transport) and the fixed External Link item - it is the whole point of this sample.` &&
+                 ` Kept per the members-newer-than-1.71 fidelity policy; @since verified by hand against fork-openui5/src/sap.tnt/src/sap/tnt/NavigationListItem.js line 101-103 (property gate is blind to sap.tnt).` &&
+                 ` Requires a UI5 release >= 1.116 to render.`
+        use_ec = abap_true
+        use_ec_arg = abap_true )
       ( module = `sap.tnt`            control = `sap.tnt.SideNavigation`              name = `SideNavigationWithTags`              class = `z2ui5_cl_ai_app_132` path = `src/05/b03/z2ui5_cl_ai_app_132.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        release = `1.116`
+        release_post171 = abap_true
+        is_post171 = abap_true
         notes = `LIVE-TEST: The 'Toggle Collapse/Expand' button flips SideNavigation.expanded (bound to a boolean model field, initial true as in the original). The original toggled it imperatively via` &&
                  ` byId().setExpanded; the property is two-way bound here and toggled on a backend round-trip. Every tnt:tag ObjectStatus (IndicationColor states 15-20, inverted) and the NavigationListGroup / fixedItem` &&
-                 ` structure are reproduced 1:1.` )
+                 ` structure are reproduced 1:1. // POST-1.71: NavigationListItem.selectable (@since 1.116) is kept 1:1 from the original (selectable=false on parent items). Newer than UI5 1.71; declared per the` &&
+                 ` property-171 policy. Previously undeclared because the property gate is blind to sap.tnt (properties.json holds sap.m only); found and corrected by the app-172 cold-read probe 2026-07-24.`
+        post171 = `NavigationListItem.selectable (@since 1.116) is kept 1:1 from the original (selectable=false on parent items). Newer than UI5 1.71; declared per the property-171 policy. Previously undeclared because` &&
+                 ` the property gate is blind to sap.tnt (properties.json holds sap.m only); found and corrected by the app-172 cold-read probe 2026-07-24.` )
       ( module = `sap.tnt`            control = `sap.tnt.ToolHeader`                  name = `ToolHeader`                          class = `z2ui5_cl_ai_app_134` path = `src/05/b04/z2ui5_cl_ai_app_134.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`

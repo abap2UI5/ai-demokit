@@ -5,6 +5,27 @@ findings are fixed or new ones land (same-change discipline as AGENTS.md §10).
 For the process itself see TRAINING.md; for what abap2UI5 can express see
 CAPABILITIES.md._
 
+## Subagent cold-read probe (2026-07-24) — app 172 + latent POST_171 debt found
+
+Second subagent cold-read: `sap.tnt.sample.SideNavigationUnselectableParents`
+(app 172, `src/05/b06`), machine-green (all gates incl. render-smoke), one
+POST_171 (`NavigationListItem.selectable` 1.116) + two LIVE_TEST. Coverage
+**172**, `sap.tnt` 7→8.
+
+The probe's manual `@since` discipline (forced by the property-gate blindness
+documented the same day) **found real latent debt**: apps **128 and 132** ship
+`NavigationListItem.selectable="false"` (@since 1.116) with **no POST_171
+declaration** — the blind gate had hidden it. Corrected both sidecars. (app 167
+already declared it.) This is exactly the failure the property-gate caveat warns
+about, now proven to have already happened; a broader `@since` sweep of all
+non-`sap.m` ports (`src/02`–`src/05`) is a worthwhile follow-up.
+
+Doc fixes from the friction log: the client-toast `t_arg` tuple order
+(object/method/template/arg, wire token `MESSAGE_TOAST`) added to the §5
+cheat-sheet; §5 now states a data-less-but-stateful app seeds its flag inline
+(no `model_init`) and that a scalar literal→two-way binding is faithful, not a
+structural-diff trigger (declare LIVE_TEST for the behaviour, not the diff).
+
 ## Subagent cold-read probe (2026-07-24) — app 171, first `sap.ui.unified.Currency`
 
 A fresh subagent (its own context, no port memory) ported

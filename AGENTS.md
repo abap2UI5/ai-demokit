@@ -278,7 +278,18 @@ ENDMETHOD.
 - `check_on_event( )` fires on every user interaction — dispatch in `on_event( )`.
 - Add `model_init( )` / `on_event( )` **only when the app actually has data /
   events** — never a pass-through method with a single statement. A static app
-  (like app 051) has just `view_display( )` under `check_on_init( )`.
+  (like app 051) has just `view_display( )` under `check_on_init( )`. A
+  **data-less-but-stateful** app (its only "model" is one or two control-state
+  flags a button toggles, e.g. `expanded`) seeds those flags **inline in `main`**
+  (or `view_display`), no `model_init` — the single-statement-method rule wins
+  (app 128 precedent).
+- **A scalar literal → two-way binding is faithful, not a structural difference.**
+  Turning `expanded="false"` into `expanded="{/EXPANDED}"` to reproduce a
+  controller's imperative `setExpanded` is the idiomatic thin-frontend move;
+  `structural-diff` does **not** flag it (it compares control/attr presence, and
+  binding *values* only where the original itself binds). Declare a `LIVE_TEST`
+  only because the round-trip *behaviour* is unverified, not because the diff
+  requires it (app 128/172 precedent).
 - If the sample re-displays on navigation, add an
   `ELSEIF client->check_on_navigated( ). view_display( ).` branch.
 
@@ -558,7 +569,7 @@ creation).
 | A **boolean** attribute fed from an ABAP variable | `z2ui5_cl_ai_xml=>as_bool( flag )` (a literal is just `` v = \`true\` ``) — never feed `abap_true`/`abap_false` raw | §5 "Booleans"; app 007 |
 | A property **computed from several bound values** | UI5 expression binding, `_bind` inlined: `` \|\{= ${ client->_bind( a ) } && ${ client->_bind( b ) } \}\| `` — no event round-trip | §5; app 007 |
 | The controller **reads an event/source value** (`evt.getSource().getId()`) | Transport it, don't fake it: `t_arg` value `$event.oSource.sId` / `${COL}`, read back with `get_event_arg( )`. A bare `{COL}` is **not** resolved here | §5 "Data binding & events"; app 005 |
-| `MessageToast.show("…" + evt.x)` (text built on the client) | Client-composed template, roundtrip-free: `cs_event-control_global`, `MESSAGE_TOAST`/`show`, template `Foo: {0}` + arg `${$parameters>/item}.getText()` | CAPABILITIES; apps 005/060 |
+| `MessageToast.show("…" + evt.x)` (text built on the client) | Client-composed template, roundtrip-free. Exact `t_arg` tuple order = **object, method, template, arg(s)**: `` client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( \`MESSAGE_TOAST\` ) ( \`show\` ) ( \`Item selected: {0}\` ) ( \`${$parameters>/item}.getText()\` ) ) ) ``. The wire token is `MESSAGE_TOAST` (not `MessageToast`); `{0}` is filled by the resolved arg | CAPABILITIES; apps 005/060/172 |
 | Custom **CSS / raw markup** (`style.css`, `<h2>`, a `core:HTML` `content` div) | `core:HTML` leaf, markup in the `content` **attribute** (no CDATA node exists). Two traps: **(a)** write the **decoded** literal markup — the original XML carries it entity-encoded (`&lt;div&gt;`), but you write `<div>`; the builder re-escapes on stringify, so copying the entities double-escapes them. **(b)** escape literal braces `\{ \}` in a **backtick** literal `` `…\{…\}…` `` — backtick passes `\{` through to the serialized attribute; a `\|…\|` template would collapse `\{`→`{` and re-crash (the **reverse** of the typed-binding row, which *wants* real braces and so uses the pipe) | CAPABILITIES "Custom CSS"; apps 026/028, 169 |
 | Controller **`.filter()`/`.sort()`** on `oList.getBinding('items')` | `cs_event-binding_call` (whitelisted methods/operators, compound filter groups since 2026-07-20) — the model stays untouched | CAPABILITIES "Controller-applied binding filter"; app 022 |
 | An **imperative control method** (`open`/`close`/`toggleStyleClass`/`toDetail`/`expandToLevel`/`setHiddenInPopin`…) | `follow_up_action( val = cs_event-control_by_id t_arg = id/method/args )` — **only** the whitelisted `CONTROL_METHODS`; an unlisted method is a declared deviation + a `pr/` request, never a hopeful LIVE_TEST | CAPABILITIES "Frontend-action catalog"; §5 |
