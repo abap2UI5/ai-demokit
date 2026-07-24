@@ -2320,6 +2320,12 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         notes = `NOTE: Composite data-type binding paradigm: the Currency type is pulled in via core:require and every Input/Text binds a composite parts:['/amount','/currency'] with type:'CurrencyType' plus` &&
                  ` formatOptions (showMeasure/showNumber/preserveDecimals/currencyCode/style) 1:1. The two model fields amount ('123456789.123') and currency ('USD') are serialized by abap2UI5 as /AMOUNT and /CURRENCY;` &&
                  ` the paths are generated via _bind (never hardcoded).` )
+      ( module = `sap.ui.core`        control = `sap.ui.model.type.Float`             name = `TypeFloat`                           class = `z2ui5_cl_ai_app_179` path = `src/02/b10/z2ui5_cl_ai_app_179.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `NOTE: Data-type binding paradigm: the Float type module is pulled in with core:require='{FloatType: sap/ui/model/type/Float}' and the Input/Text bindings carry type:'FloatType' plus formatOptions` &&
+                 ` (min/maxIntegerDigits, min/maxFractionDigits, preserveDecimals) 1:1. The single model field 'number' (initial '123.456', kept as a string like the sample's JSON) is serialized by abap2UI5 as /NUMBER,` &&
+                 ` so the original raw '/number' paths are written as '/NUMBER'.` )
       ( module = `sap.ui.core`        control = `sap.ui.model.type.Integer`           name = `TypeInteger`                         class = `z2ui5_cl_ai_app_129` path = `src/02/b03/z2ui5_cl_ai_app_129.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
