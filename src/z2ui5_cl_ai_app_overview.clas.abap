@@ -829,6 +829,25 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `NOTE: Static sap.f.ShellBar with menu/nav/search/notifications/copilot toggles, homeIcon, notificationsNumber and a profile Avatar (initials), reproduced 1:1.` )
+      ( module = `sap.f`              control = `sap.f.ShellBar`                      name = `ShellBarWithSearch`                  class = `z2ui5_cl_ai_app_218` path = `src/04/b07/z2ui5_cl_ai_app_218.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        notes = `IMPROVISED: suggest handler (handlerSearchSuggestEvent): the original builds two sap.ui.model.Filter objects with custom JS test functions (case-insensitive substring on ProductId and Name) and` &&
+                 ` applies them to the SearchManager's suggestionItems binding, then calls oSF.suggest() to reopen the suggestion popup. The custom JS filter functions are inexpressible (control-side JS), but their` &&
+                 ` semantics is the whitelisted 'Contains' operator, so the filter is reproduced 1:1 via cs_event-binding_call (compound OR group over PRODUCTID/NAME Contains the typed value), CAPABILITIES` &&
+                 ` 'Controller-applied binding filter' / app 022. The typed text is transported as the ${$parameters>/suggestValue} event arg and read with get_event_arg. The imperative oSF.suggest() popup-reopen call` &&
+                 ` is DROPPED - 'suggest' is not in the abap2UI5 CONTROL_METHODS whitelist (would need a pr/ request); the binding filter itself is applied server-declaratively. // LIVE-TEST: Unverified in a running` &&
+                 ` system: (a) the search and liveChange handlers are client-composed MessageToast.show calls via cs_event-control_global (template '{0} search event is fired' / '{0} liveChange event value is: {1}'` &&
+                 ` filled by $event.oSource.sId and ${$parameters>/newValue}), app 005 idiom; (b) the suggest->binding_call compound Contains filter roundtrip and its effect on the SearchManager suggestion list.` &&
+                 ` Rendering (render-smoke) is green; runtime event/roundtrip behaviour needs a live check. // NOTE: The ShellBar homeIcon asset URL './resources/sap/ui/documentation/sdk/images/logo_sap.png' is` &&
+                 ` repointed to the OpenUI5 host 'https://sdk.openui5.org/resources/...' per the asset-URL rule (same as app 110). The mock's per-row ProductPicUrl values are kept byte-identical to` &&
+                 ` sap/ui/demo/mock/products.json (unbound display data, never rendered by this view). Rows without a DateOfSale in the mock carry an empty string (the property is not bound).`
+        use_ec = abap_true
+        use_ec_arg = abap_true
+        use_fua = abap_true
+        use_fua_arg = abap_true
+        use_name = abap_true )
       ( module = `sap.f`              control = `sap.f.SidePanel`                     name = `SidePanelSingle`                     class = `z2ui5_cl_ai_app_136` path = `src/04/b03/z2ui5_cl_ai_app_136.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -2748,6 +2767,16 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` ('https://sdk.openui5.org/test-resources/sap/uxap/images/robot.png') per the offline asset-URL rule. Same asset, literal src value only - structural-diff compares literal attribute names, not values.`
         post171 = `sap.uxap.ObjectPageSubSection.showTitle (showTitle='false' on the 'Order Details' and 'Products' subsections) exists only since UI5 1.77 - kept 1:1 (fidelity wins), so the app needs a UI5 release >=` &&
                  ` 1.77 to render it. Also kept 1:1: the sap.m.Avatar control (since 1.73) with its displayShape (Square) and displaySize (L) properties, used in the snapped heading and header content.` )
+      ( module = `sap.uxap`           control = `sap.uxap.ObjectPageHeader`           name = `KPIObjectPageHeader`                 class = `z2ui5_cl_ai_app_217` path = `src/03/b02/z2ui5_cl_ai_app_217.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `IMPROVISED: Block->content inlining (app 188/178/161 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'). The original blocks/moreBlocks aggregations each hold a custom` &&
+                 ` BlockBase control from the sample's SharedBlocks JS: goals:GoalsBlock (id goalsblock), personal:BlockPhoneNumber (id phone), personal:BlockSocial (id social), personal:BlockAdresses (id adresses),` &&
+                 ` personal:BlockMailing (id mailing, columnLayout=1), personal:PersonalBlockPart1 (id part1, columnLayout=1) and personal:PersonalBlockPart2 (id part2, columnLayout=1). A BlockBase is only a` &&
+                 ` lazy-loading wrapper around a view, and ObjectPageSubSection.blocks/moreBlocks accept any sap.ui.core.Control, so each block's rendered content (a sap.ui.layout.form.SimpleForm) is inlined directly` &&
+                 ` here as a form:SimpleForm holding its core:Title, m:Label and m:Text children. Consequently all seven block controls (GoalsBlock, BlockPhoneNumber, BlockSocial, BlockAdresses, BlockMailing,` &&
+                 ` PersonalBlockPart1, PersonalBlockPart2) are absent from the port and seven form:SimpleForm controls with their core:Title, m:Label and m:Text content are present in their place (the m:Label count` &&
+                 ` rises from 3 to 15). The blocks carry no controller behaviour to port; the ObjectPageModel (employee.json) the controller loads is never bound by the view, so no default model is seeded.` )
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageHeaderContent`    name = `HeaderContent`                       class = `z2ui5_cl_ai_app_216` path = `src/03/b02/z2ui5_cl_ai_app_216.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
