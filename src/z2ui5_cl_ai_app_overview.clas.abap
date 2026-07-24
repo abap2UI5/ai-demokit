@@ -952,6 +952,11 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22`
         use_name = abap_true )
+      ( module = `sap.m`              control = `sap.m.ComboBox`                      name = `ComboBox2Columns`                    class = `z2ui5_cl_ai_app_193` path = `src/01/b17/z2ui5_cl_ai_app_193.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.22`
+        use_name = abap_true )
       ( module = `sap.m`              control = `sap.m.ComparisonPattern`             name = `ComparisonPattern`                   class = `z2ui5_cl_ai_app_012` path = `src/01/b05/z2ui5_cl_ai_app_012.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 5 reworked, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
@@ -2464,6 +2469,9 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` crash view creation. This adds one core:HTML control not present in the original view.xml. // NOTE: The core:HTML 'content' divs and the FormattedText 'htmlText' are written as the decoded literal` &&
                  ` markup (e.g. <div class=exampleDiv></div>); the original view.xml carries them HTML-entity-encoded (&lt;div ...&gt;) and the builder re-escapes the literal on stringify. Multi-line div contents in` &&
                  ` the original are written single-line here (whitespace-only difference, not a binding).` )
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.Grid`                  name = `GridInfo`                            class = `z2ui5_cl_ai_app_194` path = `src/02/b10/z2ui5_cl_ai_app_194.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
       ( module = `sap.ui.layout`      control = `sap.ui.layout.HorizontalLayout`      name = `HorizontalLayout`                    class = `z2ui5_cl_ai_app_162` path = `src/02/b09/z2ui5_cl_ai_app_162.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
