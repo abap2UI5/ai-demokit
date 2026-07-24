@@ -1678,6 +1678,14 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` since the port does not carry the whole collection. // NOTE: the model holds exactly the bound record /ProductCollection/0 (Notebook Basic 15) of ui5/mock/products.json, verbatim - this is the` &&
                  ` original sample's own single-record binding {/ProductCollection/0}, not a shortened data set.`
         use_name = abap_true )
+      ( module = `sap.m`              control = `sap.m.ObjectHeader`                  name = `ObjectHeaderImage`                   class = `z2ui5_cl_ai_app_206` path = `src/01/b17/z2ui5_cl_ai_app_206.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.12`
+        notes = `NOTE: The ObjectHeader's single-record element binding attribute binding="{/ProductCollection/5}" is dropped: abap2UI5 serves one default model, so products.json row 5 is seeded directly onto the` &&
+                 ` model root (model_init) and the control's relative {NAME}/{PRICE}/… bindings resolve against it — same data, renders identically (single-record fold, AGENTS §5). // LIVE-TEST: The` &&
+                 ` sap.ui.model.type.Currency composite binding on number and the flattened relative bindings render in render-smoke but the live data bind is unverified in a running system.`
+        use_name = abap_true )
       ( module = `sap.m`              control = `sap.m.ObjectHeader`                  name = `ObjectHeaderMarkers`                 class = `z2ui5_cl_ai_app_197` path = `src/01/b17/z2ui5_cl_ai_app_197.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -1930,6 +1938,10 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.m`              control = `sap.m.Select`                        name = `Select`                              class = `z2ui5_cl_ai_app_048` path = `src/01/b02/z2ui5_cl_ai_app_048.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        use_name = abap_true )
+      ( module = `sap.m`              control = `sap.m.Select`                        name = `SelectWithIcons`                     class = `z2ui5_cl_ai_app_205` path = `src/01/b17/z2ui5_cl_ai_app_205.clas.abap`
+        score = 1
+        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         use_name = abap_true )
       ( module = `sap.m`              control = `sap.m.SelectDialog`                  name = `SelectDialog`                        class = `z2ui5_cl_ai_app_103` path = `src/01/b12/z2ui5_cl_ai_app_103.clas.abap`
         score = 5

@@ -1,0 +1,17 @@
+{
+  "class": "z2ui5_cl_ai_app_206",
+  "sample": "sap.m.sample.ObjectHeaderImage",
+  "entity": "sap.m.ObjectHeader",
+  "file": "src/01/b17/z2ui5_cl_ai_app_206.clas.abap",
+  "batch": "b17",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    { "type": "NOTE", "what": "The ObjectHeader's single-record element binding attribute binding=\"{/ProductCollection/5}\" is dropped: abap2UI5 serves one default model, so products.json row 5 is seeded directly onto the model root (model_init) and the control's relative {NAME}/{PRICE}/… bindings resolve against it — same data, renders identically (single-record fold, AGENTS §5)." },
+    { "type": "LIVE_TEST", "what": "The sap.ui.model.type.Currency composite binding on number and the flattened relative bindings render in render-smoke but the live data bind is unverified in a running system." }
+  ]
+}
