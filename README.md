@@ -131,7 +131,10 @@ Rules:
   node scripts/validate-meta.mjs.
 - Any runtime asset URLs the sample uses (test-resources / resources images)
   also point at the OpenUI5 host (sdk.openui5.org), never SAPUI5.
-- Set the abapGit <DESCRIPT> to `<entity> - <demo kit description>`.
+- Leave the abapGit <DESCRIPT> as the scaffolder's `<library> - <sample name>`
+  default (e.g. `sap.f - GridListBoxContainerGrouping`); only improve the
+  trailing text to a human phrase when you know one. Don't agonize over
+  entity-vs-library (see AGENTS.md section 5).
 - Follow all ABAP conventions in AGENTS.md.
 ```
 <!-- prompt:end -->
@@ -185,7 +188,7 @@ have an abap2UI5 port.
 
 <!-- coverage:start -->
 
-Overall **175 / 641** in-scope demo kit samples ported (27.3 %).
+Overall **176 / 641** in-scope demo kit samples ported (27.5 %).
 **In scope**: samples whose control exists since **UI5 1.71** and is **not deprecated** (legacy-free ready).
 Out of scope: 66 of 707 samples — 16 on deprecated controls, 21 on controls newer than 1.71, 29 without control metadata.
 Control metadata from OpenUI5 **1.151.0**.
@@ -195,14 +198,14 @@ Control metadata from OpenUI5 **1.151.0**.
 | `sap.ui.codeeditor` | 2 | 2 | 2 | 100.0 % | ██████████ |
 | `sap.ui.integration` | 4 | 4 | 2 | 50.0 % | █████░░░░░ |
 | `sap.tnt` | 17 | 17 | 8 | 47.1 % | █████░░░░░ |
+| `sap.f` | 42 | 41 | 13 | 31.7 % | ███░░░░░░░ |
 | `sap.m` | 446 | 403 | 119 | 29.5 % | ███░░░░░░░ |
-| `sap.f` | 42 | 41 | 12 | 29.3 % | ███░░░░░░░ |
 | `sap.ui.core` | 48 | 36 | 10 | 27.8 % | ███░░░░░░░ |
 | `sap.ui.unified` | 21 | 21 | 5 | 23.8 % | ██░░░░░░░░ |
 | `sap.ui.table` | 18 | 17 | 4 | 23.5 % | ██░░░░░░░░ |
 | `sap.ui.layout` | 62 | 59 | 11 | 18.6 % | ██░░░░░░░░ |
 | `sap.uxap` | 47 | 41 | 2 | 4.9 % | ░░░░░░░░░░ |
-| **Total** | **707** | **641** | **175** | **27.3 %** | ███░░░░░░░ |
+| **Total** | **707** | **641** | **176** | **27.5 %** | ███░░░░░░░ |
 
 <!-- coverage:end -->
 

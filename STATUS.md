@@ -5,6 +5,25 @@ findings are fixed or new ones land (same-change discipline as AGENTS.md §10).
 For the process itself see TRAINING.md; for what abap2UI5 can express see
 CAPABILITIES.md._
 
+## Subagent cold-read probe (2026-07-24) — app 176 (sap.f GridList grouping)
+
+Sixth cold-read port: `sap.f.sample.GridListBoxContainerGrouping` (app 176),
+machine-green. Coverage **176**, `sap.f` 12→13. `sap.f.AvatarGroup` (the only
+un-ported *new* sap.f control) was skipped — render-hostile (declared skip), so
+a clean depth port was taken. All members @since-checked (≤ 1.71). Slider→width
+done as a roundtrip-free expression binding (spec-preferred over the round-trip
+that the nearest reference app 144 actually uses — the docs prefer it but no gate
+enforces it; noted).
+
+Two doc fixes from the friction log:
+- **§5**: `stringify( )` renders from the root, so **trailing `shut( )`s are
+  optional** — a chain may end at the deepest node with a bare `).` (all open
+  nodes close structurally in the output). `shut( )` only moves the cursor to add
+  a higher sibling. Confirmed in the builder (`stringify` → `root->render( )`).
+- **generation-prompt.txt**: the `<DESCRIPT>` line now matches §5 (scaffolder's
+  `<library> - <sample name>` default) instead of the old `<entity> - <desc>`
+  that contradicted it.
+
 ## Subagent cold-read probe (2026-07-24) — app 175 (first SimpleForm) + ref bug
 
 Fifth cold-read port: `sap.ui.layout.sample.SimpleFormToolbar` (app 175, first

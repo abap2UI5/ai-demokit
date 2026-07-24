@@ -763,6 +763,15 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` carry the value back. // NOTE: GridList with a grid:GridBoxLayout (boxMinWidth 17rem) and a GridListItem template (VBox + FlexItemData, Title, Label). The 27 items are inlined from model/items.json;` &&
                  ` the template binds {TITLE}/{SUBTITLE} 1:1.`
         use_name = abap_true )
+      ( module = `sap.f`              control = `sap.f.GridList`                      name = `GridListBoxContainerGrouping`        class = `z2ui5_cl_ai_app_176` path = `src/04/b07/z2ui5_cl_ai_app_176.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `LIVE-TEST: The Slider ``liveChange`` handler (original onSliderMoved: byId('panelForGridList').setWidth(value + '%')) is dropped and replaced by a roundtrip-free expression binding on the host` &&
+                 ` Panel.width (``{= ${/SLIDER_VALUE} + '%'}``), with Slider.value bound two-way to carry the value; per AGENTS.md 5 / CAPABILITIES 'prefer a pure expression binding over an event round-trip' (app 007` &&
+                 ` pattern). The width expression rendering is unverified in a running system. // NOTE: GridList with a group sorter on items ({path, sorter:{path:'GROUP', descending:false, group:true}}, default group` &&
+                 ` headers), an empty grid:GridBoxLayout customLayout, growing/growingThreshold, and a custom f:headerToolbar (Toolbar with Title, ToolbarSpacer, SearchField - the SearchField has no handler in the` &&
+                 ` original). The 27 items are inlined 1:1 from the sample's own model/items.json; the GridListItem template (VBox>VBox+FlexItemData, Title, Label) binds {TITLE}/{SUBTITLE} 1:1.`
+        use_name = abap_true )
       ( module = `sap.f`              control = `sap.f.GridList`                      name = `GridListDragAndDrop`                 class = `z2ui5_cl_ai_app_148` path = `src/04/b05/z2ui5_cl_ai_app_148.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`

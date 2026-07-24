@@ -79,5 +79,8 @@ Rules:
   node scripts/validate-meta.mjs.
 - Any runtime asset URLs the sample uses (test-resources / resources images)
   also point at the OpenUI5 host (sdk.openui5.org), never SAPUI5.
-- Set the abapGit <DESCRIPT> to `<entity> - <demo kit description>`.
+- Leave the abapGit <DESCRIPT> as the scaffolder's `<library> - <sample name>`
+  default (e.g. `sap.f - GridListBoxContainerGrouping`); only improve the
+  trailing text to a human phrase when you know one. Don't agonize over
+  entity-vs-library (see AGENTS.md section 5).
 - Follow all ABAP conventions in AGENTS.md.

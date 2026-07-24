@@ -411,7 +411,13 @@ client->view_display( view->stringify( ) ).
 ```
 
 `stringify( )` renders the whole tree to the XML string handed to
-`client->view_display( )` as the standalone final statement.
+`client->view_display( )` as the standalone final statement. **It renders from
+the root, so every tag is closed structurally — trailing `shut( )`s before the
+final `).` are optional.** `shut( )` only moves the *cursor* up to add a sibling
+at a higher level; once the last leaf/attr is placed you can end the chain with a
+bare `).` (the still-open View/Panel/… nodes all close in the output). Both
+styles pass every gate — a chain that closes back to the root explicitly, or one
+that stops at the deepest node.
 
 #### Formatting rules (strict — reviewers check these)
 
