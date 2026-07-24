@@ -1,0 +1,46 @@
+{
+	"_version": "2.0.0",
+	"sap.app": {
+		"id": "sap.ui.layout.sample.GridData",
+		"applicationVersion": {
+			"version": "1.0.0"
+		},
+		"type": "application",
+		"title": "Application 'GridData'"
+	},
+	"sap.ui": {
+		"technology": "UI5",
+		"deviceTypes": {
+			"desktop": true,
+			"tablet": true,
+			"phone": true
+		}
+	},
+	"sap.ui5": {
+		"rootView": "sap.ui.layout.sample.GridData.view.GridData",
+		"resources": {
+			"css": [
+				{
+					"uri": "styles/styles.css"
+				}
+			]
+		},
+		"dependencies": {
+			"minUI5Version": "2.0.0",
+			"libs": {
+				"sap.m": {},
+				"sap.ui.layout": {}
+			}
+		},
+		"config": {
+			"sample": {
+				"files": [
+					"view/GridData.view.xml",
+					"controller/GridData.controller.js",
+					"styles/styles.css",
+					"manifest.json"
+				]
+			}
+		}
+	}
+}

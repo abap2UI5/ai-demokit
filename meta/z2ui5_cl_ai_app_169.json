@@ -1,0 +1,18 @@
+{
+  "class": "z2ui5_cl_ai_app_169",
+  "sample": "sap.ui.layout.sample.GridData",
+  "entity": "sap.ui.layout.Grid",
+  "file": "src/02/b10/z2ui5_cl_ai_app_169.clas.abap",
+  "batch": "b10",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    { "type": "IMPROVISED", "what": "The eight Sliders' liveChange='.onSliderMoved' handler is dropped. The original controller resizes the next grid wrapper via jQuery DOM traversal (oSlider.$().parent().next().find('.gridWrapper'), then Element.closestTo(...).setWidth(value + '%')) - a live DOM manipulation with no server-reachable or bindable equivalent (it addresses a sibling by rendered DOM position, not by control id or model path). The Sliders render 1:1 but do not resize the grids; the responsive GridData behaviour is still observable by resizing the browser window." },
+    { "type": "NOTE", "what": "The sample's styles.css (.GridDataSample .exampleDiv / .propertiesDisplay / p) is injected via a single core:HTML <style> leaf as the first child of the outer VerticalLayout (abap2UI5 ships no separate css file). CSS braces are escaped \\{ \\} in a backtick literal so the backslash survives to the serialized attribute, otherwise the XMLView binding parser would read them as bindings and crash view creation. This adds one core:HTML control not present in the original view.xml." },
+    { "type": "NOTE", "what": "The core:HTML 'content' divs and the FormattedText 'htmlText' are written as the decoded literal markup (e.g. <div class=exampleDiv></div>); the original view.xml carries them HTML-entity-encoded (&lt;div ...&gt;) and the builder re-escapes the literal on stringify. Multi-line div contents in the original are written single-line here (whitespace-only difference, not a binding)." }
+  ]
+}

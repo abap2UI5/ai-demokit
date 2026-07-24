@@ -5,6 +5,42 @@ findings are fixed or new ones land (same-change discipline as AGENTS.md §10).
 For the process itself see TRAINING.md; for what abap2UI5 can express see
 CAPABILITIES.md._
 
+## From-scratch probe (2026-07-24) — app 169, first `sap.ui.layout.Grid` port
+
+The real regeneration probe the agents-usability pass owed: **built entirely
+from the agent files**, from the OpenUI5 source (`oblomov-dev/fork-openui5`
+cloned into the session), no reference to another port (there was none — new
+control). Chosen breadth-first: `sap.ui.layout.sample.GridData`
+(`sap.ui.layout.Grid` + the `GridData` responsive layoutData — span / indent /
+linebreak / visibility), a single-view sample so `structural-diff` is meaningful.
+
+**Machine-green on the first serious pass** — abaplint STANDARD + CLOUD (0
+issues), validate-meta, pattern-lint (after fix, see below), structure-lint,
+structural-diff `--strict` (**0 undeclared**; 2 declared: the injected CSS
+`core:HTML` + the dropped `Slider.liveChange`), render-smoke (real
+`XMLView.create`, **pass**), property-check (0 post-1.71). Coverage **169**;
+`sap.ui.layout` 8→9. Deviations: 1 IMPROVISED (the eight Sliders'
+`.onSliderMoved` resizes the grid wrapper by jQuery DOM traversal — no
+server/bindable equivalent, dropped), 2 NOTE (CSS injected via `core:HTML`;
+`core:HTML` div/`FormattedText` markup written decoded).
+
+Two friction points a fresh AI hits — the docs were correct but not crisp, now
+fixed in the same change (AGENTS §5 "Idiom cheat-sheet" CSS row + CAPABILITIES
+"Custom CSS"):
+
+- **`core:HTML content` needs decoded markup.** The original view.xml carries
+  it entity-encoded (`&lt;div&gt;`); you must write the literal `<div>` because
+  the builder re-escapes on stringify — copying the entities double-escapes.
+- **Escaped braces `\{ \}` must be a backtick literal**, not a `|…|` template.
+  Backtick passes `\{` through to the serialized attribute; a pipe collapses
+  `\{`→`{` and re-crashes — the exact reverse of the typed-binding string (which
+  wants real braces and so uses the pipe). Verified against apps 026/028.
+
+A third, minor: `pattern-lint no-blank-before-shut` requires a blank line before
+the first `)->shut(` of a closing group — easy to miss from the prompt's terse
+"before shut". Fixed (15 warnings → 0); prompt wording left as-is (the rule
+gates it anyway).
+
 ## Agents-usability pass (2026-07-24) — make the docs hand an AI the exact rule
 
 Focus: lower the barrier for an AI to build a port first-try from the agent
