@@ -1,0 +1,73 @@
+<mvc:View
+	controllerName="sap.tnt.sample.InfoLabelInTable.C"
+	xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:core="sap.ui.core"
+	xmlns:tnt="sap.tnt">
+	<Table
+		id="idProductsTable"
+		inset="false"
+		items="{
+			path: '/ProductCollection',
+			sorter: {
+				path: 'Name'
+			}
+		}">
+		<headerToolbar>
+			<Toolbar>
+					<Title text="Products" level="H2" />
+					<ToolbarSpacer />
+					<ComboBox
+						id="idPopinLayout"
+						placeholder="Popin layout options"
+						change=".onPopinLayoutChanged">
+						<core:Item text="Block" key="Block" />
+						<core:Item text="Grid Large" key="GridLarge" />
+						<core:Item text="Grid Small" key="GridSmall" />
+					</ComboBox>
+			</Toolbar>
+		</headerToolbar>
+		<columns>
+			<Column width="12em">
+				<Text text="Product" />
+			</Column>
+			<Column minScreenWidth="Tablet" demandPopin="true">
+				<Text text="Supplier" />
+			</Column>
+			<Column minScreenWidth="Desktop" demandPopin="true">
+				<Text text="Dimensions" />
+			</Column>
+			<Column minScreenWidth="Desktop" demandPopin="true">
+				<Text text="Availability" />
+			</Column>
+			<Column>
+				<Text text="Price" />
+			</Column>
+		</columns>
+		<items>
+			<ColumnListItem>
+				<cells>
+					<ObjectIdentifier title="{Name}" text="{ProductId}" />
+					<Text text="{SupplierName}" />
+					<Text text="{Width} x {Depth} x {Height} {DimUnit}" />
+					<tnt:InfoLabel
+						text="{Status}"
+						displayOnly="true"
+						colorScheme= "{
+							parts: [
+								{path: 'Status'}
+							],
+							formatter: '.formatter.availableState'
+						}" />
+					<ObjectNumber
+						number="{
+							parts:[{path:'Price'},{path:'CurrencyCode'}],
+							type: 'sap.ui.model.type.Currency',
+							formatOptions: {showMeasure: false}
+						}"
+						unit="{CurrencyCode}" />
+				</cells>
+			</ColumnListItem>
+		</items>
+	</Table>
+</mvc:View>

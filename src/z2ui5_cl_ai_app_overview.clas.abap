@@ -1613,6 +1613,13 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` abap2UI5 does not serve that static asset, so it does not render offline (the first tile's sap-icon://travel-expense does). The image is archived under ui5/sap.m/NumericContentIcon/images/.`
         use_ec = abap_true
         use_ec_arg = abap_true )
+      ( module = `sap.m`              control = `sap.m.ObjectAttribute`               name = `ObjectAttributeInTable`              class = `z2ui5_cl_ai_app_191` path = `src/01/b17/z2ui5_cl_ai_app_191.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.12`
+        notes = `NOTE: the JSONModel is defined inline in the original controller's onInit (an array of {product, supplier} rows under /modelData); it is moved verbatim into ABAP model_init (all 10 rows kept) and` &&
+                 ` bound on the one default model. Pure prefix/root rename (/modelData -> the default model root), same data, renders identically.`
+        use_name = abap_true )
       ( module = `sap.m`              control = `sap.m.ObjectAttribute`               name = `ObjectAttributes`                    class = `z2ui5_cl_ai_app_073` path = `src/01/b09/z2ui5_cl_ai_app_073.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
@@ -2192,6 +2199,17 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` non-sap.m @since audit 2026-07-24.`
         post171 = `sap.tnt.InfoLabel.icon (@since 1.74) is used 1:1 (one InfoLabel carries icon='sap-icon://home-share'). Newer than UI5 1.71; declared per the property-171 policy. Previously undeclared because the` &&
                  ` property gate is blind to sap.tnt; found by the non-sap.m @since audit 2026-07-24.` )
+      ( module = `sap.tnt`            control = `sap.tnt.InfoLabel`                   name = `InfoLabelInTable`                    class = `z2ui5_cl_ai_app_192` path = `src/05/b06/z2ui5_cl_ai_app_192.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `IMPROVISED: the controller's onPopinLayoutChanged (ComboBox change handler running a PopinLayout switch with a Block default) is expressed as bound properties instead of a round-trip (AGENTS 'prefer a` &&
+                 ` bindable property', as app 009): the ComboBox's change attribute is dropped, its selectedKey is bound two-way, and the Table gains a popinLayout expression binding that reproduces the switch` &&
+                 ` including its Block default. // NOTE: the original binds the InfoLabel colorScheme via a frontend formatter (Formatter.availableState: an already-classified Status string mapped to a colorScheme` &&
+                 ` index 8/3/5/9). abap2UI5 being a thin frontend, that mapping is computed in ABAP model_init into a COLOR_SCHEME field and bound colorScheme="{COLOR_SCHEME}" (with path 'Status'), not via a frontend` &&
+                 ` formatter. Visually 1:1 with the original. // NOTE: the sample's local mock model/data.json (/ProductCollection, 9 rows) is moved verbatim into ABAP model_init on the one default model; all 9 rows` &&
+                 ` and all bound columns kept. Width/Depth/Height are TYPE string (display-only values in a text template with variable decimals like 3.1/1.8 - packed with fixed DECIMALS would add trailing zeros). Pure` &&
+                 ` prefix-drop, renders identically.`
+        use_name = abap_true )
       ( module = `sap.tnt`            control = `sap.tnt.NavigationList`              name = `NavigationList`                      class = `z2ui5_cl_ai_app_123` path = `src/05/b02/z2ui5_cl_ai_app_123.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
