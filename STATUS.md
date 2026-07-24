@@ -5,6 +5,22 @@ findings are fixed or new ones land (same-change discipline as AGENTS.md §10).
 For the process itself see TRAINING.md; for what abap2UI5 can express see
 CAPABILITIES.md._
 
+## Subagent cold-read probe (2026-07-24) — app 177 (sap.ui.unified CalendarDateInterval)
+
+Seventh cold-read port: `sap.ui.unified.sample.CalendarDateIntervalBasic` (app
+177, first `sap.ui.unified.CalendarDateInterval`), machine-green, 0 diffs.
+Coverage **177**, `sap.ui.unified` 5→6. Data-less-but-stateful (inline flag,
+no `model_init`). One LIVE_TEST (event date simplified, same as app 139).
+
+Friction is now down to `@since`-check refinements — both added to the §5
+property-gate caveat: **(a)** an inherited member's `@since` lives in the
+**parent class file** (follow the `extend` chain — `CalendarDateInterval` →
+`Calendar.js`); **(b)** a member with **no `@since` tag** is base-version (≤ 1.71,
+no POST_171). The core spec is otherwise saturated for this port class — recent
+friction logs surface only cross-corpus consistency nits (references using
+dispreferred-but-valid patterns, the scaffolder stub vs the data-less rule),
+not capability gaps.
+
 ## Subagent cold-read probe (2026-07-24) — app 176 (sap.f GridList grouping)
 
 Sixth cold-read port: `sap.f.sample.GridListBoxContainerGrouping` (app 176),

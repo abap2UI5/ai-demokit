@@ -1,0 +1,16 @@
+{
+  "class": "z2ui5_cl_ai_app_177",
+  "sample": "sap.ui.unified.sample.CalendarDateIntervalBasic",
+  "entity": "sap.ui.unified.CalendarDateInterval",
+  "file": "src/02/b10/z2ui5_cl_ai_app_177.clas.abap",
+  "batch": "b10",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    { "type": "LIVE_TEST", "what": "CalendarDateInterval.select and the 'Select Today' button are wired to backend events that write the current server date (yyyy-MM-dd) into the bound status Text. The original formatted getSelectedDates()[0].getStartDate() with DateFormat, and handleCalendarSelect additionally toggled the day off when the same date was re-clicked (removeSelectedDate). Reading the actually clicked day out of the transpiled event, and the re-click deselect, are simplified to reporting the server date; the select/press attributes are kept." }
+  ]
+}

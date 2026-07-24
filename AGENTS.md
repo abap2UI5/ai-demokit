@@ -193,10 +193,14 @@ source of truth:
   the property gate can enforce **nothing** and passes silently, so its green is
   hollow there. You must **@since-check every non-`sap.m` member by hand**
   against the OpenUI5 source (`src/<lib>/src/<path>/<Control>.js`, grep the
-  member's `@since`) and declare `POST_171` yourself. (Found by the app-171
-  cold-read probe, 2026-07-24; extending `LIB_DIRS` to the other libs is a
-  worthwhile follow-up but the `generate_result` CI checkout must then include
-  those libs' `src/`.)
+  member's `@since`) and declare `POST_171` yourself. Two rules for reading the
+  source: **(a)** an inherited member lives in the **parent class file**, not the
+  control's — if `<Control>.js` doesn't define it, follow the `X.extend(...)`
+  chain up (e.g. `CalendarDateInterval` → `Calendar.js` for `width`/`select`);
+  **(b)** a member with **no `@since` tag at all** is base-version (predates the
+  tag), i.e. ≤ 1.71 — no `POST_171`. (Found by the app-171/177 cold-read probes,
+  2026-07-24; extending `LIB_DIRS` to the other libs is a worthwhile follow-up
+  but the `generate_result` CI checkout must then include those libs' `src/`.)
 - **Before declaring any sample feature inexpressible, check `CAPABILITIES.md`**
   — the map of what abap2UI5 can express, each entry backed by a port that
   proves it. Never improvise around a feature it marks ✅/🔶 (app 042 replaced a
