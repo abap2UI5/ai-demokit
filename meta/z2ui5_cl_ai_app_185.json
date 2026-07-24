@@ -1,0 +1,17 @@
+{
+  "class": "z2ui5_cl_ai_app_185",
+  "sample": "sap.m.sample.WhitespacePattern",
+  "entity": "sap.m.WhitespacePattern",
+  "file": "src/01/b17/z2ui5_cl_ai_app_185.clas.abap",
+  "batch": "b17",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    { "type": "NOTE", "what": "The sample's default model is a bare JSON array (oModel.setData([...])), bound as the root ({/} on the suggestionItems / items aggregations) and by absolute index (/9/text, /9/key on the second form). abap2UI5's single default model is an object, so the ten rows live in the T_ITEMS member: {/} becomes {/T_ITEMS} and /9/text / /9/key become /T_ITEMS/9/TEXT / /T_ITEMS/9/KEY. The last path segment is identical, which structural-diff matches; same data, renders identically." },
+    { "type": "NOTE", "what": "The original applies an app-authored '.whitespace2Char' formatter on every text/additionalText binding - it replaces each doubled space with space + U+00A0 (non-breaking space) so consecutive whitespaces stay visible. abap2UI5 is a thin frontend, so this presentation transform is computed once in model_init (REPLACE ALL OCCURRENCES OF two spaces WITH space + nbsp) and the finished text is bound plainly ({TEXT}, {ADDITIONALTEXT}); the 'formatter' key is dropped from the bindings. Output is identical." }
+  ]
+}

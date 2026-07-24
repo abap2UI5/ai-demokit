@@ -2136,6 +2136,17 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` shows the filterString), so only the three visible preset filter options are reproduced. This adds 3 ViewSettingsItem over the original fragment count.`
         use_fua = abap_true
         use_fua_arg = abap_true )
+      ( module = `sap.m`              control = `sap.m.WhitespacePattern`             name = `WhitespacePattern`                   class = `z2ui5_cl_ai_app_185` path = `src/01/b17/z2ui5_cl_ai_app_185.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        ui5_only = abap_true
+        notes = `NOTE: The sample's default model is a bare JSON array (oModel.setData([...])), bound as the root ({/} on the suggestionItems / items aggregations) and by absolute index (/9/text, /9/key on the second` &&
+                 ` form). abap2UI5's single default model is an object, so the ten rows live in the T_ITEMS member: {/} becomes {/T_ITEMS} and /9/text / /9/key become /T_ITEMS/9/TEXT / /T_ITEMS/9/KEY. The last path` &&
+                 ` segment is identical, which structural-diff matches; same data, renders identically. // NOTE: The original applies an app-authored '.whitespace2Char' formatter on every text/additionalText binding -` &&
+                 ` it replaces each doubled space with space + U+00A0 (non-breaking space) so consecutive whitespaces stay visible. abap2UI5 is a thin frontend, so this presentation transform is computed once in` &&
+                 ` model_init (REPLACE ALL OCCURRENCES OF two spaces WITH space + nbsp) and the finished text is bound plainly ({TEXT}, {ADDITIONALTEXT}); the 'formatter' key is dropped from the bindings. Output is` &&
+                 ` identical.`
+        use_name = abap_true )
       ( module = `sap.m`              control = `sap.m.Wizard`                        name = `Wizard`                              class = `z2ui5_cl_ai_app_101` path = `src/01/b12/z2ui5_cl_ai_app_101.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
@@ -2435,6 +2446,17 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         notes = `NOTE: The original uses a separate 'img' JSON model for the image src ({img>/products/pic1}) alongside the default model for the widths. abap2UI5 has one default model, so the picture path is folded` &&
                  ` into it and the src binds it directly - the 'img>' prefix is dropped and the path flattened to a single field (pic1); the last path segment is identical, which structural-diff matches. Widths use the` &&
                  ` desktop values (the original's phone branch is a client-only Device decision).` )
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.ResponsiveSplitter`    name = `ResponsiveSplitter`                  class = `z2ui5_cl_ai_app_186` path = `src/02/b10/z2ui5_cl_ai_app_186.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `NOTE: The original keeps the three pane sizes in a separate 'sizes' JSON model ({sizes>/pane1}, {sizes>/pane2}, {sizes>/pane3}) bound on the three SplitterLayoutData.size properties and echoed in each` &&
+                 ` pane's Text label. abap2UI5 has one default model, so pane1/pane2/pane3 are folded into it and bound directly - the 'sizes>' prefix is dropped and the last path segment is identical, which` &&
+                 ` structural-diff matches. Same data, renders identically. // NOTE: The shared 123-row demo ProductCollection (sap/ui/demo/mock/products.json) is inlined into model_init with the three columns the` &&
+                 ` sample binds - ProductId, Name and Quantity (the List's title/counter and the Select's Item key/text). Quantity is the mock integer; the full row set is kept. // IMPROVISED: The two PaneContainer` &&
+                 ` resize handlers (resize='.onRootContainerResize' on the root container and resize='.onInnerContainerResize' on the inner container) are dropped. Both only compose an informational MessageToast` &&
+                 ` listing the oldSizes/newSizes pane-size arrays reported by the resize event; that array-valued container-resize event has no bound-model equivalent, so the resize attribute is not reproduced. No app` &&
+                 ` state depends on it.`
+        use_name = abap_true )
       ( module = `sap.ui.layout`      control = `sap.ui.layout.Splitter`              name = `Splitter2`                           class = `z2ui5_cl_ai_app_125` path = `src/02/b02/z2ui5_cl_ai_app_125.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
