@@ -330,6 +330,17 @@ just `open`/`leaf` calls — an aggregation is a nameless-namespace `open` with 
 attributes, e.g. `)->open( \`headerToolbar\` )` (positional — a single named `n =`
 would trip abaplint's `omit_parameter_name`).
 
+**An aggregation carries the same `ns=` as the tag has in the XML** — which is
+its parent control's namespace, not the default one. `<m:content>` under an
+`sap.m.Page` is `)->open( n = \`content\` ns = \`m\` )`; but a default-namespace
+aggregation like `<columns>` / `<template>` / `<footer>` inside an
+`sap.ui.table.Table` (whose view default `xmlns` is `sap.ui.table`) is the
+nameless `)->open( \`columns\` )`. Copy the prefix from the original tag; a
+wrong or missing `ns` on an aggregation produces an unknown-aggregation node
+that `render_smoke` rejects. (Worked example: app 164, `sap.ui.table` RowModes —
+`m:content`/`m:OverflowToolbar` prefixed, `columns`/`extension`/`footer`/`template`
+bare.)
+
 `factory( )` returns an **empty root**. There is no implicit `<View>` — you open
 the `<mvc:View>` and declare its `xmlns` namespaces yourself, exactly like any
 other control:
@@ -503,6 +514,35 @@ faithful 1:1 port. Still add the inline `"` comment at the exact spot of each
 deviation in the ABAP code; the sidecar is the scannable summary of those —
 the structural diff (§6) matches undeclared view differences against exactly
 these entries.
+
+#### Idiom cheat-sheet — the recurring hard cases
+
+The idioms that cause the most first-try mistakes, each as the exact ABAP to
+write. This is an index into the long-form rules above and in `CAPABILITIES.md`
+(named there) — scan it before porting; when in doubt read the referenced row.
+Braces `{ }` inside a `|…|` template are **always** escaped `\{ \}` (an
+unescaped `{` is read as a binding by the XMLView parser and crashes view
+creation).
+
+| In the original you see… | Write in the port | Detail |
+|---|---|---|
+| A **named model** binding `{ui>/rowMode}`, `{img>/x}`, any `name>/…` | Drop the prefix, bind the field on the **one default model**: `client->_bind( rowmode )` → `{/ROWMODE}`. structural-diff matches on the last path segment | CAPABILITIES "Named JSON models"; apps 162/163/164 |
+| A **typed / complex binding** `{path:'Q', type:'sap.ui.model.type.Integer'}` | Raw binding-info string, braces escaped: `` v = \|\{ path: 'Q', type: 'sap.ui.model.type.Integer' \}\| `` — passes through to `XMLView.create` unmangled | CAPABILITIES "composite … types"; apps 164/129/033 |
+| A **`sorter` / `sorter group:true`** on an aggregation | Keep the raw string; get the bare path via `client->_bind( val = t path = abap_true )`: `` \|\{ path: '{ … }', sorter: \{ path: 'COL', group: true \} \}\| `` | CAPABILITIES "Binding sorter"; app 039 |
+| A **date-object** property (`CalendarAppointment.startDate`, `PlanningCalendar.startDate`, `DatePicker.dateValue`) | Formatter at point of use: `` \|\{ path: 'START_AT', formatter: 'Formatter.DateCreateObject' \}\| `` + `core:require="\{Formatter: 'z2ui5/model/formatter'\}"` (POST_171). A plain string binding **crashes** | CAPABILITIES "Date-object"; apps 108/109 |
+| A **boolean** attribute fed from an ABAP variable | `z2ui5_cl_ai_xml=>as_bool( flag )` (a literal is just `` v = \`true\` ``) — never feed `abap_true`/`abap_false` raw | §5 "Booleans"; app 007 |
+| A property **computed from several bound values** | UI5 expression binding, `_bind` inlined: `` \|\{= ${ client->_bind( a ) } && ${ client->_bind( b ) } \}\| `` — no event round-trip | §5; app 007 |
+| The controller **reads an event/source value** (`evt.getSource().getId()`) | Transport it, don't fake it: `t_arg` value `$event.oSource.sId` / `${COL}`, read back with `get_event_arg( )`. A bare `{COL}` is **not** resolved here | §5 "Data binding & events"; app 005 |
+| `MessageToast.show("…" + evt.x)` (text built on the client) | Client-composed template, roundtrip-free: `cs_event-control_global`, `MESSAGE_TOAST`/`show`, template `Foo: {0}` + arg `${$parameters>/item}.getText()` | CAPABILITIES; apps 005/060 |
+| Custom **CSS / raw markup** (`style.css`, `<h2>`) | `core:HTML` leaf, markup in the `content` **attribute**, CSS braces escaped `\{ \}` (no CDATA node exists) | CAPABILITIES "Custom CSS"; apps 026/028 |
+| Controller **`.filter()`/`.sort()`** on `oList.getBinding('items')` | `cs_event-binding_call` (whitelisted methods/operators, compound filter groups since 2026-07-20) — the model stays untouched | CAPABILITIES "Controller-applied binding filter"; app 022 |
+| An **imperative control method** (`open`/`close`/`toggleStyleClass`/`toDetail`/`expandToLevel`/`setHiddenInPopin`…) | `follow_up_action( val = cs_event-control_by_id t_arg = id/method/args )` — **only** the whitelisted `CONTROL_METHODS`; an unlisted method is a declared deviation + a `pr/` request, never a hopeful LIVE_TEST | CAPABILITIES "Frontend-action catalog"; §5 |
+| A control-created **popup** (`new Dialog().open()`, `new PDFViewer().open()`) | Build a `core:FragmentDefinition`, show with `client->popup_display( )` / declare in `mvc:dependents` + `control_by_id`/`open` | CAPABILITIES "Popups & messages"; apps 019/044 |
+
+Two feature classes stay **❌ — don't improvise around them, declare the
+deviation**: control-returning factories (`groupHeaderFactory`, item factories)
+and app-authored JS formatter functions outside the curated `model/formatter.js`
+pack (business logic goes to `model_init`, per the thin-frontend principle).
 
 #### Worked references
 

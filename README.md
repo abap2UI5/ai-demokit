@@ -68,6 +68,11 @@ Rules:
   yourself. Blank line between controls whose verb differs (open<->leaf,
   before shut); none between same-verb controls, none right after a shut,
   none between a control and its attrs; the whole view ends in a single ).
+  An aggregation carries the same namespace as its XML tag (its parent
+  control's): <m:content> under a Page is open( n = `content` ns = `m` ),
+  a default-namespace <columns> inside an sap.ui.table.Table is open( `columns` ).
+  Braces { } inside a |...| template are ALWAYS escaped \{ \} - an unescaped {
+  is read as a binding by the XMLView parser and crashes view creation.
   Booleans: literal v = `true`/`false`, or v = z2ui5_cl_ai_xml=>as_bool( flag )
   when fed from an ABAP boolean variable.
 - BEFORE declaring any sample feature inexpressible, check CAPABILITIES.md -
@@ -95,6 +100,14 @@ Rules:
   crashes enum-typed properties and overrides property defaults where the
   original's undefined picked the default - fill the UI5 default explicitly
   or split the aggregation into per-shape templates.
+- abap2UI5 serves ONE default model - there are no named models. A named-model
+  binding ({ui>/rowMode}, {img>/x}) is folded into the default model: drop the
+  prefix and bind the field directly (client->_bind( rowmode )); structural-diff
+  matches on the last path segment. A typed/complex binding is kept as a raw
+  binding-info string, braces escaped: |\{ path: 'Q', type:
+  'sap.ui.model.type.Integer' \}| (same for Date/Currency parts and sorter) -
+  it passes through to XMLView.create unmangled. See AGENTS.md section 5
+  "Idiom cheat-sheet".
 - Frontend actions: a whitelisted control method (CONTROL_METHODS in
   FrontendAction.js) silently drops every argument beyond its declared arg
   kinds - verify the kinds in the framework source before wiring a

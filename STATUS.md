@@ -5,6 +5,35 @@ findings are fixed or new ones land (same-change discipline as AGENTS.md §10).
 For the process itself see TRAINING.md; for what abap2UI5 can express see
 CAPABILITIES.md._
 
+## Agents-usability pass (2026-07-24) — make the docs hand an AI the exact rule
+
+Focus: lower the barrier for an AI to build a port first-try from the agent
+files alone. Cold-read one weakly-covered port (app 164, `sap.ui.table`
+RowModes) against ground truth + the offline gate baseline (all green:
+validate-meta 168/168, pattern-lint 0/0, structural-diff `--strict` 0
+undeclared, structure-lint 0). Full write-up: **`probes/agents-usability-2026-07-24.md`**.
+
+Three idioms were correct in the docs but **buried in prose** (an AI had to
+re-derive the one-line action): named-model folding, typed/complex bindings with
+escaped braces, and the aggregation namespace. Fixed same change:
+
+- **`AGENTS.md` §5 — new "Idiom cheat-sheet"**: the ~12 recurring hard idioms as
+  copy-paste one-liners (`original → port → detail`), each pointing at its
+  long-form rule + proving app; the two ❌ boundaries (control factories,
+  app-authored JS formatters) stated once as "declare, don't improvise".
+- **`AGENTS.md` §5 — aggregation-namespace rule** made explicit (an aggregation
+  carries its XML tag's namespace = its parent control's; a wrong `ns` is an
+  unknown-aggregation node `render_smoke` rejects), app 164 as example.
+- **`scripts/generation-prompt.txt`** — three lines added to the first-read
+  prompt (aggregation ns, always-escape-`\{ \}`-in-`|…|`, one-default-model /
+  typed binding); re-spliced into `README.md`.
+- **overview app regenerated** — committed copy was stale (missing `ui5_only`),
+  the "system push carries stale generated files" gotcha; idempotent regen.
+
+No ports changed; coverage unchanged at 168. Owed next: a real from-scratch
+regeneration probe per thin library once OpenUI5 is reachable — cold-read
+catches doc-extraction friction, only a fresh port surfaces uncovered idioms.
+
 ## Batches b05–b07 — stress-test ports, maximally-diverse controls (2026-07-23) — 12 ports
 
 Three more diverse faithful batches to stress-test how far abab2UI5 reaches,
