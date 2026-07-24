@@ -957,6 +957,11 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22`
         use_name = abap_true )
+      ( module = `sap.m`              control = `sap.m.ComboBox`                      name = `ComboBoxGrouping`                    class = `z2ui5_cl_ai_app_199` path = `src/01/b17/z2ui5_cl_ai_app_199.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.22`
+        use_name = abap_true )
       ( module = `sap.m`              control = `sap.m.ComparisonPattern`             name = `ComparisonPattern`                   class = `z2ui5_cl_ai_app_012` path = `src/01/b05/z2ui5_cl_ai_app_012.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 5 reworked, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
@@ -2618,6 +2623,19 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` '(Upload Success)'). The uploadUrl='upload/' is kept 1:1.`
         use_ec = abap_true
         use_ec_arg = abap_true )
+      ( module = `sap.uxap`           control = `sap.uxap.HeaderFacetPattern`         name = `ObjectPageSectionShowTitle`          class = `z2ui5_cl_ai_app_200` path = `src/03/b02/z2ui5_cl_ai_app_200.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        release = `1.77`
+        release_post171 = abap_true
+        ui5_only = abap_true
+        is_post171 = abap_true
+        notes = `POST-1.71: sap.uxap.ObjectPageSubSection.showTitle (showTitle='false' on the 'Order Details' and 'Products' subsections) exists only since UI5 1.77 - kept 1:1 (fidelity wins), so the app needs a UI5` &&
+                 ` release >= 1.77 to render it. Also kept 1:1: the sap.m.Avatar control (since 1.73) with its displayShape (Square) and displaySize (L) properties, used in the snapped heading and header content. //` &&
+                 ` NOTE: The two robot.png avatar assets use the sample's relative './test-resources/sap/uxap/images/robot.png' path; rewritten to the absolute sdk.openui5.org host` &&
+                 ` ('https://sdk.openui5.org/test-resources/sap/uxap/images/robot.png') per the offline asset-URL rule. Same asset, literal src value only - structural-diff compares literal attribute names, not values.`
+        post171 = `sap.uxap.ObjectPageSubSection.showTitle (showTitle='false' on the 'Order Details' and 'Products' subsections) exists only since UI5 1.77 - kept 1:1 (fidelity wins), so the app needs a UI5 release >=` &&
+                 ` 1.77 to render it. Also kept 1:1: the sap.m.Avatar control (since 1.73) with its displayShape (Square) and displaySize (L) properties, used in the snapped heading and header content.` )
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageHeaderContent`    name = `ObjectPageHeaderContentPriorities`   class = `z2ui5_cl_ai_app_188` path = `src/03/b02/z2ui5_cl_ai_app_188.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
