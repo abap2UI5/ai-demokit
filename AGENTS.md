@@ -644,7 +644,7 @@ A fourth workflow, `checks`, runs three deterministic gates on every PR:
 | Job | Command | Fails when |
 |-----|---------|------------|
 | `pattern_lint` | `node scripts/pattern-lint.mjs` | a known-bad pattern reappears (each rule encodes a distilled §10 lesson; known open findings live in the script's BASELINE and in STATUS.md) |
-| `structural_diff` | `node scripts/structural-diff.mjs --strict` | a port's rendered view deviates from the original `view.xml` — control multiset, attribute names or simple **binding values** — without a declared deviation |
+| `structural_diff` | `node scripts/structural-diff.mjs --strict` | a port's rendered view deviates from the original `view.xml` — control multiset, attribute names or simple **binding values** — without a declared deviation. It flags only what the port is **missing** (a control/attr the original has that the port dropped) — extra controls/attrs the port adds are never flagged. It compares the full **qualified name incl. namespace prefix**, so use the original view's prefix on controls too (not a neighbour's convention). A diff is "declared" when some deviation's `what` text **contains the missing name verbatim** — so when you replace an imperative event handler with a binding (dropping the `press`/`change` attr), name that attribute in the deviation (e.g. "…the `change`/`press` attributes are dropped") or it stays UNDECLARED |
 | `structure_lint` | `node scripts/structure-lint.mjs --strict` | the builder call tree is malformed — an **aggregation nested directly inside another aggregation** (a missing `)->shut(`, e.g. `<footer>` landing inside `<columns>`), or a `shut` with no open to close. A fast static tree check that runs before `render_smoke` so this class fails in milliseconds with a precise message instead of a cryptic UI5 load error. Helper-built views (RETURNING a `z2ui5_cl_ai_xml` handle) are skipped — their open/shut pairs span methods |
 | `render_smoke` | `node scripts/render-smoke.mjs --strict` (`npm run smoke`) | a port's reconstructed view fails a real headless `XMLView.create` against the OpenUI5 runtime (invalid XML, unknown control/property, strict property-type violation, broken expression binding). Helper-method-built views (a captured node handle passed into a builder-returning helper and chained out — app 049) are reconstructed by the handle-aware path (`extractDocsWithHelpers`; a handle is a stack snapshot, each helper call inlined re-anchored to its argument). A port the reconstructor still cannot rebuild must declare `"render_smoke": { "skip": true, "reason": "…" }` in its sidecar — an **undeclared** non-reconstructable port FAILS. The same declared skip also covers a **reconstructable** port whose view genuinely does not render in the static headless harness — a control whose runtime layout/resource behaviour the reconstruction cannot satisfy (`sap.f.AvatarGroup`'s overflow measurement loops with no real layout box; an `sap.ui.integration` Card needs an external manifest). Every skip is **verified against the actual render each run**: it is honoured only while the view still errors, and the moment it renders clean the declaration is **stale** and FAILS — so the skip set can never drift (a render-hostile skip can never outlive its reason). Render-hostile ports must still pass every other gate (structural-diff, abaplint, e2e) |
 | `e2e_smoke` (heavy, on-demand) | `npm run e2e:build` then `npm run e2e` (`scripts/e2e-build.mjs` + `e2e-smoke.mjs`) | a port fails to run as the **real app**: it starts the transpiled abap2UI5 backend (framework + all ports via `?app_start=<class>`, needs an abap2UI5 checkout — `A2UI5_HOME`), boots each port in headless Chromium (UI5 served from the local `@openui5` packages), and fails if it does not boot+render or if a backend request 4xx/5xx or a JS exception fires. Unlike `render_smoke` (static view reconstruction) this exercises the actual backend roundtrip, Component boot and event wiring. Not in the fast gate set (multi-minute transpile + browser); run before a release or when touching the framework wire/runtime. A small `INTERACTIONS` map adds real click→assert checks (e.g. 005 press→client-composed toast) |
@@ -687,7 +687,13 @@ that is the actual porting work):
   `ProductCollection` …) into an ABAP `VALUE #( … )` literal for `model_init`
   (backtick-escaping and type inference handled; also exports `rowsToAbapValue`
   / `rowsToAbapType` for reuse). The scaffolder prints the exact command when
-  the sample's controller loads a JSON mock.
+  the sample's controller loads a JSON mock. **Type inference scans all rows**
+  (not just the first): a numeric column with any decimal value is emitted as a
+  **backtick string literal** (never truncated to `i`) and the tool warns on
+  stderr — declare that field `TYPE p LENGTH n DECIMALS m` for a numeric control
+  property (a backtick literal converts to packed), or `TYPE string` when it is
+  a display-only value bound into a text template (keeps the exact decimals,
+  e.g. dimensions `40.8`). Do **not** leave a decimal column as `TYPE i`.
 
 The last two are automated by the tracked **`.githooks/pre-commit`** hook: on
 every commit it regenerates the overview app + coverage docs and stages them,
@@ -926,7 +932,15 @@ How to record it:
   serializes as a JSON string is rejected when the property is a number/boolean
   (`"100" is of type string, expected float` on `sap.m.Slider.value`, app 053).
   Type the bound ABAP field numerically (`i`/packed) or as `abap_bool`, never
-  as `string`, so the model carries a real JSON number/boolean.
+  as `string`, so the model carries a real JSON number/boolean. But a
+  **display-only** value with variable decimals bound into a *text template*
+  (`{WIDTH} x {DEPTH}`, dimensions `40.8`) stays `TYPE string` — packed with a
+  fixed `DECIMALS` would add trailing zeros (`40.80`); string keeps it exact.
+- **abaplint `commented_code` can fire on an ordinary English comment** — a
+  `"` view-description comment containing a `/` next to CamelCase UI5 identifiers
+  (e.g. `" bound to RowSettings highlight/highlightText`) lexes like ABAP and is
+  rejected as commented-out code. Reword (drop the slash, or split the
+  identifiers) — found on app 174.
 - **Device APIs need a secure context (HTTPS)** — geolocation and the camera
   (`z2ui5.cc.Geolocation` / `CameraPicture`) silently do nothing over plain
   HTTP; `getCurrentPosition` / `getUserMedia` fail with a secure-origin error

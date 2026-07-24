@@ -5,6 +5,32 @@ findings are fixed or new ones land (same-change discipline as AGENTS.md §10).
 For the process itself see TRAINING.md; for what abap2UI5 can express see
 CAPABILITIES.md._
 
+## Subagent cold-read probe (2026-07-24) — app 174 + json-to-abap truncation fix
+
+Fourth cold-read port: `sap.ui.table.sample.RowHighlights` (app 174), machine-green
+all gates. Coverage **174**, `sap.ui.table` 3→4. Chosen over the suggested
+TreeTable because that needs a recursive/arbitrary-depth tree binding ABAP can't
+type (new **CAPABILITIES ❌ row**) — a genuine boundary the probe pinned down.
+
+The friction log drove several fixes:
+
+- **`json-to-abap.mjs` truncation bug fixed** — it inferred a numeric column's
+  type from the **first row only**, so a decimal column whose row 0 is
+  integer-valued (`Price` 956) was typed `i` and every later decimal (`6.99`)
+  silently `Math.trunc`ated. Now it scans **all rows**, emits any decimal column
+  as a backtick string (no truncation) and warns. **app 170's data was corrupt
+  from this** (Width/Depth/Height `40.8→40`, Price `6.99→6`) — regenerated with
+  the fixed tool: dimensions now `TYPE string` (display-only text template, exact
+  decimals), Price packed with decimals preserved.
+- **`structural-diff` mechanics documented** (§6): it flags only *missing*
+  controls/attrs (extras never), compares the full **qname incl. prefix**, and a
+  diff is "declared" only when a deviation's `what` names the missing item
+  verbatim — so dropping a `press`/`change` handler for a binding must name that
+  attribute.
+- **CAPABILITIES**: recursive TreeTable binding ❌ (fixed-depth nesting stays ✅).
+- **§10 gotcha**: abaplint `commented_code` fires on English comments with `/` +
+  UI5 identifiers — reword.
+
 ## Subagent cold-read probe (2026-07-24) — app 173 + a bug in its reference
 
 Third cold-read port: `sap.ui.layout.sample.VerticalLayout` (app 173, first

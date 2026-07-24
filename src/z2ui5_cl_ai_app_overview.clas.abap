@@ -735,7 +735,9 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` round-trip + re-render; the original toggles it imperatively (setShowFooter). headerExpanded and toggleHeaderOnTitleClick are likewise bound to model flags (both default true) - the original binds` &&
                  ` {/headerExpanded}/{/titleClickable} against a model that never sets them, so they fall back to the control defaults, reproduced here explicitly. // NOTE: The shared 123-row demo ProductCollection` &&
                  ` (sap/ui/demo/mock/products.json) is inlined with the columns the table binds (Name, ProductId, SupplierName, Width, Depth, Height, DimUnit, Price, CurrencyCode). The Price/CurrencyCode Currency` &&
-                 ` composite type binding and the items sorter (path 'Name') are kept 1:1 as raw binding-info strings.`
+                 ` composite type binding and the items sorter (path 'Name') are kept 1:1 as raw binding-info strings. // NOTE: Width/Depth/Height are TYPE string (not i): the mock carries decimal dimensions (40.8,` &&
+                 ` 3.1) and they bind display-only into a text template ({WIDTH} x {DEPTH} x {HEIGHT} {DIMUNIT}), so a string keeps the exact value; TYPE i would truncate (an earlier version did, via json-to-abap's` &&
+                 ` first-row inference — tool since fixed). Price stays packed (DECIMALS 2) for the Currency type binding, decimals preserved.`
         use_name = abap_true )
       ( module = `sap.f`              control = `sap.f.GridContainer`                 name = `GridContainer`                       class = `z2ui5_cl_ai_app_168` path = `src/04/b07/z2ui5_cl_ai_app_168.clas.abap`
         score = 4
@@ -2398,6 +2400,26 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `NOTE: sap.ui.table grid Table with multi-level column headers (multiLabels + headerSpan '3,2'/'2') and an extension OverflowToolbar. The 5 contact rows are inlined from the controller's JSON model;` &&
                  ` column templates bind {SUPPLIER}/{STREET}/{CITY}/{PHONE}/{OPENORDERS} 1:1.`
+        use_name = abap_true )
+      ( module = `sap.ui.table`       control = `sap.ui.table.Table`                  name = `RowHighlights`                       class = `z2ui5_cl_ai_app_174` path = `src/02/b10/z2ui5_cl_ai_app_174.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        notes = `IMPROVISED: The three toolbar handlers imperatively mutate Table properties in the original controller: onSelectionModeChange calls setSelectionMode, onAlternateToggle calls setAlternateRowColors,` &&
+                 ` onHighlightToggle swaps the rowSettingsTemplate between a RowSettings and null. abap2UI5 is a thin frontend, so all three are reproduced as two-way property bindings on the one default model with no` &&
+                 ` round-trip (AGENTS section 5 / section 10 'prefer a bindable property'): the Select selectedKey and the Table selectionMode both bind SELECTION_MODE; the 'Toggle Alternate Row Colors' ToggleButton` &&
+                 ` pressed and the Table alternateRowColors both bind ALTERNATE_ROW_COLORS (the alternateRowColors attribute is added to the Table - it is not in the original view, which only sets it via the` &&
+                 ` controller); the 'Toggle Highlights' ToggleButton pressed binds SHOW_HIGHLIGHTS, which the RowSettings highlight reads through an expression binding {= ${/SHOW_HIGHLIGHTS} ? ${STATUS} : 'None'} to` &&
+                 ` reproduce the template-null hide. As a consequence the original event-handler attributes are dropped: the Select change and both ToggleButton press handlers are not emitted (their behaviour now lives` &&
+                 ` in the bindings). // IMPROVISED: The highlight state per row (RowSettings highlight={Status}, highlightText={StatusText}) is computed by the original controller in initSampleDataModel (fixed states` &&
+                 ` for the first five rows, then Success/Warning/Error/Information/Indication01/None derived from the Price thresholds, with the matching custom highlightText). This is business logic, so per the` &&
+                 ` thin-frontend principle it is computed in ABAP model_init into the STATUS / STATUSTEXT model fields and bound directly (highlight={STATUS} via the expression above, highlightText={STATUSTEXT}) rather` &&
+                 ` than in a frontend formatter. // NOTE: The shared 123-row demo ProductCollection (sap/ui/demo/mock/products.json) is inlined verbatim into model_init with the five columns the sample binds (Name,` &&
+                 ` ProductId, Quantity, Price, CurrencyCode). Price is typed as a packed ABAP field (p LENGTH 13 DECIMALS 2) because the u:Currency value property is numeric (float) - UI5 2.x strict-type validation` &&
+                 ` would reject a string there. The mock's own Status field (all 'Available') is intentionally not carried, since the sample overwrites Status with the highlight classification above. // LIVE-TEST: The` &&
+                 ` interaction paths are unverified in a running system: the two-way client-side property bindings that replace the controller setters (selectionMode, alternateRowColors) and the highlight-visibility` &&
+                 ` expression binding driven by the SHOW_HIGHLIGHTS ToggleButton. All @since-checked members are <= 1.71 so no POST_171 is needed (RowSettings 1.48, RowSettings.highlightText 1.62,` &&
+                 ` Table.alternateRowColors 1.52, u:Currency 1.21.1).`
         use_name = abap_true )
       ( module = `sap.ui.table`       control = `sap.ui.table.Table`                  name = `RowModes`                            class = `z2ui5_cl_ai_app_164` path = `src/02/b10/z2ui5_cl_ai_app_164.clas.abap`
         score = 3

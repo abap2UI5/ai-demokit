@@ -11,9 +11,25 @@
   "status": "generated",
   "checked": null,
   "deviations": [
-    { "type": "IMPROVISED", "what": "The controller's Card popover (onPressOpenPopover, wired to the GenericTag press and the 'Button with layoutData' press) is dropped: it Fragment.loads Card.fragment.xml (a Popover > sap.f.Card > sap.f.cards.NumericHeader with two NumericSideIndicators) and opens it by the pressed control. This is a controller-built popup fragment with no view-declared equivalent; the GenericTag.press attribute is therefore also dropped. sap.f.Card / NumericHeader are already covered by app 117 (sap.f.sample.Card), so no coverage is lost. Accounts for the structural-diff 'control missing' on Popover / f:Card / card:NumericHeader / card:NumericSideIndicator and 'attr missing' GenericTag.press." },
-    { "type": "IMPROVISED", "what": "The Edit button's press='.toggleAreaPriority' is dropped. The handler flips the DynamicPageTitle.areaShrinkRatio between its default and '1.6:1:1.6' - an imperative title-layout tweak with no bindable path (areaShrinkRatio is settable but the toggle reads the metadata default at runtime); cosmetic, no data impact." },
-    { "type": "NOTE", "what": "showFooter is two-way bound to a model flag ({/SHOWFOOTER}, default false) and the 'Toggle Footer' button flips it via a TOGGLE_FOOTER round-trip + re-render; the original toggles it imperatively (setShowFooter). headerExpanded and toggleHeaderOnTitleClick are likewise bound to model flags (both default true) - the original binds {/headerExpanded}/{/titleClickable} against a model that never sets them, so they fall back to the control defaults, reproduced here explicitly." },
-    { "type": "NOTE", "what": "The shared 123-row demo ProductCollection (sap/ui/demo/mock/products.json) is inlined with the columns the table binds (Name, ProductId, SupplierName, Width, Depth, Height, DimUnit, Price, CurrencyCode). The Price/CurrencyCode Currency composite type binding and the items sorter (path 'Name') are kept 1:1 as raw binding-info strings." }
+    {
+      "type": "IMPROVISED",
+      "what": "The controller's Card popover (onPressOpenPopover, wired to the GenericTag press and the 'Button with layoutData' press) is dropped: it Fragment.loads Card.fragment.xml (a Popover > sap.f.Card > sap.f.cards.NumericHeader with two NumericSideIndicators) and opens it by the pressed control. This is a controller-built popup fragment with no view-declared equivalent; the GenericTag.press attribute is therefore also dropped. sap.f.Card / NumericHeader are already covered by app 117 (sap.f.sample.Card), so no coverage is lost. Accounts for the structural-diff 'control missing' on Popover / f:Card / card:NumericHeader / card:NumericSideIndicator and 'attr missing' GenericTag.press."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "The Edit button's press='.toggleAreaPriority' is dropped. The handler flips the DynamicPageTitle.areaShrinkRatio between its default and '1.6:1:1.6' - an imperative title-layout tweak with no bindable path (areaShrinkRatio is settable but the toggle reads the metadata default at runtime); cosmetic, no data impact."
+    },
+    {
+      "type": "NOTE",
+      "what": "showFooter is two-way bound to a model flag ({/SHOWFOOTER}, default false) and the 'Toggle Footer' button flips it via a TOGGLE_FOOTER round-trip + re-render; the original toggles it imperatively (setShowFooter). headerExpanded and toggleHeaderOnTitleClick are likewise bound to model flags (both default true) - the original binds {/headerExpanded}/{/titleClickable} against a model that never sets them, so they fall back to the control defaults, reproduced here explicitly."
+    },
+    {
+      "type": "NOTE",
+      "what": "The shared 123-row demo ProductCollection (sap/ui/demo/mock/products.json) is inlined with the columns the table binds (Name, ProductId, SupplierName, Width, Depth, Height, DimUnit, Price, CurrencyCode). The Price/CurrencyCode Currency composite type binding and the items sorter (path 'Name') are kept 1:1 as raw binding-info strings."
+    },
+    {
+      "type": "NOTE",
+      "what": "Width/Depth/Height are TYPE string (not i): the mock carries decimal dimensions (40.8, 3.1) and they bind display-only into a text template ({WIDTH} x {DEPTH} x {HEIGHT} {DIMUNIT}), so a string keeps the exact value; TYPE i would truncate (an earlier version did, via json-to-abap's first-row inference — tool since fixed). Price stays packed (DECIMALS 2) for the Currency type binding, decimals preserved."
+    }
   ]
 }
