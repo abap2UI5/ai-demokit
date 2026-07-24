@@ -1,0 +1,2 @@
+{ "class": "z2ui5_cl_ai_app_157", "sample": "sap.m.sample.HeaderContainerVM", "entity": "sap.m.HeaderContainer", "file": "src/01/b16/z2ui5_cl_ai_app_157.clas.abap", "batch": "b16", "audit": { "frontend_action": false, "event_t_arg": false }, "status": "generated", "checked": null,
+  "deviations": [ { "type": "LIVE_TEST", "what": "NumericContent presses show a client MessageToast (original press handler). Two vertical HeaderContainers — one of eight NumericContents, one of five TileContents (each wrapping a NumericContent) — reproduced 1:1." } ] }

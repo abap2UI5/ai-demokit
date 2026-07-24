@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_ai_app_116",
+  "sample": "sap.uxap.sample.ObjectPageSubSection",
+  "entity": "sap.uxap.ObjectPageLayout",
+  "file": "src/03/b01/z2ui5_cl_ai_app_116.clas.abap",
+  "batch": "b01",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "Breadth-probe: a minimal sap.uxap.ObjectPageLayout (header title + section + two subsections). The original's blocks are custom JS view controls (sample:MultiViewBlock) \u2014 not expressible in the declarative builder \u2014 so they are replaced with sap.m.Text content for the rendering probe."
+    }
+  ],
+  "structural_diff": {
+    "skip": true,
+    "reason": "breadth/capability probe \u2014 renders the control but is not a faithful 1:1 rebuild of the full sample"
+  }
+}

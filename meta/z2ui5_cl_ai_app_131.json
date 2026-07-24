@@ -1,0 +1,13 @@
+{
+  "class": "z2ui5_cl_ai_app_131",
+  "sample": "sap.ui.core.sample.BasicThemeParameters",
+  "entity": "sap.ui.core.theming.Parameters",
+  "file": "src/02/b03/z2ui5_cl_ai_app_131.clas.abap",
+  "batch": "b03",
+  "audit": { "frontend_action": false, "event_t_arg": false },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    { "type": "NOTE", "what": "The sample itself is just a MessageStrip + Link pointing at the Theme Parameter Toolbox (the real demo content lives in that external tool); reproduced 1:1." }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "class": "z2ui5_cl_ai_app_111",
+  "sample": "sap.f.sample.GridListBasic",
+  "entity": "sap.f.GridList",
+  "file": "src/04/b01/z2ui5_cl_ai_app_111.clas.abap",
+  "batch": "b01",
+  "audit": { "frontend_action": false, "event_t_arg": false },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    { "type": "NOTE", "what": "The Slider drives the panel width via a roundtrip-free expression binding ({= ${slider} + '%' }) over the two-way slider value, instead of the original onSliderMoved setWidth handler; Slider.liveChange is therefore not wired (the width tracks the slider client-side). The full 27-row item set is inlined." }
+  ]
+}

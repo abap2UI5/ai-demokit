@@ -1,0 +1,31 @@
+{
+  "class": "z2ui5_cl_ai_app_097",
+  "sample": "sap.m.sample.SplitApp",
+  "entity": "sap.m.SplitApp",
+  "file": "src/01/b12/z2ui5_cl_ai_app_097.clas.abap",
+  "batch": "b12",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "Master-detail navigation is driven 1:1 via follow_up_action( cs_event-control_by_id ) on the newly whitelisted SplitApp methods: to (Go-to-Detail button), backDetail/backMaster (page navButtonPress), toMaster (master list item), toDetail (master2 list items) and setMode (RadioButtonGroup). The methods were added to the abap2UI5 framework in the same change set (CONTROL_METHODS)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The master2 list navigates via a per-item press event that carries the target page id as a t_arg literal ('detail'/'detailDetail'/'detail2'); the original reads the pressed item's custom:to CustomData in one List.itemPress handler, which is not transportable as an event arg. custom:to is kept on the items for fidelity."
+    },
+    {
+      "type": "NOTE",
+      "what": "The split mode is selected via a two-way selectedIndex binding on the RadioButtonGroup (mode_idx) and mapped to the SplitAppMode string in ABAP; the original reads the selected RadioButton's custom:splitAppMode CustomData. custom:splitAppMode is kept on the buttons for fidelity. The onInit setHomeIcon and the onOrientationChange toast are dropped (device-specific cosmetics)."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "SplitApp as the root view plus the control_by_id navigation (to/toDetail/toMaster/backDetail/backMaster/setMode) need an in-system check — machine gates only verify view validity, not the runtime navigation roundtrip."
+    }
+  ]
+}

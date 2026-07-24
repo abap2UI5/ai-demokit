@@ -2729,6 +2729,1617 @@
      "deprecated": null
     }
    ]
+  },
+  {
+   "lib": "sap.f",
+   "samples": [
+    {
+     "name": "AvatarGroup",
+     "entity": "sap.f.AvatarGroup",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "Card",
+     "entity": "sap.f.Card",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "DynamicPageAnalyticalTable",
+     "entity": "sap.f.DynamicPage",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "DynamicPageFreeStyle",
+     "entity": "sap.f.DynamicPage",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "DynamicPageResponsiveAvatar",
+     "entity": "sap.f.DynamicPage",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "DynamicPageWithStickySubheader",
+     "entity": "sap.f.DynamicPage",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "DynamicPageWithWizard",
+     "entity": "sap.f.DynamicPage",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "FlexibleColumnLayoutColumnResize",
+     "entity": "sap.f.FlexibleColumnLayout",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "FlexibleColumnLayoutLandmarkInfo",
+     "entity": "sap.f.FlexibleColumnLayout",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "FlexibleColumnLayoutLandmarkInfoArrow",
+     "entity": "sap.f.FlexibleColumnLayout",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "FlexibleColumnLayoutSimple",
+     "entity": "sap.f.FlexibleColumnLayout",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "FlexibleColumnLayoutWithFullscreenPage",
+     "entity": "sap.f.FlexibleColumnLayout",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "FlexibleColumnLayoutWithOneColumnStart",
+     "entity": "sap.f.FlexibleColumnLayout",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "FlexibleColumnLayoutWithTwoColumnStart",
+     "entity": "sap.f.FlexibleColumnLayout",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "GridContainer",
+     "entity": "sap.f.GridContainer",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "GridContainerDragAndDrop",
+     "entity": "sap.f.GridContainer",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "GridContainerDragAndDropFromList",
+     "entity": "sap.f.GridContainer",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "GridContainersNavigation",
+     "entity": "sap.f.GridContainer",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "GridListBasic",
+     "entity": "sap.f.GridList",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "GridListBoxContainer",
+     "entity": "sap.f.GridList",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "GridListBoxContainerGrouping",
+     "entity": "sap.f.GridList",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "GridListBoxContainerReal",
+     "entity": "sap.f.GridList",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "GridListBreakPoints",
+     "entity": "sap.f.GridList",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "GridListDragAndDrop",
+     "entity": "sap.f.GridList",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "GridListKeyboardArrowsNavigation",
+     "entity": "sap.f.GridList",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "GridListModes",
+     "entity": "sap.f.GridList",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "GridListResponsiveColumnLayout",
+     "entity": "sap.f.GridList",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "MomentInPage",
+     "entity": null,
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ProductSwitchItemWithImageSrc",
+     "entity": "sap.f.ProductSwitch",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ProductSwitchNavigation",
+     "entity": "sap.f.ProductSwitch",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SemanticPage",
+     "entity": "sap.f.semantic.SemanticPage",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SemanticPageFreeStyle",
+     "entity": "sap.f.semantic.SemanticPage",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ShellBar",
+     "entity": "sap.f.ShellBar",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ShellBarProductSwitch",
+     "entity": "sap.f.ShellBar",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ShellBarWithFlexibleColumnLayout",
+     "entity": "sap.f.FlexibleColumnLayout",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ShellBarWithMenuButton",
+     "entity": "sap.f.ShellBar",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ShellBarWithSearch",
+     "entity": "sap.f.ShellBar",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ShellBarWithSplitApp",
+     "entity": "sap.f.ShellBar",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SidePanel",
+     "entity": "sap.f.SidePanel",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SidePanelOverflow",
+     "entity": "sap.f.SidePanel",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SidePanelResizable",
+     "entity": "sap.f.SidePanel",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SidePanelSingle",
+     "entity": "sap.f.SidePanel",
+     "since": null,
+     "deprecated": null
+    }
+   ]
+  },
+  {
+   "lib": "sap.ui.layout",
+   "samples": [
+    {
+     "name": "BlockLayoutCustomBackground",
+     "entity": "sap.ui.layout.BlockLayout",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "BlockLayoutCustomBackgroundPerCell",
+     "entity": "sap.ui.layout.BlockLayout",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "BlockLayoutDefault",
+     "entity": "sap.ui.layout.BlockLayout",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "BlockLayoutLinkTitle",
+     "entity": "sap.ui.layout.BlockLayout",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "CSSGrid",
+     "entity": "sap.ui.layout.cssgrid.CSSGrid",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "DynamicSideContent",
+     "entity": "sap.ui.layout.DynamicSideContent",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "DynamicSideContentEqualSplit",
+     "entity": "sap.ui.layout.DynamicSideContent",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "DynamicSideContentPosition",
+     "entity": "sap.ui.layout.DynamicSideContent",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "DynamicSideContentProduct",
+     "entity": "sap.ui.layout.DynamicSideContent",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "FixFlexFixedSize",
+     "entity": "sap.ui.layout.FixFlex",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "FixFlexHorizontal",
+     "entity": "sap.ui.layout.FixFlex",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "FixFlexMinFlexSize",
+     "entity": "sap.ui.layout.FixFlex",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "FixFlexVertical",
+     "entity": "sap.ui.layout.FixFlex",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "Form_Column_oneGroup",
+     "entity": "sap.ui.layout.form.Form",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "Form_Column_oneGroup234",
+     "entity": "sap.ui.layout.form.Form",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "Form_Column_threeGroups234",
+     "entity": "sap.ui.layout.form.Form",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "Form_Column_threeGroups346",
+     "entity": "sap.ui.layout.form.Form",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "Form_Column_twoGroups234",
+     "entity": "sap.ui.layout.form.Form",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "Form354",
+     "entity": "sap.ui.layout.form.Form",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "Form354wide",
+     "entity": "sap.ui.layout.form.Form",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "Form354wideDual",
+     "entity": "sap.ui.layout.form.Form",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "Form471",
+     "entity": "sap.ui.layout.form.Form",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "Form480",
+     "entity": null,
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "Form480_12120",
+     "entity": "sap.ui.layout.form.Form",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "Form480_12120Dual",
+     "entity": "sap.ui.layout.form.Form",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "Form480_Trial",
+     "entity": "sap.ui.layout.form.Form",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "FormToolbar",
+     "entity": "sap.ui.layout.form.Form",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "GridAutoFlow",
+     "entity": "sap.ui.layout.cssgrid.CSSGrid",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "GridAutoRows",
+     "entity": "sap.ui.layout.cssgrid.CSSGrid",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "GridData",
+     "entity": "sap.ui.layout.Grid",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "GridGap",
+     "entity": "sap.ui.layout.cssgrid.CSSGrid",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "GridInfo",
+     "entity": "sap.ui.layout.Grid",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "GridProperties",
+     "entity": "sap.ui.layout.Grid",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "GridResponsiveColumnLayout",
+     "entity": "sap.ui.layout.cssgrid.CSSGrid",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "GridResponsiveness",
+     "entity": "sap.ui.layout.cssgrid.CSSGrid",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "GridTemplateRows",
+     "entity": "sap.ui.layout.cssgrid.CSSGrid",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "GridXL",
+     "entity": "sap.ui.layout.Grid",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "HorizontalLayout",
+     "entity": "sap.ui.layout.HorizontalLayout",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "NestedGrids",
+     "entity": "sap.ui.layout.cssgrid.CSSGrid",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ProductHomeLayout",
+     "entity": "sap.ui.layout.cssgrid.CSSGrid",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ResponsiveSplitter",
+     "entity": "sap.ui.layout.ResponsiveSplitter",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SimpleForm_Column_oneGroup",
+     "entity": "sap.ui.layout.form.SimpleForm",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SimpleForm_Column_oneGroup234",
+     "entity": "sap.ui.layout.form.SimpleForm",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SimpleForm_Column_threeGroups234",
+     "entity": "sap.ui.layout.form.SimpleForm",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SimpleForm_Column_threeGroups346",
+     "entity": "sap.ui.layout.form.SimpleForm",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SimpleForm_Column_twoGroups234",
+     "entity": "sap.ui.layout.form.SimpleForm",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SimpleForm354",
+     "entity": "sap.ui.layout.form.SimpleForm",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SimpleForm354wide",
+     "entity": "sap.ui.layout.form.SimpleForm",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SimpleForm354wideDual",
+     "entity": "sap.ui.layout.form.SimpleForm",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SimpleForm471",
+     "entity": "sap.ui.layout.form.SimpleForm",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SimpleForm480",
+     "entity": null,
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SimpleForm480_12120",
+     "entity": "sap.ui.layout.form.SimpleForm",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SimpleForm480_12120Dual",
+     "entity": "sap.ui.layout.form.SimpleForm",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SimpleForm480_Trial",
+     "entity": "sap.ui.layout.form.SimpleForm",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SimpleFormToolbar",
+     "entity": "sap.ui.layout.form.SimpleForm",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "Splitter",
+     "entity": "sap.ui.layout.Splitter",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "Splitter2",
+     "entity": "sap.ui.layout.Splitter",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "Splitter3",
+     "entity": "sap.ui.layout.Splitter",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "Splitter4",
+     "entity": "sap.ui.layout.Splitter",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SplitterNested1",
+     "entity": "sap.ui.layout.Splitter",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "tests",
+     "entity": null,
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "VerticalLayout",
+     "entity": "sap.ui.layout.VerticalLayout",
+     "since": null,
+     "deprecated": null
+    }
+   ]
+  },
+  {
+   "lib": "sap.ui.core",
+   "samples": [
+    {
+     "name": "BasicThemeParameters",
+     "entity": "sap.ui.core.theming",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "BoundFilters",
+     "entity": null,
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "BusyIndicator",
+     "entity": "sap.ui.core.BusyIndicator",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "Commands",
+     "entity": "sap.ui.core.CommandExecution",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "common",
+     "entity": null,
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ControlBusyIndicator",
+     "entity": "sap.ui.core.Control",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ControllerExtension",
+     "entity": null,
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "FieldGroup",
+     "entity": "sap.ui.core.Control",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "gherkin",
+     "entity": null,
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "Html",
+     "entity": "sap.ui.core.HTML",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "HyphenationAPI",
+     "entity": "sap.ui.core.hyphenation.Hyphenation",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "Icon",
+     "entity": "sap.ui.core.Icon",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "InvisibleMessage",
+     "entity": "sap.ui.core.InvisibleMessage",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "InvisibleText",
+     "entity": "sap.ui.core.InvisibleText",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "matcher",
+     "entity": null,
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "Messaging",
+     "entity": null,
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "odata",
+     "entity": null,
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "OpaAction",
+     "entity": "sap.ui.test.Opa5",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "OpaAutoWaitParams",
+     "entity": "sap.ui.test.Opa5",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "OpaBusyIndicator",
+     "entity": "sap.ui.test.Opa5",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "OpaById",
+     "entity": "sap.ui.test.Opa5",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "OpaDynamicWait",
+     "entity": "sap.ui.test.Opa5",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "OpaGetStarted",
+     "entity": "sap.ui.test.Opa5",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "OpaMatchers",
+     "entity": "sap.ui.test.Opa5",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "OpaPageObject",
+     "entity": "sap.ui.test.Opa5",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "OpaStartup",
+     "entity": null,
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "OpaStaticAreaControls",
+     "entity": "sap.ui.test.Opa5",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "OpaTableAction",
+     "entity": "sap.ui.test.Opa5",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "OpaTestLibrary",
+     "entity": "sap.ui.test.Opa5",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "OpaURLParameters",
+     "entity": null,
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "OpaWithSupportAssistant",
+     "entity": "sap.ui.test.Opa5",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "PatternMatching",
+     "entity": "sap.ui.core.routing.Route",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "RoutingFullscreen",
+     "entity": "sap.ui.core.routing.Router",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "RoutingMasterDetail",
+     "entity": "sap.ui.core.routing.Router",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "RoutingNestedComponent",
+     "entity": "sap.ui.core.routing.Router",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "TargetsStandalone",
+     "entity": "sap.ui.core.routing.Targets",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ThemeCustomClasses",
+     "entity": "sap.ui.core.theming",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "TypeCurrency",
+     "entity": "sap.ui.model.type.Currency",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "TypeDateAsDate",
+     "entity": "sap.ui.model.type.Date",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "TypeDateAsString",
+     "entity": "sap.ui.model.type.Date",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "TypeDateTime",
+     "entity": "sap.ui.model.type.DateTime",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "TypeFileSize",
+     "entity": "sap.ui.model.type.FileSize",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "TypeFloat",
+     "entity": "sap.ui.model.type.Float",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "TypeInteger",
+     "entity": "sap.ui.model.type.Integer",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "TypeTimeAsTime",
+     "entity": "sap.ui.model.type.Time",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "View",
+     "entity": null,
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ViewTemplate",
+     "entity": null,
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "XMLComposite",
+     "entity": null,
+     "since": null,
+     "deprecated": null
+    }
+   ]
+  },
+  {
+   "lib": "sap.ui.unified",
+   "samples": [
+    {
+     "name": "CalendarCalendarType",
+     "entity": "sap.ui.unified.Calendar",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "CalendarDateDeselection",
+     "entity": "sap.ui.unified.Calendar",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "CalendarDateIntervalBasic",
+     "entity": "sap.ui.unified.CalendarDateInterval",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "CalendarLegendNavigation",
+     "entity": "sap.ui.unified.Calendar",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "CalendarMinMax",
+     "entity": "sap.ui.unified.Calendar",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "CalendarMultipleDaySelection",
+     "entity": "sap.ui.unified.Calendar",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "CalendarMultipleMonth",
+     "entity": "sap.ui.unified.Calendar",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "CalendarSingleDaySelection",
+     "entity": "sap.ui.unified.Calendar",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "CalendarSingleIntervalSelection",
+     "entity": "sap.ui.unified.Calendar",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "CalendarSpecialDaysLegend",
+     "entity": "sap.ui.unified.Calendar",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ColorPicker",
+     "entity": "sap.ui.unified.ColorPicker",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ColorPickerLarge",
+     "entity": "sap.ui.unified.ColorPicker",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ColorPickerPopover",
+     "entity": "sap.ui.unified.ColorPicker",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ColorPickerSimplified",
+     "entity": "sap.ui.unified.ColorPicker",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "Currency",
+     "entity": "sap.ui.unified.Currency",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "CurrencyInTable",
+     "entity": "sap.ui.unified.Currency",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "FileUploaderBasic",
+     "entity": "sap.ui.unified.FileUploader",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "FileUploaderComplex",
+     "entity": "sap.ui.unified.FileUploader",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "MenuItemEventing",
+     "entity": "sap.ui.unified.Menu",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "MenuMenuEventing",
+     "entity": "sap.ui.unified.Menu",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "MenuSelectable",
+     "entity": "sap.ui.unified.Menu",
+     "since": null,
+     "deprecated": null
+    }
+   ]
+  },
+  {
+   "lib": "sap.ui.table",
+   "samples": [
+    {
+     "name": "Aggregations",
+     "entity": "sap.ui.table.Table",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "Basic",
+     "entity": "sap.ui.table.Table",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ColumnResizing",
+     "entity": "sap.ui.table.Table",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "DnD",
+     "entity": "sap.ui.table.Table",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "Filtering",
+     "entity": "sap.ui.table.Table",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "Menus",
+     "entity": "sap.ui.table.Table",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "MultiHeader",
+     "entity": "sap.ui.table.Table",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "MultiSelectionPlugin",
+     "entity": "sap.ui.table.Table",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "OData",
+     "entity": "sap.ui.table.Table",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "OData2",
+     "entity": "sap.ui.table.Table",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "RowAction",
+     "entity": "sap.ui.table.Table",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "RowHighlights",
+     "entity": "sap.ui.table.Table",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "RowModes",
+     "entity": "sap.ui.table.Table",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SelectCopyPaste",
+     "entity": "sap.ui.table.Table",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "Selection",
+     "entity": "sap.ui.table.Table",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "Sorting",
+     "entity": "sap.ui.table.Table",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "TableFreeze",
+     "entity": "sap.ui.table.Table",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "TreeTable",
+     "entity": null,
+     "since": null,
+     "deprecated": null
+    }
+   ]
+  },
+  {
+   "lib": "sap.uxap",
+   "samples": [
+    {
+     "name": "AlternativeProfileObjectPageHeader",
+     "entity": "sap.uxap.ObjectPageHeader",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "AnchorBar",
+     "entity": "sap.uxap.ObjectPageLayout",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "AnchorBarNoPopover",
+     "entity": "sap.uxap.ObjectPageLayout",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "AnchorBarWithNumbers",
+     "entity": "sap.uxap.ObjectPageLayout",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "BlockBaseBlockInBlock",
+     "entity": "sap.uxap.BlockBase",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "BlockBaseEventing",
+     "entity": "sap.uxap.BlockBase",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "BoundModelMapping",
+     "entity": "sap.uxap.ModelMapping",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ChildObjectPage",
+     "entity": "sap.uxap.ObjectPageHeader",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "HeaderContent",
+     "entity": "sap.uxap.ObjectPageHeaderContent",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "KPIObjectPageHeader",
+     "entity": "sap.uxap.ObjectPageHeader",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "MPModelMapping",
+     "entity": "sap.uxap.ModelMapping",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ObjectPageBeforeNavigate",
+     "entity": "sap.uxap.ObjectPageLayout",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ObjectPageBlockBase",
+     "entity": "sap.uxap.BlockBase",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ObjectPageBlockViewTypes",
+     "entity": "sap.uxap.ObjectPageLayout",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ObjectPageDynamicSideContentBtn",
+     "entity": "sap.uxap.ObjectPageHeader",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ObjectPageFormFocusableInput",
+     "entity": "sap.uxap.ObjectPageLayout",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ObjectPageFormLayout",
+     "entity": "sap.uxap.ObjectPageLayout",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ObjectPageHeaderActionButtons",
+     "entity": null,
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ObjectPageHeaderBackgroundDesign",
+     "entity": null,
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ObjectPageHeaderContentPriorities",
+     "entity": "sap.uxap.ObjectPageHeaderContent",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ObjectPageHeaderExpanded",
+     "entity": "sap.uxap.ObjectPageLayout",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ObjectPageHeaderWithAllControls",
+     "entity": "sap.uxap.ObjectPageHeader",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ObjectPageLazyLoadingWithoutBlocks",
+     "entity": "sap.uxap.ObjectPageLayout",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ObjectPageOnJSON",
+     "entity": "sap.uxap.ObjectPageLayout",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ObjectPageOnJSONWithLazyLoading",
+     "entity": "sap.uxap.ObjectPageLayout",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ObjectPageProgressRatingIndicators",
+     "entity": null,
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ObjectPageResetSelectedSection",
+     "entity": "sap.uxap.ObjectPageLayout",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ObjectPageResponsiveAvatar",
+     "entity": "sap.uxap.ObjectPageLayout",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ObjectPageSection",
+     "entity": "sap.uxap.ObjectPageSection",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ObjectPageSectionShowTitle",
+     "entity": "sap.uxap.HeaderFacetPattern",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ObjectPageSelectedSection",
+     "entity": "sap.uxap.ObjectPageLayout",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ObjectPageState",
+     "entity": "sap.uxap.ObjectPageLayout",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ObjectPageSubSection",
+     "entity": "sap.uxap.ObjectPageSubSection",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ObjectPageSubSectionBackground",
+     "entity": "sap.uxap.ObjectPageSubSection",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ObjectPageSubSectionHiddenTitle",
+     "entity": "sap.uxap.ObjectPageSubSection",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ObjectPageSubSectionMultiView",
+     "entity": "sap.uxap.ObjectPageSubSection",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ObjectPageSubSectionSized",
+     "entity": "sap.uxap.ObjectPageSubSection",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ObjectPageSubSectionWithActions",
+     "entity": "sap.uxap.ObjectPageSubSection",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ObjectPageTabNavigationMode",
+     "entity": "sap.uxap.ObjectPageLayout",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ObjectPageTitleOnLeft",
+     "entity": "sap.uxap.ObjectPageLayout",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ObjectPageWithHeaderContainer",
+     "entity": "sap.uxap.ObjectPageLayout",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ObjectPageWithLinksAndObjectStatus",
+     "entity": "sap.uxap.HeaderFacetPattern",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ObjectPageXML",
+     "entity": null,
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ProfileObjectPageHeader",
+     "entity": "sap.uxap.ObjectPageHeader",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SharedBlocks",
+     "entity": null,
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SharedJSONData",
+     "entity": null,
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SingleView",
+     "entity": "sap.uxap.BlockBase",
+     "since": null,
+     "deprecated": null
+    }
+   ]
+  },
+  {
+   "lib": "sap.tnt",
+   "samples": [
+    {
+     "name": "InfoLabel",
+     "entity": "sap.tnt.InfoLabel",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "InfoLabelInDynamicPage",
+     "entity": "sap.tnt.InfoLabel",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "InfoLabelInTable",
+     "entity": "sap.tnt.InfoLabel",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "NavigationList",
+     "entity": "sap.tnt.NavigationList",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SideNavigation",
+     "entity": "sap.tnt.SideNavigation",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SideNavigationActions",
+     "entity": "sap.tnt.SideNavigation",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SideNavigationOverlayMode",
+     "entity": "sap.tnt.SideNavigation",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SideNavigationPressEvent",
+     "entity": "sap.tnt.SideNavigation",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SideNavigationSearch",
+     "entity": "sap.tnt.SideNavigation",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SideNavigationUnselectableParents",
+     "entity": "sap.tnt.SideNavigation",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SideNavigationWithTags",
+     "entity": "sap.tnt.SideNavigation",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "SideNavigationWrapping",
+     "entity": "sap.tnt.SideNavigation",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ToolHeader",
+     "entity": "sap.tnt.ToolHeader",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ToolHeaderIconTabHeader",
+     "entity": "sap.tnt.ToolHeader",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ToolPage",
+     "entity": "sap.tnt.ToolPage",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ToolPageHorizontalNavigation",
+     "entity": "sap.tnt.ToolPage",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "ToolPageNavigation",
+     "entity": "sap.tnt.ToolPage",
+     "since": null,
+     "deprecated": null
+    }
+   ]
+  },
+  {
+   "lib": "sap.ui.codeeditor",
+   "samples": [
+    {
+     "name": "CodeEditor",
+     "entity": "sap.ui.codeeditor.CodeEditor",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "CodeEditorIconTabHeader",
+     "entity": "sap.ui.codeeditor.CodeEditor",
+     "since": null,
+     "deprecated": null
+    }
+   ]
+  },
+  {
+   "lib": "sap.ui.integration",
+   "samples": [
+    {
+     "name": "CardExplorer",
+     "entity": "sap.ui.integration.widgets.Card",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "CardsLayout",
+     "entity": "sap.ui.integration.widgets.Card",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "CardsLoading",
+     "entity": "sap.ui.integration.widgets.Card",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "LazyLoading",
+     "entity": "sap.ui.integration.widgets.Card",
+     "since": null,
+     "deprecated": null
+    }
+   ]
   }
  ]
 }

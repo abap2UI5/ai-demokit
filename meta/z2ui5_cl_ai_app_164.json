@@ -1,0 +1,14 @@
+{
+  "class": "z2ui5_cl_ai_app_164",
+  "sample": "sap.ui.table.sample.RowModes",
+  "entity": "sap.ui.table.Table",
+  "file": "src/02/b10/z2ui5_cl_ai_app_164.clas.abap",
+  "batch": "b10",
+  "audit": { "frontend_action": false, "event_t_arg": false },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    { "type": "NOTE", "what": "The original splits UI state into a separate 'ui' JSON model and binds the row mode from it ({ui>/rowMode}) in two places - the Table's rowMode aggregation and the footer SegmentedButton's selectedKey - while the grid rows come from the default model ({/ProductCollection}). abap2UI5 has one default model, so the row mode is folded into it and both places bind it directly - the 'ui>' prefix is dropped and the path flattened to a single field (rowMode); the last path segment is identical, which structural-diff matches." },
+    { "type": "NOTE", "what": "The shared 123-row demo ProductCollection (sap/ui/demo/mock/products.json) is inlined into model_init with the five columns the sample binds (Name, Category, ProductPicUrl, Quantity, DeliveryDate). The original computes DeliveryDate from Date.now() with an i-mod-10 offset; a fixed base date (2026-07-23) is used here so the port is deterministic - a client-only display decision. The Quantity and DeliveryDate columns keep the original typed complex bindings (sap.ui.model.type.Integer / .Date with timestamp source)." }
+  ]
+}

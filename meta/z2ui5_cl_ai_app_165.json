@@ -1,0 +1,13 @@
+{
+  "class": "z2ui5_cl_ai_app_165",
+  "sample": "sap.f.sample.ProductSwitchNavigation",
+  "entity": "sap.f.ProductSwitch",
+  "file": "src/04/b07/z2ui5_cl_ai_app_165.clas.abap",
+  "batch": "b07",
+  "audit": { "frontend_action": false, "event_t_arg": true },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    { "type": "IMPROVISED", "what": "The shipped view is only the trigger Button plus two explanatory Texts in a VerticalLayout - rebuilt 1:1. The ProductSwitch is built in the sample's JS controller (fnOpen) inside a ResponsivePopover fragment (ResponsivePopover > ProductSwitch > ProductSwitchItem) and opened on press. abap2UI5 has no JS controller, so the button press raises a client MESSAGE_TOAST in place of the controller-built ResponsivePopover; the ProductSwitch and ProductSwitchItem controls are therefore not rendered (a controller-only sample)." }
+  ]
+}

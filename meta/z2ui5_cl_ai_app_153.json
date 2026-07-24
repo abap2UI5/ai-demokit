@@ -1,0 +1,2 @@
+{ "class": "z2ui5_cl_ai_app_153", "sample": "sap.m.sample.MaskInput", "entity": "sap.m.MaskInput", "file": "src/01/b15/z2ui5_cl_ai_app_153.clas.abap", "batch": "b15", "audit": { "frontend_action": false, "event_t_arg": false }, "status": "generated", "checked": null,
+  "deviations": [ { "type": "NOTE", "what": "Six MaskInputs across two SimpleForms with mask/placeholderSymbol/placeholder and MaskInputRule (maskFormatSymbol/regex) sub-rules; the {/showClearIcon} bindings are wired to a boolean model field (initial true), reproducing the original." } ] }

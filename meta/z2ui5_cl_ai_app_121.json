@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_ai_app_121",
+  "sample": "sap.m.sample.UploadSet",
+  "entity": "sap.m.upload.UploadSet",
+  "file": "src/01/b13/z2ui5_cl_ai_app_121.clas.abap",
+  "batch": "b13",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "Breadth-probe: a minimal sap.m.upload.UploadSet (file upload list) with 3 pre-populated items + a toolbar. The actual upload backend, the full toolbar and the item action buttons are simplified; upload here would target the abap2UI5 FileUploader path in a live system."
+    }
+  ],
+  "structural_diff": {
+    "skip": true,
+    "reason": "breadth/capability probe \u2014 renders the control but is not a faithful 1:1 rebuild of the full sample"
+  }
+}

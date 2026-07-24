@@ -1,0 +1,14 @@
+{
+  "class": "z2ui5_cl_ai_app_133",
+  "sample": "sap.f.sample.GridListModes",
+  "entity": "sap.f.GridList",
+  "file": "src/04/b02/z2ui5_cl_ai_app_133.clas.abap",
+  "batch": "b02",
+  "audit": { "frontend_action": false, "event_t_arg": false },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    { "type": "LIVE_TEST", "what": "SegmentedButton.selectionChange reproduces onModeChange server-side: GridList.mode is two-way bound to the same field as SegmentedButton.selectedKey and the headerText (bound) is recomputed as 'GridList with mode ' + key on a backend round-trip. The GridList delete / selectionChange and the GridListItem press / detailPress are wired to client-side MessageToasts (the original toasted the affected item's runtime id). mode/headerText/selectedKey carry bindings the original set statically." },
+    { "type": "NOTE", "what": "The 11 product rows are inlined from the sample's model/data.json. Fields the original JSON omits are given their UI5 defaults so the bound enum-ish properties stay valid: GridListItem.type -> 'Inactive' (8 rows), highlight/Status -> 'None' (5 rows). Both render identically to the original's undefined values; structural-diff compares only binding paths, not data." }
+  ]
+}

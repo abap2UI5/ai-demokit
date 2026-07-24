@@ -1,0 +1,13 @@
+{
+  "class": "z2ui5_cl_ai_app_135",
+  "sample": "sap.ui.core.sample.TypeCurrency",
+  "entity": "sap.ui.model.type.Currency",
+  "file": "src/02/b04/z2ui5_cl_ai_app_135.clas.abap",
+  "batch": "b04",
+  "audit": { "frontend_action": false, "event_t_arg": false },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    { "type": "NOTE", "what": "Composite data-type binding paradigm: the Currency type is pulled in via core:require and every Input/Text binds a composite parts:['/amount','/currency'] with type:'CurrencyType' plus formatOptions (showMeasure/showNumber/preserveDecimals/currencyCode/style) 1:1. The two model fields amount ('123456789.123') and currency ('USD') are serialized by abap2UI5 as /AMOUNT and /CURRENCY; the paths are generated via _bind (never hardcoded)." }
+  ]
+}

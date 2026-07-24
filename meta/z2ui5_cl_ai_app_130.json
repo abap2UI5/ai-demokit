@@ -1,0 +1,13 @@
+{
+  "class": "z2ui5_cl_ai_app_130",
+  "sample": "sap.ui.core.sample.ControlBusyIndicator",
+  "entity": "sap.ui.core.Control",
+  "file": "src/02/b03/z2ui5_cl_ai_app_130.clas.abap",
+  "batch": "b03",
+  "audit": { "frontend_action": false, "event_t_arg": false },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    { "type": "LIVE_TEST", "what": "The 'Toggle Busy State' button flips a boolean model field bound to Panel1.busy and the Icon.busy (both added to carry the binding; the original set busy imperatively via byId().setBusy). The original set both busy=true then cleared them after a 5s setTimeout; the client-side auto-reset is simplified to a server-side toggle." }
+  ]
+}

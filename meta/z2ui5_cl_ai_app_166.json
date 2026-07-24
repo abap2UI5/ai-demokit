@@ -1,0 +1,14 @@
+{
+  "class": "z2ui5_cl_ai_app_166",
+  "sample": "sap.f.sample.SemanticPage",
+  "entity": "sap.f.semantic.SemanticPage",
+  "file": "src/04/b07/z2ui5_cl_ai_app_166.clas.abap",
+  "batch": "b07",
+  "audit": { "frontend_action": false, "event_t_arg": true },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    { "type": "IMPROVISED", "what": "The original keeps header/object data in nested paths on one JSON model (title, showFooter, titleSnappedContent/text, titleExpandedContent/text, objectDescription/category|center|email|status). abap2UI5 keeps one default model and render-smoke does not mock nested structures, so those paths are folded to flat fields bound via _bind (last path segment identical, which structural-diff matches). Both the snapped and expanded subheading Text controls bind the same flat 'text' field. The full 125-row ProductCollection mock is inlined." },
+    { "type": "IMPROVISED", "what": "The semantic action press handlers (titleMainAction onEdit, footerMainAction onSave, footerCustomActions Cancel onCancel, messagesIndicator onMessagesButtonPress) are controller methods in the original (opening popovers / navigating); here each press raises a client MESSAGE_TOAST. The DiscussInJam / SendEmail / SendMessage semantic actions keep their built-in behaviour, and the DraftIndicator shows state Saved." }
+  ]
+}

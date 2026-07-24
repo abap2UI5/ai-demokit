@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_ai_app_124",
+  "sample": "sap.ui.layout.sample.CSSGrid",
+  "entity": "sap.ui.layout.cssgrid.CSSGrid",
+  "file": "src/02/b02/z2ui5_cl_ai_app_124.clas.abap",
+  "batch": "b02",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "LIVE_TEST",
+      "what": "The Slider liveChange reproduces onSliderMoved server-side: Slider.value is two-way bound and the CSSGrid host Panel.width (bound to a model field) is recomputed as value + '%' on a backend round-trip. The original set Slider.value=100 statically and drove byId('gridLayout').setWidth imperatively; here value and width carry bindings to carry that behaviour."
+    },
+    {
+      "type": "NOTE",
+      "what": "The five core:HTML tiles carry raw HTML in the content attribute (the builder xml-escapes it, matching the original's escaped &lt;header&gt;/&lt;aside&gt;/&lt;article&gt;/&lt;footer&gt; content 1:1, including the original's quirks: the double space in '<aside  ...>Navigation</aside >' and the mismatched '<aside ...>Related Links</article>' close tag)."
+    }
+  ]
+}

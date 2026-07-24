@@ -1,0 +1,13 @@
+{
+  "class": "z2ui5_cl_ai_app_137",
+  "sample": "sap.ui.table.sample.MultiHeader",
+  "entity": "sap.ui.table.Table",
+  "file": "src/02/b05/z2ui5_cl_ai_app_137.clas.abap",
+  "batch": "b05",
+  "audit": { "frontend_action": false, "event_t_arg": false },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    { "type": "NOTE", "what": "sap.ui.table grid Table with multi-level column headers (multiLabels + headerSpan '3,2'/'2') and an extension OverflowToolbar. The 5 contact rows are inlined from the controller's JSON model; column templates bind {SUPPLIER}/{STREET}/{CITY}/{PHONE}/{OPENORDERS} 1:1." }
+  ]
+}

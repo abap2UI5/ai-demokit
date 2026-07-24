@@ -1,0 +1,13 @@
+{
+  "class": "z2ui5_cl_ai_app_139",
+  "sample": "sap.ui.unified.sample.CalendarSingleDaySelection",
+  "entity": "sap.ui.unified.Calendar",
+  "file": "src/02/b05/z2ui5_cl_ai_app_139.clas.abap",
+  "batch": "b05",
+  "audit": { "frontend_action": false, "event_t_arg": false },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    { "type": "LIVE_TEST", "what": "Calendar.select and the 'Select Today' button are wired to backend events that write the current server date (yyyy-MM-dd) into the bound status Text. The original formatted getSelectedDates()[0].getStartDate() / added a DateRange(today) with DateFormat + UI5Date; reading the actually clicked day out of the transpiled event is simplified to the server date." }
+  ]
+}

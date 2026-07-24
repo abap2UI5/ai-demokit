@@ -1,0 +1,37 @@
+{
+  "name": "ai-demokit-web",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Run the ai-demokit ports entirely in the browser (transpiled abap2UI5) and deploy to GitHub Pages.",
+  "scripts": {
+    "assemble": "rm -rf src abap2UI5 downport output build && mkdir src && git clone --depth=1 https://github.com/abap2UI5/abap2UI5 && cp -r abap2UI5/src/. src/ && cp src/99/02/z2ui5_cl_pop_*.clas.abap src/99/02/z2ui5_cl_pop_*.clas.xml src/02/ && ( cp src/99/z2ui5_cl_xml_view*.clas.* src/02/ 2>/dev/null || true ) && rm -rf src/99 && mkdir -p src/ai-demokit && cp -r ../src/. src/ai-demokit/",
+    "syfixes": "find . -type f -name '*.abap' -exec sed -i -e 's/ RAISE EXCEPTION TYPE cx_sy_itab_line_not_found/ ASSERT 1 = 0/g' {} + ",
+    "downport": "rm -rf downport && cp -r src downport && node ci/patch_diss_oref.mjs && abaplint --fix ./ci/abaplint-downport.jsonc && npm run syfixes",
+    "transpile": "rm -rf output && cp srv/*.abap downport && abap_transpile ./ci/abap_transpile.json && node ci/patch_init_order.mjs",
+    "build": "npm run assemble && npm run downport && npm run transpile && rm -rf src abap2UI5",
+    "unit": "node output/index.mjs",
+    "webpack:build": "webpack --mode development --env development",
+    "deploy:docs": "node ci/copy_to_docs.mjs",
+    "all": "npm run build && npm run webpack:build && npm run deploy:docs",
+    "express": "node srv/express.mjs",
+    "serve:build": "node srv/serve_build.mjs"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@abaplint/cli": "2.119.66",
+    "@abaplint/database-sqlite": "^2.13.40",
+    "@abaplint/runtime": "^2.13.40",
+    "@abaplint/transpiler-cli": "^2.13.40",
+    "buffer": "^6.0.3",
+    "copy-webpack-plugin": "^14.0.0",
+    "express": "^5.2.1",
+    "html-webpack-plugin": "^5.6.7",
+    "path-browserify": "^1.0.1",
+    "process": "^0.11.10",
+    "sql.js": "^1.14.1",
+    "web-encoding": "^1.1.5",
+    "webpack": "^5.108.4",
+    "webpack-cli": "^7.2.1",
+    "webpack-dev-server": "^6.0.0"
+  }
+}

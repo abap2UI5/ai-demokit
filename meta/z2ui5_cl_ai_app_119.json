@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_ai_app_119",
+  "sample": "sap.ui.layout.sample.FixFlexVertical",
+  "entity": "sap.ui.layout.FixFlex",
+  "file": "src/02/b01/z2ui5_cl_ai_app_119.clas.abap",
+  "batch": "b01",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "Breadth-probe: sap.ui.layout.FixFlex (fixed image + flexible text). The named-model image path (img>/products/pic1) is resolved to a static OpenUI5 product image."
+    }
+  ],
+  "structural_diff": {
+    "skip": true,
+    "reason": "breadth/capability probe \u2014 renders the control but is not a faithful 1:1 rebuild of the full sample"
+  }
+}

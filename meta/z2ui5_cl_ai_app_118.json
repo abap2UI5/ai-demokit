@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_ai_app_118",
+  "sample": "sap.ui.integration.sample.CardsLayout",
+  "entity": "sap.ui.integration.Card",
+  "file": "src/02/b01/z2ui5_cl_ai_app_118.clas.abap",
+  "batch": "b01",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "Breadth-probe of the declarative-card paradigm: a sap.ui.integration.widgets.Card whose whole UI comes from a JSON manifest. The manifest is carried as an ABAP string and bound to the Card. The original binds several manifests from a named model; here one inline List-card manifest probes whether abap2UI5 can drive an integration card at all."
+    }
+  ],
+  "structural_diff": {
+    "skip": true,
+    "reason": "breadth/capability probe \u2014 renders the control but is not a faithful 1:1 rebuild of the full sample"
+  }
+}

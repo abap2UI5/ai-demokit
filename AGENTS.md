@@ -88,7 +88,7 @@ by the UI5 **library** of the demo kit sample they rebuild:
 | `src/01` | `sap.m`    | `sap.m`    | exists |
 | `src/02` | `sap.ui`   | `sap.ui.*` (core, layout, unified, table, integration, model.type) | planned |
 | `src/03` | `sap.uxap` | `sap.uxap` | planned |
-| `src/04` | `sap.f`    | `sap.f`    | planned |
+| `src/04` | `sap.f`    | `sap.f`    | exists  |
 | `src/05` | `sap.tnt`  | `sap.tnt`  | planned |
 
 The split key is the **second-level namespace** of the sample's entity. New
@@ -561,7 +561,8 @@ A fourth workflow, `checks`, runs three deterministic gates on every PR:
 |-----|---------|------------|
 | `pattern_lint` | `node scripts/pattern-lint.mjs` | a known-bad pattern reappears (each rule encodes a distilled §10 lesson; known open findings live in the script's BASELINE and in STATUS.md) |
 | `structural_diff` | `node scripts/structural-diff.mjs --strict` | a port's rendered view deviates from the original `view.xml` — control multiset, attribute names or simple **binding values** — without a declared deviation |
-| `render_smoke` | `node scripts/render-smoke.mjs --strict` (`npm run smoke`) | a port's reconstructed view fails a real headless `XMLView.create` against the OpenUI5 runtime (invalid XML, unknown control/property, strict property-type violation, broken expression binding). Helper-method-built views (a captured node handle passed into a builder-returning helper and chained out — app 049) are reconstructed by the handle-aware path (`extractDocsWithHelpers`; a handle is a stack snapshot, each helper call inlined re-anchored to its argument). A port the reconstructor still cannot rebuild must declare `"render_smoke": { "skip": true, "reason": "…" }` in its sidecar — an **undeclared** non-reconstructable port FAILS, and so does a **stale** declaration (a port that reconstructs but still declares skip), so the skip set can never drift |
+| `structure_lint` | `node scripts/structure-lint.mjs --strict` | the builder call tree is malformed — an **aggregation nested directly inside another aggregation** (a missing `)->shut(`, e.g. `<footer>` landing inside `<columns>`), or a `shut` with no open to close. A fast static tree check that runs before `render_smoke` so this class fails in milliseconds with a precise message instead of a cryptic UI5 load error. Helper-built views (RETURNING a `z2ui5_cl_ai_xml` handle) are skipped — their open/shut pairs span methods |
+| `render_smoke` | `node scripts/render-smoke.mjs --strict` (`npm run smoke`) | a port's reconstructed view fails a real headless `XMLView.create` against the OpenUI5 runtime (invalid XML, unknown control/property, strict property-type violation, broken expression binding). Helper-method-built views (a captured node handle passed into a builder-returning helper and chained out — app 049) are reconstructed by the handle-aware path (`extractDocsWithHelpers`; a handle is a stack snapshot, each helper call inlined re-anchored to its argument). A port the reconstructor still cannot rebuild must declare `"render_smoke": { "skip": true, "reason": "…" }` in its sidecar — an **undeclared** non-reconstructable port FAILS. The same declared skip also covers a **reconstructable** port whose view genuinely does not render in the static headless harness — a control whose runtime layout/resource behaviour the reconstruction cannot satisfy (`sap.f.AvatarGroup`'s overflow measurement loops with no real layout box; an `sap.ui.integration` Card needs an external manifest). Every skip is **verified against the actual render each run**: it is honoured only while the view still errors, and the moment it renders clean the declaration is **stale** and FAILS — so the skip set can never drift (a render-hostile skip can never outlive its reason). Render-hostile ports must still pass every other gate (structural-diff, abaplint, e2e) |
 | `e2e_smoke` (heavy, on-demand) | `npm run e2e:build` then `npm run e2e` (`scripts/e2e-build.mjs` + `e2e-smoke.mjs`) | a port fails to run as the **real app**: it starts the transpiled abap2UI5 backend (framework + all ports via `?app_start=<class>`, needs an abap2UI5 checkout — `A2UI5_HOME`), boots each port in headless Chromium (UI5 served from the local `@openui5` packages), and fails if it does not boot+render or if a backend request 4xx/5xx or a JS exception fires. Unlike `render_smoke` (static view reconstruction) this exercises the actual backend roundtrip, Component boot and event wiring. Not in the fast gate set (multi-minute transpile + browser); run before a release or when touching the framework wire/runtime. A small `INTERACTIONS` map adds real click→assert checks (e.g. 005 press→client-composed toast) |
 | `meta_valid` | `validate-meta.mjs` + regenerate overview & coverage, `git diff --exit-code -- src README.md api.md` | an invalid sidecar, or a change forgot to regenerate the overview app / coverage docs |
 | `property_gate` | `node scripts/property-check.mjs` | a port uses a control member introduced after UI5 1.71 (per-member `@since` from `ui5/properties.json`) without declaring it in a `POST_171` deviation — this covers both `a( n = … )` attributes **and** event parameters consumed via `${$parameters>/<name>}` in a `t_arg` |
@@ -576,11 +577,33 @@ npx abaplint ./abaplint.jsonc          # expect 0 issues
 node scripts/validate-meta.mjs         # sidecar schema + referential integrity
 node scripts/pattern-lint.mjs          # expect 0 errors
 node scripts/structural-diff.mjs --strict
+node scripts/structure-lint.mjs --strict # builder tree well-formedness (fast)
 node scripts/render-smoke.mjs --strict # headless XMLView.create per port
 node scripts/property-check.mjs        # no member newer than UI5 1.71
 node scripts/generate-overview.mjs     # then: git diff must stay clean
 node scripts/generate-coverage.mjs     # (README/api.md must stay clean too)
 ```
+
+### Developer tooling — starting a port
+
+Two helpers remove the mechanical boilerplate (they do **not** write the view —
+that is the actual porting work):
+
+- **`npm run scaffold <sample>`** (`scripts/scaffold.mjs`) — from an OpenUI5
+  demo-kit sample id/name it archives the template into `ui5/<lib>/<Name>/`,
+  picks the next app number + `src/<lib>/b<nn>` batch (`--new-batch` /
+  `--batch bNN`), and writes the class stub, `clas.xml`, `package.devc.xml` and
+  a valid `meta/` sidecar. The stub is a TODO placeholder view: it passes
+  abaplint / pattern-lint / structure-lint / render-smoke immediately, and
+  `structural_diff` (correctly) fails until you rebuild the view 1:1. Needs an
+  OpenUI5 checkout (`OPENUI5_SRC`, default `../fork-openui5`). `--dry-run` to
+  preview.
+- **`npm run json-to-abap -- <file.json> [--path k] [--fields spec] [--var v]`**
+  (`scripts/json-to-abap.mjs`) — turns a JSON array (a demo mock's
+  `ProductCollection` …) into an ABAP `VALUE #( … )` literal for `model_init`
+  (backtick-escaping and type inference handled; also exports `rowsToAbapValue`
+  / `rowsToAbapType` for reuse). The scaffolder prints the exact command when
+  the sample's controller loads a JSON mock.
 
 The last two are automated by the tracked **`.githooks/pre-commit`** hook: on
 every commit it regenerates the overview app + coverage docs and stages them,

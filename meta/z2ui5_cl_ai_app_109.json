@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_ai_app_109",
+  "sample": "sap.m.sample.SinglePlanningCalendarDateSelection",
+  "entity": "sap.m.SinglePlanningCalendar",
+  "file": "src/01/b14/z2ui5_cl_ai_app_109.clas.abap",
+  "batch": "b14",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The object-typed date properties (SinglePlanningCalendar.startDate, CalendarAppointment.startDate/endDate) are fed from ISO strings and converted with Formatter.DateCreateObject (core:require). The original UI5Date.getInstance values are normalized to ISO 1:1 (0-based months). The first appointment used UI5Date.getInstance() (the current time); it is pinned to the calendar's start date (2018-07-09) so the port is deterministic."
+    },
+    {
+      "type": "NOTE",
+      "what": "viewChange / selectedDatesChange / weekNumberPress / startDateChange are wired to toasts echoing the event name (the original toasts the same). The MultiSelect ToggleButton toast stands in for the original setDateSelectionMode SingleSelect/MultiSelect toggle + tooltip swap."
+    },
+    {
+      "type": "POST_171",
+      "what": "Formatter.DateCreateObject is referenced via core:require (UI5 >= 1.74). sap.m.SinglePlanningCalendar and its DayView/WorkWeekView/WeekView/MonthView are since 1.61 (in scope)."
+    }
+  ]
+}

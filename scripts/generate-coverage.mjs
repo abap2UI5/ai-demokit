@@ -92,7 +92,7 @@ const abapUrl = (file) => `${GH}/blob/${REF}/${file.split(path.sep).join('/')}`;
 
 // Focus: only these UI5 libraries are in scope right now (§7 AGENTS.md); the
 // others are brought back in later. Set to null to cover every library again.
-const FOCUS_LIBS = ['sap.m'];
+const FOCUS_LIBS = ['sap.m', 'sap.f', 'sap.ui.layout', 'sap.ui.core', 'sap.ui.unified', 'sap.ui.table', 'sap.uxap', 'sap.tnt', 'sap.ui.codeeditor', 'sap.ui.integration'];
 
 // --- 1. ported set from the meta/ sidecars ---------------------------------
 const ported = new Map(); // `${lib}\t${name}` -> { cls, file }

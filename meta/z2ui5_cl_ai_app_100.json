@@ -1,0 +1,35 @@
+{
+  "class": "z2ui5_cl_ai_app_100",
+  "sample": "sap.m.sample.QuickView",
+  "entity": "sap.m.QuickView",
+  "file": "src/01/b12/z2ui5_cl_ai_app_100.clas.abap",
+  "batch": "b12",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "The original binds four separate named JSONModels (CompanyModel / EmployeeModel / GenericModel / GenericModelNoHeader) and swaps the model on the shared QuickView before openBy. abap2UI5 serves a single default model, so the four data sets are flattened into four ABAP tables (kept in PROTECTED) and the pressed button copies the relevant one into the bound t_pages before the popover is opened. Named ABAP-fed JSON models are not expressible (CAPABILITIES)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The QuickView popover is built per press and shown 1:1 via client->popover_display( xml, by_id ), anchored to the pressed button (the original oQuickView.openBy(oButton)). The nested pages/groups/elements are a nested ABAP table; relative child aggregations (groups, elements) keep the original binding-info form."
+    },
+    {
+      "type": "NOTE",
+      "what": "The navigate toast is simplified to a fixed message (the original shows the clicked link's text via navOrigin, a control reference that is not transportable as an event arg). Elements without an elementType (Generic pages, and the Address/Slogan rows) get the QuickViewGroupElementType default 'text', and pages without displayShape (Generic) get the AvatarShape default 'Circle', so no enum property serializes as an empty string. The EmployeeData icon (a test-resources image) points at the OpenUI5 host."
+    },
+    {
+      "type": "POST_171",
+      "what": "sap.m.Avatar (and the QuickViewPage avatar aggregation) is since 1.73; it is kept 1:1 as the page icon, so the app needs UI5 >= 1.73 to render the avatar."
+    },
+    {
+      "type": "POST_171",
+      "what": "sap.m.Button.ariaHasPopup (since 1.84) is kept 1:1 on the four trigger buttons; needs UI5 >= 1.84."
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_ai_app_128",
+  "sample": "sap.tnt.sample.SideNavigation",
+  "entity": "sap.tnt.SideNavigation",
+  "file": "src/05/b02/z2ui5_cl_ai_app_128.clas.abap",
+  "batch": "b02",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "LIVE_TEST",
+      "what": "The two buttons reproduce the controller behaviour server-side: 'Toggle Collapse/Expand' flips SideNavigation.expanded (bound to a boolean model field, initial false as in the original) and 'Show/Hide \"Walked\"' flips the 'walked' NavigationListItem.visible. The original used byId().setExpanded/setVisible; here the properties are two-way bound and toggled on a backend round-trip. The 'visible' attribute added to the walked item carries that binding (the original toggled it imperatively)."
+    }
+  ]
+}

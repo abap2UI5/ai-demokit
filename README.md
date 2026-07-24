@@ -17,9 +17,14 @@ _Last generated: <!-- last-run -->2026-07-20 06:21 UTC<!-- /last-run -->_
 > express — so they can be closed. Deprecated or newer controls are listed as
 > out of scope; other UI5 libraries follow later.
 >
-> See the result in **[api.md](api.md)**, or try it live: pull this repo into
-> your ABAP system and start **`z2ui5_cl_ai_app_overview`**, which lists every
-> generated sample and launches it right in your system.
+> See the result in **[api.md](api.md)**, or try it live — two ways:
+> - **In your browser (no backend):** open the GitHub Pages demo at
+>   **https://abap2ui5.github.io/ai-demokit/** — the framework and all ports
+>   run fully client-side (transpiled ABAP + sql.js WASM). Built from
+>   [`web/`](web) into [`docs/`](docs); see [`web/README.md`](web/README.md).
+> - **In your ABAP system:** pull this repo and start
+>   **`z2ui5_cl_ai_app_overview`**, which lists every generated sample and
+>   launches it right in your system.
 
 ## Pipeline
 
@@ -167,15 +172,24 @@ have an abap2UI5 port.
 
 <!-- coverage:start -->
 
-Overall **94 / 403** in-scope demo kit samples ported (23.3 %).
+Overall **168 / 641** in-scope demo kit samples ported (26.2 %).
 **In scope**: samples whose control exists since **UI5 1.71** and is **not deprecated** (legacy-free ready).
-Out of scope: 43 of 446 samples — 16 on deprecated controls, 21 on controls newer than 1.71, 6 without control metadata.
+Out of scope: 66 of 707 samples — 16 on deprecated controls, 21 on controls newer than 1.71, 29 without control metadata.
 Control metadata from OpenUI5 **1.151.0**.
 
 | Module | Samples | In scope | Ported | Coverage | |
 |--------|--------:|---------:|-------:|---------:|---|
-| `sap.m` | 446 | 403 | 94 | 23.3 % | ██░░░░░░░░ |
-| **Total** | **446** | **403** | **94** | **23.3 %** | ██░░░░░░░░ |
+| `sap.ui.codeeditor` | 2 | 2 | 2 | 100.0 % | ██████████ |
+| `sap.ui.integration` | 4 | 4 | 2 | 50.0 % | █████░░░░░ |
+| `sap.tnt` | 17 | 17 | 7 | 41.2 % | ████░░░░░░ |
+| `sap.m` | 446 | 403 | 119 | 29.5 % | ███░░░░░░░ |
+| `sap.ui.core` | 48 | 36 | 10 | 27.8 % | ███░░░░░░░ |
+| `sap.f` | 42 | 41 | 11 | 26.8 % | ███░░░░░░░ |
+| `sap.ui.unified` | 21 | 21 | 4 | 19.0 % | ██░░░░░░░░ |
+| `sap.ui.table` | 18 | 17 | 3 | 17.6 % | ██░░░░░░░░ |
+| `sap.ui.layout` | 62 | 59 | 8 | 13.6 % | █░░░░░░░░░ |
+| `sap.uxap` | 47 | 41 | 2 | 4.9 % | ░░░░░░░░░░ |
+| **Total** | **707** | **641** | **168** | **26.2 %** | ███░░░░░░░ |
 
 <!-- coverage:end -->
 

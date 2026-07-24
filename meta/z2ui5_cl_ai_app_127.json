@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_ai_app_127",
+  "sample": "sap.ui.core.sample.InvisibleText",
+  "entity": "sap.ui.core.InvisibleText",
+  "file": "src/02/b02/z2ui5_cl_ai_app_127.clas.abap",
+  "batch": "b02",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "LIVE_TEST",
+      "what": "All twelve Button presses are wired to a single client-side MessageToast.show('Pressed') via the control_global frontend action. The original onPress toasted source.getId() + ' Pressed' (the runtime-generated control id); the id is not reproducible statically, so a fixed 'Pressed' toast stands in. The ariaLabelledBy / ariaDescribedBy associations and the six core:InvisibleText targets are reproduced 1:1."
+    }
+  ]
+}

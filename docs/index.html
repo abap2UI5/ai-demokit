@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>abap2UI5 · ai-demokit</title>
+    <link rel="icon" href="data:," />
+    <!-- ai-demokit: land on the port overview when no app is requested.
+         Runs before app.bundle.js so web.mjs reads the param from
+         window.location.href on its in-memory boot GET. replaceState keeps
+         it reload-free; ?app_start= from the overview's launch links wins. -->
+    <script>
+      (function () {
+        if (!/[?&]app_start=/.test(location.search)) {
+          var q = (location.search ? location.search + '&' : '?') + 'app_start=z2ui5_cl_ai_app_overview';
+          history.replaceState(null, '', location.pathname + q + location.hash);
+        }
+      })();
+    </script>
+</head>
+<body>
+    <!-- Deliberately empty: web.mjs boots the transpiled ABAP backend and
+         document.writes the frontend HTML served by z2ui5_cl_http_handler.
+         Any splash content painted here would flash for a split second
+         before document.write wipes it, so the page stays blank until the
+         real frontend arrives. -->
+<script src="app.bundle.js"></script></body>
+</html>

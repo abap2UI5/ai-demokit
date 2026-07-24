@@ -1,0 +1,35 @@
+{
+  "class": "z2ui5_cl_ai_app_104",
+  "sample": "sap.m.sample.TableSelectDialog",
+  "entity": "sap.m.TableSelectDialog",
+  "file": "src/01/b12/z2ui5_cl_ai_app_104.clas.abap",
+  "batch": "b12",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "The original configures a single shared dialog imperatively per button (oButton.data() CustomData -> setMultiSelect/setDraggable/setResizable/setRememberSelections/setConfirmButtonText/addStyleClass). abap2UI5 binds those SelectDialog properties two-way and each button's handler sets them before opening (responsivePadding toggles the style class via control_by_id addStyleClass/removeStyleClass). The core:CustomData is kept on the buttons for fidelity; the dialog is declared once in mvc:dependents and opened via follow_up_action( cs_event-control_by_id, open )."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "The ObjectNumber weightState is business logic (parseFloat thresholds), so it is computed in ABAP (WEIGHT_STATE, thin-frontend principle) and bound state='{WEIGHT_STATE}' instead of the frontend Formatter.weightState; core:require is therefore dropped and the Currency binding keeps the full standard type path 'sap.ui.model.type.Currency' 1:1. The full 123-row /ProductCollection is inlined (ProductPicUrl is not needed — the table cells carry no icon)."
+    },
+    {
+      "type": "NOTE",
+      "what": "Search filters the dialog's items binding client-side via _event_client( cs_event-binding_call, filter NAME Contains ${$parameters>/value} ). The valueHelpRequest opens a second TableSelectDialog (also in dependents) after preselecting the row matching the input value. The confirm/valueHelpClose toasts are simplified — selectedContexts / selectedItem are control references not transportable as event args (original composes the chosen product names / copies the selected title into the input)."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The per-button dialog configuration, the client-side search filter, multi-select confirm and the value-help selection copy-back need an in-system check; machine gates only verify the views are valid."
+    },
+    {
+      "type": "POST_171",
+      "what": "sap.m.TableSelectDialog.searchPlaceholder (since 1.110) is kept 1:1 on the value-help dialog; needs UI5 >= 1.110."
+    }
+  ]
+}

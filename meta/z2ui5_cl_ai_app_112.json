@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_ai_app_112",
+  "sample": "sap.ui.unified.sample.ColorPickerSimplified",
+  "entity": "sap.ui.unified.ColorPicker",
+  "file": "src/02/b01/z2ui5_cl_ai_app_112.clas.abap",
+  "batch": "b01",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "Breadth-probe (cross-library capability test). Inline sap.ui.unified ColorPicker (HSL / Simplified). The button's ResponsivePopover-with-ColorPicker is simplified to a toast."
+    }
+  ],
+  "structural_diff": {
+    "skip": true,
+    "reason": "breadth/capability probe \u2014 renders the control but is not a faithful 1:1 rebuild of the full sample"
+  }
+}

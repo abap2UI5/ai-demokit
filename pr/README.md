@@ -35,6 +35,7 @@ removed)" table below.
 | [`popover-bind-element`](popover-bind-element/) | A `BIND_ELEMENT` `follow_up_action` (popup + popover) — `follow_up_action( val = cs_event-bind_element, view = popup/popover, t_arg = ( idx ) ( client->_bind( mt_tab ) ) )`. The binding comes from `_bind` (registered + rename-safe), never text; the action strips `{ }`, appends `/idx` and sets the slot's element binding. Fits the existing signature, no new method params. | app 094 |
 | [`table-hidden-in-popin`](table-hidden-in-popin/) | Whitelist `setHiddenInPopin` in `CONTROL_METHODS`, like the `openBy`/`setActivePage`/`toggleBy` family, so the auto-pop-in demo's MultiComboBox works. `setContextualWidth`/Slider `setWidth` still open. | app 092 |
 | [`style-class-toggle`](style-class-toggle/) | Whitelist `addStyleClass`/`removeStyleClass`/`toggleStyleClass` (`["string"]`) in `CONTROL_METHODS` — the client-side equivalent of the controller's `oControl.toggleStyleClass('x')`. Motivated by app 013 (its CSS is not shipped, so 013 stays as-is, but the capability is available). | app 013 |
+| [`split-container-nav`](split-container-nav/) | Whitelist `toDetail`/`toMaster` (`["controlId"]`), `backDetail`/`backMaster` (no-arg), `setMode` (`["string"]`) and `navigateBack` (no-arg) in `CONTROL_METHODS` — SplitApp/SplitContainer master-detail navigation + QuickView(Card) page back. Generic `evControlCallById` dispatch, no special-casing; 4 node tests. | apps 096/097/099/100 |
 
 ## Declined / deferred (folder removed 2026-07-19)
 

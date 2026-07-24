@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_ai_app_115",
+  "sample": "sap.ui.table.sample.Basic",
+  "entity": "sap.ui.table.Table",
+  "file": "src/02/b01/z2ui5_cl_ai_app_115.clas.abap",
+  "batch": "b01",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "Breadth-probe: a minimal sap.ui.table.Table (grid table, distinct from sap.m.Table) with 3 columns + template cells over a small ABAP model. The original's full column set, the p:ColumnAIAction plugin (post-1.71) and paste handling are omitted for the probe."
+    }
+  ],
+  "structural_diff": {
+    "skip": true,
+    "reason": "breadth/capability probe \u2014 renders the control but is not a faithful 1:1 rebuild of the full sample"
+  }
+}

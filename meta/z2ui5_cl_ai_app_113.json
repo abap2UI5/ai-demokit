@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_ai_app_113",
+  "sample": "sap.tnt.sample.InfoLabel",
+  "entity": "sap.tnt.InfoLabel",
+  "file": "src/05/b01/z2ui5_cl_ai_app_113.clas.abap",
+  "batch": "b01",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "Breadth-probe (cross-library test). Ten sap.tnt InfoLabels across color schemes / render modes / icon / displayOnly, in FlexBox rows."
+    }
+  ],
+  "structural_diff": {
+    "skip": true,
+    "reason": "breadth/capability probe \u2014 renders the control but is not a faithful 1:1 rebuild of the full sample"
+  }
+}

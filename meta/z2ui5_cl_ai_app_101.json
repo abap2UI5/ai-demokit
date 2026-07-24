@@ -1,0 +1,31 @@
+{
+  "class": "z2ui5_cl_ai_app_101",
+  "sample": "sap.m.sample.Wizard",
+  "entity": "sap.m.Wizard",
+  "file": "src/01/b12/z2ui5_cl_ai_app_101.clas.abap",
+  "batch": "b12",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "Step validation (additionalInfoValidation) is reproduced in ABAP: on the ProductName/ProductWeight liveChange (and ProductInfoStep activate) the name-length>=6 / weight-numeric checks set the two valueStates and the ProductInfoStep validated property, which is bound two-way (step2_validated) instead of the original imperative validateStep/invalidateStep. The other steps keep their literal validated='true'."
+    },
+    {
+      "type": "NOTE",
+      "what": "The step-1 SegmentedButton gets item keys (Mobile/Desktop/Other) and a two-way selectedKey binding so the chosen product type reaches the model directly; the original reads evt.getParameters().item.getText() in setProductTypeFromSegmented. selectionChange is still wired. The PricingStep activate/complete handlers (which only toggle the unused navApiEnabled flag) are wired for fidelity but do nothing."
+    },
+    {
+      "type": "NOTE",
+      "what": "Navigation is 1:1 via follow_up_action( cs_event-control_by_id ): Wizard complete -> NavContainer 'to' the review page; each Edit link -> 'to' the content page then Wizard 'goToStep' the target step (whitelisted). Cancel and Submit open a MessageBox (warning/confirm) with YES/NO; on YES the wizard resets via 'to' the content page + 'discardProgress' ProductTypeStep, matching _handleMessageBoxOpen."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The full wizard flow — step validation gating the Next button, complete/edit navigation, the goToStep scroll and the cancel/submit reset — needs an in-system check; machine gates only verify the view is valid."
+    }
+  ]
+}

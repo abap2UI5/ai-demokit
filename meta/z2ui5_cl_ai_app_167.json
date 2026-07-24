@@ -1,0 +1,15 @@
+{
+  "class": "z2ui5_cl_ai_app_167",
+  "sample": "sap.tnt.sample.ToolPage",
+  "entity": "sap.tnt.ToolPage",
+  "file": "src/05/b06/z2ui5_cl_ai_app_167.clas.abap",
+  "batch": "b06",
+  "audit": { "frontend_action": false, "event_t_arg": true },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    { "type": "IMPROVISED", "what": "NavigationListItem.selectable is the expression binding {= ${items}.length > 3} in the original; per the thin-frontend rule that presentation logic is computed in ABAP into a flat 'selectable' field (children count > 3) and bound directly. The controller event handlers (onSideNavButtonPress toggling the side, onItemPress, onItemSelect navigating the NavContainer via to(), handleUserNamePress opening a popover, fixed-item quickActionPress) are raised as client MESSAGE_TOAST here; the NavContainer shows its initialPage (page2) but page-to-page navigation is not wired (would need a backend roundtrip)." },
+    { "type": "POST_171", "what": "ariaHasPopup is bound on the header Button (Alan Smith) and the fixed NavigationListItem, exactly as the original sample - sap.m.Button.ariaHasPopup exists since UI5 1.84 (> 1.71), kept for faithfulness." },
+    { "type": "NOTE", "what": "The full 14-item navigation tree (with its nested child lists, incl. Root Item 3's 38 children) and the 4-item fixed navigation are inlined from data.json. The page2 ScrollContainer's multi-paragraph lorem-ipsum filler text is abbreviated to a short placeholder." }
+  ]
+}

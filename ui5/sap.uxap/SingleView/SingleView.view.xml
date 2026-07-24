@@ -1,0 +1,22 @@
+<mvc:View height="100%" xmlns:mvc="sap.ui.core.mvc"
+           xmlns="sap.uxap" xmlns:blockcolor="sap.uxap.sample.SharedBlocks">
+
+	<ObjectPageLayout id="ObjectPageLayout">
+		<headerTitle>
+			<ObjectPageHeader objectTitle="Single View"/>
+		</headerTitle>
+
+		<sections>
+			<ObjectPageSection titleUppercase="false" title="example">
+				<subSections>
+
+					<ObjectPageSubSection title="Example" titleUppercase="false">
+						<blocks>
+							<blockcolor:BlockBlue id="b1"/>
+						</blocks>
+					</ObjectPageSubSection>
+				</subSections>
+			</ObjectPageSection>
+		</sections>
+	</ObjectPageLayout>
+</mvc:View>

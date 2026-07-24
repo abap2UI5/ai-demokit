@@ -1,0 +1,2 @@
+{ "class": "z2ui5_cl_ai_app_154", "sample": "sap.m.sample.FormattedText", "entity": "sap.m.FormattedText", "file": "src/01/b15/z2ui5_cl_ai_app_154.clas.abap", "batch": "b15", "audit": { "frontend_action": false, "event_t_arg": false }, "status": "generated", "checked": null,
+  "deviations": [ { "type": "NOTE", "what": "FormattedText.htmlText bound to a model field holding the original controller's demo HTML string (headings, link, list, pre, code, cite, dl) 1:1." } ] }

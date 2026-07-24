@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_ai_app_120",
+  "sample": "sap.ui.core.sample.Html",
+  "entity": "sap.ui.core.HTML",
+  "file": "src/02/b01/z2ui5_cl_ai_app_120.clas.abap",
+  "batch": "b01",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "Breadth-probe: raw HTML injected via the sap.ui.core.HTML content attribute (the builder xml-escapes the markup into the attribute value). Lorem text shortened."
+    }
+  ],
+  "structural_diff": {
+    "skip": true,
+    "reason": "breadth/capability probe \u2014 renders the control but is not a faithful 1:1 rebuild of the full sample"
+  }
+}

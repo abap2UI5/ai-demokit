@@ -1,0 +1,22 @@
+<core:FragmentDefinition
+	xmlns="sap.m"
+	xmlns:core="sap.ui.core">
+	<Dialog
+		id="selectTimeDialog"
+		title="Select New Time">
+		<TimePickerSliders
+			id="TPS2"
+			valueFormat="hh:mm a"
+			displayFormat="hh:mm a"
+			height="400px"/>
+		<buttons>
+			<Button
+				text="OK"
+				press=".handleOKPress"
+				type="Emphasized"/>
+			<Button
+				text="Cancel"
+				press=".handleCancelPress"/>
+		</buttons>
+	</Dialog>
+</core:FragmentDefinition>

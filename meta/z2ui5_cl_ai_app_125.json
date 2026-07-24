@@ -1,0 +1,14 @@
+{
+  "class": "z2ui5_cl_ai_app_125",
+  "sample": "sap.ui.layout.sample.Splitter2",
+  "entity": "sap.ui.layout.Splitter",
+  "file": "src/02/b02/z2ui5_cl_ai_app_125.clas.abap",
+  "batch": "b02",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": []
+}

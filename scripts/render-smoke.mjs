@@ -26,9 +26,17 @@
  * re-anchored to its argument handle. A port that still cannot be reconstructed
  * (a new idiom the handle path does not cover) must DECLARE the skip in its
  * sidecar (`"render_smoke": { "skip": true, "reason": "…" }`); an UNDECLARED
- * non-reconstructable port is a FAILURE, not a silent skip, and a declaration
- * that has gone stale (the port now reconstructs) is a FAILURE too — so the
- * skip set can never drift.
+ * non-reconstructable port is a FAILURE, not a silent skip.
+ *
+ * A declared skip is also honoured for a RECONSTRUCTABLE port whose view
+ * genuinely does not render in this static headless harness — a control whose
+ * runtime layout/resource behaviour the reconstruction cannot satisfy
+ * (sap.f.AvatarGroup's overflow measurement loops with no real layout box; an
+ * sap.ui.integration Card needs an external manifest). Such a skip is VERIFIED
+ * against the actual render each run: it is honoured only while the view still
+ * errors, and the moment it renders clean the skip is stale and FAILS. So every
+ * skip — non-reconstructable or render-hostile — is drift-proof: it fails the
+ * instant the reason it was granted for no longer holds.
  *
  * Substitutions while reconstructing (the harness controls both sides, so
  * exact framework path names do not matter):
@@ -65,6 +73,12 @@ const BENIGN = [
   /theming\.Parameters/i,             // parameters need the compiled theme too
   /failed to load JavaScript resource/i,   // follow-up of the two above
   /Core\.applyTheme|sap\.ui\.getCore/i,
+  // nested bound aggregation whose template is itself a bound-aggregation
+  // template (e.g. sap.tnt NavigationListItem with a sub items binding): UI5
+  // logs a template-lifecycle caution about not destroying the shared template.
+  // It is a warning, not a load failure — an actual duplicate-ID collision
+  // would surface as its own (unfiltered) error, so this only hides the caution.
+  /clone operation.*template|templateShareable/i,
 ];
 
 // ---------------------------------------------------------------------------
@@ -529,16 +543,30 @@ function parseTypes(content) {
 }
 
 function parseData(content) {
-  const vars = new Map(); // var -> { kind: 'scalar'|'table'|'struct', type }
-  for (const m of content.matchAll(/^\s*DATA\s+(\w+)\s+TYPE\s+(?:(STANDARD TABLE OF\s+(\w+))|REF TO\s+\w+|([\w ]+?))\s*(?:LENGTH\s+\d+)?\s*(?:DECIMALS\s+\d+)?\s*(?:WITH EMPTY KEY\s*)?\.\s*$/gm)) {
+  const vars = new Map(); // var -> { kind: 'scalar'|'table'|'struct', type, value? }
+  // the trailing (?:VALUE …)? captures an inline initial value on the same
+  // declaration (DATA n TYPE i VALUE 5. / … TYPE abap_bool VALUE abap_true.),
+  // so a VALUE-seeded field mocks with the right type instead of falling back
+  // to an empty string. The scalar type is a single token (\w+) so the VALUE
+  // clause cannot bleed into it (was `i VALUE 5` under the old `[\w ]+?`).
+  for (const m of content.matchAll(/^\s*DATA\s+(\w+)\s+TYPE\s+(?:(STANDARD TABLE OF\s+(\w+))|REF TO\s+\w+|(\w+))\s*(?:LENGTH\s+\d+)?\s*(?:DECIMALS\s+\d+)?\s*(?:WITH EMPTY KEY\s*)?(?:VALUE\s+(`(?:[^`]|``)*`|abap_true|abap_false|-?\d+(?:\.\d+)?))?\s*\.\s*$/gm)) {
     if (m[3]) vars.set(m[1], { kind: 'table', type: m[3] });
-    else if (m[4]) vars.set(m[1], { kind: 'scalar', type: m[4].trim() });
+    else if (m[4]) vars.set(m[1], { kind: 'scalar', type: m[4].trim(), value: m[5] });
   }
   return vars;
 }
 
 const scalarDefault = (type) =>
   type === 'abap_bool' ? false : NUMERIC.test(type) ? 0 : '';
+
+// coerce an ABAP scalar literal (backtick string / abap_true|false / number)
+// to its typed JS value — shared by VALUE clauses, model_init assignments and
+// row fields so the three paths agree.
+const coerceScalar = (raw, type) =>
+  raw === 'abap_true' ? true
+    : raw === 'abap_false' ? false
+      : raw.startsWith('`') ? (NUMERIC.test(type) ? Number(raw.slice(1, -1)) || 0 : raw.slice(1, -1).replace(/``/g, '`'))
+        : NUMERIC.test(type) ? Number(raw) : raw;
 
 // parse one VALUE #( ... ) region into JS rows, typed by the row's fields
 function parseRows(region, rowType, types) {
@@ -620,11 +648,11 @@ function buildModel(content, boundVars, types, vars, notes) {
     } else {
       const t = decl.type;
       if (scalarSeed.has(v)) {
-        const raw = scalarSeed.get(v);
-        model[up(v)] = raw === 'abap_true' ? true
-          : raw === 'abap_false' ? false
-            : raw.startsWith('`') ? (NUMERIC.test(t) ? Number(raw.slice(1, -1)) || 0 : raw.slice(1, -1).replace(/``/g, '`'))
-              : NUMERIC.test(t) ? Number(raw) : raw;
+        // explicit assignment in model_init wins over an inline VALUE
+        model[up(v)] = coerceScalar(scalarSeed.get(v), t);
+      } else if (decl.value != null) {
+        // inline DATA … VALUE … seeds the field with its declared literal
+        model[up(v)] = coerceScalar(decl.value, t);
       } else {
         const d = derivedSeed.find((s) => s.target === v);
         const rows = d && tableSeed.has(d.table)
@@ -664,7 +692,7 @@ function preparePort(meta) {
 // ---------------------------------------------------------------------------
 // 6. Local OpenUI5 server (from the @openui5/* npm source packages)
 // ---------------------------------------------------------------------------
-const LIB_ROOTS = ['sap.ui.core', 'sap.m', 'sap.ui.layout', 'sap.ui.unified', 'sap.f', 'themelib_sap_horizon']
+const LIB_ROOTS = ['sap.ui.core', 'sap.m', 'sap.ui.layout', 'sap.ui.unified', 'sap.f', 'sap.ui.table', 'sap.uxap', 'sap.tnt', 'sap.ui.codeeditor', 'sap.ui.integration', 'themelib_sap_horizon']
   .map((p) => path.join(ROOT, 'node_modules', '@openui5', p, 'src'))
   .filter((p) => fs.existsSync(p));
 
@@ -746,7 +774,7 @@ const HARNESS = `<!DOCTYPE html>
   })();
 </script>
 <script id="sap-ui-bootstrap" src="/resources/sap-ui-core.js"
-  data-sap-ui-libs="sap.m,sap.ui.layout,sap.f"
+  data-sap-ui-libs="sap.m,sap.ui.layout,sap.f,sap.ui.table,sap.uxap,sap.tnt"
   data-sap-ui-theme="sap_hcb"
   data-sap-ui-async="true"
   data-sap-ui-compatversion="edge"></script>
@@ -927,13 +955,8 @@ for (const meta of metas) {
     }
     continue;
   }
-  if (declaredSkip) {
-    // the declaration has gone stale — the port now reconstructs, so the skip
-    // must be removed and the port actually smoke-tested
-    failed++;
-    console.log(`FAIL  ${cls}  (meta declares render_smoke.skip but the view reconstructs — remove the stale declaration)`);
-    continue;
-  }
+  // linear port: reconstruct and render, THEN decide the outcome (a declared
+  // skip is verified against the actual render, so it can never go stale)
   const errs = [];
   if (!docs.length) errs.push('no view reconstructed from builder calls');
   for (const xml of docs) {
@@ -945,6 +968,23 @@ for (const meta of metas) {
       raw = [`HARNESS: ${e.message}`];
     }
     errs.push(...raw.filter((e) => !BENIGN.some((re) => re.test(e))));
+  }
+  if (declaredSkip) {
+    // a declared skip on a reconstructable port is honoured ONLY while the view
+    // genuinely fails to render in the static harness — a control whose runtime
+    // layout/resource behaviour the headless reconstruction cannot satisfy
+    // (e.g. sap.f.AvatarGroup's overflow measurement loops with no real layout
+    // box; an integration Card needs an external manifest). The moment it
+    // renders clean the skip is stale and FAILS, so a render-hostile skip can
+    // never silently outlive the reason it was granted for.
+    if (errs.length) {
+      skipped++;
+      console.log(`SKIP  ${cls}  (declared render_smoke.skip — does not render in the static harness: ${errs[0].slice(0, 100)})`);
+    } else {
+      failed++;
+      console.log(`FAIL  ${cls}  (declares render_smoke.skip but the view now renders clean — remove the stale declaration)`);
+    }
+    continue;
   }
   const status = errs.length ? 'FAIL' : 'pass';
   if (errs.length) failed++;

@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_ai_app_114",
+  "sample": "sap.ui.codeeditor.sample.CodeEditor",
+  "entity": "sap.ui.codeeditor.CodeEditor",
+  "file": "src/02/b01/z2ui5_cl_ai_app_114.clas.abap",
+  "batch": "b01",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "Breadth-probe: the ACE-based sap.ui.codeeditor CodeEditor (a wrapped third-party editor). JSON value shortened to a representative snippet; literal braces escaped so the XMLView parser does not read them as a binding."
+    }
+  ],
+  "structural_diff": {
+    "skip": true,
+    "reason": "breadth/capability probe \u2014 renders the control but is not a faithful 1:1 rebuild of the full sample"
+  }
+}

@@ -1,0 +1,2 @@
+{ "class": "z2ui5_cl_ai_app_155", "sample": "sap.m.sample.CheckBox", "entity": "sap.m.CheckBox", "file": "src/01/b15/z2ui5_cl_ai_app_155.clas.abap", "batch": "b15", "audit": { "frontend_action": false, "event_t_arg": false }, "status": "generated", "checked": null,
+  "deviations": [ { "type": "NOTE", "what": "Fifteen CheckBoxes across all states (selected, partiallySelected, required, enabled, valueState Warning/Error/Information, wrapping) plus a SimpleForm with GridData-laid-out CheckBoxes, reproduced 1:1." } ] }

@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_ai_app_107",
+  "sample": "sap.m.sample.SemanticPage",
+  "entity": "sap.m.semantic.SemanticPage",
+  "file": "src/01/b13/z2ui5_cl_ai_app_107.clas.abap",
+  "batch": "b13",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "onSemanticButtonPress toasts each action's class name, reproduced by passing the name as a t_arg literal. The SortSelect change toasts the two-way selectedKey (sort_key); PagingButton positionChange transports ${$parameters>/newPosition}; the custom footer / share buttons transport $event.oSource.sId. The MultiSelectAction and MessagesIndicator toasts are simplified to fixed messages (the original toggles a MultiSelect state / opens a MessagePopover)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The SortSelect items are bound to a 2-row filter-type table reproducing /ProductCollectionStats/Filters (the two `type` values Category and SupplierName; the per-type `values` sub-arrays are unused by the Select). The binding keeps the original sorter { path: 'Name' } 1:1 — a no-op there too, since the Filters entries carry `type`, not `Name`."
+    }
+  ]
+}

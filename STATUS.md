@@ -1,15 +1,42 @@
 # STATUS.md — current state & open findings
 
-_Point-in-time summary, last updated **2026-07-20**. Update this file whenever
+_Point-in-time summary, last updated **2026-07-22**. Update this file whenever
 findings are fixed or new ones land (same-change discipline as AGENTS.md §10).
 For the process itself see TRAINING.md; for what abap2UI5 can express see
 CAPABILITIES.md._
+
+## Batches b05–b07 — stress-test ports, maximally-diverse controls (2026-07-23) — 12 ports
+
+Three more diverse faithful batches to stress-test how far abab2UI5 reaches,
+each internally maximally-different. All machine-green (abaplint
+STANDARD/CLOUD/702, validate-meta, pattern-lint, structural-diff `--strict`,
+property-check, render-smoke):
+
+- **b05 (137–141):** `sap.ui.table.Table` multi-level column headers
+  (multiLabels/headerSpan) · `sap.ui.layout.DynamicSideContent` · `sap.ui.unified.Calendar`
+  · `sap.ui.layout.BlockLayout` (6 rows/7 cells, color shades A–F) ·
+  `sap.ui.core.InvisibleMessage`.
+- **b06 (142–145):** `sap.ui.layout.form.Form` (FormContainers + toolbars +
+  GridData) · `sap.f.DynamicPage` (title/header/content/footer + tnt:InfoLabel)
+  · `sap.f.GridList` GridBoxLayout · `sap.ui.layout.cssgrid` gridAutoFlow +
+  RadioButtonGroup.
+- **b07 (146–148):** `sap.ui.core` HyphenationAPI (core:HTML) ·
+  `sap.ui.core.BusyIndicator` (global) · `sap.f.GridList` **drag & drop**
+  (dnd:DragInfo + GridDropInfo).
+
+New paradigms exercised without framework changes: the sap.ui.table grid table
+with `multiLabels`/`headerSpan`, a full `sap.ui.layout.form.Form` tree,
+`DynamicSideContent`/`DynamicPage` responsive containers, and drag-and-drop
+config. One transpiler/checker footnote: the `sap.f.dnd` `GridDropInfo` keeps a
+hyphen-free `dndgrid` xmlns alias (the original's `dnd-grid` prefix trips the
+static regexes; the alias names the same URI). Coverage: **148** ports across
+10 libraries.
 
 ## Where the repo stands
 
 | Aspect | State |
 |---|---|
-| Ports | 94 / **403 in-scope** `sap.m` samples (23.3 %) — in scope = control exists since UI5 1.71 and is not deprecated; 43 of 446 samples are out of scope (16 deprecated, 21 newer, 6 without control metadata) |
+| Ports | 109 / **403 in-scope** `sap.m` samples (27.0 %) — in scope = control exists since UI5 1.71 and is not deprecated; 43 of 446 samples are out of scope (16 deprecated, 21 newer, 6 without control metadata) |
 | CI | ABAP_STANDARD, ABAP_CLOUD, ABAP_702 all green |
 | Structural view diff | **0 undeclared differences** across all 64 ports (`node scripts/structural-diff.mjs --strict`) — including simple **binding values** and, since 2026-07-19, **`id` attributes** (name-level per control type; dropped original ids must be restored or declared) |
 | Render smoke | **0 failing / 0 skipped** (`npm run smoke`): every port's view loads in a real headless `XMLView.create` — incl. app 049, now reconstructed by the **handle-aware path** (`extractDocsWithHelpers`: a builder handle is a stack snapshot, a captured handle passed into a builder-returning helper is inlined re-anchored per call). The declared-skip mechanism stays as a CI-enforced safety net for any future idiom the reconstructor cannot rebuild (undeclared non-reconstructable = FAIL, stale declaration = FAIL); harness carries `sap.f` and mocks scalar-row tables as empty arrays since b05 |
@@ -17,6 +44,175 @@ CAPABILITIES.md._
 | Meta sidecars | 67 in `meta/` — status: 21 `generated`, 41 `checked`, **5 `golden`** (401, 421, 454, 540, 543 — promoted 2026-07-20 after the full live check); deviations: 39 IMPROVISED, 34 POST_171, 81 NOTE, 3 DROPPED_171 (the `p:ColumnAIAction` plugin in apps 009/022/534 — a whole control newer than 1.71, unlike the restorable members). **0 LIVE_TEST** (b07/b08 menu + message-popover paths live-checked 2026-07-22) and **0 SUBSET_DATA** (retired 2026-07-22 — every port now inlines the full mock row set). `audit` is a structured object since 2026-07-18 |
 | Manually verified in a running system | **46 of 67 ports** — adds 060/061/066/067 (menu + MessagePopover, human live check 2026-07-22) to the 2026-07-20 checked set; the 21 remaining `generated` ports are b01–b04 apps that never carried an open question (machine-verified only) |
 | Archive | `ui5/sap.m/<SampleName>/` — full originals for the 44 ported samples (+2 cross-referenced: `FacetFilterSimple`, `Table`); mock snapshot in `ui5/mock/`. Unported samples are copied over batch by batch. |
+
+## Batch b04 — faithful diverse cross-library ports (2026-07-23) — 3 ports
+
+Third diverse faithful batch, three libraries. All machine-green (abaplint
+STANDARD/CLOUD/702, validate-meta, pattern-lint, structural-diff `--strict`
+**0 diffs each**, property-check, render-smoke):
+
+- **134** `sap.tnt.ToolHeader` — a shell-like app header: two ToolHeaders in a
+  ScrollContainer with `OverflowToolbarButton`s, `ToolHeaderUtilitySeparator`,
+  Avatar/Image, each item carrying `OverflowToolbarLayoutData`
+  priorities/groups. Logo/Avatar presses → client toasts; the original's
+  `Device.media` responsive-visibility handler is a device behaviour not
+  reproduced server-side.
+- **135** `sap.ui.model.type.Currency` (`sap.ui.core` TypeCurrency) — the
+  **composite** data-type binding: every Input/Text binds
+  `parts:['/amount','/currency']` with `type:'CurrencyType'` + formatOptions
+  (showMeasure/showNumber/preserveDecimals/currencyCode/style). Paths generated
+  via `_bind` (both fields land in the render-smoke mock model).
+- **136** `sap.f.SidePanel` Single — a docked side panel: `f:mainContent`
+  (buttons, veto Switches, ten body Texts) + `f:items` → `SidePanelItem`.
+  `toggle` → client toast (the original's preventDefault veto by the two
+  switches is a live interaction, not reproduced).
+
+New batch folders `src/05/b04`, `src/02/b04`, `src/04/b03`. Coverage: **136**
+ports across 10 libraries.
+
+## Batch b03 — faithful diverse cross-library ports (2026-07-23) — 5 ports
+
+Second diverse faithful batch, three libraries, chosen for paradigms b02 didn't
+touch. All machine-green (abaplint STANDARD/CLOUD/702, validate-meta,
+pattern-lint, structural-diff `--strict` **0 diffs each**, property-check,
+render-smoke):
+
+- **129** `sap.ui.model.type.Integer` (`sap.ui.core` TypeInteger) — the
+  **data-type binding** paradigm: `core:require` pulls in the Integer type and
+  `form:SimpleForm` Inputs/Texts bind `{path, type:'IntegerType', formatOptions}`
+  (min/maxIntegerDigits) 1:1. The path is generated via `_bind(val=… path=X)`
+  (never hardcoded — a pattern-lint rule), which also puts the field in the
+  render-smoke mock model.
+- **130** `sap.ui.core` ControlBusyIndicator — `busy` state on a Panel + Icon,
+  toggled server-side (bound boolean); the original's 5 s setTimeout auto-reset
+  is simplified to a toggle.
+- **131** `sap.ui.core` BasicThemeParameters — MessageStrip + Link (the sample
+  is just a pointer to the external Theme Parameter Toolbox).
+- **132** `sap.tnt.SideNavigation` WithTags — richer than b02's 128: every
+  `tnt:tag` carries an `ObjectStatus` badge (IndicationColor 15-20, inverted),
+  plus `NavigationListGroup` + `fixedItem`; expand toggled server-side.
+- **133** `sap.f.GridList` Modes — the **data-bound list** paradigm: 11 product
+  rows inlined from `model/data.json`, a `GridListItem` template with
+  `counter`/`highlight`/`type` bindings + `{= …}` expression-bound visibility,
+  a `SegmentedButton` whose `selectionChange` drives `mode` + `headerText`
+  server-side, `f:customLayout` → `GridBasicLayout`. Absent enum-ish JSON
+  fields are seeded with their UI5 defaults (`type→Inactive`, `Status→None`) so
+  the bound enum properties stay valid — renders identically, and
+  structural-diff compares only binding paths.
+
+New batch folders `src/02/b03`, `src/05/b03`, `src/04/b02`. Coverage: **133**
+ports across 10 libraries.
+
+## Batch b02 — faithful diverse cross-library ports (2026-07-23) — 7 ports
+
+First **faithful** (structurally verified, not probe) batch that spans past
+`sap.m`, picked for maximal control diversity across four libraries. All seven
+are machine-green (abaplint STANDARD/CLOUD/702, validate-meta, pattern-lint,
+structural-diff `--strict` with **0 diffs each**, property-check, render-smoke):
+
+- **122** `sap.ui.core.Icon` — icon-font gallery (`core:Icon` × 5 in an HBox,
+  each with `FlexItemData` layoutData; stethoscope press → client toast).
+- **123** `sap.tnt.NavigationList` — nav tree with nested items; the two toolbar
+  buttons flip `expanded` / a sub-item's `visible` server-side (boolean model
+  fields, `view_model_update`).
+- **124** `sap.ui.layout.cssgrid.CSSGrid` — CSS-grid page layout, five
+  `core:HTML` tiles (raw HTML in `content`, escaped 1:1 incl. the original's
+  quirks) + `GridItemLayoutData`; Slider `liveChange` → panel width roundtrip.
+- **125** `sap.ui.layout.Splitter` — resizable split panes with
+  `SplitterLayoutData` (fully static, no controller).
+- **126** `sap.ui.unified.FileUploader` — file uploader + upload button
+  (upload cycle reduced to client toasts — endpoint-dependent, LIVE_TEST).
+- **127** `sap.ui.core.InvisibleText` — ARIA-description Page (12 buttons across
+  customHeader/subHeader/content/footer, six `core:InvisibleText` targets,
+  `ariaLabelledBy`/`ariaDescribedBy` associations 1:1).
+- **128** `sap.tnt.SideNavigation` — side nav with `NavigationListGroup`s +
+  `fixedItem`, external-link items; expand/hide toggles server-side.
+
+New batch folders `src/02/b02` (sap.ui.* → 122/124/125/126/127) and
+`src/05/b02` (sap.tnt → 123/128). Coverage: **128** ports across 10 libraries.
+Two render-smoke lessons re-confirmed: (a) a nested aggregation (`layoutData`)
+needs its **own** `shut()` plus one for the parent control before a sibling —
+one missing `shut()` silently nests the next control inside the previous one;
+(b) a bound property whose `DATA` uses an inline `VALUE` clause is invisible to
+render-smoke's typed-model derivation (it only reads assignment seeds), so such
+fields mock as empty string and fail strict boolean/numeric property typing —
+seed them with a plain assignment on init instead.
+
+## Beyond sap.m: sap.f library started (2026-07-22) — src/04/b01
+
+First expansion past `sap.m`. **sap.f** (Fiori flagship) is now a second library
+in coverage/universe and the render-smoke harness (its `@openui5` package ships
+in `LIB_ROOTS`). Two ports, both machine-green: **110** ShellBar (static app
+shell header with a sap.m Menu + profile Avatar) and **111** GridList (grid
+layout list, 27 items, Slider→panel-width via a roundtrip-free expression
+binding). Infra: `FOCUS_LIBS += sap.f`; the 42 sap.f demokit samples merged into
+`ui5/universe.json` from the fork's docuindex (null since/deprecated — no built
+SDK api.json, so a full regen would wipe sap.m's scope metadata; the manual
+merge preserves it, sap.f starts with permissive scope). **structural-diff was
+hardcoded to `ui5/sap.m/`** and now resolves `ui5/<lib>/<Name>` from the sample
+library, so sap.f (and future libs) are structurally verified. Coverage:
+109/488 across 2 libraries. Deferred (own follow-up batch): the sap.f controls
+with popover fragments / named models (AvatarGroup — also hits a headless
+AvatarGroup render-restart loop —, DynamicPage, FlexibleColumnLayout, Card,
+GridContainer, ProductSwitch, SidePanel, SemanticPage).
+
+## Batch b14 generated (2026-07-22) — planning calendars (2 ports)
+
+The two calendar NEW controls, both machine-green including render-smoke:
+**108** PlanningCalendar (the Single variant — a single-row day planner with 21
+appointments + 3 interval headers) and **109** SinglePlanningCalendar (the
+DateSelection variant — Day/WorkWeek/Week/Month views + 11 appointments). Both
+prove the **date-object property** path end to end in the ai-demokit builder: the
+model carries plain ISO strings and the object-typed `startDate`/`endDate`
+(PlanningCalendar / SinglePlanningCalendar / `unified:CalendarAppointment`) are
+converted at the binding with `Formatter.DateCreateObject` via
+`core:require="{Formatter: 'z2ui5/model/formatter'}"` (POST_171, UI5 >= 1.74) —
+**no framework change needed**, the curated formatter already ships it and
+render-smoke registers the same module (the `xmlns:core` declaration is required
+alongside `core:require`). The original `UI5Date.getInstance(y, month0, d, …)`
+values are normalized to ISO 1:1 (0-based months; JS Date overflow rolled
+forward). Interactive paths (appointment/interval select, view/date change,
+mode toggle) are simplified toasts, `LIVE_TEST`. Remaining calendar work is
+**depth only** — the other ~22 PlanningCalendar/SinglePlanningCalendar variants
+now that both controls are covered.
+
+## Batch b13 generated (2026-07-22) — sap.m.semantic pages (3 ports)
+
+The `sap.m.semantic` page family, all machine-green: **105**
+SemanticPageFullScreen (`FullscreenPage` + the full semantic-action set),
+**107** SemanticPage (`SplitContainer` master/detail with SortSelect bound to a
+2-row filter-type table, PagingButton, custom footer/share content) and **106**
+SemanticPageFloatingFooter (same with `floatingFooter='true'`). Each semantic
+action toasts its class name (passed as a t_arg literal); `positionChange` and
+custom-button presses transport `${$parameters>/newPosition}` /
+`$event.oSource.sId`. All interactive paths `LIVE_TEST`. No framework change
+needed. **Remaining in-scope NEW controls**: only the `PlanningCalendar` and
+`SinglePlanningCalendar` families are left — both need the date-object property
+support (CAPABILITIES 🔶, per-binding `Formatter.DateCreateObject`) and warrant
+a dedicated batch.
+
+## Batch b12 generated (2026-07-22) — dialogs, pickers & master-detail (10 ports)
+
+Ten breadth-first `NEW-CONTROL` ports (095–104), each machine-green (abaplint
+STANDARD/CLOUD/702, validate-meta, pattern-lint, structural-diff `--strict`,
+property-check, render-smoke `--strict`): **095** TimePickerSliders (dialog +
+sliders), **096** SplitContainer, **097** SplitApp (master-detail),
+**098** ViewSettingsDialog (sort/group/filter, 3 dialogs in `mvc:dependents`,
+`open [pageKey]`), **099** QuickViewCard + **100** QuickView (nested
+pages/groups/elements; QuickView flattens 4 named models into 4 ABAP tables),
+**101** Wizard (4 steps + review NavContainer, validation in ABAP,
+`goToStep`/`discardProgress`), **102** InputModelUpdate (OData mock → ABAP
+timer), **103** SelectDialog + **104** TableSelectDialog (per-button config via
+bound properties, full 123-row ProductCollection, client-side `binding_call`
+search). All interactive navigation/selection paths are flagged `LIVE_TEST`.
+
+**Paired framework change** (abap2UI5 branch
+`claude/ai-demokit-next-batches-rq9sfy`, [`pr/split-container-nav`](../pr/split-container-nav/)):
+six control methods whitelisted in `CONTROL_METHODS` (both `FrontendAction.js`
+and the ABAP mirror `z2ui5_cl_app_frontendaction_js`) so the ports drive them
+1:1 — `toDetail`/`toMaster`/`backDetail`/`backMaster`/`setMode`
+(SplitApp/SplitContainer) and `navigateBack` (QuickView/QuickViewCard); 4 new
+node tests (41 pass), abaplint clean.
 
 ## Real-app e2e smoke — runs every port as the actual app (2026-07-22)
 

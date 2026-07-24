@@ -42,6 +42,19 @@ jobs:
         node-version: '22'
     - run: node scripts/structural-diff.mjs --strict
 
+  structure_lint:
+    # fast static check of the builder call tree — catches an aggregation
+    # nested directly inside another aggregation (a missing )->shut(), the
+    # malformed-view class, before the expensive render gate runs
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+    - uses: actions/checkout@v7
+    - uses: actions/setup-node@v6
+      with:
+        node-version: '22'
+    - run: node scripts/structure-lint.mjs --strict
+
   render_smoke:
     # headless rendering gate: every port's reconstructed view must load in a
     # real XMLView.create against the OpenUI5 runtime (npm packages, offline)

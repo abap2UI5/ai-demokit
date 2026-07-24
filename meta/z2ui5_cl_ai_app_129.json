@@ -1,0 +1,13 @@
+{
+  "class": "z2ui5_cl_ai_app_129",
+  "sample": "sap.ui.core.sample.TypeInteger",
+  "entity": "sap.ui.model.type.Integer",
+  "file": "src/02/b03/z2ui5_cl_ai_app_129.clas.abap",
+  "batch": "b03",
+  "audit": { "frontend_action": false, "event_t_arg": false },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    { "type": "NOTE", "what": "Data-type binding paradigm: the Integer type module is pulled in with core:require='{IntegerType: sap/ui/model/type/Integer}' and the Input/Text bindings carry type:'IntegerType' plus formatOptions (min/maxIntegerDigits) 1:1. The single model field 'number' (initial '123') is serialized by abap2UI5 as /NUMBER, so the original raw '/number' paths are written as '/NUMBER'." }
+  ]
+}

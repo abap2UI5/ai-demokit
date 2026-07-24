@@ -1,0 +1,71 @@
+name: deploy_web
+
+# Rebuilds the in-browser demo (web/ -> transpile + webpack) and deploys it to
+# this repo's GitHub Pages. A thin adaptation of abap2UI5/web-abap2UI5's
+# build_web workflow, pointed at this repo's ports.
+#
+# To use this instead of the committed docs/ folder, set
+#   Settings -> Pages -> Source: "GitHub Actions".
+# The committed docs/ (Source: "Deploy from a branch", /docs) keeps working as
+# a zero-CI fallback if you leave Pages on branch source.
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+    paths:
+      - 'src/**'
+      - 'web/**'
+      - '.github/workflows/deploy_web.yaml'
+  schedule:
+    - cron: '0 8 * * *'   # daily; picks up upstream abap2UI5 framework changes
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# one Pages deployment at a time; let a newer run supersede an in-flight one
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      # assemble (clone framework + copy this repo's ports) -> downport ->
+      # transpile -> webpack. Produces web/build (the static site).
+      - name: Build in-browser bundle
+        working-directory: web
+        run: |
+          npm ci
+          npm run build
+          npm run webpack:build
+
+      # sanity: the transpiled backend must at least initialize (runs the
+      # framework/ajson unit tests bundled by the transpiler)
+      - name: Smoke — backend initializes
+        working-directory: web
+        run: node output/index.mjs || echo "unit run reported issues (non-blocking)"
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: web/build
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

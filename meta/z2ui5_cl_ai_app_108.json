@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_ai_app_108",
+  "sample": "sap.m.sample.PlanningCalendarSingle",
+  "entity": "sap.m.PlanningCalendar",
+  "file": "src/01/b14/z2ui5_cl_ai_app_108.clas.abap",
+  "batch": "b14",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The object-typed calendar date properties (PlanningCalendar.startDate, CalendarAppointment.startDate/endDate) are fed from plain ISO strings in the model and converted at the point of use with Formatter.DateCreateObject from the curated module (core:require='{Formatter: z2ui5/model/formatter}'). The original's UI5Date.getInstance(year, month0, day, ...) values are normalized to ISO 1:1 (month is 0-based; day/month overflow rolled forward exactly as the JS Date constructor does)."
+    },
+    {
+      "type": "NOTE",
+      "what": "appointmentSelect / intervalSelect / the ToggleButton toggleDayNamesLine are wired to simple toasts. The original opens a MessageBox with the selected appointment title + count, appends a new appointment on interval select, and toggles the day-names line — those interactive behaviors are simplified here (the appointment/date event parameters are control references)."
+    },
+    {
+      "type": "POST_171",
+      "what": "Formatter.DateCreateObject is referenced via core:require, which needs UI5 >= 1.74. sap.m.PlanningCalendar itself is since 1.34 (in scope)."
+    }
+  ]
+}

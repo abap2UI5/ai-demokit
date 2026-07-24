@@ -1,0 +1,2 @@
+{ "class": "z2ui5_cl_ai_app_159", "sample": "sap.m.sample.InputTypes", "entity": "sap.m.Input", "file": "src/01/b16/z2ui5_cl_ai_app_159.clas.abap", "batch": "b16", "audit": { "frontend_action": false, "event_t_arg": false }, "status": "generated", "checked": null,
+  "deviations": [ { "type": "NOTE", "what": "Five Inputs demonstrating the input types Text / Email / Tel / Number / Url with labelFor Labels, reproduced 1:1." } ] }
