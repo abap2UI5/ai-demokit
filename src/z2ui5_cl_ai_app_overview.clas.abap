@@ -1707,6 +1707,15 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` since the port does not carry the whole collection. // NOTE: the model holds exactly the bound record /ProductCollection/0 (Notebook Basic 15) of ui5/mock/products.json, verbatim - this is the` &&
                  ` original sample's own single-record binding {/ProductCollection/0}, not a shortened data set.`
         use_name = abap_true )
+      ( module = `sap.m`              control = `sap.m.ObjectHeader`                  name = `ObjectHeaderResponsiveV`             class = `z2ui5_cl_ai_app_209` path = `src/01/b17/z2ui5_cl_ai_app_209.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.12`
+        notes = `NOTE: The ObjectHeader's single-record element binding attribute binding="{/ProductCollection/0}" is dropped: abap2UI5 serves one default model, so products.json row 0 (HT-1000, Notebook Basic 15) is` &&
+                 ` seeded directly onto the model root (model_init) and the control's relative {NAME}/{DESCRIPTION}/{SUPPLIERNAME}/{WIDTH}/… bindings resolve against it — same data, renders identically (single-record` &&
+                 ` fold, AGENTS §5). The ProductPicUrl asset is served absolute from sdk.openui5.org per the asset-URL rule. // LIVE-TEST: The flattened relative field bindings and the ObjectMarker/ObjectStatus markers` &&
+                 ` render in render-smoke, but the live data bind of the folded single record is unverified in a running system.`
+        use_name = abap_true )
       ( module = `sap.m`              control = `sap.m.ObjectIdentifier`              name = `ObjectIdentifier`                    class = `z2ui5_cl_ai_app_071` path = `src/01/b09/z2ui5_cl_ai_app_071.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -2100,6 +2109,11 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.34`
         notes = `NOTE: addNewButtonPress appends an empty employee (bound /T_EMPLOYEES); itemClose in the original calls preventDefault (keeps the tab) and would confirm - here it toasts and the tab is kept.`
+        use_name = abap_true )
+      ( module = `sap.m`              control = `sap.m.Table`                         name = `TableAlternateRowColors`             class = `z2ui5_cl_ai_app_210` path = `src/01/b17/z2ui5_cl_ai_app_210.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.16`
         use_name = abap_true )
       ( module = `sap.m`              control = `sap.m.Table`                         name = `TableAutoPopin`                      class = `z2ui5_cl_ai_app_092` path = `src/01/b11/z2ui5_cl_ai_app_092.clas.abap`
         score = 5
