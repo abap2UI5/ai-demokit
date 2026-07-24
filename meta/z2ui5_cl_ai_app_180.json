@@ -1,0 +1,16 @@
+{
+  "class": "z2ui5_cl_ai_app_180",
+  "sample": "sap.ui.core.sample.TypeFileSize",
+  "entity": "sap.ui.model.type.FileSize",
+  "file": "src/02/b10/z2ui5_cl_ai_app_180.clas.abap",
+  "batch": "b10",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    { "type": "NOTE", "what": "Data-type binding paradigm: the FileSize type module is pulled in with core:require='{FileSizeType: sap/ui/model/type/FileSize}' and the Input/Text bindings carry type:'FileSizeType' plus formatOptions (min/maxIntegerDigits, min/maxFractionDigits) 1:1. The single model field 'fileSize' (initial 100, kept numeric like the sample's JSON) is serialized by abap2UI5 as /FILESIZE, so the original raw '/fileSize' paths are written as '/FILESIZE'." }
+  ]
+}
