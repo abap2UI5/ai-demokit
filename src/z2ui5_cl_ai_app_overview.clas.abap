@@ -1436,6 +1436,14 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.m`              control = `sap.m.List`                          name = `ListNoData`                          class = `z2ui5_cl_ai_app_035` path = `src/01/b04/z2ui5_cl_ai_app_035.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
+      ( module = `sap.m`              control = `sap.m.List`                          name = `ListSelection`                       class = `z2ui5_cl_ai_app_224` path = `src/01/b17/z2ui5_cl_ai_app_224.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `NOTE: The List mode and the Select selectedKey are two-way bound to one default-model field mode (seeded MultiSelect, a valid sap.m.ListMode), reproducing the original controller's` &&
+                 ` handleSelectChange/setMode behaviour without a round-trip. The Select's change attribute is dropped (the two-way binding keeps List.mode in sync client-side). structural-diff does not flag the` &&
+                 ` literal mode=MultiSelect / selectedKey=MultiSelect becoming bindings. // NOTE: The full /ProductCollection mock (123 rows) is inlined; the row type is restricted to the columns the StandardListItem` &&
+                 ` binds (Name, ProductId, ProductPicUrl) - a column subset, not a row subset. ProductPicUrl relative asset paths are rehosted to the OpenUI5 host https://sdk.openui5.org/ per the asset-URL rule.`
+        use_name = abap_true )
       ( module = `sap.m`              control = `sap.m.MaskInput`                     name = `MaskInput`                           class = `z2ui5_cl_ai_app_153` path = `src/01/b15/z2ui5_cl_ai_app_153.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -2607,6 +2615,14 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` (productid,name,suppliername,width,depth,height,dimunit,weightmeasure,weightunit,price,currencycode). Dimension and weight fields are TYPE string to preserve exact decimals for the display templates;` &&
                  ` price is TYPE p DECIMALS 2 for the sap.ui.model.type.Currency binding. Data verified against the mock.`
         use_name = abap_true )
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.BlockLayout`           name = `BlockLayoutLinkTitle`                class = `z2ui5_cl_ai_app_223` path = `src/02/b10/z2ui5_cl_ai_app_223.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `NOTE: The Slider's imperative onSliderMoved handler (setWidth on the container) is replaced by the thin-frontend equivalent: the Slider value is two-way bound and the VerticalLayout containerLayout` &&
+                 ` width is an expression binding {= ${/SLIDERVALUE} + '%' }. The Slider's liveChange attribute is dropped (no event round-trip needed). structural-diff does not flag the literal value=100 becoming a` &&
+                 ` binding. // NOTE: The SegmentedButton selectedKey and the BlockLayout background are two-way bound to one default-model field selected_background, reproducing the original {/selectedBackground}` &&
+                 ` wiring; it is seeded with the enum default Default (a valid BlockBackgroundType) because an empty enum value crashes validateProperty. The original controller loads sap/ui/demo/mock/products.json as` &&
+                 ` the unnamed model but no view binding references it, so it is not reproduced.` )
       ( module = `sap.ui.layout`      control = `sap.ui.layout.cssgrid.CSSGrid`       name = `CSSGrid`                             class = `z2ui5_cl_ai_app_124` path = `src/02/b02/z2ui5_cl_ai_app_124.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
