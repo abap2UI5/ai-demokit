@@ -1366,6 +1366,14 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         notes = `POST-1.71: headerLevel="H2" on the List (since UI5 1.117) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.117 to render it.`
         post171 = `headerLevel="H2" on the List (since UI5 1.117) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.117 to render it.`
         use_name = abap_true )
+      ( module = `sap.m`              control = `sap.m.List`                          name = `ListFooter`                          class = `z2ui5_cl_ai_app_195` path = `src/01/b17/z2ui5_cl_ai_app_195.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `NOTE: The original controller loads the shared demo products.json and the List uses binding="{/ProductCollection/0}" to element-bind a single record; abap2UI5 serves one default model, so the record` &&
+                 ` is flattened to top-level default-model fields (name/productid/productpicurl = products.json row 0, Notebook Basic 15 / HT-1000) the relative {NAME}/{PRODUCTID}/{PRODUCTPICURL} bindings resolve` &&
+                 ` against. Same data, same leaf names, renders identically — the List's binding attribute is dropped. // NOTE: ProductPicUrl is stored as the absolute` &&
+                 ` https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1000.jpg (the mock's host-relative test-resources path rewritten to the OpenUI5 host per the runtime asset-URL rule).`
+        use_name = abap_true )
       ( module = `sap.m`              control = `sap.m.List`                          name = `ListNoData`                          class = `z2ui5_cl_ai_app_035` path = `src/01/b04/z2ui5_cl_ai_app_035.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
@@ -2568,6 +2576,16 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `NOTE: Breadth-probe (cross-library capability test). Inline sap.ui.unified ColorPicker (HSL / Simplified). The button's ResponsivePopover-with-ColorPicker is simplified to a toast.` )
+      ( module = `sap.ui.unified`     control = `sap.ui.unified.Currency`             name = `Currency`                            class = `z2ui5_cl_ai_app_196` path = `src/02/b10/z2ui5_cl_ai_app_196.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        notes = `IMPROVISED: The controller calls Formatting.setCustomCurrencies({BGN4:{digits:4}, WWWW:{digits:5}}) to register two custom currencies used by list five (customCurrencyDataModel). This is a global` &&
+                 ` frontend i18n formatting config, not a control and not expressible in the thin abap2UI5 frontend; ported without it, so the BGN4/WWWW currencies in list five render with UI5's default digit count` &&
+                 ` instead of 4/5 digits. // LIVE-TEST: The various/nonDecimal arrays back the u:Currency value property (float) as ABAP packed fields; the bigNumber/customCurrency arrays back stringValue (string) as` &&
+                 ` ABAP string fields — matching the sample's JSON (numbers vs strings). listSix binds the numeric variousNumberDataModel/price to stringValue (number coerced to string, as in the original). Currency` &&
+                 ` value/stringValue/maxPrecision formatting needs a live render check.`
+        use_name = abap_true )
       ( module = `sap.ui.unified`     control = `sap.ui.unified.Currency`             name = `CurrencyInTable`                     class = `z2ui5_cl_ai_app_171` path = `src/02/b10/z2ui5_cl_ai_app_171.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
