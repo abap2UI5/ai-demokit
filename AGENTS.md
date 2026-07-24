@@ -170,8 +170,13 @@ source of truth:
   directly in the sidecar; `reviewed` is a manual promotion too. (There is no
   `golden` status — the category was retired 2026-07-22; former golden ports are
   plain `checked`, and any port may be refactored to the current conventions.)
-- The abapGit `<DESCRIPT>` follows `<entity> - <demo kit description>`
-  (e.g. `sap.m.Switch - Some say it is only a switch...`), truncated to 60 chars.
+- The abapGit `<DESCRIPT>` follows `<library> - <short description>`, truncated
+  to 60 chars — the form `scaffold.mjs` emits (e.g. `sap.ui.unified - CurrencyInTable`).
+  There is **no canonical description string offline** (`universe.json` carries
+  none), so the scaffolder's `<library> - <sample name>` default is acceptable
+  as-is; only improve the trailing text to a human phrase when you know one
+  (e.g. `sap.m.Switch - Some say it is only a switch...`). Do not agonize over
+  entity-vs-library — existing ports use both; keep the scaffolder default.
 - The **control** must exist since UI5 1.71 and not be deprecated — samples
   whose control is newer or deprecated are **out of scope** (§1) and never
   enter a batch. **Members (properties/aggregations/associations/events)
@@ -181,6 +186,17 @@ source of truth:
   `ui5/properties.json`); the app then needs a UI5 release ≥ that member's
   version to render it. `DROPPED_171` remains only for the rare member that
   genuinely cannot be expressed.
+  **Gate coverage caveat — `ui5/properties.json` currently holds `sap.m`
+  controls only** (`generate-properties.mjs` `LIB_DIRS` = `sap/m`). For a port
+  in any other library (`sap.f`, `sap.ui.layout`, `sap.ui.unified`,
+  `sap.ui.table`, `sap.uxap`, `sap.tnt`, `sap.ui.core` — i.e. `src/02`–`src/05`)
+  the property gate can enforce **nothing** and passes silently, so its green is
+  hollow there. You must **@since-check every non-`sap.m` member by hand**
+  against the OpenUI5 source (`src/<lib>/src/<path>/<Control>.js`, grep the
+  member's `@since`) and declare `POST_171` yourself. (Found by the app-171
+  cold-read probe, 2026-07-24; extending `LIB_DIRS` to the other libs is a
+  worthwhile follow-up but the `generate_result` CI checkout must then include
+  those libs' `src/`.)
 - **Before declaring any sample feature inexpressible, check `CAPABILITIES.md`**
   — the map of what abap2UI5 can express, each entry backed by a port that
   proves it. Never improvise around a feature it marks ✅/🔶 (app 042 replaced a
@@ -411,6 +427,14 @@ client->view_display( view->stringify( ) ).
   `` `{PRODUCT_ID}` `` referencing an upper-cased model field, which has no `_bind`
   form (see the next bullet); keep those, but never write the absolute / model-root
   path by hand.
+- **A `path:` inside a raw binding-info string uses the ABAP (upper-cased) field
+  name too** — same rule as the brace form, easy to miss. A typed/sorter/Currency
+  binding copied from the original keeps its *structure* 1:1 but its `path:` must
+  switch to the model field: original `` `{path:'exchangeRate', type:'sap.ui.model.type.Float'}` ``
+  → `` \|\{ path: 'EXCHANGE_RATE', type: 'sap.ui.model.type.Float' \}\| ``. Copying
+  the original camelCase `path:'exchangeRate'` verbatim renders nothing (no such
+  model field) and no gate catches it — structural-diff normalizes case, render-smoke
+  mocks the model. Found by the app-171 cold-read probe (2026-07-24).
 - `client->_bind( var )` — bind an ABAP `DATA` member two-way (the value
   flows back into `var` on the next round-trip), e.g.
   `)->a( n = `items` v = client->_bind( t_items )`. **`client->_bind_edit( )`
@@ -527,7 +551,8 @@ creation).
 | In the original you see… | Write in the port | Detail |
 |---|---|---|
 | A **named model** binding `{ui>/rowMode}`, `{img>/x}`, any `name>/…` | Drop the prefix, bind the field on the **one default model**: `client->_bind( rowmode )` → `{/ROWMODE}`. structural-diff matches on the last path segment | CAPABILITIES "Named JSON models"; apps 162/163/164 |
-| A **typed / complex binding** `{path:'Q', type:'sap.ui.model.type.Integer'}` | Raw binding-info string, braces escaped: `` v = \|\{ path: 'Q', type: 'sap.ui.model.type.Integer' \}\| `` — passes through to `XMLView.create` unmangled | CAPABILITIES "composite … types"; apps 164/129/033 |
+| A **typed / complex binding** `{path:'Q', type:'sap.ui.model.type.Integer'}` | Raw binding-info string, braces escaped: `` v = \|\{ path: 'Q', type: 'sap.ui.model.type.Integer' \}\| `` — passes through to `XMLView.create` unmangled. The `path:` uses the **upper-cased ABAP field name** (`'Q'`→`'PRICE'`), not the original camelCase — no gate catches a stale path | CAPABILITIES "composite … types"; apps 164/129/033/171 |
+| A **nested single object** binding `{transactionAmount/size}` (control property → a sub-object, not an array) | Nested ABAP **structure** component in the row type; bind the relative sub-path `{TRANSACTION_AMOUNT/SIZE}`. Keep the nesting — do **not** flatten to `{OBJ_FIELD}` | CAPABILITIES "Nested single object"; app 171 |
 | A **`sorter` / `sorter group:true`** on an aggregation | Keep the raw string; get the bare path via `client->_bind( val = t path = abap_true )`: `` \|\{ path: '{ … }', sorter: \{ path: 'COL', group: true \} \}\| `` | CAPABILITIES "Binding sorter"; app 039 |
 | A **date-object** property (`CalendarAppointment.startDate`, `PlanningCalendar.startDate`, `DatePicker.dateValue`) | Formatter at point of use: `` \|\{ path: 'START_AT', formatter: 'Formatter.DateCreateObject' \}\| `` + `core:require="\{Formatter: 'z2ui5/model/formatter'\}"` (POST_171). A plain string binding **crashes** | CAPABILITIES "Date-object"; apps 108/109 |
 | A **boolean** attribute fed from an ABAP variable | `z2ui5_cl_ai_xml=>as_bool( flag )` (a literal is just `` v = \`true\` ``) — never feed `abap_true`/`abap_false` raw | §5 "Booleans"; app 007 |
@@ -605,7 +630,7 @@ A fourth workflow, `checks`, runs three deterministic gates on every PR:
 | `render_smoke` | `node scripts/render-smoke.mjs --strict` (`npm run smoke`) | a port's reconstructed view fails a real headless `XMLView.create` against the OpenUI5 runtime (invalid XML, unknown control/property, strict property-type violation, broken expression binding). Helper-method-built views (a captured node handle passed into a builder-returning helper and chained out — app 049) are reconstructed by the handle-aware path (`extractDocsWithHelpers`; a handle is a stack snapshot, each helper call inlined re-anchored to its argument). A port the reconstructor still cannot rebuild must declare `"render_smoke": { "skip": true, "reason": "…" }` in its sidecar — an **undeclared** non-reconstructable port FAILS. The same declared skip also covers a **reconstructable** port whose view genuinely does not render in the static headless harness — a control whose runtime layout/resource behaviour the reconstruction cannot satisfy (`sap.f.AvatarGroup`'s overflow measurement loops with no real layout box; an `sap.ui.integration` Card needs an external manifest). Every skip is **verified against the actual render each run**: it is honoured only while the view still errors, and the moment it renders clean the declaration is **stale** and FAILS — so the skip set can never drift (a render-hostile skip can never outlive its reason). Render-hostile ports must still pass every other gate (structural-diff, abaplint, e2e) |
 | `e2e_smoke` (heavy, on-demand) | `npm run e2e:build` then `npm run e2e` (`scripts/e2e-build.mjs` + `e2e-smoke.mjs`) | a port fails to run as the **real app**: it starts the transpiled abap2UI5 backend (framework + all ports via `?app_start=<class>`, needs an abap2UI5 checkout — `A2UI5_HOME`), boots each port in headless Chromium (UI5 served from the local `@openui5` packages), and fails if it does not boot+render or if a backend request 4xx/5xx or a JS exception fires. Unlike `render_smoke` (static view reconstruction) this exercises the actual backend roundtrip, Component boot and event wiring. Not in the fast gate set (multi-minute transpile + browser); run before a release or when touching the framework wire/runtime. A small `INTERACTIONS` map adds real click→assert checks (e.g. 005 press→client-composed toast) |
 | `meta_valid` | `validate-meta.mjs` + regenerate overview & coverage, `git diff --exit-code -- src README.md api.md` | an invalid sidecar, or a change forgot to regenerate the overview app / coverage docs |
-| `property_gate` | `node scripts/property-check.mjs` | a port uses a control member introduced after UI5 1.71 (per-member `@since` from `ui5/properties.json`) without declaring it in a `POST_171` deviation — this covers both `a( n = … )` attributes **and** event parameters consumed via `${$parameters>/<name>}` in a `t_arg` |
+| `property_gate` | `node scripts/property-check.mjs` | a port uses a control member introduced after UI5 1.71 (per-member `@since` from `ui5/properties.json`) without declaring it in a `POST_171` deviation — this covers both `a( n = … )` attributes **and** event parameters consumed via `${$parameters>/<name>}` in a `t_arg`. **Covers `sap.m` only** — `properties.json` holds no other library's controls, so for `src/02`–`src/05` ports this gate passes vacuously and members must be `@since`-checked by hand (see §5) |
 
 **When a distilled lesson is greppable, add it as a pattern-lint rule in the
 same change** — that is what makes a lesson unrepeatable rather than advisory.

@@ -2372,6 +2372,13 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `NOTE: Breadth-probe (cross-library capability test). Inline sap.ui.unified ColorPicker (HSL / Simplified). The button's ResponsivePopover-with-ColorPicker is simplified to a toast.` )
+      ( module = `sap.ui.unified`     control = `sap.ui.unified.Currency`             name = `CurrencyInTable`                     class = `z2ui5_cl_ai_app_171` path = `src/02/b10/z2ui5_cl_ai_app_171.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `LIVE-TEST: u:Currency binds a nested object path (value={transactionAmount/size}, currency={transactionAmount/currency}). Ported as a nested ABAP structure TRANSACTION_AMOUNT (fields SIZE/CURRENCY),` &&
+                 ` bound {TRANSACTION_AMOUNT/SIZE} / {TRANSACTION_AMOUNT/CURRENCY}. CAPABILITIES.md documents nested TABLES/trees but not a nested single (non-array) structure within a row, so the nested-object` &&
+                 ` serialization + relative sub-path binding needs a live render check.`
+        use_name = abap_true )
       ( module = `sap.ui.unified`     control = `sap.ui.unified.FileUploader`         name = `FileUploaderBasic`                   class = `z2ui5_cl_ai_app_126` path = `src/02/b02/z2ui5_cl_ai_app_126.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`

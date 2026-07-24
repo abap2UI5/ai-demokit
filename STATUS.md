@@ -5,6 +5,35 @@ findings are fixed or new ones land (same-change discipline as AGENTS.md §10).
 For the process itself see TRAINING.md; for what abap2UI5 can express see
 CAPABILITIES.md._
 
+## Subagent cold-read probe (2026-07-24) — app 171, first `sap.ui.unified.Currency`
+
+A fresh subagent (its own context, no port memory) ported
+`sap.ui.unified.sample.CurrencyInTable` from the agent files alone, ran every
+gate green, and returned a friction log — the strongest test yet of "can an AI
+build from the docs". Result: **machine-green** (abaplint STANDARD+CLOUD,
+validate-meta, pattern-lint, structure-lint, structural-diff `--strict` 0
+undeclared / clean 1:1, property-check, render-smoke pass). Coverage **171**,
+`sap.ui.unified` 4→5. One deviation: LIVE_TEST on the nested-object bind.
+
+Independently re-verified before commit. The probe surfaced four real doc gaps,
+all fixed same change:
+
+- **Nested single (non-array) object bind** `{transactionAmount/size}` was
+  undocumented (only nested *arrays* were). New CAPABILITIES row (🧪) + §5
+  cheat-sheet: keep a nested ABAP structure, bind the relative sub-path
+  `{OBJ/FIELD}`, don't flatten. app 171 proves view-create; runtime bind LIVE_TEST.
+- **`property_gate` covers `sap.m` only** — `properties.json` holds no other
+  library, so for `src/02`–`src/05` the gate passes vacuously. §5/§6 now say so
+  and require a manual `@since` check against the OpenUI5 source. (Re-checked
+  169/170's non-sap.m members by hand: all ≤1.71 — `snappedTitleOnMobile` 1.63,
+  Grid/GridData 1.15, DynamicPage* 1.42 — no undeclared POST_171.)
+- **`path:` inside a raw binding string uses the upper-cased ABAP field name**
+  (`'exchangeRate'`→`'EXCHANGE_RATE'`), same as the brace form — no gate catches
+  a stale camelCase path. Added to §5 + the cheat-sheet typed-binding row.
+- **`<DESCRIPT>` rule** contradicted the scaffolder and had no offline
+  description source — §5 now endorses the scaffolder's `<library> - <name>`
+  default.
+
 ## From-scratch probe (2026-07-24) — app 169, first `sap.ui.layout.Grid` port
 
 The real regeneration probe the agents-usability pass owed: **built entirely
