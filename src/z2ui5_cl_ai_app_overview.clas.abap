@@ -2326,6 +2326,16 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         notes = `NOTE: Data-type binding paradigm: sap.ui.model.type.Date is pulled via core:require={DateType: 'sap/ui/model/type/Date'} and every DatePicker/Text keeps the original { path, type: 'DateType',` &&
                  ` formatOptions: { style, source: { pattern: 'yyyy-MM-dd' } } } binding 1:1 as a raw binding-info string (braces escaped, path via _bind). The single model field is a yyyy-MM-dd string. // NOTE: The` &&
                  ` original seeds the current date (UI5Date.getInstance().toISOString().slice(0,10)); a fixed date (2026-07-24) is used here so the port is deterministic - a client-only display value.` )
+      ( module = `sap.ui.core`        control = `sap.ui.model.type.DateTime`          name = `TypeDateTime`                        class = `z2ui5_cl_ai_app_183` path = `src/02/b10/z2ui5_cl_ai_app_183.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `IMPROVISED: The original model value /dtValue is a JS Date object (UI5Date.getInstance()) and every DateTimeType binding has NO source formatOption (the type's default model format is a Date object).` &&
+                 ` abap2UI5 cannot hold a JS Date object in the JSON model, so a source formatOption { source: { pattern: 'yyyy-MM-dd HH:mm:ss' } } is added to each DateTimeType binding and the field dtvalue is a` &&
+                 ` parseable datetime string ('2026-07-24 13:30:00') - the abap2UI5 equivalent of the Date-object model. Without it view creation crashes ('Date must be a JavaScript or UI5Date date object'). The` &&
+                 ` display style/pattern/UTC/relative formatOptions stay 1:1 on top of the added source. Same idiom as app 182 (TypeTimeAsTime) and the CAPABILITIES date-object row. // NOTE: The original seeds the` &&
+                 ` current time (UI5Date.getInstance()); a fixed datetime (2026-07-24 13:30:00) is used here so the port is deterministic - a client-only display value. The /dtPattern Input placeholder, which the` &&
+                 ` original controller derives at runtime from the DateTimeType's getPlaceholderText(), is likewise seeded as a static representative value ('e.g. Dec 31, 2026, 11:59:58 PM' - the en medium-style` &&
+                 ` DateTime placeholder) since the port has no controller to compute it.` )
       ( module = `sap.ui.core`        control = `sap.ui.model.type.FileSize`          name = `TypeFileSize`                        class = `z2ui5_cl_ai_app_180` path = `src/02/b10/z2ui5_cl_ai_app_180.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -2530,6 +2540,17 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         notes = `IMPROVISED: Wall-break for sap.uxap: the original blocks aggregation holds a custom BlockBase control (blockcolor:BlockBlue from the sample's SharedBlocks JS). A BlockBase is only a lazy-loading` &&
                  ` wrapper around a view; its content (a single coloured div) is inlined here as core:HTML, since ObjectPageSubSection.blocks accepts any sap.ui.core.Control. This removes the need for a custom JS` &&
                  ` control - the whole uxap ObjectPage renders with the thin generic frontend. The blockcolor:BlockBlue control is therefore absent and a core:HTML is present in its place.` )
+      ( module = `sap.uxap`           control = `sap.uxap.ObjectPageSection`          name = `ObjectPageSection`                   class = `z2ui5_cl_ai_app_184` path = `src/03/b02/z2ui5_cl_ai_app_184.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `IMPROVISED: Block->content inlining (app 178/161 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the original blocks aggregations each hold a custom BlockBase` &&
+                 ` control (blockcolor:BlockBlueT1, blockcolor:BlockBlueT2, blockcolor:BlockBlueT3, blockcolor:BlockBlueT4, blockcolor:BlockBlueT5, from the sample's SharedBlocks JS,` &&
+                 ` xmlns:blockcolor='sap.uxap.sample.SharedBlocks'), used once each with ids bbt1/bbt2/bbt3/bbt4/bbt5. A BlockBase is only a lazy-loading wrapper around a view; each BlockBlueTn's rendered content is a` &&
+                 ` single coloured div (<html:div style='height:auto;min-height:4em; background-color: #A9EAFF ;line-height: 4em;'>...explanatory text...</html:div>). Since ObjectPageSubSection.blocks accepts any` &&
+                 ` sap.ui.core.Control, each blockcolor:BlockBlueTn is inlined as a core:HTML leaf carrying that div in its content attribute - the whole ObjectPage renders with the thin generic frontend, no custom JS` &&
+                 ` control. Consequently all five blockcolor:BlockBlueT1..T5 controls (and their id attributes) are absent from the port and five core:HTML controls are present in their place; the` &&
+                 ` xmlns:blockcolor='sap.uxap.sample.SharedBlocks' declaration is dropped and xmlns:core='sap.ui.core' added. The block sources are not archived into ui5/ (matching the scaffolder), read from the` &&
+                 ` checkout's SharedBlocks/BlockBlueTn.view.xml.` )
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageSubSection`       name = `ObjectPageSubSectionWithActions`     class = `z2ui5_cl_ai_app_178` path = `src/03/b02/z2ui5_cl_ai_app_178.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
