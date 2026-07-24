@@ -1,0 +1,46 @@
+<mvc:View
+	xmlns:l="sap.ui.layout"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m">
+	<VBox>
+		<Panel headerText="Render Type - Div">
+			<FlexBox renderType="Div">
+				<Button text="Some text" type="Emphasized" class="sapUiSmallMarginEnd">
+					<layoutData>
+						<FlexItemData growFactor="3" />
+					</layoutData>
+				</Button>
+				<Input value="Some value" width="auto" class="sapUiSmallMarginEnd">
+					<layoutData>
+						<FlexItemData growFactor="2" />
+					</layoutData>
+				</Input>
+				<Button icon="sap-icon://download">
+					<layoutData>
+						<FlexItemData growFactor="1" />
+					</layoutData>
+				</Button>
+			</FlexBox>
+		</Panel>
+
+		<Panel headerText="Render Type - Bare">
+			<FlexBox renderType="Bare">
+				<Button text="Some text" type="Emphasized" class="sapUiSmallMarginEnd">
+					<layoutData>
+						<FlexItemData growFactor="3" />
+					</layoutData>
+				</Button>
+				<Input value="Some value" width="auto" class="sapUiSmallMarginEnd">
+					<layoutData>
+						<FlexItemData growFactor="2" />
+					</layoutData>
+				</Input>
+				<Button icon="sap-icon://download">
+					<layoutData>
+						<FlexItemData growFactor="1" />
+					</layoutData>
+				</Button>
+			</FlexBox>
+		</Panel>
+	</VBox>
+</mvc:View>

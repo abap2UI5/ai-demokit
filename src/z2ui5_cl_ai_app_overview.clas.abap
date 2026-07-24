@@ -834,6 +834,9 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         checked = `CHECKED (2026-07-20): verified in a running system - human pass 2026-07-20: app starts and renders like the original; no interaction paths were open for this port` )
+      ( module = `sap.m`              control = `sap.m.Bar`                           name = `ToolbarVsBar`                        class = `z2ui5_cl_ai_app_189` path = `src/01/b17/z2ui5_cl_ai_app_189.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
       ( module = `sap.m`              control = `sap.m.Breadcrumbs`                   name = `Breadcrumbs`                         class = `z2ui5_cl_ai_app_003` path = `src/01/b01/z2ui5_cl_ai_app_003.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, reviewed, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a` &&
@@ -1199,6 +1202,9 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` original.`
         notes = `NOTE: the original colours .item1..item6 and the h2 headings via a separate style.css; here it is injected as a core:HTML content attribute (a style tag, minified - see CAPABILITIES.md; the EXTRA` &&
                  ` core:HTML control vs the original view). Confirmed rendering via the human visual pass 2026-07-19.` )
+      ( module = `sap.m`              control = `sap.m.FlexBox`                       name = `FlexBoxRenderType`                   class = `z2ui5_cl_ai_app_190` path = `src/01/b17/z2ui5_cl_ai_app_190.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
       ( module = `sap.m`              control = `sap.m.FormattedText`                 name = `FormattedText`                       class = `z2ui5_cl_ai_app_154` path = `src/01/b15/z2ui5_cl_ai_app_154.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
