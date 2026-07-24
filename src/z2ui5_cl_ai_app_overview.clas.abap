@@ -2580,6 +2580,10 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         notes = `LIVE-TEST: The Toggle button, the width Slider (liveChange) and the DynamicSideContent breakpointChanged are wired to backend events; the original drove them imperatively (toggle(), $().width(),` &&
                  ` getCurrentBreakpoint()) — device/DOM behaviours not reproduced server-side. // NOTE: The hint Text.visible is bound to a boolean model field (initial true); the original used a literal` &&
                  ` visible='getVisible()' (a sample quirk) toggled per Device.system.phone in onBeforeRendering. The two long body texts are shortened representative Lorem (not gate-compared, static).` )
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.FixFlex`               name = `FixFlexMinFlexSize`                  class = `z2ui5_cl_ai_app_215` path = `src/02/b10/z2ui5_cl_ai_app_215.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        use_name = abap_true )
       ( module = `sap.ui.layout`      control = `sap.ui.layout.FixFlex`               name = `FixFlexVertical`                     class = `z2ui5_cl_ai_app_119` path = `src/02/b01/z2ui5_cl_ai_app_119.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -2744,6 +2748,12 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` ('https://sdk.openui5.org/test-resources/sap/uxap/images/robot.png') per the offline asset-URL rule. Same asset, literal src value only - structural-diff compares literal attribute names, not values.`
         post171 = `sap.uxap.ObjectPageSubSection.showTitle (showTitle='false' on the 'Order Details' and 'Products' subsections) exists only since UI5 1.77 - kept 1:1 (fidelity wins), so the app needs a UI5 release >=` &&
                  ` 1.77 to render it. Also kept 1:1: the sap.m.Avatar control (since 1.73) with its displayShape (Square) and displaySize (L) properties, used in the snapped heading and header content.` )
+      ( module = `sap.uxap`           control = `sap.uxap.ObjectPageHeaderContent`    name = `HeaderContent`                       class = `z2ui5_cl_ai_app_216` path = `src/03/b02/z2ui5_cl_ai_app_216.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `NOTE: The view is a 1:1 static rebuild - every ObjectStatus/ObjectNumber/Label/Text/ProgressIndicator/ObjectAttribute/Button/Tokenizer value is a literal, exactly as in the original` &&
+                 ` ObjectPageHeaderContent view.xml. The sample's controller loads sap/uxap/sample/SharedJSONData/employee.json into a named 'ObjectPageModel', but the view never binds a single field from it (all` &&
+                 ` header content is hard-coded in the XML), so the port carries no model_init - omitting a dead model changes nothing in the rendered view.` )
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageHeaderContent`    name = `ObjectPageHeaderContentPriorities`   class = `z2ui5_cl_ai_app_188` path = `src/03/b02/z2ui5_cl_ai_app_188.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
