@@ -5,6 +5,24 @@ findings are fixed or new ones land (same-change discipline as AGENTS.md §10).
 For the process itself see TRAINING.md; for what abap2UI5 can express see
 CAPABILITIES.md._
 
+## Subagent cold-read probe (2026-07-24) — app 178 (sap.uxap ObjectPage, BlockBase inlining)
+
+Eighth cold-read port and the hardest so far: `sap.uxap.sample.ObjectPageSubSectionWithActions`
+(app 178, `src/03`), the thinnest library. Machine-green all gates. Coverage
+**178**, `sap.uxap` 2→3. The documented-but-barely-exercised **BlockBase-inlining
+idiom worked cleanly** — three `blockcolor:BlockBlue` refs inlined as `core:HTML`
+divs (app 161 precedent), one IMPROVISED deviation naming the block→content
+substitution covered both structural-diff lines (`control missing` blockcolor:BlockBlue
++ `control extra` core:HTML). All uxap members @since-checked (≤ 1.71).
+
+Even this hardest port surfaced only consistency nits (blank-line prose vs the 161
+precedent; §4 "archive everything" vs the reality that SharedBlock sources aren't
+copied into `ui5/`; the block-view path pattern). CAPABILITIES BlockBase row
+clarified (block-view path, single-deviation declaration, not-offline-archived).
+**Conclusion: the agent-file hardening is saturated** — eight consecutive
+cold-read ports across seven libraries built machine-green from the docs alone;
+recent friction is cross-corpus consistency, not capability or spec gaps.
+
 ## Subagent cold-read probe (2026-07-24) — app 177 (sap.ui.unified CalendarDateInterval)
 
 Seventh cold-read port: `sap.ui.unified.sample.CalendarDateIntervalBasic` (app

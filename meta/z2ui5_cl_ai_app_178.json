@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_ai_app_178",
+  "sample": "sap.uxap.sample.ObjectPageSubSectionWithActions",
+  "entity": "sap.uxap.ObjectPageSubSection",
+  "file": "src/03/b02/z2ui5_cl_ai_app_178.clas.abap",
+  "batch": "b02",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "Block->content inlining (app 161 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the original blocks aggregations each hold a custom BlockBase control blockcolor:BlockBlue (from the sample's SharedBlocks JS, xmlns:blockcolor='sap.uxap.sample.SharedBlocks'), used 3 times (ids b1/b2/b3). A BlockBase is only a lazy-loading wrapper around a view; BlockBlue's rendered content is a single coloured div (<html:div style='height:4em; background-color: #A9EAFF ;'/>). Since ObjectPageSubSection.blocks accepts any sap.ui.core.Control, each blockcolor:BlockBlue is inlined as a core:HTML leaf carrying that div in its content attribute - the whole ObjectPage renders with the thin generic frontend, no custom JS control. Consequently all three blockcolor:BlockBlue controls (and their id attributes) are absent from the port and three core:HTML controls are present in their place. The empty BlockBlueCtrl controller (a no-op onParentBlockModeChange stub) carries no behaviour to port."
+    }
+  ]
+}
