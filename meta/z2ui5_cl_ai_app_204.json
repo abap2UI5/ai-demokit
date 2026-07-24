@@ -1,0 +1,16 @@
+{
+  "class": "z2ui5_cl_ai_app_204",
+  "sample": "sap.m.sample.StandardListItemInfoStateInverted",
+  "entity": "sap.m.StandardListItem",
+  "file": "src/01/b17/z2ui5_cl_ai_app_204.clas.abap",
+  "batch": "b17",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    { "type": "POST_171", "what": "sap.m.StandardListItem infoStateInverted (since 1.74) is kept 1:1 from the original view; needs a UI5 release >= 1.74 to render." }
+  ]
+}
