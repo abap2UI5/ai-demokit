@@ -305,8 +305,10 @@ The sample's JSON model becomes ABAP: one `ty_s_`/`ty_t_` type per JSON array,
 filled with `VALUE #( ( … ) ( … ) )`. Field names are the JSON keys, upper-cased
 by ABAP; bindings reference them in braces (`{TITLE}`, `{PRODUCT_ID}`). **A
 camelCase key mirrors verbatim — do not insert underscores**: `SupplierName` →
-field `suppliername`, binding `{SUPPLIERNAME}` (never `SUPPLIER_NAME`);
-structural-diff case-normalizes but an inserted underscore would not match. Keep the
+field `suppliername`, binding `{SUPPLIERNAME}` (never `SUPPLIER_NAME`) — a corpus
+convention. (structural-diff would tolerate either — its `normBind` lower-cases
+**and** strips underscores — so this is for consistency, not to satisfy the gate.)
+Keep the
 data verbatim from the sample — **the full row set, no subsetting**: inline every
 row of the referenced mock array (e.g. all 123 `/ProductCollection` rows of
 `ui5/mock/products.json`), byte-identical to the mock (`SUBSET_DATA` is no longer
