@@ -10,7 +10,7 @@
     "transpile": "rm -rf output && cp srv/*.abap downport && abap_transpile ./ci/abap_transpile.json && node ci/patch_init_order.mjs",
     "build": "npm run assemble && npm run downport && npm run transpile && rm -rf src abap2UI5",
     "unit": "node output/index.mjs",
-    "webpack:build": "webpack --mode development --env development && node ci/gen_landing.mjs",
+    "webpack:build": "webpack --mode development --env development",
     "deploy:docs": "node ci/copy_to_docs.mjs",
     "all": "npm run build && npm run webpack:build && npm run deploy:docs",
     "express": "node srv/express.mjs",

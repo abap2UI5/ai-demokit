@@ -5,13 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>abap2UI5 · ai-demokit</title>
     <link rel="icon" href="data:," />
-    <!-- This is run.html, the abap2UI5 runner: it always boots exactly one
-         port, taken from ?app_start=. Opened without one (someone hit the
-         runner directly), send them back to the static landing gallery. -->
+    <!-- ai-demokit: land on the port overview when no app is requested.
+         Runs before app.bundle.js so web.mjs reads the param from
+         window.location.href on its in-memory boot GET. replaceState keeps
+         it reload-free; ?app_start= from the overview's launch links wins. -->
     <script>
       (function () {
         if (!/[?&]app_start=/.test(location.search)) {
-          location.replace('./' + location.hash);
+          var q = (location.search ? location.search + '&' : '?') + 'app_start=z2ui5_cl_ai_app_overview';
+          history.replaceState(null, '', location.pathname + q + location.hash);
         }
       })();
     </script>

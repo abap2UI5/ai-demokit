@@ -58,14 +58,8 @@ module.exports = ({mode} = {mode: "development"}) => ({
     },
   },
   plugins: [
-    // The abap2UI5 runner. Output as run.html (NOT index.html): index.html is
-    // a static landing gallery (ci/gen_landing.mjs) that boots no abap2UI5 at
-    // all, so the heavy 136-row overview never renders on the front page — it
-    // was the one app deep enough to blow Safari's smaller JS stack
-    // ("Maximum call stack size exceeded"). Individual ports run fine.
     new HtmlWebpackPlugin({
       template: "app/index.html",
-      filename: "run.html",
       scriptLoading: "blocking",
     }),
     new CopyPlugin({
