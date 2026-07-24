@@ -1,0 +1,18 @@
+{
+  "class": "z2ui5_cl_ai_app_221",
+  "sample": "sap.tnt.sample.ToolHeaderIconTabHeader",
+  "entity": "sap.tnt.ToolHeader",
+  "file": "src/05/b06/z2ui5_cl_ai_app_221.clas.abap",
+  "batch": "b06",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    { "type": "IMPROVISED", "what": "The three home Buttons drop their press=onHomePress handler: the original imperatively resets the sibling IconTabHeader selectedKey to 'invalidKey' (deselecting all tabs) by reaching into the DOM (event.oSource.getParent().getDomRef()...). There is no bindable equivalent for this DOM-walk selection reset, so the press attribute is dropped; the IconTabHeaders keep their static selectedKey='invalidKey'." },
+    { "type": "POST_171", "what": "IconTabFilter interactionMode='SelectLeavesOnly' (property since 1.121) is kept 1:1 on the parent filters of the second ToolHeader's IconTabHeader (iconTabHeaderOneClickArea); requires a UI5 release >= 1.121." },
+    { "type": "NOTE", "what": "Fully static view reproduced 1:1: three tnt:ToolHeaders, each with a home Button, an IconTabHeader (mode='Inline', backgroundDesign='Transparent', selectedKey='invalidKey') with OverflowToolbarLayoutData, search/comment Buttons and a MenuButton with a Menu (Edit/Save). The second/third ToolHeaders use nested IconTabFilter items; no bound data." }
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "class": "z2ui5_cl_ai_app_222",
+  "sample": "sap.f.sample.GridListResponsiveColumnLayout",
+  "entity": "sap.f.GridList",
+  "file": "src/04/b07/z2ui5_cl_ai_app_222.clas.abap",
+  "batch": "b07",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    { "type": "IMPROVISED", "what": "The ToggleButton drops its press=onRevealGrid handler (a client-side debug overlay from the sample's RevealGrid.js that visualises the grid tracks - imperative-only, no bindable equivalent) and the Slider drops its liveChange=onSliderMoved handler (the original sets width imperatively on byId('gridList'), a control id that does not even exist in the view, so it is a no-op DOM manipulation). Both controls are kept but rendered inert." },
+    { "type": "POST_171", "what": "The GridList customLayout uses sap.ui.layout.cssgrid.ResponsiveColumnLayout and per-item ResponsiveColumnItemLayoutData with columns/rows (control + members since 1.72), kept 1:1; requires a UI5 release >= 1.72." },
+    { "type": "NOTE", "what": "Fully static view reproduced 1:1: a ToggleButton, a Slider (value=100), and a Panel (headerToolbar Toolbar+Title) hosting an f:GridList with a ResponsiveColumnLayout and five static f:GridListItems (columns/rows 4/4, 3/2, 3/2, 1/1, 1/1), each a VBox with a Title and 1..5 Labels; no bound data." }
+  ]
+}

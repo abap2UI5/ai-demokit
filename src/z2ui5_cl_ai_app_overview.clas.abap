@@ -801,6 +801,19 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         use_ec = abap_true
         use_ec_arg = abap_true
         use_name = abap_true )
+      ( module = `sap.f`              control = `sap.f.GridList`                      name = `GridListResponsiveColumnLayout`      class = `z2ui5_cl_ai_app_222` path = `src/04/b07/z2ui5_cl_ai_app_222.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        release = `1.72`
+        release_post171 = abap_true
+        is_post171 = abap_true
+        notes = `IMPROVISED: The ToggleButton drops its press=onRevealGrid handler (a client-side debug overlay from the sample's RevealGrid.js that visualises the grid tracks - imperative-only, no bindable` &&
+                 ` equivalent) and the Slider drops its liveChange=onSliderMoved handler (the original sets width imperatively on byId('gridList'), a control id that does not even exist in the view, so it is a no-op` &&
+                 ` DOM manipulation). Both controls are kept but rendered inert. // POST-1.71: The GridList customLayout uses sap.ui.layout.cssgrid.ResponsiveColumnLayout and per-item ResponsiveColumnItemLayoutData` &&
+                 ` with columns/rows (control + members since 1.72), kept 1:1; requires a UI5 release >= 1.72. // NOTE: Fully static view reproduced 1:1: a ToggleButton, a Slider (value=100), and a Panel (headerToolbar` &&
+                 ` Toolbar+Title) hosting an f:GridList with a ResponsiveColumnLayout and five static f:GridListItems (columns/rows 4/4, 3/2, 3/2, 1/1, 1/1), each a VBox with a Title and 1..5 Labels; no bound data.`
+        post171 = `The GridList customLayout uses sap.ui.layout.cssgrid.ResponsiveColumnLayout and per-item ResponsiveColumnItemLayoutData with columns/rows (control + members since 1.72), kept 1:1; requires a UI5` &&
+                 ` release >= 1.72.` )
       ( module = `sap.f`              control = `sap.f.ProductSwitch`                 name = `ProductSwitchNavigation`             class = `z2ui5_cl_ai_app_165` path = `src/04/b07/z2ui5_cl_ai_app_165.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -2421,6 +2434,20 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` OverflowToolbarButtons are reproduced 1:1, including the original's Cyrillic-o typo in 'Prоduct Name'.`
         use_ec = abap_true
         use_ec_arg = abap_true )
+      ( module = `sap.tnt`            control = `sap.tnt.ToolHeader`                  name = `ToolHeaderIconTabHeader`             class = `z2ui5_cl_ai_app_221` path = `src/05/b06/z2ui5_cl_ai_app_221.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        release = `1.121`
+        release_post171 = abap_true
+        is_post171 = abap_true
+        notes = `IMPROVISED: The three home Buttons drop their press=onHomePress handler: the original imperatively resets the sibling IconTabHeader selectedKey to 'invalidKey' (deselecting all tabs) by reaching into` &&
+                 ` the DOM (event.oSource.getParent().getDomRef()...). There is no bindable equivalent for this DOM-walk selection reset, so the press attribute is dropped; the IconTabHeaders keep their static` &&
+                 ` selectedKey='invalidKey'. // POST-1.71: IconTabFilter interactionMode='SelectLeavesOnly' (property since 1.121) is kept 1:1 on the parent filters of the second ToolHeader's IconTabHeader` &&
+                 ` (iconTabHeaderOneClickArea); requires a UI5 release >= 1.121. // NOTE: Fully static view reproduced 1:1: three tnt:ToolHeaders, each with a home Button, an IconTabHeader (mode='Inline',` &&
+                 ` backgroundDesign='Transparent', selectedKey='invalidKey') with OverflowToolbarLayoutData, search/comment Buttons and a MenuButton with a Menu (Edit/Save). The second/third ToolHeaders use nested` &&
+                 ` IconTabFilter items; no bound data.`
+        post171 = `IconTabFilter interactionMode='SelectLeavesOnly' (property since 1.121) is kept 1:1 on the parent filters of the second ToolHeader's IconTabHeader (iconTabHeaderOneClickArea); requires a UI5 release` &&
+                 ` >= 1.121.` )
       ( module = `sap.tnt`            control = `sap.tnt.ToolPage`                    name = `ToolPage`                            class = `z2ui5_cl_ai_app_167` path = `src/05/b06/z2ui5_cl_ai_app_167.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
