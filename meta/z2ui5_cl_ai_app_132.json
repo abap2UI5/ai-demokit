@@ -9,6 +9,6 @@
   "checked": null,
   "deviations": [
     { "type": "LIVE_TEST", "what": "The 'Toggle Collapse/Expand' button flips SideNavigation.expanded (bound to a boolean model field, initial true as in the original). The original toggled it imperatively via byId().setExpanded; the property is two-way bound here and toggled on a backend round-trip. Every tnt:tag ObjectStatus (IndicationColor states 15-20, inverted) and the NavigationListGroup / fixedItem structure are reproduced 1:1." },
-    { "type": "POST_171", "what": "NavigationListItem.selectable (@since 1.116) is kept 1:1 from the original (selectable=false on parent items). Newer than UI5 1.71; declared per the property-171 policy. Previously undeclared because the property gate is blind to sap.tnt (properties.json holds sap.m only); found and corrected by the app-172 cold-read probe 2026-07-24." }
+    { "type": "POST_171", "what": "Two sap.tnt.NavigationListItem members newer than UI5 1.71 are kept 1:1: selectable (@since 1.116, selectable=false on parent items) and the tag aggregation (@since 1.149, a sap.m.ObjectStatus per item, used 5x). Declared per the property-171 policy. Previously undeclared because the property gate is blind to sap.tnt (properties.json holds sap.m only); selectable found by the app-172 cold-read probe and tag by the non-sap.m @since audit, 2026-07-24." }
   ]
 }

@@ -5,6 +5,29 @@ findings are fixed or new ones land (same-change discipline as AGENTS.md §10).
 For the process itself see TRAINING.md; for what abap2UI5 can express see
 CAPABILITIES.md._
 
+## Non-sap.m POST_171 audit (2026-07-24) — systemic debt swept
+
+Prompted by the 128/132 finding, a full `@since` audit of all 61 non-`sap.m`
+ports (`src/02`–`src/05`) — the libraries the property gate is blind to — every
+member cross-checked against the OpenUI5 source, then independently re-verified
+before fixing. **Undeclared post-1.71 debt found and corrected in 5 ports:**
+
+| Port | Member(s) now declared | @since |
+|---|---|---|
+| 113 (`sap.tnt.InfoLabel`) | `InfoLabel.icon` | 1.74 |
+| 128 (`sap.tnt.SideNavigation`) | `NavigationListItem.selectable` | 1.116 |
+| 132 (`sap.tnt.SideNavigation`) | `NavigationListItem.selectable` + `tag` aggr. | 1.116 / 1.149 |
+| 164 (`sap.ui.table.Table`) | `Table.rowMode` aggregation | 1.119 |
+| 167 (`sap.tnt.ToolPage`) | `NavigationListItem.selectable`/`design`/`press`/`ariaHasPopup` (fixed a wrong @since citation) | 1.116 / 1.133 |
+
+Excluded as false positives (base-class relocation, still functionally pre-1.71):
+`NavigationListItem.expanded` (@since 1.121, the `NavigationListItemBase` split)
+and `.visible` (@since 1.52). Every other non-`sap.m` port uses only members
+`@since ≤ 1.71`. This closes the debt the blind gate had accumulated; the real
+fix (extending `properties.json`/`LIB_DIRS` to the other libraries so the gate
+enforces this automatically) remains the open follow-up, gated on the
+`generate_result` CI checkout including those libs' `src/`.
+
 ## Subagent cold-read probe (2026-07-24) — app 172 + latent POST_171 debt found
 
 Second subagent cold-read: `sap.tnt.sample.SideNavigationUnselectableParents`
