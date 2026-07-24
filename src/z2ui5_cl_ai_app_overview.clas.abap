@@ -1379,6 +1379,18 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` against. Same data, same leaf names, renders identically — the List's binding attribute is dropped. // NOTE: ProductPicUrl is stored as the absolute` &&
                  ` https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1000.jpg (the mock's host-relative test-resources path rewritten to the OpenUI5 host per the runtime asset-URL rule).`
         use_name = abap_true )
+      ( module = `sap.m`              control = `sap.m.List`                          name = `ListItemTypes`                       class = `z2ui5_cl_ai_app_207` path = `src/01/b17/z2ui5_cl_ai_app_207.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `NOTE: the original wires a change handler on the type Select (handleSelectChange, which loops the list items calling item.setType). selectedKey and every StandardListItem type share one two-way bound` &&
+                 ` field (LISTTYPE), so a selection re-types all items client-side and the Select.change attribute is deliberately MISSING vs the original view (AGENTS prefer-a-bindable-property rule; app 003` &&
+                 ` precedent). The added StandardListItem type binding is not in the original view. // NOTE: the ProductPicUrl icon values are stored as absolute` &&
+                 ` https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/*.jpg URLs (the mock's host-relative test-resources paths rewritten to the OpenUI5 host per the runtime asset-URL rule). Same` &&
+                 ` 123-row set, kept verbatim otherwise. // LIVE-TEST: unverified in a running system: (a) handlePress/handleDetailPress are reproduced as roundtrip-free client toasts (control_global MESSAGE_TOAST.show` &&
+                 ` of "'press' event fired!" / "'detailPress' event fired!"); (b) the Select selectedKey <-> item type two-way binding should re-type all rows on selection. Re-verify both.`
+        use_ec = abap_true
+        use_ec_arg = abap_true
+        use_name = abap_true )
       ( module = `sap.m`              control = `sap.m.List`                          name = `ListNoData`                          class = `z2ui5_cl_ai_app_035` path = `src/01/b04/z2ui5_cl_ai_app_035.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
@@ -2052,6 +2064,13 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.m`              control = `sap.m.StandardListItem`              name = `StandardListItemDescription`         class = `z2ui5_cl_ai_app_202` path = `src/01/b17/z2ui5_cl_ai_app_202.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        use_name = abap_true )
+      ( module = `sap.m`              control = `sap.m.StandardListItem`              name = `StandardListItemInfo`                class = `z2ui5_cl_ai_app_208` path = `src/01/b17/z2ui5_cl_ai_app_208.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `NOTE: the original binds infoState via the presentation-only formatter '.formatter.status' (maps the already-classified Status Available->Success / Out of Stock->Warning / Discontinued->Error / else` &&
+                 ` None to a ValueState). abap2UI5 being a thin frontend, the info state is derived in the backend into the INFOSTATE field and bound directly (infoState="{INFOSTATE}"); same output, no loss. All 123` &&
+                 ` mock rows (Name/Status) kept verbatim; the List items sorter:{path:'NAME'} is kept 1:1 as a raw binding-info string.`
         use_name = abap_true )
       ( module = `sap.m`              control = `sap.m.StandardListItem`              name = `StandardListItemInfoStateInverted`   class = `z2ui5_cl_ai_app_204` path = `src/01/b17/z2ui5_cl_ai_app_204.clas.abap`
         score = 2
