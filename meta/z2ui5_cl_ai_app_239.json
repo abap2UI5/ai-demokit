@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_ai_app_239",
+  "sample": "sap.uxap.sample.ObjectPageHeaderActionButtons",
+  "entity": "sap.uxap.ObjectPageHeaderActionButton",
+  "file": "src/03/b03/z2ui5_cl_ai_app_239.clas.abap",
+  "batch": "b03",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "Block->content inlining (app 161/178 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): each of the 15 subsection blocks aggregations holds a custom BlockBase control sample:mySimpleBlock (from the AnchorBar SharedBlocks JS, xmlns:sample='sap.uxap.sample.AnchorBar.controller.blocks', ids bbt1/bbt2/bbt3/bbt4/bbt5/b1..b10). A BlockBase is only a lazy-loading wrapper around a view; mySimpleBlock's content is an html:div (font-size: 0.875rem) wrapping a forms:SimpleForm with a Label 'Content' + Text 'some content goes here...'. Since ObjectPageSubSection.blocks accepts any sap.ui.core.Control, each mySimpleBlock is inlined directly as that SimpleForm. Consequently all 15 sample:mySimpleBlock controls (and their id attributes) are absent from the port; the block's root mvc:View wrapper (its width='100%' attribute) is dropped together with its content-only inlining, and the html:div font-size wrapper is dropped - a control cannot be wrapped by another control via core:HTML (core:HTML carries markup in a string attribute only), and the div is purely a cosmetic font-size wrapper with no data impact. The empty mySimpleBlock controller carries no behaviour to port."
+    },
+    {
+      "type": "NOTE",
+      "what": "Namespace-representation difference: mySimpleBlock.view.xml declares its default xmlns as sap.m, so its Label and Text controls are bare there; the single port view has a single default namespace (sap.uxap, matching the main sample view), so the inlined block's Label and Text carry the m: prefix (m:Label / m:Text) and the SimpleForm keeps its forms: prefix. Control counts are prefix-sensitive in structural-diff, so the block's bare 'Label' and 'Text' read as missing while the port supplies m:Label / m:Text - an unavoidable namespace-representation artifact of folding a sap.m-default fragment into a sap.uxap-default view (cheat-sheet 'multi-fragment differing-default-xmlns'). No output difference."
+    },
+    {
+      "type": "NOTE",
+      "what": "Static sample: no controller behaviour, no model, no events - only view_display. All members used (ObjectPageHeaderActionButton.text/type/icon/tooltip/hideText/hideIcon @since 1.26, ObjectPageDynamicHeaderTitle @since 1.52, ObjectPageLayout.showTitleInHeaderContent/upperCaseAnchorBar, SimpleForm.maxContainerCols/layout/editable) are <= 1.71 - no POST_171 needed."
+    }
+  ]
+}
