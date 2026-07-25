@@ -739,6 +739,21 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` 3.1) and they bind display-only into a text template ({WIDTH} x {DEPTH} x {HEIGHT} {DIMUNIT}), so a string keeps the exact value; TYPE i would truncate (an earlier version did, via json-to-abap's` &&
                  ` first-row inference — tool since fixed). Price stays packed (DECIMALS 2) for the Currency type binding, decimals preserved.`
         use_name = abap_true )
+      ( module = `sap.f`              control = `sap.f.FlexibleColumnLayout`          name = `FlexibleColumnLayoutSimple`          class = `z2ui5_cl_ai_app_234` path = `src/04/b08/z2ui5_cl_ai_app_234.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `NOTE: the sample is NOT a pure-routing showcase - it uses an EventBus (no sap.ui.core.routing Router/Targets) and drives the column visibility purely through the FlexibleColumnLayout's own layout` &&
+                 ` property (setLayout). So it is expressed as ONE view: the three column views (List, Detail, DetailDetail) are inlined into the FlexibleColumnLayout's beginColumnPages/midColumnPages/endColumnPages` &&
+                 ` aggregations. Consequently the original's nested mvc:XMLView reference (in beginColumnPages) is dropped - its List page content is placed inline instead. // NOTE: FlexibleColumnLayout is emitted with` &&
+                 ` the f: namespace prefix (f:FlexibleColumnLayout) because the merged single view uses sap.m as its default xmlns for the pages, whereas the original FlexibleColumnLayout.view.xml declares sap.f as the` &&
+                 ` default xmlns and writes the control unprefixed. Same control, prefix-only difference from merging four views (with two different default namespaces) into one. // NOTE: each column view holds 26` &&
+                 ` static, byte-identical navigation rows (List: 'Open mid column', Detail: 'Open end column', DetailDetail: 'No more columns') hardcoded in the XML - there is no JSON model. This is reproduced` &&
+                 ` faithfully as a bound aggregation over a 26-row model table per column (one ColumnListItem/Text template each): same 26 rendered rows, so the ColumnListItem count (78 originals) and Text count (78` &&
+                 ` originals) collapse to the three templates. No data is lost or subset. // LIVE-TEST: the controller's imperative setLayout(TwoColumnsBeginExpanded/ThreeColumnsMidExpanded) is replaced by binding the` &&
+                 ` FlexibleColumnLayout layout property two-way ({/LAYOUT}, initial OneColumn) and changing it server-side in the press handlers (prefer-a-bindable-property over a frontend action; setLayout is not a` &&
+                 ` whitelisted CONTROL_METHOD). The column-switch round-trip behaviour is not verified in a running system. The lazy view loading (runAsOwner/XMLView.create on demand) is a pure framework optimization` &&
+                 ` with no user-visible effect and is not reproduced - all three pages exist from the start.`
+        use_name = abap_true )
       ( module = `sap.f`              control = `sap.f.GridContainer`                 name = `GridContainer`                       class = `z2ui5_cl_ai_app_168` path = `src/04/b07/z2ui5_cl_ai_app_168.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -1215,6 +1230,31 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         use_fua = abap_true
         use_fua_arg = abap_true
         use_name = abap_true )
+      ( module = `sap.m`              control = `sap.m.FacetFilter`                   name = `FacetFilterSimple`                   class = `z2ui5_cl_ai_app_235` path = `src/01/b19/z2ui5_cl_ai_app_235.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `NOTE: the bound lists="{/ProductCollectionStats/Filters}" collection is represented as two static FacetFilterLists (Category, SupplierName) - the original's stats model yields exactly these two lists,` &&
+                 ` so this is a faithful equivalent; the facet values inside each list stay bound to a FacetFilterItem template. This is the type="Simple" variant of the FacetFilter (app 022 ports the near-identical` &&
+                 ` type="Light" FacetFilterLight); the difference is the FacetFilter type plus the confirm handling below. // NOTE: selection transport - every FacetFilterItem binds selected two-way; on the FacetFilter` &&
+                 ` confirm (and on reset) the backend reads/clears the flags and re-filters. This is the documented 1:1 path (CAPABILITIES.md marks controller-read FacetFilter/List multi-select as expressible with app` &&
+                 ` 022 as its evidence port), not a workaround; the model is applied before on_event runs. The original's handleConfirm also shows a MessageToast 'confirm event fired' - reproduced 1:1 via` &&
+                 ` client->message_toast_display after applying the filter. The FacetFilterSimple view does not wire the per-list listClose (only the confirm event drives filtering), so no listClose attribute is` &&
+                 ` emitted. // IMPROVISED: the original controller appends the sap.m.sample.Table component's table with its first cell swapped for an ObjectIdentifier {Name}/{Category}; that table is rebuilt inline.` &&
+                 ` The price column keeps the original sap.ui.model.type.Currency composite binding 1:1 (raw binding-info string over a numeric PRICE field). // NOTE: the appended table's header toolbar is restored` &&
+                 ` except for the sticky controls: the popin-layout ComboBox keeps its core:Item entries and binds selectedKey two-way in place of the original's change handler (the controller switch is a pure` &&
+                 ` key-to-property pass-through; the Table's added popinLayout expression binding maps an empty selection to the Block default), and the Hide/Show ToggleButton binds pressed two-way in place of its` &&
+                 ` press handler, with the restored infoToolbar's OverflowToolbar carrying a visible expression binding over the same flag - both per the prefer-a-bindable-property rule, no round-trip. // IMPROVISED:` &&
+                 ` the sticky options Label and the three sticky CheckBox controls (with their select handlers) are dropped - Table.sticky is an array-valued property the controller mutates via setSticky, and neither` &&
+                 ` an array property binding nor a setSticky whitelist entry is a proven path; a bound-array LIVE_TEST port could disprove this later. // 1.71: the p:ColumnAIAction column plugin (sap.m.plugins, far` &&
+                 ` newer than UI5 1.71) is dropped with its dependents aggregation and press toast - the plugin class does not exist on a 1.71 runtime, so keeping it would crash view creation there. // NOTE: the` &&
+                 ` original's nested items-binding filter (ORs inside each facet group, AND across the groups, model untouched) is expressed 1:1 as a declarative compound filter: apply_filter builds the groups JSON` &&
+                 ` from the two-way bound selected flags and schedules follow_up_action cs_event-binding_call filter on idProductsTable/items (compound groups implemented upstream 2026-07-20,` &&
+                 ` pr/binding-call-compound-filters). // NOTE: the original derives the ObjectNumber weight state in its frontend Formatter.js (weightState: KG conversion + Success/Warning/Error thresholds). That is` &&
+                 ` business logic, so - abap2UI5 being a thin frontend - it is computed in ABAP model_init into a WEIGHT_STATE field and bound state="{WEIGHT_STATE}", not via a frontend formatter (core:require` &&
+                 ` dropped). Visually 1:1 with the original.`
+        use_fua = abap_true
+        use_fua_arg = abap_true
+        use_name = abap_true )
       ( module = `sap.m`              control = `sap.m.FeedContent`                   name = `FeedContent`                         class = `z2ui5_cl_ai_app_023` path = `src/01/b06/z2ui5_cl_ai_app_023.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -1343,6 +1383,45 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` abap2UI5 does not serve those static assets, so only the first (sap-icon://area-chart) icon renders offline. The images are archived under ui5/sap.m/ImageContent/images/.`
         use_ec = abap_true
         use_ec_arg = abap_true )
+      ( module = `sap.m`              control = `sap.m.InitialPagePattern`            name = `InitialPagePattern`                  class = `z2ui5_cl_ai_app_233` path = `src/01/b18/z2ui5_cl_ai_app_233.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 5 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        release = `1.108`
+        release_post171 = abap_true
+        ui5_only = abap_true
+        is_post171 = abap_true
+        notes = `IMPROVISED: The five core:Fragment references of App.view.xml (Input in the heading, HeaderContent in headerContent, and IllustratedMessage/ProductsTable/SupplierDetails in sections) are inlined 1:1` &&
+                 ` into the single port view - abap2UI5 builds one XML view, there is no runtime Fragment reference. So core:Fragment is absent (5 dropped) and every fragment's content is rendered directly. //` &&
+                 ` IMPROVISED: The dynamic /selectedPurchase JSON object is flattened onto the single default model as root-level fields: has_selection (drives the ObjectPageLayout` &&
+                 ` showHeaderContent/toggleHeaderOnTitleClick and every section visible expression, replacing the object-truthiness !!${/selectedPurchase}),` &&
+                 ` sel_category/sel_subcategory/sel_suppliername/sel_paymenttype/sel_deliverystatus (HeaderContent), sel_delivery_state (ObjectStatus) and sel_products (the products Table). The controller's` &&
+                 ` _setSelectedPurchaseAndUpdateInput selection logic is reproduced server-side in set_selection: the entered/selected PurchaseID resolves a purchase from t_purchases and seeds these fields (or forces` &&
+                 ` has_selection=false so the IllustratedMessage "not found" state shows). The text and Sub-Category header bindings therefore bind the flattened fields instead of {/selectedPurchase/...}. //` &&
+                 ` IMPROVISED: i18n named-model bindings folded to literal English values from i18n.properties: the pure {i18n>...} property bindings on text (Title Receipt Information/Delivery Status/Products,` &&
+                 ` column-header Product/Dimensions/Quantity/Price), title (SelectDialog Purchases) and placeholder (Input Enter product) are resolved statically (loses runtime language switching, renders identically` &&
+                 ` in English). The IllustratedMessage title/description/illustrationType keep their expression binding {= ${/inputPopulated} ? ... : ... } with the i18n operands replaced by the literal strings. The` &&
+                 ` Label ...:'-suffixed i18n texts are likewise inlined. // IMPROVISED: formatter.deliveryStatusState (Shipped->Success, Failed Shipping->Error, else None) is business logic; per the thin-frontend` &&
+                 ` principle it moves out of the frontend formatter into the ABAP model (deliverystatus_state, computed in model_init per purchase) and the ObjectStatus state binds that precomputed field` &&
+                 ` (sel_delivery_state) directly instead of a formatter binding. // IMPROVISED: handleValueHelpSearch / _getCombinedFilter builds an OR filter of PurchaseID Contains + SupplierName Contains; the port's` &&
+                 ` SelectDialog search wires a single binding_call filter on SUPPLIERNAME Contains ${$parameters>/value} - the compound OR over two fields is simplified to the supplier field. The suggestion Input's` &&
+                 ` setFilterFunction (case-insensitive contains over key+text) is UI5's built-in suggestion filtering and is not reproduced explicitly. // NOTE: Namespace-prefix representation: the port declares` &&
+                 ` xmlns=sap.m (default) plus xmlns:uxap=sap.uxap, so the uxap controls are emitted uxap:-prefixed. In the originals ObjectPageLayout/ObjectPageDynamicHeaderTitle (App.view.xml) and the` &&
+                 ` IllustratedMessage-fragment ObjectPageSection/ObjectPageSubSection are unprefixed (their file's default xmlns is sap.uxap), while the ProductsTable/SupplierDetails fragments already use the uxap:` &&
+                 ` prefix. Same library, identical rendering; structural-diff sees uxap:ObjectPageSection vs ObjectPageSection (and likewise ObjectPageLayout/ObjectPageDynamicHeaderTitle/ObjectPageSubSection) as` &&
+                 ` control missing/extra. m:IllustratedMessage keeps its m: prefix to match the original. // POST-1.71: sap.m.IllustratedMessage (control since UI5 1.98, with illustrationType/title/description) is` &&
+                 ` newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.98 to render it. property-check does not track IllustratedMessage members, so this is declared by policy, not gate-forced.` &&
+                 ` // POST-1.71: sap.m.Input.autocomplete (since UI5 1.108) is newer than 1.71 but kept 1:1 (autocomplete='false'); the app needs a UI5 release >= 1.108 to render it. Not tracked by property-check` &&
+                 ` (declared by policy). // LIVE-TEST: unverified in a running system: (a) Input submit resolves the entered PurchaseID (two-way bound input_value) and redraws with the selected purchase; (b)` &&
+                 ` suggestionItemSelected transports the picked ListItem key via ${$parameters>/selectedItem}.getKey(); (c) valueHelpRequest opens the SelectDialog client-side via control_by_id open; (d) the` &&
+                 ` SelectDialog search (binding_call filter) and confirm (${$parameters>/selectedItem}.getDescription()) resolve and redraw; (e) the ObjectPageLayout/IllustratedMessage/Table render inside the headless` &&
+                 ` harness as they do in the running app.`
+        post171 = `sap.m.IllustratedMessage (control since UI5 1.98, with illustrationType/title/description) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.98 to render it.` &&
+                 ` property-check does not track IllustratedMessage members, so this is declared by policy, not gate-forced. // sap.m.Input.autocomplete (since UI5 1.108) is newer than 1.71 but kept 1:1` &&
+                 ` (autocomplete='false'); the app needs a UI5 release >= 1.108 to render it. Not tracked by property-check (declared by policy).`
+        use_ec = abap_true
+        use_ec_arg = abap_true
+        use_name = abap_true )
       ( module = `sap.m`              control = `sap.m.Input`                         name = `InputTypes`                          class = `z2ui5_cl_ai_app_159` path = `src/01/b16/z2ui5_cl_ai_app_159.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -2532,6 +2611,33 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` intended delay/duration (the global busy overlay and timers are not reproduced server-side).`
         use_ec = abap_true
         use_ec_arg = abap_true )
+      ( module = `sap.ui.core`        control = `sap.ui.core.CommandExecution`        name = `Commands`                            class = `z2ui5_cl_ai_app_232` path = `src/02/b10/z2ui5_cl_ai_app_232.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        release = `1.84`
+        release_post171 = abap_true
+        is_post171 = abap_true
+        notes = `IMPROVISED: The sample's entire point is sap.ui.core.CommandExecution - declarative command objects bound to keyboard shortcuts (manifest sap.ui5/commands: Save=Ctrl+S, Delete=Ctrl+D). abap2UI5 has NO` &&
+                 ` equivalent for a command / keyboard-shortcut binding (nothing in CAPABILITIES; no CommandExecution control, no $cmd> command model, no manifest-level shortcut registry - the frontend only renders XML` &&
+                 ` and forwards named events, it cannot register a global key handler). So all three core:CommandExecution controls (CE_SAVE, CE_DELETE in the Page dependents, CE_SAVE_POPOVER in the popoverCommand` &&
+                 ` dependents) are DROPPED and the Ctrl+S / Ctrl+D shortcuts are lost. The invoked actions stay reachable: every command-triggering button (press='cmd:Save' / press='cmd:Delete', in the Button panel and` &&
+                 ` both popover footers) keeps its press attribute, rewired to a client-composed MESSAGE_TOAST.show that reproduces onSave ('CTRL+S: save triggered on controller') and onDelete ('CTRL+D: Delete` &&
+                 ` triggered on controller'). See the friction log / pr/core-commandexecution-keyboard-shortcuts. // IMPROVISED: The $cmd> command model bindings enabled='{$cmd>Save/enabled}' /` &&
+                 ` enabled='{$cmd>Delete/enabled}' on the popover footer buttons have no command model to bind to (CommandExecution dropped), so they are folded to default-model booleans: the popover buttons bind` &&
+                 ` enabled to {/SAVE_ENABLED}/{/DELETE_ENABLED} (page popover) and {/PSAVE_ENABLED}/{/DELETE_ENABLED} (command popover). Correspondingly the controller's onToggleSave/onToggleDelete/onTogglePopoverSave` &&
+                 ` (byId('CE_SAVE').setEnabled(state)) and the *Visibility variants (setVisible) are reproduced as two-way bindings: each Switch state is bound two-way to the matching boolean and the popover buttons` &&
+                 ` additionally bind visible to {/SAVE_VISIBLE}/{/DELETE_VISIBLE}/{/PSAVE_VISIBLE}, so the switches drive the command-buttons entirely client-side (thin frontend, app 007/128 pattern) with no` &&
+                 ` round-trip. Consequently the Switch change attributes (change='.onToggleSave' etc., 6 of them) are DROPPED and replaced by the two-way state binding; the enabled binding value differs from the` &&
+                 ` original $cmd> path. // POST-1.71: sap.m.Button.ariaHasPopup (since UI5 1.84) is newer than 1.71 but kept for the 1:1 port - the two Open-Popover buttons carry ariaHasPopup='Dialog' as in the` &&
+                 ` original; the app needs a UI5 release >= 1.84 to render it. // LIVE-TEST: unverified in a running system: (a) the two Open-Popover buttons open the popover anchored to the button via control_by_id` &&
+                 ` openBy ($event.oSource.sId) - sap.m.Popover exposes openBy (unlike sap.ui.unified.Menu, app 227), so this is expected to work as in app 016/060 but is not live-checked; (b) the Save/Delete buttons` &&
+                 ` toast the onSave/onDelete text via client-composed MESSAGE_TOAST; (c) the switch-driven two-way enabled/visible of the popover buttons.`
+        post171 = `sap.m.Button.ariaHasPopup (since UI5 1.84) is newer than 1.71 but kept for the 1:1 port - the two Open-Popover buttons carry ariaHasPopup='Dialog' as in the original; the app needs a UI5 release >=` &&
+                 ` 1.84 to render it.`
+        use_ec = abap_true
+        use_ec_arg = abap_true
+        use_name = abap_true )
       ( module = `sap.ui.core`        control = `sap.ui.core.Control`                 name = `ControlBusyIndicator`                class = `z2ui5_cl_ai_app_130` path = `src/02/b03/z2ui5_cl_ai_app_130.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -2929,6 +3035,17 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` ('https://sdk.openui5.org/test-resources/sap/uxap/images/robot.png') per the offline asset-URL rule. Same asset, literal src value only - structural-diff compares literal attribute names, not values.`
         post171 = `sap.uxap.ObjectPageSubSection.showTitle (showTitle='false' on the 'Order Details' and 'Products' subsections) exists only since UI5 1.77 - kept 1:1 (fidelity wins), so the app needs a UI5 release >=` &&
                  ` 1.77 to render it. Also kept 1:1: the sap.m.Avatar control (since 1.73) with its displayShape (Square) and displaySize (L) properties, used in the snapped heading and header content.` )
+      ( module = `sap.uxap`           control = `sap.uxap.ModelMapping`               name = `BoundModelMapping`                   class = `z2ui5_cl_ai_app_230` path = `src/03/b02/z2ui5_cl_ai_app_230.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `IMPROVISED: Named-model fold: the sample's whole point is the uxap:ModelMapping element inside a custom BlockBase (sample:ModelMappingBlock), which maps the external named model jsonModel (at` &&
+                 ` {jsonModel>/externalPath}, resolving to /Employee) onto the block's internal named model Contact, so {Contact>firstName}/{Contact>lastName} render John/Miller. abap2UI5 serves a single default model` &&
+                 ` - a second, independent ABAP-fed named model was DECLINED 2026-07-19 (pr/named-json-models, too complex: one serialized JSONModel per slot). So the two named models are folded into the one default` &&
+                 ` model: firstName/lastName are seeded at the default-model root and bound {/FIRSTNAME}/{/LASTNAME} (last-segment match with the original {Contact>firstName}/{Contact>lastName}). Consequently the` &&
+                 ` ModelMapping control (the sample entity, a pure model-mapping config with no visual output) is absent, the externalPath indirection is resolved statically to /Employee, and the ModelMappingBlock` &&
+                 ` BlockBase wrapper is inlined to its own view content: its forms:SimpleForm (core:Title + two Text) is rendered directly, since ObjectPageSubSection/block content is standard controls (CAPABILITIES` &&
+                 ` BlockBase row, apps 161/178). ModelMappingBlock and ModelMapping are therefore both absent and a forms:SimpleForm/core:Title/Text are present in their place.`
+        use_name = abap_true )
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageHeader`           name = `KPIObjectPageHeader`                 class = `z2ui5_cl_ai_app_217` path = `src/03/b02/z2ui5_cl_ai_app_217.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`

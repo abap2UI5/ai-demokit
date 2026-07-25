@@ -33,8 +33,19 @@ become the backlog to close.
 1.71** and is **not deprecated** in the current release (legacy-free ready) —
 computed per sample from `ui5/universe.json` by `generate-coverage.mjs`
 (`scopeOf`). Out-of-scope samples stay listed in `api.md` (marked `✗`) but are
-never ported; `node scripts/generate-coverage.mjs --backlog` prints the
+**never ported**; `node scripts/generate-coverage.mjs --backlog` prints the
 in-scope, unported samples for batch planning.
+
+> **⚠️ Verify scope from source before porting — the offline snapshot is blind.**
+> `ui5/universe.json` carries `since: null` for most controls (the fork has no
+> generated `designtime/api.json`), so `scopeOf` does `sinceLeq171(null)=true`
+> and silently passes controls newer than 1.71. That is how `sap.f.AvatarGroup`
+> (@1.73) nearly shipped and `sap.f.SidePanel` (@1.107, app 136) already did.
+> **Always run `node scripts/scope-of.mjs <entity>` (or `--sample <Name>`) first**
+> — it reads the authoritative `@since`/`@deprecated` from the OpenUI5 source and
+> exits non-zero on any out-of-scope entity. A neighbour port existing is **not**
+> proof of scope (see the UploadSet/SidePanel debt). Wiring `scopeOf` to this is
+> `pr/scope-since-from-source`.
 
 **Batch planning is breadth-first.** The mission is gap discovery, and the
 gap yield of a port drops sharply once its control is covered — many samples
@@ -198,11 +209,18 @@ source of truth:
   generator reads `@since` still matter if you're verifying a flag: **(a)** an
   inherited member's `@since` lives in the **parent class file** (the gate walks
   `X.extend(...)` up, e.g. `CalendarDateInterval` → `Calendar.js`); **(b)** a
-  member with **no `@since` tag** is base-version (≤ 1.71). Two residual limits:
+  member with **no `@since` tag** is base-version (≤ 1.71). Three residual limits:
   enum *values* newer than 1.71 (e.g. `ObjectStatus` `Indication06`) are
-  invisible at the attribute-name level, and a member **relocated to a newer base
+  invisible at the attribute-name level; a member **relocated to a newer base
   class** reads as that base's version (e.g. `NavigationListItem.expanded` shows
-  1.121 though the property predates 1.71 — declare it with that note).
+  1.121 though the property predates 1.71 — declare it with that note); and a
+  member/control **not present in `properties.json` at all** is silently passed
+  (e.g. `IllustratedMessage` @1.98, `Input.autocomplete` @1.108, and
+  `sap.ui.core.CommandExecution` were all invisible to the gate on app 232/233).
+  **So the property gate is a backstop, not a guarantee** — when a control feels
+  new, still confirm with `node scripts/scope-of.mjs <entity>` (control-level)
+  and declare `POST_171` **by policy** even if no gate forces it. A green
+  property-check does **not** prove a port is ≤ 1.71-clean.
 - **Before declaring any sample feature inexpressible, check `CAPABILITIES.md`**
   — the map of what abap2UI5 can express, each entry backed by a port that
   proves it. Never improvise around a feature it marks ✅/🔶 (app 042 replaced a
@@ -580,6 +598,14 @@ with a closed `type` vocabulary so deviations stay countable:
   **Settled policy (2026-07-24):** NOTE for a same-data prefix-drop, IMPROVISED
   only for a lossy/static fold — this ends the earlier IMPROVISED/NOTE
   inconsistency the cold-read probes kept hitting.
+  **Refinement (2026-07-25):** "renders identically" is **not** sufficient for
+  NOTE when the fold **drops a control/config artifact** — a `sap.uxap:ModelMapping`
+  (or its `ModelMappingBlock`), a `core:CommandExecution`, an `i18n` resource
+  model. Removing a control the original declares (even a zero-visual-output
+  config element) or losing a behaviour (runtime language switch, keyboard
+  command) **is a loss → IMPROVISED**, regardless of pixel-identical render. The
+  pure-render test decides only the *prefix-drop* case; dropping an artifact is
+  lossy by definition. (Apps 230 ModelMapping, 232 CommandExecution, 233 i18n.)
 
 The `what` text carries the full explanation. Keep the array **empty** for a
 faithful 1:1 port. Still add the inline `"` comment at the exact spot of each
@@ -598,7 +624,8 @@ creation).
 
 | In the original you see… | Write in the port | Detail |
 |---|---|---|
-| A **named model** binding `{ui>/rowMode}`, `{img>/x}`, any `name>/…` | Drop the prefix, bind the field on the **one default model**: `client->_bind( rowmode )` → `{/ROWMODE}`. structural-diff matches on the last path segment | CAPABILITIES "Named JSON models"; apps 162/163/164 |
+| A **named model** binding `{ui>/rowMode}`, `{img>/x}`, any `name>/…` | Drop the prefix, bind the field on the **one default model**: `client->_bind( rowmode )` → `{/ROWMODE}`. structural-diff matches on the last path segment. A **`sap.uxap:ModelMapping`** (external→internal model remap, e.g. `{Contact>firstName}` where `Contact` maps `jsonModel>/Employee`) folds the same way — resolve the indirection statically and bind the leaf on the root; dropping the `ModelMapping`/`ModelMappingBlock` **config control** is **lossy → IMPROVISED** even though it renders identically (see the deviation-type note below) | CAPABILITIES "Named JSON models"; apps 162/163/164, 230 |
+| An **i18n resource-model** binding `{i18n>KEY}` (`sap.ui.model.resource.ResourceModel`) | No i18n model exists — fold to the **literal** text (usually English from `i18n.properties`) and declare **IMPROVISED** (loses runtime language switching). Recurs on most `sap.m` samples; treat like the named-model fold but for text | §5; apps 233 |
 | A **typed / complex binding** `{path:'Q', type:'sap.ui.model.type.Integer'}` | Raw binding-info string, braces escaped: `` v = \|\{ path: 'Q', type: 'sap.ui.model.type.Integer' \}\| `` — passes through to `XMLView.create` unmangled. The `path:` uses the **upper-cased ABAP field name** (`'Q'`→`'PRICE'`), not the original camelCase — no gate catches a stale path | CAPABILITIES "composite … types"; apps 164/129/033/171 |
 | A **nested single object** binding `{transactionAmount/size}` (control property → a sub-object, not an array) | Nested ABAP **structure** component in the row type; bind the relative sub-path `{TRANSACTION_AMOUNT/SIZE}`. Keep the nesting — do **not** flatten to `{OBJ_FIELD}` | CAPABILITIES "Nested single object"; app 171 |
 | A **literal quote inside a binding-info `pattern`** (`pattern:'yyyy-MM-dd'T'HH:mm:ss'` — the `'T'`) | Escape it **backslash-quote** `\'`, written `\\'` in the ABAP `\|…\|` template (UI5's JSTokenizer **rejects** a doubled `''`) — matches how the original view.xml escapes it | app 183 (`TypeDateTime`) |
@@ -614,6 +641,8 @@ creation).
 | An **anchored-open popup** (`byId(x).openBy(btn)` — `sap.m.Menu`, TimePicker, DatePicker) | `control_by_id` + `openBy`/`toggleBy` + `$event.oSource.sId`; declare the popup control in `dependents`. **Caveat:** `sap.ui.unified.Menu` has **no `openBy`** (only `open(kbd, opener, my, at, of)`, which self-closes when `of` is absent) — anchored open is a **current framework gap**, so the `openBy` wire is a declared no-op (IMPROVISED + `pr/unified-menu-open-anchored`), *not* a LIVE_TEST | CAPABILITIES "Frontend-action catalog"; apps 016/060 (work), 227/228 (`sap.ui.unified.Menu` gap) |
 | A control-created **popup** (`new Dialog().open()`, `new PDFViewer().open()`) | Build a `core:FragmentDefinition`, show with `client->popup_display( val = … )` / `popover_display( xml = … by_id = … )` (popover XML param is **`xml`**, not `val`) — or declare in `mvc:dependents` + `control_by_id`/`open`/`openBy`. A **single-root** fragment (`<SomeControl …>` with the namespaces on the control, no wrapper) has **no** `FragmentDefinition` — open the control directly, and structural-diff **counts** that root control (only `mvc:View`/`core:FragmentDefinition` are exempt) | CAPABILITIES "Popups & messages"; apps 019/044/229 |
 | A popup/popover **`bindElement`** | **Fixed index** `bindElement('/Coll/0')` (single record) → seed those fields at the **default-model root** and keep the fragment's **relative** `{FIELD}` bindings (they resolve against the root); **no** `bind_element` follow-up needed. **Per-row** selection (index arrives from `$event.oSource.getBindingContext()`) → `follow_up_action( val = cs_event-bind_element view = cs_view-popover t_arg = ( idx )( client->_bind( tab ) ) )`. Pick by whether the bound record is fixed or row-driven | CAPABILITIES "Popups & messages"; app 229 (fixed), app 094 (per-row) |
+| **Inlining a `core:Fragment`** (the sample splits its view into `*.fragment.xml` referenced by `<core:Fragment fragmentName="…"/>`) | Inline the fragment content directly into the one port view. structural-diff **unions every `*.fragment.xml` with the view** and **counts the `core:Fragment` reference elements as controls** (only `mvc:View`/`core:FragmentDefinition` roots are exempt) — so the dropped `core:Fragment` references must be **named in a deviation** (same as the `core:require` rule). If the fragments declare **different default `xmlns`** (e.g. `sap.uxap` in one, `sap.m` in another), the single port view can only carry one default namespace, so some controls get a prefix the original lacked (`uxap:ObjectPageSection` vs `ObjectPageSection`) — an **unavoidable namespace-representation NOTE**. Asymmetry to remember: attribute checks are prefix-blind (`simpleName`), but **control counts are prefix-sensitive** | CAPABILITIES "Popups & messages"; apps 233/234 |
+| A **bindable property the controller sets imperatively** (`fcl.setLayout(x)`, `oCtrl.setVisible(b)`) | Prefer the **bindable property** over a frontend action: two-way bind it (`layout="{/LAYOUT}"`) and update the model server-side — no `CONTROL_METHODS` entry needed. Only reach for `follow_up_action`/`control_by_id` when there is **no** bindable property for the effect (§10 "prefer a bindable property") | CAPABILITIES "Frontend-action catalog"; app 234 (`FlexibleColumnLayout.layout`) |
 
 Two feature classes stay **❌ — don't improvise around them, declare the
 deviation**: control-returning factories (`groupHeaderFactory`, item factories)
