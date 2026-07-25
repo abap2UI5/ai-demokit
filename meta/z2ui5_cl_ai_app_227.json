@@ -1,0 +1,36 @@
+{
+  "class": "z2ui5_cl_ai_app_227",
+  "sample": "sap.ui.unified.sample.MenuItemEventing",
+  "entity": "sap.ui.unified.Menu",
+  "file": "src/02/b10/z2ui5_cl_ai_app_227.clas.abap",
+  "batch": "b10",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "init-only, roundtrip-free like app 060: the button press wires control_by_id openBy anchored to the button ($event.oSource.sId); each MenuItem/MenuTextFieldItem select composes its toast on the frontend via control_global MESSAGE_TOAST.show (template + ${$parameters>/item}.getText()/getValue()), so there is no on_event"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "Button.ariaHasPopup (since UI5 1.84) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.84 to render it."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "the sample opens the fragment Menu anchored to the button via oMenu.open( bWithKeyboard, oButton, Popup.Dock.BeginTop, Popup.Dock.BeginBottom, oButton ). sap.ui.unified.Menu - unlike sap.m.Menu (app 060) - exposes NO openBy method; it only has open( bWithKeyboard, oOpenerRef, my, at, of ), and the whitelisted `open` control-method takes a single string arg so it cannot receive the opener/`of` element (sap.ui.unified.Menu.open even closes itself immediately when `of` is absent - Menu.js `if (!oOfDom) this.close()`). The port wires the whitelisted, intent-correct `openBy` anchored to the button DOM ref (`$event.oSource.sId`, same idiom as app 060), but it is a NO-OP on the current framework because the method is missing on this control - the Menu does not open until abap2UI5 adds anchored-open support for sap.ui.unified.Menu (pr/unified-menu-open-anchored). The keyboard flag (from the controller's attachBrowserEvent tab/keyup tracking) and the BeginTop/BeginBottom docking are dropped either way. The `press` attribute is preserved (rewired to the openBy frontend action)."
+    },
+    {
+      "type": "NOTE",
+      "what": "the fragment Menu (added in the controller via getView().addDependent(this._menu)) is declared 1:1 inside the Button's `dependents` aggregation (the addDependent equivalent, same as app 060) - structurally identical, no loss; structural-diff ignores the aggregation name."
+    },
+    {
+      "type": "NOTE",
+      "what": "the selected item text/value is read with ${$parameters>/item}.getText() (and .getValue() for the MenuTextFieldItem), a method call on the resolved MenuItemBase control, NOT ${$parameters>/item/text}: the $parameters model exposes 'item' as the control object and UI5 keeps properties in the control's internal store, so the path .../item/text reads an undefined field and the toast arrives empty (same finding as app 060)."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "unverified in a running system: (a) the button press cannot yet open the Menu (openBy no-op, see the anchored-open deviation) - re-verify once pr/unified-menu-open-anchored lands; (b) each MenuItem select toasts \"'<text>' pressed\" via ${$parameters>/item}.getText() and the MenuTextFieldItem select toasts \"'<value>' entered\" via ${$parameters>/item}.getValue()."
+    }
+  ]
+}

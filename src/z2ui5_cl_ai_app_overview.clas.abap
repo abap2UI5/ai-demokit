@@ -2845,6 +2845,55 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` '(Upload Success)'). The uploadUrl='upload/' is kept 1:1.`
         use_ec = abap_true
         use_ec_arg = abap_true )
+      ( module = `sap.ui.unified`     control = `sap.ui.unified.Menu`                 name = `MenuItemEventing`                    class = `z2ui5_cl_ai_app_227` path = `src/02/b10/z2ui5_cl_ai_app_227.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        release = `1.84`
+        release_post171 = abap_true
+        is_post171 = abap_true
+        notes = `POST-1.71: Button.ariaHasPopup (since UI5 1.84) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.84 to render it. // IMPROVISED: the sample opens the fragment Menu` &&
+                 ` anchored to the button via oMenu.open( bWithKeyboard, oButton, Popup.Dock.BeginTop, Popup.Dock.BeginBottom, oButton ). sap.ui.unified.Menu - unlike sap.m.Menu (app 060) - exposes NO openBy method; it` &&
+                 ` only has open( bWithKeyboard, oOpenerRef, my, at, of ), and the whitelisted ``open`` control-method takes a single string arg so it cannot receive the opener/``of`` element (sap.ui.unified.Menu.open` &&
+                 ` even closes itself immediately when ``of`` is absent - Menu.js ``if (!oOfDom) this.close()``). The port wires the whitelisted, intent-correct ``openBy`` anchored to the button DOM ref` &&
+                 ` (``$event.oSource.sId``, same idiom as app 060), but it is a NO-OP on the current framework because the method is missing on this control - the Menu does not open until abap2UI5 adds anchored-open` &&
+                 ` support for sap.ui.unified.Menu (pr/unified-menu-open-anchored). The keyboard flag (from the controller's attachBrowserEvent tab/keyup tracking) and the BeginTop/BeginBottom docking are dropped` &&
+                 ` either way. The ``press`` attribute is preserved (rewired to the openBy frontend action). // NOTE: the fragment Menu (added in the controller via getView().addDependent(this._menu)) is declared 1:1` &&
+                 ` inside the Button's ``dependents`` aggregation (the addDependent equivalent, same as app 060) - structurally identical, no loss; structural-diff ignores the aggregation name. // NOTE: the selected` &&
+                 ` item text/value is read with ${$parameters>/item}.getText() (and .getValue() for the MenuTextFieldItem), a method call on the resolved MenuItemBase control, NOT ${$parameters>/item/text}: the` &&
+                 ` $parameters model exposes 'item' as the control object and UI5 keeps properties in the control's internal store, so the path .../item/text reads an undefined field and the toast arrives empty (same` &&
+                 ` finding as app 060). // LIVE-TEST: unverified in a running system: (a) the button press cannot yet open the Menu (openBy no-op, see the anchored-open deviation) - re-verify once` &&
+                 ` pr/unified-menu-open-anchored lands; (b) each MenuItem select toasts "'<text>' pressed" via ${$parameters>/item}.getText() and the MenuTextFieldItem select toasts "'<value>' entered" via` &&
+                 ` ${$parameters>/item}.getValue().`
+        post171 = `Button.ariaHasPopup (since UI5 1.84) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.84 to render it.`
+        use_ec = abap_true
+        use_ec_arg = abap_true )
+      ( module = `sap.ui.unified`     control = `sap.ui.unified.Menu`                 name = `MenuMenuEventing`                    class = `z2ui5_cl_ai_app_228` path = `src/02/b10/z2ui5_cl_ai_app_228.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        release = `1.84`
+        release_post171 = abap_true
+        is_post171 = abap_true
+        notes = `POST-1.71: Button.ariaHasPopup (since UI5 1.84) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.84 to render it. // IMPROVISED: the sample opens the fragment Menu` &&
+                 ` anchored to the button via oMenu.open( bWithKeyboard, oButton, Popup.Dock.BeginTop, Popup.Dock.BeginBottom, oButton ). sap.ui.unified.Menu - unlike sap.m.Menu (app 060) - exposes NO openBy method; it` &&
+                 ` only has open( bWithKeyboard, oOpenerRef, my, at, of ), and the whitelisted ``open`` control-method takes a single string arg so it cannot receive the opener/``of`` element (sap.ui.unified.Menu.open` &&
+                 ` even closes itself immediately when ``of`` is absent - Menu.js ``if (!oOfDom) this.close()``). The port wires the whitelisted, intent-correct ``openBy`` anchored to the button DOM ref` &&
+                 ` (``$event.oSource.sId``), but it is a NO-OP on the current framework because the method is missing on this control - the Menu does not open until abap2UI5 adds anchored-open support for` &&
+                 ` sap.ui.unified.Menu (pr/unified-menu-open-anchored). The keyboard flag and BeginTop/BeginBottom docking are dropped either way. The ``press`` attribute is preserved (rewired to the openBy frontend` &&
+                 ` action). // IMPROVISED: the sample's handleMenuItemPress branches on the runtime item: ``if (oItem.getSubmenu()) return;`` (do nothing for a parent that only opens its submenu) and ``if` &&
+                 ` (oItem.getMetadata().getName() === 'sap.ui.unified.MenuTextFieldItem') sMessage = item.getValue() + ' entered'`` else ``item.getText() + ' pressed'``. This walks the client-side control tree /` &&
+                 ` inspects the control class, which the thin backend cannot do - and the roundtrip-free MESSAGE_TOAST.show template cannot branch. The port composes a single toast "'<text>' pressed" from` &&
+                 ` ${$parameters>/item}.getText() for every itemSelect, dropping the submenu-parent guard and the MenuTextFieldItem getValue()/'entered' branch (same class of limit as app 060's parent-chain breadcrumb,` &&
+                 ` which the server cannot walk). The itemSelect event and every item are declared 1:1. // NOTE: the fragment Menu (added in the controller via getView().addDependent(this._menu)) is declared 1:1 inside` &&
+                 ` the Button's ``dependents`` aggregation (the addDependent equivalent, same as app 060) - structurally identical, no loss; structural-diff ignores the aggregation name. // NOTE: the selected item text` &&
+                 ` is read with ${$parameters>/item}.getText() (a method call on the resolved MenuItemBase control), NOT ${$parameters>/item/text}: the $parameters model exposes 'item' as the control object and UI5` &&
+                 ` keeps properties in the control's internal store, so the path .../item/text reads an undefined field and the toast arrives empty (same finding as app 060). // LIVE-TEST: unverified in a running` &&
+                 ` system: (a) the button press cannot yet open the Menu (openBy no-op, see the anchored-open deviation) - re-verify once pr/unified-menu-open-anchored lands; (b) selecting a menu item toasts "'<text>'` &&
+                 ` pressed" via the Menu-level itemSelect + ${$parameters>/item}.getText().`
+        post171 = `Button.ariaHasPopup (since UI5 1.84) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.84 to render it.`
+        use_ec = abap_true
+        use_ec_arg = abap_true )
       ( module = `sap.uxap`           control = `sap.uxap.HeaderFacetPattern`         name = `ObjectPageSectionShowTitle`          class = `z2ui5_cl_ai_app_200` path = `src/03/b02/z2ui5_cl_ai_app_200.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`

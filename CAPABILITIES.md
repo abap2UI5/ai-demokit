@@ -103,7 +103,10 @@ since 2026-07-18 also `open [pageKey]`, `close`, `setExpanded` —
 pr/control-call-whitelist —, since 2026-07-19 `goToStep` plus the
 optional `to`/`open` args — pr/control-method-args — and since
 2026-07-20 `openBy [anchorId→domRef]` + `setActivePage` —
-pr/control-methods-openby-setactivepage),
+pr/control-methods-openby-setactivepage; **exception:** `sap.ui.unified.Menu`
+has no `openBy` at all — only `open(kbd, opener, my, at, of)`, which self-closes
+when `of` is absent — so anchored open is a **current gap** there, no-op today,
+apps 227/228 → pr/unified-menu-open-anchored),
 client-side after render, without adding a dedicated action constant per case.
 Since 2026-07-22 a `control_global` single-string method (MessageToast.show,
 MessageBox.*) also **composes its text from a template + client-resolved args**
