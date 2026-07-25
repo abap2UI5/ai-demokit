@@ -344,10 +344,10 @@ generated class at generation time):
 - **Shell switch** (next to Tree view) toggles the `sap.m.Shell` letterboxing
   (`appWidthLimited`), two-way bound, client-side.
 - **Open column split into two buttons**: the first starts the abap2UI5 app
-  **in-page** via **hash routing** (UI5 Router style). The overview enables it
-  once with `client->set_nav_routing( )`; the button then sets the URL route
-  `#/app/<CLASS>` client-side via `client->cs_event-nav_to_route`, which starts
-  that app fresh. The route is bookmarkable and the native browser Back/Forward
+  **in-page from the backend** via `client->nav_app_call` (server event
+  `START_APP`). The overview enables **hash routing** (UI5 Router style) once
+  with `client->set_nav_routing( )`; the framework then pushes the bookmarkable
+  route `#/app/<CLASS>` for the called app, and the native browser Back/Forward
   buttons navigate between the overview and the launched apps — no new tab, no
   page reload. The second button opens the reference-links popover, trimmed to
   the four external links (OpenUI5 API, source, live sample, ABAP class). The
