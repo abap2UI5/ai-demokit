@@ -1,0 +1,31 @@
+{
+  "class": "z2ui5_cl_ai_app_246",
+  "sample": "sap.ui.unified.sample.FileUploaderComplex",
+  "entity": "sap.ui.unified.FileUploader",
+  "file": "src/02/b12/z2ui5_cl_ai_app_246.clas.abap",
+  "batch": "b12",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "handleUploadPress: the imperative getValue() guard + checkFileReadable().then(upload).then(clear) upload cycle is endpoint/browser-file dependent and upload/checkFileReadable/clear are not whitelisted CONTROL_METHODS, so the Button press is reduced to a client-composed MessageToast (control_global MESSAGE_TOAST.show 'Uploading file to the local server ...'). Same reduction as app 126 (FileUploaderBasic). uploadUrl='upload/' is kept 1:1."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "handleUploadComplete: the original parses a hardcoded 'File upload complete. Status: 200' response and toasts '<response> (Upload Success)'. Reproduced as a client-composed MessageToast with the resolved literal 'File upload complete. Status: 200 (Upload Success)' (endpoint-independent, same as app 126)."
+    },
+    {
+      "type": "NOTE",
+      "what": "change and typeMissmatch handlers are reproduced 1:1 as roundtrip-free client-composed MessageToasts (control_global MESSAGE_TOAST.show): change -> \"Press 'Upload File' to upload file '{0}'\" filled by ${$parameters>/newValue}; typeMissmatch -> 'The file type *.{0} is not supported. Choose one of the following types: txt, jpg' filled by ${$parameters>/fileType}. The allowed-types list is folded to the literal 'txt, jpg' (the static fileType property the original builds it from); the original's aFileTypes.map(...) result is unused there too, so the message text matches."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "The client-composed toasts (change/typeMissmatch/uploadComplete/press via control_global MESSAGE_TOAST) and the ${$parameters>/newValue} / ${$parameters>/fileType} event-arg resolution are view-create verified (render-smoke) but not yet live-verified in a running system."
+    }
+  ]
+}

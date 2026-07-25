@@ -1,0 +1,40 @@
+{
+  "class": "z2ui5_cl_ai_app_243",
+  "sample": "sap.m.sample.ResponsivePopover",
+  "entity": "sap.m.ResponsivePopover",
+  "file": "src/01/b19/z2ui5_cl_ai_app_243.clas.abap",
+  "batch": "b19",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "each button press builds a core:FragmentDefinition ResponsivePopover server-side and shows it anchored via client->popover_display( xml = ... by_id = $event.oSource.sId ); the action/footer buttons close it via follow_up_action( cs_event-popover_close )"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "Button.ariaHasPopup (since UI5 1.84.0) is kept 1:1 on the two trigger buttons (ariaHasPopup='Dialog'); the app needs a UI5 release >= 1.84 to render it."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "handleResponsivePopoverPress/handleResponsivePopoverFooterPress lazily Fragment.load a ResponsivePopover fragment and openBy(button). The port builds each fragment (Popover.fragment.xml -> ResponsivePopover id='myPopover'; PopoverFooter.fragment.xml -> ResponsivePopover id='myFooterPopover') as a core:FragmentDefinition on the button-press round-trip and shows it anchored to the pressed button via client->popover_display( xml = ..., by_id = $event.oSource.sId ) - the popover XML parameter is named 'xml' (not 'val' like popup_display). A server round-trip where the original is a client-side Fragment.load, but faithful (lazy either way) and matches apps 229/238. All ResponsivePopover/Button/Image/OverflowToolbar/ToolbarSpacer controls of both fragments are built in the port, so the fragment union in structural-diff is satisfied."
+    },
+    {
+      "type": "NOTE",
+      "what": "the original oPopover.bindElement('/ProductCollection/0') binds each popover to a single record; the port seeds that record's fields (name, productpicurl) at the default-model root and the fragments' relative bindings {NAME}/{PRODUCTPICURL} resolve against the root - same data, structural-diff matches on the last path segment. No bind_element follow-up needed because the record is the static row 0, not a per-row selection."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleCloseButton (Action-A/Action-B) and handleCloseFooterButton (Cancel) each do byId(...).close(); the port routes all three to one CLOSE event that issues follow_up_action( cs_event-popover_close ) - only one popover slot is open at a time, so a single popover_close covers both fragments. The footer's OK button has no handler in the original and none here."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "the JSONModel is loaded from the shared sap/ui/demo/mock/products.json; only the single record /ProductCollection/0 is bound (its Name + ProductPicUrl), so only those are seeded. The mock's host-relative ProductPicUrl ('test-resources/...') is resolved to an absolute sdk.openui5.org URL."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "unverified in a running system: that both ResponsivePopover fragments open anchored to their button (popover_display by_id = $event.oSource.sId), that {NAME}/{PRODUCTPICURL} resolve from the root-seeded record, and that the action/footer buttons close the popover (popover_close)."
+    }
+  ]
+}

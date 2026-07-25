@@ -739,6 +739,28 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` 3.1) and they bind display-only into a text template ({WIDTH} x {DEPTH} x {HEIGHT} {DIMUNIT}), so a string keeps the exact value; TYPE i would truncate (an earlier version did, via json-to-abap's` &&
                  ` first-row inference — tool since fixed). Price stays packed (DECIMALS 2) for the Currency type binding, decimals preserved.`
         use_name = abap_true )
+      ( module = `sap.f`              control = `sap.f.DynamicPage`                     name = `DynamicPageResponsiveAvatar`         class = `z2ui5_cl_ai_app_244` path = `src/04/b10/z2ui5_cl_ai_app_244.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        release = `1.73`
+        release_post171 = abap_true
+        is_post171 = abap_true
+        notes = `POST-1.71: sap.m.Avatar (control @since 1.73, incl. its src/class/press members) is used 1:1 in snappedContent and the DynamicPageHeader; needs UI5 >= 1.73. DynamicPage is the in-scope headline` &&
+                 ` control (@1.42); Avatar is a secondary control kept 1:1 per the post-1.71 member policy. // IMPROVISED: The controller's breakpointChange handling is dropped. onBreakpointChange read` &&
+                 ` currentRange/currentWidth from a runtime layout-breakpoint measurement and imperatively setDisplaySize on the header/snapped Avatars (M/L/XL) plus toasted the media range. Runtime breakpoint/overflow` &&
+                 ` geometry is not visible to the thin backend (CAPABILITIES: 'Event args derived from runtime layout/overflow measurement' is not expressible), so the responsive Avatar resizing and the 'Media Range:` &&
+                 ` ...' toast are omitted; the Avatars render at their default displaySize. The DynamicPage has no breakpointChange view attribute (it was attached imperatively), so this is a behavioural drop with no` &&
+                 ` structural-diff impact. // LIVE-TEST: showFooter is two-way bound ({/SHOW_FOOTER}, default true) and the Toggle Footer button flips it on a round-trip (view_model_update) - the faithful abap2UI5 form` &&
+                 ` of the controller's setShowFooter(!getShowFooter()); the scalar literal showFooter="true" -> binding is not a structural diff. The Home/Examples/Avatar presses raise client-composed MessageToasts via` &&
+                 ` _event_client control_global MESSAGE_TOAST (roundtrip-free, apps 005/060). Both the footer round-trip and the toast wiring are unverified in a running system. // NOTE: The two Avatar src values point` &&
+                 ` at the sdk.openui5.org host (https://sdk.openui5.org/test-resources/sap/uxap/images/imageID_275314.png) per the offline asset-URL rule; the original uses the relative ./test-resources path. Literal` &&
+                 ` src values are not compared by structural-diff.`
+        post171 = `sap.m.Avatar (control @since 1.73, incl. its src/class/press members) is used 1:1 in snappedContent and the DynamicPageHeader; needs UI5 >= 1.73. DynamicPage is the in-scope headline control (@1.42);` &&
+                 ` Avatar is a secondary control kept 1:1 per the post-1.71 member policy.`
+        use_ec = abap_true
+        use_ec_arg = abap_true
+        use_name = abap_true )
       ( module = `sap.f`              control = `sap.f.DynamicPage`                     name = `DynamicPageWithStickySubheader`      class = `z2ui5_cl_ai_app_238` path = `src/04/b09/z2ui5_cl_ai_app_238.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
@@ -1773,6 +1795,31 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` release >= 1.94 to render it.`
         post171 = `showClearIcon (since UI5 1.94) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.94 to render it.`
         use_name = abap_true )
+      ( module = `sap.m`              control = `sap.m.NavContainer`                    name = `NavContainer`                        class = `z2ui5_cl_ai_app_242` path = `src/01/b19/z2ui5_cl_ai_app_242.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        release = `1.111.0`
+        release_post171 = abap_true
+        is_post171 = abap_true
+        notes = `POST-1.71: NavContainer.navigationFinished (event, since UI5 1.111.0) is kept 1:1 - it is wired to a client-composed MessageToast; the app needs a UI5 release >= 1.111 to fire it. // IMPROVISED:` &&
+                 ` handleNav does navCon.to( byId(target), animationSelect.getSelectedKey() ) / navCon.back() imperatively. The port keeps the NavContainer id='navCon' and drives navigation via a round-trip: each` &&
+                 ` To-button's press (NAV) carries its static target page id (p1..p4) as the event arg, and on_event issues follow_up_action( val = cs_event-control_by_id t_arg = ( 'navCon' )( 'to' )( <target> )(` &&
+                 ` animation ) ) - 'to' is whitelisted with kinds [controlId, string], so the target page and the transition name both reach the method; Back issues ( 'navCon' )( 'back' ). A server round-trip where the` &&
+                 ` original is a purely client-side imperative call, but faithful. // NOTE: the animation transition comes from a Select whose getSelectedKey() the original reads at click time. The port two-way binds` &&
+                 ` the Select's selectedKey to a model field {/ANIMATION} (seeded to the first item's key 'slide'), so the current transition is available to the backend on the NAV round-trip. The original Select has` &&
+                 ` no selectedKey attribute (it defaults to the first item), so adding the bound selectedKey is an extra attribute (structural-diff only flags MISSING attributes) and is the faithful thin-frontend form` &&
+                 ` of the imperative getSelectedKey(). // NOTE: the sample's style.css (a border around the NavContainer via the .navContainerControl class) is injected via an added core:HTML leaf carrying a <style>` &&
+                 ` block in its content attribute (CAPABILITIES 'Custom CSS'); the literal CSS braces are escaped. structural-diff reports this core:HTML as an extra control (named here); the .navContainerControl class` &&
+                 ` stays on the NavContainer. // NOTE: the four To-buttons keep their core:CustomData (key='target') element 1:1 for structural fidelity, but the port transports the target page id via the button's` &&
+                 ` event arg (a static literal per button) rather than reading evt.getSource().data('target') - identical result since the target is fixed per button. // LIVE-TEST: unverified in a running system: that` &&
+                 ` navCon.to()/back() navigate the four pages with the selected transition (follow_up_action cs_event-control_by_id 'to'/'back'), that the two-way bound animation Select is applied before NAV runs, and` &&
+                 ` that navigationFinished fires the client-composed toast with the resolved page title.`
+        post171 = `NavContainer.navigationFinished (event, since UI5 1.111.0) is kept 1:1 - it is wired to a client-composed MessageToast; the app needs a UI5 release >= 1.111 to fire it.`
+        use_ec = abap_true
+        use_ec_arg = abap_true
+        use_fua = abap_true
+        use_fua_arg = abap_true )
       ( module = `sap.m`              control = `sap.m.NewsContent`                     name = `NewsContent`                         class = `z2ui5_cl_ai_app_063` path = `src/01/b07/z2ui5_cl_ai_app_063.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -2141,6 +2188,31 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         since = `1.38`
         notes = `NOTE: the sample binds the composite RangeSlider "range" property (an array [low, high] - range="{/RS1}" / range="0,100"). abap2UI5 binds scalar ABAP fields, so each range is expressed as the` &&
                  ` equivalent value / value2 properties the control keeps in sync - identical rendering.` )
+      ( module = `sap.m`              control = `sap.m.ResponsivePopover`               name = `ResponsivePopover`                   class = `z2ui5_cl_ai_app_243` path = `src/01/b19/z2ui5_cl_ai_app_243.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.15.1`
+        release = `1.84.0`
+        release_post171 = abap_true
+        is_post171 = abap_true
+        notes = `POST-1.71: Button.ariaHasPopup (since UI5 1.84.0) is kept 1:1 on the two trigger buttons (ariaHasPopup='Dialog'); the app needs a UI5 release >= 1.84 to render it. // IMPROVISED:` &&
+                 ` handleResponsivePopoverPress/handleResponsivePopoverFooterPress lazily Fragment.load a ResponsivePopover fragment and openBy(button). The port builds each fragment (Popover.fragment.xml ->` &&
+                 ` ResponsivePopover id='myPopover'; PopoverFooter.fragment.xml -> ResponsivePopover id='myFooterPopover') as a core:FragmentDefinition on the button-press round-trip and shows it anchored to the` &&
+                 ` pressed button via client->popover_display( xml = ..., by_id = $event.oSource.sId ) - the popover XML parameter is named 'xml' (not 'val' like popup_display). A server round-trip where the original` &&
+                 ` is a client-side Fragment.load, but faithful (lazy either way) and matches apps 229/238. All ResponsivePopover/Button/Image/OverflowToolbar/ToolbarSpacer controls of both fragments are built in the` &&
+                 ` port, so the fragment union in structural-diff is satisfied. // NOTE: the original oPopover.bindElement('/ProductCollection/0') binds each popover to a single record; the port seeds that record's` &&
+                 ` fields (name, productpicurl) at the default-model root and the fragments' relative bindings {NAME}/{PRODUCTPICURL} resolve against the root - same data, structural-diff matches on the last path` &&
+                 ` segment. No bind_element follow-up needed because the record is the static row 0, not a per-row selection. // NOTE: handleCloseButton (Action-A/Action-B) and handleCloseFooterButton (Cancel) each do` &&
+                 ` byId(...).close(); the port routes all three to one CLOSE event that issues follow_up_action( cs_event-popover_close ) - only one popover slot is open at a time, so a single popover_close covers both` &&
+                 ` fragments. The footer's OK button has no handler in the original and none here. // IMPROVISED: the JSONModel is loaded from the shared sap/ui/demo/mock/products.json; only the single record` &&
+                 ` /ProductCollection/0 is bound (its Name + ProductPicUrl), so only those are seeded. The mock's host-relative ProductPicUrl ('test-resources/...') is resolved to an absolute sdk.openui5.org URL. //` &&
+                 ` LIVE-TEST: unverified in a running system: that both ResponsivePopover fragments open anchored to their button (popover_display by_id = $event.oSource.sId), that {NAME}/{PRODUCTPICURL} resolve from` &&
+                 ` the root-seeded record, and that the action/footer buttons close the popover (popover_close).`
+        post171 = `Button.ariaHasPopup (since UI5 1.84.0) is kept 1:1 on the two trigger buttons (ariaHasPopup='Dialog'); the app needs a UI5 release >= 1.84 to render it.`
+        use_fua = abap_true
+        use_popover = abap_true
+        use_name = abap_true )
       ( module = `sap.m`              control = `sap.m.ScrollContainer`                 name = `ScrollContainer`                     class = `z2ui5_cl_ai_app_046` path = `src/01/b04/z2ui5_cl_ai_app_046.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 reworked, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -2949,6 +3021,27 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         notes = `IMPROVISED: Breadth-probe: a minimal sap.ui.table.Table (grid table, distinct from sap.m.Table) with 3 columns + template cells over a small ABAP model. The original's full column set, the` &&
                  ` p:ColumnAIAction plugin (post-1.71) and paste handling are omitted for the probe.`
         use_name = abap_true )
+      ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `ColumnResizing`                      class = `z2ui5_cl_ai_app_247` path = `src/02/b12/z2ui5_cl_ai_app_247.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        notes = `IMPROVISED: onColumnResize is reduced: the original buffers per-column resize messages, joins them and toasts 'Column <label> was resized to <width>.', and calls oEvent.preventDefault() to block` &&
+                 ` resizing the deliverydate column. The backend cannot preventDefault a client-side column resize (no CONTROL_METHODS / event hook for it) and cannot read the column label off the event, so` &&
+                 ` columnResize is wired to a roundtrip-free client MessageToast (control_global MESSAGE_TOAST.show 'Column was resized to {0}.' filled by ${$parameters>/width}); the per-column preventDefault and the` &&
+                 ` column-label text are dropped. // NOTE: Named-model fold with a nested config object: the original binds each Column width to the ui>/widths/{name,category,image,quantity,date} single object on a` &&
+                 ` separate JSONModel. abap2UI5 has one default model and, unlike a scalar named-model field, offers no _bind form for a nested config sub-path (and reconstructing '/WIDTHS/NAME' by hand is disallowed).` &&
+                 ` Folded to five top-level string fields named exactly name/category/image/quantity/date, each bound via client->_bind so the last path segment still matches the original (structural-diff normalizes on` &&
+                 ` the last segment). onColumnWidthsChange (SegmentedButton Static/Flexible/Mixed) is reproduced faithfully: the selected key is transported via ${$parameters>/item}.getKey() and the width set is` &&
+                 ` recomputed in ABAP (thin-frontend) + view_model_update. // NOTE: DeliveryDate is seeded deterministically. The original computes DeliveryDate = Date.now() - (i % 10 * 4 days) per load` &&
+                 ` (non-deterministic timestamps); the port uses a fixed base (2026-07-25 in epoch ms) minus the same (i % 10 * 4 days) offset, kept as an epoch-ms value bound through the original {path:'DeliveryDate',` &&
+                 ` type:'sap.ui.model.type.Date', formatOptions:{source:{pattern:'timestamp'}}} typed binding. // NOTE: ProductPicUrl is resolved to the OpenUI5 host: the mock stores the host-relative` &&
+                 ` 'test-resources/sap/ui/documentation/sdk/images/HT-xxxx.jpg'; the port stores the absolute 'https://sdk.openui5.org/test-resources/...' per the asset-URL rule, keeping the original {ProductPicUrl}` &&
+                 ` binding. Full 123-row ProductCollection inlined (Name/Category/ProductPicUrl/Quantity/DeliveryDate). // LIVE-TEST: The SegmentedButton width-switch round-trip (WIDTHS_CHANGE with` &&
+                 ` ${$parameters>/item}.getKey(), width recompute + view_model_update), the columnResize client toast (${$parameters>/width}), and the timestamp-typed DeliveryDate rendering are view-create verified` &&
+                 ` (render-smoke) but not yet live-verified in a running system.`
+        use_ec = abap_true
+        use_ec_arg = abap_true
+        use_name = abap_true )
       ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `MultiHeader`                         class = `z2ui5_cl_ai_app_137` path = `src/02/b05/z2ui5_cl_ai_app_137.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -3071,6 +3164,21 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         notes = `LIVE-TEST: The full upload cycle is backend/endpoint dependent, so it is reduced to client-side MessageToasts: 'Upload File' press shows an upload-started toast (original handleUploadPress ran` &&
                  ` checkFileReadable().then(upload)), and FileUploader.uploadComplete shows the hardcoded success message the original built (handleUploadComplete parsed a hardcoded 'Status: 200' response and toasted` &&
                  ` '(Upload Success)'). The uploadUrl='upload/' is kept 1:1.`
+        use_ec = abap_true
+        use_ec_arg = abap_true )
+      ( module = `sap.ui.unified`     control = `sap.ui.unified.FileUploader`           name = `FileUploaderComplex`                 class = `z2ui5_cl_ai_app_246` path = `src/02/b12/z2ui5_cl_ai_app_246.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        notes = `IMPROVISED: handleUploadPress: the imperative getValue() guard + checkFileReadable().then(upload).then(clear) upload cycle is endpoint/browser-file dependent and upload/checkFileReadable/clear are not` &&
+                 ` whitelisted CONTROL_METHODS, so the Button press is reduced to a client-composed MessageToast (control_global MESSAGE_TOAST.show 'Uploading file to the local server ...'). Same reduction as app 126` &&
+                 ` (FileUploaderBasic). uploadUrl='upload/' is kept 1:1. // IMPROVISED: handleUploadComplete: the original parses a hardcoded 'File upload complete. Status: 200' response and toasts '<response> (Upload` &&
+                 ` Success)'. Reproduced as a client-composed MessageToast with the resolved literal 'File upload complete. Status: 200 (Upload Success)' (endpoint-independent, same as app 126). // NOTE: change and` &&
+                 ` typeMissmatch handlers are reproduced 1:1 as roundtrip-free client-composed MessageToasts (control_global MESSAGE_TOAST.show): change -> "Press 'Upload File' to upload file '{0}'" filled by` &&
+                 ` ${$parameters>/newValue}; typeMissmatch -> 'The file type *.{0} is not supported. Choose one of the following types: txt, jpg' filled by ${$parameters>/fileType}. The allowed-types list is folded to` &&
+                 ` the literal 'txt, jpg' (the static fileType property the original builds it from); the original's aFileTypes.map(...) result is unused there too, so the message text matches. // LIVE-TEST: The` &&
+                 ` client-composed toasts (change/typeMissmatch/uploadComplete/press via control_global MESSAGE_TOAST) and the ${$parameters>/newValue} / ${$parameters>/fileType} event-arg resolution are view-create` &&
+                 ` verified (render-smoke) but not yet live-verified in a running system.`
         use_ec = abap_true
         use_ec_arg = abap_true )
       ( module = `sap.ui.unified`     control = `sap.ui.unified.Menu`                   name = `MenuItemEventing`                    class = `z2ui5_cl_ai_app_227` path = `src/02/b10/z2ui5_cl_ai_app_227.clas.abap`
@@ -3217,6 +3325,16 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` control. Consequently all five blockcolor:BlockBlueT1..T5 controls (and their id attributes) are absent from the port and five core:HTML controls are present in their place; the` &&
                  ` xmlns:blockcolor='sap.uxap.sample.SharedBlocks' declaration is dropped and xmlns:core='sap.ui.core' added. The block sources are not archived into ui5/ (matching the scaffolder), read from the` &&
                  ` checkout's SharedBlocks/BlockBlueTn.view.xml.` )
+      ( module = `sap.uxap`           control = `sap.uxap.ObjectPageSubSection`         name = `ObjectPageSubSectionHiddenTitle`     class = `z2ui5_cl_ai_app_245` path = `src/03/b04/z2ui5_cl_ai_app_245.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `NOTE: The ObjectNumber state binding differs: the original binds state="{path:'WeightMeasure', formatter:'.weightState'}" to a controller formatter (parseFloat + Success/Warning/Error thresholds).` &&
+                 ` That is business logic, so - abap2UI5 being a thin frontend - the weightState is computed in ABAP model_init into a WEIGHTSTATE field and bound state="{WEIGHTSTATE}", not via a frontend formatter.` &&
+                 ` Visually 1:1 with the original (apps 009/010/022/092 precedent). No core:require is dropped - the original registers the formatter as a controller method, not on the view root. // NOTE: The default` &&
+                 ` JSONModel (products.json) is folded into the one default model: the Table items path {/ProductCollection} and the row bindings ({SupplierName}, Currency parts:[{path:'Price'},...]) keep the same leaf` &&
+                 ` names, so structural-diff matches 0 diffs. Full 123-row ProductCollection inlined verbatim; only the columns the view binds are kept as fields. The Price Currency composite type binding is kept 1:1` &&
+                 ` (price TYPE p) - standard client-side type, no version issue.`
+        use_name = abap_true )
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageSubSection`         name = `ObjectPageSubSectionWithActions`     class = `z2ui5_cl_ai_app_178` path = `src/03/b02/z2ui5_cl_ai_app_178.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
