@@ -1901,6 +1901,28 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         post171 = `Formatter.DateCreateObject is referenced via core:require, which needs UI5 >= 1.74. sap.m.PlanningCalendar itself is since 1.34 (in scope). Also sap.ui.unified.CalendarAppointment.ariaHasPopup (@since` &&
                  ` 1.150.0) is kept 1:1 from the original view (ariaHasPopup='{ariaHasPopup}'); newer than 1.71, declared. Was undeclared because the property gate was sap.m-only (now extended to all libs, 2026-07-24).`
         use_name = abap_true )
+      ( module = `sap.m`              control = `sap.m.Popover`                       name = `Popover`                             class = `z2ui5_cl_ai_app_229` path = `src/01/b18/z2ui5_cl_ai_app_229.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        release = `1.84`
+        release_post171 = abap_true
+        is_post171 = abap_true
+        notes = `POST-1.71: Button.ariaHasPopup (since UI5 1.84) is kept 1:1 on the two view buttons (ariaHasPopup='Dialog'); the app needs a UI5 release >= 1.84 to render it. // IMPROVISED:` &&
+                 ` handlePopoverPress/handleResizablePopoverPress lazily Fragment.load a Popover and openBy(button). The port builds each popover as a core:FragmentDefinition on the button-press round-trip and shows it` &&
+                 ` anchored to the pressed button via client->popover_display( xml = ..., by_id = $event.oSource.sId ) - the popover XML parameter is named ``xml`` (not ``val`` like popup_display). This is a` &&
+                 ` server-round-trip where the original is a client-side Fragment.load, but it is faithful (lazy either way) and matches app 094. // NOTE: the original oPopover.bindElement('/ProductCollection/0') binds` &&
+                 ` each popover to a single record; the port seeds that record's fields (name, product_pic_url) at the default-model root and the popover's relative bindings {NAME}/{PRODUCT_PIC_URL} resolve against the` &&
+                 ` root - same data, structural-diff matches on the last path segment (app 175 single-record-flatten idiom). No bind_element needed because the record is the static row 0, not a per-row selection. //` &&
+                 ` NOTE: handleEmailPress does byId('myPopover').close() + MessageToast.show('E-Mail has been sent'), and handleClose does byId('myResizablePopover').close(); both close the popover slot via` &&
+                 ` follow_up_action( cs_event-popover_close ) (there is one popover slot open at a time), the email variant additionally toasting via message_toast_display. // IMPROVISED: the JSONModel is loaded from` &&
+                 ` the shared sap/ui/demo/mock/products.json; only the single record /ProductCollection/0 is bound, so only its name + picture URL are seeded. The mock's host-relative ProductPicUrl` &&
+                 ` ('test-resources/...') is resolved to an absolute sdk.openui5.org URL. // LIVE-TEST: unverified in a running system: that both popovers open anchored to their button (popover_display by_id =` &&
+                 ` $event.oSource.sId), that {NAME}/{PRODUCT_PIC_URL} resolve from the root-seeded record, and that the Email/Close footer buttons close the popover (popover_close) with the Email toast firing.`
+        post171 = `Button.ariaHasPopup (since UI5 1.84) is kept 1:1 on the two view buttons (ariaHasPopup='Dialog'); the app needs a UI5 release >= 1.84 to render it.`
+        use_fua = abap_true
+        use_popover = abap_true
+        use_name = abap_true )
       ( module = `sap.m`              control = `sap.m.Popover`                       name = `PopoverControllingCloseBehavior`     class = `z2ui5_cl_ai_app_094` path = `src/01/b11/z2ui5_cl_ai_app_094.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
