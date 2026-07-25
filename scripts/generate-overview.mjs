@@ -367,8 +367,10 @@ const abap = `"! Generated overview app - lists every abap2UI5 api sample app in
 "! links (OpenUI5 API, OpenUI5 source, live fullscreen sample, the generated ABAP
 "! class on GitHub, each opening in a new tab) AND the port's generation info -
 "! checked status, a post-1.71 note, and the generation notes; the second starts
-"! this abap2UI5 app directly in a new tab (open_new_tab; the start URL is
-"! same-origin). The same two buttons sit on every tree sample leaf (links only,
+"! this abap2UI5 app IN-PAGE via nav_app_call (server event START_APP) - it replaces
+"! the overview in the same tab and the native browser Back button returns to it
+"! (the framework couples Back to the server-side app stack, so no new tab, no page
+"! reload). The same two buttons sit on every tree sample leaf (links only,
 "! the tree model carries no info). The Rating column is a 1-5 "by feel" score of
 "! how much attention a port deserves (not coloured): app complexity, how heavily
 "! it was reworked/corrected (IMPROVISED/DROPPED_171/SUBSET_DATA/NOTE), whether it
@@ -508,6 +510,8 @@ CLASS ${CLASS} IMPLEMENTATION.
 
   METHOD on_event.
 
+    DATA li_app TYPE REF TO z2ui5_if_app.
+
     CASE client->get( )-event.
 
       WHEN \`LINKS\`.
@@ -601,6 +605,30 @@ CLASS ${CLASS} IMPLEMENTATION.
 
         client->popover_display( xml   = links->stringify( )
                                  by_id = client->get_event_arg( 8 ) ).
+
+      WHEN \`START_APP\`.
+        " Launch the selected abap2UI5 app IN-PAGE via nav_app_call: it replaces
+        " the overview in the same browser tab (no new tab). The user returns
+        " with the native browser Back button - the framework couples Back to the
+        " server-side app stack (nav_app_leave), so the overview reappears
+        " without a page reload. The class name is parsed from the same start URL
+        " the row already carries ( \`...?app_start=<CLASS>\` ).
+        DATA(lv_start) = client->get_event_arg( ).
+        DATA(lv_class) = lv_start.
+        FIND \`app_start=\` IN lv_start MATCH OFFSET DATA(lv_off).
+        IF sy-subrc = 0.
+          lv_class = to_upper( substring( val = lv_start off = lv_off + strlen( \`app_start=\` ) ) ).
+          SPLIT lv_class AT \`&\` INTO lv_class DATA(lv_rest).
+          SPLIT lv_class AT \`#\` INTO lv_class lv_rest.
+        ENDIF.
+        IF lv_class IS NOT INITIAL.
+          TRY.
+              CREATE OBJECT li_app TYPE (lv_class).
+              client->nav_app_call( li_app ).
+            CATCH cx_root.
+              client->message_toast_display( |App { lv_class } could not be started| ).
+          ENDTRY.
+        ENDIF.
 
     ENDCASE.
 
@@ -835,8 +863,10 @@ ${columnsBlock}
                                 " the reference links AND the port's generation info (checked,
                                 " post-1.71, notes) - the pressed button's runtime id
                                 " (\$event.oSource.sId) anchors it; second launches the abap2UI5
-                                " app directly in a new tab (open_new_tab - the start URL is
-                                " same-origin, so it passes isValidRedirectURL)
+                                " app IN-PAGE via nav_app_call (server event START_APP) - it
+                                " replaces the overview in the same tab, and the native browser
+                                " Back button returns to it (the framework couples Back to the
+                                " app stack, so no new tab and no page reload)
                                 )->open( \`HBox\`
                                     )->leaf( \`Button\`
                                         )->a( n = \`icon\`    v = \`sap-icon://chain-link\`
@@ -848,8 +878,8 @@ ${columnsBlock}
                                     )->leaf( \`Button\`
                                         )->a( n = \`icon\`    v = \`sap-icon://action\`
                                         )->a( n = \`type\`    v = \`Transparent\`
-                                        )->a( n = \`tooltip\` v = \`Start this abap2UI5 app in a new tab\`
-                                        )->a( n = \`press\`   v = client->_event_client( val = client->cs_event-open_new_tab t_arg = VALUE #( ( \`\${START_URL}\` ) ) )
+                                        )->a( n = \`tooltip\` v = \`Start this abap2UI5 app - opens in the same tab; use the browser Back button to return\`
+                                        )->a( n = \`press\`   v = client->_event( val = \`START_APP\` t_arg = VALUE #( ( \`\${START_URL}\` ) ) )
 
                                 )->shut(
                             )->shut(
@@ -901,9 +931,9 @@ ${columnsBlock}
                                 )->leaf( \`Button\`
                                     )->a( n = \`icon\`    v = \`sap-icon://action\`
                                     )->a( n = \`type\`    v = \`Transparent\`
-                                    )->a( n = \`tooltip\` v = \`Start this abap2UI5 app in a new tab\`
+                                    )->a( n = \`tooltip\` v = \`Start this abap2UI5 app - opens in the same tab; use the browser Back button to return\`
                                     )->a( n = \`visible\` v = \`{HAS_LINK}\`
-                                    )->a( n = \`press\`   v = client->_event_client( val = client->cs_event-open_new_tab t_arg = VALUE #( ( \`\${START_URL}\` ) ) ) ).
+                                    )->a( n = \`press\`   v = client->_event( val = \`START_APP\` t_arg = VALUE #( ( \`\${START_URL}\` ) ) ) ).
 
     client->view_display( view->stringify( ) ).
 

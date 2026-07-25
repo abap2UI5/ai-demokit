@@ -344,10 +344,12 @@ generated class at generation time):
 - **Shell switch** (next to Tree view) toggles the `sap.m.Shell` letterboxing
   (`appWidthLimited`), two-way bound, client-side.
 - **Open column split into two buttons**: the first starts the abap2UI5 app
-  directly in a new tab (`cs_event-open_new_tab` via `_event_client` — the start
-  URL is same-origin, so it passes `isValidRedirectURL`); the second opens the
-  reference-links popover, now trimmed to the four external links (OpenUI5 API,
-  source, live sample, ABAP class). The same two buttons sit on every tree leaf.
+  **in-page** via `nav_app_call` (server event `START_APP` — it replaces the
+  overview in the same tab, and the native browser Back button returns to it
+  because the framework couples Back/Forward to the server-side app stack, so no
+  new tab and no page reload); the second opens the reference-links popover, now
+  trimmed to the four external links (OpenUI5 API, source, live sample, ABAP
+  class). The same two buttons sit on every tree leaf.
 
 Follow-up refinements (2026-07-22): the **Release** column is renamed **Since**
 and only shows a value when higher than the control's own since (otherwise it
