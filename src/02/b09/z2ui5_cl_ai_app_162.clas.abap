@@ -74,7 +74,7 @@ CLASS z2ui5_cl_ai_app_162 IMPLEMENTATION.
     widths = `5em`.
     widthm = `10em`.
     widthl = `15em`.
-    pic1   = `test-resources/sap/ui/documentation/sdk/images/HT-1000.jpg`.
+    pic1   = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-7777-large.jpg`.
 
   ENDMETHOD.
 

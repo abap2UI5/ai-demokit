@@ -1,0 +1,17 @@
+{
+  "class": "z2ui5_cl_ai_app_181",
+  "sample": "sap.ui.core.sample.TypeDateAsString",
+  "entity": "sap.ui.model.type.Date",
+  "file": "src/02/b10/z2ui5_cl_ai_app_181.clas.abap",
+  "batch": "b10",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    { "type": "NOTE", "what": "Data-type binding paradigm: sap.ui.model.type.Date is pulled via core:require={DateType: 'sap/ui/model/type/Date'} and every DatePicker/Text keeps the original { path, type: 'DateType', formatOptions: { style, source: { pattern: 'yyyy-MM-dd' } } } binding 1:1 as a raw binding-info string (braces escaped, path via _bind). The single model field is a yyyy-MM-dd string." },
+    { "type": "NOTE", "what": "The original seeds the current date (UI5Date.getInstance().toISOString().slice(0,10)); a fixed date (2026-07-24) is used here so the port is deterministic - a client-only display value." }
+  ]
+}

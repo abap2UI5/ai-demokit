@@ -1,0 +1,47 @@
+{
+	"_version": "2.0.0",
+	"sap.app": {
+		"id": "sap.ui.unified.sample.CalendarLegendNavigation",
+		"applicationVersion": {
+			"version": "1.0.0"
+		},
+		"type": "application",
+		"title": "Application 'CalendarLegendNavigation'"
+	},
+	"sap.ui": {
+		"technology": "UI5",
+		"deviceTypes": {
+			"desktop": true,
+			"tablet": true,
+			"phone": true
+		}
+	},
+	"sap.ui5": {
+		"rootView": "sap.ui.unified.sample.CalendarLegendNavigation.CalendarLegendNavigation",
+		"dependencies": {
+			"minUI5Version": "2.0.0",
+			"libs": {
+				"sap.m": {},
+				"sap.ui.core": {},
+				"sap.ui.layout": {},
+				"sap.ui.unified": {}
+			}
+		},
+		"resources": {
+			"css": [
+				{
+					"uri": "../style.css"
+				}
+			]
+		},
+		"config": {
+			"sample": {
+				"files": [
+					"CalendarLegendNavigation.view.xml",
+					"CalendarLegendNavigation.controller.js",
+					"manifest.json"
+				]
+			}
+		}
+	}
+}

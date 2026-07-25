@@ -1,0 +1,17 @@
+{
+  "class": "z2ui5_cl_ai_app_176",
+  "sample": "sap.f.sample.GridListBoxContainerGrouping",
+  "entity": "sap.f.GridList",
+  "file": "src/04/b07/z2ui5_cl_ai_app_176.clas.abap",
+  "batch": "b07",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    { "type": "LIVE_TEST", "what": "The Slider `liveChange` handler (original onSliderMoved: byId('panelForGridList').setWidth(value + '%')) is dropped and replaced by a roundtrip-free expression binding on the host Panel.width (`{= ${/SLIDER_VALUE} + '%'}`), with Slider.value bound two-way to carry the value; per AGENTS.md 5 / CAPABILITIES 'prefer a pure expression binding over an event round-trip' (app 007 pattern). The width expression rendering is unverified in a running system." },
+    { "type": "NOTE", "what": "GridList with a group sorter on items ({path, sorter:{path:'GROUP', descending:false, group:true}}, default group headers), an empty grid:GridBoxLayout customLayout, growing/growingThreshold, and a custom f:headerToolbar (Toolbar with Title, ToolbarSpacer, SearchField - the SearchField has no handler in the original). The 27 items are inlined 1:1 from the sample's own model/items.json; the GridListItem template (VBox>VBox+FlexItemData, Title, Label) binds {TITLE}/{SUBTITLE} 1:1." }
+  ]
+}

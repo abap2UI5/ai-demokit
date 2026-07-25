@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_ai_app_184",
+  "sample": "sap.uxap.sample.ObjectPageSection",
+  "entity": "sap.uxap.ObjectPageSection",
+  "file": "src/03/b02/z2ui5_cl_ai_app_184.clas.abap",
+  "batch": "b02",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "Block->content inlining (app 178/161 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the original blocks aggregations each hold a custom BlockBase control (blockcolor:BlockBlueT1, blockcolor:BlockBlueT2, blockcolor:BlockBlueT3, blockcolor:BlockBlueT4, blockcolor:BlockBlueT5, from the sample's SharedBlocks JS, xmlns:blockcolor='sap.uxap.sample.SharedBlocks'), used once each with ids bbt1/bbt2/bbt3/bbt4/bbt5. A BlockBase is only a lazy-loading wrapper around a view; each BlockBlueTn's rendered content is a single coloured div (<html:div style='height:auto;min-height:4em; background-color: #A9EAFF ;line-height: 4em;'>...explanatory text...</html:div>). Since ObjectPageSubSection.blocks accepts any sap.ui.core.Control, each blockcolor:BlockBlueTn is inlined as a core:HTML leaf carrying that div in its content attribute - the whole ObjectPage renders with the thin generic frontend, no custom JS control. Consequently all five blockcolor:BlockBlueT1..T5 controls (and their id attributes) are absent from the port and five core:HTML controls are present in their place; the xmlns:blockcolor='sap.uxap.sample.SharedBlocks' declaration is dropped and xmlns:core='sap.ui.core' added. The block sources are not archived into ui5/ (matching the scaffolder), read from the checkout's SharedBlocks/BlockBlueTn.view.xml."
+    }
+  ]
+}

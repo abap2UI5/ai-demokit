@@ -1,0 +1,17 @@
+{
+  "class": "z2ui5_cl_ai_app_213",
+  "sample": "sap.f.sample.GridListBreakPoints",
+  "entity": "sap.f.GridList",
+  "file": "src/04/b07/z2ui5_cl_ai_app_213.clas.abap",
+  "batch": "b07",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    { "type": "LIVE_TEST", "what": "The Slider's `liveChange` attribute is dropped: Slider.value is two-way bound to /SLIDER_VALUE and the Panel's width is an expression binding {= ${/SLIDER_VALUE} + '%' } that reproduces the controller's onSliderMoved setWidth entirely client-side (thin-frontend, no round-trip). Panel width is added (the original set it imperatively). Binding/render behaviour unverified in a running system." },
+    { "type": "NOTE", "what": "GridResponsiveLayout.layoutChange is wired to a client-composed MessageToast (control_global MESSAGE_TOAST, template 'Layout changed to {0}' filled by ${$parameters>/layout}) reproducing onLayoutChange 1:1 without a backend round-trip. The layoutChange attribute itself is kept, so structural-diff sees no difference." }
+  ]
+}

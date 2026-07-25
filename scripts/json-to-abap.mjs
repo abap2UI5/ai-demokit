@@ -46,10 +46,31 @@ export function inferFields(rows) {
   for (const row of rows) {
     for (const k of Object.keys(row || {})) if (!seen.has(k)) { seen.add(k); keys.push(k); }
   }
-  return keys.map((json) => {
-    const sample = rows.find((r) => r && r[json] != null)?.[json];
-    return { json, abap: abapName(json), type: inferType(sample) };
+  // Infer the type from ALL values of a key, not just the first — a numeric
+  // column whose first row is integer-valued (956) but later rows carry
+  // decimals (1650.99) must NOT infer 'i' (which truncates via Math.trunc).
+  // Any non-integer number → 'string' so the value is emitted as a backtick
+  // literal (no truncation); declare that field TYPE p … DECIMALS n in ABAP,
+  // where a backtick literal converts to packed (app 171/174 pattern).
+  const decimalCols = [];
+  const fields = keys.map((json) => {
+    const values = rows.map((r) => (r ? r[json] : null)).filter((v) => v != null);
+    let type;
+    if (values.length === 0) type = 'string';
+    else if (values.every((v) => typeof v === 'boolean')) type = 'abap_bool';
+    else if (values.every((v) => typeof v === 'number')) {
+      type = values.every((v) => Number.isInteger(v)) ? 'i' : 'string';
+      if (type === 'string') decimalCols.push(json);
+    } else type = 'string';
+    return { json, abap: abapName(json), type };
   });
+  if (decimalCols.length) {
+    process.stderr.write(
+      `json-to-abap: WARNING — decimal column(s) [${decimalCols.join(', ')}] emitted as ` +
+      `string literals to avoid integer truncation; declare each TYPE p LENGTH n DECIMALS m ` +
+      `in ABAP (a backtick literal converts to packed).\n`);
+  }
+  return fields;
 }
 
 // a backtick ABAP string literal: content is passed verbatim, so an embedded
@@ -104,12 +125,27 @@ function drill(data, dotpath) {
   return dotpath.split('.').reduce((o, k) => (o == null ? o : o[k]), data);
 }
 
+// all-rows type inference for a single key (same rule as inferFields) — never
+// infer 'i' from the first row when a later row carries a decimal.
+function inferTypeForKey(rows, json) {
+  const values = rows.map((r) => (r ? r[json] : null)).filter((v) => v != null);
+  if (values.length === 0) return 'string';
+  if (values.every((v) => typeof v === 'boolean')) return 'abap_bool';
+  if (values.every((v) => typeof v === 'number')) {
+    return values.every((v) => Number.isInteger(v)) ? 'i' : 'string';
+  }
+  return 'string';
+}
+
 function parseFieldsSpec(spec, rows) {
   if (!spec) return inferFields(rows);
   return spec.split(',').map((token) => {
     const [json, name, type] = token.split(':');
-    const sample = rows.find((r) => r && r[json] != null)?.[json];
-    return { json, abap: name ? abapName(name) : abapName(json), type: type || inferType(sample) };
+    const inferred = type || inferTypeForKey(rows, json);
+    if (!type && inferred === 'string' && rows.some((r) => typeof (r && r[json]) === 'number')) {
+      process.stderr.write(`json-to-abap: WARNING — column '${json}' has decimal value(s), emitted as string literals to avoid truncation; declare it TYPE p LENGTH n DECIMALS m.\n`);
+    }
+    return { json, abap: name ? abapName(name) : abapName(json), type: inferred };
   });
 }
 

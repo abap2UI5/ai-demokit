@@ -1,0 +1,17 @@
+{
+  "class": "z2ui5_cl_ai_app_209",
+  "sample": "sap.m.sample.ObjectHeaderResponsiveV",
+  "entity": "sap.m.ObjectHeader",
+  "file": "src/01/b17/z2ui5_cl_ai_app_209.clas.abap",
+  "batch": "b17",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    { "type": "NOTE", "what": "The ObjectHeader's single-record element binding attribute binding=\"{/ProductCollection/0}\" is dropped: abap2UI5 serves one default model, so products.json row 0 (HT-1000, Notebook Basic 15) is seeded directly onto the model root (model_init) and the control's relative {NAME}/{DESCRIPTION}/{SUPPLIERNAME}/{WIDTH}/… bindings resolve against it — same data, renders identically (single-record fold, AGENTS §5). The ProductPicUrl asset is served absolute from sdk.openui5.org per the asset-URL rule." },
+    { "type": "LIVE_TEST", "what": "The flattened relative field bindings and the ObjectMarker/ObjectStatus markers render in render-smoke, but the live data bind of the folded single record is unverified in a running system." }
+  ]
+}

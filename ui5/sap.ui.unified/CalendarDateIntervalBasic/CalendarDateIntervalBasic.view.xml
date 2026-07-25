@@ -1,0 +1,29 @@
+<mvc:View
+		controllerName="sap.ui.unified.sample.CalendarDateIntervalBasic.CalendarDateIntervalBasic"
+		xmlns:l="sap.ui.layout"
+		xmlns:u="sap.ui.unified"
+		xmlns:mvc="sap.ui.core.mvc"
+		xmlns="sap.m"
+		class="viewPadding">
+	<l:VerticalLayout>
+		<u:CalendarDateInterval
+				id="calendar"
+				width="320px"
+				select=".handleCalendarSelect"/>
+		<l:VerticalLayout>
+			<Button
+					press=".handleSelectToday"
+					text="Select Today"/>
+			<l:HorizontalLayout>
+				<Label
+						text="Selected Date:"
+						labelFor="selectedDate"
+						class="labelMarginLeft"/>
+				<Text
+						id="selectedDate"
+						text="No Date Selected"
+						class="labelMarginLeft"/>
+			</l:HorizontalLayout>
+		</l:VerticalLayout>
+	</l:VerticalLayout>
+</mvc:View>

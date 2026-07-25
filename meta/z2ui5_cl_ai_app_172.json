@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_ai_app_172",
+  "sample": "sap.tnt.sample.SideNavigationUnselectableParents",
+  "entity": "sap.tnt.SideNavigation",
+  "file": "src/05/b06/z2ui5_cl_ai_app_172.clas.abap",
+  "batch": "b06",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "sap.tnt.NavigationListItem.selectable (@since 1.116) is used 1:1 on the unselectable parent items (Building/Mileage/Transport) and the fixed External Link item - it is the whole point of this sample. Kept per the members-newer-than-1.71 fidelity policy; @since verified by hand against fork-openui5/src/sap.tnt/src/sap/tnt/NavigationListItem.js line 101-103 (property gate is blind to sap.tnt). Requires a UI5 release >= 1.116 to render."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "onCollapseExpandPress reproduced server-side: SideNavigation.expanded is two-way bound (initial false as in the original expanded=\"false\") and flipped on a backend round-trip (TOGGLE_EXPAND) instead of the original imperative byId().setExpanded(!expanded). Same technique as app 128. The literal expanded=\"false\" becoming a {/EXPANDED} binding needs a live render check."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "onItemSelect reproduced roundtrip-free: the SideNavigation itemSelect event fires a client-composed MessageToast (control_global MESSAGE_TOAST/show, template 'Item selected: {0}' filled by the client-resolved ${$parameters>/item}.getText()) - the 1:1 equivalent of the original MessageToast.show(`Item selected: ${sText}`). Same idiom as app 060; CAPABILITIES marks it expressible, live render/click check pending."
+    }
+  ]
+}

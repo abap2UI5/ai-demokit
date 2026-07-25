@@ -1,0 +1,42 @@
+{
+	"_version": "2.0.0",
+	"sap.app": {
+		"id": "sap.f.sample.DynamicPageWithStickySubheader",
+		"applicationVersion": {
+			"version": "1.0.0"
+		},
+		"type": "application",
+		"title": "Application 'DynamicPageWithStickySubheader'"
+	},
+	"sap.ui": {
+		"technology": "UI5",
+		"deviceTypes": {
+			"desktop": true,
+			"tablet": true,
+			"phone": true
+		}
+	},
+	"sap.ui5": {
+		"rootView": "sap.f.sample.DynamicPageWithStickySubheader.view.DynamicPageWithStickySubheader",
+		"dependencies": {
+			"minUI5Version": "2.0.0",
+			"libs": {
+				"sap.f": {},
+				"sap.m": {},
+				"sap.ui.core": {},
+				"sap.ui.layout": {}
+			}
+		},
+		"config": {
+			"sample": {
+				"stretch": true,
+				"files": [
+					"controller/DynamicPageWithStickySubheader.controller.js",
+					"view/DynamicPageWithStickySubheader.view.xml",
+					"view/Card.fragment.xml",
+					"manifest.json"
+				]
+			}
+		}
+	}
+}

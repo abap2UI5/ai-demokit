@@ -1,0 +1,18 @@
+{
+  "class": "z2ui5_cl_ai_app_225",
+  "sample": "sap.m.sample.TableStrictLayout",
+  "entity": "sap.m.Table",
+  "file": "src/01/b17/z2ui5_cl_ai_app_225.clas.abap",
+  "batch": "b17",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    { "type": "POST_171", "what": "sap.m.Table autoPopinMode (since UI5 1.76) kept 1:1 from the original; needs a UI5 release >= 1.76 to render." },
+    { "type": "POST_171", "what": "sap.m.plugins.ColumnResizer (since UI5 1.91) kept 1:1 in the Table dependents aggregation; needs a UI5 release >= 1.91 to render." },
+    { "type": "LIVE_TEST", "what": "The sorter binding ({path:'/ProductCollection', sorter:{path:'NAME'}}) and the sap.ui.model.type.Currency composite binding on Price/CurrencyCode are passed through 1:1 as raw binding-info strings; the sorted order and currency formatting are not yet verified in a running system." }
+  ]
+}

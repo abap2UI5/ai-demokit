@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_ai_app_173",
+  "sample": "sap.ui.layout.sample.VerticalLayout",
+  "entity": "sap.ui.layout.VerticalLayout",
+  "file": "src/02/b10/z2ui5_cl_ai_app_173.clas.abap",
+  "batch": "b10",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "The original binds the image src against a separate 'img' JSON model ({img>/products/pic1} from sap/ui/demo/mock/img.json) alongside the default model for the widths. abap2UI5 has one default model, so the picture path is folded into it and the src binds it directly (client->_bind( pic1 )) - the 'img>' prefix is dropped and the last path segment (pic1) is identical, which structural-diff matches."
+    },
+    {
+      "type": "NOTE",
+      "what": "The original computes widthS/M/L from Device.system.phone in the controller (phone: 2/4/6em, else 5/10/15em). The bindings {/widthS..L} are ported 1:1 on the default model; the seed uses the desktop values, as the phone branch is a client-only Device decision. Widths render but the device-conditional seed is unverified in a running system."
+    }
+  ]
+}

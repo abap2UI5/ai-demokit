@@ -1,0 +1,14 @@
+{
+  "class": "z2ui5_cl_ai_app_215",
+  "sample": "sap.ui.layout.sample.FixFlexMinFlexSize",
+  "entity": "sap.ui.layout.FixFlex",
+  "file": "src/02/b10/z2ui5_cl_ai_app_215.clas.abap",
+  "batch": "b10",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": []
+}

@@ -1,0 +1,32 @@
+{
+  "class": "z2ui5_cl_ai_app_232",
+  "sample": "sap.ui.core.sample.Commands",
+  "entity": "sap.ui.core.CommandExecution",
+  "file": "src/02/b10/z2ui5_cl_ai_app_232.clas.abap",
+  "batch": "b10",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "init-only, roundtrip-free: the Save/Delete buttons compose their toast on the frontend via control_global MESSAGE_TOAST.show (static text, no round-trip); the two Open-Popover buttons wire control_by_id openBy anchored to the button ($event.oSource.sId); the enabled/visibility switches are two-way bound to default-model booleans that the popover command-buttons bind their enabled/visible to - so there is no on_event"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "The sample's entire point is sap.ui.core.CommandExecution - declarative command objects bound to keyboard shortcuts (manifest sap.ui5/commands: Save=Ctrl+S, Delete=Ctrl+D). abap2UI5 has NO equivalent for a command / keyboard-shortcut binding (nothing in CAPABILITIES; no CommandExecution control, no $cmd> command model, no manifest-level shortcut registry - the frontend only renders XML and forwards named events, it cannot register a global key handler). So all three core:CommandExecution controls (CE_SAVE, CE_DELETE in the Page dependents, CE_SAVE_POPOVER in the popoverCommand dependents) are DROPPED and the Ctrl+S / Ctrl+D shortcuts are lost. The invoked actions stay reachable: every command-triggering button (press='cmd:Save' / press='cmd:Delete', in the Button panel and both popover footers) keeps its press attribute, rewired to a client-composed MESSAGE_TOAST.show that reproduces onSave ('CTRL+S: save triggered on controller') and onDelete ('CTRL+D: Delete triggered on controller'). See the friction log / pr/core-commandexecution-keyboard-shortcuts."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "The $cmd> command model bindings enabled='{$cmd>Save/enabled}' / enabled='{$cmd>Delete/enabled}' on the popover footer buttons have no command model to bind to (CommandExecution dropped), so they are folded to default-model booleans: the popover buttons bind enabled to {/SAVE_ENABLED}/{/DELETE_ENABLED} (page popover) and {/PSAVE_ENABLED}/{/DELETE_ENABLED} (command popover). Correspondingly the controller's onToggleSave/onToggleDelete/onTogglePopoverSave (byId('CE_SAVE').setEnabled(state)) and the *Visibility variants (setVisible) are reproduced as two-way bindings: each Switch state is bound two-way to the matching boolean and the popover buttons additionally bind visible to {/SAVE_VISIBLE}/{/DELETE_VISIBLE}/{/PSAVE_VISIBLE}, so the switches drive the command-buttons entirely client-side (thin frontend, app 007/128 pattern) with no round-trip. Consequently the Switch change attributes (change='.onToggleSave' etc., 6 of them) are DROPPED and replaced by the two-way state binding; the enabled binding value differs from the original $cmd> path."
+    },
+    {
+      "type": "POST_171",
+      "what": "sap.m.Button.ariaHasPopup (since UI5 1.84) is newer than 1.71 but kept for the 1:1 port - the two Open-Popover buttons carry ariaHasPopup='Dialog' as in the original; the app needs a UI5 release >= 1.84 to render it."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "unverified in a running system: (a) the two Open-Popover buttons open the popover anchored to the button via control_by_id openBy ($event.oSource.sId) - sap.m.Popover exposes openBy (unlike sap.ui.unified.Menu, app 227), so this is expected to work as in app 016/060 but is not live-checked; (b) the Save/Delete buttons toast the onSave/onDelete text via client-composed MESSAGE_TOAST; (c) the switch-driven two-way enabled/visible of the popover buttons."
+    }
+  ]
+}

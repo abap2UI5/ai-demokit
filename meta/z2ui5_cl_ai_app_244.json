@@ -1,0 +1,31 @@
+{
+  "class": "z2ui5_cl_ai_app_244",
+  "sample": "sap.f.sample.DynamicPageResponsiveAvatar",
+  "entity": "sap.f.DynamicPage",
+  "file": "src/04/b10/z2ui5_cl_ai_app_244.clas.abap",
+  "batch": "b10",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "sap.m.Avatar (control @since 1.73, incl. its src/class/press members) is used 1:1 in snappedContent and the DynamicPageHeader; needs UI5 >= 1.73. DynamicPage is the in-scope headline control (@1.42); Avatar is a secondary control kept 1:1 per the post-1.71 member policy."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "The controller's breakpointChange handling is dropped. onBreakpointChange read currentRange/currentWidth from a runtime layout-breakpoint measurement and imperatively setDisplaySize on the header/snapped Avatars (M/L/XL) plus toasted the media range. Runtime breakpoint/overflow geometry is not visible to the thin backend (CAPABILITIES: 'Event args derived from runtime layout/overflow measurement' is not expressible), so the responsive Avatar resizing and the 'Media Range: ...' toast are omitted; the Avatars render at their default displaySize. The DynamicPage has no breakpointChange view attribute (it was attached imperatively), so this is a behavioural drop with no structural-diff impact."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "showFooter is two-way bound ({/SHOW_FOOTER}, default true) and the Toggle Footer button flips it on a round-trip (view_model_update) - the faithful abap2UI5 form of the controller's setShowFooter(!getShowFooter()); the scalar literal showFooter=\"true\" -> binding is not a structural diff. The Home/Examples/Avatar presses raise client-composed MessageToasts via _event_client control_global MESSAGE_TOAST (roundtrip-free, apps 005/060). Both the footer round-trip and the toast wiring are unverified in a running system."
+    },
+    {
+      "type": "NOTE",
+      "what": "The two Avatar src values point at the sdk.openui5.org host (https://sdk.openui5.org/test-resources/sap/uxap/images/imageID_275314.png) per the offline asset-URL rule; the original uses the relative ./test-resources path. Literal src values are not compared by structural-diff."
+    }
+  ]
+}

@@ -33,8 +33,19 @@ become the backlog to close.
 1.71** and is **not deprecated** in the current release (legacy-free ready) —
 computed per sample from `ui5/universe.json` by `generate-coverage.mjs`
 (`scopeOf`). Out-of-scope samples stay listed in `api.md` (marked `✗`) but are
-never ported; `node scripts/generate-coverage.mjs --backlog` prints the
+**never ported**; `node scripts/generate-coverage.mjs --backlog` prints the
 in-scope, unported samples for batch planning.
+
+> **⚠️ Verify scope from source before porting — the offline snapshot is blind.**
+> `ui5/universe.json` carries `since: null` for most controls (the fork has no
+> generated `designtime/api.json`), so `scopeOf` does `sinceLeq171(null)=true`
+> and silently passes controls newer than 1.71. That is how `sap.f.AvatarGroup`
+> (@1.73) nearly shipped and `sap.f.SidePanel` (@1.107, app 136) already did.
+> **Always run `node scripts/scope-of.mjs <entity>` (or `--sample <Name>`) first**
+> — it reads the authoritative `@since`/`@deprecated` from the OpenUI5 source and
+> exits non-zero on any out-of-scope entity. A neighbour port existing is **not**
+> proof of scope (see the UploadSet/SidePanel debt). Wiring `scopeOf` to this is
+> `pr/scope-since-from-source`.
 
 **Batch planning is breadth-first.** The mission is gap discovery, and the
 gap yield of a port drops sharply once its control is covered — many samples
@@ -170,8 +181,13 @@ source of truth:
   directly in the sidecar; `reviewed` is a manual promotion too. (There is no
   `golden` status — the category was retired 2026-07-22; former golden ports are
   plain `checked`, and any port may be refactored to the current conventions.)
-- The abapGit `<DESCRIPT>` follows `<entity> - <demo kit description>`
-  (e.g. `sap.m.Switch - Some say it is only a switch...`), truncated to 60 chars.
+- The abapGit `<DESCRIPT>` follows `<library> - <short description>`, truncated
+  to 60 chars — the form `scaffold.mjs` emits (e.g. `sap.ui.unified - CurrencyInTable`).
+  There is **no canonical description string offline** (`universe.json` carries
+  none), so the scaffolder's `<library> - <sample name>` default is acceptable
+  as-is; only improve the trailing text to a human phrase when you know one
+  (e.g. `sap.m.Switch - Some say it is only a switch...`). Do not agonize over
+  entity-vs-library — existing ports use both; keep the scaffolder default.
 - The **control** must exist since UI5 1.71 and not be deprecated — samples
   whose control is newer or deprecated are **out of scope** (§1) and never
   enter a batch. **Members (properties/aggregations/associations/events)
@@ -181,6 +197,30 @@ source of truth:
   `ui5/properties.json`); the app then needs a UI5 release ≥ that member's
   version to render it. `DROPPED_171` remains only for the rare member that
   genuinely cannot be expressed.
+  **Gate coverage — the property gate now covers ALL ported libraries**
+  (`sap.m`, `sap.f`, `sap.ui.core/layout/table/unified`, `sap.uxap`, `sap.tnt`, …
+  — extended 2026-07-24). `generate-properties.mjs` scans every lib's source
+  **recursively** (nested controls too — `form/SimpleForm`, `cards/NumericHeader`)
+  into `ui5/properties.json` (831 controls), and `property-check.mjs` resolves
+  each control via the port's own `xmlns` declarations and walks the parent
+  chain — so a post-1.71 member in any library is now caught automatically. The
+  `generate_result` CI step clones the full OpenUI5 repo, so this holds in CI.
+  You no longer need to `@since`-check by hand — but two facts about how the
+  generator reads `@since` still matter if you're verifying a flag: **(a)** an
+  inherited member's `@since` lives in the **parent class file** (the gate walks
+  `X.extend(...)` up, e.g. `CalendarDateInterval` → `Calendar.js`); **(b)** a
+  member with **no `@since` tag** is base-version (≤ 1.71). Three residual limits:
+  enum *values* newer than 1.71 (e.g. `ObjectStatus` `Indication06`) are
+  invisible at the attribute-name level; a member **relocated to a newer base
+  class** reads as that base's version (e.g. `NavigationListItem.expanded` shows
+  1.121 though the property predates 1.71 — declare it with that note); and a
+  member/control **not present in `properties.json` at all** is silently passed
+  (e.g. `IllustratedMessage` @1.98, `Input.autocomplete` @1.108, and
+  `sap.ui.core.CommandExecution` were all invisible to the gate on app 232/233).
+  **So the property gate is a backstop, not a guarantee** — when a control feels
+  new, still confirm with `node scripts/scope-of.mjs <entity>` (control-level)
+  and declare `POST_171` **by policy** even if no gate forces it. A green
+  property-check does **not** prove a port is ≤ 1.71-clean.
 - **Before declaring any sample feature inexpressible, check `CAPABILITIES.md`**
   — the map of what abap2UI5 can express, each entry backed by a port that
   proves it. Never improvise around a feature it marks ✅/🔶 (app 042 replaced a
@@ -262,7 +302,18 @@ ENDMETHOD.
 - `check_on_event( )` fires on every user interaction — dispatch in `on_event( )`.
 - Add `model_init( )` / `on_event( )` **only when the app actually has data /
   events** — never a pass-through method with a single statement. A static app
-  (like app 051) has just `view_display( )` under `check_on_init( )`.
+  (like app 051) has just `view_display( )` under `check_on_init( )`. A
+  **data-less-but-stateful** app (its only "model" is one or two control-state
+  flags a button toggles, e.g. `expanded`) seeds those flags **inline in `main`**
+  (or `view_display`), no `model_init` — the single-statement-method rule wins
+  (app 128 precedent).
+- **A scalar literal → two-way binding is faithful, not a structural difference.**
+  Turning `expanded="false"` into `expanded="{/EXPANDED}"` to reproduce a
+  controller's imperative `setExpanded` is the idiomatic thin-frontend move;
+  `structural-diff` does **not** flag it (it compares control/attr presence, and
+  binding *values* only where the original itself binds). Declare a `LIVE_TEST`
+  only because the round-trip *behaviour* is unverified, not because the diff
+  requires it (app 128/172 precedent).
 - If the sample re-displays on navigation, add an
   `ELSEIF client->check_on_navigated( ). view_display( ).` branch.
 
@@ -270,7 +321,12 @@ ENDMETHOD.
 
 The sample's JSON model becomes ABAP: one `ty_s_`/`ty_t_` type per JSON array,
 filled with `VALUE #( ( … ) ( … ) )`. Field names are the JSON keys, upper-cased
-by ABAP; bindings reference them in braces (`{TITLE}`, `{PRODUCT_ID}`). Keep the
+by ABAP; bindings reference them in braces (`{TITLE}`, `{PRODUCT_ID}`). **A
+camelCase key mirrors verbatim — do not insert underscores**: `SupplierName` →
+field `suppliername`, binding `{SUPPLIERNAME}` (never `SUPPLIER_NAME`) — a corpus
+convention. (structural-diff would tolerate either — its `normBind` lower-cases
+**and** strips underscores — so this is for consistency, not to satisfy the gate.)
+Keep the
 data verbatim from the sample — **the full row set, no subsetting**: inline every
 row of the referenced mock array (e.g. all 123 `/ProductCollection` rows of
 `ui5/mock/products.json`), byte-identical to the mock (`SUBSET_DATA` is no longer
@@ -286,10 +342,20 @@ that binds against a named model (`img>/products/pic1`, a separate `JSONModel`,
 merge the extra model's fields into the row type, or — for pure display assets
 like image URLs that are the same for every row — inline them as literals /
 build them from a shared base (a non-bound `base_url` kept in `PROTECTED`, not
-`PUBLIC`, so the round-trip model scan stays small). Record the flattening as an
-`IMPROVISED:` note — also when it merely drops unbound columns of a shared
-mock model. Worked example: app 006 (`sap.m.Carousel`, `img>` model →
-static image URLs).
+`PUBLIC`, so the round-trip model scan stays small).
+**Deviation type for the flattening — the rule that ends the IMPROVISED/NOTE
+confusion:** a **pure prefix-drop that renders identically** — same data, same
+leaf name, `structural-diff` 0 diffs (`{ui>/rowMode}`→`{/ROWMODE}`,
+`{img>/products/pic1}`→`{/PIC1}` with the real value) — is faithful → **`NOTE`**.
+Use **`IMPROVISED`** only when the fold actually *loses or changes* something:
+drops bound columns, resolves a live model statically, or substitutes values
+(app 006's `img>`→static URLs). When binding a single record the original
+`bindElement`s (`/SupplierCollection/0`), seed those fields at the **default-model
+root** so the view's *relative* child bindings (`{SupplierName}`) resolve — and
+seed the **actual mock row-0 values**, verified against the mock, not a
+neighbour port (app 162/142 had copied wrong values). Worked example: app 006
+(`sap.m.Carousel`, `img>` → static URLs, `IMPROVISED`); app 175 (`SimpleForm`,
+supplier row-0 flatten).
 
 **Absent JSON properties must not become empty strings.** A flat ABAP row
 serializes every field on every row; where the original JSON simply omits a
@@ -330,6 +396,17 @@ just `open`/`leaf` calls — an aggregation is a nameless-namespace `open` with 
 attributes, e.g. `)->open( \`headerToolbar\` )` (positional — a single named `n =`
 would trip abaplint's `omit_parameter_name`).
 
+**An aggregation carries the same `ns=` as the tag has in the XML** — which is
+its parent control's namespace, not the default one. `<m:content>` under an
+`sap.m.Page` is `)->open( n = \`content\` ns = \`m\` )`; but a default-namespace
+aggregation like `<columns>` / `<template>` / `<footer>` inside an
+`sap.ui.table.Table` (whose view default `xmlns` is `sap.ui.table`) is the
+nameless `)->open( \`columns\` )`. Copy the prefix from the original tag; a
+wrong or missing `ns` on an aggregation produces an unknown-aggregation node
+that `render_smoke` rejects. (Worked example: app 164, `sap.ui.table` RowModes —
+`m:content`/`m:OverflowToolbar` prefixed, `columns`/`extension`/`footer`/`template`
+bare.)
+
 `factory( )` returns an **empty root**. There is no implicit `<View>` — you open
 the `<mvc:View>` and declare its `xmlns` namespaces yourself, exactly like any
 other control:
@@ -360,7 +437,13 @@ client->view_display( view->stringify( ) ).
 ```
 
 `stringify( )` renders the whole tree to the XML string handed to
-`client->view_display( )` as the standalone final statement.
+`client->view_display( )` as the standalone final statement. **It renders from
+the root, so every tag is closed structurally — trailing `shut( )`s before the
+final `).` are optional.** `shut( )` only moves the *cursor* up to add a sibling
+at a higher level; once the last leaf/attr is placed you can end the chain with a
+bare `).` (the still-open View/Panel/… nodes all close in the output). Both
+styles pass every gate — a chain that closes back to the root explicitly, or one
+that stops at the deepest node.
 
 #### Formatting rules (strict — reviewers check these)
 
@@ -400,6 +483,14 @@ client->view_display( view->stringify( ) ).
   `` `{PRODUCT_ID}` `` referencing an upper-cased model field, which has no `_bind`
   form (see the next bullet); keep those, but never write the absolute / model-root
   path by hand.
+- **A `path:` inside a raw binding-info string uses the ABAP (upper-cased) field
+  name too** — same rule as the brace form, easy to miss. A typed/sorter/Currency
+  binding copied from the original keeps its *structure* 1:1 but its `path:` must
+  switch to the model field: original `` `{path:'exchangeRate', type:'sap.ui.model.type.Float'}` ``
+  → `` \|\{ path: 'EXCHANGE_RATE', type: 'sap.ui.model.type.Float' \}\| ``. Copying
+  the original camelCase `path:'exchangeRate'` verbatim renders nothing (no such
+  model field) and no gate catches it — structural-diff normalizes case, render-smoke
+  mocks the model. Found by the app-171 cold-read probe (2026-07-24).
 - `client->_bind( var )` — bind an ABAP `DATA` member two-way (the value
   flows back into `var` on the next round-trip), e.g.
   `)->a( n = `items` v = client->_bind( t_items )`. **`client->_bind_edit( )`
@@ -486,17 +577,35 @@ with a closed `type` vocabulary so deviations stay countable:
 - `LIVE_TEST` — needs checking in a running system: an unverified
   binding/event path, or uncertain rendering (e.g. app 003's `${$source>/text}`
   event arg).
-- `IMPROVISED` — deviates from the sample: e.g. a named model flattened to
-  static values (app 006), or a MessageManager replaced by a hardcoded message
-  table (app 038). Only improvise what `CAPABILITIES.md` does not mark
-  expressible — app 042's Dialog→toast substitution was a wrong improvisation;
-  app 044 shows the 1:1 way (`popup_display`).
+- `IMPROVISED` — **materially deviates** from the sample: the port loses or
+  changes something. A named model flattened to **static values** (app 006's
+  `img>`→hardcoded URLs), a MessageManager replaced by a hardcoded message table
+  (app 038), a fold that **drops bound columns** or resolves a live model
+  statically. Only improvise what `CAPABILITIES.md` does not mark expressible —
+  app 042's Dialog→toast substitution was a wrong improvisation; app 044 shows
+  the 1:1 way (`popup_display`).
 - `DROPPED_171` — a control / property / enum value newer than 1.71 was
   dropped or downgraded (app 042's `Indication06`+ states set to `None`).
 - `SUBSET_DATA` — **retired (2026-07-22): no longer accepted.** Ports inline the
   full mock row set (see `model_init` above); `validate-meta` now rejects this
   type. Kept in the vocabulary only so historical diffs stay readable.
-- `NOTE` — anything else worth flagging.
+- `NOTE` — a faithful port with a caveat worth recording but **no loss**. This
+  is the type for a **pure named-model prefix-drop that renders identically** —
+  same data, same leaf name, `structural-diff` 0 diffs (`{ui>/rowMode}`→`{/ROWMODE}`,
+  `{img>/pic1}`→`{/PIC1}` with the real value); the model layer differs, the
+  output does not, so it is not IMPROVISED. Also: a deterministic-date
+  substitution, a device-branch simplification, anything else worth flagging.
+  **Settled policy (2026-07-24):** NOTE for a same-data prefix-drop, IMPROVISED
+  only for a lossy/static fold — this ends the earlier IMPROVISED/NOTE
+  inconsistency the cold-read probes kept hitting.
+  **Refinement (2026-07-25):** "renders identically" is **not** sufficient for
+  NOTE when the fold **drops a control/config artifact** — a `sap.uxap:ModelMapping`
+  (or its `ModelMappingBlock`), a `core:CommandExecution`, an `i18n` resource
+  model. Removing a control the original declares (even a zero-visual-output
+  config element) or losing a behaviour (runtime language switch, keyboard
+  command) **is a loss → IMPROVISED**, regardless of pixel-identical render. The
+  pure-render test decides only the *prefix-drop* case; dropping an artifact is
+  lossy by definition. (Apps 230 ModelMapping, 232 CommandExecution, 233 i18n.)
 
 The `what` text carries the full explanation. Keep the array **empty** for a
 faithful 1:1 port. Still add the inline `"` comment at the exact spot of each
@@ -504,7 +613,51 @@ deviation in the ABAP code; the sidecar is the scannable summary of those —
 the structural diff (§6) matches undeclared view differences against exactly
 these entries.
 
+#### Idiom cheat-sheet — the recurring hard cases
+
+The idioms that cause the most first-try mistakes, each as the exact ABAP to
+write. This is an index into the long-form rules above and in `CAPABILITIES.md`
+(named there) — scan it before porting; when in doubt read the referenced row.
+Braces `{ }` inside a `|…|` template are **always** escaped `\{ \}` (an
+unescaped `{` is read as a binding by the XMLView parser and crashes view
+creation).
+
+| In the original you see… | Write in the port | Detail |
+|---|---|---|
+| A **named model** binding `{ui>/rowMode}`, `{img>/x}`, any `name>/…` | Drop the prefix, bind the field on the **one default model**: `client->_bind( rowmode )` → `{/ROWMODE}`. structural-diff matches on the last path segment. A **`sap.uxap:ModelMapping`** (external→internal model remap, e.g. `{Contact>firstName}` where `Contact` maps `jsonModel>/Employee`) folds the same way — resolve the indirection statically and bind the leaf on the root; dropping the `ModelMapping`/`ModelMappingBlock` **config control** is **lossy → IMPROVISED** even though it renders identically (see the deviation-type note below) | CAPABILITIES "Named JSON models"; apps 162/163/164, 230 |
+| An **i18n resource-model** binding `{i18n>KEY}` (`sap.ui.model.resource.ResourceModel`) | No i18n model exists — fold to the **literal** text (usually English from `i18n.properties`) and declare **IMPROVISED** (loses runtime language switching). Recurs on most `sap.m` samples; treat like the named-model fold but for text | §5; apps 233 |
+| A **typed / complex binding** `{path:'Q', type:'sap.ui.model.type.Integer'}` | Raw binding-info string, braces escaped: `` v = \|\{ path: 'Q', type: 'sap.ui.model.type.Integer' \}\| `` — passes through to `XMLView.create` unmangled. The `path:` uses the **upper-cased ABAP field name** (`'Q'`→`'PRICE'`), not the original camelCase — no gate catches a stale path | CAPABILITIES "composite … types"; apps 164/129/033/171 |
+| A **nested single object** binding `{transactionAmount/size}` (control property → a sub-object, not an array) | Nested ABAP **structure** component in the row type; bind the relative sub-path `{TRANSACTION_AMOUNT/SIZE}`. Keep the nesting — do **not** flatten to `{OBJ_FIELD}` | CAPABILITIES "Nested single object"; app 171 |
+| A **literal quote inside a binding-info `pattern`** (`pattern:'yyyy-MM-dd'T'HH:mm:ss'` — the `'T'`) | Escape it **backslash-quote** `\'`, written `\\'` in the ABAP `\|…\|` template (UI5's JSTokenizer **rejects** a doubled `''`) — matches how the original view.xml escapes it | app 183 (`TypeDateTime`) |
+| A **`sorter` / `sorter group:true`** on an aggregation | Keep the raw string; get the bare path via `client->_bind( val = t path = abap_true )`: `` \|\{ path: '{ … }', sorter: \{ path: 'COL', group: true \} \}\| `` | CAPABILITIES "Binding sorter"; app 039 |
+| A **date-object** property (`CalendarAppointment.startDate`, `PlanningCalendar.startDate`, `DatePicker.dateValue`) | Formatter at point of use: `` \|\{ path: 'START_AT', formatter: 'Formatter.DateCreateObject' \}\| `` + `core:require="\{Formatter: 'z2ui5/model/formatter'\}"` (POST_171). A plain string binding **crashes** | CAPABILITIES "Date-object"; apps 108/109 |
+| A **boolean** attribute fed from an ABAP variable | `z2ui5_cl_ai_xml=>as_bool( flag )` (a literal is just `` v = \`true\` ``) — never feed `abap_true`/`abap_false` raw | §5 "Booleans"; app 007 |
+| A property **computed from several bound values** | UI5 expression binding, `_bind` inlined: `` \|\{= ${ client->_bind( a ) } && ${ client->_bind( b ) } \}\| `` — no event round-trip | §5; app 007 |
+| The controller **reads an event/source value** (`evt.getSource().getId()`) | Transport it, don't fake it: `t_arg` value `$event.oSource.sId` / `${COL}`, read back with `get_event_arg( )`. A bare `{COL}` is **not** resolved here | §5 "Data binding & events"; app 005 |
+| `MessageToast.show("…" + evt.x)` (text built on the client) | Client-composed template, roundtrip-free. Exact `t_arg` tuple order = **object, method, template, arg(s)**: `` client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( \`MESSAGE_TOAST\` ) ( \`show\` ) ( \`Item selected: {0}\` ) ( \`${$parameters>/item}.getText()\` ) ) ) ``. The wire token is `MESSAGE_TOAST` (not `MessageToast`); `{0}` is filled by the resolved arg. Button text is `${$source>/text}`; menu-item text is `${$parameters>/item}.getText()`. **When the original pulls the module via `core:require` on the fragment/view root** (`core:require="\{MessageToast: 'sap/m/MessageToast'\}"` for an inline `press="MessageToast.show(…)"`) and you rewire to `_event_client`, that `core:require` is **dropped — name it in the deviation**: structural-diff treats `core:require` as an ordinary (non-`xmlns`) attribute and flags it missing | CAPABILITIES; apps 005/060/172 |
+| Custom **CSS / raw markup** (`style.css`, `<h2>`, a `core:HTML` `content` div) | `core:HTML` leaf, markup in the `content` **attribute** (no CDATA node exists). Two traps: **(a)** write the **decoded** literal markup — the original XML carries it entity-encoded (`&lt;div&gt;`), but you write `<div>`; the builder re-escapes on stringify, so copying the entities double-escapes them. **(b)** escape literal braces `\{ \}` in a **backtick** literal `` `…\{…\}…` `` — backtick passes `\{` through to the serialized attribute; a `\|…\|` template would collapse `\{`→`{` and re-crash (the **reverse** of the typed-binding row, which *wants* real braces and so uses the pipe) | CAPABILITIES "Custom CSS"; apps 026/028, 169 |
+| Controller **`.filter()`/`.sort()`** on `oList.getBinding('items')` | `cs_event-binding_call` (whitelisted methods/operators, compound filter groups since 2026-07-20) — the model stays untouched | CAPABILITIES "Controller-applied binding filter"; app 022 |
+| An **imperative control method** (`open`/`close`/`toggleStyleClass`/`toDetail`/`expandToLevel`/`setHiddenInPopin`…) | `follow_up_action( val = cs_event-control_by_id t_arg = id/method/args )` — **only** the whitelisted `CONTROL_METHODS`; an unlisted method is a declared deviation + a `pr/` request, never a hopeful LIVE_TEST | CAPABILITIES "Frontend-action catalog"; §5 |
+| An **anchored-open popup** (`byId(x).openBy(btn)` — `sap.m.Menu`, TimePicker, DatePicker) | `control_by_id` + `openBy`/`toggleBy` + `$event.oSource.sId`; declare the popup control in `dependents`. **Caveat:** `sap.ui.unified.Menu` has **no `openBy`** (only `open(kbd, opener, my, at, of)`, which self-closes when `of` is absent) — anchored open is a **current framework gap**, so the `openBy` wire is a declared no-op (IMPROVISED + `pr/unified-menu-open-anchored`), *not* a LIVE_TEST | CAPABILITIES "Frontend-action catalog"; apps 016/060 (work), 227/228 (`sap.ui.unified.Menu` gap) |
+| A control-created **popup** (`new Dialog().open()`, `new PDFViewer().open()`) | Build a `core:FragmentDefinition`, show with `client->popup_display( val = … )` / `popover_display( xml = … by_id = … )` (popover XML param is **`xml`**, not `val`) — or declare in `mvc:dependents` + `control_by_id`/`open`/`openBy`. A **single-root** fragment (`<SomeControl …>` with the namespaces on the control, no wrapper) has **no** `FragmentDefinition` — open the control directly, and structural-diff **counts** that root control (only `mvc:View`/`core:FragmentDefinition` are exempt) | CAPABILITIES "Popups & messages"; apps 019/044/229 |
+| A popup/popover **`bindElement`** | **Fixed index** `bindElement('/Coll/0')` (single record) → seed those fields at the **default-model root** and keep the fragment's **relative** `{FIELD}` bindings (they resolve against the root); **no** `bind_element` follow-up needed. **Per-row** selection (index arrives from `$event.oSource.getBindingContext()`) → `follow_up_action( val = cs_event-bind_element view = cs_view-popover t_arg = ( idx )( client->_bind( tab ) ) )`. Pick by whether the bound record is fixed or row-driven | CAPABILITIES "Popups & messages"; app 229 (fixed), app 094 (per-row) |
+| **Inlining a `core:Fragment`** (the sample splits its view into `*.fragment.xml` referenced by `<core:Fragment fragmentName="…"/>`) | Inline the fragment content directly into the one port view. structural-diff **unions every `*.fragment.xml` with the view** and **counts the `core:Fragment` reference elements as controls** (only `mvc:View`/`core:FragmentDefinition` roots are exempt) — so the dropped `core:Fragment` references must be **named in a deviation** (same as the `core:require` rule). If the fragments declare **different default `xmlns`** (e.g. `sap.uxap` in one, `sap.m` in another), the single port view can only carry one default namespace, so some controls get a prefix the original lacked (`uxap:ObjectPageSection` vs `ObjectPageSection`) — an **unavoidable namespace-representation NOTE**. Asymmetry to remember: attribute checks are prefix-blind (`simpleName`), but **control counts are prefix-sensitive**. When you inline a **BlockBase** block or a nested `mvc:View` content-only, the block's **own root `mvc:View` attributes** (`width="100%"`, `height`, …) are dropped too and surface as `attr missing View.width` — **name the root-View attributes in the deviation as well**, not just the block/`html:div` wrapper | CAPABILITIES "Popups & messages"; apps 233/234, 239 (BlockBase root-View attrs) |
+| A **bindable property the controller sets imperatively** (`fcl.setLayout(x)`, `oCtrl.setVisible(b)`) | Prefer the **bindable property** over a frontend action: two-way bind it (`layout="{/LAYOUT}"`) and update the model server-side — no `CONTROL_METHODS` entry needed. Only reach for `follow_up_action`/`control_by_id` when there is **no** bindable property for the effect (§10 "prefer a bindable property") | CAPABILITIES "Frontend-action catalog"; app 234 (`FlexibleColumnLayout.layout`) |
+
+Two feature classes stay **❌ — don't improvise around them, declare the
+deviation**: control-returning factories (`groupHeaderFactory`, item factories)
+and app-authored JS formatter functions outside the curated `model/formatter.js`
+pack (business logic goes to `model_init`, per the thin-frontend principle).
+
 #### Worked references
+
+> **A reference shows an *idiom*, not ground truth. When a nearby port conflicts
+> with this §5, `CAPABILITIES.md`, or the sample's own source/mock, the spec and
+> the source win — never copy a reference's *data values* blindly.** A cold-read
+> probe (app 173, 2026-07-24) found its nearest reference (app 162) had copied
+> the wrong mock image id (`HT-1000` instead of the mock's `HT-7777-large`) and a
+> host-relative asset URL against the `sdk.openui5.org` rule — verify each seeded
+> value against the sample's actual mock, not the neighbour.
 
 Read the 2–3 nearest ones before writing a new port. Prefer `checked` ports
 (live-verified) as references — several were previously flagged `golden`
@@ -560,12 +713,12 @@ A fourth workflow, `checks`, runs three deterministic gates on every PR:
 | Job | Command | Fails when |
 |-----|---------|------------|
 | `pattern_lint` | `node scripts/pattern-lint.mjs` | a known-bad pattern reappears (each rule encodes a distilled §10 lesson; known open findings live in the script's BASELINE and in STATUS.md) |
-| `structural_diff` | `node scripts/structural-diff.mjs --strict` | a port's rendered view deviates from the original `view.xml` — control multiset, attribute names or simple **binding values** — without a declared deviation |
+| `structural_diff` | `node scripts/structural-diff.mjs --strict` | a port's rendered view deviates from the original `view.xml` — control multiset, attribute names or simple **binding values** — without a declared deviation. **Controls are flagged in BOTH directions**: a control the original has that the port dropped (`control missing`) **and a control the port ADDS that the original lacks** (`control extra` — e.g. an inlined controller-built popup `Dialog`, or the controls of a bound row-template the original built imperatively). Only **attributes** are one-directional: it flags a **missing** attr but **extra attrs the port adds are never flagged** (line 47/232). So "the port only adds, never drops" is **not** a free pass — name every extra control in a deviation too. It compares the full **qualified name incl. namespace prefix**, so use the original view's prefix on controls (not a neighbour's convention). A diff is "declared" when some deviation's `what` text **contains that control/attr name verbatim** — so when you inline a controller-built popup, list the added `Dialog`/`Button`/… ; when you replace an imperative handler with a binding (dropping `press`/`change`), name that attribute — or it stays UNDECLARED. Exception: **helper-built (`dynamic`) ports skip control-count diffs entirely** (`port.dynamic`, line 226 — loop/helper-built counts can't match statically), which is one reason a helper-dedup'd view needs a `render_smoke` skip |
 | `structure_lint` | `node scripts/structure-lint.mjs --strict` | the builder call tree is malformed — an **aggregation nested directly inside another aggregation** (a missing `)->shut(`, e.g. `<footer>` landing inside `<columns>`), or a `shut` with no open to close. A fast static tree check that runs before `render_smoke` so this class fails in milliseconds with a precise message instead of a cryptic UI5 load error. Helper-built views (RETURNING a `z2ui5_cl_ai_xml` handle) are skipped — their open/shut pairs span methods |
 | `render_smoke` | `node scripts/render-smoke.mjs --strict` (`npm run smoke`) | a port's reconstructed view fails a real headless `XMLView.create` against the OpenUI5 runtime (invalid XML, unknown control/property, strict property-type violation, broken expression binding). Helper-method-built views (a captured node handle passed into a builder-returning helper and chained out — app 049) are reconstructed by the handle-aware path (`extractDocsWithHelpers`; a handle is a stack snapshot, each helper call inlined re-anchored to its argument). A port the reconstructor still cannot rebuild must declare `"render_smoke": { "skip": true, "reason": "…" }` in its sidecar — an **undeclared** non-reconstructable port FAILS. The same declared skip also covers a **reconstructable** port whose view genuinely does not render in the static headless harness — a control whose runtime layout/resource behaviour the reconstruction cannot satisfy (`sap.f.AvatarGroup`'s overflow measurement loops with no real layout box; an `sap.ui.integration` Card needs an external manifest). Every skip is **verified against the actual render each run**: it is honoured only while the view still errors, and the moment it renders clean the declaration is **stale** and FAILS — so the skip set can never drift (a render-hostile skip can never outlive its reason). Render-hostile ports must still pass every other gate (structural-diff, abaplint, e2e) |
 | `e2e_smoke` (heavy, on-demand) | `npm run e2e:build` then `npm run e2e` (`scripts/e2e-build.mjs` + `e2e-smoke.mjs`) | a port fails to run as the **real app**: it starts the transpiled abap2UI5 backend (framework + all ports via `?app_start=<class>`, needs an abap2UI5 checkout — `A2UI5_HOME`), boots each port in headless Chromium (UI5 served from the local `@openui5` packages), and fails if it does not boot+render or if a backend request 4xx/5xx or a JS exception fires. Unlike `render_smoke` (static view reconstruction) this exercises the actual backend roundtrip, Component boot and event wiring. Not in the fast gate set (multi-minute transpile + browser); run before a release or when touching the framework wire/runtime. A small `INTERACTIONS` map adds real click→assert checks (e.g. 005 press→client-composed toast) |
 | `meta_valid` | `validate-meta.mjs` + regenerate overview & coverage, `git diff --exit-code -- src README.md api.md` | an invalid sidecar, or a change forgot to regenerate the overview app / coverage docs |
-| `property_gate` | `node scripts/property-check.mjs` | a port uses a control member introduced after UI5 1.71 (per-member `@since` from `ui5/properties.json`) without declaring it in a `POST_171` deviation — this covers both `a( n = … )` attributes **and** event parameters consumed via `${$parameters>/<name>}` in a `t_arg` |
+| `property_gate` | `node scripts/property-check.mjs` | a port uses a control member introduced after UI5 1.71 (per-member `@since` from `ui5/properties.json`) without declaring it in a `POST_171` deviation — this covers both `a( n = … )` attributes **and** event parameters consumed via `${$parameters>/<name>}` in a `t_arg`. **Covers every ported library** (2026-07-24): `properties.json` is generated recursively from all libs' sources and the check resolves each control via the port's `xmlns` map + the parent chain, so `src/02`–`src/05` members are enforced too |
 
 **When a distilled lesson is greppable, add it as a pattern-lint rule in the
 same change** — that is what makes a lesson unrepeatable rather than advisory.
@@ -603,7 +756,13 @@ that is the actual porting work):
   `ProductCollection` …) into an ABAP `VALUE #( … )` literal for `model_init`
   (backtick-escaping and type inference handled; also exports `rowsToAbapValue`
   / `rowsToAbapType` for reuse). The scaffolder prints the exact command when
-  the sample's controller loads a JSON mock.
+  the sample's controller loads a JSON mock. **Type inference scans all rows**
+  (not just the first): a numeric column with any decimal value is emitted as a
+  **backtick string literal** (never truncated to `i`) and the tool warns on
+  stderr — declare that field `TYPE p LENGTH n DECIMALS m` for a numeric control
+  property (a backtick literal converts to packed), or `TYPE string` when it is
+  a display-only value bound into a text template (keeps the exact decimals,
+  e.g. dimensions `40.8`). Do **not** leave a decimal column as `TYPE i`.
 
 The last two are automated by the tracked **`.githooks/pre-commit`** hook: on
 every commit it regenerates the overview app + coverage docs and stages them,
@@ -842,7 +1001,15 @@ How to record it:
   serializes as a JSON string is rejected when the property is a number/boolean
   (`"100" is of type string, expected float` on `sap.m.Slider.value`, app 053).
   Type the bound ABAP field numerically (`i`/packed) or as `abap_bool`, never
-  as `string`, so the model carries a real JSON number/boolean.
+  as `string`, so the model carries a real JSON number/boolean. But a
+  **display-only** value with variable decimals bound into a *text template*
+  (`{WIDTH} x {DEPTH}`, dimensions `40.8`) stays `TYPE string` — packed with a
+  fixed `DECIMALS` would add trailing zeros (`40.80`); string keeps it exact.
+- **abaplint `commented_code` can fire on an ordinary English comment** — a
+  `"` view-description comment containing a `/` next to CamelCase UI5 identifiers
+  (e.g. `" bound to RowSettings highlight/highlightText`) lexes like ABAP and is
+  rejected as commented-out code. Reword (drop the slash, or split the
+  identifiers) — found on app 174.
 - **Device APIs need a secure context (HTTPS)** — geolocation and the camera
   (`z2ui5.cc.Geolocation` / `CameraPicture`) silently do nothing over plain
   HTTP; `getCurrentPosition` / `getUserMedia` fail with a secure-origin error

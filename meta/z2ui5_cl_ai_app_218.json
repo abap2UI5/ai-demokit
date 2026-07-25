@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_ai_app_218",
+  "sample": "sap.f.sample.ShellBarWithSearch",
+  "entity": "sap.f.ShellBar",
+  "file": "src/04/b07/z2ui5_cl_ai_app_218.clas.abap",
+  "batch": "b07",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "suggest handler (handlerSearchSuggestEvent): the original builds two sap.ui.model.Filter objects with custom JS test functions (case-insensitive substring on ProductId and Name) and applies them to the SearchManager's suggestionItems binding, then calls oSF.suggest() to reopen the suggestion popup. The custom JS filter functions are inexpressible (control-side JS), but their semantics is the whitelisted 'Contains' operator, so the filter is reproduced 1:1 via cs_event-binding_call (compound OR group over PRODUCTID/NAME Contains the typed value), CAPABILITIES 'Controller-applied binding filter' / app 022. The typed text is transported as the ${$parameters>/suggestValue} event arg and read with get_event_arg. The imperative oSF.suggest() popup-reopen call is DROPPED - 'suggest' is not in the abap2UI5 CONTROL_METHODS whitelist (would need a pr/ request); the binding filter itself is applied server-declaratively."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "Unverified in a running system: (a) the search and liveChange handlers are client-composed MessageToast.show calls via cs_event-control_global (template '{0} search event is fired' / '{0} liveChange event value is: {1}' filled by $event.oSource.sId and ${$parameters>/newValue}), app 005 idiom; (b) the suggest->binding_call compound Contains filter roundtrip and its effect on the SearchManager suggestion list. Rendering (render-smoke) is green; runtime event/roundtrip behaviour needs a live check."
+    },
+    {
+      "type": "NOTE",
+      "what": "The ShellBar homeIcon asset URL './resources/sap/ui/documentation/sdk/images/logo_sap.png' is repointed to the OpenUI5 host 'https://sdk.openui5.org/resources/...' per the asset-URL rule (same as app 110). The mock's per-row ProductPicUrl values are kept byte-identical to sap/ui/demo/mock/products.json (unbound display data, never rendered by this view). Rows without a DateOfSale in the mock carry an empty string (the property is not bound)."
+    }
+  ]
+}

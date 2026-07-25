@@ -208,11 +208,11 @@ CLASS z2ui5_cl_ai_app_142 IMPLEMENTATION.
 
     " original binds /SupplierCollection/0 from the shared demo supplier.json;
     " flattened here to top-level fields the {…} form bindings resolve against.
-    suppliername = `Titanium`.
-    street       = `Star Street`.
-    housenumber  = `12`.
-    zipcode      = `12345`.
-    city         = `Walldorf`.
+    suppliername = `Red Point Stores`.
+    street       = `Main St`.
+    housenumber  = `1618`.
+    zipcode      = `31415`.
+    city         = `Maintown`.
     country      = `Germany`.
     url          = `http://www.sap.com`.
     twitter      = `@sap`.

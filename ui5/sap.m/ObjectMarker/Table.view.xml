@@ -1,0 +1,32 @@
+<mvc:View
+	controllerName="sap.m.sample.ObjectMarker.Table"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m">
+		<Table id="idProductsTable"
+			items="{
+				path: '/modelData'
+			}">
+			<columns>
+				<Column>
+					<Text text="Products" />
+				</Column>
+				<Column>
+					<Text text="Status" />
+				</Column>
+				<Column>
+					<Text text="Status (active)" />
+				</Column>
+			</columns>
+			<ColumnListItem>
+				<ObjectIdentifier
+					text="{product}"/>
+				<ObjectMarker
+					type="{type}"
+					additionalInfo="{additionalInfo}"/>
+				<ObjectMarker
+					type="{type}"
+					additionalInfo="{additionalInfo}"
+					press=".onPress"/>
+			</ColumnListItem>
+		</Table>
+</mvc:View>

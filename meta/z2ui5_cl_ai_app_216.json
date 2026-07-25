@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_ai_app_216",
+  "sample": "sap.uxap.sample.HeaderContent",
+  "entity": "sap.uxap.ObjectPageHeaderContent",
+  "file": "src/03/b02/z2ui5_cl_ai_app_216.clas.abap",
+  "batch": "b02",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The view is a 1:1 static rebuild - every ObjectStatus/ObjectNumber/Label/Text/ProgressIndicator/ObjectAttribute/Button/Tokenizer value is a literal, exactly as in the original ObjectPageHeaderContent view.xml. The sample's controller loads sap/uxap/sample/SharedJSONData/employee.json into a named 'ObjectPageModel', but the view never binds a single field from it (all header content is hard-coded in the XML), so the port carries no model_init - omitting a dead model changes nothing in the rendered view."
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "class": "z2ui5_cl_ai_app_241",
+  "sample": "sap.tnt.sample.SideNavigationPressEvent",
+  "entity": "sap.tnt.SideNavigation",
+  "file": "src/05/b07/z2ui5_cl_ai_app_241.clas.abap",
+  "batch": "b07",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "NavigationListItemBase.press event (@since 1.133) is the whole point of this sample; wired 1:1 on every NavigationListItem (press) to a backend ITEM_PRESS event. @since verified in fork-openui5/src/sap.tnt/src/sap/tnt/NavigationListItemBase.js:74-79. Requires a UI5 release >= 1.133."
+    },
+    {
+      "type": "POST_171",
+      "what": "The press event parameters ctrlKey/shiftKey/altKey/metaKey (@since 1.137) are transported via ${$parameters>/ctrlKey} etc. in the ITEM_PRESS t_arg and echoed into the toast, exactly as the original itemPress reads them. @since verified NavigationListItemBase.js:88-109. Requires a UI5 release >= 1.137 (the property gate is blind to sap.tnt event params)."
+    },
+    {
+      "type": "POST_171",
+      "what": "NavigationListItem.selectable (@since 1.116) is used 1:1 (selectable=false) on Link 1/Link 2, Quick Create and External Link. @since verified NavigationListItem.js:101-103."
+    },
+    {
+      "type": "POST_171",
+      "what": "NavigationListItem.design=\"Action\" and NavigationListItem.ariaHasPopup=\"Dialog\" (both @since 1.133.0) are kept 1:1 on the Quick Create item. @since verified NavigationListItem.js:131-139."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "itemPress preventDefault: when the 'preventDefaultCheckbox' is selected the original calls oEvent.preventDefault() to suppress the item's default selection. The thin frontend cannot conditionally suppress the client-side selection, so the selection still changes; only the toast heading reflects the choice ('Default was prevented:' vs 'Item Pressed:'). The prevent-default behaviour itself is dropped. The checkbox state is read server-side via a two-way bound selected={/PREVENT_DEFAULT} (the original had no binding and read getSelected()); the .itemPress handler is rewired to the ITEM_PRESS backend event."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "quickActionPress dialog: reproduced as a core:FragmentDefinition shown via client->popup_display - the controller-built sap.m.Dialog with two Label + Input pairs (Name/Icon, the Inputs two-way bound to create_name/create_icon) and Create/Cancel Buttons. These Dialog/Label/Input/Button controls are extra vs the original view.xml, which declared none of them (the original built the Dialog imperatively in the controller). The original Create button imperatively does sideNavigation.getItem().addItem(new NavigationListItem(...)); dynamic addItem to the statically declared NavigationList is not expressible (it would require folding the 1:1 static items into a bound aggregation), so CREATE_ITEM reads the entered values and shows a toast instead of adding the item. The .quickActionPress handler is rewired to the QUICK_CREATE backend event."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "onCollapseExpandPress reproduced server-side: SideNavigation.expanded is two-way bound (initial false as in the original expanded=\"false\") and flipped on the TOGGLE_EXPAND round-trip instead of the imperative byId().setExpanded(!expanded) - same technique as apps 172/128. The literal expanded=\"false\" becoming a {/EXPANDED} binding, the ITEM_PRESS modifier-key transport and the popup round-trips all need a live render check."
+    }
+  ]
+}
