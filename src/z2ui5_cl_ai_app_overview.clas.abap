@@ -24,10 +24,11 @@
 "! links (OpenUI5 API, OpenUI5 source, live fullscreen sample, the generated ABAP
 "! class on GitHub, each opening in a new tab) AND the port's generation info -
 "! checked status, a post-1.71 note, and the generation notes; the second starts
-"! this abap2UI5 app IN-PAGE via nav_app_call (server event START_APP) - it replaces
-"! the overview in the same tab and the native browser Back button returns to it
-"! (the framework couples Back to the server-side app stack, so no new tab, no page
-"! reload). The same two buttons sit on every tree sample leaf (links only,
+"! this abap2UI5 app IN-PAGE via hash routing (client->cs_event-nav_to_route sets
+"! the URL route '#/app/<CLASS>', UI5 Router style) - it replaces the overview in
+"! the same tab and the native browser Back/Forward buttons navigate between them,
+"! bookmarkable, so no new tab and no page reload (the overview enabled routing via
+"! client->set_nav_routing). The same two buttons sit on every tree sample leaf (links only,
 "! the tree model carries no info). The Rating column is a 1-5 "by feel" score of
 "! how much attention a port deserves (not coloured): app complexity, how heavily
 "! it was reworked/corrected (IMPROVISED/DROPPED_171/SUBSET_DATA/NOTE), whether it
@@ -101,6 +102,7 @@ CLASS z2ui5_cl_ai_app_overview DEFINITION PUBLIC.
         ui5_url   TYPE string,
         abap_url  TYPE string,
         start_url TYPE string,
+        class     TYPE string,
         has_link  TYPE abap_bool,
       END OF ty_s_sample,
       BEGIN OF ty_s_control,
@@ -149,6 +151,11 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
 
     me->client = client.
     IF client->check_on_init( ).
+      " Enable hash-based app routing (UI5 Router style) for this session: the
+      " URL hash mirrors the running app as a bookmarkable route '#/app/<CLASS>'
+      " and the native browser Back/Forward buttons navigate between the
+      " overview and the launched apps - no new tab, no page reload.
+      client->set_nav_routing( ).
       " default filtering (all on) + Shell on, set once so later round-trips keep
       " whatever the user toggled (the flags are two-way bound)
       shell_on        = abap_true.
@@ -166,8 +173,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
 
 
   METHOD on_event.
-
-    DATA li_app TYPE REF TO z2ui5_if_app.
 
     CASE client->get( )-event.
 
@@ -262,30 +267,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
 
         client->popover_display( xml   = links->stringify( )
                                  by_id = client->get_event_arg( 8 ) ).
-
-      WHEN `START_APP`.
-        " Launch the selected abap2UI5 app IN-PAGE via nav_app_call: it replaces
-        " the overview in the same browser tab (no new tab). The user returns
-        " with the native browser Back button - the framework couples Back to the
-        " server-side app stack (nav_app_leave), so the overview reappears
-        " without a page reload. The class name is parsed from the same start URL
-        " the row already carries ( `...?app_start=<CLASS>` ).
-        DATA(lv_start) = client->get_event_arg( ).
-        DATA(lv_class) = lv_start.
-        FIND `app_start=` IN lv_start MATCH OFFSET DATA(lv_off).
-        IF sy-subrc = 0.
-          lv_class = to_upper( substring( val = lv_start off = lv_off + strlen( `app_start=` ) ) ).
-          SPLIT lv_class AT `&` INTO lv_class DATA(lv_rest).
-          SPLIT lv_class AT `#` INTO lv_class lv_rest.
-        ENDIF.
-        IF lv_class IS NOT INITIAL.
-          TRY.
-              CREATE OBJECT li_app TYPE (lv_class).
-              client->nav_app_call( li_app ).
-            CATCH cx_root.
-              client->message_toast_display( |App { lv_class } could not be started| ).
-          ENDTRY.
-        ENDIF.
 
     ENDCASE.
 
@@ -668,10 +649,11 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                                 " the reference links AND the port's generation info (checked,
                                 " post-1.71, notes) - the pressed button's runtime id
                                 " ($event.oSource.sId) anchors it; second launches the abap2UI5
-                                " app IN-PAGE via nav_app_call (server event START_APP) - it
-                                " replaces the overview in the same tab, and the native browser
-                                " Back button returns to it (the framework couples Back to the
-                                " app stack, so no new tab and no page reload)
+                                " app IN-PAGE via hash routing (cs_event-nav_to_route sets the
+                                " URL route '#/app/<CLASS>', UI5 Router style) - it replaces the
+                                " overview in the same tab, and the native browser Back/Forward
+                                " buttons navigate between them, bookmarkable (no new tab, no
+                                " page reload)
                                 )->open( `HBox`
                                     )->leaf( `Button`
                                         )->a( n = `icon`    v = `sap-icon://chain-link`
@@ -684,7 +666,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                                         )->a( n = `icon`    v = `sap-icon://action`
                                         )->a( n = `type`    v = `Transparent`
                                         )->a( n = `tooltip` v = `Start this abap2UI5 app - opens in the same tab; use the browser Back button to return`
-                                        )->a( n = `press`   v = client->_event( val = `START_APP` t_arg = VALUE #( ( `${START_URL}` ) ) )
+                                        )->a( n = `press`   v = client->_event_client( val = client->cs_event-nav_to_route t_arg = VALUE #( ( `${CLASS}` ) ) )
 
                                 )->shut(
                             )->shut(
@@ -738,7 +720,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                                     )->a( n = `type`    v = `Transparent`
                                     )->a( n = `tooltip` v = `Start this abap2UI5 app - opens in the same tab; use the browser Back button to return`
                                     )->a( n = `visible` v = `{HAS_LINK}`
-                                    )->a( n = `press`   v = client->_event( val = `START_APP` t_arg = VALUE #( ( `${START_URL}` ) ) ) ).
+                                    )->a( n = `press`   v = client->_event_client( val = client->cs_event-nav_to_route t_arg = VALUE #( ( `${CLASS}` ) ) ) ).
 
     client->view_display( view->stringify( ) ).
 
@@ -2502,6 +2484,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                       ui5_url   = ls_app-ui5_url
                       abap_url  = ls_app-abap_url
                       start_url = ls_app-start_url
+                      class     = ls_app-class
                       has_link  = abap_true ) TO <control>-nodes.
 
     ENDLOOP.
