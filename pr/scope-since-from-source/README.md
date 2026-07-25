@@ -24,6 +24,26 @@ Concrete failures this caused:
   violation, same class as the known `UploadSet` (app 121) deprecated-control
   debt.
 
+### Full out-of-scope debt (audit 2026-07-25, `scope-of.mjs` over all 171 ported entities)
+
+Running the new authoritative checker over every ported sidecar surfaces **four**
+out-of-scope ports the blind gate admitted — all `status: generated` (none
+human-checked). **Left in place pending a maintainer decision** (drop, or
+document as an accepted exception; 1.72/1.78 are borderline just over the line):
+
+| App | Sample | Entity | Why out of scope |
+|-----|--------|--------|------------------|
+| 121 | `UploadSet` | `sap.m.upload.UploadSet` | deprecated |
+| 136 | `SidePanelSingle` | `sap.f.SidePanel` | control @since 1.107 |
+| 141 | `InvisibleMessage` | `sap.ui.core.InvisibleMessage` | control @since 1.78 |
+| 165 | `ProductSwitchNavigation` | `sap.f.ProductSwitch` | control @since 1.72 |
+
+Once `scopeOf` consults source `@since` (below), these four would light up the
+out-of-scope gate automatically. (`scope-of.mjs` reports UNRESOLVED for the
+`*Pattern` composite samples and for controls in a sub-package — `widgets/Card`,
+`upload/UploadSet` — whose entity name omits the sub-package; those need the
+api-metadata mapping, not a source path, and are not scope violations per se.)
+
 The deprecation half is only partly covered too: the snapshot happens to carry
 `deprecated` for some controls (e.g. ActionSheet 1.149) but not `since`, so the
 two halves of the rule are enforced inconsistently.
