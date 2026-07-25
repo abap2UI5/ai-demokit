@@ -1273,6 +1273,27 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` the original; note the source differs too: sy-datum/sy-uzeit is the SERVER date/time and timezone, while the original renders the browser-local new Date() - around midnight or across timezones the` &&
                  ` displayed timestamp of a new entry can differ from a client-side clock.`
         use_name = abap_true )
+      ( module = `sap.m`              control = `sap.m.FeedInput`                     name = `FeedInput`                           class = `z2ui5_cl_ai_app_236` path = `src/01/b19/z2ui5_cl_ai_app_236.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.22`
+        release = `1.139`
+        release_post171 = abap_true
+        is_post171 = abap_true
+        notes = `POST-1.71: the FeedInput 'actions' aggregation (a Button next to the text area) is @since 1.139 - kept 1:1 on the last two FeedInputs; the app needs a UI5 release >= 1.139 to render it. // NOTE:` &&
+                 ` onPost: the original controller does MessageToast.show( "Posted new feed entry: " + evt.getParameter( "value" ) ) on every FeedInput; reproduced roundtrip-free as a client-composed toast` &&
+                 ` (cs_event-control_global MESSAGE_TOAST, template 'Posted new feed entry: {0}' filled by ${$parameters>/value}). The post attribute is kept, so structural-diff sees no difference. // NOTE:` &&
+                 ` onActionButtonPress: the original builds a Dialog imperatively (new Dialog({...}).open()) with a Text and two buttons; expressed 1:1 as a core:FragmentDefinition (Dialog > content/Text,` &&
+                 ` beginButton/Button 'Enable Post Button', endButton/Button 'Disable Post Button') shown via popup_display on the actions Button press (ACTION_PRESS). The Dialog + its controls are extra vs the` &&
+                 ` archived V.view.xml (which holds only the two trigger actions Buttons). // IMPROVISED: the dialog's begin/end buttons call oFeedInput.enablePostButton(true/false) in the original before closing;` &&
+                 ` enablePostButton is not in the CONTROL_METHODS whitelist and FeedInput exposes no bindable post-button-enabled property, so the buttons only close the popup - the post-button toggle is lost. See` &&
+                 ` friction log / pr/feedinput-enable-post-button. // NOTE: the icon 'test-resources/sap/m/images/george_washington.jpg' is rehosted to the OpenUI5 host (https://sdk.openui5.org/test-resources/...) per` &&
+                 ` the project asset-URL rule; presence of the icon attribute is unchanged.`
+        post171 = `the FeedInput 'actions' aggregation (a Button next to the text area) is @since 1.139 - kept 1:1 on the last two FeedInputs; the app needs a UI5 release >= 1.139 to render it.`
+        use_ec = abap_true
+        use_ec_arg = abap_true
+        use_popup = abap_true )
       ( module = `sap.m`              control = `sap.m.FeedListItem`                  name = `FeedListItem`                        class = `z2ui5_cl_ai_app_025` path = `src/01/b06/z2ui5_cl_ai_app_025.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -1871,6 +1892,17 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` controller's MessageToast.show("Pressed : " + oEvent.getSource().getTitle())) - re-verify pressing an item toasts "Pressed : <title>".`
         use_ec = abap_true
         use_ec_arg = abap_true )
+      ( module = `sap.m`              control = `sap.m.ObjectMarker`                  name = `ObjectMarker`                        class = `z2ui5_cl_ai_app_237` path = `src/01/b19/z2ui5_cl_ai_app_237.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.38`
+        notes = `NOTE: the Table's items model is the anonymous JSON model set in onInit (new JSONModel({modelData:[...]}), items='{path:/modelData}'); folded to the one default model as client->_bind( t_modeldata )` &&
+                 ` -> {/T_MODELDATA}. Same data, last path segment identical, structural-diff 0 diffs. Child bindings {product}/{type}/{additionalInfo} map to the upper-cased fields {PRODUCT}/{TYPE}/{ADDITIONALINFO}.` &&
+                 ` // NOTE: onPress (on the third, interactive ObjectMarker): the original does MessageToast.show( evt.getParameter( "type" ) + " marker pressed!" ); reproduced roundtrip-free as a client-composed toast` &&
+                 ` (cs_event-control_global MESSAGE_TOAST, template '{0} marker pressed!' filled by ${$parameters>/type}). The press attribute is kept, so structural-diff sees no difference.`
+        use_ec = abap_true
+        use_ec_arg = abap_true
+        use_name = abap_true )
       ( module = `sap.m`              control = `sap.m.ObjectNumber`                  name = `ObjectNumber`                        class = `z2ui5_cl_ai_app_072` path = `src/01/b09/z2ui5_cl_ai_app_072.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
