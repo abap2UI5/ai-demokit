@@ -56,12 +56,14 @@ Rules:
   'sap.ui.model.type.Integer' \}| (same for Date/Currency parts and sorter) -
   it passes through to XMLView.create unmangled. See AGENTS.md section 5
   "Idiom cheat-sheet".
-- Frontend actions: a whitelisted control method (CONTROL_METHODS in
-  FrontendAction.js) silently drops every argument beyond its declared arg
-  kinds - verify the kinds in the framework source before wiring a
-  parametrized call; a needed-but-unlisted argument is a declared deviation
-  plus a pr/ request, never a LIVE_TEST hope. popover_display imports
-  xml + by_id (the XML parameter is `xml`, not `val`).
+- Frontend actions: a control method LISTED in CONTROL_METHODS
+  (FrontendAction.js) carries explicit arg kinds and silently drops every
+  argument beyond them - verify the kinds before a parametrized call. An
+  UNLISTED public method also runs unless it matches the deny regex
+  (destroy/bind/attach/setModel/...); a denylisted or argument-dropping
+  need is a declared deviation plus a pr/ request, never a LIVE_TEST hope.
+  popover_display imports xml + by_id (the XML parameter is `xml`, not
+  `val`).
 - Map controller event handlers to check_on_event( ) branches. To pass a value
   into an event, use the `$`-prefixed form in t_arg (a model column as
   `${COL}`, the event object as `$event.oSource.sId` / `${$source>/text}`) and
