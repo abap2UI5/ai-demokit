@@ -1,0 +1,28 @@
+{
+  "class": "z2ui5_cl_ai_app_207",
+  "sample": "sap.m.sample.ListItemTypes",
+  "entity": "sap.m.List",
+  "file": "src/01/b17/z2ui5_cl_ai_app_207.clas.abap",
+  "batch": "b17",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "press/detailPress toast roundtrip-free via control_global MESSAGE_TOAST.show; the Select drives item type via a shared two-way binding, so the app is init-only (no on_event)"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "the original wires a change handler on the type Select (handleSelectChange, which loops the list items calling item.setType). selectedKey and every StandardListItem type share one two-way bound field (LISTTYPE), so a selection re-types all items client-side and the Select.change attribute is deliberately MISSING vs the original view (AGENTS prefer-a-bindable-property rule; app 003 precedent). The added StandardListItem type binding is not in the original view."
+    },
+    {
+      "type": "NOTE",
+      "what": "the ProductPicUrl icon values are stored as absolute https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/*.jpg URLs (the mock's host-relative test-resources paths rewritten to the OpenUI5 host per the runtime asset-URL rule). Same 123-row set, kept verbatim otherwise."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "unverified in a running system: (a) handlePress/handleDetailPress are reproduced as roundtrip-free client toasts (control_global MESSAGE_TOAST.show of \"'press' event fired!\" / \"'detailPress' event fired!\"); (b) the Select selectedKey <-> item type two-way binding should re-type all rows on selection. Re-verify both."
+    }
+  ]
+}

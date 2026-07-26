@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_ai_app_171",
+  "sample": "sap.ui.unified.sample.CurrencyInTable",
+  "entity": "sap.ui.unified.Currency",
+  "file": "src/02/b10/z2ui5_cl_ai_app_171.clas.abap",
+  "batch": "b10",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "LIVE_TEST",
+      "what": "u:Currency binds a nested object path (value={transactionAmount/size}, currency={transactionAmount/currency}). Ported as a nested ABAP structure TRANSACTION_AMOUNT (fields SIZE/CURRENCY), bound {TRANSACTION_AMOUNT/SIZE} / {TRANSACTION_AMOUNT/CURRENCY}. CAPABILITIES.md documents nested TABLES/trees but not a nested single (non-array) structure within a row, so the nested-object serialization + relative sub-path binding needs a live render check."
+    }
+  ]
+}

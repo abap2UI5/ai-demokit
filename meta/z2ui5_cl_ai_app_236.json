@@ -1,0 +1,34 @@
+{
+  "class": "z2ui5_cl_ai_app_236",
+  "sample": "sap.m.sample.FeedInput",
+  "entity": "sap.m.FeedInput",
+  "file": "src/01/b19/z2ui5_cl_ai_app_236.clas.abap",
+  "batch": "b19",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "the FeedInput 'actions' aggregation (a Button next to the text area) is @since 1.139 - kept 1:1 on the last two FeedInputs; the app needs a UI5 release >= 1.139 to render it."
+    },
+    {
+      "type": "NOTE",
+      "what": "onPost: the original controller does MessageToast.show( \"Posted new feed entry: \" + evt.getParameter( \"value\" ) ) on every FeedInput; reproduced roundtrip-free as a client-composed toast (cs_event-control_global MESSAGE_TOAST, template 'Posted new feed entry: {0}' filled by ${$parameters>/value}). The post attribute is kept, so structural-diff sees no difference."
+    },
+    {
+      "type": "NOTE",
+      "what": "onActionButtonPress: the original builds a Dialog imperatively (new Dialog({...}).open()) with a Text and two buttons; expressed 1:1 as a core:FragmentDefinition (Dialog > content/Text, beginButton/Button 'Enable Post Button', endButton/Button 'Disable Post Button') shown via popup_display on the actions Button press (ACTION_PRESS). The Dialog + its controls are extra vs the archived V.view.xml (which holds only the two trigger actions Buttons)."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "the dialog's begin/end buttons call oFeedInput.enablePostButton(true/false) in the original before closing; enablePostButton is not in the CONTROL_METHODS whitelist and FeedInput exposes no bindable post-button-enabled property, so the buttons only close the popup - the post-button toggle is lost. See friction log / pr/feedinput-enable-post-button."
+    },
+    {
+      "type": "NOTE",
+      "what": "the icon 'test-resources/sap/m/images/george_washington.jpg' is rehosted to the OpenUI5 host (https://sdk.openui5.org/test-resources/...) per the project asset-URL rule; presence of the icon attribute is unchanged."
+    }
+  ]
+}

@@ -1,0 +1,40 @@
+{
+  "class": "z2ui5_cl_ai_app_242",
+  "sample": "sap.m.sample.NavContainer",
+  "entity": "sap.m.NavContainer",
+  "file": "src/01/b19/z2ui5_cl_ai_app_242.clas.abap",
+  "batch": "b19",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "the To-buttons carry their target page id as an event arg (NAV) and the backend calls navCon.to via follow_up_action( cs_event-control_by_id t_arg = navCon/to/<target>/<animation> ); Back calls navCon.back(); navigationFinished shows a client-composed MessageToast built from the resolved page title"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "NavContainer.navigationFinished (event, since UI5 1.111.0) is kept 1:1 - it is wired to a client-composed MessageToast; the app needs a UI5 release >= 1.111 to fire it."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "handleNav does navCon.to( byId(target), animationSelect.getSelectedKey() ) / navCon.back() imperatively. The port keeps the NavContainer id='navCon' and drives navigation via a round-trip: each To-button's press (NAV) carries its static target page id (p1..p4) as the event arg, and on_event issues follow_up_action( val = cs_event-control_by_id t_arg = ( 'navCon' )( 'to' )( <target> )( animation ) ) - 'to' is whitelisted with kinds [controlId, string], so the target page and the transition name both reach the method; Back issues ( 'navCon' )( 'back' ). A server round-trip where the original is a purely client-side imperative call, but faithful."
+    },
+    {
+      "type": "NOTE",
+      "what": "the animation transition comes from a Select whose getSelectedKey() the original reads at click time. The port two-way binds the Select's selectedKey to a model field {/ANIMATION} (seeded to the first item's key 'slide'), so the current transition is available to the backend on the NAV round-trip. The original Select has no selectedKey attribute (it defaults to the first item), so adding the bound selectedKey is an extra attribute (structural-diff only flags MISSING attributes) and is the faithful thin-frontend form of the imperative getSelectedKey()."
+    },
+    {
+      "type": "NOTE",
+      "what": "the sample's style.css (a border around the NavContainer via the .navContainerControl class) is injected via an added core:HTML leaf carrying a <style> block in its content attribute (CAPABILITIES 'Custom CSS'); the literal CSS braces are escaped. structural-diff reports this core:HTML as an extra control (named here); the .navContainerControl class stays on the NavContainer."
+    },
+    {
+      "type": "NOTE",
+      "what": "the four To-buttons keep their core:CustomData (key='target') element 1:1 for structural fidelity, but the port transports the target page id via the button's event arg (a static literal per button) rather than reading evt.getSource().data('target') - identical result since the target is fixed per button."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "unverified in a running system: that navCon.to()/back() navigate the four pages with the selected transition (follow_up_action cs_event-control_by_id 'to'/'back'), that the two-way bound animation Select is applied before NAV runs, and that navigationFinished fires the client-composed toast with the resolved page title."
+    }
+  ]
+}

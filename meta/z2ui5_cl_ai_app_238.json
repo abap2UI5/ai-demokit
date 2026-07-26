@@ -1,0 +1,36 @@
+{
+  "class": "z2ui5_cl_ai_app_238",
+  "sample": "sap.f.sample.DynamicPageWithStickySubheader",
+  "entity": "sap.f.DynamicPage",
+  "file": "src/04/b09/z2ui5_cl_ai_app_238.clas.abap",
+  "batch": "b09",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "GENERIC_TAG_PRESS carries $event.oSource.sId and builds the Card popover fragment shown anchored via client->popover_display( xml = ... by_id = ... ); TOGGLE_FOOTER flips the showFooter model flag and re-renders"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "showFooter is two-way bound to a model flag ({/SHOWFOOTER}, default false) and the 'Toggle Footer' button flips it via a TOGGLE_FOOTER round-trip + re-render; the original controller toggles it imperatively (onToggleFooter -> setShowFooter). The original view has no showFooter attribute (it defaults false), so adding the bound attribute is the faithful thin-frontend form of the imperative toggle and structural-diff does not flag it (it only flags missing attributes). toggleHeaderOnTitleClick keeps the original {/titleClickable} binding (default true - the original binds it against a model that never sets it, so it falls back to the control default)."
+    },
+    {
+      "type": "NOTE",
+      "what": "onGenericTagPress lazily Fragment.loads Card.fragment.xml (a Popover > sap.f.Card > sap.f.cards.NumericHeader with two sap.f.cards.NumericSideIndicator) and openBy(the pressed GenericTag). The port builds that same popover server-side on the GENERIC_TAG_PRESS round-trip and shows it anchored to the pressed GenericTag via client->popover_display( xml = ..., by_id = $event.oSource.sId ) - the popover XML parameter is named `xml` (not `val` like popup_display). Faithful (lazy either way), matches app 229; the GenericTag.press attribute is kept (rewired to the abap2UI5 event). All Card/NumericHeader/NumericSideIndicator controls of the fragment are present in the port (built in popover_card), so the fragment union in structural-diff is satisfied."
+    },
+    {
+      "type": "NOTE",
+      "what": "The shared 123-row demo ProductCollection (sap/ui/demo/mock/products.json) is inlined with the columns the Products table binds (Name, ProductId, SupplierName, Width, Depth, Height, DimUnit, Price, CurrencyCode). The items sorter (path 'Name') and the Price/CurrencyCode Currency composite type binding are kept 1:1 as raw binding-info strings (path upper-cased to the ABAP field names). Width/Depth/Height are TYPE string because the mock carries decimal values (40.8, 3.1) bound display-only into a text template ({WIDTH} x {DEPTH} x {HEIGHT} {DIMUNIT}); Price stays packed (DECIMALS 2) for the Currency type binding."
+    },
+    {
+      "type": "NOTE",
+      "what": "stickySubheaderProvider='iconTabBar' is kept 1:1 as the association to the content IconTabBar (id='iconTabBar'); it is a control-id association resolved by XMLView.create within the same view. stickySubheaderProvider is @since 1.65 (<= 1.71, base) - no POST_171 needed. All Card/NumericHeader/GenericTag members used are <= 1.71."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "unverified in a running system: that the Card popover opens anchored to the pressed GenericTag (popover_display by_id = $event.oSource.sId), and that the Toggle Footer round-trip flips showFooter and reveals/hides the DynamicPage footer."
+    }
+  ]
+}

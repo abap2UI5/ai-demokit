@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_ai_app_223",
+  "sample": "sap.ui.layout.sample.BlockLayoutLinkTitle",
+  "entity": "sap.ui.layout.BlockLayout",
+  "file": "src/02/b10/z2ui5_cl_ai_app_223.clas.abap",
+  "batch": "b10",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The Slider's imperative onSliderMoved handler (setWidth on the container) is replaced by the thin-frontend equivalent: the Slider value is two-way bound and the VerticalLayout containerLayout width is an expression binding {= ${/SLIDERVALUE} + '%' }. The Slider's liveChange attribute is dropped (no event round-trip needed). structural-diff does not flag the literal value=100 becoming a binding."
+    },
+    {
+      "type": "NOTE",
+      "what": "The SegmentedButton selectedKey and the BlockLayout background are two-way bound to one default-model field selected_background, reproducing the original {/selectedBackground} wiring; it is seeded with the enum default Default (a valid BlockBackgroundType) because an empty enum value crashes validateProperty. The original controller loads sap/ui/demo/mock/products.json as the unnamed model but no view binding references it, so it is not reproduced."
+    }
+  ]
+}

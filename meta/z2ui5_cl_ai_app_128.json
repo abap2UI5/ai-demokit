@@ -14,6 +14,10 @@
     {
       "type": "LIVE_TEST",
       "what": "The two buttons reproduce the controller behaviour server-side: 'Toggle Collapse/Expand' flips SideNavigation.expanded (bound to a boolean model field, initial false as in the original) and 'Show/Hide \"Walked\"' flips the 'walked' NavigationListItem.visible. The original used byId().setExpanded/setVisible; here the properties are two-way bound and toggled on a backend round-trip. The 'visible' attribute added to the walked item carries that binding (the original toggled it imperatively)."
+    },
+    {
+      "type": "POST_171",
+      "what": "NavigationListItem.selectable (@since 1.116) is kept 1:1 from the original (selectable=false on the parent items). Newer than UI5 1.71; declared per the property-171 policy. Was previously undeclared because the property gate is blind to sap.tnt (properties.json holds sap.m only); found and corrected by the app-172 cold-read probe 2026-07-24."
     }
   ]
 }

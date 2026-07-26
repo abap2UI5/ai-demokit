@@ -1,0 +1,18 @@
+{
+  "class": "z2ui5_cl_ai_app_186",
+  "sample": "sap.ui.layout.sample.ResponsiveSplitter",
+  "entity": "sap.ui.layout.ResponsiveSplitter",
+  "file": "src/02/b10/z2ui5_cl_ai_app_186.clas.abap",
+  "batch": "b10",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    { "type": "NOTE", "what": "The original keeps the three pane sizes in a separate 'sizes' JSON model ({sizes>/pane1}, {sizes>/pane2}, {sizes>/pane3}) bound on the three SplitterLayoutData.size properties and echoed in each pane's Text label. abap2UI5 has one default model, so pane1/pane2/pane3 are folded into it and bound directly - the 'sizes>' prefix is dropped and the last path segment is identical, which structural-diff matches. Same data, renders identically." },
+    { "type": "NOTE", "what": "The shared 123-row demo ProductCollection (sap/ui/demo/mock/products.json) is inlined into model_init with the three columns the sample binds - ProductId, Name and Quantity (the List's title/counter and the Select's Item key/text). Quantity is the mock integer; the full row set is kept." },
+    { "type": "IMPROVISED", "what": "The two PaneContainer resize handlers (resize='.onRootContainerResize' on the root container and resize='.onInnerContainerResize' on the inner container) are dropped. Both only compose an informational MessageToast listing the oldSizes/newSizes pane-size arrays reported by the resize event; that array-valued container-resize event has no bound-model equivalent, so the resize attribute is not reproduced. No app state depends on it." }
+  ]
+}

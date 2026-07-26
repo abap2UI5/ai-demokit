@@ -9,10 +9,6 @@
    "parent": "sap.m.ListItemBase",
    "members": {}
   },
-  "sap.m.ActionSelect": {
-   "parent": "sap.m.Select",
-   "members": {}
-  },
   "sap.m.ActionSheet": {
    "parent": "sap.ui.core.Control",
    "members": {}
@@ -78,7 +74,6 @@
   "sap.m.Bar": {
    "parent": "sap.ui.core.Control",
    "members": {
-    "translucent": "1.12",
     "design": "1.22",
     "titleAlignment": "1.85"
    }
@@ -194,7 +189,6 @@
    "members": {
     "showSecondaryValues": "1.60",
     "showClearIcon": "1.96",
-    "maxPickerHeight": "1.150",
     "loadItems": "1.38"
    }
   },
@@ -213,10 +207,6 @@
    "members": {
     "accDescription": "1.84"
    }
-  },
-  "sap.m.CustomTile": {
-   "parent": "sap.m.Tile",
-   "members": {}
   },
   "sap.m.CustomTreeItem": {
    "parent": "sap.m.TreeItemBase",
@@ -252,18 +242,6 @@
     "liveChange": "1.104.0"
    }
   },
-  "sap.m.DateTimeInput": {
-   "parent": "sap.ui.core.Control",
-   "members": {
-    "editable": "1.12.0",
-    "valueStateText": "1.26.0",
-    "showValueStateMessage": "1.26.0",
-    "textAlign": "1.26.0",
-    "textDirection": "1.28.0",
-    "ariaLabelledBy": "1.27.0",
-    "valid": "1.38.0"
-   }
-  },
   "sap.m.DateTimePicker": {
    "parent": "sap.m.DatePicker",
    "members": {
@@ -280,7 +258,6 @@
    "members": {
     "showHeader": "1.15.1",
     "state": "1.11.2",
-    "stretchOnPhone": "1.11.2",
     "stretch": "1.13.1",
     "contentWidth": "1.12.1",
     "contentHeight": "1.12.1",
@@ -480,21 +457,12 @@
   "sap.m.GroupHeaderListItem": {
    "parent": "sap.m.ListItemBase",
    "members": {
-    "upperCase": "1.13.2",
     "titleTextDirection": "1.28.0"
    }
   },
   "sap.m.GrowingEnablement": {
    "parent": "sap.ui.base.Object",
    "members": {}
-  },
-  "sap.m.GrowingList": {
-   "parent": "sap.m.List",
-   "members": {
-    "threshold": "1.16",
-    "triggerText": "1.16",
-    "scrollToLoad": "1.16"
-   }
   },
   "sap.m.HBox": {
    "parent": "sap.m.FlexBox",
@@ -521,7 +489,6 @@
     "applyContentPadding": "1.26",
     "backgroundDesign": "1.26",
     "headerMode": "1.40",
-    "showOverflowSelectList": "1.42",
     "headerBackgroundDesign": "1.44",
     "enableTabReordering": "1.46",
     "maxNestingLevel": "1.79",
@@ -635,7 +602,6 @@
     "showValueHelp": "1.16",
     "valueHelpIconSrc": "1.84.0",
     "showSuggestion": "1.16.1",
-    "valueHelpOnly": "1.21.0",
     "maxSuggestionWidth": "1.21.1",
     "startSuggestion": "1.21.2",
     "showTableSuggestionValueHelp": "1.22.1",
@@ -741,7 +707,6 @@
    "parent": "sap.ui.core.Control",
    "members": {
     "headerLevel": "1.117.0",
-    "headerDesign": "1.14",
     "enableBusyIndicator": "1.20.2",
     "growing": "1.16.0",
     "growingThreshold": "1.16.0",
@@ -761,8 +726,6 @@
     "noData": "1.101",
     "ariaLabelledBy": "1.28.0",
     "selectionChange": "1.16",
-    "growingStarted": "1.16",
-    "growingFinished": "1.16",
     "updateStarted": "1.16.3",
     "updateFinished": "1.16.3",
     "itemPress": "1.20",
@@ -851,26 +814,12 @@
    "parent": "sap.m.StandardListItem",
    "members": {}
   },
-  "sap.m.MessagePage": {
-   "parent": "sap.ui.core.Control",
-   "members": {
-    "titleLevel": "1.97",
-    "iconAlt": "1.52",
-    "enableFormattedText": "1.54",
-    "buttons": "1.54",
-    "navButtonPress": "1.28.1"
-   }
-  },
   "sap.m.MessagePopover": {
    "parent": "sap.ui.core.Control",
    "members": {
     "groupItems": "1.73",
     "activeTitlePress": "1.58"
    }
-  },
-  "sap.m.MessagePopoverItem": {
-   "parent": "sap.m.MessageItem",
-   "members": {}
   },
   "sap.m.MessageStrip": {
    "parent": "sap.ui.core.Control",
@@ -891,14 +840,9 @@
    "parent": "sap.m.ComboBoxBase",
    "members": {}
   },
-  "sap.m.MultiEditField": {
-   "parent": "sap.ui.core.XMLComposite",
-   "members": {}
-  },
   "sap.m.MultiInput": {
    "parent": "sap.m.Input",
    "members": {
-    "enableMultiLineMode": "1.28",
     "maxTokens": "1.36",
     "tokenUpdate": "1.46"
    }
@@ -955,9 +899,6 @@
    "parent": "sap.ui.core.Control",
    "members": {
     "imageShape": "1.61",
-    "markFavorite": "1.16.0",
-    "markFlagged": "1.16.0",
-    "showMarkers": "1.16.0",
     "showTitleSelector": "1.16.0",
     "numberState": "1.16.0",
     "responsive": "1.21.1",
@@ -989,11 +930,7 @@
   "sap.m.ObjectListItem": {
    "parent": "sap.m.ListItemBase",
    "members": {
-    "markFavorite": "1.16.0",
-    "markFlagged": "1.16.0",
-    "showMarkers": "1.16.0",
-    "numberState": "1.16.0",
-    "markLocked": "1.28"
+    "numberState": "1.16.0"
    }
   },
   "sap.m.ObjectMarker": {
@@ -1062,107 +999,6 @@
    "parent": "sap.m.Tokenizer",
    "members": {}
   },
-  "sap.m.P13nAnyFilterItem": {
-   "parent": "sap.m.P13nFilterItem",
-   "members": {}
-  },
-  "sap.m.P13nColumnsItem": {
-   "parent": "sap.ui.core.Item",
-   "members": {
-    "columnKey": "1.26.0",
-    "index": "1.26.0",
-    "visible": "1.26.0",
-    "width": "1.26.0",
-    "total": "1.26.0"
-   }
-  },
-  "sap.m.P13nColumnsPanel": {
-   "parent": "sap.m.P13nPanel",
-   "members": {
-    "visibleItemsThreshold": "1.26.7",
-    "columnsItems": "1.26.0",
-    "addColumnsItem": "1.26.0",
-    "changeColumnsItems": "1.26.7",
-    "items": "1.50.0",
-    "setData": "1.26.7"
-   }
-  },
-  "sap.m.P13nConditionPanel": {
-   "parent": "sap.ui.core.Control",
-   "members": {}
-  },
-  "sap.m.P13nDialog": {
-   "parent": "sap.m.Dialog",
-   "members": {
-    "showResetEnabled": "1.36.0"
-   }
-  },
-  "sap.m.P13nDimMeasureItem": {
-   "parent": "sap.ui.core.Item",
-   "members": {}
-  },
-  "sap.m.P13nDimMeasurePanel": {
-   "parent": "sap.m.P13nPanel",
-   "members": {
-    "changeDimMeasureItems": "1.50.0",
-    "changeChartType": "1.50.0"
-   }
-  },
-  "sap.m.P13nFilterItem": {
-   "parent": "sap.ui.core.Item",
-   "members": {}
-  },
-  "sap.m.P13nFilterPanel": {
-   "parent": "sap.m.P13nPanel",
-   "members": {}
-  },
-  "sap.m.P13nGroupItem": {
-   "parent": "sap.ui.core.Item",
-   "members": {}
-  },
-  "sap.m.P13nGroupPanel": {
-   "parent": "sap.m.P13nPanel",
-   "members": {}
-  },
-  "sap.m.P13nItem": {
-   "parent": "sap.ui.core.Element",
-   "members": {
-    "typeInstance": "1.56",
-    "formatSettings": "1.52",
-    "values": "1.34.0",
-    "role": "1.34.0",
-    "aggregationRole": "1.34.0",
-    "href": "1.46.0",
-    "press": "1.46.0",
-    "description": "1.56.0"
-   }
-  },
-  "sap.m.P13nPanel": {
-   "parent": "sap.ui.core.Control",
-   "members": {
-    "titleLarge": "1.30.0",
-    "beforeNavigationTo": "1.28.0"
-   }
-  },
-  "sap.m.P13nSelectionItem": {
-   "parent": "sap.ui.core.Item",
-   "members": {}
-  },
-  "sap.m.P13nSelectionPanel": {
-   "parent": "sap.m.P13nPanel",
-   "members": {
-    "changeSelectionItems": "1.52",
-    "items": "1.52"
-   }
-  },
-  "sap.m.P13nSortItem": {
-   "parent": "sap.ui.core.Item",
-   "members": {}
-  },
-  "sap.m.P13nSortPanel": {
-   "parent": "sap.m.P13nPanel",
-   "members": {}
-  },
   "sap.m.PDFViewer": {
    "parent": "sap.ui.core.Control",
    "members": {}
@@ -1171,7 +1007,6 @@
    "parent": "sap.ui.core.Control",
    "members": {
     "showSubHeader": "1.28",
-    "navButtonType": "1.12",
     "showFooter": "1.13.1",
     "contentOnlyBusy": "1.29.0",
     "titleAlignment": "1.72",
@@ -1209,7 +1044,6 @@
    "members": {
     "showEmptyIntervalHeaders": "1.38.0",
     "groupAppointmentsMode": "1.48.0",
-    "appointmentsReducedHeight": "1.38.0",
     "appointmentHeight": "1.81.0",
     "appointmentRoundWidth": "1.81.0",
     "appointmentsVisualization": "1.40.0",
@@ -1231,8 +1065,6 @@
     "endDate": "1.38.0",
     "subInterval": "1.38.0",
     "row": "1.38.0",
-    "rowHeaderClick": "1.46.0",
-    "headerId": "1.73",
     "rowHeaderPress": "1.119.0"
    }
   },
@@ -1283,7 +1115,6 @@
     "maxHeight": "1.148",
     "verticalScrolling": "1.15.0",
     "horizontalScrolling": "1.15.0",
-    "bounce": "1.16.5",
     "resizable": "1.36.4",
     "ariaModal": "1.70",
     "titleAlignment": "1.72",
@@ -1332,7 +1163,6 @@
   "sap.m.QuickViewPage": {
    "parent": "sap.ui.core.Control",
    "members": {
-    "fallbackIcon": "1.69",
     "avatar": "1.92"
    }
   },
@@ -1390,11 +1220,8 @@
    "parent": "sap.ui.core.Control",
    "members": {
     "showRefreshButton": "1.16",
-    "refreshButtonTooltip": "1.16",
     "showSearchButton": "1.23",
     "enableSuggestions": "1.34",
-    "selectOnFocus": "1.20",
-    "ariaControls": "1.150",
     "suggestionItems": "1.34",
     "suggestionItem": "1.34",
     "refreshButtonPressed": "1.16",
@@ -1413,7 +1240,6 @@
     "contentMode": "1.142.0",
     "items": "1.28",
     "selectedItem": "1.52",
-    "key": "1.28.0",
     "selectionChange": "1.52",
     "previousItem": "1.144",
     "previousKey": "1.144"
@@ -1553,7 +1379,7 @@
    }
   },
   "sap.m.SinglePlanningCalendarMonthGrid": {
-   "parent": null,
+   "parent": "sap.ui.core.Control",
    "members": {
     "firstDayOfWeek": "1.98",
     "calendarWeekNumbering": "1.110.0",
@@ -1650,7 +1476,6 @@
   "sap.m.StandardListItem": {
    "parent": "sap.m.ListItemBase",
    "members": {
-    "infoIcon": "1.150",
     "adaptTitleSize": "1.16.3",
     "titleTextDirection": "1.28.0",
     "infoTextDirection": "1.28.0",
@@ -1659,10 +1484,6 @@
     "wrapCharLimit": "1.94",
     "avatar": "1.98"
    }
-  },
-  "sap.m.StandardTile": {
-   "parent": "sap.m.Tile",
-   "members": {}
   },
   "sap.m.StandardTreeItem": {
    "parent": "sap.m.TreeItemBase",
@@ -1745,18 +1566,6 @@
     "popinChanged": "1.77"
    }
   },
-  "sap.m.TablePersoController": {
-   "parent": "sap.ui.base.ManagedObject",
-   "members": {}
-  },
-  "sap.m.TablePersoDialog": {
-   "parent": "sap.ui.base.ManagedObject",
-   "members": {}
-  },
-  "sap.m.TablePersoProvider": {
-   "parent": "sap.ui.base.ManagedObject",
-   "members": {}
-  },
   "sap.m.TableSelectDialog": {
    "parent": "sap.m.SelectDialogBase",
    "members": {
@@ -1790,15 +1599,7 @@
     "growingMaxLines": "1.38.0"
    }
   },
-  "sap.m.Tile": {
-   "parent": "sap.ui.core.Control",
-   "members": {}
-  },
   "sap.m.TileAttribute": {
-   "parent": "sap.ui.core.Control",
-   "members": {}
-  },
-  "sap.m.TileContainer": {
    "parent": "sap.ui.core.Control",
    "members": {}
   },
@@ -1863,7 +1664,7 @@
    }
   },
   "my.MyElement": {
-   "parent": null,
+   "parent": "sap.ui.core.Element",
    "members": {}
   },
   "sap.m.ToggleButton": {
@@ -1881,7 +1682,6 @@
    "members": {
     "name": "1.142.0",
     "displayOnly": "1.142.0",
-    "tokenUpdate": "1.46",
     "tokenDelete": "1.82",
     "renderModeChange": "1.133"
    }
@@ -1906,6 +1706,10 @@
    "parent": "sap.ui.core.Control",
    "members": {}
   },
+  "sap.m.Tooltip": {
+   "parent": "sap.ui.core.Control",
+   "members": {}
+  },
   "sap.m.Tree": {
    "parent": "sap.m.ListBase",
    "members": {
@@ -1914,51 +1718,6 @@
   },
   "sap.m.TreeItemBase": {
    "parent": "sap.m.ListItemBase",
-   "members": {}
-  },
-  "sap.m.UploadCollection": {
-   "parent": "sap.ui.core.Control",
-   "members": {
-    "noDataDescription": "1.46.0",
-    "instantUpload": "1.30.0",
-    "numberOfAttachmentsText": "1.30.0",
-    "mode": "1.34.0",
-    "uploadButtonInvisible": "1.42.0",
-    "terminationEnabled": "1.42.0",
-    "toolbar": "1.34.0",
-    "infoToolbar": "1.44.0",
-    "_list": "1.34.0",
-    "_noDataIcon": "1.46.0",
-    "_dragDropIcon": "1.46.0",
-    "_dragDropText": "1.46.0",
-    "files": "1.28.0",
-    "item": "1.28.0",
-    "selectionChange": "1.36.0"
-   }
-  },
-  "sap.m.UploadCollectionItem": {
-   "parent": "sap.ui.core.Element",
-   "members": {
-    "ariaLabelForPicture": "1.30.0",
-    "selected": "1.34.0",
-    "attributes": "1.30.0",
-    "_propertyAttributes": "1.30.0",
-    "statuses": "1.30.0",
-    "markers": "1.40.0",
-    "fileUploader": "1.30.0",
-    "press": "1.50.0",
-    "deletePress": "1.50.0"
-   }
-  },
-  "sap.m.UploadCollectionParameter": {
-   "parent": "sap.ui.core.Element",
-   "members": {
-    "name": "1.12.2",
-    "value": "1.12.2"
-   }
-  },
-  "sap.m.UploadCollectionToolbarPlaceholder": {
-   "parent": "sap.ui.core.Control",
    "members": {}
   },
   "sap.m.VBox": {
@@ -2052,6 +1811,2953 @@
     "_nextButton": "1.58",
     "subsequentSteps": "1.32",
     "nextStep": "1.32"
+   }
+  },
+  "sap.m.delegate.DateNavigation": {
+   "parent": "sap.ui.base.EventProvider",
+   "members": {}
+  },
+  "sap.m.delegate.ValueState": {
+   "parent": "sap.ui.base.Object",
+   "members": {}
+  },
+  "sap.m.p13n.AbstractContainer": {
+   "parent": null,
+   "members": {}
+  },
+  "sap.m.p13n.AbstractContainerItem": {
+   "parent": null,
+   "members": {}
+  },
+  "sap.m.p13n.BasePanel": {
+   "parent": null,
+   "members": {}
+  },
+  "sap.m.p13n.Container": {
+   "parent": null,
+   "members": {}
+  },
+  "sap.m.p13n.Engine": {
+   "parent": null,
+   "members": {}
+  },
+  "sap.m.p13n.FilterController": {
+   "parent": null,
+   "members": {}
+  },
+  "sap.m.p13n.FilterPanel": {
+   "parent": null,
+   "members": {}
+  },
+  "sap.m.p13n.GroupController": {
+   "parent": null,
+   "members": {}
+  },
+  "sap.m.p13n.GroupPanel": {
+   "parent": null,
+   "members": {}
+  },
+  "sap.m.p13n.MessageStrip": {
+   "parent": null,
+   "members": {}
+  },
+  "sap.m.p13n.MetadataHelper": {
+   "parent": null,
+   "members": {}
+  },
+  "sap.m.p13n.PersistenceProvider": {
+   "parent": null,
+   "members": {}
+  },
+  "sap.m.p13n.Popup": {
+   "parent": null,
+   "members": {}
+  },
+  "sap.m.p13n.QueryPanel": {
+   "parent": null,
+   "members": {}
+  },
+  "sap.m.p13n.SelectionController": {
+   "parent": null,
+   "members": {}
+  },
+  "sap.m.p13n.SelectionPanel": {
+   "parent": null,
+   "members": {}
+  },
+  "sap.m.p13n.SortController": {
+   "parent": null,
+   "members": {}
+  },
+  "sap.m.p13n.SortPanel": {
+   "parent": null,
+   "members": {}
+  },
+  "sap.m.p13n.modification.FlexModificationHandler": {
+   "parent": null,
+   "members": {}
+  },
+  "sap.m.p13n.modification.LocalStorageModificationHandler": {
+   "parent": null,
+   "members": {}
+  },
+  "sap.m.p13n.modification.ModificationHandler": {
+   "parent": null,
+   "members": {}
+  },
+  "sap.m.p13n.modules.AdaptationProvider": {
+   "parent": null,
+   "members": {}
+  },
+  "sap.m.p13n.modules.DefaultProviderRegistry": {
+   "parent": null,
+   "members": {}
+  },
+  "sap.m.p13n.modules.StateHandlerRegistry": {
+   "parent": null,
+   "members": {}
+  },
+  "sap.m.p13n.modules.UIManager": {
+   "parent": null,
+   "members": {}
+  },
+  "sap.m.plugins.CellSelector": {
+   "parent": "sap.m.plugins.PluginBase",
+   "members": {
+    "selectionChange": "1.130"
+   }
+  },
+  "sap.m.plugins.ColumnAIAction": {
+   "parent": "sap.m.plugins.PluginBase",
+   "members": {}
+  },
+  "sap.m.plugins.ColumnResizer": {
+   "parent": "sap.m.plugins.PluginBase",
+   "members": {}
+  },
+  "sap.m.plugins.ContextMenuSetting": {
+   "parent": "sap.m.plugins.PluginBase",
+   "members": {}
+  },
+  "sap.m.plugins.CopyProvider": {
+   "parent": "sap.m.plugins.PluginBase",
+   "members": {
+    "visible": "1.114",
+    "copyPreference": "1.119"
+   }
+  },
+  "sap.m.plugins.DataStateIndicator": {
+   "parent": "sap.m.plugins.PluginBase",
+   "members": {
+    "enableFiltering": "1.89",
+    "applyFilter": "1.89",
+    "clearFilter": "1.89",
+    "close": "1.103"
+   }
+  },
+  "sap.m.plugins.PasteProvider": {
+   "parent": "sap.m.plugins.PluginBase",
+   "members": {}
+  },
+  "sap.m.plugins.PluginBase": {
+   "parent": "sap.ui.core.Element",
+   "members": {}
+  },
+  "sap.m.plugins.TitleProvider": {
+   "parent": "sap.m.plugins.PluginBase",
+   "members": {}
+  },
+  "sap.m.plugins.UploadSetwithTable": {
+   "parent": "sap.m.plugins.PluginBase",
+   "members": {
+    "fileNameValidationConfig": "1.136",
+    "itemRenameCanceled": "1.142"
+   }
+  },
+  "sap.m.routing.Router": {
+   "parent": "sap.ui.core.routing.Router",
+   "members": {}
+  },
+  "sap.m.routing.Target": {
+   "parent": "sap.ui.core.routing.Target",
+   "members": {}
+  },
+  "sap.m.routing.TargetHandler": {
+   "parent": "sap.ui.base.Object",
+   "members": {}
+  },
+  "sap.m.routing.Targets": {
+   "parent": "sap.ui.core.routing.Targets",
+   "members": {}
+  },
+  "sap.m.semantic.AddAction": {
+   "parent": "sap.m.semantic.SemanticButton",
+   "members": {}
+  },
+  "sap.m.semantic.CancelAction": {
+   "parent": "sap.m.semantic.SemanticButton",
+   "members": {}
+  },
+  "sap.m.semantic.DeleteAction": {
+   "parent": "sap.m.semantic.SemanticButton",
+   "members": {}
+  },
+  "sap.m.semantic.DetailPage": {
+   "parent": "sap.m.semantic.ShareMenuPage",
+   "members": {}
+  },
+  "sap.m.semantic.DiscussInJamAction": {
+   "parent": "sap.m.semantic.SemanticButton",
+   "members": {}
+  },
+  "sap.m.semantic.EditAction": {
+   "parent": "sap.m.semantic.SemanticButton",
+   "members": {}
+  },
+  "sap.m.semantic.FavoriteAction": {
+   "parent": "sap.m.semantic.SemanticToggleButton",
+   "members": {}
+  },
+  "sap.m.semantic.FilterAction": {
+   "parent": "sap.m.semantic.SemanticButton",
+   "members": {}
+  },
+  "sap.m.semantic.FilterSelect": {
+   "parent": "sap.m.semantic.SemanticSelect",
+   "members": {}
+  },
+  "sap.m.semantic.FlagAction": {
+   "parent": "sap.m.semantic.SemanticToggleButton",
+   "members": {}
+  },
+  "sap.m.semantic.ForwardAction": {
+   "parent": "sap.m.semantic.SemanticButton",
+   "members": {}
+  },
+  "sap.m.semantic.FullscreenPage": {
+   "parent": "sap.m.semantic.ShareMenuPage",
+   "members": {}
+  },
+  "sap.m.semantic.GroupAction": {
+   "parent": "sap.m.semantic.SemanticButton",
+   "members": {}
+  },
+  "sap.m.semantic.GroupSelect": {
+   "parent": "sap.m.semantic.SemanticSelect",
+   "members": {}
+  },
+  "sap.m.semantic.MainAction": {
+   "parent": "sap.m.semantic.SemanticButton",
+   "members": {}
+  },
+  "sap.m.semantic.MasterPage": {
+   "parent": "sap.m.semantic.SemanticPage",
+   "members": {}
+  },
+  "sap.m.semantic.MessagesIndicator": {
+   "parent": "sap.m.semantic.SemanticButton",
+   "members": {}
+  },
+  "sap.m.semantic.MultiSelectAction": {
+   "parent": "sap.m.semantic.SemanticToggleButton",
+   "members": {}
+  },
+  "sap.m.semantic.NegativeAction": {
+   "parent": "sap.m.semantic.SemanticButton",
+   "members": {}
+  },
+  "sap.m.semantic.OpenInAction": {
+   "parent": "sap.m.semantic.SemanticButton",
+   "members": {}
+  },
+  "sap.m.semantic.PositiveAction": {
+   "parent": "sap.m.semantic.SemanticButton",
+   "members": {}
+  },
+  "sap.m.semantic.PrintAction": {
+   "parent": "sap.m.semantic.SemanticButton",
+   "members": {}
+  },
+  "sap.m.semantic.SaveAction": {
+   "parent": "sap.m.semantic.SemanticButton",
+   "members": {}
+  },
+  "sap.m.semantic.Segment": {
+   "parent": "sap.ui.base.Object",
+   "members": {}
+  },
+  "sap.m.semantic.SegmentedContainer": {
+   "parent": "sap.ui.base.Object",
+   "members": {}
+  },
+  "sap.m.semantic.SemanticButton": {
+   "parent": "sap.m.semantic.SemanticControl",
+   "members": {}
+  },
+  "sap.m.semantic.SemanticConfiguration": {
+   "parent": "sap.ui.base.Object",
+   "members": {}
+  },
+  "sap.m.semantic.SemanticControl": {
+   "parent": "sap.ui.core.Element",
+   "members": {}
+  },
+  "sap.m.semantic.SemanticOverflowToolbarButton": {
+   "parent": "sap.m.OverflowToolbarButton",
+   "members": {}
+  },
+  "sap.m.semantic.SemanticOverflowToolbarToggleButton": {
+   "parent": "sap.m.OverflowToolbarToggleButton",
+   "members": {}
+  },
+  "sap.m.semantic.SemanticPage": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "floatingFooter": "1.40.1",
+    "semanticRuleSet": "1.44",
+    "backgroundDesign": "1.52"
+   }
+  },
+  "sap.m.semantic.SemanticSelect": {
+   "parent": "sap.m.semantic.SemanticControl",
+   "members": {}
+  },
+  "sap.m.semantic.SemanticToggleButton": {
+   "parent": "sap.m.semantic.SemanticButton",
+   "members": {}
+  },
+  "sap.m.semantic.SendEmailAction": {
+   "parent": "sap.m.semantic.SemanticButton",
+   "members": {}
+  },
+  "sap.m.semantic.SendMessageAction": {
+   "parent": "sap.m.semantic.SemanticButton",
+   "members": {}
+  },
+  "sap.m.semantic.ShareInJamAction": {
+   "parent": "sap.m.semantic.SemanticButton",
+   "members": {}
+  },
+  "sap.m.semantic.ShareMenu": {
+   "parent": "sap.ui.base.Object",
+   "members": {}
+  },
+  "sap.m.semantic.ShareMenuPage": {
+   "parent": "sap.m.semantic.SemanticPage",
+   "members": {}
+  },
+  "sap.m.semantic.SortAction": {
+   "parent": "sap.m.semantic.SemanticButton",
+   "members": {}
+  },
+  "sap.m.semantic.SortSelect": {
+   "parent": "sap.m.semantic.SemanticSelect",
+   "members": {}
+  },
+  "sap.m.table.ColumnWidthController": {
+   "parent": "sap.m.p13n.SelectionController",
+   "members": {}
+  },
+  "sap.m.table.Title": {
+   "parent": "sap.ui.core.Control",
+   "members": {}
+  },
+  "sap.m.table.columnmenu.ActionItem": {
+   "parent": "sap.m.table.columnmenu.ItemBase",
+   "members": {}
+  },
+  "sap.m.table.columnmenu.Entry": {
+   "parent": "sap.ui.core.Element",
+   "members": {}
+  },
+  "sap.m.table.columnmenu.ItemBase": {
+   "parent": "sap.m.table.columnmenu.Entry",
+   "members": {}
+  },
+  "sap.m.table.columnmenu.ItemContainer": {
+   "parent": "sap.m.table.columnmenu.ItemBase",
+   "members": {}
+  },
+  "sap.m.table.columnmenu.Menu": {
+   "parent": "sap.m.table.columnmenu.MenuBase",
+   "members": {}
+  },
+  "sap.m.table.columnmenu.MenuBase": {
+   "parent": "sap.ui.core.Control",
+   "members": {}
+  },
+  "sap.m.table.columnmenu.QuickAction": {
+   "parent": "sap.m.table.columnmenu.QuickActionBase",
+   "members": {}
+  },
+  "sap.m.table.columnmenu.QuickActionBase": {
+   "parent": "sap.m.table.columnmenu.Entry",
+   "members": {}
+  },
+  "sap.m.table.columnmenu.QuickActionContainer": {
+   "parent": "sap.m.table.columnmenu.QuickActionBase",
+   "members": {}
+  },
+  "sap.m.table.columnmenu.QuickActionItem": {
+   "parent": "sap.m.table.columnmenu.Entry",
+   "members": {}
+  },
+  "sap.m.table.columnmenu.QuickGroup": {
+   "parent": "sap.m.table.columnmenu.QuickActionBase",
+   "members": {}
+  },
+  "sap.m.table.columnmenu.QuickGroupItem": {
+   "parent": "sap.m.table.columnmenu.QuickActionItem",
+   "members": {}
+  },
+  "sap.m.table.columnmenu.QuickResize": {
+   "parent": "sap.m.table.columnmenu.QuickActionBase",
+   "members": {}
+  },
+  "sap.m.table.columnmenu.QuickSort": {
+   "parent": "sap.m.table.columnmenu.QuickActionBase",
+   "members": {}
+  },
+  "sap.m.table.columnmenu.QuickSortItem": {
+   "parent": "sap.m.table.columnmenu.QuickActionItem",
+   "members": {}
+  },
+  "sap.m.table.columnmenu.QuickTotal": {
+   "parent": "sap.m.table.columnmenu.QuickActionBase",
+   "members": {}
+  },
+  "sap.m.table.columnmenu.QuickTotalItem": {
+   "parent": "sap.m.table.columnmenu.QuickActionItem",
+   "members": {}
+  },
+  "sap.m.upload.ActionsPlaceholder": {
+   "parent": "sap.ui.core.Control",
+   "members": {}
+  },
+  "sap.m.upload.Column": {
+   "parent": "sap.m.Column",
+   "members": {}
+  },
+  "sap.m.upload.FilePreviewDialog": {
+   "parent": "sap.ui.core.Element",
+   "members": {
+    "customPageContentHandler": "1.136"
+   }
+  },
+  "sap.m.upload.FilterPanel": {
+   "parent": "sap.m.p13n.BasePanel",
+   "members": {}
+  },
+  "sap.m.upload.UploadItem": {
+   "parent": "sap.ui.core.Element",
+   "members": {
+    "isTrustedSource": "1.125",
+    "isDirectory": "1.139"
+   }
+  },
+  "sap.m.upload.UploadItemConfiguration": {
+   "parent": "sap.ui.core.Element",
+   "members": {
+    "isTrustedSourcePath": "1.125",
+    "isDirectoryPath": "1.139"
+   }
+  },
+  "sap.m.upload.UploaderTableItem": {
+   "parent": "sap.ui.core.Element",
+   "members": {}
+  },
+  "sap.f.AvatarGroup": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "avatarCustomDisplaySize": "1.103",
+    "avatarCustomFontSize": "1.103"
+   }
+  },
+  "sap.f.AvatarGroupItem": {
+   "parent": "sap.ui.core.Control",
+   "members": {}
+  },
+  "sap.f.CalendarAppointmentInCard": {
+   "parent": "sap.ui.unified.CalendarAppointment",
+   "members": {}
+  },
+  "sap.f.CalendarInCard": {
+   "parent": "sap.ui.unified.Calendar",
+   "members": {}
+  },
+  "sap.f.Card": {
+   "parent": "sap.f.CardBase",
+   "members": {
+    "headerPosition": "1.65"
+   }
+  },
+  "sap.f.CardBase": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "headingLevel": "1.150"
+   }
+  },
+  "sap.f.DynamicPage": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "headerPinned": "1.93",
+    "backgroundDesign": "1.68",
+    "stickySubheaderProvider": "1.65",
+    "landmarkInfo": "1.61",
+    "pinnedStateChange": "1.93",
+    "breakpointChange": "1.147"
+   }
+  },
+  "sap.f.DynamicPageAccessibleLandmarkInfo": {
+   "parent": "sap.ui.core.Element",
+   "members": {
+    "headerContentLabel": "1.127.0"
+   }
+  },
+  "sap.f.DynamicPageHeader": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "backgroundDesign": "1.58"
+   }
+  },
+  "sap.f.DynamicPageTitle": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "areaShrinkRatio": "1.54",
+    "backgroundDesign": "1.58",
+    "snappedHeading": "1.52",
+    "expandedHeading": "1.52",
+    "navigationActions": "1.52",
+    "content": "1.50",
+    "snappedTitleOnMobile": "1.63",
+    "breadcrumbs": "1.52",
+    "_navActionsToolbar": "1.52",
+    "_navActionsToolbarSeparator": "1.52",
+    "_expandButton": "1.52",
+    "_snappedTitleOnMobileIcon": "1.63",
+    "ariaDescribedBy": "1.78",
+    "stateChange": "1.54"
+   }
+  },
+  "sap.f.FlexibleColumnLayout": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "autoFocus": "1.76",
+    "backgroundDesign": "1.54",
+    "restoreFocusOnBackNavigation": "1.77",
+    "landmarkInfo": "1.95",
+    "columnResize": "1.76",
+    "columnsDistributionChange": "1.128"
+   }
+  },
+  "sap.f.FlexibleColumnLayoutAccessibleLandmarkInfo": {
+   "parent": "sap.ui.core.Element",
+   "members": {}
+  },
+  "sap.f.FlexibleColumnLayoutData": {
+   "parent": "sap.ui.core.LayoutData",
+   "members": {}
+  },
+  "sap.f.FlexibleColumnLayoutDataForDesktop": {
+   "parent": "sap.ui.core.LayoutData",
+   "members": {}
+  },
+  "sap.f.FlexibleColumnLayoutDataForTablet": {
+   "parent": "sap.ui.core.LayoutData",
+   "members": {}
+  },
+  "sap.f.GridContainer": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "direction": "1.85",
+    "row": "1.85",
+    "column": "1.85"
+   }
+  },
+  "sap.f.GridContainerItemLayoutData": {
+   "parent": "sap.ui.core.LayoutData",
+   "members": {}
+  },
+  "sap.f.GridContainerSettings": {
+   "parent": "sap.ui.base.ManagedObject",
+   "members": {}
+  },
+  "sap.f.GridList": {
+   "parent": "sap.m.ListBase",
+   "members": {}
+  },
+  "sap.f.GridListItem": {
+   "parent": "sap.m.ListItemBase",
+   "members": {}
+  },
+  "sap.f.PlanningCalendarInCardLegend": {
+   "parent": "sap.m.PlanningCalendarLegend",
+   "members": {}
+  },
+  "sap.f.ProductSwitch": {
+   "parent": "sap.ui.core.Control",
+   "members": {}
+  },
+  "sap.f.ProductSwitchItem": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "imageSrc": "1.140"
+   }
+  },
+  "sap.f.SearchManager": {
+   "parent": "sap.ui.core.Element",
+   "members": {}
+  },
+  "sap.f.ShellBar": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "homeIconTooltip": "1.67",
+    "notificationsNumber": "1.64",
+    "searchManager": "1.67"
+   }
+  },
+  "sap.f.SidePanel": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "sidePanelMinWidth": "1.109.0",
+    "sidePanelMaxWidth": "1.109.0",
+    "sidePanelResizeStep": "1.109.0",
+    "sidePanelResizeLargerStep": "1.109.0"
+   }
+  },
+  "sap.f.SidePanelItem": {
+   "parent": "sap.ui.core.Item",
+   "members": {
+    "title": "1.146"
+   }
+  },
+  "sap.f.cards.BaseHeader": {
+   "parent": "sap.ui.core.Control",
+   "members": {}
+  },
+  "sap.f.cards.CardBadgeCustomData": {
+   "parent": "sap.ui.core.CustomData",
+   "members": {
+    "icon": "1.128",
+    "visibilityMode": "1.128",
+    "state": "1.128",
+    "visible": "1.128",
+    "announcementText": "1.128"
+   }
+  },
+  "sap.f.cards.Header": {
+   "parent": "sap.f.cards.BaseHeader",
+   "members": {
+    "iconFitType": "1.130",
+    "iconState": "1.141"
+   }
+  },
+  "sap.f.cards.NumericHeader": {
+   "parent": "sap.f.cards.BaseHeader",
+   "members": {
+    "iconFitType": "1.130",
+    "numberVisible": "1.109"
+   }
+  },
+  "sap.f.cards.NumericIndicators": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "numberVisible": "1.109"
+   }
+  },
+  "sap.f.cards.NumericSideIndicator": {
+   "parent": "sap.ui.core.Control",
+   "members": {}
+  },
+  "sap.f.cards.loading.AnalyticalPlaceholder": {
+   "parent": "sap.f.cards.loading.PlaceholderBase",
+   "members": {}
+  },
+  "sap.f.cards.loading.CalendarPlaceholder": {
+   "parent": "sap.f.cards.loading.ListPlaceholder",
+   "members": {}
+  },
+  "sap.f.cards.loading.GenericPlaceholder": {
+   "parent": "sap.f.cards.loading.PlaceholderBase",
+   "members": {}
+  },
+  "sap.f.cards.loading.ListPlaceholder": {
+   "parent": "sap.f.cards.loading.PlaceholderBase",
+   "members": {}
+  },
+  "sap.f.cards.loading.ObjectPlaceholder": {
+   "parent": "sap.f.cards.loading.PlaceholderBase",
+   "members": {}
+  },
+  "sap.f.cards.loading.PlaceholderBase": {
+   "parent": "sap.ui.core.Control",
+   "members": {}
+  },
+  "sap.f.cards.loading.TablePlaceholder": {
+   "parent": "sap.f.cards.loading.PlaceholderBase",
+   "members": {}
+  },
+  "sap.f.cards.loading.TimelinePlaceholder": {
+   "parent": "sap.f.cards.loading.PlaceholderBase",
+   "members": {}
+  },
+  "sap.f.delegate.GridContainerItemNavigation": {
+   "parent": "sap.f.delegate.GridItemNavigation",
+   "members": {}
+  },
+  "sap.f.delegate.GridItemNavigation": {
+   "parent": "sap.ui.core.delegate.ItemNavigation",
+   "members": {}
+  },
+  "sap.f.dnd.GridDragOver": {
+   "parent": "sap.ui.base.Object",
+   "members": {}
+  },
+  "sap.f.dnd.GridDropInfo": {
+   "parent": "sap.ui.core.dnd.DropInfo",
+   "members": {}
+  },
+  "sap.f.gen.ui5.webcomponents.dist.Avatar": {
+   "parent": "sap.ui.core.webc.WebComponent",
+   "members": {}
+  },
+  "sap.f.gen.ui5.webcomponents.dist.Button": {
+   "parent": "sap.ui.core.webc.WebComponent",
+   "members": {}
+  },
+  "sap.f.gen.ui5.webcomponents.dist.Label": {
+   "parent": "sap.ui.core.webc.WebComponent",
+   "members": {}
+  },
+  "sap.f.gen.ui5.webcomponents.dist.ListItem": {
+   "parent": "sap.f.gen.ui5.webcomponents.dist.ListItemBase",
+   "members": {}
+  },
+  "sap.f.gen.ui5.webcomponents.dist.ListItemBase": {
+   "parent": "sap.ui.core.webc.WebComponent",
+   "members": {}
+  },
+  "sap.f.gen.ui5.webcomponents.dist.ListItemGroup": {
+   "parent": "sap.ui.core.webc.WebComponent",
+   "members": {}
+  },
+  "sap.f.gen.ui5.webcomponents.dist.Menu": {
+   "parent": "sap.ui.core.webc.WebComponent",
+   "members": {}
+  },
+  "sap.f.gen.ui5.webcomponents.dist.MenuItem": {
+   "parent": "sap.f.gen.ui5.webcomponents.dist.ListItem",
+   "members": {}
+  },
+  "sap.f.gen.ui5.webcomponents_fiori.dist.IllustratedMessage": {
+   "parent": "sap.ui.core.webc.WebComponent",
+   "members": {}
+  },
+  "sap.f.gen.ui5.webcomponents_fiori.dist.NotificationList": {
+   "parent": "sap.ui.core.webc.WebComponent",
+   "members": {}
+  },
+  "sap.f.gen.ui5.webcomponents_fiori.dist.NotificationListGroupItem": {
+   "parent": "sap.f.gen.ui5.webcomponents_fiori.dist.NotificationListItemBase",
+   "members": {}
+  },
+  "sap.f.gen.ui5.webcomponents_fiori.dist.NotificationListItem": {
+   "parent": "sap.f.gen.ui5.webcomponents_fiori.dist.NotificationListItemBase",
+   "members": {}
+  },
+  "sap.f.gen.ui5.webcomponents_fiori.dist.NotificationListItemBase": {
+   "parent": "sap.f.gen.ui5.webcomponents.dist.ListItemBase",
+   "members": {}
+  },
+  "sap.f.gen.ui5.webcomponents_fiori.dist.Search": {
+   "parent": "sap.ui.core.webc.WebComponent",
+   "members": {}
+  },
+  "sap.f.gen.ui5.webcomponents_fiori.dist.SearchItem": {
+   "parent": "sap.f.gen.ui5.webcomponents.dist.ListItemBase",
+   "members": {}
+  },
+  "sap.f.gen.ui5.webcomponents_fiori.dist.SearchItemGroup": {
+   "parent": "sap.f.gen.ui5.webcomponents.dist.ListItemGroup",
+   "members": {}
+  },
+  "sap.f.gen.ui5.webcomponents_fiori.dist.SearchItemShowMore": {
+   "parent": "sap.f.gen.ui5.webcomponents.dist.ListItemBase",
+   "members": {}
+  },
+  "sap.f.gen.ui5.webcomponents_fiori.dist.SearchMessageArea": {
+   "parent": "sap.ui.core.webc.WebComponent",
+   "members": {}
+  },
+  "sap.f.gen.ui5.webcomponents_fiori.dist.SearchScope": {
+   "parent": "sap.ui.core.webc.WebComponent",
+   "members": {}
+  },
+  "sap.f.gen.ui5.webcomponents_fiori.dist.ShellBar": {
+   "parent": "sap.ui.core.webc.WebComponent",
+   "members": {}
+  },
+  "sap.f.gen.ui5.webcomponents_fiori.dist.ShellBarBranding": {
+   "parent": "sap.ui.core.webc.WebComponent",
+   "members": {}
+  },
+  "sap.f.gen.ui5.webcomponents_fiori.dist.ShellBarItem": {
+   "parent": "sap.ui.core.webc.WebComponent",
+   "members": {}
+  },
+  "sap.f.gen.ui5.webcomponents_fiori.dist.ShellBarSearch": {
+   "parent": "sap.f.gen.ui5.webcomponents_fiori.dist.Search",
+   "members": {}
+  },
+  "sap.f.gen.ui5.webcomponents_fiori.dist.ShellBarSpacer": {
+   "parent": "sap.ui.core.webc.WebComponent",
+   "members": {}
+  },
+  "sap.f.gen.ui5.webcomponents_fiori.dist.UserMenu": {
+   "parent": "sap.ui.core.webc.WebComponent",
+   "members": {}
+  },
+  "sap.f.gen.ui5.webcomponents_fiori.dist.UserMenuAccount": {
+   "parent": "sap.ui.core.webc.WebComponent",
+   "members": {}
+  },
+  "sap.f.gen.ui5.webcomponents_fiori.dist.UserMenuItem": {
+   "parent": "sap.f.gen.ui5.webcomponents.dist.MenuItem",
+   "members": {}
+  },
+  "sap.f.routing.Router": {
+   "parent": "sap.ui.core.routing.Router",
+   "members": {}
+  },
+  "sap.f.routing.Target": {
+   "parent": "sap.ui.core.routing.Target",
+   "members": {}
+  },
+  "sap.f.routing.TargetHandler": {
+   "parent": "sap.ui.base.Object",
+   "members": {}
+  },
+  "sap.f.routing.Targets": {
+   "parent": "sap.ui.core.routing.Targets",
+   "members": {}
+  },
+  "sap.f.semantic.AddAction": {
+   "parent": "sap.f.semantic.SemanticButton",
+   "members": {}
+  },
+  "sap.f.semantic.CloseAction": {
+   "parent": "sap.f.semantic.SemanticButton",
+   "members": {}
+  },
+  "sap.f.semantic.CopyAction": {
+   "parent": "sap.f.semantic.SemanticButton",
+   "members": {}
+  },
+  "sap.f.semantic.DeleteAction": {
+   "parent": "sap.f.semantic.SemanticButton",
+   "members": {}
+  },
+  "sap.f.semantic.DiscussInJamAction": {
+   "parent": "sap.f.semantic.SemanticButton",
+   "members": {}
+  },
+  "sap.f.semantic.EditAction": {
+   "parent": "sap.f.semantic.SemanticButton",
+   "members": {}
+  },
+  "sap.f.semantic.ExitFullScreenAction": {
+   "parent": "sap.f.semantic.SemanticButton",
+   "members": {}
+  },
+  "sap.f.semantic.FavoriteAction": {
+   "parent": "sap.f.semantic.SemanticToggleButton",
+   "members": {}
+  },
+  "sap.f.semantic.FlagAction": {
+   "parent": "sap.f.semantic.SemanticToggleButton",
+   "members": {}
+  },
+  "sap.f.semantic.FooterMainAction": {
+   "parent": "sap.f.semantic.MainAction",
+   "members": {}
+  },
+  "sap.f.semantic.FullScreenAction": {
+   "parent": "sap.f.semantic.SemanticButton",
+   "members": {}
+  },
+  "sap.f.semantic.MainAction": {
+   "parent": "sap.f.semantic.SemanticButton",
+   "members": {}
+  },
+  "sap.f.semantic.MessagesIndicator": {
+   "parent": "sap.f.semantic.SemanticButton",
+   "members": {}
+  },
+  "sap.f.semantic.NegativeAction": {
+   "parent": "sap.f.semantic.SemanticButton",
+   "members": {}
+  },
+  "sap.f.semantic.PositiveAction": {
+   "parent": "sap.f.semantic.SemanticButton",
+   "members": {}
+  },
+  "sap.f.semantic.PrintAction": {
+   "parent": "sap.f.semantic.SemanticButton",
+   "members": {}
+  },
+  "sap.f.semantic.SemanticButton": {
+   "parent": "sap.m.semantic.SemanticButton",
+   "members": {}
+  },
+  "sap.f.semantic.SemanticConfiguration": {
+   "parent": "sap.ui.base.Object",
+   "members": {}
+  },
+  "sap.f.semantic.SemanticContainer": {
+   "parent": "sap.ui.base.EventProvider",
+   "members": {}
+  },
+  "sap.f.semantic.SemanticControl": {
+   "parent": "sap.ui.core.Element",
+   "members": {}
+  },
+  "sap.f.semantic.SemanticFooter": {
+   "parent": "sap.f.semantic.SemanticContainer",
+   "members": {}
+  },
+  "sap.f.semantic.SemanticPage": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "titleAreaShrinkRatio": "1.58",
+    "fitContent": "1.73",
+    "titleExpandedHeading": "1.58",
+    "titleSnappedHeading": "1.58",
+    "titleBreadcrumbs": "1.52",
+    "titleSnappedOnMobile": "1.63",
+    "titleContent": "1.52",
+    "editAction": "1.50",
+    "landmarkInfo": "1.61"
+   }
+  },
+  "sap.f.semantic.SemanticShareMenu": {
+   "parent": "sap.f.semantic.SemanticContainer",
+   "members": {}
+  },
+  "sap.f.semantic.SemanticTitle": {
+   "parent": "sap.f.semantic.SemanticContainer",
+   "members": {}
+  },
+  "sap.f.semantic.SemanticToggleButton": {
+   "parent": "sap.m.semantic.SemanticToggleButton",
+   "members": {}
+  },
+  "sap.f.semantic.SendEmailAction": {
+   "parent": "sap.f.semantic.SemanticButton",
+   "members": {}
+  },
+  "sap.f.semantic.SendMessageAction": {
+   "parent": "sap.f.semantic.SemanticButton",
+   "members": {}
+  },
+  "sap.f.semantic.ShareInJamAction": {
+   "parent": "sap.f.semantic.SemanticButton",
+   "members": {}
+  },
+  "sap.f.semantic.TitleMainAction": {
+   "parent": "sap.f.semantic.MainAction",
+   "members": {}
+  },
+  "sap.f.shellBar.CoPilot": {
+   "parent": "sap.ui.core.Control",
+   "members": {}
+  },
+  "sap.f.shellBar.ControlSpacer": {
+   "parent": "sap.ui.core.Control",
+   "members": {}
+  },
+  "sap.f.shellBar.Search": {
+   "parent": "sap.ui.core.Control",
+   "members": {}
+  },
+  "sap.ui.core.AccessKeysEnablement": {
+   "parent": "sap.ui.base.Object",
+   "members": {}
+  },
+  "sap.ui.core.CommandExecution": {
+   "parent": "sap.ui.core.Element",
+   "members": {}
+  },
+  "sap.ui.core.Component": {
+   "parent": "sap.ui.base.ManagedObject",
+   "members": {}
+  },
+  "sap.ui.core.ComponentContainer": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "componentCreated": "1.50",
+    "componentFailed": "1.60"
+   }
+  },
+  "my.MyControl": {
+   "parent": null,
+   "members": {}
+  },
+  "sap.ui.core.Control": {
+   "parent": "sap.ui.core.Element",
+   "members": {}
+  },
+  "sap.ui.core.Element": {
+   "parent": "sap.ui.base.ManagedObject",
+   "members": {
+    "dependents": "1.19",
+    "dragDropConfig": "1.56",
+    "writeToDom": "1.9.0"
+   }
+  },
+  "sap.ui.core.EventBus": {
+   "parent": "sap.ui.base.Object",
+   "members": {}
+  },
+  "sap.ui.core.FocusHandler": {
+   "parent": "sap.ui.base.Object",
+   "members": {}
+  },
+  "sap.ui.core.Fragment": {
+   "parent": "sap.ui.base.ManagedObject",
+   "members": {}
+  },
+  "sap.ui.core.HTML": {
+   "parent": "sap.ui.core.Control",
+   "members": {}
+  },
+  "sap.ui.core.History": {
+   "parent": "sap.ui.base.Object",
+   "members": {}
+  },
+  "sap.ui.core.Icon": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "decorative": "1.16.4",
+    "useIconTooltip": "1.30.0",
+    "alt": "1.30.0",
+    "noTabStop": "1.30.1"
+   }
+  },
+  "sap.ui.core.IntervalTrigger": {
+   "parent": "sap.ui.base.Object",
+   "members": {}
+  },
+  "sap.ui.core.InvisibleMessage": {
+   "parent": "sap.ui.base.ManagedObject",
+   "members": {}
+  },
+  "sap.ui.core.InvisibleText": {
+   "parent": "sap.ui.core.Control",
+   "members": {}
+  },
+  "sap.ui.core.Item": {
+   "parent": "sap.ui.core.Element",
+   "members": {}
+  },
+  "sap.ui.core.LayoutData": {
+   "parent": "sap.ui.core.Element",
+   "members": {}
+  },
+  "sap.ui.core.Lib": {
+   "parent": "sap.ui.base.Object",
+   "members": {}
+  },
+  "sap.ui.core.ListItem": {
+   "parent": "sap.ui.core.Item",
+   "members": {}
+  },
+  "sap.ui.core.Locale": {
+   "parent": null,
+   "members": {}
+  },
+  "sap.ui.core.LocaleData": {
+   "parent": "sap.ui.base.Object",
+   "members": {}
+  },
+  "sap.ui.core.Manifest": {
+   "parent": "sap.ui.base.Object",
+   "members": {}
+  },
+  "sap.ui.core.Placeholder": {
+   "parent": "sap.ui.base.Object",
+   "members": {}
+  },
+  "sap.ui.core.Popup": {
+   "parent": "sap.ui.base.ManagedObject",
+   "members": {}
+  },
+  "sap.ui.core.ResizeHandler": {
+   "parent": "sap.ui.base.Object",
+   "members": {}
+  },
+  "sap.ui.core.SeparatorItem": {
+   "parent": "sap.ui.core.Item",
+   "members": {}
+  },
+  "sap.ui.core.Title": {
+   "parent": "sap.ui.core.Element",
+   "members": {}
+  },
+  "sap.ui.core.TooltipBase": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "closed": "1.11.0"
+   }
+  },
+  "sap.ui.core.UIArea": {
+   "parent": "sap.ui.base.ManagedObject",
+   "members": {}
+  },
+  "sap.ui.core.UIComponent": {
+   "parent": "sap.ui.core.Component",
+   "members": {}
+  },
+  "sap.ui.core.VariantLayoutData": {
+   "parent": "sap.ui.core.LayoutData",
+   "members": {}
+  },
+  "sap.ui.core.date.Buddhist": {
+   "parent": "sap.ui.core.date.UniversalDate",
+   "members": {}
+  },
+  "sap.ui.core.date.Gregorian": {
+   "parent": "sap.ui.core.date.UniversalDate",
+   "members": {}
+  },
+  "sap.ui.core.date.Islamic": {
+   "parent": "sap.ui.core.date.UniversalDate",
+   "members": {}
+  },
+  "sap.ui.core.date.Japanese": {
+   "parent": "sap.ui.core.date.UniversalDate",
+   "members": {}
+  },
+  "sap.ui.core.date.Persian": {
+   "parent": "sap.ui.core.date.UniversalDate",
+   "members": {}
+  },
+  "sap.ui.core.date.UniversalDate": {
+   "parent": "sap.ui.base.Object",
+   "members": {}
+  },
+  "sap.ui.core.delegate.ItemNavigation": {
+   "parent": "sap.ui.base.EventProvider",
+   "members": {}
+  },
+  "sap.ui.core.delegate.ScrollEnablement": {
+   "parent": "sap.ui.base.Object",
+   "members": {}
+  },
+  "sap.ui.core.dnd.DragDropBase": {
+   "parent": null,
+   "members": {
+    "enabled": "1.56",
+    "keyboardHandling": "1.126"
+   }
+  },
+  "sap.ui.core.dnd.DragDropInfo": {
+   "parent": "sap.ui.core.dnd.DropInfo",
+   "members": {
+    "dragEnd": "1.56"
+   }
+  },
+  "sap.ui.core.dnd.DragInfo": {
+   "parent": "sap.ui.core.dnd.DragDropBase",
+   "members": {
+    "dragEnd": "1.56"
+   }
+  },
+  "sap.ui.core.dnd.DropInfo": {
+   "parent": "sap.ui.core.dnd.DragDropBase",
+   "members": {
+    "dragOver": "1.56"
+   }
+  },
+  "sap.ui.core.fieldhelp.FieldHelpCustomData": {
+   "parent": "sap.ui.core.CustomData",
+   "members": {}
+  },
+  "sap.ui.core.format.FileSizeFormat": {
+   "parent": "sap.ui.base.Object",
+   "members": {}
+  },
+  "sap.ui.core.format.NumberFormat": {
+   "parent": "sap.ui.base.Object",
+   "members": {}
+  },
+  "sap.ui.core.hyphenation.Hyphenation": {
+   "parent": "sap.ui.base.ManagedObject",
+   "members": {}
+  },
+  "sap.ui.core.message.ControlMessageProcessor": {
+   "parent": "sap.ui.core.message.MessageProcessor",
+   "members": {}
+  },
+  "sap.ui.core.message.Message": {
+   "parent": "sap.ui.base.Object",
+   "members": {}
+  },
+  "sap.ui.core.message.MessageParser": {
+   "parent": "sap.ui.base.Object",
+   "members": {}
+  },
+  "sap.ui.core.message.MessageProcessor": {
+   "parent": "sap.ui.base.EventProvider",
+   "members": {}
+  },
+  "sap.ui.core.mvc.Controller": {
+   "parent": "sap.ui.base.EventProvider",
+   "members": {}
+  },
+  "sap.ui.core.mvc.ControllerExtension": {
+   "parent": "sap.ui.base.Object",
+   "members": {}
+  },
+  "myapp.views.MainView": {
+   "parent": null,
+   "members": {
+    "async": "1.30"
+   }
+  },
+  "sap.ui.core.mvc.XMLView": {
+   "parent": "sap.ui.core.mvc.View",
+   "members": {}
+  },
+  "sap.ui.core.postmessage.Bus": {
+   "parent": "sap.ui.core.EventBus",
+   "members": {}
+  },
+  "sap.ui.core.routing.HashChanger": {
+   "parent": "sap.ui.core.routing.HashChangerBase",
+   "members": {}
+  },
+  "sap.ui.core.routing.HashChangerBase": {
+   "parent": "sap.ui.base.EventProvider",
+   "members": {}
+  },
+  "sap.ui.core.routing.Route": {
+   "parent": "sap.ui.base.EventProvider",
+   "members": {}
+  },
+  "sap.ui.core.routing.Router": {
+   "parent": "sap.ui.base.EventProvider",
+   "members": {}
+  },
+  "sap.ui.core.routing.RouterHashChanger": {
+   "parent": "sap.ui.core.routing.HashChangerBase",
+   "members": {}
+  },
+  "sap.ui.core.routing.Target.TitleProvider": {
+   "parent": "sap.ui.core.Element",
+   "members": {}
+  },
+  "sap.ui.core.routing.TargetCache": {
+   "parent": "sap.ui.base.EventProvider",
+   "members": {}
+  },
+  "sap.ui.core.routing.Targets": {
+   "parent": "sap.ui.base.EventProvider",
+   "members": {}
+  },
+  "sap.ui.core.routing.Views": {
+   "parent": "sap.ui.core.routing.TargetCache",
+   "members": {}
+  },
+  "my.Service": {
+   "parent": null,
+   "members": {}
+  },
+  "my.ServiceFactory": {
+   "parent": null,
+   "members": {}
+  },
+  "sap.ui.core.support.Plugin": {
+   "parent": "sap.ui.base.Object",
+   "members": {}
+  },
+  "sap.ui.core.support.RuleEngineOpaExtension": {
+   "parent": "sap.ui.base.Object",
+   "members": {}
+  },
+  "sap.ui.core.support.Support": {
+   "parent": "sap.ui.base.EventProvider",
+   "members": {}
+  },
+  "sap.ui.core.support.controls.InteractionSlider": {
+   "parent": "sap.ui.base.ManagedObject",
+   "members": {}
+  },
+  "sap.ui.core.support.controls.InteractionTree": {
+   "parent": "sap.ui.base.ManagedObject",
+   "members": {}
+  },
+  "sap.ui.core.support.controls.ObjectViewer": {
+   "parent": "sap.ui.base.ManagedObject",
+   "members": {}
+  },
+  "sap.ui.core.support.controls.TimelineOverview": {
+   "parent": "sap.ui.base.ManagedObject",
+   "members": {}
+  },
+  "sap.ui.core.support.controls.TreeViewer": {
+   "parent": "sap.ui.base.ManagedObject",
+   "members": {}
+  },
+  "sap.ui.core.support.plugins.Breakpoint": {
+   "parent": "sap.ui.core.support.Plugin",
+   "members": {}
+  },
+  "sap.ui.core.support.plugins.ControlTree": {
+   "parent": "sap.ui.core.support.Plugin",
+   "members": {}
+  },
+  "sap.ui.core.support.plugins.Debugging": {
+   "parent": "sap.ui.core.support.Plugin",
+   "members": {}
+  },
+  "sap.ui.core.support.plugins.Interaction": {
+   "parent": "sap.ui.core.support.Plugin",
+   "members": {}
+  },
+  "sap.ui.core.support.plugins.LocalStorage": {
+   "parent": "sap.ui.core.support.Plugin",
+   "members": {}
+  },
+  "sap.ui.core.support.plugins.Performance": {
+   "parent": "sap.ui.core.support.Plugin",
+   "members": {}
+  },
+  "sap.ui.core.support.plugins.Selector": {
+   "parent": "sap.ui.core.support.Plugin",
+   "members": {}
+  },
+  "sap.ui.core.support.plugins.TechInfo": {
+   "parent": "sap.ui.core.support.Plugin",
+   "members": {}
+  },
+  "sap.ui.core.support.plugins.Trace": {
+   "parent": "sap.ui.core.support.Plugin",
+   "members": {}
+  },
+  "sap.ui.core.util.LibraryInfo": {
+   "parent": "sap.ui.base.Object",
+   "members": {}
+  },
+  "sap.ui.core.util.MockServer": {
+   "parent": null,
+   "members": {}
+  },
+  "sap.ui.core.util._with": {
+   "parent": "sap.ui.base.ManagedObject",
+   "members": {}
+  },
+  "sap.ui.core.util.serializer.Serializer": {
+   "parent": "sap.ui.base.EventProvider",
+   "members": {}
+  },
+  "sap.ui.core.util.serializer.ViewSerializer": {
+   "parent": "sap.ui.base.EventProvider",
+   "members": {}
+  },
+  "sap.ui.core.util.serializer.XMLViewSerializer": {
+   "parent": "sap.ui.base.EventProvider",
+   "members": {}
+  },
+  "sap.ui.core.util.serializer.delegate.Delegate": {
+   "parent": "sap.ui.base.EventProvider",
+   "members": {}
+  },
+  "sap.ui.core.util.serializer.delegate.HTML": {
+   "parent": "sap.ui.core.util.serializer.delegate.Delegate",
+   "members": {}
+  },
+  "sap.ui.core.util.serializer.delegate.XML": {
+   "parent": "sap.ui.core.util.serializer.delegate.Delegate",
+   "members": {}
+  },
+  "sap.ui.core.webc.WebComponent": {
+   "parent": "sap.ui.core.Control",
+   "members": {}
+  },
+  "sap.ui.core.ws.SapPcpWebSocket": {
+   "parent": "sap.ui.core.ws.WebSocket",
+   "members": {}
+  },
+  "sap.ui.core.ws.WebSocket": {
+   "parent": "sap.ui.base.EventProvider",
+   "members": {}
+  },
+  "sap.ui.layout.AlignedFlowLayout": {
+   "parent": "sap.ui.core.Control",
+   "members": {}
+  },
+  "sap.ui.layout.AssociativeSplitter": {
+   "parent": "sap.ui.layout.Splitter",
+   "members": {}
+  },
+  "sap.ui.layout.BlockLayout": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "background": "1.42",
+    "keepFontSize": "1.52"
+   }
+  },
+  "sap.ui.layout.BlockLayoutCell": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "backgroundColorSet": "1.48",
+    "backgroundColorShade": "1.48",
+    "titleLink": "1.56"
+   }
+  },
+  "sap.ui.layout.BlockLayoutCellData": {
+   "parent": "sap.ui.core.LayoutData",
+   "members": {}
+  },
+  "sap.ui.layout.BlockLayoutRow": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "rowColorSet": "1.42",
+    "accentCells": "1.42"
+   }
+  },
+  "sap.ui.layout.DynamicSideContent": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "sideContentWidthM": "1.121",
+    "sideContentWidthL": "1.121",
+    "sideContentWidthXL": "1.121",
+    "sideContentPosition": "1.36",
+    "breakpointChanged": "1.32"
+   }
+  },
+  "sap.ui.layout.FixFlex": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "minFlexSize": "1.29"
+   }
+  },
+  "sap.ui.layout.Grid": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "ariaLabelledBy": "1.48.7"
+   }
+  },
+  "sap.ui.layout.GridData": {
+   "parent": "sap.ui.core.LayoutData",
+   "members": {}
+  },
+  "sap.ui.layout.HorizontalLayout": {
+   "parent": "sap.ui.core.Control",
+   "members": {}
+  },
+  "sap.ui.layout.PaneContainer": {
+   "parent": "sap.ui.core.Element",
+   "members": {}
+  },
+  "sap.ui.layout.ResponsiveFlowLayout": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "ariaLabelledBy": "1.48.7"
+   }
+  },
+  "sap.ui.layout.ResponsiveFlowLayoutData": {
+   "parent": "sap.ui.core.LayoutData",
+   "members": {}
+  },
+  "sap.ui.layout.ResponsiveSplitter": {
+   "parent": "sap.ui.core.Control",
+   "members": {}
+  },
+  "sap.ui.layout.ResponsiveSplitterPage": {
+   "parent": "sap.ui.core.Control",
+   "members": {}
+  },
+  "sap.ui.layout.SplitPane": {
+   "parent": "sap.ui.core.Element",
+   "members": {}
+  },
+  "sap.ui.layout.Splitter": {
+   "parent": "sap.ui.core.Control",
+   "members": {}
+  },
+  "sap.ui.layout.SplitterLayoutData": {
+   "parent": "sap.ui.core.LayoutData",
+   "members": {}
+  },
+  "sap.ui.layout.VerticalLayout": {
+   "parent": "sap.ui.core.Control",
+   "members": {}
+  },
+  "sap.ui.layout.cssgrid.CSSGrid": {
+   "parent": "sap.ui.core.Control",
+   "members": {}
+  },
+  "sap.ui.layout.cssgrid.GridBasicLayout": {
+   "parent": "sap.ui.layout.cssgrid.GridLayoutBase",
+   "members": {}
+  },
+  "sap.ui.layout.cssgrid.GridBoxLayout": {
+   "parent": "sap.ui.layout.cssgrid.GridLayoutBase",
+   "members": {}
+  },
+  "sap.ui.layout.cssgrid.GridItemLayoutData": {
+   "parent": "sap.ui.core.LayoutData",
+   "members": {}
+  },
+  "sap.ui.layout.cssgrid.GridLayoutBase": {
+   "parent": "sap.ui.base.ManagedObject",
+   "members": {}
+  },
+  "sap.ui.layout.cssgrid.GridLayoutDelegate": {
+   "parent": "sap.ui.base.Object",
+   "members": {}
+  },
+  "sap.ui.layout.cssgrid.GridResponsiveLayout": {
+   "parent": "sap.ui.layout.cssgrid.GridLayoutBase",
+   "members": {}
+  },
+  "sap.ui.layout.cssgrid.GridSettings": {
+   "parent": "sap.ui.base.ManagedObject",
+   "members": {}
+  },
+  "sap.ui.layout.cssgrid.ResponsiveColumnItemLayoutData": {
+   "parent": "sap.ui.core.LayoutData",
+   "members": {}
+  },
+  "sap.ui.layout.cssgrid.ResponsiveColumnLayout": {
+   "parent": "sap.ui.layout.cssgrid.GridLayoutBase",
+   "members": {}
+  },
+  "sap.ui.layout.form.ColumnContainerData": {
+   "parent": "sap.ui.core.LayoutData",
+   "members": {}
+  },
+  "sap.ui.layout.form.ColumnElementData": {
+   "parent": "sap.ui.core.LayoutData",
+   "members": {}
+  },
+  "sap.ui.layout.form.ColumnLayout": {
+   "parent": "sap.ui.layout.form.FormLayout",
+   "members": {}
+  },
+  "sap.ui.layout.form.Form": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "editable": "1.20.0",
+    "toolbar": "1.36.0",
+    "ariaLabelledBy": "1.28.0"
+   }
+  },
+  "sap.ui.layout.form.FormContainer": {
+   "parent": "sap.ui.core.Element",
+   "members": {
+    "toolbar": "1.36.0",
+    "ariaLabelledBy": "1.36.0"
+   }
+  },
+  "sap.ui.layout.form.FormElement": {
+   "parent": "sap.ui.core.Element",
+   "members": {}
+  },
+  "sap.ui.layout.form.FormLayout": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "backgroundDesign": "1.36.0"
+   }
+  },
+  "sap.ui.layout.form.ResponsiveGridLayout": {
+   "parent": "sap.ui.layout.form.FormLayout",
+   "members": {
+    "labelSpanXL": "1.34.0",
+    "labelSpanL": "1.16.3",
+    "labelSpanM": "1.16.3",
+    "labelSpanS": "1.16.3",
+    "adjustLabelSpan": "1.34.0",
+    "emptySpanXL": "1.34.0",
+    "emptySpanL": "1.16.3",
+    "emptySpanM": "1.16.3",
+    "emptySpanS": "1.16.3",
+    "columnsXL": "1.34.0",
+    "columnsL": "1.16.3",
+    "columnsM": "1.16.3",
+    "singleContainerFullSize": "1.34.0",
+    "breakpointXL": "1.34.0",
+    "breakpointL": "1.16.3",
+    "breakpointM": "1.16.3"
+   }
+  },
+  "sap.ui.layout.form.SemanticFormElement": {
+   "parent": "sap.ui.layout.form.FormElement",
+   "members": {}
+  },
+  "sap.ui.layout.form.SimpleForm": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "width": "1.28.0",
+    "labelSpanXL": "1.34.0",
+    "labelSpanL": "1.16.3",
+    "labelSpanM": "1.16.3",
+    "labelSpanS": "1.16.3",
+    "adjustLabelSpan": "1.34.0",
+    "emptySpanXL": "1.34.0",
+    "emptySpanL": "1.16.3",
+    "emptySpanM": "1.16.3",
+    "emptySpanS": "1.16.3",
+    "columnsXL": "1.34.0",
+    "columnsL": "1.16.3",
+    "columnsM": "1.16.3",
+    "singleContainerFullSize": "1.34.0",
+    "breakpointXL": "1.34.0",
+    "breakpointL": "1.16.3",
+    "breakpointM": "1.16.3",
+    "backgroundDesign": "1.36.0",
+    "title": "1.16.3",
+    "toolbar": "1.36.0",
+    "ariaLabelledBy": "1.32.0"
+   }
+  },
+  "sap.ui.table.AnalyticalColumn": {
+   "parent": "sap.ui.table.Column",
+   "members": {
+    "grouped": "1.118"
+   }
+  },
+  "sap.ui.table.AnalyticalTable": {
+   "parent": "sap.ui.table.Table",
+   "members": {
+    "group": "1.118"
+   }
+  },
+  "sap.ui.table.Column": {
+   "parent": "sap.ui.core.Element",
+   "members": {
+    "minWidth": "1.44.1",
+    "filterType": "1.9.2",
+    "name": "1.11.1",
+    "showFilterMenuEntry": "1.13.0",
+    "showSortMenuEntry": "1.13.0",
+    "autoResizable": "1.21.1",
+    "multiLabels": "1.13.1",
+    "_action": "1.136",
+    "headerMenu": "1.110"
+   }
+  },
+  "sap.ui.table.CreationRow": {
+   "parent": "sap.ui.core.Control",
+   "members": {}
+  },
+  "sap.ui.table.HeaderSelector": {
+   "parent": "sap.ui.core.Control",
+   "members": {}
+  },
+  "sap.ui.table.Row": {
+   "parent": "sap.ui.core.Element",
+   "members": {}
+  },
+  "sap.ui.table.RowAction": {
+   "parent": "sap.ui.core.Control",
+   "members": {}
+  },
+  "sap.ui.table.RowActionItem": {
+   "parent": "sap.ui.core.Element",
+   "members": {}
+  },
+  "sap.ui.table.RowSettings": {
+   "parent": "sap.ui.core.Element",
+   "members": {
+    "highlight": "1.48.0",
+    "highlightText": "1.62",
+    "navigated": "1.72"
+   }
+  },
+  "sap.ui.table.Table": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "scrollThreshold": "1.128",
+    "enableColumnFreeze": "1.21.0",
+    "enableCellFilter": "1.21.0",
+    "showOverlay": "1.21.2",
+    "enableSelectAll": "1.23.0",
+    "enableCustomFilter": "1.23.0",
+    "enableBusyIndicator": "1.27.0",
+    "rowActionCount": "1.45.0",
+    "alternateRowColors": "1.52",
+    "rowMode": "1.119",
+    "contextMenu": "1.54",
+    "_messageStrip": "1.73",
+    "_hiddenDependents": "1.75",
+    "cellClick": "1.21.0",
+    "beforeOpenContextMenu": "1.54",
+    "columnFreeze": "1.21.0",
+    "customFilter": "1.23.0",
+    "firstVisibleRowChanged": "1.37.0",
+    "busyStateChanged": "1.37.0",
+    "paste": "1.60",
+    "rowsUpdated": "1.86"
+   }
+  },
+  "sap.ui.table.TreeTable": {
+   "parent": "sap.ui.table.Table",
+   "members": {}
+  },
+  "sap.ui.table.extensions.Accessibility": {
+   "parent": "sap.ui.table.extensions.ExtensionBase",
+   "members": {}
+  },
+  "sap.ui.table.extensions.AccessibilityRender": {
+   "parent": "sap.ui.table.extensions.ExtensionBase",
+   "members": {}
+  },
+  "sap.ui.table.extensions.DragAndDrop": {
+   "parent": "sap.ui.table.extensions.ExtensionBase",
+   "members": {}
+  },
+  "sap.ui.table.extensions.ExtensionBase": {
+   "parent": "sap.ui.base.Object",
+   "members": {}
+  },
+  "sap.ui.table.extensions.Keyboard": {
+   "parent": "sap.ui.table.extensions.ExtensionBase",
+   "members": {}
+  },
+  "sap.ui.table.extensions.KeyboardDelegate": {
+   "parent": "sap.ui.base.Object",
+   "members": {}
+  },
+  "sap.ui.table.extensions.Pointer": {
+   "parent": "sap.ui.table.extensions.ExtensionBase",
+   "members": {}
+  },
+  "sap.ui.table.extensions.Scrolling": {
+   "parent": "sap.ui.table.extensions.ExtensionBase",
+   "members": {}
+  },
+  "sap.ui.table.extensions.ScrollingIOS": {
+   "parent": "sap.ui.table.extensions.ExtensionBase",
+   "members": {}
+  },
+  "sap.ui.table.extensions.Synchronization": {
+   "parent": "sap.ui.table.extensions.ExtensionBase",
+   "members": {}
+  },
+  "sap.ui.table.menus.AnalyticalTableContextMenu": {
+   "parent": "sap.ui.table.menus.ContextMenu",
+   "members": {}
+  },
+  "sap.ui.table.menus.ColumnHeaderMenuAdapter": {
+   "parent": "sap.ui.base.Object",
+   "members": {}
+  },
+  "sap.ui.table.menus.ContextMenu": {
+   "parent": "sap.ui.core.Element",
+   "members": {}
+  },
+  "sap.ui.table.menus.MobileColumnHeaderMenuAdapter": {
+   "parent": "sap.ui.table.menus.ColumnHeaderMenuAdapter",
+   "members": {}
+  },
+  "sap.ui.table.plugins.BindingSelection": {
+   "parent": "sap.ui.table.plugins.SelectionPlugin",
+   "members": {}
+  },
+  "sap.ui.table.plugins.MultiSelectionPlugin": {
+   "parent": "sap.ui.table.plugins.SelectionPlugin",
+   "members": {
+    "enableNotification": "1.71"
+   }
+  },
+  "sap.ui.table.plugins.ODataV4Aggregation": {
+   "parent": "sap.ui.table.plugins.ODataV4MultiLevel",
+   "members": {}
+  },
+  "sap.ui.table.plugins.ODataV4Hierarchy": {
+   "parent": "sap.ui.table.plugins.ODataV4MultiLevel",
+   "members": {}
+  },
+  "sap.ui.table.plugins.ODataV4MultiLevel": {
+   "parent": "sap.ui.table.plugins.PluginBase",
+   "members": {}
+  },
+  "sap.ui.table.plugins.ODataV4MultiSelection": {
+   "parent": "sap.ui.table.plugins.ODataV4Selection",
+   "members": {
+    "leafSelectionDisabled": "1.148"
+   }
+  },
+  "sap.ui.table.plugins.ODataV4Selection": {
+   "parent": "sap.ui.table.plugins.SelectionPlugin",
+   "members": {}
+  },
+  "sap.ui.table.plugins.ODataV4SingleSelection": {
+   "parent": "sap.ui.table.plugins.ODataV4Selection",
+   "members": {}
+  },
+  "sap.ui.table.plugins.PluginBase": {
+   "parent": "sap.ui.core.Element",
+   "members": {}
+  },
+  "sap.ui.table.plugins.SelectionModelSelection": {
+   "parent": "sap.ui.table.plugins.SelectionPlugin",
+   "members": {}
+  },
+  "sap.ui.table.plugins.SelectionPlugin": {
+   "parent": "sap.ui.table.plugins.PluginBase",
+   "members": {}
+  },
+  "sap.ui.table.rowmodes.Auto": {
+   "parent": "sap.ui.table.rowmodes.RowMode",
+   "members": {}
+  },
+  "sap.ui.table.rowmodes.Fixed": {
+   "parent": "sap.ui.table.rowmodes.RowMode",
+   "members": {}
+  },
+  "sap.ui.table.rowmodes.Interactive": {
+   "parent": "sap.ui.table.rowmodes.RowMode",
+   "members": {}
+  },
+  "sap.ui.table.rowmodes.RowMode": {
+   "parent": "sap.ui.core.Element",
+   "members": {}
+  },
+  "sap.ui.unified.Calendar": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "months": "1.28.0",
+    "firstDayOfWeek": "1.28.9",
+    "nonWorkingDays": "1.28.9",
+    "primaryCalendarType": "1.34.0",
+    "secondaryCalendarType": "1.34.0",
+    "width": "1.38.0",
+    "minDate": "1.38.0",
+    "maxDate": "1.38.0",
+    "showWeekNumbers": "1.48",
+    "showCurrentDateButton": "1.95",
+    "_currentPicker": "1.84.0",
+    "calendarWeekNumbering": "1.108.0",
+    "initialFocusedDate": "1.111",
+    "specialDates": "1.24.0",
+    "disabledDates": "1.38.0",
+    "ariaLabelledBy": "1.28.0",
+    "legend": "1.38.5",
+    "startDateChange": "1.34.0",
+    "weekNumberSelect": "1.56"
+   }
+  },
+  "sap.ui.unified.CalendarAppointment": {
+   "parent": "sap.ui.unified.DateTypeRange",
+   "members": {
+    "description": "1.81.0",
+    "color": "1.46.0",
+    "ariaHasPopup": "1.150.0",
+    "customContent": "1.93.0"
+   }
+  },
+  "sap.ui.unified.CalendarDateInterval": {
+   "parent": "sap.ui.unified.Calendar",
+   "members": {
+    "showDayNamesLine": "1.34.0",
+    "pickerPopup": "1.34.0",
+    "_weeksRow": "1.146.0"
+   }
+  },
+  "sap.ui.unified.CalendarLegend": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "standardItems": "1.54"
+   }
+  },
+  "sap.ui.unified.CalendarLegendItem": {
+   "parent": "sap.ui.core.Element",
+   "members": {
+    "type": "1.28.9",
+    "color": "1.46.0"
+   }
+  },
+  "sap.ui.unified.CalendarMonthInterval": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "pickerPopup": "1.34.0",
+    "minDate": "1.38.0",
+    "maxDate": "1.38.0",
+    "_currentPicker": "1.84.0",
+    "legend": "1.38.5",
+    "startDateChange": "1.34.0"
+   }
+  },
+  "sap.ui.unified.CalendarOneMonthInterval": {
+   "parent": "sap.ui.unified.CalendarDateInterval",
+   "members": {}
+  },
+  "sap.ui.unified.CalendarRow": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "showEmptyIntervalHeaders": "1.38.0",
+    "appointmentsVisualization": "1.40.0",
+    "appointmentHeight": "1.81.0",
+    "appointmentRoundWidth": "1.81.0",
+    "multipleAppointmentsSelection": "1.97",
+    "nonWorkingPeriods": "1.128",
+    "legend": "1.40.0",
+    "domRefId": "1.50",
+    "intervalSelect": "1.38.0"
+   }
+  },
+  "sap.ui.unified.CalendarTimeInterval": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "pickerPopup": "1.34.0",
+    "minDate": "1.38.0",
+    "maxDate": "1.38.0",
+    "_currentPicker": "1.84.0",
+    "legend": "1.38.5",
+    "startDateChange": "1.34.0"
+   }
+  },
+  "sap.ui.unified.CalendarWeekInterval": {
+   "parent": "sap.ui.unified.CalendarDateInterval",
+   "members": {}
+  },
+  "sap.ui.unified.ColorPicker": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "colorString": "1.48.0",
+    "mode": "1.48.0",
+    "displayMode": "1.58",
+    "_grid": "1.48.0",
+    "_invisibleTexts": "1.48.0",
+    "change": "1.48.0",
+    "liveChange": "1.48.0"
+   }
+  },
+  "sap.ui.unified.ColorPickerPopover": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "colorString": "1.60.0",
+    "mode": "1.60.0",
+    "displayMode": "1.60.0",
+    "change": "1.60.0",
+    "liveChange": "1.85"
+   }
+  },
+  "sap.ui.unified.Currency": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "stringValue": "1.54",
+    "emptyIndicatorMode": "1.89"
+   }
+  },
+  "sap.ui.unified.DateRange": {
+   "parent": "sap.ui.core.Element",
+   "members": {}
+  },
+  "sap.ui.unified.DateTypeRange": {
+   "parent": "sap.ui.unified.DateRange",
+   "members": {
+    "secondaryType": "1.81.0",
+    "color": "1.76.0"
+   }
+  },
+  "sap.ui.unified.FileUploader": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "httpRequestMethod": "1.81.0",
+    "maximumFilenameLength": "1.24.0",
+    "valueState": "1.24.0",
+    "valueStateText": "1.52",
+    "icon": "1.26.0",
+    "iconHovered": "1.26.0",
+    "iconSelected": "1.26.0",
+    "iconFirst": "1.26.0",
+    "iconOnly": "1.26.0",
+    "directory": "1.105.0",
+    "required": "1.144",
+    "parameters": "1.12.2",
+    "xhrSettings": "1.52",
+    "_tokenizer": "1.144",
+    "_browseIcon": "1.144",
+    "_clearIcon": "1.144",
+    "uploadProgress": "1.24.0",
+    "uploadAborted": "1.24.0",
+    "filenameLengthExceed": "1.24.0",
+    "uploadStart": "1.30.0",
+    "beforeDialogOpen": "1.102.0",
+    "afterDialogClose": "1.102.0"
+   }
+  },
+  "sap.ui.unified.FileUploaderParameter": {
+   "parent": "sap.ui.core.Element",
+   "members": {
+    "name": "1.12.2",
+    "value": "1.12.2"
+   }
+  },
+  "sap.ui.unified.FileUploaderXHRSettings": {
+   "parent": "sap.ui.core.Element",
+   "members": {
+    "withCredentials": "1.52"
+   }
+  },
+  "sap.ui.unified.Menu": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "pageSize": "1.25.0",
+    "ariaLabelledBy": "1.26.3",
+    "closed": "1.129"
+   }
+  },
+  "sap.ui.unified.MenuItem": {
+   "parent": "sap.ui.unified.MenuItemBase",
+   "members": {
+    "selected": "1.127.0",
+    "endContent": "1.131"
+   }
+  },
+  "sap.ui.unified.MenuItemBase": {
+   "parent": "sap.ui.core.Element",
+   "members": {}
+  },
+  "sap.ui.unified.MenuItemGroup": {
+   "parent": "sap.ui.core.Element",
+   "members": {}
+  },
+  "sap.ui.unified.MenuTextFieldItem": {
+   "parent": "sap.ui.unified.MenuItemBase",
+   "members": {}
+  },
+  "sap.ui.unified.MonthlyRecurrenceRule": {
+   "parent": "sap.ui.unified.RecurrenceRule",
+   "members": {}
+  },
+  "sap.ui.unified.NonWorkingPeriod": {
+   "parent": "sap.ui.core.Element",
+   "members": {}
+  },
+  "sap.ui.unified.RecurrenceRule": {
+   "parent": "sap.ui.core.Element",
+   "members": {}
+  },
+  "sap.ui.unified.RecurringCalendarAppointment": {
+   "parent": "sap.ui.unified.CalendarAppointment",
+   "members": {}
+  },
+  "sap.ui.unified.RecurringNonWorkingPeriod": {
+   "parent": "sap.ui.unified.NonWorkingPeriod",
+   "members": {}
+  },
+  "sap.ui.unified.TimeRange": {
+   "parent": "sap.ui.core.Element",
+   "members": {}
+  },
+  "sap.ui.unified.WeeklyRecurrenceRule": {
+   "parent": "sap.ui.unified.RecurrenceRule",
+   "members": {}
+  },
+  "sap.ui.unified.YearlyRecurrenceRule": {
+   "parent": "sap.ui.unified.MonthlyRecurrenceRule",
+   "members": {}
+  },
+  "sap.ui.unified.calendar.CalendarDate": {
+   "parent": "sap.ui.base.Object",
+   "members": {}
+  },
+  "sap.ui.unified.internal.CustomMonthPicker": {
+   "parent": "sap.ui.unified.Calendar",
+   "members": {}
+  },
+  "sap.ui.unified.internal.CustomYearPicker": {
+   "parent": "sap.ui.unified.Calendar",
+   "members": {}
+  },
+  "sap.ui.unified.calendar.DatesRow": {
+   "parent": "sap.ui.unified.calendar.Month",
+   "members": {
+    "showDayNamesLine": "1.34.0",
+    "calendarWeekNumbering": "1.110.0",
+    "selectableAccessibilitySemantics": "1.139.0"
+   }
+  },
+  "sap.ui.unified.calendar.Header": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "textButton0": "1.32.0",
+    "additionalTextButton0": "1.34.0",
+    "ariaLabelButton0": "1.32.0",
+    "visibleButton0": "1.32.0",
+    "additionalTextButton1": "1.34.0",
+    "visibleButton1": "1.32.0",
+    "additionalTextButton2": "1.34.0",
+    "visibleButton2": "1.32.0",
+    "visibleCurrentDateButton": "1.95.0",
+    "pressButton0": "1.32.0"
+   }
+  },
+  "sap.ui.unified.calendar.IndexPicker": {
+   "parent": "sap.ui.core.Control",
+   "members": {}
+  },
+  "sap.ui.unified.calendar.Month": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "firstDayOfWeek": "1.28.9",
+    "nonWorkingDays": "1.28.9",
+    "primaryCalendarType": "1.34.0",
+    "secondaryCalendarType": "1.34.0",
+    "width": "1.38.0",
+    "showWeekNumbers": "1.48",
+    "_focusedDate": "1.90",
+    "_renderMonthWeeksOnly": "1.123",
+    "calendarWeekNumbering": "1.108.0",
+    "disabledDates": "1.38.0",
+    "legend": "1.38.5",
+    "weekNumberSelect": "1.60"
+   }
+  },
+  "sap.ui.unified.calendar.MonthPicker": {
+   "parent": null,
+   "members": {
+    "months": "1.30.0",
+    "intervalSelection": "1.74",
+    "_singleSelection": "1.134.0",
+    "columns": "1.30.0",
+    "primaryCalendarType": "1.34.0",
+    "secondaryCalendarType": "1.104.0",
+    "selectedDates": "1.74",
+    "ariaLabelledBy": "1.92",
+    "pageChange": "1.38.0"
+   }
+  },
+  "sap.ui.unified.calendar.MonthsRow": {
+   "parent": null,
+   "members": {
+    "primaryCalendarType": "1.108.0",
+    "secondaryCalendarType": "1.109.0",
+    "selectableAccessibilitySemantics": "1.139.0",
+    "showWeekNumbers": "1.145.0",
+    "legend": "1.38.5"
+   }
+  },
+  "sap.ui.unified.calendar.OneMonthDatesRow": {
+   "parent": "sap.ui.unified.calendar.DatesRow",
+   "members": {}
+  },
+  "sap.ui.unified.calendar.TimesRow": {
+   "parent": null,
+   "members": {
+    "primaryCalendarType": "1.108.0",
+    "secondaryCalendarType": "1.109.0",
+    "selectableAccessibilitySemantics": "1.139.0",
+    "legend": "1.38.5"
+   }
+  },
+  "sap.ui.unified.calendar.WeeksRow": {
+   "parent": "sap.ui.core.Control",
+   "members": {}
+  },
+  "sap.ui.unified.calendar.YearPicker": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "years": "1.30.0",
+    "intervalSelection": "1.74",
+    "_singleSelection": "1.134",
+    "columns": "1.30.0",
+    "date": "1.34.0",
+    "primaryCalendarType": "1.34.0",
+    "secondaryCalendarType": "1.104.0",
+    "_middleDate": "1.84.0",
+    "selectedDates": "1.74",
+    "pageChange": "1.38.0"
+   }
+  },
+  "sap.ui.unified.calendar.YearRangePicker": {
+   "parent": "sap.ui.unified.calendar.YearPicker",
+   "members": {}
+  },
+  "sap.ui.unified._ContentRenderer": {
+   "parent": "sap.ui.base.Object",
+   "members": {}
+  },
+  "sap.uxap.AnchorBar": {
+   "parent": "sap.m.Toolbar",
+   "members": {
+    "backgroundDesign": "1.58"
+   }
+  },
+  "sap.uxap.BlockBase": {
+   "parent": "sap.ui.core.Control",
+   "members": {}
+  },
+  "sap.uxap.BreadCrumbs": {
+   "parent": "sap.ui.core.Control",
+   "members": {}
+  },
+  "sap.uxap.HierarchicalSelect": {
+   "parent": "sap.m.Select",
+   "members": {}
+  },
+  "sap.uxap._helpers.LazyLoading": {
+   "parent": "sap.ui.base.Object",
+   "members": {}
+  },
+  "sap.uxap.ModelMapping": {
+   "parent": "sap.ui.core.Element",
+   "members": {}
+  },
+  "sap.uxap.ObjectPageAccessibleLandmarkInfo": {
+   "parent": "sap.ui.core.Element",
+   "members": {
+    "headerContentLabel": "1.127.0"
+   }
+  },
+  "sap.uxap.ObjectPageDynamicHeaderContent": {
+   "parent": "sap.f.DynamicPageHeader",
+   "members": {}
+  },
+  "sap.uxap.ObjectPageDynamicHeaderTitle": {
+   "parent": "sap.f.DynamicPageTitle",
+   "members": {}
+  },
+  "sap.uxap.ObjectPageHeader": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "objectImageBackgroundColor": "1.73",
+    "markChanges": "1.34.0",
+    "breadcrumbs": "1.50",
+    "sideContentButton": "1.38.0",
+    "titleSelectorTooltip": "1.56"
+   }
+  },
+  "sap.uxap.ObjectPageHeaderActionButton": {
+   "parent": "sap.m.Button",
+   "members": {
+    "importance": "1.34.0"
+   }
+  },
+  "sap.uxap.ObjectPageHeaderContent": {
+   "parent": "sap.ui.core.Control",
+   "members": {}
+  },
+  "sap.uxap.ObjectPageHeaderLayoutData": {
+   "parent": "sap.ui.core.LayoutData",
+   "members": {}
+  },
+  "sap.uxap.ObjectPageLayout": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "backgroundDesignAnchorBar": "1.58",
+    "sectionTitleLevel": "1.44.0",
+    "showOnlyHighImportance": "1.32.0",
+    "isChildPage": "1.34.0",
+    "alwaysShowContentHeader": "1.34.0",
+    "headerContentPinnable": "1.52",
+    "headerContentPinned": "1.93",
+    "toggleHeaderOnTitleClick": "1.52",
+    "preserveHeaderStateOnScroll": "1.52",
+    "showEditHeaderButton": "1.34.0",
+    "flexEnabled": "1.34.0",
+    "showFooter": "1.40",
+    "selectedSection": "1.44.0",
+    "footer": "1.40",
+    "landmarkInfo": "1.61",
+    "headerContentPinnedStateChange": "1.93",
+    "sectionChange": "1.73",
+    "beforeNavigate": "1.118",
+    "navigate": "1.40",
+    "subSectionVisibilityChange": "1.77",
+    "breakpointChange": "1.147"
+   }
+  },
+  "sap.uxap._helpers.AB": {
+   "parent": "sap.ui.base.Object",
+   "members": {}
+  },
+  "sap.uxap.ObjectPageLazyLoader": {
+   "parent": "sap.ui.core.Element",
+   "members": {}
+  },
+  "sap.uxap.ObjectPageSection": {
+   "parent": "sap.uxap.ObjectPageSectionBase",
+   "members": {
+    "heading": "1.106"
+   }
+  },
+  "sap.uxap.ObjectPageSectionBase": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "titleLevel": "1.44.0",
+    "titleVisible": "1.121.0",
+    "importance": "1.32.0"
+   }
+  },
+  "sap.uxap.ObjectPageSubSection": {
+   "parent": "sap.uxap.ObjectPageSectionBase",
+   "members": {
+    "showTitle": "1.77"
+   }
+  },
+  "sap.uxap.ThrottledTask": {
+   "parent": "sap.ui.base.Object",
+   "members": {}
+  },
+  "sap.uxap.component.Component": {
+   "parent": "sap.ui.core.UIComponent",
+   "members": {}
+  },
+  "sap.uxap.component.ObjectPageComponentContainer": {
+   "parent": "sap.ui.core.ComponentContainer",
+   "members": {}
+  },
+  "sap.uxap.component.ObjectPageLayoutUXDrivenFactory": {
+   "parent": "sap.ui.core.mvc.Controller",
+   "members": {}
+  },
+  "sap.tnt.InfoLabel": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "icon": "1.74"
+   }
+  },
+  "sap.tnt.NavigationList": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "selectedKey": "1.62.0",
+    "selectedItem": "1.52.0",
+    "ctrlKey": "1.137",
+    "shiftKey": "1.137",
+    "altKey": "1.137",
+    "metaKey": "1.137"
+   }
+  },
+  "sap.tnt.NavigationListGroup": {
+   "parent": "sap.tnt.NavigationListItemBase",
+   "members": {
+    "items": "1.121.0"
+   }
+  },
+  "sap.tnt.NavigationListItem": {
+   "parent": "sap.tnt.NavigationListItemBase",
+   "members": {
+    "visible": "1.52",
+    "selectable": "1.116",
+    "design": "1.133.0",
+    "ariaHasPopup": "1.133.0",
+    "tag": "1.149"
+   }
+  },
+  "sap.tnt.NavigationListItemBase": {
+   "parent": "sap.ui.core.Item",
+   "members": {
+    "expanded": "1.121",
+    "visible": "1.121",
+    "_expandIconControl": "1.121",
+    "_externalLinkIconControl": "1.121",
+    "press": "1.133",
+    "ctrlKey": "1.137",
+    "shiftKey": "1.137",
+    "altKey": "1.137",
+    "metaKey": "1.137"
+   }
+  },
+  "sap.tnt.NavigationListMenuItem": {
+   "parent": "sap.m.MenuItem",
+   "members": {
+    "_externalLinkIcon": "1.121",
+    "tag": "1.149"
+   }
+  },
+  "sap.tnt.SideNavigation": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "width": "1.120",
+    "selectedKey": "1.62.0",
+    "ariaLabel": "1.98",
+    "design": "1.134",
+    "selectedItem": "1.52.0",
+    "ctrlKey": "1.136",
+    "shiftKey": "1.136",
+    "altKey": "1.136",
+    "metaKey": "1.136"
+   }
+  },
+  "sap.tnt.ToolHeader": {
+   "parent": "sap.m.OverflowToolbar",
+   "members": {}
+  },
+  "sap.tnt.ToolHeaderUtilitySeparator": {
+   "parent": "sap.ui.core.Control",
+   "members": {}
+  },
+  "sap.tnt.ToolPage": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "contentBackgroundDesign": "1.115",
+    "subHeader": "1.93"
+   }
+  },
+  "sap.ui.codeeditor.CodeEditor": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "maxLines": "1.48.1"
+   }
+  },
+  "sap.ui.integration.ActionDefinition": {
+   "parent": "sap.ui.core.Element",
+   "members": {}
+  },
+  "sap.ui.integration.Designtime": {
+   "parent": "sap.ui.base.ManagedObject",
+   "members": {}
+  },
+  "sap.ui.integration.Extension": {
+   "parent": "sap.ui.base.ManagedObject",
+   "members": {
+    "formData": "1.129"
+   }
+  },
+  "sap.ui.integration.Host": {
+   "parent": "sap.ui.core.Element",
+   "members": {
+    "formData": "1.129"
+   }
+  },
+  "sap.ui.integration.cards.AdaptiveContent": {
+   "parent": "sap.ui.integration.cards.BaseContent",
+   "members": {}
+  },
+  "sap.ui.integration.cards.AnalyticalContent": {
+   "parent": "sap.ui.integration.cards.BaseContent",
+   "members": {}
+  },
+  "sap.ui.integration.cards.AnalyticsCloudContent": {
+   "parent": "sap.ui.integration.cards.BaseContent",
+   "members": {}
+  },
+  "sap.ui.integration.cards.BaseContent": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "design": "1.109"
+   }
+  },
+  "sap.ui.integration.cards.BaseListContent": {
+   "parent": "sap.ui.integration.cards.BaseContent",
+   "members": {}
+  },
+  "sap.ui.integration.cards.CalendarContent": {
+   "parent": "sap.ui.integration.cards.BaseContent",
+   "members": {}
+  },
+  "sap.ui.integration.cards.ComponentContent": {
+   "parent": "sap.ui.integration.cards.BaseContent",
+   "members": {}
+  },
+  "sap.ui.integration.cards.Footer": {
+   "parent": "sap.ui.core.Control",
+   "members": {}
+  },
+  "sap.ui.integration.cards.Header": {
+   "parent": "sap.f.cards.Header",
+   "members": {}
+  },
+  "sap.ui.integration.cards.ListContent": {
+   "parent": "sap.ui.integration.cards.BaseListContent",
+   "members": {}
+  },
+  "sap.ui.integration.cards.NumericHeader": {
+   "parent": "sap.f.cards.NumericHeader",
+   "members": {}
+  },
+  "sap.ui.integration.cards.ObjectContent": {
+   "parent": "sap.ui.integration.cards.BaseContent",
+   "members": {}
+  },
+  "sap.ui.integration.cards.TableContent": {
+   "parent": "sap.ui.integration.cards.BaseListContent",
+   "members": {}
+  },
+  "sap.ui.integration.cards.TimelineContent": {
+   "parent": "sap.ui.integration.cards.BaseListContent",
+   "members": {}
+  },
+  "sap.ui.integration.cards.WebPageContent": {
+   "parent": "sap.ui.integration.cards.BaseContent",
+   "members": {}
+  },
+  "sap.ui.integration.cards.actions.BaseAction": {
+   "parent": "sap.ui.base.ManagedObject",
+   "members": {}
+  },
+  "sap.ui.integration.cards.actions.CardActions": {
+   "parent": "sap.ui.base.ManagedObject",
+   "members": {}
+  },
+  "sap.ui.integration.cards.actions.CustomAction": {
+   "parent": "sap.ui.integration.cards.actions.BaseAction",
+   "members": {}
+  },
+  "sap.ui.integration.cards.actions.DateChangeAction": {
+   "parent": "sap.ui.integration.cards.actions.BaseAction",
+   "members": {}
+  },
+  "sap.ui.integration.cards.actions.HideCardAction": {
+   "parent": "sap.ui.integration.cards.actions.BaseAction",
+   "members": {}
+  },
+  "sap.ui.integration.cards.actions.MonthChangeAction": {
+   "parent": "sap.ui.integration.cards.actions.BaseAction",
+   "members": {}
+  },
+  "sap.ui.integration.cards.actions.NavigationAction": {
+   "parent": "sap.ui.integration.cards.actions.BaseAction",
+   "members": {}
+  },
+  "sap.ui.integration.cards.actions.ShowCardAction": {
+   "parent": "sap.ui.integration.cards.actions.BaseAction",
+   "members": {}
+  },
+  "sap.ui.integration.cards.actions.SubmitAction": {
+   "parent": "sap.ui.integration.cards.actions.BaseAction",
+   "members": {}
+  },
+  "sap.ui.integration.cards.filters.BaseFilter": {
+   "parent": "sap.ui.core.Control",
+   "members": {}
+  },
+  "sap.ui.integration.cards.filters.ComboBoxFilter": {
+   "parent": "sap.ui.integration.cards.filters.BaseFilter",
+   "members": {}
+  },
+  "sap.ui.integration.cards.filters.DateRangeFilter": {
+   "parent": "sap.ui.integration.cards.filters.BaseFilter",
+   "members": {}
+  },
+  "sap.ui.integration.cards.filters.FilterBar": {
+   "parent": "sap.ui.core.Control",
+   "members": {}
+  },
+  "sap.ui.integration.util.FilterBarFactory": {
+   "parent": "sap.ui.base.Object",
+   "members": {}
+  },
+  "sap.ui.integration.cards.filters.SearchFilter": {
+   "parent": "sap.ui.integration.cards.filters.BaseFilter",
+   "members": {}
+  },
+  "sap.ui.integration.cards.filters.SelectFilter": {
+   "parent": "sap.ui.integration.cards.filters.BaseFilter",
+   "members": {}
+  },
+  "sap.ui.integration.cards.list.MicrochartsResizeHelper": {
+   "parent": "sap.ui.base.Object",
+   "members": {}
+  },
+  "sap.ui.integration.controls.ActionsStrip": {
+   "parent": "sap.ui.core.Control",
+   "members": {}
+  },
+  "sap.ui.integration.controls.ActionsToolbar": {
+   "parent": "sap.ui.core.Control",
+   "members": {}
+  },
+  "sap.ui.integration.controls.BlockingMessage": {
+   "parent": "sap.ui.core.Control",
+   "members": {}
+  },
+  "sap.ui.integration.controls.ComboBox": {
+   "parent": "sap.m.ComboBox",
+   "members": {}
+  },
+  "sap.ui.integration.controls.HeaderInfoSectionColumn": {
+   "parent": "sap.ui.core.Control",
+   "members": {}
+  },
+  "sap.ui.integration.controls.HeaderInfoSectionRow": {
+   "parent": "sap.ui.core.Control",
+   "members": {}
+  },
+  "sap.ui.integration.controls.ImageWithOverlay": {
+   "parent": "sap.ui.core.Control",
+   "members": {}
+  },
+  "sap.ui.integration.controls.ListContentItem": {
+   "parent": "sap.m.ListItemBase",
+   "members": {
+    "descriptionVisible": "1.116",
+    "iconAlt": "1.82",
+    "iconDisplayShape": "1.82",
+    "iconInitials": "1.82",
+    "iconSize": "1.82",
+    "iconFitType": "1.126",
+    "iconBackgroundColor": "1.83",
+    "infoVisible": "1.115"
+   }
+  },
+  "sap.ui.integration.controls.Microchart": {
+   "parent": "sap.ui.core.Control",
+   "members": {}
+  },
+  "sap.ui.integration.controls.MicrochartLegend": {
+   "parent": "sap.ui.core.Control",
+   "members": {}
+  },
+  "sap.ui.integration.controls.ObjectStatus": {
+   "parent": "sap.m.ObjectStatus",
+   "members": {}
+  },
+  "sap.ui.integration.delegate.OverflowHandler": {
+   "parent": "sap.ui.base.Object",
+   "members": {}
+  },
+  "sap.ui.integration.delegate.Paginator": {
+   "parent": null,
+   "members": {}
+  },
+  "sap.ui.integration.delegate.PreventKeyboardScrolling": {
+   "parent": "sap.ui.base.Object",
+   "members": {}
+  },
+  "sap.ui.integration.designtime.baseEditor.BaseEditor": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "hasError": "1.96.0"
+   }
+  },
+  "sap.ui.integration.designtime.baseEditor.PropertyEditor": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "hasError": "1.96.0"
+   }
+  },
+  "sap.ui.integration.designtime.baseEditor.PropertyEditors": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "hasError": "1.96.0"
+   }
+  },
+  "sap.ui.integration.designtime.baseEditor.propertyEditor.BasePropertyEditor": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "hasError": "1.96.0"
+   }
+  },
+  "sap.ui.integration.designtime.baseEditor.propertyEditor.arrayEditor.ArrayEditor": {
+   "parent": "sap.ui.integration.designtime.baseEditor.propertyEditor.BasePropertyEditor",
+   "members": {}
+  },
+  "sap.ui.integration.designtime.baseEditor.propertyEditor.booleanEditor.BooleanEditor": {
+   "parent": "sap.ui.integration.designtime.baseEditor.propertyEditor.BasePropertyEditor",
+   "members": {}
+  },
+  "sap.ui.integration.designtime.baseEditor.propertyEditor.codeEditor.CodeEditor": {
+   "parent": "sap.ui.integration.designtime.baseEditor.propertyEditor.BasePropertyEditor",
+   "members": {}
+  },
+  "sap.ui.integration.designtime.baseEditor.propertyEditor.dateEditor.DateEditor": {
+   "parent": "sap.ui.integration.designtime.baseEditor.propertyEditor.BasePropertyEditor",
+   "members": {}
+  },
+  "sap.ui.integration.designtime.baseEditor.propertyEditor.dateTimeEditor.DateTimeEditor": {
+   "parent": "sap.ui.integration.designtime.baseEditor.propertyEditor.dateEditor.DateEditor",
+   "members": {}
+  },
+  "sap.ui.integration.designtime.baseEditor.propertyEditor.groupEditor.GroupEditor": {
+   "parent": "sap.ui.integration.designtime.baseEditor.propertyEditor.BasePropertyEditor",
+   "members": {}
+  },
+  "sap.ui.integration.designtime.baseEditor.propertyEditor.iconEditor.IconEditor": {
+   "parent": "sap.ui.integration.designtime.baseEditor.propertyEditor.BasePropertyEditor",
+   "members": {}
+  },
+  "sap.ui.integration.designtime.baseEditor.propertyEditor.integerEditor.IntegerEditor": {
+   "parent": "sap.ui.integration.designtime.baseEditor.propertyEditor.numberEditor.NumberEditor",
+   "members": {}
+  },
+  "sap.ui.integration.designtime.baseEditor.propertyEditor.jsonEditor.JsonEditor": {
+   "parent": "sap.ui.integration.designtime.baseEditor.propertyEditor.BasePropertyEditor",
+   "members": {}
+  },
+  "sap.ui.integration.designtime.baseEditor.propertyEditor.listEditor.ListEditor": {
+   "parent": "sap.ui.integration.designtime.baseEditor.propertyEditor.BasePropertyEditor",
+   "members": {}
+  },
+  "sap.ui.integration.designtime.baseEditor.propertyEditor.mapEditor.MapEditor": {
+   "parent": "sap.ui.integration.designtime.baseEditor.propertyEditor.BasePropertyEditor",
+   "members": {}
+  },
+  "sap.ui.integration.designtime.baseEditor.propertyEditor.multiSelectEditor.MultiSelectEditor": {
+   "parent": "sap.ui.integration.designtime.baseEditor.propertyEditor.BasePropertyEditor",
+   "members": {}
+  },
+  "sap.ui.integration.designtime.baseEditor.propertyEditor.numberEditor.NumberEditor": {
+   "parent": "sap.ui.integration.designtime.baseEditor.propertyEditor.BasePropertyEditor",
+   "members": {}
+  },
+  "sap.ui.integration.designtime.baseEditor.propertyEditor.objectArrayEditor.ObjectArrayEditor": {
+   "parent": "sap.ui.integration.designtime.baseEditor.propertyEditor.codeEditor.CodeEditor",
+   "members": {}
+  },
+  "sap.ui.integration.designtime.baseEditor.propertyEditor.selectEditor.SelectEditor": {
+   "parent": "sap.ui.integration.designtime.baseEditor.propertyEditor.BasePropertyEditor",
+   "members": {}
+  },
+  "sap.ui.integration.designtime.baseEditor.propertyEditor.separatorEditor.SeparatorEditor": {
+   "parent": "sap.ui.integration.designtime.baseEditor.propertyEditor.BasePropertyEditor",
+   "members": {}
+  },
+  "sap.ui.integration.designtime.baseEditor.propertyEditor.stringEditor.StringEditor": {
+   "parent": "sap.ui.integration.designtime.baseEditor.propertyEditor.BasePropertyEditor",
+   "members": {}
+  },
+  "sap.ui.integration.designtime.baseEditor.propertyEditor.textAreaEditor.TextAreaEditor": {
+   "parent": "sap.ui.integration.designtime.baseEditor.propertyEditor.BasePropertyEditor",
+   "members": {}
+  },
+  "sap.ui.integration.designtime.baseEditor.util.ObjectBinding": {
+   "parent": "sap.ui.base.ManagedObject",
+   "members": {}
+  },
+  "sap.ui.integration.designtime.cardEditor.BASEditor": {
+   "parent": "sap.ui.integration.designtime.cardEditor.CardEditor",
+   "members": {}
+  },
+  "sap.ui.integration.designtime.cardEditor.CardEditor": {
+   "parent": "sap.ui.integration.designtime.baseEditor.BaseEditor",
+   "members": {
+    "baseUrl": "1.83"
+   }
+  },
+  "sap.ui.integration.designtime.cardEditor.propertyEditor.complexMapEditor.ComplexMapEditor": {
+   "parent": "sap.ui.integration.designtime.baseEditor.propertyEditor.BasePropertyEditor",
+   "members": {}
+  },
+  "sap.ui.integration.designtime.cardEditor.propertyEditor.destinationsEditor.DestinationsEditor": {
+   "parent": "sap.ui.integration.designtime.cardEditor.propertyEditor.complexMapEditor.ComplexMapEditor",
+   "members": {}
+  },
+  "sap.ui.integration.designtime.cardEditor.propertyEditor.filtersEditor.FiltersEditor": {
+   "parent": "sap.ui.integration.designtime.cardEditor.propertyEditor.complexMapEditor.ComplexMapEditor",
+   "members": {}
+  },
+  "sap.ui.integration.designtime.cardEditor.propertyEditor.iconEditor.IconEditor": {
+   "parent": "sap.ui.integration.designtime.baseEditor.propertyEditor.BasePropertyEditor",
+   "members": {}
+  },
+  "sap.ui.integration.designtime.cardEditor.propertyEditor.parametersEditor.ParametersEditor": {
+   "parent": "sap.ui.integration.designtime.baseEditor.propertyEditor.mapEditor.MapEditor",
+   "members": {}
+  },
+  "sap.ui.integration.designtime.editor.Card": {
+   "parent": "sap.ui.integration.widgets.Card",
+   "members": {
+    "readonly": "1.112",
+    "readonlyZIndex": "1.112"
+   }
+  },
+  "sap.ui.integration.designtime.editor.CardEditor": {
+   "parent": "sap.ui.integration.editor.Editor",
+   "members": {}
+  },
+  "sap.ui.integration.designtime.editor.CardPreview": {
+   "parent": "sap.ui.core.Control",
+   "members": {}
+  },
+  "sap.ui.integration.editor.Editor": {
+   "parent": "sap.ui.core.Control",
+   "members": {}
+  },
+  "sap.ui.integration.editor.EditorResourceBundles": {
+   "parent": "sap.ui.base.ManagedObject",
+   "members": {}
+  },
+  "sap.ui.integration.editor.Extension": {
+   "parent": "sap.ui.integration.Extension",
+   "members": {}
+  },
+  "sap.ui.integration.editor.Manifest": {
+   "parent": "sap.ui.integration.util.Manifest",
+   "members": {}
+  },
+  "sap.ui.integration.editor.Settings": {
+   "parent": "sap.ui.core.Control",
+   "members": {}
+  },
+  "sap.ui.integration.editor.fields.BaseField": {
+   "parent": "sap.ui.core.Control",
+   "members": {}
+  },
+  "sap.ui.integration.editor.fields.BooleanField": {
+   "parent": "sap.ui.integration.editor.fields.BaseField",
+   "members": {}
+  },
+  "sap.ui.integration.editor.fields.DateField": {
+   "parent": "sap.ui.integration.editor.fields.BaseField",
+   "members": {}
+  },
+  "sap.ui.integration.editor.fields.DateTimeField": {
+   "parent": "sap.ui.integration.editor.fields.BaseField",
+   "members": {}
+  },
+  "sap.ui.integration.editor.fields.DestinationField": {
+   "parent": "sap.ui.integration.editor.fields.BaseField",
+   "members": {}
+  },
+  "sap.ui.integration.editor.fields.GroupField": {
+   "parent": "sap.ui.integration.editor.fields.BaseField",
+   "members": {}
+  },
+  "sap.ui.integration.editor.fields.IntegerField": {
+   "parent": "sap.ui.integration.editor.fields.BaseField",
+   "members": {}
+  },
+  "sap.ui.integration.editor.fields.NumberField": {
+   "parent": "sap.ui.integration.editor.fields.BaseField",
+   "members": {}
+  },
+  "sap.ui.integration.editor.fields.ObjectField": {
+   "parent": "sap.ui.integration.editor.fields.BaseField",
+   "members": {}
+  },
+  "sap.ui.integration.editor.fields.ObjectListField": {
+   "parent": "sap.ui.integration.editor.fields.ObjectField",
+   "members": {}
+  },
+  "sap.ui.integration.editor.fields.StringField": {
+   "parent": "sap.ui.integration.editor.fields.BaseField",
+   "members": {}
+  },
+  "sap.ui.integration.editor.fields.StringListField": {
+   "parent": "sap.ui.integration.editor.fields.BaseField",
+   "members": {}
+  },
+  "sap.ui.integration.editor.fields.fragment.Controller": {
+   "parent": "sap.ui.core.mvc.Controller",
+   "members": {}
+  },
+  "sap.ui.integration.editor.fields.viz.ColorSelect": {
+   "parent": "sap.ui.integration.editor.fields.viz.VizBase",
+   "members": {}
+  },
+  "sap.ui.integration.editor.fields.viz.IconSelect": {
+   "parent": "sap.ui.integration.editor.fields.viz.VizBase",
+   "members": {
+    "allowDefaultIcons": "1.119",
+    "change": "1.134"
+   }
+  },
+  "sap.ui.integration.editor.fields.viz.ImageSelect": {
+   "parent": "sap.ui.integration.editor.fields.viz.IconSelect",
+   "members": {}
+  },
+  "sap.ui.integration.editor.fields.viz.ShapeSelect": {
+   "parent": "sap.ui.integration.editor.fields.viz.VizBase",
+   "members": {}
+  },
+  "sap.ui.integration.editor.fields.viz.VizBase": {
+   "parent": "sap.ui.core.Control",
+   "members": {}
+  },
+  "sap.ui.integration.extensions.OAuth3LO": {
+   "parent": "sap.ui.integration.Extension",
+   "members": {}
+  },
+  "sap.ui.integration.formatters.IconFormatter": {
+   "parent": "sap.ui.base.ManagedObject",
+   "members": {}
+  },
+  "sap.ui.integration.model.ContextModel": {
+   "parent": "sap.ui.model.json.JSONModel",
+   "members": {}
+  },
+  "sap.ui.integration.model.ObservableModel": {
+   "parent": "sap.ui.model.json.JSONModel",
+   "members": {}
+  },
+  "sap.ui.integration.util.BaseFactory": {
+   "parent": "sap.ui.base.Object",
+   "members": {}
+  },
+  "sap.ui.integration.util.SimpleControl": {
+   "parent": "sap.ui.base.ManagedObject",
+   "members": {}
+  },
+  "sap.ui.integration.util.CacheAndRequestDataProvider": {
+   "parent": "sap.ui.integration.util.RequestDataProvider",
+   "members": {}
+  },
+  "sap.ui.integration.util.CardObserver": {
+   "parent": "sap.ui.base.Object",
+   "members": {}
+  },
+  "sap.ui.integration.util.ContentFactory": {
+   "parent": "sap.ui.integration.util.BaseFactory",
+   "members": {}
+  },
+  "sap.ui.integration.util.CsrfTokenHandler": {
+   "parent": "sap.ui.base.Object",
+   "members": {}
+  },
+  "sap.ui.integration.util.DataProvider": {
+   "parent": "sap.ui.base.ManagedObject",
+   "members": {}
+  },
+  "sap.ui.integration.util.DataProviderFactory": {
+   "parent": "sap.ui.base.EventProvider",
+   "members": {}
+  },
+  "sap.ui.integration.util.DelayedLoadingProvider": {
+   "parent": "sap.ui.integration.util.LoadingProvider",
+   "members": {}
+  },
+  "sap.ui.integration.util.Destinations": {
+   "parent": "sap.ui.base.Object",
+   "members": {}
+  },
+  "sap.ui.integration.util.DisplayVariants": {
+   "parent": "sap.ui.base.Object",
+   "members": {}
+  },
+  "sap.ui.integration.util.ExtensionDataProvider": {
+   "parent": "sap.ui.integration.util.DataProvider",
+   "members": {}
+  },
+  "sap.ui.integration.util.Form": {
+   "parent": "sap.ui.base.ManagedObject",
+   "members": {}
+  },
+  "sap.ui.integration.util.HeaderFactory": {
+   "parent": "sap.ui.integration.util.BaseFactory",
+   "members": {}
+  },
+  "sap.ui.integration.util.LoadingProvider": {
+   "parent": "sap.ui.core.Element",
+   "members": {}
+  },
+  "sap.ui.integration.util.Manifest": {
+   "parent": "sap.ui.base.Object",
+   "members": {}
+  },
+  "sap.ui.integration.util.RequestDataProvider": {
+   "parent": "sap.ui.integration.util.DataProvider",
+   "members": {
+    "properties": "1.81"
+   }
+  },
+  "sap.ui.integration.util.SkeletonCard": {
+   "parent": "sap.ui.integration.widgets.Card",
+   "members": {}
+  },
+  "sap.ui.integration.widgets.Card": {
+   "parent": "sap.f.CardBase",
+   "members": {
+    "baseUrl": "1.70",
+    "showCloseButton": "1.128",
+    "isPaginationCard": "1.140",
+    "formData": "1.129"
    }
   }
  }

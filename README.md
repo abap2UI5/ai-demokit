@@ -68,6 +68,11 @@ Rules:
   yourself. Blank line between controls whose verb differs (open<->leaf,
   before shut); none between same-verb controls, none right after a shut,
   none between a control and its attrs; the whole view ends in a single ).
+  An aggregation carries the same namespace as its XML tag (its parent
+  control's): <m:content> under a Page is open( n = `content` ns = `m` ),
+  a default-namespace <columns> inside an sap.ui.table.Table is open( `columns` ).
+  Braces { } inside a |...| template are ALWAYS escaped \{ \} - an unescaped {
+  is read as a binding by the XMLView parser and crashes view creation.
   Booleans: literal v = `true`/`false`, or v = z2ui5_cl_ai_xml=>as_bool( flag )
   when fed from an ABAP boolean variable.
 - BEFORE declaring any sample feature inexpressible, check CAPABILITIES.md -
@@ -95,6 +100,14 @@ Rules:
   crashes enum-typed properties and overrides property defaults where the
   original's undefined picked the default - fill the UI5 default explicitly
   or split the aggregation into per-shape templates.
+- abap2UI5 serves ONE default model - there are no named models. A named-model
+  binding ({ui>/rowMode}, {img>/x}) is folded into the default model: drop the
+  prefix and bind the field directly (client->_bind( rowmode )); structural-diff
+  matches on the last path segment. A typed/complex binding is kept as a raw
+  binding-info string, braces escaped: |\{ path: 'Q', type:
+  'sap.ui.model.type.Integer' \}| (same for Date/Currency parts and sorter) -
+  it passes through to XMLView.create unmangled. See AGENTS.md section 5
+  "Idiom cheat-sheet".
 - Frontend actions: a whitelisted control method (CONTROL_METHODS in
   FrontendAction.js) silently drops every argument beyond its declared arg
   kinds - verify the kinds in the framework source before wiring a
@@ -118,7 +131,10 @@ Rules:
   node scripts/validate-meta.mjs.
 - Any runtime asset URLs the sample uses (test-resources / resources images)
   also point at the OpenUI5 host (sdk.openui5.org), never SAPUI5.
-- Set the abapGit <DESCRIPT> to `<entity> - <demo kit description>`.
+- Leave the abapGit <DESCRIPT> as the scaffolder's `<library> - <sample name>`
+  default (e.g. `sap.f - GridListBoxContainerGrouping`); only improve the
+  trailing text to a human phrase when you know one. Don't agonize over
+  entity-vs-library (see AGENTS.md section 5).
 - Follow all ABAP conventions in AGENTS.md.
 ```
 <!-- prompt:end -->
@@ -172,7 +188,7 @@ have an abap2UI5 port.
 
 <!-- coverage:start -->
 
-Overall **168 / 641** in-scope demo kit samples ported (26.2 %).
+Overall **246 / 641** in-scope demo kit samples ported (38.4 %).
 **In scope**: samples whose control exists since **UI5 1.71** and is **not deprecated** (legacy-free ready).
 Out of scope: 66 of 707 samples — 16 on deprecated controls, 21 on controls newer than 1.71, 29 without control metadata.
 Control metadata from OpenUI5 **1.151.0**.
@@ -180,16 +196,16 @@ Control metadata from OpenUI5 **1.151.0**.
 | Module | Samples | In scope | Ported | Coverage | |
 |--------|--------:|---------:|-------:|---------:|---|
 | `sap.ui.codeeditor` | 2 | 2 | 2 | 100.0 % | ██████████ |
+| `sap.tnt` | 17 | 17 | 11 | 64.7 % | ██████░░░░ |
+| `sap.ui.unified` | 21 | 21 | 12 | 57.1 % | ██████░░░░ |
 | `sap.ui.integration` | 4 | 4 | 2 | 50.0 % | █████░░░░░ |
-| `sap.tnt` | 17 | 17 | 7 | 41.2 % | ████░░░░░░ |
-| `sap.m` | 446 | 403 | 119 | 29.5 % | ███░░░░░░░ |
-| `sap.ui.core` | 48 | 36 | 10 | 27.8 % | ███░░░░░░░ |
-| `sap.f` | 42 | 41 | 11 | 26.8 % | ███░░░░░░░ |
-| `sap.ui.unified` | 21 | 21 | 4 | 19.0 % | ██░░░░░░░░ |
-| `sap.ui.table` | 18 | 17 | 3 | 17.6 % | ██░░░░░░░░ |
-| `sap.ui.layout` | 62 | 59 | 8 | 13.6 % | █░░░░░░░░░ |
-| `sap.uxap` | 47 | 41 | 2 | 4.9 % | ░░░░░░░░░░ |
-| **Total** | **707** | **641** | **168** | **26.2 %** | ███░░░░░░░ |
+| `sap.f` | 42 | 41 | 19 | 46.3 % | █████░░░░░ |
+| `sap.ui.core` | 48 | 36 | 16 | 44.4 % | ████░░░░░░ |
+| `sap.m` | 446 | 403 | 149 | 37.0 % | ████░░░░░░ |
+| `sap.ui.layout` | 62 | 59 | 18 | 30.5 % | ███░░░░░░░ |
+| `sap.ui.table` | 18 | 17 | 5 | 29.4 % | ███░░░░░░░ |
+| `sap.uxap` | 47 | 41 | 12 | 29.3 % | ███░░░░░░░ |
+| **Total** | **707** | **641** | **246** | **38.4 %** | ████░░░░░░ |
 
 <!-- coverage:end -->
 

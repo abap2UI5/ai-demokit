@@ -5,6 +5,311 @@ findings are fixed or new ones land (same-change discipline as AGENTS.md §10).
 For the process itself see TRAINING.md; for what abap2UI5 can express see
 CAPABILITIES.md._
 
+## Property gate extended to all libraries (2026-07-24) — blind spot closed
+
+The systemic follow-up (the property gate was `sap.m`-only, so post-1.71 members
+in every other library passed vacuously — the root cause of the POST_171 debt
+swept earlier). Fixed for real:
+
+- **`generate-properties.mjs`**: `LIB_DIRS` now covers all ten ported libraries
+  and scans each **recursively** (nested controls: `form/SimpleForm`,
+  `cards/NumericHeader`, `sap.m/semantic/*`, …). `ui5/properties.json` grew
+  263 → **831 controls**. A missing lib dir is skipped with a warning (not fatal).
+  CI-safe: `generate_result` clones the full OpenUI5 repo, so all libs' `src/`
+  are present (verified in `generate_result.yaml`).
+- **`property-check.mjs`**: builds a prefix→namespace map from each port's own
+  `xmlns` declarations and resolves every control's full dotted name (not just
+  `sap.m.<X>`), then walks the parent chain as before. The `sap.m`-only skip is
+  gone.
+- **Two members the manual audit had missed/deferred, now caught and declared**:
+  app 108 `CalendarAppointment.ariaHasPopup` (1.150.0, genuinely in the original
+  view) and app 167 `NavigationListItem.expanded` (reads 1.121 — a base-class
+  relocation, property predates 1.71; declared with that note). `property-check`
+  is green across all 178 ports; the gate now enforces POST_171 for every library
+  automatically, so this class of debt cannot silently return.
+
+Residual limits (documented in §5): enum *values* newer than 1.71 stay invisible
+at the attribute-name level; a member relocated to a newer base class reads as
+that base's version.
+
+## Subagent cold-read probe (2026-07-24) — app 178 (sap.uxap ObjectPage, BlockBase inlining)
+
+Eighth cold-read port and the hardest so far: `sap.uxap.sample.ObjectPageSubSectionWithActions`
+(app 178, `src/03`), the thinnest library. Machine-green all gates. Coverage
+**178**, `sap.uxap` 2→3. The documented-but-barely-exercised **BlockBase-inlining
+idiom worked cleanly** — three `blockcolor:BlockBlue` refs inlined as `core:HTML`
+divs (app 161 precedent), one IMPROVISED deviation naming the block→content
+substitution covered both structural-diff lines (`control missing` blockcolor:BlockBlue
++ `control extra` core:HTML). All uxap members @since-checked (≤ 1.71).
+
+Even this hardest port surfaced only consistency nits (blank-line prose vs the 161
+precedent; §4 "archive everything" vs the reality that SharedBlock sources aren't
+copied into `ui5/`; the block-view path pattern). CAPABILITIES BlockBase row
+clarified (block-view path, single-deviation declaration, not-offline-archived).
+**Conclusion: the agent-file hardening is saturated** — eight consecutive
+cold-read ports across seven libraries built machine-green from the docs alone;
+recent friction is cross-corpus consistency, not capability or spec gaps.
+
+## Subagent cold-read probe (2026-07-24) — app 177 (sap.ui.unified CalendarDateInterval)
+
+Seventh cold-read port: `sap.ui.unified.sample.CalendarDateIntervalBasic` (app
+177, first `sap.ui.unified.CalendarDateInterval`), machine-green, 0 diffs.
+Coverage **177**, `sap.ui.unified` 5→6. Data-less-but-stateful (inline flag,
+no `model_init`). One LIVE_TEST (event date simplified, same as app 139).
+
+Friction is now down to `@since`-check refinements — both added to the §5
+property-gate caveat: **(a)** an inherited member's `@since` lives in the
+**parent class file** (follow the `extend` chain — `CalendarDateInterval` →
+`Calendar.js`); **(b)** a member with **no `@since` tag** is base-version (≤ 1.71,
+no POST_171). The core spec is otherwise saturated for this port class — recent
+friction logs surface only cross-corpus consistency nits (references using
+dispreferred-but-valid patterns, the scaffolder stub vs the data-less rule),
+not capability gaps.
+
+## Subagent cold-read probe (2026-07-24) — app 176 (sap.f GridList grouping)
+
+Sixth cold-read port: `sap.f.sample.GridListBoxContainerGrouping` (app 176),
+machine-green. Coverage **176**, `sap.f` 12→13. `sap.f.AvatarGroup` (the only
+un-ported *new* sap.f control) was skipped — render-hostile (declared skip), so
+a clean depth port was taken. All members @since-checked (≤ 1.71). Slider→width
+done as a roundtrip-free expression binding (spec-preferred over the round-trip
+that the nearest reference app 144 actually uses — the docs prefer it but no gate
+enforces it; noted).
+
+Two doc fixes from the friction log:
+- **§5**: `stringify( )` renders from the root, so **trailing `shut( )`s are
+  optional** — a chain may end at the deepest node with a bare `).` (all open
+  nodes close structurally in the output). `shut( )` only moves the cursor to add
+  a higher sibling. Confirmed in the builder (`stringify` → `root->render( )`).
+- **generation-prompt.txt**: the `<DESCRIPT>` line now matches §5 (scaffolder's
+  `<library> - <sample name>` default) instead of the old `<entity> - <desc>`
+  that contradicted it.
+
+## Subagent cold-read probe (2026-07-24) — app 175 (first SimpleForm) + ref bug
+
+Fifth cold-read port: `sap.ui.layout.sample.SimpleFormToolbar` (app 175, first
+`sap.ui.layout.form.SimpleForm` — a new control), machine-green, **0 structural
+diffs**. Coverage **175**, `sap.ui.layout` 10→11. All SimpleForm members
+@since-checked by hand (≤ 1.71, no POST_171).
+
+- **app 142 fixed** — like 162, its nearest-neighbour data was wrong: it seeded
+  `Titanium`/`Walldorf`/`Star Street`… but its sample `bindElement`s
+  `/SupplierCollection/0` and the mock's only row is `Red Point Stores` / `Main
+  St 1618` / `Maintown`. Corrected all address fields to the real row-0 values.
+- **Recurring IMPROVISED-vs-NOTE confusion resolved in §5** (surfaced by 173/175
+  and flagged earlier): a pure prefix-drop that renders identically (0 diffs) is
+  `NOTE`; `IMPROVISED` only when the fold loses/changes data. Also documented the
+  `bindElement('/X/0')` → seed-fields-at-default-model-root idiom, and that
+  seeded values must be the actual mock row, verified — not a neighbour's.
+- **§5**: a camelCase JSON key mirrors verbatim into the ABAP field / binding
+  (`SupplierName`→`{SUPPLIERNAME}`, never `SUPPLIER_NAME`).
+
+Pattern across the probes: the written spec builds correct ports, but several
+**existing ports carry wrong seeded data copied from neighbours** (162, 142) —
+the "verify against the sample's own mock, not the nearest port" caution (§5) is
+now doubly proven.
+
+**Data-fidelity audit run (2026-07-24):** all 175 ports scanned, the
+single-record-flatten / named-model-scalar class verified value-by-value against
+each sample's actual mock. Result: **one more bug — app 119 (FixFlexVertical)**
+seeded `HT-1000.jpg` where its `{img>/products/pic1}` binding resolves to
+`HT-7777-large.jpg` (same wrong-neighbour copy as 162). Fixed. Everything else
+verified correct (image ports 006/031/046/162/173; supplier flatteners
+020/084/142/175; product flatteners 041/071/073/087/089/048; date/wizard
+017/018/101). The corpus is otherwise data-clean; multi-row verbatim tables were
+spot-checked only (row 0 correct) and are lower-risk.
+
+## Subagent cold-read probe (2026-07-24) — app 174 + json-to-abap truncation fix
+
+Fourth cold-read port: `sap.ui.table.sample.RowHighlights` (app 174), machine-green
+all gates. Coverage **174**, `sap.ui.table` 3→4. Chosen over the suggested
+TreeTable because that needs a recursive/arbitrary-depth tree binding ABAP can't
+type (new **CAPABILITIES ❌ row**) — a genuine boundary the probe pinned down.
+
+The friction log drove several fixes:
+
+- **`json-to-abap.mjs` truncation bug fixed** — it inferred a numeric column's
+  type from the **first row only**, so a decimal column whose row 0 is
+  integer-valued (`Price` 956) was typed `i` and every later decimal (`6.99`)
+  silently `Math.trunc`ated. Now it scans **all rows**, emits any decimal column
+  as a backtick string (no truncation) and warns. **app 170's data was corrupt
+  from this** (Width/Depth/Height `40.8→40`, Price `6.99→6`) — regenerated with
+  the fixed tool: dimensions now `TYPE string` (display-only text template, exact
+  decimals), Price packed with decimals preserved.
+- **`structural-diff` mechanics documented** (§6): it flags only *missing*
+  controls/attrs (extras never), compares the full **qname incl. prefix**, and a
+  diff is "declared" only when a deviation's `what` names the missing item
+  verbatim — so dropping a `press`/`change` handler for a binding must name that
+  attribute.
+- **CAPABILITIES**: recursive TreeTable binding ❌ (fixed-depth nesting stays ✅).
+- **§10 gotcha**: abaplint `commented_code` fires on English comments with `/` +
+  UI5 identifiers — reword.
+
+## Subagent cold-read probe (2026-07-24) — app 173 + a bug in its reference
+
+Third cold-read port: `sap.ui.layout.sample.VerticalLayout` (app 173, first
+`sap.ui.layout.VerticalLayout`), machine-green all gates. Coverage **173**,
+`sap.ui.layout` 9→10. The written spec was sufficient to build a correct port —
+the friction was that the **nearest reference (app 162, HorizontalLayout)
+contradicted the spec**, and the probe caught a real bug in it:
+
+- **app 162 fixed** — it seeded `pic1 = …/HT-1000.jpg` (host-relative), but the
+  shared demo mock `sap/ui/demo/mock/img.json` has `products.pic1 =
+  …/HT-7777-large.jpg`. Wrong image id **and** a relative URL against the
+  `sdk.openui5.org` asset-host rule. Corrected to the absolute `HT-7777-large`
+  URL (a model-seed value; no gate saw it — render-smoke mocks the model,
+  structural-diff ignores data). app 173 seeded the correct value.
+- **Doc fix** — §5 "Worked references" now warns that a reference shows an idiom,
+  not ground truth: the spec/CAPABILITIES/sample-source win on conflict, and
+  seeded data values must be checked against the sample's own mock, not the
+  neighbour.
+
+**Open maintainer question flagged by the probe:** the deviation *type* for a
+named-model prefix-fold is inconsistent across the corpus — §5 says `IMPROVISED`,
+CAPABILITIES frames a pure prefix-drop as the faithful standard (0 diffs), and
+ports split (006/173 `IMPROVISED`, 162 `NOTE`). A one-line policy — `NOTE` for a
+pure same-data prefix-drop, `IMPROVISED` only when the fold loses columns or
+resolves statically — would make it countable. Left for a maintainer decision,
+not rewritten unilaterally.
+
+## Non-sap.m POST_171 audit (2026-07-24) — systemic debt swept
+
+Prompted by the 128/132 finding, a full `@since` audit of all 61 non-`sap.m`
+ports (`src/02`–`src/05`) — the libraries the property gate is blind to — every
+member cross-checked against the OpenUI5 source, then independently re-verified
+before fixing. **Undeclared post-1.71 debt found and corrected in 5 ports:**
+
+| Port | Member(s) now declared | @since |
+|---|---|---|
+| 113 (`sap.tnt.InfoLabel`) | `InfoLabel.icon` | 1.74 |
+| 128 (`sap.tnt.SideNavigation`) | `NavigationListItem.selectable` | 1.116 |
+| 132 (`sap.tnt.SideNavigation`) | `NavigationListItem.selectable` + `tag` aggr. | 1.116 / 1.149 |
+| 164 (`sap.ui.table.Table`) | `Table.rowMode` aggregation | 1.119 |
+| 167 (`sap.tnt.ToolPage`) | `NavigationListItem.selectable`/`design`/`press`/`ariaHasPopup` (fixed a wrong @since citation) | 1.116 / 1.133 |
+
+Excluded as false positives (base-class relocation, still functionally pre-1.71):
+`NavigationListItem.expanded` (@since 1.121, the `NavigationListItemBase` split)
+and `.visible` (@since 1.52). Every other non-`sap.m` port uses only members
+`@since ≤ 1.71`. This closes the debt the blind gate had accumulated; the real
+fix (extending `properties.json`/`LIB_DIRS` to the other libraries so the gate
+enforces this automatically) remains the open follow-up, gated on the
+`generate_result` CI checkout including those libs' `src/`.
+
+## Subagent cold-read probe (2026-07-24) — app 172 + latent POST_171 debt found
+
+Second subagent cold-read: `sap.tnt.sample.SideNavigationUnselectableParents`
+(app 172, `src/05/b06`), machine-green (all gates incl. render-smoke), one
+POST_171 (`NavigationListItem.selectable` 1.116) + two LIVE_TEST. Coverage
+**172**, `sap.tnt` 7→8.
+
+The probe's manual `@since` discipline (forced by the property-gate blindness
+documented the same day) **found real latent debt**: apps **128 and 132** ship
+`NavigationListItem.selectable="false"` (@since 1.116) with **no POST_171
+declaration** — the blind gate had hidden it. Corrected both sidecars. (app 167
+already declared it.) This is exactly the failure the property-gate caveat warns
+about, now proven to have already happened; a broader `@since` sweep of all
+non-`sap.m` ports (`src/02`–`src/05`) is a worthwhile follow-up.
+
+Doc fixes from the friction log: the client-toast `t_arg` tuple order
+(object/method/template/arg, wire token `MESSAGE_TOAST`) added to the §5
+cheat-sheet; §5 now states a data-less-but-stateful app seeds its flag inline
+(no `model_init`) and that a scalar literal→two-way binding is faithful, not a
+structural-diff trigger (declare LIVE_TEST for the behaviour, not the diff).
+
+## Subagent cold-read probe (2026-07-24) — app 171, first `sap.ui.unified.Currency`
+
+A fresh subagent (its own context, no port memory) ported
+`sap.ui.unified.sample.CurrencyInTable` from the agent files alone, ran every
+gate green, and returned a friction log — the strongest test yet of "can an AI
+build from the docs". Result: **machine-green** (abaplint STANDARD+CLOUD,
+validate-meta, pattern-lint, structure-lint, structural-diff `--strict` 0
+undeclared / clean 1:1, property-check, render-smoke pass). Coverage **171**,
+`sap.ui.unified` 4→5. One deviation: LIVE_TEST on the nested-object bind.
+
+Independently re-verified before commit. The probe surfaced four real doc gaps,
+all fixed same change:
+
+- **Nested single (non-array) object bind** `{transactionAmount/size}` was
+  undocumented (only nested *arrays* were). New CAPABILITIES row (🧪) + §5
+  cheat-sheet: keep a nested ABAP structure, bind the relative sub-path
+  `{OBJ/FIELD}`, don't flatten. app 171 proves view-create; runtime bind LIVE_TEST.
+- **`property_gate` covers `sap.m` only** — `properties.json` holds no other
+  library, so for `src/02`–`src/05` the gate passes vacuously. §5/§6 now say so
+  and require a manual `@since` check against the OpenUI5 source. (Re-checked
+  169/170's non-sap.m members by hand: all ≤1.71 — `snappedTitleOnMobile` 1.63,
+  Grid/GridData 1.15, DynamicPage* 1.42 — no undeclared POST_171.)
+- **`path:` inside a raw binding string uses the upper-cased ABAP field name**
+  (`'exchangeRate'`→`'EXCHANGE_RATE'`), same as the brace form — no gate catches
+  a stale camelCase path. Added to §5 + the cheat-sheet typed-binding row.
+- **`<DESCRIPT>` rule** contradicted the scaffolder and had no offline
+  description source — §5 now endorses the scaffolder's `<library> - <name>`
+  default.
+
+## From-scratch probe (2026-07-24) — app 169, first `sap.ui.layout.Grid` port
+
+The real regeneration probe the agents-usability pass owed: **built entirely
+from the agent files**, from the OpenUI5 source (`oblomov-dev/fork-openui5`
+cloned into the session), no reference to another port (there was none — new
+control). Chosen breadth-first: `sap.ui.layout.sample.GridData`
+(`sap.ui.layout.Grid` + the `GridData` responsive layoutData — span / indent /
+linebreak / visibility), a single-view sample so `structural-diff` is meaningful.
+
+**Machine-green on the first serious pass** — abaplint STANDARD + CLOUD (0
+issues), validate-meta, pattern-lint (after fix, see below), structure-lint,
+structural-diff `--strict` (**0 undeclared**; 2 declared: the injected CSS
+`core:HTML` + the dropped `Slider.liveChange`), render-smoke (real
+`XMLView.create`, **pass**), property-check (0 post-1.71). Coverage **169**;
+`sap.ui.layout` 8→9. Deviations: 1 IMPROVISED (the eight Sliders'
+`.onSliderMoved` resizes the grid wrapper by jQuery DOM traversal — no
+server/bindable equivalent, dropped), 2 NOTE (CSS injected via `core:HTML`;
+`core:HTML` div/`FormattedText` markup written decoded).
+
+Two friction points a fresh AI hits — the docs were correct but not crisp, now
+fixed in the same change (AGENTS §5 "Idiom cheat-sheet" CSS row + CAPABILITIES
+"Custom CSS"):
+
+- **`core:HTML content` needs decoded markup.** The original view.xml carries
+  it entity-encoded (`&lt;div&gt;`); you must write the literal `<div>` because
+  the builder re-escapes on stringify — copying the entities double-escapes.
+- **Escaped braces `\{ \}` must be a backtick literal**, not a `|…|` template.
+  Backtick passes `\{` through to the serialized attribute; a pipe collapses
+  `\{`→`{` and re-crashes — the exact reverse of the typed-binding string (which
+  wants real braces and so uses the pipe). Verified against apps 026/028.
+
+A third, minor: `pattern-lint no-blank-before-shut` requires a blank line before
+the first `)->shut(` of a closing group — easy to miss from the prompt's terse
+"before shut". Fixed (15 warnings → 0); prompt wording left as-is (the rule
+gates it anyway).
+
+## Agents-usability pass (2026-07-24) — make the docs hand an AI the exact rule
+
+Focus: lower the barrier for an AI to build a port first-try from the agent
+files alone. Cold-read one weakly-covered port (app 164, `sap.ui.table`
+RowModes) against ground truth + the offline gate baseline (all green:
+validate-meta 168/168, pattern-lint 0/0, structural-diff `--strict` 0
+undeclared, structure-lint 0). Full write-up: **`probes/agents-usability-2026-07-24.md`**.
+
+Three idioms were correct in the docs but **buried in prose** (an AI had to
+re-derive the one-line action): named-model folding, typed/complex bindings with
+escaped braces, and the aggregation namespace. Fixed same change:
+
+- **`AGENTS.md` §5 — new "Idiom cheat-sheet"**: the ~12 recurring hard idioms as
+  copy-paste one-liners (`original → port → detail`), each pointing at its
+  long-form rule + proving app; the two ❌ boundaries (control factories,
+  app-authored JS formatters) stated once as "declare, don't improvise".
+- **`AGENTS.md` §5 — aggregation-namespace rule** made explicit (an aggregation
+  carries its XML tag's namespace = its parent control's; a wrong `ns` is an
+  unknown-aggregation node `render_smoke` rejects), app 164 as example.
+- **`scripts/generation-prompt.txt`** — three lines added to the first-read
+  prompt (aggregation ns, always-escape-`\{ \}`-in-`|…|`, one-default-model /
+  typed binding); re-spliced into `README.md`.
+- **overview app regenerated** — committed copy was stale (missing `ui5_only`),
+  the "system push carries stale generated files" gotcha; idempotent regen.
+
+No ports changed; coverage unchanged at 168. Owed next: a real from-scratch
+regeneration probe per thin library once OpenUI5 is reachable — cold-read
+catches doc-extraction friction, only a fresh port surfaces uncovered idioms.
+
 ## Batches b05–b07 — stress-test ports, maximally-diverse controls (2026-07-23) — 12 ports
 
 Three more diverse faithful batches to stress-test how far abab2UI5 reaches,

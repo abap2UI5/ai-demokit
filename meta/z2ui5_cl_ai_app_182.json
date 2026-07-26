@@ -1,0 +1,17 @@
+{
+  "class": "z2ui5_cl_ai_app_182",
+  "sample": "sap.ui.core.sample.TypeTimeAsTime",
+  "entity": "sap.ui.model.type.Time",
+  "file": "src/02/b10/z2ui5_cl_ai_app_182.clas.abap",
+  "batch": "b10",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    { "type": "IMPROVISED", "what": "The original model value is a JS Date object (UI5Date.getInstance()) and every TimeType binding has NO source formatOption (the type's default model format is a Date object). abap2UI5 cannot hold a JS Date object in the JSON model, so a source formatOption { source: { pattern: 'HH:mm:ss' } } is added to each TimeType binding and the field is a parseable time string ('13:30:00') - the abap2UI5 equivalent of the Date-object model. Without it view creation crashes ('Time must be a Date object'). Same idiom applies to any TypeTime/TypeDateTime sample whose model is an object; a plain string binding is not enough (CAPABILITIES date-object row)." },
+    { "type": "NOTE", "what": "The original seeds the current time; a fixed time (13:30:00) is used here so the port is deterministic - a client-only display value." }
+  ]
+}

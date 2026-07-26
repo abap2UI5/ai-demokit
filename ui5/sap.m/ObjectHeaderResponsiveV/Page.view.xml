@@ -1,0 +1,33 @@
+<mvc:View
+	height="100%"
+	controllerName="sap.m.sample.ObjectHeaderResponsiveV.Page"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m">
+	<ObjectHeader
+		id="oh1"
+		responsive="true"
+		binding="{/ProductCollection/0}"
+		icon="{ProductPicUrl}"
+		iconAlt="{Name}"
+		intro="{Description}"
+		title="{Name}"
+		backgroundDesign="Translucent"
+		class="sapUiResponsivePadding--header" >
+		<ObjectAttribute
+			title="Manufacturer"
+			text="{SupplierName}"/>
+		<ObjectAttribute
+			title="Dimension per unit"
+			text="{Width} x {Depth} x {Height} {DimUnit}"/>
+		<markers>
+			<ObjectMarker type="Favorite"/>
+			<ObjectMarker type="Flagged"/>
+		</markers>
+		<statuses>
+			<ObjectStatus
+				title="Approval"
+				text="Pending"
+				state="Warning"/>
+		</statuses>
+	</ObjectHeader>
+</mvc:View>

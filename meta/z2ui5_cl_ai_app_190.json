@@ -1,0 +1,14 @@
+{
+  "class": "z2ui5_cl_ai_app_190",
+  "sample": "sap.m.sample.FlexBoxRenderType",
+  "entity": "sap.m.FlexBox",
+  "file": "src/01/b17/z2ui5_cl_ai_app_190.clas.abap",
+  "batch": "b17",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": []
+}

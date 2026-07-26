@@ -1,0 +1,52 @@
+{
+  "class": "z2ui5_cl_ai_app_233",
+  "sample": "sap.m.sample.InitialPagePattern",
+  "entity": "sap.m.InitialPagePattern",
+  "file": "src/01/b18/z2ui5_cl_ai_app_233.clas.abap",
+  "batch": "b18",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "the Input value-help opens the SelectDialog client-side via control_by_id open; the SelectDialog search filters client-side via binding_call; suggestion-select / submit / value-help-confirm round-trip to resolve the picked purchase and redraw"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "The five core:Fragment references of App.view.xml (Input in the heading, HeaderContent in headerContent, and IllustratedMessage/ProductsTable/SupplierDetails in sections) are inlined 1:1 into the single port view - abap2UI5 builds one XML view, there is no runtime Fragment reference. So core:Fragment is absent (5 dropped) and every fragment's content is rendered directly."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "The dynamic /selectedPurchase JSON object is flattened onto the single default model as root-level fields: has_selection (drives the ObjectPageLayout showHeaderContent/toggleHeaderOnTitleClick and every section visible expression, replacing the object-truthiness !!${/selectedPurchase}), sel_category/sel_subcategory/sel_suppliername/sel_paymenttype/sel_deliverystatus (HeaderContent), sel_delivery_state (ObjectStatus) and sel_products (the products Table). The controller's _setSelectedPurchaseAndUpdateInput selection logic is reproduced server-side in set_selection: the entered/selected PurchaseID resolves a purchase from t_purchases and seeds these fields (or forces has_selection=false so the IllustratedMessage \"not found\" state shows). The text and Sub-Category header bindings therefore bind the flattened fields instead of {/selectedPurchase/...}."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "i18n named-model bindings folded to literal English values from i18n.properties: the pure {i18n>...} property bindings on text (Title Receipt Information/Delivery Status/Products, column-header Product/Dimensions/Quantity/Price), title (SelectDialog Purchases) and placeholder (Input Enter product) are resolved statically (loses runtime language switching, renders identically in English). The IllustratedMessage title/description/illustrationType keep their expression binding {= ${/inputPopulated} ? ... : ... } with the i18n operands replaced by the literal strings. The Label ...:'-suffixed i18n texts are likewise inlined."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "formatter.deliveryStatusState (Shipped->Success, Failed Shipping->Error, else None) is business logic; per the thin-frontend principle it moves out of the frontend formatter into the ABAP model (deliverystatus_state, computed in model_init per purchase) and the ObjectStatus state binds that precomputed field (sel_delivery_state) directly instead of a formatter binding."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "handleValueHelpSearch / _getCombinedFilter builds an OR filter of PurchaseID Contains + SupplierName Contains; the port's SelectDialog search wires a single binding_call filter on SUPPLIERNAME Contains ${$parameters>/value} - the compound OR over two fields is simplified to the supplier field. The suggestion Input's setFilterFunction (case-insensitive contains over key+text) is UI5's built-in suggestion filtering and is not reproduced explicitly."
+    },
+    {
+      "type": "NOTE",
+      "what": "Namespace-prefix representation: the port declares xmlns=sap.m (default) plus xmlns:uxap=sap.uxap, so the uxap controls are emitted uxap:-prefixed. In the originals ObjectPageLayout/ObjectPageDynamicHeaderTitle (App.view.xml) and the IllustratedMessage-fragment ObjectPageSection/ObjectPageSubSection are unprefixed (their file's default xmlns is sap.uxap), while the ProductsTable/SupplierDetails fragments already use the uxap: prefix. Same library, identical rendering; structural-diff sees uxap:ObjectPageSection vs ObjectPageSection (and likewise ObjectPageLayout/ObjectPageDynamicHeaderTitle/ObjectPageSubSection) as control missing/extra. m:IllustratedMessage keeps its m: prefix to match the original."
+    },
+    {
+      "type": "POST_171",
+      "what": "sap.m.IllustratedMessage (control since UI5 1.98, with illustrationType/title/description) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.98 to render it. property-check does not track IllustratedMessage members, so this is declared by policy, not gate-forced."
+    },
+    {
+      "type": "POST_171",
+      "what": "sap.m.Input.autocomplete (since UI5 1.108) is newer than 1.71 but kept 1:1 (autocomplete='false'); the app needs a UI5 release >= 1.108 to render it. Not tracked by property-check (declared by policy)."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "unverified in a running system: (a) Input submit resolves the entered PurchaseID (two-way bound input_value) and redraws with the selected purchase; (b) suggestionItemSelected transports the picked ListItem key via ${$parameters>/selectedItem}.getKey(); (c) valueHelpRequest opens the SelectDialog client-side via control_by_id open; (d) the SelectDialog search (binding_call filter) and confirm (${$parameters>/selectedItem}.getDescription()) resolve and redraw; (e) the ObjectPageLayout/IllustratedMessage/Table render inside the headless harness as they do in the running app."
+    }
+  ]
+}

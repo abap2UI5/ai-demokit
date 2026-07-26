@@ -14,6 +14,10 @@
     {
       "type": "NOTE",
       "what": "Breadth-probe (cross-library test). Ten sap.tnt InfoLabels across color schemes / render modes / icon / displayOnly, in FlexBox rows."
+    },
+    {
+      "type": "POST_171",
+      "what": "sap.tnt.InfoLabel.icon (@since 1.74) is used 1:1 (one InfoLabel carries icon='sap-icon://home-share'). Newer than UI5 1.71; declared per the property-171 policy. Previously undeclared because the property gate is blind to sap.tnt; found by the non-sap.m @since audit 2026-07-24."
     }
   ],
   "structural_diff": {

@@ -1,0 +1,17 @@
+{
+  "class": "z2ui5_cl_ai_app_203",
+  "sample": "sap.m.sample.OverflowToolbarTokenizer",
+  "entity": "sap.m.OverflowToolbarTokenizer",
+  "file": "src/01/b17/z2ui5_cl_ai_app_203.clas.abap",
+  "batch": "b17",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    { "type": "IMPROVISED", "what": "The imperative token interaction is dropped: the tokenDelete event handler on all four OverflowToolbarTokenizers and the press handler on the 'Add Token' Button are removed. The original controller mutates static Token child controls via addToken/removeToken plus a MessageToast - imperative control mutation over static (non-bound) tokens, not expressible without inventing a bound token model. All controls, tokens and every other attribute are kept 1:1." },
+    { "type": "POST_171", "what": "sap.m.OverflowToolbar ariaHasPopup (since 1.79.0) is kept 1:1 from the original view; needs a UI5 release >= 1.79 to render." }
+  ]
+}
