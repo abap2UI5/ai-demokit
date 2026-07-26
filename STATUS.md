@@ -649,10 +649,14 @@ generated class at generation time):
 - **Shell switch** (next to Tree view) toggles the `sap.m.Shell` letterboxing
   (`appWidthLimited`), two-way bound, client-side.
 - **Open column split into two buttons**: the first starts the abap2UI5 app
-  directly in a new tab (`cs_event-open_new_tab` via `_event_client` — the start
-  URL is same-origin, so it passes `isValidRedirectURL`); the second opens the
-  reference-links popover, now trimmed to the four external links (OpenUI5 API,
-  source, live sample, ABAP class). The same two buttons sit on every tree leaf.
+  **in-page from the backend** via `client->nav_app_call` (server event
+  `START_APP`). The overview enables **hash routing** (UI5 Router style) once
+  with `client->set_nav_routing( )`; the framework then pushes the bookmarkable
+  route `#/app/<CLASS>` for the called app, and the native browser Back/Forward
+  buttons navigate between the overview and the launched apps — no new tab, no
+  page reload. The second button opens the reference-links popover, trimmed to
+  the four external links (OpenUI5 API, source, live sample, ABAP class). The
+  same two buttons sit on every tree leaf.
 
 Follow-up refinements (2026-07-22): the **Release** column is renamed **Since**
 and only shows a value when higher than the control's own since (otherwise it

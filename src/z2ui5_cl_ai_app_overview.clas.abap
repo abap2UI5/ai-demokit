@@ -24,8 +24,12 @@
 "! links (OpenUI5 API, OpenUI5 source, live fullscreen sample, the generated ABAP
 "! class on GitHub, each opening in a new tab) AND the port's generation info -
 "! checked status, a post-1.71 note, and the generation notes; the second starts
-"! this abap2UI5 app directly in a new tab (open_new_tab; the start URL is
-"! same-origin). The same two buttons sit on every tree sample leaf (links only,
+"! this abap2UI5 app IN-PAGE from the backend via client->nav_app_call (server
+"! event START_APP). With hash routing on, the framework pushes the route
+"! '#/app/<CLASS>' (UI5 Router style) - it replaces the overview in the same tab
+"! and the native browser Back/Forward buttons navigate between them, bookmarkable,
+"! so no new tab and no page reload (the overview enabled routing via
+"! client->set_nav_routing). The same two buttons sit on every tree sample leaf (links only,
 "! the tree model carries no info). The Rating column is a 1-5 "by feel" score of
 "! how much attention a port deserves (not coloured): app complexity, how heavily
 "! it was reworked/corrected (IMPROVISED/DROPPED_171/SUBSET_DATA/NOTE), whether it
@@ -99,6 +103,7 @@ CLASS z2ui5_cl_ai_app_overview DEFINITION PUBLIC.
         ui5_url   TYPE string,
         abap_url  TYPE string,
         start_url TYPE string,
+        class     TYPE string,
         has_link  TYPE abap_bool,
       END OF ty_s_sample,
       BEGIN OF ty_s_control,
@@ -147,6 +152,11 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
 
     me->client = client.
     IF client->check_on_init( ).
+      " Enable hash-based app routing (UI5 Router style) for this session: the
+      " URL hash mirrors the running app as a bookmarkable route '#/app/<CLASS>'
+      " and the native browser Back/Forward buttons navigate between the
+      " overview and the launched apps - no new tab, no page reload.
+      client->set_nav_routing( ).
       " default filtering (all on) + Shell on, set once so later round-trips keep
       " whatever the user toggled (the flags are two-way bound)
       shell_on        = abap_true.
@@ -164,6 +174,8 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
 
 
   METHOD on_event.
+
+    DATA li_app TYPE REF TO z2ui5_if_app.
 
     CASE client->get( )-event.
 
@@ -258,6 +270,22 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
 
         client->popover_display( xml   = links->stringify( )
                                  by_id = client->get_event_arg( 8 ) ).
+
+      WHEN `START_APP`.
+        " Launch the selected abap2UI5 app from the BACKEND via nav_app_call.
+        " With hash routing active (set_nav_routing), the framework pushes the
+        " route '#/app/<CLASS>' for the called app, so the app opens in-page and
+        " the native browser Back button returns to the overview (bookmarkable,
+        " no new tab, no page reload). The class is passed as the event arg.
+        DATA(lv_class) = to_upper( client->get_event_arg( ) ).
+        IF lv_class IS NOT INITIAL.
+          TRY.
+              CREATE OBJECT li_app TYPE (lv_class).
+              client->nav_app_call( li_app ).
+            CATCH cx_root.
+              client->message_toast_display( |App { lv_class } could not be started| ).
+          ENDTRY.
+        ENDIF.
 
     ENDCASE.
 
@@ -640,8 +668,12 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                                 " the reference links AND the port's generation info (checked,
                                 " post-1.71, notes) - the pressed button's runtime id
                                 " ($event.oSource.sId) anchors it; second launches the abap2UI5
-                                " app directly in a new tab (open_new_tab - the start URL is
-                                " same-origin, so it passes isValidRedirectURL)
+                                " app IN-PAGE from the backend via client->nav_app_call (server
+                                " event START_APP). With hash routing on, the framework pushes the
+                                " route '#/app/<CLASS>' (UI5 Router style) - it replaces the
+                                " overview in the same tab, and the native browser Back/Forward
+                                " buttons navigate between them, bookmarkable (no new tab, no
+                                " page reload)
                                 )->open( `HBox`
                                     )->leaf( `Button`
                                         )->a( n = `icon`    v = `sap-icon://chain-link`
@@ -653,8 +685,8 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                                     )->leaf( `Button`
                                         )->a( n = `icon`    v = `sap-icon://action`
                                         )->a( n = `type`    v = `Transparent`
-                                        )->a( n = `tooltip` v = `Start this abap2UI5 app in a new tab`
-                                        )->a( n = `press`   v = client->_event_client( val = client->cs_event-open_new_tab t_arg = VALUE #( ( `${START_URL}` ) ) )
+                                        )->a( n = `tooltip` v = `Start this abap2UI5 app - opens in the same tab; use the browser Back button to return`
+                                        )->a( n = `press`   v = client->_event( val = `START_APP` t_arg = VALUE #( ( `${CLASS}` ) ) )
 
                                 )->shut(
                             )->shut(
@@ -706,9 +738,9 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                                 )->leaf( `Button`
                                     )->a( n = `icon`    v = `sap-icon://action`
                                     )->a( n = `type`    v = `Transparent`
-                                    )->a( n = `tooltip` v = `Start this abap2UI5 app in a new tab`
+                                    )->a( n = `tooltip` v = `Start this abap2UI5 app - opens in the same tab; use the browser Back button to return`
                                     )->a( n = `visible` v = `{HAS_LINK}`
-                                    )->a( n = `press`   v = client->_event_client( val = client->cs_event-open_new_tab t_arg = VALUE #( ( `${START_URL}` ) ) ) ).
+                                    )->a( n = `press`   v = client->_event( val = `START_APP` t_arg = VALUE #( ( `${CLASS}` ) ) ) ).
 
     client->view_display( view->stringify( ) ).
 
@@ -1400,6 +1432,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.44.0`
+        ui5_only = abap_true
         notes = `NOTE: the Select's literal selectedKey="1" is replaced by a two-way binding {SELECTED_KEY} (seeded '1'); scrollStepByItem on both HeaderContainers is now a pure client-side expression binding over it` &&
                  ` ({= ${SELECTED_KEY} === 'px' ? 0 : +${SELECTED_KEY} }), so the original Select's change handler (onScrollByItemChange) is dropped - no round-trip. This is the prefer-a-bindable-property/expression` &&
                  ` pattern (like the app 019). The original controller reads oEvent.getParameter('selectedItem').getKey(), which has no public $parameters path (selectedItem is a control; reading private control` &&
@@ -1415,6 +1448,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.44.0`
+        ui5_only = abap_true
         notes = `LIVE-TEST: NumericContent presses show a client MessageToast (original press handler). Two vertical HeaderContainers — one of eight NumericContents, one of five TileContents (each wrapping a` &&
                  ` NumericContent) — reproduced 1:1.`
         use_ec = abap_true
@@ -1642,6 +1676,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         since = `1.21.2`
         release = `1.124`
         release_post171 = abap_true
+        ui5_only = abap_true
         is_post171 = abap_true
         notes = `NOTE: the sample opens a sap.m.MessageBox from its controller; there is no such control in the view. It is driven by two buttons wired to events that call client->message_box_display - the documented` &&
                  ` 1:1 path (CAPABILITIES.md marks sap.m.MessageBox as expressible with app 036 as its evidence port), not a workaround. // POST-1.71: ariaHasPopup="Dialog" on both buttons (since UI5 1.84) is newer` &&
@@ -1759,7 +1794,8 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.m`              control = `sap.m.MessageToast`                    name = `MessageToast`                        class = `z2ui5_cl_ai_app_037` path = `src/01/b03/z2ui5_cl_ai_app_037.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        since = `1.9.2` )
+        since = `1.9.2`
+        ui5_only = abap_true )
       ( module = `sap.m`              control = `sap.m.MessageView`                     name = `MessageViewMessageManager`           class = `z2ui5_cl_ai_app_038` path = `src/01/b03/z2ui5_cl_ai_app_038.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -2533,6 +2569,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.63`
+        ui5_only = abap_true
         is_deprecated = abap_true
         dep_text = `Deprecated since 1.129: replaced by sap.m.plugins.UploadSetwithTable`
         notes = `IMPROVISED: Breadth-probe: a minimal sap.m.upload.UploadSet (file upload list) with 3 pre-populated items + a toolbar. The actual upload backend, the full toolbar and the item action buttons are` &&
@@ -2542,6 +2579,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.10`
+        ui5_only = abap_true
         notes = `NOTE: element binding kept 1:1 - a one-record structure /S_SUPPLIER instead of {/SupplierCollection/0}. // NOTE: URLHelper.triggerTel/triggerSms/triggerEmail/redirect map 1:1 to the URLHELPER frontend` &&
                  ` action (cs_event-urlhelper): TRIGGER_TEL/TRIGGER_SMS take the number as a plain string param, TRIGGER_EMAIL/REDIRECT take a { EMAIL/URL, ... } object-literal t_arg (get_t_arg emits {-prefixed args` &&
                  ` raw as UI5 event-handler object literals). open_new_tab is NOT used - it is same-origin-only (isValidRedirectURL).`
@@ -2588,10 +2626,12 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.m`              control = `sap.ui.core.ContainerPadding`          name = `ContainerNoPadding`                  class = `z2ui5_cl_ai_app_087` path = `src/01/b10/z2ui5_cl_ai_app_087.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        ui5_only = abap_true
         notes = `NOTE: the /ProductCollectionStats/Counts values are flattened to the default model fields /TOTAL, /OK, /HEAVY, /OVERWEIGHT (verbatim counts).` )
       ( module = `sap.m`              control = `sap.ui.core.StandardMargins`           name = `StandardMarginsAll`                  class = `z2ui5_cl_ai_app_088` path = `src/01/b11/z2ui5_cl_ai_app_088.clas.abap`
         score = 1
-        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
+        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        ui5_only = abap_true )
       ( module = `sap.tnt`            control = `sap.f.DynamicPage`                     name = `InfoLabelInDynamicPage`              class = `z2ui5_cl_ai_app_143` path = `src/05/b05/z2ui5_cl_ai_app_143.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -2762,6 +2802,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.ui.core`        control = `sap.ui.core.BusyIndicator`             name = `BusyIndicator`                       class = `z2ui5_cl_ai_app_147` path = `src/02/b07/z2ui5_cl_ai_app_147.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        ui5_only = abap_true
         notes = `LIVE-TEST: Each button opened the global sap.ui.core.BusyIndicator with a different delay/duration (show(delay) + setTimeout(hide)); reproduced here as client-side MessageToasts describing the` &&
                  ` intended delay/duration (the global busy overlay and timers are not reproduced server-side).`
         use_ec = abap_true
@@ -2830,22 +2871,26 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.ui.core`        control = `sap.ui.core.theming.Parameters`        name = `BasicThemeParameters`                class = `z2ui5_cl_ai_app_131` path = `src/02/b03/z2ui5_cl_ai_app_131.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        ui5_only = abap_true
         notes = `NOTE: The sample itself is just a MessageStrip + Link pointing at the Theme Parameter Toolbox (the real demo content lives in that external tool); reproduced 1:1.` )
       ( module = `sap.ui.core`        control = `sap.ui.model.type.Currency`            name = `TypeCurrency`                        class = `z2ui5_cl_ai_app_135` path = `src/02/b04/z2ui5_cl_ai_app_135.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        ui5_only = abap_true
         notes = `NOTE: Composite data-type binding paradigm: the Currency type is pulled in via core:require and every Input/Text binds a composite parts:['/amount','/currency'] with type:'CurrencyType' plus` &&
                  ` formatOptions (showMeasure/showNumber/preserveDecimals/currencyCode/style) 1:1. The two model fields amount ('123456789.123') and currency ('USD') are serialized by abap2UI5 as /AMOUNT and /CURRENCY;` &&
                  ` the paths are generated via _bind (never hardcoded).` )
       ( module = `sap.ui.core`        control = `sap.ui.model.type.Date`                name = `TypeDateAsString`                    class = `z2ui5_cl_ai_app_181` path = `src/02/b10/z2ui5_cl_ai_app_181.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        ui5_only = abap_true
         notes = `NOTE: Data-type binding paradigm: sap.ui.model.type.Date is pulled via core:require={DateType: 'sap/ui/model/type/Date'} and every DatePicker/Text keeps the original { path, type: 'DateType',` &&
                  ` formatOptions: { style, source: { pattern: 'yyyy-MM-dd' } } } binding 1:1 as a raw binding-info string (braces escaped, path via _bind). The single model field is a yyyy-MM-dd string. // NOTE: The` &&
                  ` original seeds the current date (UI5Date.getInstance().toISOString().slice(0,10)); a fixed date (2026-07-24) is used here so the port is deterministic - a client-only display value.` )
       ( module = `sap.ui.core`        control = `sap.ui.model.type.DateTime`            name = `TypeDateTime`                        class = `z2ui5_cl_ai_app_183` path = `src/02/b10/z2ui5_cl_ai_app_183.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        ui5_only = abap_true
         notes = `IMPROVISED: The original model value /dtValue is a JS Date object (UI5Date.getInstance()) and every DateTimeType binding has NO source formatOption (the type's default model format is a Date object).` &&
                  ` abap2UI5 cannot hold a JS Date object in the JSON model, so a source formatOption { source: { pattern: 'yyyy-MM-dd HH:mm:ss' } } is added to each DateTimeType binding and the field dtvalue is a` &&
                  ` parseable datetime string ('2026-07-24 13:30:00') - the abap2UI5 equivalent of the Date-object model. Without it view creation crashes ('Date must be a JavaScript or UI5Date date object'). The` &&
@@ -2856,23 +2901,27 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.ui.core`        control = `sap.ui.model.type.FileSize`            name = `TypeFileSize`                        class = `z2ui5_cl_ai_app_180` path = `src/02/b10/z2ui5_cl_ai_app_180.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        ui5_only = abap_true
         notes = `NOTE: Data-type binding paradigm: the FileSize type module is pulled in with core:require='{FileSizeType: sap/ui/model/type/FileSize}' and the Input/Text bindings carry type:'FileSizeType' plus` &&
                  ` formatOptions (min/maxIntegerDigits, min/maxFractionDigits) 1:1. The single model field 'fileSize' (initial 100, kept numeric like the sample's JSON) is serialized by abap2UI5 as /FILESIZE, so the` &&
                  ` original raw '/fileSize' paths are written as '/FILESIZE'.` )
       ( module = `sap.ui.core`        control = `sap.ui.model.type.Float`               name = `TypeFloat`                           class = `z2ui5_cl_ai_app_179` path = `src/02/b10/z2ui5_cl_ai_app_179.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        ui5_only = abap_true
         notes = `NOTE: Data-type binding paradigm: the Float type module is pulled in with core:require='{FloatType: sap/ui/model/type/Float}' and the Input/Text bindings carry type:'FloatType' plus formatOptions` &&
                  ` (min/maxIntegerDigits, min/maxFractionDigits, preserveDecimals) 1:1. The single model field 'number' (initial '123.456', kept as a string like the sample's JSON) is serialized by abap2UI5 as /NUMBER,` &&
                  ` so the original raw '/number' paths are written as '/NUMBER'.` )
       ( module = `sap.ui.core`        control = `sap.ui.model.type.Integer`             name = `TypeInteger`                         class = `z2ui5_cl_ai_app_129` path = `src/02/b03/z2ui5_cl_ai_app_129.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        ui5_only = abap_true
         notes = `NOTE: Data-type binding paradigm: the Integer type module is pulled in with core:require='{IntegerType: sap/ui/model/type/Integer}' and the Input/Text bindings carry type:'IntegerType' plus` &&
                  ` formatOptions (min/maxIntegerDigits) 1:1. The single model field 'number' (initial '123') is serialized by abap2UI5 as /NUMBER, so the original raw '/number' paths are written as '/NUMBER'.` )
       ( module = `sap.ui.core`        control = `sap.ui.model.type.Time`                name = `TypeTimeAsTime`                      class = `z2ui5_cl_ai_app_182` path = `src/02/b10/z2ui5_cl_ai_app_182.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        ui5_only = abap_true
         notes = `IMPROVISED: The original model value is a JS Date object (UI5Date.getInstance()) and every TimeType binding has NO source formatOption (the type's default model format is a Date object). abap2UI5` &&
                  ` cannot hold a JS Date object in the JSON model, so a source formatOption { source: { pattern: 'HH:mm:ss' } } is added to each TimeType binding and the field is a parseable time string ('13:30:00') -` &&
                  ` the abap2UI5 equivalent of the Date-object model. Without it view creation crashes ('Time must be a Date object'). Same idiom applies to any TypeTime/TypeDateTime sample whose model is an object; a` &&
@@ -2881,6 +2930,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.ui.integration` control = `sap.ui.integration.Card`               name = `CardsLayout`                         class = `z2ui5_cl_ai_app_118` path = `src/02/b01/z2ui5_cl_ai_app_118.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        ui5_only = abap_true
         notes = `IMPROVISED: Breadth-probe of the declarative-card paradigm: a sap.ui.integration.widgets.Card whose whole UI comes from a JSON manifest. The manifest is carried as an ABAP string and bound to the` &&
                  ` Card. The original binds several manifests from a named model; here one inline List-card manifest probes whether abap2UI5 can drive an integration card at all.` )
       ( module = `sap.ui.integration` control = `sap.ui.integration.widgets.Card`       name = `CardExplorer`                        class = `z2ui5_cl_ai_app_149` path = `src/02/b08/z2ui5_cl_ai_app_149.clas.abap`
@@ -3390,6 +3440,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                       ui5_url   = ls_app-ui5_url
                       abap_url  = ls_app-abap_url
                       start_url = ls_app-start_url
+                      class     = ls_app-class
                       has_link  = abap_true ) TO <control>-nodes.
 
     ENDLOOP.
