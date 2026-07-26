@@ -289,6 +289,25 @@ const RULES = [
       return out;
     },
   },
+  {
+    id: 'duplicate-for-iterator',
+    level: 'error',
+    doc: 'the same `FOR <n> = …` iterator name used twice in ONE method — the 702 downport materializes each as `DATA <n> TYPE i`, so the downported class (and the e2e transpiler) fails with "Variable name already defined". Use distinct names (i, j, k) per VALUE block; app 234, 2026-07-26',
+    find(content) {
+      const out = [];
+      for (const mm of content.matchAll(/\bMETHOD\b[\s\S]*?\bENDMETHOD\b/g)) {
+        const seen = new Map(); // name -> first index (relative to method)
+        for (const m of mm[0].matchAll(/\bFOR\s+(\w+)\s*=/g)) {
+          if (seen.has(m[1])) {
+            out.push({ line: lineOf(content, mm.index + m.index), text: `iterator "${m[1]}" reused (first at line ${lineOf(content, mm.index + seen.get(m[1]))})` });
+          } else {
+            seen.set(m[1], m.index);
+          }
+        }
+      }
+      return out;
+    },
+  },
 ];
 
 function grepLines(re) {

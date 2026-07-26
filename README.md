@@ -10,12 +10,14 @@
 
 _Last generated: <!-- last-run -->2026-07-20 06:21 UTC<!-- /last-run -->_
 
-> **This repository is AI-generated.** From every official **`sap.m`** UI5 demo
-> kit sample whose control **exists since UI5 1.71** and is **not deprecated**
-> (legacy-free ready) it automatically builds an abap2UI5 app, exposing the
-> **functional gaps** between what UI5 offers and what abap2UI5 can already
-> express — so they can be closed. Deprecated or newer controls are listed as
-> out of scope; other UI5 libraries follow later.
+> **This repository is AI-generated.** From every official UI5 demo kit
+> sample of the ten covered libraries (**`sap.m`**, `sap.f`, `sap.ui.core`,
+> `sap.ui.layout`, `sap.ui.table`, `sap.ui.unified`, `sap.uxap`, `sap.tnt`,
+> `sap.ui.codeeditor`, `sap.ui.integration`) whose control **exists since
+> UI5 1.71** and is **not deprecated** (legacy-free ready) it automatically
+> builds an abap2UI5 app, exposing the **functional gaps** between what UI5
+> offers and what abap2UI5 can already express — so they can be closed.
+> Deprecated or newer controls are listed as out of scope.
 >
 > See the result in **[api.md](api.md)**, or try it live — two ways:
 > - **In your browser (no backend):** open the GitHub Pages demo at
@@ -31,10 +33,12 @@ _Last generated: <!-- last-run -->2026-07-20 06:21 UTC<!-- /last-run -->_
 A coding agent runs the pipeline:
 
 1. **Read** — clone [OpenUI5](https://github.com/SAP/openui5) and scan every
-   `sap.m` demo kit sample (`src/sap.m/test/sap/m/demokit/sample/<Name>/`).
+   demo kit sample of the covered libraries
+   (`src/<library>/test/<library>/demokit/sample/<Name>/`).
 2. **Generate** — rebuild each sample 1:1 as an abap2UI5 app (`z2ui5_if_app`),
-   filed under `src/01` in batch subpackages (`b01`, `b02`, …) — one batch of
-   related samples per package.
+   filed by library under `src/<NN>` (`src/01` = `sap.m`, see AGENTS §3) in
+   batch subpackages (`b01`, `b02`, …) — one batch of related samples per
+   package.
 3. **Store templates** — keep the original UI5 JS/XML templates in
    [`ui5/`](ui5), one folder per sample — only ported samples are archived;
    each batch copies its samples over from the OpenUI5 checkout.
@@ -141,9 +145,10 @@ Rules:
 
 </details>
 
-The focus is currently on **`sap.m`** — all ports live under `src/01`, grouped
-into batch subpackages `src/01/b<nn>` (one generation/review batch = one ABAP
-package). Other UI5 libraries are brought back in later.
+Ports are filed by the sample's UI5 library — `src/01` (`sap.m`), `src/02`
+(`sap.ui.*`), `src/03` (`sap.uxap`), `src/04` (`sap.f`), `src/05` (`sap.tnt`)
+— and grouped into batch subpackages `src/<NN>/b<nn>` (one generation/review
+batch = one ABAP package); see AGENTS §3 for the folder table.
 
 ## Compatibility
 
@@ -176,7 +181,8 @@ the coverage and the structural diff read from.
 | [`AGENTS.md`](AGENTS.md) | The complete generation rulebook (conventions, skeleton, gates) |
 | [`CAPABILITIES.md`](CAPABILITIES.md) | What abap2UI5 can express — each entry backed by a proving port or a source-verified trace |
 | [`TRAINING.md`](TRAINING.md) | The improvement loop: batches, quality ladder, reference repositories |
-| [`STATUS.md`](STATUS.md) | Point-in-time state + the open findings backlog |
+| [`STATUS.md`](STATUS.md) | Generated point-in-time state + the open findings backlog |
+| [`STATUS-history.md`](STATUS-history.md) | The chronological journal (batches, probes, audits) |
 | [`api.md`](api.md) | One row per demo kit sample: ported, backlog or out of scope |
 | [`meta/`](meta) | One sidecar per port — status, checked, typed deviations |
 | [`pr/`](pr) | Forwardable improvement requests for the abap2UI5 framework, distilled from porting gaps |
@@ -188,24 +194,24 @@ have an abap2UI5 port.
 
 <!-- coverage:start -->
 
-Overall **246 / 641** in-scope demo kit samples ported (38.4 %).
+Overall **246 / 639** in-scope demo kit samples ported (38.5 %).
 **In scope**: samples whose control exists since **UI5 1.71** and is **not deprecated** (legacy-free ready).
-Out of scope: 66 of 707 samples — 16 on deprecated controls, 21 on controls newer than 1.71, 29 without control metadata.
+Out of scope: 50 of 689 samples — 18 on deprecated controls, 29 on controls newer than 1.71, 3 demo apps without an owning control.
 Control metadata from OpenUI5 **1.151.0**.
 
 | Module | Samples | In scope | Ported | Coverage | |
 |--------|--------:|---------:|-------:|---------:|---|
 | `sap.ui.codeeditor` | 2 | 2 | 2 | 100.0 % | ██████████ |
 | `sap.tnt` | 17 | 17 | 11 | 64.7 % | ██████░░░░ |
+| `sap.f` | 41 | 32 | 19 | 59.4 % | ██████░░░░ |
 | `sap.ui.unified` | 21 | 21 | 12 | 57.1 % | ██████░░░░ |
 | `sap.ui.integration` | 4 | 4 | 2 | 50.0 % | █████░░░░░ |
-| `sap.f` | 42 | 41 | 19 | 46.3 % | █████░░░░░ |
-| `sap.ui.core` | 48 | 36 | 16 | 44.4 % | ████░░░░░░ |
-| `sap.m` | 446 | 403 | 149 | 37.0 % | ████░░░░░░ |
-| `sap.ui.layout` | 62 | 59 | 18 | 30.5 % | ███░░░░░░░ |
-| `sap.ui.table` | 18 | 17 | 5 | 29.4 % | ███░░░░░░░ |
-| `sap.uxap` | 47 | 41 | 12 | 29.3 % | ███░░░░░░░ |
-| **Total** | **707** | **641** | **246** | **38.4 %** | ████░░░░░░ |
+| `sap.ui.core` | 37 | 36 | 16 | 44.4 % | ████░░░░░░ |
+| `sap.m` | 444 | 404 | 149 | 36.9 % | ████░░░░░░ |
+| `sap.ui.layout` | 61 | 61 | 18 | 29.5 % | ███░░░░░░░ |
+| `sap.ui.table` | 17 | 17 | 5 | 29.4 % | ███░░░░░░░ |
+| `sap.uxap` | 45 | 45 | 12 | 26.7 % | ███░░░░░░░ |
+| **Total** | **689** | **639** | **246** | **38.5 %** | ████░░░░░░ |
 
 <!-- coverage:end -->
 

@@ -75,9 +75,62 @@ const sinceLeq171 = (since) => {
 // -> 'in' | 'deprecated' | 'newer' | 'unknown'. An entity containing
 // '.sample.' is the sample id itself (demo apps without an owning control,
 // e.g. AIIntegration) — no control metadata, so scope is unknown.
+// Samples are enriched from ui5/properties.json BEFORE this runs (see
+// enrichFromProperties below), so a null since/deprecated from the snapshot
+// no longer silently passes controls newer than 1.71 (pr/scope-since-from-source).
 const scopeOf = (s) =>
   !s.entity || s.entity.includes('.sample.') ? 'unknown'
     : s.deprecated ? 'deprecated' : sinceLeq171(s.since) ? 'in' : 'newer';
+
+// --- scope fallback: control-level @since/@deprecated from the source scan --
+// ui5/universe.json carries since:null for most controls (the fork checkout
+// has no generated api.json), which made scopeOf blind — sinceLeq171(null)
+// passed controls newer than 1.71 (sap.f.SidePanel @1.107 shipped as app 136
+// that way). ui5/properties.json now carries each control's class-level
+// @since/@deprecated parsed from the OpenUI5 sources (generate-properties.mjs);
+// fill the snapshot's nulls from it so the scope verdict matches
+// scripts/scope-of.mjs offline.
+const PROPS_FILE = path.join(ROOT, 'ui5', 'properties.json');
+const propsControls = fs.existsSync(PROPS_FILE)
+  ? JSON.parse(fs.readFileSync(PROPS_FILE, 'utf8')).controls || {}
+  : {};
+function enrichFromProperties(s) {
+  const c = s.entity && propsControls[s.entity];
+  if (!c) return s;
+  return {
+    ...s,
+    since: s.since || c.since || null,
+    deprecated: s.deprecated || c.deprecated || null,
+  };
+}
+
+// --- curated universe fixups (both the build and the offline-load path) -----
+// ui5/universe-excludes.json: demokit sample/ dirs that are not samples
+// (shared helpers, test infra, group folders with nested samples).
+// ui5/entity-overrides.json: sample id -> owning entity where the upstream
+// docuindex has no mapping, so real samples get proper scope + API links.
+const EXCLUDES_FILE = path.join(ROOT, 'ui5', 'universe-excludes.json');
+const OVERRIDES_FILE = path.join(ROOT, 'ui5', 'entity-overrides.json');
+const excludeSet = new Set(
+  (fs.existsSync(EXCLUDES_FILE)
+    ? JSON.parse(fs.readFileSync(EXCLUDES_FILE, 'utf8')).excludes || []
+    : []).map((e) => `${e.lib}\t${e.name}`));
+const entityOverrides = fs.existsSync(OVERRIDES_FILE)
+  ? JSON.parse(fs.readFileSync(OVERRIDES_FILE, 'utf8')).overrides || {}
+  : {};
+function applyUniverseFixups(u) {
+  return {
+    ...u,
+    libs: u.libs.map((e) => ({
+      ...e,
+      samples: e.samples
+        .filter((s) => !excludeSet.has(`${e.lib}\t${s.name}`))
+        .map((s) => (entityOverrides[`${e.lib}.sample.${s.name}`]
+          ? { ...s, entity: entityOverrides[`${e.lib}.sample.${s.name}`] }
+          : s)),
+    })),
+  };
+}
 // turn a JSDoc doclet into plain text: resolve {@link sym text} to its display
 // text (or the symbol), collapse whitespace, trim.
 const cleanDoc = (t) => String(t || '')
@@ -172,14 +225,19 @@ if (fs.existsSync(OPENUI5_DIR)) {
   process.exit(1);
 }
 
+universe = applyUniverseFixups(universe);
+
 const release = universe.release;
 const libs = universe.libs.map((e) => ({
   lib: e.lib,
-  samples: e.samples.map((s) => ({
-    ...s,
-    port: ported.get(`${e.lib}\t${s.name}`) || null,
-    scope: scopeOf(s),
-  })),
+  samples: e.samples.map((s) => {
+    const enriched = enrichFromProperties(s);
+    return {
+      ...enriched,
+      port: ported.get(`${e.lib}\t${s.name}`) || null,
+      scope: scopeOf(enriched),
+    };
+  }),
 }));
 
 // a ported sample outside the scope is a rule violation — warn loudly
@@ -259,7 +317,7 @@ function summaryLines() {
   const l = [];
   l.push(`Overall **${totalPorted} / ${totalInScope}** in-scope demo kit samples ported (${pct(totalPorted, totalInScope)}).`);
   l.push(`**In scope**: samples whose control exists since **UI5 1.71** and is **not deprecated** (legacy-free ready).`);
-  l.push(`Out of scope: ${totalSamples - totalInScope} of ${totalSamples} samples — ${outBy.deprecated} on deprecated controls, ${outBy.newer} on controls newer than 1.71, ${outBy.unknown} without control metadata.`);
+  l.push(`Out of scope: ${totalSamples - totalInScope} of ${totalSamples} samples — ${outBy.deprecated} on deprecated controls, ${outBy.newer} on controls newer than 1.71, ${outBy.unknown} demo apps without an owning control.`);
   if (release) l.push(`Control metadata from OpenUI5 **${release}**.`);
   l.push('');
   l.push('| Module | Samples | In scope | Ported | Coverage | |');

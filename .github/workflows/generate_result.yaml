@@ -61,6 +61,9 @@ jobs:
     - name: Regenerate the in-system overview app
       run: node scripts/generate-overview.mjs
 
+    - name: Regenerate the STATUS.md state block
+      run: node scripts/generate-status.mjs
+
     - name: Drop OpenUI5 checkout
       run: rm -rf openui5
 
@@ -75,6 +78,7 @@ jobs:
         add-paths: |
           api.md
           README.md
+          STATUS.md
           ui5/universe.json
           ui5/properties.json
           src/z2ui5_cl_ai_app_overview.clas.abap

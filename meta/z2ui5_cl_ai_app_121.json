@@ -13,7 +13,11 @@
   "deviations": [
     {
       "type": "IMPROVISED",
-      "what": "Breadth-probe: a minimal sap.m.upload.UploadSet (file upload list) with 3 pre-populated items + a toolbar. The actual upload backend, the full toolbar and the item action buttons are simplified; upload here would target the abap2UI5 FileUploader path in a live system."
+      "what": "Breadth-probe: a minimal sap.m.upload.UploadSet (file upload list) with 3 pre-populated items + a toolbar. The item file names are invented (Screenshot.png etc.), not the mock's items.json rows. The actual upload backend, the full toolbar and the item action buttons are simplified; upload here would target the abap2UI5 FileUploader path in a live system."
+    },
+    {
+      "type": "POST_171",
+      "what": "UploadSet.mode (since UI5 1.100) and UploadSet.afterItemRemoved (since UI5 1.83) kept for the 1:1 port - surfaced when the property gate gained the sap.m/upload sub-package (control-level source scan 2026-07-26). The whole control is deprecated out-of-scope debt anyway (pr/scope-since-from-source)."
     }
   ],
   "structural_diff": {

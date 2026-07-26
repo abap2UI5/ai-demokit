@@ -72,12 +72,43 @@ const benign = (s) => BENIGN.some((re) => re.test(s));
 
 // richer per-port checks (optional). Each: after boot, run action(page) and
 // assert. The generic boot+render+no-error gate runs for EVERY port regardless.
+//
+// GROW THIS MAP — it is the automated close path for the LIVE_TEST backlog
+// (STATUS.md open findings): each entry proves one LIVE_TEST *class* end to
+// end, so a green nightly run stands in for the human live check of every
+// port that only carries that class. Covered so far:
+//   005  client-composed toast (_event_client MESSAGE_TOAST, $event.* args)
+//   019  popup_display Dialog round-trip (open + fragment renders)
+//   060  anchored open via control_by_id toggleBy (roundtrip-free) + the
+//        ${$parameters>/item}.getText() client-composed selection toast
+//   094  popover_display + BIND_ELEMENT (row context → bound popover)
 const INTERACTIONS = {
   z2ui5_cl_ai_app_005: async (page, expect) => {
     const btn = page.getByRole('button', { name: 'Default', exact: true }).first();
     await expect(btn, 'a "Default" press button').toBeVisibleEnabled();
     await btn.click();
     await expect(page.locator('.sapMMessageToast'), 'the client-composed press toast').toContainText('Pressed');
+  },
+  z2ui5_cl_ai_app_019: async (page, expect) => {
+    const btn = page.getByRole('button', { name: 'Approve', exact: true }).first();
+    await expect(btn, 'the "Approve" dialog button').toBeVisibleEnabled();
+    await btn.click();
+    await expect(page.locator('.sapMDialog'), 'the popup_display Dialog').toContainText('Approve');
+  },
+  z2ui5_cl_ai_app_060: async (page, expect) => {
+    const btn = page.getByRole('button', { name: 'Open Menu', exact: true }).first();
+    await expect(btn, 'the "Open Menu" anchor button').toBeVisibleEnabled();
+    await btn.click();
+    const item = page.getByText('Hide Existing Sites', { exact: true }).first();
+    await expect(item, 'the anchored-open menu (toggleBy)').toBeVisibleEnabled();
+    await item.click();
+    await expect(page.locator('.sapMMessageToast'), 'the item-selected client toast').toContainText('Action triggered on item: Hide Existing Sites');
+  },
+  z2ui5_cl_ai_app_094: async (page, expect) => {
+    const link = page.locator('.sapMListTbl a.sapMLnk').first();
+    await expect(link, 'the first product-ID link').toBeVisibleEnabled();
+    await link.click();
+    await expect(page.locator('.sapMPopover'), 'the BIND_ELEMENT-bound popover').toContainText('Product');
   },
 };
 
@@ -165,7 +196,11 @@ metas.sort((a, b) => a.class.localeCompare(b.class));
 console.log(`e2e-smoke: ${metas.length} port(s), backend from ${A2}`);
 const backend = await startBackend();
 await waitPort(3000);
-const browser = await chromium.launch({ headless: !HEADED, executablePath: '/opt/pw-browsers/chromium' });
+// prefer the sandbox's pinned Chromium when present, else the playwright-managed one (CI)
+const LOCAL_CHROMIUM = '/opt/pw-browsers/chromium';
+const browser = fs.existsSync(LOCAL_CHROMIUM)
+  ? await chromium.launch({ headless: !HEADED, executablePath: LOCAL_CHROMIUM })
+  : await chromium.launch({ headless: !HEADED });
 
 let failed = 0;
 for (const m of metas) {

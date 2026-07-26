@@ -26,7 +26,7 @@
 "! checked status, a post-1.71 note, and the generation notes; the second starts
 "! this abap2UI5 app IN-PAGE from the backend via client->nav_app_call (server
 "! event START_APP). With hash routing on, the framework pushes the route
-"! '#/app/<CLASS>' (UI5 Router style) - it replaces the overview in the same tab
+"! '#/app/' + class name (UI5 Router style) - it replaces the overview in the same tab
 "! and the native browser Back/Forward buttons navigate between them, bookmarkable,
 "! so no new tab and no page reload (the overview enabled routing via
 "! client->set_nav_routing). The same two buttons sit on every tree sample leaf (links only,
@@ -753,11 +753,13 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.f`              control = `sap.f.Card`                            name = `Card`                                class = `z2ui5_cl_ai_app_117` path = `src/04/b01/z2ui5_cl_ai_app_117.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.64`
         notes = `IMPROVISED: Breadth-probe: sap.f.Card with a sap.f.cards.Header and a simplified content body (the original's named-model From/To ComboBoxes + DatePicker are represented by a Text + Button for the` &&
                  ` render probe).` )
       ( module = `sap.f`              control = `sap.f.DynamicPage`                     name = `DynamicPageFreeStyle`                class = `z2ui5_cl_ai_app_170` path = `src/04/b07/z2ui5_cl_ai_app_170.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.42`
         notes = `IMPROVISED: The controller's Card popover (onPressOpenPopover, wired to the GenericTag press and the 'Button with layoutData' press) is dropped: it Fragment.loads Card.fragment.xml (a Popover >` &&
                  ` sap.f.Card > sap.f.cards.NumericHeader with two NumericSideIndicators) and opens it by the pressed control. This is a controller-built popup fragment with no view-declared equivalent; the` &&
                  ` GenericTag.press attribute is therefore also dropped. sap.f.Card / NumericHeader are already covered by app 117 (sap.f.sample.Card), so no coverage is lost. Accounts for the structural-diff 'control` &&
@@ -775,6 +777,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
+        since = `1.42`
         release = `1.73`
         release_post171 = abap_true
         is_post171 = abap_true
@@ -797,6 +800,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
+        since = `1.42`
         notes = `NOTE: showFooter is two-way bound to a model flag ({/SHOWFOOTER}, default false) and the 'Toggle Footer' button flips it via a TOGGLE_FOOTER round-trip + re-render; the original controller toggles it` &&
                  ` imperatively (onToggleFooter -> setShowFooter). The original view has no showFooter attribute (it defaults false), so adding the bound attribute is the faithful thin-frontend form of the imperative` &&
                  ` toggle and structural-diff does not flag it (it only flags missing attributes). toggleHeaderOnTitleClick keeps the original {/titleClickable} binding (default true - the original binds it against a` &&
@@ -816,6 +820,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.f`              control = `sap.f.FlexibleColumnLayout`            name = `FlexibleColumnLayoutSimple`          class = `z2ui5_cl_ai_app_234` path = `src/04/b08/z2ui5_cl_ai_app_234.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.46`
         notes = `NOTE: the sample is NOT a pure-routing showcase - it uses an EventBus (no sap.ui.core.routing Router/Targets) and drives the column visibility purely through the FlexibleColumnLayout's own layout` &&
                  ` property (setLayout). So it is expressed as ONE view: the three column views (List, Detail, DetailDetail) are inlined into the FlexibleColumnLayout's beginColumnPages/midColumnPages/endColumnPages` &&
                  ` aggregations. Consequently the original's nested mvc:XMLView reference (in beginColumnPages) is dropped - its List page content is placed inline instead. // NOTE: FlexibleColumnLayout is emitted with` &&
@@ -831,6 +836,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.f`              control = `sap.f.GridContainer`                   name = `GridContainer`                       class = `z2ui5_cl_ai_app_168` path = `src/04/b07/z2ui5_cl_ai_app_168.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.65`
         notes = `IMPROVISED: The original binds two named models inside the cards (cities> for the ComboBoxes, products> for the revenue List); abap2UI5 keeps one default model, so those bind directly` &&
                  ` ({cities>/cities} -> {/CITIES}, {products>/productItems} -> {/PRODUCTITEMS}, prefix dropped, last segment identical). The RevealGrid toggle, the three property Switches, the GridContainer` &&
                  ` columnsChange, the GenericTile press and the f:Card header press are controller handlers in the original; here each raises a client MESSAGE_TOAST. // NOTE: The ComboBox items keep a plain {/CITIES}` &&
@@ -842,12 +848,14 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.f`              control = `sap.f.GridList`                        name = `GridListBasic`                       class = `z2ui5_cl_ai_app_111` path = `src/04/b01/z2ui5_cl_ai_app_111.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.60`
         notes = `NOTE: The Slider drives the panel width via a roundtrip-free expression binding ({= ${slider} + '%' }) over the two-way slider value, instead of the original onSliderMoved setWidth handler;` &&
                  ` Slider.liveChange is therefore not wired (the width tracks the slider client-side). The full 27-row item set is inlined.`
         use_name = abap_true )
       ( module = `sap.f`              control = `sap.f.GridList`                        name = `GridListBoxContainer`                class = `z2ui5_cl_ai_app_144` path = `src/04/b04/z2ui5_cl_ai_app_144.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.60`
         notes = `LIVE-TEST: The Slider liveChange recomputes the host Panel.width (bound) as value + '%' server-side; the original set byId('panelForGridList').setWidth imperatively. Slider.value carries a binding to` &&
                  ` carry the value back. // NOTE: GridList with a grid:GridBoxLayout (boxMinWidth 17rem) and a GridListItem template (VBox + FlexItemData, Title, Label). The 27 items are inlined from model/items.json;` &&
                  ` the template binds {TITLE}/{SUBTITLE} 1:1.`
@@ -855,6 +863,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.f`              control = `sap.f.GridList`                        name = `GridListBoxContainerGrouping`        class = `z2ui5_cl_ai_app_176` path = `src/04/b07/z2ui5_cl_ai_app_176.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.60`
         notes = `LIVE-TEST: The Slider ``liveChange`` handler (original onSliderMoved: byId('panelForGridList').setWidth(value + '%')) is dropped and replaced by a roundtrip-free expression binding on the host` &&
                  ` Panel.width (``{= ${/SLIDER_VALUE} + '%'}``), with Slider.value bound two-way to carry the value; per AGENTS.md 5 / CAPABILITIES 'prefer a pure expression binding over an event round-trip' (app 007` &&
                  ` pattern). The width expression rendering is unverified in a running system. // NOTE: GridList with a group sorter on items ({path, sorter:{path:'GROUP', descending:false, group:true}}, default group` &&
@@ -864,6 +873,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.f`              control = `sap.f.GridList`                        name = `GridListBreakPoints`                 class = `z2ui5_cl_ai_app_213` path = `src/04/b07/z2ui5_cl_ai_app_213.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.60`
         notes = `LIVE-TEST: The Slider's ``liveChange`` attribute is dropped: Slider.value is two-way bound to /SLIDER_VALUE and the Panel's width is an expression binding {= ${/SLIDER_VALUE} + '%' } that reproduces` &&
                  ` the controller's onSliderMoved setWidth entirely client-side (thin-frontend, no round-trip). Panel width is added (the original set it imperatively). Binding/render behaviour unverified in a running` &&
                  ` system. // NOTE: GridResponsiveLayout.layoutChange is wired to a client-composed MessageToast (control_global MESSAGE_TOAST, template 'Layout changed to {0}' filled by ${$parameters>/layout})` &&
@@ -874,6 +884,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.f`              control = `sap.f.GridList`                        name = `GridListDragAndDrop`                 class = `z2ui5_cl_ai_app_148` path = `src/04/b05/z2ui5_cl_ai_app_148.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.60`
         notes = `LIVE-TEST: The dragDropConfig (dnd:DragInfo + GridDropInfo) reorders items on drop; the drop event is wired to a backend event but the reorder logic (splice + setProperty) is not reproduced. The` &&
                  ` GridDropInfo control from sap.f.dnd keeps a hyphen-free 'dndgrid' xmlns alias instead of the original 'dnd-grid' (the alias only names the same sap.f.dnd URI; it makes the control statically visible` &&
                  ` to the checks). // NOTE: 27 items inlined from model/data.json; absent enum fields defaulted (highlight None, type Inactive) so the bound GridListItem properties stay valid. Template binds` &&
@@ -882,6 +893,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.f`              control = `sap.f.GridList`                        name = `GridListModes`                       class = `z2ui5_cl_ai_app_133` path = `src/04/b02/z2ui5_cl_ai_app_133.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.60`
         notes = `LIVE-TEST: SegmentedButton.selectionChange reproduces onModeChange server-side: GridList.mode is two-way bound to the same field as SegmentedButton.selectedKey and the headerText (bound) is recomputed` &&
                  ` as 'GridList with mode ' + key on a backend round-trip. The GridList delete / selectionChange and the GridListItem press / detailPress are wired to client-side MessageToasts (the original toasted the` &&
                  ` affected item's runtime id). mode/headerText/selectedKey carry bindings the original set statically. // NOTE: The 11 product rows are inlined from the sample's model/data.json. Fields the original` &&
@@ -893,6 +905,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.f`              control = `sap.f.GridList`                        name = `GridListResponsiveColumnLayout`      class = `z2ui5_cl_ai_app_222` path = `src/04/b07/z2ui5_cl_ai_app_222.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.60`
         release = `1.72`
         release_post171 = abap_true
         is_post171 = abap_true
@@ -905,7 +918,11 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` release >= 1.72.` )
       ( module = `sap.f`              control = `sap.f.ProductSwitch`                   name = `ProductSwitchNavigation`             class = `z2ui5_cl_ai_app_165` path = `src/04/b07/z2ui5_cl_ai_app_165.clas.abap`
         score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.72`
+        since_post171 = abap_true
+        is_post171 = abap_true
         notes = `IMPROVISED: The shipped view is only the trigger Button plus two explanatory Texts in a VerticalLayout - rebuilt 1:1. The ProductSwitch is built in the sample's JS controller (fnOpen) inside a` &&
                  ` ResponsivePopover fragment (ResponsivePopover > ProductSwitch > ProductSwitchItem) and opened on press. abap2UI5 has no JS controller, so the button press raises a client MESSAGE_TOAST in place of` &&
                  ` the controller-built ResponsivePopover; the ProductSwitch and ProductSwitchItem controls are therefore not rendered (a controller-only sample).`
@@ -914,6 +931,9 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.f`              control = `sap.f.semantic.SemanticPage`           name = `SemanticPage`                        class = `z2ui5_cl_ai_app_166` path = `src/04/b07/z2ui5_cl_ai_app_166.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.46.0`
+        is_deprecated = abap_true
+        dep_text = `Deprecated since 1.54: `
         notes = `IMPROVISED: The original keeps header/object data in nested paths on one JSON model (title, showFooter, titleSnappedContent/text, titleExpandedContent/text,` &&
                  ` objectDescription/category|center|email|status). abap2UI5 keeps one default model and render-smoke does not mock nested structures, so those paths are folded to flat fields bound via _bind (last path` &&
                  ` segment identical, which structural-diff matches). Both the snapped and expanded subheading Text controls bind the same flat 'text' field. The full 125-row ProductCollection mock is inlined. //` &&
@@ -926,15 +946,18 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.f`              control = `sap.f.ShellBar`                        name = `ShellBar`                            class = `z2ui5_cl_ai_app_110` path = `src/04/b01/z2ui5_cl_ai_app_110.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.63`
         notes = `NOTE: First sap.f port. Static ShellBar with a sap.m Menu and a profile Avatar; the homeIcon points at the OpenUI5 host. No controller events are wired in the original view.` )
       ( module = `sap.f`              control = `sap.f.ShellBar`                        name = `ShellBarWithMenuButton`              class = `z2ui5_cl_ai_app_152` path = `src/04/b06/z2ui5_cl_ai_app_152.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.63`
         notes = `NOTE: Static sap.f.ShellBar with menu/nav/search/notifications/copilot toggles, homeIcon, notificationsNumber and a profile Avatar (initials), reproduced 1:1.` )
       ( module = `sap.f`              control = `sap.f.ShellBar`                        name = `ShellBarWithSearch`                  class = `z2ui5_cl_ai_app_218` path = `src/04/b07/z2ui5_cl_ai_app_218.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
+        since = `1.63`
         notes = `IMPROVISED: suggest handler (handlerSearchSuggestEvent): the original builds two sap.ui.model.Filter objects with custom JS test functions (case-insensitive substring on ProductId and Name) and` &&
                  ` applies them to the SearchManager's suggestionItems binding, then calls oSF.suggest() to reopen the suggestion popup. The custom JS filter functions are inexpressible (control-side JS), but their` &&
                  ` semantics is the whitelisted 'Contains' operator, so the filter is reproduced 1:1 via cs_event-binding_call (compound OR group over PRODUCTID/NAME Contains the typed value), CAPABILITIES` &&
@@ -953,6 +976,9 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.f`              control = `sap.f.SidePanel`                       name = `SidePanelSingle`                     class = `z2ui5_cl_ai_app_136` path = `src/04/b03/z2ui5_cl_ai_app_136.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.107`
+        since_post171 = abap_true
+        is_post171 = abap_true
         notes = `LIVE-TEST: SidePanel.toggle shows a client-side MessageToast. The original onToggle inspected the preventExpand/preventCollapse switches and called event.preventDefault() to veto the expand/collapse;` &&
                  ` that veto logic is a live interaction not reproduced here (the switches are kept as static controls).`
         use_ec = abap_true
@@ -1432,7 +1458,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.44.0`
-        ui5_only = abap_true
         notes = `NOTE: the Select's literal selectedKey="1" is replaced by a two-way binding {SELECTED_KEY} (seeded '1'); scrollStepByItem on both HeaderContainers is now a pure client-side expression binding over it` &&
                  ` ({= ${SELECTED_KEY} === 'px' ? 0 : +${SELECTED_KEY} }), so the original Select's change handler (onScrollByItemChange) is dropped - no round-trip. This is the prefer-a-bindable-property/expression` &&
                  ` pattern (like the app 019). The original controller reads oEvent.getParameter('selectedItem').getKey(), which has no public $parameters path (selectedItem is a control; reading private control` &&
@@ -1448,7 +1473,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.44.0`
-        ui5_only = abap_true
         notes = `LIVE-TEST: NumericContent presses show a client MessageToast (original press handler). Two vertical HeaderContainers — one of eight NumericContents, one of five TileContents (each wrapping a` &&
                  ` NumericContent) — reproduced 1:1.`
         use_ec = abap_true
@@ -1676,7 +1700,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         since = `1.21.2`
         release = `1.124`
         release_post171 = abap_true
-        ui5_only = abap_true
         is_post171 = abap_true
         notes = `NOTE: the sample opens a sap.m.MessageBox from its controller; there is no such control in the view. It is driven by two buttons wired to events that call client->message_box_display - the documented` &&
                  ` 1:1 path (CAPABILITIES.md marks sap.m.MessageBox as expressible with app 036 as its evidence port), not a workaround. // POST-1.71: ariaHasPopup="Dialog" on both buttons (since UI5 1.84) is newer` &&
@@ -1794,8 +1817,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.m`              control = `sap.m.MessageToast`                    name = `MessageToast`                        class = `z2ui5_cl_ai_app_037` path = `src/01/b03/z2ui5_cl_ai_app_037.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        since = `1.9.2`
-        ui5_only = abap_true )
+        since = `1.9.2` )
       ( module = `sap.m`              control = `sap.m.MessageView`                     name = `MessageViewMessageManager`           class = `z2ui5_cl_ai_app_038` path = `src/01/b03/z2ui5_cl_ai_app_038.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -2569,17 +2591,22 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.63`
-        ui5_only = abap_true
+        release = `1.100`
+        release_post171 = abap_true
+        is_post171 = abap_true
         is_deprecated = abap_true
         dep_text = `Deprecated since 1.129: replaced by sap.m.plugins.UploadSetwithTable`
-        notes = `IMPROVISED: Breadth-probe: a minimal sap.m.upload.UploadSet (file upload list) with 3 pre-populated items + a toolbar. The actual upload backend, the full toolbar and the item action buttons are` &&
-                 ` simplified; upload here would target the abap2UI5 FileUploader path in a live system.`
+        notes = `IMPROVISED: Breadth-probe: a minimal sap.m.upload.UploadSet (file upload list) with 3 pre-populated items + a toolbar. The item file names are invented (Screenshot.png etc.), not the mock's items.json` &&
+                 ` rows. The actual upload backend, the full toolbar and the item action buttons are simplified; upload here would target the abap2UI5 FileUploader path in a live system. // POST-1.71: UploadSet.mode` &&
+                 ` (since UI5 1.100) and UploadSet.afterItemRemoved (since UI5 1.83) kept for the 1:1 port - surfaced when the property gate gained the sap.m/upload sub-package (control-level source scan 2026-07-26).` &&
+                 ` The whole control is deprecated out-of-scope debt anyway (pr/scope-since-from-source).`
+        post171 = `UploadSet.mode (since UI5 1.100) and UploadSet.afterItemRemoved (since UI5 1.83) kept for the 1:1 port - surfaced when the property gate gained the sap.m/upload sub-package (control-level source scan` &&
+                 ` 2026-07-26). The whole control is deprecated out-of-scope debt anyway (pr/scope-since-from-source).`
         use_name = abap_true )
       ( module = `sap.m`              control = `sap.m.URLHelper`                       name = `UrlHelper`                           class = `z2ui5_cl_ai_app_084` path = `src/01/b10/z2ui5_cl_ai_app_084.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.10`
-        ui5_only = abap_true
         notes = `NOTE: element binding kept 1:1 - a one-record structure /S_SUPPLIER instead of {/SupplierCollection/0}. // NOTE: URLHelper.triggerTel/triggerSms/triggerEmail/redirect map 1:1 to the URLHELPER frontend` &&
                  ` action (cs_event-urlhelper): TRIGGER_TEL/TRIGGER_SMS take the number as a plain string param, TRIGGER_EMAIL/REDIRECT take a { EMAIL/URL, ... } object-literal t_arg (get_t_arg emits {-prefixed args` &&
                  ` raw as UI5 event-handler object literals). open_new_tab is NOT used - it is same-origin-only (isValidRedirectURL).`
@@ -2626,21 +2653,21 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.m`              control = `sap.ui.core.ContainerPadding`          name = `ContainerNoPadding`                  class = `z2ui5_cl_ai_app_087` path = `src/01/b10/z2ui5_cl_ai_app_087.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        ui5_only = abap_true
         notes = `NOTE: the /ProductCollectionStats/Counts values are flattened to the default model fields /TOTAL, /OK, /HEAVY, /OVERWEIGHT (verbatim counts).` )
       ( module = `sap.m`              control = `sap.ui.core.StandardMargins`           name = `StandardMarginsAll`                  class = `z2ui5_cl_ai_app_088` path = `src/01/b11/z2ui5_cl_ai_app_088.clas.abap`
         score = 1
-        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        ui5_only = abap_true )
+        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
       ( module = `sap.tnt`            control = `sap.f.DynamicPage`                     name = `InfoLabelInDynamicPage`              class = `z2ui5_cl_ai_app_143` path = `src/05/b05/z2ui5_cl_ai_app_143.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.54`
         notes = `LIVE-TEST: The 'Edit' (toggleAreaPriority) and 'Toggle Footer' actions are wired to backend events; the original toggled title-area priority and footer visibility imperatively — not reproduced` &&
                  ` server-side. // NOTE: f:DynamicPage with title (heading, expanded/snapped tnt:InfoLabel, actions), pinnable header (ObjectAttributes), content (two long Texts) and footer. The footer message Button` &&
                  ` binds text and visible='{= !!${/MESSAGESLENGTH}}' to a model field (initial 0), reproducing the original {/messagesLength} wiring.` )
       ( module = `sap.tnt`            control = `sap.tnt.InfoLabel`                     name = `InfoLabel`                           class = `z2ui5_cl_ai_app_113` path = `src/05/b01/z2ui5_cl_ai_app_113.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.54`
         release = `1.74`
         release_post171 = abap_true
         is_post171 = abap_true
@@ -2652,6 +2679,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.tnt`            control = `sap.tnt.InfoLabel`                     name = `InfoLabelInTable`                    class = `z2ui5_cl_ai_app_192` path = `src/05/b06/z2ui5_cl_ai_app_192.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.54`
         notes = `IMPROVISED: the controller's onPopinLayoutChanged (ComboBox change handler running a PopinLayout switch with a Block default) is expressed as bound properties instead of a round-trip (AGENTS 'prefer a` &&
                  ` bindable property', as app 009): the ComboBox's change attribute is dropped, its selectedKey is bound two-way, and the Table gains a popinLayout expression binding that reproduces the switch` &&
                  ` including its Block default. // NOTE: the original binds the InfoLabel colorScheme via a frontend formatter (Formatter.availableState: an already-classified Status string mapped to a colorScheme` &&
@@ -2663,12 +2691,14 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.tnt`            control = `sap.tnt.NavigationList`                name = `NavigationList`                      class = `z2ui5_cl_ai_app_123` path = `src/05/b02/z2ui5_cl_ai_app_123.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.34`
         notes = `LIVE-TEST: The two toolbar buttons reproduce the original controller behaviour server-side: 'Toggle Collapse/Expand' flips NavigationList.expanded (bound to a boolean model field), 'Show/Hide SubItem` &&
                  ` 3' flips subItemThree.visible. The original used byId().setExpanded/setVisible; here the properties are two-way bound and toggled on a backend round-trip. The 'expanded' attribute on NavigationList` &&
                  ` and the 'visible' attribute on subItemThree are added to carry these bindings (the original set them imperatively).` )
       ( module = `sap.tnt`            control = `sap.tnt.SideNavigation`                name = `SideNavigation`                      class = `z2ui5_cl_ai_app_128` path = `src/05/b02/z2ui5_cl_ai_app_128.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.34`
         release = `1.116`
         release_post171 = abap_true
         is_post171 = abap_true
@@ -2683,6 +2713,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
+        since = `1.34`
         release = `1.137`
         release_post171 = abap_true
         is_post171 = abap_true
@@ -2713,6 +2744,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.tnt`            control = `sap.tnt.SideNavigation`                name = `SideNavigationUnselectableParents`   class = `z2ui5_cl_ai_app_172` path = `src/05/b06/z2ui5_cl_ai_app_172.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.34`
         release = `1.116`
         release_post171 = abap_true
         is_post171 = abap_true
@@ -2731,6 +2763,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.tnt`            control = `sap.tnt.SideNavigation`                name = `SideNavigationWithTags`              class = `z2ui5_cl_ai_app_132` path = `src/05/b03/z2ui5_cl_ai_app_132.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.34`
         release = `1.149`
         release_post171 = abap_true
         is_post171 = abap_true
@@ -2745,6 +2778,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.tnt`            control = `sap.tnt.ToolHeader`                    name = `ToolHeader`                          class = `z2ui5_cl_ai_app_134` path = `src/05/b04/z2ui5_cl_ai_app_134.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.34`
         notes = `LIVE-TEST: The SAP-logo Image and profile Avatar presses show client-side MessageToasts ('Logo pressed!' / 'Avatar pressed!'), matching the original onLogoPressed / onAvatarPressed. The original's` &&
                  ` Device.media handler (which toggles productName/secondTitle/searchField/searchButton visibility per screen range) is a device-responsive behaviour not reproduced server-side; those controls keep` &&
                  ` their static initial visibility (searchButton visible='false'). // NOTE: Both ToolHeaders, all OverflowToolbarLayoutData priorities/groups, the ToolHeaderUtilitySeparator and the` &&
@@ -2754,6 +2788,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.tnt`            control = `sap.tnt.ToolHeader`                    name = `ToolHeaderIconTabHeader`             class = `z2ui5_cl_ai_app_221` path = `src/05/b06/z2ui5_cl_ai_app_221.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.34`
         release = `1.121`
         release_post171 = abap_true
         is_post171 = abap_true
@@ -2769,6 +2804,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
+        since = `1.34`
         release = `1.133.0`
         release_post171 = abap_true
         is_post171 = abap_true
@@ -2793,16 +2829,17 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.ui.codeeditor`  control = `sap.ui.codeeditor.CodeEditor`          name = `CodeEditor`                          class = `z2ui5_cl_ai_app_114` path = `src/02/b01/z2ui5_cl_ai_app_114.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.46`
         notes = `NOTE: Breadth-probe: the ACE-based sap.ui.codeeditor CodeEditor (a wrapped third-party editor). JSON value shortened to a representative snippet; literal braces escaped so the XMLView parser does not` &&
                  ` read them as a binding.` )
       ( module = `sap.ui.codeeditor`  control = `sap.ui.codeeditor.CodeEditor`          name = `CodeEditorIconTabHeader`             class = `z2ui5_cl_ai_app_150` path = `src/02/b08/z2ui5_cl_ai_app_150.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.46`
         notes = `LIVE-TEST: The IconTabHeader select is wired to a backend event; the original swapped the CodeEditor content per selected tab (A/B) imperatively. The ce:CodeEditor (javascript) renders 1:1.` )
       ( module = `sap.ui.core`        control = `sap.ui.core.BusyIndicator`             name = `BusyIndicator`                       class = `z2ui5_cl_ai_app_147` path = `src/02/b07/z2ui5_cl_ai_app_147.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        ui5_only = abap_true
         notes = `LIVE-TEST: Each button opened the global sap.ui.core.BusyIndicator with a different delay/duration (show(delay) + setTimeout(hide)); reproduced here as client-side MessageToasts describing the` &&
                  ` intended delay/duration (the global busy overlay and timers are not reproduced server-side).`
         use_ec = abap_true
@@ -2811,6 +2848,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
+        since = `1.70`
         release = `1.84`
         release_post171 = abap_true
         is_post171 = abap_true
@@ -2846,23 +2884,29 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.ui.core`        control = `sap.ui.core.hyphenation.Hyphenation`   name = `HyphenationAPI`                      class = `z2ui5_cl_ai_app_146` path = `src/02/b07/z2ui5_cl_ai_app_146.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.60`
         notes = `LIVE-TEST: The three core:HTML panels are filled by the original controller with hyphenated text via the Hyphenation API (per language); here the HTML content is left empty (the hyphenation happens` &&
                  ` client-side against the API). The width Slider liveChange is wired to a backend event (original resized the container imperatively).` )
       ( module = `sap.ui.core`        control = `sap.ui.core.Icon`                      name = `Icon`                                class = `z2ui5_cl_ai_app_122` path = `src/02/b02/z2ui5_cl_ai_app_122.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.11.1`
         notes = `LIVE-TEST: The stethoscope Icon press is wired client-side to MessageToast.show('Over budget!') via the control_global frontend action, matching the original controller's handleStethoscopePress` &&
                  ` (MessageToast.show).`
         use_ec = abap_true
         use_ec_arg = abap_true )
       ( module = `sap.ui.core`        control = `sap.ui.core.InvisibleMessage`          name = `InvisibleMessage`                    class = `z2ui5_cl_ai_app_141` path = `src/02/b05/z2ui5_cl_ai_app_141.clas.abap`
-        score = 2
-        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.78`
+        since_post171 = abap_true
+        is_post171 = abap_true
         notes = `LIVE-TEST: The four buttons announce the pressed button's type+text to the sap.ui.core.InvisibleMessage a11y service and echo it into the status Text; here a press updates the bound status Text with a` &&
                  ` generic confirmation (the a11y live-region announce and the per-button identity are not reproduced server-side). The original's 'Infromation' button-text typo is kept 1:1.` )
       ( module = `sap.ui.core`        control = `sap.ui.core.InvisibleText`             name = `InvisibleText`                       class = `z2ui5_cl_ai_app_127` path = `src/02/b02/z2ui5_cl_ai_app_127.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.27.0`
         notes = `LIVE-TEST: All twelve Button presses are wired to a single client-side MessageToast.show('Pressed') via the control_global frontend action. The original onPress toasted source.getId() + ' Pressed'` &&
                  ` (the runtime-generated control id); the id is not reproducible statically, so a fixed 'Pressed' toast stands in. The ariaLabelledBy / ariaDescribedBy associations and the six core:InvisibleText` &&
                  ` targets are reproduced 1:1.`
@@ -2871,26 +2915,22 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.ui.core`        control = `sap.ui.core.theming.Parameters`        name = `BasicThemeParameters`                class = `z2ui5_cl_ai_app_131` path = `src/02/b03/z2ui5_cl_ai_app_131.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        ui5_only = abap_true
         notes = `NOTE: The sample itself is just a MessageStrip + Link pointing at the Theme Parameter Toolbox (the real demo content lives in that external tool); reproduced 1:1.` )
       ( module = `sap.ui.core`        control = `sap.ui.model.type.Currency`            name = `TypeCurrency`                        class = `z2ui5_cl_ai_app_135` path = `src/02/b04/z2ui5_cl_ai_app_135.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        ui5_only = abap_true
         notes = `NOTE: Composite data-type binding paradigm: the Currency type is pulled in via core:require and every Input/Text binds a composite parts:['/amount','/currency'] with type:'CurrencyType' plus` &&
                  ` formatOptions (showMeasure/showNumber/preserveDecimals/currencyCode/style) 1:1. The two model fields amount ('123456789.123') and currency ('USD') are serialized by abap2UI5 as /AMOUNT and /CURRENCY;` &&
                  ` the paths are generated via _bind (never hardcoded).` )
       ( module = `sap.ui.core`        control = `sap.ui.model.type.Date`                name = `TypeDateAsString`                    class = `z2ui5_cl_ai_app_181` path = `src/02/b10/z2ui5_cl_ai_app_181.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        ui5_only = abap_true
         notes = `NOTE: Data-type binding paradigm: sap.ui.model.type.Date is pulled via core:require={DateType: 'sap/ui/model/type/Date'} and every DatePicker/Text keeps the original { path, type: 'DateType',` &&
                  ` formatOptions: { style, source: { pattern: 'yyyy-MM-dd' } } } binding 1:1 as a raw binding-info string (braces escaped, path via _bind). The single model field is a yyyy-MM-dd string. // NOTE: The` &&
                  ` original seeds the current date (UI5Date.getInstance().toISOString().slice(0,10)); a fixed date (2026-07-24) is used here so the port is deterministic - a client-only display value.` )
       ( module = `sap.ui.core`        control = `sap.ui.model.type.DateTime`            name = `TypeDateTime`                        class = `z2ui5_cl_ai_app_183` path = `src/02/b10/z2ui5_cl_ai_app_183.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        ui5_only = abap_true
         notes = `IMPROVISED: The original model value /dtValue is a JS Date object (UI5Date.getInstance()) and every DateTimeType binding has NO source formatOption (the type's default model format is a Date object).` &&
                  ` abap2UI5 cannot hold a JS Date object in the JSON model, so a source formatOption { source: { pattern: 'yyyy-MM-dd HH:mm:ss' } } is added to each DateTimeType binding and the field dtvalue is a` &&
                  ` parseable datetime string ('2026-07-24 13:30:00') - the abap2UI5 equivalent of the Date-object model. Without it view creation crashes ('Date must be a JavaScript or UI5Date date object'). The` &&
@@ -2901,27 +2941,23 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.ui.core`        control = `sap.ui.model.type.FileSize`            name = `TypeFileSize`                        class = `z2ui5_cl_ai_app_180` path = `src/02/b10/z2ui5_cl_ai_app_180.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        ui5_only = abap_true
         notes = `NOTE: Data-type binding paradigm: the FileSize type module is pulled in with core:require='{FileSizeType: sap/ui/model/type/FileSize}' and the Input/Text bindings carry type:'FileSizeType' plus` &&
                  ` formatOptions (min/maxIntegerDigits, min/maxFractionDigits) 1:1. The single model field 'fileSize' (initial 100, kept numeric like the sample's JSON) is serialized by abap2UI5 as /FILESIZE, so the` &&
                  ` original raw '/fileSize' paths are written as '/FILESIZE'.` )
       ( module = `sap.ui.core`        control = `sap.ui.model.type.Float`               name = `TypeFloat`                           class = `z2ui5_cl_ai_app_179` path = `src/02/b10/z2ui5_cl_ai_app_179.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        ui5_only = abap_true
         notes = `NOTE: Data-type binding paradigm: the Float type module is pulled in with core:require='{FloatType: sap/ui/model/type/Float}' and the Input/Text bindings carry type:'FloatType' plus formatOptions` &&
                  ` (min/maxIntegerDigits, min/maxFractionDigits, preserveDecimals) 1:1. The single model field 'number' (initial '123.456', kept as a string like the sample's JSON) is serialized by abap2UI5 as /NUMBER,` &&
                  ` so the original raw '/number' paths are written as '/NUMBER'.` )
       ( module = `sap.ui.core`        control = `sap.ui.model.type.Integer`             name = `TypeInteger`                         class = `z2ui5_cl_ai_app_129` path = `src/02/b03/z2ui5_cl_ai_app_129.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        ui5_only = abap_true
         notes = `NOTE: Data-type binding paradigm: the Integer type module is pulled in with core:require='{IntegerType: sap/ui/model/type/Integer}' and the Input/Text bindings carry type:'IntegerType' plus` &&
                  ` formatOptions (min/maxIntegerDigits) 1:1. The single model field 'number' (initial '123') is serialized by abap2UI5 as /NUMBER, so the original raw '/number' paths are written as '/NUMBER'.` )
       ( module = `sap.ui.core`        control = `sap.ui.model.type.Time`                name = `TypeTimeAsTime`                      class = `z2ui5_cl_ai_app_182` path = `src/02/b10/z2ui5_cl_ai_app_182.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        ui5_only = abap_true
         notes = `IMPROVISED: The original model value is a JS Date object (UI5Date.getInstance()) and every TimeType binding has NO source formatOption (the type's default model format is a Date object). abap2UI5` &&
                  ` cannot hold a JS Date object in the JSON model, so a source formatOption { source: { pattern: 'HH:mm:ss' } } is added to each TimeType binding and the field is a parseable time string ('13:30:00') -` &&
                  ` the abap2UI5 equivalent of the Date-object model. Without it view creation crashes ('Time must be a Date object'). Same idiom applies to any TypeTime/TypeDateTime sample whose model is an object; a` &&
@@ -2930,12 +2966,13 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.ui.integration` control = `sap.ui.integration.Card`               name = `CardsLayout`                         class = `z2ui5_cl_ai_app_118` path = `src/02/b01/z2ui5_cl_ai_app_118.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        ui5_only = abap_true
+        since = `1.62`
         notes = `IMPROVISED: Breadth-probe of the declarative-card paradigm: a sap.ui.integration.widgets.Card whose whole UI comes from a JSON manifest. The manifest is carried as an ABAP string and bound to the` &&
                  ` Card. The original binds several manifests from a named model; here one inline List-card manifest probes whether abap2UI5 can drive an integration card at all.` )
       ( module = `sap.ui.integration` control = `sap.ui.integration.widgets.Card`       name = `CardExplorer`                        class = `z2ui5_cl_ai_app_149` path = `src/02/b08/z2ui5_cl_ai_app_149.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.62`
         notes = `NOTE: The sample itself is a Link + Image pointing at the Card Explorer tool (the actual integration Cards live in that tool); reproduced 1:1. The Image press shows a client MessageToast (original` &&
                  ` onImagePress opened the tool).`
         use_ec = abap_true
@@ -2943,6 +2980,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.ui.layout`      control = `sap.ui.layout.BlockLayout`             name = `BlockLayoutCustomBackground`         class = `z2ui5_cl_ai_app_140` path = `src/02/b05/z2ui5_cl_ai_app_140.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.34`
         release = `1.98`
         release_post171 = abap_true
         is_post171 = abap_true
@@ -2953,6 +2991,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.ui.layout`      control = `sap.ui.layout.BlockLayout`             name = `BlockLayoutDefault`                  class = `z2ui5_cl_ai_app_214` path = `src/02/b10/z2ui5_cl_ai_app_214.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.34`
         notes = `LIVE-TEST: The Slider's ``liveChange`` attribute is dropped: Slider.value is two-way bound to /SLIDER_VALUE and the containerLayout (VerticalLayout) width is an expression binding {= ${/SLIDER_VALUE}` &&
                  ` + '%' } reproducing the controller's onSliderMoved setWidth client-side (thin-frontend, no round-trip; the original set width='100%' statically). Binding/render behaviour unverified in a running` &&
                  ` system. // LIVE-TEST: The SegmentedButton.selectedKey and the BlockLayout.background are both two-way bound to the same /SELECTEDBACKGROUND field, so changing the segmented button updates the` &&
@@ -2964,6 +3003,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.ui.layout`      control = `sap.ui.layout.BlockLayout`             name = `BlockLayoutLinkTitle`                class = `z2ui5_cl_ai_app_223` path = `src/02/b10/z2ui5_cl_ai_app_223.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.34`
         notes = `NOTE: The Slider's imperative onSliderMoved handler (setWidth on the container) is replaced by the thin-frontend equivalent: the Slider value is two-way bound and the VerticalLayout containerLayout` &&
                  ` width is an expression binding {= ${/SLIDERVALUE} + '%' }. The Slider's liveChange attribute is dropped (no event round-trip needed). structural-diff does not flag the literal value=100 becoming a` &&
                  ` binding. // NOTE: The SegmentedButton selectedKey and the BlockLayout background are two-way bound to one default-model field selected_background, reproducing the original {/selectedBackground}` &&
@@ -2972,6 +3012,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.ui.layout`      control = `sap.ui.layout.cssgrid.CSSGrid`         name = `CSSGrid`                             class = `z2ui5_cl_ai_app_124` path = `src/02/b02/z2ui5_cl_ai_app_124.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.60`
         notes = `LIVE-TEST: The Slider liveChange reproduces onSliderMoved server-side: Slider.value is two-way bound and the CSSGrid host Panel.width (bound to a model field) is recomputed as value + '%' on a backend` &&
                  ` round-trip. The original set Slider.value=100 statically and drove byId('gridLayout').setWidth imperatively; here value and width carry bindings to carry that behaviour. // NOTE: The five core:HTML` &&
                  ` tiles carry raw HTML in the content attribute (the builder xml-escapes it, matching the original's escaped &lt;header&gt;/&lt;aside&gt;/&lt;article&gt;/&lt;footer&gt; content 1:1, including the` &&
@@ -2979,18 +3020,21 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.ui.layout`      control = `sap.ui.layout.cssgrid.CSSGrid`         name = `GridAutoFlow`                        class = `z2ui5_cl_ai_app_145` path = `src/02/b06/z2ui5_cl_ai_app_145.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.60`
         notes = `LIVE-TEST: The RadioButtonGroup select is wired to a backend event; the original switched CSSGrid.gridAutoFlow (Column/ColumnDense/Row/RowDense) imperatively per selected index. The 'Reveal Grid'` &&
                  ` ToggleButton used a demo-only RevealGrid helper module (grid outline overlay) — reduced to a backend event. // NOTE: grid:CSSGrid with gridAutoFlow + 10 VBox demo boxes, four carrying` &&
                  ` GridItemLayoutData row/column spans, 1:1.` )
       ( module = `sap.ui.layout`      control = `sap.ui.layout.DynamicSideContent`      name = `DynamicSideContent`                  class = `z2ui5_cl_ai_app_138` path = `src/02/b05/z2ui5_cl_ai_app_138.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.30`
         notes = `LIVE-TEST: The Toggle button, the width Slider (liveChange) and the DynamicSideContent breakpointChanged are wired to backend events; the original drove them imperatively (toggle(), $().width(),` &&
                  ` getCurrentBreakpoint()) — device/DOM behaviours not reproduced server-side. // NOTE: The hint Text.visible is bound to a boolean model field (initial true); the original used a literal` &&
                  ` visible='getVisible()' (a sample quirk) toggled per Device.system.phone in onBeforeRendering. The two long body texts are shortened representative Lorem (not gate-compared, static).` )
       ( module = `sap.ui.layout`      control = `sap.ui.layout.FixFlex`                 name = `FixFlexHorizontal`                   class = `z2ui5_cl_ai_app_219` path = `src/02/b10/z2ui5_cl_ai_app_219.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.25.0`
         notes = `NOTE: The original binds the Image src against a separate 'img' JSON model ({img>/products/pic1}) loaded from sap/ui/demo/mock/img.json. abap2UI5 serves one default model, so the picture path is` &&
                  ` folded into it and the src binds it directly (client->_bind( pic1 )) - the 'img>' prefix is dropped and the last path segment is identical, which structural-diff matches. The mock's host-relative` &&
                  ` path is resolved to the OpenUI5 host (sdk.openui5.org) per the asset-URL rule. // NOTE: The sample's style.css (background colours on the FixFlex fixed/flexible areas, referenced by` &&
@@ -2999,26 +3043,31 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.ui.layout`      control = `sap.ui.layout.FixFlex`                 name = `FixFlexMinFlexSize`                  class = `z2ui5_cl_ai_app_215` path = `src/02/b10/z2ui5_cl_ai_app_215.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.25.0`
         use_name = abap_true )
       ( module = `sap.ui.layout`      control = `sap.ui.layout.FixFlex`                 name = `FixFlexVertical`                     class = `z2ui5_cl_ai_app_119` path = `src/02/b01/z2ui5_cl_ai_app_119.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.25.0`
         notes = `IMPROVISED: Breadth-probe: sap.ui.layout.FixFlex (fixed image + flexible text). The named-model image path (img>/products/pic1) is resolved to a static OpenUI5 product image.` )
       ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `FormToolbar`                         class = `z2ui5_cl_ai_app_142` path = `src/02/b06/z2ui5_cl_ai_app_142.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.16.0`
         notes = `NOTE: sap.ui.layout.form.Form with two FormContainers, per-container toolbars, ResponsiveGridLayout, FormElements with GridData layoutData and a Select. The original bound an element context` &&
                  ` (/SupplierCollection/0 from the shared demo supplier.json); flattened here to top-level model fields the {…} bindings resolve against.`
         use_name = abap_true )
       ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleFormToolbar`                   class = `z2ui5_cl_ai_app_175` path = `src/02/b10/z2ui5_cl_ai_app_175.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.16.0`
         notes = `IMPROVISED: The original controller loads the shared demo supplier.json and element-binds a single record (/SupplierCollection/0); flattened here to top-level default-model fields the {…} SimpleForm` &&
                  ` bindings resolve against. Values are supplier.json SupplierCollection row 0 (Red Point Stores, Maintown); unbound columns (Tel, Sms, Rating, …) are dropped.`
         use_name = abap_true )
       ( module = `sap.ui.layout`      control = `sap.ui.layout.Grid`                    name = `GridData`                            class = `z2ui5_cl_ai_app_169` path = `src/02/b10/z2ui5_cl_ai_app_169.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.15.0`
         notes = `IMPROVISED: The eight Sliders' liveChange='.onSliderMoved' handler is dropped. The original controller resizes the next grid wrapper via jQuery DOM traversal` &&
                  ` (oSlider.$().parent().next().find('.gridWrapper'), then Element.closestTo(...).setWidth(value + '%')) - a live DOM manipulation with no server-reachable or bindable equivalent (it addresses a sibling` &&
                  ` by rendered DOM position, not by control id or model path). The Sliders render 1:1 but do not resize the grids; the responsive GridData behaviour is still observable by resizing the browser window.` &&
@@ -3029,10 +3078,12 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` the original are written single-line here (whitespace-only difference, not a binding).` )
       ( module = `sap.ui.layout`      control = `sap.ui.layout.Grid`                    name = `GridInfo`                            class = `z2ui5_cl_ai_app_194` path = `src/02/b10/z2ui5_cl_ai_app_194.clas.abap`
         score = 2
-        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.15.0` )
       ( module = `sap.ui.layout`      control = `sap.ui.layout.Grid`                    name = `GridXL`                              class = `z2ui5_cl_ai_app_226` path = `src/02/b10/z2ui5_cl_ai_app_226.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.15.0`
         notes = `NOTE: The original binds against the default JSONModel (no named model); the InformationCollection array is reproduced 1:1 on the one abap2UI5 default model. The Grid binding={/InformationCollection}` &&
                  ` element-binding and the index-relative child bindings ({0/introText1}, {3/ProductPicUrl2}, {1/ProductPicUrl}, {2/ProductPicUrl}, {1/ProductPicUrl2}, {0/Description1}, {0/Description2}) are kept` &&
                  ` verbatim with upper-cased field names. // NOTE: Image asset URLs are host-prefixed to https://sdk.openui5.org/ per the project asset-URL rule: the static demoAppsTeaser.png src, and the bound` &&
@@ -3041,12 +3092,14 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.ui.layout`      control = `sap.ui.layout.HorizontalLayout`        name = `HorizontalLayout`                    class = `z2ui5_cl_ai_app_162` path = `src/02/b09/z2ui5_cl_ai_app_162.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.16.0`
         notes = `NOTE: The original uses a separate 'img' JSON model for the image src ({img>/products/pic1}) alongside the default model for the widths. abap2UI5 has one default model, so the picture path is folded` &&
                  ` into it and the src binds it directly - the 'img>' prefix is dropped and the path flattened to a single field (pic1); the last path segment is identical, which structural-diff matches. Widths use the` &&
                  ` desktop values (the original's phone branch is a client-only Device decision).` )
       ( module = `sap.ui.layout`      control = `sap.ui.layout.ResponsiveSplitter`      name = `ResponsiveSplitter`                  class = `z2ui5_cl_ai_app_186` path = `src/02/b10/z2ui5_cl_ai_app_186.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.38`
         notes = `NOTE: The original keeps the three pane sizes in a separate 'sizes' JSON model ({sizes>/pane1}, {sizes>/pane2}, {sizes>/pane3}) bound on the three SplitterLayoutData.size properties and echoed in each` &&
                  ` pane's Text label. abap2UI5 has one default model, so pane1/pane2/pane3 are folded into it and bound directly - the 'sizes>' prefix is dropped and the last path segment is identical, which` &&
                  ` structural-diff matches. Same data, renders identically. // NOTE: The shared 123-row demo ProductCollection (sap/ui/demo/mock/products.json) is inlined into model_init with the three columns the` &&
@@ -3057,10 +3110,12 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         use_name = abap_true )
       ( module = `sap.ui.layout`      control = `sap.ui.layout.Splitter`                name = `Splitter2`                           class = `z2ui5_cl_ai_app_125` path = `src/02/b02/z2ui5_cl_ai_app_125.clas.abap`
         score = 1
-        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
+        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.22.0` )
       ( module = `sap.ui.layout`      control = `sap.ui.layout.VerticalLayout`          name = `VerticalLayout`                      class = `z2ui5_cl_ai_app_173` path = `src/02/b10/z2ui5_cl_ai_app_173.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.16.0`
         notes = `IMPROVISED: The original binds the image src against a separate 'img' JSON model ({img>/products/pic1} from sap/ui/demo/mock/img.json) alongside the default model for the widths. abap2UI5 has one` &&
                  ` default model, so the picture path is folded into it and the src binds it directly (client->_bind( pic1 )) - the 'img>' prefix is dropped and the last path segment (pic1) is identical, which` &&
                  ` structural-diff matches. // NOTE: The original computes widthS/M/L from Device.system.phone in the controller (phone: 2/4/6em, else 5/10/15em). The bindings {/widthS..L} are ported 1:1 on the default` &&
@@ -3138,11 +3193,13 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarCalendarType`                class = `z2ui5_cl_ai_app_151` path = `src/02/b08/z2ui5_cl_ai_app_151.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.22.0`
         notes = `LIVE-TEST: Calendar with primaryCalendarType Islamic / secondaryCalendarType Gregorian. select and 'Focus Today' are wired to backend events that write the current server date (Gregorian yyyy-MM-dd)` &&
                  ` into the bound Text; the original formatted the selected day / focused today via DateFormat + UI5Date.` )
       ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarMinMax`                      class = `z2ui5_cl_ai_app_220` path = `src/02/b10/z2ui5_cl_ai_app_220.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.22.0`
         release = `1.74`
         release_post171 = abap_true
         is_post171 = abap_true
@@ -3162,17 +3219,20 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarSingleDaySelection`          class = `z2ui5_cl_ai_app_139` path = `src/02/b05/z2ui5_cl_ai_app_139.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.22.0`
         notes = `LIVE-TEST: Calendar.select and the 'Select Today' button are wired to backend events that write the current server date (yyyy-MM-dd) into the bound status Text. The original formatted` &&
                  ` getSelectedDates()[0].getStartDate() / added a DateRange(today) with DateFormat + UI5Date; reading the actually clicked day out of the transpiled event is simplified to the server date.` )
       ( module = `sap.ui.unified`     control = `sap.ui.unified.CalendarDateInterval`   name = `CalendarDateIntervalBasic`           class = `z2ui5_cl_ai_app_177` path = `src/02/b10/z2ui5_cl_ai_app_177.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.30.0`
         notes = `LIVE-TEST: CalendarDateInterval.select and the 'Select Today' button are wired to backend events that write the current server date (yyyy-MM-dd) into the bound status Text. The original formatted` &&
                  ` getSelectedDates()[0].getStartDate() with DateFormat, and handleCalendarSelect additionally toggled the day off when the same date was re-clicked (removeSelectedDate). Reading the actually clicked` &&
                  ` day out of the transpiled event, and the re-click deselect, are simplified to reporting the server date; the select/press attributes are kept.` )
       ( module = `sap.ui.unified`     control = `sap.ui.unified.CalendarLegend`         name = `CalendarLegendNavigation`            class = `z2ui5_cl_ai_app_240` path = `src/02/b11/z2ui5_cl_ai_app_240.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.22.0`
         release = `1.74`
         release_post171 = abap_true
         is_post171 = abap_true
@@ -3190,11 +3250,13 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.ui.unified`     control = `sap.ui.unified.ColorPicker`            name = `ColorPickerSimplified`               class = `z2ui5_cl_ai_app_112` path = `src/02/b01/z2ui5_cl_ai_app_112.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.48.0`
         notes = `NOTE: Breadth-probe (cross-library capability test). Inline sap.ui.unified ColorPicker (HSL / Simplified). The button's ResponsivePopover-with-ColorPicker is simplified to a toast.` )
       ( module = `sap.ui.unified`     control = `sap.ui.unified.Currency`               name = `Currency`                            class = `z2ui5_cl_ai_app_196` path = `src/02/b10/z2ui5_cl_ai_app_196.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
+        since = `1.21.1`
         notes = `IMPROVISED: The controller calls Formatting.setCustomCurrencies({BGN4:{digits:4}, WWWW:{digits:5}}) to register two custom currencies used by list five (customCurrencyDataModel). This is a global` &&
                  ` frontend i18n formatting config, not a control and not expressible in the thin abap2UI5 frontend; ported without it, so the BGN4/WWWW currencies in list five render with UI5's default digit count` &&
                  ` instead of 4/5 digits. // LIVE-TEST: The various/nonDecimal arrays back the u:Currency value property (float) as ABAP packed fields; the bigNumber/customCurrency arrays back stringValue (string) as` &&
@@ -3204,6 +3266,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.ui.unified`     control = `sap.ui.unified.Currency`               name = `CurrencyInTable`                     class = `z2ui5_cl_ai_app_171` path = `src/02/b10/z2ui5_cl_ai_app_171.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.21.1`
         notes = `LIVE-TEST: u:Currency binds a nested object path (value={transactionAmount/size}, currency={transactionAmount/currency}). Ported as a nested ABAP structure TRANSACTION_AMOUNT (fields SIZE/CURRENCY),` &&
                  ` bound {TRANSACTION_AMOUNT/SIZE} / {TRANSACTION_AMOUNT/CURRENCY}. CAPABILITIES.md documents nested TABLES/trees but not a nested single (non-array) structure within a row, so the nested-object` &&
                  ` serialization + relative sub-path binding needs a live render check.`
@@ -3235,6 +3298,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
+        since = `1.21.0`
         release = `1.84`
         release_post171 = abap_true
         is_post171 = abap_true
@@ -3258,6 +3322,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
+        since = `1.21.0`
         release = `1.84`
         release_post171 = abap_true
         is_post171 = abap_true
@@ -3296,6 +3361,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.uxap`           control = `sap.uxap.ModelMapping`                 name = `BoundModelMapping`                   class = `z2ui5_cl_ai_app_230` path = `src/03/b02/z2ui5_cl_ai_app_230.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.26`
         notes = `IMPROVISED: Named-model fold: the sample's whole point is the uxap:ModelMapping element inside a custom BlockBase (sample:ModelMappingBlock), which maps the external named model jsonModel (at` &&
                  ` {jsonModel>/externalPath}, resolving to /Employee) onto the block's internal named model Contact, so {Contact>firstName}/{Contact>lastName} render John/Miller. abap2UI5 serves a single default model` &&
                  ` - a second, independent ABAP-fed named model was DECLINED 2026-07-19 (pr/named-json-models, too complex: one serialized JSONModel per slot). So the two named models are folded into the one default` &&
@@ -3307,6 +3373,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageHeader`             name = `KPIObjectPageHeader`                 class = `z2ui5_cl_ai_app_217` path = `src/03/b02/z2ui5_cl_ai_app_217.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.26`
         notes = `IMPROVISED: Block->content inlining (app 188/178/161 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'). The original blocks/moreBlocks aggregations each hold a custom` &&
                  ` BlockBase control from the sample's SharedBlocks JS: goals:GoalsBlock (id goalsblock), personal:BlockPhoneNumber (id phone), personal:BlockSocial (id social), personal:BlockAdresses (id adresses),` &&
                  ` personal:BlockMailing (id mailing, columnLayout=1), personal:PersonalBlockPart1 (id part1, columnLayout=1) and personal:PersonalBlockPart2 (id part2, columnLayout=1). A BlockBase is only a` &&
@@ -3332,12 +3399,14 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageHeaderContent`      name = `HeaderContent`                       class = `z2ui5_cl_ai_app_216` path = `src/03/b02/z2ui5_cl_ai_app_216.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.30`
         notes = `NOTE: The view is a 1:1 static rebuild - every ObjectStatus/ObjectNumber/Label/Text/ProgressIndicator/ObjectAttribute/Button/Tokenizer value is a literal, exactly as in the original` &&
                  ` ObjectPageHeaderContent view.xml. The sample's controller loads sap/uxap/sample/SharedJSONData/employee.json into a named 'ObjectPageModel', but the view never binds a single field from it (all` &&
                  ` header content is hard-coded in the XML), so the port carries no model_init - omitting a dead model changes nothing in the rendered view.` )
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageHeaderContent`      name = `ObjectPageHeaderContentPriorities`   class = `z2ui5_cl_ai_app_188` path = `src/03/b02/z2ui5_cl_ai_app_188.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.30`
         notes = `IMPROVISED: Block->content inlining (app 178/161 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the original blocks aggregations each hold a custom BlockBase` &&
                  ` control goals:GoalsBlock (from the sample's SharedBlocks JS, xmlns:goals='sap.uxap.sample.SharedBlocks.goals'), used 4 times in the four ObjectPageSubSection blocks aggregations. A BlockBase is only` &&
                  ` a lazy-loading wrapper around a view; GoalsBlock's rendered content is a sap.ui.layout.form.SimpleForm (editable='false' layout='ColumnLayout') holding three Label/Text goal pairs. Since` &&
@@ -3347,6 +3416,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `AnchorBarNoPopover`                  class = `z2ui5_cl_ai_app_187` path = `src/03/b02/z2ui5_cl_ai_app_187.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.26`
         notes = `IMPROVISED: Block->content inlining (app 178/161 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the original blocks aggregations each hold a custom BlockBase` &&
                  ` control blockcolor:BlockBlue (from the sample's SharedBlocks JS, xmlns:blockcolor='sap.uxap.sample.SharedBlocks'), used 4 times with the id attributes bbt1/bbt2/bbt3/bbt4. A BlockBase is only a` &&
                  ` lazy-loading wrapper around a view; BlockBlue's rendered content is a single coloured div (<html:div style='height:4em; background-color: #A9EAFF ;'/>). Since ObjectPageSubSection.blocks accepts any` &&
@@ -3356,17 +3426,20 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `ObjectPageSubSection`                class = `z2ui5_cl_ai_app_116` path = `src/03/b01/z2ui5_cl_ai_app_116.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.26`
         notes = `IMPROVISED: Breadth-probe: a minimal sap.uxap.ObjectPageLayout (header title + section + two subsections). The original's blocks are custom JS view controls (sample:MultiViewBlock) — not expressible` &&
                  ` in the declarative builder — so they are replaced with sap.m.Text content for the rendering probe.` )
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `SingleView`                          class = `z2ui5_cl_ai_app_161` path = `src/03/b02/z2ui5_cl_ai_app_161.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.26`
         notes = `IMPROVISED: Wall-break for sap.uxap: the original blocks aggregation holds a custom BlockBase control (blockcolor:BlockBlue from the sample's SharedBlocks JS). A BlockBase is only a lazy-loading` &&
                  ` wrapper around a view; its content (a single coloured div) is inlined here as core:HTML, since ObjectPageSubSection.blocks accepts any sap.ui.core.Control. This removes the need for a custom JS` &&
                  ` control - the whole uxap ObjectPage renders with the thin generic frontend. The blockcolor:BlockBlue control is therefore absent and a core:HTML is present in its place.` )
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageSection`            name = `ObjectPageSection`                   class = `z2ui5_cl_ai_app_184` path = `src/03/b02/z2ui5_cl_ai_app_184.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.26`
         notes = `IMPROVISED: Block->content inlining (app 178/161 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the original blocks aggregations each hold a custom BlockBase` &&
                  ` control (blockcolor:BlockBlueT1, blockcolor:BlockBlueT2, blockcolor:BlockBlueT3, blockcolor:BlockBlueT4, blockcolor:BlockBlueT5, from the sample's SharedBlocks JS,` &&
                  ` xmlns:blockcolor='sap.uxap.sample.SharedBlocks'), used once each with ids bbt1/bbt2/bbt3/bbt4/bbt5. A BlockBase is only a lazy-loading wrapper around a view; each BlockBlueTn's rendered content is a` &&
@@ -3378,6 +3451,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageSubSection`         name = `ObjectPageSubSectionHiddenTitle`     class = `z2ui5_cl_ai_app_245` path = `src/03/b04/z2ui5_cl_ai_app_245.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.26`
         notes = `NOTE: The ObjectNumber state binding differs: the original binds state="{path:'WeightMeasure', formatter:'.weightState'}" to a controller formatter (parseFloat + Success/Warning/Error thresholds).` &&
                  ` That is business logic, so - abap2UI5 being a thin frontend - the weightState is computed in ABAP model_init into a WEIGHTSTATE field and bound state="{WEIGHTSTATE}", not via a frontend formatter.` &&
                  ` Visually 1:1 with the original (apps 009/010/022/092 precedent). No core:require is dropped - the original registers the formatter as a controller method, not on the view root. // NOTE: The default` &&
@@ -3388,6 +3462,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageSubSection`         name = `ObjectPageSubSectionWithActions`     class = `z2ui5_cl_ai_app_178` path = `src/03/b02/z2ui5_cl_ai_app_178.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.26`
         notes = `IMPROVISED: Block->content inlining (app 161 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the original blocks aggregations each hold a custom BlockBase control` &&
                  ` blockcolor:BlockBlue (from the sample's SharedBlocks JS, xmlns:blockcolor='sap.uxap.sample.SharedBlocks'), used 3 times (ids b1/b2/b3). A BlockBase is only a lazy-loading wrapper around a view;` &&
                  ` BlockBlue's rendered content is a single coloured div (<html:div style='height:4em; background-color: #A9EAFF ;'/>). Since ObjectPageSubSection.blocks accepts any sap.ui.core.Control, each` &&

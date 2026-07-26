@@ -60,8 +60,9 @@ PR. Per batch:
    rule in AGENTS/CAPABILITIES **and, where greppable, a deterministic check**
    (structural diff / pattern lint), style → convention update, new technique →
    CAPABILITIES row, framework limitation → forwardable request under `pr/`
-   (one folder per request). Corrected ports become `checked`;
-   STATUS.md is updated in the same change.
+   (one folder per request). Corrected ports become `checked`; the journal
+   entry goes into STATUS-history.md in the same change (the STATUS.md state
+   block regenerates itself via generate-status.mjs).
 5. **Regression probe** (every few batches) — re-generate a handful of
    `checked` reference ports plus the hold-out set from scratch with the current setup
    and diff: a re-appearing old mistake means the rule was too weak.
@@ -213,6 +214,11 @@ Training signal is only as good as the stored pairs:
 ## Fine-tuning (later)
 
 The pair structure (sample files + capability context → ABAP + typed
-deviations) is exactly the JSONL shape a supervised fine-tune would need. With
-~34 pairs this is far below any useful volume — revisit at a few hundred
-`checked` reference pairs; until then the flywheel above is where the gains are.
+deviations) is exactly the JSONL shape a supervised fine-tune would need —
+and since 2026-07-26 it is a command, not a plan:
+`node scripts/export-training-pairs.mjs` emits one JSON line per `checked`
+port (input = the archived originals + referenced mocks, output = the ABAP
+class + typed deviations; hold-out samples always excluded, `--all` for
+every status). Still far below useful fine-tuning volume — revisit at a few
+hundred `checked` reference pairs; until then the flywheel above is where
+the gains are.
