@@ -54,15 +54,27 @@ in-scope, unported samples for batch planning.
 > neighbour port existing is **not** proof of scope (see the
 > UploadSet/SidePanel debt).
 
-**Batch planning is breadth-first.** The mission is gap discovery, and the
-gap yield of a port drops sharply once its control is covered — many samples
-are near-duplicates on the same control. So: port **one sample per
-uncovered control first**; only when every in-scope control has at least one
-port does depth (more samples per control) pay. `--backlog` encodes this:
-rows are sorted `NEW-CONTROL` first (control has no port at all), then
-`covered-control`; pick batches from the top. Rows marked `HOLDOUT` belong
-to the hold-out set (`ui5/holdout.json`, TRAINING.md) and stay out of
-regular batch planning.
+**Batch planning is breadth-first, then idiom-first depth.** The mission is
+gap discovery, and the gap yield of a port drops sharply once its control is
+covered — many samples are near-duplicates on the same control. So: port
+**one sample per uncovered control first**; only when every in-scope control
+has at least one port does depth (more samples per control) pay. `--backlog`
+encodes both phases: rows sort `NEW-CONTROL` first (control has no port at
+all), then `covered-control(n)` **ascending by n** — a control with one port
+still yields more new idioms than one with five. **Within equal n, pick by
+idiom, not by name**: prefer the sample whose title/files show a feature no
+existing port of that control exercises (a different aggregation, binding
+form, event wiring, popup path — skim the sample's view/controller against
+the control's existing ports), and skip true near-duplicates entirely — a
+depth port that exercises nothing new is corpus weight without training
+signal. Rows marked `HOLDOUT` belong to the hold-out set
+(`ui5/holdout.json`, TRAINING.md) and stay out of regular batch planning.
+**GROUP-nested samples** (the demo kit's group folders: `TreeTable.…`,
+`p13n.…`, `UploadSetwithTablePlugin.…`, `View.…`, …) are part of the
+universe since 2026-07-26 — named `<Group>.<Child>`, source at
+`sample/<Group>/<Child>`, archived flat as `ui5/<lib>/<Group>.<Child>/`
+(the scaffolder handles the mapping); only children the docuindex lists as
+official samples count.
 
 The pipeline (run by a coding agent):
 

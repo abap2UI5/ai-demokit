@@ -69,6 +69,19 @@ one change:
   "planned" though long existing), AGENTS §7 overview description, and a
   pre-existing pattern-lint violation in the generated overview class
   (`<CLASS>` in ABAP Doc from the hash-routing PR) fixed at the generator.
+- **Depth phase prepared (same day, second pass)**: the universe now includes
+  the demo kit's GROUP-nested samples (47 added: `TreeTable.…`, `p13n.…`,
+  `UploadSetwithTablePlugin.…`, `View.…`, `ViewTemplate.…`, …) — taken only
+  when the docuindex lists the child as an official sample, named
+  `<Group>.<Child>`, archived flat as `ui5/<lib>/<Group>.<Child>/`
+  (scaffolder maps the path). Universe 689 → 736 samples, backlog 398 → 425
+  with 47 on uncovered controls. `--backlog` now sorts depth rows ascending
+  by `covered-control(n)`, and AGENTS §1/TRAINING document the idiom-first
+  depth criteria (within equal n, pick the sample exercising something no
+  existing port of that control does; skip true near-duplicates). Snapshot
+  rebuilt from the fork — api.json metadata absent until the next weekly
+  `generate_result` run, the properties.json control-level fallback covers
+  Since/Deprecated meanwhile.
 - **data_fidelity stage 2 (same day, second pass)**: the gate now also parses
   every `VALUE #( … )` table block (string-literal-aware — parens inside
   backtick literals are data, not nesting) and compares it against its ONE

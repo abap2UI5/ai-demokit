@@ -137,9 +137,11 @@ const cleanDoc = (t) => String(t || '')
   .replace(/\{@link\s+([^}\s]+)(?:\s+([^}]+))?\}/g, (_, sym, disp) => (disp ? disp.trim() : sym))
   .replace(/\s+/g, ' ')
   .trim();
-// the sample's source folder in the OpenUI5 repository
+// the sample's source folder in the OpenUI5 repository. A GROUP-nested
+// sample is named `<Group>.<Child>` (TreeTable.JSONTreeBinding) — its
+// folder is sample/<Group>/<Child>
 const sampleSrcUrl = (lib, name) =>
-  `${OPENUI5}/tree/${OPENUI5_REF}/src/${lib}/test/${lib.replace(/\./g, '/')}/demokit/sample/${name}`;
+  `${OPENUI5}/tree/${OPENUI5_REF}/src/${lib}/test/${lib.replace(/\./g, '/')}/demokit/sample/${name.replace(/\./g, '/')}`;
 // generated abap2UI5 class file under src/ (this repo)
 const abapUrl = (file) => `${GH}/blob/${REF}/${file.split(path.sep).join('/')}`;
 
@@ -205,8 +207,25 @@ if (fs.existsSync(OPENUI5_DIR)) {
     const entOf = entityMap(demokitDir);
     const api = loadApi(lib);
     if (api.version && !release) release = api.version;
-    const samples = fs.readdirSync(sampleDir)
-      .filter((n) => fs.statSync(path.join(sampleDir, n)).isDirectory())
+    const isSampleDir = (p) =>
+      fs.existsSync(path.join(p, 'Component.js')) || fs.existsSync(path.join(p, 'manifest.json'));
+    const names = [];
+    for (const n of fs.readdirSync(sampleDir)) {
+      const dir = path.join(sampleDir, n);
+      if (!fs.statSync(dir).isDirectory()) continue;
+      if (entOf.has(`${lib}.sample.${n}`) || isSampleDir(dir)) {
+        names.push(n);
+        continue;
+      }
+      // GROUP folder (TreeTable, p13n, …): its subfolders are the real
+      // samples — take a child ONLY when the docuindex lists it as an
+      // official demo kit sample (test infra / shared helpers stay out)
+      for (const c of fs.readdirSync(dir)) {
+        if (!fs.statSync(path.join(dir, c)).isDirectory()) continue;
+        if (entOf.has(`${lib}.sample.${n}.${c}`)) names.push(`${n}.${c}`);
+      }
+    }
+    const samples = names
       .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
       .map((name) => {
         const entity = entOf.get(`${lib}.sample.${name}`) || null;
@@ -286,22 +305,28 @@ if (process.argv.includes('--backlog')) {
   const holdout = fs.existsSync(holdoutFile)
     ? new Set(JSON.parse(fs.readFileSync(holdoutFile, 'utf8')).samples)
     : new Set();
-  const portedEntities = new Set(
-    libs.flatMap((e) => e.samples.filter((s) => s.port && s.entity).map((s) => s.entity)));
+  // ports per control — depth planning prefers thinly-covered controls
+  const portsPerEntity = new Map();
+  for (const e of libs) for (const s of e.samples) {
+    if (s.port && s.entity) portsPerEntity.set(s.entity, (portsPerEntity.get(s.entity) || 0) + 1);
+  }
   const rows = libs.flatMap((e) => e.samples
     .filter((s) => s.scope === 'in' && !s.port)
     .map((s) => ({
       lib: e.lib, entity: s.entity, name: s.name,
-      newControl: !portedEntities.has(s.entity),
+      covered: portsPerEntity.get(s.entity) || 0,
       holdout: holdout.has(`${e.lib}.sample.${s.name}`),
     })));
-  rows.sort((a, b) => (b.newControl - a.newControl)
+  // breadth first (uncovered controls), then DEPTH: ascending by how many
+  // ports the control already has — a control with one port still yields
+  // more new idioms than one with five (AGENTS §1 depth criteria)
+  rows.sort((a, b) => (a.covered - b.covered)
     || a.entity.localeCompare(b.entity) || a.name.localeCompare(b.name));
   for (const r of rows) {
-    console.log(`${r.lib}\t${r.entity}\t${r.name}\t${r.newControl ? 'NEW-CONTROL' : 'covered-control'}${r.holdout ? '\tHOLDOUT' : ''}`);
+    console.log(`${r.lib}\t${r.entity}\t${r.name}\t${r.covered === 0 ? 'NEW-CONTROL' : `covered-control(${r.covered})`}${r.holdout ? '\tHOLDOUT' : ''}`);
   }
-  const n = rows.filter((r) => r.newControl && !r.holdout).length;
-  console.log(`# ${rows.length} in-scope unported samples; ${n} on uncovered controls (plan these first, HOLDOUT excluded)`);
+  const n = rows.filter((r) => r.covered === 0 && !r.holdout).length;
+  console.log(`# ${rows.length} in-scope unported samples; ${n} on uncovered controls (plan these first, HOLDOUT excluded; then depth = lowest covered-control(n) first)`);
   process.exit(0);
 }
 

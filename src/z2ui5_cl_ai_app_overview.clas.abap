@@ -1457,7 +1457,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.m`              control = `sap.m.HeaderContainer`                 name = `HeaderContainer`                     class = `z2ui5_cl_ai_app_029` path = `src/01/b06/z2ui5_cl_ai_app_029.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        since = `1.44.0`
         notes = `NOTE: the Select's literal selectedKey="1" is replaced by a two-way binding {SELECTED_KEY} (seeded '1'); scrollStepByItem on both HeaderContainers is now a pure client-side expression binding over it` &&
                  ` ({= ${SELECTED_KEY} === 'px' ? 0 : +${SELECTED_KEY} }), so the original Select's change handler (onScrollByItemChange) is dropped - no round-trip. This is the prefer-a-bindable-property/expression` &&
                  ` pattern (like the app 019). The original controller reads oEvent.getParameter('selectedItem').getKey(), which has no public $parameters path (selectedItem is a control; reading private control` &&
@@ -1472,7 +1471,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.m`              control = `sap.m.HeaderContainer`                 name = `HeaderContainerVM`                   class = `z2ui5_cl_ai_app_157` path = `src/01/b16/z2ui5_cl_ai_app_157.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        since = `1.44.0`
         notes = `LIVE-TEST: NumericContent presses show a client MessageToast (original press handler). Two vertical HeaderContainers — one of eight NumericContents, one of five TileContents (each wrapping a` &&
                  ` NumericContent) — reproduced 1:1.`
         use_ec = abap_true
@@ -1697,7 +1695,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.m`              control = `sap.m.MessageBox`                      name = `MessageBoxInitialFocus`              class = `z2ui5_cl_ai_app_036` path = `src/01/b03/z2ui5_cl_ai_app_036.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        since = `1.21.2`
         release = `1.124`
         release_post171 = abap_true
         is_post171 = abap_true
@@ -1816,8 +1813,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` namespace decls (xmlns:core, core:require on the view root) are not in the sample view.` )
       ( module = `sap.m`              control = `sap.m.MessageToast`                    name = `MessageToast`                        class = `z2ui5_cl_ai_app_037` path = `src/01/b03/z2ui5_cl_ai_app_037.clas.abap`
         score = 2
-        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        since = `1.9.2` )
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
       ( module = `sap.m`              control = `sap.m.MessageView`                     name = `MessageViewMessageManager`           class = `z2ui5_cl_ai_app_038` path = `src/01/b03/z2ui5_cl_ai_app_038.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -2595,7 +2591,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         release_post171 = abap_true
         is_post171 = abap_true
         is_deprecated = abap_true
-        dep_text = `Deprecated since 1.129: replaced by sap.m.plugins.UploadSetwithTable`
+        dep_text = `Deprecated since 1.129: replaced by {@link sap.m.plugins.UploadSetwithTable}`
         notes = `IMPROVISED: Breadth-probe: a minimal sap.m.upload.UploadSet (file upload list) with 3 pre-populated items + a toolbar. The item file names are invented (Screenshot.png etc.), not the mock's items.json` &&
                  ` rows. The actual upload backend, the full toolbar and the item action buttons are simplified; upload here would target the abap2UI5 FileUploader path in a live system. // POST-1.71: UploadSet.mode` &&
                  ` (since UI5 1.100) and UploadSet.afterItemRemoved (since UI5 1.83) kept for the 1:1 port - surfaced when the property gate gained the sap.m/upload sub-package (control-level source scan 2026-07-26).` &&
@@ -2606,7 +2602,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.m`              control = `sap.m.URLHelper`                       name = `UrlHelper`                           class = `z2ui5_cl_ai_app_084` path = `src/01/b10/z2ui5_cl_ai_app_084.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        since = `1.10`
         notes = `NOTE: element binding kept 1:1 - a one-record structure /S_SUPPLIER instead of {/SupplierCollection/0}. // NOTE: URLHelper.triggerTel/triggerSms/triggerEmail/redirect map 1:1 to the URLHELPER frontend` &&
                  ` action (cs_event-urlhelper): TRIGGER_TEL/TRIGGER_SMS take the number as a plain string param, TRIGGER_EMAIL/REDIRECT take a { EMAIL/URL, ... } object-literal t_arg (get_t_arg emits {-prefixed args` &&
                  ` raw as UI5 event-handler object literals). open_new_tab is NOT used - it is same-origin-only (isValidRedirectURL).`

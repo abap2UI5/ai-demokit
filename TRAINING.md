@@ -46,7 +46,10 @@ PR. Per batch:
    the 2–3 nearest `checked` ports. Pick **breadth-first**: `NEW-CONTROL` rows
    (control not covered by any port yet) before further samples of covered
    controls, and never rows marked `HOLDOUT` (see below) — one port per
-   control maximizes gap discovery per port (AGENTS §1).
+   control maximizes gap discovery per port. Once breadth is exhausted, pick
+   **idiom-first depth**: lowest `covered-control(n)` first, and within equal
+   n only samples that exercise something no existing port of that control
+   does — skip true near-duplicates (AGENTS §1).
 2. **Machine-verify until green** — abaplint ×3, `validate-meta`,
    `structural-diff --strict`, `pattern-lint`, plus an adversarial AI review
    pass. The agent
