@@ -240,14 +240,40 @@ const libs = universe.libs.map((e) => ({
   }),
 }));
 
-// a ported sample outside the scope is a rule violation — warn loudly
+// a ported sample outside the scope is a rule violation — HARD gate since
+// 2026-07-26: fail unless the sample carries a documented exception in
+// ui5/scope-exceptions.json (a maintainer decision, never a silencer).
+// 'unknown' scope (demo apps without an owning control) is not a violation.
+const SCOPE_EXC_FILE = path.join(ROOT, 'ui5', 'scope-exceptions.json');
+const scopeExceptions = new Map(
+  (fs.existsSync(SCOPE_EXC_FILE)
+    ? JSON.parse(fs.readFileSync(SCOPE_EXC_FILE, 'utf8')).exceptions || []
+    : []).map((e) => [e.sample, e]));
+let scopeErrors = 0;
 for (const e of libs) {
   for (const s of e.samples) {
-    if (s.port && s.scope !== 'in') {
-      console.warn(`WARNING: ported sample ${e.lib}.sample.${s.name} is out of scope (${s.scope})`);
+    if (!s.port || s.scope === 'in' || s.scope === 'unknown') continue;
+    const sampleId = `${e.lib}.sample.${s.name}`;
+    const exc = scopeExceptions.get(sampleId);
+    if (exc) {
+      console.warn(`note: ported sample ${sampleId} is out of scope (${s.scope}) — documented exception: ${exc.reason}`);
+    } else {
+      console.error(`ERROR: ported sample ${sampleId} is out of scope (${s.scope}) — out-of-scope samples are never ported (AGENTS §1); remove the port or add a maintainer-decided entry to ui5/scope-exceptions.json`);
+      scopeErrors++;
     }
   }
 }
+// stale exceptions must not linger: an entry whose sample is no longer ported
+// (or no longer out of scope) fails too, so the list can only shrink honestly
+for (const [sampleId, exc] of scopeExceptions) {
+  const hit = libs.flatMap((e) => e.samples.map((s) => ({ ...s, id: `${e.lib}.sample.${s.name}` })))
+    .find((s) => s.id === sampleId);
+  if (!hit || !hit.port || hit.scope === 'in' || hit.scope === 'unknown') {
+    console.error(`ERROR: stale scope exception "${sampleId}" (${exc.class}) — the sample is ${!hit ? 'not in the universe' : !hit.port ? 'not ported' : 'in scope'}; remove the entry from ui5/scope-exceptions.json`);
+    scopeErrors++;
+  }
+}
+if (scopeErrors) process.exit(1);
 
 // --backlog: print the in-scope, unported samples (batch planning input).
 // BREADTH-FIRST order: samples whose CONTROL has no port at all come first —

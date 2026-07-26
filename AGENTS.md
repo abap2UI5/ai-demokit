@@ -41,9 +41,13 @@ in-scope, unported samples for batch planning.
 > `@since`/`@deprecated` (parsed from the OpenUI5 sources by
 > `generate-properties.mjs`), and `scopeOf` in `generate-coverage.mjs` falls
 > back to it when `ui5/universe.json` carries null — so out-of-scope samples
-> surface offline in coverage/backlog/WARNINGs (`pr/scope-since-from-source`
+> surface offline in coverage/backlog (`pr/scope-since-from-source`
 > implemented; that is how the SidePanel/InvisibleMessage/ProductSwitch/
-> SemanticPage debt was surfaced, tracked in STATUS.md). **Still run
+> SemanticPage debt was surfaced, tracked in STATUS.md). Since 2026-07-26 the
+> check is a **hard gate**: `generate-coverage.mjs` exits 1 on any ported
+> out-of-scope sample without a maintainer-decided entry in
+> `ui5/scope-exceptions.json` (stale entries fail too, so the list can only
+> shrink honestly). **Still run
 > `node scripts/scope-of.mjs <entity>` (or `--sample <Name>`) before porting**
 > — it is the authoritative per-entity pre-check straight from the source
 > JSDoc and also covers controls a stale `properties.json` might miss. A

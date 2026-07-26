@@ -35,8 +35,10 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   ported sample whose control is deprecated or newer than 1.71, including
   `sap.f.semantic.SemanticPage` (deprecated since 1.54) which the earlier
   hand audit had missed. Pending maintainer decision per app: drop the port,
-  or keep it as a documented exception. Until then `generate-coverage.mjs`
-  prints one WARNING per app on every run.
+  or keep it permanently. Until then the five carry documented entries in
+  `ui5/scope-exceptions.json`; since 2026-07-26 the check is a **hard gate**
+  (exit 1) for any NEW ported out-of-scope sample without such an entry, and
+  stale entries fail too.
 - [ ] **LIVE_TEST debt → e2e interactions.** The open `LIVE_TEST` count (see
   the generated table) is the corpus' unverified-behaviour backlog. The
   systematic close path is the e2e harness: grow the `INTERACTIONS` map in
