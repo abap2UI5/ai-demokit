@@ -69,6 +69,19 @@ one change:
   "planned" though long existing), AGENTS §7 overview description, and a
   pre-existing pattern-lint violation in the generated overview class
   (`<CLASS>` in ABAP Doc from the hash-routing PR) fixed at the generator.
+- **data_fidelity stage 2 (same day, second pass)**: the gate now also parses
+  every `VALUE #( … )` table block (string-literal-aware — parens inside
+  backtick literals are data, not nesting) and compares it against its ONE
+  best-matching mock array: positional row/field string equality on a full
+  inline, per-field set membership on a subset (a legitimate `/Coll/0..n`
+  passes, an invented value fails), equality modulo the sanctioned
+  sdk.openui5.org host-absolutization, numbers uncompared. Corpus is clean
+  (0 errors over 246 ports); both paths regression-tested with injected
+  142-class bugs. The out-of-scope check also became a **hard gate** the
+  same day (`ui5/scope-exceptions.json`, stale entries fail), and the e2e
+  INTERACTIONS grew 4 → 8 verified LIVE_TEST-class checks
+  (+091 openBy hidden picker, +104 dialog + binding_call search, +130
+  two-way busy round-trip, +133 GridList mode round-trip).
 - **app 234 downport defect fixed + gated**: three `FOR i = …` iterators in
   one method downport to three `DATA i TYPE i` — the 702 build and the e2e
   transpiler both failed on it. Renamed to `i`/`j`/`k`; new pattern-lint

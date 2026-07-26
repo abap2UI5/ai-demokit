@@ -26,10 +26,24 @@
  * `what` names the asset's basename verbatim declares it; a sidecar
  * "data_fidelity": { "skip": true, "reason": "…" } skips the port.
  *
- * Value-level mock fidelity beyond assets (names, addresses, quantities)
- * stays with review + the periodic audit: --report prints, per port, the
- * mock string values that never appear in the ABAP source, as a scannable
- * audit worksheet — informational only, it does not fail the run.
+ * STAGE 2 (2026-07-26) — value-level table fidelity. Every ABAP
+ * `VALUE #( … )` block that inlines a mock array (matched by >= 3 shared
+ * field names, >= 2 rows) is compared against that array:
+ *
+ *   - equal row counts  -> row-by-row, field-by-field STRING comparison
+ *     (positional; a field the mock row omits is skipped — the port seeds
+ *     the UI5 default there by rule);
+ *   - fewer rows        -> per-field SET membership: every seeded string
+ *     value must exist among that field's mock values (subsets can be
+ *     legitimate — the original may bind /Coll/0..n — but INVENTED values
+ *     are the 142-class bug this catches);
+ *   - numbers stay uncompared (formatting freedom: 6.99 vs `6.99`), and a
+ *     value is cleared by a deviation whose `what` names it (or the field),
+ *     same convention as the asset checks.
+ *
+ * Residual value-level review beyond tables (scalar folds): --report prints,
+ * per port, the mock string values that never appear in the ABAP source, as
+ * a scannable audit worksheet — informational only.
  *
  * Run:  node scripts/data-fidelity.mjs [--report]     (exit 1 on any error)
  */
@@ -71,6 +85,89 @@ const normalize = (t) => t.replace(/^https?:\/\/[^/]+\//, '').replace(/^\.\//, '
 function assetTokens(text) {
   const out = [];
   for (const m of text.matchAll(ASSET_RE)) out.push(m[1]);
+  return out;
+}
+
+// --- stage 2 helpers: ABAP VALUE-block table parsing -------------------------
+
+// normalize a field/key name for matching: SupplierName == suppliername == supplier_name
+const normName = (s) => s.toLowerCase().replace(/_/g, '');
+// join `a` && `b` continuations and unescape doubled backticks
+function abapString(raw) {
+  const parts = [...raw.matchAll(/`((?:[^`]|``)*)`/g)].map((m) => m[1].replace(/``/g, '`'));
+  return parts.join('');
+}
+
+// protect backtick string literals so paren scanning/masking never touches
+// text INSIDE a literal ("(mono)" in a description is data, not nesting):
+// returns { text, lits } with each literal replaced by \x00<n>\x00
+function protectLiterals(src) {
+  const lits = [];
+  const text = src.replace(/`(?:[^`]|``)*`/g, (lit) => {
+    lits.push(lit);
+    return `\x00${lits.length - 1}\x00`;
+  });
+  return { text, lits };
+}
+const restoreLiterals = (s, lits) => s.replace(/\x00(\d+)\x00/g, (_, n) => lits[+n]);
+
+// every VALUE #( … ) block in the source parsed into rows of {field: value}
+// (string values only; rows = the block's depth-1 `( … )` groups; nested
+// parens inside a row — nested tables/structures — are masked out). All
+// scanning happens on the literal-protected text.
+function parseValueBlocks(abap) {
+  const { text, lits } = protectLiterals(abap);
+  const blocks = [];
+  for (const m of text.matchAll(/VALUE\s+#?\s*\(/g)) {
+    const open = m.index + m[0].length - 1;
+    // region of this VALUE( … ) on the protected text
+    let depth = 0;
+    let end = text.length;
+    for (let i = open; i < text.length; i++) {
+      if (text[i] === '(') depth++;
+      else if (text[i] === ')' && --depth === 0) { end = i; break; }
+    }
+    const body = text.slice(open + 1, end);
+    const rows = [];
+    let d = 0;
+    let start = -1;
+    for (let i = 0; i < body.length; i++) {
+      if (body[i] === '(') { if (d === 0) start = i; d++; }
+      else if (body[i] === ')') { d--; if (d === 0 && start >= 0) rows.push(body.slice(start + 1, i)); }
+    }
+    if (rows.length < 2) continue;
+    const parsed = [];
+    for (const rowText of rows) {
+      // mask nested paren groups (nested VALUE/structs) — literals are safe
+      let masked = rowText;
+      let prev;
+      do { prev = masked; masked = masked.replace(/\([^()]*\)/g, ' '); } while (masked !== prev);
+      const row = {};
+      for (const p of masked.matchAll(/(\w+)\s*=\s*(\x00\d+\x00(?:\s*&&\s*\x00\d+\x00)*)/g)) {
+        row[normName(p[1])] = abapString(restoreLiterals(p[2], lits));
+      }
+      parsed.push(row);
+    }
+    if (parsed.some((r) => Object.keys(r).length)) blocks.push(parsed);
+  }
+  return blocks;
+}
+
+// arrays of flat objects in a JSON doc (top level or one level down)
+function mockArrays(doc, name) {
+  const out = [];
+  const take = (label, v) => {
+    if (Array.isArray(v) && v.length >= 2 && v.every((r) => r && typeof r === 'object' && !Array.isArray(r))) {
+      out.push({ name: label, rows: v });
+    }
+  };
+  take(name, doc);
+  if (doc && typeof doc === 'object' && !Array.isArray(doc)) {
+    for (const [k, v] of Object.entries(doc)) {
+      take(k, v);
+      if (v && typeof v === 'object' && !Array.isArray(v)) for (const [k2, v2] of Object.entries(v)) take(`${k}/${k2}`, v2);
+    }
+  }
   return out;
 }
 
@@ -150,6 +247,90 @@ for (const mf of fs.readdirSync(META).sort()) {
       if (!ok) {
         err(`${meta.class}: asset path \`${tok}\` does not match any occurrence of \`${base}\` in the sample's archived files/mocks — path/folder differs`);
       }
+    }
+  }
+
+  // --- stage 2: VALUE-block tables vs mock arrays ---------------------------
+  const corpusDocs = [];
+  for (const f of corpusFiles) {
+    if (path.extname(f) !== '.json' || f.endsWith('manifest.json')) continue;
+    try { corpusDocs.push({ name: path.basename(f, '.json'), doc: JSON.parse(fs.readFileSync(f, 'utf8')) }); } catch { /* not JSON */ }
+  }
+  if (fs.existsSync(MOCK)) {
+    for (const mock of fs.readdirSync(MOCK)) {
+      if (!mock.endsWith('.json')) continue;
+      if (corpusTexts.some((t) => t.includes(mock)) || corpusDocs.length === 0) {
+        try { corpusDocs.push({ name: path.basename(mock, '.json'), doc: JSON.parse(fs.readFileSync(path.join(MOCK, mock), 'utf8')) }); } catch { /* */ }
+      }
+    }
+  }
+  const arrays = [];
+  const seenArr = new Set();
+  for (const { name: dn, doc } of corpusDocs) {
+    for (const a of mockArrays(doc, dn)) {
+      if (seenArr.has(a.name)) continue;
+      seenArr.add(a.name);
+      arrays.push(a);
+    }
+  }
+  const blocks = parseValueBlocks(abap);
+  const declaredLc = declared.toLowerCase();
+  const isDeclared = (...cands) => cands.some((c) => c && declaredLc.includes(String(c).toLowerCase()));
+  // each ABAP table block is compared against its ONE best-matching mock
+  // array — never against every array that shares field names (a sample may
+  // carry its own modified products.json NEXT TO the shared mock, app 010).
+  // Score: field overlap first, then exact row-count match, then source
+  // order (sample-local docs come before the shared mocks in `arrays`).
+  for (const block of blocks) {
+    const fields = new Set(block.flatMap((r) => Object.keys(r)));
+    let bestArr = null;
+    let bestOverlap = null;
+    let bestScore = -1;
+    arrays.forEach((arr, idx) => {
+      const keySet = new Set(arr.rows.flatMap((r) => Object.keys(r)).map(normName));
+      const overlap = [...fields].filter((f) => keySet.has(f));
+      if (overlap.length < 3) return;
+      const score = overlap.length * 1000 + (block.length === arr.rows.length ? 100 : 0) + (arrays.length - idx);
+      if (score > bestScore) { bestScore = score; bestArr = arr; bestOverlap = overlap; }
+    });
+    if (!bestArr) continue;
+    const arr = bestArr;
+    const overlap = bestOverlap;
+    const keyByNorm = new Map();
+    for (const r of arr.rows) for (const k of Object.keys(r)) if (!keyByNorm.has(normName(k))) keyByNorm.set(normName(k), k);
+
+    // values compare equal modulo the sanctioned host-absolutization
+    // (mock `test-resources/…` seeded as `https://sdk.openui5.org/test-resources/…`)
+    const sameValue = (a, b) => a === b || normalize(a) === normalize(b);
+
+    if (block.length === arr.rows.length) {
+      // full inline — positional row/field string comparison
+      block.forEach((row, i) => {
+        for (const f of overlap) {
+          const mv = arr.rows[i]?.[keyByNorm.get(f)];
+          const av = row[f];
+          if (typeof mv !== 'string' || av === undefined || av === '') continue;
+          if (!sameValue(av, mv) && !isDeclared(av, mv, f)) {
+            err(`${meta.class}: table row ${i + 1} field \`${f}\` = ${JSON.stringify(av)} but the mock ${arr.name} row has ${JSON.stringify(mv)} — data must stay verbatim (declare the field/value in a deviation if intentional)`);
+          }
+        }
+      });
+    } else if (block.length < arr.rows.length) {
+      // subset inline (may be legitimate — the original may bind /Coll/0..n):
+      // every seeded string value must at least EXIST among that field's mock
+      // values, so invented / wrong-neighbour values (the 142 class) still fail
+      const valuesByField = new Map(overlap.map((f) => [f,
+        new Set(arr.rows.map((r) => r[keyByNorm.get(f)]).filter((v) => typeof v === 'string').map((v) => normalize(v)))]));
+      block.forEach((row, i) => {
+        for (const f of overlap) {
+          const av = row[f];
+          const set = valuesByField.get(f);
+          if (av === undefined || av === '' || !set || set.size === 0) continue;
+          if (!set.has(normalize(av)) && !isDeclared(av, f)) {
+            err(`${meta.class}: table row ${i + 1} field \`${f}\` = ${JSON.stringify(av)} appears nowhere in the mock ${arr.name}'s ${keyByNorm.get(f)} values — invented/wrong-neighbour data (declare it in a deviation if intentional)`);
+          }
+        }
+      });
     }
   }
 
