@@ -93,7 +93,7 @@ const INTERACTIONS = {
     const btn = page.getByRole('button', { name: 'Approve', exact: true }).first();
     await expect(btn, 'the "Approve" dialog button').toBeVisibleEnabled();
     await btn.click();
-    await expect(page.locator('.sapMDialog'), 'the popup_display Dialog').toContainText('Approve');
+    await expect(page.locator('.sapMDialog'), 'the popup_display Dialog').toContainText('Do you want to submit this order?');
   },
   z2ui5_cl_ai_app_060: async (page, expect) => {
     const btn = page.getByRole('button', { name: 'Open Menu', exact: true }).first();
@@ -108,7 +108,7 @@ const INTERACTIONS = {
     const link = page.locator('.sapMListTbl a.sapMLnk').first();
     await expect(link, 'the first product-ID link').toBeVisibleEnabled();
     await link.click();
-    await expect(page.locator('.sapMPopover'), 'the BIND_ELEMENT-bound popover').toContainText('Product');
+    await expect(page.locator('.sapMPopover'), 'the BIND_ELEMENT-bound popover').toContainText('Action');
   },
 };
 
