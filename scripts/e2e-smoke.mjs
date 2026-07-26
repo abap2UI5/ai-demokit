@@ -81,7 +81,12 @@ const benign = (s) => BENIGN.some((re) => re.test(s));
 //   019  popup_display Dialog round-trip (open + fragment renders)
 //   060  anchored open via control_by_id toggleBy (roundtrip-free) + the
 //        ${$parameters>/item}.getText() client-composed selection toast
+//   091  roundtrip-free control_by_id openBy on a hidden picker (016 idiom)
 //   094  popover_display + BIND_ELEMENT (row context → bound popover)
+//   104  dependents-declared dialog + full 123-row mock + client-side
+//        binding_call Contains search
+//   130  server round-trip flipping a two-way bound control property (busy)
+//   133  SegmentedButton selectionChange → bound GridList.mode round-trip
 const INTERACTIONS = {
   z2ui5_cl_ai_app_005: async (page, expect) => {
     const btn = page.getByRole('button', { name: 'Default', exact: true }).first();
@@ -109,6 +114,43 @@ const INTERACTIONS = {
     await expect(link, 'the first product-ID link').toBeVisibleEnabled();
     await link.click();
     await expect(page.locator('.sapMPopover'), 'the BIND_ELEMENT-bound popover').toContainText('Action');
+  },
+  // server round-trip on a two-way bound control property (busy flips in ABAP)
+  z2ui5_cl_ai_app_130: async (page, expect) => {
+    const btn = page.getByRole('button', { name: 'Toggle Busy State of Both Controls' }).first();
+    await expect(btn, 'the busy-toggle button').toBeVisibleEnabled();
+    await btn.click();
+    // assert the busy STATE class on the bound control — the overlay div
+    // itself has a zero-height box in the headless layout and never counts
+    // as "visible" to playwright
+    await expect(page.locator('.sapUiLocalBusy').first(), 'the bound control turning busy after the round-trip').toBeVisibleEnabled();
+  },
+  // roundtrip-free control_by_id openBy on a hidden picker (the app-016 idiom)
+  z2ui5_cl_ai_app_091: async (page, expect) => {
+    const btn = page.getByRole('button', { name: 'Open Time Picker', exact: true }).first();
+    await expect(btn, 'the openBy anchor button').toBeVisibleEnabled();
+    await btn.click();
+    await expect(page.locator('.sapMPopover'), 'the hidden TimePicker opened anchored').toContainText('');
+  },
+  // popup_display TableSelectDialog with the FULL 123-row mock + the
+  // client-side binding_call Contains search (no round-trip)
+  z2ui5_cl_ai_app_104: async (page, expect) => {
+    const btn = page.getByRole('button', { name: 'Show Table Select Dialog', exact: true }).first();
+    await expect(btn, 'the dialog button').toBeVisibleEnabled();
+    await btn.click();
+    await expect(page.locator('.sapMDialog'), 'the full product table in the dialog').toContainText('Portable DVD player');
+    const search = page.locator('.sapMDialog input').first();
+    await search.fill('Gladiator MX');
+    await search.press('Enter');
+    await expect(page.locator('.sapMDialog'), 'the binding_call Contains filter').toContainText('Gladiator MX');
+  },
+  // SegmentedButton selectionChange → server round-trip flips the bound
+  // GridList.mode (checkboxes appear only in MultiSelect mode)
+  z2ui5_cl_ai_app_133: async (page, expect) => {
+    const seg = page.getByText('MultiSelect', { exact: true }).first();
+    await expect(seg, 'the MultiSelect segment').toBeVisibleEnabled();
+    await seg.click();
+    await expect(page.locator('.sapMCb').first(), 'list checkboxes after the mode round-trip').toBeVisibleEnabled();
   },
 };
 
