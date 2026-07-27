@@ -72,6 +72,7 @@ CLASS z2ui5_cl_ai_app_226 IMPLEMENTATION.
                     )->a( n = `class` v = `sapUiTinyMarginBottom`
 
             )->shut(
+            " src host-prefixed to sdk.openui5.org per the asset-URL rule (original: relative resources/ path)
             )->open( `Image`
                 )->a( n = `src`          v = `https://sdk.openui5.org/resources/sap/ui/documentation/sdk/images/demoAppsTeaser.png`
                 )->a( n = `densityAware` v = `false`

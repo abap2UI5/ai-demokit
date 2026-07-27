@@ -8,7 +8,7 @@
     "frontend_action": false,
     "event_t_arg": false
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     { "type": "IMPROVISED", "what": "The original controller loads the shared demo supplier.json and element-binds a single record (/SupplierCollection/0); flattened here to top-level default-model fields the {…} SimpleForm bindings resolve against. Values are supplier.json SupplierCollection row 0 (Red Point Stores, Maintown); unbound columns (Tel, Sms, Rating, …) are dropped." }

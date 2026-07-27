@@ -13,7 +13,7 @@
   "deviations": [
     {
       "type": "IMPROVISED",
-      "what": "Breadth-probe: a minimal sap.ui.table.Table (grid table, distinct from sap.m.Table) with 3 columns + template cells over a small ABAP model. The original's full column set, the p:ColumnAIAction plugin (post-1.71) and paste handling are omitted for the probe."
+      "what": "Breadth-probe: a minimal sap.ui.table.Table (grid table, distinct from sap.m.Table) with 3 columns + template cells over a small ABAP model. The original's full 13-column set (Input/ObjectStatus/Currency/ComboBox/Link/Button/CheckBox/Select/MultiInput/Icon/DatePicker cells, formatters, derived Suppliers/Categories arrays), the p:ColumnAIAction plugin (post-1.71) and paste handling are omitted, and only 5 of the 123 /ProductCollection rows are seeded. Review 2026-07-27: two seeded literals contradicting the mock were corrected (ITelO Vault supplier Smartcard Corp -> Technocom, Comfort Easy price 1650 -> 1679, the wrong-neighbour-copy class); the reduction itself needs rework toward a faithful rebuild (full rows per the retired-SUBSET_DATA policy; only the post-1.71 plugin may stay dropped, as DROPPED_171)."
     }
   ],
   "structural_diff": {

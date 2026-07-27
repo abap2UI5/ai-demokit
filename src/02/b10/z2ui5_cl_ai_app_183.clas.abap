@@ -21,6 +21,9 @@ CLASS z2ui5_cl_ai_app_183 IMPLEMENTATION.
 
     me->client = client.
     IF client->check_on_init( ).
+      " original seeds the current time (UI5Date.getInstance()) - fixed here for
+      " determinism; the placeholder is derived at runtime from the type's
+      " getPlaceholderText() in the original - seeded as a static representative
       dtvalue   = `2026-07-24 13:30:00`.
       dtpattern = `e.g. Dec 31, 2026, 11:59:58 PM`.
       view_display( ).

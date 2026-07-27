@@ -55,6 +55,7 @@ CLASS z2ui5_cl_ai_app_155 IMPLEMENTATION.
                 )->a( n = `partiallySelected` v = `true`
             )->leaf( `CheckBox`
                 )->a( n = `text`     v = `Required option`
+                " required is @since 1.121 - kept 1:1 (POST_171)
                 )->a( n = `required` v = `true`
             )->leaf( `CheckBox`
                 )->a( n = `text`       v = `Warning`

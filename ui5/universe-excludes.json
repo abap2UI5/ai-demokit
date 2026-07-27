@@ -1,0 +1,23 @@
+{
+ "note": "demokit sample/ directories that are NOT self-contained samples - shared helpers, test infrastructure, or GROUP folders whose nested subfolders are the real samples. generate-coverage.mjs drops them from the universe (build AND offline load), so they never show up as 'without control metadata' rows. Criterion: no Component.js/manifest.json at the folder top level (verified against the OpenUI5 checkout 2026-07-26). Nested samples inside the group folders are a possible future universe extension.",
+ "excludes": [
+  { "lib": "sap.m", "name": "p13n", "reason": "group folder - nested samples (Container, Engine, ...)" },
+  { "lib": "sap.m", "name": "UploadSetwithTablePlugin", "reason": "group folder - nested samples" },
+  { "lib": "sap.f", "name": "MomentInPage", "reason": "no Component.js/manifest.json - controller helper only" },
+  { "lib": "sap.ui.layout", "name": "tests", "reason": "qunit test infrastructure, not a sample" },
+  { "lib": "sap.ui.core", "name": "common", "reason": "shared helpers for the sap.ui.core samples" },
+  { "lib": "sap.ui.core", "name": "BoundFilters", "reason": "group folder - nested samples" },
+  { "lib": "sap.ui.core", "name": "gherkin", "reason": "group folder - Gherkin testing demos" },
+  { "lib": "sap.ui.core", "name": "matcher", "reason": "group folder - OPA matcher demos" },
+  { "lib": "sap.ui.core", "name": "Messaging", "reason": "group folder - nested samples" },
+  { "lib": "sap.ui.core", "name": "odata", "reason": "group folder - OData model demos" },
+  { "lib": "sap.ui.core", "name": "OpaStartup", "reason": "group folder - OPA startup demos" },
+  { "lib": "sap.ui.core", "name": "OpaURLParameters", "reason": "group folder - OPA URL-parameter demos" },
+  { "lib": "sap.ui.core", "name": "View", "reason": "group folder - view type demos" },
+  { "lib": "sap.ui.core", "name": "ViewTemplate", "reason": "group folder - XML templating demos" },
+  { "lib": "sap.ui.core", "name": "XMLComposite", "reason": "group folder - deprecated XMLComposite demos" },
+  { "lib": "sap.ui.table", "name": "TreeTable", "reason": "group folder - nested TreeTable samples" },
+  { "lib": "sap.uxap", "name": "SharedBlocks", "reason": "shared BlockBase sources used by the sap.uxap samples" },
+  { "lib": "sap.uxap", "name": "SharedJSONData", "reason": "shared mock JSON used by the sap.uxap samples" }
+ ]
+}

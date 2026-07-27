@@ -182,7 +182,7 @@ CLASS z2ui5_cl_ai_app_113 IMPLEMENTATION.
                 )->a( n = `class`      v = `sapUiTinyMarginBottom`
 
                 )->leaf( `Text`
-                    )->a( n = `text`  v = `Color Scheme 10`
+                    )->a( n = `text`  v = `Any Color Scheme in Display Only Mode`
                     )->a( n = `class` v = `sapUiTinyMarginEnd`
                 )->leaf( n = `InfoLabel` ns = `tnt`
                     )->a( n = `id`   v = `il10`

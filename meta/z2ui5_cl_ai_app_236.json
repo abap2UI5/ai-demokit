@@ -24,7 +24,7 @@
     },
     {
       "type": "IMPROVISED",
-      "what": "the dialog's begin/end buttons call oFeedInput.enablePostButton(true/false) in the original before closing; enablePostButton is not in the CONTROL_METHODS whitelist and FeedInput exposes no bindable post-button-enabled property, so the buttons only close the popup - the post-button toggle is lost. See friction log / pr/feedinput-enable-post-button."
+      "what": "the dialog's begin/end buttons call oFeedInput.enablePostButton(true/false) in the original before closing; in the port the buttons only close the popup - the post-button toggle is lost. REVIEW 2026-07-27: the original whitelist rationale is stale - since the generalized control-method allowlist (FrontendAction.js: an unlisted public method not matching the deny regex runs, the source comment even names enablePostButton) the call IS expressible via control_by_id + enablePostButton + 'X'/'' once the two action-carrying FeedInputs get ids and each dialog targets its own parent input; needs view/event rework, so the toggle stays dropped for now and pr/feedinput-enable-post-button is likewise superseded."
     },
     {
       "type": "NOTE",

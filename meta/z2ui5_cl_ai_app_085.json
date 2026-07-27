@@ -8,16 +8,20 @@
     "frontend_action": false,
     "event_t_arg": false
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {
       "type": "IMPROVISED",
-      "what": "the first Tokenizer's tokens are now model-bound (t_tokens): onAddToken appends the input value, onTokenDelete removes by key (the deleted key arrives via $event.getParameter('tokens')[0].getKey()); the second, disabled Tokenizer keeps its 3 static tokens, so the port shows one bound Token template + 3 static Token vs the original's 3+3."
+      "what": "the first Tokenizer's tokens are now model-bound (t_tokens): onAddToken appends the input value, onTokenDelete removes by key (the deleted key arrives via $event.getParameter('tokens')[0].getKey(); the delete toast shows the token text looked up by that key, like the original's oToken.getText()); the second, disabled Tokenizer keeps its 3 static tokens, so the port shows one bound Token template + 3 static Token vs the original's 3+3."
     },
     {
       "type": "NOTE",
       "what": "the CheckBox select handler becomes a live two-way selected/editable bind on the first Tokenizer."
+    },
+    {
+      "type": "POST_171",
+      "what": "tokenDelete (since UI5 1.82) on the first Tokenizer is newer than 1.71 but kept for the 1:1 port (the original wires the same event) - the app needs a UI5 release >= 1.82 to render it."
     }
   ]
 }

@@ -8,7 +8,7 @@
     "frontend_action": false,
     "event_t_arg": false
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     { "type": "LIVE_TEST", "what": "The Slider `liveChange` handler (original onSliderMoved: byId('panelForGridList').setWidth(value + '%')) is dropped and replaced by a roundtrip-free expression binding on the host Panel.width (`{= ${/SLIDER_VALUE} + '%'}`), with Slider.value bound two-way to carry the value; per AGENTS.md 5 / CAPABILITIES 'prefer a pure expression binding over an event round-trip' (app 007 pattern). The width expression rendering is unverified in a running system." },

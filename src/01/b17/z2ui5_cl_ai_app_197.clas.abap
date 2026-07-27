@@ -5,15 +5,15 @@ CLASS z2ui5_cl_ai_app_197 DEFINITION PUBLIC.
 
     TYPES:
       BEGIN OF ty_s_product,
-        name           TYPE string,
-        price          TYPE p LENGTH 14 DECIMALS 2,
-        currency_code  TYPE string,
-        weight_measure TYPE string,
-        weight_unit    TYPE string,
-        width          TYPE string,
-        depth          TYPE string,
-        height         TYPE string,
-        dim_unit       TYPE string,
+        name          TYPE string,
+        price         TYPE p LENGTH 14 DECIMALS 2,
+        currencycode  TYPE string,
+        weightmeasure TYPE string,
+        weightunit    TYPE string,
+        width         TYPE string,
+        depth         TYPE string,
+        height        TYPE string,
+        dimunit       TYPE string,
       END OF ty_s_product.
     DATA s_product TYPE ty_s_product.
 
@@ -56,15 +56,15 @@ CLASS z2ui5_cl_ai_app_197 IMPLEMENTATION.
 
             )->open( `ObjectHeader`
                 )->a( n = `title`      v = `{NAME}`
-                )->a( n = `number`     v = |\{ parts:[\{path:'PRICE'\},\{path:'CURRENCY_CODE'\}], type: 'sap.ui.model.type.Currency', formatOptions: \{showMeasure: false\} \}|
-                )->a( n = `numberUnit` v = `{CURRENCY_CODE}`
+                )->a( n = `number`     v = |\{ parts:[\{path:'PRICE'\},\{path:'CURRENCYCODE'\}], type: 'sap.ui.model.type.Currency', formatOptions: \{showMeasure: false\} \}|
+                )->a( n = `numberUnit` v = `{CURRENCYCODE}`
                 )->a( n = `responsive` v = `true`
                 )->a( n = `class`      v = `sapUiResponsivePadding--header`
 
                 )->leaf( `ObjectAttribute`
-                    )->a( n = `text` v = `{WEIGHT_MEASURE} {WEIGHT_UNIT}`
+                    )->a( n = `text` v = `{WEIGHTMEASURE} {WEIGHTUNIT}`
                 )->leaf( `ObjectAttribute`
-                    )->a( n = `text` v = `{WIDTH} x {DEPTH} x {HEIGHT} {DIM_UNIT}`
+                    )->a( n = `text` v = `{WIDTH} x {DEPTH} x {HEIGHT} {DIMUNIT}`
 
                 )->open( `markers`
                     )->leaf( `ObjectMarker`
@@ -82,15 +82,15 @@ CLASS z2ui5_cl_ai_app_197 IMPLEMENTATION.
   METHOD model_init.
 
     " the bound record /ProductCollection/0 (Notebook Basic 15) of the shared mock data sap/ui/demo/mock/products.json
-    s_product = VALUE #( name           = `Notebook Basic 15`
-                         price          = '956.00'
-                         currency_code  = `EUR`
-                         weight_measure = `4.2`
-                         weight_unit    = `KG`
-                         width          = `30`
-                         depth          = `18`
-                         height         = `3`
-                         dim_unit       = `cm` ).
+    s_product = VALUE #( name          = `Notebook Basic 15`
+                         price         = '956.00'
+                         currencycode  = `EUR`
+                         weightmeasure = `4.2`
+                         weightunit    = `KG`
+                         width         = `30`
+                         depth         = `18`
+                         height        = `3`
+                         dimunit       = `cm` ).
 
   ENDMETHOD.
 

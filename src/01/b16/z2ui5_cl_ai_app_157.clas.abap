@@ -43,49 +43,49 @@ CLASS z2ui5_cl_ai_app_157 IMPLEMENTATION.
                 )->a( n = `value`      v = `1.75`
                 )->a( n = `valueColor` v = `Good`
                 )->a( n = `indicator`  v = `Up`
-                )->a( n = `press`      v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The numeric content is pressed.` ) ) )
+                )->a( n = `press`      v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Fire press` ) ) )
             )->leaf( `NumericContent`
                 )->a( n = `scale`      v = `M`
                 )->a( n = `value`      v = `0.57`
                 )->a( n = `valueColor` v = `Error`
                 )->a( n = `indicator`  v = `Down`
-                )->a( n = `press`      v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The numeric content is pressed.` ) ) )
+                )->a( n = `press`      v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Fire press` ) ) )
             )->leaf( `NumericContent`
                 )->a( n = `scale`      v = `M`
                 )->a( n = `value`      v = `1.04`
                 )->a( n = `valueColor` v = `Neutral`
                 )->a( n = `indicator`  v = `Up`
-                )->a( n = `press`      v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The numeric content is pressed.` ) ) )
+                )->a( n = `press`      v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Fire press` ) ) )
             )->leaf( `NumericContent`
                 )->a( n = `scale`      v = `M`
                 )->a( n = `value`      v = `3.65`
                 )->a( n = `valueColor` v = `Good`
                 )->a( n = `indicator`  v = `Up`
-                )->a( n = `press`      v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The numeric content is pressed.` ) ) )
+                )->a( n = `press`      v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Fire press` ) ) )
             )->leaf( `NumericContent`
                 )->a( n = `scale`      v = `M`
                 )->a( n = `value`      v = `0.73`
                 )->a( n = `valueColor` v = `Error`
                 )->a( n = `indicator`  v = `Down`
-                )->a( n = `press`      v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The numeric content is pressed.` ) ) )
+                )->a( n = `press`      v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Fire press` ) ) )
             )->leaf( `NumericContent`
                 )->a( n = `scale`      v = `M`
                 )->a( n = `value`      v = `1.01`
                 )->a( n = `valueColor` v = `Critical`
                 )->a( n = `indicator`  v = `Down`
-                )->a( n = `press`      v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The numeric content is pressed.` ) ) )
+                )->a( n = `press`      v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Fire press` ) ) )
             )->leaf( `NumericContent`
                 )->a( n = `scale`      v = `M`
                 )->a( n = `value`      v = `1.42`
                 )->a( n = `valueColor` v = `Good`
                 )->a( n = `indicator`  v = `Up`
-                )->a( n = `press`      v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The numeric content is pressed.` ) ) )
+                )->a( n = `press`      v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Fire press` ) ) )
             )->leaf( `NumericContent`
                 )->a( n = `scale`      v = `M`
                 )->a( n = `value`      v = `0.21`
                 )->a( n = `valueColor` v = `Error`
                 )->a( n = `indicator`  v = `Down`
-                )->a( n = `press`      v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The numeric content is pressed.` ) ) )
+                )->a( n = `press`      v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Fire press` ) ) )
 
         )->shut(
 
@@ -101,7 +101,7 @@ CLASS z2ui5_cl_ai_app_157 IMPLEMENTATION.
                         )->a( n = `value`      v = `1.96`
                         )->a( n = `valueColor` v = `Error`
                         )->a( n = `indicator`  v = `Down`
-                        )->a( n = `press`      v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The numeric content is pressed.` ) ) )
+                        )->a( n = `press`      v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Fire press` ) ) )
 
             )->shut(
             )->shut(

@@ -8,7 +8,12 @@
     "frontend_action": false,
     "event_t_arg": false
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
-  "deviations": []
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "the original controller seeds three byte-identical product arrays (/ProductCollection, /ProductCollection2, /ProductCollection3) and binds one Select to each; the port folds them into the single shared table /T_PRODUCTS feeding all three Selects - same rows, same sorter, each Select keeps its own two-way selectedKey, so rendering and behaviour are identical."
+    }
+  ]
 }

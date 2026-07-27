@@ -9,7 +9,7 @@
     "event_t_arg": true,
     "note": "each button press builds a core:FragmentDefinition ResponsivePopover server-side and shows it anchored via client->popover_display( xml = ... by_id = $event.oSource.sId ); the action/footer buttons close it via follow_up_action( cs_event-popover_close )"
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {

@@ -53,6 +53,7 @@ CLASS z2ui5_cl_ai_app_200 IMPLEMENTATION.
 
                     )->open( `snappedHeading`
                         )->open( n = `HBox` ns = `m`
+                            " POST-1.71: sap.m.Avatar (since 1.73) kept 1:1, here and in headerContent
                             )->leaf( n = `Avatar` ns = `m`
                                 )->a( n = `src`          v = `https://sdk.openui5.org/test-resources/sap/uxap/images/robot.png`
                                 )->a( n = `class`        v = `sapUiMediumMarginEnd`
@@ -204,6 +205,7 @@ CLASS z2ui5_cl_ai_app_200 IMPLEMENTATION.
                     )->open( `subSections`
                         )->open( `ObjectPageSubSection`
                             )->a( n = `title`     v = `Order Details`
+                            " POST-1.71: showTitle (since 1.77) kept 1:1, here and on the Products subsection
                             )->a( n = `showTitle` v = `false`
 
                             )->open( `blocks`

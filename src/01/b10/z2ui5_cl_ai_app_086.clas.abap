@@ -104,8 +104,8 @@ CLASS z2ui5_cl_ai_app_086 IMPLEMENTATION.
 
   METHOD model_init.
 
-    " keys of sap.m.ToolbarDesign / sap.m.ToolbarStyle (the original derives them from Object.keys)
-    t_design_types = VALUE #( ( key = `Auto` ) ( key = `Transparent` ) ( key = `Solid` ) ( key = `Info` ) ).
+    " keys of sap.m.ToolbarDesign / sap.m.ToolbarStyle in Object.keys order (library.js declaration order)
+    t_design_types = VALUE #( ( key = `Auto` ) ( key = `Transparent` ) ( key = `Info` ) ( key = `Solid` ) ).
     t_style_types  = VALUE #( ( key = `Standard` ) ( key = `Clear` ) ).
     design = `Auto`.
     style  = `Standard`.

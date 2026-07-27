@@ -87,9 +87,13 @@ if (!folder) { console.error(`no src/ folder mapping for library "${lib}" (known
 // ---------- locate the OpenUI5 template dir ----------
 const libPath = lib.replace(/\./g, '/');
 const SRC_ROOTS = [process.env.OPENUI5_SRC, '/home/user/fork-openui5', path.join(ROOT, 'openui5'), path.join(ROOT, '..', 'fork-openui5')].filter(Boolean);
+// a GROUP-nested sample is named `<Group>.<Child>` (TreeTable.JSONTreeBinding)
+// — its source folder is sample/<Group>/<Child>; the ui5/ archive folder keeps
+// the dotted name (ui5/<lib>/<Group>.<Child>/)
+const namePath = name.replace(/\./g, '/');
 let templateDir = null;
 for (const r of SRC_ROOTS) {
-  const cand = path.join(r, 'src', lib, 'test', libPath, 'demokit', 'sample', name);
+  const cand = path.join(r, 'src', lib, 'test', libPath, 'demokit', 'sample', namePath);
   if (fs.existsSync(cand)) { templateDir = cand; break; }
 }
 if (!templateDir) {

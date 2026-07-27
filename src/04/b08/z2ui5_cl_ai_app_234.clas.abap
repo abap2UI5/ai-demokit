@@ -201,8 +201,8 @@ CLASS z2ui5_cl_ai_app_234 IMPLEMENTATION.
     " the three column views hold 26 static, identical navigation rows each -
     " reproduced as a bound aggregation over a 26-row model (same rendered output)
     t_list         = VALUE #( FOR i = 1 UNTIL i > 26 ( text = `Open mid column` ) ).
-    t_detail       = VALUE #( FOR i = 1 UNTIL i > 26 ( text = `Open end column` ) ).
-    t_detaildetail = VALUE #( FOR i = 1 UNTIL i > 26 ( text = `No more columns` ) ).
+    t_detail       = VALUE #( FOR j = 1 UNTIL j > 26 ( text = `Open end column` ) ).
+    t_detaildetail = VALUE #( FOR k = 1 UNTIL k > 26 ( text = `No more columns` ) ).
 
   ENDMETHOD.
 

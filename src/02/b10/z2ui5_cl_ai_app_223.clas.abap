@@ -3,8 +3,8 @@ CLASS z2ui5_cl_ai_app_223 DEFINITION PUBLIC.
   PUBLIC SECTION.
     INTERFACES z2ui5_if_app.
 
-    DATA slidervalue         TYPE i.
-    DATA selected_background TYPE string.
+    DATA slidervalue        TYPE i.
+    DATA selectedbackground TYPE string.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -21,8 +21,8 @@ CLASS z2ui5_cl_ai_app_223 IMPLEMENTATION.
 
     me->client = client.
     IF client->check_on_init( ).
-      slidervalue         = 100.
-      selected_background = `Default`.
+      slidervalue        = 100.
+      selectedbackground = `Default`.
       view_display( ).
     ENDIF.
 
@@ -55,7 +55,7 @@ CLASS z2ui5_cl_ai_app_223 IMPLEMENTATION.
                 )->a( n = `text` v = `Background`
 
             )->open( `SegmentedButton`
-                )->a( n = `selectedKey`     v = client->_bind( selected_background )
+                )->a( n = `selectedKey`     v = client->_bind( selectedbackground )
                 )->a( n = `ariaDescribedBy` v = `backgroundLabel`
                 )->a( n = `ariaLabelledBy`  v = `backgroundLabel`
 
@@ -86,7 +86,7 @@ CLASS z2ui5_cl_ai_app_223 IMPLEMENTATION.
 
             )->open( n = `BlockLayout` ns = `l`
                 )->a( n = `id`         v = `BlockLayout`
-                )->a( n = `background` v = client->_bind( selected_background )
+                )->a( n = `background` v = client->_bind( selectedbackground )
 
                 )->open( n = `BlockLayoutRow` ns = `l`
                     )->a( n = `accentCells` v = `Accent1`

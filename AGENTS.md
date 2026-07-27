@@ -36,26 +36,45 @@ computed per sample from `ui5/universe.json` by `generate-coverage.mjs`
 **never ported**; `node scripts/generate-coverage.mjs --backlog` prints the
 in-scope, unported samples for batch planning.
 
-> **⚠️ Verify scope from source before porting — the offline snapshot is blind.**
-> `ui5/universe.json` carries `since: null` for most controls (the fork has no
-> generated `designtime/api.json`), so `scopeOf` does `sinceLeq171(null)=true`
-> and silently passes controls newer than 1.71. That is how `sap.f.AvatarGroup`
-> (@1.73) nearly shipped and `sap.f.SidePanel` (@1.107, app 136) already did.
-> **Always run `node scripts/scope-of.mjs <entity>` (or `--sample <Name>`) first**
-> — it reads the authoritative `@since`/`@deprecated` from the OpenUI5 source and
-> exits non-zero on any out-of-scope entity. A neighbour port existing is **not**
-> proof of scope (see the UploadSet/SidePanel debt). Wiring `scopeOf` to this is
-> `pr/scope-since-from-source`.
+> **⚠️ Verify scope from source before porting.** Since 2026-07-26 the gate is
+> no longer blind: `ui5/properties.json` carries each control's class-level
+> `@since`/`@deprecated` (parsed from the OpenUI5 sources by
+> `generate-properties.mjs`), and `scopeOf` in `generate-coverage.mjs` falls
+> back to it when `ui5/universe.json` carries null — so out-of-scope samples
+> surface offline in coverage/backlog (`pr/scope-since-from-source`
+> implemented; that is how the SidePanel/InvisibleMessage/ProductSwitch/
+> SemanticPage debt was surfaced, tracked in STATUS.md). Since 2026-07-26 the
+> check is a **hard gate**: `generate-coverage.mjs` exits 1 on any ported
+> out-of-scope sample without a maintainer-decided entry in
+> `ui5/scope-exceptions.json` (stale entries fail too, so the list can only
+> shrink honestly). **Still run
+> `node scripts/scope-of.mjs <entity>` (or `--sample <Name>`) before porting**
+> — it is the authoritative per-entity pre-check straight from the source
+> JSDoc and also covers controls a stale `properties.json` might miss. A
+> neighbour port existing is **not** proof of scope (see the
+> UploadSet/SidePanel debt).
 
-**Batch planning is breadth-first.** The mission is gap discovery, and the
-gap yield of a port drops sharply once its control is covered — many samples
-are near-duplicates on the same control. So: port **one sample per
-uncovered control first**; only when every in-scope control has at least one
-port does depth (more samples per control) pay. `--backlog` encodes this:
-rows are sorted `NEW-CONTROL` first (control has no port at all), then
-`covered-control`; pick batches from the top. Rows marked `HOLDOUT` belong
-to the hold-out set (`ui5/holdout.json`, TRAINING.md) and stay out of
-regular batch planning.
+**Batch planning is breadth-first, then idiom-first depth.** The mission is
+gap discovery, and the gap yield of a port drops sharply once its control is
+covered — many samples are near-duplicates on the same control. So: port
+**one sample per uncovered control first**; only when every in-scope control
+has at least one port does depth (more samples per control) pay. `--backlog`
+encodes both phases: rows sort `NEW-CONTROL` first (control has no port at
+all), then `covered-control(n)` **ascending by n** — a control with one port
+still yields more new idioms than one with five. **Within equal n, pick by
+idiom, not by name**: prefer the sample whose title/files show a feature no
+existing port of that control exercises (a different aggregation, binding
+form, event wiring, popup path — skim the sample's view/controller against
+the control's existing ports), and skip true near-duplicates entirely — a
+depth port that exercises nothing new is corpus weight without training
+signal. Rows marked `HOLDOUT` belong to the hold-out set
+(`ui5/holdout.json`, TRAINING.md) and stay out of regular batch planning.
+**GROUP-nested samples** (the demo kit's group folders: `TreeTable.…`,
+`p13n.…`, `UploadSetwithTablePlugin.…`, `View.…`, …) are part of the
+universe since 2026-07-26 — named `<Group>.<Child>`, source at
+`sample/<Group>/<Child>`, archived flat as `ui5/<lib>/<Group>.<Child>/`
+(the scaffolder handles the mapping); only children the docuindex lists as
+official samples count.
 
 The pipeline (run by a coding agent):
 
@@ -97,10 +116,10 @@ by the UI5 **library** of the demo kit sample they rebuild:
 | Folder   | CTEXT (`package.devc.xml`) | Library namespace | Status |
 |----------|----------------------------|-------------------|--------|
 | `src/01` | `sap.m`    | `sap.m`    | exists |
-| `src/02` | `sap.ui`   | `sap.ui.*` (core, layout, unified, table, integration, model.type) | planned |
-| `src/03` | `sap.uxap` | `sap.uxap` | planned |
-| `src/04` | `sap.f`    | `sap.f`    | exists  |
-| `src/05` | `sap.tnt`  | `sap.tnt`  | planned |
+| `src/02` | `sap.ui`   | `sap.ui.*` (core, layout, unified, table, integration, codeeditor, model.type) | exists |
+| `src/03` | `sap.uxap` | `sap.uxap` | exists |
+| `src/04` | `sap.f`    | `sap.f`    | exists |
+| `src/05` | `sap.tnt`  | `sap.tnt`  | exists |
 
 The split key is the **second-level namespace** of the sample's entity. New
 libraries get the next free `src/NN` folder with a matching `package.devc.xml`.
@@ -170,6 +189,7 @@ source of truth:
                "event_t_arg": true },           // passes event args via t_arg?
   "status":  "generated",                       // generated|reviewed|checked
   "checked": { "date": "2026-07-15", "note": "verified in a running system - ..." },
+                                                // ^ omit "checked" entirely while status is generated/reviewed
   "deviations": [ { "type": "IMPROVISED", "what": "..." } ]
 }
 ```
@@ -298,6 +318,10 @@ ENDMETHOD.
   bottom stops that data from interrupting the reading flow of the dispatcher,
   view and event methods. pattern-lint checks that main comes first and that
   model_init comes last.
+- A **fully static sample** (no data, no events — app 051's class) reduces the
+  dispatcher to a bare `IF client->check_on_init( ). view_display( ). ENDIF.`
+  — no `ELSEIF`, no `model_init`/`on_event` methods at all (probe-#2 friction:
+  four cold agents had to infer this from prose).
 - `check_on_init( )` fires once when the app starts — seed the data, draw the view.
 - `check_on_event( )` fires on every user interaction — dispatch in `on_event( )`.
 - Add `model_init( )` / `on_event( )` **only when the app actually has data /
@@ -321,16 +345,22 @@ ENDMETHOD.
 
 The sample's JSON model becomes ABAP: one `ty_s_`/`ty_t_` type per JSON array,
 filled with `VALUE #( ( … ) ( … ) )`. Field names are the JSON keys, upper-cased
-by ABAP; bindings reference them in braces (`{TITLE}`, `{PRODUCT_ID}`). **A
+by ABAP; bindings reference them in braces (`{TITLE}`, `{PRODUCTID}`). **A
 camelCase key mirrors verbatim — do not insert underscores**: `SupplierName` →
 field `suppliername`, binding `{SUPPLIERNAME}` (never `SUPPLIER_NAME`) — a corpus
 convention. (structural-diff would tolerate either — its `normBind` lower-cases
-**and** strips underscores — so this is for consistency, not to satisfy the gate.)
+**and** strips underscores — so this is for consistency, not to satisfy the gate.
+**The worked references 022/040 predate this convention and still use
+`SUPPLIER_NAME`/`PRODUCT_ID` — do not copy their underscored field names; the
+spec wins**, probe-#2 friction 2026-07-26.)
 Keep the
 data verbatim from the sample — **the full row set, no subsetting**: inline every
 row of the referenced mock array (e.g. all 123 `/ProductCollection` rows of
 `ui5/mock/products.json`), byte-identical to the mock (`SUBSET_DATA` is no longer
-an accepted deviation — user decision 2026-07-22). Where the original itself
+an accepted deviation — user decision 2026-07-22). **Rows, not columns:** per
+row, inline only the fields the view actually binds (the 040/022 practice —
+unbound mock keys stay out of the row type); "full row set" never means all
+20 JSON keys of every row. Where the original itself
 binds a single record (`{/ProductCollection/0}`) or a precomputed stats array
 (`/ProductCollectionStats/Filters`), reproduce exactly that — that is the 1:1
 data, not a shortening. A packed field must carry enough `DECIMALS` for the mock
@@ -625,7 +655,7 @@ creation).
 | In the original you see… | Write in the port | Detail |
 |---|---|---|
 | A **named model** binding `{ui>/rowMode}`, `{img>/x}`, any `name>/…` | Drop the prefix, bind the field on the **one default model**: `client->_bind( rowmode )` → `{/ROWMODE}`. structural-diff matches on the last path segment. A **`sap.uxap:ModelMapping`** (external→internal model remap, e.g. `{Contact>firstName}` where `Contact` maps `jsonModel>/Employee`) folds the same way — resolve the indirection statically and bind the leaf on the root; dropping the `ModelMapping`/`ModelMappingBlock` **config control** is **lossy → IMPROVISED** even though it renders identically (see the deviation-type note below) | CAPABILITIES "Named JSON models"; apps 162/163/164, 230 |
-| An **i18n resource-model** binding `{i18n>KEY}` (`sap.ui.model.resource.ResourceModel`) | No i18n model exists — fold to the **literal** text (usually English from `i18n.properties`) and declare **IMPROVISED** (loses runtime language switching). Recurs on most `sap.m` samples; treat like the named-model fold but for text | §5; apps 233 |
+| An **i18n resource-model** binding `{i18n>KEY}` (`sap.ui.model.resource.ResourceModel`) | No i18n model exists **by design, not as a gap** (user decision 2026-07-26): a frontend translation store contradicts the thin-frontend principle — translation is a backend concern, ABAP translates texts natively (text elements / OTR, `sy-langu`) and serves the finished string as a bound model field. So: for a 1:1 demo-kit port, fold to the **literal** text (usually English from `i18n.properties`) and declare **IMPROVISED** (the sample's runtime language *switch* is lost); a real translatable app binds ABAP-translated texts instead — never propose frontend i18n support as a `pr/` | §5; apps 233; CAPABILITIES "i18n texts" |
 | A **typed / complex binding** `{path:'Q', type:'sap.ui.model.type.Integer'}` | Raw binding-info string, braces escaped: `` v = \|\{ path: 'Q', type: 'sap.ui.model.type.Integer' \}\| `` — passes through to `XMLView.create` unmangled. The `path:` uses the **upper-cased ABAP field name** (`'Q'`→`'PRICE'`), not the original camelCase — no gate catches a stale path | CAPABILITIES "composite … types"; apps 164/129/033/171 |
 | A **nested single object** binding `{transactionAmount/size}` (control property → a sub-object, not an array) | Nested ABAP **structure** component in the row type; bind the relative sub-path `{TRANSACTION_AMOUNT/SIZE}`. Keep the nesting — do **not** flatten to `{OBJ_FIELD}` | CAPABILITIES "Nested single object"; app 171 |
 | A **literal quote inside a binding-info `pattern`** (`pattern:'yyyy-MM-dd'T'HH:mm:ss'` — the `'T'`) | Escape it **backslash-quote** `\'`, written `\\'` in the ABAP `\|…\|` template (UI5's JSTokenizer **rejects** a doubled `''`) — matches how the original view.xml escapes it | app 183 (`TypeDateTime`) |
@@ -634,10 +664,10 @@ creation).
 | A **boolean** attribute fed from an ABAP variable | `z2ui5_cl_ai_xml=>as_bool( flag )` (a literal is just `` v = \`true\` ``) — never feed `abap_true`/`abap_false` raw | §5 "Booleans"; app 007 |
 | A property **computed from several bound values** | UI5 expression binding, `_bind` inlined: `` \|\{= ${ client->_bind( a ) } && ${ client->_bind( b ) } \}\| `` — no event round-trip | §5; app 007 |
 | The controller **reads an event/source value** (`evt.getSource().getId()`) | Transport it, don't fake it: `t_arg` value `$event.oSource.sId` / `${COL}`, read back with `get_event_arg( )`. A bare `{COL}` is **not** resolved here | §5 "Data binding & events"; app 005 |
-| `MessageToast.show("…" + evt.x)` (text built on the client) | Client-composed template, roundtrip-free. Exact `t_arg` tuple order = **object, method, template, arg(s)**: `` client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( \`MESSAGE_TOAST\` ) ( \`show\` ) ( \`Item selected: {0}\` ) ( \`${$parameters>/item}.getText()\` ) ) ) ``. The wire token is `MESSAGE_TOAST` (not `MessageToast`); `{0}` is filled by the resolved arg. Button text is `${$source>/text}`; menu-item text is `${$parameters>/item}.getText()`. **When the original pulls the module via `core:require` on the fragment/view root** (`core:require="\{MessageToast: 'sap/m/MessageToast'\}"` for an inline `press="MessageToast.show(…)"`) and you rewire to `_event_client`, that `core:require` is **dropped — name it in the deviation**: structural-diff treats `core:require` as an ordinary (non-`xmlns`) attribute and flags it missing | CAPABILITIES; apps 005/060/172 |
+| `MessageToast.show("…" + evt.x)` (text built on the client) | Client-composed template, roundtrip-free. Exact `t_arg` tuple order = **object, method, template, arg(s)**: `` client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( \`MESSAGE_TOAST\` ) ( \`show\` ) ( \`Item selected: {0}\` ) ( \`${$parameters>/item}.getText()\` ) ) ) ``. The wire token is `MESSAGE_TOAST` (not `MessageToast`); `{0}` is filled by the resolved arg. **A template may START with `{0}`** — `get_t_arg` quotes a leading `{N}`/`{N?…}` placeholder as a plain string (source: `^\{[0-9]+[?}]` match), so a value-first toast needs no round-trip fallback (probe-#2 friction, app 609-class). Button text is `${$source>/text}`; menu-item text is `${$parameters>/item}.getText()`. **When the original pulls the module via `core:require` on the fragment/view root** (`core:require="\{MessageToast: 'sap/m/MessageToast'\}"` for an inline `press="MessageToast.show(…)"`) and you rewire to `_event_client`, that `core:require` is **dropped — name it in the deviation**: structural-diff treats `core:require` as an ordinary (non-`xmlns`) attribute and flags it missing | CAPABILITIES; apps 005/060/172 |
 | Custom **CSS / raw markup** (`style.css`, `<h2>`, a `core:HTML` `content` div) | `core:HTML` leaf, markup in the `content` **attribute** (no CDATA node exists). Two traps: **(a)** write the **decoded** literal markup — the original XML carries it entity-encoded (`&lt;div&gt;`), but you write `<div>`; the builder re-escapes on stringify, so copying the entities double-escapes them. **(b)** escape literal braces `\{ \}` in a **backtick** literal `` `…\{…\}…` `` — backtick passes `\{` through to the serialized attribute; a `\|…\|` template would collapse `\{`→`{` and re-crash (the **reverse** of the typed-binding row, which *wants* real braces and so uses the pipe) | CAPABILITIES "Custom CSS"; apps 026/028, 169 |
 | Controller **`.filter()`/`.sort()`** on `oList.getBinding('items')` | `cs_event-binding_call` (whitelisted methods/operators, compound filter groups since 2026-07-20) — the model stays untouched | CAPABILITIES "Controller-applied binding filter"; app 022 |
-| An **imperative control method** (`open`/`close`/`toggleStyleClass`/`toDetail`/`expandToLevel`/`setHiddenInPopin`…) | `follow_up_action( val = cs_event-control_by_id t_arg = id/method/args )` — **only** the whitelisted `CONTROL_METHODS`; an unlisted method is a declared deviation + a `pr/` request, never a hopeful LIVE_TEST | CAPABILITIES "Frontend-action catalog"; §5 |
+| An **imperative control method** (`open`/`close`/`toggleStyleClass`/`toDetail`/`expandToLevel`/`setHiddenInPopin`…) | `follow_up_action( val = cs_event-control_by_id t_arg = id/method/args )`. A method **listed** in `CONTROL_METHODS` carries explicit arg kinds (extra args silently dropped — verify the kinds); a method **not listed** still runs when it is a public control method not matching the deny regex (`destroy/bind/attach/setModel/…` — the framework-invariant guard), so ordinary setters/toggles need no whitelist entry (source-verified in FrontendAction.js 2026-07-26 — the older "whitelist-only, unlisted = pr/" phrasing is stale; a *denylisted or argument-dropping* need is still a declared deviation + `pr/`) | CAPABILITIES "Frontend-action catalog"; §5 |
 | An **anchored-open popup** (`byId(x).openBy(btn)` — `sap.m.Menu`, TimePicker, DatePicker) | `control_by_id` + `openBy`/`toggleBy` + `$event.oSource.sId`; declare the popup control in `dependents`. **Caveat:** `sap.ui.unified.Menu` has **no `openBy`** (only `open(kbd, opener, my, at, of)`, which self-closes when `of` is absent) — anchored open is a **current framework gap**, so the `openBy` wire is a declared no-op (IMPROVISED + `pr/unified-menu-open-anchored`), *not* a LIVE_TEST | CAPABILITIES "Frontend-action catalog"; apps 016/060 (work), 227/228 (`sap.ui.unified.Menu` gap) |
 | A control-created **popup** (`new Dialog().open()`, `new PDFViewer().open()`) | Build a `core:FragmentDefinition`, show with `client->popup_display( val = … )` / `popover_display( xml = … by_id = … )` (popover XML param is **`xml`**, not `val`) — or declare in `mvc:dependents` + `control_by_id`/`open`/`openBy`. A **single-root** fragment (`<SomeControl …>` with the namespaces on the control, no wrapper) has **no** `FragmentDefinition` — open the control directly, and structural-diff **counts** that root control (only `mvc:View`/`core:FragmentDefinition` are exempt) | CAPABILITIES "Popups & messages"; apps 019/044/229 |
 | A popup/popover **`bindElement`** | **Fixed index** `bindElement('/Coll/0')` (single record) → seed those fields at the **default-model root** and keep the fragment's **relative** `{FIELD}` bindings (they resolve against the root); **no** `bind_element` follow-up needed. **Per-row** selection (index arrives from `$event.oSource.getBindingContext()`) → `follow_up_action( val = cs_event-bind_element view = cs_view-popover t_arg = ( idx )( client->_bind( tab ) ) )`. Pick by whether the bound record is fixed or row-driven | CAPABILITIES "Popups & messages"; app 229 (fixed), app 094 (per-row) |
@@ -713,11 +743,12 @@ A fourth workflow, `checks`, runs three deterministic gates on every PR:
 | Job | Command | Fails when |
 |-----|---------|------------|
 | `pattern_lint` | `node scripts/pattern-lint.mjs` | a known-bad pattern reappears (each rule encodes a distilled §10 lesson; known open findings live in the script's BASELINE and in STATUS.md) |
-| `structural_diff` | `node scripts/structural-diff.mjs --strict` | a port's rendered view deviates from the original `view.xml` — control multiset, attribute names or simple **binding values** — without a declared deviation. **Controls are flagged in BOTH directions**: a control the original has that the port dropped (`control missing`) **and a control the port ADDS that the original lacks** (`control extra` — e.g. an inlined controller-built popup `Dialog`, or the controls of a bound row-template the original built imperatively). Only **attributes** are one-directional: it flags a **missing** attr but **extra attrs the port adds are never flagged** (line 47/232). So "the port only adds, never drops" is **not** a free pass — name every extra control in a deviation too. It compares the full **qualified name incl. namespace prefix**, so use the original view's prefix on controls (not a neighbour's convention). A diff is "declared" when some deviation's `what` text **contains that control/attr name verbatim** — so when you inline a controller-built popup, list the added `Dialog`/`Button`/… ; when you replace an imperative handler with a binding (dropping `press`/`change`), name that attribute — or it stays UNDECLARED. Exception: **helper-built (`dynamic`) ports skip control-count diffs entirely** (`port.dynamic`, line 226 — loop/helper-built counts can't match statically), which is one reason a helper-dedup'd view needs a `render_smoke` skip |
+| `structural_diff` | `node scripts/structural-diff.mjs --strict` | a port's rendered view deviates from the original `view.xml` — control multiset, attribute names or simple **binding values** — without a declared deviation. **Controls are flagged in BOTH directions**: a control the original has that the port dropped (`control missing`) **and a control the port ADDS that the original lacks** (`control extra` — e.g. an inlined controller-built popup `Dialog`, or the controls of a bound row-template the original built imperatively). Only **attributes** are one-directional: it flags a **missing** attr but **extra attrs the port adds are never flagged** (line 47/232). So "the port only adds, never drops" is **not** a free pass — name every extra control in a deviation too. It compares the full **qualified name incl. namespace prefix**, so use the original view's prefix on controls (not a neighbour's convention). The original root's **`controllerName` is always dropped, undeclared** — it sits in the diff's `IGNORED_ATTRS` (line 49), like all `xmlns:*` (probe-#2 friction: four cold agents had to infer this from the references' empty deviations). A diff is "declared" when some deviation's `what` text **contains that control/attr name verbatim** — so when you inline a controller-built popup, list the added `Dialog`/`Button`/… ; when you replace an imperative handler with a binding (dropping `press`/`change`), name that attribute — or it stays UNDECLARED. Exception: **helper-built (`dynamic`) ports skip control-count diffs entirely** (`port.dynamic`, line 226 — loop/helper-built counts can't match statically), which is one reason a helper-dedup'd view needs a `render_smoke` skip |
 | `structure_lint` | `node scripts/structure-lint.mjs --strict` | the builder call tree is malformed — an **aggregation nested directly inside another aggregation** (a missing `)->shut(`, e.g. `<footer>` landing inside `<columns>`), or a `shut` with no open to close. A fast static tree check that runs before `render_smoke` so this class fails in milliseconds with a precise message instead of a cryptic UI5 load error. Helper-built views (RETURNING a `z2ui5_cl_ai_xml` handle) are skipped — their open/shut pairs span methods |
 | `render_smoke` | `node scripts/render-smoke.mjs --strict` (`npm run smoke`) | a port's reconstructed view fails a real headless `XMLView.create` against the OpenUI5 runtime (invalid XML, unknown control/property, strict property-type violation, broken expression binding). Helper-method-built views (a captured node handle passed into a builder-returning helper and chained out — app 049) are reconstructed by the handle-aware path (`extractDocsWithHelpers`; a handle is a stack snapshot, each helper call inlined re-anchored to its argument). A port the reconstructor still cannot rebuild must declare `"render_smoke": { "skip": true, "reason": "…" }` in its sidecar — an **undeclared** non-reconstructable port FAILS. The same declared skip also covers a **reconstructable** port whose view genuinely does not render in the static headless harness — a control whose runtime layout/resource behaviour the reconstruction cannot satisfy (`sap.f.AvatarGroup`'s overflow measurement loops with no real layout box; an `sap.ui.integration` Card needs an external manifest). Every skip is **verified against the actual render each run**: it is honoured only while the view still errors, and the moment it renders clean the declaration is **stale** and FAILS — so the skip set can never drift (a render-hostile skip can never outlive its reason). Render-hostile ports must still pass every other gate (structural-diff, abaplint, e2e) |
 | `e2e_smoke` (heavy, on-demand) | `npm run e2e:build` then `npm run e2e` (`scripts/e2e-build.mjs` + `e2e-smoke.mjs`) | a port fails to run as the **real app**: it starts the transpiled abap2UI5 backend (framework + all ports via `?app_start=<class>`, needs an abap2UI5 checkout — `A2UI5_HOME`), boots each port in headless Chromium (UI5 served from the local `@openui5` packages), and fails if it does not boot+render or if a backend request 4xx/5xx or a JS exception fires. Unlike `render_smoke` (static view reconstruction) this exercises the actual backend roundtrip, Component boot and event wiring. Not in the fast gate set (multi-minute transpile + browser); run before a release or when touching the framework wire/runtime. A small `INTERACTIONS` map adds real click→assert checks (e.g. 005 press→client-composed toast) |
-| `meta_valid` | `validate-meta.mjs` + regenerate overview & coverage, `git diff --exit-code -- src README.md api.md` | an invalid sidecar, or a change forgot to regenerate the overview app / coverage docs |
+| `data_fidelity` | `node scripts/data-fidelity.mjs` | **(a) assets:** a port seeds an asset value the sample's own archived files/mocks never mention (basename lookup over `ui5/<lib>/<Name>/` + the `ui5/mock/*.json` the sample references by file name or top-level collection key), a full asset path whose folder differs from every mock occurrence, or an asset on a non-OpenUI5 UI5 host. **(b) table values (stage 2, 2026-07-26):** every `VALUE #( … )` block that inlines a mock array (matched to its ONE best array by ≥ 3 shared field names, ≥ 2 rows; sample-local JSON beats the shared mock on a name collision — app 010 carries its own modified products.json) is compared string-field-wise: equal row counts → positional row/field equality (a field the mock row omits is skipped — the port seeds the UI5 default there); fewer rows → per-field set membership, so a legitimate `/Coll/0..n` subset passes but an invented value (the 142 class) fails. Values compare modulo the sanctioned `https://sdk.openui5.org/` host-absolutization; numbers are not compared (formatting freedom). Together this is the deterministic form of the 2026-07-24 data audit — the wrong-neighbour-copy class (apps 162/142/119) that structural-diff (ignores values) and render-smoke (mocks the model) can never see. Escapes: a deviation whose `what` names the basename/field/value verbatim, or a sidecar `"data_fidelity": { "skip": true, "reason": "…" }`. `--report` prints per port the mock string values missing from the ABAP source as the residual audit worksheet |
+| `meta_valid` | `validate-meta.mjs` + regenerate overview, coverage & status, `git diff --exit-code -- src README.md api.md STATUS.md` | an invalid sidecar, or a change forgot to regenerate the overview app / coverage docs / STATUS state block |
 | `property_gate` | `node scripts/property-check.mjs` | a port uses a control member introduced after UI5 1.71 (per-member `@since` from `ui5/properties.json`) without declaring it in a `POST_171` deviation — this covers both `a( n = … )` attributes **and** event parameters consumed via `${$parameters>/<name>}` in a `t_arg`. **Covers every ported library** (2026-07-24): `properties.json` is generated recursively from all libs' sources and the check resolves each control via the port's `xmlns` map + the parent chain, so `src/02`–`src/05` members are enforced too |
 
 **When a distilled lesson is greppable, add it as a pattern-lint rule in the
@@ -733,8 +764,10 @@ node scripts/structural-diff.mjs --strict
 node scripts/structure-lint.mjs --strict # builder tree well-formedness (fast)
 node scripts/render-smoke.mjs --strict # headless XMLView.create per port
 node scripts/property-check.mjs        # no member newer than UI5 1.71
+node scripts/data-fidelity.mjs         # model_init seeds match the archived mocks
 node scripts/generate-overview.mjs     # then: git diff must stay clean
 node scripts/generate-coverage.mjs     # (README/api.md must stay clean too)
+node scripts/generate-status.mjs       # (STATUS.md state block too)
 ```
 
 ### Developer tooling — starting a port
@@ -780,11 +813,17 @@ PRs). It is enabled with `git config core.hooksPath .githooks`, which
 
 ## 7. Coverage & overview — always (re)generated
 
-Three generated, never hand-edited artefacts. **Never hand-edit them — edit the
+Four generated, never hand-edited artefacts. **Never hand-edit them — edit the
 scripts.**
 
 - **`README.md`** (between the `<!-- coverage:start/end -->` markers) — the
   per-module coverage summary.
+- **`STATUS.md`** (between the `<!-- state:start/end -->` markers) — the
+  point-in-time state table (port/status/deviation counts, open LIVE_TESTs,
+  out-of-scope ported samples), regenerated from `meta/` by
+  `scripts/generate-status.mjs` so it can never drift from the corpus. The
+  open-findings backlog below the block stays hand-maintained; the
+  chronological journal lives in `STATUS-history.md`.
 - **`api.md`** — ONE flat table, one row per UI5 demo kit sample, sorted
   module → control → sample. Columns: **Module** · **Control** (→ OpenUI5 API,
   ~~struck~~ when deprecated) · **Since** · **Deprecated** (deprecation version
@@ -801,11 +840,13 @@ scripts.**
   button opens the deviations popup) · **Open** (a button that opens an anchored
   popover of every link: OpenUI5 API, OpenUI5 source, live fullscreen sample,
   the generated class on GitHub, and starting the app). The **Control** name and
-  the **Since** value come from `ui5/universe.json`. **Text is never coloured**;
+  the **Since** value come from `ui5/universe.json`, with nulls filled from
+  the control-level source scan in `ui5/properties.json` (same scope fallback
+  as `generate-coverage.mjs`). **Text is never coloured**;
   a deprecated control's name is struck through (via a `sap.m.FormattedText`
   `htmlText`, so the strikethrough can vary per row — a bound `class` would not,
-  being applied once at parse time). All current ports are in-scope (≤ 1.71,
-  non-deprecated), so none is struck today. A **Switch** in the subheader
+  being applied once at parse time) — today that strikes the known
+  out-of-scope debt ports (STATUS.md open findings). A **Switch** in the subheader
   toggles between the table and a **module → control → sample tree**
   (`sap.m.Tree`, built in `build_tree` from the full catalog, expanded by
   default via a `numberOfExpandedLevels` binding parameter, with Expand-all /
@@ -829,6 +870,7 @@ scripts.**
 ```bash
 node scripts/generate-coverage.mjs          # README + api.md (offline, from ui5/universe.json)
 node scripts/generate-overview.mjs          # the overview app (src only, from meta/)
+node scripts/generate-status.mjs            # STATUS.md state block (from meta/)
 node scripts/validate-meta.mjs              # sidecar schema + referential integrity
 node scripts/structural-diff.mjs [--strict] # port vs original view check
 node scripts/pattern-lint.mjs               # distilled-lesson gate
@@ -972,6 +1014,10 @@ How to record it:
   the 702 config. Never run it on the tree you intend to commit; run it in a
   throwaway `git worktree` (or copy) and check `abap_702.jsonc` there. If you did
   run it in place, `git checkout -- .` to restore before committing.
+  **A file with a parser error poisons the whole run**: the `--fix` `&&`-chain
+  exits non-zero, later steps never run, and the copy is left half-rewritten —
+  every file then reports downport errors, including clean ones. Fix (or drop)
+  parser-broken classes BEFORE downporting (probe #2 scoring, 2026-07-26).
 - **ABAP Doc (`"!`) is HTML** — no raw `<tag>` (e.g. `<mvc:View>`); see §8.
 - **Literal braces in attribute values are read as a BINDING by the XMLView
   parser** — CSS/JS braces inside a `core:HTML` `content` (or any literal
@@ -1005,6 +1051,12 @@ How to record it:
   **display-only** value with variable decimals bound into a *text template*
   (`{WIDTH} x {DEPTH}`, dimensions `40.8`) stays `TYPE string` — packed with a
   fixed `DECIMALS` would add trailing zeros (`40.80`); string keeps it exact.
+- **Never reuse a `FOR <n> = …` iterator name within one method** — the 702
+  downport materializes each numeric iterator as `DATA <n> TYPE i`, so a
+  second `FOR i = …` in the same method makes the downported class (and the
+  e2e transpiler) fail with "Variable name already defined". Use distinct
+  names (`i`, `j`, `k`) per `VALUE` block; found on app 234 (2026-07-26),
+  pattern-lint rule `duplicate-for-iterator` gates it.
 - **abaplint `commented_code` can fire on an ordinary English comment** — a
   `"` view-description comment containing a `/` next to CamelCase UI5 identifiers
   (e.g. `" bound to RowSettings highlight/highlightText`) lexes like ABAP and is
@@ -1027,7 +1079,7 @@ How to record it:
   driving it imperatively. Only methods with no bindable equivalent
   (`NavContainer.to`, `focus`, `scrollToIndex`) need a frontend action.
   Compare app 088 (NavContainer + action) with the IconTabBar samples.
-- **A whitelisted control method silently drops arguments beyond its
+- **A listed control method silently drops arguments beyond its
   declared kinds** — `castArgs` in `FrontendAction.js` maps over the
   `CONTROL_METHODS` kinds list, so a `to` transition name or a
   ViewSettingsDialog `open` page key never reaches the method; the call
@@ -1036,6 +1088,8 @@ How to record it:
   needs the arg, that is a declared deviation **plus a pr/ request in the
   same change** — never a LIVE_TEST for something source-decidable
   (hold-out probe apps 609/624, 2026-07-19; pr/control-method-args).
+  Since 2026-07-26 note: an UNLISTED public method that does not match the
+  deny regex runs too (plain setters/toggles) — see the cheat-sheet row.
 - **POST_171 covers event *parameters* too** — a post-1.71 event parameter
   read via `${$parameters>/…}` (e.g. SearchField `searchButtonPressed`,
   since 1.114) needs its POST_171 deviation exactly like a bound member;

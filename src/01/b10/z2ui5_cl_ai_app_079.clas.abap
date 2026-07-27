@@ -53,6 +53,7 @@ CLASS z2ui5_cl_ai_app_079 IMPLEMENTATION.
 
                 )->open( `headerToolbar`
                     )->open( `Toolbar`
+                        " the Link sits in the Title content aggregation (since UI5 1.87) - kept 1:1, needs UI5 >= 1.87
                         )->open( `Title`
                             )->a( n = `level` v = `H3`
                             )->leaf( `Link`

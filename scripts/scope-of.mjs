@@ -80,7 +80,10 @@ function metaFromSource(file, entity) {
   const extendRe = new RegExp(`\\.extend\\(\\s*["']${entity.replace(/\./g, '\\.')}["']`);
   const em = txt.match(extendRe);
   const header = em ? txt.slice(0, em.index) : txt.slice(0, 4000);
-  const sinceM = header.match(/@since\s+(?:version\s+)?([\d.]+)/i);
+  // @ui5-experimental-since counts as the control's since too — an
+  // experimental control has no plain @since, which made the 1.139
+  // OverflowToolbarTokenizer read as base-version (review sweep, app 203)
+  const sinceM = header.match(/@(?:ui5-experimental-)?since\s+(?:version\s+)?([\d.]+)/i);
   const depM = header.match(/@deprecated(?:\s+As of(?:\s+version)?\s+([\d.]+))?([^\n]*)/i);
   return {
     since: sinceM ? sinceM[1] : null,

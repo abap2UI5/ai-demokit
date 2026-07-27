@@ -5,9 +5,9 @@ CLASS z2ui5_cl_ai_app_229 DEFINITION PUBLIC.
 
     " the sample binds both popovers to /ProductCollection/0 (a single record);
     " row-0 fields are seeded at the default-model root so the popover's relative
-    " child bindings ({NAME}, {PRODUCT_PIC_URL}) resolve against the model root
-    DATA name            TYPE string.
-    DATA product_pic_url TYPE string.
+    " child bindings ({NAME}, {PRODUCTPICURL}) resolve against the model root
+    DATA name          TYPE string.
+    DATA productpicurl TYPE string.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -77,7 +77,7 @@ CLASS z2ui5_cl_ai_app_229 IMPLEMENTATION.
         " handlePopoverPress: Fragment.load(Popover) -> openBy(button). The
         " popover is built server-side and shown anchored to the pressed button
         " ($event.oSource.sId); bindElement("/ProductCollection/0") is folded to
-        " the root-seeded fields (relative {NAME}/{PRODUCT_PIC_URL} resolve there)
+        " the root-seeded fields (relative {NAME}/{PRODUCTPICURL} resolve there)
         DATA(popover) = z2ui5_cl_ai_xml=>factory( ).
         popover->open( n = `FragmentDefinition` ns = `core`
             )->a( n = `xmlns`      v = `sap.m`
@@ -99,7 +99,7 @@ CLASS z2ui5_cl_ai_app_229 IMPLEMENTATION.
                     )->shut(
                 )->shut(
                 )->leaf( `Image`
-                    )->a( n = `src`          v = `{PRODUCT_PIC_URL}`
+                    )->a( n = `src`          v = `{PRODUCTPICURL}`
                     )->a( n = `width`        v = `15em`
                     )->a( n = `densityAware` v = `false`
 
@@ -131,7 +131,7 @@ CLASS z2ui5_cl_ai_app_229 IMPLEMENTATION.
                     )->shut(
                 )->shut(
                 )->leaf( `Image`
-                    )->a( n = `src`          v = `{PRODUCT_PIC_URL}`
+                    )->a( n = `src`          v = `{PRODUCTPICURL}`
                     )->a( n = `width`        v = `15em`
                     )->a( n = `densityAware` v = `false`
 
@@ -157,8 +157,8 @@ CLASS z2ui5_cl_ai_app_229 IMPLEMENTATION.
 
     " /ProductCollection/0 of ui5/mock/products.json - the single record both
     " popovers bindElement to; the picture URL points at the OpenUI5 host
-    name            = `Notebook Basic 15`.
-    product_pic_url = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1000.jpg`.
+    name          = `Notebook Basic 15`.
+    productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1000.jpg`.
 
   ENDMETHOD.
 

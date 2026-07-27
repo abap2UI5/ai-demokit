@@ -53,6 +53,7 @@ CLASS z2ui5_cl_ai_app_045 IMPLEMENTATION.
             )->leaf( `Text`
                 )->a( n = `text`  v = `RangeSlider with text fields`
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
+            " the composite range property ([low, high]) is expressed as the scalar value/value2 pair on every RangeSlider below (see sidecar NOTE)
             )->leaf( `RangeSlider`
                 )->a( n = `showAdvancedTooltip` v = `true`
                 )->a( n = `value`               v = client->_bind( rs1_value )

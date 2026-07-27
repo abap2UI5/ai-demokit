@@ -1,0 +1,11 @@
+{
+ "note": "ported samples whose control is out of scope (deprecated or newer than UI5 1.71) but which are ALLOWED to stay - each with the reason. The out-of-scope check in generate-coverage.mjs FAILS (exit 1) on any ported out-of-scope sample NOT listed here, so new violations can never land silently; listed ones print an informational note. Entries are a maintainer decision - do not add one just to silence the gate.",
+ "exceptions": [
+  { "sample": "sap.m.sample.UploadSet", "class": "z2ui5_cl_ai_app_121", "reason": "pending maintainer decision (drop vs keep) - deprecated control, pre-gate breadth-probe debt, tracked in STATUS.md open findings" },
+  { "sample": "sap.f.sample.SidePanelSingle", "class": "z2ui5_cl_ai_app_136", "reason": "pending maintainer decision - control @since 1.107, admitted by the blind pre-2026-07-26 gate, tracked in STATUS.md open findings" },
+  { "sample": "sap.ui.core.sample.InvisibleMessage", "class": "z2ui5_cl_ai_app_141", "reason": "pending maintainer decision - control @since 1.78, admitted by the blind pre-2026-07-26 gate, tracked in STATUS.md open findings" },
+  { "sample": "sap.f.sample.ProductSwitchNavigation", "class": "z2ui5_cl_ai_app_165", "reason": "pending maintainer decision - control @since 1.72 (borderline), admitted by the blind pre-2026-07-26 gate, tracked in STATUS.md open findings" },
+  { "sample": "sap.f.sample.SemanticPage", "class": "z2ui5_cl_ai_app_166", "reason": "pending maintainer decision - sap.f.semantic.SemanticPage deprecated since 1.54, found by the source-backed gate 2026-07-26, tracked in STATUS.md open findings" },
+  { "sample": "sap.m.sample.OverflowToolbarTokenizer", "class": "z2ui5_cl_ai_app_203", "reason": "pending maintainer decision - sap.m.OverflowToolbarTokenizer is @ui5-experimental-since 1.139 (no plain @since, so the pre-2026-07-27 scanners read it as base-version); found by the review sweep, tracked in STATUS.md open findings" }
+ ]
+}

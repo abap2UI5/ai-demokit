@@ -9,12 +9,12 @@
     "event_t_arg": false,
     "note": "follow_up_action cs_event-binding_call: compound filter groups on the items binding (apply_filter)"
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {
       "type": "NOTE",
-      "what": "the bound lists=\"{/ProductCollectionStats/Filters}\" collection is represented as two static FacetFilterLists (Category, SupplierName) - the original's stats model yields exactly these two lists, so this is a faithful equivalent; the facet values inside each list stay bound to a FacetFilterItem template. This is the type=\"Simple\" variant of the FacetFilter (app 022 ports the near-identical type=\"Light\" FacetFilterLight); the difference is the FacetFilter type plus the confirm handling below."
+      "what": "the bound lists=\"{/ProductCollectionStats/Filters}\" collection is represented as two static FacetFilterLists (Category, SupplierName) - the original's stats model yields exactly these two lists, so this is a faithful equivalent; the facet values inside each list stay bound to a FacetFilterItem template. The stats value objects carry only text + data fields (no key), so the template's key binds {TEXT} (the original's key='{key}' resolves undefined against the same mock) and the counter binds the data value as {COUNT}. This is the type=\"Simple\" variant of the FacetFilter (app 022 ports the near-identical type=\"Light\" FacetFilterLight); the difference is the FacetFilter type plus the confirm handling below."
     },
     {
       "type": "NOTE",

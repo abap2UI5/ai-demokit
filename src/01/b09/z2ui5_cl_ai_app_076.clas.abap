@@ -44,19 +44,20 @@ CLASS z2ui5_cl_ai_app_076 IMPLEMENTATION.
                 )->shut(
 
                 )->open( `NotificationListItem`
-                    )->a( n = `title`           v = `New order (#2525) With a very long title - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent feugiat, turpis vel scelerisque pharetra, tellus odio` &&
+                    )->a( n = `title`           v = `New order (#2525) With a very long title - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent feugiat, turpis vel scelerisque pharetra, tellus odio ` &&
                                                      `vehicula dolor, nec elementum lectus turpis at nunc.`
-                    )->a( n = `description`     v = `And with a very long description and long labels of the action buttons - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent feugiat, turpis vel` &&
-                                                     `scelerisque pharetra, tellus odio vehicula dolor, nec elementum lectus` &&
+                    )->a( n = `description`     v = `And with a very long description and long labels of the action buttons - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent feugiat, turpis vel ` &&
+                                                     `scelerisque pharetra, tellus odio vehicula dolor, nec elementum lectus ` &&
                                                      `turpis at nunc.`
                     )->a( n = `showCloseButton` v = `true`
                     )->a( n = `datetime`        v = `1 hour`
                     )->a( n = `unread`          v = `true`
                     )->a( n = `priority`        v = `None`
+                    " the original's onItemClose also removes the item client-side - static items here, so close only toasts
                     )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Closed: {0}` ) ( `${$source>/title}` ) ) )
                     )->a( n = `press`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                     )->a( n = `authorName`      v = `Jean Doe`
-                    )->a( n = `authorPicture`   v = `test-resources/sap/m/images/Woman_04.png`
+                    )->a( n = `authorPicture`   v = `https://sdk.openui5.org/test-resources/sap/m/images/Woman_04.png`
                     )->open( `buttons`
                         )->leaf( `Button`
                             )->a( n = `text`  v = `Accept All Requested Information`
@@ -107,7 +108,7 @@ CLASS z2ui5_cl_ai_app_076 IMPLEMENTATION.
 
                 )->leaf( `NotificationListItem`
                     )->a( n = `title`             v = `New order (#2522)`
-                    )->a( n = `description`       v = `With a very long description - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent feugiat, turpis vel scelerisque pharetra, tellus odio vehicula` &&
+                    )->a( n = `description`       v = `With a very long description - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent feugiat, turpis vel scelerisque pharetra, tellus odio vehicula ` &&
                                                        `dolor, nec elementum lectus turpis at nunc.`
                     )->a( n = `showCloseButton`   v = `true`
                     )->a( n = `datetime`          v = `3 days`
@@ -121,8 +122,8 @@ CLASS z2ui5_cl_ai_app_076 IMPLEMENTATION.
 
                 )->leaf( `NotificationListItem`
                     )->a( n = `title`           v = `New order (#2521)`
-                    )->a( n = `description`     v = `With a very long description and no action buttons below - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent feugiat, turpis vel scelerisque` &&
-                                                     `pharetra, tellus odio vehicula dolor, nec elementum lectus turpis at` &&
+                    )->a( n = `description`     v = `With a very long description and no action buttons below - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent feugiat, turpis vel scelerisque ` &&
+                                                     `pharetra, tellus odio vehicula dolor, nec elementum lectus turpis at ` &&
                                                      `nunc.`
                     )->a( n = `showCloseButton` v = `true`
                     )->a( n = `datetime`        v = `3 days`
@@ -131,14 +132,14 @@ CLASS z2ui5_cl_ai_app_076 IMPLEMENTATION.
                     )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Closed: {0}` ) ( `${$source>/title}` ) ) )
                     )->a( n = `press`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                     )->a( n = `authorName`      v = `John Smith`
-                    )->a( n = `authorPicture`   v = `test-resources/sap/m/images/headerImg2.jpg`
+                    )->a( n = `authorPicture`   v = `https://sdk.openui5.org/test-resources/sap/m/images/headerImg2.jpg`
 
                 )->open( `NotificationListItem`
-                    )->a( n = `title`           v = `New order (#2525) With a very long title and truncation disabled by default! Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent feugiat, turpis vel` &&
-                                                     `scelerisque pharetra, tellus odio vehicula dolor, nec elementum` &&
+                    )->a( n = `title`           v = `New order (#2525) With a very long title and truncation disabled by default! Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent feugiat, turpis vel ` &&
+                                                     `scelerisque pharetra, tellus odio vehicula dolor, nec elementum ` &&
                                                      `lectus turpis at nunc.`
-                    )->a( n = `description`     v = `And a very long description and long labels of the action buttons - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent feugiat, turpis vel scelerisque` &&
-                                                     `pharetra, tellus odio vehicula dolor, nec elementum lectus` &&
+                    )->a( n = `description`     v = `And a very long description and long labels of the action buttons - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent feugiat, turpis vel scelerisque ` &&
+                                                     `pharetra, tellus odio vehicula dolor, nec elementum lectus ` &&
                                                      `turpis at nunc.`
                     )->a( n = `showCloseButton` v = `true`
                     )->a( n = `datetime`        v = `2 day`
@@ -147,7 +148,7 @@ CLASS z2ui5_cl_ai_app_076 IMPLEMENTATION.
                     )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Closed: {0}` ) ( `${$source>/title}` ) ) )
                     )->a( n = `press`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                     )->a( n = `authorName`      v = `Jean Doe`
-                    )->a( n = `authorPicture`   v = `test-resources/sap/m/images/Woman_04.png`
+                    )->a( n = `authorPicture`   v = `https://sdk.openui5.org/test-resources/sap/m/images/Woman_04.png`
                     )->a( n = `truncate`        v = `false`
                     )->open( `buttons`
                         )->leaf( `Button`
@@ -158,11 +159,11 @@ CLASS z2ui5_cl_ai_app_076 IMPLEMENTATION.
                 )->shut(
 
                 )->open( `NotificationListItem`
-                    )->a( n = `title`              v = `New order (#2525) With a very long title and with truncation enabled but 'Show More' hidden! Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent` &&
-                                                        `feugiat, turpis vel scelerisque pharetra, tellus odio vehicula dolor,` &&
+                    )->a( n = `title`              v = `New order (#2525) With a very long title and with truncation enabled but 'Show More' hidden! Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ` &&
+                                                        `feugiat, turpis vel scelerisque pharetra, tellus odio vehicula dolor, ` &&
                                                         `nec elementum lectus turpis at nunc.`
-                    )->a( n = `description`        v = `And a very long description and long labels of the action buttons - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent feugiat, turpis vel scelerisque` &&
-                                                        `pharetra, tellus odio vehicula dolor, nec elementum lectus` &&
+                    )->a( n = `description`        v = `And a very long description and long labels of the action buttons - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent feugiat, turpis vel scelerisque ` &&
+                                                        `pharetra, tellus odio vehicula dolor, nec elementum lectus ` &&
                                                         `turpis at nunc.`
                     )->a( n = `showCloseButton`    v = `true`
                     )->a( n = `datetime`           v = `2 day`
@@ -171,7 +172,7 @@ CLASS z2ui5_cl_ai_app_076 IMPLEMENTATION.
                     )->a( n = `close`              v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Closed: {0}` ) ( `${$source>/title}` ) ) )
                     )->a( n = `press`              v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                     )->a( n = `authorName`         v = `Jean Doe`
-                    )->a( n = `authorPicture`      v = `test-resources/sap/m/images/Woman_04.png`
+                    )->a( n = `authorPicture`      v = `https://sdk.openui5.org/test-resources/sap/m/images/Woman_04.png`
                     )->a( n = `hideShowMoreButton` v = `true`
                     )->a( n = `showButtons`        v = `false`
                     )->open( `buttons`
@@ -194,7 +195,7 @@ CLASS z2ui5_cl_ai_app_076 IMPLEMENTATION.
                     )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Closed: {0}` ) ( `${$source>/title}` ) ) )
                     )->a( n = `press`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                     )->a( n = `authorName`      v = `Patricia Clark`
-                    )->a( n = `authorPicture`   v = `test-resources/sap/m/images/female_BaySu.jpg`
+                    )->a( n = `authorPicture`   v = `https://sdk.openui5.org/test-resources/sap/m/images/female_BaySu.jpg`
                     )->open( `buttons`
                         )->leaf( `Button`
                             )->a( n = `text`  v = `Accept`
@@ -204,6 +205,7 @@ CLASS z2ui5_cl_ai_app_076 IMPLEMENTATION.
                             )->a( n = `text`  v = `Reject`
                             )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Reject Button Pressed` ) ) )
                             )->a( n = `icon`  v = `sap-icon://sys-cancel`
+                        " the original's onErrorPress sets a MessageStrip processingMessage on the item - shown as a toast here
                         )->leaf( `Button`
                             )->a( n = `text`  v = `Get Error`
                             )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Error: Something went wrong.` ) ) )

@@ -9,7 +9,7 @@
     "event_t_arg": true,
     "note": "init-only, roundtrip-free like app 060: the button press wires control_by_id openBy anchored to the button ($event.oSource.sId); each MenuItem/MenuTextFieldItem select composes its toast on the frontend via control_global MESSAGE_TOAST.show (template + ${$parameters>/item}.getText()/getValue()), so there is no on_event"
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {

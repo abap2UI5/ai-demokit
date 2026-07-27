@@ -75,18 +75,73 @@ const sinceLeq171 = (since) => {
 // -> 'in' | 'deprecated' | 'newer' | 'unknown'. An entity containing
 // '.sample.' is the sample id itself (demo apps without an owning control,
 // e.g. AIIntegration) — no control metadata, so scope is unknown.
+// Samples are enriched from ui5/properties.json BEFORE this runs (see
+// enrichFromProperties below), so a null since/deprecated from the snapshot
+// no longer silently passes controls newer than 1.71 (pr/scope-since-from-source).
 const scopeOf = (s) =>
   !s.entity || s.entity.includes('.sample.') ? 'unknown'
     : s.deprecated ? 'deprecated' : sinceLeq171(s.since) ? 'in' : 'newer';
+
+// --- scope fallback: control-level @since/@deprecated from the source scan --
+// ui5/universe.json carries since:null for most controls (the fork checkout
+// has no generated api.json), which made scopeOf blind — sinceLeq171(null)
+// passed controls newer than 1.71 (sap.f.SidePanel @1.107 shipped as app 136
+// that way). ui5/properties.json now carries each control's class-level
+// @since/@deprecated parsed from the OpenUI5 sources (generate-properties.mjs);
+// fill the snapshot's nulls from it so the scope verdict matches
+// scripts/scope-of.mjs offline.
+const PROPS_FILE = path.join(ROOT, 'ui5', 'properties.json');
+const propsControls = fs.existsSync(PROPS_FILE)
+  ? JSON.parse(fs.readFileSync(PROPS_FILE, 'utf8')).controls || {}
+  : {};
+function enrichFromProperties(s) {
+  const c = s.entity && propsControls[s.entity];
+  if (!c) return s;
+  return {
+    ...s,
+    since: s.since || c.since || null,
+    deprecated: s.deprecated || c.deprecated || null,
+  };
+}
+
+// --- curated universe fixups (both the build and the offline-load path) -----
+// ui5/universe-excludes.json: demokit sample/ dirs that are not samples
+// (shared helpers, test infra, group folders with nested samples).
+// ui5/entity-overrides.json: sample id -> owning entity where the upstream
+// docuindex has no mapping, so real samples get proper scope + API links.
+const EXCLUDES_FILE = path.join(ROOT, 'ui5', 'universe-excludes.json');
+const OVERRIDES_FILE = path.join(ROOT, 'ui5', 'entity-overrides.json');
+const excludeSet = new Set(
+  (fs.existsSync(EXCLUDES_FILE)
+    ? JSON.parse(fs.readFileSync(EXCLUDES_FILE, 'utf8')).excludes || []
+    : []).map((e) => `${e.lib}\t${e.name}`));
+const entityOverrides = fs.existsSync(OVERRIDES_FILE)
+  ? JSON.parse(fs.readFileSync(OVERRIDES_FILE, 'utf8')).overrides || {}
+  : {};
+function applyUniverseFixups(u) {
+  return {
+    ...u,
+    libs: u.libs.map((e) => ({
+      ...e,
+      samples: e.samples
+        .filter((s) => !excludeSet.has(`${e.lib}\t${s.name}`))
+        .map((s) => (entityOverrides[`${e.lib}.sample.${s.name}`]
+          ? { ...s, entity: entityOverrides[`${e.lib}.sample.${s.name}`] }
+          : s)),
+    })),
+  };
+}
 // turn a JSDoc doclet into plain text: resolve {@link sym text} to its display
 // text (or the symbol), collapse whitespace, trim.
 const cleanDoc = (t) => String(t || '')
   .replace(/\{@link\s+([^}\s]+)(?:\s+([^}]+))?\}/g, (_, sym, disp) => (disp ? disp.trim() : sym))
   .replace(/\s+/g, ' ')
   .trim();
-// the sample's source folder in the OpenUI5 repository
+// the sample's source folder in the OpenUI5 repository. A GROUP-nested
+// sample is named `<Group>.<Child>` (TreeTable.JSONTreeBinding) — its
+// folder is sample/<Group>/<Child>
 const sampleSrcUrl = (lib, name) =>
-  `${OPENUI5}/tree/${OPENUI5_REF}/src/${lib}/test/${lib.replace(/\./g, '/')}/demokit/sample/${name}`;
+  `${OPENUI5}/tree/${OPENUI5_REF}/src/${lib}/test/${lib.replace(/\./g, '/')}/demokit/sample/${name.replace(/\./g, '/')}`;
 // generated abap2UI5 class file under src/ (this repo)
 const abapUrl = (file) => `${GH}/blob/${REF}/${file.split(path.sep).join('/')}`;
 
@@ -152,8 +207,25 @@ if (fs.existsSync(OPENUI5_DIR)) {
     const entOf = entityMap(demokitDir);
     const api = loadApi(lib);
     if (api.version && !release) release = api.version;
-    const samples = fs.readdirSync(sampleDir)
-      .filter((n) => fs.statSync(path.join(sampleDir, n)).isDirectory())
+    const isSampleDir = (p) =>
+      fs.existsSync(path.join(p, 'Component.js')) || fs.existsSync(path.join(p, 'manifest.json'));
+    const names = [];
+    for (const n of fs.readdirSync(sampleDir)) {
+      const dir = path.join(sampleDir, n);
+      if (!fs.statSync(dir).isDirectory()) continue;
+      if (entOf.has(`${lib}.sample.${n}`) || isSampleDir(dir)) {
+        names.push(n);
+        continue;
+      }
+      // GROUP folder (TreeTable, p13n, …): its subfolders are the real
+      // samples — take a child ONLY when the docuindex lists it as an
+      // official demo kit sample (test infra / shared helpers stay out)
+      for (const c of fs.readdirSync(dir)) {
+        if (!fs.statSync(path.join(dir, c)).isDirectory()) continue;
+        if (entOf.has(`${lib}.sample.${n}.${c}`)) names.push(`${n}.${c}`);
+      }
+    }
+    const samples = names
       .sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
       .map((name) => {
         const entity = entOf.get(`${lib}.sample.${name}`) || null;
@@ -172,24 +244,55 @@ if (fs.existsSync(OPENUI5_DIR)) {
   process.exit(1);
 }
 
+universe = applyUniverseFixups(universe);
+
 const release = universe.release;
 const libs = universe.libs.map((e) => ({
   lib: e.lib,
-  samples: e.samples.map((s) => ({
-    ...s,
-    port: ported.get(`${e.lib}\t${s.name}`) || null,
-    scope: scopeOf(s),
-  })),
+  samples: e.samples.map((s) => {
+    const enriched = enrichFromProperties(s);
+    return {
+      ...enriched,
+      port: ported.get(`${e.lib}\t${s.name}`) || null,
+      scope: scopeOf(enriched),
+    };
+  }),
 }));
 
-// a ported sample outside the scope is a rule violation — warn loudly
+// a ported sample outside the scope is a rule violation — HARD gate since
+// 2026-07-26: fail unless the sample carries a documented exception in
+// ui5/scope-exceptions.json (a maintainer decision, never a silencer).
+// 'unknown' scope (demo apps without an owning control) is not a violation.
+const SCOPE_EXC_FILE = path.join(ROOT, 'ui5', 'scope-exceptions.json');
+const scopeExceptions = new Map(
+  (fs.existsSync(SCOPE_EXC_FILE)
+    ? JSON.parse(fs.readFileSync(SCOPE_EXC_FILE, 'utf8')).exceptions || []
+    : []).map((e) => [e.sample, e]));
+let scopeErrors = 0;
 for (const e of libs) {
   for (const s of e.samples) {
-    if (s.port && s.scope !== 'in') {
-      console.warn(`WARNING: ported sample ${e.lib}.sample.${s.name} is out of scope (${s.scope})`);
+    if (!s.port || s.scope === 'in' || s.scope === 'unknown') continue;
+    const sampleId = `${e.lib}.sample.${s.name}`;
+    const exc = scopeExceptions.get(sampleId);
+    if (exc) {
+      console.warn(`note: ported sample ${sampleId} is out of scope (${s.scope}) — documented exception: ${exc.reason}`);
+    } else {
+      console.error(`ERROR: ported sample ${sampleId} is out of scope (${s.scope}) — out-of-scope samples are never ported (AGENTS §1); remove the port or add a maintainer-decided entry to ui5/scope-exceptions.json`);
+      scopeErrors++;
     }
   }
 }
+// stale exceptions must not linger: an entry whose sample is no longer ported
+// (or no longer out of scope) fails too, so the list can only shrink honestly
+for (const [sampleId, exc] of scopeExceptions) {
+  const hit = libs.flatMap((e) => e.samples.map((s) => ({ ...s, id: `${e.lib}.sample.${s.name}` })))
+    .find((s) => s.id === sampleId);
+  if (!hit || !hit.port || hit.scope === 'in' || hit.scope === 'unknown') {
+    console.error(`ERROR: stale scope exception "${sampleId}" (${exc.class}) — the sample is ${!hit ? 'not in the universe' : !hit.port ? 'not ported' : 'in scope'}; remove the entry from ui5/scope-exceptions.json`);
+    scopeErrors++;
+  }
+}
+if (scopeErrors) process.exit(1);
 
 // --backlog: print the in-scope, unported samples (batch planning input).
 // BREADTH-FIRST order: samples whose CONTROL has no port at all come first —
@@ -202,22 +305,28 @@ if (process.argv.includes('--backlog')) {
   const holdout = fs.existsSync(holdoutFile)
     ? new Set(JSON.parse(fs.readFileSync(holdoutFile, 'utf8')).samples)
     : new Set();
-  const portedEntities = new Set(
-    libs.flatMap((e) => e.samples.filter((s) => s.port && s.entity).map((s) => s.entity)));
+  // ports per control — depth planning prefers thinly-covered controls
+  const portsPerEntity = new Map();
+  for (const e of libs) for (const s of e.samples) {
+    if (s.port && s.entity) portsPerEntity.set(s.entity, (portsPerEntity.get(s.entity) || 0) + 1);
+  }
   const rows = libs.flatMap((e) => e.samples
     .filter((s) => s.scope === 'in' && !s.port)
     .map((s) => ({
       lib: e.lib, entity: s.entity, name: s.name,
-      newControl: !portedEntities.has(s.entity),
+      covered: portsPerEntity.get(s.entity) || 0,
       holdout: holdout.has(`${e.lib}.sample.${s.name}`),
     })));
-  rows.sort((a, b) => (b.newControl - a.newControl)
+  // breadth first (uncovered controls), then DEPTH: ascending by how many
+  // ports the control already has — a control with one port still yields
+  // more new idioms than one with five (AGENTS §1 depth criteria)
+  rows.sort((a, b) => (a.covered - b.covered)
     || a.entity.localeCompare(b.entity) || a.name.localeCompare(b.name));
   for (const r of rows) {
-    console.log(`${r.lib}\t${r.entity}\t${r.name}\t${r.newControl ? 'NEW-CONTROL' : 'covered-control'}${r.holdout ? '\tHOLDOUT' : ''}`);
+    console.log(`${r.lib}\t${r.entity}\t${r.name}\t${r.covered === 0 ? 'NEW-CONTROL' : `covered-control(${r.covered})`}${r.holdout ? '\tHOLDOUT' : ''}`);
   }
-  const n = rows.filter((r) => r.newControl && !r.holdout).length;
-  console.log(`# ${rows.length} in-scope unported samples; ${n} on uncovered controls (plan these first, HOLDOUT excluded)`);
+  const n = rows.filter((r) => r.covered === 0 && !r.holdout).length;
+  console.log(`# ${rows.length} in-scope unported samples; ${n} on uncovered controls (plan these first, HOLDOUT excluded; then depth = lowest covered-control(n) first)`);
   process.exit(0);
 }
 
@@ -259,7 +368,7 @@ function summaryLines() {
   const l = [];
   l.push(`Overall **${totalPorted} / ${totalInScope}** in-scope demo kit samples ported (${pct(totalPorted, totalInScope)}).`);
   l.push(`**In scope**: samples whose control exists since **UI5 1.71** and is **not deprecated** (legacy-free ready).`);
-  l.push(`Out of scope: ${totalSamples - totalInScope} of ${totalSamples} samples — ${outBy.deprecated} on deprecated controls, ${outBy.newer} on controls newer than 1.71, ${outBy.unknown} without control metadata.`);
+  l.push(`Out of scope: ${totalSamples - totalInScope} of ${totalSamples} samples — ${outBy.deprecated} on deprecated controls, ${outBy.newer} on controls newer than 1.71, ${outBy.unknown} demo apps without an owning control.`);
   if (release) l.push(`Control metadata from OpenUI5 **${release}**.`);
   l.push('');
   l.push('| Module | Samples | In scope | Ported | Coverage | |');

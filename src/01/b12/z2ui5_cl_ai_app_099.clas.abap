@@ -152,6 +152,8 @@ CLASS z2ui5_cl_ai_app_099 IMPLEMENTATION.
 
   METHOD model_init.
 
+    " target seeds the UI5 default '_blank' explicitly - a serialized empty
+    " string would override the QuickViewGroupElement.target default
     t_pages = VALUE #(
       ( pageid       = `companyPageId`
         header       = `Company info`
@@ -163,15 +165,15 @@ CLASS z2ui5_cl_ai_app_099 IMPLEMENTATION.
         groups       = VALUE #(
           ( heading  = `Contact Details`
             elements = VALUE #(
-              ( label = `Phone`   value = `+001 6101 34869-0` elementtype = `phone` )
-              ( label = `Address` value = `550 Larkin Street, 4F, Mountain View, CA, 94102 San Francisco USA` elementtype = `text` ) ) )
+              ( label = `Phone`   value = `+001 6101 34869-0` elementtype = `phone` target = `_blank` )
+              ( label = `Address` value = `550 Larkin Street, 4F, Mountain View, CA, 94102 San Francisco USA` elementtype = `text` target = `_blank` ) ) )
           ( heading  = `Main Contact`
             elements = VALUE #(
-              ( label = `Name`            value = `John Doe`                  elementtype = `pageLink` pagelinkid = `companyEmployeePageId` )
-              ( label = `Mobile`          value = `+001 6101 34869-0`         elementtype = `mobile` )
-              ( label = `Phone`           value = `+001 6101 34869-0`         elementtype = `phone` )
-              ( label = `Email`           value = `main.contact@company.com`  elementtype = `email` emailsubject = `Subject` )
-              ( label = `Additional info` value = ``                          elementtype = `text` ) ) ) ) )
+              ( label = `Name`            value = `John Doe`                  elementtype = `pageLink` pagelinkid = `companyEmployeePageId` target = `_blank` )
+              ( label = `Mobile`          value = `+001 6101 34869-0`         elementtype = `mobile` target = `_blank` )
+              ( label = `Phone`           value = `+001 6101 34869-0`         elementtype = `phone` target = `_blank` )
+              ( label = `Email`           value = `main.contact@company.com`  elementtype = `email` emailsubject = `Subject` target = `_blank` )
+              ( label = `Additional info` value = ``                          elementtype = `text` target = `_blank` ) ) ) ) )
       ( pageid       = `companyEmployeePageId`
         header       = `Employee Info`
         title        = `John Doe`
@@ -181,13 +183,13 @@ CLASS z2ui5_cl_ai_app_099 IMPLEMENTATION.
         groups       = VALUE #(
           ( heading  = `Company`
             elements = VALUE #(
-              ( label = `Name`    value = `Adventure Company`             url = `http://sap.com` elementtype = `link` )
-              ( label = `Address` value = `Sofia, Boris III, 136A`        elementtype = `text` )
-              ( label = `Slogan`  value = `Innovation through technology` elementtype = `text` ) ) )
+              ( label = `Name`    value = `Adventure Company`             url = `http://sap.com` elementtype = `link` target = `_blank` )
+              ( label = `Address` value = `Sofia, Boris III, 136A`        elementtype = `text` target = `_blank` )
+              ( label = `Slogan`  value = `Innovation through technology` elementtype = `text` target = `_blank` ) ) )
           ( heading  = `Other`
             elements = VALUE #(
-              ( label = `Email` value = `john.doe@sap.com` elementtype = `email` emailsubject = `Subject` )
-              ( label = `Phone` value = `+359 888 888 888`  elementtype = `mobile` ) ) ) ) ) ).
+              ( label = `Email` value = `john.doe@sap.com` elementtype = `email` emailsubject = `Subject` target = `_blank` )
+              ( label = `Phone` value = `+359 888 888 888`  elementtype = `mobile` target = `_blank` ) ) ) ) ) ).
 
   ENDMETHOD.
 

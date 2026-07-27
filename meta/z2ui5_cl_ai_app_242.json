@@ -9,7 +9,7 @@
     "event_t_arg": true,
     "note": "the To-buttons carry their target page id as an event arg (NAV) and the backend calls navCon.to via follow_up_action( cs_event-control_by_id t_arg = navCon/to/<target>/<animation> ); Back calls navCon.back(); navigationFinished shows a client-composed MessageToast built from the resolved page title"
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {

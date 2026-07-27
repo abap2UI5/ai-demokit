@@ -135,6 +135,7 @@ CLASS z2ui5_cl_ai_app_069 IMPLEMENTATION.
                 )->a( n = `labelFor` v = `groupF`
             )->open( `RadioButtonGroup`
                 )->a( n = `id` v = `groupF`
+                " POST-1.71: wrapping and wrappingType (since UI5 1.126) kept 1:1
                 )->leaf( `RadioButton`
                     )->a( n = `width`        v = `240px`
                     )->a( n = `wrapping`     v = `true`

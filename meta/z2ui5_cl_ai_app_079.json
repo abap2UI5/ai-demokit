@@ -8,7 +8,12 @@
     "frontend_action": false,
     "event_t_arg": false
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
-  "deviations": []
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "the Link nested inside the Title uses the Title content aggregation (since UI5 1.87) - newer than 1.71 but kept for the 1:1 port (the sample's whole point); the app needs a UI5 release >= 1.87 to render it. Aggregation-level, invisible to the attribute-scanning property gate."
+    }
+  ]
 }

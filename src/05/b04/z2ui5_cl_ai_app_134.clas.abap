@@ -52,8 +52,9 @@ CLASS z2ui5_cl_ai_app_134 IMPLEMENTATION.
 
                 )->shut(
                 )->shut(
+                " image assets rewritten to the OpenUI5 host per the runtime asset-URL rule
                 )->open( `Image`
-                    )->a( n = `src`        v = `test-resources/sap/tnt/images/SAP_Logo.png`
+                    )->a( n = `src`        v = `https://sdk.openui5.org/test-resources/sap/tnt/images/SAP_Logo.png`
                     )->a( n = `decorative` v = `false`
                     )->a( n = `press`      v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Logo pressed!` ) ) )
                     )->a( n = `tooltip`    v = `SAP Logo`
@@ -155,8 +156,9 @@ CLASS z2ui5_cl_ai_app_134 IMPLEMENTATION.
                     )->a( n = `type`    v = `Transparent`
                     )->a( n = `text`    v = `My Products`
                     )->a( n = `tooltip` v = `My Products`
+                " Avatar is a control @since 1.73 - kept 1:1 (POST_171)
                 )->open( `Avatar`
-                    )->a( n = `src`         v = `test-resources/sap/tnt/images/Woman_avatar_01.png`
+                    )->a( n = `src`         v = `https://sdk.openui5.org/test-resources/sap/tnt/images/Woman_avatar_01.png`
                     )->a( n = `displaySize` v = `XS`
                     )->a( n = `press`       v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Avatar pressed!` ) ) )
                     )->a( n = `tooltip`     v = `Profile`
@@ -173,7 +175,7 @@ CLASS z2ui5_cl_ai_app_134 IMPLEMENTATION.
                 )->a( n = `class` v = `sapUiTinyMargin sapUiLargeMarginTop`
 
                 )->open( `Image`
-                    )->a( n = `src`        v = `test-resources/sap/tnt/images/SAP_Logo.png`
+                    )->a( n = `src`        v = `https://sdk.openui5.org/test-resources/sap/tnt/images/SAP_Logo.png`
                     )->a( n = `decorative` v = `false`
                     )->a( n = `press`      v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Logo pressed!` ) ) )
                     )->a( n = `tooltip`    v = `SAP Logo`
@@ -196,7 +198,7 @@ CLASS z2ui5_cl_ai_app_134 IMPLEMENTATION.
                 )->shut(
                 )->leaf( `ToolbarSpacer`
                 )->open( `Avatar`
-                    )->a( n = `src`         v = `test-resources/sap/tnt/images/Woman_avatar_01.png`
+                    )->a( n = `src`         v = `https://sdk.openui5.org/test-resources/sap/tnt/images/Woman_avatar_01.png`
                     )->a( n = `displaySize` v = `XS`
                     )->a( n = `press`       v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Avatar pressed!` ) ) )
                     )->a( n = `tooltip`     v = `Profile`

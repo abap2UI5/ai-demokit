@@ -9,7 +9,7 @@
     "event_t_arg": true,
     "note": "each ObjectListItem press toasts `Pressed : {0}` roundtrip-free via control_global MESSAGE_TOAST.show ({0} filled by ${$source>/title}); the app is init-only, no model (the sample's items are static in the view)"
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {

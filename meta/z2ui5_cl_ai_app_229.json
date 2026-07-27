@@ -9,7 +9,7 @@
     "event_t_arg": true,
     "note": "each button press builds a core:FragmentDefinition Popover server-side and shows it anchored via client->popover_display( xml = ... by_id = $event.oSource.sId ); the footer buttons close it via follow_up_action( cs_event-popover_close )"
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {
@@ -22,7 +22,7 @@
     },
     {
       "type": "NOTE",
-      "what": "the original oPopover.bindElement('/ProductCollection/0') binds each popover to a single record; the port seeds that record's fields (name, product_pic_url) at the default-model root and the popover's relative bindings {NAME}/{PRODUCT_PIC_URL} resolve against the root - same data, structural-diff matches on the last path segment (app 175 single-record-flatten idiom). No bind_element needed because the record is the static row 0, not a per-row selection."
+      "what": "the original oPopover.bindElement('/ProductCollection/0') binds each popover to a single record; the port seeds that record's fields (name, productpicurl) at the default-model root and the popover's relative bindings {NAME}/{PRODUCTPICURL} resolve against the root - same data, structural-diff matches on the last path segment (app 175 single-record-flatten idiom). No bind_element needed because the record is the static row 0, not a per-row selection."
     },
     {
       "type": "NOTE",
@@ -34,7 +34,7 @@
     },
     {
       "type": "LIVE_TEST",
-      "what": "unverified in a running system: that both popovers open anchored to their button (popover_display by_id = $event.oSource.sId), that {NAME}/{PRODUCT_PIC_URL} resolve from the root-seeded record, and that the Email/Close footer buttons close the popover (popover_close) with the Email toast firing."
+      "what": "unverified in a running system: that both popovers open anchored to their button (popover_display by_id = $event.oSource.sId), that {NAME}/{PRODUCTPICURL} resolve from the root-seeded record, and that the Email/Close footer buttons close the popover (popover_close) with the Email toast firing."
     }
   ]
 }

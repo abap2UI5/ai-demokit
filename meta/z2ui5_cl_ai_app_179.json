@@ -8,9 +8,16 @@
     "frontend_action": false,
     "event_t_arg": false
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
-    { "type": "NOTE", "what": "Data-type binding paradigm: the Float type module is pulled in with core:require='{FloatType: sap/ui/model/type/Float}' and the Input/Text bindings carry type:'FloatType' plus formatOptions (min/maxIntegerDigits, min/maxFractionDigits, preserveDecimals) 1:1. The single model field 'number' (initial '123.456', kept as a string like the sample's JSON) is serialized by abap2UI5 as /NUMBER, so the original raw '/number' paths are written as '/NUMBER'." }
+    {
+      "type": "POST_171",
+      "what": "core:require on the view root (module preloading for the FloatType alias) is kept 1:1 from the original view.xml; core:require needs UI5 >= 1.74 (declared by policy - the property gate cannot see view-root require attributes)."
+    },
+    {
+      "type": "NOTE",
+      "what": "Data-type binding paradigm: the Float type module is pulled in with core:require='{FloatType: sap/ui/model/type/Float}' and the Input/Text bindings carry type:'FloatType' plus formatOptions (min/maxIntegerDigits, min/maxFractionDigits, preserveDecimals) 1:1. The single model field 'number' (initial '123.456', kept as a string like the sample's JSON) is serialized by abap2UI5 as /NUMBER, so the original raw '/number' paths are written as '/NUMBER'."
+    }
   ]
 }

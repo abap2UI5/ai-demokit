@@ -1,13 +1,19 @@
 #!/usr/bin/env node
 /*
- * Builds ui5/properties.json — per control: the parent class and every
- * member (property/aggregation/association/event) that carries a JSDoc
- * @since, parsed from the OpenUI5 control sources.
+ * Builds ui5/properties.json — per control: the parent class, the CONTROL's
+ * own class-level @since / @deprecated, and every member (property/
+ * aggregation/association/event) that carries a JSDoc @since, parsed from
+ * the OpenUI5 control sources.
  *
  * This is the data source for scripts/property-check.mjs (the 1.71 property
  * gate): a port may only use members that existed by UI5 1.71, so the check
  * needs to know when each member was introduced. Members without @since are
  * older than version tracking and count as always-available.
+ *
+ * The control-level since/deprecated additionally feed the scope gate:
+ * generate-coverage.mjs's scopeOf falls back to them when ui5/universe.json
+ * carries null (the fork checkout has no generated api.json), so the
+ * out-of-scope check is authoritative offline (pr/scope-since-from-source).
  *
  * Source: an OpenUI5 checkout (env OPENUI5_DIR, default ./openui5) — the
  * generate_result CI step clones the full repo, so every ported library's
@@ -58,6 +64,25 @@ const dotted = (p, base) => {
   return abs.replace(/\//g, '.');
 };
 
+// class-level JSDoc @since / @deprecated ONLY — they live in the class-doc
+// block PRECEDING the `X.extend("<entity>", …)` call; member blocks (with
+// their own @since) come after it and must not be read. Same rule as
+// scripts/scope-of.mjs: no class-level @since ⇒ base version (<= 1.71).
+function classMeta(src, name) {
+  const em = src.match(new RegExp(`\\.extend\\(\\s*["']${name.replace(/\./g, '\\.')}["']`));
+  const header = em ? src.slice(0, em.index) : src.slice(0, 4000);
+  // @ui5-experimental-since counts too (app 203 lesson — experimental
+  // controls carry no plain @since and read as base-version otherwise)
+  const sinceM = header.match(/@(?:ui5-experimental-)?since\s+(?:version\s+)?([\d.]+)/i);
+  const depM = header.match(/@deprecated(?:\s+As of(?:\s+version)?\s+([\d.]+))?([^\n]*)/i);
+  return {
+    since: sinceM ? sinceM[1] : null,
+    deprecated: depM
+      ? { since: depM[1] || null, text: (depM[2] || '').replace(/^[\s.,;:—-]+/, '').replace(/\s+/g, ' ').trim() }
+      : null,
+  };
+}
+
 function parseControl(file, base) {
   const src = fs.readFileSync(file, 'utf8');
   // the class this file defines: SomeBase.extend("sap.m.Button", ...)
@@ -97,7 +122,7 @@ function parseControl(file, base) {
     }
   }
   for (const k of Object.keys(members)) if (members[k] === null) delete members[k];
-  return { name, parent, members };
+  return { name, parent, members, ...classMeta(src, name) };
 }
 
 const controls = {};
@@ -115,6 +140,8 @@ for (const [base, dir] of LIB_DIRS) {
     const c = parseControl(file, fileBase);
     if (!c) continue;
     controls[c.name] = { parent: c.parent, members: c.members };
+    if (c.since) controls[c.name].since = c.since;
+    if (c.deprecated) controls[c.name].deprecated = c.deprecated;
     files++;
   }
 }
@@ -124,8 +151,9 @@ if (!libsSeen) {
 }
 
 fs.writeFileSync(OUT, JSON.stringify({
-  note: 'member @since per control, parsed from the OpenUI5 sources - input for scripts/property-check.mjs',
+  note: 'per control: class-level @since/@deprecated + member @since, parsed from the OpenUI5 sources - input for scripts/property-check.mjs and the generate-coverage.mjs scope fallback',
   controls,
 }, null, 1) + '\n');
 const withSince = Object.values(controls).filter((c) => Object.keys(c.members).length).length;
-console.log(`properties.json: ${files} controls parsed, ${withSince} with @since members`);
+const withOwn = Object.values(controls).filter((c) => c.since).length;
+console.log(`properties.json: ${files} controls parsed, ${withSince} with @since members, ${withOwn} with a class-level @since`);

@@ -9,7 +9,7 @@
     "event_t_arg": true,
     "note": "the list-item press toasts `Pressed : {0}` roundtrip-free via control_global MESSAGE_TOAST.show ({0} filled by ${NAME}); the app is now init-only"
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {

@@ -9,12 +9,20 @@
     "event_t_arg": true,
     "note": "press/close compose `Item Pressed: {0}`/`Item Closed: {0}` (+ ${$source>/title}); accept/reject/error are static control_global toasts - all roundtrip-free, so the app is init-only"
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {
       "type": "IMPROVISED",
       "what": "the notifications are static (not model-bound), so onItemClose's client-side removeItem is not mirrored (close fires a toast only); onErrorPress's setProcessingMessage MessageStrip on the item is shown as a toast."
+    },
+    {
+      "type": "POST_171",
+      "what": "the NotificationList container control (since UI5 1.90) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.90 to render it (control-level, invisible to the member-level property gate)."
+    },
+    {
+      "type": "NOTE",
+      "what": "the sample's demo-kit authorPicture image paths (test-resources/sap/m/images/Woman_04.png, headerImg2.jpg, female_BaySu.jpg) are resolved to absolute sdk.openui5.org URLs."
     },
     {
       "type": "LIVE_TEST",

@@ -13,11 +13,11 @@
   "deviations": [
     {
       "type": "IMPROVISED",
-      "what": "Breadth-probe of the declarative-card paradigm: a sap.ui.integration.widgets.Card whose whole UI comes from a JSON manifest. The manifest is carried as an ABAP string and bound to the Card. The original binds several manifests from a named model; here one inline List-card manifest probes whether abap2UI5 can drive an integration card at all."
+      "what": "Breadth-probe of the declarative-card paradigm: a sap.ui.integration.widgets.Card whose whole UI comes from a JSON manifest. The manifest is carried as an ABAP string and bound to the Card, and its content (title/subtitle/3 list items) is invented for the probe - it does not come from the sample. The original page (f:ShellBar, IconTabBar with IconTabFilters, f:GridContainer with layout settings, several w:Cards over the manifests> named model incl. card:CardBadgeCustomData badges and GridContainerItemLayoutData) is dropped entirely. Needs rework for a faithful rebuild; the multi-manifest binding + external component card manifests remain the hard part (render_smoke notes integration Cards need external manifests)."
     }
   ],
   "structural_diff": {
     "skip": true,
-    "reason": "breadth/capability probe \u2014 renders the control but is not a faithful 1:1 rebuild of the full sample"
+    "reason": "breadth/capability probe — renders the control but is not a faithful 1:1 rebuild of the full sample"
   }
 }

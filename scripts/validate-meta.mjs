@@ -88,6 +88,20 @@ for (const sf of sidecars.sort()) {
     }
   }
   if (m.class && m.class !== name) err(`${sf}: class "${m.class}" does not match filename`);
+  // optional data_fidelity escape hatch — same shape as render_smoke
+  if (m.data_fidelity !== undefined) {
+    const df = m.data_fidelity;
+    if (typeof df !== 'object' || df === null || Array.isArray(df)) {
+      err(`${sf}: data_fidelity must be an object { skip: true, reason }`);
+    } else {
+      if (df.skip !== true) err(`${sf}: data_fidelity.skip must be true when present (drop the field otherwise)`);
+      if (!df.reason || typeof df.reason !== 'string') err(`${sf}: data_fidelity.reason must be a non-empty string`);
+      for (const k of Object.keys(df)) {
+        if (!['skip', 'reason'].includes(k)) err(`${sf}: unknown data_fidelity field "${k}"`);
+      }
+    }
+  }
+
   if (m.status && !STATUS.includes(m.status)) err(`${sf}: unknown status "${m.status}"`);
   if (m.status === 'checked' && !m.checked?.date) {
     err(`${sf}: status "${m.status}" requires a checked {date, note}`);

@@ -1,0 +1,54 @@
+name: e2e_nightly
+
+# Runs every port as the REAL app (transpiled abap2UI5 backend + headless
+# Chromium, scripts/e2e-build.mjs + e2e-smoke.mjs) — the heavy gate that the
+# fast PR `checks` deliberately skip (multi-minute transpile + browser).
+# Nightly so LIVE_TEST-class regressions surface within a day instead of at
+# the next release: every INTERACTIONS entry that stays green here is a
+# LIVE_TEST candidate for closure (STATUS.md open findings).
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '30 2 * * *'   # nightly, 02:30 UTC
+
+permissions:
+  contents: read
+
+concurrency:
+  group: e2e-nightly
+  cancel-in-progress: true
+
+jobs:
+  e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+    - name: Checkout ai-demokit
+      uses: actions/checkout@v7
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v6
+      with:
+        node-version: '22'
+
+    - name: Install ai-demokit dependencies
+      run: npm ci
+
+    - name: Install Playwright Chromium
+      run: npx playwright install --with-deps chromium
+
+    - name: Clone abap2UI5 (transpiler + express runtime)
+      run: |
+        git clone --depth 1 https://github.com/abap2UI5/abap2UI5.git .abap2UI5
+        cd .abap2UI5 && npm ci
+
+    - name: Build the transpiled backend (framework + all ports)
+      env:
+        A2UI5_HOME: ${{ github.workspace }}/.abap2UI5
+      run: npm run e2e:build
+
+    - name: Run every port as the real app
+      env:
+        A2UI5_HOME: ${{ github.workspace }}/.abap2UI5
+      run: node scripts/e2e-smoke.mjs --strict

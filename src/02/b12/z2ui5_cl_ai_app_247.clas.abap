@@ -13,9 +13,9 @@ CLASS z2ui5_cl_ai_app_247 DEFINITION PUBLIC.
     DATA t_products TYPE STANDARD TABLE OF ty_s_product WITH EMPTY KEY.
 
     " Column widths - the sample's ui>/widths/{name,category,image,quantity,date}
-    " single config object, folded to the one default model. abap2UI5 has no _bind
-    " form for a nested config sub-path, so each width is a top-level field bound
-    " via _bind; the member name equals the original leaf so structural-diff matches.
+    " single config object, folded to the one default model as five top-level
+    " fields bound via _bind (named-model prefix-drop idiom); the member name
+    " equals the original leaf so structural-diff matches.
     DATA name     TYPE string.
     DATA category TYPE string.
     DATA image    TYPE string.

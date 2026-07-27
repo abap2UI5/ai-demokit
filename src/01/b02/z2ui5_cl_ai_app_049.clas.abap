@@ -41,6 +41,8 @@ CLASS z2ui5_cl_ai_app_049 IMPLEMENTATION.
             )->open( `List`
                 )->a( n = `id` v = `idTable` ).
 
+    " the original's bound CustomListItem template (List items="{/modelData}") is
+    " unrolled into one static item per row - see the sidecar IMPROVISED deviation
     render_item( list  = list
                  label = `Step = 1 (default); value = 6, min = 5, max = 15, width = 120px`
         )->leaf( `StepInput`

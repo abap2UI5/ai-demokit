@@ -9,7 +9,7 @@
     "event_t_arg": true,
     "note": "colorSelect toasts `Color Selected: value - {0}, \\n defaultAction - {1}` roundtrip-free via control_global MESSAGE_TOAST.show ({0}=${$parameters>/value}, {1}=${$parameters>/defaultAction}; the boolean defaultAction stringifies to true/false natively, so no server COND is needed); the app is now init-only"
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {

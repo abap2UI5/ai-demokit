@@ -1,9 +1,18 @@
 # scope-since-from-source — make scope gating see `@since` from source
 
-**Status: partially addressed** — a standalone reporter (`scripts/scope-of.mjs`)
-now resolves the authoritative verdict from source; wiring the coverage gate's
-`scopeOf` to use it is the open ask below. From demo-kit batches around apps
-230–235 (2026-07-25), flagged independently by two porting agents.
+**Status: IMPLEMENTED (2026-07-26)** — exactly the "lowest-effort form"
+proposed below: `generate-properties.mjs` now emits each control's
+**class-level `@since`/`@deprecated`** into `ui5/properties.json` (parsed from
+the class-doc header preceding the `.extend(…)` call, same rule as
+`scope-of.mjs`), and `generate-coverage.mjs`'s `scopeOf` (plus the overview
+generator and `generate-status.mjs`) falls back to it whenever
+`universe.json` carries null. The out-of-scope gate is authoritative offline;
+on first run it flagged all four ports below **plus a fifth the audit had
+missed: app 166 (`sap.f.sample.SemanticPage` — `sap.f.semantic.SemanticPage`
+deprecated since 1.54)**. The five stay in place pending the maintainer
+decision (tracked in STATUS.md open findings); `scope-of.mjs` remains the
+per-entity pre-check. Originally from demo-kit batches around apps 230–235
+(2026-07-25), flagged independently by two porting agents.
 
 ## Motivation
 

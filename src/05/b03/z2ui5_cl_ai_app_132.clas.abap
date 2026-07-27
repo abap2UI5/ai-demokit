@@ -61,6 +61,8 @@ CLASS z2ui5_cl_ai_app_132 IMPLEMENTATION.
                         )->a( n = `text` v = `Dashboard`
                         )->a( n = `icon` v = `sap-icon://home`
 
+                    " expanded reads @since 1.121 (relocated to NavigationListItemBase), selectable is @since 1.116,
+                    " tag is @since 1.149 and the Indication15-20 states are @since 1.120 - all kept 1:1 (POST_171)
                     )->open( n = `NavigationListItem` ns = `tnt`
                         )->a( n = `text`       v = `Favorites`
                         )->a( n = `icon`       v = `sap-icon://favorite`
@@ -91,6 +93,7 @@ CLASS z2ui5_cl_ai_app_132 IMPLEMENTATION.
 
                     )->shut(
 
+                    " NavigationListGroup is a control @since 1.121 - kept 1:1 (POST_171)
                     )->open( n = `NavigationListGroup` ns = `tnt`
                         )->a( n = `text` v = `Business Operations`
                         )->open( n = `NavigationListItem` ns = `tnt`

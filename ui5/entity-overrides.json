@@ -1,0 +1,13 @@
+{
+ "note": "sample id -> owning control entity for real samples the demokit docuindex.json does not map (docuindex gap upstream). Applied by generate-coverage.mjs after the universe is built/loaded, so these samples get proper scope + API links instead of 'without control metadata'. Entities picked from each sample's main view control (verified against the OpenUI5 checkout 2026-07-26). Demo apps with no owning control (AIIntegration, UXCIntegration, TsHelloWorld) are deliberately NOT mapped - their entity stays the sample id and their scope stays 'unknown'.",
+ "overrides": {
+  "sap.m.sample.ObjectHeaderResponsiveVI": "sap.m.ObjectHeader",
+  "sap.ui.layout.sample.Form480": "sap.ui.layout.form.Form",
+  "sap.ui.layout.sample.SimpleForm480": "sap.ui.layout.form.SimpleForm",
+  "sap.ui.core.sample.ControllerExtension": "sap.ui.core.mvc.ControllerExtension",
+  "sap.uxap.sample.ObjectPageHeaderActionButtons": "sap.uxap.ObjectPageHeaderActionButton",
+  "sap.uxap.sample.ObjectPageHeaderBackgroundDesign": "sap.uxap.ObjectPageDynamicHeaderTitle",
+  "sap.uxap.sample.ObjectPageProgressRatingIndicators": "sap.uxap.ObjectPageDynamicHeaderTitle",
+  "sap.uxap.sample.ObjectPageXML": "sap.uxap.ObjectPageLayout"
+ }
+}

@@ -13,7 +13,11 @@
   "deviations": [
     {
       "type": "NOTE",
-      "what": "onSemanticButtonPress toasts each action's class name, reproduced by passing the name as a t_arg literal. The SortSelect change toasts the two-way selectedKey (sort_key); PagingButton positionChange transports ${$parameters>/newPosition}; the custom footer / share buttons transport $event.oSource.sId. The MultiSelectAction and MessagesIndicator toasts are simplified to fixed messages (the original toggles a MultiSelect state / opens a MessagePopover)."
+      "what": "onSemanticButtonPress toasts each action's class name, reproduced by passing the name as a t_arg literal. The SortSelect change toasts the two-way selectedKey (sort_key); PagingButton positionChange transports ${$parameters>/newPosition}; the custom footer / share buttons transport $event.oSource.sId."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "The MultiSelectAction and MessagesIndicator handlers are simplified to fixed toasts, losing behavior the framework can express: the original toasts Pressed/Unpressed from the toggle state (readable via a ${$source>/pressed} t_arg) and opens a MessagePopover over the message model with one seeded 'Something wrong happened' error message (expressible via mvc:dependents + toggleBy per app 066, app-authored messages per app 065); without the seeded message the MessagesIndicator button stays invisible. Review 2026-07-27: needs rework, retyped from NOTE - a lost behavior is IMPROVISED, not NOTE."
     },
     {
       "type": "NOTE",

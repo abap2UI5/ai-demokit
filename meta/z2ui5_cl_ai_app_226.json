@@ -8,7 +8,7 @@
     "frontend_action": false,
     "event_t_arg": false
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     { "type": "NOTE", "what": "The original binds against the default JSONModel (no named model); the InformationCollection array is reproduced 1:1 on the one abap2UI5 default model. The Grid binding={/InformationCollection} element-binding and the index-relative child bindings ({0/introText1}, {3/ProductPicUrl2}, {1/ProductPicUrl}, {2/ProductPicUrl}, {1/ProductPicUrl2}, {0/Description1}, {0/Description2}) are kept verbatim with upper-cased field names." },

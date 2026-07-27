@@ -5,17 +5,17 @@ CLASS z2ui5_cl_ai_app_192 DEFINITION PUBLIC.
 
     TYPES:
       BEGIN OF ty_s_product,
-        product_id    TYPE string,
-        supplier_name TYPE string,
-        name          TYPE string,
-        status        TYPE string,
-        currency_code TYPE string,
-        price         TYPE p LENGTH 8 DECIMALS 2,
-        width         TYPE string,
-        depth         TYPE string,
-        height        TYPE string,
-        dim_unit      TYPE string,
-        color_scheme  TYPE i,
+        productid    TYPE string,
+        suppliername TYPE string,
+        name         TYPE string,
+        status       TYPE string,
+        currencycode TYPE string,
+        price        TYPE p LENGTH 8 DECIMALS 2,
+        width        TYPE string,
+        depth        TYPE string,
+        height       TYPE string,
+        dimunit      TYPE string,
+        color_scheme TYPE i,
       END OF ty_s_product.
     DATA t_products TYPE STANDARD TABLE OF ty_s_product WITH EMPTY KEY.
     DATA popin_layout TYPE string.
@@ -131,19 +131,19 @@ CLASS z2ui5_cl_ai_app_192 IMPLEMENTATION.
                     )->open( `cells`
                         )->leaf( `ObjectIdentifier`
                             )->a( n = `title` v = `{NAME}`
-                            )->a( n = `text`  v = `{PRODUCT_ID}`
+                            )->a( n = `text`  v = `{PRODUCTID}`
                         )->leaf( `Text`
-                            )->a( n = `text` v = `{SUPPLIER_NAME}`
+                            )->a( n = `text` v = `{SUPPLIERNAME}`
                         )->leaf( `Text`
-                            )->a( n = `text` v = `{WIDTH} x {DEPTH} x {HEIGHT} {DIM_UNIT}`
+                            )->a( n = `text` v = `{WIDTH} x {DEPTH} x {HEIGHT} {DIMUNIT}`
                         " colorScheme is derived from Status in ABAP (see the NOTE deviation), not the original frontend formatter
                         )->leaf( n = `InfoLabel` ns = `tnt`
                             )->a( n = `text`        v = `{STATUS}`
                             )->a( n = `displayOnly` v = `true`
                             )->a( n = `colorScheme` v = `{COLOR_SCHEME}`
                         )->leaf( `ObjectNumber`
-                            )->a( n = `number` v = `{ parts:[{path:'PRICE'},{path:'CURRENCY_CODE'}], type: 'sap.ui.model.type.Currency', formatOptions: {showMeasure: false} }`
-                            )->a( n = `unit`   v = `{CURRENCY_CODE}` ).
+                            )->a( n = `number` v = `{ parts:[{path:'PRICE'},{path:'CURRENCYCODE'}], type: 'sap.ui.model.type.Currency', formatOptions: {showMeasure: false} }`
+                            )->a( n = `unit`   v = `{CURRENCYCODE}` ).
 
     client->view_display( view->stringify( ) ).
 
@@ -155,24 +155,24 @@ CLASS z2ui5_cl_ai_app_192 IMPLEMENTATION.
     popin_layout = `Block`.
 
     t_products = VALUE #(
-      ( product_id = `HT-1000` supplier_name = `Very Best Screens` name = `Notebook Basic 15`
-        status = `Available`           currency_code = `EUR` price = '956'  width = `30` depth = `18`  height = `3`   dim_unit = `cm` )
-      ( product_id = `HT-1001` supplier_name = `Very Best Screens` name = `Notebook Basic 17`
-        status = `Sold out`            currency_code = `EUR` price = '1249' width = `29` depth = `17`  height = `3.1` dim_unit = `cm` )
-      ( product_id = `HT-1002` supplier_name = `Very Best Screens` name = `Notebook Basic 18`
-        status = `Available`           currency_code = `EUR` price = '1570' width = `28` depth = `19`  height = `2.5` dim_unit = `cm` )
-      ( product_id = `HT-1003` supplier_name = `Smartcards`        name = `Notebook Basic 19`
-        status = `Available`           currency_code = `EUR` price = '1650' width = `32` depth = `21`  height = `4`   dim_unit = `cm` )
-      ( product_id = `HT-1007` supplier_name = `Technocom`         name = `ITelO Vault`
-        status = `Sold out`            currency_code = `EUR` price = '299'  width = `32` depth = `22`  height = `3`   dim_unit = `cm` )
-      ( product_id = `HT-1010` supplier_name = `Very Best Screens` name = `Notebook Professional 15`
-        status = `No longer available` currency_code = `EUR` price = '1999' width = `33` depth = `20`  height = `3`   dim_unit = `cm` )
-      ( product_id = `HT-1011` supplier_name = `Very Best Screens` name = `Notebook Professional 17`
-        status = `Sold out`            currency_code = `EUR` price = '2299' width = `33` depth = `23`  height = `2`   dim_unit = `cm` )
-      ( product_id = `HT-1020` supplier_name = `Technocom`         name = `ITelO Vault Net`
-        status = `delivery expected`   currency_code = `EUR` price = '459'  width = `10` depth = `1.8` height = `17`  dim_unit = `cm` )
-      ( product_id = `HT-1021` supplier_name = `Technocom`         name = `ITelO Vault SAT`
-        status = `delivery expected`   currency_code = `EUR` price = '149'  width = `11` depth = `1.7` height = `18`  dim_unit = `cm` ) ).
+      ( productid = `HT-1000` suppliername = `Very Best Screens` name = `Notebook Basic 15`
+        status = `Available`           currencycode = `EUR` price = '956'  width = `30` depth = `18`  height = `3`   dimunit = `cm` )
+      ( productid = `HT-1001` suppliername = `Very Best Screens` name = `Notebook Basic 17`
+        status = `Sold out`            currencycode = `EUR` price = '1249' width = `29` depth = `17`  height = `3.1` dimunit = `cm` )
+      ( productid = `HT-1002` suppliername = `Very Best Screens` name = `Notebook Basic 18`
+        status = `Available`           currencycode = `EUR` price = '1570' width = `28` depth = `19`  height = `2.5` dimunit = `cm` )
+      ( productid = `HT-1003` suppliername = `Smartcards`        name = `Notebook Basic 19`
+        status = `Available`           currencycode = `EUR` price = '1650' width = `32` depth = `21`  height = `4`   dimunit = `cm` )
+      ( productid = `HT-1007` suppliername = `Technocom`         name = `ITelO Vault`
+        status = `Sold out`            currencycode = `EUR` price = '299'  width = `32` depth = `22`  height = `3`   dimunit = `cm` )
+      ( productid = `HT-1010` suppliername = `Very Best Screens` name = `Notebook Professional 15`
+        status = `No longer available` currencycode = `EUR` price = '1999' width = `33` depth = `20`  height = `3`   dimunit = `cm` )
+      ( productid = `HT-1011` suppliername = `Very Best Screens` name = `Notebook Professional 17`
+        status = `Sold out`            currencycode = `EUR` price = '2299' width = `33` depth = `23`  height = `2`   dimunit = `cm` )
+      ( productid = `HT-1020` suppliername = `Technocom`         name = `ITelO Vault Net`
+        status = `delivery expected`   currencycode = `EUR` price = '459'  width = `10` depth = `1.8` height = `17`  dimunit = `cm` )
+      ( productid = `HT-1021` suppliername = `Technocom`         name = `ITelO Vault SAT`
+        status = `delivery expected`   currencycode = `EUR` price = '149'  width = `11` depth = `1.7` height = `18`  dimunit = `cm` ) ).
 
     " availableState maps an already-classified Status to an InfoLabel colorScheme index - moved
     " from the original frontend Formatter.js to the ABAP backend (thin-frontend principle)

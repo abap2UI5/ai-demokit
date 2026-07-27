@@ -64,10 +64,12 @@ CLASS z2ui5_cl_ai_app_160 IMPLEMENTATION.
                     )->a( n = `class`    v = `sapUiSmallMarginTop`
                 )->leaf( `Link`
                     )->a( n = `text`    v = `Show more information`
+                    " endIcon is @since 1.128 - kept 1:1 (POST_171)
                     )->a( n = `endIcon` v = `sap-icon://inspect`
                     )->a( n = `press`   v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Link pressed` ) ) )
                 )->leaf( `Link`
                     )->a( n = `text`    v = `Disabled link with icon`
+                    " icon is @since 1.128 - kept 1:1 (POST_171)
                     )->a( n = `icon`    v = `sap-icon://cart`
                     )->a( n = `enabled` v = `false`
                 )->leaf( `Link`

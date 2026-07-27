@@ -8,7 +8,7 @@
     "frontend_action": true,
     "event_t_arg": false
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {
@@ -21,11 +21,11 @@
     },
     {
       "type": "NOTE",
-      "what": "The navigate toast is simplified to a fixed message (the original shows the clicked link's text via navOrigin, a control reference that is not transportable as an event arg). Elements without an elementType (Generic pages, and the Address/Slogan rows) get the QuickViewGroupElementType default 'text', and pages without displayShape (Generic) get the AvatarShape default 'Circle', so no enum property serializes as an empty string. The EmployeeData icon (a test-resources image) points at the OpenUI5 host."
+      "what": "The navigate toast is simplified to a fixed message (the original shows the clicked link's text via navOrigin, a control reference that is not transportable as an event arg). Elements without an elementType (Generic pages, and the Address/Slogan rows) get the QuickViewGroupElementType default 'text', pages without displayShape (Generic) get the AvatarShape default 'Circle', and every element row seeds target '_blank' (the QuickViewGroupElement.target default) - absent JSON properties must not serialize as empty strings, which would override the UI5 defaults. The EmployeeData icon (a test-resources image) points at the OpenUI5 host."
     },
     {
       "type": "POST_171",
-      "what": "sap.m.Avatar (and the QuickViewPage avatar aggregation) is since 1.73; it is kept 1:1 as the page icon, so the app needs UI5 >= 1.73 to render the avatar."
+      "what": "sap.m.Avatar (control since 1.73) is kept 1:1 as the page icon via the QuickViewPage avatar aggregation, which itself is since UI5 1.92 - so the app needs UI5 >= 1.92 to render the avatar."
     },
     {
       "type": "POST_171",

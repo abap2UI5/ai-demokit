@@ -9,7 +9,7 @@
     "event_t_arg": true,
     "note": "each toggle press toasts `{0} {1?Pressed:Unpressed}` roundtrip-free via control_global MESSAGE_TOAST.show ({0} = $event.oSource.sId, {1} = $event.oSource.getPressed() mapped Pressed/Unpressed by the conditional placeholder); the app is now init-only"
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {

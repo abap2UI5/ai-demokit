@@ -8,7 +8,7 @@
     "frontend_action": false,
     "event_t_arg": false
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     { "type": "NOTE", "what": "The original controller loads the shared demo products.json and the List uses binding=\"{/ProductCollection/0}\" to element-bind a single record; abap2UI5 serves one default model, so the record is flattened to top-level default-model fields (name/productid/productpicurl = products.json row 0, Notebook Basic 15 / HT-1000) the relative {NAME}/{PRODUCTID}/{PRODUCTPICURL} bindings resolve against. Same data, same leaf names, renders identically — the List's binding attribute is dropped." },

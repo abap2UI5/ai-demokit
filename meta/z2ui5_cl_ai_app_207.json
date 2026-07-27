@@ -9,7 +9,7 @@
     "event_t_arg": true,
     "note": "press/detailPress toast roundtrip-free via control_global MESSAGE_TOAST.show; the Select drives item type via a shared two-way binding, so the app is init-only (no on_event)"
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {

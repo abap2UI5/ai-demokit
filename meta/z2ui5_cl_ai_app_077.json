@@ -7,9 +7,9 @@
   "audit": {
     "frontend_action": true,
     "event_t_arg": true,
-    "note": "press/close/accept/reject all toast roundtrip-free via control_global MESSAGE_TOAST.show - press/close compose a template (`Item Pressed: {0}`/`Closed: {0}` + ${$source>/title}), so the app is init-only (the client-side removeItem on close is still not mirrored, see below)"
+    "note": "press/close/accept/reject all toast roundtrip-free via control_global MESSAGE_TOAST.show - press/close compose a template (`Item Pressed: {0}`/`Item Closed: {0}` + ${$source>/title}), so the app is init-only (the client-side removeItem on close is still not mirrored, see below)"
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {
@@ -19,6 +19,10 @@
     {
       "type": "NOTE",
       "what": "the original's showCloseButton=\"falseue\" typo on two items is corrected to false, otherwise UI5 boolean parsing rejects it."
+    },
+    {
+      "type": "POST_171",
+      "what": "the NotificationList container control (since UI5 1.90) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.90 to render it (control-level, invisible to the member-level property gate)."
     }
   ]
 }

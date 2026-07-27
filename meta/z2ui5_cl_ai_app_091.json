@@ -9,7 +9,7 @@
     "event_t_arg": true,
     "note": "openBy is roundtrip-free via _event_client( control_by_id, openBy ) and the change toast composes `Time selected: {0}` via control_global MESSAGE_TOAST.show - both roundtrip-free, so the app is init-only"
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {

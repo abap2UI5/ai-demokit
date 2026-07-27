@@ -42,6 +42,18 @@ jobs:
         node-version: '22'
     - run: node scripts/structural-diff.mjs --strict
 
+  data_fidelity:
+    # seeded asset values must match the archived sample mocks — catches the
+    # wrong-neighbour-copy class (apps 162/142/119) no other gate can see
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+    - uses: actions/checkout@v7
+    - uses: actions/setup-node@v6
+      with:
+        node-version: '22'
+    - run: node scripts/data-fidelity.mjs
+
   structure_lint:
     # fast static check of the builder call tree — catches an aggregation
     # nested directly inside another aggregation (a missing )->shut(), the
@@ -83,4 +95,5 @@ jobs:
     - run: node scripts/validate-meta.mjs
     - run: node scripts/generate-overview.mjs
     - run: node scripts/generate-coverage.mjs
-    - run: git diff --exit-code -- src README.md api.md
+    - run: node scripts/generate-status.mjs
+    - run: git diff --exit-code -- src README.md api.md STATUS.md

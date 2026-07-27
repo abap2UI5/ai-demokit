@@ -52,6 +52,18 @@ const OPENUI5_CONTROLS = (() => {
 })();
 const OPENUI5_PKG = path.join(ROOT, 'node_modules', '@openui5');
 const OPENUI5_LIBS = fs.existsSync(OPENUI5_PKG) ? fs.readdirSync(OPENUI5_PKG) : [];
+
+// scope fallback (same as generate-coverage.mjs, pr/scope-since-from-source):
+// the universe snapshot carries since:null for most controls, so fill the
+// nulls from the control-level @since/@deprecated that generate-properties.mjs
+// parses out of the OpenUI5 sources — the overview's Since column and the
+// deprecation strikethrough then match the authoritative scope verdict.
+for (const s of uniMap.values()) {
+  const c = s.entity && OPENUI5_CONTROLS[s.entity];
+  if (!c) continue;
+  if (!s.since && c.since) s.since = c.since;
+  if (!s.deprecated && c.deprecated) s.deprecated = c.deprecated;
+}
 // per-library text (library.js + .library manifest) - catches OpenUI5 entities
 // that have no own module: statics/helpers (sap.m.URLHelper, in library.js) and
 // CSS-class doc entities (sap.ui.core.StandardMargins/ContainerPadding, in .library)
@@ -369,7 +381,7 @@ const abap = `"! Generated overview app - lists every abap2UI5 api sample app in
 "! checked status, a post-1.71 note, and the generation notes; the second starts
 "! this abap2UI5 app IN-PAGE from the backend via client->nav_app_call (server
 "! event START_APP). With hash routing on, the framework pushes the route
-"! '#/app/<CLASS>' (UI5 Router style) - it replaces the overview in the same tab
+"! '#/app/' + class name (UI5 Router style) - it replaces the overview in the same tab
 "! and the native browser Back/Forward buttons navigate between them, bookmarkable,
 "! so no new tab and no page reload (the overview enabled routing via
 "! client->set_nav_routing). The same two buttons sit on every tree sample leaf (links only,

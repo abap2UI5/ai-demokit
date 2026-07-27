@@ -66,6 +66,7 @@ CLASS z2ui5_cl_ai_app_128 IMPLEMENTATION.
                         )->a( n = `text` v = `Home`
                         )->a( n = `icon` v = `sap-icon://home`
 
+                    " NavigationListGroup is a control @since 1.121 - kept 1:1 (POST_171)
                     )->open( n = `NavigationListGroup` ns = `tnt`
                         )->a( n = `text` v = `New`
                         )->leaf( n = `NavigationListItem` ns = `tnt`
@@ -130,6 +131,7 @@ CLASS z2ui5_cl_ai_app_128 IMPLEMENTATION.
                         )->leaf( n = `NavigationListItem` ns = `tnt`
                             )->a( n = `text` v = `Bar Chart`
                             )->a( n = `icon` v = `sap-icon://bar-chart`
+                        " selectable is @since 1.116 - kept 1:1 (POST_171)
                         )->leaf( n = `NavigationListItem` ns = `tnt`
                             )->a( n = `selectable` v = `false`
                             )->a( n = `href`       v = `https://sap.com`

@@ -16,12 +16,12 @@
       "what": "The object-typed date properties (SinglePlanningCalendar.startDate, CalendarAppointment.startDate/endDate) are fed from ISO strings and converted with Formatter.DateCreateObject (core:require). The original UI5Date.getInstance values are normalized to ISO 1:1 (0-based months). The first appointment used UI5Date.getInstance() (the current time); it is pinned to the calendar's start date (2018-07-09) so the port is deterministic."
     },
     {
-      "type": "NOTE",
-      "what": "viewChange / selectedDatesChange / weekNumberPress / startDateChange are wired to toasts echoing the event name (the original toasts the same). The MultiSelect ToggleButton toast stands in for the original setDateSelectionMode SingleSelect/MultiSelect toggle + tooltip swap."
+      "type": "IMPROVISED",
+      "what": "viewChange / selectedDatesChange / weekNumberPress / startDateChange are wired to toasts echoing only the event name - the original toasts also carry the new start date (${$parameters>/date}) and the week number (${$parameters>/weekNumber}), values readable from the event but not transported here. The MultiSelect ToggleButton toast stands in for the original setDateSelectionMode SingleSelect/MultiSelect toggle + tooltip swap - the sample's central date-selection behavior; dateSelectionMode is a bindable property (@since 1.123, POST_171 by policy) and the tooltip swap an expression binding over the two-way pressed state. Review 2026-07-27: needs rework, retyped from NOTE - a lost behavior is IMPROVISED, not NOTE."
     },
     {
       "type": "POST_171",
-      "what": "Formatter.DateCreateObject is referenced via core:require (UI5 >= 1.74). sap.m.SinglePlanningCalendar and its DayView/WorkWeekView/WeekView/MonthView are since 1.61 (in scope)."
+      "what": "Formatter.DateCreateObject is referenced via core:require (UI5 >= 1.74). sap.m.SinglePlanningCalendar and its DayView/WorkWeekView/WeekView/MonthView are since 1.61 (in scope). Also the SinglePlanningCalendar events weekNumberPress and selectedDatesChange (@since 1.123) are kept 1:1 from the original view; newer than 1.71, declared per the property-171 policy."
     }
   ]
 }

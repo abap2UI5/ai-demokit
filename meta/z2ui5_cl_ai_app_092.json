@@ -13,7 +13,7 @@
   "deviations": [
     {
       "type": "POST_171",
-      "what": "Table.popinChanged (since 1.77) and Column.importance (since 1.76), the core of the auto-pop-in demo, are kept 1:1; needs UI5 >= 1.77."
+      "what": "Table.autoPopinMode (since 1.76), Table.popinChanged (since 1.77) and Column.importance (since 1.76), the core of the auto-pop-in demo, are kept 1:1; needs UI5 >= 1.77."
     },
     {
       "type": "IMPROVISED",

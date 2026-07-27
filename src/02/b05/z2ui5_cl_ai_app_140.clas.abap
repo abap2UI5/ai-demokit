@@ -90,26 +90,26 @@ CLASS z2ui5_cl_ai_app_140 IMPLEMENTATION.
 
                 )->open( n = `BlockLayoutRow` ns = `l`
                     )->open( n = `BlockLayoutCell` ns = `l`
-                        )->a( n = `title`             v = `Cells with Custom Color (Shade A)`
-                        )->a( n = `backgroundColorSet`v = client->_bind( colorset )
-                        )->a( n = `backgroundColorShade`v = `ShadeA`
+                        )->a( n = `title`                v = `Cells with Custom Color (Shade A)`
+                        )->a( n = `backgroundColorSet`   v = client->_bind( colorset )
+                        )->a( n = `backgroundColorShade` v = `ShadeA`
 
                 )->shut(
                 )->shut(
 
                 )->open( n = `BlockLayoutRow` ns = `l`
                     )->open( n = `BlockLayoutCell` ns = `l`
-                        )->a( n = `title`             v = `The Title`
-                        )->a( n = `titleAlignment`    v = `Center`
-                        )->a( n = `class`             v = `customCellImageBackground`
+                        )->a( n = `title`          v = `The Title`
+                        )->a( n = `titleAlignment` v = `Center`
+                        )->a( n = `class`          v = `customCellImageBackground`
                         )->leaf( `Text`
                         )->a( n = `text` v = `Donec bibendum diam nibh, sit amet ornare ante fermentum sed. Ut vulputate justo at orci sollicitudin.`
 
                 )->shut(
                     )->open( n = `BlockLayoutCell` ns = `l`
-                        )->a( n = `title`             v = `An Icon (Shade B)`
-                        )->a( n = `backgroundColorSet`v = client->_bind( colorset )
-                        )->a( n = `backgroundColorShade`v = `ShadeB`
+                        )->a( n = `title`                v = `An Icon (Shade B)`
+                        )->a( n = `backgroundColorSet`   v = client->_bind( colorset )
+                        )->a( n = `backgroundColorShade` v = `ShadeB`
                     )->leaf( n = `Icon` ns = `core`
                         )->a( n = `src` v = `sap-icon://add-activity`
 
@@ -118,9 +118,9 @@ CLASS z2ui5_cl_ai_app_140 IMPLEMENTATION.
 
                 )->open( n = `BlockLayoutRow` ns = `l`
                     )->open( n = `BlockLayoutCell` ns = `l`
-                        )->a( n = `title`             v = `Simple Form (Shade C)`
-                        )->a( n = `backgroundColorSet`v = client->_bind( colorset )
-                        )->a( n = `backgroundColorShade`v = `ShadeC`
+                        )->a( n = `title`                v = `Simple Form (Shade C)`
+                        )->a( n = `backgroundColorSet`   v = client->_bind( colorset )
+                        )->a( n = `backgroundColorShade` v = `ShadeC`
                     )->open( n = `SimpleForm` ns = `f`
                         )->a( n = `editable`         v = `true`
                         )->a( n = `backgroundDesign` v = `Transparent`
@@ -150,10 +150,10 @@ CLASS z2ui5_cl_ai_app_140 IMPLEMENTATION.
 
                 )->open( n = `BlockLayoutRow` ns = `l`
                     )->open( n = `BlockLayoutCell` ns = `l`
-                        )->a( n = `title`             v = `Right Aligned Title (Shade D)`
-                        )->a( n = `titleAlignment`    v = `Right`
-                        )->a( n = `backgroundColorSet`v = client->_bind( colorset )
-                        )->a( n = `backgroundColorShade`v = `ShadeD`
+                        )->a( n = `title`                v = `Right Aligned Title (Shade D)`
+                        )->a( n = `titleAlignment`       v = `Right`
+                        )->a( n = `backgroundColorSet`   v = client->_bind( colorset )
+                        )->a( n = `backgroundColorShade` v = `ShadeD`
                         )->leaf( `Text`
                         )->a( n = `text` v = `Morbi id ullamcorper lorem, vestibulum facilisis velit. Ut elementum aliquam nisl a pretium. Donec auctor mattis convallis. Aenean sodales tortor nec facilisis fringilla. ` &&
                                              `Nam feugiat nulla at diam sollicitudin pretium. Sed at lacus volutpat, finibus arcu ultricies, convallis elit. Aliquam sollicitudin tortor sit amet mi consequat ` &&
@@ -165,10 +165,10 @@ CLASS z2ui5_cl_ai_app_140 IMPLEMENTATION.
 
                 )->open( n = `BlockLayoutRow` ns = `l`
                     )->open( n = `BlockLayoutCell` ns = `l`
-                        )->a( n = `title`             v = `Left Aligned Title (Shade E - Only Available for SAP Quartz and Horizon Themes)`
-                        )->a( n = `titleAlignment`    v = `Left`
-                        )->a( n = `backgroundColorSet`v = client->_bind( colorset )
-                        )->a( n = `backgroundColorShade`v = `ShadeE`
+                        )->a( n = `title`                v = `Left Aligned Title (Shade E - Only Available for SAP Quartz and Horizon Themes)`
+                        )->a( n = `titleAlignment`       v = `Left`
+                        )->a( n = `backgroundColorSet`   v = client->_bind( colorset )
+                        )->a( n = `backgroundColorShade` v = `ShadeE`
                         )->leaf( `Text`
                         )->a( n = `text` v = `Morbi id ullamcorper lorem, vestibulum facilisis velit. Ut elementum aliquam nisl a pretium. Donec auctor mattis convallis. Aenean sodales tortor nec facilisis fringilla. ` &&
                                              `Nam feugiat nulla at diam sollicitudin pretium. Sed at lacus volutpat, finibus arcu ultricies, convallis elit. Aliquam sollicitudin tortor sit amet mi consequat ` &&
@@ -180,9 +180,9 @@ CLASS z2ui5_cl_ai_app_140 IMPLEMENTATION.
 
                 )->open( n = `BlockLayoutRow` ns = `l`
                     )->open( n = `BlockLayoutCell` ns = `l`
-                        )->a( n = `title`             v = `Default Aligned Title (Shade F - Only Available for SAP Quartz and Horizon Themes)`
-                        )->a( n = `backgroundColorSet`v = client->_bind( colorset )
-                        )->a( n = `backgroundColorShade`v = `ShadeF`
+                        )->a( n = `title`                v = `Default Aligned Title (Shade F - Only Available for SAP Quartz and Horizon Themes)`
+                        )->a( n = `backgroundColorSet`   v = client->_bind( colorset )
+                        )->a( n = `backgroundColorShade` v = `ShadeF`
                         )->leaf( `Text`
                         )->a( n = `text` v = `Morbi id ullamcorper lorem, vestibulum facilisis velit. Ut elementum aliquam nisl a pretium. Donec auctor mattis convallis. Aenean sodales tortor nec facilisis fringilla. ` &&
                                              `Nam feugiat nulla at diam sollicitudin pretium. Sed at lacus volutpat, finibus arcu ultricies, convallis elit. Aliquam sollicitudin tortor sit amet mi consequat ` &&

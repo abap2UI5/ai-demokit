@@ -53,6 +53,7 @@ CLASS z2ui5_cl_ai_app_058 IMPLEMENTATION.
 
             )->leaf( `Label`
                 )->a( n = `text` v = `Display Only`
+            " roundtrip-free rework: the controller handlers are replaced by two-way bindings, the change and liveChange events dropped (see sidecar)
             )->leaf( `Switch`
                 )->a( n = `state` v = client->_bind( display_only )
             )->leaf( `Label`

@@ -35,6 +35,8 @@ CLASS z2ui5_cl_ai_app_203 IMPLEMENTATION.
         )->a( n = `xmlns:core` v = `sap.ui.core`
 
         )->open( `Toolbar`
+            " sap.m.OverflowToolbarTokenizer is @ui5-experimental-since 1.139 (no plain @since tag,
+            " invisible to scope-of/property gate) - out of 1.71 scope, see the sidecar deviation
             )->open( `OverflowToolbarTokenizer`
                 )->a( n = `id`        v = `toolbarTokenizer`
                 )->a( n = `width`     v = `50%`

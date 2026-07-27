@@ -8,10 +8,10 @@
     "frontend_action": false,
     "event_t_arg": false
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     { "type": "IMPROVISED", "what": "The controller calls Formatting.setCustomCurrencies({BGN4:{digits:4}, WWWW:{digits:5}}) to register two custom currencies used by list five (customCurrencyDataModel). This is a global frontend i18n formatting config, not a control and not expressible in the thin abap2UI5 frontend; ported without it, so the BGN4/WWWW currencies in list five render with UI5's default digit count instead of 4/5 digits." },
-    { "type": "LIVE_TEST", "what": "The various/nonDecimal arrays back the u:Currency value property (float) as ABAP packed fields; the bigNumber/customCurrency arrays back stringValue (string) as ABAP string fields — matching the sample's JSON (numbers vs strings). listSix binds the numeric variousNumberDataModel/price to stringValue (number coerced to string, as in the original). Currency value/stringValue/maxPrecision formatting needs a live render check." }
+    { "type": "LIVE_TEST", "what": "The various/nonDecimal arrays back the u:Currency value property (float) as ABAP packed fields, matching the sample's JSON numbers; the bigNumber array (JSON strings) and the customCurrency array (JSON numbers bound to the string property stringValue, so UI5 coerces them) are ABAP string fields keeping the exact literals (123.45676 has 5 decimals). listSix binds the numeric variousNumberDataModel/price to stringValue (number coerced to string, as in the original). Currency value/stringValue/maxPrecision formatting needs a live render check." }
   ]
 }

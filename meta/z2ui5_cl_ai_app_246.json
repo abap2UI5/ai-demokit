@@ -13,7 +13,7 @@
   "deviations": [
     {
       "type": "IMPROVISED",
-      "what": "handleUploadPress: the imperative getValue() guard + checkFileReadable().then(upload).then(clear) upload cycle is endpoint/browser-file dependent and upload/checkFileReadable/clear are not whitelisted CONTROL_METHODS, so the Button press is reduced to a client-composed MessageToast (control_global MESSAGE_TOAST.show 'Uploading file to the local server ...'). Same reduction as app 126 (FileUploaderBasic). uploadUrl='upload/' is kept 1:1."
+      "what": "handleUploadPress: the Button press is reduced to a client-composed MessageToast (control_global MESSAGE_TOAST.show 'Uploading file to the local server ...'). That toast text is NOT in the original controller (it is derived from the FileUploader tooltip) - the original press either toasts 'Choose a file first' (empty value) or runs checkFileReadable().then(upload).then(clear) silently. Review 2026-07-27: the original 'not whitelisted CONTROL_METHODS' rationale is stale - since the generalized CONTROL_BY_ID allowlist (FrontendAction.js CONTROL_METHOD_DENY), upload() and clear() are callable public methods, so press -> follow_up_action( control_by_id 'fileUploader'/'upload' ) is expressible (only the getValue() guard and the checkFileReadable() promise chain are not). Same reduction as app 126 (FileUploaderBasic), which is itself unreviewed. Needs rework - left status generated. uploadUrl='upload/' is kept 1:1."
     },
     {
       "type": "IMPROVISED",
