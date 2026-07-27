@@ -9,7 +9,7 @@
     "event_t_arg": true,
     "note": "each StepInput change toasts `Value changed to '{0}'` roundtrip-free via control_global MESSAGE_TOAST.show ({0} filled by ${$parameters>/value}); the single quotes rely on get_t_arg's ' -> \\' escaping (abap2UI5 branch); the app is now init-only"
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {

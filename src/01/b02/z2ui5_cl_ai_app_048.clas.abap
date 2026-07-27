@@ -142,8 +142,9 @@ CLASS z2ui5_cl_ai_app_048 IMPLEMENTATION.
     enabled  = abap_true.
     editable = abap_true.
 
-    " one shared product list feeds all three Selects (the original binds them to
-    " the same /ProductCollection); each Select keeps its own selectedKey
+    " one shared product list feeds all three Selects (the original seeds three
+    " byte-identical collections /ProductCollection, /ProductCollection2 and
+    " /ProductCollection3); each Select keeps its own selectedKey
     t_products = VALUE #(
       ( product_id = `HT-1000` name = `Notebook Basic 15` )
       ( product_id = `HT-1001` name = `Notebook Basic 17` )
