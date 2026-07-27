@@ -1014,6 +1014,10 @@ How to record it:
   the 702 config. Never run it on the tree you intend to commit; run it in a
   throwaway `git worktree` (or copy) and check `abap_702.jsonc` there. If you did
   run it in place, `git checkout -- .` to restore before committing.
+  **A file with a parser error poisons the whole run**: the `--fix` `&&`-chain
+  exits non-zero, later steps never run, and the copy is left half-rewritten —
+  every file then reports downport errors, including clean ones. Fix (or drop)
+  parser-broken classes BEFORE downporting (probe #2 scoring, 2026-07-26).
 - **ABAP Doc (`"!`) is HTML** — no raw `<tag>` (e.g. `<mvc:View>`); see §8.
 - **Literal braces in attribute values are read as a BINDING by the XMLView
   parser** — CSS/JS braces inside a `core:HTML` `content` (or any literal

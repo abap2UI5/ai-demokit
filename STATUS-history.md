@@ -7,6 +7,32 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## Hold-out probe #2 (2026-07-26) — fidelity way up, syntax is the new frontier
+
+Second regeneration probe, protocol identical to the 2026-07-19 baseline
+(full write-up + gate table: **`probes/holdout-2026-07-26.md`**). All 24
+hold-out samples generated from scratch by fresh agents (restricted inputs,
+no validation runs), scored once, adversarially reviewed (5 reviewers).
+
+**Headline vs baseline:** review MAJORs **6 → 2**, undeclared structural
+diffs **4 → 0**, render-smoke raw failures **2 → 0** (zero harness fixes,
+was 2), invented data values **0** (data-fidelity green, reviewers verified
+mocks byte-level). The two MAJORs are not rule gaps: 618 has a mechanical
+paren-balance error (does not compile), 624 rebuilt a MessageBox as a
+Dialog on a source-refutable claim (the app-042 lesson class —
+`message_box_display` HAS `onclose`). abaplint-green-first-try dropped
+22/25 → 19/24: **syntax slips in long builder chains (3 paren errors) are
+now the dominant first-try failure mode**, while everything downstream of
+syntax improved sharply. The property gate's documented enum blind spot bit
+for real once (602 `CalendarDayType.NonWorking` @1.121, undeclared).
+Friction logs contained zero capability complaints — nine recurring doc
+gaps were distilled into AGENTS/CAPABILITIES in the same change (static-app
+skeleton, camelCase-vs-references contradiction, rows-not-columns,
+`controllerName` IGNORED_ATTRS, MessageBox `onclose`, MessageToast
+positional call, leading-`{0}` template, stale whitelist-only
+CONTROL_METHODS phrasing, sidecar `checked` omission). Probe ports were
+never merged; only the report landed.
+
 ## Infrastructure sweep (2026-07-26) — scope gate wired, data-fidelity gate, STATUS split, e2e nightly
 
 External review round ("was würdest du verbessern?"), all points implemented in
