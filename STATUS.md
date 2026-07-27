@@ -54,8 +54,13 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   lookup inside `SmartVariantManagement` yields null — the frame above the API
   (`…:459`) has to be read in the debugger. Port-side changes meanwhile: the
   `pageVariantPersistencyKey` custom data plus the docs' wiring (no `smartVariant`
-  associations) — **not yet verified in a system**; the crash above was recorded with the
-  earlier association-based wiring.
+  associations) is now deployed and **does not fix it** — `control` is still `null`, same
+  frame, same stack. Both wirings therefore behave identically, which points at a missing
+  `initialise()` handshake rather than at the declarative configuration: `sap.ui.comp`'s
+  own documentation shows the app calling `addPersonalizableControl()` **and**
+  `initialise(fnCallback, oControl)`, and the curated abap2UI5 sample
+  `z2ui5_cl_demo_app_111` does exactly that from custom JS. Next experiment (browser, no
+  redeploy): call `initialise` on the page variant by hand and retry the save.
 - [ ] **sap.ui.comp ports are all unverified (5 open LIVE_TESTs).** They need
   a SAPUI5 runtime plus a Gateway service exposing the tutorial's `Products`
   entity set, so neither `render_smoke` (declared skips) nor the e2e harness

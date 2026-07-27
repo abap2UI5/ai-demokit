@@ -3457,10 +3457,11 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` service annotates the four columns it shows. The page variant, the persistency keys and the smartVariant wiring the step is about are unaffected. // LIVE-TEST: Partly run in a system 2026-07-27: the` &&
                ` view renders and the SmartTable loads (205 products from GWSAMPLE_BASIC), but SAVING a view fails. Pinned in the live debugger to sap.ui.fl SmartVariantManagementWriteAPI:28 with mPropertyBag.control` &&
                ` === null - sap.ui.comp hands the flex API no control when saving a page variant; app component, association ids, registration and loadVariants are all verified fine (see the STATUS open findings for`.
-    lv_text1 = lv_text1 && ` the full list of refuted causes). The current wiring (pageVariantPersistencyKey custom data, no smartVariant associations, per the SAPUI5 docs) was shipped AFTER that debugger session and is` &&
-               ` unverified. Open to verify - whether saving works with the documented wiring, and then that the page variant restores filter bar and table personalization together and that variant management no` &&
-               ` longer appears inside the Filters dialog. // NOTE: The property gate (ui5/properties.json) covers OpenUI5 libraries only, so no member of sap.ui.comp is checked against the 1.71 rule automatically.` &&
-               ` SmartVariantManagement, SmartFilterBar and SmartTable are @since 1.28; the smartVariant association and persistencyKey properties are of the same vintage.`.
+    lv_text1 = lv_text1 && ` the full list of refuted causes). The current wiring (pageVariantPersistencyKey custom data, no smartVariant associations, per the SAPUI5 docs) has since been deployed and does NOT fix it - control` &&
+               ` is still null in the same frame, so both wirings behave identically. Open to verify - whether saving works with the documented wiring, and then that the page variant restores filter bar and table` &&
+               ` personalization together and that variant management no longer appears inside the Filters dialog. // NOTE: The property gate (ui5/properties.json) covers OpenUI5 libraries only, so no member of` &&
+               ` sap.ui.comp is checked against the 1.71 rule automatically. SmartVariantManagement, SmartFilterBar and SmartTable are @since 1.28; the smartVariant association and persistencyKey properties are of` &&
+               ` the same vintage.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.comp`        control = `sap.ui.comp.smartvariants.SmartVariantManagement` name = `PageVariantManagement`               class = `z2ui5_cl_ai_app_251` path = `src/06/b01/z2ui5_cl_ai_app_251.clas.abap`
         score = 5
