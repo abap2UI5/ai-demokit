@@ -64,9 +64,18 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   control."** — although `getPersonalizableControls()` lists exactly that filter bar
   (type `filterBar`, id resolvable, key `SmartFilterPKey`). So the control is in the
   registration list but not in whatever list `initialise` checks; the same failing lookup
-  is what yields `control: null` on save. Open: read the `sap.ui.comp` source in the
-  running app (`-dbg` files are served) — search the loaded sources for "unknown control"
-  and read the frame `SmartVariantMan…del-dbg.js:459` that fills `control:`.
+  is what yields `control: null` on save. The failing call is
+  `SmartVariantManagementModel:459`, `return FlexWriteAPI?.addVariant(mProperties) ?? null`
+  — the model only forwards; `mProperties` arrives as
+  `{control: null, changeSpecificData: {type: "page", isVariant: true, isUserDependent: true,
+  executeOnSelection: false, ODataService: undefined, texts: {variantName: "test"},
+  **content: {}**}}`. The empty `content` is the second half of the same story: a page
+  variant's content is the aggregate of every registered control's `fetchVariant()`, so
+  nothing was collected either. Neighbouring methods in that file (`save(oPersoControl)`,
+  `_handleUserDependentUpdate` with `control: oPersoControl`) show the model expects a
+  perso control it never received. Open: the function behind the log text "initialise on an
+  unknown control." (searchable in the served `-dbg` sources) — it holds the rule by which
+  the SVM decides a control is "its own", and that rule is what our view fails.
 - [ ] **sap.ui.comp ports are all unverified (5 open LIVE_TESTs).** They need
   a SAPUI5 runtime plus a Gateway service exposing the tutorial's `Products`
   entity set, so neither `render_smoke` (declared skips) nor the e2e harness
