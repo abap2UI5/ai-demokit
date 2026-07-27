@@ -2361,9 +2361,9 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         use_popover = abap_true
         use_name = abap_true ) ).
 
-    " Split into two statements: a single VALUE #( ) holding all catalog rows
-    " exceeds the maximum permitted ABAP statement length, so the catalog is
-    " built in two halves - the second half appends via VALUE #( BASE result ).
+    " A single VALUE #( ) holding every catalog row exceeds the maximum permitted
+    " ABAP statement length, so the catalog is emitted in two halves; the second
+    " half appends to the first via VALUE #( BASE result ).
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.ScrollContainer`                 name = `ScrollContainer`                     class = `z2ui5_cl_ai_app_046` path = `src/01/b04/z2ui5_cl_ai_app_046.clas.abap`
         score = 3
