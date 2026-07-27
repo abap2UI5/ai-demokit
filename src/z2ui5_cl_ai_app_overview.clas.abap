@@ -2359,7 +2359,12 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         post171 = `Button.ariaHasPopup (since UI5 1.84.0) is kept 1:1 on the two trigger buttons (ariaHasPopup='Dialog'); the app needs a UI5 release >= 1.84 to render it.`
         use_fua = abap_true
         use_popover = abap_true
-        use_name = abap_true )
+        use_name = abap_true ) ).
+
+    " Split into two statements: a single VALUE #( ) holding all catalog rows
+    " exceeds the maximum permitted ABAP statement length, so the catalog is
+    " built in two halves - the second half appends via VALUE #( BASE result ).
+    result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.ScrollContainer`                 name = `ScrollContainer`                     class = `z2ui5_cl_ai_app_046` path = `src/01/b04/z2ui5_cl_ai_app_046.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 reworked, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
