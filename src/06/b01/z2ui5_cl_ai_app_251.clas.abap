@@ -61,7 +61,6 @@ CLASS z2ui5_cl_ai_app_251 IMPLEMENTATION.
         )->open( n = `SmartFilterBar` ns = `smartFilterBar`
             )->a( n = `id`                     v = `smartFilterBar`
             )->a( n = `entitySet`              v = `ProductSet`
-            )->a( n = `smartVariant`           v = `pageVariantId`
             )->a( n = `persistencyKey`         v = `SmartFilterPKey`
             " The tutorial's onFiltersChanged handler is not published, so there is no
             " original body to rebuild - but the original IS a controller function, i.e.
@@ -71,12 +70,14 @@ CLASS z2ui5_cl_ai_app_251 IMPLEMENTATION.
             )->a( n = `assignedFiltersChanged` v = client->_event_client( val   = client->cs_event-control_global
                                                                           t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Assigned filters changed` ) ) )
 
-            " Page variant + SmartFilterBar: the PAGE variant's key has to reach the
-            " filter bar through the pageVariantPersistencyKey custom data - its own
-            " persistencyKey property only names its slice of the stored data. The
-            " filter bar then adapts the related SmartTable itself. Documented in
-            " "Smart Variant Management" (SAPUI5 docs, Page Variants); the tutorial's
-            " published view omits it, which is why saving a variant failed.
+            " Page variant + SmartFilterBar, the wiring the SAPUI5 docs describe
+            " ("Smart Variant Management", Page Variants): the PAGE variant's key
+            " reaches the filter bar through the pageVariantPersistencyKey custom data
+            " - the persistencyKey property above only names this control's slice of
+            " the stored data. The filter bar then adapts the related SmartTable
+            " itself, "and therefore, the smartVariant association doesn't have to be
+            " assigned" - which is why neither control carries it here, unlike the
+            " tutorial's published view.
             )->open( n = `customData` ns = `smartFilterBar`
                 )->leaf( n = `CustomData` ns = `core`
                     )->a( n = `key`   v = `pageVariantPersistencyKey`
@@ -94,7 +95,6 @@ CLASS z2ui5_cl_ai_app_251 IMPLEMENTATION.
         )->leaf( n = `SmartTable` ns = `smartTable`
             )->a( n = `id`                      v = `smartTable_ResponsiveTable`
             )->a( n = `smartFilterId`           v = `smartFilterBar`
-            )->a( n = `smartVariant`            v = `pageVariantId`
             )->a( n = `tableType`               v = `ResponsiveTable`
             )->a( n = `editable`                v = `false`
             )->a( n = `entitySet`               v = `ProductSet`
