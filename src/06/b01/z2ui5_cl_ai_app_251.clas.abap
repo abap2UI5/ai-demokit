@@ -51,6 +51,7 @@ CLASS z2ui5_cl_ai_app_251 IMPLEMENTATION.
         )->a( n = `xmlns:smartVariantManagement` v = `sap.ui.comp.smartvariants`
         )->a( n = `xmlns:smartFilterBar`         v = `sap.ui.comp.smartfilterbar`
         )->a( n = `xmlns:smartTable`             v = `sap.ui.comp.smarttable`
+        )->a( n = `xmlns:core`                   v = `sap.ui.core`
 
         )->open( `HBox`
             )->a( n = `class` v = `exPageVariantPadding`
@@ -67,6 +68,18 @@ CLASS z2ui5_cl_ai_app_251 IMPLEMENTATION.
             )->a( n = `persistencyKey`         v = `SmartFilterPKey`
             )->a( n = `assignedFiltersChanged` v = client->_event( `FILTERS_CHANGED` )
 
+            " Page variant + SmartFilterBar: the PAGE variant's key has to reach the
+            " filter bar through the pageVariantPersistencyKey custom data - its own
+            " persistencyKey property only names its slice of the stored data. The
+            " filter bar then adapts the related SmartTable itself. Documented in
+            " "Smart Variant Management" (SAPUI5 docs, Page Variants); the tutorial's
+            " published view omits it, which is why saving a variant failed.
+            )->open( n = `customData` ns = `smartFilterBar`
+                )->leaf( n = `CustomData` ns = `core`
+                    )->a( n = `key`   v = `pageVariantPersistencyKey`
+                    )->a( n = `value` v = `PageVariantPKey`
+
+            )->shut(
             )->open( n = `controlConfiguration` ns = `smartFilterBar`
                 )->leaf( n = `ControlConfiguration` ns = `smartFilterBar`
                     )->a( n = `key`                                      v = `Category`

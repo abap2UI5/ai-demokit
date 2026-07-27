@@ -17,7 +17,7 @@ TRAINING.md; for what abap2UI5 can express see CAPABILITIES.md._
 |---|---|
 | Ports | **251** sidecars in `meta/` (src/01: 149 · src/02: 55 · src/03: 12 · src/04: 19 · src/05: 11 · src/06: 5) |
 | Status ladder | 52 `generated` · 146 `reviewed` · 53 `checked` (live-verified) |
-| Deviations | 4 DROPPED_171 · 135 IMPROVISED · 76 LIVE_TEST · 265 NOTE · 95 POST_171 |
+| Deviations | 4 DROPPED_171 · 136 IMPROVISED · 76 LIVE_TEST · 265 NOTE · 95 POST_171 |
 | Open LIVE_TESTs | **72 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
 | Declared gate skips | 7 structural-diff · 6 render-smoke (each re-verified per run — a stale skip FAILS) |
 | Out-of-scope ported samples | `z2ui5_cl_ai_app_121 (sap.m.sample.UploadSet — deprecated)` · `z2ui5_cl_ai_app_136 (sap.f.sample.SidePanelSingle — control @since 1.107)` · `z2ui5_cl_ai_app_141 (sap.ui.core.sample.InvisibleMessage — control @since 1.78)` · `z2ui5_cl_ai_app_165 (sap.f.sample.ProductSwitchNavigation — control @since 1.72)` · `z2ui5_cl_ai_app_166 (sap.f.sample.SemanticPage — deprecated)` · `z2ui5_cl_ai_app_203 (sap.m.sample.OverflowToolbarTokenizer — control @since 1.139)` — standing debt pending a maintainer decision (drop vs documented exception), surfaced by the source-backed scope gate (pr/scope-since-from-source) |
@@ -37,6 +37,12 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   host is not an option (`pattern-lint` `commercial-ui5-host`); the fix is to
   suppress or re-target the links for `ui5_only` rows in
   `scripts/generate-overview.mjs`. Their ABAP-class link is correct.
+- [ ] **Variant management crashes on save (app 251).** `SmartVariantManagement._newVariant` throws
+  `Cannot read properties of undefined (reading 'getId')` when a view is saved. Two halves: the
+  port-side one is fixed (the `pageVariantPersistencyKey` custom data the SAPUI5 docs require when a
+  page variant is used by a `SmartFilterBar`); the framework-side one is open — abap2UI5's manifest
+  declares `flexEnabled: false` while variant persistence runs through the flexibility layer, filed as
+  `pr/flex-enabled-for-variants` with the console check that confirms or refutes it.
 - [ ] **sap.ui.comp ports are all unverified (5 open LIVE_TESTs).** They need
   a SAPUI5 runtime plus a Gateway service exposing the tutorial's `Products`
   entity set, so neither `render_smoke` (declared skips) nor the e2e harness
