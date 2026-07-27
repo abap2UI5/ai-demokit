@@ -1,0 +1,113 @@
+CLASS z2ui5_cl_ai_app_251 DEFINITION PUBLIC.
+
+  PUBLIC SECTION.
+    INTERFACES z2ui5_if_app.
+
+  PROTECTED SECTION.
+    " Smart controls read their metadata from an OData V2 service. The tutorial
+    " serves the service of steps 5-7 (see ui5/sap.ui.comp/SmartTable/metadata.xml)
+    " from a local mock server; in an ABAP system the default model is switched
+    " to a Gateway service exposing the same Products entity set - adapt the
+    " path to the service in your system.
+    CONSTANTS c_odata_service TYPE string VALUE `/sap/opu/odata/sap/Z2UI5_SMART_TUT_08_SRV/`.
+
+    DATA client TYPE REF TO z2ui5_if_client.
+
+    METHODS view_display.
+    METHODS on_event.
+
+  PRIVATE SECTION.
+ENDCLASS.
+
+
+CLASS z2ui5_cl_ai_app_251 IMPLEMENTATION.
+
+  METHOD z2ui5_if_app~main.
+
+    me->client = client.
+    IF client->check_on_init( ).
+      view_display( ).
+    ELSEIF client->check_on_event( ).
+      on_event( ).
+    ENDIF.
+
+  ENDMETHOD.
+
+
+  METHOD view_display.
+
+    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+
+    " Page variant: one SmartVariantManagement in front of the page owns the
+    " persistency (PageVariantPKey) and both smart controls register with it
+    " through their smartVariant association, each contributing its own
+    " persistencyKey. Everything below is metadata-driven - no model data.
+    view->open( n = `View` ns = `mvc`
+        )->a( n = `xmlns`                        v = `sap.m`
+        )->a( n = `xmlns:mvc`                    v = `sap.ui.core.mvc`
+        )->a( n = `xmlns:html`                   v = `http://www.w3.org/1999/xhtml`
+        )->a( n = `xmlns:smartVariantManagement` v = `sap.ui.comp.smartvariants`
+        )->a( n = `xmlns:smartFilterBar`         v = `sap.ui.comp.smartfilterbar`
+        )->a( n = `xmlns:smartTable`             v = `sap.ui.comp.smarttable`
+
+        )->open( `HBox`
+            )->a( n = `class` v = `exPageVariantPadding`
+
+            )->leaf( n = `SmartVariantManagement` ns = `smartVariantManagement`
+                )->a( n = `id`             v = `pageVariantId`
+                )->a( n = `persistencyKey` v = `PageVariantPKey`
+
+        )->shut(
+        )->open( n = `SmartFilterBar` ns = `smartFilterBar`
+            )->a( n = `id`                     v = `smartFilterBar`
+            )->a( n = `entitySet`              v = `Products`
+            )->a( n = `smartVariant`           v = `pageVariantId`
+            )->a( n = `persistencyKey`         v = `SmartFilterPKey`
+            )->a( n = `assignedFiltersChanged` v = client->_event( `FILTERS_CHANGED` )
+
+            )->open( n = `controlConfiguration` ns = `smartFilterBar`
+                )->leaf( n = `ControlConfiguration` ns = `smartFilterBar`
+                    )->a( n = `key`                                      v = `Category`
+                    )->a( n = `visibleInAdvancedArea`                    v = `true`
+                    )->a( n = `preventInitialDataFetchInValueHelpDialog` v = `false`
+
+            )->shut(
+        )->shut(
+        )->leaf( n = `SmartTable` ns = `smartTable`
+            )->a( n = `id`                      v = `smartTable_ResponsiveTable`
+            )->a( n = `smartFilterId`           v = `smartFilterBar`
+            )->a( n = `smartVariant`            v = `pageVariantId`
+            )->a( n = `tableType`               v = `ResponsiveTable`
+            )->a( n = `editable`                v = `false`
+            )->a( n = `entitySet`               v = `Products`
+            )->a( n = `useVariantManagement`    v = `true`
+            )->a( n = `useTablePersonalisation` v = `true`
+            )->a( n = `header`                  v = `Products`
+            )->a( n = `showRowCount`            v = `true`
+            )->a( n = `enableExport`            v = `false`
+            )->a( n = `enableAutoBinding`       v = `true`
+            )->a( n = `persistencyKey`          v = `SmartTablePKey` ).
+
+    client->view_display( val                       = view->stringify( )
+                          switch_default_model_path = c_odata_service ).
+
+  ENDMETHOD.
+
+
+  METHOD on_event.
+
+    CASE client->get( )-event.
+
+      WHEN `FILTERS_CHANGED`.
+        " The tutorial wires assignedFiltersChanged to onFiltersChanged but does
+        " not publish that handler, so there is no original behaviour to rebuild.
+        " The port keeps the event and confirms the round-trip reached the
+        " backend, which is what a real app would use the hook for (re-reading
+        " the assigned filters server-side).
+        client->message_toast_display( `Assigned filters changed` ).
+
+    ENDCASE.
+
+  ENDMETHOD.
+
+ENDCLASS.

@@ -1,0 +1,34 @@
+{
+  "class": "z2ui5_cl_ai_app_249",
+  "sample": "sap.ui.comp.sample.SmartForm",
+  "entity": "sap.ui.comp.smartform.SmartForm",
+  "file": "src/06/b01/z2ui5_cl_ai_app_249.clas.abap",
+  "batch": "b01",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "render_smoke": {
+    "skip": true,
+    "reason": "sap.ui.comp ships only with SAPUI5 - the headless harness serves the @openui5/* packages, which contain no sap/ui/comp modules, so XMLView.create can never resolve SmartForm/Group/GroupElement/SmartField here. The port renders in a SAPUI5 runtime with an OData V2 service."
+  },
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The original controller binds one record onto the page hosting the form (byId(\"smartFormPage\").bindElement(\"/Products('4711')\")). abap2UI5 has no controller and the sample's page is not part of the published view, so the port declares the element binding as a binding attribute on the mvc:View root - every relative SmartField binding ({ProductId}, {Name}, {CategoryName}, {Description}, {Price}, {SupplierName}) and the SmartForm title {Name} resolve against it exactly as before."
+    },
+    {
+      "type": "NOTE",
+      "what": "The tutorial serves its metadata.xml and Products.json from a local mock server. abap2UI5 points the default model at a real OData V2 service instead (client->view_display switch_default_model_path, constant c_odata_service); the service must expose the archived metadata's Products entity set with the labels the SmartForm renders. Configuration difference, not a view difference."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "Not yet run in a system: the port needs a SAPUI5 runtime (sap.ui.comp) plus a Gateway service, so neither render_smoke nor e2e can exercise it. Open to verify - editTogglable switching the whole form between display and edit mode, and the two-field GroupElement with elementForLabel=1 taking its label from the second field."
+    },
+    {
+      "type": "NOTE",
+      "what": "The property gate (ui5/properties.json) covers OpenUI5 libraries only, so no member of sap.ui.comp is checked against the 1.71 rule automatically. Every control and property used here predates 1.71: SmartForm/Group/GroupElement/SmartField are @since 1.28, GroupElement.elementForLabel @since 1.48."
+    }
+  ]
+}

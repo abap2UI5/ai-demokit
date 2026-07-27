@@ -1,0 +1,34 @@
+{
+  "class": "z2ui5_cl_ai_app_250",
+  "sample": "sap.ui.comp.sample.SmartTable",
+  "entity": "sap.ui.comp.smarttable.SmartTable",
+  "file": "src/06/b01/z2ui5_cl_ai_app_250.clas.abap",
+  "batch": "b01",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "render_smoke": {
+    "skip": true,
+    "reason": "sap.ui.comp ships only with SAPUI5 - the headless harness serves the @openui5/* packages, which contain no sap/ui/comp modules, so XMLView.create can never resolve SmartFilterBar/ControlConfiguration/SmartTable here. The port renders in a SAPUI5 runtime with an OData V2 service."
+  },
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The tutorial serves its metadata.xml and Products.json from a local mock server. abap2UI5 points the default model at a real OData V2 service instead (client->view_display switch_default_model_path, constant c_odata_service); the service must expose the archived metadata's Products entity set including the UI.LineItem annotation the SmartTable builds its columns from and the ValueList annotations behind the Category/Currency value helps. Configuration difference, not a view difference - the view is the sample's, unchanged."
+    },
+    {
+      "type": "NOTE",
+      "what": "The port has no model_init and no on_event: the sample's controller is empty (it only extends Controller), the SmartTable binds itself via enableAutoBinding and reads the filter conditions through the smartFilterId association. The whole app is the view plus the service - the purest case of the metadata-driven idiom."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "Not yet run in a system: the port needs a SAPUI5 runtime (sap.ui.comp) plus a Gateway service, so neither render_smoke nor e2e can exercise it. Open to verify - that the SmartFilterBar's Go triggers the SmartTable's request through smartFilterId and that the ControlConfiguration puts Category into the advanced filter area."
+    },
+    {
+      "type": "NOTE",
+      "what": "The property gate (ui5/properties.json) covers OpenUI5 libraries only, so no member of sap.ui.comp is checked against the 1.71 rule automatically. SmartTable, SmartFilterBar and smartfilterbar.ControlConfiguration are all @since 1.28, well below 1.71."
+    }
+  ]
+}

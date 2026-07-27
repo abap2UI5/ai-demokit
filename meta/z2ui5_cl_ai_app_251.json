@@ -1,0 +1,34 @@
+{
+  "class": "z2ui5_cl_ai_app_251",
+  "sample": "sap.ui.comp.sample.PageVariantManagement",
+  "entity": "sap.ui.comp.smartvariants.SmartVariantManagement",
+  "file": "src/06/b01/z2ui5_cl_ai_app_251.clas.abap",
+  "batch": "b01",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "render_smoke": {
+    "skip": true,
+    "reason": "sap.ui.comp ships only with SAPUI5 - the headless harness serves the @openui5/* packages, which contain no sap/ui/comp modules, so XMLView.create can never resolve SmartVariantManagement/SmartFilterBar/SmartTable here. The port renders in a SAPUI5 runtime with an OData V2 service."
+  },
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "The view wires assignedFiltersChanged=\"onFiltersChanged\" on the SmartFilterBar, but the tutorial does not publish that controller, so there is no original handler body to rebuild. The port keeps the event and routes it to the backend (FILTERS_CHANGED), where it raises a message toast - invented behaviour, chosen so the wire is a live round-trip rather than a dead one. A real app would use the hook to re-read the assigned filters server-side."
+    },
+    {
+      "type": "NOTE",
+      "what": "The tutorial serves the service of steps 5-7 from a local mock server (step 8 does not republish its metadata.xml; see ui5/sap.ui.comp/SmartTable/metadata.xml). abap2UI5 points the default model at a real OData V2 service instead (client->view_display switch_default_model_path, constant c_odata_service). Configuration difference, not a view difference."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "Not yet run in a system: the port needs a SAPUI5 runtime (sap.ui.comp) plus a Gateway service, so neither render_smoke nor e2e can exercise it. Open to verify - that the page variant (PageVariantPKey) saves and restores filter bar and table personalization together through the smartVariant association, and that variant management no longer appears inside the Filters dialog."
+    },
+    {
+      "type": "NOTE",
+      "what": "The property gate (ui5/properties.json) covers OpenUI5 libraries only, so no member of sap.ui.comp is checked against the 1.71 rule automatically. SmartVariantManagement, SmartFilterBar and SmartTable are @since 1.28; the smartVariant association and persistencyKey properties are of the same vintage."
+    }
+  ]
+}
