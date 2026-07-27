@@ -37,27 +37,25 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   host is not an option (`pattern-lint` `commercial-ui5-host`); the fix is to
   suppress or re-target the links for `ui5_only` rows in
   `scripts/generate-overview.mjs`. Their ABAP-class link is correct.
-- [ ] **Variant management crashes on save (app 251) — cause still open, four
-  hypotheses refuted.** `SmartVariantManagement._newVariant` throws `Cannot read
-  properties of undefined (reading 'getId')`. What is established: every write path of
-  `sap/ui/fl/write/api/SmartVariantManagementWriteAPI` funnels through
-  `setReferenceAndPersistencyKeyInPropertyBagAndCallFunction`, whose first line is the
-  unguarded `Utils.getAppComponentForControl(mPropertyBag.control).getId()` (line 26) —
-  and that helper returns `undefined` for an undefined control, which is the exact shape
-  of the error. Refuted live, in this order: **(1)** the app component is missing —
-  `getAppComponentForControl(<SVM>)` returns the `container-z2ui5` component; **(2)** the
-  manifest's `flexEnabled: false` gates it — the flag appears nowhere in `sap.ui.fl`,
-  only `sap.ui.rta` reads it (a `pr/` request on that premise was withdrawn); **(3)** the
-  `smartVariant` association does not resolve — `XMLTemplateProcessor` prefixes single
-  associations via `createId` (`_iKind === 3`); **(4)** no personalizable control is
-  registered — `getPersonalizableControls()` returns **2**, and
-  `SmartVariantManagementApplyAPI.loadVariants({control: <filter bar>})` resolves cleanly
-  (`variants: []`, standard variant present), so registration and the flex read both work.
-  Still unexplained: `SmartFilterBar.getFilters: called before the SmartFilterBar is
-  initialized` in the same session. Next step is the actual stack: DevTools → Pause on
-  caught exceptions → Save As, which names the frame and the undefined local instead of
-  the swallowed message. Port-side fixes that stay regardless: the
-  `pageVariantPersistencyKey` custom data, and the roundtrip-free filter event.
+- [ ] **Variant management crashes on save (app 251) — pinned to `control: null`.**
+  Live debugger (2026-07-27, pause on caught exceptions) stops at
+  `sap/ui/fl/write/api/SmartVariantManagementWriteAPI-dbg.js:28`,
+  `Utils.getAppComponentForControl(mPropertyBag.control).getId()`, with
+  **`mPropertyBag = {control: null, changeSpecificData: {…}}`** — call stack
+  `Button press → SmartVariantManagementBase:156 → SmartVariantManagement:1451/1021/1035
+  → …:459 → SmartVariantManagementWriteAPI.addVariant:89 → :28`. So `sap.ui.comp` hands
+  the flex API a **null** control when saving a page variant; nothing on the resolution
+  side is broken. Refuted along the way, each live: missing app component
+  (`getAppComponentForControl(<SVM>)` returns `container-z2ui5`), `flexEnabled` (read only
+  by `sap.ui.rta`, never by `sap.ui.fl` — a `pr/` on that premise was withdrawn),
+  association-id prefixing (`XMLTemplateProcessor` `_iKind === 3` → `createId`), and
+  registration (`getPersonalizableControls()` → 2, both resolvable, types `table`/`filterBar`,
+  keys `SmartTablePKey`/`SmartFilterPKey`; `loadVariants` resolves cleanly). Open: which
+  lookup inside `SmartVariantManagement` yields null — the frame above the API
+  (`…:459`) has to be read in the debugger. Port-side changes meanwhile: the
+  `pageVariantPersistencyKey` custom data plus the docs' wiring (no `smartVariant`
+  associations) — **not yet verified in a system**; the crash above was recorded with the
+  earlier association-based wiring.
 - [ ] **sap.ui.comp ports are all unverified (5 open LIVE_TESTs).** They need
   a SAPUI5 runtime plus a Gateway service exposing the tutorial's `Products`
   entity set, so neither `render_smoke` (declared skips) nor the e2e harness

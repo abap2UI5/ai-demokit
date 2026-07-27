@@ -29,7 +29,7 @@
     },
     {
       "type": "LIVE_TEST",
-      "what": "Partly run in a system 2026-07-27: the view renders and filters against GWSAMPLE_BASIC, but SAVING a view fails with a TypeError in SmartVariantManagement._newVariant and the cause is still open - see the STATUS open findings for the trace so far (the crash shape matches the unguarded getAppComponentForControl(control).getId() in sap.ui.fl's SmartVariantManagementWriteAPI, but the four obvious causes are refuted live: app component resolves, flexEnabled is not read by sap.ui.fl, associations are id-prefixed by XMLViews, and both smart controls ARE registered with a working loadVariants). Open to verify once fixed - saving and re-selecting a view, the page variant restoring filter bar and table personalization together, and variant management no longer appearing inside the Filters dialog."
+      "what": "Partly run in a system 2026-07-27: the view renders and the SmartTable loads (205 products from GWSAMPLE_BASIC), but SAVING a view fails. Pinned in the live debugger to sap.ui.fl SmartVariantManagementWriteAPI:28 with mPropertyBag.control === null - sap.ui.comp hands the flex API no control when saving a page variant; app component, association ids, registration and loadVariants are all verified fine (see the STATUS open findings for the full list of refuted causes). The current wiring (pageVariantPersistencyKey custom data, no smartVariant associations, per the SAPUI5 docs) was shipped AFTER that debugger session and is unverified. Open to verify - whether saving works with the documented wiring, and then that the page variant restores filter bar and table personalization together and that variant management no longer appears inside the Filters dialog."
     },
     {
       "type": "NOTE",
