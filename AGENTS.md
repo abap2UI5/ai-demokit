@@ -1060,10 +1060,20 @@ How to record it:
   `abapgit-xml-bom` gates every `src/**/*.xml`.
 - **A single giant `VALUE #( … )` can exceed ABAP's maximum statement
   length** — the overview's 246-row catalog hit the limit in a real system
-  (human fix PR #38). Split such blocks in halves and append with
-  `VALUE #( BASE result … )`. Port-sized mock tables (123 rows × few
-  columns) are safely below the limit; think of this when a block grows to
-  many hundreds of long rows.
+  (human fix PR #38), and splitting it **in halves was not enough**: two
+  ~200 kB statements still blew the limit in the same system (2026-07-27).
+  Split by emitted **size**, not by a fixed number of parts — the catalog
+  keeps growing and every fixed part grows with it. `generate-overview.mjs`
+  now caps each statement at `CHUNK_CHARS` 3000 / `CHUNK_ROWS` 6 and appends
+  with `VALUE #( BASE result … )`, and hoists any single text longer than
+  `HOIST_CHARS` into preceding `lv_textN = lv_textN && \`…\`` assignments
+  (each ≤ `ASSIGN_CHARS`), so one oversized row cannot blow the budget on
+  its own. Largest statement in the generated class: ~3 kB / ~400 tokens.
+  Data points for the (undocumented) threshold: the statement that failed
+  was ~226 kB / ~29 k tokens, while the biggest inlined mock table in the
+  ports (app 012, ~74 kB / ~9.7 k tokens) passes — so port-sized mock
+  tables are below the limit, but think of this when a block grows to many
+  hundreds of long rows, and split by size rather than trusting a margin.
 - **Never reuse a `FOR <n> = …` iterator name within one method** — the 702
   downport materializes each numeric iterator as `DATA <n> TYPE i`, so a
   second `FOR i = …` in the same method makes the downported class (and the
