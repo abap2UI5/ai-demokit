@@ -1416,7 +1416,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         use_name = abap_true )
       ( module = `sap.m`              control = `sap.m.FeedInput`                       name = `FeedInput`                           class = `z2ui5_cl_ai_app_236` path = `src/01/b19/z2ui5_cl_ai_app_236.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
         since = `1.22`
         release = `1.139`
@@ -1427,15 +1427,17 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` (cs_event-control_global MESSAGE_TOAST, template 'Posted new feed entry: {0}' filled by ${$parameters>/value}). The post attribute is kept, so structural-diff sees no difference. // NOTE:` &&
                  ` onActionButtonPress: the original builds a Dialog imperatively (new Dialog({...}).open()) with a Text and two buttons; expressed 1:1 as a core:FragmentDefinition (Dialog > content/Text,` &&
                  ` beginButton/Button 'Enable Post Button', endButton/Button 'Disable Post Button') shown via popup_display on the actions Button press (ACTION_PRESS). The Dialog + its controls are extra vs the` &&
-                 ` archived V.view.xml (which holds only the two trigger actions Buttons). // IMPROVISED: the dialog's begin/end buttons call oFeedInput.enablePostButton(true/false) in the original before closing; in` &&
-                 ` the port the buttons only close the popup - the post-button toggle is lost. REVIEW 2026-07-27: the original whitelist rationale is stale - since the generalized control-method allowlist` &&
-                 ` (FrontendAction.js: an unlisted public method not matching the deny regex runs, the source comment even names enablePostButton) the call IS expressible via control_by_id + enablePostButton + 'X'/''` &&
-                 ` once the two action-carrying FeedInputs get ids and each dialog targets its own parent input; needs view/event rework, so the toggle stays dropped for now and pr/feedinput-enable-post-button is` &&
-                 ` likewise superseded. // NOTE: the icon 'test-resources/sap/m/images/george_washington.jpg' is rehosted to the OpenUI5 host (https://sdk.openui5.org/test-resources/...) per the project asset-URL rule;` &&
-                 ` presence of the icon attribute is unchanged.`
+                 ` archived V.view.xml (which holds only the two trigger actions Buttons). // NOTE: the dialog begin/end buttons reproduce oFeedInput.enablePostButton(true/false) 1:1 via follow_up_action control_by_id` &&
+                 ` + the whitelisted enablePostButton bool method (framework 2026-07-27, pr/feedinput-enable-post-button) and close the popup server-side (popup_destroy). The owning FeedInput (original:` &&
+                 ` oEvent.getSource().getParent()) is transported as a static button t_arg literal - the two action-carrying FeedInputs got added ids feedActionPlain/feedActionIcon for it (extra id attributes, not in` &&
+                 ` the original view). // NOTE: the icon 'test-resources/sap/m/images/george_washington.jpg' is rehosted to the OpenUI5 host (https://sdk.openui5.org/test-resources/...) per the project asset-URL rule;` &&
+                 ` presence of the icon attribute is unchanged. // LIVE-TEST: unverified in a running system: the ENABLE_POST/DISABLE_POST round-trips combining follow_up_action(enablePostButton) with popup_destroy in` &&
+                 ` one response (the app-019 toast+destroy precedent, but with a control method).`
         post171 = `the FeedInput 'actions' aggregation (a Button next to the text area) is @since 1.139 - kept 1:1 on the last two FeedInputs; the app needs a UI5 release >= 1.139 to render it.`
         use_ec = abap_true
         use_ec_arg = abap_true
+        use_fua = abap_true
+        use_fua_arg = abap_true
         use_popup = abap_true )
       ( module = `sap.m`              control = `sap.m.FeedListItem`                    name = `FeedListItem`                        class = `z2ui5_cl_ai_app_025` path = `src/01/b06/z2ui5_cl_ai_app_025.clas.abap`
         score = 3
@@ -3511,6 +3513,26 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         use_ec = abap_true
         use_ec_arg = abap_true )
       ( module = `sap.ui.unified`     control = `sap.ui.unified.Menu`                   name = `MenuItemEventing`                    class = `z2ui5_cl_ai_app_227` path = `src/02/b10/z2ui5_cl_ai_app_227.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.21.0`
+        release = `1.84`
+        release_post171 = abap_true
+        is_post171 = abap_true
+        notes = `POST-1.71: Button.ariaHasPopup (since UI5 1.84) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.84 to render it. // NOTE: anchored open works since the framework` &&
+                 ` fallback of 2026-07-27 (pr/unified-menu-open-anchored, implemented): the openBy dispatch detects that sap.ui.unified.Menu has no openBy and calls open(false, anchor, 'begin top', 'begin bottom',` &&
+                 ` anchor) with the button as opener and dock reference - the previously declared no-op wire is now functional, unchanged in the port. Still dropped either way: the keyboard flag (controller` &&
+                 ` attachBrowserEvent tab/keyup tracking) and the explicit Popup.Dock.BeginTop/BeginBottom constants (default docking is visually equivalent). // NOTE: the fragment Menu (added in the controller via` &&
+                 ` getView().addDependent(this._menu)) is declared 1:1 inside the Button's ``dependents`` aggregation (the addDependent equivalent, same as app 060) - structurally identical, no loss; structural-diff` &&
+                 ` ignores the aggregation name. // NOTE: the selected item text/value is read with ${$parameters>/item}.getText() (and .getValue() for the MenuTextFieldItem), a method call on the resolved MenuItemBase` &&
+                 ` control, NOT ${$parameters>/item/text}: the $parameters model exposes 'item' as the control object and UI5 keeps properties in the control's internal store, so the path .../item/text reads an` &&
+                 ` undefined field and the toast arrives empty (same finding as app 060). // LIVE-TEST: unverified in a running system: (a) the button press opens the Menu via the 2026-07-27 anchored-open fallback -` &&
+                 ` verify the open in a running system; (b) each MenuItem select toasts "'<text>' pressed" via ${$parameters>/item}.getText() and the MenuTextFieldItem select toasts "'<value>' entered" via` &&
+                 ` ${$parameters>/item}.getValue().`
+        post171 = `Button.ariaHasPopup (since UI5 1.84) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.84 to render it.`
+        use_ec = abap_true
+        use_ec_arg = abap_true )
+      ( module = `sap.ui.unified`     control = `sap.ui.unified.Menu`                   name = `MenuMenuEventing`                    class = `z2ui5_cl_ai_app_228` path = `src/02/b10/z2ui5_cl_ai_app_228.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -3518,46 +3540,19 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         release = `1.84`
         release_post171 = abap_true
         is_post171 = abap_true
-        notes = `POST-1.71: Button.ariaHasPopup (since UI5 1.84) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.84 to render it. // IMPROVISED: the sample opens the fragment Menu` &&
-                 ` anchored to the button via oMenu.open( bWithKeyboard, oButton, Popup.Dock.BeginTop, Popup.Dock.BeginBottom, oButton ). sap.ui.unified.Menu - unlike sap.m.Menu (app 060) - exposes NO openBy method; it` &&
-                 ` only has open( bWithKeyboard, oOpenerRef, my, at, of ), and the whitelisted ``open`` control-method takes a single string arg so it cannot receive the opener/``of`` element (sap.ui.unified.Menu.open` &&
-                 ` even closes itself immediately when ``of`` is absent - Menu.js ``if (!oOfDom) this.close()``). The port wires the whitelisted, intent-correct ``openBy`` anchored to the button DOM ref` &&
-                 ` (``$event.oSource.sId``, same idiom as app 060), but it is a NO-OP on the current framework because the method is missing on this control - the Menu does not open until abap2UI5 adds anchored-open` &&
-                 ` support for sap.ui.unified.Menu (pr/unified-menu-open-anchored). The keyboard flag (from the controller's attachBrowserEvent tab/keyup tracking) and the BeginTop/BeginBottom docking are dropped` &&
-                 ` either way. The ``press`` attribute is preserved (rewired to the openBy frontend action). // NOTE: the fragment Menu (added in the controller via getView().addDependent(this._menu)) is declared 1:1` &&
-                 ` inside the Button's ``dependents`` aggregation (the addDependent equivalent, same as app 060) - structurally identical, no loss; structural-diff ignores the aggregation name. // NOTE: the selected` &&
-                 ` item text/value is read with ${$parameters>/item}.getText() (and .getValue() for the MenuTextFieldItem), a method call on the resolved MenuItemBase control, NOT ${$parameters>/item/text}: the` &&
-                 ` $parameters model exposes 'item' as the control object and UI5 keeps properties in the control's internal store, so the path .../item/text reads an undefined field and the toast arrives empty (same` &&
-                 ` finding as app 060). // LIVE-TEST: unverified in a running system: (a) the button press cannot yet open the Menu (openBy no-op, see the anchored-open deviation) - re-verify once` &&
-                 ` pr/unified-menu-open-anchored lands; (b) each MenuItem select toasts "'<text>' pressed" via ${$parameters>/item}.getText() and the MenuTextFieldItem select toasts "'<value>' entered" via` &&
-                 ` ${$parameters>/item}.getValue().`
-        post171 = `Button.ariaHasPopup (since UI5 1.84) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.84 to render it.`
-        use_ec = abap_true
-        use_ec_arg = abap_true )
-      ( module = `sap.ui.unified`     control = `sap.ui.unified.Menu`                   name = `MenuMenuEventing`                    class = `z2ui5_cl_ai_app_228` path = `src/02/b10/z2ui5_cl_ai_app_228.clas.abap`
-        score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
-        since = `1.21.0`
-        release = `1.84`
-        release_post171 = abap_true
-        is_post171 = abap_true
-        notes = `POST-1.71: Button.ariaHasPopup (since UI5 1.84) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.84 to render it. // IMPROVISED: the sample opens the fragment Menu` &&
-                 ` anchored to the button via oMenu.open( bWithKeyboard, oButton, Popup.Dock.BeginTop, Popup.Dock.BeginBottom, oButton ). sap.ui.unified.Menu - unlike sap.m.Menu (app 060) - exposes NO openBy method; it` &&
-                 ` only has open( bWithKeyboard, oOpenerRef, my, at, of ), and the whitelisted ``open`` control-method takes a single string arg so it cannot receive the opener/``of`` element (sap.ui.unified.Menu.open` &&
-                 ` even closes itself immediately when ``of`` is absent - Menu.js ``if (!oOfDom) this.close()``). The port wires the whitelisted, intent-correct ``openBy`` anchored to the button DOM ref` &&
-                 ` (``$event.oSource.sId``), but it is a NO-OP on the current framework because the method is missing on this control - the Menu does not open until abap2UI5 adds anchored-open support for` &&
-                 ` sap.ui.unified.Menu (pr/unified-menu-open-anchored). The keyboard flag and BeginTop/BeginBottom docking are dropped either way. The ``press`` attribute is preserved (rewired to the openBy frontend` &&
-                 ` action). // IMPROVISED: the sample's handleMenuItemPress branches on the runtime item: ``if (oItem.getSubmenu()) return;`` (do nothing for a parent that only opens its submenu) and ``if` &&
-                 ` (oItem.getMetadata().getName() === 'sap.ui.unified.MenuTextFieldItem') sMessage = item.getValue() + ' entered'`` else ``item.getText() + ' pressed'``. This walks the client-side control tree /` &&
-                 ` inspects the control class, which the thin backend cannot do - and the roundtrip-free MESSAGE_TOAST.show template cannot branch. The port composes a single toast "'<text>' pressed" from` &&
-                 ` ${$parameters>/item}.getText() for every itemSelect, dropping the submenu-parent guard and the MenuTextFieldItem getValue()/'entered' branch (same class of limit as app 060's parent-chain breadcrumb,` &&
-                 ` which the server cannot walk). The itemSelect event and every item are declared 1:1. // NOTE: the fragment Menu (added in the controller via getView().addDependent(this._menu)) is declared 1:1 inside` &&
-                 ` the Button's ``dependents`` aggregation (the addDependent equivalent, same as app 060) - structurally identical, no loss; structural-diff ignores the aggregation name. // NOTE: the selected item text` &&
-                 ` is read with ${$parameters>/item}.getText() (a method call on the resolved MenuItemBase control), NOT ${$parameters>/item/text}: the $parameters model exposes 'item' as the control object and UI5` &&
-                 ` keeps properties in the control's internal store, so the path .../item/text reads an undefined field and the toast arrives empty (same finding as app 060). // LIVE-TEST: unverified in a running` &&
-                 ` system: (a) the button press cannot yet open the Menu (openBy no-op, see the anchored-open deviation) - re-verify once pr/unified-menu-open-anchored lands; (b) selecting a menu item toasts "'<text>'` &&
-                 ` pressed" via the Menu-level itemSelect + ${$parameters>/item}.getText().`
+        notes = `POST-1.71: Button.ariaHasPopup (since UI5 1.84) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.84 to render it. // NOTE: anchored open works since the framework` &&
+                 ` fallback of 2026-07-27 (pr/unified-menu-open-anchored, implemented): the openBy dispatch detects that sap.ui.unified.Menu has no openBy and calls open(false, anchor, 'begin top', 'begin bottom',` &&
+                 ` anchor) with the button as opener and dock reference - the previously declared no-op wire is now functional, unchanged in the port. Still dropped either way: the keyboard flag (controller` &&
+                 ` attachBrowserEvent tab/keyup tracking) and the explicit Popup.Dock.BeginTop/BeginBottom constants (default docking is visually equivalent). // IMPROVISED: the sample's handleMenuItemPress branches on` &&
+                 ` the runtime item: ``if (oItem.getSubmenu()) return;`` (do nothing for a parent that only opens its submenu) and ``if (oItem.getMetadata().getName() === 'sap.ui.unified.MenuTextFieldItem') sMessage =` &&
+                 ` item.getValue() + ' entered'`` else ``item.getText() + ' pressed'``. This walks the client-side control tree / inspects the control class, which the thin backend cannot do - and the roundtrip-free` &&
+                 ` MESSAGE_TOAST.show template cannot branch. The port composes a single toast "'<text>' pressed" from ${$parameters>/item}.getText() for every itemSelect, dropping the submenu-parent guard and the` &&
+                 ` MenuTextFieldItem getValue()/'entered' branch (same class of limit as app 060's parent-chain breadcrumb, which the server cannot walk). The itemSelect event and every item are declared 1:1. // NOTE:` &&
+                 ` the fragment Menu (added in the controller via getView().addDependent(this._menu)) is declared 1:1 inside the Button's ``dependents`` aggregation (the addDependent equivalent, same as app 060) -` &&
+                 ` structurally identical, no loss; structural-diff ignores the aggregation name. // NOTE: the selected item text is read with ${$parameters>/item}.getText() (a method call on the resolved MenuItemBase` &&
+                 ` control), NOT ${$parameters>/item/text}: the $parameters model exposes 'item' as the control object and UI5 keeps properties in the control's internal store, so the path .../item/text reads an` &&
+                 ` undefined field and the toast arrives empty (same finding as app 060). // LIVE-TEST: unverified in a running system: (a) the button press opens the Menu via the 2026-07-27 anchored-open fallback -` &&
+                 ` verify the open in a running system; (b) selecting a menu item toasts "'<text>' pressed" via the Menu-level itemSelect + ${$parameters>/item}.getText().`
         post171 = `Button.ariaHasPopup (since UI5 1.84) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.84 to render it.`
         use_ec = abap_true
         use_ec_arg = abap_true )

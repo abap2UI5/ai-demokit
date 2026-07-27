@@ -1,7 +1,9 @@
 # messagepopover-async-url — a declarable `MessagePopover.setAsyncURLHandler`
 
-**Priority: low / niche** — filed for the record; the messages render and
-navigate fine without it, so this is an enhancement, not a blocker.
+**Status: open — low / niche** — filed for the record; the messages render and
+navigate fine without it, so this is an enhancement, not a blocker (reviewed
+2026-07-27, kept current: a live JS promise callback has no declarable ABAP
+equivalent).
 
 ## Motivation
 

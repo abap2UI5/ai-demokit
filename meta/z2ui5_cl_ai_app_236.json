@@ -8,7 +8,7 @@
     "frontend_action": true,
     "event_t_arg": false
   },
-  "status": "generated",
+  "status": "reviewed",
   "deviations": [
     {
       "type": "POST_171",
@@ -23,12 +23,16 @@
       "what": "onActionButtonPress: the original builds a Dialog imperatively (new Dialog({...}).open()) with a Text and two buttons; expressed 1:1 as a core:FragmentDefinition (Dialog > content/Text, beginButton/Button 'Enable Post Button', endButton/Button 'Disable Post Button') shown via popup_display on the actions Button press (ACTION_PRESS). The Dialog + its controls are extra vs the archived V.view.xml (which holds only the two trigger actions Buttons)."
     },
     {
-      "type": "IMPROVISED",
-      "what": "the dialog's begin/end buttons call oFeedInput.enablePostButton(true/false) in the original before closing; in the port the buttons only close the popup - the post-button toggle is lost. REVIEW 2026-07-27: the original whitelist rationale is stale - since the generalized control-method allowlist (FrontendAction.js: an unlisted public method not matching the deny regex runs, the source comment even names enablePostButton) the call IS expressible via control_by_id + enablePostButton + 'X'/'' once the two action-carrying FeedInputs get ids and each dialog targets its own parent input; needs view/event rework, so the toggle stays dropped for now and pr/feedinput-enable-post-button is likewise superseded."
+      "type": "NOTE",
+      "what": "the dialog begin/end buttons reproduce oFeedInput.enablePostButton(true/false) 1:1 via follow_up_action control_by_id + the whitelisted enablePostButton bool method (framework 2026-07-27, pr/feedinput-enable-post-button) and close the popup server-side (popup_destroy). The owning FeedInput (original: oEvent.getSource().getParent()) is transported as a static button t_arg literal - the two action-carrying FeedInputs got added ids feedActionPlain/feedActionIcon for it (extra id attributes, not in the original view)."
     },
     {
       "type": "NOTE",
       "what": "the icon 'test-resources/sap/m/images/george_washington.jpg' is rehosted to the OpenUI5 host (https://sdk.openui5.org/test-resources/...) per the project asset-URL rule; presence of the icon attribute is unchanged."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "unverified in a running system: the ENABLE_POST/DISABLE_POST round-trips combining follow_up_action(enablePostButton) with popup_destroy in one response (the app-019 toast+destroy precedent, but with a control method)."
     }
   ]
 }

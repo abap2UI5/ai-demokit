@@ -1,7 +1,11 @@
 # feedinput-enable-post-button — whitelist `FeedInput.enablePostButton`
 
-**Status: open** — small `CONTROL_METHODS` gap. From demo-kit app 236
-(`sap.m.sample.FeedInput`, 2026-07-25).
+**Status: IMPLEMENTED (2026-07-27)** — `enablePostButton: ["bool"]` listed in
+`CONTROL_METHODS` (abap2UI5 branch `claude/ai-demokit-review-qavjtr`; the
+generalized allowlist already ran the method, the entry adds the proper
+X/space→boolean cast). App 236 rewired 1:1: the dialog buttons toggle the
+owning FeedInput (id via static button t_arg) and close server-side.
+Originally from demo-kit app 236 (`sap.m.sample.FeedInput`, 2026-07-25).
 
 ## Motivation
 

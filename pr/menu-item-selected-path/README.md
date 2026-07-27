@@ -1,5 +1,9 @@
 # pr/menu-item-selected-path — the selected menu item's ancestor-text path in the event payload
 
+**Status: open** — niche enhancement (breadcrumb path needs a client-side
+parent-chain walk; the single-item text already transports via
+`${$parameters>/item}.getText()`). Reviewed 2026-07-27, kept current.
+
 ## Motivation
 
 Both menu demo kit samples build a **breadcrumb path** from the selected item

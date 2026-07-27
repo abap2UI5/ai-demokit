@@ -1,6 +1,9 @@
 # event-prevent-default — conditional `preventDefault()` for a client event
 
-**Status: open** — genuine framework gap. From demo-kit app 241
+**Status: open — deliberately deferred 2026-07-27**: the change touches the
+core event protocol (the eB event-array slots, popup-controller variants), so
+it needs framework-side tests before landing; reviewed and kept current.
+From demo-kit app 241
 (`sap.tnt.sample.SideNavigationPressEvent`, 2026-07-25).
 
 ## Motivation
