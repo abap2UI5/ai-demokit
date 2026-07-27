@@ -8,8 +8,11 @@
     "frontend_action": true,
     "event_t_arg": true
   },
-  "status": "reviewed",
-  "checked": null,
+  "status": "checked",
+  "checked": {
+    "date": "2026-07-27",
+    "note": "verified in a running system 2026-07-27 - SplitContainer toDetail/toMaster/backDetail/backMaster/setMode navigation works across modes"
+  },
   "deviations": [
     {
       "type": "NOTE",
@@ -24,8 +27,8 @@
       "what": "The split mode is selected via a two-way selectedIndex binding on the RadioButtonGroup (mode_idx) and mapped to the SplitAppMode string in ABAP; the original reads the selected RadioButton's custom:splitAppMode CustomData. custom:splitAppMode is kept on the buttons for fidelity. The onAfterRendering parent-height fix and the device-model onInit setup (device model is global in abap2UI5) are dropped."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "SplitContainer as the root view plus the control_by_id navigation (to/toDetail/toMaster/backDetail/backMaster/setMode) need an in-system check — machine gates only verify view validity, not the runtime navigation roundtrip."
+      "type": "NOTE",
+      "what": "live-verified 2026-07-27: SplitContainer as the root view plus the control_by_id navigation (to/toDetail/toMaster/backDetail/backMaster/setMode) need an in-system check — machine gates only verify view validity, not the runtime navigation roundtrip."
     }
   ]
 }

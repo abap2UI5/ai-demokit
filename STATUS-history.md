@@ -7,6 +7,28 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## Human live check + PR #38 distilled (2026-07-27, after the #37 merge)
+
+- **Nine ports live-verified in a running system and promoted to `checked`**
+  (065, 084, 085, 096, 108, 140, 164, 171, 241) — each closes a whole
+  LIVE_TEST *class*: MessageManager cc, URLHelper triggers (the class the
+  sandboxed e2e can never verify), Tokenizer two-way, SplitContainer
+  `control_by_id` navigation, the date-object Formatter path, the two
+  sweep-repaired ports (140/164), the nested-object runtime bind, and the
+  tnt controller-built Dialog. CAPABILITIES upgraded in the same change:
+  the nested single-object row is now **✅ live-verified** (was 🧪), and the
+  MessageManager/URLHelper/SplitContainer-nav/date-object rows carry
+  live-verified 2026-07-27 evidence.
+- **PR #38 (human fix) distilled**: abapGit XML files MUST start with the
+  UTF-8 BOM — four agent-written files lacked it; new pattern-lint rule
+  `abapgit-xml-bom` gates every `src/**/*.xml` bytewise, and §10 documents
+  it plus the second #38 lesson (a single giant `VALUE #( )` exceeds ABAP's
+  maximum statement length — the overview catalog now splits in halves via
+  `VALUE #( BASE result … )`, kept intact by the regenerated overview).
+  The overview class was also regenerated with the merged generator — the
+  #38 copy had been produced with a pre-#37 generator state and
+  reintroduced the `<CLASS>` ABAP-Doc lint hit.
+
 ## Review sweep (2026-07-27) — the empty `reviewed` rung filled: 152 promoted, 49 flagged
 
 The quality ladder's middle rung had been empty since its definition (0

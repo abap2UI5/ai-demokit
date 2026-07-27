@@ -352,9 +352,33 @@ function walk(dir, out = []) {
   return out;
 }
 
+function walkXml(dir, out = []) {
+  for (const name of fs.readdirSync(dir)) {
+    const full = path.join(dir, name);
+    if (fs.statSync(full).isDirectory()) walkXml(full, out);
+    else if (full.endsWith('.xml')) out.push(full);
+  }
+  return out;
+}
+
 let errors = 0;
 let warns = 0;
 const seenBaseline = new Set();
+
+// abapGit XML files MUST start with the UTF-8 BOM — abapGit serializes them
+// that way, and BOM-less files break the format on the system pull (four
+// crept in via agent-written files; human fix PR #38, 2026-07-27). The
+// scaffolder and generate-overview both emit the BOM; this gates hand-written
+// ones. Checked bytewise, outside the .clas.abap rule loop.
+for (const f of walkXml(SRC).sort()) {
+  const rel = path.relative(ROOT, f).split(path.sep).join('/');
+  const b = fs.readFileSync(f);
+  if (!(b[0] === 0xEF && b[1] === 0xBB && b[2] === 0xBF)) {
+    console.log(`ERROR ${rel}:1 [abapgit-xml-bom] file does not start with the UTF-8 BOM`);
+    console.log('      abapGit XML must begin with EF BB BF — copy a reference clas.xml byte-exactly (PR #38 lesson, 2026-07-27)');
+    errors++;
+  }
+}
 
 for (const f of walk(SRC).sort()) {
   const rel = path.relative(ROOT, f).split(path.sep).join('/');

@@ -8,8 +8,11 @@
     "frontend_action": false,
     "event_t_arg": true
   },
-  "status": "reviewed",
-  "checked": null,
+  "status": "checked",
+  "checked": {
+    "date": "2026-07-27",
+    "note": "verified in a running system 2026-07-27 - controller-built Dialog opens/closes; NavigationList selection paths work"
+  },
   "deviations": [
     {
       "type": "POST_171",
@@ -36,8 +39,8 @@
       "what": "quickActionPress dialog: reproduced as a core:FragmentDefinition shown via client->popup_display - the controller-built sap.m.Dialog with two Label + Input pairs (Name/Icon, the Inputs two-way bound to create_name/create_icon) and Create/Cancel Buttons. These Dialog/Label/Input/Button controls are extra vs the original view.xml, which declared none of them (the original built the Dialog imperatively in the controller). The original Create button imperatively does sideNavigation.getItem().addItem(new NavigationListItem(...)); dynamic addItem to the statically declared NavigationList is not expressible (it would require folding the 1:1 static items into a bound aggregation), so CREATE_ITEM reads the entered values and shows a toast instead of adding the item. The .quickActionPress handler is rewired to the QUICK_CREATE backend event."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "onCollapseExpandPress reproduced server-side: SideNavigation.expanded is two-way bound (initial false as in the original expanded=\"false\") and flipped on the TOGGLE_EXPAND round-trip instead of the imperative byId().setExpanded(!expanded) - same technique as apps 172/128. The literal expanded=\"false\" becoming a {/EXPANDED} binding, the ITEM_PRESS modifier-key transport and the popup round-trips all need a live render check."
+      "type": "NOTE",
+      "what": "live-verified 2026-07-27: onCollapseExpandPress reproduced server-side: SideNavigation.expanded is two-way bound (initial false as in the original expanded=\"false\") and flipped on the TOGGLE_EXPAND round-trip instead of the imperative byId().setExpanded(!expanded) - same technique as apps 172/128. The literal expanded=\"false\" becoming a {/EXPANDED} binding, the ITEM_PRESS modifier-key transport and the popup round-trips all need a live render check."
     }
   ]
 }

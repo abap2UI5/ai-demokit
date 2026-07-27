@@ -1051,6 +1051,19 @@ How to record it:
   **display-only** value with variable decimals bound into a *text template*
   (`{WIDTH} x {DEPTH}`, dimensions `40.8`) stays `TYPE string` — packed with a
   fixed `DECIMALS` would add trailing zeros (`40.80`); string keeps it exact.
+- **abapGit XML files must start with the UTF-8 BOM** (`EF BB BF` before
+  `<?xml …>`). abapGit serializes them that way; BOM-less files break the
+  abapGit format on the system pull. Four agent-written files crept in
+  without it (human fix PR #38, 2026-07-27). The scaffolder and
+  generate-overview emit the BOM; when writing a `.clas.xml`/`package.devc.xml`
+  by hand, copy a reference byte-exactly — pattern-lint rule
+  `abapgit-xml-bom` gates every `src/**/*.xml`.
+- **A single giant `VALUE #( … )` can exceed ABAP's maximum statement
+  length** — the overview's 246-row catalog hit the limit in a real system
+  (human fix PR #38). Split such blocks in halves and append with
+  `VALUE #( BASE result … )`. Port-sized mock tables (123 rows × few
+  columns) are safely below the limit; think of this when a block grows to
+  many hundreds of long rows.
 - **Never reuse a `FOR <n> = …` iterator name within one method** — the 702
   downport materializes each numeric iterator as `DATA <n> TYPE i`, so a
   second `FOR i = …` in the same method makes the downported class (and the
