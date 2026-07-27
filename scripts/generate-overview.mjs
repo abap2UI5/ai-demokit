@@ -957,7 +957,13 @@ ${columnsBlock}
   METHOD get_catalog.
 
     result = VALUE #(
-${rows.join('\n')} ).
+${rows.slice(0, Math.ceil(rows.length / 2)).join('\n')} ).
+
+    " A single VALUE #( ) holding every catalog row exceeds the maximum permitted
+    " ABAP statement length, so the catalog is emitted in two halves; the second
+    " half appends to the first via VALUE #( BASE result ).
+    result = VALUE #( BASE result
+${rows.slice(Math.ceil(rows.length / 2)).join('\n')} ).
 
   ENDMETHOD.
 
