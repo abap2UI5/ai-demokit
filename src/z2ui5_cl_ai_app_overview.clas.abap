@@ -4,10 +4,8 @@
 "! views are bound and their visibility is an expression binding over the two-way
 "! show_tree flag, so the toggle runs entirely on the client (no round-trip). The
 "! search field filters the table on the client (binding_call Contains, no
-"! round-trip); its query is two-way bound (search_query), so it survives an app
-"! state restore - the browser Back button after starting a listed app - and
-"! view_display re-applies the filter via follow_up_action; the tree is not
-"! filtered. Each tree leaf has the same jump popover as the table's Open column.
+"! round-trip); the tree is not filtered. Each tree leaf has the same jump
+"! popover as the table's Open column.
 "! The title carries the ported-app count in parentheses. There are two sortable
 "! Since columns: the first (next to Control) shows the UI5 release the CONTROL
 "! appeared in (from ui5/universe.json; blank when older than tracking / since
@@ -120,12 +118,6 @@ CLASS z2ui5_cl_ai_app_overview DEFINITION PUBLIC.
 
     DATA t_app TYPE ty_t_app.
     DATA t_tree TYPE ty_t_tree.
-    " the search field's text (two-way, so it survives a round-trip and the
-    " draft): the filter itself runs on the client, but only a value that is
-    " part of the MODEL comes back when the app is restored - e.g. by the
-    " browser Back button after starting one of the listed apps. view_display
-    " re-applies the filter for a non-initial query via follow_up_action.
-    DATA search_query TYPE string.
     " table/tree toggle (drives the visible expression bindings)
     DATA show_tree TYPE abap_bool.
     " sap.m.Shell letterboxing toggle (two-way, drives Shell appWidthLimited)
@@ -375,10 +367,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                         )->leaf( `SearchField`
                             )->a( n = `placeholder` v = `Search the table - module, control, since, sample, class`
                             )->a( n = `width`       v = `24rem`
-                            " two-way bound so the typed query is part of the model and
-                            " comes back with the app state (Back button, draft restore);
-                            " the filtering itself stays client-side (below)
-                            )->a( n = `value`       v = client->_bind( search_query )
                             " disabled while the tree is shown (search filters only the table)
                             )->a( n = `enabled`     v = |\{= !${ client->_bind( show_tree ) } \}|
                             )->a( n = `liveChange`  v = client->_event_client( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `filter` ) ( `FILTER` ) ( `Contains` ) ( `${$parameters>/newValue}` ) ) )
@@ -755,16 +743,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                                     )->a( n = `press`   v = client->_event( val = `START_APP` t_arg = VALUE #( ( `${CLASS}` ) ) ) ).
 
     client->view_display( view->stringify( ) ).
-
-    " Re-apply the client-side table filter for a restored query. The filter is
-    " a frontend-only binding operation (the model keeps all rows), so a rebuilt
-    " view starts unfiltered - while the SearchField, being two-way bound, does
-    " show the query again. follow_up_action runs the very same binding_call
-    " after the view was rendered, so both are back in sync.
-    IF search_query IS NOT INITIAL.
-      client->follow_up_action( val   = client->cs_event-binding_call
-                                t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `filter` ) ( `FILTER` ) ( `Contains` ) ( search_query ) ) ).
-    ENDIF.
 
   ENDMETHOD.
 

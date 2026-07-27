@@ -48,7 +48,7 @@ CLASS z2ui5_cl_ai_app_249 IMPLEMENTATION.
         )->a( n = `xmlns:mvc`        v = `sap.ui.core.mvc`
         )->a( n = `xmlns:smartForm`  v = `sap.ui.comp.smartform`
         )->a( n = `xmlns:smartField` v = `sap.ui.comp.smartfield`
-        )->a( n = `binding`          v = `{/ProductSet('HT-1000')}`
+        )->a( n = `binding`          v = `{/ProductSet('AR-FB-1000')}`
 
         )->open( n = `SmartForm` ns = `smartForm`
             )->a( n = `id`            v = `smartForm`

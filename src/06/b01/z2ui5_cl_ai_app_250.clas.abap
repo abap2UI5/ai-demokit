@@ -69,7 +69,8 @@ CLASS z2ui5_cl_ai_app_250 IMPLEMENTATION.
             )->a( n = `header`                  v = `Products`
             )->a( n = `showRowCount`            v = `true`
             )->a( n = `enableExport`            v = `false`
-            )->a( n = `enableAutoBinding`       v = `true` ).
+            )->a( n = `enableAutoBinding`       v = `true`
+            ).
 
     client->view_display( val                       = view->stringify( )
                           switch_default_model_path = c_odata_service ).
