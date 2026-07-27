@@ -3439,25 +3439,26 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         ui5_only = abap_true
         notes = lv_text1 ) ).
 
-    lv_text1 = `IMPROVISED: The view wires assignedFiltersChanged="onFiltersChanged" on the SmartFilterBar, but the tutorial does not publish that controller, so there is no original handler body to rebuild. The port` &&
-               ` keeps the event and routes it to the backend (FILTERS_CHANGED), where it raises a message toast - invented behaviour, chosen so the wire is a live round-trip rather than a dead one. A real app would` &&
-               ` use the hook to re-read the assigned filters server-side. // IMPROVISED: Saving a view failed live (2026-07-27) with a JS TypeError inside SmartVariantManagement._newVariant ("Cannot read properties` &&
-               ` of undefined (reading 'getId')"). The tutorial's published step-8 view wires the page variant through the smartVariant association only, but the SAPUI5 documentation ("Smart Variant Management",` &&
-               ` section Page Variants) states that when the page variant is used by a SmartFilterBar, the PAGE variant's key has to be assigned through the control's pageVariantPersistencyKey CUSTOM DATA - the` &&
-               ` filter bar's own persistencyKey names only its slice of the stored data, and the filter bar then adapts the related SmartTable itself. The port therefore adds a customData aggregation with one`.
-    lv_text1 = lv_text1 && ` core:CustomData (key=pageVariantPersistencyKey, value=PageVariantPKey) plus the xmlns:core declaration - two controls the sample's view does not have. The smartVariant associations are kept as the` &&
-               ` tutorial writes them (the doc says they are then unnecessary, not forbidden). // IMPROVISED: The tutorial serves its own metadata.xml and mock data from a local mock server, which an ABAP system` &&
+    lv_text1 = `IMPROVISED: The view wires assignedFiltersChanged="onFiltersChanged" on the SmartFilterBar, but the tutorial does not publish that controller, so there is no original handler body to rebuild. The` &&
+               ` original handler is a controller function, i.e. client-side, so the port keeps the wire client-side too: control_global MESSAGE_TOAST.show via _event_client, roundtrip-free. The toast text is` &&
+               ` invented; what matters is that no backend round-trip fires in the middle of the variant/filter handshake (an earlier version routed this to a backend event - dropped 2026-07-27 while chasing the` &&
+               ` variant-save crash). The app is therefore init-only, no on_event. // IMPROVISED: Saving a view failed live (2026-07-27) with a JS TypeError inside SmartVariantManagement._newVariant ("Cannot read` &&
+               ` properties of undefined (reading 'getId')"). The tutorial's published step-8 view wires the page variant through the smartVariant association only, but the SAPUI5 documentation ("Smart Variant` &&
+               ` Management", section Page Variants) states that when the page variant is used by a SmartFilterBar, the PAGE variant's key has to be assigned through the control's pageVariantPersistencyKey CUSTOM`.
+    lv_text1 = lv_text1 && ` DATA - the filter bar's own persistencyKey names only its slice of the stored data, and the filter bar then adapts the related SmartTable itself. The port therefore adds a customData aggregation with` &&
+               ` one core:CustomData (key=pageVariantPersistencyKey, value=PageVariantPKey) plus the xmlns:core declaration - two controls the sample's view does not have. The smartVariant associations are kept as` &&
+               ` the tutorial writes them (the doc says they are then unnecessary, not forbidden). // IMPROVISED: The tutorial serves its own metadata.xml and mock data from a local mock server, which an ABAP system` &&
                ` cannot reproduce (a Gateway service is not a transportable artifact of this repo). The port therefore points the default model at the SAP Gateway demo service GWSAMPLE_BASIC` &&
                ` (/sap/opu/odata/IWBEP/GWSAMPLE_BASIC/, client->view_display switch_default_model_path, constant c_odata_service): it ships with every on-premise system and only has to be activated once in` &&
-               ` /IWFND/MAINT_SERVICE, so the app actually runs. The sample's own metadata.xml stays archived beside the template for anyone who wants to rebuild the tutorial service instead. Both smart controls` &&
-               ` therefore carry entitySet="ProductSet" instead of "Products" (the header stays "Products", it is a label). One consequence needs an addition to the view: GWSAMPLE_BASIC carries no UI.LineItem`.
-    lv_text1 = lv_text1 && ` annotation, and without one a SmartTable starts with NO columns at all - it renders the "add columns to see the content" placeholder (seen live 2026-07-27; an earlier version of this note wrongly` &&
+               ` /IWFND/MAINT_SERVICE, so the app actually runs. The sample's own metadata.xml stays archived beside the template for anyone who wants to rebuild the tutorial service instead. Both smart controls`.
+    lv_text1 = lv_text1 && ` therefore carry entitySet="ProductSet" instead of "Products" (the header stays "Products", it is a label). One consequence needs an addition to the view: GWSAMPLE_BASIC carries no UI.LineItem` &&
+               ` annotation, and without one a SmartTable starts with NO columns at all - it renders the "add columns to see the content" placeholder (seen live 2026-07-27; an earlier version of this note wrongly` &&
                ` assumed it would fall back to all metadata fields). The port therefore adds initiallyVisibleFields="ProductID,Name,Category,SupplierName,Price", an attribute the sample does not carry because its own` &&
                ` service annotates the four columns it shows. The page variant, the persistency keys and the smartVariant wiring the step is about are unaffected. // LIVE-TEST: Partly run in a system 2026-07-27: the` &&
                ` view renders and filters against GWSAMPLE_BASIC, but SAVING a view still has to be re-checked. The first attempt failed in SmartVariantManagement._newVariant ("Cannot read properties of undefined` &&
-               ` (reading 'getId')"); the port-side half of that finding is fixed here (pageVariantPersistencyKey custom data), the framework-side half is filed as pr/flex-enabled-for-variants (abap2UI5's manifest` &&
-               ` declares flexEnabled: false, while variant persistence runs through the SAPUI5 flexibility layer) and is NOT fixed. Open to verify - that saving and re-selecting a view now works, that the page`.
-    lv_text1 = lv_text1 && ` variant restores filter bar and table personalization together, and that variant management no longer appears inside the Filters dialog. // NOTE: The property gate (ui5/properties.json) covers` &&
+               ` (reading 'getId')"); the port-side half of that finding is fixed here (pageVariantPersistencyKey custom data), the framework-side half is filed as pr/flex-enabled-for-variants (abap2UI5's manifest`.
+    lv_text1 = lv_text1 && ` declares flexEnabled: false, while variant persistence runs through the SAPUI5 flexibility layer) and is NOT fixed. Open to verify - that saving and re-selecting a view now works, that the page` &&
+               ` variant restores filter bar and table personalization together, and that variant management no longer appears inside the Filters dialog. // NOTE: The property gate (ui5/properties.json) covers` &&
                ` OpenUI5 libraries only, so no member of sap.ui.comp is checked against the 1.71 rule automatically. SmartVariantManagement, SmartFilterBar and SmartTable are @since 1.28; the smartVariant association` &&
                ` and persistencyKey properties are of the same vintage.`.
     result = VALUE #( BASE result
@@ -3466,7 +3467,9 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
         ui5_only = abap_true
-        notes = lv_text1 ) ).
+        notes = lv_text1
+        use_ec = abap_true
+        use_ec_arg = abap_true ) ).
 
     result = VALUE #( BASE result
       ( module = `sap.ui.core`        control = `sap.ui.core.BusyIndicator`                        name = `BusyIndicator`                       class = `z2ui5_cl_ai_app_147` path = `src/02/b07/z2ui5_cl_ai_app_147.clas.abap`

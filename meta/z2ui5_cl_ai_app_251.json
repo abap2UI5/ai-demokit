@@ -5,8 +5,9 @@
   "file": "src/06/b01/z2ui5_cl_ai_app_251.clas.abap",
   "batch": "b01",
   "audit": {
-    "frontend_action": false,
-    "event_t_arg": false
+    "frontend_action": true,
+    "event_t_arg": false,
+    "note": "assignedFiltersChanged toasts roundtrip-free via control_global MESSAGE_TOAST.show; the app is init-only"
   },
   "status": "generated",
   "render_smoke": {
@@ -16,7 +17,7 @@
   "deviations": [
     {
       "type": "IMPROVISED",
-      "what": "The view wires assignedFiltersChanged=\"onFiltersChanged\" on the SmartFilterBar, but the tutorial does not publish that controller, so there is no original handler body to rebuild. The port keeps the event and routes it to the backend (FILTERS_CHANGED), where it raises a message toast - invented behaviour, chosen so the wire is a live round-trip rather than a dead one. A real app would use the hook to re-read the assigned filters server-side."
+      "what": "The view wires assignedFiltersChanged=\"onFiltersChanged\" on the SmartFilterBar, but the tutorial does not publish that controller, so there is no original handler body to rebuild. The original handler is a controller function, i.e. client-side, so the port keeps the wire client-side too: control_global MESSAGE_TOAST.show via _event_client, roundtrip-free. The toast text is invented; what matters is that no backend round-trip fires in the middle of the variant/filter handshake (an earlier version routed this to a backend event - dropped 2026-07-27 while chasing the variant-save crash). The app is therefore init-only, no on_event."
     },
     {
       "type": "IMPROVISED",

@@ -16,7 +16,6 @@ CLASS z2ui5_cl_ai_app_251 DEFINITION PUBLIC.
     DATA client TYPE REF TO z2ui5_if_client.
 
     METHODS view_display.
-    METHODS on_event.
 
   PRIVATE SECTION.
 ENDCLASS.
@@ -29,8 +28,6 @@ CLASS z2ui5_cl_ai_app_251 IMPLEMENTATION.
     me->client = client.
     IF client->check_on_init( ).
       view_display( ).
-    ELSEIF client->check_on_event( ).
-      on_event( ).
     ENDIF.
 
   ENDMETHOD.
@@ -66,7 +63,13 @@ CLASS z2ui5_cl_ai_app_251 IMPLEMENTATION.
             )->a( n = `entitySet`              v = `ProductSet`
             )->a( n = `smartVariant`           v = `pageVariantId`
             )->a( n = `persistencyKey`         v = `SmartFilterPKey`
-            )->a( n = `assignedFiltersChanged` v = client->_event( `FILTERS_CHANGED` )
+            " The tutorial's onFiltersChanged handler is not published, so there is no
+            " original body to rebuild - but the original IS a controller function, i.e.
+            " client-side. The wire therefore stays roundtrip-free (control_global
+            " MESSAGE_TOAST): a backend round-trip fired in the middle of the variant /
+            " filter handshake is exactly what a smart control does not expect.
+            )->a( n = `assignedFiltersChanged` v = client->_event_client( val   = client->cs_event-control_global
+                                                                          t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Assigned filters changed` ) ) )
 
             " Page variant + SmartFilterBar: the PAGE variant's key has to reach the
             " filter bar through the pageVariantPersistencyKey custom data - its own
@@ -110,23 +113,6 @@ CLASS z2ui5_cl_ai_app_251 IMPLEMENTATION.
 
     client->view_display( val                       = view->stringify( )
                           switch_default_model_path = c_odata_service ).
-
-  ENDMETHOD.
-
-
-  METHOD on_event.
-
-    CASE client->get( )-event.
-
-      WHEN `FILTERS_CHANGED`.
-        " The tutorial wires assignedFiltersChanged to onFiltersChanged but does
-        " not publish that handler, so there is no original behaviour to rebuild.
-        " The port keeps the event and confirms the round-trip reached the
-        " backend, which is what a real app would use the hook for (re-reading
-        " the assigned filters server-side).
-        client->message_toast_display( `Assigned filters changed` ).
-
-    ENDCASE.
 
   ENDMETHOD.
 
