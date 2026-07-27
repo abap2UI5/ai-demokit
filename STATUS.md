@@ -37,26 +37,27 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   host is not an option (`pattern-lint` `commercial-ui5-host`); the fix is to
   suppress or re-target the links for `ui5_only` rows in
   `scripts/generate-overview.mjs`. Their ABAP-class link is correct.
-- [ ] **Variant management crashes on save (app 251) — root cause narrowed, not fixed.**
-  `SmartVariantManagement._newVariant` throws `Cannot read properties of undefined
-  (reading 'getId')`. Traced into the OPEN-SOURCE half: both
-  `sap/ui/fl/write/api/SmartVariantManagementWriteAPI.js:26` and
-  `SmartVariantManagementApplyAPI.loadVariants` do
-  `Utils.getAppComponentForControl(oControl).getId()` unguarded, and
-  `getAppComponentForControl(undefined)` returns `undefined` — so the control handed
-  to the flex API is **undefined**, i.e. no personalizable control was registered at
-  the page variant. That matches the second live symptom,
-  `SmartFilterBar.getFilters: called before the SmartFilterBar is initialized`: the
-  filter bar never finishes its init handshake, so it never registers, and the save
-  path then runs on nothing. Ruled out with evidence: the app component resolves fine
-  (live console), `flexEnabled` is read only by `sap.ui.rta`, never by `sap.ui.fl`
-  (so the manifest flag is NOT the gate — an earlier `pr/` request on that premise was
-  withdrawn), and XMLViews DO prefix single-association ids (`XMLTemplateProcessor`
-  `_iKind === 3` → `createId`), so `smartVariant="pageVariantId"` resolves. Fixed on the
-  port side meanwhile: the `pageVariantPersistencyKey` custom data the SAPUI5 docs
-  require for a SmartFilterBar page variant, and the filter event is roundtrip-free.
-  Next step is a live `SmartVariantManagementApplyAPI.loadVariants({control: <filter
-  bar>, standardVariant: {}})` — it surfaces the error the control swallows.
+- [ ] **Variant management crashes on save (app 251) — cause still open, four
+  hypotheses refuted.** `SmartVariantManagement._newVariant` throws `Cannot read
+  properties of undefined (reading 'getId')`. What is established: every write path of
+  `sap/ui/fl/write/api/SmartVariantManagementWriteAPI` funnels through
+  `setReferenceAndPersistencyKeyInPropertyBagAndCallFunction`, whose first line is the
+  unguarded `Utils.getAppComponentForControl(mPropertyBag.control).getId()` (line 26) —
+  and that helper returns `undefined` for an undefined control, which is the exact shape
+  of the error. Refuted live, in this order: **(1)** the app component is missing —
+  `getAppComponentForControl(<SVM>)` returns the `container-z2ui5` component; **(2)** the
+  manifest's `flexEnabled: false` gates it — the flag appears nowhere in `sap.ui.fl`,
+  only `sap.ui.rta` reads it (a `pr/` request on that premise was withdrawn); **(3)** the
+  `smartVariant` association does not resolve — `XMLTemplateProcessor` prefixes single
+  associations via `createId` (`_iKind === 3`); **(4)** no personalizable control is
+  registered — `getPersonalizableControls()` returns **2**, and
+  `SmartVariantManagementApplyAPI.loadVariants({control: <filter bar>})` resolves cleanly
+  (`variants: []`, standard variant present), so registration and the flex read both work.
+  Still unexplained: `SmartFilterBar.getFilters: called before the SmartFilterBar is
+  initialized` in the same session. Next step is the actual stack: DevTools → Pause on
+  caught exceptions → Save As, which names the frame and the undefined local instead of
+  the swallowed message. Port-side fixes that stay regardless: the
+  `pageVariantPersistencyKey` custom data, and the roundtrip-free filter event.
 - [ ] **sap.ui.comp ports are all unverified (5 open LIVE_TESTs).** They need
   a SAPUI5 runtime plus a Gateway service exposing the tutorial's `Products`
   entity set, so neither `render_smoke` (declared skips) nor the e2e harness

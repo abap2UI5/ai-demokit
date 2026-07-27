@@ -63,18 +63,23 @@ Three lessons came out of the review and the first live run, all now encoded:
   serve the sample (app 252 needs an *analytical* one), the placeholder now
   reads as a placeholder: `…/<YOUR_ANALYTICAL_SERVICE>/`. Rule written into
   AGENTS §3 and CAPABILITIES.
-- **The variant-save crash is a missing registration, not a missing flag.**
+- **The variant-save crash: four hypotheses refuted, cause still open.**
   Saving a view in app 251 throws `Cannot read properties of undefined
   (reading 'getId')`. `sap.ui.comp` is closed, but the crashing line is not:
   `sap/ui/fl/write/api/SmartVariantManagementWriteAPI.js:26` (and
   `SmartVariantManagementApplyAPI.loadVariants`) call
   `Utils.getAppComponentForControl(oControl).getId()` with no guard, and that
-  helper returns `undefined` for an `undefined` control — so the page variant is
-  saving with no personalizable control registered. Two hypotheses died on
-  evidence along the way, both worth remembering: the app component resolves
-  fine in the running app, and `flexEnabled` is read **only** by `sap.ui.rta`,
-  never by `sap.ui.fl` (a `pr/` request filed on that premise was withdrawn the
-  same day — read the source before filing). Port-side fix landed anyway: the
+  helper returns `undefined` for an `undefined` control — the exact shape of the
+  error. Four hypotheses then died on live evidence, in this order: the app
+  component is missing (it resolves), `flexEnabled` gates it (the flag appears
+  nowhere in `sap.ui.fl` — only `sap.ui.rta` reads it; a `pr/` request filed on
+  that premise was withdrawn the same day), the `smartVariant` association does
+  not resolve (XMLViews prefix single associations via `createId`), and no
+  personalizable control is registered (`getPersonalizableControls()` returns 2
+  and `loadVariants` resolves cleanly). The cause is still open — the lesson to
+  keep is the method, not the answer: read the open-source half of the stack
+  before filing anything, and check each hypothesis in the running app before
+  writing it down as a finding. Port-side fixes landed regardless: the
   `pageVariantPersistencyKey` custom data the docs require, and the filter event
   moved off the backend round-trip.
 - **A SmartTable without a `UI.LineItem` annotation renders NO columns.**
