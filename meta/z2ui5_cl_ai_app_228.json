@@ -17,8 +17,8 @@
       "what": "Button.ariaHasPopup (since UI5 1.84) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.84 to render it."
     },
     {
-      "type": "IMPROVISED",
-      "what": "the sample opens the fragment Menu anchored to the button via oMenu.open( bWithKeyboard, oButton, Popup.Dock.BeginTop, Popup.Dock.BeginBottom, oButton ). sap.ui.unified.Menu - unlike sap.m.Menu (app 060) - exposes NO openBy method; it only has open( bWithKeyboard, oOpenerRef, my, at, of ), and the whitelisted `open` control-method takes a single string arg so it cannot receive the opener/`of` element (sap.ui.unified.Menu.open even closes itself immediately when `of` is absent - Menu.js `if (!oOfDom) this.close()`). The port wires the whitelisted, intent-correct `openBy` anchored to the button DOM ref (`$event.oSource.sId`), but it is a NO-OP on the current framework because the method is missing on this control - the Menu does not open until abap2UI5 adds anchored-open support for sap.ui.unified.Menu (pr/unified-menu-open-anchored). The keyboard flag and BeginTop/BeginBottom docking are dropped either way. The `press` attribute is preserved (rewired to the openBy frontend action)."
+      "type": "NOTE",
+      "what": "anchored open works since the framework fallback of 2026-07-27 (pr/unified-menu-open-anchored, implemented): the openBy dispatch detects that sap.ui.unified.Menu has no openBy and calls open(false, anchor, 'begin top', 'begin bottom', anchor) with the button as opener and dock reference - the previously declared no-op wire is now functional, unchanged in the port. Still dropped either way: the keyboard flag (controller attachBrowserEvent tab/keyup tracking) and the explicit Popup.Dock.BeginTop/BeginBottom constants (default docking is visually equivalent)."
     },
     {
       "type": "IMPROVISED",
@@ -34,7 +34,7 @@
     },
     {
       "type": "LIVE_TEST",
-      "what": "unverified in a running system: (a) the button press cannot yet open the Menu (openBy no-op, see the anchored-open deviation) - re-verify once pr/unified-menu-open-anchored lands; (b) selecting a menu item toasts \"'<text>' pressed\" via the Menu-level itemSelect + ${$parameters>/item}.getText()."
+      "what": "unverified in a running system: (a) the button press opens the Menu via the 2026-07-27 anchored-open fallback - verify the open in a running system; (b) selecting a menu item toasts \"'<text>' pressed\" via the Menu-level itemSelect + ${$parameters>/item}.getText()."
     }
   ]
 }

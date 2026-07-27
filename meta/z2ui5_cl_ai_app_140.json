@@ -8,8 +8,11 @@
     "frontend_action": false,
     "event_t_arg": false
   },
-  "status": "reviewed",
-  "checked": null,
+  "status": "checked",
+  "checked": {
+    "date": "2026-07-27",
+    "note": "verified in a running system 2026-07-27 - BlockLayout renders all 6 rows/7 cells with color shades after the attribute-line repair"
+  },
   "deviations": [
     {
       "type": "NOTE",

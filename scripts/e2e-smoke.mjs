@@ -152,6 +152,24 @@ const INTERACTIONS = {
     await seg.click();
     await expect(page.locator('.sapMCb').first(), 'list checkboxes after the mode round-trip').toBeVisibleEnabled();
   },
+  // sap.ui.unified.Menu anchored open via the 2026-07-27 openBy→open()
+  // fallback (no own openBy on this control)
+  z2ui5_cl_ai_app_227: async (page, expect) => {
+    const btn = page.getByRole('button', { name: 'Open Menu', exact: true }).first();
+    await expect(btn, 'the menu anchor button').toBeVisibleEnabled();
+    await btn.click();
+    await expect(page.getByText('My 1st Item', { exact: true }).first(), 'the unified.Menu opened anchored').toBeVisibleEnabled();
+  },
+  // FeedInput action dialog → enablePostButton round-trip (whitelisted
+  // bool method, 2026-07-27) + server-side popup_destroy
+  z2ui5_cl_ai_app_236: async (page, expect) => {
+    const action = page.locator("[id*='feedActionPlain'] button").first();
+    await expect(action, 'the FeedInput action button').toBeVisibleEnabled();
+    await action.click();
+    await expect(page.locator('.sapMDialog'), 'the action dialog').toContainText('Choose an action.');
+    await page.getByRole('button', { name: 'Enable Post Button', exact: true }).first().click();
+    await page.locator('.sapMDialog').waitFor({ state: 'hidden', timeout: 10000 });
+  },
 };
 
 function startBackend() {

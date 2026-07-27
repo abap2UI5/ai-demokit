@@ -11,8 +11,8 @@
   },
   "status": "checked",
   "checked": {
-    "date": "2026-07-21",
-    "note": "verified in a running system - human live check 2026-07-21: startup toast at native height; Save opens the MessagePopover with 3 Errors + 1 Warning marking John Miller (Name) / Stefan Bosch (ZIP) / Maria Fontes (Email) + employment weekly hours; group headers Personal, Information / Personal, Contact; message-title press scrolls to and focuses the field; toggleBy opens/closes. Known cosmetic gap: the injected non-numeric ZIP shows empty (not \"AAA\") because the Integer-typed field cannot format it via the model->view path."
+    "date": "2026-07-27",
+    "note": "verified in a running system 2026-07-27 - MessageManager cc: add/remove app-authored messages reconciled, MessagePopover shows both sources"
   },
   "deviations": [
     {

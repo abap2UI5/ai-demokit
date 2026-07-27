@@ -1,6 +1,8 @@
 # core-commandexecution-keyboard-shortcuts — declarative shortcuts
 
-**Status: open** — genuine framework gap. From demo-kit app 232
+**Status: open — deliberately deferred 2026-07-27**: a real feature (client
+shortcut registry + command bus bridge), too large to land alongside the
+CONTROL_METHODS fixes; reviewed and kept current. From demo-kit app 232
 (`sap.ui.core.sample.Commands`, 2026-07-25).
 
 ## Motivation

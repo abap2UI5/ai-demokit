@@ -1,7 +1,13 @@
 # unified-menu-open-anchored — anchored open for `sap.ui.unified.Menu`
 
-**Status: open** — genuine framework gap, not yet implemented. From demo-kit
-batch b10 apps 227 (`MenuItemEventing`) and 228 (`MenuMenuEventing`).
+**Status: IMPLEMENTED (2026-07-27)** — exactly the proposed fallback: the
+`openBy` dispatch in `FrontendAction.js` now calls
+`open(false, anchor, "begin top", "begin bottom", anchor)` when the resolved
+control has no own `openBy` (abap2UI5 branch `claude/ai-demokit-review-qavjtr`).
+Apps 227/228 kept their existing `openBy` wires — the declared no-op became
+functional; keyboard flag + explicit dock constants stay dropped (NOTE).
+Originally from demo-kit batch b10 apps 227 (`MenuItemEventing`) and 228
+(`MenuMenuEventing`).
 
 ## Motivation
 

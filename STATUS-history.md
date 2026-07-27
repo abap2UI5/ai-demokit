@@ -7,6 +7,58 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## pr/ backlog swept — two framework features landed, ports rewired (2026-07-27)
+
+Full pass over the 12 `pr/` requests (user ask after the #37 merge). Result:
+**8 implemented · 2 deliberately deferred · 2 niche-open**, every README now
+carries an explicit status line.
+
+- **Landed in abap2UI5** (branch `claude/ai-demokit-review-qavjtr`, one
+  commit, abaplint 0, ABAP mirror regenerated via `npm run app2abap`):
+  **(a)** the `openBy` dispatch falls back to
+  `open(false, anchor, 'begin top', 'begin bottom', anchor)` for controls
+  without an own `openBy` — `sap.ui.unified.Menu` — so the same wire covers
+  every menu family (pr/unified-menu-open-anchored); **(b)**
+  `enablePostButton: ["bool"]` listed in `CONTROL_METHODS`
+  (pr/feedinput-enable-post-button).
+- **Ports**: 227/228 needed no code change — their declared no-op `openBy`
+  wires became functional (deviations rewritten IMPROVISED→NOTE, LIVE_TEST
+  re-scoped). 236 rewired 1:1: the dialog buttons now toggle the owning
+  FeedInput via `follow_up_action(enablePostButton)` + `popup_destroy`, the
+  owning feed transported as a static button `t_arg` literal (added ids
+  `feedActionPlain`/`feedActionIcon`, declared). Two new e2e INTERACTIONS
+  (227 anchored unified.Menu open, 236 dialog→enable→close) verify both
+  features against the transpiled framework.
+- **Deferred with reasons in the READMEs**: `event-prevent-default` and
+  `core-commandexecution-keyboard-shortcuts` both touch the core event
+  protocol (eB array slots / a client shortcut registry) — too large to land
+  without framework-side tests; `menu-item-selected-path` and
+  `messagepopover-async-url` stay niche-open.
+- AGENTS §5 cheat-sheet + CAPABILITIES frontend-action rows updated (the
+  unified.Menu "current gap" caveat replaced by the fallback).
+
+## Human live check + PR #38 distilled (2026-07-27, after the #37 merge)
+
+- **Nine ports live-verified in a running system and promoted to `checked`**
+  (065, 084, 085, 096, 108, 140, 164, 171, 241) — each closes a whole
+  LIVE_TEST *class*: MessageManager cc, URLHelper triggers (the class the
+  sandboxed e2e can never verify), Tokenizer two-way, SplitContainer
+  `control_by_id` navigation, the date-object Formatter path, the two
+  sweep-repaired ports (140/164), the nested-object runtime bind, and the
+  tnt controller-built Dialog. CAPABILITIES upgraded in the same change:
+  the nested single-object row is now **✅ live-verified** (was 🧪), and the
+  MessageManager/URLHelper/SplitContainer-nav/date-object rows carry
+  live-verified 2026-07-27 evidence.
+- **PR #38 (human fix) distilled**: abapGit XML files MUST start with the
+  UTF-8 BOM — four agent-written files lacked it; new pattern-lint rule
+  `abapgit-xml-bom` gates every `src/**/*.xml` bytewise, and §10 documents
+  it plus the second #38 lesson (a single giant `VALUE #( )` exceeds ABAP's
+  maximum statement length — the overview catalog now splits in halves via
+  `VALUE #( BASE result … )`, kept intact by the regenerated overview).
+  The overview class was also regenerated with the merged generator — the
+  #38 copy had been produced with a pre-#37 generator state and
+  reintroduced the `<CLASS>` ABAP-Doc lint hit.
+
 ## Review sweep (2026-07-27) — the empty `reviewed` rung filled: 152 promoted, 49 flagged
 
 The quality ladder's middle rung had been empty since its definition (0

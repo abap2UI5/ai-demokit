@@ -5,6 +5,9 @@ CLASS z2ui5_cl_ai_app_236 DEFINITION PUBLIC.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
+    " id of the FeedInput whose action button opened the dialog (original:
+    " oEvent.getSource().getParent()) - transported as a static button t_arg
+    DATA action_feed_id TYPE string.
 
     METHODS view_display.
     METHODS on_event.
@@ -96,13 +99,14 @@ CLASS z2ui5_cl_ai_app_236 IMPLEMENTATION.
             )->a( n = `text`  v = `Without Icon and an enabled Action Button`
             )->a( n = `class` v = `sapUiSmallMarginTop sapUiTinyMarginBottom`
         )->open( `FeedInput`
+            )->a( n = `id`       v = `feedActionPlain`
             )->a( n = `post`     v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Posted new feed entry: {0}` ) ( `${$parameters>/value}` ) ) )
             )->a( n = `showIcon` v = `false`
 
             )->open( `actions`
                 )->leaf( `Button`
                     )->a( n = `icon`  v = `sap-icon://action`
-                    )->a( n = `press` v = client->_event( `ACTION_PRESS` )
+                    )->a( n = `press` v = client->_event( val = `ACTION_PRESS` t_arg = VALUE #( ( `feedActionPlain` ) ) )
 
             )->shut(
         )->shut(
@@ -111,13 +115,14 @@ CLASS z2ui5_cl_ai_app_236 IMPLEMENTATION.
             )->a( n = `text`  v = `With an Icon Placeholder and an enabled Action Button`
             )->a( n = `class` v = `sapUiSmallMarginTop sapUiTinyMarginBottom`
         )->open( `FeedInput`
+            )->a( n = `id`       v = `feedActionIcon`
             )->a( n = `post`     v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Posted new feed entry: {0}` ) ( `${$parameters>/value}` ) ) )
             )->a( n = `showIcon` v = `true`
 
             )->open( `actions`
                 )->leaf( `Button`
                     )->a( n = `icon`  v = `sap-icon://action`
-                    )->a( n = `press` v = client->_event( `ACTION_PRESS` ) ).
+                    )->a( n = `press` v = client->_event( val = `ACTION_PRESS` t_arg = VALUE #( ( `feedActionIcon` ) ) ) ).
 
     client->view_display( view->stringify( ) ).
 
@@ -129,7 +134,20 @@ CLASS z2ui5_cl_ai_app_236 IMPLEMENTATION.
     CASE client->get( )-event.
 
       WHEN `ACTION_PRESS`.
+        action_feed_id = client->get_event_arg( ).
         popup_action_display( ).
+
+      WHEN `ENABLE_POST`.
+        " original: oFeedInput.enablePostButton( true ) - 1:1 via the
+        " CONTROL_METHODS entry enablePostButton (framework 2026-07-27)
+        client->follow_up_action( val   = client->cs_event-control_by_id
+                                  t_arg = VALUE #( ( action_feed_id ) ( `enablePostButton` ) ( `X` ) ) ).
+        client->popup_destroy( ).
+
+      WHEN `DISABLE_POST`.
+        client->follow_up_action( val   = client->cs_event-control_by_id
+                                  t_arg = VALUE #( ( action_feed_id ) ( `enablePostButton` ) ( `false` ) ) ).
+        client->popup_destroy( ).
 
     ENDCASE.
 
@@ -142,8 +160,8 @@ CLASS z2ui5_cl_ai_app_236 IMPLEMENTATION.
 
     " the original onActionButtonPress builds this Dialog imperatively (new Dialog({...}).open());
     " expressed 1:1 as a core:FragmentDefinition shown via popup_display. The begin/end buttons
-    " only close the popup - the original's oFeedInput.enablePostButton(true/false) toggle is
-    " dropped for now; the generalized allowlist would allow the call (see IMPROVISED deviation)
+    " toggle the owning FeedInput's Post button via the whitelisted enablePostButton
+    " control method (framework 2026-07-27) and close the popup server-side
     popup->open( n = `FragmentDefinition` ns = `core`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns`      v = `sap.m`
@@ -159,13 +177,13 @@ CLASS z2ui5_cl_ai_app_236 IMPLEMENTATION.
             )->open( `beginButton`
                 )->leaf( `Button`
                     )->a( n = `text`  v = `Enable Post Button`
-                    )->a( n = `press` v = client->_event_client( client->cs_event-popup_close )
+                    )->a( n = `press` v = client->_event( `ENABLE_POST` )
 
             )->shut(
             )->open( `endButton`
                 )->leaf( `Button`
                     )->a( n = `text`  v = `Disable Post Button`
-                    )->a( n = `press` v = client->_event_client( client->cs_event-popup_close ) ).
+                    )->a( n = `press` v = client->_event( `DISABLE_POST` ) ).
 
     client->popup_display( popup->stringify( ) ).
 
