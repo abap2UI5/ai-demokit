@@ -238,11 +238,11 @@ apps.sort((a, b) =>
 // at runtime in view_display (the abap2UI5 start URL needs the system origin)
 const w = (k) => Math.max(...apps.map((a) => a[k].length));
 const wm = w('module'), wc = w('control'), wn = w('name'), wl = w('cls'), wf = w('file');
-// render a string as an ABAP backtick literal, splitting long text with && to stay < 255 cols
-const abapStr = (s) => {
+// render a string as ABAP backtick literals, splitting long text to stay < 255 cols
+const abapParts = (s) => {
   const q = (x) => '`' + x + '`';
   const esc = s.replace(/`/g, '``');
-  if (esc.length <= 200) return q(esc);
+  if (esc.length <= 200) return [q(esc)];
   const parts = [];
   let rest = esc;
   while (rest.length > 200) {
@@ -257,8 +257,33 @@ const abapStr = (s) => {
     rest = rest.slice(cut);
   }
   if (rest) parts.push(rest);
-  return parts.map(q).join(' &&\n                 ');
+  return parts.map(q);
 };
+// the &&-joined literal chain as it appears inside a VALUE #( ) row
+const abapStr = (s) => abapParts(s).join(' &&\n                 ');
+
+// --- statement-size budgets (see the catalog emission block below) ---
+// every emitted statement stays well under ABAP's maximum permitted statement
+// length, in characters and in tokens
+const CHUNK_CHARS = 3000;   // max source characters per VALUE #( ) statement
+const CHUNK_ROWS = 6;       // max catalog rows per VALUE #( ) statement
+const HOIST_CHARS = 900;    // a single field value longer than this is hoisted
+const ASSIGN_CHARS = 1200;  // max source characters per hoisted-text statement
+
+// a text too long to sit inside its row: assigned to a local variable in one or
+// more `lv_textN = [lv_textN &&] `…` && `…`.` statements, each of bounded size
+const hoistStatements = (name, parts) => {
+  const groups = [];
+  for (const p of parts) {
+    const last = groups[groups.length - 1];
+    if (!last || last.chars + p.length > ASSIGN_CHARS) groups.push({ parts: [p], chars: p.length });
+    else { last.parts.push(p); last.chars += p.length; }
+  }
+  const indent = ' '.repeat(7 + name.length);
+  return groups.map((g, i) =>
+    `    ${name} = ${i === 0 ? '' : `${name} && `}${g.parts.join(` &&\n${indent}`)}.`);
+};
+
 const rows = apps.map((a) => {
   const base =
     `      ( module = \`${a.module}\`${' '.repeat(wm - a.module.length)}` +
@@ -267,8 +292,20 @@ const rows = apps.map((a) => {
     ` class = \`${a.cls}\`${' '.repeat(wl - a.cls.length)}` +
     ` path = \`${a.file}\`${' '.repeat(wf - a.file.length)}`;
   const extras = [];
+  // long texts do not fit into the row's own statement - hoist them into
+  // preceding lv_textN assignments and reference the variable in the row
+  const prelude = [];
+  let hoisted = 0;
+  const text = (v) => {
+    const parts = abapParts(v);
+    const inline = parts.join(' &&\n                 ');
+    if (inline.length <= HOIST_CHARS) return inline;
+    const name = `lv_text${++hoisted}`;
+    prelude.push(...hoistStatements(name, parts));
+    return name;
+  };
   extras.push(`score = ${a.score}`);
-  extras.push(`score_tip = ${abapStr(a.score_tip)}`);
+  extras.push(`score_tip = ${text(a.score_tip)}`);
   if (a.since) extras.push(`since = \`${a.since}\``);
   if (a.since_post171) extras.push('since_post171 = abap_true');
   if (a.release) extras.push(`release = \`${a.release}\``);
@@ -276,10 +313,10 @@ const rows = apps.map((a) => {
   if (a.ui5_only) extras.push('ui5_only = abap_true');
   if (a.is_post171) extras.push('is_post171 = abap_true');
   if (a.is_deprecated) extras.push('is_deprecated = abap_true');
-  if (a.dep_text) extras.push(`dep_text = ${abapStr(a.dep_text)}`);
-  if (a.checked) extras.push(`checked = ${abapStr(a.checked)}`);
-  if (a.notes) extras.push(`notes = ${abapStr(a.notes)}`);
-  if (a.post171) extras.push(`post171 = ${abapStr(a.post171)}`);
+  if (a.dep_text) extras.push(`dep_text = ${text(a.dep_text)}`);
+  if (a.checked) extras.push(`checked = ${text(a.checked)}`);
+  if (a.notes) extras.push(`notes = ${text(a.notes)}`);
+  if (a.post171) extras.push(`post171 = ${text(a.post171)}`);
   if (a.use_ec) extras.push('use_ec = abap_true');
   if (a.use_ec_arg) extras.push('use_ec_arg = abap_true');
   if (a.use_fua) extras.push('use_fua = abap_true');
@@ -287,8 +324,44 @@ const rows = apps.map((a) => {
   if (a.use_popup) extras.push('use_popup = abap_true');
   if (a.use_popover) extras.push('use_popover = abap_true');
   if (a.use_name) extras.push('use_name = abap_true');
-  return extras.length ? `${base}\n        ${extras.join('\n        ')} )` : `${base} )`;
+  const row = extras.length ? `${base}\n        ${extras.join('\n        ')} )` : `${base} )`;
+  return { row, prelude, hoisted };
 });
+
+// --- catalog emission: one VALUE #( ) per size-bounded chunk ---
+// A single VALUE #( ) holding every catalog row blows ABAP's maximum permitted
+// statement length (the rows carry long notes/score_tip literals, so 246 rows
+// are ~400 kB of source). Splitting the rows into a fixed number of parts does
+// not hold - the catalog keeps growing and each part grows with it - so chunk
+// by the actual emitted size instead: start a new statement as soon as the
+// current one would exceed CHUNK_CHARS or CHUNK_ROWS. The first statement
+// builds result, every following one appends via VALUE #( BASE result ).
+// A row whose texts were hoisted gets a statement of its own, right behind its
+// lv_textN assignments - the variables are reused by every later row, so no
+// second row may sit in the same statement.
+const chunks = [];
+let open = null;
+for (const r of rows) {
+  if (r.prelude.length) {
+    open = null;
+    chunks.push({ prelude: r.prelude, rows: [r.row] });
+    continue;
+  }
+  if (!open || open.rows.length >= CHUNK_ROWS || open.chars + r.row.length > CHUNK_CHARS) {
+    open = { prelude: [], rows: [r.row], chars: r.row.length };
+    chunks.push(open);
+  } else {
+    open.rows.push(r.row);
+    open.chars += r.row.length;
+  }
+}
+const catalogStatements = chunks
+  .map((c, i) =>
+    [...c.prelude, `    result = VALUE #(${i === 0 ? '' : ' BASE result'}\n${c.rows.join('\n')} ).`].join('\n'))
+  .join('\n\n');
+// the hoist variables, declared once at the top of get_catalog (definitions_top)
+const maxHoist = Math.max(0, ...rows.map((r) => r.hoisted));
+const catalogDecl = Array.from({ length: maxHoist }, (_, i) => `    DATA lv_text${i + 1} TYPE string.`).join('\n');
 
 // the Tree view's nested model is built in ABAP (build_tree) from the filtered
 // app list, so the search filters the tree as well as the table.
@@ -956,14 +1029,15 @@ ${columnsBlock}
 
   METHOD get_catalog.
 
-    result = VALUE #(
-${rows.slice(0, Math.ceil(rows.length / 2)).join('\n')} ).
-
     " A single VALUE #( ) holding every catalog row exceeds the maximum permitted
-    " ABAP statement length, so the catalog is emitted in two halves; the second
-    " half appends to the first via VALUE #( BASE result ).
-    result = VALUE #( BASE result
-${rows.slice(Math.ceil(rows.length / 2)).join('\n')} ).
+    " ABAP statement length, so the generator emits the catalog in size-bounded
+    " chunks (a few rows each); every chunk after the first appends to the
+    " previous ones via VALUE #( BASE result ). Texts too long to fit into their
+    " own row are assigned to lv_textN just ahead of it - such a row is always
+    " alone in its statement, because the next hoisting row reuses the variable.
+${catalogDecl}
+
+${catalogStatements}
 
   ENDMETHOD.
 
