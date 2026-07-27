@@ -73,9 +73,16 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   variant's content is the aggregate of every registered control's `fetchVariant()`, so
   nothing was collected either. Neighbouring methods in that file (`save(oPersoControl)`,
   `_handleUserDependentUpdate` with `control: oPersoControl`) show the model expects a
-  perso control it never received. Open: the function behind the log text "initialise on an
-  unknown control." (searchable in the served `-dbg` sources) — it holds the rule by which
-  the SVM decides a control is "its own", and that rule is what our view fails.
+  perso control it never received. Source-confirmed in the served `-dbg` files:
+  `SmartVariantManagement.prototype._newVariant` (line ~1017) builds
+  `this.oModel._flWriteAddVariant({control: this._oPersoControl, changeSpecificData: mParams})`
+  — so the `null` is the SVM's **own `_oPersoControl`**, and the empty `content` comes from
+  the same gap (`_fetchContentAsync()` returns `{}` with no perso control). `_oPersoControl`
+  is what `initialise(fCallback, oPersoControl)` assigns, and that call rejects our filter
+  bar as an "unknown control" although the association lists it. Open: whether the SVM's
+  INTERNAL registration list (`_aPersonalizableControls`) is empty while the public
+  association getter shows two entries — and whether forcing `_oPersoControl` by hand makes
+  the save go through, which would size the gap exactly.
 - [ ] **sap.ui.comp ports are all unverified (5 open LIVE_TESTs).** They need
   a SAPUI5 runtime plus a Gateway service exposing the tutorial's `Products`
   entity set, so neither `render_smoke` (declared skips) nor the e2e harness
