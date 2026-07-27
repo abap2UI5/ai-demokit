@@ -59,8 +59,14 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   `initialise()` handshake rather than at the declarative configuration: `sap.ui.comp`'s
   own documentation shows the app calling `addPersonalizableControl()` **and**
   `initialise(fnCallback, oControl)`, and the curated abap2UI5 sample
-  `z2ui5_cl_demo_app_111` does exactly that from custom JS. Next experiment (browser, no
-  redeploy): call `initialise` on the page variant by hand and retry the save.
+  `z2ui5_cl_demo_app_111` does exactly that from custom JS. Tested live: calling
+  `oSVM.initialise(fn, <filter bar>)` by hand answers **"initialise on an unknown
+  control."** — although `getPersonalizableControls()` lists exactly that filter bar
+  (type `filterBar`, id resolvable, key `SmartFilterPKey`). So the control is in the
+  registration list but not in whatever list `initialise` checks; the same failing lookup
+  is what yields `control: null` on save. Open: read the `sap.ui.comp` source in the
+  running app (`-dbg` files are served) — search the loaded sources for "unknown control"
+  and read the frame `SmartVariantMan…del-dbg.js:459` that fills `control:`.
 - [ ] **sap.ui.comp ports are all unverified (5 open LIVE_TESTs).** They need
   a SAPUI5 runtime plus a Gateway service exposing the tutorial's `Products`
   entity set, so neither `render_smoke` (declared skips) nor the e2e harness
