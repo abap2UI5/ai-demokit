@@ -8,7 +8,7 @@
     "frontend_action": false,
     "event_t_arg": false
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     { "type": "NOTE", "what": "The sample's default model is a bare JSON array (oModel.setData([...])), bound as the root ({/} on the suggestionItems / items aggregations) and by absolute index (/9/text, /9/key on the second form). abap2UI5's single default model is an object, so the ten rows live in the T_ITEMS member: {/} becomes {/T_ITEMS} and /9/text / /9/key become /T_ITEMS/9/TEXT / /T_ITEMS/9/KEY. The last path segment is identical, which structural-diff matches; same data, renders identically." },

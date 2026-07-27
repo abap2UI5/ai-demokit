@@ -9,7 +9,7 @@
     "event_t_arg": true,
     "note": "init-only, roundtrip-free: the button press wires control_by_id openBy anchored to the button ($event.oSource.sId); the Menu-level itemSelect composes a single toast on the frontend via control_global MESSAGE_TOAST.show (template + ${$parameters>/item}.getText()), so there is no on_event"
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {

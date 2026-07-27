@@ -120,6 +120,7 @@ CLASS z2ui5_cl_ai_app_233 IMPLEMENTATION.
                             )->a( n = `autocomplete`    v = `false`
                             )->a( n = `showValueHelp`   v = `true`
                             )->a( n = `change`          v = client->_event( `CHANGE` )
+                            " opens unfiltered: the original pre-filters and calls open(sInputValue) - see meta deviation
                             )->a( n = `valueHelpRequest` v = client->_event_client( val   = client->cs_event-control_by_id
                                                                                     t_arg = VALUE #( ( `selectDialog` ) ( `open` ) ) )
                             )->a( n = `suggestionItems` v = client->_bind( t_purchases )

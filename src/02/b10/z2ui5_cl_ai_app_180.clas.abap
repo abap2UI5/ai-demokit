@@ -59,7 +59,6 @@ CLASS z2ui5_cl_ai_app_180 IMPLEMENTATION.
         )->shut(
 
         )->open( n = `SimpleForm` ns = `form`
-            )->a( n = `width`      v = `auto`
             )->a( n = `class`      v = `sapUiResponsiveMargin`
             )->a( n = `layout`     v = `ResponsiveGridLayout`
             )->a( n = `labelSpanL` v = `3`

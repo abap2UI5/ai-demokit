@@ -69,11 +69,17 @@ CLASS z2ui5_cl_ai_app_173 IMPLEMENTATION.
 
   METHOD model_init.
 
-    " original widths are Device.system.phone dependent; the desktop values
-    " are used here (the phone branch is a client-only decision).
-    widths = `5em`.
-    widthm = `10em`.
-    widthl = `15em`.
+    " original widths are Device.system.phone dependent - reproduced from the
+    " server-side device mirror (client->get( )-s_device, app 012 precedent)
+    IF client->get( )-s_device-system = z2ui5_if_types=>cs_device-system-phone.
+      widths = `2em`.
+      widthm = `4em`.
+      widthl = `6em`.
+    ELSE.
+      widths = `5em`.
+      widthm = `10em`.
+      widthl = `15em`.
+    ENDIF.
     " img>/products/pic1 of the sample's sap/ui/demo/mock/img.json, on the OpenUI5 host
     pic1   = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-7777-large.jpg`.
 

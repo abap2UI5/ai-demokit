@@ -9,7 +9,7 @@
     "event_t_arg": true,
     "note": "init-only, roundtrip-free: the Save/Delete buttons compose their toast on the frontend via control_global MESSAGE_TOAST.show (static text, no round-trip); the two Open-Popover buttons wire control_by_id openBy anchored to the button ($event.oSource.sId); the enabled/visibility switches are two-way bound to default-model booleans that the popover command-buttons bind their enabled/visible to - so there is no on_event"
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {
@@ -19,6 +19,10 @@
     {
       "type": "IMPROVISED",
       "what": "The $cmd> command model bindings enabled='{$cmd>Save/enabled}' / enabled='{$cmd>Delete/enabled}' on the popover footer buttons have no command model to bind to (CommandExecution dropped), so they are folded to default-model booleans: the popover buttons bind enabled to {/SAVE_ENABLED}/{/DELETE_ENABLED} (page popover) and {/PSAVE_ENABLED}/{/DELETE_ENABLED} (command popover). Correspondingly the controller's onToggleSave/onToggleDelete/onTogglePopoverSave (byId('CE_SAVE').setEnabled(state)) and the *Visibility variants (setVisible) are reproduced as two-way bindings: each Switch state is bound two-way to the matching boolean and the popover buttons additionally bind visible to {/SAVE_VISIBLE}/{/DELETE_VISIBLE}/{/PSAVE_VISIBLE}, so the switches drive the command-buttons entirely client-side (thin frontend, app 007/128 pattern) with no round-trip. Consequently the Switch change attributes (change='.onToggleSave' etc., 6 of them) are DROPPED and replaced by the two-way state binding; the enabled binding value differs from the original $cmd> path."
+    },
+    {
+      "type": "NOTE",
+      "what": "The manifest-declared viewModel named JSON model (bindings {viewModel>/value}, {viewModel>/countries}, {viewModel>/selected}, {viewModel>key}, {viewModel>text}) is folded onto the one default model as value/t_countries/selected with the same leaf names and the controller's addData seed values (HelloWorld!, DZ Algeria / AR Argentina) - a pure prefix-drop, renders identically, structural-diff 0 diffs."
     },
     {
       "type": "POST_171",

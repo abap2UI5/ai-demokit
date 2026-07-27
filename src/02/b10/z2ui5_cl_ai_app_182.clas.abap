@@ -20,6 +20,8 @@ CLASS z2ui5_cl_ai_app_182 IMPLEMENTATION.
 
     me->client = client.
     IF client->check_on_init( ).
+      " original seeds the current time (UI5Date.getInstance()); a fixed time
+      " is used here so the port is deterministic
       time = `13:30:00`.
       view_display( ).
     ENDIF.
@@ -33,7 +35,10 @@ CLASS z2ui5_cl_ai_app_182 IMPLEMENTATION.
 
     " sap.ui.model.type.Time data-type binding (TypeTimeAsTime). TimeType is
     " pulled via core:require; the TimePicker and the three style Texts keep the
-    " original { path, type: 'TimeType', formatOptions: { style } } binding 1:1.
+    " original { path, type: 'TimeType', formatOptions: { style } } binding, each
+    " with an ADDED source formatOption { source: { pattern: 'HH:mm:ss' } } so the
+    " parseable string model revives into the type (see sidecar IMPROVISED - the
+    " original model value is a JS Date object abap2UI5 cannot hold).
     view->open( n = `View` ns = `mvc`
         )->a( n = `xmlns`        v = `sap.m`
         )->a( n = `xmlns:mvc`    v = `sap.ui.core.mvc`

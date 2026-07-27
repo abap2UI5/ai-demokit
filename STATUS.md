@@ -16,11 +16,11 @@ TRAINING.md; for what abap2UI5 can express see CAPABILITIES.md._
 | Aspect | State |
 |---|---|
 | Ports | **246** sidecars in `meta/` (src/01: 149 · src/02: 55 · src/03: 12 · src/04: 19 · src/05: 11) |
-| Status ladder | 118 `generated` · 83 `reviewed` · 45 `checked` (live-verified) |
-| Deviations | 4 DROPPED_171 · 131 IMPROVISED · 71 LIVE_TEST · 249 NOTE · 91 POST_171 |
-| Open LIVE_TESTs | **67 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
+| Status ladder | 49 `generated` · 152 `reviewed` · 45 `checked` (live-verified) |
+| Deviations | 4 DROPPED_171 · 131 IMPROVISED · 73 LIVE_TEST · 250 NOTE · 95 POST_171 |
+| Open LIVE_TESTs | **69 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
 | Declared gate skips | 7 structural-diff · 1 render-smoke (each re-verified per run — a stale skip FAILS) |
-| Out-of-scope ported samples | `z2ui5_cl_ai_app_121 (sap.m.sample.UploadSet — deprecated)` · `z2ui5_cl_ai_app_136 (sap.f.sample.SidePanelSingle — control @since 1.107)` · `z2ui5_cl_ai_app_141 (sap.ui.core.sample.InvisibleMessage — control @since 1.78)` · `z2ui5_cl_ai_app_165 (sap.f.sample.ProductSwitchNavigation — control @since 1.72)` · `z2ui5_cl_ai_app_166 (sap.f.sample.SemanticPage — deprecated)` — standing debt pending a maintainer decision (drop vs documented exception), surfaced by the source-backed scope gate (pr/scope-since-from-source) |
+| Out-of-scope ported samples | `z2ui5_cl_ai_app_121 (sap.m.sample.UploadSet — deprecated)` · `z2ui5_cl_ai_app_136 (sap.f.sample.SidePanelSingle — control @since 1.107)` · `z2ui5_cl_ai_app_141 (sap.ui.core.sample.InvisibleMessage — control @since 1.78)` · `z2ui5_cl_ai_app_165 (sap.f.sample.ProductSwitchNavigation — control @since 1.72)` · `z2ui5_cl_ai_app_166 (sap.f.sample.SemanticPage — deprecated)` · `z2ui5_cl_ai_app_203 (sap.m.sample.OverflowToolbarTokenizer — control @since 1.139)` — standing debt pending a maintainer decision (drop vs documented exception), surfaced by the source-backed scope gate (pr/scope-since-from-source) |
 
 _Coverage per library (ported / in scope) is generated into the [README](README.md#coverage); one row per sample in [api.md](api.md)._
 
@@ -52,12 +52,23 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   green property-check still does not prove a port ≤ 1.71-clean — the
   control-level `scope-of` check plus by-policy POST_171 declarations remain
   required.
-- [ ] **Group-folder samples are excluded from the universe**
-  (`ui5/universe-excludes.json`): `p13n`, `UploadSetwithTablePlugin`,
-  `TreeTable`, `View`, `ViewTemplate`, … are container folders whose
-  *nested* subfolders are the real demo kit samples. Those nested samples
-  are currently not in the universe at all — recursing into them is a
-  possible future coverage extension.
+- [ ] **Review-sweep rework backlog (48 ports).** The 2026-07-27 sweep
+  promoted 153 of 201 `generated` ports to `reviewed`; the remaining 48 stay
+  `generated` with **corrected, honest sidecars** and need real view/logic
+  rework. Recurring classes: dead `_event` wires with no `on_event`
+  dispatcher (pattern-lint `dead-event-wire`, 6 BASELINE entries), toast
+  substitutions around capabilities CAPABILITIES marks expressible
+  (MessageBox `onclose`, `popover_display`, URLHELPER, timers, generalized
+  `control_by_id` methods — the app-042 class), faked event values where the
+  `$event.*` transport exists, dropped sample CSS (122/124, plus §4 archive
+  gaps), and one source-verified crash risk (app 220: empty-string endDate
+  through `DateCreateObject`). Find them: sidecar status `generated` minus
+  the 5 scope-exception ports.
+- [ ] **App 203 out of scope via `@ui5-experimental-since`** —
+  `sap.m.OverflowToolbarTokenizer` is experimental since 1.139 with no plain
+  `@since`, which the scanners misread as base-version until 2026-07-27
+  (both now read the experimental tag). Same pending drop-vs-keep decision
+  as the other five `ui5/scope-exceptions.json` entries.
 - [ ] pattern-lint stays regex-based **by decision** (2026-07-18): the rule
   set is green and each rule is small; a rewrite on the abaplint AST API only
   pays once regex rules start producing false positives/negatives in

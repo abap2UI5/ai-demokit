@@ -23,7 +23,16 @@ const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = path.join(ROOT, 'src');
 
 // known, still-open findings (tracked in STATUS.md) — 'rule-id|repo-relative-file'
-const BASELINE = new Set([]);
+// the dead-event-wire entries are the review-sweep rework backlog (2026-07-27):
+// each port's sidecar declares the gap; remove the entry when the port is reworked
+const BASELINE = new Set([
+  'dead-event-wire|src/02/b05/z2ui5_cl_ai_app_138.clas.abap',
+  'dead-event-wire|src/05/b05/z2ui5_cl_ai_app_143.clas.abap',
+  'dead-event-wire|src/02/b06/z2ui5_cl_ai_app_145.clas.abap',
+  'dead-event-wire|src/02/b07/z2ui5_cl_ai_app_146.clas.abap',
+  'dead-event-wire|src/04/b05/z2ui5_cl_ai_app_148.clas.abap',
+  'dead-event-wire|src/02/b08/z2ui5_cl_ai_app_150.clas.abap',
+]);
 
 // return the content of the parenthesized region starting at content[open] === '('
 function parenRegion(content, open) {
@@ -286,6 +295,20 @@ const RULES = [
           out.push({ line: i + 1, text: `preceded by: ${prev.trim().slice(0, 60)}` });
         }
       });
+      return out;
+    },
+  },
+  {
+    id: 'dead-event-wire',
+    level: 'error',
+    doc: 'client->_event( … ) wired in the view but the class has no on_event/check_on_event dispatcher — the event fires a round-trip that no branch handles (dead wire; the 2026-07-27 review sweep found 8 such ports in the b05-b07 stress batches). Either dispatch it or drop the wire for a bindable property.',
+    find(content) {
+      const out = [];
+      if (!/INTERFACES\s+z2ui5_if_app/i.test(content)) return out; // ports only
+      if (!/->_event\(/.test(content)) return out;
+      if (/check_on_event|on_event/.test(content)) return out;
+      const m = content.match(/->_event\(/);
+      out.push({ line: lineOf(content, m.index), text: '_event( ) wired but no on_event/check_on_event in the class' });
       return out;
     },
   },

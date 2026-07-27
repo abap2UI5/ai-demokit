@@ -142,8 +142,8 @@ CLASS z2ui5_cl_ai_app_236 IMPLEMENTATION.
 
     " the original onActionButtonPress builds this Dialog imperatively (new Dialog({...}).open());
     " expressed 1:1 as a core:FragmentDefinition shown via popup_display. The begin/end buttons
-    " only close the popup - the original's oFeedInput.enablePostButton(true/false) is not in the
-    " CONTROL_METHODS whitelist, so the post-button toggle cannot be reproduced (see IMPROVISED deviation)
+    " only close the popup - the original's oFeedInput.enablePostButton(true/false) toggle is
+    " dropped for now; the generalized allowlist would allow the call (see IMPROVISED deviation)
     popup->open( n = `FragmentDefinition` ns = `core`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns`      v = `sap.m`

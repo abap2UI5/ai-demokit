@@ -28,6 +28,12 @@ CLASS z2ui5_cl_ai_app_188 IMPLEMENTATION.
 
     DATA(view) = z2ui5_cl_ai_xml=>factory( ).
 
+    " Block->content inlining (app 178/161 precedent): the original blocks
+    " aggregations each hold the custom BlockBase control goals:GoalsBlock
+    " (sample's SharedBlocks JS). A BlockBase is only a lazy-loading wrapper
+    " around a view; GoalsBlock's content is a SimpleForm of three Label/Text
+    " goal pairs, inlined here as form:SimpleForm in each blocks aggregation -
+    " no custom JS control needed, thin frontend preserved (see sidecar).
     view->open( n = `View` ns = `mvc`
         )->a( n = `height`        v = `100%`
         )->a( n = `xmlns`         v = `sap.uxap`

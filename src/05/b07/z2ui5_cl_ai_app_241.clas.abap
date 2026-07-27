@@ -193,6 +193,8 @@ CLASS z2ui5_cl_ai_app_241 IMPLEMENTATION.
 
   METHOD popup_quickcreate_display.
 
+    " original quickActionPress builds this Dialog imperatively (new Dialog({...}).open());
+    " expressed as a core:FragmentDefinition shown via popup_display (see IMPROVISED deviation)
     DATA(popup) = z2ui5_cl_ai_xml=>factory( ).
 
     popup->open( n = `FragmentDefinition` ns = `core`

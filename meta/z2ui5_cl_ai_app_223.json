@@ -8,7 +8,7 @@
     "frontend_action": false,
     "event_t_arg": false
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {
@@ -17,7 +17,7 @@
     },
     {
       "type": "NOTE",
-      "what": "The SegmentedButton selectedKey and the BlockLayout background are two-way bound to one default-model field selected_background, reproducing the original {/selectedBackground} wiring; it is seeded with the enum default Default (a valid BlockBackgroundType) because an empty enum value crashes validateProperty. The original controller loads sap/ui/demo/mock/products.json as the unnamed model but no view binding references it, so it is not reproduced."
+      "what": "The SegmentedButton selectedKey and the BlockLayout background are two-way bound to one default-model field selectedbackground, reproducing the original {/selectedBackground} wiring; it is seeded with the enum default Default (a valid BlockBackgroundType) because an empty enum value crashes validateProperty. The original controller loads sap/ui/demo/mock/products.json as the unnamed model but no view binding references it, so it is not reproduced."
     }
   ]
 }

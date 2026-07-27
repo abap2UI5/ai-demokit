@@ -71,7 +71,9 @@ const dotted = (p, base) => {
 function classMeta(src, name) {
   const em = src.match(new RegExp(`\\.extend\\(\\s*["']${name.replace(/\./g, '\\.')}["']`));
   const header = em ? src.slice(0, em.index) : src.slice(0, 4000);
-  const sinceM = header.match(/@since\s+(?:version\s+)?([\d.]+)/i);
+  // @ui5-experimental-since counts too (app 203 lesson — experimental
+  // controls carry no plain @since and read as base-version otherwise)
+  const sinceM = header.match(/@(?:ui5-experimental-)?since\s+(?:version\s+)?([\d.]+)/i);
   const depM = header.match(/@deprecated(?:\s+As of(?:\s+version)?\s+([\d.]+))?([^\n]*)/i);
   return {
     since: sinceM ? sinceM[1] : null,

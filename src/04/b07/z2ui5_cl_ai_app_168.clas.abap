@@ -14,7 +14,6 @@ CLASS z2ui5_cl_ai_app_168 DEFINITION PUBLIC.
         title        TYPE string,
         subtitle     TYPE string,
         revenue      TYPE string,
-        status       TYPE string,
         statusschema TYPE string,
       END OF ty_prod.
     DATA productitems TYPE STANDARD TABLE OF ty_prod WITH EMPTY KEY.
@@ -177,14 +176,15 @@ CLASS z2ui5_cl_ai_app_168 IMPLEMENTATION.
                                     )->open( `ComboBox`
                                         )->a( n = `width`       v = `120px`
                                         )->a( n = `placeholder` v = `From City`
-                                        )->a( n = `items`       v = client->_bind( cities )
+                                        " sorter kept 1:1 from the original binding-info (CAPABILITIES 'Binding sorter')
+                                        )->a( n = `items`       v = |\{ path: '{ client->_bind( val = cities path = abap_true ) }', sorter: \{ path: 'TEXT' \} \}|
                                         )->leaf( n = `Item` ns = `core` )->a( n = `key` v = `{KEY}` )->a( n = `text` v = `{TEXT}`
 
                                     )->shut(
                                     )->open( `ComboBox`
                                         )->a( n = `width`       v = `120px`
                                         )->a( n = `placeholder` v = `To City`
-                                        )->a( n = `items`       v = client->_bind( cities )
+                                        )->a( n = `items`       v = |\{ path: '{ client->_bind( val = cities path = abap_true ) }', sorter: \{ path: 'TEXT' \} \}|
                                         )->leaf( n = `Item` ns = `core` )->a( n = `key` v = `{KEY}` )->a( n = `text` v = `{TEXT}`
 
                                     )->shut(
@@ -323,9 +323,9 @@ CLASS z2ui5_cl_ai_app_168 IMPLEMENTATION.
     ).
 
     productitems = VALUE #(
-      ( title = `Notebook HT` subtitle = `ID23452256-D44` revenue = `27.25K EUR` status = `success` statusschema = `Success` )
-      ( title = `Notebook XT` subtitle = `ID27852256-D47` revenue = `7.35K EUR` status = `exceeded` statusschema = `Error` )
-      ( title = `Notebook ST` subtitle = `ID123555587-I05` revenue = `22.89K EUR` status = `warning` statusschema = `Warning` )
+      ( title = `Notebook HT` subtitle = `ID23452256-D44` revenue = `27.25K EUR` statusschema = `Success` )
+      ( title = `Notebook XT` subtitle = `ID27852256-D47` revenue = `7.35K EUR` statusschema = `Error` )
+      ( title = `Notebook ST` subtitle = `ID123555587-I05` revenue = `22.89K EUR` statusschema = `Warning` )
     ).
 
   ENDMETHOD.

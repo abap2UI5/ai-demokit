@@ -56,7 +56,7 @@ CLASS z2ui5_cl_ai_app_170 IMPLEMENTATION.
     " (the original toggles showFooter imperatively; the faithful abap2UI5 form
     " binds it). The Products table keeps the original sorter + Currency composite
     " type bindings 1:1. The controller's Card popover (onPressOpenPopover) and
-    " areaShrinkRatio toggle (Edit) have no bindable path and are dropped (declared).
+    " areaShrinkRatio toggle (Edit) are dropped - both expressible, see sidecar.
     view->open( n = `View` ns = `mvc`
         )->a( n = `xmlns`        v = `sap.m`
         )->a( n = `xmlns:mvc`    v = `sap.ui.core.mvc`
@@ -301,7 +301,7 @@ CLASS z2ui5_cl_ai_app_170 IMPLEMENTATION.
     CASE client->get( )-event.
       WHEN `TOGGLE_FOOTER`.
         showfooter = xsdbool( showfooter = abap_false ).
-        view_display( ).
+        client->view_model_update( ).
     ENDCASE.
 
   ENDMETHOD.

@@ -59,6 +59,7 @@ CLASS z2ui5_cl_ai_app_204 IMPLEMENTATION.
                     )->a( n = `highlight`         v = `{HIGHLIGHT}`
                     )->a( n = `info`              v = `{INFO}`
                     )->a( n = `infoState`         v = `{HIGHLIGHT}`
+                    " POST-1.71: infoStateInverted (since 1.74) kept 1:1
                     )->a( n = `infoStateInverted` v = `true` ).
 
     client->view_display( view->stringify( ) ).

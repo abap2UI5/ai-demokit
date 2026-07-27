@@ -153,6 +153,7 @@ CLASS z2ui5_cl_ai_app_166 IMPLEMENTATION.
                 )->shut(
             )->shut(
 
+            " the original controller handlers (onEdit, onSave, onCancel, onMessagesButtonPress) are replaced by client toasts, see sidecar
             )->open( n = `titleMainAction` ns = `semantic`
                 )->leaf( n = `TitleMainAction` ns = `semantic`
                     )->a( n = `id`    v = `editAction`

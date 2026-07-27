@@ -17,11 +17,11 @@
   "deviations": [
     {
       "type": "IMPROVISED",
-      "what": "The original binds two named models inside the cards (cities> for the ComboBoxes, products> for the revenue List); abap2UI5 keeps one default model, so those bind directly ({cities>/cities} -> {/CITIES}, {products>/productItems} -> {/PRODUCTITEMS}, prefix dropped, last segment identical). The RevealGrid toggle, the three property Switches, the GridContainer columnsChange, the GenericTile press and the f:Card header press are controller handlers in the original; here each raises a client MESSAGE_TOAST."
+      "what": "The original binds two named models inside the cards (cities> for the ComboBoxes, products> for the revenue List); abap2UI5 keeps one default model, so those bind directly ({cities>/cities} -> {/CITIES}, {products>/productItems} -> {/PRODUCTITEMS}, prefix dropped, last segment identical). The RevealGrid toggle (a sample-local JS debug overlay module), the three property Switches, the GridContainer columnsChange, the GenericTile press and the f:Card header press are controller handlers in the original; here each raises a STATIC-text client MESSAGE_TOAST. The controller's onInit attachLayoutChange handler (swapping sapUiSmallMargin/sapUiTinyMargin on layoutXS/S) is dropped entirely. Review 2026-07-27: several of these substitutions under-deliver against CAPABILITIES - the three Switches set BINDABLE GridContainer properties (snapToRow/allowDenseFill/inlineBlockLayout could be two-way bound to the Switch states, prefer-a-bindable-property rule, app 048 idiom), the press toasts fake values readable from the event ($event.oSource metadata name), and columnsCountText could carry the columns parameter - flagged for rework, not promoted."
     },
     {
       "type": "NOTE",
-      "what": "The ComboBox items keep a plain {/CITIES} binding (the original's sorter:{path:'text'} is a client-only ordering, dropped). The sap.ui.integration Card keeps its original external manifest reference (cardManifest.json). The two long lorem-ipsum filler Texts are abbreviated to short placeholders. cities.json (7) and products.json (3) are inlined in full."
+      "what": "The ComboBox items keep the original binding-info sorter 1:1 ({path:'/CITIES', sorter:{path:'TEXT'}} - restored 2026-07-27; an earlier version had dropped it although CAPABILITIES marks binding sorters expressible). The sap.ui.integration Card keeps its original external manifest reference (cardManifest.json). The two long lorem-ipsum filler Texts are abbreviated to short placeholders. cities.json (7) and products.json (3) are inlined in full (the unbound 'status' mock column stays out of the row type per the rows-not-columns rule)."
     }
   ]
 }

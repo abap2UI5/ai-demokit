@@ -8,7 +8,7 @@
     "frontend_action": false,
     "event_t_arg": false
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {
@@ -17,7 +17,7 @@
     },
     {
       "type": "NOTE",
-      "what": "The sample's style.css (background colours on the FixFlex fixed/flexible areas, referenced by class='fixFlexHorizontal') is loaded via the manifest in the original; abap2UI5 ships no separate css file, so it is injected via a core:HTML <style> node with the CSS braces escaped. This adds a core:HTML control not present in the original view (extra controls are not flagged by structural-diff)."
+      "what": "The sample's style.css (background colours on the FixFlex fixed/flexible areas, referenced by class='fixFlexHorizontal') is loaded via the manifest in the original; abap2UI5 ships no separate css file, so it is injected via a core:HTML <style> node with the CSS braces escaped. This adds a core:HTML control not present in the original view - an extra control IS flagged by structural-diff (control extra), declared here by name."
     }
   ]
 }

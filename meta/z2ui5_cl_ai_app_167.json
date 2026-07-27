@@ -13,7 +13,7 @@
   "deviations": [
     {
       "type": "IMPROVISED",
-      "what": "NavigationListItem.selectable is the expression binding {= ${items}.length > 3} in the original; per the thin-frontend rule that presentation logic is computed in ABAP into a flat 'selectable' field (children count > 3) and bound directly. The controller event handlers (onSideNavButtonPress toggling the side, onItemPress, onItemSelect navigating the NavContainer via to(), handleUserNamePress opening a popover, fixed-item quickActionPress) are raised as client MESSAGE_TOAST here; the NavContainer shows its initialPage (page2) but page-to-page navigation is not wired (would need a backend roundtrip)."
+      "what": "NavigationListItem.selectable is the expression binding {= ${items}.length > 3} in the original; per the thin-frontend rule that presentation logic is computed in ABAP into a flat 'selectable' field (children count > 3) and bound directly. The controller event handlers (onSideNavButtonPress toggling the side, onItemPress, onItemSelect navigating the NavContainer via to(), handleUserNamePress opening a popover, fixed-item quickActionPress opening a Create Item Dialog) are each replaced by a STATIC-text client MESSAGE_TOAST; the NavContainer shows its initialPage (page2) but page-to-page navigation is not wired. Review 2026-07-27: these substitutions under-deliver against CAPABILITIES - onItemPress could transport the item text client-side (control_global toast template + ${$parameters>/item}.getText(), app 060/172 idiom), the side toggle could two-way bind ToolPage.sideExpanded (prefer-a-bindable-property rule), and itemSelect->to() is expressible via control_by_id 'to' (CONTROL_METHODS to: controlId+transition, client-resolved key) - flagged for rework, not promoted."
     },
     {
       "type": "POST_171",
@@ -21,7 +21,7 @@
     },
     {
       "type": "NOTE",
-      "what": "The full 14-item navigation tree (with its nested child lists, incl. Root Item 3's 38 children) and the 4-item fixed navigation are inlined from data.json. The page2 ScrollContainer's multi-paragraph lorem-ipsum filler text is abbreviated to a short placeholder."
+      "what": "The full 14-item navigation tree (with its nested child lists, incl. Root Item 3's 38 children) and the 4-item fixed navigation are inlined from data.json. Where data.json omits a property the UI5 default is seeded explicitly (enabled true, expanded false, and on Fixed Item 1-3 the enum fields ariaHasPopup None / design Default - an empty string would throw in validateProperty). The page2 ScrollContainer's multi-paragraph lorem-ipsum filler text is abbreviated to a short placeholder."
     }
   ]
 }

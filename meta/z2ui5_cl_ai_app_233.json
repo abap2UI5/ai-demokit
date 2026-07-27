@@ -9,7 +9,7 @@
     "event_t_arg": true,
     "note": "the Input value-help opens the SelectDialog client-side via control_by_id open; the SelectDialog search filters client-side via binding_call; suggestion-select / submit / value-help-confirm round-trip to resolve the picked purchase and redraw"
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {
@@ -30,7 +30,7 @@
     },
     {
       "type": "IMPROVISED",
-      "what": "handleValueHelpSearch / _getCombinedFilter builds an OR filter of PurchaseID Contains + SupplierName Contains; the port's SelectDialog search wires a single binding_call filter on SUPPLIERNAME Contains ${$parameters>/value} - the compound OR over two fields is simplified to the supplier field. The suggestion Input's setFilterFunction (case-insensitive contains over key+text) is UI5's built-in suggestion filtering and is not reproduced explicitly."
+      "what": "handleValueHelpSearch / _getCombinedFilter builds an OR filter of PurchaseID Contains + SupplierName Contains; the port's SelectDialog search wires a single binding_call filter on SUPPLIERNAME Contains ${$parameters>/value} - the compound OR over two fields is simplified to the supplier field. The suggestion Input's setFilterFunction (case-insensitive contains over key+text) is UI5's built-in suggestion filtering and is not reproduced explicitly. Additionally _filterAndOpenValueHelpDialog pre-filters the dialog with the current input value and opens it via oDialog.open(sInputValue); the port's valueHelpRequest opens the SelectDialog unfiltered with no search-string argument (control_by_id open without params), so the pre-filter-on-open behaviour is lost."
     },
     {
       "type": "NOTE",

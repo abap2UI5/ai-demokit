@@ -78,6 +78,8 @@ CLASS z2ui5_cl_ai_app_191 IMPLEMENTATION.
 
   METHOD model_init.
 
+    " the original controller's inline /modelData rows, moved verbatim onto the
+    " one default model (pure root rename, see sidecar NOTE)
     t_products = VALUE #(
       ( product = `Power Projector 4713` supplier = `Robert Brown Entertainment` )
       ( product = `HT-1022`              supplier = `Pear Computing Services` )

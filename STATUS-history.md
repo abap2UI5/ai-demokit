@@ -7,6 +7,50 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## Review sweep (2026-07-27) — the empty `reviewed` rung filled: 153 promoted, 48 flagged
+
+The quality ladder's middle rung had been empty since its definition (0
+`reviewed` ports). A full adversarial sweep over all 201 `generated` ports
+(14 batches, each port read against its archived original, the mocks —
+byte-level where inlined — and the abap2UI5/OpenUI5 sources) closed that:
+
+- **153 ports promoted to `reviewed`**, ~60 of them after documentation/data
+  fixes applied in the same pass: missing POST_171 declarations of
+  gate-invisible members (control-level `NotificationList` @1.90,
+  aggregation-level `Title.content` @1.87 / `StandardListItem.avatar` @1.98 /
+  `IconTabFilter.items` @1.77, enum values Indication15–20 @1.120,
+  `core:require` ≥1.74), wrong deviation vocabulary retyped per the settled
+  policy, corrected audit flags, missing inline `"` comments, and real data
+  fixes verified against the mocks (lost `&&`-join spaces in 076/077,
+  neighbour-copied toast text in 157, an invented row + reordered tail in
+  164, mock-contradicting literals in 113/115, ToolbarDesign enum order in
+  086, missing `NEW_WINDOW` in 084, wrong token-delete text in 085, twelve
+  malformed attribute lines in 140, §5 underscore-field renames in
+  192/197/199/201/211/215/223/229/235).
+- **48 ports stay `generated`** with corrected, honest sidecars — the rework
+  backlog (STATUS.md open findings): dead `_event` wires without an
+  `on_event` dispatcher (new pattern-lint rule `dead-event-wire`, 6 BASELINE
+  entries), toast substitutions around expressible capabilities (the app-042
+  class — several rationales were source-refuted, e.g. "MessageBox has no
+  return path", "upload not whitelisted", "suggest not whitelisted"), faked
+  event values where `$event.*` transport exists, dropped sample CSS
+  (122/124 + §4 archive gaps), and one source-verified crash risk (app 220:
+  `end=""` through `DateCreateObject` → invalid-date throw in
+  `CalendarDate.fromLocalJSDate`).
+- **New scope blind spot found and closed**: `sap.m.OverflowToolbarTokenizer`
+  (app 203) is `@ui5-experimental-since 1.139` with no plain `@since` — both
+  source scanners (`scope-of.mjs`, `generate-properties.mjs`) now read the
+  experimental tag; 203 joins `ui5/scope-exceptions.json` pending the same
+  maintainer decision as the other five.
+- Concurrency note: the first sweep attempt hit the session limit mid-write
+  (13 of 14 agents); partial edits were reverted and the batches re-run —
+  only fully-reported batches were ever committed.
+
+All gates green after the sweep (abaplint STANDARD+CLOUD, validate-meta,
+pattern-lint incl. the new rule, structural-diff --strict, structure-lint,
+property-check, data-fidelity, render-smoke). Ladder now: 48 `generated` ·
+153 `reviewed` · 45 `checked`.
+
 ## Hold-out probe #2 (2026-07-26) — fidelity way up, syntax is the new frontier
 
 Second regeneration probe, protocol identical to the 2026-07-19 baseline

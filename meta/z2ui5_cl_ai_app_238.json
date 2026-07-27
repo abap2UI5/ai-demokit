@@ -9,7 +9,7 @@
     "event_t_arg": true,
     "note": "GENERIC_TAG_PRESS carries $event.oSource.sId and builds the Card popover fragment shown anchored via client->popover_display( xml = ... by_id = ... ); TOGGLE_FOOTER flips the showFooter model flag and re-renders"
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {
