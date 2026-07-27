@@ -13,11 +13,11 @@
   "deviations": [
     {
       "type": "IMPROVISED",
-      "what": "Breadth-probe: sap.ui.layout.FixFlex (fixed image + flexible text). The named-model image path (img>/products/pic1) is resolved to a static OpenUI5 product image."
+      "what": "The named-model image path (img>/products/pic1) is resolved to the static OpenUI5 product image https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-7777-large.jpg (the mock's actual pic1 value, host-absolutized; wrong-neighbour HT-1000 copy fixed by the 2026-07-24 data audit). Image.src carries the static value where the original binds {img>/products/pic1} - the app-006 static-fold class."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "The sample's css/style.css (the .fixFlexVertical > .sapUiFixFlexFixed / .sapUiFixFlexFlexible background colors, loaded via the manifest resources.css) is not injected - the class attributes are kept but the decorative backgrounds are lost. Review 2026-07-27: custom CSS IS expressible via a core:HTML style leaf (CAPABILITIES 'Custom CSS', apps 026/028/169) - needs rework to inject the style."
     }
-  ],
-  "structural_diff": {
-    "skip": true,
-    "reason": "breadth/capability probe \u2014 renders the control but is not a faithful 1:1 rebuild of the full sample"
-  }
+  ]
 }

@@ -56,6 +56,7 @@ CLASS z2ui5_cl_ai_app_083 IMPLEMENTATION.
                     )->a( n = `iconDensityAware` v = `false`
                     )->a( n = `iconInset`      v = `false`
                     )->a( n = `adaptTitleSize` v = `false`
+                    " the avatar aggregation (since UI5 1.98) and sap.m.Avatar (since 1.73) are kept 1:1 - needs UI5 >= 1.98
                     )->open( `avatar`
                         )->leaf( `Avatar`
                             )->a( n = `src`          v = `{0/PRODUCT_PIC_URL}`

@@ -4,10 +4,17 @@
   "entity": "sap.f.SidePanel",
   "file": "src/04/b03/z2ui5_cl_ai_app_136.clas.abap",
   "batch": "b03",
-  "audit": { "frontend_action": false, "event_t_arg": false },
-  "status": "generated",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": false,
+    "note": "toggle is wired roundtrip-free via _event_client( control_global, MESSAGE_TOAST.show )"
+  },
+  "status": "reviewed",
   "checked": null,
   "deviations": [
-    { "type": "LIVE_TEST", "what": "SidePanel.toggle shows a client-side MessageToast. The original onToggle inspected the preventExpand/preventCollapse switches and called event.preventDefault() to veto the expand/collapse; that veto logic is a live interaction not reproduced here (the switches are kept as static controls)." }
+    {
+      "type": "IMPROVISED",
+      "what": "SidePanel.toggle shows a client-side MessageToast on every toggle. The original onToggle inspected the preventExpand/preventCollapse switches and called event.preventDefault() to veto the expand/collapse (toasting only when a veto fired, then resetting the switch); an event veto is not expressible in abap2UI5, so that behaviour is lost and the switches are kept as static controls."
+    }
   ]
 }

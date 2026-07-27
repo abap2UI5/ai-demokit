@@ -57,6 +57,7 @@ CLASS z2ui5_cl_ai_app_090 IMPLEMENTATION.
 
     CASE client->get( )-event.
       WHEN `OPEN`.
+        " the original loads Dialog.fragment.xml and opens it - rebuilt 1:1 and shown via popup_display; its bindElement /ProductCollection/0 is a no-op (static content) and dropped
         DATA(popup) = z2ui5_cl_ai_xml=>factory( ).
         popup->open( n = `FragmentDefinition` ns = `core`
             )->a( n = `xmlns`      v = `sap.m`

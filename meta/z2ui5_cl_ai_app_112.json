@@ -12,12 +12,8 @@
   "checked": null,
   "deviations": [
     {
-      "type": "NOTE",
-      "what": "Breadth-probe (cross-library capability test). Inline sap.ui.unified ColorPicker (HSL / Simplified). The button's ResponsivePopover-with-ColorPicker is simplified to a toast."
+      "type": "IMPROVISED",
+      "what": "Breadth-probe (cross-library capability test). Inline sap.ui.unified ColorPicker (HSL / Simplified); the view itself is a 1:1 rebuild. The button's controller-built ResponsivePopover-with-ColorPicker is simplified to a toast - a lost behavior that IS expressible (popover_display( xml = ... by_id = ... ) anchored via $event.oSource.sId, CAPABILITIES popups row; the app-042 toast-substitution class). Review 2026-07-27: needs rework, retyped from NOTE; the stale structural_diff skip was removed (the main view matches the original 1:1, the popover is controller-built and invisible to the diff)."
     }
-  ],
-  "structural_diff": {
-    "skip": true,
-    "reason": "breadth/capability probe \u2014 renders the control but is not a faithful 1:1 rebuild of the full sample"
-  }
+  ]
 }

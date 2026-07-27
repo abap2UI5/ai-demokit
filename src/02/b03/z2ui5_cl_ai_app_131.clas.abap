@@ -47,7 +47,8 @@ CLASS z2ui5_cl_ai_app_131 IMPLEMENTATION.
                 )->leaf( `Link`
                     )->a( n = `text`   v = `Click here to open the Theme Parameter Toolbox `
                     )->a( n = `target` v = `_blank`
-                    )->a( n = `href`   v = `test-resources/sap/m/demokit/theming/webapp/index.html` ).
+                    " host-relative demokit href rewritten to the OpenUI5 host per the runtime asset-URL rule
+                    )->a( n = `href`   v = `https://sdk.openui5.org/test-resources/sap/m/demokit/theming/webapp/index.html` ).
 
     client->view_display( view->stringify( ) ).
 

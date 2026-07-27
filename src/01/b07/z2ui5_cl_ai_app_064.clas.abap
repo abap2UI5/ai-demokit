@@ -46,6 +46,7 @@ CLASS z2ui5_cl_ai_app_064 IMPLEMENTATION.
             )->a( n = `scale`      v = `MM`
             )->a( n = `valueColor` v = `Critical`
             )->a( n = `indicator`  v = `Up`
+            " original demokit test-resources image path kept 1:1 - not served by abap2UI5 (see sidecar)
             )->a( n = `icon`       v = `test-resources/sap/m/demokit/sample/NumericContentIcon/images/grass.jpg`
             )->a( n = `class`      v = `sapUiSmallMargin`
             )->a( n = `press`      v = client->_event_client( val   = client->cs_event-control_global

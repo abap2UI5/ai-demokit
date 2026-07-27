@@ -1,2 +1,20 @@
-{ "class": "z2ui5_cl_ai_app_149", "sample": "sap.ui.integration.sample.CardExplorer", "entity": "sap.ui.integration.widgets.Card", "file": "src/02/b08/z2ui5_cl_ai_app_149.clas.abap", "batch": "b08", "audit": { "frontend_action": false, "event_t_arg": false }, "status": "generated", "checked": null,
-  "deviations": [ { "type": "NOTE", "what": "The sample itself is a Link + Image pointing at the Card Explorer tool (the actual integration Cards live in that tool); reproduced 1:1. The Image press shows a client MessageToast (original onImagePress opened the tool)." } ] }
+{
+  "class": "z2ui5_cl_ai_app_149",
+  "sample": "sap.ui.integration.sample.CardExplorer",
+  "entity": "sap.ui.integration.widgets.Card",
+  "file": "src/02/b08/z2ui5_cl_ai_app_149.clas.abap",
+  "batch": "b08",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": false,
+    "note": "Image press is a roundtrip-free _event_client( control_global, MESSAGE_TOAST.show ) substitution"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "The sample itself is a Link + Image pointing at the Card Explorer tool (the actual integration Cards live in that tool); Link and Image reproduced 1:1. The Image press shows a client MessageToast instead of the original onImagePress URLHelper.redirect(url, true) - a behaviour substitution (redirect is expressible via _event_client( urlhelper, REDIRECT ), see CAPABILITIES 'Opening external URLs')."
+    }
+  ]
+}

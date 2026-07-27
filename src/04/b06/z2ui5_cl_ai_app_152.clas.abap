@@ -39,7 +39,8 @@ CLASS z2ui5_cl_ai_app_152 IMPLEMENTATION.
             )->a( n = `id`                  v = `sapFShellBarSample`
             )->a( n = `title`               v = `Application Title`
             )->a( n = `secondTitle`         v = `Short description`
-            )->a( n = `homeIcon`            v = `./resources/sap/ui/documentation/sdk/images/logo_sap.png`
+            " homeIcon absolutized to the OpenUI5 host (original: ./resources/...)
+            )->a( n = `homeIcon`            v = `https://sdk.openui5.org/resources/sap/ui/documentation/sdk/images/logo_sap.png`
             )->a( n = `showCopilot`         v = `true`
             )->a( n = `showSearch`          v = `true`
             )->a( n = `showMenuButton`      v = `true`
@@ -49,6 +50,7 @@ CLASS z2ui5_cl_ai_app_152 IMPLEMENTATION.
             )->a( n = `notificationsNumber` v = `2`
 
             )->open( `profile`
+                " sap.m.Avatar is @since 1.73 - kept 1:1 (POST_171)
                 )->leaf( n = `Avatar` ns = `m`
                     )->a( n = `initials` v = `UI` ).
 

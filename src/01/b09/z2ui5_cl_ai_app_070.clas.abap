@@ -147,6 +147,7 @@ CLASS z2ui5_cl_ai_app_070 IMPLEMENTATION.
             )->leaf( `Text`
                 )->a( n = `text`  v = `Set the ProgressIndicator to 100% with animation`
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
+            " the two interactive ProgressIndicators bind percentValue and displayValue two-way, replacing the original setter calls (see sidecar)
             )->leaf( `ProgressIndicator`
                 )->a( n = `id`           v = `pi-with-animation`
                 )->a( n = `class`        v = `sapUiSmallMarginBottom`
@@ -177,6 +178,7 @@ CLASS z2ui5_cl_ai_app_070 IMPLEMENTATION.
                 )->a( n = `displayValue`     v = client->_bind( pi_b_display )
                 )->a( n = `state`            v = `Success`
                 )->a( n = `displayOnly`      v = `true`
+                " POST-1.71: displayAnimation (since UI5 1.73) kept 1:1
                 )->a( n = `displayAnimation` v = `false`
             )->open( `FlexBox`
                 )->leaf( `Button`

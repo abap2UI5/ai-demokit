@@ -16,10 +16,10 @@ TRAINING.md; for what abap2UI5 can express see CAPABILITIES.md._
 | Aspect | State |
 |---|---|
 | Ports | **246** sidecars in `meta/` (src/01: 149 · src/02: 55 · src/03: 12 · src/04: 19 · src/05: 11) |
-| Status ladder | 186 `generated` · 15 `reviewed` · 45 `checked` (live-verified) |
-| Deviations | 4 DROPPED_171 · 117 IMPROVISED · 76 LIVE_TEST · 253 NOTE · 76 POST_171 |
-| Open LIVE_TESTs | **72 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
-| Declared gate skips | 10 structural-diff · 1 render-smoke (each re-verified per run — a stale skip FAILS) |
+| Status ladder | 118 `generated` · 83 `reviewed` · 45 `checked` (live-verified) |
+| Deviations | 4 DROPPED_171 · 131 IMPROVISED · 71 LIVE_TEST · 249 NOTE · 91 POST_171 |
+| Open LIVE_TESTs | **67 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
+| Declared gate skips | 7 structural-diff · 1 render-smoke (each re-verified per run — a stale skip FAILS) |
 | Out-of-scope ported samples | `z2ui5_cl_ai_app_121 (sap.m.sample.UploadSet — deprecated)` · `z2ui5_cl_ai_app_136 (sap.f.sample.SidePanelSingle — control @since 1.107)` · `z2ui5_cl_ai_app_141 (sap.ui.core.sample.InvisibleMessage — control @since 1.78)` · `z2ui5_cl_ai_app_165 (sap.f.sample.ProductSwitchNavigation — control @since 1.72)` · `z2ui5_cl_ai_app_166 (sap.f.sample.SemanticPage — deprecated)` — standing debt pending a maintainer decision (drop vs documented exception), surfaced by the source-backed scope gate (pr/scope-since-from-source) |
 
 _Coverage per library (ported / in scope) is generated into the [README](README.md#coverage); one row per sample in [api.md](api.md)._

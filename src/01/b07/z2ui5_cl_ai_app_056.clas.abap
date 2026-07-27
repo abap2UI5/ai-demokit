@@ -40,6 +40,7 @@ CLASS z2ui5_cl_ai_app_056 IMPLEMENTATION.
                                                                t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The ImageContent is pressed.` ) ) )
         )->leaf( `ImageContent`
             )->a( n = `class`       v = `sapUiLargeMarginTop sapUiLargeMarginBottom`
+            " original demokit test-resources image paths kept 1:1 - not served by abap2UI5 (see sidecar)
             )->a( n = `src`         v = `test-resources/sap/m/demokit/sample/ImageContent/images/ProfileImage_LargeGenTile.png`
             )->a( n = `description` v = `Profile image`
             )->a( n = `press`       v = client->_event_client( val   = client->cs_event-control_global

@@ -58,6 +58,7 @@ CLASS z2ui5_cl_ai_app_073 IMPLEMENTATION.
                     )->a( n = `text`   v = `Not active Object Attribute with title and text`
                     )->a( n = `design` v = `Bold`
                     )->a( n = `class`  v = `sapUiSmallMarginTop`
+                " element binding kept 1:1 - a one-record structure S_PRODUCT instead of ProductCollection record 0 (see sidecar)
                 )->leaf( `ObjectAttribute`
                     )->a( n = `binding` v = client->_bind( s_product )
                     )->a( n = `title`   v = `Weight`
@@ -79,6 +80,7 @@ CLASS z2ui5_cl_ai_app_073 IMPLEMENTATION.
                     )->a( n = `title`        v = `Click to`
                     )->a( n = `text`         v = `Provide feedback`
                     )->a( n = `active`       v = `true`
+                    " POST-1.71: ariaHasPopup (since UI5 1.97) kept 1:1
                     )->a( n = `ariaHasPopup` v = `Dialog`
                     )->a( n = `press`        v = client->_event( `FEEDBACK` )
 
@@ -90,6 +92,7 @@ CLASS z2ui5_cl_ai_app_073 IMPLEMENTATION.
                     )->a( n = `title`  v = `Visit our site`
                     )->a( n = `text`   v = `www.sap.com`
                     )->a( n = `active` v = `true`
+                    " the original handleSAPLinkPressed - URLHelper redirect as the URLHELPER REDIRECT frontend action (see sidecar)
                     )->a( n = `press`  v = client->_event_client( val   = client->cs_event-urlhelper
                                                                   t_arg = VALUE #( ( `REDIRECT` ) ( |\{ URL: 'http://www.sap.com', NEW_WINDOW: true \}| ) ) )
 

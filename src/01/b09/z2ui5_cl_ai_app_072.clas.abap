@@ -54,6 +54,7 @@ CLASS z2ui5_cl_ai_app_072 IMPLEMENTATION.
                 )->a( n = `design` v = `Bold`
             )->open( n = `HorizontalLayout` ns = `l`
                 )->a( n = `class` v = `sapUiContentPadding`
+                " element binding kept 1:1 - each ObjectNumber index-binds a record of the default-model table T_PRODUCTS (see sidecar)
                 )->leaf( `ObjectNumber`
                     )->a( n = `class`   v = `sapUiSmallMarginBottom`
                     )->a( n = `binding` v = |\{{ client->_bind( val = t_products path = abap_true ) }/0\}|
@@ -96,6 +97,7 @@ CLASS z2ui5_cl_ai_app_072 IMPLEMENTATION.
                 )->a( n = `design` v = `Bold`
             )->open( n = `HorizontalLayout` ns = `l`
                 )->a( n = `class` v = `sapUiContentPadding`
+                " POST-1.71: inverted, active and press (since UI5 1.86) kept 1:1
                 )->leaf( `ObjectNumber`
                     )->a( n = `class`    v = `sapUiSmallMarginBottom`
                     )->a( n = `inverted` v = `true`

@@ -103,8 +103,8 @@ CLASS z2ui5_cl_ai_app_115 IMPLEMENTATION.
       ( name = `Notebook Basic 15` supplier = `Very Best Screens` price = `956.00` )
       ( name = `Notebook Basic 17` supplier = `Very Best Screens` price = `1249.00` )
       ( name = `Notebook Basic 18` supplier = `Very Best Screens` price = `1570.00` )
-      ( name = `ITelO Vault` supplier = `Smartcard Corp` price = `299.00` )
-      ( name = `Comfort Easy` supplier = `Technocom` price = `1650.00` ) ).
+      ( name = `ITelO Vault` supplier = `Technocom` price = `299.00` )
+      ( name = `Comfort Easy` supplier = `Technocom` price = `1679.00` ) ).
 
   ENDMETHOD.
 

@@ -20,7 +20,9 @@ CLASS z2ui5_cl_ai_app_153 IMPLEMENTATION.
 
     me->client = client.
     IF client->check_on_init( ).
-      showclearicon = abap_true.
+      " the original binds {/showClearIcon} but sets no model - the binding
+      " stays unresolved and the property keeps its default false
+      showclearicon = abap_false.
       view_display( ).
     ENDIF.
 
@@ -76,6 +78,7 @@ CLASS z2ui5_cl_ai_app_153 IMPLEMENTATION.
                         )->a( n = `mask`             v = `(999) 999 999999`
                         )->a( n = `placeholderSymbol` v = `_`
                         )->a( n = `placeholder`      v = `Enter twelve-digit number`
+                        " showClearIcon is @since 1.96 - kept 1:1 (POST_171)
                         )->a( n = `showClearIcon`    v = `true`
 
                 )->shut(

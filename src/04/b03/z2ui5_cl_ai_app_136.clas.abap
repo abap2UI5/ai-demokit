@@ -39,6 +39,7 @@ CLASS z2ui5_cl_ai_app_136 IMPLEMENTATION.
             )->open( `content`
                 )->open( n = `SidePanel` ns = `f`
                     )->a( n = `id`     v = `mySidePanel`
+                    " original onToggle vetoed expand/collapse (preventDefault) per the prevent switches - not expressible; a client toast signals the toggle instead
                     )->a( n = `toggle` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Side panel toggled` ) ) )
 
                     )->open( n = `mainContent` ns = `f`

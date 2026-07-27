@@ -28,7 +28,11 @@ CLASS z2ui5_cl_ai_app_120 IMPLEMENTATION.
             )->a( n = `width` v = `100%`
             )->leaf( n = `HTML` ns = `core`
                 )->a( n = `content` v = `<div class="content"><h4>Lorem ipsum</h4><div>Lorem ipsum dolor sit amet, consetetur sadipscing elitr, ` &&
-                                        `sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat.</div>` &&
+                                        `sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. ` &&
+                                        `At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est ` &&
+                                        `Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod ` &&
+                                        `tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo ` &&
+                                        `duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</div>` &&
                                         `<a target="_blank" href="http://en.wikipedia.org/wiki/Lorem_ipsum">Learn more about Lorem Ipsum ...</a></div>` ).
     client->view_display( view->stringify( ) ).
   ENDMETHOD.

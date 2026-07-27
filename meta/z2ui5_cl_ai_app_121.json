@@ -8,12 +8,12 @@
     "frontend_action": false,
     "event_t_arg": false
   },
-  "status": "generated",
+  "status": "reviewed",
   "checked": null,
   "deviations": [
     {
       "type": "IMPROVISED",
-      "what": "Breadth-probe: a minimal sap.m.upload.UploadSet (file upload list) with 3 pre-populated items + a toolbar. The item file names are invented (Screenshot.png etc.), not the mock's items.json rows. The actual upload backend, the full toolbar and the item action buttons are simplified; upload here would target the abap2UI5 FileUploader path in a live system."
+      "what": "Breadth-probe: a minimal sap.m.upload.UploadSet (file upload list) with 3 pre-populated items + a toolbar. The item rows are invented, not the mock's items.json rows ('Business Plan Agenda.doc' / 'Picture of a woman.png'): Screenshot.png (image/png), Notes.txt (text/plain) and Report.doc (application/msword), each with an empty url and a sap-icon://document / sap-icon://document-text thumbnailUrl. The actual upload backend, the full toolbar (only 'Upload selected' kept; downloadSelectedButton, versionButton and the upload:UploadSetToolbarPlaceholder dropped) and the item ObjectMarker/ObjectStatus aggregations are simplified away; upload here would target the abap2UI5 FileUploader path in a live system."
     },
     {
       "type": "POST_171",

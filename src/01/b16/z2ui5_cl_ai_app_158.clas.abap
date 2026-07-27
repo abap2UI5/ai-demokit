@@ -38,6 +38,7 @@ CLASS z2ui5_cl_ai_app_158 IMPLEMENTATION.
                 )->a( n = `headerText` v = `Gap`
                 )->open( `FlexBox`
                     )->a( n = `alignItems` v = `Start`
+                    " gap is @since 1.134 - kept 1:1 (POST_171)
                     )->a( n = `gap` v = `30px`
                     )->a( n = `width`      v = `170px`
                     )->a( n = `wrap`       v = `Wrap`
@@ -75,6 +76,7 @@ CLASS z2ui5_cl_ai_app_158 IMPLEMENTATION.
                 )->a( n = `headerText` v = `Column gap`
                 )->open( `FlexBox`
                     )->a( n = `alignItems` v = `Start`
+                    " columnGap is @since 1.134 - kept 1:1 (POST_171)
                     )->a( n = `columnGap` v = `30px`
                     )->a( n = `width`      v = `170px`
                     )->a( n = `wrap`       v = `Wrap`
@@ -112,6 +114,7 @@ CLASS z2ui5_cl_ai_app_158 IMPLEMENTATION.
                 )->a( n = `headerText` v = `Row gap`
                 )->open( `FlexBox`
                     )->a( n = `alignItems` v = `Start`
+                    " rowGap is @since 1.134 - kept 1:1 (POST_171)
                     )->a( n = `rowGap` v = `30px`
                     )->a( n = `width`      v = `100px`
                     )->a( n = `wrap`       v = `Wrap`

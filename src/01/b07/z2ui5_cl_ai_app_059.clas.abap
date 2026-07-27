@@ -26,10 +26,12 @@ CLASS z2ui5_cl_ai_app_059 IMPLEMENTATION.
 
   METHOD view_display.
 
+    " the six identical filler paragraphs share this literal; attribute whitespace is normalised to single spaces (see sidecar)
     DATA(lorem) = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam interdum lectus et tempus blandit. Sed porta ex quis tortor gravida, ut suscipit felis dignissim. Ut iaculis elit vel ligula scelerisque, et porttitor est pretium. ` &&
                   `Suspendisse purus dolor, fermentum in tortor eu, semper finibus velit. Proin vel lobortis leo, vel eleifend lorem. Etiam ac erat sollicitudin, condimentum magna ac, venenatis lacus. ` &&
                   `Pellentesque non mauris consectetur, tristique arcu id, aliquet tortor.`.
 
+    " original demokit sdk asset paths kept 1:1 - not served by abap2UI5 (see sidecar)
     DATA(base) = `test-resources/sap/ui/documentation/sdk/images/`.
 
     DATA(view) = z2ui5_cl_ai_xml=>factory( ).

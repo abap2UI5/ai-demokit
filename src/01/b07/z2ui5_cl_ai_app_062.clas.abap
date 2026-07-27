@@ -42,6 +42,7 @@ CLASS z2ui5_cl_ai_app_062 IMPLEMENTATION.
         )->a( n = `xmlns:core`   v = `sap.ui.core`
         )->a( n = `xmlns:mvc`    v = `sap.ui.core.mvc`
         )->a( n = `xmlns`        v = `sap.m`
+        " POST-1.71: core:require (since UI5 1.74) wires the curated formatter module; not in the sample view
         )->a( n = `core:require` v = `{Formatter: 'z2ui5/model/formatter'}`
 
         )->open( n = `VerticalLayout` ns = `l`
@@ -84,6 +85,7 @@ CLASS z2ui5_cl_ai_app_062 IMPLEMENTATION.
                     )->a( n = `showCloseButton`     v = `true`
                     )->a( n = `class`               v = `sapUiMediumMarginBottom`
 
+                    " POST-1.71: the controls aggregation (since UI5 1.129) kept 1:1 for the multi-link formatted text
                     )->open( `controls`
                         )->leaf( `Link`
                             )->a( n = `href` v = `http://www.sap.com`
@@ -106,6 +108,7 @@ CLASS z2ui5_cl_ai_app_062 IMPLEMENTATION.
                     )->a( n = `showCloseButton`     v = `true`
                     )->a( n = `class`               v = `sapUiMediumMarginBottom`
                 )->leaf( `MessageStrip`
+                    " the controller-built inline-icon string is stored with icon placeholders and expanded by Formatter.expandInlineIcons (see sidecar)
                     )->a( n = `text`                v = |\{ path: '{ client->_bind( val = inline_icons_helper path = abap_true ) }', formatter: 'Formatter.expandInlineIcons' \}|
                     )->a( n = `type`                v = `Success`
                     )->a( n = `enableFormattedText` v = `true`
@@ -120,6 +123,7 @@ CLASS z2ui5_cl_ai_app_062 IMPLEMENTATION.
 
   METHOD model_init.
 
+    " the sample's static JSONModel strings, verbatim; field names differ from the JSON keys (default becomes default_text etc., see sidecar)
     default_text = `Default <em>(Information)</em> with default icon and <strong>close button</strong>:`.
 
     error_text = `<strong>Error</strong> with link to <a target="_blank" href="http://www.sap.com">SAP Homepage</a> <em>(For more info)</em>`.

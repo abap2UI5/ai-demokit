@@ -13,11 +13,11 @@
   "deviations": [
     {
       "type": "IMPROVISED",
-      "what": "Breadth-probe: sap.f.Card with a sap.f.cards.Header and a simplified content body (the original's named-model From/To ComboBoxes + DatePicker are represented by a Text + Button for the render probe)."
+      "what": "Breadth-probe: sap.f.Card with a sap.f.cards.Header and a simplified content body - the original's From/To ComboBoxes (cities> named model), DatePicker and Book button are represented by a Text + a 'Buy Now' Button, and the sample's entire second Card (Project Cloud Transformation: List of CustomListItems over the products> named model with Title/Text/ObjectStatus) is dropped. Review 2026-07-27: both named models fold into the default model per CAPABILITIES 'Named JSON models' (the mocks are archived under ui5/sap.f/Card/model/), so the full sample is expressible - needs rework to a faithful rebuild."
     }
   ],
   "structural_diff": {
     "skip": true,
-    "reason": "breadth/capability probe \u2014 renders the control but is not a faithful 1:1 rebuild of the full sample"
+    "reason": "breadth/capability probe — renders the control but is not a faithful 1:1 rebuild of the full sample"
   }
 }

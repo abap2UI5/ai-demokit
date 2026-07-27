@@ -49,7 +49,8 @@ CLASS z2ui5_cl_ai_app_077 IMPLEMENTATION.
                 )->open( `NotificationListGroup`
                     )->a( n = `title`           v = `Orders`
                     )->a( n = `showCloseButton` v = `true`
-                    )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Closed: {0}` ) ( `${$source>/title}` ) ) )
+                    " the original onItemClose also removes the item client-side - static items here, so close only toasts
+                    )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Closed: {0}` ) ( `${$source>/title}` ) ) )
                     )->open( `buttons`
                         )->leaf( `Button`
                             )->a( n = `text`  v = `Accept All`
@@ -63,19 +64,19 @@ CLASS z2ui5_cl_ai_app_077 IMPLEMENTATION.
                         )->a( n = `datetime`        v = `1 hour`
                         )->a( n = `unread`          v = `true`
                         )->a( n = `priority`        v = `None`
-                        )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Closed: {0}` ) ( `${$source>/title}` ) ) )
+                        )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Closed: {0}` ) ( `${$source>/title}` ) ) )
                         )->a( n = `press`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                         )->a( n = `authorPicture`   v = `sap-icon://car-rental`
                         )->a( n = `authorAvatarColor` v = `Accent8`
                     )->open( `NotificationListItem`
                         )->a( n = `title`           v = `New order (#2524)`
-                        )->a( n = `description`     v = `Aliquam quis varius ligula. In justo lorem, lacinia ac ex at, vulputate dictum turpis. Praesent feugiat, turpis vel scelerisque pharetra, tellus odio vehicula dolor,` &&
+                        )->a( n = `description`     v = `Aliquam quis varius ligula. In justo lorem, lacinia ac ex at, vulputate dictum turpis. Praesent feugiat, turpis vel scelerisque pharetra, tellus odio vehicula dolor, ` &&
                                                          `nec elementum lectus turpis at nunc.`
                         )->a( n = `showCloseButton` v = `true`
                         )->a( n = `datetime`        v = `3 days`
                         )->a( n = `unread`          v = `true`
                         )->a( n = `priority`        v = `High`
-                        )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Closed: {0}` ) ( `${$source>/title}` ) ) )
+                        )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Closed: {0}` ) ( `${$source>/title}` ) ) )
                         )->a( n = `press`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                         )->a( n = `authorInitials`  v = `SF`
                         )->a( n = `authorAvatarColor` v = `Random`
@@ -96,7 +97,7 @@ CLASS z2ui5_cl_ai_app_077 IMPLEMENTATION.
                         )->a( n = `unread`          v = `false`
                         )->a( n = `datetime`        v = `3 days`
                         )->a( n = `priority`        v = `High`
-                        )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Closed: {0}` ) ( `${$source>/title}` ) ) )
+                        )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Closed: {0}` ) ( `${$source>/title}` ) ) )
                         )->a( n = `press`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                         )->a( n = `authorInitials`  v = `YR`
                         )->a( n = `authorAvatarColor` v = `Accent7`
@@ -116,7 +117,7 @@ CLASS z2ui5_cl_ai_app_077 IMPLEMENTATION.
                     )->a( n = `title`           v = `Orders`
                     )->a( n = `showCloseButton` v = `true`
                     )->a( n = `collapsed`       v = `true`
-                    )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Closed: {0}` ) ( `${$source>/title}` ) ) )
+                    )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Closed: {0}` ) ( `${$source>/title}` ) ) )
                     )->open( `buttons`
                         )->leaf( `Button`
                             )->a( n = `text`  v = `Accept All`
@@ -133,7 +134,7 @@ CLASS z2ui5_cl_ai_app_077 IMPLEMENTATION.
                         )->a( n = `datetime`        v = `1 hour`
                         )->a( n = `unread`          v = `true`
                         )->a( n = `priority`        v = `None`
-                        )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Closed: {0}` ) ( `${$source>/title}` ) ) )
+                        )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Closed: {0}` ) ( `${$source>/title}` ) ) )
                         )->a( n = `press`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                         )->a( n = `authorInitials`  v = `BN`
                     )->open( `NotificationListItem`
@@ -143,7 +144,7 @@ CLASS z2ui5_cl_ai_app_077 IMPLEMENTATION.
                         )->a( n = `datetime`        v = `3 days`
                         )->a( n = `unread`          v = `true`
                         )->a( n = `priority`        v = `High`
-                        )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Closed: {0}` ) ( `${$source>/title}` ) ) )
+                        )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Closed: {0}` ) ( `${$source>/title}` ) ) )
                         )->a( n = `press`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                         )->a( n = `authorPicture`   v = `sap-icon://car-rental`
                         )->open( `buttons`
@@ -159,11 +160,12 @@ CLASS z2ui5_cl_ai_app_077 IMPLEMENTATION.
                     )->open( `NotificationListItem`
                         )->a( n = `title`           v = `New order (#2523)`
                         )->a( n = `description`     v = `Aliquam quis varius ligula.`
+                        " the original writes showCloseButton="falseue" here - corrected to false (UI5 boolean parsing rejects the typo)
                         )->a( n = `showCloseButton` v = `false`
                         )->a( n = `unread`          v = `false`
                         )->a( n = `datetime`        v = `3 days`
                         )->a( n = `priority`        v = `High`
-                        )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Closed: {0}` ) ( `${$source>/title}` ) ) )
+                        )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Closed: {0}` ) ( `${$source>/title}` ) ) )
                         )->a( n = `press`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                         )->a( n = `authorInitials`  v = `YR`
                         )->a( n = `authorAvatarColor` v = `Accent7`
@@ -182,8 +184,9 @@ CLASS z2ui5_cl_ai_app_077 IMPLEMENTATION.
                 )->open( `NotificationListGroup`
                     )->a( n = `title`           v = `When 'Accept All' is pressed some of the notifications will show an error`
                     )->a( n = `showCloseButton` v = `true`
-                    )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Closed: {0}` ) ( `${$source>/title}` ) ) )
+                    )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Closed: {0}` ) ( `${$source>/title}` ) ) )
                     )->open( `buttons`
+                        " the original onAcceptErrors puts a random error MessageStrip on one item - simplified to the accept toast
                         )->leaf( `Button`
                             )->a( n = `text`  v = `Accept All`
                             )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Accept Button Pressed` ) ) )
@@ -199,7 +202,7 @@ CLASS z2ui5_cl_ai_app_077 IMPLEMENTATION.
                         )->a( n = `datetime`        v = `1 hour`
                         )->a( n = `unread`          v = `true`
                         )->a( n = `priority`        v = `None`
-                        )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Closed: {0}` ) ( `${$source>/title}` ) ) )
+                        )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Closed: {0}` ) ( `${$source>/title}` ) ) )
                         )->a( n = `press`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                         )->a( n = `authorPicture`   v = `sap-icon://car-rental`
                         )->a( n = `authorAvatarColor` v = `Accent8`
@@ -210,7 +213,7 @@ CLASS z2ui5_cl_ai_app_077 IMPLEMENTATION.
                         )->a( n = `datetime`        v = `3 days`
                         )->a( n = `unread`          v = `true`
                         )->a( n = `priority`        v = `High`
-                        )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Closed: {0}` ) ( `${$source>/title}` ) ) )
+                        )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Closed: {0}` ) ( `${$source>/title}` ) ) )
                         )->a( n = `press`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                         )->a( n = `authorPicture`   v = `sap-icon://car-rental`
                         )->a( n = `authorAvatarColor` v = `Accent8`
@@ -224,11 +227,12 @@ CLASS z2ui5_cl_ai_app_077 IMPLEMENTATION.
                     )->open( `NotificationListItem`
                         )->a( n = `title`           v = `New order (#2523)`
                         )->a( n = `description`     v = `Aliquam quis varius ligula.`
+                        " the original writes showCloseButton="falseue" here - corrected to false (UI5 boolean parsing rejects the typo)
                         )->a( n = `showCloseButton` v = `false`
                         )->a( n = `unread`          v = `false`
                         )->a( n = `datetime`        v = `3 days`
                         )->a( n = `priority`        v = `High`
-                        )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Closed: {0}` ) ( `${$source>/title}` ) ) )
+                        )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Closed: {0}` ) ( `${$source>/title}` ) ) )
                         )->a( n = `press`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                         )->a( n = `authorInitials`  v = `BN`
                         )->open( `buttons`
@@ -246,7 +250,7 @@ CLASS z2ui5_cl_ai_app_077 IMPLEMENTATION.
                 )->open( `NotificationListGroup`
                     )->a( n = `title`           v = `Group with notifications without footer buttons`
                     )->a( n = `showCloseButton` v = `true`
-                    )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Closed: {0}` ) ( `${$source>/title}` ) ) )
+                    )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Closed: {0}` ) ( `${$source>/title}` ) ) )
                     )->leaf( `NotificationListItem`
                         )->a( n = `title`           v = `New order (#2525)`
                         )->a( n = `description`     v = desc_long
@@ -254,7 +258,7 @@ CLASS z2ui5_cl_ai_app_077 IMPLEMENTATION.
                         )->a( n = `datetime`        v = `1 hour`
                         )->a( n = `unread`          v = `true`
                         )->a( n = `priority`        v = `None`
-                        )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Closed: {0}` ) ( `${$source>/title}` ) ) )
+                        )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Closed: {0}` ) ( `${$source>/title}` ) ) )
                         )->a( n = `press`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                         )->a( n = `authorPicture`   v = `sap-icon://car-rental`
                         )->a( n = `authorAvatarColor` v = `Accent8`
@@ -265,7 +269,7 @@ CLASS z2ui5_cl_ai_app_077 IMPLEMENTATION.
                         )->a( n = `datetime`        v = `3 days`
                         )->a( n = `unread`          v = `true`
                         )->a( n = `priority`        v = `High`
-                        )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Closed: {0}` ) ( `${$source>/title}` ) ) )
+                        )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Closed: {0}` ) ( `${$source>/title}` ) ) )
                         )->a( n = `press`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                         )->a( n = `authorInitials`  v = `BN`
                         )->open( `buttons`

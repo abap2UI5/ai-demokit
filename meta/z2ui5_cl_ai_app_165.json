@@ -4,10 +4,10 @@
   "entity": "sap.f.ProductSwitch",
   "file": "src/04/b07/z2ui5_cl_ai_app_165.clas.abap",
   "batch": "b07",
-  "audit": { "frontend_action": false, "event_t_arg": true },
+  "audit": { "frontend_action": true, "event_t_arg": false, "note": "the trigger press shows a static client-composed toast (control_global MESSAGE_TOAST.show) - see the IMPROVISED deviation, flagged for rework to the fragment popover" },
   "status": "generated",
   "checked": null,
   "deviations": [
-    { "type": "IMPROVISED", "what": "The shipped view is only the trigger Button plus two explanatory Texts in a VerticalLayout - rebuilt 1:1. The ProductSwitch is built in the sample's JS controller (fnOpen) inside a ResponsivePopover fragment (ResponsivePopover > ProductSwitch > ProductSwitchItem) and opened on press. abap2UI5 has no JS controller, so the button press raises a client MESSAGE_TOAST in place of the controller-built ResponsivePopover; the ProductSwitch and ProductSwitchItem controls are therefore not rendered (a controller-only sample)." }
+    { "type": "IMPROVISED", "what": "The shipped view is only the trigger Button plus two explanatory Texts in a VerticalLayout - rebuilt 1:1. The ProductSwitch is built in the sample's ProductSwitchPopover.fragment.xml (core:FragmentDefinition > ResponsivePopover > ProductSwitch > ProductSwitchItem, items bound to model/data.json) and opened on press (fnOpen). The port raises a client MESSAGE_TOAST instead; the ResponsivePopover, ProductSwitch and ProductSwitchItem controls are not rendered and the fnChange toast + URLHelper.redirect are lost. Review 2026-07-27: the original 'no JS controller' rationale is refuted by CAPABILITIES - a fragment popover opens 1:1 via popover_display/dependents+openBy and URLHelper redirect is expressible (cs_event-urlhelper); flagged for rework." }
   ]
 }

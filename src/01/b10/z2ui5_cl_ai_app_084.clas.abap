@@ -69,7 +69,7 @@ CLASS z2ui5_cl_ai_app_084 IMPLEMENTATION.
                     )->a( n = `value` v = `{EMAIL}`
                     )->a( n = `type`  v = `Active`
                     )->a( n = `press` v = client->_event_client( val   = client->cs_event-urlhelper
-                                                                 t_arg = VALUE #( ( `TRIGGER_EMAIL` ) ( |\{ EMAIL: '{ s_supplier-email }', SUBJECT: 'Info Request' \}| ) ) )
+                                                                 t_arg = VALUE #( ( `TRIGGER_EMAIL` ) ( |\{ EMAIL: '{ s_supplier-email }', SUBJECT: 'Info Request', NEW_WINDOW: true \}| ) ) )
                 )->leaf( `DisplayListItem`
                     )->a( n = `label` v = `Website`
                     )->a( n = `value` v = `{URL}`
