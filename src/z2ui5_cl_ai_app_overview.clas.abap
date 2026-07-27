@@ -3455,12 +3455,13 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` annotation, and without one a SmartTable starts with NO columns at all - it renders the "add columns to see the content" placeholder (seen live 2026-07-27; an earlier version of this note wrongly` &&
                ` assumed it would fall back to all metadata fields). The port therefore adds initiallyVisibleFields="ProductID,Name,Category,SupplierName,Price", an attribute the sample does not carry because its own` &&
                ` service annotates the four columns it shows. The page variant, the persistency keys and the smartVariant wiring the step is about are unaffected. // LIVE-TEST: Partly run in a system 2026-07-27: the` &&
-               ` view renders and filters against GWSAMPLE_BASIC, but SAVING a view still has to be re-checked. The first attempt failed in SmartVariantManagement._newVariant ("Cannot read properties of undefined` &&
-               ` (reading 'getId')"); the port-side half of that finding is fixed here (pageVariantPersistencyKey custom data), the framework-side half is filed as pr/flex-enabled-for-variants (abap2UI5's manifest`.
-    lv_text1 = lv_text1 && ` declares flexEnabled: false, while variant persistence runs through the SAPUI5 flexibility layer) and is NOT fixed. Open to verify - that saving and re-selecting a view now works, that the page` &&
-               ` variant restores filter bar and table personalization together, and that variant management no longer appears inside the Filters dialog. // NOTE: The property gate (ui5/properties.json) covers` &&
-               ` OpenUI5 libraries only, so no member of sap.ui.comp is checked against the 1.71 rule automatically. SmartVariantManagement, SmartFilterBar and SmartTable are @since 1.28; the smartVariant association` &&
-               ` and persistencyKey properties are of the same vintage.`.
+               ` view renders and filters against GWSAMPLE_BASIC, but SAVING a view still fails. Traced (see STATUS open findings): the flex APIs sap.ui.fl SmartVariantManagementWriteAPI/ApplyAPI call` &&
+               ` getAppComponentForControl(oControl).getId() unguarded, and the control they get is undefined - no personalizable control is registered at the page variant, which matches the companion symptom`.
+    lv_text1 = lv_text1 && ` "SmartFilterBar.getFilters: called before the SmartFilterBar is initialized". Ruled out: missing app component (resolves live), the manifest's flexEnabled flag (read only by sap.ui.rta), and` &&
+               ` association-id prefixing (XMLViews do prefix single associations). Fixed on the port side: the pageVariantPersistencyKey custom data. Open to verify once the init handshake is understood - saving and` &&
+               ` re-selecting a view, the page variant restoring filter bar and table personalization together, and variant management no longer appearing inside the Filters dialog. // NOTE: The property gate` &&
+               ` (ui5/properties.json) covers OpenUI5 libraries only, so no member of sap.ui.comp is checked against the 1.71 rule automatically. SmartVariantManagement, SmartFilterBar and SmartTable are @since 1.28;` &&
+               ` the smartVariant association and persistencyKey properties are of the same vintage.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.comp`        control = `sap.ui.comp.smartvariants.SmartVariantManagement` name = `PageVariantManagement`               class = `z2ui5_cl_ai_app_251` path = `src/06/b01/z2ui5_cl_ai_app_251.clas.abap`
         score = 5

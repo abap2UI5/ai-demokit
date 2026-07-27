@@ -63,6 +63,20 @@ Three lessons came out of the review and the first live run, all now encoded:
   serve the sample (app 252 needs an *analytical* one), the placeholder now
   reads as a placeholder: `…/<YOUR_ANALYTICAL_SERVICE>/`. Rule written into
   AGENTS §3 and CAPABILITIES.
+- **The variant-save crash is a missing registration, not a missing flag.**
+  Saving a view in app 251 throws `Cannot read properties of undefined
+  (reading 'getId')`. `sap.ui.comp` is closed, but the crashing line is not:
+  `sap/ui/fl/write/api/SmartVariantManagementWriteAPI.js:26` (and
+  `SmartVariantManagementApplyAPI.loadVariants`) call
+  `Utils.getAppComponentForControl(oControl).getId()` with no guard, and that
+  helper returns `undefined` for an `undefined` control — so the page variant is
+  saving with no personalizable control registered. Two hypotheses died on
+  evidence along the way, both worth remembering: the app component resolves
+  fine in the running app, and `flexEnabled` is read **only** by `sap.ui.rta`,
+  never by `sap.ui.fl` (a `pr/` request filed on that premise was withdrawn the
+  same day — read the source before filing). Port-side fix landed anyway: the
+  `pageVariantPersistencyKey` custom data the docs require, and the filter event
+  moved off the backend round-trip.
 - **A SmartTable without a `UI.LineItem` annotation renders NO columns.**
   First live run of apps 250/251 against GWSAMPLE_BASIC came up with the
   "add columns to see the content" placeholder. The assumption written into

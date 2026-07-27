@@ -37,12 +37,26 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   host is not an option (`pattern-lint` `commercial-ui5-host`); the fix is to
   suppress or re-target the links for `ui5_only` rows in
   `scripts/generate-overview.mjs`. Their ABAP-class link is correct.
-- [ ] **Variant management crashes on save (app 251).** `SmartVariantManagement._newVariant` throws
-  `Cannot read properties of undefined (reading 'getId')` when a view is saved. Two halves: the
-  port-side one is fixed (the `pageVariantPersistencyKey` custom data the SAPUI5 docs require when a
-  page variant is used by a `SmartFilterBar`); the framework-side one is open — abap2UI5's manifest
-  declares `flexEnabled: false` while variant persistence runs through the flexibility layer, filed as
-  `pr/flex-enabled-for-variants` with the console check that confirms or refutes it.
+- [ ] **Variant management crashes on save (app 251) — root cause narrowed, not fixed.**
+  `SmartVariantManagement._newVariant` throws `Cannot read properties of undefined
+  (reading 'getId')`. Traced into the OPEN-SOURCE half: both
+  `sap/ui/fl/write/api/SmartVariantManagementWriteAPI.js:26` and
+  `SmartVariantManagementApplyAPI.loadVariants` do
+  `Utils.getAppComponentForControl(oControl).getId()` unguarded, and
+  `getAppComponentForControl(undefined)` returns `undefined` — so the control handed
+  to the flex API is **undefined**, i.e. no personalizable control was registered at
+  the page variant. That matches the second live symptom,
+  `SmartFilterBar.getFilters: called before the SmartFilterBar is initialized`: the
+  filter bar never finishes its init handshake, so it never registers, and the save
+  path then runs on nothing. Ruled out with evidence: the app component resolves fine
+  (live console), `flexEnabled` is read only by `sap.ui.rta`, never by `sap.ui.fl`
+  (so the manifest flag is NOT the gate — an earlier `pr/` request on that premise was
+  withdrawn), and XMLViews DO prefix single-association ids (`XMLTemplateProcessor`
+  `_iKind === 3` → `createId`), so `smartVariant="pageVariantId"` resolves. Fixed on the
+  port side meanwhile: the `pageVariantPersistencyKey` custom data the SAPUI5 docs
+  require for a SmartFilterBar page variant, and the filter event is roundtrip-free.
+  Next step is a live `SmartVariantManagementApplyAPI.loadVariants({control: <filter
+  bar>, standardVariant: {}})` — it surfaces the error the control swallows.
 - [ ] **sap.ui.comp ports are all unverified (5 open LIVE_TESTs).** They need
   a SAPUI5 runtime plus a Gateway service exposing the tutorial's `Products`
   entity set, so neither `render_smoke` (declared skips) nor the e2e harness
