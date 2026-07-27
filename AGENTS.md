@@ -183,6 +183,10 @@ Two idioms are specific to these ports:
   so in the deviation, rather than a plausible-looking name. The sample's own
   `metadata.xml` stays archived next to the template as the specification of
   what a rebuilt service has to expose.
+  **A `SmartTable` on a service without a `UI.LineItem` annotation renders zero
+  columns** — the "add columns to see the content" placeholder, not a fallback
+  to all metadata fields (live finding 2026-07-27). GWSAMPLE_BASIC has no such
+  annotation, so those ports must add `initiallyVisibleFields` and declare it.
 - **Element binding by entity path.** Where the sample's controller calls
   `bindElement("/Products('4711')")`, the port declares
   `)->a( n = \`binding\` v = \`{/Products('4711')}\`` on the view root. This is

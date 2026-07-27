@@ -82,6 +82,11 @@ CLASS z2ui5_cl_ai_app_251 IMPLEMENTATION.
             )->a( n = `tableType`               v = `ResponsiveTable`
             )->a( n = `editable`                v = `false`
             )->a( n = `entitySet`               v = `ProductSet`
+            " GWSAMPLE_BASIC carries no UI.LineItem annotation, and without one a
+            " SmartTable starts with NO columns at all ("add columns to see the
+            " content") - the initially visible fields have to be named. Not part of
+            " the sample's view, which gets its four columns from its own annotation.
+            )->a( n = `initiallyVisibleFields`  v = `ProductID,Name,Category,SupplierName,Price`
             )->a( n = `useVariantManagement`    v = `true`
             )->a( n = `useTablePersonalisation` v = `true`
             )->a( n = `header`                  v = `Products`

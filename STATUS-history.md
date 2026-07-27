@@ -52,7 +52,7 @@ ships only with SAPUI5, so the ports sit outside the OpenUI5 universe, the
 each exception, `ui5/sap.ui.comp/README.md` the template provenance (the
 public SAP-docs sources, since no OpenUI5 checkout carries these samples).
 
-Two lessons came out of the review, both now encoded:
+Three lessons came out of the review and the first live run, all now encoded:
 
 - **Never invent a service path.** The first draft pointed every port at
   `/sap/opu/odata/sap/Z2UI5_SMART_TUT_0n_SRV/` — a name that exists in no
@@ -63,6 +63,14 @@ Two lessons came out of the review, both now encoded:
   serve the sample (app 252 needs an *analytical* one), the placeholder now
   reads as a placeholder: `…/<YOUR_ANALYTICAL_SERVICE>/`. Rule written into
   AGENTS §3 and CAPABILITIES.
+- **A SmartTable without a `UI.LineItem` annotation renders NO columns.**
+  First live run of apps 250/251 against GWSAMPLE_BASIC came up with the
+  "add columns to see the content" placeholder. The assumption written into
+  the sidecars - that the control falls back to all metadata fields - was
+  wrong; the initially visible fields have to be named. Both ports now carry
+  `initiallyVisibleFields="ProductID,Name,Category,SupplierName,Price"` (an
+  attribute the sample does not need, because its own service annotates its
+  four columns), declared per port, and AGENTS §3 states the rule.
 - **structural-diff was blind to camelCase namespace prefixes.** `isControl`
   matched the prefix as `[a-z]+:`, so every `smartForm:SmartForm`,
   `smartField:SmartField`, `smartTable:SmartTable`, … counted as a lowercase

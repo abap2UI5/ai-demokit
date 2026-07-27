@@ -4,8 +4,10 @@
 "! views are bound and their visibility is an expression binding over the two-way
 "! show_tree flag, so the toggle runs entirely on the client (no round-trip). The
 "! search field filters the table on the client (binding_call Contains, no
-"! round-trip); the tree is not filtered. Each tree leaf has the same jump
-"! popover as the table's Open column.
+"! round-trip); its query is two-way bound (search_query), so it survives an app
+"! state restore - the browser Back button after starting a listed app - and
+"! view_display re-applies the filter via follow_up_action; the tree is not
+"! filtered. Each tree leaf has the same jump popover as the table's Open column.
 "! The title carries the ported-app count in parentheses. There are two sortable
 "! Since columns: the first (next to Control) shows the UI5 release the CONTROL
 "! appeared in (from ui5/universe.json; blank when older than tracking / since
@@ -118,6 +120,12 @@ CLASS z2ui5_cl_ai_app_overview DEFINITION PUBLIC.
 
     DATA t_app TYPE ty_t_app.
     DATA t_tree TYPE ty_t_tree.
+    " the search field's text (two-way, so it survives a round-trip and the
+    " draft): the filter itself runs on the client, but only a value that is
+    " part of the MODEL comes back when the app is restored - e.g. by the
+    " browser Back button after starting one of the listed apps. view_display
+    " re-applies the filter for a non-initial query via follow_up_action.
+    DATA search_query TYPE string.
     " table/tree toggle (drives the visible expression bindings)
     DATA show_tree TYPE abap_bool.
     " sap.m.Shell letterboxing toggle (two-way, drives Shell appWidthLimited)
@@ -367,6 +375,10 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                         )->leaf( `SearchField`
                             )->a( n = `placeholder` v = `Search the table - module, control, since, sample, class`
                             )->a( n = `width`       v = `24rem`
+                            " two-way bound so the typed query is part of the model and
+                            " comes back with the app state (Back button, draft restore);
+                            " the filtering itself stays client-side (below)
+                            )->a( n = `value`       v = client->_bind( search_query )
                             " disabled while the tree is shown (search filters only the table)
                             )->a( n = `enabled`     v = |\{= !${ client->_bind( show_tree ) } \}|
                             )->a( n = `liveChange`  v = client->_event_client( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `filter` ) ( `FILTER` ) ( `Contains` ) ( `${$parameters>/newValue}` ) ) )
@@ -743,6 +755,16 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                                     )->a( n = `press`   v = client->_event( val = `START_APP` t_arg = VALUE #( ( `${CLASS}` ) ) ) ).
 
     client->view_display( view->stringify( ) ).
+
+    " Re-apply the client-side table filter for a restored query. The filter is
+    " a frontend-only binding operation (the model keeps all rows), so a rebuilt
+    " view starts unfiltered - while the SearchField, being two-way bound, does
+    " show the query again. follow_up_action runs the very same binding_call
+    " after the view was rendered, so both are back in sync.
+    IF search_query IS NOT INITIAL.
+      client->follow_up_action( val   = client->cs_event-binding_call
+                                t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `filter` ) ( `FILTER` ) ( `Contains` ) ( search_query ) ) ).
+    ENDIF.
 
   ENDMETHOD.
 
@@ -3363,7 +3385,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` IMPROVISED: The tutorial serves its own metadata.xml and mock data from a local mock server, which an ABAP system cannot reproduce (a Gateway service is not a transportable artifact of this repo).` &&
                ` The port therefore points the default model at the SAP Gateway demo service GWSAMPLE_BASIC (/sap/opu/odata/IWBEP/GWSAMPLE_BASIC/, client->view_display switch_default_model_path, constant` &&
                ` c_odata_service): it ships with every on-premise system and only has to be activated once in /IWFND/MAINT_SERVICE, so the app actually runs. The sample's own metadata.xml stays archived beside the` &&
-               ` template for anyone who wants to rebuild the tutorial service instead. GWSAMPLE_BASIC exposes ProductSet instead of the tutorial's Products, so the element binding reads /ProductSet('HT-1000')`.
+               ` template for anyone who wants to rebuild the tutorial service instead. GWSAMPLE_BASIC exposes ProductSet instead of the tutorial's Products, so the element binding reads /ProductSet('AR-FB-1000')`.
     lv_text1 = lv_text1 && ` instead of /Products('4711') - a different product record of a different service. The bound field itself is unchanged: GWSAMPLE_BASIC's Price carries sap:unit=CurrencyCode and a sap:label, which is` &&
                ` exactly what the step demonstrates about SmartField. // LIVE-TEST: Not yet run in a system: the port needs a SAPUI5 runtime (sap.ui.comp) and the GWSAMPLE_BASIC demo service activated in` &&
                ` /IWFND/MAINT_SERVICE, so neither render_smoke nor e2e can exercise it. Open to verify - that the declarative binding attribute reaches the OData model the same way the controller's bindElement did,` &&
@@ -3383,7 +3405,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` ABAP system cannot reproduce (a Gateway service is not a transportable artifact of this repo). The port therefore points the default model at the SAP Gateway demo service GWSAMPLE_BASIC` &&
                ` (/sap/opu/odata/IWBEP/GWSAMPLE_BASIC/, client->view_display switch_default_model_path, constant c_odata_service): it ships with every on-premise system and only has to be activated once in` &&
                ` /IWFND/MAINT_SERVICE, so the app actually runs. The sample's own metadata.xml stays archived beside the template for anyone who wants to rebuild the tutorial service instead. Two consequences for the`.
-    lv_text1 = lv_text1 && ` view: the element binding reads /ProductSet('HT-1000') instead of /Products('4711'), and two of the six SmartField bindings are renamed to the demo service's property names - {ProductId} becomes` &&
+    lv_text1 = lv_text1 && ` view: the element binding reads /ProductSet('AR-FB-1000') instead of /Products('4711'), and two of the six SmartField bindings are renamed to the demo service's property names - {ProductId} becomes` &&
                ` {ProductID} (case only) and {CategoryName} becomes {Category}. {Name}, {Description}, {Price} and {SupplierName} exist under the same names, as does the form title binding {Name}. // LIVE-TEST: Not` &&
                ` yet run in a system: the port needs a SAPUI5 runtime (sap.ui.comp) and the GWSAMPLE_BASIC demo service activated in /IWFND/MAINT_SERVICE, so neither render_smoke nor e2e can exercise it. Open to` &&
                ` verify - editTogglable switching the whole form between display and edit mode, and the two-field GroupElement with elementForLabel=1 taking its label from the second field. // NOTE: The property gate` &&
@@ -3402,13 +3424,14 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` from a local mock server, which an ABAP system cannot reproduce (a Gateway service is not a transportable artifact of this repo). The port therefore points the default model at the SAP Gateway demo` &&
                ` service GWSAMPLE_BASIC (/sap/opu/odata/IWBEP/GWSAMPLE_BASIC/, client->view_display switch_default_model_path, constant c_odata_service): it ships with every on-premise system and only has to be` &&
                ` activated once in /IWFND/MAINT_SERVICE, so the app actually runs. The sample's own metadata.xml stays archived beside the template for anyone who wants to rebuild the tutorial service instead. Both` &&
-               ` the SmartFilterBar and the SmartTable therefore carry entitySet="ProductSet" instead of "Products" (the header stays "Products", it is a label). Two behavioural differences follow from the demo`.
-    lv_text1 = lv_text1 && ` service's annotations rather than from the port: GWSAMPLE_BASIC has no UI.LineItem annotation, so the SmartTable builds its columns from all metadata fields instead of the tutorial's four; and the` &&
-               ` Category value help appears only if the system's service carries the sap:value-list annotation (VH_CategorySet). The filter field itself works either way - Category is filterable. // LIVE-TEST: Not` &&
-               ` yet run in a system: the port needs a SAPUI5 runtime (sap.ui.comp) and the GWSAMPLE_BASIC demo service activated in /IWFND/MAINT_SERVICE, so neither render_smoke nor e2e can exercise it. Open to` &&
-               ` verify - that the SmartFilterBar's Go triggers the SmartTable's request through smartFilterId and that the ControlConfiguration puts Category into the advanced filter area. // NOTE: The property gate` &&
-               ` (ui5/properties.json) covers OpenUI5 libraries only, so no member of sap.ui.comp is checked against the 1.71 rule automatically. SmartTable, SmartFilterBar and smartfilterbar.ControlConfiguration are` &&
-               ` all @since 1.28, well below 1.71.`.
+               ` the SmartFilterBar and the SmartTable therefore carry entitySet="ProductSet" instead of "Products" (the header stays "Products", it is a label). One consequence needs an addition to the view:`.
+    lv_text1 = lv_text1 && ` GWSAMPLE_BASIC carries no UI.LineItem annotation, and without one a SmartTable starts with NO columns at all - it renders the "add columns to see the content" placeholder (seen live 2026-07-27; an` &&
+               ` earlier version of this note wrongly assumed it would fall back to all metadata fields). The port therefore adds initiallyVisibleFields="ProductID,Name,Category,SupplierName,Price", an attribute the` &&
+               ` sample does not carry because its own service annotates the four columns it shows. The Category value help additionally appears only if the system's service carries the sap:value-list annotation` &&
+               ` (VH_CategorySet); the filter field itself works either way - Category is filterable. // LIVE-TEST: Not yet run in a system: the port needs a SAPUI5 runtime (sap.ui.comp) and the GWSAMPLE_BASIC demo` &&
+               ` service activated in /IWFND/MAINT_SERVICE, so neither render_smoke nor e2e can exercise it. Open to verify - that the SmartFilterBar's Go triggers the SmartTable's request through smartFilterId and` &&
+               ` that the ControlConfiguration puts Category into the advanced filter area. // NOTE: The property gate (ui5/properties.json) covers OpenUI5 libraries only, so no member of sap.ui.comp is checked`.
+    lv_text1 = lv_text1 && ` against the 1.71 rule automatically. SmartTable, SmartFilterBar and smartfilterbar.ControlConfiguration are all @since 1.28, well below 1.71.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.comp`        control = `sap.ui.comp.smarttable.SmartTable`                name = `SmartTable`                          class = `z2ui5_cl_ai_app_250` path = `src/06/b01/z2ui5_cl_ai_app_250.clas.abap`
         score = 4
@@ -3422,11 +3445,13 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` Gateway service is not a transportable artifact of this repo). The port therefore points the default model at the SAP Gateway demo service GWSAMPLE_BASIC (/sap/opu/odata/IWBEP/GWSAMPLE_BASIC/,` &&
                ` client->view_display switch_default_model_path, constant c_odata_service): it ships with every on-premise system and only has to be activated once in /IWFND/MAINT_SERVICE, so the app actually runs.` &&
                ` The sample's own metadata.xml stays archived beside the template for anyone who wants to rebuild the tutorial service instead. Both smart controls therefore carry entitySet="ProductSet" instead of`.
-    lv_text1 = lv_text1 && ` "Products" (the header stays "Products", it is a label). As with the SmartTable port, GWSAMPLE_BASIC has no UI.LineItem annotation, so the table shows all metadata fields as columns; the page` &&
+    lv_text1 = lv_text1 && ` "Products" (the header stays "Products", it is a label). One consequence needs an addition to the view: GWSAMPLE_BASIC carries no UI.LineItem annotation, and without one a SmartTable starts with NO` &&
+               ` columns at all - it renders the "add columns to see the content" placeholder (seen live 2026-07-27; an earlier version of this note wrongly assumed it would fall back to all metadata fields). The` &&
+               ` port therefore adds initiallyVisibleFields="ProductID,Name,Category,SupplierName,Price", an attribute the sample does not carry because its own service annotates the four columns it shows. The page` &&
                ` variant, the persistency keys and the smartVariant wiring the step is about are unaffected. // LIVE-TEST: Not yet run in a system: the port needs a SAPUI5 runtime (sap.ui.comp) and the GWSAMPLE_BASIC` &&
                ` demo service activated in /IWFND/MAINT_SERVICE, so neither render_smoke nor e2e can exercise it. Open to verify - that the page variant (PageVariantPKey) saves and restores filter bar and table` &&
-               ` personalization together through the smartVariant association, and that variant management no longer appears inside the Filters dialog. // NOTE: The property gate (ui5/properties.json) covers OpenUI5` &&
-               ` libraries only, so no member of sap.ui.comp is checked against the 1.71 rule automatically. SmartVariantManagement, SmartFilterBar and SmartTable are @since 1.28; the smartVariant association and` &&
+               ` personalization together through the smartVariant association, and that variant management no longer appears inside the Filters dialog. // NOTE: The property gate (ui5/properties.json) covers OpenUI5`.
+    lv_text1 = lv_text1 && ` libraries only, so no member of sap.ui.comp is checked against the 1.71 rule automatically. SmartVariantManagement, SmartFilterBar and SmartTable are @since 1.28; the smartVariant association and` &&
                ` persistencyKey properties are of the same vintage.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.comp`        control = `sap.ui.comp.smartvariants.SmartVariantManagement` name = `PageVariantManagement`               class = `z2ui5_cl_ai_app_251` path = `src/06/b01/z2ui5_cl_ai_app_251.clas.abap`

@@ -36,11 +36,13 @@ The ports therefore read the **SAP Gateway demo service `GWSAMPLE_BASIC`**
 (`/sap/opu/odata/IWBEP/GWSAMPLE_BASIC/`, entity set `ProductSet`), which ships
 with every on-premise system and only has to be activated once in
 `/IWFND/MAINT_SERVICE`. The price is a small, declared adaptation per port —
-`entitySet="ProductSet"`, the element binding key `/ProductSet('HT-1000')`, and
+`entitySet="ProductSet"`, the element binding key `/ProductSet('AR-FB-1000')`, and
 in the SmartForm port two renamed field bindings (`{ProductId}` → `{ProductID}`,
 `{CategoryName}` → `{Category}`). Because GWSAMPLE_BASIC carries no `UI.LineItem`
-annotation, the SmartTable shows all metadata fields as columns rather than the
-tutorial's four.
+annotation, a SmartTable on it would render **no columns at all** (the "add
+columns to see the content" placeholder), so apps 250 and 251 additionally name
+their columns via `initiallyVisibleFields` — an attribute the sample does not
+need, because its own service annotates the four columns it shows.
 
 **Exception — app 252 (SmartChart).** A chart needs an *analytical* service
 (`sap:aggregation-role` dimensions/measures plus the `UI.Chart` annotation);
