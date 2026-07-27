@@ -7,14 +7,14 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
-## Review sweep (2026-07-27) — the empty `reviewed` rung filled: 153 promoted, 48 flagged
+## Review sweep (2026-07-27) — the empty `reviewed` rung filled: 152 promoted, 49 flagged
 
 The quality ladder's middle rung had been empty since its definition (0
 `reviewed` ports). A full adversarial sweep over all 201 `generated` ports
 (14 batches, each port read against its archived original, the mocks —
 byte-level where inlined — and the abap2UI5/OpenUI5 sources) closed that:
 
-- **153 ports promoted to `reviewed`**, ~60 of them after documentation/data
+- **152 ports promoted to `reviewed`**, ~60 of them after documentation/data
   fixes applied in the same pass: missing POST_171 declarations of
   gate-invisible members (control-level `NotificationList` @1.90,
   aggregation-level `Title.content` @1.87 / `StandardListItem.avatar` @1.98 /
@@ -27,7 +27,7 @@ byte-level where inlined — and the abap2UI5/OpenUI5 sources) closed that:
   086, missing `NEW_WINDOW` in 084, wrong token-delete text in 085, twelve
   malformed attribute lines in 140, §5 underscore-field renames in
   192/197/199/201/211/215/223/229/235).
-- **48 ports stay `generated`** with corrected, honest sidecars — the rework
+- **49 ports stay `generated`** with corrected, honest sidecars — the rework
   backlog (STATUS.md open findings): dead `_event` wires without an
   `on_event` dispatcher (new pattern-lint rule `dead-event-wire`, 6 BASELINE
   entries), toast substitutions around expressible capabilities (the app-042
@@ -48,8 +48,8 @@ byte-level where inlined — and the abap2UI5/OpenUI5 sources) closed that:
 
 All gates green after the sweep (abaplint STANDARD+CLOUD, validate-meta,
 pattern-lint incl. the new rule, structural-diff --strict, structure-lint,
-property-check, data-fidelity, render-smoke). Ladder now: 48 `generated` ·
-153 `reviewed` · 45 `checked`.
+property-check, data-fidelity, render-smoke). Ladder now: 49 `generated` ·
+152 `reviewed` · 45 `checked`.
 
 ## Hold-out probe #2 (2026-07-26) — fidelity way up, syntax is the new frontier
 

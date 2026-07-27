@@ -52,8 +52,8 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   green property-check still does not prove a port ≤ 1.71-clean — the
   control-level `scope-of` check plus by-policy POST_171 declarations remain
   required.
-- [ ] **Review-sweep rework backlog (48 ports).** The 2026-07-27 sweep
-  promoted 153 of 201 `generated` ports to `reviewed`; the remaining 48 stay
+- [ ] **Review-sweep rework backlog (49 ports).** The 2026-07-27 sweep
+  promoted 152 of 201 `generated` ports to `reviewed`; the remaining 49 stay
   `generated` with **corrected, honest sidecars** and need real view/logic
   rework. Recurring classes: dead `_event` wires with no `on_event`
   dispatcher (pattern-lint `dead-event-wire`, 6 BASELINE entries), toast
