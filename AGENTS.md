@@ -1158,6 +1158,19 @@ How to record it:
   driving it imperatively. Only methods with no bindable equivalent
   (`NavContainer.to`, `focus`, `scrollToIndex`) need a frontend action.
   Compare app 088 (NavContainer + action) with the IconTabBar samples.
+- **Client-side-only state does not survive a view rebuild** — a value the
+  frontend never sends back (a `SearchField` with no bound `value`) and a
+  `binding_call` filter/sorter (it acts on the aggregation binding, not on the
+  model) are gone the moment the backend rebuilds the view: another round-trip,
+  a draft restore, the browser Back button after `nav_app_call`. Bind the value
+  two-way so it travels with the next event, and re-apply the binding operation
+  in `view_display` via `follow_up_action( cs_event-binding_call … )` when the
+  restored value is non-initial. The overview app lost its search this way
+  (user report, 2026-07-27); its Shell/tree switches and filter checkboxes were
+  fine — they are two-way bound. (What ALSO had to be fixed for them: the
+  framework pointed the caller's history entry at its pre-event draft —
+  pr/nav-app-call-caller-draft.) Sort state stays client-only: an
+  `_event_client` sort cannot write to the model, so it is deliberately lost.
 - **A listed control method silently drops arguments beyond its
   declared kinds** — `castArgs` in `FrontendAction.js` maps over the
   `CONTROL_METHODS` kinds list, so a `to` transition name or a

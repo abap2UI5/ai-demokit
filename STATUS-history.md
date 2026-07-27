@@ -7,6 +7,41 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## Overview state survives the browser Back button (2026-07-27)
+
+User report: search something in the overview, or flip the Shell switch, start
+an app and press Back - the overview comes back in its default state. Two
+independent causes, both fixed.
+
+- **Framework (abap2UI5, branch `claude/ai-demokit-state-loss-cyz42a`,
+  pr/nav-app-call-caller-draft).** Every roundtrip saves the app under a NEW
+  draft id, and `nav_app_call` saves the CALLING app - including the two-way
+  model delta that arrived with the triggering event - under that fresh id.
+  The caller's hash entry, however, still carried the draft of its last
+  RENDER, so Back restored the state the user saw before touching any
+  control. The response now carries `nav_app_call_prev_app`/`_id` and
+  `View1._repointCallerEntry` `replaceHash`es the caller's entry onto the
+  fresh draft before pushing the called app's route (KEEP mode; first hop of
+  a request only, so `A -> B -> C` keeps A's entry). Covered by
+  `node/tests/view1History.spec.js` (6 cases, the repoint one fails without
+  the fix) and an extended `test_stack_call`.
+- **Overview app.** The search query lived only in the frontend: the
+  SearchField had no bound `value`, and the filter is a `binding_call` on the
+  table's items binding, which a rebuilt view starts without. The query is
+  now two-way bound (`search_query`), so it travels with the START_APP event
+  and comes back with the app state, and `view_display` re-applies the very
+  same `binding_call` filter through `follow_up_action` whenever the restored
+  query is non-initial. The Shell/tree switches and the three filter
+  checkboxes needed no app change - they were already two-way bound and only
+  ever lost to the framework issue above.
+- **Not covered by an e2e run**: the overview cannot do a second roundtrip on
+  the transpiled Node backend at all - reloading its own draft dies in the
+  transpiled `cl_ixml` parse (`ASSERTION_FAILED`, uncatchable in JS), and a
+  `nav_app_call` to a fresh app dies in `main_attri_db_load` for the same
+  reason. Both are open-abap runtime limits, not app defects (a real system
+  runs this daily), so the browser-level proof stays a human check; the
+  framework half is unit-tested instead.
+
 ## sap.ui.comp smart controls ported — and two lessons (2026-07-27)
 
 New library tree `src/06` (`sap.ui.comp`), batch `b01`, apps 248-252 rebuilt
