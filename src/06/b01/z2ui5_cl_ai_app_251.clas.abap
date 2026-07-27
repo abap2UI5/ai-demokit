@@ -61,6 +61,7 @@ CLASS z2ui5_cl_ai_app_251 IMPLEMENTATION.
         )->open( n = `SmartFilterBar` ns = `smartFilterBar`
             )->a( n = `id`                     v = `smartFilterBar`
             )->a( n = `entitySet`              v = `ProductSet`
+            )->a( n = `smartVariant`           v = `pageVariantId`
             )->a( n = `persistencyKey`         v = `SmartFilterPKey`
             " The tutorial's onFiltersChanged handler is not published, so there is no
             " original body to rebuild - but the original IS a controller function, i.e.
@@ -76,8 +77,9 @@ CLASS z2ui5_cl_ai_app_251 IMPLEMENTATION.
             " - the persistencyKey property above only names this control's slice of
             " the stored data. The filter bar then adapts the related SmartTable
             " itself, "and therefore, the smartVariant association doesn't have to be
-            " assigned" - which is why neither control carries it here, unlike the
-            " tutorial's published view.
+            " assigned" - read as: the TABLE does not need it (it has none below), while
+            " the filter bar keeps it, because the custom data carries only the KEY and
+            " the control still has to find the page variant INSTANCE somehow.
             )->open( n = `customData` ns = `smartFilterBar`
                 )->leaf( n = `CustomData` ns = `core`
                     )->a( n = `key`   v = `pageVariantPersistencyKey`
