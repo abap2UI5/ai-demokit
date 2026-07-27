@@ -19,12 +19,12 @@
       "what": "The view wires assignedFiltersChanged=\"onFiltersChanged\" on the SmartFilterBar, but the tutorial does not publish that controller, so there is no original handler body to rebuild. The port keeps the event and routes it to the backend (FILTERS_CHANGED), where it raises a message toast - invented behaviour, chosen so the wire is a live round-trip rather than a dead one. A real app would use the hook to re-read the assigned filters server-side."
     },
     {
-      "type": "NOTE",
-      "what": "The tutorial serves the service of steps 5-7 from a local mock server (step 8 does not republish its metadata.xml; see ui5/sap.ui.comp/SmartTable/metadata.xml). abap2UI5 points the default model at a real OData V2 service instead (client->view_display switch_default_model_path, constant c_odata_service). Configuration difference, not a view difference."
+      "type": "IMPROVISED",
+      "what": "The tutorial serves its own metadata.xml and mock data from a local mock server, which an ABAP system cannot reproduce (a Gateway service is not a transportable artifact of this repo). The port therefore points the default model at the SAP Gateway demo service GWSAMPLE_BASIC (/sap/opu/odata/IWBEP/GWSAMPLE_BASIC/, client->view_display switch_default_model_path, constant c_odata_service): it ships with every on-premise system and only has to be activated once in /IWFND/MAINT_SERVICE, so the app actually runs. The sample's own metadata.xml stays archived beside the template for anyone who wants to rebuild the tutorial service instead. Both smart controls therefore carry entitySet=\"ProductSet\" instead of \"Products\" (the header stays \"Products\", it is a label). As with the SmartTable port, GWSAMPLE_BASIC has no UI.LineItem annotation, so the table shows all metadata fields as columns; the page variant, the persistency keys and the smartVariant wiring the step is about are unaffected."
     },
     {
       "type": "LIVE_TEST",
-      "what": "Not yet run in a system: the port needs a SAPUI5 runtime (sap.ui.comp) plus a Gateway service, so neither render_smoke nor e2e can exercise it. Open to verify - that the page variant (PageVariantPKey) saves and restores filter bar and table personalization together through the smartVariant association, and that variant management no longer appears inside the Filters dialog."
+      "what": "Not yet run in a system: the port needs a SAPUI5 runtime (sap.ui.comp) and the GWSAMPLE_BASIC demo service activated in /IWFND/MAINT_SERVICE, so neither render_smoke nor e2e can exercise it. Open to verify - that the page variant (PageVariantPKey) saves and restores filter bar and table personalization together through the smartVariant association, and that variant management no longer appears inside the Filters dialog."
     },
     {
       "type": "NOTE",

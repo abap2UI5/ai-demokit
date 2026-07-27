@@ -170,9 +170,19 @@ Two idioms are specific to these ports:
   their UI from OData metadata, so the port has no `model_init`; it switches the
   default model instead:
   `client->view_display( val = view->stringify( ) switch_default_model_path = c_odata_service )`,
-  with `c_odata_service` a `CONSTANTS` in `PROTECTED` naming the Gateway service
-  that exposes the sample's entity set (the sample's own `metadata.xml` is
-  archived next to the template, so the service can be rebuilt in any system).
+  with `c_odata_service` a `CONSTANTS` in `PROTECTED`. **Never invent a service
+  name there** — a `Z…_SRV` path that exists in no system makes the app look
+  runnable when it is not (the first draft of this batch did exactly that). The
+  default is the Gateway demo service **`/sap/opu/odata/IWBEP/GWSAMPLE_BASIC/`**
+  (`ProductSet`), which ships with every on-premise system and only needs
+  activating in `/IWFND/MAINT_SERVICE`; adapting the sample's entity set and
+  field names onto it is an `IMPROVISED` deviation and worth it, because the
+  port then runs. Where the demo service genuinely cannot serve the sample — the
+  SmartChart needs an **analytical** service (`sap:aggregation-role`, `UI.Chart`)
+  — ship a placeholder that reads as one (`…/<YOUR_ANALYTICAL_SERVICE>/`) and say
+  so in the deviation, rather than a plausible-looking name. The sample's own
+  `metadata.xml` stays archived next to the template as the specification of
+  what a rebuilt service has to expose.
 - **Element binding by entity path.** Where the sample's controller calls
   `bindElement("/Products('4711')")`, the port declares
   `)->a( n = \`binding\` v = \`{/Products('4711')}\`` on the view root. This is

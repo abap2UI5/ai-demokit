@@ -19,12 +19,12 @@
       "what": "The original onNavigationTargetsObtained composes the navigation popover imperatively - oParameters.show(...) with two navpopover.LinkData entries and a sap.ui.layout.form.SimpleForm of Title/Image/Text built in JavaScript. Constructing controls in the frontend is exactly what a thin frontend does not do, and abap2UI5 has no equivalent hook, so the port keeps the event wired (NAV_TARGETS_OBTAINED, answered with a toast) and leaves the popover at the content the SemanticObjectController derives from the annotations itself. The additional links, the Homepage link and the product-description form of the original are therefore not shown."
     },
     {
-      "type": "NOTE",
-      "what": "onNavigate is rebuilt 1:1: the link text travels to the backend as an event argument (${$parameters>/text}) and the NAVIGATE branch reproduces the original's early return for \"Homepage\" plus the MessageBox (title \"SmartChart demo\", text \"<link> has been pressed\") via client->message_box_display."
+      "type": "IMPROVISED",
+      "what": "The SmartChart needs an ANALYTICAL OData V2 service - sap:aggregation-role dimension/measure properties plus the UI.Chart annotation the chart layout comes from. No such service is part of a standard system (the Gateway demo service GWSAMPLE_BASIC its four neighbours in this package use is not analytical), and the tutorial's own mock server cannot be reproduced in ABAP, so the port ships NO working service: c_odata_service is the explicit placeholder /sap/opu/odata/sap/<YOUR_ANALYTICAL_SERVICE>/ and the app shows an empty chart until it is replaced. The view itself is the tutorial's, unchanged, including entitySet=\"Products\"; the sample's metadata.xml is archived in ui5/sap.ui.comp/SmartChart/ as the specification of what the service has to expose."
     },
     {
       "type": "NOTE",
-      "what": "The tutorial serves its analytical metadata.xml and Products.json from a local mock server. abap2UI5 points the default model at a real OData V2 service instead (client->view_display switch_default_model_path, constant c_odata_service); the service must carry the archived metadata's aggregation-role dimensions/measures, the UI.Chart annotation and the SemanticObject annotation on Category. Configuration difference, not a view difference."
+      "what": "onNavigate is rebuilt 1:1: the link text travels to the backend as an event argument (${$parameters>/text}) and the NAVIGATE branch reproduces the original's early return for \"Homepage\" plus the MessageBox (title \"SmartChart demo\", text \"<link> has been pressed\") via client->message_box_display."
     },
     {
       "type": "LIVE_TEST",

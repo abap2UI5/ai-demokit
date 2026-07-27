@@ -47,7 +47,14 @@ const STRICT = process.argv.includes('--strict');
 // Ids the port ADDS are fine (extra attrs are never flagged); ids the
 // original has and the port lacks must be restored or declared.
 const IGNORED_ATTRS = new Set(['controllerName']);
-const isControl = (qname) => /^([a-z]+:)?[A-Z]/.test(qname);
+// A control is an UpperCamelCase element; a lowercase element is an aggregation.
+// The NAMESPACE PREFIX is irrelevant to that distinction and may itself be
+// camelCase — sap.ui.comp's samples declare `smartForm:`, `smartField:`,
+// `smartFilterBar:`, `smartVariantManagement:`, `smartChart:`. The prefix used to
+// be matched as `[a-z]+:`, which silently classified every one of those controls
+// as an aggregation and made the whole comparison vacuous for those ports
+// (found 2026-07-27 while porting the smart controls).
+const isControl = (qname) => /^([A-Za-z_][\w.-]*:)?[A-Z]/.test(qname);
 const simpleName = (qname) => qname.split(':').pop();
 
 // ---------- original side: parse view.xml ----------

@@ -3340,81 +3340,98 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
     lv_text1 = `IMPROVISED: The original onNavigationTargetsObtained composes the navigation popover imperatively - oParameters.show(...) with two navpopover.LinkData entries and a sap.ui.layout.form.SimpleForm of` &&
                ` Title/Image/Text built in JavaScript. Constructing controls in the frontend is exactly what a thin frontend does not do, and abap2UI5 has no equivalent hook, so the port keeps the event wired` &&
                ` (NAV_TARGETS_OBTAINED, answered with a toast) and leaves the popover at the content the SemanticObjectController derives from the annotations itself. The additional links, the Homepage link and the` &&
-               ` product-description form of the original are therefore not shown. // NOTE: onNavigate is rebuilt 1:1: the link text travels to the backend as an event argument (${$parameters>/text}) and the NAVIGATE` &&
-               ` branch reproduces the original's early return for "Homepage" plus the MessageBox (title "SmartChart demo", text "<link> has been pressed") via client->message_box_display. // NOTE: The tutorial` &&
-               ` serves its analytical metadata.xml and Products.json from a local mock server. abap2UI5 points the default model at a real OData V2 service instead (client->view_display switch_default_model_path,`.
-    lv_text1 = lv_text1 && ` constant c_odata_service); the service must carry the archived metadata's aggregation-role dimensions/measures, the UI.Chart annotation and the SemanticObject annotation on Category. Configuration` &&
-               ` difference, not a view difference. // LIVE-TEST: Not yet run in a system: the port needs a SAPUI5 runtime (sap.ui.comp plus a charting library) and an analytical Gateway service, so neither` &&
-               ` render_smoke nor e2e can exercise it. Open to verify - that the chart personalization dialog and variant management come up from the annotations alone, and that the navigate event delivers the link` &&
-               ` text to get_event_arg( ). // NOTE: The property gate (ui5/properties.json) covers OpenUI5 libraries only, so no member of sap.ui.comp is checked against the 1.71 rule automatically. SmartChart is` &&
-               ` @since 1.38 and navpopover.SemanticObjectController @since 1.28 - both below 1.71.`.
+               ` product-description form of the original are therefore not shown. // IMPROVISED: The SmartChart needs an ANALYTICAL OData V2 service - sap:aggregation-role dimension/measure properties plus the` &&
+               ` UI.Chart annotation the chart layout comes from. No such service is part of a standard system (the Gateway demo service GWSAMPLE_BASIC its four neighbours in this package use is not analytical), and` &&
+               ` the tutorial's own mock server cannot be reproduced in ABAP, so the port ships NO working service: c_odata_service is the explicit placeholder /sap/opu/odata/sap/<YOUR_ANALYTICAL_SERVICE>/ and the`.
+    lv_text1 = lv_text1 && ` app shows an empty chart until it is replaced. The view itself is the tutorial's, unchanged, including entitySet="Products"; the sample's metadata.xml is archived in ui5/sap.ui.comp/SmartChart/ as` &&
+               ` the specification of what the service has to expose. // NOTE: onNavigate is rebuilt 1:1: the link text travels to the backend as an event argument (${$parameters>/text}) and the NAVIGATE branch` &&
+               ` reproduces the original's early return for "Homepage" plus the MessageBox (title "SmartChart demo", text "<link> has been pressed") via client->message_box_display. // LIVE-TEST: Not yet run in a` &&
+               ` system: the port needs a SAPUI5 runtime (sap.ui.comp plus a charting library) and an analytical Gateway service, so neither render_smoke nor e2e can exercise it. Open to verify - that the chart` &&
+               ` personalization dialog and variant management come up from the annotations alone, and that the navigate event delivers the link text to get_event_arg( ). // NOTE: The property gate` &&
+               ` (ui5/properties.json) covers OpenUI5 libraries only, so no member of sap.ui.comp is checked against the 1.71 rule automatically. SmartChart is @since 1.38 and navpopover.SemanticObjectController`.
+    lv_text1 = lv_text1 && ` @since 1.28 - both below 1.71.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.comp`        control = `sap.ui.comp.smartchart.SmartChart`                name = `SmartChart`                          class = `z2ui5_cl_ai_app_252` path = `src/06/b01/z2ui5_cl_ai_app_252.clas.abap`
-        score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
         ui5_only = abap_true
         notes = lv_text1 ) ).
 
     lv_text1 = `NOTE: The original controller binds the view to one record (getView().bindElement("/Products('4711')")). abap2UI5 has no controller, so the port declares the same element binding as a binding` &&
-               ` attribute on the mvc:View root; the SmartField's relative {Price} binding resolves against it unchanged. Same data, same rendering - the binding just moves from the controller into the view. // NOTE:` &&
-               ` The tutorial serves its metadata.xml and Products.json from a local mock server. abap2UI5 points the default model at a real OData V2 service instead (client->view_display switch_default_model_path,` &&
-               ` constant c_odata_service); the service must expose the archived metadata's Products entity set. This is a configuration difference, not a view difference - the sample's own metadata.xml is archived` &&
-               ` in ui5/sap.ui.comp/SmartField/ so the service can be rebuilt in any system. // LIVE-TEST: Not yet run in a system: the port needs a SAPUI5 runtime (sap.ui.comp) plus a Gateway service, so neither` &&
-               ` render_smoke nor e2e can exercise it. Open to verify - that the declarative binding attribute reaches the OData model the same way the controller's bindElement did, and that a SmartField renders`.
-    lv_text1 = lv_text1 && ` inside the ColumnLayout. // NOTE: The property gate (ui5/properties.json) covers OpenUI5 libraries only, so no member of sap.ui.comp is checked against the 1.71 rule automatically. Every control used` &&
-               ` here predates 1.71 by a wide margin: SmartForm/SmartField/Group/GroupElement are @since 1.28 and smartform.ColumnLayout @since 1.56.`.
+               ` attribute on the mvc:View root; the SmartField's relative {Price} binding resolves against it unchanged. Same data, same rendering - the binding just moves from the controller into the view. //` &&
+               ` IMPROVISED: The tutorial serves its own metadata.xml and mock data from a local mock server, which an ABAP system cannot reproduce (a Gateway service is not a transportable artifact of this repo).` &&
+               ` The port therefore points the default model at the SAP Gateway demo service GWSAMPLE_BASIC (/sap/opu/odata/IWBEP/GWSAMPLE_BASIC/, client->view_display switch_default_model_path, constant` &&
+               ` c_odata_service): it ships with every on-premise system and only has to be activated once in /IWFND/MAINT_SERVICE, so the app actually runs. The sample's own metadata.xml stays archived beside the` &&
+               ` template for anyone who wants to rebuild the tutorial service instead. GWSAMPLE_BASIC exposes ProductSet instead of the tutorial's Products, so the element binding reads /ProductSet('HT-1000')`.
+    lv_text1 = lv_text1 && ` instead of /Products('4711') - a different product record of a different service. The bound field itself is unchanged: GWSAMPLE_BASIC's Price carries sap:unit=CurrencyCode and a sap:label, which is` &&
+               ` exactly what the step demonstrates about SmartField. // LIVE-TEST: Not yet run in a system: the port needs a SAPUI5 runtime (sap.ui.comp) and the GWSAMPLE_BASIC demo service activated in` &&
+               ` /IWFND/MAINT_SERVICE, so neither render_smoke nor e2e can exercise it. Open to verify - that the declarative binding attribute reaches the OData model the same way the controller's bindElement did,` &&
+               ` and that a SmartField renders inside the ColumnLayout. // NOTE: The property gate (ui5/properties.json) covers OpenUI5 libraries only, so no member of sap.ui.comp is checked against the 1.71 rule` &&
+               ` automatically. Every control used here predates 1.71 by a wide margin: SmartForm/SmartField/Group/GroupElement are @since 1.28 and smartform.ColumnLayout @since 1.56.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.comp`        control = `sap.ui.comp.smartfield.SmartField`                name = `SmartField`                          class = `z2ui5_cl_ai_app_248` path = `src/06/b01/z2ui5_cl_ai_app_248.clas.abap`
-        score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         ui5_only = abap_true
         notes = lv_text1
         use_name = abap_true ) ).
 
     lv_text1 = `NOTE: The original controller binds one record onto the page hosting the form (byId("smartFormPage").bindElement("/Products('4711')")). abap2UI5 has no controller and the sample's page is not part of` &&
                ` the published view, so the port declares the element binding as a binding attribute on the mvc:View root - every relative SmartField binding ({ProductId}, {Name}, {CategoryName}, {Description},` &&
-               ` {Price}, {SupplierName}) and the SmartForm title {Name} resolve against it exactly as before. // NOTE: The tutorial serves its metadata.xml and Products.json from a local mock server. abap2UI5 points` &&
-               ` the default model at a real OData V2 service instead (client->view_display switch_default_model_path, constant c_odata_service); the service must expose the archived metadata's Products entity set` &&
-               ` with the labels the SmartForm renders. Configuration difference, not a view difference. // LIVE-TEST: Not yet run in a system: the port needs a SAPUI5 runtime (sap.ui.comp) plus a Gateway service, so` &&
-               ` neither render_smoke nor e2e can exercise it. Open to verify - editTogglable switching the whole form between display and edit mode, and the two-field GroupElement with elementForLabel=1 taking its`.
-    lv_text1 = lv_text1 && ` label from the second field. // NOTE: The property gate (ui5/properties.json) covers OpenUI5 libraries only, so no member of sap.ui.comp is checked against the 1.71 rule automatically. Every control` &&
-               ` and property used here predates 1.71: SmartForm/Group/GroupElement/SmartField are @since 1.28, GroupElement.elementForLabel @since 1.48.`.
+               ` {Price}, {SupplierName}) and the SmartForm title {Name} resolve against it exactly as before. // IMPROVISED: The tutorial serves its own metadata.xml and mock data from a local mock server, which an` &&
+               ` ABAP system cannot reproduce (a Gateway service is not a transportable artifact of this repo). The port therefore points the default model at the SAP Gateway demo service GWSAMPLE_BASIC` &&
+               ` (/sap/opu/odata/IWBEP/GWSAMPLE_BASIC/, client->view_display switch_default_model_path, constant c_odata_service): it ships with every on-premise system and only has to be activated once in` &&
+               ` /IWFND/MAINT_SERVICE, so the app actually runs. The sample's own metadata.xml stays archived beside the template for anyone who wants to rebuild the tutorial service instead. Two consequences for the`.
+    lv_text1 = lv_text1 && ` view: the element binding reads /ProductSet('HT-1000') instead of /Products('4711'), and two of the six SmartField bindings are renamed to the demo service's property names - {ProductId} becomes` &&
+               ` {ProductID} (case only) and {CategoryName} becomes {Category}. {Name}, {Description}, {Price} and {SupplierName} exist under the same names, as does the form title binding {Name}. // LIVE-TEST: Not` &&
+               ` yet run in a system: the port needs a SAPUI5 runtime (sap.ui.comp) and the GWSAMPLE_BASIC demo service activated in /IWFND/MAINT_SERVICE, so neither render_smoke nor e2e can exercise it. Open to` &&
+               ` verify - editTogglable switching the whole form between display and edit mode, and the two-field GroupElement with elementForLabel=1 taking its label from the second field. // NOTE: The property gate` &&
+               ` (ui5/properties.json) covers OpenUI5 libraries only, so no member of sap.ui.comp is checked against the 1.71 rule automatically. Every control and property used here predates 1.71:` &&
+               ` SmartForm/Group/GroupElement/SmartField are @since 1.28, GroupElement.elementForLabel @since 1.48.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.comp`        control = `sap.ui.comp.smartform.SmartForm`                  name = `SmartForm`                           class = `z2ui5_cl_ai_app_249` path = `src/06/b01/z2ui5_cl_ai_app_249.clas.abap`
-        score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         ui5_only = abap_true
         notes = lv_text1
         use_name = abap_true ) ).
 
-    lv_text1 = `NOTE: The tutorial serves its metadata.xml and Products.json from a local mock server. abap2UI5 points the default model at a real OData V2 service instead (client->view_display` &&
-               ` switch_default_model_path, constant c_odata_service); the service must expose the archived metadata's Products entity set including the UI.LineItem annotation the SmartTable builds its columns from` &&
-               ` and the ValueList annotations behind the Category/Currency value helps. Configuration difference, not a view difference - the view is the sample's, unchanged. // NOTE: The port has no model_init and` &&
-               ` no on_event: the sample's controller is empty (it only extends Controller), the SmartTable binds itself via enableAutoBinding and reads the filter conditions through the smartFilterId association.` &&
-               ` The whole app is the view plus the service - the purest case of the metadata-driven idiom. // LIVE-TEST: Not yet run in a system: the port needs a SAPUI5 runtime (sap.ui.comp) plus a Gateway service,` &&
-               ` so neither render_smoke nor e2e can exercise it. Open to verify - that the SmartFilterBar's Go triggers the SmartTable's request through smartFilterId and that the ControlConfiguration puts Category`.
-    lv_text1 = lv_text1 && ` into the advanced filter area. // NOTE: The property gate (ui5/properties.json) covers OpenUI5 libraries only, so no member of sap.ui.comp is checked against the 1.71 rule automatically. SmartTable,` &&
-               ` SmartFilterBar and smartfilterbar.ControlConfiguration are all @since 1.28, well below 1.71.`.
+    lv_text1 = `NOTE: The port has no model_init and no on_event: the sample's controller is empty (it only extends Controller), the SmartTable binds itself via enableAutoBinding and reads the filter conditions` &&
+               ` through the smartFilterId association. The whole app is the view plus the service - the purest case of the metadata-driven idiom. // IMPROVISED: The tutorial serves its own metadata.xml and mock data` &&
+               ` from a local mock server, which an ABAP system cannot reproduce (a Gateway service is not a transportable artifact of this repo). The port therefore points the default model at the SAP Gateway demo` &&
+               ` service GWSAMPLE_BASIC (/sap/opu/odata/IWBEP/GWSAMPLE_BASIC/, client->view_display switch_default_model_path, constant c_odata_service): it ships with every on-premise system and only has to be` &&
+               ` activated once in /IWFND/MAINT_SERVICE, so the app actually runs. The sample's own metadata.xml stays archived beside the template for anyone who wants to rebuild the tutorial service instead. Both` &&
+               ` the SmartFilterBar and the SmartTable therefore carry entitySet="ProductSet" instead of "Products" (the header stays "Products", it is a label). Two behavioural differences follow from the demo`.
+    lv_text1 = lv_text1 && ` service's annotations rather than from the port: GWSAMPLE_BASIC has no UI.LineItem annotation, so the SmartTable builds its columns from all metadata fields instead of the tutorial's four; and the` &&
+               ` Category value help appears only if the system's service carries the sap:value-list annotation (VH_CategorySet). The filter field itself works either way - Category is filterable. // LIVE-TEST: Not` &&
+               ` yet run in a system: the port needs a SAPUI5 runtime (sap.ui.comp) and the GWSAMPLE_BASIC demo service activated in /IWFND/MAINT_SERVICE, so neither render_smoke nor e2e can exercise it. Open to` &&
+               ` verify - that the SmartFilterBar's Go triggers the SmartTable's request through smartFilterId and that the ControlConfiguration puts Category into the advanced filter area. // NOTE: The property gate` &&
+               ` (ui5/properties.json) covers OpenUI5 libraries only, so no member of sap.ui.comp is checked against the 1.71 rule automatically. SmartTable, SmartFilterBar and smartfilterbar.ControlConfiguration are` &&
+               ` all @since 1.28, well below 1.71.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.comp`        control = `sap.ui.comp.smarttable.SmartTable`                name = `SmartTable`                          class = `z2ui5_cl_ai_app_250` path = `src/06/b01/z2ui5_cl_ai_app_250.clas.abap`
-        score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         ui5_only = abap_true
         notes = lv_text1 ) ).
 
     lv_text1 = `IMPROVISED: The view wires assignedFiltersChanged="onFiltersChanged" on the SmartFilterBar, but the tutorial does not publish that controller, so there is no original handler body to rebuild. The port` &&
                ` keeps the event and routes it to the backend (FILTERS_CHANGED), where it raises a message toast - invented behaviour, chosen so the wire is a live round-trip rather than a dead one. A real app would` &&
-               ` use the hook to re-read the assigned filters server-side. // NOTE: The tutorial serves the service of steps 5-7 from a local mock server (step 8 does not republish its metadata.xml; see` &&
-               ` ui5/sap.ui.comp/SmartTable/metadata.xml). abap2UI5 points the default model at a real OData V2 service instead (client->view_display switch_default_model_path, constant c_odata_service).` &&
-               ` Configuration difference, not a view difference. // LIVE-TEST: Not yet run in a system: the port needs a SAPUI5 runtime (sap.ui.comp) plus a Gateway service, so neither render_smoke nor e2e can` &&
-               ` exercise it. Open to verify - that the page variant (PageVariantPKey) saves and restores filter bar and table personalization together through the smartVariant association, and that variant`.
-    lv_text1 = lv_text1 && ` management no longer appears inside the Filters dialog. // NOTE: The property gate (ui5/properties.json) covers OpenUI5 libraries only, so no member of sap.ui.comp is checked against the 1.71 rule` &&
-               ` automatically. SmartVariantManagement, SmartFilterBar and SmartTable are @since 1.28; the smartVariant association and persistencyKey properties are of the same vintage.`.
+               ` use the hook to re-read the assigned filters server-side. // IMPROVISED: The tutorial serves its own metadata.xml and mock data from a local mock server, which an ABAP system cannot reproduce (a` &&
+               ` Gateway service is not a transportable artifact of this repo). The port therefore points the default model at the SAP Gateway demo service GWSAMPLE_BASIC (/sap/opu/odata/IWBEP/GWSAMPLE_BASIC/,` &&
+               ` client->view_display switch_default_model_path, constant c_odata_service): it ships with every on-premise system and only has to be activated once in /IWFND/MAINT_SERVICE, so the app actually runs.` &&
+               ` The sample's own metadata.xml stays archived beside the template for anyone who wants to rebuild the tutorial service instead. Both smart controls therefore carry entitySet="ProductSet" instead of`.
+    lv_text1 = lv_text1 && ` "Products" (the header stays "Products", it is a label). As with the SmartTable port, GWSAMPLE_BASIC has no UI.LineItem annotation, so the table shows all metadata fields as columns; the page` &&
+               ` variant, the persistency keys and the smartVariant wiring the step is about are unaffected. // LIVE-TEST: Not yet run in a system: the port needs a SAPUI5 runtime (sap.ui.comp) and the GWSAMPLE_BASIC` &&
+               ` demo service activated in /IWFND/MAINT_SERVICE, so neither render_smoke nor e2e can exercise it. Open to verify - that the page variant (PageVariantPKey) saves and restores filter bar and table` &&
+               ` personalization together through the smartVariant association, and that variant management no longer appears inside the Filters dialog. // NOTE: The property gate (ui5/properties.json) covers OpenUI5` &&
+               ` libraries only, so no member of sap.ui.comp is checked against the 1.71 rule automatically. SmartVariantManagement, SmartFilterBar and SmartTable are @since 1.28; the smartVariant association and` &&
+               ` persistencyKey properties are of the same vintage.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.comp`        control = `sap.ui.comp.smartvariants.SmartVariantManagement` name = `PageVariantManagement`               class = `z2ui5_cl_ai_app_251` path = `src/06/b01/z2ui5_cl_ai_app_251.clas.abap`
-        score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
         ui5_only = abap_true
         notes = lv_text1 ) ).

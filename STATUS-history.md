@@ -7,6 +7,36 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## sap.ui.comp smart controls ported — and two lessons (2026-07-27)
+
+New library tree `src/06` (`sap.ui.comp`), batch `b01`, apps 248-252 rebuilt
+from the SAPUI5 **Smart Controls tutorial** (SmartField, SmartForm,
+SmartFilterBar+SmartTable, page variant management, SmartChart). `sap.ui.comp`
+ships only with SAPUI5, so the ports sit outside the OpenUI5 universe, the
+`render_smoke` runtime and the property gate by design — AGENTS §3 documents
+each exception, `ui5/sap.ui.comp/README.md` the template provenance (the
+public SAP-docs sources, since no OpenUI5 checkout carries these samples).
+
+Two lessons came out of the review, both now encoded:
+
+- **Never invent a service path.** The first draft pointed every port at
+  `/sap/opu/odata/sap/Z2UI5_SMART_TUT_0n_SRV/` — a name that exists in no
+  system, which makes an app look runnable when it renders an empty control.
+  Corrected to the Gateway demo service `GWSAMPLE_BASIC` (`ProductSet`,
+  activate in `/IWFND/MAINT_SERVICE`) with the entity set / field-name
+  adaptation declared IMPROVISED per port; where no standard service can
+  serve the sample (app 252 needs an *analytical* one), the placeholder now
+  reads as a placeholder: `…/<YOUR_ANALYTICAL_SERVICE>/`. Rule written into
+  AGENTS §3 and CAPABILITIES.
+- **structural-diff was blind to camelCase namespace prefixes.** `isControl`
+  matched the prefix as `[a-z]+:`, so every `smartForm:SmartForm`,
+  `smartField:SmartField`, `smartTable:SmartTable`, … counted as a lowercase
+  *aggregation* and was ignored on both sides — the whole comparison was
+  vacuous for these five ports (they reported 0 diffs while one binding
+  genuinely differed). The prefix is irrelevant to the control-vs-aggregation
+  distinction; the regex now allows any prefix and the real diff surfaced
+  (app 249 `{CategoryName}` → `{Category}`). No other port changed.
+
 ## pr/ backlog swept — two framework features landed, ports rewired (2026-07-27)
 
 Full pass over the 12 `pr/` requests (user ask after the #37 merge). Result:

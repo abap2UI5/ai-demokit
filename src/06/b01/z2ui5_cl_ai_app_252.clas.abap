@@ -4,14 +4,17 @@ CLASS z2ui5_cl_ai_app_252 DEFINITION PUBLIC.
     INTERFACES z2ui5_if_app.
 
   PROTECTED SECTION.
-    " Smart controls read their metadata from an OData V2 service. The tutorial
-    " serves the step's metadata.xml (archived beside the template in
-    " ui5/sap.ui.comp/SmartChart/) from a local mock server; in an ABAP system
-    " the default model is switched to a Gateway service exposing the same
-    " Products entity set - adapt the path to the service in your system. The
-    " service is an analytical one: dimensions, measures and the chart layout
-    " come from its aggregation-role and UI.Chart annotations.
-    CONSTANTS c_odata_service TYPE string VALUE `/sap/opu/odata/sap/Z2UI5_SMART_TUT_09_SRV/`.
+    " THIS PATH IS A PLACEHOLDER AND MUST BE REPLACED - the app shows an empty
+    " chart until it points at a real service.
+    " Unlike its four neighbours in this package, the SmartChart cannot fall back
+    " to the Gateway demo service GWSAMPLE_BASIC: it needs an ANALYTICAL OData V2
+    " service - properties marked sap:aggregation-role dimension/measure plus the
+    " UI.Chart annotation the chart layout comes from (see the sample's own
+    " metadata.xml, archived in ui5/sap.ui.comp/SmartChart/). No such service is
+    " part of any standard system, so there is no honest default to ship here;
+    " enter the analytical service of your system, with an entity set carrying
+    " the dimensions and measures the view expects.
+    CONSTANTS c_odata_service TYPE string VALUE `/sap/opu/odata/sap/<YOUR_ANALYTICAL_SERVICE>/`.
 
     DATA client TYPE REF TO z2ui5_if_client.
 

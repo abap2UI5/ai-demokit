@@ -26,6 +26,30 @@ including its full `view.xml`, controller, `metadata.xml` and mock data:
 The files are held **verbatim** as published (tabs, attribute order and all),
 same rule as every other template folder — never edited to fit ABAP.
 
+## The service the ports actually read
+
+The tutorial runs against a **local mock server** built from each step's
+`metadata.xml` — an ABAP system cannot reproduce that, and a Gateway service is
+not among the object types this repo can carry (`CLAS`, `DEVC`, `INTF`, `TABL`).
+
+The ports therefore read the **SAP Gateway demo service `GWSAMPLE_BASIC`**
+(`/sap/opu/odata/IWBEP/GWSAMPLE_BASIC/`, entity set `ProductSet`), which ships
+with every on-premise system and only has to be activated once in
+`/IWFND/MAINT_SERVICE`. The price is a small, declared adaptation per port —
+`entitySet="ProductSet"`, the element binding key `/ProductSet('HT-1000')`, and
+in the SmartForm port two renamed field bindings (`{ProductId}` → `{ProductID}`,
+`{CategoryName}` → `{Category}`). Because GWSAMPLE_BASIC carries no `UI.LineItem`
+annotation, the SmartTable shows all metadata fields as columns rather than the
+tutorial's four.
+
+**Exception — app 252 (SmartChart).** A chart needs an *analytical* service
+(`sap:aggregation-role` dimensions/measures plus the `UI.Chart` annotation);
+GWSAMPLE_BASIC is not one and no standard system ships an equivalent. That port
+keeps the tutorial's view unchanged and carries the explicit placeholder
+`/sap/opu/odata/sap/<YOUR_ANALYTICAL_SERVICE>/` — it shows an empty chart until
+the path is replaced. The archived `SmartChart/metadata.xml` is the specification
+of what such a service has to expose.
+
 ## What is deliberately not archived
 
 - **`Products.json` of `SmartTable/` and `SmartChart/`** — the documentation

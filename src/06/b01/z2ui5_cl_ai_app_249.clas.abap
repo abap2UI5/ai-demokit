@@ -4,12 +4,14 @@ CLASS z2ui5_cl_ai_app_249 DEFINITION PUBLIC.
     INTERFACES z2ui5_if_app.
 
   PROTECTED SECTION.
-    " Smart controls read their metadata from an OData V2 service. The tutorial
-    " serves the step's metadata.xml (archived beside the template in
-    " ui5/sap.ui.comp/SmartForm/) from a local mock server; in an ABAP system
-    " the default model is switched to a Gateway service exposing the same
-    " Products entity set - adapt the path to the service in your system.
-    CONSTANTS c_odata_service TYPE string VALUE `/sap/opu/odata/sap/Z2UI5_SMART_TUT_04_SRV/`.
+    " Smart controls build their UI from OData V2 metadata. The tutorial serves
+    " its own metadata.xml from a local mock server (archived beside the template
+    " in ui5/sap.ui.comp/SmartForm/) - an ABAP system cannot reproduce that, so the
+    " port reads the SAP Gateway demo service GWSAMPLE_BASIC (EPM products)
+    " instead: it ships with every on-premise system and only has to be activated
+    " once in /IWFND/MAINT_SERVICE. Its entity set is ProductSet, which is why the
+    " sample's Products entity set and two of its field names are mapped onto it.
+    CONSTANTS c_odata_service TYPE string VALUE `/sap/opu/odata/IWBEP/GWSAMPLE_BASIC/`.
 
     DATA client TYPE REF TO z2ui5_if_client.
 
@@ -46,7 +48,7 @@ CLASS z2ui5_cl_ai_app_249 IMPLEMENTATION.
         )->a( n = `xmlns:mvc`        v = `sap.ui.core.mvc`
         )->a( n = `xmlns:smartForm`  v = `sap.ui.comp.smartform`
         )->a( n = `xmlns:smartField` v = `sap.ui.comp.smartfield`
-        )->a( n = `binding`          v = `{/Products('4711')}`
+        )->a( n = `binding`          v = `{/ProductSet('HT-1000')}`
 
         )->open( n = `SmartForm` ns = `smartForm`
             )->a( n = `id`            v = `smartForm`
@@ -59,7 +61,7 @@ CLASS z2ui5_cl_ai_app_249 IMPLEMENTATION.
 
                 )->open( n = `GroupElement` ns = `smartForm`
                     )->leaf( n = `SmartField` ns = `smartField`
-                        )->a( n = `value` v = `{ProductId}`
+                        )->a( n = `value` v = `{ProductID}`
 
                 )->shut(
                 )->open( n = `GroupElement` ns = `smartForm`
@@ -71,7 +73,7 @@ CLASS z2ui5_cl_ai_app_249 IMPLEMENTATION.
                     )->a( n = `elementForLabel` v = `1`
 
                     )->leaf( n = `SmartField` ns = `smartField`
-                        )->a( n = `value` v = `{CategoryName}`
+                        )->a( n = `value` v = `{Category}`
                     )->leaf( n = `SmartField` ns = `smartField`
                         )->a( n = `value` v = `{Description}`
 
