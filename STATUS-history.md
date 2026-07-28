@@ -63,7 +63,7 @@ Three lessons came out of the review and the first live run, all now encoded:
   serve the sample (app 252 needs an *analytical* one), the placeholder now
   reads as a placeholder: `…/<YOUR_ANALYTICAL_SERVICE>/`. Rule written into
   AGENTS §3 and CAPABILITIES.
-- **The variant-save crash: four hypotheses refuted, cause still open.**
+- **The variant-save crash: solved, after seven refuted hypotheses.**
   Saving a view in app 251 throws `Cannot read properties of undefined
   (reading 'getId')`. `sap.ui.comp` is closed, but the crashing line is not:
   `sap/ui/fl/write/api/SmartVariantManagementWriteAPI.js:26` (and
@@ -97,6 +97,22 @@ Three lessons came out of the review and the first live run, all now encoded:
   `follow_up_action`. Method note for next time: the closed half of a stack is
   usually reachable anyway — `sap.ui.fl` is open source and the running system
   serves the `-dbg` sources.
+- **The answer: `setPersControler()`, the call a page variant never gets.**
+  `addPersonalizableControl()` (read from the served `-dbg` sources) ends with
+  `if (this.isPageVariant()) { return this }` **before** `setPersControler()` —
+  the setter that both anchors the personalizable control and creates the control
+  promise `initialise()` requires. A controller-less app therefore has neither:
+  saving dies in `sap.ui.fl`, and once the field is forced by hand the write path
+  works while the load path still aborts, so nothing shows after a restart.
+  abap2UI5's `SMART_VARIANT_INIT` action now calls `setPersControler()` and then
+  `initialise()` as soon as the control's wrapper exists. Live: `isInitialized:
+  true`, 7 variants / 7 items, saved views back after a restart.
+  What finally cracked it was a temporary tracing build the maintainer installed —
+  every hypothesis before that was refuted by a console one-liner, and the ones
+  that survived longest were the ones nobody could measure. **Method to keep:
+  when the closed half of a stack blocks you, print the function itself
+  (`String(oControl.someMethod)`) — sap.ui.comp's sources are served as `-dbg`
+  files in the running app, so nothing here needed guessing at all.**
 - **A SmartTable without a `UI.LineItem` annotation renders NO columns.**
   First live run of apps 250/251 against GWSAMPLE_BASIC came up with the
   "add columns to see the content" placeholder. The assumption written into

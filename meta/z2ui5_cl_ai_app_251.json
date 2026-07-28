@@ -9,7 +9,7 @@
     "event_t_arg": false,
     "note": "assignedFiltersChanged toasts roundtrip-free via control_global MESSAGE_TOAST.show; view_display is followed by a smart_variant_init follow_up_action - the app is init-only"
   },
-  "status": "generated",
+  "status": "checked",
   "render_smoke": {
     "skip": true,
     "reason": "sap.ui.comp ships only with SAPUI5 - the headless harness serves the @openui5/* packages, which contain no sap/ui/comp modules, so XMLView.create can never resolve SmartVariantManagement/SmartFilterBar/SmartTable here. The port renders in a SAPUI5 runtime with an OData V2 service."
@@ -33,11 +33,11 @@
     },
     {
       "type": "NOTE",
-      "what": "sap.ui.comp variant management needs one call an app normally makes from its controller - oSmartVariantManagement.initialise(fnCallback, oPersoControl). Without it the control keeps _oPersoControl null, saving a view dies inside sap.ui.fl (getAppComponentForControl(null).getId(), measured live 2026-07-28) and stored views are never loaded. abap2UI5 had no way to make that call - CONTROL_BY_ID carries strings, not a function and a control instance - so the framework gained the dedicated SMART_VARIANT_INIT action (abap2UI5 branch claude/smart-controls-samples-vdfr5y). Note the measured detail: on SAPUI5 1.150 the documented initialise( ) call does NOT set _oPersoControl, so the action makes that call and then assigns the field itself when it is still unset. The port therefore ends view_display with a follow_up_action carrying the SmartVariantManagement id and the personalizable control id - one line the sample does not need because it has a controller. The action name is written out as a literal for now: this repo's abaplint resolves abap2UI5 from its default branch, which does not carry the new cs_event-smart_variant_init constant until the framework change is merged."
-    },
-    {
-      "type": "LIVE_TEST",
-      "what": "Run in a system 2026-07-28. Working: the view renders, the SmartTable loads 205 products from GWSAMPLE_BASIC, filtering works, and SAVING a view now works declaratively - the SMART_VARIANT_INIT follow-up action replaces the console workaround (the documented initialise( ) call alone does not, it leaves _oPersoControl null on 1.150). STILL OPEN: after an app restart the saved views are gone. Setting the perso control anchors the WRITE path; LOADING the stored variants at startup is the second half of the handshake and is not covered yet. Next datapoint needed: whether SmartVariantManagementApplyAPI.loadVariants( ) returns the saved variant after a restart (then only the display/apply step is missing) or zero (then the save never reached the LREP backend)."
+      "what": "sap.ui.comp variant management needs a handshake an app normally makes from its controller, and abap2UI5 has no controller. Measured on SAPUI5 1.150: addPersonalizableControl( ) returns EARLY for a page variant (if isPageVariant( ) return this) and therefore never reaches setPersControler( ) - the setter that both anchors the personalizable control (_oPersoControl) and creates the control promise initialise( ) insists on. Without it saving a view dies in sap.ui.fl (getAppComponentForControl(null).getId()) and stored views are never loaded. The framework gained the SMART_VARIANT_INIT action for exactly that (abap2UI5 branch claude/smart-controls-samples-vdfr5y): it calls setPersControler( ) and then initialise( ) once the control's wrapper exists. The port ends view_display with a follow_up_action carrying the SmartVariantManagement id and the personalizable control id - one line the sample does not need because it has a controller. The action name is written out as a literal until the framework change is merged (this repo's abaplint resolves abap2UI5 from its default branch)."
     }
-  ]
+  ],
+  "checked": {
+    "date": "2026-07-28",
+    "note": "verified in a running system - view renders, SmartTable loads GWSAMPLE_BASIC, filtering works, saving a view works and the saved views are back after an app restart (isInitialized true, 7 variants / 7 items). Needs the SMART_VARIANT_INIT action from the abap2UI5 branch claude/smart-controls-samples-vdfr5y"
+  }
 }

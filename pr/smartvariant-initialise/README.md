@@ -37,24 +37,42 @@ var oVariant = this.oModel._flWriteAddVariant({
 ```
 
 **Setting `_oPersoControl` by hand in the console makes Save As work immediately** —
-the view appears under *Meine Ansichten*.
+the view appears under *Meine Ansichten*. But a restart still shows nothing, and the
+reason is one call further down.
 
-The obvious candidate for doing that properly is the call SAP's own documentation shows
-([Smart Variant Management](https://github.com/SAP-docs/sapui5/blob/main/docs/10_More_About_Controls/smart-variant-management-06a4c3a.md)):
+The call SAP's own documentation shows
+([Smart Variant Management](https://github.com/SAP-docs/sapui5/blob/main/docs/10_More_About_Controls/smart-variant-management-06a4c3a.md))
+is not the answer either:
 
 ```js
 oSmartVariantManagement.addPersonalizableControl(oPersInfo);
 oSmartVariantManagement.initialise(function () { /* init done */ }, this);
 ```
 
-**It does not work on 1.150.** Called with the registered filter bar, `initialise()`
-leaves `_oPersoControl` at `null` (the stack shows the work moved behind a
-`SmartVariantManagementMediator`), and saving keeps throwing. Measured, not assumed —
-an earlier version of this request claimed otherwise and was corrected.
+On 1.150 `initialise()` does **not** set `_oPersoControl` — measured — and it aborts
+early when the field is empty. Reading it from the served `-dbg` sources shows why:
 
-So the public API does not cover an app that has no controller of its own, and the
-only measured path is the field assignment. If a supported call for this exists in
-current `sap.ui.comp`, this request should be closed with that call instead.
+```js
+// SmartVariantManagement.prototype.initialise
+if (!this._oControlPromise || !this._oPersoControl || !a) {
+    this._errorHandling("'initialise' no personalizable component available", …); return }
+```
+
+and the missing piece is in the registration path:
+
+```js
+// SmartVariantManagement.prototype.addPersonalizableControl
+this.addAggregation("personalizableControls", oPersInfo, true);
+a = this._createControlWrapper(oPersInfo);
+if (a) { this._aPersonalizableControls.push(a) }
+if (this.isPageVariant()) { return this }   // ← a page variant stops here
+this.setPersControler(oControl);            // ← only the single-control case
+```
+
+**`setPersControler()` is the call a page variant never gets.** It anchors the
+personalizable control *and* creates the control promise `initialise()` requires. An
+app with a controller makes it; a controller-less app ends up with neither, which is
+why saving crashed and, once the field was forced, the variant list stayed empty.
 
 ## Current behavior
 
@@ -83,25 +101,17 @@ client->follow_up_action(
                      ( `smartFilterBar` ) ) ).  " the personalizable control id
 ```
 
-Frontend side, as implemented (the shape follows what `initialise()` actually does —
-read from the served `-dbg` source):
+Frontend side, as implemented:
 
 ```js
-// 1. the anchor, as early as the named control exists
-if (!oSVM._oPersoControl) oSVM._oPersoControl = oCtrl;
+// 1. the anchor - sap.ui.comp's own setter, which also creates the control promise
+if (!oSVM._oPersoControl) oSVM.setPersControler(oCtrl);
 
-// 2. then start the load flow once - but only for a wrapper that exists and
-//    has not run: initialise() answers "unknown control" without a wrapper and
-//    "already executed" for one that has, and it aborts with "no personalizable
-//    component available" when the anchor is missing.
+// 2. start the load flow once the control's wrapper exists (initialise answers
+//    "unknown control" without one and "already executed" for one that has run)
 const wrapper = oSVM._getControlWrapper(oCtrl);
 if (wrapper && !wrapper.bInitialized) oSVM.initialise(function () {}, oCtrl);
 ```
-
-The order is the whole point. `initialise()` reads `_oPersoControl`, it does not set
-it, so anchoring afterwards buys only the write path: saving works (it reads the same
-field) while the variant list stays empty after every restart — measured exactly like
-that, with `loadVariants()` returning 5 stored views the control never showed.
 
 Both ids are resolved through the existing slot lookup, the callback is a no-op, and
 nothing app-supplied is evaluated. A variant that fits the framework even better would
@@ -116,20 +126,21 @@ whether smart-control variant management stays a documented boundary
 
 ## Status
 
-**Implemented** on the abap2UI5 branch `claude/smart-controls-samples-vdfr5y`
-(2026-07-28), pending upstream merge: the `SMART_VARIANT_INIT` handler in
-`app/webapp/core/FrontendAction.js`, the `cs_event-smart_variant_init` constant in
-`z2ui5_if_client`, the regenerated ABAP mirror, and seven specs in
-`node/tests/frontendAction.spec.js` (the test sandbox also had to be given the timer
-globals). App 251 calls it through `follow_up_action` after `view_display` — with the
-action name still written out as a literal, because ai-demokit's abaplint resolves
-abap2UI5 from its default branch. Switch that to the constant once merged.
+**Implemented and verified in a running system** (2026-07-28), on the abap2UI5 branch
+`claude/smart-controls-samples-vdfr5y`, pending upstream merge: the
+`SMART_VARIANT_INIT` handler in `app/webapp/core/FrontendAction.js`, the
+`cs_event-smart_variant_init` constant in `z2ui5_if_client`, the regenerated ABAP
+mirror and eight specs in `node/tests/frontendAction.spec.js` (the test sandbox also
+had to be given the timer globals).
 
-Verified in a system: saving a view works with the action in place. The variant list
-after a restart is the last open point — the stored views are provably in the backend
-(`loadVariants()` returns them) and both control wrappers report `bInitialized`
-undefined, i.e. nobody had started the load flow; the retry that closes that gap is
-the newest commit on the branch and still needs one live run.
+Live result with app 251: `isInitialized: true`, 7 variants / 7 items, saving works and
+the saved views are back after an app restart. App 251 calls the action through
+`follow_up_action` after `view_display` — with the action name written out as a literal
+until this is merged, because ai-demokit's abaplint resolves abap2UI5 from its default
+branch.
 
-The evidence trail — six refuted hypotheses before this one — is in `STATUS.md` and in
-the port's sidecar.
+Open question for the maintainer: whether abap2UI5 should run this handshake
+**automatically** whenever a view contains a `SmartVariantManagement`, instead of the
+app naming the two ids.
+
+The evidence trail — seven refuted hypotheses before this one — is in `STATUS.md`.

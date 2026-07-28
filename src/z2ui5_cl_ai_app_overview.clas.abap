@@ -3428,15 +3428,18 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
     lv_text1 = lv_text1 && ` GWSAMPLE_BASIC carries no UI.LineItem annotation, and without one a SmartTable starts with NO columns at all - it renders the "add columns to see the content" placeholder (seen live 2026-07-27; an` &&
                ` earlier version of this note wrongly assumed it would fall back to all metadata fields). The port therefore adds initiallyVisibleFields="ProductID,Name,Category,SupplierName,Price", an attribute the` &&
                ` sample does not carry because its own service annotates the four columns it shows. The Category value help additionally appears only if the system's service carries the sap:value-list annotation` &&
-               ` (VH_CategorySet); the filter field itself works either way - Category is filterable. // LIVE-TEST: Not yet run in a system: the port needs a SAPUI5 runtime (sap.ui.comp) and the GWSAMPLE_BASIC demo` &&
-               ` service activated in /IWFND/MAINT_SERVICE, so neither render_smoke nor e2e can exercise it. Open to verify - that the SmartFilterBar's Go triggers the SmartTable's request through smartFilterId and` &&
-               ` that the ControlConfiguration puts Category into the advanced filter area. // NOTE: The property gate (ui5/properties.json) covers OpenUI5 libraries only, so no member of sap.ui.comp is checked`.
-    lv_text1 = lv_text1 && ` against the 1.71 rule automatically. SmartTable, SmartFilterBar and smartfilterbar.ControlConfiguration are all @since 1.28, well below 1.71.`.
+               ` (VH_CategorySet); the filter field itself works either way - Category is filterable. // NOTE: The property gate (ui5/properties.json) covers OpenUI5 libraries only, so no member of sap.ui.comp is` &&
+               ` checked against the 1.71 rule automatically. SmartTable, SmartFilterBar and smartfilterbar.ControlConfiguration are all @since 1.28, well below 1.71. // LIVE-TEST: Rendering and data are verified` &&
+               ` (see checked). Still open: that the SmartFilterBar's Go re-triggers the SmartTable request through smartFilterId, and whether the Category value help appears - that depends on the system's service`.
+    lv_text1 = lv_text1 && ` carrying the sap:value-list annotation.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.comp`        control = `sap.ui.comp.smarttable.SmartTable`                name = `SmartTable`                          class = `z2ui5_cl_ai_app_250` path = `src/06/b01/z2ui5_cl_ai_app_250.clas.abap`
         score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 reworked, reviewed, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
         ui5_only = abap_true
+        checked = `CHECKED (2026-07-28): verified in a running system - the SmartFilterBar renders its filter fields and the SmartTable loads 205 products from GWSAMPLE_BASIC with the named initiallyVisibleFields` &&
+                 ` columns`
         notes = lv_text1 ) ).
 
     lv_text1 = `IMPROVISED: The view wires assignedFiltersChanged="onFiltersChanged" on the SmartFilterBar, but the tutorial does not publish that controller, so there is no original handler body to rebuild. The` &&
@@ -3454,23 +3457,21 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
     lv_text1 = lv_text1 && ` 2026-07-27; an earlier version of this note wrongly assumed it would fall back to all metadata fields). The port therefore adds initiallyVisibleFields="ProductID,Name,Category,SupplierName,Price", an` &&
                ` attribute the sample does not carry because its own service annotates the four columns it shows. The page variant, the persistency keys and the smartVariant wiring the step is about are unaffected.` &&
                ` // NOTE: The property gate (ui5/properties.json) covers OpenUI5 libraries only, so no member of sap.ui.comp is checked against the 1.71 rule automatically. SmartVariantManagement, SmartFilterBar and` &&
-               ` SmartTable are @since 1.28; the smartVariant association and persistencyKey properties are of the same vintage. // NOTE: sap.ui.comp variant management needs one call an app normally makes from its` &&
-               ` controller - oSmartVariantManagement.initialise(fnCallback, oPersoControl). Without it the control keeps _oPersoControl null, saving a view dies inside sap.ui.fl` &&
-               ` (getAppComponentForControl(null).getId(), measured live 2026-07-28) and stored views are never loaded. abap2UI5 had no way to make that call - CONTROL_BY_ID carries strings, not a function and a`.
-    lv_text1 = lv_text1 && ` control instance - so the framework gained the dedicated SMART_VARIANT_INIT action (abap2UI5 branch claude/smart-controls-samples-vdfr5y). Note the measured detail: on SAPUI5 1.150 the documented` &&
-               ` initialise( ) call does NOT set _oPersoControl, so the action makes that call and then assigns the field itself when it is still unset. The port therefore ends view_display with a follow_up_action` &&
-               ` carrying the SmartVariantManagement id and the personalizable control id - one line the sample does not need because it has a controller. The action name is written out as a literal for now: this` &&
-               ` repo's abaplint resolves abap2UI5 from its default branch, which does not carry the new cs_event-smart_variant_init constant until the framework change is merged. // LIVE-TEST: Run in a system` &&
-               ` 2026-07-28. Working: the view renders, the SmartTable loads 205 products from GWSAMPLE_BASIC, filtering works, and SAVING a view now works declaratively - the SMART_VARIANT_INIT follow-up action` &&
-               ` replaces the console workaround (the documented initialise( ) call alone does not, it leaves _oPersoControl null on 1.150). STILL OPEN: after an app restart the saved views are gone. Setting the`.
-    lv_text1 = lv_text1 && ` perso control anchors the WRITE path; LOADING the stored variants at startup is the second half of the handshake and is not covered yet. Next datapoint needed: whether` &&
-               ` SmartVariantManagementApplyAPI.loadVariants( ) returns the saved variant after a restart (then only the display/apply step is missing) or zero (then the save never reached the LREP backend).`.
+               ` SmartTable are @since 1.28; the smartVariant association and persistencyKey properties are of the same vintage. // NOTE: sap.ui.comp variant management needs a handshake an app normally makes from` &&
+               ` its controller, and abap2UI5 has no controller. Measured on SAPUI5 1.150: addPersonalizableControl( ) returns EARLY for a page variant (if isPageVariant( ) return this) and therefore never reaches` &&
+               ` setPersControler( ) - the setter that both anchors the personalizable control (_oPersoControl) and creates the control promise initialise( ) insists on. Without it saving a view dies in sap.ui.fl`.
+    lv_text1 = lv_text1 && ` (getAppComponentForControl(null).getId()) and stored views are never loaded. The framework gained the SMART_VARIANT_INIT action for exactly that (abap2UI5 branch` &&
+               ` claude/smart-controls-samples-vdfr5y): it calls setPersControler( ) and then initialise( ) once the control's wrapper exists. The port ends view_display with a follow_up_action carrying the` &&
+               ` SmartVariantManagement id and the personalizable control id - one line the sample does not need because it has a controller. The action name is written out as a literal until the framework change is` &&
+               ` merged (this repo's abaplint resolves abap2UI5 from its default branch).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.comp`        control = `sap.ui.comp.smartvariants.SmartVariantManagement` name = `PageVariantManagement`               class = `z2ui5_cl_ai_app_251` path = `src/06/b01/z2ui5_cl_ai_app_251.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
         ui5_only = abap_true
+        checked = `CHECKED (2026-07-28): verified in a running system - view renders, SmartTable loads GWSAMPLE_BASIC, filtering works, saving a view works and the saved views are back after an app restart` &&
+                 ` (isInitialized true, 7 variants / 7 items). Needs the SMART_VARIANT_INIT action from the abap2UI5 branch claude/smart-controls-samples-vdfr5y`
         notes = lv_text1
         use_ec = abap_true
         use_ec_arg = abap_true
