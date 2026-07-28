@@ -124,12 +124,18 @@ const RULES = [
     id: 'hardcoded-binding-path',
     level: 'error',
     portsOnly: true,
-    doc: "an absolute binding path is hard-coded as text (`{/PATH}` or `path: '/PATH'`) — derive it from client->_bind( var ) (raw path: _bind( val = var path = abap_true )) so it moves with a variable rename; relative field bindings (`{FIELD}`) are the allowed exception (AGENTS §5 'Data binding & events')",
+    doc: "an absolute binding path is hard-coded as text (`{/PATH}` or `path: '/PATH'`) — derive it from client->_bind( var ) (raw path: _bind( val = var path = abap_true )) so it moves with a variable rename; relative field bindings (`{FIELD}`) are the allowed exception (AGENTS §5 'Data binding & events'). An OData ENTITY path with a key predicate (`{/Products('4711')}`) in a port that switches its default model to an OData service is exempt: that path addresses the service, not an ABAP variable, so there is nothing to derive it from (AGENTS §5 'sap.ui.comp ports')",
     find(content) {
       const out = [];
+      // a port whose default model IS an OData service (switch_default_model_path)
+      // binds elements by entity path — `{/EntitySet('key')}`. No ABAP member backs
+      // such a path, and a model path can never carry a key predicate, so the
+      // exemption stays tight to that one shape.
+      const odata = /switch_default_model_path/.test(content);
       content.split('\n').forEach((l, i) => {
         const t = l.trimStart();
         if (t.startsWith('"') || t.startsWith('*')) return; // ABAP comment line
+        if (odata && /\{\/\w+\([^)]*\)\}/.test(l)) return;  // OData entity path
         if (/\{\//.test(l) || /\bpath\s*:\s*'\//.test(l)) {
           out.push({ line: i + 1, text: l.trim().slice(0, 90) });
         }

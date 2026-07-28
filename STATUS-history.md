@@ -42,6 +42,94 @@ independent causes, both fixed.
   runs this daily), so the browser-level proof stays a human check; the
   framework half is unit-tested instead.
 
+## sap.ui.comp smart controls ported — and two lessons (2026-07-27)
+
+New library tree `src/06` (`sap.ui.comp`), batch `b01`, apps 248-252 rebuilt
+from the SAPUI5 **Smart Controls tutorial** (SmartField, SmartForm,
+SmartFilterBar+SmartTable, page variant management, SmartChart). `sap.ui.comp`
+ships only with SAPUI5, so the ports sit outside the OpenUI5 universe, the
+`render_smoke` runtime and the property gate by design — AGENTS §3 documents
+each exception, `ui5/sap.ui.comp/README.md` the template provenance (the
+public SAP-docs sources, since no OpenUI5 checkout carries these samples).
+
+Three lessons came out of the review and the first live run, all now encoded:
+
+- **Never invent a service path.** The first draft pointed every port at
+  `/sap/opu/odata/sap/Z2UI5_SMART_TUT_0n_SRV/` — a name that exists in no
+  system, which makes an app look runnable when it renders an empty control.
+  Corrected to the Gateway demo service `GWSAMPLE_BASIC` (`ProductSet`,
+  activate in `/IWFND/MAINT_SERVICE`) with the entity set / field-name
+  adaptation declared IMPROVISED per port; where no standard service can
+  serve the sample (app 252 needs an *analytical* one), the placeholder now
+  reads as a placeholder: `…/<YOUR_ANALYTICAL_SERVICE>/`. Rule written into
+  AGENTS §3 and CAPABILITIES.
+- **The variant-save crash: solved, after seven refuted hypotheses.**
+  Saving a view in app 251 throws `Cannot read properties of undefined
+  (reading 'getId')`. `sap.ui.comp` is closed, but the crashing line is not:
+  `sap/ui/fl/write/api/SmartVariantManagementWriteAPI.js:26` (and
+  `SmartVariantManagementApplyAPI.loadVariants`) call
+  `Utils.getAppComponentForControl(oControl).getId()` with no guard, and that
+  helper returns `undefined` for an `undefined` control — the exact shape of the
+  error. Four hypotheses then died on live evidence, in this order: the app
+  component is missing (it resolves), `flexEnabled` gates it (the flag appears
+  nowhere in `sap.ui.fl` — only `sap.ui.rta` reads it; a `pr/` request filed on
+  that premise was withdrawn the same day), the `smartVariant` association does
+  not resolve (XMLViews prefix single associations via `createId`), and no
+  personalizable control is registered (`getPersonalizableControls()` returns 2
+  and `loadVariants` resolves cleanly). The cause is still open — the lesson to
+  keep is the method, not the answer: read the open-source half of the stack
+  before filing anything, and check each hypothesis in the running app before
+  writing it down as a finding. Port-side fixes landed regardless: the
+  `pageVariantPersistencyKey` custom data the docs require, and the filter event
+  moved off the backend round-trip.
+- **Variant management needed a framework action — and got one.** Saving a
+  view in app 251 threw `Cannot read properties of undefined (reading 'getId')`.
+  Five hypotheses died on live evidence (app component, `flexEnabled`,
+  association-id prefixing, registration, and the SAPUI5 docs' own page-variant
+  wiring — which registers **0** controls where the sample's registers 2). The
+  actual gap: `sap.ui.comp` expects a controller to call
+  `initialise(fnCallback, oPersoControl)`; without it `_oPersoControl` stays
+  `null` and `sap/ui/fl/write/api/SmartVariantManagementWriteAPI.js:26` dereferences
+  it. Setting the field by hand in the console made Save As work at once, which
+  sized the gap exactly. abap2UI5 now has `SMART_VARIANT_INIT` (branch
+  `claude/smart-controls-samples-vdfr5y`, four specs, ABAP mirror regenerated;
+  the test sandbox also needed the timer globals), and app 251 calls it via
+  `follow_up_action`. Method note for next time: the closed half of a stack is
+  usually reachable anyway — `sap.ui.fl` is open source and the running system
+  serves the `-dbg` sources.
+- **The answer: `setPersControler()`, the call a page variant never gets.**
+  `addPersonalizableControl()` (read from the served `-dbg` sources) ends with
+  `if (this.isPageVariant()) { return this }` **before** `setPersControler()` —
+  the setter that both anchors the personalizable control and creates the control
+  promise `initialise()` requires. A controller-less app therefore has neither:
+  saving dies in `sap.ui.fl`, and once the field is forced by hand the write path
+  works while the load path still aborts, so nothing shows after a restart.
+  abap2UI5's `SMART_VARIANT_INIT` action now calls `setPersControler()` and then
+  `initialise()` as soon as the control's wrapper exists. Live: `isInitialized:
+  true`, 7 variants / 7 items, saved views back after a restart.
+  What finally cracked it was a temporary tracing build the maintainer installed —
+  every hypothesis before that was refuted by a console one-liner, and the ones
+  that survived longest were the ones nobody could measure. **Method to keep:
+  when the closed half of a stack blocks you, print the function itself
+  (`String(oControl.someMethod)`) — sap.ui.comp's sources are served as `-dbg`
+  files in the running app, so nothing here needed guessing at all.**
+- **A SmartTable without a `UI.LineItem` annotation renders NO columns.**
+  First live run of apps 250/251 against GWSAMPLE_BASIC came up with the
+  "add columns to see the content" placeholder. The assumption written into
+  the sidecars - that the control falls back to all metadata fields - was
+  wrong; the initially visible fields have to be named. Both ports now carry
+  `initiallyVisibleFields="ProductID,Name,Category,SupplierName,Price"` (an
+  attribute the sample does not need, because its own service annotates its
+  four columns), declared per port, and AGENTS §3 states the rule.
+- **structural-diff was blind to camelCase namespace prefixes.** `isControl`
+  matched the prefix as `[a-z]+:`, so every `smartForm:SmartForm`,
+  `smartField:SmartField`, `smartTable:SmartTable`, … counted as a lowercase
+  *aggregation* and was ignored on both sides — the whole comparison was
+  vacuous for these five ports (they reported 0 diffs while one binding
+  genuinely differed). The prefix is irrelevant to the control-vs-aggregation
+  distinction; the regex now allows any prefix and the real diff surfaced
+  (app 249 `{CategoryName}` → `{Category}`). No other port changed.
+
 ## pr/ backlog swept — two framework features landed, ports rewired (2026-07-27)
 
 Full pass over the 12 `pr/` requests (user ask after the #37 merge). Result:

@@ -331,12 +331,20 @@ if (process.argv.includes('--backlog')) {
 }
 
 // integrity: a port that matches no universe sample would silently vanish
-// from the coverage — report it loudly instead
+// from the coverage — report it loudly instead. Exception: libraries that ship
+// only with SAPUI5 are not in the OpenUI5 checkout the universe is scanned from,
+// so their ports are outside the coverage tables BY DESIGN (AGENTS §3) — they
+// get a note, not a warning, or every run would cry wolf.
+const NON_OPENUI5_LIBS = new Set(['sap.ui.comp']);
 const matched = new Set(libs.flatMap((e) => e.samples.map((s) => `${e.lib}\t${s.name}`)));
 for (const key of ported.keys()) {
-  if (!matched.has(key)) {
-    console.warn(`WARNING: orphan port ${key.replace('\t', '.sample.')} — not in the sample universe (renamed/removed upstream, or outside FOCUS_LIBS?)`);
+  if (matched.has(key)) continue;
+  const sampleId = key.replace('\t', '.sample.');
+  if (NON_OPENUI5_LIBS.has(key.split('\t')[0])) {
+    console.log(`note: ${sampleId} is a SAPUI5-only port — outside the OpenUI5 sample universe by design (AGENTS §3)`);
+    continue;
   }
+  console.warn(`WARNING: orphan port ${sampleId} — not in the sample universe (renamed/removed upstream, or outside FOCUS_LIBS?)`);
 }
 
 // --- 3. render --------------------------------------------------------------

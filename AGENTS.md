@@ -120,6 +120,7 @@ by the UI5 **library** of the demo kit sample they rebuild:
 | `src/03` | `sap.uxap` | `sap.uxap` | exists |
 | `src/04` | `sap.f`    | `sap.f`    | exists |
 | `src/05` | `sap.tnt`  | `sap.tnt`  | exists |
+| `src/06` | `sap.ui.comp` | `sap.ui.comp` (smart controls — **SAPUI5 only**, see below) | exists |
 
 The split key is the **second-level namespace** of the sample's entity. New
 libraries get the next free `src/NN` folder with a matching `package.devc.xml`.
@@ -134,6 +135,65 @@ into a closed one — see TRAINING.md for the batch process.
 
 Because `FOLDER_LOGIC=PREFIX`, class names never encode the folder — moving a
 class between folders needs no rename.
+
+### `src/06` — sap.ui.comp (smart controls), the one SAPUI5-only tree
+
+`sap.ui.comp` is **not part of OpenUI5**: it ships with SAPUI5 only, so it is in
+neither the OpenUI5 checkout nor the `@openui5/*` packages. Its ports therefore
+sit outside three pieces of the machinery **by design** — do not "fix" this:
+
+- **Universe / coverage.** `ui5/universe.json` is scanned from the OpenUI5
+  checkout, so no `sap.ui.comp` sample can be in it and the ports never appear
+  in `api.md` / the README coverage. `generate-coverage.mjs` knows the library
+  (`NON_OPENUI5_LIBS`) and prints a *note*, not an orphan warning. The in-system
+  overview app lists them like any other port and badges them orange **SAPUI5**
+  (the existing `ui5_only` flag) — but its OpenUI5 reference links do not
+  resolve for these rows (STATUS.md open findings).
+- **`render_smoke`.** The headless harness serves the `@openui5/*` packages, so
+  `XMLView.create` can never load a `sap/ui/comp/*` module. Every port declares
+  `"render_smoke": {"skip": true, …}` — the skip is still verified against the
+  real render each run, so it can never drift.
+- **The property gate.** `ui5/properties.json` is generated from OpenUI5
+  sources, so no `sap.ui.comp` member is checked against the 1.71 rule. Confirm
+  the `@since` by hand and record it in a `NOTE` deviation (the smart controls
+  are old API: most are @since 1.28, `smartform.ColumnLayout` @since 1.56,
+  `SmartChart` @since 1.38 — all comfortably below 1.71).
+
+Templates come from the **public SAPUI5 documentation sources** instead of an
+OpenUI5 checkout (`npm run scaffold` cannot reach them) — see
+`ui5/sap.ui.comp/README.md` for the provenance table and for the near-duplicate
+tutorial steps that are deliberately not ported.
+
+Two idioms are specific to these ports:
+
+- **The model is an OData V2 service, not ABAP data.** Smart controls build
+  their UI from OData metadata, so the port has no `model_init`; it switches the
+  default model instead:
+  `client->view_display( val = view->stringify( ) switch_default_model_path = c_odata_service )`,
+  with `c_odata_service` a `CONSTANTS` in `PROTECTED`. **Never invent a service
+  name there** — a `Z…_SRV` path that exists in no system makes the app look
+  runnable when it is not (the first draft of this batch did exactly that). The
+  default is the Gateway demo service **`/sap/opu/odata/IWBEP/GWSAMPLE_BASIC/`**
+  (`ProductSet`), which ships with every on-premise system and only needs
+  activating in `/IWFND/MAINT_SERVICE`; adapting the sample's entity set and
+  field names onto it is an `IMPROVISED` deviation and worth it, because the
+  port then runs. Where the demo service genuinely cannot serve the sample — the
+  SmartChart needs an **analytical** service (`sap:aggregation-role`, `UI.Chart`)
+  — ship a placeholder that reads as one (`…/<YOUR_ANALYTICAL_SERVICE>/`) and say
+  so in the deviation, rather than a plausible-looking name. The sample's own
+  `metadata.xml` stays archived next to the template as the specification of
+  what a rebuilt service has to expose.
+  **A `SmartTable` on a service without a `UI.LineItem` annotation renders zero
+  columns** — the "add columns to see the content" placeholder, not a fallback
+  to all metadata fields (live finding 2026-07-27). GWSAMPLE_BASIC has no such
+  annotation, so those ports must add `initiallyVisibleFields` and declare it.
+- **Element binding by entity path.** Where the sample's controller calls
+  `bindElement("/Products('4711')")`, the port declares
+  `)->a( n = \`binding\` v = \`{/Products('4711')}\`` on the view root. This is
+  the one absolute path that is **not** derived from `client->_bind( )` — it
+  addresses the OData service, not an ABAP member; `pattern-lint`'s
+  `hardcoded-binding-path` rule exempts exactly this shape (a key predicate, in
+  a port that switches its default model to OData).
 
 ### Class naming
 

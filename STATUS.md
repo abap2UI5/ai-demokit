@@ -15,11 +15,11 @@ TRAINING.md; for what abap2UI5 can express see CAPABILITIES.md._
 
 | Aspect | State |
 |---|---|
-| Ports | **246** sidecars in `meta/` (src/01: 149 · src/02: 55 · src/03: 12 · src/04: 19 · src/05: 11) |
-| Status ladder | 47 `generated` · 146 `reviewed` · 53 `checked` (live-verified) |
-| Deviations | 4 DROPPED_171 · 128 IMPROVISED · 71 LIVE_TEST · 256 NOTE · 95 POST_171 |
-| Open LIVE_TESTs | **67 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
-| Declared gate skips | 7 structural-diff · 1 render-smoke (each re-verified per run — a stale skip FAILS) |
+| Ports | **251** sidecars in `meta/` (src/01: 149 · src/02: 55 · src/03: 12 · src/04: 19 · src/05: 11 · src/06: 5) |
+| Status ladder | 48 `generated` · 146 `reviewed` · 57 `checked` (live-verified) |
+| Deviations | 4 DROPPED_171 · 135 IMPROVISED · 74 LIVE_TEST · 267 NOTE · 95 POST_171 |
+| Open LIVE_TESTs | **70 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
+| Declared gate skips | 7 structural-diff · 6 render-smoke (each re-verified per run — a stale skip FAILS) |
 | Out-of-scope ported samples | `z2ui5_cl_ai_app_121 (sap.m.sample.UploadSet — deprecated)` · `z2ui5_cl_ai_app_136 (sap.f.sample.SidePanelSingle — control @since 1.107)` · `z2ui5_cl_ai_app_141 (sap.ui.core.sample.InvisibleMessage — control @since 1.78)` · `z2ui5_cl_ai_app_165 (sap.f.sample.ProductSwitchNavigation — control @since 1.72)` · `z2ui5_cl_ai_app_166 (sap.f.sample.SemanticPage — deprecated)` · `z2ui5_cl_ai_app_203 (sap.m.sample.OverflowToolbarTokenizer — control @since 1.139)` — standing debt pending a maintainer decision (drop vs documented exception), surfaced by the source-backed scope gate (pr/scope-since-from-source) |
 
 _Coverage per library (ported / in scope) is generated into the [README](README.md#coverage); one row per sample in [api.md](api.md)._
@@ -28,6 +28,36 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
 
 ## Open findings (backlog)
 
+- [ ] **sap.ui.comp ports carry OpenUI5 reference links.** The five smart
+  control ports (`src/06/b01`, apps 248-252) are listed in the in-system
+  overview app with the orange **SAPUI5** badge, but the row's four reference
+  links are built unconditionally against `sdk.openui5.org` /
+  `github.com/SAP/openui5`, where `sap.ui.comp` does not exist — so API,
+  source and live-sample links do not resolve for those rows. The commercial
+  host is not an option (`pattern-lint` `commercial-ui5-host`); the fix is to
+  suppress or re-target the links for `ui5_only` rows in
+  `scripts/generate-overview.mjs`. Their ABAP-class link is correct.
+- [ ] **Smart variant management: solved, one cleanup left.** `sap.ui.comp`'s page
+  variant never gets `setPersControler()` — `addPersonalizableControl()` returns early
+  for `isPageVariant()`, so a controller-less app has neither the anchor
+  (`_oPersoControl`) nor the control promise `initialise()` requires. abap2UI5 now does
+  the handshake through the `SMART_VARIANT_INIT` action (abap2UI5 branch
+  `claude/smart-controls-samples-vdfr5y`, eight specs); app 251 is **live-verified**:
+  saving works and the saved views are back after a restart (`isInitialized: true`,
+  7 variants / 7 items). **Left to do:** the port writes the action name as a literal
+  because this repo's abaplint resolves abap2UI5 from its default branch — switch to
+  `client->cs_event-smart_variant_init` once the framework change is merged.
+  Seven hypotheses died on live evidence before this one, kept so nobody walks them
+  again: missing app component (resolves), `flexEnabled` (read only by `sap.ui.rta`),
+  association-id prefixing (XMLViews prefix single associations), registration
+  (2 controls, `loadVariants` clean), the SAPUI5 docs' page-variant wiring (registers
+  **0** controls — the sample's wiring is the right one), `initialise()` as the setter
+  (it only reads the field), and anchoring after the fact (the write path works, the
+  load path does not).
+- [ ] **sap.ui.comp ports are all unverified (5 open LIVE_TESTs).** They need
+  a SAPUI5 runtime plus a Gateway service exposing the tutorial's `Products`
+  entity set, so neither `render_smoke` (declared skips) nor the e2e harness
+  can exercise them — the first real check has to be a live one.
 - [ ] **Out-of-scope ported samples** (listed live in the generated table
   above): the source-backed scope gate (`scopeOf` falls back to control-level
   `@since`/`@deprecated` from `ui5/properties.json`, wired 2026-07-26 —

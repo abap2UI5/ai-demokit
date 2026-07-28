@@ -1,0 +1,38 @@
+{
+  "class": "z2ui5_cl_ai_app_252",
+  "sample": "sap.ui.comp.sample.SmartChart",
+  "entity": "sap.ui.comp.smartchart.SmartChart",
+  "file": "src/06/b01/z2ui5_cl_ai_app_252.clas.abap",
+  "batch": "b01",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "render_smoke": {
+    "skip": true,
+    "reason": "sap.ui.comp ships only with SAPUI5 - the headless harness serves the @openui5/* packages, which contain no sap/ui/comp modules (and no charting library), so XMLView.create can never resolve SmartChart/SemanticObjectController here. The port renders in a SAPUI5 runtime with an analytical OData V2 service."
+  },
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "The original onNavigationTargetsObtained composes the navigation popover imperatively - oParameters.show(...) with two navpopover.LinkData entries and a sap.ui.layout.form.SimpleForm of Title/Image/Text built in JavaScript. Constructing controls in the frontend is exactly what a thin frontend does not do, and abap2UI5 has no equivalent hook, so the port keeps the event wired (NAV_TARGETS_OBTAINED, answered with a toast) and leaves the popover at the content the SemanticObjectController derives from the annotations itself. The additional links, the Homepage link and the product-description form of the original are therefore not shown."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "The SmartChart needs an ANALYTICAL OData V2 service - sap:aggregation-role dimension/measure properties plus the UI.Chart annotation the chart layout comes from. No such service is part of a standard system (the Gateway demo service GWSAMPLE_BASIC its four neighbours in this package use is not analytical), and the tutorial's own mock server cannot be reproduced in ABAP, so the port ships NO working service: c_odata_service is the explicit placeholder /sap/opu/odata/sap/<YOUR_ANALYTICAL_SERVICE>/ and the app shows an empty chart until it is replaced. The view itself is the tutorial's, unchanged, including entitySet=\"Products\"; the sample's metadata.xml is archived in ui5/sap.ui.comp/SmartChart/ as the specification of what the service has to expose."
+    },
+    {
+      "type": "NOTE",
+      "what": "onNavigate is rebuilt 1:1: the link text travels to the backend as an event argument (${$parameters>/text}) and the NAVIGATE branch reproduces the original's early return for \"Homepage\" plus the MessageBox (title \"SmartChart demo\", text \"<link> has been pressed\") via client->message_box_display."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "Not yet run in a system: the port needs a SAPUI5 runtime (sap.ui.comp plus a charting library) and an analytical Gateway service, so neither render_smoke nor e2e can exercise it. Open to verify - that the chart personalization dialog and variant management come up from the annotations alone, and that the navigate event delivers the link text to get_event_arg( )."
+    },
+    {
+      "type": "NOTE",
+      "what": "The property gate (ui5/properties.json) covers OpenUI5 libraries only, so no member of sap.ui.comp is checked against the 1.71 rule automatically. SmartChart is @since 1.38 and navpopover.SemanticObjectController @since 1.28 - both below 1.71."
+    }
+  ]
+}
