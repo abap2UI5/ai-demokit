@@ -83,16 +83,25 @@ client->follow_up_action(
                      ( `smartFilterBar` ) ) ).  " the personalizable control id
 ```
 
-Frontend side (sketch):
+Frontend side, as implemented (the shape follows what `initialise()` actually does —
+read from the served `-dbg` source):
 
 ```js
-evSmartVariantInit(aArgs) {
-  const oSVM  = ViewSlots.resolveById(aArgs[0]);
-  const oCtrl = ViewSlots.resolveById(aArgs[1]);
-  oSVM.initialise(function () {}, oCtrl);          // documented call
-  if (!oSVM._oPersoControl) oSVM._oPersoControl = oCtrl;  // what actually works on 1.150
-}
+// 1. the anchor, as early as the named control exists
+if (!oSVM._oPersoControl) oSVM._oPersoControl = oCtrl;
+
+// 2. then start the load flow once - but only for a wrapper that exists and
+//    has not run: initialise() answers "unknown control" without a wrapper and
+//    "already executed" for one that has, and it aborts with "no personalizable
+//    component available" when the anchor is missing.
+const wrapper = oSVM._getControlWrapper(oCtrl);
+if (wrapper && !wrapper.bInitialized) oSVM.initialise(function () {}, oCtrl);
 ```
+
+The order is the whole point. `initialise()` reads `_oPersoControl`, it does not set
+it, so anchoring afterwards buys only the write path: saving works (it reads the same
+field) while the variant list stays empty after every restart — measured exactly like
+that, with `loadVariants()` returning 5 stored views the control never showed.
 
 Both ids are resolved through the existing slot lookup, the callback is a no-op, and
 nothing app-supplied is evaluated. A variant that fits the framework even better would
@@ -110,11 +119,17 @@ whether smart-control variant management stays a documented boundary
 **Implemented** on the abap2UI5 branch `claude/smart-controls-samples-vdfr5y`
 (2026-07-28), pending upstream merge: the `SMART_VARIANT_INIT` handler in
 `app/webapp/core/FrontendAction.js`, the `cs_event-smart_variant_init` constant in
-`z2ui5_if_client`, the regenerated ABAP mirror, and four specs in
+`z2ui5_if_client`, the regenerated ABAP mirror, and seven specs in
 `node/tests/frontendAction.spec.js` (the test sandbox also had to be given the timer
 globals). App 251 calls it through `follow_up_action` after `view_display` — with the
 action name still written out as a literal, because ai-demokit's abaplint resolves
 abap2UI5 from its default branch. Switch that to the constant once merged.
 
-The full evidence trail — five refuted hypotheses before this one — is in `STATUS.md`
-and in the port's sidecar.
+Verified in a system: saving a view works with the action in place. The variant list
+after a restart is the last open point — the stored views are provably in the backend
+(`loadVariants()` returns them) and both control wrappers report `bInitialized`
+undefined, i.e. nobody had started the load flow; the retry that closes that gap is
+the newest commit on the branch and still needs one live run.
+
+The evidence trail — six refuted hypotheses before this one — is in `STATUS.md` and in
+the port's sidecar.

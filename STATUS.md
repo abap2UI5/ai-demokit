@@ -57,9 +57,13 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   2026-07-28 with the framework branch installed), but a saved view **does not survive an
   app restart** — setting the perso control anchors the WRITE path, while LOADING the
   stored variants at startup is the second half of the handshake and is not covered yet.
-  The next datapoint decides where it hangs: `loadVariants()` after a restart returning the
-  saved variant (only the display/apply step missing) or zero (the save never reached the
-  LREP).
+  Measured since: `loadVariants()` after a restart returns **5** stored views, and both
+  control wrappers report `bInitialized` undefined — so the data is in the backend and
+  nobody ever started the load flow. `initialise()` (read from the served `-dbg` source)
+  aborts when `_oPersoControl` is unset and marks the wrapper as done, so the anchor has to
+  be in place BEFORE it runs; the action now anchors first and then initialises a wrapper
+  that exists and has not run, retrying until the control has registered. That last step
+  awaits one live run.
   Refuted on the way, each measured live and kept here so nobody walks them again: missing
   app component (resolves), `flexEnabled` (read only by `sap.ui.rta`, never by `sap.ui.fl`),
   association-id prefixing (XMLViews prefix single associations), registration
