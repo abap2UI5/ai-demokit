@@ -956,7 +956,8 @@ bound properties, full 123-row ProductCollection, client-side `binding_call`
 search). All interactive navigation/selection paths are flagged `LIVE_TEST`.
 
 **Paired framework change** (abap2UI5 branch
-`claude/ai-demokit-next-batches-rq9sfy`, [`pr/split-container-nav`](../pr/split-container-nav/)):
+`claude/ai-demokit-next-batches-rq9sfy`, `pr/split-container-nav`, merged
+upstream as **#2470**, folder removed):
 six control methods whitelisted in `CONTROL_METHODS` (both `FrontendAction.js`
 and the ABAP mirror `z2ui5_cl_app_frontendaction_js`) so the ports drive them
 1:1 — `toDetail`/`toMaster`/`backDetail`/`backMaster`/`setMode`
@@ -1027,8 +1028,8 @@ all fixed, all six checks still green:
   (correctness fix), and CAPABILITIES.md updated.
 
 Both **`pr/`** requests from the checks —
-[`table-hidden-in-popin`](../pr/table-hidden-in-popin/) (092) and
-[`popover-bind-element`](../pr/popover-bind-element/) (094) — are now
+`table-hidden-in-popin` (092) and
+`popover-bind-element` (094) — are now
 **implemented** in the framework (see the next section).
 
 ## Framework features implemented (2026-07-22) — `setHiddenInPopin` + `BIND_ELEMENT`
