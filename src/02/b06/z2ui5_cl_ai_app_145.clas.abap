@@ -3,10 +3,13 @@ CLASS z2ui5_cl_ai_app_145 DEFINITION PUBLIC.
   PUBLIC SECTION.
     INTERFACES z2ui5_if_app.
 
+    DATA selected_index TYPE i.
+
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
 
     METHODS view_display.
+    METHODS model_init.
 
   PRIVATE SECTION.
 ENDCLASS.
@@ -18,6 +21,7 @@ CLASS z2ui5_cl_ai_app_145 IMPLEMENTATION.
 
     me->client = client.
     IF client->check_on_init( ).
+      model_init( ).
       view_display( ).
     ENDIF.
 
@@ -28,6 +32,10 @@ CLASS z2ui5_cl_ai_app_145 IMPLEMENTATION.
 
     DATA(view) = z2ui5_cl_ai_xml=>factory( ).
 
+    " the original's onRadioButtonSelected switches the CSSGrid gridAutoFlow per
+    " selected index in JS; rebuilt on the client as a two-way bound
+    " selectedIndex plus the same switch as a gridAutoFlow expression binding -
+    " no round-trip. The Reveal Grid ToggleButton loses its press (see sidecar)
     view->open( n = `View` ns = `mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
@@ -36,7 +44,6 @@ CLASS z2ui5_cl_ai_app_145 IMPLEMENTATION.
         )->leaf( `ToggleButton`
             )->a( n = `id`    v = `revealGrid`
             )->a( n = `text`  v = `Reveal Grid`
-            )->a( n = `press` v = client->_event( `REVEAL` )
             )->a( n = `class` v = `sapUiSmallMargin`
 
         )->open( `Panel`
@@ -53,8 +60,8 @@ CLASS z2ui5_cl_ai_app_145 IMPLEMENTATION.
             )->shut(
 
             )->open( `RadioButtonGroup`
-                )->a( n = `class`  v = `sapUiSmallMargin`
-                )->a( n = `select` v = client->_event( `RB_SELECT` )
+                )->a( n = `class`         v = `sapUiSmallMargin`
+                )->a( n = `selectedIndex` v = client->_bind( selected_index )
                 )->leaf( `RadioButton`
                     )->a( n = `text` v = `Column - Vertical placement in columns`
                 )->leaf( `RadioButton`
@@ -68,7 +75,9 @@ CLASS z2ui5_cl_ai_app_145 IMPLEMENTATION.
 
             )->open( n = `CSSGrid` ns = `grid`
                 )->a( n = `id`                  v = `grid1`
-                )->a( n = `gridAutoFlow`        v = `Column`
+                )->a( n = `gridAutoFlow`        v = |\{= ${ client->_bind( selected_index ) } === 0 ? 'Column'| &&
+                                                    | : (${ client->_bind( selected_index ) } === 1 ? 'ColumnDense'| &&
+                                                    | : (${ client->_bind( selected_index ) } === 2 ? 'Row' : 'RowDense')) \}|
                 )->a( n = `gridTemplateColumns` v = `repeat(7, 1fr)`
                 )->a( n = `gridTemplateRows`    v = `repeat(2, 5rem)`
                 )->a( n = `gridAutoRows`        v = `5rem`
@@ -165,6 +174,14 @@ CLASS z2ui5_cl_ai_app_145 IMPLEMENTATION.
                     )->a( n = `wrapping` v = `true` ).
 
     client->view_display( view->stringify( ) ).
+
+  ENDMETHOD.
+
+
+  METHOD model_init.
+
+    " the original's gridAutoFlow="Column" is the first radio button
+    selected_index = 0.
 
   ENDMETHOD.
 

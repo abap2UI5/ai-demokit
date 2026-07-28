@@ -39,10 +39,18 @@ jobs:
     # in scripts/generate-coverage.mjs. The jsdoc task may exit non-zero on
     # cross-library type warnings while still writing a valid api.json, so we
     # tolerate the exit code and assert the artifact exists instead.
+    # `npm ci` is OpenUI5's install, not ours: when their committed
+    # package-lock.json drifts from their package.json it hard-fails with
+    # EUSAGE, which is nothing this repo can fix. That took this workflow down
+    # on 2026-07-27 (js-yaml/argparse/sprintf-js missing from the lock); their
+    # lock was repaired upstream on 2026-07-28, so the fallback below is
+    # hardening against the next drift rather than a live fix. `npm install`
+    # resolves the tree from package.json — we only need their jsdoc
+    # toolchain, not a reproducible install.
     - name: Build control metadata (api.json) for focused libraries
       working-directory: openui5
       run: |
-        npm ci
+        npm ci --no-audit --no-fund || npm install --no-audit --no-fund
         npx grunt jsdoc:library-sap.m || true
         test -f target/openui5-sdk/test-resources/sap/m/designtime/api.json
 

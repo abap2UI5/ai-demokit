@@ -69,7 +69,10 @@ CLASS z2ui5_cl_ai_app_220 IMPLEMENTATION.
                 )->open( n = `disabledDates` ns = `u`
                     )->leaf( n = `DateRange` ns = `u`
                         )->a( n = `startDate` v = |\{ path: 'START', formatter: 'Formatter.DateCreateObject' \}|
-                        )->a( n = `endDate`   v = |\{ path: 'END', formatter: 'Formatter.DateCreateObject' \}|
+                        " the second range is a single day and carries no end: an empty string
+                        " through DateCreateObject is an Invalid Date, which Month._checkDateEnabled
+                        " throws on - the guard keeps endDate null there (probe-verified, see sidecar)
+                        )->a( n = `endDate`   v = `{= ${END} ? Formatter.DateCreateObject(${END}) : null }`
 
                 )->shut(
             )->shut(

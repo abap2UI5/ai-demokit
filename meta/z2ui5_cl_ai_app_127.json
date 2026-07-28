@@ -12,8 +12,8 @@
   "checked": null,
   "deviations": [
     {
-      "type": "LIVE_TEST",
-      "what": "All twelve Button presses are wired to a single client-side MessageToast.show('Pressed') via the control_global frontend action. The original onPress toasted source.getId() + ' Pressed' (the runtime-generated control id); the id is not reproducible statically, so a fixed 'Pressed' toast stands in. The ariaLabelledBy / ariaDescribedBy associations and the six core:InvisibleText targets are reproduced 1:1."
+      "type": "NOTE",
+      "what": "onPress toasts evt.getSource().getId() + ' Pressed'. All twelve presses reproduce that client-side and roundtrip-free (control_global MESSAGE_TOAST.show) with the template '{0} Pressed' filled by $event.oSource.sId - the documented transport for the pressed control's runtime id. Until 2026-07-28 the port toasted a bare 'Pressed' on the rationale that the generated id is 'not reproducible statically', which was the wrong conclusion: the id does not have to be reproduced, it is read off the event on the client. The id string itself is a UI5 runtime value and will differ from the original sample's (the view prefix differs), exactly as it differs between two runs of the original."
     }
   ]
 }

@@ -4,11 +4,24 @@
   "entity": "sap.ui.layout.DynamicSideContent",
   "file": "src/02/b05/z2ui5_cl_ai_app_138.clas.abap",
   "batch": "b05",
-  "audit": { "frontend_action": false, "event_t_arg": false },
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
   "status": "generated",
   "checked": null,
   "deviations": [
-    { "type": "LIVE_TEST", "what": "The Toggle button, the width Slider (liveChange) and the DynamicSideContent breakpointChanged are wired to backend events; the original drove them imperatively (toggle(), $().width(), getCurrentBreakpoint()) — device/DOM behaviours not reproduced server-side." },
-    { "type": "NOTE", "what": "The hint Text.visible is bound to a boolean model field (initial true); the original used a literal visible='getVisible()' (a sample quirk) toggled per Device.system.phone in onBeforeRendering. The two long body texts are shortened representative Lorem (not gate-compared, static)." }
+    {
+      "type": "NOTE",
+      "what": "Two of the original's three controller behaviours are now reproduced rather than wired to nothing. (a) breakpointChanged carries its own currentBreakpoint event parameter to the backend (t_arg ${$parameters>/currentBreakpoint}) and on_event enables the Toggle button exactly when it is 'S' - what _updateToggleButtonState does; the port therefore adds an enabled attribute to the Toggle Button, which the original sets from the controller. (b) handleToggleClick calls DynamicSideContent.toggle( ); the port binds showSideContent (the property that setter writes, default true) and flips it in on_event, so the press has an effect. Both were dead wires before this rework - BP_CHANGED and TOGGLE fired round-trips this class never dispatched (pattern-lint dead-event-wire). The original also calls _updateToggleButtonState once in onAfterRendering; abap2UI5 has no equivalent hook, so the button starts disabled and takes its state from the first breakpointChanged event."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "The width Slider loses its liveChange. The original's handleSliderChange resizes the containing Page through jQuery - this.byId('sideContentContainer').$().width(iValue + '%') - i.e. it writes a CSS width straight onto the rendered DOM node. sap.m.Page has no width property, so there is nothing to bind and no whitelisted control method to call: the expression-binding rebuild used for the same slider idiom elsewhere (apps 053/146, where the target is a Toolbar/Panel width property) does not apply here. The Slider stays in the view with its value=\"100\" literal and no longer fires a SLIDER backend event no branch handled; dragging it now does nothing."
+    },
+    {
+      "type": "NOTE",
+      "what": "The hint Text.visible is bound to a boolean model field (initial true); the original used a literal visible='getVisible()' (a sample quirk) toggled per Device.system.phone in onBeforeRendering. The two long body texts are shortened representative Lorem (not gate-compared, static)."
+    }
   ]
 }

@@ -83,8 +83,10 @@ CLASS z2ui5_cl_ai_app_109 IMPLEMENTATION.
                 )->a( n = `title`               v = `My Calendar`
                 )->a( n = `viewChange`          v = client->_event( `VIEW_CHANGE` )
                 )->a( n = `selectedDatesChange` v = client->_event( `SELECTED_DATE` )
-                )->a( n = `weekNumberPress`     v = client->_event( `WEEK` )
-                )->a( n = `startDateChange`     v = client->_event( `START_DATE` )
+                )->a( n = `weekNumberPress`     v = client->_event( val   = `WEEK`
+                                                                    t_arg = VALUE #( ( `${$parameters>/weekNumber}` ) ) )
+                )->a( n = `startDateChange`     v = client->_event( val   = `START_DATE`
+                                                                    t_arg = VALUE #( ( `${$parameters>/date}` ) ) )
                 )->a( n = `startDate`           v = |\{ path: '{ client->_bind( val = start_date path = abap_true ) }', formatter: 'Formatter.DateCreateObject' \}|
                 )->a( n = `appointments`        v = client->_bind( t_appointments )
 
@@ -131,10 +133,12 @@ CLASS z2ui5_cl_ai_app_109 IMPLEMENTATION.
         client->message_toast_display( |'selectedDatesChange' event fired.| ).
 
       WHEN `WEEK`.
-        client->message_toast_display( |'weekNumberPress' event fired.| ).
+        " the original appends the pressed week number, which the event carries
+        client->message_toast_display( |'weekNumberPress' event fired.\n\nweek number is { client->get_event_arg( ) }| ).
 
       WHEN `START_DATE`.
-        client->message_toast_display( |'startDateChange' event fired.| ).
+        " same for the new start date (the event parameter, not a control ref)
+        client->message_toast_display( |'startDateChange' event fired.\n\nNew start date is { client->get_event_arg( ) }| ).
 
     ENDCASE.
 

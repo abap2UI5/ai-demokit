@@ -105,10 +105,7 @@ CLASS z2ui5_cl_ai_app_251 IMPLEMENTATION.
     " never gets a personalizable control, so saving a view dies in sap.ui.fl and
     " stored views are never loaded (measured 2026-07-28; the action waits for the
     " smart controls to register, which they do once their metadata has arrived).
-    " (the framework constant client->cs_event-smart_variant_init replaces the
-    " literal once the abap2UI5 change is merged upstream - this repo's abaplint
-    " resolves abap2UI5 from its default branch, which does not carry it yet)
-    client->follow_up_action( val   = `SMART_VARIANT_INIT`
+    client->follow_up_action( val   = client->cs_event-smart_variant_init
                               t_arg = VALUE #( ( `pageVariantId` ) ( `smartFilterBar` ) ) ).
 
   ENDMETHOD.

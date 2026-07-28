@@ -4,13 +4,11 @@ CLASS z2ui5_cl_ai_app_124 DEFINITION PUBLIC.
     INTERFACES z2ui5_if_app.
 
     DATA slider_value TYPE i.
-    DATA panel_width  TYPE string.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
 
     METHODS view_display.
-    METHODS on_event.
 
   PRIVATE SECTION.
 ENDCLASS.
@@ -22,11 +20,8 @@ CLASS z2ui5_cl_ai_app_124 IMPLEMENTATION.
 
     me->client = client.
     IF client->check_on_init( ).
-      slider_value = 100.
-      panel_width  = `100%`.
+      slider_value = 100.       " the original Slider value / Panel width=100%
       view_display( ).
-    ELSEIF client->check_on_event( ).
-      on_event( ).
     ENDIF.
 
   ENDMETHOD.
@@ -36,20 +31,31 @@ CLASS z2ui5_cl_ai_app_124 IMPLEMENTATION.
 
     DATA(view) = z2ui5_cl_ai_xml=>factory( ).
 
+    " onSliderMoved sets the Panel width to value + "%" in JS; rebuilt as a
+    " two-way bound Slider value plus a width expression binding, so the resize
+    " runs on the client (a liveChange round-trip would fire per drag step)
     view->open( n = `View` ns = `mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns:grid` v = `sap.ui.layout.cssgrid`
         )->a( n = `xmlns:core` v = `sap.ui.core`
 
+        " the sample's css/main.css, injected via a core:HTML content attribute
+        " (see CAPABILITIES.md) - the class the five grid tiles below carry.
+        " Literal braces are escaped \{ \} in a backtick literal: the XMLView
+        " parser reads an unescaped brace as a binding
+        )->leaf( n = `HTML` ns = `core`
+            )->a( n = `content` v = `<style>.sapUiLayoutCSSGrid .stylePageLayout\{` &&
+                                    `background-color:#3b6f9a;color:#ffffff;border-radius:10px;` &&
+                                    `display:flex;align-items:center;justify-content:center\}</style>`
+
         )->leaf( `Slider`
-            )->a( n = `liveChange` v = client->_event( `SLIDER_MOVED` )
-            )->a( n = `value`      v = client->_bind( slider_value )
-            )->a( n = `class`      v = `sapUiSmallMarginBottom`
+            )->a( n = `value` v = client->_bind( slider_value )
+            )->a( n = `class` v = `sapUiSmallMarginBottom`
 
         )->open( `Panel`
             )->a( n = `id`     v = `gridLayout`
-            )->a( n = `width`  v = client->_bind( panel_width )
+            )->a( n = `width`  v = |\{= ${ client->_bind( slider_value ) } + '%' \}|
             )->a( n = `height` v = `100%`
 
             )->open( `headerToolbar`
@@ -88,20 +94,6 @@ CLASS z2ui5_cl_ai_app_124 IMPLEMENTATION.
                             )->a( n = `gridColumn` v = `1 / 4` ).
 
     client->view_display( view->stringify( ) ).
-
-  ENDMETHOD.
-
-
-  METHOD on_event.
-
-    CASE client->get( )-event.
-
-      WHEN `SLIDER_MOVED`.
-        " original onSliderMoved: byId('gridLayout').setWidth(value + '%')
-        panel_width = |{ slider_value }%|.
-        client->view_model_update( ).
-
-    ENDCASE.
 
   ENDMETHOD.
 

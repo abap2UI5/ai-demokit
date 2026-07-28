@@ -7,6 +7,7 @@ CLASS z2ui5_cl_ai_app_160 DEFINITION PUBLIC.
     DATA client TYPE REF TO z2ui5_if_client.
 
     METHODS view_display.
+    METHODS on_event.
 
   PRIVATE SECTION.
 ENDCLASS.
@@ -19,6 +20,8 @@ CLASS z2ui5_cl_ai_app_160 IMPLEMENTATION.
     me->client = client.
     IF client->check_on_init( ).
       view_display( ).
+    ELSEIF client->check_on_event( ).
+      on_event( ).
     ENDIF.
 
   ENDMETHOD.
@@ -28,7 +31,9 @@ CLASS z2ui5_cl_ai_app_160 IMPLEMENTATION.
 
     DATA(view) = z2ui5_cl_ai_xml=>factory( ).
 
-    " handleLinkPress opens a MessageBox in the original; here a client toast
+    " handleLinkPress opens MessageBox.alert('Link was clicked!'); the framework
+    " expresses that 1:1 (client->message_box_display), so both wired Links go
+    " through a backend event rather than being reduced to a toast
     view->open( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
@@ -41,7 +46,7 @@ CLASS z2ui5_cl_ai_app_160 IMPLEMENTATION.
             )->open( n = `content` ns = `l`
                 )->leaf( `Link`
                     )->a( n = `text`  v = `Open message box`
-                    )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Link pressed` ) ) )
+                    )->a( n = `press` v = client->_event( `LINK_PRESSED` )
                 )->leaf( `Link`
                     )->a( n = `text`    v = `Disabled link`
                     )->a( n = `enabled` v = `false`
@@ -66,7 +71,7 @@ CLASS z2ui5_cl_ai_app_160 IMPLEMENTATION.
                     )->a( n = `text`    v = `Show more information`
                     " endIcon is @since 1.128 - kept 1:1 (POST_171)
                     )->a( n = `endIcon` v = `sap-icon://inspect`
-                    )->a( n = `press`   v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Link pressed` ) ) )
+                    )->a( n = `press`   v = client->_event( `LINK_PRESSED` )
                 )->leaf( `Link`
                     )->a( n = `text`    v = `Disabled link with icon`
                     " icon is @since 1.128 - kept 1:1 (POST_171)
@@ -78,6 +83,20 @@ CLASS z2ui5_cl_ai_app_160 IMPLEMENTATION.
                     )->a( n = `href` v = `http://www.sap.com` ).
 
     client->view_display( view->stringify( ) ).
+
+  ENDMETHOD.
+
+
+  METHOD on_event.
+
+    CASE client->get( )-event.
+
+      WHEN `LINK_PRESSED`.
+        " MessageBox.alert( ) - type 'alert' with the original's text, verbatim
+        client->message_box_display( text = `Link was clicked!`
+                                     type = `alert` ).
+
+    ENDCASE.
 
   ENDMETHOD.
 

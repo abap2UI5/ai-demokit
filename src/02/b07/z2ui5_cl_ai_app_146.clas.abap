@@ -3,10 +3,13 @@ CLASS z2ui5_cl_ai_app_146 DEFINITION PUBLIC.
   PUBLIC SECTION.
     INTERFACES z2ui5_if_app.
 
+    DATA slider_value TYPE i.
+
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
 
     METHODS view_display.
+    METHODS model_init.
 
   PRIVATE SECTION.
 ENDCLASS.
@@ -18,6 +21,7 @@ CLASS z2ui5_cl_ai_app_146 IMPLEMENTATION.
 
     me->client = client.
     IF client->check_on_init( ).
+      model_init( ).
       view_display( ).
     ENDIF.
 
@@ -28,6 +32,10 @@ CLASS z2ui5_cl_ai_app_146 IMPLEMENTATION.
 
     DATA(view) = z2ui5_cl_ai_xml=>factory( ).
 
+    " the original's onSliderMoved sets the three Panel widths to value + "%" in
+    " JS; rebuilt as a two-way bound Slider value plus an expression binding on
+    " each Panel width, so the resize runs on the client with no round-trip
+    " (thin frontend) and the liveChange wire is not needed
     view->open( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc`    v = `sap.ui.core.mvc`
         )->a( n = `xmlns`        v = `sap.m`
@@ -47,16 +55,15 @@ CLASS z2ui5_cl_ai_app_146 IMPLEMENTATION.
             )->leaf( `Label`
                 )->a( n = `text` v = `Container Width`
             )->leaf( `Slider`
-                )->a( n = `id`         v = `widthSlider`
-                )->a( n = `value`      v = `100`
-                )->a( n = `liveChange` v = client->_event( `SLIDER` )
+                )->a( n = `id`    v = `widthSlider`
+                )->a( n = `value` v = client->_bind( slider_value )
 
         )->shut(
 
         )->open( `Panel`
             )->a( n = `id`         v = `containerLayout`
             )->a( n = `headerText` v = `Default language (English-US)`
-            )->a( n = `width`      v = `100%`
+            )->a( n = `width`      v = |\{= ${ client->_bind( slider_value ) } + '%' \}|
             )->leaf( n = `HTML` ns = `c`
                 )->a( n = `id`      v = `hyphenatedText`
                 )->a( n = `content` v = ``
@@ -65,7 +72,7 @@ CLASS z2ui5_cl_ai_app_146 IMPLEMENTATION.
         )->open( `Panel`
             )->a( n = `id`         v = `containerLayoutDE`
             )->a( n = `headerText` v = `German language`
-            )->a( n = `width`      v = `100%`
+            )->a( n = `width`      v = |\{= ${ client->_bind( slider_value ) } + '%' \}|
             )->leaf( n = `HTML` ns = `c`
                 )->a( n = `id`      v = `hyphenatedTextDE`
                 )->a( n = `content` v = ``
@@ -74,12 +81,20 @@ CLASS z2ui5_cl_ai_app_146 IMPLEMENTATION.
         )->open( `Panel`
             )->a( n = `id`         v = `containerLayoutRU`
             )->a( n = `headerText` v = `Russian language`
-            )->a( n = `width`      v = `100%`
+            )->a( n = `width`      v = |\{= ${ client->_bind( slider_value ) } + '%' \}|
             )->leaf( n = `HTML` ns = `c`
                 )->a( n = `id`      v = `hyphenatedTextRU`
                 )->a( n = `content` v = `` ).
 
     client->view_display( view->stringify( ) ).
+
+  ENDMETHOD.
+
+
+  METHOD model_init.
+
+    " the original Slider carries value="100" and the Panels width="100%"
+    slider_value = 100.
 
   ENDMETHOD.
 

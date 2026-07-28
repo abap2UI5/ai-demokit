@@ -640,25 +640,42 @@ CLASS ${CLASS} IMPLEMENTATION.
                 )->open( \`VBox\`
                     )->a( n = \`class\` v = \`sapUiContentPadding\` ).
 
-        box->leaf( \`Link\`
-            )->a( n = \`text\`   v = \`Control - OpenUI5 API reference\`
-            )->a( n = \`href\`   v = lv_api
-            )->a( n = \`target\` v = \`_blank\`
-            )->a( n = \`class\`  v = \`sapUiTinyMarginBottom\` ).
-        box->leaf( \`Link\`
-            )->a( n = \`text\`   v = \`Sample - OpenUI5 source\`
-            )->a( n = \`href\`   v = lv_js
-            )->a( n = \`target\` v = \`_blank\`
-            )->a( n = \`class\`  v = \`sapUiTinyMarginBottom\` ).
-        box->leaf( \`Link\`
-            )->a( n = \`text\`   v = \`Sample - live fullscreen runner\`
-            )->a( n = \`href\`   v = lv_ui5
-            )->a( n = \`target\` v = \`_blank\`
-            )->a( n = \`class\`  v = \`sapUiTinyMarginBottom\` ).
+        " the three OpenUI5 links are empty for a ui5_only row (sap.ui.comp is
+        " not in OpenUI5), so each is rendered only when it actually resolves
+        IF lv_api IS NOT INITIAL.
+          box->leaf( \`Link\`
+              )->a( n = \`text\`   v = \`Control - OpenUI5 API reference\`
+              )->a( n = \`href\`   v = lv_api
+              )->a( n = \`target\` v = \`_blank\`
+              )->a( n = \`class\`  v = \`sapUiTinyMarginBottom\` ).
+        ENDIF.
+        IF lv_js IS NOT INITIAL.
+          box->leaf( \`Link\`
+              )->a( n = \`text\`   v = \`Sample - OpenUI5 source\`
+              )->a( n = \`href\`   v = lv_js
+              )->a( n = \`target\` v = \`_blank\`
+              )->a( n = \`class\`  v = \`sapUiTinyMarginBottom\` ).
+        ENDIF.
+        IF lv_ui5 IS NOT INITIAL.
+          box->leaf( \`Link\`
+              )->a( n = \`text\`   v = \`Sample - live fullscreen runner\`
+              )->a( n = \`href\`   v = lv_ui5
+              )->a( n = \`target\` v = \`_blank\`
+              )->a( n = \`class\`  v = \`sapUiTinyMarginBottom\` ).
+        ENDIF.
         box->leaf( \`Link\`
             )->a( n = \`text\`   v = \`abap2UI5 - class on GitHub\`
             )->a( n = \`href\`   v = lv_abap
             )->a( n = \`target\` v = \`_blank\` ).
+
+        " say why the reference links are missing rather than leaving a gap
+        IF lv_api IS INITIAL.
+          box->leaf( \`MessageStrip\`
+              )->a( n = \`text\`      v = \`sap.ui.comp ships with SAPUI5 only - it is in no OpenUI5 checkout, so this sample has no OpenUI5 API, source or live-runner link.\`
+              )->a( n = \`type\`      v = \`Information\`
+              )->a( n = \`showIcon\`  v = \`true\`
+              )->a( n = \`class\`     v = \`sapUiSmallMarginTop\` ).
+        ENDIF.
 
         IF lv_checked IS NOT INITIAL.
           box->leaf( \`ObjectStatus\`
@@ -745,12 +762,21 @@ CLASS ${CLASS} IMPLEMENTATION.
       DATA(dot) = find( val = <app>-control sub = \`.\` occ = -1 ).
       <app>-ctrl_name = COND #( WHEN dot >= 0 THEN substring( val = <app>-control off = dot + 1 ) ELSE <app>-control ).
 
-      <app>-api_url   = |https://sdk.openui5.org/api/{ <app>-control }|.
-      <app>-js_url    = |https://github.com/SAP/openui5/tree/master/src/{ <app>-module }| &&
+      " the three reference links point into OpenUI5 - API reference, sample
+      " source, live runner - so they only exist for a library OpenUI5 ships.
+      " A ui5_only row (sap.ui.comp, SAPUI5 only) has none of the three there:
+      " leaving them built would hand out four links of which three 404, and
+      " the commercial host is not an option (pattern-lint commercial-ui5-host).
+      " They stay empty and the popover renders only what resolves - the ABAP
+      " class link is repository-local and always correct
+      IF <app>-ui5_only = abap_false.
+        <app>-api_url = |https://sdk.openui5.org/api/{ <app>-control }|.
+        <app>-js_url  = |https://github.com/SAP/openui5/tree/master/src/{ <app>-module }| &&
                         |/test/{ libpath }/demokit/sample/{ <app>-name }|.
-      <app>-ui5_url   = |https://sdk.openui5.org/resources/sap/ui/documentation/sdk/index.html| &&
+        <app>-ui5_url = |https://sdk.openui5.org/resources/sap/ui/documentation/sdk/index.html| &&
                         |?sap-ui-xx-sample-id={ <app>-module }.sample.{ <app>-name }| &&
                         |&sap-ui-xx-sample-lib={ <app>-module }|.
+      ENDIF.
       <app>-abap_url  = |https://github.com/abap2UI5/api/blob/main/{ <app>-path }|.
       <app>-start_url = |{ start }{ to_upper( <app>-class ) }|.
       <app>-has_check = xsdbool( <app>-checked IS NOT INITIAL ).

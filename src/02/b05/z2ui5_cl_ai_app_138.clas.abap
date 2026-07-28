@@ -3,12 +3,15 @@ CLASS z2ui5_cl_ai_app_138 DEFINITION PUBLIC.
   PUBLIC SECTION.
     INTERFACES z2ui5_if_app.
 
-    DATA hint_visible TYPE abap_bool.
+    DATA hint_visible   TYPE abap_bool.
+    DATA show_side      TYPE abap_bool.
+    DATA toggle_enabled TYPE abap_bool.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
 
     METHODS view_display.
+    METHODS on_event.
 
   PRIVATE SECTION.
 ENDCLASS.
@@ -21,7 +24,10 @@ CLASS z2ui5_cl_ai_app_138 IMPLEMENTATION.
     me->client = client.
     IF client->check_on_init( ).
       hint_visible = abap_true.
+      show_side    = abap_true.       " DynamicSideContent.showSideContent default
       view_display( ).
+    ELSEIF client->check_on_event( ).
+      on_event( ).
     ENDIF.
 
   ENDMETHOD.
@@ -31,6 +37,11 @@ CLASS z2ui5_cl_ai_app_138 IMPLEMENTATION.
 
     DATA(view) = z2ui5_cl_ai_xml=>factory( ).
 
+    " two of the three controller behaviours are reproduced: breakpointChanged
+    " carries its currentBreakpoint parameter to the backend, which enables the
+    " Toggle button on breakpoint S exactly as _updateToggleButtonState does,
+    " and the Toggle press flips the bound showSideContent (the property behind
+    " toggle( )). The Slider's DOM resize has no bindable equivalent - see sidecar
     view->open( n = `View` ns = `mvc`
         )->a( n = `height`    v = `100%`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
@@ -50,8 +61,10 @@ CLASS z2ui5_cl_ai_app_138 IMPLEMENTATION.
                     )->a( n = `id`                  v = `DynamicSideContent`
                     )->a( n = `class`               v = `sapUiDSCExplored sapUiContentPadding`
                     )->a( n = `sideContentFallDown` v = `BelowM`
-                    )->a( n = `containerQuery`       v = `true`
-                    )->a( n = `breakpointChanged`    v = client->_event( `BP_CHANGED` )
+                    )->a( n = `containerQuery`      v = `true`
+                    )->a( n = `showSideContent`     v = client->_bind( show_side )
+                    )->a( n = `breakpointChanged`   v = client->_event( val   = `BP_CHANGED`
+                                                                        t_arg = VALUE #( ( `${$parameters>/currentBreakpoint}` ) ) )
 
                     )->leaf( `Title`
                         )->a( n = `level` v = `H1`
@@ -75,20 +88,40 @@ CLASS z2ui5_cl_ai_app_138 IMPLEMENTATION.
             )->open( `footer`
                 )->open( `Toolbar`
                     )->leaf( `Button`
-                        )->a( n = `text`  v = `Toggle`
-                        )->a( n = `type`  v = `Accept`
-                        )->a( n = `press` v = client->_event( `TOGGLE` )
-                        )->a( n = `id`    v = `toggleButton`
+                        )->a( n = `text`    v = `Toggle`
+                        )->a( n = `type`    v = `Accept`
+                        )->a( n = `press`   v = client->_event( `TOGGLE` )
+                        )->a( n = `id`      v = `toggleButton`
+                        )->a( n = `enabled` v = client->_bind( toggle_enabled )
                     )->leaf( `Slider`
-                        )->a( n = `id`         v = `DSCWidthSlider`
-                        )->a( n = `value`      v = `100`
-                        )->a( n = `liveChange` v = client->_event( `SLIDER` )
+                        )->a( n = `id`    v = `DSCWidthSlider`
+                        )->a( n = `value` v = `100`
                     )->leaf( `Text`
                         )->a( n = `id`      v = `DSCWidthHintText`
                         )->a( n = `text`    v = `Best view in full screen mode`
                         )->a( n = `visible` v = client->_bind( hint_visible ) ).
 
     client->view_display( view->stringify( ) ).
+
+  ENDMETHOD.
+
+
+  METHOD on_event.
+
+    CASE client->get( )-event.
+
+      WHEN `BP_CHANGED`.
+        " _updateToggleButtonState: the button is only enabled on breakpoint S
+        toggle_enabled = xsdbool( client->get_event_arg( ) = `S` ).
+        client->view_model_update( ).
+
+      WHEN `TOGGLE`.
+        " DynamicSideContent.toggle( ) swaps main and side content on S; the
+        " bound showSideContent is the property that setter writes
+        show_side = xsdbool( show_side = abap_false ).
+        client->view_model_update( ).
+
+    ENDCASE.
 
   ENDMETHOD.
 

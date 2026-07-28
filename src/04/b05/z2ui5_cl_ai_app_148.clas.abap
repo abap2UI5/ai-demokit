@@ -19,6 +19,7 @@ CLASS z2ui5_cl_ai_app_148 DEFINITION PUBLIC.
     DATA client TYPE REF TO z2ui5_if_client.
 
     METHODS view_display.
+    METHODS on_event.
     METHODS model_init.
 
   PRIVATE SECTION.
@@ -33,6 +34,8 @@ CLASS z2ui5_cl_ai_app_148 IMPLEMENTATION.
     IF client->check_on_init( ).
       model_init( ).
       view_display( ).
+    ELSEIF client->check_on_event( ).
+      on_event( ).
     ENDIF.
 
   ENDMETHOD.
@@ -42,6 +45,9 @@ CLASS z2ui5_cl_ai_app_148 IMPLEMENTATION.
 
     DATA(view) = z2ui5_cl_ai_xml=>factory( ).
 
+    " the drop carries the two row indices and the insert position as client-side
+    " resolved $-args (CAPABILITIES "Drag & drop reorder"); on_event reorders the
+    " ABAP table with exactly the original controller's splice arithmetic
     view->open( n = `View` ns = `mvc`
         )->a( n = `xmlns`         v = `sap.m`
         )->a( n = `xmlns:mvc`     v = `sap.ui.core.mvc`
@@ -75,7 +81,11 @@ CLASS z2ui5_cl_ai_app_148 IMPLEMENTATION.
                         )->a( n = `targetAggregation` v = `items`
                         )->a( n = `dropPosition`      v = `Between`
                         )->a( n = `dropLayout`        v = `Horizontal`
-                        )->a( n = `drop`              v = client->_event( `DROP` )
+                        )->a( n = `drop`              v = client->_event( val   = `DROP`
+                                                                          t_arg = VALUE #(
+                                                                            ( `${$parameters>/draggedControl/oParent}.indexOfItem(${$parameters>/draggedControl})` )
+                                                                            ( `${$parameters>/droppedControl/oParent}.indexOfItem(${$parameters>/droppedControl})` )
+                                                                            ( `${$parameters>/dropPosition}` ) ) )
 
                 )->shut(
 
@@ -108,6 +118,44 @@ CLASS z2ui5_cl_ai_app_148 IMPLEMENTATION.
                                 )->a( n = `wrapping` v = `true` ).
 
     client->view_display( view->stringify( ) ).
+
+  ENDMETHOD.
+
+
+  METHOD on_event.
+
+    CASE client->get( )-event.
+
+      WHEN `DROP`.
+        " onDrop 1:1 - the client indices are 0-based, ABAP rows 1-based. Both
+        " arrive from the frontend, so they are range-checked before they are
+        " used as a table index: JS would splice a nonsense index harmlessly,
+        " ABAP would dump on the read
+        DATA(drag_pos) = CONV i( client->get_event_arg( ) ).
+        DATA(drop_pos) = CONV i( client->get_event_arg( 2 ) ).
+        DATA(position) = client->get_event_arg( 3 ).
+
+        IF drag_pos < 0 OR drag_pos >= lines( t_items )
+        OR drop_pos < 0 OR drop_pos >= lines( t_items ).
+          RETURN.
+        ENDIF.
+
+        DATA(item) = t_items[ drag_pos + 1 ].
+        DELETE t_items INDEX drag_pos + 1.
+
+        IF drag_pos < drop_pos.
+          drop_pos = drop_pos - 1.
+        ENDIF.
+
+        IF position = `Before`.
+          INSERT item INTO t_items INDEX drop_pos + 1.
+        ELSE.
+          INSERT item INTO t_items INDEX drop_pos + 2.
+        ENDIF.
+
+        client->view_model_update( ).
+
+    ENDCASE.
 
   ENDMETHOD.
 

@@ -7,6 +7,109 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## Backlog sweep (2026-07-28) — dead wires closed, an app-killing crash proved and fixed, the OpenUI5 snapshots refreshed
+
+The open findings that were actionable without a live system, worked off in one
+change:
+
+- **`generate_result` had been failing since 2026-07-27** — its `npm ci` runs
+  inside the freshly cloned OpenUI5 checkout, and OpenUI5's own committed
+  `package-lock.json` had drifted from its `package.json` (`Missing: js-yaml@3.14.2,
+  argparse@1.0.10, sprintf-js@1.0.3`), which `npm ci` treats as a hard EUSAGE
+  failure. Nothing this repo can fix upstream, so the step falls back to
+  `npm install` — we only need their jsdoc toolchain, not a reproducible install.
+  **Verified end-to-end the same day, which also corrected the diagnosis**:
+  OpenUI5 repaired their lock upstream on 2026-07-28, so `npm ci` succeeds again
+  and the workflow would have recovered on its own. The fallback is therefore
+  hardening against the next drift, not a live fix — but the outage was real and
+  cost eight days of coverage refresh.
+- **App 220 (`sap.ui.unified.CalendarMinMax`) did not just have a "crash risk" —
+  it did not render at all**, and it is fixed. The 07-27 sweep had traced it in
+  the sources; a probe now shows it empirically
+  (`scripts/probes/calendar-empty-enddate-probe.mjs`, real OpenUI5 in headless
+  Chromium, calendar focused on the month that carries the disabled dates):
+  with the plain formatter binding over the empty `END` field the view throws
+  *"Date must be a JavaScript or UI5Date date object"* and renders **0** calendar
+  days; with the conversion guarded in the binding
+  (`` `{= ${END} ? Formatter.DateCreateObject(${END}) : null }` ``, a backtick
+  literal so the braces survive) the empty row yields `endDate` `null` and all 42
+  days render. The probe also killed the obvious alternative fix: seeding
+  `end = start` would disable **nothing**, because `Month._checkDateEnabled`
+  compares a range strictly exclusive (`> start && < end`) and reaches its
+  single-day branch only when there is no `endDate` at all. Distilled into
+  AGENTS §10, CAPABILITIES (date-object row) and the new pattern-lint rule
+  `unguarded-date-formatter`, which was regression-tested against the pre-fix code.
+- **The dead-`_event`-wire class is closed** (BASELINE now empty). Six ports,
+  each rebuilt the way the capability allows rather than left firing a
+  round-trip no branch handled: 146 and 150 and 145 the thin-frontend way
+  (two-way bound `value`/`selectedKey`/`selectedIndex` + an expression binding
+  carrying the controller's own switch — the app-053 shape), 143 and 138 with a
+  real `on_event` dispatcher over bound properties (`showFooter` /
+  `areaShrinkRatio`, `showSideContent` / Toggle `enabled`), and 148 with the
+  **full drag & drop reorder** — CAPABILITIES marks it ✅, so "reorder logic not
+  reproduced" had been a wrong improvisation: the drop ships both row indices
+  and the insert position as client-resolved `$`-args and `on_event` replays the
+  original splice arithmetic in ABAP. 138 also now carries its
+  `breakpointChanged` parameter (`${$parameters>/currentBreakpoint}`) instead of
+  faking it. Two behaviours stay genuinely dropped and are declared as such:
+  138's slider (a jQuery DOM width on a `sap.m.Page`, which has no width
+  property) and 145's `RevealGrid` overlay (a sample-local helper module, not a
+  UI5 API). The six keep status `generated` — the headline gap is closed and
+  gate-verified, a full end-to-end re-review per port is not.
+- **Five more capability-refuted substitutions replaced** in the same pass, each
+  one a case where the port had claimed a loss the framework can express:
+  **124** did a full backend round-trip per slider drag step → the same
+  expression binding as 053/146; **160** toasted "Link pressed" where the
+  original opens `MessageBox.alert('Link was clicked!')` → `message_box_display`
+  (its own sidecar had already called this a wrong improvisation); **163**
+  hardcoded each button's caption into its toast → `${$source>/text}`, and its
+  dropped `ActionSheet.fragment.xml` is rebuilt 1:1 and anchored with
+  `popover_display( by_id = $event.oSource.sId )`; **109** toasted only event
+  names → `weekNumberPress`/`startDateChange` now carry their `weekNumber` /
+  `date` parameters (`selectedDatesChange` stays name-only: its parameter is an
+  array of DateRange *controls*, which is not transportable); **127** toasted a
+  bare "Pressed" on the rationale that the runtime id is "not reproducible
+  statically" → it does not need reproducing, `$event.oSource.sId` reads it off
+  the event.
+- **The dropped sample CSS of 122/124 is shipped** — and the "blocked" call that
+  first went with it was wrong. `curl` to `raw.githubusercontent.com` is refused
+  by this environment's proxy, and that was taken for "no OpenUI5 source
+  reachable"; **`git clone` of `SAP/openui5` works fine**, which is what the
+  pipeline uses anyway. With the checkout, both missing stylesheets were
+  recovered and archived (closing that §4 archive gap) and injected into the
+  ports through a `core:HTML` `<style>` leaf, the documented CAPABILITIES form.
+  Both ports had been carrying the class names with no rules behind them: app
+  122 rendered every icon at the default size (the sample is *about* icon
+  sizes) and app 124's five grid tiles rendered as unstyled text instead of the
+  blue rounded boxes. **Lesson: one blocked protocol is not a blocked network** —
+  check the transport the tooling actually uses before declaring a task
+  impossible.
+- **The OpenUI5-derived snapshots were refreshed by hand** from that checkout,
+  the work `generate_result` had not been doing since 2026-07-20:
+  `ui5/properties.json` (831 → 928 controls), `ui5/universe.json` (736 → 741
+  samples — five new `sap.f.HeroBanner` samples, all @1.152 and therefore out of
+  scope) and `api.md`/README against real control metadata from OpenUI5
+  **1.152.0**.
+- **The `sap.ui.comp` overview rows no longer hand out links that 404.** The
+  three OpenUI5 reference links (API, sample source, live runner) are built only
+  for a library OpenUI5 actually ships; a `ui5_only` row renders just its ABAP
+  class link plus a MessageStrip saying why. The commercial host stays excluded
+  (`pattern-lint` `commercial-ui5-host`).
+- **App 251 names the variant action through `client->cs_event-smart_variant_init`**
+  now that abap2UI5 #2481 is on main — the last open cleanup of the smart-controls
+  batch. `pr/smartvariant-initialise` is retired per the `pr/` convention (folder
+  removed, recorded in the implemented table).
+- **One new `pr/` request filed:** `formatter-date-empty-guard` — make
+  `Formatter.DateCreateObject` return `null` for a falsy input instead of an
+  Invalid Date. Low priority (every port can guard it itself, and pattern-lint
+  now makes sure it does), but the unguarded failure mode is a whole-view crash
+  that names neither the control nor the field.
+
+Ladder unchanged (48 `generated` · 146 `reviewed` · 57 `checked`) — the reworked
+ports keep their rung, the headline gap is what closed; open LIVE_TESTs 70 → 61. All gates green: abaplint STANDARD + CLOUD + the 702
+downport, validate-meta, pattern-lint (incl. the new rule), structural-diff
+--strict, structure-lint, property-check, data-fidelity, render-smoke.
+
 ## Overview state survives the browser Back button (2026-07-27)
 
 User report: search something in the overview, or flip the Shell switch, start
