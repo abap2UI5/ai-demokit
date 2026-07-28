@@ -12,8 +12,8 @@
   "checked": null,
   "deviations": [
     {
-      "type": "LIVE_TEST",
-      "what": "The Slider liveChange reproduces onSliderMoved server-side: Slider.value is two-way bound and the CSSGrid host Panel.width (bound to a model field) is recomputed as value + '%' on a backend round-trip. The original set Slider.value=100 statically and drove byId('gridLayout').setWidth imperatively; here value and width carry bindings to carry that behaviour."
+      "type": "NOTE",
+      "what": "onSliderMoved sets the Panel width to value + \"%\" imperatively. Rebuilt on the client (the app-053 shape): the Slider value is two-way bound to slider_value, seeded with the original's literal 100, and the Panel width carries the expression binding {= slider_value + '%' } instead of the literal 100%. The liveChange attribute is therefore dropped. Until 2026-07-28 the port routed liveChange to a SLIDER_MOVED backend event that recomputed the width server-side - correct but one full round-trip per drag step; the expression binding is the thin-frontend form and needs none."
     },
     {
       "type": "NOTE",

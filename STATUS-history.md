@@ -52,6 +52,26 @@ change:
   property) and 145's `RevealGrid` overlay (a sample-local helper module, not a
   UI5 API). The six keep status `generated` — the headline gap is closed and
   gate-verified, a full end-to-end re-review per port is not.
+- **Five more capability-refuted substitutions replaced** in the same pass, each
+  one a case where the port had claimed a loss the framework can express:
+  **124** did a full backend round-trip per slider drag step → the same
+  expression binding as 053/146; **160** toasted "Link pressed" where the
+  original opens `MessageBox.alert('Link was clicked!')` → `message_box_display`
+  (its own sidecar had already called this a wrong improvisation); **163**
+  hardcoded each button's caption into its toast → `${$source>/text}`, and its
+  dropped `ActionSheet.fragment.xml` is rebuilt 1:1 and anchored with
+  `popover_display( by_id = $event.oSource.sId )`; **109** toasted only event
+  names → `weekNumberPress`/`startDateChange` now carry their `weekNumber` /
+  `date` parameters (`selectedDatesChange` stays name-only: its parameter is an
+  array of DateRange *controls*, which is not transportable); **127** toasted a
+  bare "Pressed" on the rationale that the runtime id is "not reproducible
+  statically" → it does not need reproducing, `$event.oSource.sId` reads it off
+  the event.
+- **Blocked, and recorded as such:** the dropped sample CSS of 122/124. Neither
+  stylesheet was archived (the §4 archive gap — `Icon/style.css`,
+  `CSSGrid/css/main.css`) and this environment reaches no OpenUI5 source, so
+  the files cannot be recovered here; inventing CSS would be exactly the
+  invented-data failure the data-fidelity gate exists to prevent.
 - **The `sap.ui.comp` overview rows no longer hand out links that 404.** The
   three OpenUI5 reference links (API, sample source, live runner) are built only
   for a library OpenUI5 actually ships; a `ui5_only` row renders just its ABAP
@@ -61,8 +81,8 @@ change:
   now that abap2UI5 #2481 is on main — the last open cleanup of the smart-controls
   batch.
 
-Ladder unchanged (48 `generated` · 146 `reviewed` · 57 `checked`); open
-LIVE_TESTs 70 → 63. All gates green: abaplint STANDARD + CLOUD + the 702
+Ladder unchanged (48 `generated` · 146 `reviewed` · 57 `checked`) — the reworked
+ports keep their rung, the headline gap is what closed; open LIVE_TESTs 70 → 61. All gates green: abaplint STANDARD + CLOUD + the 702
 downport, validate-meta, pattern-lint (incl. the new rule), structural-diff
 --strict, structure-lint, property-check, data-fidelity, render-smoke.
 

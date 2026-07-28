@@ -17,8 +17,8 @@ TRAINING.md; for what abap2UI5 can express see CAPABILITIES.md._
 |---|---|
 | Ports | **251** sidecars in `meta/` (src/01: 149 · src/02: 55 · src/03: 12 · src/04: 19 · src/05: 11 · src/06: 5) |
 | Status ladder | 48 `generated` · 146 `reviewed` · 57 `checked` (live-verified) |
-| Deviations | 4 DROPPED_171 · 138 IMPROVISED · 67 LIVE_TEST · 275 NOTE · 95 POST_171 |
-| Open LIVE_TESTs | **63 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
+| Deviations | 4 DROPPED_171 · 136 IMPROVISED · 65 LIVE_TEST · 279 NOTE · 95 POST_171 |
+| Open LIVE_TESTs | **61 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
 | Declared gate skips | 7 structural-diff · 6 render-smoke (each re-verified per run — a stale skip FAILS) |
 | Out-of-scope ported samples | `z2ui5_cl_ai_app_121 (sap.m.sample.UploadSet — deprecated)` · `z2ui5_cl_ai_app_136 (sap.f.sample.SidePanelSingle — control @since 1.107)` · `z2ui5_cl_ai_app_141 (sap.ui.core.sample.InvisibleMessage — control @since 1.78)` · `z2ui5_cl_ai_app_165 (sap.f.sample.ProductSwitchNavigation — control @since 1.72)` · `z2ui5_cl_ai_app_166 (sap.f.sample.SemanticPage — deprecated)` · `z2ui5_cl_ai_app_203 (sap.m.sample.OverflowToolbarTokenizer — control @since 1.139)` — standing debt pending a maintainer decision (drop vs documented exception), surfaced by the source-backed scope gate (pr/scope-since-from-source) |
 
@@ -82,15 +82,23 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   for 148 (CAPABILITIES marks it ✅, so the earlier "not reproduced" was a
   wrong improvisation). Only 138's slider (a jQuery DOM width on a
   `sap.m.Page`, which has no width property) and 145's `RevealGrid` overlay
-  (a sample-local helper module) stay dropped, now declared as such. **Still
-  open:** toast substitutions around capabilities CAPABILITIES marks
-  expressible (MessageBox `onclose`, `popover_display`, URLHELPER, timers,
-  generalized `control_by_id` methods — the app-042 class), faked event values
-  where the `$event.*` transport exists, and dropped sample CSS (122/124, plus
-  §4 archive gaps). Find them: sidecar status `generated` minus the 6
-  scope-exception ports. Note the six reworked ports keep status `generated`:
-  the headline gap is closed and gate-verified, a full end-to-end re-review
-  per port is not done.
+  (a sample-local helper module) stay dropped, now declared as such. Also closed in the
+  same pass: 124 (a `liveChange` round-trip per drag step → the expression
+  binding), 160 (toast → the real `MessageBox.alert`, which its own sidecar had
+  already flagged as a wrong improvisation), 163 (hardcoded button captions →
+  `${$source>/text}`, and the dropped `ActionSheet.fragment.xml` rebuilt and
+  anchored via `popover_display`), 109 (`weekNumber` / `date` event parameters
+  now transported into the toast texts) and 127 (`$event.oSource.sId` instead
+  of a bare "Pressed"). **Still open:** the rest of the toast-substitution
+  class (URLHELPER, timers, generalized `control_by_id`, the remaining
+  controller-built popups — 106/107/112/147/149/170/218/244/246/252), faked
+  event values in the ports not listed above, and the dropped sample CSS of
+  122/124 — **blocked here**: neither sample's stylesheet was archived (`§4`
+  archive gap: `Icon/style.css`, `CSSGrid/css/main.css`), and this environment
+  reaches no OpenUI5 source, so reproducing them needs a checkout. Find the
+  rest: sidecar status `generated` minus the 6 scope-exception ports. Note the
+  reworked ports keep status `generated`: the headline gap is closed and
+  gate-verified, a full end-to-end re-review per port is not done.
 - [ ] **App 203 out of scope via `@ui5-experimental-since`** —
   `sap.m.OverflowToolbarTokenizer` is experimental since 1.139 with no plain
   `@since`, which the scanners misread as base-version until 2026-07-27
