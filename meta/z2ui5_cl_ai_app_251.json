@@ -37,7 +37,7 @@
     },
     {
       "type": "LIVE_TEST",
-      "what": "Run in a system 2026-07-28: the view renders, the SmartTable loads 205 products from GWSAMPLE_BASIC, filtering works. Saving a view works ONLY once _oPersoControl is set (proven from the console - the view then appears under \"Meine Ansichten\"); the documented initialise( ) call does not set it on 1.150, which is why the framework action assigns the field. The declarative path (SMART_VARIANT_INIT via follow_up_action) is NOT yet verified in a system - the framework branch was not installed when this was last tested. Open to verify - saving without any console step, a saved view surviving an app restart (the SmartVariantManagement has to LOAD its variants on startup, which is a second question the field assignment may or may not answer), and the page variant restoring filter bar and table personalization together."
+      "what": "Run in a system 2026-07-28. Working: the view renders, the SmartTable loads 205 products from GWSAMPLE_BASIC, filtering works, and SAVING a view now works declaratively - the SMART_VARIANT_INIT follow-up action replaces the console workaround (the documented initialise( ) call alone does not, it leaves _oPersoControl null on 1.150). STILL OPEN: after an app restart the saved views are gone. Setting the perso control anchors the WRITE path; LOADING the stored variants at startup is the second half of the handshake and is not covered yet. Next datapoint needed: whether SmartVariantManagementApplyAPI.loadVariants( ) returns the saved variant after a restart (then only the display/apply step is missing) or zero (then the save never reached the LREP backend)."
     }
   ]
 }

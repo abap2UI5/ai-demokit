@@ -3461,11 +3461,10 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` initialise( ) call does NOT set _oPersoControl, so the action makes that call and then assigns the field itself when it is still unset. The port therefore ends view_display with a follow_up_action` &&
                ` carrying the SmartVariantManagement id and the personalizable control id - one line the sample does not need because it has a controller. The action name is written out as a literal for now: this` &&
                ` repo's abaplint resolves abap2UI5 from its default branch, which does not carry the new cs_event-smart_variant_init constant until the framework change is merged. // LIVE-TEST: Run in a system` &&
-               ` 2026-07-28: the view renders, the SmartTable loads 205 products from GWSAMPLE_BASIC, filtering works. Saving a view works ONLY once _oPersoControl is set (proven from the console - the view then` &&
-               ` appears under "Meine Ansichten"); the documented initialise( ) call does not set it on 1.150, which is why the framework action assigns the field. The declarative path (SMART_VARIANT_INIT via`.
-    lv_text1 = lv_text1 && ` follow_up_action) is NOT yet verified in a system - the framework branch was not installed when this was last tested. Open to verify - saving without any console step, a saved view surviving an app` &&
-               ` restart (the SmartVariantManagement has to LOAD its variants on startup, which is a second question the field assignment may or may not answer), and the page variant restoring filter bar and table` &&
-               ` personalization together.`.
+               ` 2026-07-28. Working: the view renders, the SmartTable loads 205 products from GWSAMPLE_BASIC, filtering works, and SAVING a view now works declaratively - the SMART_VARIANT_INIT follow-up action` &&
+               ` replaces the console workaround (the documented initialise( ) call alone does not, it leaves _oPersoControl null on 1.150). STILL OPEN: after an app restart the saved views are gone. Setting the`.
+    lv_text1 = lv_text1 && ` perso control anchors the WRITE path; LOADING the stored variants at startup is the second half of the handshake and is not covered yet. Next datapoint needed: whether` &&
+               ` SmartVariantManagementApplyAPI.loadVariants( ) returns the saved variant after a restart (then only the display/apply step is missing) or zero (then the save never reached the LREP backend).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.comp`        control = `sap.ui.comp.smartvariants.SmartVariantManagement` name = `PageVariantManagement`               class = `z2ui5_cl_ai_app_251` path = `src/06/b01/z2ui5_cl_ai_app_251.clas.abap`
         score = 5
