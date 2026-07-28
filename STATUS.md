@@ -46,7 +46,11 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   the field by hand in the console made Save As work immediately. abap2UI5 gained the
   dedicated `SMART_VARIANT_INIT` frontend action for it (branch
   `claude/smart-controls-samples-vdfr5y` in abap2UI5, four specs, ABAP mirror regenerated);
-  app 251 calls it via `follow_up_action` after `view_display`. **Two follow-ups:**
+  app 251 calls it via `follow_up_action` after `view_display`. **Measured detail:** the
+  documented `initialise()` call does **not** set `_oPersoControl` on 1.150 (the work
+  moved behind a `SmartVariantManagementMediator`), so the action makes that call and
+  then assigns the field itself when it is still unset — the only path that made Save As
+  work. **Two follow-ups:**
   (a) the port writes the action name as a **literal** because this repo's abaplint
   resolves abap2UI5 from its default branch — switch to `client->cs_event-smart_variant_init`
   once the framework change is merged; (b) the declarative path is **not yet live-verified**

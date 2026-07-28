@@ -36,16 +36,25 @@ var oVariant = this.oModel._flWriteAddVariant({
 });
 ```
 
-`_oPersoControl` is what `initialise(fnCallback, oPersoControl)` assigns. **Setting
-it by hand in the console makes Save As work immediately** — the view appears under
-*Meine Ansichten*. So exactly one call is missing, and it is one an app normally makes
-from its controller. SAP's own documentation shows the pattern
+**Setting `_oPersoControl` by hand in the console makes Save As work immediately** —
+the view appears under *Meine Ansichten*.
+
+The obvious candidate for doing that properly is the call SAP's own documentation shows
 ([Smart Variant Management](https://github.com/SAP-docs/sapui5/blob/main/docs/10_More_About_Controls/smart-variant-management-06a4c3a.md)):
 
 ```js
 oSmartVariantManagement.addPersonalizableControl(oPersInfo);
 oSmartVariantManagement.initialise(function () { /* init done */ }, this);
 ```
+
+**It does not work on 1.150.** Called with the registered filter bar, `initialise()`
+leaves `_oPersoControl` at `null` (the stack shows the work moved behind a
+`SmartVariantManagementMediator`), and saving keeps throwing. Measured, not assumed —
+an earlier version of this request claimed otherwise and was corrected.
+
+So the public API does not cover an app that has no controller of its own, and the
+only measured path is the field assignment. If a supported call for this exists in
+current `sap.ui.comp`, this request should be closed with that call instead.
 
 ## Current behavior
 
@@ -78,11 +87,10 @@ Frontend side (sketch):
 
 ```js
 evSmartVariantInit(aArgs) {
-  const oSVM  = ViewSlots.byId(aArgs[0]);
-  const oCtrl = ViewSlots.byId(aArgs[1]);
-  if (oSVM && oCtrl && oSVM.initialise) {
-    oSVM.initialise(function () {}, oCtrl);
-  }
+  const oSVM  = ViewSlots.resolveById(aArgs[0]);
+  const oCtrl = ViewSlots.resolveById(aArgs[1]);
+  oSVM.initialise(function () {}, oCtrl);          // documented call
+  if (!oSVM._oPersoControl) oSVM._oPersoControl = oCtrl;  // what actually works on 1.150
 }
 ```
 
