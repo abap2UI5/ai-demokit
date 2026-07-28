@@ -82,6 +82,21 @@ Three lessons came out of the review and the first live run, all now encoded:
   writing it down as a finding. Port-side fixes landed regardless: the
   `pageVariantPersistencyKey` custom data the docs require, and the filter event
   moved off the backend round-trip.
+- **Variant management needed a framework action — and got one.** Saving a
+  view in app 251 threw `Cannot read properties of undefined (reading 'getId')`.
+  Five hypotheses died on live evidence (app component, `flexEnabled`,
+  association-id prefixing, registration, and the SAPUI5 docs' own page-variant
+  wiring — which registers **0** controls where the sample's registers 2). The
+  actual gap: `sap.ui.comp` expects a controller to call
+  `initialise(fnCallback, oPersoControl)`; without it `_oPersoControl` stays
+  `null` and `sap/ui/fl/write/api/SmartVariantManagementWriteAPI.js:26` dereferences
+  it. Setting the field by hand in the console made Save As work at once, which
+  sized the gap exactly. abap2UI5 now has `SMART_VARIANT_INIT` (branch
+  `claude/smart-controls-samples-vdfr5y`, four specs, ABAP mirror regenerated;
+  the test sandbox also needed the timer globals), and app 251 calls it via
+  `follow_up_action`. Method note for next time: the closed half of a stack is
+  usually reachable anyway — `sap.ui.fl` is open source and the running system
+  serves the `-dbg` sources.
 - **A SmartTable without a `UI.LineItem` annotation renders NO columns.**
   First live run of apps 250/251 against GWSAMPLE_BASIC came up with the
   "add columns to see the content" placeholder. The assumption written into

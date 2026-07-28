@@ -3453,13 +3453,17 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` to the view: GWSAMPLE_BASIC carries no UI.LineItem annotation, and without one a SmartTable starts with NO columns at all - it renders the "add columns to see the content" placeholder (seen live`.
     lv_text1 = lv_text1 && ` 2026-07-27; an earlier version of this note wrongly assumed it would fall back to all metadata fields). The port therefore adds initiallyVisibleFields="ProductID,Name,Category,SupplierName,Price", an` &&
                ` attribute the sample does not carry because its own service annotates the four columns it shows. The page variant, the persistency keys and the smartVariant wiring the step is about are unaffected.` &&
-               ` // LIVE-TEST: Partly run in a system 2026-07-27: the view renders and the SmartTable loads (205 products from GWSAMPLE_BASIC), but SAVING a view fails. Pinned in the live debugger to sap.ui.fl` &&
-               ` SmartVariantManagementWriteAPI:28 with mPropertyBag.control === null - sap.ui.comp hands the flex API no control when saving a page variant; app component, association ids, registration and` &&
-               ` loadVariants are all verified fine (see the STATUS open findings for the full list of refuted causes). The current wiring (pageVariantPersistencyKey custom data, no smartVariant associations, per the` &&
-               ` SAPUI5 docs) has since been deployed and does NOT fix it - control is still null in the same frame, so both wirings behave identically. Open to verify - whether saving works with the documented`.
-    lv_text1 = lv_text1 && ` wiring, and then that the page variant restores filter bar and table personalization together and that variant management no longer appears inside the Filters dialog. // NOTE: The property gate` &&
-               ` (ui5/properties.json) covers OpenUI5 libraries only, so no member of sap.ui.comp is checked against the 1.71 rule automatically. SmartVariantManagement, SmartFilterBar and SmartTable are @since 1.28;` &&
-               ` the smartVariant association and persistencyKey properties are of the same vintage.`.
+               ` // NOTE: The property gate (ui5/properties.json) covers OpenUI5 libraries only, so no member of sap.ui.comp is checked against the 1.71 rule automatically. SmartVariantManagement, SmartFilterBar and` &&
+               ` SmartTable are @since 1.28; the smartVariant association and persistencyKey properties are of the same vintage. // NOTE: sap.ui.comp variant management needs one call an app normally makes from its` &&
+               ` controller - oSmartVariantManagement.initialise(fnCallback, oPersoControl). Without it the control keeps _oPersoControl null, saving a view dies inside sap.ui.fl` &&
+               ` (getAppComponentForControl(null).getId(), measured live 2026-07-28) and stored views are never loaded. abap2UI5 had no way to make that call - CONTROL_BY_ID carries strings, not a function and a`.
+    lv_text1 = lv_text1 && ` control instance - so the framework gained the dedicated SMART_VARIANT_INIT action (abap2UI5 branch claude/smart-controls-samples-vdfr5y). The port therefore ends view_display with a follow_up_action` &&
+               ` carrying the SmartVariantManagement id and the personalizable control id - one line the sample does not need because it has a controller. The action name is written out as a literal for now: this` &&
+               ` repo's abaplint resolves abap2UI5 from its default branch, which does not carry the new cs_event-smart_variant_init constant until the framework change is merged. // LIVE-TEST: Run in a system` &&
+               ` 2026-07-28 up to this point: the view renders, the SmartTable loads 205 products from GWSAMPLE_BASIC, filtering works, and saving a view was proven to work once _oPersoControl was set by hand in the` &&
+               ` console (the view appeared under "Meine Ansichten"). The SMART_VARIANT_INIT follow-up action that now does this declaratively is NOT yet verified in a system. Open to verify - that saving works` &&
+               ` without the console workaround, that a saved view survives an app restart (it did not before, because nothing was ever initialised), and that the page variant restores filter bar and table`.
+    lv_text1 = lv_text1 && ` personalization together.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.comp`        control = `sap.ui.comp.smartvariants.SmartVariantManagement` name = `PageVariantManagement`               class = `z2ui5_cl_ai_app_251` path = `src/06/b01/z2ui5_cl_ai_app_251.clas.abap`
         score = 5
@@ -3468,7 +3472,9 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         ui5_only = abap_true
         notes = lv_text1
         use_ec = abap_true
-        use_ec_arg = abap_true ) ).
+        use_ec_arg = abap_true
+        use_fua = abap_true
+        use_fua_arg = abap_true ) ).
 
     result = VALUE #( BASE result
       ( module = `sap.ui.core`        control = `sap.ui.core.BusyIndicator`                        name = `BusyIndicator`                       class = `z2ui5_cl_ai_app_147` path = `src/02/b07/z2ui5_cl_ai_app_147.clas.abap`

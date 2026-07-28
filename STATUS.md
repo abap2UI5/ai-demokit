@@ -17,7 +17,7 @@ TRAINING.md; for what abap2UI5 can express see CAPABILITIES.md._
 |---|---|
 | Ports | **251** sidecars in `meta/` (src/01: 149 · src/02: 55 · src/03: 12 · src/04: 19 · src/05: 11 · src/06: 5) |
 | Status ladder | 52 `generated` · 146 `reviewed` · 53 `checked` (live-verified) |
-| Deviations | 4 DROPPED_171 · 135 IMPROVISED · 76 LIVE_TEST · 266 NOTE · 95 POST_171 |
+| Deviations | 4 DROPPED_171 · 135 IMPROVISED · 76 LIVE_TEST · 267 NOTE · 95 POST_171 |
 | Open LIVE_TESTs | **72 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
 | Declared gate skips | 7 structural-diff · 6 render-smoke (each re-verified per run — a stale skip FAILS) |
 | Out-of-scope ported samples | `z2ui5_cl_ai_app_121 (sap.m.sample.UploadSet — deprecated)` · `z2ui5_cl_ai_app_136 (sap.f.sample.SidePanelSingle — control @since 1.107)` · `z2ui5_cl_ai_app_141 (sap.ui.core.sample.InvisibleMessage — control @since 1.78)` · `z2ui5_cl_ai_app_165 (sap.f.sample.ProductSwitchNavigation — control @since 1.72)` · `z2ui5_cl_ai_app_166 (sap.f.sample.SemanticPage — deprecated)` · `z2ui5_cl_ai_app_203 (sap.m.sample.OverflowToolbarTokenizer — control @since 1.139)` — standing debt pending a maintainer decision (drop vs documented exception), surfaced by the source-backed scope gate (pr/scope-since-from-source) |
@@ -37,57 +37,26 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   host is not an option (`pattern-lint` `commercial-ui5-host`); the fix is to
   suppress or re-target the links for `ui5_only` rows in
   `scripts/generate-overview.mjs`. Their ABAP-class link is correct.
-- [ ] **Variant management crashes on save (app 251) — pinned to `control: null`.**
-  Live debugger (2026-07-27, pause on caught exceptions) stops at
-  `sap/ui/fl/write/api/SmartVariantManagementWriteAPI-dbg.js:28`,
-  `Utils.getAppComponentForControl(mPropertyBag.control).getId()`, with
-  **`mPropertyBag = {control: null, changeSpecificData: {…}}`** — call stack
-  `Button press → SmartVariantManagementBase:156 → SmartVariantManagement:1451/1021/1035
-  → …:459 → SmartVariantManagementWriteAPI.addVariant:89 → :28`. So `sap.ui.comp` hands
-  the flex API a **null** control when saving a page variant; nothing on the resolution
-  side is broken. Refuted along the way, each live: missing app component
-  (`getAppComponentForControl(<SVM>)` returns `container-z2ui5`), `flexEnabled` (read only
-  by `sap.ui.rta`, never by `sap.ui.fl` — a `pr/` on that premise was withdrawn),
-  association-id prefixing (`XMLTemplateProcessor` `_iKind === 3` → `createId`), and
-  registration (`getPersonalizableControls()` → 2, both resolvable, types `table`/`filterBar`,
-  keys `SmartTablePKey`/`SmartFilterPKey`; `loadVariants` resolves cleanly). Open: which
-  lookup inside `SmartVariantManagement` yields null — the frame above the API
-  (`…:459`) has to be read in the debugger. Port-side changes meanwhile: the
-  `pageVariantPersistencyKey` custom data plus the docs' wiring (no `smartVariant`
-  associations) is now deployed and **does not fix it** — `control` is still `null`, same
-  frame, same stack. Both wirings therefore behave identically, which points at a missing
-  `initialise()` handshake rather than at the declarative configuration: `sap.ui.comp`'s
-  own documentation shows the app calling `addPersonalizableControl()` **and**
-  `initialise(fnCallback, oControl)`, and the curated abap2UI5 sample
-  `z2ui5_cl_demo_app_111` does exactly that from custom JS. Tested live: calling
-  `oSVM.initialise(fn, <filter bar>)` by hand answers **"initialise on an unknown
-  control."** — although `getPersonalizableControls()` lists exactly that filter bar
-  (type `filterBar`, id resolvable, key `SmartFilterPKey`). So the control is in the
-  registration list but not in whatever list `initialise` checks; the same failing lookup
-  is what yields `control: null` on save. **Measured 2026-07-28:** with the docs' wiring
-  (custom data, association dropped) `getPersonalizableControls()` returns **0** — nothing
-  registers at all — while the tutorial's association wiring registers **2**. The port is
-  therefore back at the sample's 1:1 wiring, and the docs' variant is recorded as a dead end.
-  Forcing `_oPersoControl` by hand did not make the save succeed either, but that test ran in
-  the degenerate zero-registration state and has to be repeated on the restored wiring. The failing call is
-  `SmartVariantManagementModel:459`, `return FlexWriteAPI?.addVariant(mProperties) ?? null`
-  — the model only forwards; `mProperties` arrives as
-  `{control: null, changeSpecificData: {type: "page", isVariant: true, isUserDependent: true,
-  executeOnSelection: false, ODataService: undefined, texts: {variantName: "test"},
-  **content: {}**}}`. The empty `content` is the second half of the same story: a page
-  variant's content is the aggregate of every registered control's `fetchVariant()`, so
-  nothing was collected either. Neighbouring methods in that file (`save(oPersoControl)`,
-  `_handleUserDependentUpdate` with `control: oPersoControl`) show the model expects a
-  perso control it never received. Source-confirmed in the served `-dbg` files:
-  `SmartVariantManagement.prototype._newVariant` (line ~1017) builds
-  `this.oModel._flWriteAddVariant({control: this._oPersoControl, changeSpecificData: mParams})`
-  — so the `null` is the SVM's **own `_oPersoControl`**, and the empty `content` comes from
-  the same gap (`_fetchContentAsync()` returns `{}` with no perso control). `_oPersoControl`
-  is what `initialise(fCallback, oPersoControl)` assigns, and that call rejects our filter
-  bar as an "unknown control" although the association lists it. Open: whether the SVM's
-  INTERNAL registration list (`_aPersonalizableControls`) is empty while the public
-  association getter shows two entries — and whether forcing `_oPersoControl` by hand makes
-  the save go through, which would size the gap exactly.
+- [ ] **Smart variant management needed a framework action — merge pending.**
+  Root cause found and closed on 2026-07-28: `sap.ui.comp` variant management needs
+  `oSmartVariantManagement.initialise(fnCallback, oPersoControl)`, a call an app normally
+  makes from its controller. Without it `_oPersoControl` stays `null`, saving a view dies
+  in `sap/ui/fl/write/api/SmartVariantManagementWriteAPI.js:26`
+  (`getAppComponentForControl(null).getId()`), and stored views are never loaded — setting
+  the field by hand in the console made Save As work immediately. abap2UI5 gained the
+  dedicated `SMART_VARIANT_INIT` frontend action for it (branch
+  `claude/smart-controls-samples-vdfr5y` in abap2UI5, four specs, ABAP mirror regenerated);
+  app 251 calls it via `follow_up_action` after `view_display`. **Two follow-ups:**
+  (a) the port writes the action name as a **literal** because this repo's abaplint
+  resolves abap2UI5 from its default branch — switch to `client->cs_event-smart_variant_init`
+  once the framework change is merged; (b) the declarative path is **not yet live-verified**
+  (only the console workaround was), so the LIVE_TEST on app 251 stays open: saving without
+  the workaround, and a saved view surviving an app restart.
+  Refuted on the way, each measured live and kept here so nobody walks them again: missing
+  app component (resolves), `flexEnabled` (read only by `sap.ui.rta`, never by `sap.ui.fl`),
+  association-id prefixing (XMLViews prefix single associations), registration
+  (`getPersonalizableControls()` returns 2 with the sample's wiring — and **0** with the
+  wiring the SAPUI5 docs describe, which is why the port keeps the sample's 1:1 form).
 - [ ] **sap.ui.comp ports are all unverified (5 open LIVE_TESTs).** They need
   a SAPUI5 runtime plus a Gateway service exposing the tutorial's `Products`
   entity set, so neither `render_smoke` (declared skips) nor the e2e harness

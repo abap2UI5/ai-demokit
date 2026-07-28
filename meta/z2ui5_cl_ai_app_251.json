@@ -7,7 +7,7 @@
   "audit": {
     "frontend_action": true,
     "event_t_arg": false,
-    "note": "assignedFiltersChanged toasts roundtrip-free via control_global MESSAGE_TOAST.show; the app is init-only"
+    "note": "assignedFiltersChanged toasts roundtrip-free via control_global MESSAGE_TOAST.show; view_display is followed by a smart_variant_init follow_up_action - the app is init-only"
   },
   "status": "generated",
   "render_smoke": {
@@ -28,12 +28,16 @@
       "what": "The tutorial serves its own metadata.xml and mock data from a local mock server, which an ABAP system cannot reproduce (a Gateway service is not a transportable artifact of this repo). The port therefore points the default model at the SAP Gateway demo service GWSAMPLE_BASIC (/sap/opu/odata/IWBEP/GWSAMPLE_BASIC/, client->view_display switch_default_model_path, constant c_odata_service): it ships with every on-premise system and only has to be activated once in /IWFND/MAINT_SERVICE, so the app actually runs. The sample's own metadata.xml stays archived beside the template for anyone who wants to rebuild the tutorial service instead. Both smart controls therefore carry entitySet=\"ProductSet\" instead of \"Products\" (the header stays \"Products\", it is a label). One consequence needs an addition to the view: GWSAMPLE_BASIC carries no UI.LineItem annotation, and without one a SmartTable starts with NO columns at all - it renders the \"add columns to see the content\" placeholder (seen live 2026-07-27; an earlier version of this note wrongly assumed it would fall back to all metadata fields). The port therefore adds initiallyVisibleFields=\"ProductID,Name,Category,SupplierName,Price\", an attribute the sample does not carry because its own service annotates the four columns it shows. The page variant, the persistency keys and the smartVariant wiring the step is about are unaffected."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "Partly run in a system 2026-07-27: the view renders and the SmartTable loads (205 products from GWSAMPLE_BASIC), but SAVING a view fails. Pinned in the live debugger to sap.ui.fl SmartVariantManagementWriteAPI:28 with mPropertyBag.control === null - sap.ui.comp hands the flex API no control when saving a page variant; app component, association ids, registration and loadVariants are all verified fine (see the STATUS open findings for the full list of refuted causes). The current wiring (pageVariantPersistencyKey custom data, no smartVariant associations, per the SAPUI5 docs) has since been deployed and does NOT fix it - control is still null in the same frame, so both wirings behave identically. Open to verify - whether saving works with the documented wiring, and then that the page variant restores filter bar and table personalization together and that variant management no longer appears inside the Filters dialog."
+      "type": "NOTE",
+      "what": "The property gate (ui5/properties.json) covers OpenUI5 libraries only, so no member of sap.ui.comp is checked against the 1.71 rule automatically. SmartVariantManagement, SmartFilterBar and SmartTable are @since 1.28; the smartVariant association and persistencyKey properties are of the same vintage."
     },
     {
       "type": "NOTE",
-      "what": "The property gate (ui5/properties.json) covers OpenUI5 libraries only, so no member of sap.ui.comp is checked against the 1.71 rule automatically. SmartVariantManagement, SmartFilterBar and SmartTable are @since 1.28; the smartVariant association and persistencyKey properties are of the same vintage."
+      "what": "sap.ui.comp variant management needs one call an app normally makes from its controller - oSmartVariantManagement.initialise(fnCallback, oPersoControl). Without it the control keeps _oPersoControl null, saving a view dies inside sap.ui.fl (getAppComponentForControl(null).getId(), measured live 2026-07-28) and stored views are never loaded. abap2UI5 had no way to make that call - CONTROL_BY_ID carries strings, not a function and a control instance - so the framework gained the dedicated SMART_VARIANT_INIT action (abap2UI5 branch claude/smart-controls-samples-vdfr5y). The port therefore ends view_display with a follow_up_action carrying the SmartVariantManagement id and the personalizable control id - one line the sample does not need because it has a controller. The action name is written out as a literal for now: this repo's abaplint resolves abap2UI5 from its default branch, which does not carry the new cs_event-smart_variant_init constant until the framework change is merged."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "Run in a system 2026-07-28 up to this point: the view renders, the SmartTable loads 205 products from GWSAMPLE_BASIC, filtering works, and saving a view was proven to work once _oPersoControl was set by hand in the console (the view appeared under \"Meine Ansichten\"). The SMART_VARIANT_INIT follow-up action that now does this declaratively is NOT yet verified in a system. Open to verify - that saving works without the console workaround, that a saved view survives an app restart (it did not before, because nothing was ever initialised), and that the page variant restores filter bar and table personalization together."
     }
   ]
 }
