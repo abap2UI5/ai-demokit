@@ -23,16 +23,9 @@ const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = path.join(ROOT, 'src');
 
 // known, still-open findings (tracked in STATUS.md) — 'rule-id|repo-relative-file'
-// the dead-event-wire entries are the review-sweep rework backlog (2026-07-27):
-// each port's sidecar declares the gap; remove the entry when the port is reworked
-const BASELINE = new Set([
-  'dead-event-wire|src/02/b05/z2ui5_cl_ai_app_138.clas.abap',
-  'dead-event-wire|src/05/b05/z2ui5_cl_ai_app_143.clas.abap',
-  'dead-event-wire|src/02/b06/z2ui5_cl_ai_app_145.clas.abap',
-  'dead-event-wire|src/02/b07/z2ui5_cl_ai_app_146.clas.abap',
-  'dead-event-wire|src/04/b05/z2ui5_cl_ai_app_148.clas.abap',
-  'dead-event-wire|src/02/b08/z2ui5_cl_ai_app_150.clas.abap',
-]);
+// empty since 2026-07-28: the six dead-event-wire entries of the review sweep
+// (138/143/145/146/148/150) were reworked, so the rule now stands on its own
+const BASELINE = new Set([]);
 
 // return the content of the parenthesized region starting at content[open] === '('
 function parenRegion(content, open) {
@@ -315,6 +308,23 @@ const RULES = [
       if (/check_on_event|on_event/.test(content)) return out;
       const m = content.match(/->_event\(/);
       out.push({ line: lineOf(content, m.index), text: '_event( ) wired but no on_event/check_on_event in the class' });
+      return out;
+    },
+  },
+  {
+    id: 'unguarded-date-formatter',
+    level: 'error',
+    doc: "a { path: 'X', formatter: 'Formatter.DateCreateObject' } binding over a field the SAME class seeds empty somewhere — Formatter.DateCreateObject('') is new Date('') = Invalid Date, and an Invalid Date is TRUTHY, so a consumer that branches on the property (sap.ui.unified Month._checkDateEnabled -> CalendarDate.fromLocalJSDate) throws and the view dies. One bound template cannot omit an attribute per row, so guard the conversion in the binding instead: `{= ${X} ? Formatter.DateCreateObject(${X}) : null }` in a BACKTICK literal. App 220, probe-verified 2026-07-28 (scripts/probes/calendar-empty-enddate-probe.mjs)",
+    find(content) {
+      const out = [];
+      for (const m of content.matchAll(/path:\s*'(\w+)'\s*,\s*formatter:\s*'Formatter\.DateCreateObject'/g)) {
+        const field = m[1];
+        // the same class seeds that field with an empty literal in a VALUE block
+        const seeded = new RegExp('\\b' + field + '\\s*=\\s*(``|\\|\\||\'\')(?![^\\n]*[`\'|])', 'i');
+        if (seeded.test(content)) {
+          out.push({ line: lineOf(content, m.index), text: `${field} is converted with Formatter.DateCreateObject but seeded empty — guard it with an expression binding` });
+        }
+      }
       return out;
     },
   },

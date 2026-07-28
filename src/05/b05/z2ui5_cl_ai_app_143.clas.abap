@@ -4,11 +4,14 @@ CLASS z2ui5_cl_ai_app_143 DEFINITION PUBLIC.
     INTERFACES z2ui5_if_app.
 
     DATA messageslength TYPE i.
+    DATA shrink_wide    TYPE abap_bool.
+    DATA show_footer    TYPE abap_bool.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
 
     METHODS view_display.
+    METHODS on_event.
 
   PRIVATE SECTION.
 ENDCLASS.
@@ -21,6 +24,8 @@ CLASS z2ui5_cl_ai_app_143 IMPLEMENTATION.
     me->client = client.
     IF client->check_on_init( ).
       view_display( ).
+    ELSEIF client->check_on_event( ).
+      on_event( ).
     ENDIF.
 
   ENDMETHOD.
@@ -30,6 +35,11 @@ CLASS z2ui5_cl_ai_app_143 IMPLEMENTATION.
 
     DATA(view) = z2ui5_cl_ai_xml=>factory( ).
 
+    " the two toggles the original drives from its controller are bound instead:
+    " showFooter directly, areaShrinkRatio through an expression binding over the
+    " same two values the controller alternates between (the property default
+    " 1:1.6:1.6 and 1.6:1:1.6). on_event flips the flags - the press wires are
+    " dispatched, not decorative
     view->open( n = `View` ns = `mvc`
         )->a( n = `xmlns`        v = `sap.m`
         )->a( n = `xmlns:mvc`    v = `sap.ui.core.mvc`
@@ -41,10 +51,12 @@ CLASS z2ui5_cl_ai_app_143 IMPLEMENTATION.
         )->a( n = `height`       v = `100%`
 
         )->open( n = `DynamicPage` ns = `f`
-            )->a( n = `id` v = `dynamicPageId`
+            )->a( n = `id`         v = `dynamicPageId`
+            )->a( n = `showFooter` v = client->_bind( show_footer )
 
             )->open( n = `title` ns = `f`
                 )->open( n = `DynamicPageTitle` ns = `f`
+                    )->a( n = `areaShrinkRatio` v = |\{= ${ client->_bind( shrink_wide ) } ? '1.6:1:1.6' : '1:1.6:1.6' \}|
                     )->open( n = `heading` ns = `f`
                         )->leaf( `Title`
                             )->a( n = `text` v = `Delivery order`
@@ -146,6 +158,25 @@ CLASS z2ui5_cl_ai_app_143 IMPLEMENTATION.
                         )->a( n = `text` v = `Reject` ).
 
     client->view_display( view->stringify( ) ).
+
+  ENDMETHOD.
+
+
+  METHOD on_event.
+
+    CASE client->get( )-event.
+
+      WHEN `TOGGLE_PRIO`.
+        " the original reads the current areaShrinkRatio and alternates it with
+        " the property default; the flag carries the same two-state information
+        shrink_wide = xsdbool( shrink_wide = abap_false ).
+        client->view_model_update( ).
+
+      WHEN `TOGGLE_FOOTER`.
+        show_footer = xsdbool( show_footer = abap_false ).
+        client->view_model_update( ).
+
+    ENDCASE.
 
   ENDMETHOD.
 

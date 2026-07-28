@@ -7,6 +7,65 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## Backlog sweep (2026-07-28) — dead wires closed, an app-killing crash proved and fixed, generate_result unblocked
+
+The open findings that were actionable without a live system, worked off in one
+change:
+
+- **`generate_result` was failing since 2026-07-27** — its `npm ci` runs inside
+  the freshly cloned OpenUI5 checkout, and OpenUI5's own committed
+  `package-lock.json` had drifted from its `package.json` (`Missing: js-yaml@3.14.2,
+  argparse@1.0.10, sprintf-js@1.0.3`), which `npm ci` treats as a hard EUSAGE
+  failure. Nothing this repo can fix upstream, so the step falls back to
+  `npm install` — we only need their jsdoc toolchain, not a reproducible install.
+  Coverage/api.md/universe.json had been frozen at the 2026-07-20 stamp.
+- **App 220 (`sap.ui.unified.CalendarMinMax`) did not just have a "crash risk" —
+  it did not render at all**, and it is fixed. The 07-27 sweep had traced it in
+  the sources; a probe now shows it empirically
+  (`scripts/probes/calendar-empty-enddate-probe.mjs`, real OpenUI5 in headless
+  Chromium, calendar focused on the month that carries the disabled dates):
+  with the plain formatter binding over the empty `END` field the view throws
+  *"Date must be a JavaScript or UI5Date date object"* and renders **0** calendar
+  days; with the conversion guarded in the binding
+  (`` `{= ${END} ? Formatter.DateCreateObject(${END}) : null }` ``, a backtick
+  literal so the braces survive) the empty row yields `endDate` `null` and all 42
+  days render. The probe also killed the obvious alternative fix: seeding
+  `end = start` would disable **nothing**, because `Month._checkDateEnabled`
+  compares a range strictly exclusive (`> start && < end`) and reaches its
+  single-day branch only when there is no `endDate` at all. Distilled into
+  AGENTS §10, CAPABILITIES (date-object row) and the new pattern-lint rule
+  `unguarded-date-formatter`, which was regression-tested against the pre-fix code.
+- **The dead-`_event`-wire class is closed** (BASELINE now empty). Six ports,
+  each rebuilt the way the capability allows rather than left firing a
+  round-trip no branch handled: 146 and 150 and 145 the thin-frontend way
+  (two-way bound `value`/`selectedKey`/`selectedIndex` + an expression binding
+  carrying the controller's own switch — the app-053 shape), 143 and 138 with a
+  real `on_event` dispatcher over bound properties (`showFooter` /
+  `areaShrinkRatio`, `showSideContent` / Toggle `enabled`), and 148 with the
+  **full drag & drop reorder** — CAPABILITIES marks it ✅, so "reorder logic not
+  reproduced" had been a wrong improvisation: the drop ships both row indices
+  and the insert position as client-resolved `$`-args and `on_event` replays the
+  original splice arithmetic in ABAP. 138 also now carries its
+  `breakpointChanged` parameter (`${$parameters>/currentBreakpoint}`) instead of
+  faking it. Two behaviours stay genuinely dropped and are declared as such:
+  138's slider (a jQuery DOM width on a `sap.m.Page`, which has no width
+  property) and 145's `RevealGrid` overlay (a sample-local helper module, not a
+  UI5 API). The six keep status `generated` — the headline gap is closed and
+  gate-verified, a full end-to-end re-review per port is not.
+- **The `sap.ui.comp` overview rows no longer hand out links that 404.** The
+  three OpenUI5 reference links (API, sample source, live runner) are built only
+  for a library OpenUI5 actually ships; a `ui5_only` row renders just its ABAP
+  class link plus a MessageStrip saying why. The commercial host stays excluded
+  (`pattern-lint` `commercial-ui5-host`).
+- **App 251 names the variant action through `client->cs_event-smart_variant_init`**
+  now that abap2UI5 #2481 is on main — the last open cleanup of the smart-controls
+  batch.
+
+Ladder unchanged (48 `generated` · 146 `reviewed` · 57 `checked`); open
+LIVE_TESTs 70 → 63. All gates green: abaplint STANDARD + CLOUD + the 702
+downport, validate-meta, pattern-lint (incl. the new rule), structural-diff
+--strict, structure-lint, property-check, data-fidelity, render-smoke.
+
 ## Overview state survives the browser Back button (2026-07-27)
 
 User report: search something in the overview, or flip the Shell switch, start

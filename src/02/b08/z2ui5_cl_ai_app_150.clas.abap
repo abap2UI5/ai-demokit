@@ -3,10 +3,16 @@ CLASS z2ui5_cl_ai_app_150 DEFINITION PUBLIC.
   PUBLIC SECTION.
     INTERFACES z2ui5_if_app.
 
+    DATA selected_key TYPE string.
+    DATA code_init    TYPE string.
+    DATA code_a       TYPE string.
+    DATA code_b       TYPE string.
+
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
 
     METHODS view_display.
+    METHODS model_init.
 
   PRIVATE SECTION.
 ENDCLASS.
@@ -18,6 +24,7 @@ CLASS z2ui5_cl_ai_app_150 IMPLEMENTATION.
 
     me->client = client.
     IF client->check_on_init( ).
+      model_init( ).
       view_display( ).
     ENDIF.
 
@@ -28,6 +35,10 @@ CLASS z2ui5_cl_ai_app_150 IMPLEMENTATION.
 
     DATA(view) = z2ui5_cl_ai_xml=>factory( ).
 
+    " the original's onSelectTab swaps the CodeEditor value per selected key in
+    " JS (A -> example2, B -> example1, anything else empty) and onInit seeds the
+    " hint text. Rebuilt on the client: selectedKey is two-way bound and the
+    " editor value is the same switch as an expression binding - no round-trip
     view->open( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
@@ -36,8 +47,7 @@ CLASS z2ui5_cl_ai_app_150 IMPLEMENTATION.
 
         )->open( `IconTabHeader`
             )->a( n = `id`          v = `iconTabHeader`
-            )->a( n = `selectedKey` v = `invalidKey`
-            )->a( n = `select`      v = client->_event( `SELECT_TAB` )
+            )->a( n = `selectedKey` v = client->_bind( selected_key )
             )->open( `items`
                 )->leaf( `IconTabFilter`
                     )->a( n = `text` v = `A`
@@ -52,9 +62,24 @@ CLASS z2ui5_cl_ai_app_150 IMPLEMENTATION.
         )->leaf( n = `CodeEditor` ns = `ce`
             )->a( n = `id`     v = `aCodeEditor`
             )->a( n = `height` v = `300px`
-            )->a( n = `type`   v = `javascript` ).
+            )->a( n = `type`   v = `javascript`
+            )->a( n = `value`  v = |\{= ${ client->_bind( selected_key ) } === 'A' ? ${ client->_bind( code_a ) }| &&
+                                    | : (${ client->_bind( selected_key ) } === 'B' ? ${ client->_bind( code_b ) }| &&
+                                    | : ${ client->_bind( code_init ) }) \}| ).
 
     client->view_display( view->stringify( ) ).
+
+  ENDMETHOD.
+
+
+  METHOD model_init.
+
+    " the original's onInit hint plus its two example strings, verbatim - note
+    " the original's own swap: tab A shows example2, tab B shows example1
+    selected_key = `invalidKey`.
+    code_init    = `// select tabs to see value of CodeEditor changing`.
+    code_a       = |function myFunction(p1, p2) \{\n\treturn 'foo';\n\}|.
+    code_b       = |function loadDoc() \{\n\treturn 'bar';\n\}|.
 
   ENDMETHOD.
 

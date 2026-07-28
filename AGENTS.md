@@ -1140,6 +1140,21 @@ How to record it:
   e2e transpiler) fail with "Variable name already defined". Use distinct
   names (`i`, `j`, `k`) per `VALUE` block; found on app 234 (2026-07-26),
   pattern-lint rule `duplicate-for-iterator` gates it.
+- **An OPTIONAL date in a bound row needs a guard in the binding** — one bound
+  template cannot omit an attribute per row, so a row whose date field is empty
+  still goes through the formatter: `Formatter.DateCreateObject('')` is
+  `new Date('')` = **Invalid Date**, which is *truthy*, so every consumer that
+  branches on the property (`sap.ui.unified` `Month._checkDateEnabled` →
+  `CalendarDate.fromLocalJSDate`) throws and the whole view dies — the app
+  renders **zero** days, not a degraded one. Guard the conversion in the
+  binding: ``` `{= ${END} ? Formatter.DateCreateObject(${END}) : null }` ``` in a
+  **backtick** literal (a `|…|` template would eat the braces). Do **not**
+  "fix" it by seeding `end = start`: `_checkDateEnabled` compares a range
+  strictly exclusive (`> start && < end`) and reaches its single-day branch only
+  when there is no `endDate` at all, so that seeds a range disabling nothing.
+  Found on app 220, probe-verified 2026-07-28
+  (`scripts/probes/calendar-empty-enddate-probe.mjs`); pattern-lint rule
+  `unguarded-date-formatter` gates it.
 - **abaplint `commented_code` can fire on an ordinary English comment** — a
   `"` view-description comment containing a `/` next to CamelCase UI5 identifiers
   (e.g. `" bound to RowSettings highlight/highlightText`) lexes like ABAP and is
