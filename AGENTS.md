@@ -722,7 +722,7 @@ creation).
 | A **`sorter` / `sorter group:true`** on an aggregation | Keep the raw string; get the bare path via `client->_bind( val = t path = abap_true )`: `` \|\{ path: '{ … }', sorter: \{ path: 'COL', group: true \} \}\| `` | CAPABILITIES "Binding sorter"; app 039 |
 | A **date-object** property (`CalendarAppointment.startDate`, `PlanningCalendar.startDate`, `DatePicker.dateValue`) | Formatter at point of use: `` \|\{ path: 'START_AT', formatter: 'Formatter.DateCreateObject' \}\| `` + `core:require="\{Formatter: 'z2ui5/model/formatter'\}"` (POST_171). A plain string binding **crashes** | CAPABILITIES "Date-object"; apps 108/109 |
 | A **boolean** attribute fed from an ABAP variable | `z2ui5_cl_ai_xml=>as_bool( flag )` (a literal is just `` v = \`true\` ``) — never feed `abap_true`/`abap_false` raw | §5 "Booleans"; app 007 |
-| A property **computed from several bound values** | UI5 expression binding, `_bind` inlined: `` \|\{= ${ client->_bind( a ) } && ${ client->_bind( b ) } \}\| `` — no event round-trip | §5; app 007 |
+| A property **computed from several bound values** | UI5 expression binding, `_bind` inlined: `` \|\{= ${ client->_bind( a ) } && ${ client->_bind( b ) } \}\| `` — no event round-trip. **Which literal form depends on where the paths come from**: a `_bind( )` result must be *interpolated*, so the expression goes in a `\|…\|` template with the outer braces escaped `\{ \}` (the row's form). An expression over a **relative row field** inside a bound aggregation has nothing to interpolate — write it as a plain **backtick** literal, `` `{= ${END} ? Formatter.DateCreateObject(${END}) : null }` ``, so every brace reaches the attribute verbatim. Escaping row-field braces inside a template collapses them and the attribute silently becomes garbage that no gate reads as a binding | §5; apps 007, 053; the relative-field form: app 220 |
 | The controller **reads an event/source value** (`evt.getSource().getId()`) | Transport it, don't fake it: `t_arg` value `$event.oSource.sId` / `${COL}`, read back with `get_event_arg( )`. A bare `{COL}` is **not** resolved here | §5 "Data binding & events"; app 005 |
 | `MessageToast.show("…" + evt.x)` (text built on the client) | Client-composed template, roundtrip-free. Exact `t_arg` tuple order = **object, method, template, arg(s)**: `` client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( \`MESSAGE_TOAST\` ) ( \`show\` ) ( \`Item selected: {0}\` ) ( \`${$parameters>/item}.getText()\` ) ) ) ``. The wire token is `MESSAGE_TOAST` (not `MessageToast`); `{0}` is filled by the resolved arg. **A template may START with `{0}`** — `get_t_arg` quotes a leading `{N}`/`{N?…}` placeholder as a plain string (source: `^\{[0-9]+[?}]` match), so a value-first toast needs no round-trip fallback (probe-#2 friction, app 609-class). Button text is `${$source>/text}`; menu-item text is `${$parameters>/item}.getText()`. **When the original pulls the module via `core:require` on the fragment/view root** (`core:require="\{MessageToast: 'sap/m/MessageToast'\}"` for an inline `press="MessageToast.show(…)"`) and you rewire to `_event_client`, that `core:require` is **dropped — name it in the deviation**: structural-diff treats `core:require` as an ordinary (non-`xmlns`) attribute and flags it missing | CAPABILITIES; apps 005/060/172 |
 | Custom **CSS / raw markup** (`style.css`, `<h2>`, a `core:HTML` `content` div) | `core:HTML` leaf, markup in the `content` **attribute** (no CDATA node exists). Two traps: **(a)** write the **decoded** literal markup — the original XML carries it entity-encoded (`&lt;div&gt;`), but you write `<div>`; the builder re-escapes on stringify, so copying the entities double-escapes them. **(b)** escape literal braces `\{ \}` in a **backtick** literal `` `…\{…\}…` `` — backtick passes `\{` through to the serialized attribute; a `\|…\|` template would collapse `\{`→`{` and re-crash (the **reverse** of the typed-binding row, which *wants* real braces and so uses the pipe) | CAPABILITIES "Custom CSS"; apps 026/028, 169 |
@@ -1140,6 +1140,33 @@ How to record it:
   e2e transpiler) fail with "Variable name already defined". Use distinct
   names (`i`, `j`, `k`) per `VALUE` block; found on app 234 (2026-07-26),
   pattern-lint rule `duplicate-for-iterator` gates it.
+- **A `client->_event( )` in the view needs an `on_event` branch that handles
+  it** — otherwise the wire fires a full backend round-trip that falls through
+  every `CASE` and the app does nothing, while *looking* wired. The 2026-07-27
+  review sweep found eight such ports; six were reworked 2026-07-28 and
+  pattern-lint rule `dead-event-wire` now gates it (no class with `->_event(`
+  and no `on_event`/`check_on_event`). Two legitimate resolutions, no third:
+  **dispatch it** (a `CASE` branch that changes bound state and calls
+  `view_model_update`, or a `message_box_display`/`popover_display`), or
+  **drop the wire** — if the behaviour is genuinely inexpressible, the
+  attribute goes away and the loss is declared. Before dropping, check
+  CAPABILITIES.md: five of the six turned out to be expressible (three as a
+  two-way binding + expression binding, one as a real dispatcher, one as the
+  full drag & drop reorder), and the "not reproducible" rationales in their
+  sidecars were simply wrong.
+- **Range-check any index that arrives from the frontend before using it as a
+  table index** — JS splices a nonsense index harmlessly, `t[ i ]` in ABAP
+  **dumps**. A drag & drop `drop` handler receives both row indices from the
+  client (`indexOfItem(…)` resolved in the browser), so a stale or malformed
+  value reaches `on_event` as an ordinary event arg. Guard with
+  `lines( )` and return early rather than trusting the client (app 148).
+- **A blocked protocol is not a blocked network** — this environment refuses
+  `curl https://raw.githubusercontent.com/…` at the proxy, which reads like "no
+  OpenUI5 source reachable" and nearly got two recoverable stylesheets written
+  off as impossible. **`git clone https://github.com/SAP/openui5.git` works**,
+  and that is the transport the pipeline (`generate_result`, `scaffold`,
+  `generate-properties`) uses anyway. Before declaring a task blocked on
+  network access, try the transport the tooling itself uses (2026-07-28).
 - **An OPTIONAL date in a bound row needs a guard in the binding** — one bound
   template cannot omit an attribute per row, so a row whose date field is empty
   still goes through the formatter: `Formatter.DateCreateObject('')` is

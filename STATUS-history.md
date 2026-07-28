@@ -7,18 +7,22 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
-## Backlog sweep (2026-07-28) — dead wires closed, an app-killing crash proved and fixed, generate_result unblocked
+## Backlog sweep (2026-07-28) — dead wires closed, an app-killing crash proved and fixed, the OpenUI5 snapshots refreshed
 
 The open findings that were actionable without a live system, worked off in one
 change:
 
-- **`generate_result` was failing since 2026-07-27** — its `npm ci` runs inside
-  the freshly cloned OpenUI5 checkout, and OpenUI5's own committed
+- **`generate_result` had been failing since 2026-07-27** — its `npm ci` runs
+  inside the freshly cloned OpenUI5 checkout, and OpenUI5's own committed
   `package-lock.json` had drifted from its `package.json` (`Missing: js-yaml@3.14.2,
   argparse@1.0.10, sprintf-js@1.0.3`), which `npm ci` treats as a hard EUSAGE
   failure. Nothing this repo can fix upstream, so the step falls back to
   `npm install` — we only need their jsdoc toolchain, not a reproducible install.
-  Coverage/api.md/universe.json had been frozen at the 2026-07-20 stamp.
+  **Verified end-to-end the same day, which also corrected the diagnosis**:
+  OpenUI5 repaired their lock upstream on 2026-07-28, so `npm ci` succeeds again
+  and the workflow would have recovered on its own. The fallback is therefore
+  hardening against the next drift, not a live fix — but the outage was real and
+  cost eight days of coverage refresh.
 - **App 220 (`sap.ui.unified.CalendarMinMax`) did not just have a "crash risk" —
   it did not render at all**, and it is fixed. The 07-27 sweep had traced it in
   the sources; a probe now shows it empirically
@@ -67,11 +71,25 @@ change:
   bare "Pressed" on the rationale that the runtime id is "not reproducible
   statically" → it does not need reproducing, `$event.oSource.sId` reads it off
   the event.
-- **Blocked, and recorded as such:** the dropped sample CSS of 122/124. Neither
-  stylesheet was archived (the §4 archive gap — `Icon/style.css`,
-  `CSSGrid/css/main.css`) and this environment reaches no OpenUI5 source, so
-  the files cannot be recovered here; inventing CSS would be exactly the
-  invented-data failure the data-fidelity gate exists to prevent.
+- **The dropped sample CSS of 122/124 is shipped** — and the "blocked" call that
+  first went with it was wrong. `curl` to `raw.githubusercontent.com` is refused
+  by this environment's proxy, and that was taken for "no OpenUI5 source
+  reachable"; **`git clone` of `SAP/openui5` works fine**, which is what the
+  pipeline uses anyway. With the checkout, both missing stylesheets were
+  recovered and archived (closing that §4 archive gap) and injected into the
+  ports through a `core:HTML` `<style>` leaf, the documented CAPABILITIES form.
+  Both ports had been carrying the class names with no rules behind them: app
+  122 rendered every icon at the default size (the sample is *about* icon
+  sizes) and app 124's five grid tiles rendered as unstyled text instead of the
+  blue rounded boxes. **Lesson: one blocked protocol is not a blocked network** —
+  check the transport the tooling actually uses before declaring a task
+  impossible.
+- **The OpenUI5-derived snapshots were refreshed by hand** from that checkout,
+  the work `generate_result` had not been doing since 2026-07-20:
+  `ui5/properties.json` (831 → 928 controls), `ui5/universe.json` (736 → 741
+  samples — five new `sap.f.HeroBanner` samples, all @1.152 and therefore out of
+  scope) and `api.md`/README against real control metadata from OpenUI5
+  **1.152.0**.
 - **The `sap.ui.comp` overview rows no longer hand out links that 404.** The
   three OpenUI5 reference links (API, sample source, live runner) are built only
   for a library OpenUI5 actually ships; a `ui5_only` row renders just its ABAP

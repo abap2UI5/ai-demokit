@@ -1691,6 +1691,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.m`              control = `sap.m.HeaderContainer`                            name = `HeaderContainer`                     class = `z2ui5_cl_ai_app_029` path = `src/01/b06/z2ui5_cl_ai_app_029.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.44.0`
         notes = lv_text1
         use_ec = abap_true
         use_ec_arg = abap_true ) ).
@@ -1699,6 +1700,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.m`              control = `sap.m.HeaderContainer`                            name = `HeaderContainerVM`                   class = `z2ui5_cl_ai_app_157` path = `src/01/b16/z2ui5_cl_ai_app_157.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.44.0`
         notes = `LIVE-TEST: NumericContent presses show a client MessageToast ('Fire press', the original press handler's text - review fixed the earlier text copied from the NumericContentDifColors neighbour). Two` &&
                  ` vertical HeaderContainers — one of eight NumericContents, one of five TileContents (each wrapping a NumericContent) — reproduced 1:1.`
         use_ec = abap_true
@@ -1977,6 +1979,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.m`              control = `sap.m.MessageBox`                                 name = `MessageBoxInitialFocus`              class = `z2ui5_cl_ai_app_036` path = `src/01/b03/z2ui5_cl_ai_app_036.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.21.2`
         release = `1.124`
         release_post171 = abap_true
         is_post171 = abap_true
@@ -2103,7 +2106,8 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.MessageToast`                               name = `MessageToast`                        class = `z2ui5_cl_ai_app_037` path = `src/01/b03/z2ui5_cl_ai_app_037.clas.abap`
         score = 2
-        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.9.2` )
       ( module = `sap.m`              control = `sap.m.MessageView`                                name = `MessageViewMessageManager`           class = `z2ui5_cl_ai_app_038` path = `src/01/b03/z2ui5_cl_ai_app_038.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -2112,7 +2116,9 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` view slot since pr/message-model (2026-07-18, auto-collecting control validation messages), but there is no ABAP API to push an arbitrary static message set into it - so for this render-only sample` &&
                  ` the messages are bound as a plain ABAP table on MessageView items with a MessageItem template (client->_bind( t_messages )), the path CAPABILITIES.md explicitly endorses for static message sets. Same` &&
                  ` rendering as the original. Proven by the curated sample z2ui5_cl_demo_app_038 (MessageView + MessageItem + MessagePopover over a bound table).`
-        use_name = abap_true )
+        use_name = abap_true ) ).
+
+    result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.MultiComboBox`                              name = `MultiComboBoxGrouping`               class = `z2ui5_cl_ai_app_039` path = `src/01/b02/z2ui5_cl_ai_app_039.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -3075,7 +3081,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         release_post171 = abap_true
         is_post171 = abap_true
         is_deprecated = abap_true
-        dep_text = `Deprecated since 1.129: replaced by {@link sap.m.plugins.UploadSetwithTable}`
+        dep_text = `Deprecated since 1.129: replaced by sap.m.plugins.UploadSetwithTable`
         notes = lv_text1
         post171 = `UploadSet.mode (since UI5 1.100) and UploadSet.afterItemRemoved (since UI5 1.83) kept for the 1:1 port - surfaced when the property gate gained the sap.m/upload sub-package (control-level source scan` &&
                  ` 2026-07-26). The whole control is deprecated out-of-scope debt anyway (pr/scope-since-from-source).`
@@ -3085,6 +3091,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.m`              control = `sap.m.URLHelper`                                  name = `UrlHelper`                           class = `z2ui5_cl_ai_app_084` path = `src/01/b10/z2ui5_cl_ai_app_084.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.10`
         checked = `CHECKED (2026-07-27): verified in a running system 2026-07-27 - URLHelper tel/sms/email triggers and REDIRECT all fire correctly`
         notes = `NOTE: element binding kept 1:1 - a one-record structure /S_SUPPLIER instead of {/SupplierCollection/0}. // NOTE: URLHelper.triggerTel/triggerSms/triggerEmail/redirect map 1:1 to the URLHELPER frontend` &&
                  ` action (cs_event-urlhelper): TRIGGER_TEL/TRIGGER_SMS take the number as a plain string param, TRIGGER_EMAIL/REDIRECT take a { EMAIL/URL, ... } object-literal t_arg (get_t_arg emits {-prefixed args` &&
@@ -3600,15 +3607,22 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         since = `1.60`
         notes = lv_text1 ) ).
 
+    lv_text1 = `NOTE: The sample's style.css is now shipped with the port: it is injected through a core:HTML leaf carrying a <style> block (the documented CAPABILITIES form, as in apps 026/028), so the port adds one` &&
+               ` core:HTML control the original view does not have - the original loads the stylesheet through its manifest's sap.ui5/resources/css entry instead. The five size classes and the <600px media query are` &&
+               ` verbatim, only whitespace-collapsed; literal braces are escaped \{ \} in a backtick literal because the XMLView parser reads an unescaped brace as a binding. Until 2026-07-28 the port carried the` &&
+               ` size1..size5 class names with no stylesheet behind them, so every Icon rendered at the default size - the sample is about icon SIZES, so that was its whole point. The stylesheet was also missing from` &&
+               ` ui5/sap.ui.core/Icon/ (a §4 archive gap) and is archived in the same change. // LIVE-TEST: The stethoscope Icon press is wired client-side to MessageToast.show('Over budget!') via the control_global` &&
+               ` frontend action, matching the original controller's handleStethoscopePress (MessageToast.show).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.core`        control = `sap.ui.core.Icon`                                 name = `Icon`                                class = `z2ui5_cl_ai_app_122` path = `src/02/b02/z2ui5_cl_ai_app_122.clas.abap`
         score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.11.1`
-        notes = `LIVE-TEST: The stethoscope Icon press is wired client-side to MessageToast.show('Over budget!') via the control_global frontend action, matching the original controller's handleStethoscopePress` &&
-                 ` (MessageToast.show).`
+        notes = lv_text1
         use_ec = abap_true
-        use_ec_arg = abap_true )
+        use_ec_arg = abap_true ) ).
+
+    result = VALUE #( BASE result
       ( module = `sap.ui.core`        control = `sap.ui.core.InvisibleMessage`                     name = `InvisibleMessage`                    class = `z2ui5_cl_ai_app_141` path = `src/02/b05/z2ui5_cl_ai_app_141.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -3616,9 +3630,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         since_post171 = abap_true
         is_post171 = abap_true
         notes = `LIVE-TEST: The four buttons announce the pressed button's type+text to the sap.ui.core.InvisibleMessage a11y service and echo it into the status Text; here a press updates the bound status Text with a` &&
-                 ` generic confirmation (the a11y live-region announce and the per-button identity are not reproduced server-side). The original's 'Infromation' button-text typo is kept 1:1.` ) ).
-
-    result = VALUE #( BASE result
+                 ` generic confirmation (the a11y live-region announce and the per-button identity are not reproduced server-side). The original's 'Infromation' button-text typo is kept 1:1.` )
       ( module = `sap.ui.core`        control = `sap.ui.core.InvisibleText`                        name = `InvisibleText`                       class = `z2ui5_cl_ai_app_127` path = `src/02/b02/z2ui5_cl_ai_app_127.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -3628,21 +3640,23 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` statically', which was the wrong conclusion: the id does not have to be reproduced, it is read off the event on the client. The id string itself is a UI5 runtime value and will differ from the` &&
                  ` original sample's (the view prefix differs), exactly as it differs between two runs of the original.`
         use_ec = abap_true
-        use_ec_arg = abap_true )
+        use_ec_arg = abap_true ) ).
+
+    result = VALUE #( BASE result
       ( module = `sap.ui.core`        control = `sap.ui.core.theming.Parameters`                   name = `BasicThemeParameters`                class = `z2ui5_cl_ai_app_131` path = `src/02/b03/z2ui5_cl_ai_app_131.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `NOTE: The sample itself is just a MessageStrip + Link pointing at the Theme Parameter Toolbox (the real demo content lives in that external tool); reproduced 1:1. The Link href is the original's` &&
                  ` host-relative 'test-resources/sap/m/demokit/theming/webapp/index.html' rewritten to the OpenUI5 host https://sdk.openui5.org/test-resources/sap/m/demokit/theming/webapp/index.html per the runtime` &&
-                 ` asset-URL rule (an abap2UI5 system does not serve the demokit path; app 152 precedent).` ) ).
-
-    result = VALUE #( BASE result
+                 ` asset-URL rule (an abap2UI5 system does not serve the demokit path; app 152 precedent).` )
       ( module = `sap.ui.core`        control = `sap.ui.model.type.Currency`                       name = `TypeCurrency`                        class = `z2ui5_cl_ai_app_135` path = `src/02/b04/z2ui5_cl_ai_app_135.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `NOTE: Composite data-type binding paradigm: the Currency type is pulled in via core:require and every Input/Text binds a composite parts:['/amount','/currency'] with type:'CurrencyType' plus` &&
                  ` formatOptions (showMeasure/showNumber/preserveDecimals/currencyCode/style) 1:1. The two model fields amount ('123456789.123') and currency ('USD') are serialized by abap2UI5 as /AMOUNT and /CURRENCY;` &&
-                 ` the paths are generated via _bind (never hardcoded).` )
+                 ` the paths are generated via _bind (never hardcoded).` ) ).
+
+    result = VALUE #( BASE result
       ( module = `sap.ui.core`        control = `sap.ui.model.type.Date`                           name = `TypeDateAsString`                    class = `z2ui5_cl_ai_app_181` path = `src/02/b10/z2ui5_cl_ai_app_181.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -3765,15 +3779,19 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         since = `1.34`
         notes = lv_text1 ) ).
 
-    lv_text1 = `NOTE: onSliderMoved sets the Panel width to value + "%" imperatively. Rebuilt on the client (the app-053 shape): the Slider value is two-way bound to slider_value, seeded with the original's literal` &&
-               ` 100, and the Panel width carries the expression binding {= slider_value + '%' } instead of the literal 100%. The liveChange attribute is therefore dropped. Until 2026-07-28 the port routed liveChange` &&
-               ` to a SLIDER_MOVED backend event that recomputed the width server-side - correct but one full round-trip per drag step; the expression binding is the thin-frontend form and needs none. // NOTE: The` &&
-               ` five core:HTML tiles carry raw HTML in the content attribute (the builder xml-escapes it, matching the original's escaped &lt;header&gt;/&lt;aside&gt;/&lt;article&gt;/&lt;footer&gt; content 1:1,` &&
-               ` including the original's quirks: the double space in '<aside  ...>Navigation</aside >' and the mismatched '<aside ...>Related Links</article>' close tag).`.
+    lv_text1 = `NOTE: The sample's css/main.css is now shipped with the port: injected through a core:HTML leaf carrying a <style> block (the documented CAPABILITIES form), so the port carries six core:HTML controls` &&
+               ` where the original view has five - the original loads the stylesheet through its manifest's sap.ui5/resources/css entry. The single .sapUiLayoutCSSGrid .stylePageLayout rule is verbatim,` &&
+               ` whitespace-collapsed, braces escaped \{ \} in a backtick literal. Until 2026-07-28 the five grid tiles carried the stylePageLayout class with no stylesheet behind them, so they rendered as unstyled` &&
+               ` text instead of the blue rounded boxes the sample shows. The stylesheet was also missing from ui5/sap.ui.layout/CSSGrid/ (a §4 archive gap) and is archived in the same change. // NOTE: onSliderMoved` &&
+               ` sets the Panel width to value + "%" imperatively. Rebuilt on the client (the app-053 shape): the Slider value is two-way bound to slider_value, seeded with the original's literal 100, and the Panel` &&
+               ` width carries the expression binding {= slider_value + '%' } instead of the literal 100%. The liveChange attribute is therefore dropped. Until 2026-07-28 the port routed liveChange to a SLIDER_MOVED`.
+    lv_text1 = lv_text1 && ` backend event that recomputed the width server-side - correct but one full round-trip per drag step; the expression binding is the thin-frontend form and needs none. // NOTE: The five core:HTML tiles` &&
+               ` carry raw HTML in the content attribute (the builder xml-escapes it, matching the original's escaped &lt;header&gt;/&lt;aside&gt;/&lt;article&gt;/&lt;footer&gt; content 1:1, including the original's` &&
+               ` quirks: the double space in '<aside  ...>Navigation</aside >' and the mismatched '<aside ...>Related Links</article>' close tag).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.cssgrid.CSSGrid`                    name = `CSSGrid`                             class = `z2ui5_cl_ai_app_124` path = `src/02/b02/z2ui5_cl_ai_app_124.clas.abap`
         score = 2
-        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.60`
         notes = lv_text1 ) ).
 

@@ -40,6 +40,15 @@ CLASS z2ui5_cl_ai_app_124 IMPLEMENTATION.
         )->a( n = `xmlns:grid` v = `sap.ui.layout.cssgrid`
         )->a( n = `xmlns:core` v = `sap.ui.core`
 
+        " the sample's css/main.css, injected via a core:HTML content attribute
+        " (see CAPABILITIES.md) - the class the five grid tiles below carry.
+        " Literal braces are escaped \{ \} in a backtick literal: the XMLView
+        " parser reads an unescaped brace as a binding
+        )->leaf( n = `HTML` ns = `core`
+            )->a( n = `content` v = `<style>.sapUiLayoutCSSGrid .stylePageLayout\{` &&
+                                    `background-color:#3b6f9a;color:#ffffff;border-radius:10px;` &&
+                                    `display:flex;align-items:center;justify-content:center\}</style>`
+
         )->leaf( `Slider`
             )->a( n = `value` v = client->_bind( slider_value )
             )->a( n = `class` v = `sapUiSmallMarginBottom`

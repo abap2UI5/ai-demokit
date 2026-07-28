@@ -1,5 +1,5 @@
 {
- "release": null,
+ "release": "1.152.0",
  "libs": [
   {
    "lib": "sap.f",
@@ -167,6 +167,36 @@
      "deprecated": null
     },
     {
+     "name": "HeroBannerBasic",
+     "entity": "sap.f.HeroBanner",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "HeroBannerColumnsRatio",
+     "entity": "sap.f.HeroBanner",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "HeroBannerHeaderBlockAndActionsPlacement",
+     "entity": "sap.f.HeroBanner",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "HeroBannerIntegrationCard",
+     "entity": "sap.f.HeroBanner",
+     "since": null,
+     "deprecated": null
+    },
+    {
+     "name": "HeroBannerUseCases",
+     "entity": "sap.f.HeroBanner",
+     "since": null,
+     "deprecated": null
+    },
+    {
      "name": "ProductSwitchItemWithImageSrc",
      "entity": "sap.f.ProductSwitch",
      "since": null,
@@ -264,14 +294,20 @@
     {
      "name": "ActionSelect",
      "entity": "sap.m.ActionSelect",
-     "since": null,
-     "deprecated": null
+     "since": "1.16",
+     "deprecated": {
+      "since": "1.111",
+      "text": "with no replacement. The control is no longer considered part of the Fiori concept."
+     }
     },
     {
      "name": "ActionSheet",
      "entity": "sap.m.ActionSheet",
-     "since": null,
-     "deprecated": null
+     "since": "1.9.1",
+     "deprecated": {
+      "since": "1.149",
+      "text": "use sap.m.Menu / sap.m.MenuItem instead."
+     }
     },
     {
      "name": "AIIntegration",
@@ -282,49 +318,49 @@
     {
      "name": "Avatar",
      "entity": "sap.m.Avatar",
-     "since": null,
+     "since": "1.73",
      "deprecated": null
     },
     {
      "name": "AvatarActiveState",
      "entity": "sap.m.Avatar",
-     "since": null,
+     "since": "1.73",
      "deprecated": null
     },
     {
      "name": "AvatarBadgeIconColor",
      "entity": "sap.m.Avatar",
-     "since": null,
+     "since": "1.73",
      "deprecated": null
     },
     {
      "name": "AvatarValueState",
      "entity": "sap.m.Avatar",
-     "since": null,
+     "since": "1.73",
      "deprecated": null
     },
     {
      "name": "AvatarWithAffordance",
      "entity": "sap.m.Avatar",
-     "since": null,
+     "since": "1.73",
      "deprecated": null
     },
     {
      "name": "Breadcrumbs",
      "entity": "sap.m.Breadcrumbs",
-     "since": null,
+     "since": "1.34",
      "deprecated": null
     },
     {
      "name": "BreadcrumbsWithCurrentPageLink",
      "entity": "sap.m.Breadcrumbs",
-     "since": null,
+     "since": "1.34",
      "deprecated": null
     },
     {
      "name": "BreadcrumbsWithoutCurrentPage",
      "entity": "sap.m.Breadcrumbs",
-     "since": null,
+     "since": "1.34",
      "deprecated": null
     },
     {
@@ -402,91 +438,91 @@
     {
      "name": "ColorPalette",
      "entity": "sap.m.ColorPalette",
-     "since": null,
+     "since": "1.54",
      "deprecated": null
     },
     {
      "name": "ColorPalettePopover",
      "entity": "sap.m.ColorPalette",
-     "since": null,
+     "since": "1.54",
      "deprecated": null
     },
     {
      "name": "ComboBox",
      "entity": "sap.m.ComboBox",
-     "since": null,
+     "since": "1.22",
      "deprecated": null
     },
     {
      "name": "ComboBox2Columns",
      "entity": "sap.m.ComboBox",
-     "since": null,
+     "since": "1.22",
      "deprecated": null
     },
     {
      "name": "ComboBoxClearIcon",
      "entity": "sap.m.ComboBox",
-     "since": null,
+     "since": "1.22",
      "deprecated": null
     },
     {
      "name": "ComboBoxDefaultFiltering",
      "entity": "sap.m.ComboBox",
-     "since": null,
+     "since": "1.22",
      "deprecated": null
     },
     {
      "name": "ComboBoxFilteringContains",
      "entity": "sap.m.ComboBox",
-     "since": null,
+     "since": "1.22",
      "deprecated": null
     },
     {
      "name": "ComboBoxFilteringStartsWith",
      "entity": "sap.m.ComboBox",
-     "since": null,
+     "since": "1.22",
      "deprecated": null
     },
     {
      "name": "ComboBoxGrouping",
      "entity": "sap.m.ComboBox",
-     "since": null,
+     "since": "1.22",
      "deprecated": null
     },
     {
      "name": "ComboBoxLazyLoading",
      "entity": "sap.m.ComboBox",
-     "since": null,
+     "since": "1.22",
      "deprecated": null
     },
     {
      "name": "ComboBoxMaxPickerHeight",
      "entity": "sap.m.ComboBox",
-     "since": null,
+     "since": "1.22",
      "deprecated": null
     },
     {
      "name": "ComboBoxSearchBoth",
      "entity": "sap.m.ComboBox",
-     "since": null,
+     "since": "1.22",
      "deprecated": null
     },
     {
      "name": "ComboBoxValidation",
      "entity": "sap.m.ComboBox",
-     "since": null,
+     "since": "1.22",
      "deprecated": null
     },
     {
      "name": "ComboBoxValueState",
      "entity": "sap.m.ComboBox",
-     "since": null,
+     "since": "1.22",
      "deprecated": null
     },
     {
      "name": "ComboBoxWrapping",
      "entity": "sap.m.ComboBox",
-     "since": null,
+     "since": "1.22",
      "deprecated": null
     },
     {
@@ -534,79 +570,82 @@
     {
      "name": "CustomMessageStripDesign",
      "entity": "sap.m.MessageStrip",
-     "since": null,
+     "since": "1.30",
      "deprecated": null
     },
     {
      "name": "CustomTreeItem",
      "entity": "sap.m.CustomTreeItem",
-     "since": null,
+     "since": "1.48.0",
      "deprecated": null
     },
     {
      "name": "DatePicker",
      "entity": "sap.m.DatePicker",
-     "since": null,
+     "since": "1.22.0",
      "deprecated": null
     },
     {
      "name": "DatePickerHidden",
      "entity": "sap.m.DatePicker",
-     "since": null,
+     "since": "1.22.0",
      "deprecated": null
     },
     {
      "name": "DatePickerMassEdit",
      "entity": "sap.m.DatePicker",
-     "since": null,
+     "since": "1.22.0",
      "deprecated": null
     },
     {
      "name": "DatePickerValueState",
      "entity": "sap.m.DatePicker",
-     "since": null,
+     "since": "1.22.0",
      "deprecated": null
     },
     {
      "name": "DateRangeSelection",
      "entity": "sap.m.DateRangeSelection",
-     "since": null,
+     "since": "1.22.0",
      "deprecated": null
     },
     {
      "name": "DateRangeSelectionHidden",
      "entity": "sap.m.DateRangeSelection",
-     "since": null,
+     "since": "1.22.0",
      "deprecated": null
     },
     {
      "name": "DateRangeSelectionValueState",
      "entity": "sap.m.DateRangeSelection",
-     "since": null,
+     "since": "1.22.0",
      "deprecated": null
     },
     {
      "name": "DateTimeInput",
      "entity": "sap.m.DateTimeInput",
-     "since": null,
-     "deprecated": null
+     "since": "1.9.1",
+     "deprecated": {
+      "since": "1.32.8",
+      "text": "replaced by sap.m.DatePicker, sap.m.TimePicker or sap.m.DateTimePicker"
+     }
     },
     {
      "name": "DateTimePicker",
      "entity": "sap.m.DateTimePicker",
-     "since": null,
+     "since": "1.38.0",
      "deprecated": null
     },
     {
      "name": "DateTimePickerHidden",
      "entity": "sap.m.DateTimePicker",
-     "since": null,
+     "since": "1.38.0",
      "deprecated": null
     },
     {
      "name": "DateTimePickerValueState",
      "entity": "sap.m.DateTimePicker",
-     "since": null,
+     "since": "1.38.0",
      "deprecated": null
     },
     {
@@ -660,43 +699,43 @@
     {
      "name": "DraftIndicator",
      "entity": "sap.m.DraftIndicator",
-     "since": null,
+     "since": "1.32.0",
      "deprecated": null
     },
     {
      "name": "DynamicDateRange",
      "entity": "sap.m.DynamicDateRange",
-     "since": null,
+     "since": "1.92.0",
      "deprecated": null
     },
     {
      "name": "DynamicDateRangeAndCalendarWeekNumbering",
      "entity": "sap.m.DynamicDateRange",
-     "since": null,
+     "since": "1.92.0",
      "deprecated": null
     },
     {
      "name": "DynamicDateRangeHidden",
      "entity": "sap.m.DynamicDateRange",
-     "since": null,
+     "since": "1.92.0",
      "deprecated": null
     },
     {
      "name": "DynamicDateRangeWithCustomOptions",
      "entity": "sap.m.DynamicDateRange",
-     "since": null,
+     "since": "1.92.0",
      "deprecated": null
     },
     {
      "name": "DynamicMessageStripGenerator",
      "entity": "sap.m.MessageStrip",
-     "since": null,
+     "since": "1.30",
      "deprecated": null
     },
     {
      "name": "ExpandableText",
      "entity": "sap.m.ExpandableText",
-     "since": null,
+     "since": "1.87",
      "deprecated": null
     },
     {
@@ -720,25 +759,25 @@
     {
      "name": "Feed",
      "entity": "sap.m.FeedInput",
-     "since": null,
+     "since": "1.22",
      "deprecated": null
     },
     {
      "name": "FeedContent",
      "entity": "sap.m.FeedContent",
-     "since": null,
+     "since": "1.34",
      "deprecated": null
     },
     {
      "name": "FeedInput",
      "entity": "sap.m.FeedInput",
-     "since": null,
+     "since": "1.22",
      "deprecated": null
     },
     {
      "name": "FeedListItem",
      "entity": "sap.m.FeedListItem",
-     "since": null,
+     "since": "1.12",
      "deprecated": null
     },
     {
@@ -798,79 +837,79 @@
     {
      "name": "FormattedText",
      "entity": "sap.m.FormattedText",
-     "since": null,
+     "since": "1.38.0",
      "deprecated": null
     },
     {
      "name": "GenericTag",
      "entity": "sap.m.GenericTag",
-     "since": null,
+     "since": "1.62.0",
      "deprecated": null
     },
     {
      "name": "GenericTileAsFeedTile",
      "entity": "sap.m.GenericTile",
-     "since": null,
+     "since": "1.34.0",
      "deprecated": null
     },
     {
      "name": "GenericTileAsKPITile",
      "entity": "sap.m.GenericTile",
-     "since": null,
+     "since": "1.34.0",
      "deprecated": null
     },
     {
      "name": "GenericTileAsLaunchTile",
      "entity": "sap.m.GenericTile",
-     "since": null,
+     "since": "1.34.0",
      "deprecated": null
     },
     {
      "name": "GenericTileAsMonitorTile",
      "entity": "sap.m.GenericTile",
-     "since": null,
+     "since": "1.34.0",
      "deprecated": null
     },
     {
      "name": "GenericTileLineMode",
      "entity": "sap.m.GenericTile",
-     "since": null,
+     "since": "1.34.0",
      "deprecated": null
     },
     {
      "name": "GenericTileStates",
      "entity": "sap.m.GenericTile",
-     "since": null,
+     "since": "1.34.0",
      "deprecated": null
     },
     {
      "name": "HeaderContainer",
      "entity": "sap.m.HeaderContainer",
-     "since": null,
+     "since": "1.44.0",
      "deprecated": null
     },
     {
      "name": "HeaderContainerLazyLoading",
      "entity": "sap.m.HeaderContainer",
-     "since": null,
+     "since": "1.44.0",
      "deprecated": null
     },
     {
      "name": "HeaderContainerNoDividers",
      "entity": "sap.m.HeaderContainer",
-     "since": null,
+     "since": "1.44.0",
      "deprecated": null
     },
     {
      "name": "HeaderContainerOH",
      "entity": "sap.m.HeaderContainer",
-     "since": null,
+     "since": "1.44.0",
      "deprecated": null
     },
     {
      "name": "HeaderContainerVM",
      "entity": "sap.m.HeaderContainer",
-     "since": null,
+     "since": "1.44.0",
      "deprecated": null
     },
     {
@@ -972,7 +1011,7 @@
     {
      "name": "IconTabHeader",
      "entity": "sap.m.IconTabHeader",
-     "since": null,
+     "since": "1.15",
      "deprecated": null
     },
     {
@@ -984,61 +1023,61 @@
     {
      "name": "IllustratedMessageEVR",
      "entity": "sap.m.IllustratedMessage",
-     "since": null,
+     "since": "1.98",
      "deprecated": null
     },
     {
      "name": "IllustratedMessageInAppCustom",
      "entity": "sap.m.IllustratedMessage",
-     "since": null,
+     "since": "1.98",
      "deprecated": null
     },
     {
      "name": "IllustratedMessageInCardNoActivities",
      "entity": "sap.m.IllustratedMessage",
-     "since": null,
+     "since": "1.98",
      "deprecated": null
     },
     {
      "name": "IllustratedMessageInCardNoEmail",
      "entity": "sap.m.IllustratedMessage",
-     "since": null,
+     "since": "1.98",
      "deprecated": null
     },
     {
      "name": "IllustratedMessageInDialog",
      "entity": "sap.m.IllustratedMessage",
-     "since": null,
+     "since": "1.98",
      "deprecated": null
     },
     {
      "name": "IllustratedMessageInPage",
      "entity": "sap.m.IllustratedMessage",
-     "since": null,
+     "since": "1.98",
      "deprecated": null
     },
     {
      "name": "IllustratedMessageInPageCustom",
      "entity": "sap.m.IllustratedMessage",
-     "since": null,
+     "since": "1.98",
      "deprecated": null
     },
     {
      "name": "IllustratedMessageInPageTNT",
      "entity": "sap.m.IllustratedMessage",
-     "since": null,
+     "since": "1.98",
      "deprecated": null
     },
     {
      "name": "IllustratedMessageInPageWithURI",
      "entity": "sap.m.IllustratedMessage",
-     "since": null,
+     "since": "1.98",
      "deprecated": null
     },
     {
      "name": "IllustratedMessageSessionTimeout",
      "entity": "sap.m.IllustratedMessage",
-     "since": null,
+     "since": "1.98",
      "deprecated": null
     },
     {
@@ -1050,7 +1089,7 @@
     {
      "name": "ImageContent",
      "entity": "sap.m.ImageContent",
-     "since": null,
+     "since": "1.38",
      "deprecated": null
     },
     {
@@ -1212,19 +1251,19 @@
     {
      "name": "Link",
      "entity": "sap.m.Link",
-     "since": null,
+     "since": "1.12",
      "deprecated": null
     },
     {
      "name": "LinkEmphasized",
      "entity": "sap.m.Link",
-     "since": null,
+     "since": "1.12",
      "deprecated": null
     },
     {
      "name": "LinkSubtle",
      "entity": "sap.m.Link",
-     "since": null,
+     "since": "1.12",
      "deprecated": null
     },
     {
@@ -1326,13 +1365,13 @@
     {
      "name": "MaskInput",
      "entity": "sap.m.MaskInput",
-     "since": null,
+     "since": "1.34.0",
      "deprecated": null
     },
     {
      "name": "MaxNumberOfNotificationsReached",
      "entity": "sap.m.NotificationListGroup",
-     "since": null,
+     "since": "1.34",
      "deprecated": null
     },
     {
@@ -1362,157 +1401,163 @@
     {
      "name": "MessageBox",
      "entity": "sap.m.MessageBox",
-     "since": null,
+     "since": "1.21.2",
      "deprecated": null
     },
     {
      "name": "MessageBoxInfo",
      "entity": "sap.m.MessageBox",
-     "since": null,
+     "since": "1.21.2",
      "deprecated": null
     },
     {
      "name": "MessageBoxInitialFocus",
      "entity": "sap.m.MessageBox",
-     "since": null,
+     "since": "1.21.2",
      "deprecated": null
     },
     {
      "name": "MessagePage",
      "entity": "sap.m.MessagePage",
-     "since": null,
-     "deprecated": null
+     "since": "1.28",
+     "deprecated": {
+      "since": "1.112",
+      "text": "Use the sap.m.IllustratedMessage instead."
+     }
     },
     {
      "name": "MessagePageWithButtons",
      "entity": "sap.m.MessagePage",
-     "since": null,
-     "deprecated": null
+     "since": "1.28",
+     "deprecated": {
+      "since": "1.112",
+      "text": "Use the sap.m.IllustratedMessage instead."
+     }
     },
     {
      "name": "MessagePopover",
      "entity": "sap.m.MessagePopover",
-     "since": null,
+     "since": "1.28",
      "deprecated": null
     },
     {
      "name": "MessagePopoverAsyncMessageHandling",
      "entity": "sap.m.MessagePopover",
-     "since": null,
+     "since": "1.28",
      "deprecated": null
     },
     {
      "name": "MessagePopoverMessageHandling",
      "entity": "sap.m.MessagePopover",
-     "since": null,
+     "since": "1.28",
      "deprecated": null
     },
     {
      "name": "MessageStrip",
      "entity": "sap.m.MessageStrip",
-     "since": null,
+     "since": "1.30",
      "deprecated": null
     },
     {
      "name": "MessageStripWithEnableFormattedText",
      "entity": "sap.m.MessageStrip",
-     "since": null,
+     "since": "1.30",
      "deprecated": null
     },
     {
      "name": "MessageToast",
      "entity": "sap.m.MessageToast",
-     "since": null,
+     "since": "1.9.2",
      "deprecated": null
     },
     {
      "name": "MessageViewInsideDialog",
      "entity": "sap.m.MessageView",
-     "since": null,
+     "since": "1.46",
      "deprecated": null
     },
     {
      "name": "MessageViewInsidePopover",
      "entity": "sap.m.MessageView",
-     "since": null,
+     "since": "1.46",
      "deprecated": null
     },
     {
      "name": "MessageViewInsideResponsivePopover",
      "entity": "sap.m.MessageView",
-     "since": null,
+     "since": "1.46",
      "deprecated": null
     },
     {
      "name": "MessageViewMessageManager",
      "entity": "sap.m.MessageView",
-     "since": null,
+     "since": "1.46",
      "deprecated": null
     },
     {
      "name": "MessageViewWithGrouping",
      "entity": "sap.m.MessageView",
-     "since": null,
+     "since": "1.46",
      "deprecated": null
     },
     {
      "name": "MultiComboBox",
      "entity": "sap.m.MultiComboBox",
-     "since": null,
+     "since": "1.22.0",
      "deprecated": null
     },
     {
      "name": "MultiComboBoxClearIcon",
      "entity": "sap.m.MultiComboBox",
-     "since": null,
+     "since": "1.22.0",
      "deprecated": null
     },
     {
      "name": "MultiComboBoxCustomFiltering",
      "entity": "sap.m.MultiComboBox",
-     "since": null,
+     "since": "1.22.0",
      "deprecated": null
     },
     {
      "name": "MultiComboBoxDefaultFiltering",
      "entity": "sap.m.MultiComboBox",
-     "since": null,
+     "since": "1.22.0",
      "deprecated": null
     },
     {
      "name": "MultiComboBoxGrouping",
      "entity": "sap.m.MultiComboBox",
-     "since": null,
+     "since": "1.22.0",
      "deprecated": null
     },
     {
      "name": "MultiComboBoxMaxPickerHeight",
      "entity": "sap.m.MultiComboBox",
-     "since": null,
+     "since": "1.22.0",
      "deprecated": null
     },
     {
      "name": "MultiComboBoxSelectAll",
      "entity": "sap.m.MultiComboBox",
-     "since": null,
+     "since": "1.22.0",
      "deprecated": null
     },
     {
      "name": "MultiComboBoxSuggestionsAndValueState",
      "entity": "sap.m.MultiComboBox",
-     "since": null,
+     "since": "1.22.0",
      "deprecated": null
     },
     {
      "name": "MultiComboBoxTwoColumnsLayout",
      "entity": "sap.m.MultiComboBox",
-     "since": null,
+     "since": "1.22.0",
      "deprecated": null
     },
     {
      "name": "MultiComboBoxWrapping",
      "entity": "sap.m.MultiComboBox",
-     "since": null,
+     "since": "1.22.0",
      "deprecated": null
     },
     {
@@ -1596,127 +1641,127 @@
     {
      "name": "NewsContent",
      "entity": "sap.m.NewsContent",
-     "since": null,
+     "since": "1.34",
      "deprecated": null
     },
     {
      "name": "NotificationListGroup",
      "entity": "sap.m.NotificationListGroup",
-     "since": null,
+     "since": "1.34",
      "deprecated": null
     },
     {
      "name": "NotificationListGroupBindings",
      "entity": "sap.m.NotificationListGroup",
-     "since": null,
+     "since": "1.34",
      "deprecated": null
     },
     {
      "name": "NotificationListGroupLazyLoading",
      "entity": "sap.m.NotificationListGroup",
-     "since": null,
+     "since": "1.34",
      "deprecated": null
     },
     {
      "name": "NotificationListItem",
      "entity": "sap.m.NotificationListItem",
-     "since": null,
+     "since": "1.34",
      "deprecated": null
     },
     {
      "name": "NumericContentDifColors",
      "entity": "sap.m.NumericContent",
-     "since": null,
+     "since": "1.34",
      "deprecated": null
     },
     {
      "name": "NumericContentIcon",
      "entity": "sap.m.NumericContent",
-     "since": null,
+     "since": "1.34",
      "deprecated": null
     },
     {
      "name": "NumericContentWithoutMargin",
      "entity": "sap.m.NumericContent",
-     "since": null,
+     "since": "1.34",
      "deprecated": null
     },
     {
      "name": "ObjectAttributeInTable",
      "entity": "sap.m.ObjectAttribute",
-     "since": null,
+     "since": "1.12",
      "deprecated": null
     },
     {
      "name": "ObjectAttributes",
      "entity": "sap.m.ObjectAttribute",
-     "since": null,
+     "since": "1.12",
      "deprecated": null
     },
     {
      "name": "ObjectHeader",
      "entity": "sap.m.ObjectHeader",
-     "since": null,
+     "since": "1.12",
      "deprecated": null
     },
     {
      "name": "ObjectHeaderActiveAttributes",
      "entity": "sap.m.ObjectAttribute",
-     "since": null,
+     "since": "1.12",
      "deprecated": null
     },
     {
      "name": "ObjectHeaderCircleImage",
      "entity": "sap.m.ObjectHeader",
-     "since": null,
+     "since": "1.12",
      "deprecated": null
     },
     {
      "name": "ObjectHeaderCondensed",
      "entity": "sap.m.ObjectHeader",
-     "since": null,
+     "since": "1.12",
      "deprecated": null
     },
     {
      "name": "ObjectHeaderImage",
      "entity": "sap.m.ObjectHeader",
-     "since": null,
+     "since": "1.12",
      "deprecated": null
     },
     {
      "name": "ObjectHeaderMarkers",
      "entity": "sap.m.ObjectHeader",
-     "since": null,
+     "since": "1.12",
      "deprecated": null
     },
     {
      "name": "ObjectHeaderResponsiveI",
      "entity": "sap.m.ObjectAttribute",
-     "since": null,
+     "since": "1.12",
      "deprecated": null
     },
     {
      "name": "ObjectHeaderResponsiveII",
      "entity": "sap.m.ObjectHeader",
-     "since": null,
+     "since": "1.12",
      "deprecated": null
     },
     {
      "name": "ObjectHeaderResponsiveIII",
      "entity": "sap.m.ObjectHeader",
-     "since": null,
+     "since": "1.12",
      "deprecated": null
     },
     {
      "name": "ObjectHeaderResponsiveIV",
      "entity": "sap.m.ObjectHeader",
-     "since": null,
+     "since": "1.12",
      "deprecated": null
     },
     {
      "name": "ObjectHeaderResponsiveV",
      "entity": "sap.m.ObjectHeader",
-     "since": null,
+     "since": "1.12",
      "deprecated": null
     },
     {
@@ -1728,43 +1773,43 @@
     {
      "name": "ObjectHeaderTitleActive",
      "entity": "sap.m.ObjectHeader",
-     "since": null,
+     "since": "1.12",
      "deprecated": null
     },
     {
      "name": "ObjectHeaderTitleSel",
      "entity": "sap.m.ObjectHeader",
-     "since": null,
+     "since": "1.12",
      "deprecated": null
     },
     {
      "name": "ObjectIdentifier",
      "entity": "sap.m.ObjectIdentifier",
-     "since": null,
+     "since": "1.12",
      "deprecated": null
     },
     {
      "name": "ObjectListItem",
      "entity": "sap.m.ObjectListItem",
-     "since": null,
+     "since": "1.12",
      "deprecated": null
     },
     {
      "name": "ObjectListItemMarkers",
      "entity": "sap.m.ObjectListItem",
-     "since": null,
+     "since": "1.12",
      "deprecated": null
     },
     {
      "name": "ObjectMarker",
      "entity": "sap.m.ObjectMarker",
-     "since": null,
+     "since": "1.38",
      "deprecated": null
     },
     {
      "name": "ObjectNumber",
      "entity": "sap.m.ObjectNumber",
-     "since": null,
+     "since": "1.12",
      "deprecated": null
     },
     {
@@ -1776,19 +1821,19 @@
     {
      "name": "OverflowToolbarDifferentControls",
      "entity": "sap.m.OverflowToolbar",
-     "since": null,
+     "since": "1.28",
      "deprecated": null
     },
     {
      "name": "OverflowToolbarFooter",
      "entity": "sap.m.OverflowToolbar",
-     "since": null,
+     "since": "1.28",
      "deprecated": null
     },
     {
      "name": "OverflowToolbarSimple",
      "entity": "sap.m.GenericTag",
-     "since": null,
+     "since": "1.62.0",
      "deprecated": null
     },
     {
@@ -1800,43 +1845,43 @@
     {
      "name": "p13n.Container",
      "entity": "sap.m.p13n.Container",
-     "since": null,
+     "since": "1.96",
      "deprecated": null
     },
     {
      "name": "p13n.Engine",
      "entity": "sap.m.p13n.Engine",
-     "since": null,
+     "since": "1.104",
      "deprecated": null
     },
     {
      "name": "p13n.EngineCustomFilters",
      "entity": "sap.m.p13n.Engine",
-     "since": null,
+     "since": "1.104",
      "deprecated": null
     },
     {
      "name": "p13n.EngineGridList",
      "entity": "sap.m.p13n.Engine",
-     "since": null,
+     "since": "1.104",
      "deprecated": null
     },
     {
      "name": "p13n.EngineGridTable",
      "entity": "sap.m.p13n.Engine",
-     "since": null,
+     "since": "1.104",
      "deprecated": null
     },
     {
      "name": "p13n.EngineMultipleController",
      "entity": "sap.m.p13n.Engine",
-     "since": null,
+     "since": "1.104",
      "deprecated": null
     },
     {
      "name": "p13n.Popup",
      "entity": "sap.m.p13n.Popup",
-     "since": null,
+     "since": "1.97",
      "deprecated": null
     },
     {
@@ -1872,127 +1917,127 @@
     {
      "name": "Panel",
      "entity": "sap.m.Panel",
-     "since": null,
+     "since": "1.16",
      "deprecated": null
     },
     {
      "name": "PanelBackgroundDesign",
      "entity": "sap.m.Panel",
-     "since": null,
+     "since": "1.16",
      "deprecated": null
     },
     {
      "name": "PanelExpanded",
      "entity": "sap.m.Panel",
-     "since": null,
+     "since": "1.16",
      "deprecated": null
     },
     {
      "name": "PanelSticky",
      "entity": "sap.m.Panel",
-     "since": null,
+     "since": "1.16",
      "deprecated": null
     },
     {
      "name": "PDFViewerEmbedded",
      "entity": "sap.m.PDFViewer",
-     "since": null,
+     "since": "1.48",
      "deprecated": null
     },
     {
      "name": "PDFViewerMultiple",
      "entity": "sap.m.PDFViewer",
-     "since": null,
+     "since": "1.48",
      "deprecated": null
     },
     {
      "name": "PDFViewerPopup",
      "entity": "sap.m.PDFViewer",
-     "since": null,
+     "since": "1.48",
      "deprecated": null
     },
     {
      "name": "PlanningCalendar",
      "entity": "sap.m.PlanningCalendar",
-     "since": null,
+     "since": "1.34",
      "deprecated": null
     },
     {
      "name": "PlanningCalendarAppointmentSizes",
      "entity": "sap.m.PlanningCalendar",
-     "since": null,
+     "since": "1.34",
      "deprecated": null
     },
     {
      "name": "PlanningCalendarDnD",
      "entity": "sap.m.PlanningCalendar",
-     "since": null,
+     "since": "1.34",
      "deprecated": null
     },
     {
      "name": "PlanningCalendarMinMax",
      "entity": "sap.m.PlanningCalendar",
-     "since": null,
+     "since": "1.34",
      "deprecated": null
     },
     {
      "name": "PlanningCalendarModifyAppointments",
      "entity": "sap.m.PlanningCalendar",
-     "since": null,
+     "since": "1.34",
      "deprecated": null
     },
     {
      "name": "PlanningCalendarMulti",
      "entity": "sap.m.PlanningCalendar",
-     "since": null,
+     "since": "1.34",
      "deprecated": null
     },
     {
      "name": "PlanningCalendarOneLine",
      "entity": "sap.m.PlanningCalendar",
-     "since": null,
+     "since": "1.34",
      "deprecated": null
     },
     {
      "name": "PlanningCalendarRecurringItem",
      "entity": "sap.m.PlanningCalendar",
-     "since": null,
+     "since": "1.34",
      "deprecated": null
     },
     {
      "name": "PlanningCalendarRelativeViews",
      "entity": "sap.m.PlanningCalendar",
-     "since": null,
+     "since": "1.34",
      "deprecated": null
     },
     {
      "name": "PlanningCalendarSingle",
      "entity": "sap.m.PlanningCalendar",
-     "since": null,
+     "since": "1.34",
      "deprecated": null
     },
     {
      "name": "PlanningCalendarViews",
      "entity": "sap.m.PlanningCalendar",
-     "since": null,
+     "since": "1.34",
      "deprecated": null
     },
     {
      "name": "PlanningCalendarWeekNumbering",
      "entity": "sap.m.PlanningCalendar",
-     "since": null,
+     "since": "1.34",
      "deprecated": null
     },
     {
      "name": "PlanningCalendarWithLegend",
      "entity": "sap.m.PlanningCalendar",
-     "since": null,
+     "since": "1.34",
      "deprecated": null
     },
     {
      "name": "PlanningCalendarWithStickyHeader",
      "entity": "sap.m.PlanningCalendar",
-     "since": null,
+     "since": "1.34",
      "deprecated": null
     },
     {
@@ -2022,49 +2067,49 @@
     {
      "name": "ProgressIndicator",
      "entity": "sap.m.ProgressIndicator",
-     "since": null,
+     "since": "1.13.1",
      "deprecated": null
     },
     {
      "name": "ProgressIndicatorWithAnnouncement",
      "entity": "sap.m.ProgressIndicator",
-     "since": null,
+     "since": "1.13.1",
      "deprecated": null
     },
     {
      "name": "PullToRefresh",
      "entity": "sap.m.PullToRefresh",
-     "since": null,
+     "since": "1.9.2",
      "deprecated": null
     },
     {
      "name": "QuickView",
      "entity": "sap.m.QuickView",
-     "since": null,
+     "since": "1.28.11",
      "deprecated": null
     },
     {
      "name": "QuickViewAvatarConfiguration",
      "entity": "sap.m.QuickView",
-     "since": null,
+     "since": "1.28.11",
      "deprecated": null
     },
     {
      "name": "QuickViewCard",
      "entity": "sap.m.QuickViewCard",
-     "since": null,
+     "since": "1.28.11",
      "deprecated": null
     },
     {
      "name": "QuickViewCardScrollBar",
      "entity": "sap.m.QuickViewCard",
-     "since": null,
+     "since": "1.28.11",
      "deprecated": null
     },
     {
      "name": "QuickViewNavOrigin",
      "entity": "sap.m.QuickView",
-     "since": null,
+     "since": "1.28.11",
      "deprecated": null
     },
     {
@@ -2076,31 +2121,31 @@
     {
      "name": "RadioButtonGroup",
      "entity": "sap.m.RadioButtonGroup",
-     "since": null,
+     "since": "1.25.0",
      "deprecated": null
     },
     {
      "name": "RangeSlider",
      "entity": "sap.m.RangeSlider",
-     "since": null,
+     "since": "1.38",
      "deprecated": null
     },
     {
      "name": "RatingIndicator",
      "entity": "sap.m.RatingIndicator",
-     "since": null,
+     "since": "1.14",
      "deprecated": null
     },
     {
      "name": "RefreshResponsive",
      "entity": "sap.m.PullToRefresh",
-     "since": null,
+     "since": "1.9.2",
      "deprecated": null
     },
     {
      "name": "ResponsivePopover",
      "entity": "sap.m.ResponsivePopover",
-     "since": null,
+     "since": "1.15.1",
      "deprecated": null
     },
     {
@@ -2184,13 +2229,13 @@
     {
      "name": "SelectList",
      "entity": "sap.m.SelectList",
-     "since": null,
+     "since": "1.26.0",
      "deprecated": null
     },
     {
      "name": "SelectListWithIcons",
      "entity": "sap.m.SelectList",
-     "since": null,
+     "since": "1.26.0",
      "deprecated": null
     },
     {
@@ -2214,85 +2259,85 @@
     {
      "name": "SemanticPage",
      "entity": "sap.m.semantic.SemanticPage",
-     "since": null,
+     "since": "1.30.0",
      "deprecated": null
     },
     {
      "name": "SemanticPageDraftIndicator",
      "entity": "sap.m.DraftIndicator",
-     "since": null,
+     "since": "1.32.0",
      "deprecated": null
     },
     {
      "name": "SemanticPageFloatingFooter",
      "entity": "sap.m.semantic.SemanticPage",
-     "since": null,
+     "since": "1.30.0",
      "deprecated": null
     },
     {
      "name": "SemanticPageFullScreen",
      "entity": "sap.m.semantic.SemanticPage",
-     "since": null,
+     "since": "1.30.0",
      "deprecated": null
     },
     {
      "name": "SinglePlanningCalendar",
      "entity": "sap.m.SinglePlanningCalendar",
-     "since": null,
+     "since": "1.61",
      "deprecated": null
     },
     {
      "name": "SinglePlanningCalendarCreateApp",
      "entity": "sap.m.SinglePlanningCalendar",
-     "since": null,
+     "since": "1.61",
      "deprecated": null
     },
     {
      "name": "SinglePlanningCalendarDateSelection",
      "entity": "sap.m.SinglePlanningCalendar",
-     "since": null,
+     "since": "1.61",
      "deprecated": null
     },
     {
      "name": "SinglePlanningCalendarDND",
      "entity": "sap.m.SinglePlanningCalendar",
-     "since": null,
+     "since": "1.61",
      "deprecated": null
     },
     {
      "name": "SinglePlanningCalendarRecurringItem",
      "entity": "sap.m.SinglePlanningCalendar",
-     "since": null,
+     "since": "1.61",
      "deprecated": null
     },
     {
      "name": "SinglePlanningCalendarSnappingHeader",
      "entity": "sap.m.SinglePlanningCalendar",
-     "since": null,
+     "since": "1.61",
      "deprecated": null
     },
     {
      "name": "SinglePlanningCalendarWeekNumbering",
      "entity": "sap.m.SinglePlanningCalendar",
-     "since": null,
+     "since": "1.61",
      "deprecated": null
     },
     {
      "name": "SinglePlanningCalendarWithCustomViews",
      "entity": "sap.m.SinglePlanningCalendar",
-     "since": null,
+     "since": "1.61",
      "deprecated": null
     },
     {
      "name": "SinglePlanningCalendarWithLegend",
      "entity": "sap.m.SinglePlanningCalendar",
-     "since": null,
+     "since": "1.61",
      "deprecated": null
     },
     {
      "name": "SinglePlanningCalendarWithZoomInZoomOut",
      "entity": "sap.m.SinglePlanningCalendar",
-     "since": null,
+     "since": "1.61",
      "deprecated": null
     },
     {
@@ -2304,7 +2349,7 @@
     {
      "name": "SlideTile",
      "entity": "sap.m.SlideTile",
-     "since": null,
+     "since": "1.34",
      "deprecated": null
     },
     {
@@ -2424,13 +2469,13 @@
     {
      "name": "StepInput",
      "entity": "sap.m.StepInput",
-     "since": null,
+     "since": "1.40",
      "deprecated": null
     },
     {
      "name": "StepInputValueState",
      "entity": "sap.m.StepInput",
-     "since": null,
+     "since": "1.40",
      "deprecated": null
     },
     {
@@ -2442,157 +2487,157 @@
     {
      "name": "TabContainer",
      "entity": "sap.m.TabContainer",
-     "since": null,
+     "since": "1.34",
      "deprecated": null
     },
     {
      "name": "TabContainerIcons",
      "entity": "sap.m.TabContainer",
-     "since": null,
+     "since": "1.34",
      "deprecated": null
     },
     {
      "name": "TabContainerMHC",
      "entity": "sap.m.TabContainer",
-     "since": null,
+     "since": "1.34",
      "deprecated": null
     },
     {
      "name": "Table",
      "entity": "sap.m.Column",
-     "since": null,
+     "since": "1.12",
      "deprecated": null
     },
     {
      "name": "TableAlternateRowColors",
      "entity": "sap.m.Table",
-     "since": null,
+     "since": "1.16",
      "deprecated": null
     },
     {
      "name": "TableAutoPopin",
      "entity": "sap.m.Table",
-     "since": null,
+     "since": "1.16",
      "deprecated": null
     },
     {
      "name": "TableBreadcrumb",
      "entity": "sap.m.Table",
-     "since": null,
+     "since": "1.16",
      "deprecated": null
     },
     {
      "name": "TableColumnWidth",
      "entity": "sap.m.Table",
-     "since": null,
+     "since": "1.16",
      "deprecated": null
     },
     {
      "name": "TableContextualWidthDynamic",
      "entity": "sap.m.Table",
-     "since": null,
+     "since": "1.16",
      "deprecated": null
     },
     {
      "name": "TableContextualWidthStatic",
      "entity": "sap.m.Table",
-     "since": null,
+     "since": "1.16",
      "deprecated": null
     },
     {
      "name": "TableDnD",
      "entity": "sap.m.Table",
-     "since": null,
+     "since": "1.16",
      "deprecated": null
     },
     {
      "name": "TableEditable",
      "entity": "sap.m.Table",
-     "since": null,
+     "since": "1.16",
      "deprecated": null
     },
     {
      "name": "TableIColumnHeaderMenu",
      "entity": "sap.m.Table",
-     "since": null,
+     "since": "1.16",
      "deprecated": null
     },
     {
      "name": "TableLayout",
      "entity": "sap.m.Table",
-     "since": null,
+     "since": "1.16",
      "deprecated": null
     },
     {
      "name": "TableMergeCells",
      "entity": "sap.m.Table",
-     "since": null,
+     "since": "1.16",
      "deprecated": null
     },
     {
      "name": "TableMultiSelectMode",
      "entity": "sap.m.Table",
-     "since": null,
+     "since": "1.16",
      "deprecated": null
     },
     {
      "name": "TableNavigated",
      "entity": "sap.m.Table",
-     "since": null,
+     "since": "1.16",
      "deprecated": null
     },
     {
      "name": "TableOutdated",
      "entity": "sap.m.Table",
-     "since": null,
+     "since": "1.16",
      "deprecated": null
     },
     {
      "name": "TableScrollToIndex",
      "entity": "sap.m.Table",
-     "since": null,
+     "since": "1.16",
      "deprecated": null
     },
     {
      "name": "TableSelectCopy",
      "entity": "sap.m.Table",
-     "since": null,
+     "since": "1.16",
      "deprecated": null
     },
     {
      "name": "TableSelectDialog",
      "entity": "sap.m.TableSelectDialog",
-     "since": null,
+     "since": "1.16",
      "deprecated": null
     },
     {
      "name": "TableSelectDialogGrowing",
      "entity": "sap.m.TableSelectDialog",
-     "since": null,
+     "since": "1.16",
      "deprecated": null
     },
     {
      "name": "TableStrictLayout",
      "entity": "sap.m.Table",
-     "since": null,
+     "since": "1.16",
      "deprecated": null
     },
     {
      "name": "TableTest",
      "entity": "sap.m.ColumnListItem",
-     "since": null,
+     "since": "1.12",
      "deprecated": null
     },
     {
      "name": "TableVerticalAlignment",
      "entity": "sap.m.Table",
-     "since": null,
+     "since": "1.16",
      "deprecated": null
     },
     {
      "name": "TableViewSettingsDialog",
      "entity": "sap.m.Table",
-     "since": null,
+     "since": "1.16",
      "deprecated": null
     },
     {
@@ -2604,31 +2649,31 @@
     {
      "name": "TextArea",
      "entity": "sap.m.TextArea",
-     "since": null,
+     "since": "1.9.0",
      "deprecated": null
     },
     {
      "name": "TextAreaGrowing",
      "entity": "sap.m.TextArea",
-     "since": null,
+     "since": "1.9.0",
      "deprecated": null
     },
     {
      "name": "TextAreaMaxLength",
      "entity": "sap.m.TextArea",
-     "since": null,
+     "since": "1.9.0",
      "deprecated": null
     },
     {
      "name": "TextAreaValueStates",
      "entity": "sap.m.TextArea",
-     "since": null,
+     "since": "1.9.0",
      "deprecated": null
     },
     {
      "name": "TextAreaValueUpdate",
      "entity": "sap.m.TextArea",
-     "since": null,
+     "since": "1.9.0",
      "deprecated": null
     },
     {
@@ -2658,61 +2703,64 @@
     {
      "name": "TileContainer",
      "entity": "sap.m.StandardTile",
-     "since": null,
-     "deprecated": null
+     "since": "1.12",
+     "deprecated": {
+      "since": "1.50",
+      "text": "replaced by sap.m.GenericTile"
+     }
     },
     {
      "name": "TileContent",
      "entity": "sap.m.TileContent",
-     "since": null,
+     "since": "1.34.0",
      "deprecated": null
     },
     {
      "name": "TimePicker",
      "entity": "sap.m.TimePicker",
-     "since": null,
+     "since": "1.32",
      "deprecated": null
     },
     {
      "name": "TimePickerHidden",
      "entity": "sap.m.TimePicker",
-     "since": null,
+     "since": "1.32",
      "deprecated": null
     },
     {
      "name": "TimePickerSliders",
      "entity": "sap.m.TimePickerSliders",
-     "since": null,
+     "since": "1.54",
      "deprecated": null
     },
     {
      "name": "TimePickerValueState",
      "entity": "sap.m.TimePicker",
-     "since": null,
+     "since": "1.32",
      "deprecated": null
     },
     {
      "name": "Title",
      "entity": "sap.m.Title",
-     "since": null,
+     "since": "1.27.0",
      "deprecated": null
     },
     {
      "name": "TitleLink",
      "entity": "sap.m.Title",
-     "since": null,
+     "since": "1.27.0",
      "deprecated": null
     },
     {
      "name": "TitleToolBar",
      "entity": "sap.m.OverflowToolbar",
-     "since": null,
+     "since": "1.28",
      "deprecated": null
     },
     {
      "name": "TitleWrapping",
      "entity": "sap.m.Title",
-     "since": null,
+     "since": "1.27.0",
      "deprecated": null
     },
     {
@@ -2724,49 +2772,49 @@
     {
      "name": "TokenizerBasic",
      "entity": "sap.m.Tokenizer",
-     "since": null,
+     "since": "1.22",
      "deprecated": null
     },
     {
      "name": "TokenizerMultiLine",
      "entity": "sap.m.Tokenizer",
-     "since": null,
+     "since": "1.22",
      "deprecated": null
     },
     {
      "name": "ToolbarActive",
      "entity": "sap.m.OverflowToolbar",
-     "since": null,
+     "since": "1.28",
      "deprecated": null
     },
     {
      "name": "ToolbarAlignment",
      "entity": "sap.m.OverflowToolbar",
-     "since": null,
+     "since": "1.28",
      "deprecated": null
     },
     {
      "name": "ToolbarDesign",
      "entity": "sap.m.OverflowToolbar",
-     "since": null,
+     "since": "1.28",
      "deprecated": null
     },
     {
      "name": "ToolbarEnabled",
      "entity": "sap.m.OverflowToolbar",
-     "since": null,
+     "since": "1.28",
      "deprecated": null
     },
     {
      "name": "ToolbarResponsive",
      "entity": "sap.m.Toolbar",
-     "since": null,
+     "since": "1.16",
      "deprecated": null
     },
     {
      "name": "ToolbarShrinkable",
      "entity": "sap.m.Toolbar",
-     "since": null,
+     "since": "1.16",
      "deprecated": null
     },
     {
@@ -2778,49 +2826,49 @@
     {
      "name": "Tree",
      "entity": "sap.m.Tree",
-     "since": null,
+     "since": "1.42",
      "deprecated": null
     },
     {
      "name": "TreeDnD",
      "entity": "sap.m.Tree",
-     "since": null,
+     "since": "1.42",
      "deprecated": null
     },
     {
      "name": "TreeExpandMulti",
      "entity": "sap.m.Tree",
-     "since": null,
+     "since": "1.42",
      "deprecated": null
     },
     {
      "name": "TreeExpandTo",
      "entity": "sap.m.Tree",
-     "since": null,
+     "since": "1.42",
      "deprecated": null
     },
     {
      "name": "TreeIcon",
      "entity": "sap.m.Tree",
-     "since": null,
+     "since": "1.42",
      "deprecated": null
     },
     {
      "name": "TreeJSONLazyLoading",
      "entity": "sap.m.Tree",
-     "since": null,
+     "since": "1.42",
      "deprecated": null
     },
     {
      "name": "TreeOData",
      "entity": "sap.m.Tree",
-     "since": null,
+     "since": "1.42",
      "deprecated": null
     },
     {
      "name": "TreeSelection",
      "entity": "sap.m.Tree",
-     "since": null,
+     "since": "1.42",
      "deprecated": null
     },
     {
@@ -2833,126 +2881,156 @@
      "name": "UploadCollection",
      "entity": "sap.m.UploadCollection",
      "since": null,
-     "deprecated": null
+     "deprecated": {
+      "since": "1.88",
+      "text": "replaced by sap.m.upload.UploadSet"
+     }
     },
     {
      "name": "UploadCollectionFolderHierarchy",
      "entity": "sap.m.UploadCollection",
      "since": null,
-     "deprecated": null
+     "deprecated": {
+      "since": "1.88",
+      "text": "replaced by sap.m.upload.UploadSet"
+     }
     },
     {
      "name": "UploadCollectionForPendingUpload",
      "entity": "sap.m.UploadCollection",
      "since": null,
-     "deprecated": null
+     "deprecated": {
+      "since": "1.88",
+      "text": "replaced by sap.m.upload.UploadSet"
+     }
     },
     {
      "name": "UploadCollectionSortingFiltering",
      "entity": "sap.m.UploadCollection",
      "since": null,
-     "deprecated": null
+     "deprecated": {
+      "since": "1.88",
+      "text": "replaced by sap.m.upload.UploadSet"
+     }
     },
     {
      "name": "UploadCollectionVersioning",
      "entity": "sap.m.UploadCollection",
      "since": null,
-     "deprecated": null
+     "deprecated": {
+      "since": "1.88",
+      "text": "replaced by sap.m.upload.UploadSet"
+     }
     },
     {
      "name": "UploadSet",
      "entity": "sap.m.upload.UploadSet",
-     "since": null,
-     "deprecated": null
+     "since": "1.63",
+     "deprecated": {
+      "since": "1.129",
+      "text": "replaced by sap.m.plugins.UploadSetwithTable"
+     }
     },
     {
      "name": "UploadSetCloudUpload",
      "entity": "sap.m.upload.UploadSet",
-     "since": null,
-     "deprecated": null
+     "since": "1.63",
+     "deprecated": {
+      "since": "1.129",
+      "text": "replaced by sap.m.plugins.UploadSetwithTable"
+     }
     },
     {
      "name": "UploadSetCustomUploader",
      "entity": "sap.m.upload.UploadSet",
-     "since": null,
-     "deprecated": null
+     "since": "1.63",
+     "deprecated": {
+      "since": "1.129",
+      "text": "replaced by sap.m.plugins.UploadSetwithTable"
+     }
     },
     {
      "name": "UploadSetDirectoryUploads",
      "entity": "sap.m.upload.UploadSet",
-     "since": null,
-     "deprecated": null
+     "since": "1.63",
+     "deprecated": {
+      "since": "1.129",
+      "text": "replaced by sap.m.plugins.UploadSetwithTable"
+     }
     },
     {
      "name": "UploadSetGroupingSortingFiltering",
      "entity": "sap.m.upload.UploadSet",
-     "since": null,
-     "deprecated": null
+     "since": "1.63",
+     "deprecated": {
+      "since": "1.129",
+      "text": "replaced by sap.m.plugins.UploadSetwithTable"
+     }
     },
     {
      "name": "UploadSetwithTablePlugin.FileNameValidationSample",
      "entity": "sap.m.plugins.UploadSetwithTable",
-     "since": null,
+     "since": "1.124",
      "deprecated": null
     },
     {
      "name": "UploadSetwithTablePlugin.FilePreviewCustomPageContent",
      "entity": "sap.m.plugins.UploadSetwithTable",
-     "since": null,
+     "since": "1.124",
      "deprecated": null
     },
     {
      "name": "UploadSetwithTablePlugin.GridTableSimple",
      "entity": "sap.m.plugins.UploadSetwithTable",
-     "since": null,
+     "since": "1.124",
      "deprecated": null
     },
     {
      "name": "UploadSetwithTablePlugin.MultiplePluginInstances",
      "entity": "sap.m.plugins.UploadSetwithTable",
-     "since": null,
+     "since": "1.124",
      "deprecated": null
     },
     {
      "name": "UploadSetwithTablePlugin.ResponsiveTableFileDialogs",
      "entity": "sap.m.plugins.UploadSetwithTable",
-     "since": null,
+     "since": "1.124",
      "deprecated": null
     },
     {
      "name": "UploadSetwithTablePlugin.ResponsiveTableFilePreview",
      "entity": "sap.m.plugins.UploadSetwithTable",
-     "since": null,
+     "since": "1.124",
      "deprecated": null
     },
     {
      "name": "UploadSetwithTablePlugin.ResponsiveTableProgressIndicator",
      "entity": "sap.m.plugins.UploadSetwithTable",
-     "since": null,
+     "since": "1.124",
      "deprecated": null
     },
     {
      "name": "UploadSetwithTablePlugin.ResponsiveTableSimple",
      "entity": "sap.m.plugins.UploadSetwithTable",
-     "since": null,
+     "since": "1.124",
      "deprecated": null
     },
     {
      "name": "UploadSetwithTablePlugin.TreeTableSimple",
      "entity": "sap.m.plugins.UploadSetwithTable",
-     "since": null,
+     "since": "1.124",
      "deprecated": null
     },
     {
      "name": "UploadSetwithTablePlugin.TreeTableWithFolderHierarchy",
      "entity": "sap.m.plugins.UploadSetwithTable",
-     "since": null,
+     "since": "1.124",
      "deprecated": null
     },
     {
      "name": "UrlHelper",
      "entity": "sap.m.URLHelper",
-     "since": null,
+     "since": "1.10",
      "deprecated": null
     },
     {
@@ -2964,31 +3042,31 @@
     {
      "name": "VariantManagement",
      "entity": "sap.m.VariantManagement",
-     "since": null,
+     "since": "1.103",
      "deprecated": null
     },
     {
      "name": "ViewSettingsDialog",
      "entity": "sap.m.ViewSettingsDialog",
-     "since": null,
+     "since": "1.16",
      "deprecated": null
     },
     {
      "name": "ViewSettingsDialogCustom",
      "entity": "sap.m.ViewSettingsDialog",
-     "since": null,
+     "since": "1.16",
      "deprecated": null
     },
     {
      "name": "ViewSettingsDialogCustomFilterDetails",
      "entity": "sap.m.ViewSettingsDialog",
-     "since": null,
+     "since": "1.16",
      "deprecated": null
     },
     {
      "name": "ViewSettingsDialogCustomTabs",
      "entity": "sap.m.ViewSettingsDialog",
-     "since": null,
+     "since": "1.16",
      "deprecated": null
     },
     {
@@ -3000,25 +3078,25 @@
     {
      "name": "Wizard",
      "entity": "sap.m.Wizard",
-     "since": null,
+     "since": "1.30",
      "deprecated": null
     },
     {
      "name": "WizardBranching",
      "entity": "sap.m.Wizard",
-     "since": null,
+     "since": "1.30",
      "deprecated": null
     },
     {
      "name": "WizardCurrentStep",
      "entity": "sap.m.Wizard",
-     "since": null,
+     "since": "1.30",
      "deprecated": null
     },
     {
      "name": "WizardSingleStep",
      "entity": "sap.m.Wizard",
-     "since": null,
+     "since": "1.30",
      "deprecated": null
     }
    ]

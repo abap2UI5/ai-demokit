@@ -13,6 +13,10 @@
   "deviations": [
     {
       "type": "NOTE",
+      "what": "The sample's css/main.css is now shipped with the port: injected through a core:HTML leaf carrying a <style> block (the documented CAPABILITIES form), so the port carries six core:HTML controls where the original view has five - the original loads the stylesheet through its manifest's sap.ui5/resources/css entry. The single .sapUiLayoutCSSGrid .stylePageLayout rule is verbatim, whitespace-collapsed, braces escaped \\{ \\} in a backtick literal. Until 2026-07-28 the five grid tiles carried the stylePageLayout class with no stylesheet behind them, so they rendered as unstyled text instead of the blue rounded boxes the sample shows. The stylesheet was also missing from ui5/sap.ui.layout/CSSGrid/ (a §4 archive gap) and is archived in the same change."
+    },
+    {
+      "type": "NOTE",
       "what": "onSliderMoved sets the Panel width to value + \"%\" imperatively. Rebuilt on the client (the app-053 shape): the Slider value is two-way bound to slider_value, seeded with the original's literal 100, and the Panel width carries the expression binding {= slider_value + '%' } instead of the literal 100%. The liveChange attribute is therefore dropped. Until 2026-07-28 the port routed liveChange to a SLIDER_MOVED backend event that recomputed the width server-side - correct but one full round-trip per drag step; the expression binding is the thin-frontend form and needs none."
     },
     {

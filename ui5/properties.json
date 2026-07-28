@@ -253,6 +253,11 @@
    "members": {},
    "since": "1.48.0"
   },
+  "sap.m.DateHighZoomInputs": {
+   "parent": "sap.ui.core.Control",
+   "members": {},
+   "since": "1.135"
+  },
   "sap.m.DatePicker": {
    "parent": "sap.m.DateTimeField",
    "members": {
@@ -2202,16 +2207,6 @@
    "members": {},
    "since": "1.16"
   },
-  "sap.m.Tooltip": {
-   "parent": "sap.ui.core.Control",
-   "members": {
-    "text": "1.151",
-    "placement": "1.151",
-    "delay": "1.151",
-    "afterOpen": "1.151",
-    "afterClose": "1.151"
-   }
-  },
   "sap.m.Tree": {
    "parent": "sap.m.ListBase",
    "members": {
@@ -3170,6 +3165,11 @@
    "members": {},
    "since": "1.70"
   },
+  "sap.f.HeroBanner": {
+   "parent": "sap.f.gen.ui5.webcomponents_fiori.dist.HeroBanner",
+   "members": {},
+   "since": "1.152"
+  },
   "sap.f.IllustratedMessage": {
    "parent": "sap.m.IllustratedMessage",
    "members": {},
@@ -3367,6 +3367,10 @@
   },
   "sap.f.gen.ui5.webcomponents.dist.MenuItem": {
    "parent": "sap.f.gen.ui5.webcomponents.dist.ListItem",
+   "members": {}
+  },
+  "sap.f.gen.ui5.webcomponents_fiori.dist.HeroBanner": {
+   "parent": "sap.ui.core.webc.WebComponent",
    "members": {}
   },
   "sap.f.gen.ui5.webcomponents_fiori.dist.IllustratedMessage": {
@@ -4213,6 +4217,16 @@
    "deprecated": {
     "since": "1.56.",
     "text": "Use an {@link sap.ui.core.mvc.XMLView XMLView} or a {@link topic:e6bb33d076dc4f23be50c082c271b9f0 Typed View} instead."
+   }
+  },
+  "sap.ui.core.tooltip.Tooltip": {
+   "parent": "sap.ui.core.Control",
+   "members": {
+    "text": "1.151",
+    "placement": "1.151",
+    "delay": "1.151",
+    "afterOpen": "1.151",
+    "afterClose": "1.151"
    }
   },
   "sap.ui.core.tooltip.TooltipEnablement": {
@@ -6298,6 +6312,7 @@
     "useMockData": "1.109",
     "showCloseButton": "1.128",
     "isPaginationCard": "1.140",
+    "_manifestBadge": "1.151",
     "formData": "1.129"
    },
    "since": "1.62"

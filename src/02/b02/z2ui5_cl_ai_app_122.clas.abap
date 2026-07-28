@@ -33,6 +33,26 @@ CLASS z2ui5_cl_ai_app_122 IMPLEMENTATION.
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns`      v = `sap.m`
 
+        " the sample's style.css, injected via a core:HTML content attribute
+        " (see CAPABILITIES.md) - the five size classes the Icons below carry,
+        " including the <600px media query, verbatim. Literal braces are escaped
+        " \{ \} in a backtick literal: the XMLView parser reads an unescaped
+        " brace as a binding
+        )->leaf( n = `HTML` ns = `core`
+            )->a( n = `content` v = `<style>` &&
+                                    `.size1\{font-size:1.5rem\}` &&
+                                    `.size2\{font-size:2.5rem\}` &&
+                                    `.size3\{font-size:5rem\}` &&
+                                    `.size4\{font-size:7.5rem\}` &&
+                                    `.size5\{font-size:10rem\}` &&
+                                    `@media (max-width:599px)\{` &&
+                                    `.size1\{font-size:1rem\}` &&
+                                    `.size2\{font-size:2rem\}` &&
+                                    `.size3\{font-size:3rem\}` &&
+                                    `.size4\{font-size:4rem\}` &&
+                                    `.size5\{font-size:5rem\}\}` &&
+                                    `</style>`
+
         )->open( `HBox`
             )->a( n = `class` v = `sapUiSmallMargin`
 
