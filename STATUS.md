@@ -41,8 +41,8 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   variant never gets `setPersControler()` — `addPersonalizableControl()` returns early
   for `isPageVariant()`, so a controller-less app has neither the anchor
   (`_oPersoControl`) nor the control promise `initialise()` requires. abap2UI5 now does
-  the handshake through the `SMART_VARIANT_INIT` action (abap2UI5 branch
-  `claude/smart-controls-samples-vdfr5y`, eight specs); app 251 is **live-verified**:
+  the handshake through the `SMART_VARIANT_INIT` action (upstream PR
+  [abap2UI5#2481](https://github.com/abap2UI5/abap2UI5/pull/2481), eight specs); app 251 is **live-verified**:
   saving works and the saved views are back after a restart (`isInitialized: true`,
   7 variants / 7 items). **Left to do:** the port writes the action name as a literal
   because this repo's abaplint resolves abap2UI5 from its default branch — switch to

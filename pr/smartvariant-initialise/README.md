@@ -126,8 +126,9 @@ whether smart-control variant management stays a documented boundary
 
 ## Status
 
-**Implemented and verified in a running system** (2026-07-28), on the abap2UI5 branch
-`claude/smart-controls-samples-vdfr5y`, pending upstream merge: the
+**Implemented and verified in a running system** (2026-07-28), submitted upstream as
+[abap2UI5#2481](https://github.com/abap2UI5/abap2UI5/pull/2481) (branch
+`claude/smart-controls-samples-vdfr5y`): the
 `SMART_VARIANT_INIT` handler in `app/webapp/core/FrontendAction.js`, the
 `cs_event-smart_variant_init` constant in `z2ui5_if_client`, the regenerated ABAP
 mirror and eight specs in `node/tests/frontendAction.spec.js` (the test sandbox also
