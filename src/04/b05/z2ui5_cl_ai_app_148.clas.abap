@@ -127,10 +127,18 @@ CLASS z2ui5_cl_ai_app_148 IMPLEMENTATION.
     CASE client->get( )-event.
 
       WHEN `DROP`.
-        " onDrop 1:1 - the client indices are 0-based, ABAP rows 1-based
+        " onDrop 1:1 - the client indices are 0-based, ABAP rows 1-based. Both
+        " arrive from the frontend, so they are range-checked before they are
+        " used as a table index: JS would splice a nonsense index harmlessly,
+        " ABAP would dump on the read
         DATA(drag_pos) = CONV i( client->get_event_arg( ) ).
         DATA(drop_pos) = CONV i( client->get_event_arg( 2 ) ).
         DATA(position) = client->get_event_arg( 3 ).
+
+        IF drag_pos < 0 OR drag_pos >= lines( t_items )
+        OR drop_pos < 0 OR drop_pos >= lines( t_items ).
+          RETURN.
+        ENDIF.
 
         DATA(item) = t_items[ drag_pos + 1 ].
         DELETE t_items INDEX drag_pos + 1.

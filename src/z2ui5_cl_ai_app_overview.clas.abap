@@ -974,10 +974,11 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
     lv_text1 = `NOTE: The drop now reorders the list for real. CAPABILITIES marks drag & drop reorder expressible, so the earlier 'reorder logic not reproduced' was a wrong improvisation: the drop event ships the two` &&
                ` row indices and the insert position as client-side resolved $-args (${$parameters>/draggedControl/oParent}.indexOfItem(${$parameters>/draggedControl}), the same for droppedControl, and` &&
                ` ${$parameters>/dropPosition}), and on_event rebuilds the original onDrop arithmetic 1:1 in ABAP - remove the dragged row, decrement the drop index when dragging downwards, insert Before or After -` &&
-               ` then view_model_update. Client indices are 0-based, ABAP table rows 1-based, which is the only difference to the JS splice. Before this rework the drop fired a DROP event this class never dispatched` &&
-               ` (a dead wire, pattern-lint dead-event-wire). // NOTE: The GridDropInfo control from sap.f.dnd keeps a hyphen-free 'dndgrid' xmlns alias instead of the original 'dnd-grid' (the alias only names the` &&
-               ` same sap.f.dnd URI; it makes the control statically visible to the checks). // NOTE: 27 items inlined from model/data.json; absent enum fields defaulted (highlight None, type Inactive) so the bound`.
-    lv_text1 = lv_text1 && ` GridListItem properties stay valid. Template binds counter/highlight/type/unread + title/subtitle 1:1.`.
+               ` then view_model_update. Client indices are 0-based, ABAP table rows 1-based, which is the only difference to the JS splice. Both indices are range-checked before use: they arrive from the frontend,` &&
+               ` and where JS would splice a nonsense index harmlessly, an ABAP table read on it dumps. Before this rework the drop fired a DROP event this class never dispatched (a dead wire, pattern-lint` &&
+               ` dead-event-wire). // NOTE: The GridDropInfo control from sap.f.dnd keeps a hyphen-free 'dndgrid' xmlns alias instead of the original 'dnd-grid' (the alias only names the same sap.f.dnd URI; it makes`.
+    lv_text1 = lv_text1 && ` the control statically visible to the checks). // NOTE: 27 items inlined from model/data.json; absent enum fields defaulted (highlight None, type Inactive) so the bound GridListItem properties stay` &&
+               ` valid. Template binds counter/highlight/type/unread + title/subtitle 1:1.`.
     result = VALUE #( BASE result
       ( module = `sap.f`              control = `sap.f.GridList`                                   name = `GridListDragAndDrop`                 class = `z2ui5_cl_ai_app_148` path = `src/04/b05/z2ui5_cl_ai_app_148.clas.abap`
         score = 3
