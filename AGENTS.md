@@ -311,7 +311,12 @@ source of truth:
   folder per request with a self-contained, forwardable README (motivation
   with the sample/port that hit it, current behavior with source references,
   proposed change, example). Add it in the same change that discovers the
-  gap; see `pr/README.md`.
+  gap; see `pr/README.md`. **`pr/` is a pure backlog folder — it holds OPEN
+  requests only:** once a request is live (merged upstream, or landed in this
+  repo's tooling) delete its folder in that same change and leave only a row in
+  the `pr/README.md` "Implemented" table; the details then live upstream and in
+  `CAPABILITIES.md`/`STATUS.md`. Never mark a folder "implemented, kept until
+  merged" — that is what the table is for.
 - Every port must pass all three CI checks (§6).
 
 ### App skeleton — how a port is built
