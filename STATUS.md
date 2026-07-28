@@ -53,9 +53,13 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   work. **Two follow-ups:**
   (a) the port writes the action name as a **literal** because this repo's abaplint
   resolves abap2UI5 from its default branch — switch to `client->cs_event-smart_variant_init`
-  once the framework change is merged; (b) the declarative path is **not yet live-verified**
-  (only the console workaround was), so the LIVE_TEST on app 251 stays open: saving without
-  the workaround, and a saved view surviving an app restart.
+  once the framework change is merged; (b) **saving now works declaratively** (verified
+  2026-07-28 with the framework branch installed), but a saved view **does not survive an
+  app restart** — setting the perso control anchors the WRITE path, while LOADING the
+  stored variants at startup is the second half of the handshake and is not covered yet.
+  The next datapoint decides where it hangs: `loadVariants()` after a restart returning the
+  saved variant (only the display/apply step missing) or zero (the save never reached the
+  LREP).
   Refuted on the way, each measured live and kept here so nobody walks them again: missing
   app component (resolves), `flexEnabled` (read only by `sap.ui.rta`, never by `sap.ui.fl`),
   association-id prefixing (XMLViews prefix single associations), registration
