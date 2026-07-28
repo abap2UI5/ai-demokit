@@ -48,7 +48,6 @@ CLASS z2ui5_cl_ai_app_251 IMPLEMENTATION.
         )->a( n = `xmlns:smartVariantManagement` v = `sap.ui.comp.smartvariants`
         )->a( n = `xmlns:smartFilterBar`         v = `sap.ui.comp.smartfilterbar`
         )->a( n = `xmlns:smartTable`             v = `sap.ui.comp.smarttable`
-        )->a( n = `xmlns:core`                   v = `sap.ui.core`
 
         )->open( `HBox`
             )->a( n = `class` v = `exPageVariantPadding`
@@ -71,21 +70,6 @@ CLASS z2ui5_cl_ai_app_251 IMPLEMENTATION.
             )->a( n = `assignedFiltersChanged` v = client->_event_client( val   = client->cs_event-control_global
                                                                           t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Assigned filters changed` ) ) )
 
-            " Page variant + SmartFilterBar, the wiring the SAPUI5 docs describe
-            " ("Smart Variant Management", Page Variants): the PAGE variant's key
-            " reaches the filter bar through the pageVariantPersistencyKey custom data
-            " - the persistencyKey property above only names this control's slice of
-            " the stored data. The filter bar then adapts the related SmartTable
-            " itself, "and therefore, the smartVariant association doesn't have to be
-            " assigned" - read as: the TABLE does not need it (it has none below), while
-            " the filter bar keeps it, because the custom data carries only the KEY and
-            " the control still has to find the page variant INSTANCE somehow.
-            )->open( n = `customData` ns = `smartFilterBar`
-                )->leaf( n = `CustomData` ns = `core`
-                    )->a( n = `key`   v = `pageVariantPersistencyKey`
-                    )->a( n = `value` v = `PageVariantPKey`
-
-            )->shut(
             )->open( n = `controlConfiguration` ns = `smartFilterBar`
                 )->leaf( n = `ControlConfiguration` ns = `smartFilterBar`
                     )->a( n = `key`                                      v = `Category`
@@ -97,6 +81,7 @@ CLASS z2ui5_cl_ai_app_251 IMPLEMENTATION.
         )->leaf( n = `SmartTable` ns = `smartTable`
             )->a( n = `id`                      v = `smartTable_ResponsiveTable`
             )->a( n = `smartFilterId`           v = `smartFilterBar`
+            )->a( n = `smartVariant`            v = `pageVariantId`
             )->a( n = `tableType`               v = `ResponsiveTable`
             )->a( n = `editable`                v = `false`
             )->a( n = `entitySet`               v = `ProductSet`

@@ -3442,30 +3442,28 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
     lv_text1 = `IMPROVISED: The view wires assignedFiltersChanged="onFiltersChanged" on the SmartFilterBar, but the tutorial does not publish that controller, so there is no original handler body to rebuild. The` &&
                ` original handler is a controller function, i.e. client-side, so the port keeps the wire client-side too: control_global MESSAGE_TOAST.show via _event_client, roundtrip-free. The toast text is` &&
                ` invented; what matters is that no backend round-trip fires in the middle of the variant/filter handshake (an earlier version routed this to a backend event - dropped 2026-07-27 while chasing the` &&
-               ` variant-save crash). The app is therefore init-only, no on_event. // IMPROVISED: Saving a view failed live (2026-07-27) with a TypeError in SmartVariantManagement._newVariant. The port therefore uses` &&
-               ` the page-variant wiring the SAPUI5 documentation describes ("Smart Variant Management", section Page Variants) instead of the one the tutorial's published view shows: the PAGE variant's key is` &&
-               ` assigned through the SmartFilterBar's pageVariantPersistencyKey CUSTOM DATA (added customData aggregation with one core:CustomData, plus the xmlns:core declaration - two controls the sample does not`.
-    lv_text1 = lv_text1 && ` have), and the smartVariant association is dropped on the SmartTable, because per that documentation the filter bar adapts the related SmartTable itself and the association "doesn't have to be` &&
-               ` assigned" - the SmartFilterBar keeps it, since the custom data carries only the page variant's KEY while the control still has to find the page variant INSTANCE (dropping it there too was tried on` &&
-               ` 2026-07-27 and changed nothing). Each control keeps its own persistencyKey, which names its slice of the stored data. Whether this also fixes the save is unverified - see the LIVE_TEST entry and the` &&
-               ` STATUS open findings for the four causes already refuted. // IMPROVISED: The tutorial serves its own metadata.xml and mock data from a local mock server, which an ABAP system cannot reproduce (a` &&
-               ` Gateway service is not a transportable artifact of this repo). The port therefore points the default model at the SAP Gateway demo service GWSAMPLE_BASIC (/sap/opu/odata/IWBEP/GWSAMPLE_BASIC/,` &&
-               ` client->view_display switch_default_model_path, constant c_odata_service): it ships with every on-premise system and only has to be activated once in /IWFND/MAINT_SERVICE, so the app actually runs.`.
-    lv_text1 = lv_text1 && ` The sample's own metadata.xml stays archived beside the template for anyone who wants to rebuild the tutorial service instead. Both smart controls therefore carry entitySet="ProductSet" instead of` &&
-               ` "Products" (the header stays "Products", it is a label). One consequence needs an addition to the view: GWSAMPLE_BASIC carries no UI.LineItem annotation, and without one a SmartTable starts with NO` &&
-               ` columns at all - it renders the "add columns to see the content" placeholder (seen live 2026-07-27; an earlier version of this note wrongly assumed it would fall back to all metadata fields). The` &&
-               ` port therefore adds initiallyVisibleFields="ProductID,Name,Category,SupplierName,Price", an attribute the sample does not carry because its own service annotates the four columns it shows. The page` &&
-               ` variant, the persistency keys and the smartVariant wiring the step is about are unaffected. // LIVE-TEST: Partly run in a system 2026-07-27: the view renders and the SmartTable loads (205 products` &&
-               ` from GWSAMPLE_BASIC), but SAVING a view fails. Pinned in the live debugger to sap.ui.fl SmartVariantManagementWriteAPI:28 with mPropertyBag.control === null - sap.ui.comp hands the flex API no`.
-    lv_text1 = lv_text1 && ` control when saving a page variant; app component, association ids, registration and loadVariants are all verified fine (see the STATUS open findings for the full list of refuted causes). The current` &&
-               ` wiring (pageVariantPersistencyKey custom data, no smartVariant associations, per the SAPUI5 docs) has since been deployed and does NOT fix it - control is still null in the same frame, so both` &&
-               ` wirings behave identically. Open to verify - whether saving works with the documented wiring, and then that the page variant restores filter bar and table personalization together and that variant` &&
-               ` management no longer appears inside the Filters dialog. // NOTE: The property gate (ui5/properties.json) covers OpenUI5 libraries only, so no member of sap.ui.comp is checked against the 1.71 rule` &&
-               ` automatically. SmartVariantManagement, SmartFilterBar and SmartTable are @since 1.28; the smartVariant association and persistencyKey properties are of the same vintage.`.
+               ` variant-save crash). The app is therefore init-only, no on_event. // NOTE: Measured while chasing the save crash (2026-07-27/28): the page-variant wiring the SAPUI5 documentation describes - the page` &&
+               ` variant's key through the SmartFilterBar's pageVariantPersistencyKey custom data, smartVariant association dropped - was tried and is WORSE in this runtime: with it, getPersonalizableControls()` &&
+               ` returns 0 (nothing registers at all), while the tutorial's association-based wiring registers both controls (2, right types and keys). The port therefore keeps the sample's wiring 1:1 -`.
+    lv_text1 = lv_text1 && ` smartVariant="pageVariantId" on both smart controls, no custom data - and the documentation's variant is recorded here as a measured dead end rather than as an improvement. // IMPROVISED: The` &&
+               ` tutorial serves its own metadata.xml and mock data from a local mock server, which an ABAP system cannot reproduce (a Gateway service is not a transportable artifact of this repo). The port therefore` &&
+               ` points the default model at the SAP Gateway demo service GWSAMPLE_BASIC (/sap/opu/odata/IWBEP/GWSAMPLE_BASIC/, client->view_display switch_default_model_path, constant c_odata_service): it ships with` &&
+               ` every on-premise system and only has to be activated once in /IWFND/MAINT_SERVICE, so the app actually runs. The sample's own metadata.xml stays archived beside the template for anyone who wants to` &&
+               ` rebuild the tutorial service instead. Both smart controls therefore carry entitySet="ProductSet" instead of "Products" (the header stays "Products", it is a label). One consequence needs an addition` &&
+               ` to the view: GWSAMPLE_BASIC carries no UI.LineItem annotation, and without one a SmartTable starts with NO columns at all - it renders the "add columns to see the content" placeholder (seen live`.
+    lv_text1 = lv_text1 && ` 2026-07-27; an earlier version of this note wrongly assumed it would fall back to all metadata fields). The port therefore adds initiallyVisibleFields="ProductID,Name,Category,SupplierName,Price", an` &&
+               ` attribute the sample does not carry because its own service annotates the four columns it shows. The page variant, the persistency keys and the smartVariant wiring the step is about are unaffected.` &&
+               ` // LIVE-TEST: Partly run in a system 2026-07-27: the view renders and the SmartTable loads (205 products from GWSAMPLE_BASIC), but SAVING a view fails. Pinned in the live debugger to sap.ui.fl` &&
+               ` SmartVariantManagementWriteAPI:28 with mPropertyBag.control === null - sap.ui.comp hands the flex API no control when saving a page variant; app component, association ids, registration and` &&
+               ` loadVariants are all verified fine (see the STATUS open findings for the full list of refuted causes). The current wiring (pageVariantPersistencyKey custom data, no smartVariant associations, per the` &&
+               ` SAPUI5 docs) has since been deployed and does NOT fix it - control is still null in the same frame, so both wirings behave identically. Open to verify - whether saving works with the documented`.
+    lv_text1 = lv_text1 && ` wiring, and then that the page variant restores filter bar and table personalization together and that variant management no longer appears inside the Filters dialog. // NOTE: The property gate` &&
+               ` (ui5/properties.json) covers OpenUI5 libraries only, so no member of sap.ui.comp is checked against the 1.71 rule automatically. SmartVariantManagement, SmartFilterBar and SmartTable are @since 1.28;` &&
+               ` the smartVariant association and persistencyKey properties are of the same vintage.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.comp`        control = `sap.ui.comp.smartvariants.SmartVariantManagement` name = `PageVariantManagement`               class = `z2ui5_cl_ai_app_251` path = `src/06/b01/z2ui5_cl_ai_app_251.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
         ui5_only = abap_true
         notes = lv_text1
