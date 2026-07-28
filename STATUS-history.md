@@ -79,7 +79,13 @@ change:
   (`pattern-lint` `commercial-ui5-host`).
 - **App 251 names the variant action through `client->cs_event-smart_variant_init`**
   now that abap2UI5 #2481 is on main — the last open cleanup of the smart-controls
-  batch.
+  batch. `pr/smartvariant-initialise` is retired per the `pr/` convention (folder
+  removed, recorded in the implemented table).
+- **One new `pr/` request filed:** `formatter-date-empty-guard` — make
+  `Formatter.DateCreateObject` return `null` for a falsy input instead of an
+  Invalid Date. Low priority (every port can guard it itself, and pattern-lint
+  now makes sure it does), but the unguarded failure mode is a whole-view crash
+  that names neither the control nor the field.
 
 Ladder unchanged (48 `generated` · 146 `reviewed` · 57 `checked`) — the reworked
 ports keep their rung, the headline gap is what closed; open LIVE_TESTs 70 → 61. All gates green: abaplint STANDARD + CLOUD + the 702
