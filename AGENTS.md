@@ -864,8 +864,8 @@ scripts.**
   the trailing **Open** column): **Module** · **Control** · **Since** (the UI5
   release the control appeared in) · **Sample** · **abap2UI5** (class name) ·
   **Rating** · **Open** (three buttons — the LINKS popover with the four
-  reference targets, the INFO popover with the port's generation notes, and a
-  direct app start in a new tab). Three columns were dropped on 2026-07-29: a
+  reference targets, a direct app start in a new tab, and the trailing INFO
+  popover with the port's generation notes). Three columns were dropped on 2026-07-29: a
   per-SAMPLE **Since**, an **Audit** column (one badge per framework-wiring
   fact) and a **Version** column (orange SAPUI5 badge). Their data is still
   computed — the audit flags feed the Rating's test-priority term, `ui5_only`

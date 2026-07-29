@@ -426,13 +426,14 @@ const abap = `"! Generated overview app - lists every abap2UI5 api sample app in
 "! Transparent Buttons - Control API Reference, Sample Link, Sample Source Code,
 "! abap2UI5 Source Code, each opening its target in a new tab through the
 "! URLHELPER REDIRECT frontend action (a Button carries no href, and open_new_tab
-"! is same-origin only). The information one opens the INFO popover with the
-"! port's generation notes - live-check status, the members that need a release
-"! newer than 1.71, and the deviation list as a bullet list; it renders only on a
-"! row that carries at least one of the three. The third starts
+"! is same-origin only). The second starts
 "! this abap2UI5 app directly in a new tab (open_new_tab; the start URL is
 "! same-origin, so it passes isValidRedirectURL) - the overview stays open in its
-"! own tab. The Rating column is a 1-5 "by feel" score of
+"! own tab. The trailing information one opens the INFO popover with the
+"! port's generation notes - live-check status, the members that need a release
+"! newer than 1.71, and the deviation list as a bullet list; it renders only on a
+"! row that carries at least one of the three.
+"! The Rating column is a 1-5 "by feel" score of
 "! how much attention a port deserves (not coloured): app complexity, how heavily
 "! it was reworked/corrected (IMPROVISED/DROPPED_171/SUBSET_DATA/NOTE), whether it
 "! was reviewed/discussed (it carries a checked block), and how important a live
@@ -845,12 +846,12 @@ ${columnsBlock}
 
                                 " Open column: three buttons, each anchored to its own runtime
                                 " id (\$event.oSource.sId). First opens the links popover (the
-                                " four reference targets); second the generation-notes popover -
-                                " shown only on a row that HAS something to say (checked /
-                                " post-1.71 / notes); third launches the abap2UI5 app directly
-                                " in a new tab (open_new_tab - the start URL is same-origin, so
-                                " it passes isValidRedirectURL), leaving the overview open in
-                                " its own tab
+                                " four reference targets); second launches the abap2UI5 app
+                                " directly in a new tab (open_new_tab - the start URL is
+                                " same-origin, so it passes isValidRedirectURL), leaving the
+                                " overview open in its own tab; third opens the
+                                " generation-notes popover - shown only on a row that HAS
+                                " something to say (checked / post-1.71 / notes)
                                 )->open( \`HBox\`
                                     )->leaf( \`Button\`
                                         )->a( n = \`icon\`    v = \`sap-icon://chain-link\`
@@ -858,6 +859,11 @@ ${columnsBlock}
                                         )->a( n = \`tooltip\` v = \`Links: Control API Reference, Sample Link, Sample Source Code, abap2UI5 Source Code\`
                                         )->a( n = \`press\`   v = client->_event( val = \`LINKS\` t_arg = VALUE #(
                                             ( \`\${API_URL}\` ) ( \`\${JS_URL}\` ) ( \`\${UI5_URL}\` ) ( \`\${ABAP_URL}\` ) ( \`\$event.oSource.sId\` ) ) )
+                                    )->leaf( \`Button\`
+                                        )->a( n = \`icon\`    v = \`sap-icon://action\`
+                                        )->a( n = \`type\`    v = \`Transparent\`
+                                        )->a( n = \`tooltip\` v = \`Start this abap2UI5 app in a new tab\`
+                                        )->a( n = \`press\`   v = client->_event_client( val = client->cs_event-open_new_tab t_arg = VALUE #( ( \`\${START_URL}\` ) ) )
                                     )->leaf( \`Button\`
                                         )->a( n = \`icon\`    v = \`sap-icon://information\`
                                         )->a( n = \`type\`    v = \`Transparent\`
@@ -868,11 +874,6 @@ ${columnsBlock}
                                         )->a( n = \`visible\` v = \`{= \${HAS_CHECK} || \${HAS_P171} || \${HAS_NOTES} }\`
                                         )->a( n = \`press\`   v = client->_event( val = \`INFO\` t_arg = VALUE #(
                                             ( \`\${CHECKED}\` ) ( \`\${POST171}\` ) ( \`\${NOTES}\` ) ( \`\$event.oSource.sId\` ) ) )
-                                    )->leaf( \`Button\`
-                                        )->a( n = \`icon\`    v = \`sap-icon://action\`
-                                        )->a( n = \`type\`    v = \`Transparent\`
-                                        )->a( n = \`tooltip\` v = \`Start this abap2UI5 app in a new tab\`
-                                        )->a( n = \`press\`   v = client->_event_client( val = client->cs_event-open_new_tab t_arg = VALUE #( ( \`\${START_URL}\` ) ) )
 
                                 )->shut(
                             )->shut(
