@@ -422,9 +422,11 @@ const abap = `"! Generated overview app - lists every abap2UI5 api sample app in
 "! Hide newer than 1.71 (2020), Hide deprecated. A Shell switch toggles the
 "! sap.m.Shell letterboxing (appWidthLimited), client-side. Navigation lives in
 "! the trailing Open column, which
-"! carries two buttons: the first opens an anchored popover with the four reference
-"! links (OpenUI5 API, OpenUI5 source, live fullscreen sample, the generated ABAP
-"! class on GitHub, each opening in a new tab) AND the port's generation info -
+"! carries two buttons: the first opens an anchored popover with four full-width
+"! Transparent Buttons - Control API Reference, Sample Link, Sample Source Code,
+"! abap2UI5 Source Code, each opening its target in a new tab through the
+"! URLHELPER REDIRECT frontend action (a Button carries no href, and open_new_tab
+"! is same-origin only) - AND the port's generation info -
 "! checked status, a post-1.71 note, and the generation notes; the second starts
 "! this abap2UI5 app directly in a new tab (open_new_tab; the start URL is
 "! same-origin, so it passes isValidRedirectURL) - the overview stays open in its
@@ -500,6 +502,11 @@ CLASS ${CLASS} DEFINITION PUBLIC.
     METHODS get_catalog
       RETURNING
         VALUE(result) TYPE ty_t_app.
+    METHODS link_press
+      IMPORTING
+        url           TYPE string
+      RETURNING
+        VALUE(result) TYPE string.
 
   PRIVATE SECTION.
 ENDCLASS.
@@ -532,7 +539,7 @@ CLASS ${CLASS} IMPLEMENTATION.
     CASE client->get( )-event.
 
       WHEN \`LINKS\`.
-        " the four reference links plus the port's generation info (checked /
+        " the four link buttons plus the port's generation info (checked /
         " post-1.71 / notes) for the pressed row; resolved client-side and passed
         " via t_arg, opened in a popover anchored to the pressed button (arg 8)
         DATA(lv_api)     = client->get_event_arg( ).
@@ -556,38 +563,56 @@ CLASS ${CLASS} IMPLEMENTATION.
                 )->open( \`VBox\`
                     )->a( n = \`class\` v = \`sapUiContentPadding\` ).
 
-        " the three OpenUI5 links are empty for a ui5_only row (the control is
-        " not in the OpenUI5 checkout), so each is rendered only when it resolves
+        " One full-width Transparent Button per target, stacked in the VBox. A
+        " Button cannot carry an href, and cs_event-open_new_tab is same-origin
+        " only (isValidRedirectURL), so the press goes through the URLHELPER
+        " REDIRECT frontend action with { URL, NEW_WINDOW: true } - the same
+        " new-tab behaviour a Link target="_blank" had, client-side and with no
+        " round-trip. The URL is also the tooltip, so it stays readable/copyable.
+        " The three OpenUI5 targets are empty for a ui5_only row (the control is
+        " not in the OpenUI5 checkout), so each renders only when it resolves.
         IF lv_api IS NOT INITIAL.
-          box->leaf( \`Link\`
-              )->a( n = \`text\`   v = \`Control - OpenUI5 API reference\`
-              )->a( n = \`href\`   v = lv_api
-              )->a( n = \`target\` v = \`_blank\`
-              )->a( n = \`class\`  v = \`sapUiTinyMarginBottom\` ).
-        ENDIF.
-        IF lv_js IS NOT INITIAL.
-          box->leaf( \`Link\`
-              )->a( n = \`text\`   v = \`Sample - OpenUI5 source\`
-              )->a( n = \`href\`   v = lv_js
-              )->a( n = \`target\` v = \`_blank\`
-              )->a( n = \`class\`  v = \`sapUiTinyMarginBottom\` ).
+          box->leaf( \`Button\`
+              )->a( n = \`text\`    v = \`Control API Reference\`
+              )->a( n = \`icon\`    v = \`sap-icon://document-text\`
+              )->a( n = \`type\`    v = \`Transparent\`
+              )->a( n = \`width\`   v = \`100%\`
+              )->a( n = \`tooltip\` v = lv_api
+              )->a( n = \`class\`   v = \`sapUiTinyMarginBottom\`
+              )->a( n = \`press\`   v = link_press( lv_api ) ).
         ENDIF.
         IF lv_ui5 IS NOT INITIAL.
-          box->leaf( \`Link\`
-              )->a( n = \`text\`   v = \`Sample - live fullscreen runner\`
-              )->a( n = \`href\`   v = lv_ui5
-              )->a( n = \`target\` v = \`_blank\`
-              )->a( n = \`class\`  v = \`sapUiTinyMarginBottom\` ).
+          box->leaf( \`Button\`
+              )->a( n = \`text\`    v = \`Sample Link\`
+              )->a( n = \`icon\`    v = \`sap-icon://sys-monitor\`
+              )->a( n = \`type\`    v = \`Transparent\`
+              )->a( n = \`width\`   v = \`100%\`
+              )->a( n = \`tooltip\` v = lv_ui5
+              )->a( n = \`class\`   v = \`sapUiTinyMarginBottom\`
+              )->a( n = \`press\`   v = link_press( lv_ui5 ) ).
         ENDIF.
-        box->leaf( \`Link\`
-            )->a( n = \`text\`   v = \`abap2UI5 - class on GitHub\`
-            )->a( n = \`href\`   v = lv_abap
-            )->a( n = \`target\` v = \`_blank\` ).
+        IF lv_js IS NOT INITIAL.
+          box->leaf( \`Button\`
+              )->a( n = \`text\`    v = \`Sample Source Code\`
+              )->a( n = \`icon\`    v = \`sap-icon://source-code\`
+              )->a( n = \`type\`    v = \`Transparent\`
+              )->a( n = \`width\`   v = \`100%\`
+              )->a( n = \`tooltip\` v = lv_js
+              )->a( n = \`class\`   v = \`sapUiTinyMarginBottom\`
+              )->a( n = \`press\`   v = link_press( lv_js ) ).
+        ENDIF.
+        box->leaf( \`Button\`
+            )->a( n = \`text\`    v = \`abap2UI5 Source Code\`
+            )->a( n = \`icon\`    v = \`sap-icon://syntax\`
+            )->a( n = \`type\`    v = \`Transparent\`
+            )->a( n = \`width\`   v = \`100%\`
+            )->a( n = \`tooltip\` v = lv_abap
+            )->a( n = \`press\`   v = link_press( lv_abap ) ).
 
         " say why the reference links are missing rather than leaving a gap
         IF lv_api IS INITIAL.
           box->leaf( \`MessageStrip\`
-              )->a( n = \`text\`      v = \`This control is in no OpenUI5 checkout, so this sample has no OpenUI5 API, source or live-runner link.\`
+              )->a( n = \`text\`      v = \`This control is in no OpenUI5 checkout, so this sample has no Control API Reference, Sample Link or Sample Source Code.\`
               )->a( n = \`type\`      v = \`Information\`
               )->a( n = \`showIcon\`  v = \`true\`
               )->a( n = \`class\`     v = \`sapUiSmallMarginTop\` ).
@@ -817,7 +842,7 @@ ${columnsBlock}
                                     )->leaf( \`Button\`
                                         )->a( n = \`icon\`    v = \`sap-icon://chain-link\`
                                         )->a( n = \`type\`    v = \`Transparent\`
-                                        )->a( n = \`tooltip\` v = \`Reference links & info: OpenUI5 API, source, live sample, ABAP class, generation notes\`
+                                        )->a( n = \`tooltip\` v = \`Links & info: Control API Reference, Sample Link, Sample Source Code, abap2UI5 Source Code, generation notes\`
                                         )->a( n = \`press\`   v = client->_event( val = \`LINKS\` t_arg = VALUE #(
                                             ( \`\${API_URL}\` ) ( \`\${JS_URL}\` ) ( \`\${UI5_URL}\` ) ( \`\${ABAP_URL}\` )
                                             ( \`\${CHECKED}\` ) ( \`\${POST171}\` ) ( \`\${NOTES}\` ) ( \`\$event.oSource.sId\` ) ) )
@@ -859,6 +884,20 @@ ${columnsBlock}
 ${catalogDecl}
 
 ${catalogStatements}
+
+  ENDMETHOD.
+
+
+  METHOD link_press.
+
+    " the press wire of the popover's four link buttons: open an EXTERNAL url in
+    " a new tab, entirely on the client. cs_event-open_new_tab is same-origin
+    " only (isValidRedirectURL) and three of the four targets live on
+    " sdk.openui5.org / github.com, so the redirect goes through the URLHELPER
+    " frontend action, whose REDIRECT takes a URL/NEW_WINDOW object-literal
+    " t_arg - NEW_WINDOW true is what target="_blank" did on the former Links.
+    result = client->_event_client( val   = client->cs_event-urlhelper
+                                    t_arg = VALUE #( ( \`REDIRECT\` ) ( |\\{ URL: '{ url }', NEW_WINDOW: true \\}| ) ) ).
 
   ENDMETHOD.
 
