@@ -534,8 +534,8 @@ that stops at the deepest node.
   (`_bind( … path = abap_true )`), a slot element binding
   (`follow_up_action( val = cs_event-bind_element … t_arg = VALUE #( ( idx ) ( client->_bind( tab ) ) ) )`
   — pass `client->_bind( tab )`, never the text path), a `binding_call` target, etc.
-  The overview's **Audit** column carries a `literal binding` badge that flags ports
-  still writing a binding by name. The **one unavoidable exception** is a *relative
+  `pattern-lint`'s `hardcoded-binding-path` rule flags ports still writing a
+  binding by name. The **one unavoidable exception** is a *relative
   child property* inside a bound aggregation template — `` `{TITLE}` `` /
   `` `{PRODUCT_ID}` `` referencing an upper-cased model field, which has no `_bind`
   form (see the next bullet); keep those, but never write the absolute / model-root
@@ -863,10 +863,12 @@ scripts.**
   sorted by module → control → sample. Columns (all plain text — links moved to
   the trailing **Open** column): **Module** · **Control** · **Since** (the UI5
   release the control appeared in) · **Sample** · **abap2UI5** (class name) ·
-  **Note** (green check when live-verified; hint
-  button opens the deviations popup) · **Open** (a button that opens an anchored
-  popover of every link: OpenUI5 API, OpenUI5 source, live fullscreen sample,
-  the generated class on GitHub, and starting the app). The **Control** name and
+  **Version** (orange SAPUI5 badge when the control is not part of OpenUI5) ·
+  **Rating** · **Open** (two buttons — an anchored popover with every link plus
+  the port's generation info, and a direct app start in a new tab). A per-SAMPLE
+  Since column and an **Audit** column (one badge per framework-wiring fact)
+  existed until 2026-07-29 and were dropped; the audit flags are still computed,
+  they now only feed the Rating's test-priority term. The **Control** name and
   the **Since** value come from `ui5/universe.json`, with nulls filled from
   the control-level source scan in `ui5/properties.json` (same scope fallback
   as `generate-coverage.mjs`). **Text is never coloured**;

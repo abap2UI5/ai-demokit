@@ -115,21 +115,20 @@ for (const mf of fs.readdirSync(META)) {
   const nSub = devs.filter((d) => d.type === 'SUBSET_DATA').length;
   const nNote = devs.filter((d) => d.type === 'NOTE').length;
   const nLive = devs.filter((d) => d.type === 'LIVE_TEST').length;
-  // two "Since" columns: the control's own since (next to Control) and the
-  // sample's required release (next to Sample). The sample release = the control
-  // since raised by any post-1.71 member the port keeps (POST_171 deviations note
-  // "since X.YZ"); it is only worth showing when it is HIGHER than the control's
-  // own since (otherwise it just repeats it), so a same-or-lower value is blanked.
+  // the "Since" column shows the CONTROL's own since (next to Control). The
+  // sample's required release is no longer a column of its own (dropped
+  // 2026-07-29) but is still computed here: it drives the is_post171 flag behind
+  // the Hide-newer-than-1.71 filter. It = the control since raised by any
+  // post-1.71 member the port keeps (POST_171 deviations note "since X.YZ").
   const since = u.since || '';
   let release = since;
-  // the sample's required release = the highest version mentioned across ALL its
-  // POST_171 deviation texts (every kept newer-than-1.71 member notes its @since).
-  // Take every X.Y(.Z) token, not just "since X.Y" - the texts phrase it many ways
+  // the highest version mentioned across ALL the port's POST_171 deviation texts
+  // (every kept newer-than-1.71 member notes its @since). Take every X.Y(.Z)
+  // token, not just "since X.Y" - the texts phrase it many ways
   // ("since UI5 1.84", "(since 1.97)", ">= 1.74", "OneByOne / TwoByOne (1.71)").
   for (const d of devs.filter((x) => x.type === 'POST_171')) {
     for (const mm of d.what.matchAll(/\b(\d+\.\d+(?:\.\d+)?)\b/g)) release = verMax(release, mm[1]);
   }
-  const releaseShown = (release !== '' && verCmp(release, since) > 0) ? release : '';
   // a since value is coloured orange when it is newer than UI5 1.71
   const overOneSeven = (v) => v !== '' && verCmp(v, '1.71') > 0;
   const ui5Only = !inOpenUI5(m.entity);
@@ -140,7 +139,8 @@ for (const mf of fs.readdirSync(META)) {
   const nP171 = devs.filter((d) => d.type === 'POST_171').length;
   const isPost171 = nP171 > 0 || overOneSeven(release);
   // audit flags - which framework wiring the port actually uses, read straight
-  // from its ABAP source (always shown as badges in the overview's Audit column).
+  // from its ABAP source. They no longer have a column of their own (the Audit
+  // column was dropped 2026-07-29); they feed the Rating's test-priority term.
   // _event_client / follow_up_action t_arg is detected as a t_arg keyword before
   // the call's first ")" (val/view args carry no ")", so this is reliable here).
   // "literal binding" = a binding path written by name in clear text ({FIELD} or
@@ -214,18 +214,9 @@ for (const mf of fs.readdirSync(META)) {
     dep_text: dep ? `Deprecated since ${dep.since}: ${dep.text}` : '',
     score,
     score_tip: scoreTip,
-    release: releaseShown,
-    release_post171: overOneSeven(releaseShown),
     ui5_only: ui5Only,
     is_post171: isPost171,
     is_deprecated: isDeprecated,
-    use_ec: useEc,
-    use_ec_arg: useEcArg,
-    use_fua: useFua,
-    use_fua_arg: useFuaArg,
-    use_popup: usePopup,
-    use_popover: usePopover,
-    use_name: useName,
   });
 }
 // order by module, then control, then sample name (case-insensitive)
@@ -308,8 +299,6 @@ const rows = apps.map((a) => {
   extras.push(`score_tip = ${text(a.score_tip)}`);
   if (a.since) extras.push(`since = \`${a.since}\``);
   if (a.since_post171) extras.push('since_post171 = abap_true');
-  if (a.release) extras.push(`release = \`${a.release}\``);
-  if (a.release_post171) extras.push('release_post171 = abap_true');
   if (a.ui5_only) extras.push('ui5_only = abap_true');
   if (a.is_post171) extras.push('is_post171 = abap_true');
   if (a.is_deprecated) extras.push('is_deprecated = abap_true');
@@ -317,13 +306,6 @@ const rows = apps.map((a) => {
   if (a.checked) extras.push(`checked = ${text(a.checked)}`);
   if (a.notes) extras.push(`notes = ${text(a.notes)}`);
   if (a.post171) extras.push(`post171 = ${text(a.post171)}`);
-  if (a.use_ec) extras.push('use_ec = abap_true');
-  if (a.use_ec_arg) extras.push('use_ec_arg = abap_true');
-  if (a.use_fua) extras.push('use_fua = abap_true');
-  if (a.use_fua_arg) extras.push('use_fua_arg = abap_true');
-  if (a.use_popup) extras.push('use_popup = abap_true');
-  if (a.use_popover) extras.push('use_popover = abap_true');
-  if (a.use_name) extras.push('use_name = abap_true');
   const row = extras.length ? `${base}\n        ${extras.join('\n        ')} )` : `${base} )`;
   return { row, prelude, hoisted };
 });
@@ -409,17 +391,15 @@ const plainColumn = (label, attrs = []) => {
   return `${head}\n                                )->a( n = \`text\` v = \`${label}\`\n\n                        )->shut(`;
 };
 // column order (mirrored 1:1 by the cells below): Since sits after Control,
-// Note + Open are the trailing non-sortable columns
+// Version + Open are the trailing non-sortable columns
 const columnsBlock = [
   sortableColumn('Module', 'MODULE'),
   sortableColumn('Control', 'CTRL_NAME'),
   sortableColumn('Since', 'SINCE'),
   sortableColumn('Sample', 'NAME'),
-  sortableColumn('Since', 'RELEASE'),
   sortableColumn('abap2UI5', 'CLASS'),
   plainColumn('Version', [['width', '6rem'], ['hAlign', 'Center']]),
   sortableColumn('Rating', 'SCORE'),
-  plainColumn('Audit', [['width', '15rem']]),
   plainColumn('Open', [['width', '7rem'], ['hAlign', 'Center']]),
 ].join('\n');
 
@@ -428,14 +408,14 @@ const abap = `"! Generated overview app - lists every abap2UI5 api sample app in
 "! round-trip); its query is two-way bound (search_query), so it survives a
 "! round-trip or an app state restore (draft) and view_display re-applies the
 "! filter via follow_up_action.
-"! The title carries the ported-app count in parentheses. There are two sortable
-"! Since columns: the first (next to Control) shows the UI5 release the CONTROL
-"! appeared in (from ui5/universe.json; blank when older than tracking / since
-"! forever); the second (next to Sample) shows the direct release the whole SAMPLE
-"! needs (control since raised by any kept post-1.71 member) and is shown only when
-"! HIGHER than the control's own since. Both since values are coloured orange
-"! (ObjectStatus Warning) when newer than UI5 1.71; a deprecated control's name is
-"! struck through (FormattedText htmlText, so the strikethrough can vary per row).
+"! The title carries the ported-app count in parentheses. The sortable Since
+"! column (next to Control) shows the UI5 release the CONTROL appeared in (from
+"! ui5/universe.json; blank when older than tracking / since forever). It is
+"! coloured orange (ObjectStatus Warning) when newer than UI5 1.71; a deprecated
+"! control's name is struck through (FormattedText htmlText, so the strikethrough
+"! can vary per row). There is no per-SAMPLE Since column - whether a sample needs
+"! a release newer than 1.71 is carried by the Hide-newer-than-1.71 filter and
+"! spelled out in the Open column's info popover.
 "! The Version column badges rows whose control is not part of OpenUI5 with an
 "! orange SAPUI5 status. Three header checkboxes (default all on) filter the table
 "! entirely on the client via each row's visible expression: Hide non-OpenUI5,
@@ -454,13 +434,9 @@ const abap = `"! Generated overview app - lists every abap2UI5 api sample app in
 "! was reviewed/discussed (it carries a checked block), and how important a live
 "! re-test is (pending LIVE_TESTs, roundtrip-free wiring, popups, needs-newer-UI5);
 "! 1 = simple faithful 1:1, 5 = complex/reworked/worth a close look. Sort it
-"! descending to surface the samples worth a closer manual look. The Audit
-"! column shows, always, one badge per framework-wiring fact the port uses (read
-"! from its ABAP source): _event_client and its t_arg form, follow_up_action and
-"! its t_arg form, whether it opens a Popup or Popover, and whether it binds a
-"! path by literal name in clear text ({FIELD}/{/Path}) rather than via _bind.
+"! descending to surface the samples worth a closer manual look.
 "! The search field above the table filters all rows by a
-"! substring over the text columns (module, control, since, sample, release,
+"! substring over the text columns (module, control, since, sample,
 "! class) only, and each sortable column header carries ascending/
 "! descending sort icons - both run entirely on the frontend
 "! (cs_event-binding_call via _event_client, no server round-trip). Do not edit
@@ -491,8 +467,6 @@ CLASS ${CLASS} DEFINITION PUBLIC.
         has_p171  TYPE abap_bool,
         since         TYPE string,
         since_post171 TYPE abap_bool,
-        release       TYPE string,
-        release_post171 TYPE abap_bool,
         ui5_only      TYPE abap_bool,
         is_post171    TYPE abap_bool,
         is_deprecated TYPE abap_bool,
@@ -500,13 +474,6 @@ CLASS ${CLASS} DEFINITION PUBLIC.
         ctrl_html TYPE string,
         score       TYPE i,
         score_tip   TYPE string,
-        use_ec      TYPE abap_bool,
-        use_ec_arg  TYPE abap_bool,
-        use_fua     TYPE abap_bool,
-        use_fua_arg TYPE abap_bool,
-        use_popup   TYPE abap_bool,
-        use_popover TYPE abap_bool,
-        use_name    TYPE abap_bool,
         filter    TYPE string,
       END OF ty_s_app.
     TYPES ty_t_app TYPE STANDARD TABLE OF ty_s_app WITH EMPTY KEY.
@@ -728,11 +695,11 @@ CLASS ${CLASS} IMPLEMENTATION.
       " one blob per row, bound as the FILTER column that the table search's
       " client-side Contains filter (binding_call) matches against. Only the
       " VISIBLE text columns feed it - Module, Control (bare name), Since,
-      " Sample, Release, abap2UI5 (class) - so a query like "Date" no longer
+      " Sample, abap2UI5 (class) - so a query like "Date" no longer
       " matches hidden text buried in the notes/checked/post-1.71 fields
       <app>-filter = <app>-module && \` \` && <app>-ctrl_name && \` \` &&
                      <app>-since  && \` \` && <app>-name      && \` \` &&
-                     <app>-release && \` \` && <app>-class.
+                     <app>-class.
 
     ENDLOOP.
 
@@ -823,12 +790,6 @@ ${columnsBlock}
                                     )->a( n = \`tooltip\` v = \`{DEP_TEXT}\`
                                 )->leaf( \`Text\`
                                     )->a( n = \`text\` v = \`{NAME}\`
-                                " second Since: the direct UI5 release the whole sample needs,
-                                " shown only when higher than the control's own since; same
-                                " orange-when-newer-than-1.71 colouring
-                                )->leaf( \`ObjectStatus\`
-                                    )->a( n = \`text\`  v = \`{RELEASE}\`
-                                    )->a( n = \`state\` v = |\\{= $\\{RELEASE_POST171\\} ? 'Warning' : 'None' \\}|
                                 )->leaf( \`Text\`
                                     )->a( n = \`text\` v = \`{CLASS}\`
                                 " Version: the control does not exist in OpenUI5 (SAPUI5- /
@@ -845,59 +806,6 @@ ${columnsBlock}
                                     )->a( n = \`text\`    v = \`{SCORE} / 5\`
                                     )->a( n = \`tooltip\` v = \`{SCORE_TIP}\`
 
-                                " audit column: one badge per framework-wiring fact the
-                                " port uses (read from its ABAP source at generation time),
-                                " always shown so the table shows at a glance which apps use
-                                " _event_client / follow_up_action (and their t_arg form),
-                                " open a Popup or Popover, or bind a path by literal name
-                                )->open( \`HBox\`
-                                    )->a( n = \`wrap\`       v = \`Wrap\`
-                                    )->a( n = \`alignItems\` v = \`Center\`
-
-                                    )->leaf( \`ObjectStatus\`
-                                        )->a( n = \`text\`    v = \`_event_client\`
-                                        )->a( n = \`state\`   v = \`Information\`
-                                        )->a( n = \`tooltip\` v = \`Uses _event_client - a roundtrip-free client event wired directly in the view\`
-                                        )->a( n = \`visible\` v = \`{USE_EC}\`
-                                        )->a( n = \`class\`   v = \`sapUiTinyMarginEnd\`
-                                    )->leaf( \`ObjectStatus\`
-                                        )->a( n = \`text\`    v = \`_event_client t_arg\`
-                                        )->a( n = \`state\`   v = \`Information\`
-                                        )->a( n = \`tooltip\` v = \`Uses _event_client with t_arg (passes positional arguments to the client event)\`
-                                        )->a( n = \`visible\` v = \`{USE_EC_ARG}\`
-                                        )->a( n = \`class\`   v = \`sapUiTinyMarginEnd\`
-                                    )->leaf( \`ObjectStatus\`
-                                        )->a( n = \`text\`    v = \`follow_up_action\`
-                                        )->a( n = \`state\`   v = \`Success\`
-                                        )->a( n = \`tooltip\` v = \`Uses follow_up_action - a frontend action scheduled after the backend response\`
-                                        )->a( n = \`visible\` v = \`{USE_FUA}\`
-                                        )->a( n = \`class\`   v = \`sapUiTinyMarginEnd\`
-                                    )->leaf( \`ObjectStatus\`
-                                        )->a( n = \`text\`    v = \`follow_up_action t_arg\`
-                                        )->a( n = \`state\`   v = \`Success\`
-                                        )->a( n = \`tooltip\` v = \`Uses follow_up_action with t_arg (passes positional arguments to the follow-up action)\`
-                                        )->a( n = \`visible\` v = \`{USE_FUA_ARG}\`
-                                        )->a( n = \`class\`   v = \`sapUiTinyMarginEnd\`
-                                    )->leaf( \`ObjectStatus\`
-                                        )->a( n = \`text\`    v = \`Popup\`
-                                        )->a( n = \`state\`   v = \`Warning\`
-                                        )->a( n = \`tooltip\` v = \`Opens a Popup (popup_display)\`
-                                        )->a( n = \`visible\` v = \`{USE_POPUP}\`
-                                        )->a( n = \`class\`   v = \`sapUiTinyMarginEnd\`
-                                    )->leaf( \`ObjectStatus\`
-                                        )->a( n = \`text\`    v = \`Popover\`
-                                        )->a( n = \`state\`   v = \`Warning\`
-                                        )->a( n = \`tooltip\` v = \`Opens a Popover (popover_display)\`
-                                        )->a( n = \`visible\` v = \`{USE_POPOVER}\`
-                                        )->a( n = \`class\`   v = \`sapUiTinyMarginEnd\`
-                                    )->leaf( \`ObjectStatus\`
-                                        )->a( n = \`text\`    v = \`literal binding\`
-                                        )->a( n = \`state\`   v = \`Error\`
-                                        )->a( n = \`tooltip\` v = \`Binds a path by literal name in clear text ({FIELD} or {/Path}) instead of via client->_bind - breaks on a variable rename\`
-                                        )->a( n = \`visible\` v = \`{USE_NAME}\`
-                                        )->a( n = \`class\`   v = \`sapUiTinyMarginEnd\`
-
-                                )->shut(
                                 " Open column: two buttons. First opens an anchored popover with
                                 " the reference links AND the port's generation info (checked,
                                 " post-1.71, notes) - the pressed button's runtime id
