@@ -15,11 +15,11 @@ TRAINING.md; for what abap2UI5 can express see CAPABILITIES.md._
 
 | Aspect | State |
 |---|---|
-| Ports | **251** sidecars in `meta/` (src/01: 149 · src/02: 55 · src/03: 12 · src/04: 19 · src/05: 11 · src/06: 5) |
-| Status ladder | 48 `generated` · 146 `reviewed` · 57 `checked` (live-verified) |
-| Deviations | 4 DROPPED_171 · 136 IMPROVISED · 65 LIVE_TEST · 281 NOTE · 95 POST_171 |
-| Open LIVE_TESTs | **61 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
-| Declared gate skips | 7 structural-diff · 6 render-smoke (each re-verified per run — a stale skip FAILS) |
+| Ports | **246** sidecars in `meta/` (src/01: 149 · src/02: 55 · src/03: 12 · src/04: 19 · src/05: 11) |
+| Status ladder | 47 `generated` · 146 `reviewed` · 53 `checked` (live-verified) |
+| Deviations | 4 DROPPED_171 · 129 IMPROVISED · 62 LIVE_TEST · 270 NOTE · 95 POST_171 |
+| Open LIVE_TESTs | **58 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
+| Declared gate skips | 7 structural-diff · 1 render-smoke (each re-verified per run — a stale skip FAILS) |
 | Out-of-scope ported samples | `z2ui5_cl_ai_app_121 (sap.m.sample.UploadSet — deprecated)` · `z2ui5_cl_ai_app_136 (sap.f.sample.SidePanelSingle — control @since 1.107)` · `z2ui5_cl_ai_app_141 (sap.ui.core.sample.InvisibleMessage — control @since 1.78)` · `z2ui5_cl_ai_app_165 (sap.f.sample.ProductSwitchNavigation — control @since 1.72)` · `z2ui5_cl_ai_app_166 (sap.f.sample.SemanticPage — deprecated)` · `z2ui5_cl_ai_app_203 (sap.m.sample.OverflowToolbarTokenizer — control @since 1.139)` — standing debt pending a maintainer decision (drop vs documented exception), surfaced by the source-backed scope gate (pr/scope-since-from-source) |
 
 _Coverage per library (ported / in scope) is generated into the [README](README.md#coverage); one row per sample in [api.md](api.md)._
@@ -33,9 +33,10 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   for `isPageVariant()`, so a controller-less app has neither the anchor
   (`_oPersoControl`) nor the control promise `initialise()` requires. abap2UI5 does
   the handshake through the `SMART_VARIANT_INIT` action, merged into abap2UI5 main
-  with #2481; app 251 is **live-verified**: saving works and the saved views are back
-  after a restart (`isInitialized: true`, 7 variants / 7 items). The port now names the
-  action through `client->cs_event-smart_variant_init` instead of the string literal.
+  with #2481; the PageVariantManagement port is **live-verified**: saving works and the
+  saved views are back after a restart (`isInitialized: true`, 7 variants / 7 items).
+  The port names the action through `client->cs_event-smart_variant_init` instead of the
+  string literal, and now lives in abap2UI5/samples (`z2ui5_cl_demo_app_478`).
   Seven hypotheses died on live evidence before this one, kept so nobody walks them
   again: missing app component (resolves), `flexEnabled` (read only by `sap.ui.rta`),
   association-id prefixing (XMLViews prefix single associations), registration
@@ -43,10 +44,14 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   **0** controls — the sample's wiring is the right one), `initialise()` as the setter
   (it only reads the field), and anchoring after the fact (the write path works, the
   load path does not).
-- [ ] **sap.ui.comp ports are all unverified (5 open LIVE_TESTs).** They need
-  a SAPUI5 runtime plus a Gateway service exposing the tutorial's `Products`
-  entity set, so neither `render_smoke` (declared skips) nor the e2e harness
-  can exercise them — the first real check has to be a live one.
+- [x] **sap.ui.comp ports left this repo** (closed 2026-07-29). The five smart
+  control ports needed a SAPUI5 runtime plus a Gateway service, so neither the
+  universe, the property gate, `render_smoke` nor the e2e harness could see
+  them — they sat outside every check this repo is built on. This repo is now
+  **OpenUI5-only** (AGENTS §3): the ports moved to
+  [abap2UI5/samples](https://github.com/abap2UI5/samples) `src/00/00`
+  (*extended*, next to the existing smart control demos 313/314/319) as
+  `z2ui5_cl_demo_app_475`–`_479`, rebuilt on `z2ui5_cl_xml_view`.
 - [ ] **Out-of-scope ported samples** (listed live in the generated table
   above): the source-backed scope gate (`scopeOf` falls back to control-level
   `@since`/`@deprecated` from `ui5/properties.json`, wired 2026-07-26 —
@@ -91,7 +96,7 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   now transported into the toast texts) and 127 (`$event.oSource.sId` instead
   of a bare "Pressed"). **Still open:** the rest of the toast-substitution
   class (URLHELPER, timers, generalized `control_by_id`, the remaining
-  controller-built popups — 106/107/112/147/149/170/218/244/246/252) and faked
+  controller-built popups — 106/107/112/147/149/170/218/244/246) and faked
   event values in the ports not listed above. The dropped sample CSS of 122/124
   is **closed** (2026-07-28): both stylesheets are archived (closing that `§4`
   gap) and injected through a `core:HTML` `<style>` leaf.

@@ -120,7 +120,6 @@ by the UI5 **library** of the demo kit sample they rebuild:
 | `src/03` | `sap.uxap` | `sap.uxap` | exists |
 | `src/04` | `sap.f`    | `sap.f`    | exists |
 | `src/05` | `sap.tnt`  | `sap.tnt`  | exists |
-| `src/06` | `sap.ui.comp` | `sap.ui.comp` (smart controls — **SAPUI5 only**, see below) | exists |
 
 The split key is the **second-level namespace** of the sample's entity. New
 libraries get the next free `src/NN` folder with a matching `package.devc.xml`.
@@ -136,64 +135,27 @@ into a closed one — see TRAINING.md for the batch process.
 Because `FOLDER_LOGIC=PREFIX`, class names never encode the folder — moving a
 class between folders needs no rename.
 
-### `src/06` — sap.ui.comp (smart controls), the one SAPUI5-only tree
+### OpenUI5 only — no SAPUI5-only library in this repo
 
-`sap.ui.comp` is **not part of OpenUI5**: it ships with SAPUI5 only, so it is in
-neither the OpenUI5 checkout nor the `@openui5/*` packages. Its ports therefore
-sit outside three pieces of the machinery **by design** — do not "fix" this:
+**Every port in this repo rebuilds an OpenUI5 demo kit sample, and every control
+it uses must be part of OpenUI5.** A library that ships with SAPUI5 only
+(`sap.ui.comp` smart controls, `sap.suite.*`, `sap.viz.*`, `sap.gantt.*`, …) is
+out of scope here — full stop. It has no `src/NN` folder, no `ui5/<lib>/`
+template folder, and no entry in the coverage tables.
 
-- **Universe / coverage.** `ui5/universe.json` is scanned from the OpenUI5
-  checkout, so no `sap.ui.comp` sample can be in it and the ports never appear
-  in `api.md` / the README coverage. `generate-coverage.mjs` knows the library
-  (`NON_OPENUI5_LIBS`) and prints a *note*, not an orphan warning. The in-system
-  overview app lists them like any other port and badges them orange **SAPUI5**
-  (the existing `ui5_only` flag) — but its OpenUI5 reference links do not
-  resolve for these rows (STATUS.md open findings).
-- **`render_smoke`.** The headless harness serves the `@openui5/*` packages, so
-  `XMLView.create` can never load a `sap/ui/comp/*` module. Every port declares
-  `"render_smoke": {"skip": true, …}` — the skip is still verified against the
-  real render each run, so it can never drift.
-- **The property gate.** `ui5/properties.json` is generated from OpenUI5
-  sources, so no `sap.ui.comp` member is checked against the 1.71 rule. Confirm
-  the `@since` by hand and record it in a `NOTE` deviation (the smart controls
-  are old API: most are @since 1.28, `smartform.ColumnLayout` @since 1.56,
-  `SmartChart` @since 1.38 — all comfortably below 1.71).
+The reason is not taste, it is that the whole machinery is built on an OpenUI5
+checkout: `ui5/universe.json` (the sample universe), `ui5/properties.json` (the
+property gate) and `render_smoke` (which serves the `@openui5/*` packages) can
+none of them see a control that OpenUI5 does not ship. A SAPUI5-only port
+therefore sits outside all three checks and is unverifiable here —
+`generate-coverage.mjs` reports it as an **orphan port**, which is the correct
+answer, not a false alarm to suppress.
 
-Templates come from the **public SAPUI5 documentation sources** instead of an
-OpenUI5 checkout (`npm run scaffold` cannot reach them) — see
-`ui5/sap.ui.comp/README.md` for the provenance table and for the near-duplicate
-tutorial steps that are deliberately not ported.
-
-Two idioms are specific to these ports:
-
-- **The model is an OData V2 service, not ABAP data.** Smart controls build
-  their UI from OData metadata, so the port has no `model_init`; it switches the
-  default model instead:
-  `client->view_display( val = view->stringify( ) switch_default_model_path = c_odata_service )`,
-  with `c_odata_service` a `CONSTANTS` in `PROTECTED`. **Never invent a service
-  name there** — a `Z…_SRV` path that exists in no system makes the app look
-  runnable when it is not (the first draft of this batch did exactly that). The
-  default is the Gateway demo service **`/sap/opu/odata/IWBEP/GWSAMPLE_BASIC/`**
-  (`ProductSet`), which ships with every on-premise system and only needs
-  activating in `/IWFND/MAINT_SERVICE`; adapting the sample's entity set and
-  field names onto it is an `IMPROVISED` deviation and worth it, because the
-  port then runs. Where the demo service genuinely cannot serve the sample — the
-  SmartChart needs an **analytical** service (`sap:aggregation-role`, `UI.Chart`)
-  — ship a placeholder that reads as one (`…/<YOUR_ANALYTICAL_SERVICE>/`) and say
-  so in the deviation, rather than a plausible-looking name. The sample's own
-  `metadata.xml` stays archived next to the template as the specification of
-  what a rebuilt service has to expose.
-  **A `SmartTable` on a service without a `UI.LineItem` annotation renders zero
-  columns** — the "add columns to see the content" placeholder, not a fallback
-  to all metadata fields (live finding 2026-07-27). GWSAMPLE_BASIC has no such
-  annotation, so those ports must add `initiallyVisibleFields` and declare it.
-- **Element binding by entity path.** Where the sample's controller calls
-  `bindElement("/Products('4711')")`, the port declares
-  `)->a( n = \`binding\` v = \`{/Products('4711')}\`` on the view root. This is
-  the one absolute path that is **not** derived from `client->_bind( )` — it
-  addresses the OData service, not an ABAP member; `pattern-lint`'s
-  `hardcoded-binding-path` rule exempts exactly this shape (a key predicate, in
-  a port that switches its default model to OData).
+Curated SAPUI5-only demos belong in [abap2UI5/samples](https://github.com/abap2UI5/samples)
+instead, under `src/00/` (*extended*), where the build strips them before the
+cloud and 702 checks. The `sap.ui.comp` smart control ports that briefly lived
+in `src/06` moved there on 2026-07-29 (`src/00/00`, `z2ui5_cl_demo_app_475`–`_479`),
+rebuilt on the framework's own `z2ui5_cl_xml_view` builder.
 
 ### Class naming
 
@@ -572,8 +534,8 @@ that stops at the deepest node.
   (`_bind( … path = abap_true )`), a slot element binding
   (`follow_up_action( val = cs_event-bind_element … t_arg = VALUE #( ( idx ) ( client->_bind( tab ) ) ) )`
   — pass `client->_bind( tab )`, never the text path), a `binding_call` target, etc.
-  The overview's **Audit** column carries a `literal binding` badge that flags ports
-  still writing a binding by name. The **one unavoidable exception** is a *relative
+  `pattern-lint`'s `hardcoded-binding-path` rule flags ports still writing a
+  binding by name. The **one unavoidable exception** is a *relative
   child property* inside a bound aggregation template — `` `{TITLE}` `` /
   `` `{PRODUCT_ID}` `` referencing an upper-cased model field, which has no `_bind`
   form (see the next bullet); keep those, but never write the absolute / model-root
@@ -901,28 +863,26 @@ scripts.**
   sorted by module → control → sample. Columns (all plain text — links moved to
   the trailing **Open** column): **Module** · **Control** · **Since** (the UI5
   release the control appeared in) · **Sample** · **abap2UI5** (class name) ·
-  **Note** (green check when live-verified; hint
-  button opens the deviations popup) · **Open** (a button that opens an anchored
-  popover of every link: OpenUI5 API, OpenUI5 source, live fullscreen sample,
-  the generated class on GitHub, and starting the app). The **Control** name and
+  **Rating** · **Open** (three buttons — the LINKS popover with the four
+  reference targets, a direct app start in a new tab, and the trailing INFO
+  popover with the port's generation notes). Three columns were dropped on 2026-07-29: a
+  per-SAMPLE **Since**, an **Audit** column (one badge per framework-wiring
+  fact) and a **Version** column (orange SAPUI5 badge). Their data is still
+  computed — the audit flags feed the Rating's test-priority term, `ui5_only`
+  feeds the Hide-non-OpenUI5 filter, and the per-sample release feeds
+  `is_post171`. The **Control** name and
   the **Since** value come from `ui5/universe.json`, with nulls filled from
   the control-level source scan in `ui5/properties.json` (same scope fallback
   as `generate-coverage.mjs`). **Text is never coloured**;
   a deprecated control's name is struck through (via a `sap.m.FormattedText`
   `htmlText`, so the strikethrough can vary per row — a bound `class` would not,
   being applied once at parse time) — today that strikes the known
-  out-of-scope debt ports (STATUS.md open findings). A **Switch** in the subheader
-  toggles between the table and a **module → control → sample tree**
-  (`sap.m.Tree`, built in `build_tree` from the full catalog, expanded by
-  default via a `numberOfExpandedLevels` binding parameter, with Expand-all /
-  Collapse-all buttons in its header toolbar — client-side
-  `cs_event-control_by_id` `expandToLevel`/`collapseAll`) showing the same
-  samples; each tree leaf has the same jump popover as the table's **Open**
-  column. Both views are bound and their `visible` is an expression binding
-  over the two-way `show_tree` flag, so the toggle runs entirely on the client
-  (like app 007). The **search field** filters **only the table**, on the
+  out-of-scope debt ports (STATUS.md open findings). The table is the only
+  view — the module → control → sample `sap.m.Tree` alternative and its
+  `show_tree` Switch were removed 2026-07-29; do not reintroduce a second
+  view of the same catalog. The **search field** filters the table on the
   client (`binding_call` `Contains` over a per-row `filter` blob via
-  `_event_client` — no round-trip); the **tree is intentionally not filtered**.
+  `_event_client` — no round-trip).
   Each column header also carries client-side ascending/descending **sort**
   icons via the same `binding_call` mechanism. **Every link opens in a new browser tab**
   (`target="_blank"`). All source links point at OpenUI5; only the class +

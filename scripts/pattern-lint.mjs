@@ -117,7 +117,7 @@ const RULES = [
     id: 'hardcoded-binding-path',
     level: 'error',
     portsOnly: true,
-    doc: "an absolute binding path is hard-coded as text (`{/PATH}` or `path: '/PATH'`) — derive it from client->_bind( var ) (raw path: _bind( val = var path = abap_true )) so it moves with a variable rename; relative field bindings (`{FIELD}`) are the allowed exception (AGENTS §5 'Data binding & events'). An OData ENTITY path with a key predicate (`{/Products('4711')}`) in a port that switches its default model to an OData service is exempt: that path addresses the service, not an ABAP variable, so there is nothing to derive it from (AGENTS §5 'sap.ui.comp ports')",
+    doc: "an absolute binding path is hard-coded as text (`{/PATH}` or `path: '/PATH'`) — derive it from client->_bind( var ) (raw path: _bind( val = var path = abap_true )) so it moves with a variable rename; relative field bindings (`{FIELD}`) are the allowed exception (AGENTS §5 'Data binding & events'). An OData ENTITY path with a key predicate (`{/Products('4711')}`) in a port that switches its default model to an OData service is exempt: that path addresses the service, not an ABAP variable, so there is nothing to derive it from",
     find(content) {
       const out = [];
       // a port whose default model IS an OData service (switch_default_model_path)
