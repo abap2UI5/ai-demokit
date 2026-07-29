@@ -432,9 +432,9 @@ const abap = `"! Generated overview app - lists every abap2UI5 api sample app in
 "! views are bound and their visibility is an expression binding over the two-way
 "! show_tree flag, so the toggle runs entirely on the client (no round-trip). The
 "! search field filters the table on the client (binding_call Contains, no
-"! round-trip); its query is two-way bound (search_query), so it survives an app
-"! state restore - the browser Back button after starting a listed app - and
-"! view_display re-applies the filter via follow_up_action; the tree is not
+"! round-trip); its query is two-way bound (search_query), so it survives a
+"! round-trip or an app state restore (draft) and view_display re-applies the
+"! filter via follow_up_action; the tree is not
 "! filtered. Each tree leaf has the same jump popover as the table's Open column.
 "! The title carries the ported-app count in parentheses. There are two sortable
 "! Since columns: the first (next to Control) shows the UI5 release the CONTROL
@@ -454,12 +454,9 @@ const abap = `"! Generated overview app - lists every abap2UI5 api sample app in
 "! links (OpenUI5 API, OpenUI5 source, live fullscreen sample, the generated ABAP
 "! class on GitHub, each opening in a new tab) AND the port's generation info -
 "! checked status, a post-1.71 note, and the generation notes; the second starts
-"! this abap2UI5 app IN-PAGE from the backend via client->nav_app_call (server
-"! event START_APP). With hash routing on, the framework pushes the route
-"! '#/app/' + class name (UI5 Router style) - it replaces the overview in the same tab
-"! and the native browser Back/Forward buttons navigate between them, bookmarkable,
-"! so no new tab and no page reload (the overview enabled routing via
-"! client->set_nav_routing). The same two buttons sit on every tree sample leaf (links only,
+"! this abap2UI5 app directly in a new tab (open_new_tab; the start URL is
+"! same-origin, so it passes isValidRedirectURL) - the overview stays open in its
+"! own tab. The same two buttons sit on every tree sample leaf (links only,
 "! the tree model carries no info). The Rating column is a 1-5 "by feel" score of
 "! how much attention a port deserves (not coloured): app complexity, how heavily
 "! it was reworked/corrected (IMPROVISED/DROPPED_171/SUBSET_DATA/NOTE), whether it
@@ -533,7 +530,6 @@ CLASS ${CLASS} DEFINITION PUBLIC.
         ui5_url   TYPE string,
         abap_url  TYPE string,
         start_url TYPE string,
-        class     TYPE string,
         has_link  TYPE abap_bool,
       END OF ty_s_sample,
       BEGIN OF ty_s_control,
@@ -550,8 +546,7 @@ CLASS ${CLASS} DEFINITION PUBLIC.
     DATA t_tree TYPE ty_t_tree.
     " the search field's text (two-way, so it survives a round-trip and the
     " draft): the filter itself runs on the client, but only a value that is
-    " part of the MODEL comes back when the app is restored - e.g. by the
-    " browser Back button after starting one of the listed apps. view_display
+    " part of the MODEL comes back when the app is restored. view_display
     " re-applies the filter for a non-initial query via follow_up_action.
     DATA search_query TYPE string.
     " table/tree toggle (drives the visible expression bindings)
@@ -588,11 +583,6 @@ CLASS ${CLASS} IMPLEMENTATION.
 
     me->client = client.
     IF client->check_on_init( ).
-      " Enable hash-based app routing (UI5 Router style) for this session: the
-      " URL hash mirrors the running app as a bookmarkable route '#/app/<CLASS>'
-      " and the native browser Back/Forward buttons navigate between the
-      " overview and the launched apps - no new tab, no page reload.
-      client->set_nav_routing( ).
       " default filtering (all on) + Shell on, set once so later round-trips keep
       " whatever the user toggled (the flags are two-way bound)
       shell_on        = abap_true.
@@ -610,8 +600,6 @@ CLASS ${CLASS} IMPLEMENTATION.
 
 
   METHOD on_event.
-
-    DATA li_app TYPE REF TO z2ui5_if_app.
 
     CASE client->get( )-event.
 
@@ -640,8 +628,8 @@ CLASS ${CLASS} IMPLEMENTATION.
                 )->open( \`VBox\`
                     )->a( n = \`class\` v = \`sapUiContentPadding\` ).
 
-        " the three OpenUI5 links are empty for a ui5_only row (sap.ui.comp is
-        " not in OpenUI5), so each is rendered only when it actually resolves
+        " the three OpenUI5 links are empty for a ui5_only row (the control is
+        " not in the OpenUI5 checkout), so each is rendered only when it resolves
         IF lv_api IS NOT INITIAL.
           box->leaf( \`Link\`
               )->a( n = \`text\`   v = \`Control - OpenUI5 API reference\`
@@ -671,7 +659,7 @@ CLASS ${CLASS} IMPLEMENTATION.
         " say why the reference links are missing rather than leaving a gap
         IF lv_api IS INITIAL.
           box->leaf( \`MessageStrip\`
-              )->a( n = \`text\`      v = \`sap.ui.comp ships with SAPUI5 only - it is in no OpenUI5 checkout, so this sample has no OpenUI5 API, source or live-runner link.\`
+              )->a( n = \`text\`      v = \`This control is in no OpenUI5 checkout, so this sample has no OpenUI5 API, source or live-runner link.\`
               )->a( n = \`type\`      v = \`Information\`
               )->a( n = \`showIcon\`  v = \`true\`
               )->a( n = \`class\`     v = \`sapUiSmallMarginTop\` ).
@@ -724,22 +712,6 @@ CLASS ${CLASS} IMPLEMENTATION.
         client->popover_display( xml   = links->stringify( )
                                  by_id = client->get_event_arg( 8 ) ).
 
-      WHEN \`START_APP\`.
-        " Launch the selected abap2UI5 app from the BACKEND via nav_app_call.
-        " With hash routing active (set_nav_routing), the framework pushes the
-        " route '#/app/<CLASS>' for the called app, so the app opens in-page and
-        " the native browser Back button returns to the overview (bookmarkable,
-        " no new tab, no page reload). The class is passed as the event arg.
-        DATA(lv_class) = to_upper( client->get_event_arg( ) ).
-        IF lv_class IS NOT INITIAL.
-          TRY.
-              CREATE OBJECT li_app TYPE (lv_class).
-              client->nav_app_call( li_app ).
-            CATCH cx_root.
-              client->message_toast_display( |App { lv_class } could not be started| ).
-          ENDTRY.
-        ENDIF.
-
     ENDCASE.
 
   ENDMETHOD.
@@ -764,9 +736,10 @@ CLASS ${CLASS} IMPLEMENTATION.
 
       " the three reference links point into OpenUI5 - API reference, sample
       " source, live runner - so they only exist for a library OpenUI5 ships.
-      " A ui5_only row (sap.ui.comp, SAPUI5 only) has none of the three there:
-      " leaving them built would hand out four links of which three 404, and
-      " the commercial host is not an option (pattern-lint commercial-ui5-host).
+      " A ui5_only row (control not in the OpenUI5 checkout) has none of the
+      " three there: leaving them built would hand out four links of which three
+      " 404, and the commercial host is not an option (pattern-lint
+      " commercial-ui5-host).
       " They stay empty and the popover renders only what resolves - the ABAP
       " class link is repository-local and always correct
       IF <app>-ui5_only = abap_false.
@@ -830,7 +803,7 @@ CLASS ${CLASS} IMPLEMENTATION.
                             )->a( n = \`placeholder\` v = \`Search the table - module, control, since, sample, class\`
                             )->a( n = \`width\`       v = \`24rem\`
                             " two-way bound so the typed query is part of the model and
-                            " comes back with the app state (Back button, draft restore);
+                            " comes back with the app state (round-trip, draft restore);
                             " the filtering itself stays client-side (below)
                             )->a( n = \`value\`       v = client->_bind( search_query )
                             " disabled while the tree is shown (search filters only the table)
@@ -986,12 +959,9 @@ ${columnsBlock}
                                 " the reference links AND the port's generation info (checked,
                                 " post-1.71, notes) - the pressed button's runtime id
                                 " (\$event.oSource.sId) anchors it; second launches the abap2UI5
-                                " app IN-PAGE from the backend via client->nav_app_call (server
-                                " event START_APP). With hash routing on, the framework pushes the
-                                " route '#/app/<CLASS>' (UI5 Router style) - it replaces the
-                                " overview in the same tab, and the native browser Back/Forward
-                                " buttons navigate between them, bookmarkable (no new tab, no
-                                " page reload)
+                                " app directly in a new tab (open_new_tab - the start URL is
+                                " same-origin, so it passes isValidRedirectURL), leaving the
+                                " overview open in its own tab
                                 )->open( \`HBox\`
                                     )->leaf( \`Button\`
                                         )->a( n = \`icon\`    v = \`sap-icon://chain-link\`
@@ -1003,8 +973,8 @@ ${columnsBlock}
                                     )->leaf( \`Button\`
                                         )->a( n = \`icon\`    v = \`sap-icon://action\`
                                         )->a( n = \`type\`    v = \`Transparent\`
-                                        )->a( n = \`tooltip\` v = \`Start this abap2UI5 app - opens in the same tab; use the browser Back button to return\`
-                                        )->a( n = \`press\`   v = client->_event( val = \`START_APP\` t_arg = VALUE #( ( \`\${CLASS}\` ) ) )
+                                        )->a( n = \`tooltip\` v = \`Start this abap2UI5 app in a new tab\`
+                                        )->a( n = \`press\`   v = client->_event_client( val = client->cs_event-open_new_tab t_arg = VALUE #( ( \`\${START_URL}\` ) ) )
 
                                 )->shut(
                             )->shut(
@@ -1056,9 +1026,9 @@ ${columnsBlock}
                                 )->leaf( \`Button\`
                                     )->a( n = \`icon\`    v = \`sap-icon://action\`
                                     )->a( n = \`type\`    v = \`Transparent\`
-                                    )->a( n = \`tooltip\` v = \`Start this abap2UI5 app - opens in the same tab; use the browser Back button to return\`
+                                    )->a( n = \`tooltip\` v = \`Start this abap2UI5 app in a new tab\`
                                     )->a( n = \`visible\` v = \`{HAS_LINK}\`
-                                    )->a( n = \`press\`   v = client->_event( val = \`START_APP\` t_arg = VALUE #( ( \`\${CLASS}\` ) ) ) ).
+                                    )->a( n = \`press\`   v = client->_event_client( val = client->cs_event-open_new_tab t_arg = VALUE #( ( \`\${START_URL}\` ) ) ) ).
 
     client->view_display( view->stringify( ) ).
 
@@ -1132,7 +1102,6 @@ ${catalogStatements}
                       ui5_url   = ls_app-ui5_url
                       abap_url  = ls_app-abap_url
                       start_url = ls_app-start_url
-                      class     = ls_app-class
                       has_link  = abap_true ) TO <control>-nodes.
 
     ENDLOOP.
