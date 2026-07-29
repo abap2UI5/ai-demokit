@@ -1,13 +1,8 @@
 "! Generated overview app - lists every abap2UI5 api sample app in a table.
-"! A Switch in the header toggles between the table and a module -> control ->
-"! sample tree (sap.m.Tree, expanded by default) showing the same samples - both
-"! views are bound and their visibility is an expression binding over the two-way
-"! show_tree flag, so the toggle runs entirely on the client (no round-trip). The
-"! search field filters the table on the client (binding_call Contains, no
+"! The search field filters the table on the client (binding_call Contains, no
 "! round-trip); its query is two-way bound (search_query), so it survives a
 "! round-trip or an app state restore (draft) and view_display re-applies the
-"! filter via follow_up_action; the tree is not
-"! filtered. Each tree leaf has the same jump popover as the table's Open column.
+"! filter via follow_up_action.
 "! The title carries the ported-app count in parentheses. There are two sortable
 "! Since columns: the first (next to Control) shows the UI5 release the CONTROL
 "! appeared in (from ui5/universe.json; blank when older than tracking / since
@@ -20,16 +15,15 @@
 "! orange SAPUI5 status. Three header checkboxes (default all on) filter the table
 "! entirely on the client via each row's visible expression: Hide non-OpenUI5,
 "! Hide newer than 1.71 (2020), Hide deprecated. A Shell switch toggles the
-"! sap.m.Shell letterboxing (appWidthLimited), a Tree view switch toggles table vs
-"! tree - both client-side. Navigation lives in the trailing Open column, which
+"! sap.m.Shell letterboxing (appWidthLimited), client-side. Navigation lives in
+"! the trailing Open column, which
 "! carries two buttons: the first opens an anchored popover with the four reference
 "! links (OpenUI5 API, OpenUI5 source, live fullscreen sample, the generated ABAP
 "! class on GitHub, each opening in a new tab) AND the port's generation info -
 "! checked status, a post-1.71 note, and the generation notes; the second starts
 "! this abap2UI5 app directly in a new tab (open_new_tab; the start URL is
 "! same-origin, so it passes isValidRedirectURL) - the overview stays open in its
-"! own tab. The same two buttons sit on every tree sample leaf (links only,
-"! the tree model carries no info). The Rating column is a 1-5 "by feel" score of
+"! own tab. The Rating column is a 1-5 "by feel" score of
 "! how much attention a port deserves (not coloured): app complexity, how heavily
 "! it was reworked/corrected (IMPROVISED/DROPPED_171/SUBSET_DATA/NOTE), whether it
 "! was reviewed/discussed (it carries a checked block), and how important a live
@@ -92,37 +86,12 @@ CLASS z2ui5_cl_ai_app_overview DEFINITION PUBLIC.
       END OF ty_s_app.
     TYPES ty_t_app TYPE STANDARD TABLE OF ty_s_app WITH EMPTY KEY.
 
-    " nested tree model (module -> control -> sample); sap.m.Tree recurses on the
-    " nodes tables. The sample leaves carry the same links as the table's Open column
-    TYPES:
-      BEGIN OF ty_s_sample,
-        text      TYPE string,
-        api_url   TYPE string,
-        js_url    TYPE string,
-        ui5_url   TYPE string,
-        abap_url  TYPE string,
-        start_url TYPE string,
-        has_link  TYPE abap_bool,
-      END OF ty_s_sample,
-      BEGIN OF ty_s_control,
-        text  TYPE string,
-        nodes TYPE STANDARD TABLE OF ty_s_sample WITH EMPTY KEY,
-      END OF ty_s_control,
-      BEGIN OF ty_s_module,
-        text  TYPE string,
-        nodes TYPE STANDARD TABLE OF ty_s_control WITH EMPTY KEY,
-      END OF ty_s_module.
-    TYPES ty_t_tree TYPE STANDARD TABLE OF ty_s_module WITH EMPTY KEY.
-
     DATA t_app TYPE ty_t_app.
-    DATA t_tree TYPE ty_t_tree.
     " the search field's text (two-way, so it survives a round-trip and the
     " draft): the filter itself runs on the client, but only a value that is
     " part of the MODEL comes back when the app is restored. view_display
     " re-applies the filter for a non-initial query via follow_up_action.
     DATA search_query TYPE string.
-    " table/tree toggle (drives the visible expression bindings)
-    DATA show_tree TYPE abap_bool.
     " sap.m.Shell letterboxing toggle (two-way, drives Shell appWidthLimited)
     DATA shell_on  TYPE abap_bool.
     " header filter checkboxes (two-way; each row's visible expression binding
@@ -139,11 +108,6 @@ CLASS z2ui5_cl_ai_app_overview DEFINITION PUBLIC.
     METHODS get_catalog
       RETURNING
         VALUE(result) TYPE ty_t_app.
-    METHODS build_tree
-      IMPORTING
-        it_app        TYPE ty_t_app
-      RETURNING
-        VALUE(result) TYPE ty_t_tree.
 
   PRIVATE SECTION.
 ENDCLASS.
@@ -347,9 +311,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
 
     ENDLOOP.
 
-    " the tree lists the full, unfiltered catalog (search filters only the table)
-    t_tree = build_tree( t_app ).
-
     DATA(view) = z2ui5_cl_ai_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
@@ -368,9 +329,8 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
 
                 )->open( `subHeader`
                     )->open( `OverflowToolbar`
-                        " client-side filter over the table only: liveChange/search run
-                        " a binding_call Contains filter via _event_client (no round-trip);
-                        " the tree is intentionally left unfiltered
+                        " client-side filter over the table: liveChange/search run
+                        " a binding_call Contains filter via _event_client (no round-trip)
                         )->leaf( `SearchField`
                             )->a( n = `placeholder` v = `Search the table - module, control, since, sample, class`
                             )->a( n = `width`       v = `24rem`
@@ -378,27 +338,21 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                             " comes back with the app state (round-trip, draft restore);
                             " the filtering itself stays client-side (below)
                             )->a( n = `value`       v = client->_bind( search_query )
-                            " disabled while the tree is shown (search filters only the table)
-                            )->a( n = `enabled`     v = |\{= !${ client->_bind( show_tree ) } \}|
                             )->a( n = `liveChange`  v = client->_event_client( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `filter` ) ( `FILTER` ) ( `Contains` ) ( `${$parameters>/newValue}` ) ) )
                             )->a( n = `search`      v = client->_event_client( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `filter` ) ( `FILTER` ) ( `Contains` ) ( `${$parameters>/query}` ) ) )
                         " default-on filter checkboxes; each is two-way bound and the row
-                        " visible expression reacts live (no round-trip). Disabled while the
-                        " tree is shown (the filters act on the table only)
+                        " visible expression reacts live (no round-trip)
                         )->leaf( `CheckBox`
                             )->a( n = `text`     v = `Hide non-OpenUI5`
                             )->a( n = `selected` v = client->_bind( hide_non_ui5 )
-                            )->a( n = `enabled`  v = |\{= !${ client->_bind( show_tree ) } \}|
                             )->a( n = `tooltip`  v = `Hide samples whose control is not part of OpenUI5`
                         )->leaf( `CheckBox`
                             )->a( n = `text`     v = `Hide newer than 1.71 (2020)`
                             )->a( n = `selected` v = client->_bind( hide_post171 )
-                            )->a( n = `enabled`  v = |\{= !${ client->_bind( show_tree ) } \}|
                             )->a( n = `tooltip`  v = `Hide samples that need a UI5 release newer than 1.71`
                         )->leaf( `CheckBox`
                             )->a( n = `text`     v = `Hide deprecated`
                             )->a( n = `selected` v = client->_bind( hide_deprecated )
-                            )->a( n = `enabled`  v = |\{= !${ client->_bind( show_tree ) } \}|
                             )->a( n = `tooltip`  v = `Hide samples whose control is deprecated`
                         )->leaf( `ToolbarSpacer`
                         )->leaf( `Label`
@@ -407,13 +361,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                         )->leaf( `Switch`
                             )->a( n = `state`   v = client->_bind( shell_on )
                             )->a( n = `tooltip` v = `Toggle the Shell letterboxing (limited app width)`
-                        )->leaf( `Label`
-                            )->a( n = `text` v = `Tree view`
-                        " Switch toggles table vs tree entirely on the client (two-way
-                        " bound show_tree drives both views' visible expression bindings)
-                        )->leaf( `Switch`
-                            )->a( n = `state`   v = client->_bind( show_tree )
-                            )->a( n = `tooltip` v = `Switch between the table and a module -> control -> sample tree`
 
                     )->shut(
                 )->shut(
@@ -421,7 +368,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                 )->open( `Table`
                     )->a( n = `id`      v = `idOverviewTable`
                     )->a( n = `sticky`  v = `ColumnHeaders`
-                    )->a( n = `visible` v = |\{= !${ client->_bind( show_tree ) } \}|
                     )->a( n = `items`   v = client->_bind( t_app )
 
                     )->open( `columns`
@@ -582,7 +528,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                             " row is hidden when a hide-flag (two-way bound model-root) is set
                             " AND the row carries that trait (UI5_ONLY / IS_POST171 /
                             " IS_DEPRECATED). Expression binding, re-evaluated live on toggle,
-                            " no round-trip - like the tree/table Switch.
+                            " no round-trip - like the Shell Switch.
                             )->a( n = `visible` v = |\{= !(${ client->_bind( hide_non_ui5 ) } && $\{UI5_ONLY\}) && !(${ client->_bind( hide_post171 ) } && $\{IS_POST171\}) && !(${ client->_bind( hide_deprecated ) } && $\{IS_DEPRECATED\}) \}|
                             )->open( `cells`
                                 )->leaf( `Text`
@@ -700,55 +646,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                             )->shut(
                         )->shut(
                     )->shut(
-                )->shut(
-
-                " tree view (module -> control -> sample) - shown instead of the
-                " table when the header Switch is on (client-side visible binding);
-                " numberOfExpandedLevels expands every level by default; sibling of
-                " the Table under the Page (NOT nested in the Table's items)
-                )->open( `Tree`
-                        )->a( n = `id`      v = `idOverviewTree`
-                        )->a( n = `visible` v = |\{= ${ client->_bind( show_tree ) } \}|
-                        )->a( n = `items`   v = |\{ path: '{ client->_bind( val = t_tree path = abap_true ) }', parameters: \{ numberOfExpandedLevels: 10 \} \}|
-
-                        " expand-all / collapse-all act on the tree by id, client-side
-                        )->open( `headerToolbar`
-                            )->open( `Toolbar`
-                                )->leaf( `Button`
-                                    )->a( n = `text`  v = `Expand all`
-                                    )->a( n = `icon`  v = `sap-icon://expand-group`
-                                    )->a( n = `press` v = client->_event_client( val = client->cs_event-control_by_id t_arg = VALUE #( ( `idOverviewTree` ) ( `expandToLevel` ) ( `10` ) ) )
-                                )->leaf( `Button`
-                                    )->a( n = `text`  v = `Collapse all`
-                                    )->a( n = `icon`  v = `sap-icon://collapse-group`
-                                    )->a( n = `press` v = client->_event_client( val = client->cs_event-control_by_id t_arg = VALUE #( ( `idOverviewTree` ) ( `collapseAll` ) ) )
-
-                            )->shut(
-                        )->shut(
-
-                        )->open( `CustomTreeItem`
-                            )->open( `HBox`
-                                )->a( n = `alignItems` v = `Center`
-
-                                )->leaf( `Text`
-                                    )->a( n = `text` v = `{TEXT}`
-                                " same two buttons as the table's Open column - only on sample
-                                " leaves: the reference-links popover, then the direct app launch.
-                                " The tree model carries no notes/checked, so the info args are
-                                " empty (the popover then just shows the four links).
-                                )->leaf( `Button`
-                                    )->a( n = `icon`    v = `sap-icon://chain-link`
-                                    )->a( n = `type`    v = `Transparent`
-                                    )->a( n = `tooltip` v = `Reference links: OpenUI5 API, source, live sample, ABAP class`
-                                    )->a( n = `class`   v = `sapUiTinyMarginBegin`
-                                    )->a( n = `visible` v = `{HAS_LINK}`
-                                    )->a( n = `press`   v = client->_event( val = `LINKS` t_arg = VALUE #( ( `${API_URL}` ) ( `${JS_URL}` ) ( `${UI5_URL}` ) ( `${ABAP_URL}` ) ( `` ) ( `` ) ( `` ) ( `$event.oSource.sId` ) ) )
-                                )->leaf( `Button`
-                                    )->a( n = `icon`    v = `sap-icon://action`
-                                    )->a( n = `type`    v = `Transparent`
-                                    )->a( n = `tooltip` v = `Start this abap2UI5 app in a new tab`
-                                    )->a( n = `visible` v = `{HAS_LINK}`
-                                    )->a( n = `press`   v = client->_event_client( val = client->cs_event-open_new_tab t_arg = VALUE #( ( `${START_URL}` ) ) ) ).
+                )->shut( ).
 
     client->view_display( view->stringify( ) ).
 
@@ -4250,55 +4148,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.26`
         notes = lv_text1 ) ).
-
-  ENDMETHOD.
-
-
-  METHOD build_tree.
-
-    " group the (already module/control/sample-sorted) apps into the nested tree;
-    " each sample leaf keeps the links so its popover can jump the same places.
-    " Read the last row only after an explicit lines( ) > 0 guard on its own
-    " statement - a table expression behind a short-circuit OR ( result IS
-    " INITIAL OR result[ ... ] ) is hoisted ahead of the guard by the 7.02
-    " downport, which then reads the still-empty table on the first pass and
-    " dumps. build_tree runs on the transpiled Node backend too, so keep the
-    " emptiness check separate.
-    LOOP AT it_app INTO DATA(ls_app).
-
-      DATA(lv_new_module) = abap_true.
-      IF lines( result ) > 0.
-        ASSIGN result[ lines( result ) ] TO FIELD-SYMBOL(<last_module>).
-        IF <last_module>-text = ls_app-module.
-          lv_new_module = abap_false.
-        ENDIF.
-      ENDIF.
-      IF lv_new_module = abap_true.
-        APPEND VALUE #( text = ls_app-module ) TO result.
-      ENDIF.
-      ASSIGN result[ lines( result ) ] TO FIELD-SYMBOL(<module>).
-
-      DATA(lv_new_control) = abap_true.
-      IF lines( <module>-nodes ) > 0.
-        ASSIGN <module>-nodes[ lines( <module>-nodes ) ] TO FIELD-SYMBOL(<last_control>).
-        IF <last_control>-text = ls_app-ctrl_name.
-          lv_new_control = abap_false.
-        ENDIF.
-      ENDIF.
-      IF lv_new_control = abap_true.
-        APPEND VALUE #( text = ls_app-ctrl_name ) TO <module>-nodes.
-      ENDIF.
-      ASSIGN <module>-nodes[ lines( <module>-nodes ) ] TO FIELD-SYMBOL(<control>).
-
-      APPEND VALUE #( text      = |{ ls_app-name } - { ls_app-class }|
-                      api_url   = ls_app-api_url
-                      js_url    = ls_app-js_url
-                      ui5_url   = ls_app-ui5_url
-                      abap_url  = ls_app-abap_url
-                      start_url = ls_app-start_url
-                      has_link  = abap_true ) TO <control>-nodes.
-
-    ENDLOOP.
 
   ENDMETHOD.
 

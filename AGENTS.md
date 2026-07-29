@@ -873,18 +873,12 @@ scripts.**
   a deprecated control's name is struck through (via a `sap.m.FormattedText`
   `htmlText`, so the strikethrough can vary per row — a bound `class` would not,
   being applied once at parse time) — today that strikes the known
-  out-of-scope debt ports (STATUS.md open findings). A **Switch** in the subheader
-  toggles between the table and a **module → control → sample tree**
-  (`sap.m.Tree`, built in `build_tree` from the full catalog, expanded by
-  default via a `numberOfExpandedLevels` binding parameter, with Expand-all /
-  Collapse-all buttons in its header toolbar — client-side
-  `cs_event-control_by_id` `expandToLevel`/`collapseAll`) showing the same
-  samples; each tree leaf has the same jump popover as the table's **Open**
-  column. Both views are bound and their `visible` is an expression binding
-  over the two-way `show_tree` flag, so the toggle runs entirely on the client
-  (like app 007). The **search field** filters **only the table**, on the
+  out-of-scope debt ports (STATUS.md open findings). The table is the only
+  view — the module → control → sample `sap.m.Tree` alternative and its
+  `show_tree` Switch were removed 2026-07-29; do not reintroduce a second
+  view of the same catalog. The **search field** filters the table on the
   client (`binding_call` `Contains` over a per-row `filter` blob via
-  `_event_client` — no round-trip); the **tree is intentionally not filtered**.
+  `_event_client` — no round-trip).
   Each column header also carries client-side ascending/descending **sort**
   icons via the same `binding_call` mechanism. **Every link opens in a new browser tab**
   (`target="_blank"`). All source links point at OpenUI5; only the class +
