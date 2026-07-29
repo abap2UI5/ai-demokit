@@ -398,9 +398,8 @@ const columnsBlock = [
   sortableColumn('Since', 'SINCE'),
   sortableColumn('Sample', 'NAME'),
   sortableColumn('abap2UI5', 'CLASS'),
-  plainColumn('Version', [['width', '6rem'], ['hAlign', 'Center']]),
   sortableColumn('Rating', 'SCORE'),
-  plainColumn('Open', [['width', '7rem'], ['hAlign', 'Center']]),
+  plainColumn('Open', [['width', '9rem'], ['hAlign', 'Center']]),
 ].join('\n');
 
 const abap = `"! Generated overview app - lists every abap2UI5 api sample app in a table.
@@ -416,18 +415,21 @@ const abap = `"! Generated overview app - lists every abap2UI5 api sample app in
 "! can vary per row). There is no per-SAMPLE Since column - whether a sample needs
 "! a release newer than 1.71 is carried by the Hide-newer-than-1.71 filter and
 "! spelled out in the Open column's info popover.
-"! The Version column badges rows whose control is not part of OpenUI5 with an
-"! orange SAPUI5 status. Three header checkboxes (default all on) filter the table
+"! Three header checkboxes (default all on) filter the table
 "! entirely on the client via each row's visible expression: Hide non-OpenUI5,
-"! Hide newer than 1.71 (2020), Hide deprecated. A Shell switch toggles the
+"! Hide newer than 1.71 (2020), Hide deprecated (the ui5_only flag behind the
+"! first one has no column of its own - the badge column was dropped 2026-07-29).
+"! A Shell switch toggles the
 "! sap.m.Shell letterboxing (appWidthLimited), client-side. Navigation lives in
-"! the trailing Open column, which
-"! carries two buttons: the first opens an anchored popover with four full-width
+"! the trailing Open column, which carries three buttons, each anchored to its
+"! own runtime id. The chain-link one opens the LINKS popover: four full-width
 "! Transparent Buttons - Control API Reference, Sample Link, Sample Source Code,
 "! abap2UI5 Source Code, each opening its target in a new tab through the
 "! URLHELPER REDIRECT frontend action (a Button carries no href, and open_new_tab
-"! is same-origin only) - AND the port's generation info -
-"! checked status, a post-1.71 note, and the generation notes; the second starts
+"! is same-origin only). The information one opens the INFO popover with the
+"! port's generation notes - live-check status, the members that need a release
+"! newer than 1.71, and the deviation list as a bullet list; it renders only on a
+"! row that carries at least one of the three. The third starts
 "! this abap2UI5 app directly in a new tab (open_new_tab; the start URL is
 "! same-origin, so it passes isValidRedirectURL) - the overview stays open in its
 "! own tab. The Rating column is a 1-5 "by feel" score of
@@ -539,16 +541,12 @@ CLASS ${CLASS} IMPLEMENTATION.
     CASE client->get( )-event.
 
       WHEN \`LINKS\`.
-        " the four link buttons plus the port's generation info (checked /
-        " post-1.71 / notes) for the pressed row; resolved client-side and passed
-        " via t_arg, opened in a popover anchored to the pressed button (arg 8)
-        DATA(lv_api)     = client->get_event_arg( ).
-        DATA(lv_js)      = client->get_event_arg( 2 ).
-        DATA(lv_ui5)     = client->get_event_arg( 3 ).
-        DATA(lv_abap)    = client->get_event_arg( 4 ).
-        DATA(lv_checked) = client->get_event_arg( 5 ).
-        DATA(lv_post171) = client->get_event_arg( 6 ).
-        DATA(lv_notes)   = client->get_event_arg( 7 ).
+        " the four link buttons for the pressed row; resolved client-side and
+        " passed via t_arg, opened in a popover anchored to the button (arg 5)
+        DATA(lv_api)  = client->get_event_arg( ).
+        DATA(lv_js)   = client->get_event_arg( 2 ).
+        DATA(lv_ui5)  = client->get_event_arg( 3 ).
+        DATA(lv_abap) = client->get_event_arg( 4 ).
 
         DATA(links) = z2ui5_cl_ai_xml=>factory( ).
         DATA(box) = links->open( n = \`FragmentDefinition\` ns = \`core\`
@@ -556,7 +554,7 @@ CLASS ${CLASS} IMPLEMENTATION.
             )->a( n = \`xmlns:core\` v = \`sap.ui.core\`
 
             )->open( \`Popover\`
-                )->a( n = \`title\`        v = \`Links & info\`
+                )->a( n = \`title\`        v = \`Links\`
                 )->a( n = \`placement\`    v = \`Auto\`
                 )->a( n = \`contentWidth\` v = \`26rem\`
 
@@ -618,25 +616,46 @@ CLASS ${CLASS} IMPLEMENTATION.
               )->a( n = \`class\`     v = \`sapUiSmallMarginTop\` ).
         ENDIF.
 
+        client->popover_display( xml   = links->stringify( )
+                                 by_id = client->get_event_arg( 5 ) ).
+
+      WHEN \`INFO\`.
+        " everything the generator knows ABOUT the port (as opposed to where it
+        " points): the live-check status, the members that need a UI5 release
+        " newer than 1.71, and the deviation notes. Own popover behind the info
+        " button, anchored to it (arg 4); the button only renders on a row that
+        " carries at least one of the three.
+        DATA(lv_checked) = client->get_event_arg( ).
+        DATA(lv_post171) = client->get_event_arg( 2 ).
+        DATA(lv_notes)   = client->get_event_arg( 3 ).
+
+        DATA(info) = z2ui5_cl_ai_xml=>factory( ).
+        DATA(ibox) = info->open( n = \`FragmentDefinition\` ns = \`core\`
+            )->a( n = \`xmlns\`      v = \`sap.m\`
+            )->a( n = \`xmlns:core\` v = \`sap.ui.core\`
+
+            )->open( \`Popover\`
+                )->a( n = \`title\`        v = \`Generation notes\`
+                )->a( n = \`placement\`    v = \`Auto\`
+                )->a( n = \`contentWidth\` v = \`30rem\`
+
+                )->open( \`VBox\`
+                    )->a( n = \`class\` v = \`sapUiContentPadding\` ).
+
         IF lv_checked IS NOT INITIAL.
-          box->leaf( \`ObjectStatus\`
+          ibox->leaf( \`ObjectStatus\`
               )->a( n = \`text\`  v = lv_checked
-              )->a( n = \`state\` v = \`Success\`
-              )->a( n = \`class\` v = \`sapUiSmallMarginTop\` ).
+              )->a( n = \`state\` v = \`Success\` ).
         ENDIF.
 
         IF lv_post171 IS NOT INITIAL.
-          box->leaf( \`ObjectStatus\`
+          ibox->leaf( \`ObjectStatus\`
               )->a( n = \`text\`  v = |Needs a UI5 release newer than 1.71: { lv_post171 }|
               )->a( n = \`state\` v = \`Warning\`
               )->a( n = \`class\` v = \`sapUiTinyMarginTop\` ).
         ENDIF.
 
         IF lv_notes IS NOT INITIAL.
-          box->leaf( \`Title\`
-              )->a( n = \`text\`  v = \`Generation notes\`
-              )->a( n = \`level\` v = \`H5\`
-              )->a( n = \`class\` v = \`sapUiSmallMarginTop\` ).
           " render the notes as an HTML bullet list (FormattedText): each
           " \` // \`-separated bullet becomes one <li> with its leading LABEL
           " (NOTE / IMPROVISED / POST-1.71 / ...) in bold. The note text is
@@ -658,12 +677,12 @@ CLASS ${CLASS} IMPLEMENTATION.
             ENDIF.
           ENDLOOP.
           lv_html = |{ lv_html }</ul>|.
-          box->leaf( \`FormattedText\`
+          ibox->leaf( \`FormattedText\`
               )->a( n = \`htmlText\` v = lv_html ).
         ENDIF.
 
-        client->popover_display( xml   = links->stringify( )
-                                 by_id = client->get_event_arg( 8 ) ).
+        client->popover_display( xml   = info->stringify( )
+                                 by_id = client->get_event_arg( 4 ) ).
 
     ENDCASE.
 
@@ -817,13 +836,6 @@ ${columnsBlock}
                                     )->a( n = \`text\` v = \`{NAME}\`
                                 )->leaf( \`Text\`
                                     )->a( n = \`text\` v = \`{CLASS}\`
-                                " Version: the control does not exist in OpenUI5 (SAPUI5- /
-                                " demo-kit-only); an orange SAPUI5 badge only on those rows
-                                )->leaf( \`ObjectStatus\`
-                                    )->a( n = \`text\`    v = \`SAPUI5\`
-                                    )->a( n = \`state\`   v = \`Warning\`
-                                    )->a( n = \`tooltip\` v = \`This control is not part of OpenUI5 - it cannot render on an OpenUI5 stack\`
-                                    )->a( n = \`visible\` v = \`{UI5_ONLY}\`
                                 " rating 1-5 (by feel): how much attention the port
                                 " deserves - complexity, rework, review, test-priority
                                 " (not coloured); tooltip lists the drivers
@@ -831,20 +843,30 @@ ${columnsBlock}
                                     )->a( n = \`text\`    v = \`{SCORE} / 5\`
                                     )->a( n = \`tooltip\` v = \`{SCORE_TIP}\`
 
-                                " Open column: two buttons. First opens an anchored popover with
-                                " the reference links AND the port's generation info (checked,
-                                " post-1.71, notes) - the pressed button's runtime id
-                                " (\$event.oSource.sId) anchors it; second launches the abap2UI5
-                                " app directly in a new tab (open_new_tab - the start URL is
-                                " same-origin, so it passes isValidRedirectURL), leaving the
-                                " overview open in its own tab
+                                " Open column: three buttons, each anchored to its own runtime
+                                " id (\$event.oSource.sId). First opens the links popover (the
+                                " four reference targets); second the generation-notes popover -
+                                " shown only on a row that HAS something to say (checked /
+                                " post-1.71 / notes); third launches the abap2UI5 app directly
+                                " in a new tab (open_new_tab - the start URL is same-origin, so
+                                " it passes isValidRedirectURL), leaving the overview open in
+                                " its own tab
                                 )->open( \`HBox\`
                                     )->leaf( \`Button\`
                                         )->a( n = \`icon\`    v = \`sap-icon://chain-link\`
                                         )->a( n = \`type\`    v = \`Transparent\`
-                                        )->a( n = \`tooltip\` v = \`Links & info: Control API Reference, Sample Link, Sample Source Code, abap2UI5 Source Code, generation notes\`
+                                        )->a( n = \`tooltip\` v = \`Links: Control API Reference, Sample Link, Sample Source Code, abap2UI5 Source Code\`
                                         )->a( n = \`press\`   v = client->_event( val = \`LINKS\` t_arg = VALUE #(
-                                            ( \`\${API_URL}\` ) ( \`\${JS_URL}\` ) ( \`\${UI5_URL}\` ) ( \`\${ABAP_URL}\` )
+                                            ( \`\${API_URL}\` ) ( \`\${JS_URL}\` ) ( \`\${UI5_URL}\` ) ( \`\${ABAP_URL}\` ) ( \`\$event.oSource.sId\` ) ) )
+                                    )->leaf( \`Button\`
+                                        )->a( n = \`icon\`    v = \`sap-icon://information\`
+                                        )->a( n = \`type\`    v = \`Transparent\`
+                                        )->a( n = \`tooltip\` v = \`Generation notes: how this port was built - live-check status, post-1.71 members, deviations\`
+                                        " a backtick literal, not a |…| template: ABAP ends a string
+                                        " template at the next |, so the expression binding's || would
+                                        " close it mid-way. Nothing here needs interpolation anyway.
+                                        )->a( n = \`visible\` v = \`{= \${HAS_CHECK} || \${HAS_P171} || \${HAS_NOTES} }\`
+                                        )->a( n = \`press\`   v = client->_event( val = \`INFO\` t_arg = VALUE #(
                                             ( \`\${CHECKED}\` ) ( \`\${POST171}\` ) ( \`\${NOTES}\` ) ( \`\$event.oSource.sId\` ) ) )
                                     )->leaf( \`Button\`
                                         )->a( n = \`icon\`    v = \`sap-icon://action\`

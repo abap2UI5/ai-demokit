@@ -863,12 +863,14 @@ scripts.**
   sorted by module → control → sample. Columns (all plain text — links moved to
   the trailing **Open** column): **Module** · **Control** · **Since** (the UI5
   release the control appeared in) · **Sample** · **abap2UI5** (class name) ·
-  **Version** (orange SAPUI5 badge when the control is not part of OpenUI5) ·
-  **Rating** · **Open** (two buttons — an anchored popover with every link plus
-  the port's generation info, and a direct app start in a new tab). A per-SAMPLE
-  Since column and an **Audit** column (one badge per framework-wiring fact)
-  existed until 2026-07-29 and were dropped; the audit flags are still computed,
-  they now only feed the Rating's test-priority term. The **Control** name and
+  **Rating** · **Open** (three buttons — the LINKS popover with the four
+  reference targets, the INFO popover with the port's generation notes, and a
+  direct app start in a new tab). Three columns were dropped on 2026-07-29: a
+  per-SAMPLE **Since**, an **Audit** column (one badge per framework-wiring
+  fact) and a **Version** column (orange SAPUI5 badge). Their data is still
+  computed — the audit flags feed the Rating's test-priority term, `ui5_only`
+  feeds the Hide-non-OpenUI5 filter, and the per-sample release feeds
+  `is_post171`. The **Control** name and
   the **Since** value come from `ui5/universe.json`, with nulls filled from
   the control-level source scan in `ui5/properties.json` (same scope fallback
   as `generate-coverage.mjs`). **Text is never coloured**;
