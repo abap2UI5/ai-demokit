@@ -189,7 +189,8 @@ const INTERACTIONS = {
   z2ui5_cl_ai_app_122: async (page, expect) => {
     const icon = page.locator('.sapUiIconPointer').first();
     await icon.waitFor({ state: 'attached', timeout: 10000 });
-    await icon.click({ force: true });
+    // the icon sits in a zero-height row headless - dispatch the click
+    await icon.dispatchEvent('click');
     await expect(page.locator('.sapMMessageToast'), 'the Over budget toast').toContainText('Over budget!');
   },
   // NumericContent press → the original's 'Fire press' toast
@@ -208,7 +209,7 @@ const INTERACTIONS = {
     // column renders
     await page.waitForFunction(
       () => {
-        const mid = document.querySelector('.sapFFCLColumnMiddle');
+        const mid = document.querySelector('.sapFFCLColumnMid');
         return mid && mid.offsetWidth > 0;
       },
       { timeout: 10000 },
@@ -224,7 +225,7 @@ const INTERACTIONS = {
   // prevent-default itemClose + MessageBox.confirm + bound-row removal
   // (2026-07-30 audit fix)
   z2ui5_cl_ai_app_093: async (page, expect) => {
-    const close = page.locator('.sapMTSTouchArea .sapMTabStripSelectListItemCloseBtn, .sapMTSItemCloseBtn, [id*="-close"]').first();
+    const close = page.locator('.sapMTSItemCloseBtnCnt button').first();
     await close.waitFor({ state: 'attached', timeout: 10000 });
     await close.click({ force: true });
     const dialog = page.locator('.sapMMessageBox');

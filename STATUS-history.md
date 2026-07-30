@@ -7,6 +7,32 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## Framework bug found by e2e: the MessageBox onclose action never reached the backend (2026-07-30)
+
+- Arming the 093 close-confirm interaction surfaced a **real abap2UI5
+  regression**: `Messages.js` passed the pressed MessageBox action INSIDE
+  the event array (`eB([ONCLOSE, sAction])`, since #2441), but
+  `Server.roundtrip` reads the event name from `ARGUMENTS[0][0]` and then
+  **shifts the whole array away** — the action never landed in
+  `T_EVENT_ARG`, so `get_event_arg( )` after an onclose event always
+  returned initial. Every confirm dialog's OK/YES was indistinguishable
+  from Cancel (silently — the wrong branch just ran). Fixed upstream on
+  the abap2UI5 branch: the action rides as the first positional argument
+  (`eB([ONCLOSE], sAction)`), the shape `evImageEditorPopupClose` already
+  used; ABAP mirror regenerated (`app2abap`), abaplint 0.
+- In the e2e harness the symptom was harsher than in a real system: the 702
+  downport materializes the `t_event_arg[ v ]` table expression into a
+  `READ TABLE` + `RAISE cx_sy_itab_line_not_found`, and e2e-build maps that
+  RAISE to `ASSERT 1 = 0` — which the ABAP `TRY ... CATCH cx_root` does NOT
+  catch, so the read of a missing arg 500s the round-trip instead of
+  returning initial. Worth remembering when an e2e run shows
+  `ASSERTION_FAILED at ...get_event_arg`: in a real system that path is a
+  caught no-op.
+- Affected ports: 093 (new close-confirm flow) and **101** (the Wizard's
+  cancel/submit confirm — its `CANCEL_CLOSED` branch could never see `YES`
+  under the broken wire). CAPABILITIES' MessageBox row now documents the
+  regression window; both ports work unchanged with the fix.
+
 ## Faked-event-value audit + formatter guard closure (2026-07-30, follow-up to the pr/-closure batch)
 
 - **pr/formatter-date-empty-guard closed — already upstream.** The guard
