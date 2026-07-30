@@ -220,7 +220,12 @@ const INTERACTIONS = {
     const tag = page.locator('.sapMGenericTag').first();
     await expect(tag, 'the GenericTag').toBeVisibleEnabled();
     await tag.click();
-    await expect(page.locator('.sapMPopover'), 'the Card popover').toContainText('Sales Revenue');
+    // this popover's box measures empty headless (content overflows it), so
+    // assert on the rendered text instead of playwright visibility
+    await page.waitForFunction(
+      () => document.querySelector('.sapMPopover')?.innerText.includes('Sales Revenue'),
+      { timeout: 10000 },
+    );
   },
   // prevent-default itemClose + MessageBox.confirm + bound-row removal
   // (2026-07-30 audit fix)

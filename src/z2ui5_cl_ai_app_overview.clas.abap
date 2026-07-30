@@ -688,7 +688,9 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` ({WIDTH} x {DEPTH} x {HEIGHT} {DIMUNIT}); Price stays packed (DECIMALS 2) for the Currency type binding. // NOTE: stickySubheaderProvider='iconTabBar' is kept 1:1 as the association to the content` &&
                ` IconTabBar (id='iconTabBar'); it is a control-id association resolved by XMLView.create within the same view. stickySubheaderProvider is @since 1.65 (<= 1.71, base) - no POST_171 needed. All`.
     lv_text1 = lv_text1 && ` Card/NumericHeader/GenericTag members used are <= 1.71. // LIVE-TEST: unverified in a running system: that the Card popover opens anchored to the pressed GenericTag (popover_display by_id =` &&
-               ` $event.oSource.sId), and that the Toggle Footer round-trip flips showFooter and reveals/hides the DynamicPage footer.`.
+               ` $event.oSource.sId), and that the Toggle Footer round-trip flips showFooter and reveals/hides the DynamicPage footer. **e2e-verified 2026-07-30** (transpiled-framework interaction,` &&
+               ` scripts/e2e-smoke.mjs): the GenericTag press opens the Card popover with the NumericHeader rendering ('Sales Revenue'; asserted on text - the popover box measures empty headless); the` &&
+               ` layoutData-button variant is the identical wire.`.
     result = VALUE #( BASE result
       ( module = `sap.f`              control = `sap.f.DynamicPage`                     name = `DynamicPageWithStickySubheader`      class = `z2ui5_cl_ai_app_238` path = `src/04/b09/z2ui5_cl_ai_app_238.clas.abap`
         score = 5
@@ -704,14 +706,15 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` default xmlns and writes the control unprefixed. Same control, prefix-only difference from merging four views (with two different default namespaces) into one. // NOTE: each column view holds 26` &&
                ` static, byte-identical navigation rows (List: 'Open mid column', Detail: 'Open end column', DetailDetail: 'No more columns') hardcoded in the XML - there is no JSON model. This is reproduced`.
     lv_text1 = lv_text1 && ` faithfully as a bound aggregation over a 26-row model table per column (one ColumnListItem/Text template each): same 26 rendered rows, so the ColumnListItem count (78 originals) and Text count (78` &&
-               ` originals) collapse to the three templates. No data is lost or subset. // LIVE-TEST: the controller's imperative setLayout(TwoColumnsBeginExpanded/ThreeColumnsMidExpanded) is replaced by binding the` &&
+               ` originals) collapse to the three templates. No data is lost or subset. // NOTE: the controller's imperative setLayout(TwoColumnsBeginExpanded/ThreeColumnsMidExpanded) is replaced by binding the` &&
                ` FlexibleColumnLayout layout property two-way ({/LAYOUT}, initial OneColumn) and changing it server-side in the press handlers (prefer-a-bindable-property over a frontend action; setLayout is not a` &&
                ` whitelisted CONTROL_METHOD). The column-switch round-trip behaviour is not verified in a running system. The lazy view loading (runAsOwner/XMLView.create on demand) is a pure framework optimization` &&
-               ` with no user-visible effect and is not reproduced - all three pages exist from the start.`.
+               ` with no user-visible effect and is not reproduced - all three pages exist from the start. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): pressing the first` &&
+               ` master list item round-trips LIST_PRESS and the mid column renders (the two-way bound layout flipped to TwoColumnsBeginExpanded).`.
     result = VALUE #( BASE result
       ( module = `sap.f`              control = `sap.f.FlexibleColumnLayout`            name = `FlexibleColumnLayoutSimple`          class = `z2ui5_cl_ai_app_234` path = `src/04/b08/z2ui5_cl_ai_app_234.clas.abap`
-        score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.46`
         notes = lv_text1 ) ).
 
@@ -730,7 +733,8 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
     lv_text1 = lv_text1 && ` columnsCountText text ('Current grid columns count: <n>'; text is an added attr on the Text). onPress (tiles + card): client-composed toast 'Press was fired on - {0}' filled by` &&
                ` $event.oSource.getMetadata().getName(), the original's exact text. onRevealGrid: the Reveal Grid button's press attribute is DROPPED, undecorated - RevealGrid is a sample-local JS helper (grid` &&
                ` outline overlay) with no declarative equivalent (the app-145 precedent); the earlier static toasts ('Reveal Grid', 'Snap to row', 'Allow dense fill', 'Inline block layout', 'Columns changed', 'Tile` &&
-               ` pressed', 'Card pressed') are gone.`.
+               ` pressed', 'Card pressed') are gone. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the first GenericTile press toasts 'Press was fired on - sap.m.GenericTile'` &&
+               ` (the getMetadata().getName() expression resolves); the switch bindings and columns counter remain unexercised.`.
     result = VALUE #( BASE result
       ( module = `sap.f`              control = `sap.f.GridContainer`                   name = `GridContainer`                       class = `z2ui5_cl_ai_app_168` path = `src/04/b07/z2ui5_cl_ai_app_168.clas.abap`
         score = 5
@@ -1413,10 +1417,11 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.HeaderContainer`                 name = `HeaderContainerVM`                   class = `z2ui5_cl_ai_app_157` path = `src/01/b16/z2ui5_cl_ai_app_157.clas.abap`
         score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.44.0`
-        notes = `LIVE-TEST: NumericContent presses show a client MessageToast ('Fire press', the original press handler's text - review fixed the earlier text copied from the NumericContentDifColors neighbour). Two` &&
-                 ` vertical HeaderContainers — one of eight NumericContents, one of five TileContents (each wrapping a NumericContent) — reproduced 1:1.` )
+        notes = `NOTE: NumericContent presses show a client MessageToast ('Fire press', the original press handler's text - review fixed the earlier text copied from the NumericContentDifColors neighbour). Two` &&
+                 ` vertical HeaderContainers — one of eight NumericContents, one of five TileContents (each wrapping a NumericContent) — reproduced 1:1. **e2e-verified 2026-07-30** (transpiled-framework interaction,` &&
+                 ` scripts/e2e-smoke.mjs): pressing the first NumericContent toasts 'Fire press'; the other tiles are the identical wire.` )
       ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabBarStretchContent`            class = `z2ui5_cl_ai_app_030` path = `src/01/b04/z2ui5_cl_ai_app_030.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -2442,7 +2447,8 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` and on OK deletes the row + view_model_update (the bound-aggregation removeItem) and toasts 'Item closed: <name>' (duration 500), on Cancel toasts 'Item close canceled: <name>' - exactly the` &&
                ` original's onClose branches. The pending name/index live in protected state across the confirm round-trip. The earlier static 'Close requested' toast (tab never removable) is gone. // LIVE-TEST: the`.
     lv_text1 = lv_text1 && ` prevent-default itemClose + MessageBox.confirm + row-delete chain and the index transport via the oParent indexOfItem form are unverified in a running system; the e2e interaction covers` &&
-               ` open-confirm-OK-removes end to end in the transpiled harness.`.
+               ` open-confirm-OK-removes end to end in the transpiled harness. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): covered end to end: close icon -> confirm box with` &&
+               ` the item name -> OK -> row removed + 'Item closed:' toast (needs the 2026-07-30 Messages.js onclose fix - under the broken wire the OK action never arrived).`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.TabContainer`                    name = `TabContainer`                        class = `z2ui5_cl_ai_app_093` path = `src/01/b11/z2ui5_cl_ai_app_093.clas.abap`
         score = 3
@@ -2886,7 +2892,9 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` _setToggleButtonTooltip; init seeds the desktop default 'Small Size Navigation' (the Device.system.desktop branch resolved statically). handleUserNamePress: the controller-built Popover (showHeader`.
     lv_text1 = lv_text1 && ` false, Bottom, Feedback/Help/Logout transparent buttons, sapMOTAPopover sapTntToolHeaderPopover classes) is rebuilt 1:1 via popover_display by_id = $event.oSource.sId - Popover + 3 Buttons are extra` &&
                ` controls vs the original view.xml (controller-built). onQuickActionPress: the design guard runs server-side on the transported ${$source>/design} and a design=Action item opens the 'Create Item'` &&
-               ` Message Dialog (Text 'Create New Navigation List Item', Create/Cancel closing via popup_close) via popup_display - Dialog/Text/Button extra controls declared here too.`.
+               ` Message Dialog (Text 'Create New Navigation List Item', Create/Cancel closing via popup_close) via popup_display - Dialog/Text/Button extra controls declared here too. **e2e-verified 2026-07-30**` &&
+               ` (transpiled-framework interaction, scripts/e2e-smoke.mjs): Child Item 1 press toasts 'Fired itemPress, item: Child Item 1' and the Alan Smith press opens the Feedback/Help/Logout popover; the side` &&
+               ` toggle, key navigation target and Quick Create dialog remain unexercised.`.
     lv_text2 = `Several members newer than UI5 1.71 are kept 1:1 from the original. sap.tnt.NavigationListItem: selectable (@since 1.116), design (@since 1.133.0, sap.tnt.NavigationListItemDesign), press (event,` &&
                ` @since 1.133 on NavigationListItemBase), ariaHasPopup (@since 1.133.0). sap.m.Button.ariaHasPopup (@since 1.84) on the header 'Alan Smith' button. Declared per the property-171 policy; the tnt` &&
                ` members were previously mis/under-declared (the earlier note cited only sap.m.Button 1.84 for ariaHasPopup, which is the Button version, not the tnt member's 1.133) because the property gate is blind` &&
@@ -3000,12 +3008,13 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` core:HTML control the original view does not have - the original loads the stylesheet through its manifest's sap.ui5/resources/css entry instead. The five size classes and the <600px media query are` &&
                ` verbatim, only whitespace-collapsed; literal braces are escaped \{ \} in a backtick literal because the XMLView parser reads an unescaped brace as a binding. Until 2026-07-28 the port carried the` &&
                ` size1..size5 class names with no stylesheet behind them, so every Icon rendered at the default size - the sample is about icon SIZES, so that was its whole point. The stylesheet was also missing from` &&
-               ` ui5/sap.ui.core/Icon/ (a §4 archive gap) and is archived in the same change. // LIVE-TEST: The stethoscope Icon press is wired client-side to MessageToast.show('Over budget!') via the control_global` &&
-               ` frontend action, matching the original controller's handleStethoscopePress (MessageToast.show).`.
+               ` ui5/sap.ui.core/Icon/ (a §4 archive gap) and is archived in the same change. // NOTE: The stethoscope Icon press is wired client-side to MessageToast.show('Over budget!') via the control_global` &&
+               ` frontend action, matching the original controller's handleStethoscopePress (MessageToast.show). **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the Icon press`.
+    lv_text1 = lv_text1 && ` (dispatched click - the icon row renders zero-height headless) toasts 'Over budget!'.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.core`        control = `sap.ui.core.Icon`                      name = `Icon`                                class = `z2ui5_cl_ai_app_122` path = `src/02/b02/z2ui5_cl_ai_app_122.clas.abap`
         score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.11.1`
         notes = lv_text1 ) ).
 

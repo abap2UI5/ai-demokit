@@ -17,7 +17,7 @@
     },
     {
       "type": "LIVE_TEST",
-      "what": "the prevent-default itemClose + MessageBox.confirm + row-delete chain and the index transport via the oParent indexOfItem form are unverified in a running system; the e2e interaction covers open-confirm-OK-removes end to end in the transpiled harness."
+      "what": "the prevent-default itemClose + MessageBox.confirm + row-delete chain and the index transport via the oParent indexOfItem form are unverified in a running system; the e2e interaction covers open-confirm-OK-removes end to end in the transpiled harness. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): covered end to end: close icon -> confirm box with the item name -> OK -> row removed + 'Item closed:' toast (needs the 2026-07-30 Messages.js onclose fix - under the broken wire the OK action never arrived)."
     }
   ]
 }

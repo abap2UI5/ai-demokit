@@ -31,7 +31,12 @@ of their date and are NOT kept current._
 - Affected ports: 093 (new close-confirm flow) and **101** (the Wizard's
   cancel/submit confirm — its `CANCEL_CLOSED` branch could never see `YES`
   under the broken wire). CAPABILITIES' MessageBox row now documents the
-  regression window; both ports work unchanged with the fix.
+  regression window; both ports work unchanged with the fix. **With the fix
+  in the rebuilt harness the 093 interaction runs green end to end** (close
+  icon → confirm with the item name → OK → row removed + toast), and the
+  audit interactions all pass (092/122/157/167/168/234/238 — 238's popover
+  box measures empty headless, so its assertion reads the rendered text).
+  Open-LIVE_TEST ports 49 → 47.
 
 ## Faked-event-value audit + formatter guard closure (2026-07-30, follow-up to the pr/-closure batch)
 
