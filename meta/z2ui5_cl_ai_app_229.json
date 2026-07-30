@@ -34,7 +34,7 @@
     },
     {
       "type": "LIVE_TEST",
-      "what": "unverified in a running system: that both popovers open anchored to their button (popover_display by_id = $event.oSource.sId), that {NAME}/{PRODUCTPICURL} resolve from the root-seeded record, and that the Email/Close footer buttons close the popover (popover_close) with the Email toast firing."
+      "what": "unverified in a running system: that both popovers open anchored to their button (popover_display by_id = $event.oSource.sId), that {NAME}/{PRODUCTPICURL} resolve from the root-seeded record, and that the Email/Close footer buttons close the popover (popover_close) with the Email toast firing. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the 'Show Popover' press opens the popover anchored with the root-seeded relative bindings rendering (the 'Email' action visible); the resizable variant is the identical wire."
     }
   ]
 }

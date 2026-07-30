@@ -40,12 +40,12 @@
       "what": "the Menu open/close is wired roundtrip-free via client->_event_client( cs_event-control_by_id, toggleBy ) on the button press (anchored by $event.oSource.sId) - the original's client-side toggle 1:1; the item-selected toast is now roundtrip-free too, composed on the frontend via control_global MESSAGE_TOAST.show (template + ${$parameters>/item}.getText()), so the app has no on_event at all (init-only)."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "the menu toggle was switched from a follow_up_action round-trip to roundtrip-free _event_client on 2026-07-22 - re-verify the button opens/closes the Menu."
+      "type": "NOTE",
+      "what": "the menu toggle was switched from a follow_up_action round-trip to roundtrip-free _event_client on 2026-07-22 - re-verify the button opens/closes the Menu. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the 'Open Menu' press opens the Menu anchored (toggleBy)."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "the item-selected toast was switched from a message_toast_display round-trip to a roundtrip-free client-composed toast on 2026-07-22 (control_global MESSAGE_TOAST.show, template `Action triggered on item: {0}` filled by ${$parameters>/item}.getText()) - re-verify selecting a menu item toasts \"Action triggered on item: <text>\"."
+      "type": "NOTE",
+      "what": "the item-selected toast was switched from a message_toast_display round-trip to a roundtrip-free client-composed toast on 2026-07-22 (control_global MESSAGE_TOAST.show, template `Action triggered on item: {0}` filled by ${$parameters>/item}.getText()) - re-verify selecting a menu item toasts \"Action triggered on item: <text>\". **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): selecting 'Hide Existing Sites' toasts 'Action triggered on item: Hide Existing Sites'."
     }
   ]
 }

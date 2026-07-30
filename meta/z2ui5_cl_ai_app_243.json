@@ -34,7 +34,7 @@
     },
     {
       "type": "LIVE_TEST",
-      "what": "unverified in a running system: that both ResponsivePopover fragments open anchored to their button (popover_display by_id = $event.oSource.sId), that {NAME}/{PRODUCTPICURL} resolve from the root-seeded record, and that the action/footer buttons close the popover (popover_close)."
+      "what": "unverified in a running system: that both ResponsivePopover fragments open anchored to their button (popover_display by_id = $event.oSource.sId), that {NAME}/{PRODUCTPICURL} resolve from the root-seeded record, and that the action/footer buttons close the popover (popover_close). **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the 'Popover with Custom Footer' press opens the ResponsivePopover anchored with its OK/Cancel footer; the phone-Dialog variant remains unexercised."
     }
   ]
 }

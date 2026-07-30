@@ -36,7 +36,7 @@
     },
     {
       "type": "LIVE_TEST",
-      "what": "The 2026-07-27 live check predates the 2026-07-30 prevent-default rewire (status reset checked -> generated per the invalidation rule): re-verify that with the checkbox set a press does NOT change the selection (eBP cancels the default) and still toasts 'Default was prevented:', that with the checkbox clear selection changes normally, and that the PREVENT_TOGGLE redraw keeps working (expanded state and checkbox survive it via their two-way bindings). onCollapseExpandPress (expanded two-way + TOGGLE_EXPAND round-trip), the ITEM_PRESS modifier-key transport and the popup round-trips were live-verified 2026-07-27."
+      "what": "The 2026-07-27 live check predates the 2026-07-30 prevent-default rewire (status reset checked -> generated per the invalidation rule): re-verify that with the checkbox set a press does NOT change the selection (eBP cancels the default) and still toasts 'Default was prevented:', that with the checkbox clear selection changes normally, and that the PREVENT_TOGGLE redraw keeps working (expanded state and checkbox survive it via their two-way bindings). onCollapseExpandPress (expanded two-way + TOGGLE_EXPAND round-trip), the ITEM_PRESS modifier-key transport and the popup round-trips were live-verified 2026-07-27. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): with the checkbox set, the PREVENT_TOGGLE redraw re-bakes the wires and pressing 'Building' toasts 'Default was prevented:' - the eBP wire fires and round-trips; the visual no-selection-change and the popup paths remain for the live check."
     }
   ]
 }

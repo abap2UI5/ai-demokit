@@ -25,7 +25,7 @@
     },
     {
       "type": "LIVE_TEST",
-      "what": "The client-composed toasts (change/typeMissmatch/uploadComplete/press via control_global MESSAGE_TOAST) and the ${$parameters>/newValue} / ${$parameters>/fileType} event-arg resolution are view-create verified (render-smoke) but not yet live-verified in a running system."
+      "what": "The client-composed toasts (change/typeMissmatch/uploadComplete/press via control_global MESSAGE_TOAST) and the ${$parameters>/newValue} / ${$parameters>/fileType} event-arg resolution are view-create verified (render-smoke) but not yet live-verified in a running system. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): pressing 'Upload File' with no chosen file round-trips and toasts 'Choose a file first'; the change/typeMissmatch toasts need a real file dialog and remain unexercised."
     }
   ]
 }

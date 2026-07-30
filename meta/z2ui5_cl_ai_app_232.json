@@ -30,7 +30,7 @@
     },
     {
       "type": "LIVE_TEST",
-      "what": "unverified in a running system: (a) the two Open-Popover buttons open the popover anchored to the button via control_by_id openBy ($event.oSource.sId); (b) the Ctrl+S / Ctrl+D keyboard_shortcut registrations firing the backend SAVE/DELETE round-trips and their enabled/visible server-side gating; (c) the switch-driven two-way enabled/visible of the popover buttons. The e2e interaction (keyboard Ctrl+S -> save toast) covers (b) for the page-level Save."
+      "what": "unverified in a running system: (a) the two Open-Popover buttons open the popover anchored to the button via control_by_id openBy ($event.oSource.sId); (b) the Ctrl+S / Ctrl+D keyboard_shortcut registrations firing the backend SAVE/DELETE round-trips and their enabled/visible server-side gating; (c) the switch-driven two-way enabled/visible of the popover buttons. The e2e interaction (keyboard Ctrl+S -> save toast) covers (b) for the page-level Save. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): Ctrl+S fires the SAVE round-trip and toasts 'CTRL+S: save triggered on controller'."
     }
   ]
 }

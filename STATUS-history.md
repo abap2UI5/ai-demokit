@@ -56,9 +56,28 @@ So the work was port integration, not framework code:
   root build, pattern-lint 0 — the 149 object-literal arg moved to the
   pipe-template form the `event-arg-bare-brace` rule expects —,
   structural-diff 0 undeclared, render-smoke 0 failing, data-fidelity 0,
-  property-check 0). The full transpiled e2e run over the changed ports is
-  in flight in this same change series; its LIVE_TEST → NOTE conversions
-  follow with the run's evidence.
+  property-check 0).
+- **e2e evidence + conversions (same day, follow-up commit):** every armed
+  interaction ran green against the freshly transpiled backend — including
+  the three new framework wires (232 Ctrl+S → SAVE toast, 241 checkbox →
+  redraw → 'Default was prevented', 244 viewport shrink → 'Media Range:'
+  toast) and the reworked 147/170/112/246/107 flows. **Open-LIVE_TEST ports
+  62 → 49**: fully covered entries became NOTEs with the run's evidence
+  (003/005/049/060/074/080/091/130/133/147/156/177/198/236), partially
+  covered ones keep LIVE_TEST with the evidence appended (061/066/067/076/
+  103/104/112/128/134/227/229/232/241/242/243/246). Three harness findings:
+  **(a)** `LIB_ROOTS` was a hand-kept six-package list, so `sap.tnt`/
+  `sap.uxap`/`sap.ui.table`/`sap.ui.integration`/`sap.ui.codeeditor` ports
+  "passed" the generic gate on their *Application Error popup* — the list is
+  now discovered from `node_modules/@openui5` (the 241 interaction exposed
+  the hollow pass); **(b)** app 016's `hideInput` DatePicker `openBy` opens
+  the calendar but then loops in `Popover.onfocusin` headless (focus-restore
+  bounces off the hidden input) — wiring is 1:1 with the original, recorded
+  as a LIVE_TEST finding for the next live check, 091 covers the class;
+  **(c)** app 008's palette squares render a zero-height box headless, so
+  its colorSelect toast stays uncovered. The headless layout also collapses
+  003's breadcrumb links into the overflow Select (the interaction goes
+  through the picker) and hides 049's +/- icons (driven by keyboard).
 
 ## Backlog sweep (2026-07-28) — dead wires closed, an app-killing crash proved and fixed, the OpenUI5 snapshots refreshed
 

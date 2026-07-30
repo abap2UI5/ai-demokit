@@ -33,7 +33,7 @@
     },
     {
       "type": "LIVE_TEST",
-      "what": "the toggle and the active-title toast were switched to roundtrip-free _event_client on 2026-07-22, and the 2026-07-30 RELATIVE_ONLY URL policy + urlValidated toast are new since the 2026-07-22 live check (status reset checked -> generated): re-verify the button toggles the MessagePopover, an active title toasts, and the absolute http link in the first message renders disabled after validation while relative links stay clickable."
+      "what": "the toggle and the active-title toast were switched to roundtrip-free _event_client on 2026-07-22, and the 2026-07-30 RELATIVE_ONLY URL policy + urlValidated toast are new since the 2026-07-22 live check (status reset checked -> generated): re-verify the button toggles the MessagePopover, an active title toasts, and the absolute http link in the first message renders disabled after validation while relative links stay clickable. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the button toggles the MessagePopover open (the 'Error message' item renders its markup)."
     }
   ]
 }

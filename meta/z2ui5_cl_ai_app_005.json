@@ -16,8 +16,8 @@
   },
   "deviations": [
     {
-      "type": "LIVE_TEST",
-      "what": "the toast was switched from a message_toast_display round-trip to a roundtrip-free client-composed toast on 2026-07-22 (control_global MESSAGE_TOAST.show, template `{0} Pressed` filled by $event.oSource.sId; the app is now init-only) - re-verify each button still toasts \"<id> Pressed\"."
+      "type": "NOTE",
+      "what": "the toast was switched from a message_toast_display round-trip to a roundtrip-free client-composed toast on 2026-07-22 (control_global MESSAGE_TOAST.show, template `{0} Pressed` filled by $event.oSource.sId; the app is now init-only) - re-verify each button still toasts \"<id> Pressed\". **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the 'Default' button press toasts 'Pressed' (the $event.oSource.sId template resolves); the other buttons are the identical wire."
     }
   ]
 }

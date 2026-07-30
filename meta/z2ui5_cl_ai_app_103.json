@@ -25,7 +25,7 @@
     },
     {
       "type": "LIVE_TEST",
-      "what": "The per-button dialog configuration (multi/growing/remember/clear/confirm text/draggable/resizable), the client-side search filter and the value-help selection need an in-system check; machine gates only verify the views are valid."
+      "what": "The per-button dialog configuration (multi/growing/remember/clear/confirm text/draggable/resizable), the client-side search filter and the value-help selection need an in-system check; machine gates only verify the views are valid. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the 'Show Select Dialog' popup opens with the 'Select Product' title; the per-button variants, search and copy-back remain unexercised."
     },
     {
       "type": "POST_171",

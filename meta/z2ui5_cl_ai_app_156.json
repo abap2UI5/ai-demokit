@@ -1,2 +1,20 @@
-{ "class": "z2ui5_cl_ai_app_156", "sample": "sap.m.sample.NumericContentDifColors", "entity": "sap.m.NumericContent", "file": "src/01/b15/z2ui5_cl_ai_app_156.clas.abap", "batch": "b15", "audit": { "frontend_action": true, "event_t_arg": false, "note": "every press shows a static client-composed toast (control_global MESSAGE_TOAST.show, fixed text) - roundtrip-free, so the app is init-only" }, "status": "reviewed", "checked": null,
-  "deviations": [ { "type": "LIVE_TEST", "what": "The NumericContent / GenericTile presses show a client MessageToast ('The numeric content is pressed.'), matching the original press handler. Four NumericContents (value colors Good/Critical/Error, indicators) plus a GenericTile > TileContent > NumericContent are reproduced 1:1." } ] }
+{
+  "class": "z2ui5_cl_ai_app_156",
+  "sample": "sap.m.sample.NumericContentDifColors",
+  "entity": "sap.m.NumericContent",
+  "file": "src/01/b15/z2ui5_cl_ai_app_156.clas.abap",
+  "batch": "b15",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": false,
+    "note": "every press shows a static client-composed toast (control_global MESSAGE_TOAST.show, fixed text) - roundtrip-free, so the app is init-only"
+  },
+  "status": "reviewed",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The NumericContent / GenericTile presses show a client MessageToast ('The numeric content is pressed.'), matching the original press handler. Four NumericContents (value colors Good/Critical/Error, indicators) plus a GenericTile > TileContent > NumericContent are reproduced 1:1. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): pressing the first NumericContent toasts 'The numeric content is pressed.'; the other tiles are the identical wire."
+    }
+  ]
+}
