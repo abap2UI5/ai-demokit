@@ -133,6 +133,10 @@ CLASS z2ui5_cl_ai_app_218 IMPLEMENTATION.
         ENDIF.
         client->follow_up_action( val   = client->cs_event-binding_call
                                   t_arg = VALUE #( ( `searchField` ) ( `suggestionItems` ) ( `filter` ) ( json_groups ) ) ).
+        " original: this.oSF.suggest() - reopen the suggestion popup after the
+        " filter (a public non-denied method via the generalized allowlist)
+        client->follow_up_action( val   = client->cs_event-control_by_id
+                                  t_arg = VALUE #( ( `searchField` ) ( `suggest` ) ) ).
 
     ENDCASE.
 

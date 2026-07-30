@@ -13,8 +13,12 @@
   "checked": null,
   "deviations": [
     {
-      "type": "IMPROVISED",
-      "what": "Each button opened the global sap.ui.core.BusyIndicator with a different delay/duration (show(delay) + setTimeout(hide)); reproduced here as client-side MessageToasts describing the intended delay/duration (the global busy overlay and timers are not reproduced server-side)."
+      "type": "NOTE",
+      "what": "Since 2026-07-30 the global sap.ui.core.BusyIndicator behaviour is reproduced 1:1: each button fires a backend event whose response chains follow_up_action( control_global BUSY_INDICATOR show [delay] ) with the original's delay (default / 0 / 2000) plus follow_up_action( start_timer HIDE_BUSY duration ) (4000 / 4000 / 1000); the HIDE_BUSY timer round-trip then issues BUSY_INDICATOR hide - the frontend-action form of showBusyIndicator(iDuration, iDelay) + setTimeout(hideBusyIndicator). START_TIMER's single-slot semantics (a new timer replaces the pending one) match the original's clearTimeout of _sTimeoutId. Timing nuance: the hide fires after duration + one round-trip latency, and the show after the press round-trip - a few ms later than the original's purely client-side call; the press attributes are rewired from the controller handler names to backend events (the earlier MessageToast substitution is gone)."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "the BUSY_INDICATOR show/hide chain and the START_TIMER HIDE_BUSY round-trips are unverified in a running system - verify the overlay appears (default and zero delay), disappears after ~4s, and never appears in the 2s-delay/1s-duration case."
     }
   ]
 }

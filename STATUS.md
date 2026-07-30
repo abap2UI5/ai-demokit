@@ -16,9 +16,9 @@ TRAINING.md; for what abap2UI5 can express see CAPABILITIES.md._
 | Aspect | State |
 |---|---|
 | Ports | **246** sidecars in `meta/` (src/01: 149 · src/02: 55 · src/03: 12 · src/04: 19 · src/05: 11) |
-| Status ladder | 47 `generated` · 146 `reviewed` · 53 `checked` (live-verified) |
-| Deviations | 4 DROPPED_171 · 129 IMPROVISED · 62 LIVE_TEST · 270 NOTE · 95 POST_171 |
-| Open LIVE_TESTs | **58 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
+| Status ladder | 49 `generated` · 146 `reviewed` · 51 `checked` (live-verified) |
+| Deviations | 4 DROPPED_171 · 117 IMPROVISED · 66 LIVE_TEST · 280 NOTE · 96 POST_171 |
+| Open LIVE_TESTs | **62 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
 | Declared gate skips | 7 structural-diff · 1 render-smoke (each re-verified per run — a stale skip FAILS) |
 | Out-of-scope ported samples | `z2ui5_cl_ai_app_121 (sap.m.sample.UploadSet — deprecated)` · `z2ui5_cl_ai_app_136 (sap.f.sample.SidePanelSingle — control @since 1.107)` · `z2ui5_cl_ai_app_141 (sap.ui.core.sample.InvisibleMessage — control @since 1.78)` · `z2ui5_cl_ai_app_165 (sap.f.sample.ProductSwitchNavigation — control @since 1.72)` · `z2ui5_cl_ai_app_166 (sap.f.sample.SemanticPage — deprecated)` · `z2ui5_cl_ai_app_203 (sap.m.sample.OverflowToolbarTokenizer — control @since 1.139)` — standing debt pending a maintainer decision (drop vs documented exception), surfaced by the source-backed scope gate (pr/scope-since-from-source) |
 
@@ -103,6 +103,19 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   Find the rest: sidecar status `generated` minus the 6 scope-exception ports. Note the
   reworked ports keep status `generated`: the headline gap is closed and
   gate-verified, a full end-to-end re-review per port is not done.
+  **Closed 2026-07-30:** the whole remaining toast-substitution class —
+  106/107 (MultiSelect toggle state + the MessagesIndicator MessagePopover
+  over the `message>` model via the cc.MessageManager bridge), 112 (the
+  ResponsivePopover-with-ColorPicker via `popover_display`), 147 (the global
+  BusyIndicator show/hide reproduced with `BUSY_INDICATOR` + `START_TIMER`),
+  149 (URLHELPER REDIRECT instead of the toast), 170 (the Card popover
+  fragment 1:1 + the Edit `areaShrinkRatio` toggle via two-way binding),
+  218 (the dropped `oSF.suggest()` popup-reopen wired as a second
+  `control_by_id` follow-up), 244 (`breakpointChange` → bound Avatar
+  `displaySize`, POST_171 @1.147) and 246 (the original `handleUploadPress`
+  empty-check/upload/clear instead of the tooltip-derived toast). What
+  remains of this backlog is only the residual faked-event-value audit
+  across `generated` ports.
 - [ ] **App 203 out of scope via `@ui5-experimental-since`** —
   `sap.m.OverflowToolbarTokenizer` is experimental since 1.139 with no plain
   `@since`, which the scanners misread as base-version until 2026-07-27

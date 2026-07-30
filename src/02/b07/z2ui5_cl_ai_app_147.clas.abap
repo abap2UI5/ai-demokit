@@ -7,6 +7,7 @@ CLASS z2ui5_cl_ai_app_147 DEFINITION PUBLIC.
     DATA client TYPE REF TO z2ui5_if_client.
 
     METHODS view_display.
+    METHODS on_event.
 
   PRIVATE SECTION.
 ENDCLASS.
@@ -19,6 +20,8 @@ CLASS z2ui5_cl_ai_app_147 IMPLEMENTATION.
     me->client = client.
     IF client->check_on_init( ).
       view_display( ).
+    ELSEIF client->check_on_event( ).
+      on_event( ).
     ENDIF.
 
   ENDMETHOD.
@@ -28,9 +31,6 @@ CLASS z2ui5_cl_ai_app_147 IMPLEMENTATION.
 
     DATA(view) = z2ui5_cl_ai_xml=>factory( ).
 
-    " the four button presses trigger the global BusyIndicator with varying
-    " duration/delay in the original; here each opens a client MessageToast
-    " (the global BusyIndicator show/hide + setTimeout are not reproduced).
     view->open( n = `View` ns = `mvc`
         )->a( n = `height`     v = `100%`
         )->a( n = `xmlns:core` v = `sap.ui.core`
@@ -53,7 +53,7 @@ CLASS z2ui5_cl_ai_app_147 IMPLEMENTATION.
                     )->open( `content`
                         )->leaf( `Button`
                             )->a( n = `text`  v = `Show BusyIndicator`
-                            )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `BusyIndicator (default delay) for 4s` ) ) )
+                            )->a( n = `press` v = client->_event( `SHOW_4000` )
 
                     )->shut(
                 )->shut(
@@ -63,7 +63,7 @@ CLASS z2ui5_cl_ai_app_147 IMPLEMENTATION.
                     )->open( `content`
                         )->leaf( `Button`
                             )->a( n = `text`  v = `Show BusyIndicator`
-                            )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `BusyIndicator (zero delay) for 4s` ) ) )
+                            )->a( n = `press` v = client->_event( `SHOW_4000_0` )
 
                     )->shut(
                 )->shut(
@@ -73,9 +73,49 @@ CLASS z2ui5_cl_ai_app_147 IMPLEMENTATION.
                     )->open( `content`
                         )->leaf( `Button`
                             )->a( n = `text`  v = `Show BusyIndicator`
-                            )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `BusyIndicator (2s delay, 1s duration)` ) ) ) ).
+                            )->a( n = `press` v = client->_event( `SHOW_1000_2000` ) ).
 
     client->view_display( view->stringify( ) ).
+
+  ENDMETHOD.
+
+
+  METHOD on_event.
+
+    " original showBusyIndicator(iDuration, iDelay): BusyIndicator.show(iDelay)
+    " plus a setTimeout that hides it after iDuration - reproduced with the
+    " BUSY_INDICATOR global target and START_TIMER (a new timer replaces the
+    " previous one, matching the original's clearTimeout of _sTimeoutId)
+    CASE client->get( )-event.
+
+      WHEN `SHOW_4000`.
+        " show4000: default delay (1 second), hide after 4 seconds
+        client->follow_up_action( val   = client->cs_event-control_global
+                                  t_arg = VALUE #( ( `BUSY_INDICATOR` ) ( `show` ) ) ).
+        client->follow_up_action( val   = client->cs_event-start_timer
+                                  t_arg = VALUE #( ( `HIDE_BUSY` ) ( `4000` ) ) ).
+
+      WHEN `SHOW_4000_0`.
+        " show4000_0: zero delay, hide after 4 seconds
+        client->follow_up_action( val   = client->cs_event-control_global
+                                  t_arg = VALUE #( ( `BUSY_INDICATOR` ) ( `show` ) ( `0` ) ) ).
+        client->follow_up_action( val   = client->cs_event-start_timer
+                                  t_arg = VALUE #( ( `HIDE_BUSY` ) ( `4000` ) ) ).
+
+      WHEN `SHOW_1000_2000`.
+        " show1000_2000: two seconds delay, hide after one second - the
+        " indicator should never appear at all
+        client->follow_up_action( val   = client->cs_event-control_global
+                                  t_arg = VALUE #( ( `BUSY_INDICATOR` ) ( `show` ) ( `2000` ) ) ).
+        client->follow_up_action( val   = client->cs_event-start_timer
+                                  t_arg = VALUE #( ( `HIDE_BUSY` ) ( `1000` ) ) ).
+
+      WHEN `HIDE_BUSY`.
+        " the timer callback - hideBusyIndicator
+        client->follow_up_action( val   = client->cs_event-control_global
+                                  t_arg = VALUE #( ( `BUSY_INDICATOR` ) ( `hide` ) ) ).
+
+    ENDCASE.
 
   ENDMETHOD.
 

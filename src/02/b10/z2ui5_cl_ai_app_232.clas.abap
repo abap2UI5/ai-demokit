@@ -24,6 +24,7 @@ CLASS z2ui5_cl_ai_app_232 DEFINITION PUBLIC.
     DATA client TYPE REF TO z2ui5_if_client.
 
     METHODS view_display.
+    METHODS on_event.
     METHODS model_init.
 
   PRIVATE SECTION.
@@ -38,6 +39,8 @@ CLASS z2ui5_cl_ai_app_232 IMPLEMENTATION.
     IF client->check_on_init( ).
       model_init( ).
       view_display( ).
+    ELSEIF client->check_on_event( ).
+      on_event( ).
     ENDIF.
 
   ENDMETHOD.
@@ -62,8 +65,8 @@ CLASS z2ui5_cl_ai_app_232 IMPLEMENTATION.
 
                 )->open( `dependents`
                     " the two core:CommandExecution controls (CE_SAVE/CE_DELETE) that
-                    " sat here are DROPPED - no abap2UI5 equivalent for a command /
-                    " keyboard-shortcut binding (see meta deviations + friction log)
+                    " sat here are DROPPED as controls; their Ctrl+S / Ctrl+D shortcuts
+                    " are reproduced via cs_event-keyboard_shortcut (registered on init)
                     )->open( `Popover`
                         )->a( n = `id`    v = `popoverCommand`
                         )->a( n = `title` v = `Popover`
@@ -77,15 +80,13 @@ CLASS z2ui5_cl_ai_app_232 IMPLEMENTATION.
                                     )->a( n = `text`    v = `Delete`
                                     )->a( n = `enabled` v = client->_bind( delete_enabled )
                                     )->a( n = `visible` v = client->_bind( delete_visible )
-                                    )->a( n = `press`   v = client->_event_client( val   = client->cs_event-control_global
-                                                                                   t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `CTRL+D: Delete triggered on controller` ) ) )
+                                    )->a( n = `press`   v = client->_event( `DELETE` )
                                 )->leaf( `ToolbarSpacer`
                                 )->leaf( `Button`
                                     )->a( n = `text`    v = `Save`
                                     )->a( n = `enabled` v = client->_bind( psave_enabled )
                                     )->a( n = `visible` v = client->_bind( psave_visible )
-                                    )->a( n = `press`   v = client->_event_client( val   = client->cs_event-control_global
-                                                                                   t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `CTRL+S: save triggered on controller` ) ) )
+                                    )->a( n = `press`   v = client->_event( `PSAVE` )
 
                             )->shut(
                         )->shut(
@@ -104,15 +105,13 @@ CLASS z2ui5_cl_ai_app_232 IMPLEMENTATION.
                                     )->a( n = `text`    v = `Delete`
                                     )->a( n = `enabled` v = client->_bind( delete_enabled )
                                     )->a( n = `visible` v = client->_bind( delete_visible )
-                                    )->a( n = `press`   v = client->_event_client( val   = client->cs_event-control_global
-                                                                                   t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `CTRL+D: Delete triggered on controller` ) ) )
+                                    )->a( n = `press`   v = client->_event( `DELETE` )
                                 )->leaf( `ToolbarSpacer`
                                 )->leaf( `Button`
                                     )->a( n = `text`    v = `Save`
                                     )->a( n = `enabled` v = client->_bind( save_enabled )
                                     )->a( n = `visible` v = client->_bind( save_visible )
-                                    )->a( n = `press`   v = client->_event_client( val   = client->cs_event-control_global
-                                                                                   t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `CTRL+S: save triggered on controller` ) ) )
+                                    )->a( n = `press`   v = client->_event( `SAVE` )
 
                             )->shut(
                         )->shut(
@@ -127,8 +126,7 @@ CLASS z2ui5_cl_ai_app_232 IMPLEMENTATION.
 
                     )->leaf( `Button`
                         )->a( n = `text`  v = `Save`
-                        )->a( n = `press` v = client->_event_client( val   = client->cs_event-control_global
-                                                                     t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `CTRL+S: save triggered on controller` ) ) )
+                        )->a( n = `press` v = client->_event( `SAVE` )
 
                 )->shut(
 
@@ -248,6 +246,42 @@ CLASS z2ui5_cl_ai_app_232 IMPLEMENTATION.
         )->shut( ).
 
     client->view_display( view->stringify( ) ).
+
+    " the manifest's sap.ui5/commands shortcuts (Save = Ctrl+S, Delete = Ctrl+D)
+    " - registered as declarative combo -> named-event bindings; pressing the
+    " combo fires the event like a button press and suppresses the browser default
+    client->follow_up_action( val   = client->cs_event-keyboard_shortcut
+                              t_arg = VALUE #( ( `Ctrl+S` ) ( `SAVE` ) ) ).
+    client->follow_up_action( val   = client->cs_event-keyboard_shortcut
+                              t_arg = VALUE #( ( `Ctrl+D` ) ( `DELETE` ) ) ).
+
+  ENDMETHOD.
+
+
+  METHOD on_event.
+
+    CASE client->get( )-event.
+
+      WHEN `SAVE`.
+        " original onSave (page CE_SAVE): a disabled/invisible CommandExecution
+        " swallows the command, so the flags gate the toast server-side
+        IF save_enabled = abap_true AND save_visible = abap_true.
+          client->message_toast_display( `CTRL+S: save triggered on controller` ).
+        ENDIF.
+
+      WHEN `DELETE`.
+        " original onDelete (page CE_DELETE)
+        IF delete_enabled = abap_true AND delete_visible = abap_true.
+          client->message_toast_display( `CTRL+D: Delete triggered on controller` ).
+        ENDIF.
+
+      WHEN `PSAVE`.
+        " original onSave via the popover-local CE_SAVE_POPOVER
+        IF psave_enabled = abap_true AND psave_visible = abap_true.
+          client->message_toast_display( `CTRL+S: save triggered on controller` ).
+        ENDIF.
+
+    ENDCASE.
 
   ENDMETHOD.
 

@@ -71,6 +71,10 @@ CLASS z2ui5_cl_ai_app_067 IMPLEMENTATION.
                                 )->a( n = `items`            v = client->_bind( t_messages )
                                 )->a( n = `activeTitlePress` v = client->_event_client( val   = client->cs_event-control_global
                                                                                         t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Active title is pressed` ) ) )
+                                " added wire (declared): the original attaches urlValidated in the
+                                " controller and toasts after each async URL validation
+                                )->a( n = `urlValidated`     v = client->_event_client( val   = client->cs_event-control_global
+                                                                                        t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `URL validation has been performed.` ) ) )
 
                                 )->open( `MessageItem`
                                     )->a( n = `type`              v = `{TYPE}`
@@ -100,6 +104,12 @@ CLASS z2ui5_cl_ai_app_067 IMPLEMENTATION.
         )->shut( ).
 
     client->view_display( view->stringify( ) ).
+
+    " original setAsyncURLHandler: allowed = url.lastIndexOf('http', 0) < 0 -
+    " the framework's built-in RELATIVE_ONLY policy (relative links allowed,
+    " absolute ones disabled) covers the demo's exact case declaratively
+    client->follow_up_action( val   = client->cs_event-control_by_id
+                              t_arg = VALUE #( ( `messagePopover` ) ( `setAsyncURLHandler` ) ( `RELATIVE_ONLY` ) ) ).
 
   ENDMETHOD.
 

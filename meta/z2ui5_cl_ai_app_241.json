@@ -8,11 +8,7 @@
     "frontend_action": false,
     "event_t_arg": true
   },
-  "status": "checked",
-  "checked": {
-    "date": "2026-07-27",
-    "note": "verified in a running system 2026-07-27 - controller-built Dialog opens/closes; NavigationList selection paths work"
-  },
+  "status": "generated",
   "deviations": [
     {
       "type": "POST_171",
@@ -31,16 +27,16 @@
       "what": "NavigationListItem.design=\"Action\" and NavigationListItem.ariaHasPopup=\"Dialog\" (both @since 1.133.0) are kept 1:1 on the Quick Create item. @since verified NavigationListItem.js:131-139."
     },
     {
-      "type": "IMPROVISED",
-      "what": "itemPress preventDefault: when the 'preventDefaultCheckbox' is selected the original calls oEvent.preventDefault() to suppress the item's default selection. The thin frontend cannot conditionally suppress the client-side selection, so the selection still changes; only the toast heading reflects the choice ('Default was prevented:' vs 'Item Pressed:'). The prevent-default behaviour itself is dropped. The checkbox state is read server-side via a two-way bound selected={/PREVENT_DEFAULT} (the original had no binding and read getSelected()); the .itemPress handler is rewired to the ITEM_PRESS backend event."
+      "type": "NOTE",
+      "what": "itemPress preventDefault reproduced 1:1 since 2026-07-30: every NavigationListItem press wire carries s_ctrl-check_prevent_default = prevent_default, so when the 'preventDefaultCheckbox' is selected the handler cancels the item's built-in default client-side (oEvent.preventDefault() before the round-trip - selection stays, href navigation is suppressed) exactly like the original. The flag is baked into the handler expression at render time, so the CheckBox got an added select wire (PREVENT_TOGGLE, declared) that redraws the view when toggled; the redraw resets the client-side selection back to selectedKey='walked' - a small toggle-time caveat the original (which never redraws) does not have. The checkbox state stays two-way bound (selected={/PREVENT_DEFAULT}); the toast heading ('Default was prevented:' vs 'Item Pressed:') is composed server-side from the same flag."
     },
     {
       "type": "IMPROVISED",
       "what": "quickActionPress dialog: reproduced as a core:FragmentDefinition shown via client->popup_display - the controller-built sap.m.Dialog with two Label + Input pairs (Name/Icon, the Inputs two-way bound to create_name/create_icon) and Create/Cancel Buttons. These Dialog/Label/Input/Button controls are extra vs the original view.xml, which declared none of them (the original built the Dialog imperatively in the controller). The original Create button imperatively does sideNavigation.getItem().addItem(new NavigationListItem(...)); dynamic addItem to the statically declared NavigationList is not expressible (it would require folding the 1:1 static items into a bound aggregation), so CREATE_ITEM reads the entered values and shows a toast instead of adding the item. The .quickActionPress handler is rewired to the QUICK_CREATE backend event."
     },
     {
-      "type": "NOTE",
-      "what": "live-verified 2026-07-27: onCollapseExpandPress reproduced server-side: SideNavigation.expanded is two-way bound (initial false as in the original expanded=\"false\") and flipped on the TOGGLE_EXPAND round-trip instead of the imperative byId().setExpanded(!expanded) - same technique as apps 172/128. The literal expanded=\"false\" becoming a {/EXPANDED} binding, the ITEM_PRESS modifier-key transport and the popup round-trips all need a live render check."
+      "type": "LIVE_TEST",
+      "what": "The 2026-07-27 live check predates the 2026-07-30 prevent-default rewire (status reset checked -> generated per the invalidation rule): re-verify that with the checkbox set a press does NOT change the selection (eBP cancels the default) and still toasts 'Default was prevented:', that with the checkbox clear selection changes normally, and that the PREVENT_TOGGLE redraw keeps working (expanded state and checkbox survive it via their two-way bindings). onCollapseExpandPress (expanded two-way + TOGGLE_EXPAND round-trip), the ITEM_PRESS modifier-key transport and the popup round-trips were live-verified 2026-07-27."
     }
   ]
 }

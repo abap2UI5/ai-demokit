@@ -45,7 +45,11 @@ CLASS z2ui5_cl_ai_app_149 IMPLEMENTATION.
                 )->a( n = `src`   v = `./resources/sap/ui/documentation/sdk/images/tools/CardExplorer.png`
                 )->a( n = `alt`   v = `Card Explorer`
                 )->a( n = `class` v = `sapUiSmallMargin`
-                )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Opening the Card Explorer ...` ) ) ) ).
+                " original onImagePress: URLHelper.redirect(url, true) - 1:1 via the
+                " urlhelper REDIRECT frontend action (same relative target as the Link)
+                )->a( n = `press` v = client->_event_client( val   = client->cs_event-urlhelper
+                                                             t_arg = VALUE #( ( `REDIRECT` )
+                                                                              ( |\{ URL: 'test-resources/sap/ui/integration/demokit/cardExplorer/index.html', NEW_WINDOW: true \}| ) ) ) ).
 
     client->view_display( view->stringify( ) ).
 

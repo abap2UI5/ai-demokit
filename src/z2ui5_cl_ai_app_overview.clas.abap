@@ -628,49 +628,52 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` 2026-07-27: both named models fold into the default model per CAPABILITIES 'Named JSON models' (the mocks are archived under ui5/sap.f/Card/model/), so the full sample is expressible - needs rework` &&
                  ` to a faithful rebuild.` ) ).
 
-    lv_text1 = `IMPROVISED: The controller's Card popover (onPressOpenPopover, wired to the GenericTag press and the 'Button with layoutData' press) is dropped: it Fragment.loads Card.fragment.xml (a Popover >` &&
-               ` sap.f.Card > sap.f.cards.NumericHeader with two NumericSideIndicators) and opens it by the pressed control; the GenericTag.press attribute is therefore also dropped. Accounts for the structural-diff` &&
-               ` 'control missing' on Popover / f:Card / card:NumericHeader / card:NumericSideIndicator and 'attr missing' GenericTag.press. Review 2026-07-27: this drop improvises around a CAPABILITIES-checkmarked` &&
-               ` feature - a Fragment.load + openBy popover is exactly popover_display( xml = <fragment> by_id = $event.oSource.sId ) (Popups & messages rows, app 229/094 idiom), so the popover should be ported 1:1;` &&
-               ` flagged for rework, not promoted. // IMPROVISED: The Edit button's press='.toggleAreaPriority' is dropped. The handler flips the DynamicPageTitle.areaShrinkRatio between its default and '1.6:1:1.6';` &&
-               ` cosmetic, no data impact. Review 2026-07-27: the earlier 'no bindable path' rationale is wrong - areaShrinkRatio IS a bindable property and the metadata default is the static constant '1:1.6:1.6', so`.
-    lv_text1 = lv_text1 && ` the toggle is expressible as a two-way bound model field flipped in a backend event (same technique as the TOGGLE_FOOTER flag in this port); flagged for rework together with the popover drop. //` &&
-               ` NOTE: showFooter is two-way bound to a model flag ({/SHOWFOOTER}, default false) and the 'Toggle Footer' button flips it via a TOGGLE_FOOTER round-trip + re-render; the original toggles it` &&
-               ` imperatively (setShowFooter). headerExpanded and toggleHeaderOnTitleClick are likewise bound to model flags (both default true) - the original binds {/headerExpanded}/{/titleClickable} against a` &&
-               ` model that never sets them, so they fall back to the control defaults, reproduced here explicitly. // NOTE: The shared 123-row demo ProductCollection (sap/ui/demo/mock/products.json) is inlined with` &&
-               ` the columns the table binds (Name, ProductId, SupplierName, Width, Depth, Height, DimUnit, Price, CurrencyCode). The Price/CurrencyCode Currency composite type binding and the items sorter (path` &&
-               ` 'Name') are kept 1:1 as raw binding-info strings. // NOTE: Width/Depth/Height are TYPE string (not i): the mock carries decimal dimensions (40.8, 3.1) and they bind display-only into a text template`.
-    lv_text1 = lv_text1 && ` ({WIDTH} x {DEPTH} x {HEIGHT} {DIMUNIT}), so a string keeps the exact value; TYPE i would truncate (an earlier version did, via json-to-abap's first-row inference — tool since fixed). Price stays` &&
-               ` packed (DECIMALS 2) for the Currency type binding, decimals preserved.`.
+    lv_text1 = `NOTE: The controller's Card popover (onPressOpenPopover, wired to the GenericTag press and the 'Button with layoutData' press) is reproduced 1:1 since 2026-07-30: both presses fire OPEN_POPOVER with` &&
+               ` $event.oSource.sId and the backend rebuilds view/Card.fragment.xml verbatim (Popover placement Bottom / showHeader false / contentWidth 300px > f:Card > card:NumericHeader 'Sales Revenue' with the` &&
+               ` two card:NumericSideIndicator Target/Deviation rows) shown via popover_display( by_id = pressed control ) - the Fragment.load + openBy equivalent. The fragment's Popover, Card, NumericHeader and` &&
+               ` NumericSideIndicator controls are counted by structural-diff against the union that includes the original's own Card.fragment.xml, so the counts match; both press attributes are restored 1:1. //` &&
+               ` NOTE: The Edit button's press='.toggleAreaPriority' is reproduced since 2026-07-30: DynamicPageTitle.areaShrinkRatio is two-way bound ({/AREASHRINKRATIO}, an added attribute vs the original view -` &&
+               ` declared here) seeded with the metadata default 1:1.6:1.6, and the TOGGLE_AREA_PRIORITY round-trip flips it to 1.6:1:1.6 and back (the controller read the default from`.
+    lv_text1 = lv_text1 && ` getMetadata().getProperty('areaShrinkRatio').getDefaultValue(); the port seeds the same literal - re-verify should UI5 ever change the default). // NOTE: showFooter is two-way bound to a model flag` &&
+               ` ({/SHOWFOOTER}, default false) and the 'Toggle Footer' button flips it via a TOGGLE_FOOTER round-trip + re-render; the original toggles it imperatively (setShowFooter). headerExpanded and` &&
+               ` toggleHeaderOnTitleClick are likewise bound to model flags (both default true) - the original binds {/headerExpanded}/{/titleClickable} against a model that never sets them, so they fall back to the` &&
+               ` control defaults, reproduced here explicitly. // NOTE: The shared 123-row demo ProductCollection (sap/ui/demo/mock/products.json) is inlined with the columns the table binds (Name, ProductId,` &&
+               ` SupplierName, Width, Depth, Height, DimUnit, Price, CurrencyCode). The Price/CurrencyCode Currency composite type binding and the items sorter (path 'Name') are kept 1:1 as raw binding-info strings.` &&
+               ` // NOTE: Width/Depth/Height are TYPE string (not i): the mock carries decimal dimensions (40.8, 3.1) and they bind display-only into a text template ({WIDTH} x {DEPTH} x {HEIGHT} {DIMUNIT}), so a`.
+    lv_text1 = lv_text1 && ` string keeps the exact value; TYPE i would truncate (an earlier version did, via json-to-abap's first-row inference — tool since fixed). Price stays packed (DECIMALS 2) for the Currency type binding,` &&
+               ` decimals preserved.`.
     result = VALUE #( BASE result
       ( module = `sap.f`              control = `sap.f.DynamicPage`                     name = `DynamicPageFreeStyle`                class = `z2ui5_cl_ai_app_170` path = `src/04/b07/z2ui5_cl_ai_app_170.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.42`
         notes = lv_text1 ) ).
 
     lv_text1 = `POST-1.71: sap.m.Avatar (control @since 1.73, incl. its src/class/press members) is used 1:1 in snappedContent and the DynamicPageHeader; needs UI5 >= 1.73. DynamicPage is the in-scope headline` &&
-               ` control (@1.42); Avatar is a secondary control kept 1:1 per the post-1.71 member policy. // IMPROVISED: The controller's breakpointChange handling is dropped: onBreakpointChange read` &&
-               ` currentRange/currentWidth and imperatively setDisplaySize on the header/snapped Avatars (M/L/XL) plus toasted 'Media Range: ...'. The responsive Avatar resizing and the toast are omitted; the Avatars` &&
-               ` render at their default displaySize. The DynamicPage has no breakpointChange view attribute (attached imperatively), so no structural-diff impact. Review 2026-07-27: the original rationale` &&
-               ` (CAPABILITIES 'Event args derived from runtime layout/overflow measurement' not expressible) does NOT hold here - breakpointChange is a declarable metadata event of sap.f.DynamicPage (since UI5` &&
-               ` 1.147, would be a POST_171 deviation) and its currentRange/currentWidth are ordinary event parameters transportable via ${$parameters>/...}; a faithful reproduction (event round-trip, displaySize`.
-    lv_text1 = lv_text1 && ` two-way bound and recomputed in ABAP, client-composed 'Media Range: {0} ({1}px)' toast) appears expressible. Needs rework - left status generated. // LIVE-TEST: showFooter is two-way bound` &&
-               ` ({/SHOW_FOOTER}, default true) and the Toggle Footer button flips it on a round-trip (view_model_update) - the faithful abap2UI5 form of the controller's setShowFooter(!getShowFooter()); the scalar` &&
-               ` literal showFooter="true" -> binding is not a structural diff. The Home/Examples/Avatar presses raise client-composed MessageToasts via _event_client control_global MESSAGE_TOAST (roundtrip-free,` &&
-               ` apps 005/060). Both the footer round-trip and the toast wiring are unverified in a running system. // NOTE: The two Avatar src values point at the sdk.openui5.org host` &&
+               ` control (@1.42); Avatar is a secondary control kept 1:1 per the post-1.71 member policy. // POST-1.71: sap.f.DynamicPage.breakpointChange (@since 1.147, incl. its currentRange/currentWidth` &&
+               ` parameters) is the whole point of this sample and is wired 1:1 since 2026-07-30 as a view attribute (an added attr - the original attaches it imperatively in onInit via attachBreakpointChange):` &&
+               ` BREAKPOINT_CHANGE transports ${$parameters>/currentRange} and ${$parameters>/currentWidth}, the backend maps Phone->M / Tablet->L / else XL into the two-way bound Avatar displaySize ({/AVATAR_SIZE},` &&
+               ` an added attribute on both Avatars, seeded XL) and toasts Media Range: <range> (<width>px) exactly like onBreakpointChange. @since verified fork-openui5/src/sap.f/src/sap/f/DynamicPage.js:315.` &&
+               ` Requires a UI5 release >= 1.147; on older releases the event never fires and the Avatars keep the seeded XL (the property gate is blind to sap.f event params). // LIVE-TEST: showFooter is two-way`.
+    lv_text1 = lv_text1 && ` bound ({/SHOW_FOOTER}, default true) and the Toggle Footer button flips it on a round-trip (view_model_update) - the faithful abap2UI5 form of the controller's setShowFooter(!getShowFooter()); the` &&
+               ` scalar literal showFooter="true" -> binding is not a structural diff. The Home/Examples/Avatar presses raise client-composed MessageToasts via _event_client control_global MESSAGE_TOAST` &&
+               ` (roundtrip-free, apps 005/060). Both the footer round-trip and the toast wiring are unverified in a running system. // NOTE: The two Avatar src values point at the sdk.openui5.org host` &&
                ` (https://sdk.openui5.org/test-resources/sap/uxap/images/imageID_275314.png) per the offline asset-URL rule; the original uses the relative ./test-resources path. Literal src values are not compared` &&
                ` by structural-diff.`.
+    lv_text2 = `sap.m.Avatar (control @since 1.73, incl. its src/class/press members) is used 1:1 in snappedContent and the DynamicPageHeader; needs UI5 >= 1.73. DynamicPage is the in-scope headline control (@1.42);` &&
+               ` Avatar is a secondary control kept 1:1 per the post-1.71 member policy. // sap.f.DynamicPage.breakpointChange (@since 1.147, incl. its currentRange/currentWidth parameters) is the whole point of this` &&
+               ` sample and is wired 1:1 since 2026-07-30 as a view attribute (an added attr - the original attaches it imperatively in onInit via attachBreakpointChange): BREAKPOINT_CHANGE transports` &&
+               ` ${$parameters>/currentRange} and ${$parameters>/currentWidth}, the backend maps Phone->M / Tablet->L / else XL into the two-way bound Avatar displaySize ({/AVATAR_SIZE}, an added attribute on both` &&
+               ` Avatars, seeded XL) and toasts Media Range: <range> (<width>px) exactly like onBreakpointChange. @since verified fork-openui5/src/sap.f/src/sap/f/DynamicPage.js:315. Requires a UI5 release >= 1.147;` &&
+               ` on older releases the event never fires and the Avatars keep the seeded XL (the property gate is blind to sap.f event params).`.
     result = VALUE #( BASE result
       ( module = `sap.f`              control = `sap.f.DynamicPage`                     name = `DynamicPageResponsiveAvatar`         class = `z2ui5_cl_ai_app_244` path = `src/04/b10/z2ui5_cl_ai_app_244.clas.abap`
-        score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.42`
         is_post171 = abap_true
         notes = lv_text1
-        post171 = `sap.m.Avatar (control @since 1.73, incl. its src/class/press members) is used 1:1 in snappedContent and the DynamicPageHeader; needs UI5 >= 1.73. DynamicPage is the in-scope headline control (@1.42);` &&
-                 ` Avatar is a secondary control kept 1:1 per the post-1.71 member policy.` ) ).
+        post171 = lv_text2 ) ).
 
     lv_text1 = `NOTE: showFooter is two-way bound to a model flag ({/SHOWFOOTER}, default false) and the 'Toggle Footer' button flips it via a TOGGLE_FOOTER round-trip + re-render; the original controller toggles it` &&
                ` imperatively (onToggleFooter -> setShowFooter). The original view has no showFooter attribute (it defaults false), so adding the bound attribute is the faithful thin-frontend form of the imperative` &&
@@ -864,25 +867,23 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         post171 = `sap.m.Avatar (control @since 1.73) is used 1:1 as the profile avatar - the profile aggregation's m:Avatar with initials. Newer than UI5 1.71; declared per the property-171 policy (apps 099/244` &&
                  ` precedent), so the app needs UI5 >= 1.73 to render the avatar.` ) ).
 
-    lv_text1 = `IMPROVISED: suggest handler (handlerSearchSuggestEvent): the original builds two sap.ui.model.Filter objects with custom JS test functions (case-insensitive substring on ProductId and Name) and` &&
-               ` applies them to the SearchManager's suggestionItems binding, then calls oSF.suggest() to reopen the suggestion popup. The custom JS filter functions are inexpressible (control-side JS), but their` &&
-               ` semantics is the whitelisted 'Contains' operator, so the filter is reproduced 1:1 via cs_event-binding_call (compound OR group over PRODUCTID/NAME Contains the typed value), CAPABILITIES` &&
-               ` 'Controller-applied binding filter' / app 022. The typed text is transported as the ${$parameters>/suggestValue} event arg and read with get_event_arg. The imperative oSF.suggest() popup-reopen call` &&
-               ` is DROPPED. Review correction 2026-07-27: the earlier rationale ('suggest' not in the CONTROL_METHODS whitelist, needs a pr/) is WRONG - FrontendAction.js allows any public non-denylisted control` &&
-               ` method as an unlisted control_by_id call, and sap.f.SearchManager.suggest() is public (source-verified), so the popup-reopen could be wired as a second follow_up_action( control_by_id,`.
-    lv_text1 = lv_text1 && ` searchField/suggest ). The drop is an open porting gap, not a framework gap; rewiring + live check pending. // LIVE-TEST: Unverified in a running system: (a) the search and liveChange handlers are` &&
-               ` client-composed MessageToast.show calls via cs_event-control_global (template '{0} search event is fired' / '{0} liveChange event value is: {1}' filled by $event.oSource.sId and` &&
-               ` ${$parameters>/newValue}), app 005 idiom; (b) the suggest->binding_call compound Contains filter roundtrip and its effect on the SearchManager suggestion list. Rendering (render-smoke) is green;` &&
-               ` runtime event/roundtrip behaviour needs a live check. // NOTE: The ShellBar homeIcon asset URL './resources/sap/ui/documentation/sdk/images/logo_sap.png' is repointed to the OpenUI5 host` &&
-               ` 'https://sdk.openui5.org/resources/...' per the asset-URL rule (same as app 110). The mock's per-row ProductPicUrl values are kept byte-identical to sap/ui/demo/mock/products.json (unbound display` &&
-               ` data, never rendered by this view). Rows without a DateOfSale in the mock carry an empty string (the property is not bound). Review finding 2026-07-27: the row type inlines all 20 mock keys although`.
-    lv_text1 = lv_text1 && ` the view binds only Name, Price, CurrencyCode and ProductId - against AGENTS.md par.5 'unbound mock keys stay out of the row type'; the unbound columns (category, maincategory, taxtarifcode,` &&
-               ` suppliername, weightmeasure, weightunit, description, dateofsale, productpicurl, status, quantity, uom, width, depth, height, dimunit) should be trimmed.`.
+    lv_text1 = `NOTE: suggest handler (handlerSearchSuggestEvent): the original builds two sap.ui.model.Filter objects with custom JS test functions (case-insensitive substring on ProductId and Name) and applies them` &&
+               ` to the SearchManager's suggestionItems binding, then calls oSF.suggest() to reopen the suggestion popup. The custom JS filter functions are inexpressible (control-side JS), but their semantics is the` &&
+               ` whitelisted 'Contains' operator (case-insensitive on client bindings when Filter.caseSensitive is unset), so the filter is reproduced 1:1 via cs_event-binding_call (compound OR group over` &&
+               ` PRODUCTID/NAME Contains the typed value), CAPABILITIES 'Controller-applied binding filter' / app 022. The typed text is transported as the ${$parameters>/suggestValue} event arg and read with` &&
+               ` get_event_arg. Since 2026-07-30 the imperative oSF.suggest() popup-reopen is wired too, as a second follow_up_action( control_by_id, searchField/suggest ) - sap.f.SearchManager.suggest() is a public` &&
+               ` non-denied method via the generalized allowlist (closing the 2026-07-27 review-flagged gap). // LIVE-TEST: Unverified in a running system: (a) the search and liveChange handlers are client-composed`.
+    lv_text1 = lv_text1 && ` MessageToast.show calls via cs_event-control_global (template '{0} search event is fired' / '{0} liveChange event value is: {1}' filled by $event.oSource.sId and ${$parameters>/newValue}), app 005` &&
+               ` idiom; (b) the suggest->binding_call compound Contains filter roundtrip and its effect on the SearchManager suggestion list. Rendering (render-smoke) is green; runtime event/roundtrip behaviour needs` &&
+               ` a live check. // NOTE: The ShellBar homeIcon asset URL './resources/sap/ui/documentation/sdk/images/logo_sap.png' is repointed to the OpenUI5 host 'https://sdk.openui5.org/resources/...' per the` &&
+               ` asset-URL rule (same as app 110). The mock's per-row ProductPicUrl values are kept byte-identical to sap/ui/demo/mock/products.json (unbound display data, never rendered by this view). Rows without a` &&
+               ` DateOfSale in the mock carry an empty string (the property is not bound). Review finding 2026-07-27: the row type inlines all 20 mock keys although the view binds only Name, Price, CurrencyCode and` &&
+               ` ProductId - against AGENTS.md par.5 'unbound mock keys stay out of the row type'; the unbound columns (category, maincategory, taxtarifcode, suppliername, weightmeasure, weightunit, description,`.
+    lv_text1 = lv_text1 && ` dateofsale, productpicurl, status, quantity, uom, width, depth, height, dimunit) should be trimmed.`.
     result = VALUE #( BASE result
       ( module = `sap.f`              control = `sap.f.ShellBar`                        name = `ShellBarWithSearch`                  class = `z2ui5_cl_ai_app_218` path = `src/04/b07/z2ui5_cl_ai_app_218.clas.abap`
-        score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.63`
         notes = lv_text1 ) ).
 
@@ -1394,7 +1395,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.44.0`
-        ui5_only = abap_true
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
@@ -1402,7 +1402,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.44.0`
-        ui5_only = abap_true
         notes = `LIVE-TEST: NumericContent presses show a client MessageToast ('Fire press', the original press handler's text - review fixed the earlier text copied from the NumericContentDifColors neighbour). Two` &&
                  ` vertical HeaderContainers — one of eight NumericContents, one of five TileContents (each wrapping a NumericContent) — reproduced 1:1.` )
       ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabBarStretchContent`            class = `z2ui5_cl_ai_app_030` path = `src/01/b04/z2ui5_cl_ai_app_030.clas.abap`
@@ -1646,7 +1645,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.21.2`
-        ui5_only = abap_true
         is_post171 = abap_true
         notes = lv_text1
         post171 = `ariaHasPopup="Dialog" on both buttons (since UI5 1.84) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.84 to render it. // the MessageBox emphasizedAction option (since` &&
@@ -1678,20 +1676,24 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
     lv_text1 = `POST-1.71: Button.ariaHasPopup (since UI5 1.84) kept on the message-popover button; the Button.type value 'Negative' is a sap.m.ButtonType value since 1.73. MessageItem.markupDescription (renders the` &&
                ` HTML description) is kept for the async sample's rich-text messages. // IMPROVISED: the MessagePopover (built in the controller) is declared 1:1 in the button's ``dependents``; the controller's` &&
                ` toggle(button) becomes a roundtrip-free client->_event_client( cs_event-control_by_id, toggleBy ) on the button press (anchored by id), and onActiveTitlePress's MessageToast.show becomes` &&
-               ` roundtrip-free client->_event_client( cs_event-control_global, MESSAGE_TOAST/show ); the app is now init-only. Anchored to $event.oSource.sId. // IMPROVISED: the sample's` &&
-               ` oMessagePopover.setAsyncURLHandler(...) - a client-side JS callback that asynchronously validates each link URL (disabling absolute http links, allowing relative ones) before navigation - has no` &&
-               ` abap2UI5 equivalent and is dropped; the messages and their markupDescription HTML (with the two demo <a> links) render, but the async URL-validation gate is not reproduced. // NOTE: the three`.
-    lv_text1 = lv_text1 && ` severity formatters are precomputed in ABAP from the static mock (error icon, Negative type, count 2); the root-array JSON model is carried under /T_MESSAGES on the single default model. // NOTE:` &&
+               ` roundtrip-free client->_event_client( cs_event-control_global, MESSAGE_TOAST/show ); the app is now init-only. Anchored to $event.oSource.sId. // NOTE: the sample's` &&
+               ` oMessagePopover.setAsyncURLHandler(...) - allowed = url.lastIndexOf('http', 0) < 0, i.e. relative links allowed, absolute http links disabled - is reproduced since 2026-07-30 via the framework's` &&
+               ` declarative URL policy: follow_up_action control_by_id setAsyncURLHandler 'RELATIVE_ONLY' installs the built-in validator on init (pr/messagepopover-async-url implemented upstream). Semantic nuance:`.
+    lv_text1 = lv_text1 && ` RELATIVE_ONLY also denies non-http absolute schemes (mailto:) and protocol-relative //host URLs, which the original's http-prefix test would allow - a strictly safer superset, no demo link is` &&
+               ` affected. The controller's urlValidated toast ('URL validation has been performed.') is wired 1:1 as an added urlValidated attribute (declared) with a client-composed toast; the original's` &&
+               ` setAsyncDescriptionHandler (allow-all) and its longtextLoaded toast are NOT reproduced - no remote long texts exist in the mock, so the handler never fires in the sample either. // NOTE: the three` &&
+               ` severity formatters are precomputed in ABAP from the static mock (error icon, Negative type, count 2); the root-array JSON model is carried under /T_MESSAGES on the single default model. // NOTE:` &&
                ` live-verified 2026-07-22 - confirm the button toggles the MessagePopover (toggleBy) and the first Error message renders its HTML markupDescription (h2/p/ul/ol + links); activeTitlePress toasts. //` &&
-               ` LIVE-TEST: the toggle and the active-title toast were switched to roundtrip-free _event_client on 2026-07-22 - re-verify the button toggles the MessagePopover and an active title toasts.`.
+               ` LIVE-TEST: the toggle and the active-title toast were switched to roundtrip-free _event_client on 2026-07-22, and the 2026-07-30 RELATIVE_ONLY URL policy + urlValidated toast are new since the`.
+    lv_text1 = lv_text1 && ` 2026-07-22 live check (status reset checked -> generated): re-verify the button toggles the MessagePopover, an active title toasts, and the absolute http link in the first message renders disabled` &&
+               ` after validation while relative links stay clickable.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.MessagePopover`                  name = `MessagePopoverAsyncMessageHandling`  class = `z2ui5_cl_ai_app_067` path = `src/01/b08/z2ui5_cl_ai_app_067.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, reviewed, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth` &&
-                 ` a close look.`
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
         since = `1.28`
         is_post171 = abap_true
-        checked = `CHECKED (2026-07-22): verified in a running system 2026-07-22: the button toggles the MessagePopover (toggleBy) and the first Error message renders its HTML markupDescription.`
         notes = lv_text1
         post171 = `Button.ariaHasPopup (since UI5 1.84) kept on the message-popover button; the Button.type value 'Negative' is a sap.m.ButtonType value since 1.73. MessageItem.markupDescription (renders the HTML` &&
                  ` description) is kept for the async sample's rich-text messages.` ) ).
@@ -1753,8 +1755,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.m`              control = `sap.m.MessageToast`                    name = `MessageToast`                        class = `z2ui5_cl_ai_app_037` path = `src/01/b03/z2ui5_cl_ai_app_037.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        since = `1.9.2`
-        ui5_only = abap_true )
+        since = `1.9.2` )
       ( module = `sap.m`              control = `sap.m.MessageView`                     name = `MessageViewMessageManager`           class = `z2ui5_cl_ai_app_038` path = `src/01/b03/z2ui5_cl_ai_app_038.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -2257,31 +2258,35 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         since = `1.26.0` ) ).
 
     lv_text1 = `NOTE: onSemanticButtonPress toasts each action's class name, reproduced by passing the name as a t_arg literal. The SortSelect change toasts the two-way selectedKey (sort_key); PagingButton` &&
-               ` positionChange transports ${$parameters>/newPosition}; the custom footer / share buttons transport $event.oSource.sId. // IMPROVISED: The MultiSelectAction and MessagesIndicator handlers are` &&
-               ` simplified to fixed toasts, losing behavior the framework can express: the original toasts Pressed/Unpressed from the toggle state (readable via a ${$source>/pressed} t_arg) and opens a` &&
-               ` MessagePopover over the message model with one seeded 'Something wrong happened' error message (expressible via mvc:dependents + toggleBy per app 066, app-authored messages per app 065); without the` &&
-               ` seeded message the MessagesIndicator button stays invisible. Review 2026-07-27: needs rework, retyped from NOTE - a lost behavior is IMPROVISED, not NOTE. // NOTE: The SortSelect items are bound to a` &&
-               ` 2-row filter-type table reproducing /ProductCollectionStats/Filters (the two ``type`` values Category and SupplierName; the per-type ``values`` sub-arrays are unused by the Select). The binding keeps`.
-    lv_text1 = lv_text1 && ` the original sorter { path: 'Name' } 1:1 — a no-op there too, since the Filters entries carry ``type``, not ``Name``.`.
+               ` positionChange transports ${$parameters>/newPosition}; the custom footer / share buttons transport $event.oSource.sId. // NOTE: MultiSelectAction and MessagesIndicator reproduced 1:1 since` &&
+               ` 2026-07-30. onMultiSelectPress: the press transports ${$source>/pressed} and the backend toasts 'MultiSelect Pressed'/'MultiSelect Unpressed' from the toggle state exactly like getPressed().` &&
+               ` onMessagesButtonPress: the controller-built MessagePopover over the message model is declared as a dependent of the MessagesIndicator (added controls vs the original view.xml: MessagePopover +` &&
+               ` MessageItem with the original's {message>description}/{message>type}/{message>message} template) and toggled roundtrip-free via _event_client control_by_id toggleBy ($event.oSource.sId) - the` &&
+               ` _messagePopover.toggle(oMessagesButton) equivalent. onInit's MessageManager.addMessages seed ('Something wrong happened', Error) rides on an added z2ui5.cc.MessageManager bridge control (in an added`.
+    lv_text1 = lv_text1 && ` semantic content aggregation, declared) with its one-row items table - the app-065 idiom. // NOTE: The SortSelect items are bound to a 2-row filter-type table reproducing` &&
+               ` /ProductCollectionStats/Filters (the two ``type`` values Category and SupplierName; the per-type ``values`` sub-arrays are unused by the Select). The binding keeps the original sorter { path: 'Name'` &&
+               ` } 1:1 — a no-op there too, since the Filters entries carry ``type``, not ``Name``.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.semantic.SemanticPage`           name = `SemanticPage`                        class = `z2ui5_cl_ai_app_107` path = `src/01/b13/z2ui5_cl_ai_app_107.clas.abap`
-        score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.30.0`
         notes = lv_text1 ) ).
 
     lv_text1 = `NOTE: onSemanticButtonPress toasts each action's class name, reproduced by passing the name as a t_arg literal. The SortSelect change toasts the two-way selectedKey (sort_key); PagingButton` &&
-               ` positionChange transports ${$parameters>/newPosition}; the custom footer / share buttons transport $event.oSource.sId. // IMPROVISED: The MultiSelectAction and MessagesIndicator handlers are` &&
-               ` simplified to fixed toasts, losing behavior the framework can express: the original toasts Pressed/Unpressed from the toggle state (readable via a ${$source>/pressed} t_arg) and opens a` &&
-               ` MessagePopover over the message model with one seeded 'Something wrong happened' error message (expressible via mvc:dependents + toggleBy per app 066, app-authored messages per app 065); without the` &&
-               ` seeded message the MessagesIndicator button stays invisible. Review 2026-07-27: needs rework, retyped from NOTE - a lost behavior is IMPROVISED, not NOTE. // NOTE: The SortSelect items are bound to a` &&
-               ` 2-row filter-type table reproducing /ProductCollectionStats/Filters (the two ``type`` values Category and SupplierName; the per-type ``values`` sub-arrays are unused by the Select). The binding keeps`.
-    lv_text1 = lv_text1 && ` the original sorter { path: 'Name' } 1:1 — a no-op there too, since the Filters entries carry ``type``, not ``Name``. // NOTE: Same as SemanticPage but the MasterPage and DetailPage carry` &&
-               ` floatingFooter='true' and the MasterPage drops the PageAccessibleLandmarkInfo (matching the SemanticPageFloatingFooter variant).`.
+               ` positionChange transports ${$parameters>/newPosition}; the custom footer / share buttons transport $event.oSource.sId. // NOTE: MultiSelectAction and MessagesIndicator reproduced 1:1 since` &&
+               ` 2026-07-30. onMultiSelectPress: the press transports ${$source>/pressed} and the backend toasts 'MultiSelect Pressed'/'MultiSelect Unpressed' from the toggle state exactly like getPressed().` &&
+               ` onMessagesButtonPress: the controller-built MessagePopover over the message model is declared as a dependent of the MessagesIndicator (added controls vs the original view.xml: MessagePopover +` &&
+               ` MessageItem with the original's {message>description}/{message>type}/{message>message} template) and toggled roundtrip-free via _event_client control_by_id toggleBy ($event.oSource.sId) - the` &&
+               ` _messagePopover.toggle(oMessagesButton) equivalent. onInit's MessageManager.addMessages seed ('Something wrong happened', Error) rides on an added z2ui5.cc.MessageManager bridge control (in an added`.
+    lv_text1 = lv_text1 && ` semantic content aggregation, declared) with its one-row items table - the app-065 idiom. // NOTE: The SortSelect items are bound to a 2-row filter-type table reproducing` &&
+               ` /ProductCollectionStats/Filters (the two ``type`` values Category and SupplierName; the per-type ``values`` sub-arrays are unused by the Select). The binding keeps the original sorter { path: 'Name'` &&
+               ` } 1:1 — a no-op there too, since the Filters entries carry ``type``, not ``Name``. // NOTE: Same as SemanticPage but the MasterPage and DetailPage carry floatingFooter='true' and the MasterPage drops` &&
+               ` the PageAccessibleLandmarkInfo (matching the SemanticPageFloatingFooter variant).`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.semantic.SemanticPage`           name = `SemanticPageFloatingFooter`          class = `z2ui5_cl_ai_app_106` path = `src/01/b13/z2ui5_cl_ai_app_106.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.30.0`
         notes = lv_text1 ) ).
 
@@ -2565,7 +2570,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.10`
-        ui5_only = abap_true
         checked = `CHECKED (2026-07-27): verified in a running system 2026-07-27 - URLHelper tel/sms/email triggers and REDIRECT all fire correctly`
         notes = `NOTE: element binding kept 1:1 - a one-record structure /S_SUPPLIER instead of {/SupplierCollection/0}. // NOTE: URLHelper.triggerTel/triggerSms/triggerEmail/redirect map 1:1 to the URLHELPER frontend` &&
                  ` action (cs_event-urlhelper): TRIGGER_TEL/TRIGGER_SMS take the number as a plain string param, TRIGGER_EMAIL/REDIRECT take a { EMAIL/URL, ... } object-literal t_arg (get_t_arg emits {-prefixed args` &&
@@ -2616,12 +2620,10 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.m`              control = `sap.ui.core.ContainerPadding`          name = `ContainerNoPadding`                  class = `z2ui5_cl_ai_app_087` path = `src/01/b10/z2ui5_cl_ai_app_087.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        ui5_only = abap_true
         notes = `NOTE: the /ProductCollectionStats/Counts values are flattened to the default model fields /TOTAL, /OK, /HEAVY, /OVERWEIGHT (verbatim counts).` )
       ( module = `sap.m`              control = `sap.ui.core.StandardMargins`           name = `StandardMarginsAll`                  class = `z2ui5_cl_ai_app_088` path = `src/01/b11/z2ui5_cl_ai_app_088.clas.abap`
         score = 1
-        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        ui5_only = abap_true ) ).
+        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` ) ).
 
     lv_text1 = `NOTE: The two toggles the original drives from its controller are now bound and dispatched instead of decorative. onToggleFooter flips DynamicPage.showFooter - the port binds showFooter to a boolean` &&
                ` member (an attribute the original view does not carry: it relies on the property default false and the controller's setter). toggleAreaPriority alternates DynamicPageTitle.areaShrinkRatio between the` &&
@@ -2697,17 +2699,19 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` transported via ${$parameters>/ctrlKey} etc. in the ITEM_PRESS t_arg and echoed into the toast, exactly as the original itemPress reads them. @since verified NavigationListItemBase.js:88-109.` &&
                ` Requires a UI5 release >= 1.137 (the property gate is blind to sap.tnt event params). // POST-1.71: NavigationListItem.selectable (@since 1.116) is used 1:1 (selectable=false) on Link 1/Link 2, Quick` &&
                ` Create and External Link. @since verified NavigationListItem.js:101-103. // POST-1.71: NavigationListItem.design="Action" and NavigationListItem.ariaHasPopup="Dialog" (both @since 1.133.0) are kept` &&
-               ` 1:1 on the Quick Create item. @since verified NavigationListItem.js:131-139. // IMPROVISED: itemPress preventDefault: when the 'preventDefaultCheckbox' is selected the original calls`.
-    lv_text1 = lv_text1 && ` oEvent.preventDefault() to suppress the item's default selection. The thin frontend cannot conditionally suppress the client-side selection, so the selection still changes; only the toast heading` &&
-               ` reflects the choice ('Default was prevented:' vs 'Item Pressed:'). The prevent-default behaviour itself is dropped. The checkbox state is read server-side via a two-way bound` &&
-               ` selected={/PREVENT_DEFAULT} (the original had no binding and read getSelected()); the .itemPress handler is rewired to the ITEM_PRESS backend event. // IMPROVISED: quickActionPress dialog: reproduced` &&
-               ` as a core:FragmentDefinition shown via client->popup_display - the controller-built sap.m.Dialog with two Label + Input pairs (Name/Icon, the Inputs two-way bound to create_name/create_icon) and` &&
-               ` Create/Cancel Buttons. These Dialog/Label/Input/Button controls are extra vs the original view.xml, which declared none of them (the original built the Dialog imperatively in the controller). The` &&
-               ` original Create button imperatively does sideNavigation.getItem().addItem(new NavigationListItem(...)); dynamic addItem to the statically declared NavigationList is not expressible (it would require`.
-    lv_text1 = lv_text1 && ` folding the 1:1 static items into a bound aggregation), so CREATE_ITEM reads the entered values and shows a toast instead of adding the item. The .quickActionPress handler is rewired to the` &&
-               ` QUICK_CREATE backend event. // NOTE: live-verified 2026-07-27: onCollapseExpandPress reproduced server-side: SideNavigation.expanded is two-way bound (initial false as in the original` &&
-               ` expanded="false") and flipped on the TOGGLE_EXPAND round-trip instead of the imperative byId().setExpanded(!expanded) - same technique as apps 172/128. The literal expanded="false" becoming a` &&
-               ` {/EXPANDED} binding, the ITEM_PRESS modifier-key transport and the popup round-trips all need a live render check.`.
+               ` 1:1 on the Quick Create item. @since verified NavigationListItem.js:131-139. // NOTE: itemPress preventDefault reproduced 1:1 since 2026-07-30: every NavigationListItem press wire carries`.
+    lv_text1 = lv_text1 && ` s_ctrl-check_prevent_default = prevent_default, so when the 'preventDefaultCheckbox' is selected the handler cancels the item's built-in default client-side (oEvent.preventDefault() before the` &&
+               ` round-trip - selection stays, href navigation is suppressed) exactly like the original. The flag is baked into the handler expression at render time, so the CheckBox got an added select wire` &&
+               ` (PREVENT_TOGGLE, declared) that redraws the view when toggled; the redraw resets the client-side selection back to selectedKey='walked' - a small toggle-time caveat the original (which never redraws)` &&
+               ` does not have. The checkbox state stays two-way bound (selected={/PREVENT_DEFAULT}); the toast heading ('Default was prevented:' vs 'Item Pressed:') is composed server-side from the same flag. //` &&
+               ` IMPROVISED: quickActionPress dialog: reproduced as a core:FragmentDefinition shown via client->popup_display - the controller-built sap.m.Dialog with two Label + Input pairs (Name/Icon, the Inputs` &&
+               ` two-way bound to create_name/create_icon) and Create/Cancel Buttons. These Dialog/Label/Input/Button controls are extra vs the original view.xml, which declared none of them (the original built the`.
+    lv_text1 = lv_text1 && ` Dialog imperatively in the controller). The original Create button imperatively does sideNavigation.getItem().addItem(new NavigationListItem(...)); dynamic addItem to the statically declared` &&
+               ` NavigationList is not expressible (it would require folding the 1:1 static items into a bound aggregation), so CREATE_ITEM reads the entered values and shows a toast instead of adding the item. The` &&
+               ` .quickActionPress handler is rewired to the QUICK_CREATE backend event. // LIVE-TEST: The 2026-07-27 live check predates the 2026-07-30 prevent-default rewire (status reset checked -> generated per` &&
+               ` the invalidation rule): re-verify that with the checkbox set a press does NOT change the selection (eBP cancels the default) and still toasts 'Default was prevented:', that with the checkbox clear` &&
+               ` selection changes normally, and that the PREVENT_TOGGLE redraw keeps working (expanded state and checkbox survive it via their two-way bindings). onCollapseExpandPress (expanded two-way +` &&
+               ` TOGGLE_EXPAND round-trip), the ITEM_PRESS modifier-key transport and the popup round-trips were live-verified 2026-07-27.`.
     lv_text2 = `NavigationListItemBase.press event (@since 1.133) is the whole point of this sample; wired 1:1 on every NavigationListItem (press) to a backend ITEM_PRESS event. @since verified in` &&
                ` fork-openui5/src/sap.tnt/src/sap/tnt/NavigationListItemBase.js:74-79. Requires a UI5 release >= 1.133. // The press event parameters ctrlKey/shiftKey/altKey/metaKey (@since 1.137) are transported via` &&
                ` ${$parameters>/ctrlKey} etc. in the ITEM_PRESS t_arg and echoed into the toast, exactly as the original itemPress reads them. @since verified NavigationListItemBase.js:88-109. Requires a UI5 release` &&
@@ -2717,11 +2721,10 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
     result = VALUE #( BASE result
       ( module = `sap.tnt`            control = `sap.tnt.SideNavigation`                name = `SideNavigationPressEvent`            class = `z2ui5_cl_ai_app_241` path = `src/05/b07/z2ui5_cl_ai_app_241.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, reviewed, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth` &&
-                 ` a close look.`
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
         since = `1.34`
         is_post171 = abap_true
-        checked = `CHECKED (2026-07-27): verified in a running system 2026-07-27 - controller-built Dialog opens/closes; NavigationList selection paths work`
         notes = lv_text1
         post171 = lv_text2 ) ).
 
@@ -2858,31 +2861,36 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         since = `1.46`
         notes = lv_text1 ) ).
 
+    lv_text1 = `NOTE: Since 2026-07-30 the global sap.ui.core.BusyIndicator behaviour is reproduced 1:1: each button fires a backend event whose response chains follow_up_action( control_global BUSY_INDICATOR show` &&
+               ` [delay] ) with the original's delay (default / 0 / 2000) plus follow_up_action( start_timer HIDE_BUSY duration ) (4000 / 4000 / 1000); the HIDE_BUSY timer round-trip then issues BUSY_INDICATOR hide -` &&
+               ` the frontend-action form of showBusyIndicator(iDuration, iDelay) + setTimeout(hideBusyIndicator). START_TIMER's single-slot semantics (a new timer replaces the pending one) match the original's` &&
+               ` clearTimeout of _sTimeoutId. Timing nuance: the hide fires after duration + one round-trip latency, and the show after the press round-trip - a few ms later than the original's purely client-side` &&
+               ` call; the press attributes are rewired from the controller handler names to backend events (the earlier MessageToast substitution is gone). // LIVE-TEST: the BUSY_INDICATOR show/hide chain and the` &&
+               ` START_TIMER HIDE_BUSY round-trips are unverified in a running system - verify the overlay appears (default and zero delay), disappears after ~4s, and never appears in the 2s-delay/1s-duration case.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.core`        control = `sap.ui.core.BusyIndicator`             name = `BusyIndicator`                       class = `z2ui5_cl_ai_app_147` path = `src/02/b07/z2ui5_cl_ai_app_147.clas.abap`
-        score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        ui5_only = abap_true
-        notes = `IMPROVISED: Each button opened the global sap.ui.core.BusyIndicator with a different delay/duration (show(delay) + setTimeout(hide)); reproduced here as client-side MessageToasts describing the` &&
-                 ` intended delay/duration (the global busy overlay and timers are not reproduced server-side).` ) ).
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = lv_text1 ) ).
 
-    lv_text1 = `IMPROVISED: The sample's entire point is sap.ui.core.CommandExecution - declarative command objects bound to keyboard shortcuts (manifest sap.ui5/commands: Save=Ctrl+S, Delete=Ctrl+D). abap2UI5 has NO` &&
-               ` equivalent for a command / keyboard-shortcut binding (nothing in CAPABILITIES; no CommandExecution control, no $cmd> command model, no manifest-level shortcut registry - the frontend only renders XML` &&
-               ` and forwards named events, it cannot register a global key handler). So all three core:CommandExecution controls (CE_SAVE, CE_DELETE in the Page dependents, CE_SAVE_POPOVER in the popoverCommand` &&
-               ` dependents) are DROPPED and the Ctrl+S / Ctrl+D shortcuts are lost. The invoked actions stay reachable: every command-triggering button (press='cmd:Save' / press='cmd:Delete', in the Button panel and` &&
-               ` both popover footers) keeps its press attribute, rewired to a client-composed MESSAGE_TOAST.show that reproduces onSave ('CTRL+S: save triggered on controller') and onDelete ('CTRL+D: Delete` &&
-               ` triggered on controller'). See the friction log / pr/core-commandexecution-keyboard-shortcuts. // IMPROVISED: The $cmd> command model bindings enabled='{$cmd>Save/enabled}' /`.
-    lv_text1 = lv_text1 && ` enabled='{$cmd>Delete/enabled}' on the popover footer buttons have no command model to bind to (CommandExecution dropped), so they are folded to default-model booleans: the popover buttons bind` &&
-               ` enabled to {/SAVE_ENABLED}/{/DELETE_ENABLED} (page popover) and {/PSAVE_ENABLED}/{/DELETE_ENABLED} (command popover). Correspondingly the controller's onToggleSave/onToggleDelete/onTogglePopoverSave` &&
-               ` (byId('CE_SAVE').setEnabled(state)) and the *Visibility variants (setVisible) are reproduced as two-way bindings: each Switch state is bound two-way to the matching boolean and the popover buttons` &&
-               ` additionally bind visible to {/SAVE_VISIBLE}/{/DELETE_VISIBLE}/{/PSAVE_VISIBLE}, so the switches drive the command-buttons entirely client-side (thin frontend, app 007/128 pattern) with no` &&
-               ` round-trip. Consequently the Switch change attributes (change='.onToggleSave' etc., 6 of them) are DROPPED and replaced by the two-way state binding; the enabled binding value differs from the` &&
-               ` original $cmd> path. // NOTE: The manifest-declared viewModel named JSON model (bindings {viewModel>/value}, {viewModel>/countries}, {viewModel>/selected}, {viewModel>key}, {viewModel>text}) is`.
-    lv_text1 = lv_text1 && ` folded onto the one default model as value/t_countries/selected with the same leaf names and the controller's addData seed values (HelloWorld!, DZ Algeria / AR Argentina) - a pure prefix-drop,` &&
-               ` renders identically, structural-diff 0 diffs. // POST-1.71: sap.m.Button.ariaHasPopup (since UI5 1.84) is newer than 1.71 but kept for the 1:1 port - the two Open-Popover buttons carry` &&
-               ` ariaHasPopup='Dialog' as in the original; the app needs a UI5 release >= 1.84 to render it. // LIVE-TEST: unverified in a running system: (a) the two Open-Popover buttons open the popover anchored to` &&
-               ` the button via control_by_id openBy ($event.oSource.sId) - sap.m.Popover exposes openBy (unlike sap.ui.unified.Menu, app 227), so this is expected to work as in app 016/060 but is not live-checked;` &&
-               ` (b) the Save/Delete buttons toast the onSave/onDelete text via client-composed MESSAGE_TOAST; (c) the switch-driven two-way enabled/visible of the popover buttons.`.
+    lv_text1 = `IMPROVISED: The three core:CommandExecution controls (CE_SAVE, CE_DELETE in the Page dependents, CE_SAVE_POPOVER in the popoverCommand dependents) are DROPPED as controls - abap2UI5 renders no` &&
+               ` CommandExecution element. Their behaviour IS reproduced since 2026-07-30: the manifest shortcuts Save=Ctrl+S / Delete=Ctrl+D are registered on init via cs_event-keyboard_shortcut (follow_up_action,` &&
+               ` combo -> named backend event), and every command-triggering button (press='cmd:Save' / press='cmd:Delete') fires the same backend SAVE/DELETE/PSAVE events, so shortcut and button share one command` &&
+               ` path like the original command bus; the backend gates each command on its enabled/visible flags, so a disabled command's button press or shortcut does nothing, as with a disabled CommandExecution.` &&
+               ` Residual loss: the shortcut registry is document-global - the original's popover-local command scope (CE_SAVE_POPOVER overriding Save while popoverCommand is open) is not reproduced; Ctrl+S always` &&
+               ` triggers the page-level Save command. // IMPROVISED: The $cmd> command model bindings enabled='{$cmd>Save/enabled}' / enabled='{$cmd>Delete/enabled}' on the popover footer buttons have no command`.
+    lv_text1 = lv_text1 && ` model to bind to (CommandExecution dropped), so they are folded to default-model booleans: the popover buttons bind enabled to {/SAVE_ENABLED}/{/DELETE_ENABLED} (page popover) and` &&
+               ` {/PSAVE_ENABLED}/{/DELETE_ENABLED} (command popover). Correspondingly the controller's onToggleSave/onToggleDelete/onTogglePopoverSave (byId('CE_SAVE').setEnabled(state)) and the *Visibility variants` &&
+               ` (setVisible) are reproduced as two-way bindings: each Switch state is bound two-way to the matching boolean and the popover buttons additionally bind visible to` &&
+               ` {/SAVE_VISIBLE}/{/DELETE_VISIBLE}/{/PSAVE_VISIBLE}, so the switches drive the command-buttons client-side with no round-trip. Consequently the Switch change attributes (change='.onToggleSave' etc., 6` &&
+               ` of them) are DROPPED and replaced by the two-way state binding; the enabled binding value differs from the original $cmd> path. The flags travel with the next event's two-way model update, which is` &&
+               ` how the server-side command gating reads the current switch state. // NOTE: The manifest-declared viewModel named JSON model (bindings {viewModel>/value}, {viewModel>/countries},`.
+    lv_text1 = lv_text1 && ` {viewModel>/selected}, {viewModel>key}, {viewModel>text}) is folded onto the one default model as value/t_countries/selected with the same leaf names and the controller's addData seed values` &&
+               ` (HelloWorld!, DZ Algeria / AR Argentina) - a pure prefix-drop, renders identically, structural-diff 0 diffs. // POST-1.71: sap.m.Button.ariaHasPopup (since UI5 1.84) is newer than 1.71 but kept for` &&
+               ` the 1:1 port - the two Open-Popover buttons carry ariaHasPopup='Dialog' as in the original; the app needs a UI5 release >= 1.84 to render it. // LIVE-TEST: unverified in a running system: (a) the two` &&
+               ` Open-Popover buttons open the popover anchored to the button via control_by_id openBy ($event.oSource.sId); (b) the Ctrl+S / Ctrl+D keyboard_shortcut registrations firing the backend SAVE/DELETE` &&
+               ` round-trips and their enabled/visible server-side gating; (c) the switch-driven two-way enabled/visible of the popover buttons. The e2e interaction (keyboard Ctrl+S -> save toast) covers (b) for the` &&
+               ` page-level Save.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.core`        control = `sap.ui.core.CommandExecution`          name = `Commands`                            class = `z2ui5_cl_ai_app_232` path = `src/02/b10/z2ui5_cl_ai_app_232.clas.abap`
         score = 5
@@ -2956,23 +2964,18 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.ui.core`        control = `sap.ui.core.theming.Parameters`        name = `BasicThemeParameters`                class = `z2ui5_cl_ai_app_131` path = `src/02/b03/z2ui5_cl_ai_app_131.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        ui5_only = abap_true
         notes = `NOTE: The sample itself is just a MessageStrip + Link pointing at the Theme Parameter Toolbox (the real demo content lives in that external tool); reproduced 1:1. The Link href is the original's` &&
                  ` host-relative 'test-resources/sap/m/demokit/theming/webapp/index.html' rewritten to the OpenUI5 host https://sdk.openui5.org/test-resources/sap/m/demokit/theming/webapp/index.html per the runtime` &&
                  ` asset-URL rule (an abap2UI5 system does not serve the demokit path; app 152 precedent).` )
       ( module = `sap.ui.core`        control = `sap.ui.model.type.Currency`            name = `TypeCurrency`                        class = `z2ui5_cl_ai_app_135` path = `src/02/b04/z2ui5_cl_ai_app_135.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        ui5_only = abap_true
         notes = `NOTE: Composite data-type binding paradigm: the Currency type is pulled in via core:require and every Input/Text binds a composite parts:['/amount','/currency'] with type:'CurrencyType' plus` &&
                  ` formatOptions (showMeasure/showNumber/preserveDecimals/currencyCode/style) 1:1. The two model fields amount ('123456789.123') and currency ('USD') are serialized by abap2UI5 as /AMOUNT and /CURRENCY;` &&
-                 ` the paths are generated via _bind (never hardcoded).` ) ).
-
-    result = VALUE #( BASE result
+                 ` the paths are generated via _bind (never hardcoded).` )
       ( module = `sap.ui.core`        control = `sap.ui.model.type.Date`                name = `TypeDateAsString`                    class = `z2ui5_cl_ai_app_181` path = `src/02/b10/z2ui5_cl_ai_app_181.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        ui5_only = abap_true
         notes = `NOTE: Data-type binding paradigm: sap.ui.model.type.Date is pulled via core:require={DateType: 'sap/ui/model/type/Date'} and every DatePicker/Text keeps the original { path, type: 'DateType',` &&
                  ` formatOptions: { style, source: { pattern: 'yyyy-MM-dd' } } } binding 1:1 as a raw binding-info string (braces escaped, path via _bind). The single model field is a yyyy-MM-dd string. // NOTE: The` &&
                  ` original seeds the current date (UI5Date.getInstance().toISOString().slice(0,10)); a fixed date (2026-07-24) is used here so the port is deterministic - a client-only display value.` ) ).
@@ -2988,14 +2991,12 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.ui.core`        control = `sap.ui.model.type.DateTime`            name = `TypeDateTime`                        class = `z2ui5_cl_ai_app_183` path = `src/02/b10/z2ui5_cl_ai_app_183.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        ui5_only = abap_true
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
       ( module = `sap.ui.core`        control = `sap.ui.model.type.FileSize`            name = `TypeFileSize`                        class = `z2ui5_cl_ai_app_180` path = `src/02/b10/z2ui5_cl_ai_app_180.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        ui5_only = abap_true
         is_post171 = abap_true
         notes = `POST-1.71: core:require on the view root (module preloading for the FileSizeType alias) is kept 1:1 from the original view.xml; core:require needs UI5 >= 1.74 (declared by policy - the property gate` &&
                  ` cannot see view-root require attributes). // NOTE: Data-type binding paradigm: the FileSize type module is pulled in with core:require='{FileSizeType: sap/ui/model/type/FileSize}' and the Input/Text` &&
@@ -3008,7 +3009,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.ui.core`        control = `sap.ui.model.type.Float`               name = `TypeFloat`                           class = `z2ui5_cl_ai_app_179` path = `src/02/b10/z2ui5_cl_ai_app_179.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        ui5_only = abap_true
         is_post171 = abap_true
         notes = `POST-1.71: core:require on the view root (module preloading for the FloatType alias) is kept 1:1 from the original view.xml; core:require needs UI5 >= 1.74 (declared by policy - the property gate` &&
                  ` cannot see view-root require attributes). // NOTE: Data-type binding paradigm: the Float type module is pulled in with core:require='{FloatType: sap/ui/model/type/Float}' and the Input/Text bindings` &&
@@ -3019,7 +3019,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.ui.core`        control = `sap.ui.model.type.Integer`             name = `TypeInteger`                         class = `z2ui5_cl_ai_app_129` path = `src/02/b03/z2ui5_cl_ai_app_129.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        ui5_only = abap_true
         notes = `NOTE: Data-type binding paradigm: the Integer type module is pulled in with core:require='{IntegerType: sap/ui/model/type/Integer}' and the Input/Text bindings carry type:'IntegerType' plus` &&
                  ` formatOptions (min/maxIntegerDigits) 1:1. The single model field 'number' (initial '123') is serialized by abap2UI5 as /NUMBER, so the original raw '/number' paths are written as '/NUMBER'.` ) ).
 
@@ -3027,7 +3026,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.ui.core`        control = `sap.ui.model.type.Time`                name = `TypeTimeAsTime`                      class = `z2ui5_cl_ai_app_182` path = `src/02/b10/z2ui5_cl_ai_app_182.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        ui5_only = abap_true
         notes = `IMPROVISED: The original model value is a JS Date object (UI5Date.getInstance()) and every TimeType binding has NO source formatOption (the type's default model format is a Date object). abap2UI5` &&
                  ` cannot hold a JS Date object in the JSON model, so a source formatOption { source: { pattern: 'HH:mm:ss' } } is added to each TimeType binding and the field is a parseable time string ('13:30:00') -` &&
                  ` the abap2UI5 equivalent of the Date-object model. Without it view creation crashes ('Time must be a Date object'). Same idiom applies to any TypeTime/TypeDateTime sample whose model is an object; a` &&
@@ -3037,20 +3035,24 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.62`
-        ui5_only = abap_true
         notes = `IMPROVISED: Breadth-probe of the declarative-card paradigm: a sap.ui.integration.widgets.Card whose whole UI comes from a JSON manifest. The manifest is carried as an ABAP string and bound to the` &&
                  ` Card, and its content (title/subtitle/3 list items) is invented for the probe - it does not come from the sample. The original page (f:ShellBar, IconTabBar with IconTabFilters, f:GridContainer with` &&
                  ` layout settings, several w:Cards over the manifests> named model incl. card:CardBadgeCustomData badges and GridContainerItemLayoutData) is dropped entirely. Needs rework for a faithful rebuild; the` &&
                  ` multi-manifest binding + external component card manifests remain the hard part (render_smoke notes integration Cards need external manifests).` ) ).
 
+    lv_text1 = `NOTE: The sample itself is a Link + Image pointing at the Card Explorer tool (the actual integration Cards live in that tool); Link and Image reproduced 1:1. Since 2026-07-30 the Image press is the` &&
+               ` original onImagePress 1:1: URLHelper.redirect('test-resources/sap/ui/integration/demokit/cardExplorer/index.html', true) via _event_client( cs_event-urlhelper, REDIRECT + { URL, NEW_WINDOW: true } )` &&
+               ` - the earlier MessageToast substitution is gone. The relative target resolves against the serving origin exactly like the original's (and the Link's href); outside an OpenUI5-hosted origin it 404s in` &&
+               ` the new tab, as the original would. // LIVE-TEST: the urlhelper REDIRECT on the Image press (new-window open of the relative Card Explorer URL) is unverified in a running system; the same REDIRECT` &&
+               ` action class is live-verified in app 084.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.integration` control = `sap.ui.integration.widgets.Card`       name = `CardExplorer`                        class = `z2ui5_cl_ai_app_149` path = `src/02/b08/z2ui5_cl_ai_app_149.clas.abap`
         score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.62`
-        notes = `IMPROVISED: The sample itself is a Link + Image pointing at the Card Explorer tool (the actual integration Cards live in that tool); Link and Image reproduced 1:1. The Image press shows a client` &&
-                 ` MessageToast instead of the original onImagePress URLHelper.redirect(url, true) - a behaviour substitution (redirect is expressible via _event_client( urlhelper, REDIRECT ), see CAPABILITIES 'Opening` &&
-                 ` external URLs').` )
+        notes = lv_text1 ) ).
+
+    result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.BlockLayout`             name = `BlockLayoutCustomBackground`         class = `z2ui5_cl_ai_app_140` path = `src/02/b05/z2ui5_cl_ai_app_140.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -3408,15 +3410,18 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` module), which needs UI5 >= 1.74 - a plain ISO-string binding would crash view creation (CAPABILITIES 'Date-object properties'; same idiom as apps 108/109). The xmlns:core + core:require were added` &&
                  ` for it; the original view had neither.` ) ).
 
+    lv_text1 = `NOTE: Breadth-probe (cross-library capability test). Inline sap.ui.unified ColorPicker (HSL / Simplified); the view itself is a 1:1 rebuild. Since 2026-07-30 the button's controller-built` &&
+               ` ResponsivePopover-with-ColorPicker is reproduced 1:1 via popover_display( xml = fragment by_id = $event.oSource.sId ): a core:FragmentDefinition with ResponsivePopover (title 'Color Picker'), a` &&
+               ` second u:ColorPicker (HSL/Simplified) in its content and Submit/Cancel Button pair - all extra controls vs the original view.xml, which declared none of them (controller-built). The original's` &&
+               ` Device.system.phone branch (phone: begin/end Submit/Cancel buttons that close; desktop: setShowHeader(false)) is expressed declaratively: showHeader='{device>/system/phone}' and` &&
+               ` visible='{device>/system/phone}' on both buttons, so phone and desktop render as the original without a JS branch; the buttons close via the popover_close frontend action (oRP.close()). // LIVE-TEST:` &&
+               ` the anchored ResponsivePopover open (popover_display by_id) with the embedded ColorPicker and the device-bound header/button variants are unverified in a running system.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.ColorPicker`            name = `ColorPickerSimplified`               class = `z2ui5_cl_ai_app_112` path = `src/02/b01/z2ui5_cl_ai_app_112.clas.abap`
         score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.48.0`
-        notes = `IMPROVISED: Breadth-probe (cross-library capability test). Inline sap.ui.unified ColorPicker (HSL / Simplified); the view itself is a 1:1 rebuild. The button's controller-built` &&
-                 ` ResponsivePopover-with-ColorPicker is simplified to a toast - a lost behavior that IS expressible (popover_display( xml = ... by_id = ... ) anchored via $event.oSource.sId, CAPABILITIES popups row;` &&
-                 ` the app-042 toast-substitution class). Review 2026-07-27: needs rework, retyped from NOTE; the stale structural_diff skip was removed (the main view matches the original 1:1, the popover is` &&
-                 ` controller-built and invisible to the diff).` ) ).
+        notes = lv_text1 ) ).
 
     lv_text1 = `IMPROVISED: The controller calls Formatting.setCustomCurrencies({BGN4:{digits:4}, WWWW:{digits:5}}) to register two custom currencies used by list five (customCurrencyDataModel). This is a global` &&
                ` frontend i18n formatting config, not a control and not expressible in the thin abap2UI5 frontend; ported without it, so the BGN4/WWWW currencies in list five render with UI5's default digit count` &&
@@ -3447,21 +3452,20 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` checkFileReadable().then(upload)), and FileUploader.uploadComplete shows the hardcoded success message the original built (handleUploadComplete parsed a hardcoded 'Status: 200' response and toasted` &&
                  ` '(Upload Success)'). The uploadUrl='upload/' is kept 1:1.` ) ).
 
-    lv_text1 = `IMPROVISED: handleUploadPress: the Button press is reduced to a client-composed MessageToast (control_global MESSAGE_TOAST.show 'Uploading file to the local server ...'). That toast text is NOT in the` &&
-               ` original controller (it is derived from the FileUploader tooltip) - the original press either toasts 'Choose a file first' (empty value) or runs checkFileReadable().then(upload).then(clear) silently.` &&
-               ` Review 2026-07-27: the original 'not whitelisted CONTROL_METHODS' rationale is stale - since the generalized CONTROL_BY_ID allowlist (FrontendAction.js CONTROL_METHOD_DENY), upload() and clear() are` &&
-               ` callable public methods, so press -> follow_up_action( control_by_id 'fileUploader'/'upload' ) is expressible (only the getValue() guard and the checkFileReadable() promise chain are not). Same` &&
-               ` reduction as app 126 (FileUploaderBasic), which is itself unreviewed. Needs rework - left status generated. uploadUrl='upload/' is kept 1:1. // IMPROVISED: handleUploadComplete: the original parses a`.
-    lv_text1 = lv_text1 && ` hardcoded 'File upload complete. Status: 200' response and toasts '<response> (Upload Success)'. Reproduced as a client-composed MessageToast with the resolved literal 'File upload complete. Status:` &&
-               ` 200 (Upload Success)' (endpoint-independent, same as app 126). // NOTE: change and typeMissmatch handlers are reproduced 1:1 as roundtrip-free client-composed MessageToasts (control_global` &&
-               ` MESSAGE_TOAST.show): change -> "Press 'Upload File' to upload file '{0}'" filled by ${$parameters>/newValue}; typeMissmatch -> 'The file type *.{0} is not supported. Choose one of the following` &&
-               ` types: txt, jpg' filled by ${$parameters>/fileType}. The allowed-types list is folded to the literal 'txt, jpg' (the static fileType property the original builds it from); the original's` &&
-               ` aFileTypes.map(...) result is unused there too, so the message text matches. // LIVE-TEST: The client-composed toasts (change/typeMissmatch/uploadComplete/press via control_global MESSAGE_TOAST) and` &&
-               ` the ${$parameters>/newValue} / ${$parameters>/fileType} event-arg resolution are view-create verified (render-smoke) but not yet live-verified in a running system.`.
+    lv_text1 = `NOTE: handleUploadPress reproduced since 2026-07-30: the Upload File press fires a backend UPLOAD round-trip; FileUploader.value is two-way bound (an added value attribute, declared) so the backend` &&
+               ` runs the original's empty check - no file chosen toasts 'Choose a file first' (1:1), else follow_up_action control_by_id fileUploader upload + clear reproduce oFileUploader.upload() then clear()` &&
+               ` (both public non-denied methods via the generalized allowlist). The earlier tooltip-derived 'Uploading file to the local server ...' toast is gone. NOT reproduced: checkFileReadable() - a client-side` &&
+               ` File API probe whose rejection branch ('The file cannot be read. It may have changed.') has no declarative equivalent; the port uploads without the readability pre-check. // IMPROVISED:` &&
+               ` handleUploadComplete: the original parses a hardcoded 'File upload complete. Status: 200' response and toasts '<response> (Upload Success)'. Reproduced as a client-composed MessageToast with the` &&
+               ` resolved literal 'File upload complete. Status: 200 (Upload Success)' (endpoint-independent, same as app 126). // NOTE: change and typeMissmatch handlers are reproduced 1:1 as roundtrip-free`.
+    lv_text1 = lv_text1 && ` client-composed MessageToasts (control_global MESSAGE_TOAST.show): change -> "Press 'Upload File' to upload file '{0}'" filled by ${$parameters>/newValue}; typeMissmatch -> 'The file type *.{0} is` &&
+               ` not supported. Choose one of the following types: txt, jpg' filled by ${$parameters>/fileType}. The allowed-types list is folded to the literal 'txt, jpg' (the static fileType property the original` &&
+               ` builds it from); the original's aFileTypes.map(...) result is unused there too, so the message text matches. // LIVE-TEST: The client-composed toasts (change/typeMissmatch/uploadComplete/press via` &&
+               ` control_global MESSAGE_TOAST) and the ${$parameters>/newValue} / ${$parameters>/fileType} event-arg resolution are view-create verified (render-smoke) but not yet live-verified in a running system.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.FileUploader`           name = `FileUploaderComplex`                 class = `z2ui5_cl_ai_app_246` path = `src/02/b12/z2ui5_cl_ai_app_246.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
         notes = lv_text1 ) ).
 

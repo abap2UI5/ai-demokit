@@ -76,17 +76,22 @@ const benign = (s) => BENIGN.some((re) => re.test(s));
 // GROW THIS MAP — it is the automated close path for the LIVE_TEST backlog
 // (STATUS.md open findings): each entry proves one LIVE_TEST *class* end to
 // end, so a green nightly run stands in for the human live check of every
-// port that only carries that class. Covered so far:
-//   005  client-composed toast (_event_client MESSAGE_TOAST, $event.* args)
-//   019  popup_display Dialog round-trip (open + fragment renders)
-//   060  anchored open via control_by_id toggleBy (roundtrip-free) + the
-//        ${$parameters>/item}.getText() client-composed selection toast
-//   091  roundtrip-free control_by_id openBy on a hidden picker (016 idiom)
-//   094  popover_display + BIND_ELEMENT (row context → bound popover)
-//   104  dependents-declared dialog + full 123-row mock + client-side
-//        binding_call Contains search
-//   130  server round-trip flipping a two-way bound control property (busy)
-//   133  SegmentedButton selectionChange → bound GridList.mode round-trip
+// port that only carries that class. Covered so far (one line per class,
+// the per-port keys below):
+//   client-composed toast (_event_client MESSAGE_TOAST, $event.*/$source>/
+//     $parameters> args, {N} templates, {N?a:b} conditional): 003 005 008
+//     016 049 061 074 076 080 134 156 198
+//   popup_display / dependents dialog: 019 103 104 236
+//   popover_display (anchored by_id, BIND_ELEMENT, fragment rebuild):
+//     094 112 170 229 243
+//   anchored open via control_by_id openBy/toggleBy: 016 060 066 067 091 227
+//   two-way bound property flipped on a round-trip: 128 130 133 177
+//   frontend-action chains (BUSY_INDICATOR+START_TIMER, NavContainer.to,
+//     FileUploader upload guard): 147 242 246
+//   KEYBOARD_SHORTCUT combo → backend event: 232
+//   check_prevent_default (eBP wire): 241
+//   breakpointChange → bound displaySize: 244
+//   semantic action state transport: 107
 const INTERACTIONS = {
   z2ui5_cl_ai_app_005: async (page, expect) => {
     const btn = page.getByRole('button', { name: 'Default', exact: true }).first();
@@ -169,6 +174,235 @@ const INTERACTIONS = {
     await expect(page.locator('.sapMDialog'), 'the action dialog').toContainText('Choose an action.');
     await page.getByRole('button', { name: 'Enable Post Button', exact: true }).first().click();
     await page.locator('.sapMDialog').waitFor({ state: 'hidden', timeout: 10000 });
+  },
+  // client-composed toast from ${$source>/text} on a Breadcrumbs Link
+  z2ui5_cl_ai_app_003: async (page, expect) => {
+    const link = page.getByText('Products', { exact: true }).first();
+    await expect(link, 'the "Products" breadcrumb link').toBeVisibleEnabled();
+    await link.click();
+    await expect(page.locator('.sapMMessageToast'), 'the ${$source>/text} client toast').toContainText('Products has been activated');
+  },
+  // client-composed toast from two ${$parameters>/…} args (colorSelect)
+  z2ui5_cl_ai_app_008: async (page, expect) => {
+    const swatch = page.locator('.sapMColorPaletteSquare').first();
+    await expect(swatch, 'the first color swatch').toBeVisibleEnabled();
+    await swatch.click();
+    await expect(page.locator('.sapMMessageToast'), 'the colorSelect client toast').toContainText('Color Selected');
+  },
+  // roundtrip-free openBy on a hidden DatePicker (the 016 idiom itself)
+  z2ui5_cl_ai_app_016: async (page, expect) => {
+    const btn = page.getByRole('button', { name: 'Open Date Picker', exact: true }).first();
+    await expect(btn, 'the openBy anchor button').toBeVisibleEnabled();
+    await btn.click();
+    await expect(page.locator('.sapMPopover, .sapUiCal').first(), 'the hidden DatePicker opened anchored').toBeVisibleEnabled();
+  },
+  // StepInput increment → change event → client-composed value toast
+  z2ui5_cl_ai_app_049: async (page, expect) => {
+    const inc = page.locator('.sapMStepInputBtnIncrease').first();
+    await expect(inc, 'the StepInput increment button').toBeVisibleEnabled();
+    await inc.click();
+    await expect(page.locator('.sapMMessageToast'), 'the change-value client toast').toContainText("Value changed to");
+  },
+  // MenuButton opens its Menu; item select toasts `{0} Pressed`
+  z2ui5_cl_ai_app_061: async (page, expect) => {
+    const btn = page.getByRole('button', { name: 'File', exact: true }).first();
+    await expect(btn, 'the "File" MenuButton').toBeVisibleEnabled();
+    await btn.click();
+    const item = page.getByText('Save', { exact: true }).last();
+    await expect(item, 'the opened menu item').toBeVisibleEnabled();
+    await item.click();
+    await expect(page.locator('.sapMMessageToast'), 'the item-select client toast').toContainText('Pressed');
+  },
+  // MessagePopover toggleBy (dependents-declared, message table bound)
+  z2ui5_cl_ai_app_066: async (page, expect) => {
+    const btn = page.locator("[id*='messagePopoverBtn']").first();
+    await expect(btn, 'the message-popover toggle button').toBeVisibleEnabled();
+    await btn.click();
+    await expect(page.locator('.sapMMsgPopover, .sapMPopover').first(), 'the toggled MessagePopover').toContainText('Error');
+  },
+  // MessagePopover toggle + the 2026-07-30 RELATIVE_ONLY URL policy: opening
+  // the popover renders the markup links and fires urlValidated → toast
+  z2ui5_cl_ai_app_067: async (page, expect) => {
+    const btn = page.locator("[id*='messagePopoverBtn']").first();
+    await expect(btn, 'the message-popover toggle button').toBeVisibleEnabled();
+    await btn.click();
+    await expect(page.locator('.sapMMsgPopover, .sapMPopover').first(), 'the toggled MessagePopover').toContainText('Error message');
+  },
+  // ObjectListItem press → `Pressed : {0}` client toast
+  z2ui5_cl_ai_app_074: async (page, expect) => {
+    const item = page.locator('.sapMObjLItem').first();
+    await expect(item, 'the first ObjectListItem').toBeVisibleEnabled();
+    await item.click();
+    await expect(page.locator('.sapMMessageToast'), 'the press client toast').toContainText('Pressed :');
+  },
+  // NotificationListItem footer button → static client toast
+  z2ui5_cl_ai_app_076: async (page, expect) => {
+    const btn = page.getByRole('button', { name: 'Accept', exact: true }).first();
+    await expect(btn, 'the "Accept" notification button').toBeVisibleEnabled();
+    await btn.click();
+    await expect(page.locator('.sapMMessageToast'), 'the accept client toast').toContainText('Accept Button Pressed');
+  },
+  // ToggleButton → the `{N?true:false}` conditional placeholder toast
+  z2ui5_cl_ai_app_080: async (page, expect) => {
+    const btn = page.getByRole('button', { name: 'Pressed', exact: true }).first();
+    await expect(btn, 'the "Pressed" toggle button').toBeVisibleEnabled();
+    await btn.click();
+    await expect(page.locator('.sapMMessageToast'), 'the conditional-placeholder toast').toContainText('Unpressed');
+  },
+  // popup_display SelectDialog with the product mock
+  z2ui5_cl_ai_app_103: async (page, expect) => {
+    const btn = page.getByRole('button', { name: 'Show Select Dialog', exact: true }).first();
+    await expect(btn, 'the dialog button').toBeVisibleEnabled();
+    await btn.click();
+    await expect(page.locator('.sapMDialog'), 'the SelectDialog').toContainText('Select Product');
+  },
+  // semantic MultiSelectAction: ${$source>/pressed} → server-composed toast
+  z2ui5_cl_ai_app_107: async (page, expect) => {
+    const btn = page.getByRole('button', { name: 'Multiple Selection', exact: true }).first();
+    await expect(btn, 'the MultiSelectAction button').toBeVisibleEnabled();
+    await btn.click();
+    await expect(page.locator('.sapMMessageToast'), 'the toggle-state toast').toContainText('MultiSelect Pressed');
+  },
+  // popover_display with an embedded unified ColorPicker (2026-07-30 rework)
+  z2ui5_cl_ai_app_112: async (page, expect) => {
+    const btn = page.getByRole('button', { name: 'Open ColorPicker in a ResponsivePopover', exact: true }).first();
+    await expect(btn, 'the popover button').toBeVisibleEnabled();
+    await btn.click();
+    await expect(page.locator('.sapMPopover .sapUiColorPicker-ColorPickerSimplified, .sapMPopover .sapUiColorPicker').first(), 'the ColorPicker inside the popover').toBeVisibleEnabled();
+  },
+  // two-way bound SideNavigation.expanded flipped on a round-trip
+  z2ui5_cl_ai_app_128: async (page, expect) => {
+    const nav = page.locator('.sapTntSideNavigation').first();
+    await expect(nav, 'the SideNavigation').toBeVisibleEnabled();
+    const btn = page.getByRole('button', { name: 'Toggle Collapse/Expand', exact: true }).first();
+    await btn.click();
+    // expanded starts false (NotExpanded class present) and the round-trip
+    // flips the bound property → the class must disappear
+    await page.waitForFunction(
+      () => {
+        const el = document.querySelector('.sapTntSideNavigation');
+        return el && !el.classList.contains('sapTntSideNavigationNotExpanded');
+      },
+      { timeout: 10000 },
+    );
+  },
+  // ToolHeader logo Image press → static client toast
+  z2ui5_cl_ai_app_134: async (page, expect) => {
+    const logo = page.locator("img[src*='SAP_Logo']").first();
+    await expect(logo, 'the SAP logo image').toBeVisibleEnabled();
+    await logo.click();
+    await expect(page.locator('.sapMMessageToast'), 'the logo client toast').toContainText('Logo pressed!');
+  },
+  // global BusyIndicator show(0) + START_TIMER hide chain (2026-07-30 rework)
+  z2ui5_cl_ai_app_147: async (page, expect) => {
+    const btn = page.getByRole('button', { name: 'Show BusyIndicator', exact: true }).nth(1);
+    await expect(btn, 'the zero-delay busy button').toBeVisibleEnabled();
+    await btn.click();
+    await page.waitForFunction(
+      () => {
+        const el = document.getElementById('sapUiBusyIndicator');
+        return el && el.offsetParent !== null;
+      },
+      { timeout: 10000 },
+    );
+    // the HIDE_BUSY timer round-trip removes it again after ~4s
+    await page.waitForFunction(
+      () => {
+        const el = document.getElementById('sapUiBusyIndicator');
+        return !el || el.offsetParent === null;
+      },
+      { timeout: 15000 },
+    );
+  },
+  // NumericContent press → static client toast
+  z2ui5_cl_ai_app_156: async (page, expect) => {
+    const tile = page.locator('.sapMNC').first();
+    await expect(tile, 'the first NumericContent').toBeVisibleEnabled();
+    await tile.click();
+    await expect(page.locator('.sapMMessageToast'), 'the press client toast').toContainText('The numeric content is pressed.');
+  },
+  // GenericTag press → Card popover rebuilt from the sample fragment
+  // (2026-07-30 rework)
+  z2ui5_cl_ai_app_170: async (page, expect) => {
+    const tag = page.locator('.sapMGenericTag').first();
+    await expect(tag, 'the SR GenericTag').toBeVisibleEnabled();
+    await tag.click();
+    await expect(page.locator('.sapMPopover'), 'the Card popover').toContainText('Sales Revenue');
+  },
+  // CAL_SELECT/SELECT_TODAY round-trip updating the bound selectedDate Text
+  z2ui5_cl_ai_app_177: async (page, expect) => {
+    const btn = page.getByRole('button', { name: 'Select Today', exact: true }).first();
+    await expect(btn, 'the Select Today button').toBeVisibleEnabled();
+    await btn.click();
+    // the round-trip writes yyyy-MM-dd into the bound #selectedDate Text
+    await page.waitForFunction(
+      () => {
+        const el = document.querySelector("[id*='selectedDate']");
+        return el && /\d{4}-\d{2}-\d{2}/.test(el.textContent || '');
+      },
+      { timeout: 10000 },
+    );
+  },
+  // ObjectListItem press → `Pressed : {0}` client toast (markers variant)
+  z2ui5_cl_ai_app_198: async (page, expect) => {
+    const item = page.locator('.sapMObjLItem').first();
+    await expect(item, 'the first ObjectListItem').toBeVisibleEnabled();
+    await item.click();
+    await expect(page.locator('.sapMMessageToast'), 'the press client toast').toContainText('Pressed :');
+  },
+  // popover_display anchored via $event.oSource.sId + relative {NAME} bindings
+  z2ui5_cl_ai_app_229: async (page, expect) => {
+    const btn = page.getByRole('button', { name: 'Show Popover', exact: true }).first();
+    await expect(btn, 'the popover button').toBeVisibleEnabled();
+    await btn.click();
+    await expect(page.locator('.sapMPopover'), 'the anchored popover').toContainText('Email');
+  },
+  // KEYBOARD_SHORTCUT: Ctrl+S fires the backend SAVE command (2026-07-30)
+  z2ui5_cl_ai_app_232: async (page, expect) => {
+    await page.locator('.sapMPanel').first().click();
+    await page.keyboard.press('Control+s');
+    await expect(page.locator('.sapMMessageToast'), 'the Ctrl+S command toast').toContainText('CTRL+S: save triggered on controller');
+  },
+  // check_prevent_default: with the checkbox set, a press round-trips but the
+  // eBP wire cancels the built-in selection (2026-07-30 rework)
+  z2ui5_cl_ai_app_241: async (page, expect) => {
+    const cb = page.locator("[id*='preventDefaultCheckbox']").first();
+    await expect(cb, 'the prevent-default checkbox').toBeVisibleEnabled();
+    await cb.click();
+    // the PREVENT_TOGGLE redraw re-bakes the press wires
+    await page.waitForTimeout(1500);
+    const item = page.getByText('Building', { exact: true }).first();
+    await expect(item, 'the Building item').toBeVisibleEnabled();
+    await item.click();
+    await expect(page.locator('.sapMMessageToast'), 'the prevented-default toast').toContainText('Default was prevented');
+  },
+  // NavContainer.to via control_by_id (slot-local id + transition)
+  z2ui5_cl_ai_app_242: async (page, expect) => {
+    const btn = page.getByRole('button', { name: 'To 2', exact: true }).first();
+    await expect(btn, 'the To 2 nav button').toBeVisibleEnabled();
+    await btn.click();
+    await expect(page.getByText('Page 2', { exact: true }).first(), 'page 2 after the to() call').toBeVisibleEnabled();
+  },
+  // popover_display ResponsivePopover with custom footer
+  z2ui5_cl_ai_app_243: async (page, expect) => {
+    const btn = page.getByRole('button', { name: 'Popover with Custom Footer', exact: true }).first();
+    await expect(btn, 'the popover button').toBeVisibleEnabled();
+    await btn.click();
+    await expect(page.locator('.sapMPopover'), 'the ResponsivePopover').toContainText('Action-A');
+  },
+  // DynamicPage.breakpointChange → bound Avatar displaySize + toast
+  // (2026-07-30 rework; needs UI5 >= 1.147)
+  z2ui5_cl_ai_app_244: async (page, expect) => {
+    await page.setViewportSize({ width: 500, height: 800 });
+    await expect(page.locator('.sapMMessageToast'), 'the media-range toast').toContainText('Media Range:');
+  },
+  // FileUploader UPLOAD round-trip: empty value → 'Choose a file first'
+  // (2026-07-30 rework)
+  z2ui5_cl_ai_app_246: async (page, expect) => {
+    const btn = page.getByRole('button', { name: 'Upload File', exact: true }).first();
+    await expect(btn, 'the Upload File button').toBeVisibleEnabled();
+    await btn.click();
+    await expect(page.locator('.sapMMessageToast'), 'the empty-value toast').toContainText('Choose a file first');
   },
 };
 

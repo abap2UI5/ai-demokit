@@ -12,12 +12,12 @@
   "checked": null,
   "deviations": [
     {
-      "type": "IMPROVISED",
-      "what": "The controller's Card popover (onPressOpenPopover, wired to the GenericTag press and the 'Button with layoutData' press) is dropped: it Fragment.loads Card.fragment.xml (a Popover > sap.f.Card > sap.f.cards.NumericHeader with two NumericSideIndicators) and opens it by the pressed control; the GenericTag.press attribute is therefore also dropped. Accounts for the structural-diff 'control missing' on Popover / f:Card / card:NumericHeader / card:NumericSideIndicator and 'attr missing' GenericTag.press. Review 2026-07-27: this drop improvises around a CAPABILITIES-checkmarked feature - a Fragment.load + openBy popover is exactly popover_display( xml = <fragment> by_id = $event.oSource.sId ) (Popups & messages rows, app 229/094 idiom), so the popover should be ported 1:1; flagged for rework, not promoted."
+      "type": "NOTE",
+      "what": "The controller's Card popover (onPressOpenPopover, wired to the GenericTag press and the 'Button with layoutData' press) is reproduced 1:1 since 2026-07-30: both presses fire OPEN_POPOVER with $event.oSource.sId and the backend rebuilds view/Card.fragment.xml verbatim (Popover placement Bottom / showHeader false / contentWidth 300px > f:Card > card:NumericHeader 'Sales Revenue' with the two card:NumericSideIndicator Target/Deviation rows) shown via popover_display( by_id = pressed control ) - the Fragment.load + openBy equivalent. The fragment's Popover, Card, NumericHeader and NumericSideIndicator controls are counted by structural-diff against the union that includes the original's own Card.fragment.xml, so the counts match; both press attributes are restored 1:1."
     },
     {
-      "type": "IMPROVISED",
-      "what": "The Edit button's press='.toggleAreaPriority' is dropped. The handler flips the DynamicPageTitle.areaShrinkRatio between its default and '1.6:1:1.6'; cosmetic, no data impact. Review 2026-07-27: the earlier 'no bindable path' rationale is wrong - areaShrinkRatio IS a bindable property and the metadata default is the static constant '1:1.6:1.6', so the toggle is expressible as a two-way bound model field flipped in a backend event (same technique as the TOGGLE_FOOTER flag in this port); flagged for rework together with the popover drop."
+      "type": "NOTE",
+      "what": "The Edit button's press='.toggleAreaPriority' is reproduced since 2026-07-30: DynamicPageTitle.areaShrinkRatio is two-way bound ({/AREASHRINKRATIO}, an added attribute vs the original view - declared here) seeded with the metadata default 1:1.6:1.6, and the TOGGLE_AREA_PRIORITY round-trip flips it to 1.6:1:1.6 and back (the controller read the default from getMetadata().getProperty('areaShrinkRatio').getDefaultValue(); the port seeds the same literal - re-verify should UI5 ever change the default)."
     },
     {
       "type": "NOTE",

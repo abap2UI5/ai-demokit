@@ -7,6 +7,59 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## Backlog sweep (2026-07-30) — three pr/ closed against upstream, the toast-substitution class reworked, INTERACTIONS 12 → 39
+
+The two "deferred — too large" framework requests turned out to be **already
+merged upstream** (abap2UI5 main had moved past our stale local ref):
+`cs_event-keyboard_shortcut` and the MessagePopover URL policies landed with
+**#2482**, and `s_ctrl-check_prevent_default` (the `eBP` wire) is in main too.
+So the work was port integration, not framework code:
+
+- **pr/ closed (3):** `core-commandexecution-keyboard-shortcuts` — app 232
+  registers Ctrl+S/Ctrl+D on init, every `cmd:` button fires the same backend
+  SAVE/DELETE/PSAVE events and the backend gates each command on its
+  enabled/visible flags (residual: the registry is document-global, no
+  popover-local command scope). `event-prevent-default` — app 241 bakes
+  `check_prevent_default = prevent_default` into all eight press wires; the
+  checkbox got a declared `select` wire whose redraw re-bakes the flag
+  (status reset `checked` → `generated` per the invalidation rule).
+  `messagepopover-async-url` — app 067 installs the `RELATIVE_ONLY` policy on
+  init and wires the original's `urlValidated` toast 1:1. CAPABILITIES rows
+  flipped ❌ → ✅ (keyboard shortcuts, conditional preventDefault) and a new
+  `setAsyncURLHandler` row added; folders deleted, Implemented rows left.
+- **Toast-substitution rework (9 ports, the STATUS backlog list):** 106/107
+  (`${$source>/pressed}` toggle toast + the controller-built MessagePopover
+  over the `message>` model as a MessagesIndicator dependent, seeded through
+  the `z2ui5.cc.MessageManager` bridge), 112 (ResponsivePopover-with-
+  ColorPicker via `popover_display`, the Device.system.phone branch as
+  `device>` bindings), 147 (global BusyIndicator 1:1: `BUSY_INDICATOR`
+  show(delay) + `START_TIMER` HIDE_BUSY duration → hide — the setTimeout
+  chain as frontend actions), 149 (URLHELPER REDIRECT, the original's
+  relative Card-Explorer URL), 170 (Card.fragment.xml rebuilt 1:1 into an
+  anchored `popover_display` on both wired presses + the Edit button's
+  `areaShrinkRatio` toggle as a two-way binding), 218 (the review-flagged
+  `oSF.suggest()` popup-reopen wired as a second `control_by_id` follow-up),
+  244 (`breakpointChange` @1.147 wired as a view attribute, POST_171 —
+  Phone/Tablet/Desktop → bound Avatar `displaySize` + the media-range
+  toast), 246 (the original `handleUploadPress`: two-way bound value,
+  empty → 'Choose a file first', else `upload` + `clear` follow-ups;
+  `checkFileReadable` declared inexpressible).
+- **e2e INTERACTIONS 12 → 39**: per-port click→assert checks now cover every
+  major LIVE_TEST class — client-composed toasts (003/005/008/016/049/061/
+  074/076/080/134/156/198), popups & popovers (019/066/067/103/104/112/170/
+  229/236/243), anchored opens (060/091/227), two-way round-trips (128/130/
+  133/177), action chains (147/242/246), the new keyboard-shortcut (232),
+  prevent-default (241), breakpointChange (244) and semantic-state (107)
+  wires. The nightly e2e run is the close path that converts verified
+  LIVE_TEST entries into NOTEs.
+- All fast gates green at commit time (abaplint 0 across all three configs'
+  root build, pattern-lint 0 — the 149 object-literal arg moved to the
+  pipe-template form the `event-arg-bare-brace` rule expects —,
+  structural-diff 0 undeclared, render-smoke 0 failing, data-fidelity 0,
+  property-check 0). The full transpiled e2e run over the changed ports is
+  in flight in this same change series; its LIVE_TEST → NOTE conversions
+  follow with the run's evidence.
+
 ## Backlog sweep (2026-07-28) — dead wires closed, an app-killing crash proved and fixed, the OpenUI5 snapshots refreshed
 
 The open findings that were actionable without a live system, worked off in one
