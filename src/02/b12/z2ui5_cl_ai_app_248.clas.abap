@@ -148,7 +148,7 @@ CLASS z2ui5_cl_ai_app_248 IMPLEMENTATION.
                                 " the guard keeps the Price cell empty there like the original's
                                 " absent JSON property (app-220 idiom, declared)
                                 )->leaf( n = `Currency` ns = `u`
-                                    )->a( n = `value`    v = `{= ${AMOUNT} ? ${AMOUNT} : null }`
+                                    )->a( n = `value`    v = `{= ${AMOUNT} > 0 ? ${AMOUNT} : null }`
                                     )->a( n = `currency` v = `{CURRENCY}`
 
                             )->shut(

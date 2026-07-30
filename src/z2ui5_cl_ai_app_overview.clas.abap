@@ -3421,12 +3421,13 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` {path:'/catalog/clothing', parameters:{arrayNames:['categories']}}. Homogeneous-type caveat: a level-3 leaf article (Jewelry/Necklace class) carries an empty CATEGORIES array (the ABAP row type is` &&
                ` one shape per level) - JSONTreeBinding treats an empty child array as a leaf, so it renders like the original's absent property; and a level-3 CATEGORY row (Dresses) carries initial` &&
                ` AMOUNT/CURRENCY/SIZE fields its original JSON node omits - SIZE '' keeps the Select hidden through the original's own !!SIZE guard, and the Price guard below keeps the cell empty. // NOTE:` &&
-               ` Currency.value is the guarded expression binding ``{= ${AMOUNT} ? ${AMOUNT} : null }`` instead of the original's plain {amount}: a category row's own AMOUNT serializes as 0 (initial packed - a flat`.
-    lv_text1 = lv_text1 && ` ABAP row serializes every field), and an unguarded 0 would render '0.00' where the original's absent JSON property renders an empty Price cell. The app-220 optional-value-guard idiom (backtick` &&
-               ` literal so the braces reach the attribute verbatim); leaf amounts are all > 0, so no real price is masked. // LIVE-TEST: unverified in a running system: (a) the nested-structure model root` &&
-               ` (/CATALOG/CLOTHING via _bind on the catalog-clothing component) feeding the TreeTable rows binding with arrayNames; (b) Collapse all / Expand first level via roundtrip-free _event_client` &&
-               ` control_by_id (collapseAll whitelisted, expandToLevel int); (c) Collapse/Expand selection 1:1 via the $event.oSource.getParent().getParent().getSelectedIndices() expression - the resolved index array` &&
-               ` reaches the unlisted-but-public collapse/expand methods through castArgAuto untouched; (d) the two-way Select selectedKey writing a changed size back into the tree row.`.
+               ` Currency.value is the guarded expression binding ``{= ${AMOUNT} > 0 ? ${AMOUNT} : null }`` (a numeric-string 0.00 from the transpiled runtime is truthy, so the guard compares > 0 instead of testing`.
+    lv_text1 = lv_text1 && ` truthiness) instead of the original's plain {amount}: a category row's own AMOUNT serializes as 0 (initial packed - a flat ABAP row serializes every field), and an unguarded 0 would render '0.00'` &&
+               ` where the original's absent JSON property renders an empty Price cell. The app-220 optional-value-guard idiom (backtick literal so the braces reach the attribute verbatim); leaf amounts are all > 0,` &&
+               ` so no real price is masked. // LIVE-TEST: unverified in a running system: (a) the nested-structure model root (/CATALOG/CLOTHING via _bind on the catalog-clothing component) feeding the TreeTable` &&
+               ` rows binding with arrayNames; (b) Collapse all / Expand first level via roundtrip-free _event_client control_by_id (collapseAll whitelisted, expandToLevel int); (c) Collapse/Expand selection 1:1 via` &&
+               ` the $event.oSource.getParent().getParent().getSelectedIndices() expression - the resolved index array reaches the unlisted-but-public collapse/expand methods through castArgAuto untouched; (d) the` &&
+               ` two-way Select selectedKey writing a changed size back into the tree row.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.table`       control = `sap.ui.table.TreeTable`                name = `TreeTable.JSONTreeBinding`           class = `z2ui5_cl_ai_app_248` path = `src/02/b12/z2ui5_cl_ai_app_248.clas.abap`
         score = 4

@@ -17,7 +17,7 @@
     },
     {
       "type": "NOTE",
-      "what": "Currency.value is the guarded expression binding `{= ${AMOUNT} ? ${AMOUNT} : null }` instead of the original's plain {amount}: a category row's own AMOUNT serializes as 0 (initial packed - a flat ABAP row serializes every field), and an unguarded 0 would render '0.00' where the original's absent JSON property renders an empty Price cell. The app-220 optional-value-guard idiom (backtick literal so the braces reach the attribute verbatim); leaf amounts are all > 0, so no real price is masked."
+      "what": "Currency.value is the guarded expression binding `{= ${AMOUNT} > 0 ? ${AMOUNT} : null }` (a numeric-string 0.00 from the transpiled runtime is truthy, so the guard compares > 0 instead of testing truthiness) instead of the original's plain {amount}: a category row's own AMOUNT serializes as 0 (initial packed - a flat ABAP row serializes every field), and an unguarded 0 would render '0.00' where the original's absent JSON property renders an empty Price cell. The app-220 optional-value-guard idiom (backtick literal so the braces reach the attribute verbatim); leaf amounts are all > 0, so no real price is masked."
     },
     {
       "type": "LIVE_TEST",
