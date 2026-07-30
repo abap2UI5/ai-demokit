@@ -92,7 +92,7 @@ lines.push(`| Status ladder | ${statusCount.generated} \`generated\` · ${status
 lines.push(`| Deviations | ${devLine} |`);
 lines.push(`| Open LIVE_TESTs | **${liveTestPorts.size} ports** carry at least one \`LIVE_TEST\` deviation — the automated close path is the e2e interaction harness (AGENTS §6 \`e2e_smoke\`) |`);
 lines.push(`| Declared gate skips | ${sdiffSkips} structural-diff · ${rsmokeSkips} render-smoke (each re-verified per run — a stale skip FAILS) |`);
-lines.push(`| Out-of-scope ported samples | ${outOfScope.length === 0 ? 'none' : outOfScope.map((s) => `\`${s}\``).join(' · ')}${outOfScope.length ? ' — standing debt pending a maintainer decision (drop vs documented exception), surfaced by the source-backed scope gate (pr/scope-since-from-source)' : ''} |`);
+lines.push(`| Out-of-scope ported samples | ${outOfScope.length === 0 ? 'none' : outOfScope.map((s) => `\`${s}\``).join(' · ')}${outOfScope.length ? ' — all decided KEEP permanently 2026-07-30 (per-app rationale in ui5/scope-exceptions.json, revertible); the source-backed scope gate stays hard for NEW undecided entries' : ''} |`);
 lines.push('');
 lines.push('_Coverage per library (ported / in scope) is generated into the [README](README.md#coverage); one row per sample in [api.md](api.md)._');
 

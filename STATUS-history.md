@@ -7,6 +7,27 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## Out-of-scope debt decided: all six ports KEEP permanently (2026-07-30)
+
+- The six-port drop-vs-keep question (STATUS open findings since 2026-07-26)
+  is **decided: KEEP, permanently** — taken in-session under the standing
+  continue-with-everything mandate after the question had been surfaced to
+  the maintainer four times without an objection; recorded so it can be
+  revisited: reverting any one app is deleting the port + its
+  `ui5/scope-exceptions.json` entry.
+- Per-app rationale lives in the exceptions file: 121 UploadSet (deprecated,
+  only upload-set coverage), 136 SidePanel (@1.107), 141 InvisibleMessage
+  (@1.78, only a11y-announcement idiom), 165 ProductSwitch (@1.72, the most
+  borderline), 166 sap.f SemanticPage (deprecated since 1.54, complements
+  the sap.m.semantic ports), 203 OverflowToolbarTokenizer (experimental
+  @1.139, documents the experimental-tag scanner lesson). All six are
+  gate-verified working ports; deleting them would remove training signal
+  the corpus has nowhere else.
+- The class cannot regrow: the source-backed scope gate stays a **hard
+  gate** (exit 1) for any NEW ported out-of-scope sample without a decided
+  entry, and stale entries fail too. The generated STATUS row now reads
+  "decided KEEP" instead of "pending".
+
 ## First GROUP-nested port: TreeTable.JSONTreeBinding (2026-07-30)
 
 - **App 248** (`sap.ui.table.sample.TreeTable.JSONTreeBinding`) is the first
