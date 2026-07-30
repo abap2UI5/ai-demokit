@@ -3427,7 +3427,9 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` so no real price is masked. // LIVE-TEST: unverified in a running system: (a) the nested-structure model root (/CATALOG/CLOTHING via _bind on the catalog-clothing component) feeding the TreeTable` &&
                ` rows binding with arrayNames; (b) Collapse all / Expand first level via roundtrip-free _event_client control_by_id (collapseAll whitelisted, expandToLevel int); (c) Collapse/Expand selection 1:1 via` &&
                ` the $event.oSource.getParent().getParent().getSelectedIndices() expression - the resolved index array reaches the unlisted-but-public collapse/expand methods through castArgAuto untouched; (d) the` &&
-               ` two-way Select selectedKey writing a changed size back into the tree row.`.
+               ` two-way Select selectedKey writing a changed size back into the tree row. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): (a) and (b) are covered - the tree`.
+    lv_text1 = lv_text1 && ` renders its root categories from the nested-structure model, Expand first level reveals the second level (Accessories) and Collapse all hides it again; (c) selection expand/collapse and (d) the` &&
+               ` two-way Select remain unexercised. Environment note: the transpiled runtime serializes packed AMOUNT as a numeric string, which is why the Currency guard compares > 0 instead of truthiness.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.table`       control = `sap.ui.table.TreeTable`                name = `TreeTable.JSONTreeBinding`           class = `z2ui5_cl_ai_app_248` path = `src/02/b12/z2ui5_cl_ai_app_248.clas.abap`
         score = 4
