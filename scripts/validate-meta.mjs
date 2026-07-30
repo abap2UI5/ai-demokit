@@ -109,7 +109,9 @@ for (const sf of sidecars.sort()) {
   if (m.checked && !/^\d{4}-\d{2}-\d{2}$/.test(m.checked.date || '')) {
     err(`${sf}: checked.date must be YYYY-MM-DD`);
   }
-  if (m.sample && !/^[\w.]+\.sample\.\w+$/.test(m.sample)) {
+  // GROUP-nested samples (AGENTS §1, since 2026-07-26) are named
+  // <Group>.<Child> after .sample. — the name part may carry dots
+  if (m.sample && !/^[\w.]+\.sample\.\w+(\.\w+)*$/.test(m.sample)) {
     err(`${sf}: sample "${m.sample}" is not <lib>.sample.<Name>`);
   }
   for (const d of m.deviations || []) {

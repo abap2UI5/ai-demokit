@@ -7,6 +7,39 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## First GROUP-nested port: TreeTable.JSONTreeBinding (2026-07-30)
+
+- **App 248** (`sap.ui.table.sample.TreeTable.JSONTreeBinding`) is the first
+  port of a GROUP-nested sample (`<Group>.<Child>` universe naming, AGENTS
+  §1) — and the only genuinely portable NEW-CONTROL entry left in the
+  backlog tail (the rest is OPA/gherkin test samples, routing/view concept
+  samples and OData tree bindings). `validate-meta`'s sample-name regex
+  still rejected group names (`<lib>.sample.<Name>` with no dots); it now
+  allows the dotted child part — the scaffolder already handled the
+  mapping.
+- The port models the fixed-depth Clothing tree as **nested ABAP types
+  under a `CATALOG-CLOTHING` structure**, so the rows binding keeps the
+  original's `/catalog/clothing` root + `arrayNames: ['CATEGORIES']`
+  1:1 (`_bind` on a structure component resolves the deep path). Two
+  homogeneous-type caveats are declared: a level-3 leaf carries an empty
+  child array (JSONTreeBinding reads [] as a leaf), and a level-3 category
+  row serializes initial `AMOUNT`/`SIZE` fields — `SIZE ''` stays hidden
+  through the original's own `!!${size}` guard, and `Currency.value` gets
+  the app-220 optional-value guard so category Price cells stay empty
+  (declared; the plain `{amount}` would render `0.00`).
+- All four toolbar actions are wired 1:1 roundtrip-free: `collapseAll` /
+  `expandToLevel(1)` via `control_by_id`, and **Collapse/Expand selection
+  via `$event.oSource.getParent().getParent().getSelectedIndices()`** —
+  the resolved index array passes through `castArgAuto` untouched into the
+  public `collapse`/`expand` methods. e2e interaction: expand first level →
+  'Accessories' renders, collapse all → gone.
+- Interactions batch 3 was trimmed to what proves stable headless: 132
+  (tags-variant SideNavigation collapse round-trip) is armed and its
+  LIVE_TEST converted; 097/101/172/207/233 need per-app debugging that
+  outgrew this pass (Wizard footer clicks time out, SplitApp detail text
+  never surfaces, the ListItemTypes Select id collides) — they stay
+  LIVE_TEST, un-armed, for a later pass.
+
 ## Framework bug found by e2e: the MessageBox onclose action never reached the backend (2026-07-30)
 
 - Arming the 093 close-confirm interaction surfaced a **real abap2UI5

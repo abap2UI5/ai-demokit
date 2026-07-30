@@ -185,6 +185,32 @@ const INTERACTIONS = {
     await page.getByRole('button', { name: 'Enable Post Button', exact: true }).first().click();
     await page.locator('.sapMDialog').waitFor({ state: 'hidden', timeout: 10000 });
   },
+  // two-way bound SideNavigation.expanded (tags variant) flipped on a round-trip
+  z2ui5_cl_ai_app_132: async (page, expect) => {
+    const nav = page.locator('.sapTntSideNavigation').first();
+    await expect(nav, 'the SideNavigation').toBeVisibleEnabled();
+    await page.getByRole('button', { name: 'Toggle Collapse/Expand', exact: true }).first().click();
+    // expanded starts true → the round-trip collapses it
+    await page.waitForFunction(
+      () => {
+        const el = document.querySelector('.sapTntSideNavigation');
+        return el && el.classList.contains('sapTntSideNavigationNotExpanded');
+      },
+      { timeout: 10000 },
+    );
+  },
+  // TreeTable JSONTreeBinding: nested-structure model root + roundtrip-free
+  // expandToLevel/collapseAll via control_by_id (new port 2026-07-30)
+  z2ui5_cl_ai_app_248: async (page, expect) => {
+    await expect(page.getByText('Women', { exact: true }).first(), 'the first root category').toBeVisibleEnabled();
+    await page.getByRole('button', { name: 'Expand first level', exact: true }).first().click();
+    await expect(page.getByText('Accessories', { exact: true }).first(), 'a second-level category after expandToLevel(1)').toBeVisibleEnabled();
+    await page.getByRole('button', { name: 'Collapse all', exact: true }).first().click();
+    await page.waitForFunction(
+      () => ![...document.querySelectorAll('td, .sapUiTableCell')].some((c) => c.textContent.trim() === 'Accessories' && c.offsetParent !== null),
+      { timeout: 10000 },
+    );
+  },
   // Icon press → static client toast (the sample's stethoscope budget icon)
   z2ui5_cl_ai_app_122: async (page, expect) => {
     const icon = page.locator('.sapUiIconPointer').first();

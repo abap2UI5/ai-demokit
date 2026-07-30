@@ -2807,15 +2807,16 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` Kept per the members-newer-than-1.71 fidelity policy; @since verified by hand against fork-openui5/src/sap.tnt/src/sap/tnt/NavigationListItem.js line 101-103 (property gate is blind to sap.tnt).` &&
                  ` Requires a UI5 release >= 1.116 to render.` ) ).
 
-    lv_text1 = `LIVE-TEST: The 'Toggle Collapse/Expand' button flips SideNavigation.expanded (bound to a boolean model field, initial true as in the original). The original toggled it imperatively via` &&
-               ` byId().setExpanded; the property is two-way bound here and toggled on a backend round-trip. Every tnt:tag ObjectStatus (IndicationColor states 15-20, inverted) and the NavigationListGroup / fixedItem` &&
-               ` structure are reproduced 1:1. // POST-1.71: Two sap.tnt.NavigationListItem members newer than UI5 1.71 are kept 1:1: selectable (@since 1.116, selectable=false on the Favorites parent item) and the` &&
-               ` tag aggregation (@since 1.149, a sap.m.ObjectStatus per item, used 8x). Declared per the property-171 policy. Previously undeclared because the property gate is blind to sap.tnt (properties.json` &&
-               ` holds sap.m only); selectable found by the app-172 cold-read probe and tag by the non-sap.m @since audit, 2026-07-24. // POST-1.71: Kept 1:1 but newer than UI5 1.71 and invisible to the property` &&
-               ` gate: sap.tnt.NavigationListGroup (control @since 1.121, the 'Business Operations' group); NavigationListItem.expanded (expanded=true on the Favorites and Projects items - reads as @since 1.121`.
-    lv_text1 = lv_text1 && ` because the property was relocated to the newer base class NavigationListItemBase, the property itself predates 1.71, declared per the relocated-member note); and the IndicationColor enum values` &&
-               ` Indication15, Indication16, Indication17, Indication18, Indication19, Indication20 (@since 1.120) carried by all 8 ObjectStatus tag states (enum values are invisible at the attribute-name level). The` &&
-               ` app needs UI5 >= 1.121 to render groups and tags. Found by the 2026-07-27 review sweep.`.
+    lv_text1 = `NOTE: The 'Toggle Collapse/Expand' button flips SideNavigation.expanded (bound to a boolean model field, initial true as in the original). The original toggled it imperatively via byId().setExpanded;` &&
+               ` the property is two-way bound here and toggled on a backend round-trip. Every tnt:tag ObjectStatus (IndicationColor states 15-20, inverted) and the NavigationListGroup / fixedItem structure are` &&
+               ` reproduced 1:1. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the Toggle Collapse/Expand round-trip collapses the two-way bound SideNavigation (the` &&
+               ` NotExpanded class appears). // POST-1.71: Two sap.tnt.NavigationListItem members newer than UI5 1.71 are kept 1:1: selectable (@since 1.116, selectable=false on the Favorites parent item) and the tag` &&
+               ` aggregation (@since 1.149, a sap.m.ObjectStatus per item, used 8x). Declared per the property-171 policy. Previously undeclared because the property gate is blind to sap.tnt (properties.json holds` &&
+               ` sap.m only); selectable found by the app-172 cold-read probe and tag by the non-sap.m @since audit, 2026-07-24. // POST-1.71: Kept 1:1 but newer than UI5 1.71 and invisible to the property gate:`.
+    lv_text1 = lv_text1 && ` sap.tnt.NavigationListGroup (control @since 1.121, the 'Business Operations' group); NavigationListItem.expanded (expanded=true on the Favorites and Projects items - reads as @since 1.121 because the` &&
+               ` property was relocated to the newer base class NavigationListItemBase, the property itself predates 1.71, declared per the relocated-member note); and the IndicationColor enum values Indication15,` &&
+               ` Indication16, Indication17, Indication18, Indication19, Indication20 (@since 1.120) carried by all 8 ObjectStatus tag states (enum values are invisible at the attribute-name level). The app needs UI5` &&
+               ` >= 1.121 to render groups and tags. Found by the 2026-07-27 review sweep.`.
     lv_text2 = `Two sap.tnt.NavigationListItem members newer than UI5 1.71 are kept 1:1: selectable (@since 1.116, selectable=false on the Favorites parent item) and the tag aggregation (@since 1.149, a` &&
                ` sap.m.ObjectStatus per item, used 8x). Declared per the property-171 policy. Previously undeclared because the property gate is blind to sap.tnt (properties.json holds sap.m only); selectable found` &&
                ` by the app-172 cold-read probe and tag by the non-sap.m @since audit, 2026-07-24. // Kept 1:1 but newer than UI5 1.71 and invisible to the property gate: sap.tnt.NavigationListGroup (control @since` &&
@@ -2826,7 +2827,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
     result = VALUE #( BASE result
       ( module = `sap.tnt`            control = `sap.tnt.SideNavigation`                name = `SideNavigationWithTags`              class = `z2ui5_cl_ai_app_132` path = `src/05/b03/z2ui5_cl_ai_app_132.clas.abap`
         score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.34`
         is_post171 = abap_true
         notes = lv_text1
@@ -3414,6 +3415,23 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         notes = lv_text1
         post171 = `sap.ui.table.Table.rowMode (aggregation, @since 1.119) is used 1:1 (the RowModes sample binds rowMode to the folded 'ui>' state). Newer than UI5 1.71; declared per the property-171 policy. Previously` &&
                  ` undeclared because the property gate is blind to sap.ui.table (properties.json holds sap.m only); found by the non-sap.m @since audit 2026-07-24.` ) ).
+
+    lv_text1 = `NOTE: The onInit JSONModel('.../Clothing.json') load is folded into model_init: the full tree (Women/Men/Girls/Boys, every article with amount/currency/size) plus the /sizes list, 1:1 from the mock.` &&
+               ` The tree keeps the original's shape - nested types per level under a CATALOG-CLOTHING structure, so the rows binding path '/CATALOG/CLOTHING' with parameters { arrayNames: ['CATEGORIES'] } mirrors` &&
+               ` {path:'/catalog/clothing', parameters:{arrayNames:['categories']}}. Homogeneous-type caveat: a level-3 leaf article (Jewelry/Necklace class) carries an empty CATEGORIES array (the ABAP row type is` &&
+               ` one shape per level) - JSONTreeBinding treats an empty child array as a leaf, so it renders like the original's absent property; and a level-3 CATEGORY row (Dresses) carries initial` &&
+               ` AMOUNT/CURRENCY/SIZE fields its original JSON node omits - SIZE '' keeps the Select hidden through the original's own !!SIZE guard, and the Price guard below keeps the cell empty. // NOTE:` &&
+               ` Currency.value is the guarded expression binding ``{= ${AMOUNT} ? ${AMOUNT} : null }`` instead of the original's plain {amount}: a category row's own AMOUNT serializes as 0 (initial packed - a flat`.
+    lv_text1 = lv_text1 && ` ABAP row serializes every field), and an unguarded 0 would render '0.00' where the original's absent JSON property renders an empty Price cell. The app-220 optional-value-guard idiom (backtick` &&
+               ` literal so the braces reach the attribute verbatim); leaf amounts are all > 0, so no real price is masked. // LIVE-TEST: unverified in a running system: (a) the nested-structure model root` &&
+               ` (/CATALOG/CLOTHING via _bind on the catalog-clothing component) feeding the TreeTable rows binding with arrayNames; (b) Collapse all / Expand first level via roundtrip-free _event_client` &&
+               ` control_by_id (collapseAll whitelisted, expandToLevel int); (c) Collapse/Expand selection 1:1 via the $event.oSource.getParent().getParent().getSelectedIndices() expression - the resolved index array` &&
+               ` reaches the unlisted-but-public collapse/expand methods through castArgAuto untouched; (d) the two-way Select selectedKey writing a changed size back into the tree row.`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.table`       control = `sap.ui.table.TreeTable`                name = `TreeTable.JSONTreeBinding`           class = `z2ui5_cl_ai_app_248` path = `src/02/b12/z2ui5_cl_ai_app_248.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarCalendarType`                class = `z2ui5_cl_ai_app_151` path = `src/02/b08/z2ui5_cl_ai_app_151.clas.abap`
