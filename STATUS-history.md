@@ -7,6 +7,25 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## Depth port ButtonWithBadge (2026-07-30)
+
+- **App 249** (`sap.m.sample.ButtonWithBadge`, covered-control(1) depth pick,
+  idiom-first): the badge idiom exists nowhere else in the corpus —
+  `sap.m.BadgeCustomData` (@1.80, secondary control under the in-scope
+  `sap.m.Button` headline, the app-244 Avatar precedent), `Button.badgeStyle`
+  (@1.132) and the `BadgeEnabler` `setBadgeMin/MaxValue` methods via
+  `control_by_id`. Coverage 248/741.
+- Thin-frontend rewires, all declared: the StepInput and the badge share one
+  two-way `/BADGECURRENT` field (the controller's `getBadgeCustomData().
+  setValue()` copy becomes a binding, the StepInput `change` wire is
+  dropped); the min/max clamp logic runs server-side with the
+  reset-to-last-accepted behaviour of the original, and the accepted value
+  reaches the button via `setBadgeMin/MaxValue` follow-ups; the icon/text
+  `{= ${/flag} ? ${/value} : '' }` expression bindings port verbatim via the
+  `_bind`-interpolation form. `badgeMin/Max` are `TYPE i` (the original
+  model carries strings, the `numeric-bound-as-string` lint wants numbers —
+  declared).
+
 ## Out-of-scope debt decided: all six ports KEEP permanently (2026-07-30)
 
 - The six-port drop-vs-keep question (STATUS open findings since 2026-07-26)

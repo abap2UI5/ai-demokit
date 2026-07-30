@@ -213,6 +213,23 @@ const INTERACTIONS = {
       { timeout: 10000 },
     );
   },
+  // ButtonWithBadge: BadgeCustomData.value and StepInput.value share one
+  // two-way field - the badge follows the stepper client-side (new port)
+  z2ui5_cl_ai_app_249: async (page, expect) => {
+    const badge = page.locator('.sapMBadgeIndicator').first();
+    await badge.waitFor({ state: 'attached', timeout: 10000 });
+    await page.waitForFunction(
+      () => document.querySelector('.sapMBadgeIndicator')?.textContent.trim() === '1',
+      { timeout: 10000 },
+    );
+    const input = page.locator('.sapMStepInput input').first();
+    await input.click();
+    await page.keyboard.press('ArrowUp');
+    await page.waitForFunction(
+      () => document.querySelector('.sapMBadgeIndicator')?.textContent.trim() === '2',
+      { timeout: 10000 },
+    );
+  },
   // Icon press → static client toast (the sample's stethoscope budget icon)
   z2ui5_cl_ai_app_122: async (page, expect) => {
     const icon = page.locator('.sapUiIconPointer').first();
