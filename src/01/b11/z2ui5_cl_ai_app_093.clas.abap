@@ -15,6 +15,10 @@ CLASS z2ui5_cl_ai_app_093 DEFINITION PUBLIC.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
+    " the tab pending the close confirmation (name + row index), kept across
+    " the MessageBox round-trip
+    DATA close_name  TYPE string.
+    DATA close_index TYPE i.
 
     METHODS view_display.
     METHODS on_event.
@@ -54,7 +58,12 @@ CLASS z2ui5_cl_ai_app_093 IMPLEMENTATION.
             )->a( n = `showAddNewButton`  v = `true`
             )->a( n = `class`             v = `sapUiResponsiveContentPadding sapUiResponsivePadding--header`
             )->a( n = `addNewButtonPress` v = client->_event( `ADD` )
-            )->a( n = `itemClose`         v = client->_event( `CLOSE` )
+            " itemCloseHandler: oEvent.preventDefault() unconditionally, then a
+            " MessageBox.confirm decides - the eBP wire cancels the built-in close
+            " and transports the tab name + its row index for the server decision
+            )->a( n = `itemClose`         v = client->_event( val    = `CLOSE`
+                                                              t_arg  = VALUE #( ( `${$parameters>/item}.getName()` ) ( `${$parameters>/item/oParent}.indexOfItem(${$parameters>/item})` ) )
+                                                              s_ctrl = VALUE #( check_prevent_default = abap_true ) )
 
             )->open( `items`
                 )->open( `TabContainerItem`
@@ -93,8 +102,25 @@ CLASS z2ui5_cl_ai_app_093 IMPLEMENTATION.
         APPEND VALUE #( name = `New employee` modified = abap_false ) TO t_employees.
         client->view_model_update( ).
       WHEN `CLOSE`.
-        " the original prevents the default close and would confirm first; here a toast (the tab is not removed)
-        client->message_toast_display( `Close requested` ).
+        " itemCloseHandler: confirm before closing; the answer comes back as
+        " the CLOSE_DECIDE event's action argument
+        close_name  = client->get_event_arg( ).
+        close_index = client->get_event_arg( 2 ).
+        client->message_box_display( text    = |Do you want to close the tab '{ close_name }'?|
+                                     type    = `confirm`
+                                     onclose = `CLOSE_DECIDE` ).
+
+      WHEN `CLOSE_DECIDE`.
+        " OK removes the tab row (the bound-aggregation form of removeItem)
+        IF client->get_event_arg( ) = `OK`.
+          IF close_index >= 0 AND close_index < lines( t_employees ).
+            DELETE t_employees INDEX close_index + 1.
+            client->view_model_update( ).
+          ENDIF.
+          client->message_toast_display( text = |Item closed: { close_name }| duration = `500` ).
+        ELSE.
+          client->message_toast_display( text = |Item close canceled: { close_name }| duration = `500` ).
+        ENDIF.
     ENDCASE.
 
   ENDMETHOD.

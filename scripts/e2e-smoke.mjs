@@ -97,9 +97,11 @@ const benign = (s) => BENIGN.some((re) => re.test(s));
 //   frontend-action chains (BUSY_INDICATOR+START_TIMER, NavContainer.to,
 //     FileUploader upload guard): 147 242 246
 //   KEYBOARD_SHORTCUT combo → backend event: 232
-//   check_prevent_default (eBP wire): 241
+//   check_prevent_default (eBP wire): 241 093 (093 adds the confirm-then-
+//     remove flow: MessageBox onclose action + bound-row delete)
 //   breakpointChange → bound displaySize: 244
 //   semantic action state transport: 107
+//   audit-fix wires (2026-07-30): 122 157 167 168 234 238
 const INTERACTIONS = {
   z2ui5_cl_ai_app_005: async (page, expect) => {
     const btn = page.getByRole('button', { name: 'Default', exact: true }).first();
@@ -182,6 +184,71 @@ const INTERACTIONS = {
     await expect(page.locator('.sapMDialog'), 'the action dialog').toContainText('Choose an action.');
     await page.getByRole('button', { name: 'Enable Post Button', exact: true }).first().click();
     await page.locator('.sapMDialog').waitFor({ state: 'hidden', timeout: 10000 });
+  },
+  // Icon press → static client toast (the sample's stethoscope budget icon)
+  z2ui5_cl_ai_app_122: async (page, expect) => {
+    const icon = page.locator('.sapUiIconPointer').first();
+    await icon.waitFor({ state: 'attached', timeout: 10000 });
+    await icon.click({ force: true });
+    await expect(page.locator('.sapMMessageToast'), 'the Over budget toast').toContainText('Over budget!');
+  },
+  // NumericContent press → the original's 'Fire press' toast
+  z2ui5_cl_ai_app_157: async (page, expect) => {
+    const tile = page.locator('.sapMNC').first();
+    await expect(tile, 'the first NumericContent').toBeVisibleEnabled();
+    await tile.click();
+    await expect(page.locator('.sapMMessageToast'), 'the press toast').toContainText('Fire press');
+  },
+  // two-way bound FlexibleColumnLayout.layout flipped on a round-trip
+  z2ui5_cl_ai_app_234: async (page, expect) => {
+    const item = page.locator('.sapMSLI, .sapMLIB').first();
+    await expect(item, 'the first master list item').toBeVisibleEnabled();
+    await item.click();
+    // the LIST_PRESS round-trip switches to TwoColumnsBeginExpanded → the mid
+    // column renders
+    await page.waitForFunction(
+      () => {
+        const mid = document.querySelector('.sapFFCLColumnMiddle');
+        return mid && mid.offsetWidth > 0;
+      },
+      { timeout: 10000 },
+    );
+  },
+  // GenericTag → Card popover fragment (the 170/238 class, 238's own wire)
+  z2ui5_cl_ai_app_238: async (page, expect) => {
+    const tag = page.locator('.sapMGenericTag').first();
+    await expect(tag, 'the GenericTag').toBeVisibleEnabled();
+    await tag.click();
+    await expect(page.locator('.sapMPopover'), 'the Card popover').toContainText('Sales Revenue');
+  },
+  // prevent-default itemClose + MessageBox.confirm + bound-row removal
+  // (2026-07-30 audit fix)
+  z2ui5_cl_ai_app_093: async (page, expect) => {
+    const close = page.locator('.sapMTSTouchArea .sapMTabStripSelectListItemCloseBtn, .sapMTSItemCloseBtn, [id*="-close"]').first();
+    await close.waitFor({ state: 'attached', timeout: 10000 });
+    await close.click({ force: true });
+    const dialog = page.locator('.sapMMessageBox');
+    await expect(dialog, 'the close-confirm MessageBox').toContainText('Do you want to close the tab');
+    await page.getByRole('button', { name: 'OK', exact: true }).first().click();
+    await expect(page.locator('.sapMMessageToast'), 'the closed toast').toContainText('Item closed:');
+  },
+  // ToolPage audit fix: itemPress toast with the real item text + the
+  // user-name popover (both 2026-07-30)
+  z2ui5_cl_ai_app_167: async (page, expect) => {
+    const item = page.getByText('Child Item 1', { exact: true }).first();
+    await expect(item, 'the Child Item 1 nav entry').toBeVisibleEnabled();
+    await item.click();
+    await expect(page.locator('.sapMMessageToast'), 'the itemPress toast').toContainText('Fired itemPress, item: Child Item 1');
+    const user = page.getByRole('button', { name: 'Alan Smith', exact: true }).first();
+    await user.click();
+    await expect(page.locator('.sapMPopover'), 'the user popover').toContainText('Feedback');
+  },
+  // GridContainer audit fix: press toast composed from getMetadata().getName()
+  z2ui5_cl_ai_app_168: async (page, expect) => {
+    const tile = page.locator('.sapMGT').first();
+    await expect(tile, 'the first GenericTile').toBeVisibleEnabled();
+    await tile.click();
+    await expect(page.locator('.sapMMessageToast'), 'the metadata-name toast').toContainText('Press was fired on - sap.m.GenericTile');
   },
   // client-composed toast from ${$source>/text} on a Breadcrumbs Link
   z2ui5_cl_ai_app_003: async (page, expect) => {

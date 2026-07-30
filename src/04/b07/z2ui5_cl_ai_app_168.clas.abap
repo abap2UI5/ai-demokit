@@ -17,11 +17,16 @@ CLASS z2ui5_cl_ai_app_168 DEFINITION PUBLIC.
         statusschema TYPE string,
       END OF ty_prod.
     DATA productitems TYPE STANDARD TABLE OF ty_prod WITH EMPTY KEY.
+    DATA snap_to_row         TYPE abap_bool.
+    DATA allow_dense_fill    TYPE abap_bool.
+    DATA inline_block_layout TYPE abap_bool.
+    DATA columns_text        TYPE string.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
 
     METHODS view_display.
+    METHODS on_event.
     METHODS model_init.
 
   PRIVATE SECTION.
@@ -36,6 +41,8 @@ CLASS z2ui5_cl_ai_app_168 IMPLEMENTATION.
     IF client->check_on_init( ).
       model_init( ).
       view_display( ).
+    ELSEIF client->check_on_event( ).
+      on_event( ).
     ENDIF.
 
   ENDMETHOD.
@@ -67,8 +74,9 @@ CLASS z2ui5_cl_ai_app_168 IMPLEMENTATION.
 
             )->open( `ToggleButton`
                 )->a( n = `id`    v = `revealGrid`
+                " press wire dropped (declared): RevealGrid is a sample-local JS
+                " helper module (grid outline overlay) with no declarative equivalent
                 )->a( n = `text`  v = `Reveal Grid`
-                )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Reveal Grid` ) ) )
                 )->a( n = `class` v = `sapUiSmallMargin`
 
             )->shut(
@@ -78,21 +86,23 @@ CLASS z2ui5_cl_ai_app_168 IMPLEMENTATION.
                 )->open( `HBox`
                     )->a( n = `alignItems` v = `Center`
                     )->leaf( `Label` )->a( n = `width` v = `8rem` )->a( n = `class` v = `sapUiSmallMarginBegin` )->a( n = `text` v = `Snap to Row:`
-                    )->leaf( `Switch` )->a( n = `change` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Snap to row` ) ) ) )->a( n = `state` v = `false`
+                    " change wire dropped (declared): state is two-way bound and the
+                    " grid binds snapToRow to the same field - the 007/128 pattern
+                    )->leaf( `Switch` )->a( n = `state` v = client->_bind( snap_to_row )
                     )->leaf( `Text` )->a( n = `class` v = `sapUiTinyMarginBeginEnd` )->a( n = `text` v = `(Should the items stretch to fill the rows which they occupy, or not. If turned on the items will stretch.)`
 
                 )->shut(
                 )->open( `HBox`
                     )->a( n = `alignItems` v = `Center`
                     )->leaf( `Label` )->a( n = `width` v = `8rem` )->a( n = `class` v = `sapUiSmallMarginBegin` )->a( n = `text` v = `Allow dense fill:`
-                    )->leaf( `Switch` )->a( n = `change` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Allow dense fill` ) ) ) )->a( n = `state` v = `false`
+                    )->leaf( `Switch` )->a( n = `state` v = client->_bind( allow_dense_fill )
                     )->leaf( `Text` )->a( n = `class` v = `sapUiTinyMarginBeginEnd` )->a( n = `text` v = `(Smaller items will take up all of the available space, ignoring their order.)`
 
                 )->shut(
                 )->open( `HBox`
                     )->a( n = `alignItems` v = `Center`
                     )->leaf( `Label` )->a( n = `width` v = `8rem` )->a( n = `class` v = `sapUiSmallMarginBegin` )->a( n = `text` v = `Inline block layout:`
-                    )->leaf( `Switch` )->a( n = `change` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Inline block layout` ) ) ) )->a( n = `state` v = `false`
+                    )->leaf( `Switch` )->a( n = `state` v = client->_bind( inline_block_layout )
                     )->leaf( `Text` )->a( n = `class` v = `sapUiTinyMarginBeginEnd` )->a( n = `text` v = `(Makes the grid items act like an inline-block elements.)`
 
                 )->shut(
@@ -100,13 +110,21 @@ CLASS z2ui5_cl_ai_app_168 IMPLEMENTATION.
 
             )->open( `Panel`
                 )->leaf( `Text` )->a( n = `class` v = `sapUiSmallMarginBegin` )->a( n = `id` v = `columnsCountText`
+                    )->a( n = `text` v = client->_bind( columns_text )
 
             )->shut(
 
             )->open( n = `GridContainer` ns = `f`
-                )->a( n = `id`            v = `demoGrid`
-                )->a( n = `class`         v = `sapUiSmallMargin`
-                )->a( n = `columnsChange` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Columns changed` ) ) )
+                )->a( n = `id`                v = `demoGrid`
+                )->a( n = `class`             v = `sapUiSmallMargin`
+                " added attrs (declared): the switch-driven properties the original
+                " set imperatively (setSnapToRow / setAllowDenseFill / setInlineBlockLayout)
+                )->a( n = `snapToRow`         v = client->_bind( snap_to_row )
+                )->a( n = `allowDenseFill`    v = client->_bind( allow_dense_fill )
+                )->a( n = `inlineBlockLayout` v = client->_bind( inline_block_layout )
+                " onGridColumnsChange: the bound columnsCountText is recomputed
+                )->a( n = `columnsChange`     v = client->_event( val   = `COLUMNS_CHANGE`
+                                                                  t_arg = VALUE #( ( `${$parameters>/columns}` ) ) )
                 )->open( n = `layout` ns = `f`
                     )->leaf( n = `GridContainerSettings` ns = `f` )->a( n = `rowSize` v = `84px` )->a( n = `columnSize` v = `84px` )->a( n = `gap` v = `8px`
 
@@ -119,7 +137,8 @@ CLASS z2ui5_cl_ai_app_168 IMPLEMENTATION.
                     )->open( `GenericTile`
                         )->a( n = `header` v = `Sales Fulfillment Application Title`
                         )->a( n = `subheader` v = `Subtitle`
-                        )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Tile pressed` ) ) )
+                        )->a( n = `press` v = client->_event_client( val   = client->cs_event-control_global
+                                                                     t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Press was fired on - {0}` ) ( `$event.oSource.getMetadata().getName()` ) ) )
                         )->open( `layoutData`
                             )->leaf( n = `GridContainerItemLayoutData` ns = `f` )->a( n = `minRows` v = `2` )->a( n = `columns` v = `2`
 
@@ -163,7 +182,8 @@ CLASS z2ui5_cl_ai_app_168 IMPLEMENTATION.
                                 )->a( n = `title`    v = `Buy bus ticket on-line`
                                 )->a( n = `subtitle` v = `Buy a single drive ticket for a date`
                                 )->a( n = `iconSrc`  v = `sap-icon://bus-public-transport`
-                                )->a( n = `press`    v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Card pressed` ) ) )
+                                )->a( n = `press`    v = client->_event_client( val   = client->cs_event-control_global
+                                                                                t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Press was fired on - {0}` ) ( `$event.oSource.getMetadata().getName()` ) ) )
 
                         )->shut(
                         )->open( n = `content` ns = `f`
@@ -306,6 +326,20 @@ CLASS z2ui5_cl_ai_app_168 IMPLEMENTATION.
         )->shut( ).
 
     client->view_display( view->stringify( ) ).
+
+  ENDMETHOD.
+
+
+  METHOD on_event.
+
+    CASE client->get( )-event.
+
+      WHEN `COLUMNS_CHANGE`.
+        " onGridColumnsChange: setText('Current grid columns count: ' + columns)
+        columns_text = |Current grid columns count: { client->get_event_arg( ) }|.
+        client->view_model_update( ).
+
+    ENDCASE.
 
   ENDMETHOD.
 

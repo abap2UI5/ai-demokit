@@ -7,6 +7,48 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## Faked-event-value audit + formatter guard closure (2026-07-30, follow-up to the pr/-closure batch)
+
+- **pr/formatter-date-empty-guard closed — already upstream.** The guard
+  (`if (!s) return null;` in `DateCreateObject`) ships in abap2UI5's
+  `model/formatter.js` with the exact Invalid-Date rationale as a source
+  comment (ABAP mirror included). Folder deleted, Implemented row added;
+  the port-side expression guards and the `unguarded-date-formatter`
+  pattern-lint rule stay as defense in depth for systems on older
+  framework releases. `pr/` is now down to ONE deliberately deferred
+  request (`menu-item-selected-path`, user decision 2026-07-20).
+- **The faked-event-value audit ran as a scripted sweep** over the 49
+  `generated` ports (original controller reads `getParameter`/`getSource`
+  values + port transports no `$`-arg + port toasts): four hits, each
+  fixed 1:1 the same day:
+  - **092** `TableAutoPopin`: `onPopinChanged` now composes
+    `Number of hidden pop-ins: {0}` from
+    `${$parameters>/hiddenInPopin}.length` client-side (was a static
+    round-trip toast).
+  - **093** `TabContainer`: the full `itemCloseHandler` —
+    `check_prevent_default` on the itemClose wire (the original calls
+    `preventDefault()` unconditionally), name + row index transported (the
+    dnd `oParent.indexOfItem` idiom), `MessageBox.confirm` with `onclose`,
+    OK deletes the bound row (`removeItem` for a bound aggregation) and
+    toasts with the 500ms duration, Cancel toasts the cancel text.
+  - **167** `ToolPage`: itemPress toasts the real item text, itemSelect
+    navigates the NavContainer to the item's key page (roundtrip-free
+    `control_by_id to` with `${$parameters>/item}.getKey()`),
+    `sideExpanded` + the toggle tooltip are two-way bound with the
+    pre-toggle tooltip semantics, the user popover (Feedback/Help/Logout)
+    and the Quick Create dialog are rebuilt 1:1 (design guard server-side
+    on `${$source>/design}`).
+  - **168** `GridContainer`: the three switches now DRIVE the grid —
+    `snapToRow`/`allowDenseFill`/`inlineBlockLayout` two-way bound to the
+    switch states (007/128 pattern, change wires dropped and declared);
+    `columnsChange` recomputes the bound columns counter; tile/card
+    presses toast `Press was fired on - {0}` from
+    `$event.oSource.getMetadata().getName()`; the sample-local RevealGrid
+    helper stays dropped (145 precedent), now without a fake toast.
+- Six new INTERACTIONS arm the fixes (093 confirm-close, 122, 157, 167,
+  168, 234 FCL layout flip, 238 Card popover); results in the follow-up
+  commit after the rebuild.
+
 ## Backlog sweep (2026-07-30) — three pr/ closed against upstream, the toast-substitution class reworked, INTERACTIONS 12 → 39
 
 The two "deferred — too large" framework requests turned out to be **already

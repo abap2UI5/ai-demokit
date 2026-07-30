@@ -79,7 +79,10 @@ CLASS z2ui5_cl_ai_app_092 IMPLEMENTATION.
             )->a( n = `autoPopinMode`   v = `true`
             )->a( n = `contextualWidth` v = `Auto`
             )->a( n = `width`           v = |\{= ${ client->_bind( width_pct ) } + '%' \}|
-            )->a( n = `popinChanged`    v = client->_event( `POPIN` )
+            " onPopinChanged: MessageToast.show('Number of hidden pop-ins: ' +
+            " hiddenInPopin.length) - client-composed, roundtrip-free
+            )->a( n = `popinChanged`    v = client->_event_client( val   = client->cs_event-control_global
+                                                                   t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Number of hidden pop-ins: {0}` ) ( `${$parameters>/hiddenInPopin}.length` ) ) )
             )->a( n = `items`           v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
 
             )->open( `headerToolbar`
@@ -224,9 +227,6 @@ CLASS z2ui5_cl_ai_app_092 IMPLEMENTATION.
   METHOD on_event.
 
     CASE client->get( )-event.
-      WHEN `POPIN`.
-        " popinChanged: report the number of columns currently in pop-in
-        client->message_toast_display( `Pop-in layout changed` ).
       WHEN `HIDE`.
         " selectionFinish: the MultiComboBox keys arrive two-way bound in
         " t_hidden; forward them as a JSON Priority array to the table's
