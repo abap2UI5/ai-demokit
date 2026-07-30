@@ -7,6 +7,16 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## Depth port BusyDialogLight — coverage crosses 250 (2026-07-30)
+
+- **App 251** (`sap.m.sample.BusyDialogLight`): the controller's
+  `oDialog.open()` + `setTimeout(close, 3000)` is the app-147 idiom applied
+  to a dialog — `SHOW_BUSY` round-trips into `control_by_id BusyDialog open`
+  plus `START_TIMER CLOSE_BUSY 3000`, the timer round-trip closes. The
+  single-control `BusyDialog.fragment.xml` is inlined into `l:dependents`
+  (the `core:Fragment` reference dropped, declared). Every fast gate green
+  on the first pass. **Coverage 250/741.**
+
 ## Depth port ColorPalettePopover (2026-07-30)
 
 - **App 250** (`sap.m.sample.ColorPalettePopover`, covered-control(1) depth):

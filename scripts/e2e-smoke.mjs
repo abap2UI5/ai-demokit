@@ -243,6 +243,15 @@ const INTERACTIONS = {
       { timeout: 10000 },
     );
   },
+  // BusyDialog open + START_TIMER close chain (the 147 idiom on a dialog)
+  z2ui5_cl_ai_app_251: async (page, expect) => {
+    const btn = page.getByRole('button', { name: 'Show Light Busy Dialog', exact: true }).first();
+    await expect(btn, 'the busy-dialog button').toBeVisibleEnabled();
+    await btn.click();
+    await expect(page.locator('.sapMBusyDialog'), 'the opened BusyDialog').toBeVisibleEnabled();
+    // the CLOSE_BUSY timer round-trip closes it after ~3s
+    await page.locator('.sapMBusyDialog').waitFor({ state: 'hidden', timeout: 15000 });
+  },
   // Icon press → static client toast (the sample's stethoscope budget icon)
   z2ui5_cl_ai_app_122: async (page, expect) => {
     const icon = page.locator('.sapUiIconPointer').first();
