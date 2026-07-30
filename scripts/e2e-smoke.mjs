@@ -218,15 +218,28 @@ const INTERACTIONS = {
   z2ui5_cl_ai_app_249: async (page, expect) => {
     const badge = page.locator('.sapMBadgeIndicator').first();
     await badge.waitFor({ state: 'attached', timeout: 10000 });
+    // the badge value lives in the data-badge attribute (CSS content)
     await page.waitForFunction(
-      () => document.querySelector('.sapMBadgeIndicator')?.textContent.trim() === '1',
+      () => document.querySelector('.sapMBadgeIndicator')?.getAttribute('data-badge') === '1',
       { timeout: 10000 },
     );
     const input = page.locator('.sapMStepInput input').first();
     await input.click();
     await page.keyboard.press('ArrowUp');
     await page.waitForFunction(
-      () => document.querySelector('.sapMBadgeIndicator')?.textContent.trim() === '2',
+      () => document.querySelector('.sapMBadgeIndicator')?.getAttribute('data-badge') === '2',
+      { timeout: 10000 },
+    );
+  },
+  // ColorPalettePopover: dependents-declared popup-mode control, openBy
+  // roundtrip-free (new port; the swatches render zero-height headless, so
+  // only the anchored open is asserted)
+  z2ui5_cl_ai_app_250: async (page, expect) => {
+    const btn = page.locator('.sapMBtn').first();
+    await expect(btn, 'the first action button').toBeVisibleEnabled();
+    await btn.click();
+    await page.waitForFunction(
+      () => !!document.querySelector("[class*='ColorPalette']"),
       { timeout: 10000 },
     );
   },

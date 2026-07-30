@@ -7,6 +7,23 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## Depth port ColorPalettePopover (2026-07-30)
+
+- **App 250** (`sap.m.sample.ColorPalettePopover`, covered-control(1) depth):
+  the controller lazily builds SIX differently configured
+  `ColorPalettePopover` instances and `openBy()`s them — the port declares
+  all six 1:1 in the view's `mvc:dependents` and opens each roundtrip-free
+  via `control_by_id openBy` (the dependents-declared popup-mode idiom at
+  its largest so far). `colorSelect` is the app-008 client-composed toast.
+  Coverage 249/741.
+- Two boundary findings, both declared: **an XML `string[]` attribute
+  splits on commas**, so `hsl(0,100%,71%)` and `rgb(255,234,234)` cannot
+  ride the `colors` attribute at all (CSSColor validation also rejects any
+  escaping workaround) — they become their exact hex equivalents
+  `#ff6b6b`/`#ffeaea`; and `handleLiveChange` paints the pressed button's
+  icon via raw DOM styling (`getDomRef().firstChild...style.color`) —
+  direct DOM manipulation with no bindable property, dropped IMPROVISED.
+
 ## Depth port ButtonWithBadge (2026-07-30)
 
 - **App 249** (`sap.m.sample.ButtonWithBadge`, covered-control(1) depth pick,

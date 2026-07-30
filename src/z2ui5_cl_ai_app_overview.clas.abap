@@ -1014,6 +1014,28 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         notes = `LIVE-TEST: the color-select toast was switched to a roundtrip-free client-composed toast on 2026-07-22 (control_global MESSAGE_TOAST.show, template with {0}/{1} filled by ${$parameters>/value} and` &&
                  ` ${$parameters>/defaultAction}; on_event dropped, init-only) - re-verify selecting a color toasts the value and true/false defaultAction.` ) ).
 
+    lv_text1 = `NOTE: The controller lazily builds six differently configured ColorPalettePopover instances and openBy()s them; the port declares all six 1:1 in the view's mvc:dependents (ColorPalettePopover x6 -` &&
+               ` extra controls vs the original view.xml, controller-built there) with the original ids/configurations, and every button press opens its popover roundtrip-free via _event_client control_by_id openBy` &&
+               ` ($event.oSource.sId). handleColorSelect is the app-008 client-composed toast: 'Color Selected: value - {0}, \n defaultAction - {1}' filled by ${$parameters>/value} and ${$parameters>/defaultAction}.` &&
+               ` The original's same-instance quirk (both displayMode buttons share oColorPaletteDisplayMode) is kept - both open the same declared popover. // POST-1.71: Members newer than 1.71 kept 1:1 per the` &&
+               ` fidelity-first policy: sap.m.ColorPalettePopover.selectedColor (@1.122) and showRecentColorsSection (@1.74) on the selected-color popover, and sap.m.Button.ariaHasPopup (@1.84) on all seven action` &&
+               ` buttons. The app needs a UI5 release >= 1.122 for the selectedColor variant; the control itself is @1.54. // NOTE: Two of the custom colors cannot ride an XML string[] attribute - the parser splits`.
+    lv_text1 = lv_text1 && ` on commas, so hsl(0,100%,71%) and rgb(255,234,234) become their exact hex equivalents #ff6b6b and #ffeaea (same rendered swatches, different notation; sap.ui.core.CSSColor validation rejects any` &&
+               ` comma-escaping workaround). // IMPROVISED: handleLiveChange is DROPPED (the liveChange wire on the shared displayMode popover): the original paints the pressed button's icon via raw DOM styling` &&
+               ` (getDomRef().firstChild.firstChild.style.color = rgba(r,g,b,alpha) from the liveChange parameters) - direct DOM manipulation outside any bindable property, not expressible in the thin frontend. The` &&
+               ` popover itself (shared with the non-liveChange button) works 1:1; only the icon recoloring effect is lost. Also NOT ported: onExit's popover destroy calls - the declared dependents die with the view.` &&
+               ` // LIVE-TEST: unverified in a running system: the six dependents-declared ColorPalettePopover configurations opening anchored via openBy and the colorSelect toast argument resolution.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.ColorPalette`                    name = `ColorPalettePopover`                 class = `z2ui5_cl_ai_app_250` path = `src/01/b19/z2ui5_cl_ai_app_250.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.54`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `Members newer than 1.71 kept 1:1 per the fidelity-first policy: sap.m.ColorPalettePopover.selectedColor (@1.122) and showRecentColorsSection (@1.74) on the selected-color popover, and` &&
+                 ` sap.m.Button.ariaHasPopup (@1.84) on all seven action buttons. The app needs a UI5 release >= 1.122 for the selectedColor variant; the control itself is @1.54.` ) ).
+
     lv_text1 = `IMPROVISED: the shared demo kit mock model sap/ui/demo/mock/products.json (/ProductCollection, snapshotted in ui5/mock/products.json) is flattened into the default model: all 123 rows are kept` &&
                ` verbatim, but only the bound columns (ProductId, Name, SupplierName, WeightMeasure, WeightUnit, Width, Depth, Height, DimUnit, Price, CurrencyCode) are ported - the unbound columns (Category,` &&
                ` MainCategory, TaxTarifCode, Description, DateOfSale, ProductPicUrl, Status, Quantity, UoM) of the shared mock model are dropped. // IMPROVISED: the controller's onPopinLayoutChanged (ComboBox change` &&
