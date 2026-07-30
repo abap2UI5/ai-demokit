@@ -196,6 +196,7 @@ const INTERACTIONS = {
         const el = document.querySelector('.sapTntSideNavigation');
         return el && el.classList.contains('sapTntSideNavigationNotExpanded');
       },
+      null,
       { timeout: 10000 },
     );
   },
@@ -226,6 +227,7 @@ const INTERACTIONS = {
     const input = page.locator('.sapMStepInput input').first();
     await input.click();
     await page.keyboard.press('ArrowUp');
+    await page.keyboard.press('Enter');
     await page.waitForFunction(
       () => document.querySelector('.sapMBadgeIndicator')?.getAttribute('data-badge') === '2',
       { timeout: 10000 },
@@ -279,6 +281,7 @@ const INTERACTIONS = {
         const mid = document.querySelector('.sapFFCLColumnMid');
         return mid && mid.offsetWidth > 0;
       },
+      null,
       { timeout: 10000 },
     );
   },
@@ -428,6 +431,7 @@ const INTERACTIONS = {
         const el = document.querySelector('.sapTntSideNavigation');
         return el && !el.classList.contains('sapTntSideNavigationNotExpanded');
       },
+      null,
       { timeout: 10000 },
     );
   },
@@ -448,6 +452,7 @@ const INTERACTIONS = {
         const el = document.getElementById('sapUiBusyIndicator');
         return el && el.offsetParent !== null;
       },
+      null,
       { timeout: 10000 },
     );
     // the HIDE_BUSY timer round-trip removes it again after ~4s
@@ -456,6 +461,7 @@ const INTERACTIONS = {
         const el = document.getElementById('sapUiBusyIndicator');
         return !el || el.offsetParent === null;
       },
+      null,
       { timeout: 15000 },
     );
   },
@@ -485,6 +491,7 @@ const INTERACTIONS = {
         const el = document.querySelector("[id*='selectedDate']");
         return el && /\d{4}-\d{2}-\d{2}/.test(el.textContent || '');
       },
+      null,
       { timeout: 10000 },
     );
   },
