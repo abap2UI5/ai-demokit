@@ -57,8 +57,9 @@ So the work was port integration, not framework code:
   pipe-template form the `event-arg-bare-brace` rule expects —,
   structural-diff 0 undeclared, render-smoke 0 failing, data-fidelity 0,
   property-check 0).
-- **e2e evidence + conversions (same day, follow-up commit):** every armed
-  interaction ran green against the freshly transpiled backend — including
+- **e2e evidence + conversions (same day, follow-up commit):** the full
+  246-port run finished **0 failing** with every armed interaction green
+  against the freshly transpiled backend — including
   the three new framework wires (232 Ctrl+S → SAVE toast, 241 checkbox →
   redraw → 'Default was prevented', 244 viewport shrink → 'Media Range:'
   toast) and the reworked 147/170/112/246/107 flows. **Open-LIVE_TEST ports
