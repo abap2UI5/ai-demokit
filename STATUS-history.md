@@ -7,6 +7,25 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## Depth port NestedGrids — three known idioms in one port (2026-07-31)
+
+- **App 270** (`sap.ui.layout.sample.NestedGrids`, b14): a `CSSGrid` inside a
+  `CSSGrid`, the inner tiles positioned with `GridItemLayoutData`
+  (`gridColumn="1 / 3"`, `gridRow`), the sample's `css/main.css` injected as a
+  `core:HTML` `<style>` leaf (122/124 precedent) and `onSliderMoved` replaced by
+  a two-way bound slider value plus the expression binding
+  `{= ${/SLIDER_VALUE} + '%' }` on the Panel width — `sap.m.Panel` HAS a width
+  property, so unlike apps 267/269 this jQuery-setter idiom binds cleanly
+  (app 214 form). NOTE, not IMPROVISED: same rendered behaviour.
+- **Two traps hit while writing it**, both worth knowing: writing the absolute
+  path by hand (`{= ${/SLIDER_VALUE} …}`) trips pattern-lint's
+  `hardcoded-binding-path`; and building it from
+  `_bind( … path = abap_true )` inside `|…|` yields `${ /SLIDER_VALUE }` **with
+  spaces**, which UI5 does not resolve — render-smoke caught it as
+  `"null%" is of type string, expected sap.ui.core.CSSSize`. The correct form is
+  the documented one: interpolate `_bind`'s braced result directly after the
+  `$` (`|\{= ${ client->_bind( slider_value ) } + '%' \}|`).
+
 ## Depth port DynamicSideContentProduct + full sweep green (2026-07-31)
 
 - **Full e2e sweep after the b14 ports: `266 port(s), 0 failing`** (268/269 came

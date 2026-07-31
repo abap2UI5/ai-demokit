@@ -736,6 +736,20 @@ const INTERACTIONS = {
     await item.click();
     await expect(page.locator('.sapMMessageToast').last(), 'the itemSelect client toast').toContainText("'My 1st Item' pressed");
   },
+  // SplitApp navigation driven from the backend (control_by_id to/toDetail/…)
+  z2ui5_cl_ai_app_097: async (page, expect) => {
+    const btn = page.getByRole('button', { name: 'Go to Detail page2', exact: true }).first();
+    await expect(btn, 'the detail-navigation button').toBeVisibleEnabled();
+    await btn.click();
+    await expect(page.locator('.sapMSplitApp'), 'the second detail page after the round-trip').toContainText('Detail Detail');
+  },
+  // FileUploader: the upload cycle reduced to client toasts
+  z2ui5_cl_ai_app_126: async (page, expect) => {
+    const btn = page.getByRole('button', { name: 'Upload File', exact: true }).first();
+    await expect(btn, 'the Upload File button').toBeVisibleEnabled();
+    await btn.click();
+    await expect(page.locator('.sapMMessageToast').last(), 'the upload client toast').toContainText('File upload complete');
+  },
   // per-row bound filter: each row's Select lists only its region's managers
   z2ui5_cl_ai_app_265: async (page, expect) => {
     await expect(page.locator('.sapUiTable'), 'the customers table').toContainText('TechCorp Solutions');

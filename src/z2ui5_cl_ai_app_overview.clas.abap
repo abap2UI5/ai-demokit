@@ -3405,6 +3405,19 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         since = `1.60`
         notes = lv_text1 ) ).
 
+    lv_text1 = `NOTE: The sample's css/main.css (the .demoBox / .demoInnerBox colours and radii the grid tiles carry) is injected through a core:HTML leaf with a <style> element in its content attribute - the app` &&
+               ` 122/124 precedent, since a port ships no stylesheet. That core:HTML control is therefore EXTRA against the original view (original 0 vs port 1); the CSS itself is reproduced verbatim, only` &&
+               ` whitespace-collapsed. // NOTE: The Slider's liveChange attribute is dropped: onSliderMoved calls byId('panelCSSGrid').setWidth(fValue + '%'). sap.m.Panel HAS a width property, so the slider value is` &&
+               ` two-way bound ({/SLIDER_VALUE}) and the Panel width is the expression binding {= ${/SLIDER_VALUE} + '%' } - the app 214 form, which needs no round-trip and no imperative setter. Same rendered` &&
+               ` behaviour, so NOTE rather than IMPROVISED. // LIVE-TEST: Unverified in a running system: that dragging the Slider really resizes the Panel through the expression binding (render-smoke only proves the` &&
+               ` binding produces a valid CSSSize), and that the nested CSSGrid with its GridItemLayoutData (gridColumn '1 / 3', gridRow 1/2) lays the E/F/G boxes out as in the original.`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.cssgrid.CSSGrid`         name = `NestedGrids`                         class = `z2ui5_cl_ai_app_270` path = `src/02/b14/z2ui5_cl_ai_app_270.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.60`
+        notes = lv_text1 ) ).
+
     lv_text1 = `NOTE: Two of the original's three controller behaviours are now reproduced rather than wired to nothing. (a) breakpointChanged carries its own currentBreakpoint event parameter to the backend (t_arg` &&
                ` ${$parameters>/currentBreakpoint}) and on_event enables the Toggle button exactly when it is 'S' - what _updateToggleButtonState does; the port therefore adds an enabled attribute to the Toggle` &&
                ` Button, which the original sets from the controller. (b) handleToggleClick calls DynamicSideContent.toggle( ); the port binds showSideContent (the property that setter writes, default true) and flips` &&
