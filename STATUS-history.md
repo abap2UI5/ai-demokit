@@ -7,6 +7,20 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## Depth port SplitterNested1 — batch b14 opened (2026-07-31)
+
+- **App 266** (`sap.ui.layout.sample.SplitterNested1`, `src/02/b14`): nested
+  `sap.ui.layout.Splitter`s with per-pane `SplitterLayoutData`
+  (`size` `auto`/`px`/`%`, `minSize`), the outer one `orientation="Vertical"`.
+  Fully static, no controller — **zero deviations and zero structural diffs**,
+  green on every gate first pass. `sap.ui.layout` is the thinnest ported
+  library after the non-app scope rule, so depth starts here.
+- The sibling `Splitter` sample was **skipped on purpose**: its controller
+  builds the whole options panel imperatively (add/remove content area,
+  invalidate, change orientation, a live resize counter). A port would drop
+  most of it and carry a large IMPROVISED — weak training signal for a
+  depth pick, so `SplitterNested1` is the better first Splitter port.
+
 ## e2e round 2: a dead Select found in app 207 (2026-07-31)
 
 - Six more `INTERACTIONS` written (029, 123, 172, 207, 228, 247). 123 (bound
