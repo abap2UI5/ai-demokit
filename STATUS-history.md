@@ -7,6 +7,12 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## Depth ports DateRangeSelectionValueState + DateTimePickerValueState (2026-07-30)
+
+- **Apps 254/255**: the 253 valueState pattern applied to the two sibling
+  pickers (254 adds the `delimiter` en dash, 255 the DTP id/labelFor pair).
+  Both green across every gate first pass. Coverage 254/741.
+
 ## Depth port DatePickerValueState (2026-07-30)
 
 - **App 253** (`sap.m.sample.DatePickerValueState`): bound
