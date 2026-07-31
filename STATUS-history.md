@@ -7,6 +7,60 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## Pages demo: `Network error: ASSERTION_FAILED` on the overview's links / info popovers (2026-07-31)
+
+- **User report**: on
+  <https://abap2ui5.github.io/ai-demokit/?app_start=z2ui5_cl_ai_app_overview>,
+  pressing the chain-link or the information button of any row answered
+  `Network error: ASSERTION_FAILED`. Those two buttons are the overview's only
+  backend round-trips (everything else is `_event_client`), so the demo's front
+  door was effectively read-only. Reproduced locally against the committed
+  `docs/` bundle **and** against a freshly built Node backend
+  (`npm run node:setup`), i.e. it was never app-specific.
+- **Root cause — an open-abap serializer bug, not an app defect and not a
+  "runtime limit".** `KERNEL_CALL_TRANSFORMATION`'s `LCL_DATA_TO_XML` builds
+  `CALL TRANSFORMATION id … RESULT XML` output by string concatenation and
+  writes element values **raw**. The overview's `NOTES` column carries
+  deviation texts like `… are <= 1.71`, so `Z2UI5_CL_CORE_APP=>DB_SAVE`
+  persisted a draft containing `<NOTES>… are <= 1.71 …</NOTES>`. The next
+  request's `DB_LOAD` parses that back with the transpiled `CL_IXML`, whose
+  parser reads the stray `<` as a tag start and dies in
+  `ASSERT ls_match-offset = 0` — and an `ASSERT` is not catchable in the JS
+  runtime, so the framework's `TRY … CATCH cx_root` around the draft load
+  cannot absorb it and the round-trip 500s. A real ABAP server escapes the
+  value and runs the same app fine. This also **corrects the 2026-07-27
+  entry** below, which filed the same failure as an unfixable open-abap limit
+  ("the overview cannot do a second roundtrip … dies in the transpiled
+  `cl_ixml` parse").
+- **Fix — patch the lib at build time.** `web/ci/patch_open_abap_xml.mjs`
+  escapes `&`/`<`/`>` in character data on write (only for values that carry
+  one, so everything else serializes byte-identically) and moves the `&amp;`
+  replacement **last** in `LCL_ESCAPE=>UNESCAPE_VALUE` (a value containing a
+  literal `&lt;` used to come back as `<`). Both transpiled builds now clone
+  open-abap-core themselves and transpile against the patched copy: `web/`
+  (`npm run assemble` + `ci/abap_transpile.json` `folder`) and
+  `scripts/e2e-build.mjs` (`<A2>/node/open-abap-core` + a generated
+  `e2e-transpile.json`). Forwarded upstream as `pr/open-abap-xml-escaping`;
+  the patch scripts and their README sections go when it lands there.
+- **Second half: the click was ~30 s even once it stopped failing.** The
+  transpiled `CL_IXML` parse is quadratic in the draft size (it re-slices and
+  `CONDENSE`s the remaining string per node), and the overview's draft was
+  **578 kB** — 256 rows × generation notes, live-check text and four reference
+  URLs, all of it public state only because the two popovers passed it back
+  through the client as event args. Measured on the Node backend:
+  `all_xml_parse` 29.8 s of a 31.3 s round-trip. The app now binds a slim
+  `ty_s_row` (only what the table renders, sorts or filters on), keeps the full
+  catalog in a local (`get_catalog( )` is a METHOD, so it is never persisted),
+  and the presses carry only `${CLASS}` + the anchor id — `row_of( )` reads the
+  pressed row and `derive( )` rebuilds its URLs server-side. Same UI, same
+  popover content. Measured after: draft **199 kB**, `all_xml_parse` 3.4 s,
+  click-to-popover ~3.9 s in the webpacked browser bundle (~5 s on the Node
+  backend) — on this 4-core sandbox, so a normal machine is faster.
+- Lessons written to AGENTS §10 (`ASSERTION_FAILED` in a transpiled build is a
+  runtime artefact — table expressions and unescaped XML; every PUBLIC
+  attribute is persisted state, so pass a key and look the payload up), plus
+  `web/README.md` and `E2E.md`.
+
 ## Depth ports DateRangeSelection/DateTimePicker Hidden (2026-07-30)
 
 - **Apps 256/257**: the 016 hidden-picker pattern (three anchors →
@@ -427,6 +481,10 @@ independent causes, both fixed.
   reason. Both are open-abap runtime limits, not app defects (a real system
   runs this daily), so the browser-level proof stays a human check; the
   framework half is unit-tested instead.
+  **[Corrected 2026-07-31]** this was not a runtime limit: open-abap's
+  `CALL TRANSFORMATION id … RESULT XML` writes character data unescaped, so
+  the overview's own draft was unparsable XML. Fixed by a build-time patch —
+  see the top entry.
 
 ## sap.ui.comp smart controls ported — and two lessons (2026-07-27)
 

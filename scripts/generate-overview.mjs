@@ -440,6 +440,12 @@ const abap = `"! Generated overview app - lists every abap2UI5 api sample app in
 "! re-test is (pending LIVE_TESTs, roundtrip-free wiring, popups, needs-newer-UI5);
 "! 1 = simple faithful 1:1, 5 = complex/reworked/worth a close look. Sort it
 "! descending to surface the samples worth a closer manual look.
+"! Both popovers are backend round-trips, but the row's press carries only its
+"! CLASS: the generation notes, the live-check text and the four reference URLs
+"! are looked up from the catalog in on_event, so they never enter the bound
+"! model. Only bound columns are public state, which keeps the persisted draft
+"! (and the model JSON of every render) small - the in-browser demo re-parses
+"! that draft on every round-trip.
 "! The search field above the table filters all rows by a
 "! substring over the text columns (module, control, since, sample,
 "! class) only, and each sortable column header carries ascending/
@@ -451,6 +457,56 @@ CLASS ${CLASS} DEFINITION PUBLIC.
   PUBLIC SECTION.
     INTERFACES z2ui5_if_app.
 
+    " the BOUND row - only what the table renders, sorts or filters on. Every
+    " public attribute is part of the app state the framework persists as a
+    " draft and re-parses on the next round-trip, so the heavy per-port text
+    " (generation notes, live-check note, the four reference URLs) is
+    " deliberately NOT here: it is looked up server-side from the catalog when
+    " a popover asks for it (see on_event). Keeping it in the model made the
+    " draft ~578 kB and every round-trip of the transpiled in-browser demo took
+    " ~30 s in the XML parse (which is quadratic there); the split brings the
+    " draft to ~199 kB and the round-trip to ~3-4 s on the same machine.
+    TYPES:
+      BEGIN OF ty_s_row,
+        module    TYPE string,
+        ctrl_name TYPE string,
+        name      TYPE string,
+        class     TYPE string,
+        start_url TYPE string,
+        has_check TYPE abap_bool,
+        has_notes TYPE abap_bool,
+        has_p171  TYPE abap_bool,
+        since         TYPE string,
+        since_post171 TYPE abap_bool,
+        ui5_only      TYPE abap_bool,
+        is_post171    TYPE abap_bool,
+        is_deprecated TYPE abap_bool,
+        dep_text  TYPE string,
+        ctrl_html TYPE string,
+        score       TYPE i,
+        score_tip   TYPE string,
+        filter    TYPE string,
+      END OF ty_s_row.
+    TYPES ty_t_row TYPE STANDARD TABLE OF ty_s_row WITH EMPTY KEY.
+
+    DATA t_app TYPE ty_t_row.
+    " the search field's text (two-way, so it survives a round-trip and the
+    " draft): the filter itself runs on the client, but only a value that is
+    " part of the MODEL comes back when the app is restored. view_display
+    " re-applies the filter for a non-initial query via follow_up_action.
+    DATA search_query TYPE string.
+    " sap.m.Shell letterboxing toggle (two-way, drives Shell appWidthLimited)
+    DATA shell_on  TYPE abap_bool.
+    " header filter checkboxes (two-way; each row's visible expression binding
+    " hides it when the matching flag is set and the row carries that trait)
+    DATA hide_non_ui5   TYPE abap_bool.
+    DATA hide_post171   TYPE abap_bool.
+    DATA hide_deprecated TYPE abap_bool.
+
+  PROTECTED SECTION.
+    " the full catalog row - the generated facts plus everything derived from
+    " them. It lives only in local variables (get_catalog is a METHOD, never an
+    " attribute), so none of it reaches the persisted app state.
     TYPES:
       BEGIN OF ty_s_app,
         module    TYPE string,
@@ -483,25 +539,18 @@ CLASS ${CLASS} DEFINITION PUBLIC.
       END OF ty_s_app.
     TYPES ty_t_app TYPE STANDARD TABLE OF ty_s_app WITH EMPTY KEY.
 
-    DATA t_app TYPE ty_t_app.
-    " the search field's text (two-way, so it survives a round-trip and the
-    " draft): the filter itself runs on the client, but only a value that is
-    " part of the MODEL comes back when the app is restored. view_display
-    " re-applies the filter for a non-initial query via follow_up_action.
-    DATA search_query TYPE string.
-    " sap.m.Shell letterboxing toggle (two-way, drives Shell appWidthLimited)
-    DATA shell_on  TYPE abap_bool.
-    " header filter checkboxes (two-way; each row's visible expression binding
-    " hides it when the matching flag is set and the row carries that trait)
-    DATA hide_non_ui5   TYPE abap_bool.
-    DATA hide_post171   TYPE abap_bool.
-    DATA hide_deprecated TYPE abap_bool.
-
-  PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
 
     METHODS view_display.
     METHODS on_event.
+    METHODS row_of
+      IMPORTING
+        val           TYPE string
+      RETURNING
+        VALUE(result) TYPE ty_s_app.
+    METHODS derive
+      CHANGING
+        app TYPE ty_s_app.
     METHODS get_catalog
       RETURNING
         VALUE(result) TYPE ty_t_app.
@@ -542,12 +591,15 @@ CLASS ${CLASS} IMPLEMENTATION.
     CASE client->get( )-event.
 
       WHEN \`LINKS\`.
-        " the four link buttons for the pressed row; resolved client-side and
-        " passed via t_arg, opened in a popover anchored to the button (arg 5)
-        DATA(lv_api)  = client->get_event_arg( ).
-        DATA(lv_js)   = client->get_event_arg( 2 ).
-        DATA(lv_ui5)  = client->get_event_arg( 3 ).
-        DATA(lv_abap) = client->get_event_arg( 4 ).
+        " the four link buttons for the pressed row, opened in a popover
+        " anchored to the button (arg 2). Only the row KEY travels through the
+        " client (arg 1, \`\${CLASS}\`) - the URLs are rebuilt here from the
+        " catalog, so they never sit in the bound model and never bloat the draft.
+        DATA(ls_link) = row_of( client->get_event_arg( ) ).
+        DATA(lv_api)  = ls_link-api_url.
+        DATA(lv_js)   = ls_link-js_url.
+        DATA(lv_ui5)  = ls_link-ui5_url.
+        DATA(lv_abap) = ls_link-abap_url.
 
         DATA(links) = z2ui5_cl_ai_xml=>factory( ).
         DATA(box) = links->open( n = \`FragmentDefinition\` ns = \`core\`
@@ -618,17 +670,19 @@ CLASS ${CLASS} IMPLEMENTATION.
         ENDIF.
 
         client->popover_display( xml   = links->stringify( )
-                                 by_id = client->get_event_arg( 5 ) ).
+                                 by_id = client->get_event_arg( 2 ) ).
 
       WHEN \`INFO\`.
         " everything the generator knows ABOUT the port (as opposed to where it
         " points): the live-check status, the members that need a UI5 release
         " newer than 1.71, and the deviation notes. Own popover behind the info
-        " button, anchored to it (arg 4); the button only renders on a row that
-        " carries at least one of the three.
-        DATA(lv_checked) = client->get_event_arg( ).
-        DATA(lv_post171) = client->get_event_arg( 2 ).
-        DATA(lv_notes)   = client->get_event_arg( 3 ).
+        " button, anchored to it (arg 2); the button only renders on a row that
+        " carries at least one of the three. Like LINKS, only the row key
+        " travels (arg 1) - the texts are read from the catalog here.
+        DATA(ls_info)    = row_of( client->get_event_arg( ) ).
+        DATA(lv_checked) = ls_info-checked.
+        DATA(lv_post171) = ls_info-post171.
+        DATA(lv_notes)   = ls_info-notes.
 
         DATA(info) = z2ui5_cl_ai_xml=>factory( ).
         DATA(ibox) = info->open( n = \`FragmentDefinition\` ns = \`core\`
@@ -683,68 +737,60 @@ CLASS ${CLASS} IMPLEMENTATION.
         ENDIF.
 
         client->popover_display( xml   = info->stringify( )
-                                 by_id = client->get_event_arg( 4 ) ).
+                                 by_id = client->get_event_arg( 2 ) ).
 
     ENDCASE.
 
   ENDMETHOD.
 
 
+  METHOD row_of.
+
+    " the catalog row behind a pressed table row, by its class name (the only
+    " thing the press event carries). READ TABLE, not a table expression: the
+    " 702 downport turns \`tab[ … ]\` into a raise the transpiled runtime maps to
+    " an uncatchable ASSERT.
+    DATA(catalog) = get_catalog( ).
+    READ TABLE catalog INTO result WITH KEY class = val.
+    IF sy-subrc <> 0.
+      CLEAR result.
+      RETURN.
+    ENDIF.
+
+    derive( CHANGING app = result ).
+
+  ENDMETHOD.
+
+
   METHOD view_display.
 
-    " base url to launch an abap2UI5 app in a new browser tab
-    DATA(start) = |{ client->get( )-s_config-origin }{ client->get( )-s_config-pathname }?app_start=|.
+    DATA(catalog) = get_catalog( ).
+    CLEAR t_app.
+    LOOP AT catalog ASSIGNING FIELD-SYMBOL(<app>).
 
-    t_app = get_catalog( ).
-    LOOP AT t_app ASSIGNING FIELD-SYMBOL(<app>).
+      derive( CHANGING app = <app> ).
 
-      DATA(libpath) = replace( val = <app>-module
-                               sub = \`.\`
-                               with = \`/\`
-                               occ = 0 ).
-
-      " display only the bare control, without its namespace (sap.f.GridList -> GridList)
-      DATA(dot) = find( val = <app>-control sub = \`.\` occ = -1 ).
-      <app>-ctrl_name = COND #( WHEN dot >= 0 THEN substring( val = <app>-control off = dot + 1 ) ELSE <app>-control ).
-
-      " the three reference links point into OpenUI5 - API reference, sample
-      " source, live runner - so they only exist for a library OpenUI5 ships.
-      " A ui5_only row (control not in the OpenUI5 checkout) has none of the
-      " three there: leaving them built would hand out four links of which three
-      " 404, and the commercial host is not an option (pattern-lint
-      " commercial-ui5-host).
-      " They stay empty and the popover renders only what resolves - the ABAP
-      " class link is repository-local and always correct
-      IF <app>-ui5_only = abap_false.
-        <app>-api_url = |https://sdk.openui5.org/api/{ <app>-control }|.
-        <app>-js_url  = |https://github.com/SAP/openui5/tree/master/src/{ <app>-module }| &&
-                        |/test/{ libpath }/demokit/sample/{ <app>-name }|.
-        <app>-ui5_url = |https://sdk.openui5.org/resources/sap/ui/documentation/sdk/index.html| &&
-                        |?sap-ui-xx-sample-id={ <app>-module }.sample.{ <app>-name }| &&
-                        |&sap-ui-xx-sample-lib={ <app>-module }|.
-      ENDIF.
-      <app>-abap_url  = |https://github.com/abap2UI5/api/blob/main/{ <app>-path }|.
-      <app>-start_url = |{ start }{ to_upper( <app>-class ) }|.
-      <app>-has_check = xsdbool( <app>-checked IS NOT INITIAL ).
-      <app>-has_notes = xsdbool( <app>-notes IS NOT INITIAL ).
-      <app>-has_p171  = xsdbool( <app>-post171 IS NOT INITIAL ).
-
-      " control name: struck through when the control is deprecated, otherwise
-      " plain - never coloured (carried as FormattedText htmlText so the
-      " strikethrough can vary per row); a plain control is rendered as-is
-      <app>-ctrl_html = COND string(
-          WHEN <app>-dep_text IS NOT INITIAL
-          THEN |<span style="text-decoration:line-through">{ <app>-ctrl_name }</span>|
-          ELSE <app>-ctrl_name ).
-
-      " one blob per row, bound as the FILTER column that the table search's
-      " client-side Contains filter (binding_call) matches against. Only the
-      " VISIBLE text columns feed it - Module, Control (bare name), Since,
-      " Sample, abap2UI5 (class) - so a query like "Date" no longer
-      " matches hidden text buried in the notes/checked/post-1.71 fields
-      <app>-filter = <app>-module && \` \` && <app>-ctrl_name && \` \` &&
-                     <app>-since  && \` \` && <app>-name      && \` \` &&
-                     <app>-class.
+      " only the columns the table renders, sorts or filters on go into the
+      " bound model - the notes, the live-check text and the four URLs stay in
+      " the catalog and are fetched per row in on_event (see ty_s_row)
+      APPEND VALUE #( module        = <app>-module
+                      ctrl_name     = <app>-ctrl_name
+                      name          = <app>-name
+                      class         = <app>-class
+                      start_url     = <app>-start_url
+                      has_check     = <app>-has_check
+                      has_notes     = <app>-has_notes
+                      has_p171      = <app>-has_p171
+                      since         = <app>-since
+                      since_post171 = <app>-since_post171
+                      ui5_only      = <app>-ui5_only
+                      is_post171    = <app>-is_post171
+                      is_deprecated = <app>-is_deprecated
+                      dep_text      = <app>-dep_text
+                      ctrl_html     = <app>-ctrl_html
+                      score         = <app>-score
+                      score_tip     = <app>-score_tip
+                      filter        = <app>-filter ) TO t_app.
 
     ENDLOOP.
 
@@ -857,8 +903,12 @@ ${columnsBlock}
                                         )->a( n = \`icon\`    v = \`sap-icon://chain-link\`
                                         )->a( n = \`type\`    v = \`Transparent\`
                                         )->a( n = \`tooltip\` v = \`Links: Control API Reference, Sample Link, Sample Source Code, abap2UI5 Source Code\`
+                                        " only the row KEY travels (the four URLs are rebuilt
+                                        " server-side in on_event, so they stay out of the model
+                                        " and out of the persisted draft), plus the button's own
+                                        " runtime id as the popover anchor
                                         )->a( n = \`press\`   v = client->_event( val = \`LINKS\` t_arg = VALUE #(
-                                            ( \`\${API_URL}\` ) ( \`\${JS_URL}\` ) ( \`\${UI5_URL}\` ) ( \`\${ABAP_URL}\` ) ( \`\$event.oSource.sId\` ) ) )
+                                            ( \`\${CLASS}\` ) ( \`\$event.oSource.sId\` ) ) )
                                     )->leaf( \`Button\`
                                         )->a( n = \`icon\`    v = \`sap-icon://action\`
                                         )->a( n = \`type\`    v = \`Transparent\`
@@ -873,7 +923,7 @@ ${columnsBlock}
                                         " close it mid-way. Nothing here needs interpolation anyway.
                                         )->a( n = \`visible\` v = \`{= \${HAS_CHECK} || \${HAS_P171} || \${HAS_NOTES} }\`
                                         )->a( n = \`press\`   v = client->_event( val = \`INFO\` t_arg = VALUE #(
-                                            ( \`\${CHECKED}\` ) ( \`\${POST171}\` ) ( \`\${NOTES}\` ) ( \`\$event.oSource.sId\` ) ) )
+                                            ( \`\${CLASS}\` ) ( \`\$event.oSource.sId\` ) ) )
 
                                 )->shut(
                             )->shut(
@@ -892,6 +942,65 @@ ${columnsBlock}
       client->follow_up_action( val   = client->cs_event-binding_call
                                 t_arg = VALUE #( ( \`${ID_TABLE}\` ) ( \`items\` ) ( \`filter\` ) ( \`FILTER\` ) ( \`Contains\` ) ( search_query ) ) ).
     ENDIF.
+
+  ENDMETHOD.
+
+
+  METHOD derive.
+
+    " everything a catalog row does not carry as a generated fact: the bare
+    " control name, the four reference links, the start URL, the three
+    " has-something flags, the control's display markup and the search blob.
+    " Called per row when the table is built, and for the single row a popover
+    " asks about (row_of) - so the links exist without living in the model.
+    DATA(libpath) = replace( val = app-module
+                             sub = \`.\`
+                             with = \`/\`
+                             occ = 0 ).
+
+    " display only the bare control, without its namespace (sap.f.GridList -> GridList)
+    DATA(dot) = find( val = app-control sub = \`.\` occ = -1 ).
+    app-ctrl_name = COND #( WHEN dot >= 0 THEN substring( val = app-control off = dot + 1 ) ELSE app-control ).
+
+    " the three reference links point into OpenUI5 - API reference, sample
+    " source, live runner - so they only exist for a library OpenUI5 ships.
+    " A ui5_only row (control not in the OpenUI5 checkout) has none of the
+    " three there: leaving them built would hand out four links of which three
+    " 404, and the commercial host is not an option (pattern-lint
+    " commercial-ui5-host).
+    " They stay empty and the popover renders only what resolves - the ABAP
+    " class link is repository-local and always correct
+    IF app-ui5_only = abap_false.
+      app-api_url = |https://sdk.openui5.org/api/{ app-control }|.
+      app-js_url  = |https://github.com/SAP/openui5/tree/master/src/{ app-module }| &&
+                    |/test/{ libpath }/demokit/sample/{ app-name }|.
+      app-ui5_url = |https://sdk.openui5.org/resources/sap/ui/documentation/sdk/index.html| &&
+                    |?sap-ui-xx-sample-id={ app-module }.sample.{ app-name }| &&
+                    |&sap-ui-xx-sample-lib={ app-module }|.
+    ENDIF.
+    app-abap_url  = |https://github.com/abap2UI5/api/blob/main/{ app-path }|.
+    app-start_url = |{ client->get( )-s_config-origin }{ client->get( )-s_config-pathname }| &&
+                    |?app_start={ to_upper( app-class ) }|.
+    app-has_check = xsdbool( app-checked IS NOT INITIAL ).
+    app-has_notes = xsdbool( app-notes IS NOT INITIAL ).
+    app-has_p171  = xsdbool( app-post171 IS NOT INITIAL ).
+
+    " control name: struck through when the control is deprecated, otherwise
+    " plain - never coloured (carried as FormattedText htmlText so the
+    " strikethrough can vary per row); a plain control is rendered as-is
+    app-ctrl_html = COND string(
+        WHEN app-dep_text IS NOT INITIAL
+        THEN |<span style="text-decoration:line-through">{ app-ctrl_name }</span>|
+        ELSE app-ctrl_name ).
+
+    " one blob per row, bound as the FILTER column that the table search's
+    " client-side Contains filter (binding_call) matches against. Only the
+    " VISIBLE text columns feed it - Module, Control (bare name), Since,
+    " Sample, abap2UI5 (class) - so a query like "Date" no longer
+    " matches hidden text buried in the notes/checked/post-1.71 fields
+    app-filter = app-module && \` \` && app-ctrl_name && \` \` &&
+                 app-since  && \` \` && app-name      && \` \` &&
+                 app-class.
 
   ENDMETHOD.
 

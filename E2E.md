@@ -70,3 +70,14 @@ npm run e2e                  # boots each port headless, asserts boot+render+no-
 
 See `scripts/e2e-build.mjs` / `scripts/e2e-smoke.mjs` for details, and AGENTS.md
 (`e2e_smoke` gate) for where it fits among the checks.
+
+## Patched `open-abap-core`
+
+`e2e-build` clones [open-abap-core](https://github.com/open-abap/open-abap-core)
+into `<abap2UI5 checkout>/node/open-abap-core`, patches it with
+`web/ci/patch_open_abap_xml.mjs` (the same patch the browser build applies) and
+transpiles against that copy. Upstream's `CALL TRANSFORMATION id … RESULT XML`
+writes character data unescaped, so any app whose model carries a `<` saves a
+draft its own `CL_IXML` cannot parse back — every later round-trip then fails
+with `Network error: ASSERTION_FAILED`. The clone is reused across builds;
+delete it to pick up a newer open-abap-core.
