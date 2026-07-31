@@ -33,8 +33,8 @@
       "what": "the selected item text is read with ${$parameters>/item}.getText() (a method call on the resolved MenuItemBase control), NOT ${$parameters>/item/text}: the $parameters model exposes 'item' as the control object and UI5 keeps properties in the control's internal store, so the path .../item/text reads an undefined field and the toast arrives empty (same finding as app 060)."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "unverified in a running system: (a) the button press opens the Menu via the 2026-07-27 anchored-open fallback - verify the open in a running system; (b) selecting a menu item toasts \"'<text>' pressed\" via the Menu-level itemSelect + ${$parameters>/item}.getText()."
+      "type": "NOTE",
+      "what": "unverified in a running system: (a) the button press opens the Menu via the 2026-07-27 anchored-open fallback - verify the open in a running system; (b) selecting a menu item toasts \"'<text>' pressed\" via the Menu-level itemSelect + ${$parameters>/item}.getText(). **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the button press opens the sap.ui.unified.Menu through the 2026-07-27 openBy fallback (open(false, anchor, ...) for a control without its own openBy) and selecting an item raises the client-composed \"'My 1st Item' pressed\" toast."
     }
   ]
 }

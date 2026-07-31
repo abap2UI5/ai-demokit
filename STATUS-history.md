@@ -7,6 +7,32 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## e2e round 2 results + depth port DynamicSideContentEqualSplit (2026-07-31)
+
+- The 207 fix is live: the rebuilt backend shows `typeBinding: '/LISTTYPE'` and
+  the model carries the shared field. Open LIVE_TESTs **55 → 52 ports** (029
+  partial, 123/172/228 fully converted to `NOTE`s).
+- **Two harness boundaries measured, not guessed.** A control that lives in an
+  `OverflowToolbar` is *only instantiated when its overflow popover opens*, and
+  in that popover it loses its usual root class — no viewport width brings it
+  inline (tried up to 2200px). That killed the click-through for **207**'s type
+  Select and **247**'s width SegmentedButton:
+  - 207 keeps a `LIVE_TEST` but its interaction now guards the regression that
+    actually bit us — it asserts through `page.evaluate` that the item template
+    binds the **absolute** `/LISTTYPE`; a relative `{LISTTYPE}` would resolve
+    against the row and kill the Select again.
+  - 247's interaction was **removed** rather than left half-working; its
+    `LIVE_TEST` stays open and honest.
+- **App 267** (`sap.ui.layout.sample.DynamicSideContentEqualSplit`, b14):
+  `toggle()` roundtrip-free via `control_by_id` (a public method needs no
+  whitelist entry), `_updateToggleButtonState` as the `breakpointChanged`
+  round-trip (`${$parameters>/currentBreakpoint}` → the bound `enabled` flag,
+  enabled only on `S`), and the Slider's `visible` from the shared `device>`
+  model — the declarative form of `onBeforeRendering setVisible(!phone)`.
+  Declared IMPROVISED: the static `img>` fold and the dropped `liveChange`,
+  whose jQuery width targets a `sap.m.Page` that has no width property to bind
+  (apps 213/214 could bind theirs, this one cannot).
+
 ## Depth port SplitterNested1 — batch b14 opened (2026-07-31)
 
 - **App 266** (`sap.ui.layout.sample.SplitterNested1`, `src/02/b14`): nested

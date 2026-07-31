@@ -22,7 +22,7 @@
     },
     {
       "type": "LIVE_TEST",
-      "what": "unverified in a running system: (a) handlePress/handleDetailPress are reproduced as roundtrip-free client toasts (control_global MESSAGE_TOAST.show of \"'press' event fired!\" / \"'detailPress' event fired!\"); (b) the Select selectedKey <-> item type two-way binding should re-type all rows on selection. Re-verify both."
+      "what": "unverified in a running system: (a) handlePress/handleDetailPress are reproduced as roundtrip-free client toasts (control_global MESSAGE_TOAST.show of \"'press' event fired!\" / \"'detailPress' event fired!\"); (b) the Select selectedKey <-> item type two-way binding should re-type all rows on selection. Re-verify both. **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the list renders and every StandardListItem binds its type to the ABSOLUTE path /LISTTYPE - the regression that actually bit us (see the correction above) is now guarded: a relative {LISTTYPE} would resolve against the row and kill the Select. NOT covered: the press/detailPress toasts themselves - the type Select lives in an OverflowToolbar whose popover content is not drivable headless, so switching the item type stays a human check."
     }
   ]
 }

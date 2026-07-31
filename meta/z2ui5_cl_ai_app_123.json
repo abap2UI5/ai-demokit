@@ -12,8 +12,8 @@
   "checked": null,
   "deviations": [
     {
-      "type": "LIVE_TEST",
-      "what": "The two toolbar buttons reproduce the original controller behaviour server-side: 'Toggle Collapse/Expand' flips NavigationList.expanded (bound to a boolean model field), 'Show/Hide SubItem 3' flips subItemThree.visible. The original used byId().setExpanded/setVisible; here the properties are two-way bound and toggled on a backend round-trip. The 'expanded' attribute on NavigationList and the 'visible' attribute on subItemThree are added to carry these bindings (the original set them imperatively)."
+      "type": "NOTE",
+      "what": "The two toolbar buttons reproduce the original controller behaviour server-side: 'Toggle Collapse/Expand' flips NavigationList.expanded (bound to a boolean model field), 'Show/Hide SubItem 3' flips subItemThree.visible. The original used byId().setExpanded/setVisible; here the properties are two-way bound and toggled on a backend round-trip. The 'expanded' attribute on NavigationList and the 'visible' attribute on subItemThree are added to carry these bindings (the original set them imperatively). **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): 'Show/Hide SubItem 3' removes exactly one of the two same-named sub items (the bound visible flag flipped on a round-trip) and 'Toggle Collapse/Expand' collapses the NavigationList so the item texts disappear - both toolbar buttons reproduce the original byId().setVisible/setExpanded server-side."
     }
   ]
 }

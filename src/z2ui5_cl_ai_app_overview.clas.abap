@@ -1541,7 +1541,9 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` the controller - all client-side, no scroll_step_by_item field. // NOTE: the NumericContent press ('Fire press' MessageToast) is wired roundtrip-free via client->_event_client(`.
     lv_text1 = lv_text1 && ` cs_event-control_global, MESSAGE_TOAST/show ) - the original's client-side MessageToast.show 1:1; the app is now init-only (no on_event). An unused xmlns:l namespace was dropped. // LIVE-TEST: the` &&
                ` scroll-step selection and the tile-press toast were switched from server round-trips to client-side expression binding / _event_client( control_global ) on 2026-07-22 - re-verify in a running system` &&
-               ` that selecting an item/px still changes the arrow scroll step on both containers and that pressing a NumericContent still toasts 'Fire press'.`.
+               ` that selecting an item/px still changes the arrow scroll step on both containers and that pressing a NumericContent still toasts 'Fire press'. **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs` &&
+               ` interaction, transpiled backend + real browser): pressing the first NumericContent tile raises its client-composed toast ('Fire press'). The scroll-step Select (item/px) is NOT covered - it sits in` &&
+               ` the sample's option area and needs a human check.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.HeaderContainer`                 name = `HeaderContainer`                     class = `z2ui5_cl_ai_app_029` path = `src/01/b06/z2ui5_cl_ai_app_029.clas.abap`
         score = 4
@@ -1716,7 +1718,10 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` client->_bind( listtype ), which is what a shared root-level field needs inside a bound aggregation. // NOTE: the ProductPicUrl icon values are stored as absolute` &&
                ` https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/*.jpg URLs (the mock's host-relative test-resources paths rewritten to the OpenUI5 host per the runtime asset-URL rule). Same`.
     lv_text1 = lv_text1 && ` 123-row set, kept verbatim otherwise. // LIVE-TEST: unverified in a running system: (a) handlePress/handleDetailPress are reproduced as roundtrip-free client toasts (control_global MESSAGE_TOAST.show` &&
-               ` of "'press' event fired!" / "'detailPress' event fired!"); (b) the Select selectedKey <-> item type two-way binding should re-type all rows on selection. Re-verify both.`.
+               ` of "'press' event fired!" / "'detailPress' event fired!"); (b) the Select selectedKey <-> item type two-way binding should re-type all rows on selection. Re-verify both. **e2e-verified 2026-07-31**` &&
+               ` (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the list renders and every StandardListItem binds its type to the ABSOLUTE path /LISTTYPE - the regression that actually bit us` &&
+               ` (see the correction above) is now guarded: a relative {LISTTYPE} would resolve against the row and kill the Select. NOT covered: the press/detailPress toasts themselves - the type Select lives in an` &&
+               ` OverflowToolbar whose popover content is not drivable headless, so switching the item type stays a human check.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.List`                            name = `ListItemTypes`                       class = `z2ui5_cl_ai_app_207` path = `src/01/b17/z2ui5_cl_ai_app_207.clas.abap`
         score = 4
@@ -2873,14 +2878,17 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         since = `1.54`
         notes = lv_text1 ) ).
 
+    lv_text1 = `NOTE: The two toolbar buttons reproduce the original controller behaviour server-side: 'Toggle Collapse/Expand' flips NavigationList.expanded (bound to a boolean model field), 'Show/Hide SubItem 3'` &&
+               ` flips subItemThree.visible. The original used byId().setExpanded/setVisible; here the properties are two-way bound and toggled on a backend round-trip. The 'expanded' attribute on NavigationList and` &&
+               ` the 'visible' attribute on subItemThree are added to carry these bindings (the original set them imperatively). **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs interaction, transpiled backend +` &&
+               ` real browser): 'Show/Hide SubItem 3' removes exactly one of the two same-named sub items (the bound visible flag flipped on a round-trip) and 'Toggle Collapse/Expand' collapses the NavigationList so` &&
+               ` the item texts disappear - both toolbar buttons reproduce the original byId().setVisible/setExpanded server-side.`.
     result = VALUE #( BASE result
       ( module = `sap.tnt`            control = `sap.tnt.NavigationList`                name = `NavigationList`                      class = `z2ui5_cl_ai_app_123` path = `src/05/b02/z2ui5_cl_ai_app_123.clas.abap`
-        score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.34`
-        notes = `LIVE-TEST: The two toolbar buttons reproduce the original controller behaviour server-side: 'Toggle Collapse/Expand' flips NavigationList.expanded (bound to a boolean model field), 'Show/Hide SubItem` &&
-                 ` 3' flips subItemThree.visible. The original used byId().setExpanded/setVisible; here the properties are two-way bound and toggled on a backend round-trip. The 'expanded' attribute on NavigationList` &&
-                 ` and the 'visible' attribute on subItemThree are added to carry these bindings (the original set them imperatively).` ) ).
+        notes = lv_text1 ) ).
 
     lv_text1 = `LIVE-TEST: The two buttons reproduce the controller behaviour server-side: 'Toggle Collapse/Expand' flips SideNavigation.expanded (bound to a boolean model field, initial false as in the original) and` &&
                ` 'Show/Hide "Walked"' flips the 'walked' NavigationListItem.visible. The original used byId().setExpanded/setVisible; here the properties are two-way bound and toggled on a backend round-trip. The` &&
@@ -2940,15 +2948,17 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
 
     lv_text1 = `POST-1.71: sap.tnt.NavigationListItem.selectable (@since 1.116) is used 1:1 on the unselectable parent items (Building/Mileage/Transport) and the fixed External Link item - it is the whole point of` &&
                ` this sample. Kept per the members-newer-than-1.71 fidelity policy; @since verified by hand against fork-openui5/src/sap.tnt/src/sap/tnt/NavigationListItem.js line 101-103 (property gate is blind to` &&
-               ` sap.tnt). Requires a UI5 release >= 1.116 to render. // LIVE-TEST: onCollapseExpandPress reproduced server-side: SideNavigation.expanded is two-way bound (initial false as in the original` &&
+               ` sap.tnt). Requires a UI5 release >= 1.116 to render. // NOTE: onCollapseExpandPress reproduced server-side: SideNavigation.expanded is two-way bound (initial false as in the original` &&
                ` expanded="false") and flipped on a backend round-trip (TOGGLE_EXPAND) instead of the original imperative byId().setExpanded(!expanded). Same technique as app 128. The literal expanded="false"` &&
-               ` becoming a {/EXPANDED} binding needs a live render check. // LIVE-TEST: onItemSelect reproduced roundtrip-free: the SideNavigation itemSelect event fires a client-composed MessageToast` &&
-               ` (control_global MESSAGE_TOAST/show, template 'Item selected: {0}' filled by the client-resolved ${$parameters>/item}.getText()) - the 1:1 equivalent of the original MessageToast.show(``Item selected:`.
-    lv_text1 = lv_text1 && ` ${sText}``). Same idiom as app 060; CAPABILITIES marks it expressible, live render/click check pending.`.
+               ` becoming a {/EXPANDED} binding needs a live render check. **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the Toggle Collapse/Expand round-trip` &&
+               ` expands the SideNavigation - the sub items 'Office 01'/'Office 02' appear, so the two-way bound expanded flag really flipped in ABAP. // NOTE: onItemSelect reproduced roundtrip-free: the`.
+    lv_text1 = lv_text1 && ` SideNavigation itemSelect event fires a client-composed MessageToast (control_global MESSAGE_TOAST/show, template 'Item selected: {0}' filled by the client-resolved ${$parameters>/item}.getText()) -` &&
+               ` the 1:1 equivalent of the original MessageToast.show(``Item selected: ${sText}``). Same idiom as app 060; CAPABILITIES marks it expressible, live render/click check pending. **e2e-verified` &&
+               ` 2026-07-31** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): selecting 'Office 01' raises the client-composed 'Item selected: Office 01' toast.`.
     result = VALUE #( BASE result
       ( module = `sap.tnt`            control = `sap.tnt.SideNavigation`                name = `SideNavigationUnselectableParents`   class = `z2ui5_cl_ai_app_172` path = `src/05/b06/z2ui5_cl_ai_app_172.clas.abap`
-        score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.34`
         is_post171 = abap_true
         notes = lv_text1
@@ -3412,6 +3422,24 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         since = `1.30`
         notes = lv_text1 ) ).
 
+    lv_text1 = `IMPROVISED: The named img> model ({img>/products/pic1} and {img>/products/pic3}, loaded from sap/ui/demo/mock/img.json) is resolved STATICALLY to the two image URLs it points at (HT-7777-large.jpg for` &&
+               ` the main content, HT-6100-large.jpg for the side content, on the sdk.openui5.org host per the offline asset rule). abap2UI5 serves one default model and these are pure display assets that never` &&
+               ` change, so a lossy-by-definition static fold (app 006 precedent) rather than a NOTE-worthy prefix drop - the live model indirection is gone. // IMPROVISED: The Slider's liveChange attribute is` &&
+               ` dropped: handleSliderChange resizes the DynamicSideContent's container by writing a percentage width straight onto its DOM node (byId('sideContentContainer').$().width(iValue + '%')). The container` &&
+               ` is a sap.m.Page, which has no width property to bind, so there is nothing to two-way bind the slider value to (apps 213/214 hit the same jQuery-width idiom on controls that DO have a width, and bound` &&
+               ` it there). The Slider is kept 1:1 with its value='100' so the sample's footer is complete, but moving it has no effect. // LIVE-TEST: handleToggleClick is reproduced roundtrip-free as _event_client(`.
+    lv_text1 = lv_text1 && ` control_by_id, DynamicSideContent / toggle ) - toggle() is a public sap.ui.layout.DynamicSideContent method and needs no whitelist entry (the framework-invariant guard admits it).` &&
+               ` _updateToggleButtonState becomes the BREAKPOINT_CHANGED round-trip: the breakpointChanged event transports ${$parameters>/currentBreakpoint} and the backend enables the Toggle button only on` &&
+               ` breakpoint 'S', exactly like the original, through the two-way bound enabled flag. The Slider's visible follows the shared device> model ({= !${device>/system/phone}}), the declarative form of the` &&
+               ` original's onBeforeRendering setVisible(!Device.system.phone). None of the three wires is verified in a running system.`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.DynamicSideContent`      name = `DynamicSideContentEqualSplit`        class = `z2ui5_cl_ai_app_267` path = `src/02/b14/z2ui5_cl_ai_app_267.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.30`
+        notes = lv_text1 ) ).
+
     lv_text1 = `NOTE: The original binds the Image src against a separate 'img' JSON model ({img>/products/pic1}) loaded from sap/ui/demo/mock/img.json. abap2UI5 serves one default model, so the picture path is` &&
                ` folded into it and the src binds it directly (client->_bind( pic1 )) - the 'img>' prefix is dropped and the last path segment is identical, which structural-diff matches. The mock's host-relative` &&
                ` path is resolved to the OpenUI5 host (sdk.openui5.org) per the asset-URL rule. // NOTE: The sample's style.css (background colours on the FixFlex fixed/flexible areas, referenced by` &&
@@ -3804,12 +3832,14 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` the fragment Menu (added in the controller via getView().addDependent(this._menu)) is declared 1:1 inside the Button's ``dependents`` aggregation (the addDependent equivalent, same as app 060) -` &&
                ` structurally identical, no loss; structural-diff ignores the aggregation name. // NOTE: the selected item text is read with ${$parameters>/item}.getText() (a method call on the resolved MenuItemBase` &&
                ` control), NOT ${$parameters>/item/text}: the $parameters model exposes 'item' as the control object and UI5 keeps properties in the control's internal store, so the path .../item/text reads an` &&
-               ` undefined field and the toast arrives empty (same finding as app 060). // LIVE-TEST: unverified in a running system: (a) the button press opens the Menu via the 2026-07-27 anchored-open fallback -`.
-    lv_text1 = lv_text1 && ` verify the open in a running system; (b) selecting a menu item toasts "'<text>' pressed" via the Menu-level itemSelect + ${$parameters>/item}.getText().`.
+               ` undefined field and the toast arrives empty (same finding as app 060). // NOTE: unverified in a running system: (a) the button press opens the Menu via the 2026-07-27 anchored-open fallback - verify`.
+    lv_text1 = lv_text1 && ` the open in a running system; (b) selecting a menu item toasts "'<text>' pressed" via the Menu-level itemSelect + ${$parameters>/item}.getText(). **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs` &&
+               ` interaction, transpiled backend + real browser): the button press opens the sap.ui.unified.Menu through the 2026-07-27 openBy fallback (open(false, anchor, ...) for a control without its own openBy)` &&
+               ` and selecting an item raises the client-composed "'My 1st Item' pressed" toast.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.Menu`                   name = `MenuMenuEventing`                    class = `z2ui5_cl_ai_app_228` path = `src/02/b10/z2ui5_cl_ai_app_228.clas.abap`
-        score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
         since = `1.21.0`
         is_post171 = abap_true

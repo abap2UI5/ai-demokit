@@ -682,16 +682,6 @@ const INTERACTIONS = {
     await tile.click();
     await expect(page.locator('.sapMMessageToast').last(), 'the tile-press client toast').toContainText('Fire press');
   },
-  // sap.ui.table ColumnResizing: the SegmentedButton width switch is a real
-  // backend round-trip (WIDTHS_CHANGE with ${$parameters>/item}.getKey())
-  z2ui5_cl_ai_app_247: async (page, expect) => {
-    const flexible = page.locator('#columnWidths .sapMSegBBtn').nth(1);
-    await expect(flexible, 'the Flexible width mode button').toBeVisibleEnabled();
-    await flexible.click();
-    await page.waitForTimeout(1200);
-    // the round-trip re-renders the table with recomputed column widths
-    await expect(page.locator('.sapUiTable'), 'the table after the width round-trip').toContainText('Product Name');
-  },
   // tnt NavigationList: the two toolbar buttons flip bound control state
   // server-side (the original used byId().setExpanded / setVisible)
   z2ui5_cl_ai_app_123: async (page, expect) => {
@@ -702,6 +692,11 @@ const INTERACTIONS = {
     await btn.click();
     // the bound visible flag hides exactly one sub item — the count must drop
     await expect(page.getByText('Sub Item 3', { exact: true }), 'one Sub Item 3 hidden after the round-trip').toHaveCountBelow(2);
+    // the second button flips NavigationList.expanded — collapsed shows icons only
+    const toggle = page.getByRole('button', { name: 'Toggle Collapse/Expand', exact: true }).first();
+    await expect(toggle, 'the collapse/expand button').toBeVisibleEnabled();
+    await toggle.click();
+    await expect(nav, 'the collapsed navigation list').notToContainText('Sub Item 1');
   },
   // SideNavigation.expanded two-way bound, flipped on a round-trip (starts
   // collapsed = icons only), plus the itemSelect client toast
@@ -713,25 +708,22 @@ const INTERACTIONS = {
     await page.getByText('Office 01', { exact: true }).first().click();
     await expect(page.locator('.sapMMessageToast').last(), 'the itemSelect client toast').toContainText('Item selected: Office 01');
   },
-  // ListItemTypes: the press/detailPress client toasts
+  // ListItemTypes: every item's `type` follows ONE shared root field. The type
+  // Select sits in an OverflowToolbar whose popover is not drivable headless
+  // (its content is only instantiated on open and the Select keeps no .sapMSlt
+  // root there), so this asserts the regression that actually bit us: the
+  // template must bind the ABSOLUTE path /LISTTYPE — a relative {LISTTYPE}
+  // resolves against the row, leaves every item Inactive and kills the Select
+  // (fixed 2026-07-31, see the 207 sidecar). The click-through stays a human check.
   z2ui5_cl_ai_app_207: async (page, expect) => {
-    // every row starts Inactive (no press) — the Select drives the bound type.
-    // It sits in an OverflowToolbar and is only instantiated once the overflow
-    // popover opens ("Additional Options"), so go through that button
-    const overflow = page.locator('[id$="-overflowButton"]').first();
-    await expect(overflow, 'the OverflowToolbar overflow button').toBeVisibleEnabled();
-    await overflow.click();
-    const sel = page.locator('.sapMPopover .sapMSlt').first();
-    await expect(sel, 'the item-type Select in the overflow popover').toBeVisibleEnabled();
-    await sel.click();
-    await page.locator('.sapMSltPicker li', { hasText: 'Active' }).first().click();
-    await page.waitForTimeout(800);
-    await page.keyboard.press('Escape');   // close the overflow popover
-    await page.waitForTimeout(500);
-    const item = page.locator('.sapMLIB').first();
-    await expect(item, 'the first list item').toBeVisibleEnabled();
-    await item.click();
-    await expect(page.locator('.sapMMessageToast').last(), "the 'press' client toast").toContainText("'press' event fired!");
+    await expect(page.locator('.sapMList'), 'the product list').toContainText('Notebook Basic 15');
+    const shape = await page.evaluate(() => {
+      const El = sap.ui.require('sap/ui/core/Element');
+      const items = Object.values(El.registry.all()).filter((c) => c.getMetadata().getName() === 'sap.m.StandardListItem');
+      return { n: items.length, path: items[0] && items[0].getBindingPath('type') };
+    });
+    if (!shape.n) throw new Error('no StandardListItem rendered');
+    if (shape.path !== '/LISTTYPE') throw new Error(`the item type must bind the absolute /LISTTYPE, got "${shape.path}"`);
   },
   // sap.ui.unified.Menu opened through the 2026-07-27 openBy fallback
   // (open(false, anchor, …) for a control without its own openBy)
