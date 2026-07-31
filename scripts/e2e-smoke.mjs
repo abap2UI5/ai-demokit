@@ -250,9 +250,10 @@ const INTERACTIONS = {
     const btn = page.getByRole('button', { name: 'Show Light Busy Dialog', exact: true }).first();
     await expect(btn, 'the busy-dialog button').toBeVisibleEnabled();
     await btn.click();
-    await expect(page.locator('.sapMBusyDialog'), 'the opened BusyDialog').toBeVisibleEnabled();
-    // the CLOSE_BUSY timer round-trip closes it after ~3s
-    await page.locator('.sapMBusyDialog').waitFor({ state: 'hidden', timeout: 15000 });
+    // the dialog box measures empty headless - assert presence, not visibility
+    await page.locator('.sapMBusyDialog').waitFor({ state: 'attached', timeout: 10000 });
+    // the CLOSE_BUSY timer round-trip closes (detaches) it after ~3s
+    await page.locator('.sapMBusyDialog').waitFor({ state: 'detached', timeout: 15000 });
   },
   // Carousel customLayout + the set_size_limit follow-up: exactly 10 of the
   // 123 bound rows render (the page indicator counts them)

@@ -7,6 +7,16 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## Depth port DatePickerValueState (2026-07-30)
+
+- **App 253** (`sap.m.sample.DatePickerValueState`): bound
+  valueState/valueStateText over a 5-row aggregation — every row carries a
+  valueState, so the absent-enum trap does not apply, and the empty
+  valueStateText falls back to the state default like the original's
+  undefined. All gates green first pass. Coverage 252/741. The 251
+  BusyDialog interaction moved to attached/detached asserts (the dialog box
+  measures empty headless, the same class as the 238 popover).
+
 ## Depth port CarouselWithMorePages (2026-07-30)
 
 - **App 252** (`sap.m.sample.CarouselWithMorePages`): the Carousel
