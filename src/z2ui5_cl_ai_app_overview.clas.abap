@@ -951,14 +951,18 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         checked = `CHECKED (2026-07-20): verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed)`
         notes = lv_text1 ) ).
 
+    lv_text1 = `NOTE: BusyDialog.fragment.xml is inlined into the l:dependents aggregation - the core:Fragment reference element ('core:Fragment' fragmentName sap.m.sample.BusyDialogLight.BusyDialog) is dropped for` &&
+               ` the inlined BusyDialog, per the fragment-inlining rule. handlePress is the app-147 idiom: the SHOW_BUSY round-trip issues follow_up_action control_by_id BusyDialog open plus START_TIMER CLOSE_BUSY` &&
+               ` 3000, and the timer round-trip closes the dialog - the setTimeout(close, 3000) equivalent with one round-trip latency added to the 3s. // NOTE: unverified in a running system: the open + 3s timer +` &&
+               ` close chain on the dependents-declared BusyDialog. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the full chain runs green - the button opens the BusyDialog` &&
+               ` (attached) and the CLOSE_BUSY timer round-trip detaches it after ~3s.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.BusyDialog`                      name = `BusyDialogLight`                     class = `z2ui5_cl_ai_app_251` path = `src/01/b19/z2ui5_cl_ai_app_251.clas.abap`
         score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        notes = `NOTE: BusyDialog.fragment.xml is inlined into the l:dependents aggregation - the core:Fragment reference element ('core:Fragment' fragmentName sap.m.sample.BusyDialogLight.BusyDialog) is dropped for` &&
-                 ` the inlined BusyDialog, per the fragment-inlining rule. handlePress is the app-147 idiom: the SHOW_BUSY round-trip issues follow_up_action control_by_id BusyDialog open plus START_TIMER CLOSE_BUSY` &&
-                 ` 3000, and the timer round-trip closes the dialog - the setTimeout(close, 3000) equivalent with one round-trip latency added to the 3s. // LIVE-TEST: unverified in a running system: the open + 3s` &&
-                 ` timer + close chain on the dependents-declared BusyDialog.` )
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = lv_text1 ) ).
+
+    result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Button`                          name = `Button`                              class = `z2ui5_cl_ai_app_005` path = `src/01/b03/z2ui5_cl_ai_app_005.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -978,7 +982,8 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` currentChangeHandler() call is unnecessary - the binding seeds the badge. (d) badgeMin/badgeMax are TYPE i - the original model carries them as strings, but the bound values are numeric-only and the` &&
                ` numeric-bound-as-string lint (app-053 lesson) wants the model to serialize real numbers; Input.value coerces either way. // LIVE-TEST: unverified in a running system: (a) the shared /BADGECURRENT` &&
                ` binding driving badge and StepInput; (b) the icon/text expression bindings over /BUTTONWITHICON//BUTTONWITHTEXT; (c) the MIN_CHANGE/MAX_CHANGE validation round-trips incl. the reset-on-invalid path` &&
-               ` and the setBadgeMin/MaxValue follow-ups.`.
+               ` and the setBadgeMin/MaxValue follow-ups. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): (a) is covered - the badge renders data-badge 1 and follows the`.
+    lv_text1 = lv_text1 && ` StepInput to 2 after ArrowUp+Enter (the change event carries the two-way write); the MIN/MAX validation round-trips remain unexercised.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Button`                          name = `ButtonWithBadge`                     class = `z2ui5_cl_ai_app_249` path = `src/01/b19/z2ui5_cl_ai_app_249.clas.abap`
         score = 4
@@ -1007,12 +1012,14 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` host-absolutized to https://sdk.openui5.org/ per the offline asset rule. // NOTE: Thin-frontend folds, both attribute drops declared: onNumberOfPages - the Input's liveChange attribute is DROPPED,` &&
                ` Input.value is two-way bound with an added valueLiveUpdate='true' and CarouselLayout.visiblePagesCount binds the same /PAGES_COUNT field, so typing drives the carousel client-side exactly like the`.
     lv_text1 = lv_text1 && ` original's per-keystroke setVisiblePagesCount. OnScrollModeChange - the Switch's change attribute is DROPPED, Switch.state is two-way bound and scrollMode is the expression binding {= state ?` &&
-               ` 'VisiblePages' : 'SinglePage' } over the same field - the original's imperative setScrollMode as a binding. // LIVE-TEST: unverified in a running system: the set_size_limit(10, MAIN) follow-up` &&
-               ` capping the pages binding, the shared /PAGES_COUNT driving Input and visiblePagesCount, and the scrollMode expression flip.`.
+               ` 'VisiblePages' : 'SinglePage' } over the same field - the original's imperative setScrollMode as a binding. // NOTE: unverified in a running system: the set_size_limit(10, MAIN) follow-up capping the` &&
+               ` pages binding, the shared /PAGES_COUNT driving Input and visiblePagesCount, and the scrollMode expression flip. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs):` &&
+               ` exactly 10 carousel items render from the 123 bound rows (the set_size_limit(10, MAIN) follow-up caps the binding) with the first product card visible; the pages-count input and scrollMode flip` &&
+               ` remain unexercised but are the proven 007/128 client-side class.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Carousel`                        name = `CarouselWithMorePages`               class = `z2ui5_cl_ai_app_252` path = `src/01/b19/z2ui5_cl_ai_app_252.clas.abap`
         score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         is_post171 = abap_true
         notes = lv_text1
         post171 = `Members newer than 1.71 kept 1:1: sap.m.Carousel.ariaLabelledBy (@1.125) and sap.m.CarouselLayout.scrollMode (@1.121); the CarouselLayout control itself is @1.62. The app needs a UI5 release >= 1.125` &&
