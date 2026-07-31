@@ -1,0 +1,35 @@
+{
+  "class": "z2ui5_cl_ai_app_261",
+  "sample": "sap.uxap.sample.ObjectPageTitleOnLeft",
+  "entity": "sap.uxap.ObjectPageLayout",
+  "file": "src/03/b05/z2ui5_cl_ai_app_261.clas.abap",
+  "batch": "b05",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "Block->content inlining (app 188/217 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the blocks / moreBlocks aggregations hold SharedBlocks BlockBase controls - goals:GoalsBlock, personal:BlockAdresses / BlockPhoneNumber / BlockSocial / BlockMailing / PersonalBlockPart1 / PersonalBlockPart2, employment:BlockJobInfoPart1 / BlockJobInfoPart2 / BlockJobInfoPart3 / BlockEmpDetailPart1 / BlockEmpDetailPart2 / BlockEmpDetailPart3 / EmploymentBlockJob. Each BlockBase is only a lazy-loading wrapper around a static view (forms:SimpleForm with core:Title / Label / Text, or a layout:HorizontalLayout / layout:VerticalLayout tree), so every block view is inlined 1:1 into its aggregation. Absent as a result: the 13 BlockBase controls with their ids, and the block views' own mvc:View roots with their width='100%'."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "EmploymentBlockJob is a two-view BlockBase (Collapsed / Expanded, selected by the block mode, with showSubSectionMore='true' offering the toggle) whose views bind six internal named models emp1>..emp6> that six uxap:ModelMapping elements map onto ObjectPageModel>/Employee/0..5. abap2UI5 serves one default model and has no BlockBase mode toggle, so: the Collapsed view (the block's initial state, two employees - a layout:Grid / layout:VerticalLayout tree with layout:GridData layoutData) is inlined, and emp1>/emp2> are folded onto default-model root fields bound via client->_bind (app 230 precedent). Lost: the six ModelMapping config controls, the Expanded view with employees 3-6, the more/less toggle behind showSubSectionMore, and the mapping indirection - the two records are resolved statically to HRData.json /Employee/0 (Michael Adams, Scrum Master) and /Employee/1 (John Miller, Product Owner)."
+    },
+    {
+      "type": "POST_171",
+      "what": "sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): src='sap-icon://picture' in the snappedHeading and in the headerContent (displaySize='L'). Needs a UI5 runtime >= 1.73."
+    },
+    {
+      "type": "NOTE",
+      "what": "The controller's three MessageToast handlers (handleLink1Press, handleLink2Press, handleEditBtnPress) are dead code in this sample - the view wires no press event and sets no showEditHeaderButton, so nothing can reach them. The port therefore has no on_event method, which is behaviour-identical."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "subSectionLayout='TitleOnLeft' is the point of the sample (subsection titles rendered in a left column instead of above the content). The property is passed through 1:1 but the resulting layout was not verified in a running system."
+    }
+  ]
+}

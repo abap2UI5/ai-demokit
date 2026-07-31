@@ -1,0 +1,31 @@
+{
+  "class": "z2ui5_cl_ai_app_262",
+  "sample": "sap.uxap.sample.ObjectPageResponsiveAvatar",
+  "entity": "sap.uxap.ObjectPageLayout",
+  "file": "src/03/b05/z2ui5_cl_ai_app_262.clas.abap",
+  "batch": "b05",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "sap.uxap.ObjectPageLayout.breakpointChange (@since 1.147, incl. its currentRange / currentWidth parameters) is the whole point of this sample and is wired 1:1 as a view attribute (an added attr - the original attaches it imperatively in onInit via attachBreakpointChange): BREAKPOINT_CHANGE transports ${$parameters>/currentRange} and ${$parameters>/currentWidth}, the backend maps Phone->M / Tablet->L / Desktop and DesktopExtraLarge->XL into the two-way bound Avatar displaySize ({/AVATAR_SIZE}, an added attribute on both Avatars, seeded L like the controller's default branch) and toasts 'Media Range: <range> (<width>px) / Avatar Size: <size>' exactly like onBreakpointChange. Same wiring as app 244 (the sap.f.DynamicPage twin of this sample). Requires a UI5 release >= 1.147; on older releases the event never fires and both Avatars keep the seeded L."
+    },
+    {
+      "type": "POST_171",
+      "what": "sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar (id snappedAvatar) and the headerContent avatar (id headerAvatar). Needs a UI5 runtime >= 1.73."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "showFooter is two-way bound ({/SHOW_FOOTER}, seeded false = the original's ObjectPageLayout default, since the sample sets no showFooter attribute) and the Toggle Footer button flips it on a round-trip (view_model_update) - the faithful abap2UI5 form of the controller's setShowFooter(!getShowFooter()); a scalar literal -> binding is not a structural diff. The two breadcrumb Link presses and the editHeaderButtonPress raise client-composed MessageToasts via _event_client control_global MESSAGE_TOAST (roundtrip-free, apps 005/060/244). Footer round-trip, toast wiring and the editHeaderButtonPress attribute are unverified in a running system."
+    },
+    {
+      "type": "NOTE",
+      "what": "Both Avatar src values point at the sdk.openui5.org host (https://sdk.openui5.org/test-resources/sap/uxap/images/imageID_275314.png) per the offline asset-URL rule; the original uses the relative ./test-resources path. Literal src values are not compared by structural-diff."
+    }
+  ]
+}

@@ -15,10 +15,10 @@ TRAINING.md; for what abap2UI5 can express see CAPABILITIES.md._
 
 | Aspect | State |
 |---|---|
-| Ports | **256** sidecars in `meta/` (src/01: 158 · src/02: 56 · src/03: 12 · src/04: 19 · src/05: 11) |
-| Status ladder | 59 `generated` · 146 `reviewed` · 51 `checked` (live-verified) |
-| Deviations | 4 DROPPED_171 · 118 IMPROVISED · 57 LIVE_TEST · 317 NOTE · 101 POST_171 |
-| Open LIVE_TESTs | **54 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
+| Ports | **262** sidecars in `meta/` (src/01: 158 · src/02: 56 · src/03: 18 · src/04: 19 · src/05: 11) |
+| Status ladder | 65 `generated` · 146 `reviewed` · 51 `checked` (live-verified) |
+| Deviations | 4 DROPPED_171 · 126 IMPROVISED · 63 LIVE_TEST · 322 NOTE · 107 POST_171 |
+| Open LIVE_TESTs | **60 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
 | Declared gate skips | 7 structural-diff · 1 render-smoke (each re-verified per run — a stale skip FAILS) |
 | Out-of-scope ported samples | `z2ui5_cl_ai_app_121 (sap.m.sample.UploadSet — deprecated)` · `z2ui5_cl_ai_app_136 (sap.f.sample.SidePanelSingle — control @since 1.107)` · `z2ui5_cl_ai_app_141 (sap.ui.core.sample.InvisibleMessage — control @since 1.78)` · `z2ui5_cl_ai_app_165 (sap.f.sample.ProductSwitchNavigation — control @since 1.72)` · `z2ui5_cl_ai_app_166 (sap.f.sample.SemanticPage — deprecated)` · `z2ui5_cl_ai_app_203 (sap.m.sample.OverflowToolbarTokenizer — control @since 1.139)` — all decided KEEP permanently 2026-07-30 (per-app rationale in ui5/scope-exceptions.json, revertible); the source-backed scope gate stays hard for NEW undecided entries |
 
@@ -63,6 +63,20 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   (OverflowToolbarTokenizer, experimental @1.139). The source-backed scope
   gate stays a **hard gate** (exit 1) for any NEW ported out-of-scope
   sample without a decided entry, so this class of debt cannot regrow.
+- [ ] **Breadth is exhausted — `--backlog`'s NEW-CONTROL rows are now all
+  test-framework samples** (found while planning batch b05, 2026-07-31). Apps
+  258/259 took the last two portable `NEW-CONTROL` rows
+  (`sap.uxap.ObjectPageDynamicHeaderTitle`). What is left under that marker is
+  ~40 `sap.ui.core` rows that are **not app views**: `sap.ui.test.Opa5` /
+  `gherkin.*` / `matcher.*` (QUnit test demos), `sap.ui.core.routing.*` and
+  `View.*` / `ViewTemplate.*` / `XMLComposite.*` (multi-view Component routing
+  and templating infrastructure). They inflate the breadth signal and will
+  never be ported, so batch planning is **depth-only** from here (lowest
+  `covered-control(n)` first, idiom-first within equal n). Open decision for a
+  maintainer: mark that class out of scope explicitly — a `ui5/`
+  scope/exclude entry per family, so `--backlog` stops offering them — versus
+  leaving them visible as an honest ❌ gap in `api.md`. Nothing was changed
+  unilaterally; the rows are simply skipped.
 - [ ] **LIVE_TEST debt → e2e interactions.** The open `LIVE_TEST` count (see
   the generated table) is the corpus' unverified-behaviour backlog. The
   systematic close path is the e2e harness: grow the `INTERACTIONS` map in

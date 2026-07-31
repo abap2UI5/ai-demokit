@@ -7,6 +7,54 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## sap.uxap batch b05 — the last two portable NEW-CONTROL rows + four ObjectPage idioms (2026-07-31)
+
+- **Apps 258–263** (`src/03/b05`, the first uxap batch since b04): breadth-first
+  first — `ObjectPageHeaderBackgroundDesign` (258) and
+  `ObjectPageProgressRatingIndicators` (259) were the last two `NEW-CONTROL`
+  rows in the backlog that are actually portable app samples
+  (`sap.uxap.ObjectPageDynamicHeaderTitle`; `universe.json` carries `entity:
+  null` for both, so the sidecars name the entity by hand). **Breadth is now
+  exhausted**: every remaining `NEW-CONTROL` row is a `sap.ui.test`
+  (Opa5/gherkin/matcher), routing, `View.*`/`ViewTemplate.*` or
+  `XMLComposite.*` sample — QUnit/test-infrastructure demos, not app views.
+  Batch planning is depth-only from here (see the STATUS.md finding).
+- Then four idiom-first depth picks on `sap.uxap.ObjectPageLayout`, each
+  carrying an idiom no existing uxap port has: 260 `ObjectPageHeaderExpanded`
+  (`preserveHeaderStateOnScroll`), 261 `ObjectPageTitleOnLeft`
+  (`subSectionLayout="TitleOnLeft"` + the `EmploymentBlockJob` ModelMapping
+  fold), 262 `ObjectPageResponsiveAvatar` (the uxap twin of app 244:
+  `breakpointChange` @1.147 → bound Avatar `displaySize`, `showFooter` toggle,
+  `showEditHeaderButton`/`editHeaderButtonPress`, client-composed toasts) and
+  263 `ObjectPageResetSelectedSection` (NavContainer `to` via
+  `_event_client( control_by_id )`, the `navigate` round-trip, the
+  `setSelectedSection` reset).
+- **`selectedSection` is an ASSOCIATION, not a property** (`ObjectPageLayout.js`
+  line 379) — so the usual scalar-literal→two-way-binding move does not apply,
+  and a null association argument is not transportable through
+  `control_by_id` either. App 263 therefore resets by setting the **first
+  section's id**, which is exactly UI5's own fallback in
+  `_adjustSelectedSectionByUXRules`. Rule recorded in AGENTS §10.
+- **SharedBlocks archiving: tried, measured, rejected.** §4 says archive every
+  file the manifest lists, so `ui5/sap.uxap/SharedBlocks/` +
+  `SharedJSONData/` were copied in and the gates re-run. The six existing uxap
+  ports stayed green, but the uxap manifests **over-list**: 259's manifest names
+  the whole `EmploymentBlockJob*` set the view never instantiates, so
+  `structural-diff` demanded phantom `layout:Grid`/`GridData`/`VerticalLayout`
+  controls from ports that correctly do not render them. Reverted; the uxap
+  block templates stay unarchived (as in every earlier uxap batch) and the
+  block inlining stays declared per port. Rule recorded in AGENTS §4.
+- Every block is inlined with its real view content (SimpleForm/Label/Text,
+  the Grid tree of `EmploymentBlockJobCollapsed`, the six Panels of
+  `ConnectionsBlock`) rather than a `core:HTML` placeholder — the 188/217
+  practice, not the 161/187 coloured-div one. `POST_171` declared for
+  `sap.m.Avatar` (control @1.73), `sap.m.Title.content` (@1.87, the Link nested
+  in a Title of 259) and `ObjectPageLayout.breakpointChange` (@1.147).
+- All gates green: abaplint 0, pattern-lint 0, validate-meta 0,
+  structural-diff **0 undeclared** (262 ports), render-smoke 0 failing / 1
+  declared skip, property-check 0, data-fidelity 0, structure-lint 0.
+  Coverage 262/741.
+
 ## Depth ports DateRangeSelection/DateTimePicker Hidden (2026-07-30)
 
 - **Apps 256/257**: the 016 hidden-picker pattern (three anchors →

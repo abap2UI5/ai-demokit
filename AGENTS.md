@@ -191,6 +191,19 @@ under `ui5/mock/` (see its README for provenance); upstream it lives in the
 [UI5/openui5](https://github.com/UI5/openui5) repository (the SAP/openui5 URLs
 redirect) at `src/sap.ui.documentation/test/sap/ui/documentation/sdk/`.
 
+**Exception — the `sap.uxap` `SharedBlocks` templates stay unarchived**
+(measured in batch b05, 2026-07-31). The uxap manifests **over-list**: they
+name the whole `../SharedBlocks/` set regardless of what the view actually
+instantiates (`ObjectPageProgressRatingIndicators` lists every
+`EmploymentBlockJob*` file and never uses one). `structural-diff` resolves
+manifest-listed `../<OtherSample>/*.view.xml` paths, so archiving
+`ui5/sap.uxap/SharedBlocks/` feeds it block views the sample never renders and
+it then demands phantom controls (`layout:Grid`/`GridData`/`VerticalLayout`)
+from correct ports. Tried in both directions: with the folder archived the six
+older uxap ports stayed green but apps 259/261/263 gained undeclared phantom
+diffs. So uxap block templates stay out of `ui5/`, and the BlockBase
+inlining is declared in each sidecar instead (apps 161/187/188/217/258–263).
+
 ---
 
 ## 5. Generation rules
@@ -1051,6 +1064,17 @@ How to record it:
   `unescaped-brace-in-style-content` gates the `<style>` case.
 - **Event args need the `$`-prefixed form** (`${COL}`, `$event.oSource.sId`), not
   a bare `{COL}` — see §5 "Data binding & events".
+- **A UI5 *association* cannot be data-bound** — only properties and
+  aggregations can, so the scalar-literal→two-way-binding move (§5) does not
+  apply to one. `sap.uxap.ObjectPageLayout.selectedSection` reads like a
+  property but is declared under `associations:` (`ObjectPageLayout.js:379`);
+  drive it through `follow_up_action( val = cs_event-control_by_id t_arg = ( id )
+  ( \`setSelectedSection\` ) ( … ) )` instead. An **empty/null association
+  argument is not transportable** either — pass the id you actually want (app
+  263 resets to the first section's id, which is what UI5's own
+  `_adjustSelectedSectionByUXRules` falls back to when the association is
+  empty). Before binding something that "should" be a property, grep the
+  control source for `associations:` (found in batch b05, 2026-07-31).
 - **abap2UI5 has only one default model** — flatten any named-model binding into
   it — see §5 "`model_init` — the model".
 - **`_bind( val = x path = abap_true )` returns the bare model path**
