@@ -40,6 +40,9 @@ of their date and are NOT kept current._
   promoted on a half-check.
 - Harness gained `notToContainText` (poll-until-absent) — a filter assertion
   needs the negative form, and the previous helper had none.
+- **Full sweep after the harness change: `264 port(s), 0 failing`** — the
+  shared parts touched here (`notToContainText`, the extra 060 leg) regress
+  nothing.
 
 ## pr/menu-item-selected-path closed — measured, not assumed (2026-07-31)
 
