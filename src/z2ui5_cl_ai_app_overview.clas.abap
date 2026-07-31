@@ -3753,6 +3753,25 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         since = `1.48.0`
         notes = lv_text1 ) ).
 
+    lv_text1 = `NOTE: The four u:ColorPickerPopover controls are EXTRA in the port (original 0 vs port 4): the controller creates them lazily in JS (new ColorPickerPopover('oColorPickerPopover', { colorString:` &&
+               ` 'blue', mode: 'HSL', change: ... }) and the Large/Simplified/liveChange variants) and opens each with openBy(oEvent.getSource()). abap2UI5 declares them up front in the Table's dependents aggregation` &&
+               ` with the same ids, colorStrings (blue/green/pink/orange), displayModes and mode='HSL', and each Input's valueHelpRequest opens its own popover roundtrip-free via _event_client( control_by_id,` &&
+               ` <id>/openBy/$event.oSource.sId ) - the anchored-open idiom of apps 016/060. Same controls, same configuration, declared instead of constructed; the lazy instantiation and the onExit destroy() are` &&
+               ` gone with the JS. // IMPROVISED: The Inputs' change handler is dropped: handleInputChange validates the typed text with sap.ui.core.CSSColor.isValid and sets the Input's valueState to Error for an` &&
+               ` invalid color. Colour-string validation is frontend logic with no ABAP equivalent that runs per keystroke, and abap2UI5's thin-frontend rule forbids reimplementing it in a formatter or expression`.
+    lv_text1 = lv_text1 && ` binding; a round-trip per change would be a different behaviour. The Input.value stays two-way bound so the typed text reaches the backend, but an invalid entry is not flagged. handleChange's own` &&
+               ` valueState reset (ValueState.None after picking a colour) is therefore not needed either. // LIVE-TEST: Unverified in a running system: (a) that each valueHelpRequest opens ITS ColorPickerPopover` &&
+               ` anchored to the pressed Input (control_by_id + openBy with a domRef arg); (b) that the popover's change round-trip writes the chosen colorString into the right Input and toasts 'Chosen color string:` &&
+               ` <color>' like handleChange - the original tracks the source Input in this.inputId, while here every popover has its own event so the target is known statically; (c) that the liveChange round-trip` &&
+               ` keeps the Text under the last Input in sync while the user drags in the picker.`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.unified`     control = `sap.ui.unified.ColorPickerPopover`     name = `ColorPickerPopover`                  class = `z2ui5_cl_ai_app_268` path = `src/02/b14/z2ui5_cl_ai_app_268.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.48.0`
+        notes = lv_text1 ) ).
+
     lv_text1 = `IMPROVISED: The controller calls Formatting.setCustomCurrencies({BGN4:{digits:4}, WWWW:{digits:5}}) to register two custom currencies used by list five (customCurrencyDataModel). This is a global` &&
                ` frontend i18n formatting config, not a control and not expressible in the thin abap2UI5 frontend; ported without it, so the BGN4/WWWW currencies in list five render with UI5's default digit count` &&
                ` instead of 4/5 digits. // LIVE-TEST: The various/nonDecimal arrays back the u:Currency value property (float) as ABAP packed fields, matching the sample's JSON numbers; the bigNumber array (JSON` &&

@@ -7,6 +7,29 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## Depth port ColorPickerPopover — and two skipped near-duplicates (2026-07-31)
+
+- **App 268** (`sap.ui.unified.sample.ColorPickerPopover`, b14): the controller
+  lazily constructs four `sap.ui.unified.ColorPickerPopover`s (Default / Large /
+  Simplified / with liveChange) and opens each with `openBy(input)`. The port
+  declares all four in the Table's `dependents` with the same ids and
+  configuration and opens them roundtrip-free via
+  `_event_client( control_by_id, <id>/openBy/$event.oSource.sId )` — the
+  anchored-open idiom of apps 016/060, now on a control the corpus had not
+  used. `change` / `liveChange` round-trip so the backend writes the chosen
+  colour into the right Input, toasts it and keeps the liveChange Text in sync.
+- **IMPROVISED, deliberately**: `handleInputChange` validates the typed text
+  with `sap.ui.core.CSSColor.isValid` and paints the Input's `valueState`. That
+  is per-keystroke frontend logic; the thin-frontend rule forbids
+  reimplementing it in a formatter, and a round-trip per keystroke would be a
+  different behaviour — so an invalid entry is simply not flagged.
+- **`ColorPicker` and `ColorPickerLarge` skipped as near-duplicates**: both are
+  the already-ported app 112 (`ColorPickerSimplified`) with a different
+  `displayMode` — same view, same controller. AGENTS §1 says a depth port that
+  exercises nothing new is corpus weight without training signal, so the
+  ColorPicker family contributes exactly one more port, the one with a genuinely
+  new control and wiring.
+
 ## e2e round 2 results + depth port DynamicSideContentEqualSplit (2026-07-31)
 
 - The 207 fix is live: the rebuilt backend shows `typeBinding: '/LISTTYPE'` and
