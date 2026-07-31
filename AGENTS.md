@@ -36,6 +36,23 @@ computed per sample from `ui5/universe.json` by `generate-coverage.mjs`
 **never ported**; `node scripts/generate-coverage.mjs --backlog` prints the
 in-scope, unported samples for batch planning.
 
+**Second scope rule — the sample must be an app view** (maintainer decision
+2026-07-31). A control can be perfectly 1.71-clean while the sample is not a UI
+at all: UI5's own **test infrastructure** (`sap.ui.test.*` — OPA5, gherkin,
+matcher demos are QUnit pages), **Component routing** across several
+views/targets (`sap.ui.core.routing.*` — an abap2UI5 app serves one view per
+round-trip), and the **view-type / XML-templating / XMLComposite authoring**
+demos (`View.*`, `ViewTemplate.*`, `XMLComposite.*` — they demonstrate how a
+view is produced, not a UI to rebuild). These families are listed in
+`ui5/scope-nonapp.json` with a per-family reason and are **out of scope**:
+`scopeOf` returns `nonapp`, `--backlog` never offers them, `api.md` marks them
+`✗`, and `scripts/scope-of.mjs --sample <Name>` reports them
+`OUT_OF_SCOPE (not an app view — …)`. They previously dominated the
+`NEW-CONTROL` rows and made breadth look unfinished when it was not (38
+samples). Adding a family is a maintainer decision — write the reason into the
+file; a ported sample that matches hits the same hard scope gate as a
+deprecated/newer one.
+
 > **⚠️ Verify scope from source before porting.** Since 2026-07-26 the gate is
 > no longer blind: `ui5/properties.json` carries each control's class-level
 > `@since`/`@deprecated` (parsed from the OpenUI5 sources by

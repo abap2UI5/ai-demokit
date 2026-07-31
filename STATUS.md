@@ -63,20 +63,26 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   (OverflowToolbarTokenizer, experimental @1.139). The source-backed scope
   gate stays a **hard gate** (exit 1) for any NEW ported out-of-scope
   sample without a decided entry, so this class of debt cannot regrow.
-- [ ] **Breadth is exhausted — `--backlog`'s NEW-CONTROL rows are now all
-  test-framework samples** (found while planning batch b05, 2026-07-31). Apps
-  258/259 took the last two portable `NEW-CONTROL` rows
-  (`sap.uxap.ObjectPageDynamicHeaderTitle`). What is left under that marker is
-  ~40 `sap.ui.core` rows that are **not app views**: `sap.ui.test.Opa5` /
-  `gherkin.*` / `matcher.*` (QUnit test demos), `sap.ui.core.routing.*` and
-  `View.*` / `ViewTemplate.*` / `XMLComposite.*` (multi-view Component routing
-  and templating infrastructure). They inflate the breadth signal and will
-  never be ported, so batch planning is **depth-only** from here (lowest
-  `covered-control(n)` first, idiom-first within equal n). Open decision for a
-  maintainer: mark that class out of scope explicitly — a `ui5/`
-  scope/exclude entry per family, so `--backlog` stops offering them — versus
-  leaving them visible as an honest ❌ gap in `api.md`. Nothing was changed
-  unilaterally; the rows are simply skipped.
+- [x] **Non-app samples are out of scope** (user decision 2026-07-31, found
+  while planning batch b05). Apps 258/259 took the last two portable
+  `NEW-CONTROL` rows (`sap.uxap.ObjectPageDynamicHeaderTitle`); everything left
+  under that marker was UI5's own **test infrastructure** (`sap.ui.test.*` —
+  OPA5 / gherkin / matcher QUnit pages), **Component routing**
+  (`sap.ui.core.routing.*`) and the **view-type / XML-templating /
+  XMLComposite authoring** demos (`View.*`, `ViewTemplate.*`,
+  `XMLComposite.*`) — samples whose control is 1.71-clean but that are not app
+  views, so there is nothing to rebuild 1:1. They are now a **second scope
+  rule** (AGENTS §1): the families live in `ui5/scope-nonapp.json` with a
+  reason each, `scopeOf` returns `nonapp`, `--backlog` never offers them,
+  `api.md` still lists them `✗`, and `scope-of.mjs --sample` reports
+  `OUT_OF_SCOPE (not an app view — …)`. 38 samples moved out of scope, so the
+  honest denominator is **627 in-scope** (was 665) and `sap.ui.core` reads
+  76.2 % instead of 27.1 %. Batch planning is **depth-only** from here (lowest
+  `covered-control(n)` first, idiom-first within equal n).
+  Still undecided, deliberately left in scope: `ControllerExtension`
+  (`sap.ui.core.mvc.ControllerExtension`) — a JS controller-extension demo that
+  is arguably the same class, and the two `BoundFilters.*` samples
+  (`sap.ui.model.Filter`), which ARE real app views and should be ported.
 - [ ] **LIVE_TEST debt → e2e interactions.** The open `LIVE_TEST` count (see
   the generated table) is the corpus' unverified-behaviour backlog. The
   systematic close path is the e2e harness: grow the `INTERACTIONS` map in

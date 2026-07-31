@@ -7,6 +7,34 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## Second scope rule: non-app samples are out of scope (2026-07-31)
+
+- **User decision on the b05 finding**: the sample families that are not app
+  views are **out of scope**, not an open ❌ gap. Implemented as a declarative
+  `ui5/scope-nonapp.json` (one entry per family, each with its reason) read by
+  both `generate-coverage.mjs` (`scopeOf` → new verdict `nonapp`) and
+  `scripts/scope-of.mjs` (`--sample <Name>` → `OUT_OF_SCOPE (not an app
+  view — …)`, exit 1), so the pre-port check and the coverage gate cannot
+  drift apart.
+- Families: `sap.ui.test.*` (OPA5 / gherkin / matcher — QUnit test pages),
+  `sap.ui.core.routing.*` (Component routing across several views/targets;
+  an abap2UI5 app serves one view per round-trip), and `View.*` /
+  `ViewTemplate.*` / `XMLComposite.*` in `sap.ui.core` (view-type,
+  OData-annotation templating and composite-control authoring demos — they
+  demonstrate how a view is produced rather than being one).
+- Effect: **38 samples** move out of scope. In-scope denominator 665 → **627**,
+  overall coverage 39.4 % → **41.8 %**, `sap.ui.core` 27.1 % → **76.2 %** —
+  the honest numbers, since those 38 were never portable. `--backlog`'s
+  `NEW-CONTROL` list drops from ~43 rows to three real ones
+  (`ControllerExtension`, `BoundFilters.FilterBar`,
+  `BoundFilters.FilteredListInTable`) plus the three HOLDOUTs. They stay listed
+  in `api.md` marked `✗` for completeness.
+- Deliberately left **in** scope: the two `BoundFilters.*` samples (real app
+  views on `sap.ui.model.Filter`, worth porting) and `ControllerExtension`
+  (arguably the same class as `View.*`; flagged in STATUS.md rather than
+  decided unilaterally). A ported sample matching a non-app family hits the
+  same hard scope gate as a deprecated/newer one — no port matches today.
+
 ## sap.uxap batch b05 — the last two portable NEW-CONTROL rows + four ObjectPage idioms (2026-07-31)
 
 - **Apps 258–263** (`src/03/b05`, the first uxap batch since b04): breadth-first
