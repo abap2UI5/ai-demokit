@@ -7,6 +7,16 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## Depth ports DateRangeSelection/DateTimePicker Hidden (2026-07-30)
+
+- **Apps 256/257**: the 016 hidden-picker pattern (three anchors →
+  roundtrip-free `openBy`, client-composed change toast) on the two sibling
+  pickers, texts/ids/toast prefixes 1:1 from their samples. POST_171:
+  `ariaHasPopup` (Button @1.84 / Link @1.86) + `hideInput`/`openBy` @1.97.
+  Their LIVE_TESTs carry the 016 headless focus-loop caveat forward. The
+  four-port picker family (253–257) closes the DatePicker-clan depth row.
+  Coverage 256/741.
+
 ## Depth ports DateRangeSelectionValueState + DateTimePickerValueState (2026-07-30)
 
 - **Apps 254/255**: the 253 valueState pattern applied to the two sibling
