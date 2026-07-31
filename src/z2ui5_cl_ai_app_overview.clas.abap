@@ -3440,6 +3440,26 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         since = `1.30`
         notes = lv_text1 ) ).
 
+    lv_text1 = `IMPROVISED: The named img> model ({img>/products/pic1}, from sap/ui/demo/mock/img.json) is resolved STATICALLY to the URL it points at (HT-7777-large.jpg, on the sdk.openui5.org host per the offline` &&
+               ` asset rule) - same fold and same reasoning as app 267: a pure display asset that never changes, but the live model indirection is gone. // IMPROVISED: The Slider's liveChange attribute is dropped:` &&
+               ` handleSliderChange writes a percentage width straight onto the container's DOM node (byId('sideContentContainer').$().width(iValue + '%')). The container is a sap.m.Page, which has no width property` &&
+               ` to bind (apps 213/214 hit the same jQuery idiom on controls that DO have one). The Slider itself is kept 1:1 so the footer is complete, but moving it has no effect. // NOTE: The controller's media` &&
+               ` model (new JSONModel(Device.system)) is abap2UI5's shared device> model, so every {media>/phone} binding becomes {= !${device>/system/phone}} on the same data - the Close button, the Slider and the` &&
+               ` width hint Text keep their original visibility rules. A device-branch fold onto the framework's own model, no loss. // IMPROVISED: updateShowSideContentButtonVisibility is reproduced only by its`.
+    lv_text1 = lv_text1 && ` breakpoint half. The original computes !(breakpoint === 'S' || oDSC.isSideContentVisible()), i.e. it also hides the 'Open Side Content' button whenever the side content happens to be visible;` &&
+               ` isSideContentVisible() is client state the backend cannot read. The port keeps the button's visibility bound to the breakpoint (visible unless 'S') and flips the same flag in the two press handlers` &&
+               ` (hide -> button shows, show -> button hides), which matches the original in every path the sample offers - but a side-content visibility change caused by anything else (e.g. the Toggle button) does` &&
+               ` not update it. // LIVE-TEST: Unverified in a running system: handleToggleClick as _event_client( control_by_id, DynamicSideContent/toggle ), the two setShowSideContent(false/true) follow-up actions,` &&
+               ` and the BREAKPOINT_CHANGED round-trip that drives the Toggle button's enabled flag (S only) and the Open Side Content button's visibility. The FeedListItem list over the sample's own feed.json (4` &&
+               ` rows verbatim, author pictures on upload.wikimedia.org exactly as the mock has them) renders in render-smoke but its feed layout was not seen live.`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.DynamicSideContent`      name = `DynamicSideContentProduct`           class = `z2ui5_cl_ai_app_269` path = `src/02/b14/z2ui5_cl_ai_app_269.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.30`
+        notes = lv_text1 ) ).
+
     lv_text1 = `NOTE: The original binds the Image src against a separate 'img' JSON model ({img>/products/pic1}) loaded from sap/ui/demo/mock/img.json. abap2UI5 serves one default model, so the picture path is` &&
                ` folded into it and the src binds it directly (client->_bind( pic1 )) - the 'img>' prefix is dropped and the last path segment is identical, which structural-diff matches. The mock's host-relative` &&
                ` path is resolved to the OpenUI5 host (sdk.openui5.org) per the asset-URL rule. // NOTE: The sample's style.css (background colours on the FixFlex fixed/flexible areas, referenced by` &&

@@ -7,6 +7,29 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## Depth port DynamicSideContentProduct + full sweep green (2026-07-31)
+
+- **Full e2e sweep after the b14 ports: `266 port(s), 0 failing`** (268/269 came
+  after that build and are covered by the next one).
+- **App 269** (`sap.ui.layout.sample.DynamicSideContentProduct`, b14): the
+  richer DynamicSideContent sample — `sideContentFallDown="BelowM"`, a
+  `FeedListItem` list over the sample's own `feed.json` (4 rows verbatim) plus a
+  `FeedInput`, and three controller behaviours reproduced server-side:
+  `toggle()` and `setShowSideContent(false/true)` through `control_by_id`, and
+  the `breakpointChanged` round-trip driving the Toggle button's `enabled`
+  (S only) and the Open-Side-Content button's `visible`.
+- The controller's **media model** (`new JSONModel(Device.system)`) is
+  abap2UI5's shared `device>` model, so `{media>/phone}` folds to
+  `{= !${device>/system/phone}}` on the same data — a NOTE, no loss.
+- **One honest half-reproduction, declared:**
+  `updateShowSideContentButtonVisibility` computes
+  `!(breakpoint === 'S' || oDSC.isSideContentVisible())`. The second term is
+  client state the backend cannot read, so the port binds the button to the
+  breakpoint and flips the flag in both press handlers — identical in every
+  path the sample offers, but a side-content change from elsewhere (the Toggle
+  button) does not update it. IMPROVISED rather than a silent approximation.
+- `sap.ui.layout` coverage 32.8 % → **34.4 %**.
+
 ## Depth port ColorPickerPopover — and two skipped near-duplicates (2026-07-31)
 
 - **App 268** (`sap.ui.unified.sample.ColorPickerPopover`, b14): the controller
