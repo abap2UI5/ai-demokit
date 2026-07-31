@@ -3178,7 +3178,50 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `NOTE: The sample itself is just a MessageStrip + Link pointing at the Theme Parameter Toolbox (the real demo content lives in that external tool); reproduced 1:1. The Link href is the original's` &&
                  ` host-relative 'test-resources/sap/m/demokit/theming/webapp/index.html' rewritten to the OpenUI5 host https://sdk.openui5.org/test-resources/sap/m/demokit/theming/webapp/index.html per the runtime` &&
-                 ` asset-URL rule (an abap2UI5 system does not serve the demokit path; app 152 precedent).` )
+                 ` asset-URL rule (an abap2UI5 system does not serve the demokit path; app 152 precedent).` ) ).
+
+    lv_text1 = `POST-1.71: The sample's whole point is the binding-info parameter 'boundFilters' - filter values that are binding expressions, so the aggregation re-filters whenever a value changes through data` &&
+               ` binding. It is 'Supported since 1.146.0' (source: fork-openui5/src/sap.ui.core/src/sap/ui/base/ManagedObject.js:3711, the sample's manifest declares minUI5Version 1.146.0) and is passed through 1:1` &&
+               ` in the rows binding-info string. A binding-info parameter is invisible to the property gate (it is not a control member), so this is a by-policy declaration; the app needs a UI5 release >= 1.146. //` &&
+               ` NOTE: Named-model fold: the controller registers two JSONModels, 'filter' (departmentPrefix / locationPrefix / firstName / lastName, all undefined initially) and 'ui' (showOrganizational: true).` &&
+               ` abap2UI5 serves one default model, so both fold onto the default-model root with the same leaf names ({filter>/departmentPrefix} -> {/DEPARTMENTPREFIX}, {ui>/showOrganizational} ->` &&
+               ` {/SHOWORGANIZATIONAL}) - same data, same leaves, renders identically, so NOTE and not IMPROVISED (AGENTS §5 settled policy 2026-07-24). The Inputs keep their odata String type 1:1 (core:require`.
+    lv_text1 = lv_text1 && ` StringType), which maps empty input to null. // NOTE: onToggleFilters flips ui>/showOrganizational and applies the other filter pair with oListBinding.filter(aFilters, FilterType.ApplicationBound).` &&
+               ` abap2UI5 bakes binding info at render time, so the TOGGLE_FILTERS round-trip flips the bound flag and redraws the view with the other boundFilters list in the rows binding (app 241 precedent, 'the` &&
+               ` flag is baked into the handler at render time'). Same observable behaviour - the visible Inputs switch via the bound visible expressions and the table re-filters on the other pair - through a redraw` &&
+               ` instead of an imperative filter() call; the entered prefixes survive because they are two-way bound. The controller's aOrgFilters order (department, location) is the view's boundFilters order` &&
+               ` reversed (location, department); the port keeps the view's order, which is semantically identical (AND-combined). // LIVE-TEST: Unverified in a running system: that the bound filter values re-filter` &&
+               ` the sap.ui.table rows as the user types (boundFilters + odata String type mapping empty to null, i.e. an empty prefix must drop the filter rather than match nothing), and that the TOGGLE_FILTERS`.
+    lv_text1 = lv_text1 && ` redraw swaps the filter pair without losing the entered prefixes.`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.core`        control = `sap.ui.model.Filter`                   name = `BoundFilters.FilterBar`              class = `z2ui5_cl_ai_app_264` path = `src/02/b13/z2ui5_cl_ai_app_264.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `The sample's whole point is the binding-info parameter 'boundFilters' - filter values that are binding expressions, so the aggregation re-filters whenever a value changes through data binding. It is` &&
+                 ` 'Supported since 1.146.0' (source: fork-openui5/src/sap.ui.core/src/sap/ui/base/ManagedObject.js:3711, the sample's manifest declares minUI5Version 1.146.0) and is passed through 1:1 in the rows` &&
+                 ` binding-info string. A binding-info parameter is invisible to the property gate (it is not a control member), so this is a by-policy declaration; the app needs a UI5 release >= 1.146.` ) ).
+
+    lv_text1 = `POST-1.71: The sample's whole point is the binding-info parameter 'boundFilters', 'Supported since 1.146.0' (source: fork-openui5/src/sap.ui.core/src/sap/ui/base/ManagedObject.js:3711; the manifest` &&
+               ` declares minUI5Version 1.146.0). Here it filters each row's Select items by the RELATIVE row field value1: '{REGION}', so every row lists only the account managers of its own region and re-filters` &&
+               ` when that row's region changes. Passed through 1:1 as a raw binding-info string; a binding-info parameter is invisible to the property gate, so this is a by-policy declaration and the app needs UI5` &&
+               ` >= 1.146. // NOTE: No named models in this sample - both arrays (/customers, /accountManagers) already live in the default model and are bound with client->_bind (the Select's items path via _bind(` &&
+               ` val = t_accountmanagers path = abap_true ), never as text). Inside the binding-info strings the paths use the ABAP upper-cased field names: 'REGION' in the boundFilters entry and {parts:` &&
+               ` ['FIRSTNAME', 'LASTNAME']} in the core:Item text, matching the original's 'region' / ['firstName', 'lastName']. Full mock row set inlined (20 customers, 13 account managers, byte-identical to`.
+    lv_text1 = lv_text1 && ` Component.js). // LIVE-TEST: Unverified in a running system: that each row's Select really shows only its region's account managers (per-row bound filter over a relative value), that` &&
+               ` forceSelection='false' plus selectedKey={ACCOUNTMANAGERID} preselects the right manager, and that the composite {parts: [...]} item text renders 'First Last'.`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.core`        control = `sap.ui.model.Filter`                   name = `BoundFilters.FilteredListInTable`    class = `z2ui5_cl_ai_app_265` path = `src/02/b13/z2ui5_cl_ai_app_265.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `The sample's whole point is the binding-info parameter 'boundFilters', 'Supported since 1.146.0' (source: fork-openui5/src/sap.ui.core/src/sap/ui/base/ManagedObject.js:3711; the manifest declares` &&
+                 ` minUI5Version 1.146.0). Here it filters each row's Select items by the RELATIVE row field value1: '{REGION}', so every row lists only the account managers of its own region and re-filters when that` &&
+                 ` row's region changes. Passed through 1:1 as a raw binding-info string; a binding-info parameter is invisible to the property gate, so this is a by-policy declaration and the app needs UI5 >= 1.146.` ) ).
+
+    result = VALUE #( BASE result
       ( module = `sap.ui.core`        control = `sap.ui.model.type.Currency`            name = `TypeCurrency`                        class = `z2ui5_cl_ai_app_135` path = `src/02/b04/z2ui5_cl_ai_app_135.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`

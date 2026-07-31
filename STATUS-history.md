@@ -7,6 +7,40 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## Batch b13 — BoundFilters: breadth closed except the hold-out set (2026-07-31)
+
+- **Apps 264/265** (`src/02/b13`, `sap.ui.model.Filter`): the two
+  `BoundFilters.*` samples were the last `NEW-CONTROL` rows left after the
+  non-app scope rule. With them ported, **every uncovered control in the
+  backlog is a HOLDOUT** (`BusyIndicator`, `RadioButtonGroup`,
+  `RatingIndicator`, reserved for the regression probe) — breadth is closed,
+  planning is depth-only.
+- **The idiom both samples exist for**: `boundFilters`, a binding-info
+  parameter whose filter *values are binding expressions*, so the aggregation
+  re-filters itself when a bound value changes (`ManagedObject.js:3711`,
+  "Supported since 1.146.0"; both manifests declare `minUI5Version 1.146.0`).
+  It goes into the raw `rows`/`items` binding-info string verbatim — 264 binds
+  the four filter prefixes with `client->_bind( … )`, 265 uses the **relative
+  row field** `value1: '{REGION}'` so every row's Select lists only its own
+  region's account managers.
+- **New property-gate blind spot recorded** (AGENTS §5): a binding-info
+  parameter is not a control member, so it appears in **no** gate —
+  `property-check` cannot see `boundFilters` at all. Declared `POST_171` by
+  policy in both sidecars.
+- **`onToggleFilters` → re-bake redraw** (app 241 idiom): the controller swaps
+  the whole filter set with `oListBinding.filter(aOther,
+  FilterType.ApplicationBound)`. abap2UI5 bakes binding info at render time, so
+  `TOGGLE_FILTERS` flips the two-way bound `showorganizational` flag and calls
+  `view_display( )` again with the other `boundFilters` list — same observable
+  behaviour, no `binding_call` needed. CAPABILITIES' binding-filter row now
+  carries both forms.
+- Named-model fold in 264 (`filter>` + `ui>` → default-model root, same leaf
+  names) is a **NOTE**, not IMPROVISED — same data, renders identically.
+- Both ports land with **zero structural diffs** and green on every gate first
+  pass: abaplint 0, pattern-lint 0, validate-meta 0, structural-diff 0
+  undeclared, render-smoke 0 failing, property-check 0, data-fidelity 0,
+  structure-lint 0. Coverage 264/741.
+
 ## Second scope rule: non-app samples are out of scope (2026-07-31)
 
 - **User decision on the b05 finding**: the sample families that are not app

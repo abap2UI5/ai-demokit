@@ -291,6 +291,10 @@ source of truth:
   invisible at the attribute-name level; a member **relocated to a newer base
   class** reads as that base's version (e.g. `NavigationListItem.expanded` shows
   1.121 though the property predates 1.71 — declare it with that note); and a
+  a **binding-info parameter** (`boundFilters` @1.146, `templateShareable`, …)
+  carries its own `@since` in the `ManagedObject` JSDoc and is **not a control
+  member at all**, so no gate can ever see it — declare it `POST_171` by policy
+  (apps 264/265, found 2026-07-31); and a
   member/control **not present in `properties.json` at all** is silently passed
   (e.g. `IllustratedMessage` @1.98, `Input.autocomplete` @1.108, and
   `sap.ui.core.CommandExecution` were all invisible to the gate on app 232/233).

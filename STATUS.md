@@ -15,10 +15,10 @@ TRAINING.md; for what abap2UI5 can express see CAPABILITIES.md._
 
 | Aspect | State |
 |---|---|
-| Ports | **262** sidecars in `meta/` (src/01: 158 · src/02: 56 · src/03: 18 · src/04: 19 · src/05: 11) |
-| Status ladder | 65 `generated` · 146 `reviewed` · 51 `checked` (live-verified) |
-| Deviations | 4 DROPPED_171 · 126 IMPROVISED · 63 LIVE_TEST · 322 NOTE · 107 POST_171 |
-| Open LIVE_TESTs | **60 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
+| Ports | **264** sidecars in `meta/` (src/01: 158 · src/02: 58 · src/03: 18 · src/04: 19 · src/05: 11) |
+| Status ladder | 67 `generated` · 146 `reviewed` · 51 `checked` (live-verified) |
+| Deviations | 4 DROPPED_171 · 126 IMPROVISED · 65 LIVE_TEST · 325 NOTE · 109 POST_171 |
+| Open LIVE_TESTs | **62 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
 | Declared gate skips | 7 structural-diff · 1 render-smoke (each re-verified per run — a stale skip FAILS) |
 | Out-of-scope ported samples | `z2ui5_cl_ai_app_121 (sap.m.sample.UploadSet — deprecated)` · `z2ui5_cl_ai_app_136 (sap.f.sample.SidePanelSingle — control @since 1.107)` · `z2ui5_cl_ai_app_141 (sap.ui.core.sample.InvisibleMessage — control @since 1.78)` · `z2ui5_cl_ai_app_165 (sap.f.sample.ProductSwitchNavigation — control @since 1.72)` · `z2ui5_cl_ai_app_166 (sap.f.sample.SemanticPage — deprecated)` · `z2ui5_cl_ai_app_203 (sap.m.sample.OverflowToolbarTokenizer — control @since 1.139)` — all decided KEEP permanently 2026-07-30 (per-app rationale in ui5/scope-exceptions.json, revertible); the source-backed scope gate stays hard for NEW undecided entries |
 
@@ -83,8 +83,9 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   in the same pass (user decision): abap2UI5 has no frontend controller to
   extend, so the sample carries no view idiom to rebuild. Deliberately kept
   **in** scope: the two `BoundFilters.*` samples (`sap.ui.model.Filter`) — real
-  app views, and now the only `NEW-CONTROL` rows left outside the hold-out
-  set.
+  app views, ported the same day as apps 264/265, so **every remaining
+  uncovered control in the backlog is a HOLDOUT**: breadth is closed and batch
+  planning is depth-only.
 - [ ] **LIVE_TEST debt → e2e interactions.** The open `LIVE_TEST` count (see
   the generated table) is the corpus' unverified-behaviour backlog. The
   systematic close path is the e2e harness: grow the `INTERACTIONS` map in
@@ -94,7 +95,9 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   Every green interaction is human live-check time saved.
 - [ ] **Property-gate residual limits** (documented in AGENTS §5): enum
   *values* newer than 1.71 are invisible at the attribute-name level; a
-  member relocated to a newer base class reads as that base's version. A
+  member relocated to a newer base class reads as that base's version; and a
+  **binding-info parameter** (`boundFilters` @1.146, apps 264/265) is not a
+  control member at all, so it appears in no gate — declare it by policy. A
   green property-check still does not prove a port ≤ 1.71-clean — the
   control-level `scope-of` check plus by-policy POST_171 declarations remain
   required.
