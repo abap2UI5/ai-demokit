@@ -31,8 +31,8 @@
       "what": "the icon 'test-resources/sap/m/images/george_washington.jpg' is rehosted to the OpenUI5 host (https://sdk.openui5.org/test-resources/...) per the project asset-URL rule; presence of the icon attribute is unchanged."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "unverified in a running system: the ENABLE_POST/DISABLE_POST round-trips combining follow_up_action(enablePostButton) with popup_destroy in one response (the app-019 toast+destroy precedent, but with a control method)."
+      "type": "NOTE",
+      "what": "unverified in a running system: the ENABLE_POST/DISABLE_POST round-trips combining follow_up_action(enablePostButton) with popup_destroy in one response (the app-019 toast+destroy precedent, but with a control method). **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the action dialog's 'Enable Post Button' click runs the enablePostButton follow-up and the popup_destroy closes the dialog in the same response."
     }
   ]
 }

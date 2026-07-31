@@ -25,7 +25,7 @@
     },
     {
       "type": "LIVE_TEST",
-      "what": "The per-button dialog configuration, the client-side search filter, multi-select confirm and the value-help selection copy-back need an in-system check; machine gates only verify the views are valid."
+      "what": "The per-button dialog configuration, the client-side search filter, multi-select confirm and the value-help selection copy-back need an in-system check; machine gates only verify the views are valid. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the dialog opens with the full 123-row mock and the client-side Contains search filters to 'Gladiator MX'; multi-select confirm and the value-help copy-back remain unexercised."
     },
     {
       "type": "POST_171",

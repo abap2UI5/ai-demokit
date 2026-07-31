@@ -37,7 +37,7 @@
     },
     {
       "type": "LIVE_TEST",
-      "what": "all toasts were switched from message_toast_display round-trips to roundtrip-free client-composed control_global toasts on 2026-07-22 (the app is now init-only) - re-verify each button/menu still toasts its text."
+      "what": "all toasts were switched from message_toast_display round-trips to roundtrip-free client-composed control_global toasts on 2026-07-22 (the app is now init-only) - re-verify each button/menu still toasts its text. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): opening the 'File' MenuButton and selecting 'Save' toasts 'Action triggered on item: Save' (the ${$parameters>/item}.getText() template resolves); the remaining buttons/defaultAction wires are the same class but unexercised."
     }
   ]
 }

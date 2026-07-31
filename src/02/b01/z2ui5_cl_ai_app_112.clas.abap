@@ -51,7 +51,8 @@ CLASS z2ui5_cl_ai_app_112 IMPLEMENTATION.
                     )->a( n = `displayMode` v = `Simplified`
                 )->leaf( n = `Button` ns = `m`
                     )->a( n = `text`  v = `Open ColorPicker in a ResponsivePopover`
-                    )->a( n = `press` v = client->_event( `OPEN_POPOVER` ) ).
+                    )->a( n = `press` v = client->_event( val   = `OPEN_POPOVER`
+                                                          t_arg = VALUE #( ( `$event.oSource.sId` ) ) ) ).
 
     client->view_display( view->stringify( ) ).
 
@@ -63,7 +64,42 @@ CLASS z2ui5_cl_ai_app_112 IMPLEMENTATION.
     CASE client->get( )-event.
 
       WHEN `OPEN_POPOVER`.
-        client->message_toast_display( `ColorPicker popover requested` ).
+        " original openPopover: a controller-built ResponsivePopover with an
+        " HSL/Simplified ColorPicker, opened by the pressed button; the
+        " Device.system.phone branch (Submit/Cancel buttons vs no header) is
+        " expressed via device> model bindings instead of a JS branch
+        DATA(popover) = z2ui5_cl_ai_xml=>factory( ).
+
+        popover->open( n = `FragmentDefinition` ns = `core`
+            )->a( n = `xmlns:core` v = `sap.ui.core`
+            )->a( n = `xmlns:u`    v = `sap.ui.unified`
+            )->a( n = `xmlns`      v = `sap.m`
+
+            )->open( `ResponsivePopover`
+                )->a( n = `title`      v = `Color Picker`
+                )->a( n = `showHeader` v = `{device>/system/phone}`
+
+                )->open( `content`
+                    )->leaf( n = `ColorPicker` ns = `u`
+                        )->a( n = `mode`        v = `HSL`
+                        )->a( n = `displayMode` v = `Simplified`
+
+                )->shut(
+                )->open( `beginButton`
+                    )->leaf( `Button`
+                        )->a( n = `text`    v = `Submit`
+                        )->a( n = `visible` v = `{device>/system/phone}`
+                        )->a( n = `press`   v = client->_event_client( client->cs_event-popover_close )
+
+                )->shut(
+                )->open( `endButton`
+                    )->leaf( `Button`
+                        )->a( n = `text`    v = `Cancel`
+                        )->a( n = `visible` v = `{device>/system/phone}`
+                        )->a( n = `press`   v = client->_event_client( client->cs_event-popover_close ) ).
+
+        client->popover_display( xml   = popover->stringify( )
+                                 by_id = client->get_event_arg( ) ).
 
     ENDCASE.
 

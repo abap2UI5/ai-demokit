@@ -16,8 +16,8 @@
       "what": "onSemanticButtonPress toasts each action's class name, reproduced by passing the name as a t_arg literal. The SortSelect change toasts the two-way selectedKey (sort_key); PagingButton positionChange transports ${$parameters>/newPosition}; the custom footer / share buttons transport $event.oSource.sId."
     },
     {
-      "type": "IMPROVISED",
-      "what": "The MultiSelectAction and MessagesIndicator handlers are simplified to fixed toasts, losing behavior the framework can express: the original toasts Pressed/Unpressed from the toggle state (readable via a ${$source>/pressed} t_arg) and opens a MessagePopover over the message model with one seeded 'Something wrong happened' error message (expressible via mvc:dependents + toggleBy per app 066, app-authored messages per app 065); without the seeded message the MessagesIndicator button stays invisible. Review 2026-07-27: needs rework, retyped from NOTE - a lost behavior is IMPROVISED, not NOTE."
+      "type": "NOTE",
+      "what": "MultiSelectAction and MessagesIndicator reproduced 1:1 since 2026-07-30. onMultiSelectPress: the press transports ${$source>/pressed} and the backend toasts 'MultiSelect Pressed'/'MultiSelect Unpressed' from the toggle state exactly like getPressed(). onMessagesButtonPress: the controller-built MessagePopover over the message model is declared as a dependent of the MessagesIndicator (added controls vs the original view.xml: MessagePopover + MessageItem with the original's {message>description}/{message>type}/{message>message} template) and toggled roundtrip-free via _event_client control_by_id toggleBy ($event.oSource.sId) - the _messagePopover.toggle(oMessagesButton) equivalent. onInit's MessageManager.addMessages seed ('Something wrong happened', Error) rides on an added z2ui5.cc.MessageManager bridge control (in an added semantic content aggregation, declared) with its one-row items table - the app-065 idiom."
     },
     {
       "type": "NOTE",

@@ -7,6 +7,289 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## Depth ports DateRangeSelection/DateTimePicker Hidden (2026-07-30)
+
+- **Apps 256/257**: the 016 hidden-picker pattern (three anchors →
+  roundtrip-free `openBy`, client-composed change toast) on the two sibling
+  pickers, texts/ids/toast prefixes 1:1 from their samples. POST_171:
+  `ariaHasPopup` (Button @1.84 / Link @1.86) + `hideInput`/`openBy` @1.97.
+  Their LIVE_TESTs carry the 016 headless focus-loop caveat forward. The
+  four-port picker family (253–257) closes the DatePicker-clan depth row.
+  Coverage 256/741.
+
+## Depth ports DateRangeSelectionValueState + DateTimePickerValueState (2026-07-30)
+
+- **Apps 254/255**: the 253 valueState pattern applied to the two sibling
+  pickers (254 adds the `delimiter` en dash, 255 the DTP id/labelFor pair).
+  Both green across every gate first pass. Coverage 254/741.
+
+## Depth port DatePickerValueState (2026-07-30)
+
+- **App 253** (`sap.m.sample.DatePickerValueState`): bound
+  valueState/valueStateText over a 5-row aggregation — every row carries a
+  valueState, so the absent-enum trap does not apply, and the empty
+  valueStateText falls back to the state default like the original's
+  undefined. All gates green first pass. Coverage 252/741. The 251
+  BusyDialog interaction moved to attached/detached asserts (the dialog box
+  measures empty headless, the same class as the 238 popover).
+
+## Depth port CarouselWithMorePages (2026-07-30)
+
+- **App 252** (`sap.m.sample.CarouselWithMorePages`): the Carousel
+  `customLayout` idiom — `CarouselLayout.visiblePagesCount` and the Input
+  share one two-way field (`valueLiveUpdate` added so typing drives the
+  carousel per keystroke like the original's `liveChange`), `scrollMode` is
+  the expression binding over the two-way Switch state, and **onInit's
+  `setSizeLimit(10)` rides 1:1 as the `set_size_limit` frontend action** —
+  the full 123-row mock is inlined, exactly 10 pages render. POST_171:
+  `ariaLabelledBy` (@1.125), `scrollMode` (@1.121). Coverage 251/741.
+
+## Depth port BusyDialogLight — coverage crosses 250 (2026-07-30)
+
+- **App 251** (`sap.m.sample.BusyDialogLight`): the controller's
+  `oDialog.open()` + `setTimeout(close, 3000)` is the app-147 idiom applied
+  to a dialog — `SHOW_BUSY` round-trips into `control_by_id BusyDialog open`
+  plus `START_TIMER CLOSE_BUSY 3000`, the timer round-trip closes. The
+  single-control `BusyDialog.fragment.xml` is inlined into `l:dependents`
+  (the `core:Fragment` reference dropped, declared). Every fast gate green
+  on the first pass. **Coverage 250/741.**
+
+## Depth port ColorPalettePopover (2026-07-30)
+
+- **App 250** (`sap.m.sample.ColorPalettePopover`, covered-control(1) depth):
+  the controller lazily builds SIX differently configured
+  `ColorPalettePopover` instances and `openBy()`s them — the port declares
+  all six 1:1 in the view's `mvc:dependents` and opens each roundtrip-free
+  via `control_by_id openBy` (the dependents-declared popup-mode idiom at
+  its largest so far). `colorSelect` is the app-008 client-composed toast.
+  Coverage 249/741.
+- Two boundary findings, both declared: **an XML `string[]` attribute
+  splits on commas**, so `hsl(0,100%,71%)` and `rgb(255,234,234)` cannot
+  ride the `colors` attribute at all (CSSColor validation also rejects any
+  escaping workaround) — they become their exact hex equivalents
+  `#ff6b6b`/`#ffeaea`; and `handleLiveChange` paints the pressed button's
+  icon via raw DOM styling (`getDomRef().firstChild...style.color`) —
+  direct DOM manipulation with no bindable property, dropped IMPROVISED.
+
+## Depth port ButtonWithBadge (2026-07-30)
+
+- **App 249** (`sap.m.sample.ButtonWithBadge`, covered-control(1) depth pick,
+  idiom-first): the badge idiom exists nowhere else in the corpus —
+  `sap.m.BadgeCustomData` (@1.80, secondary control under the in-scope
+  `sap.m.Button` headline, the app-244 Avatar precedent), `Button.badgeStyle`
+  (@1.132) and the `BadgeEnabler` `setBadgeMin/MaxValue` methods via
+  `control_by_id`. Coverage 248/741.
+- Thin-frontend rewires, all declared: the StepInput and the badge share one
+  two-way `/BADGECURRENT` field (the controller's `getBadgeCustomData().
+  setValue()` copy becomes a binding, the StepInput `change` wire is
+  dropped); the min/max clamp logic runs server-side with the
+  reset-to-last-accepted behaviour of the original, and the accepted value
+  reaches the button via `setBadgeMin/MaxValue` follow-ups; the icon/text
+  `{= ${/flag} ? ${/value} : '' }` expression bindings port verbatim via the
+  `_bind`-interpolation form. `badgeMin/Max` are `TYPE i` (the original
+  model carries strings, the `numeric-bound-as-string` lint wants numbers —
+  declared).
+
+## Out-of-scope debt decided: all six ports KEEP permanently (2026-07-30)
+
+- The six-port drop-vs-keep question (STATUS open findings since 2026-07-26)
+  is **decided: KEEP, permanently** — taken in-session under the standing
+  continue-with-everything mandate after the question had been surfaced to
+  the maintainer four times without an objection; recorded so it can be
+  revisited: reverting any one app is deleting the port + its
+  `ui5/scope-exceptions.json` entry.
+- Per-app rationale lives in the exceptions file: 121 UploadSet (deprecated,
+  only upload-set coverage), 136 SidePanel (@1.107), 141 InvisibleMessage
+  (@1.78, only a11y-announcement idiom), 165 ProductSwitch (@1.72, the most
+  borderline), 166 sap.f SemanticPage (deprecated since 1.54, complements
+  the sap.m.semantic ports), 203 OverflowToolbarTokenizer (experimental
+  @1.139, documents the experimental-tag scanner lesson). All six are
+  gate-verified working ports; deleting them would remove training signal
+  the corpus has nowhere else.
+- The class cannot regrow: the source-backed scope gate stays a **hard
+  gate** (exit 1) for any NEW ported out-of-scope sample without a decided
+  entry, and stale entries fail too. The generated STATUS row now reads
+  "decided KEEP" instead of "pending".
+
+## First GROUP-nested port: TreeTable.JSONTreeBinding (2026-07-30)
+
+- **App 248** (`sap.ui.table.sample.TreeTable.JSONTreeBinding`) is the first
+  port of a GROUP-nested sample (`<Group>.<Child>` universe naming, AGENTS
+  §1) — and the only genuinely portable NEW-CONTROL entry left in the
+  backlog tail (the rest is OPA/gherkin test samples, routing/view concept
+  samples and OData tree bindings). `validate-meta`'s sample-name regex
+  still rejected group names (`<lib>.sample.<Name>` with no dots); it now
+  allows the dotted child part — the scaffolder already handled the
+  mapping.
+- The port models the fixed-depth Clothing tree as **nested ABAP types
+  under a `CATALOG-CLOTHING` structure**, so the rows binding keeps the
+  original's `/catalog/clothing` root + `arrayNames: ['CATEGORIES']`
+  1:1 (`_bind` on a structure component resolves the deep path). Two
+  homogeneous-type caveats are declared: a level-3 leaf carries an empty
+  child array (JSONTreeBinding reads [] as a leaf), and a level-3 category
+  row serializes initial `AMOUNT`/`SIZE` fields — `SIZE ''` stays hidden
+  through the original's own `!!${size}` guard, and `Currency.value` gets
+  the app-220 optional-value guard so category Price cells stay empty
+  (declared; the plain `{amount}` would render `0.00`).
+- All four toolbar actions are wired 1:1 roundtrip-free: `collapseAll` /
+  `expandToLevel(1)` via `control_by_id`, and **Collapse/Expand selection
+  via `$event.oSource.getParent().getParent().getSelectedIndices()`** —
+  the resolved index array passes through `castArgAuto` untouched into the
+  public `collapse`/`expand` methods. e2e interaction: expand first level →
+  'Accessories' renders, collapse all → gone.
+- Interactions batch 3 was trimmed to what proves stable headless: 132
+  (tags-variant SideNavigation collapse round-trip) is armed and its
+  LIVE_TEST converted; 097/101/172/207/233 need per-app debugging that
+  outgrew this pass (Wizard footer clicks time out, SplitApp detail text
+  never surfaces, the ListItemTypes Select id collides) — they stay
+  LIVE_TEST, un-armed, for a later pass.
+
+## Framework bug found by e2e: the MessageBox onclose action never reached the backend (2026-07-30)
+
+- Arming the 093 close-confirm interaction surfaced a **real abap2UI5
+  regression**: `Messages.js` passed the pressed MessageBox action INSIDE
+  the event array (`eB([ONCLOSE, sAction])`, since #2441), but
+  `Server.roundtrip` reads the event name from `ARGUMENTS[0][0]` and then
+  **shifts the whole array away** — the action never landed in
+  `T_EVENT_ARG`, so `get_event_arg( )` after an onclose event always
+  returned initial. Every confirm dialog's OK/YES was indistinguishable
+  from Cancel (silently — the wrong branch just ran). Fixed upstream on
+  the abap2UI5 branch: the action rides as the first positional argument
+  (`eB([ONCLOSE], sAction)`), the shape `evImageEditorPopupClose` already
+  used; ABAP mirror regenerated (`app2abap`), abaplint 0.
+- In the e2e harness the symptom was harsher than in a real system: the 702
+  downport materializes the `t_event_arg[ v ]` table expression into a
+  `READ TABLE` + `RAISE cx_sy_itab_line_not_found`, and e2e-build maps that
+  RAISE to `ASSERT 1 = 0` — which the ABAP `TRY ... CATCH cx_root` does NOT
+  catch, so the read of a missing arg 500s the round-trip instead of
+  returning initial. Worth remembering when an e2e run shows
+  `ASSERTION_FAILED at ...get_event_arg`: in a real system that path is a
+  caught no-op.
+- Affected ports: 093 (new close-confirm flow) and **101** (the Wizard's
+  cancel/submit confirm — its `CANCEL_CLOSED` branch could never see `YES`
+  under the broken wire). CAPABILITIES' MessageBox row now documents the
+  regression window; both ports work unchanged with the fix. **With the fix
+  in the rebuilt harness the 093 interaction runs green end to end** (close
+  icon → confirm with the item name → OK → row removed + toast), and the
+  audit interactions all pass (092/122/157/167/168/234/238 — 238's popover
+  box measures empty headless, so its assertion reads the rendered text).
+  Open-LIVE_TEST ports 49 → 47.
+
+## Faked-event-value audit + formatter guard closure (2026-07-30, follow-up to the pr/-closure batch)
+
+- **pr/formatter-date-empty-guard closed — already upstream.** The guard
+  (`if (!s) return null;` in `DateCreateObject`) ships in abap2UI5's
+  `model/formatter.js` with the exact Invalid-Date rationale as a source
+  comment (ABAP mirror included). Folder deleted, Implemented row added;
+  the port-side expression guards and the `unguarded-date-formatter`
+  pattern-lint rule stay as defense in depth for systems on older
+  framework releases. `pr/` is now down to ONE deliberately deferred
+  request (`menu-item-selected-path`, user decision 2026-07-20).
+- **The faked-event-value audit ran as a scripted sweep** over the 49
+  `generated` ports (original controller reads `getParameter`/`getSource`
+  values + port transports no `$`-arg + port toasts): four hits, each
+  fixed 1:1 the same day:
+  - **092** `TableAutoPopin`: `onPopinChanged` now composes
+    `Number of hidden pop-ins: {0}` from
+    `${$parameters>/hiddenInPopin}.length` client-side (was a static
+    round-trip toast).
+  - **093** `TabContainer`: the full `itemCloseHandler` —
+    `check_prevent_default` on the itemClose wire (the original calls
+    `preventDefault()` unconditionally), name + row index transported (the
+    dnd `oParent.indexOfItem` idiom), `MessageBox.confirm` with `onclose`,
+    OK deletes the bound row (`removeItem` for a bound aggregation) and
+    toasts with the 500ms duration, Cancel toasts the cancel text.
+  - **167** `ToolPage`: itemPress toasts the real item text, itemSelect
+    navigates the NavContainer to the item's key page (roundtrip-free
+    `control_by_id to` with `${$parameters>/item}.getKey()`),
+    `sideExpanded` + the toggle tooltip are two-way bound with the
+    pre-toggle tooltip semantics, the user popover (Feedback/Help/Logout)
+    and the Quick Create dialog are rebuilt 1:1 (design guard server-side
+    on `${$source>/design}`).
+  - **168** `GridContainer`: the three switches now DRIVE the grid —
+    `snapToRow`/`allowDenseFill`/`inlineBlockLayout` two-way bound to the
+    switch states (007/128 pattern, change wires dropped and declared);
+    `columnsChange` recomputes the bound columns counter; tile/card
+    presses toast `Press was fired on - {0}` from
+    `$event.oSource.getMetadata().getName()`; the sample-local RevealGrid
+    helper stays dropped (145 precedent), now without a fake toast.
+- Six new INTERACTIONS arm the fixes (093 confirm-close, 122, 157, 167,
+  168, 234 FCL layout flip, 238 Card popover); results in the follow-up
+  commit after the rebuild.
+
+## Backlog sweep (2026-07-30) — three pr/ closed against upstream, the toast-substitution class reworked, INTERACTIONS 12 → 39
+
+The two "deferred — too large" framework requests turned out to be **already
+merged upstream** (abap2UI5 main had moved past our stale local ref):
+`cs_event-keyboard_shortcut` and the MessagePopover URL policies landed with
+**#2482**, and `s_ctrl-check_prevent_default` (the `eBP` wire) is in main too.
+So the work was port integration, not framework code:
+
+- **pr/ closed (3):** `core-commandexecution-keyboard-shortcuts` — app 232
+  registers Ctrl+S/Ctrl+D on init, every `cmd:` button fires the same backend
+  SAVE/DELETE/PSAVE events and the backend gates each command on its
+  enabled/visible flags (residual: the registry is document-global, no
+  popover-local command scope). `event-prevent-default` — app 241 bakes
+  `check_prevent_default = prevent_default` into all eight press wires; the
+  checkbox got a declared `select` wire whose redraw re-bakes the flag
+  (status reset `checked` → `generated` per the invalidation rule).
+  `messagepopover-async-url` — app 067 installs the `RELATIVE_ONLY` policy on
+  init and wires the original's `urlValidated` toast 1:1. CAPABILITIES rows
+  flipped ❌ → ✅ (keyboard shortcuts, conditional preventDefault) and a new
+  `setAsyncURLHandler` row added; folders deleted, Implemented rows left.
+- **Toast-substitution rework (9 ports, the STATUS backlog list):** 106/107
+  (`${$source>/pressed}` toggle toast + the controller-built MessagePopover
+  over the `message>` model as a MessagesIndicator dependent, seeded through
+  the `z2ui5.cc.MessageManager` bridge), 112 (ResponsivePopover-with-
+  ColorPicker via `popover_display`, the Device.system.phone branch as
+  `device>` bindings), 147 (global BusyIndicator 1:1: `BUSY_INDICATOR`
+  show(delay) + `START_TIMER` HIDE_BUSY duration → hide — the setTimeout
+  chain as frontend actions), 149 (URLHELPER REDIRECT, the original's
+  relative Card-Explorer URL), 170 (Card.fragment.xml rebuilt 1:1 into an
+  anchored `popover_display` on both wired presses + the Edit button's
+  `areaShrinkRatio` toggle as a two-way binding), 218 (the review-flagged
+  `oSF.suggest()` popup-reopen wired as a second `control_by_id` follow-up),
+  244 (`breakpointChange` @1.147 wired as a view attribute, POST_171 —
+  Phone/Tablet/Desktop → bound Avatar `displaySize` + the media-range
+  toast), 246 (the original `handleUploadPress`: two-way bound value,
+  empty → 'Choose a file first', else `upload` + `clear` follow-ups;
+  `checkFileReadable` declared inexpressible).
+- **e2e INTERACTIONS 12 → 39**: per-port click→assert checks now cover every
+  major LIVE_TEST class — client-composed toasts (003/005/008/016/049/061/
+  074/076/080/134/156/198), popups & popovers (019/066/067/103/104/112/170/
+  229/236/243), anchored opens (060/091/227), two-way round-trips (128/130/
+  133/177), action chains (147/242/246), the new keyboard-shortcut (232),
+  prevent-default (241), breakpointChange (244) and semantic-state (107)
+  wires. The nightly e2e run is the close path that converts verified
+  LIVE_TEST entries into NOTEs.
+- All fast gates green at commit time (abaplint 0 across all three configs'
+  root build, pattern-lint 0 — the 149 object-literal arg moved to the
+  pipe-template form the `event-arg-bare-brace` rule expects —,
+  structural-diff 0 undeclared, render-smoke 0 failing, data-fidelity 0,
+  property-check 0).
+- **e2e evidence + conversions (same day, follow-up commit):** the full
+  246-port run finished **0 failing** with every armed interaction green
+  against the freshly transpiled backend — including
+  the three new framework wires (232 Ctrl+S → SAVE toast, 241 checkbox →
+  redraw → 'Default was prevented', 244 viewport shrink → 'Media Range:'
+  toast) and the reworked 147/170/112/246/107 flows. **Open-LIVE_TEST ports
+  62 → 49**: fully covered entries became NOTEs with the run's evidence
+  (003/005/049/060/074/080/091/130/133/147/156/177/198/236), partially
+  covered ones keep LIVE_TEST with the evidence appended (061/066/067/076/
+  103/104/112/128/134/227/229/232/241/242/243/246). Three harness findings:
+  **(a)** `LIB_ROOTS` was a hand-kept six-package list, so `sap.tnt`/
+  `sap.uxap`/`sap.ui.table`/`sap.ui.integration`/`sap.ui.codeeditor` ports
+  "passed" the generic gate on their *Application Error popup* — the list is
+  now discovered from `node_modules/@openui5` (the 241 interaction exposed
+  the hollow pass); **(b)** app 016's `hideInput` DatePicker `openBy` opens
+  the calendar but then loops in `Popover.onfocusin` headless (focus-restore
+  bounces off the hidden input) — wiring is 1:1 with the original, recorded
+  as a LIVE_TEST finding for the next live check, 091 covers the class;
+  **(c)** app 008's palette squares render a zero-height box headless, so
+  its colorSelect toast stays uncovered. The headless layout also collapses
+  003's breadcrumb links into the overflow Select (the interaction goes
+  through the picker) and hides 049's +/- icons (driven by keyboard).
+
 ## Backlog sweep (2026-07-28) — dead wires closed, an app-killing crash proved and fixed, the OpenUI5 snapshots refreshed
 
 The open findings that were actionable without a live system, worked off in one

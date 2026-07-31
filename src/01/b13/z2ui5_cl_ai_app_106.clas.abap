@@ -6,8 +6,14 @@ CLASS z2ui5_cl_ai_app_106 DEFINITION PUBLIC.
     TYPES: BEGIN OF ty_s_filter,
              type TYPE string,
            END OF ty_s_filter.
-    DATA t_filters TYPE STANDARD TABLE OF ty_s_filter WITH EMPTY KEY.
-    DATA sort_key TYPE string.
+    TYPES: BEGIN OF ty_s_message,
+             message     TYPE string,
+             description TYPE string,
+             type        TYPE string,
+           END OF ty_s_message.
+    DATA t_filters  TYPE STANDARD TABLE OF ty_s_filter WITH EMPTY KEY.
+    DATA t_messages TYPE STANDARD TABLE OF ty_s_message WITH EMPTY KEY.
+    DATA sort_key   TYPE string.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -45,6 +51,7 @@ CLASS z2ui5_cl_ai_app_106 IMPLEMENTATION.
         )->a( n = `xmlns:mvc`      v = `sap.ui.core.mvc`
         )->a( n = `xmlns`          v = `sap.m`
         )->a( n = `xmlns:semantic` v = `sap.m.semantic`
+        )->a( n = `xmlns:z2ui5`    v = `z2ui5.cc`
         )->a( n = `xmlns:ui`       v = `sap.ca.ui`
         )->a( n = `displayBlock`   v = `true`
 
@@ -83,7 +90,8 @@ CLASS z2ui5_cl_ai_app_106 IMPLEMENTATION.
                     )->shut(
                     )->open( n = `multiSelectAction` ns = `semantic`
                         )->leaf( n = `MultiSelectAction` ns = `semantic`
-                            )->a( n = `press` v = client->_event( `MULTI` )
+                            )->a( n = `press` v = client->_event( val   = `MULTI`
+                                                                  t_arg = VALUE #( ( `${$source>/pressed}` ) ) )
 
                     )->shut(
                 )->shut(
@@ -146,9 +154,25 @@ CLASS z2ui5_cl_ai_app_106 IMPLEMENTATION.
 
                     )->shut(
                     )->open( n = `messagesIndicator` ns = `semantic`
-                        )->leaf( n = `MessagesIndicator` ns = `semantic`
-                            )->a( n = `press` v = client->_event( `MESSAGES` )
+                        )->open( n = `MessagesIndicator` ns = `semantic`
+                            )->a( n = `press` v = client->_event_client( val   = client->cs_event-control_by_id
+                                                                         t_arg = VALUE #( ( `semMessagePopover` ) ( `toggleBy` ) ( `$event.oSource.sId` ) ) )
 
+                            " the original's controller-built MessagePopover over the
+                            " message model, declared as a dependent of its anchor
+                            )->open( n = `dependents` ns = `semantic`
+                                )->open( `MessagePopover`
+                                    )->a( n = `id`    v = `semMessagePopover`
+                                    )->a( n = `items` v = `{message>/}`
+
+                                    )->leaf( `MessageItem`
+                                        )->a( n = `description` v = `{message>description}`
+                                        )->a( n = `type`        v = `{message>type}`
+                                        )->a( n = `title`       v = `{message>message}`
+
+                                )->shut(
+                            )->shut(
+                        )->shut(
                     )->shut(
                     )->open( n = `pagingAction` ns = `semantic`
                         )->leaf( `PagingButton`
@@ -165,6 +189,13 @@ CLASS z2ui5_cl_ai_app_106 IMPLEMENTATION.
                             )->a( n = `icon`  v = `sap-icon://video`
                             )->a( n = `text`  v = `Video`
                             )->a( n = `press` v = client->_event( val = `PRESS` t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
+
+                    )->shut(
+                    )->open( n = `content` ns = `semantic`
+                        " added container (declared): the z2ui5.cc.MessageManager bridge
+                        " reproducing onInit's MessageManager.addMessages seed
+                        )->leaf( n = `MessageManager` ns = `z2ui5`
+                            )->a( n = `items` v = client->_bind( t_messages )
 
                     )->shut(
                     )->open( n = `customShareMenuContent` ns = `semantic`
@@ -193,10 +224,11 @@ CLASS z2ui5_cl_ai_app_106 IMPLEMENTATION.
         client->message_toast_display( |Selected: { sort_key }| ).
 
       WHEN `MULTI`.
-        client->message_toast_display( `MultiSelect Pressed` ).
-
-      WHEN `MESSAGES`.
-        client->message_toast_display( `Messages` ).
+        " onMultiSelectPress: getPressed() ? 'MultiSelect Pressed' : 'MultiSelect Unpressed'
+        DATA(lv_pressed) = CONV abap_bool( client->get_event_arg( ) ).
+        client->message_toast_display( COND #( WHEN lv_pressed = abap_true
+                                               THEN `MultiSelect Pressed`
+                                               ELSE `MultiSelect Unpressed` ) ).
 
       WHEN `POSITION`.
         client->message_toast_display( |Positioned changed to { client->get_event_arg( ) }| ).
@@ -212,6 +244,10 @@ CLASS z2ui5_cl_ai_app_106 IMPLEMENTATION.
   METHOD model_init.
 
     t_filters = VALUE #( ( type = `Category` ) ( type = `SupplierName` ) ).
+
+    " onInit: MessageManager.addMessages(new Message({ message: 'Something wrong
+    " happened', type: Error })) - reconciled by the z2ui5.cc.MessageManager
+    t_messages = VALUE #( ( message = `Something wrong happened` type = `Error` ) ).
 
   ENDMETHOD.
 

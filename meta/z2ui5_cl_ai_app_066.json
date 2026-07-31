@@ -33,7 +33,7 @@
     },
     {
       "type": "LIVE_TEST",
-      "what": "the toggle and the active-title toast were switched from server round-trips to roundtrip-free _event_client( control_global / control_by_id ) on 2026-07-22 - re-verify in a running system that the button still toggles the MessagePopover and that pressing an active title still toasts."
+      "what": "the toggle and the active-title toast were switched from server round-trips to roundtrip-free _event_client( control_global / control_by_id ) on 2026-07-22 - re-verify in a running system that the button still toggles the MessagePopover and that pressing an active title still toasts. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the button toggles the MessagePopover open (the bound message items render); the active-title toast remains unexercised."
     }
   ]
 }

@@ -30,7 +30,7 @@
     },
     {
       "type": "LIVE_TEST",
-      "what": "unverified in a running system: that the Card popover opens anchored to the pressed GenericTag (popover_display by_id = $event.oSource.sId), and that the Toggle Footer round-trip flips showFooter and reveals/hides the DynamicPage footer."
+      "what": "unverified in a running system: that the Card popover opens anchored to the pressed GenericTag (popover_display by_id = $event.oSource.sId), and that the Toggle Footer round-trip flips showFooter and reveals/hides the DynamicPage footer. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the GenericTag press opens the Card popover with the NumericHeader rendering ('Sales Revenue'; asserted on text - the popover box measures empty headless); the layoutData-button variant is the identical wire."
     }
   ]
 }

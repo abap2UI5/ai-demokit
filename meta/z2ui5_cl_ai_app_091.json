@@ -25,8 +25,8 @@
       "what": "the hidden TimePicker openBy is wired roundtrip-free via client->_event_client( cs_event-control_by_id, openBy ) on each anchor press ($event.oSource.sId) - the original's byId('HiddenTP').openBy(getDomRef()) 1:1; the change toast is now roundtrip-free too (control_global MESSAGE_TOAST.show), so the app is init-only."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "the openBy was switched to roundtrip-free _event_client on 2026-07-22 - re-verify each anchor opens the hidden TimePicker."
+      "type": "NOTE",
+      "what": "the openBy was switched to roundtrip-free _event_client on 2026-07-22 - re-verify each anchor opens the hidden TimePicker. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the 'Open Time Picker' anchor opens the hidden TimePicker popover; the remaining anchors are the identical wire."
     },
     {
       "type": "LIVE_TEST",

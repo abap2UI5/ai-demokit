@@ -3,10 +3,13 @@ CLASS z2ui5_cl_ai_app_246 DEFINITION PUBLIC.
   PUBLIC SECTION.
     INTERFACES z2ui5_if_app.
 
+    DATA file_value TYPE string.
+
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
 
     METHODS view_display.
+    METHODS on_event.
 
   PRIVATE SECTION.
 ENDCLASS.
@@ -19,6 +22,8 @@ CLASS z2ui5_cl_ai_app_246 IMPLEMENTATION.
     me->client = client.
     IF client->check_on_init( ).
       view_display( ).
+    ELSEIF client->check_on_event( ).
+      on_event( ).
     ENDIF.
 
   ENDMETHOD.
@@ -40,6 +45,9 @@ CLASS z2ui5_cl_ai_app_246 IMPLEMENTATION.
             )->open( n = `FileUploader` ns = `u`
                 )->a( n = `id`             v = `fileUploader`
                 )->a( n = `name`           v = `myFileUpload`
+                " added attr (declared): two-way value so the backend can run the
+                " original's empty-value check in handleUploadPress
+                )->a( n = `value`          v = client->_bind( file_value )
                 )->a( n = `uploadUrl`      v = `upload/`
                 )->a( n = `tooltip`        v = `Upload your file to the local server`
                 )->a( n = `uploadComplete` v = client->_event_client( val   = client->cs_event-control_global
@@ -68,10 +76,34 @@ CLASS z2ui5_cl_ai_app_246 IMPLEMENTATION.
 
             )->leaf( `Button`
                 )->a( n = `text`  v = `Upload File`
-                )->a( n = `press` v = client->_event_client( val   = client->cs_event-control_global
-                                                             t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Uploading file to the local server ...` ) ) ) ).
+                )->a( n = `press` v = client->_event( `UPLOAD` ) ).
 
     client->view_display( view->stringify( ) ).
+
+  ENDMETHOD.
+
+
+  METHOD on_event.
+
+    CASE client->get( )-event.
+
+      WHEN `UPLOAD`.
+        " original handleUploadPress: no chosen file -> 'Choose a file first';
+        " else upload() then clear() (checkFileReadable is a client-side File
+        " API probe with no declarative equivalent - its cannot-be-read branch
+        " is not reproduced, see sidecar)
+        IF file_value IS INITIAL.
+          client->message_toast_display( `Choose a file first` ).
+        ELSE.
+          client->follow_up_action( val   = client->cs_event-control_by_id
+                                    t_arg = VALUE #( ( `fileUploader` ) ( `upload` ) ) ).
+          client->follow_up_action( val   = client->cs_event-control_by_id
+                                    t_arg = VALUE #( ( `fileUploader` ) ( `clear` ) ) ).
+          file_value = ``.
+          client->view_model_update( ).
+        ENDIF.
+
+    ENDCASE.
 
   ENDMETHOD.
 

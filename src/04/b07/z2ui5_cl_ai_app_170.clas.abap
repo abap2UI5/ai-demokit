@@ -17,9 +17,10 @@ CLASS z2ui5_cl_ai_app_170 DEFINITION PUBLIC.
       END OF ty_row.
     DATA productcollection TYPE STANDARD TABLE OF ty_row WITH EMPTY KEY.
 
-    DATA headerexpanded TYPE abap_bool.
-    DATA titleclickable TYPE abap_bool.
-    DATA showfooter     TYPE abap_bool.
+    DATA headerexpanded  TYPE abap_bool.
+    DATA titleclickable  TYPE abap_bool.
+    DATA showfooter      TYPE abap_bool.
+    DATA areashrinkratio TYPE string.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -52,11 +53,11 @@ CLASS z2ui5_cl_ai_app_170 IMPLEMENTATION.
     DATA(view) = z2ui5_cl_ai_xml=>factory( ).
 
     " sap.f.DynamicPage (freestyle) - title/header/content/footer. headerExpanded,
-    " toggleHeaderOnTitleClick and showFooter are two-way bound to model flags
-    " (the original toggles showFooter imperatively; the faithful abap2UI5 form
-    " binds it). The Products table keeps the original sorter + Currency composite
-    " type bindings 1:1. The controller's Card popover (onPressOpenPopover) and
-    " areaShrinkRatio toggle (Edit) are dropped - both expressible, see sidecar.
+    " toggleHeaderOnTitleClick, showFooter and the title's areaShrinkRatio are
+    " two-way bound to model fields (the original toggles them imperatively; the
+    " faithful abap2UI5 form binds them). The Products table keeps the original
+    " sorter + Currency composite type bindings 1:1. The controller's Card popover
+    " (onPressOpenPopover) is shown via popover_display on both wired presses.
     view->open( n = `View` ns = `mvc`
         )->a( n = `xmlns`        v = `sap.m`
         )->a( n = `xmlns:mvc`    v = `sap.ui.core.mvc`
@@ -72,6 +73,8 @@ CLASS z2ui5_cl_ai_app_170 IMPLEMENTATION.
 
             )->open( n = `title` ns = `f`
                 )->open( n = `DynamicPageTitle` ns = `f`
+                    " added attr (declared): carries the Edit button's toggle
+                    )->a( n = `areaShrinkRatio` v = client->_bind( areashrinkratio )
 
                     )->open( n = `heading` ns = `f`
                         )->leaf( `Title`
@@ -121,6 +124,8 @@ CLASS z2ui5_cl_ai_app_170 IMPLEMENTATION.
                                 )->a( n = `text`   v = `SR`
                                 )->a( n = `status` v = `Error`
                                 )->a( n = `design` v = `StatusIconHidden`
+                                )->a( n = `press`  v = client->_event( val   = `OPEN_POPOVER`
+                                                                       t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
                                 )->leaf( `ObjectNumber`
                                     )->a( n = `number`     v = `2`
                                     )->a( n = `unit`       v = `M`
@@ -133,8 +138,9 @@ CLASS z2ui5_cl_ai_app_170 IMPLEMENTATION.
 
                     )->open( n = `actions` ns = `f`
                         )->leaf( `Button`
-                            )->a( n = `text` v = `Edit`
-                            )->a( n = `type` v = `Emphasized`
+                            )->a( n = `text`  v = `Edit`
+                            )->a( n = `type`  v = `Emphasized`
+                            )->a( n = `press` v = client->_event( `TOGGLE_AREA_PRIORITY` )
                         )->leaf( `Button`
                             )->a( n = `text` v = `Delete`
                             )->a( n = `type` v = `Transparent`
@@ -150,8 +156,10 @@ CLASS z2ui5_cl_ai_app_170 IMPLEMENTATION.
                             )->a( n = `type` v = `Transparent`
 
                         )->open( `Button`
-                            )->a( n = `text` v = `Button with layoutData`
-                            )->a( n = `type` v = `Transparent`
+                            )->a( n = `text`  v = `Button with layoutData`
+                            )->a( n = `type`  v = `Transparent`
+                            )->a( n = `press` v = client->_event( val   = `OPEN_POPOVER`
+                                                                  t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
                             )->open( `layoutData`
                                 )->leaf( `OverflowToolbarLayoutData`
                                     )->a( n = `priority`                  v = `AlwaysOverflow`
@@ -299,9 +307,62 @@ CLASS z2ui5_cl_ai_app_170 IMPLEMENTATION.
   METHOD on_event.
 
     CASE client->get( )-event.
+
       WHEN `TOGGLE_FOOTER`.
         showfooter = xsdbool( showfooter = abap_false ).
         client->view_model_update( ).
+
+      WHEN `TOGGLE_AREA_PRIORITY`.
+        " original toggleAreaPriority: flip areaShrinkRatio between the
+        " metadata default (1:1.6:1.6) and 1.6:1:1.6 via the two-way binding
+        areashrinkratio = COND #( WHEN areashrinkratio = `1:1.6:1.6`
+                                  THEN `1.6:1:1.6`
+                                  ELSE `1:1.6:1.6` ).
+        client->view_model_update( ).
+
+      WHEN `OPEN_POPOVER`.
+        " original onPressOpenPopover: Fragment.load(view/Card.fragment.xml)
+        " + openBy(pressed control) - the Card popover rebuilt 1:1, anchored
+        " via popover_display by_id
+        DATA(popover) = z2ui5_cl_ai_xml=>factory( ).
+
+        popover->open( n = `FragmentDefinition` ns = `core`
+            )->a( n = `xmlns`      v = `sap.m`
+            )->a( n = `xmlns:core` v = `sap.ui.core`
+            )->a( n = `xmlns:f`    v = `sap.f`
+            )->a( n = `xmlns:card` v = `sap.f.cards`
+
+            )->open( `Popover`
+                )->a( n = `placement`    v = `Bottom`
+                )->a( n = `showHeader`   v = `false`
+                )->a( n = `contentWidth` v = `300px`
+
+                )->open( n = `Card` ns = `f`
+                    )->a( n = `width` v = `100%`
+
+                    )->open( n = `header` ns = `f`
+                        )->open( n = `NumericHeader` ns = `card`
+                            )->a( n = `title`             v = `Sales Revenue`
+                            )->a( n = `subtitle`          v = `Sales revenue in the current quarter`
+                            )->a( n = `unitOfMeasurement` v = `EUR`
+                            )->a( n = `number`            v = `2.16`
+                            )->a( n = `scale`             v = `M`
+                            )->a( n = `trend`             v = `Down`
+                            )->a( n = `state`             v = `Error`
+
+                            )->open( n = `sideIndicators` ns = `card`
+                                )->leaf( n = `NumericSideIndicator` ns = `card`
+                                    )->a( n = `number` v = `4.74`
+                                    )->a( n = `unit`   v = `M`
+                                    )->a( n = `title`  v = `Target`
+                                )->leaf( n = `NumericSideIndicator` ns = `card`
+                                    )->a( n = `number` v = `-54.49`
+                                    )->a( n = `unit`   v = `%`
+                                    )->a( n = `title`  v = `Deviation` ).
+
+        client->popover_display( xml   = popover->stringify( )
+                                 by_id = client->get_event_arg( ) ).
+
     ENDCASE.
 
   ENDMETHOD.
@@ -312,9 +373,11 @@ CLASS z2ui5_cl_ai_app_170 IMPLEMENTATION.
     " the DynamicPage starts with an expanded, click-toggleable header and a
     " hidden footer (the original's default state; the footer is revealed by the
     " Toggle Footer action)
-    headerexpanded = abap_true.
-    titleclickable = abap_true.
-    showfooter     = abap_false.
+    headerexpanded  = abap_true.
+    titleclickable  = abap_true.
+    showfooter      = abap_false.
+    " DynamicPageTitle.areaShrinkRatio metadata default (the Edit toggle's base)
+    areashrinkratio = `1:1.6:1.6`.
 
     " the shared 123-row demo ProductCollection (sap/ui/demo/mock/products.json),
     " the five columns the table binds (+ Price/CurrencyCode for the Currency type)

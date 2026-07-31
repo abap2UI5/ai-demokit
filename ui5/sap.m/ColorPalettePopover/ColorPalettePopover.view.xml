@@ -1,0 +1,45 @@
+<mvc:View
+		xmlns:mvc="sap.ui.core.mvc"
+		controllerName="sap.m.sample.ColorPalettePopover.ColorPalettePopover"
+		xmlns="sap.m">
+	<Table id="samplesTable" headerText="Color Palette in a Popover" class="sapUiLargeMarginBottom">
+		<columns>
+			<Column>
+				<Text text="Description"/>
+			</Column>
+			<Column width="30%">
+				<Text text="Action"/>
+			</Column>
+		</columns>
+
+		<ColumnListItem>
+			<Label text='Default set of colors with both "Default Color" and "More Colors..." buttons'/>
+			<Button press=".openFullSample" icon="sap-icon://text-color" ariaHasPopup="Dialog"/>
+		</ColumnListItem>
+		<ColumnListItem>
+			<Label text='Default set of colors without any additional buttons'/>
+			<Button press=".openMinimalSample" icon="sap-icon://color-fill" ariaHasPopup="Dialog"/>
+		</ColumnListItem>
+		<ColumnListItem>
+			<Label text='Custom set of colors with "More Colors..." button'/>
+			<Button press=".openCustomColorsSample" icon="sap-icon://color-fill" ariaHasPopup="Dialog"/>
+		</ColumnListItem>
+		<ColumnListItem>
+			<Label text='Two custom colors with "Default Color" button'/>
+			<Button press=".openMinimalSampleWithDefaultColorButton" icon="sap-icon://palette" ariaHasPopup="Dialog"/>
+		</ColumnListItem>
+		<ColumnListItem>
+			<Label text='Default set of colors with "More Colors..." button and displayMode set to "Simplified"'/>
+			<Button press=".openSampleWithDisplayModeSet" icon="sap-icon://color-fill" ariaHasPopup="Dialog"/>
+		</ColumnListItem>
+		<ColumnListItem>
+			<Label text='liveChange of the Default set of colors with "More Colors..." button and displayMode set to "Simplified"'/>
+			<Button id="liveChangeButton" press=".openSampleWithDisplayModeSetLiveChange" icon="sap-icon://color-fill" ariaHasPopup="Dialog"/>
+		</ColumnListItem>
+		<ColumnListItem>
+			<Label text='Custom set of colors with a selected color and with no additional buttons'/>
+			<Button press=".openSelectedColorSample" icon="sap-icon://cursor-arrow" ariaHasPopup="Dialog"/>
+		</ColumnListItem>
+
+	</Table>
+</mvc:View>

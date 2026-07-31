@@ -17,8 +17,8 @@
       "what": "the sample binds a List to the JSON model /modelData and renders one templated CustomListItem per row. The rows are unrolled into static list items here because every row sets a different subset of the StepInput properties - an empty ABAP model field would bind as \"\" instead of leaving the property at its default, so a bound template would not render 1:1. Template properties no row ever sets (valueState) are dropped with it."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "the change toast was switched to a roundtrip-free client-composed toast on 2026-07-22 (control_global MESSAGE_TOAST.show, template `Value changed to '{0}'` with get_t_arg single-quote escaping; on_event dropped, init-only) - re-verify changing a StepInput toasts \"Value changed to '<value>'\" with the quotes intact."
+      "type": "NOTE",
+      "what": "the change toast was switched to a roundtrip-free client-composed toast on 2026-07-22 (control_global MESSAGE_TOAST.show, template `Value changed to '{0}'` with get_t_arg single-quote escaping; on_event dropped, init-only) - re-verify changing a StepInput toasts \"Value changed to '<value>'\" with the quotes intact. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): ArrowUp + Enter on the first StepInput fires change and toasts \"Value changed to '<value>'\" with the quotes intact; the other StepInputs are the identical wire."
     }
   ]
 }

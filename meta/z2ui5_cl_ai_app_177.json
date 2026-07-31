@@ -11,7 +11,13 @@
   "status": "reviewed",
   "checked": null,
   "deviations": [
-    { "type": "IMPROVISED", "what": "CalendarDateInterval.select and the 'Select Today' button are wired to backend events that write the current server date (yyyy-MM-dd) into the bound status Text. The original formatted getSelectedDates()[0].getStartDate() with DateFormat, and handleCalendarSelect additionally toggled the day off when the same date was re-clicked (removeSelectedDate). Reading the actually clicked day out of the event is not transportable (select carries no date parameter and getSelectedDates()[0] needs array indexing the $-arg expression parser does not offer), so both actions report the server date and the re-click deselect is lost; the select/press attributes are kept." },
-    { "type": "LIVE_TEST", "what": "The CAL_SELECT / SELECT_TODAY round-trips updating the bound selectedDate Text are unverified in a running system." }
+    {
+      "type": "IMPROVISED",
+      "what": "CalendarDateInterval.select and the 'Select Today' button are wired to backend events that write the current server date (yyyy-MM-dd) into the bound status Text. The original formatted getSelectedDates()[0].getStartDate() with DateFormat, and handleCalendarSelect additionally toggled the day off when the same date was re-clicked (removeSelectedDate). Reading the actually clicked day out of the event is not transportable (select carries no date parameter and getSelectedDates()[0] needs array indexing the $-arg expression parser does not offer), so both actions report the server date and the re-click deselect is lost; the select/press attributes are kept."
+    },
+    {
+      "type": "NOTE",
+      "what": "The CAL_SELECT / SELECT_TODAY round-trips updating the bound selectedDate Text are unverified in a running system. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): 'Select Today' round-trips and the bound #selectedDate Text shows the yyyy-MM-dd value; CAL_SELECT is the same handler."
+    }
   ]
 }

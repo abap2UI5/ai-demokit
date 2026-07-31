@@ -1,0 +1,31 @@
+{
+  "class": "z2ui5_cl_ai_app_252",
+  "sample": "sap.m.sample.CarouselWithMorePages",
+  "entity": "sap.m.Carousel",
+  "file": "src/01/b19/z2ui5_cl_ai_app_252.clas.abap",
+  "batch": "b19",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "Members newer than 1.71 kept 1:1: sap.m.Carousel.ariaLabelledBy (@1.125) and sap.m.CarouselLayout.scrollMode (@1.121); the CarouselLayout control itself is @1.62. The app needs a UI5 release >= 1.125 to render both."
+    },
+    {
+      "type": "NOTE",
+      "what": "The two named models are folded onto the one default model (pure prefix-drops, same leaf names): products>/ProductCollection -> /T_PRODUCTS (the full 123-row sap/ui/demo/mock/products.json with the nine bound fields; onInit's oProductsModel.setSizeLimit(10) rides 1:1 as follow_up_action cs_event-set_size_limit 10 MAIN, so exactly 10 pages render like the original) and settings>/pagesCount -> /PAGES_COUNT. The Device.system pagesCount branch (desktop 4 / tablet 2 / else 1) is resolved statically to the desktop default 4. ProductPicUrl values are host-absolutized to https://sdk.openui5.org/ per the offline asset rule."
+    },
+    {
+      "type": "NOTE",
+      "what": "Thin-frontend folds, both attribute drops declared: onNumberOfPages - the Input's liveChange attribute is DROPPED, Input.value is two-way bound with an added valueLiveUpdate='true' and CarouselLayout.visiblePagesCount binds the same /PAGES_COUNT field, so typing drives the carousel client-side exactly like the original's per-keystroke setVisiblePagesCount. OnScrollModeChange - the Switch's change attribute is DROPPED, Switch.state is two-way bound and scrollMode is the expression binding {= state ? 'VisiblePages' : 'SinglePage' } over the same field - the original's imperative setScrollMode as a binding."
+    },
+    {
+      "type": "NOTE",
+      "what": "unverified in a running system: the set_size_limit(10, MAIN) follow-up capping the pages binding, the shared /PAGES_COUNT driving Input and visiblePagesCount, and the scrollMode expression flip. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): exactly 10 carousel items render from the 123 bound rows (the set_size_limit(10, MAIN) follow-up caps the binding) with the first product card visible; the pages-count input and scrollMode flip remain unexercised but are the proven 007/128 client-side class."
+    }
+  ]
+}

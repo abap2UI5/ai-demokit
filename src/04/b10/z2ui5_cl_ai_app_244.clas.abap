@@ -4,6 +4,7 @@ CLASS z2ui5_cl_ai_app_244 DEFINITION PUBLIC.
     INTERFACES z2ui5_if_app.
 
     DATA show_footer TYPE abap_bool.
+    DATA avatar_size TYPE string.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -22,6 +23,7 @@ CLASS z2ui5_cl_ai_app_244 IMPLEMENTATION.
     me->client = client.
     IF client->check_on_init( ).
       show_footer = abap_true.
+      avatar_size = `XL`.
       view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
@@ -38,6 +40,8 @@ CLASS z2ui5_cl_ai_app_244 IMPLEMENTATION.
     " a model flag ({/SHOW_FOOTER}, default true) and Toggle Footer flips it -
     " the faithful abap2UI5 form of the controller's imperative setShowFooter.
     " The Home/Examples/Avatar presses raise client-composed MessageToasts.
+    " breakpointChange (the sample's point) is wired as a view attribute (the
+    " original attaches it in onInit) and drives both Avatars' bound displaySize.
     " test-resources image URLs point at the sdk.openui5.org host (offline rule).
     view->open( n = `View` ns = `mvc`
         )->a( n = `xmlns`        v = `sap.m`
@@ -49,6 +53,9 @@ CLASS z2ui5_cl_ai_app_244 IMPLEMENTATION.
         )->open( n = `DynamicPage` ns = `f`
             )->a( n = `id`         v = `dynamicPageId`
             )->a( n = `showFooter` v = client->_bind( show_footer )
+            " added wire (declared): the controller attaches this in onInit
+            )->a( n = `breakpointChange` v = client->_event( val   = `BREAKPOINT_CHANGE`
+                                                             t_arg = VALUE #( ( `${$parameters>/currentRange}` ) ( `${$parameters>/currentWidth}` ) ) )
 
             )->open( n = `title` ns = `f`
                 )->open( n = `DynamicPageTitle` ns = `f`
@@ -89,8 +96,9 @@ CLASS z2ui5_cl_ai_app_244 IMPLEMENTATION.
                             )->a( n = `fitContainer` v = `true`
                             )->a( n = `alignItems`   v = `Center`
                             )->leaf( `Avatar`
-                                )->a( n = `id`    v = `snappedAvatar`
-                                )->a( n = `src`   v = `https://sdk.openui5.org/test-resources/sap/uxap/images/imageID_275314.png`
+                                )->a( n = `id`          v = `snappedAvatar`
+                                )->a( n = `displaySize` v = client->_bind( avatar_size )
+                                )->a( n = `src`         v = `https://sdk.openui5.org/test-resources/sap/uxap/images/imageID_275314.png`
                                 )->a( n = `class` v = `sapUiTinyMarginEnd`
                             )->leaf( `Text`
                                 )->a( n = `text` v = `Senior UI Developer`
@@ -127,9 +135,10 @@ CLASS z2ui5_cl_ai_app_244 IMPLEMENTATION.
                         )->a( n = `class` v = `sapUiSmallMarginBottom`
 
                         )->leaf( `Avatar`
-                            )->a( n = `id`    v = `headerAvatar`
-                            )->a( n = `class` v = `sapUiSmallMarginEnd`
-                            )->a( n = `src`   v = `https://sdk.openui5.org/test-resources/sap/uxap/images/imageID_275314.png`
+                            )->a( n = `id`          v = `headerAvatar`
+                            )->a( n = `displaySize` v = client->_bind( avatar_size )
+                            )->a( n = `class`       v = `sapUiSmallMarginEnd`
+                            )->a( n = `src`         v = `https://sdk.openui5.org/test-resources/sap/uxap/images/imageID_275314.png`
                             )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Avatar pressed` ) ) )
 
                         )->open( n = `VerticalLayout` ns = `layout`
@@ -272,6 +281,19 @@ CLASS z2ui5_cl_ai_app_244 IMPLEMENTATION.
         " the two-way bound flag and pushing the model back to the client
         show_footer = xsdbool( show_footer = abap_false ).
         client->view_model_update( ).
+
+      WHEN `BREAKPOINT_CHANGE`.
+        " onBreakpointChange: map the media range to the Avatar size (Phone M,
+        " Tablet L, Desktop/DesktopExtraLarge XL), update both bound Avatars
+        " and toast 'Media Range: <range> (<width>px)'
+        DATA(lv_range) = client->get_event_arg( ).
+        DATA(lv_width) = client->get_event_arg( 2 ).
+        avatar_size = SWITCH #( lv_range
+                                WHEN `Phone`  THEN `M`
+                                WHEN `Tablet` THEN `L`
+                                ELSE `XL` ).
+        client->view_model_update( ).
+        client->message_toast_display( |Media Range: { lv_range } ({ lv_width }px)| ).
     ENDCASE.
 
   ENDMETHOD.

@@ -13,8 +13,8 @@
   "checked": null,
   "deviations": [
     {
-      "type": "LIVE_TEST",
-      "what": "the list-item press was built as a roundtrip-free client-composed toast (control_global MESSAGE_TOAST.show, template `Pressed : {0}` filled by ${$source>/title}, reproducing the controller's MessageToast.show(\"Pressed : \" + oEvent.getSource().getTitle())) - re-verify pressing an item toasts \"Pressed : <title>\"."
+      "type": "NOTE",
+      "what": "the list-item press was built as a roundtrip-free client-composed toast (control_global MESSAGE_TOAST.show, template `Pressed : {0}` filled by ${$source>/title}, reproducing the controller's MessageToast.show(\"Pressed : \" + oEvent.getSource().getTitle())) - re-verify pressing an item toasts \"Pressed : <title>\". **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): pressing the first ObjectListItem toasts 'Pressed : <title>' (the ${$source>/title} template resolves)."
     }
   ]
 }

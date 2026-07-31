@@ -60,6 +60,9 @@ CLASS z2ui5_cl_ai_app_241 IMPLEMENTATION.
                     )->a( n = `id`       v = `preventDefaultCheckbox`
                     )->a( n = `text`     v = `Press event - PreventDefault`
                     )->a( n = `selected` v = client->_bind( prevent_default )
+                    " added wire (declared): the redraw bakes check_prevent_default
+                    " into every press handler to match the fresh checkbox state
+                    )->a( n = `select`   v = client->_event( `PREVENT_TOGGLE` )
 
             )->shut(
 
@@ -72,27 +75,32 @@ CLASS z2ui5_cl_ai_app_241 IMPLEMENTATION.
                     )->leaf( n = `NavigationListItem` ns = `tnt`
                         )->a( n = `text`  v = `Home`
                         )->a( n = `icon`  v = `sap-icon://home`
-                        )->a( n = `press` v = client->_event( val   = `ITEM_PRESS`
-                                                              t_arg = VALUE #( ( `${$parameters>/item}.getText()` ) ( `${$parameters>/ctrlKey}` ) ( `${$parameters>/shiftKey}` ) ( `${$parameters>/altKey}` ) ( `${$parameters>/metaKey}` ) ) )
+                        )->a( n = `press` v = client->_event( val    = `ITEM_PRESS`
+                                                              t_arg  = VALUE #( ( `${$parameters>/item}.getText()` ) ( `${$parameters>/ctrlKey}` ) ( `${$parameters>/shiftKey}` ) ( `${$parameters>/altKey}` ) ( `${$parameters>/metaKey}` ) )
+                                                              s_ctrl = VALUE #( check_prevent_default = prevent_default ) )
                     )->leaf( n = `NavigationListItem` ns = `tnt`
                         )->a( n = `text`  v = `Building`
                         )->a( n = `icon`  v = `sap-icon://building`
-                        )->a( n = `press` v = client->_event( val   = `ITEM_PRESS`
-                                                              t_arg = VALUE #( ( `${$parameters>/item}.getText()` ) ( `${$parameters>/ctrlKey}` ) ( `${$parameters>/shiftKey}` ) ( `${$parameters>/altKey}` ) ( `${$parameters>/metaKey}` ) ) )
+                        )->a( n = `press` v = client->_event( val    = `ITEM_PRESS`
+                                                              t_arg  = VALUE #( ( `${$parameters>/item}.getText()` ) ( `${$parameters>/ctrlKey}` ) ( `${$parameters>/shiftKey}` ) ( `${$parameters>/altKey}` ) ( `${$parameters>/metaKey}` ) )
+                                                              s_ctrl = VALUE #( check_prevent_default = prevent_default ) )
 
                     )->open( n = `NavigationListItem` ns = `tnt`
                         )->a( n = `text`  v = `Mileage`
                         )->a( n = `icon`  v = `sap-icon://mileage`
-                        )->a( n = `press` v = client->_event( val   = `ITEM_PRESS`
-                                                              t_arg = VALUE #( ( `${$parameters>/item}.getText()` ) ( `${$parameters>/ctrlKey}` ) ( `${$parameters>/shiftKey}` ) ( `${$parameters>/altKey}` ) ( `${$parameters>/metaKey}` ) ) )
+                        )->a( n = `press` v = client->_event( val    = `ITEM_PRESS`
+                                                              t_arg  = VALUE #( ( `${$parameters>/item}.getText()` ) ( `${$parameters>/ctrlKey}` ) ( `${$parameters>/shiftKey}` ) ( `${$parameters>/altKey}` ) ( `${$parameters>/metaKey}` ) )
+                                                              s_ctrl = VALUE #( check_prevent_default = prevent_default ) )
                         )->leaf( n = `NavigationListItem` ns = `tnt`
                             )->a( n = `text`  v = `Driven`
-                            )->a( n = `press` v = client->_event( val   = `ITEM_PRESS`
-                                                                  t_arg = VALUE #( ( `${$parameters>/item}.getText()` ) ( `${$parameters>/ctrlKey}` ) ( `${$parameters>/shiftKey}` ) ( `${$parameters>/altKey}` ) ( `${$parameters>/metaKey}` ) ) )
+                            )->a( n = `press` v = client->_event( val    = `ITEM_PRESS`
+                                                                  t_arg  = VALUE #( ( `${$parameters>/item}.getText()` ) ( `${$parameters>/ctrlKey}` ) ( `${$parameters>/shiftKey}` ) ( `${$parameters>/altKey}` ) ( `${$parameters>/metaKey}` ) )
+                                                                  s_ctrl = VALUE #( check_prevent_default = prevent_default ) )
                         )->leaf( n = `NavigationListItem` ns = `tnt`
                             )->a( n = `text`  v = `Walked`
-                            )->a( n = `press` v = client->_event( val   = `ITEM_PRESS`
-                                                                  t_arg = VALUE #( ( `${$parameters>/item}.getText()` ) ( `${$parameters>/ctrlKey}` ) ( `${$parameters>/shiftKey}` ) ( `${$parameters>/altKey}` ) ( `${$parameters>/metaKey}` ) ) )
+                            )->a( n = `press` v = client->_event( val    = `ITEM_PRESS`
+                                                                  t_arg  = VALUE #( ( `${$parameters>/item}.getText()` ) ( `${$parameters>/ctrlKey}` ) ( `${$parameters>/shiftKey}` ) ( `${$parameters>/altKey}` ) ( `${$parameters>/metaKey}` ) )
+                                                                  s_ctrl = VALUE #( check_prevent_default = prevent_default ) )
 
                     )->shut(
                     )->leaf( n = `NavigationListItem` ns = `tnt`
@@ -101,16 +109,18 @@ CLASS z2ui5_cl_ai_app_241 IMPLEMENTATION.
                         )->a( n = `selectable` v = `false`
                         )->a( n = `href`       v = `https://sap.com`
                         )->a( n = `target`     v = `_blank`
-                        )->a( n = `press`      v = client->_event( val   = `ITEM_PRESS`
-                                                                   t_arg = VALUE #( ( `${$parameters>/item}.getText()` ) ( `${$parameters>/ctrlKey}` ) ( `${$parameters>/shiftKey}` ) ( `${$parameters>/altKey}` ) ( `${$parameters>/metaKey}` ) ) )
+                        )->a( n = `press`      v = client->_event( val    = `ITEM_PRESS`
+                                                                   t_arg  = VALUE #( ( `${$parameters>/item}.getText()` ) ( `${$parameters>/ctrlKey}` ) ( `${$parameters>/shiftKey}` ) ( `${$parameters>/altKey}` ) ( `${$parameters>/metaKey}` ) )
+                                                                   s_ctrl = VALUE #( check_prevent_default = prevent_default ) )
                     )->leaf( n = `NavigationListItem` ns = `tnt`
                         )->a( n = `text`       v = `Link 2`
                         )->a( n = `icon`       v = `sap-icon://attachment`
                         )->a( n = `selectable` v = `false`
                         )->a( n = `href`       v = `https://sap.com`
                         )->a( n = `target`     v = `_blank`
-                        )->a( n = `press`      v = client->_event( val   = `ITEM_PRESS`
-                                                                   t_arg = VALUE #( ( `${$parameters>/item}.getText()` ) ( `${$parameters>/ctrlKey}` ) ( `${$parameters>/shiftKey}` ) ( `${$parameters>/altKey}` ) ( `${$parameters>/metaKey}` ) ) )
+                        )->a( n = `press`      v = client->_event( val    = `ITEM_PRESS`
+                                                                   t_arg  = VALUE #( ( `${$parameters>/item}.getText()` ) ( `${$parameters>/ctrlKey}` ) ( `${$parameters>/shiftKey}` ) ( `${$parameters>/altKey}` ) ( `${$parameters>/metaKey}` ) )
+                                                                   s_ctrl = VALUE #( check_prevent_default = prevent_default ) )
 
                 )->shut(
 
@@ -130,8 +140,9 @@ CLASS z2ui5_cl_ai_app_241 IMPLEMENTATION.
                             )->a( n = `selectable` v = `false`
                             )->a( n = `href`       v = `https://sap.com`
                             )->a( n = `target`     v = `_blank`
-                            )->a( n = `press`      v = client->_event( val   = `ITEM_PRESS`
-                                                                       t_arg = VALUE #( ( `${$parameters>/item}.getText()` ) ( `${$parameters>/ctrlKey}` ) ( `${$parameters>/shiftKey}` ) ( `${$parameters>/altKey}` ) ( `${$parameters>/metaKey}` ) ) ) ).
+                            )->a( n = `press`      v = client->_event( val    = `ITEM_PRESS`
+                                                                       t_arg  = VALUE #( ( `${$parameters>/item}.getText()` ) ( `${$parameters>/ctrlKey}` ) ( `${$parameters>/shiftKey}` ) ( `${$parameters>/altKey}` ) ( `${$parameters>/metaKey}` ) )
+                                                                       s_ctrl = VALUE #( check_prevent_default = prevent_default ) ) ).
 
     client->view_display( view->stringify( ) ).
 
@@ -152,10 +163,15 @@ CLASS z2ui5_cl_ai_app_241 IMPLEMENTATION.
         expanded = xsdbool( expanded = abap_false ).
         client->view_model_update( ).
 
+      WHEN `PREVENT_TOGGLE`.
+        " redraw so every press wire carries check_prevent_default matching the
+        " fresh checkbox state (the flag is baked into the handler at render time)
+        view_display( ).
+
       WHEN `ITEM_PRESS`.
         " original itemPress: reads the pressed item text + modifier keys and
-        " toasts them; preventDefault (when the checkbox is set) cannot suppress
-        " the client-side selection here - only the message text reflects it
+        " toasts them; when the checkbox is set the wire's check_prevent_default
+        " cancels the item's built-in default (selection / href) client-side
         DATA(lv_item) = client->get_event_arg( ).
         lv_ctrl  = client->get_event_arg( 2 ).
         lv_shift = client->get_event_arg( 3 ).

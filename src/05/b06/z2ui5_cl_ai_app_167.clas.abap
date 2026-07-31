@@ -20,7 +20,9 @@ CLASS z2ui5_cl_ai_app_167 DEFINITION PUBLIC.
         selectable TYPE abap_bool,
         items      TYPE ty_child_tt,
       END OF ty_nav.
-    DATA navigation TYPE STANDARD TABLE OF ty_nav WITH EMPTY KEY.
+    DATA navigation     TYPE STANDARD TABLE OF ty_nav WITH EMPTY KEY.
+    DATA sideexpanded   TYPE abap_bool.
+    DATA toggle_tooltip TYPE string.
     TYPES:
       BEGIN OF ty_fixed,
         title        TYPE string,
@@ -40,6 +42,7 @@ CLASS z2ui5_cl_ai_app_167 DEFINITION PUBLIC.
     DATA client TYPE REF TO z2ui5_if_client.
 
     METHODS view_display.
+    METHODS on_event.
     METHODS model_init.
 
   PRIVATE SECTION.
@@ -54,6 +57,8 @@ CLASS z2ui5_cl_ai_app_167 IMPLEMENTATION.
     IF client->check_on_init( ).
       model_init( ).
       view_display( ).
+    ELSEIF client->check_on_event( ).
+      on_event( ).
     ENDIF.
 
   ENDMETHOD.
@@ -70,15 +75,19 @@ CLASS z2ui5_cl_ai_app_167 IMPLEMENTATION.
         )->a( n = `height`    v = `100%`
 
         )->open( n = `ToolPage` ns = `tnt`
-            )->a( n = `id` v = `toolPage`
+            )->a( n = `id`           v = `toolPage`
+            " added attr (declared): carries onSideNavButtonPress' setSideExpanded
+            )->a( n = `sideExpanded` v = client->_bind( sideexpanded )
 
             )->open( n = `header` ns = `tnt`
                 )->open( n = `ToolHeader` ns = `tnt`
                     )->open( `Button`
-                        )->a( n = `id`    v = `sideNavigationToggleButton`
-                        )->a( n = `icon`  v = `sap-icon://menu2`
-                        )->a( n = `type`  v = `Transparent`
-                        )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Toggle side navigation` ) ) )
+                        )->a( n = `id`      v = `sideNavigationToggleButton`
+                        )->a( n = `icon`    v = `sap-icon://menu2`
+                        )->a( n = `type`    v = `Transparent`
+                        " added attr (declared): the original sets the tooltip imperatively
+                        )->a( n = `tooltip` v = client->_bind( toggle_tooltip )
+                        )->a( n = `press`   v = client->_event( `SIDE_TOGGLE` )
                         )->open( `layoutData`
                             )->leaf( `OverflowToolbarLayoutData` )->a( n = `priority` v = `NeverOverflow`
 
@@ -161,7 +170,8 @@ CLASS z2ui5_cl_ai_app_167 IMPLEMENTATION.
                     )->open( `Button`
                         )->a( n = `text`         v = `Alan Smith`
                         )->a( n = `type`         v = `Transparent`
-                        )->a( n = `press`        v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Alan Smith` ) ) )
+                        )->a( n = `press`        v = client->_event( val   = `USER_POPOVER`
+                                                                     t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
                         )->a( n = `ariaHasPopup` v = `Menu`
                         )->open( `layoutData`
                             )->leaf( `OverflowToolbarLayoutData` )->a( n = `priority` v = `NeverOverflow`
@@ -174,9 +184,13 @@ CLASS z2ui5_cl_ai_app_167 IMPLEMENTATION.
             )->open( n = `sideContent` ns = `tnt`
                 )->open( n = `SideNavigation` ns = `tnt`
                     )->a( n = `expanded`    v = `true`
-                    )->a( n = `itemPress`   v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item pressed` ) ) )
+                    )->a( n = `itemPress`   v = client->_event_client( val   = client->cs_event-control_global
+                                                                       t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Fired itemPress, item: {0}` ) ( `${$parameters>/item}.getText()` ) ) )
                     )->a( n = `selectedKey` v = client->_bind( selectedkey )
-                    )->a( n = `itemSelect`  v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item selected` ) ) )
+                    " onItemSelect: pageContainer.to(createId(item.getKey())) - the key
+                    " resolves client-side and the to() runs roundtrip-free
+                    )->a( n = `itemSelect`  v = client->_event_client( val   = client->cs_event-control_by_id
+                                                                       t_arg = VALUE #( ( `pageContainer` ) ( `to` ) ( `${$parameters>/item}.getKey()` ) ) )
                     )->open( n = `NavigationList` ns = `tnt`
                         )->a( n = `items` v = client->_bind( navigation )
                         )->open( n = `NavigationListItem` ns = `tnt`
@@ -202,7 +216,8 @@ CLASS z2ui5_cl_ai_app_167 IMPLEMENTATION.
                                 )->a( n = `icon`         v = `{ICON}`
                                 )->a( n = `ariaHasPopup` v = `{ARIAHASPOPUP}`
                                 )->a( n = `design`       v = `{DESIGN}`
-                                )->a( n = `press`        v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Quick action` ) ) )
+                                )->a( n = `press`        v = client->_event( val   = `QUICK_ACTION`
+                                                                             t_arg = VALUE #( ( `${$source>/design}` ) ) )
                                 )->a( n = `selectable`   v = `{SELECTABLE}`
 
                         )->shut(
@@ -260,7 +275,91 @@ CLASS z2ui5_cl_ai_app_167 IMPLEMENTATION.
   ENDMETHOD.
 
 
+  METHOD on_event.
+
+    CASE client->get( )-event.
+
+      WHEN `SIDE_TOGGLE`.
+        " onSideNavButtonPress: tooltip from the PRE-toggle expanded state
+        " (_setToggleButtonTooltip(bSideExpanded)), then setSideExpanded(!...)
+        toggle_tooltip = COND #( WHEN sideexpanded = abap_true
+                                 THEN `Large Size Navigation`
+                                 ELSE `Small Size Navigation` ).
+        sideexpanded = xsdbool( sideexpanded = abap_false ).
+        client->view_model_update( ).
+
+      WHEN `USER_POPOVER`.
+        " handleUserNamePress: the controller-built Popover (no header, Bottom,
+        " three transparent buttons), opened by the pressed user button
+        DATA(popover) = z2ui5_cl_ai_xml=>factory( ).
+
+        popover->open( n = `FragmentDefinition` ns = `core`
+            )->a( n = `xmlns:core` v = `sap.ui.core`
+            )->a( n = `xmlns`      v = `sap.m`
+
+            )->open( `Popover`
+                )->a( n = `showHeader` v = `false`
+                )->a( n = `placement`  v = `Bottom`
+                )->a( n = `class`      v = `sapMOTAPopover sapTntToolHeaderPopover`
+
+                )->open( `content`
+                    )->leaf( `Button`
+                        )->a( n = `text` v = `Feedback`
+                        )->a( n = `type` v = `Transparent`
+                    )->leaf( `Button`
+                        )->a( n = `text` v = `Help`
+                        )->a( n = `type` v = `Transparent`
+                    )->leaf( `Button`
+                        )->a( n = `text` v = `Logout`
+                        )->a( n = `type` v = `Transparent` ).
+
+        client->popover_display( xml   = popover->stringify( )
+                                 by_id = client->get_event_arg( ) ).
+
+      WHEN `QUICK_ACTION`.
+        " onQuickActionPress: only a design=Action item opens the dialog
+        IF client->get_event_arg( ) = `Action`.
+          DATA(popup) = z2ui5_cl_ai_xml=>factory( ).
+
+          popup->open( n = `FragmentDefinition` ns = `core`
+              )->a( n = `xmlns:core` v = `sap.ui.core`
+              )->a( n = `xmlns`      v = `sap.m`
+
+              )->open( `Dialog`
+                  )->a( n = `title` v = `Create Item`
+                  )->a( n = `type`  v = `Message`
+
+                  )->open( `content`
+                      )->leaf( `Text`
+                          )->a( n = `text` v = `Create New Navigation List Item`
+
+                  )->shut(
+                  )->open( `beginButton`
+                      )->leaf( `Button`
+                          )->a( n = `type`  v = `Emphasized`
+                          )->a( n = `text`  v = `Create`
+                          )->a( n = `press` v = client->_event_client( client->cs_event-popup_close )
+
+                  )->shut(
+                  )->open( `endButton`
+                      )->leaf( `Button`
+                          )->a( n = `text`  v = `Cancel`
+                          )->a( n = `press` v = client->_event_client( client->cs_event-popup_close ) ).
+
+          client->popup_display( popup->stringify( ) ).
+        ENDIF.
+
+    ENDCASE.
+
+  ENDMETHOD.
+
+
   METHOD model_init.
+
+    " onInit: _setToggleButtonTooltip(!Device.system.desktop) - the desktop
+    " default; the ToolPage starts with its side content expanded (UI5 default)
+    sideexpanded   = abap_true.
+    toggle_tooltip = `Small Size Navigation`.
 
     navigation = VALUE #(
       ( title = `Root Item 1` icon = `sap-icon://employee` enabled = abap_true expanded = abap_true key = `root1` selectable = abap_false

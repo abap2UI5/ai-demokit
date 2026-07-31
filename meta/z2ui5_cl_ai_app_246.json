@@ -12,8 +12,8 @@
   "checked": null,
   "deviations": [
     {
-      "type": "IMPROVISED",
-      "what": "handleUploadPress: the Button press is reduced to a client-composed MessageToast (control_global MESSAGE_TOAST.show 'Uploading file to the local server ...'). That toast text is NOT in the original controller (it is derived from the FileUploader tooltip) - the original press either toasts 'Choose a file first' (empty value) or runs checkFileReadable().then(upload).then(clear) silently. Review 2026-07-27: the original 'not whitelisted CONTROL_METHODS' rationale is stale - since the generalized CONTROL_BY_ID allowlist (FrontendAction.js CONTROL_METHOD_DENY), upload() and clear() are callable public methods, so press -> follow_up_action( control_by_id 'fileUploader'/'upload' ) is expressible (only the getValue() guard and the checkFileReadable() promise chain are not). Same reduction as app 126 (FileUploaderBasic), which is itself unreviewed. Needs rework - left status generated. uploadUrl='upload/' is kept 1:1."
+      "type": "NOTE",
+      "what": "handleUploadPress reproduced since 2026-07-30: the Upload File press fires a backend UPLOAD round-trip; FileUploader.value is two-way bound (an added value attribute, declared) so the backend runs the original's empty check - no file chosen toasts 'Choose a file first' (1:1), else follow_up_action control_by_id fileUploader upload + clear reproduce oFileUploader.upload() then clear() (both public non-denied methods via the generalized allowlist). The earlier tooltip-derived 'Uploading file to the local server ...' toast is gone. NOT reproduced: checkFileReadable() - a client-side File API probe whose rejection branch ('The file cannot be read. It may have changed.') has no declarative equivalent; the port uploads without the readability pre-check."
     },
     {
       "type": "IMPROVISED",
@@ -25,7 +25,7 @@
     },
     {
       "type": "LIVE_TEST",
-      "what": "The client-composed toasts (change/typeMissmatch/uploadComplete/press via control_global MESSAGE_TOAST) and the ${$parameters>/newValue} / ${$parameters>/fileType} event-arg resolution are view-create verified (render-smoke) but not yet live-verified in a running system."
+      "what": "The client-composed toasts (change/typeMissmatch/uploadComplete/press via control_global MESSAGE_TOAST) and the ${$parameters>/newValue} / ${$parameters>/fileType} event-arg resolution are view-create verified (render-smoke) but not yet live-verified in a running system. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): pressing 'Upload File' with no chosen file round-trips and toasts 'Choose a file first'; the change/typeMissmatch toasts need a real file dialog and remain unexercised."
     }
   ]
 }

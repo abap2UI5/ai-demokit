@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_ai_app_256",
+  "sample": "sap.m.sample.DateRangeSelectionHidden",
+  "entity": "sap.m.DateRangeSelection",
+  "file": "src/01/b19/z2ui5_cl_ai_app_256.clas.abap",
+  "batch": "b19",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "sap.m.Button.ariaHasPopup (@1.84) and sap.m.Link.ariaHasPopup (@1.86) kept 1:1 on the three anchors; also hideInput on the picker (@1.97 per the 016 precedent). The app needs a UI5 release >= 1.97."
+    },
+    {
+      "type": "NOTE",
+      "what": "The 016 hidden-picker pattern on the sibling control: all three anchors (text Button, icon Button, Link) open the hideInput picker roundtrip-free via _event_client control_by_id openBy ($event.oSource.sId), and the change toast is client-composed from ${$parameters>/value} - the controller handlers fold into the two wire forms 1:1."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "unverified in a running system: the anchored open of the hideInput picker and the change-value toast. Note the 016 headless finding likely applies here too - the popover opens but the focus-restore can loop on the hidden input in headless Chromium (Popover.onfocusin recursion); wiring is 1:1, verify in a real browser."
+    }
+  ]
+}
