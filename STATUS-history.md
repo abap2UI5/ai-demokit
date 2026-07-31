@@ -7,6 +7,40 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## e2e interactions for batches b05/b13 — LIVE_TEST debt 62 → 55 ports (2026-07-31)
+
+- With the transpiled backend freshly built (the expensive prerequisite), the
+  named close path for the LIVE_TEST backlog was worth walking: **eight new
+  `INTERACTIONS` entries** (258–265), each asserting what its sidecar had
+  declared unverified, then the verified `LIVE_TEST`s converted to `NOTE`s.
+  Open LIVE_TESTs: **62 → 55 ports**.
+- What the new legs actually prove: 258 the `Translucent` anchor bar reaches
+  the DOM; 259 the ProgressIndicator really displays `42%` (UI5 parses the
+  `'42%'` string on the float property, as the original relies on) next to the
+  RatingIndicator; 260 the header content survives a scroll to 1500px — that
+  *is* `preserveHeaderStateOnScroll`; 261 the folded `ModelMapping` records
+  render; 262 the `showFooter` round-trip plus the breadcrumb toast; 263
+  `NavContainer.to` via `control_by_id`, there **and** back; 264 a bound prefix
+  re-filters the rows, an empty prefix drops the filter again (the odata String
+  type mapping `''`→null), and Toggle Filters re-bakes the set; 265 the per-row
+  bound filter over the relative `value1: '{REGION}'`.
+- **Three assertions failed first and each taught something**, so they are in
+  the harness as measured facts rather than guesses: the `Translucent` class
+  sits on the **in-flow** anchor bar (the sticky clone has a zero box, so
+  `.last()` not `.first()`), `.sapUxAPObjectPageHeaderContent` **does not exist**
+  in this release (assert the header text instead), and at 1280px the
+  `Breadcrumbs` collapse into a `Select` — the link press is only reachable
+  through its list.
+- Residuals are named per sidecar instead of silently dropped: the title's
+  `backgroundDesign='Solid'` has no DOM marker, `editHeaderButtonPress` needs
+  header hover, the `setSelectedSection` reset has no stable marker without an
+  icon tab bar, and `subSectionLayout='TitleOnLeft'` only changes the
+  subsection's grid column math (`ObjectPageSubSection._calculateLayoutConfiguration`)
+  — so 261 keeps its `LIVE_TEST` with the evidence appended rather than being
+  promoted on a half-check.
+- Harness gained `notToContainText` (poll-until-absent) — a filter assertion
+  needs the negative form, and the previous helper had none.
+
 ## pr/menu-item-selected-path closed — measured, not assumed (2026-07-31)
 
 - The last open `pr/` request wanted the selected menu item's **ancestor

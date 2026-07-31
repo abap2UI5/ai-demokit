@@ -20,8 +20,8 @@
       "what": "No named models in this sample - both arrays (/customers, /accountManagers) already live in the default model and are bound with client->_bind (the Select's items path via _bind( val = t_accountmanagers path = abap_true ), never as text). Inside the binding-info strings the paths use the ABAP upper-cased field names: 'REGION' in the boundFilters entry and {parts: ['FIRSTNAME', 'LASTNAME']} in the core:Item text, matching the original's 'region' / ['firstName', 'lastName']. Full mock row set inlined (20 customers, 13 account managers, byte-identical to Component.js)."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "Unverified in a running system: that each row's Select really shows only its region's account managers (per-row bound filter over a relative value), that forceSelection='false' plus selectedKey={ACCOUNTMANAGERID} preselects the right manager, and that the composite {parts: [...]} item text renders 'First Last'."
+      "type": "NOTE",
+      "what": "Unverified in a running system: that each row's Select really shows only its region's account managers (per-row bound filter over a relative value), that forceSelection='false' plus selectedKey={ACCOUNTMANAGERID} preselects the right manager, and that the composite {parts: [...]} item text renders 'First Last'. **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the first row's Select lists 'John Smith' (Americas, the row's own region) and NOT 'Yuki Tanaka' (APJ) - the per-row bound filter over the relative value1 '{REGION}' works. Residual: the forceSelection='false' / selectedKey preselection is not separately asserted."
     }
   ]
 }

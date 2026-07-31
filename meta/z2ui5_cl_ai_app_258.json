@@ -16,8 +16,8 @@
       "what": "Block->content inlining (app 161/187 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the five blocks aggregations each hold the sample's own BlockBase control sample:mySimpleBlock (xmlns:sample='sap.uxap.sample.AnchorBar.controller.blocks', ids bbt1-bbt5). A BlockBase is only a lazy-loading wrapper around a view; mySimpleBlock's view is an html:div (style 'font-size: 0.875rem') wrapping a forms:SimpleForm (maxContainerCols=2, layout=ResponsiveGridLayout, editable=false) with one Label 'Content' / Text 'some content goes here...' pair. Since ObjectPageSubSection.blocks accepts any sap.ui.core.Control, that SimpleForm is inlined 1:1 in each blocks aggregation - no custom JS control, thin frontend preserved. Lost with the wrapper: the five mySimpleBlock controls with their ids, the html:div font-size:0.875rem styling (a core:HTML leaf cannot wrap controls, so the div is not reproducible around the form) and the block view root's own width='100%' attribute, which goes with the dropped mvc:View wrapper."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "ObjectPageDynamicHeaderTitle backgroundDesign='Solid' plus ObjectPageLayout backgroundDesignAnchorBar='Translucent' (@since 1.58) are pure rendering properties - the port passes them through 1:1, but the rendered title / anchor-bar background was not verified in a running system."
+      "type": "NOTE",
+      "what": "ObjectPageDynamicHeaderTitle backgroundDesign='Solid' plus ObjectPageLayout backgroundDesignAnchorBar='Translucent' (@since 1.58) are pure rendering properties - the port passes them through 1:1, but the rendered title / anchor-bar background was not verified in a running system. **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the anchor bar renders with the sapUxAPObjectPageNavigationTranslucent class, the dynamic header title shows 'Denise Smith' and every inlined block form renders. Residual (nothing e2e can assert): the title's backgroundDesign='Solid' is a pure paint property with no own DOM marker."
     }
   ]
 }

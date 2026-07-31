@@ -102,6 +102,14 @@ const benign = (s) => BENIGN.some((re) => re.test(s));
 //   breakpointChange → bound displaySize: 244
 //   semantic action state transport: 107
 //   audit-fix wires (2026-07-30): 122 157 167 168 234 238
+//   uxap ObjectPage batch b05 (2026-07-31): 258 (Translucent anchor bar +
+//     inlined blocks) 259 (ProgressIndicator/RatingIndicator header facets)
+//     260 (preserveHeaderStateOnScroll survives a real scroll) 261 (folded
+//     ModelMapping records) 262 (showFooter round-trip + breadcrumb toast)
+//     263 (NavContainer.to via control_by_id, there and back)
+//   boundFilters @1.146 (2026-07-31): 264 (bound prefix re-filters, empty
+//     prefix drops the filter, toggle re-bakes the set) 265 (per-row bound
+//     filter over a relative value1)
 const INTERACTIONS = {
   z2ui5_cl_ai_app_005: async (page, expect) => {
     const btn = page.getByRole('button', { name: 'Default', exact: true }).first();
@@ -582,6 +590,101 @@ const INTERACTIONS = {
     await btn.click();
     await expect(page.locator('.sapMMessageToast'), 'the empty-value toast').toContainText('Choose a file first');
   },
+  // uxap batch b05 (2026-07-31)
+  // ObjectPageDynamicHeaderTitle backgroundDesign + backgroundDesignAnchorBar
+  z2ui5_cl_ai_app_258: async (page, expect) => {
+    await expect(page.locator('.sapUxAPObjectPageHeaderTitle'), 'the dynamic header title').toContainText('Denise Smith');
+    await expect(page.locator('.sapUxAPObjectPageNavigation'), 'the anchor bar').toContainText('Section 1');
+    // the blocks are the inlined SimpleForms, not the sample's BlockBase
+    await expect(page.locator('.sapUiForm').first(), 'the inlined block form').toContainText('some content goes here...');
+    // backgroundDesignAnchorBar="Translucent" reaches the AnchorBar toolbar
+    // .last() = the in-flow anchor bar; the sticky clone has a zero box
+    await expect(page.locator('.sapUxAPObjectPageNavigationTranslucent').last(), 'the Translucent anchor bar').toBeVisibleEnabled();
+  },
+  // ProgressIndicator + RatingIndicator header facets
+  z2ui5_cl_ai_app_259: async (page, expect) => {
+    await expect(page.locator('.sapMPI').first(), 'the header ProgressIndicator').toContainText('42%');
+    await expect(page.locator('.sapMRI').first(), 'the header RatingIndicator').toBeVisibleEnabled();
+    await expect(page.locator('.sapUxAPObjectPageSection').first(), 'the goals section').toContainText('Evangelize the UI framework');
+  },
+  // preserveHeaderStateOnScroll
+  z2ui5_cl_ai_app_260: async (page, expect) => {
+    await expect(page.locator('.sapUxAPObjectPageLayout'), 'the preserved header content').toContainText('Cost Center');
+    await expect(page.locator('.sapUiForm').first(), 'the inlined GoalsBlock form').toContainText('Mentor junior developers');
+    // preserveHeaderStateOnScroll: the header content stays shown while the
+    // page scrolls (without it the header snaps away)
+    await page.evaluate(() => { const sc = document.querySelector('.sapUxAPObjectPageWrapper, .sapUxAPObjectPageLayout'); if (sc) sc.scrollTop = 1500; });
+    await page.waitForTimeout(1000);
+    await expect(page.getByText('Cost Center', { exact: true }).first(), 'the header content after scrolling').toBeVisibleEnabled();
+  },
+  // subSectionLayout="TitleOnLeft" + the EmploymentBlockJob ModelMapping fold
+  z2ui5_cl_ai_app_261: async (page, expect) => {
+    await expect(page.locator('.sapUxAPObjectPageLayout'), 'the object page').toContainText('Denise Smith');
+    const section = page.getByText('Job Relationship', { exact: true }).first();
+    await expect(section, 'the Job Relationship subsection title').toBeVisibleEnabled();
+    // the folded emp1>/emp2> root fields (HRData /Employee rows 0 and 1)
+    await expect(page.locator('.sapUxAPObjectPageLayout'), 'the folded ModelMapping records').toContainText('Michael Adams');
+  },
+  // ObjectPageLayout.showFooter two-way bound, flipped by a round-trip
+  z2ui5_cl_ai_app_262: async (page, expect) => {
+    const btn = page.getByRole('button', { name: 'Toggle Footer', exact: true }).first();
+    await expect(btn, 'the Toggle Footer button').toBeVisibleEnabled();
+    await btn.click();
+    await expect(page.locator('.sapUxAPObjectPageFooter'), 'the footer after the round-trip').toContainText('Accept');
+    // the breadcrumb link's client-composed toast — at this viewport the
+    // Breadcrumbs collapse into a Select, so pick the entry from its list
+    const crumbs = page.locator('.sapMBreadcrumbs .sapMSlt').first();
+    await expect(crumbs, 'the collapsed breadcrumbs select').toBeVisibleEnabled();
+    await crumbs.click();
+    const home = page.locator('.sapMSltPicker li', { hasText: 'Home' }).first();
+    await expect(home, 'the Home breadcrumb entry').toBeVisibleEnabled();
+    await home.click();
+    await expect(page.locator('.sapMMessageToast').last(), 'the breadcrumb client toast').toContainText('Page 1 a very long link clicked');
+  },
+  // NavContainer.to via _event_client(control_by_id) + the navigate round-trip
+  z2ui5_cl_ai_app_263: async (page, expect) => {
+    const item = page.getByText('To ObjectPage', { exact: true }).first();
+    await expect(item, 'the navigating list item').toBeVisibleEnabled();
+    await item.click();
+    await expect(page.locator('.sapUxAPObjectPageLayout'), 'the ObjectPage on page 2').toContainText('Denise Smith');
+    const back = page.locator('.sapMPageHeader .sapMBarLeft .sapMBtn').first();
+    await expect(back, 'the nav-back button').toBeVisibleEnabled();
+    await back.click();
+    await expect(page.locator('.sapMPage'), 'page 1 after navigating back').toContainText('To ObjectPage');
+  },
+  // batch b13 (2026-07-31) — boundFilters (@1.146)
+  // typing a prefix re-filters the bound rows; Toggle Filters re-bakes the set
+  z2ui5_cl_ai_app_264: async (page, expect) => {
+    const rows = page.locator('.sapUiTableRow:not(.sapUiTableRowHidden)');
+    await expect(page.locator('.sapUiTable'), 'the employees table').toContainText('Walldorf');
+    const input = page.locator('input.sapMInputBaseInner').first();
+    await expect(input, 'the department prefix input').toBeVisibleEnabled();
+    await input.fill('Manage');
+    await input.press('Enter');
+    await expect(page.locator('.sapUiTableCtrl'), 'the rows filtered by the bound filter').notToContainText('Development');
+    const btn = page.getByRole('button', { name: 'Show Personal Filters', exact: true }).first();
+    await expect(btn, 'the toggle-filters button').toBeVisibleEnabled();
+    await btn.click();
+    await expect(page.locator('.sapMTB'), 'the personal filter bar after the re-bake redraw').toContainText('First name prefix');
+    // back to organizational, then clear the prefix: an empty value must DROP
+    // the filter (the odata String type maps '' to null), not match nothing
+    await page.getByRole('button', { name: 'Show Organizational Filters', exact: true }).first().click();
+    const dept = page.locator('input.sapMInputBaseInner').first();
+    await dept.fill('');
+    await dept.press('Enter');
+    await expect(page.locator('.sapUiTableCtrl'), 'every row back after clearing the prefix').toContainText('Development');
+    void rows;
+  },
+  // per-row bound filter: each row's Select lists only its region's managers
+  z2ui5_cl_ai_app_265: async (page, expect) => {
+    await expect(page.locator('.sapUiTable'), 'the customers table').toContainText('TechCorp Solutions');
+    const select = page.locator('.sapMSlt').first();
+    await expect(select, 'the first row Select').toBeVisibleEnabled();
+    await select.click();
+    const list = page.locator('.sapMSltPicker');
+    await expect(list, 'the region-filtered manager list').toContainText('John Smith');
+    await expect(list, 'the other regions are filtered out').notToContainText('Yuki Tanaka');
+  },
 };
 
 function startBackend() {
@@ -618,6 +721,16 @@ function makeExpect(errs) {
     async toContainText(txt) {
       await locator.filter({ hasText: txt }).first().waitFor({ state: 'visible', timeout: 10000 })
         .catch(() => { throw new Error(`${label}: never showed text "${txt}"`); });
+    },
+    // negative form — a filter assertion needs it (the row that must be GONE).
+    // Polls until the text is absent so an async re-filter is tolerated.
+    async notToContainText(txt) {
+      const deadline = Date.now() + 10000;
+      for (;;) {
+        if (!(await locator.filter({ hasText: txt }).count())) return;
+        if (Date.now() > deadline) throw new Error(`${label}: still shows text "${txt}"`);
+        await new Promise((r) => setTimeout(r, 250));
+      }
     },
   });
 }

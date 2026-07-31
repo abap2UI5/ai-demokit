@@ -3202,13 +3202,15 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` abap2UI5 bakes binding info at render time, so the TOGGLE_FILTERS round-trip flips the bound flag and redraws the view with the other boundFilters list in the rows binding (app 241 precedent, 'the` &&
                ` flag is baked into the handler at render time'). Same observable behaviour - the visible Inputs switch via the bound visible expressions and the table re-filters on the other pair - through a redraw` &&
                ` instead of an imperative filter() call; the entered prefixes survive because they are two-way bound. The controller's aOrgFilters order (department, location) is the view's boundFilters order` &&
-               ` reversed (location, department); the port keeps the view's order, which is semantically identical (AND-combined). // LIVE-TEST: Unverified in a running system: that the bound filter values re-filter` &&
-               ` the sap.ui.table rows as the user types (boundFilters + odata String type mapping empty to null, i.e. an empty prefix must drop the filter rather than match nothing), and that the TOGGLE_FILTERS`.
-    lv_text1 = lv_text1 && ` redraw swaps the filter pair without losing the entered prefixes.`.
+               ` reversed (location, department); the port keeps the view's order, which is semantically identical (AND-combined). // NOTE: Unverified in a running system: that the bound filter values re-filter the` &&
+               ` sap.ui.table rows as the user types (boundFilters + odata String type mapping empty to null, i.e. an empty prefix must drop the filter rather than match nothing), and that the TOGGLE_FILTERS redraw`.
+    lv_text1 = lv_text1 && ` swaps the filter pair without losing the entered prefixes. **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): typing 'Manage' into the department` &&
+               ` prefix re-filters the bound rows (no 'Development' row left), clearing the prefix brings every row back (the odata String type maps '' to null, so an empty prefix drops the filter instead of matching` &&
+               ` nothing), and 'Show Personal Filters' re-bakes the binding into the personal pair (the first/last name inputs appear). That is the whole boundFilters + re-bake-redraw claim.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.core`        control = `sap.ui.model.Filter`                   name = `BoundFilters.FilterBar`              class = `z2ui5_cl_ai_app_264` path = `src/02/b13/z2ui5_cl_ai_app_264.clas.abap`
         score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         is_post171 = abap_true
         notes = lv_text1
         post171 = `The sample's whole point is the binding-info parameter 'boundFilters' - filter values that are binding expressions, so the aggregation re-filters whenever a value changes through data binding. It is` &&
@@ -3221,12 +3223,14 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` >= 1.146. // NOTE: No named models in this sample - both arrays (/customers, /accountManagers) already live in the default model and are bound with client->_bind (the Select's items path via _bind(` &&
                ` val = t_accountmanagers path = abap_true ), never as text). Inside the binding-info strings the paths use the ABAP upper-cased field names: 'REGION' in the boundFilters entry and {parts:` &&
                ` ['FIRSTNAME', 'LASTNAME']} in the core:Item text, matching the original's 'region' / ['firstName', 'lastName']. Full mock row set inlined (20 customers, 13 account managers, byte-identical to`.
-    lv_text1 = lv_text1 && ` Component.js). // LIVE-TEST: Unverified in a running system: that each row's Select really shows only its region's account managers (per-row bound filter over a relative value), that` &&
-               ` forceSelection='false' plus selectedKey={ACCOUNTMANAGERID} preselects the right manager, and that the composite {parts: [...]} item text renders 'First Last'.`.
+    lv_text1 = lv_text1 && ` Component.js). // NOTE: Unverified in a running system: that each row's Select really shows only its region's account managers (per-row bound filter over a relative value), that` &&
+               ` forceSelection='false' plus selectedKey={ACCOUNTMANAGERID} preselects the right manager, and that the composite {parts: [...]} item text renders 'First Last'. **e2e-verified 2026-07-31**` &&
+               ` (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the first row's Select lists 'John Smith' (Americas, the row's own region) and NOT 'Yuki Tanaka' (APJ) - the per-row bound` &&
+               ` filter over the relative value1 '{REGION}' works. Residual: the forceSelection='false' / selectedKey preselection is not separately asserted.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.core`        control = `sap.ui.model.Filter`                   name = `BoundFilters.FilteredListInTable`    class = `z2ui5_cl_ai_app_265` path = `src/02/b13/z2ui5_cl_ai_app_265.clas.abap`
         score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         is_post171 = abap_true
         notes = lv_text1
         post171 = `The sample's whole point is the binding-info parameter 'boundFilters', 'Supported since 1.146.0' (source: fork-openui5/src/sap.ui.core/src/sap/ui/base/ManagedObject.js:3711; the manifest declares` &&
@@ -3837,14 +3841,15 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` control sample:mySimpleBlock (xmlns:sample='sap.uxap.sample.AnchorBar.controller.blocks', ids bbt1-bbt5). A BlockBase is only a lazy-loading wrapper around a view; mySimpleBlock's view is an html:div` &&
                ` (style 'font-size: 0.875rem') wrapping a forms:SimpleForm (maxContainerCols=2, layout=ResponsiveGridLayout, editable=false) with one Label 'Content' / Text 'some content goes here...' pair. Since` &&
                ` ObjectPageSubSection.blocks accepts any sap.ui.core.Control, that SimpleForm is inlined 1:1 in each blocks aggregation - no custom JS control, thin frontend preserved. Lost with the wrapper: the five` &&
-               ` mySimpleBlock controls with their ids, the html:div font-size:0.875rem styling (a core:HTML leaf cannot wrap controls, so the div is not reproducible around the form) and the block view root's own`.
-    lv_text1 = lv_text1 && ` width='100%' attribute, which goes with the dropped mvc:View wrapper. // LIVE-TEST: ObjectPageDynamicHeaderTitle backgroundDesign='Solid' plus ObjectPageLayout backgroundDesignAnchorBar='Translucent'` &&
-               ` (@since 1.58) are pure rendering properties - the port passes them through 1:1, but the rendered title / anchor-bar background was not verified in a running system.`.
+               ` mySimpleBlock controls with their ids, the html:div font-size:0.875rem styling (a core:HTML leaf cannot wrap controls, so the div is not reproducible around the form) and the block view root's own` &&
+               ` width='100%' attribute, which goes with the dropped mvc:View wrapper. // NOTE: ObjectPageDynamicHeaderTitle backgroundDesign='Solid' plus ObjectPageLayout backgroundDesignAnchorBar='Translucent'`.
+    lv_text1 = lv_text1 && ` (@since 1.58) are pure rendering properties - the port passes them through 1:1, but the rendered title / anchor-bar background was not verified in a running system. **e2e-verified 2026-07-31**` &&
+               ` (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the anchor bar renders with the sapUxAPObjectPageNavigationTranslucent class, the dynamic header title shows 'Denise Smith' and` &&
+               ` every inlined block form renders. Residual (nothing e2e can assert): the title's backgroundDesign='Solid' is a pure paint property with no own DOM marker.`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageDynamicHeaderTitle` name = `ObjectPageHeaderBackgroundDesign`    class = `z2ui5_cl_ai_app_258` path = `src/03/b05/z2ui5_cl_ai_app_258.clas.abap`
         score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = lv_text1 ) ).
 
     lv_text1 = `IMPROVISED: Block->content inlining (app 188/217 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the blocks / moreBlocks aggregations hold SharedBlocks BlockBase` &&
@@ -3856,14 +3861,15 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
     lv_text1 = lv_text1 && ` block views' default namespace is sap.m, so their bare Label / Text / SimpleForm counts move to the port's m: / forms: prefixed controls. // POST-1.71: sap.m.Avatar is a control @since 1.73` &&
                ` (scope-of: OUT_OF_SCOPE for a sample entity, kept here because the sample's entity sap.uxap.ObjectPageDynamicHeaderTitle is in scope and 1:1 fidelity wins for members/controls used inside): two` &&
                ` Avatars (snappedHeading, headerContent) with displayShape='Square', initials='HF', displaySize='L'. Needs a UI5 runtime >= 1.73. // POST-1.71: sap.m.Title aggregation 'content' is @since 1.87 - the` &&
-               ` original nests an m:Link inside two m:Title controls (Profile, Product Description) and the port keeps that nesting 1:1. Needs a UI5 runtime >= 1.87; below it the Link would not render. // LIVE-TEST:` &&
+               ` original nests an m:Link inside two m:Title controls (Profile, Product Description) and the port keeps that nesting 1:1. Needs a UI5 runtime >= 1.87; below it the Link would not render. // NOTE:` &&
                ` percentValue='42%' is copied verbatim from the original although sap.m.ProgressIndicator.percentValue is typed float - UI5 parses the leading number, so this renders like the original, but the` &&
-               ` rendered indicator plus the RatingIndicator value='4' / iconSize='16px' were not verified in a running system.`.
+               ` rendered indicator plus the RatingIndicator value='4' / iconSize='16px' were not verified in a running system. **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs interaction, transpiled backend +`.
+    lv_text1 = lv_text1 && ` real browser): the header ProgressIndicator renders and displays '42%' (so UI5 parses the '42%' string on the float property exactly like the original) and the RatingIndicator renders; the goals` &&
+               ` section shows its inlined block content.`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageDynamicHeaderTitle` name = `ObjectPageProgressRatingIndicators`  class = `z2ui5_cl_ai_app_259` path = `src/03/b05/z2ui5_cl_ai_app_259.clas.abap`
         score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         is_post171 = abap_true
         notes = lv_text1
         post171 = `sap.m.Avatar is a control @since 1.73 (scope-of: OUT_OF_SCOPE for a sample entity, kept here because the sample's entity sap.uxap.ObjectPageDynamicHeaderTitle is in scope and 1:1 fidelity wins for` &&
@@ -3944,13 +3950,13 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` with their ids (goalsblock, phone, social, adresses, mailing, part1, part2), BlockMailing's BlockBase columnLayout='1', and the block views' own mvc:View roots with their width='100%'. // NOTE: The` &&
                ` controller's three JSONModels (SharedJSONData/employee.json as 'ObjectPageModel', an inline 'buttons' model with text/icon, SharedJSONData/products.json as the default OneWay model) are not` &&
                ` reproduced: no control in this sample's view or in any of its inlined block views binds against them - every text is a literal. The port therefore has no model at all (no model_init), which renders`.
-    lv_text1 = lv_text1 && ` identically. // LIVE-TEST: preserveHeaderStateOnScroll='true' (@since 1.52) is the whole point of the sample - the header content staying expanded while scrolling on desktop. The property is passed` &&
-               ` through 1:1 but the scroll behaviour was not verified in a running system.`.
+    lv_text1 = lv_text1 && ` identically. // NOTE: preserveHeaderStateOnScroll='true' (@since 1.52) is the whole point of the sample - the header content staying expanded while scrolling on desktop. The property is passed` &&
+               ` through 1:1 but the scroll behaviour was not verified in a running system. **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): after scrolling the` &&
+               ` ObjectPage wrapper to 1500px the header content ('Cost Center') is still visible - that IS preserveHeaderStateOnScroll; without it the header snaps away.`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `ObjectPageHeaderExpanded`            class = `z2ui5_cl_ai_app_260` path = `src/03/b05/z2ui5_cl_ai_app_260.clas.abap`
         score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.26`
         notes = lv_text1 ) ).
 
@@ -3971,10 +3977,12 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` ObjectPageLayout / setSelectedSection / 'goals' ) - the id of the first section, which is exactly what UI5's own _adjustSelectedSectionByUXRules falls back to when the association is empty. The` &&
                ` checkbox that guards the reset is two-way bound ({/RESET_CHECK}, seeded true like the original selected='true'), so the backend can read it without touching the DOM. // POST-1.71: sap.m.Avatar is a` &&
                ` control @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar and the headerContent avatar (displaySize='L'). Needs a UI5 runtime >=` &&
-               ` 1.73. // LIVE-TEST: The page navigation is roundtrip-free _event_client( control_by_id, navigationContainer / to / page1|page2 ) - the client-side equivalent of the controller's _navTo`.
-    lv_text1 = lv_text1 && ` (oNavContainer.to(oPage)); 'to' is whitelisted in CONTROL_METHODS. Neither the navigation, the NAVIGATE round-trip nor the setSelectedSection follow-up was verified in a running system. // NOTE: The` &&
-               ` Avatar / Image src values point at the sdk.openui5.org host (imageID_275314.png, linkedin.png, Twitter.png, person.png) per the offline asset-URL rule; the original and HRData.json use the relative` &&
-               ` ./test-resources path.`.
+               ` 1.73. // NOTE: The page navigation is roundtrip-free _event_client( control_by_id, navigationContainer / to / page1|page2 ) - the client-side equivalent of the controller's _navTo`.
+    lv_text1 = lv_text1 && ` (oNavContainer.to(oPage)); 'to' is whitelisted in CONTROL_METHODS. Neither the navigation, the NAVIGATE round-trip nor the setSelectedSection follow-up was verified in a running system.` &&
+               ` **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the 'To ObjectPage' list item navigates to page 2 (NavContainer.to via _event_client control_by_id,` &&
+               ` ObjectPage with 'Denise Smith' renders) and the nav-back button returns to page 1. Residual: the setSelectedSection reset itself (NAVIGATE round-trip with the checkbox ticked) is not asserted - the` &&
+               ` page has no icon tab bar, so the selected section has no stable DOM marker. // NOTE: The Avatar / Image src values point at the sdk.openui5.org host (imageID_275314.png, linkedin.png, Twitter.png,` &&
+               ` person.png) per the offline asset-URL rule; the original and HRData.json use the relative ./test-resources path.`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `ObjectPageResetSelectedSection`      class = `z2ui5_cl_ai_app_263` path = `src/03/b05/z2ui5_cl_ai_app_263.clas.abap`
         score = 5
@@ -3991,12 +3999,15 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` Phone->M / Tablet->L / Desktop and DesktopExtraLarge->XL into the two-way bound Avatar displaySize ({/AVATAR_SIZE}, an added attribute on both Avatars, seeded L like the controller's default branch)` &&
                ` and toasts 'Media Range: <range> (<width>px) / Avatar Size: <size>' exactly like onBreakpointChange. Same wiring as app 244 (the sap.f.DynamicPage twin of this sample). Requires a UI5 release >=` &&
                ` 1.147; on older releases the event never fires and both Avatars keep the seeded L. // POST-1.71: sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity` &&
-               ` sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar (id snappedAvatar) and the headerContent avatar (id headerAvatar). Needs a UI5 runtime >= 1.73. // LIVE-TEST: showFooter is two-way`.
-    lv_text1 = lv_text1 && ` bound ({/SHOW_FOOTER}, seeded false = the original's ObjectPageLayout default, since the sample sets no showFooter attribute) and the Toggle Footer button flips it on a round-trip (view_model_update)` &&
-               ` - the faithful abap2UI5 form of the controller's setShowFooter(!getShowFooter()); a scalar literal -> binding is not a structural diff. The two breadcrumb Link presses and the editHeaderButtonPress` &&
-               ` raise client-composed MessageToasts via _event_client control_global MESSAGE_TOAST (roundtrip-free, apps 005/060/244). Footer round-trip, toast wiring and the editHeaderButtonPress attribute are` &&
-               ` unverified in a running system. // NOTE: Both Avatar src values point at the sdk.openui5.org host (https://sdk.openui5.org/test-resources/sap/uxap/images/imageID_275314.png) per the offline asset-URL` &&
-               ` rule; the original uses the relative ./test-resources path. Literal src values are not compared by structural-diff.`.
+               ` sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar (id snappedAvatar) and the headerContent avatar (id headerAvatar). Needs a UI5 runtime >= 1.73. // NOTE: showFooter is two-way bound`.
+    lv_text1 = lv_text1 && ` ({/SHOW_FOOTER}, seeded false = the original's ObjectPageLayout default, since the sample sets no showFooter attribute) and the Toggle Footer button flips it on a round-trip (view_model_update) - the` &&
+               ` faithful abap2UI5 form of the controller's setShowFooter(!getShowFooter()); a scalar literal -> binding is not a structural diff. The two breadcrumb Link presses and the editHeaderButtonPress raise` &&
+               ` client-composed MessageToasts via _event_client control_global MESSAGE_TOAST (roundtrip-free, apps 005/060/244). Footer round-trip, toast wiring and the editHeaderButtonPress attribute are unverified` &&
+               ` in a running system. **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the Toggle Footer press flips the two-way bound showFooter over a real` &&
+               ` round-trip (the footer with Accept/Reject appears), and the breadcrumb entry raises its client-composed toast 'Page 1 a very long link clicked' (at this viewport the Breadcrumbs collapse into a` &&
+               ` Select, so the entry is picked from its list). Residual: editHeaderButtonPress - the ObjectPage's pencil button only appears on header hover, so its toast stays a human check. // NOTE: Both Avatar`.
+    lv_text1 = lv_text1 && ` src values point at the sdk.openui5.org host (https://sdk.openui5.org/test-resources/sap/uxap/images/imageID_275314.png) per the offline asset-URL rule; the original uses the relative` &&
+               ` ./test-resources path. Literal src values are not compared by structural-diff.`.
     lv_text2 = `sap.uxap.ObjectPageLayout.breakpointChange (@since 1.147, incl. its currentRange / currentWidth parameters) is the whole point of this sample and is wired 1:1 as a view attribute (an added attr - the` &&
                ` original attaches it imperatively in onInit via attachBreakpointChange): BREAKPOINT_CHANGE transports ${$parameters>/currentRange} and ${$parameters>/currentWidth}, the backend maps Phone->M /` &&
                ` Tablet->L / Desktop and DesktopExtraLarge->XL into the two-way bound Avatar displaySize ({/AVATAR_SIZE}, an added attribute on both Avatars, seeded L like the controller's default branch) and toasts` &&
@@ -4006,7 +4017,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `ObjectPageResponsiveAvatar`          class = `z2ui5_cl_ai_app_262` path = `src/03/b05/z2ui5_cl_ai_app_262.clas.abap`
         score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.26`
         is_post171 = abap_true
         notes = lv_text1
@@ -4035,7 +4046,9 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` snappedHeading and in the headerContent (displaySize='L'). Needs a UI5 runtime >= 1.73. // NOTE: The controller's three MessageToast handlers (handleLink1Press, handleLink2Press, handleEditBtnPress)` &&
                ` are dead code in this sample - the view wires no press event and sets no showEditHeaderButton, so nothing can reach them. The port therefore has no on_event method, which is behaviour-identical. //`.
     lv_text1 = lv_text1 && ` LIVE-TEST: subSectionLayout='TitleOnLeft' is the point of the sample (subsection titles rendered in a left column instead of above the content). The property is passed through 1:1 but the resulting` &&
-               ` layout was not verified in a running system.`.
+               ` layout was not verified in a running system. **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the ObjectPage renders and the folded emp1>/emp2>` &&
+               ` ModelMapping records show ('Michael Adams'), and the Job Relationship subsection title is there. The TitleOnLeft layout itself stays a human check: measured in the source, subSectionLayout only` &&
+               ` changes the subsection's grid column math (ObjectPageSubSection._calculateLayoutConfiguration) - it emits no own CSS class an assertion could hook onto.`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `ObjectPageTitleOnLeft`               class = `z2ui5_cl_ai_app_261` path = `src/03/b05/z2ui5_cl_ai_app_261.clas.abap`
         score = 5

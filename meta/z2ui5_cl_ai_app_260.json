@@ -20,8 +20,8 @@
       "what": "The controller's three JSONModels (SharedJSONData/employee.json as 'ObjectPageModel', an inline 'buttons' model with text/icon, SharedJSONData/products.json as the default OneWay model) are not reproduced: no control in this sample's view or in any of its inlined block views binds against them - every text is a literal. The port therefore has no model at all (no model_init), which renders identically."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "preserveHeaderStateOnScroll='true' (@since 1.52) is the whole point of the sample - the header content staying expanded while scrolling on desktop. The property is passed through 1:1 but the scroll behaviour was not verified in a running system."
+      "type": "NOTE",
+      "what": "preserveHeaderStateOnScroll='true' (@since 1.52) is the whole point of the sample - the header content staying expanded while scrolling on desktop. The property is passed through 1:1 but the scroll behaviour was not verified in a running system. **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): after scrolling the ObjectPage wrapper to 1500px the header content ('Cost Center') is still visible - that IS preserveHeaderStateOnScroll; without it the header snaps away."
     }
   ]
 }

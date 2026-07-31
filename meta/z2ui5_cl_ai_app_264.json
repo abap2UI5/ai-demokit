@@ -24,8 +24,8 @@
       "what": "onToggleFilters flips ui>/showOrganizational and applies the other filter pair with oListBinding.filter(aFilters, FilterType.ApplicationBound). abap2UI5 bakes binding info at render time, so the TOGGLE_FILTERS round-trip flips the bound flag and redraws the view with the other boundFilters list in the rows binding (app 241 precedent, 'the flag is baked into the handler at render time'). Same observable behaviour - the visible Inputs switch via the bound visible expressions and the table re-filters on the other pair - through a redraw instead of an imperative filter() call; the entered prefixes survive because they are two-way bound. The controller's aOrgFilters order (department, location) is the view's boundFilters order reversed (location, department); the port keeps the view's order, which is semantically identical (AND-combined)."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "Unverified in a running system: that the bound filter values re-filter the sap.ui.table rows as the user types (boundFilters + odata String type mapping empty to null, i.e. an empty prefix must drop the filter rather than match nothing), and that the TOGGLE_FILTERS redraw swaps the filter pair without losing the entered prefixes."
+      "type": "NOTE",
+      "what": "Unverified in a running system: that the bound filter values re-filter the sap.ui.table rows as the user types (boundFilters + odata String type mapping empty to null, i.e. an empty prefix must drop the filter rather than match nothing), and that the TOGGLE_FILTERS redraw swaps the filter pair without losing the entered prefixes. **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): typing 'Manage' into the department prefix re-filters the bound rows (no 'Development' row left), clearing the prefix brings every row back (the odata String type maps '' to null, so an empty prefix drops the filter instead of matching nothing), and 'Show Personal Filters' re-bakes the binding into the personal pair (the first/last name inputs appear). That is the whole boundFilters + re-bake-redraw claim."
     }
   ]
 }
