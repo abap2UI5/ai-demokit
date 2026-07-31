@@ -594,6 +594,14 @@ that stops at the deepest node.
   display-only bindings.**
 - Inside a bound aggregation, child properties use UI5 binding braces on the
   upper-cased field name: `)->a( n = `text` v = `{TITLE}``.
+  **But a field shared by the whole app lives at the model ROOT, and a relative
+  `{FIELD}` inside a template resolves against the ROW** — it silently renders
+  empty when the row has no such column. Bind those with the absolute path from
+  `client->_bind( field )` even inside a template (app 207: every
+  `StandardListItem`'s `type` follows one Select; the relative form left every
+  item `Inactive` and the Select dead. No gate sees this — structural-diff
+  matches on the last path segment, render-smoke mocks the model — it took the
+  e2e interaction, 2026-07-31).
 - `client->_event( \`NAME\` )` — wire a control event (press, liveChange…) to an
   event named `NAME`. **Always** dispatch in `on_event( )` with a
   `CASE client->get( )-event.` … `WHEN \`NAME\`.` … `ENDCASE` — even for a single

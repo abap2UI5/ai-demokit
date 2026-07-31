@@ -675,6 +675,75 @@ const INTERACTIONS = {
     await expect(page.locator('.sapUiTableCtrl'), 'every row back after clearing the prefix').toContainText('Development');
     void rows;
   },
+  // HeaderContainer: the NumericContent press raises a client toast
+  z2ui5_cl_ai_app_029: async (page, expect) => {
+    const tile = page.locator('.sapMNC').first();
+    await expect(tile, 'the first NumericContent tile').toBeVisibleEnabled();
+    await tile.click();
+    await expect(page.locator('.sapMMessageToast').last(), 'the tile-press client toast').toContainText('Fire press');
+  },
+  // sap.ui.table ColumnResizing: the SegmentedButton width switch is a real
+  // backend round-trip (WIDTHS_CHANGE with ${$parameters>/item}.getKey())
+  z2ui5_cl_ai_app_247: async (page, expect) => {
+    const flexible = page.locator('#columnWidths .sapMSegBBtn').nth(1);
+    await expect(flexible, 'the Flexible width mode button').toBeVisibleEnabled();
+    await flexible.click();
+    await page.waitForTimeout(1200);
+    // the round-trip re-renders the table with recomputed column widths
+    await expect(page.locator('.sapUiTable'), 'the table after the width round-trip').toContainText('Product Name');
+  },
+  // tnt NavigationList: the two toolbar buttons flip bound control state
+  // server-side (the original used byId().setExpanded / setVisible)
+  z2ui5_cl_ai_app_123: async (page, expect) => {
+    const nav = page.locator('.sapTntNL').first();
+    await expect(nav, 'the navigation list').toContainText('Sub Item 3');
+    const btn = page.getByRole('button', { name: 'Show/Hide SubItem 3', exact: true }).first();
+    await expect(btn, 'the Show/Hide SubItem 3 button').toBeVisibleEnabled();
+    await btn.click();
+    // the bound visible flag hides exactly one sub item — the count must drop
+    await expect(page.getByText('Sub Item 3', { exact: true }), 'one Sub Item 3 hidden after the round-trip').toHaveCountBelow(2);
+  },
+  // SideNavigation.expanded two-way bound, flipped on a round-trip (starts
+  // collapsed = icons only), plus the itemSelect client toast
+  z2ui5_cl_ai_app_172: async (page, expect) => {
+    const btn = page.getByRole('button', { name: 'Toggle Collapse/Expand', exact: true }).first();
+    await expect(btn, 'the collapse/expand button').toBeVisibleEnabled();
+    await btn.click();
+    await expect(page.locator('body'), 'the expanded side navigation').toContainText('Office 01');
+    await page.getByText('Office 01', { exact: true }).first().click();
+    await expect(page.locator('.sapMMessageToast').last(), 'the itemSelect client toast').toContainText('Item selected: Office 01');
+  },
+  // ListItemTypes: the press/detailPress client toasts
+  z2ui5_cl_ai_app_207: async (page, expect) => {
+    // every row starts Inactive (no press) — the Select drives the bound type.
+    // It sits in an OverflowToolbar and is only instantiated once the overflow
+    // popover opens ("Additional Options"), so go through that button
+    const overflow = page.locator('[id$="-overflowButton"]').first();
+    await expect(overflow, 'the OverflowToolbar overflow button').toBeVisibleEnabled();
+    await overflow.click();
+    const sel = page.locator('.sapMPopover .sapMSlt').first();
+    await expect(sel, 'the item-type Select in the overflow popover').toBeVisibleEnabled();
+    await sel.click();
+    await page.locator('.sapMSltPicker li', { hasText: 'Active' }).first().click();
+    await page.waitForTimeout(800);
+    await page.keyboard.press('Escape');   // close the overflow popover
+    await page.waitForTimeout(500);
+    const item = page.locator('.sapMLIB').first();
+    await expect(item, 'the first list item').toBeVisibleEnabled();
+    await item.click();
+    await expect(page.locator('.sapMMessageToast').last(), "the 'press' client toast").toContainText("'press' event fired!");
+  },
+  // sap.ui.unified.Menu opened through the 2026-07-27 openBy fallback
+  // (open(false, anchor, …) for a control without its own openBy)
+  z2ui5_cl_ai_app_228: async (page, expect) => {
+    const btn = page.getByRole('button', { name: 'Open Menu', exact: true }).first();
+    await expect(btn, 'the menu anchor button').toBeVisibleEnabled();
+    await btn.click();
+    const item = page.getByText('My 1st Item', { exact: true }).first();
+    await expect(item, 'the anchored-open unified Menu').toBeVisibleEnabled();
+    await item.click();
+    await expect(page.locator('.sapMMessageToast').last(), 'the itemSelect client toast').toContainText("'My 1st Item' pressed");
+  },
   // per-row bound filter: each row's Select lists only its region's managers
   z2ui5_cl_ai_app_265: async (page, expect) => {
     await expect(page.locator('.sapUiTable'), 'the customers table').toContainText('TechCorp Solutions');
@@ -721,6 +790,16 @@ function makeExpect(errs) {
     async toContainText(txt) {
       await locator.filter({ hasText: txt }).first().waitFor({ state: 'visible', timeout: 10000 })
         .catch(() => { throw new Error(`${label}: never showed text "${txt}"`); });
+    },
+    // count bound — for a bound `visible` flag that removes ONE of several
+    // same-named entries (a plain absence check cannot see that)
+    async toHaveCountBelow(n) {
+      const deadline = Date.now() + 10000;
+      for (;;) {
+        if ((await locator.count()) < n) return;
+        if (Date.now() > deadline) throw new Error(`${label}: count stayed >= ${n}`);
+        await new Promise((r) => setTimeout(r, 250));
+      }
     },
     // negative form — a filter assertion needs it (the row that must be GONE).
     // Polls until the text is absent so an async re-filter is tolerated.

@@ -7,6 +7,34 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## e2e round 2: a dead Select found in app 207 (2026-07-31)
+
+- Six more `INTERACTIONS` written (029, 123, 172, 207, 228, 247). 123 (bound
+  `visible` flipped server-side), 172 (`SideNavigation.expanded` round-trip +
+  itemSelect toast) and 228 (`sap.ui.unified.Menu` through the openBy fallback)
+  pass; 029/247 wait on a backend rebuild.
+- **App 207 (`ListItemTypes`) had a dead wire that no gate could see.** The
+  `StandardListItem` template bound the shared type field **relatively**
+  (`type="{LISTTYPE}"`), which resolves against the **row** — the rows carry no
+  such column, so every item stayed `Inactive` and the type Select was
+  completely without effect, while the sidecar claimed "selection re-types all
+  items client-side". Fixed to the absolute path via `client->_bind( listtype )`.
+- Why the gates were blind: `structural-diff` matches bindings on their **last
+  path segment** (`listtype` == `listtype`, so relative and absolute look
+  identical), and `render-smoke` mocks the model, so nothing renders differently.
+  Only clicking in a real browser exposed it — the LIVE_TEST existed for exactly
+  this and had been carried since the port was written.
+- Rule recorded in AGENTS §5 (data binding): a field shared app-wide lives at
+  the model **root**; inside a bound aggregation a relative `{FIELD}` silently
+  renders empty, so bind it absolutely with `client->_bind( field )` even in a
+  template.
+- Three assertion fixes worth keeping as harness facts: the tnt navigation list
+  is `.sapTntNL` (not `.sapTntNavLI`), 172's expanded state shows the sub items
+  (`Office 01`), and 207's type Select lives in an **OverflowToolbar** — it is
+  only instantiated once the overflow popover opens, so no viewport width makes
+  it directly clickable. The harness gained `toHaveCountBelow` for the
+  bound-`visible` case, where one of several same-named entries disappears.
+
 ## e2e interactions for batches b05/b13 — LIVE_TEST debt 62 → 55 ports (2026-07-31)
 
 - With the transpiled backend freshly built (the expensive prerequisite), the

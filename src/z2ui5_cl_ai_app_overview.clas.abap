@@ -1711,9 +1711,11 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
 
     lv_text1 = `NOTE: the original wires a change handler on the type Select (handleSelectChange, which loops the list items calling item.setType). selectedKey and every StandardListItem type share one two-way bound` &&
                ` field (LISTTYPE), so a selection re-types all items client-side and the Select.change attribute is deliberately MISSING vs the original view (AGENTS prefer-a-bindable-property rule; app 003` &&
-               ` precedent). The added StandardListItem type binding is not in the original view. // NOTE: the ProductPicUrl icon values are stored as absolute` &&
-               ` https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/*.jpg URLs (the mock's host-relative test-resources paths rewritten to the OpenUI5 host per the runtime asset-URL rule). Same` &&
-               ` 123-row set, kept verbatim otherwise. // LIVE-TEST: unverified in a running system: (a) handlePress/handleDetailPress are reproduced as roundtrip-free client toasts (control_global MESSAGE_TOAST.show` &&
+               ` precedent). The added StandardListItem type binding is not in the original view. **Corrected 2026-07-31 (found by the e2e interaction):** the template first bound the shared field RELATIVELY` &&
+               ` ({LISTTYPE}), which resolves against the ROW context - the rows carry no such field, so the items stayed Inactive and the Select had no effect at all. The template now binds the absolute path through` &&
+               ` client->_bind( listtype ), which is what a shared root-level field needs inside a bound aggregation. // NOTE: the ProductPicUrl icon values are stored as absolute` &&
+               ` https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/*.jpg URLs (the mock's host-relative test-resources paths rewritten to the OpenUI5 host per the runtime asset-URL rule). Same`.
+    lv_text1 = lv_text1 && ` 123-row set, kept verbatim otherwise. // LIVE-TEST: unverified in a running system: (a) handlePress/handleDetailPress are reproduced as roundtrip-free client toasts (control_global MESSAGE_TOAST.show` &&
                ` of "'press' event fired!" / "'detailPress' event fired!"); (b) the Select selectedKey <-> item type two-way binding should re-type all rows on selection. Re-verify both.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.List`                            name = `ListItemTypes`                       class = `z2ui5_cl_ai_app_207` path = `src/01/b17/z2ui5_cl_ai_app_207.clas.abap`
