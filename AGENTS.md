@@ -43,13 +43,18 @@ matcher demos are QUnit pages), **Component routing** across several
 views/targets (`sap.ui.core.routing.*` — an abap2UI5 app serves one view per
 round-trip), and the **view-type / XML-templating / XMLComposite authoring**
 demos (`View.*`, `ViewTemplate.*`, `XMLComposite.*` — they demonstrate how a
-view is produced, not a UI to rebuild). These families are listed in
+view is produced, not a UI to rebuild), plus
+`sap.ui.core.mvc.ControllerExtension` (abap2UI5 has no frontend controller to
+extend). These families are listed in
 `ui5/scope-nonapp.json` with a per-family reason and are **out of scope**:
 `scopeOf` returns `nonapp`, `--backlog` never offers them, `api.md` marks them
 `✗`, and `scripts/scope-of.mjs --sample <Name>` reports them
 `OUT_OF_SCOPE (not an app view — …)`. They previously dominated the
-`NEW-CONTROL` rows and made breadth look unfinished when it was not (38
-samples). Adding a family is a maintainer decision — write the reason into the
+`NEW-CONTROL` rows and made breadth look unfinished when it was not (39
+samples). Note the two verdicts must stay identical: `scope-of.mjs` applies
+`ui5/entity-overrides.json` and evaluates the non-app family **before** the
+control has to resolve in the fork checkout — `ControllerExtension` carries
+`entity: null` in the universe and would otherwise report `UNRESOLVED`. Adding a family is a maintainer decision — write the reason into the
 file; a ported sample that matches hits the same hard scope gate as a
 deprecated/newer one.
 

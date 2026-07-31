@@ -75,14 +75,16 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   rule** (AGENTS §1): the families live in `ui5/scope-nonapp.json` with a
   reason each, `scopeOf` returns `nonapp`, `--backlog` never offers them,
   `api.md` still lists them `✗`, and `scope-of.mjs --sample` reports
-  `OUT_OF_SCOPE (not an app view — …)`. 38 samples moved out of scope, so the
-  honest denominator is **627 in-scope** (was 665) and `sap.ui.core` reads
-  76.2 % instead of 27.1 %. Batch planning is **depth-only** from here (lowest
+  `OUT_OF_SCOPE (not an app view — …)`. 39 samples moved out of scope, so the
+  honest denominator is **626 in-scope** (was 665) and `sap.ui.core` reads
+  80.0 % instead of 27.1 %. Batch planning is **depth-only** from here (lowest
   `covered-control(n)` first, idiom-first within equal n).
-  Still undecided, deliberately left in scope: `ControllerExtension`
-  (`sap.ui.core.mvc.ControllerExtension`) — a JS controller-extension demo that
-  is arguably the same class, and the two `BoundFilters.*` samples
-  (`sap.ui.model.Filter`), which ARE real app views and should be ported.
+  `ControllerExtension` (`sap.ui.core.mvc.ControllerExtension`) joined the list
+  in the same pass (user decision): abap2UI5 has no frontend controller to
+  extend, so the sample carries no view idiom to rebuild. Deliberately kept
+  **in** scope: the two `BoundFilters.*` samples (`sap.ui.model.Filter`) — real
+  app views, and now the only `NEW-CONTROL` rows left outside the hold-out
+  set.
 - [ ] **LIVE_TEST debt → e2e interactions.** The open `LIVE_TEST` count (see
   the generated table) is the corpus' unverified-behaviour backlog. The
   systematic close path is the e2e harness: grow the `INTERACTIONS` map in

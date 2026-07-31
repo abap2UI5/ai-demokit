@@ -23,6 +23,10 @@
       "lib": "sap.ui.core",
       "namePrefix": "XMLComposite.",
       "reason": "composite-control authoring in JS (deprecated authoring pattern), not an app view"
+    },
+    {
+      "entityPrefix": "sap.ui.core.mvc.ControllerExtension",
+      "reason": "JS controller-extension lifecycle demo (user decision 2026-07-31) - abap2UI5 has no frontend controller to extend, so there is no view idiom to rebuild"
     }
   ]
 }

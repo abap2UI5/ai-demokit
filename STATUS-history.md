@@ -22,18 +22,25 @@ of their date and are NOT kept current._
   `ViewTemplate.*` / `XMLComposite.*` in `sap.ui.core` (view-type,
   OData-annotation templating and composite-control authoring demos — they
   demonstrate how a view is produced rather than being one).
-- Effect: **38 samples** move out of scope. In-scope denominator 665 → **627**,
-  overall coverage 39.4 % → **41.8 %**, `sap.ui.core` 27.1 % → **76.2 %** —
-  the honest numbers, since those 38 were never portable. `--backlog`'s
-  `NEW-CONTROL` list drops from ~43 rows to three real ones
-  (`ControllerExtension`, `BoundFilters.FilterBar`,
-  `BoundFilters.FilteredListInTable`) plus the three HOLDOUTs. They stay listed
-  in `api.md` marked `✗` for completeness.
-- Deliberately left **in** scope: the two `BoundFilters.*` samples (real app
-  views on `sap.ui.model.Filter`, worth porting) and `ControllerExtension`
-  (arguably the same class as `View.*`; flagged in STATUS.md rather than
-  decided unilaterally). A ported sample matching a non-app family hits the
-  same hard scope gate as a deprecated/newer one — no port matches today.
+- `sap.ui.core.mvc.ControllerExtension` joined the list in the same pass (user
+  decision after the first cut): abap2UI5 has no frontend controller to extend,
+  so the sample carries no view idiom to rebuild. Matching it by `entityPrefix`
+  also fixed a hole in `scope-of.mjs`: its universe entry carries
+  `entity: null` and the owning entity only comes from
+  `ui5/entity-overrides.json`, which the CLI did not read — it now applies the
+  overrides and evaluates the non-app verdict **before** the entity has to
+  resolve in the fork checkout, so an unresolvable control no longer masks the
+  verdict.
+- Effect: **39 samples** move out of scope. In-scope denominator 665 → **626**,
+  overall coverage 39.4 % → **41.9 %**, `sap.ui.core` 27.1 % → **80.0 %** —
+  the honest numbers, since those 39 were never portable. `--backlog`'s
+  `NEW-CONTROL` list drops from ~43 rows to two real ones
+  (`BoundFilters.FilterBar`, `BoundFilters.FilteredListInTable`) plus the three
+  HOLDOUTs. They stay listed in `api.md` marked `✗` for completeness.
+- Deliberately left **in** scope: the two `BoundFilters.*` samples — real app
+  views on `sap.ui.model.Filter`, worth porting. A ported sample matching a
+  non-app family hits the same hard scope gate as a deprecated/newer one — no
+  port matches today.
 
 ## sap.uxap batch b05 — the last two portable NEW-CONTROL rows + four ObjectPage idioms (2026-07-31)
 

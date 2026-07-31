@@ -115,12 +115,21 @@ function nonAppFor({ lib, name, entity }) {
     && (!f.namePrefix || (name || '').startsWith(f.namePrefix))
     && (f.entityPrefix || f.namePrefix)) || null;
 }
+// ui5/entity-overrides.json supplies the owning entity where the upstream
+// docuindex has none (universe.json then carries entity:null) — apply it here
+// too, or a non-app family matched by entityPrefix would never fire.
+const OVERRIDES_FILE = path.join(ROOT, 'ui5', 'entity-overrides.json');
+const entityOverrides = fs.existsSync(OVERRIDES_FILE)
+  ? JSON.parse(fs.readFileSync(OVERRIDES_FILE, 'utf8')).overrides || {}
+  : {};
 function sampleInfo(sample) {
   const uni = path.join(ROOT, 'ui5', 'universe.json');
   if (!fs.existsSync(uni)) return null;
   const d = JSON.parse(fs.readFileSync(uni, 'utf8'));
   for (const l of d.libs || []) for (const s of l.samples || []) {
-    if (s.name === sample) return { lib: l.lib, name: s.name, entity: s.entity };
+    if (s.name !== sample) continue;
+    const entity = entityOverrides[`${l.lib}.sample.${s.name}`] || s.entity;
+    return { lib: l.lib, name: s.name, entity };
   }
   return null;
 }
@@ -149,14 +158,16 @@ let nonAppHit = false;
 if (argv[0] === '--sample') {
   for (const s of argv.slice(1)) {
     const info = sampleInfo(s);
-    const e = info ? info.entity : sampleToEntity(s);
-    if (!e) { console.log(`${s.padEnd(34)} UNRESOLVED (sample not in universe.json)`); continue; }
+    // the non-app verdict comes first: it holds regardless of whether the
+    // control resolves in the fork checkout
     const fam = info && nonAppFor(info);
     if (fam) {
       nonAppHit = true;
       console.log(`${s.padEnd(34)} OUT_OF_SCOPE (not an app view — ${fam.reason}; ui5/scope-nonapp.json)`);
       continue;
     }
+    const e = info ? info.entity : sampleToEntity(s);
+    if (!e) { console.log(`${s.padEnd(34)} UNRESOLVED (sample not in universe.json)`); continue; }
     entities.push(e);
   }
 } else {
