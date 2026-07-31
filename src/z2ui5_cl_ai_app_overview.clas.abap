@@ -1056,7 +1056,9 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` comma-escaping workaround). // IMPROVISED: handleLiveChange is DROPPED (the liveChange wire on the shared displayMode popover): the original paints the pressed button's icon via raw DOM styling` &&
                ` (getDomRef().firstChild.firstChild.style.color = rgba(r,g,b,alpha) from the liveChange parameters) - direct DOM manipulation outside any bindable property, not expressible in the thin frontend. The` &&
                ` popover itself (shared with the non-liveChange button) works 1:1; only the icon recoloring effect is lost. Also NOT ported: onExit's popover destroy calls - the declared dependents die with the view.` &&
-               ` // LIVE-TEST: unverified in a running system: the six dependents-declared ColorPalettePopover configurations opening anchored via openBy and the colorSelect toast argument resolution.`.
+               ` // LIVE-TEST: unverified in a running system: the six dependents-declared ColorPalettePopover configurations opening anchored via openBy and the colorSelect toast argument resolution. **e2e-verified` &&
+               ` 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the first action button opens its ColorPalettePopover anchored (palette content attached); the other five configurations are`.
+    lv_text1 = lv_text1 && ` the identical wire.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.ColorPalette`                    name = `ColorPalettePopover`                 class = `z2ui5_cl_ai_app_250` path = `src/01/b19/z2ui5_cl_ai_app_250.clas.abap`
         score = 5
