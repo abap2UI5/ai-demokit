@@ -254,6 +254,16 @@ const INTERACTIONS = {
     // the CLOSE_BUSY timer round-trip closes it after ~3s
     await page.locator('.sapMBusyDialog').waitFor({ state: 'hidden', timeout: 15000 });
   },
+  // Carousel customLayout + the set_size_limit follow-up: exactly 10 of the
+  // 123 bound rows render (the page indicator counts them)
+  z2ui5_cl_ai_app_252: async (page, expect) => {
+    await expect(page.getByText('Notebook Basic 15', { exact: true }).first(), 'the first product card').toBeVisibleEnabled();
+    await page.waitForFunction(
+      () => /of 10/.test(document.body.innerText || ''),
+      null,
+      { timeout: 10000 },
+    );
+  },
   // Icon press → static client toast (the sample's stethoscope budget icon)
   z2ui5_cl_ai_app_122: async (page, expect) => {
     const icon = page.locator('.sapUiIconPointer').first();

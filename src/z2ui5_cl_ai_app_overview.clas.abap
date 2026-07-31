@@ -998,7 +998,27 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         checked = `CHECKED (2026-07-15): manually verified in a running system - renders and scrolls like the original (see the note below on the flattened image model).`
         notes = `IMPROVISED: the three carousel images bind to a separate named model in the original (img>/products/pic1..3 from sap/ui/demo/mock/img.json); resolved here to static image URLs, as abap2UI5 serves a` &&
                  ` single default model. // POST-1.71: ariaLabelledBy on the Carousel (since UI5 1.125) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.125 to render it.`
-        post171 = `ariaLabelledBy on the Carousel (since UI5 1.125) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.125 to render it.` )
+        post171 = `ariaLabelledBy on the Carousel (since UI5 1.125) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.125 to render it.` ) ).
+
+    lv_text1 = `POST-1.71: Members newer than 1.71 kept 1:1: sap.m.Carousel.ariaLabelledBy (@1.125) and sap.m.CarouselLayout.scrollMode (@1.121); the CarouselLayout control itself is @1.62. The app needs a UI5` &&
+               ` release >= 1.125 to render both. // NOTE: The two named models are folded onto the one default model (pure prefix-drops, same leaf names): products>/ProductCollection -> /T_PRODUCTS (the full 123-row` &&
+               ` sap/ui/demo/mock/products.json with the nine bound fields; onInit's oProductsModel.setSizeLimit(10) rides 1:1 as follow_up_action cs_event-set_size_limit 10 MAIN, so exactly 10 pages render like the` &&
+               ` original) and settings>/pagesCount -> /PAGES_COUNT. The Device.system pagesCount branch (desktop 4 / tablet 2 / else 1) is resolved statically to the desktop default 4. ProductPicUrl values are` &&
+               ` host-absolutized to https://sdk.openui5.org/ per the offline asset rule. // NOTE: Thin-frontend folds, both attribute drops declared: onNumberOfPages - the Input's liveChange attribute is DROPPED,` &&
+               ` Input.value is two-way bound with an added valueLiveUpdate='true' and CarouselLayout.visiblePagesCount binds the same /PAGES_COUNT field, so typing drives the carousel client-side exactly like the`.
+    lv_text1 = lv_text1 && ` original's per-keystroke setVisiblePagesCount. OnScrollModeChange - the Switch's change attribute is DROPPED, Switch.state is two-way bound and scrollMode is the expression binding {= state ?` &&
+               ` 'VisiblePages' : 'SinglePage' } over the same field - the original's imperative setScrollMode as a binding. // LIVE-TEST: unverified in a running system: the set_size_limit(10, MAIN) follow-up` &&
+               ` capping the pages binding, the shared /PAGES_COUNT driving Input and visiblePagesCount, and the scrollMode expression flip.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.Carousel`                        name = `CarouselWithMorePages`               class = `z2ui5_cl_ai_app_252` path = `src/01/b19/z2ui5_cl_ai_app_252.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `Members newer than 1.71 kept 1:1: sap.m.Carousel.ariaLabelledBy (@1.125) and sap.m.CarouselLayout.scrollMode (@1.121); the CarouselLayout control itself is @1.62. The app needs a UI5 release >= 1.125` &&
+                 ` to render both.` ) ).
+
+    result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.CheckBox`                        name = `CheckBox`                            class = `z2ui5_cl_ai_app_155` path = `src/01/b15/z2ui5_cl_ai_app_155.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -1006,9 +1026,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         notes = `NOTE: Fifteen CheckBoxes across all states (selected, partiallySelected, required, enabled, valueState Warning/Error/Information, wrapping) plus a SimpleForm with GridData-laid-out CheckBoxes,` &&
                  ` reproduced 1:1. // POST-1.71: CheckBox.required (@since 1.121, the 'Required option' CheckBox) is used 1:1. Newer than UI5 1.71; declared per the property-171 policy, so the app needs UI5 >= 1.121 to` &&
                  ` render the required state.`
-        post171 = `CheckBox.required (@since 1.121, the 'Required option' CheckBox) is used 1:1. Newer than UI5 1.71; declared per the property-171 policy, so the app needs UI5 >= 1.121 to render the required state.` ) ).
-
-    result = VALUE #( BASE result
+        post171 = `CheckBox.required (@since 1.121, the 'Required option' CheckBox) is used 1:1. Newer than UI5 1.71; declared per the property-171 policy, so the app needs UI5 >= 1.121 to render the required state.` )
       ( module = `sap.m`              control = `sap.m.CheckBox`                        name = `CheckBoxTriState`                    class = `z2ui5_cl_ai_app_007` path = `src/01/b02/z2ui5_cl_ai_app_007.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`

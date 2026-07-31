@@ -7,6 +7,17 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## Depth port CarouselWithMorePages (2026-07-30)
+
+- **App 252** (`sap.m.sample.CarouselWithMorePages`): the Carousel
+  `customLayout` idiom — `CarouselLayout.visiblePagesCount` and the Input
+  share one two-way field (`valueLiveUpdate` added so typing drives the
+  carousel per keystroke like the original's `liveChange`), `scrollMode` is
+  the expression binding over the two-way Switch state, and **onInit's
+  `setSizeLimit(10)` rides 1:1 as the `set_size_limit` frontend action** —
+  the full 123-row mock is inlined, exactly 10 pages render. POST_171:
+  `ariaLabelledBy` (@1.125), `scrollMode` (@1.121). Coverage 251/741.
+
 ## Depth port BusyDialogLight — coverage crosses 250 (2026-07-30)
 
 - **App 251** (`sap.m.sample.BusyDialogLight`): the controller's
