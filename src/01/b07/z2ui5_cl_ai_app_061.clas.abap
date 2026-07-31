@@ -73,7 +73,14 @@ CLASS z2ui5_cl_ai_app_061 IMPLEMENTATION.
                 )->a( n = `useDefaultActionOnly` v = `true`
                 )->open( `menu`
                     )->open( `Menu`
-                        )->a( n = `itemSelected` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` ) ( `${$parameters>/item}.getText()` ) ) )
+                        )->a( n = `itemSelected` v = client->_event_client( val   = client->cs_event-control_global
+                                                                            t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` )
+                                                                                             ( `${$parameters>/item}.getParent().isA('sap.m.MenuItem') ? ` &&
+                                                                                               `${$parameters>/item}.getParent().getText() + ' > ' + ${$parameters>/item}.getText() : ` &&
+                                                                                               `(${$parameters>/item}.getParent().getParent() && ` &&
+                                                                                               `${$parameters>/item}.getParent().getParent().isA('sap.m.MenuItem') ? ` &&
+                                                                                               `${$parameters>/item}.getParent().getParent().getText() + ' > ' + ${$parameters>/item}.getText() ` &&
+                                                                                               `: ${$parameters>/item}.getText())` ) ) )
                         )->open( `MenuItem`
                             )->a( n = `text` v = `basic`
                             )->a( n = `icon` v = `sap-icon://chalkboard`
@@ -119,7 +126,14 @@ CLASS z2ui5_cl_ai_app_061 IMPLEMENTATION.
                 )->a( n = `useDefaultActionOnly` v = `true`
                 )->open( `menu`
                     )->open( `Menu`
-                        )->a( n = `itemSelected` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` ) ( `${$parameters>/item}.getText()` ) ) )
+                        )->a( n = `itemSelected` v = client->_event_client( val   = client->cs_event-control_global
+                                                                            t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` )
+                                                                                             ( `${$parameters>/item}.getParent().isA('sap.m.MenuItem') ? ` &&
+                                                                                               `${$parameters>/item}.getParent().getText() + ' > ' + ${$parameters>/item}.getText() : ` &&
+                                                                                               `(${$parameters>/item}.getParent().getParent() && ` &&
+                                                                                               `${$parameters>/item}.getParent().getParent().isA('sap.m.MenuItem') ? ` &&
+                                                                                               `${$parameters>/item}.getParent().getParent().getText() + ' > ' + ${$parameters>/item}.getText() ` &&
+                                                                                               `: ${$parameters>/item}.getText())` ) ) )
                         )->open( `MenuItem`
                             )->a( n = `text` v = `basic`
                             )->a( n = `icon` v = `sap-icon://chalkboard`
@@ -156,7 +170,14 @@ CLASS z2ui5_cl_ai_app_061 IMPLEMENTATION.
                 )->a( n = `text` v = `File`
                 )->open( `menu`
                     )->open( `Menu`
-                        )->a( n = `itemSelected` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` ) ( `${$parameters>/item}.getText()` ) ) )
+                        )->a( n = `itemSelected` v = client->_event_client( val   = client->cs_event-control_global
+                                                                            t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` )
+                                                                                             ( `${$parameters>/item}.getParent().isA('sap.m.MenuItem') ? ` &&
+                                                                                               `${$parameters>/item}.getParent().getText() + ' > ' + ${$parameters>/item}.getText() : ` &&
+                                                                                               `(${$parameters>/item}.getParent().getParent() && ` &&
+                                                                                               `${$parameters>/item}.getParent().getParent().isA('sap.m.MenuItem') ? ` &&
+                                                                                               `${$parameters>/item}.getParent().getParent().getText() + ' > ' + ${$parameters>/item}.getText() ` &&
+                                                                                               `: ${$parameters>/item}.getText())` ) ) )
                         )->leaf( `MenuItem`
                             )->a( n = `text` v = `Edit`
                             )->a( n = `icon` v = `sap-icon://edit`
@@ -180,7 +201,14 @@ CLASS z2ui5_cl_ai_app_061 IMPLEMENTATION.
                 )->a( n = `beforeMenuOpen` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `beforeMenuOpen is fired` ) ) )
                 )->open( `menu`
                     )->open( `Menu`
-                        )->a( n = `itemSelected` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` ) ( `${$parameters>/item}.getText()` ) ) )
+                        )->a( n = `itemSelected` v = client->_event_client( val   = client->cs_event-control_global
+                                                                            t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` )
+                                                                                             ( `${$parameters>/item}.getParent().isA('sap.m.MenuItem') ? ` &&
+                                                                                               `${$parameters>/item}.getParent().getText() + ' > ' + ${$parameters>/item}.getText() : ` &&
+                                                                                               `(${$parameters>/item}.getParent().getParent() && ` &&
+                                                                                               `${$parameters>/item}.getParent().getParent().isA('sap.m.MenuItem') ? ` &&
+                                                                                               `${$parameters>/item}.getParent().getParent().getText() + ' > ' + ${$parameters>/item}.getText() ` &&
+                                                                                               `: ${$parameters>/item}.getText())` ) ) )
                         )->leaf( `MenuItem`
                             )->a( n = `text` v = `Edit`
                             )->a( n = `icon` v = `sap-icon://edit`
@@ -204,7 +232,14 @@ CLASS z2ui5_cl_ai_app_061 IMPLEMENTATION.
                 )->a( n = `beforeMenuOpen` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `beforeMenuOpen is fired` ) ) )
                 )->open( `menu`
                     )->open( `Menu`
-                        )->a( n = `itemSelected` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` ) ( `${$parameters>/item}.getText()` ) ) )
+                        )->a( n = `itemSelected` v = client->_event_client( val   = client->cs_event-control_global
+                                                                            t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` )
+                                                                                             ( `${$parameters>/item}.getParent().isA('sap.m.MenuItem') ? ` &&
+                                                                                               `${$parameters>/item}.getParent().getText() + ' > ' + ${$parameters>/item}.getText() : ` &&
+                                                                                               `(${$parameters>/item}.getParent().getParent() && ` &&
+                                                                                               `${$parameters>/item}.getParent().getParent().isA('sap.m.MenuItem') ? ` &&
+                                                                                               `${$parameters>/item}.getParent().getParent().getText() + ' > ' + ${$parameters>/item}.getText() ` &&
+                                                                                               `: ${$parameters>/item}.getText())` ) ) )
                         )->leaf( `MenuItem`
                             )->a( n = `text` v = `Edit`
                             )->a( n = `icon` v = `sap-icon://edit`
@@ -229,7 +264,14 @@ CLASS z2ui5_cl_ai_app_061 IMPLEMENTATION.
                 )->a( n = `useDefaultActionOnly` v = `true`
                 )->open( `menu`
                     )->open( `Menu`
-                        )->a( n = `itemSelected` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` ) ( `${$parameters>/item}.getText()` ) ) )
+                        )->a( n = `itemSelected` v = client->_event_client( val   = client->cs_event-control_global
+                                                                            t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` )
+                                                                                             ( `${$parameters>/item}.getParent().isA('sap.m.MenuItem') ? ` &&
+                                                                                               `${$parameters>/item}.getParent().getText() + ' > ' + ${$parameters>/item}.getText() : ` &&
+                                                                                               `(${$parameters>/item}.getParent().getParent() && ` &&
+                                                                                               `${$parameters>/item}.getParent().getParent().isA('sap.m.MenuItem') ? ` &&
+                                                                                               `${$parameters>/item}.getParent().getParent().getText() + ' > ' + ${$parameters>/item}.getText() ` &&
+                                                                                               `: ${$parameters>/item}.getText())` ) ) )
                         )->leaf( `MenuItem`
                             )->a( n = `text` v = `Edit`
                             )->a( n = `icon` v = `sap-icon://edit`
@@ -255,7 +297,14 @@ CLASS z2ui5_cl_ai_app_061 IMPLEMENTATION.
                 )->a( n = `useDefaultActionOnly` v = `true`
                 )->open( `menu`
                     )->open( `Menu`
-                        )->a( n = `itemSelected` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` ) ( `${$parameters>/item}.getText()` ) ) )
+                        )->a( n = `itemSelected` v = client->_event_client( val   = client->cs_event-control_global
+                                                                            t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` )
+                                                                                             ( `${$parameters>/item}.getParent().isA('sap.m.MenuItem') ? ` &&
+                                                                                               `${$parameters>/item}.getParent().getText() + ' > ' + ${$parameters>/item}.getText() : ` &&
+                                                                                               `(${$parameters>/item}.getParent().getParent() && ` &&
+                                                                                               `${$parameters>/item}.getParent().getParent().isA('sap.m.MenuItem') ? ` &&
+                                                                                               `${$parameters>/item}.getParent().getParent().getText() + ' > ' + ${$parameters>/item}.getText() ` &&
+                                                                                               `: ${$parameters>/item}.getText())` ) ) )
                         )->leaf( `MenuItem`
                             )->a( n = `text` v = `Send the response now`
                             )->a( n = `icon` v = `sap-icon://response`
@@ -280,7 +329,14 @@ CLASS z2ui5_cl_ai_app_061 IMPLEMENTATION.
                 )->a( n = `menuPosition`        v = `RightBottom`
                 )->open( `menu`
                     )->open( `Menu`
-                        )->a( n = `itemSelected` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` ) ( `${$parameters>/item}.getText()` ) ) )
+                        )->a( n = `itemSelected` v = client->_event_client( val   = client->cs_event-control_global
+                                                                            t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` )
+                                                                                             ( `${$parameters>/item}.getParent().isA('sap.m.MenuItem') ? ` &&
+                                                                                               `${$parameters>/item}.getParent().getText() + ' > ' + ${$parameters>/item}.getText() : ` &&
+                                                                                               `(${$parameters>/item}.getParent().getParent() && ` &&
+                                                                                               `${$parameters>/item}.getParent().getParent().isA('sap.m.MenuItem') ? ` &&
+                                                                                               `${$parameters>/item}.getParent().getParent().getText() + ' > ' + ${$parameters>/item}.getText() ` &&
+                                                                                               `: ${$parameters>/item}.getText())` ) ) )
                         )->leaf( `MenuItem`
                             )->a( n = `text` v = `Edit`
                             )->a( n = `icon` v = `sap-icon://edit`
@@ -303,7 +359,14 @@ CLASS z2ui5_cl_ai_app_061 IMPLEMENTATION.
                 )->a( n = `menuPosition`        v = `BeginBottom`
                 )->open( `menu`
                     )->open( `Menu`
-                        )->a( n = `itemSelected` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` ) ( `${$parameters>/item}.getText()` ) ) )
+                        )->a( n = `itemSelected` v = client->_event_client( val   = client->cs_event-control_global
+                                                                            t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` )
+                                                                                             ( `${$parameters>/item}.getParent().isA('sap.m.MenuItem') ? ` &&
+                                                                                               `${$parameters>/item}.getParent().getText() + ' > ' + ${$parameters>/item}.getText() : ` &&
+                                                                                               `(${$parameters>/item}.getParent().getParent() && ` &&
+                                                                                               `${$parameters>/item}.getParent().getParent().isA('sap.m.MenuItem') ? ` &&
+                                                                                               `${$parameters>/item}.getParent().getParent().getText() + ' > ' + ${$parameters>/item}.getText() ` &&
+                                                                                               `: ${$parameters>/item}.getText())` ) ) )
                         )->open( `MenuItem`
                             )->a( n = `text` v = `basic`
                             )->a( n = `icon` v = `sap-icon://chalkboard`

@@ -1749,42 +1749,55 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
     lv_text1 = `POST-1.71: Button.ariaHasPopup (since UI5 1.84) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.84 to render it. // IMPROVISED: the sample loads the Menu from` &&
                ` Menu.fragment.xml on first press and toggles it in the controller (oMenu.isOpen() ? close() : openBy(button)). The port declares the Menu 1:1 inside the Button's ``dependents`` aggregation and` &&
                ` toggles it via client->roundtrip-free _event_client( cs_event-control_by_id, toggleBy ) anchored to the button's DOM ref ($event.oSource.sId) - toggleBy (open-if-closed / close-if-open) was added` &&
-               ` upstream 2026-07-20 (pr/menu-toggle-openby) precisely so the client-side open state need not be mirrored server-side, making the press-to-toggle 1:1. Frontend-action pattern as app 016. //` &&
-               ` IMPROVISED: onMenuAction builds a breadcrumb path by walking the selected MenuItem's parent chain (e.g. 'Create New Site > Official Store'); the server cannot walk the client-side control tree, so` &&
-               ` the toast shows only the selected item's own text, transported via ${$parameters>/item}.getText(). // NOTE: the selected item's text is read with ${$parameters>/item}.getText() (a method call on the`.
-    lv_text1 = lv_text1 && ` resolved MenuItem control), NOT ${$parameters>/item/text}: the $parameters model exposes 'item' as the control object and UI5 keeps properties in the control's internal property store, so the path` &&
-               ` .../item/text reads an undefined direct field and the toast arrives empty. // NOTE: live-verified 2026-07-22 - confirm in a running system that the Menu opens anchored to the button (openBy) and that` &&
-               ` ${$parameters>/item}.getText() delivers the clicked MenuItem's text to the toast. // NOTE: the Menu open/close is wired roundtrip-free via client->_event_client( cs_event-control_by_id, toggleBy ) on` &&
-               ` the button press (anchored by $event.oSource.sId) - the original's client-side toggle 1:1; the item-selected toast is now roundtrip-free too, composed on the frontend via control_global` &&
-               ` MESSAGE_TOAST.show (template + ${$parameters>/item}.getText()), so the app has no on_event at all (init-only). // NOTE: the menu toggle was switched from a follow_up_action round-trip to` &&
-               ` roundtrip-free _event_client on 2026-07-22 - re-verify the button opens/closes the Menu. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the 'Open Menu' press`.
-    lv_text1 = lv_text1 && ` opens the Menu anchored (toggleBy). // NOTE: the item-selected toast was switched from a message_toast_display round-trip to a roundtrip-free client-composed toast on 2026-07-22 (control_global` &&
-               ` MESSAGE_TOAST.show, template ``Action triggered on item: {0}`` filled by ${$parameters>/item}.getText()) - re-verify selecting a menu item toasts "Action triggered on item: <text>". **e2e-verified` &&
-               ` 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): selecting 'Hide Existing Sites' toasts 'Action triggered on item: Hide Existing Sites'.`.
+               ` upstream 2026-07-20 (pr/menu-toggle-openby) precisely so the client-side open state need not be mirrored server-side, making the press-to-toggle 1:1. Frontend-action pattern as app 016. // NOTE:` &&
+               ` onMenuAction builds a breadcrumb path by walking the selected MenuItem's parent chain (e.g. 'Create New Site > Official Store'). Reproduced client-side since 2026-07-31 (pr/menu-item-selected-path` &&
+               ` closed): UI5's EventHandlerResolver hands the WHOLE handler string to BindingParser.parseExpression, so an event arg is a full expression - method calls, isA('...'), string concat and ternaries`.
+    lv_text1 = lv_text1 && ` included - not just a binding path. The controller's while-loop therefore becomes a nested-ternary parent walk (one hop, then two, else the leaf text): a nested item yields '<parent> > <item>', a` &&
+               ` top-level item its own text, exactly like the original for this menu. No framework change and no ABAP API were needed. Control-tree note (probed on OpenUI5 1.152 with a real browser): sap.m.Menu` &&
+               ` wraps its items in an internal sap.m.MenuWrapper, so a nested item's parent chain is MenuItem -> MenuWrapper -> MenuItem -> MenuWrapper -> Popover -> ResponsivePopover -> Menu. The parent MenuItem` &&
+               ` therefore sits TWO hops up, and the sample's own 'while (oItem instanceof MenuItem) { ... oItem.getParent(); }' loop exits at the first MenuWrapper - the LIVE demo kit sample consequently toasts only` &&
+               ` the leaf text on this release. The port reproduces the controller's intended breadcrumb and stays robust across both control-tree shapes: one hop first (pre-MenuWrapper releases), then two hops, else` &&
+               ` the leaf text. Boundary: an expression has no loop, so the walk is unrolled - two ternaries here (this sample's menu is two levels deep). // NOTE: the selected item's text is read with`.
+    lv_text1 = lv_text1 && ` ${$parameters>/item}.getText() (a method call on the resolved MenuItem control), NOT ${$parameters>/item/text}: the $parameters model exposes 'item' as the control object and UI5 keeps properties in` &&
+               ` the control's internal property store, so the path .../item/text reads an undefined direct field and the toast arrives empty. // NOTE: live-verified 2026-07-22 - confirm in a running system that the` &&
+               ` Menu opens anchored to the button (openBy) and that ${$parameters>/item}.getText() delivers the clicked MenuItem's text to the toast. // NOTE: the Menu open/close is wired roundtrip-free via` &&
+               ` client->_event_client( cs_event-control_by_id, toggleBy ) on the button press (anchored by $event.oSource.sId) - the original's client-side toggle 1:1; the item-selected toast is now roundtrip-free` &&
+               ` too, composed on the frontend via control_global MESSAGE_TOAST.show (template + ${$parameters>/item}.getText()), so the app has no on_event at all (init-only). // NOTE: the menu toggle was switched` &&
+               ` from a follow_up_action round-trip to roundtrip-free _event_client on 2026-07-22 - re-verify the button opens/closes the Menu. **e2e-verified 2026-07-30** (transpiled-framework interaction,`.
+    lv_text1 = lv_text1 && ` scripts/e2e-smoke.mjs): the 'Open Menu' press opens the Menu anchored (toggleBy). // NOTE: the item-selected toast was switched from a message_toast_display round-trip to a roundtrip-free` &&
+               ` client-composed toast on 2026-07-22 (control_global MESSAGE_TOAST.show, template ``Action triggered on item: {0}`` filled by ${$parameters>/item}.getText()) - re-verify selecting a menu item toasts` &&
+               ` "Action triggered on item: <text>". **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): selecting 'Hide Existing Sites' toasts 'Action triggered on item: Hide` &&
+               ` Existing Sites'.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Menu`                            name = `Menu`                                class = `z2ui5_cl_ai_app_060` path = `src/01/b07/z2ui5_cl_ai_app_060.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, reviewed, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth` &&
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, reviewed, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth` &&
                  ` a close look.`
         is_post171 = abap_true
         checked = `CHECKED (2026-07-22): verified in a running system 2026-07-22: the Menu opens anchored to the button (openBy) and the selected item text resolves via ${$parameters>/item}.getText().`
         notes = lv_text1
         post171 = `Button.ariaHasPopup (since UI5 1.84) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.84 to render it.` ) ).
 
-    lv_text1 = `POST-1.71: the MenuButton ``beforeMenuOpen`` event (since UI5 1.94) is kept 1:1 on the split-mode buttons that use it. menuPosition (1.56), buttonMode and useDefaultActionOnly are <= 1.71. //` &&
-               ` IMPROVISED: onMenuAction builds a breadcrumb path by walking the selected MenuItem's parent chain (e.g. 'basic > add'); the server cannot walk the client-side control tree, so the toast shows only` &&
-               ` the selected item's own text, transported via ${$parameters>/item}.getText(). // NOTE: onPress toasts the pressed MenuItem's control id (the sample's evt.getSource().getId() + ' Pressed'),` &&
-               ` transported via $event.oSource.sId. The Edit item's core:CustomData (key=target, value=p1) is kept 1:1 as inert view metadata. // NOTE: the selected item's text is read with` &&
-               ` ${$parameters>/item}.getText() (a method call on the resolved MenuItem control), NOT ${$parameters>/item/text}: the $parameters model exposes 'item' as the control object and UI5 keeps properties in` &&
-               ` the control's internal property store, so the path .../item/text reads an undefined direct field and the toast arrives empty. // NOTE: live-verified 2026-07-22 - confirm in a running system that`.
-    lv_text1 = lv_text1 && ` itemSelected/press/defaultAction/beforeMenuOpen all fire their toasts and that ${$parameters>/item}.getText() delivers the selected MenuItem text. // LIVE-TEST: all toasts were switched from` &&
-               ` message_toast_display round-trips to roundtrip-free client-composed control_global toasts on 2026-07-22 (the app is now init-only) - re-verify each button/menu still toasts its text. **e2e-verified` &&
-               ` 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): opening the 'File' MenuButton and selecting 'Save' toasts 'Action triggered on item: Save' (the ${$parameters>/item}.getText()` &&
-               ` template resolves); the remaining buttons/defaultAction wires are the same class but unexercised.`.
+    lv_text1 = `POST-1.71: the MenuButton ``beforeMenuOpen`` event (since UI5 1.94) is kept 1:1 on the split-mode buttons that use it. menuPosition (1.56), buttonMode and useDefaultActionOnly are <= 1.71. // NOTE:` &&
+               ` onMenuAction builds a breadcrumb path by walking the selected MenuItem's parent chain (e.g. 'basic > add'). Reproduced client-side since 2026-07-31 (pr/menu-item-selected-path closed): UI5's` &&
+               ` EventHandlerResolver hands the WHOLE handler string to BindingParser.parseExpression, so an event arg is a full expression - method calls, isA('...'), string concat and ternaries included. All nine` &&
+               ` itemSelected wires now carry a nested-ternary parent walk (one hop, then two, else the leaf text), so a nested item toasts '<parent> > <item>' and a top-level item its own text, exactly like the` &&
+               ` original.  Control-tree note (probed on OpenUI5 1.152 with a real browser): sap.m.Menu wraps its items in an internal sap.m.MenuWrapper, so a nested item's parent chain is MenuItem -> MenuWrapper ->` &&
+               ` MenuItem -> MenuWrapper -> Popover -> ResponsivePopover -> Menu. The parent MenuItem therefore sits TWO hops up, and the sample's own 'while (oItem instanceof MenuItem) { ... oItem.getParent(); }'`.
+    lv_text1 = lv_text1 && ` loop exits at the first MenuWrapper - the LIVE demo kit sample consequently toasts only the leaf text on this release. The port reproduces the controller's intended breadcrumb and stays robust across` &&
+               ` both control-tree shapes: one hop first (pre-MenuWrapper releases), then two hops, else the leaf text. Boundary: an expression has no loop, so the walk is unrolled - two ternaries here (every menu in` &&
+               ` this sample is at most two levels deep). // NOTE: onPress toasts the pressed MenuItem's control id (the sample's evt.getSource().getId() + ' Pressed'), transported via $event.oSource.sId. The Edit` &&
+               ` item's core:CustomData (key=target, value=p1) is kept 1:1 as inert view metadata. // NOTE: the selected item's text is read with ${$parameters>/item}.getText() (a method call on the resolved MenuItem` &&
+               ` control), NOT ${$parameters>/item/text}: the $parameters model exposes 'item' as the control object and UI5 keeps properties in the control's internal property store, so the path .../item/text reads`.
+    lv_text1 = lv_text1 && ` an undefined direct field and the toast arrives empty. // NOTE: live-verified 2026-07-22 - confirm in a running system that itemSelected/press/defaultAction/beforeMenuOpen all fire their toasts and` &&
+               ` that ${$parameters>/item}.getText() delivers the selected MenuItem text. // LIVE-TEST: all toasts were switched from message_toast_display round-trips to roundtrip-free client-composed control_global` &&
+               ` toasts on 2026-07-22 (the app is now init-only) - re-verify each button/menu still toasts its text. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): opening the` &&
+               ` 'File' MenuButton and selecting 'Save' toasts 'Action triggered on item: Save' (the ${$parameters>/item}.getText() template resolves); the remaining buttons/defaultAction wires are the same class but` &&
+               ` unexercised.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.MenuButton`                      name = `MenuButton`                          class = `z2ui5_cl_ai_app_061` path = `src/01/b07/z2ui5_cl_ai_app_061.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, reviewed, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth` &&
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, reviewed, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth` &&
                  ` a close look.`
         is_post171 = abap_true
         checked = `CHECKED (2026-07-22): verified in a running system 2026-07-22: itemSelected/press/defaultAction/beforeMenuOpen all fire their toasts and the item text resolves.`

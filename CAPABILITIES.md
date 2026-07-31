@@ -124,6 +124,24 @@ its `{0}`,`{1}`,… placeholders are filled by the following values (each a
 dynamic "Action triggered on item: X" toast is roundtrip-free — 1:1 with the
 demo-kit controllers that do `MessageToast.show("…" + evt.getParameter(…))`
 (apps 005, 060). A lone string is unchanged.
+**An arg is a FULL UI5 expression, not just a path** (proven 2026-07-31 by apps
+060/061, closing `pr/menu-item-selected-path`): `EventHandlerResolver` hands the
+*entire* handler string to `BindingParser.parseExpression`
+(`sap/ui/core/mvc/EventHandlerResolver.js`), so an arg may mix embedded bindings
+with the whole expression-binding grammar — method calls, `isA('…')`, string
+concatenation, ternaries. The demo kit's menu breadcrumb (`onMenuAction`'s
+`while (oItem instanceof MenuItem) { … oItem.getParent(); }`) is therefore
+transportable with no framework change and no ABAP API:
+a nested-ternary parent walk in the `itemSelected` arg (apps 060/061).
+**Mind the control tree**: `sap.m.Menu` wraps its items in an internal
+`sap.m.MenuWrapper`, so a nested item's chain is `MenuItem → MenuWrapper →
+MenuItem → …` and the parent item sits **two hops** up — probed in a real
+browser on OpenUI5 1.152. (The demo kit sample's own
+`while (oItem instanceof MenuItem)` loop stops at that wrapper, so the *live*
+sample now toasts only the leaf text; the ports reproduce the intended
+breadcrumb and try one hop, then two, then fall back to the leaf, which stays
+correct on pre-`MenuWrapper` releases.) The one boundary: an expression has no
+loop, so the walk is **unrolled** — two ternaries cover a two-level menu.
 Since 2026-07-31 (batch b05) `control_by_id` is also the way to write a UI5
 **association**, which — unlike a property — cannot be data-bound at all:
 app 263 resets `sap.uxap.ObjectPageLayout.selectedSection` with

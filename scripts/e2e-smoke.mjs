@@ -123,6 +123,16 @@ const INTERACTIONS = {
     await expect(item, 'the anchored-open menu (toggleBy)').toBeVisibleEnabled();
     await item.click();
     await expect(page.locator('.sapMMessageToast'), 'the item-selected client toast').toContainText('Action triggered on item: Hide Existing Sites');
+    // the breadcrumb path of a NESTED item — the client-side parent walk
+    // (isA('sap.m.MenuItem') ternary) that replaces the controller's while-loop
+    await btn.click();
+    const parent = page.getByText('Create New Site', { exact: true }).first();
+    await expect(parent, 'the nesting menu item').toBeVisibleEnabled();
+    await parent.click();
+    const child = page.getByText('Official Store', { exact: true }).first();
+    await expect(child, 'the submenu item').toBeVisibleEnabled();
+    await child.click();
+    await expect(page.locator('.sapMMessageToast').last(), 'the ancestor-path toast').toContainText('Action triggered on item: Create New Site > Official Store');
   },
   z2ui5_cl_ai_app_094: async (page, expect) => {
     const link = page.locator('.sapMListTbl a.sapMLnk').first();

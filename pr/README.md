@@ -24,9 +24,9 @@ change**.
 
 Genuinely open — not yet implemented.
 
-| Request | Summary | Priority |
-|---------|---------|----------|
-| [`menu-item-selected-path`](menu-item-selected-path/) | A resolvable payload for the selected menu item's ancestor-text breadcrumb (`Create New Site > Official Store`), or a documented capability boundary. From b07 apps 060/061; today only the leaf `${$parameters>/item}.getText()` is transportable. **Deferred** (2026-07-20, user decision) — cosmetic (toast text) and likely resolves as a documented boundary rather than a framework change; kept for a later call. | low — deferred |
+_None right now (2026-07-31): `menu-item-selected-path`, the last open request,
+was closed by option 1 of its own proposal — the client already resolves it, no
+framework change needed (see the Implemented table)._
 
 ## Declined / deferred (folder removed 2026-07-19)
 
@@ -40,6 +40,7 @@ Genuinely open — not yet implemented.
 
 | Request | Implemented | Upstream result |
 |---------|-------------|-----------------|
+| menu-item-selected-path | 2026-07-31 | **No framework change needed — closed by option 1 of the request.** `EventHandlerResolver` hands the *whole* handler string to `BindingParser.parseExpression` (`sap/ui/core/mvc/EventHandlerResolver.js`), so a `$`-prefixed event arg is a **full UI5 expression**, not just a path — method calls, `isA('…')`, string concat and ternaries all resolve client-side. The demo kit's menu breadcrumb (`onMenuAction`'s `while (oItem instanceof MenuItem) … getParent()`) is therefore transportable today as a nested-ternary parent walk in the `itemSelected` arg. Probing a real browser on OpenUI5 1.152 also settled *why* it looked impossible: `sap.m.Menu` wraps its items in an internal `sap.m.MenuWrapper`, so the parent MenuItem is **two hops** up — which is also why the sample's own `while (oItem instanceof MenuItem)` loop stops at the wrapper and the live demo now toasts only the leaf text. The ports walk one hop, then two, then fall back to the leaf, so they reproduce the intended breadcrumb on both control-tree shapes. Apps 060/061 converted (their IMPROVISED breadcrumb deviations became NOTEs), e2e interaction extended to assert `Action triggered on item: Create New Site > Official Store`; CAPABILITIES' frontend-action catalog carries the rule. Documented boundary: an expression has no loop, so the parent walk is unrolled one ternary per menu level |
 | control-call-whitelist | 2026-07-18 | `open`, `close`, `setExpanded` added to the `CONTROL_BY_ID` whitelist (`app/webapp/core/FrontendAction.js` `CONTROL_METHODS`); ports 469/471 converted, IMPROVISED deviations dropped. 2026-07-19: the interim `control_call`/`control_call_by_id` wrapper methods were consolidated into `follow_up_action` + `cs_event-control_global`/`control_by_id` |
 | message-box-dependent-on | 2026-07-17 | `message_box_display` carries `dependenton`/`contentwidth`; the client resolves the id to a `sap.ui.core.Element` before `MessageBox.show` |
 | device-model-in-popups | 2026-07-17 | the shared `device>` model is bound on every view slot at creation — popup, popover and nested views, not just the main view |

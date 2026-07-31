@@ -7,6 +7,50 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## pr/menu-item-selected-path closed — an event arg is a FULL UI5 expression (2026-07-31)
+
+- The last open `pr/` request wanted a resolvable payload for the selected menu
+  item's **ancestor breadcrumb** (`Create New Site > Official Store`), which
+  apps 060/061 could not transport: the demo kit controller walks
+  `getParent()` in a `while (oItem instanceof MenuItem)` loop, and the ports
+  toasted only the leaf text (`${$parameters>/item}.getText()`), declared
+  IMPROVISED on both.
+- **Closed by option 1 of its own proposal — no framework change.** Reading
+  `sap/ui/core/mvc/EventHandlerResolver.js` settles it: the resolver hands the
+  **whole** handler string to `BindingParser.parseExpression`, so a
+  `$`-prefixed event arg is not just a binding path but a **full
+  expression-binding expression** — embedded bindings mixed with method calls,
+  `isA('…')`, string concatenation and ternaries. The corpus had only ever used
+  the trivial form (`.getText()`), which hid the capability.
+- **A browser probe then corrected the naive form.** A throwaway harness
+  (OpenUI5 1.152 from the `@openui5` packages, `fireItemSelected` on a real
+  nested `sap.m.Menu`) showed the one-hop walk returning the leaf text:
+  `sap.m.Menu` wraps its items in an internal **`sap.m.MenuWrapper`**, so the
+  chain is `MenuItem → MenuWrapper → MenuItem → MenuWrapper → Popover →
+  ResponsivePopover → Menu` and the parent item sits **two hops** up. That also
+  explains the sample: its own `while (oItem instanceof MenuItem)` loop exits at
+  the first wrapper, so the **live demo kit sample toasts only the leaf text**
+  on this release — the ports had been behaviour-identical with upstream all
+  along, just not with the controller's intent.
+- Both ports now carry a nested-ternary walk — one hop, then two, else the leaf
+  (060 once, 061 on all nine `itemSelected` wires): a nested item toasts
+  `<parent> > <item>`, a top-level item its own text, and the fallback keeps it
+  correct on pre-`MenuWrapper` releases. Probe verdict:
+  `["Create New Site > Official Store", "Export Map"]`. The two IMPROVISED
+  deviations became NOTEs carrying the control-tree finding.
+- **Documented boundary** (the request's option 2, kept for the general case):
+  an expression has no loop, so the parent walk is **unrolled** — two ternaries
+  per two-level menu. Recorded in AGENTS §5 (toast row) and in CAPABILITIES'
+  frontend-action catalog.
+- The e2e interaction for 060 grew a second leg: open the menu, click
+  **Create New Site → Official Store**, assert the toast reads
+  `Action triggered on item: Create New Site > Official Store`. Local
+  verification in this change is the browser probe above (the transpiled
+  backend was still building); the added interaction is what regression-guards
+  the wire end-to-end from the next `e2e` / nightly run on.
+- `pr/menu-item-selected-path/` deleted per the pr/ convention (Implemented row
+  left as the pointer). **`pr/` now holds no open request.**
+
 ## Batch b13 — BoundFilters: breadth closed except the hold-out set (2026-07-31)
 
 - **Apps 264/265** (`src/02/b13`, `sap.ui.model.Filter`): the two

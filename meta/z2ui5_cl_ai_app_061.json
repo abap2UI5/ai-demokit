@@ -20,8 +20,8 @@
       "what": "the MenuButton `beforeMenuOpen` event (since UI5 1.94) is kept 1:1 on the split-mode buttons that use it. menuPosition (1.56), buttonMode and useDefaultActionOnly are <= 1.71."
     },
     {
-      "type": "IMPROVISED",
-      "what": "onMenuAction builds a breadcrumb path by walking the selected MenuItem's parent chain (e.g. 'basic > add'); the server cannot walk the client-side control tree, so the toast shows only the selected item's own text, transported via ${$parameters>/item}.getText()."
+      "type": "NOTE",
+      "what": "onMenuAction builds a breadcrumb path by walking the selected MenuItem's parent chain (e.g. 'basic > add'). Reproduced client-side since 2026-07-31 (pr/menu-item-selected-path closed): UI5's EventHandlerResolver hands the WHOLE handler string to BindingParser.parseExpression, so an event arg is a full expression - method calls, isA('...'), string concat and ternaries included. All nine itemSelected wires now carry a nested-ternary parent walk (one hop, then two, else the leaf text), so a nested item toasts '<parent> > <item>' and a top-level item its own text, exactly like the original.  Control-tree note (probed on OpenUI5 1.152 with a real browser): sap.m.Menu wraps its items in an internal sap.m.MenuWrapper, so a nested item's parent chain is MenuItem -> MenuWrapper -> MenuItem -> MenuWrapper -> Popover -> ResponsivePopover -> Menu. The parent MenuItem therefore sits TWO hops up, and the sample's own 'while (oItem instanceof MenuItem) { ... oItem.getParent(); }' loop exits at the first MenuWrapper - the LIVE demo kit sample consequently toasts only the leaf text on this release. The port reproduces the controller's intended breadcrumb and stays robust across both control-tree shapes: one hop first (pre-MenuWrapper releases), then two hops, else the leaf text. Boundary: an expression has no loop, so the walk is unrolled - two ternaries here (every menu in this sample is at most two levels deep)."
     },
     {
       "type": "NOTE",
