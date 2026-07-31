@@ -124,31 +124,27 @@ its `{0}`,`{1}`,… placeholders are filled by the following values (each a
 dynamic "Action triggered on item: X" toast is roundtrip-free — 1:1 with the
 demo-kit controllers that do `MessageToast.show("…" + evt.getParameter(…))`
 (apps 005, 060). A lone string is unchanged.
-**An arg is a FULL UI5 expression, not just a path** (proven 2026-07-31 by apps
-060/061, closing `pr/menu-item-selected-path`): `EventHandlerResolver` hands the
+**An arg is a FULL UI5 expression, not just a path** (proven 2026-07-31 by the
+`pr/menu-item-selected-path` investigation): `EventHandlerResolver` hands the
 *entire* handler string to `BindingParser.parseExpression`
 (`sap/ui/core/mvc/EventHandlerResolver.js`), so an arg may mix embedded bindings
 with the whole expression-binding grammar — method calls, `isA('…')`, string
-concatenation, ternaries. The demo kit's menu breadcrumb (`onMenuAction`'s
-`while (oItem instanceof MenuItem) { … oItem.getParent(); }`) is therefore
-transportable with no framework change and no ABAP API:
-a nested-ternary parent walk in the `itemSelected` arg (apps 060/061).
-**Mind the control tree**: `sap.m.Menu` wraps its items in an internal
-`sap.m.MenuWrapper`, so a nested item's chain is `MenuItem → MenuWrapper →
-MenuItem → …` and the parent item sits **two hops** up — probed in a real
-browser on OpenUI5 1.152. (The demo kit sample's own
-`while (oItem instanceof MenuItem)` loop stops at that wrapper, so the *live*
-sample now toasts only the leaf text; the ports reproduce the intended
-breadcrumb and try one hop, then two, then fall back to the leaf, which stays
-correct on pre-`MenuWrapper` releases.) The one boundary: an expression has no
-loop, so the walk is **unrolled** — two ternaries cover a two-level menu.
-Since 2026-07-31 (batch b05) `control_by_id` is also the way to write a UI5
-**association**, which — unlike a property — cannot be data-bound at all:
-app 263 resets `sap.uxap.ObjectPageLayout.selectedSection` with
-`follow_up_action( control_by_id, ObjectPageLayout / setSelectedSection /
-<sectionId> )`. An unlisted setter runs through the framework-invariant
-guard, but an empty/null argument is not transportable — pass the target id
-(the first section's id reproduces UI5's own null fallback).
+concatenation, ternaries. Use it for anything the client can compute from the
+event without a round-trip.
+**Boundary — a menu-item ancestor breadcrumb is NOT transportable** (measured
+in a browser on OpenUI5 1.152, and against the transpiled backend): the
+expression grammar has **no loop**, and `sap.m.Menu` re-parents its items
+through an internal `sap.m.MenuWrapper` whose depth changes with the runtime
+state — the parent `MenuItem` is **two** hops up while the submenu is closed
+(`MenuItem → MenuWrapper → MenuItem`) and **four** once the submenu popover
+exists (`MenuItem → MenuWrapper → Popover → ResponsivePopover → MenuItem`). A
+fixed-hop walk therefore works only in one of the two states (it did toast
+`Create New Site > Official Store` when the event was fired programmatically,
+and the leaf text when a user clicked through). The same wrapper breaks the demo
+kit sample's own `while (oItem instanceof MenuItem) … getParent()` loop, so
+**upstream now toasts the leaf text too** — apps 060/061 keep
+`${$parameters>/item}.getText()`, which is behaviour-identical with the live
+sample, and the 060 e2e interaction asserts exactly that.
 and the sibling **`cs_event-binding_call`** (pr/binding-call) — apply a
 declarative filter/sorter to an aggregation binding. All three are scheduled
 via `follow_up_action` with positional `t_arg` (`control_by_id`:

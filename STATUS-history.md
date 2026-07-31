@@ -7,49 +7,48 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
-## pr/menu-item-selected-path closed — an event arg is a FULL UI5 expression (2026-07-31)
+## pr/menu-item-selected-path closed — measured, not assumed (2026-07-31)
 
-- The last open `pr/` request wanted a resolvable payload for the selected menu
-  item's **ancestor breadcrumb** (`Create New Site > Official Store`), which
-  apps 060/061 could not transport: the demo kit controller walks
-  `getParent()` in a `while (oItem instanceof MenuItem)` loop, and the ports
-  toasted only the leaf text (`${$parameters>/item}.getText()`), declared
-  IMPROVISED on both.
-- **Closed by option 1 of its own proposal — no framework change.** Reading
-  `sap/ui/core/mvc/EventHandlerResolver.js` settles it: the resolver hands the
+- The last open `pr/` request wanted the selected menu item's **ancestor
+  breadcrumb** (`Create New Site > Official Store`) transportable; apps 060/061
+  toasted only the leaf text, declared IMPROVISED on both.
+- **Option 1 looked like a win.** Reading
+  `sap/ui/core/mvc/EventHandlerResolver.js` shows the resolver hands the
   **whole** handler string to `BindingParser.parseExpression`, so a
-  `$`-prefixed event arg is not just a binding path but a **full
-  expression-binding expression** — embedded bindings mixed with method calls,
-  `isA('…')`, string concatenation and ternaries. The corpus had only ever used
-  the trivial form (`.getText()`), which hid the capability.
-- **A browser probe then corrected the naive form.** A throwaway harness
-  (OpenUI5 1.152 from the `@openui5` packages, `fireItemSelected` on a real
-  nested `sap.m.Menu`) showed the one-hop walk returning the leaf text:
-  `sap.m.Menu` wraps its items in an internal **`sap.m.MenuWrapper`**, so the
-  chain is `MenuItem → MenuWrapper → MenuItem → MenuWrapper → Popover →
-  ResponsivePopover → Menu` and the parent item sits **two hops** up. That also
-  explains the sample: its own `while (oItem instanceof MenuItem)` loop exits at
-  the first wrapper, so the **live demo kit sample toasts only the leaf text**
-  on this release — the ports had been behaviour-identical with upstream all
-  along, just not with the controller's intent.
-- Both ports now carry a nested-ternary walk — one hop, then two, else the leaf
-  (060 once, 061 on all nine `itemSelected` wires): a nested item toasts
-  `<parent> > <item>`, a top-level item its own text, and the fallback keeps it
-  correct on pre-`MenuWrapper` releases. Probe verdict:
-  `["Create New Site > Official Store", "Export Map"]`. The two IMPROVISED
-  deviations became NOTEs carrying the control-tree finding.
-- **Documented boundary** (the request's option 2, kept for the general case):
-  an expression has no loop, so the parent walk is **unrolled** — two ternaries
-  per two-level menu. Recorded in AGENTS §5 (toast row) and in CAPABILITIES'
-  frontend-action catalog.
-- The e2e interaction for 060 grew a second leg: open the menu, click
-  **Create New Site → Official Store**, assert the toast reads
-  `Action triggered on item: Create New Site > Official Store`. Local
-  verification in this change is the browser probe above (the transpiled
-  backend was still building); the added interaction is what regression-guards
-  the wire end-to-end from the next `e2e` / nightly run on.
+  `$`-prefixed arg is a **full expression-binding expression** — embedded
+  bindings mixed with method calls, `isA('…')`, string concat and ternaries.
+  The corpus had only ever used the trivial `.getText()` form, which hid it.
+  A ternary parent-walk was written into both ports and a throwaway browser
+  probe (OpenUI5 1.152, `fireItemSelected` on a real nested `sap.m.Menu`)
+  returned exactly `["Create New Site > Official Store", "Export Map"]`.
+- **The e2e run against the transpiled backend then refuted it.** Clicking
+  through the real menu still toasted the leaf text, and measuring the chain in
+  the *opened* state explained why: `sap.m.Menu` re-parents its items through an
+  internal `sap.m.MenuWrapper`, and the hop count to the parent `MenuItem`
+  **changes with runtime state** — two hops while the submenu is closed
+  (`MenuItem → MenuWrapper → MenuItem`), four once its popover exists
+  (`MenuItem → MenuWrapper → Popover → ResponsivePopover → MenuItem`). An
+  expression has no loop, so no fixed hop count is right in both states. The
+  probe had only ever seen the closed state.
+- **Closed as option 2 — a documented capability boundary.** The ports keep
+  `${$parameters>/item}.getText()`; their deviations became **NOTEs** rather
+  than IMPROVISED, because the same wrapper breaks the demo kit sample's own
+  `while (oItem instanceof MenuItem) … getParent()` loop: **upstream toasts the
+  leaf text too** on this release, so the ports were behaviour-identical with
+  the live sample all along.
+- Kept as the by-product: the **"an event arg is a full UI5 expression"** rule
+  (AGENTS §5, CAPABILITIES frontend-action catalog) — real, proven, and useful
+  for anything the client can compute from the event without a round-trip; only
+  the *loop* is missing.
+- The 060 e2e interaction gained a leg that selects the **nested** item and
+  asserts the leaf toast, so the boundary is regression-guarded instead of
+  merely written down. `e2e-smoke --only 060`: pass.
 - `pr/menu-item-selected-path/` deleted per the pr/ convention (Implemented row
   left as the pointer). **`pr/` now holds no open request.**
+- Process note: the first e2e failure was a **stale transpiled backend** plus a
+  leftover express server from a debug run holding port 3000 — the browser kept
+  getting the old wire. Rebuild with `npm run node:build` and check for a
+  running `node .abap2UI5/node/srv/express.mjs` before believing an e2e verdict.
 
 ## Batch b13 — BoundFilters: breadth closed except the hold-out set (2026-07-31)
 

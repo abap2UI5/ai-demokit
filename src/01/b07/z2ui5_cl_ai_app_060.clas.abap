@@ -48,20 +48,10 @@ CLASS z2ui5_cl_ai_app_060 IMPLEMENTATION.
                     )->open( `Menu`
                         )->a( n = `id`           v = `theMenu`
                         " compose the toast on the frontend (1:1 with the sample's
-                        " onMenuAction breadcrumb), roundtrip-free - {0} is filled by
-                        " the client-resolved item path: the controller's while-loop up
-                        " getParent() becomes nested ternaries on isA('sap.m.MenuItem').
-                        " Since sap.m.Menu wraps its items in a sap.m.MenuWrapper the
-                        " parent MenuItem sits TWO hops up (probed on OpenUI5 1.152),
-                        " so both shapes are tried - one hop, then two, else the leaf
+                        " MessageToast.show("Action triggered on item: " + item.getText())),
+                        " roundtrip-free - {0} is filled by the client-resolved item text
                         )->a( n = `itemSelected` v = client->_event_client( val   = client->cs_event-control_global
-                                                                            t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` )
-                                                                                             ( `${$parameters>/item}.getParent().isA('sap.m.MenuItem') ? ` &&
-                                                                                               `${$parameters>/item}.getParent().getText() + ' > ' + ${$parameters>/item}.getText() : ` &&
-                                                                                               `(${$parameters>/item}.getParent().getParent() && ` &&
-                                                                                               `${$parameters>/item}.getParent().getParent().isA('sap.m.MenuItem') ? ` &&
-                                                                                               `${$parameters>/item}.getParent().getParent().getText() + ' > ' + ${$parameters>/item}.getText() ` &&
-                                                                                               `: ${$parameters>/item}.getText())` ) ) )
+                                                                            t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` ) ( `${$parameters>/item}.getText()` ) ) )
 
                         )->leaf( `MenuItem`
                             )->a( n = `text` v = `Hide Existing Sites`

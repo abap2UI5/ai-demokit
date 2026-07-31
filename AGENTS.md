@@ -733,13 +733,16 @@ creation).
 | `MessageToast.show("…" + evt.x)` (text built on the client) | Client-composed template, roundtrip-free. Exact `t_arg` tuple order = **object, method, template, arg(s)**: `` client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( \`MESSAGE_TOAST\` ) ( \`show\` ) ( \`Item selected: {0}\` ) ( \`${$parameters>/item}.getText()\` ) ) ) ``. The wire token is `MESSAGE_TOAST` (not `MessageToast`); `{0}` is filled by the resolved arg. **A template may START with `{0}`** — `get_t_arg` quotes a leading `{N}`/`{N?…}` placeholder as a plain string (source: `^\{[0-9]+[?}]` match), so a value-first toast needs no round-trip fallback (probe-#2 friction, app 609-class). Button text is `${$source>/text}`; menu-item text is `${$parameters>/item}.getText()`.
 **An arg is a full UI5 expression, not just a path** — `EventHandlerResolver`
 parses the whole handler with `BindingParser.parseExpression`, so method calls,
-`isA('…')`, string concat and ternaries all work in an arg; the menu-breadcrumb
-walk (`while (item instanceof MenuItem) … getParent()`) is expressible as
-nested ternaries (apps 060/061, 2026-07-31 — that is what closed
-`pr/menu-item-selected-path`; only the *loop* is missing, so unroll to the
-sample's actual depth). `sap.m.Menu` wraps items in a `sap.m.MenuWrapper`, so
-the parent MenuItem is **two hops** up on current OpenUI5 — walk one hop, then
-two, else fall back to the leaf text. **When the original pulls the module via `core:require` on the fragment/view root** (`core:require="\{MessageToast: 'sap/m/MessageToast'\}"` for an inline `press="MessageToast.show(…)"`) and you rewire to `_event_client`, that `core:require` is **dropped — name it in the deviation**: structural-diff treats `core:require` as an ordinary (non-`xmlns`) attribute and flags it missing | CAPABILITIES; apps 005/060/172 |
+`isA('…')`, string concat and ternaries all work in an arg (found 2026-07-31
+while closing `pr/menu-item-selected-path`). But the grammar has **no loop**:
+a parent-chain walk must be unrolled to a fixed hop count, which fails when the
+control tree reshapes at runtime — `sap.m.Menu` re-parents items through a
+`sap.m.MenuWrapper`, so a nested item's parent `MenuItem` is two hops up while
+the submenu is closed and four once its popover exists. That is why the menu
+breadcrumb stays **non-transportable** (documented boundary, CAPABILITIES) and
+apps 060/061 keep the leaf `${$parameters>/item}.getText()` — which the live
+demo kit sample now shows too, its own `instanceof MenuItem` loop breaking on
+the same wrapper. Measure the chain before betting an arg on `getParent()`. **When the original pulls the module via `core:require` on the fragment/view root** (`core:require="\{MessageToast: 'sap/m/MessageToast'\}"` for an inline `press="MessageToast.show(…)"`) and you rewire to `_event_client`, that `core:require` is **dropped — name it in the deviation**: structural-diff treats `core:require` as an ordinary (non-`xmlns`) attribute and flags it missing | CAPABILITIES; apps 005/060/172 |
 | Custom **CSS / raw markup** (`style.css`, `<h2>`, a `core:HTML` `content` div) | `core:HTML` leaf, markup in the `content` **attribute** (no CDATA node exists). Two traps: **(a)** write the **decoded** literal markup — the original XML carries it entity-encoded (`&lt;div&gt;`), but you write `<div>`; the builder re-escapes on stringify, so copying the entities double-escapes them. **(b)** escape literal braces `\{ \}` in a **backtick** literal `` `…\{…\}…` `` — backtick passes `\{` through to the serialized attribute; a `\|…\|` template would collapse `\{`→`{` and re-crash (the **reverse** of the typed-binding row, which *wants* real braces and so uses the pipe) | CAPABILITIES "Custom CSS"; apps 026/028, 169 |
 | Controller **`.filter()`/`.sort()`** on `oList.getBinding('items')` | `cs_event-binding_call` (whitelisted methods/operators, compound filter groups since 2026-07-20) — the model stays untouched | CAPABILITIES "Controller-applied binding filter"; app 022 |
 | An **imperative control method** (`open`/`close`/`toggleStyleClass`/`toDetail`/`expandToLevel`/`setHiddenInPopin`…) | `follow_up_action( val = cs_event-control_by_id t_arg = id/method/args )`. A method **listed** in `CONTROL_METHODS` carries explicit arg kinds (extra args silently dropped — verify the kinds); a method **not listed** still runs when it is a public control method not matching the deny regex (`destroy/bind/attach/setModel/…` — the framework-invariant guard), so ordinary setters/toggles need no whitelist entry (source-verified in FrontendAction.js 2026-07-26 — the older "whitelist-only, unlisted = pr/" phrasing is stale; a *denylisted or argument-dropping* need is still a declared deviation + `pr/`) | CAPABILITIES "Frontend-action catalog"; §5 |
@@ -1116,6 +1119,14 @@ How to record it:
   (no braces) — use it when composing raw binding-info strings
   (`{ path: '...', sorter: ... }`); never reconstruct the path with substring
   tricks. Human-taught fix in app 039, 2026-07-16.
+- **An e2e verdict is only as fresh as the transpiled backend** — `scripts/`
+  `e2e-smoke.mjs` runs the code in `.abap2UI5/node/output`, so a port edited
+  after the last `npm run node:build` is NOT what the browser executes, and a
+  leftover `node .abap2UI5/node/srv/express.mjs` from a debug run keeps port
+  3000 (the harness' own spawn then fails silently and the browser talks to the
+  stale server). Both bit the 060 menu investigation on 2026-07-31: read the
+  wire the browser actually got (`menu.mEventRegistry.itemSelected[0].fFunction`
+  `._sapui_handlerName`) before concluding anything from a failing interaction.
 - **abapGit pushes from a system can carry stale generated files** — a human
   who pulled before the latest repo change and pushes back from the system
   silently reverts it (happened to the overview app's SUBSET labels,

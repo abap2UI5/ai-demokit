@@ -123,8 +123,11 @@ const INTERACTIONS = {
     await expect(item, 'the anchored-open menu (toggleBy)').toBeVisibleEnabled();
     await item.click();
     await expect(page.locator('.sapMMessageToast'), 'the item-selected client toast').toContainText('Action triggered on item: Hide Existing Sites');
-    // the breadcrumb path of a NESTED item — the client-side parent walk
-    // (isA('sap.m.MenuItem') ternary) that replaces the controller's while-loop
+    // selecting a NESTED item: the toast carries the item's own text, NOT the
+    // sample controller's ancestor breadcrumb — sap.m.Menu re-parents items
+    // through MenuWrapper/Popover, so upstream's `while (item instanceof
+    // MenuItem) getParent()` loop breaks there too (measured 2026-07-31, see
+    // CAPABILITIES "menu breadcrumb"); this leg guards that boundary
     await btn.click();
     const parent = page.getByText('Create New Site', { exact: true }).first();
     await expect(parent, 'the nesting menu item').toBeVisibleEnabled();
@@ -132,7 +135,7 @@ const INTERACTIONS = {
     const child = page.getByText('Official Store', { exact: true }).first();
     await expect(child, 'the submenu item').toBeVisibleEnabled();
     await child.click();
-    await expect(page.locator('.sapMMessageToast').last(), 'the ancestor-path toast').toContainText('Action triggered on item: Create New Site > Official Store');
+    await expect(page.locator('.sapMMessageToast').last(), 'the nested-item toast (leaf text)').toContainText('Action triggered on item: Official Store');
   },
   z2ui5_cl_ai_app_094: async (page, expect) => {
     const link = page.locator('.sapMListTbl a.sapMLnk').first();
