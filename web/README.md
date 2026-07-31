@@ -53,6 +53,22 @@ in a restricted sandbox — there the controls render but stay unthemed.
 requested, so the bare Pages URL opens the port overview. Each overview row
 has a *"Start this abap2UI5 app in a new tab"* link (`?app_start=<class>`).
 
+## Patched transpiler lib (`open-abap-core`)
+
+`assemble` clones [open-abap-core](https://github.com/open-abap/open-abap-core)
+into `open-abap-core/` and runs
+[`ci/patch_open_abap_xml.mjs`](ci/patch_open_abap_xml.mjs) over it;
+`ci/abap_transpile.json` points at that folder instead of letting the
+transpiler clone the lib itself. The patch makes
+`CALL TRANSFORMATION id … RESULT XML` **escape character data**: upstream
+writes element values raw, so an app whose model holds a `<` (the overview's
+generation notes) persists a draft that the transpiled `CL_IXML` cannot parse
+back — the next round-trip then dies in an uncatchable `ASSERT` and the page
+shows `Network error: ASSERTION_FAILED` (reported 2026-07-31 for the
+overview's links / generation-notes popovers). Forwarded upstream as
+[`pr/open-abap-xml-escaping`](../pr/open-abap-xml-escaping/); drop the clone,
+the patch and this section once it is merged there.
+
 ## Known limitation
 
 A few ports drive behaviour through backend roundtrips (toggles, mode
@@ -60,3 +76,9 @@ switches, toasts) — these work in-browser. Interactions that depend on the
 b12 split-container navigation methods need the matching frontend whitelist
 in the framework; the daily upstream framework clone may lag those until they
 are merged. Initial render of every port is unaffected.
+
+A round-trip is also **noticeably slower here than on a real server**: the
+transpiled `CL_IXML` re-parses the persisted draft on every request and its
+parser is quadratic in the draft size. Keep the bound model small (only what
+the view renders — see AGENTS §10) and round-trips stay in the
+fraction-of-a-second range.

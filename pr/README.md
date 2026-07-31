@@ -26,6 +26,7 @@ Genuinely open — not yet implemented.
 
 | Request | Summary | Priority |
 |---------|---------|----------|
+| [`open-abap-xml-escaping`](open-abap-xml-escaping/) | **Upstream target is [open-abap/open-abap-core](https://github.com/open-abap/open-abap-core), not abap2UI5.** `CALL TRANSFORMATION id … RESULT XML` writes element character data unescaped, so an app whose model carries a `<` (the overview's generation notes) saves a draft that `CL_IXML` cannot parse back — the next round-trip dies in an uncatchable `ASSERT` and the frontend shows `Network error: ASSERTION_FAILED`. Worked around here by a build-time patch (`web/ci/patch_open_abap_xml.mjs`) applied by both transpiled builds; delete this folder when the fix is upstream. | high — breaks every round-trip of the Pages demo's front door |
 | [`menu-item-selected-path`](menu-item-selected-path/) | A resolvable payload for the selected menu item's ancestor-text breadcrumb (`Create New Site > Official Store`), or a documented capability boundary. From b07 apps 060/061; today only the leaf `${$parameters>/item}.getText()` is transportable. **Deferred** (2026-07-20, user decision) — cosmetic (toast text) and likely resolves as a documented boundary rather than a framework change; kept for a later call. | low — deferred |
 
 ## Declined / deferred (folder removed 2026-07-19)
