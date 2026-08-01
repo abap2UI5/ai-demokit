@@ -72,6 +72,23 @@ of their date and are NOT kept current._
   structural-diff went from 0 to 3 undeclared findings. Keep the naming clause
   when you rewrite a deviation.
 
+## Depth port DialogMessage — five controller Dialogs, one builder (2026-08-01)
+
+- **App 273** (`sap.m.sample.DialogMessage`, b15): five press handlers that
+  each `new Dialog({type: Message, title, state, content, beginButton})`. The
+  port keeps the five trigger Buttons 1:1 and expresses every dialog as a
+  `core:FragmentDefinition` shown with `popup_display` (app 019 precedent),
+  built by **one** `popup_message_display( title state text )` method instead
+  of five near-identical blocks — the handlers differ in nothing else.
+- One detail worth the extra line of code: the **default** dialog is the only
+  one the original builds *without* a `state`, so the port writes the
+  attribute only when there is one. Emitting `state='None'` would have added
+  an attribute the original never sets — a silent fidelity loss that
+  structural-diff cannot see (it compares names, and the name would match).
+- The OK button closes the dialog roundtrip-free via
+  `_event_client( cs_event-popup_close )`, the direct form of the original's
+  `this.oDialog.close()`.
+
 ## Depth port FieldGroup — the validateFieldGroup idiom (2026-08-01)
 
 - **App 272** (`sap.ui.core.sample.FieldGroup`, new batch b15, `src/02`): the

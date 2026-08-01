@@ -1,0 +1,33 @@
+<mvc:View
+	controllerName="sap.m.sample.DialogMessage.C"
+	xmlns:l="sap.ui.layout"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m">
+	<l:VerticalLayout class="sapUiContentPadding" width="100%">
+		<Button
+			text="Message Dialog"
+			width="230px"
+			press=".onDefaultMessageDialogPress"
+			class="sapUiSmallMarginBottom" />
+		<Button
+			text="Message Dialog (Success)"
+			width="230px"
+			press=".onSuccessMessageDialogPress"
+			class="sapUiSmallMarginBottom" />
+		<Button
+			text="Message Dialog (Warning)"
+			width="230px"
+			press=".onWarningMessageDialogPress"
+			class="sapUiSmallMarginBottom" />
+		<Button
+			text="Message Dialog (Error)"
+			width="230px"
+			press=".onErrorMessageDialogPress"
+			class="sapUiSmallMarginBottom" />
+		<Button
+			text="Message Dialog (Information)"
+			width="230px"
+			press=".onMessageInformationDialogPress"
+			class="sapUiSmallMarginBottom" />
+	</l:VerticalLayout>
+</mvc:View>

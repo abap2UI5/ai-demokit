@@ -1358,6 +1358,21 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` dialogs, roundtrip-free live-enable expression, popup_close paths`
         notes = lv_text1 ) ).
 
+    lv_text1 = `NOTE: the original builds its five Message Dialogs imperatively in the controller (new Dialog({type: Message, title, state, content: new Text(...), beginButton: new Button(...)}).open()); the port` &&
+               ` expresses each as a core:FragmentDefinition popup shown via client->popup_display on the button press event - the CAPABILITIES.md 1:1 path for controller-built Dialogs (app 019 precedent). Every` &&
+               ` fragment control is therefore EXTRA vs the archived V.view.xml, which holds only the five trigger Buttons: Dialog, Text and the dialog's own OK Button (Button 5 -> 6, Dialog 0 -> 1, Text 0 -> 1 per` &&
+               ` open dialog). // NOTE: the five handlers differ only in title / state / content text, so the port builds them through one popup_message_display( title state text ) method instead of five` &&
+               ` near-identical blocks. The ``state`` attribute is written only when the original passes one: onDefaultMessageDialogPress builds its Dialog WITHOUT a state, and writing state='None' explicitly would` &&
+               ` be an added attribute rather than the inherited default. // NOTE: the original keeps each Dialog in a controller field and reuses it (if (!this.oDialog) ...); abap2UI5 rebuilds the fragment per open,`.
+    lv_text1 = lv_text1 && ` which is the framework's popup lifecycle - the same deviation the other popup ports carry. The OK button's press (this.oDialog.close()) is reproduced roundtrip-free as _event_client(` &&
+               ` cs_event-popup_close ). // LIVE-TEST: unverified in a running system: that each of the five buttons opens ITS dialog with the right title, value state and text, and that the Emphasized OK button` &&
+               ` closes it client-side without a round-trip.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.Dialog`                          name = `DialogMessage`                       class = `z2ui5_cl_ai_app_273` path = `src/01/b15/z2ui5_cl_ai_app_273.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = lv_text1 ) ).
+
     lv_text1 = `IMPROVISED: the shared mock model sap/ui/demo/mock/supplier.json is flattened into the default model: the row type keeps only the six bound columns (SupplierName, Street, HouseNumber, ZIPCode, City,` &&
                ` Country) of the single /SupplierCollection record and drops the unbound columns (Url, Twitter, Tel, Sms, Mobile, Pager, Fax, Email, Rating, Prime, Disposable); the record itself is kept verbatim. //` &&
                ` NOTE: the sample controller loads the shared mock sap/ui/demo/mock/supplier.json - snapshotted byte-identical into ui5/mock/supplier.json (2026-07-20, git sparse checkout of SAP/openui5 master); one` &&
