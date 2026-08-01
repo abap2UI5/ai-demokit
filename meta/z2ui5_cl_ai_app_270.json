@@ -20,8 +20,8 @@
       "what": "The Slider's liveChange attribute is dropped: onSliderMoved calls byId('panelCSSGrid').setWidth(fValue + '%'). sap.m.Panel HAS a width property, so the slider value is two-way bound ({/SLIDER_VALUE}) and the Panel width is the expression binding {= ${/SLIDER_VALUE} + '%' } - the app 214 form, which needs no round-trip and no imperative setter. Same rendered behaviour, so NOTE rather than IMPROVISED."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "Unverified in a running system: that dragging the Slider really resizes the Panel through the expression binding (render-smoke only proves the binding produces a valid CSSSize), and that the nested CSSGrid with its GridItemLayoutData (gridColumn '1 / 3', gridRow 1/2) lays the E/F/G boxes out as in the original."
+      "type": "NOTE",
+      "what": "**e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): driving the Slider with the keyboard resizes the Panel with no round-trip: the value goes 100 -> 99 and the Panel's width follows as '99%' through the expression binding, so the controller's jQuery width is fully replaced. The nested CSSGrid renders its E/F/G boxes. Residual (nothing headless can assert): the visual grid placement from GridItemLayoutData (gridColumn '1 / 3'), which needs the theme CSS the harness does not load."
     }
   ]
 }

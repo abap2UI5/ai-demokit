@@ -19,7 +19,8 @@
  *
  *   node scripts/e2e-smoke.mjs            advisory report
  *   node scripts/e2e-smoke.mjs --strict   exit 1 on any failing port
- *   node scripts/e2e-smoke.mjs --only 005 single port (debugging)
+ *   node scripts/e2e-smoke.mjs --only 005      single port (debugging)
+ *   node scripts/e2e-smoke.mjs --only 005,270  a comma-separated list
  *   node scripts/e2e-smoke.mjs --headed   show the browser (debugging)
  */
 import fs from 'fs';
@@ -34,7 +35,9 @@ const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const META = path.join(ROOT, 'meta');
 const STRICT = process.argv.includes('--strict');
 const HEADED = process.argv.includes('--headed');
-const ONLY = process.argv.includes('--only') ? process.argv[process.argv.indexOf('--only') + 1] : null;
+const ONLY = process.argv.includes('--only')
+  ? process.argv[process.argv.indexOf('--only') + 1].split(',').map((s) => s.trim()).filter(Boolean)
+  : null;
 
 const A2 = resolveA2UI5();
 if (!A2) { console.error('abap2UI5 checkout not found — run `npm run node:setup` or set A2UI5_HOME'); process.exit(1); }
@@ -110,6 +113,21 @@ const benign = (s) => BENIGN.some((re) => re.test(s));
 //   boundFilters @1.146 (2026-07-31): 264 (bound prefix re-filters, empty
 //     prefix drops the filter, toggle re-bakes the set) 265 (per-row bound
 //     filter over a relative value1)
+//   bound valueState/valueStateText over an aggregation: 253 254 255
+//   DynamicSideContent (2026-08-01): 267 (a real viewport resize drives
+//     breakpointChanged → the bound Toggle `enabled`) 269 (both
+//     setShowSideContent follow-up actions, there and back)
+//   a control property the user drags into place: 270 (the Slider keyboard-
+//     driven, Panel width follows the expression binding with no round-trip)
+//   271 (layoutChange round-trip + containerQuery expression binding)
+//   268 covers only the anchored ColorPickerPopover open — picking a colour
+//     needs the picker's own zero-size-headless controls
+//   "controller sets a width from a slider": 144 (round-trip) 176 213 214
+//     (expression binding) — one shared assertion, sliderDrivenWidth()
+//   the device branch resolved server-side: 173
+//   a bound record/aggregation really resolving against the SERIALIZED model
+//     (render-smoke only ever sees a mocked one): 206 209 226, and 225 for a
+//     sorter inside a raw binding-info string
 const INTERACTIONS = {
   z2ui5_cl_ai_app_005: async (page, expect) => {
     const btn = page.getByRole('button', { name: 'Default', exact: true }).first();
@@ -542,6 +560,9 @@ const INTERACTIONS = {
     await expect(btn, 'the popover button').toBeVisibleEnabled();
     await btn.click();
     await expect(page.locator('.sapMPopover'), 'the anchored popover').toContainText('Email');
+    // the root-seeded record really reaches the popover (relative bindings
+    // rendered EMPTY here until 2026-08-01 — the app-207 class)
+    await expect(page.locator('.sapMPopover'), 'the bound product name').toContainText('Notebook Basic 15');
   },
   // KEYBOARD_SHORTCUT: Ctrl+S fires the backend SAVE command (2026-07-30)
   z2ui5_cl_ai_app_232: async (page, expect) => {
@@ -575,6 +596,7 @@ const INTERACTIONS = {
     await expect(btn, 'the popover button').toBeVisibleEnabled();
     await btn.click();
     await expect(page.locator('.sapMPopover'), 'the ResponsivePopover').toContainText('OK');
+    await expect(page.locator('.sapMPopover'), 'the bound product name').toContainText('Notebook Basic 15');
   },
   // DynamicPage.breakpointChange → bound Avatar displaySize + toast
   // (2026-07-30 rework; needs UI5 >= 1.147)
@@ -760,7 +782,173 @@ const INTERACTIONS = {
     await expect(list, 'the region-filtered manager list').toContainText('John Smith');
     await expect(list, 'the other regions are filtered out').notToContainText('Yuki Tanaka');
   },
+  // DynamicSideContent breakpointChanged round-trip: the footer Toggle button
+  // follows the transported breakpoint (the original enables it on S only).
+  // Shrinking the viewport into the S range is the only way to make the
+  // round-trip fire, so this drives the resize itself.
+  z2ui5_cl_ai_app_267: async (page, expect) => {
+    await expect(page.locator('body'), 'main and side content side by side').toContainText('Side content');
+    await page.setViewportSize({ width: 400, height: 900 });
+    await waitForUi5(page, () => {
+      const b = ui5All().find((c) => c.getMetadata().getName() === 'sap.m.Button' && c.getText() === 'Toggle');
+      return !!(b && b.getEnabled());
+    }, 'the Toggle button never became enabled — the breakpointChanged round-trip did not transport "S"');
+  },
+  // anchored open of a per-row ColorPickerPopover (control_by_id openBy with a
+  // domRef arg). The change/liveChange round-trips need a real colour pick in
+  // the picker's own controls and stay a human check.
+  z2ui5_cl_ai_app_268: async (page, expect) => {
+    // the value-help icon (id …-vhi) gets a ZERO-size box in the headless
+    // layout (the theme CSS that sizes sapUiIcon never loads), so a normal
+    // click fails actionability — dispatch the DOM click the Icon listens for
+    const icon = page.locator('[id$="-vhi"]').first();
+    if (!(await icon.count())) throw new Error('the first row Input rendered no value-help icon');
+    await icon.dispatchEvent('click');
+    const pop = page.locator('.sapMPopover');
+    await expect(pop, 'the anchored ColorPickerPopover').toBeVisibleEnabled();
+    if (!(await pop.locator('.sapUnifiedColorPicker').count())) throw new Error('the opened popover carries no ColorPicker');
+  },
+  // DynamicSideContent driven from the backend: the two setShowSideContent
+  // follow-up actions (hide from the side content's own Close button, show
+  // from the footer button whose `visible` the breakpoint round-trip drives)
+  z2ui5_cl_ai_app_269: async (page, expect) => {
+    await expect(page.locator('.sapMList'), 'the feed list').toContainText('Alexandrina Victoria');
+    const close = page.getByRole('button', { name: 'Close', exact: true }).first();
+    await expect(close, 'the side-content Close button').toBeVisibleEnabled();
+    await close.click();
+    await waitForUi5(page, () => {
+      const d = ui5All().find((c) => c.getMetadata().getName() === 'sap.ui.layout.DynamicSideContent');
+      return !!d && !d.getShowSideContent();
+    }, 'the SIDE_CONTENT_HIDE follow-up action never hid the side content');
+    const open = page.getByRole('button', { name: 'Open Side Content', exact: true }).first();
+    await expect(open, 'the Open Side Content button (visible off breakpoint S)').toBeVisibleEnabled();
+    await open.click();
+    await waitForUi5(page, () => {
+      const d = ui5All().find((c) => c.getMetadata().getName() === 'sap.ui.layout.DynamicSideContent');
+      return !!d && d.getShowSideContent();
+    }, 'the SIDE_CONTENT_SHOW follow-up action never brought the side content back');
+  },
+  // the controller's jQuery panel width became an expression binding on the
+  // Slider value — moving the slider must resize the Panel with no round-trip
+  z2ui5_cl_ai_app_270: async (page, expect) => {
+    await expect(page.locator('body'), 'the nested grid boxes').toContainText('E Box');
+    // the slider handle carries a zero-size box headless (unstyled), so it is
+    // focused through the DOM and driven by keyboard — a real user gesture
+    // that goes through the Slider's own key handling and the two-way binding
+    await sliderDrivenWidth(page, 'sap.m.Panel');
+  },
+  // GridResponsiveLayout: the layoutChange round-trip names the active
+  // GridSettings aggregation, and the containerQuery expression binding
+  // follows the SegmentedButton with no round-trip of its own
+  z2ui5_cl_ai_app_271: async (page, expect) => {
+    const tiles = await page.locator('.demoBox').count();
+    if (tiles !== 12) throw new Error(`expected the sample's twelve grid tiles, got ${tiles}`);
+    // a GridLayoutBase extends ManagedObject, NOT Element — it is in no
+    // Element.registry, so the customLayout is read through its CSSGrid
+    await page.locator('.sapMSegBBtn').first().click();   // the "true" segment
+    await waitForUi5(page, () => {
+      const g = ui5All().find((c) => c.getMetadata().getName() === 'sap.ui.layout.cssgrid.CSSGrid');
+      return !!g && g.getCustomLayout() && g.getCustomLayout().getContainerQuery() === true;
+    }, 'the SegmentedButton did not flip containerQuery through the expression binding');
+    // with containerQuery on, shrinking the container fires layoutChange —
+    // the one wire that does round-trip (its ${$parameters>/layout} is the
+    // only source for the info Text)
+    await page.setViewportSize({ width: 420, height: 900 });
+    await expect(page.locator('body'), 'the layoutChange round-trip naming the active layout')
+      .toContainText('Layout size is: layoutS');
+  },
+  // bound valueState / valueStateText over a 5-row aggregation: each state
+  // must reach the DOM exactly once (render-smoke only sees the mocked model).
+  // One generic assertion, shared by the three value-state pickers.
+  z2ui5_cl_ai_app_253: (page, expect) => valueStateRows(page, expect, 'DatePicker'),
+  z2ui5_cl_ai_app_254: (page, expect) => valueStateRows(page, expect, 'DateRangeSelection'),
+  z2ui5_cl_ai_app_255: (page, expect) => valueStateRows(page, expect, 'DateTimePicker'),
+  // the "controller sets a width from a slider" class — 144 keeps the
+  // round-trip (the bound width is composed in ABAP), 176/213/214 dissolve it
+  // into an expression binding; all four must end at 99 % after one key press
+  z2ui5_cl_ai_app_144: (page) => sliderDrivenWidth(page, 'sap.m.Panel'),
+  z2ui5_cl_ai_app_176: (page) => sliderDrivenWidth(page, 'sap.m.Panel'),
+  z2ui5_cl_ai_app_213: (page) => sliderDrivenWidth(page, 'sap.m.Panel'),
+  z2ui5_cl_ai_app_214: (page) => sliderDrivenWidth(page, 'sap.ui.layout.VerticalLayout'),
+  // the device branch resolved server-side (app 012 precedent): a desktop run
+  // must seed the else-branch widths, not the phone ones
+  z2ui5_cl_ai_app_173: async (page) => {
+    await waitForUi5(page, () => {
+      const w = ui5All().filter((c) => c.getMetadata().getName() === 'sap.m.Image').map((c) => c.getWidth());
+      return ['5em', '10em', '15em'].every((x) => w.includes(x));
+    }, 'the desktop-branch widths (5em/10em/15em) never reached the three Images');
+  },
+  // element-bound single record: the folded row really resolves against the
+  // serialized default model (render-smoke only sees a mocked one)
+  z2ui5_cl_ai_app_206: async (page, expect) => {
+    await expect(page.locator('body'), 'the element-bound product').toContainText('Notebook Professional 15');
+    await expect(page.locator('body'), 'the bound description').toContainText('2,80 GHz quad core');
+  },
+  z2ui5_cl_ai_app_209: async (page, expect) => {
+    await expect(page.locator('body'), 'the element-bound product').toContainText('Notebook Basic 15');
+    await expect(page.locator('body'), 'the bound supplier').toContainText('Very Best Screens');
+  },
+  // the sorter inside the raw binding-info string really sorts: unsorted, the
+  // first row would be "Notebook Basic 15" (the model's first record)
+  z2ui5_cl_ai_app_225: async (page, expect) => {
+    const first = page.locator('.sapMListTblRow:not(.sapMListTblHeader)').first();
+    await expect(first, 'the first table row after the NAME sorter').toContainText('10" Portable DVD player');
+  },
+  // a record flattened onto the model root must be bound ABSOLUTELY — these
+  // four rendered empty until 2026-08-01 (the app-207 class, see AGENTS §5)
+  z2ui5_cl_ai_app_195: async (page, expect) => {
+    await expect(page.locator('.sapMList'), 'the root-seeded record in the list').toContainText('Notebook Basic 15');
+    await expect(page.locator('.sapMList'), 'the bound description').toContainText('HT-1000');
+  },
+  z2ui5_cl_ai_app_142: (page) => formFieldValues(page),
+  z2ui5_cl_ai_app_175: (page) => formFieldValues(page),
+  // Grid element-binding to an array path + index-relative child bindings
+  z2ui5_cl_ai_app_226: async (page, expect) => {
+    await expect(page.locator('body'), 'the {0/INTROTEXT1} index-relative binding')
+      .toContainText('This Grid Layout sample application demonstrates');
+  },
 };
+
+// the supplier record seeded at the model root must reach the form Inputs
+async function formFieldValues(page) {
+  await waitForUi5(page, () => {
+    const v = ui5All().filter((c) => c.getMetadata().getName() === 'sap.m.Input').map((c) => c.getValue());
+    return ['Red Point Stores', 'Main St', '31415'].every((x) => v.includes(x));
+  }, 'the root-seeded supplier record never reached the form Inputs');
+}
+
+// one key press on the slider must move the bound width to 99 % — the shared
+// assertion of the "controller sets a width" class (see AGENTS §10 on why the
+// handle is focused through the DOM instead of clicked)
+async function sliderDrivenWidth(page, control) {
+  const handle = page.locator('.sapMSliderHandle').first();
+  if (!(await handle.count())) throw new Error('the width slider rendered no handle');
+  await page.evaluate(() => document.querySelector('.sapMSliderHandle').focus());
+  await page.keyboard.press('ArrowLeft');
+  await waitForUi5(page, (name) => ui5All().some((c) => c.getMetadata().getName() === name && c.getWidth() === '99%'),
+    `no ${control} width followed the slider to 99%`, control);
+}
+
+async function valueStateRows(page, expect, control) {
+  await expect(page.locator('body'), 'the row labels').toContainText(`${control} with valueState Error`);
+  for (const state of ['Information', 'Success', 'Warning', 'Error']) {
+    const n = await page.locator(`.sapMInputBaseContentWrapper${state}`).count();
+    if (n !== 1) throw new Error(`expected exactly one ${state} row to render that state, got ${n}`);
+  }
+  // the bound valueStateText reaches the DOM (InputBaseRenderer always writes
+  // it into the invisible -sr node, so this holds without opening the popup)
+  await expect(page.locator('body'), 'the bound valueStateText of the Warning row')
+    .toContainText('Warning message. This is an extra long text');
+}
+
+// in-page helpers for property assertions: `ui5All()` is only ever passed
+// INTO page.evaluate (it is stringified there, so it must stay self-contained)
+function ui5All() { throw new Error('ui5All() runs in the page only'); }
+const UI5_ALL_SRC = 'const ui5All = () => Object.values(sap.ui.require("sap/ui/core/Element").registry.all());';
+async function waitForUi5(page, fn, msg, arg) {
+  const expr = `(() => { ${UI5_ALL_SRC} return (${fn.toString()})(${JSON.stringify(arg ?? null)}); })()`;
+  await page.waitForFunction(expr, undefined, { timeout: 15000 }).catch(() => { throw new Error(msg); });
+}
 
 function startBackend() {
   return new Promise((resolve, reject) => {
@@ -860,7 +1048,7 @@ async function checkPort(browser, cls) {
 const metas = fs.readdirSync(META).filter((f) => f.endsWith('.json'))
   .map((f) => JSON.parse(fs.readFileSync(path.join(META, f), 'utf8')))
   .filter((m) => /^z2ui5_cl_ai_app_\d+$/.test(m.class))
-  .filter((m) => !ONLY || m.class.endsWith(ONLY));
+  .filter((m) => !ONLY || ONLY.some((o) => m.class.endsWith(o)));
 metas.sort((a, b) => a.class.localeCompare(b.class));
 
 console.log(`e2e-smoke: ${metas.length} port(s), backend from ${A2}`);

@@ -108,7 +108,7 @@ CLASS z2ui5_cl_ai_app_142 IMPLEMENTATION.
                                 )->a( n = `label` v = `Name`
                                 )->open( n = `fields` ns = `f`
                                     )->leaf( `Input`
-                                        )->a( n = `value` v = `{SUPPLIERNAME}`
+                                        )->a( n = `value` v = client->_bind( suppliername )
                                         )->a( n = `id`    v = `name`
 
                             )->shut(
@@ -117,9 +117,9 @@ CLASS z2ui5_cl_ai_app_142 IMPLEMENTATION.
                                 )->a( n = `label` v = `Street`
                                 )->open( n = `fields` ns = `f`
                                     )->leaf( `Input`
-                                        )->a( n = `value` v = `{STREET}`
+                                        )->a( n = `value` v = client->_bind( street )
                                     )->open( `Input`
-                                        )->a( n = `value` v = `{HOUSENUMBER}`
+                                        )->a( n = `value` v = client->_bind( housenumber )
                                         )->open( `layoutData`
                                             )->leaf( n = `GridData` ns = `l`
                                                 )->a( n = `span` v = `XL2 L1 M3 S4`
@@ -132,7 +132,7 @@ CLASS z2ui5_cl_ai_app_142 IMPLEMENTATION.
                                 )->a( n = `label` v = `ZIP Code/City`
                                 )->open( n = `fields` ns = `f`
                                     )->open( `Input`
-                                        )->a( n = `value` v = `{ZIPCODE}`
+                                        )->a( n = `value` v = client->_bind( zipcode )
                                         )->open( `layoutData`
                                             )->leaf( n = `GridData` ns = `l`
                                                 )->a( n = `span` v = `XL2 L1 M3 S4`
@@ -140,7 +140,7 @@ CLASS z2ui5_cl_ai_app_142 IMPLEMENTATION.
                                     )->shut(
                                     )->shut(
                                     )->leaf( `Input`
-                                        )->a( n = `value` v = `{CITY}`
+                                        )->a( n = `value` v = client->_bind( city )
 
                             )->shut(
                             )->shut(
@@ -150,7 +150,7 @@ CLASS z2ui5_cl_ai_app_142 IMPLEMENTATION.
                                     )->open( `Select`
                                         )->a( n = `width`       v = `100%`
                                         )->a( n = `id`          v = `country`
-                                        )->a( n = `selectedKey` v = `{COUNTRY}`
+                                        )->a( n = `selectedKey` v = client->_bind( country )
                                         )->leaf( n = `Item` ns = `core`
                                             )->a( n = `text` v = `Germany`
                                             )->a( n = `key`  v = `Germany`
@@ -186,7 +186,7 @@ CLASS z2ui5_cl_ai_app_142 IMPLEMENTATION.
                                 )->a( n = `label` v = `Web`
                                 )->open( n = `fields` ns = `f`
                                     )->leaf( `Input`
-                                        )->a( n = `value` v = `{URL}`
+                                        )->a( n = `value` v = client->_bind( url )
                                         )->a( n = `type`  v = `Url`
                                         )->a( n = `id`    v = `url`
 
@@ -196,7 +196,7 @@ CLASS z2ui5_cl_ai_app_142 IMPLEMENTATION.
                                 )->a( n = `label` v = `Twitter`
                                 )->open( n = `fields` ns = `f`
                                     )->leaf( `Input`
-                                        )->a( n = `value` v = `{TWITTER}`
+                                        )->a( n = `value` v = client->_bind( twitter )
                                         )->a( n = `id`    v = `twitter` ).
 
     client->view_display( view->stringify( ) ).

@@ -20,8 +20,8 @@
       "what": "The Slider's liveChange attribute is dropped: handleSliderChange resizes the DynamicSideContent's container by writing a percentage width straight onto its DOM node (byId('sideContentContainer').$().width(iValue + '%')). The container is a sap.m.Page, which has no width property to bind, so there is nothing to two-way bind the slider value to (apps 213/214 hit the same jQuery-width idiom on controls that DO have a width, and bound it there). The Slider is kept 1:1 with its value='100' so the sample's footer is complete, but moving it has no effect."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "handleToggleClick is reproduced roundtrip-free as _event_client( control_by_id, DynamicSideContent / toggle ) - toggle() is a public sap.ui.layout.DynamicSideContent method and needs no whitelist entry (the framework-invariant guard admits it). _updateToggleButtonState becomes the BREAKPOINT_CHANGED round-trip: the breakpointChanged event transports ${$parameters>/currentBreakpoint} and the backend enables the Toggle button only on breakpoint 'S', exactly like the original, through the two-way bound enabled flag. The Slider's visible follows the shared device> model ({= !${device>/system/phone}}), the declarative form of the original's onBeforeRendering setVisible(!Device.system.phone). None of the three wires is verified in a running system."
+      "type": "NOTE",
+      "what": "**e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): shrinking the viewport into the S range makes the DynamicSideContent fire breakpointChanged, the round-trip transports 'S' and the footer Toggle button becomes enabled through the two-way bound flag - the whole _updateToggleButtonState wire. The main/side content render side by side beforehand. Residual (nothing headless can assert): that toggle() then really swaps main and side content visually, and the Slider's device-model visible flag on a real phone."
     }
   ]
 }

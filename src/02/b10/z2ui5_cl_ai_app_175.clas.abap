@@ -98,14 +98,14 @@ CLASS z2ui5_cl_ai_app_175 IMPLEMENTATION.
                     )->leaf( `Label`
                         )->a( n = `text` v = `Name`
                     )->leaf( `Input`
-                        )->a( n = `value` v = `{SUPPLIERNAME}`
+                        )->a( n = `value` v = client->_bind( suppliername )
 
                     )->leaf( `Label`
                         )->a( n = `text` v = `Street/No.`
                     )->leaf( `Input`
-                        )->a( n = `value` v = `{STREET}`
+                        )->a( n = `value` v = client->_bind( street )
                     )->open( `Input`
-                        )->a( n = `value` v = `{HOUSENUMBER}`
+                        )->a( n = `value` v = client->_bind( housenumber )
                         )->open( `layoutData`
                             )->leaf( n = `GridData` ns = `l`
                                 )->a( n = `span` v = `XL2 L1 M3 S4`
@@ -116,7 +116,7 @@ CLASS z2ui5_cl_ai_app_175 IMPLEMENTATION.
                     )->leaf( `Label`
                         )->a( n = `text` v = `ZIP Code/City`
                     )->open( `Input`
-                        )->a( n = `value` v = `{ZIPCODE}`
+                        )->a( n = `value` v = client->_bind( zipcode )
                         )->open( `layoutData`
                             )->leaf( n = `GridData` ns = `l`
                                 )->a( n = `span` v = `XL2 L1 M3 S4`
@@ -124,13 +124,13 @@ CLASS z2ui5_cl_ai_app_175 IMPLEMENTATION.
                     )->shut(
                     )->shut(
                     )->leaf( `Input`
-                        )->a( n = `value` v = `{CITY}`
+                        )->a( n = `value` v = client->_bind( city )
 
                     )->leaf( `Label`
                         )->a( n = `text` v = `Country`
                     )->open( `Select`
                         )->a( n = `id`          v = `country`
-                        )->a( n = `selectedKey` v = `{COUNTRY}`
+                        )->a( n = `selectedKey` v = client->_bind( country )
                         )->open( `items`
                             )->leaf( n = `Item` ns = `core`
                                 )->a( n = `text` v = `England`
@@ -159,13 +159,13 @@ CLASS z2ui5_cl_ai_app_175 IMPLEMENTATION.
                     )->leaf( `Label`
                         )->a( n = `text` v = `Web`
                     )->leaf( `Input`
-                        )->a( n = `value` v = `{URL}`
+                        )->a( n = `value` v = client->_bind( url )
                         )->a( n = `type`  v = `Url`
 
                     )->leaf( `Label`
                         )->a( n = `text` v = `Twitter`
                     )->leaf( `Input`
-                        )->a( n = `value` v = `{TWITTER}` ).
+                        )->a( n = `value` v = client->_bind( twitter ) ).
 
     client->view_display( view->stringify( ) ).
 

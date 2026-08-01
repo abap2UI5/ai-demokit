@@ -28,8 +28,8 @@
       "what": "updateShowSideContentButtonVisibility is reproduced only by its breakpoint half. The original computes !(breakpoint === 'S' || oDSC.isSideContentVisible()), i.e. it also hides the 'Open Side Content' button whenever the side content happens to be visible; isSideContentVisible() is client state the backend cannot read. The port keeps the button's visibility bound to the breakpoint (visible unless 'S') and flips the same flag in the two press handlers (hide -> button shows, show -> button hides), which matches the original in every path the sample offers - but a side-content visibility change caused by anything else (e.g. the Toggle button) does not update it."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "Unverified in a running system: handleToggleClick as _event_client( control_by_id, DynamicSideContent/toggle ), the two setShowSideContent(false/true) follow-up actions, and the BREAKPOINT_CHANGED round-trip that drives the Toggle button's enabled flag (S only) and the Open Side Content button's visibility. The FeedListItem list over the sample's own feed.json (4 rows verbatim, author pictures on upload.wikimedia.org exactly as the mock has them) renders in render-smoke but its feed layout was not seen live."
+      "type": "NOTE",
+      "what": "**e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the feed list renders all four feed.json rows, the side content's Close button hides the side content through the SIDE_CONTENT_HIDE follow-up action (setShowSideContent false), the Open Side Content button then shows (its visible flag comes from the breakpointChanged round-trip) and brings it back through SIDE_CONTENT_SHOW. Residual (nothing headless can assert): the FeedListItem layout with its remote author pictures, and toggle() on a real S-breakpoint device."
     }
   ]
 }

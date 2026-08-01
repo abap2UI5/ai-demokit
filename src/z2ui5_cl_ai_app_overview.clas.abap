@@ -1224,14 +1224,17 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.86 to render it. // DatePicker.hideInput (since UI5 1.97) is newer than 1.71 but kept for the 1:1 port - the sample's central` &&
                  ` property (the picker input stays hidden, opened only via the anchor controls); openBy is also since 1.97, so the app needs a UI5 release >= 1.97 to render this sample's behavior.` ) ).
 
+    lv_text1 = `NOTE: The onInit-seeded JSON model rides 1:1 in model_init (5 rows, the derived label texts written out); every row carries a valueState so the absent-enum-empty-string trap does not apply, and the` &&
+               ` rows without a valueStateText keep the empty string - a string property, where the empty value falls back to the state default text like the original undefined. // NOTE: **e2e-verified 2026-08-01**` &&
+               ` (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): all five rows render from the real backend model - the labels arrive, each of the four non-None value states reaches the DOM` &&
+               ` exactly once (sapMInputBaseContentWrapper<State> on the DatePicker) and the bound valueStateText of the Warning row is written into the value-state node. Residual (nothing headless can assert): the` &&
+               ` value-state message popup's wrapping of the long text, which needs the theme CSS the harness does not load.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.DatePicker`                      name = `DatePickerValueState`                class = `z2ui5_cl_ai_app_253` path = `src/01/b19/z2ui5_cl_ai_app_253.clas.abap`
         score = 2
-        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22.0`
-        notes = `NOTE: The onInit-seeded JSON model rides 1:1 in model_init (5 rows, the derived label texts written out); every row carries a valueState so the absent-enum-empty-string trap does not apply, and the` &&
-                 ` rows without a valueStateText keep the empty string - a string property, where the empty value falls back to the state default text like the original undefined. // LIVE-TEST: unverified in a running` &&
-                 ` system: the bound valueState/valueStateText rendering over the 5-row aggregation (render-smoke mocks the model).` ) ).
+        notes = lv_text1 ) ).
 
     lv_text1 = `NOTE: the original controller's JSON model carries UI5Date objects; the ABAP model carries the same dates as ISO 'yyyy-MM-dd' strings, and each sap.ui.model.type.Date part of the DateInterval value` &&
                ` bindings gets an added formatOptions.source pattern 'yyyy-MM-dd' so the strings are parsed to Dates and written back as strings (source-verified: DateInterval sets bUseInternalValues and` &&
@@ -1270,14 +1273,17 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         notes = lv_text1
         post171 = `sap.m.Button.ariaHasPopup (@1.84) and sap.m.Link.ariaHasPopup (@1.86) kept 1:1 on the three anchors; also hideInput on the picker (@1.97 per the 016 precedent). The app needs a UI5 release >= 1.97.` ) ).
 
+    lv_text1 = `NOTE: The onInit-seeded JSON model rides 1:1 in model_init (5 rows, the derived label texts written out); every row carries a valueState so the absent-enum-empty-string trap does not apply, and the` &&
+               ` rows without a valueStateText keep the empty string (falls back to the state default text like the original undefined) - the app-253 pattern. // NOTE: **e2e-verified 2026-08-01**` &&
+               ` (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): all five rows render from the real backend model - the labels arrive, each of the four non-None value states reaches the DOM` &&
+               ` exactly once (sapMInputBaseContentWrapper<State> on the DateRangeSelection) and the bound valueStateText of the Warning row is written into the value-state node. Residual (nothing headless can` &&
+               ` assert): the value-state message popup's wrapping of the long text, which needs the theme CSS the harness does not load.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.DateRangeSelection`              name = `DateRangeSelectionValueState`        class = `z2ui5_cl_ai_app_254` path = `src/01/b19/z2ui5_cl_ai_app_254.clas.abap`
         score = 2
-        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22.0`
-        notes = `NOTE: The onInit-seeded JSON model rides 1:1 in model_init (5 rows, the derived label texts written out); every row carries a valueState so the absent-enum-empty-string trap does not apply, and the` &&
-                 ` rows without a valueStateText keep the empty string (falls back to the state default text like the original undefined) - the app-253 pattern. // LIVE-TEST: unverified in a running system: the bound` &&
-                 ` valueState/valueStateText rendering over the 5-row aggregation (render-smoke mocks the model).` ) ).
+        notes = lv_text1 ) ).
 
     lv_text1 = `IMPROVISED: the JSON model's UI5Date instances become date strings in the flat ABAP model: the sap.ui.model.type.DateTime bindings (DTP2/3/4/5/8) get an added source pattern 'yyyy-MM-dd HH:mm:ss'` &&
                ` format option so the type parses the model string (CAPABILITIES: Date types over ISO strings need a source pattern), and the sap.ui.model.odata.type.DateTimeOffset parts of DTP10/DTP11 get added` &&
@@ -1321,14 +1327,17 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         notes = lv_text1
         post171 = `sap.m.Button.ariaHasPopup (@1.84) and sap.m.Link.ariaHasPopup (@1.86) kept 1:1 on the three anchors; also hideInput on the picker (@1.97 per the 016 precedent). The app needs a UI5 release >= 1.97.` ) ).
 
+    lv_text1 = `NOTE: The onInit-seeded JSON model rides 1:1 in model_init (5 rows, the derived label texts written out); every row carries a valueState so the absent-enum-empty-string trap does not apply, and the` &&
+               ` rows without a valueStateText keep the empty string (falls back to the state default text like the original undefined) - the app-253 pattern. // NOTE: **e2e-verified 2026-08-01**` &&
+               ` (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): all five rows render from the real backend model - the labels arrive, each of the four non-None value states reaches the DOM` &&
+               ` exactly once (sapMInputBaseContentWrapper<State> on the DateTimePicker) and the bound valueStateText of the Warning row is written into the value-state node. Residual (nothing headless can assert):` &&
+               ` the value-state message popup's wrapping of the long text, which needs the theme CSS the harness does not load.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.DateTimePicker`                  name = `DateTimePickerValueState`            class = `z2ui5_cl_ai_app_255` path = `src/01/b19/z2ui5_cl_ai_app_255.clas.abap`
         score = 2
-        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.38.0`
-        notes = `NOTE: The onInit-seeded JSON model rides 1:1 in model_init (5 rows, the derived label texts written out); every row carries a valueState so the absent-enum-empty-string trap does not apply, and the` &&
-                 ` rows without a valueStateText keep the empty string (falls back to the state default text like the original undefined) - the app-253 pattern. // LIVE-TEST: unverified in a running system: the bound` &&
-                 ` valueState/valueStateText rendering over the 5-row aggregation (render-smoke mocks the model).` ) ).
+        notes = lv_text1 ) ).
 
     lv_text1 = `NOTE: the original builds its four Dialogs imperatively in the controller (new Dialog({...}).open()); the port expresses each as a core:FragmentDefinition popup shown via client->popup_display on the` &&
                ` button press event - the CAPABILITIES.md 1:1 path for controller-built Dialogs. The four Dialog fragments are therefore extra vs the archived V.view.xml, which holds only the four trigger Buttons;` &&
@@ -1702,14 +1711,17 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         notes = `POST-1.71: headerLevel="H2" on the List (since UI5 1.117) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.117 to render it.`
         post171 = `headerLevel="H2" on the List (since UI5 1.117) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.117 to render it.` ) ).
 
+    lv_text1 = `NOTE: The original controller loads the shared demo products.json and the List uses binding="{/ProductCollection/0}" to element-bind a single record; abap2UI5 serves one default model, so the record` &&
+               ` is flattened to top-level default-model fields (name/productid/productpicurl = products.json row 0, Notebook Basic 15 / HT-1000) the relative {NAME}/{PRODUCTID}/{PRODUCTPICURL} bindings resolve` &&
+               ` against. Same data, same leaf names, renders identically — the List's binding attribute is dropped. **Corrected 2026-08-01**: those bindings were written RELATIVE ({FIELD}) and a relative path on a` &&
+               ` control with no binding context resolves against nothing — the fields rendered EMPTY in the running app (measured with the e2e harness, the app-207 class). They are now bound ABSOLUTELY through` &&
+               ` client->_bind( field ), which is what a root-seeded record needs. // NOTE: ProductPicUrl is stored as the absolute https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1000.jpg` &&
+               ` (the mock's host-relative test-resources path rewritten to the OpenUI5 host per the runtime asset-URL rule).`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.List`                            name = `ListFooter`                          class = `z2ui5_cl_ai_app_195` path = `src/01/b17/z2ui5_cl_ai_app_195.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        notes = `NOTE: The original controller loads the shared demo products.json and the List uses binding="{/ProductCollection/0}" to element-bind a single record; abap2UI5 serves one default model, so the record` &&
-                 ` is flattened to top-level default-model fields (name/productid/productpicurl = products.json row 0, Notebook Basic 15 / HT-1000) the relative {NAME}/{PRODUCTID}/{PRODUCTPICURL} bindings resolve` &&
-                 ` against. Same data, same leaf names, renders identically — the List's binding attribute is dropped. // NOTE: ProductPicUrl is stored as the absolute` &&
-                 ` https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1000.jpg (the mock's host-relative test-resources path rewritten to the OpenUI5 host per the runtime asset-URL rule).` ) ).
+        notes = lv_text1 ) ).
 
     lv_text1 = `NOTE: the original wires a change handler on the type Select (handleSelectChange, which loops the list items calling item.setType). selectedKey and every StandardListItem type share one two-way bound` &&
                ` field (LISTTYPE), so a selection re-types all items client-side and the Select.change attribute is deliberately MISSING vs the original view (AGENTS prefer-a-bindable-property rule; app 003` &&
@@ -2080,14 +2092,19 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         notes = `NOTE: the ObjectHeader keeps the original element binding and its relative field bindings 1:1 (title {Name}, condensed, numberUnit {CurrencyCode}, the ObjectAttribute composite text and the` &&
                  ` sap.ui.model.type.Currency number binding over Price/CurrencyCode); only the binding context path changes - a one-record structure /S_PRODUCT in the default model instead of {/ProductCollection/0},` &&
                  ` since the port does not carry the whole collection. // NOTE: the model holds exactly the bound record /ProductCollection/0 (Notebook Basic 15) of ui5/mock/products.json, verbatim - this is the` &&
-                 ` original sample's own single-record binding {/ProductCollection/0}, not a shortened data set.` )
+                 ` original sample's own single-record binding {/ProductCollection/0}, not a shortened data set.` ) ).
+
+    lv_text1 = `NOTE: The ObjectHeader's single-record element binding attribute binding="{/ProductCollection/5}" is dropped: abap2UI5 serves one default model, so products.json row 5 is seeded directly onto the` &&
+               ` model root (model_init) and the control's relative {NAME}/{PRICE}/… bindings resolve against it — same data, renders identically (single-record fold, AGENTS §5). **Corrected 2026-08-01**: those` &&
+               ` bindings were written RELATIVE ({FIELD}) and a relative path on a control with no binding context resolves against nothing — the fields rendered EMPTY in the running app (measured with the e2e` &&
+               ` harness, the app-207 class). They are now bound ABSOLUTELY through client->_bind( field ), which is what a root-seeded record needs. // LIVE-TEST: The sap.ui.model.type.Currency composite binding on` &&
+               ` number and the flattened relative bindings render in render-smoke but the live data bind is unverified in a running system.`.
+    result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.ObjectHeader`                    name = `ObjectHeaderImage`                   class = `z2ui5_cl_ai_app_206` path = `src/01/b17/z2ui5_cl_ai_app_206.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.12`
-        notes = `NOTE: The ObjectHeader's single-record element binding attribute binding="{/ProductCollection/5}" is dropped: abap2UI5 serves one default model, so products.json row 5 is seeded directly onto the` &&
-                 ` model root (model_init) and the control's relative {NAME}/{PRICE}/… bindings resolve against it — same data, renders identically (single-record fold, AGENTS §5). // LIVE-TEST: The` &&
-                 ` sap.ui.model.type.Currency composite binding on number and the flattened relative bindings render in render-smoke but the live data bind is unverified in a running system.` ) ).
+        notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.ObjectHeader`                    name = `ObjectHeaderMarkers`                 class = `z2ui5_cl_ai_app_197` path = `src/01/b17/z2ui5_cl_ai_app_197.clas.abap`
@@ -2097,15 +2114,20 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         notes = `NOTE: the Page keeps the original element binding and the ObjectHeader relative field bindings 1:1 (title {Name}, numberUnit {CurrencyCode}, the two ObjectAttribute composite texts and the` &&
                  ` sap.ui.model.type.Currency number binding over Price/CurrencyCode); only the binding context path changes - a one-record structure /S_PRODUCT in the default model instead of {/ProductCollection/0},` &&
                  ` since the port does not carry the whole collection. // NOTE: the model holds exactly the bound record /ProductCollection/0 (Notebook Basic 15) of ui5/mock/products.json, verbatim - this is the` &&
-                 ` original sample's own single-record binding {/ProductCollection/0}, not a shortened data set.` )
+                 ` original sample's own single-record binding {/ProductCollection/0}, not a shortened data set.` ) ).
+
+    lv_text1 = `NOTE: The ObjectHeader's single-record element binding attribute binding="{/ProductCollection/0}" is dropped: abap2UI5 serves one default model, so products.json row 0 (HT-1000, Notebook Basic 15) is` &&
+               ` seeded directly onto the model root (model_init) and the control's relative {NAME}/{DESCRIPTION}/{SUPPLIERNAME}/{WIDTH}/… bindings resolve against it — same data, renders identically (single-record` &&
+               ` fold, AGENTS §5). The ProductPicUrl asset is served absolute from sdk.openui5.org per the asset-URL rule. **Corrected 2026-08-01**: those bindings were written RELATIVE ({FIELD}) and a relative path` &&
+               ` on a control with no binding context resolves against nothing — the fields rendered EMPTY in the running app (measured with the e2e harness, the app-207 class). They are now bound ABSOLUTELY through` &&
+               ` client->_bind( field ), which is what a root-seeded record needs. // LIVE-TEST: The flattened relative field bindings and the ObjectMarker/ObjectStatus markers render in render-smoke, but the live` &&
+               ` data bind of the folded single record is unverified in a running system.`.
+    result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.ObjectHeader`                    name = `ObjectHeaderResponsiveV`             class = `z2ui5_cl_ai_app_209` path = `src/01/b17/z2ui5_cl_ai_app_209.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.12`
-        notes = `NOTE: The ObjectHeader's single-record element binding attribute binding="{/ProductCollection/0}" is dropped: abap2UI5 serves one default model, so products.json row 0 (HT-1000, Notebook Basic 15) is` &&
-                 ` seeded directly onto the model root (model_init) and the control's relative {NAME}/{DESCRIPTION}/{SUPPLIERNAME}/{WIDTH}/… bindings resolve against it — same data, renders identically (single-record` &&
-                 ` fold, AGENTS §5). The ProductPicUrl asset is served absolute from sdk.openui5.org per the asset-URL rule. // LIVE-TEST: The flattened relative field bindings and the ObjectMarker/ObjectStatus markers` &&
-                 ` render in render-smoke, but the live data bind of the folded single record is unverified in a running system.` ) ).
+        notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.ObjectIdentifier`                name = `ObjectIdentifier`                    class = `z2ui5_cl_ai_app_071` path = `src/01/b09/z2ui5_cl_ai_app_071.clas.abap`
@@ -2265,14 +2287,16 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` anchored to the pressed button via client->popover_display( xml = ..., by_id = $event.oSource.sId ) - the popover XML parameter is named ``xml`` (not ``val`` like popup_display). This is a` &&
                ` server-round-trip where the original is a client-side Fragment.load, but it is faithful (lazy either way) and matches app 094. // NOTE: the original oPopover.bindElement('/ProductCollection/0') binds` &&
                ` each popover to a single record; the port seeds that record's fields (name, productpicurl) at the default-model root and the popover's relative bindings {NAME}/{PRODUCTPICURL} resolve against the` &&
-               ` root - same data, structural-diff matches on the last path segment (app 175 single-record-flatten idiom). No bind_element needed because the record is the static row 0, not a per-row selection. //`.
-    lv_text1 = lv_text1 && ` NOTE: handleEmailPress does byId('myPopover').close() + MessageToast.show('E-Mail has been sent'), and handleClose does byId('myResizablePopover').close(); both close the popover slot via` &&
-               ` follow_up_action( cs_event-popover_close ) (there is one popover slot open at a time), the email variant additionally toasting via message_toast_display. // IMPROVISED: the JSONModel is loaded from` &&
-               ` the shared sap/ui/demo/mock/products.json; only the single record /ProductCollection/0 is bound, so only its name + picture URL are seeded. The mock's host-relative ProductPicUrl` &&
-               ` ('test-resources/...') is resolved to an absolute sdk.openui5.org URL. // LIVE-TEST: unverified in a running system: that both popovers open anchored to their button (popover_display by_id =` &&
-               ` $event.oSource.sId), that {NAME}/{PRODUCTPICURL} resolve from the root-seeded record, and that the Email/Close footer buttons close the popover (popover_close) with the Email toast firing.` &&
-               ` **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the 'Show Popover' press opens the popover anchored with the root-seeded relative bindings rendering (the`.
-    lv_text1 = lv_text1 && ` 'Email' action visible); the resizable variant is the identical wire.`.
+               ` root - same data, structural-diff matches on the last path segment (app 175 single-record-flatten idiom). No bind_element needed because the record is the static row 0, not a per-row selection.`.
+    lv_text1 = lv_text1 && ` **Corrected 2026-08-01**: those bindings were written RELATIVE ({FIELD}) and a relative path on a control with no binding context resolves against nothing — the fields rendered EMPTY in the running` &&
+               ` app (measured with the e2e harness, the app-207 class). They are now bound ABSOLUTELY through client->_bind( field ), which is what a root-seeded record needs. // NOTE: handleEmailPress does` &&
+               ` byId('myPopover').close() + MessageToast.show('E-Mail has been sent'), and handleClose does byId('myResizablePopover').close(); both close the popover slot via follow_up_action(` &&
+               ` cs_event-popover_close ) (there is one popover slot open at a time), the email variant additionally toasting via message_toast_display. // IMPROVISED: the JSONModel is loaded from the shared` &&
+               ` sap/ui/demo/mock/products.json; only the single record /ProductCollection/0 is bound, so only its name + picture URL are seeded. The mock's host-relative ProductPicUrl ('test-resources/...') is` &&
+               ` resolved to an absolute sdk.openui5.org URL. // LIVE-TEST: unverified in a running system: that both popovers open anchored to their button (popover_display by_id = $event.oSource.sId), that`.
+    lv_text1 = lv_text1 && ` {NAME}/{PRODUCTPICURL} resolve from the root-seeded record, and that the Email/Close footer buttons close the popover (popover_close) with the Email toast firing. **e2e-verified 2026-07-30**` &&
+               ` (transpiled-framework interaction, scripts/e2e-smoke.mjs): the 'Show Popover' press opens the popover anchored with the root-seeded relative bindings rendering (the 'Email' action visible); the` &&
+               ` resizable variant is the identical wire.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Popover`                         name = `Popover`                             class = `z2ui5_cl_ai_app_229` path = `src/01/b18/z2ui5_cl_ai_app_229.clas.abap`
         score = 5
@@ -2369,13 +2393,15 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` is a client-side Fragment.load, but faithful (lazy either way) and matches apps 229/238. All ResponsivePopover/Button/Image/OverflowToolbar/ToolbarSpacer controls of both fragments are built in the` &&
                ` port, so the fragment union in structural-diff is satisfied. // NOTE: the original oPopover.bindElement('/ProductCollection/0') binds each popover to a single record; the port seeds that record's`.
     lv_text1 = lv_text1 && ` fields (name, productpicurl) at the default-model root and the fragments' relative bindings {NAME}/{PRODUCTPICURL} resolve against the root - same data, structural-diff matches on the last path` &&
-               ` segment. No bind_element follow-up needed because the record is the static row 0, not a per-row selection. // NOTE: handleCloseButton (Action-A/Action-B) and handleCloseFooterButton (Cancel) each do` &&
-               ` byId(...).close(); the port routes all three to one CLOSE event that issues follow_up_action( cs_event-popover_close ) - only one popover slot is open at a time, so a single popover_close covers both` &&
-               ` fragments. The footer's OK button has no handler in the original and none here. // IMPROVISED: the JSONModel is loaded from the shared sap/ui/demo/mock/products.json; only the single record` &&
-               ` /ProductCollection/0 is bound (its Name + ProductPicUrl), so only those are seeded. The mock's host-relative ProductPicUrl ('test-resources/...') is resolved to an absolute sdk.openui5.org URL. //` &&
-               ` LIVE-TEST: unverified in a running system: that both ResponsivePopover fragments open anchored to their button (popover_display by_id = $event.oSource.sId), that {NAME}/{PRODUCTPICURL} resolve from`.
-    lv_text1 = lv_text1 && ` the root-seeded record, and that the action/footer buttons close the popover (popover_close). **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the 'Popover with` &&
-               ` Custom Footer' press opens the ResponsivePopover anchored with its OK/Cancel footer; the phone-Dialog variant remains unexercised.`.
+               ` segment. No bind_element follow-up needed because the record is the static row 0, not a per-row selection. **Corrected 2026-08-01**: those bindings were written RELATIVE ({FIELD}) and a relative path` &&
+               ` on a control with no binding context resolves against nothing — the fields rendered EMPTY in the running app (measured with the e2e harness, the app-207 class). They are now bound ABSOLUTELY through` &&
+               ` client->_bind( field ), which is what a root-seeded record needs. // NOTE: handleCloseButton (Action-A/Action-B) and handleCloseFooterButton (Cancel) each do byId(...).close(); the port routes all` &&
+               ` three to one CLOSE event that issues follow_up_action( cs_event-popover_close ) - only one popover slot is open at a time, so a single popover_close covers both fragments. The footer's OK button has` &&
+               ` no handler in the original and none here. // IMPROVISED: the JSONModel is loaded from the shared sap/ui/demo/mock/products.json; only the single record /ProductCollection/0 is bound (its Name +`.
+    lv_text1 = lv_text1 && ` ProductPicUrl), so only those are seeded. The mock's host-relative ProductPicUrl ('test-resources/...') is resolved to an absolute sdk.openui5.org URL. // LIVE-TEST: unverified in a running system:` &&
+               ` that both ResponsivePopover fragments open anchored to their button (popover_display by_id = $event.oSource.sId), that {NAME}/{PRODUCTPICURL} resolve from the root-seeded record, and that the` &&
+               ` action/footer buttons close the popover (popover_close). **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the 'Popover with Custom Footer' press opens the` &&
+               ` ResponsivePopover anchored with its OK/Cancel footer; the phone-Dialog variant remains unexercised.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.ResponsivePopover`               name = `ResponsivePopover`                   class = `z2ui5_cl_ai_app_243` path = `src/01/b19/z2ui5_cl_ai_app_243.clas.abap`
         score = 5
@@ -3430,12 +3456,13 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` 122/124 precedent, since a port ships no stylesheet. That core:HTML control is therefore EXTRA against the original view (original 0 vs port 1); the CSS itself is reproduced verbatim, only` &&
                ` whitespace-collapsed. // NOTE: The Slider's liveChange attribute is dropped: onSliderMoved calls byId('panelCSSGrid').setWidth(fValue + '%'). sap.m.Panel HAS a width property, so the slider value is` &&
                ` two-way bound ({/SLIDER_VALUE}) and the Panel width is the expression binding {= ${/SLIDER_VALUE} + '%' } - the app 214 form, which needs no round-trip and no imperative setter. Same rendered` &&
-               ` behaviour, so NOTE rather than IMPROVISED. // LIVE-TEST: Unverified in a running system: that dragging the Slider really resizes the Panel through the expression binding (render-smoke only proves the` &&
-               ` binding produces a valid CSSSize), and that the nested CSSGrid with its GridItemLayoutData (gridColumn '1 / 3', gridRow 1/2) lays the E/F/G boxes out as in the original.`.
+               ` behaviour, so NOTE rather than IMPROVISED. // NOTE: **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): driving the Slider with the keyboard resizes` &&
+               ` the Panel with no round-trip: the value goes 100 -> 99 and the Panel's width follows as '99%' through the expression binding, so the controller's jQuery width is fully replaced. The nested CSSGrid`.
+    lv_text1 = lv_text1 && ` renders its E/F/G boxes. Residual (nothing headless can assert): the visual grid placement from GridItemLayoutData (gridColumn '1 / 3'), which needs the theme CSS the harness does not load.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.cssgrid.CSSGrid`         name = `NestedGrids`                         class = `z2ui5_cl_ai_app_270` path = `src/02/b14/z2ui5_cl_ai_app_270.clas.abap`
         score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.60`
         notes = lv_text1 ) ).
 
@@ -3461,16 +3488,14 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` change, so a lossy-by-definition static fold (app 006 precedent) rather than a NOTE-worthy prefix drop - the live model indirection is gone. // IMPROVISED: The Slider's liveChange attribute is` &&
                ` dropped: handleSliderChange resizes the DynamicSideContent's container by writing a percentage width straight onto its DOM node (byId('sideContentContainer').$().width(iValue + '%')). The container` &&
                ` is a sap.m.Page, which has no width property to bind, so there is nothing to two-way bind the slider value to (apps 213/214 hit the same jQuery-width idiom on controls that DO have a width, and bound` &&
-               ` it there). The Slider is kept 1:1 with its value='100' so the sample's footer is complete, but moving it has no effect. // LIVE-TEST: handleToggleClick is reproduced roundtrip-free as _event_client(`.
-    lv_text1 = lv_text1 && ` control_by_id, DynamicSideContent / toggle ) - toggle() is a public sap.ui.layout.DynamicSideContent method and needs no whitelist entry (the framework-invariant guard admits it).` &&
-               ` _updateToggleButtonState becomes the BREAKPOINT_CHANGED round-trip: the breakpointChanged event transports ${$parameters>/currentBreakpoint} and the backend enables the Toggle button only on` &&
-               ` breakpoint 'S', exactly like the original, through the two-way bound enabled flag. The Slider's visible follows the shared device> model ({= !${device>/system/phone}}), the declarative form of the` &&
-               ` original's onBeforeRendering setVisible(!Device.system.phone). None of the three wires is verified in a running system.`.
+               ` it there). The Slider is kept 1:1 with its value='100' so the sample's footer is complete, but moving it has no effect. // NOTE: **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction,`.
+    lv_text1 = lv_text1 && ` transpiled backend + real browser): shrinking the viewport into the S range makes the DynamicSideContent fire breakpointChanged, the round-trip transports 'S' and the footer Toggle button becomes` &&
+               ` enabled through the two-way bound flag - the whole _updateToggleButtonState wire. The main/side content render side by side beforehand. Residual (nothing headless can assert): that toggle() then` &&
+               ` really swaps main and side content visually, and the Slider's device-model visible flag on a real phone.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.DynamicSideContent`      name = `DynamicSideContentEqualSplit`        class = `z2ui5_cl_ai_app_267` path = `src/02/b14/z2ui5_cl_ai_app_267.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.30`
         notes = lv_text1 ) ).
 
@@ -3483,14 +3508,13 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
     lv_text1 = lv_text1 && ` breakpoint half. The original computes !(breakpoint === 'S' || oDSC.isSideContentVisible()), i.e. it also hides the 'Open Side Content' button whenever the side content happens to be visible;` &&
                ` isSideContentVisible() is client state the backend cannot read. The port keeps the button's visibility bound to the breakpoint (visible unless 'S') and flips the same flag in the two press handlers` &&
                ` (hide -> button shows, show -> button hides), which matches the original in every path the sample offers - but a side-content visibility change caused by anything else (e.g. the Toggle button) does` &&
-               ` not update it. // LIVE-TEST: Unverified in a running system: handleToggleClick as _event_client( control_by_id, DynamicSideContent/toggle ), the two setShowSideContent(false/true) follow-up actions,` &&
-               ` and the BREAKPOINT_CHANGED round-trip that drives the Toggle button's enabled flag (S only) and the Open Side Content button's visibility. The FeedListItem list over the sample's own feed.json (4` &&
-               ` rows verbatim, author pictures on upload.wikimedia.org exactly as the mock has them) renders in render-smoke but its feed layout was not seen live.`.
+               ` not update it. // NOTE: **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the feed list renders all four feed.json rows, the side content's Close` &&
+               ` button hides the side content through the SIDE_CONTENT_HIDE follow-up action (setShowSideContent false), the Open Side Content button then shows (its visible flag comes from the breakpointChanged` &&
+               ` round-trip) and brings it back through SIDE_CONTENT_SHOW. Residual (nothing headless can assert): the FeedListItem layout with its remote author pictures, and toggle() on a real S-breakpoint device.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.DynamicSideContent`      name = `DynamicSideContentProduct`           class = `z2ui5_cl_ai_app_269` path = `src/02/b14/z2ui5_cl_ai_app_269.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.30`
         notes = lv_text1 ) ).
 
@@ -3530,13 +3554,17 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16.0`
         notes = `NOTE: sap.ui.layout.form.Form with two FormContainers, per-container toolbars, ResponsiveGridLayout, FormElements with GridData layoutData and a Select. The original bound an element context` &&
-                 ` (/SupplierCollection/0 from the shared demo supplier.json); flattened here to top-level model fields the {…} bindings resolve against.` )
+                 ` (/SupplierCollection/0 from the shared demo supplier.json); flattened here to top-level model fields the {…} bindings resolve against. **Corrected 2026-08-01**: those bindings were written RELATIVE` &&
+                 ` ({FIELD}) and a relative path on a control with no binding context resolves against nothing — the fields rendered EMPTY in the running app (measured with the e2e harness, the app-207 class). They are` &&
+                 ` now bound ABSOLUTELY through client->_bind( field ), which is what a root-seeded record needs.` )
       ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleFormToolbar`                   class = `z2ui5_cl_ai_app_175` path = `src/02/b10/z2ui5_cl_ai_app_175.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16.0`
         notes = `IMPROVISED: The original controller loads the shared demo supplier.json and element-binds a single record (/SupplierCollection/0); flattened here to top-level default-model fields the {…} SimpleForm` &&
-                 ` bindings resolve against. Values are supplier.json SupplierCollection row 0 (Red Point Stores, Maintown); unbound columns (Tel, Sms, Rating, …) are dropped.` ) ).
+                 ` bindings resolve against. Values are supplier.json SupplierCollection row 0 (Red Point Stores, Maintown); unbound columns (Tel, Sms, Rating, …) are dropped. **Corrected 2026-08-01**: those bindings` &&
+                 ` were written RELATIVE ({FIELD}) and a relative path on a control with no binding context resolves against nothing — the fields rendered EMPTY in the running app (measured with the e2e harness, the` &&
+                 ` app-207 class). They are now bound ABSOLUTELY through client->_bind( field ), which is what a root-seeded record needs.` ) ).
 
     lv_text1 = `IMPROVISED: The eight Sliders' liveChange='.onSliderMoved' handler is dropped. The original controller resizes the next grid wrapper via jQuery DOM traversal` &&
                ` (oSlider.$().parent().next().find('.gridWrapper'), then Element.closestTo(...).setWidth(value + '%')). The Sliders render 1:1 but do not resize the grids; the responsive GridData behaviour is still` &&
@@ -3814,10 +3842,11 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` gone with the JS. // IMPROVISED: The Inputs' change handler is dropped: handleInputChange validates the typed text with sap.ui.core.CSSColor.isValid and sets the Input's valueState to Error for an` &&
                ` invalid color. Colour-string validation is frontend logic with no ABAP equivalent that runs per keystroke, and abap2UI5's thin-frontend rule forbids reimplementing it in a formatter or expression`.
     lv_text1 = lv_text1 && ` binding; a round-trip per change would be a different behaviour. The Input.value stays two-way bound so the typed text reaches the backend, but an invalid entry is not flagged. handleChange's own` &&
-               ` valueState reset (ValueState.None after picking a colour) is therefore not needed either. // LIVE-TEST: Unverified in a running system: (a) that each valueHelpRequest opens ITS ColorPickerPopover` &&
-               ` anchored to the pressed Input (control_by_id + openBy with a domRef arg); (b) that the popover's change round-trip writes the chosen colorString into the right Input and toasts 'Chosen color string:` &&
-               ` <color>' like handleChange - the original tracks the source Input in this.inputId, while here every popover has its own event so the target is known statically; (c) that the liveChange round-trip` &&
-               ` keeps the Text under the last Input in sync while the user drags in the picker.`.
+               ` valueState reset (ValueState.None after picking a colour) is therefore not needed either. // LIVE-TEST: Unverified in a running system: (b) that the popover's change round-trip writes the chosen` &&
+               ` colorString into the right Input and toasts 'Chosen color string: <color>' like handleChange - the original tracks the source Input in this.inputId, while here every popover has its own event so the` &&
+               ` target is known statically; (c) that the liveChange round-trip keeps the Text under the last Input in sync while the user drags in the picker. Leg (a) is closed: **e2e-verified 2026-08-01**` &&
+               ` (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): clicking the first row's value-help icon opens THAT Input's own ColorPickerPopover anchored at the input (control_by_id openBy` &&
+               ` + domRef), with the ColorPicker inside it. Picking a colour needs the picker's own drag/slider controls, which carry zero-size boxes headless, so (b)/(c) stay a human check.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.ColorPickerPopover`     name = `ColorPickerPopover`                  class = `z2ui5_cl_ai_app_268` path = `src/02/b14/z2ui5_cl_ai_app_268.clas.abap`
         score = 5

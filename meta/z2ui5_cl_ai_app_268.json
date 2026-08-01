@@ -21,7 +21,7 @@
     },
     {
       "type": "LIVE_TEST",
-      "what": "Unverified in a running system: (a) that each valueHelpRequest opens ITS ColorPickerPopover anchored to the pressed Input (control_by_id + openBy with a domRef arg); (b) that the popover's change round-trip writes the chosen colorString into the right Input and toasts 'Chosen color string: <color>' like handleChange - the original tracks the source Input in this.inputId, while here every popover has its own event so the target is known statically; (c) that the liveChange round-trip keeps the Text under the last Input in sync while the user drags in the picker."
+      "what": "Unverified in a running system: (b) that the popover's change round-trip writes the chosen colorString into the right Input and toasts 'Chosen color string: <color>' like handleChange - the original tracks the source Input in this.inputId, while here every popover has its own event so the target is known statically; (c) that the liveChange round-trip keeps the Text under the last Input in sync while the user drags in the picker. Leg (a) is closed: **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): clicking the first row's value-help icon opens THAT Input's own ColorPickerPopover anchored at the input (control_by_id openBy + domRef), with the ColorPicker inside it. Picking a colour needs the picker's own drag/slider controls, which carry zero-size boxes headless, so (b)/(c) stay a human check."
     }
   ]
 }

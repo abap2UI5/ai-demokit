@@ -44,9 +44,9 @@ CLASS z2ui5_cl_ai_app_195 IMPLEMENTATION.
             )->a( n = `footerText` v = `This is the footer text`
 
             )->leaf( `StandardListItem`
-                )->a( n = `title`            v = `{NAME}`
-                )->a( n = `description`      v = `{PRODUCTID}`
-                )->a( n = `icon`             v = `{PRODUCTPICURL}`
+                )->a( n = `title`            v = client->_bind( name )
+                )->a( n = `description`      v = client->_bind( productid )
+                )->a( n = `icon`             v = client->_bind( productpicurl )
                 )->a( n = `iconDensityAware` v = `false`
                 )->a( n = `iconInset`        v = `false` ).
 

@@ -16,8 +16,8 @@
       "what": "The onInit-seeded JSON model rides 1:1 in model_init (5 rows, the derived label texts written out); every row carries a valueState so the absent-enum-empty-string trap does not apply, and the rows without a valueStateText keep the empty string (falls back to the state default text like the original undefined) - the app-253 pattern."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "unverified in a running system: the bound valueState/valueStateText rendering over the 5-row aggregation (render-smoke mocks the model)."
+      "type": "NOTE",
+      "what": "**e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): all five rows render from the real backend model - the labels arrive, each of the four non-None value states reaches the DOM exactly once (sapMInputBaseContentWrapper<State> on the DateRangeSelection) and the bound valueStateText of the Warning row is written into the value-state node. Residual (nothing headless can assert): the value-state message popup's wrapping of the long text, which needs the theme CSS the harness does not load."
     }
   ]
 }

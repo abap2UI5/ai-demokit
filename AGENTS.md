@@ -602,6 +602,17 @@ that stops at the deepest node.
   item `Inactive` and the Select dead. No gate sees this — structural-diff
   matches on the last path segment, render-smoke mocks the model — it took the
   e2e interaction, 2026-07-31).
+  **The same trap outside any template: a "flattened element binding".** When
+  the original does `bindElement('/ProductCollection/0')` (or a `binding=`
+  attribute) and the port seeds that record's fields at the model root, the
+  view must bind them **absolutely** too — a relative `{NAME}` on a control
+  with *no binding context at all* resolves against nothing and renders empty.
+  Seven ports carried the wrong form with a sidecar note claiming the opposite
+  ("the relative bindings resolve against the root"): 142 175 195 206 209 229
+  243, all fixed 2026-08-01 after the e2e harness showed app 206 rendering
+  `x x` where the dimensions belong. Audit for it with:
+  `_bind`-less `` v = `{FIELD}` `` whose FIELD is a root-level `DATA` scalar of
+  the class and not a component of any row structure.
 - `client->_event( \`NAME\` )` — wire a control event (press, liveChange…) to an
   event named `NAME`. **Always** dispatch in `on_event( )` with a
   `CASE client->get( )-event.` … `WHEN \`NAME\`.` … `ENDCASE` — even for a single
@@ -1144,6 +1155,24 @@ How to record it:
   `pgrep -f e2e-build`** — the waiting shell's own command line contains that
   string, so it matches itself and waits forever. Grep the build log for
   `e2e-build: done` instead.
+- **A control with no theme CSS has a zero-size box, and playwright will not
+  click or focus it** — the e2e harness serves the UI5 *sources*, not the
+  themes, so `sapUiIcon` (an Input's `…-vhi` value-help icon, app 268) and
+  `sapMSliderHandle` (apps 270/271) measure 0×0 and every actionability check
+  fails with *"not visible"*, which reads like a broken port. Both have a real
+  gesture that still goes through the control's own handling:
+  `locator.dispatchEvent('click')` for an icon (UI5's `Icon` listens for the
+  DOM click) and `page.evaluate(() => el.focus())` + `keyboard.press('ArrowLeft')`
+  for a slider (its key handling then moves the value through the two-way
+  binding). Do not "fix" this by setting the property through the UI5 API —
+  that bypasses the binding the test exists to prove. Same family as the
+  OverflowToolbar popover (app 207) and the busy overlay (app 130): assert the
+  *effect* (a bound property, a rendered class), not the pixels (2026-08-01).
+- **An interaction may create the state it needs** — app 267's whole
+  `breakpointChanged` wire only fires below 720 px, so its interaction calls
+  `page.setViewportSize({ width: 400, height: 900 })` and then waits for the
+  bound `enabled` flag. A responsive wire is testable; it just needs the
+  viewport as an input (2026-08-01).
 - **abapGit pushes from a system can carry stale generated files** — a human
   who pulled before the latest repo change and pushes back from the system
   silently reverts it (happened to the overview app's SUBSET labels,

@@ -7,6 +7,32 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## e2e round 3 — eight interactions, six LIVE_TESTs closed (2026-08-01)
+
+- Eight new `INTERACTIONS` entries, all green: **253/254/255** (one shared
+  assertion for the value-state pickers — every non-`None` state reaches the DOM
+  exactly once as `sapMInputBaseContentWrapper<State>`, and the bound
+  `valueStateText` is written into the value-state node), **267** and **269**
+  (DynamicSideContent), **268** (the anchored ColorPickerPopover open),
+  **270** (the keyboard-driven Slider resizing the Panel) and **271**
+  (`layoutChange` round-trip + the `containerQuery` expression binding).
+  Open LIVE_TESTs **57 → 51**; 268 keeps its LIVE_TEST for the two legs that
+  need a real colour pick, with the verified leg named in the sidecar.
+- **Driving a control that has no layout headless.** Two selectors died on the
+  same cause: the theme CSS never loads in the harness, so `sapUiIcon` and
+  `sapMSliderHandle` render with a **zero-size box** and playwright refuses to
+  click or focus them. The fixes are the two general workarounds, both real
+  gestures: `locator.dispatchEvent('click')` for the icon (UI5's `Icon`
+  listens for the DOM click) and `element.focus()` + `keyboard.press(…)` for
+  the slider (the Slider's own key handling then moves the value through the
+  two-way binding). Recorded in AGENTS §10.
+- **A viewport resize is a legitimate test input.** App 267's whole
+  `_updateToggleButtonState` wire only fires below 720 px, so the interaction
+  calls `page.setViewportSize({ width: 400 })` and then waits for the bound
+  `enabled` flag — the first interaction that produces its own breakpoint.
+- `--only` now takes a comma-separated list (`--only 268,270`), which is what
+  iterating on a handful of ports actually needs.
+
 ## Depth port GridResponsiveness + a stale-build symptom worth naming (2026-07-31)
 
 - **App 271** (`sap.ui.layout.sample.GridResponsiveness`, b14): the
