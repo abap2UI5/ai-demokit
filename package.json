@@ -1,5 +1,5 @@
 {
-  "name": "abap2UI5-api",
+  "name": "abap2ui5-ai-demokit",
   "private": true,
   "version": "1.0.0",
   "description": "Generated abap2UI5 ports of the official UI5 demo kit samples.",
@@ -23,13 +23,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/abap2UI5/api.git"
+    "url": "git+https://github.com/abap2UI5/ai-demokit.git"
   },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/abap2UI5/abap2UI5/issues"
   },
-  "homepage": "https://github.com/abap2UI5/api#readme",
+  "homepage": "https://github.com/abap2UI5/ai-demokit#readme",
   "devDependencies": {
     "@abaplint/cli": "^2.120.3",
     "@openui5/sap.f": "^1.150.0",

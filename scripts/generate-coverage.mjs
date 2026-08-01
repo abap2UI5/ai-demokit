@@ -51,7 +51,7 @@ const END = '<!-- coverage:end -->';
 
 // link targets (overridable via env) — all links are external/absolute and
 // point at OpenUI5: the demo kit (sdk.openui5.org) and the source repo (SAP/openui5)
-const REPO = process.env.REPO || 'abap2UI5/api';   // owner/name (this repo)
+const REPO = process.env.REPO || 'abap2UI5/ai-demokit';   // owner/name (this repo)
 const REF = process.env.REF || 'main';             // branch the ABAP links resolve on
 const GH = `https://github.com/${REPO}`;
 const DEMOKIT = process.env.DEMOKIT || 'https://sdk.openui5.org';   // OpenUI5 demo kit
@@ -301,12 +301,30 @@ for (const e of libs) {
   }
 }
 // stale exceptions must not linger: an entry whose sample is no longer ported
-// (or no longer out of scope) fails too, so the list can only shrink honestly
+// (or no longer out of scope) fails too, so the list can only shrink honestly.
+// Each entry also PINS the scope facts the decision was made on ("decided":
+// scope verdict + control @since + deprecation @since) — a universe/properties
+// refresh that changes any of them invalidates the decision's rationale, so
+// the gate fails until a maintainer re-decides (and re-pins) the entry.
+const depSince = (d) => d == null ? null : typeof d === 'object' ? (d.since || 'yes') : String(d);
 for (const [sampleId, exc] of scopeExceptions) {
   const hit = libs.flatMap((e) => e.samples.map((s) => ({ ...s, id: `${e.lib}.sample.${s.name}` })))
     .find((s) => s.id === sampleId);
   if (!hit || !hit.port || hit.scope === 'in' || hit.scope === 'unknown') {
     console.error(`ERROR: stale scope exception "${sampleId}" (${exc.class}) — the sample is ${!hit ? 'not in the universe' : !hit.port ? 'not ported' : 'in scope'}; remove the entry from ui5/scope-exceptions.json`);
+    scopeErrors++;
+    continue;
+  }
+  if (!exc.decided) {
+    console.error(`ERROR: scope exception "${sampleId}" (${exc.class}) carries no "decided" facts — pin the decision's basis as { "scope", "since", "deprecated" } in ui5/scope-exceptions.json`);
+    scopeErrors++;
+    continue;
+  }
+  const cur = { scope: hit.scope, since: hit.since || null, deprecated: depSince(hit.deprecated) };
+  const dec = { scope: exc.decided.scope ?? null, since: exc.decided.since ?? null, deprecated: exc.decided.deprecated ?? null };
+  const changed = ['scope', 'since', 'deprecated'].filter((k) => cur[k] !== dec[k]);
+  if (changed.length) {
+    console.error(`ERROR: scope exception "${sampleId}" (${exc.class}) was decided on facts that have changed — ${changed.map((k) => `${k}: decided ${JSON.stringify(dec[k])}, now ${JSON.stringify(cur[k])}`).join('; ')}. Re-decide the entry (and re-pin "decided") in ui5/scope-exceptions.json`);
     scopeErrors++;
   }
 }
