@@ -3,3 +3,6 @@ node_modules
 output
 openui5
 .abap2UI5
+src/zz_dev
+
+.abaplint-mcp-dev.jsonc

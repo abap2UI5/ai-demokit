@@ -188,6 +188,8 @@ the coverage and the structural diff read from.
 | [`api.md`](api.md) | One row per demo kit sample: ported, backlog or out of scope |
 | [`meta/`](meta) | One sidecar per port — status, checked, typed deviations |
 | [`pr/`](pr) | Forwardable improvement requests for the abap2UI5 framework, distilled from porting gaps |
+| [ai-mcp](https://github.com/abap2UI5/ai-mcp) | MCP server for AI coding agents — capability queries, view validation, deploy, headless run + screenshot on this repo's infrastructure (separate repository) |
+| [ai-view-check](https://github.com/abap2UI5/ai-view-check) | The render-smoke/property gates extracted as standalone CLI, library and GitHub Action (separate repository) |
 
 ## Coverage
 
