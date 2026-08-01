@@ -451,7 +451,9 @@ data, or split the aggregation into per-shape templates (the QuickView port's
 
 #### `view_display` — the view via `z2ui5_cl_ai_xml`
 
-Build the view with the generic builder **`z2ui5_cl_ai_xml`**. It translates a
+Build the view with the generic builder **`z2ui5_cl_ai_xml`**. The class lives
+in abap2UI5 core (`src/02/`, migrated from this repo) and resolves through the
+abap2UI5 abaplint dependency. It translates a
 UI5 XML view 1:1 by method chaining — every control, property and namespace maps
 directly, nothing is approximated. The four navigation verbs are all 4 chars so
 the `)->` arrows line up:
@@ -1024,8 +1026,9 @@ DSAG Leitfaden, then the samples style. Essentials:
 - Lifecycle: chain `check_on_init( )` / `check_on_navigated( )` /
   `check_on_event( )` with `ELSEIF`. Re-display the view in the
   `check_on_navigated( )` branch.
-- Build views with `z2ui5_cl_ai_xml` (see §5 — the only view builder in this
-  repo); `client->view_display( view->stringify( ) )` as a standalone final
+- Build views with `z2ui5_cl_ai_xml` (see §5 — the only view builder used in
+  this repo; the class itself lives in abap2UI5 core, `src/02/`);
+  `client->view_display( view->stringify( ) )` as a standalone final
   statement.
 - **ABAP Doc (`"!`) is parsed as HTML.** A raw `<…>` is read as an HTML tag, so
   never put a literal UI5 element (`<mvc:View>`) or any other `<tag>` in a `"!`
