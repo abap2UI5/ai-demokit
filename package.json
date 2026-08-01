@@ -11,6 +11,7 @@
     "structure-lint": "node scripts/structure-lint.mjs --strict",
     "scaffold": "node scripts/scaffold.mjs",
     "json-to-abap": "node scripts/json-to-abap.mjs",
+    "mcp": "node mcp/server.mjs",
     "node:setup": "node scripts/node-setup.mjs",
     "node:build": "node scripts/e2e-build.mjs",
     "node:serve": "node scripts/node-serve.mjs",
@@ -32,6 +33,7 @@
   "homepage": "https://github.com/abap2UI5/ai-demokit#readme",
   "devDependencies": {
     "@abaplint/cli": "^2.120.3",
+    "@modelcontextprotocol/sdk": "^1.30.0",
     "@openui5/sap.f": "^1.150.0",
     "@openui5/sap.m": "^1.150.0",
     "@openui5/sap.tnt": "1.150.0",

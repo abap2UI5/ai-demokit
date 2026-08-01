@@ -188,6 +188,7 @@ the coverage and the structural diff read from.
 | [`api.md`](api.md) | One row per demo kit sample: ported, backlog or out of scope |
 | [`meta/`](meta) | One sidecar per port — status, checked, typed deviations |
 | [`pr/`](pr) | Forwardable improvement requests for the abap2UI5 framework, distilled from porting gaps |
+| [`mcp/`](mcp) | MCP server for AI coding agents — capability queries, deploy, headless run + screenshot, no SAP system needed |
 
 ## Coverage
 

@@ -1,6 +1,9 @@
 {
   "global": {
-    "files": "/src/**/*.*"
+    "files": "/src/**/*.*",
+    // src/zz_dev is the gitignored MCP dev sandbox (see mcp/README.md) — it is
+    // linted separately with a relaxed object_naming via the mcp lint tool
+    "exclude": ["zz_dev"]
   },
   "dependencies": [
     {
