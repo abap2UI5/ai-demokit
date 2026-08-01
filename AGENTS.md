@@ -1195,7 +1195,11 @@ How to record it:
   Clicking `Additional Options` opens the associative popover and the controls
   inside it click normally, round-trip and all (measured on app 174,
   2026-08-01). This supersedes the earlier "not drivable" note on apps
-  207/247 — their checks can be re-armed the same way.
+  207/247 — both are re-armed and green. Two details: an **overflowed
+  `SegmentedButton` renders as a `Select`** in that popover (app 247), and the
+  binding **template** of an aggregation sits in `Element.registry` next to
+  the real rows with no binding context, so filter on `getBindingContext()`
+  before asserting a property over "all items" (app 207).
 - **An event parameter that is an ARRAY arrives as JSON, not as a joined
   string.** `${$parameters>/fieldGroupIds}` reached `on_event` as
   `["Billing Information"]`, brackets and quotes included. Index it in the

@@ -28,8 +28,8 @@
       "what": "ProductPicUrl is resolved to the OpenUI5 host: the mock stores the host-relative 'test-resources/sap/ui/documentation/sdk/images/HT-xxxx.jpg'; the port stores the absolute 'https://sdk.openui5.org/test-resources/...' per the asset-URL rule, keeping the original {ProductPicUrl} binding. Full 123-row ProductCollection inlined (Name/Category/ProductPicUrl/Quantity/DeliveryDate)."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The SegmentedButton width-switch round-trip (WIDTHS_CHANGE with ${$parameters>/item}.getKey(), width recompute + view_model_update), the columnResize client toast (${$parameters>/width}), and the timestamp-typed DeliveryDate rendering are view-create verified (render-smoke) but not yet live-verified in a running system."
+      "type": "NOTE",
+      "what": "**e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the SegmentedButton width switch really round-trips: picking 'Flexible' sends WIDTHS_CHANGE with ${$parameters>/item}.getKey(), the backend recomputes the widths and the Table's columns come back at 25%. The button sits in an OverflowToolbar, where it renders as a Select - drivable once the 'Additional Options' popover is open (AGENTS 10). Residual: the columnResize client toast (a real column drag) and the timestamp-typed DeliveryDate formatting."
     }
   ]
 }

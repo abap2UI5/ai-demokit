@@ -24,8 +24,8 @@
       "what": "The shared 123-row demo ProductCollection (sap/ui/demo/mock/products.json) is inlined verbatim into model_init with the five columns the sample binds (Name, ProductId, Quantity, Price, CurrencyCode). Price is typed as a packed ABAP field (p LENGTH 13 DECIMALS 2) because the u:Currency value property is numeric (float) - UI5 2.x strict-type validation would reject a string there. The mock's own Status field (all 'Available') is intentionally not carried, since the sample overwrites Status with the highlight classification above."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The interaction paths are unverified in a running system: the two-way client-side property bindings that replace the controller setters (selectionMode, alternateRowColors) and the highlight-visibility expression binding driven by the SHOW_HIGHLIGHTS ToggleButton. All @since-checked members are <= 1.71 so no POST_171 is needed (RowSettings 1.48, RowSettings.highlightText 1.62, Table.alternateRowColors 1.52, u:Currency 1.21.1)."
+      "type": "NOTE",
+      "what": "**e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): all three toolbar controls really drive the grid Table through their bindings - the Toggle Alternate Row Colors button flips Table.alternateRowColors to true, turning Toggle Highlights off puts every RowSettings highlight back to 'None' through the expression binding, and picking 'Single' in the SelectionMode Select sets Table.selectionMode. They all sit in the OverflowToolbar, which IS drivable once its 'Additional Options' popover is open (AGENTS 10). All @since-checked members are <= 1.71 so no POST_171 is needed (RowSettings 1.48, RowSettings.highlightText 1.62, Table.alternateRowColors 1.52, u:Currency 1.21.1)."
     }
   ]
 }

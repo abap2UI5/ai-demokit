@@ -24,8 +24,8 @@
       "what": "the original keeps each Dialog in a controller field and reuses it (if (!this.oDialog) ...); abap2UI5 rebuilds the fragment per open, which is the framework's popup lifecycle - the same deviation the other popup ports carry. The OK button's press (this.oDialog.close()) is reproduced roundtrip-free as _event_client( cs_event-popup_close )."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "unverified in a running system: that each of the five buttons opens ITS dialog with the right title, value state and text, and that the Emphasized OK button closes it client-side without a round-trip."
+      "type": "NOTE",
+      "what": "**e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the Default and the Error dialog each open with their own title/state/text and close again on the Emphasized OK button (popup_close, no round-trip) - the second open proves the rebuild-per-open lifecycle works. The other three differ only in the three literals the same builder method fills in, and render-smoke covers their views."
     }
   ]
 }

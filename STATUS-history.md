@@ -72,6 +72,38 @@ of their date and are NOT kept current._
   structural-diff went from 0 to 3 undeclared findings. Keep the naming clause
   when you rewrite a deviation.
 
+## Depth port GenericTileStates (2026-08-01)
+
+- **App 275** (`sap.m.sample.GenericTileStates`, b15): the tile-state matrix —
+  `Loaded` / `Loading` / `Failed` / `Disabled`, each once with and once
+  without a press handler, plus a `SlideTile` over two news tiles. Purely
+  declarative: the controller's single handler is a **constant**
+  `MessageToast.show`, so every press is the roundtrip-free client toast and
+  the app stays init-only. The four handler-less tiles keep no wire, so the
+  "no press event" half of the sample still demonstrates exactly that.
+- The sample's `style.css` is injected through a `core:HTML` `<style>` leaf
+  (the 122/124/270 precedent) and declared as the one extra control. The two
+  `SlideTile` background images point into **another** sample's folder and are
+  kept verbatim, only host-absolutized — named in the sidecar so
+  `data-fidelity` sees them.
+
+## The overflow popover closes four more LIVE_TESTs (2026-08-01)
+
+- With the fixed build all five re-run interactions pass (174, 218, 272, 273,
+  274), and the **overflow-popover route was pushed further**: apps **207**
+  and **247** — both written off as "not drivable headless" — are re-armed
+  and green. 207's click-through (pick a list type, every bound row re-types)
+  and 247's `WIDTHS_CHANGE` round-trip (pick 'Flexible', the columns come back
+  at 25 %) are now machine-checked instead of human checks. 174 gained its
+  third toolbar control, the SelectionMode Select.
+- Two details that cost a red run each, now in AGENTS §10: an **overflowed
+  `SegmentedButton` renders as a `Select`** in the popover, and the binding
+  **template** of an aggregation sits in `Element.registry` beside the real
+  rows with no binding context — `.every(row => …)` over "all items" fails on
+  the template alone. Filter on `getBindingContext()`.
+- Open LIVE_TESTs **44 → 41 ports**. 272 keeps its entry for the strip-close
+  and Reset legs, with the two verified legs named.
+
 ## Five interactions, three lessons, one real port fix (2026-08-01)
 
 - The first run of the newest interactions failed **5 of 5** — and four of the

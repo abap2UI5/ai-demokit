@@ -135,8 +135,10 @@ const benign = (s) => BENIGN.some((re) => re.test(s));
 //   fieldGroupIds / validateFieldGroup: 272
 //   controller-built Dialogs as popup_display fragments: 273 274
 //   OverflowToolbar controls ARE drivable — open the overflow popover
-//     ("Additional Options") first, then click inside it: 174 (2026-08-01,
-//     which also re-opens the 207/247 checks that were given up on)
+//     ("Additional Options") first, then click inside it: 174 207 247
+//     (2026-08-01; an overflowed SegmentedButton renders as a Select there,
+//     and the binding TEMPLATE sits in the Element registry next to the real
+//     rows, so filter on getBindingContext() before asserting over rows)
 //   still open: 008 (a DOM click on a ColorPalette swatch fires no
 //     colorSelect) and 233 (its ObjectPage header input/value-help icon never
 //     becomes actionable headless)
@@ -758,6 +760,21 @@ const INTERACTIONS = {
     });
     if (!shape.n) throw new Error('no StandardListItem rendered');
     if (shape.path !== '/LISTTYPE') throw new Error(`the item type must bind the absolute /LISTTYPE, got "${shape.path}"`);
+    // …and the click-through IS drivable through the overflow popover
+    // (2026-08-01) — picking a type must reach every item's `type`
+    const more = page.getByRole('button', { name: 'Additional Options' }).first();
+    await expect(more, 'the overflow button').toBeVisibleEnabled();
+    await more.click();
+    const sel = page.locator('.sapMPopover .sapMSlt').first();
+    await expect(sel, 'the list-type Select in the overflow').toBeVisibleEnabled();
+    await sel.click();
+    await page.locator('.sapMSltPicker').getByText('Navigation', { exact: true }).first().click();
+    await waitForUi5(page, () => {
+      // the binding TEMPLATE is in the registry too and keeps the default
+      // type (it has no binding context) — only the real rows count
+      const rows = ui5All().filter((c) => c.getMetadata().getName() === 'sap.m.StandardListItem' && c.getBindingContext());
+      return rows.length > 0 && rows.every((i) => i.getType() === 'Navigation');
+    }, 'the picked list type never reached the items');
   },
   // sap.ui.unified.Menu opened through the 2026-07-27 openBy fallback
   // (open(false, anchor, …) for a control without its own openBy)
@@ -937,6 +954,15 @@ const INTERACTIONS = {
       const rs = ui5All().filter((c) => c.getMetadata().getName() === 'sap.ui.table.RowSettings');
       return rs.length > 0 && rs.every((r) => r.getHighlight() === 'None');
     }, 'turning highlights off did not reach the RowSettings highlight expression binding');
+    // the third toolbar control: the SelectionMode Select, also in the overflow
+    const sel = page.locator('.sapMPopover .sapMSlt').first();
+    await expect(sel, 'the SelectionMode Select in the overflow').toBeVisibleEnabled();
+    await sel.click();
+    await page.locator('.sapMSltPicker').getByText('Single', { exact: true }).first().click();
+    await waitForUi5(page, () => {
+      const t = ui5All().find((c) => c.getMetadata().getName() === 'sap.ui.table.Table');
+      return !!t && t.getSelectionMode() === 'Single';
+    }, 'the Select did not flip the Table selectionMode through the two-way binding');
   },
   // fieldGroupIds + validateFieldGroup: leaving a group fires the event with
   // the group's ids, and the backend classifies it into ITS MessageStrip
@@ -995,6 +1021,32 @@ const INTERACTIONS = {
     await expect(dlg, 'the bound product list inside the dialog').toContainText('Notebook Basic 15');
     await dlg.getByRole('button', { name: 'Close', exact: true }).first().click();
     await expect(page.locator('.sapMDialog'), 'the dialog after popup_close').toHaveCountBelow(1);
+  },
+  // the width-switch round-trip: the SegmentedButton sits in an
+  // OverflowToolbar, so the overflow popover is opened first (2026-08-01)
+  z2ui5_cl_ai_app_247: async (page, expect) => {
+    const more = page.getByRole('button', { name: 'Additional Options' }).first();
+    await expect(more, 'the overflow button').toBeVisibleEnabled();
+    await more.click();
+    // an overflowed SegmentedButton renders as a Select in the popover
+    const sel = page.locator('.sapMPopover .sapMSlt').first();
+    await expect(sel, 'the width SegmentedButton (a Select in the overflow)').toBeVisibleEnabled();
+    await sel.click();
+    await page.locator('.sapMSltPicker').getByText('Flexible', { exact: true }).first().click();
+    await waitForUi5(page, () => {
+      const cols = ui5All().filter((c) => c.getMetadata().getName() === 'sap.ui.table.Column');
+      return cols.some((c) => c.getWidth() === '25%');
+    }, 'the WIDTHS_CHANGE round-trip never re-sized the columns');
+  },
+  // GenericTile states: the press wire is a constant client toast, and a
+  // handler-less tile must stay silent
+  z2ui5_cl_ai_app_275: async (page, expect) => {
+    const tiles = page.locator('.sapMGT');
+    await expect(tiles.first(), 'the first tile').toBeVisibleEnabled();
+    await expect(page.locator('body'), 'the tile headers').toContainText('Status Loaded - with press event');
+    await tiles.nth(1).click();   // "Status Loaded - with press event"
+    await expect(page.locator('.sapMMessageToast').last(), 'the client-composed press toast')
+      .toContainText('The generic tile is pressed.');
   },
   z2ui5_cl_ai_app_142: (page) => formFieldValues(page),
   z2ui5_cl_ai_app_175: (page) => formFieldValues(page),

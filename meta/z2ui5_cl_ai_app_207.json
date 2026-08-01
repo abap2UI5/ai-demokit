@@ -21,8 +21,8 @@
       "what": "the ProductPicUrl icon values are stored as absolute https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/*.jpg URLs (the mock's host-relative test-resources paths rewritten to the OpenUI5 host per the runtime asset-URL rule). Same 123-row set, kept verbatim otherwise."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "unverified in a running system: (a) handlePress/handleDetailPress are reproduced as roundtrip-free client toasts (control_global MESSAGE_TOAST.show of \"'press' event fired!\" / \"'detailPress' event fired!\"); (b) the Select selectedKey <-> item type two-way binding should re-type all rows on selection. Re-verify both. **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the list renders and every StandardListItem binds its type to the ABSOLUTE path /LISTTYPE - the regression that actually bit us (see the correction above) is now guarded: a relative {LISTTYPE} would resolve against the row and kill the Select. NOT covered: the press/detailPress toasts themselves - the type Select lives in an OverflowToolbar whose popover content is not drivable headless, so switching the item type stays a human check."
+      "type": "NOTE",
+      "what": "unverified originally: (a) handlePress/handleDetailPress as roundtrip-free client toasts (control_global MESSAGE_TOAST.show of \"'press' event fired!\" / \"'detailPress' event fired!\"); (b) the Select selectedKey <-> item type two-way binding re-typing all rows. **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the list renders, every StandardListItem binds its type to the ABSOLUTE path /LISTTYPE (the regression that bit us - a relative {LISTTYPE} would resolve against the row and kill the Select), AND the click-through now runs: opening the OverflowToolbar's 'Additional Options' popover makes the type Select drivable, and picking 'Navigation' re-types every bound row. The earlier claim that the popover is not drivable headless was wrong (AGENTS 10, 2026-08-01). Still not covered: the press/detailPress toasts."
     }
   ]
 }

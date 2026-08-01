@@ -28,8 +28,8 @@
       "what": "the List binds the shared demo mock products.json /ProductCollection (all 123 rows, Name + Quantity - the only two fields the StandardListItem binds) inlined into model_init; the original loads the same file through a JSONModel. Both dialog buttons (OK and Close) close the dialog client-side via _event_client( cs_event-popup_close ), the direct form of the original's this.oDialog.close()."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "unverified in a running system: that each of the three buttons opens its dialog with the 123-row product list, that the fullscreen toggle appears (needs UI5 >= 1.149) and that resizable/draggable behave as in the original; also that both footer buttons close the dialog without a round-trip."
+      "type": "NOTE",
+      "what": "**e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the plain dialog opens with its title 'Available Products' and the bound 123-row product list inside it, and the Close button closes it client-side (popup_close). Residual (nothing headless can assert): the fullscreen toggle itself (needs UI5 >= 1.149) and the resizable/draggable behaviour of the other two dialogs, which differ only in the flags the same builder writes."
     }
   ]
 }

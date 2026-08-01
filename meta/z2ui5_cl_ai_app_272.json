@@ -29,7 +29,7 @@
     },
     {
       "type": "LIVE_TEST",
-      "what": "unverified in a running system: (a) that leaving a field group really fires validateFieldGroup and the event arg arrives as the plain group name (the array-to-string coercion of ${$parameters>/fieldGroupIds}); (b) that the classified MessageStrip then appears with its bound type/text; (c) that each strip's close button hides only its own strip; (d) that Submit/Cancel hide all four strips and Reset additionally empties every input."
+      "what": "legs (a) and (b) are closed: **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): moving focus from a Billing Information input into the Discount Code input fires validateFieldGroup, the arg arrives (the array is indexed with [0]) and the Billing MessageStrip appears with the mapped type and the text \"Group 'Billing Information' Validation:Error\", together with the toast. Still unverified in a running system: (c) that each strip's close button hides only its own strip; (d) that Submit/Cancel hide all four strips and Reset additionally empties every input."
     }
   ]
 }
