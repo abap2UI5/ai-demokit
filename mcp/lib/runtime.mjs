@@ -15,7 +15,7 @@
 import fs from 'fs';
 import http from 'http';
 import path from 'path';
-import { spawn } from 'child_process';
+import { spawn, execSync } from 'child_process';
 import { resolveA2UI5, REPO_ROOT } from '../../scripts/lib-a2ui5.mjs';
 
 const DEV_DIR = path.join(REPO_ROOT, 'src', 'zz_dev');
@@ -188,10 +188,54 @@ export function lintApp(className) {
 
 let building = null;
 
-export function buildBackend({ onLine } = {}) {
+/*
+ * mode 'full'        — scripts/e2e-build.mjs: downport framework + all apps to
+ *                      v702, then transpile. Slow (the 3 abaplint --fix passes
+ *                      dominate), but handles any ABAP.
+ * mode 'incremental' — copy only src/zz_dev/ into the EXISTING downport dir and
+ *                      re-run just the transpile (~1-2 min). Skips the downport
+ *                      fix passes, so the dev source must already be plain,
+ *                      transpiler-friendly ABAP (which the framework style
+ *                      guide prescribes anyway); a construct the transpiler
+ *                      rejects fails the build with its message — fall back to
+ *                      a full build or simplify the code.
+ * mode 'auto'        — incremental when a prior full build exists, else full.
+ */
+export function buildBackend({ onLine, mode = 'auto' } = {}) {
   if (building) return building;
+  const a2 = resolveA2UI5();
+  const canIncrement = Boolean(a2 && fs.existsSync(path.join(a2, 'node/downport')) && backendBuilt());
+  const incremental = mode === 'incremental' || (mode === 'auto' && canIncrement);
+  if (incremental && !canIncrement) {
+    return Promise.resolve({ ok: false, code: 1, tail: 'incremental build needs a prior full build (node/downport + node/output missing) — run mode:full first' });
+  }
   building = new Promise((resolve) => {
-    const child = spawn('node', [path.join(REPO_ROOT, 'scripts', 'e2e-build.mjs')], { cwd: REPO_ROOT });
+    let child;
+    if (incremental) {
+      if (fs.existsSync(DEV_DIR)) {
+        for (const f of fs.readdirSync(DEV_DIR)) {
+          if (/\.(abap|xml)$/.test(f)) fs.copyFileSync(path.join(DEV_DIR, f), path.join(a2, 'node/downport', f));
+        }
+      }
+      // the transpile depends on the locally patched open-abap-core clone that
+      // e2e-build normally provides — restore it if it was cleaned away
+      const lib = path.join(a2, 'node/open-abap-core');
+      if (!fs.existsSync(path.join(lib, 'src'))) {
+        fs.rmSync(lib, { recursive: true, force: true });
+        execSync(`git clone --quiet --depth=1 https://github.com/open-abap/open-abap-core ${lib}`, { cwd: a2 });
+        execSync(`node ${path.join(REPO_ROOT, 'web/ci/patch_open_abap_xml.mjs')} ${lib}`, { cwd: a2 });
+      }
+      // same transpile invocation e2e-build ends with: the framework's config,
+      // retargeted at the locally patched open-abap-core clone
+      const tcfg = JSON.parse(fs.readFileSync(path.join(a2, 'node/setup/abap_transpile.json'), 'utf8'));
+      tcfg.libs = tcfg.libs.map((l) => (l.url && l.url.includes('open-abap-core') ? { folder: '/node/open-abap-core' } : l));
+      const tcfgPath = path.join(a2, 'e2e-transpile.json');
+      fs.writeFileSync(tcfgPath, JSON.stringify(tcfg, null, 2));
+      child = spawn('npx', ['abap_transpile', './e2e-transpile.json'], { cwd: a2 });
+      child.on('close', () => fs.rmSync(tcfgPath, { force: true }));
+    } else {
+      child = spawn('node', [path.join(REPO_ROOT, 'scripts', 'e2e-build.mjs')], { cwd: REPO_ROOT });
+    }
     let tail = [];
     const keep = (d) => {
       const lines = String(d).split('\n').filter(Boolean);
@@ -202,7 +246,7 @@ export function buildBackend({ onLine } = {}) {
     child.stderr.on('data', keep);
     child.on('close', (code) => {
       building = null;
-      resolve({ ok: code === 0, code, tail: tail.join('\n') });
+      resolve({ ok: code === 0, code, mode: incremental ? 'incremental' : 'full', tail: tail.join('\n') });
     });
   });
   return building;
@@ -342,9 +386,26 @@ function resolveLocal(pathname) {
 
 let browserPromise = null;
 
+// sandboxes often ship a system chromium instead of the playwright-managed
+// download — honor A2UI5_MCP_CHROMIUM, else try the managed browser, else fall
+// back to a known system binary
+async function launchChromium() {
+  const { chromium } = await import('playwright');
+  const explicit = process.env.A2UI5_MCP_CHROMIUM;
+  if (explicit) return chromium.launch({ executablePath: explicit });
+  try {
+    return await chromium.launch();
+  } catch (e) {
+    for (const cand of ['/opt/pw-browsers/chromium', '/usr/bin/chromium', '/usr/bin/chromium-browser']) {
+      if (fs.existsSync(cand)) return chromium.launch({ executablePath: cand });
+    }
+    throw e;
+  }
+}
+
 async function getBrowser() {
   if (!browserPromise) {
-    browserPromise = import('playwright').then(({ chromium }) => chromium.launch());
+    browserPromise = launchChromium();
   }
   return browserPromise;
 }
@@ -386,11 +447,14 @@ export async function runApp({ className, timeoutMs = 60000, fullPage = true }) 
       /* ignore unparsable urls */
     }
   });
+  // UI5 modules resolve from the local @openui5 packages; what they lack
+  // (notably the BUILT theme css — the packages ship only .less sources) may
+  // come from the real CDN so screenshots are styled. A2UI5_MCP_OFFLINE=1
+  // forces the hermetic 404 behaviour of e2e-smoke.
   await page.route('**://sdk.openui5.org/**', (route) => {
     const hit = resolveLocal(new URL(route.request().url()).pathname);
-    return hit
-      ? route.fulfill({ status: 200, contentType: hit.type, body: hit.body })
-      : route.fulfill({ status: 404, body: '' });
+    if (hit) return route.fulfill({ status: 200, contentType: hit.type, body: hit.body });
+    return process.env.A2UI5_MCP_OFFLINE ? route.fulfill({ status: 404, body: '' }) : route.continue();
   });
 
   let booted = false;

@@ -41,7 +41,7 @@ claude mcp add abap2ui5 -- node mcp/server.mjs
 | `generation_rules` | The rulebook for writing an app with the generic view builder (`scripts/generation-prompt.txt`) |
 | `scope_of` | In/out-of-scope verdict for UI5 controls (since <= 1.71, not deprecated), from the OpenUI5 source JSDoc |
 | `deploy_app` | Write `<class>.clas.abap` + abapGit sidecar into the gitignored sandbox `src/zz_dev/`, then abaplint it |
-| `build_backend` | Rebuild the transpiled Node backend (framework + ports + dev apps). A few minutes — batch deploys, build once |
+| `build_backend` | Rebuild the transpiled Node backend. `mode: auto` (default) is **incremental** after the first full build — only `src/zz_dev/` is re-copied and re-transpiled (~1-2 min per iteration). `mode: full` runs the complete e2e-build (downport + transpile; needed initially and after framework/port changes) |
 | `run_app` | Boot any app class headless (`?app_start=<class>`), return boot status, real page errors (benign UI5 noise filtered, same rules as e2e-smoke) and a full-page **screenshot as an image** |
 | `backend` | `status` / `start` / `stop` / `restart` of the local express backend (run_app auto-starts it) |
 | `remove_app` | Delete a dev app from `src/zz_dev/` (or list the deployed ones) |
@@ -67,9 +67,14 @@ port, look at it, then build mine".
   leak into a commit. Promote a finished app by moving it into a real package
   (or the samples repo) deliberately.
 - **Port:** the backend listens on 3000 (`A2UI5_MCP_PORT` overrides).
-- **UI5 sources:** served from the installed `@openui5` packages, so the loop
-  works fully offline; `sdk.openui5.org` requests are routed locally exactly
-  like in e2e-smoke.
+- **UI5 sources:** modules are served from the installed `@openui5` packages
+  (routed locally exactly like in e2e-smoke), so booting needs no network.
+  The built theme CSS is not in those packages — with network access it loads
+  from the CDN (styled screenshots); without, apps render unstyled but
+  structurally complete, which is exactly what the nightly e2e gate accepts.
+  `A2UI5_MCP_OFFLINE=1` forces the hermetic 404 behaviour.
+- **Chromium:** uses the Playwright-managed browser; if absent, falls back to
+  a system chromium (`A2UI5_MCP_CHROMIUM` overrides the executable path).
 - **Screenshots:** also written to `mcp/screenshots/<class>.png` (gitignored)
   so a human can look at the same image the agent saw.
 - **Real system deployment** stays what it is today: abapGit. This server is

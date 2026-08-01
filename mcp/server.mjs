@@ -106,10 +106,17 @@ const TOOLS = [
   {
     name: 'build_backend',
     description:
-      'Rebuild the transpiled Node backend (framework + all apps incl. src/zz_dev/) via scripts/e2e-build.mjs. ' +
-      'Required once after deploy_app / editing ABAP before run_app picks the change up. Takes a few minutes — ' +
-      'batch your deploys, then build once. Stops a running backend first.',
-    inputSchema: { type: 'object', properties: {} },
+      'Rebuild the transpiled Node backend so run_app picks up deployed/edited ABAP. mode auto (default) is ' +
+      'incremental when a prior full build exists: only src/zz_dev/ is re-copied and re-transpiled (~1-2 min). ' +
+      'mode full runs the complete e2e-build (downport + transpile, tens of minutes) — needed once initially, or ' +
+      'when framework/port sources changed, or when the incremental transpile rejects a construct (then simplify ' +
+      'the ABAP or go full). Stops a running backend first.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        mode: { type: 'string', enum: ['auto', 'incremental', 'full'], description: 'default auto' },
+      },
+    },
   },
   {
     name: 'run_app',
@@ -216,9 +223,9 @@ async function handle(name, args = {}) {
     }
     case 'build_backend': {
       await stopBackend();
-      const res = await buildBackend();
-      if (!res.ok) return toolError(`build failed (exit ${res.code}):\n${res.tail}`);
-      return text({ built: true, next: 'run_app { class_name } to boot and screenshot the app', tail: res.tail.split('\n').slice(-5).join('\n') });
+      const res = await buildBackend({ mode: args.mode || 'auto' });
+      if (!res.ok) return toolError(`build failed (exit ${res.code}, mode ${res.mode || args.mode}):\n${res.tail}`);
+      return text({ built: true, mode: res.mode, next: 'run_app { class_name } to boot and screenshot the app', tail: res.tail.split('\n').slice(-5).join('\n') });
     }
     case 'run_app': {
       const res = await runApp({ className: args.class_name, timeoutMs: args.timeout_ms || 60000 });
