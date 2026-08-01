@@ -97,9 +97,30 @@ function main() {
   }
   fs.rmSync(cfg, { force: true });
 
-  // 4. transpile the downported copy with the framework's own config
+  // 4. transpile the downported copy with the framework's own config — but
+  //    against a LOCAL, patched open-abap-core: upstream's
+  //    `CALL TRANSFORMATION id ... RESULT XML` writes character data
+  //    unescaped, so any app whose model carries a `<` (the overview's
+  //    generation notes) produces a draft that CL_IXML cannot parse back and
+  //    the next roundtrip dies in an uncatchable ASSERT
+  //    ("Network error: ASSERTION_FAILED"). Same patch the browser build
+  //    applies (web/ci/patch_open_abap_xml.mjs is the single source).
+  const lib = path.join(A2, 'node/open-abap-core');
+  if (!fs.existsSync(path.join(lib, 'src'))) {
+    fs.rmSync(lib, { recursive: true, force: true });
+    console.log('e2e-build: cloning open-abap-core …');
+    sh(`git clone --quiet --depth=1 https://github.com/open-abap/open-abap-core ${lib}`);
+  }
+  execSync(`node ${path.join(AIDEMOKIT, 'web/ci/patch_open_abap_xml.mjs')} ${lib}`, { stdio: 'inherit' });
+
+  const tcfg = JSON.parse(fs.readFileSync(path.join(A2, 'node/setup/abap_transpile.json'), 'utf8'));
+  tcfg.libs = tcfg.libs.map((l) => (l.url?.includes('open-abap-core') ? { folder: '/node/open-abap-core' } : l));
+  const tcfgPath = path.join(A2, 'e2e-transpile.json');
+  fs.writeFileSync(tcfgPath, JSON.stringify(tcfg, null, 2));
+
   console.log('e2e-build: transpiling → node/output …');
-  sh(`npx abap_transpile ./node/setup/abap_transpile.json`);
+  sh(`npx abap_transpile ./e2e-transpile.json`);
+  fs.rmSync(tcfgPath, { force: true });
 
   const built = fs.readdirSync(output).filter((f) => /^z2ui5_cl_ai_app_\d+\.clas\.mjs$/.test(f)).length;
   console.log(`e2e-build: done — ${built} ports transpiled into node/output`);

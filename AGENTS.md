@@ -1348,6 +1348,37 @@ How to record it:
   framework pointed the caller's history entry at its pre-event draft —
   pr/nav-app-call-caller-draft.) Sort state stays client-only: an
   `_event_client` sort cannot write to the model, so it is deliberately lost.
+- **`Network error: ASSERTION_FAILED` in a transpiled build ≠ an app defect** —
+  an `ASSERT` cannot be caught in the JS runtime, so any assert inside a
+  `TRY … CATCH cx_root` that a real system swallows becomes a 500 there. Two
+  known sources, both in the *runtime*, not in the port: (a) the 702 downport
+  turns a table expression `tab[ … ]` into `RAISE cx_sy_itab_line_not_found`,
+  which the build maps to `ASSERT 1 = 0` — that is why a missing
+  `get_event_arg( n )` 500s instead of returning initial; (b) open-abap's
+  `CALL TRANSFORMATION id … RESULT XML` writes character data **unescaped**, so
+  an app whose model carries a `<` saves a draft its own `CL_IXML` cannot parse
+  back and **every** later round-trip dies in the parser's
+  `ASSERT ls_match-offset = 0`. (b) is what broke the overview's links/info
+  popovers on the Pages demo (user report 2026-07-31, wrongly filed as an
+  "open-abap runtime limit" on 2026-07-27); it is patched at build time by
+  `web/ci/patch_open_abap_xml.mjs`, which both transpiled builds apply
+  (`web/` and `scripts/e2e-build.mjs`), and forwarded upstream as
+  `pr/open-abap-xml-escaping`. Prefer `READ TABLE` over `tab[ … ]` in an app
+  that must run there.
+- **Every PUBLIC attribute is persisted app state** — the framework serializes
+  it into the draft on every round-trip and parses it back on the next one, and
+  the whole model also travels to the browser on every render. So data that
+  exists **only** to be handed back as an event argument does not belong in the
+  model: pass the row **key** in the `t_arg` and look the payload up
+  server-side (the catalog/DB read is cheap, the transport is not). The
+  overview shipped 256 rows × generation notes + four URLs (~578 kB draft) just
+  to fill two popovers; in the transpiled in-browser demo the quadratic
+  `CL_IXML` parse of that draft made every click take ~30 s. Now only bound
+  columns are public (`ty_s_row`), the full catalog stays in a local
+  (`get_catalog( )` is a METHOD) and `row_of( val )` fetches the pressed row:
+  draft 578 kB → 199 kB, click ~30 s → ~4 s on the same machine (2026-07-31). This is **not** a licence to subset a port's mock data — §5
+  still requires the full row set; it is about text that is never rendered from
+  the model.
 - **A listed control method silently drops arguments beyond its
   declared kinds** — `castArgs` in `FrontendAction.js` maps over the
   `CONTROL_METHODS` kinds list, so a `to` transition name or a

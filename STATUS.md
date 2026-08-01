@@ -86,6 +86,18 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   app views, ported the same day as apps 264/265, so **every remaining
   uncovered control in the backlog is a HOLDOUT**: breadth is closed and batch
   planning is depth-only.
+- [ ] **open-abap XML escaping — patched here, open upstream.**
+  `CALL TRANSFORMATION id … RESULT XML` writes character data unescaped in
+  open-abap-core, so any app whose model carries a `<` persists a draft its own
+  `CL_IXML` cannot parse back and every later round-trip fails with
+  `Network error: ASSERTION_FAILED` (user report 2026-07-31 on the Pages demo's
+  overview; STATUS-history has the analysis). Both transpiled builds now
+  transpile against a locally patched clone
+  (`web/ci/patch_open_abap_xml.mjs`); the request is filed as
+  `pr/open-abap-xml-escaping`. When it is merged upstream: drop the patch
+  script, the two clone steps (`web/package.json` assemble,
+  `scripts/e2e-build.mjs`) and the `folder` lib entries, and delete the pr/
+  folder.
 - [ ] **LIVE_TEST debt → e2e interactions.** The open `LIVE_TEST` count (see
   the generated table) is the corpus' unverified-behaviour backlog. The
   systematic close path is the e2e harness: grow the `INTERACTIONS` map in

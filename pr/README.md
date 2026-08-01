@@ -24,10 +24,14 @@ change**.
 
 Genuinely open — not yet implemented.
 
-_None right now (2026-07-31): `menu-item-selected-path`, the last open request,
-was closed by **option 2** of its own proposal — a documented capability
-boundary, measured rather than assumed, with the "an event arg is a full UI5
-expression" capability as the by-product (see the Implemented table)._
+| Request | Summary | Priority |
+|---------|---------|----------|
+| [`open-abap-xml-escaping`](open-abap-xml-escaping/) | **Upstream target is [open-abap/open-abap-core](https://github.com/open-abap/open-abap-core), not abap2UI5.** `CALL TRANSFORMATION id … RESULT XML` writes element character data unescaped, so an app whose model carries a `<` (the overview's generation notes) saves a draft that `CL_IXML` cannot parse back — the next round-trip dies in an uncatchable `ASSERT` and the frontend shows `Network error: ASSERTION_FAILED`. Worked around here by a build-time patch (`web/ci/patch_open_abap_xml.mjs`) applied by both transpiled builds; delete this folder when the fix is upstream. | high — breaks every round-trip of the Pages demo's front door |
+
+_`menu-item-selected-path` left this list on 2026-07-31: it was closed by
+**option 2** of its own proposal — a documented capability boundary, measured
+rather than assumed, with the "an event arg is a full UI5 expression"
+capability as the by-product (see the Implemented table)._
 
 ## Declined / deferred (folder removed 2026-07-19)
 

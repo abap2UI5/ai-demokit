@@ -15,7 +15,8 @@
  * controls, and raise NO page/console error (benign theme/preload/i18n noise
  * from unbundled source is filtered). A small INTERACTIONS map adds a real
  * click -> toast check for a few ports as a richer proof — extend it freely,
- * but the boot+render+no-error gate already covers all 94.
+ * but the boot+render+no-error gate already covers every port. The overview app
+ * (not a numbered port) is checked last, with its info-popover round-trip.
  *
  *   node scripts/e2e-smoke.mjs            advisory report
  *   node scripts/e2e-smoke.mjs --strict   exit 1 on any failing port
@@ -38,6 +39,8 @@ const HEADED = process.argv.includes('--headed');
 const ONLY = process.argv.includes('--only')
   ? process.argv[process.argv.indexOf('--only') + 1].split(',').map((s) => s.trim()).filter(Boolean)
   : null;
+// the overview app is checked alongside the numbered ports (see INTERACTIONS)
+const OVERVIEW = 'z2ui5_cl_ai_app_overview';
 
 const A2 = resolveA2UI5();
 if (!A2) { console.error('abap2UI5 checkout not found — run `npm run node:setup` or set A2UI5_HOME'); process.exit(1); }
@@ -1144,6 +1147,20 @@ const INTERACTIONS = {
     await expect(page.locator('body'), 'the {0/INTROTEXT1} index-relative binding')
       .toContainText('This Grid Layout sample application demonstrates');
   },
+  // The overview app (not a numbered port, but the demo's front door). Its info
+  // button is the app's only backend round-trip, so this one click covers the
+  // whole draft save -> reload path: it is where the 2026-07-31
+  // `Network error: ASSERTION_FAILED` regression showed up (open-abap wrote the
+  // draft XML with unescaped `<`, see pr/open-abap-xml-escaping). The popover
+  // content also proves the server-side row lookup (only ${CLASS} travels).
+  [OVERVIEW]: async (page, expect) => {
+    const btn = page.locator('button[title^="Generation notes"]').first();
+    await expect(btn, 'a row\'s generation-notes button').toBeVisibleEnabled();
+    await btn.click();
+    await page.waitForSelector('.sapMPopover', { timeout: 60000 })
+      .catch(() => { throw new Error('the generation-notes popover never opened (round-trip failed?)'); });
+    await expect(page.locator('.sapMPopover'), 'the generation-notes popover').toContainText('Generation notes');
+  },
 };
 
 // poll until a selector reaches at least n matches
@@ -1315,7 +1332,16 @@ for (const m of metas) {
   else console.log(`pass  ${cls}${INTERACTIONS[m.class] ? '  (+interaction)' : ''}`);
 }
 
+// the overview app: same generic gate, plus the info-popover round-trip
+let overviewChecked = 0;
+if (!ONLY || ONLY.some((o) => OVERVIEW.endsWith(o))) {
+  overviewChecked = 1;
+  const errs = await checkPort(browser, OVERVIEW);
+  if (errs.length) { failed++; console.log(`FAIL  overview  ${errs[0]}`); }
+  else console.log('pass  overview  (+interaction)');
+}
+
 await browser.close();
 backend.kill();
-console.log(`\ne2e-smoke: ${metas.length} port(s), ${failed} failing.`);
+console.log(`\ne2e-smoke: ${metas.length + overviewChecked} app(s), ${failed} failing.`);
 if (STRICT && failed) process.exit(1);
