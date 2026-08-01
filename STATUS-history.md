@@ -72,6 +72,13 @@ of their date and are NOT kept current._
   structural-diff went from 0 to 3 undeclared findings. Keep the naming clause
   when you rewrite a deviation.
 
+## Full sweep green on the fixed build: 274/274 (2026-08-01)
+
+- The whole corpus re-run after the seven binding fixes and the re-armed
+  overflow checks: **274 ports, 0 failing**, ~90 of them with a real
+  click→assert interaction. Ports 276/277 were written after that build and
+  are covered by the next one.
+
 ## Depth port TableContextualWidthDynamic — a controller that is one binding (2026-08-01)
 
 - **App 277** (`sap.m.sample.TableContextualWidthDynamic`, b15): a

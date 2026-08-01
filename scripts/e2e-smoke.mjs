@@ -139,6 +139,11 @@ const benign = (s) => BENIGN.some((re) => re.test(s));
 //     (2026-08-01; an overflowed SegmentedButton renders as a Select there,
 //     and the binding TEMPLATE sits in the Element registry next to the real
 //     rows, so filter on getBindingContext() before asserting over rows)
+//   round-trip that opens a MessageBox: 101 (the wizard Cancel)
+//   a11y announce round-trip writing a bound Text: 141
+//   u:Currency over inlined arrays: 196
+//   client-side growing (no wire at all): 276
+//   a controller replaced by a device-model expression: 277
 //   still open: 008 (a DOM click on a ColorPalette swatch fires no
 //     colorSelect) and 233 (its ObjectPage header input/value-help icon never
 //     becomes actionable headless)
@@ -1065,6 +1070,35 @@ const INTERACTIONS = {
       .toContainText('Move the splitter to see the container based popin behaviour');
     await expect(page.locator('.sapMListTblHeader').first(), 'the left table header').toBeVisibleEnabled();
     await expect(page.locator('body'), 'both panes bound to the same collection').toContainText('Notebook Basic 15');
+  },
+  // the a11y announce round-trip: pressing any button writes the status Text
+  z2ui5_cl_ai_app_141: async (page, expect) => {
+    const btn = page.getByRole('button', { name: 'Success', exact: true }).first();
+    await expect(btn, 'the Success button').toBeVisibleEnabled();
+    await btn.click();
+    await expect(page.locator('body'), 'the bound status text after the round-trip')
+      .toContainText('A new message was sent to the invisible messaging service.');
+  },
+  // Wizard: the footer Cancel goes through a backend round-trip that opens a
+  // MessageBox (message_box_display with a YES/NO onclose action)
+  z2ui5_cl_ai_app_101: async (page, expect) => {
+    await expect(page.locator('body'), 'the first wizard step').toContainText('Product Type');
+    const cancel = page.getByRole('button', { name: 'Cancel', exact: true }).first();
+    await expect(cancel, 'the wizard Cancel button').toBeVisibleEnabled();
+    await cancel.click();
+    await expect(page.locator('.sapMDialog'), 'the cancel MessageBox')
+      .toContainText('Are you sure you want to cancel your report?');
+  },
+  // u:Currency over four inlined arrays: the real backend model must reach
+  // the control and be formatted with its currency (locale-independent parts
+  // only — the digit grouping is the browser's, not the port's)
+  z2ui5_cl_ai_app_196: async (page, expect) => {
+    const lists = page.locator('.sapMList');
+    await expect(lists.first(), 'the first currency list').toBeVisibleEnabled();
+    await expect(page.locator('body'), 'the bound EUR row').toContainText('EUR');
+    await expect(page.locator('body'), 'the bound JPY row').toContainText('JPY');
+    const n = await page.locator('.sapUiUfdCurrency').count();
+    if (n < 4) throw new Error(`expected the sample's Currency controls to render, got ${n}`);
   },
   z2ui5_cl_ai_app_142: (page) => formFieldValues(page),
   z2ui5_cl_ai_app_175: (page) => formFieldValues(page),
