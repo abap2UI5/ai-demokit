@@ -4,5 +4,5 @@ output
 openui5
 .abap2UI5
 src/zz_dev
-mcp/screenshots
+
 .abaplint-mcp-dev.jsonc
