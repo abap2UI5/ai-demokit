@@ -7,6 +7,631 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## e2e round 3 — a whole broken binding class, and 13 LIVE_TESTs closed (2026-08-01)
+
+- **Seven ports rendered EMPTY in the running app.** App 206 came out of the
+  new interaction showing `x x` where its dimensions belong: the port had
+  flattened the original's `binding="{/ProductCollection/5}"` onto the model
+  root but kept the bindings **relative** (`{NAME}`), and a relative path on a
+  control with *no binding context at all* resolves against nothing. The same
+  form (with a sidecar note claiming the opposite — *"the relative bindings
+  resolve against the root"*) sat in **142 175 195 206 209 229 243**. All are
+  now bound absolutely through `client->_bind( field )`, every wrong claim is
+  corrected in place, and all seven are e2e-verified.
+  This is the app-207 class one level up, and again **no static gate could see
+  it**: structural-diff matches on the last path segment, render-smoke mocks
+  the model, property-check reads member names. Two lint changes came out of it:
+  - new rule **`relative-bind-on-root-field`** — a `{FIELD}` literal whose
+    FIELD is a root-level `DATA` scalar of the class and no row column. Zero
+    findings over the corpus after the fixes, so the class cannot regrow.
+  - **`numeric-bound-as-string` is now control-aware.** It fired on the ZIP
+    code and house number of 142/175 the moment they became visible as binds:
+    `value` is a float on a `Slider` and a **string** on an `Input`, so the
+    attribute name alone proves nothing. Only a hit in a `NUMERIC_PROPS`
+    (control, property) pair is a defect now; a synthetic check confirms the
+    Slider case still fails and the Input case does not.
+- Eighteen new `INTERACTIONS` entries, all green: **253/254/255** (one shared
+  assertion for the value-state pickers — every non-`None` state reaches the DOM
+  exactly once as `sapMInputBaseContentWrapper<State>`, and the bound
+  `valueStateText` is written into the value-state node), **267** and **269**
+  (DynamicSideContent), **268** (the anchored ColorPickerPopover open),
+  **270** (the keyboard-driven Slider resizing the Panel) and **271**
+  (`layoutChange` round-trip + the `containerQuery` expression binding), plus
+  the "controller sets a width from a slider" class in one shared assertion
+  (**144** with its round-trip, **176/213/214** with the expression binding),
+  the server-side device branch (**173**), the bound-record ports
+  (**195/206/209/226**) and the sorter inside a raw binding-info string
+  (**225**). Open LIVE_TESTs **57 → 44 ports**. Partial coverage is recorded as
+  such: 268 keeps its LIVE_TEST for the two legs that need a real colour pick,
+  229 for its second popover and the footer buttons.
+- Two measurements worth keeping: a `GridLayoutBase` extends **ManagedObject**,
+  not Element, so a `customLayout` is in **no** `Element.registry` — read it
+  through its `CSSGrid` (that cost one wrong "the port drops the layout"
+  conclusion). And app 271's `layoutChange` only fires once `containerQuery`
+  is on **and** the container actually changes size, so the interaction flips
+  the SegmentedButton and then shrinks the viewport.
+- **Driving a control that has no layout headless.** Two selectors died on the
+  same cause: the theme CSS never loads in the harness, so `sapUiIcon` and
+  `sapMSliderHandle` render with a **zero-size box** and playwright refuses to
+  click or focus them. The fixes are the two general workarounds, both real
+  gestures: `locator.dispatchEvent('click')` for the icon (UI5's `Icon`
+  listens for the DOM click) and `element.focus()` + `keyboard.press(…)` for
+  the slider (the Slider's own key handling then moves the value through the
+  two-way binding). Recorded in AGENTS §10.
+- **A viewport resize is a legitimate test input.** App 267's whole
+  `_updateToggleButtonState` wire only fires below 720 px, so the interaction
+  calls `page.setViewportSize({ width: 400 })` and then waits for the bound
+  `enabled` flag — the first interaction that produces its own breakpoint.
+- `--only` now takes a comma-separated list (`--only 268,270`), which is what
+  iterating on a handful of ports actually needs.
+- **Full sweep green: 270/270 ports, 0 failing** (the build that carries the
+  seven binding fixes).
+- One more trap, now in AGENTS §10: **a deviation text is a gate escape.**
+  Rewriting the `LIVE_TEST` prose of 176/213/214 into verified prose dropped
+  the sentence that declared their missing `Slider.liveChange`, and
+  structural-diff went from 0 to 3 undeclared findings. Keep the naming clause
+  when you rewrite a deviation.
+
+## Session close 2026-08-01 — state handed over
+
+- Both faked-event-value fixes are **e2e-verified** on the rebuilt backend
+  (100 boots clean, 133's press toast now names the item id).
+- All gates green at hand-over: abaplint 0 · pattern-lint 0 · validate-meta
+  276/276 · structure-lint 0 · data-fidelity 0 · property-check 0 ·
+  render-smoke 276/0 failing (1 declared skip) · structural-diff 0 undeclared.
+  The last **full e2e sweep was 274/274 green**; the three ports added after
+  it (275–277) are each verified individually with their own interaction, so
+  the next nightly is the first run to cover all 276 in one go.
+- Where to pick up: **40 ports** still carry a `LIVE_TEST`, of which only 149
+  and the three hidden-picker ports (016/256/257, the `Popover.onfocusin`
+  recursion) have no interaction at all — the rest are partial legs named in
+  their sidecars. Batch planning stays depth-only; sample templates come from
+  the sparse OpenUI5 clone (`OPENUI5_SRC=/home/user/openui5-sparse`).
+
+## The faked-event-value audit is closed — and it was a script (2026-08-01)
+
+- The last open item of the review-sweep backlog turned into
+  `scripts/probes/faked-event-value-audit.mjs`: for every port it reads the
+  sample's own controller, keeps the `MessageToast.show(… + oEvent…)` calls
+  that compose their text from event data, and reports the port if its own
+  wire carries a **constant**. Four hits, **two real**:
+  - **App 133** (`GridListModes`) toasted *"Selection changed"*, *"Delete
+    item"*, *"Request details"* and *"Pressed item"* — four constants where
+    the original names the item. Now client-composed:
+    `{0?Selected:Unselected} item with ID {1}` over
+    `${$parameters>/selected}` + `${$parameters>/listItem}.getId()`, and
+    `… with ID {0}` over `$event.oSource.sId` for the other three.
+  - **App 100** (`QuickView`) toasted *"A QuickView link was clicked"*,
+    dropping both the link identity and the back-button branch. The navigate
+    event now transports
+    `${$parameters>/navOrigin} ? ${$parameters>/navOrigin}.getText() : ''`
+    and an ABAP `COND` rebuilds the original's if/else.
+  - The other two (118 `CardsLayout`, 203 `OverflowToolbarTokenizer`) are
+    deliberately dropped interactions, already declared IMPROVISED — the probe
+    prints them so a reader can re-check the decision, not fix it blindly.
+- Neither defect was visible to any gate: structural-diff compares attribute
+  names, render-smoke mocks the model, property-check reads member names. The
+  same blind spot as the relative-binding class found this morning.
+
+## The keyboard reaches what the mouse cannot (2026-08-01)
+
+- The two ports written off in the morning round are covered after all, and
+  the fix was the same in both cases: **focus + key instead of click**.
+  App **008**'s palette swatch takes `Enter` and toasts
+  *Color Selected: value - gold, defaultAction - false*; app **233**'s
+  PurchaseID Input takes **F4**, the keyboard form of `valueHelpRequest`, and
+  the SelectDialog opens client-side through `control_by_id` with its bound
+  rows. A DOM click reached neither. Recorded in AGENTS §10 next to the
+  zero-size-box rule: try focus+key before giving a control up.
+- Still open on 233: the confirm leg — neither a click nor an `Enter` on a
+  dialog row reaches the SelectDialog's `confirm` headless, so that stays a
+  human check and the sidecar says so.
+- Interactions for **101** (the wizard Cancel MessageBox), **141** (the
+  announce round-trip writing the bound status Text), **196** (u:Currency over
+  the four inlined arrays), **276** and **277** all pass on the new build.
+  Open LIVE_TESTs **41 → 40 ports**; only 016/256/257 (the hidden-picker
+  `Popover.onfocusin` recursion) and 149 now lack any interaction at all.
+
+## Full sweep green on the fixed build: 274/274 (2026-08-01)
+
+- The whole corpus re-run after the seven binding fixes and the re-armed
+  overflow checks: **274 ports, 0 failing**, ~90 of them with a real
+  click→assert interaction. Ports 276/277 were written after that build and
+  are covered by the next one.
+
+## Depth port TableContextualWidthDynamic — a controller that is one binding (2026-08-01)
+
+- **App 277** (`sap.m.sample.TableContextualWidthDynamic`, b15): a
+  `ResponsiveSplitter` over two `contextualWidth="Auto"` tables. Its whole
+  controller — `onBeforeRendering` + `_orientationHandler` + `_showMessageStrip`
+  + the `onExit` detach — exists to hide one MessageStrip on a **phone in
+  portrait**. That is one expression binding on the shared device model:
+  `visible = {= !${device>/system/phone} || ${device>/orientation/landscape} }`,
+  which UI5 keeps current on every rotation. Four controller methods, no
+  round-trip, and the added `visible` attribute is the only difference to the
+  archived view.
+- Both panes bind **one** inlined product table, mirroring the original's
+  single model bound twice, so the two tables stay in sync as before.
+
+## Depth port ListGrowing — a feature that needs no wire (2026-08-01)
+
+- **App 276** (`sap.m.sample.ListGrowing`, b15): `growing` /
+  `growingThreshold=4` / `growingScrollToLoad=false` are **pure client-side
+  paging** over the bound aggregation, so the port needs no wire for them and
+  stays init-only — **zero structural difference** to the archived view. The
+  whole 123-row collection travels to the client exactly as the original's
+  JSONModel holds it.
+- One lesson from the same round (AGENTS §10): a sidecar text ends up
+  **inside generated ABAP** — `generate-overview.mjs` inlines every deviation
+  `what` into the overview app's literals, so app 275's NOTE quoting a CSS
+  rule with raw braces next to the word "style" made pattern-lint's
+  `unescaped-brace-in-style-content` fire on the *generated* file. Describe
+  such things in words instead.
+
+## Depth port GenericTileStates (2026-08-01)
+
+- **App 275** (`sap.m.sample.GenericTileStates`, b15): the tile-state matrix —
+  `Loaded` / `Loading` / `Failed` / `Disabled`, each once with and once
+  without a press handler, plus a `SlideTile` over two news tiles. Purely
+  declarative: the controller's single handler is a **constant**
+  `MessageToast.show`, so every press is the roundtrip-free client toast and
+  the app stays init-only. The four handler-less tiles keep no wire, so the
+  "no press event" half of the sample still demonstrates exactly that.
+- The sample's `style.css` is injected through a `core:HTML` `<style>` leaf
+  (the 122/124/270 precedent) and declared as the one extra control. The two
+  `SlideTile` background images point into **another** sample's folder and are
+  kept verbatim, only host-absolutized — named in the sidecar so
+  `data-fidelity` sees them.
+
+## The overflow popover closes four more LIVE_TESTs (2026-08-01)
+
+- With the fixed build all five re-run interactions pass (174, 218, 272, 273,
+  274), and the **overflow-popover route was pushed further**: apps **207**
+  and **247** — both written off as "not drivable headless" — are re-armed
+  and green. 207's click-through (pick a list type, every bound row re-types)
+  and 247's `WIDTHS_CHANGE` round-trip (pick 'Flexible', the columns come back
+  at 25 %) are now machine-checked instead of human checks. 174 gained its
+  third toolbar control, the SelectionMode Select.
+- Two details that cost a red run each, now in AGENTS §10: an **overflowed
+  `SegmentedButton` renders as a `Select`** in the popover, and the binding
+  **template** of an aggregation sits in `Element.registry` beside the real
+  rows with no binding context — `.every(row => …)` over "all items" fails on
+  the template alone. Filter on `getBindingContext()`.
+- Open LIVE_TESTs **44 → 41 ports**. 272 keeps its entry for the strip-close
+  and Reset legs, with the two verified legs named.
+
+## Five interactions, three lessons, one real port fix (2026-08-01)
+
+- The first run of the newest interactions failed **5 of 5** — and four of the
+  five were the harness being wrong, not the ports:
+  - **App 272 was the real one.** The round-trip fired, but the toast read
+    *Validation of field group '["Billing Information"]' triggered.* — an event
+    parameter that is an **array arrives as JSON**, brackets and all. Fixed by
+    indexing in the expression (`${$parameters>/fieldGroupIds}[0]`), which is
+    also literally what the original controller does;
+    `BindingParser.parseExpression` confirms the grammar takes `[n]` and even
+    method calls.
+  - **OverflowToolbar controls are drivable after all**: clicking
+    `Additional Options` opens the associative popover and everything inside
+    clicks normally (app 174's two ToggleButtons flip the grid Table's bound
+    properties). That supersedes the "not drivable headless" note left on apps
+    207/247 — their checks can be re-armed.
+  - **App 218's ShellBar search is collapsed** behind a Search button; expand
+    it first, then the SearchManager's client-composed liveChange toast fires.
+  - 008 (a DOM click on a ColorPalette swatch fires no `colorSelect`) and 233
+    (its ObjectPage header input never becomes actionable headless) stay
+    **uncovered** — the interactions were removed again rather than left
+    red, and both are named in the harness header.
+- Both new AGENTS §10 entries came out of this round, plus one from a
+  self-inflicted wound: `ps … | grep '[e]2e-build' | xargs kill` in a command
+  line that also contains the plain string kills **your own shell** (exit 144,
+  no output) — the same family as the `pkill -f express.mjs` case.
+
+## Depth port DialogFullScreen — flags written only when set (2026-08-01)
+
+- **App 274** (`sap.m.sample.DialogFullScreen`, b15): three controller-built
+  Dialogs over the shared products mock (123 rows, `Name` + `Quantity`), again
+  through one builder method — `popup_products_display( resizable draggable
+  sized begin_ok )`. `showFullScreenButton` is **@since 1.149** and is the
+  very property the sample demonstrates, so it stays and is declared
+  `POST_171` (fidelity-first).
+- Same discipline as 273, now with four flags: **each attribute is written
+  only when the original passes it.** The plain dialog gets no
+  `resizable="false"` and no `contentWidth` — a default written out explicitly
+  is a fidelity loss no gate can see, because structural-diff compares
+  attribute *names* and the name would match.
+
+## Depth port DialogMessage — five controller Dialogs, one builder (2026-08-01)
+
+- **App 273** (`sap.m.sample.DialogMessage`, b15): five press handlers that
+  each `new Dialog({type: Message, title, state, content, beginButton})`. The
+  port keeps the five trigger Buttons 1:1 and expresses every dialog as a
+  `core:FragmentDefinition` shown with `popup_display` (app 019 precedent),
+  built by **one** `popup_message_display( title state text )` method instead
+  of five near-identical blocks — the handlers differ in nothing else.
+- One detail worth the extra line of code: the **default** dialog is the only
+  one the original builds *without* a `state`, so the port writes the
+  attribute only when there is one. Emitting `state='None'` would have added
+  an attribute the original never sets — a silent fidelity loss that
+  structural-diff cannot see (it compares names, and the name would match).
+- The OK button closes the dialog roundtrip-free via
+  `_event_client( cs_event-popup_close )`, the direct form of the original's
+  `this.oDialog.close()`.
+
+## Depth port FieldGroup — the validateFieldGroup idiom (2026-08-01)
+
+- **App 272** (`sap.ui.core.sample.FieldGroup`, new batch b15, `src/02`): the
+  first port of `sap.ui.core.Control`'s **`fieldGroupIds`** + the form's
+  **`validateFieldGroup`** event. Every Input/Select/ComboBox keeps its group
+  id; leaving a group fires one backend event carrying
+  `${$parameters>/fieldGroupIds}` (a single-element array that stringifies to
+  the group name — the original reads `aFieldGroup[0]`), and the ABAP `CASE`
+  is the controller's `mMessageMapping`. The three imperative setters per
+  MessageStrip (`setType`/`setText`/`setVisible`) become a bound triple, and
+  `onMsgStripClose` becomes one `close` event per strip because each target is
+  statically known. **Zero structural diffs** — the view is 1:1.
+- The sample sources came from a **blobless sparse clone** of SAP/openui5
+  (~350 MB for the eight demokit sample trees): `/home/user/fork-openui5`
+  carries only `src/<lib>/src` and has no samples at all, which reads like
+  "no template available". Recipe recorded in AGENTS §6 next to the
+  scaffolder.
+
+## Depth port GridResponsiveness + a stale-build symptom worth naming (2026-07-31)
+
+- **App 271** (`sap.ui.layout.sample.GridResponsiveness`, b14): the
+  `GridResponsiveLayout` idiom — three `GridSettings` breakpoints
+  (`layoutS`/`layout`/`layoutXL`) in the `CSSGrid`'s `customLayout`. Two
+  controller handlers dissolve into bindings: the Slider→Panel width as in 270,
+  and `onSegmentedButtonChange` (`setContainerQuery(key === 'true')`) as a
+  **shared two-way field** — `selectedKey={/CONTAINER_QUERY}` next to
+  `containerQuery={= ${/CONTAINER_QUERY} === 'true' }`, the string→boolean step
+  the controller does in JS. No round-trip, no imperative setter.
+  `layoutChange` does round-trip, because its `${$parameters>/layout}` is the
+  only source for the info Text.
+- Declared IMPROVISED: the **Reveal Grid** ToggleButton keeps its label but
+  loses its handler — `RevealGrid.toggle()` is a sample-local JS module drawing
+  a debug overlay (the same drop as app 145).
+- **A stale transpiled backend now has a named signature** (AGENTS §10): a
+  brand-new port fails e2e with `backend HTTP 500` whose body reads *"The app
+  'Z2UI5_CL_AI_APP_269' does not exist in the system"*. That is always a missing
+  `npm run node:build`, never a port defect. Two companion rules from the same
+  round: never run `e2e-smoke` while a build is in flight (`e2e-build` wipes
+  `node/output` first, so the run dies silently), and never wait for a build
+  with `pgrep -f e2e-build` — the waiting shell matches its own command line and
+  waits forever; grep the build log for `e2e-build: done` instead.
+- Also this round: 097 (SplitApp `control_by_id` navigation) and 126
+  (FileUploader upload toast) gained interactions; 126's assertion was corrected
+  to the port's actual first toast (*'Uploading file to the local server …'*).
+
+## Depth port NestedGrids — three known idioms in one port (2026-07-31)
+
+- **App 270** (`sap.ui.layout.sample.NestedGrids`, b14): a `CSSGrid` inside a
+  `CSSGrid`, the inner tiles positioned with `GridItemLayoutData`
+  (`gridColumn="1 / 3"`, `gridRow`), the sample's `css/main.css` injected as a
+  `core:HTML` `<style>` leaf (122/124 precedent) and `onSliderMoved` replaced by
+  a two-way bound slider value plus the expression binding
+  `{= ${/SLIDER_VALUE} + '%' }` on the Panel width — `sap.m.Panel` HAS a width
+  property, so unlike apps 267/269 this jQuery-setter idiom binds cleanly
+  (app 214 form). NOTE, not IMPROVISED: same rendered behaviour.
+- **Two traps hit while writing it**, both worth knowing: writing the absolute
+  path by hand (`{= ${/SLIDER_VALUE} …}`) trips pattern-lint's
+  `hardcoded-binding-path`; and building it from
+  `_bind( … path = abap_true )` inside `|…|` yields `${ /SLIDER_VALUE }` **with
+  spaces**, which UI5 does not resolve — render-smoke caught it as
+  `"null%" is of type string, expected sap.ui.core.CSSSize`. The correct form is
+  the documented one: interpolate `_bind`'s braced result directly after the
+  `$` (`|\{= ${ client->_bind( slider_value ) } + '%' \}|`).
+
+## Depth port DynamicSideContentProduct + full sweep green (2026-07-31)
+
+- **Full e2e sweep after the b14 ports: `266 port(s), 0 failing`** (268/269 came
+  after that build and are covered by the next one).
+- **App 269** (`sap.ui.layout.sample.DynamicSideContentProduct`, b14): the
+  richer DynamicSideContent sample — `sideContentFallDown="BelowM"`, a
+  `FeedListItem` list over the sample's own `feed.json` (4 rows verbatim) plus a
+  `FeedInput`, and three controller behaviours reproduced server-side:
+  `toggle()` and `setShowSideContent(false/true)` through `control_by_id`, and
+  the `breakpointChanged` round-trip driving the Toggle button's `enabled`
+  (S only) and the Open-Side-Content button's `visible`.
+- The controller's **media model** (`new JSONModel(Device.system)`) is
+  abap2UI5's shared `device>` model, so `{media>/phone}` folds to
+  `{= !${device>/system/phone}}` on the same data — a NOTE, no loss.
+- **One honest half-reproduction, declared:**
+  `updateShowSideContentButtonVisibility` computes
+  `!(breakpoint === 'S' || oDSC.isSideContentVisible())`. The second term is
+  client state the backend cannot read, so the port binds the button to the
+  breakpoint and flips the flag in both press handlers — identical in every
+  path the sample offers, but a side-content change from elsewhere (the Toggle
+  button) does not update it. IMPROVISED rather than a silent approximation.
+- `sap.ui.layout` coverage 32.8 % → **34.4 %**.
+
+## Depth port ColorPickerPopover — and two skipped near-duplicates (2026-07-31)
+
+- **App 268** (`sap.ui.unified.sample.ColorPickerPopover`, b14): the controller
+  lazily constructs four `sap.ui.unified.ColorPickerPopover`s (Default / Large /
+  Simplified / with liveChange) and opens each with `openBy(input)`. The port
+  declares all four in the Table's `dependents` with the same ids and
+  configuration and opens them roundtrip-free via
+  `_event_client( control_by_id, <id>/openBy/$event.oSource.sId )` — the
+  anchored-open idiom of apps 016/060, now on a control the corpus had not
+  used. `change` / `liveChange` round-trip so the backend writes the chosen
+  colour into the right Input, toasts it and keeps the liveChange Text in sync.
+- **IMPROVISED, deliberately**: `handleInputChange` validates the typed text
+  with `sap.ui.core.CSSColor.isValid` and paints the Input's `valueState`. That
+  is per-keystroke frontend logic; the thin-frontend rule forbids
+  reimplementing it in a formatter, and a round-trip per keystroke would be a
+  different behaviour — so an invalid entry is simply not flagged.
+- **`ColorPicker` and `ColorPickerLarge` skipped as near-duplicates**: both are
+  the already-ported app 112 (`ColorPickerSimplified`) with a different
+  `displayMode` — same view, same controller. AGENTS §1 says a depth port that
+  exercises nothing new is corpus weight without training signal, so the
+  ColorPicker family contributes exactly one more port, the one with a genuinely
+  new control and wiring.
+
+## e2e round 2 results + depth port DynamicSideContentEqualSplit (2026-07-31)
+
+- The 207 fix is live: the rebuilt backend shows `typeBinding: '/LISTTYPE'` and
+  the model carries the shared field. Open LIVE_TESTs **55 → 52 ports** (029
+  partial, 123/172/228 fully converted to `NOTE`s).
+- **Two harness boundaries measured, not guessed.** A control that lives in an
+  `OverflowToolbar` is *only instantiated when its overflow popover opens*, and
+  in that popover it loses its usual root class — no viewport width brings it
+  inline (tried up to 2200px). That killed the click-through for **207**'s type
+  Select and **247**'s width SegmentedButton:
+  - 207 keeps a `LIVE_TEST` but its interaction now guards the regression that
+    actually bit us — it asserts through `page.evaluate` that the item template
+    binds the **absolute** `/LISTTYPE`; a relative `{LISTTYPE}` would resolve
+    against the row and kill the Select again.
+  - 247's interaction was **removed** rather than left half-working; its
+    `LIVE_TEST` stays open and honest.
+- **App 267** (`sap.ui.layout.sample.DynamicSideContentEqualSplit`, b14):
+  `toggle()` roundtrip-free via `control_by_id` (a public method needs no
+  whitelist entry), `_updateToggleButtonState` as the `breakpointChanged`
+  round-trip (`${$parameters>/currentBreakpoint}` → the bound `enabled` flag,
+  enabled only on `S`), and the Slider's `visible` from the shared `device>`
+  model — the declarative form of `onBeforeRendering setVisible(!phone)`.
+  Declared IMPROVISED: the static `img>` fold and the dropped `liveChange`,
+  whose jQuery width targets a `sap.m.Page` that has no width property to bind
+  (apps 213/214 could bind theirs, this one cannot).
+
+## Depth port SplitterNested1 — batch b14 opened (2026-07-31)
+
+- **App 266** (`sap.ui.layout.sample.SplitterNested1`, `src/02/b14`): nested
+  `sap.ui.layout.Splitter`s with per-pane `SplitterLayoutData`
+  (`size` `auto`/`px`/`%`, `minSize`), the outer one `orientation="Vertical"`.
+  Fully static, no controller — **zero deviations and zero structural diffs**,
+  green on every gate first pass. `sap.ui.layout` is the thinnest ported
+  library after the non-app scope rule, so depth starts here.
+- The sibling `Splitter` sample was **skipped on purpose**: its controller
+  builds the whole options panel imperatively (add/remove content area,
+  invalidate, change orientation, a live resize counter). A port would drop
+  most of it and carry a large IMPROVISED — weak training signal for a
+  depth pick, so `SplitterNested1` is the better first Splitter port.
+
+## e2e round 2: a dead Select found in app 207 (2026-07-31)
+
+- Six more `INTERACTIONS` written (029, 123, 172, 207, 228, 247). 123 (bound
+  `visible` flipped server-side), 172 (`SideNavigation.expanded` round-trip +
+  itemSelect toast) and 228 (`sap.ui.unified.Menu` through the openBy fallback)
+  pass; 029/247 wait on a backend rebuild.
+- **App 207 (`ListItemTypes`) had a dead wire that no gate could see.** The
+  `StandardListItem` template bound the shared type field **relatively**
+  (`type="{LISTTYPE}"`), which resolves against the **row** — the rows carry no
+  such column, so every item stayed `Inactive` and the type Select was
+  completely without effect, while the sidecar claimed "selection re-types all
+  items client-side". Fixed to the absolute path via `client->_bind( listtype )`.
+- Why the gates were blind: `structural-diff` matches bindings on their **last
+  path segment** (`listtype` == `listtype`, so relative and absolute look
+  identical), and `render-smoke` mocks the model, so nothing renders differently.
+  Only clicking in a real browser exposed it — the LIVE_TEST existed for exactly
+  this and had been carried since the port was written.
+- Rule recorded in AGENTS §5 (data binding): a field shared app-wide lives at
+  the model **root**; inside a bound aggregation a relative `{FIELD}` silently
+  renders empty, so bind it absolutely with `client->_bind( field )` even in a
+  template.
+- Three assertion fixes worth keeping as harness facts: the tnt navigation list
+  is `.sapTntNL` (not `.sapTntNavLI`), 172's expanded state shows the sub items
+  (`Office 01`), and 207's type Select lives in an **OverflowToolbar** — it is
+  only instantiated once the overflow popover opens, so no viewport width makes
+  it directly clickable. The harness gained `toHaveCountBelow` for the
+  bound-`visible` case, where one of several same-named entries disappears.
+
+## e2e interactions for batches b05/b13 — LIVE_TEST debt 62 → 55 ports (2026-07-31)
+
+- With the transpiled backend freshly built (the expensive prerequisite), the
+  named close path for the LIVE_TEST backlog was worth walking: **eight new
+  `INTERACTIONS` entries** (258–265), each asserting what its sidecar had
+  declared unverified, then the verified `LIVE_TEST`s converted to `NOTE`s.
+  Open LIVE_TESTs: **62 → 55 ports**.
+- What the new legs actually prove: 258 the `Translucent` anchor bar reaches
+  the DOM; 259 the ProgressIndicator really displays `42%` (UI5 parses the
+  `'42%'` string on the float property, as the original relies on) next to the
+  RatingIndicator; 260 the header content survives a scroll to 1500px — that
+  *is* `preserveHeaderStateOnScroll`; 261 the folded `ModelMapping` records
+  render; 262 the `showFooter` round-trip plus the breadcrumb toast; 263
+  `NavContainer.to` via `control_by_id`, there **and** back; 264 a bound prefix
+  re-filters the rows, an empty prefix drops the filter again (the odata String
+  type mapping `''`→null), and Toggle Filters re-bakes the set; 265 the per-row
+  bound filter over the relative `value1: '{REGION}'`.
+- **Three assertions failed first and each taught something**, so they are in
+  the harness as measured facts rather than guesses: the `Translucent` class
+  sits on the **in-flow** anchor bar (the sticky clone has a zero box, so
+  `.last()` not `.first()`), `.sapUxAPObjectPageHeaderContent` **does not exist**
+  in this release (assert the header text instead), and at 1280px the
+  `Breadcrumbs` collapse into a `Select` — the link press is only reachable
+  through its list.
+- Residuals are named per sidecar instead of silently dropped: the title's
+  `backgroundDesign='Solid'` has no DOM marker, `editHeaderButtonPress` needs
+  header hover, the `setSelectedSection` reset has no stable marker without an
+  icon tab bar, and `subSectionLayout='TitleOnLeft'` only changes the
+  subsection's grid column math (`ObjectPageSubSection._calculateLayoutConfiguration`)
+  — so 261 keeps its `LIVE_TEST` with the evidence appended rather than being
+  promoted on a half-check.
+- Harness gained `notToContainText` (poll-until-absent) — a filter assertion
+  needs the negative form, and the previous helper had none.
+- **Full sweep after the harness change: `264 port(s), 0 failing`** — the
+  shared parts touched here (`notToContainText`, the extra 060 leg) regress
+  nothing.
+
+## pr/menu-item-selected-path closed — measured, not assumed (2026-07-31)
+
+- The last open `pr/` request wanted the selected menu item's **ancestor
+  breadcrumb** (`Create New Site > Official Store`) transportable; apps 060/061
+  toasted only the leaf text, declared IMPROVISED on both.
+- **Option 1 looked like a win.** Reading
+  `sap/ui/core/mvc/EventHandlerResolver.js` shows the resolver hands the
+  **whole** handler string to `BindingParser.parseExpression`, so a
+  `$`-prefixed arg is a **full expression-binding expression** — embedded
+  bindings mixed with method calls, `isA('…')`, string concat and ternaries.
+  The corpus had only ever used the trivial `.getText()` form, which hid it.
+  A ternary parent-walk was written into both ports and a throwaway browser
+  probe (OpenUI5 1.152, `fireItemSelected` on a real nested `sap.m.Menu`)
+  returned exactly `["Create New Site > Official Store", "Export Map"]`.
+- **The e2e run against the transpiled backend then refuted it.** Clicking
+  through the real menu still toasted the leaf text, and measuring the chain in
+  the *opened* state explained why: `sap.m.Menu` re-parents its items through an
+  internal `sap.m.MenuWrapper`, and the hop count to the parent `MenuItem`
+  **changes with runtime state** — two hops while the submenu is closed
+  (`MenuItem → MenuWrapper → MenuItem`), four once its popover exists
+  (`MenuItem → MenuWrapper → Popover → ResponsivePopover → MenuItem`). An
+  expression has no loop, so no fixed hop count is right in both states. The
+  probe had only ever seen the closed state.
+- **Closed as option 2 — a documented capability boundary.** The ports keep
+  `${$parameters>/item}.getText()`; their deviations became **NOTEs** rather
+  than IMPROVISED, because the same wrapper breaks the demo kit sample's own
+  `while (oItem instanceof MenuItem) … getParent()` loop: **upstream toasts the
+  leaf text too** on this release, so the ports were behaviour-identical with
+  the live sample all along.
+- Kept as the by-product: the **"an event arg is a full UI5 expression"** rule
+  (AGENTS §5, CAPABILITIES frontend-action catalog) — real, proven, and useful
+  for anything the client can compute from the event without a round-trip; only
+  the *loop* is missing.
+- The 060 e2e interaction gained a leg that selects the **nested** item and
+  asserts the leaf toast, so the boundary is regression-guarded instead of
+  merely written down. `e2e-smoke --only 060`: pass.
+- `pr/menu-item-selected-path/` deleted per the pr/ convention (Implemented row
+  left as the pointer). **`pr/` now holds no open request.**
+- Process note: the first e2e failure was a **stale transpiled backend** plus a
+  leftover express server from a debug run holding port 3000 — the browser kept
+  getting the old wire. Rebuild with `npm run node:build` and check for a
+  running `node .abap2UI5/node/srv/express.mjs` before believing an e2e verdict.
+
+## Batch b13 — BoundFilters: breadth closed except the hold-out set (2026-07-31)
+
+- **Apps 264/265** (`src/02/b13`, `sap.ui.model.Filter`): the two
+  `BoundFilters.*` samples were the last `NEW-CONTROL` rows left after the
+  non-app scope rule. With them ported, **every uncovered control in the
+  backlog is a HOLDOUT** (`BusyIndicator`, `RadioButtonGroup`,
+  `RatingIndicator`, reserved for the regression probe) — breadth is closed,
+  planning is depth-only.
+- **The idiom both samples exist for**: `boundFilters`, a binding-info
+  parameter whose filter *values are binding expressions*, so the aggregation
+  re-filters itself when a bound value changes (`ManagedObject.js:3711`,
+  "Supported since 1.146.0"; both manifests declare `minUI5Version 1.146.0`).
+  It goes into the raw `rows`/`items` binding-info string verbatim — 264 binds
+  the four filter prefixes with `client->_bind( … )`, 265 uses the **relative
+  row field** `value1: '{REGION}'` so every row's Select lists only its own
+  region's account managers.
+- **New property-gate blind spot recorded** (AGENTS §5): a binding-info
+  parameter is not a control member, so it appears in **no** gate —
+  `property-check` cannot see `boundFilters` at all. Declared `POST_171` by
+  policy in both sidecars.
+- **`onToggleFilters` → re-bake redraw** (app 241 idiom): the controller swaps
+  the whole filter set with `oListBinding.filter(aOther,
+  FilterType.ApplicationBound)`. abap2UI5 bakes binding info at render time, so
+  `TOGGLE_FILTERS` flips the two-way bound `showorganizational` flag and calls
+  `view_display( )` again with the other `boundFilters` list — same observable
+  behaviour, no `binding_call` needed. CAPABILITIES' binding-filter row now
+  carries both forms.
+- Named-model fold in 264 (`filter>` + `ui>` → default-model root, same leaf
+  names) is a **NOTE**, not IMPROVISED — same data, renders identically.
+- Both ports land with **zero structural diffs** and green on every gate first
+  pass: abaplint 0, pattern-lint 0, validate-meta 0, structural-diff 0
+  undeclared, render-smoke 0 failing, property-check 0, data-fidelity 0,
+  structure-lint 0. Coverage 264/741.
+
+## Second scope rule: non-app samples are out of scope (2026-07-31)
+
+- **User decision on the b05 finding**: the sample families that are not app
+  views are **out of scope**, not an open ❌ gap. Implemented as a declarative
+  `ui5/scope-nonapp.json` (one entry per family, each with its reason) read by
+  both `generate-coverage.mjs` (`scopeOf` → new verdict `nonapp`) and
+  `scripts/scope-of.mjs` (`--sample <Name>` → `OUT_OF_SCOPE (not an app
+  view — …)`, exit 1), so the pre-port check and the coverage gate cannot
+  drift apart.
+- Families: `sap.ui.test.*` (OPA5 / gherkin / matcher — QUnit test pages),
+  `sap.ui.core.routing.*` (Component routing across several views/targets;
+  an abap2UI5 app serves one view per round-trip), and `View.*` /
+  `ViewTemplate.*` / `XMLComposite.*` in `sap.ui.core` (view-type,
+  OData-annotation templating and composite-control authoring demos — they
+  demonstrate how a view is produced rather than being one).
+- `sap.ui.core.mvc.ControllerExtension` joined the list in the same pass (user
+  decision after the first cut): abap2UI5 has no frontend controller to extend,
+  so the sample carries no view idiom to rebuild. Matching it by `entityPrefix`
+  also fixed a hole in `scope-of.mjs`: its universe entry carries
+  `entity: null` and the owning entity only comes from
+  `ui5/entity-overrides.json`, which the CLI did not read — it now applies the
+  overrides and evaluates the non-app verdict **before** the entity has to
+  resolve in the fork checkout, so an unresolvable control no longer masks the
+  verdict.
+- Effect: **39 samples** move out of scope. In-scope denominator 665 → **626**,
+  overall coverage 39.4 % → **41.9 %**, `sap.ui.core` 27.1 % → **80.0 %** —
+  the honest numbers, since those 39 were never portable. `--backlog`'s
+  `NEW-CONTROL` list drops from ~43 rows to two real ones
+  (`BoundFilters.FilterBar`, `BoundFilters.FilteredListInTable`) plus the three
+  HOLDOUTs. They stay listed in `api.md` marked `✗` for completeness.
+- Deliberately left **in** scope: the two `BoundFilters.*` samples — real app
+  views on `sap.ui.model.Filter`, worth porting. A ported sample matching a
+  non-app family hits the same hard scope gate as a deprecated/newer one — no
+  port matches today.
+
+## sap.uxap batch b05 — the last two portable NEW-CONTROL rows + four ObjectPage idioms (2026-07-31)
+
+- **Apps 258–263** (`src/03/b05`, the first uxap batch since b04): breadth-first
+  first — `ObjectPageHeaderBackgroundDesign` (258) and
+  `ObjectPageProgressRatingIndicators` (259) were the last two `NEW-CONTROL`
+  rows in the backlog that are actually portable app samples
+  (`sap.uxap.ObjectPageDynamicHeaderTitle`; `universe.json` carries `entity:
+  null` for both, so the sidecars name the entity by hand). **Breadth is now
+  exhausted**: every remaining `NEW-CONTROL` row is a `sap.ui.test`
+  (Opa5/gherkin/matcher), routing, `View.*`/`ViewTemplate.*` or
+  `XMLComposite.*` sample — QUnit/test-infrastructure demos, not app views.
+  Batch planning is depth-only from here (see the STATUS.md finding).
+- Then four idiom-first depth picks on `sap.uxap.ObjectPageLayout`, each
+  carrying an idiom no existing uxap port has: 260 `ObjectPageHeaderExpanded`
+  (`preserveHeaderStateOnScroll`), 261 `ObjectPageTitleOnLeft`
+  (`subSectionLayout="TitleOnLeft"` + the `EmploymentBlockJob` ModelMapping
+  fold), 262 `ObjectPageResponsiveAvatar` (the uxap twin of app 244:
+  `breakpointChange` @1.147 → bound Avatar `displaySize`, `showFooter` toggle,
+  `showEditHeaderButton`/`editHeaderButtonPress`, client-composed toasts) and
+  263 `ObjectPageResetSelectedSection` (NavContainer `to` via
+  `_event_client( control_by_id )`, the `navigate` round-trip, the
+  `setSelectedSection` reset).
+- **`selectedSection` is an ASSOCIATION, not a property** (`ObjectPageLayout.js`
+  line 379) — so the usual scalar-literal→two-way-binding move does not apply,
+  and a null association argument is not transportable through
+  `control_by_id` either. App 263 therefore resets by setting the **first
+  section's id**, which is exactly UI5's own fallback in
+  `_adjustSelectedSectionByUXRules`. Rule recorded in AGENTS §10.
+- **SharedBlocks archiving: tried, measured, rejected.** §4 says archive every
+  file the manifest lists, so `ui5/sap.uxap/SharedBlocks/` +
+  `SharedJSONData/` were copied in and the gates re-run. The six existing uxap
+  ports stayed green, but the uxap manifests **over-list**: 259's manifest names
+  the whole `EmploymentBlockJob*` set the view never instantiates, so
+  `structural-diff` demanded phantom `layout:Grid`/`GridData`/`VerticalLayout`
+  controls from ports that correctly do not render them. Reverted; the uxap
+  block templates stay unarchived (as in every earlier uxap batch) and the
+  block inlining stays declared per port. Rule recorded in AGENTS §4.
+- Every block is inlined with its real view content (SimpleForm/Label/Text,
+  the Grid tree of `EmploymentBlockJobCollapsed`, the six Panels of
+  `ConnectionsBlock`) rather than a `core:HTML` placeholder — the 188/217
+  practice, not the 161/187 coloured-div one. `POST_171` declared for
+  `sap.m.Avatar` (control @1.73), `sap.m.Title.content` (@1.87, the Link nested
+  in a Title of 259) and `ObjectPageLayout.breakpointChange` (@1.147).
+- All gates green: abaplint 0, pattern-lint 0, validate-meta 0,
+  structural-diff **0 undeclared** (262 ports), render-smoke 0 failing / 1
+  declared skip, property-check 0, data-fidelity 0, structure-lint 0.
+  Coverage 262/741.
 ## Pages demo: `Network error: ASSERTION_FAILED` on the overview's links / info popovers (2026-07-31)
 
 - **User report**: on

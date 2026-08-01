@@ -84,7 +84,7 @@ CLASS z2ui5_cl_ai_app_229 IMPLEMENTATION.
             )->a( n = `xmlns:core` v = `sap.ui.core`
             )->open( `Popover`
                 )->a( n = `id`           v = `myPopover`
-                )->a( n = `title`        v = `{NAME}`
+                )->a( n = `title`        v = client->_bind( name )
                 )->a( n = `class`        v = `sapUiResponsivePadding--header sapUiResponsivePadding--footer`
                 )->a( n = `placement`    v = `Bottom`
                 )->a( n = `initialFocus` v = `email`
@@ -99,7 +99,7 @@ CLASS z2ui5_cl_ai_app_229 IMPLEMENTATION.
                     )->shut(
                 )->shut(
                 )->leaf( `Image`
-                    )->a( n = `src`          v = `{PRODUCTPICURL}`
+                    )->a( n = `src`          v = client->_bind( productpicurl )
                     )->a( n = `width`        v = `15em`
                     )->a( n = `densityAware` v = `false`
 
@@ -115,7 +115,7 @@ CLASS z2ui5_cl_ai_app_229 IMPLEMENTATION.
             )->a( n = `xmlns:core` v = `sap.ui.core`
             )->open( `Popover`
                 )->a( n = `id`           v = `myResizablePopover`
-                )->a( n = `title`        v = `{NAME}`
+                )->a( n = `title`        v = client->_bind( name )
                 )->a( n = `class`        v = `sapUiResponsivePadding--header sapUiResponsivePadding--footer`
                 )->a( n = `placement`    v = `Right`
                 )->a( n = `resizable`    v = `true`
@@ -131,7 +131,7 @@ CLASS z2ui5_cl_ai_app_229 IMPLEMENTATION.
                     )->shut(
                 )->shut(
                 )->leaf( `Image`
-                    )->a( n = `src`          v = `{PRODUCTPICURL}`
+                    )->a( n = `src`          v = client->_bind( productpicurl )
                     )->a( n = `width`        v = `15em`
                     )->a( n = `densityAware` v = `false`
 

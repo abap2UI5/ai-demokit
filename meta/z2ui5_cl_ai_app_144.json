@@ -12,8 +12,8 @@
   "checked": null,
   "deviations": [
     {
-      "type": "LIVE_TEST",
-      "what": "The Slider liveChange recomputes the host Panel.width (bound) as value + '%' server-side; the original set byId('panelForGridList').setWidth imperatively. Slider.value carries a binding to carry the value back."
+      "type": "NOTE",
+      "what": "**e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): one keyboard step on the Slider carries the value into the backend, the round-trip recomposes the Panel width and the Panel really renders at 99% - the imperative setWidth is fully replaced. Residual (nothing headless can assert): the visual GridList reflow inside the resized panel."
     },
     {
       "type": "NOTE",

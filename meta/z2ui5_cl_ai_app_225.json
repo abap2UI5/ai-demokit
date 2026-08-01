@@ -20,8 +20,8 @@
       "what": "sap.m.plugins.ColumnResizer (since UI5 1.91) kept 1:1 in the Table dependents aggregation; needs a UI5 release >= 1.91 to render. The Table fixedLayout='Strict' value is also newer than 1.71 (a value-level extension of the 1.22 property, invisible to the property gate; the source JSDoc carries no value-level @since) - covered by the same >= 1.91 floor."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The sorter binding ({path:'/ProductCollection', sorter:{path:'NAME'}}) and the sap.ui.model.type.Currency composite binding on Price/CurrencyCode are passed through 1:1 as raw binding-info strings; the sorted order and currency formatting are not yet verified in a running system."
+      "type": "NOTE",
+      "what": "**e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the sorter inside the raw binding-info string really sorts: the first rendered row is '10\" Portable DVD player', not the model's first record ('Notebook Basic 15'). Residual (nothing headless can assert deterministically): the Currency type's locale formatting of Price/CurrencyCode."
     }
   ]
 }

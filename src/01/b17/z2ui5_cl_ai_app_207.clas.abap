@@ -96,7 +96,12 @@ CLASS z2ui5_cl_ai_app_207 IMPLEMENTATION.
                 )->a( n = `icon`             v = `{PRODUCTPICURL}`
                 )->a( n = `iconDensityAware` v = `false`
                 )->a( n = `iconInset`        v = `false`
-                )->a( n = `type`             v = `{LISTTYPE}`
+                " absolute binding (client->_bind), NOT the relative {LISTTYPE}:
+                " the shared field lives at the model ROOT, while the template
+                " resolves relative paths against the row - a row has no
+                " LISTTYPE, so the relative form never followed the Select
+                " (found by the e2e interaction 2026-07-31)
+                )->a( n = `type`             v = client->_bind( listtype )
                 )->a( n = `press`            v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `'press' event fired!` ) ) )
                 )->a( n = `detailPress`      v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `'detailPress' event fired!` ) ) ) ).
 

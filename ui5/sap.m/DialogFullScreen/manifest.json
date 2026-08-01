@@ -1,0 +1,34 @@
+{
+	"sap.app": {
+		"id": "sap.m.sample.DialogFullScreen",
+		"applicationVersion": {
+			"version": "1.0.0"
+		}
+	},
+	"sap.ui5": {
+		"rootView": {
+			"viewName": "sap.m.sample.DialogFullScreen.V",
+			"type": "XML",
+			"async": true
+		},
+		"dependencies": {
+			"libs": {
+				"sap.m": {},
+				"sap.ui.core": {},
+				"sap.ui.layout": {}
+			}
+		},
+		"config": {
+			"sample": {
+				"name": "Dialog - Fullscreen",
+				"description": "A dialog that can be toggled to fullscreen mode through a header button, by double-clicking the header, or by using the 'Shift+Ctrl+F' keyboard shortcut.",
+				"files": [
+					"V.view.xml",
+					"C.controller.js",
+					"Component.js",
+					"manifest.json"
+				]
+			}
+		}
+	}
+}

@@ -25,7 +25,7 @@
     },
     {
       "type": "LIVE_TEST",
-      "what": "The full wizard flow — step validation gating the Next button, complete/edit navigation, the goToStep scroll and the cancel/submit reset — needs an in-system check; machine gates only verify the view is valid."
+      "what": "the cancel leg is closed: **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the first wizard step renders and the footer Cancel really round-trips - message_box_display opens the MessageBox 'Are you sure you want to cancel your report?' with its YES/NO onclose action. Still needs an in-system check: step validation gating the Next button, the complete/edit navigation, the goToStep scroll and the submit/cancel reset itself."
     }
   ]
 }

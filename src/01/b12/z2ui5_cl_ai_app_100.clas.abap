@@ -128,7 +128,11 @@ CLASS z2ui5_cl_ai_app_100 IMPLEMENTATION.
         popup_quickview_display( `genericQuickViewNoHeader` ).
 
       WHEN `NAVIGATE`.
-        client->message_toast_display( `A QuickView link was clicked` ).
+        " onNavigate: the clicked link's text, or the back button
+        DATA(lv_origin) = client->get_event_arg( ).
+        client->message_toast_display( COND string( WHEN lv_origin IS NOT INITIAL
+                                                    THEN |Link '{ lv_origin }' was clicked|
+                                                    ELSE `Back button was clicked` ) ).
 
     ENDCASE.
 
@@ -146,7 +150,10 @@ CLASS z2ui5_cl_ai_app_100 IMPLEMENTATION.
         )->open( `QuickView`
             )->a( n = `id`       v = `quickView`
             )->a( n = `pages`    v = client->_bind( t_pages )
-            )->a( n = `navigate` v = client->_event( `NAVIGATE` )
+            " onNavigate reads the navOrigin link and names it in the toast;
+            " a BACK navigation has no navOrigin, which the ternary reproduces
+            )->a( n = `navigate` v = client->_event( val   = `NAVIGATE`
+                                                     t_arg = VALUE #( ( `${$parameters>/navOrigin} ? ${$parameters>/navOrigin}.getText() : ''` ) ) )
 
             )->open( `QuickViewPage`
                 )->a( n = `pageId`      v = `{PAGEID}`

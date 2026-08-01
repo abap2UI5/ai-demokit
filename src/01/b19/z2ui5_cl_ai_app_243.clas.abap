@@ -86,7 +86,7 @@ CLASS z2ui5_cl_ai_app_243 IMPLEMENTATION.
 
             )->open( `ResponsivePopover`
                 )->a( n = `id`        v = `myPopover`
-                )->a( n = `title`     v = `{NAME}`
+                )->a( n = `title`     v = client->_bind( name )
                 )->a( n = `class`     v = `sapUiContentPadding`
                 )->a( n = `placement` v = `Bottom`
 
@@ -106,7 +106,7 @@ CLASS z2ui5_cl_ai_app_243 IMPLEMENTATION.
 
                 )->open( `content`
                     )->leaf( `Image`
-                        )->a( n = `src`   v = `{PRODUCTPICURL}`
+                        )->a( n = `src`   v = client->_bind( productpicurl )
                         )->a( n = `width` v = `15em`
 
             )->shut(
@@ -124,7 +124,7 @@ CLASS z2ui5_cl_ai_app_243 IMPLEMENTATION.
 
             )->open( `ResponsivePopover`
                 )->a( n = `id`                 v = `myFooterPopover`
-                )->a( n = `title`              v = `{NAME}`
+                )->a( n = `title`              v = client->_bind( name )
                 )->a( n = `class`              v = `sapUiContentPadding`
                 )->a( n = `placement`          v = `Bottom`
                 )->a( n = `contentWidth`       v = `320px`
@@ -132,7 +132,7 @@ CLASS z2ui5_cl_ai_app_243 IMPLEMENTATION.
 
                 )->open( `content`
                     )->leaf( `Image`
-                        )->a( n = `src`   v = `{PRODUCTPICURL}`
+                        )->a( n = `src`   v = client->_bind( productpicurl )
                         )->a( n = `width` v = `15em`
 
                 )->shut(

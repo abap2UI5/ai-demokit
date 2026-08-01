@@ -72,15 +72,33 @@ const sinceLeq171 = (since) => {
   const m = String(since).match(/^(\d+)\.(\d+)/);
   return m ? (+m[1] < 1 || (+m[1] === 1 && +m[2] <= 71)) : false;
 };
-// -> 'in' | 'deprecated' | 'newer' | 'unknown'. An entity containing
+// --- non-app sample families (maintainer decision 2026-07-31) --------------
+// ui5/scope-nonapp.json lists families whose control is in scope by the 1.71
+// rule but that are not app views at all — UI5's own test infrastructure
+// (OPA5/gherkin/matchers), Component routing across several views, and the
+// view-type / XML-templating / XMLComposite authoring demos. They are out of
+// scope: listed in api.md, never offered by --backlog, never ported.
+const NONAPP_FILE = path.join(ROOT, 'ui5', 'scope-nonapp.json');
+const nonAppFamilies = fs.existsSync(NONAPP_FILE)
+  ? JSON.parse(fs.readFileSync(NONAPP_FILE, 'utf8')).families || []
+  : [];
+// -> the matching family (with its reason) or null
+const nonAppFamily = (lib, s) => nonAppFamilies.find((f) =>
+  (!f.lib || f.lib === lib)
+  && (!f.entityPrefix || (s.entity || '').startsWith(f.entityPrefix))
+  && (!f.namePrefix || s.name.startsWith(f.namePrefix))
+  && (f.entityPrefix || f.namePrefix)) || null;
+
+// -> 'in' | 'deprecated' | 'newer' | 'nonapp' | 'unknown'. An entity containing
 // '.sample.' is the sample id itself (demo apps without an owning control,
 // e.g. AIIntegration) — no control metadata, so scope is unknown.
 // Samples are enriched from ui5/properties.json BEFORE this runs (see
 // enrichFromProperties below), so a null since/deprecated from the snapshot
 // no longer silently passes controls newer than 1.71 (pr/scope-since-from-source).
-const scopeOf = (s) =>
+const scopeOf = (lib, s) =>
   !s.entity || s.entity.includes('.sample.') ? 'unknown'
-    : s.deprecated ? 'deprecated' : sinceLeq171(s.since) ? 'in' : 'newer';
+    : s.deprecated ? 'deprecated' : !sinceLeq171(s.since) ? 'newer'
+      : nonAppFamily(lib, s) ? 'nonapp' : 'in';
 
 // --- scope fallback: control-level @since/@deprecated from the source scan --
 // ui5/universe.json carries since:null for most controls (the fork checkout
@@ -254,7 +272,7 @@ const libs = universe.libs.map((e) => ({
     return {
       ...enriched,
       port: ported.get(`${e.lib}\t${s.name}`) || null,
-      scope: scopeOf(enriched),
+      scope: scopeOf(e.lib, enriched),
     };
   }),
 }));
@@ -361,7 +379,7 @@ const summary = libs
 let totalSamples = 0;
 let totalInScope = 0;
 let totalPorted = 0;
-const outBy = { deprecated: 0, newer: 0, unknown: 0 };
+const outBy = { deprecated: 0, newer: 0, nonapp: 0, unknown: 0 };
 for (const s of summary) { totalSamples += s.total; totalInScope += s.inScope; totalPorted += s.ported; }
 for (const e of libs) for (const s of e.samples) if (s.scope !== 'in') outBy[s.scope]++;
 
@@ -370,7 +388,7 @@ function summaryLines() {
   const l = [];
   l.push(`Overall **${totalPorted} / ${totalInScope}** in-scope demo kit samples ported (${pct(totalPorted, totalInScope)}).`);
   l.push(`**In scope**: samples whose control exists since **UI5 1.71** and is **not deprecated** (legacy-free ready).`);
-  l.push(`Out of scope: ${totalSamples - totalInScope} of ${totalSamples} samples — ${outBy.deprecated} on deprecated controls, ${outBy.newer} on controls newer than 1.71, ${outBy.unknown} demo apps without an owning control.`);
+  l.push(`Out of scope: ${totalSamples - totalInScope} of ${totalSamples} samples — ${outBy.deprecated} on deprecated controls, ${outBy.newer} on controls newer than 1.71, ${outBy.nonapp} that are not app views (UI5 test infrastructure, Component routing, view-templating demos — see \`ui5/scope-nonapp.json\`), ${outBy.unknown} demo apps without an owning control.`);
   if (release) l.push(`Control metadata from OpenUI5 **${release}**.`);
   l.push('');
   l.push('| Module | Samples | In scope | Ported | Coverage | |');
@@ -393,8 +411,10 @@ function controlLines() {
   l.push('its ↗ opens the live fullscreen sample, **ABAP** is the generated class.');
   l.push('`—` = in scope, not ported yet — those rows are the backlog.');
   l.push('`✗` = **out of scope**: the control is deprecated or newer than UI5 1.71');
-  l.push('(not legacy-free ready / not 1.71-compatible) — these samples are listed');
-  l.push('for completeness but are not ported. A **⁺** after the class marks ports');
+  l.push('(not legacy-free ready / not 1.71-compatible), or the sample is not an app');
+  l.push('view at all (UI5 test infrastructure, Component routing, view-templating and');
+  l.push('XMLComposite authoring demos — `ui5/scope-nonapp.json`) — these samples are');
+  l.push('listed for completeness but are not ported. A **⁺** after the class marks ports');
   l.push('that keep members newer than UI5 1.71 for 1:1 fidelity (declared as');
   l.push('POST_171 in the sidecar) — they need a correspondingly recent UI5.');
   l.push('See the [README](README.md#coverage) for the per-module coverage summary.');

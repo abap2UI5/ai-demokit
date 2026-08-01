@@ -36,6 +36,28 @@ computed per sample from `ui5/universe.json` by `generate-coverage.mjs`
 **never ported**; `node scripts/generate-coverage.mjs --backlog` prints the
 in-scope, unported samples for batch planning.
 
+**Second scope rule — the sample must be an app view** (maintainer decision
+2026-07-31). A control can be perfectly 1.71-clean while the sample is not a UI
+at all: UI5's own **test infrastructure** (`sap.ui.test.*` — OPA5, gherkin,
+matcher demos are QUnit pages), **Component routing** across several
+views/targets (`sap.ui.core.routing.*` — an abap2UI5 app serves one view per
+round-trip), and the **view-type / XML-templating / XMLComposite authoring**
+demos (`View.*`, `ViewTemplate.*`, `XMLComposite.*` — they demonstrate how a
+view is produced, not a UI to rebuild), plus
+`sap.ui.core.mvc.ControllerExtension` (abap2UI5 has no frontend controller to
+extend). These families are listed in
+`ui5/scope-nonapp.json` with a per-family reason and are **out of scope**:
+`scopeOf` returns `nonapp`, `--backlog` never offers them, `api.md` marks them
+`✗`, and `scripts/scope-of.mjs --sample <Name>` reports them
+`OUT_OF_SCOPE (not an app view — …)`. They previously dominated the
+`NEW-CONTROL` rows and made breadth look unfinished when it was not (39
+samples). Note the two verdicts must stay identical: `scope-of.mjs` applies
+`ui5/entity-overrides.json` and evaluates the non-app family **before** the
+control has to resolve in the fork checkout — `ControllerExtension` carries
+`entity: null` in the universe and would otherwise report `UNRESOLVED`. Adding a family is a maintainer decision — write the reason into the
+file; a ported sample that matches hits the same hard scope gate as a
+deprecated/newer one.
+
 > **⚠️ Verify scope from source before porting.** Since 2026-07-26 the gate is
 > no longer blind: `ui5/properties.json` carries each control's class-level
 > `@since`/`@deprecated` (parsed from the OpenUI5 sources by
@@ -191,6 +213,19 @@ under `ui5/mock/` (see its README for provenance); upstream it lives in the
 [UI5/openui5](https://github.com/UI5/openui5) repository (the SAP/openui5 URLs
 redirect) at `src/sap.ui.documentation/test/sap/ui/documentation/sdk/`.
 
+**Exception — the `sap.uxap` `SharedBlocks` templates stay unarchived**
+(measured in batch b05, 2026-07-31). The uxap manifests **over-list**: they
+name the whole `../SharedBlocks/` set regardless of what the view actually
+instantiates (`ObjectPageProgressRatingIndicators` lists every
+`EmploymentBlockJob*` file and never uses one). `structural-diff` resolves
+manifest-listed `../<OtherSample>/*.view.xml` paths, so archiving
+`ui5/sap.uxap/SharedBlocks/` feeds it block views the sample never renders and
+it then demands phantom controls (`layout:Grid`/`GridData`/`VerticalLayout`)
+from correct ports. Tried in both directions: with the folder archived the six
+older uxap ports stayed green but apps 259/261/263 gained undeclared phantom
+diffs. So uxap block templates stay out of `ui5/`, and the BlockBase
+inlining is declared in each sidecar instead (apps 161/187/188/217/258–263).
+
 ---
 
 ## 5. Generation rules
@@ -256,6 +291,10 @@ source of truth:
   invisible at the attribute-name level; a member **relocated to a newer base
   class** reads as that base's version (e.g. `NavigationListItem.expanded` shows
   1.121 though the property predates 1.71 — declare it with that note); and a
+  a **binding-info parameter** (`boundFilters` @1.146, `templateShareable`, …)
+  carries its own `@since` in the `ManagedObject` JSDoc and is **not a control
+  member at all**, so no gate can ever see it — declare it `POST_171` by policy
+  (apps 264/265, found 2026-07-31); and a
   member/control **not present in `properties.json` at all** is silently passed
   (e.g. `IllustratedMessage` @1.98, `Input.autocomplete` @1.108, and
   `sap.ui.core.CommandExecution` were all invisible to the gate on app 232/233).
@@ -555,6 +594,25 @@ that stops at the deepest node.
   display-only bindings.**
 - Inside a bound aggregation, child properties use UI5 binding braces on the
   upper-cased field name: `)->a( n = `text` v = `{TITLE}``.
+  **But a field shared by the whole app lives at the model ROOT, and a relative
+  `{FIELD}` inside a template resolves against the ROW** — it silently renders
+  empty when the row has no such column. Bind those with the absolute path from
+  `client->_bind( field )` even inside a template (app 207: every
+  `StandardListItem`'s `type` follows one Select; the relative form left every
+  item `Inactive` and the Select dead. No gate sees this — structural-diff
+  matches on the last path segment, render-smoke mocks the model — it took the
+  e2e interaction, 2026-07-31).
+  **The same trap outside any template: a "flattened element binding".** When
+  the original does `bindElement('/ProductCollection/0')` (or a `binding=`
+  attribute) and the port seeds that record's fields at the model root, the
+  view must bind them **absolutely** too — a relative `{NAME}` on a control
+  with *no binding context at all* resolves against nothing and renders empty.
+  Seven ports carried the wrong form with a sidecar note claiming the opposite
+  ("the relative bindings resolve against the root"): 142 175 195 206 209 229
+  243, all fixed 2026-08-01 after the e2e harness showed app 206 rendering
+  `x x` where the dimensions belong. Audit for it with:
+  `_bind`-less `` v = `{FIELD}` `` whose FIELD is a root-level `DATA` scalar of
+  the class and not a component of any row structure.
 - `client->_event( \`NAME\` )` — wire a control event (press, liveChange…) to an
   event named `NAME`. **Always** dispatch in `on_event( )` with a
   `CASE client->get( )-event.` … `WHEN \`NAME\`.` … `ENDCASE` — even for a single
@@ -691,7 +749,19 @@ creation).
 | A **boolean** attribute fed from an ABAP variable | `z2ui5_cl_ai_xml=>as_bool( flag )` (a literal is just `` v = \`true\` ``) — never feed `abap_true`/`abap_false` raw | §5 "Booleans"; app 007 |
 | A property **computed from several bound values** | UI5 expression binding, `_bind` inlined: `` \|\{= ${ client->_bind( a ) } && ${ client->_bind( b ) } \}\| `` — no event round-trip. **Which literal form depends on where the paths come from**: a `_bind( )` result must be *interpolated*, so the expression goes in a `\|…\|` template with the outer braces escaped `\{ \}` (the row's form). An expression over a **relative row field** inside a bound aggregation has nothing to interpolate — write it as a plain **backtick** literal, `` `{= ${END} ? Formatter.DateCreateObject(${END}) : null }` ``, so every brace reaches the attribute verbatim. Escaping row-field braces inside a template collapses them and the attribute silently becomes garbage that no gate reads as a binding | §5; apps 007, 053; the relative-field form: app 220 |
 | The controller **reads an event/source value** (`evt.getSource().getId()`) | Transport it, don't fake it: `t_arg` value `$event.oSource.sId` / `${COL}`, read back with `get_event_arg( )`. A bare `{COL}` is **not** resolved here | §5 "Data binding & events"; app 005 |
-| `MessageToast.show("…" + evt.x)` (text built on the client) | Client-composed template, roundtrip-free. Exact `t_arg` tuple order = **object, method, template, arg(s)**: `` client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( \`MESSAGE_TOAST\` ) ( \`show\` ) ( \`Item selected: {0}\` ) ( \`${$parameters>/item}.getText()\` ) ) ) ``. The wire token is `MESSAGE_TOAST` (not `MessageToast`); `{0}` is filled by the resolved arg. **A template may START with `{0}`** — `get_t_arg` quotes a leading `{N}`/`{N?…}` placeholder as a plain string (source: `^\{[0-9]+[?}]` match), so a value-first toast needs no round-trip fallback (probe-#2 friction, app 609-class). Button text is `${$source>/text}`; menu-item text is `${$parameters>/item}.getText()`. **When the original pulls the module via `core:require` on the fragment/view root** (`core:require="\{MessageToast: 'sap/m/MessageToast'\}"` for an inline `press="MessageToast.show(…)"`) and you rewire to `_event_client`, that `core:require` is **dropped — name it in the deviation**: structural-diff treats `core:require` as an ordinary (non-`xmlns`) attribute and flags it missing | CAPABILITIES; apps 005/060/172 |
+| `MessageToast.show("…" + evt.x)` (text built on the client) | Client-composed template, roundtrip-free. Exact `t_arg` tuple order = **object, method, template, arg(s)**: `` client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( \`MESSAGE_TOAST\` ) ( \`show\` ) ( \`Item selected: {0}\` ) ( \`${$parameters>/item}.getText()\` ) ) ) ``. The wire token is `MESSAGE_TOAST` (not `MessageToast`); `{0}` is filled by the resolved arg. **A template may START with `{0}`** — `get_t_arg` quotes a leading `{N}`/`{N?…}` placeholder as a plain string (source: `^\{[0-9]+[?}]` match), so a value-first toast needs no round-trip fallback (probe-#2 friction, app 609-class). Button text is `${$source>/text}`; menu-item text is `${$parameters>/item}.getText()`.
+**An arg is a full UI5 expression, not just a path** — `EventHandlerResolver`
+parses the whole handler with `BindingParser.parseExpression`, so method calls,
+`isA('…')`, string concat and ternaries all work in an arg (found 2026-07-31
+while closing `pr/menu-item-selected-path`). But the grammar has **no loop**:
+a parent-chain walk must be unrolled to a fixed hop count, which fails when the
+control tree reshapes at runtime — `sap.m.Menu` re-parents items through a
+`sap.m.MenuWrapper`, so a nested item's parent `MenuItem` is two hops up while
+the submenu is closed and four once its popover exists. That is why the menu
+breadcrumb stays **non-transportable** (documented boundary, CAPABILITIES) and
+apps 060/061 keep the leaf `${$parameters>/item}.getText()` — which the live
+demo kit sample now shows too, its own `instanceof MenuItem` loop breaking on
+the same wrapper. Measure the chain before betting an arg on `getParent()`. **When the original pulls the module via `core:require` on the fragment/view root** (`core:require="\{MessageToast: 'sap/m/MessageToast'\}"` for an inline `press="MessageToast.show(…)"`) and you rewire to `_event_client`, that `core:require` is **dropped — name it in the deviation**: structural-diff treats `core:require` as an ordinary (non-`xmlns`) attribute and flags it missing | CAPABILITIES; apps 005/060/172 |
 | Custom **CSS / raw markup** (`style.css`, `<h2>`, a `core:HTML` `content` div) | `core:HTML` leaf, markup in the `content` **attribute** (no CDATA node exists). Two traps: **(a)** write the **decoded** literal markup — the original XML carries it entity-encoded (`&lt;div&gt;`), but you write `<div>`; the builder re-escapes on stringify, so copying the entities double-escapes them. **(b)** escape literal braces `\{ \}` in a **backtick** literal `` `…\{…\}…` `` — backtick passes `\{` through to the serialized attribute; a `\|…\|` template would collapse `\{`→`{` and re-crash (the **reverse** of the typed-binding row, which *wants* real braces and so uses the pipe) | CAPABILITIES "Custom CSS"; apps 026/028, 169 |
 | Controller **`.filter()`/`.sort()`** on `oList.getBinding('items')` | `cs_event-binding_call` (whitelisted methods/operators, compound filter groups since 2026-07-20) — the model stays untouched | CAPABILITIES "Controller-applied binding filter"; app 022 |
 | An **imperative control method** (`open`/`close`/`toggleStyleClass`/`toDetail`/`expandToLevel`/`setHiddenInPopin`…) | `follow_up_action( val = cs_event-control_by_id t_arg = id/method/args )`. A method **listed** in `CONTROL_METHODS` carries explicit arg kinds (extra args silently dropped — verify the kinds); a method **not listed** still runs when it is a public control method not matching the deny regex (`destroy/bind/attach/setModel/…` — the framework-invariant guard), so ordinary setters/toggles need no whitelist entry (source-verified in FrontendAction.js 2026-07-26 — the older "whitelist-only, unlisted = pr/" phrasing is stale; a *denylisted or argument-dropping* need is still a declared deviation + `pr/`) | CAPABILITIES "Frontend-action catalog"; §5 |
@@ -810,7 +880,12 @@ that is the actual porting work):
   abaplint / pattern-lint / structure-lint / render-smoke immediately, and
   `structural_diff` (correctly) fails until you rebuild the view 1:1. Needs an
   OpenUI5 checkout (`OPENUI5_SRC`, default `../fork-openui5`). `--dry-run` to
-  preview.
+  preview. **`/home/user/fork-openui5` carries only `src/<lib>/src` — no
+  `test/…/demokit/sample`**, so the scaffolder finds nothing there. A blobless
+  sparse clone gets just the sample trees in ~350 MB (2026-08-01):
+  `git clone --filter=blob:none --sparse https://github.com/SAP/openui5.git …`
+  then `git sparse-checkout set src/<lib>/test/<lib path>/demokit/sample …`,
+  and point `OPENUI5_SRC` at it.
 - **`npm run json-to-abap -- <file.json> [--path k] [--fields spec] [--var v]`**
   (`scripts/json-to-abap.mjs`) — turns a JSON array (a demo mock's
   `ProductCollection` …) into an ABAP `VALUE #( … )` literal for `model_init`
@@ -1051,12 +1126,103 @@ How to record it:
   `unescaped-brace-in-style-content` gates the `<style>` case.
 - **Event args need the `$`-prefixed form** (`${COL}`, `$event.oSource.sId`), not
   a bare `{COL}` — see §5 "Data binding & events".
+- **A UI5 *association* cannot be data-bound** — only properties and
+  aggregations can, so the scalar-literal→two-way-binding move (§5) does not
+  apply to one. `sap.uxap.ObjectPageLayout.selectedSection` reads like a
+  property but is declared under `associations:` (`ObjectPageLayout.js:379`);
+  drive it through `follow_up_action( val = cs_event-control_by_id t_arg = ( id )
+  ( \`setSelectedSection\` ) ( … ) )` instead. An **empty/null association
+  argument is not transportable** either — pass the id you actually want (app
+  263 resets to the first section's id, which is what UI5's own
+  `_adjustSelectedSectionByUXRules` falls back to when the association is
+  empty). Before binding something that "should" be a property, grep the
+  control source for `associations:` (found in batch b05, 2026-07-31).
 - **abap2UI5 has only one default model** — flatten any named-model binding into
   it — see §5 "`model_init` — the model".
 - **`_bind( val = x path = abap_true )` returns the bare model path**
   (no braces) — use it when composing raw binding-info strings
   (`{ path: '...', sorter: ... }`); never reconstruct the path with substring
   tricks. Human-taught fix in app 039, 2026-07-16.
+- **An e2e verdict is only as fresh as the transpiled backend** — `scripts/`
+  `e2e-smoke.mjs` runs the code in `.abap2UI5/node/output`, so a port edited
+  after the last `npm run node:build` is NOT what the browser executes, and a
+  leftover `node .abap2UI5/node/srv/express.mjs` from a debug run keeps port
+  3000 (the harness' own spawn then fails silently and the browser talks to the
+  stale server). Both bit the 060 menu investigation on 2026-07-31: read the
+  wire the browser actually got (`menu.mEventRegistry.itemSelected[0].fFunction`
+  `._sapui_handlerName`) before concluding anything from a failing interaction.
+  The unmistakable symptom for a **brand-new** port is
+  `backend HTTP 500` whose body reads *"The app 'Z2UI5_CL_AI_APP_nnn' does not
+  exist in the system"* — that is a missing rebuild, never a port defect
+  (app 269, same day). Two more rules from the same afternoon: **never run
+  `e2e-smoke` while a build is in flight** (`e2e-build` wipes `node/output`
+  first, so the run dies with no output), and **never wait on a build with
+  `pgrep -f e2e-build`** — the waiting shell's own command line contains that
+  string, so it matches itself and waits forever. Grep the build log for
+  `e2e-build: done` instead. **The same self-match kills your own shell**:
+  `ps … | grep '[e]2e-build' | xargs kill` in a command line that *also*
+  contains the plain string (e.g. a following `nohup … e2e-build.mjs`) matches
+  that very shell — the bracket trick only hides the grep's own pattern, not
+  the rest of your command. Exit code 144 with no output is the symptom
+  (2026-08-01, after the identical `pkill -f express.mjs` case). Kill by the
+  PID you noted in a SEPARATE, earlier command.
+- **A control with no theme CSS has a zero-size box, and playwright will not
+  click or focus it** — the e2e harness serves the UI5 *sources*, not the
+  themes, so `sapUiIcon` (an Input's `…-vhi` value-help icon, app 268) and
+  `sapMSliderHandle` (apps 270/271) measure 0×0 and every actionability check
+  fails with *"not visible"*, which reads like a broken port. Both have a real
+  gesture that still goes through the control's own handling:
+  `locator.dispatchEvent('click')` for an icon (UI5's `Icon` listens for the
+  DOM click) and `page.evaluate(() => el.focus())` + `keyboard.press('ArrowLeft')`
+  for a slider (its key handling then moves the value through the two-way
+  binding). **The keyboard is the more general of the two**: a DOM click
+  reached neither a `ColorPalette` swatch nor an `Input`'s value-help icon,
+  but `focus()` + `Enter` picks the colour (app 008) and `F4` opens the value
+  help (app 233). Reach for focus+key before giving a control up — two ports
+  sat uncovered for a day because only click had been tried.
+  Do not "fix" this by setting the property through the UI5 API —
+  that bypasses the binding the test exists to prove. Same family as the
+  OverflowToolbar popover (app 207) and the busy overlay (app 130): assert the
+  *effect* (a bound property, a rendered class), not the pixels (2026-08-01).
+- **A deviation text is also a gate escape — rewriting it can un-declare a
+  diff.** `structural-diff` (and `data-fidelity`) accept a difference only
+  while some sidecar deviation *names* it. Converting a `LIVE_TEST` to a
+  `NOTE` and rewriting the prose therefore silently re-opens every diff that
+  sentence covered: apps 176/213/214 turned into three undeclared
+  `attr missing Slider.liveChange` findings the moment their verified text
+  replaced the one that said "the Slider's liveChange attribute is dropped"
+  (2026-08-01). When you rewrite a deviation, keep the naming clause and run
+  `structural-diff --strict` in the same change.
+- **OverflowToolbar controls ARE drivable headless — open the overflow
+  popover first.** In the harness' 1280 px viewport a toolbar folds almost
+  everything into its `Additional Options` button, so a direct
+  `getByRole('button', …)` for a toolbar control fails with *"not visible"*.
+  Clicking `Additional Options` opens the associative popover and the controls
+  inside it click normally, round-trip and all (measured on app 174,
+  2026-08-01). This supersedes the earlier "not drivable" note on apps
+  207/247 — both are re-armed and green. Two details: an **overflowed
+  `SegmentedButton` renders as a `Select`** in that popover (app 247), and the
+  binding **template** of an aggregation sits in `Element.registry` next to
+  the real rows with no binding context, so filter on `getBindingContext()`
+  before asserting a property over "all items" (app 207).
+- **A sidecar text ends up inside generated ABAP — keep raw braces out of
+  it.** `generate-overview.mjs` inlines every deviation `what` into the
+  overview app's literals, so a NOTE quoting a CSS rule with `{ … }` next to
+  the word `<style>` made pattern-lint's `unescaped-brace-in-style-content`
+  fire on the *generated* file, not on any port (app 275, 2026-08-01).
+  Describe such things in words ("one rule: .tileLayout floats left").
+- **An event parameter that is an ARRAY arrives as JSON, not as a joined
+  string.** `${$parameters>/fieldGroupIds}` reached `on_event` as
+  `["Billing Information"]`, brackets and quotes included. Index it in the
+  expression — `${$parameters>/fieldGroupIds}[0]`, which is also literally
+  what the original controller does — the UI5 expression grammar accepts
+  `[n]` and method calls (both verified with `BindingParser.parseExpression`,
+  app 272, 2026-08-01). Do not "fix" this by string-stripping in ABAP.
+- **An interaction may create the state it needs** — app 267's whole
+  `breakpointChanged` wire only fires below 720 px, so its interaction calls
+  `page.setViewportSize({ width: 400, height: 900 })` and then waits for the
+  bound `enabled` flag. A responsive wire is testable; it just needs the
+  viewport as an input (2026-08-01).
 - **abapGit pushes from a system can carry stale generated files** — a human
   who pulled before the latest repo change and pushes back from the system
   silently reverts it (happened to the overview app's SUBSET labels,

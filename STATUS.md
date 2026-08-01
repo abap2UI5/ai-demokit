@@ -15,10 +15,10 @@ TRAINING.md; for what abap2UI5 can express see CAPABILITIES.md._
 
 | Aspect | State |
 |---|---|
-| Ports | **256** sidecars in `meta/` (src/01: 158 · src/02: 56 · src/03: 12 · src/04: 19 · src/05: 11) |
-| Status ladder | 59 `generated` · 146 `reviewed` · 51 `checked` (live-verified) |
-| Deviations | 4 DROPPED_171 · 118 IMPROVISED · 57 LIVE_TEST · 317 NOTE · 101 POST_171 |
-| Open LIVE_TESTs | **54 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
+| Ports | **276** sidecars in `meta/` (src/01: 163 · src/02: 65 · src/03: 18 · src/04: 19 · src/05: 11) |
+| Status ladder | 79 `generated` · 146 `reviewed` · 51 `checked` (live-verified) |
+| Deviations | 4 DROPPED_171 · 131 IMPROVISED · 41 LIVE_TEST · 390 NOTE · 110 POST_171 |
+| Open LIVE_TESTs | **40 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
 | Declared gate skips | 7 structural-diff · 1 render-smoke (each re-verified per run — a stale skip FAILS) |
 | Out-of-scope ported samples | `z2ui5_cl_ai_app_121 (sap.m.sample.UploadSet — deprecated)` · `z2ui5_cl_ai_app_136 (sap.f.sample.SidePanelSingle — control @since 1.107)` · `z2ui5_cl_ai_app_141 (sap.ui.core.sample.InvisibleMessage — control @since 1.78)` · `z2ui5_cl_ai_app_165 (sap.f.sample.ProductSwitchNavigation — control @since 1.72)` · `z2ui5_cl_ai_app_166 (sap.f.sample.SemanticPage — deprecated)` · `z2ui5_cl_ai_app_203 (sap.m.sample.OverflowToolbarTokenizer — control @since 1.139)` — all decided KEEP permanently 2026-07-30 (per-app rationale in ui5/scope-exceptions.json, revertible); the source-backed scope gate stays hard for NEW undecided entries |
 
@@ -63,6 +63,29 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   (OverflowToolbarTokenizer, experimental @1.139). The source-backed scope
   gate stays a **hard gate** (exit 1) for any NEW ported out-of-scope
   sample without a decided entry, so this class of debt cannot regrow.
+- [x] **Non-app samples are out of scope** (user decision 2026-07-31, found
+  while planning batch b05). Apps 258/259 took the last two portable
+  `NEW-CONTROL` rows (`sap.uxap.ObjectPageDynamicHeaderTitle`); everything left
+  under that marker was UI5's own **test infrastructure** (`sap.ui.test.*` —
+  OPA5 / gherkin / matcher QUnit pages), **Component routing**
+  (`sap.ui.core.routing.*`) and the **view-type / XML-templating /
+  XMLComposite authoring** demos (`View.*`, `ViewTemplate.*`,
+  `XMLComposite.*`) — samples whose control is 1.71-clean but that are not app
+  views, so there is nothing to rebuild 1:1. They are now a **second scope
+  rule** (AGENTS §1): the families live in `ui5/scope-nonapp.json` with a
+  reason each, `scopeOf` returns `nonapp`, `--backlog` never offers them,
+  `api.md` still lists them `✗`, and `scope-of.mjs --sample` reports
+  `OUT_OF_SCOPE (not an app view — …)`. 39 samples moved out of scope, so the
+  honest denominator is **626 in-scope** (was 665) and `sap.ui.core` reads
+  80.0 % instead of 27.1 %. Batch planning is **depth-only** from here (lowest
+  `covered-control(n)` first, idiom-first within equal n).
+  `ControllerExtension` (`sap.ui.core.mvc.ControllerExtension`) joined the list
+  in the same pass (user decision): abap2UI5 has no frontend controller to
+  extend, so the sample carries no view idiom to rebuild. Deliberately kept
+  **in** scope: the two `BoundFilters.*` samples (`sap.ui.model.Filter`) — real
+  app views, ported the same day as apps 264/265, so **every remaining
+  uncovered control in the backlog is a HOLDOUT**: breadth is closed and batch
+  planning is depth-only.
 - [ ] **open-abap XML escaping — patched here, open upstream.**
   `CALL TRANSFORMATION id … RESULT XML` writes character data unescaped in
   open-abap-core, so any app whose model carries a `<` persists a draft its own
@@ -84,7 +107,9 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   Every green interaction is human live-check time saved.
 - [ ] **Property-gate residual limits** (documented in AGENTS §5): enum
   *values* newer than 1.71 are invisible at the attribute-name level; a
-  member relocated to a newer base class reads as that base's version. A
+  member relocated to a newer base class reads as that base's version; and a
+  **binding-info parameter** (`boundFilters` @1.146, apps 264/265) is not a
+  control member at all, so it appears in no gate — declare it by policy. A
   green property-check still does not prove a port ≤ 1.71-clean — the
   control-level `scope-of` check plus by-policy POST_171 declarations remain
   required.
@@ -125,9 +150,19 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   218 (the dropped `oSF.suggest()` popup-reopen wired as a second
   `control_by_id` follow-up), 244 (`breakpointChange` → bound Avatar
   `displaySize`, POST_171 @1.147) and 246 (the original `handleUploadPress`
-  empty-check/upload/clear instead of the tooltip-derived toast). What
-  remains of this backlog is only the residual faked-event-value audit
-  across `generated` ports.
+  empty-check/upload/clear instead of the tooltip-derived toast).
+  **Closed 2026-08-01 — the residual faked-event-value audit.** It is a script
+  now: `scripts/probes/faked-event-value-audit.mjs` compares every sample's own
+  `MessageToast.show(… + oEvent…)` against the port's wire and reports a port
+  whose text is a CONSTANT. It found **two** real cases, both fixed — app 133
+  (all four GridList toasts had dropped the item id; now
+  `{0?Selected:Unselected} item with ID {1}` and friends over
+  `${$parameters>/listItem}.getId()` / `$event.oSource.sId`) and app 100 (a
+  constant instead of *"Link 'X' was clicked"*, with the back-button branch
+  missing entirely; the navigate event now transports the navOrigin text and
+  an ABAP `COND` rebuilds the original if/else). The two remaining hits
+  (118/203) are deliberately dropped interactions, declared IMPROVISED.
+  Re-run the probe after any batch that adds toast wires.
 - [ ] **App 203 out of scope via `@ui5-experimental-since`** —
   `sap.m.OverflowToolbarTokenizer` is experimental since 1.139 with no plain
   `@since`, which the scanners misread as base-version until 2026-07-27

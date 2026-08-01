@@ -27,7 +27,11 @@ Genuinely open — not yet implemented.
 | Request | Summary | Priority |
 |---------|---------|----------|
 | [`open-abap-xml-escaping`](open-abap-xml-escaping/) | **Upstream target is [open-abap/open-abap-core](https://github.com/open-abap/open-abap-core), not abap2UI5.** `CALL TRANSFORMATION id … RESULT XML` writes element character data unescaped, so an app whose model carries a `<` (the overview's generation notes) saves a draft that `CL_IXML` cannot parse back — the next round-trip dies in an uncatchable `ASSERT` and the frontend shows `Network error: ASSERTION_FAILED`. Worked around here by a build-time patch (`web/ci/patch_open_abap_xml.mjs`) applied by both transpiled builds; delete this folder when the fix is upstream. | high — breaks every round-trip of the Pages demo's front door |
-| [`menu-item-selected-path`](menu-item-selected-path/) | A resolvable payload for the selected menu item's ancestor-text breadcrumb (`Create New Site > Official Store`), or a documented capability boundary. From b07 apps 060/061; today only the leaf `${$parameters>/item}.getText()` is transportable. **Deferred** (2026-07-20, user decision) — cosmetic (toast text) and likely resolves as a documented boundary rather than a framework change; kept for a later call. | low — deferred |
+
+_`menu-item-selected-path` left this list on 2026-07-31: it was closed by
+**option 2** of its own proposal — a documented capability boundary, measured
+rather than assumed, with the "an event arg is a full UI5 expression"
+capability as the by-product (see the Implemented table)._
 
 ## Declined / deferred (folder removed 2026-07-19)
 
@@ -41,6 +45,7 @@ Genuinely open — not yet implemented.
 
 | Request | Implemented | Upstream result |
 |---------|-------------|-----------------|
+| menu-item-selected-path | 2026-07-31 | **Closed by option 2 — documented capability boundary; no framework change.** Option 1 was tried first and *almost* worked: `EventHandlerResolver` hands the whole handler string to `BindingParser.parseExpression` (`sap/ui/core/mvc/EventHandlerResolver.js`), so a `$`-prefixed arg is a **full UI5 expression** — method calls, `isA('…')`, concat, ternaries — a capability the corpus had never used and now documented in CAPABILITIES. But measuring the live control tree (browser probe + e2e on OpenUI5 1.152) killed the breadcrumb itself: `sap.m.Menu` re-parents items through an internal `sap.m.MenuWrapper`, and the hop count to the parent `MenuItem` changes with runtime state — **two** hops while the submenu is closed, **four** once its popover exists — while an expression has no loop. The same wrapper breaks the sample's own `while (oItem instanceof MenuItem) … getParent()` loop, so upstream now toasts the leaf text as well: apps 060/061 keep `${$parameters>/item}.getText()` (their deviations became NOTEs, since that is behaviour-identical with the live sample) and the 060 e2e interaction asserts the nested-selection leaf toast to guard the boundary |
 | control-call-whitelist | 2026-07-18 | `open`, `close`, `setExpanded` added to the `CONTROL_BY_ID` whitelist (`app/webapp/core/FrontendAction.js` `CONTROL_METHODS`); ports 469/471 converted, IMPROVISED deviations dropped. 2026-07-19: the interim `control_call`/`control_call_by_id` wrapper methods were consolidated into `follow_up_action` + `cs_event-control_global`/`control_by_id` |
 | message-box-dependent-on | 2026-07-17 | `message_box_display` carries `dependenton`/`contentwidth`; the client resolves the id to a `sap.ui.core.Element` before `MessageBox.show` |
 | device-model-in-popups | 2026-07-17 | the shared `device>` model is bound on every view slot at creation — popup, popover and nested views, not just the main view |

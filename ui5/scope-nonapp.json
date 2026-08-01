@@ -1,0 +1,32 @@
+{
+  "note": "Sample families that are NOT app views. They own a control that is in scope by the 1.71 rule, but there is no view to rebuild 1:1 as an abap2UI5 port: UI5's own test infrastructure (OPA5 / gherkin / matcher demos are QUnit pages), Component routing across several views (an abap2UI5 app serves one view), and the view-type / XML-templating / XMLComposite authoring demos (they demonstrate how a view is produced, not a UI). Maintainer decision 2026-07-31: out of scope - listed in api.md for completeness (marked '✗'), never offered by 'generate-coverage.mjs --backlog', never ported. Matching is per library on the sample's entity prefix or on the sample name prefix (GROUP-nested children carry their group as the name prefix, e.g. 'ViewTemplate.tiny'). A ported sample that matches here hits the same hard scope gate as a deprecated/newer one and needs a decided entry in ui5/scope-exceptions.json.",
+  "families": [
+    {
+      "entityPrefix": "sap.ui.test.",
+      "reason": "UI5 test infrastructure - OPA5, gherkin and matcher demos are QUnit test pages, not app views"
+    },
+    {
+      "entityPrefix": "sap.ui.core.routing.",
+      "reason": "Component routing across several views/targets; an abap2UI5 app serves a single view per round-trip"
+    },
+    {
+      "lib": "sap.ui.core",
+      "namePrefix": "View.",
+      "reason": "view-type infrastructure demos (async loading, typed views, view preprocessors) - about how a view is created, no UI to rebuild"
+    },
+    {
+      "lib": "sap.ui.core",
+      "namePrefix": "ViewTemplate.",
+      "reason": "XML templating over OData annotations - metadata-driven view generation, needs an OData service and produces the view rather than being one"
+    },
+    {
+      "lib": "sap.ui.core",
+      "namePrefix": "XMLComposite.",
+      "reason": "composite-control authoring in JS (deprecated authoring pattern), not an app view"
+    },
+    {
+      "entityPrefix": "sap.ui.core.mvc.ControllerExtension",
+      "reason": "JS controller-extension lifecycle demo (user decision 2026-07-31) - abap2UI5 has no frontend controller to extend, so there is no view idiom to rebuild"
+    }
+  ]
+}

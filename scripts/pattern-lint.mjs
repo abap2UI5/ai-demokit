@@ -228,10 +228,48 @@ const RULES = [
         const cmp = new RegExp(`_bind(?:_edit)?\\(\\s*${name}\\s*\\)[^|]*?===\\s*'([^']*)'`);
         const cm = cmp.exec(content);
         if (cm && !/^-?\d+(\.\d+)?$/.test(cm[1].trim())) allNumeric = false;
+        // …and the decisive one: the bind must actually reach a NUMERIC
+        // control property. `value` is a float on a Slider and a string on an
+        // Input, so the attribute name alone says nothing — the enclosing
+        // control decides (2026-08-01: apps 142/175 bind a ZIP code and a
+        // house number, both genuinely strings, to `Input value`; apps
+        // 206/209 format decimals into a text template). Only a hit in
+        // NUMERIC_PROPS is a defect.
+        if (!boundToNumericProp(content, name)) allNumeric = false;
         if (any && allNumeric) {
           out.push({ line: lineOf(content, m.index), text: `${name} TYPE string, bound, only numeric literals assigned` });
         }
       }
+      return out;
+    },
+  },
+  {
+    id: 'relative-bind-on-root-field',
+    level: 'error',
+    doc: 'a `{FIELD}` binding whose FIELD is a root-level DATA scalar of the class (and no row column) is RELATIVE and resolves against nothing / against the row — it renders empty in the running app. Bind the root field absolutely with client->_bind( field ) — AGENTS §5, apps 207 and 142/175/195/206/209/229/243 (2026-08-01)',
+    find(content) {
+      const out = [];
+      const scalars = new Map();
+      for (const m of content.matchAll(/^ {4}DATA\s+(\w+)\s+TYPE\s+(?![^.\n]*\bTABLE\b)[^.\n]+\.$/gm)) {
+        scalars.set(m[1].toUpperCase(), m[1]);
+      }
+      if (!scalars.size) return out;
+      // names that are columns of a row structure declared in the class — a
+      // relative binding on those is the correct form inside a template
+      const rowFields = new Set();
+      for (const blk of content.matchAll(/BEGIN OF[\s\S]*?END OF/g)) {
+        for (const c of blk[0].matchAll(/^\s+(\w+)\s+TYPE\b/gm)) rowFields.add(c[1].toUpperCase());
+      }
+      content.split('\n').forEach((l, i) => {
+        if (/^\s*"/.test(l)) return;
+        for (const lit of l.matchAll(/`([^`]*)`/g)) {
+          for (const b of lit[1].matchAll(/\{([A-Z][A-Z0-9_]*)\}/g)) {
+            const up = b[1];
+            if (!scalars.has(up) || rowFields.has(up)) continue;
+            out.push({ line: i + 1, text: `{${up}} is relative, but ${scalars.get(up)} is a root field — use client->_bind( ${scalars.get(up)} )` });
+          }
+        }
+      });
       return out;
     },
   },
@@ -348,6 +386,35 @@ const RULES = [
     },
   },
 ];
+
+// control properties that really are numeric in UI5 (a string bound to one of
+// them is what UI5 2.x strict-type validation rejects). Keyed by control name
+// as written in the view builder; anything not listed is treated as a string
+// property, so the rule stays silent rather than guessing.
+const NUMERIC_PROPS = {
+  Slider: ['value', 'min', 'max', 'step'],
+  RangeSlider: ['value', 'value2', 'min', 'max', 'step'],
+  StepInput: ['value', 'min', 'max', 'step'],
+  ProgressIndicator: ['percentValue'],
+  RatingIndicator: ['value', 'maxValue', 'iconSize'],
+};
+
+// true when some `_bind( name )` of the field lands on a numeric property of
+// its enclosing control (the nearest `leaf(`/`open(` above it)
+function boundToNumericProp(content, name) {
+  for (const b of content.matchAll(new RegExp(`_bind(?:_edit)?\\(\\s*${name}\\s*\\)`, 'g'))) {
+    const from = content.lastIndexOf('\n', b.index) + 1;
+    const to = content.indexOf('\n', b.index);
+    const line = content.slice(from, to < 0 ? content.length : to);
+    const attr = /n\s*=\s*`(\w+)`/.exec(line);
+    if (!attr) continue;
+    const before = content.slice(0, from);
+    const ctrl = [...before.matchAll(/->(?:leaf|open)\(\s*(?:n\s*=\s*)?`(\w+)`/g)].pop();
+    if (!ctrl) continue;
+    if ((NUMERIC_PROPS[ctrl[1]] || []).includes(attr[1])) return true;
+  }
+  return false;
+}
 
 function grepLines(re) {
   return (content) => {

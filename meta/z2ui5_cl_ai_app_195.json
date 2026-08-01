@@ -11,7 +11,13 @@
   "status": "reviewed",
   "checked": null,
   "deviations": [
-    { "type": "NOTE", "what": "The original controller loads the shared demo products.json and the List uses binding=\"{/ProductCollection/0}\" to element-bind a single record; abap2UI5 serves one default model, so the record is flattened to top-level default-model fields (name/productid/productpicurl = products.json row 0, Notebook Basic 15 / HT-1000) the relative {NAME}/{PRODUCTID}/{PRODUCTPICURL} bindings resolve against. Same data, same leaf names, renders identically — the List's binding attribute is dropped." },
-    { "type": "NOTE", "what": "ProductPicUrl is stored as the absolute https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1000.jpg (the mock's host-relative test-resources path rewritten to the OpenUI5 host per the runtime asset-URL rule)." }
+    {
+      "type": "NOTE",
+      "what": "The original controller loads the shared demo products.json and the List uses binding=\"{/ProductCollection/0}\" to element-bind a single record; abap2UI5 serves one default model, so the record is flattened to top-level default-model fields (name/productid/productpicurl = products.json row 0, Notebook Basic 15 / HT-1000) the relative {NAME}/{PRODUCTID}/{PRODUCTPICURL} bindings resolve against. Same data, same leaf names, renders identically — the List's binding attribute is dropped. **Corrected 2026-08-01**: those bindings were written RELATIVE ({FIELD}) and a relative path on a control with no binding context resolves against nothing — the fields rendered EMPTY in the running app (measured with the e2e harness, the app-207 class). They are now bound ABSOLUTELY through client->_bind( field ), which is what a root-seeded record needs."
+    },
+    {
+      "type": "NOTE",
+      "what": "ProductPicUrl is stored as the absolute https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1000.jpg (the mock's host-relative test-resources path rewritten to the OpenUI5 host per the runtime asset-URL rule)."
+    }
   ]
 }

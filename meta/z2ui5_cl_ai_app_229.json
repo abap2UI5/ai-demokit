@@ -22,7 +22,7 @@
     },
     {
       "type": "NOTE",
-      "what": "the original oPopover.bindElement('/ProductCollection/0') binds each popover to a single record; the port seeds that record's fields (name, productpicurl) at the default-model root and the popover's relative bindings {NAME}/{PRODUCTPICURL} resolve against the root - same data, structural-diff matches on the last path segment (app 175 single-record-flatten idiom). No bind_element needed because the record is the static row 0, not a per-row selection."
+      "what": "the original oPopover.bindElement('/ProductCollection/0') binds each popover to a single record; the port seeds that record's fields (name, productpicurl) at the default-model root and the popover's relative bindings {NAME}/{PRODUCTPICURL} resolve against the root - same data, structural-diff matches on the last path segment (app 175 single-record-flatten idiom). No bind_element needed because the record is the static row 0, not a per-row selection. **Corrected 2026-08-01**: those bindings were written RELATIVE ({FIELD}) and a relative path on a control with no binding context resolves against nothing — the fields rendered EMPTY in the running app (measured with the e2e harness, the app-207 class). They are now bound ABSOLUTELY through client->_bind( field ), which is what a root-seeded record needs."
     },
     {
       "type": "NOTE",
@@ -34,7 +34,7 @@
     },
     {
       "type": "LIVE_TEST",
-      "what": "unverified in a running system: that both popovers open anchored to their button (popover_display by_id = $event.oSource.sId), that {NAME}/{PRODUCTPICURL} resolve from the root-seeded record, and that the Email/Close footer buttons close the popover (popover_close) with the Email toast firing. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the 'Show Popover' press opens the popover anchored with the root-seeded relative bindings rendering (the 'Email' action visible); the resizable variant is the identical wire."
+      "what": "partly verified 2026-08-01 (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the first popover opens anchored to its button (popover_display by_id = $event.oSource.sId) AND the root-seeded record now reaches it - the popover shows 'Notebook Basic 15' (it rendered empty until the relative bindings were made absolute the same day, see the corrected NOTE above). Still unverified in a running system: the second popover's placement, and that the Email / Close footer buttons close it (popover_close) with the Email one opening the mail client."
     }
   ]
 }

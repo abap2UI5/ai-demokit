@@ -44,18 +44,22 @@ CLASS z2ui5_cl_ai_app_206 IMPLEMENTATION.
 
     " the original binds the ObjectHeader to a single record {/ProductCollection/5};
     " that element binding is flattened onto the default model root (fields seeded
-    " in model_init with products.json row 5) so the relative bindings resolve
+    " in model_init with products.json row 5). The fields are bound ABSOLUTELY:
+    " a relative {NAME} on a control with no binding context resolves against
+    " nothing and renders empty (measured 2026-08-01, the app-207 class)
     view->open( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
         )->open( `ObjectHeader`
-            )->a( n = `icon`             v = `{PRODUCTPICURL}`
+            )->a( n = `icon`             v = client->_bind( productpicurl )
             )->a( n = `iconDensityAware` v = `false`
-            )->a( n = `iconAlt`          v = `{NAME}`
-            )->a( n = `title`            v = `{NAME}`
-            )->a( n = `number`           v = |\{ parts:[\{path:'PRICE'\},\{path:'CURRENCYCODE'\}], type: 'sap.ui.model.type.Currency', formatOptions: \{showMeasure: false\} \}|
-            )->a( n = `numberUnit`       v = `{CURRENCYCODE}`
+            )->a( n = `iconAlt`          v = client->_bind( name )
+            )->a( n = `title`            v = client->_bind( name )
+            )->a( n = `number`           v = |\{ parts:[\{path:'{ client->_bind( val = price path = abap_true ) }'\},| &&
+                                             |\{path:'{ client->_bind( val = currencycode path = abap_true ) }'\}], | &&
+                                             |type: 'sap.ui.model.type.Currency', formatOptions: \{showMeasure: false\} \}|
+            )->a( n = `numberUnit`       v = client->_bind( currencycode )
             )->a( n = `class`            v = `sapUiResponsivePadding--header`
 
             )->open( `statuses`
@@ -66,11 +70,11 @@ CLASS z2ui5_cl_ai_app_206 IMPLEMENTATION.
             )->shut(
 
             )->leaf( `ObjectAttribute`
-                )->a( n = `text` v = `{WEIGHTMEASURE} {WEIGHTUNIT}`
+                )->a( n = `text` v = |{ client->_bind( weightmeasure ) } { client->_bind( weightunit ) }|
             )->leaf( `ObjectAttribute`
-                )->a( n = `text` v = `{WIDTH} x {DEPTH} x {HEIGHT} {DIMUNIT}`
+                )->a( n = `text` v = |{ client->_bind( width ) } x { client->_bind( depth ) } x { client->_bind( height ) } { client->_bind( dimunit ) }|
             )->leaf( `ObjectAttribute`
-                )->a( n = `text` v = `{DESCRIPTION}` ).
+                )->a( n = `text` v = client->_bind( description ) ).
 
     client->view_display( view->stringify( ) ).
 
