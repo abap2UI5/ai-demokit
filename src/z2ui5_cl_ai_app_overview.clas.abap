@@ -1582,15 +1582,16 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` affected. // systemInfo and appShortcut (since UI5 1.92) are newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.92 to render them. // url on the link tiles (since UI5 1.76)` &&
                  ` is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.76 to render it.` ) ).
 
-    lv_text1 = `NOTE: the sample's style.css (.tileLayout { float: left; }) is injected through an extra core:HTML <style> leaf (app 122/124/270 precedent) - one control the archived Page.view.xml does not have` &&
-               ` (core:HTML 0 -> 1). The literal braces are escaped \{ \} because the XMLView parser reads an unescaped brace in an attribute value as a binding. // NOTE: the controller's only handler is` &&
-               ` MessageToast.show('The generic tile is pressed.') with a CONSTANT text, so every press wire is the roundtrip-free client toast (_event_client cs_event-control_global MESSAGE_TOAST.show, app 005` &&
-               ` idiom) and the app stays init-only. The four tiles the original leaves without a press handler keep none, so the 'no press event' half of the sample still demonstrates exactly that. // NOTE: the two` &&
-               ` SlideTile tiles carry backgroundImage paths that point into ANOTHER sample's folder (test-resources/sap/m/demokit/sample/GenericTileAsFeedTile/images/NewsImage1.png and NewsImage2.png); they are kept` &&
-               ` verbatim and only host-absolutized to https://sdk.openui5.org/ per the runtime asset-URL rule, so the images resolve against the OpenUI5 host exactly as in the demo kit. The sample's own`.
-    lv_text1 = lv_text1 && ` images/headerImg2.jpg is referenced by no control in the view and is therefore not seeded. // LIVE-TEST: unverified in a running system: that the Loading / Failed / Disabled tile states render their` &&
-               ` placeholder, error and disabled visuals, that the SlideTile really slides between its two tiles, and that pressing a tile WITH a handler toasts 'The generic tile is pressed.' while a Disabled or` &&
-               ` handler-less tile stays silent.`.
+    lv_text1 = `NOTE: the sample's style.css (one rule: .tileLayout floats left) is injected through an extra core:HTML style leaf (app 122/124/270 precedent) - one control the archived Page.view.xml does not have` &&
+               ` (core:HTML 0 -> 1). The literal braces of the CSS rule are escaped in the ABAP literal because the XMLView parser reads an unescaped brace in an attribute value as a binding. // NOTE: the` &&
+               ` controller's only handler is MessageToast.show('The generic tile is pressed.') with a CONSTANT text, so every press wire is the roundtrip-free client toast (_event_client cs_event-control_global` &&
+               ` MESSAGE_TOAST.show, app 005 idiom) and the app stays init-only. The four tiles the original leaves without a press handler keep none, so the 'no press event' half of the sample still demonstrates` &&
+               ` exactly that. // NOTE: the two SlideTile tiles carry backgroundImage paths that point into ANOTHER sample's folder (test-resources/sap/m/demokit/sample/GenericTileAsFeedTile/images/NewsImage1.png and` &&
+               ` NewsImage2.png); they are kept verbatim and only host-absolutized to https://sdk.openui5.org/ per the runtime asset-URL rule, so the images resolve against the OpenUI5 host exactly as in the demo`.
+    lv_text1 = lv_text1 && ` kit. The sample's own images/headerImg2.jpg is referenced by no control in the view and is therefore not seeded. // LIVE-TEST: the press leg is closed: **e2e-verified 2026-08-01**` &&
+               ` (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the tiles render with their headers and pressing the 'Status Loaded - with press event' tile toasts 'The generic tile is` &&
+               ` pressed.' through the client wire, with no round-trip. Still unverified in a running system: that the Loading / Failed / Disabled states render their placeholder, error and disabled visuals (pure` &&
+               ` paint, and the harness loads no theme CSS), and that the SlideTile really slides between its two tiles.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.GenericTile`                     name = `GenericTileStates`                   class = `z2ui5_cl_ai_app_275` path = `src/01/b15/z2ui5_cl_ai_app_275.clas.abap`
         score = 4
@@ -1777,6 +1778,17 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.m`              control = `sap.m.List`                            name = `ListFooter`                          class = `z2ui5_cl_ai_app_195` path = `src/01/b17/z2ui5_cl_ai_app_195.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: zero structural difference to the archived List.view.xml: growing / growingThreshold=4 / growingScrollToLoad=false are pure client-side paging over the bound aggregation, so the port needs no` &&
+               ` wire for them at all and stays init-only. The whole collection travels to the client exactly as in the original, where the JSONModel also holds all 123 rows. // NOTE: the List binds the shared demo` &&
+               ` mock products.json /ProductCollection (all 123 rows; Name, ProductId and ProductPicUrl - the three fields the StandardListItem binds) inlined into model_init. The mock's host-relative ProductPicUrl` &&
+               ` ('test-resources/...') is resolved to an absolute sdk.openui5.org URL per the runtime asset-URL rule. // LIVE-TEST: unverified in a running system: that the list starts at the growingThreshold of 4` &&
+               ` rows and that the 'More' trigger appends the next four (growingScrollToLoad=false means the trigger is a button, not a scroll).`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.List`                            name = `ListGrowing`                         class = `z2ui5_cl_ai_app_276` path = `src/01/b15/z2ui5_cl_ai_app_276.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = lv_text1 ) ).
 
     lv_text1 = `NOTE: the original wires a change handler on the type Select (handleSelectChange, which loops the list items calling item.setType). selectedKey and every StandardListItem type share one two-way bound` &&

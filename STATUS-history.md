@@ -72,6 +72,21 @@ of their date and are NOT kept current._
   structural-diff went from 0 to 3 undeclared findings. Keep the naming clause
   when you rewrite a deviation.
 
+## Depth port ListGrowing — a feature that needs no wire (2026-08-01)
+
+- **App 276** (`sap.m.sample.ListGrowing`, b15): `growing` /
+  `growingThreshold=4` / `growingScrollToLoad=false` are **pure client-side
+  paging** over the bound aggregation, so the port needs no wire for them and
+  stays init-only — **zero structural difference** to the archived view. The
+  whole 123-row collection travels to the client exactly as the original's
+  JSONModel holds it.
+- One lesson from the same round (AGENTS §10): a sidecar text ends up
+  **inside generated ABAP** — `generate-overview.mjs` inlines every deviation
+  `what` into the overview app's literals, so app 275's NOTE quoting a CSS
+  rule with raw braces next to the word "style" made pattern-lint's
+  `unescaped-brace-in-style-content` fire on the *generated* file. Describe
+  such things in words instead.
+
 ## Depth port GenericTileStates (2026-08-01)
 
 - **App 275** (`sap.m.sample.GenericTileStates`, b15): the tile-state matrix —

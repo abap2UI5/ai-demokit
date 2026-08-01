@@ -13,7 +13,7 @@
   "deviations": [
     {
       "type": "NOTE",
-      "what": "the sample's style.css (.tileLayout { float: left; }) is injected through an extra core:HTML <style> leaf (app 122/124/270 precedent) - one control the archived Page.view.xml does not have (core:HTML 0 -> 1). The literal braces are escaped \\{ \\} because the XMLView parser reads an unescaped brace in an attribute value as a binding."
+      "what": "the sample's style.css (one rule: .tileLayout floats left) is injected through an extra core:HTML style leaf (app 122/124/270 precedent) - one control the archived Page.view.xml does not have (core:HTML 0 -> 1). The literal braces of the CSS rule are escaped in the ABAP literal because the XMLView parser reads an unescaped brace in an attribute value as a binding."
     },
     {
       "type": "NOTE",
@@ -25,7 +25,7 @@
     },
     {
       "type": "LIVE_TEST",
-      "what": "unverified in a running system: that the Loading / Failed / Disabled tile states render their placeholder, error and disabled visuals, that the SlideTile really slides between its two tiles, and that pressing a tile WITH a handler toasts 'The generic tile is pressed.' while a Disabled or handler-less tile stays silent."
+      "what": "the press leg is closed: **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the tiles render with their headers and pressing the 'Status Loaded - with press event' tile toasts 'The generic tile is pressed.' through the client wire, with no round-trip. Still unverified in a running system: that the Loading / Failed / Disabled states render their placeholder, error and disabled visuals (pure paint, and the harness loads no theme CSS), and that the SlideTile really slides between its two tiles."
     }
   ]
 }

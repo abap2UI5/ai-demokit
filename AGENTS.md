@@ -1200,6 +1200,12 @@ How to record it:
   binding **template** of an aggregation sits in `Element.registry` next to
   the real rows with no binding context, so filter on `getBindingContext()`
   before asserting a property over "all items" (app 207).
+- **A sidecar text ends up inside generated ABAP — keep raw braces out of
+  it.** `generate-overview.mjs` inlines every deviation `what` into the
+  overview app's literals, so a NOTE quoting a CSS rule with `{ … }` next to
+  the word `<style>` made pattern-lint's `unescaped-brace-in-style-content`
+  fire on the *generated* file, not on any port (app 275, 2026-08-01).
+  Describe such things in words ("one rule: .tileLayout floats left").
 - **An event parameter that is an ARRAY arrives as JSON, not as a joined
   string.** `${$parameters>/fieldGroupIds}` reached `on_event` as
   `["Billing Information"]`, brackets and quotes included. Index it in the

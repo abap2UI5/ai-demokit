@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_ai_app_276",
+  "sample": "sap.m.sample.ListGrowing",
+  "entity": "sap.m.List",
+  "file": "src/01/b15/z2ui5_cl_ai_app_276.clas.abap",
+  "batch": "b15",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "zero structural difference to the archived List.view.xml: growing / growingThreshold=4 / growingScrollToLoad=false are pure client-side paging over the bound aggregation, so the port needs no wire for them at all and stays init-only. The whole collection travels to the client exactly as in the original, where the JSONModel also holds all 123 rows."
+    },
+    {
+      "type": "NOTE",
+      "what": "the List binds the shared demo mock products.json /ProductCollection (all 123 rows; Name, ProductId and ProductPicUrl - the three fields the StandardListItem binds) inlined into model_init. The mock's host-relative ProductPicUrl ('test-resources/...') is resolved to an absolute sdk.openui5.org URL per the runtime asset-URL rule."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "unverified in a running system: that the list starts at the growingThreshold of 4 rows and that the 'More' trigger appends the next four (growingScrollToLoad=false means the trigger is a button, not a scroll)."
+    }
+  ]
+}

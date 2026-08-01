@@ -1048,6 +1048,16 @@ const INTERACTIONS = {
     await expect(page.locator('.sapMMessageToast').last(), 'the client-composed press toast')
       .toContainText('The generic tile is pressed.');
   },
+  // client-side growing: the list starts at the threshold and the More
+  // trigger appends the next page — no backend wire at all
+  z2ui5_cl_ai_app_276: async (page, expect) => {
+    const rows = page.locator('.sapMLIB.sapMSLI');
+    await expect(rows.first(), 'the first list row').toBeVisibleEnabled();
+    const before = await rows.count();
+    if (before !== 4) throw new Error(`the growingThreshold should show 4 rows, got ${before}`);
+    await page.locator('.sapMGrowingListTrigger').first().click();
+    await waitForCount(page, '.sapMLIB.sapMSLI', 8, 'the More trigger did not append the next page');
+  },
   z2ui5_cl_ai_app_142: (page) => formFieldValues(page),
   z2ui5_cl_ai_app_175: (page) => formFieldValues(page),
   // Grid element-binding to an array path + index-relative child bindings
@@ -1056,6 +1066,16 @@ const INTERACTIONS = {
       .toContainText('This Grid Layout sample application demonstrates');
   },
 };
+
+// poll until a selector reaches at least n matches
+async function waitForCount(page, selector, n, msg) {
+  const deadline = Date.now() + 10000;
+  for (;;) {
+    if ((await page.locator(selector).count()) >= n) return;
+    if (Date.now() > deadline) throw new Error(msg);
+    await new Promise((r) => setTimeout(r, 250));
+  }
+}
 
 // the supplier record seeded at the model root must reach the form Inputs
 async function formFieldValues(page) {
