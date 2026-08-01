@@ -17,7 +17,7 @@ TRAINING.md; for what abap2UI5 can express see CAPABILITIES.md._
 |---|---|
 | Ports | **276** sidecars in `meta/` (src/01: 163 · src/02: 65 · src/03: 18 · src/04: 19 · src/05: 11) |
 | Status ladder | 79 `generated` · 146 `reviewed` · 51 `checked` (live-verified) |
-| Deviations | 4 DROPPED_171 · 131 IMPROVISED · 41 LIVE_TEST · 388 NOTE · 110 POST_171 |
+| Deviations | 4 DROPPED_171 · 131 IMPROVISED · 41 LIVE_TEST · 390 NOTE · 110 POST_171 |
 | Open LIVE_TESTs | **40 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
 | Declared gate skips | 7 structural-diff · 1 render-smoke (each re-verified per run — a stale skip FAILS) |
 | Out-of-scope ported samples | `z2ui5_cl_ai_app_121 (sap.m.sample.UploadSet — deprecated)` · `z2ui5_cl_ai_app_136 (sap.f.sample.SidePanelSingle — control @since 1.107)` · `z2ui5_cl_ai_app_141 (sap.ui.core.sample.InvisibleMessage — control @since 1.78)` · `z2ui5_cl_ai_app_165 (sap.f.sample.ProductSwitchNavigation — control @since 1.72)` · `z2ui5_cl_ai_app_166 (sap.f.sample.SemanticPage — deprecated)` · `z2ui5_cl_ai_app_203 (sap.m.sample.OverflowToolbarTokenizer — control @since 1.139)` — all decided KEEP permanently 2026-07-30 (per-app rationale in ui5/scope-exceptions.json, revertible); the source-backed scope gate stays hard for NEW undecided entries |
@@ -138,9 +138,19 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   218 (the dropped `oSF.suggest()` popup-reopen wired as a second
   `control_by_id` follow-up), 244 (`breakpointChange` → bound Avatar
   `displaySize`, POST_171 @1.147) and 246 (the original `handleUploadPress`
-  empty-check/upload/clear instead of the tooltip-derived toast). What
-  remains of this backlog is only the residual faked-event-value audit
-  across `generated` ports.
+  empty-check/upload/clear instead of the tooltip-derived toast).
+  **Closed 2026-08-01 — the residual faked-event-value audit.** It is a script
+  now: `scripts/probes/faked-event-value-audit.mjs` compares every sample's own
+  `MessageToast.show(… + oEvent…)` against the port's wire and reports a port
+  whose text is a CONSTANT. It found **two** real cases, both fixed — app 133
+  (all four GridList toasts had dropped the item id; now
+  `{0?Selected:Unselected} item with ID {1}` and friends over
+  `${$parameters>/listItem}.getId()` / `$event.oSource.sId`) and app 100 (a
+  constant instead of *"Link 'X' was clicked"*, with the back-button branch
+  missing entirely; the navigate event now transports the navOrigin text and
+  an ABAP `COND` rebuilds the original if/else). The two remaining hits
+  (118/203) are deliberately dropped interactions, declared IMPROVISED.
+  Re-run the probe after any batch that adds toast wires.
 - [ ] **App 203 out of scope via `@ui5-experimental-since`** —
   `sap.m.OverflowToolbarTokenizer` is experimental since 1.139 with no plain
   `@since`, which the scanners misread as base-version until 2026-07-27

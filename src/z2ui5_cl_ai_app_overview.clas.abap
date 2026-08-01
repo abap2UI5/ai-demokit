@@ -800,11 +800,15 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` affected item's runtime id). mode/headerText/selectedKey carry bindings the original set statically. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): selecting` &&
                ` 'MultiSelect' round-trips the two-way bound mode and the list renders checkboxes. // NOTE: The 11 product rows are inlined from the sample's model/data.json. Fields the original JSON omits are given` &&
                ` their UI5 defaults so the bound enum-ish properties stay valid: GridListItem.type -> 'Inactive' (8 rows), highlight/Status -> 'None' (5 rows). Both render identically to the original's undefined` &&
-               ` values; structural-diff compares only binding paths, not data.`.
+               ` values; structural-diff compares only binding paths, not data. // NOTE: the four MessageToast handlers are reproduced as roundtrip-free CLIENT-COMPOSED toasts (_event_client cs_event-control_global`.
+    lv_text1 = lv_text1 && ` MESSAGE_TOAST.show with a {N} template): onSelectionChange as '{0?Selected:Unselected} item with ID {1}' over ${$parameters>/selected} and ${$parameters>/listItem}.getId(), onDelete as 'Delete item` &&
+               ` with ID {0}', and onDetailPress/onPress as 'Request details for item with ID {0}' / 'Pressed item with ID {0}' over $event.oSource.sId. **Corrected 2026-08-01** (faked-event-value audit): all four` &&
+               ` used to toast a CONSTANT ('Selection changed', 'Delete item', 'Request details', 'Pressed item') and dropped the item identity the original shows. The ids are the runtime UI5 ids, exactly as in the` &&
+               ` original.`.
     result = VALUE #( BASE result
       ( module = `sap.f`              control = `sap.f.GridList`                        name = `GridListModes`                       class = `z2ui5_cl_ai_app_133` path = `src/04/b02/z2ui5_cl_ai_app_133.clas.abap`
         score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.60`
         notes = lv_text1 ) ).
 
@@ -2419,7 +2423,10 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` without an elementType (Generic pages, and the Address/Slogan rows) get the QuickViewGroupElementType default 'text', pages without displayShape (Generic) get the AvatarShape default 'Circle', and`.
     lv_text1 = lv_text1 && ` every element row seeds target '_blank' (the QuickViewGroupElement.target default) - absent JSON properties must not serialize as empty strings, which would override the UI5 defaults. The` &&
                ` EmployeeData icon (a test-resources image) points at the OpenUI5 host. // POST-1.71: sap.m.Avatar (control since 1.73) is kept 1:1 as the page icon via the QuickViewPage avatar aggregation, which` &&
-               ` itself is since UI5 1.92 - so the app needs UI5 >= 1.92 to render the avatar. // POST-1.71: sap.m.Button.ariaHasPopup (since 1.84) is kept 1:1 on the four trigger buttons; needs UI5 >= 1.84.`.
+               ` itself is since UI5 1.92 - so the app needs UI5 >= 1.92 to render the avatar. // POST-1.71: sap.m.Button.ariaHasPopup (since 1.84) is kept 1:1 on the four trigger buttons; needs UI5 >= 1.84. // NOTE:` &&
+               ` onNavigate names the clicked link in its toast ("Link '<text>' was clicked") and falls back to 'Back button was clicked' when the event carries no navOrigin. **Corrected 2026-08-01**` &&
+               ` (faked-event-value audit): the port used to toast the constant 'A QuickView link was clicked' and dropped both the link identity and the back-button branch. The navigate event now transports` &&
+               ` ${$parameters>/navOrigin} ? ${$parameters>/navOrigin}.getText() : '' and the ABAP COND rebuilds the original's if/else.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.QuickView`                       name = `QuickView`                           class = `z2ui5_cl_ai_app_100` path = `src/01/b12/z2ui5_cl_ai_app_100.clas.abap`
         score = 5

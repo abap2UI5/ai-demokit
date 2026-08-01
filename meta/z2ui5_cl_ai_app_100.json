@@ -30,6 +30,10 @@
     {
       "type": "POST_171",
       "what": "sap.m.Button.ariaHasPopup (since 1.84) is kept 1:1 on the four trigger buttons; needs UI5 >= 1.84."
+    },
+    {
+      "type": "NOTE",
+      "what": "onNavigate names the clicked link in its toast (\"Link '<text>' was clicked\") and falls back to 'Back button was clicked' when the event carries no navOrigin. **Corrected 2026-08-01** (faked-event-value audit): the port used to toast the constant 'A QuickView link was clicked' and dropped both the link identity and the back-button branch. The navigate event now transports ${$parameters>/navOrigin} ? ${$parameters>/navOrigin}.getText() : '' and the ABAP COND rebuilds the original's if/else."
     }
   ]
 }

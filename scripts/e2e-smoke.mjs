@@ -1128,6 +1128,15 @@ const INTERACTIONS = {
     await expect(page.locator('.sapMMessageToast').last(), 'the client-composed colorSelect toast')
       .toContainText('Color Selected: value - gold');
   },
+  // faked-event-value fixes (2026-08-01): the toast must carry the item's
+  // own id, not a constant
+  z2ui5_cl_ai_app_133: async (page, expect) => {
+    const item = page.locator('.sapFGridListItem, .sapMLIB').first();
+    await expect(item, 'the first grid list item').toBeVisibleEnabled();
+    await item.click();
+    await expect(page.locator('.sapMMessageToast').last(), 'the press toast naming the item id')
+      .toContainText('Pressed item with ID');
+  },
   z2ui5_cl_ai_app_142: (page) => formFieldValues(page),
   z2ui5_cl_ai_app_175: (page) => formFieldValues(page),
   // Grid element-binding to an array path + index-relative child bindings

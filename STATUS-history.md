@@ -72,6 +72,31 @@ of their date and are NOT kept current._
   structural-diff went from 0 to 3 undeclared findings. Keep the naming clause
   when you rewrite a deviation.
 
+## The faked-event-value audit is closed — and it was a script (2026-08-01)
+
+- The last open item of the review-sweep backlog turned into
+  `scripts/probes/faked-event-value-audit.mjs`: for every port it reads the
+  sample's own controller, keeps the `MessageToast.show(… + oEvent…)` calls
+  that compose their text from event data, and reports the port if its own
+  wire carries a **constant**. Four hits, **two real**:
+  - **App 133** (`GridListModes`) toasted *"Selection changed"*, *"Delete
+    item"*, *"Request details"* and *"Pressed item"* — four constants where
+    the original names the item. Now client-composed:
+    `{0?Selected:Unselected} item with ID {1}` over
+    `${$parameters>/selected}` + `${$parameters>/listItem}.getId()`, and
+    `… with ID {0}` over `$event.oSource.sId` for the other three.
+  - **App 100** (`QuickView`) toasted *"A QuickView link was clicked"*,
+    dropping both the link identity and the back-button branch. The navigate
+    event now transports
+    `${$parameters>/navOrigin} ? ${$parameters>/navOrigin}.getText() : ''`
+    and an ABAP `COND` rebuilds the original's if/else.
+  - The other two (118 `CardsLayout`, 203 `OverflowToolbarTokenizer`) are
+    deliberately dropped interactions, already declared IMPROVISED — the probe
+    prints them so a reader can re-check the decision, not fix it blindly.
+- Neither defect was visible to any gate: structural-diff compares attribute
+  names, render-smoke mocks the model, property-check reads member names. The
+  same blind spot as the relative-binding class found this morning.
+
 ## The keyboard reaches what the mouse cannot (2026-08-01)
 
 - The two ports written off in the morning round are covered after all, and
