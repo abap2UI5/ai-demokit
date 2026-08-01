@@ -3,7 +3,8 @@
  * e2e-build — assemble the transpiled abap2UI5 backend that serves the PORTS.
  *
  * render-smoke reconstructs a view statically; this build runs the REAL app:
- * the abap2UI5 framework + the ai-demokit ports (+ the z2ui5_cl_ai_xml builder)
+ * the abap2UI5 framework (which includes the z2ui5_cl_ai_xml builder in
+ * src/02/) + the ai-demokit ports
  * are transpiled to JS by @abaplint/transpiler and served by the framework's
  * express shim (node/srv/express.mjs -> ZCL_SICF -> z2ui5_cl_http_handler),
  * i.e. the same open-abap runtime the framework's own e2e uses. An app is then
@@ -54,10 +55,14 @@ function main() {
   fs.mkdirSync(downport, { recursive: true });
 
   // 1. framework src (modern copy) + the express shim handler + transpile setup
+  //    src/99 is historical only (see the framework's AGENTS.md) - nothing in
+  //    the served backend uses it, so it is dropped from the copy
   sh(`cp -r src/. ${downport}/`);
+  sh(`rm -rf ${downport}/99`);
   sh(`cp node/srv/*.abap ${downport}/`);
 
-  // 2. ai-demokit ports + the z2ui5_cl_ai_xml builder (both .abap and .clas.xml)
+  // 2. ai-demokit ports (both .abap and .clas.xml) — the z2ui5_cl_ai_xml
+  //    builder ships with the framework src (abap2UI5 src/02/), copied in step 1
   let ports = 0;
   for (const f of walk(path.join(AIDEMOKIT, 'src'))) {
     if (!/\.(abap|xml)$/.test(f)) continue;
