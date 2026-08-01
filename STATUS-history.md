@@ -72,6 +72,20 @@ of their date and are NOT kept current._
   structural-diff went from 0 to 3 undeclared findings. Keep the naming clause
   when you rewrite a deviation.
 
+## Depth port DialogFullScreen — flags written only when set (2026-08-01)
+
+- **App 274** (`sap.m.sample.DialogFullScreen`, b15): three controller-built
+  Dialogs over the shared products mock (123 rows, `Name` + `Quantity`), again
+  through one builder method — `popup_products_display( resizable draggable
+  sized begin_ok )`. `showFullScreenButton` is **@since 1.149** and is the
+  very property the sample demonstrates, so it stays and is declared
+  `POST_171` (fidelity-first).
+- Same discipline as 273, now with four flags: **each attribute is written
+  only when the original passes it.** The plain dialog gets no
+  `resizable="false"` and no `contentWidth` — a default written out explicitly
+  is a fidelity loss no gate can see, because structural-diff compares
+  attribute *names* and the name would match.
+
 ## Depth port DialogMessage — five controller Dialogs, one builder (2026-08-01)
 
 - **App 273** (`sap.m.sample.DialogMessage`, b15): five press handlers that

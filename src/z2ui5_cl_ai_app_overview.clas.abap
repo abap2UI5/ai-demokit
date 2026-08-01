@@ -1358,6 +1358,26 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` dialogs, roundtrip-free live-enable expression, popup_close paths`
         notes = lv_text1 ) ).
 
+    lv_text1 = `POST-1.71: sap.m.Dialog.showFullScreenButton is @since 1.149 - it is the very property this sample demonstrates, so dropping it would drop the sample. Kept 1:1 (fidelity-first, the corpus-wide` &&
+               ` POST_171 policy); the app needs UI5 >= 1.149 to show the toggle, everything else renders on 1.71. // NOTE: the original builds its three Dialogs imperatively in the controller (new` &&
+               ` Dialog({...}).open(), each cached in a controller field and added as a view dependent); the port expresses each as a core:FragmentDefinition popup shown via client->popup_display on the button press` &&
+               ` (app 019/273 precedent). Every fragment control is therefore EXTRA vs the archived V.view.xml, which holds only the three trigger Buttons: Dialog, List, StandardListItem and the dialog's own OK/Close` &&
+               ` Buttons (Button 3 -> 5, Dialog/List/StandardListItem 0 -> 1 per open dialog). // NOTE: the three dialogs differ only in resizable / draggable / the fixed contentWidth+contentHeight and in the first` &&
+               ` one's extra Emphasized OK begin button, so the port builds them through one popup_products_display( resizable draggable sized begin_ok ) method. Each flag is written ONLY when the original passes it`.
+    lv_text1 = lv_text1 && ` - the plain dialog gets no resizable='false' and no contentWidth, so no attribute the original never sets is added. // NOTE: the List binds the shared demo mock products.json /ProductCollection (all` &&
+               ` 123 rows, Name + Quantity - the only two fields the StandardListItem binds) inlined into model_init; the original loads the same file through a JSONModel. Both dialog buttons (OK and Close) close the` &&
+               ` dialog client-side via _event_client( cs_event-popup_close ), the direct form of the original's this.oDialog.close(). // LIVE-TEST: unverified in a running system: that each of the three buttons` &&
+               ` opens its dialog with the 123-row product list, that the fullscreen toggle appears (needs UI5 >= 1.149) and that resizable/draggable behave as in the original; also that both footer buttons close the` &&
+               ` dialog without a round-trip.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.Dialog`                          name = `DialogFullScreen`                    class = `z2ui5_cl_ai_app_274` path = `src/01/b15/z2ui5_cl_ai_app_274.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `sap.m.Dialog.showFullScreenButton is @since 1.149 - it is the very property this sample demonstrates, so dropping it would drop the sample. Kept 1:1 (fidelity-first, the corpus-wide POST_171 policy);` &&
+                 ` the app needs UI5 >= 1.149 to show the toggle, everything else renders on 1.71.` ) ).
+
     lv_text1 = `NOTE: the original builds its five Message Dialogs imperatively in the controller (new Dialog({type: Message, title, state, content: new Text(...), beginButton: new Button(...)}).open()); the port` &&
                ` expresses each as a core:FragmentDefinition popup shown via client->popup_display on the button press event - the CAPABILITIES.md 1:1 path for controller-built Dialogs (app 019 precedent). Every` &&
                ` fragment control is therefore EXTRA vs the archived V.view.xml, which holds only the five trigger Buttons: Dialog, Text and the dialog's own OK Button (Button 5 -> 6, Dialog 0 -> 1, Text 0 -> 1 per` &&

@@ -968,6 +968,38 @@ const INTERACTIONS = {
     await open('Message Dialog', "That's OpenUI5.");
     await open('Message Dialog (Error)', 'The only error you can make is to not even try.');
   },
+  // ShellBar SearchManager: liveChange composes its toast on the client
+  // ('{0} liveChange event value is: {1}'), typing also drives the backend
+  // suggest round-trip
+  z2ui5_cl_ai_app_218: async (page, expect) => {
+    const search = page.locator('.sapMSF input, .sapMSFI').first();
+    await expect(search, 'the ShellBar search field').toBeVisibleEnabled();
+    await search.click();
+    await search.type('Pro', { delay: 60 });
+    await expect(page.locator('.sapMMessageToast').last(), 'the client-composed liveChange toast')
+      .toContainText('liveChange event value is: Pro');
+  },
+  // ColorPalette swatches have a zero-height box headless, so the swatch gets
+  // the DOM click directly (the 268/270 workaround, AGENTS §10)
+  z2ui5_cl_ai_app_008: async (page, expect) => {
+    const swatch = page.locator('.sapMColorPaletteSquare').first();
+    if (!(await swatch.count())) throw new Error('the ColorPalette rendered no swatches');
+    await swatch.dispatchEvent('click');
+    await expect(page.locator('.sapMMessageToast').last(), 'the client-composed colorSelect toast')
+      .toContainText('Color Selected: value -');
+  },
+  // three controller-built Dialogs with the shared product list; the two
+  // footer buttons close client-side (popup_close)
+  z2ui5_cl_ai_app_274: async (page, expect) => {
+    const btn = page.getByRole('button', { name: 'Dialog with Fullscreen Toggle', exact: true }).first();
+    await expect(btn, 'the plain-dialog button').toBeVisibleEnabled();
+    await btn.click();
+    const dlg = page.locator('.sapMDialog');
+    await expect(dlg, 'the dialog title').toContainText('Available Products');
+    await expect(dlg, 'the bound product list inside the dialog').toContainText('Notebook Basic 15');
+    await dlg.getByRole('button', { name: 'Close', exact: true }).first().click();
+    await expect(page.locator('.sapMDialog'), 'the dialog after popup_close').toHaveCountBelow(1);
+  },
   z2ui5_cl_ai_app_142: (page) => formFieldValues(page),
   z2ui5_cl_ai_app_175: (page) => formFieldValues(page),
   // Grid element-binding to an array path + index-relative child bindings

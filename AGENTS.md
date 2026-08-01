@@ -1159,7 +1159,13 @@ How to record it:
   first, so the run dies with no output), and **never wait on a build with
   `pgrep -f e2e-build`** — the waiting shell's own command line contains that
   string, so it matches itself and waits forever. Grep the build log for
-  `e2e-build: done` instead.
+  `e2e-build: done` instead. **The same self-match kills your own shell**:
+  `ps … | grep '[e]2e-build' | xargs kill` in a command line that *also*
+  contains the plain string (e.g. a following `nohup … e2e-build.mjs`) matches
+  that very shell — the bracket trick only hides the grep's own pattern, not
+  the rest of your command. Exit code 144 with no output is the symptom
+  (2026-08-01, after the identical `pkill -f express.mjs` case). Kill by the
+  PID you noted in a SEPARATE, earlier command.
 - **A control with no theme CSS has a zero-size box, and playwright will not
   click or focus it** — the e2e harness serves the UI5 *sources*, not the
   themes, so `sapUiIcon` (an Input's `…-vhi` value-help icon, app 268) and
