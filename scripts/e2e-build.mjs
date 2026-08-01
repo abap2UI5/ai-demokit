@@ -55,7 +55,10 @@ function main() {
   fs.mkdirSync(downport, { recursive: true });
 
   // 1. framework src (modern copy) + the express shim handler + transpile setup
+  //    src/99 is historical only (see the framework's AGENTS.md) - nothing in
+  //    the served backend uses it, so it is dropped from the copy
   sh(`cp -r src/. ${downport}/`);
+  sh(`rm -rf ${downport}/99`);
   sh(`cp node/srv/*.abap ${downport}/`);
 
   // 2. ai-demokit ports (both .abap and .clas.xml) — the z2ui5_cl_ai_xml
