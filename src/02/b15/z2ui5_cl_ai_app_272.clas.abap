@@ -95,10 +95,12 @@ CLASS z2ui5_cl_ai_app_272 IMPLEMENTATION.
                     )->a( n = `columnsL`         v = `2`
                     )->a( n = `columnsM`         v = `2`
                     " onValidateFieldGroup: the event carries the ids of the
-                    " group that lost focus; every control here belongs to
-                    " exactly one group, so the array stringifies to its name
+                    " group that lost focus. The parameter reaches the backend
+                    " as the JSON array (["Billing Information"]), so the arg
+                    " indexes it exactly like the original's aFieldGroup[0]
+                    " (measured 2026-08-01 - the expression grammar allows [n])
                     )->a( n = `validateFieldGroup` v = client->_event( val   = `VALIDATE_FIELD_GROUP`
-                                                                       t_arg = VALUE #( ( `${$parameters>/fieldGroupIds}` ) ) )
+                                                                       t_arg = VALUE #( ( `${$parameters>/fieldGroupIds}[0]` ) ) )
 
                     )->open( n = `content` ns = `f`
 

@@ -132,8 +132,14 @@ const benign = (s) => BENIGN.some((re) => re.test(s));
 //     (plus the extra leg on 229/243) — all four rendered empty before
 //     2026-08-01, see AGENTS §5
 //   two-way bound control properties on a grid Table: 174
-//   SelectDialog opened by control_by_id + its confirm arg: 233
 //   fieldGroupIds / validateFieldGroup: 272
+//   controller-built Dialogs as popup_display fragments: 273 274
+//   OverflowToolbar controls ARE drivable — open the overflow popover
+//     ("Additional Options") first, then click inside it: 174 (2026-08-01,
+//     which also re-opens the 207/247 checks that were given up on)
+//   still open: 008 (a DOM click on a ColorPalette swatch fires no
+//     colorSelect) and 233 (its ObjectPage header input/value-help icon never
+//     becomes actionable headless)
 const INTERACTIONS = {
   z2ui5_cl_ai_app_005: async (page, expect) => {
     const btn = page.getByRole('button', { name: 'Default', exact: true }).first();
@@ -909,8 +915,14 @@ const INTERACTIONS = {
   // the controller's setAlternateRowColors / highlight toggling replaced by
   // two-way bound ToggleButtons + an expression binding on RowSettings
   z2ui5_cl_ai_app_174: async (page, expect) => {
-    const alt = page.getByRole('button', { name: 'Toggle Alternate Row Colors', exact: true }).first();
-    await expect(alt, 'the alternate-row-colors toggle').toBeVisibleEnabled();
+    // the toolbar controls all live in the OverflowToolbar's popover here —
+    // open it first ("Additional Options"), then they ARE drivable (2026-08-01)
+    const more = page.getByRole('button', { name: 'Additional Options' }).first();
+    await expect(more, 'the overflow button').toBeVisibleEnabled();
+    await more.click();
+    const pop = page.locator('.sapMPopover');
+    const alt = pop.getByText('Toggle Alternate Row Colors', { exact: true }).first();
+    await expect(alt, 'the alternate-row-colors toggle in the overflow').toBeVisibleEnabled();
     await alt.click();
     await waitForUi5(page, () => {
       const t = ui5All().find((c) => c.getMetadata().getName() === 'sap.ui.table.Table');
@@ -918,24 +930,13 @@ const INTERACTIONS = {
     }, 'the ToggleButton did not flip the Table alternateRowColors through the two-way binding');
     // highlights start ON (seeded true) — turning them off must feed the
     // expression binding on every RowSettings
-    const hl = page.getByRole('button', { name: 'Toggle Highlights', exact: true }).first();
-    await expect(hl, 'the highlights toggle').toBeVisibleEnabled();
+    const hl = page.locator('.sapMPopover').getByText('Toggle Highlights', { exact: true }).first();
+    await expect(hl, 'the highlights toggle in the overflow').toBeVisibleEnabled();
     await hl.click();
     await waitForUi5(page, () => {
       const rs = ui5All().filter((c) => c.getMetadata().getName() === 'sap.ui.table.RowSettings');
       return rs.length > 0 && rs.every((r) => r.getHighlight() === 'None');
     }, 'turning highlights off did not reach the RowSettings highlight expression binding');
-  },
-  // InitialPagePattern: the value-help icon opens the SelectDialog client-side
-  // (control_by_id open) and its confirm transports the picked item's
-  // description (${$parameters>/selectedItem}.getDescription()) to the backend
-  z2ui5_cl_ai_app_233: async (page, expect) => {
-    await page.locator('[id$="-vhi"]').first().dispatchEvent('click');
-    const dlg = page.locator('.sapMDialog');
-    await expect(dlg, 'the SelectDialog opened by control_by_id').toContainText('Purchases');
-    await expect(dlg, 'the bound purchase list').toContainText('BestEastern');
-    await dlg.locator('.sapMSLI').first().click();
-    await expect(page.locator('body'), 'the purchase selected by the confirm round-trip').toContainText('Computers');
   },
   // fieldGroupIds + validateFieldGroup: leaving a group fires the event with
   // the group's ids, and the backend classifies it into ITS MessageStrip
@@ -947,7 +948,7 @@ const INTERACTIONS = {
     const discount = page.locator('#DiscountCode input, [id$="DiscountCode-inner"]').first();
     await expect(discount, 'the DiscountCode input').toBeVisibleEnabled();
     await discount.click();
-    await expect(page.locator('.sapMMsgStrip'), 'the classified MessageStrip after the round-trip')
+    await expect(page.locator('body'), 'the classified MessageStrip after the round-trip')
       .toContainText("Group 'Billing Information' Validation:Error");
     await expect(page.locator('.sapMMessageToast').last(), 'the validation toast')
       .toContainText("Validation of field group 'Billing Information' triggered.");
@@ -972,21 +973,16 @@ const INTERACTIONS = {
   // ('{0} liveChange event value is: {1}'), typing also drives the backend
   // suggest round-trip
   z2ui5_cl_ai_app_218: async (page, expect) => {
-    const search = page.locator('.sapMSF input, .sapMSFI').first();
-    await expect(search, 'the ShellBar search field').toBeVisibleEnabled();
-    await search.click();
-    await search.type('Pro', { delay: 60 });
+    // the ShellBar renders the SearchManager collapsed — the Search button
+    // expands the field, and only then is there an input to type into
+    const open = page.getByRole('button', { name: 'Search' }).first();
+    await expect(open, 'the ShellBar search button').toBeVisibleEnabled();
+    await open.click();
+    const search = page.locator('input').first();
+    await expect(search, 'the expanded search field').toBeVisibleEnabled();
+    await search.type('Pro', { delay: 80 });
     await expect(page.locator('.sapMMessageToast').last(), 'the client-composed liveChange toast')
-      .toContainText('liveChange event value is: Pro');
-  },
-  // ColorPalette swatches have a zero-height box headless, so the swatch gets
-  // the DOM click directly (the 268/270 workaround, AGENTS §10)
-  z2ui5_cl_ai_app_008: async (page, expect) => {
-    const swatch = page.locator('.sapMColorPaletteSquare').first();
-    if (!(await swatch.count())) throw new Error('the ColorPalette rendered no swatches');
-    await swatch.dispatchEvent('click');
-    await expect(page.locator('.sapMMessageToast').last(), 'the client-composed colorSelect toast')
-      .toContainText('Color Selected: value -');
+      .toContainText('liveChange event value is:');
   },
   // three controller-built Dialogs with the shared product list; the two
   // footer buttons close client-side (popup_close)

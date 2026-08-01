@@ -13,7 +13,7 @@
   "deviations": [
     {
       "type": "NOTE",
-      "what": "The sample's own idiom is sap.ui.core.Control's fieldGroupIds plus the SimpleForm's validateFieldGroup event, both passed through 1:1: every Input/Select/ComboBox keeps its fieldGroupIds ('Billing Information' / 'Discount Code' / 'Credit Card' / 'Online') and the form's validateFieldGroup is wired to a backend event carrying ${$parameters>/fieldGroupIds}. The original reads aFieldGroup[0]; here every control belongs to exactly one group, so the single-element array stringifies to the group name and the ABAP CASE resolves it - the controller's mMessageMapping table (group -> strip id + type)."
+      "what": "The sample's own idiom is sap.ui.core.Control's fieldGroupIds plus the SimpleForm's validateFieldGroup event, both passed through 1:1: every Input/Select/ComboBox keeps its fieldGroupIds ('Billing Information' / 'Discount Code' / 'Credit Card' / 'Online') and the form's validateFieldGroup is wired to a backend event carrying ${$parameters>/fieldGroupIds}. The parameter reaches the backend as the JSON array ([\"Billing Information\"], measured 2026-08-01), so the arg indexes it - ${$parameters>/fieldGroupIds}[0], literally the original's aFieldGroup[0] - and the ABAP CASE is the controller's mMessageMapping table (group -> strip id + type)."
     },
     {
       "type": "NOTE",

@@ -3210,18 +3210,18 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` scripts/e2e-smoke.mjs): the toggle round-trip turns the bound controls busy (sapUiLocalBusy present after the click).` ) ).
 
     lv_text1 = `NOTE: The sample's own idiom is sap.ui.core.Control's fieldGroupIds plus the SimpleForm's validateFieldGroup event, both passed through 1:1: every Input/Select/ComboBox keeps its fieldGroupIds` &&
-               ` ('Billing Information' / 'Discount Code' / 'Credit Card' / 'Online') and the form's validateFieldGroup is wired to a backend event carrying ${$parameters>/fieldGroupIds}. The original reads` &&
-               ` aFieldGroup[0]; here every control belongs to exactly one group, so the single-element array stringifies to the group name and the ABAP CASE resolves it - the controller's mMessageMapping table` &&
-               ` (group -> strip id + type). // NOTE: The controller sets three properties per MessageStrip imperatively (byId(id).setType(t).setText(s).setVisible(true)); the port binds that triple` &&
-               ` (type/text/visible) per strip instead, so the round-trip that classifies the group also updates the strip. onMsgStripClose (oEvt.getSource().setVisible(false)) becomes one close event per strip -` &&
-               ` each target is known statically, so no source lookup is needed. // NOTE: onReset does getModel().setData({}) - reproduced by CLEARing the fourteen bound field values. onAccept/onCancel/onReset all`.
-    lv_text1 = lv_text1 && ` call hideMessages() first, kept as a helper method. The four MessageToast texts are passed through verbatim ('Validation of field group '<g>' triggered.', 'Accept triggered', 'Cancel triggered',` &&
-               ` 'Reset triggered'); the original's duration:500 is dropped because abap2UI5's message_toast_display has no duration parameter. // NOTE: The original controller loads SampleData.json and element-binds` &&
-               ` the whole model (bindElement('/')), which makes its {BillingName} & co relative. The port seeds the same fields at the model root and binds them ABSOLUTELY (client->_bind) - a relative path on a` &&
-               ` control with no binding context resolves against nothing (AGENTS 5, the class fixed corpus-wide 2026-08-01). SampleData.json's single value (Email) is bound by no control in the view, so every input` &&
-               ` starts empty exactly as in the original. // LIVE-TEST: unverified in a running system: (a) that leaving a field group really fires validateFieldGroup and the event arg arrives as the plain group name` &&
-               ` (the array-to-string coercion of ${$parameters>/fieldGroupIds}); (b) that the classified MessageStrip then appears with its bound type/text; (c) that each strip's close button hides only its own`.
-    lv_text1 = lv_text1 && ` strip; (d) that Submit/Cancel hide all four strips and Reset additionally empties every input.`.
+               ` ('Billing Information' / 'Discount Code' / 'Credit Card' / 'Online') and the form's validateFieldGroup is wired to a backend event carrying ${$parameters>/fieldGroupIds}. The parameter reaches the` &&
+               ` backend as the JSON array (["Billing Information"], measured 2026-08-01), so the arg indexes it - ${$parameters>/fieldGroupIds}[0], literally the original's aFieldGroup[0] - and the ABAP CASE is the` &&
+               ` controller's mMessageMapping table (group -> strip id + type). // NOTE: The controller sets three properties per MessageStrip imperatively (byId(id).setType(t).setText(s).setVisible(true)); the port` &&
+               ` binds that triple (type/text/visible) per strip instead, so the round-trip that classifies the group also updates the strip. onMsgStripClose (oEvt.getSource().setVisible(false)) becomes one close` &&
+               ` event per strip - each target is known statically, so no source lookup is needed. // NOTE: onReset does getModel().setData({}) - reproduced by CLEARing the fourteen bound field values.`.
+    lv_text1 = lv_text1 && ` onAccept/onCancel/onReset all call hideMessages() first, kept as a helper method. The four MessageToast texts are passed through verbatim ('Validation of field group '<g>' triggered.', 'Accept` &&
+               ` triggered', 'Cancel triggered', 'Reset triggered'); the original's duration:500 is dropped because abap2UI5's message_toast_display has no duration parameter. // NOTE: The original controller loads` &&
+               ` SampleData.json and element-binds the whole model (bindElement('/')), which makes its {BillingName} & co relative. The port seeds the same fields at the model root and binds them ABSOLUTELY` &&
+               ` (client->_bind) - a relative path on a control with no binding context resolves against nothing (AGENTS 5, the class fixed corpus-wide 2026-08-01). SampleData.json's single value (Email) is bound by` &&
+               ` no control in the view, so every input starts empty exactly as in the original. // LIVE-TEST: unverified in a running system: (a) that leaving a field group really fires validateFieldGroup and the` &&
+               ` event arg arrives as the plain group name (the array-to-string coercion of ${$parameters>/fieldGroupIds}); (b) that the classified MessageStrip then appears with its bound type/text; (c) that each`.
+    lv_text1 = lv_text1 && ` strip's close button hides only its own strip; (d) that Submit/Cancel hide all four strips and Reset additionally empties every input.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.core`        control = `sap.ui.core.Control`                   name = `FieldGroup`                          class = `z2ui5_cl_ai_app_272` path = `src/02/b15/z2ui5_cl_ai_app_272.clas.abap`
         score = 5

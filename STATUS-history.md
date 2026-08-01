@@ -72,6 +72,33 @@ of their date and are NOT kept current._
   structural-diff went from 0 to 3 undeclared findings. Keep the naming clause
   when you rewrite a deviation.
 
+## Five interactions, three lessons, one real port fix (2026-08-01)
+
+- The first run of the newest interactions failed **5 of 5** — and four of the
+  five were the harness being wrong, not the ports:
+  - **App 272 was the real one.** The round-trip fired, but the toast read
+    *Validation of field group '["Billing Information"]' triggered.* — an event
+    parameter that is an **array arrives as JSON**, brackets and all. Fixed by
+    indexing in the expression (`${$parameters>/fieldGroupIds}[0]`), which is
+    also literally what the original controller does;
+    `BindingParser.parseExpression` confirms the grammar takes `[n]` and even
+    method calls.
+  - **OverflowToolbar controls are drivable after all**: clicking
+    `Additional Options` opens the associative popover and everything inside
+    clicks normally (app 174's two ToggleButtons flip the grid Table's bound
+    properties). That supersedes the "not drivable headless" note left on apps
+    207/247 — their checks can be re-armed.
+  - **App 218's ShellBar search is collapsed** behind a Search button; expand
+    it first, then the SearchManager's client-composed liveChange toast fires.
+  - 008 (a DOM click on a ColorPalette swatch fires no `colorSelect`) and 233
+    (its ObjectPage header input never becomes actionable headless) stay
+    **uncovered** — the interactions were removed again rather than left
+    red, and both are named in the harness header.
+- Both new AGENTS §10 entries came out of this round, plus one from a
+  self-inflicted wound: `ps … | grep '[e]2e-build' | xargs kill` in a command
+  line that also contains the plain string kills **your own shell** (exit 144,
+  no output) — the same family as the `pkill -f express.mjs` case.
+
 ## Depth port DialogFullScreen — flags written only when set (2026-08-01)
 
 - **App 274** (`sap.m.sample.DialogFullScreen`, b15): three controller-built

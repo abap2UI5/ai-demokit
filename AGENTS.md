@@ -1188,6 +1188,21 @@ How to record it:
   replaced the one that said "the Slider's liveChange attribute is dropped"
   (2026-08-01). When you rewrite a deviation, keep the naming clause and run
   `structural-diff --strict` in the same change.
+- **OverflowToolbar controls ARE drivable headless — open the overflow
+  popover first.** In the harness' 1280 px viewport a toolbar folds almost
+  everything into its `Additional Options` button, so a direct
+  `getByRole('button', …)` for a toolbar control fails with *"not visible"*.
+  Clicking `Additional Options` opens the associative popover and the controls
+  inside it click normally, round-trip and all (measured on app 174,
+  2026-08-01). This supersedes the earlier "not drivable" note on apps
+  207/247 — their checks can be re-armed the same way.
+- **An event parameter that is an ARRAY arrives as JSON, not as a joined
+  string.** `${$parameters>/fieldGroupIds}` reached `on_event` as
+  `["Billing Information"]`, brackets and quotes included. Index it in the
+  expression — `${$parameters>/fieldGroupIds}[0]`, which is also literally
+  what the original controller does — the UI5 expression grammar accepts
+  `[n]` and method calls (both verified with `BindingParser.parseExpression`,
+  app 272, 2026-08-01). Do not "fix" this by string-stripping in ABAP.
 - **An interaction may create the state it needs** — app 267's whole
   `breakpointChanged` wire only fires below 720 px, so its interaction calls
   `page.setViewportSize({ width: 400, height: 900 })` and then waits for the
