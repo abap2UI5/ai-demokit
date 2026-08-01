@@ -72,6 +72,22 @@ of their date and are NOT kept current._
   structural-diff went from 0 to 3 undeclared findings. Keep the naming clause
   when you rewrite a deviation.
 
+## Session close 2026-08-01 — state handed over
+
+- Both faked-event-value fixes are **e2e-verified** on the rebuilt backend
+  (100 boots clean, 133's press toast now names the item id).
+- All gates green at hand-over: abaplint 0 · pattern-lint 0 · validate-meta
+  276/276 · structure-lint 0 · data-fidelity 0 · property-check 0 ·
+  render-smoke 276/0 failing (1 declared skip) · structural-diff 0 undeclared.
+  The last **full e2e sweep was 274/274 green**; the three ports added after
+  it (275–277) are each verified individually with their own interaction, so
+  the next nightly is the first run to cover all 276 in one go.
+- Where to pick up: **40 ports** still carry a `LIVE_TEST`, of which only 149
+  and the three hidden-picker ports (016/256/257, the `Popover.onfocusin`
+  recursion) have no interaction at all — the rest are partial legs named in
+  their sidecars. Batch planning stays depth-only; sample templates come from
+  the sparse OpenUI5 clone (`OPENUI5_SRC=/home/user/openui5-sparse`).
+
 ## The faked-event-value audit is closed — and it was a script (2026-08-01)
 
 - The last open item of the review-sweep backlog turned into
