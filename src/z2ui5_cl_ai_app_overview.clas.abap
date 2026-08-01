@@ -3405,6 +3405,27 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         since = `1.60`
         notes = lv_text1 ) ).
 
+    lv_text1 = `NOTE: The sample's css/main.css (.demoBox tile colours, .sapMText.message bold) is injected through a core:HTML <style> leaf (app 122/124 precedent), so that core:HTML control is EXTRA against the` &&
+               ` original view (original 0 vs port 1). The CSS is reproduced verbatim, only whitespace-collapsed. // NOTE: The Slider's liveChange attribute is dropped: onSliderMoved calls` &&
+               ` byId('panelCSSGrid').setWidth(fValue + '%'), and sap.m.Panel has a width property, so the value is two-way bound and the width is the expression binding {= ${/SLIDER_VALUE} + '%' } (app 214/270` &&
+               ` form). Same rendered behaviour without a round-trip. // NOTE: The SegmentedButton's selectionChange attribute is dropped: onSegmentedButtonChange calls grid1.getCustomLayout().setContainerQuery(key` &&
+               ` === 'true'). The button's selectedKey and the GridResponsiveLayout's containerQuery share one two-way bound field here - selectedKey={/CONTAINER_QUERY} and containerQuery={= ${/CONTAINER_QUERY} ===` &&
+               ` 'true' }, the string-to-boolean step the controller does in JS - so switching the segment reconfigures the layout client-side, with no round-trip and no imperative setter. // IMPROVISED: The 'Reveal`.
+    lv_text1 = lv_text1 && ` Grid' ToggleButton keeps its label but loses its press handler: onRevealGrid calls RevealGrid.toggle('grid1', view) from the sample-local module RevealGrid/RevealGrid.js, which draws a debug overlay` &&
+               ` of the grid lines on top of the rendered DOM. That is a sample-only JS helper with its own CSS, not an abap2UI5 capability (same drop as app 145's RevealGrid); the button therefore does nothing.` &&
+               ` onExit's RevealGrid.destroy goes with it. // NOTE: onAfterRendering seeds the info Text from the layout that is active after the first render` &&
+               ` (getCustomLayout().getActiveGridSettings().sParentAggregationName). The backend cannot read that, so the port ships the view's own initial text ('Layout size is: ') and the first real value arrives` &&
+               ` with the first layoutChange event - which UI5 fires whenever the active GridSettings change, including on the initial breakpoint evaluation. // LIVE-TEST: Unverified in a running system: (a) the` &&
+               ` layoutChange round-trip (${$parameters>/layout}) writing 'Layout size is: layoutS/layoutM or layoutL/layoutXL' into the bound Text; (b) that the containerQuery expression binding really re-evaluates`.
+    lv_text1 = lv_text1 && ` the GridResponsiveLayout when the segment switches; (c) that the three GridSettings breakpoints lay the twelve tiles out as in the original.`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.cssgrid.CSSGrid`         name = `GridResponsiveness`                  class = `z2ui5_cl_ai_app_271` path = `src/02/b14/z2ui5_cl_ai_app_271.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.60`
+        notes = lv_text1 ) ).
+
     lv_text1 = `NOTE: The sample's css/main.css (the .demoBox / .demoInnerBox colours and radii the grid tiles carry) is injected through a core:HTML leaf with a <style> element in its content attribute - the app` &&
                ` 122/124 precedent, since a port ships no stylesheet. That core:HTML control is therefore EXTRA against the original view (original 0 vs port 1); the CSS itself is reproduced verbatim, only` &&
                ` whitespace-collapsed. // NOTE: The Slider's liveChange attribute is dropped: onSliderMoved calls byId('panelCSSGrid').setWidth(fValue + '%'). sap.m.Panel HAS a width property, so the slider value is` &&

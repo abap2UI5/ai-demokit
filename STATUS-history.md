@@ -7,6 +7,33 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## Depth port GridResponsiveness + a stale-build symptom worth naming (2026-07-31)
+
+- **App 271** (`sap.ui.layout.sample.GridResponsiveness`, b14): the
+  `GridResponsiveLayout` idiom — three `GridSettings` breakpoints
+  (`layoutS`/`layout`/`layoutXL`) in the `CSSGrid`'s `customLayout`. Two
+  controller handlers dissolve into bindings: the Slider→Panel width as in 270,
+  and `onSegmentedButtonChange` (`setContainerQuery(key === 'true')`) as a
+  **shared two-way field** — `selectedKey={/CONTAINER_QUERY}` next to
+  `containerQuery={= ${/CONTAINER_QUERY} === 'true' }`, the string→boolean step
+  the controller does in JS. No round-trip, no imperative setter.
+  `layoutChange` does round-trip, because its `${$parameters>/layout}` is the
+  only source for the info Text.
+- Declared IMPROVISED: the **Reveal Grid** ToggleButton keeps its label but
+  loses its handler — `RevealGrid.toggle()` is a sample-local JS module drawing
+  a debug overlay (the same drop as app 145).
+- **A stale transpiled backend now has a named signature** (AGENTS §10): a
+  brand-new port fails e2e with `backend HTTP 500` whose body reads *"The app
+  'Z2UI5_CL_AI_APP_269' does not exist in the system"*. That is always a missing
+  `npm run node:build`, never a port defect. Two companion rules from the same
+  round: never run `e2e-smoke` while a build is in flight (`e2e-build` wipes
+  `node/output` first, so the run dies silently), and never wait for a build
+  with `pgrep -f e2e-build` — the waiting shell matches its own command line and
+  waits forever; grep the build log for `e2e-build: done` instead.
+- Also this round: 097 (SplitApp `control_by_id` navigation) and 126
+  (FileUploader upload toast) gained interactions; 126's assertion was corrected
+  to the port's actual first toast (*'Uploading file to the local server …'*).
+
 ## Depth port NestedGrids — three known idioms in one port (2026-07-31)
 
 - **App 270** (`sap.ui.layout.sample.NestedGrids`, b14): a `CSSGrid` inside a

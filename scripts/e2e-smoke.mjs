@@ -748,7 +748,7 @@ const INTERACTIONS = {
     const btn = page.getByRole('button', { name: 'Upload File', exact: true }).first();
     await expect(btn, 'the Upload File button').toBeVisibleEnabled();
     await btn.click();
-    await expect(page.locator('.sapMMessageToast').last(), 'the upload client toast').toContainText('File upload complete');
+    await expect(page.locator('.sapMMessageToast').last(), 'the upload-started client toast').toContainText('Uploading file to the local server');
   },
   // per-row bound filter: each row's Select lists only its region's managers
   z2ui5_cl_ai_app_265: async (page, expect) => {

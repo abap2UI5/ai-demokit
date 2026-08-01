@@ -1135,6 +1135,15 @@ How to record it:
   stale server). Both bit the 060 menu investigation on 2026-07-31: read the
   wire the browser actually got (`menu.mEventRegistry.itemSelected[0].fFunction`
   `._sapui_handlerName`) before concluding anything from a failing interaction.
+  The unmistakable symptom for a **brand-new** port is
+  `backend HTTP 500` whose body reads *"The app 'Z2UI5_CL_AI_APP_nnn' does not
+  exist in the system"* — that is a missing rebuild, never a port defect
+  (app 269, same day). Two more rules from the same afternoon: **never run
+  `e2e-smoke` while a build is in flight** (`e2e-build` wipes `node/output`
+  first, so the run dies with no output), and **never wait on a build with
+  `pgrep -f e2e-build`** — the waiting shell's own command line contains that
+  string, so it matches itself and waits forever. Grep the build log for
+  `e2e-build: done` instead.
 - **abapGit pushes from a system can carry stale generated files** — a human
   who pulled before the latest repo change and pushes back from the system
   silently reverts it (happened to the overview app's SUBSET labels,
