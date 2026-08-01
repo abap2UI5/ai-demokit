@@ -46,7 +46,7 @@
     },
     {
       "type": "LIVE_TEST",
-      "what": "unverified in a running system: (a) Input submit resolves the entered PurchaseID (two-way bound input_value) and redraws with the selected purchase; (b) suggestionItemSelected transports the picked ListItem key via ${$parameters>/selectedItem}.getKey(); (c) valueHelpRequest opens the SelectDialog client-side via control_by_id open; (d) the SelectDialog search (binding_call filter) and confirm (${$parameters>/selectedItem}.getDescription()) resolve and redraw; (e) the ObjectPageLayout/IllustratedMessage/Table render inside the headless harness as they do in the running app."
+      "what": "leg (c) is closed: **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): F4 on the PurchaseID Input (the keyboard form of valueHelpRequest - its icon has no layout box headless) opens the SelectDialog client-side through control_by_id, and the dialog renders its bound purchase rows. Still unverified in a running system: (a) Input submit resolving the entered PurchaseID and redrawing; (b) suggestionItemSelected transporting ${$parameters>/selectedItem}.getKey(); (d) the SelectDialog search (binding_call filter) and its confirm arg - the dialog row has no layout box headless and neither a click nor a keyboard Enter reaches the confirm; (e) the ObjectPageLayout/IllustratedMessage/Table rendering."
     }
   ]
 }

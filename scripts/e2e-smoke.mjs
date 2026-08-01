@@ -144,9 +144,12 @@ const benign = (s) => BENIGN.some((re) => re.test(s));
 //   u:Currency over inlined arrays: 196
 //   client-side growing (no wire at all): 276
 //   a controller replaced by a device-model expression: 277
-//   still open: 008 (a DOM click on a ColorPalette swatch fires no
-//     colorSelect) and 233 (its ObjectPage header input/value-help icon never
-//     becomes actionable headless)
+//   KEYBOARD activation for controls with no layout box: 008 (a palette
+//     swatch, focus + Enter) 233 (F4 on the Input opens the SelectDialog) —
+//     a DOM click does NOT reach either of them
+//   still open: 233's confirm leg (neither click nor Enter on a dialog row
+//     reaches the SelectDialog's confirm headless) and the hidden-picker
+//     openBy class (016/256/257, Popover.onfocusin recursion)
 const INTERACTIONS = {
   z2ui5_cl_ai_app_005: async (page, expect) => {
     const btn = page.getByRole('button', { name: 'Default', exact: true }).first();
@@ -1099,6 +1102,31 @@ const INTERACTIONS = {
     await expect(page.locator('body'), 'the bound JPY row').toContainText('JPY');
     const n = await page.locator('.sapUiUfdCurrency').count();
     if (n < 4) throw new Error(`expected the sample's Currency controls to render, got ${n}`);
+  },
+  // InitialPagePattern: F4 on the Input is the keyboard form of the
+  // valueHelpRequest (its icon carries a zero-size box headless), and the
+  // SelectDialog is opened client-side by control_by_id. Picking a row and
+  // its confirm round-trip stay a human check: the dialog row has no layout
+  // box headless and neither a click nor a keyboard Enter reaches the
+  // SelectDialog's confirm (measured 2026-08-01).
+  z2ui5_cl_ai_app_233: async (page, expect) => {
+    const inp = page.locator('.sapMInputBaseInner').first();
+    if (!(await inp.count())) throw new Error('the PurchaseID input did not render');
+    await page.evaluate(() => document.querySelector('.sapMInputBaseInner').focus());
+    await page.keyboard.press('F4');
+    await expect(page.locator('.sapMDialog'), 'the SelectDialog opened by control_by_id').toContainText('Purchases');
+    await waitForCount(page, '.sapMDialog .sapMLIB', 1, 'the SelectDialog stayed empty');
+  },
+  // ColorPalette: the swatches have a zero-height box headless, so a colour
+  // is picked the keyboard way — focus the swatch, press Enter — and the
+  // client-composed toast carries ${$parameters>/value} and /defaultAction
+  z2ui5_cl_ai_app_008: async (page, expect) => {
+    const sw = page.locator('.sapMColorPaletteSquare');
+    if (!(await sw.count())) throw new Error('the ColorPalette rendered no swatches');
+    await page.evaluate(() => document.querySelector('.sapMColorPaletteSquare').focus());
+    await page.keyboard.press('Enter');
+    await expect(page.locator('.sapMMessageToast').last(), 'the client-composed colorSelect toast')
+      .toContainText('Color Selected: value - gold');
   },
   z2ui5_cl_ai_app_142: (page) => formFieldValues(page),
   z2ui5_cl_ai_app_175: (page) => formFieldValues(page),

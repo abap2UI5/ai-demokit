@@ -72,6 +72,25 @@ of their date and are NOT kept current._
   structural-diff went from 0 to 3 undeclared findings. Keep the naming clause
   when you rewrite a deviation.
 
+## The keyboard reaches what the mouse cannot (2026-08-01)
+
+- The two ports written off in the morning round are covered after all, and
+  the fix was the same in both cases: **focus + key instead of click**.
+  App **008**'s palette swatch takes `Enter` and toasts
+  *Color Selected: value - gold, defaultAction - false*; app **233**'s
+  PurchaseID Input takes **F4**, the keyboard form of `valueHelpRequest`, and
+  the SelectDialog opens client-side through `control_by_id` with its bound
+  rows. A DOM click reached neither. Recorded in AGENTS §10 next to the
+  zero-size-box rule: try focus+key before giving a control up.
+- Still open on 233: the confirm leg — neither a click nor an `Enter` on a
+  dialog row reaches the SelectDialog's `confirm` headless, so that stays a
+  human check and the sidecar says so.
+- Interactions for **101** (the wizard Cancel MessageBox), **141** (the
+  announce round-trip writing the bound status Text), **196** (u:Currency over
+  the four inlined arrays), **276** and **277** all pass on the new build.
+  Open LIVE_TESTs **41 → 40 ports**; only 016/256/257 (the hidden-picker
+  `Popover.onfocusin` recursion) and 149 now lack any interaction at all.
+
 ## Full sweep green on the fixed build: 274/274 (2026-08-01)
 
 - The whole corpus re-run after the seven binding fixes and the re-armed

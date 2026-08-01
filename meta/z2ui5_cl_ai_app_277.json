@@ -25,7 +25,7 @@
     },
     {
       "type": "LIVE_TEST",
-      "what": "unverified in a running system: that moving the splitter really re-flows both tables through contextualWidth (the container-based popin behaviour the sample is about), and that the MessageStrip's device-model expression hides it on a phone in portrait and brings it back on rotation."
+      "what": "the device-model leg is closed: **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): on the harness' desktop viewport the MessageStrip is visible - the expression on ${device>/system/phone} / ${device>/orientation/landscape} evaluates and both panes render the same bound collection. Still unverified in a running system: that moving the splitter really re-flows both tables through contextualWidth (the container-based popin behaviour the sample is about), and the phone-portrait branch of the strip, which needs a real device rotation."
     }
   ]
 }

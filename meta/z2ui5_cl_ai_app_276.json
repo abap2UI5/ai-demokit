@@ -20,8 +20,8 @@
       "what": "the List binds the shared demo mock products.json /ProductCollection (all 123 rows; Name, ProductId and ProductPicUrl - the three fields the StandardListItem binds) inlined into model_init. The mock's host-relative ProductPicUrl ('test-resources/...') is resolved to an absolute sdk.openui5.org URL per the runtime asset-URL rule."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "unverified in a running system: that the list starts at the growingThreshold of 4 rows and that the 'More' trigger appends the next four (growingScrollToLoad=false means the trigger is a button, not a scroll)."
+      "type": "NOTE",
+      "what": "**e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the list starts at exactly the growingThreshold of 4 rows and the More trigger appends the next page (8 rows) - client-side paging over the whole bound collection, with no backend wire involved."
     }
   ]
 }

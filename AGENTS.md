@@ -1175,7 +1175,12 @@ How to record it:
   `locator.dispatchEvent('click')` for an icon (UI5's `Icon` listens for the
   DOM click) and `page.evaluate(() => el.focus())` + `keyboard.press('ArrowLeft')`
   for a slider (its key handling then moves the value through the two-way
-  binding). Do not "fix" this by setting the property through the UI5 API —
+  binding). **The keyboard is the more general of the two**: a DOM click
+  reached neither a `ColorPalette` swatch nor an `Input`'s value-help icon,
+  but `focus()` + `Enter` picks the colour (app 008) and `F4` opens the value
+  help (app 233). Reach for focus+key before giving a control up — two ports
+  sat uncovered for a day because only click had been tried.
+  Do not "fix" this by setting the property through the UI5 API —
   that bypasses the binding the test exists to prove. Same family as the
   OverflowToolbar popover (app 207) and the busy overlay (app 130): assert the
   *effect* (a bound property, a rendered class), not the pixels (2026-08-01).
