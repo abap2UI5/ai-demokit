@@ -1,0 +1,31 @@
+{
+  "class": "z2ui5_cl_ai_app_277",
+  "sample": "sap.m.sample.TableContextualWidthDynamic",
+  "entity": "sap.m.Table",
+  "file": "src/01/b15/z2ui5_cl_ai_app_277.clas.abap",
+  "batch": "b15",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "the whole controller is one responsive rule: onBeforeRendering + _orientationHandler + _showMessageStrip hide the MessageStrip on a PHONE in portrait and show it again in landscape (and onExit detaches the handler). The port replaces all four methods with one expression binding on the shared device model - visible = !${device>/system/phone} || ${device>/orientation/landscape} - which UI5 keeps current on every rotation. No round-trip, no controller; the added `visible` attribute is the only difference to the archived Table.view.xml."
+    },
+    {
+      "type": "NOTE",
+      "what": "contextualWidth='Auto' + popinLayout='GridSmall' + the per-column minScreenWidth/demandPopin are what the sample demonstrates and are passed through 1:1 on both tables, including the original's mixed casing ('phone'/'tablet' on two columns, 'Phone' on the third). The ResponsiveSplitter/PaneContainer/SplitPane nesting with requiredParentWidth 500 and 400 is 1:1 as well."
+    },
+    {
+      "type": "NOTE",
+      "what": "both tables bind the shared demo mock products.json /ProductCollection (all 123 rows; Name, SupplierName, Status and Quantity - the four fields the ColumnListItem binds) from ONE inlined table in model_init; the original loads the same file once into the view's model and binds it twice, so the two panes stay in sync exactly as before."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "unverified in a running system: that moving the splitter really re-flows both tables through contextualWidth (the container-based popin behaviour the sample is about), and that the MessageStrip's device-model expression hides it on a phone in portrait and brings it back on rotation."
+    }
+  ]
+}

@@ -2733,6 +2733,21 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         notes = lv_text1
         post171 = `Table.autoPopinMode (since 1.76), Table.popinChanged (since 1.77) and Column.importance (since 1.76), the core of the auto-pop-in demo, are kept 1:1; needs UI5 >= 1.77.` ) ).
 
+    lv_text1 = `NOTE: the whole controller is one responsive rule: onBeforeRendering + _orientationHandler + _showMessageStrip hide the MessageStrip on a PHONE in portrait and show it again in landscape (and onExit` &&
+               ` detaches the handler). The port replaces all four methods with one expression binding on the shared device model - visible = !${device>/system/phone} || ${device>/orientation/landscape} - which UI5` &&
+               ` keeps current on every rotation. No round-trip, no controller; the added ``visible`` attribute is the only difference to the archived Table.view.xml. // NOTE: contextualWidth='Auto' +` &&
+               ` popinLayout='GridSmall' + the per-column minScreenWidth/demandPopin are what the sample demonstrates and are passed through 1:1 on both tables, including the original's mixed casing ('phone'/'tablet'` &&
+               ` on two columns, 'Phone' on the third). The ResponsiveSplitter/PaneContainer/SplitPane nesting with requiredParentWidth 500 and 400 is 1:1 as well. // NOTE: both tables bind the shared demo mock` &&
+               ` products.json /ProductCollection (all 123 rows; Name, SupplierName, Status and Quantity - the four fields the ColumnListItem binds) from ONE inlined table in model_init; the original loads the same`.
+    lv_text1 = lv_text1 && ` file once into the view's model and binds it twice, so the two panes stay in sync exactly as before. // LIVE-TEST: unverified in a running system: that moving the splitter really re-flows both tables` &&
+               ` through contextualWidth (the container-based popin behaviour the sample is about), and that the MessageStrip's device-model expression hides it on a phone in portrait and brings it back on rotation.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.Table`                           name = `TableContextualWidthDynamic`         class = `z2ui5_cl_ai_app_277` path = `src/01/b15/z2ui5_cl_ai_app_277.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.16`
+        notes = lv_text1 ) ).
+
     lv_text1 = `POST-1.71: sap.m.Table autoPopinMode (since UI5 1.76) kept 1:1 from the original; needs a UI5 release >= 1.76 to render. // POST-1.71: sap.m.plugins.ColumnResizer (since UI5 1.91) kept 1:1 in the` &&
                ` Table dependents aggregation; needs a UI5 release >= 1.91 to render. The Table fixedLayout='Strict' value is also newer than 1.71 (a value-level extension of the 1.22 property, invisible to the` &&
                ` property gate; the source JSDoc carries no value-level @since) - covered by the same >= 1.91 floor. // NOTE: **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real` &&

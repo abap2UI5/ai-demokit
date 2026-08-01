@@ -1058,6 +1058,14 @@ const INTERACTIONS = {
     await page.locator('.sapMGrowingListTrigger').first().click();
     await waitForCount(page, '.sapMLIB.sapMSLI', 8, 'the More trigger did not append the next page');
   },
+  // the controller's phone/orientation MessageStrip rule became one device-
+  // model expression: on a desktop viewport the strip must be VISIBLE
+  z2ui5_cl_ai_app_277: async (page, expect) => {
+    await expect(page.locator('body'), 'the device-model driven MessageStrip')
+      .toContainText('Move the splitter to see the container based popin behaviour');
+    await expect(page.locator('.sapMListTblHeader').first(), 'the left table header').toBeVisibleEnabled();
+    await expect(page.locator('body'), 'both panes bound to the same collection').toContainText('Notebook Basic 15');
+  },
   z2ui5_cl_ai_app_142: (page) => formFieldValues(page),
   z2ui5_cl_ai_app_175: (page) => formFieldValues(page),
   // Grid element-binding to an array path + index-relative child bindings

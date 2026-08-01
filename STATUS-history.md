@@ -72,6 +72,20 @@ of their date and are NOT kept current._
   structural-diff went from 0 to 3 undeclared findings. Keep the naming clause
   when you rewrite a deviation.
 
+## Depth port TableContextualWidthDynamic — a controller that is one binding (2026-08-01)
+
+- **App 277** (`sap.m.sample.TableContextualWidthDynamic`, b15): a
+  `ResponsiveSplitter` over two `contextualWidth="Auto"` tables. Its whole
+  controller — `onBeforeRendering` + `_orientationHandler` + `_showMessageStrip`
+  + the `onExit` detach — exists to hide one MessageStrip on a **phone in
+  portrait**. That is one expression binding on the shared device model:
+  `visible = {= !${device>/system/phone} || ${device>/orientation/landscape} }`,
+  which UI5 keeps current on every rotation. Four controller methods, no
+  round-trip, and the added `visible` attribute is the only difference to the
+  archived view.
+- Both panes bind **one** inlined product table, mirroring the original's
+  single model bound twice, so the two tables stay in sync as before.
+
 ## Depth port ListGrowing — a feature that needs no wire (2026-08-01)
 
 - **App 276** (`sap.m.sample.ListGrowing`, b15): `growing` /
