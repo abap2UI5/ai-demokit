@@ -978,7 +978,7 @@ ${columnsBlock}
                     |?sap-ui-xx-sample-id={ app-module }.sample.{ app-name }| &&
                     |&sap-ui-xx-sample-lib={ app-module }|.
     ENDIF.
-    app-abap_url  = |https://github.com/abap2UI5/api/blob/main/{ app-path }|.
+    app-abap_url  = |https://github.com/abap2UI5/ai-demokit/blob/main/{ app-path }|.
     app-start_url = |{ client->get( )-s_config-origin }{ client->get( )-s_config-pathname }| &&
                     |?app_start={ to_upper( app-class ) }|.
     app-has_check = xsdbool( app-checked IS NOT INITIAL ).

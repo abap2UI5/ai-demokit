@@ -16,7 +16,7 @@ permissions:
 
 jobs:
   auto_downport:
-    if: github.repository == 'abap2UI5/api'
+    if: github.repository == 'abap2UI5/ai-demokit'
     permissions:
       contents: write
     runs-on: ubuntu-latest

@@ -7,6 +7,37 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## Repository assessment follow-up: rename debt, AGENTS distillation, pinned scope decisions (2026-08-01)
+
+Three findings from a repository review, fixed in one change:
+
+- **The repo rename to `ai-demokit` had left `abap2UI5/api` behind in six
+  places** — most consequentially in `auto_downport.yaml`'s
+  `if: github.repository == 'abap2UI5/api'` guard, which meant **the 702
+  branch has not been rebuilt since the rename** (the workflow was skipped on
+  every push to main). Also fixed: the five README badge URLs (pointing at the
+  old repo's actions), the README/AGENTS titles, `package.json`
+  name/repository/homepage (+ lockfile), the `REPO` default in
+  `generate-coverage.mjs` (every `api.md` ABAP link) and the class URL in
+  `generate-overview.mjs` (the overview app's source links). Lesson recorded
+  in AGENTS §10: after a repo rename, grep for the old `owner/name` — a
+  `github.repository` guard fails **silently** (the workflow is skipped, not
+  red).
+- **AGENTS.md distilled to the rules** (1398 → 1323 lines): discovery dates,
+  probe war stories and retired-history asides removed per §10's own "write
+  the rule, not the story"; every rule, app reference and gate description
+  kept. One stale contradiction fixed: the last §10 bullet still claimed
+  `property-check.mjs` cannot see `${$parameters>/…}` event parameters in a
+  `t_arg` — it scans them since the 2026-07-20 fix (as §6 already said).
+- **Scope exceptions now pin the facts they were decided on.** Each
+  `ui5/scope-exceptions.json` entry carries `decided: { scope, since,
+  deprecated }` (the verdict + control `@since` + deprecation `@since` at
+  decision time), and `generate-coverage.mjs` fails when a universe/properties
+  refresh changes any of them — so the six KEEP decisions are re-validated
+  automatically on every metadata refresh instead of silently outliving their
+  rationale. An entry without `decided` facts fails too (negative path
+  verified: a pinned `since` mismatch exits 1 with a re-decide message).
+
 ## e2e round 3 — a whole broken binding class, and 13 LIVE_TESTs closed (2026-08-01)
 
 - **Seven ports rendered EMPTY in the running app.** App 206 came out of the

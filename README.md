@@ -1,12 +1,12 @@
-[![ABAP_STANDARD](https://github.com/abap2UI5/api/actions/workflows/ABAP_STANDARD.yaml/badge.svg)](https://github.com/abap2UI5/api/actions/workflows/ABAP_STANDARD.yaml)
-[![ABAP_CLOUD](https://github.com/abap2UI5/api/actions/workflows/ABAP_CLOUD.yaml/badge.svg)](https://github.com/abap2UI5/api/actions/workflows/ABAP_CLOUD.yaml)
-[![ABAP_702](https://github.com/abap2UI5/api/actions/workflows/ABAP_702.yaml/badge.svg)](https://github.com/abap2UI5/api/actions/workflows/ABAP_702.yaml)
+[![ABAP_STANDARD](https://github.com/abap2UI5/ai-demokit/actions/workflows/ABAP_STANDARD.yaml/badge.svg)](https://github.com/abap2UI5/ai-demokit/actions/workflows/ABAP_STANDARD.yaml)
+[![ABAP_CLOUD](https://github.com/abap2UI5/ai-demokit/actions/workflows/ABAP_CLOUD.yaml/badge.svg)](https://github.com/abap2UI5/ai-demokit/actions/workflows/ABAP_CLOUD.yaml)
+[![ABAP_702](https://github.com/abap2UI5/ai-demokit/actions/workflows/ABAP_702.yaml/badge.svg)](https://github.com/abap2UI5/ai-demokit/actions/workflows/ABAP_702.yaml)
 <br>
-[![auto_downport](https://github.com/abap2UI5/api/actions/workflows/auto_downport.yaml/badge.svg)](https://github.com/abap2UI5/api/actions/workflows/auto_downport.yaml)
+[![auto_downport](https://github.com/abap2UI5/ai-demokit/actions/workflows/auto_downport.yaml/badge.svg)](https://github.com/abap2UI5/ai-demokit/actions/workflows/auto_downport.yaml)
 <br>
-[![generate_result](https://github.com/abap2UI5/api/actions/workflows/generate_result.yaml/badge.svg)](https://github.com/abap2UI5/api/actions/workflows/generate_result.yaml)
+[![generate_result](https://github.com/abap2UI5/ai-demokit/actions/workflows/generate_result.yaml/badge.svg)](https://github.com/abap2UI5/ai-demokit/actions/workflows/generate_result.yaml)
 
-# abap2UI5-api
+# abap2UI5 ai-demokit
 
 _Last generated: <!-- last-run -->2026-07-20 06:21 UTC<!-- /last-run -->_
 
