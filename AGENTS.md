@@ -880,7 +880,12 @@ that is the actual porting work):
   abaplint / pattern-lint / structure-lint / render-smoke immediately, and
   `structural_diff` (correctly) fails until you rebuild the view 1:1. Needs an
   OpenUI5 checkout (`OPENUI5_SRC`, default `../fork-openui5`). `--dry-run` to
-  preview.
+  preview. **`/home/user/fork-openui5` carries only `src/<lib>/src` — no
+  `test/…/demokit/sample`**, so the scaffolder finds nothing there. A blobless
+  sparse clone gets just the sample trees in ~350 MB (2026-08-01):
+  `git clone --filter=blob:none --sparse https://github.com/SAP/openui5.git …`
+  then `git sparse-checkout set src/<lib>/test/<lib path>/demokit/sample …`,
+  and point `OPENUI5_SRC` at it.
 - **`npm run json-to-abap -- <file.json> [--path k] [--fields spec] [--var v]`**
   (`scripts/json-to-abap.mjs`) — turns a JSON array (a demo mock's
   `ProductCollection` …) into an ABAP `VALUE #( … )` literal for `model_init`
@@ -1168,6 +1173,15 @@ How to record it:
   that bypasses the binding the test exists to prove. Same family as the
   OverflowToolbar popover (app 207) and the busy overlay (app 130): assert the
   *effect* (a bound property, a rendered class), not the pixels (2026-08-01).
+- **A deviation text is also a gate escape — rewriting it can un-declare a
+  diff.** `structural-diff` (and `data-fidelity`) accept a difference only
+  while some sidecar deviation *names* it. Converting a `LIVE_TEST` to a
+  `NOTE` and rewriting the prose therefore silently re-opens every diff that
+  sentence covered: apps 176/213/214 turned into three undeclared
+  `attr missing Slider.liveChange` findings the moment their verified text
+  replaced the one that said "the Slider's liveChange attribute is dropped"
+  (2026-08-01). When you rewrite a deviation, keep the naming clause and run
+  `structural-diff --strict` in the same change.
 - **An interaction may create the state it needs** — app 267's whole
   `breakpointChanged` wire only fires below 720 px, so its interaction calls
   `page.setViewportSize({ width: 400, height: 900 })` and then waits for the

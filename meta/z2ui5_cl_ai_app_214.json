@@ -12,8 +12,8 @@
   "checked": null,
   "deviations": [
     {
-      "type": "LIVE_TEST",
-      "what": "The Slider's `liveChange` attribute is dropped: Slider.value is two-way bound to /SLIDER_VALUE and the containerLayout (VerticalLayout) width is an expression binding {= ${/SLIDER_VALUE} + '%' } reproducing the controller's onSliderMoved setWidth client-side (thin-frontend, no round-trip; the original set width='100%' statically). Binding/render behaviour unverified in a running system."
+      "type": "NOTE",
+      "what": "The Slider's `liveChange` attribute is dropped (the expression binding needs no event). **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): one keyboard step on the Slider moves the containerLayout (VerticalLayout) width to 99% with no round-trip - the expression binding replaces onSliderMoved completely. Residual: the BlockLayout's own reflow inside the resized layout."
     },
     {
       "type": "LIVE_TEST",

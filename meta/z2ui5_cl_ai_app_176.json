@@ -11,7 +11,13 @@
   "status": "reviewed",
   "checked": null,
   "deviations": [
-    { "type": "LIVE_TEST", "what": "The Slider `liveChange` handler (original onSliderMoved: byId('panelForGridList').setWidth(value + '%')) is dropped and replaced by a roundtrip-free expression binding on the host Panel.width (`{= ${/SLIDER_VALUE} + '%'}`), with Slider.value bound two-way to carry the value; per AGENTS.md 5 / CAPABILITIES 'prefer a pure expression binding over an event round-trip' (app 007 pattern). The width expression rendering is unverified in a running system." },
-    { "type": "NOTE", "what": "GridList with a group sorter on items ({path, sorter:{path:'GROUP', descending:false, group:true}}, default group headers), an empty grid:GridBoxLayout customLayout, growing/growingThreshold, and a custom f:headerToolbar (Toolbar with Title, ToolbarSpacer, SearchField - the SearchField has no handler in the original). The 27 items are inlined 1:1 from the sample's own model/items.json; the GridListItem template (VBox>VBox+FlexItemData, Title, Label) binds {TITLE}/{SUBTITLE} 1:1." }
+    {
+      "type": "NOTE",
+      "what": "The Slider's `liveChange` attribute is dropped (the expression binding needs no event). **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): one keyboard step on the Slider moves the Panel width to 99% with no round-trip at all - the expression binding replaces onSliderMoved completely. Residual: the grouped GridList's visual reflow."
+    },
+    {
+      "type": "NOTE",
+      "what": "GridList with a group sorter on items ({path, sorter:{path:'GROUP', descending:false, group:true}}, default group headers), an empty grid:GridBoxLayout customLayout, growing/growingThreshold, and a custom f:headerToolbar (Toolbar with Title, ToolbarSpacer, SearchField - the SearchField has no handler in the original). The 27 items are inlined 1:1 from the sample's own model/items.json; the GridListItem template (VBox>VBox+FlexItemData, Title, Label) binds {TITLE}/{SUBTITLE} 1:1."
+    }
   ]
 }

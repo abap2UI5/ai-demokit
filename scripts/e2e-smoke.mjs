@@ -128,6 +128,12 @@ const benign = (s) => BENIGN.some((re) => re.test(s));
 //   a bound record/aggregation really resolving against the SERIALIZED model
 //     (render-smoke only ever sees a mocked one): 206 209 226, and 225 for a
 //     sorter inside a raw binding-info string
+//   a record FLATTENED onto the model root, bound absolutely: 142 175 195
+//     (plus the extra leg on 229/243) — all four rendered empty before
+//     2026-08-01, see AGENTS §5
+//   two-way bound control properties on a grid Table: 174
+//   SelectDialog opened by control_by_id + its confirm arg: 233
+//   fieldGroupIds / validateFieldGroup: 272
 const INTERACTIONS = {
   z2ui5_cl_ai_app_005: async (page, expect) => {
     const btn = page.getByRole('button', { name: 'Default', exact: true }).first();
@@ -899,6 +905,52 @@ const INTERACTIONS = {
   z2ui5_cl_ai_app_195: async (page, expect) => {
     await expect(page.locator('.sapMList'), 'the root-seeded record in the list').toContainText('Notebook Basic 15');
     await expect(page.locator('.sapMList'), 'the bound description').toContainText('HT-1000');
+  },
+  // the controller's setAlternateRowColors / highlight toggling replaced by
+  // two-way bound ToggleButtons + an expression binding on RowSettings
+  z2ui5_cl_ai_app_174: async (page, expect) => {
+    const alt = page.getByRole('button', { name: 'Toggle Alternate Row Colors', exact: true }).first();
+    await expect(alt, 'the alternate-row-colors toggle').toBeVisibleEnabled();
+    await alt.click();
+    await waitForUi5(page, () => {
+      const t = ui5All().find((c) => c.getMetadata().getName() === 'sap.ui.table.Table');
+      return !!t && t.getAlternateRowColors() === true;
+    }, 'the ToggleButton did not flip the Table alternateRowColors through the two-way binding');
+    // highlights start ON (seeded true) — turning them off must feed the
+    // expression binding on every RowSettings
+    const hl = page.getByRole('button', { name: 'Toggle Highlights', exact: true }).first();
+    await expect(hl, 'the highlights toggle').toBeVisibleEnabled();
+    await hl.click();
+    await waitForUi5(page, () => {
+      const rs = ui5All().filter((c) => c.getMetadata().getName() === 'sap.ui.table.RowSettings');
+      return rs.length > 0 && rs.every((r) => r.getHighlight() === 'None');
+    }, 'turning highlights off did not reach the RowSettings highlight expression binding');
+  },
+  // InitialPagePattern: the value-help icon opens the SelectDialog client-side
+  // (control_by_id open) and its confirm transports the picked item's
+  // description (${$parameters>/selectedItem}.getDescription()) to the backend
+  z2ui5_cl_ai_app_233: async (page, expect) => {
+    await page.locator('[id$="-vhi"]').first().dispatchEvent('click');
+    const dlg = page.locator('.sapMDialog');
+    await expect(dlg, 'the SelectDialog opened by control_by_id').toContainText('Purchases');
+    await expect(dlg, 'the bound purchase list').toContainText('BestEastern');
+    await dlg.locator('.sapMSLI').first().click();
+    await expect(page.locator('body'), 'the purchase selected by the confirm round-trip').toContainText('Computers');
+  },
+  // fieldGroupIds + validateFieldGroup: leaving a group fires the event with
+  // the group's ids, and the backend classifies it into ITS MessageStrip
+  z2ui5_cl_ai_app_272: async (page, expect) => {
+    const billing = page.locator('#BillingName input, [id$="BillingName-inner"]').first();
+    await expect(billing, 'the BillingName input').toBeVisibleEnabled();
+    await billing.click();
+    // moving focus into ANOTHER group is what triggers the validation
+    const discount = page.locator('#DiscountCode input, [id$="DiscountCode-inner"]').first();
+    await expect(discount, 'the DiscountCode input').toBeVisibleEnabled();
+    await discount.click();
+    await expect(page.locator('.sapMMsgStrip'), 'the classified MessageStrip after the round-trip')
+      .toContainText("Group 'Billing Information' Validation:Error");
+    await expect(page.locator('.sapMMessageToast').last(), 'the validation toast')
+      .toContainText("Validation of field group 'Billing Information' triggered.");
   },
   z2ui5_cl_ai_app_142: (page) => formFieldValues(page),
   z2ui5_cl_ai_app_175: (page) => formFieldValues(page),

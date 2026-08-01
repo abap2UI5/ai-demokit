@@ -7,17 +7,49 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
-## e2e round 3 — eight interactions, six LIVE_TESTs closed (2026-08-01)
+## e2e round 3 — a whole broken binding class, and 13 LIVE_TESTs closed (2026-08-01)
 
-- Eight new `INTERACTIONS` entries, all green: **253/254/255** (one shared
+- **Seven ports rendered EMPTY in the running app.** App 206 came out of the
+  new interaction showing `x x` where its dimensions belong: the port had
+  flattened the original's `binding="{/ProductCollection/5}"` onto the model
+  root but kept the bindings **relative** (`{NAME}`), and a relative path on a
+  control with *no binding context at all* resolves against nothing. The same
+  form (with a sidecar note claiming the opposite — *"the relative bindings
+  resolve against the root"*) sat in **142 175 195 206 209 229 243**. All are
+  now bound absolutely through `client->_bind( field )`, every wrong claim is
+  corrected in place, and all seven are e2e-verified.
+  This is the app-207 class one level up, and again **no static gate could see
+  it**: structural-diff matches on the last path segment, render-smoke mocks
+  the model, property-check reads member names. Two lint changes came out of it:
+  - new rule **`relative-bind-on-root-field`** — a `{FIELD}` literal whose
+    FIELD is a root-level `DATA` scalar of the class and no row column. Zero
+    findings over the corpus after the fixes, so the class cannot regrow.
+  - **`numeric-bound-as-string` is now control-aware.** It fired on the ZIP
+    code and house number of 142/175 the moment they became visible as binds:
+    `value` is a float on a `Slider` and a **string** on an `Input`, so the
+    attribute name alone proves nothing. Only a hit in a `NUMERIC_PROPS`
+    (control, property) pair is a defect now; a synthetic check confirms the
+    Slider case still fails and the Input case does not.
+- Eighteen new `INTERACTIONS` entries, all green: **253/254/255** (one shared
   assertion for the value-state pickers — every non-`None` state reaches the DOM
   exactly once as `sapMInputBaseContentWrapper<State>`, and the bound
   `valueStateText` is written into the value-state node), **267** and **269**
   (DynamicSideContent), **268** (the anchored ColorPickerPopover open),
   **270** (the keyboard-driven Slider resizing the Panel) and **271**
-  (`layoutChange` round-trip + the `containerQuery` expression binding).
-  Open LIVE_TESTs **57 → 51**; 268 keeps its LIVE_TEST for the two legs that
-  need a real colour pick, with the verified leg named in the sidecar.
+  (`layoutChange` round-trip + the `containerQuery` expression binding), plus
+  the "controller sets a width from a slider" class in one shared assertion
+  (**144** with its round-trip, **176/213/214** with the expression binding),
+  the server-side device branch (**173**), the bound-record ports
+  (**195/206/209/226**) and the sorter inside a raw binding-info string
+  (**225**). Open LIVE_TESTs **57 → 44 ports**. Partial coverage is recorded as
+  such: 268 keeps its LIVE_TEST for the two legs that need a real colour pick,
+  229 for its second popover and the footer buttons.
+- Two measurements worth keeping: a `GridLayoutBase` extends **ManagedObject**,
+  not Element, so a `customLayout` is in **no** `Element.registry` — read it
+  through its `CSSGrid` (that cost one wrong "the port drops the layout"
+  conclusion). And app 271's `layoutChange` only fires once `containerQuery`
+  is on **and** the container actually changes size, so the interaction flips
+  the SegmentedButton and then shrinks the viewport.
 - **Driving a control that has no layout headless.** Two selectors died on the
   same cause: the theme CSS never loads in the harness, so `sapUiIcon` and
   `sapMSliderHandle` render with a **zero-size box** and playwright refuses to
@@ -32,6 +64,31 @@ of their date and are NOT kept current._
   `enabled` flag — the first interaction that produces its own breakpoint.
 - `--only` now takes a comma-separated list (`--only 268,270`), which is what
   iterating on a handful of ports actually needs.
+- **Full sweep green: 270/270 ports, 0 failing** (the build that carries the
+  seven binding fixes).
+- One more trap, now in AGENTS §10: **a deviation text is a gate escape.**
+  Rewriting the `LIVE_TEST` prose of 176/213/214 into verified prose dropped
+  the sentence that declared their missing `Slider.liveChange`, and
+  structural-diff went from 0 to 3 undeclared findings. Keep the naming clause
+  when you rewrite a deviation.
+
+## Depth port FieldGroup — the validateFieldGroup idiom (2026-08-01)
+
+- **App 272** (`sap.ui.core.sample.FieldGroup`, new batch b15, `src/02`): the
+  first port of `sap.ui.core.Control`'s **`fieldGroupIds`** + the form's
+  **`validateFieldGroup`** event. Every Input/Select/ComboBox keeps its group
+  id; leaving a group fires one backend event carrying
+  `${$parameters>/fieldGroupIds}` (a single-element array that stringifies to
+  the group name — the original reads `aFieldGroup[0]`), and the ABAP `CASE`
+  is the controller's `mMessageMapping`. The three imperative setters per
+  MessageStrip (`setType`/`setText`/`setVisible`) become a bound triple, and
+  `onMsgStripClose` becomes one `close` event per strip because each target is
+  statically known. **Zero structural diffs** — the view is 1:1.
+- The sample sources came from a **blobless sparse clone** of SAP/openui5
+  (~350 MB for the eight demokit sample trees): `/home/user/fork-openui5`
+  carries only `src/<lib>/src` and has no samples at all, which reads like
+  "no template available". Recipe recorded in AGENTS §6 next to the
+  scaffolder.
 
 ## Depth port GridResponsiveness + a stale-build symptom worth naming (2026-07-31)
 
