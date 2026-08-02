@@ -2183,7 +2183,27 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.m`              control = `sap.m.MessageToast`                    name = `MessageToast`                        class = `z2ui5_cl_ai_app_037` path = `src/01/b03/z2ui5_cl_ai_app_037.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        since = `1.9.2` )
+        since = `1.9.2` ) ).
+
+    lv_text1 = `NOTE: the sample's view.xml is only the Page with the Delete Button - everything else is built in onInit. The controller-built Dialog (resizable, state Error, contentHeight/contentWidth 50%,` &&
+               ` verticalScrolling false), its customHeader Bar with the nav-back Button and the Title, the MessageView with its MessageItem template and the item's Link, and the Close beginButton are rebuilt 1:1 as` &&
+               ` a core:FragmentDefinition shown with popup_display. So Dialog, Bar, Title, MessageView, MessageItem, Link and two of the three Button controls are extra against the original view.xml. // NOTE: the` &&
+               ` two controller handlers that reach into controls become bound state, per the prefer-a-bindable-property rule: oBackButton.setVisible(...) is the two-way bound visible={/BACK_VISIBLE} and` &&
+               ` oDialogTitle.setText(...) is text={/DIALOG_TITLE}. Only navigateBack has no bindable equivalent - it is the one frontend action (control_by_id, view = cs_view-popup, on the MessageView id` &&
+               ` messageView, an unlisted public control method that passes the framework's deny-prefix guard). handleDialogPress's own navigateBack is not needed: popup_display rebuilds the fragment, so the`.
+    lv_text1 = lv_text1 && ` MessageView always opens on its list page; only the header state is reset in ABAP. // NOTE: activeTitlePress keeps the original's client-side MessageToast.show('Active title pressed') as a` &&
+               ` roundtrip-free _event_client MESSAGE_TOAST show - the text is static, so nothing has to travel. // NOTE: a flat ABAP row serializes every field, so the properties the mock omits carry their UI5` &&
+               ` defaults: markupDescription is false on all six messages (never set in the original), activeTitle false except on the last one, and the counter of the second message (Warning without description) is` &&
+               ` 0 - ListItemBaseRenderer.renderCounter only renders a truthy counter, so 0 and 'absent' render identically.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.MessageView`                     name = `MessageViewInsideDialog`             class = `z2ui5_cl_ai_app_284` path = `src/01/b20/z2ui5_cl_ai_app_284.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.46`
+        notes = lv_text1 ) ).
+
+    result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.MessageView`                     name = `MessageViewMessageManager`           class = `z2ui5_cl_ai_app_038` path = `src/01/b03/z2ui5_cl_ai_app_038.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`

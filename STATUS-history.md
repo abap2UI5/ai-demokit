@@ -7,6 +7,30 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## Batch b20 (284) — a controller-built dialog, and the id nothing validated (2026-08-02)
+
+**284 `sap.m.sample.MessageViewInsideDialog`** (`sap.m.MessageView`). The
+sample's `view.xml` is one Button; the Dialog, its custom-header Bar with the
+nav-back Button and Title, the MessageView with its MessageItem template and
+Link — all of it is built in `onInit`. The port rebuilds them as a
+`core:FragmentDefinition` shown with `popup_display`, and splits the
+controller's three imperative reaches the way the rulebook says: `setVisible`
+and `setText` become **two-way bound state** (`visible={/BACK_VISIBLE}`,
+`text={/DIALOG_TITLE}`), and only `navigateBack` — which has no bindable
+equivalent — stays a `control_by_id` frontend action on the popup slot.
+
+Which exposed the last unvalidated part of that wire: **the id**. Everything
+else in a `CONTROL_BY_ID` call is checked (the action token, the method for
+the closed-set actions, the obsolete empty view slot), but the id itself was
+taken on trust — and a wrong one is silent in exactly the way the whole rule
+family exists for: the frontend finds no control, logs it, and the button
+does nothing. Now the linter rule **`frontend-action-unknown-id`**: every
+literal id in a `CONTROL_BY_ID` wire is matched against the ids the class's
+views declare, across all slots. It stays quiet unless *every* `id` attribute
+in the class is a literal, so a class that builds ids at runtime is never
+guessed at. 0 findings over the 284-file corpus; proven by miscasing 284's
+own `messageView`.
+
 ## Batch b16 (282/283) — sap.ui.core reaches full in-scope coverage, and two gate defects (2026-08-02)
 
 Two sap.ui.core depth ports, both idiom-first picks; they happen to be the
