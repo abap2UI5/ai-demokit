@@ -499,8 +499,10 @@ DSAG Leitfaden, then the samples style. Essentials:
   standalone final statement.
 - **ABAP Doc (`"!`) is parsed as HTML.** A raw `<…>` is read as an HTML tag, so
   never put a literal UI5 element (`<mvc:View>`) or any other `<tag>` in a `"!`
-  comment — write it plain (`mvc:View element`). A `<tag>` there is flagged as an
-  unsupported *and* unclosed HTML tag (was a warning on `z2ui5_cl_ai_xml`).
+  comment — write it plain (`mvc:View element`) or escape it as `&lt;tag&gt;`.
+  A `<tag>` there is flagged as an unsupported *and* unclosed HTML tag (was a
+  warning on `z2ui5_cl_ai_xml`, and again on `z2ui5_cl_ai_frontend_simulator`
+  where a placeholder `<class name>` had to become `&lt;class name&gt;`).
 
 **Run `abaplint` after every change — 0 issues before committing.**
 
