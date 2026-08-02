@@ -12,6 +12,9 @@
  * entity, checked and deviations - the port classes carry no header).
  *
  * Run:  node scripts/generate-overview.mjs
+ *       node scripts/generate-overview.mjs --update-entities
+ *         (rebuilds ui5/openui5-entities.json from the installed @openui5
+ *          sources - needs node_modules; see the oracle comment below)
  */
 
 import fs from 'fs';
@@ -40,16 +43,28 @@ const uni = JSON.parse(fs.readFileSync(path.join(ROOT, 'ui5', 'universe.json'), 
 const uniMap = new Map();
 for (const lib of uni.libs) for (const s of lib.samples) uniMap.set(`${lib.lib}|${s.name}`, s);
 
-// OpenUI5 membership oracle: a control/entity is in OpenUI5 if it is a known
-// control (ui5/properties.json, the offline control catalog) OR has an OpenUI5
-// source module in the installed @openui5 packages (catches helpers/statics like
-// MessageBox/MessageToast/URLHelper that carry no @since members). Entities with
-// neither (demo-kit-only patterns, CSS-class doc entities) are "not in OpenUI5".
-// Resolved at generation time; the flags are baked into the generated class.
+// OpenUI5 membership oracle — DETERMINISTIC, reads only committed data: a
+// control/entity is in OpenUI5 if it is a known control (ui5/properties.json,
+// the offline control catalog) OR listed in ui5/openui5-entities.json (the
+// committed snapshot of OpenUI5 entities that have no properties.json entry:
+// statics/helpers like MessageBox/MessageToast/URLHelper, the sap.ui.model
+// types, CSS-class doc entities). Entities in neither are "not in OpenUI5"
+// (demo-kit-only patterns). The snapshot exists so the ui5_only flags come out
+// identical with and without node_modules — the previous filesystem probe of
+// node_modules/@openui5 made the generated class differ between environments
+// (6 vs 25 flags), so the meta_valid drift gate and the pre-commit hook
+// disagreed depending on whether npm ci had run. When the @openui5 packages
+// ARE installed, the snapshot is cross-checked against their sources and a
+// stale snapshot fails the run; rebuild it with --update-entities.
 const OPENUI5_CONTROLS = (() => {
   try { return JSON.parse(fs.readFileSync(path.join(ROOT, 'ui5', 'properties.json'), 'utf8')).controls || {}; }
   catch { return {}; }
 })();
+const ENTITIES_FILE = path.join(ROOT, 'ui5', 'openui5-entities.json');
+const EXTRA_ENTITIES = new Set((() => {
+  try { return JSON.parse(fs.readFileSync(ENTITIES_FILE, 'utf8')).entities || []; }
+  catch { return []; }
+})());
 const OPENUI5_PKG = path.join(ROOT, 'node_modules', '@openui5');
 const OPENUI5_LIBS = fs.existsSync(OPENUI5_PKG) ? fs.readdirSync(OPENUI5_PKG) : [];
 
@@ -78,11 +93,60 @@ function libText(lib) {
   return (libTextCache[lib] = t);
 }
 function inOpenUI5(entity) {
-  if (OPENUI5_CONTROLS[entity]) return true;
+  return !!OPENUI5_CONTROLS[entity] || EXTRA_ENTITIES.has(entity);
+}
+// source probe — used ONLY to build/verify ui5/openui5-entities.json, never to
+// decide a flag directly (that would reintroduce the environment dependence)
+function probeOpenUI5(entity) {
   const rel = entity.replace(/\./g, '/') + '.js';
   const wordRe = new RegExp('\\b' + entity.split('.').pop() + '\\b');
   return OPENUI5_LIBS.some((lib) =>
     fs.existsSync(path.join(OPENUI5_PKG, lib, 'src', rel)) || wordRe.test(libText(lib)));
+}
+
+// --update-entities rebuilds the snapshot from the installed @openui5 sources;
+// a plain run with node_modules present cross-checks the snapshot instead and
+// fails when it is stale, so the committed verdicts can never silently drift
+// from the sources they were derived from.
+{
+  const metaEntities = new Set();
+  for (const mf of fs.readdirSync(META)) {
+    if (!mf.endsWith('.json')) continue;
+    const e = JSON.parse(fs.readFileSync(path.join(META, mf), 'utf8')).entity;
+    if (e) metaEntities.add(e);
+  }
+  const UPDATE_ENTITIES = process.argv.includes('--update-entities');
+  if (UPDATE_ENTITIES && !OPENUI5_LIBS.length) {
+    console.error('--update-entities needs the installed @openui5 packages (run npm ci first).');
+    process.exit(1);
+  }
+  if (OPENUI5_LIBS.length) {
+    const probed = [...metaEntities]
+      .filter((e) => !OPENUI5_CONTROLS[e] && probeOpenUI5(e))
+      .sort();
+    if (UPDATE_ENTITIES) {
+      const note =
+        'OpenUI5 entities with no ui5/properties.json entry (statics/helpers, sap.ui.model ' +
+        'types, CSS-class doc entities). Read by generate-overview.mjs so the ui5_only flag ' +
+        'is deterministic without node_modules. Never hand-edit - rebuild with: ' +
+        'node scripts/generate-overview.mjs --update-entities';
+      fs.writeFileSync(ENTITIES_FILE, JSON.stringify({ note, entities: probed }, null, 2) + '\n');
+      EXTRA_ENTITIES.clear();
+      for (const e of probed) EXTRA_ENTITIES.add(e);
+      console.log(`openui5-entities.json: ${probed.length} entities`);
+    } else {
+      const missing = probed.filter((e) => !EXTRA_ENTITIES.has(e));
+      const gone = [...EXTRA_ENTITIES].filter((e) => metaEntities.has(e) && !probed.includes(e));
+      if (missing.length || gone.length) {
+        console.error(
+          `ui5/openui5-entities.json is stale (missing: ${missing.join(', ') || '-'}; ` +
+            `no longer in OpenUI5: ${gone.join(', ') || '-'}) - ` +
+            'rebuild with: node scripts/generate-overview.mjs --update-entities'
+        );
+        process.exit(1);
+      }
+    }
+  }
 }
 // compare dotted UI5 versions ("1.86" > "1.77"); '' (unknown / since forever) is lowest
 const verCmp = (a, b) => {
