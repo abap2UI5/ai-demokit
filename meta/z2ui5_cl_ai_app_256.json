@@ -8,8 +8,11 @@
     "frontend_action": true,
     "event_t_arg": true
   },
-  "status": "generated",
-  "checked": null,
+  "status": "checked",
+  "checked": {
+    "date": "2026-08-02",
+    "note": "verified in a running system - human live check 2026-08-02 (maintainer): all anchors open the hideInput picker and the change toast carries the picked value."
+  },
   "deviations": [
     {
       "type": "POST_171",
@@ -20,8 +23,8 @@
       "what": "The 016 hidden-picker pattern on the sibling control: all three anchors (text Button, icon Button, Link) open the hideInput picker roundtrip-free via _event_client control_by_id openBy ($event.oSource.sId), and the change toast is client-composed from ${$parameters>/value} - the controller handlers fold into the two wire forms 1:1."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "unverified in a running system: the anchored open of the hideInput picker and the change-value toast. Note the 016 headless finding likely applies here too - the popover opens but the focus-restore can loop on the hidden input in headless Chromium (Popover.onfocusin recursion); wiring is 1:1, verify in a real browser."
+      "type": "NOTE",
+      "what": "live-verified on 2026-08-02: the anchored open of the hideInput picker and the change-value toast both work in a real browser. The 016 headless finding (Popover.onfocusin recursion on the hidden input) is therefore headless-only for this control too; no e2e interaction is armed for the hidden-picker class."
     }
   ]
 }
