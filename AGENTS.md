@@ -820,18 +820,17 @@ same change** — that is what makes a lesson unrepeatable rather than advisory.
 
 **Run before every commit:**
 ```bash
-npm ci
-npx abaplint ./abaplint.jsonc          # expect 0 issues
-node scripts/validate-meta.mjs         # sidecar schema + referential integrity
-node scripts/pattern-lint.mjs          # expect 0 errors
-node scripts/structural-diff.mjs --strict
-node scripts/structure-lint.mjs --strict # builder tree well-formedness (fast)
-node scripts/render-smoke.mjs --strict # headless XMLView.create per port
-node scripts/property-check.mjs        # no member newer than UI5 1.71
-node scripts/data-fidelity.mjs         # model_init seeds match the archived mocks
-node scripts/generate-overview.mjs     # then: git diff must stay clean
-node scripts/generate-coverage.mjs     # (README/api.md must stay clean too)
-node scripts/generate-status.mjs       # (STATUS.md state block too)
+npm run gates        # full offline gate set, fail-fast; needs NO node_modules and no network
+```
+It chains: structure-lint → pattern-lint → validate-meta → structural-diff →
+property-check → data-fidelity → regenerate overview/coverage/status →
+`git diff --exit-code -- src README.md api.md STATUS.md` (regenerated
+artefacts must leave the tree clean, exactly as the `meta_valid` CI job checks).
+
+**Before every PR, additionally:**
+```bash
+npm ci               # once - installs abaplint + the local OpenUI5 runtime
+npm run gates:full   # gates + `npx abaplint ./abaplint.jsonc` (0 issues) + render-smoke
 ```
 
 ### Developer tooling — starting a port

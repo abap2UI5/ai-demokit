@@ -7,6 +7,8 @@
     "prepare": "git config core.hooksPath .githooks || true",
     "overview": "node scripts/generate-overview.mjs",
     "coverage": "node scripts/generate-coverage.mjs",
+    "gates": "node scripts/structure-lint.mjs --strict && node scripts/pattern-lint.mjs && node scripts/validate-meta.mjs && node scripts/structural-diff.mjs --strict && node scripts/property-check.mjs && node scripts/data-fidelity.mjs && node scripts/generate-overview.mjs && node scripts/generate-coverage.mjs && node scripts/generate-status.mjs && git diff --exit-code -- src README.md api.md STATUS.md",
+    "gates:full": "npm run gates && npx abaplint ./abaplint.jsonc && node scripts/render-smoke.mjs --strict",
     "smoke": "node scripts/render-smoke.mjs --strict",
     "structure-lint": "node scripts/structure-lint.mjs --strict",
     "scaffold": "node scripts/scaffold.mjs",
