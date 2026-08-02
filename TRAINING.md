@@ -106,7 +106,7 @@ generating or reviewing):
   sources (e.g. the default group header in `ComboBoxBase`, the
   `EventHandlerResolver` for `$`-args — both verified 2026-07-16),
   (c) property-level `@since` metadata for the 1.71 property gate
-  (`scripts/generate-properties.mjs` → `ui5/properties.json`).
+  (the linter's `generate-metadata.mjs` → `ui5/properties.json`).
 
 ## Quality ladder
 
