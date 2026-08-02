@@ -22,6 +22,10 @@
     {
       "type": "NOTE",
       "what": "The ShellBar homeIcon asset URL './resources/sap/ui/documentation/sdk/images/logo_sap.png' is repointed to the OpenUI5 host 'https://sdk.openui5.org/resources/...' per the asset-URL rule (same as app 110). The mock's per-row ProductPicUrl values are kept byte-identical to sap/ui/demo/mock/products.json (unbound display data, never rendered by this view). Rows without a DateOfSale in the mock carry an empty string (the property is not bound). Review finding 2026-07-27: the row type inlines all 20 mock keys although the view binds only Name, Price, CurrencyCode and ProductId - against AGENTS.md par.5 'unbound mock keys stay out of the row type'; the unbound columns (category, maincategory, taxtarifcode, suppliername, weightmeasure, weightunit, description, dateofsale, productpicurl, status, quantity, uom, width, depth, height, dimunit) should be trimmed."
+    },
+    {
+      "type": "POST_171",
+      "what": "the sap.m.Avatar control (since UI5 1.73) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.73 to render it. @since verified in sap/m/Avatar.js:99 (control-level, which the member-level property gate never saw)."
     }
   ]
 }

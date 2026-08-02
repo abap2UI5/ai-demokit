@@ -170,7 +170,7 @@ CI enforces this on every change:
 | `ABAP_STANDARD`  | `abaplint ./abaplint.jsonc` (syntax `v750`)                    |
 | `ABAP_CLOUD`     | `abaplint .github/abaplint/abap_cloud.jsonc` (syntax `Cloud`)  |
 | `ABAP_702`       | `npm run downport` → `abaplint .github/abaplint/abap_702.jsonc` |
-| `checks`         | `pattern-lint` (distilled lessons), `structural-diff --strict` (port vs original view incl. binding values, undeclared deviations fail), `render-smoke` (headless `XMLView.create` per port), `validate-meta` + overview/coverage sync |
+| `checks`         | `pattern-lint` (distilled lessons), `structural-diff --strict` (port vs original view incl. binding values, undeclared deviations fail), `view-gates` (abap2UI5-linter: UI5 metadata, builder structure, headless `XMLView.create` per port), `validate-meta` + overview/coverage sync |
 
 Every port also carries a machine-readable sidecar `meta/<class>.json`
 (sample, status, declared deviations) — the source of truth the overview app,
@@ -189,7 +189,7 @@ the coverage and the structural diff read from.
 | [`meta/`](meta) | One sidecar per port — status, checked, typed deviations |
 | [`pr/`](pr) | Forwardable improvement requests for the abap2UI5 framework, distilled from porting gaps |
 | [ai-mcp](https://github.com/abap2UI5/ai-mcp) | MCP server for AI coding agents — capability queries, view validation, deploy, headless run + screenshot on this repo's infrastructure (separate repository) |
-| [abap2UI5-linter](https://github.com/abap2UI5/abap2UI5-linter) | The render-smoke/property gates extracted as standalone CLI, library and GitHub Action (separate repository) |
+| [abap2UI5-linter](https://github.com/abap2UI5/abap2UI5-linter) | The view gates as standalone CLI, library and GitHub Action — extracted from this repo and now used BY it (`scripts/view-gates.mjs`) |
 
 ## Coverage
 
@@ -198,7 +198,7 @@ have an abap2UI5 port.
 
 <!-- coverage:start -->
 
-Overall **276 / 626** in-scope demo kit samples ported (44.1 %).
+Overall **280 / 626** in-scope demo kit samples ported (44.7 %).
 **In scope**: samples whose control exists since **UI5 1.71** and is **not deprecated** (legacy-free ready).
 Out of scope: 115 of 741 samples — 21 on deprecated controls, 52 on controls newer than 1.71, 39 that are not app views (UI5 test infrastructure, Component routing, view-templating demos — see `ui5/scope-nonapp.json`), 3 demo apps without an owning control.
 Control metadata from OpenUI5 **1.152.0**.
@@ -211,11 +211,11 @@ Control metadata from OpenUI5 **1.152.0**.
 | `sap.ui.unified` | 21 | 21 | 13 | 61.9 % | ██████░░░░ |
 | `sap.f` | 46 | 32 | 19 | 59.4 % | ██████░░░░ |
 | `sap.ui.integration` | 4 | 4 | 2 | 50.0 % | █████░░░░░ |
-| `sap.m` | 461 | 403 | 163 | 40.4 % | ████░░░░░░ |
+| `sap.m` | 461 | 403 | 167 | 41.4 % | ████░░░░░░ |
 | `sap.uxap` | 45 | 45 | 18 | 40.0 % | ████░░░░░░ |
 | `sap.ui.layout` | 61 | 61 | 23 | 37.7 % | ████░░░░░░ |
 | `sap.ui.table` | 21 | 21 | 6 | 28.6 % | ███░░░░░░░ |
-| **Total** | **741** | **626** | **276** | **44.1 %** | ████░░░░░░ |
+| **Total** | **741** | **626** | **280** | **44.7 %** | ████░░░░░░ |
 
 <!-- coverage:end -->
 

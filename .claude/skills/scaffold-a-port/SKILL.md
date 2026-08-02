@@ -43,7 +43,7 @@ that is the actual porting work):
   picks the next app number + `src/<lib>/b<nn>` batch (`--new-batch` /
   `--batch bNN`), and writes the class stub, `clas.xml`, `package.devc.xml` and
   a valid `meta/` sidecar. The stub is a TODO placeholder view: it passes
-  abaplint / pattern-lint / structure-lint / render-smoke immediately, and
+  abaplint / pattern-lint / view-gates immediately, and
   `structural_diff` (correctly) fails until you rebuild the view 1:1. Needs an
   OpenUI5 checkout (`OPENUI5_SRC`, default `../fork-openui5`). `--dry-run` to
   preview. **`/home/user/fork-openui5` carries only `src/<lib>/src` — no
@@ -51,7 +51,12 @@ that is the actual porting work):
   sparse clone gets just the sample trees in ~350 MB:
   `git clone --filter=blob:none --sparse https://github.com/SAP/openui5.git …`
   then `git sparse-checkout set src/<lib>/test/<lib path>/demokit/sample …`,
-  and point `OPENUI5_SRC` at it.
+  and point `OPENUI5_SRC` at it. **Add `src/<lib>/src` to that same sparse set**
+  — `scope-of.mjs` reads the control JSDoc from there and answers
+  `UNRESOLVED (no source .js found)` for *every* entity when the checkout has
+  only the sample trees. That reads like "unknown control" but means "wrong
+  checkout": one sparse clone must carry both halves (~170 MB for the ported
+  libraries), or the scope pre-check silently stops gating.
 - **`npm run json-to-abap -- <file.json> [--path k] [--fields spec] [--var v]`**
   (`scripts/json-to-abap.mjs`) — turns a JSON array (a demo mock's
   `ProductCollection` …) into an ABAP `VALUE #( … )` literal for `model_init`
@@ -65,3 +70,8 @@ that is the actual porting work):
   a display-only value bound into a text template (keeps the exact decimals,
   e.g. dimensions `40.8`). Do **not** leave a decimal column as `TYPE i`.
 
+The last two are automated by the tracked **`.githooks/pre-commit`** hook: on
+every commit it regenerates the overview app + coverage docs and stages them,
+so they never drift from `meta/` (which the `meta_valid` CI job enforces on
+PRs). It is enabled with `git config core.hooksPath .githooks`, which
+`npm ci` / `npm install` runs automatically via the `prepare` script.

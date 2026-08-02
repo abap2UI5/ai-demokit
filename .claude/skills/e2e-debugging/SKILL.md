@@ -75,3 +75,7 @@ verdicts below turned out to be harness effects.
   (`web/` and `scripts/e2e-build.mjs`), and forwarded upstream as
   `pr/open-abap-xml-escaping`. Prefer `READ TABLE` over `tab[ … ]` in an app
   that must run there.
+- **Type with a delay when the wire round-trips.** A per-keystroke round-trip
+  is lossy, not queued (events fired mid-flight are dropped) — a no-delay
+  `pressSequentially` asserts a value the wire never promised. Full rule (app
+  280) in the `port-a-sample` guide's porting gotchas.

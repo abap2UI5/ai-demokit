@@ -277,7 +277,7 @@ that stops at the deepest node.
   → `` \|\{ path: 'EXCHANGE_RATE', type: 'sap.ui.model.type.Float' \}\| ``. Copying
   the original camelCase `path:'exchangeRate'` verbatim renders nothing (no such
   model field) and no gate catches it — structural-diff normalizes case,
-  render-smoke mocks the model (app 171).
+  the render gate mocks the model (app 171).
 - `client->_bind( var )` — bind an ABAP `DATA` member two-way (the value
   flows back into `var` on the next round-trip), e.g.
   `)->a( n = `items` v = client->_bind( t_items )`. **`client->_bind_edit( )`
@@ -414,6 +414,16 @@ these entries.
 
 #### Porting gotchas (distilled lessons — same discipline as AGENTS.md §10)
 
+- **A per-keystroke round-trip is LOSSY, not queued.** abap2UI5 serializes
+  round-trips: an event fired while one is in flight is **dropped**, so a
+  `liveChange`/`liveSearch` wire that round-trips shows the value of the last
+  *completed* trip, skipping intermediate ones under fast typing (measured on
+  app 280 — typing `abc` with no delay left the bound field at `a` while the
+  TextArea held `abc`; it converges as soon as typing pauses). Prefer a two-way
+  binding or an expression binding whenever the sample's point allows it; when
+  the round-trip is required, say so in the sidecar and make any e2e
+  interaction **type with a delay** — a no-delay `pressSequentially` asserts a
+  value the wire never promised.
 - **Event args need the `$`-prefixed form** (`${COL}`, `$event.oSource.sId`), not
   a bare `{COL}` — see §5 "Data binding & events".
 - **A UI5 *association* cannot be data-bound** — only properties and
@@ -512,5 +522,5 @@ these entries.
 - **POST_171 covers event *parameters* too** — a post-1.71 event parameter
   read via `${$parameters>/…}` (e.g. SearchField `searchButtonPressed`,
   since 1.114) needs its POST_171 deviation exactly like a bound member;
-  `property-check.mjs` enforces this (it scans `$parameters>/<name>` refs in
+  the property gate enforces this (it scans `$parameters>/<name>` refs in
   `t_arg` and resolves them against the same member map as attributes, §6).

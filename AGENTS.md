@@ -279,8 +279,9 @@ source of truth:
   **Gate coverage — the property gate covers ALL ported libraries.**
   `generate-properties.mjs` scans every lib's source **recursively** (nested
   controls too — `form/SimpleForm`, `cards/NumericHeader`) into
-  `ui5/properties.json`, and `property-check.mjs` resolves each control via the
-  port's own `xmlns` declarations and walks the parent chain — so a post-1.71
+  `ui5/properties.json` for the coverage docs, while the gate itself reads the
+  linter's own snapshot; either way each control is resolved via the port's own
+  `xmlns` declarations and the parent chain is walked — so a post-1.71
   member in any library is caught automatically (the `generate_result` CI step
   clones the full OpenUI5 repo, so this holds in CI). Two facts about how the
   generator reads `@since` matter when verifying a flag: **(a)** an inherited
@@ -300,7 +301,8 @@ source of truth:
   **So the property gate is a backstop, not a guarantee** — when a control
   feels new, still confirm with `node scripts/scope-of.mjs <entity>`
   (control-level) and declare `POST_171` **by policy** even if no gate forces
-  it. A green property-check does **not** prove a port is ≤ 1.71-clean.
+  it. A green property gate does **not** prove a port is ≤ 1.71-clean — though
+  it now does check the **control** itself, not only its members.
 - **Before declaring any sample feature inexpressible, check `CAPABILITIES.md`**
   — the map of what abap2UI5 can express, each entry backed by a port that
   proves it. Never improvise around a feature it marks ✅/🔶 (app 042 replaced a
@@ -371,9 +373,12 @@ rebuilds the `702` branch on every push to `main`.
 
 The `checks` workflow runs the deterministic gates on every PR; the heavy
 `e2e_smoke` runs in `e2e_nightly.yaml` (scheduled + on demand). The gate set:
-`pattern_lint`, `structural_diff`, `structure_lint`, `render_smoke`,
-`data_fidelity`, `meta_valid`, `property_gate`, plus `e2e_smoke`. What each
-gate checks, what a failure means and every legitimate escape hatch is in
+`pattern_lint`, `structural_diff`, `view_gates` (properties + structure +
+headless render — the three former view gates, now run from
+[abap2UI5-linter](https://github.com/abap2UI5/abap2UI5-linter) with only the
+corpus policy kept here in `scripts/view-gates.mjs`), `data_fidelity`,
+`meta_valid`, plus `e2e_smoke`. What each gate checks, what a failure means
+and every legitimate escape hatch is in
 **`.claude/skills/run-the-gates/SKILL.md`** — read it the moment a gate fails,
 and before declaring any skip or deviation to satisfy one.
 
@@ -384,15 +389,16 @@ same change** — that is what makes a lesson unrepeatable rather than advisory.
 ```bash
 npm run gates        # full offline gate set, fail-fast; needs NO node_modules and no network
 ```
-It chains: structure-lint → pattern-lint → validate-meta → structural-diff →
-property-check → data-fidelity → regenerate overview/coverage/status →
+It chains: pattern-lint → validate-meta → structural-diff → data-fidelity →
+regenerate overview/coverage/status →
 `git diff --exit-code -- src README.md api.md STATUS.md` (regenerated
 artefacts must leave the tree clean, exactly as the `meta_valid` CI job checks).
 
 **Before every PR, additionally:**
 ```bash
-npm ci               # once - installs abaplint + the local OpenUI5 runtime
-npm run gates:full   # gates + `npx abaplint ./abaplint.jsonc` (0 issues) + render-smoke
+npm ci               # once - installs abaplint, @abap2ui5/linter + the OpenUI5 runtime
+npm run gates:full   # gates + `npx abaplint ./abaplint.jsonc` (0 issues)
+                     #       + view-gates --strict (properties/structure/headless render)
 ```
 
 
@@ -551,6 +557,16 @@ e2e gotchas in `e2e-debugging`, generator gotchas in `regenerate-artefacts`).
   exits non-zero, later steps never run, and the copy is left half-rewritten —
   every file then reports downport errors, including clean ones. Fix (or drop)
   parser-broken classes BEFORE downporting.
+- **A per-keystroke round-trip is LOSSY, not queued.** abap2UI5 serializes
+  round-trips: an event fired while one is in flight is **dropped**, so a
+  `liveChange`/`liveSearch` wire that round-trips shows the value of the last
+  *completed* trip, skipping intermediate ones under fast typing (measured on
+  app 280 — typing `abc` with no delay left the bound field at `a` while the
+  TextArea held `abc`; it converges as soon as typing pauses). Prefer a two-way
+  binding or an expression binding whenever the sample's point allows it; when
+  the round-trip is required, say so in the sidecar and make any e2e
+  interaction **type with a delay** — a no-delay `pressSequentially` asserts a
+  value the wire never promised.
 - **ABAP Doc (`"!`) is HTML** — no raw `<tag>` (e.g. `<mvc:View>`); see §8.
 - **Literal braces in attribute values are read as a BINDING by the XMLView
   parser** — CSS/JS braces inside a `core:HTML` `content` (or any literal

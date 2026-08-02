@@ -7,6 +7,102 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## Live check closes 13 ports — and a round-trip that drops keystrokes (2026-08-02)
+
+The maintainer live-checked the hidden-picker family and the whole b15 depth
+run. **`checked` 51 → 63, open LIVE_TESTs 43 → 35 ports.**
+
+- **016 / 256 / 257 — the hidden-picker class is closed.** All three anchors
+  open the `hideInput` picker and the change toast carries the picked value.
+  That also settles the 2026-07-30 headless finding: the `Popover.onfocusin`
+  recursion (*Maximum call stack size exceeded*) is **headless-only** — the
+  picker works in a real browser, so no port change is needed and the e2e
+  interaction stays deliberately unarmed for this class (app 091 covers the
+  openBy idiom). Recorded honestly: the check covered the visible behaviour,
+  the console was not necessarily inspected for a silent recursion warning.
+- **272–281 promoted to `checked`.** One open leg was deliberately kept: 277's
+  phone-portrait branch of the `MessageStrip` expression needs a real device
+  rotation, which neither a desktop check nor the harness performs.
+- **Three new e2e interactions (279/280/281), green over two consecutive runs.**
+
+The interesting part is what writing them measured:
+
+- **A per-keystroke round-trip is lossy, not queued** (now AGENTS §10). Typing
+  `abc` into app 280 with no delay left `GET_VALUE` at `a` while the TextArea
+  itself held `abc`: abap2UI5 serializes round-trips and **drops** events fired
+  while one is in flight. The port is correct — the original updates its Text
+  client-side, so under fast typing the backend-held value lags and can skip
+  intermediate values, converging as soon as typing pauses. The interaction
+  types with a 700 ms delay; the limit is declared in the sidecar.
+- **281's selectionFinish leg is not machine-drivable.** It fires only when the
+  picker *closes*, and headless neither F4 nor Escape reaches the picker once
+  focus sits in the item list, an outside click does not dismiss it, and
+  `getPicker()` is null on the registry instance. The armed interaction covers
+  the selectionChange leg (the toast carries the real item text via
+  `${$parameters>/changedItem}.getText()`); the finish leg is live-verified.
+- **279's load leg cannot be checked headless** either — the seeded product
+  image sits on `sdk.openui5.org` and the harness serves only `/resources/`
+  locally, so the error path already fires at boot. The interaction asserts the
+  error→swap round-trip (via the control's own `getVisible()`, not just text).
+
+One methodological note worth keeping: the harness truncates a thrown error
+message to ~200 chars, which made a control-registry dump look as if two
+`sap.m.Text` controls were missing from app 280 — they were there all along.
+Write diagnostics to a **file** from the interaction (it runs in Node), never
+into the error message.
+
+## Four depth ports: the MessageBox matrix, an image error fallback, a live-update TextArea, select-all (2026-08-02)
+
+Four idiom-first depth ports into b15 — 276 → 280 ports, every gate green
+(abaplint ×3 incl. a 702 downport in a throwaway copy, validate-meta,
+pattern-lint, structure-lint, structural-diff **0 undeclared**, render-smoke,
+property-check, data-fidelity).
+
+- **App 278** (`sap.m.sample.MessageBox`): the type matrix — `confirm`,
+  `alert`, `error`, `information`, `warning`, `success`, plus the two
+  action boxes and the responsive-padding one. `client->message_box_display`
+  takes the sample's own method name as `type` (`Messages.js` resolves it as
+  `MessageBox[TYPE]`), so the mapping is literally 1:1 and every per-method
+  default (confirm's [OK, CANCEL], error's [CLOSE]) stays UI5's. The
+  `onClose` toast is the interesting half: the original composes it on the
+  client, the port lets the pressed action ride back through the `onclose`
+  event and builds the same sentence in ABAP — the action becomes
+  backend-visible, which is what that return path is for.
+- **App 279** (`sap.m.sample.ImageErrorWithIllustration`): the `error`/`load`
+  round-trip drives one `HAS_ERROR` flag, and the two `visible` expression
+  bindings over it swap the `Image` for the `IllustratedMessage` (@1.98,
+  declared POST_171 **by policy** — the control is not in `properties.json`,
+  so no gate would have asked). The controller's `Device.system.phone` size
+  branch is **not** resolved to one value: it stays a branch as an expression
+  over the shared device model (the 277 precedent), so both sizes survive.
+- **App 280** (`sap.m.sample.TextAreaValueUpdate`): the sample exists to show
+  the gap between the control's own value and the model property while
+  `valueLiveUpdate` is off — so the port must **not** bind both Texts to one
+  field. `liveChange` carries `${$parameters>/value}` to the backend into a
+  separate `GET_VALUE` field, the second Text keeps the TextArea's own field,
+  and the `Switch` two-way binds `valueLiveUpdate` itself. Porting it any
+  "simpler" would have deleted the demo.
+- **App 281** (`sap.m.sample.MultiComboBoxSelectAll`): `showSelectAll`
+  (@1.111, POST_171) over the full 123-row `ProductCollection` with the
+  original's `sorter: { path: 'NAME' }`. `selectionFinish` needs the whole
+  selection, so the control gains a `selectedKeys` binding (the 092 idiom —
+  the original reads `getSelectedItems` imperatively) and ABAP joins the
+  matching names into the sample's `['A','B']` form. Both toasts round-trip
+  rather than being client-composed, which also carries the original's
+  `width: 'auto'` option that the client-composed wire cannot pass.
+
+Two samples were **skipped as near-duplicates** on the same pass, which is the
+depth rule working: `BreadcrumbsWithoutCurrentPage` differs from the ported
+`Breadcrumbs` (app 003) only by the missing `currentLocationText` and the link
+captions, and `MultiComboBoxDefaultFiltering`-class rows exercise nothing app
+039/281 do not.
+
+Lesson recorded in AGENTS §6: a sparse OpenUI5 clone that carries only the
+`demokit/sample` trees makes **`scope-of.mjs` answer `UNRESOLVED` for every
+entity** — it reads the control JSDoc from `src/<lib>/src`. It looks like an
+unknown control and is really a wrong checkout, so the scope pre-check stops
+gating silently. One clone must carry both halves.
+
 ## Repository assessment follow-up: rename debt, AGENTS distillation, pinned scope decisions (2026-08-01)
 
 Three findings from a repository review, fixed in one change:
