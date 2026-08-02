@@ -133,7 +133,7 @@ CLASS z2ui5_cl_ai_app_259 IMPLEMENTATION.
                             )->a( n = `text` v = `Personal Information`
                         )->leaf( n = `ProgressIndicator` ns = `m`
                             )->a( n = `displayValue` v = `42%`
-                            )->a( n = `percentValue` v = `42%`
+                            )->a( n = `percentValue` v = `42`
                             )->a( n = `state`        v = `Information`
 
                     )->shut(

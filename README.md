@@ -170,7 +170,7 @@ CI enforces this on every change:
 | `ABAP_STANDARD`  | `abaplint ./abaplint.jsonc` (syntax `v750`)                    |
 | `ABAP_CLOUD`     | `abaplint .github/abaplint/abap_cloud.jsonc` (syntax `Cloud`)  |
 | `ABAP_702`       | `npm run downport` → `abaplint .github/abaplint/abap_702.jsonc` |
-| `checks`         | `pattern-lint` (distilled lessons), `structural-diff --strict` (port vs original view incl. binding values, undeclared deviations fail), `render-smoke` (headless `XMLView.create` per port), `validate-meta` + overview/coverage sync |
+| `checks`         | `pattern-lint` (distilled lessons), `structural-diff --strict` (port vs original view incl. binding values, undeclared deviations fail), `view-gates` (abap2UI5-linter: UI5 metadata, builder structure, headless `XMLView.create` per port), `validate-meta` + overview/coverage sync |
 
 Every port also carries a machine-readable sidecar `meta/<class>.json`
 (sample, status, declared deviations) — the source of truth the overview app,
@@ -189,7 +189,7 @@ the coverage and the structural diff read from.
 | [`meta/`](meta) | One sidecar per port — status, checked, typed deviations |
 | [`pr/`](pr) | Forwardable improvement requests for the abap2UI5 framework, distilled from porting gaps |
 | [ai-mcp](https://github.com/abap2UI5/ai-mcp) | MCP server for AI coding agents — capability queries, view validation, deploy, headless run + screenshot on this repo's infrastructure (separate repository) |
-| [abap2UI5-linter](https://github.com/abap2UI5/abap2UI5-linter) | The render-smoke/property gates extracted as standalone CLI, library and GitHub Action (separate repository) |
+| [abap2UI5-linter](https://github.com/abap2UI5/abap2UI5-linter) | The view gates as standalone CLI, library and GitHub Action — extracted from this repo and now used BY it (`scripts/view-gates.mjs`) |
 
 ## Coverage
 
