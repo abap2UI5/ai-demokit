@@ -39,8 +39,8 @@ sibling `../abap2UI5`.
 
 ## Open the overview (front door — lists every port)
 
-The simplest entry point is the overview app: it lists all ported samples in a
-table and a tree, and every row has a **Start this abap2UI5 app in a new tab**
+The simplest entry point is the overview app: it lists all ported samples in
+one flat table (the only view of the catalog), and every row has a **Start this abap2UI5 app in a new tab**
 button that launches the port right there.
 
 ```

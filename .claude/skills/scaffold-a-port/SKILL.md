@@ -1,0 +1,67 @@
+---
+name: scaffold-a-port
+description: Batch planning rules (breadth-first then idiom-first depth, HOLDOUT rows, GROUP-nested samples) and the port scaffolding tooling - npm run scaffold, npm run json-to-abap, the OPENUI5_SRC sparse-clone recipe, scope-of pre-checks. Use when planning the next porting batch or creating a new port skeleton.
+---
+
+# Planning & scaffolding a port
+
+Part of the ai-demokit rulebook — the scope gate itself (1.71, deprecation,
+non-app families, exceptions) is defined in `AGENTS.md` §1 and is a hard CI
+gate; this guide covers picking the next samples and generating the skeleton.
+
+## Batch planning
+
+**Batch planning is breadth-first, then idiom-first depth.** The mission is
+gap discovery, and the gap yield of a port drops sharply once its control is
+covered — many samples are near-duplicates on the same control. So: port
+**one sample per uncovered control first**; only when every in-scope control
+has at least one port does depth (more samples per control) pay. `--backlog`
+encodes both phases: rows sort `NEW-CONTROL` first (control has no port at
+all), then `covered-control(n)` **ascending by n** — a control with one port
+still yields more new idioms than one with five. **Within equal n, pick by
+idiom, not by name**: prefer the sample whose title/files show a feature no
+existing port of that control exercises (a different aggregation, binding
+form, event wiring, popup path — skim the sample's view/controller against
+the control's existing ports), and skip true near-duplicates entirely — a
+depth port that exercises nothing new is corpus weight without training
+signal. Rows marked `HOLDOUT` belong to the hold-out set
+(`ui5/holdout.json`, TRAINING.md) and stay out of regular batch planning.
+**GROUP-nested samples** (the demo kit's group folders: `TreeTable.…`,
+`p13n.…`, `UploadSetwithTablePlugin.…`, `View.…`, …) are part of the
+universe — named `<Group>.<Child>`, source at `sample/<Group>/<Child>`,
+archived flat as `ui5/<lib>/<Group>.<Child>/` (the scaffolder handles the
+mapping); only children the docuindex lists as official samples count.
+
+
+### Developer tooling — starting a port
+
+Two helpers remove the mechanical boilerplate (they do **not** write the view —
+that is the actual porting work):
+
+- **`npm run scaffold <sample>`** (`scripts/scaffold.mjs`) — from an OpenUI5
+  demo-kit sample id/name it archives the template into `ui5/<lib>/<Name>/`,
+  picks the next app number + `src/<lib>/b<nn>` batch (`--new-batch` /
+  `--batch bNN`), and writes the class stub, `clas.xml`, `package.devc.xml` and
+  a valid `meta/` sidecar. The stub is a TODO placeholder view: it passes
+  abaplint / pattern-lint / structure-lint / render-smoke immediately, and
+  `structural_diff` (correctly) fails until you rebuild the view 1:1. Needs an
+  OpenUI5 checkout (`OPENUI5_SRC`, default `../fork-openui5`). `--dry-run` to
+  preview. **`/home/user/fork-openui5` carries only `src/<lib>/src` — no
+  `test/…/demokit/sample`**, so the scaffolder finds nothing there. A blobless
+  sparse clone gets just the sample trees in ~350 MB:
+  `git clone --filter=blob:none --sparse https://github.com/SAP/openui5.git …`
+  then `git sparse-checkout set src/<lib>/test/<lib path>/demokit/sample …`,
+  and point `OPENUI5_SRC` at it.
+- **`npm run json-to-abap -- <file.json> [--path k] [--fields spec] [--var v]`**
+  (`scripts/json-to-abap.mjs`) — turns a JSON array (a demo mock's
+  `ProductCollection` …) into an ABAP `VALUE #( … )` literal for `model_init`
+  (backtick-escaping and type inference handled; also exports `rowsToAbapValue`
+  / `rowsToAbapType` for reuse). The scaffolder prints the exact command when
+  the sample's controller loads a JSON mock. **Type inference scans all rows**
+  (not just the first): a numeric column with any decimal value is emitted as a
+  **backtick string literal** (never truncated to `i`) and the tool warns on
+  stderr — declare that field `TYPE p LENGTH n DECIMALS m` for a numeric control
+  property (a backtick literal converts to packed), or `TYPE string` when it is
+  a display-only value bound into a text template (keeps the exact decimals,
+  e.g. dimensions `40.8`). Do **not** leave a decimal column as `TYPE i`.
+
