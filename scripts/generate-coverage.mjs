@@ -64,7 +64,7 @@ const fullscreenUrl = (lib, name) =>
 const apiUrl = (entity) => `${DEMOKIT}/api/${entity}`;
 // bare control name without its namespace (sap.f.GridList -> GridList)
 const bareControl = (entity) => entity.slice(entity.lastIndexOf('.') + 1);
-// the porting scope (§7 AGENTS.md): a sample is IN SCOPE when its control
+// the porting scope (AGENTS.md §1): a sample is IN SCOPE when its control
 // existed by UI5 1.71 (empty since = older than tracking) and is not
 // deprecated (legacy-free ready). Everything else is listed but not ported.
 const sinceLeq171 = (since) => {
@@ -163,7 +163,7 @@ const sampleSrcUrl = (lib, name) =>
 // generated abap2UI5 class file under src/ (this repo)
 const abapUrl = (file) => `${GH}/blob/${REF}/${file.split(path.sep).join('/')}`;
 
-// Focus: only these UI5 libraries are in scope right now (§7 AGENTS.md); the
+// Focus: only these UI5 libraries are in scope right now (AGENTS.md §1); the
 // others are brought back in later. Set to null to cover every library again.
 const FOCUS_LIBS = ['sap.m', 'sap.f', 'sap.ui.layout', 'sap.ui.core', 'sap.ui.unified', 'sap.ui.table', 'sap.uxap', 'sap.tnt', 'sap.ui.codeeditor', 'sap.ui.integration'];
 

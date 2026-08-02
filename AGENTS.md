@@ -20,6 +20,30 @@ Single source of truth for agents working on **abap2UI5 ai-demokit**.
 
 ---
 
+## Task guides — read on demand
+
+The step-by-step procedure for each recurring task lives in a guide under
+`.claude/skills/` — Claude Code auto-loads them as skills; every other agent
+reads the files directly. **Read the matching guide BEFORE starting the task**
+— this file keeps only what every session must know up front:
+
+| Task | Guide |
+|---|---|
+| Write, change or review a port (recipe, binding, events, deviations) | `.claude/skills/port-a-sample/SKILL.md` |
+| A construct the recipe doesn't cover 1:1 (named model, typed binding, popup, fragment, …) | `.claude/skills/idiom-lookup/SKILL.md` |
+| A gate failed / declare a skip or deviation for a gate | `.claude/skills/run-the-gates/SKILL.md` |
+| Plan the next batch / scaffold a new port | `.claude/skills/scaffold-a-port/SKILL.md` |
+| Touch a generator, a generated artefact, or the meta/ shape they read | `.claude/skills/regenerate-artefacts/SKILL.md` |
+| Run or debug the e2e smoke (Playwright) | `.claude/skills/e2e-debugging/SKILL.md` |
+
+**Large files — grep them, never read them whole:** `api.md` (~316 KB
+generated table), `STATUS-history.md` (~198 KB journal), `CAPABILITIES.md`
+(~45 KB — grep for the feature row), `scripts/e2e-smoke.mjs` (~80 KB),
+`scripts/generate-overview.mjs` (~54 KB),
+`src/z2ui5_cl_ai_app_overview.clas.abap` (generated).
+
+---
+
 ## 1. Mission — an automated repository
 
 This repo exists to **clone every official UI5 demo kit sample and independently
@@ -72,26 +96,12 @@ hard scope gate as a deprecated/newer one.
 > `properties.json` might miss. A neighbour port existing is **not** proof of
 > scope (see the UploadSet/SidePanel debt in STATUS.md).
 
-**Batch planning is breadth-first, then idiom-first depth.** The mission is
-gap discovery, and the gap yield of a port drops sharply once its control is
-covered — many samples are near-duplicates on the same control. So: port
-**one sample per uncovered control first**; only when every in-scope control
-has at least one port does depth (more samples per control) pay. `--backlog`
-encodes both phases: rows sort `NEW-CONTROL` first (control has no port at
-all), then `covered-control(n)` **ascending by n** — a control with one port
-still yields more new idioms than one with five. **Within equal n, pick by
-idiom, not by name**: prefer the sample whose title/files show a feature no
-existing port of that control exercises (a different aggregation, binding
-form, event wiring, popup path — skim the sample's view/controller against
-the control's existing ports), and skip true near-duplicates entirely — a
-depth port that exercises nothing new is corpus weight without training
-signal. Rows marked `HOLDOUT` belong to the hold-out set
-(`ui5/holdout.json`, TRAINING.md) and stay out of regular batch planning.
-**GROUP-nested samples** (the demo kit's group folders: `TreeTable.…`,
-`p13n.…`, `UploadSetwithTablePlugin.…`, `View.…`, …) are part of the
-universe — named `<Group>.<Child>`, source at `sample/<Group>/<Child>`,
-archived flat as `ui5/<lib>/<Group>.<Child>/` (the scaffolder handles the
-mapping); only children the docuindex lists as official samples count.
+
+**Batch planning is breadth-first, then idiom-first depth** — one sample per
+uncovered control first; depth only once every in-scope control has a port,
+picked for a new idiom, never a near-duplicate. The full planning rules
+(`--backlog` sorting, HOLDOUT rows, GROUP-nested samples) are in the
+`scaffold-a-port` guide — read it before planning or starting a batch.
 
 The pipeline (run by a coding agent):
 
@@ -311,471 +321,28 @@ source of truth:
   merged" — that is what the table is for.
 - Every port must pass all three CI checks (§6).
 
-### App skeleton — how a port is built
 
-This is the complete recipe for turning one UI5 demo kit sample into a port.
-Follow it exactly so every port looks the same and stays maintainable.
+### The porting recipe — on-demand guides
 
-**Inputs** — the sample's original files from the OpenUI5 checkout: the
-`*.view.xml` (the UI), the controller (`*.controller.js` — event handlers),
-`Component.js` / `manifest.json` (which model data is loaded), plus any local
-`*.json` mock data. All of these are also copied verbatim into the sample's
-`ui5/<library>/<SampleName>/` folder (§4).
+The complete step-by-step recipe (class layout, dispatcher, `model_init`,
+`view_display` with `z2ui5_cl_ai_xml`, formatting rules, data binding & events,
+booleans, the 1.71 rule in practice, deviation types, porting gotchas) lives in
+**`.claude/skills/port-a-sample/SKILL.md`** — read it in full before writing or
+reviewing any port; it is the authoritative long form of the generation rules.
 
-**Output** — one class `z2ui5_cl_ai_app_<n>` implementing `z2ui5_if_app`, whose
-view is a **1:1** rebuild of the sample's XML.
-
-#### Class layout
-
-```abap
-CLASS z2ui5_cl_ai_app_<n> DEFINITION PUBLIC.       " lowercase, not FINAL
-
-  PUBLIC SECTION.
-    INTERFACES z2ui5_if_app.
-    " local types for the model data (ty_s_ / ty_t_) + the DATA that back the
-    " bindings live here, so the framework can serialise them across round-trips
-    TYPES: BEGIN OF ty_s_item, ... END OF ty_s_item.
-    DATA t_items TYPE STANDARD TABLE OF ty_s_item WITH EMPTY KEY.
-    " ONLY bound DATA belongs in PUBLIC: the round-trip model scan walks the
-    " public instance attributes, so every non-bound helper/backup kept here
-    " just slows the binding search. Put such state in PROTECTED (see below).
-
-  PROTECTED SECTION.
-    DATA client TYPE REF TO z2ui5_if_client.
-    METHODS view_display.
-    METHODS on_event.        " only if the app reacts to events
-    METHODS model_init.      " only if the app has model data - declared LAST
-
-  PRIVATE SECTION.           " always present, kept empty
-ENDCLASS.
-```
-
-#### `z2ui5_if_app~main` — the dispatcher
-
-```abap
-METHOD z2ui5_if_app~main.
-
-  me->client = client.
-  IF client->check_on_init( ).
-    model_init( ).
-    view_display( ).
-  ELSEIF client->check_on_event( ).
-    on_event( ).
-  ENDIF.
-
-ENDMETHOD.
-```
-
-- **Method order in the implementation**: `z2ui5_if_app~main` is always the
-  **first** method; the remaining methods follow **in the order they are
-  called from `main`**, depth-first (`view_display` → `on_event` → helpers
-  right after their caller) — **except `model_init`, which always goes LAST**,
-  after every other method (and is declared last in the DEFINITION too). It
-  usually holds a large `VALUE #( )` block of mock data; keeping it at the
-  bottom stops that data from interrupting the reading flow of the dispatcher,
-  view and event methods. pattern-lint checks that main comes first and that
-  model_init comes last.
-- A **fully static sample** (no data, no events — app 051's class) reduces the
-  dispatcher to a bare `IF client->check_on_init( ). view_display( ). ENDIF.`
-  — no `ELSEIF`, no `model_init`/`on_event` methods at all.
-- `check_on_init( )` fires once when the app starts — seed the data, draw the view.
-- `check_on_event( )` fires on every user interaction — dispatch in `on_event( )`.
-- Add `model_init( )` / `on_event( )` **only when the app actually has data /
-  events** — never a pass-through method with a single statement. A static app
-  (like app 051) has just `view_display( )` under `check_on_init( )`. A
-  **data-less-but-stateful** app (its only "model" is one or two control-state
-  flags a button toggles, e.g. `expanded`) seeds those flags **inline in `main`**
-  (or `view_display`), no `model_init` — the single-statement-method rule wins
-  (app 128 precedent).
-- **A scalar literal → two-way binding is faithful, not a structural difference.**
-  Turning `expanded="false"` into `expanded="{/EXPANDED}"` to reproduce a
-  controller's imperative `setExpanded` is the idiomatic thin-frontend move;
-  `structural-diff` does **not** flag it (it compares control/attr presence, and
-  binding *values* only where the original itself binds). Declare a `LIVE_TEST`
-  only because the round-trip *behaviour* is unverified, not because the diff
-  requires it (app 128/172 precedent).
-- If the sample re-displays on navigation, add an
-  `ELSEIF client->check_on_navigated( ). view_display( ).` branch.
-
-#### `model_init` — the model
-
-The sample's JSON model becomes ABAP: one `ty_s_`/`ty_t_` type per JSON array,
-filled with `VALUE #( ( … ) ( … ) )`. Field names are the JSON keys, upper-cased
-by ABAP; bindings reference them in braces (`{TITLE}`, `{PRODUCTID}`). **A
-camelCase key mirrors verbatim — do not insert underscores**: `SupplierName` →
-field `suppliername`, binding `{SUPPLIERNAME}` (never `SUPPLIER_NAME`) — a corpus
-convention. (structural-diff would tolerate either — its `normBind` lower-cases
-**and** strips underscores — so this is for consistency, not to satisfy the
-gate. **The worked references 022/040 predate this convention and still use
-`SUPPLIER_NAME`/`PRODUCT_ID` — do not copy their underscored field names; the
-spec wins.**)
-Keep the
-data verbatim from the sample — **the full row set, no subsetting**: inline every
-row of the referenced mock array (e.g. all 123 `/ProductCollection` rows of
-`ui5/mock/products.json`), byte-identical to the mock (`SUBSET_DATA` is no longer
-an accepted deviation — user decision). **Rows, not columns:** per row, inline
-only the fields the view actually binds (the 040/022 practice — unbound mock
-keys stay out of the row type); "full row set" never means all 20 JSON keys of
-every row. Where the original itself binds a single record
-(`{/ProductCollection/0}`) or a precomputed stats array
-(`/ProductCollectionStats/Filters`), reproduce exactly that — that is the 1:1
-data, not a shortening. A packed field must carry enough `DECIMALS` for the mock
-(e.g. `Price` has 2-decimal values, so `TYPE p … DECIMALS 2`).
-
-**abap2UI5 serves a single default model — there are no named models.** A sample
-that binds against a named model (`img>/products/pic1`, a separate `JSONModel`,
-`sap/ui/demo/mock/*.json`) must be **flattened** into the one default model:
-merge the extra model's fields into the row type, or — for pure display assets
-like image URLs that are the same for every row — inline them as literals /
-build them from a shared base (a non-bound `base_url` kept in `PROTECTED`, not
-`PUBLIC`, so the round-trip model scan stays small).
-**Deviation type for the flattening:** a **pure prefix-drop that renders
-identically** — same data, same leaf name, `structural-diff` 0 diffs
-(`{ui>/rowMode}`→`{/ROWMODE}`, `{img>/products/pic1}`→`{/PIC1}` with the real
-value) — is faithful → **`NOTE`**. Use **`IMPROVISED`** only when the fold
-actually *loses or changes* something: drops bound columns, resolves a live
-model statically, or substitutes values (app 006's `img>`→static URLs). When
-binding a single record the original `bindElement`s (`/SupplierCollection/0`),
-seed those fields at the **default-model root** so the view's *relative* child
-bindings (`{SupplierName}`) resolve — and seed the **actual mock row-0 values**,
-verified against the mock, not a neighbour port (app 162/142 had copied wrong
-values). Worked example: app 006 (`sap.m.Carousel`, `img>` → static URLs,
-`IMPROVISED`); app 175 (`SimpleForm`, supplier row-0 flatten).
-
-**Absent JSON properties must not become empty strings.** A flat ABAP row
-serializes every field on every row; where the original JSON simply omits a
-property, the port sends `""` — and UI5 rejects `""` on **enum**-typed
-properties (`validateProperty` throws where the original's `undefined`
-picked the default) and overrides non-empty property **defaults** (e.g.
-`Link.target` `_blank`). Fill the UI5 default value explicitly in the ABAP
-data, or split the aggregation into per-shape templates (the QuickView port's
-`QuickViewGroupElementType`/`AvatarShape` crashed every page this way).
-
-#### `view_display` — the view via `z2ui5_cl_ai_xml`
-
-Build the view with the generic builder **`z2ui5_cl_ai_xml`**. The class lives
-in abap2UI5 core (`src/02/`, migrated from this repo) and resolves through the
-abap2UI5 abaplint dependency. It translates a
-UI5 XML view 1:1 by method chaining — every control, property and namespace maps
-directly, nothing is approximated. The four navigation verbs are all 4 chars so
-the `)->` arrows line up:
-
-| Verb | XML meaning | Tree action | Returns |
-|------|-------------|-------------|---------|
-| `open( n ns a )` | open a container tag `<X>` | add child **and descend** into it | the new child |
-| `leaf( n ns a )` | a self-closing tag `<X/>` | add child, **stay** on current node | the same node |
-| `shut( )` | the closing `</X>` | **ascend** to the parent | the parent |
-| `a( n v )` | one `name="value"` | add an attribute to the control just opened/leaf'd | the same node |
-
-Arguments: `n` = tag name, `ns` = namespace **prefix** (literal `f`, `l`, `core`,
-`mvc` — omitted for the default `sap.m` namespace).
-
-**Attributes go through `a( n = `key` v = `value` )`**, chained right after the
-control's `open`/`leaf`. `a` always targets that control (the last-added child,
-or the node itself if none yet), so it works after both `open` and `leaf`. `v` is
-any string expression — a literal, a `client->_bind( … )` / `_event( … )` result,
-or a `|…|` template. (An `open`/`leaf` also accepts an up-front `a = VALUE #( ( `key=value` ) … )`
-string table, split on the first `=` — handy for attributes built in a loop.)
-
-Both named XML aggregations (`<headerToolbar>`, `<layoutData>`) and controls are
-just `open`/`leaf` calls — an aggregation is a nameless-namespace `open` with no
-attributes, e.g. `)->open( \`headerToolbar\` )` (positional — a single named `n =`
-would trip abaplint's `omit_parameter_name`).
-
-**An aggregation carries the same `ns=` as the tag has in the XML** — which is
-its parent control's namespace, not the default one. `<m:content>` under an
-`sap.m.Page` is `)->open( n = \`content\` ns = \`m\` )`; but a default-namespace
-aggregation like `<columns>` / `<template>` / `<footer>` inside an
-`sap.ui.table.Table` (whose view default `xmlns` is `sap.ui.table`) is the
-nameless `)->open( \`columns\` )`. Copy the prefix from the original tag; a
-wrong or missing `ns` on an aggregation produces an unknown-aggregation node
-that `render_smoke` rejects. (Worked example: app 164, `sap.ui.table` RowModes —
-`m:content`/`m:OverflowToolbar` prefixed, `columns`/`extension`/`footer`/`template`
-bare.)
-
-`factory( )` returns an **empty root**. There is no implicit `<View>` — you open
-the `<mvc:View>` and declare its `xmlns` namespaces yourself, exactly like any
-other control:
-
-```abap
-DATA(view) = z2ui5_cl_ai_xml=>factory( ).
-
-view->open( n = `View` ns = `mvc`
-    )->a( n = `xmlns`     v = `sap.m`
-    )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
-    )->a( n = `xmlns:f`   v = `sap.f`
-
-    )->leaf( `Slider`
-        )->a( n = `value`      v = client->_bind( slider_value )
-        )->a( n = `liveChange` v = client->_event( `SLIDER_MOVED` )
-
-    )->open( `Panel`
-        )->a( n = `width` v = client->_bind( panel_width )
-        )->open( `headerToolbar`
-            )->open( `Toolbar`
-                )->leaf( `Title`
-                    )->a( n = `text` v = `Header`
-
-            )->shut(
-        )->shut( ).
-
-client->view_display( view->stringify( ) ).
-```
-
-`stringify( )` renders the whole tree to the XML string handed to
-`client->view_display( )` as the standalone final statement. **It renders from
-the root, so every tag is closed structurally — trailing `shut( )`s before the
-final `).` are optional.** `shut( )` only moves the *cursor* up to add a sibling
-at a higher level; once the last leaf/attr is placed you can end the chain with a
-bare `).` (the still-open View/Panel/… nodes all close in the output). Both
-styles pass every gate — a chain that closes back to the root explicitly, or one
-that stops at the deepest node.
-
-#### Formatting rules (strict — reviewers check these)
-
-- **The closing paren rides with the arrow.** Never leave a `)` alone at a line
-  end; carry it to the **start of the next segment** so it always reads `)->`.
-  With the `a()` chain there is no nested `VALUE`, so the whole view ends in a
-  single `` ).`` (not `) ).`).
-- **Indent after every `open`.** Each `open( )` shifts its children's `)->` one
-  level (4 spaces) to the right; `shut( )` shifts back left. The `)->` of a
-  `shut` sits at the same column as the `open` it closes.
-- **A control's `a()` lines sit one level (4 spaces) in from the control's
-  own `)->` line**; align the `v =` column across them.
-- **Blank lines** (attrs never count — they belong to their control):
-  - **never** between consecutive `leaf`s, and **never** after a **one-liner
-    `open`** (an aggregation/container with no attrs) before its first child;
-  - a blank **does** separate an `open` that *has* attrs from its first child,
-    and separates a new `open`/`leaf` block from the previous sibling;
-  - a blank **before** every `shut`; **none** after a `shut` or between `shut`s;
-  - **none** between a control and its own `a()`s.
-- Long text/binding values split with `&&` at ~255 chars max per line (§6).
-
-#### Data binding & events
-
-- **A binding path always comes from a binding method — never hard-code it as
-  text.** `client->_bind( var )` (and `client->_bind( val = var path = abap_true )`
-  for the raw path) derives the model path *from the ABAP variable*, so renaming
-  the variable moves the binding with it. Writing the path literally instead
-  (`'/T_ITEMS'`, `` `{/T_ITEMS}` ``, `items = '{/T_ITEMS}'`, `path: '/T_ITEMS'`)
-  silently breaks on the next rename and is not allowed. This holds **everywhere a
-  method can produce the path**: the aggregation / model-root path
-  (`_bind( … path = abap_true )`), a slot element binding
-  (`follow_up_action( val = cs_event-bind_element … t_arg = VALUE #( ( idx ) ( client->_bind( tab ) ) ) )`
-  — pass `client->_bind( tab )`, never the text path), a `binding_call` target, etc.
-  `pattern-lint`'s `hardcoded-binding-path` rule flags ports still writing a
-  binding by name. The **one unavoidable exception** is a *relative
-  child property* inside a bound aggregation template — `` `{TITLE}` `` /
-  `` `{PRODUCT_ID}` `` referencing an upper-cased model field, which has no `_bind`
-  form (see the next bullet); keep those, but never write the absolute / model-root
-  path by hand.
-- **A `path:` inside a raw binding-info string uses the ABAP (upper-cased) field
-  name too** — same rule as the brace form, easy to miss. A typed/sorter/Currency
-  binding copied from the original keeps its *structure* 1:1 but its `path:` must
-  switch to the model field: original `` `{path:'exchangeRate', type:'sap.ui.model.type.Float'}` ``
-  → `` \|\{ path: 'EXCHANGE_RATE', type: 'sap.ui.model.type.Float' \}\| ``. Copying
-  the original camelCase `path:'exchangeRate'` verbatim renders nothing (no such
-  model field) and no gate catches it — structural-diff normalizes case,
-  the render gate mocks the model (app 171).
-- `client->_bind( var )` — bind an ABAP `DATA` member two-way (the value
-  flows back into `var` on the next round-trip), e.g.
-  `)->a( n = `items` v = client->_bind( t_items )`. **`client->_bind_edit( )`
-  is obsolete — `_bind` is two-way; always use `_bind`, including for
-  display-only bindings.**
-- Inside a bound aggregation, child properties use UI5 binding braces on the
-  upper-cased field name: `)->a( n = `text` v = `{TITLE}``.
-  **But a field shared by the whole app lives at the model ROOT, and a relative
-  `{FIELD}` inside a template resolves against the ROW** — it silently renders
-  empty when the row has no such column. Bind those with the absolute path from
-  `client->_bind( field )` even inside a template (app 207: every
-  `StandardListItem`'s `type` follows one Select; the relative form left every
-  item `Inactive` and the Select dead — no gate sees this, only the e2e
-  interaction did).
-  **The same trap outside any template: a "flattened element binding".** When
-  the original does `bindElement('/ProductCollection/0')` (or a `binding=`
-  attribute) and the port seeds that record's fields at the model root, the
-  view must bind them **absolutely** too — a relative `{NAME}` on a control
-  with *no binding context at all* resolves against nothing and renders empty.
-  Seven ports carried the wrong form with a sidecar note claiming the opposite
-  (142 175 195 206 209 229 243, all fixed). Audit for it with:
-  `_bind`-less `` v = `{FIELD}` `` whose FIELD is a root-level `DATA` scalar of
-  the class and not a component of any row structure.
-- `client->_event( \`NAME\` )` — wire a control event (press, liveChange…) to an
-  event named `NAME`. **Always** dispatch in `on_event( )` with a
-  `CASE client->get( )-event.` … `WHEN \`NAME\`.` … `ENDCASE` — even for a single
-  event (never an `IF check_on_event( )`). After changing bound data in an event,
-  call `client->view_model_update( )` to push it back (no full redraw).
-- **Client handle strings (`_event`, `_bind`, `_event_client`, …) are
-  written inline at each control — never captured in a variable**, even when
-  the same call repeats on many controls and even inside expression bindings
-  (human decision, apps 005/053/007; pattern-lint blocks
-  `DATA(x) = client->_…(`).
-- Read event parameters (declared via `_event( … t_arg = … )`) with
-  `client->get_event_arg( )` — the index defaults to 1; **write it only for
-  position 2+** (`get_event_arg( 2 )`), never `get_event_arg( 1 )`
-  (pattern-lint flags it). A **boolean** parameter (e.g. a CheckBox
-  `selected`, `${$parameters>/selected}`) already arrives as `abap_bool`
-  (`X` / space), **not** the string `` `true` `` — assign it straight into an
-  `abap_bool` field (`flag = client->get_event_arg( ).`); never test `… = \`true\``.
-- **Passing a value *into* an event uses the `$`-prefixed form — never a bare
-  `{…}`.** The runtime (`z2ui5_cl_core_srv_event=>get_t_arg`) sends every
-  `t_arg` entry that starts with `$` or `{` to the frontend **verbatim** and
-  wraps everything else in quotes as a string literal. Only a **`$`-prefixed**
-  arg is then resolved by UI5 (against the row's binding context / the event
-  object) before the round-trip; a bare-brace `{…}` is *not* resolved and the
-  value reaches `get_event_arg( )` empty. So the same model column that is a
-  correct **property** binding as `` `{NOTES}` `` in an attribute
-  (`)->a( n = \`tooltip\` v = \`{NOTES}\``) must be written `` `${NOTES}` `` in a
-  `t_arg` (`t_arg = VALUE #( ( \`${NOTES}\` ) )`). The same `$`-prefix rule
-  covers the UI5 event object: `` `$event.oSource.sId` `` (the pressed
-  control's id — app 005), `` `${$source>/text}` `` (a bound property of the
-  event source — app 003), `` `$event.mParameters.selectedItems` `` (app 022).
-- **Don't fake a value you can actually read from the event.** When the original
-  controller reads something off the event/source (`evt.getSource().getId()`,
-  `evt.getParameter(...)`), transport it with the `$event.…` arg above and read
-  it back with `get_event_arg( )` — do **not** substitute a static placeholder
-  (app 005's toast carries the real control id via `` `$event.oSource.sId` ``).
-- **A property computed from several bound values → a UI5 expression binding
-  `{= … }`.** Write every `client->_bind( … )` call inline, embedded with
-  `${ … }` — the never-capture rule above applies inside expression bindings
-  too (repeated calls to `_bind` on the same variable return the same handle).
-  Build the expression with an ABAP string template, escaping the UI5 braces
-  and any pipes: e.g. a "select all"/"partially selected" pair —
-  `` v = |\{= ${ client->_bind( child1 ) } \|\| ${ client->_bind( child2 ) } \|\| ${ client->_bind( child3 ) } \}| `` (OR)
-  and `` v = |\{= !(${ client->_bind( child1 ) } && ${ client->_bind( child2 ) } && ${ client->_bind( child3 ) })\}| ``
-  (NOT-AND). Worked example: app 007 (`sap.m.CheckBox` tri-state parent). Do the
-  logic in the binding, not by round-tripping — no event needed to keep the
-  parent box in sync.
-
-#### Booleans
-
-A literal boolean is just `)->a( n = `editable` v = `true``. **Only** when the
-value comes from an ABAP boolean variable, wrap it with `as_bool( )`:
-`)->a( n = `editable` v = z2ui5_cl_ai_xml=>as_bool( flag )` — a raw
-`abap_false` would otherwise serialise to an empty string. Never feed
-`abap_true`/`abap_false` straight into an attribute value.
-
-#### The 1.71 rule in practice
-
-Use **only** controls/properties available since UI5 1.71; never a deprecated
-one. When a sample uses something newer, either omit that one optional property
-with a one-line comment (see app 040: `showClearIcon` dropped, `" … omitted to
-stay compatible with UI5 1.71`) if the sample still works without it, or — if the
-sample's whole point needs the newer/deprecated control — **do not port it** and
-leave it as an ❌ gap. Never silently substitute a different control.
-
-#### Generation notes — record every caveat in the sidecar
-
-When the port is **not** a clean 1:1 — you improvised, dropped/downgraded
-something for 1.71, replaced a controller-only behaviour, or relied on a
-binding/event form you could not verify — record it as an entry in the
-`deviations` array of `meta/<class>.json` (§5 intro). One entry per caveat,
-with a closed `type` vocabulary so deviations stay countable:
-
-- `LIVE_TEST` — needs checking in a running system: an unverified
-  binding/event path, or uncertain rendering (e.g. app 003's `${$source>/text}`
-  event arg).
-- `IMPROVISED` — **materially deviates** from the sample: the port loses or
-  changes something. A named model flattened to **static values** (app 006's
-  `img>`→hardcoded URLs), a MessageManager replaced by a hardcoded message table
-  (app 038), a fold that **drops bound columns** or resolves a live model
-  statically. Only improvise what `CAPABILITIES.md` does not mark expressible —
-  app 042's Dialog→toast substitution was a wrong improvisation; app 044 shows
-  the 1:1 way (`popup_display`).
-- `DROPPED_171` — a control / property / enum value newer than 1.71 was
-  dropped or downgraded (app 042's `Indication06`+ states set to `None`).
-- `SUBSET_DATA` — **retired: no longer accepted.** Ports inline the full mock
-  row set (see `model_init` above); `validate-meta` now rejects this type.
-  Kept in the vocabulary only so historical diffs stay readable.
-- `NOTE` — a faithful port with a caveat worth recording but **no loss**. This
-  is the type for a **pure named-model prefix-drop that renders identically** —
-  same data, same leaf name, `structural-diff` 0 diffs (`{ui>/rowMode}`→`{/ROWMODE}`,
-  `{img>/pic1}`→`{/PIC1}` with the real value); the model layer differs, the
-  output does not, so it is not IMPROVISED. Also: a deterministic-date
-  substitution, a device-branch simplification, anything else worth flagging.
-  **Settled policy:** NOTE for a same-data prefix-drop, IMPROVISED only for a
-  lossy/static fold.
-  **Refinement:** "renders identically" is **not** sufficient for NOTE when
-  the fold **drops a control/config artifact** — a `sap.uxap:ModelMapping`
-  (or its `ModelMappingBlock`), a `core:CommandExecution`, an `i18n` resource
-  model. Removing a control the original declares (even a zero-visual-output
-  config element) or losing a behaviour (runtime language switch, keyboard
-  command) **is a loss → IMPROVISED**, regardless of pixel-identical render. The
-  pure-render test decides only the *prefix-drop* case; dropping an artifact is
-  lossy by definition. (Apps 230 ModelMapping, 232 CommandExecution, 233 i18n.)
-
-The `what` text carries the full explanation. Keep the array **empty** for a
-faithful 1:1 port. Still add the inline `"` comment at the exact spot of each
-deviation in the ABAP code; the sidecar is the scannable summary of those —
-the structural diff (§6) matches undeclared view differences against exactly
-these entries.
-
-#### Idiom cheat-sheet — the recurring hard cases
-
-The idioms that cause the most first-try mistakes, each as the exact ABAP to
-write. This is an index into the long-form rules above and in `CAPABILITIES.md`
-(named there) — scan it before porting; when in doubt read the referenced row.
-Braces `{ }` inside a `|…|` template are **always** escaped `\{ \}` (an
-unescaped `{` is read as a binding by the XMLView parser and crashes view
-creation).
-
-| In the original you see… | Write in the port | Detail |
-|---|---|---|
-| A **named model** binding `{ui>/rowMode}`, `{img>/x}`, any `name>/…` | Drop the prefix, bind the field on the **one default model**: `client->_bind( rowmode )` → `{/ROWMODE}`. structural-diff matches on the last path segment. A **`sap.uxap:ModelMapping`** (external→internal model remap, e.g. `{Contact>firstName}` where `Contact` maps `jsonModel>/Employee`) folds the same way — resolve the indirection statically and bind the leaf on the root; dropping the `ModelMapping`/`ModelMappingBlock` **config control** is **lossy → IMPROVISED** even though it renders identically (see the deviation-type note above) | CAPABILITIES "Named JSON models"; apps 162/163/164, 230 |
-| An **i18n resource-model** binding `{i18n>KEY}` (`sap.ui.model.resource.ResourceModel`) | No i18n model exists **by design, not as a gap** (user decision): a frontend translation store contradicts the thin-frontend principle — translation is a backend concern, ABAP translates texts natively (text elements / OTR, `sy-langu`) and serves the finished string as a bound model field. So: for a 1:1 demo-kit port, fold to the **literal** text (usually English from `i18n.properties`) and declare **IMPROVISED** (the sample's runtime language *switch* is lost); a real translatable app binds ABAP-translated texts instead — never propose frontend i18n support as a `pr/` | §5; app 233; CAPABILITIES "i18n texts" |
-| A **typed / complex binding** `{path:'Q', type:'sap.ui.model.type.Integer'}` | Raw binding-info string, braces escaped: `` v = \|\{ path: 'Q', type: 'sap.ui.model.type.Integer' \}\| `` — passes through to `XMLView.create` unmangled. The `path:` uses the **upper-cased ABAP field name** (`'Q'`→`'PRICE'`), not the original camelCase — no gate catches a stale path | CAPABILITIES "composite … types"; apps 164/129/033/171 |
-| A **nested single object** binding `{transactionAmount/size}` (control property → a sub-object, not an array) | Nested ABAP **structure** component in the row type; bind the relative sub-path `{TRANSACTION_AMOUNT/SIZE}`. Keep the nesting — do **not** flatten to `{OBJ_FIELD}` | CAPABILITIES "Nested single object"; app 171 |
-| A **literal quote inside a binding-info `pattern`** (`pattern:'yyyy-MM-dd'T'HH:mm:ss'` — the `'T'`) | Escape it **backslash-quote** `\'`, written `\\'` in the ABAP `\|…\|` template (UI5's JSTokenizer **rejects** a doubled `''`) — matches how the original view.xml escapes it | app 183 (`TypeDateTime`) |
-| A **`sorter` / `sorter group:true`** on an aggregation | Keep the raw string; get the bare path via `client->_bind( val = t path = abap_true )`: `` \|\{ path: '{ … }', sorter: \{ path: 'COL', group: true \} \}\| `` | CAPABILITIES "Binding sorter"; app 039 |
-| A **date-object** property (`CalendarAppointment.startDate`, `PlanningCalendar.startDate`, `DatePicker.dateValue`) | Formatter at point of use: `` \|\{ path: 'START_AT', formatter: 'Formatter.DateCreateObject' \}\| `` + `core:require="\{Formatter: 'z2ui5/model/formatter'\}"` (POST_171). A plain string binding **crashes** | CAPABILITIES "Date-object"; apps 108/109 |
-| A **boolean** attribute fed from an ABAP variable | `z2ui5_cl_ai_xml=>as_bool( flag )` (a literal is just `` v = \`true\` ``) — never feed `abap_true`/`abap_false` raw | §5 "Booleans"; app 007 |
-| A property **computed from several bound values** | UI5 expression binding, `_bind` inlined: `` \|\{= ${ client->_bind( a ) } && ${ client->_bind( b ) } \}\| `` — no event round-trip. **Which literal form depends on where the paths come from**: a `_bind( )` result must be *interpolated*, so the expression goes in a `\|…\|` template with the outer braces escaped `\{ \}` (the row's form). An expression over a **relative row field** inside a bound aggregation has nothing to interpolate — write it as a plain **backtick** literal, `` `{= ${END} ? Formatter.DateCreateObject(${END}) : null }` ``, so every brace reaches the attribute verbatim. Escaping row-field braces inside a template collapses them and the attribute silently becomes garbage that no gate reads as a binding | §5; apps 007, 053; the relative-field form: app 220 |
-| The controller **reads an event/source value** (`evt.getSource().getId()`) | Transport it, don't fake it: `t_arg` value `$event.oSource.sId` / `${COL}`, read back with `get_event_arg( )`. A bare `{COL}` is **not** resolved here | §5 "Data binding & events"; app 005 |
-| `MessageToast.show("…" + evt.x)` (text built on the client) | Client-composed template, roundtrip-free. Exact `t_arg` tuple order = **object, method, template, arg(s)**: `` client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( \`MESSAGE_TOAST\` ) ( \`show\` ) ( \`Item selected: {0}\` ) ( \`${$parameters>/item}.getText()\` ) ) ) ``. The wire token is `MESSAGE_TOAST` (not `MessageToast`); `{0}` is filled by the resolved arg. **A template may START with `{0}`** — `get_t_arg` quotes a leading `{N}`/`{N?…}` placeholder as a plain string (source: `^\{[0-9]+[?}]` match), so a value-first toast needs no round-trip fallback. Button text is `${$source>/text}`; menu-item text is `${$parameters>/item}.getText()`. **An arg is a full UI5 expression, not just a path** — `EventHandlerResolver` parses the whole handler with `BindingParser.parseExpression`, so method calls, `isA('…')`, string concat and ternaries all work in an arg. But the grammar has **no loop**: a parent-chain walk must be unrolled to a fixed hop count, which fails when the control tree reshapes at runtime — `sap.m.Menu` re-parents items through a `sap.m.MenuWrapper`, so a nested item's parent `MenuItem` is two hops up while the submenu is closed and four once its popover exists. That is why the menu breadcrumb stays **non-transportable** (documented boundary, CAPABILITIES) and apps 060/061 keep the leaf `${$parameters>/item}.getText()`. Measure the chain before betting an arg on `getParent()`. **When the original pulls the module via `core:require` on the fragment/view root** (`core:require="\{MessageToast: 'sap/m/MessageToast'\}"` for an inline `press="MessageToast.show(…)"`) and you rewire to `_event_client`, that `core:require` is **dropped — name it in the deviation**: structural-diff treats `core:require` as an ordinary (non-`xmlns`) attribute and flags it missing | CAPABILITIES; apps 005/060/172 |
-| Custom **CSS / raw markup** (`style.css`, `<h2>`, a `core:HTML` `content` div) | `core:HTML` leaf, markup in the `content` **attribute** (no CDATA node exists). Two traps: **(a)** write the **decoded** literal markup — the original XML carries it entity-encoded (`&lt;div&gt;`), but you write `<div>`; the builder re-escapes on stringify, so copying the entities double-escapes them. **(b)** escape literal braces `\{ \}` in a **backtick** literal `` `…\{…\}…` `` — backtick passes `\{` through to the serialized attribute; a `\|…\|` template would collapse `\{`→`{` and re-crash (the **reverse** of the typed-binding row, which *wants* real braces and so uses the pipe) | CAPABILITIES "Custom CSS"; apps 026/028, 169 |
-| Controller **`.filter()`/`.sort()`** on `oList.getBinding('items')` | `cs_event-binding_call` (whitelisted methods/operators, compound filter groups supported) — the model stays untouched | CAPABILITIES "Controller-applied binding filter"; app 022 |
-| An **imperative control method** (`open`/`close`/`toggleStyleClass`/`toDetail`/`expandToLevel`/`setHiddenInPopin`…) | `follow_up_action( val = cs_event-control_by_id t_arg = id/method/args )`. A method **listed** in `CONTROL_METHODS` carries explicit arg kinds (extra args silently dropped — verify the kinds); a method **not listed** still runs when it is a public control method not matching the deny regex (`destroy/bind/attach/setModel/…` — the framework-invariant guard), so ordinary setters/toggles need no whitelist entry (source-verified in FrontendAction.js). A *denylisted or argument-dropping* need is a declared deviation + `pr/` | CAPABILITIES "Frontend-action catalog"; §5 |
-| An **anchored-open popup** (`byId(x).openBy(btn)` — `sap.m.Menu`, TimePicker, DatePicker, `sap.ui.unified.Menu`) | `control_by_id` + `openBy`/`toggleBy` + `$event.oSource.sId`; declare the popup control in `dependents`. The `openBy` dispatch **falls back to `open(false, anchor, 'begin top', 'begin bottom', anchor)`** for a control without an own `openBy` (`sap.ui.unified.Menu`) — the same `openBy` wire works for every menu family. Only the keyboard flag and explicit dock constants stay dropped (NOTE) | CAPABILITIES "Frontend-action catalog"; apps 016/060, 227/228 (unified.Menu via the fallback) |
-| A control-created **popup** (`new Dialog().open()`, `new PDFViewer().open()`) | Build a `core:FragmentDefinition`, show with `client->popup_display( val = … )` / `popover_display( xml = … by_id = … )` (popover XML param is **`xml`**, not `val`) — or declare in `mvc:dependents` + `control_by_id`/`open`/`openBy`. A **single-root** fragment (`<SomeControl …>` with the namespaces on the control, no wrapper) has **no** `FragmentDefinition` — open the control directly, and structural-diff **counts** that root control (only `mvc:View`/`core:FragmentDefinition` are exempt) | CAPABILITIES "Popups & messages"; apps 019/044/229 |
-| A popup/popover **`bindElement`** | **Fixed index** `bindElement('/Coll/0')` (single record) → seed those fields at the **default-model root** and keep the fragment's **relative** `{FIELD}` bindings (they resolve against the root); **no** `bind_element` follow-up needed. **Per-row** selection (index arrives from `$event.oSource.getBindingContext()`) → `follow_up_action( val = cs_event-bind_element view = cs_view-popover t_arg = ( idx )( client->_bind( tab ) ) )`. Pick by whether the bound record is fixed or row-driven | CAPABILITIES "Popups & messages"; app 229 (fixed), app 094 (per-row) |
-| **Inlining a `core:Fragment`** (the sample splits its view into `*.fragment.xml` referenced by `<core:Fragment fragmentName="…"/>`) | Inline the fragment content directly into the one port view. structural-diff **unions every `*.fragment.xml` with the view** and **counts the `core:Fragment` reference elements as controls** (only `mvc:View`/`core:FragmentDefinition` roots are exempt) — so the dropped `core:Fragment` references must be **named in a deviation** (same as the `core:require` rule). If the fragments declare **different default `xmlns`** (e.g. `sap.uxap` in one, `sap.m` in another), the single port view can only carry one default namespace, so some controls get a prefix the original lacked (`uxap:ObjectPageSection` vs `ObjectPageSection`) — an **unavoidable namespace-representation NOTE**. Asymmetry to remember: attribute checks are prefix-blind (`simpleName`), but **control counts are prefix-sensitive**. When you inline a **BlockBase** block or a nested `mvc:View` content-only, the block's **own root `mvc:View` attributes** (`width="100%"`, `height`, …) are dropped too and surface as `attr missing View.width` — **name the root-View attributes in the deviation as well**, not just the block/`html:div` wrapper | CAPABILITIES "Popups & messages"; apps 233/234, 239 (BlockBase root-View attrs) |
-| A **bindable property the controller sets imperatively** (`fcl.setLayout(x)`, `oCtrl.setVisible(b)`) | Prefer the **bindable property** over a frontend action: two-way bind it (`layout="{/LAYOUT}"`) and update the model server-side — no `CONTROL_METHODS` entry needed. Only reach for `follow_up_action`/`control_by_id` when there is **no** bindable property for the effect (§10 "prefer a bindable property") | CAPABILITIES "Frontend-action catalog"; app 234 (`FlexibleColumnLayout.layout`) |
-
-Two feature classes stay **❌ — don't improvise around them, declare the
-deviation**: control-returning factories (`groupHeaderFactory`, item factories)
-and app-authored JS formatter functions outside the curated `model/formatter.js`
-pack (business logic goes to `model_init`, per the thin-frontend principle).
-
-#### Worked references
-
-> **A reference shows an *idiom*, not ground truth. When a nearby port conflicts
-> with this §5, `CAPABILITIES.md`, or the sample's own source/mock, the spec and
-> the source win — never copy a reference's *data values* blindly.** App 173's
-> nearest reference (app 162) had copied the wrong mock image id (`HT-1000`
-> instead of the mock's `HT-7777-large`) and a host-relative asset URL against
-> the `sdk.openui5.org` rule — verify each seeded value against the sample's
-> actual mock, not the neighbour.
-
-Read the 2–3 nearest ones before writing a new port. Prefer `checked` ports
-(live-verified) as references:
-
-| App | Sample | Shows |
-|-----|--------|-------|
-| `src/01/b01/z2ui5_cl_ai_app_051` | `sap.m.Text` | static view, no data/events, `&&`-split text |
-| `src/01/b02/z2ui5_cl_ai_app_007` | `sap.m.CheckBox` | two-way bind, expression bindings, boolean event arg |
-| `src/01/b02/z2ui5_cl_ai_app_040` | `sap.m.MultiInput` | data, bound aggregation, `core:Item`, tokens, cc control `z2ui5.cc.MultiInputExt` |
-| `src/01/b04/z2ui5_cl_ai_app_022` | `sap.m.FacetFilter` | compound `binding_call` filter, curated formatter module, two-way facet selection |
-| `src/01/b06/z2ui5_cl_ai_app_019` | `sap.m.Dialog` | fragment-popup dialogs, roundtrip-free live-enable expression, both popup_close paths |
-| `src/01/b05/z2ui5_cl_ai_app_016` | `sap.m.DatePicker` | frontend action (`openBy`/domRef), `$event.oSource.sId` anchor transport, POST_171 discipline |
+The recurring hard idioms (named models, typed bindings, expression bindings,
+`_event_client`, popups, fragments, …) and the worked reference ports are in
+**`.claude/skills/idiom-lookup/SKILL.md`** — scan it before porting, and
+consult it whenever the original does something the recipe does not cover 1:1.
 
 ### Generation prompt
 
-A condensed version of the recipe above, phrased as a porting task, lives in
+A condensed version of the porting recipe, phrased as a porting task, lives in
 **`scripts/generation-prompt.txt`** — the single source; `generate-coverage.mjs`
 splices it into `README.md` between the `<!-- prompt:start/end -->` markers
-(never edit the README block by hand). When this §5 changes in substance,
-update the prompt file in the same change — this §5 is the authoritative
-long form.
+(never edit the README block by hand). When the recipe changes in substance
+(the `port-a-sample` guide), update the prompt file in the same change — that
+guide is the authoritative long form.
 
 ---
 
@@ -804,77 +371,50 @@ is no `src/00` "restricted" area here (unlike abap2UI5/samples); everything must
 survive all three builds. The self-contained `auto_downport.yaml` workflow
 rebuilds the `702` branch on every push to `main`.
 
-A fourth workflow, `checks`, runs deterministic gates on every PR:
-
-| Job | Command | Fails when |
-|-----|---------|------------|
-| `pattern_lint` | `node scripts/pattern-lint.mjs` | a known-bad pattern reappears (each rule encodes a distilled §10 lesson; known open findings live in the script's BASELINE and in STATUS.md) |
-| `structural_diff` | `node scripts/structural-diff.mjs --strict` | a port's rendered view deviates from the original `view.xml` — control multiset, attribute names or simple **binding values** — without a declared deviation. **Controls are flagged in BOTH directions**: a control the original has that the port dropped (`control missing`) **and a control the port ADDS that the original lacks** (`control extra` — e.g. an inlined controller-built popup `Dialog`, or the controls of a bound row-template the original built imperatively). Only **attributes** are one-directional: it flags a **missing** attr but **extra attrs the port adds are never flagged**. So "the port only adds, never drops" is **not** a free pass — name every extra control in a deviation too. It compares the full **qualified name incl. namespace prefix**, so use the original view's prefix on controls (not a neighbour's convention). The original root's **`controllerName` is always dropped, undeclared** — it sits in the diff's `IGNORED_ATTRS`, like all `xmlns:*`. A diff is "declared" when some deviation's `what` text **contains that control/attr name verbatim** — so when you inline a controller-built popup, list the added `Dialog`/`Button`/… ; when you replace an imperative handler with a binding (dropping `press`/`change`), name that attribute — or it stays UNDECLARED. Exception: **helper-built (`dynamic`) ports skip control-count diffs entirely** (loop/helper-built counts can't match statically), which is one reason a helper-dedup'd view needs a `render_smoke` skip |
-| `view_gates` | `node scripts/view-gates.mjs --strict` (`npm run view-gates`) | one of the three view gates fails for a port. They all live in [abap2UI5-linter](https://github.com/abap2UI5/abap2UI5-linter) now — this repo keeps only the corpus policy on top of it (which ports, POST_171 deviations, declared skips). **(a) properties:** a control or member the port writes does not exist, carries a value UI5 rejects, is deprecated at 1.71, or was introduced after 1.71 without a `POST_171` deviation naming it — attributes, aggregations, **event parameters** read via `${$parameters>/<name>}` in a `t_arg` (resolved per event), and the **control itself** (which the old member-level gate never saw). **(b) structure:** the builder call tree is malformed — an **aggregation nested directly inside another aggregation** (a missing `)->shut(`, e.g. `<footer>` landing inside `<columns>`), a `shut` with no open to close, an attribute written twice on one control (`z2ui5_cl_ai_xml` asserts on that). **(c) render:** the reconstructed view fails a real headless `XMLView.create` against the OpenUI5 runtime (invalid XML, unknown control/property, strict property-type violation, broken expression binding). Helper-method-built views (a captured node handle passed into a builder-returning helper and chained out — app 049) are reconstructed by the handle-aware path. A port the reconstructor cannot rebuild must declare `"render_smoke": { "skip": true, "reason": "…" }` in its sidecar — an **undeclared** non-reconstructable port FAILS. The same declared skip also covers a **reconstructable** port whose view genuinely does not render in the static headless harness (an `sap.ui.integration` Card needs an external manifest). Every skip is **verified against the actual render each run**: honoured only while the view still errors, and the moment it renders clean the declaration is **stale** and FAILS — so the skip set can never drift. Accessibility findings and unhandled events are printed as advisories (`·`) and do not gate |
-| `e2e_smoke` (heavy, on-demand) | `npm run e2e:build` then `npm run e2e` (`scripts/e2e-build.mjs` + `e2e-smoke.mjs`) | a port fails to run as the **real app**: it starts the transpiled abap2UI5 backend (framework + all ports via `?app_start=<class>`, needs an abap2UI5 checkout — `A2UI5_HOME`), boots each port in headless Chromium (UI5 served from the local `@openui5` packages), and fails if it does not boot+render or if a backend request 4xx/5xx or a JS exception fires. Unlike `render_smoke` (static view reconstruction) this exercises the actual backend roundtrip, Component boot and event wiring. Not in the fast gate set (multi-minute transpile + browser); run before a release or when touching the framework wire/runtime. The `INTERACTIONS` map adds real click→assert checks (e.g. 005 press→client-composed toast) — it is the systematic close path for `LIVE_TEST` deviations |
-| `data_fidelity` | `node scripts/data-fidelity.mjs` | **(a) assets:** a port seeds an asset value the sample's own archived files/mocks never mention (basename lookup over `ui5/<lib>/<Name>/` + the `ui5/mock/*.json` the sample references by file name or top-level collection key), a full asset path whose folder differs from every mock occurrence, or an asset on a non-OpenUI5 UI5 host. **(b) table values:** every `VALUE #( … )` block that inlines a mock array (matched to its ONE best array by ≥ 3 shared field names, ≥ 2 rows; sample-local JSON beats the shared mock on a name collision — app 010 carries its own modified products.json) is compared string-field-wise: equal row counts → positional row/field equality (a field the mock row omits is skipped — the port seeds the UI5 default there); fewer rows → per-field set membership, so a legitimate `/Coll/0..n` subset passes but an invented value fails. Values compare modulo the sanctioned `https://sdk.openui5.org/` host-absolutization; numbers are not compared (formatting freedom). This is the deterministic form of the data audit — the wrong-neighbour-copy class (apps 162/142/119) that structural-diff (ignores values) and the render gate (mocks the model) can never see. Escapes: a deviation whose `what` names the basename/field/value verbatim, or a sidecar `"data_fidelity": { "skip": true, "reason": "…" }`. `--report` prints per port the mock string values missing from the ABAP source as the residual audit worksheet |
-| `meta_valid` | `validate-meta.mjs` + regenerate overview, coverage & status, `git diff --exit-code -- src README.md api.md STATUS.md` | an invalid sidecar, or a change forgot to regenerate the overview app / coverage docs / STATUS state block |
+The `checks` workflow runs the deterministic gates on every PR; the heavy
+`e2e_smoke` runs in `e2e_nightly.yaml` (scheduled + on demand). The gate set:
+`pattern_lint`, `structural_diff`, `view_gates` (properties + structure +
+headless render — the three former view gates, now run from
+[abap2UI5-linter](https://github.com/abap2UI5/abap2UI5-linter) with only the
+corpus policy kept here in `scripts/view-gates.mjs`), `data_fidelity`,
+`meta_valid`, plus `e2e_smoke`. What each gate checks, what a failure means
+and every legitimate escape hatch is in
+**`.claude/skills/run-the-gates/SKILL.md`** — read it the moment a gate fails,
+and before declaring any skip or deviation to satisfy one.
 
 **When a distilled lesson is greppable, add it as a pattern-lint rule in the
 same change** — that is what makes a lesson unrepeatable rather than advisory.
 
 **Run before every commit:**
 ```bash
-npm ci
-npx abaplint ./abaplint.jsonc          # expect 0 issues
-node scripts/validate-meta.mjs         # sidecar schema + referential integrity
-node scripts/pattern-lint.mjs          # expect 0 errors
-node scripts/structural-diff.mjs --strict
-node scripts/view-gates.mjs --strict    # properties + structure + headless render
-                                       # (--no-render skips the browser)
-node scripts/data-fidelity.mjs         # model_init seeds match the archived mocks
-node scripts/generate-overview.mjs     # then: git diff must stay clean
-node scripts/generate-coverage.mjs     # (README/api.md must stay clean too)
-node scripts/generate-status.mjs       # (STATUS.md state block too)
+npm run gates        # full offline gate set, fail-fast; needs NO node_modules and no network
 ```
+It chains: pattern-lint → validate-meta → structural-diff → data-fidelity →
+regenerate overview/coverage/status →
+`git diff --exit-code -- src README.md api.md STATUS.md` (regenerated
+artefacts must leave the tree clean, exactly as the `meta_valid` CI job checks).
+
+**Before every PR, additionally:**
+```bash
+npm ci               # once - installs abaplint, @abap2ui5/linter + the OpenUI5 runtime
+npm run gates:full   # gates + `npx abaplint ./abaplint.jsonc` (0 issues)
+                     #       + view-gates --strict (properties/structure/headless render)
+```
+
 
 ### Developer tooling — starting a port
 
-Two helpers remove the mechanical boilerplate (they do **not** write the view —
-that is the actual porting work):
+`npm run scaffold <sample>` archives the template, picks the app number/batch
+and writes the class stub + sidecar; `npm run json-to-abap` turns a JSON mock
+array into a typed ABAP `VALUE #( )` literal. Usage, flags, the `OPENUI5_SRC`
+sparse-clone recipe and the type-inference rules are in
+**`.claude/skills/scaffold-a-port/SKILL.md`**.
 
-- **`npm run scaffold <sample>`** (`scripts/scaffold.mjs`) — from an OpenUI5
-  demo-kit sample id/name it archives the template into `ui5/<lib>/<Name>/`,
-  picks the next app number + `src/<lib>/b<nn>` batch (`--new-batch` /
-  `--batch bNN`), and writes the class stub, `clas.xml`, `package.devc.xml` and
-  a valid `meta/` sidecar. The stub is a TODO placeholder view: it passes
-  abaplint / pattern-lint / view-gates immediately, and
-  `structural_diff` (correctly) fails until you rebuild the view 1:1. Needs an
-  OpenUI5 checkout (`OPENUI5_SRC`, default `../fork-openui5`). `--dry-run` to
-  preview. **`/home/user/fork-openui5` carries only `src/<lib>/src` — no
-  `test/…/demokit/sample`**, so the scaffolder finds nothing there. A blobless
-  sparse clone gets just the sample trees in ~350 MB:
-  `git clone --filter=blob:none --sparse https://github.com/SAP/openui5.git …`
-  then `git sparse-checkout set src/<lib>/test/<lib path>/demokit/sample …`,
-  and point `OPENUI5_SRC` at it. **Add `src/<lib>/src` to that same sparse set**
-  — `scope-of.mjs` reads the control JSDoc from there and answers
-  `UNRESOLVED (no source .js found)` for *every* entity when the checkout has
-  only the sample trees. That reads like "unknown control" but means "wrong
-  checkout": one sparse clone must carry both halves (~170 MB for the ported
-  libraries), or the scope pre-check silently stops gating.
-- **`npm run json-to-abap -- <file.json> [--path k] [--fields spec] [--var v]`**
-  (`scripts/json-to-abap.mjs`) — turns a JSON array (a demo mock's
-  `ProductCollection` …) into an ABAP `VALUE #( … )` literal for `model_init`
-  (backtick-escaping and type inference handled; also exports `rowsToAbapValue`
-  / `rowsToAbapType` for reuse). The scaffolder prints the exact command when
-  the sample's controller loads a JSON mock. **Type inference scans all rows**
-  (not just the first): a numeric column with any decimal value is emitted as a
-  **backtick string literal** (never truncated to `i`) and the tool warns on
-  stderr — declare that field `TYPE p LENGTH n DECIMALS m` for a numeric control
-  property (a backtick literal converts to packed), or `TYPE string` when it is
-  a display-only value bound into a text template (keeps the exact decimals,
-  e.g. dimensions `40.8`). Do **not** leave a decimal column as `TYPE i`.
-
-The last two are automated by the tracked **`.githooks/pre-commit`** hook: on
-every commit it regenerates the overview app + coverage docs and stages them,
-so they never drift from `meta/` (which the `meta_valid` CI job enforces on
-PRs). It is enabled with `git config core.hooksPath .githooks`, which
-`npm ci` / `npm install` runs automatically via the `prepare` script.
+Artefact regeneration is automated by the tracked **`.githooks/pre-commit`**
+hook: on every commit it regenerates the overview app + coverage docs and
+stages them, so they never drift from `meta/` (which the `meta_valid` CI job
+enforces on PRs). It is enabled with `git config core.hooksPath .githooks`,
+which `npm ci` / `npm install` runs automatically via the `prepare` script.
 
 ### abapGit file format (all serialized files)
 
@@ -882,99 +422,21 @@ PRs). It is enabled with `git config core.hooksPath .githooks`, which
 - Indentation 2 spaces. Max **255 characters** per `.abap` line (split long
   literals with `&&`).
 
+
 ---
 
 ## 7. Coverage & overview — always (re)generated
 
-Four generated, never hand-edited artefacts. **Never hand-edit them — edit the
-scripts.**
-
-- **`README.md`** (between the `<!-- coverage:start/end -->` markers) — the
-  per-module coverage summary.
-- **`STATUS.md`** (between the `<!-- state:start/end -->` markers) — the
-  point-in-time state table (port/status/deviation counts, open LIVE_TESTs,
-  out-of-scope ported samples), regenerated from `meta/` by
-  `scripts/generate-status.mjs` so it can never drift from the corpus. The
-  open-findings backlog below the block stays hand-maintained; the
-  chronological journal lives in `STATUS-history.md`.
-- **`api.md`** — ONE flat table, one row per UI5 demo kit sample, sorted
-  module → control → sample. Columns: **Module** · **Control** (→ OpenUI5 API,
-  ~~struck~~ when deprecated) · **Since** · **Deprecated** (deprecation version
-  + replacement hint from the release's `api.json`, empty = not deprecated) ·
-  **Sample** (→ OpenUI5 repo source, ↗ → live fullscreen sample) · **ABAP**
-  (→ generated class, `—` = not ported; those rows are the backlog). There is
-  no separate deprecated-controls section — everything sits in this table.
-- **`src/z2ui5_cl_ai_app_overview.clas.*`** — the in-system overview **app**:
-  an abap2UI5 app that lists every ported app as one row of a `sap.m.Table`,
-  sorted by module → control → sample. Columns (all plain text — links moved to
-  the trailing **Open** column): **Module** · **Control** · **Since** (the UI5
-  release the control appeared in) · **Sample** · **abap2UI5** (class name) ·
-  **Rating** · **Open** (three buttons — the LINKS popover with the four
-  reference targets, a direct app start in a new tab, and the trailing INFO
-  popover with the port's generation notes). The **Control** name and the
-  **Since** value come from `ui5/universe.json`, with nulls filled from the
-  control-level source scan in `ui5/properties.json` (same scope fallback as
-  `generate-coverage.mjs`). **Text is never coloured**; a deprecated control's
-  name is struck through (via a `sap.m.FormattedText` `htmlText`, so the
-  strikethrough can vary per row — a bound `class` would not, being applied
-  once at parse time) — today that strikes the known out-of-scope debt ports
-  (STATUS.md open findings). The table is the only view — do not reintroduce a
-  second view of the same catalog (the module→control→sample `sap.m.Tree`
-  alternative was removed). The **search field** filters the table on the
-  client (`binding_call` `Contains` over a per-row `filter` blob via
-  `_event_client` — no round-trip). Each column header also carries
-  client-side ascending/descending **sort** icons via the same `binding_call`
-  mechanism. **Every link opens in a new browser tab** (`target="_blank"`).
-  All source links point at OpenUI5; only the class + start links are local.
-  The per-row URLs are built in `view_display` (the start URL needs the
-  runtime system origin), the static facts come from `get_catalog`. Ports are
-  numbered gap-free `z2ui5_cl_ai_app_001..NNN` in this same overview order; a
-  renumber is a repo-wide rename (class token, sidecar `class`/`file`, and
-  every `app NNN` doc reference) followed by a regenerate.
-
-```bash
-node scripts/generate-coverage.mjs          # README + api.md (offline, from ui5/universe.json)
-node scripts/generate-overview.mjs          # the overview app (src only, from meta/)
-node scripts/generate-status.mjs            # STATUS.md state block (from meta/)
-node scripts/validate-meta.mjs              # sidecar schema + referential integrity
-node scripts/structural-diff.mjs [--strict] # port vs original view check
-node scripts/pattern-lint.mjs               # distilled-lesson gate
-```
-
-- **`validate-meta.mjs`** checks the `meta/<class>.json` sidecars — the source
-  of truth for sample/entity/status/checked/deviations (§5); `meta/` sits
-  outside `src/` so abapGit ignores it. See TRAINING.md.
-- **`structural-diff.mjs`** compares each port's builder-emitted view structure
-  (controls + attribute names) against its archived original view.xml and fails
-  (`--strict`) on any difference not covered by a declared deviation — run it
-  before committing a new or changed port; every hit means: fix the port or
-  declare the deviation in the sidecar.
-
-- **Universe of samples** — `ui5/universe.json`, a committed snapshot of every
-  `demokit/sample/<Name>` of the focused libraries (`FOCUS_LIBS` in
-  `generate-coverage.mjs`) with entity/Since/deprecation from the release's
-  `api.json`. When an OpenUI5 checkout is present (`$OPENUI5_DIR`),
-  `generate-coverage.mjs` REBUILDS the snapshot from it (the weekly
-  `generate_result` workflow does exactly that); offline it reads the
-  snapshot, so coverage regenerates without a checkout.
-- **Ported set** — the `meta/<class>.json` sidecars; a port matches a sample on
-  `(library, Name)` from `meta.sample`. Ports matching no universe sample are
-  reported as orphans (rename/removal upstream, or outside `FOCUS_LIBS`).
-- **api.md links are external** (absolute URLs, overridable via env) and point
-  at **OpenUI5** — only the ABAP column links back to this repo:
-  Control → the control's OpenUI5 API reference
-  (`DEMOKIT`=`https://sdk.openui5.org`/api/`<entity>`),
-  Sample → the sample's source folder in the OpenUI5 repository
-  (`OPENUI5`=`https://github.com/SAP/openui5`/tree/`OPENUI5_REF`/src/…/demokit/sample/`<Name>`),
-  Sample ↗ → the live OpenUI5 fullscreen sample runner
-  (`DEMOKIT`/resources/…/index.html?sap-ui-xx-sample-id=…&sap-ui-xx-sample-lib=…),
-  ABAP → the generated `.clas.abap` (`REPO`/`REF`).
-
-The `generate_result` workflow (`workflow_dispatch` + weekly) shallow-clones
-OpenUI5, refreshes `ui5/universe.json`, regenerates coverage + overview, stamps
-the `<!-- last-run -->` timestamp into `README.md`, and opens a pull request.
-The overview app must stay abaplint-clean (§6) — it lives in `src/` and is part
-of every CI build.
+Four artefacts are generated, never hand-edited — edit the scripts instead:
+the `README.md` coverage block, the `STATUS.md` state block, `api.md`, and the
+in-system overview app `src/z2ui5_cl_ai_app_overview.clas.*`. They regenerate
+as part of `npm run gates` (or via the individual `generate-*.mjs` scripts)
+and must leave `git diff` clean before every commit — the `meta_valid` CI job
+enforces exactly that. The full spec (overview app columns and behaviour, the
+`ui5/universe.json` + `ui5/openui5-entities.json` snapshots, api.md link
+targets, the weekly `generate_result` workflow, gap-free renumbering) is in
+**`.claude/skills/regenerate-artefacts/SKILL.md`** — read it before touching a
+generator, a generated file, or the sidecar shape they read.
 
 ---
 
@@ -1030,10 +492,11 @@ DSAG Leitfaden, then the samples style. Essentials:
 - Lifecycle: chain `check_on_init( )` / `check_on_navigated( )` /
   `check_on_event( )` with `ELSEIF`. Re-display the view in the
   `check_on_navigated( )` branch.
-- Build views with `z2ui5_cl_ai_xml` (see §5 — the only view builder used in
-  this repo; the class itself lives in abap2UI5 core, `src/02/`);
-  `client->view_display( view->stringify( ) )` as a standalone final
-  statement.
+- Build views with `z2ui5_cl_ai_xml` (see the `port-a-sample` guide — the only
+  view builder used in this repo; the class itself lives in the **abap2UI5 core
+  repo** under *its* `src/02/` — not this repo's `src/02/`, which is the
+  `sap.ui` port package); `client->view_display( view->stringify( ) )` as a
+  standalone final statement.
 - **ABAP Doc (`"!`) is parsed as HTML.** A raw `<…>` is read as an HTML tag, so
   never put a literal UI5 element (`<mvc:View>`) or any other `<tag>` in a `"!`
   comment — write it plain (`mvc:View element`). A `<tag>` there is flagged as an
@@ -1041,12 +504,14 @@ DSAG Leitfaden, then the samples style. Essentials:
 
 **Run `abaplint` after every change — 0 issues before committing.**
 
+
 ---
 
 ## 9. Dependencies
 
 * [abap2UI5](https://github.com/abap2UI5/abap2UI5) — the framework the ports run on.
 * [OpenUI5](https://github.com/SAP/openui5) — the source of the demo kit samples.
+
 
 ---
 
@@ -1066,14 +531,22 @@ What does not: a one-off typo, anything already stated above.
 How to record it:
 
 - Put the rule where an agent will hit it — a **step-specific** lesson goes in
-  that step's section (e.g. an event-arg rule in §5 "Data binding & events"); a
-  **cross-cutting** one goes in the list below or §8.
+  that step's guide under `.claude/skills/` (an event-arg rule in
+  `port-a-sample` "Data binding & events", an e2e trick in `e2e-debugging`, a
+  generator quirk in `regenerate-artefacts`); a **cross-cutting** one goes in
+  the list below or §8. **Never grow this file with step-specific material** —
+  keeping it lean is what keeps it loadable in every session.
 - Write the **rule**, not the war story: one line on what to do / avoid, and a
   short why. Reference the app or class where it bit us, so it can be checked.
   The full story, if worth keeping, goes in the `STATUS-history.md` journal.
 - Keep it deduplicated — extend the existing bullet rather than adding a second.
 
+
 ### Known gotchas (cross-cutting)
+
+Cross-cutting rules only — a task-specific gotcha lives at the end of the
+matching guide under `.claude/skills/` (porting gotchas in `port-a-sample`,
+e2e gotchas in `e2e-debugging`, generator gotchas in `regenerate-artefacts`).
 
 - **`npm run downport` rewrites the working tree in place** — it runs
   `abaplint --fix` over every `src/**` file *and overwrites `abaplint.jsonc`* with
@@ -1099,56 +572,6 @@ How to record it:
   parser** — CSS/JS braces inside a `core:HTML` `content` (or any literal
   attribute value) must be escaped `\{ … \}` or view creation crashes (app 028;
   pattern-lint rule `unescaped-brace-in-style-content` gates the `<style>` case).
-- **Event args need the `$`-prefixed form** (`${COL}`, `$event.oSource.sId`), not
-  a bare `{COL}` — see §5 "Data binding & events".
-- **A UI5 *association* cannot be data-bound** — only properties and
-  aggregations can, so the scalar-literal→two-way-binding move (§5) does not
-  apply to one. `sap.uxap.ObjectPageLayout.selectedSection` reads like a
-  property but is declared under `associations:`; drive it through
-  `follow_up_action( val = cs_event-control_by_id t_arg = ( id )
-  ( \`setSelectedSection\` ) ( … ) )` instead. An **empty/null association
-  argument is not transportable** either — pass the id you actually want (app
-  263 resets to the first section's id, which is what UI5's own
-  `_adjustSelectedSectionByUXRules` falls back to when the association is
-  empty). Before binding something that "should" be a property, grep the
-  control source for `associations:`.
-- **abap2UI5 has only one default model** — flatten any named-model binding into
-  it — see §5 "`model_init` — the model".
-- **`_bind( val = x path = abap_true )` returns the bare model path**
-  (no braces) — use it when composing raw binding-info strings
-  (`{ path: '...', sorter: ... }`); never reconstruct the path with substring
-  tricks (app 039).
-- **An e2e verdict is only as fresh as the transpiled backend** —
-  `e2e-smoke.mjs` runs the code in `.abap2UI5/node/output`, so a port edited
-  after the last `npm run node:build` is NOT what the browser executes, and a
-  leftover `node .abap2UI5/node/srv/express.mjs` from a debug run keeps port
-  3000 (the harness' own spawn then fails silently and the browser talks to
-  the stale server). The unmistakable symptom for a **brand-new** port is
-  `backend HTTP 500` whose body reads *"The app 'Z2UI5_CL_AI_APP_nnn' does not
-  exist in the system"* — that is a missing rebuild, never a port defect.
-  Never run `e2e-smoke` while a build is in flight (`e2e-build` wipes
-  `node/output` first, so the run dies with no output). **Never wait on or
-  kill a process by grepping for a string your own command line also
-  contains** — `pgrep -f e2e-build` matches the waiting shell itself and waits
-  forever, and a `grep '[e]2e-build' | xargs kill` whose command line also
-  names `e2e-build.mjs` kills your own shell (exit 144, no output). Grep the
-  build log for `e2e-build: done`; kill by a PID noted in a SEPARATE, earlier
-  command.
-- **A control with no theme CSS has a zero-size box, and playwright will not
-  click or focus it** — the e2e harness serves the UI5 *sources*, not the
-  themes, so `sapUiIcon` (an Input's value-help icon, app 268) and
-  `sapMSliderHandle` (apps 270/271) measure 0×0 and every actionability check
-  fails with *"not visible"*, which reads like a broken port. Both have a real
-  gesture that still goes through the control's own handling:
-  `locator.dispatchEvent('click')` for an icon, and
-  `page.evaluate(() => el.focus())` + a key press for anything else — **the
-  keyboard is the more general of the two**: focus+`Enter` picks a
-  `ColorPalette` swatch (app 008), focus+`F4` opens a value help (app 233),
-  focus+`ArrowLeft` moves a slider through its two-way binding. Reach for
-  focus+key before giving a control up. Do not "fix" this by setting the
-  property through the UI5 API — that bypasses the binding the test exists to
-  prove. Same family: assert the *effect* (a bound property, a rendered
-  class), not the pixels (apps 207/130).
 - **A deviation text is also a gate escape — rewriting it can un-declare a
   diff.** `structural-diff` (and `data-fidelity`) accept a difference only
   while some sidecar deviation *names* it. Converting a `LIVE_TEST` to a
@@ -1158,35 +581,6 @@ How to record it:
   replaced the one naming the dropped attribute). When you rewrite a
   deviation, keep the naming clause and run `structural-diff --strict` in the
   same change.
-- **OverflowToolbar controls ARE drivable headless — open the overflow
-  popover first.** In the harness' 1280 px viewport a toolbar folds almost
-  everything into its `Additional Options` button, so a direct
-  `getByRole('button', …)` for a toolbar control fails with *"not visible"*.
-  Clicking `Additional Options` opens the associative popover and the controls
-  inside it click normally, round-trip and all (app 174). Two details: an
-  **overflowed `SegmentedButton` renders as a `Select`** in that popover
-  (app 247), and the binding **template** of an aggregation sits in
-  `Element.registry` next to the real rows with no binding context, so filter
-  on `getBindingContext()` before asserting a property over "all items"
-  (app 207).
-- **A sidecar text ends up inside generated ABAP — keep raw braces out of
-  it.** `generate-overview.mjs` inlines every deviation `what` into the
-  overview app's literals, so a NOTE quoting a CSS rule with `{ … }` next to
-  the word `<style>` makes pattern-lint fire on the *generated* file, not on
-  any port (app 275). Describe such things in words ("one rule: .tileLayout
-  floats left").
-- **An event parameter that is an ARRAY arrives as JSON, not as a joined
-  string.** `${$parameters>/fieldGroupIds}` reaches `on_event` as
-  `["Billing Information"]`, brackets and quotes included. Index it in the
-  expression — `${$parameters>/fieldGroupIds}[0]`, which is also literally
-  what the original controller does — the UI5 expression grammar accepts
-  `[n]` and method calls (app 272). Do not "fix" this by string-stripping in
-  ABAP.
-- **An interaction may create the state it needs** — app 267's whole
-  `breakpointChanged` wire only fires below 720 px, so its interaction calls
-  `page.setViewportSize({ width: 400, height: 900 })` and then waits for the
-  bound `enabled` flag. A responsive wire is testable; it just needs the
-  viewport as an input.
 - **abapGit pushes from a system can carry stale generated files** — a human
   who pulled before the latest repo change and pushes back from the system
   silently reverts it. After every human push: regenerate the overview
@@ -1196,57 +590,18 @@ How to record it:
   status, checked, deviations, audit) lives in `meta/<class>.json`; edit the
   sidecar, never write `"!` lines into a port (pattern-lint blocks them, and
   `validate-meta.mjs` checks the sidecars).
-- **UI5 2.x validates control property types strictly** — a bound value that
-  serializes as a JSON string is rejected when the property is a number/boolean
-  (`"100" is of type string, expected float` on `sap.m.Slider.value`, app 053).
-  Type the bound ABAP field numerically (`i`/packed) or as `abap_bool`, never
-  as `string`, so the model carries a real JSON number/boolean. But a
-  **display-only** value with variable decimals bound into a *text template*
-  (`{WIDTH} x {DEPTH}`, dimensions `40.8`) stays `TYPE string` — packed with a
-  fixed `DECIMALS` would add trailing zeros (`40.80`); string keeps it exact.
 - **abapGit XML files must start with the UTF-8 BOM** (`EF BB BF` before
   `<?xml …>`). abapGit serializes them that way; BOM-less files break the
   abapGit format on the system pull. The scaffolder and generate-overview emit
   the BOM; when writing a `.clas.xml`/`package.devc.xml` by hand, copy a
   reference byte-exactly — pattern-lint rule `abapgit-xml-bom` gates every
   `src/**/*.xml`.
-- **A single giant `VALUE #( … )` can exceed ABAP's maximum statement
-  length** — the overview's catalog hit the limit in a real system, and
-  splitting it **in halves was not enough**. Split by emitted **size**, not by
-  a fixed number of parts — the catalog keeps growing and every fixed part
-  grows with it. `generate-overview.mjs` caps each statement at `CHUNK_CHARS`
-  3000 / `CHUNK_ROWS` 6 and appends with `VALUE #( BASE result … )`, and
-  hoists any single text longer than `HOIST_CHARS` into preceding
-  `lv_textN = lv_textN && \`…\`` assignments (each ≤ `ASSIGN_CHARS`), so one
-  oversized row cannot blow the budget on its own. Data points for the
-  (undocumented) threshold: a ~226 kB statement failed, the biggest inlined
-  port mock table (app 012, ~74 kB) passes — port-sized mock tables are below
-  the limit, but split by size rather than trusting a margin when a block
-  grows to many hundreds of long rows.
 - **Never reuse a `FOR <n> = …` iterator name within one method** — the 702
   downport materializes each numeric iterator as `DATA <n> TYPE i`, so a
   second `FOR i = …` in the same method makes the downported class (and the
   e2e transpiler) fail with "Variable name already defined". Use distinct
   names (`i`, `j`, `k`) per `VALUE` block (app 234; pattern-lint rule
   `duplicate-for-iterator`).
-- **A `client->_event( )` in the view needs an `on_event` branch that handles
-  it** — otherwise the wire fires a full backend round-trip that falls through
-  every `CASE` and the app does nothing, while *looking* wired (pattern-lint
-  rule `dead-event-wire`: no class with `->_event(` and no
-  `on_event`/`check_on_event`). Two legitimate resolutions, no third:
-  **dispatch it** (a `CASE` branch that changes bound state and calls
-  `view_model_update`, or a `message_box_display`/`popover_display`), or
-  **drop the wire** — if the behaviour is genuinely inexpressible, the
-  attribute goes away and the loss is declared. Before dropping, check
-  CAPABILITIES.md: most "not reproducible" rationales in this class turned
-  out to be wrong — the behaviour was expressible as a two-way binding +
-  expression binding, a real dispatcher, or the full drag & drop reorder.
-- **Range-check any index that arrives from the frontend before using it as a
-  table index** — JS splices a nonsense index harmlessly, `t[ i ]` in ABAP
-  **dumps**. A drag & drop `drop` handler receives both row indices from the
-  client, so a stale or malformed value reaches `on_event` as an ordinary
-  event arg. Guard with `lines( )` and return early rather than trusting the
-  client (app 148).
 - **After a repo rename, grep for the old `owner/name` — a
   `github.repository` guard fails SILENTLY.** The rename to `ai-demokit` left
   `abap2UI5/api` in the `auto_downport.yaml` `if:` guard (the workflow was
@@ -1260,63 +615,12 @@ How to record it:
   works**, and that is the transport the pipeline (`generate_result`,
   `scaffold`, `generate-properties`) uses anyway. Before declaring a task
   blocked on network access, try the transport the tooling itself uses.
-- **An OPTIONAL date in a bound row needs a guard in the binding** — one bound
-  template cannot omit an attribute per row, so a row whose date field is empty
-  still goes through the formatter: `Formatter.DateCreateObject('')` is
-  `new Date('')` = **Invalid Date**, which is *truthy*, so every consumer that
-  branches on the property throws and the whole view dies — the app renders
-  **zero** days, not a degraded one. Guard the conversion in the binding:
-  ``` `{= ${END} ? Formatter.DateCreateObject(${END}) : null }` ``` in a
-  **backtick** literal (a `|…|` template would eat the braces). Do **not**
-  "fix" it by seeding `end = start`: `_checkDateEnabled` compares a range
-  strictly exclusive and reaches its single-day branch only when there is no
-  `endDate` at all, so that seeds a range disabling nothing (app 220;
-  pattern-lint rule `unguarded-date-formatter`).
-- **abaplint `commented_code` can fire on an ordinary English comment** — a
-  `"` view-description comment containing a `/` next to CamelCase UI5 identifiers
-  (e.g. `" bound to RowSettings highlight/highlightText`) lexes like ABAP and is
-  rejected as commented-out code. Reword (drop the slash, or split the
-  identifiers) — app 174.
-- **Device APIs need a secure context (HTTPS)** — geolocation and the camera
-  (`z2ui5.cc.Geolocation` / `CameraPicture`) silently do nothing over plain
-  HTTP; `getCurrentPosition` / `getUserMedia` fail with a secure-origin error.
-  Test over HTTPS or `localhost`, not `http://`.
 - **A code change to a `checked` port invalidates the check** — `checked`
   certifies the code that was live-verified, not the class name. Any
   behavioral rework of a `checked` port resets `status` to `generated`
   (keep the historical check as context inside a `LIVE_TEST` deviation) or
   restamps `checked` after a fresh live run (app 003 once showed green in the
   overview while its central interaction path was unverified).
-- **Prefer a bindable property over a frontend action / round-trip** — if a
-  control exposes its state as a property (`IconTabBar.selectedKey`,
-  `visible="{= … }"`, the `device>` model), bind it (two-way) instead of
-  driving it imperatively. Only methods with no bindable equivalent
-  (`NavContainer.to`, `focus`, `scrollToIndex`) need a frontend action.
-  Compare app 088 (NavContainer + action) with the IconTabBar samples.
-- **Client-side-only state does not survive a view rebuild** — a value the
-  frontend never sends back (a `SearchField` with no bound `value`) and a
-  `binding_call` filter/sorter (it acts on the aggregation binding, not on the
-  model) are gone the moment the backend rebuilds the view: another round-trip,
-  a draft restore, the browser Back button after `nav_app_call`. Bind the value
-  two-way so it travels with the next event, and re-apply the binding operation
-  in `view_display` via `follow_up_action( cs_event-binding_call … )` when the
-  restored value is non-initial (the overview app's search). Sort state stays
-  client-only: an `_event_client` sort cannot write to the model, so it is
-  deliberately lost.
-- **`Network error: ASSERTION_FAILED` in a transpiled build ≠ an app defect** —
-  an `ASSERT` cannot be caught in the JS runtime, so any assert inside a
-  `TRY … CATCH cx_root` that a real system swallows becomes a 500 there. Two
-  known sources, both in the *runtime*, not in the port: (a) the 702 downport
-  turns a table expression `tab[ … ]` into `RAISE cx_sy_itab_line_not_found`,
-  which the build maps to `ASSERT 1 = 0` — that is why a missing
-  `get_event_arg( n )` 500s instead of returning initial; (b) open-abap's
-  `CALL TRANSFORMATION id … RESULT XML` writes character data **unescaped**, so
-  an app whose model carries a `<` saves a draft its own `CL_IXML` cannot parse
-  back and **every** later round-trip dies in the parser — patched at build
-  time by `web/ci/patch_open_abap_xml.mjs`, which both transpiled builds apply
-  (`web/` and `scripts/e2e-build.mjs`), and forwarded upstream as
-  `pr/open-abap-xml-escaping`. Prefer `READ TABLE` over `tab[ … ]` in an app
-  that must run there.
 - **Every PUBLIC attribute is persisted app state** — the framework serializes
   it into the draft on every round-trip and parses it back on the next one, and
   the whole model also travels to the browser on every render. So data that
@@ -1328,20 +632,5 @@ How to record it:
   popovers; now only bound columns are public, the full catalog stays in a
   local (`get_catalog( )` is a METHOD) and `row_of( val )` fetches the pressed
   row (draft 199 kB, clicks ~4 s). This is **not** a licence to subset a
-  port's mock data — §5 still requires the full row set; it is about text that
-  is never rendered from the model.
-- **A listed control method silently drops arguments beyond its
-  declared kinds** — `castArgs` in `FrontendAction.js` maps over the
-  `CONTROL_METHODS` kinds list, so a `to` transition name or a
-  ViewSettingsDialog `open` page key never reaches the method; the call
-  "works" and the behavior is quietly wrong. Verify the method's kinds in
-  the framework source BEFORE wiring a parametrized call; if the sample
-  needs the arg, that is a declared deviation **plus a pr/ request in the
-  same change** — never a LIVE_TEST for something source-decidable
-  (pr/control-method-args). An UNLISTED public method that does not match
-  the deny regex runs too (plain setters/toggles) — see the cheat-sheet row.
-- **POST_171 covers event *parameters* too** — a post-1.71 event parameter
-  read via `${$parameters>/…}` (e.g. SearchField `searchButtonPressed`,
-  since 1.114) needs its POST_171 deviation exactly like a bound member;
-  the property gate enforces this (it scans `$parameters>/<name>` refs in
-  `t_arg` and resolves them against the same member map as attributes, §6).
+  port's mock data — the porting recipe (`port-a-sample`) still requires the
+  full row set; it is about text that is never rendered from the model.

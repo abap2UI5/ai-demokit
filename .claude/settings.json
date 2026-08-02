@@ -6,10 +6,38 @@
           {
             "type": "command",
             "statusMessage": "Loading AGENTS.md lessons-learned reminder",
-            "command": "jq -n --arg c 'AGENTS.md is this project memory. Per section 10 (Lessons learned): whenever you discover and fix a non-obvious mistake - an unknown CI or linter rule, a framework quirk, a wrong assumption you had to unlearn, a tool that behaved destructively - record the rule back in AGENTS.md in the SAME change, before you finish. Put a step-specific lesson in that step section; a cross-cutting one in section 10 (Known gotchas) or section 8. Write the rule, not the story, and name the app or class where it bit us. Ask yourself at the end of the task: did I learn something the next agent would otherwise repeat?' '{hookSpecificOutput:{hookEventName:\"SessionStart\",additionalContext:$c}}'"
+            "command": "jq -n --arg c 'AGENTS.md is this project memory, and the task guides under .claude/skills/ are its on-demand chapters. Per AGENTS.md section 10 (Lessons learned): whenever you discover and fix a non-obvious mistake - an unknown CI or linter rule, a framework quirk, a wrong assumption you had to unlearn, a tool that behaved destructively - record the rule back in the SAME change, before you finish. Route it where the next agent will hit it: a step-specific lesson goes into that step guide (.claude/skills/port-a-sample, e2e-debugging, regenerate-artefacts, run-the-gates, scaffold-a-port, idiom-lookup); only a cross-cutting one goes into AGENTS.md section 10 or 8 - never grow AGENTS.md with step-specific material. Write the rule, not the story, and name the app or class where it bit us. Ask yourself at the end of the task: did I learn something the next agent would otherwise repeat?' '{hookSpecificOutput:{hookEventName:\"SessionStart\",additionalContext:$c}}'"
           }
         ]
       }
+    ]
+  },
+  "permissions": {
+    "allow": [
+      "Bash(npm ci)",
+      "Bash(npm install)",
+      "Bash(npm run gates)",
+      "Bash(npm run gates:*)",
+      "Bash(npm run view-gates:*)",
+      "Bash(npm run view-gates)",
+      "Bash(npm run overview)",
+      "Bash(npm run coverage)",
+      "Bash(npm run scaffold:*)",
+      "Bash(npm run json-to-abap:*)",
+      "Bash(npm run e2e:*)",
+      "Bash(npm run e2e)",
+      "Bash(npm run node:*)",
+      "Bash(node scripts/*)",
+      "Bash(npx abaplint:*)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git show:*)"
+    ],
+    "deny": [
+      "Edit(api.md)",
+      "Edit(src/z2ui5_cl_ai_app_overview.clas.abap)",
+      "Edit(src/z2ui5_cl_ai_app_overview.clas.xml)"
     ]
   }
 }
