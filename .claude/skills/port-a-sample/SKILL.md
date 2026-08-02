@@ -21,7 +21,7 @@ Follow it exactly so every port looks the same and stays maintainable.
 `*.view.xml` (the UI), the controller (`*.controller.js` — event handlers),
 `Component.js` / `manifest.json` (which model data is loaded), plus any local
 `*.json` mock data. All of these are also copied verbatim into the sample's
-`ui5/<library>/<SampleName>/` folder (§4).
+`ui5/<library>/<SampleName>/` folder (AGENTS.md §4).
 
 **Output** — one class `z2ui5_cl_ai_app_<n>` implementing `z2ui5_if_app`, whose
 view is a **1:1** rebuild of the sample's XML.
@@ -370,7 +370,7 @@ leave it as an ❌ gap. Never silently substitute a different control.
 When the port is **not** a clean 1:1 — you improvised, dropped/downgraded
 something for 1.71, replaced a controller-only behaviour, or relied on a
 binding/event form you could not verify — record it as an entry in the
-`deviations` array of `meta/<class>.json` (§5 intro). One entry per caveat,
+`deviations` array of `meta/<class>.json` (the sidecar contract is AGENTS.md §5). One entry per caveat,
 with a closed `type` vocabulary so deviations stay countable:
 
 - `LIVE_TEST` — needs checking in a running system: an unverified
@@ -425,9 +425,9 @@ these entries.
   interaction **type with a delay** — a no-delay `pressSequentially` asserts a
   value the wire never promised.
 - **Event args need the `$`-prefixed form** (`${COL}`, `$event.oSource.sId`), not
-  a bare `{COL}` — see §5 "Data binding & events".
+  a bare `{COL}` — see "Data binding & events" in this guide.
 - **A UI5 *association* cannot be data-bound** — only properties and
-  aggregations can, so the scalar-literal→two-way-binding move (§5) does not
+  aggregations can, so the scalar-literal->two-way-binding move (this guide) does not
   apply to one. `sap.uxap.ObjectPageLayout.selectedSection` reads like a
   property but is declared under `associations:`; drive it through
   `follow_up_action( val = cs_event-control_by_id t_arg = ( id )
@@ -438,7 +438,7 @@ these entries.
   empty). Before binding something that "should" be a property, grep the
   control source for `associations:`.
 - **abap2UI5 has only one default model** — flatten any named-model binding into
-  it — see §5 "`model_init` — the model".
+  it — see "`model_init` — the model" in this guide.
 - **`_bind( val = x path = abap_true )` returns the bare model path**
   (no braces) — use it when composing raw binding-info strings
   (`{ path: '...', sorter: ... }`); never reconstruct the path with substring
