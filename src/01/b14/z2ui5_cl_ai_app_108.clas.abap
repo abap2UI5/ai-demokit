@@ -113,7 +113,6 @@ CLASS z2ui5_cl_ai_app_108 IMPLEMENTATION.
                             )->leaf( n = `CalendarAppointment` ns = `unified`
                                 )->a( n = `startDate` v = `{ path: 'START_AT', formatter: 'Formatter.DateCreateObject' }`
                                 )->a( n = `endDate`   v = `{ path: 'END_AT', formatter: 'Formatter.DateCreateObject' }`
-                                )->a( n = `icon`      v = `{PIC}`
                                 )->a( n = `title`     v = `{TITLE}`
                                 )->a( n = `type`      v = `{TYPE}`
 

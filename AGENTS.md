@@ -269,8 +269,9 @@ source of truth:
   **Gate coverage — the property gate covers ALL ported libraries.**
   `generate-properties.mjs` scans every lib's source **recursively** (nested
   controls too — `form/SimpleForm`, `cards/NumericHeader`) into
-  `ui5/properties.json`, and `property-check.mjs` resolves each control via the
-  port's own `xmlns` declarations and walks the parent chain — so a post-1.71
+  `ui5/properties.json` for the coverage docs, while the gate itself reads the
+  linter's own snapshot; either way each control is resolved via the port's own
+  `xmlns` declarations and the parent chain is walked — so a post-1.71
   member in any library is caught automatically (the `generate_result` CI step
   clones the full OpenUI5 repo, so this holds in CI). Two facts about how the
   generator reads `@since` matter when verifying a flag: **(a)** an inherited
@@ -290,7 +291,8 @@ source of truth:
   **So the property gate is a backstop, not a guarantee** — when a control
   feels new, still confirm with `node scripts/scope-of.mjs <entity>`
   (control-level) and declare `POST_171` **by policy** even if no gate forces
-  it. A green property-check does **not** prove a port is ≤ 1.71-clean.
+  it. A green property gate does **not** prove a port is ≤ 1.71-clean — though
+  it now does check the **control** itself, not only its members.
 - **Before declaring any sample feature inexpressible, check `CAPABILITIES.md`**
   — the map of what abap2UI5 can express, each entry backed by a port that
   proves it. Never improvise around a feature it marks ✅/🔶 (app 042 replaced a
@@ -574,7 +576,7 @@ that stops at the deepest node.
   → `` \|\{ path: 'EXCHANGE_RATE', type: 'sap.ui.model.type.Float' \}\| ``. Copying
   the original camelCase `path:'exchangeRate'` verbatim renders nothing (no such
   model field) and no gate catches it — structural-diff normalizes case,
-  render-smoke mocks the model (app 171).
+  the render gate mocks the model (app 171).
 - `client->_bind( var )` — bind an ABAP `DATA` member two-way (the value
   flows back into `var` on the next round-trip), e.g.
   `)->a( n = `items` v = client->_bind( t_items )`. **`client->_bind_edit( )`
@@ -808,12 +810,10 @@ A fourth workflow, `checks`, runs deterministic gates on every PR:
 |-----|---------|------------|
 | `pattern_lint` | `node scripts/pattern-lint.mjs` | a known-bad pattern reappears (each rule encodes a distilled §10 lesson; known open findings live in the script's BASELINE and in STATUS.md) |
 | `structural_diff` | `node scripts/structural-diff.mjs --strict` | a port's rendered view deviates from the original `view.xml` — control multiset, attribute names or simple **binding values** — without a declared deviation. **Controls are flagged in BOTH directions**: a control the original has that the port dropped (`control missing`) **and a control the port ADDS that the original lacks** (`control extra` — e.g. an inlined controller-built popup `Dialog`, or the controls of a bound row-template the original built imperatively). Only **attributes** are one-directional: it flags a **missing** attr but **extra attrs the port adds are never flagged**. So "the port only adds, never drops" is **not** a free pass — name every extra control in a deviation too. It compares the full **qualified name incl. namespace prefix**, so use the original view's prefix on controls (not a neighbour's convention). The original root's **`controllerName` is always dropped, undeclared** — it sits in the diff's `IGNORED_ATTRS`, like all `xmlns:*`. A diff is "declared" when some deviation's `what` text **contains that control/attr name verbatim** — so when you inline a controller-built popup, list the added `Dialog`/`Button`/… ; when you replace an imperative handler with a binding (dropping `press`/`change`), name that attribute — or it stays UNDECLARED. Exception: **helper-built (`dynamic`) ports skip control-count diffs entirely** (loop/helper-built counts can't match statically), which is one reason a helper-dedup'd view needs a `render_smoke` skip |
-| `structure_lint` | `node scripts/structure-lint.mjs --strict` | the builder call tree is malformed — an **aggregation nested directly inside another aggregation** (a missing `)->shut(`, e.g. `<footer>` landing inside `<columns>`), or a `shut` with no open to close. A fast static tree check that runs before `render_smoke` so this class fails in milliseconds with a precise message instead of a cryptic UI5 load error. Helper-built views (RETURNING a `z2ui5_cl_ai_xml` handle) are skipped — their open/shut pairs span methods |
-| `render_smoke` | `node scripts/render-smoke.mjs --strict` (`npm run smoke`) | a port's reconstructed view fails a real headless `XMLView.create` against the OpenUI5 runtime (invalid XML, unknown control/property, strict property-type violation, broken expression binding). Helper-method-built views (a captured node handle passed into a builder-returning helper and chained out — app 049) are reconstructed by the handle-aware path (`extractDocsWithHelpers`; a handle is a stack snapshot, each helper call inlined re-anchored to its argument). A port the reconstructor still cannot rebuild must declare `"render_smoke": { "skip": true, "reason": "…" }` in its sidecar — an **undeclared** non-reconstructable port FAILS. The same declared skip also covers a **reconstructable** port whose view genuinely does not render in the static headless harness (`sap.f.AvatarGroup`'s overflow measurement loops with no real layout box; an `sap.ui.integration` Card needs an external manifest). Every skip is **verified against the actual render each run**: it is honoured only while the view still errors, and the moment it renders clean the declaration is **stale** and FAILS — so the skip set can never drift. Render-hostile ports must still pass every other gate (structural-diff, abaplint, e2e) |
+| `view_gates` | `node scripts/view-gates.mjs --strict` (`npm run view-gates`) | one of the three view gates fails for a port. They all live in [abap2UI5-linter](https://github.com/abap2UI5/abap2UI5-linter) now — this repo keeps only the corpus policy on top of it (which ports, POST_171 deviations, declared skips). **(a) properties:** a control or member the port writes does not exist, carries a value UI5 rejects, is deprecated at 1.71, or was introduced after 1.71 without a `POST_171` deviation naming it — attributes, aggregations, **event parameters** read via `${$parameters>/<name>}` in a `t_arg` (resolved per event), and the **control itself** (which the old member-level gate never saw). **(b) structure:** the builder call tree is malformed — an **aggregation nested directly inside another aggregation** (a missing `)->shut(`, e.g. `<footer>` landing inside `<columns>`), a `shut` with no open to close, an attribute written twice on one control (`z2ui5_cl_ai_xml` asserts on that). **(c) render:** the reconstructed view fails a real headless `XMLView.create` against the OpenUI5 runtime (invalid XML, unknown control/property, strict property-type violation, broken expression binding). Helper-method-built views (a captured node handle passed into a builder-returning helper and chained out — app 049) are reconstructed by the handle-aware path. A port the reconstructor cannot rebuild must declare `"render_smoke": { "skip": true, "reason": "…" }` in its sidecar — an **undeclared** non-reconstructable port FAILS. The same declared skip also covers a **reconstructable** port whose view genuinely does not render in the static headless harness (an `sap.ui.integration` Card needs an external manifest). Every skip is **verified against the actual render each run**: honoured only while the view still errors, and the moment it renders clean the declaration is **stale** and FAILS — so the skip set can never drift. Accessibility findings and unhandled events are printed as advisories (`·`) and do not gate |
 | `e2e_smoke` (heavy, on-demand) | `npm run e2e:build` then `npm run e2e` (`scripts/e2e-build.mjs` + `e2e-smoke.mjs`) | a port fails to run as the **real app**: it starts the transpiled abap2UI5 backend (framework + all ports via `?app_start=<class>`, needs an abap2UI5 checkout — `A2UI5_HOME`), boots each port in headless Chromium (UI5 served from the local `@openui5` packages), and fails if it does not boot+render or if a backend request 4xx/5xx or a JS exception fires. Unlike `render_smoke` (static view reconstruction) this exercises the actual backend roundtrip, Component boot and event wiring. Not in the fast gate set (multi-minute transpile + browser); run before a release or when touching the framework wire/runtime. The `INTERACTIONS` map adds real click→assert checks (e.g. 005 press→client-composed toast) — it is the systematic close path for `LIVE_TEST` deviations |
-| `data_fidelity` | `node scripts/data-fidelity.mjs` | **(a) assets:** a port seeds an asset value the sample's own archived files/mocks never mention (basename lookup over `ui5/<lib>/<Name>/` + the `ui5/mock/*.json` the sample references by file name or top-level collection key), a full asset path whose folder differs from every mock occurrence, or an asset on a non-OpenUI5 UI5 host. **(b) table values:** every `VALUE #( … )` block that inlines a mock array (matched to its ONE best array by ≥ 3 shared field names, ≥ 2 rows; sample-local JSON beats the shared mock on a name collision — app 010 carries its own modified products.json) is compared string-field-wise: equal row counts → positional row/field equality (a field the mock row omits is skipped — the port seeds the UI5 default there); fewer rows → per-field set membership, so a legitimate `/Coll/0..n` subset passes but an invented value fails. Values compare modulo the sanctioned `https://sdk.openui5.org/` host-absolutization; numbers are not compared (formatting freedom). This is the deterministic form of the data audit — the wrong-neighbour-copy class (apps 162/142/119) that structural-diff (ignores values) and render-smoke (mocks the model) can never see. Escapes: a deviation whose `what` names the basename/field/value verbatim, or a sidecar `"data_fidelity": { "skip": true, "reason": "…" }`. `--report` prints per port the mock string values missing from the ABAP source as the residual audit worksheet |
+| `data_fidelity` | `node scripts/data-fidelity.mjs` | **(a) assets:** a port seeds an asset value the sample's own archived files/mocks never mention (basename lookup over `ui5/<lib>/<Name>/` + the `ui5/mock/*.json` the sample references by file name or top-level collection key), a full asset path whose folder differs from every mock occurrence, or an asset on a non-OpenUI5 UI5 host. **(b) table values:** every `VALUE #( … )` block that inlines a mock array (matched to its ONE best array by ≥ 3 shared field names, ≥ 2 rows; sample-local JSON beats the shared mock on a name collision — app 010 carries its own modified products.json) is compared string-field-wise: equal row counts → positional row/field equality (a field the mock row omits is skipped — the port seeds the UI5 default there); fewer rows → per-field set membership, so a legitimate `/Coll/0..n` subset passes but an invented value fails. Values compare modulo the sanctioned `https://sdk.openui5.org/` host-absolutization; numbers are not compared (formatting freedom). This is the deterministic form of the data audit — the wrong-neighbour-copy class (apps 162/142/119) that structural-diff (ignores values) and the render gate (mocks the model) can never see. Escapes: a deviation whose `what` names the basename/field/value verbatim, or a sidecar `"data_fidelity": { "skip": true, "reason": "…" }`. `--report` prints per port the mock string values missing from the ABAP source as the residual audit worksheet |
 | `meta_valid` | `validate-meta.mjs` + regenerate overview, coverage & status, `git diff --exit-code -- src README.md api.md STATUS.md` | an invalid sidecar, or a change forgot to regenerate the overview app / coverage docs / STATUS state block |
-| `property_gate` | `node scripts/property-check.mjs` | a port uses a control member introduced after UI5 1.71 (per-member `@since` from `ui5/properties.json`) without declaring it in a `POST_171` deviation — this covers both `a( n = … )` attributes **and** event parameters consumed via `${$parameters>/<name>}` in a `t_arg`. Covers every ported library: `properties.json` is generated recursively from all libs' sources and the check resolves each control via the port's `xmlns` map + the parent chain |
 
 **When a distilled lesson is greppable, add it as a pattern-lint rule in the
 same change** — that is what makes a lesson unrepeatable rather than advisory.
@@ -825,9 +825,8 @@ npx abaplint ./abaplint.jsonc          # expect 0 issues
 node scripts/validate-meta.mjs         # sidecar schema + referential integrity
 node scripts/pattern-lint.mjs          # expect 0 errors
 node scripts/structural-diff.mjs --strict
-node scripts/structure-lint.mjs --strict # builder tree well-formedness (fast)
-node scripts/render-smoke.mjs --strict # headless XMLView.create per port
-node scripts/property-check.mjs        # no member newer than UI5 1.71
+node scripts/view-gates.mjs --strict    # properties + structure + headless render
+                                       # (--no-render skips the browser)
 node scripts/data-fidelity.mjs         # model_init seeds match the archived mocks
 node scripts/generate-overview.mjs     # then: git diff must stay clean
 node scripts/generate-coverage.mjs     # (README/api.md must stay clean too)
@@ -844,7 +843,7 @@ that is the actual porting work):
   picks the next app number + `src/<lib>/b<nn>` batch (`--new-batch` /
   `--batch bNN`), and writes the class stub, `clas.xml`, `package.devc.xml` and
   a valid `meta/` sidecar. The stub is a TODO placeholder view: it passes
-  abaplint / pattern-lint / structure-lint / render-smoke immediately, and
+  abaplint / pattern-lint / view-gates immediately, and
   `structural_diff` (correctly) fails until you rebuild the view 1:1. Needs an
   OpenUI5 checkout (`OPENUI5_SRC`, default `../fork-openui5`). `--dry-run` to
   preview. **`/home/user/fork-openui5` carries only `src/<lib>/src` — no
@@ -1329,5 +1328,5 @@ How to record it:
 - **POST_171 covers event *parameters* too** — a post-1.71 event parameter
   read via `${$parameters>/…}` (e.g. SearchField `searchButtonPressed`,
   since 1.114) needs its POST_171 deviation exactly like a bound member;
-  `property-check.mjs` enforces this (it scans `$parameters>/<name>` refs in
+  the property gate enforces this (it scans `$parameters>/<name>` refs in
   `t_arg` and resolves them against the same member map as attributes, §6).
