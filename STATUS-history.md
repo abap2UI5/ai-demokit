@@ -7,6 +7,50 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## Live check closes 13 ports — and a round-trip that drops keystrokes (2026-08-02)
+
+The maintainer live-checked the hidden-picker family and the whole b15 depth
+run. **`checked` 51 → 63, open LIVE_TESTs 43 → 35 ports.**
+
+- **016 / 256 / 257 — the hidden-picker class is closed.** All three anchors
+  open the `hideInput` picker and the change toast carries the picked value.
+  That also settles the 2026-07-30 headless finding: the `Popover.onfocusin`
+  recursion (*Maximum call stack size exceeded*) is **headless-only** — the
+  picker works in a real browser, so no port change is needed and the e2e
+  interaction stays deliberately unarmed for this class (app 091 covers the
+  openBy idiom). Recorded honestly: the check covered the visible behaviour,
+  the console was not necessarily inspected for a silent recursion warning.
+- **272–281 promoted to `checked`.** One open leg was deliberately kept: 277's
+  phone-portrait branch of the `MessageStrip` expression needs a real device
+  rotation, which neither a desktop check nor the harness performs.
+- **Three new e2e interactions (279/280/281), green over two consecutive runs.**
+
+The interesting part is what writing them measured:
+
+- **A per-keystroke round-trip is lossy, not queued** (now AGENTS §10). Typing
+  `abc` into app 280 with no delay left `GET_VALUE` at `a` while the TextArea
+  itself held `abc`: abap2UI5 serializes round-trips and **drops** events fired
+  while one is in flight. The port is correct — the original updates its Text
+  client-side, so under fast typing the backend-held value lags and can skip
+  intermediate values, converging as soon as typing pauses. The interaction
+  types with a 700 ms delay; the limit is declared in the sidecar.
+- **281's selectionFinish leg is not machine-drivable.** It fires only when the
+  picker *closes*, and headless neither F4 nor Escape reaches the picker once
+  focus sits in the item list, an outside click does not dismiss it, and
+  `getPicker()` is null on the registry instance. The armed interaction covers
+  the selectionChange leg (the toast carries the real item text via
+  `${$parameters>/changedItem}.getText()`); the finish leg is live-verified.
+- **279's load leg cannot be checked headless** either — the seeded product
+  image sits on `sdk.openui5.org` and the harness serves only `/resources/`
+  locally, so the error path already fires at boot. The interaction asserts the
+  error→swap round-trip (via the control's own `getVisible()`, not just text).
+
+One methodological note worth keeping: the harness truncates a thrown error
+message to ~200 chars, which made a control-registry dump look as if two
+`sap.m.Text` controls were missing from app 280 — they were there all along.
+Write diagnostics to a **file** from the interaction (it runs in Node), never
+into the error message.
+
 ## Four depth ports: the MessageBox matrix, an image error fallback, a live-update TextArea, select-all (2026-08-02)
 
 Four idiom-first depth ports into b15 — 276 → 280 ports, every gate green

@@ -1085,6 +1085,16 @@ How to record it:
   exits non-zero, later steps never run, and the copy is left half-rewritten —
   every file then reports downport errors, including clean ones. Fix (or drop)
   parser-broken classes BEFORE downporting.
+- **A per-keystroke round-trip is LOSSY, not queued.** abap2UI5 serializes
+  round-trips: an event fired while one is in flight is **dropped**, so a
+  `liveChange`/`liveSearch` wire that round-trips shows the value of the last
+  *completed* trip, skipping intermediate ones under fast typing (measured on
+  app 280 — typing `abc` with no delay left the bound field at `a` while the
+  TextArea held `abc`; it converges as soon as typing pauses). Prefer a two-way
+  binding or an expression binding whenever the sample's point allows it; when
+  the round-trip is required, say so in the sidecar and make any e2e
+  interaction **type with a delay** — a no-delay `pressSequentially` asserts a
+  value the wire never promised.
 - **ABAP Doc (`"!`) is HTML** — no raw `<tag>` (e.g. `<mvc:View>`); see §8.
 - **Literal braces in attribute values are read as a BINDING by the XMLView
   parser** — CSS/JS braces inside a `core:HTML` `content` (or any literal

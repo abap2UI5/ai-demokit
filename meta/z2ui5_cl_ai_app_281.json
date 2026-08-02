@@ -8,8 +8,11 @@
     "frontend_action": false,
     "event_t_arg": true
   },
-  "status": "generated",
-  "checked": null,
+  "status": "checked",
+  "checked": {
+    "date": "2026-08-02",
+    "note": "verified in a running system - human live check 2026-08-02 (maintainer): app started and exercised, no findings."
+  },
   "deviations": [
     {
       "type": "POST_171",
@@ -20,8 +23,8 @@
       "what": "both toasts round-trip instead of being composed on the client. selectionChange carries the changed item's text and the selected flag as event args and ABAP builds the same sentence; selectionFinish needs the whole selection, so the MultiComboBox gains a selectedKeys binding (added, no counterpart in the original, which reads getSelectedItems in the controller) and ABAP joins the matching product names into the original's ['A','B'] form. The round-trip also carries the original's width: 'auto' toast option, which the client-composed toast wire cannot pass."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "confirm in a running system that the selectionFinish toast lists the selected names in the same order as the original's getSelectedItems, and that Select All fills the selectedKeys binding with every key."
+      "type": "NOTE",
+      "what": "live-verified on 2026-08-02 (maintainer live check): the selectionFinish toast lists the selected names and Select All fills the selectedKeys binding. The selectionChange leg is additionally e2e-verified (the toast carries the real item text). The selectionFinish leg is NOT machine-checkable: it fires only when the picker CLOSES, and headless neither F4 nor Escape reaches the picker once focus sits in the item list, an outside click does not dismiss it and getPicker() is null on the registry instance (measured 2026-08-02) - the armed interaction covers the selectionChange leg only."
     }
   ]
 }
