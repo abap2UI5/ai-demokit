@@ -116,7 +116,7 @@ CLASS z2ui5_cl_ai_app_266 IMPLEMENTATION.
                             )->open( `layoutData`
                                 )->leaf( n = `SplitterLayoutData` ns = `l`
                                     )->a( n = `size`    v = `30%`
-                                    )->a( n = `minSize` v = `200px`
+                                    )->a( n = `minSize` v = `200`
 
                             )->shut(
                         )->shut(
