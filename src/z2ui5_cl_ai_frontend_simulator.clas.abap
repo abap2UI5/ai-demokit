@@ -23,7 +23,7 @@ CLASS z2ui5_cl_ai_frontend_simulator DEFINITION PUBLIC FINAL CREATE PRIVATE.
   PUBLIC SECTION.
 
     "! Start an app - one roundtrip without an id, mirroring the browser's
-    "! first POST with ?app_start=<class name>.
+    "! first POST with ?app_start=&lt;class name&gt;.
     "! @parameter app    | Global class name of the app to start (e.g. `Z2UI5_CL_AI_SIMULATOR_EXAMPLE`).
     "! @parameter result | The simulator instance, holding the first response.
     CLASS-METHODS start
