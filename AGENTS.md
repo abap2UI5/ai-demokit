@@ -80,8 +80,9 @@ hard scope gate as a deprecated/newer one.
 
 > **⚠️ Verify scope from source before porting.** The gate is not blind:
 > `ui5/properties.json` carries each control's class-level
-> `@since`/`@deprecated` (parsed from the OpenUI5 sources by
-> `generate-properties.mjs`), and `scopeOf` in `generate-coverage.mjs` falls
+> `@since`/`@deprecated` (parsed from the OpenUI5 sources by the **linter's**
+> `generate-metadata.mjs`, run from `generate_result`), and `scopeOf` in
+> `generate-coverage.mjs` falls
 > back to it when `ui5/universe.json` carries null — so out-of-scope samples
 > surface offline in coverage/backlog. The check is a **hard gate**:
 > `generate-coverage.mjs` exits 1 on any ported out-of-scope sample without a
@@ -277,10 +278,11 @@ source of truth:
   version to render it. `DROPPED_171` remains only for the rare member that
   genuinely cannot be expressed.
   **Gate coverage — the property gate covers ALL ported libraries.**
-  `generate-properties.mjs` scans every lib's source **recursively** (nested
-  controls too — `form/SimpleForm`, `cards/NumericHeader`) into
-  `ui5/properties.json` for the coverage docs, while the gate itself reads the
-  linter's own snapshot; either way each control is resolved via the port's own
+  The linter's `generate-metadata.mjs` scans every lib's source **recursively**
+  (nested controls too — `form/SimpleForm`, `cards/NumericHeader`); the same
+  generator fills `ui5/properties.json` for the coverage docs here and the
+  linter's own snapshot for the gate — the difference is only the OpenUI5
+  version each is run against. Either way each control is resolved via the port's own
   `xmlns` declarations and the parent chain is walked — so a post-1.71
   member in any library is caught automatically (the `generate_result` CI step
   clones the full OpenUI5 repo, so this holds in CI). Two facts about how the
@@ -375,7 +377,7 @@ The `checks` workflow runs the deterministic gates on every PR; the heavy
 `e2e_smoke` runs in `e2e_nightly.yaml` (scheduled + on demand). The gate set:
 `pattern_lint`, `structural_diff`, `view_gates` (properties + structure +
 headless render — the three former view gates, now run from
-[abap2UI5-linter](https://github.com/abap2UI5/abap2UI5-linter) with only the
+[abap2UI5-linter](https://github.com/abap2UI5/linter) with only the
 corpus policy kept here in `scripts/view-gates.mjs`), `data_fidelity`,
 `meta_valid`, plus `e2e_smoke`. What each gate checks, what a failure means
 and every legitimate escape hatch is in
@@ -615,7 +617,7 @@ e2e gotchas in `e2e-debugging`, generator gotchas in `regenerate-artefacts`).
   `curl https://raw.githubusercontent.com/…` at the proxy, which reads like "no
   OpenUI5 source reachable". **`git clone https://github.com/SAP/openui5.git`
   works**, and that is the transport the pipeline (`generate_result`,
-  `scaffold`, `generate-properties`) uses anyway. Before declaring a task
+  `scaffold`, the metadata refresh) uses anyway. Before declaring a task
   blocked on network access, try the transport the tooling itself uses.
 - **A code change to a `checked` port invalidates the check** — `checked`
   certifies the code that was live-verified, not the class name. Any

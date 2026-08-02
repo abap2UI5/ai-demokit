@@ -54,10 +54,36 @@ jobs:
         npx grunt jsdoc:library-sap.m || true
         test -f target/openui5-sdk/test-resources/sap/m/designtime/api.json
 
+    # Installs @abap2ui5/linter, which brings the metadata generator used below.
+    - name: Install this repo's dependencies
+      run: npm ci --no-audit --no-fund
+
+    # The 1.71 property snapshot. Built by the LINTER's generator - the same one
+    # that produces the linter's own data/properties.json - rather than by a
+    # second parser living here, which is what scripts/generate-properties.mjs
+    # used to be. Two parsers over two checkouts had already drifted: the local
+    # one attributed a file-level `@deprecated` JSDoc block sitting on a local
+    # variable to the CONTROL, marking sap.f.DynamicPageTitle and
+    # sap.f.semantic.SemanticPage deprecated when neither class doc says so.
+    #
+    # It runs against THIS workflow's OpenUI5 checkout, not the linter's pinned
+    # @openui5 packages, because the snapshot has to cover the same release the
+    # sample universe is built from (`ui5/universe.json`.release). A snapshot
+    # older than the universe loses the @since of controls introduced in
+    # between, and scopeOf then reads them as in scope - sap.f.HeroBanner
+    # (@1.152) is the current example. One generator, two invocations, each at
+    # the version its own consumer needs.
     - name: Refresh the 1.71 property snapshot
       env:
         OPENUI5_DIR: ./openui5
-      run: node scripts/generate-properties.mjs
+      run: |
+        GEN=node_modules/@abap2ui5/linter/scripts/generate-metadata.mjs
+        test -f "$GEN" || {
+          echo "::error::$GEN is missing — the pinned @abap2ui5/linter predates the"
+          echo "::error::change that publishes the generator. Bump the pin in package.json."
+          exit 1
+        }
+        node "$GEN" --out ui5/properties.json
 
     - name: Regenerate coverage (README + api.md)
       env:

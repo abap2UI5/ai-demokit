@@ -28,6 +28,31 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
 
 ## Open findings (backlog)
 
+- [ ] **Metadata snapshot: one generator now, two follow-ups pending.**
+  `scripts/generate-properties.mjs` is gone. `ui5/properties.json` is built by
+  the **linter's** `generate-metadata.mjs` (published with the package, run
+  with `--out` from `generate_result`), against this repo's own OpenUI5
+  checkout — so the snapshot still matches `ui5/universe.json`.release, which
+  a reuse of the linter's own 1.150 snapshot would not (it has no
+  `sap.f.HeroBanner` @1.152, and `scopeOf` would read those five samples as in
+  scope). Two things are still open:
+  - **The dependency points at a linter feature branch**
+    (`github:abap2UI5/linter#claude/repos-structure-review-u5itms`) because the
+    generator is not published on the linter's main yet. Re-pin to a **main
+    SHA** once that PR merges — the linter's AGENTS.md carries the same rule.
+  - **The first regenerated snapshot will flag a stale scope exception.** The
+    old parser attributed a file-level `@deprecated` JSDoc block sitting on a
+    local variable to the CONTROL, so `sap.f.semantic.SemanticPage` was
+    recorded deprecated @1.54 although its class doc says nothing of the kind
+    (`sap.f.DynamicPageTitle` had the same false positive). App 166 is
+    therefore **in scope**, and `generate-coverage.mjs` will fail with
+    `stale scope exception "sap.f.sample.SemanticPage"` — that is the gate
+    working as designed. Remove that entry from `ui5/scope-exceptions.json`
+    in the same change; it is left in place now because the *committed*
+    snapshot still carries the false deprecation. Expect `sap.f` in-scope to
+    rise by the SemanticPage samples and `sap.ui.core.XMLComposite` to gain
+    the deprecation it always had.
+
 - [x] **Smart variant management: solved** (closed 2026-07-28). `sap.ui.comp`'s page
   variant never gets `setPersControler()` — `addPersonalizableControl()` returns early
   for `isPageVariant()`, so a controller-less app has neither the anchor

@@ -36,7 +36,8 @@ scripts.**
   reference targets, a direct app start in a new tab, and the trailing INFO
   popover with the port's generation notes). The **Control** name and the
   **Since** value come from `ui5/universe.json`, with nulls filled from the
-  control-level source scan in `ui5/properties.json` (same scope fallback as
+  control-level source scan in `ui5/properties.json` (built by the linter's
+  `generate-metadata.mjs`; same scope fallback as
   `generate-coverage.mjs`). **Text is never coloured**; a deprecated control's
   name is struck through (via a `sap.m.FormattedText` `htmlText`, so the
   strikethrough can vary per row — a bound `class` would not, being applied
