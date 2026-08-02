@@ -7,6 +7,58 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## Four depth ports: the MessageBox matrix, an image error fallback, a live-update TextArea, select-all (2026-08-02)
+
+Four idiom-first depth ports into b15 — 276 → 280 ports, every gate green
+(abaplint ×3 incl. a 702 downport in a throwaway copy, validate-meta,
+pattern-lint, structure-lint, structural-diff **0 undeclared**, render-smoke,
+property-check, data-fidelity).
+
+- **App 278** (`sap.m.sample.MessageBox`): the type matrix — `confirm`,
+  `alert`, `error`, `information`, `warning`, `success`, plus the two
+  action boxes and the responsive-padding one. `client->message_box_display`
+  takes the sample's own method name as `type` (`Messages.js` resolves it as
+  `MessageBox[TYPE]`), so the mapping is literally 1:1 and every per-method
+  default (confirm's [OK, CANCEL], error's [CLOSE]) stays UI5's. The
+  `onClose` toast is the interesting half: the original composes it on the
+  client, the port lets the pressed action ride back through the `onclose`
+  event and builds the same sentence in ABAP — the action becomes
+  backend-visible, which is what that return path is for.
+- **App 279** (`sap.m.sample.ImageErrorWithIllustration`): the `error`/`load`
+  round-trip drives one `HAS_ERROR` flag, and the two `visible` expression
+  bindings over it swap the `Image` for the `IllustratedMessage` (@1.98,
+  declared POST_171 **by policy** — the control is not in `properties.json`,
+  so no gate would have asked). The controller's `Device.system.phone` size
+  branch is **not** resolved to one value: it stays a branch as an expression
+  over the shared device model (the 277 precedent), so both sizes survive.
+- **App 280** (`sap.m.sample.TextAreaValueUpdate`): the sample exists to show
+  the gap between the control's own value and the model property while
+  `valueLiveUpdate` is off — so the port must **not** bind both Texts to one
+  field. `liveChange` carries `${$parameters>/value}` to the backend into a
+  separate `GET_VALUE` field, the second Text keeps the TextArea's own field,
+  and the `Switch` two-way binds `valueLiveUpdate` itself. Porting it any
+  "simpler" would have deleted the demo.
+- **App 281** (`sap.m.sample.MultiComboBoxSelectAll`): `showSelectAll`
+  (@1.111, POST_171) over the full 123-row `ProductCollection` with the
+  original's `sorter: { path: 'NAME' }`. `selectionFinish` needs the whole
+  selection, so the control gains a `selectedKeys` binding (the 092 idiom —
+  the original reads `getSelectedItems` imperatively) and ABAP joins the
+  matching names into the sample's `['A','B']` form. Both toasts round-trip
+  rather than being client-composed, which also carries the original's
+  `width: 'auto'` option that the client-composed wire cannot pass.
+
+Two samples were **skipped as near-duplicates** on the same pass, which is the
+depth rule working: `BreadcrumbsWithoutCurrentPage` differs from the ported
+`Breadcrumbs` (app 003) only by the missing `currentLocationText` and the link
+captions, and `MultiComboBoxDefaultFiltering`-class rows exercise nothing app
+039/281 do not.
+
+Lesson recorded in AGENTS §6: a sparse OpenUI5 clone that carries only the
+`demokit/sample` trees makes **`scope-of.mjs` answer `UNRESOLVED` for every
+entity** — it reads the control JSDoc from `src/<lib>/src`. It looks like an
+unknown control and is really a wrong checkout, so the scope pre-check stops
+gating silently. One clone must carry both halves.
+
 ## Repository assessment follow-up: rename debt, AGENTS distillation, pinned scope decisions (2026-08-01)
 
 Three findings from a repository review, fixed in one change:

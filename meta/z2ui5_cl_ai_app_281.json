@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_ai_app_281",
+  "sample": "sap.m.sample.MultiComboBoxSelectAll",
+  "entity": "sap.m.MultiComboBox",
+  "file": "src/01/b15/z2ui5_cl_ai_app_281.clas.abap",
+  "batch": "b15",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "showSelectAll (since UI5 1.111) is the sample's whole point and kept 1:1 - the app needs a UI5 release >= 1.111 for the select-all checkbox in the picker."
+    },
+    {
+      "type": "NOTE",
+      "what": "both toasts round-trip instead of being composed on the client. selectionChange carries the changed item's text and the selected flag as event args and ABAP builds the same sentence; selectionFinish needs the whole selection, so the MultiComboBox gains a selectedKeys binding (added, no counterpart in the original, which reads getSelectedItems in the controller) and ABAP joins the matching product names into the original's ['A','B'] form. The round-trip also carries the original's width: 'auto' toast option, which the client-composed toast wire cannot pass."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "confirm in a running system that the selectionFinish toast lists the selected names in the same order as the original's getSelectedItems, and that Select All fills the selectedKeys binding with every key."
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "class": "z2ui5_cl_ai_app_279",
+  "sample": "sap.m.sample.ImageErrorWithIllustration",
+  "entity": "sap.m.Image",
+  "file": "src/01/b15/z2ui5_cl_ai_app_279.clas.abap",
+  "batch": "b15",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "sap.m.IllustratedMessage (control since UI5 1.98, with its description / title / illustrationType members) is newer than 1.71 but kept for the 1:1 port - it is the sample's whole point, the error fallback. No gate sees it (the control is not in ui5/properties.json), so this entry is declared by policy; the app needs a UI5 release >= 1.98."
+    },
+    {
+      "type": "NOTE",
+      "what": "the controller resolves Device.system.phone once in onInit into the model fields imageHeight / imageWidth (5em on a phone, 10em otherwise). The port binds height and width to the same branch as an expression over the shared device model instead of seeding one resolved value, so both branches survive - the model layer differs, the rendered size does not."
+    },
+    {
+      "type": "NOTE",
+      "what": "the named img> model ({img>/products/pic1} from sap/ui/demo/mock/img.json) folds onto the one default model as the bound field IMAGE_SRC, seeded with the mock's own HT-7777-large.jpg path absolutized to the sdk.openui5.org host. It stays a bound field because the sample's Set-wrong-src button overwrites it at runtime (with /some/random/url, as in the original)."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "confirm in a running system that the Image load / error events round-trip: the initial load must leave HAS_ERROR false, and pressing Set wrong src must fire error, hide the Image and reveal the IllustratedMessage."
+    }
+  ]
+}

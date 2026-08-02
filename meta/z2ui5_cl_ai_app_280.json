@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_ai_app_280",
+  "sample": "sap.m.sample.TextAreaValueUpdate",
+  "entity": "sap.m.TextArea",
+  "file": "src/01/b15/z2ui5_cl_ai_app_280.clas.abap",
+  "batch": "b15",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "the sample's whole point is the difference between the control's own value and the model property while valueLiveUpdate is off, so the getValue Text must NOT be bound to the same field as the TextArea. The port keeps them apart the same way: liveChange carries ${$parameters>/value} into the backend, which writes it to the separate field GET_VALUE - the second Text stays bound to the TextArea's own model field, which only updates when valueLiveUpdate is on (or on blur)."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "confirm in a running system that typing with the Switch off updates only the input.getValue() Text while model.getProperty() lags behind, and that flipping the Switch makes both follow every keystroke."
+    }
+  ]
+}

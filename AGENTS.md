@@ -852,7 +852,12 @@ that is the actual porting work):
   sparse clone gets just the sample trees in ~350 MB:
   `git clone --filter=blob:none --sparse https://github.com/SAP/openui5.git …`
   then `git sparse-checkout set src/<lib>/test/<lib path>/demokit/sample …`,
-  and point `OPENUI5_SRC` at it.
+  and point `OPENUI5_SRC` at it. **Add `src/<lib>/src` to that same sparse set**
+  — `scope-of.mjs` reads the control JSDoc from there and answers
+  `UNRESOLVED (no source .js found)` for *every* entity when the checkout has
+  only the sample trees. That reads like "unknown control" but means "wrong
+  checkout": one sparse clone must carry both halves (~170 MB for the ported
+  libraries), or the scope pre-check silently stops gating.
 - **`npm run json-to-abap -- <file.json> [--path k] [--fields spec] [--var v]`**
   (`scripts/json-to-abap.mjs`) — turns a JSON array (a demo mock's
   `ProductCollection` …) into an ABAP `VALUE #( … )` literal for `model_init`
