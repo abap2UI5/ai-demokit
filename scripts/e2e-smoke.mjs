@@ -1147,6 +1147,57 @@ const INTERACTIONS = {
     await expect(page.locator('body'), 'the {0/INTROTEXT1} index-relative binding')
       .toContainText('This Grid Layout sample application demonstrates');
   },
+  // Image error -> round-trip -> the two visible expression bindings swap the
+  // Image for the IllustratedMessage. NOTE the initial LOAD leg is not
+  // checkable here: the seeded product image sits on sdk.openui5.org and the
+  // sandbox serves only /resources/ locally, so the error path already fires
+  // at boot. This asserts the swap survives the explicit Set-wrong-src
+  // round-trip; the load->HAS_ERROR-false leg stays a human check.
+  z2ui5_cl_ai_app_279: async (page, expect) => {
+    const btn = page.getByRole('button', { name: 'Set wrong src', exact: true }).first();
+    await expect(btn, 'the Set-wrong-src button').toBeVisibleEnabled();
+    await btn.click();
+    await expect(page.locator('body'), 'the IllustratedMessage revealed by HAS_ERROR').toContainText('Not Found');
+    await waitForUi5(page, () => {
+      const img = ui5All().find((c) => c.getMetadata().getName() === 'sap.m.Image');
+      return img && img.getVisible() === false;
+    }, 'the Image stayed visible although HAS_ERROR is set');
+  },
+  // valueLiveUpdate off: liveChange carries ${$parameters>/value} to the
+  // backend into GET_VALUE, while the TextArea's OWN model field (and with it
+  // the second Text) must NOT follow yet — that gap is the sample's point, so
+  // both legs are asserted
+  z2ui5_cl_ai_app_280: async (page, expect) => {
+    const ta = page.locator('textarea').first();
+    await expect(ta, 'the TextArea').toBeVisibleEnabled();
+    await ta.click();
+    await ta.pressSequentially('abc');
+    await expect(page.locator("[id$='getValue']"), 'the liveChange round-trip filling GET_VALUE').toContainText('abc');
+    const lagging = await page.locator("[id$='getProperty']").innerText();
+    if (lagging.includes('abc')) throw new Error('model.getProperty() already followed although valueLiveUpdate is off');
+    // flip the Switch: valueLiveUpdate is two-way bound, so the model now follows too
+    await page.locator('.sapMSwtCont').first().click();
+    await ta.click();
+    await ta.pressSequentially('de');
+    await expect(page.locator("[id$='getProperty']"), 'the model field once valueLiveUpdate is on').toContainText('abc');
+  },
+  // selectionChange transports changedItem.getText() + the selected flag, and
+  // selectionFinish rebuilds the original's ['A','B'] text from the added
+  // selectedKeys binding — both toasts are backend-composed
+  z2ui5_cl_ai_app_281: async (page, expect) => {
+    const inp = page.locator('.sapMMultiComboBox input, .sapMInputBaseInner').first();
+    await expect(inp, 'the MultiComboBox input').toBeVisibleEnabled();
+    await inp.click();
+    await page.keyboard.press('F4');
+    await waitForCount(page, '.sapMPopover li', 1, 'the MultiComboBox picker stayed empty');
+    await page.locator('.sapMPopover li').first().click();
+    await expect(page.locator('.sapMMessageToast').last(), 'the selectionChange toast')
+      .toContainText("Event 'selectionChange': Selected '");
+    // F4 again closes the picker (ESC would also revert the selection)
+    await page.keyboard.press('F4');
+    await expect(page.locator('.sapMMessageToast').last(), 'the selectionFinish toast over selectedKeys')
+      .toContainText("Event 'selectionFinished': ['");
+  },
   // The overview app (not a numbered port, but the demo's front door). Its info
   // button is the app's only backend round-trip, so this one click covers the
   // whole draft save -> reload path: it is where the 2026-07-31
