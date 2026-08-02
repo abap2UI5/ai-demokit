@@ -7,6 +7,43 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## Batch b16 (282/283) — sap.ui.core reaches full in-scope coverage, and two gate defects (2026-08-02)
+
+Two sap.ui.core depth ports, both idiom-first picks; they happen to be the
+last two in-scope gaps of that library, so `sap.ui.core` is now **20/20**.
+
+- **282 `sap.ui.core.sample.TypeDateAsDate`** (`sap.ui.model.type.Date`) —
+  the sibling of 181 with the paradigm inverted: the original model holds a
+  **JS `Date` object**, which is exactly what a JSON model cannot carry. The
+  port keeps every binding-info 1:1 and only adds `formatOptions.source`
+  `{ pattern: 'yyyy-MM-dd' }`. Without it `sap.ui.model.type.Date` raises a
+  `FormatException` on the first `format()` and the field stays empty —
+  invisible to both the property gate (the member is fine) and the render
+  gate (it mocks the model). That gap became the linter rule
+  **`date-type-without-source`** (0 findings over the 284-file corpus, proven
+  to fire by stripping the source from 181).
+- **283 `sap.ui.core.sample.ThemeCustomClasses`** (`sap.ui.core.theming`) —
+  the first port whose `core:HTML` `content` carries a **real binding**
+  (`{STYLECLASS}`), the exact opposite of the escaped-brace CSS case (app
+  028): here the braces must stay unescaped. Its model is scraped from
+  `document.styleSheets` in the original, which no backend can do, so the 26
+  rows are seeded from the OpenUI5 base theme source (IMPROVISED). The
+  original's `onAfterRendering` border patch becomes a computed `BORDERSTYLE`
+  column — the thin-frontend form of the same effect. Upstream detail kept
+  honest: the sample's `borderWidth = "1xp"` is a typo the browser drops, so
+  it is not reproduced.
+
+**Coverage was being measured wrong.** The README's `Ported` column counted
+*every* port against the *in-scope* sample count, so the six documented
+out-of-scope ports inflated it — `sap.ui.core` read 19/20 while 18 of its
+ports were in scope. Adding this batch pushed it to 21/20 and the ratio > 1
+crashed the whole gate chain in `String.repeat`
+(`RangeError: Invalid count value: -1`) inside the coverage bar — a stack
+trace where the real news was a miscount. `generate-coverage.mjs` now counts
+in-scope ports only, states the out-of-scope ports on their own line, and
+clamps the bar so the same class of bug can never again look like a broken
+generator (lesson in the `regenerate-artefacts` guide).
+
 ## Live check closes 13 ports — and a round-trip that drops keystrokes (2026-08-02)
 
 The maintainer live-checked the hidden-picker family and the whole b15 depth

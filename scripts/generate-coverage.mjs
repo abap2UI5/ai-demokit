@@ -381,24 +381,33 @@ for (const key of ported.keys()) {
 const pct = (n, d) => (d === 0 ? '—' : `${((n / d) * 100).toFixed(1)} %`);
 const bar = (n, d) => {
   if (d === 0) return '';
-  const filled = Math.round((n / d) * 10);
+  // clamp: the coverage ratio must never leave [0,1] — an out-of-range value
+  // used to crash the whole gate chain in String.repeat (RangeError) instead
+  // of reporting the miscount it stands for
+  const filled = Math.min(10, Math.max(0, Math.round((n / d) * 10)));
   return '█'.repeat(filled) + '░'.repeat(10 - filled);
 };
 
+// "Ported" counts IN-SCOPE ports only — a documented out-of-scope port
+// (ui5/scope-exceptions.json) is not coverage of the in-scope backlog, and
+// counting it as such made sap.ui.core read 19/20 while 18 of its ports were
+// in scope (and 21/20 once the batch closed the gap).
 const summary = libs
   .map((l) => ({
     lib: l.lib,
     total: l.samples.length,
     inScope: l.samples.filter((s) => s.scope === 'in').length,
-    ported: l.samples.filter((s) => s.port).length,
+    ported: l.samples.filter((s) => s.port && s.scope === 'in').length,
+    portedOut: l.samples.filter((s) => s.port && s.scope !== 'in').length,
   }))
   .sort((a, b) => (b.ported / b.inScope) - (a.ported / a.inScope) || a.lib.localeCompare(b.lib));
 
 let totalSamples = 0;
 let totalInScope = 0;
 let totalPorted = 0;
+let totalPortedOut = 0;
 const outBy = { deprecated: 0, newer: 0, nonapp: 0, unknown: 0 };
-for (const s of summary) { totalSamples += s.total; totalInScope += s.inScope; totalPorted += s.ported; }
+for (const s of summary) { totalSamples += s.total; totalInScope += s.inScope; totalPorted += s.ported; totalPortedOut += s.portedOut; }
 for (const e of libs) for (const s of e.samples) if (s.scope !== 'in') outBy[s.scope]++;
 
 // README block: overall figure + coverage-per-module summary table
@@ -407,6 +416,7 @@ function summaryLines() {
   l.push(`Overall **${totalPorted} / ${totalInScope}** in-scope demo kit samples ported (${pct(totalPorted, totalInScope)}).`);
   l.push(`**In scope**: samples whose control exists since **UI5 1.71** and is **not deprecated** (legacy-free ready).`);
   l.push(`Out of scope: ${totalSamples - totalInScope} of ${totalSamples} samples — ${outBy.deprecated} on deprecated controls, ${outBy.newer} on controls newer than 1.71, ${outBy.nonapp} that are not app views (UI5 test infrastructure, Component routing, view-templating demos — see \`ui5/scope-nonapp.json\`), ${outBy.unknown} demo apps without an owning control.`);
+  if (totalPortedOut) l.push(`Plus **${totalPortedOut}** ported samples outside that scope — maintainer-decided exceptions (\`ui5/scope-exceptions.json\`, listed in [STATUS.md](STATUS.md)); they are not counted as coverage of the in-scope backlog.`);
   if (release) l.push(`Control metadata from OpenUI5 **${release}**.`);
   l.push('');
   l.push('| Module | Samples | In scope | Ported | Coverage | |');

@@ -122,3 +122,15 @@ of every CI build.
   port mock table (app 012, ~74 kB) passes — port-sized mock tables are below
   the limit, but split by size rather than trusting a margin when a block
   grows to many hundreds of long rows.
+- **Coverage is measured over the IN-SCOPE backlog only.** The README's
+  `Ported` column counts ports whose sample is in scope; a documented
+  out-of-scope port (`ui5/scope-exceptions.json`) is listed separately, not as
+  coverage — counting it made `sap.ui.core` read 19/20 while only 18 of its
+  ports were in scope, and produced a **ratio > 1** the moment the batch
+  closed the last real gap. That crashed the whole gate chain in
+  `String.repeat` (`RangeError: Invalid count value: -1`) inside the coverage
+  `bar( )`, which reads like a broken generator rather than the miscount it
+  was. `bar( )` now clamps to `[0,1]`, so a future mismatch shows as a full
+  bar and a wrong number instead of a stack trace — but the number is what to
+  fix. Any new "n of m" figure in a generator gets the same treatment: derive
+  numerator and denominator from the **same** filter.

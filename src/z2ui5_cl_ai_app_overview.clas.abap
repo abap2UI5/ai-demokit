@@ -3545,6 +3545,21 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` statically', which was the wrong conclusion: the id does not have to be reproduced, it is read off the event on the client. The id string itself is a UI5 runtime value and will differ from the` &&
                  ` original sample's (the view prefix differs), exactly as it differs between two runs of the original.` ) ).
 
+    lv_text1 = `IMPROVISED: the model is resolved statically. The original controller builds it in the browser: _fetchClasses walks document.styleSheets and collects every cssRule whose selectorText contains` &&
+               ` sapTheme, and it re-runs on every Theming.attachApplied. Neither is reachable from ABAP (no DOM, no stylesheet), so the 26 rows are seeded in model_init from the OpenUI5 base theme source` &&
+               ` themes/base/parameterClasses.less - same classes, same declaration blocks, but they no longer follow a theme switch at runtime. The two font rows carry the CSS custom property form` &&
+               ` (var(--sapFontSize)) where the less source uses the @sapUiFontSize variable, which only exists after theme compilation. // NOTE: the original's per-row border flag plus its onAfterRendering DOM patch` &&
+               ` (querySelectorAll('.sampling')[i].style.borderStyle = 'solid') become the computed model column BORDERSTYLE, bound into the core:HTML div's style attribute - the same visible result without touching` &&
+               ` the DOM from the frontend. The original's companion elem.style.borderWidth = '1xp' is an upstream typo (no such CSS unit, the browser drops it), so it is not reproduced; the solid border renders at`.
+    lv_text1 = lv_text1 && ` the CSS default width in both. // NOTE: the core:HTML content keeps the original's {styleClass} binding as a REAL binding ({STYLECLASS} on the ABAP field), so its braces stay unescaped - the opposite` &&
+               ` of the literal-CSS case (app 028), where braces inside a core:HTML content must be escaped. The markup is written decoded (<div ...>) because the builder re-escapes it on stringify. // NOTE: the` &&
+               ` third cell's empty class="" attribute of the original Text is dropped - an empty class list is a no-op and the builder writes no attribute for an empty value.`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.core`        control = `sap.ui.core.theming`                   name = `ThemeCustomClasses`                  class = `z2ui5_cl_ai_app_283` path = `src/02/b16/z2ui5_cl_ai_app_283.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = lv_text1 ) ).
+
     result = VALUE #( BASE result
       ( module = `sap.ui.core`        control = `sap.ui.core.theming.Parameters`        name = `BasicThemeParameters`                class = `z2ui5_cl_ai_app_131` path = `src/02/b03/z2ui5_cl_ai_app_131.clas.abap`
         score = 1
@@ -3604,7 +3619,20 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `NOTE: Composite data-type binding paradigm: the Currency type is pulled in via core:require and every Input/Text binds a composite parts:['/amount','/currency'] with type:'CurrencyType' plus` &&
                  ` formatOptions (showMeasure/showNumber/preserveDecimals/currencyCode/style) 1:1. The two model fields amount ('123456789.123') and currency ('USD') are serialized by abap2UI5 as /AMOUNT and /CURRENCY;` &&
-                 ` the paths are generated via _bind (never hardcoded).` )
+                 ` the paths are generated via _bind (never hardcoded).` ) ).
+
+    lv_text1 = `NOTE: the sample's whole point is a JSON model holding a Date OBJECT (UI5Date.getInstance()), which is exactly what an abap2UI5 model can never carry - the model travels as JSON, so a date is a` &&
+               ` string. Every binding therefore keeps the original { path, type: 'DateType', formatOptions: { style / relative } } 1:1 and only ADDS formatOptions.source { pattern: 'yyyy-MM-dd' }, which makes` &&
+               ` sap.ui.model.type.Date parse the string model value and write it back in the same form (same paradigm as the sibling port 181 TypeDateAsString and app 017). Without the source pattern the type raises` &&
+               ` a FormatException on every binding and the view stays empty. // NOTE: the original seeds the CURRENT date (UI5Date.getInstance()); a fixed date (2026-08-02) is used here so the port is deterministic` &&
+               ` - a display-only value. The Relative Time form therefore shows the distance to that fixed day, not to today.`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.core`        control = `sap.ui.model.type.Date`                name = `TypeDateAsDate`                      class = `z2ui5_cl_ai_app_282` path = `src/02/b16/z2ui5_cl_ai_app_282.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = lv_text1 ) ).
+
+    result = VALUE #( BASE result
       ( module = `sap.ui.core`        control = `sap.ui.model.type.Date`                name = `TypeDateAsString`                    class = `z2ui5_cl_ai_app_181` path = `src/02/b10/z2ui5_cl_ai_app_181.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`

@@ -8,6 +8,7 @@
     "sap.ui.core.BusyIndicator",
     "sap.ui.core.ContainerPadding",
     "sap.ui.core.StandardMargins",
+    "sap.ui.core.theming",
     "sap.ui.core.theming.Parameters",
     "sap.ui.integration.Card",
     "sap.ui.model.Filter",
