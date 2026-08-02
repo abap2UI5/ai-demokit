@@ -1,6 +1,6 @@
 ---
 name: run-the-gates
-description: What every CI gate checks (pattern_lint, structural_diff, structure_lint, render_smoke, e2e_smoke, data_fidelity, meta_valid, property_gate), what a failure means, and every legitimate escape hatch (sidecar skips, deviation naming). Use the moment npm run gates or a CI check fails, and before declaring any skip or deviation to satisfy a gate.
+description: What every CI gate checks (pattern_lint, structural_diff, view_gates - the linter-backed properties/structure/render consolidation, e2e_smoke, data_fidelity, meta_valid), what a failure means, and every legitimate escape hatch (sidecar skips, deviation naming). Use the moment npm run gates, view-gates or a CI check fails, and before declaring any skip or deviation to satisfy a gate.
 ---
 
 # The gates — semantics, failures, escapes
