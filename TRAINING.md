@@ -188,7 +188,7 @@ looped controls. Values are not compared — that stays with review/live checks.
   marks them `HOLDOUT`), and a hold-out port is never promoted to `checked`.
   A regeneration probe = generate them from scratch with the current
   rules/references and score: CI green on first try, structural-diff
-  violations, render-smoke failures, review findings per app. Improvement
+  violations, view-gate failures, review findings per app. Improvement
   becomes a number per generation run. ~~Run the first probe before batch
   b05 lands~~ — **probe #1 ran 2026-07-19**; the baseline (protocol + all
   numbers: 21/25 CI-green first try, 4 undeclared structural diffs,

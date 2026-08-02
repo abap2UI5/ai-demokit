@@ -21,17 +21,6 @@ jobs:
         node-version: '22'
     - run: node scripts/pattern-lint.mjs
 
-  property_gate:
-    # every member a port uses must exist by UI5 1.71 (ui5/properties.json)
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-    - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
-      with:
-        node-version: '22'
-    - run: node scripts/property-check.mjs
-
   structural_diff:
     runs-on: ubuntu-latest
     timeout-minutes: 10
@@ -54,22 +43,14 @@ jobs:
         node-version: '22'
     - run: node scripts/data-fidelity.mjs
 
-  structure_lint:
-    # fast static check of the builder call tree — catches an aggregation
-    # nested directly inside another aggregation (a missing )->shut(), the
-    # malformed-view class, before the expensive render gate runs
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    steps:
-    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-    - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
-      with:
-        node-version: '22'
-    - run: node scripts/structure-lint.mjs --strict
-
-  render_smoke:
-    # headless rendering gate: every port's reconstructed view must load in a
-    # real XMLView.create against the OpenUI5 runtime (npm packages, offline)
+  view_gates:
+    # abap2UI5-linter over every port: the view is reconstructed from the
+    # builder calls, checked against the UI5 metadata (@since floor,
+    # deprecation, unknown controls/members/values), checked for structural
+    # defects (an aggregation inside an aggregation = a missing )->shut(), one
+    # shut too many, a duplicate attribute) and rendered in a real headless
+    # XMLView.create. scripts/view-gates.mjs adds the corpus policy on top:
+    # POST_171 deviations, declared render_smoke skips.
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
@@ -79,7 +60,7 @@ jobs:
         node-version: '22'
     - run: npm ci
     - run: npx playwright install --with-deps chromium
-    - run: node scripts/render-smoke.mjs --strict
+    - run: node scripts/view-gates.mjs --strict
 
   meta_valid:
     # meta/ sidecars are the source of truth (schema + referential integrity),
