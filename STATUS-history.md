@@ -7,6 +7,20 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## 293 — a port with an empty deviations array (2026-08-02)
+
+**293 `sap.uxap.sample.ObjectPageSubSectionBackground`** (`sap.uxap.ObjectPageSubSection`)
+is 33 lines of pure markup with no controller at all, and the port is a **1:1
+rebuild with zero deviations** — the first in a while. It earns its place for
+one thing the corpus had not recorded: the view turns the usual namespace
+assignment **around**. `sap.uxap` is the DEFAULT namespace and `sap.m` carries
+the `m:` prefix (`<m:List>`).
+
+That matters because `structural-diff` compares the **qualified** control name:
+a `List` written without `ns` in such a view is a different control from the
+original's `m:List` and would be reported in both directions. Copy the
+original's namespace assignment as-is — now a gotcha in the porting guide.
+
 ## Batch b23 (291/292) — three levels of bound aggregation, and a port with no controller left (2026-08-02)
 
 **291 `sap.m.sample.NotificationListGroupBindings`** (`sap.m.NotificationListGroup`).

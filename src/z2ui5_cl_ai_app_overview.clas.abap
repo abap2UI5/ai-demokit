@@ -4739,6 +4739,12 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         since = `1.26`
         notes = lv_text1 ) ).
 
+    result = VALUE #( BASE result
+      ( module = `sap.uxap`           control = `sap.uxap.ObjectPageSubSection`         name = `ObjectPageSubSectionBackground`      class = `z2ui5_cl_ai_app_293` path = `src/03/b06/z2ui5_cl_ai_app_293.clas.abap`
+        score = 1
+        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.26` ) ).
+
     lv_text1 = `NOTE: The ObjectNumber state binding differs: the original binds state="{path:'WeightMeasure', formatter:'.weightState'}" to a controller formatter (parseFloat + Success/Warning/Error thresholds).` &&
                ` That is business logic, so - abap2UI5 being a thin frontend - the weightState is computed in ABAP model_init into a WEIGHTSTATE field and bound state="{WEIGHTSTATE}", not via a frontend formatter.` &&
                ` Visually 1:1 with the original (apps 009/010/022/092 precedent). No core:require is dropped - the original registers the formatter as a controller method, not on the view root. // NOTE: The default` &&

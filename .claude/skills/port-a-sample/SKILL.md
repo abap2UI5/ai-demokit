@@ -420,6 +420,13 @@ these entries.
 
 #### Porting gotchas (distilled lessons — same discipline as AGENTS.md §10)
 
+- **The default namespace is not always `sap.m`.** A `sap.uxap` / `sap.ui.table`
+  sample often declares its own library as `xmlns` and gives **`sap.m` the
+  prefix** (`xmlns:m="sap.m"`, `<m:List>`). Copy that assignment as-is:
+  `structural-diff` compares the **qualified** control name, so a `List`
+  written without `ns` in such a view is a different control from the
+  original's `m:List` and is reported in both directions (app 293).
+
 - **One builder chain per view — never split it across ABAP statements.** The
   builder keeps its cursor across statements at runtime, so
   `popover->open( \`Popover\` … ).` followed by a separate

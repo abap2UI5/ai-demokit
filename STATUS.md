@@ -15,8 +15,8 @@ TRAINING.md; for what abap2UI5 can express see CAPABILITIES.md._
 
 | Aspect | State |
 |---|---|
-| Ports | **291** sidecars in `meta/` (src/01: 176 · src/02: 67 · src/03: 18 · src/04: 19 · src/05: 11) |
-| Status ladder | 84 `generated` · 146 `reviewed` · 61 `checked` (live-verified) |
+| Ports | **292** sidecars in `meta/` (src/01: 176 · src/02: 67 · src/03: 19 · src/04: 19 · src/05: 11) |
+| Status ladder | 85 `generated` · 146 `reviewed` · 61 `checked` (live-verified) |
 | Deviations | 4 DROPPED_171 · 135 IMPROVISED · 37 LIVE_TEST · 436 NOTE · 121 POST_171 |
 | Open LIVE_TESTs | **37 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
 | Declared gate skips | 7 structural-diff · 2 render-smoke (each re-verified per run — a stale skip FAILS) |
