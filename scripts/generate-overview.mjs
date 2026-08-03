@@ -104,6 +104,9 @@ function probeOpenUI5(entity) {
     fs.existsSync(path.join(OPENUI5_PKG, lib, 'src', rel)) || wordRe.test(libText(lib)));
 }
 
+// The list holds only entities that ui5/properties.json does NOT carry, so an
+// entry can also fall out because the property snapshot grew to cover it -
+// "no longer needed here" does not mean OpenUI5 dropped the control.
 // --update-entities rebuilds the snapshot from the installed @openui5 sources;
 // a plain run with node_modules present cross-checks the snapshot instead and
 // fails when it is stale, so the committed verdicts can never silently drift
@@ -140,7 +143,7 @@ function probeOpenUI5(entity) {
       if (missing.length || gone.length) {
         console.error(
           `ui5/openui5-entities.json is stale (missing: ${missing.join(', ') || '-'}; ` +
-            `no longer in OpenUI5: ${gone.join(', ') || '-'}) - ` +
+            `no longer needed here: ${gone.join(', ') || '-'}) - ` +
             'rebuild with: node scripts/generate-overview.mjs --update-entities'
         );
         process.exit(1);

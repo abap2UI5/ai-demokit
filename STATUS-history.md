@@ -7,6 +7,35 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## The metadata snapshot is now the linter's own artefact (2026-08-02)
+
+`ui5/properties.json` regenerated with the **linter's** `generate-metadata.mjs`
+against this repo's OpenUI5 checkout (1.152), and the dependency re-pinned from
+the merged feature branch to the linter **main SHA `10c700b4`** — the two
+follow-ups STATUS carried since the generator consolidation are closed.
+
+What the new snapshot changed, exactly as predicted:
+
+- The old parser's two **false deprecations** are gone. It attributed a
+  file-level `@deprecated` JSDoc block sitting on a *local variable* to the
+  CONTROL, marking `sap.f.semantic.SemanticPage` and `sap.f.DynamicPageTitle`
+  deprecated @1.54 although neither class doc says so. App 166 is therefore
+  **in scope**, its `scope-exceptions.json` entry was stale, the gate said so,
+  and the entry is removed — 6 exceptions → 5, `sap.f` in-scope 32 → 34.
+- `sap.ui.core.XMLComposite` gained the deprecation it always had (@1.88), so
+  its two samples moved from *nonapp* to *deprecated* — no port affected, the
+  family was never portable.
+- The snapshot is the full member shape now (976 controls, ~479 kB against the
+  old 925/159 kB), i.e. byte-for-byte the artefact the linter generates for
+  itself, only at this repo's OpenUI5 version.
+
+One diagnosis worth keeping: the richer snapshot made
+`generate-overview.mjs` report `sap.m.HeaderContainer` as
+**"no longer in OpenUI5"**. It never left — `ui5/openui5-entities.json` holds
+only entities `properties.json` does *not* carry, and the control had just
+been picked up by the growing snapshot. The message now reads "no longer
+needed here", with the reason in a comment above the check.
+
 ## Batch b20 (284) — a controller-built dialog, and the id nothing validated (2026-08-02)
 
 **284 `sap.m.sample.MessageViewInsideDialog`** (`sap.m.MessageView`). The

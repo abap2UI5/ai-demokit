@@ -963,8 +963,6 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.46.0`
-        is_deprecated = abap_true
-        dep_text = `Deprecated since 1.54: `
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
