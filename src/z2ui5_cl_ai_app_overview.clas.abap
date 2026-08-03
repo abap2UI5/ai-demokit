@@ -2189,6 +2189,22 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         notes = lv_text1
         post171 = `two post-1.71 members are kept for the 1:1 port: Button.ariaHasPopup (since UI5 1.84) on the MessagePopover button, and MessagePopover.groupItems (since UI5 1.73).` ) ).
 
+    lv_text1 = `NOTE: the original's view.xml has no MessageStrip at all: showMsgStrip destroys the previous one and _generateMsgStrip creates a new sap.m.MessageStrip in the controller, adding it to the` &&
+               ` VerticalLayout. The port declares that MessageStrip in the view (one control more than the original view.xml) and binds its four varying properties - text, type, showIcon, showCloseButton - plus` &&
+               ` visible, which keeps it hidden until the button has been pressed once. Destroy-and-recreate then has no counterpart: rebinding the same control is the abap2UI5 form of the same result. // IMPROVISED:` &&
+               ` the original randomizes: sType = aTypes[Math.round(Math.random() * 3)] and both flags from Math.round(Math.random()). Deciding is backend work, so the choice moves to ABAP - and it is made` &&
+               ` DETERMINISTIC there: a press counter rotates the type through Information/Warning/Error/Success and the two flags through their combinations, so every press still changes the strip but the port is` &&
+               ` reproducible (the corpus rule for random/current-date values, apps 164/181). MessageStrip.type carries the control's own default Information until the first press, because an empty string is rejected`.
+    lv_text1 = lv_text1 && ` on an enum property. // IMPROVISED: the accessibility announcement is dropped: onInit takes an sap.ui.core.InvisibleMessage instance and _generateMsgStrip calls announce('New Information Bar of type` &&
+               ` ...', Assertive) on it. InvisibleMessage is a JS singleton, not a control in the view, so no wire addresses it - CONTROL_BY_ID needs an id and CONTROL_GLOBAL a whitelisted global object. App 141` &&
+               ` (sap.ui.core.sample.InvisibleMessage) covers the control-based announcement idiom instead.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.MessageStrip`                    name = `DynamicMessageStripGenerator`        class = `z2ui5_cl_ai_app_289` path = `src/01/b22/z2ui5_cl_ai_app_289.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.30`
+        notes = lv_text1 ) ).
+
     lv_text1 = `POST-1.71: the MessageStrip ``controls`` aggregation (since UI5 1.129) is kept 1:1 for the fifth strip's %%0/%%1/%%2 multi-link formatted text (three sap.m.Link). enableFormattedText itself is since` &&
                ` 1.50 (<= 1.71). // POST-1.71: core:require="{Formatter: 'z2ui5/model/formatter'}" wires the curated formatter module (since UI5 1.74) so the inlineIconsHelper strip can use` &&
                ` Formatter.expandInlineIcons; the two added namespace decls (xmlns:core, core:require on the view root) are not in the sample view. // NOTE: the sample's controller builds inlineIconsHelper from` &&
@@ -2552,6 +2568,18 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: the two PDF paths are the ones onInit resolves with sap.ui.require.toUrl('sap/m/sample/PDFViewerEmbedded/sample.pdf') and '.../sample_nonexisting.pdf'. An abap2UI5 system does not serve the demo` &&
+               ` kit module path, so both are pinned to the OpenUI5 host in their SDK form (https://sdk.openui5.org/test-resources/sap/m/demokit/sample/PDFViewerEmbedded/sample.pdf and sample_nonexisting.pdf) per the` &&
+               ` runtime asset-URL rule - same two file names, same sample folder, only the host-side prefix differs from the module path the original writes (app 131/152 precedent). The second one is MEANT to 404:` &&
+               ` it is how the sample demonstrates the PDFViewer's loading error. // NOTE: the controller keeps the two paths in closure variables and swaps /Source with setProperty. Here they are PROTECTED CONSTANTS` &&
+               ` and only the bound SOURCE field is public - a value that exists solely to be assigned is not model data (AGENTS section 10, every PUBLIC attribute is persisted app state).`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.PDFViewer`                       name = `PDFViewerEmbedded`                   class = `z2ui5_cl_ai_app_288` path = `src/01/b22/z2ui5_cl_ai_app_288.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.48`
         notes = lv_text1 ) ).
 
     lv_text1 = `NOTE: the original onInit creates a popup-mode sap.m.PDFViewer and adds it as a view dependent; it is declared 1:1 in the view's mvc:dependents aggregation (an extra PDFViewer element vs the original` &&

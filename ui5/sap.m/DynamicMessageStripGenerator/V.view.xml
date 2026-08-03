@@ -1,0 +1,19 @@
+<mvc:View
+	controllerName="sap.m.sample.DynamicMessageStripGenerator.C"
+	xmlns:l="sap.ui.layout"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m">
+
+	<l:VerticalLayout
+		class="sapUiContentPadding"
+		id="oVerticalContent"
+		width="100%">
+		<l:content>
+			<Button
+				text="Generate MessageStrip"
+				class="sapUiSmallMarginBottom"
+				press=".showMsgStrip"
+				width="250px"/>
+		</l:content>
+	</l:VerticalLayout>
+</mvc:View>

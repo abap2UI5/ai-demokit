@@ -7,6 +7,40 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## Batch b22 (288/289) — a new control, and randomness as a backend decision (2026-08-02)
+
+- **288 `sap.m.sample.PDFViewerEmbedded`** (`sap.m.PDFViewer`) — a control the
+  corpus did not have. Two buttons swap the bound `source` between a valid and
+  a deliberately missing PDF (that 404 *is* the sample: it demonstrates the
+  viewer's loading error). Both paths are the ones the controller resolves with
+  `sap.ui.require.toUrl( )`, pinned to the OpenUI5 host in their SDK form per
+  the asset-URL rule — same file names, same sample folder, only the host-side
+  prefix differs, which `data-fidelity` needs named in the sidecar. The two
+  paths are PROTECTED `CONSTANTS`: a value that exists only to be assigned is
+  not model data.
+- **289 `sap.m.sample.DynamicMessageStripGenerator`** (`sap.m.MessageStrip`) —
+  the controller destroys and re-creates a `MessageStrip` on every press, with
+  `type`, `showIcon` and `showCloseButton` picked by `Math.random( )`. The port
+  declares the strip in the view (one control more than the original view.xml,
+  declared) and binds those four properties plus `visible`; rebinding the same
+  control is the abap2UI5 form of destroy-and-recreate.
+
+  **Randomness is a decision, so it moves to ABAP — and becomes deterministic
+  there.** A press counter rotates the type through the four values and the two
+  flags through their combinations: every press still changes the strip, and
+  the port stays reproducible, which is the same rule the corpus already
+  applies to "the current date" (apps 164/181).
+
+  One trap paid for itself immediately: `strip_type` started out empty and the
+  render gate rejected `""` on the enum property — the documented
+  absent-property rule, so the field now carries the control's own default
+  `Information` until the first press.
+
+  The `InvisibleMessage.announce( )` accessibility call is dropped and
+  declared: it is a JS singleton, not a control, so neither `CONTROL_BY_ID`
+  (needs an id) nor `CONTROL_GLOBAL` (closed object list) reaches it. App 141
+  covers the control-based announcement idiom.
+
 ## Batch b21 (286/287) — the customData idiom, and a rule paying off twice (2026-08-02)
 
 Two sap.m depth ports, both picked for an idiom the corpus did not have.
