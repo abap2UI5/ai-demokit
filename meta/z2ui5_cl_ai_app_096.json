@@ -8,11 +8,8 @@
     "frontend_action": true,
     "event_t_arg": true
   },
-  "status": "checked",
-  "checked": {
-    "date": "2026-07-27",
-    "note": "verified in a running system 2026-07-27 - SplitContainer toDetail/toMaster/backDetail/backMaster/setMode navigation works across modes"
-  },
+  "status": "generated",
+  "checked": null,
   "deviations": [
     {
       "type": "NOTE",
@@ -29,6 +26,14 @@
     {
       "type": "NOTE",
       "what": "live-verified 2026-07-27: SplitContainer as the root view plus the control_by_id navigation (to/toDetail/toMaster/backDetail/backMaster/setMode) need an in-system check — machine gates only verify view validity, not the runtime navigation roundtrip."
+    },
+    {
+      "type": "NOTE",
+      "what": "the mode RadioButtonGroup's handler calls oSplitContainer.setMode( ) in the original; SplitContainer.mode is a bindable property, so the port binds it two-way (added attribute, no structural diff) and the handler only assigns the chosen mode - the prefer-a-bindable-property rule, gated by the linter rule settable-property-via-action. The state then survives a view rebuild instead of living only in the control."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "the two-way mode binding replaces the setMode( ) action and is not live-verified. The imperative form it replaces WAS verified: verified in a running system 2026-07-27 - SplitContainer toDetail/toMaster/backDetail/backMaster/setMode navigation works across modes (2026-07-27) - kept as context. A fresh live run (each radio button switches the split mode and the toast names it) restamps this port to checked."
     }
   ]
 }

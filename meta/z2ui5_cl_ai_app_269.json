@@ -24,6 +24,10 @@
       "what": "The controller's media model (new JSONModel(Device.system)) is abap2UI5's shared device> model, so every {media>/phone} binding becomes {= !${device>/system/phone}} on the same data - the Close button, the Slider and the width hint Text keep their original visibility rules. A device-branch fold onto the framework's own model, no loss."
     },
     {
+      "type": "NOTE",
+      "what": "handleSideContentHide / handleSideContentShow call oDSC.setShowSideContent(false/true) in the original. DynamicSideContent.showSideContent is a bindable property, so the port binds it two-way and only flips the flag server-side (added attribute, no structural diff) - the prefer-a-bindable-property rule, now gated by the linter rule settable-property-via-action. The state then survives a view rebuild, and the control's own toggle( ) - the Toggle button's client-side wire, kept as it is - writes back into the model instead of drifting from it."
+    },
+    {
       "type": "IMPROVISED",
       "what": "updateShowSideContentButtonVisibility is reproduced only by its breakpoint half. The original computes !(breakpoint === 'S' || oDSC.isSideContentVisible()), i.e. it also hides the 'Open Side Content' button whenever the side content happens to be visible; isSideContentVisible() is client state the backend cannot read. The port keeps the button's visibility bound to the breakpoint (visible unless 'S') and flips the same flag in the two press handlers (hide -> button shows, show -> button hides), which matches the original in every path the sample offers - but a side-content visibility change caused by anything else (e.g. the Toggle button) does not update it."
     },

@@ -78,6 +78,10 @@ CLASS z2ui5_cl_ai_app_092 IMPLEMENTATION.
             )->a( n = `id`              v = `idProductsTable`
             )->a( n = `autoPopinMode`   v = `true`
             )->a( n = `contextualWidth` v = `Auto`
+            " hiddenInPopin is a bindable property; the MultiComboBox's
+            " selectedKeys already IS the Priority array the original hands to
+            " setHiddenInPopin, so both bind the same field
+            )->a( n = `hiddenInPopin`   v = client->_bind( t_hidden )
             )->a( n = `width`           v = |\{= ${ client->_bind( width_pct ) } + '%' \}|
             " onPopinChanged: MessageToast.show('Number of hidden pop-ins: ' +
             " hiddenInPopin.length) - client-composed, roundtrip-free
@@ -229,16 +233,10 @@ CLASS z2ui5_cl_ai_app_092 IMPLEMENTATION.
     CASE client->get( )-event.
       WHEN `HIDE`.
         " selectionFinish: the MultiComboBox keys arrive two-way bound in
-        " t_hidden; forward them as a JSON Priority array to the table's
-        " setHiddenInPopin so columns of those importances are hidden while
-        " in pop-in (1:1 with the sample's setHiddenInPopin(getSelectedKeys())).
-        DATA(json) = ``.
-        LOOP AT t_hidden INTO DATA(prio).
-          json = |{ json }{ COND string( WHEN sy-tabix > 1 THEN `,` ) }"{ prio }"|.
-        ENDLOOP.
-        json = |[{ json }]|.
-        client->follow_up_action( val   = client->cs_event-control_by_id
-                                  t_arg = VALUE #( ( `idProductsTable` ) ( `setHiddenInPopin` ) ( json ) ) ).
+        " t_hidden, and the table's hiddenInPopin is bound to the same field -
+        " so the sample's setHiddenInPopin(getSelectedKeys()) needs no action,
+        " only the model push
+        client->view_model_update( ).
     ENDCASE.
 
   ENDMETHOD.

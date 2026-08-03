@@ -7,6 +7,55 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## A rule that found work: five ports move from action to binding (2026-08-02)
+
+`settable-property-via-action` encodes the oldest unenforced rule in the book —
+*prefer a bindable property over a frontend action* — and unlike the previous
+four it did **not** measure 0 on the corpus. It found five ports driving a
+property imperatively that the control lets you bind:
+
+| Port | What it drove |
+|---|---|
+| 043 `PanelExpanded` | `sap.m.Panel.expanded` |
+| 092 `TableAutoPopin` | `sap.m.Table.hiddenInPopin` |
+| 096 `SplitContainer` | `sap.m.SplitContainer.mode` |
+| 097 `SplitApp` | `sap.m.SplitApp.mode` |
+| 269 `DynamicSideContentProduct` | `sap.ui.layout.DynamicSideContent.showSideContent` |
+
+All five are converted; the corpus reports none. Three of them shrank
+noticeably — 092's handler used to *build a JSON Priority array by hand* for
+the action, and the MultiComboBox's `selectedKeys` it was built from is the
+very same field, so both now bind `T_HIDDEN` and the handler is one
+`view_model_update( )`.
+
+**043 reverses an earlier decision, on purpose.** Its sidecar recorded (
+2026-07-18) that the two-way `expanded` binding had been *replaced* by the
+whitelisted `setExpanded` to "match the original view.xml exactly". An added
+attribute is not a structural diff, and the rulebook has since settled the
+other way; the sidecar now says so rather than quietly flipping. 043 and 096
+lose their `checked` status for it (a behavioural rework invalidates the
+check, AGENTS §10) — the historical check is kept as context in a `LIVE_TEST`.
+
+Two things the rule needed, both of which say something about the linter's
+shape:
+
+- **What an id IS.** The ABAP-side rules only ever saw the class source; a
+  `CONTROL_BY_ID` wire names an id, and whether `setX` may be replaced by a
+  binding depends on the control's type. `collectControlIds` now bridges the
+  view tree and the ABAP rules.
+- **What "bindable" means.** Precision lives entirely in the metadata: an
+  **association** (`ObjectPageLayout.selectedSection`) and a **function**-typed
+  property (`MessagePopover.asyncURLHandler` — the reason the framework names a
+  built-in URL policy instead) can never be bound, so they are excluded rather
+  than reported and excused.
+
+One more model defect fell out of 092's conversion: `DATA t_hidden TYPE
+string_table.` — a standard ABAP table type, neither declared in the class nor
+written in the inline `STANDARD TABLE OF` form — was modelled as a **scalar**,
+so binding it to `hiddenInPopin` failed the render gate with `"" is of type
+string, expected sap.ui.core.Priority[]`. The known scalar table types are
+tables now.
+
 ## pr/popup-within-area implemented upstream — app 285 keeps the sample's point (2026-08-02)
 
 The gap app 285 declared one entry ago is closed in the framework rather than
