@@ -2300,6 +2300,21 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         notes = lv_text1
         post171 = `showClearIcon (since UI5 1.94) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.94 to render it.` ) ).
 
+    lv_text1 = `NOTE: handleValueHelp is reproduced 1:1 through two follow-up actions in the order the controller has them: cs_event-binding_call filters the dialog's items binding by NAME Contains the typed value` &&
+               ` (the model stays untouched, exactly like oValueHelpDialog.getBinding('items').filter([...])), then cs_event-control_by_id open( value ) opens it with that same value in its search field -` &&
+               ` CONTROL_METHODS declares open's optional string argument, so oValueHelpDialog.open(sInputValue) travels whole. The MultiInput's value is bound two-way so the typed text is on the server when` &&
+               ` valueHelpRequest fires. The dialog's own search event keeps the roundtrip-free _event_client binding_call form (app 103 idiom). // NOTE: _handleValueHelpClose reads evt.getParameter('selectedItems')` &&
+               ` and adds one sap.m.Token per item. A list of CONTROLS cannot travel to the backend, so the selection is read from the data instead: the StandardListItem template gains a selected={SELECTED} binding` &&
+               ` (an added attribute) and the handler loops the rows, appends a token per selected row and clears the flag again. The MultiInput's tokens aggregation is bound to that token table, so the Token in the`.
+    lv_text1 = lv_text1 && ` view is a template the original does not have (it builds Tokens in the controller) - one control more than the original view.xml. // NOTE: the suggestionItems binding keeps the original's { path,` &&
+               ` sorter: { path: 'Name' } } shape 1:1 as a raw binding-info string, with the path from client->_bind and the sorter path switched to the ABAP field NAME. The Component's oModel.setSizeLimit(1000000)` &&
+               ` has no counterpart: an abap2UI5 model carries whatever the ABAP table holds, so all 123 rows are bound without a limit to raise.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.MultiInput`                      name = `MultiInputValueHelp`                 class = `z2ui5_cl_ai_app_290` path = `src/01/b22/z2ui5_cl_ai_app_290.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = lv_text1 ) ).
+
     lv_text1 = `POST-1.71: NavContainer.navigationFinished (event, since UI5 1.111.0) is kept 1:1 - it is wired to a client-composed MessageToast; the app needs a UI5 release >= 1.111 to fire it. // IMPROVISED:` &&
                ` handleNav does navCon.to( byId(target), animationSelect.getSelectedKey() ) / navCon.back() imperatively. The port keeps the NavContainer id='navCon' and drives navigation via a round-trip: each` &&
                ` To-button's press (NAV) carries its static target page id (p1..p4) as the event arg, and on_event issues follow_up_action( val = cs_event-control_by_id t_arg = ( 'navCon' )( 'to' )( <target> )(` &&

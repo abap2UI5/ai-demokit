@@ -7,7 +7,7 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
-## Batch b22 (288/289) — a new control, and randomness as a backend decision (2026-08-02)
+## Batch b22 (288/289/290) — a new control, and randomness as a backend decision (2026-08-02)
 
 - **288 `sap.m.sample.PDFViewerEmbedded`** (`sap.m.PDFViewer`) — a control the
   corpus did not have. Two buttons swap the bound `source` between a valid and
@@ -40,6 +40,26 @@ of their date and are NOT kept current._
   declared: it is a JS singleton, not a control, so neither `CONTROL_BY_ID`
   (needs an id) nor `CONTROL_GLOBAL` (closed object list) reaches it. App 141
   covers the control-based announcement idiom.
+
+- **290 `sap.m.sample.MultiInputValueHelp`** (`sap.m.MultiInput`) — the value
+  help flow the corpus was missing. `handleValueHelp` becomes two follow-up
+  actions in the controller's own order: `binding_call` filters the dialog's
+  items binding by the typed text (the model stays untouched, exactly like
+  `getBinding('items').filter([...])`), then `control_by_id` `open( value )` —
+  `CONTROL_METHODS` declares that optional string, so
+  `oValueHelpDialog.open(sInputValue)` travels whole. The MultiInput's `value`
+  is bound two-way, so the typed text is already on the server when
+  `valueHelpRequest` fires.
+
+  **A list of controls cannot travel.** `_handleValueHelpClose` reads
+  `evt.getParameter('selectedItems')` and builds a `Token` per item; nothing
+  transports that. So the selection is read from the DATA instead — the
+  `StandardListItem` template gains `selected={SELECTED}`, and the handler
+  loops the rows, appends a token per selected row and clears the flag. The
+  `tokens` aggregation is bound to that table, which is why the port carries a
+  `Token` the original view.xml does not (it creates them in the controller).
+  That is the general answer for every "the event hands me controls" sample:
+  bind the state the controls stand for.
 
 ## Batch b21 (286/287) — the customData idiom, and a rule paying off twice (2026-08-02)
 

@@ -1,0 +1,28 @@
+{
+  "class": "z2ui5_cl_ai_app_290",
+  "sample": "sap.m.sample.MultiInputValueHelp",
+  "entity": "sap.m.MultiInput",
+  "file": "src/01/b22/z2ui5_cl_ai_app_290.clas.abap",
+  "batch": "b22",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": false,
+    "note": "binding_call filter on the dialog binding + control_by_id open( searchValue )"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "handleValueHelp is reproduced 1:1 through two follow-up actions in the order the controller has them: cs_event-binding_call filters the dialog's items binding by NAME Contains the typed value (the model stays untouched, exactly like oValueHelpDialog.getBinding('items').filter([...])), then cs_event-control_by_id open( value ) opens it with that same value in its search field - CONTROL_METHODS declares open's optional string argument, so oValueHelpDialog.open(sInputValue) travels whole. The MultiInput's value is bound two-way so the typed text is on the server when valueHelpRequest fires. The dialog's own search event keeps the roundtrip-free _event_client binding_call form (app 103 idiom)."
+    },
+    {
+      "type": "NOTE",
+      "what": "_handleValueHelpClose reads evt.getParameter('selectedItems') and adds one sap.m.Token per item. A list of CONTROLS cannot travel to the backend, so the selection is read from the data instead: the StandardListItem template gains a selected={SELECTED} binding (an added attribute) and the handler loops the rows, appends a token per selected row and clears the flag again. The MultiInput's tokens aggregation is bound to that token table, so the Token in the view is a template the original does not have (it builds Tokens in the controller) - one control more than the original view.xml."
+    },
+    {
+      "type": "NOTE",
+      "what": "the suggestionItems binding keeps the original's { path, sorter: { path: 'Name' } } shape 1:1 as a raw binding-info string, with the path from client->_bind and the sorter path switched to the ABAP field NAME. The Component's oModel.setSizeLimit(1000000) has no counterpart: an abap2UI5 model carries whatever the ABAP table holds, so all 123 rows are bound without a limit to raise."
+    }
+  ]
+}
