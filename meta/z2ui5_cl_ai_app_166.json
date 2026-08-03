@@ -4,7 +4,7 @@
   "entity": "sap.f.semantic.SemanticPage",
   "file": "src/04/b07/z2ui5_cl_ai_app_166.clas.abap",
   "batch": "b07",
-  "audit": { "frontend_action": false, "event_t_arg": true },
+  "audit": { "frontend_action": true, "event_t_arg": true },
   "status": "reviewed",
   "checked": null,
   "deviations": [

@@ -364,12 +364,15 @@ value comes from an ABAP boolean variable, wrap it with `as_bool( )`:
 
 #### The 1.71 rule in practice
 
-Use **only** controls/properties available since UI5 1.71; never a deprecated
-one. When a sample uses something newer, either omit that one optional property
-with a one-line comment (see app 040: `showClearIcon` dropped, `" … omitted to
-stay compatible with UI5 1.71`) if the sample still works without it, or — if the
-sample's whole point needs the newer/deprecated control — **do not port it** and
-leave it as an ❌ gap. Never silently substitute a different control.
+The **control** must exist since UI5 1.71 and not be deprecated — otherwise
+the sample is out of scope and is never ported (pre-check with
+`node scripts/scope-of.mjs <entity>`); never silently substitute a different
+control. **Members** (properties/aggregations/associations/events) newer than
+1.71 ARE kept when the original uses them — 1:1 fidelity wins (AGENTS §5) —
+and each one is declared as a `POST_171` deviation naming the member (app 040
+keeps `showClearIcon` @1.94 that way; the app then needs a UI5 release ≥ that
+member's version to render it). `DROPPED_171` remains only for the rare
+member that genuinely cannot be expressed.
 
 #### Generation notes — record every caveat in the sidecar
 

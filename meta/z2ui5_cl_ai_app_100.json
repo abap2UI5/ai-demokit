@@ -5,7 +5,7 @@
   "file": "src/01/b12/z2ui5_cl_ai_app_100.clas.abap",
   "batch": "b12",
   "audit": {
-    "frontend_action": true,
+    "frontend_action": false,
     "event_t_arg": false
   },
   "status": "reviewed",

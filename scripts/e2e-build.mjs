@@ -2,7 +2,7 @@
 /*
  * e2e-build — assemble the transpiled abap2UI5 backend that serves the PORTS.
  *
- * render-smoke reconstructs a view statically; this build runs the REAL app:
+ * The view-gates render gate reconstructs a view statically; this build runs the REAL app:
  * the abap2UI5 framework (which includes the z2ui5_cl_ai_xml builder in
  * src/02/) + the ai-demokit ports
  * are transpiled to JS by @abaplint/transpiler and served by the framework's
@@ -10,8 +10,10 @@
  * i.e. the same open-abap runtime the framework's own e2e uses. An app is then
  * started in a browser via ?app_start=<class> (see e2e-smoke.mjs).
  *
- * The abap2UI5 checkout supplies the transpiler + express + runtime libs; point
- * at it with A2UI5_HOME (default ../abap2UI5, then /home/user/abap2UI5). The
+ * The abap2UI5 checkout supplies the transpiler + express + runtime libs;
+ * resolved by lib-a2ui5.mjs (A2UI5_HOME override, then the in-repo .abap2UI5
+ * clone that `npm run node:setup` writes, then ../abap2UI5, then
+ * /home/user/abap2UI5). The
  * framework must have its node_modules installed. The framework SOURCE is never
  * mutated — a COPY is downported in node/downport (its normal build dir), the
  * transpiler writes node/output, and express serves that.

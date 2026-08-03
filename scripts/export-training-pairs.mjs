@@ -31,6 +31,10 @@ const ALL = process.argv.includes('--all');
 const OUT = process.argv.includes('--out')
   ? process.argv[process.argv.indexOf('--out') + 1]
   : 'training-pairs.jsonl';
+if (!OUT) {
+  console.error('export-training-pairs: --out needs a file path');
+  process.exit(2);
+}
 
 const TEXT_EXT = ['.json', '.xml', '.js', '.html', '.properties', '.css', '.ts'];
 
@@ -67,11 +71,14 @@ for (const mf of fs.readdirSync(META).sort()) {
     if (!TEXT_EXT.includes(path.extname(f).toLowerCase())) continue;
     input[path.relative(UI5, f).split(path.sep).join('/')] = fs.readFileSync(f, 'utf8');
   }
-  // shared mocks the sample references by file name (fold sources)
+  // shared mocks the sample references by file name (fold sources) — decide
+  // against a snapshot of the sample's OWN texts, or a mock added earlier in
+  // the loop could transitively pull in a later one by readdir order
+  const sampleTexts = Object.values(input);
   if (fs.existsSync(MOCK)) {
     for (const mock of fs.readdirSync(MOCK)) {
       if (!mock.endsWith('.json')) continue;
-      if (Object.values(input).some((t) => t.includes(mock))) {
+      if (sampleTexts.some((t) => t.includes(mock))) {
         input[`mock/${mock}`] = fs.readFileSync(path.join(MOCK, mock), 'utf8');
       }
     }

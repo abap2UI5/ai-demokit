@@ -65,6 +65,8 @@ needs internet access on your machine (the CI sandbox blocks it, which is why
 ## Automated smoke over every port
 
 ```sh
+npm run e2e:build            # (re)build the transpiled backend — a port edited
+                             # after the last build is not what the browser runs
 npm run e2e                  # boots each port headless, asserts boot+render+no-error
 ```
 

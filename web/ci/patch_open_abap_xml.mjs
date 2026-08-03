@@ -30,7 +30,8 @@
 //   2. unescape `&amp;` LAST on read (CL_IXML replaced it first, so a value
 //      that literally contains `&lt;` came back as `<`).
 import { readFileSync, writeFileSync, existsSync } from "node:fs";
-import { join } from "node:path";
+import { join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 
 const WRITE_FILE = "src/kernel/call_transformation/kernel_call_transformation.clas.locals_imp.abap";
 const READ_FILE = "src/ixml/cl_ixml.clas.locals_imp.abap";
@@ -120,6 +121,6 @@ export function patchOpenAbapXml(root) {
 }
 
 // CLI: node patch_open_abap_xml.mjs [path-to-open-abap-core]
-if (import.meta.url === `file://${process.argv[1]}`) {
-  patchOpenAbapXml(process.argv[2] || new URL("../open-abap-core", import.meta.url).pathname);
+if (process.argv[1] && fileURLToPath(import.meta.url) === resolve(process.argv[1])) {
+  patchOpenAbapXml(process.argv[2] || fileURLToPath(new URL("../open-abap-core", import.meta.url)));
 }

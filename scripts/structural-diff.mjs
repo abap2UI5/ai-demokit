@@ -219,7 +219,7 @@ for (const metaFile of fs.readdirSync(META).sort()) {
   }
   const port = parseAbap(fs.readFileSync(abapPath, 'utf8'));
 
-  const declaredText = (meta.deviations.map((d) => d.what).join(' ') + ' ' + (meta.checked?.note || '')).toLowerCase();
+  const declaredText = ((meta.deviations || []).map((d) => d.what).join(' ') + ' ' + (meta.checked?.note || '')).toLowerCase();
   const declared = (name) => declaredText.includes(name.toLowerCase());
 
   const diffs = [];

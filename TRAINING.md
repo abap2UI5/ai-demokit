@@ -152,7 +152,6 @@ edited directly in the sidecar. The shape:
   "deviations": [
     { "type": "POST_171",    "what": "showClearIcon (since UI5 1.94) kept for the 1:1 port ..." },
     { "type": "IMPROVISED",  "what": "the controller's addValidator is dropped ..." },
-    { "type": "SUBSET_DATA", "what": "16-row subset of the 123-row mock ..." },
     { "type": "LIVE_TEST",   "what": "confirm ... in a running system" }
   ]
 }
@@ -160,8 +159,9 @@ edited directly in the sidecar. The shape:
 
 Deviation types are closed vocabulary (`IMPROVISED`, `POST_171` — a kept
 member newer than UI5 1.71, `DROPPED_171` — a member that could not be
-expressed, `SUBSET_DATA`, `LIVE_TEST`, `NOTE`) so they can be counted: "how often does
-the agent improvise unnecessarily" becomes a query, not an impression.
+expressed, `LIVE_TEST`, `NOTE`; `SUBSET_DATA` is retired — `validate-meta`
+rejects it, full mock data is required) so they can be counted: "how often
+does the agent improvise unnecessarily" becomes a query, not an impression.
 
 ## Verification: structural view diff
 
@@ -174,7 +174,8 @@ against the port's declared deviations in `meta/`:
 
 > difference found in the diff but not declared → **fail** (`--strict`).
 
-As of 2026-07-16 all 34 ports run at 0 undeclared differences. Known limits:
+All ports run at 0 undeclared differences (`structural-diff --strict` is part
+of `npm run gates`). Known limits:
 controller-created UI is invisible on the view.xml side (it shows as EXTRA in
 the port), and loop-built view parts (`[dynamic]`) exempt count checks for the
 looped controls. Values are not compared — that stays with review/live checks.
@@ -182,7 +183,7 @@ looped controls. Values are not compared — that stays with review/live checks.
 ## Measuring progress
 
 - **Hold-out set — defined in [`ui5/holdout.json`](ui5/holdout.json):**
-  25 samples spread across control families and complexity (display, input,
+  24 samples spread across control families and complexity (display, input,
   lists/tables, popups, navigation). Rules: they are **never used as prompt
   references**, they stay **out of regular batch planning** (`--backlog`
   marks them `HOLDOUT`), and a hold-out port is never promoted to `checked`.
@@ -196,7 +197,8 @@ looped controls. Values are not compared — that stays with review/live checks.
   3 root causes) lives in
   [`probes/holdout-2026-07-19.md`](probes/holdout-2026-07-19.md). Repeat
   the protocol identically for every future probe and compare against that
-  file.
+  file — probe #2 (2026-07-26) is in
+  [`probes/holdout-2026-07-26.md`](probes/holdout-2026-07-26.md).
 - **Regeneration diff:** re-run old ports with the improved setup and diff
   against their checked version.
 

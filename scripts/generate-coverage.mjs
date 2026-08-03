@@ -94,7 +94,7 @@ const nonAppFamily = (lib, s) => nonAppFamilies.find((f) =>
 // e.g. AIIntegration) — no control metadata, so scope is unknown.
 // Samples are enriched from ui5/properties.json BEFORE this runs (see
 // enrichFromProperties below), so a null since/deprecated from the snapshot
-// no longer silently passes controls newer than 1.71 (pr/scope-since-from-source).
+// no longer silently passes controls newer than 1.71.
 const scopeOf = (lib, s) =>
   !s.entity || s.entity.includes('.sample.') ? 'unknown'
     : s.deprecated ? 'deprecated' : !sinceLeq171(s.since) ? 'newer'
@@ -400,7 +400,11 @@ const summary = libs
     ported: l.samples.filter((s) => s.port && s.scope === 'in').length,
     portedOut: l.samples.filter((s) => s.port && s.scope !== 'in').length,
   }))
-  .sort((a, b) => (b.ported / b.inScope) - (a.ported / a.inScope) || a.lib.localeCompare(b.lib));
+  .sort((a, b) => {
+    // a lib with inScope 0 must sort deterministically, not on NaN
+    const r = (s) => (s.inScope ? s.ported / s.inScope : -1);
+    return (r(b) - r(a)) || a.lib.localeCompare(b.lib);
+  });
 
 let totalSamples = 0;
 let totalInScope = 0;
@@ -498,6 +502,10 @@ readme = readme.replace(new RegExp(`${START}[\\s\\S]*?${END}`), () => block);
 const PROMPT_START = '<!-- prompt:start -->';
 const PROMPT_END = '<!-- prompt:end -->';
 const promptFile = path.join(ROOT, 'scripts', 'generation-prompt.txt');
+if (!fs.existsSync(promptFile)) {
+  console.error(`missing ${path.relative(ROOT, promptFile)} — the README prompt block is spliced from it.`);
+  process.exit(1);
+}
 if (readme.includes(PROMPT_START) && readme.includes(PROMPT_END)) {
   const prompt = fs.readFileSync(promptFile, 'utf8');
   const pblock = `${PROMPT_START}\n\`\`\`\n${prompt.replace(/\n*$/, '\n')}\`\`\`\n${PROMPT_END}`;
@@ -508,5 +516,5 @@ if (readme.includes(PROMPT_START) && readme.includes(PROMPT_END)) {
 }
 fs.writeFileSync(README, readme);
 
-console.log(`api.md + README: ${totalPorted}/${totalSamples} ported across ${libs.length} libraries` +
+console.log(`api.md + README: ${totalPorted}/${totalInScope} in-scope samples ported across ${libs.length} libraries` +
   (release ? ` (metadata from OpenUI5 ${release})` : ' (no api.json — Since column blank)'));

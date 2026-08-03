@@ -1,10 +1,11 @@
 name: generate_result
 
-# Regenerates the coverage docs (README.md summary + api.md table): every UI5
-# demo kit sample per focused library, marked with whether an abap2UI5 port
-# exists. The sample universe snapshot ui5/universe.json is REFRESHED from a
-# shallow OpenUI5 checkout (sample dirs + api.json via `grunt jsdoc`); the
-# ported set is read from the meta/ sidecars.
+# Regenerates the four generated artefacts (AGENTS §7): the README.md coverage
+# summary, api.md, the STATUS.md state block and the in-system overview app —
+# every UI5 demo kit sample per focused library, marked with whether an
+# abap2UI5 port exists. The sample universe snapshot ui5/universe.json is
+# REFRESHED from a shallow OpenUI5 checkout (sample dirs + api.json via
+# `grunt jsdoc`); the ported set is read from the meta/ sidecars.
 
 on:
   workflow_dispatch:
@@ -35,8 +36,9 @@ jobs:
     - name: Shallow clone OpenUI5 (sample universe)
       run: git clone --depth 1 https://github.com/SAP/openui5.git openui5
 
-    # Control metadata source. Keep the built libraries in sync with FOCUS_LIBS
-    # in scripts/generate-coverage.mjs. The jsdoc task may exit non-zero on
+    # Control metadata source. Only sap.m's api.json is built here — the other
+    # FOCUS_LIBS (scripts/generate-coverage.mjs) get their Since/deprecation
+    # from ui5/properties.json (regenerated below). The jsdoc task may exit non-zero on
     # cross-library type warnings while still writing a valid api.json, so we
     # tolerate the exit code and assert the artifact exists instead.
     # `npm ci` is OpenUI5's install, not ours: when their committed

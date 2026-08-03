@@ -17,7 +17,7 @@ TRAINING.md; for what abap2UI5 can express see CAPABILITIES.md._
 |---|---|
 | Ports | **293** sidecars in `meta/` (src/01: 177 · src/02: 67 · src/03: 19 · src/04: 19 · src/05: 11) |
 | Status ladder | 86 `generated` · 146 `reviewed` · 61 `checked` (live-verified) |
-| Deviations | 4 DROPPED_171 · 136 IMPROVISED · 37 LIVE_TEST · 439 NOTE · 121 POST_171 |
+| Deviations | 4 DROPPED_171 · 136 IMPROVISED · 37 LIVE_TEST · 440 NOTE · 121 POST_171 |
 | Open LIVE_TESTs | **37 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
 | Declared gate skips | 7 structural-diff · 2 render-smoke (each re-verified per run — a stale skip FAILS) |
 | Out-of-scope ported samples | `z2ui5_cl_ai_app_121 (sap.m.sample.UploadSet — deprecated)` · `z2ui5_cl_ai_app_136 (sap.f.sample.SidePanelSingle — control @since 1.107)` · `z2ui5_cl_ai_app_141 (sap.ui.core.sample.InvisibleMessage — control @since 1.78)` · `z2ui5_cl_ai_app_165 (sap.f.sample.ProductSwitchNavigation — control @since 1.72)` · `z2ui5_cl_ai_app_203 (sap.m.sample.OverflowToolbarTokenizer — control @since 1.139)` — all decided KEEP permanently 2026-07-30 (per-app rationale in ui5/scope-exceptions.json, revertible); the source-backed scope gate stays hard for NEW undecided entries |
@@ -33,7 +33,8 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   `generate-metadata.mjs` run against this repo's own OpenUI5 checkout
   (`OPENUI5_DIR=… node node_modules/@abap2ui5/linter/scripts/generate-metadata.mjs
   --out ui5/properties.json`), so there is one metadata parser in the ecosystem
-  and the snapshot still matches `ui5/universe.json`.release. Both pending
+  and the snapshot still matches the `release` field of `ui5/universe.json`.
+  Both pending
   items are settled:
   - **The dependency is pinned by SHA.** It briefly pointed at the linter main
     SHA `10c700b4`; it now points at **`10920f7`, a linter FEATURE-BRANCH
@@ -85,11 +86,13 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   under the session's standing continue-with-everything mandate; each entry
   in `ui5/scope-exceptions.json` carries the per-app rationale and is
   revertible by deleting the port + its entry). All six gate-verified ports
-  stay: 121 (UploadSet, deprecated — only upload-set coverage), 136
+  stayed: 121 (UploadSet, deprecated — only upload-set coverage), 136
   (SidePanel @1.107), 141 (InvisibleMessage @1.78 — only a11y-announcement
   idiom), 165 (ProductSwitch @1.72, most borderline), 166 (sap.f
   SemanticPage, deprecated since 1.54 yet widely deployed) and 203
-  (OverflowToolbarTokenizer, experimental @1.139). The source-backed scope
+  (OverflowToolbarTokenizer, experimental @1.139). App 166 left the list
+  again on 2026-08-02: the regenerated metadata snapshot dropped the false
+  deprecation, so it is plainly in scope and 5 exceptions remain. The source-backed scope
   gate stays a **hard gate** (exit 1) for any NEW ported out-of-scope
   sample without a decided entry, so this class of debt cannot regrow.
 - [x] **Non-app samples are out of scope** (user decision 2026-07-31, found
@@ -142,7 +145,7 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   green property-check still does not prove a port ≤ 1.71-clean — the
   control-level `scope-of` check plus by-policy POST_171 declarations remain
   required.
-- [ ] **Review-sweep rework backlog (42 ports left).** The 2026-07-27 sweep
+- [ ] **Review-sweep rework backlog.** The 2026-07-27 sweep
   promoted 152 of 201 `generated` ports to `reviewed`; the rest stayed
   `generated` with **corrected, honest sidecars** and need real view/logic
   rework. **Closed 2026-07-28:** the whole dead-`_event`-wire class (138, 143,
@@ -166,7 +169,8 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   event values in the ports not listed above. The dropped sample CSS of 122/124
   is **closed** (2026-07-28): both stylesheets are archived (closing that `§4`
   gap) and injected through a `core:HTML` `<style>` leaf.
-  Find the rest: sidecar status `generated` minus the 6 scope-exception ports. Note the
+  Find the rest: sidecar status `generated` minus the 5 scope-exception ports
+  (newer ports still awaiting their first review are `generated` too). Note the
   reworked ports keep status `generated`: the headline gap is closed and
   gate-verified, a full end-to-end re-review per port is not done.
   **Closed 2026-07-30:** the whole remaining toast-substitution class —

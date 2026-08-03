@@ -12,8 +12,8 @@
  *
  * A control is IN SCOPE when it exists since UI5 <= 1.71 AND is not deprecated in
  * the current release (AGENTS.md §1). This is a STANDALONE reporter — it does not
- * alter any gate. Wiring `scopeOf` to consult it is proposed in
- * pr/scope-since-from-source.
+ * alter any gate; `scopeOf` (generate-coverage.mjs) reads the same facts from
+ * the committed `ui5/properties.json` snapshot, so the two verdicts agree.
  *
  * Usage:
  *   node scripts/scope-of.mjs sap.f.AvatarGroup              # one entity
@@ -91,14 +91,6 @@ function metaFromSource(file, entity) {
   };
 }
 
-function sampleToEntity(sample) {
-  const uni = path.join(ROOT, 'ui5', 'universe.json');
-  if (!fs.existsSync(uni)) return null;
-  const d = JSON.parse(fs.readFileSync(uni, 'utf8'));
-  for (const l of d.libs || []) for (const s of l.samples || []) if (s.name === sample) return s.entity;
-  return null;
-}
-
 // --- non-app families (ui5/scope-nonapp.json, maintainer decision 2026-07-31)
 // A control can be perfectly 1.71-clean and the sample still be out of scope
 // because it is not an app view (OPA5/gherkin test pages, Component routing,
@@ -154,7 +146,7 @@ if (!argv.length) {
   process.exit(2);
 }
 let entities = [];
-let nonAppHit = false;
+let notOk = false;
 if (argv[0] === '--sample') {
   for (const s of argv.slice(1)) {
     const info = sampleInfo(s);
@@ -162,19 +154,25 @@ if (argv[0] === '--sample') {
     // control resolves in the fork checkout
     const fam = info && nonAppFor(info);
     if (fam) {
-      nonAppHit = true;
+      notOk = true;
       console.log(`${s.padEnd(34)} OUT_OF_SCOPE (not an app view — ${fam.reason}; ui5/scope-nonapp.json)`);
       continue;
     }
-    const e = info ? info.entity : sampleToEntity(s);
-    if (!e) { console.log(`${s.padEnd(34)} UNRESOLVED (sample not in universe.json)`); continue; }
+    const e = info ? info.entity : null;
+    if (!e) {
+      // an unresolved sample must fail too — exit 0 on a typo'd name would
+      // read as a green scope pre-check
+      notOk = true;
+      console.log(`${s.padEnd(34)} UNRESOLVED (sample not in universe.json)`);
+      continue;
+    }
     entities.push(e);
   }
 } else {
   entities = argv;
 }
 
-let allOk = !nonAppHit;
+let allOk = !notOk;
 for (const e of entities) {
   const r = verdict(e);
   if (!r.ok) allOk = false;

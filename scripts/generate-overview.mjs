@@ -68,7 +68,7 @@ const EXTRA_ENTITIES = new Set((() => {
 const OPENUI5_PKG = path.join(ROOT, 'node_modules', '@openui5');
 const OPENUI5_LIBS = fs.existsSync(OPENUI5_PKG) ? fs.readdirSync(OPENUI5_PKG) : [];
 
-// scope fallback (same as generate-coverage.mjs, pr/scope-since-from-source):
+// scope fallback (same as generate-coverage.mjs):
 // the universe snapshot carries since:null for most controls, so fill the
 // nulls from the control-level @since/@deprecated that the linter's generate-metadata.mjs
 // parses out of the OpenUI5 sources — the overview's Since column and the
@@ -317,9 +317,6 @@ const abapParts = (s) => {
   if (rest) parts.push(rest);
   return parts.map(q);
 };
-// the &&-joined literal chain as it appears inside a VALUE #( ) row
-const abapStr = (s) => abapParts(s).join(' &&\n                 ');
-
 // --- statement-size budgets (see the catalog emission block below) ---
 // every emitted statement stays well under ABAP's maximum permitted statement
 // length, in characters and in tokens

@@ -37,8 +37,12 @@ const META = path.join(ROOT, 'meta');
 const STRICT = process.argv.includes('--strict');
 const HEADED = process.argv.includes('--headed');
 const ONLY = process.argv.includes('--only')
-  ? process.argv[process.argv.indexOf('--only') + 1].split(',').map((s) => s.trim()).filter(Boolean)
+  ? (process.argv[process.argv.indexOf('--only') + 1] || '').split(',').map((s) => s.trim()).filter(Boolean)
   : null;
+if (ONLY && !ONLY.length) {
+  console.error('e2e-smoke: --only needs a comma-separated class list (e.g. --only z2ui5_cl_ai_app_001)');
+  process.exit(2);
+}
 // the overview app is checked alongside the numbered ports (see INTERACTIONS)
 const OVERVIEW = 'z2ui5_cl_ai_app_overview';
 

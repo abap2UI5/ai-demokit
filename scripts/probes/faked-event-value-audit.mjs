@@ -5,7 +5,7 @@
  * Finds ports whose toast/message text is a CONSTANT while the sample's own
  * controller composes it from event data (`MessageToast.show("… " + oEvent
  * .getParameter(…)…)`). That is the "faked event value" class: the port looks
- * right to every gate — structural-diff compares attribute names, render-smoke
+ * right to every gate — structural-diff compares attribute names, the view-gates render gate
  * mocks the model — but the running app shows less than the original.
  *
  * A hit is NOT automatically a defect: a sample whose interaction is
@@ -20,9 +20,13 @@ const walk=(d,o=[])=>{for(const n of fs.readdirSync(d)){const f=path.join(d,n);
  if(fs.statSync(f).isDirectory())walk(f,o); else o.push(f);} return o;};
 const rows=[];
 for (const f of fs.readdirSync(META)) {
+  if (!f.endsWith('.json')) continue;
   const m = JSON.parse(fs.readFileSync(path.join(META,f),'utf8'));
-  const [lib, , name] = m.sample.split(/\.sample\.|^(?=x)/).length ? [m.sample.slice(0, m.sample.indexOf('.sample.')), null, m.sample.slice(m.sample.indexOf('.sample.')+8)] : [];
-  const dir = path.join(UI5, lib, name.replace(/\./g,'.'));
+  const cut = m.sample.indexOf('.sample.');
+  if (cut === -1) continue;
+  const lib = m.sample.slice(0, cut);
+  const name = m.sample.slice(cut + '.sample.'.length);
+  const dir = path.join(UI5, lib, name);
   if (!fs.existsSync(dir)) continue;
   const js = walk(dir).filter(p=>p.endsWith('.js')).map(p=>fs.readFileSync(p,'utf8')).join('\n');
   const abap = fs.existsSync(m.file) ? fs.readFileSync(m.file,'utf8') : '';

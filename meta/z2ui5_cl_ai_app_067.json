@@ -10,6 +10,7 @@
     "note": "control_by_id toggleBy anchored to the button"
   },
   "status": "generated",
+  "checked": null,
   "deviations": [
     {
       "type": "POST_171",

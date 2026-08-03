@@ -37,9 +37,9 @@ reads the files directly. **Read the matching guide BEFORE starting the task**
 | Run or debug the e2e smoke (Playwright) | `.claude/skills/e2e-debugging/SKILL.md` |
 
 **Large files — grep them, never read them whole:** `api.md` (~316 KB
-generated table), `STATUS-history.md` (~198 KB journal), `CAPABILITIES.md`
+generated table), `STATUS-history.md` (~228 KB journal), `CAPABILITIES.md`
 (~45 KB — grep for the feature row), `scripts/e2e-smoke.mjs` (~80 KB),
-`scripts/generate-overview.mjs` (~54 KB),
+`scripts/generate-overview.mjs` (~58 KB),
 `src/z2ui5_cl_ai_app_overview.clas.abap` (generated).
 
 ---
@@ -107,7 +107,8 @@ picked for a new idiom, never a near-duplicate. The full planning rules
 The pipeline (run by a coding agent):
 
 1. **Read** — clone [OpenUI5](https://github.com/SAP/openui5), scan every demo
-   kit sample at `src/<library>/test/<library>/demokit/sample/<Name>/`.
+   kit sample at `src/<library>/test/<library path>/demokit/sample/<Name>/`
+   (second segment with dots as slashes, e.g. `src/sap.tnt/test/sap/tnt/…`).
 2. **Generate** — rebuild each sample 1:1 as an abap2UI5 app (a class
    implementing `z2ui5_if_app`), filed by library under `src/`.
 3. **Store templates** — keep the untouched original UI5 JS/XML templates in the
@@ -249,7 +250,7 @@ source of truth:
                "event_t_arg": true },           // passes event args via t_arg?
   "status":  "generated",                       // generated|reviewed|checked
   "checked": { "date": "2026-07-15", "note": "verified in a running system - ..." },
-                                                // ^ omit "checked" entirely while status is generated/reviewed
+                                                // ^ "checked": null while status is generated/reviewed
   "deviations": [ { "type": "IMPROVISED", "what": "..." } ]
 }
 ```
@@ -261,8 +262,9 @@ source of truth:
   directly in the sidecar; `reviewed` is a manual promotion too. (There is no
   `golden` status — the category was retired; former golden ports are plain
   `checked`, and any port may be refactored to the current conventions.)
-- The abapGit `<DESCRIPT>` follows `<library> - <short description>`, truncated
-  to 60 chars — the form `scaffold.mjs` emits (e.g. `sap.ui.unified - CurrencyInTable`).
+- The abapGit `<DESCRIPT>` follows `<library> - <short description>`, kept
+  within ABAP's 60-char limit — the form `scaffold.mjs` emits (e.g.
+  `sap.ui.unified - CurrencyInTable`).
   There is **no canonical description string offline** (`universe.json` carries
   none), so the scaffolder's `<library> - <sample name>` default is acceptable
   as-is; only improve the trailing text to a human phrase when you know one
@@ -413,9 +415,9 @@ sparse-clone recipe and the type-inference rules are in
 **`.claude/skills/scaffold-a-port/SKILL.md`**.
 
 Artefact regeneration is automated by the tracked **`.githooks/pre-commit`**
-hook: on every commit it regenerates the overview app + coverage docs and
-stages them, so they never drift from `meta/` (which the `meta_valid` CI job
-enforces on PRs). It is enabled with `git config core.hooksPath .githooks`,
+hook: on every commit it regenerates the overview app, the coverage docs and
+the STATUS.md state block and stages them, so they never drift from `meta/`
+(which the `meta_valid` CI job enforces on PRs). It is enabled with `git config core.hooksPath .githooks`,
 which `npm ci` / `npm install` runs automatically via the `prepare` script.
 
 ### abapGit file format (all serialized files)
