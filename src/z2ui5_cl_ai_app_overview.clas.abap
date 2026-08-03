@@ -2355,6 +2355,28 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         post171 = `the NotificationList container control (since UI5 1.90) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.90 to render it (control-level, invisible to the member-level` &&
                  ` property gate).` ) ).
 
+    lv_text1 = `POST-1.71: sap.m.NotificationList (control since UI5 1.90) is the container the sample binds its groups to and is kept 1:1, like the other notification ports (076/077). templateShareable: true is a` &&
+               ` binding-info parameter, not a control member, so no gate can see it - it is kept verbatim on all four aggregation bindings and declared here by policy (apps 264/265 precedent). The app needs a UI5` &&
+               ` release >= 1.90. // NOTE: three levels of bound aggregation, which is what the sample is about: NotificationList.items over the groups, NotificationListGroup.items over that group's items, and` &&
+               ` buttons over the group's and the item's own button rows. The ABAP model mirrors that as nested tables (ty_t_group > groupitems ty_t_item > itembuttons ty_t_button), and every relative binding inside` &&
+               ` a template addresses its own row. // NOTE: four of the five controller handlers compose their toast from the pressed control and stay on the client, roundtrip-free: onGroupClose and onListItemPress` &&
+               ` with ${$source>/title}, onGroupButtonPress and onItemButtonPress with ${$source>/text}. Only onItemClose needs the backend, because it REMOVES the row (oList.removeItem): the item's own title travels`.
+    lv_text1 = lv_text1 && ` as a $-prefixed event arg and the handler deletes that row from every group before pushing the model back. The titles are unique in this data; a real app would carry a key. // IMPROVISED: the` &&
+               ` priorityFormatter is dropped. It maps a value that is not a sap.ui.core.Priority to Priority.None - presentation logic that the thin-frontend rule puts in the backend, and the mock's priorities` &&
+               ` (High, Low) are all valid anyway, so the port binds PRIORITY directly. A model_init that seeded an unknown value would have to map it there. // NOTE: the item rows bind datetime={CREATIONDATE}, but` &&
+               ` only the GROUPS carry a creationDate in the mock and the group template does not bind it - so the field exists on the item row type and stays empty on both items, exactly as the original renders it.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.NotificationListGroup`           name = `NotificationListGroupBindings`       class = `z2ui5_cl_ai_app_291` path = `src/01/b23/z2ui5_cl_ai_app_291.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.34`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `sap.m.NotificationList (control since UI5 1.90) is the container the sample binds its groups to and is kept 1:1, like the other notification ports (076/077). templateShareable: true is a binding-info` &&
+                 ` parameter, not a control member, so no gate can see it - it is kept verbatim on all four aggregation bindings and declared here by policy (apps 264/265 precedent). The app needs a UI5 release >=` &&
+                 ` 1.90.` ) ).
+
     lv_text1 = `IMPROVISED: the notifications are static (not model-bound), so onItemClose's client-side removeItem is not mirrored (close fires a toast only); onErrorPress's setProcessingMessage MessageStrip on the` &&
                ` item is shown as a toast. // POST-1.71: the NotificationList container control (since UI5 1.90) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.90 to render it` &&
                ` (control-level, invisible to the member-level property gate). // NOTE: the sample's demo-kit authorPicture image paths (test-resources/sap/m/images/Woman_04.png, headerImg2.jpg, female_BaySu.jpg) are` &&

@@ -7,6 +7,30 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## Batch b23 (291) — three levels of bound aggregation (2026-08-02)
+
+**291 `sap.m.sample.NotificationListGroupBindings`** (`sap.m.NotificationListGroup`).
+The deepest binding structure in the corpus so far: `NotificationList.items`
+over the groups, `NotificationListGroup.items` over that group's items, and
+`buttons` over the group's *and* the item's own button rows — four bound
+aggregations, three levels. The ABAP model mirrors it as nested tables
+(`ty_t_group` > `groupitems` > `itembuttons`), and every relative binding
+inside a template addresses its own row.
+
+Four of the five handlers compose their toast from the pressed control and
+stay on the client, roundtrip-free (`${$source>/title}`, `${$source>/text}`).
+Only `onItemClose` needs the backend, because it **removes a row**: the item's
+own title travels as a `$`-prefixed event arg and the handler deletes that row
+from every group before pushing the model back. Worth noting for the next port
+of this shape — a close/remove handler is the one member of the toast family
+that cannot stay on the client, because the model is the truth.
+
+`templateShareable: true` is kept verbatim on all four bindings and declared
+by policy: it is a binding-info parameter, not a control member, so no gate
+can ever see it (apps 264/265 precedent). `priorityFormatter` is dropped and
+declared — mapping an unknown value to `Priority.None` is presentation logic
+that belongs in `model_init`, and the mock's priorities are all valid anyway.
+
 ## Batch b22 (288/289/290) — a new control, and randomness as a backend decision (2026-08-02)
 
 - **288 `sap.m.sample.PDFViewerEmbedded`** (`sap.m.PDFViewer`) — a control the
