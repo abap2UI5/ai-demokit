@@ -18,7 +18,7 @@
     "e2e:build": "node scripts/e2e-build.mjs",
     "e2e:serve": "node scripts/node-serve.mjs",
     "e2e": "node scripts/e2e-smoke.mjs --strict",
-    "syfixes": "find . -type f -name '*.abap' -exec sed -i -e 's/ RAISE EXCEPTION TYPE cx_sy_itab_line_not_found/ ASSERT 1 = 0/g' {} + ",
+    "syfixes": "find src -type f -name '*.abap' -exec sed -i -e 's/ RAISE EXCEPTION TYPE cx_sy_itab_line_not_found/ ASSERT 1 = 0/g' {} + ",
     "abaplintpathfix": "sed -i 's|\"files\": \"/\\.\\.\\/\\.\\.\\/src\\/\\*\\*\\/\\*\\.\\*\"|\"files\": \"/src/**/*.*\"|g' abaplint.jsonc",
     "downport": "abaplint --fix .github/abaplint/abap_702.jsonc && npm run syfixes && cp -f .github/abaplint/abap_702.jsonc abaplint.jsonc && npm run abaplintpathfix"
   },
@@ -28,7 +28,7 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/abap2UI5/abap2UI5/issues"
+    "url": "https://github.com/abap2UI5/ai-demokit/issues"
   },
   "homepage": "https://github.com/abap2UI5/ai-demokit#readme",
   "devDependencies": {

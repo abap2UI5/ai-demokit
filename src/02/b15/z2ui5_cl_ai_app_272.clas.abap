@@ -428,10 +428,20 @@ CLASS z2ui5_cl_ai_app_272 IMPLEMENTATION.
         " onReset: hide the messages and setData({}) - every bound field back
         " to its initial (empty) value
         hide_messages( ).
-        CLEAR: billingname, billingstreet, billingstreetnumber, billingzipcode,
-               billingcity, billingcountry, discountcode, creditcardvendor,
-               creditcardnumber, creditcardmonth, creditcardyear,
-               creditcardvalidationcode, onlinemail, onlinetwitter.
+        billingname              = VALUE #( ).
+        billingstreet            = VALUE #( ).
+        billingstreetnumber      = VALUE #( ).
+        billingzipcode           = VALUE #( ).
+        billingcity              = VALUE #( ).
+        billingcountry           = VALUE #( ).
+        discountcode             = VALUE #( ).
+        creditcardvendor         = VALUE #( ).
+        creditcardnumber         = VALUE #( ).
+        creditcardmonth          = VALUE #( ).
+        creditcardyear           = VALUE #( ).
+        creditcardvalidationcode = VALUE #( ).
+        onlinemail               = VALUE #( ).
+        onlinetwitter            = VALUE #( ).
         client->message_toast_display( `Reset triggered` ).
         client->view_model_update( ).
 

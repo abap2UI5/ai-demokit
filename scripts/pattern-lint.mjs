@@ -343,7 +343,7 @@ const RULES = [
       const out = [];
       if (!/INTERFACES\s+z2ui5_if_app/i.test(content)) return out; // ports only
       if (!/->_event\(/.test(content)) return out;
-      if (/check_on_event|on_event/.test(content)) return out;
+      if (/on_event/.test(content)) return out; // matches check_on_event too
       const m = content.match(/->_event\(/);
       out.push({ line: lineOf(content, m.index), text: '_event( ) wired but no on_event/check_on_event in the class' });
       return out;
@@ -426,20 +426,11 @@ function grepLines(re) {
   };
 }
 
-function walk(dir, out = []) {
+function walk(dir, ext = '.clas.abap', out = []) {
   for (const name of fs.readdirSync(dir)) {
     const full = path.join(dir, name);
-    if (fs.statSync(full).isDirectory()) walk(full, out);
-    else if (full.endsWith('.clas.abap')) out.push(full);
-  }
-  return out;
-}
-
-function walkXml(dir, out = []) {
-  for (const name of fs.readdirSync(dir)) {
-    const full = path.join(dir, name);
-    if (fs.statSync(full).isDirectory()) walkXml(full, out);
-    else if (full.endsWith('.xml')) out.push(full);
+    if (fs.statSync(full).isDirectory()) walk(full, ext, out);
+    else if (full.endsWith(ext)) out.push(full);
   }
   return out;
 }
@@ -453,7 +444,7 @@ const seenBaseline = new Set();
 // crept in via agent-written files; human fix PR #38, 2026-07-27). The
 // scaffolder and generate-overview both emit the BOM; this gates hand-written
 // ones. Checked bytewise, outside the .clas.abap rule loop.
-for (const f of walkXml(SRC).sort()) {
+for (const f of walk(SRC, '.xml').sort()) {
   const rel = path.relative(ROOT, f).split(path.sep).join('/');
   const b = fs.readFileSync(f);
   if (!(b[0] === 0xEF && b[1] === 0xBB && b[2] === 0xBF)) {
@@ -492,5 +483,5 @@ for (const key of BASELINE) {
 }
 
 console.log(`\npattern-lint: ${errors} error(s), ${warns} warning(s), ` +
-  `${seenBaseline.size}/${BASELINE.size} baseline entrie(s) matched.`);
+  `${seenBaseline.size}/${BASELINE.size} baseline entries matched.`);
 process.exit(errors ? 1 : 0);

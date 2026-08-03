@@ -34,12 +34,6 @@ import { fileURLToPath } from 'url';
 export const abapName = (key) =>
   String(key).replace(/[^A-Za-z0-9_]/g, '').toLowerCase().slice(0, 30);
 
-// infer an ABAP scalar type from the first non-null value seen for each key
-const inferType = (v) =>
-  typeof v === 'boolean' ? 'abap_bool'
-    : typeof v === 'number' && Number.isInteger(v) ? 'i'
-      : 'string';
-
 export function inferFields(rows) {
   const keys = [];
   const seen = new Set();
@@ -142,7 +136,8 @@ function parseFieldsSpec(spec, rows) {
   return spec.split(',').map((token) => {
     const [json, name, type] = token.split(':');
     const inferred = type || inferTypeForKey(rows, json);
-    if (!type && inferred === 'string' && rows.some((r) => typeof (r && r[json]) === 'number')) {
+    if (!type && inferred === 'string'
+      && rows.some((r) => typeof (r && r[json]) === 'number' && !Number.isInteger(r[json]))) {
       process.stderr.write(`json-to-abap: WARNING — column '${json}' has decimal value(s), emitted as string literals to avoid truncation; declare it TYPE p LENGTH n DECIMALS m.\n`);
     }
     return { json, abap: name ? abapName(name) : abapName(json), type: inferred };
@@ -151,7 +146,7 @@ function parseFieldsSpec(spec, rows) {
 
 function main() {
   const opts = parseArgs(process.argv.slice(2));
-  if (!opts.file) {
+  if (!opts.file || !Number.isFinite(opts.indent) || (opts.limit !== undefined && !Number.isFinite(opts.limit))) {
     console.error('usage: node scripts/json-to-abap.mjs <file.json> [--path p] [--fields spec] [--var name] [--limit n] [--indent n]');
     process.exit(2);
   }

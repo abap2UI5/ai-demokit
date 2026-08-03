@@ -5,9 +5,8 @@
   "file": "src/01/b16/z2ui5_cl_ai_app_160.clas.abap",
   "batch": "b16",
   "audit": {
-    "frontend_action": true,
-    "event_t_arg": false,
-    "note": "link presses show a static client-composed toast (control_global MESSAGE_TOAST.show) - see the IMPROVISED deviation, flagged for rework to message_box_display"
+    "frontend_action": false,
+    "event_t_arg": false
   },
   "status": "generated",
   "checked": null,

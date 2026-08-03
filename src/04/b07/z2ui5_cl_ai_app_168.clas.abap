@@ -8,7 +8,6 @@ CLASS z2ui5_cl_ai_app_168 DEFINITION PUBLIC.
         text TYPE string,
         key  TYPE string,
       END OF ty_city.
-    DATA cities TYPE STANDARD TABLE OF ty_city WITH EMPTY KEY.
     TYPES:
       BEGIN OF ty_prod,
         title        TYPE string,
@@ -16,6 +15,7 @@ CLASS z2ui5_cl_ai_app_168 DEFINITION PUBLIC.
         revenue      TYPE string,
         statusschema TYPE string,
       END OF ty_prod.
+    DATA cities TYPE STANDARD TABLE OF ty_city WITH EMPTY KEY.
     DATA productitems TYPE STANDARD TABLE OF ty_prod WITH EMPTY KEY.
     DATA snap_to_row         TYPE abap_bool.
     DATA allow_dense_fill    TYPE abap_bool.

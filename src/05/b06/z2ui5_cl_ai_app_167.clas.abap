@@ -20,9 +20,6 @@ CLASS z2ui5_cl_ai_app_167 DEFINITION PUBLIC.
         selectable TYPE abap_bool,
         items      TYPE ty_child_tt,
       END OF ty_nav.
-    DATA navigation     TYPE STANDARD TABLE OF ty_nav WITH EMPTY KEY.
-    DATA sideexpanded   TYPE abap_bool.
-    DATA toggle_tooltip TYPE string.
     TYPES:
       BEGIN OF ty_fixed,
         title        TYPE string,
@@ -31,6 +28,9 @@ CLASS z2ui5_cl_ai_app_167 DEFINITION PUBLIC.
         design       TYPE string,
         selectable   TYPE abap_bool,
       END OF ty_fixed.
+    DATA navigation     TYPE STANDARD TABLE OF ty_nav WITH EMPTY KEY.
+    DATA sideexpanded   TYPE abap_bool.
+    DATA toggle_tooltip TYPE string.
     DATA fixednavigation TYPE STANDARD TABLE OF ty_fixed WITH EMPTY KEY.
 
     " NavigationListItem.selectable is {= ${items}.length > 3} in the original;

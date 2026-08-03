@@ -3,7 +3,7 @@
  * data-fidelity — seeded asset values must match the archived sample mocks.
  *
  * WHY: no other gate compares DATA. structural-diff ignores model values,
- * render-smoke mocks the model — so a port that seeds a wrong asset value
+ * the view-gates render gate mocks the model — so a port that seeds a wrong asset value
  * renders green everywhere and only a human audit catches it. That class of
  * bug happened three times before the 2026-07-24 audit swept it (apps 162,
  * 142, 119: values copied from the nearest NEIGHBOUR port instead of the
@@ -256,10 +256,14 @@ for (const mf of fs.readdirSync(META).sort()) {
     if (path.extname(f) !== '.json' || f.endsWith('manifest.json')) continue;
     try { corpusDocs.push({ name: path.basename(f, '.json'), doc: JSON.parse(fs.readFileSync(f, 'utf8')) }); } catch { /* not JSON */ }
   }
+  // "no own JSON docs" must be decided BEFORE the loop below appends the
+  // shared mocks — reading corpusDocs.length inside it made the fallback add
+  // exactly one arbitrary mock (whichever came first in readdirSync order)
+  const hadOwnDocs = corpusDocs.length > 0;
   if (fs.existsSync(MOCK)) {
     for (const mock of fs.readdirSync(MOCK)) {
       if (!mock.endsWith('.json')) continue;
-      if (corpusTexts.some((t) => t.includes(mock)) || corpusDocs.length === 0) {
+      if (corpusTexts.some((t) => t.includes(mock)) || !hadOwnDocs) {
         try { corpusDocs.push({ name: path.basename(mock, '.json'), doc: JSON.parse(fs.readFileSync(path.join(MOCK, mock), 'utf8')) }); } catch { /* */ }
       }
     }

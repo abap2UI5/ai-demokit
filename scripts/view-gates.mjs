@@ -39,6 +39,10 @@ const RENDER = !process.argv.includes('--no-render');
 const ONLY = process.argv.includes('--only')
   ? process.argv[process.argv.indexOf('--only') + 1]
   : null;
+if (process.argv.includes('--only') && !ONLY) {
+  console.error('view-gates: --only needs a class name (e.g. --only z2ui5_cl_ai_app_001)');
+  process.exit(2);
+}
 
 /** The version floor every port is held to. */
 const MIN_UI5 = '1.71';

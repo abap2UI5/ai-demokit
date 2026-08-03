@@ -70,8 +70,8 @@ that is the actual porting work):
   a display-only value bound into a text template (keeps the exact decimals,
   e.g. dimensions `40.8`). Do **not** leave a decimal column as `TYPE i`.
 
-The last two are automated by the tracked **`.githooks/pre-commit`** hook: on
-every commit it regenerates the overview app + coverage docs and stages them,
-so they never drift from `meta/` (which the `meta_valid` CI job enforces on
-PRs). It is enabled with `git config core.hooksPath .githooks`, which
+Artefact regeneration is automated by the tracked **`.githooks/pre-commit`**
+hook: on every commit it regenerates the overview app, the coverage docs and
+the STATUS.md state block and stages them, so they never drift from `meta/`
+(which the `meta_valid` CI job enforces on PRs). It is enabled with `git config core.hooksPath .githooks`, which
 `npm ci` / `npm install` runs automatically via the `prepare` script.

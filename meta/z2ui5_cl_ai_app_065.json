@@ -5,7 +5,7 @@
   "file": "src/01/b08/z2ui5_cl_ai_app_065.clas.abap",
   "batch": "b08",
   "audit": {
-    "frontend_action": false,
+    "frontend_action": true,
     "event_t_arg": false,
     "note": "custom messages authored through the z2ui5.cc.MessageManager companion (items table)"
   },

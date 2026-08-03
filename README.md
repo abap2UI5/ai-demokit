@@ -34,7 +34,8 @@ A coding agent runs the pipeline:
 
 1. **Read** — clone [OpenUI5](https://github.com/SAP/openui5) and scan every
    demo kit sample of the covered libraries
-   (`src/<library>/test/<library>/demokit/sample/<Name>/`).
+   (`src/<library>/test/<library path>/demokit/sample/<Name>/`, second segment
+   with dots as slashes, e.g. `src/sap.tnt/test/sap/tnt/…`).
 2. **Generate** — rebuild each sample 1:1 as an abap2UI5 app (`z2ui5_if_app`),
    filed by library under `src/<NN>` (`src/01` = `sap.m`, see AGENTS §3) in
    batch subpackages (`b01`, `b02`, …) — one batch of related samples per
@@ -170,7 +171,7 @@ CI enforces this on every change:
 | `ABAP_STANDARD`  | `abaplint ./abaplint.jsonc` (syntax `v750`)                    |
 | `ABAP_CLOUD`     | `abaplint .github/abaplint/abap_cloud.jsonc` (syntax `Cloud`)  |
 | `ABAP_702`       | `npm run downport` → `abaplint .github/abaplint/abap_702.jsonc` |
-| `checks`         | `pattern-lint` (distilled lessons), `structural-diff --strict` (port vs original view incl. binding values, undeclared deviations fail), `view-gates` (abap2UI5-linter: UI5 metadata, builder structure, headless `XMLView.create` per port), `validate-meta` + overview/coverage sync |
+| `checks`         | `pattern-lint` (distilled lessons), `structural-diff --strict` (port vs original view incl. binding values, undeclared deviations fail), `view-gates` (abap2UI5-linter: UI5 metadata, builder structure, headless `XMLView.create` per port), `data-fidelity` (seeded values vs the archived mocks), `validate-meta` + overview/coverage sync |
 
 Every port also carries a machine-readable sidecar `meta/<class>.json`
 (sample, status, declared deviations) — the source of truth the overview app,

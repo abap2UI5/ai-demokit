@@ -49,25 +49,25 @@ if (!input) {
 // ---------- resolve the sample -> { lib, name, entity } ----------
 const universe = JSON.parse(fs.readFileSync(path.join(UI5, 'universe.json'), 'utf8'));
 function lookupUniverse(name, lib) {
+  // collect ALL matches — a bare name existing in two libs must error as
+  // ambiguous, not silently scaffold against whichever lib comes first
+  const hits = [];
   for (const l of universe.libs) {
     if (lib && l.lib !== lib) continue;
     const s = l.samples.find((s) => s.name.toLowerCase() === name.toLowerCase());
-    if (s) return { lib: l.lib, name: s.name, entity: s.entity };
+    if (s) hits.push({ lib: l.lib, name: s.name, entity: s.entity });
   }
-  return null;
+  return hits;
 }
 function resolveSample(str) {
   let lib, name;
   if (str.includes('.sample.')) { lib = str.slice(0, str.indexOf('.sample.')); name = str.slice(str.indexOf('.sample.') + '.sample.'.length); }
   else if (str.includes('/')) { [lib, name] = str.split('/'); }
   else { name = str; }
-  const u = lookupUniverse(name, lib);
-  if (u) return u;
+  const hits = lookupUniverse(name, lib);
+  if (hits.length === 1) return hits[0];
+  if (hits.length > 1) { console.error(`ambiguous "${name}" — qualify with a lib:\n  ${hits.map((h) => `${h.lib}/${h.name}`).join('\n  ')}`); process.exit(1); }
   if (lib) return { lib, name, entity: `${lib}.${name}` }; // explicit lib, not in universe
-  // bare name, not found — collect candidates for a helpful error
-  const cands = [];
-  for (const l of universe.libs) for (const s of l.samples) if (s.name.toLowerCase() === name.toLowerCase()) cands.push(`${l.lib}/${s.name}`);
-  if (cands.length) { console.error(`ambiguous "${name}" — qualify with a lib:\n  ${cands.join('\n  ')}`); process.exit(1); }
   console.error(`sample "${name}" not found in ui5/universe.json — pass a qualified <lib>/<name>`); process.exit(1);
 }
 const { lib, name, entity } = resolveSample(input);
@@ -97,7 +97,7 @@ for (const r of SRC_ROOTS) {
   if (fs.existsSync(cand)) { templateDir = cand; break; }
 }
 if (!templateDir) {
-  console.error(`template not found for ${lib}/${name}. Looked under:\n  ${SRC_ROOTS.map((r) => path.join(r, 'src', lib, 'test', libPath, 'demokit', 'sample', name)).join('\n  ')}\nSet OPENUI5_SRC to your OpenUI5 checkout.`);
+  console.error(`template not found for ${lib}/${name}. Looked under:\n  ${SRC_ROOTS.map((r) => path.join(r, 'src', lib, 'test', libPath, 'demokit', 'sample', namePath)).join('\n  ')}\nSet OPENUI5_SRC to your OpenUI5 checkout.`);
   process.exit(1);
 }
 

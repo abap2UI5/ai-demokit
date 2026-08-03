@@ -17,9 +17,9 @@ overview (`z2ui5_cl_ai_app_overview`) instead of the framework home page.
 
 ## How it works
 
-1. **assemble** — clone the abap2UI5 framework into `src/`, then copy this
-   repo's `../src` (all 136 ports + the `z2ui5_cl_ai_xml` builder + the
-   overview) into `src/ai-demokit/`.
+1. **assemble** — clone the abap2UI5 framework into `src/` (which brings the
+   `z2ui5_cl_ai_xml` builder along), then copy this repo's `../src` (every
+   `z2ui5_cl_ai_app_*` port + the overview) into `src/ai-demokit/`.
 2. **downport** — copy `src/` → `downport/` and `abaplint --fix` it to v702
    (the transpiler cannot take modern ABAP directly).
 3. **transpile** — `@abaplint/transpiler` emits `output/*.mjs` (+ the
@@ -40,7 +40,7 @@ Then commit the updated `../docs`. Test locally before committing (the
 `document.write` boot does not work with webpack-dev-server HMR):
 
 ```bash
-npm run serve:build   # serves ../build on http://localhost:8081
+npm run serve:build   # serves web/build on http://localhost:8081
 ```
 
 Note: the served frontend loads OpenUI5 from `https://sdk.openui5.org` (CDN),
@@ -72,10 +72,10 @@ the patch and this section once it is merged there.
 ## Known limitation
 
 A few ports drive behaviour through backend roundtrips (toggles, mode
-switches, toasts) — these work in-browser. Interactions that depend on the
-b12 split-container navigation methods need the matching frontend whitelist
-in the framework; the daily upstream framework clone may lag those until they
-are merged. Initial render of every port is unaffected.
+switches, toasts) — these work in-browser. Interactions that depend on
+recently whitelisted frontend methods need a framework clone that already
+carries them (the split-container navigation set was merged upstream as
+abap2UI5 #2470, 2026-07-24). Initial render of every port is unaffected.
 
 A round-trip is also **noticeably slower here than on a real server**: the
 transpiled `CL_IXML` re-parses the persisted draft on every request and its

@@ -126,6 +126,14 @@ for (const sf of sidecars.sort()) {
     else if (path.basename(abs, '.clas.abap') !== m.class) err(`${sf}: file does not match class`);
     const batch = m.file.match(/^src\/[^/]+\/(b\d+)\//)?.[1] ?? null;
     if (batch !== m.batch) err(`${sf}: batch "${m.batch}" does not match path ("${batch}")`);
+    // audit.frontend_action must match the class — a 2026-08-03 sweep found
+    // 24 drifted flags (both directions), so the fact is now derived-checked
+    if (fs.existsSync(abs) && typeof m.audit?.frontend_action === 'boolean') {
+      const uses = /_event_client\(|follow_up_action\(/.test(fs.readFileSync(abs, 'utf8'));
+      if (m.audit.frontend_action !== uses) {
+        err(`${sf}: audit.frontend_action is ${m.audit.frontend_action} but the class ${uses ? 'DOES' : 'does NOT'} call _event_client/follow_up_action`);
+      }
+    }
   }
   if (m.sample) {
     const lib = m.sample.slice(0, m.sample.indexOf('.sample.'));
