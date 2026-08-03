@@ -2,7 +2,7 @@ name: ABAP_STANDARD
 
 on:
   pull_request:
-  
+
 permissions:
   contents: read
 

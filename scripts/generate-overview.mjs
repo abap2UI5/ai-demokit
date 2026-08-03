@@ -70,7 +70,7 @@ const OPENUI5_LIBS = fs.existsSync(OPENUI5_PKG) ? fs.readdirSync(OPENUI5_PKG) : 
 
 // scope fallback (same as generate-coverage.mjs, pr/scope-since-from-source):
 // the universe snapshot carries since:null for most controls, so fill the
-// nulls from the control-level @since/@deprecated that generate-properties.mjs
+// nulls from the control-level @since/@deprecated that the linter's generate-metadata.mjs
 // parses out of the OpenUI5 sources — the overview's Since column and the
 // deprecation strikethrough then match the authoritative scope verdict.
 for (const s of uniMap.values()) {

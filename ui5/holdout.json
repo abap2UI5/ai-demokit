@@ -1,5 +1,5 @@
 {
- "comment": "Hold-out set (TRAINING.md): these samples are NEVER used as prompt references and are kept out of regular batch planning - they are regenerated from scratch with the current rules/references to measure the generator (CI-green on first try, structural-diff violations, review findings per app). Ported hold-out apps must not be promoted to golden.",
+ "comment": "Hold-out set (TRAINING.md): these samples are NEVER used as prompt references and are kept out of regular batch planning - they are regenerated from scratch with the current rules/references to measure the generator (CI-green on first try, structural-diff violations, review findings per app). Ported hold-out apps must not be promoted to checked.",
  "samples": [
   "sap.m.sample.BusyIndicator",
   "sap.m.sample.Label",

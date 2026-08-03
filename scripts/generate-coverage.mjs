@@ -105,7 +105,7 @@ const scopeOf = (lib, s) =>
 // has no generated api.json), which made scopeOf blind — sinceLeq171(null)
 // passed controls newer than 1.71 (sap.f.SidePanel @1.107 shipped as app 136
 // that way). ui5/properties.json now carries each control's class-level
-// @since/@deprecated parsed from the OpenUI5 sources (generate-properties.mjs);
+// @since/@deprecated parsed from the OpenUI5 sources (the linter's generate-metadata.mjs);
 // fill the snapshot's nulls from it so the scope verdict matches
 // scripts/scope-of.mjs offline.
 const PROPS_FILE = path.join(ROOT, 'ui5', 'properties.json');
@@ -494,7 +494,7 @@ const block = `${START}\n\n${summaryLines().join('\n').trimEnd()}\n\n${END}`;
 readme = readme.replace(new RegExp(`${START}[\\s\\S]*?${END}`), () => block);
 
 // README — splice the generation prompt from its single source
-// (scripts/generation-prompt.txt; AGENTS §5 stays the authoritative long form)
+// (scripts/generation-prompt.txt; the port-a-sample guide stays the authoritative long form)
 const PROMPT_START = '<!-- prompt:start -->';
 const PROMPT_END = '<!-- prompt:end -->';
 const promptFile = path.join(ROOT, 'scripts', 'generation-prompt.txt');
