@@ -5,19 +5,19 @@
   "file": "src/01/b04/z2ui5_cl_ai_app_043.clas.abap",
   "batch": "b04",
   "audit": {
-    "frontend_action": true,
-    "event_t_arg": false,
-    "note": "follow_up_action( cs_event-control_by_id, method setExpanded ) after the TOOLBAR_PRESSED round-trip"
+    "frontend_action": false,
+    "event_t_arg": false
   },
-  "status": "checked",
-  "checked": {
-    "date": "2026-07-20",
-    "note": "verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed)"
-  },
+  "status": "generated",
+  "checked": null,
   "deviations": [
     {
       "type": "NOTE",
-      "what": "the original controller toggles the third panel imperatively (onOverflowToolbarPress -> oPanel.setExpanded(!oPanel.getExpanded())). Reproduced 1:1 since the whitelist extension (2026-07-18, see pr/control-call-whitelist): the TOOLBAR_PRESSED handler inverts a server-side mirror of the state and calls the whitelisted setExpanded on the panel via client->follow_up_action( cs_event-control_by_id ) - the view no longer carries the improvised two-way `expanded` binding, matching the original view.xml exactly."
+      "what": "the original controller toggles the third panel imperatively (onOverflowToolbarPress -> oPanel.setExpanded(!oPanel.getExpanded())). The port binds Panel.expanded two-way instead and only flips the flag server-side, per the prefer-a-bindable-property rule: the state then lives in the model, where it survives a view rebuild and a draft restore, and the control's own expand/collapse writes back into it rather than drifting from a server-side mirror. This REVERSES the 2026-07-18 decision recorded here before (which had replaced the binding with the whitelisted setExpanded to 'match the original view.xml exactly'); an added attribute is not a structural diff, and the rulebook has since settled the other way. The linter rule settable-property-via-action now gates it corpus-wide."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "the two-way expanded binding is not live-verified. The imperative form it replaces WAS: human live check 2026-07-20 following the interaction checklist, all listed checks passed - kept here as context. A fresh live run (toolbar press expands and collapses the third panel, and a manual expand/collapse of the panel header survives the next round-trip) restamps this port to checked."
     }
   ]
 }

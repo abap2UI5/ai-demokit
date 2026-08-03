@@ -5,7 +5,7 @@
   "file": "src/01/b11/z2ui5_cl_ai_app_092.clas.abap",
   "batch": "b11",
   "audit": {
-    "frontend_action": true,
+    "frontend_action": false,
     "event_t_arg": true
   },
   "status": "generated",
@@ -13,7 +13,7 @@
   "deviations": [
     {
       "type": "POST_171",
-      "what": "Table.autoPopinMode (since 1.76), Table.popinChanged (since 1.77) and Column.importance (since 1.76), the core of the auto-pop-in demo, are kept 1:1; needs UI5 >= 1.77."
+      "what": "Table.autoPopinMode (since 1.76), Table.hiddenInPopin (since 1.77), Table.popinChanged (since 1.77) and Column.importance (since 1.76), the core of the auto-pop-in demo, are kept 1:1; needs UI5 >= 1.77."
     },
     {
       "type": "IMPROVISED",
@@ -26,6 +26,10 @@
     {
       "type": "NOTE",
       "what": "onPopinChanged reproduced 1:1 since 2026-07-30: the popinChanged wire is a roundtrip-free client-composed toast 'Number of hidden pop-ins: {0}' filled by ${$parameters>/hiddenInPopin}.length (the event parameter array's length, exactly the original's aHiddenInPopin.length) - the earlier static 'Pop-in layout changed' round-trip toast faked the value. The hiddenInPopin event parameter is part of the POST_171-declared popinChanged event (since 1.77)."
+    },
+    {
+      "type": "NOTE",
+      "what": "the original's setHiddenInPopin(oMultiComboBox.getSelectedKeys()) is a binding here: hiddenInPopin is a bindable property and the MultiComboBox's selectedKeys already IS that Priority array, so both bind the same field T_HIDDEN and the selectionFinish handler only pushes the model. The JSON array the port used to build by hand for the frontend action is gone (prefer-a-bindable-property rule, linter rule settable-property-via-action)."
     }
   ]
 }

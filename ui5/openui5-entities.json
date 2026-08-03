@@ -1,13 +1,13 @@
 {
   "note": "OpenUI5 entities with no ui5/properties.json entry (statics/helpers, sap.ui.model types, CSS-class doc entities). Read by generate-overview.mjs so the ui5_only flag is deterministic without node_modules. Never hand-edit - rebuild with: node scripts/generate-overview.mjs --update-entities",
   "entities": [
-    "sap.m.HeaderContainer",
     "sap.m.MessageBox",
     "sap.m.MessageToast",
     "sap.m.URLHelper",
     "sap.ui.core.BusyIndicator",
     "sap.ui.core.ContainerPadding",
     "sap.ui.core.StandardMargins",
+    "sap.ui.core.theming",
     "sap.ui.core.theming.Parameters",
     "sap.ui.integration.Card",
     "sap.ui.model.Filter",

@@ -26,6 +26,10 @@
     {
       "type": "LIVE_TEST",
       "what": "SplitApp as the root view plus the control_by_id navigation (to/toDetail/toMaster/backDetail/backMaster/setMode) need an in-system check — machine gates only verify view validity, not the runtime navigation roundtrip."
+    },
+    {
+      "type": "NOTE",
+      "what": "the mode RadioButtonGroup's handler calls oSplitApp.setMode( ) in the original; SplitApp.mode is a bindable property, so the port binds it two-way (added attribute, no structural diff) and the handler only assigns the chosen mode - the prefer-a-bindable-property rule, gated by the linter rule settable-property-via-action. The state then survives a view rebuild instead of living only in the control."
     }
   ]
 }

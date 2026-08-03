@@ -26,12 +26,6 @@
    "reason": "KEEP permanently (decided 2026-07-30, same mandate; revertible): sap.f.ProductSwitch is @since 1.72 - one minor release past the 1.71 line, the most borderline of the six; the port is the only ProductSwitch coverage."
   },
   {
-   "sample": "sap.f.sample.SemanticPage",
-   "class": "z2ui5_cl_ai_app_166",
-   "decided": { "scope": "deprecated", "since": "1.46.0", "deprecated": "1.54" },
-   "reason": "KEEP permanently (decided 2026-07-30, same mandate; revertible): sap.f.semantic.SemanticPage is deprecated since 1.54 yet still widely deployed; the port is the only sap.f semantic-page coverage and complements the sap.m.semantic ports 106/107."
-  },
-  {
    "sample": "sap.m.sample.OverflowToolbarTokenizer",
    "class": "z2ui5_cl_ai_app_203",
    "decided": { "scope": "newer", "since": "1.139", "deprecated": null },

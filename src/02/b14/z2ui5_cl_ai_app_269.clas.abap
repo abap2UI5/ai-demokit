@@ -14,6 +14,7 @@ CLASS z2ui5_cl_ai_app_269 DEFINITION PUBLIC.
     DATA t_entrycollection  TYPE STANDARD TABLE OF ty_s_entry WITH EMPTY KEY.
     DATA toggle_enabled     TYPE abap_bool.
     DATA show_side_btn      TYPE abap_bool.
+    DATA show_side_content  TYPE abap_bool VALUE abap_true.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -70,6 +71,7 @@ CLASS z2ui5_cl_ai_app_269 IMPLEMENTATION.
                     )->a( n = `id`                  v = `DynamicSideContent`
                     )->a( n = `class`               v = `sapUiDSCExplored sapUiContentPadding`
                     )->a( n = `containerQuery`      v = `true`
+                    )->a( n = `showSideContent`     v = client->_bind( show_side_content )
                     )->a( n = `sideContentFallDown` v = `BelowM`
                     )->a( n = `breakpointChanged`   v = client->_event( val   = `BREAKPOINT_CHANGED`
                                                                         t_arg = VALUE #( ( `${$parameters>/currentBreakpoint}` ) ) )
@@ -174,18 +176,17 @@ CLASS z2ui5_cl_ai_app_269 IMPLEMENTATION.
 
       WHEN `SIDE_CONTENT_HIDE`.
         " handleSideContentHide: setShowSideContent(false) + re-evaluate the
-        " Open Side Content button
-        client->follow_up_action( val   = client->cs_event-control_by_id
-                                  t_arg = VALUE #( ( `DynamicSideContent` ) ( `setShowSideContent` ) ( `false` ) ) ).
-        show_side_btn = abap_true.
+        " Open Side Content button. showSideContent is a bindable property, so
+        " the flag is bound two-way and only flipped here
+        show_side_content = abap_false.
+        show_side_btn     = abap_true.
         client->view_model_update( ).
 
       WHEN `SIDE_CONTENT_SHOW`.
         " handleSideContentShow: setShowSideContent(true); the button hides
         " itself again because the side content is visible now
-        client->follow_up_action( val   = client->cs_event-control_by_id
-                                  t_arg = VALUE #( ( `DynamicSideContent` ) ( `setShowSideContent` ) ( `true` ) ) ).
-        show_side_btn = abap_false.
+        show_side_content = abap_true.
+        show_side_btn     = abap_false.
         client->view_model_update( ).
     ENDCASE.
 

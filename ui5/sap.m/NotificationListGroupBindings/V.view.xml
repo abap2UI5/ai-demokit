@@ -1,0 +1,55 @@
+<mvc:View
+	controllerName="sap.m.sample.NotificationListGroupBindings.C"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m"
+	class="sapUiBodyBackground sapContrastPlus">
+	<VBox class="sapUiSmallMargin">
+		<NotificationList items="{ path: '/NotificationGroups', templateShareable: true }">
+			<layoutData>
+				<FlexItemData maxWidth="600px" />
+			</layoutData>
+
+			<NotificationListGroup
+				title="{title}"
+				showCloseButton="{showCloseButton}"
+				showEmptyGroup="{showEmptyGroup}"
+				close=".onGroupClose"
+				items="{
+					path: 'groupItems',
+					templateShareable: true
+				}"
+				buttons="{
+					path: 'groupButtons',
+					templateShareable: true
+				}">
+				<buttons>
+					<Button text="{text}" press=".onGroupButtonPress" />
+				</buttons>
+
+				<NotificationListItem
+					title="{title}"
+					description="{description}"
+					showCloseButton="{showCloseButton}"
+					datetime="{creationDate}"
+					unread="{unread}"
+					priority="{
+						path: 'priority',
+						formatter: '.priorityFormatter'
+					}"
+					close=".onItemClose"
+					press=".onListItemPress"
+					authorPicture="{authorPicture}"
+					authorInitials="{authorInitials}"
+					authorAvatarColor="{authorAvatarColor}"
+					buttons="{
+						path: 'itemButtons',
+						templateShareable: true
+					}">
+					<buttons>
+						<Button text="{text}" press=".onItemButtonPress" />
+					</buttons>
+				</NotificationListItem>
+			</NotificationListGroup>
+		</NotificationList>
+	</VBox>
+</mvc:View>

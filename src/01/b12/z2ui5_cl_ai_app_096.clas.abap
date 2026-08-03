@@ -4,6 +4,7 @@ CLASS z2ui5_cl_ai_app_096 DEFINITION PUBLIC.
     INTERFACES z2ui5_if_app.
 
     DATA mode_idx TYPE i.
+    DATA mode     TYPE string VALUE `ShowHideMode`.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -40,6 +41,7 @@ CLASS z2ui5_cl_ai_app_096 IMPLEMENTATION.
 
         )->open( `SplitContainer`
             )->a( n = `id`            v = `SplitContDemo`
+            )->a( n = `mode`          v = client->_bind( mode )
             )->a( n = `initialDetail` v = `detail`
             )->a( n = `initialMaster` v = `master`
 
@@ -197,13 +199,14 @@ CLASS z2ui5_cl_ai_app_096 IMPLEMENTATION.
                                   t_arg = VALUE #( ( `SplitContDemo` ) ( `toDetail` ) ( client->get_event_arg( ) ) ) ).
 
       WHEN `MODE_BTN`.
-        DATA(mode) = SWITCH string( mode_idx
-                                    WHEN 0 THEN `ShowHideMode`
-                                    WHEN 1 THEN `StretchCompressMode`
-                                    WHEN 2 THEN `HideMode`
-                                    WHEN 3 THEN `PopoverMode` ).
-        client->follow_up_action( val = client->cs_event-control_by_id
-                                  t_arg = VALUE #( ( `SplitContDemo` ) ( `setMode` ) ( mode ) ) ).
+        " the original calls setMode( ); mode is a bindable property, so it is
+        " bound two-way and only assigned here
+        mode = SWITCH string( mode_idx
+                              WHEN 0 THEN `ShowHideMode`
+                              WHEN 1 THEN `StretchCompressMode`
+                              WHEN 2 THEN `HideMode`
+                              WHEN 3 THEN `PopoverMode` ).
+        client->view_model_update( ).
         client->message_toast_display( text = |Split Container mode is changed to: { mode }| duration = `5000` ).
 
     ENDCASE.

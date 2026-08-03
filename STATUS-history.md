@@ -7,6 +7,392 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## 293/294 — an empty deviations array, and three formatters that were business logic (2026-08-02)
+
+**293 `sap.uxap.sample.ObjectPageSubSectionBackground`** (`sap.uxap.ObjectPageSubSection`)
+is 33 lines of pure markup with no controller at all, and the port is a **1:1
+rebuild with zero deviations** — the first in a while. It earns its place for
+one thing the corpus had not recorded: the view turns the usual namespace
+assignment **around**. `sap.uxap` is the DEFAULT namespace and `sap.m` carries
+the `m:` prefix (`<m:List>`).
+
+That matters because `structural-diff` compares the **qualified** control name:
+a `List` written without `ns` in such a view is a different control from the
+original's `m:List` and would be reported in both directions. Copy the
+original's namespace assignment as-is — now a gotcha in the porting guide.
+
+**294 `sap.m.sample.MessageViewWithGrouping`** (`sap.m.MessageView`) is the
+textbook case for the core principle. Its three *formatters* —
+`buttonIconFormatter`, `buttonTypeFormatter`, `highestSeverityMessages` — each
+walk the **whole message list** to find the highest severity
+(Error > Warning > Success > Information) and count how many messages carry it.
+That is not a presentation format, it is a computation over the data: it moves
+into `model_init`, and the footer Button binds the three finished values
+(`sap-icon://message-error`, `Negative`, `5`). A formatter that reads more than
+the one value it formats is business logic wearing a formatter's name.
+
+The rest follows app 284's shape — controller-built Dialog + MessageView
+rebuilt as a `core:FragmentDefinition`, `visible` two-way bound instead of
+`setVisible`, only `navigateBack` left as a frontend action — plus what this
+sample adds: `groupItems` with `groupName` per message, and two deliberately
+ungrouped messages that render outside the two Purchase Order groups.
+
+
+## Batch b23 (291/292) — three levels of bound aggregation, and a port with no controller left (2026-08-02)
+
+**291 `sap.m.sample.NotificationListGroupBindings`** (`sap.m.NotificationListGroup`).
+The deepest binding structure in the corpus so far: `NotificationList.items`
+over the groups, `NotificationListGroup.items` over that group's items, and
+`buttons` over the group's *and* the item's own button rows — four bound
+aggregations, three levels. The ABAP model mirrors it as nested tables
+(`ty_t_group` > `groupitems` > `itembuttons`), and every relative binding
+inside a template addresses its own row.
+
+Four of the five handlers compose their toast from the pressed control and
+stay on the client, roundtrip-free (`${$source>/title}`, `${$source>/text}`).
+Only `onItemClose` needs the backend, because it **removes a row**: the item's
+own title travels as a `$`-prefixed event arg and the handler deletes that row
+from every group before pushing the model back. Worth noting for the next port
+of this shape — a close/remove handler is the one member of the toast family
+that cannot stay on the client, because the model is the truth.
+
+**292 `sap.m.sample.PanelBackgroundDesign`** is the opposite extreme, and worth
+recording as the shape to aim for: its controller reads the Select's key and
+pushes it into the Panel with `setBackgroundDesign( )`. Both ends are
+**bindable properties**, so `Select.selectedKey` and `Panel.backgroundDesign`
+bind the *same* field — the Select writes it, the Panel reads it. No event, no
+round-trip, no `on_event`, no `model_init`; the initial `Solid` is the field's
+own `VALUE`. The `change` attribute is dropped and declared, because there is
+nothing left for it to do.
+
+`templateShareable: true` is kept verbatim on all four bindings and declared
+by policy: it is a binding-info parameter, not a control member, so no gate
+can ever see it (apps 264/265 precedent). `priorityFormatter` is dropped and
+declared — mapping an unknown value to `Priority.None` is presentation logic
+that belongs in `model_init`, and the mock's priorities are all valid anyway.
+
+## Batch b22 (288/289/290) — a new control, and randomness as a backend decision (2026-08-02)
+
+- **288 `sap.m.sample.PDFViewerEmbedded`** (`sap.m.PDFViewer`) — a control the
+  corpus did not have. Two buttons swap the bound `source` between a valid and
+  a deliberately missing PDF (that 404 *is* the sample: it demonstrates the
+  viewer's loading error). Both paths are the ones the controller resolves with
+  `sap.ui.require.toUrl( )`, pinned to the OpenUI5 host in their SDK form per
+  the asset-URL rule — same file names, same sample folder, only the host-side
+  prefix differs, which `data-fidelity` needs named in the sidecar. The two
+  paths are PROTECTED `CONSTANTS`: a value that exists only to be assigned is
+  not model data.
+- **289 `sap.m.sample.DynamicMessageStripGenerator`** (`sap.m.MessageStrip`) —
+  the controller destroys and re-creates a `MessageStrip` on every press, with
+  `type`, `showIcon` and `showCloseButton` picked by `Math.random( )`. The port
+  declares the strip in the view (one control more than the original view.xml,
+  declared) and binds those four properties plus `visible`; rebinding the same
+  control is the abap2UI5 form of destroy-and-recreate.
+
+  **Randomness is a decision, so it moves to ABAP — and becomes deterministic
+  there.** A press counter rotates the type through the four values and the two
+  flags through their combinations: every press still changes the strip, and
+  the port stays reproducible, which is the same rule the corpus already
+  applies to "the current date" (apps 164/181).
+
+  One trap paid for itself immediately: `strip_type` started out empty and the
+  render gate rejected `""` on the enum property — the documented
+  absent-property rule, so the field now carries the control's own default
+  `Information` until the first press.
+
+  The `InvisibleMessage.announce( )` accessibility call is dropped and
+  declared: it is a JS singleton, not a control, so neither `CONTROL_BY_ID`
+  (needs an id) nor `CONTROL_GLOBAL` (closed object list) reaches it. App 141
+  covers the control-based announcement idiom.
+
+- **290 `sap.m.sample.MultiInputValueHelp`** (`sap.m.MultiInput`) — the value
+  help flow the corpus was missing. `handleValueHelp` becomes two follow-up
+  actions in the controller's own order: `binding_call` filters the dialog's
+  items binding by the typed text (the model stays untouched, exactly like
+  `getBinding('items').filter([...])`), then `control_by_id` `open( value )` —
+  `CONTROL_METHODS` declares that optional string, so
+  `oValueHelpDialog.open(sInputValue)` travels whole. The MultiInput's `value`
+  is bound two-way, so the typed text is already on the server when
+  `valueHelpRequest` fires.
+
+  **A list of controls cannot travel.** `_handleValueHelpClose` reads
+  `evt.getParameter('selectedItems')` and builds a `Token` per item; nothing
+  transports that. So the selection is read from the DATA instead — the
+  `StandardListItem` template gains `selected={SELECTED}`, and the handler
+  loops the rows, appends a token per selected row and clears the flag. The
+  `tokens` aggregation is bound to that table, which is why the port carries a
+  `Token` the original view.xml does not (it creates them in the controller).
+  That is the general answer for every "the event hands me controls" sample:
+  bind the state the controls stand for.
+
+## Batch b21 (286/287) — the customData idiom, and a rule paying off twice (2026-08-02)
+
+Two sap.m depth ports, both picked for an idiom the corpus did not have.
+
+- **286 `sap.m.sample.BreadcrumbsWithCurrentPageLink`** (`sap.m.Breadcrumbs`) —
+  the `currentLocation` aggregation (@since 1.123, POST_171) that renders the
+  current page as a Link instead of plain text. Every Link keeps the original's
+  client-side `MessageToast.show(evt.getSource().getText() + ' has been
+  clicked')` as a roundtrip-free `_event_client` with the `{0}` template filled
+  by `${$source>/text}` — so the class has **no `on_event` and no model at
+  all**, which is the right shape for a view whose only behaviour is
+  client-side.
+- **287 `sap.m.sample.IconTabBarBadges`** (`sap.m.IconTabBar`) — nine
+  IconTabBars, the first one filled with 30 filters in `onInit`. New idioms:
+  the **`customData` aggregation** carrying a `sap.m.BadgeCustomData`
+  (@since 1.80, POST_171 by policy — the property gate does not resolve it),
+  `IconTabSeparator` between filters, and **nested `IconTabFilter.items`**
+  (@since 1.77) for the sub-tab bar. The 30 generated filters become one bound
+  aggregation over `T_TABS`, which is why the port carries exactly one
+  `IconTabFilter`/`Text`/`BadgeCustomData` more than the original view.xml: the
+  template itself.
+
+**The rule from the previous entry paid off twice while writing them.**
+287's `onTabDensityModeSelect` loops over all nine bars calling
+`setTabDensityMode( )`; that is precisely what `settable-property-via-action`
+reports, so the port bound `tabDensityMode` on every bar to one field from the
+start and only the RadioButtonGroup round-trips (its `selectedIndex` bound
+two-way, the three values derived server-side). A rule that changes what gets
+written in the first place is worth more than one that flags it afterwards.
+
+## A rule that found work: five ports move from action to binding (2026-08-02)
+
+`settable-property-via-action` encodes the oldest unenforced rule in the book —
+*prefer a bindable property over a frontend action* — and unlike the previous
+four it did **not** measure 0 on the corpus. It found five ports driving a
+property imperatively that the control lets you bind:
+
+| Port | What it drove |
+|---|---|
+| 043 `PanelExpanded` | `sap.m.Panel.expanded` |
+| 092 `TableAutoPopin` | `sap.m.Table.hiddenInPopin` |
+| 096 `SplitContainer` | `sap.m.SplitContainer.mode` |
+| 097 `SplitApp` | `sap.m.SplitApp.mode` |
+| 269 `DynamicSideContentProduct` | `sap.ui.layout.DynamicSideContent.showSideContent` |
+
+All five are converted; the corpus reports none. Three of them shrank
+noticeably — 092's handler used to *build a JSON Priority array by hand* for
+the action, and the MultiComboBox's `selectedKeys` it was built from is the
+very same field, so both now bind `T_HIDDEN` and the handler is one
+`view_model_update( )`.
+
+**043 reverses an earlier decision, on purpose.** Its sidecar recorded (
+2026-07-18) that the two-way `expanded` binding had been *replaced* by the
+whitelisted `setExpanded` to "match the original view.xml exactly". An added
+attribute is not a structural diff, and the rulebook has since settled the
+other way; the sidecar now says so rather than quietly flipping. 043 and 096
+lose their `checked` status for it (a behavioural rework invalidates the
+check, AGENTS §10) — the historical check is kept as context in a `LIVE_TEST`.
+
+Two things the rule needed, both of which say something about the linter's
+shape:
+
+- **What an id IS.** The ABAP-side rules only ever saw the class source; a
+  `CONTROL_BY_ID` wire names an id, and whether `setX` may be replaced by a
+  binding depends on the control's type. `collectControlIds` now bridges the
+  view tree and the ABAP rules.
+- **What "bindable" means.** Precision lives entirely in the metadata: an
+  **association** (`ObjectPageLayout.selectedSection`) and a **function**-typed
+  property (`MessagePopover.asyncURLHandler` — the reason the framework names a
+  built-in URL policy instead) can never be bound, so they are excluded rather
+  than reported and excused.
+
+One more model defect fell out of 092's conversion: `DATA t_hidden TYPE
+string_table.` — a standard ABAP table type, neither declared in the class nor
+written in the inline `STANDARD TABLE OF` form — was modelled as a **scalar**,
+so binding it to `hiddenInPopin` failed the render gate with `"" is of type
+string, expected sap.ui.core.Priority[]`. The known scalar table types are
+tables now.
+
+## pr/popup-within-area implemented upstream — app 285 keeps the sample's point (2026-08-02)
+
+The gap app 285 declared one entry ago is closed in the framework rather than
+worked around here.
+
+**abap2UI5** gains `POPUP` as a fourth `CONTROL_GLOBAL` target, with
+`setWithinArea` as its only method and a new `within` argument kind: a control
+id resolves to the **control** (which `Popup.convertWithin` dereferences when a
+popup opens, so the area survives a re-render in between), and an **empty**
+argument passes `null` — the documented form that releases the restriction.
+The module is resolved lazily like `THEMING`, because `sap/ui/core/Popup`
+exists on every release but `setWithinArea` is @since 1.89: an older runtime
+then hits the existing *"not available"* guard instead of failing the whole
+component load. Three JS unit specs cover the three paths.
+
+**App 285** wires it and its `IMPROVISED` deviation becomes a `NOTE`. One
+ordering fact came out of it and is now in CAPABILITIES: a **follow-up action
+runs AFTER the popup of the same round-trip has opened**, so the within area
+cannot be set in the press handler that opens the popover — it is set once
+together with the view. For this app that is behaviour-identical (it opens no
+other popup), and the `afterClose` release goes with it.
+
+**The linter** needed the same round: its `GLOBAL_TARGETS` is a hand-maintained
+copy of the framework's whitelist, so until it followed, it reported the
+correct new wire as an `invalid-frontend-action` — the silent-breaking-change
+direction its own AGENTS note warns about. The ai-demokit pin now points at
+that linter commit; it is a **feature-branch SHA and must become a main SHA**
+before this change is merged.
+
+## The render gate was half blind — two model defects, and app 240's skip (2026-08-02)
+
+Running the new linter over the corpus (the downstream check) found two
+defects in its **reconstructor** that had been cancelling each other out, and
+they concern this repo's own conventions:
+
+- A `DATA t_x TYPE ty_t_x.` — the **named** table type this repo's newer ports
+  write (`TYPES ty_t_x TYPE STANDARD TABLE OF ty_s_x.`) — was modelled as a
+  **scalar**. The render gate then rendered an empty aggregation for such a
+  port and **never instantiated its row template**, so nothing inside it was
+  ever checked. The older inline `DATA t_x TYPE STANDARD TABLE OF ty_s_x` form
+  was fine, which is why this survived.
+- Fixing that surfaced the second: an **unseeded** table (one filled in code,
+  `t_pages = t_company.`) was given an invented all-empty row in the *render*
+  model, which fails strict validation on the first enum property — app 100's
+  `"" is of type string, expected sap.m.AvatarShape` was the harness's own row,
+  not the port. Unseeded tables are now empty for the renderer and a declared
+  row in the shape, the same split scalars already had.
+
+Both fixed upstream in the linter. Net effect here: the render gate now
+actually sees the row templates of every named-table-type port.
+
+**App 240 (`CalendarLegendNavigation`) declares a `render_smoke` skip.** Its 20
+`DateTypeRange` rows are computed in `model_init` (a `DO` loop over `sy-datum`
+into `VALUE #( BASE t_special )`), so a static reconstruction cannot resolve
+`START_DATE`; `Formatter.DateCreateObject` then gets `undefined` and
+`XMLView.create` fails with *Date must be a JavaScript or UI5Date date object*.
+At runtime every row carries a real ISO date. The skip is re-verified against
+the render each run, so it cannot outlive the reason.
+
+## Batch b20 continued (285) — the flattened-element-binding trap becomes a rule (2026-08-02)
+
+**285 `sap.m.sample.PopoverWithinArea`** (`sap.m.Popover`): three
+controller-loaded fragment popovers, each `bindElement('/ProductCollection/0')`,
+each opened with `openBy(oButton)`. Rebuilt as three `core:FragmentDefinition`
+documents shown with `popover_display( by_id = $event.oSource.sId )`, the row-0
+record seeded at the model root and bound **absolutely**.
+
+Three things came out of it:
+
+- **The rulebook contradicted itself.** The `idiom-lookup` bindElement row said
+  to seed row 0 at the root and *keep the fragment's relative `{FIELD}`
+  bindings ("they resolve against the root")*; the `port-a-sample` gotcha said
+  the opposite and named the seven ports that had shipped the wrong form
+  (142 175 195 206 209 229 243). The gotcha is right —
+  `JSONModel._getObject` resolves a relative path against the context and
+  returns `undefined` when there is none. Both guides now say bind absolutely,
+  and the manual audit they described is the linter rule
+  **`relative-binding-without-context`**.
+- The rule's first version **reported four corpus bindings** — `sap.ui.table`
+  column `template`s, which are cloned per row and take their context from the
+  table's `rows` binding in a *sibling* aggregation. The corpus was right; a
+  `template` aggregation now counts as a row context and the corpus is back to
+  0 findings.
+- **`Popup.setWithinArea` is not reachable from ABAP**, and it is the sample's
+  whole point. `sap.ui.core.Popup` is a static module: `control_by_id` needs an
+  id it has not got, and `control_global` knows a closed set of four objects.
+  The port opens against the viewport, declares it, and the gap is filed as
+  **`pr/popup-within-area`** (add `POPUP: ['setWithinArea']` to the
+  `CONTROL_GLOBAL` targets, taking the existing `domRef` arg kind, with an
+  empty argument reaching the method as `null`).
+
+One porting rule fell out of the first draft: **one builder chain per view.**
+The first version built the two list popovers from one parameterized helper and
+split the chain across statements — which works in a system (the builder keeps
+its cursor) but leaves the reconstructor re-rooting the second statement into a
+two-root document, and left `structural-diff` counting one popup where the
+original has three. Three methods, one chain each, one per original fragment
+file.
+
+## The metadata snapshot is now the linter's own artefact (2026-08-02)
+
+`ui5/properties.json` regenerated with the **linter's** `generate-metadata.mjs`
+against this repo's OpenUI5 checkout (1.152), and the dependency re-pinned from
+the merged feature branch to the linter **main SHA `10c700b4`** — the two
+follow-ups STATUS carried since the generator consolidation are closed.
+
+What the new snapshot changed, exactly as predicted:
+
+- The old parser's two **false deprecations** are gone. It attributed a
+  file-level `@deprecated` JSDoc block sitting on a *local variable* to the
+  CONTROL, marking `sap.f.semantic.SemanticPage` and `sap.f.DynamicPageTitle`
+  deprecated @1.54 although neither class doc says so. App 166 is therefore
+  **in scope**, its `scope-exceptions.json` entry was stale, the gate said so,
+  and the entry is removed — 6 exceptions → 5, `sap.f` in-scope 32 → 34.
+- `sap.ui.core.XMLComposite` gained the deprecation it always had (@1.88), so
+  its two samples moved from *nonapp* to *deprecated* — no port affected, the
+  family was never portable.
+- The snapshot is the full member shape now (976 controls, ~479 kB against the
+  old 925/159 kB), i.e. byte-for-byte the artefact the linter generates for
+  itself, only at this repo's OpenUI5 version.
+
+One diagnosis worth keeping: the richer snapshot made
+`generate-overview.mjs` report `sap.m.HeaderContainer` as
+**"no longer in OpenUI5"**. It never left — `ui5/openui5-entities.json` holds
+only entities `properties.json` does *not* carry, and the control had just
+been picked up by the growing snapshot. The message now reads "no longer
+needed here", with the reason in a comment above the check.
+
+## Batch b20 (284) — a controller-built dialog, and the id nothing validated (2026-08-02)
+
+**284 `sap.m.sample.MessageViewInsideDialog`** (`sap.m.MessageView`). The
+sample's `view.xml` is one Button; the Dialog, its custom-header Bar with the
+nav-back Button and Title, the MessageView with its MessageItem template and
+Link — all of it is built in `onInit`. The port rebuilds them as a
+`core:FragmentDefinition` shown with `popup_display`, and splits the
+controller's three imperative reaches the way the rulebook says: `setVisible`
+and `setText` become **two-way bound state** (`visible={/BACK_VISIBLE}`,
+`text={/DIALOG_TITLE}`), and only `navigateBack` — which has no bindable
+equivalent — stays a `control_by_id` frontend action on the popup slot.
+
+Which exposed the last unvalidated part of that wire: **the id**. Everything
+else in a `CONTROL_BY_ID` call is checked (the action token, the method for
+the closed-set actions, the obsolete empty view slot), but the id itself was
+taken on trust — and a wrong one is silent in exactly the way the whole rule
+family exists for: the frontend finds no control, logs it, and the button
+does nothing. Now the linter rule **`frontend-action-unknown-id`**: every
+literal id in a `CONTROL_BY_ID` wire is matched against the ids the class's
+views declare, across all slots. It stays quiet unless *every* `id` attribute
+in the class is a literal, so a class that builds ids at runtime is never
+guessed at. 0 findings over the 284-file corpus; proven by miscasing 284's
+own `messageView`.
+
+## Batch b16 (282/283) — sap.ui.core reaches full in-scope coverage, and two gate defects (2026-08-02)
+
+Two sap.ui.core depth ports, both idiom-first picks; they happen to be the
+last two in-scope gaps of that library, so `sap.ui.core` is now **20/20**.
+
+- **282 `sap.ui.core.sample.TypeDateAsDate`** (`sap.ui.model.type.Date`) —
+  the sibling of 181 with the paradigm inverted: the original model holds a
+  **JS `Date` object**, which is exactly what a JSON model cannot carry. The
+  port keeps every binding-info 1:1 and only adds `formatOptions.source`
+  `{ pattern: 'yyyy-MM-dd' }`. Without it `sap.ui.model.type.Date` raises a
+  `FormatException` on the first `format()` and the field stays empty —
+  invisible to both the property gate (the member is fine) and the render
+  gate (it mocks the model). That gap became the linter rule
+  **`date-type-without-source`** (0 findings over the 284-file corpus, proven
+  to fire by stripping the source from 181).
+- **283 `sap.ui.core.sample.ThemeCustomClasses`** (`sap.ui.core.theming`) —
+  the first port whose `core:HTML` `content` carries a **real binding**
+  (`{STYLECLASS}`), the exact opposite of the escaped-brace CSS case (app
+  028): here the braces must stay unescaped. Its model is scraped from
+  `document.styleSheets` in the original, which no backend can do, so the 26
+  rows are seeded from the OpenUI5 base theme source (IMPROVISED). The
+  original's `onAfterRendering` border patch becomes a computed `BORDERSTYLE`
+  column — the thin-frontend form of the same effect. Upstream detail kept
+  honest: the sample's `borderWidth = "1xp"` is a typo the browser drops, so
+  it is not reproduced.
+
+**Coverage was being measured wrong.** The README's `Ported` column counted
+*every* port against the *in-scope* sample count, so the six documented
+out-of-scope ports inflated it — `sap.ui.core` read 19/20 while 18 of its
+ports were in scope. Adding this batch pushed it to 21/20 and the ratio > 1
+crashed the whole gate chain in `String.repeat`
+(`RangeError: Invalid count value: -1`) inside the coverage bar — a stack
+trace where the real news was a miscount. `generate-coverage.mjs` now counts
+in-scope ports only, states the out-of-scope ports on their own line, and
+clamps the bar so the same class of bug can never again look like a broken
+generator (lesson in the `regenerate-artefacts` guide).
+
 ## Live check closes 13 ports — and a round-trip that drops keystrokes (2026-08-02)
 
 The maintainer live-checked the hidden-picker family and the whole b15 depth

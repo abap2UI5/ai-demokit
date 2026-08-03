@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_ai_app_287",
+  "sample": "sap.m.sample.IconTabBarBadges",
+  "entity": "sap.m.IconTabBar",
+  "file": "src/01/b21/z2ui5_cl_ai_app_287.clas.abap",
+  "batch": "b21",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "two members and one control newer than UI5 1.71 are kept 1:1 because they ARE the sample: sap.m.BadgeCustomData (control since 1.80, the badge marker in every customData aggregation - declared by policy, the property gate does not resolve it) and sap.m.IconTabFilter.items (since 1.77, the nested sub-tabs of iconTabBar8). The app needs a UI5 release >= 1.80."
+    },
+    {
+      "type": "NOTE",
+      "what": "onInit adds 30 IconTabFilters to iconTabBar0 imperatively (text 'Tab n', key n, a Text 'Content n', and a BadgeCustomData visible on the 19th). The port builds that as a bound aggregation over T_TABS with one template - so exactly one IconTabFilter, one Text and one BadgeCustomData more than the original view.xml carries, which is the template itself; the 30 instances come from the model, as they come from the loop in the original."
+    },
+    {
+      "type": "NOTE",
+      "what": "onTabDensityModeSelect loops over all nine bars and calls setTabDensityMode(selectedButton.getText()). tabDensityMode is a bindable property, so every IconTabBar binds the one field TAB_DENSITY (added attribute, no structural diff) and only the RadioButtonGroup round-trips: its selectedIndex is bound two-way and the three values are derived server-side, per the prefer-a-bindable-property rule (linter rule settable-property-via-action)."
+    }
+  ]
+}

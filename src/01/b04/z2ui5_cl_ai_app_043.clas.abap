@@ -84,6 +84,7 @@ CLASS z2ui5_cl_ai_app_043 IMPLEMENTATION.
         )->open( `Panel`
             )->a( n = `id`         v = `expandablePanel`
             )->a( n = `expandable` v = `true`
+            )->a( n = `expanded`   v = client->_bind( expanded )
             )->a( n = `width`      v = `auto`
             )->a( n = `class`      v = `sapUiResponsiveMargin`
 
@@ -116,14 +117,11 @@ CLASS z2ui5_cl_ai_app_043 IMPLEMENTATION.
     CASE client->get( )-event.
 
       WHEN `TOOLBAR_PRESSED`.
-        " original: oPanel.setExpanded(!oPanel.getExpanded()) - the same
-        " imperative call, client-side via the whitelisted setExpanded.
-        " t_arg is positional: id, method, params (the view defaults to cs_view-main)
+        " original: oPanel.setExpanded(!oPanel.getExpanded()). Panel.expanded is
+        " a bindable property, so the flag is bound two-way and only flipped
+        " here - no frontend action, and the state survives a view rebuild
         expanded = xsdbool( expanded = abap_false ).
-        client->follow_up_action( val   = z2ui5_if_client=>cs_event-control_by_id
-                                  t_arg = VALUE #( ( `expandablePanel` )
-                                                   ( `setExpanded` )
-                                                   ( CONV string( expanded ) ) ) ).
+        client->view_model_update( ).
 
     ENDCASE.
 

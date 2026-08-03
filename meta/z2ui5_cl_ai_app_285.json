@@ -1,0 +1,36 @@
+{
+  "class": "z2ui5_cl_ai_app_285",
+  "sample": "sap.m.sample.PopoverWithinArea",
+  "entity": "sap.m.Popover",
+  "file": "src/01/b20/z2ui5_cl_ai_app_285.clas.abap",
+  "batch": "b20",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "control_global POPUP setWithinArea, set once with the view"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "the sample's point - Popup.setWithinArea(this.byId('withinArea')), which confines every popup to the grey VBox instead of the viewport - is reproduced through the CONTROL_GLOBAL target POPUP with the method setWithinArea (added to abap2UI5 for this port; the pr/popup-within-area request is implemented). Two differences to the original wiring, both without visible effect here: it is set ONCE together with the view instead of in each press handler, because a follow_up_action runs AFTER the popover of the same round-trip has already opened - and the Popover.afterClose handler of all three popovers, whose only job was Popup.setWithinArea(null), is therefore dropped. This app opens no other popup, so a permanently set area behaves exactly like the per-press one. Needs UI5 >= 1.89 for setWithinArea."
+    },
+    {
+      "type": "NOTE",
+      "what": "the three popovers live in three *.fragment.xml files the controller loads with Fragment.load and opens with openBy(oButton). They are rebuilt as three core:FragmentDefinition documents shown with popover_display( xml = ... by_id = ... ), anchored on the pressing button transported as $event.oSource.sId - the documented 1:1 path."
+    },
+    {
+      "type": "NOTE",
+      "what": "flattened element binding: each popover gets bindElement('/ProductCollection/0'), and the image popover's Popover.title {Name} and Image src {ProductPicUrl} are relative to it. That record (products.json row 0: Notebook Basic 15 / HT-1000.jpg) is seeded at the ABAP model root, so both bind ABSOLUTELY via client->_bind - a relative {NAME} on a control with no binding context resolves against nothing and renders empty. structural-diff pairs the port's Popover.title against the wrong one of the three Popovers (it reports 'original {Name} vs port Products', the list popover's literal title); both titles are 1:1 with the popover they sit on."
+    },
+    {
+      "type": "NOTE",
+      "what": "the two list popovers also carry bindElement('/ProductCollection/0') in the original, but nothing in them is bound relatively - the List binds the absolute {/ProductCollection} - so that element binding has no effect and has no counterpart here."
+    },
+    {
+      "type": "POST_171",
+      "what": "sap.m.Button.ariaHasPopup (since UI5 1.84) is kept 1:1 on all three buttons - the app needs a UI5 release >= 1.84 for the aria-haspopup attribute."
+    }
+  ]
+}
