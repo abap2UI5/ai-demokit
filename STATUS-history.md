@@ -7,6 +7,36 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## Batch b21 (286/287) — the customData idiom, and a rule paying off twice (2026-08-02)
+
+Two sap.m depth ports, both picked for an idiom the corpus did not have.
+
+- **286 `sap.m.sample.BreadcrumbsWithCurrentPageLink`** (`sap.m.Breadcrumbs`) —
+  the `currentLocation` aggregation (@since 1.123, POST_171) that renders the
+  current page as a Link instead of plain text. Every Link keeps the original's
+  client-side `MessageToast.show(evt.getSource().getText() + ' has been
+  clicked')` as a roundtrip-free `_event_client` with the `{0}` template filled
+  by `${$source>/text}` — so the class has **no `on_event` and no model at
+  all**, which is the right shape for a view whose only behaviour is
+  client-side.
+- **287 `sap.m.sample.IconTabBarBadges`** (`sap.m.IconTabBar`) — nine
+  IconTabBars, the first one filled with 30 filters in `onInit`. New idioms:
+  the **`customData` aggregation** carrying a `sap.m.BadgeCustomData`
+  (@since 1.80, POST_171 by policy — the property gate does not resolve it),
+  `IconTabSeparator` between filters, and **nested `IconTabFilter.items`**
+  (@since 1.77) for the sub-tab bar. The 30 generated filters become one bound
+  aggregation over `T_TABS`, which is why the port carries exactly one
+  `IconTabFilter`/`Text`/`BadgeCustomData` more than the original view.xml: the
+  template itself.
+
+**The rule from the previous entry paid off twice while writing them.**
+287's `onTabDensityModeSelect` loops over all nine bars calling
+`setTabDensityMode( )`; that is precisely what `settable-property-via-action`
+reports, so the port bound `tabDensityMode` on every bar to one field from the
+start and only the RadioButtonGroup round-trips (its `selectedIndex` bound
+two-way, the three values derived server-side). A rule that changes what gets
+written in the first place is worth more than one that flags it afterwards.
+
 ## A rule that found work: five ports move from action to binding (2026-08-02)
 
 `settable-property-via-action` encodes the oldest unenforced rule in the book —

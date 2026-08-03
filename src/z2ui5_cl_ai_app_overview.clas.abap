@@ -1058,6 +1058,19 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` instant separator switch confirmed)`
         notes = lv_text1 ) ).
 
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.Breadcrumbs`                     name = `BreadcrumbsWithCurrentPageLink`      class = `z2ui5_cl_ai_app_286` path = `src/01/b21/z2ui5_cl_ai_app_286.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.34`
+        is_post171 = abap_true
+        notes = `POST-1.71: the sample's whole point is the currentLocation aggregation of sap.m.Breadcrumbs (since UI5 1.123), which shows the current page as a Link instead of plain text - kept 1:1, so the app needs` &&
+                 ` a UI5 release >= 1.123 to render it there (on an older release the Link falls into the default items aggregation). // NOTE: each Link keeps the original's client-side` &&
+                 ` MessageToast.show(evt.getSource().getText() + ' has been clicked') as a roundtrip-free _event_client MESSAGE_TOAST with the template '{0} has been clicked' filled by ${$source>/text} - the text comes` &&
+                 ` from the pressed Link itself, exactly as in the original, and nothing travels to the backend. The class therefore has no on_event and no model at all.`
+        post171 = `the sample's whole point is the currentLocation aggregation of sap.m.Breadcrumbs (since UI5 1.123), which shows the current page as a Link instead of plain text - kept 1:1, so the app needs a UI5` &&
+                 ` release >= 1.123 to render it there (on an older release the Link falls into the default items aggregation).` ) ).
+
     lv_text1 = `NOTE: the BusyDialog fragment is rebuilt 1:1 as a core:FragmentDefinition shown via client->popup_display (the framework's displayFragment calls .open() on the fragment root, the equivalent of the` &&
                ` controller's Fragment.load + oBusyDialog.open()); one attribute is added vs the original fragment: id="busyDialog", needed so the backend timer event can close the dialog via the whitelisted` &&
                ` control_by_id 'close' method (CONTROL_METHODS in FrontendAction.js, no-arg; the id resolves in the POPUP slot via Fragment.byId('popupId', ...)) - the equivalent of the controller's` &&
@@ -1755,7 +1768,25 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         since = `1.44.0`
         notes = `NOTE: NumericContent presses show a client MessageToast ('Fire press', the original press handler's text - review fixed the earlier text copied from the NumericContentDifColors neighbour). Two` &&
                  ` vertical HeaderContainers — one of eight NumericContents, one of five TileContents (each wrapping a NumericContent) — reproduced 1:1. **e2e-verified 2026-07-30** (transpiled-framework interaction,` &&
-                 ` scripts/e2e-smoke.mjs): pressing the first NumericContent toasts 'Fire press'; the other tiles are the identical wire.` )
+                 ` scripts/e2e-smoke.mjs): pressing the first NumericContent toasts 'Fire press'; the other tiles are the identical wire.` ) ).
+
+    lv_text1 = `POST-1.71: two members and one control newer than UI5 1.71 are kept 1:1 because they ARE the sample: sap.m.BadgeCustomData (control since 1.80, the badge marker in every customData aggregation -` &&
+               ` declared by policy, the property gate does not resolve it) and sap.m.IconTabFilter.items (since 1.77, the nested sub-tabs of iconTabBar8). The app needs a UI5 release >= 1.80. // NOTE: onInit adds 30` &&
+               ` IconTabFilters to iconTabBar0 imperatively (text 'Tab n', key n, a Text 'Content n', and a BadgeCustomData visible on the 19th). The port builds that as a bound aggregation over T_TABS with one` &&
+               ` template - so exactly one IconTabFilter, one Text and one BadgeCustomData more than the original view.xml carries, which is the template itself; the 30 instances come from the model, as they come` &&
+               ` from the loop in the original. // NOTE: onTabDensityModeSelect loops over all nine bars and calls setTabDensityMode(selectedButton.getText()). tabDensityMode is a bindable property, so every` &&
+               ` IconTabBar binds the one field TAB_DENSITY (added attribute, no structural diff) and only the RadioButtonGroup round-trips: its selectedIndex is bound two-way and the three values are derived`.
+    lv_text1 = lv_text1 && ` server-side, per the prefer-a-bindable-property rule (linter rule settable-property-via-action).`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabBarBadges`                    class = `z2ui5_cl_ai_app_287` path = `src/01/b21/z2ui5_cl_ai_app_287.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `two members and one control newer than UI5 1.71 are kept 1:1 because they ARE the sample: sap.m.BadgeCustomData (control since 1.80, the badge marker in every customData aggregation - declared by` &&
+                 ` policy, the property gate does not resolve it) and sap.m.IconTabFilter.items (since 1.77, the nested sub-tabs of iconTabBar8). The app needs a UI5 release >= 1.80.` ) ).
+
+    result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabBarStretchContent`            class = `z2ui5_cl_ai_app_030` path = `src/01/b04/z2ui5_cl_ai_app_030.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
