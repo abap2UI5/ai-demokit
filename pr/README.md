@@ -26,6 +26,7 @@ Genuinely open — not yet implemented.
 
 | Request | Summary | Priority |
 |---------|---------|----------|
+| [`popup-within-area`](popup-within-area/) | `sap.ui.core.Popup.setWithinArea( )` is unreachable from ABAP — `Popup` is a static module, so neither `control_by_id` (no id) nor `control_global` (closed object list) can call it. Proposal: add `POPUP: ['setWithinArea']` to the `CONTROL_GLOBAL` targets, taking the existing `domRef` arg kind, with an empty argument reaching the method as `null` (the documented release form). Found by app 285 (`sap.m.sample.PopoverWithinArea`), which loses the sample's whole point without it. | medium — one sample blocked today, but it is the general "keep a popup inside this region" capability |
 | [`open-abap-xml-escaping`](open-abap-xml-escaping/) | **Upstream target is [open-abap/open-abap-core](https://github.com/open-abap/open-abap-core), not abap2UI5.** `CALL TRANSFORMATION id … RESULT XML` writes element character data unescaped, so an app whose model carries a `<` (the overview's generation notes) saves a draft that `CL_IXML` cannot parse back — the next round-trip dies in an uncatchable `ASSERT` and the frontend shows `Network error: ASSERTION_FAILED`. Worked around here by a build-time patch (`web/ci/patch_open_abap_xml.mjs`) applied by both transpiled builds; delete this folder when the fix is upstream. | high — breaks every round-trip of the Pages demo's front door |
 
 _`menu-item-selected-path` left this list on 2026-07-31: it was closed by

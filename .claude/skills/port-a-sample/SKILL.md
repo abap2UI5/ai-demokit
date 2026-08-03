@@ -137,8 +137,12 @@ value) — is faithful → **`NOTE`**. Use **`IMPROVISED`** only when the fold
 actually *loses or changes* something: drops bound columns, resolves a live
 model statically, or substitutes values (app 006's `img>`→static URLs). When
 binding a single record the original `bindElement`s (`/SupplierCollection/0`),
-seed those fields at the **default-model root** so the view's *relative* child
-bindings (`{SupplierName}`) resolve — and seed the **actual mock row-0 values**,
+seed those fields at the **default-model root** — and then bind them
+**absolutely** (`client->_bind( suppliername )`), *not* with the original's
+relative `{SupplierName}`: without the element binding there is no context for
+a relative path to resolve against (see the flattened-element-binding trap
+below; the linter rule is `relative-binding-without-context`). Seed the
+**actual mock row-0 values**,
 verified against the mock, not a neighbour port (app 162/142 had copied wrong
 values). Worked example: app 006 (`sap.m.Carousel`, `img>` → static URLs,
 `IMPROVISED`); app 175 (`SimpleForm`, supplier row-0 flatten).
@@ -298,9 +302,11 @@ that stops at the deepest node.
   view must bind them **absolutely** too — a relative `{NAME}` on a control
   with *no binding context at all* resolves against nothing and renders empty.
   Seven ports carried the wrong form with a sidecar note claiming the opposite
-  (142 175 195 206 209 229 243, all fixed). Audit for it with:
-  `_bind`-less `` v = `{FIELD}` `` whose FIELD is a root-level `DATA` scalar of
-  the class and not a component of any row structure.
+  (142 175 195 206 209 229 243, all fixed). **That audit is static now**: the
+  linter rule `relative-binding-without-context` reports a `_bind`-less
+  `` v = `{FIELD}` `` on a control with no binding context whose FIELD is a
+  declared class attribute (a `template` aggregation counts as a row context,
+  so `sap.ui.table` column templates are not judged).
 - `client->_event( \`NAME\` )` — wire a control event (press, liveChange…) to an
   event named `NAME`. **Always** dispatch in `on_event( )` with a
   `CASE client->get( )-event.` … `WHEN \`NAME\`.` … `ENDCASE` — even for a single
@@ -413,6 +419,19 @@ these entries.
 
 
 #### Porting gotchas (distilled lessons — same discipline as AGENTS.md §10)
+
+- **One builder chain per view — never split it across ABAP statements.** The
+  builder keeps its cursor across statements at runtime, so
+  `popover->open( \`Popover\` … ).` followed by a separate
+  `popover->open( \`List\` … ).` *works in a system* — but the linter's
+  reconstructor reads a chain as one statement and re-roots the second one, so
+  the document comes out with two roots and the render gate rejects it
+  ("Using native HTML content in XMLViews is deprecated"). It also removes the
+  temptation behind the split: a popup helper parameterized with id/title
+  (`COND #( … )` in an attribute) is unreconstructable *and* leaves
+  `structural-diff` counting one popup where the original has three. Write one
+  method with one chain per fragment, as the original has one file per
+  fragment (app 285).
 
 - **A per-keystroke round-trip is LOSSY, not queued.** abap2UI5 serializes
   round-trips: an event fired while one is in flight is **dropped**, so a

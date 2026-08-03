@@ -7,6 +7,46 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## Batch b20 continued (285) — the flattened-element-binding trap becomes a rule (2026-08-02)
+
+**285 `sap.m.sample.PopoverWithinArea`** (`sap.m.Popover`): three
+controller-loaded fragment popovers, each `bindElement('/ProductCollection/0')`,
+each opened with `openBy(oButton)`. Rebuilt as three `core:FragmentDefinition`
+documents shown with `popover_display( by_id = $event.oSource.sId )`, the row-0
+record seeded at the model root and bound **absolutely**.
+
+Three things came out of it:
+
+- **The rulebook contradicted itself.** The `idiom-lookup` bindElement row said
+  to seed row 0 at the root and *keep the fragment's relative `{FIELD}`
+  bindings ("they resolve against the root")*; the `port-a-sample` gotcha said
+  the opposite and named the seven ports that had shipped the wrong form
+  (142 175 195 206 209 229 243). The gotcha is right —
+  `JSONModel._getObject` resolves a relative path against the context and
+  returns `undefined` when there is none. Both guides now say bind absolutely,
+  and the manual audit they described is the linter rule
+  **`relative-binding-without-context`**.
+- The rule's first version **reported four corpus bindings** — `sap.ui.table`
+  column `template`s, which are cloned per row and take their context from the
+  table's `rows` binding in a *sibling* aggregation. The corpus was right; a
+  `template` aggregation now counts as a row context and the corpus is back to
+  0 findings.
+- **`Popup.setWithinArea` is not reachable from ABAP**, and it is the sample's
+  whole point. `sap.ui.core.Popup` is a static module: `control_by_id` needs an
+  id it has not got, and `control_global` knows a closed set of four objects.
+  The port opens against the viewport, declares it, and the gap is filed as
+  **`pr/popup-within-area`** (add `POPUP: ['setWithinArea']` to the
+  `CONTROL_GLOBAL` targets, taking the existing `domRef` arg kind, with an
+  empty argument reaching the method as `null`).
+
+One porting rule fell out of the first draft: **one builder chain per view.**
+The first version built the two list popovers from one parameterized helper and
+split the chain across statements — which works in a system (the builder keeps
+its cursor) but leaves the reconstructor re-rooting the second statement into a
+two-root document, and left `structural-diff` counting one popup where the
+original has three. Three methods, one chain each, one per original fragment
+file.
+
 ## The metadata snapshot is now the linter's own artefact (2026-08-02)
 
 `ui5/properties.json` regenerated with the **linter's** `generate-metadata.mjs`

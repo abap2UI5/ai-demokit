@@ -2592,7 +2592,29 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` bindings ({PRODUCT_ID} title, {NAME}, {PRODUCT_PIC_URL}) and follow_up_action( cs_event-bind_element, view=cs_view-popover ) element-binds the popover slot to t_products/<index>, where the index` &&
                  ` comes from the pressed row's binding context ($event.oSource.getBindingContext().getPath()); the popover is anchored by $event.oSource.sId and the Action button reproduces handleActionPress 1:1 (a` &&
                  ` toast 'Action has been pressed' + follow_up_action( cs_event-popover_close )). The disable/enable-pointer-events-while-open behavior is dropped.`
-        post171 = `Link.ariaHasPopup (since 1.86) is kept 1:1 on the popover link; needs UI5 >= 1.86.` )
+        post171 = `Link.ariaHasPopup (since 1.86) is kept 1:1 on the popover link; needs UI5 >= 1.86.` ) ).
+
+    lv_text1 = `IMPROVISED: the sample's whole point is lost: every handler calls Popup.setWithinArea(this.byId('withinArea')) before opening, which confines the popover to the grey VBox instead of the viewport, and` &&
+               ` handleAfterClose resets it with Popup.setWithinArea(null). sap.ui.core.Popup is a static module, not a control, so neither reach is expressible - CONTROL_GLOBAL knows only MESSAGE_TOAST /` &&
+               ` BUSY_INDICATOR and CONTROL_BY_ID addresses controls. The three popovers therefore open against the viewport, and the Popover.afterClose attribute of all three is dropped (it had no other job). Filed` &&
+               ` as the framework request pr/popup-within-area; the VBox keeps its id withinArea so the port needs no change once that lands. // NOTE: the three popovers live in three *.fragment.xml files the` &&
+               ` controller loads with Fragment.load and opens with openBy(oButton). They are rebuilt as three core:FragmentDefinition documents shown with popover_display( xml = ... by_id = ... ), anchored on the` &&
+               ` pressing button transported as $event.oSource.sId - the documented 1:1 path. // NOTE: flattened element binding: each popover gets bindElement('/ProductCollection/0'), and the image popover's`.
+    lv_text1 = lv_text1 && ` Popover.title {Name} and Image src {ProductPicUrl} are relative to it. That record (products.json row 0: Notebook Basic 15 / HT-1000.jpg) is seeded at the ABAP model root, so both bind ABSOLUTELY via` &&
+               ` client->_bind - a relative {NAME} on a control with no binding context resolves against nothing and renders empty. structural-diff pairs the port's Popover.title against the wrong one of the three` &&
+               ` Popovers (it reports 'original {Name} vs port Products', the list popover's literal title); both titles are 1:1 with the popover they sit on. // NOTE: the two list popovers also carry` &&
+               ` bindElement('/ProductCollection/0') in the original, but nothing in them is bound relatively - the List binds the absolute {/ProductCollection} - so that element binding has no effect and has no` &&
+               ` counterpart here. // POST-1.71: sap.m.Button.ariaHasPopup (since UI5 1.84) is kept 1:1 on all three buttons - the app needs a UI5 release >= 1.84 for the aria-haspopup attribute.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.Popover`                         name = `PopoverWithinArea`                   class = `z2ui5_cl_ai_app_285` path = `src/01/b20/z2ui5_cl_ai_app_285.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `sap.m.Button.ariaHasPopup (since UI5 1.84) is kept 1:1 on all three buttons - the app needs a UI5 release >= 1.84 for the aria-haspopup attribute.` ) ).
+
+    result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.ProgressIndicator`               name = `ProgressIndicator`                   class = `z2ui5_cl_ai_app_070` path = `src/01/b09/z2ui5_cl_ai_app_070.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -2601,9 +2623,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         notes = `IMPROVISED: the two interactive ProgressIndicators (pi-with-animation / pi-without-animation) are set to 0/100 via two-way bound percentValue/displayValue fields updated in a SET event, replacing the` &&
                  ` original's controller byId(...).setPercentValue/setDisplayValue calls. // POST-1.71: ProgressIndicator.displayAnimation (since UI5 1.73) is kept 1:1 on the no-animation ProgressIndicator; needs UI5` &&
                  ` >= 1.73.`
-        post171 = `ProgressIndicator.displayAnimation (since UI5 1.73) is kept 1:1 on the no-animation ProgressIndicator; needs UI5 >= 1.73.` ) ).
-
-    result = VALUE #( BASE result
+        post171 = `ProgressIndicator.displayAnimation (since UI5 1.73) is kept 1:1 on the no-animation ProgressIndicator; needs UI5 >= 1.73.` )
       ( module = `sap.m`              control = `sap.m.PullToRefresh`                   name = `PullToRefresh`                       class = `z2ui5_cl_ai_app_081` path = `src/01/b10/z2ui5_cl_ai_app_081.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
