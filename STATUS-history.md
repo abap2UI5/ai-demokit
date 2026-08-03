@@ -7,7 +7,7 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
-## 293 — a port with an empty deviations array (2026-08-02)
+## 293/294 — an empty deviations array, and three formatters that were business logic (2026-08-02)
 
 **293 `sap.uxap.sample.ObjectPageSubSectionBackground`** (`sap.uxap.ObjectPageSubSection`)
 is 33 lines of pure markup with no controller at all, and the port is a **1:1
@@ -20,6 +20,23 @@ That matters because `structural-diff` compares the **qualified** control name:
 a `List` written without `ns` in such a view is a different control from the
 original's `m:List` and would be reported in both directions. Copy the
 original's namespace assignment as-is — now a gotcha in the porting guide.
+
+**294 `sap.m.sample.MessageViewWithGrouping`** (`sap.m.MessageView`) is the
+textbook case for the core principle. Its three *formatters* —
+`buttonIconFormatter`, `buttonTypeFormatter`, `highestSeverityMessages` — each
+walk the **whole message list** to find the highest severity
+(Error > Warning > Success > Information) and count how many messages carry it.
+That is not a presentation format, it is a computation over the data: it moves
+into `model_init`, and the footer Button binds the three finished values
+(`sap-icon://message-error`, `Negative`, `5`). A formatter that reads more than
+the one value it formats is business logic wearing a formatter's name.
+
+The rest follows app 284's shape — controller-built Dialog + MessageView
+rebuilt as a `core:FragmentDefinition`, `visible` two-way bound instead of
+`setVisible`, only `navigateBack` left as a frontend action — plus what this
+sample adds: `groupItems` with `groupName` per message, and two deliberately
+ungrouped messages that render outside the two Purchase Order groups.
+
 
 ## Batch b23 (291/292) — three levels of bound aggregation, and a port with no controller left (2026-08-02)
 

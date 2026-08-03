@@ -2256,7 +2256,27 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         notes = `IMPROVISED: the original registers its four messages on the sap.ui.core.message.MessageManager and the MessageView binds them via the message> model. abap2UI5 DOES carry the message> model on every` &&
                  ` view slot since pr/message-model (2026-07-18, auto-collecting control validation messages), but there is no ABAP API to push an arbitrary static message set into it - so for this render-only sample` &&
                  ` the messages are bound as a plain ABAP table on MessageView items with a MessageItem template (client->_bind( t_messages )), the path CAPABILITIES.md explicitly endorses for static message sets. Same` &&
-                 ` rendering as the original. Proven by the curated sample z2ui5_cl_demo_app_038 (MessageView + MessageItem + MessagePopover over a bound table).` )
+                 ` rendering as the original. Proven by the curated sample z2ui5_cl_demo_app_038 (MessageView + MessageItem + MessagePopover over a bound table).` ) ).
+
+    lv_text1 = `IMPROVISED: the three formatters are computed in the backend, which is the point of the thin-frontend rule (apps 009/010/022/092). buttonIconFormatter, buttonTypeFormatter and highestSeverityMessages` &&
+               ` each walk the whole message list to find the highest severity (Error > Warning > Success > Information) and count how many messages carry it - a computation over the data, not a presentation format.` &&
+               ` model_init does it once and the Button binds the three finished values (sap-icon://message-error, Negative, 5 for this data). The original re-runs the formatters on every model change; here the` &&
+               ` values are recomputed wherever the message list changes. // NOTE: the original's view.xml is only the Page with the footer Button; the MessageView with its MessageItem template and Link, the Dialog` &&
+               ` with its custom-header Bar, the nav-back Button, the 'Publish order' Text and the Close endButton are all built in onInit. They are rebuilt here as a core:FragmentDefinition shown with popup_display,` &&
+               ` so Dialog, Bar, Text, MessageView, MessageItem, Link and two of the three Button controls are extra against the original view.xml. // NOTE: the back button's visible state is two-way bound`.
+    lv_text1 = lv_text1 && ` (visible={/BACK_VISIBLE}) instead of driven by setVisible, per the prefer-a-bindable-property rule; only navigateBack, which has no bindable equivalent, stays a control_by_id action on the popup` &&
+               ` slot. handleMessageViewPress's own navigateBack is not needed: popup_display rebuilds the fragment, so the MessageView always opens on its list page. // NOTE: the MessageItem template binds` &&
+               ` counter={COUNTER} 1:1, but no message in the sample sets a counter - a flat ABAP row serializes it as 0, which ListItemBaseRenderer renders exactly like an absent counter (it only renders a truthy` &&
+               ` one). The two ungrouped messages carry no groupName, which is what makes them appear outside the two Purchase Order groups.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.MessageView`                     name = `MessageViewWithGrouping`             class = `z2ui5_cl_ai_app_294` path = `src/01/b23/z2ui5_cl_ai_app_294.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.46`
+        notes = lv_text1 ) ).
+
+    result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.MultiComboBox`                   name = `MultiComboBoxGrouping`               class = `z2ui5_cl_ai_app_039` path = `src/01/b02/z2ui5_cl_ai_app_039.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
