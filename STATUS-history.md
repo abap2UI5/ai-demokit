@@ -7,6 +7,35 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## pr/popup-within-area implemented upstream — app 285 keeps the sample's point (2026-08-02)
+
+The gap app 285 declared one entry ago is closed in the framework rather than
+worked around here.
+
+**abap2UI5** gains `POPUP` as a fourth `CONTROL_GLOBAL` target, with
+`setWithinArea` as its only method and a new `within` argument kind: a control
+id resolves to the **control** (which `Popup.convertWithin` dereferences when a
+popup opens, so the area survives a re-render in between), and an **empty**
+argument passes `null` — the documented form that releases the restriction.
+The module is resolved lazily like `THEMING`, because `sap/ui/core/Popup`
+exists on every release but `setWithinArea` is @since 1.89: an older runtime
+then hits the existing *"not available"* guard instead of failing the whole
+component load. Three JS unit specs cover the three paths.
+
+**App 285** wires it and its `IMPROVISED` deviation becomes a `NOTE`. One
+ordering fact came out of it and is now in CAPABILITIES: a **follow-up action
+runs AFTER the popup of the same round-trip has opened**, so the within area
+cannot be set in the press handler that opens the popover — it is set once
+together with the view. For this app that is behaviour-identical (it opens no
+other popup), and the `afterClose` release goes with it.
+
+**The linter** needed the same round: its `GLOBAL_TARGETS` is a hand-maintained
+copy of the framework's whitelist, so until it followed, it reported the
+correct new wire as an `invalid-frontend-action` — the silent-breaking-change
+direction its own AGENTS note warns about. The ai-demokit pin now points at
+that linter commit; it is a **feature-branch SHA and must become a main SHA**
+before this change is merged.
+
 ## The render gate was half blind — two model defects, and app 240's skip (2026-08-02)
 
 Running the new linter over the corpus (the downstream check) found two

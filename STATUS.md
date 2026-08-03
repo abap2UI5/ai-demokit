@@ -17,7 +17,7 @@ TRAINING.md; for what abap2UI5 can express see CAPABILITIES.md._
 |---|---|
 | Ports | **284** sidecars in `meta/` (src/01: 169 · src/02: 67 · src/03: 18 · src/04: 19 · src/05: 11) |
 | Status ladder | 75 `generated` · 146 `reviewed` · 63 `checked` (live-verified) |
-| Deviations | 4 DROPPED_171 · 133 IMPROVISED · 35 LIVE_TEST · 418 NOTE · 118 POST_171 |
+| Deviations | 4 DROPPED_171 · 132 IMPROVISED · 35 LIVE_TEST · 419 NOTE · 118 POST_171 |
 | Open LIVE_TESTs | **35 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
 | Declared gate skips | 7 structural-diff · 2 render-smoke (each re-verified per run — a stale skip FAILS) |
 | Out-of-scope ported samples | `z2ui5_cl_ai_app_121 (sap.m.sample.UploadSet — deprecated)` · `z2ui5_cl_ai_app_136 (sap.f.sample.SidePanelSingle — control @since 1.107)` · `z2ui5_cl_ai_app_141 (sap.ui.core.sample.InvisibleMessage — control @since 1.78)` · `z2ui5_cl_ai_app_165 (sap.f.sample.ProductSwitchNavigation — control @since 1.72)` · `z2ui5_cl_ai_app_203 (sap.m.sample.OverflowToolbarTokenizer — control @since 1.139)` — all decided KEEP permanently 2026-07-30 (per-app rationale in ui5/scope-exceptions.json, revertible); the source-backed scope gate stays hard for NEW undecided entries |
@@ -35,12 +35,16 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   --out ui5/properties.json`), so there is one metadata parser in the ecosystem
   and the snapshot still matches `ui5/universe.json`.release. Both pending
   items are settled:
-  - **The dependency is pinned to a linter main SHA** —
-    `github:abap2UI5/linter#10c700b4` (the merge of the feature branch it used
-    to point at). *Follow-up:* the two rules added on 2026-08-02
-    (`date-type-without-source`, `frontend-action-unknown-id`) are on a linter
-    feature branch; bump the pin to their main SHA once merged, and expect no
-    corpus movement (both measure 0 findings here).
+  - **The dependency is pinned by SHA.** It briefly pointed at the linter main
+    SHA `10c700b4`; it now points at **`ca9de60`, a linter FEATURE-BRANCH
+    commit**, because the corpus needs the three rules added on 2026-08-02
+    (`date-type-without-source`, `frontend-action-unknown-id`,
+    `relative-binding-without-context`) *and* its knowledge of abap2UI5's new
+    `POPUP.setWithinArea` target, without which app 285's correct wire is
+    reported as an `invalid-frontend-action`. **This pin must become a main
+    SHA before this change is merged** (linter AGENTS.md carries the same
+    rule); expect no corpus movement from the bump — all three rules measure
+    0 findings here.
   - **The stale scope exception is gone.** The regenerated snapshot dropped the
     two false deprecations of the old parser (`sap.f.semantic.SemanticPage`,
     `sap.f.DynamicPageTitle` — a file-level `@deprecated` JSDoc block sitting

@@ -5,15 +5,16 @@
   "file": "src/01/b20/z2ui5_cl_ai_app_285.clas.abap",
   "batch": "b20",
   "audit": {
-    "frontend_action": false,
-    "event_t_arg": true
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "control_global POPUP setWithinArea, set once with the view"
   },
   "status": "generated",
   "checked": null,
   "deviations": [
     {
-      "type": "IMPROVISED",
-      "what": "the sample's whole point is lost: every handler calls Popup.setWithinArea(this.byId('withinArea')) before opening, which confines the popover to the grey VBox instead of the viewport, and handleAfterClose resets it with Popup.setWithinArea(null). sap.ui.core.Popup is a static module, not a control, so neither reach is expressible - CONTROL_GLOBAL knows only MESSAGE_TOAST / BUSY_INDICATOR and CONTROL_BY_ID addresses controls. The three popovers therefore open against the viewport, and the Popover.afterClose attribute of all three is dropped (it had no other job). Filed as the framework request pr/popup-within-area; the VBox keeps its id withinArea so the port needs no change once that lands."
+      "type": "NOTE",
+      "what": "the sample's point - Popup.setWithinArea(this.byId('withinArea')), which confines every popup to the grey VBox instead of the viewport - is reproduced through the CONTROL_GLOBAL target POPUP with the method setWithinArea (added to abap2UI5 for this port; the pr/popup-within-area request is implemented). Two differences to the original wiring, both without visible effect here: it is set ONCE together with the view instead of in each press handler, because a follow_up_action runs AFTER the popover of the same round-trip has already opened - and the Popover.afterClose handler of all three popovers, whose only job was Popup.setWithinArea(null), is therefore dropped. This app opens no other popup, so a permanently set area behaves exactly like the per-press one. Needs UI5 >= 1.89 for setWithinArea."
     },
     {
       "type": "NOTE",

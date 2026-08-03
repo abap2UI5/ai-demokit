@@ -103,7 +103,12 @@ browser things: `popup_close`, `popover_close`, `open_new_tab`,
 `*_nav_container_to` per view slot, `z2ui5` (call registered custom JS).
 Newest (branch, pending release): the generic **`cs_event-control_global`** /
 **`cs_event-control_by_id`** — call a *whitelisted* method on a global object
-(MessageToast, MessageBox, BusyIndicator, Theming) or on a control resolved
+(MessageToast, MessageBox, BusyIndicator, Theming, and since 2026-08-02
+**`POPUP.setWithinArea`** — confine every popup to the control whose id is
+passed instead of to the window, an empty argument releases it again; needs
+UI5 >= 1.89, pr/popup-within-area implemented, app 285. Note the ordering: a
+follow-up action runs AFTER the popup of the same round-trip has opened, so
+the area has to be set on an earlier round-trip) or on a control resolved
 by id (`to [transitionName]`, `back`, `focus`, `scrollToIndex`, `scrollTo`,
 since 2026-07-18 also `open [pageKey]`, `close`, `setExpanded` —
 pr/control-call-whitelist —, since 2026-07-19 `goToStep` plus the

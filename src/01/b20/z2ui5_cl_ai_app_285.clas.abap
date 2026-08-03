@@ -99,6 +99,14 @@ CLASS z2ui5_cl_ai_app_285 IMPLEMENTATION.
 
     client->view_display( view->stringify( ) ).
 
+    " Popup.setWithinArea confines every popup to the grey VBox instead of the
+    " viewport - the sample's point. The original re-sets it in each press
+    " handler and releases it in afterClose; here it is set once with the view,
+    " because a follow-up action runs AFTER the popover of the same round-trip
+    " has opened. This app opens no other popup, so the effect is the same.
+    client->follow_up_action( val   = client->cs_event-control_global
+                              t_arg = VALUE #( ( `POPUP` ) ( `setWithinArea` ) ( `withinArea` ) ) ).
+
   ENDMETHOD.
 
 
