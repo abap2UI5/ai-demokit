@@ -7,6 +7,36 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## The render gate was half blind — two model defects, and app 240's skip (2026-08-02)
+
+Running the new linter over the corpus (the downstream check) found two
+defects in its **reconstructor** that had been cancelling each other out, and
+they concern this repo's own conventions:
+
+- A `DATA t_x TYPE ty_t_x.` — the **named** table type this repo's newer ports
+  write (`TYPES ty_t_x TYPE STANDARD TABLE OF ty_s_x.`) — was modelled as a
+  **scalar**. The render gate then rendered an empty aggregation for such a
+  port and **never instantiated its row template**, so nothing inside it was
+  ever checked. The older inline `DATA t_x TYPE STANDARD TABLE OF ty_s_x` form
+  was fine, which is why this survived.
+- Fixing that surfaced the second: an **unseeded** table (one filled in code,
+  `t_pages = t_company.`) was given an invented all-empty row in the *render*
+  model, which fails strict validation on the first enum property — app 100's
+  `"" is of type string, expected sap.m.AvatarShape` was the harness's own row,
+  not the port. Unseeded tables are now empty for the renderer and a declared
+  row in the shape, the same split scalars already had.
+
+Both fixed upstream in the linter. Net effect here: the render gate now
+actually sees the row templates of every named-table-type port.
+
+**App 240 (`CalendarLegendNavigation`) declares a `render_smoke` skip.** Its 20
+`DateTypeRange` rows are computed in `model_init` (a `DO` loop over `sy-datum`
+into `VALUE #( BASE t_special )`), so a static reconstruction cannot resolve
+`START_DATE`; `Formatter.DateCreateObject` then gets `undefined` and
+`XMLView.create` fails with *Date must be a JavaScript or UI5Date date object*.
+At runtime every row carries a real ISO date. The skip is re-verified against
+the render each run, so it cannot outlive the reason.
+
 ## Batch b20 continued (285) — the flattened-element-binding trap becomes a rule (2026-08-02)
 
 **285 `sap.m.sample.PopoverWithinArea`** (`sap.m.Popover`): three
