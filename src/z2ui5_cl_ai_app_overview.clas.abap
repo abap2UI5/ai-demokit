@@ -2592,7 +2592,14 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.m`              control = `sap.m.Page`                            name = `PageStandardClasses`                 class = `z2ui5_cl_ai_app_089` path = `src/01/b11/z2ui5_cl_ai_app_089.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        notes = `NOTE: element binding kept 1:1 - a one-record structure /S_PRODUCT instead of {/ProductCollection/0}; the IconTabBar expanded stays bound to {device>/isNoPhone} (runtime device model).` ) ).
+        notes = `NOTE: element binding kept 1:1 - a one-record structure /S_PRODUCT instead of {/ProductCollection/0}; the IconTabBar expanded stays bound to {device>/isNoPhone} (runtime device model).` )
+      ( module = `sap.m`              control = `sap.m.Panel`                           name = `PanelBackgroundDesign`               class = `z2ui5_cl_ai_app_292` path = `src/01/b23/z2ui5_cl_ai_app_292.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.16`
+        notes = `NOTE: the Select's change attribute is dropped, and with it the whole controller. onBackgroundDesignChange only reads the selected key and pushes it into the panel with setBackgroundDesign - both ends` &&
+                 ` are bindable properties, so Select.selectedKey and Panel.backgroundDesign bind the SAME field: the Select writes it, the Panel reads it, and no event and no round-trip are needed at all` &&
+                 ` (prefer-a-bindable-property, linter rule settable-property-via-action). The class has no on_event and no model_init; the initial Solid comes from the field's own VALUE.` ) ).
 
     lv_text1 = `NOTE: the original controller toggles the third panel imperatively (onOverflowToolbarPress -> oPanel.setExpanded(!oPanel.getExpanded())). The port binds Panel.expanded two-way instead and only flips` &&
                ` the flag server-side, per the prefer-a-bindable-property rule: the state then lives in the model, where it survives a view rebuild and a draft restore, and the control's own expand/collapse writes` &&

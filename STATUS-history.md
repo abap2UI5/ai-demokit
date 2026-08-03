@@ -7,7 +7,7 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
-## Batch b23 (291) — three levels of bound aggregation (2026-08-02)
+## Batch b23 (291/292) — three levels of bound aggregation, and a port with no controller left (2026-08-02)
 
 **291 `sap.m.sample.NotificationListGroupBindings`** (`sap.m.NotificationListGroup`).
 The deepest binding structure in the corpus so far: `NotificationList.items`
@@ -24,6 +24,15 @@ own title travels as a `$`-prefixed event arg and the handler deletes that row
 from every group before pushing the model back. Worth noting for the next port
 of this shape — a close/remove handler is the one member of the toast family
 that cannot stay on the client, because the model is the truth.
+
+**292 `sap.m.sample.PanelBackgroundDesign`** is the opposite extreme, and worth
+recording as the shape to aim for: its controller reads the Select's key and
+pushes it into the Panel with `setBackgroundDesign( )`. Both ends are
+**bindable properties**, so `Select.selectedKey` and `Panel.backgroundDesign`
+bind the *same* field — the Select writes it, the Panel reads it. No event, no
+round-trip, no `on_event`, no `model_init`; the initial `Solid` is the field's
+own `VALUE`. The `change` attribute is dropped and declared, because there is
+nothing left for it to do.
 
 `templateShareable: true` is kept verbatim on all four bindings and declared
 by policy: it is a binding-info parameter, not a control member, so no gate
