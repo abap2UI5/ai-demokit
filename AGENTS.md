@@ -10,13 +10,22 @@ Single source of truth for agents working on **abap2UI5 ai-demokit**.
 > **Never put business logic in the frontend** — no computation, unit
 > conversion, thresholds, classification or validation in a frontend formatter,
 > expression binding or custom JS. Compute the result in ABAP and bind the
-> finished value. A *formatter* is presentation-only (a date/number format, an
-> icon glyph); a value like an `ObjectNumber` `state` derived from a measure +
-> thresholds **is business logic** and must be computed server-side into a model
-> field, then bound directly (`state="{WEIGHT_STATE}"`). When a UI5 sample does
-> such logic in its `Formatter.js`, the faithful abap2UI5 port moves it to
-> `model_init` and declares the difference — a *more* correct architecture, not
-> a deviation from intent (apps 009/010/022/092).
+> finished value. When a UI5 sample does such logic in its `Formatter.js`, the
+> faithful abap2UI5 port moves it to `model_init` and declares the difference —
+> a *more* correct architecture, not a deviation from intent (apps
+> 009/010/022/092).
+>
+> **The curated formatter module is not the escape hatch.** It exports exactly
+> four functions — `DateCreateObject`, `DateAbapDateToDateObject`,
+> `DateAbapDateTimeToDateObject`, `expandInlineIcons` — because those are the
+> only two things the backend physically cannot produce: a JS `Date` for an
+> object-typed property, and an icon-font glyph of the loaded theme. Everything
+> else, *including* rounding a number, joining fields into a string and mapping
+> a business status to a `ValueState`/icon, is computed in ABAP and bound
+> (`state="{WEIGHT_STATE}"`). Those five were shipped once and removed again;
+> `pattern-lint` (`uncurated-formatter`) fails any binding naming a function
+> outside the four, because UI5 resolves an unknown name to nothing and the
+> cell just renders blank.
 
 ---
 
