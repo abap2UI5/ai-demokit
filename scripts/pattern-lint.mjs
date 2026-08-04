@@ -15,7 +15,8 @@
  * unescaped/collapsed-brace-in-style, invalid-frontend-action
  * (control-by-id-empty-view-slot), binding-type-mismatch
  * (numeric-bound-as-string), relative-binding-without-context
- * (relative-bind-on-root-field) and duplicate-for-iterator. Do NOT re-add a
+ * (relative-bind-on-root-field), duplicate-for-iterator, ui5-internal-access
+ * (private-mproperties) and commercial-ui5-host. Do NOT re-add a
  * rule here that the linter can express — one rule set, two enforcement
  * points was exactly how the editor and CI drifted apart before.
  *
@@ -43,12 +44,6 @@ const BASELINE = new Set([]);
 const lineOf = (content, idx) => content.slice(0, idx).split('\n').length;
 
 const RULES = [
-  {
-    id: 'private-mproperties',
-    level: 'error',
-    doc: 'reads private UI5 internals via mProperties — fragile across UI5 patches; restructure to a two-way binding or a public parameter — CAPABILITIES.md "Events"',
-    find: grepLines(/mProperties/),
-  },
   {
     id: 'event-arg-default-index',
     level: 'error',
@@ -84,12 +79,6 @@ const RULES = [
       }
       return [];
     },
-  },
-  {
-    id: 'commercial-ui5-host',
-    level: 'error',
-    doc: 'URL points at the commercial SAPUI5 host — always use sdk.openui5.org — AGENTS §5',
-    find: grepLines(/ui5\.sap\.com|hana\.ondemand\.com/),
   },
   {
     id: 'abapdoc-html-tag',

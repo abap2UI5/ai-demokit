@@ -54,6 +54,19 @@ Corpus side:
   matching), and a red nightly now opens/updates an issue
   (`e2e nightly is red`) instead of hiding in the Actions tab.
 
+A second linter round followed the same day (pin → `5b17036`): the 043
+BINDING_ERROR became the generic rule `binding-to-nonpublic`; the
+"enum values newer than 1.71 are invisible" residual limit closed as
+`enum-value-too-new` (its first corpus run *confirmed* app 028's two
+hand-written frameType POST_171 declarations — the rule now checks what a
+human could only declare); `unknown-binding-path` covers `path: '/X'` and
+`${/X}` forms (the `/T_ITEMS/9/...` row-index trap died in the corpus
+measurement); pattern-lint's last two generic rules (`private-mproperties`,
+`commercial-ui5-host`) moved over; and `view_gates`' render leg got the
+linter's new page pool. Linter-side the metadata generator dropped from
+~3 minutes to ~1.5 s (an unanchored regex was 167 of 172 seconds), which
+also makes the weekly `generate_result` snapshot refresh here cheaper.
+
 ## The curated formatter shrinks to a marshalling layer, and a gate holds the line (2026-08-04)
 
 A review of the framework's `model/formatter.js` against the thin-frontend

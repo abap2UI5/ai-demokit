@@ -37,17 +37,21 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   Both pending
   items are settled:
   - **The dependency is pinned by SHA.** As of 2026-08-04 it points at
-    **`15a07b8`, a linter FEATURE-BRANCH commit** (the previous feature-branch
+    **`5b17036`, a linter FEATURE-BRANCH commit** (the previous feature-branch
     pin `10920f7` is meanwhile part of linter main via its PR #9): the corpus
-    now gates the seven 2026-08-04 rules too (`popover-display-val`,
+    now gates the eleven 2026-08-04 rules too (`popover-display-val`,
     `uncurated-formatter`, `hardcoded-binding-path`,
     `missing-view-display-on-navigated`, `separate-lifecycle-ifs`,
-    `duplicate-for-iterator` gating; `unknown-event-parameter` as a budgeted
-    advisory) — the generic half of pattern-lint moved there in the same
-    change. **This pin must become a main SHA before this change is merged**
-    (linter AGENTS.md carries the same rule); corpus movement from the bump:
-    0 new violations, +1 advisory (app 268's forwarded `colorString`, inside
-    the ratchet budget).
+    `duplicate-for-iterator`, `binding-to-nonpublic`, `ui5-internal-access`,
+    `commercial-ui5-host` gating; `unknown-event-parameter` as a budgeted
+    advisory; `enum-value-too-new` in `VERSION_TYPES`, POST_171-excusable) —
+    pattern-lint's whole generic half moved there across the two rounds.
+    **This pin must become a main SHA before this change is merged**
+    (linter AGENTS.md carries the same rule); corpus movement from the bumps:
+    0 new violations (app 028's two `enum-value-too-new` findings land on its
+    existing frameType POST_171 declarations — the rule's first run confirmed
+    a hand-written audit), +1 advisory (app 268's forwarded `colorString`,
+    inside the ratchet budget).
   - **The stale scope exception is gone.** The regenerated snapshot dropped the
     two false deprecations of the old parser (`sap.f.semantic.SemanticPage`,
     `sap.f.DynamicPageTitle` — a file-level `@deprecated` JSDoc block sitting

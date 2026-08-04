@@ -50,7 +50,7 @@ const MIN_UI5 = '1.71';
 /* Version findings are the ones a deviation may excuse: using a member the
  * original sample uses is fidelity, and the porting policy allows it as long
  * as the sidecar names it. Everything else is a defect, not a choice. */
-const VERSION_TYPES = new Set(['control-too-new', 'member-too-new', 'event-parameter-too-new']);
+const VERSION_TYPES = new Set(['control-too-new', 'member-too-new', 'event-parameter-too-new', 'enum-value-too-new']);
 
 /* Reported, never gating per finding: rules the linter grew after this corpus
  * was built. They are worth seeing on every run - an icon-only button really
