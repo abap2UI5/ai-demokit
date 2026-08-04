@@ -20,8 +20,8 @@
       "what": "sap.f.DynamicPage.breakpointChange (@since 1.147, incl. its currentRange/currentWidth parameters) is the whole point of this sample and is wired 1:1 since 2026-07-30 as a view attribute (an added attr - the original attaches it imperatively in onInit via attachBreakpointChange): BREAKPOINT_CHANGE transports ${$parameters>/currentRange} and ${$parameters>/currentWidth}, the backend maps Phone->M / Tablet->L / else XL into the two-way bound Avatar displaySize ({/AVATAR_SIZE}, an added attribute on both Avatars, seeded XL) and toasts Media Range: <range> (<width>px) exactly like onBreakpointChange. @since verified fork-openui5/src/sap.f/src/sap/f/DynamicPage.js:315. Requires a UI5 release >= 1.147; on older releases the event never fires and the Avatars keep the seeded XL (the property gate is blind to sap.f event params)."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "showFooter is two-way bound ({/SHOW_FOOTER}, default true) and the Toggle Footer button flips it on a round-trip (view_model_update) - the faithful abap2UI5 form of the controller's setShowFooter(!getShowFooter()); the scalar literal showFooter=\"true\" -> binding is not a structural diff. The Home/Examples/Avatar presses raise client-composed MessageToasts via _event_client control_global MESSAGE_TOAST (roundtrip-free, apps 005/060). Both the footer round-trip and the toast wiring are unverified in a running system."
+      "type": "NOTE",
+      "what": "live-verified 2026-08-04 (nightly e2e interaction): showFooter is two-way bound ({/SHOW_FOOTER}, default true) and the Toggle Footer button flips it on a round-trip (view_model_update) - the faithful abap2UI5 form of the controller's setShowFooter(!getShowFooter()); the scalar literal showFooter=\"true\" -> binding is not a structural diff. The Home/Examples/Avatar presses raise client-composed MessageToasts via _event_client control_global MESSAGE_TOAST (roundtrip-free, apps 005/060). Both the footer round-trip and the toast wiring are unverified in a running system."
     },
     {
       "type": "NOTE",

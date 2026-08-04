@@ -16,8 +16,8 @@
       "what": "The Slider's `liveChange` attribute is dropped (the expression binding needs no event). **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): one keyboard step on the Slider moves the containerLayout (VerticalLayout) width to 99% with no round-trip - the expression binding replaces onSliderMoved completely. Residual: the BlockLayout's own reflow inside the resized layout."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The SegmentedButton.selectedKey and the BlockLayout.background are both two-way bound to the same /SELECTEDBACKGROUND field, so changing the segmented button updates the BlockLayout background entirely on the client with no round-trip (the app-048/003 shared-binding idiom, matching the original {/selectedBackground} on both). The field is seeded with the enum default Default (the original leaves /selectedBackground undefined; an empty string would fail BlockBackgroundType validateProperty). Live sync unverified."
+      "type": "NOTE",
+      "what": "live-verified 2026-08-04 (nightly e2e interaction): The SegmentedButton.selectedKey and the BlockLayout.background are both two-way bound to the same /SELECTEDBACKGROUND field, so changing the segmented button updates the BlockLayout background entirely on the client with no round-trip (the app-048/003 shared-binding idiom, matching the original {/selectedBackground} on both). The field is seeded with the enum default Default (the original leaves /selectedBackground undefined; an empty string would fail BlockBackgroundType validateProperty). Live sync unverified."
     },
     {
       "type": "NOTE",

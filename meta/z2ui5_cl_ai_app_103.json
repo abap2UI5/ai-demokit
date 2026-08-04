@@ -24,8 +24,8 @@
       "what": "The StandardListItem icon binds ProductPicUrl, which is derived in ABAP from the product id (the mock's test-resources/<id>.jpg) built from a shared base pointing at the OpenUI5 host, like app 006's image flattening. The full 123-row /ProductCollection is inlined."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The per-button dialog configuration (multi/growing/remember/clear/confirm text/draggable/resizable), the client-side search filter and the value-help selection need an in-system check; machine gates only verify the views are valid. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the 'Show Select Dialog' popup opens with the 'Select Product' title; the per-button variants, search and copy-back remain unexercised."
+      "type": "NOTE",
+      "what": "live-verified 2026-08-04 (nightly e2e interaction): The per-button dialog configuration (multi/growing/remember/clear/confirm text/draggable/resizable), the client-side search filter and the value-help selection need an in-system check; machine gates only verify the views are valid. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the 'Show Select Dialog' popup opens with the 'Select Product' title; the per-button variants, search and copy-back remain unexercised."
     },
     {
       "type": "POST_171",

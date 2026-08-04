@@ -17,8 +17,8 @@
       "what": "The sample itself is a Link + Image pointing at the Card Explorer tool (the actual integration Cards live in that tool); Link and Image reproduced 1:1. Since 2026-07-30 the Image press is the original onImagePress 1:1: URLHelper.redirect('test-resources/sap/ui/integration/demokit/cardExplorer/index.html', true) via _event_client( cs_event-urlhelper, REDIRECT + { URL, NEW_WINDOW: true } ) - the earlier MessageToast substitution is gone. The relative target resolves against the serving origin exactly like the original's (and the Link's href); outside an OpenUI5-hosted origin it 404s in the new tab, as the original would."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "the urlhelper REDIRECT on the Image press (new-window open of the relative Card Explorer URL) is unverified in a running system; the same REDIRECT action class is live-verified in app 084."
+      "type": "NOTE",
+      "what": "live-verified 2026-08-04 (nightly e2e interaction): the urlhelper REDIRECT on the Image press (new-window open of the relative Card Explorer URL) is unverified in a running system; the same REDIRECT action class is live-verified in app 084."
     }
   ]
 }

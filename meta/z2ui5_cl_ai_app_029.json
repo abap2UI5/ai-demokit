@@ -24,8 +24,8 @@
       "what": "the NumericContent press ('Fire press' MessageToast) is wired roundtrip-free via client->_event_client( cs_event-control_global, MESSAGE_TOAST/show ) - the original's client-side MessageToast.show 1:1; the app is now init-only (no on_event). An unused xmlns:l namespace was dropped."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "the scroll-step selection and the tile-press toast were switched from server round-trips to client-side expression binding / _event_client( control_global ) on 2026-07-22 - re-verify in a running system that selecting an item/px still changes the arrow scroll step on both containers and that pressing a NumericContent still toasts 'Fire press'. **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): pressing the first NumericContent tile raises its client-composed toast ('Fire press'). The scroll-step Select (item/px) is NOT covered - it sits in the sample's option area and needs a human check."
+      "type": "NOTE",
+      "what": "live-verified 2026-08-04 (nightly e2e interaction): the scroll-step selection and the tile-press toast were switched from server round-trips to client-side expression binding / _event_client( control_global ) on 2026-07-22 - re-verify in a running system that selecting an item/px still changes the arrow scroll step on both containers and that pressing a NumericContent still toasts 'Fire press'. **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): pressing the first NumericContent tile raises its client-composed toast ('Fire press'). The scroll-step Select (item/px) is NOT covered - it sits in the sample's option area and needs a human check."
     }
   ]
 }
