@@ -7,6 +7,66 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## The curated formatter shrinks to a marshalling layer, and a gate holds the line (2026-08-04)
+
+A review of the framework's `model/formatter.js` against the thin-frontend
+principle, prompted by the question whether shipping formatters contradicts it
+at all. The answer turned out to be **not the mechanism, but half the content**.
+
+Sorting the nine exports by *why* they cannot live in ABAP splits them cleanly:
+
+- **`DateCreateObject` / `DateAbapDateToDateObject` /
+  `DateAbapDateTimeToDateObject`** — not logic at all, **marshalling**. UI5
+  properties typed `object` demand a real JS `Date` and JSON has no date type,
+  so the ABAP model physically cannot carry one; a string binding crashes view
+  creation. The conversion *has* to happen at the binding.
+- **`expandInlineIcons`** — the glyph and font family come from the loaded
+  theme's icon font via `IconPool`. Hardcoding a codepoint in ABAP would push a
+  frontend detail into the backend: the thin-frontend rule **in reverse**.
+- **`round2DP`, `dimensions`** — ABAP rounds and concatenates. They existed
+  only to keep a port's binding structure 1:1 with the original, which is a
+  porting-fidelity motive, not an architectural one.
+- **`stockStatusState`, `stockStatusIcon`, `deliveryStatusState`** — lookup
+  tables from a business status (`Available`, `Shipped`) to a `ValueState` and
+  an icon. Presentation by the letter, but it put a demo domain's **vocabulary
+  into the framework**, and mapping a status to a visual is classification.
+
+The last five were **removed** (abap2UI5, 2026-08-04), following
+`weightState`/`weightStateByValue` which went 2026-07-22 for the same reason.
+The corpus paid nothing: of 293 ports, **7** bind a formatter at all — 40×
+`DateCreateObject`, 5× `expandInlineIcons`, and **zero** uses of the five that
+went. Meanwhile **27** ports carry a thin-frontend note for logic they moved
+out of the original's `Formatter.js`. The principle was already being enforced
+by hand in the ports; the framework module was the one place lagging behind it.
+
+**What actually changed, so this does not drift back:**
+
+- The module header now states three **admission criteria** — one value only;
+  frontend-only for a technical reason (`js-type` | `icon-font` |
+  `locale-theme`); no domain vocabulary — and
+  `.github/scripts/formatter-scope-gate.mjs` enforces the two a machine can
+  check: the export surface must match a manifest where every entry names its
+  reason, and no `ValueState` or `sap-icon://` **string literal** may appear
+  (comments and regexes are not scanned, so prose may still discuss them).
+- **New pattern-lint rule `uncurated-formatter`** here: a
+  `formatter: 'Formatter.<fn>'` or `Formatter.<fn>(` naming anything outside
+  the four curated functions is an error. This is the failure mode that made
+  the review urgent — two abap2UI5 samples (450, 453) still bound
+  `weightState` / the removed pack **weeks after** it was deleted, and nothing
+  caught it: UI5 resolves an unknown formatter name to nothing, so the property
+  is never set and the cell renders **blank, with no error**. Both samples were
+  rebuilt (450 now demonstrates the DATS/TIMS helpers, 453 the same table
+  computed in ABAP).
+- The call form deliberately allows **no space before the paren**
+  (`Formatter.x(`), which is what keeps deviation prose like "its frontend
+  `Formatter.js` (weightState: …)" from matching — four such false positives in
+  the generated overview class during development.
+
+The reusable criterion, from app 294 two days earlier and now the module's
+criterion 1: *a formatter that reads more than the one value it formats is
+business logic wearing a formatter's name.*
+
+
 ## 293/294 — an empty deviations array, and three formatters that were business logic (2026-08-02)
 
 **293 `sap.uxap.sample.ObjectPageSubSectionBackground`** (`sap.uxap.ObjectPageSubSection`)

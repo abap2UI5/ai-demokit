@@ -46,6 +46,16 @@ deviation**: control-returning factories (`groupHeaderFactory`, item factories)
 and app-authored JS formatter functions outside the curated `model/formatter.js`
 pack (business logic goes to `model_init`, per the thin-frontend principle).
 
+The curated pack is exactly **four** functions — `DateCreateObject`,
+`DateAbapDateToDateObject`, `DateAbapDateTimeToDateObject`,
+`expandInlineIcons` — a JS `Date` and an icon-font glyph being the only things
+ABAP cannot produce. Anything else the original's `Formatter.js` does
+(rounding, joining fields, a status → `ValueState`/icon lookup) is computed in
+`model_init`; five such functions were shipped once and removed again. A
+binding naming a function outside the four fails `pattern-lint`
+(`uncurated-formatter`) — UI5 resolves an unknown name to nothing and the cell
+renders blank with no error at all.
+
 #### Worked references
 
 > **A reference shows an *idiom*, not ground truth. When a nearby port conflicts

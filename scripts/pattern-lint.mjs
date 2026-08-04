@@ -367,6 +367,34 @@ const RULES = [
     },
   },
   {
+    id: 'uncurated-formatter',
+    level: 'error',
+    doc: "a `formatter: 'Formatter.<fn>'` / `z2ui5.Formatter.<fn>` binding naming a function the framework's curated module does not export. UI5 resolves the string at binding time: an unknown name silently yields no value, so the property is simply never set and the cell renders blank - no error, nothing red in CI. The curated set is deliberately tiny and shrinks when a function turns out to be business logic (the demo kit pack - round2DP, dimensions, stockStatusState, stockStatusIcon, deliveryStatusState - and weightState/weightStateByValue before it were all REMOVED, which broke two samples exactly this way). If the value the port needs is not in the list below, it is not a formatting problem: compute it in model_init and bind the finished field (state=\"{MY_STATE}\"). Source of truth: abap2UI5 app/webapp/model/formatter.js, gated there by .github/scripts/formatter-scope-gate.mjs",
+    find(content) {
+      // the complete curated export surface; keep in sync with
+      // abap2UI5 app/webapp/model/formatter.js (its own gate guards that end)
+      const CURATED = new Set([
+        'DateCreateObject',
+        'DateAbapDateToDateObject',
+        'DateAbapDateTimeToDateObject',
+        'expandInlineIcons',
+      ]);
+      const out = [];
+      // both wirings: the core:require alias and the published global, in
+      // both forms - the `formatter:` binding-info key and a call inside an
+      // expression binding. The call form allows NO space before the paren,
+      // which is what keeps prose like "its frontend Formatter.js (weightState:
+      // ...)" in a deviation note from matching.
+      for (const m of content.matchAll(/(?:z2ui5\.)?Formatter\.(\w+)\(|formatter:\s*'(?:z2ui5\.)?Formatter\.(\w+)'/g)) {
+        const fn = m[1] || m[2];
+        if (!CURATED.has(fn)) {
+          out.push({ line: lineOf(content, m.index), text: `Formatter.${fn} is not in the curated module - compute it in ABAP and bind the finished field` });
+        }
+      }
+      return out;
+    },
+  },
+  {
     id: 'duplicate-for-iterator',
     level: 'error',
     doc: 'the same `FOR <n> = …` iterator name used twice in ONE method — the 702 downport materializes each as `DATA <n> TYPE i`, so the downported class (and the e2e transpiler) fails with "Variable name already defined". Use distinct names (i, j, k) per VALUE block; app 234, 2026-07-26',
