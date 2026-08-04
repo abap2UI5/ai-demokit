@@ -6,6 +6,19 @@
  * CAPABILITIES.md): once a mistake is understood, it becomes a rule so it can
  * never be merged again — regardless of whether the generator repeats it.
  *
+ * SCOPE (since 2026-08-04): only CORPUS-POLICY rules live here — method
+ * order, formatting, sidecar conventions, and lessons no generic linter can
+ * know. Everything generic moved into @abap2ui5/linter, where every consumer
+ * sees it and view-gates gates it for this corpus: popover-display-val,
+ * uncurated-formatter, hardcoded-binding-path, obsolete-binder
+ * (obsolete-bind-edit), event-arg-unresolved (event-arg-bare-brace),
+ * unescaped/collapsed-brace-in-style, invalid-frontend-action
+ * (control-by-id-empty-view-slot), binding-type-mismatch
+ * (numeric-bound-as-string), relative-binding-without-context
+ * (relative-bind-on-root-field) and duplicate-for-iterator. Do NOT re-add a
+ * rule here that the linter can express — one rule set, two enforcement
+ * points was exactly how the editor and CI drifted apart before.
+ *
  * Levels: 'error' rules fail the run (exit 1) unless the exact file is listed
  * in BASELINE (a known, still-open backlog finding — see STATUS.md); 'warn'
  * rules are reported but never fail. When a baselined finding is fixed, its
@@ -27,114 +40,14 @@ const SRC = path.join(ROOT, 'src');
 // (138/143/145/146/148/150) were reworked, so the rule now stands on its own
 const BASELINE = new Set([]);
 
-// return the content of the parenthesized region starting at content[open] === '('
-function parenRegion(content, open) {
-  let depth = 0;
-  for (let i = open; i < content.length; i++) {
-    if (content[i] === '(') depth++;
-    else if (content[i] === ')' && --depth === 0) return content.slice(open + 1, i);
-  }
-  return content.slice(open + 1);
-}
-
 const lineOf = (content, idx) => content.slice(0, idx).split('\n').length;
 
 const RULES = [
-  {
-    id: 'popover-display-val',
-    level: 'error',
-    doc: 'popover_display imports `xml` (not `val`, unlike popup_display) — guessed-by-analogy `val =` does not compile; hold-out probe apps 607/613/617, 2026-07-19',
-    find(content) {
-      const out = [];
-      for (const m of content.matchAll(/popover_display\(\s*val\s*=/g)) {
-        out.push({ line: lineOf(content, m.index), text: m[0] });
-      }
-      return out;
-    },
-  },
-  {
-    id: 'control-by-id-empty-view-slot',
-    level: 'error',
-    doc: 'control_by_id t_arg carries an obsolete empty view slot as its 2nd element — the view now goes via the `view` parameter (get_event_client inserts it at index 2). Drop the ( `` ): otherwise it shifts the method into the wrong slot and the frontend logs "CONTROL_BY_ID: method \'\' not allowed". Correct form: ( `id` ) ( `method` ) ( params… ).',
-    find(content) {
-      const out = [];
-      const re = /control_by_id/g;
-      let m;
-      while ((m = re.exec(content))) {
-        const vi = content.indexOf('VALUE', re.lastIndex);
-        // only look inside the same call: bail if another statement starts first
-        if (vi === -1 || vi - re.lastIndex > 200) continue;
-        const open = content.indexOf('(', vi);
-        if (open === -1) continue;
-        const region = parenRegion(content, open);
-        const elems = [...region.matchAll(/\(\s*`([^`]*)`\s*\)/g)];
-        if (elems.length >= 2 && elems[1][1] === '') {
-          out.push({ line: lineOf(content, open), text: '( `' + elems[0][1] + '` ) ( `` ) …' });
-        }
-      }
-      return out;
-    },
-  },
-  {
-    id: 'event-arg-bare-brace',
-    level: 'error',
-    doc: 'event t_arg uses a bare `{COL}` — not resolved by get_event_arg; use the $-prefixed form (${COL}) — AGENTS §5, bit us in app 005',
-    find(content) {
-      const out = [];
-      const re = /t_arg\s*=/g;
-      let m;
-      while ((m = re.exec(content))) {
-        const open = content.indexOf('(', re.lastIndex);
-        if (open === -1) continue;
-        const region = parenRegion(content, open);
-        for (const lit of region.matchAll(/`([^`]*)`/g)) {
-          // a bare leading `{COL}` is the bug (unresolved binding); a pure
-          // positional placeholder `{0}` / conditional `{0?a:b}` is legitimate —
-          // it is the client-composed MessageToast/MessageBox template arg,
-          // filled from the following client-resolved values (a field name is
-          // never digits).
-          if (/^\{/.test(lit[1]) && !/^\{\d+[?}]/.test(lit[1])) {
-            out.push({ line: lineOf(content, open + lit.index), text: '`' + lit[1] + '`' });
-          }
-        }
-      }
-      return out;
-    },
-  },
   {
     id: 'private-mproperties',
     level: 'error',
     doc: 'reads private UI5 internals via mProperties — fragile across UI5 patches; restructure to a two-way binding or a public parameter — CAPABILITIES.md "Events"',
     find: grepLines(/mProperties/),
-  },
-  {
-    id: 'obsolete-bind-edit',
-    level: 'error',
-    doc: 'client->_bind_edit( is obsolete — always use _bind (two-way) — AGENTS §5',
-    find: grepLines(/->_bind_edit\(/),
-  },
-  {
-    id: 'hardcoded-binding-path',
-    level: 'error',
-    portsOnly: true,
-    doc: "an absolute binding path is hard-coded as text (`{/PATH}` or `path: '/PATH'`) — derive it from client->_bind( var ) (raw path: _bind( val = var path = abap_true )) so it moves with a variable rename; relative field bindings (`{FIELD}`) are the allowed exception (AGENTS §5 'Data binding & events'). An OData ENTITY path with a key predicate (`{/Products('4711')}`) in a port that switches its default model to an OData service is exempt: that path addresses the service, not an ABAP variable, so there is nothing to derive it from",
-    find(content) {
-      const out = [];
-      // a port whose default model IS an OData service (switch_default_model_path)
-      // binds elements by entity path — `{/EntitySet('key')}`. No ABAP member backs
-      // such a path, and a model path can never carry a key predicate, so the
-      // exemption stays tight to that one shape.
-      const odata = /switch_default_model_path/.test(content);
-      content.split('\n').forEach((l, i) => {
-        const t = l.trimStart();
-        if (t.startsWith('"') || t.startsWith('*')) return; // ABAP comment line
-        if (odata && /\{\/\w+\([^)]*\)\}/.test(l)) return;  // OData entity path
-        if (/\{\//.test(l) || /\bpath\s*:\s*'\//.test(l)) {
-          out.push({ line: i + 1, text: l.trim().slice(0, 90) });
-        }
-      });
-      return out;
-    },
   },
   {
     id: 'event-arg-default-index',
@@ -202,91 +115,6 @@ const RULES = [
     level: 'error',
     doc: 'bare `TYPE TABLE OF` gives an implicit default key — declare it explicitly as `TYPE STANDARD TABLE OF ... WITH EMPTY KEY` (AGENTS §8; slipped the abaplint defaultKey gate, which only catches explicit DEFAULT KEY, in app 034)',
     find: grepLines(/\bTYPE\s+TABLE\s+OF\b/),
-  },
-  {
-    id: 'numeric-bound-as-string',
-    level: 'error',
-    doc: 'a model field that is bound to a control and only ever assigned numeric literals is TYPE string — UI5 2.x strict-type validation rejects a string on a numeric property (Slider/RangeSlider/StepInput value); type it numerically (TYPE i / p / decfloat) — AGENTS §10, apps 053/045',
-    find(content) {
-      const out = [];
-      const decl = /^\s*DATA\s+(\w+)\s+TYPE\s+string\s*\.\s*$/gm;
-      let m;
-      while ((m = decl.exec(content))) {
-        const name = m[1];
-        if (!new RegExp(`_bind(?:_edit)?\\(\\s*${name}\\s*\\)`).test(content)) continue;
-        const asn = new RegExp(`\\b${name}\\s*=\\s*\`([^\`]*)\``, 'g');
-        let a, any = false, allNumeric = true;
-        while ((a = asn.exec(content))) {
-          any = true;
-          if (!/^-?\d+(\.\d+)?$/.test(a[1].trim())) { allNumeric = false; break; }
-        }
-        // string evidence beyond ABAP assignments: a non-numeric comparison in a
-        // UI5 { = } expression over the field (e.g. a selectedKey field compared
-        // `${ _bind( key ) } === 'px'`) proves it is genuinely a string, not a
-        // numeric property bound to a string. Without this the rule false-positives
-        // on a Select selectedKey whose only ABAP seed happens to be numeric.
-        const cmp = new RegExp(`_bind(?:_edit)?\\(\\s*${name}\\s*\\)[^|]*?===\\s*'([^']*)'`);
-        const cm = cmp.exec(content);
-        if (cm && !/^-?\d+(\.\d+)?$/.test(cm[1].trim())) allNumeric = false;
-        // …and the decisive one: the bind must actually reach a NUMERIC
-        // control property. `value` is a float on a Slider and a string on an
-        // Input, so the attribute name alone says nothing — the enclosing
-        // control decides (2026-08-01: apps 142/175 bind a ZIP code and a
-        // house number, both genuinely strings, to `Input value`; apps
-        // 206/209 format decimals into a text template). Only a hit in
-        // NUMERIC_PROPS is a defect.
-        if (!boundToNumericProp(content, name)) allNumeric = false;
-        if (any && allNumeric) {
-          out.push({ line: lineOf(content, m.index), text: `${name} TYPE string, bound, only numeric literals assigned` });
-        }
-      }
-      return out;
-    },
-  },
-  {
-    id: 'relative-bind-on-root-field',
-    level: 'error',
-    doc: 'a `{FIELD}` binding whose FIELD is a root-level DATA scalar of the class (and no row column) is RELATIVE and resolves against nothing / against the row — it renders empty in the running app. Bind the root field absolutely with client->_bind( field ) — AGENTS §5, apps 207 and 142/175/195/206/209/229/243 (2026-08-01)',
-    find(content) {
-      const out = [];
-      const scalars = new Map();
-      for (const m of content.matchAll(/^ {4}DATA\s+(\w+)\s+TYPE\s+(?![^.\n]*\bTABLE\b)[^.\n]+\.$/gm)) {
-        scalars.set(m[1].toUpperCase(), m[1]);
-      }
-      if (!scalars.size) return out;
-      // names that are columns of a row structure declared in the class — a
-      // relative binding on those is the correct form inside a template
-      const rowFields = new Set();
-      for (const blk of content.matchAll(/BEGIN OF[\s\S]*?END OF/g)) {
-        for (const c of blk[0].matchAll(/^\s+(\w+)\s+TYPE\b/gm)) rowFields.add(c[1].toUpperCase());
-      }
-      content.split('\n').forEach((l, i) => {
-        if (/^\s*"/.test(l)) return;
-        for (const lit of l.matchAll(/`([^`]*)`/g)) {
-          for (const b of lit[1].matchAll(/\{([A-Z][A-Z0-9_]*)\}/g)) {
-            const up = b[1];
-            if (!scalars.has(up) || rowFields.has(up)) continue;
-            out.push({ line: i + 1, text: `{${up}} is relative, but ${scalars.get(up)} is a root field — use client->_bind( ${scalars.get(up)} )` });
-          }
-        }
-      });
-      return out;
-    },
-  },
-  {
-    id: 'unescaped-brace-in-style-content',
-    level: 'error',
-    doc: 'literal { } inside a <style> content literal must be escaped as \\{ \\} — the XMLView binding parser reads unescaped braces in attribute values as a binding and crashes (render-smoke caught app 028; apps 026/031 were the same class)',
-    find(content) {
-      const out = [];
-      content.split('\n').forEach((l, i) => {
-        for (const m of l.matchAll(/`((?:[^`]|``)*)`/g)) {
-          if (!m[1].includes('<style>')) continue;
-          if (/(?<!\\)[{}]/.test(m[1])) out.push({ line: i + 1, text: m[1].slice(0, 80) });
-        }
-      });
-      return out;
-    },
   },
   {
     id: 'param-continuation-align',
@@ -366,83 +194,7 @@ const RULES = [
       return out;
     },
   },
-  {
-    id: 'uncurated-formatter',
-    level: 'error',
-    doc: "a `formatter: 'Formatter.<fn>'` / `z2ui5.Formatter.<fn>` binding naming a function the framework's curated module does not export. UI5 resolves the string at binding time: an unknown name silently yields no value, so the property is simply never set and the cell renders blank - no error, nothing red in CI. The curated set is deliberately tiny and shrinks when a function turns out to be business logic (the demo kit pack - round2DP, dimensions, stockStatusState, stockStatusIcon, deliveryStatusState - and weightState/weightStateByValue before it were all REMOVED, which broke two samples exactly this way). If the value the port needs is not in the list below, it is not a formatting problem: compute it in model_init and bind the finished field (state=\"{MY_STATE}\"). Source of truth: abap2UI5 app/webapp/model/formatter.js, gated there by .github/scripts/formatter-scope-gate.mjs",
-    find(content) {
-      // the complete curated export surface; keep in sync with
-      // abap2UI5 app/webapp/model/formatter.js (its own gate guards that end)
-      const CURATED = new Set([
-        'DateCreateObject',
-        'DateAbapDateToDateObject',
-        'DateAbapDateTimeToDateObject',
-        'expandInlineIcons',
-      ]);
-      const out = [];
-      // both wirings: the core:require alias and the published global, in
-      // both forms - the `formatter:` binding-info key and a call inside an
-      // expression binding. The call form allows NO space before the paren,
-      // which is what keeps prose like "its frontend Formatter.js (weightState:
-      // ...)" in a deviation note from matching.
-      for (const m of content.matchAll(/(?:z2ui5\.)?Formatter\.(\w+)\(|formatter:\s*'(?:z2ui5\.)?Formatter\.(\w+)'/g)) {
-        const fn = m[1] || m[2];
-        if (!CURATED.has(fn)) {
-          out.push({ line: lineOf(content, m.index), text: `Formatter.${fn} is not in the curated module - compute it in ABAP and bind the finished field` });
-        }
-      }
-      return out;
-    },
-  },
-  {
-    id: 'duplicate-for-iterator',
-    level: 'error',
-    doc: 'the same `FOR <n> = …` iterator name used twice in ONE method — the 702 downport materializes each as `DATA <n> TYPE i`, so the downported class (and the e2e transpiler) fails with "Variable name already defined". Use distinct names (i, j, k) per VALUE block; app 234, 2026-07-26',
-    find(content) {
-      const out = [];
-      for (const mm of content.matchAll(/\bMETHOD\b[\s\S]*?\bENDMETHOD\b/g)) {
-        const seen = new Map(); // name -> first index (relative to method)
-        for (const m of mm[0].matchAll(/\bFOR\s+(\w+)\s*=/g)) {
-          if (seen.has(m[1])) {
-            out.push({ line: lineOf(content, mm.index + m.index), text: `iterator "${m[1]}" reused (first at line ${lineOf(content, mm.index + seen.get(m[1]))})` });
-          } else {
-            seen.set(m[1], m.index);
-          }
-        }
-      }
-      return out;
-    },
-  },
 ];
-
-// control properties that really are numeric in UI5 (a string bound to one of
-// them is what UI5 2.x strict-type validation rejects). Keyed by control name
-// as written in the view builder; anything not listed is treated as a string
-// property, so the rule stays silent rather than guessing.
-const NUMERIC_PROPS = {
-  Slider: ['value', 'min', 'max', 'step'],
-  RangeSlider: ['value', 'value2', 'min', 'max', 'step'],
-  StepInput: ['value', 'min', 'max', 'step'],
-  ProgressIndicator: ['percentValue'],
-  RatingIndicator: ['value', 'maxValue', 'iconSize'],
-};
-
-// true when some `_bind( name )` of the field lands on a numeric property of
-// its enclosing control (the nearest `leaf(`/`open(` above it)
-function boundToNumericProp(content, name) {
-  for (const b of content.matchAll(new RegExp(`_bind(?:_edit)?\\(\\s*${name}\\s*\\)`, 'g'))) {
-    const from = content.lastIndexOf('\n', b.index) + 1;
-    const to = content.indexOf('\n', b.index);
-    const line = content.slice(from, to < 0 ? content.length : to);
-    const attr = /n\s*=\s*`(\w+)`/.exec(line);
-    if (!attr) continue;
-    const before = content.slice(0, from);
-    const ctrl = [...before.matchAll(/->(?:leaf|open)\(\s*(?:n\s*=\s*)?`(\w+)`/g)].pop();
-    if (!ctrl) continue;
-    if ((NUMERIC_PROPS[ctrl[1]] || []).includes(attr[1])) return true;
-  }
-  return false;
-}
 
 function grepLines(re) {
   return (content) => {

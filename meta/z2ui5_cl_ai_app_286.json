@@ -6,7 +6,7 @@
   "batch": "b21",
   "audit": {
     "frontend_action": true,
-    "event_t_arg": false,
+    "event_t_arg": true,
     "note": "client-composed MESSAGE_TOAST per Link, no round-trip"
   },
   "status": "generated",

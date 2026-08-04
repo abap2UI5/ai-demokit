@@ -42,7 +42,13 @@ that is the actual porting work):
   demo-kit sample id/name it archives the template into `ui5/<lib>/<Name>/`,
   picks the next app number + `src/<lib>/b<nn>` batch (`--new-batch` /
   `--batch bNN`), and writes the class stub, `clas.xml`, `package.devc.xml` and
-  a valid `meta/` sidecar. The stub is a TODO placeholder view: it passes
+  a valid `meta/` sidecar. Since 2026-08-04 it **enforces the two pre-checks
+  that used to be manual**: a HOLDOUT sample (`ui5/holdout.json`) and an
+  out-of-scope sample (same verdict as `generate-coverage.mjs` `scopeOf`:
+  1.71 floor, deprecation, non-app family — facts from the universe enriched
+  with `ui5/properties.json`) are refused with the facts printed;
+  `ui5/scope-exceptions.json` entries pass with a note, `--force` overrides
+  as a recorded maintainer decision. The stub is a TODO placeholder view: it passes
   abaplint / pattern-lint / view-gates immediately, and
   `structural_diff` (correctly) fails until you rebuild the view 1:1. Needs an
   OpenUI5 checkout (`OPENUI5_SRC`, default `../fork-openui5`). `--dry-run` to

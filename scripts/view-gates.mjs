@@ -52,11 +52,25 @@ const MIN_UI5 = '1.71';
  * as the sidecar names it. Everything else is a defect, not a choice. */
 const VERSION_TYPES = new Set(['control-too-new', 'member-too-new', 'event-parameter-too-new']);
 
-/* Reported, never gating: rules the linter grew after this corpus was built.
- * They are worth seeing on every run - an icon-only button really is unusable
- * with a screen reader - but turning 37 of them into a red build is a
- * decision for the corpus, not a side effect of upgrading the linter. */
+/* Reported, never gating per finding: rules the linter grew after this corpus
+ * was built. They are worth seeing on every run - an icon-only button really
+ * is unusable with a screen reader - but turning 41 of them into a red build
+ * is a decision for the corpus, not a side effect of upgrading the linter. */
 const ADVISORY_TYPES = new Set(['missing-accessibility', 'event-without-handler']);
+
+/* …but "never gating" must not mean "growing unnoticed": the RATCHET pins the
+ * accepted advisory debt per finding type. The existing findings stay
+ * tolerated; a batch that ADDS one fails strict, and a batch that removes
+ * some prints the lower number so the budget can be ratcheted down in the
+ * same change. An advisory type with no entry here has budget 0 - a linter
+ * bump that introduces a new advisory rule surfaces at the bump PR, where the
+ * debt decision belongs, instead of accruing silently.
+ * Counts pinned 2026-08-04. */
+const ADVISORY_BUDGET = {
+  'missing-accessibility': 41,
+  'event-without-handler': 7,
+  'unknown-event-parameter': 1, // app 268: ColorPickerPopover forwards colorString undeclared — works live
+};
 
 const metas = fs.readdirSync(META)
   .filter((f) => f.endsWith('.json'))
@@ -96,6 +110,7 @@ function declares(meta, finding) {
 let failing = 0;
 let skipped = 0;
 let advisories = 0;
+const advisoryTally = new Map(); // finding type -> count, for the ratchet
 const lines = [];
 
 for (const r of results) {
@@ -143,6 +158,7 @@ for (const r of results) {
   }
 
   advisories += advisory.length;
+  for (const f of advisory) advisoryTally.set(f.type, (advisoryTally.get(f.type) || 0) + 1);
   if (!violations.length && !renderErrors.length) {
     if (!r.skippedRender && !declaredSkip) {
       lines.push(`pass  ${cls}${r.docs.length ? `  (${r.docs.length} doc(s))` : ''}`);
@@ -162,8 +178,26 @@ for (const r of results) {
 }
 
 console.log(lines.join('\n'));
+
+/* The ratchet: compare the advisory tally against the pinned budget. Only on
+ * full runs - a --only subset would read as "the debt shrank". */
+let ratchetExceeded = 0;
+if (!ONLY) {
+  const types = new Set([...advisoryTally.keys(), ...Object.keys(ADVISORY_BUDGET)]);
+  for (const type of [...types].sort()) {
+    const n = advisoryTally.get(type) || 0;
+    const budget = ADVISORY_BUDGET[type] ?? 0;
+    if (n > budget) {
+      ratchetExceeded++;
+      console.log(`FAIL advisory ratchet: ${type} ${n} > budget ${budget} — new advisory debt; fix it or raise the budget deliberately (scripts/view-gates.mjs ADVISORY_BUDGET)`);
+    } else if (n < budget) {
+      console.log(`note: advisory budget for ${type} can ratchet down to ${n} (currently ${budget})`);
+    }
+  }
+}
+
 console.log(
   `\nview-gates: ${results.length} ports, ${failing} failing, ${skipped} skipped, `
   + `${advisories} advisory (target SAPUI5 ${MIN_UI5}${RENDER ? ', render gate on' : ', render gate off'}).`
 );
-if (STRICT && failing) process.exit(1);
+if (STRICT && (failing || ratchetExceeded)) process.exit(1);

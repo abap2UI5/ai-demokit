@@ -164,6 +164,45 @@ const INTERACTIONS = {
     await btn.click();
     await expect(page.locator('.sapMMessageToast'), 'the client-composed press toast').toContainText('Pressed');
   },
+  // LIVE_TEST closures 2026-08-04: the last three LIVE_TEST deviations that
+  // had no interaction yet — each drives exactly the wire its deviation names
+  z2ui5_cl_ai_app_043: async (page, expect) => {
+    // the ACTIVE OverflowToolbar press round-trips, the backend flips the
+    // two-way bound `expanded`, and the third panel opens — observable as the
+    // expand arrow's aria-expanded flipping
+    const arrow = page.locator('[id$="expandablePanel"] [aria-expanded]').first();
+    await expect(arrow, 'the bound panel\'s expand arrow').toBeVisibleEnabled();
+    const before = await arrow.getAttribute('aria-expanded');
+    await page.getByText('Clickable Custom Toolbar with a header text', { exact: true }).first().click();
+    await expect(page.locator(`[id$="expandablePanel"] [aria-expanded="${before === 'true' ? 'false' : 'true'}"]`).first(),
+      'the two-way expanded binding flipped by the toolbar round-trip').toBeVisibleEnabled();
+  },
+  z2ui5_cl_ai_app_096: async (page, expect) => {
+    // selectedIndex is bound two-way; picking `hide` round-trips MODE_BTN and
+    // the backend derives the mode from the written-back index — the toast
+    // naming HideMode proves the write-back, the two-way `mode` binding then
+    // drives the SplitContainer
+    const radio = page.getByText('hide', { exact: true }).first();
+    await expect(radio, 'the HideMode radio button').toBeVisibleEnabled();
+    await radio.click();
+    await expect(page.locator('.sapMMessageToast'), 'the mode-change toast derived from the round-tripped index')
+      .toContainText('Split Container mode is changed to: HideMode');
+  },
+  z2ui5_cl_ai_app_149: async (page, expect) => {
+    // the urlhelper REDIRECT with NEW_WINDOW on the Image press — the popup
+    // opening on the relative Card Explorer URL is the whole wire
+    const img = page.locator('.sapMImg').first();
+    await expect(img, 'the Card Explorer teaser image').toBeVisibleEnabled();
+    const [popup] = await Promise.all([
+      page.waitForEvent('popup', { timeout: 10000 }),
+      img.click(),
+    ]);
+    await popup.waitForLoadState('domcontentloaded').catch(() => {});
+    if (!popup.url().includes('cardExplorer/index.html')) {
+      throw new Error(`REDIRECT popup opened on ${popup.url()} instead of the Card Explorer URL`);
+    }
+    await popup.close();
+  },
   z2ui5_cl_ai_app_019: async (page, expect) => {
     const btn = page.getByRole('button', { name: 'Approve', exact: true }).first();
     await expect(btn, 'the "Approve" dialog button').toBeVisibleEnabled();

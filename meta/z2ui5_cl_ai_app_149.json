@@ -6,7 +6,7 @@
   "batch": "b08",
   "audit": {
     "frontend_action": true,
-    "event_t_arg": false,
+    "event_t_arg": true,
     "note": "Image press is a roundtrip-free _event_client( control_global, MESSAGE_TOAST.show ) substitution"
   },
   "status": "generated",

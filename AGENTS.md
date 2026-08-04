@@ -23,9 +23,10 @@ Single source of truth for agents working on **abap2UI5 ai-demokit**.
 > else, *including* rounding a number, joining fields into a string and mapping
 > a business status to a `ValueState`/icon, is computed in ABAP and bound
 > (`state="{WEIGHT_STATE}"`). Those five were shipped once and removed again;
-> `pattern-lint` (`uncurated-formatter`) fails any binding naming a function
-> outside the four, because UI5 resolves an unknown name to nothing and the
-> cell just renders blank.
+> the linter rule `uncurated-formatter` (moved from pattern-lint 2026-08-04,
+> gated here via `view_gates`) fails any binding naming a function outside
+> the four, because UI5 resolves an unknown name to nothing and the cell just
+> renders blank.
 
 ---
 
@@ -256,7 +257,9 @@ source of truth:
   "file":    "src/01/b02/z2ui5_cl_ai_app_007.clas.abap",
   "batch":   "b02",
   "audit":   { "frontend_action": false,        // uses _event_client? (note: which)
-               "event_t_arg": true },           // passes event args via t_arg?
+               "event_t_arg": true },           // passes t_arg in ANY event wire?
+                                                // both flags are DERIVED-checked
+                                                // against the class by validate-meta
   "status":  "generated",                       // generated|reviewed|checked
   "checked": { "date": "2026-07-15", "note": "verified in a running system - ..." },
                                                 // ^ "checked": null while status is generated/reviewed
@@ -395,8 +398,19 @@ and every legitimate escape hatch is in
 **`.claude/skills/run-the-gates/SKILL.md`** — read it the moment a gate fails,
 and before declaring any skip or deviation to satisfy one.
 
-**When a distilled lesson is greppable, add it as a pattern-lint rule in the
-same change** — that is what makes a lesson unrepeatable rather than advisory.
+**When a distilled lesson is greppable, encode it as a rule in the same
+change** — that is what makes a lesson unrepeatable rather than advisory.
+Where it lives depends on what it is about (split enforced 2026-08-04):
+a lesson about **abap2UI5 views/apps in general** becomes a rule in
+[abap2UI5-linter](https://github.com/abap2UI5/linter) (every consumer sees it;
+`view_gates` gates it here after a pin bump); only a **corpus-policy** lesson
+(method order, formatting, sidecar conventions) stays a pattern-lint rule.
+Never both — one rule set, two enforcement points is how the editor and CI
+drifted apart before. `view_gates` also carries the **advisory ratchet**
+(`ADVISORY_BUDGET` in `scripts/view-gates.mjs`): advisory findings never gate
+per finding, but their per-type count must not grow — a batch that adds one
+fails strict, and a linter bump that introduces a new advisory type surfaces
+at the bump PR, where the debt decision belongs.
 
 **Run before every commit:**
 ```bash
@@ -586,7 +600,8 @@ e2e gotchas in `e2e-debugging`, generator gotchas in `regenerate-artefacts`).
 - **Literal braces in attribute values are read as a BINDING by the XMLView
   parser** — CSS/JS braces inside a `core:HTML` `content` (or any literal
   attribute value) must be escaped `\{ … \}` or view creation crashes (app 028;
-  pattern-lint rule `unescaped-brace-in-style-content` gates the `<style>` case).
+  the linter rules `unescaped-brace-in-style` / `collapsed-brace-in-style`
+  gate the `<style>` case via `view_gates`).
 - **A deviation text is also a gate escape — rewriting it can un-declare a
   diff.** `structural-diff` (and `data-fidelity`) accept a difference only
   while some sidecar deviation *names* it. Converting a `LIVE_TEST` to a
@@ -615,8 +630,8 @@ e2e gotchas in `e2e-debugging`, generator gotchas in `regenerate-artefacts`).
   downport materializes each numeric iterator as `DATA <n> TYPE i`, so a
   second `FOR i = …` in the same method makes the downported class (and the
   e2e transpiler) fail with "Variable name already defined". Use distinct
-  names (`i`, `j`, `k`) per `VALUE` block (app 234; pattern-lint rule
-  `duplicate-for-iterator`).
+  names (`i`, `j`, `k`) per `VALUE` block (app 234; linter rule
+  `duplicate-for-iterator`, gated via `view_gates`).
 - **After a repo rename, grep for the old `owner/name` — a
   `github.repository` guard fails SILENTLY.** The rename to `ai-demokit` left
   `abap2UI5/api` in the `auto_downport.yaml` `if:` guard (the workflow was

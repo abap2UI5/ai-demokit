@@ -14,6 +14,7 @@ on:
 
 permissions:
   contents: read
+  issues: write   # the failure channel below — a red nightly used to be visible only in the Actions tab
 
 concurrency:
   group: e2e-nightly
@@ -52,3 +53,24 @@ jobs:
       env:
         A2UI5_HOME: ${{ github.workspace }}/.abap2UI5
       run: node scripts/e2e-smoke.mjs --strict
+
+    # A red nightly is a regression in a LIVE_TEST-class wire — it must reach
+    # someone, not sit in the Actions tab until the next release. One issue is
+    # kept per breakage (updated, not duplicated) and it references the run.
+    - name: Open or update the nightly-failure issue
+      if: failure()
+      env:
+        GH_TOKEN: ${{ github.token }}
+        RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      run: |
+        set -e
+        title="e2e nightly is red"
+        body="The nightly e2e smoke failed: ${RUN_URL}
+
+        Every FAIL line in the run log is a port whose live wire regressed (or a harness effect — see .claude/skills/e2e-debugging). This issue is updated by each red nightly and should be closed when the nightly is green again."
+        existing=$(gh issue list --state open --search "in:title \"$title\"" --json number --jq '.[0].number // empty')
+        if [ -n "$existing" ]; then
+          gh issue comment "$existing" --body "Still red: ${RUN_URL}"
+        else
+          gh issue create --title "$title" --body "$body"
+        fi

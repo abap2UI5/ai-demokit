@@ -6,7 +6,7 @@
   "batch": "b15",
   "audit": {
     "frontend_action": true,
-    "event_t_arg": false,
+    "event_t_arg": true,
     "note": "every press shows a static client-composed toast (control_global MESSAGE_TOAST.show, fixed text) - roundtrip-free, so the app is init-only"
   },
   "status": "reviewed",
