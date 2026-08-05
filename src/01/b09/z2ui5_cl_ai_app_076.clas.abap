@@ -37,6 +37,8 @@ CLASS z2ui5_cl_ai_app_076 IMPLEMENTATION.
         )->open( `VBox`
             )->a( n = `class` v = `sapUiSmallMargin`
             )->open( `NotificationList`
+                " id added: oList.removeItem( oItem ) needs a target for the wire
+                )->a( n = `id` v = `notificationList`
                 )->open( `layoutData`
                     )->leaf( `FlexItemData`
                         )->a( n = `maxWidth` v = `600px`
@@ -53,8 +55,17 @@ CLASS z2ui5_cl_ai_app_076 IMPLEMENTATION.
                     )->a( n = `datetime`        v = `1 hour`
                     )->a( n = `unread`          v = `true`
                     )->a( n = `priority`        v = `None`
-                    " the original's onItemClose also removes the item client-side - static items here, so close only toasts
-                    )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Closed: {0}` ) ( `${$source>/title}` ) ) )
+                    " onItemClose 1:1: remove the item from its list, then toast its title -
+                    " two client actions on one event, chained with ';' (measured)
+                    )->a( n = `close`           v = client->_event_client( val   = client->cs_event-control_by_id
+                                                                           t_arg = VALUE #( ( `notificationList` )
+                                                                                            ( `removeItem` )
+                                                                                            ( `$event.oSource.getId()` ) ) ) && `; ` &&
+                                                    client->_event_client( val   = client->cs_event-control_global
+                                                                           t_arg = VALUE #( ( `MESSAGE_TOAST` )
+                                                                                            ( `show` )
+                                                                                            ( `Item Closed: {0}` )
+                                                                                            ( `${$source>/title}` ) ) )
                     )->a( n = `press`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                     )->a( n = `authorName`      v = `Jean Doe`
                     )->a( n = `authorPicture`   v = `https://sdk.openui5.org/test-resources/sap/m/images/Woman_04.png`
@@ -76,7 +87,15 @@ CLASS z2ui5_cl_ai_app_076 IMPLEMENTATION.
                     )->a( n = `datetime`        v = `3 days`
                     )->a( n = `unread`          v = `true`
                     )->a( n = `priority`        v = `High`
-                    )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Closed: {0}` ) ( `${$source>/title}` ) ) )
+                    )->a( n = `close`           v = client->_event_client( val   = client->cs_event-control_by_id
+                                                                           t_arg = VALUE #( ( `notificationList` )
+                                                                                            ( `removeItem` )
+                                                                                            ( `$event.oSource.getId()` ) ) ) && `; ` &&
+                                                    client->_event_client( val   = client->cs_event-control_global
+                                                                           t_arg = VALUE #( ( `MESSAGE_TOAST` )
+                                                                                            ( `show` )
+                                                                                            ( `Item Closed: {0}` )
+                                                                                            ( `${$source>/title}` ) ) )
                     )->a( n = `press`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                     )->a( n = `authorName`      v = `Office Notification`
                     )->a( n = `authorPicture`   v = `sap-icon://group`
@@ -88,7 +107,15 @@ CLASS z2ui5_cl_ai_app_076 IMPLEMENTATION.
                     )->a( n = `unread`            v = `false`
                     )->a( n = `datetime`          v = `3 days`
                     )->a( n = `priority`          v = `High`
-                    )->a( n = `close`             v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Closed: {0}` ) ( `${$source>/title}` ) ) )
+                    )->a( n = `close`             v = client->_event_client( val   = client->cs_event-control_by_id
+                                                                             t_arg = VALUE #( ( `notificationList` )
+                                                                                              ( `removeItem` )
+                                                                                              ( `$event.oSource.getId()` ) ) ) && `; ` &&
+                                                      client->_event_client( val   = client->cs_event-control_global
+                                                                             t_arg = VALUE #( ( `MESSAGE_TOAST` )
+                                                                                              ( `show` )
+                                                                                              ( `Item Closed: {0}` )
+                                                                                              ( `${$source>/title}` ) ) )
                     )->a( n = `press`             v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                     )->a( n = `authorName`        v = `Patricia Clark`
                     )->a( n = `authorInitials`    v = `PC`
@@ -114,7 +141,15 @@ CLASS z2ui5_cl_ai_app_076 IMPLEMENTATION.
                     )->a( n = `datetime`          v = `3 days`
                     )->a( n = `unread`            v = `true`
                     )->a( n = `priority`          v = `Medium`
-                    )->a( n = `close`             v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Closed: {0}` ) ( `${$source>/title}` ) ) )
+                    )->a( n = `close`             v = client->_event_client( val   = client->cs_event-control_by_id
+                                                                             t_arg = VALUE #( ( `notificationList` )
+                                                                                              ( `removeItem` )
+                                                                                              ( `$event.oSource.getId()` ) ) ) && `; ` &&
+                                                      client->_event_client( val   = client->cs_event-control_global
+                                                                             t_arg = VALUE #( ( `MESSAGE_TOAST` )
+                                                                                              ( `show` )
+                                                                                              ( `Item Closed: {0}` )
+                                                                                              ( `${$source>/title}` ) ) )
                     )->a( n = `press`             v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                     )->a( n = `authorName`        v = `John Smith`
                     )->a( n = `authorInitials`    v = `JS`
@@ -129,7 +164,15 @@ CLASS z2ui5_cl_ai_app_076 IMPLEMENTATION.
                     )->a( n = `datetime`        v = `3 days`
                     )->a( n = `unread`          v = `true`
                     )->a( n = `priority`        v = `Low`
-                    )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Closed: {0}` ) ( `${$source>/title}` ) ) )
+                    )->a( n = `close`           v = client->_event_client( val   = client->cs_event-control_by_id
+                                                                           t_arg = VALUE #( ( `notificationList` )
+                                                                                            ( `removeItem` )
+                                                                                            ( `$event.oSource.getId()` ) ) ) && `; ` &&
+                                                    client->_event_client( val   = client->cs_event-control_global
+                                                                           t_arg = VALUE #( ( `MESSAGE_TOAST` )
+                                                                                            ( `show` )
+                                                                                            ( `Item Closed: {0}` )
+                                                                                            ( `${$source>/title}` ) ) )
                     )->a( n = `press`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                     )->a( n = `authorName`      v = `John Smith`
                     )->a( n = `authorPicture`   v = `https://sdk.openui5.org/test-resources/sap/m/images/headerImg2.jpg`
@@ -145,7 +188,15 @@ CLASS z2ui5_cl_ai_app_076 IMPLEMENTATION.
                     )->a( n = `datetime`        v = `2 day`
                     )->a( n = `unread`          v = `false`
                     )->a( n = `priority`        v = `Low`
-                    )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Closed: {0}` ) ( `${$source>/title}` ) ) )
+                    )->a( n = `close`           v = client->_event_client( val   = client->cs_event-control_by_id
+                                                                           t_arg = VALUE #( ( `notificationList` )
+                                                                                            ( `removeItem` )
+                                                                                            ( `$event.oSource.getId()` ) ) ) && `; ` &&
+                                                    client->_event_client( val   = client->cs_event-control_global
+                                                                           t_arg = VALUE #( ( `MESSAGE_TOAST` )
+                                                                                            ( `show` )
+                                                                                            ( `Item Closed: {0}` )
+                                                                                            ( `${$source>/title}` ) ) )
                     )->a( n = `press`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                     )->a( n = `authorName`      v = `Jean Doe`
                     )->a( n = `authorPicture`   v = `https://sdk.openui5.org/test-resources/sap/m/images/Woman_04.png`
@@ -169,7 +220,15 @@ CLASS z2ui5_cl_ai_app_076 IMPLEMENTATION.
                     )->a( n = `datetime`           v = `2 day`
                     )->a( n = `unread`             v = `false`
                     )->a( n = `priority`           v = `Low`
-                    )->a( n = `close`              v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Closed: {0}` ) ( `${$source>/title}` ) ) )
+                    )->a( n = `close`              v = client->_event_client( val   = client->cs_event-control_by_id
+                                                                              t_arg = VALUE #( ( `notificationList` )
+                                                                                               ( `removeItem` )
+                                                                                               ( `$event.oSource.getId()` ) ) ) && `; ` &&
+                                                       client->_event_client( val   = client->cs_event-control_global
+                                                                              t_arg = VALUE #( ( `MESSAGE_TOAST` )
+                                                                                               ( `show` )
+                                                                                               ( `Item Closed: {0}` )
+                                                                                               ( `${$source>/title}` ) ) )
                     )->a( n = `press`              v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                     )->a( n = `authorName`         v = `Jean Doe`
                     )->a( n = `authorPicture`      v = `https://sdk.openui5.org/test-resources/sap/m/images/Woman_04.png`
@@ -192,7 +251,15 @@ CLASS z2ui5_cl_ai_app_076 IMPLEMENTATION.
                     )->a( n = `unread`          v = `false`
                     )->a( n = `datetime`        v = `3 days`
                     )->a( n = `priority`        v = `High`
-                    )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Closed: {0}` ) ( `${$source>/title}` ) ) )
+                    )->a( n = `close`           v = client->_event_client( val   = client->cs_event-control_by_id
+                                                                           t_arg = VALUE #( ( `notificationList` )
+                                                                                            ( `removeItem` )
+                                                                                            ( `$event.oSource.getId()` ) ) ) && `; ` &&
+                                                    client->_event_client( val   = client->cs_event-control_global
+                                                                           t_arg = VALUE #( ( `MESSAGE_TOAST` )
+                                                                                            ( `show` )
+                                                                                            ( `Item Closed: {0}` )
+                                                                                            ( `${$source>/title}` ) ) )
                     )->a( n = `press`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                     )->a( n = `authorName`      v = `Patricia Clark`
                     )->a( n = `authorPicture`   v = `https://sdk.openui5.org/test-resources/sap/m/images/female_BaySu.jpg`
@@ -220,7 +287,15 @@ CLASS z2ui5_cl_ai_app_076 IMPLEMENTATION.
                     )->a( n = `unread`          v = `false`
                     )->a( n = `datetime`        v = `3 days`
                     )->a( n = `priority`        v = `High`
-                    )->a( n = `close`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Closed: {0}` ) ( `${$source>/title}` ) ) )
+                    )->a( n = `close`           v = client->_event_client( val   = client->cs_event-control_by_id
+                                                                           t_arg = VALUE #( ( `notificationList` )
+                                                                                            ( `removeItem` )
+                                                                                            ( `$event.oSource.getId()` ) ) ) && `; ` &&
+                                                    client->_event_client( val   = client->cs_event-control_global
+                                                                           t_arg = VALUE #( ( `MESSAGE_TOAST` )
+                                                                                            ( `show` )
+                                                                                            ( `Item Closed: {0}` )
+                                                                                            ( `${$source>/title}` ) ) )
                     )->a( n = `press`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
 
             )->shut(

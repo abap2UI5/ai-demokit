@@ -3,10 +3,19 @@ CLASS z2ui5_cl_ai_app_203 DEFINITION PUBLIC.
   PUBLIC SECTION.
     INTERFACES z2ui5_if_app.
 
+    TYPES: BEGIN OF ty_s_token,
+             text TYPE string,
+             key  TYPE string,
+           END OF ty_s_token.
+    DATA t_tokens  TYPE STANDARD TABLE OF ty_s_token WITH EMPTY KEY.
+    DATA new_token TYPE string.
+
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
 
     METHODS view_display.
+    METHODS on_event.
+    METHODS model_init.
 
   PRIVATE SECTION.
 ENDCLASS.
@@ -18,7 +27,10 @@ CLASS z2ui5_cl_ai_app_203 IMPLEMENTATION.
 
     me->client = client.
     IF client->check_on_init( ).
+      model_init( ).
       view_display( ).
+    ELSEIF client->check_on_event( ).
+      on_event( ).
     ENDIF.
 
   ENDMETHOD.
@@ -41,17 +53,16 @@ CLASS z2ui5_cl_ai_app_203 IMPLEMENTATION.
                 )->a( n = `id`        v = `toolbarTokenizer`
                 )->a( n = `width`     v = `50%`
                 )->a( n = `labelText` v = `Tokenizer in sap.m.Toolbar:`
-                " tokenDelete event handler dropped - it removes static tokens imperatively
+                " this is the tokenizer onAddToken/onTokenDelete work on, so its three
+                " static tokens are folded into a bound aggregation (the app-085 pattern):
+                " adding appends a row, deleting removes the row by its key
+                )->a( n = `tokens`    v = client->_bind( t_tokens )
+                )->a( n = `tokenDelete` v = client->_event( val   = `TOKEN_DELETE`
+                                                            t_arg = VALUE #( ( `${$parameters>/tokens}[0].getKey()` ) ) )
                 )->open( `tokens`
                     )->leaf( `Token`
-                        )->a( n = `text` v = `Token 1`
-                        )->a( n = `key`  v = `0001`
-                    )->leaf( `Token`
-                        )->a( n = `text` v = `Token 2`
-                        )->a( n = `key`  v = `0002`
-                    )->leaf( `Token`
-                        )->a( n = `text` v = `Token 3`
-                        )->a( n = `key`  v = `0003`
+                        )->a( n = `text` v = `{TEXT}`
+                        )->a( n = `key`  v = `{KEY}`
 
                 )->shut(
             )->shut(
@@ -61,9 +72,10 @@ CLASS z2ui5_cl_ai_app_203 IMPLEMENTATION.
             )->leaf( `Input`
                 )->a( n = `id`    v = `NewTokenInput`
                 )->a( n = `width` v = `200px`
+                )->a( n = `value` v = client->_bind( new_token )
             )->leaf( `Button`
-                )->a( n = `text` v = `Add Token`
-                " press event handler dropped - it adds a token imperatively
+                )->a( n = `text`  v = `Add Token`
+                )->a( n = `press` v = client->_event( `ADD_TOKEN` )
 
         )->shut(
         )->open( n = `VerticalLayout` ns = `l`
@@ -95,7 +107,15 @@ CLASS z2ui5_cl_ai_app_203 IMPLEMENTATION.
                         )->a( n = `id`        v = `overflowToolbarTokenizer`
                         )->a( n = `width`     v = `75%`
                         )->a( n = `labelText` v = `Filter by:`
-                        " tokenDelete event handler dropped - it removes static tokens imperatively
+                        " onTokenDelete removes the token and toasts its text. The token is
+                        " static here, so the wire removes it by ID - removeAggregation accepts
+                        " an id (measured, scripts/probes/event-arg-expression-probe.mjs) - and
+                        " the toast is composed on the client from the same event
+                        )->a( n = `tokenDelete` v = client->_event_client(
+                                  val   = client->cs_event-control_by_id
+                                  t_arg = VALUE #( ( `overflowToolbarTokenizer` )
+                                                   ( `removeToken` )
+                                                   ( `${$parameters>/tokens}[0].getId()` ) ) )
                         )->open( `layoutData`
                             )->leaf( `OverflowToolbarLayoutData`
                                 )->a( n = `priority` v = `High`
@@ -155,7 +175,15 @@ CLASS z2ui5_cl_ai_app_203 IMPLEMENTATION.
                         )->a( n = `width`     v = `45%`
                         )->a( n = `maxWidth`  v = `85%`
                         )->a( n = `labelText` v = `Random label text:`
-                        " tokenDelete event handler dropped - it removes static tokens imperatively
+                        " onTokenDelete removes the token and toasts its text. The token is
+                        " static here, so the wire removes it by ID - removeAggregation accepts
+                        " an id (measured, scripts/probes/event-arg-expression-probe.mjs) - and
+                        " the toast is composed on the client from the same event
+                        )->a( n = `tokenDelete` v = client->_event_client(
+                                  val   = client->cs_event-control_by_id
+                                  t_arg = VALUE #( ( `tokenizerMaxWidth` )
+                                                   ( `removeToken` )
+                                                   ( `${$parameters>/tokens}[0].getId()` ) ) )
                         )->open( `layoutData`
                             )->leaf( `OverflowToolbarLayoutData`
                                 )->a( n = `priority` v = `High`
@@ -353,6 +381,47 @@ CLASS z2ui5_cl_ai_app_203 IMPLEMENTATION.
                         )->a( n = `level` v = `H1` ).
 
     client->view_display( view->stringify( ) ).
+
+  ENDMETHOD.
+
+
+  METHOD on_event.
+
+    CASE client->get( )-event.
+
+      WHEN `ADD_TOKEN`.
+        " onAddToken: an empty input only toasts, otherwise the token is appended
+        " with text = key = the entered value and the input is cleared
+        IF new_token IS INITIAL.
+          client->message_toast_display( `Please enter a token text.` ).
+          RETURN.
+        ENDIF.
+        INSERT VALUE #( text = new_token
+                        key  = new_token ) INTO TABLE t_tokens.
+        client->message_toast_display( |Token added: { new_token }| ).
+        CLEAR new_token.
+        client->view_model_update( ).
+
+      WHEN `TOKEN_DELETE`.
+        " onTokenDelete: remove the deleted token and toast its text
+        DATA(deleted_key) = client->get_event_arg( ).
+        DATA(deleted) = VALUE #( t_tokens[ key = deleted_key ] OPTIONAL ).
+        DELETE t_tokens WHERE key = deleted_key.
+        client->message_toast_display( |Token deleted: { deleted-text }| ).
+        client->view_model_update( ).
+
+    ENDCASE.
+
+  ENDMETHOD.
+
+
+  METHOD model_init.
+
+    " the three tokens the sample declares on the first tokenizer
+    t_tokens = VALUE #(
+      ( text = `Token 1` key = `0001` )
+      ( text = `Token 2` key = `0002` )
+      ( text = `Token 3` key = `0003` ) ).
 
   ENDMETHOD.
 

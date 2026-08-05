@@ -102,6 +102,25 @@ const CANDIDATES = [
     expect: '2026, 3, 17 — the month already +1',
   },
   {
+    key: 'remove-child-by-id',
+    what: "removeToken( <id> ) on a STATIC aggregation — CONTROL_BY_ID can only carry strings, so the question is whether ManagedObject.removeAggregation accepts an id",
+    ports: '203 (addToken/removeToken over static tokens), 076/077 (removeItem)',
+    xml: `<Tokenizer id="c" tokenDelete=".eB('EVT', $event.oSource.getTokens().length)"><Token id="t1" key="k1" text="T1"/><Token id="t2" key="k2" text="T2"/><Token id="t3" key="k3" text="T3"/></Tokenizer>`,
+    fire: `(function () {
+      c.removeToken(c.getTokens()[0].getId());     // the wire's shape: an ID STRING
+      c.fireTokenDelete({ tokens: [] });
+    })()`,
+    expect: '2 — the token really left the aggregation',
+  },
+  {
+    key: 'two-handlers',
+    what: 'TWO client actions on one event — UI5 event handler attributes separated by a semicolon',
+    ports: '076/077 (remove the item AND toast its title, as the original does both)',
+    xml: `<Button id="c" text="B" press=".eB('FIRST', 1); .eB('SECOND', 2)"/>`,
+    fire: `c.firePress()`,
+    expect: 'both handlers run (the probe records the LAST one, so SECOND proves the chain)',
+  },
+  {
     key: 'array-join',
     what: 'a whole array parameter joined into one string — ${$parameters>/newSizes}.join(",")',
     ports: "186 (ResponsiveSplitter resize oldSizes/newSizes)",

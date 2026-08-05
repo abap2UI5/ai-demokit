@@ -13,8 +13,8 @@
   "checked": null,
   "deviations": [
     {
-      "type": "IMPROVISED",
-      "what": "the notifications are static (not model-bound), so onItemClose's client-side removeItem is not mirrored (close fires a toast only); onErrorPress's setProcessingMessage MessageStrip on the item is shown as a toast."
+      "type": "NOTE",
+      "what": "onItemClose is reproduced 1:1 since 2026-08-05. The original removes the item from its list (oList.removeItem(oItem)) and toasts its title; the port does BOTH client-side on the same event: UI5 runs a ';'-separated pair of event handlers (measured with scripts/probes/event-arg-expression-probe.mjs), so the wire chains control_by_id removeItem with the client-composed toast. The item travels as its own id ($event.oSource.getId()), which ManagedObject.removeAggregation accepts (measured in the same probe). The NotificationList gained an `id` the original does not carry - removeItem needs a target for the wire; that is the port's only extra attribute here. The earlier 'static items, so close only toasts' rationale is retired."
     },
     {
       "type": "POST_171",

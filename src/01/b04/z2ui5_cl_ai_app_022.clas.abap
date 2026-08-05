@@ -27,6 +27,7 @@ CLASS z2ui5_cl_ai_app_022 DEFINITION PUBLIC.
       END OF ty_s_facet.
     TYPES ty_t_facet TYPE STANDARD TABLE OF ty_s_facet WITH EMPTY KEY.
     DATA t_products          TYPE ty_t_product.
+    DATA t_sticky            TYPE STANDARD TABLE OF string WITH EMPTY KEY.
     DATA t_categories        TYPE ty_t_facet.
     DATA t_suppliers         TYPE ty_t_facet.
     DATA popin_layout        TYPE string.
@@ -111,6 +112,7 @@ CLASS z2ui5_cl_ai_app_022 IMPLEMENTATION.
             )->shut(
             )->open( `Table`
                 )->a( n = `id`          v = `idProductsTable`
+                )->a( n = `sticky`      v = client->_bind( t_sticky )
                 )->a( n = `inset`       v = `false`
                 " popinLayout mirrors the original's setPopinLayout controller switch - an empty ComboBox selection maps to the Block default
                 )->a( n = `popinLayout` v = |\{= ${ client->_bind( popin_layout ) } \|\| 'Block' \}|
@@ -142,7 +144,22 @@ CLASS z2ui5_cl_ai_app_022 IMPLEMENTATION.
 
                             )->shut(
                         )->shut(
-                        " the original's sticky Label + CheckBoxes are dropped - Table.sticky is an array property with no binding path
+                        " the sticky options: Table.sticky is an ARRAY property, bound here to a
+                        " string table and maintained in the backend - the app-009 pattern
+                        )->leaf( `Label`
+                            )->a( n = `text` v = `Sticky options:`
+                        )->leaf( `CheckBox`
+                            )->a( n = `text`   v = `ColumnHeaders`
+                            )->a( n = `select` v = client->_event( val   = `STICKY_SELECT`
+                                                                   t_arg = VALUE #( ( `${$source>/text}` ) ( `${$parameters>/selected}` ) ) )
+                        )->leaf( `CheckBox`
+                            )->a( n = `text`   v = `HeaderToolbar`
+                            )->a( n = `select` v = client->_event( val   = `STICKY_SELECT`
+                                                                   t_arg = VALUE #( ( `${$source>/text}` ) ( `${$parameters>/selected}` ) ) )
+                        )->leaf( `CheckBox`
+                            )->a( n = `text`   v = `InfoToolbar`
+                            )->a( n = `select` v = client->_event( val   = `STICKY_SELECT`
+                                                                   t_arg = VALUE #( ( `${$source>/text}` ) ( `${$parameters>/selected}` ) ) )
                         )->leaf( `ToggleButton`
                             )->a( n = `id`      v = `toggleInfoToolbar`
                             )->a( n = `text`    v = `Hide/Show InfoToolbar`
@@ -230,6 +247,20 @@ CLASS z2ui5_cl_ai_app_022 IMPLEMENTATION.
   METHOD on_event.
 
     CASE client->get( )-event.
+
+      WHEN `STICKY_SELECT`.
+        " onSelect: the controller maintains an array of sap.m.Sticky keys and
+        " calls oTable.setSticky( ). The array is a bound string table here (the
+        " app-009 pattern, live-verified there): the CheckBox round-trips its own
+        " text and the selected flag, the backend keeps the set
+        DATA(sticky_text) = client->get_event_arg( ).
+        DATA(sticky_on) = CONV abap_bool( client->get_event_arg( 2 ) ).
+        IF sticky_on = abap_true.
+          INSERT sticky_text INTO TABLE t_sticky.
+        ELSE.
+          DELETE t_sticky WHERE table_line = sticky_text.
+        ENDIF.
+        client->view_model_update( ).
 
       WHEN `RESET`.
         " like handleFacetFilterReset: clear the two-way bound selection flags and re-filter

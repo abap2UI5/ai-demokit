@@ -1573,18 +1573,20 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` template shape yet - LIVE_TEST before adopting it. // NOTE: selection transport - every FacetFilterItem binds selected two-way; on listClose/reset the backend reads/clears the flags and re-filters.` &&
                ` This is the documented 1:1 path (CAPABILITIES.md marks controller-read FacetFilter/List multi-select as expressible with app 022 as its evidence port), not a workaround; the model is applied before` &&
                ` on_event runs. // IMPROVISED: the original controller appends the sap.m.sample.Table component's table with its first cell swapped for an ObjectIdentifier {Name}/{Category}; that table is rebuilt`.
-    lv_text1 = lv_text1 && ` inline. The price column keeps the original sap.ui.model.type.Currency composite binding 1:1 (raw binding-info string over a numeric PRICE field). // NOTE: the appended table's header toolbar is` &&
-               ` restored except for the sticky controls: the popin-layout ComboBox keeps its core:Item entries and binds selectedKey two-way in place of the original's change handler (the controller switch is a pure` &&
-               ` key-to-property pass-through; the Table's added popinLayout expression binding maps an empty selection to the Block default), and the Hide/Show ToggleButton binds pressed two-way in place of its` &&
-               ` press handler, with the restored infoToolbar's OverflowToolbar carrying a visible expression binding over the same flag - both per the prefer-a-bindable-property rule, no round-trip. // IMPROVISED:` &&
-               ` the sticky options Label and the three sticky CheckBox controls (with their select handlers) are dropped - Table.sticky is an array-valued property the controller mutates via setSticky, and neither` &&
-               ` an array property binding nor a setSticky whitelist entry is a proven path; a bound-array LIVE_TEST port could disprove this later. // 1.71: the p:ColumnAIAction column plugin (sap.m.plugins, far`.
-    lv_text1 = lv_text1 && ` newer than UI5 1.71) is dropped with its dependents aggregation and press toast - the plugin class does not exist on a 1.71 runtime, so keeping it would crash view creation there. // NOTE: the` &&
-               ` original's nested items-binding filter (ORs inside each facet group, AND across the groups, model untouched) is expressed 1:1 as a declarative compound filter: apply_filter builds the groups JSON` &&
-               ` from the two-way bound selected flags and schedules follow_up_action cs_event-binding_call filter on idProductsTable/items (compound groups implemented upstream 2026-07-20,` &&
-               ` pr/binding-call-compound-filters); the earlier ABAP-side model rebuild and the t_products_all mirror are gone. // NOTE: the original derives the ObjectNumber weight state in its frontend Formatter.js` &&
-               ` (weightState: KG conversion + Success/Warning/Error thresholds). That is business logic, so - abap2UI5 being a thin frontend - it is computed in ABAP model_init into a WEIGHT_STATE field and bound` &&
-               ` state="{WEIGHT_STATE}", not via a frontend formatter (core:require dropped). Visually 1:1 with the original.`.
+    lv_text1 = lv_text1 && ` inline. The price column keeps the original sap.ui.model.type.Currency composite binding 1:1 (raw binding-info string over a numeric PRICE field). // NOTE: the sticky options Label and the three` &&
+               ` sticky CheckBox controls are BACK (2026-08-05). The earlier rationale - 'neither an array property binding nor a setSticky whitelist entry is a proven path' - was wrong on the first half: app 009` &&
+               ` binds Table.sticky to an ABAP string table and is live-verified. This port now uses that same pattern: sticky is bound to t_sticky, each CheckBox round-trips ${$source>/text} +` &&
+               ` ${$parameters>/selected} and the backend maintains the set (a set operation is backend work; setSticky was whitelisted upstream in the same round for the imperative case, but the bound path is the` &&
+               ` thin-frontend one). The three controls come from the appended sap.m.sample.Table view, which this port rebuilds inline, so they count as extra against the archived FacetFilter original. The` &&
+               ` neighbouring onPopinLayoutChanged is unchanged and still expressed as bound properties (the app-009 pattern), so the ComboBox ``change`` attribute stays dropped: its selectedKey is bound two-way and`.
+    lv_text1 = lv_text1 && ` the Table's popinLayout is an expression binding over it, including the Block default. // IMPROVISED: the sticky options Label and the three sticky CheckBox controls (with their select handlers) are` &&
+               ` dropped - Table.sticky is an array-valued property the controller mutates via setSticky, and neither an array property binding nor a setSticky whitelist entry is a proven path; a bound-array` &&
+               ` LIVE_TEST port could disprove this later. // 1.71: the p:ColumnAIAction column plugin (sap.m.plugins, far newer than UI5 1.71) is dropped with its dependents aggregation and press toast - the plugin` &&
+               ` class does not exist on a 1.71 runtime, so keeping it would crash view creation there. // NOTE: the original's nested items-binding filter (ORs inside each facet group, AND across the groups, model` &&
+               ` untouched) is expressed 1:1 as a declarative compound filter: apply_filter builds the groups JSON from the two-way bound selected flags and schedules follow_up_action cs_event-binding_call filter on` &&
+               ` idProductsTable/items (compound groups implemented upstream 2026-07-20, pr/binding-call-compound-filters); the earlier ABAP-side model rebuild and the t_products_all mirror are gone. // NOTE: the`.
+    lv_text1 = lv_text1 && ` original derives the ObjectNumber weight state in its frontend Formatter.js (weightState: KG conversion + Success/Warning/Error thresholds). That is business logic, so - abap2UI5 being a thin` &&
+               ` frontend - it is computed in ABAP model_init into a WEIGHT_STATE field and bound state="{WEIGHT_STATE}", not via a frontend formatter (core:require dropped). Visually 1:1 with the original.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.FacetFilter`                     name = `FacetFilterLight`                    class = `z2ui5_cl_ai_app_022` path = `src/01/b04/z2ui5_cl_ai_app_022.clas.abap`
         score = 5
@@ -1602,18 +1604,20 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
     lv_text1 = lv_text1 && ` expressible with app 022 as its evidence port), not a workaround; the model is applied before on_event runs. The original's handleConfirm also shows a MessageToast 'confirm event fired' - reproduced` &&
                ` 1:1 via client->message_toast_display after applying the filter. The FacetFilterSimple view does not wire the per-list listClose (only the confirm event drives filtering), so no listClose attribute` &&
                ` is emitted. // IMPROVISED: the original controller appends the sap.m.sample.Table component's table with its first cell swapped for an ObjectIdentifier {Name}/{Category}; that table is rebuilt` &&
-               ` inline. The price column keeps the original sap.ui.model.type.Currency composite binding 1:1 (raw binding-info string over a numeric PRICE field). // NOTE: the appended table's header toolbar is` &&
-               ` restored except for the sticky controls: the popin-layout ComboBox keeps its core:Item entries and binds selectedKey two-way in place of the original's change handler (the controller switch is a pure` &&
-               ` key-to-property pass-through; the Table's added popinLayout expression binding maps an empty selection to the Block default), and the Hide/Show ToggleButton binds pressed two-way in place of its`.
-    lv_text1 = lv_text1 && ` press handler, with the restored infoToolbar's OverflowToolbar carrying a visible expression binding over the same flag - both per the prefer-a-bindable-property rule, no round-trip. // IMPROVISED:` &&
-               ` the sticky options Label and the three sticky CheckBox controls (with their select handlers) are dropped - Table.sticky is an array-valued property the controller mutates via setSticky, and neither` &&
-               ` an array property binding nor a setSticky whitelist entry is a proven path; a bound-array LIVE_TEST port could disprove this later. // 1.71: the p:ColumnAIAction column plugin (sap.m.plugins, far` &&
-               ` newer than UI5 1.71) is dropped with its dependents aggregation and press toast - the plugin class does not exist on a 1.71 runtime, so keeping it would crash view creation there. // NOTE: the` &&
-               ` original's nested items-binding filter (ORs inside each facet group, AND across the groups, model untouched) is expressed 1:1 as a declarative compound filter: apply_filter builds the groups JSON` &&
-               ` from the two-way bound selected flags and schedules follow_up_action cs_event-binding_call filter on idProductsTable/items (compound groups implemented upstream 2026-07-20,`.
-    lv_text1 = lv_text1 && ` pr/binding-call-compound-filters). // NOTE: the original derives the ObjectNumber weight state in its frontend Formatter.js (weightState: KG conversion + Success/Warning/Error thresholds). That is` &&
-               ` business logic, so - abap2UI5 being a thin frontend - it is computed in ABAP model_init into a WEIGHT_STATE field and bound state="{WEIGHT_STATE}", not via a frontend formatter (core:require` &&
-               ` dropped). Visually 1:1 with the original.`.
+               ` inline. The price column keeps the original sap.ui.model.type.Currency composite binding 1:1 (raw binding-info string over a numeric PRICE field). // NOTE: the sticky options Label and the three` &&
+               ` sticky CheckBox controls are BACK (2026-08-05). The earlier rationale - 'neither an array property binding nor a setSticky whitelist entry is a proven path' - was wrong on the first half: app 009` &&
+               ` binds Table.sticky to an ABAP string table and is live-verified. This port now uses that same pattern: sticky is bound to t_sticky, each CheckBox round-trips ${$source>/text} +`.
+    lv_text1 = lv_text1 && ` ${$parameters>/selected} and the backend maintains the set (a set operation is backend work; setSticky was whitelisted upstream in the same round for the imperative case, but the bound path is the` &&
+               ` thin-frontend one). The three controls come from the appended sap.m.sample.Table view, which this port rebuilds inline, so they count as extra against the archived FacetFilter original. The` &&
+               ` neighbouring onPopinLayoutChanged is unchanged and still expressed as bound properties (the app-009 pattern), so the ComboBox ``change`` attribute stays dropped: its selectedKey is bound two-way and` &&
+               ` the Table's popinLayout is an expression binding over it, including the Block default. // IMPROVISED: the sticky options Label and the three sticky CheckBox controls (with their select handlers) are` &&
+               ` dropped - Table.sticky is an array-valued property the controller mutates via setSticky, and neither an array property binding nor a setSticky whitelist entry is a proven path; a bound-array` &&
+               ` LIVE_TEST port could disprove this later. // 1.71: the p:ColumnAIAction column plugin (sap.m.plugins, far newer than UI5 1.71) is dropped with its dependents aggregation and press toast - the plugin`.
+    lv_text1 = lv_text1 && ` class does not exist on a 1.71 runtime, so keeping it would crash view creation there. // NOTE: the original's nested items-binding filter (ORs inside each facet group, AND across the groups, model` &&
+               ` untouched) is expressed 1:1 as a declarative compound filter: apply_filter builds the groups JSON from the two-way bound selected flags and schedules follow_up_action cs_event-binding_call filter on` &&
+               ` idProductsTable/items (compound groups implemented upstream 2026-07-20, pr/binding-call-compound-filters). // NOTE: the original derives the ObjectNumber weight state in its frontend Formatter.js` &&
+               ` (weightState: KG conversion + Success/Warning/Error thresholds). That is business logic, so - abap2UI5 being a thin frontend - it is computed in ABAP model_init into a WEIGHT_STATE field and bound` &&
+               ` state="{WEIGHT_STATE}", not via a frontend formatter (core:require dropped). Visually 1:1 with the original.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.FacetFilter`                     name = `FacetFilterSimple`                   class = `z2ui5_cl_ai_app_235` path = `src/01/b19/z2ui5_cl_ai_app_235.clas.abap`
         score = 5
@@ -2363,16 +2367,21 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
       ( module = `sap.m`              control = `sap.m.NewsContent`                     name = `NewsContent`                         class = `z2ui5_cl_ai_app_063` path = `src/01/b07/z2ui5_cl_ai_app_063.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        since = `1.34` )
+        since = `1.34` ) ).
+
+    lv_text1 = `NOTE: onItemClose is reproduced 1:1 since 2026-08-05. The original removes the item from its list (oList.removeItem(oItem)) and toasts its title; the port does BOTH client-side on the same event: UI5` &&
+               ` runs a ';'-separated pair of event handlers (measured with scripts/probes/event-arg-expression-probe.mjs), so the wire chains control_by_id removeItem with the client-composed toast. The item travels` &&
+               ` as its own id ($event.oSource.getId()), which ManagedObject.removeAggregation accepts (measured in the same probe). The NotificationList gained an ``id`` the original does not carry - removeItem` &&
+               ` needs a target for the wire; that is the port's only extra attribute here. The earlier 'static items, so close only toasts' rationale is retired. Group 3's onAcceptErrors keeps its accept toast. //` &&
+               ` NOTE: the original's showCloseButton="falseue" typo on two items is corrected to false, otherwise UI5 boolean parsing rejects it. // POST-1.71: the NotificationList container control (since UI5 1.90)` &&
+               ` is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.90 to render it (control-level, invisible to the member-level property gate).`.
+    result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.NotificationListGroup`           name = `NotificationListGroup`               class = `z2ui5_cl_ai_app_077` path = `src/01/b09/z2ui5_cl_ai_app_077.clas.abap`
-        score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.34`
         is_post171 = abap_true
-        notes = `IMPROVISED: static notifications: onItemClose's client-side removeItem is not mirrored (toast only); group 3's onAcceptErrors is simplified to the accept toast. // NOTE: the original's` &&
-                 ` showCloseButton="falseue" typo on two items is corrected to false, otherwise UI5 boolean parsing rejects it. // POST-1.71: the NotificationList container control (since UI5 1.90) is newer than 1.71` &&
-                 ` but kept for the 1:1 port - the app needs a UI5 release >= 1.90 to render it (control-level, invisible to the member-level property gate).`
+        notes = lv_text1
         post171 = `the NotificationList container control (since UI5 1.90) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.90 to render it (control-level, invisible to the member-level` &&
                  ` property gate).` ) ).
 
@@ -2398,17 +2407,19 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` parameter, not a control member, so no gate can see it - it is kept verbatim on all four aggregation bindings and declared here by policy (apps 264/265 precedent). The app needs a UI5 release >=` &&
                  ` 1.90.` ) ).
 
-    lv_text1 = `IMPROVISED: the notifications are static (not model-bound), so onItemClose's client-side removeItem is not mirrored (close fires a toast only); onErrorPress's setProcessingMessage MessageStrip on the` &&
-               ` item is shown as a toast. // POST-1.71: the NotificationList container control (since UI5 1.90) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.90 to render it` &&
-               ` (control-level, invisible to the member-level property gate). // NOTE: the sample's demo-kit authorPicture image paths (test-resources/sap/m/images/Woman_04.png, headerImg2.jpg, female_BaySu.jpg) are` &&
-               ` resolved to absolute sdk.openui5.org URLs. // NOTE: live-verified 2026-08-04 (nightly e2e interaction): all toasts were switched to roundtrip-free client-composed control_global toasts on 2026-07-22` &&
-               ` (the app is now init-only) - re-verify press/close/accept/reject/error each toast their text. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the 'Accept'` &&
-               ` footer button toasts 'Accept Button Pressed'; item press/close toasts are the identical wire but unexercised.`.
+    lv_text1 = `NOTE: onItemClose is reproduced 1:1 since 2026-08-05. The original removes the item from its list (oList.removeItem(oItem)) and toasts its title; the port does BOTH client-side on the same event: UI5` &&
+               ` runs a ';'-separated pair of event handlers (measured with scripts/probes/event-arg-expression-probe.mjs), so the wire chains control_by_id removeItem with the client-composed toast. The item travels` &&
+               ` as its own id ($event.oSource.getId()), which ManagedObject.removeAggregation accepts (measured in the same probe). The NotificationList gained an ``id`` the original does not carry - removeItem` &&
+               ` needs a target for the wire; that is the port's only extra attribute here. The earlier 'static items, so close only toasts' rationale is retired. // POST-1.71: the NotificationList container control` &&
+               ` (since UI5 1.90) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.90 to render it (control-level, invisible to the member-level property gate). // NOTE: the sample's` &&
+               ` demo-kit authorPicture image paths (test-resources/sap/m/images/Woman_04.png, headerImg2.jpg, female_BaySu.jpg) are resolved to absolute sdk.openui5.org URLs. // NOTE: live-verified 2026-08-04`.
+    lv_text1 = lv_text1 && ` (nightly e2e interaction): all toasts were switched to roundtrip-free client-composed control_global toasts on 2026-07-22 (the app is now init-only) - re-verify press/close/accept/reject/error each` &&
+               ` toast their text. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the 'Accept' footer button toasts 'Accept Button Pressed'; item press/close toasts are the` &&
+               ` identical wire but unexercised.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.NotificationListItem`            name = `NotificationListItem`                class = `z2ui5_cl_ai_app_076` path = `src/01/b09/z2ui5_cl_ai_app_076.clas.abap`
-        score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.34`
         is_post171 = abap_true
         notes = lv_text1
@@ -2589,17 +2600,20 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         since = `1.16`
         notes = lv_text1 ) ).
 
-    lv_text1 = `IMPROVISED: The imperative token interaction is dropped: the tokenDelete event handler on all four OverflowToolbarTokenizers and the press handler on the 'Add Token' Button are removed. The original` &&
-               ` controller mutates static Token child controls via addToken/removeToken plus a MessageToast - imperative control mutation over static (non-bound) tokens, not expressible without inventing a bound` &&
-               ` token model. All controls, tokens and every other attribute are kept 1:1. // POST-1.71: sap.m.OverflowToolbar ariaHasPopup (since 1.79.0) is kept 1:1 from the original view; needs a UI5 release >=` &&
-               ` 1.79 to render. // POST-1.71: REVIEW FINDING (out of scope, maintainer decision needed): the ported control sap.m.OverflowToolbarTokenizer itself is tagged @ui5-experimental-since 1.139 in the` &&
+    lv_text1 = `NOTE: the token interaction is reproduced since 2026-08-05, in the two shapes the sample needs. The FIRST tokenizer - the one onAddToken/onTokenDelete work on - has its three static tokens folded into` &&
+               ` a bound aggregation (the app-085 pattern), so adding appends a row (with the original's empty-input toast and the input cleared afterwards) and deleting removes the row by key; that costs 3 static` &&
+               ` Token controls against the original's 24, the port now declaring one bound template instead. The other three tokenizers keep their static tokens and delete them roundtrip-free through control_by_id` &&
+               ` removeToken with the token's ID - measured with scripts/probes/event-arg-expression-probe.mjs, ManagedObject.removeAggregation accepts an id and the token really leaves the aggregation - plus the` &&
+               ` original's 'Token deleted: X' toast. The earlier claim (imperative control mutation over static tokens is 'not expressible without inventing a bound token model') was half wrong: the bound model is` &&
+               ` what the sample's own add path needs, and removal by id needs no model at all. // POST-1.71: sap.m.OverflowToolbar ariaHasPopup (since 1.79.0) is kept 1:1 from the original view; needs a UI5 release`.
+    lv_text1 = lv_text1 && ` >= 1.79 to render. // POST-1.71: REVIEW FINDING (out of scope, maintainer decision needed): the ported control sap.m.OverflowToolbarTokenizer itself is tagged @ui5-experimental-since 1.139 in the` &&
                ` OpenUI5 source and carries NO plain @since tag, so scripts/scope-of.mjs misreads it as base-version (<= 1.71, 'no @since header') and the property gate cannot see it either. The sample is out of` &&
-               ` porting scope per AGENTS §1 (control must exist since UI5 1.71); the app needs a UI5 release >= 1.139 (experimental API) to render. Either drop the port or add a ui5/scope-exceptions.json entry;`.
-    lv_text1 = lv_text1 && ` scope-of.mjs should also learn @ui5-experimental-since.`.
+               ` porting scope per AGENTS §1 (control must exist since UI5 1.71); the app needs a UI5 release >= 1.139 (experimental API) to render. Either drop the port or add a ui5/scope-exceptions.json entry;` &&
+               ` scope-of.mjs should also learn @ui5-experimental-since.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.OverflowToolbarTokenizer`        name = `OverflowToolbarTokenizer`            class = `z2ui5_cl_ai_app_203` path = `src/01/b17/z2ui5_cl_ai_app_203.clas.abap`
         score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.139`
         since_post171 = abap_true
         is_post171 = abap_true
