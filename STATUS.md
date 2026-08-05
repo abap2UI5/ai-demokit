@@ -37,13 +37,16 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   Both pending
   items are settled:
   - **The dependency is pinned by SHA.** As of 2026-08-05 it points at
-    **`9c2f2b1`, a linter FEATURE-BRANCH commit** — the same SHA the VS Code
-    extension pins, so the two consumers judge by one linter state. `9c2f2b1`
-    adds no rules over `5b17036` (it exports `attachNamespaceFixes`, makes
-    baseline keys file-relative and adds the `./baseline` subpath export);
-    gates re-ran green after the bump (293 ports, 0 failing). The previous
-    feature-branch pin `10920f7` is meanwhile part of linter main via its
-    PR #9. The corpus
+    **`c0e58d0`, a linter FEATURE-BRANCH commit** — the same SHA the VS Code
+    extension pins, so the two consumers judge by one linter state. Over
+    `5b17036` this adds no new rules: `9c2f2b1` brought fix/baseline plumbing
+    for the extension (`attachNamespaceFixes` export, file-relative baseline
+    keys, `./baseline` subpath), `c0e58d0` widens `view-never-displayed`'s
+    display list by `popover_display`/`nest*_view_display` (a false positive
+    the extension's snippet gate caught; can only remove findings, and the
+    corpus had none). Gates re-ran green after each bump (293 ports,
+    0 failing). The previous feature-branch pin `10920f7` is meanwhile part
+    of linter main via its PR #9. The corpus
     now gates the eleven 2026-08-04 rules too (`popover-display-val`,
     `uncurated-formatter`, `hardcoded-binding-path`,
     `missing-view-display-on-navigated`, `separate-lifecycle-ifs`,
