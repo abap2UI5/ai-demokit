@@ -36,9 +36,14 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   and the snapshot still matches the `release` field of `ui5/universe.json`.
   Both pending
   items are settled:
-  - **The dependency is pinned by SHA.** As of 2026-08-04 it points at
-    **`5b17036`, a linter FEATURE-BRANCH commit** (the previous feature-branch
-    pin `10920f7` is meanwhile part of linter main via its PR #9): the corpus
+  - **The dependency is pinned by SHA.** As of 2026-08-05 it points at
+    **`9c2f2b1`, a linter FEATURE-BRANCH commit** — the same SHA the VS Code
+    extension pins, so the two consumers judge by one linter state. `9c2f2b1`
+    adds no rules over `5b17036` (it exports `attachNamespaceFixes`, makes
+    baseline keys file-relative and adds the `./baseline` subpath export);
+    gates re-ran green after the bump (293 ports, 0 failing). The previous
+    feature-branch pin `10920f7` is meanwhile part of linter main via its
+    PR #9. The corpus
     now gates the eleven 2026-08-04 rules too (`popover-display-val`,
     `uncurated-formatter`, `hardcoded-binding-path`,
     `missing-view-display-on-navigated`, `separate-lifecycle-ifs`,
