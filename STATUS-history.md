@@ -7,6 +7,87 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## 2026-08-05 — IMPROVISED harvest: 136 improvisations classified, 6 framework requests filed
+
+No new port in this round. The corpus had **136 `IMPROVISED` deviations** and
+`pr/` held **one** open request — i.e. the repo was accumulating evidence of
+framework gaps faster than it was forwarding them, which inverts its stated
+purpose. This round converts the existing porting work into product output
+instead of adding coverage.
+
+**The classification is a probe, not a reading.**
+`scripts/probes/improvised-cluster.mjs` sorts every `IMPROVISED` entry into one
+of five verdicts (GAP · PROBE · REWORK · BOUNDARY · POLICY) by ordered family
+regexes, first match wins, review verdicts ("needs rework", "is WRONG", "is
+refuted") matched *before* the topical families so a flagged port cannot hide
+inside its own topic. `--strict` fails on an entry that matches no family:
+that is the ratchet — a new improvisation shape has to be consciously judged
+gap-or-not instead of joining the pile. It is deliberately **not** in
+`npm run gates`; classifying is a reviewer's call, not a generation-time one.
+
+Result: **GAP 15 · PROBE 16 · REWORK 16 · BOUNDARY 16 · POLICY 73.**
+
+The POLICY share is the finding behind the finding: **more than half** of what
+the corpus calls an improvisation is the thin-frontend rule, the single default
+model, mock flattening or BlockBase inlining working as decided — 15 BlockBase
+inlinings, 13 named-model folds, 18 thin-frontend recomputations, 11 mock
+flattenings. Those are behaviour-identical and read more like `NOTE`s than
+`IMPROVISED`s. Retyping them is left out of this change on purpose: gate
+declarations match on deviation text, so a sweep of that size deserves its own
+round.
+
+**Six requests filed**, each verified against the framework source before
+writing (the corpus rule that killed `urlhelper-abap-api` on a wrong premise):
+
+- `model-empty-vs-default` — `z2ui5_cl_core_srv_model->main_json_stringify`
+  serializes with `iv_ignore_empty = abap_false`, so an initial ABAP field
+  arrives as an explicit `""`: enum properties reject it, control defaults are
+  overridden, and app 049 had to **unroll a bound List into static items**
+  because a template whose rows set different property subsets cannot work.
+  The escape hatch already exists and no port uses it — `_bind( custom_filter )`
+  is applied at exactly that point and `z2ui5_cl_ajson_filter_lib=>create_empty_filter( )`
+  drops empty nodes — so the ask is ergonomics + path scoping
+  (`omit_initial`), not a new mechanism. The highest-value of the six: the only
+  gap that forces a *structural* deviation.
+- `control-inline-style` — `sap.m.Page` has no `width` property, so the three
+  DynamicSideContent/Grid sliders that resize their container by
+  `byId(…).$().width(v + '%')` have nothing to bind and no method to call;
+  `addStyleClass` carries a class name but no value. Asked for `css:
+  ["string","string"]` on the control's own DOM ref (apps 138/267/269, plus
+  250's icon tint as an explicitly optional half).
+- `table-set-sticky` — `setSticky` is reachable through the generalized
+  allowlist but `castArgAuto` infers a **string**, so the array never arrives.
+  One line (`setSticky: ["object"]`, the shipped `setHiddenInPopin` shape)
+  undoes app 009's server-side array mirror and gives apps 022/235 back the
+  Label + three CheckBoxes they deleted from the view.
+- `control-method-null-arg` — `castArgAuto("")` returns `false`, never `null`,
+  so an association reset (`setSelectedSection(null)`, app 263) has no wire.
+  The concept ships already for exactly one kind (`within`); asked for a
+  general `controlIdOrNull`.
+- `invisible-message-announce` — `sap.ui.core.InvisibleMessage` is a singleton:
+  no id for `CONTROL_BY_ID`, no entry in `GLOBAL_TARGETS`. Filed despite a
+  single porting hit (app 289) because it is the only possible route to an ARIA
+  live announcement for **any** abap2UI5 app, and backend-driven content change
+  is what the framework does.
+- `custom-currency-formatting` — no `FORMATTING` global target, so
+  `Formatting.setCustomCurrencies` (app 196's whole subject) is unreachable;
+  affects any app with a non-standard `CURRDEC`, not just the sample.
+
+**Six probe families are owed** (STATUS.md carries them). The biggest:
+`event-value-unreachable` (7 deviations) rests on the premise that a value in
+an array or a control reference cannot be transported — but an event arg is a
+**full UI5 expression** (`EventHandlerResolver` → `BindingParser.parseExpression`),
+which `pr/menu-item-selected-path` established and no port has tested for
+indexed access. Four calendar ports (139/151/177/220) show the **server date**
+instead of the clicked day; if `$event.oSource.getSelectedDates()[0].getStartDate()`
+resolves, that is the corpus' largest remaining behaviour loss closed without a
+framework change at all.
+
+Two REWORK entries the earlier sweeps had missed also came out of it: app 166
+(the `Messaging.addMessages` seed is expressible via `cc.MessageManager`) and
+app 233 (compound `binding_call` OR-filter and `open(searchValue)` both shipped
+since 2026-07-20, both unused).
+
 ## 2026-08-04 — gate-integrity round: linter bump, pattern-lint split, ratchet, LIVE_TEST closure path
 
 One change set across linter + ai-demokit, driven by a full gates/tooling

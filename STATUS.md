@@ -28,6 +28,68 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
 
 ## Open findings (backlog)
 
+- [ ] **IMPROVISED harvest — 6 framework requests filed, 6 probes owed**
+  (2026-08-05). The repo's purpose is to expose framework gaps, but the gaps
+  were sitting in 136 `IMPROVISED` sidecar texts while `pr/` held exactly one
+  open request. All 136 are now classified — repeatably, by
+  `node scripts/probes/improvised-cluster.mjs` (`--family <key>` re-reads the
+  evidence of one family, `--strict` fails on an unclassified entry, which is
+  the ratchet for the next batch; deliberately not in `npm run gates`):
+
+  | Verdict | # | Meaning |
+  |---|---:|---|
+  | GAP | 15 | a framework gap — now filed under `pr/` (6 requests) |
+  | PROBE | 16 | a *suspected* gap whose premise is unverified — measure before filing |
+  | REWORK | 16 | expressible today; the port under-delivers (review backlog) |
+  | BOUNDARY | 16 | outside abap2UI5 by nature (client-only APIs, sample-local JS) |
+  | POLICY | 73 | a decided corpus rule; the deviation is the rule working |
+
+  The **POLICY half is the headline number**: 73 of 136 improvisations are the
+  thin frontend, the single default model, mock flattening and BlockBase
+  inlining doing what they were decided to do — behaviour-identical, and
+  arguably `NOTE`s rather than `IMPROVISED`. Retyping them is a separate
+  change (gate declarations match on deviation text) and is **not** done here.
+
+  Filed: [`model-empty-vs-default`](pr/model-empty-vs-default/) ·
+  [`control-inline-style`](pr/control-inline-style/) ·
+  [`table-set-sticky`](pr/table-set-sticky/) ·
+  [`control-method-null-arg`](pr/control-method-null-arg/) ·
+  [`invisible-message-announce`](pr/invisible-message-announce/) ·
+  [`custom-currency-formatting`](pr/custom-currency-formatting/).
+
+  **The 6 PROBE families are the open work** — each is a plausible gap that a
+  measurement could refute, and this repo's rule is that a request is filed on
+  evidence, not on a rationale (cf. the withdrawn `urlhelper-abap-api`, whose
+  premise was simply wrong). In descending value:
+  - `event-value-unreachable` (7 deviations, apps 109/139/151/177/186/220/228):
+    the value the original reads sits in an **array or a control reference** on
+    the event — `getSelectedDates()[0].getStartDate()`, an array of `DateRange`
+    controls, `oldSizes`/`newSizes`, a `getMetadata().getName()` branch. But an
+    event arg is a **full UI5 expression** (`EventHandlerResolver` →
+    `BindingParser.parseExpression`, the capability `pr/menu-item-selected-path`
+    established), so indexed access and a ternary may already work. Probe it
+    with app 220 (`sap.ui.unified.Calendar`): wire
+    `$event.oSource.getSelectedDates()[0].getStartDate()` and see whether the
+    picked day arrives. Four calendar ports (139/151/177/220) currently show
+    the **server date** instead of the clicked one — the largest single
+    behaviour loss left in the corpus.
+  - `imperative-aggregation` (4, apps 076/077/203/241): `addToken`/`addItem`/
+    `removeItem` over statically declared children. App 085 already answers it
+    (fold the static children into a bound aggregation); confirm that is always
+    available, then these are REWORK, not gaps.
+  - `event-veto` (2, apps 136/247): app 136's veto predates
+    `s_ctrl-check_prevent_default` (merged 2026-07-30) and its guard switches
+    are two-way bound, so it is probably REWORK; app 247 needs a **per-column**
+    veto, which the render-time flag genuinely cannot express.
+  - `template-clone-id` (1, app 012), `window-resize-event` (1, app 012),
+    `shortcut-scope` (1, app 232): one port each, each already named as an
+    open idea in its own sidecar. File only if a second sample needs them.
+
+  **REWORK** adds two entries to the review backlog below that were not in it:
+  app 166 (semantic action toasts + the missing `Messaging.addMessages` seed,
+  expressible via `cc.MessageManager`) and app 233 (a compound `binding_call`
+  OR-filter and `open(searchValue)` both shipped, both unused).
+
 - [x] **Metadata snapshot: both follow-ups done** (closed 2026-08-02).
   `ui5/properties.json` is now the output of the **linter's**
   `generate-metadata.mjs` run against this repo's own OpenUI5 checkout
