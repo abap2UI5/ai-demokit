@@ -4,7 +4,7 @@
   "entity": "sap.f.ProductSwitch",
   "file": "src/04/b07/z2ui5_cl_ai_app_165.clas.abap",
   "batch": "b07",
-  "audit": { "frontend_action": true, "event_t_arg": false, "note": "the trigger press shows a static client-composed toast (control_global MESSAGE_TOAST.show) - see the IMPROVISED deviation, flagged for rework to the fragment popover" },
+  "audit": { "frontend_action": true, "event_t_arg": true, "note": "the trigger press shows a static client-composed toast (control_global MESSAGE_TOAST.show) - see the IMPROVISED deviation, flagged for rework to the fragment popover" },
   "status": "generated",
   "checked": null,
   "deviations": [

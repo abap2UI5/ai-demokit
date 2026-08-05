@@ -27,6 +27,56 @@ const UI5 = path.join(ROOT, 'ui5');
 const STATUS = ['generated', 'reviewed', 'checked'];
 const DEV_TYPES = ['IMPROVISED', 'POST_171', 'DROPPED_171', 'LIVE_TEST', 'SUBSET_DATA', 'NOTE'];
 
+/* Every key a sidecar may carry. A typo'd escape hatch (`structural_dif`,
+ * `render_smok`) used to be silently ignored — the gate then ran as if
+ * nothing was declared, which reads as "covered" when it is not. */
+const KNOWN_KEYS = new Set([
+  'class', 'sample', 'entity', 'file', 'batch', 'audit', 'status', 'checked',
+  'deviations', 'render_smoke', 'data_fidelity', 'structural_diff',
+]);
+
+/* Hold-out samples (TRAINING.md): regenerated from scratch to measure the
+ * generator — a hold-out port must never be promoted to `checked`, or the
+ * measurement would train on its own yardstick. Was prose-only until now. */
+const HOLDOUT = new Set(
+  JSON.parse(fs.readFileSync(path.join(UI5, 'holdout.json'), 'utf8')).samples,
+);
+
+/* The balanced ( … ) body starting at src[open] === '(' — string-aware, the
+ * same contract as the linter's parenRegion (a paren inside a backtick
+ * literal or |…| template never counts). */
+function parenBody(src, open) {
+  let depth = 0;
+  let str = null;
+  for (let i = open; i < src.length; i++) {
+    const c = src[i];
+    if (str === '`') { if (c === '`') str = null; continue; }
+    if (str === '|') {
+      if (c === '\\') { i++; continue; }
+      if (c === '|') str = null;
+      continue;
+    }
+    if (c === '`' || c === '|') { str = c; continue; }
+    if (c === '(') depth++;
+    else if (c === ')' && --depth === 0) return src.slice(open + 1, i);
+  }
+  return src.slice(open + 1);
+}
+
+/** audit.event_t_arg, derived: does the class pass t_arg in ANY client event
+ *  wire (backend `_event`, frontend `_event_client` / `follow_up_action`)?
+ *  The stored flags had drifted beyond repair — a 2026-08-04 sweep found 44
+ *  sidecars contradicting every plausible reading — so the fact is now
+ *  derived-checked like audit.frontend_action. */
+function usesEventTArg(src) {
+  const re = /client->(?:_event|_event_client|follow_up_action)\(/g;
+  let m;
+  while ((m = re.exec(src)) !== null) {
+    if (/\bt_arg\s*=/.test(parenBody(src, m.index + m[0].length - 1))) return true;
+  }
+  return false;
+}
+
 let errors = 0;
 const err = (m) => { console.log(`ERROR ${m}`); errors++; };
 
@@ -56,6 +106,9 @@ for (const sf of sidecars.sort()) {
 
   for (const k of ['class', 'sample', 'entity', 'file', 'batch', 'audit', 'status', 'deviations']) {
     if (m[k] === undefined) err(`${sf}: missing field "${k}"`);
+  }
+  for (const k of Object.keys(m)) {
+    if (!KNOWN_KEYS.has(k)) err(`${sf}: unknown field "${k}" (known: ${[...KNOWN_KEYS].join(', ')})`);
   }
   // audit is a structured object so its facts stay queryable (like deviations)
   if (m.audit !== undefined) {
@@ -102,7 +155,26 @@ for (const sf of sidecars.sort()) {
     }
   }
 
+  // optional structural_diff escape hatch — same shape as render_smoke; its
+  // staleness is verified per run by structural-diff.mjs, this only guards
+  // the schema so a typo'd skip cannot be silently ignored
+  if (m.structural_diff !== undefined) {
+    const sd = m.structural_diff;
+    if (typeof sd !== 'object' || sd === null || Array.isArray(sd)) {
+      err(`${sf}: structural_diff must be an object { skip: true, reason }`);
+    } else {
+      if (sd.skip !== true) err(`${sf}: structural_diff.skip must be true when present (drop the field otherwise)`);
+      if (!sd.reason || typeof sd.reason !== 'string') err(`${sf}: structural_diff.reason must be a non-empty string`);
+      for (const k of Object.keys(sd)) {
+        if (!['skip', 'reason'].includes(k)) err(`${sf}: unknown structural_diff field "${k}"`);
+      }
+    }
+  }
+
   if (m.status && !STATUS.includes(m.status)) err(`${sf}: unknown status "${m.status}"`);
+  if (m.status === 'checked' && m.sample && HOLDOUT.has(m.sample)) {
+    err(`${sf}: hold-out sample "${m.sample}" must never be checked (TRAINING.md — the measurement would train on its own yardstick)`);
+  }
   if (m.status === 'checked' && !m.checked?.date) {
     err(`${sf}: status "${m.status}" requires a checked {date, note}`);
   }
@@ -128,10 +200,19 @@ for (const sf of sidecars.sort()) {
     if (batch !== m.batch) err(`${sf}: batch "${m.batch}" does not match path ("${batch}")`);
     // audit.frontend_action must match the class — a 2026-08-03 sweep found
     // 24 drifted flags (both directions), so the fact is now derived-checked
-    if (fs.existsSync(abs) && typeof m.audit?.frontend_action === 'boolean') {
-      const uses = /_event_client\(|follow_up_action\(/.test(fs.readFileSync(abs, 'utf8'));
-      if (m.audit.frontend_action !== uses) {
-        err(`${sf}: audit.frontend_action is ${m.audit.frontend_action} but the class ${uses ? 'DOES' : 'does NOT'} call _event_client/follow_up_action`);
+    if (fs.existsSync(abs)) {
+      const src = fs.readFileSync(abs, 'utf8');
+      if (typeof m.audit?.frontend_action === 'boolean') {
+        const uses = /_event_client\(|follow_up_action\(/.test(src);
+        if (m.audit.frontend_action !== uses) {
+          err(`${sf}: audit.frontend_action is ${m.audit.frontend_action} but the class ${uses ? 'DOES' : 'does NOT'} call _event_client/follow_up_action`);
+        }
+      }
+      if (typeof m.audit?.event_t_arg === 'boolean') {
+        const uses = usesEventTArg(src);
+        if (m.audit.event_t_arg !== uses) {
+          err(`${sf}: audit.event_t_arg is ${m.audit.event_t_arg} but the class ${uses ? 'DOES' : 'does NOT'} pass t_arg in an event wire`);
+        }
       }
     }
   }
@@ -149,6 +230,23 @@ const sidecarSet = new Set(sidecars.map((f) => f.replace(/\.json$/, '')));
 for (const cls of ports) if (!sidecarSet.has(cls)) err(`port ${cls} has no meta/${cls}.json`);
 const portSet = new Set(ports);
 for (const cls of sidecarSet) if (!portSet.has(cls)) err(`meta/${cls}.json has no port class`);
+
+/* Gap-free numbering (regenerate-artefacts): deleting a port renumbers the
+ * tail, so the sequence stays contiguous. KNOWN_GAPS carries the one historic
+ * exception — 231 was deleted without renumbering the ~60 ports above it, and
+ * renumbering them retroactively (class names, sidecars, e2e INTERACTIONS,
+ * STATUS history) is a maintainer decision, not a gate side effect. Any NEW
+ * gap fails. */
+const KNOWN_GAPS = new Set([231]);
+const nums = [...sidecarSet]
+  .map((c) => Number(c.match(/app_(\d+)$/)?.[1]))
+  .filter((n) => Number.isInteger(n))
+  .sort((a, b) => a - b);
+for (let n = 1; n <= (nums[nums.length - 1] ?? 0); n++) {
+  if (!nums.includes(n) && !KNOWN_GAPS.has(n)) {
+    err(`port numbering has a gap at ${String(n).padStart(3, '0')} — renumber the tail (gap-free numbering, regenerate-artefacts)`);
+  }
+}
 
 console.log(`validate-meta: ${sidecars.length} sidecars, ${ports.length} ports, ${errors} error(s).`);
 process.exit(errors ? 1 : 0);

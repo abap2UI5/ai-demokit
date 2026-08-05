@@ -6,7 +6,7 @@
   "batch": "b07",
   "audit": {
     "frontend_action": true,
-    "event_t_arg": false,
+    "event_t_arg": true,
     "note": "all three button presses are roundtrip-free _event_client( control_global, MESSAGE_TOAST.show ) substitutions"
   },
   "status": "generated",

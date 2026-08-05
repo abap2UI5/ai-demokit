@@ -15,9 +15,5 @@
       "type": "IMPROVISED",
       "what": "Breadth-probe: the ACE-based sap.ui.codeeditor CodeEditor (a wrapped third-party editor). The value literal is shortened to 4 of the original's 12 language entries (against the verbatim-data rule) - a loss, retyped from NOTE at the 2026-07-27 review. Escaping concern found at the same review: the original view.xml carries the value's literal braces backslash-escaped (value='\\{...'), but the port builds the value in a |...| template whose \\{ collapses to a raw brace, so the serialized attribute starts with an unescaped { that the XMLView binding parser will read as a binding-info object - needs the surviving-backslash form (\\\\\\{ in the template, or a backtick literal) plus a live/render verification. Needs rework."
     }
-  ],
-  "structural_diff": {
-    "skip": true,
-    "reason": "breadth/capability probe — renders the control but is not a faithful 1:1 rebuild of the full sample"
-  }
+  ]
 }

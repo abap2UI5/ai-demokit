@@ -2,12 +2,15 @@ CLASS z2ui5_cl_ai_app_043 DEFINITION PUBLIC.
 
   PUBLIC SECTION.
     INTERFACES z2ui5_if_app.
+    " two-way bound to the third panel's expanded property (original:
+    " oPanel.setExpanded(!oPanel.getExpanded())) - PUBLIC, because only
+    " public attributes are serialized into the model; bound as PROTECTED
+    " it fails the first roundtrip with BINDING_ERROR (caught by the e2e
+    " interaction that closed this port's LIVE_TEST, 2026-08-04)
+    DATA expanded TYPE abap_bool.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
-    " not bound - mirrors the panel state so the toggle can invert it
-    " (original: oPanel.getExpanded())
-    DATA expanded TYPE abap_bool.
 
     METHODS view_display.
     METHODS on_event.

@@ -6,7 +6,7 @@
   "batch": "b03",
   "audit": {
     "frontend_action": true,
-    "event_t_arg": false,
+    "event_t_arg": true,
     "note": "toggle is wired roundtrip-free via _event_client( control_global, MESSAGE_TOAST.show )"
   },
   "status": "reviewed",

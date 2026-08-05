@@ -176,7 +176,7 @@ function originalViews(sample) {
 }
 
 // ---------- run ----------
-let apps = 0, appsWithDiffs = 0, undeclaredTotal = 0;
+let apps = 0, appsWithDiffs = 0, undeclaredTotal = 0, skips = 0, staleSkips = 0;
 const lines = [];
 for (const metaFile of fs.readdirSync(META).sort()) {
   if (!metaFile.endsWith('.json')) continue;
@@ -187,11 +187,13 @@ for (const metaFile of fs.readdirSync(META).sort()) {
 
   // a port may opt out of structural comparison via its sidecar — for
   // deliberate breadth/capability probes that render a control but are not a
-  // faithful 1:1 rebuild of the whole sample (mirrors the render_smoke skip).
-  if (meta.structural_diff?.skip) {
-    lines.push(`${meta.class} (${meta.sample}): structural_diff skip — ${meta.structural_diff.reason || 'declared probe'}`);
-    continue;
-  }
+  // faithful 1:1 rebuild of the whole sample. Mirrors the render_smoke skip
+  // INCLUDING its expiry: the diff is still computed, and the moment no
+  // difference remains the skip is stale and FAILS — a skip can never
+  // quietly outlive what it was excusing (the same contract view-gates has
+  // enforced for render_smoke.skip all along; this one used to be honoured
+  // unconditionally).
+  const declaredSkip = meta.structural_diff?.skip === true;
 
   const views = originalViews(meta.sample);
   if (!views.length) {
@@ -263,6 +265,17 @@ for (const metaFile of fs.readdirSync(META).sort()) {
     }
   }
 
+  if (declaredSkip) {
+    if (diffs.length) {
+      skips++;
+      lines.push(`${meta.class} (${meta.sample}): structural_diff skip — ${meta.structural_diff.reason || 'declared probe'} (${diffs.length} difference(s) still present)`);
+    } else {
+      staleSkips++;
+      lines.push(`${meta.class} (${meta.sample}): ! STALE structural_diff.skip — no structural differences remain; remove the skip`);
+    }
+    continue;
+  }
+
   if (diffs.length) {
     appsWithDiffs++;
     lines.push(`${meta.class} (${meta.sample})${port.dynamic ? ' [dynamic]' : ''}:`);
@@ -275,5 +288,5 @@ for (const metaFile of fs.readdirSync(META).sort()) {
 }
 
 console.log(lines.join('\n'));
-console.log(`\n${apps} ports checked, ${appsWithDiffs} with structural diffs, ${undeclaredTotal} undeclared differences.`);
-if (STRICT && undeclaredTotal > 0) process.exit(1);
+console.log(`\n${apps} ports checked, ${appsWithDiffs} with structural diffs, ${undeclaredTotal} undeclared differences, ${skips} declared skips (re-verified), ${staleSkips} stale skip(s).`);
+if (STRICT && (undeclaredTotal > 0 || staleSkips > 0)) process.exit(1);

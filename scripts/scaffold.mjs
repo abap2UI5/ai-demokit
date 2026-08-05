@@ -38,11 +38,12 @@ for (let i = 0; i < argv.length; i++) {
   if (a === '--batch') flags.batch = argv[++i];
   else if (a === '--new-batch') flags.newBatch = true;
   else if (a === '--dry-run') flags.dryRun = true;
+  else if (a === '--force') flags.force = true;
   else positional.push(a);
 }
 const input = positional[0];
 if (!input) {
-  console.error('usage: node scripts/scaffold.mjs <sample> [--batch bNN | --new-batch] [--dry-run]');
+  console.error('usage: node scripts/scaffold.mjs <sample> [--batch bNN | --new-batch] [--dry-run] [--force]');
   process.exit(2);
 }
 
@@ -55,7 +56,7 @@ function lookupUniverse(name, lib) {
   for (const l of universe.libs) {
     if (lib && l.lib !== lib) continue;
     const s = l.samples.find((s) => s.name.toLowerCase() === name.toLowerCase());
-    if (s) hits.push({ lib: l.lib, name: s.name, entity: s.entity });
+    if (s) hits.push({ lib: l.lib, name: s.name, entity: s.entity, since: s.since || null, deprecated: s.deprecated || null });
   }
   return hits;
 }
@@ -70,7 +71,77 @@ function resolveSample(str) {
   if (lib) return { lib, name, entity: `${lib}.${name}` }; // explicit lib, not in universe
   console.error(`sample "${name}" not found in ui5/universe.json — pass a qualified <lib>/<name>`); process.exit(1);
 }
-const { lib, name, entity } = resolveSample(input);
+const resolved = resolveSample(input);
+const { lib, name, entity } = resolved;
+
+// ---------- scope + hold-out pre-checks ----------
+// Both used to be MANUAL steps in the batch-planning prose (AGENTS §1) —
+// exactly the kind an agent skips. The scope verdict mirrors
+// generate-coverage.mjs scopeOf (universe facts enriched from
+// ui5/properties.json, the 1.71 floor, deprecation, non-app families), so
+// the scaffolder refuses what the coverage gate would fail later anyway.
+// scope-exceptions.json entries — a maintainer decision — pass with a note;
+// --force scaffolds regardless, for exactly that kind of decision.
+{
+  const sampleId = `${lib}.sample.${name}`;
+  const holdout = JSON.parse(fs.readFileSync(path.join(UI5, 'holdout.json'), 'utf8')).samples || [];
+  if (holdout.includes(sampleId) && !flags.force) {
+    console.error(`refusing to scaffold ${sampleId}: HOLD-OUT sample (ui5/holdout.json) — never part of regular batch planning, it measures the generator (TRAINING.md).`);
+    console.error('Use --force only for a deliberate hold-out regeneration run.');
+    process.exit(1);
+  }
+
+  const sinceLeq171 = (since) => {
+    if (!since) return true;
+    const m = String(since).match(/^(\d+)\.(\d+)/);
+    return m ? (+m[1] < 1 || (+m[1] === 1 && +m[2] <= 71)) : false;
+  };
+  const propsFile = path.join(UI5, 'properties.json');
+  const propsControls = fs.existsSync(propsFile)
+    ? JSON.parse(fs.readFileSync(propsFile, 'utf8')).controls || {}
+    : {};
+  const c = entity && propsControls[entity];
+  const since = resolved.since || c?.since || null;
+  const deprecated = resolved.deprecated || c?.deprecated || null;
+  const nonappFile = path.join(UI5, 'scope-nonapp.json');
+  const families = fs.existsSync(nonappFile)
+    ? JSON.parse(fs.readFileSync(nonappFile, 'utf8')).families || []
+    : [];
+  const nonapp = families.find((f) =>
+    (!f.lib || f.lib === lib)
+    && (!f.entityPrefix || (entity || '').startsWith(f.entityPrefix))
+    && (!f.namePrefix || name.startsWith(f.namePrefix))
+    && (f.entityPrefix || f.namePrefix)) || null;
+
+  const verdict = !entity || entity.includes('.sample.') ? 'unknown'
+    : deprecated ? 'deprecated' : !sinceLeq171(since) ? 'newer'
+      : nonapp ? 'nonapp' : 'in';
+
+  if (verdict === 'unknown') {
+    console.log(`note: no control metadata for ${sampleId} — scope not judged (verify with scripts/scope-of.mjs)`);
+  } else if (verdict !== 'in') {
+    const facts = verdict === 'deprecated'
+      ? `control ${entity} is deprecated (${deprecated?.since || deprecated?.text || deprecated})`
+      : verdict === 'newer'
+        ? `control ${entity} is @since ${since} — newer than the 1.71 floor`
+        : `non-app sample family (${nonapp.reason || 'ui5/scope-nonapp.json'})`;
+    const excFile = path.join(UI5, 'scope-exceptions.json');
+    const exceptions = fs.existsSync(excFile)
+      ? JSON.parse(fs.readFileSync(excFile, 'utf8')).exceptions || []
+      : [];
+    const exc = exceptions.find((e) => e.sample === sampleId);
+    if (exc) {
+      console.log(`note: ${sampleId} is out of scope (${verdict}) — documented exception: ${exc.reason?.slice(0, 100)}`);
+    } else if (flags.force) {
+      console.log(`WARNING: scaffolding OUT-OF-SCOPE sample ${sampleId} under --force (${facts}) — the coverage gate will fail until ui5/scope-exceptions.json carries a maintainer decision`);
+    } else {
+      console.error(`refusing to scaffold ${sampleId}: OUT OF SCOPE — ${facts}.`);
+      console.error('The coverage gate (generate-coverage.mjs) fails ported out-of-scope samples without a ui5/scope-exceptions.json entry.');
+      console.error('Verify with scripts/scope-of.mjs; --force scaffolds anyway (maintainer decision).');
+      process.exit(1);
+    }
+  }
+}
 
 // ---------- lib -> src folder ----------
 function srcFolder(lib) {

@@ -17,9 +17,9 @@ TRAINING.md; for what abap2UI5 can express see CAPABILITIES.md._
 |---|---|
 | Ports | **293** sidecars in `meta/` (src/01: 177 · src/02: 67 · src/03: 19 · src/04: 19 · src/05: 11) |
 | Status ladder | 86 `generated` · 146 `reviewed` · 61 `checked` (live-verified) |
-| Deviations | 4 DROPPED_171 · 136 IMPROVISED · 37 LIVE_TEST · 440 NOTE · 121 POST_171 |
-| Open LIVE_TESTs | **37 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
-| Declared gate skips | 7 structural-diff · 2 render-smoke (each re-verified per run — a stale skip FAILS) |
+| Deviations | 4 DROPPED_171 · 136 IMPROVISED · 477 NOTE · 121 POST_171 |
+| Open LIVE_TESTs | **0 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
+| Declared gate skips | 6 structural-diff · 2 render-smoke (each re-verified per run — a stale skip FAILS) |
 | Out-of-scope ported samples | `z2ui5_cl_ai_app_121 (sap.m.sample.UploadSet — deprecated)` · `z2ui5_cl_ai_app_136 (sap.f.sample.SidePanelSingle — control @since 1.107)` · `z2ui5_cl_ai_app_141 (sap.ui.core.sample.InvisibleMessage — control @since 1.78)` · `z2ui5_cl_ai_app_165 (sap.f.sample.ProductSwitchNavigation — control @since 1.72)` · `z2ui5_cl_ai_app_203 (sap.m.sample.OverflowToolbarTokenizer — control @since 1.139)` — all decided KEEP permanently 2026-07-30 (per-app rationale in ui5/scope-exceptions.json, revertible); the source-backed scope gate stays hard for NEW undecided entries |
 
 _Coverage per library (ported / in scope) is generated into the [README](README.md#coverage); one row per sample in [api.md](api.md)._
@@ -36,17 +36,30 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   and the snapshot still matches the `release` field of `ui5/universe.json`.
   Both pending
   items are settled:
-  - **The dependency is pinned by SHA.** It briefly pointed at the linter main
-    SHA `10c700b4`; it now points at **`10920f7`, a linter FEATURE-BRANCH
-    commit**, because the corpus needs the four rules added on 2026-08-02
-    (`date-type-without-source`, `frontend-action-unknown-id`,
-    `relative-binding-without-context`, `settable-property-via-action`) *and* its knowledge of abap2UI5's new
-    `POPUP.setWithinArea` target, without which app 285's correct wire is
-    reported as an `invalid-frontend-action`. **This pin must become a main
-    SHA before this change is merged** (linter AGENTS.md carries the same
-    rule); expect no corpus movement from the bump — all four rules measure
-    0 findings here (`settable-property-via-action` found five ports before the
-    conversion below, and none after).
+  - **The dependency is pinned by SHA.** As of 2026-08-05 it points at
+    **`c0e58d0`, a linter FEATURE-BRANCH commit** — the same SHA the VS Code
+    extension pins, so the two consumers judge by one linter state. Over
+    `5b17036` this adds no new rules: `9c2f2b1` brought fix/baseline plumbing
+    for the extension (`attachNamespaceFixes` export, file-relative baseline
+    keys, `./baseline` subpath), `c0e58d0` widens `view-never-displayed`'s
+    display list by `popover_display`/`nest*_view_display` (a false positive
+    the extension's snippet gate caught; can only remove findings, and the
+    corpus had none). Gates re-ran green after each bump (293 ports,
+    0 failing). The previous feature-branch pin `10920f7` is meanwhile part
+    of linter main via its PR #9. The corpus
+    now gates the eleven 2026-08-04 rules too (`popover-display-val`,
+    `uncurated-formatter`, `hardcoded-binding-path`,
+    `missing-view-display-on-navigated`, `separate-lifecycle-ifs`,
+    `duplicate-for-iterator`, `binding-to-nonpublic`, `ui5-internal-access`,
+    `commercial-ui5-host` gating; `unknown-event-parameter` as a budgeted
+    advisory; `enum-value-too-new` in `VERSION_TYPES`, POST_171-excusable) —
+    pattern-lint's whole generic half moved there across the two rounds.
+    **This pin must become a main SHA before this change is merged**
+    (linter AGENTS.md carries the same rule); corpus movement from the bumps:
+    0 new violations (app 028's two `enum-value-too-new` findings land on its
+    existing frameType POST_171 declarations — the rule's first run confirmed
+    a hand-written audit), +1 advisory (app 268's forwarded `colorString`,
+    inside the ratchet budget).
   - **The stale scope exception is gone.** The regenerated snapshot dropped the
     two false deprecations of the old parser (`sap.f.semantic.SemanticPage`,
     `sap.f.DynamicPageTitle` — a file-level `@deprecated` JSDoc block sitting
@@ -134,8 +147,12 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   the generated table) is the corpus' unverified-behaviour backlog. The
   systematic close path is the e2e harness: grow the `INTERACTIONS` map in
   `scripts/e2e-smoke.mjs` (one generic assertion per LIVE_TEST class —
-  client-composed toast, popup/popover open, binding_call) and let the
-  nightly e2e run (`e2e_nightly.yaml`) convert verified entries into `NOTE`s.
+  client-composed toast, popup/popover open, binding_call) and, after a green
+  run, `node scripts/close-live-tests.mjs --close <nums>` converts the
+  verified entries into `NOTE`s mechanically (text kept verbatim, so gate
+  declarations keep matching). Since 2026-08-04 every LIVE_TEST port has an
+  interaction (043/096/149 were the last three without one) and a red
+  nightly opens/updates an issue instead of hiding in the Actions tab.
   Every green interaction is human live-check time saved.
 - [ ] **Property-gate residual limits** (documented in AGENTS §5): enum
   *values* newer than 1.71 are invisible at the attribute-name level; a
@@ -201,8 +218,15 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   `@since`, which the scanners misread as base-version until 2026-07-27
   (both now read the experimental tag). Same pending drop-vs-keep decision
   as the other five `ui5/scope-exceptions.json` entries.
-- [ ] pattern-lint stays regex-based **by decision** (2026-07-18): the rule
-  set is green and each rule is small; a rewrite on the abaplint AST API only
-  pays once regex rules start producing false positives/negatives in
-  practice. Revisit when a rule needs real syntax awareness (first candidate:
-  anything that must distinguish strings from code).
+- [x] pattern-lint stays regex-based **by decision** (2026-07-18), and since
+  2026-08-04 it is **corpus-policy only**: the ten generic rules moved into
+  the linter (token-/string-aware there, several with `--fix`) and are gated
+  via `view_gates`; what stays here is method order, formatting, sidecar
+  conventions and the corpus-specific lessons (`dead-event-wire`,
+  `unguarded-date-formatter`). The syntax-awareness question answered itself:
+  a rule that needs it belongs in the linter anyway.
+- [ ] **Port numbering carries one historic gap (231).** `validate-meta` now
+  enforces gap-free numbering with `231` as the single pinned exception:
+  closing it means renumbering the ~60 ports above (class names, sidecars,
+  e2e INTERACTIONS keys, history references) — a maintainer decision, not a
+  gate side effect. Any NEW gap fails the gate.

@@ -24,8 +24,8 @@
       "what": "change and typeMissmatch handlers are reproduced 1:1 as roundtrip-free client-composed MessageToasts (control_global MESSAGE_TOAST.show): change -> \"Press 'Upload File' to upload file '{0}'\" filled by ${$parameters>/newValue}; typeMissmatch -> 'The file type *.{0} is not supported. Choose one of the following types: txt, jpg' filled by ${$parameters>/fileType}. The allowed-types list is folded to the literal 'txt, jpg' (the static fileType property the original builds it from); the original's aFileTypes.map(...) result is unused there too, so the message text matches."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "The client-composed toasts (change/typeMissmatch/uploadComplete/press via control_global MESSAGE_TOAST) and the ${$parameters>/newValue} / ${$parameters>/fileType} event-arg resolution are view-create verified (render-smoke) but not yet live-verified in a running system. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): pressing 'Upload File' with no chosen file round-trips and toasts 'Choose a file first'; the change/typeMissmatch toasts need a real file dialog and remain unexercised."
+      "type": "NOTE",
+      "what": "live-verified 2026-08-04 (nightly e2e interaction): The client-composed toasts (change/typeMissmatch/uploadComplete/press via control_global MESSAGE_TOAST) and the ${$parameters>/newValue} / ${$parameters>/fileType} event-arg resolution are view-create verified (render-smoke) but not yet live-verified in a running system. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): pressing 'Upload File' with no chosen file round-trips and toasts 'Choose a file first'; the change/typeMissmatch toasts need a real file dialog and remain unexercised."
     }
   ]
 }

@@ -7,6 +7,66 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## 2026-08-04 — gate-integrity round: linter bump, pattern-lint split, ratchet, LIVE_TEST closure path
+
+One change set across linter + ai-demokit, driven by a full gates/tooling
+review. The linter gained seven rules distilled from this corpus
+(`popover-display-val` with `--fix`, `uncurated-formatter`,
+`hardcoded-binding-path`, `missing-view-display-on-navigated`,
+`separate-lifecycle-ifs`, `duplicate-for-iterator`, `unknown-event-parameter`
+as a hint), a per-file-configurable `render-error` pseudo-rule and a CI drift
+gate for its metadata snapshot; the pin moved to `15a07b8` (feature branch —
+must become a main SHA before merge). Every rule was measured against this
+corpus first: two false-positive shapes died in that measurement
+(`DateRangeSelection change` widening an inherited event → existence is only
+judged on self-declared events; `ColorPickerPopover` forwarding `colorString`
+undeclared → the rule is a hint, not a warning).
+
+Corpus side:
+
+- **pattern-lint is corpus-policy only now** — its ten generic rules moved
+  into the linter and are gated via `view_gates`. One rule set, two
+  enforcement points was how the editor and CI drifted before.
+- **`structural_diff.skip` expires like `render_smoke.skip`**: the diff is
+  still computed and a skip with no remaining differences FAILS. First catch
+  on activation: app 114's probe skip was stale (the port is a faithful
+  rebuild) — removed.
+- **Advisory ratchet in `view_gates`** (`ADVISORY_BUDGET`): advisory findings
+  never gate per finding, but their per-type count must not grow. Pinned at
+  41 missing-accessibility · 7 event-without-handler · 1
+  unknown-event-parameter.
+- **`validate-meta` hardened**: unknown sidecar top-level keys fail (a typo'd
+  escape hatch was silently ignored), `structural_diff` got a schema,
+  hold-out ports can never be `checked`, port numbering must be gap-free
+  (231 pinned as the one historic exception), and `audit.event_t_arg` is now
+  DERIVED-checked like `frontend_action` — defined as "passes `t_arg` in any
+  event wire"; the stored flags had drifted beyond repair (44 of 293
+  contradicted every plausible reading) and were swept to the derived truth.
+- **The scaffolder enforces the scope + hold-out pre-checks** that were
+  manual prose (the kind of step an agent skips): out-of-scope and HOLDOUT
+  samples are refused with the facts printed, exceptions pass with a note,
+  `--force` records a maintainer decision.
+- **The LIVE_TEST loop is closed end to end**: the last three LIVE_TEST ports
+  without an interaction got one (043 toolbar-press → two-way `expanded`
+  flip, 096 radio → round-tripped mode toast, 149 REDIRECT → popup on the
+  Card Explorer URL), `scripts/close-live-tests.mjs` converts green-verified
+  deviations to `NOTE`s mechanically (text verbatim — gate declarations keep
+  matching), and a red nightly now opens/updates an issue
+  (`e2e nightly is red`) instead of hiding in the Actions tab.
+
+A second linter round followed the same day (pin → `5b17036`): the 043
+BINDING_ERROR became the generic rule `binding-to-nonpublic`; the
+"enum values newer than 1.71 are invisible" residual limit closed as
+`enum-value-too-new` (its first corpus run *confirmed* app 028's two
+hand-written frameType POST_171 declarations — the rule now checks what a
+human could only declare); `unknown-binding-path` covers `path: '/X'` and
+`${/X}` forms (the `/T_ITEMS/9/...` row-index trap died in the corpus
+measurement); pattern-lint's last two generic rules (`private-mproperties`,
+`commercial-ui5-host`) moved over; and `view_gates`' render leg got the
+linter's new page pool. Linter-side the metadata generator dropped from
+~3 minutes to ~1.5 s (an unanchored regex was 167 of 172 seconds), which
+also makes the weekly `generate_result` snapshot refresh here cheaper.
+
 ## The curated formatter shrinks to a marshalling layer, and a gate holds the line (2026-08-04)
 
 A review of the framework's `model/formatter.js` against the thin-frontend

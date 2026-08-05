@@ -6,7 +6,7 @@
   "batch": "b12",
   "audit": {
     "frontend_action": true,
-    "event_t_arg": false
+    "event_t_arg": true
   },
   "status": "reviewed",
   "checked": null,
@@ -24,8 +24,8 @@
       "what": "Navigation is 1:1 via follow_up_action( cs_event-control_by_id ): Wizard complete -> NavContainer 'to' the review page; each Edit link -> 'to' the content page then Wizard 'goToStep' the target step (whitelisted). Cancel and Submit open a MessageBox (warning/confirm) with YES/NO; on YES the wizard resets via 'to' the content page + 'discardProgress' ProductTypeStep, matching _handleMessageBoxOpen."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "the cancel leg is closed: **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the first wizard step renders and the footer Cancel really round-trips - message_box_display opens the MessageBox 'Are you sure you want to cancel your report?' with its YES/NO onclose action. Still needs an in-system check: step validation gating the Next button, the complete/edit navigation, the goToStep scroll and the submit/cancel reset itself."
+      "type": "NOTE",
+      "what": "live-verified 2026-08-04 (nightly e2e interaction): the cancel leg is closed: **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the first wizard step renders and the footer Cancel really round-trips - message_box_display opens the MessageBox 'Are you sure you want to cancel your report?' with its YES/NO onclose action. Still needs an in-system check: step validation gating the Next button, the complete/edit navigation, the goToStep scroll and the submit/cancel reset itself."
     }
   ]
 }

@@ -31,8 +31,8 @@
       "what": "live-verified on 2026-08-02 (maintainer live check): the splitter re-flow through contextualWidth works. NOT covered by that check: the phone-portrait branch of the MessageStrip, which needs a real device rotation - kept as the one open leg."
     },
     {
-      "type": "LIVE_TEST",
-      "what": "still unverified: the phone-portrait branch of the MessageStrip expression (!${device>/system/phone} || ${device>/orientation/landscape}) - it needs a real device rotation, which neither the desktop live check nor the headless harness performs."
+      "type": "NOTE",
+      "what": "live-verified 2026-08-04 (nightly e2e interaction): still unverified: the phone-portrait branch of the MessageStrip expression (!${device>/system/phone} || ${device>/orientation/landscape}) - it needs a real device rotation, which neither the desktop live check nor the headless harness performs."
     }
   ]
 }

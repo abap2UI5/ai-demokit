@@ -6,7 +6,7 @@
   "batch": "b20",
   "audit": {
     "frontend_action": true,
-    "event_t_arg": false,
+    "event_t_arg": true,
     "note": "control_by_id navigateBack on the popup's MessageView"
   },
   "status": "generated",

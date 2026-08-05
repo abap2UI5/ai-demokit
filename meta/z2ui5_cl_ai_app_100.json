@@ -6,7 +6,7 @@
   "batch": "b12",
   "audit": {
     "frontend_action": false,
-    "event_t_arg": false
+    "event_t_arg": true
   },
   "status": "reviewed",
   "checked": null,
