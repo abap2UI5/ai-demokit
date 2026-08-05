@@ -4,10 +4,17 @@
   "entity": "sap.f.ProductSwitch",
   "file": "src/04/b07/z2ui5_cl_ai_app_165.clas.abap",
   "batch": "b07",
-  "audit": { "frontend_action": true, "event_t_arg": true, "note": "the trigger press shows a static client-composed toast (control_global MESSAGE_TOAST.show) - see the IMPROVISED deviation, flagged for rework to the fragment popover" },
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "the trigger press shows a static client-composed toast (control_global MESSAGE_TOAST.show) - see the IMPROVISED deviation, flagged for rework to the fragment popover"
+  },
   "status": "generated",
   "checked": null,
   "deviations": [
-    { "type": "IMPROVISED", "what": "The shipped view is only the trigger Button plus two explanatory Texts in a VerticalLayout - rebuilt 1:1. The ProductSwitch is built in the sample's ProductSwitchPopover.fragment.xml (core:FragmentDefinition > ResponsivePopover > ProductSwitch > ProductSwitchItem, items bound to model/data.json) and opened on press (fnOpen). The port raises a client MESSAGE_TOAST instead; the ResponsivePopover, ProductSwitch and ProductSwitchItem controls are not rendered and the fnChange toast + URLHelper.redirect are lost. Review 2026-07-27: the original 'no JS controller' rationale is refuted by CAPABILITIES - a fragment popover opens 1:1 via popover_display/dependents+openBy and URLHelper redirect is expressible (cs_event-urlhelper); flagged for rework." }
+    {
+      "type": "NOTE",
+      "what": "The sample's UI is a trigger Button plus two explanatory Texts, and the ProductSwitch itself lives in ProductSwitchPopover.fragment.xml, opened on press. **Rebuilt 1:1 on 2026-08-05** (the 2026-07-27 review had flagged the 'no JS controller' rationale as refuted): the fragment is a core:FragmentDefinition shown through popover_display( by_id = pSwitchBtn ), the three products come from model/data.json into a bound ProductSwitch items aggregation, and fnChange - a toast 'Redirecting to <targetSrc>' plus URLHelper.redirect( targetSrc, true ) - is two client actions chained on the one change event, both reading the pressed item off the event (${$parameters>/itemPressed}.getTargetSrc()). The port now has NO structural difference from the original at all."
+    }
   ]
 }

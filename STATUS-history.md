@@ -7,6 +7,38 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## 2026-08-05 (sixth round) — six of the flagged breadth-probe ports
+
+The 2026-07-27 review flagged thirteen ports as under-delivering and named the
+technique for each; this round works that list.
+
+- **119** injects the sample's `css/style.css` through a `core:HTML` content
+  attribute, so the FixFlex background colours are back.
+- **169**'s eight Sliders resize their grid wrappers again. The original walks
+  the DOM to find the wrapper below each slider; every wrapper is statically
+  known in the view, so each pair is a two-way bound value plus a width
+  expression binding — roundtrip-free, the app-176 idiom.
+- **221**'s three home Buttons reset their sibling IconTabHeader again. First
+  attempt used `control_by_id setSelectedKey` and the **linter said no**:
+  `settable-property-via-action`, because `selectedKey` is bindable. The rule
+  was right — the port binds the key and resets it from the event handler.
+- **222**'s Slider resizes its Panel through the same binding pair (the Panel
+  HAS a width property, unlike the `sap.m.Page` of 138/267/269). Its RevealGrid
+  toggle stays dropped: a sample-local JS debug overlay is not a capability.
+- **165** is rebuilt 1:1 — the ProductSwitch popover fragment via
+  `popover_display( by_id )`, the three products bound from `model/data.json`,
+  and `fnChange`'s toast + `URLHelper.redirect` as two client actions chained
+  on one change event, both reading the pressed item off the event. The port
+  now has **no structural difference from the original at all**.
+- **167** needed no code: its sidecar still described the pre-rework port and
+  called handlers "STATIC toasts" that had long since been wired (bound
+  `sideExpanded`, the item text in the toast, `to()` for the NavContainer, the
+  user popover, the Create Item dialog). Corrected — a stale rationale is a
+  defect like any other, and this one would have sent the next reader to redo
+  finished work.
+
+IMPROVISED: 51 → **45**.
+
 ## 2026-08-05 (fifth round) — IMPROVISED means what it says now, and two families closed
 
 **The metric was fixed first.** More than half of the corpus' 118 IMPROVISED

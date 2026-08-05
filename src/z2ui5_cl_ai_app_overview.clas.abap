@@ -940,15 +940,14 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
     result = VALUE #( BASE result
       ( module = `sap.f`              control = `sap.f.ProductSwitch`                   name = `ProductSwitchNavigation`             class = `z2ui5_cl_ai_app_165` path = `src/04/b07/z2ui5_cl_ai_app_165.clas.abap`
         score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.72`
         since_post171 = abap_true
         is_post171 = abap_true
-        notes = `IMPROVISED: The shipped view is only the trigger Button plus two explanatory Texts in a VerticalLayout - rebuilt 1:1. The ProductSwitch is built in the sample's ProductSwitchPopover.fragment.xml` &&
-                 ` (core:FragmentDefinition > ResponsivePopover > ProductSwitch > ProductSwitchItem, items bound to model/data.json) and opened on press (fnOpen). The port raises a client MESSAGE_TOAST instead; the` &&
-                 ` ResponsivePopover, ProductSwitch and ProductSwitchItem controls are not rendered and the fnChange toast + URLHelper.redirect are lost. Review 2026-07-27: the original 'no JS controller' rationale is` &&
-                 ` refuted by CAPABILITIES - a fragment popover opens 1:1 via popover_display/dependents+openBy and URLHelper redirect is expressible (cs_event-urlhelper); flagged for rework.` ) ).
+        notes = `NOTE: The sample's UI is a trigger Button plus two explanatory Texts, and the ProductSwitch itself lives in ProductSwitchPopover.fragment.xml, opened on press. **Rebuilt 1:1 on 2026-08-05** (the` &&
+                 ` 2026-07-27 review had flagged the 'no JS controller' rationale as refuted): the fragment is a core:FragmentDefinition shown through popover_display( by_id = pSwitchBtn ), the three products come from` &&
+                 ` model/data.json into a bound ProductSwitch items aggregation, and fnChange - a toast 'Redirecting to <targetSrc>' plus URLHelper.redirect( targetSrc, true ) - is two client actions chained on the one` &&
+                 ` change event, both reading the pressed item off the event (${$parameters>/itemPressed}.getTargetSrc()). The port now has NO structural difference from the original at all.` ) ).
 
     lv_text1 = `NOTE: The original keeps header/object data in nested paths on one JSON model (title, showFooter, titleSnappedContent/text, titleExpandedContent/text, objectDescription/category|center|email|status).` &&
                ` abap2UI5 keeps one default model and render-smoke does not mock nested structures, so those paths are folded to flat fields bound via _bind (last path segment identical, which structural-diff` &&
@@ -3554,29 +3553,29 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` User/Identity/Monitoring filters); requires a UI5 release >= 1.77. Aggregation-level member, invisible to the property gate (it scans attributes only) - declared by policy, found in review` &&
                  ` 2026-07-27.` ) ).
 
-    lv_text1 = `IMPROVISED: NavigationListItem.selectable is the expression binding {= ${items}.length > 3} in the original; per the thin-frontend rule that presentation logic is computed in ABAP into a flat` &&
-               ` 'selectable' field (children count > 3) and bound directly. The controller event handlers (onSideNavButtonPress toggling the side, onItemPress, onItemSelect navigating the NavContainer via to(),` &&
-               ` handleUserNamePress opening a popover, fixed-item quickActionPress opening a Create Item Dialog) are each replaced by a STATIC-text client MESSAGE_TOAST; the NavContainer shows its initialPage` &&
-               ` (page2) but page-to-page navigation is not wired. Review 2026-07-27: these substitutions under-deliver against CAPABILITIES - onItemPress could transport the item text client-side (control_global` &&
-               ` toast template + ${$parameters>/item}.getText(), app 060/172 idiom), the side toggle could two-way bind ToolPage.sideExpanded (prefer-a-bindable-property rule), and itemSelect->to() is expressible` &&
-               ` via control_by_id 'to' (CONTROL_METHODS to: controlId+transition, client-resolved key) - flagged for rework, not promoted. // POST-1.71: Several members newer than UI5 1.71 are kept 1:1 from the`.
-    lv_text1 = lv_text1 && ` original. sap.tnt.NavigationListItem: selectable (@since 1.116), design (@since 1.133.0, sap.tnt.NavigationListItemDesign), press (event, @since 1.133 on NavigationListItemBase), ariaHasPopup (@since` &&
-               ` 1.133.0). sap.m.Button.ariaHasPopup (@since 1.84) on the header 'Alan Smith' button. Declared per the property-171 policy; the tnt members were previously mis/under-declared (the earlier note cited` &&
-               ` only sap.m.Button 1.84 for ariaHasPopup, which is the Button version, not the tnt member's 1.133) because the property gate is blind to sap.tnt - corrected by the non-sap.m @since audit 2026-07-24.` &&
-               ` NavigationListItem.expanded is also kept 1:1; its @since reads 1.121 because the property was relocated to the new sap.tnt.NavigationListItemBase in 1.121 (the property itself predates 1.71), but the` &&
-               ` property gate resolves the base-class version, so it is declared here for the gate. // NOTE: The full 14-item navigation tree (with its nested child lists, incl. Root Item 3's 38 children) and the` &&
-               ` 4-item fixed navigation are inlined from data.json. Where data.json omits a property the UI5 default is seeded explicitly (enabled true, expanded false, and on Fixed Item 1-3 the enum fields`.
-    lv_text1 = lv_text1 && ` ariaHasPopup None / design Default - an empty string would throw in validateProperty). The page2 ScrollContainer's multi-paragraph lorem-ipsum filler text is abbreviated to a short placeholder. //` &&
-               ` NOTE: Faked-event-value audit fix (2026-07-30): four substituted handlers are now the original behaviours. onItemPress: client-composed toast 'Fired itemPress, item: {0}' filled by` &&
-               ` ${$parameters>/item}.getText() (was the static 'Item pressed'). onItemSelect: pageContainer.to(item key page) via roundtrip-free _event_client control_by_id 'to' with ${$parameters>/item}.getKey()` &&
-               ` (was a static toast; a key without a matching page logs a NavContainer error client-side exactly like the original's createId miss). onSideNavButtonPress: ToolPage.sideExpanded is two-way bound` &&
-               ` (added attr, declared) and flipped on the SIDE_TOGGLE round-trip; the button's tooltip is bound (added attr, declared) and set from the PRE-toggle state ('Large/Small Size Navigation') exactly like` &&
-               ` _setToggleButtonTooltip; init seeds the desktop default 'Small Size Navigation' (the Device.system.desktop branch resolved statically). handleUserNamePress: the controller-built Popover (showHeader`.
-    lv_text1 = lv_text1 && ` false, Bottom, Feedback/Help/Logout transparent buttons, sapMOTAPopover sapTntToolHeaderPopover classes) is rebuilt 1:1 via popover_display by_id = $event.oSource.sId - Popover + 3 Buttons are extra` &&
-               ` controls vs the original view.xml (controller-built). onQuickActionPress: the design guard runs server-side on the transported ${$source>/design} and a design=Action item opens the 'Create Item'` &&
-               ` Message Dialog (Text 'Create New Navigation List Item', Create/Cancel closing via popup_close) via popup_display - Dialog/Text/Button extra controls declared here too. **e2e-verified 2026-07-30**` &&
-               ` (transpiled-framework interaction, scripts/e2e-smoke.mjs): Child Item 1 press toasts 'Fired itemPress, item: Child Item 1' and the Alan Smith press opens the Feedback/Help/Logout popover; the side` &&
-               ` toggle, key navigation target and Quick Create dialog remain unexercised.`.
+    lv_text1 = `NOTE: NavigationListItem.selectable is the expression binding {= ${items}.length > 3} in the original; per the thin-frontend rule that presentation logic is computed in ABAP into a flat 'selectable'` &&
+               ` field (children count > 3) and bound directly. **Sidecar corrected 2026-08-05**: the text still described the port as it looked before its rework and claimed the controller handlers were STATIC` &&
+               ` toasts - they are not, and have not been for a while. onSideNavButtonPress is the two-way bound ToolPage.sideExpanded (prefer-a-bindable-property); onItemPress carries the item text into a` &&
+               ` client-composed toast (${$parameters>/item}.getText(), the app-060/172 idiom); onItemSelect navigates the NavContainer roundtrip-free through control_by_id 'to' with the key resolved on the client;` &&
+               ` handleUserNamePress rebuilds the controller's Popover (no header, Bottom, three transparent buttons) and opens it at the pressed button; onQuickActionPress reproduces the design=Action guard and the` &&
+               ` Create Item dialog. What remains is the selectable computation above - a bound field instead of the original's expression - which is the thin-frontend rule working. // POST-1.71: Several members`.
+    lv_text1 = lv_text1 && ` newer than UI5 1.71 are kept 1:1 from the original. sap.tnt.NavigationListItem: selectable (@since 1.116), design (@since 1.133.0, sap.tnt.NavigationListItemDesign), press (event, @since 1.133 on` &&
+               ` NavigationListItemBase), ariaHasPopup (@since 1.133.0). sap.m.Button.ariaHasPopup (@since 1.84) on the header 'Alan Smith' button. Declared per the property-171 policy; the tnt members were` &&
+               ` previously mis/under-declared (the earlier note cited only sap.m.Button 1.84 for ariaHasPopup, which is the Button version, not the tnt member's 1.133) because the property gate is blind to sap.tnt -` &&
+               ` corrected by the non-sap.m @since audit 2026-07-24. NavigationListItem.expanded is also kept 1:1; its @since reads 1.121 because the property was relocated to the new sap.tnt.NavigationListItemBase` &&
+               ` in 1.121 (the property itself predates 1.71), but the property gate resolves the base-class version, so it is declared here for the gate. // NOTE: The full 14-item navigation tree (with its nested` &&
+               ` child lists, incl. Root Item 3's 38 children) and the 4-item fixed navigation are inlined from data.json. Where data.json omits a property the UI5 default is seeded explicitly (enabled true, expanded`.
+    lv_text1 = lv_text1 && ` false, and on Fixed Item 1-3 the enum fields ariaHasPopup None / design Default - an empty string would throw in validateProperty). The page2 ScrollContainer's multi-paragraph lorem-ipsum filler text` &&
+               ` is abbreviated to a short placeholder. // NOTE: Faked-event-value audit fix (2026-07-30): four substituted handlers are now the original behaviours. onItemPress: client-composed toast 'Fired` &&
+               ` itemPress, item: {0}' filled by ${$parameters>/item}.getText() (was the static 'Item pressed'). onItemSelect: pageContainer.to(item key page) via roundtrip-free _event_client control_by_id 'to' with` &&
+               ` ${$parameters>/item}.getKey() (was a static toast; a key without a matching page logs a NavContainer error client-side exactly like the original's createId miss). onSideNavButtonPress:` &&
+               ` ToolPage.sideExpanded is two-way bound (added attr, declared) and flipped on the SIDE_TOGGLE round-trip; the button's tooltip is bound (added attr, declared) and set from the PRE-toggle state` &&
+               ` ('Large/Small Size Navigation') exactly like _setToggleButtonTooltip; init seeds the desktop default 'Small Size Navigation' (the Device.system.desktop branch resolved statically).`.
+    lv_text1 = lv_text1 && ` handleUserNamePress: the controller-built Popover (showHeader false, Bottom, Feedback/Help/Logout transparent buttons, sapMOTAPopover sapTntToolHeaderPopover classes) is rebuilt 1:1 via` &&
+               ` popover_display by_id = $event.oSource.sId - Popover + 3 Buttons are extra controls vs the original view.xml (controller-built). onQuickActionPress: the design guard runs server-side on the` &&
+               ` transported ${$source>/design} and a design=Action item opens the 'Create Item' Message Dialog (Text 'Create New Navigation List Item', Create/Cancel closing via popup_close) via popup_display -` &&
+               ` Dialog/Text/Button extra controls declared here too. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): Child Item 1 press toasts 'Fired itemPress, item: Child` &&
+               ` Item 1' and the Alan Smith press opens the Feedback/Help/Logout popover; the side toggle, key navigation target and Quick Create dialog remain unexercised.`.
     lv_text2 = `Several members newer than UI5 1.71 are kept 1:1 from the original. sap.tnt.NavigationListItem: selectable (@since 1.116), design (@since 1.133.0, sap.tnt.NavigationListItemDesign), press (event,` &&
                ` @since 1.133 on NavigationListItemBase), ariaHasPopup (@since 1.133.0). sap.m.Button.ariaHasPopup (@since 1.84) on the header 'Alan Smith' button. Declared per the property-171 policy; the tnt` &&
                ` members were previously mis/under-declared (the earlier note cited only sap.m.Button 1.84 for ariaHasPopup, which is the Button version, not the tnt member's 1.133) because the property gate is blind` &&
@@ -3585,8 +3584,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
     result = VALUE #( BASE result
       ( module = `sap.tnt`            control = `sap.tnt.ToolPage`                      name = `ToolPage`                            class = `z2ui5_cl_ai_app_167` path = `src/05/b06/z2ui5_cl_ai_app_167.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.34`
         is_post171 = abap_true
         notes = lv_text1
