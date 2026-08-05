@@ -12,12 +12,8 @@
   "checked": null,
   "deviations": [
     {
-      "type": "IMPROVISED",
-      "what": "Breadth-probe: a minimal sap.uxap.ObjectPageLayout (header title + section + two subsections). The original's blocks are custom JS view controls (sample:MultiViewBlock, 8 instances) replaced with sap.m.Text content, and the third ObjectPageSubSection ('Expanded by default') plus both moreBlocks aggregations are dropped entirely. Review 2026-07-27: the original 'not expressible in the declarative builder' rationale is refuted by the BlockBase-inlining technique (CAPABILITIES 'Custom BlockBase blocks', apps 161/178) - a BlockBase view's content inlines into blocks; only MultiViewBlock's per-mode view switching remains a genuine open point. Needs rework toward the documented technique."
+      "type": "NOTE",
+      "what": "**Rebuilt on 2026-08-05** - it was a breadth probe whose blocks were replaced by a Text and whose third subsection plus both moreBlocks aggregations were dropped. All three subsections and all TEN sample:MultiViewBlock positions are there now, each inlined with its block view's CONTENT (CAPABILITIES 'Custom BlockBase blocks', apps 161/178/188): a BlockBase is only a lazy-loading wrapper around a view, and ObjectPageSubSection.blocks/moreBlocks accept any control. MultiViewBlock ships TWO views and picks by the block MODE - Collapsed (Country/Subsidiary) and Expanded (+ Building/Room). abap2UI5 has no BlockBase mode, so each block carries the variant its subsection asks for (mode='Expanded' the expanded form, the default-mode subsection the collapsed one), which is exactly what the sample renders on load; what is lost is the per-block runtime switching. Structurally that means: the 10 sample:MultiViewBlock controls are absent, 10 forms:SimpleForm are present in their place (the original side counts the two block VIEWS once, not their ten instances), and their Label/Text children move to the m: prefix - 6 vs 32 each, the same shape every BlockBase port in this corpus declares. The view is written out per block rather than through a helper method, so the structural diff can reconstruct it statically."
     }
-  ],
-  "structural_diff": {
-    "skip": true,
-    "reason": "breadth/capability probe — renders the control but is not a faithful 1:1 rebuild of the full sample"
-  }
+  ]
 }

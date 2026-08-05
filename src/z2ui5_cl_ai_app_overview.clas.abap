@@ -729,13 +729,13 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
 
     result = VALUE #(
       ( module = `sap.f`              control = `sap.f.Card`                            name = `Card`                                class = `z2ui5_cl_ai_app_117` path = `src/04/b01/z2ui5_cl_ai_app_117.clas.abap`
-        score = 2
-        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.64`
-        notes = `IMPROVISED: Breadth-probe: sap.f.Card with a sap.f.cards.Header and a simplified content body - the original's From/To ComboBoxes (cities> named model), DatePicker and Book button are represented by a` &&
-                 ` Text + a 'Buy Now' Button, and the sample's entire second Card (Project Cloud Transformation: List of CustomListItems over the products> named model with Title/Text/ObjectStatus) is dropped. Review` &&
-                 ` 2026-07-27: both named models fold into the default model per CAPABILITIES 'Named JSON models' (the mocks are archived under ui5/sap.f/Card/model/), so the full sample is expressible - needs rework` &&
-                 ` to a faithful rebuild.` ) ).
+        notes = `NOTE: **Rebuilt 1:1 on 2026-08-05** - it was a breadth probe that showed one simplified card. Both cards of the sample are there now: the booking card with its two sorted city ComboBoxes, the` &&
+                 ` DatePicker and the Book button (whose fixed explanation toast is composed on the client), and the whole second card - the revenue List with its CustomListItem template, Title/Text and the` &&
+                 ` ObjectStatus state. The two named models fold into the one default model (cities> -> T_CITIES, products> -> T_PRODUCTS, last path segment identical) and the ComboBox sorter rides along as a raw` &&
+                 ` binding-info string. The port has NO structural difference from the original left, so its structural_diff skip is gone - the gate reported it stale, which is what that ratchet is for.` ) ).
 
     lv_text1 = `NOTE: The controller's Card popover (onPressOpenPopover, wired to the GenericTag press and the 'Button with layoutData' press) is reproduced 1:1 since 2026-07-30: both presses fire OPEN_POPOVER with` &&
                ` $event.oSource.sId and the backend rebuilds view/Card.fragment.xml verbatim (Popover placement Bottom / showHeader false / contentWidth 300px > f:Card > card:NumericHeader 'Sales Revenue' with the` &&
@@ -4747,15 +4747,19 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         notes = lv_text1
         post171 = lv_text2 ) ).
 
+    lv_text1 = `NOTE: **Rebuilt on 2026-08-05** - it was a breadth probe whose blocks were replaced by a Text and whose third subsection plus both moreBlocks aggregations were dropped. All three subsections and all` &&
+               ` TEN sample:MultiViewBlock positions are there now, each inlined with its block view's CONTENT (CAPABILITIES 'Custom BlockBase blocks', apps 161/178/188): a BlockBase is only a lazy-loading wrapper` &&
+               ` around a view, and ObjectPageSubSection.blocks/moreBlocks accept any control. MultiViewBlock ships TWO views and picks by the block MODE - Collapsed (Country/Subsidiary) and Expanded (+` &&
+               ` Building/Room). abap2UI5 has no BlockBase mode, so each block carries the variant its subsection asks for (mode='Expanded' the expanded form, the default-mode subsection the collapsed one), which is` &&
+               ` exactly what the sample renders on load; what is lost is the per-block runtime switching. Structurally that means: the 10 sample:MultiViewBlock controls are absent, 10 forms:SimpleForm are present in` &&
+               ` their place (the original side counts the two block VIEWS once, not their ten instances), and their Label/Text children move to the m: prefix - 6 vs 32 each, the same shape every BlockBase port in`.
+    lv_text1 = lv_text1 && ` this corpus declares. The view is written out per block rather than through a helper method, so the structural diff can reconstruct it statically.`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `ObjectPageSubSection`                class = `z2ui5_cl_ai_app_116` path = `src/03/b01/z2ui5_cl_ai_app_116.clas.abap`
-        score = 2
-        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.26`
-        notes = `IMPROVISED: Breadth-probe: a minimal sap.uxap.ObjectPageLayout (header title + section + two subsections). The original's blocks are custom JS view controls (sample:MultiViewBlock, 8 instances)` &&
-                 ` replaced with sap.m.Text content, and the third ObjectPageSubSection ('Expanded by default') plus both moreBlocks aggregations are dropped entirely. Review 2026-07-27: the original 'not expressible` &&
-                 ` in the declarative builder' rationale is refuted by the BlockBase-inlining technique (CAPABILITIES 'Custom BlockBase blocks', apps 161/178) - a BlockBase view's content inlines into blocks; only` &&
-                 ` MultiViewBlock's per-mode view switching remains a genuine open point. Needs rework toward the documented technique.` ) ).
+        notes = lv_text1 ) ).
 
     lv_text1 = `NOTE: Block->content inlining (app 188/217 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the blocks / moreBlocks aggregations hold SharedBlocks BlockBase controls` &&
                ` - goals:GoalsBlock, personal:BlockAdresses / BlockPhoneNumber / BlockSocial / BlockMailing / PersonalBlockPart1 / PersonalBlockPart2, employment:BlockJobInfoPart1 / BlockJobInfoPart2 /` &&
