@@ -3,6 +3,8 @@ CLASS z2ui5_cl_ai_app_222 DEFINITION PUBLIC.
   PUBLIC SECTION.
     INTERFACES z2ui5_if_app.
 
+    DATA slider_value TYPE i VALUE 100.
+
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
 
@@ -39,11 +41,15 @@ CLASS z2ui5_cl_ai_app_222 IMPLEMENTATION.
             )->a( n = `text`  v = `Reveal Grid`
             )->a( n = `class` v = `sapUiSmallMargin`
 
+        " onSliderMoved sets the width of byId('panelForGridList') - the Panel HAS
+        " a width property, so the resize is a roundtrip-free binding pair (the
+        " app-176/213 idiom) instead of a jQuery write
         )->leaf( `Slider`
-            )->a( n = `value` v = `100`
+            )->a( n = `value` v = client->_bind( slider_value )
 
         )->open( `Panel`
             )->a( n = `id`               v = `panelForGridList`
+            )->a( n = `width`            v = |\{= ${ client->_bind( slider_value ) } + '%' \}|
             )->a( n = `backgroundDesign` v = `Transparent`
 
             )->open( `headerToolbar`

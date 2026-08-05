@@ -3,10 +3,15 @@ CLASS z2ui5_cl_ai_app_221 DEFINITION PUBLIC.
   PUBLIC SECTION.
     INTERFACES z2ui5_if_app.
 
+    DATA selected_key1 TYPE string VALUE `invalidKey`.
+    DATA selected_key2 TYPE string VALUE `invalidKey`.
+    DATA selected_key3 TYPE string VALUE `invalidKey`.
+
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
 
     METHODS view_display.
+    METHODS on_event.
 
   PRIVATE SECTION.
 ENDCLASS.
@@ -19,6 +24,8 @@ CLASS z2ui5_cl_ai_app_221 IMPLEMENTATION.
     me->client = client.
     IF client->check_on_init( ).
       view_display( ).
+    ELSEIF client->check_on_event( ).
+      on_event( ).
     ENDIF.
 
   ENDMETHOD.
@@ -43,6 +50,13 @@ CLASS z2ui5_cl_ai_app_221 IMPLEMENTATION.
 
             )->open( `Button`
                 )->a( n = `icon` v = `sap-icon://home`
+                " onHomePress resets the sibling IconTabHeader to 'invalidKey', i.e.
+                " deselects every tab. The original finds that header by walking the
+                " DOM; here each button knows it statically, and selectedKey is a
+                " BINDABLE property - so the reset is a bound value, not a frontend
+                " action (AGENTS "prefer a bindable property")
+                )->a( n = `press` v = client->_event( val   = `HOME_PRESS`
+                                                      t_arg = VALUE #( ( `1` ) ) )
                 )->a( n = `type` v = `Transparent`
                 )->open( `layoutData`
                     )->leaf( `OverflowToolbarLayoutData`
@@ -53,7 +67,7 @@ CLASS z2ui5_cl_ai_app_221 IMPLEMENTATION.
 
             )->open( `IconTabHeader`
                 )->a( n = `id`               v = `iconTabHeader`
-                )->a( n = `selectedKey`      v = `invalidKey`
+                )->a( n = `selectedKey`      v = client->_bind( selected_key1 )
                 )->a( n = `backgroundDesign` v = `Transparent`
                 )->a( n = `mode`             v = `Inline`
                 )->open( `layoutData`
@@ -124,6 +138,13 @@ CLASS z2ui5_cl_ai_app_221 IMPLEMENTATION.
 
             )->open( `Button`
                 )->a( n = `icon` v = `sap-icon://home`
+                " onHomePress resets the sibling IconTabHeader to 'invalidKey', i.e.
+                " deselects every tab. The original finds that header by walking the
+                " DOM; here each button knows it statically, and selectedKey is a
+                " BINDABLE property - so the reset is a bound value, not a frontend
+                " action (AGENTS "prefer a bindable property")
+                )->a( n = `press` v = client->_event( val   = `HOME_PRESS`
+                                                      t_arg = VALUE #( ( `2` ) ) )
                 )->a( n = `type` v = `Transparent`
                 )->open( `layoutData`
                     )->leaf( `OverflowToolbarLayoutData`
@@ -134,7 +155,7 @@ CLASS z2ui5_cl_ai_app_221 IMPLEMENTATION.
 
             )->open( `IconTabHeader`
                 )->a( n = `id`               v = `iconTabHeaderOneClickArea`
-                )->a( n = `selectedKey`      v = `invalidKey`
+                )->a( n = `selectedKey`      v = client->_bind( selected_key2 )
                 )->a( n = `backgroundDesign` v = `Transparent`
                 )->a( n = `mode`             v = `Inline`
                 )->open( `layoutData`
@@ -241,6 +262,13 @@ CLASS z2ui5_cl_ai_app_221 IMPLEMENTATION.
 
             )->open( `Button`
                 )->a( n = `icon` v = `sap-icon://home`
+                " onHomePress resets the sibling IconTabHeader to 'invalidKey', i.e.
+                " deselects every tab. The original finds that header by walking the
+                " DOM; here each button knows it statically, and selectedKey is a
+                " BINDABLE property - so the reset is a bound value, not a frontend
+                " action (AGENTS "prefer a bindable property")
+                )->a( n = `press` v = client->_event( val   = `HOME_PRESS`
+                                                      t_arg = VALUE #( ( `3` ) ) )
                 )->a( n = `type` v = `Transparent`
                 )->open( `layoutData`
                     )->leaf( `OverflowToolbarLayoutData`
@@ -251,7 +279,7 @@ CLASS z2ui5_cl_ai_app_221 IMPLEMENTATION.
 
             )->open( `IconTabHeader`
                 )->a( n = `id`               v = `iconTabHeaderTwoClickArea`
-                )->a( n = `selectedKey`      v = `invalidKey`
+                )->a( n = `selectedKey`      v = client->_bind( selected_key3 )
                 )->a( n = `backgroundDesign` v = `Transparent`
                 )->a( n = `mode`             v = `Inline`
                 )->open( `layoutData`
@@ -347,6 +375,26 @@ CLASS z2ui5_cl_ai_app_221 IMPLEMENTATION.
         )->shut( ).
 
     client->view_display( view->stringify( ) ).
+
+  ENDMETHOD.
+
+
+  METHOD on_event.
+
+    CASE client->get( )-event.
+
+      WHEN `HOME_PRESS`.
+        CASE client->get_event_arg( ).
+          WHEN `1`.
+            selected_key1 = `invalidKey`.
+          WHEN `2`.
+            selected_key2 = `invalidKey`.
+          WHEN OTHERS.
+            selected_key3 = `invalidKey`.
+        ENDCASE.
+        client->view_model_update( ).
+
+    ENDCASE.
 
   ENDMETHOD.
 

@@ -920,17 +920,17 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         since = `1.60`
         notes = lv_text1 ) ).
 
-    lv_text1 = `IMPROVISED: The ToggleButton drops its press=onRevealGrid handler (a client-side debug overlay from the sample's RevealGrid.js that visualises the grid tracks - imperative-only, no bindable` &&
-               ` equivalent) and the Slider drops its liveChange=onSliderMoved handler. Review correction 2026-07-27: the earlier claim that onSliderMoved targets a non-existent id ('gridList') is WRONG - the` &&
-               ` controller sets width on byId('panelForGridList'), and the Panel id='panelForGridList' exists in the view, so the original Slider really resizes the Panel. That behaviour is expressible client-side` &&
-               ` exactly as in app 213 (Slider.value two-way bound + Panel width expression binding {= value + '%' }); open rework before promotion. Both controls are currently kept but rendered inert. // POST-1.71:` &&
-               ` The GridList customLayout uses sap.ui.layout.cssgrid.ResponsiveColumnLayout and per-item ResponsiveColumnItemLayoutData with columns/rows (control + members since 1.72), kept 1:1; requires a UI5` &&
-               ` release >= 1.72. // NOTE: Fully static view reproduced 1:1: a ToggleButton, a Slider (value=100), and a Panel (headerToolbar Toolbar+Title) hosting an f:GridList with a ResponsiveColumnLayout and`.
-    lv_text1 = lv_text1 && ` five static f:GridListItems (columns/rows 4/4, 3/2, 3/2, 1/1, 1/1), each a VBox with a Title and 1..5 Labels; no bound data.`.
+    lv_text1 = `NOTE: The Slider resizes the Panel again since 2026-08-05: onSliderMoved sets the width of byId('panelForGridList'), the Panel HAS a width property, so the pair is the roundtrip-free binding idiom of` &&
+               ` apps 176/213 (Slider.value two-way bound, Panel.width an expression over it) - the 2026-07-27 review had already established that the earlier 'targets a non-existent id' claim was wrong. The` &&
+               ` ToggleButton keeps its dropped press handler: onRevealGrid draws a debug overlay from the sample-local RevealGrid.js, a JS helper with its own CSS that is not an abap2UI5 capability (same drop as` &&
+               ` apps 145/271). As a consequence the Slider's liveChange attribute is not emitted either - the resize lives in the binding pair now, exactly as in apps 176/213. // POST-1.71: The GridList customLayout` &&
+               ` uses sap.ui.layout.cssgrid.ResponsiveColumnLayout and per-item ResponsiveColumnItemLayoutData with columns/rows (control + members since 1.72), kept 1:1; requires a UI5 release >= 1.72. // NOTE:` &&
+               ` Fully static view reproduced 1:1: a ToggleButton, a Slider (value=100), and a Panel (headerToolbar Toolbar+Title) hosting an f:GridList with a ResponsiveColumnLayout and five static f:GridListItems`.
+    lv_text1 = lv_text1 && ` (columns/rows 4/4, 3/2, 3/2, 1/1, 1/1), each a VBox with a Title and 1..5 Labels; no bound data.`.
     result = VALUE #( BASE result
       ( module = `sap.f`              control = `sap.f.GridList`                        name = `GridListResponsiveColumnLayout`      class = `z2ui5_cl_ai_app_222` path = `src/04/b07/z2ui5_cl_ai_app_222.clas.abap`
-        score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.60`
         is_post171 = abap_true
         notes = lv_text1
@@ -3534,20 +3534,18 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         post171 = `sap.m.Avatar (control @since 1.73) is used 1:1 as the profile avatar in both ToolHeaders (src image, displaySize XS, press). Newer than UI5 1.71; declared per the property-171 policy (control-level,` &&
                  ` app 152 precedent), so the app needs UI5 >= 1.73 to render the avatars. Found by the 2026-07-27 review sweep.` ) ).
 
-    lv_text1 = `IMPROVISED: The three home Buttons drop their press=onHomePress handler: the original imperatively resets the sibling IconTabHeader selectedKey to 'invalidKey' (deselecting all tabs) by reaching into` &&
-               ` the DOM (event.oSource.getParent().getDomRef()...). Review correction 2026-07-27: the earlier rationale (no bindable equivalent for the DOM-walk reset) is WRONG - the DOM walk only locates the` &&
-               ` sibling IconTabHeader, which each home Button resolves statically (iconTabHeader / iconTabHeaderOneClickArea / iconTabHeaderTwoClickArea), and the reset is expressible either as a two-way bound` &&
-               ` selectedKey reset from an event handler or roundtrip-free via _event_client control_by_id with the unlisted-but-allowed public setter setSelectedKey (FrontendAction.js deny-regex, source-verified).` &&
-               ` The press attributes remain dropped for now - open rework before promotion; the IconTabHeaders keep their static selectedKey='invalidKey'. // POST-1.71: IconTabFilter` &&
-               ` interactionMode='SelectLeavesOnly' (property since 1.121) is kept 1:1 on the parent filters of the second ToolHeader's IconTabHeader (iconTabHeaderOneClickArea); requires a UI5 release >= 1.121. //`.
-    lv_text1 = lv_text1 && ` POST-1.71: IconTabFilter items (the nested sub-filter aggregation, since 1.77 per IconTabFilter.js JSDoc) is kept 1:1 in the second and third ToolHeaders' IconTabHeaders (nested` &&
-               ` User/Identity/Monitoring filters); requires a UI5 release >= 1.77. Aggregation-level member, invisible to the property gate (it scans attributes only) - declared by policy, found in review` &&
-               ` 2026-07-27. // NOTE: Fully static view reproduced 1:1: three tnt:ToolHeaders, each with a home Button, an IconTabHeader (mode='Inline', backgroundDesign='Transparent', selectedKey='invalidKey') with` &&
+    lv_text1 = `NOTE: The three home Buttons reset their sibling IconTabHeader again since 2026-08-05. The original reaches into the DOM (event.oSource.getParent().getDomRef()...) only to FIND that header - each` &&
+               ` button knows it statically here - and selectedKey is a BINDABLE property, so the reset is a bound value rather than a frontend action (the prefer-a-bindable-property rule, which the linter enforces):` &&
+               ` each header's selectedKey is two-way bound, the press round-trips and the backend writes 'invalidKey' back. The three headers keep that as their seeded value, as in the original view. // POST-1.71:` &&
+               ` IconTabFilter interactionMode='SelectLeavesOnly' (property since 1.121) is kept 1:1 on the parent filters of the second ToolHeader's IconTabHeader (iconTabHeaderOneClickArea); requires a UI5 release` &&
+               ` >= 1.121. // POST-1.71: IconTabFilter items (the nested sub-filter aggregation, since 1.77 per IconTabFilter.js JSDoc) is kept 1:1 in the second and third ToolHeaders' IconTabHeaders (nested` &&
+               ` User/Identity/Monitoring filters); requires a UI5 release >= 1.77. Aggregation-level member, invisible to the property gate (it scans attributes only) - declared by policy, found in review`.
+    lv_text1 = lv_text1 && ` 2026-07-27. // NOTE: Fully static view reproduced 1:1: three tnt:ToolHeaders, each with a home Button, an IconTabHeader (mode='Inline', backgroundDesign='Transparent', selectedKey='invalidKey') with` &&
                ` OverflowToolbarLayoutData, search/comment Buttons and a MenuButton with a Menu (Edit/Save). The second/third ToolHeaders use nested IconTabFilter items; no bound data.`.
     result = VALUE #( BASE result
       ( module = `sap.tnt`            control = `sap.tnt.ToolHeader`                    name = `ToolHeaderIconTabHeader`             class = `z2ui5_cl_ai_app_221` path = `src/05/b06/z2ui5_cl_ai_app_221.clas.abap`
         score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.34`
         is_post171 = abap_true
         notes = lv_text1
@@ -4093,13 +4091,13 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
 
     lv_text1 = `NOTE: The named-model image path (img>/products/pic1) is resolved to the static OpenUI5 product image https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-7777-large.jpg (the` &&
                ` mock's actual pic1 value, host-absolutized; wrong-neighbour HT-1000 copy fixed by the 2026-07-24 data audit). Image.src carries the static value where the original binds {img>/products/pic1} - the` &&
-               ` app-006 static-fold class. // IMPROVISED: The sample's css/style.css (the .fixFlexVertical > .sapUiFixFlexFixed / .sapUiFixFlexFlexible background colors, loaded via the manifest resources.css) is` &&
-               ` not injected - the class attributes are kept but the decorative backgrounds are lost. Review 2026-07-27: custom CSS IS expressible via a core:HTML style leaf (CAPABILITIES 'Custom CSS', apps` &&
-               ` 026/028/169) - needs rework to inject the style.`.
+               ` app-006 static-fold class. // NOTE: The sample's css/style.css (the .fixFlexVertical > .sapUiFixFlexFixed / .sapUiFixFlexFlexible background colours, loaded via the manifest resources.css) is` &&
+               ` INJECTED since 2026-08-05 through a core:HTML content attribute - the documented way to carry a stylesheet into an abap2UI5 view (CAPABILITIES 'Custom CSS', apps 026/028). The class attributes were` &&
+               ` already 1:1, so the decorative backgrounds are back; the core:HTML leaf is the one control the original view does not declare. The 2026-07-27 review flagged exactly this as rework.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.FixFlex`                 name = `FixFlexVertical`                     class = `z2ui5_cl_ai_app_119` path = `src/02/b01/z2ui5_cl_ai_app_119.clas.abap`
         score = 2
-        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.25.0`
         notes = lv_text1 ) ).
 
@@ -4121,19 +4119,19 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` were written RELATIVE ({FIELD}) and a relative path on a control with no binding context resolves against nothing — the fields rendered EMPTY in the running app (measured with the e2e harness, the` &&
                  ` app-207 class). They are now bound ABSOLUTELY through client->_bind( field ), which is what a root-seeded record needs.` ) ).
 
-    lv_text1 = `IMPROVISED: The eight Sliders' liveChange='.onSliderMoved' handler is dropped. The original controller resizes the next grid wrapper via jQuery DOM traversal` &&
-               ` (oSlider.$().parent().next().find('.gridWrapper'), then Element.closestTo(...).setWidth(value + '%')). The Sliders render 1:1 but do not resize the grids; the responsive GridData behaviour is still` &&
-               ` observable by resizing the browser window. Review 2026-07-27: the earlier 'no bindable equivalent' rationale is wrong - each slider's target wrapper is statically known in the view, so the behaviour` &&
-               ` IS expressible roundtrip-free by two-way binding each Slider.value and binding each gridWrapper VerticalLayout.width to the expression {= ${/SLIDER_n} + '%' } (exactly how app 176 ports the identical` &&
-               ` onSliderMoved pattern); flagged for rework, not promoted. // NOTE: The sample's styles.css (.GridDataSample .exampleDiv / .propertiesDisplay / p) is injected via a single core:HTML <style> leaf as` &&
-               ` the first child of the outer VerticalLayout (abap2UI5 ships no separate css file). CSS braces are escaped \{ \} in a backtick literal so the backslash survives to the serialized attribute, otherwise`.
-    lv_text1 = lv_text1 && ` the XMLView binding parser would read them as bindings and crash view creation. This adds one core:HTML control not present in the original view.xml. // NOTE: The core:HTML 'content' divs and the` &&
-               ` FormattedText 'htmlText' are written as the decoded literal markup (e.g. <div class=exampleDiv></div>); the original view.xml carries them HTML-entity-encoded (&lt;div ...&gt;) and the builder` &&
-               ` re-escapes the literal on stringify. Multi-line div contents in the original are written single-line here (whitespace-only difference, not a binding).`.
+    lv_text1 = `NOTE: The eight Sliders drive their grid wrappers again since 2026-08-05. The original controller resizes the next wrapper by walking the DOM (oSlider.$().parent().next().find('.gridWrapper'), then` &&
+               ` Element.closestTo(...).setWidth(value + '%')), but each wrapper is statically known in the view, so the pair is roundtrip-free: every Slider.value is two-way bound and the matching` &&
+               ` VerticalLayout.width is an expression binding {= ${/SLIDER_VALUE_n} + '%' } - exactly how app 176 ports the same onSliderMoved idiom. The liveChange attribute stays dropped because the behaviour now` &&
+               ` lives in the bindings; the 2026-07-27 review called the earlier 'no bindable equivalent' rationale wrong, and it was. // NOTE: The sample's styles.css (.GridDataSample .exampleDiv /` &&
+               ` .propertiesDisplay / p) is injected via a single core:HTML <style> leaf as the first child of the outer VerticalLayout (abap2UI5 ships no separate css file). CSS braces are escaped \{ \} in a` &&
+               ` backtick literal so the backslash survives to the serialized attribute, otherwise the XMLView binding parser would read them as bindings and crash view creation. This adds one core:HTML control not`.
+    lv_text1 = lv_text1 && ` present in the original view.xml. // NOTE: The core:HTML 'content' divs and the FormattedText 'htmlText' are written as the decoded literal markup (e.g. <div class=exampleDiv></div>); the original` &&
+               ` view.xml carries them HTML-entity-encoded (&lt;div ...&gt;) and the builder re-escapes the literal on stringify. Multi-line div contents in the original are written single-line here (whitespace-only` &&
+               ` difference, not a binding).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.Grid`                    name = `GridData`                            class = `z2ui5_cl_ai_app_169` path = `src/02/b10/z2ui5_cl_ai_app_169.clas.abap`
-        score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.15.0`
         notes = lv_text1 ) ).
 
