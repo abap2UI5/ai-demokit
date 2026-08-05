@@ -7,6 +7,41 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## 2026-08-05 (eighth round) — three breadth probes become faithful ports
+
+- **117** (`sap.f.Card`) is **1:1**: both cards instead of one simplified one -
+  the booking card with its two sorted city ComboBoxes, DatePicker and Book
+  button, and the whole second card (revenue List, CustomListItem template,
+  Title/Text, ObjectStatus state). The named models fold into the default model,
+  the ComboBox sorter rides along as a raw binding-info string. The gate then
+  reported its `structural_diff` skip as **STALE** — no differences remain — and
+  the skip is gone. That ratchet earns its keep.
+- **121** (`sap.m.upload.UploadSet`) is **1:1** too. It had three INVENTED rows;
+  both rows of the sample's own `items.json` are there verbatim now, with the
+  five ObjectMarkers and four ObjectStatuses of the first, the item template's
+  markers/statuses aggregations and uploadState, the UploadSet's file-size and
+  media-type properties, and the full toolbar incl. the
+  `UploadSetToolbarPlaceholder`. Skip gone as well.
+- **116** (`sap.uxap.ObjectPageSubSection`) has all three subsections and all
+  ten MultiViewBlock positions again, each inlined with its block view's
+  content. MultiViewBlock ships two views and picks by the block MODE; abap2UI5
+  has no BlockBase mode, so each block carries the variant its subsection asks
+  for — what the sample renders on load. The per-block runtime switching is the
+  declared residual.
+
+**A tooling lesson worth keeping:** 116's first version built its eight blocks
+through a helper method, and the structural diff reconstructs views
+**statically** — it saw one SimpleForm instead of ten and reported the port as
+missing everything. Views stay written out; a helper hides the view from the
+gate that judges it.
+
+Remaining from the flagged list: **115** (`sap.ui.table.Basic` — 13 columns,
+derived Suppliers/Categories, a MultiInput with tokens + suggestions, the full
+123-row mock) and **118** (`sap.ui.integration.CardsLayout` — several
+manifest-driven Cards, the hard one). Both are half-a-day ports, not one-liners.
+
+IMPROVISED: 42 → **39**.
+
 ## 2026-08-05 (seventh round) — 108, 114, 168 and a quoting boundary
 
 - **108** (`PlanningCalendarSingle`) was the one port the 2026-07-27 review

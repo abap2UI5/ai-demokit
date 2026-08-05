@@ -3286,16 +3286,17 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         since = `1.42`
         checked = `CHECKED (2026-07-19): verified in a running system - human visual pass 2026-07-19 over all apps: the nested-table hierarchy renders as an expandable Tree like the original.` ) ).
 
-    lv_text1 = `IMPROVISED: Breadth-probe: a minimal sap.m.upload.UploadSet (file upload list) with 3 pre-populated items + a toolbar. The item rows are invented, not the mock's items.json rows ('Business Plan` &&
-               ` Agenda.doc' / 'Picture of a woman.png'): Screenshot.png (image/png), Notes.txt (text/plain) and Report.doc (application/msword), each with an empty url and a sap-icon://document /` &&
-               ` sap-icon://document-text thumbnailUrl. The actual upload backend, the full toolbar (only 'Upload selected' kept; downloadSelectedButton, versionButton and the upload:UploadSetToolbarPlaceholder` &&
-               ` dropped) and the item ObjectMarker/ObjectStatus aggregations are simplified away; upload here would target the abap2UI5 FileUploader path in a live system. // POST-1.71: UploadSet.mode (since UI5` &&
-               ` 1.100) and UploadSet.afterItemRemoved (since UI5 1.83) kept for the 1:1 port - surfaced when the property gate gained the sap.m/upload sub-package (control-level source scan 2026-07-26). The whole` &&
-               ` control is deprecated out-of-scope debt anyway (pr/scope-since-from-source).`.
+    lv_text1 = `NOTE: **Rebuilt on 2026-08-05** - it was a breadth probe with THREE INVENTED rows (Screenshot.png / Notes.txt / Report.doc) and a reduced toolbar. Both rows of the sample's own items.json are there` &&
+               ` verbatim now (Business Plan Agenda.doc with its five ObjectMarkers and four ObjectStatuses, Picture of a woman.png with its two), the item template carries the markers/statuses aggregations and` &&
+               ` uploadState, the UploadSet its terminationEnabled / maxFileNameLength / maxFileSize / mediaTypes / uploadUrl, and the toolbar its three buttons plus the UploadSetToolbarPlaceholder. The asset URLs` &&
+               ` point at the OpenUI5 host per the offline asset rule. The port has no structural difference from the original left, so its breadth-probe structural_diff skip is gone. Upload itself still targets the` &&
+               ` abap2UI5 FileUploader path in a live system, and the control stays a decided scope exception (sap.m.upload.UploadSet is deprecated, KEEP 2026-07-30). // POST-1.71: UploadSet.mode (since UI5 1.100)` &&
+               ` and UploadSet.afterItemRemoved (since UI5 1.83) kept for the 1:1 port - surfaced when the property gate gained the sap.m/upload sub-package (control-level source scan 2026-07-26). The whole control`.
+    lv_text1 = lv_text1 && ` is deprecated out-of-scope debt anyway (pr/scope-since-from-source).`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.upload.UploadSet`                name = `UploadSet`                           class = `z2ui5_cl_ai_app_121` path = `src/01/b13/z2ui5_cl_ai_app_121.clas.abap`
         score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.63`
         is_post171 = abap_true
         is_deprecated = abap_true
