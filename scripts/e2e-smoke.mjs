@@ -70,18 +70,8 @@ function resolveLocal(pathname) {
   return null;
 }
 
-// page-error (real JS exception) messages that are environment noise, not port
-// defects. Resource 404/500s are handled separately by response URL (a
-// localhost:3000 backend asset failing is real; an unbundled-UI5 resource we
-// didn't serve is benign) — the console "Failed to load resource" line carries
-// no URL, so it is ignored in favour of the response tracking below.
-const BENIGN = [
-  /library-preload/i, /messagebundle/i, /i18n/i, /themes?\/|library(\.css|-parameters)/i,
-  /theming\.Parameters|\.properties/i, /failed to load (javascript )?resource/i,
-  /Core\.applyTheme|sap\.ui\.getCore/i, /favicon/i, /deprecat/i, /sap-ui-cachebuster/i,
-  /ERR_TUNNEL_CONNECTION_FAILED/i,
-];
-const benign = (s) => BENIGN.some((re) => re.test(s));
+// benign-noise contract shared with the ai-mcp server — see lib-smoke.mjs
+import { benign } from './lib-smoke.mjs';
 
 // richer per-port checks (optional). Each: after boot, run action(page) and
 // assert. The generic boot+render+no-error gate runs for EVERY port regardless.
