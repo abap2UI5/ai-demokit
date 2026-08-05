@@ -17,7 +17,7 @@ TRAINING.md; for what abap2UI5 can express see CAPABILITIES.md._
 |---|---|
 | Ports | **293** sidecars in `meta/` (src/01: 177 · src/02: 67 · src/03: 19 · src/04: 19 · src/05: 11) |
 | Status ladder | 86 `generated` · 146 `reviewed` · 61 `checked` (live-verified) |
-| Deviations | 4 DROPPED_171 · 118 IMPROVISED · 495 NOTE · 121 POST_171 |
+| Deviations | 4 DROPPED_171 · 53 IMPROVISED · 560 NOTE · 121 POST_171 |
 | Open LIVE_TESTs | **0 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
 | Declared gate skips | 6 structural-diff · 3 render-smoke (each re-verified per run — a stale skip FAILS) |
 | Out-of-scope ported samples | `z2ui5_cl_ai_app_121 (sap.m.sample.UploadSet — deprecated)` · `z2ui5_cl_ai_app_136 (sap.f.sample.SidePanelSingle — control @since 1.107)` · `z2ui5_cl_ai_app_141 (sap.ui.core.sample.InvisibleMessage — control @since 1.78)` · `z2ui5_cl_ai_app_165 (sap.f.sample.ProductSwitchNavigation — control @since 1.72)` · `z2ui5_cl_ai_app_203 (sap.m.sample.OverflowToolbarTokenizer — control @since 1.139)` — all decided KEEP permanently 2026-07-30 (per-app rationale in ui5/scope-exceptions.json, revertible); the source-backed scope gate stays hard for NEW undecided entries |
@@ -36,19 +36,25 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   evidence of one family, `--strict` fails on an unclassified entry, which is
   the ratchet for the next batch; deliberately not in `npm run gates`):
 
-  | Verdict | # | Meaning |
-  |---|---:|---|
-  | GAP | 15 | a framework gap — 6 requests filed, **all implemented upstream the same day** |
-  | PROBE | 16 | a *suspected* gap whose premise is unverified — measure before filing |
-  | REWORK | 16 | expressible today; the port under-delivers (review backlog) |
-  | BOUNDARY | 16 | outside abap2UI5 by nature (client-only APIs, sample-local JS) |
-  | POLICY | 73 | a decided corpus rule; the deviation is the rule working |
+  | Verdict | at the harvest | today | Meaning |
+  |---|---:|---:|---|
+  | GAP | 15 | 8 | a framework gap — 6 requests filed, **all implemented upstream the same day** |
+  | PROBE | 16 | 7 | a *suspected* gap whose premise is unverified — measure before filing |
+  | REWORK | 16 | 14 | expressible today; the port under-delivers (review backlog) |
+  | BOUNDARY | 16 | 16 | outside abap2UI5 by nature (client-only APIs, sample-local JS) |
+  | POLICY | 73 | 8 | a decided corpus rule; the rest are `NOTE`s now (see below) |
 
-  The **POLICY half is the headline number**: 73 of 136 improvisations are the
-  thin frontend, the single default model, mock flattening and BlockBase
+  The **POLICY half was the headline number**: 73 of 136 improvisations were
+  the thin frontend, the single default model, mock flattening and BlockBase
   inlining doing what they were decided to do — behaviour-identical, and
-  arguably `NOTE`s rather than `IMPROVISED`. Retyping them is a separate
-  change (gate declarations match on deviation text) and is **not** done here.
+  therefore `NOTE`s rather than `IMPROVISED`. **Retyped 2026-08-05** by
+  `--retype-policy --write`, which is safe because a gate declaration matches
+  the deviation TEXT, never its type (`structural-diff.mjs`, `d.what`). The
+  retype is not blind: an entry whose text still NAMES a loss is **held back**
+  and listed — 8 of the 73 were (app 261's dropped Expanded view, 267/269's
+  lost model indirection, 012's routing, the BlockBase wrappers that lose their
+  ids). `IMPROVISED` now means what it says — a behaviour of the original that
+  is lost or substituted — and the count reads **53** instead of 136.
 
   **Implemented upstream + consumed by the corpus** (details in the
   `pr/README.md` Implemented table; each port's sidecar deviation moved from

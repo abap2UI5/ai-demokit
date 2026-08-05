@@ -13,11 +13,11 @@
   "checked": null,
   "deviations": [
     {
-      "type": "IMPROVISED",
+      "type": "NOTE",
       "what": "The five core:Fragment references of App.view.xml (Input in the heading, HeaderContent in headerContent, and IllustratedMessage/ProductsTable/SupplierDetails in sections) are inlined 1:1 into the single port view - abap2UI5 builds one XML view, there is no runtime Fragment reference. So core:Fragment is absent (5 dropped) and every fragment's content is rendered directly."
     },
     {
-      "type": "IMPROVISED",
+      "type": "NOTE",
       "what": "The dynamic /selectedPurchase JSON object is flattened onto the single default model as root-level fields: has_selection (drives the ObjectPageLayout showHeaderContent/toggleHeaderOnTitleClick and every section visible expression, replacing the object-truthiness !!${/selectedPurchase}), sel_category/sel_subcategory/sel_suppliername/sel_paymenttype/sel_deliverystatus (HeaderContent), sel_delivery_state (ObjectStatus) and sel_products (the products Table). The controller's _setSelectedPurchaseAndUpdateInput selection logic is reproduced server-side in set_selection: the entered/selected PurchaseID resolves a purchase from t_purchases and seeds these fields (or forces has_selection=false so the IllustratedMessage \"not found\" state shows). The text and Sub-Category header bindings therefore bind the flattened fields instead of {/selectedPurchase/...}."
     },
     {
@@ -25,7 +25,7 @@
       "what": "i18n named-model bindings folded to literal English values from i18n.properties: the pure {i18n>...} property bindings on text (Title Receipt Information/Delivery Status/Products, column-header Product/Dimensions/Quantity/Price), title (SelectDialog Purchases) and placeholder (Input Enter product) are resolved statically (loses runtime language switching, renders identically in English). The IllustratedMessage title/description/illustrationType keep their expression binding {= ${/inputPopulated} ? ... : ... } with the i18n operands replaced by the literal strings. The Label ...:'-suffixed i18n texts are likewise inlined."
     },
     {
-      "type": "IMPROVISED",
+      "type": "NOTE",
       "what": "formatter.deliveryStatusState (Shipped->Success, Failed Shipping->Error, else None) is business logic; per the thin-frontend principle it moves out of the frontend formatter into the ABAP model (deliverystatus_state, computed in model_init per purchase) and the ObjectStatus state binds that precomputed field (sel_delivery_state) directly instead of a formatter binding."
     },
     {

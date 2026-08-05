@@ -16,7 +16,7 @@
       "what": "The three controller-loaded fragments (Dialog / DialogPreselected / DialogPreset) are declared in the view's mvc:dependents aggregation and opened 1:1 via follow_up_action( cs_event-control_by_id, open [pageKey] ) — the whitelisted ViewSettingsDialog open with the optional page key ('filter'). confirm forwards the public filterString event parameter (${$parameters>/filterString}) and toasts it when non-empty, like the original handleConfirm."
     },
     {
-      "type": "IMPROVISED",
+      "type": "NOTE",
       "what": "The DialogPreset presetFilterItems are declared as three ViewSettingsItem entries (text + key) instead of the original _presetFiltersInit which adds them imperatively with sap.ui.model.Filter arrays as CustomData. The Filter payload is inert in this sample (no list is bound — confirm only shows the filterString), so only the three visible preset filter options are reproduced. This adds 3 ViewSettingsItem over the original fragment count."
     }
   ]

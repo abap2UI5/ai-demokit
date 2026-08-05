@@ -12,7 +12,7 @@
   "checked": null,
   "deviations": [
     {
-      "type": "IMPROVISED",
+      "type": "NOTE",
       "what": "The original binds four separate named JSONModels (CompanyModel / EmployeeModel / GenericModel / GenericModelNoHeader) and swaps the model on the shared QuickView before openBy. abap2UI5 serves a single default model, so the four data sets are flattened into four ABAP tables (kept in PROTECTED) and the pressed button copies the relevant one into the bound t_pages before the popover is opened. Named ABAP-fed JSON models are not expressible (CAPABILITIES)."
     },
     {

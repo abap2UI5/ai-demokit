@@ -15,7 +15,7 @@
   },
   "deviations": [
     {
-      "type": "IMPROVISED",
+      "type": "NOTE",
       "what": "the shared mock model sap/ui/demo/mock/supplier.json is flattened into the default model: the row type keeps only the six bound columns (SupplierName, Street, HouseNumber, ZIPCode, City, Country) of the single /SupplierCollection record and drops the unbound columns (Url, Twitter, Tel, Sms, Mobile, Pager, Fax, Email, Rating, Prime, Disposable); the record itself is kept verbatim."
     },
     {

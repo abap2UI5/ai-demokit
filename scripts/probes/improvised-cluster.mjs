@@ -24,6 +24,14 @@
  * families, otherwise a flagged port would hide inside its own topic.
  *
  * Run:  node scripts/probes/improvised-cluster.mjs [--strict] [--family <key>] [--json]
+ *       node scripts/probes/improvised-cluster.mjs --retype-policy [--write]
+ *
+ * --retype-policy proposes the POLICY entries for retyping to NOTE. IMPROVISED
+ * means "a behaviour of the original is lost or substituted" (that is why the
+ * 2026-07-27 review retyped app 108 the other way, from NOTE to IMPROVISED);
+ * a decided corpus rule that renders identically is a NOTE. Entries whose text
+ * still NAMES a loss are held back and listed - a family verdict does not
+ * override what the sidecar says about its own port.
  *
  * --strict exits 1 when a deviation matches no family. That is the ratchet:
  * a new port whose improvisation is a NEW shape has to be classified here (and
@@ -254,6 +262,12 @@ const VERDICT_ORDER = ['GAP', 'PROBE', 'REWORK', 'BOUNDARY', 'POLICY'];
 const args = process.argv.slice(2);
 const strict = args.includes('--strict');
 const asJson = args.includes('--json');
+const retype = args.includes('--retype-policy');
+const write = args.includes('--write');
+
+/* A POLICY deviation whose text still names a lost behaviour is NOT a NOTE -
+ * the family says how the port was built, this says what it costs. */
+const LOSS = /\block\b|\blost\b|\bis lost\b|are lost\b|not reproduced|not reproducible|dropped entirely|no longer|is gone|are gone|cannot|is not wired|does nothing|unverified/i;
 const only = args.includes('--family') ? args[args.indexOf('--family') + 1] : null;
 
 const rows = [];
@@ -273,7 +287,33 @@ const byKey = new Map(FAMILIES.map((f) => [f.key, []]));
 const unclassified = [];
 for (const r of rows) (r.family ? byKey.get(r.family) : unclassified).push(r);
 
-if (asJson) {
+if (retype) {
+  const policy = FAMILIES.filter((f) => f.verdict === 'POLICY').map((f) => f.key);
+  const candidates = rows.filter((r) => policy.includes(r.family));
+  const held = candidates.filter((r) => LOSS.test(r.what));
+  const move = candidates.filter((r) => !LOSS.test(r.what));
+  console.log(`POLICY deviations: ${candidates.length} - ${move.length} retype to NOTE, ${held.length} held back (their text names a loss)\n`);
+  for (const r of held) console.log(`  HOLD ${r.port} [${r.family}] ${r.what.slice(0, 120)}…`);
+  if (write) {
+    const byPort = new Map();
+    for (const r of move) byPort.set(r.port, (byPort.get(r.port) || 0) + 1);
+    for (const [port] of byPort) {
+      const file = path.join(META, `z2ui5_cl_ai_app_${port}.json`);
+      const m = JSON.parse(fs.readFileSync(file, 'utf8'));
+      for (const d of m.deviations) {
+        if (d.type !== 'IMPROVISED') continue;
+        const what = String(d.what).replace(/\s+/g, ' ');
+        const fam = FAMILIES.find((x) => x.re.test(what));
+        if (!fam || fam.verdict !== 'POLICY' || LOSS.test(what)) continue;
+        d.type = 'NOTE';
+      }
+      fs.writeFileSync(file, `${JSON.stringify(m, null, 2)}\n`);
+    }
+    console.log(`\nwrote ${byPort.size} sidecar(s)`);
+  } else {
+    console.log('\n(dry run - pass --write to apply)');
+  }
+} else if (asJson) {
   console.log(JSON.stringify({ total: rows.length, rows, unclassified: unclassified.length }, null, 1));
 } else if (only) {
   const fam = FAMILIES.find((f) => f.key === only);

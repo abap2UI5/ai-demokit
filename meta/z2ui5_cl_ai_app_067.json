@@ -17,7 +17,7 @@
       "what": "Button.ariaHasPopup (since UI5 1.84) kept on the message-popover button; the Button.type value 'Negative' is a sap.m.ButtonType value since 1.73. MessageItem.markupDescription (renders the HTML description) is kept for the async sample's rich-text messages."
     },
     {
-      "type": "IMPROVISED",
+      "type": "NOTE",
       "what": "the MessagePopover (built in the controller) is declared 1:1 in the button's `dependents`; the controller's toggle(button) becomes a roundtrip-free client->_event_client( cs_event-control_by_id, toggleBy ) on the button press (anchored by id), and onActiveTitlePress's MessageToast.show becomes roundtrip-free client->_event_client( cs_event-control_global, MESSAGE_TOAST/show ); the app is now init-only. Anchored to $event.oSource.sId."
     },
     {

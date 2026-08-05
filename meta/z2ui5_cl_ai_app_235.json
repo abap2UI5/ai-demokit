@@ -21,7 +21,7 @@
       "what": "selection transport - every FacetFilterItem binds selected two-way; on the FacetFilter confirm (and on reset) the backend reads/clears the flags and re-filters. This is the documented 1:1 path (CAPABILITIES.md marks controller-read FacetFilter/List multi-select as expressible with app 022 as its evidence port), not a workaround; the model is applied before on_event runs. The original's handleConfirm also shows a MessageToast 'confirm event fired' - reproduced 1:1 via client->message_toast_display after applying the filter. The FacetFilterSimple view does not wire the per-list listClose (only the confirm event drives filtering), so no listClose attribute is emitted."
     },
     {
-      "type": "IMPROVISED",
+      "type": "NOTE",
       "what": "the original controller appends the sap.m.sample.Table component's table with its first cell swapped for an ObjectIdentifier {Name}/{Category}; that table is rebuilt inline. The price column keeps the original sap.ui.model.type.Currency composite binding 1:1 (raw binding-info string over a numeric PRICE field)."
     },
     {

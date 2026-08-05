@@ -12,7 +12,7 @@
   "checked": null,
   "deviations": [
     {
-      "type": "IMPROVISED",
+      "type": "NOTE",
       "what": "the Select `change` handlers onSelectDesign/onSelectStyle (setDesign/setStyle) become two-way bound design/style; bActionContext (design != Info) becomes an expression binding on the Buttons' visible."
     }
   ]

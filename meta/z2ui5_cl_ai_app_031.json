@@ -15,7 +15,7 @@
   },
   "deviations": [
     {
-      "type": "IMPROVISED",
+      "type": "NOTE",
       "what": "the original binds src/mode to a JSONModel (img>/products, /imageMode); these fixed sample values are inlined here as literals (mode Background, the HT-7777 / HT-6100 demo images). height/width are restored over the device> model, see below."
     },
     {

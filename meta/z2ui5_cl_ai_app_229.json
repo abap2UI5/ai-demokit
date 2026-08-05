@@ -17,7 +17,7 @@
       "what": "Button.ariaHasPopup (since UI5 1.84) is kept 1:1 on the two view buttons (ariaHasPopup='Dialog'); the app needs a UI5 release >= 1.84 to render it."
     },
     {
-      "type": "IMPROVISED",
+      "type": "NOTE",
       "what": "handlePopoverPress/handleResizablePopoverPress lazily Fragment.load a Popover and openBy(button). The port builds each popover as a core:FragmentDefinition on the button-press round-trip and shows it anchored to the pressed button via client->popover_display( xml = ..., by_id = $event.oSource.sId ) - the popover XML parameter is named `xml` (not `val` like popup_display). This is a server-round-trip where the original is a client-side Fragment.load, but it is faithful (lazy either way) and matches app 094."
     },
     {
@@ -29,7 +29,7 @@
       "what": "handleEmailPress does byId('myPopover').close() + MessageToast.show('E-Mail has been sent'), and handleClose does byId('myResizablePopover').close(); both close the popover slot via follow_up_action( cs_event-popover_close ) (there is one popover slot open at a time), the email variant additionally toasting via message_toast_display."
     },
     {
-      "type": "IMPROVISED",
+      "type": "NOTE",
       "what": "the JSONModel is loaded from the shared sap/ui/demo/mock/products.json; only the single record /ProductCollection/0 is bound, so only its name + picture URL are seeded. The mock's host-relative ProductPicUrl ('test-resources/...') is resolved to an absolute sdk.openui5.org URL."
     },
     {

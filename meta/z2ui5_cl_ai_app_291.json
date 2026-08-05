@@ -24,7 +24,7 @@
       "what": "four of the five controller handlers compose their toast from the pressed control and stay on the client, roundtrip-free: onGroupClose and onListItemPress with ${$source>/title}, onGroupButtonPress and onItemButtonPress with ${$source>/text}. Only onItemClose needs the backend, because it REMOVES the row (oList.removeItem): the item's own title travels as a $-prefixed event arg and the handler deletes that row from every group before pushing the model back. The titles are unique in this data; a real app would carry a key."
     },
     {
-      "type": "IMPROVISED",
+      "type": "NOTE",
       "what": "the priorityFormatter is dropped. It maps a value that is not a sap.ui.core.Priority to Priority.None - presentation logic that the thin-frontend rule puts in the backend, and the mock's priorities (High, Low) are all valid anyway, so the port binds PRIORITY directly. A model_init that seeded an unknown value would have to map it there."
     },
     {

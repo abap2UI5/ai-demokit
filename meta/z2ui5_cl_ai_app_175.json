@@ -12,7 +12,7 @@
   "checked": null,
   "deviations": [
     {
-      "type": "IMPROVISED",
+      "type": "NOTE",
       "what": "The original controller loads the shared demo supplier.json and element-binds a single record (/SupplierCollection/0); flattened here to top-level default-model fields the {…} SimpleForm bindings resolve against. Values are supplier.json SupplierCollection row 0 (Red Point Stores, Maintown); unbound columns (Tel, Sms, Rating, …) are dropped. **Corrected 2026-08-01**: those bindings were written RELATIVE ({FIELD}) and a relative path on a control with no binding context resolves against nothing — the fields rendered EMPTY in the running app (measured with the e2e harness, the app-207 class). They are now bound ABSOLUTELY through client->_bind( field ), which is what a root-seeded record needs."
     }
   ]

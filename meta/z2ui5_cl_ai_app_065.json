@@ -20,11 +20,11 @@
       "what": "two post-1.71 members are kept for the 1:1 port: Button.ariaHasPopup (since UI5 1.84) on the MessagePopover button, and MessagePopover.groupItems (since UI5 1.73)."
     },
     {
-      "type": "IMPROVISED",
+      "type": "NOTE",
       "what": "the controller's manual MessageManager handling is replaced by two framework mechanisms: (1) the typed value bindings with constraints (sap.ui.model.type.Integer/String, ZIP_CODE Integer, WEEKLYHOURS Integer maximum 40, EMAIL search regex) collect/clear their validation messages AUTOMATICALLY into the message> model (no app code) - replacing onChange/handleRequiredField/checkInputConstraints; (2) app-authored messages go through the new z2ui5.cc.MessageManager companion control (items bound to /T_MESSAGES), which reconciles them into the message manager with a target + processor. Save ports generateInvalidUserInput 1:1 in effect: since abap2UI5 auto-collects validation messages only from USER input (not from programmatically-set model values), Save INJECTS the four demo issues on the SAME rows the original targets (formContainer.getItems()[4/5/6] = John Miller Name empty, Stefan Bosch ZIP 'AAA', Maria Fontes email malformed, plus the employment weekly hours 400) AND authors the matching four messages (3 Errors + 1 Warning) with their /T_FORMS/4|5|6 and /T_EMPLOYMENT/0 targets, then opens the MessagePopover via follow_up_action( control_by_id openBy ) anchored to messagePopoverBtn."
     },
     {
-      "type": "IMPROVISED",
+      "type": "NOTE",
       "what": "the sample's nested JSON model (street/name, zip/code, phone/number) is flattened into a flat ABAP row (STREET_NAME, ZIP_CODE, PHONE_NUMBER, ...) - abap2UI5 serves one default model; the bindings use the flattened field names. The three f:ColumnElementData layoutData hints (cellsSmall/cellsLarge column spans on the street-number, zip-code and one employment Input) are dropped - responsive-span cosmetics with no data/behaviour."
     },
     {

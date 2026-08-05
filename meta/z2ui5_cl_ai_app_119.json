@@ -12,7 +12,7 @@
   "checked": null,
   "deviations": [
     {
-      "type": "IMPROVISED",
+      "type": "NOTE",
       "what": "The named-model image path (img>/products/pic1) is resolved to the static OpenUI5 product image https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-7777-large.jpg (the mock's actual pic1 value, host-absolutized; wrong-neighbour HT-1000 copy fixed by the 2026-07-24 data audit). Image.src carries the static value where the original binds {img>/products/pic1} - the app-006 static-fold class."
     },
     {

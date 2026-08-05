@@ -23,7 +23,7 @@
       "what": "named models flattened into the single default model: the Comparison view's settings> model becomes the bound PAGES_COUNT/IS_DESKTOP fields (pagesCount initialized to 1, the CarouselLayout.visiblePagesCount UI5 default, instead of the original's undefined-until-routeMatched), and its products> model (Products/Props) becomes T_COMP_PRODUCTS/T_COMP_PROPS; the shared mock products.json default model is flattened into a flat upper-cased row type (all 20 JSON columns kept; rows without DateOfSale carry an empty string where the original JSON omits the key - a harmless string property, no enum/default override)."
     },
     {
-      "type": "IMPROVISED",
+      "type": "NOTE",
       "what": "the '.formatter.url' iconSrc formatter flattened to absolute https://sdk.openui5.org image URLs - source-verified against the now-archived app/model/formatter.js (it only prefixes '../../../../../../', i.e. resolves to the test-resources root), so the absolute URLs are the faithful equivalent."
     },
     {

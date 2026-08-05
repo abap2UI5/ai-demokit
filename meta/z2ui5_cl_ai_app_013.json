@@ -19,7 +19,7 @@
       "what": "the i18n> ResourceModel (i18n/i18n.properties) has no framework i18n mechanism here - all texts (dialog title, section titles/summaries/details, button labels) are inlined as the resolved English literals from the properties file; this covers every i18n>-bound text incl. the Panel headerText 'More Info'."
     },
     {
-      "type": "IMPROVISED",
+      "type": "NOTE",
       "what": "the cookieData> named JSON model is flattened into the default model: /showCookieDetails becomes the bound abap_bool show_cookie_details; every visible binding and expression binding keeps its original shape over the flattened path (named ABAP-fed JSON models are not expressible, CAPABILITIES.md)."
     },
     {

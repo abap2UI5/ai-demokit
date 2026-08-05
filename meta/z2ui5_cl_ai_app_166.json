@@ -12,7 +12,7 @@
   "checked": null,
   "deviations": [
     {
-      "type": "IMPROVISED",
+      "type": "NOTE",
       "what": "The original keeps header/object data in nested paths on one JSON model (title, showFooter, titleSnappedContent/text, titleExpandedContent/text, objectDescription/category|center|email|status). abap2UI5 keeps one default model and render-smoke does not mock nested structures, so those paths are folded to flat fields bound via _bind (last path segment identical, which structural-diff matches). Both the snapped and expanded subheading Text controls bind the same flat 'text' field. The full 125-row ProductCollection mock is inlined."
     },
     {

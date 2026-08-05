@@ -12,7 +12,7 @@
   "checked": null,
   "deviations": [
     {
-      "type": "IMPROVISED",
+      "type": "NOTE",
       "what": "Block->content inlining (app 188/217 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the blocks / moreBlocks aggregations hold SharedBlocks BlockBase controls - goals:GoalsBlock, personal:BlockAdresses / BlockPhoneNumber / BlockSocial / BlockMailing / PersonalBlockPart1 / PersonalBlockPart2, employment:BlockJobInfoPart1 / BlockJobInfoPart2 / BlockJobInfoPart3 / BlockEmpDetailPart1 / BlockEmpDetailPart2 / BlockEmpDetailPart3 / EmploymentBlockJob. Each BlockBase is only a lazy-loading wrapper around a static view (forms:SimpleForm with core:Title / Label / Text, or a layout:HorizontalLayout / layout:VerticalLayout tree), so every block view is inlined 1:1 into its aggregation. Absent as a result: the 13 BlockBase controls with their ids, and the block views' own mvc:View roots with their width='100%'."
     },
     {

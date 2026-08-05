@@ -15,7 +15,7 @@
   },
   "deviations": [
     {
-      "type": "IMPROVISED",
+      "type": "NOTE",
       "what": "the Image src binds {img>/products/pic1} in the original, a JSON image model not available server-side; a static demo image URL is used instead."
     }
   ]

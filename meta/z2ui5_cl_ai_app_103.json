@@ -12,7 +12,7 @@
   "checked": null,
   "deviations": [
     {
-      "type": "IMPROVISED",
+      "type": "NOTE",
       "what": "The original configures one shared SelectDialog imperatively per button (oButton.data() CustomData -> setMultiSelect/setGrowing/setGrowingThreshold/setRememberSelections/setShowClearButton/setConfirmButtonText/setDraggable/setResizable/toggleStyleClass). abap2UI5 binds those SelectDialog properties two-way and each button's handler sets them before opening (responsivePadding toggles the style class via control_by_id addStyleClass/removeStyleClass). The core:CustomData is kept on the buttons for fidelity; the dialog is declared once in mvc:dependents and opened via follow_up_action( cs_event-control_by_id, open )."
     },
     {
@@ -20,7 +20,7 @@
       "what": "Search filters the dialog's items binding client-side via _event_client( cs_event-binding_call, filter NAME Contains ${$parameters>/value} ). The valueHelpRequest opens a second SelectDialog (also in dependents) after preselecting the row matching the input value. The confirm / value-help-close toasts are simplified — selectedContexts / selectedItem are control references not transportable as event args (original composes the chosen product names / copies the selected title into the input)."
     },
     {
-      "type": "IMPROVISED",
+      "type": "NOTE",
       "what": "The StandardListItem icon binds ProductPicUrl, which is derived in ABAP from the product id (the mock's test-resources/<id>.jpg) built from a shared base pointing at the OpenUI5 host, like app 006's image flattening. The full 123-row /ProductCollection is inlined."
     },
     {
