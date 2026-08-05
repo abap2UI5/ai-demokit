@@ -28,7 +28,7 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
 
 ## Open findings (backlog)
 
-- [ ] **IMPROVISED harvest — all 6 requests implemented, probes measured**
+- [ ] **IMPROVISED harvest — 6 requests implemented, 2 more filed, probes measured**
   (2026-08-05). The repo's purpose is to expose framework gaps, but the gaps
   were sitting in 136 `IMPROVISED` sidecar texts while `pr/` held exactly one
   open request. All 136 are now classified — repeatably, by
@@ -38,8 +38,8 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
 
   | Verdict | at the harvest | today | Meaning |
   |---|---:|---:|---|
-  | GAP | 15 | 8 | a framework gap — 6 requests filed, **all implemented upstream the same day** |
-  | PROBE | 16 | 5 | a *suspected* gap whose premise is unverified — measure before filing |
+  | GAP | 15 | 10 | a framework gap — 6 requests filed, **all implemented upstream the same day**; the second sweep added 2 more, both measured first |
+  | PROBE | 16 | 3 | a *suspected* gap whose premise is unverified — measure before filing |
   | REWORK | 16 | 1 | expressible today; the port under-delivers (review backlog) — 118, the last big rebuild (115 done 2026-08-05) |
   | BOUNDARY | 16 | 16 | outside abap2UI5 by nature (client-only APIs, sample-local JS) |
   | POLICY | 73 | 8 | a decided corpus rule; the rest are `NOTE`s now (see below) |
@@ -122,22 +122,55 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
     removes the other three tokenizers' static tokens by id; 076/077 remove the
     notification AND toast its title on one event; 241's Create button appends
     a row to a now-bound NavigationList.
-  - ~~`event-veto`~~ **half closed 2026-08-05**. App 136's rationale predated
-    `s_ctrl-check_prevent_default` (merged 2026-07-30): the flag is baked per
-    wire at render time, which is enough there because the DIRECTION of the next
-    toggle is known — an expanded panel can only collapse — so the flag is the
-    switch that applies, and the round-trip re-bakes it. App **247** is the
-    genuine residual: its veto is per **column** while the flag is per wire, and
-    `columnResize` is declared on the Table, not the Column.
-  - `template-clone-id` (1, app 012), `window-resize-event` (1, app 012),
-    `shortcut-scope` (1, app 232): one port each, each already named as an
-    open idea in its own sidecar. File only if a second sample needs them.
+  - ~~`event-veto`~~ **half closed 2026-08-05, the residual filed the same
+    day**. App 136's rationale predated `s_ctrl-check_prevent_default` (merged
+    2026-07-30): the flag is baked per wire at render time, which is enough
+    there because the DIRECTION of the next toggle is known — an expanded panel
+    can only collapse — so the flag is the switch that applies, and the
+    round-trip re-bakes it. App **247** is the genuine residual: its veto is per
+    **column** while the flag is per wire, and `columnResize` is declared on the
+    Table, not the Column. Now `pr/conditional-prevent-default` — see the second
+    sweep below.
+  - ~~`window-resize-event`~~ **measured and filed 2026-08-05** as
+    `pr/live-device-model` — see the second sweep below.
+  - `template-clone-id` (1, app 012) and `shortcut-scope` (1, app 232): one port
+    each, each already named as an open idea in its own sidecar, and neither
+    premise is measured. File only if a second sample needs them.
 
   **REWORK** adds three entries to the review backlog below that were not in
   it: app 166 (semantic action toasts + the missing `Messaging.addMessages`
   seed, expressible via `cc.MessageManager`), app 233 (a compound
   `binding_call` OR-filter and `open(searchValue)` both shipped, both unused)
   and apps 022/235 (the sticky controls, per the correction above).
+
+  **Second sweep 2026-08-05 — two more requests, both measured first.** The
+  question "are there any NEW request ideas left in the corpus" was answered by
+  probing the two leftover families that had a mechanism behind them rather than
+  a rationale. Both premises held, so both are filed:
+  - **`pr/live-device-model`** — the shared `device>` model is
+    `new JSONModel(Device)`, wrapping the LIVE `sap.ui.Device` object. Device
+    mutates itself on resize/rotation, but a JSONModel only notifies its
+    bindings when told, so it never is: `scripts/probes/device-model-live-probe.mjs`
+    drives a real viewport from 1400px to 420px and reads the rendered binding
+    back — `{device>/resize/width}` stays **`1400`**, and one `refresh(true)` on
+    Device's own handlers makes it **`420`**. Eleven ports bind this model, so
+    the change is unusually cheap for its reach. Two honest findings came with
+    it: `{device>/system/phone}` is correctly STATIC (UA/screen based — a
+    narrowing desktop window is not a phone), so the eleven ports' branches are
+    right as they are and the request must not claim them; and the media RANGE,
+    which is what a live breakpoint branch actually wants, has **no bindable
+    path at all** (`Device.media` is methods only) — so the request adds
+    `/media/range` alongside the refresh.
+  - **`pr/conditional-prevent-default`** — the veto flag is a boolean baked per
+    WIRE, so it cannot block one row/column and let the rest through the same
+    event (app 247). The proposal reuses the mechanism that is already there: a
+    `$`-prefixed value is emitted raw and resolved by
+    `BindingParser.parseExpression`, so the veto can be an EXPRESSION.
+    `scripts/probes/conditional-veto-probe.mjs` measures the proposed `eBP`
+    signature against real OpenUI5 — **one** `columnResize` wire, **one**
+    predicate, two columns: the blocked one is vetoed
+    (`fireColumnResize` → `false`), the free one goes through, and both still
+    round-trip with an identical payload.
 
   One gate consequence to re-check later: app 049 now declares a
   `render_smoke` skip. Its bound template binds the numeric StepInput

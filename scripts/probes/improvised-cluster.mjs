@@ -119,6 +119,8 @@ const FAMILIES = [
   },
 
   // --- suspected gaps whose premise is not measured yet -------------------
+  // (event-veto and window-resize-event were measured 2026-08-05 and moved to
+  //  GAP above; what stays here is genuinely unmeasured)
   {
     key: 'event-value-unreachable',
     verdict: 'PROBE',
@@ -127,7 +129,8 @@ const FAMILIES = [
   },
   {
     key: 'event-veto',
-    verdict: 'PROBE',
+    verdict: 'GAP',
+    pr: 'conditional-prevent-default',
     label: 'a conditional / per-item event veto (preventDefault) beyond the render-time flag',
     re: /preventDefault|event veto/i,
   },
@@ -145,7 +148,8 @@ const FAMILIES = [
   },
   {
     key: 'window-resize-event',
-    verdict: 'PROBE',
+    verdict: 'GAP',
+    pr: 'live-device-model',
     label: 'no live window-resize / breakpoint wire: device metrics are read once per round-trip',
     re: /ResizeHandler|live recalculation on window resize/i,
   },

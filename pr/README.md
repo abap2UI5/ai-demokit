@@ -30,11 +30,16 @@ boundary · policy, repeatably, by
 `node scripts/probes/improvised-cluster.mjs` (`--family <key>` re-reads the
 evidence). **All six are implemented** (see the Implemented table) - the last one, the
 path-scoped half of `model-empty-vs-default`, the same day it was written up.
-What stays open here targets open-abap-core, not abap2UI5.
+What stayed open after it targeted open-abap-core, not abap2UI5 - until the
+**second sweep 2026-08-05** turned two of the leftover PROBE families into
+measured requests (`live-device-model`, `conditional-prevent-default`): both
+premises were probed against real OpenUI5 first, and both held.
 
 | Request | Summary | Priority |
 |---------|---------|----------|
 | [`open-abap-xml-escaping`](open-abap-xml-escaping/) | high — breaks every round-trip of the Pages demo's front door |
+| [`live-device-model`](live-device-model/) | medium — the shared `device>` model wraps the live `sap.ui.Device` but never notifies its bindings, so a resize/rotation moves nothing; one `refresh` on Device's own handlers makes eleven ports' declarative device branches live, plus a `/media/range` path for the breakpoint the class-swap ports want. **Measured** (`scripts/probes/device-model-live-probe.mjs`): width `1400 -> 1400` today, `1400 -> 420` with the change |
+| [`conditional-prevent-default`](conditional-prevent-default/) | medium — the event veto (`s_ctrl-check_prevent_default`) is a boolean baked per WIRE at render time, so it cannot block one row/column and let the rest through the same event. Proposes a `prevent_default_expression` resolved client-side like every other event arg. **Measured** (`scripts/probes/conditional-veto-probe.mjs`): one wire, one predicate, blocked column vetoed and free column allowed |
 
 _`menu-item-selected-path` left this list on 2026-07-31: it was closed by
 **option 2** of its own proposal — a documented capability boundary, measured
