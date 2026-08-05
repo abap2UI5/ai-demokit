@@ -1017,26 +1017,29 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         post171 = `the sap.m.Avatar control (since UI5 1.73) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.73 to render it. @since verified in sap/m/Avatar.js:99 (control-level, which` &&
                  ` the member-level property gate never saw).` ) ).
 
+    lv_text1 = `NOTE: onToggle vetoes the NEXT toggle when the matching switch is on (event.preventDefault) and resets that switch. **Reproduced 2026-08-05**: the framework's veto flag (s_ctrl-check_prevent_default,` &&
+               ` merged 2026-07-30 - AFTER this port was written, which is why the sidecar said 'an event veto is not expressible') is baked into the wire at RENDER time, and that is enough here because the DIRECTION` &&
+               ` of the next toggle is known - an expanded panel can only collapse next. The flag is therefore the switch that applies to that direction, the two Switches are two-way bound, and the toggle round-trip` &&
+               ` re-renders so the flag is rebuilt from the state the client just sent back. The handler is the original's if/else: on a vetoed direction it toasts 'I am prevented COLLAPSE/EXPAND event' and clears` &&
+               ` that switch, otherwise it keeps the new expanded state. Residual: the veto costs a round-trip per toggle, where the original decides in the handler - the state the decision needs (the switches) lives`.
+    lv_text1 = lv_text1 && ` in the model either way. // POST-1.71: the SidePanel and SidePanelItem controls (both since UI5 1.107) are newer than 1.71 but are the whole point of this sample and kept for the 1:1 port - the app` &&
+               ` needs a UI5 release >= 1.107 to render it. @since verified in sap/f/SidePanel.js and sap/f/SidePanelItem.js:34 (control-level, which the member-level property gate never saw).`.
     result = VALUE #( BASE result
       ( module = `sap.f`              control = `sap.f.SidePanel`                       name = `SidePanelSingle`                     class = `z2ui5_cl_ai_app_136` path = `src/04/b03/z2ui5_cl_ai_app_136.clas.abap`
-        score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.107`
         since_post171 = abap_true
         is_post171 = abap_true
-        notes = `IMPROVISED: SidePanel.toggle shows a client-side MessageToast on every toggle. The original onToggle inspected the preventExpand/preventCollapse switches and called event.preventDefault() to veto the` &&
-                 ` expand/collapse (toasting only when a veto fired, then resetting the switch); an event veto is not expressible in abap2UI5, so that behaviour is lost and the switches are kept as static controls. //` &&
-                 ` POST-1.71: the SidePanel and SidePanelItem controls (both since UI5 1.107) are newer than 1.71 but are the whole point of this sample and kept for the 1:1 port - the app needs a UI5 release >= 1.107` &&
-                 ` to render it. @since verified in sap/f/SidePanel.js and sap/f/SidePanelItem.js:34 (control-level, which the member-level property gate never saw).`
+        notes = lv_text1
         post171 = `the SidePanel and SidePanelItem controls (both since UI5 1.107) are newer than 1.71 but are the whole point of this sample and kept for the 1:1 port - the app needs a UI5 release >= 1.107 to render` &&
-                 ` it. @since verified in sap/f/SidePanel.js and sap/f/SidePanelItem.js:34 (control-level, which the member-level property gate never saw).` )
+                 ` it. @since verified in sap/f/SidePanel.js and sap/f/SidePanelItem.js:34 (control-level, which the member-level property gate never saw).` ) ).
+
+    result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.ActionListItem`                  name = `ActionListItem`                      class = `z2ui5_cl_ai_app_001` path = `src/01/b05/z2ui5_cl_ai_app_001.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        checked = `CHECKED (2026-07-20): verified in a running system - human pass 2026-07-20: app starts and renders like the original; no interaction paths were open for this port` ) ).
-
-    result = VALUE #( BASE result
+        checked = `CHECKED (2026-07-20): verified in a running system - human pass 2026-07-20: app starts and renders like the original; no interaction paths were open for this port` )
       ( module = `sap.m`              control = `sap.m.Bar`                             name = `Page`                                class = `z2ui5_cl_ai_app_002` path = `src/01/b05/z2ui5_cl_ai_app_002.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -4214,19 +4217,21 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
     lv_text1 = `IMPROVISED: onColumnResize is reduced: the original buffers per-column resize messages, joins them and toasts 'Column <label> was resized to <width>.', and calls oEvent.preventDefault() to block` &&
                ` resizing the deliverydate column. The backend cannot preventDefault a client-side column resize (no CONTROL_METHODS / event hook for it) and cannot read the column label off the event, so` &&
                ` columnResize is wired to a roundtrip-free client MessageToast (control_global MESSAGE_TOAST.show 'Column was resized to {0}.' filled by ${$parameters>/width}); the per-column preventDefault and the` &&
-               ` column-label text are dropped. // NOTE: Named-model fold with a nested config object: the original binds each Column width to the ui>/widths/{name,category,image,quantity,date} single object on a` &&
-               ` separate JSONModel. abap2UI5 has one default model; a nested single-object bind is proven only for row-relative sub-paths (CAPABILITIES 'Nested single (non-array) structure', app 171) - a top-level` &&
-               ` struct-component _bind is unproven in this corpus, and writing '/WIDTHS/NAME' as a literal path is disallowed. So the widths object is folded to five top-level string fields named exactly`.
-    lv_text1 = lv_text1 && ` name/category/image/quantity/date (the sanctioned named-model prefix-drop idiom), each bound via client->_bind so the last path segment still matches the original (structural-diff normalizes on the` &&
-               ` last segment). onColumnWidthsChange (SegmentedButton Static/Flexible/Mixed) is reproduced faithfully: the selected key is transported via ${$parameters>/item}.getKey() and the width set is recomputed` &&
-               ` in ABAP (thin-frontend) + view_model_update. // NOTE: DeliveryDate is seeded deterministically. The original computes DeliveryDate = Date.now() - (i % 10 * 4 days) per load (non-deterministic` &&
-               ` timestamps); the port uses a fixed base (2026-07-25 in epoch ms) minus the same (i % 10 * 4 days) offset, kept as an epoch-ms value bound through the original {path:'DeliveryDate',` &&
-               ` type:'sap.ui.model.type.Date', formatOptions:{source:{pattern:'timestamp'}}} typed binding. // NOTE: ProductPicUrl is resolved to the OpenUI5 host: the mock stores the host-relative` &&
-               ` 'test-resources/sap/ui/documentation/sdk/images/HT-xxxx.jpg'; the port stores the absolute 'https://sdk.openui5.org/test-resources/...' per the asset-URL rule, keeping the original {ProductPicUrl}`.
-    lv_text1 = lv_text1 && ` binding. Full 123-row ProductCollection inlined (Name/Category/ProductPicUrl/Quantity/DeliveryDate). // NOTE: **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real` &&
-               ` browser): the SegmentedButton width switch really round-trips: picking 'Flexible' sends WIDTHS_CHANGE with ${$parameters>/item}.getKey(), the backend recomputes the widths and the Table's columns` &&
-               ` come back at 25%. The button sits in an OverflowToolbar, where it renders as a Select - drivable once the 'Additional Options' popover is open (AGENTS 10). Residual: the columnResize client toast (a` &&
-               ` real column drag) and the timestamp-typed DeliveryDate formatting.`.
+               ` column-label text are dropped. Re-judged 2026-08-05 against the veto flag (s_ctrl-check_prevent_default) that closed app 136: it does NOT help here. The flag is baked per WIRE at render time, and` &&
+               ` this veto is per COLUMN - the sample blocks resizing one column while allowing the others through the same event. A per-column wire is not available either (columnResize is declared on the Table, not` &&
+               ` on the Column). This stays the open half of the event-veto family. // NOTE: Named-model fold with a nested config object: the original binds each Column width to the`.
+    lv_text1 = lv_text1 && ` ui>/widths/{name,category,image,quantity,date} single object on a separate JSONModel. abap2UI5 has one default model; a nested single-object bind is proven only for row-relative sub-paths` &&
+               ` (CAPABILITIES 'Nested single (non-array) structure', app 171) - a top-level struct-component _bind is unproven in this corpus, and writing '/WIDTHS/NAME' as a literal path is disallowed. So the` &&
+               ` widths object is folded to five top-level string fields named exactly name/category/image/quantity/date (the sanctioned named-model prefix-drop idiom), each bound via client->_bind so the last path` &&
+               ` segment still matches the original (structural-diff normalizes on the last segment). onColumnWidthsChange (SegmentedButton Static/Flexible/Mixed) is reproduced faithfully: the selected key is` &&
+               ` transported via ${$parameters>/item}.getKey() and the width set is recomputed in ABAP (thin-frontend) + view_model_update. // NOTE: DeliveryDate is seeded deterministically. The original computes` &&
+               ` DeliveryDate = Date.now() - (i % 10 * 4 days) per load (non-deterministic timestamps); the port uses a fixed base (2026-07-25 in epoch ms) minus the same (i % 10 * 4 days) offset, kept as an epoch-ms`.
+    lv_text1 = lv_text1 && ` value bound through the original {path:'DeliveryDate', type:'sap.ui.model.type.Date', formatOptions:{source:{pattern:'timestamp'}}} typed binding. // NOTE: ProductPicUrl is resolved to the OpenUI5` &&
+               ` host: the mock stores the host-relative 'test-resources/sap/ui/documentation/sdk/images/HT-xxxx.jpg'; the port stores the absolute 'https://sdk.openui5.org/test-resources/...' per the asset-URL rule,` &&
+               ` keeping the original {ProductPicUrl} binding. Full 123-row ProductCollection inlined (Name/Category/ProductPicUrl/Quantity/DeliveryDate). // NOTE: **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs` &&
+               ` interaction, transpiled backend + real browser): the SegmentedButton width switch really round-trips: picking 'Flexible' sends WIDTHS_CHANGE with ${$parameters>/item}.getKey(), the backend recomputes` &&
+               ` the widths and the Table's columns come back at 25%. The button sits in an OverflowToolbar, where it renders as a Select - drivable once the 'Additional Options' popover is open (AGENTS 10).` &&
+               ` Residual: the columnResize client toast (a real column drag) and the timestamp-typed DeliveryDate formatting.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `ColumnResizing`                      class = `z2ui5_cl_ai_app_247` path = `src/02/b12/z2ui5_cl_ai_app_247.clas.abap`
         score = 5

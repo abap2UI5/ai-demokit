@@ -17,7 +17,7 @@ TRAINING.md; for what abap2UI5 can express see CAPABILITIES.md._
 |---|---|
 | Ports | **293** sidecars in `meta/` (src/01: 177 · src/02: 67 · src/03: 19 · src/04: 19 · src/05: 11) |
 | Status ladder | 86 `generated` · 146 `reviewed` · 61 `checked` (live-verified) |
-| Deviations | 4 DROPPED_171 · 52 IMPROVISED · 561 NOTE · 121 POST_171 |
+| Deviations | 4 DROPPED_171 · 51 IMPROVISED · 562 NOTE · 121 POST_171 |
 | Open LIVE_TESTs | **0 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
 | Declared gate skips | 6 structural-diff · 3 render-smoke (each re-verified per run — a stale skip FAILS) |
 | Out-of-scope ported samples | `z2ui5_cl_ai_app_121 (sap.m.sample.UploadSet — deprecated)` · `z2ui5_cl_ai_app_136 (sap.f.sample.SidePanelSingle — control @since 1.107)` · `z2ui5_cl_ai_app_141 (sap.ui.core.sample.InvisibleMessage — control @since 1.78)` · `z2ui5_cl_ai_app_165 (sap.f.sample.ProductSwitchNavigation — control @since 1.72)` · `z2ui5_cl_ai_app_203 (sap.m.sample.OverflowToolbarTokenizer — control @since 1.139)` — all decided KEEP permanently 2026-07-30 (per-app rationale in ui5/scope-exceptions.json, revertible); the source-backed scope gate stays hard for NEW undecided entries |
@@ -115,14 +115,20 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
     the expression grammar has no loop (the same boundary as app 060's
     breadcrumb). Its sidecar is corrected to say that instead of "control
     references are not transportable".
-  - `imperative-aggregation` (4, apps 076/077/203/241): `addToken`/`addItem`/
-    `removeItem` over statically declared children. App 085 already answers it
-    (fold the static children into a bound aggregation); confirm that is always
-    available, then these are REWORK, not gaps.
-  - `event-veto` (2, apps 136/247): app 136's veto predates
-    `s_ctrl-check_prevent_default` (merged 2026-07-30) and its guard switches
-    are two-way bound, so it is probably REWORK; app 247 needs a **per-column**
-    veto, which the render-time flag genuinely cannot express.
+  - ~~`imperative-aggregation`~~ **closed 2026-08-05** — none of the four was a
+    gap. Two measurements did it: `removeToken`/`removeItem` accept an **ID
+    string**, and UI5 runs a **`;`-separated pair** of event handlers. 203 folds
+    the tokenizer the sample's add/delete work on into a bound aggregation and
+    removes the other three tokenizers' static tokens by id; 076/077 remove the
+    notification AND toast its title on one event; 241's Create button appends
+    a row to a now-bound NavigationList.
+  - ~~`event-veto`~~ **half closed 2026-08-05**. App 136's rationale predated
+    `s_ctrl-check_prevent_default` (merged 2026-07-30): the flag is baked per
+    wire at render time, which is enough there because the DIRECTION of the next
+    toggle is known — an expanded panel can only collapse — so the flag is the
+    switch that applies, and the round-trip re-bakes it. App **247** is the
+    genuine residual: its veto is per **column** while the flag is per wire, and
+    `columnResize` is declared on the Table, not the Column.
   - `template-clone-id` (1, app 012), `window-resize-event` (1, app 012),
     `shortcut-scope` (1, app 232): one port each, each already named as an
     open idea in its own sidecar. File only if a second sample needs them.

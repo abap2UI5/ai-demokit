@@ -3,8 +3,14 @@ CLASS z2ui5_cl_ai_app_136 DEFINITION PUBLIC.
   PUBLIC SECTION.
     INTERFACES z2ui5_if_app.
 
+    DATA prevent_expand   TYPE abap_bool.
+    DATA prevent_collapse TYPE abap_bool.
+    DATA panel_expanded   TYPE abap_bool.
+
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
+
+    METHODS on_event.
 
     METHODS view_display.
 
@@ -19,6 +25,8 @@ CLASS z2ui5_cl_ai_app_136 IMPLEMENTATION.
     me->client = client.
     IF client->check_on_init( ).
       view_display( ).
+    ELSEIF client->check_on_event( ).
+      on_event( ).
     ENDIF.
 
   ENDMETHOD.
@@ -39,8 +47,18 @@ CLASS z2ui5_cl_ai_app_136 IMPLEMENTATION.
             )->open( `content`
                 )->open( n = `SidePanel` ns = `f`
                     )->a( n = `id`     v = `mySidePanel`
-                    " original onToggle vetoed expand/collapse (preventDefault) per the prevent switches - not expressible; a client toast signals the toggle instead
-                    )->a( n = `toggle` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Side panel toggled` ) ) )
+                    " onToggle vetoes the NEXT toggle when the matching switch is on
+                    " (preventDefault) and resets that switch. The framework's veto flag
+                    " is baked into the wire at RENDER time - which is enough here,
+                    " because the direction of the next toggle is known: an expanded
+                    " panel can only collapse next. So the flag is the switch that
+                    " applies to that direction, and the round-trip re-bakes it
+                    )->a( n = `toggle` v = client->_event( val    = `TOGGLE`
+                                                           t_arg  = VALUE #( ( `${$parameters>/expanded}` ) )
+                                                           s_ctrl = VALUE #( check_prevent_default =
+                                                             COND #( WHEN panel_expanded = abap_true
+                                                                     THEN prevent_collapse
+                                                                     ELSE prevent_expand ) ) )
 
                     )->open( n = `mainContent` ns = `f`
                         )->leaf( `Button`
@@ -53,12 +71,14 @@ CLASS z2ui5_cl_ai_app_136 IMPLEMENTATION.
                                 )->a( n = `text` v = `Prevent next toggle (expand) event`
                             )->leaf( `Switch`
                                 )->a( n = `id`    v = `preventExpand`
+                                )->a( n = `state` v = client->_bind( prevent_expand )
                                 )->a( n = `type`  v = `AcceptReject`
                                 )->a( n = `class` v = `sapUiSmallMarginBottom`
                             )->leaf( `Label`
                                 )->a( n = `text` v = `Prevent next toggle (collapse) event`
                             )->leaf( `Switch`
                                 )->a( n = `id`    v = `preventCollapse`
+                                )->a( n = `state` v = client->_bind( prevent_collapse )
                                 )->a( n = `type`  v = `AcceptReject`
                                 )->a( n = `class` v = `sapUiSmallMarginBottom`
 
@@ -121,6 +141,34 @@ CLASS z2ui5_cl_ai_app_136 IMPLEMENTATION.
                                     )->a( n = `text` v = `Press me` ).
 
     client->view_display( view->stringify( ) ).
+
+  ENDMETHOD.
+
+
+  METHOD on_event.
+
+    CASE client->get( )-event.
+
+      WHEN `TOGGLE`.
+        " the event still reaches the backend when the veto fired (the framework
+        " calls preventDefault synchronously and sends the event anyway), so the
+        " branch is the original's: on a vetoed direction, toast and reset that
+        " switch; otherwise the panel really toggled and the new state is kept
+        DATA(expanded) = xsdbool( client->get_event_arg( ) = abap_true ).
+        IF expanded = abap_false AND prevent_collapse = abap_true.
+          prevent_collapse = abap_false.
+          client->message_toast_display( `I am prevented COLLAPSE event` ).
+        ELSEIF expanded = abap_true AND prevent_expand = abap_true.
+          prevent_expand = abap_false.
+          client->message_toast_display( `I am prevented EXPAND event` ).
+        ELSE.
+          panel_expanded = expanded.
+        ENDIF.
+        " re-render: the veto flag is baked into the wire, so it has to be
+        " rebuilt from the switch states the round-trip just brought back
+        view_display( ).
+
+    ENDCASE.
 
   ENDMETHOD.
 
