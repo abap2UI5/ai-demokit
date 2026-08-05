@@ -952,15 +952,18 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
 
     lv_text1 = `IMPROVISED: The original keeps header/object data in nested paths on one JSON model (title, showFooter, titleSnappedContent/text, titleExpandedContent/text,` &&
                ` objectDescription/category|center|email|status). abap2UI5 keeps one default model and render-smoke does not mock nested structures, so those paths are folded to flat fields bound via _bind (last path` &&
-               ` segment identical, which structural-diff matches). Both the snapped and expanded subheading Text controls bind the same flat 'text' field. The full 125-row ProductCollection mock is inlined. //` &&
-               ` IMPROVISED: The semantic action press handlers (titleMainAction onEdit, footerMainAction onSave, footerCustomActions Cancel onCancel, messagesIndicator onMessagesButtonPress) are controller methods` &&
-               ` in the original (toggling showFooter/edit visibility, a MessageBox alert, a message popover); here each press raises a client MESSAGE_TOAST. The controller's onInit Messaging.addMessages seed (one` &&
-               ` Error message 'Something wrong happened' that gives the MessagesIndicator its count and popover content) is not reproduced, so the indicator carries no messages. The DiscussInJam / SendEmail /`.
-    lv_text1 = lv_text1 && ` SendMessage semantic actions keep their built-in behaviour, and the DraftIndicator shows state Saved.`.
+               ` segment identical, which structural-diff matches). Both the snapped and expanded subheading Text controls bind the same flat 'text' field. The full 125-row ProductCollection mock is inlined. // NOTE:` &&
+               ` The semantic action handlers are reproduced since 2026-08-05 instead of raising static toasts: onEdit sets showFooter and hides the Edit action, onSave/onCancel reset both, and onSave shows the` &&
+               ` original's MessageBox.alert( 'Successfully saved!' ) - the state lives in ABAP and drives the bound properties, which is the thin-frontend answer to three controller methods that only toggle view` &&
+               ` state. The controller's onInit Messaging.addMessages seed (one Error 'Something wrong happened') now goes through the z2ui5.cc.MessageManager companion control (app 065 idiom,`.
+    lv_text1 = lv_text1 && ` pr/message-manager-write), so the MessagesIndicator carries its count again, and onMessagesButtonPress is a MessagePopover over the message> model declared in the indicator's dependents and toggled` &&
+               ` roundtrip-free (app 066 idiom). The DiscussInJam / SendEmail / SendMessage semantic actions keep their built-in behaviour and the DraftIndicator shows state Saved. Structurally that adds three` &&
+               ` controls the original view does not declare - the z2ui5:MessageManager bridge plus the MessagePopover and its MessageItem template - because the original builds the popover in the controller and` &&
+               ` seeds the message through the Messaging API.`.
     result = VALUE #( BASE result
       ( module = `sap.f`              control = `sap.f.semantic.SemanticPage`           name = `SemanticPage`                        class = `z2ui5_cl_ai_app_166` path = `src/04/b07/z2ui5_cl_ai_app_166.clas.abap`
-        score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.46.0`
         notes = lv_text1 ) ).
 
@@ -1847,25 +1850,26 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` in English). The IllustratedMessage title/description/illustrationType keep their expression binding {= ${/inputPopulated} ? ... : ... } with the i18n operands replaced by the literal strings. The` &&
                ` Label ...:'-suffixed i18n texts are likewise inlined. // IMPROVISED: formatter.deliveryStatusState (Shipped->Success, Failed Shipping->Error, else None) is business logic; per the thin-frontend` &&
                ` principle it moves out of the frontend formatter into the ABAP model (deliverystatus_state, computed in model_init per purchase) and the ObjectStatus state binds that precomputed field`.
-    lv_text1 = lv_text1 && ` (sel_delivery_state) directly instead of a formatter binding. // IMPROVISED: handleValueHelpSearch / _getCombinedFilter builds an OR filter of PurchaseID Contains + SupplierName Contains; the port's` &&
-               ` SelectDialog search wires a single binding_call filter on SUPPLIERNAME Contains ${$parameters>/value} - the compound OR over two fields is simplified to the supplier field. The suggestion Input's` &&
-               ` setFilterFunction (case-insensitive contains over key+text) is UI5's built-in suggestion filtering and is not reproduced explicitly. Additionally _filterAndOpenValueHelpDialog pre-filters the dialog` &&
-               ` with the current input value and opens it via oDialog.open(sInputValue); the port's valueHelpRequest opens the SelectDialog unfiltered with no search-string argument (control_by_id open without` &&
-               ` params), so the pre-filter-on-open behaviour is lost. // NOTE: Namespace-prefix representation: the port declares xmlns=sap.m (default) plus xmlns:uxap=sap.uxap, so the uxap controls are emitted` &&
-               ` uxap:-prefixed. In the originals ObjectPageLayout/ObjectPageDynamicHeaderTitle (App.view.xml) and the IllustratedMessage-fragment ObjectPageSection/ObjectPageSubSection are unprefixed (their file's`.
-    lv_text1 = lv_text1 && ` default xmlns is sap.uxap), while the ProductsTable/SupplierDetails fragments already use the uxap: prefix. Same library, identical rendering; structural-diff sees uxap:ObjectPageSection vs` &&
-               ` ObjectPageSection (and likewise ObjectPageLayout/ObjectPageDynamicHeaderTitle/ObjectPageSubSection) as control missing/extra. m:IllustratedMessage keeps its m: prefix to match the original. //` &&
-               ` POST-1.71: sap.m.IllustratedMessage (control since UI5 1.98, with illustrationType/title/description) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.98 to render it.` &&
-               ` property-check does not track IllustratedMessage members, so this is declared by policy, not gate-forced. // POST-1.71: sap.m.Input.autocomplete (since UI5 1.108) is newer than 1.71 but kept 1:1` &&
-               ` (autocomplete='false'); the app needs a UI5 release >= 1.108 to render it. Not tracked by property-check (declared by policy). // NOTE: live-verified 2026-08-04 (nightly e2e interaction): leg (c) is` &&
-               ` closed: **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): F4 on the PurchaseID Input (the keyboard form of valueHelpRequest - its icon has no layout`.
-    lv_text1 = lv_text1 && ` box headless) opens the SelectDialog client-side through control_by_id, and the dialog renders its bound purchase rows. Still unverified in a running system: (a) Input submit resolving the entered` &&
-               ` PurchaseID and redrawing; (b) suggestionItemSelected transporting ${$parameters>/selectedItem}.getKey(); (d) the SelectDialog search (binding_call filter) and its confirm arg - the dialog row has no` &&
-               ` layout box headless and neither a click nor a keyboard Enter reaches the confirm; (e) the ObjectPageLayout/IllustratedMessage/Table rendering.`.
+    lv_text1 = lv_text1 && ` (sel_delivery_state) directly instead of a formatter binding. // NOTE: handleValueHelpSearch / _getCombinedFilter build an OR filter of PurchaseID Contains + SupplierName Contains, and` &&
+               ` _filterAndOpenValueHelpDialog opens the dialog pre-filtered with the current input value. **Both reproduced 2026-08-05** against capabilities that had shipped and were unused: the search round-trips` &&
+               ` its value and the backend issues the COMPOUND binding_call filter (a JSON group with both fields, ORed inside the group - pr/binding-call-compound-filters; the payload is one JSON string, so the` &&
+               ` value cannot be substituted client-side, which is why this one wire round-trips like app 022's), and valueHelpRequest now passes $event.oSource.getValue() to open( ), the search-string argument the` &&
+               ` whitelist already declared. The Input's setFilterFunction (case-insensitive contains over key+text) stays unreproduced - it is UI5's built-in suggestion filtering. // NOTE: Namespace-prefix` &&
+               ` representation: the port declares xmlns=sap.m (default) plus xmlns:uxap=sap.uxap, so the uxap controls are emitted uxap:-prefixed. In the originals ObjectPageLayout/ObjectPageDynamicHeaderTitle`.
+    lv_text1 = lv_text1 && ` (App.view.xml) and the IllustratedMessage-fragment ObjectPageSection/ObjectPageSubSection are unprefixed (their file's default xmlns is sap.uxap), while the ProductsTable/SupplierDetails fragments` &&
+               ` already use the uxap: prefix. Same library, identical rendering; structural-diff sees uxap:ObjectPageSection vs ObjectPageSection (and likewise` &&
+               ` ObjectPageLayout/ObjectPageDynamicHeaderTitle/ObjectPageSubSection) as control missing/extra. m:IllustratedMessage keeps its m: prefix to match the original. // POST-1.71: sap.m.IllustratedMessage` &&
+               ` (control since UI5 1.98, with illustrationType/title/description) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.98 to render it. property-check does not track` &&
+               ` IllustratedMessage members, so this is declared by policy, not gate-forced. // POST-1.71: sap.m.Input.autocomplete (since UI5 1.108) is newer than 1.71 but kept 1:1 (autocomplete='false'); the app` &&
+               ` needs a UI5 release >= 1.108 to render it. Not tracked by property-check (declared by policy). // NOTE: live-verified 2026-08-04 (nightly e2e interaction): leg (c) is closed: **e2e-verified`.
+    lv_text1 = lv_text1 && ` 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): F4 on the PurchaseID Input (the keyboard form of valueHelpRequest - its icon has no layout box headless) opens the` &&
+               ` SelectDialog client-side through control_by_id, and the dialog renders its bound purchase rows. Still unverified in a running system: (a) Input submit resolving the entered PurchaseID and redrawing;` &&
+               ` (b) suggestionItemSelected transporting ${$parameters>/selectedItem}.getKey(); (d) the SelectDialog search (binding_call filter) and its confirm arg - the dialog row has no layout box headless and` &&
+               ` neither a click nor a keyboard Enter reaches the confirm; (e) the ObjectPageLayout/IllustratedMessage/Table rendering.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.InitialPagePattern`              name = `InitialPagePattern`                  class = `z2ui5_cl_ai_app_233` path = `src/01/b18/z2ui5_cl_ai_app_233.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 5 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 4 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
         ui5_only = abap_true
         is_post171 = abap_true

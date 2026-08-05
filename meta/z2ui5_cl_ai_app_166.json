@@ -4,11 +4,20 @@
   "entity": "sap.f.semantic.SemanticPage",
   "file": "src/04/b07/z2ui5_cl_ai_app_166.clas.abap",
   "batch": "b07",
-  "audit": { "frontend_action": true, "event_t_arg": true },
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
   "status": "reviewed",
   "checked": null,
   "deviations": [
-    { "type": "IMPROVISED", "what": "The original keeps header/object data in nested paths on one JSON model (title, showFooter, titleSnappedContent/text, titleExpandedContent/text, objectDescription/category|center|email|status). abap2UI5 keeps one default model and render-smoke does not mock nested structures, so those paths are folded to flat fields bound via _bind (last path segment identical, which structural-diff matches). Both the snapped and expanded subheading Text controls bind the same flat 'text' field. The full 125-row ProductCollection mock is inlined." },
-    { "type": "IMPROVISED", "what": "The semantic action press handlers (titleMainAction onEdit, footerMainAction onSave, footerCustomActions Cancel onCancel, messagesIndicator onMessagesButtonPress) are controller methods in the original (toggling showFooter/edit visibility, a MessageBox alert, a message popover); here each press raises a client MESSAGE_TOAST. The controller's onInit Messaging.addMessages seed (one Error message 'Something wrong happened' that gives the MessagesIndicator its count and popover content) is not reproduced, so the indicator carries no messages. The DiscussInJam / SendEmail / SendMessage semantic actions keep their built-in behaviour, and the DraftIndicator shows state Saved." }
+    {
+      "type": "IMPROVISED",
+      "what": "The original keeps header/object data in nested paths on one JSON model (title, showFooter, titleSnappedContent/text, titleExpandedContent/text, objectDescription/category|center|email|status). abap2UI5 keeps one default model and render-smoke does not mock nested structures, so those paths are folded to flat fields bound via _bind (last path segment identical, which structural-diff matches). Both the snapped and expanded subheading Text controls bind the same flat 'text' field. The full 125-row ProductCollection mock is inlined."
+    },
+    {
+      "type": "NOTE",
+      "what": "The semantic action handlers are reproduced since 2026-08-05 instead of raising static toasts: onEdit sets showFooter and hides the Edit action, onSave/onCancel reset both, and onSave shows the original's MessageBox.alert( 'Successfully saved!' ) - the state lives in ABAP and drives the bound properties, which is the thin-frontend answer to three controller methods that only toggle view state. The controller's onInit Messaging.addMessages seed (one Error 'Something wrong happened') now goes through the z2ui5.cc.MessageManager companion control (app 065 idiom, pr/message-manager-write), so the MessagesIndicator carries its count again, and onMessagesButtonPress is a MessagePopover over the message> model declared in the indicator's dependents and toggled roundtrip-free (app 066 idiom). The DiscussInJam / SendEmail / SendMessage semantic actions keep their built-in behaviour and the DraftIndicator shows state Saved. Structurally that adds three controls the original view does not declare - the z2ui5:MessageManager bridge plus the MessagePopover and its MessageItem template - because the original builds the popover in the controller and seeds the message through the Messaging API."
+    }
   ]
 }
