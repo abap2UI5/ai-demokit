@@ -7,6 +7,78 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## 2026-08-05 (second half) — the five requests implemented upstream, six ports rebuilt on them
+
+Same day, three repos: the framework requests the harvest filed were
+implemented in abap2UI5, mirrored in the linter, and consumed by the corpus.
+
+**abap2UI5** (`_bind( omit_initial )`, `CONTROL_METHODS` `css` and `setSticky`,
+the `controlIdOrNull` argument kind with `setSelectedSection`/`setSelectedItem`,
+the `INVISIBLE_MESSAGE` and `FORMATTING` global targets). `npm run verify`
+green; 7 new JS specs and one ABAP unit test asserting an initial field stays
+absent from the serialized model. Two things were learned while implementing:
+
+- **`get_t_arg` drops a TRAILING empty argument**, so "clear this association"
+  arrived as a no-arg call and only worked by the control's own `undefined`
+  handling. `castArgs` now pads a missing trailing argument when — and only
+  when — its declared kind is nullable, so the null is explicit. Every other
+  kind keeps the no-padding rule that makes `open()` a true no-arg call.
+- **The `api-snapshot` gate reported an appended OPTIONAL parameter as a rule-5
+  violation**, although rule 5 allows exactly that ("new optional
+  parameters"). It distinguishes an additive optional parameter from a real
+  signature change now — same clauses, nothing reordered, every appended
+  parameter optional or defaulted — and still requires recording it.
+
+**abap2UI5-linter**: the hand-maintained `GLOBAL_TARGETS` mirror gained the two
+new targets (without it a correct wire fails `view_gates` as "not an accepted
+global object"). `check-upstream` also parsed `word:` pairs out of `//`
+comments inside a methods block — the payload example `{ CODE: { digits: n } }`
+read as two methods — so it strips line comments before matching now.
+
+**ai-demokit**: six ports rebuilt, each sidecar deviation moved
+`IMPROVISED → NOTE`.
+
+- **049** (`sap.m.sample.StepInput`) is the structural one: 14 unrolled static
+  items became the sample's ONE bound `CustomListItem` template again, bound
+  with `omit_initial`, and the template property `valueState` — dropped because
+  no row sets it — is back. It also found the **open half** of its own request:
+  `omit_initial` is all-or-nothing per bind, and `abap_false` IS initial, so
+  the two boolean columns (`enabled`/`editable`) would be dropped and the
+  disabled/read-only rows would render editable. They carry the original's
+  literal in a string column plus an expression binding — the port's only
+  remaining binding-value deviation, and the reason
+  `pr/model-empty-vs-default` stays open for path scoping.
+- **138 / 267 / 269**: the width Sliders resize their container again through
+  `css`, roundtrip-free, with `${$parameters>/value} + '%'` as the argument —
+  the string-concat half of the "an event arg is a full UI5 expression"
+  capability, used here for the first time.
+- **263** clears `selectedSection` with an empty argument instead of naming the
+  first section; **289** announces its regenerated MessageStrip assertively;
+  **196** registers BGN4/WWWW so list five renders 4 and 5 decimals.
+
+**A premise died on the way, and it is recorded rather than dropped:**
+`table-set-sticky` claimed neither a bound array property nor a whitelist entry
+was a proven path. **App 009 binds `sticky` to an ABAP string table and is
+live-verified** — the bound path worked all along. The whitelist entry still
+closes a footgun (an imperative `setSticky` silently received a string through
+the generalized allowlist), but apps 022/235, which deleted the sticky Label +
+three CheckBoxes from their view, are plain REWORK against app 009's pattern,
+not gap victims. That is the second request in this repo's history whose
+premise did not survive contact with the source (after `urlhelper-abap-api`),
+which is why the harvest classifies unverified premises as PROBE and not GAP.
+
+**Pins are on feature branches** until the three PRs merge: `A2UI5_PIN`, a
+`"branch"` entry on the abap2UI5 dependency in all three abaplint configs
+(without it `_bind( omit_initial )` is a syntax error to ABAP_STANDARD/CLOUD/
+702) and the `@abap2ui5/linter` commit. All three MUST become main SHAs before
+merge — the rule STATUS.md already carries for the linter pin.
+
+App 049 carries a new `render_smoke` skip: its bound template binds the numeric
+StepInput properties over rows that deliberately do not set them, and UI5 logs
+"must be a number" — which the ORIGINAL sample produces just as well, since its
+own template binds `min='{min}'` over rows without a min. The skip goes when
+the render gate treats an absent numeric path as the control default.
+
 ## 2026-08-05 — IMPROVISED harvest: 136 improvisations classified, 6 framework requests filed
 
 No new port in this round. The corpus had **136 `IMPROVISED` deviations** and

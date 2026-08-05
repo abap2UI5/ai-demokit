@@ -16,8 +16,8 @@
       "what": "The named img> model ({img>/products/pic1}, from sap/ui/demo/mock/img.json) is resolved STATICALLY to the URL it points at (HT-7777-large.jpg, on the sdk.openui5.org host per the offline asset rule) - same fold and same reasoning as app 267: a pure display asset that never changes, but the live model indirection is gone."
     },
     {
-      "type": "IMPROVISED",
-      "what": "The Slider's liveChange attribute is dropped: handleSliderChange writes a percentage width straight onto the container's DOM node (byId('sideContentContainer').$().width(iValue + '%')). The container is a sap.m.Page, which has no width property to bind (apps 213/214 hit the same jQuery idiom on controls that DO have one). The Slider itself is kept 1:1 so the footer is complete, but moving it has no effect."
+      "type": "NOTE",
+      "what": "The Slider's liveChange is reproduced roundtrip-free since 2026-08-05: handleSliderChange writes a percentage width straight onto the container's DOM node, and that container is a sap.m.Page with no width property. The `css` control method (pr/control-inline-style) does the same write from the wire - _event_client( control_by_id, sideContentContainer / css / width / ${$parameters>/value} + '%' ). Apps 213/214 keep the bound-property path where the target control HAS a width."
     },
     {
       "type": "NOTE",

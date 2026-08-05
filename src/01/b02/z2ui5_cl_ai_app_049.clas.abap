@@ -3,16 +3,32 @@ CLASS z2ui5_cl_ai_app_049 DEFINITION PUBLIC.
   PUBLIC SECTION.
     INTERFACES z2ui5_if_app.
 
+    TYPES:
+      BEGIN OF ty_s_row,
+        label                 TYPE string,
+        value                 TYPE p LENGTH 9 DECIMALS 4,
+        min                   TYPE p LENGTH 9 DECIMALS 4,
+        max                   TYPE p LENGTH 9 DECIMALS 4,
+        step                  TYPE p LENGTH 9 DECIMALS 4,
+        largerstep            TYPE p LENGTH 9 DECIMALS 4,
+        displayvalueprecision TYPE i,
+        width                 TYPE string,
+        fieldwidth            TYPE string,
+        description           TYPE string,
+        textalign             TYPE string,
+        stepmode              TYPE string,
+        validationmode        TYPE string,
+        valuestate            TYPE string,
+        enabled               TYPE string,
+        editable              TYPE string,
+      END OF ty_s_row.
+    DATA modeldata TYPE STANDARD TABLE OF ty_s_row WITH EMPTY KEY.
+
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
 
     METHODS view_display.
-    METHODS render_item
-      IMPORTING
-        list          TYPE REF TO z2ui5_cl_ai_xml
-        label         TYPE string
-      RETURNING
-        VALUE(result) TYPE REF TO z2ui5_cl_ai_xml.
+    METHODS model_init.
 
   PRIVATE SECTION.
 ENDCLASS.
@@ -24,6 +40,7 @@ CLASS z2ui5_cl_ai_app_049 IMPLEMENTATION.
 
     me->client = client.
     IF client->check_on_init( ).
+      model_init( ).
       view_display( ).
     ENDIF.
 
@@ -34,158 +51,99 @@ CLASS z2ui5_cl_ai_app_049 IMPLEMENTATION.
 
     DATA(view) = z2ui5_cl_ai_xml=>factory( ).
 
-    DATA(list) = view->open( n = `View` ns = `mvc`
+    " one bound CustomListItem template over /modelData, like the original.
+    " It only works because the rows are bound with omit_initial: every row
+    " fills a DIFFERENT subset of the StepInput properties, and an initial ABAP
+    " field would otherwise arrive as `` and override the control's own default
+    " (an enum-typed property rejects it outright). The two boolean properties
+    " are the exception - see the sidecar: an explicit false cannot ride along,
+    " so they carry the original's literal and an expression binding converts it
+    view->open( n = `View` ns = `mvc`
             )->a( n = `xmlns`     v = `sap.m`
             )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
             )->open( `List`
-                )->a( n = `id` v = `idTable` ).
+                )->a( n = `id`    v = `idTable`
+                )->a( n = `items` v = client->_bind( val          = modeldata
+                                                     omit_initial = abap_true )
 
-    " the original's bound CustomListItem template (List items="{/modelData}") is
-    " unrolled into one static item per row - see the sidecar IMPROVISED deviation
-    render_item( list  = list
-                 label = `Step = 1 (default); value = 6, min = 5, max = 15, width = 120px`
-        )->leaf( `StepInput`
-            )->a( n = `value`  v = `6`
-            )->a( n = `min`    v = `5`
-            )->a( n = `max`    v = `15`
-            )->a( n = `width`  v = `120px`
-            )->a( n = `change` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Value changed to '{0}'` ) ( `${$parameters>/value}` ) ) ) ).
+                )->open( `CustomListItem`
+                    )->open( `HBox`
+                        )->a( n = `class`          v = `sapUiTinyMargin`
+                        )->a( n = `justifyContent` v = `SpaceBetween`
+                        )->a( n = `alignItems`     v = `Center`
 
-    render_item( list  = list
-                 label = `Step = 1 (default); value = 6, min = 5, max = 15, width = 120px, with validation on LiveChange`
-        )->leaf( `StepInput`
-            )->a( n = `value`          v = `6`
-            )->a( n = `min`            v = `5`
-            )->a( n = `max`            v = `15`
-            )->a( n = `width`          v = `120px`
-            )->a( n = `validationMode` v = `LiveChange`
-            )->a( n = `change`         v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Value changed to '{0}'` ) ( `${$parameters>/value}` ) ) ) ).
+                        )->open( `VBox`
+                            )->a( n = `class` v = `sapUiSmallMarginEnd`
 
-    render_item( list  = list
-                 label = `Step = 5, no value, no min, no max, width = 120px`
-        )->leaf( `StepInput`
-            )->a( n = `step`   v = `5`
-            )->a( n = `width`  v = `120px`
-            )->a( n = `change` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Value changed to '{0}'` ) ( `${$parameters>/value}` ) ) ) ).
+                            )->leaf( `Label`
+                                )->a( n = `text`     v = `{LABEL}`
+                                )->a( n = `wrapping` v = `true`
 
-    render_item( list  = list
-                 label = `Step = 5, no value, no min, no max, width = 120px, largerStep = 3`
-        )->leaf( `StepInput`
-            )->a( n = `step`       v = `5`
-            )->a( n = `width`      v = `120px`
-            )->a( n = `largerStep` v = `3`
-            )->a( n = `change`     v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Value changed to '{0}'` ) ( `${$parameters>/value}` ) ) ) ).
+                        )->shut(
+                        )->open( `VBox`
 
-    render_item( list  = list
-                 label = `Step = 1.1, no value, displayValuePrecision = 1, min = -6, max = 23.5, width = 120px`
-        )->leaf( `StepInput`
-            )->a( n = `step`                  v = `1.1`
-            )->a( n = `min`                   v = `-6`
-            )->a( n = `max`                   v = `23.5`
-            )->a( n = `width`                 v = `120px`
-            )->a( n = `displayValuePrecision` v = `1`
-            )->a( n = `change`                v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Value changed to '{0}'` ) ( `${$parameters>/value}` ) ) ) ).
-
-    render_item( list  = list
-                 label = `Disabled, value = 12.3, displayValuePrecision = 1, width = 120px`
-        )->leaf( `StepInput`
-            )->a( n = `value`                 v = `12.3`
-            )->a( n = `enabled`               v = `false`
-            )->a( n = `width`                 v = `120px`
-            )->a( n = `displayValuePrecision` v = `1`
-            )->a( n = `change`                v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Value changed to '{0}'` ) ( `${$parameters>/value}` ) ) ) ).
-
-    render_item( list  = list
-                 label = `Read only, value = 123, default width of 100%`
-        )->leaf( `StepInput`
-            )->a( n = `value`    v = `123`
-            )->a( n = `editable` v = `false`
-            )->a( n = `change`   v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Value changed to '{0}'` ) ( `${$parameters>/value}` ) ) ) ).
-
-    render_item( list  = list
-                 label = `Step = 0.05; value = 1.32, displayValuePrecision = 3, min = -5, max = 15`
-        )->leaf( `StepInput`
-            )->a( n = `value`                 v = `1.32`
-            )->a( n = `step`                  v = `0.05`
-            )->a( n = `min`                   v = `-5`
-            )->a( n = `max`                   v = `15`
-            )->a( n = `displayValuePrecision` v = `3`
-            )->a( n = `change`                v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Value changed to '{0}'` ) ( `${$parameters>/value}` ) ) ) ).
-
-    render_item( list  = list
-                 label = `Step = 1.05; value = 1.5675, displayValuePrecision = 2, no Min and Max`
-        )->leaf( `StepInput`
-            )->a( n = `value`                 v = `1.5675`
-            )->a( n = `step`                  v = `1.05`
-            )->a( n = `displayValuePrecision` v = `2`
-            )->a( n = `change`                v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Value changed to '{0}'` ) ( `${$parameters>/value}` ) ) ) ).
-
-    render_item( list  = list
-                 label = `Step = -1 (which becomes 1), value = 20, width = 120px`
-        )->leaf( `StepInput`
-            )->a( n = `value`  v = `20`
-            )->a( n = `step`   v = `-1`
-            )->a( n = `width`  v = `120px`
-            )->a( n = `change` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Value changed to '{0}'` ) ( `${$parameters>/value}` ) ) ) ).
-
-    render_item( list  = list
-                 label = `Step = 1 (default); value = 6, min = 5, max = 15, width = 240px, with added description and default fieldWidth 50%`
-        )->leaf( `StepInput`
-            )->a( n = `value`       v = `6`
-            )->a( n = `min`         v = `5`
-            )->a( n = `max`         v = `15`
-            )->a( n = `width`       v = `240px`
-            )->a( n = `description` v = `EUR`
-            )->a( n = `change`      v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Value changed to '{0}'` ) ( `${$parameters>/value}` ) ) ) ).
-
-    render_item( list  = list
-                 label = `Step = 1 (default); value = 160, with added description and fieldWidth set to 70%`
-        )->leaf( `StepInput`
-            )->a( n = `value`       v = `160`
-            )->a( n = `fieldWidth`  v = `70%`
-            )->a( n = `description` v = `EUR`
-            )->a( n = `change`      v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Value changed to '{0}'` ) ( `${$parameters>/value}` ) ) ) ).
-
-    render_item( list  = list
-                 label = `Step = 1 (default); value = 160, align:Center`
-        )->leaf( `StepInput`
-            )->a( n = `value`     v = `160`
-            )->a( n = `textAlign` v = `Center`
-            )->a( n = `change`    v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Value changed to '{0}'` ) ( `${$parameters>/value}` ) ) ) ).
-
-    render_item( list  = list
-                 label = `Step = 5, stepMode = Multiple, min = -40, max = 100, value = 10,`
-        )->leaf( `StepInput`
-            )->a( n = `value`    v = `10`
-            )->a( n = `step`     v = `5`
-            )->a( n = `max`      v = `100`
-            )->a( n = `min`      v = `-40`
-            )->a( n = `stepMode` v = `Multiple`
-            )->a( n = `change`   v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Value changed to '{0}'` ) ( `${$parameters>/value}` ) ) ) ).
+                            )->leaf( `StepInput`
+                                )->a( n = `value`                 v = `{VALUE}`
+                                )->a( n = `displayValuePrecision` v = `{DISPLAYVALUEPRECISION}`
+                                )->a( n = `min`                   v = `{MIN}`
+                                )->a( n = `max`                   v = `{MAX}`
+                                )->a( n = `width`                 v = `{WIDTH}`
+                                )->a( n = `step`                  v = `{STEP}`
+                                )->a( n = `largerStep`            v = `{LARGERSTEP}`
+                                )->a( n = `stepMode`              v = `{STEPMODE}`
+                                )->a( n = `valueState`            v = `{VALUESTATE}`
+                                )->a( n = `enabled`               v = `{= ${ENABLED} !== 'false' }`
+                                )->a( n = `editable`              v = `{= ${EDITABLE} !== 'false' }`
+                                )->a( n = `description`           v = `{DESCRIPTION}`
+                                )->a( n = `fieldWidth`            v = `{FIELDWIDTH}`
+                                )->a( n = `textAlign`             v = `{TEXTALIGN}`
+                                )->a( n = `validationMode`        v = `{VALIDATIONMODE}`
+                                )->a( n = `change`                v = client->_event_client( val   = client->cs_event-control_global
+                                                                                             t_arg = VALUE #( ( `MESSAGE_TOAST` )
+                                                                                                              ( `show` )
+                                                                                                              ( `Value changed to '{0}'` )
+                                                                                                              ( `${$parameters>/value}` ) ) ) ).
 
     client->view_display( view->stringify( ) ).
 
   ENDMETHOD.
 
 
-  METHOD render_item.
+  METHOD model_init.
 
-    result = list->open( `CustomListItem`
-        )->open( `HBox`
-            )->a( n = `class`          v = `sapUiTinyMargin`
-            )->a( n = `justifyContent` v = `SpaceBetween`
-            )->a( n = `alignItems`     v = `Center`
-
-            )->open( `VBox`
-                )->a( n = `class` v = `sapUiSmallMarginEnd`
-
-                )->leaf( `Label`
-                    )->a( n = `text`     v = label
-                    )->a( n = `wrapping` v = `true`
-
-            )->shut(
-            )->open( `VBox` ).
+    " the controller's aData, row for row - a property a row does not set stays
+    " INITIAL here and omit_initial keeps it out of the model, so the StepInput
+    " falls back to its own default exactly as in the original
+    modeldata = VALUE #(
+        ( label = `Step = 1 (default); value = 6, min = 5, max = 15, width = 120px`
+          value = 6 min = 5 max = 15 width = `120px` )
+        ( label = `Step = 1 (default); value = 6, min = 5, max = 15, width = 120px, with validation on LiveChange`
+          value = 6 min = 5 max = 15 width = `120px` validationmode = `LiveChange` )
+        ( label = `Step = 5, no value, no min, no max, width = 120px`
+          step = 5 width = `120px` )
+        ( label = `Step = 5, no value, no min, no max, width = 120px, largerStep = 3`
+          step = 5 width = `120px` largerstep = 3 )
+        ( label = `Step = 1.1, no value, displayValuePrecision = 1, min = -6, max = 23.5, width = 120px`
+          step = '1.1' min = -6 max = '23.5' width = `120px` displayvalueprecision = 1 )
+        ( label = `Disabled, value = 12.3, displayValuePrecision = 1, width = 120px`
+          value = '12.3' enabled = `false` width = `120px` displayvalueprecision = 1 )
+        ( label = `Read only, value = 123, default width of 100%`
+          editable = `false` value = 123 )
+        ( label = `Step = 0.05; value = 1.32, displayValuePrecision = 3, min = -5, max = 15`
+          value = '1.32' step = '0.05' min = -5 max = 15 displayvalueprecision = 3 )
+        ( label = `Step = 1.05; value = 1.5675, displayValuePrecision = 2, no Min and Max`
+          value = '1.5675' step = '1.05' displayvalueprecision = 2 )
+        ( label = `Step = -1 (which becomes 1), value = 20, width = 120px`
+          value = 20 step = -1 width = `120px` )
+        ( label = `Step = 1 (default); value = 6, min = 5, max = 15, width = 240px, with added description and default fieldWidth 50%`
+          value = 6 min = 5 max = 15 width = `240px` description = `EUR` )
+        ( label = `Step = 1 (default); value = 160, with added description and fieldWidth set to 70%`
+          value = 160 fieldwidth = `70%` description = `EUR` )
+        ( label = `Step = 1 (default); value = 160, align:Center`
+          value = 160 textalign = `Center` )
+        ( label = `Step = 5, stepMode = Multiple, min = -40, max = 100, value = 10,`
+          value = 10 step = 5 max = 100 min = -40 stepmode = `Multiple` ) ).
 
   ENDMETHOD.
 

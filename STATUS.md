@@ -17,9 +17,9 @@ TRAINING.md; for what abap2UI5 can express see CAPABILITIES.md._
 |---|---|
 | Ports | **293** sidecars in `meta/` (src/01: 177 · src/02: 67 · src/03: 19 · src/04: 19 · src/05: 11) |
 | Status ladder | 86 `generated` · 146 `reviewed` · 61 `checked` (live-verified) |
-| Deviations | 4 DROPPED_171 · 136 IMPROVISED · 477 NOTE · 121 POST_171 |
+| Deviations | 4 DROPPED_171 · 130 IMPROVISED · 483 NOTE · 121 POST_171 |
 | Open LIVE_TESTs | **0 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
-| Declared gate skips | 6 structural-diff · 2 render-smoke (each re-verified per run — a stale skip FAILS) |
+| Declared gate skips | 6 structural-diff · 3 render-smoke (each re-verified per run — a stale skip FAILS) |
 | Out-of-scope ported samples | `z2ui5_cl_ai_app_121 (sap.m.sample.UploadSet — deprecated)` · `z2ui5_cl_ai_app_136 (sap.f.sample.SidePanelSingle — control @since 1.107)` · `z2ui5_cl_ai_app_141 (sap.ui.core.sample.InvisibleMessage — control @since 1.78)` · `z2ui5_cl_ai_app_165 (sap.f.sample.ProductSwitchNavigation — control @since 1.72)` · `z2ui5_cl_ai_app_203 (sap.m.sample.OverflowToolbarTokenizer — control @since 1.139)` — all decided KEEP permanently 2026-07-30 (per-app rationale in ui5/scope-exceptions.json, revertible); the source-backed scope gate stays hard for NEW undecided entries |
 
 _Coverage per library (ported / in scope) is generated into the [README](README.md#coverage); one row per sample in [api.md](api.md)._
@@ -28,7 +28,7 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
 
 ## Open findings (backlog)
 
-- [ ] **IMPROVISED harvest — 6 framework requests filed, 6 probes owed**
+- [ ] **IMPROVISED harvest — 5 of 6 requests implemented, 6 probes owed**
   (2026-08-05). The repo's purpose is to expose framework gaps, but the gaps
   were sitting in 136 `IMPROVISED` sidecar texts while `pr/` held exactly one
   open request. All 136 are now classified — repeatably, by
@@ -38,7 +38,7 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
 
   | Verdict | # | Meaning |
   |---|---:|---|
-  | GAP | 15 | a framework gap — now filed under `pr/` (6 requests) |
+  | GAP | 15 | a framework gap — 6 requests filed, **5 implemented upstream the same day** |
   | PROBE | 16 | a *suspected* gap whose premise is unverified — measure before filing |
   | REWORK | 16 | expressible today; the port under-delivers (review backlog) |
   | BOUNDARY | 16 | outside abap2UI5 by nature (client-only APIs, sample-local JS) |
@@ -50,25 +50,54 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   arguably `NOTE`s rather than `IMPROVISED`. Retyping them is a separate
   change (gate declarations match on deviation text) and is **not** done here.
 
-  Filed: [`model-empty-vs-default`](pr/model-empty-vs-default/) ·
-  [`control-inline-style`](pr/control-inline-style/) ·
-  [`table-set-sticky`](pr/table-set-sticky/) ·
-  [`control-method-null-arg`](pr/control-method-null-arg/) ·
-  [`invisible-message-announce`](pr/invisible-message-announce/) ·
-  [`custom-currency-formatting`](pr/custom-currency-formatting/).
+  **Implemented upstream + consumed by the corpus** (details in the
+  `pr/README.md` Implemented table; each port's sidecar deviation moved from
+  `IMPROVISED` to `NOTE`): `_bind( omit_initial )` → app **049** is the
+  sample's one bound template again instead of 14 unrolled items ·
+  `CONTROL_METHODS css` → apps **138/267/269** resize their `sap.m.Page`
+  container from the Slider again · `controlIdOrNull` → app **263** clears the
+  association instead of naming the first section · `INVISIBLE_MESSAGE` → app
+  **289** announces its regenerated strip · `FORMATTING` → app **196** renders
+  its two custom currencies with 4 and 5 decimals · `setSticky` is whitelisted
+  but see the correction below.
+
+  **Two premises did not survive contact with the code, and both are recorded
+  rather than quietly dropped:**
+  - `table-set-sticky` claimed the bound-array path was unproven. **App 009
+    binds `sticky` to an ABAP string table and is live-verified**, so it was
+    proven all along. The whitelist entry still closes a footgun (an imperative
+    `setSticky` silently received a string), but apps **022/235** — which
+    deleted the sticky Label + three CheckBoxes from their view — are plain
+    REWORK against app 009's pattern, not gap victims. Open, in the rework
+    backlog below.
+  - `model-empty-vs-default` is only **half** closed. `omit_initial` is
+    all-or-nothing per bind, and a boolean that must send `false` cannot live
+    with that (`abap_false` IS initial, so the filter drops it and the control
+    falls back to its default `true`). App 049 carries its two boolean columns
+    as strings + an expression binding — its only remaining binding-value
+    deviation. The path-scoped half stays open in `pr/model-empty-vs-default`.
+
+  **Both pins are on feature branches and MUST become main SHAs before this
+  change is merged** (same rule the linter pin already carries): `A2UI5_PIN`
+  points at the abap2UI5 branch commit, the three abaplint configs carry a
+  `"branch"` on the abap2UI5 dependency (without it `_bind( omit_initial )` is
+  a syntax error to ABAP_STANDARD/CLOUD/702), and `@abap2ui5/linter` is pinned
+  at the commit that mirrors the two new global targets.
 
   **The 6 PROBE families are the open work** — each is a plausible gap that a
   measurement could refute, and this repo's rule is that a request is filed on
   evidence, not on a rationale (cf. the withdrawn `urlhelper-abap-api`, whose
-  premise was simply wrong). In descending value:
+  premise was simply wrong — and now `table-set-sticky`, whose premise was half
+  wrong). In descending value:
   - `event-value-unreachable` (7 deviations, apps 109/139/151/177/186/220/228):
     the value the original reads sits in an **array or a control reference** on
     the event — `getSelectedDates()[0].getStartDate()`, an array of `DateRange`
     controls, `oldSizes`/`newSizes`, a `getMetadata().getName()` branch. But an
     event arg is a **full UI5 expression** (`EventHandlerResolver` →
     `BindingParser.parseExpression`, the capability `pr/menu-item-selected-path`
-    established), so indexed access and a ternary may already work. Probe it
-    with app 220 (`sap.ui.unified.Calendar`): wire
+    established, and the `css` wires of 138/267/269 now use its string-concat
+    half), so indexed access and a ternary may already work. Probe it with app
+    220 (`sap.ui.unified.Calendar`): wire
     `$event.oSource.getSelectedDates()[0].getStartDate()` and see whether the
     picked day arrives. Four calendar ports (139/151/177/220) currently show
     the **server date** instead of the clicked one — the largest single
@@ -85,10 +114,19 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
     `shortcut-scope` (1, app 232): one port each, each already named as an
     open idea in its own sidecar. File only if a second sample needs them.
 
-  **REWORK** adds two entries to the review backlog below that were not in it:
-  app 166 (semantic action toasts + the missing `Messaging.addMessages` seed,
-  expressible via `cc.MessageManager`) and app 233 (a compound `binding_call`
-  OR-filter and `open(searchValue)` both shipped, both unused).
+  **REWORK** adds three entries to the review backlog below that were not in
+  it: app 166 (semantic action toasts + the missing `Messaging.addMessages`
+  seed, expressible via `cc.MessageManager`), app 233 (a compound
+  `binding_call` OR-filter and `open(searchValue)` both shipped, both unused)
+  and apps 022/235 (the sticky controls, per the correction above).
+
+  One gate consequence to re-check later: app 049 now declares a
+  `render_smoke` skip. Its bound template binds the numeric StepInput
+  properties over rows that deliberately do not set them, and UI5 logs
+  "must be a number" for such a row — which the **original sample** produces
+  just as well (its own template binds `min='{min}'` over rows without a min).
+  The skip goes when the render gate learns to treat an absent numeric path as
+  the control default.
 
 - [x] **Metadata snapshot: both follow-ups done** (closed 2026-08-02).
   `ui5/properties.json` is now the output of the **linter's**

@@ -2195,13 +2195,14 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` the original randomizes: sType = aTypes[Math.round(Math.random() * 3)] and both flags from Math.round(Math.random()). Deciding is backend work, so the choice moves to ABAP - and it is made` &&
                ` DETERMINISTIC there: a press counter rotates the type through Information/Warning/Error/Success and the two flags through their combinations, so every press still changes the strip but the port is` &&
                ` reproducible (the corpus rule for random/current-date values, apps 164/181). MessageStrip.type carries the control's own default Information until the first press, because an empty string is rejected`.
-    lv_text1 = lv_text1 && ` on an enum property. // IMPROVISED: the accessibility announcement is dropped: onInit takes an sap.ui.core.InvisibleMessage instance and _generateMsgStrip calls announce('New Information Bar of type` &&
-               ` ...', Assertive) on it. InvisibleMessage is a JS singleton, not a control in the view, so no wire addresses it - CONTROL_BY_ID needs an id and CONTROL_GLOBAL a whitelisted global object. App 141` &&
-               ` (sap.ui.core.sample.InvisibleMessage) covers the control-based announcement idiom instead.`.
+    lv_text1 = lv_text1 && ` on an enum property. // NOTE: the accessibility announcement is reproduced since 2026-08-05: onInit takes an sap.ui.core.InvisibleMessage instance and _generateMsgStrip calls announce('New` &&
+               ` Information Bar of type ...', Assertive) on it. InvisibleMessage is a JS singleton, not a control in the view, so no CONTROL_BY_ID wire can address it - the INVISIBLE_MESSAGE global target added for` &&
+               ` exactly that (pr/invisible-message-announce) carries the announcement instead: follow_up_action( control_global, INVISIBLE_MESSAGE / announce / <text> / Assertive ) right after the model update, with` &&
+               ` the same text the original composes. It is lazy-required, so a runtime older than UI5 1.78 logs 'not available' instead of failing the app.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.MessageStrip`                    name = `DynamicMessageStripGenerator`        class = `z2ui5_cl_ai_app_289` path = `src/01/b22/z2ui5_cl_ai_app_289.clas.abap`
         score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.30`
         notes = lv_text1 ) ).
 
@@ -3036,12 +3037,15 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         notes = `POST-1.71: sap.m.StandardListItem infoStateInverted (since 1.74) is kept 1:1 from the original view; needs a UI5 release >= 1.74 to render.`
         post171 = `sap.m.StandardListItem infoStateInverted (since 1.74) is kept 1:1 from the original view; needs a UI5 release >= 1.74 to render.` ) ).
 
-    lv_text1 = `IMPROVISED: the sample binds a List to the JSON model /modelData and renders one templated CustomListItem per row. The rows are unrolled into static list items here because every row sets a different` &&
-               ` subset of the StepInput properties - an empty ABAP model field would bind as "" instead of leaving the property at its default, so a bound template would not render 1:1. Template properties no row` &&
-               ` ever sets (valueState) are dropped with it. // NOTE: the change toast was switched to a roundtrip-free client-composed toast on 2026-07-22 (control_global MESSAGE_TOAST.show, template ``Value changed` &&
-               ` to '{0}'`` with get_t_arg single-quote escaping; on_event dropped, init-only) - re-verify changing a StepInput toasts "Value changed to '<value>'" with the quotes intact. **e2e-verified 2026-07-30**` &&
-               ` (transpiled-framework interaction, scripts/e2e-smoke.mjs): ArrowUp + Enter on the first StepInput fires change and toasts "Value changed to '<value>'" with the quotes intact; the other StepInputs are` &&
-               ` the identical wire.`.
+    lv_text1 = `IMPROVISED: the sample binds a List to the JSON model /modelData and renders one templated CustomListItem per row. **Rebuilt as that ONE bound template on 2026-08-05** (it used to be 14 unrolled` &&
+               ` static items): the rows are bound with client->_bind( val = modeldata omit_initial = abap_true ), the parameter added upstream for exactly this shape (pr/model-empty-vs-default), so a property a row` &&
+               ` does not set stays ABSENT from the model and the StepInput keeps its own default instead of receiving ````. The dropped template property valueState is back as well. Residual: the two BOOLEAN` &&
+               ` properties cannot ride along - an explicit false is itself initial in ABAP, so omit_initial would drop it and the disabled/read-only rows would render enabled. They carry the original's literal in a` &&
+               ` string field and an expression binding converts it (enabled='{= ${ENABLED} !== \'false\' }', editable likewise), which is the only place the port's binding value differs from the original's` &&
+               ` {enabled}/{editable}. A path-scoped omit_initial would close that too - the open half of pr/model-empty-vs-default. // NOTE: the change toast was switched to a roundtrip-free client-composed toast on`.
+    lv_text1 = lv_text1 && ` 2026-07-22 (control_global MESSAGE_TOAST.show, template ``Value changed to '{0}'`` with get_t_arg single-quote escaping; on_event dropped, init-only) - re-verify changing a StepInput toasts "Value` &&
+               ` changed to '<value>'" with the quotes intact. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): ArrowUp + Enter on the first StepInput fires change and toasts` &&
+               ` "Value changed to '<value>'" with the quotes intact; the other StepInputs are the identical wire.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.StepInput`                       name = `StepInput`                           class = `z2ui5_cl_ai_app_049` path = `src/01/b02/z2ui5_cl_ai_app_049.clas.abap`
         score = 4
@@ -4004,54 +4008,56 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` ${$parameters>/currentBreakpoint}) and on_event enables the Toggle button exactly when it is 'S' - what _updateToggleButtonState does; the port therefore adds an enabled attribute to the Toggle` &&
                ` Button, which the original sets from the controller. (b) handleToggleClick calls DynamicSideContent.toggle( ); the port binds showSideContent (the property that setter writes, default true) and flips` &&
                ` it in on_event, so the press has an effect. Both were dead wires before this rework - BP_CHANGED and TOGGLE fired round-trips this class never dispatched (pattern-lint dead-event-wire). The original` &&
-               ` also calls _updateToggleButtonState once in onAfterRendering; abap2UI5 has no equivalent hook, so the button starts disabled and takes its state from the first breakpointChanged event. // IMPROVISED:`.
-    lv_text1 = lv_text1 && ` The width Slider loses its liveChange. The original's handleSliderChange resizes the containing Page through jQuery - this.byId('sideContentContainer').$().width(iValue + '%') - i.e. it writes a CSS` &&
-               ` width straight onto the rendered DOM node. sap.m.Page has no width property, so there is nothing to bind and no whitelisted control method to call: the expression-binding rebuild used for the same` &&
-               ` slider idiom elsewhere (apps 053/146, where the target is a Toolbar/Panel width property) does not apply here. The Slider stays in the view with its value="100" literal and no longer fires a SLIDER` &&
-               ` backend event no branch handled; dragging it now does nothing. // NOTE: The hint Text.visible is bound to a boolean model field (initial true); the original used a literal visible='getVisible()' (a` &&
-               ` sample quirk) toggled per Device.system.phone in onBeforeRendering. The two long body texts are shortened representative Lorem (not gate-compared, static).`.
+               ` also calls _updateToggleButtonState once in onAfterRendering; abap2UI5 has no equivalent hook, so the button starts disabled and takes its state from the first breakpointChanged event. // NOTE: The` &&
+               ` width Slider's liveChange is reproduced roundtrip-free since 2026-08-05. The original's handleSliderChange resizes the containing Page through jQuery -`.
+    lv_text1 = lv_text1 && ` this.byId('sideContentContainer').$().width(iValue + '%') - i.e. it writes a CSS width straight onto the rendered DOM node, and sap.m.Page has no width property to bind. The ``css`` control method` &&
+               ` added upstream for this class of gap (pr/control-inline-style) does the same write from the wire: _event_client( control_by_id, sideContentContainer / css / width / ${$parameters>/value} + '%' ), the` &&
+               ` arg being a full UI5 expression (CAPABILITIES). The Slider keeps its value='100' literal and now resizes the page again. // NOTE: The hint Text.visible is bound to a boolean model field (initial` &&
+               ` true); the original used a literal visible='getVisible()' (a sample quirk) toggled per Device.system.phone in onBeforeRendering. The two long body texts are shortened representative Lorem (not` &&
+               ` gate-compared, static).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.DynamicSideContent`      name = `DynamicSideContent`                  class = `z2ui5_cl_ai_app_138` path = `src/02/b05/z2ui5_cl_ai_app_138.clas.abap`
-        score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.30`
         notes = lv_text1 ) ).
 
     lv_text1 = `IMPROVISED: The named img> model ({img>/products/pic1} and {img>/products/pic3}, loaded from sap/ui/demo/mock/img.json) is resolved STATICALLY to the two image URLs it points at (HT-7777-large.jpg for` &&
                ` the main content, HT-6100-large.jpg for the side content, on the sdk.openui5.org host per the offline asset rule). abap2UI5 serves one default model and these are pure display assets that never` &&
-               ` change, so a lossy-by-definition static fold (app 006 precedent) rather than a NOTE-worthy prefix drop - the live model indirection is gone. // IMPROVISED: The Slider's liveChange attribute is` &&
-               ` dropped: handleSliderChange resizes the DynamicSideContent's container by writing a percentage width straight onto its DOM node (byId('sideContentContainer').$().width(iValue + '%')). The container` &&
-               ` is a sap.m.Page, which has no width property to bind, so there is nothing to two-way bind the slider value to (apps 213/214 hit the same jQuery-width idiom on controls that DO have a width, and bound` &&
-               ` it there). The Slider is kept 1:1 with its value='100' so the sample's footer is complete, but moving it has no effect. // NOTE: **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction,`.
-    lv_text1 = lv_text1 && ` transpiled backend + real browser): shrinking the viewport into the S range makes the DynamicSideContent fire breakpointChanged, the round-trip transports 'S' and the footer Toggle button becomes` &&
-               ` enabled through the two-way bound flag - the whole _updateToggleButtonState wire. The main/side content render side by side beforehand. Residual (nothing headless can assert): that toggle() then` &&
-               ` really swaps main and side content visually, and the Slider's device-model visible flag on a real phone.`.
+               ` change, so a lossy-by-definition static fold (app 006 precedent) rather than a NOTE-worthy prefix drop - the live model indirection is gone. // NOTE: The Slider's liveChange is reproduced` &&
+               ` roundtrip-free since 2026-08-05: handleSliderChange resizes the DynamicSideContent's container by writing a percentage width onto its DOM node (byId('sideContentContainer').$().width(iValue + '%')),` &&
+               ` and the container is a sap.m.Page, which has no width property. The ``css`` control method (pr/control-inline-style) performs that write from the wire - _event_client( control_by_id,` &&
+               ` sideContentContainer / css / width / ${$parameters>/value} + '%' ) - so the drag has its original effect; apps 213/214 keep the bound-property path where the target HAS a width. // NOTE:`.
+    lv_text1 = lv_text1 && ` **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): shrinking the viewport into the S range makes the DynamicSideContent fire breakpointChanged, the` &&
+               ` round-trip transports 'S' and the footer Toggle button becomes enabled through the two-way bound flag - the whole _updateToggleButtonState wire. The main/side content render side by side beforehand.` &&
+               ` Residual (nothing headless can assert): that toggle() then really swaps main and side content visually, and the Slider's device-model visible flag on a real phone.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.DynamicSideContent`      name = `DynamicSideContentEqualSplit`        class = `z2ui5_cl_ai_app_267` path = `src/02/b14/z2ui5_cl_ai_app_267.clas.abap`
-        score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.30`
         notes = lv_text1 ) ).
 
     lv_text1 = `IMPROVISED: The named img> model ({img>/products/pic1}, from sap/ui/demo/mock/img.json) is resolved STATICALLY to the URL it points at (HT-7777-large.jpg, on the sdk.openui5.org host per the offline` &&
-               ` asset rule) - same fold and same reasoning as app 267: a pure display asset that never changes, but the live model indirection is gone. // IMPROVISED: The Slider's liveChange attribute is dropped:` &&
-               ` handleSliderChange writes a percentage width straight onto the container's DOM node (byId('sideContentContainer').$().width(iValue + '%')). The container is a sap.m.Page, which has no width property` &&
-               ` to bind (apps 213/214 hit the same jQuery idiom on controls that DO have one). The Slider itself is kept 1:1 so the footer is complete, but moving it has no effect. // NOTE: The controller's media` &&
-               ` model (new JSONModel(Device.system)) is abap2UI5's shared device> model, so every {media>/phone} binding becomes {= !${device>/system/phone}} on the same data - the Close button, the Slider and the` &&
-               ` width hint Text keep their original visibility rules. A device-branch fold onto the framework's own model, no loss. // NOTE: handleSideContentHide / handleSideContentShow call`.
-    lv_text1 = lv_text1 && ` oDSC.setShowSideContent(false/true) in the original. DynamicSideContent.showSideContent is a bindable property, so the port binds it two-way and only flips the flag server-side (added attribute, no` &&
-               ` structural diff) - the prefer-a-bindable-property rule, now gated by the linter rule settable-property-via-action. The state then survives a view rebuild, and the control's own toggle( ) - the Toggle` &&
-               ` button's client-side wire, kept as it is - writes back into the model instead of drifting from it. // IMPROVISED: updateShowSideContentButtonVisibility is reproduced only by its breakpoint half. The` &&
-               ` original computes !(breakpoint === 'S' || oDSC.isSideContentVisible()), i.e. it also hides the 'Open Side Content' button whenever the side content happens to be visible; isSideContentVisible() is` &&
-               ` client state the backend cannot read. The port keeps the button's visibility bound to the breakpoint (visible unless 'S') and flips the same flag in the two press handlers (hide -> button shows, show` &&
-               ` -> button hides), which matches the original in every path the sample offers - but a side-content visibility change caused by anything else (e.g. the Toggle button) does not update it. // NOTE:`.
-    lv_text1 = lv_text1 && ` **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the feed list renders all four feed.json rows, the side content's Close button hides the side` &&
-               ` content through the SIDE_CONTENT_HIDE follow-up action (setShowSideContent false), the Open Side Content button then shows (its visible flag comes from the breakpointChanged round-trip) and brings it` &&
-               ` back through SIDE_CONTENT_SHOW. Residual (nothing headless can assert): the FeedListItem layout with its remote author pictures, and toggle() on a real S-breakpoint device.`.
+               ` asset rule) - same fold and same reasoning as app 267: a pure display asset that never changes, but the live model indirection is gone. // NOTE: The Slider's liveChange is reproduced roundtrip-free` &&
+               ` since 2026-08-05: handleSliderChange writes a percentage width straight onto the container's DOM node, and that container is a sap.m.Page with no width property. The ``css`` control method` &&
+               ` (pr/control-inline-style) does the same write from the wire - _event_client( control_by_id, sideContentContainer / css / width / ${$parameters>/value} + '%' ). Apps 213/214 keep the bound-property` &&
+               ` path where the target control HAS a width. // NOTE: The controller's media model (new JSONModel(Device.system)) is abap2UI5's shared device> model, so every {media>/phone} binding becomes {=` &&
+               ` !${device>/system/phone}} on the same data - the Close button, the Slider and the width hint Text keep their original visibility rules. A device-branch fold onto the framework's own model, no loss.`.
+    lv_text1 = lv_text1 && ` // NOTE: handleSideContentHide / handleSideContentShow call oDSC.setShowSideContent(false/true) in the original. DynamicSideContent.showSideContent is a bindable property, so the port binds it` &&
+               ` two-way and only flips the flag server-side (added attribute, no structural diff) - the prefer-a-bindable-property rule, now gated by the linter rule settable-property-via-action. The state then` &&
+               ` survives a view rebuild, and the control's own toggle( ) - the Toggle button's client-side wire, kept as it is - writes back into the model instead of drifting from it. // IMPROVISED:` &&
+               ` updateShowSideContentButtonVisibility is reproduced only by its breakpoint half. The original computes !(breakpoint === 'S' || oDSC.isSideContentVisible()), i.e. it also hides the 'Open Side Content'` &&
+               ` button whenever the side content happens to be visible; isSideContentVisible() is client state the backend cannot read. The port keeps the button's visibility bound to the breakpoint (visible unless` &&
+               ` 'S') and flips the same flag in the two press handlers (hide -> button shows, show -> button hides), which matches the original in every path the sample offers - but a side-content visibility change`.
+    lv_text1 = lv_text1 && ` caused by anything else (e.g. the Toggle button) does not update it. // NOTE: **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the feed list renders` &&
+               ` all four feed.json rows, the side content's Close button hides the side content through the SIDE_CONTENT_HIDE follow-up action (setShowSideContent false), the Open Side Content button then shows (its` &&
+               ` visible flag comes from the breakpointChanged round-trip) and brings it back through SIDE_CONTENT_SHOW. Residual (nothing headless can assert): the FeedListItem layout with its remote author` &&
+               ` pictures, and toggle() on a real S-breakpoint device.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.DynamicSideContent`      name = `DynamicSideContentProduct`           class = `z2ui5_cl_ai_app_269` path = `src/02/b14/z2ui5_cl_ai_app_269.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.30`
         notes = lv_text1 ) ).
 
@@ -4395,17 +4401,18 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         since = `1.48.0`
         notes = lv_text1 ) ).
 
-    lv_text1 = `IMPROVISED: The controller calls Formatting.setCustomCurrencies({BGN4:{digits:4}, WWWW:{digits:5}}) to register two custom currencies used by list five (customCurrencyDataModel). This is a global` &&
-               ` frontend i18n formatting config, not a control and not expressible in the thin abap2UI5 frontend; ported without it, so the BGN4/WWWW currencies in list five render with UI5's default digit count` &&
-               ` instead of 4/5 digits. // NOTE: The various/nonDecimal arrays back the u:Currency value property (float) as ABAP packed fields, matching the sample's JSON numbers; the bigNumber array (JSON strings)` &&
-               ` and the customCurrency array (JSON numbers bound to the string property stringValue, so UI5 coerces them) are ABAP string fields keeping the exact literals (123.45676 has 5 decimals). listSix binds` &&
-               ` the numeric variousNumberDataModel/price to stringValue (number coerced to string, as in the original). **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real` &&
-               ` browser): the serialized model reaches the controls: the lists render, the u:Currency controls come up and their currencies (EUR, JPY) are on screen. Residual: the exact digit formatting per list`.
-    lv_text1 = lv_text1 && ` (maxPrecision, the custom BGN4/WWWW digits), which is the browser's locale formatting rather than the port's data.`.
+    lv_text1 = `NOTE: The controller's Formatting.setCustomCurrencies({BGN4:{digits:4}, WWWW:{digits:5}}) is reproduced 1:1 since 2026-08-05: a follow_up_action( cs_event-control_global,` &&
+               ` FORMATTING/setCustomCurrencies ) carries the same JSON payload, so list five renders BGN4 with 4 and WWWW with 5 decimals like the original. The FORMATTING global target was added upstream for` &&
+               ` exactly this gap (pr/custom-currency-formatting); it is lazy-required, so a runtime older than UI5 1.120 logs 'not available' instead of failing the app. // NOTE: The various/nonDecimal arrays back` &&
+               ` the u:Currency value property (float) as ABAP packed fields, matching the sample's JSON numbers; the bigNumber array (JSON strings) and the customCurrency array (JSON numbers bound to the string` &&
+               ` property stringValue, so UI5 coerces them) are ABAP string fields keeping the exact literals (123.45676 has 5 decimals). listSix binds the numeric variousNumberDataModel/price to stringValue (number` &&
+               ` coerced to string, as in the original). **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the serialized model reaches the controls: the lists`.
+    lv_text1 = lv_text1 && ` render, the u:Currency controls come up and their currencies (EUR, JPY) are on screen. Residual: the exact digit formatting per list (maxPrecision, the custom BGN4/WWWW digits), which is the` &&
+               ` browser's locale formatting rather than the port's data.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.Currency`               name = `Currency`                            class = `z2ui5_cl_ai_app_196` path = `src/02/b10/z2ui5_cl_ai_app_196.clas.abap`
         score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.21.1`
         notes = lv_text1 ) ).
 
@@ -4654,22 +4661,23 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` only the Collapsed view (employees 1-2) is inlined - the Expanded view with employees 3-6 and the more/less toggle are lost. // NOTE: The ModelMapping elements in this sample name` &&
                ` externalModelName='data' while the controller registers the JSONModel as 'ObjectPageModel' - upstream those block labels therefore resolve to nothing. The port seeds the evidently intended` &&
                ` SharedJSONData/HRData.json /Employee rows (Michael Adams / Scrum Master, John Miller / Product Owner, Richard Wilson / Ux Designer, Julie Armstrong / Quality Engineer, Denise Smith / Team Member,` &&
-               ` Richard Adams / Team Member) and the person.png picture, i.e. it renders the data the sample means rather than the empty labels the name mismatch produces. // IMPROVISED: onNavigate's`.
-    lv_text1 = lv_text1 && ` setSelectedSection(null): sap.uxap.ObjectPageLayout.selectedSection is an ASSOCIATION, so it cannot be data-bound - the reset must go through the frontend action. An empty/null association argument` &&
-               ` is not transportable through control_by_id either, so the NAVIGATE round-trip (the NavContainer's navigate event, transporting ${$parameters>/toId}) issues follow_up_action( control_by_id,` &&
-               ` ObjectPageLayout / setSelectedSection / 'goals' ) - the id of the first section, which is exactly what UI5's own _adjustSelectedSectionByUXRules falls back to when the association is empty. The` &&
-               ` checkbox that guards the reset is two-way bound ({/RESET_CHECK}, seeded true like the original selected='true'), so the backend can read it without touching the DOM. // POST-1.71: sap.m.Avatar is a` &&
-               ` control @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar and the headerContent avatar (displaySize='L'). Needs a UI5 runtime >=` &&
-               ` 1.73. // NOTE: The page navigation is roundtrip-free _event_client( control_by_id, navigationContainer / to / page1|page2 ) - the client-side equivalent of the controller's _navTo`.
-    lv_text1 = lv_text1 && ` (oNavContainer.to(oPage)); 'to' is whitelisted in CONTROL_METHODS. Neither the navigation, the NAVIGATE round-trip nor the setSelectedSection follow-up was verified in a running system.` &&
-               ` **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the 'To ObjectPage' list item navigates to page 2 (NavContainer.to via _event_client control_by_id,` &&
-               ` ObjectPage with 'Denise Smith' renders) and the nav-back button returns to page 1. Residual: the setSelectedSection reset itself (NAVIGATE round-trip with the checkbox ticked) is not asserted - the` &&
-               ` page has no icon tab bar, so the selected section has no stable DOM marker. // NOTE: The Avatar / Image src values point at the sdk.openui5.org host (imageID_275314.png, linkedin.png, Twitter.png,` &&
-               ` person.png) per the offline asset-URL rule; the original and HRData.json use the relative ./test-resources path.`.
+               ` Richard Adams / Team Member) and the person.png picture, i.e. it renders the data the sample means rather than the empty labels the name mismatch produces. // NOTE: onNavigate's`.
+    lv_text1 = lv_text1 && ` setSelectedSection(null): sap.uxap.ObjectPageLayout.selectedSection is an ASSOCIATION, so it cannot be data-bound and the reset must go through the frontend action. Since 2026-08-05 an EMPTY argument` &&
+               ` reaches the setter as null (the controlIdOrNull argument kind, pr/control-method-null-arg; the framework pads a trailing empty argument for that kind, because the wire drops trailing empties), so the` &&
+               ` NAVIGATE round-trip - the NavContainer's navigate event, transporting ${$parameters>/toId} - issues follow_up_action( control_by_id, ObjectPageLayout / setSelectedSection / ```` ) and clears the` &&
+               ` association exactly like the original. The earlier substitute (naming the first section 'goals', which is what UI5's _adjustSelectedSectionByUXRules falls back to) is gone. The checkbox that guards` &&
+               ` the reset is two-way bound ({/RESET_CHECK}, seeded true like the original selected='true'), so the backend can read it without touching the DOM. // POST-1.71: sap.m.Avatar is a control @since 1.73` &&
+               ` (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar and the headerContent avatar (displaySize='L'). Needs a UI5 runtime >= 1.73. // NOTE: The`.
+    lv_text1 = lv_text1 && ` page navigation is roundtrip-free _event_client( control_by_id, navigationContainer / to / page1|page2 ) - the client-side equivalent of the controller's _navTo (oNavContainer.to(oPage)); 'to' is` &&
+               ` whitelisted in CONTROL_METHODS. Neither the navigation, the NAVIGATE round-trip nor the setSelectedSection follow-up was verified in a running system. **e2e-verified 2026-07-31**` &&
+               ` (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the 'To ObjectPage' list item navigates to page 2 (NavContainer.to via _event_client control_by_id, ObjectPage with 'Denise` &&
+               ` Smith' renders) and the nav-back button returns to page 1. Residual: the setSelectedSection reset itself (NAVIGATE round-trip with the checkbox ticked) is not asserted - the page has no icon tab bar,` &&
+               ` so the selected section has no stable DOM marker. // NOTE: The Avatar / Image src values point at the sdk.openui5.org host (imageID_275314.png, linkedin.png, Twitter.png, person.png) per the offline` &&
+               ` asset-URL rule; the original and HRData.json use the relative ./test-resources path.`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `ObjectPageResetSelectedSection`      class = `z2ui5_cl_ai_app_263` path = `src/03/b05/z2ui5_cl_ai_app_263.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
         since = `1.26`
         is_post171 = abap_true

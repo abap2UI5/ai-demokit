@@ -100,6 +100,16 @@ CLASS z2ui5_cl_ai_app_289 IMPLEMENTATION.
         show_close    = xsdbool( press_count MOD 3 <> 0 ).
         client->view_model_update( ).
 
+        " onInit takes an InvisibleMessage instance and _generateMsgStrip
+        " announces the new strip assertively. InvisibleMessage is a singleton
+        " with no control id, so the announcement goes through the global
+        " target added for it (pr/invisible-message-announce)
+        client->follow_up_action( val   = client->cs_event-control_global
+                                  t_arg = VALUE #( ( `INVISIBLE_MESSAGE` )
+                                                   ( `announce` )
+                                                   ( |New Information Bar of type { strip_type }| )
+                                                   ( `Assertive` ) ) ).
+
     ENDCASE.
 
   ENDMETHOD.
