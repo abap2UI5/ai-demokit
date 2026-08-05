@@ -3439,16 +3439,17 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` round-trip - selection stays, href navigation is suppressed) exactly like the original. The flag is baked into the handler expression at render time, so the CheckBox got an added select wire` &&
                ` (PREVENT_TOGGLE, declared) that redraws the view when toggled; the redraw resets the client-side selection back to selectedKey='walked' - a small toggle-time caveat the original (which never redraws)` &&
                ` does not have. The checkbox state stays two-way bound (selected={/PREVENT_DEFAULT}); the toast heading ('Default was prevented:' vs 'Item Pressed:') is composed server-side from the same flag. //` &&
-               ` IMPROVISED: quickActionPress dialog: reproduced as a core:FragmentDefinition shown via client->popup_display - the controller-built sap.m.Dialog with two Label + Input pairs (Name/Icon, the Inputs` &&
-               ` two-way bound to create_name/create_icon) and Create/Cancel Buttons. These Dialog/Label/Input/Button controls are extra vs the original view.xml, which declared none of them (the original built the`.
-    lv_text1 = lv_text1 && ` Dialog imperatively in the controller). The original Create button imperatively does sideNavigation.getItem().addItem(new NavigationListItem(...)); dynamic addItem to the statically declared` &&
-               ` NavigationList is not expressible (it would require folding the 1:1 static items into a bound aggregation), so CREATE_ITEM reads the entered values and shows a toast instead of adding the item. The` &&
-               ` .quickActionPress handler is rewired to the QUICK_CREATE backend event. // NOTE: live-verified 2026-08-04 (nightly e2e interaction): The 2026-07-27 live check predates the 2026-07-30 prevent-default` &&
-               ` rewire (status reset checked -> generated per the invalidation rule): re-verify that with the checkbox set a press does NOT change the selection (eBP cancels the default) and still toasts 'Default` &&
-               ` was prevented:', that with the checkbox clear selection changes normally, and that the PREVENT_TOGGLE redraw keeps working (expanded state and checkbox survive it via their two-way bindings).` &&
-               ` onCollapseExpandPress (expanded two-way + TOGGLE_EXPAND round-trip), the ITEM_PRESS modifier-key transport and the popup round-trips were live-verified 2026-07-27. **e2e-verified 2026-07-30**`.
-    lv_text1 = lv_text1 && ` (transpiled-framework interaction, scripts/e2e-smoke.mjs): with the checkbox set, the PREVENT_TOGGLE redraw re-bakes the wires and pressing 'Building' toasts 'Default was prevented:' - the eBP wire` &&
-               ` fires and round-trips; the visual no-selection-change and the popup paths remain for the live check.`.
+               ` NOTE: quickActionPress dialog: reproduced as a core:FragmentDefinition shown via client->popup_display - the controller-built sap.m.Dialog with two Label + Input pairs (Name/Icon, the Inputs two-way` &&
+               ` bound to create_name/create_icon) and Create/Cancel Buttons. These Dialog/Label/Input/Button controls are extra vs the original view.xml, which declared none of them. **The Create button now works`.
+    lv_text1 = lv_text1 && ` 1:1 (2026-08-05)**: the original does sideNavigation.getItem().addItem( new NavigationListItem({ text, expanded, icon }) ), so the main NavigationList is a BOUND aggregation here (the app-085/203` &&
+               ` pattern) and creating appends a row with the same defaults ('New Navigation Item' / sap-icon://building). Consequently the five static tnt:NavigationListItem declarations became one template plus a` &&
+               ` nested one for Mileage's children - 4 instead of 9 against the original count - and the rows bind with omit_initial_paths so an item without an icon/href keeps the control default, while SELECTABLE` &&
+               ` stays outside that list because the two external links must send their explicit false. The earlier 'dynamic addItem is not expressible' rationale is retired. // NOTE: live-verified 2026-08-04` &&
+               ` (nightly e2e interaction): The 2026-07-27 live check predates the 2026-07-30 prevent-default rewire (status reset checked -> generated per the invalidation rule): re-verify that with the checkbox set` &&
+               ` a press does NOT change the selection (eBP cancels the default) and still toasts 'Default was prevented:', that with the checkbox clear selection changes normally, and that the PREVENT_TOGGLE redraw`.
+    lv_text1 = lv_text1 && ` keeps working (expanded state and checkbox survive it via their two-way bindings). onCollapseExpandPress (expanded two-way + TOGGLE_EXPAND round-trip), the ITEM_PRESS modifier-key transport and the` &&
+               ` popup round-trips were live-verified 2026-07-27. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): with the checkbox set, the PREVENT_TOGGLE redraw re-bakes the` &&
+               ` wires and pressing 'Building' toasts 'Default was prevented:' - the eBP wire fires and round-trips; the visual no-selection-change and the popup paths remain for the live check.`.
     lv_text2 = `NavigationListItemBase.press event (@since 1.133) is the whole point of this sample; wired 1:1 on every NavigationListItem (press) to a backend ITEM_PRESS event. @since verified in` &&
                ` fork-openui5/src/sap.tnt/src/sap/tnt/NavigationListItemBase.js:74-79. Requires a UI5 release >= 1.133. // The press event parameters ctrlKey/shiftKey/altKey/metaKey (@since 1.137) are transported via` &&
                ` ${$parameters>/ctrlKey} etc. in the ITEM_PRESS t_arg and echoed into the toast, exactly as the original itemPress reads them. @since verified NavigationListItemBase.js:88-109. Requires a UI5 release` &&
@@ -3458,8 +3459,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
     result = VALUE #( BASE result
       ( module = `sap.tnt`            control = `sap.tnt.SideNavigation`                name = `SideNavigationPressEvent`            class = `z2ui5_cl_ai_app_241` path = `src/05/b07/z2ui5_cl_ai_app_241.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.34`
         is_post171 = abap_true
         notes = lv_text1

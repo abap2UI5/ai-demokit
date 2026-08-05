@@ -8,10 +8,25 @@ CLASS z2ui5_cl_ai_app_241 DEFINITION PUBLIC.
     DATA create_name     TYPE string.
     DATA create_icon     TYPE string.
 
+    TYPES: BEGIN OF ty_s_child,
+             text TYPE string,
+           END OF ty_s_child.
+    TYPES: BEGIN OF ty_s_nav_item,
+             text       TYPE string,
+             icon       TYPE string,
+             href       TYPE string,
+             target     TYPE string,
+             selectable TYPE abap_bool,
+             expanded   TYPE abap_bool,
+             items      TYPE STANDARD TABLE OF ty_s_child WITH EMPTY KEY,
+           END OF ty_s_nav_item.
+    DATA t_nav_items TYPE STANDARD TABLE OF ty_s_nav_item WITH EMPTY KEY.
+
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
 
     METHODS view_display.
+    METHODS model_init.
     METHODS on_event.
     METHODS popup_quickcreate_display.
 
@@ -26,6 +41,7 @@ CLASS z2ui5_cl_ai_app_241 IMPLEMENTATION.
     me->client = client.
     IF client->check_on_init( ).
       expanded = abap_false.
+      model_init( ).
       view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
@@ -71,57 +87,40 @@ CLASS z2ui5_cl_ai_app_241 IMPLEMENTATION.
                 )->a( n = `selectedKey` v = `walked`
                 )->a( n = `expanded`    v = client->_bind( expanded )
 
+                " the Create button of the quick-create dialog does
+                " sideNavigation.getItem().addItem( new NavigationListItem( ... ) ), so
+                " the list is bound (the app-085/203 pattern) instead of statically
+                " declared: creating appends a row. The rows are bound with
+                " omit_initial_paths so an item that sets no icon/href keeps the
+                " control's own default - SELECTABLE stays outside that list because
+                " an explicit false must reach the two external links
                 )->open( n = `NavigationList` ns = `tnt`
-                    )->leaf( n = `NavigationListItem` ns = `tnt`
-                        )->a( n = `text`  v = `Home`
-                        )->a( n = `icon`  v = `sap-icon://home`
-                        )->a( n = `press` v = client->_event( val    = `ITEM_PRESS`
-                                                              t_arg  = VALUE #( ( `${$parameters>/item}.getText()` ) ( `${$parameters>/ctrlKey}` ) ( `${$parameters>/shiftKey}` ) ( `${$parameters>/altKey}` ) ( `${$parameters>/metaKey}` ) )
-                                                              s_ctrl = VALUE #( check_prevent_default = prevent_default ) )
-                    )->leaf( n = `NavigationListItem` ns = `tnt`
-                        )->a( n = `text`  v = `Building`
-                        )->a( n = `icon`  v = `sap-icon://building`
-                        )->a( n = `press` v = client->_event( val    = `ITEM_PRESS`
-                                                              t_arg  = VALUE #( ( `${$parameters>/item}.getText()` ) ( `${$parameters>/ctrlKey}` ) ( `${$parameters>/shiftKey}` ) ( `${$parameters>/altKey}` ) ( `${$parameters>/metaKey}` ) )
-                                                              s_ctrl = VALUE #( check_prevent_default = prevent_default ) )
+                    )->a( n = `items` v = client->_bind(
+                                              val                = t_nav_items
+                                              omit_initial_paths = VALUE #( ( `ICON` )
+                                                                            ( `HREF` )
+                                                                            ( `TARGET` ) ) )
 
                     )->open( n = `NavigationListItem` ns = `tnt`
-                        )->a( n = `text`  v = `Mileage`
-                        )->a( n = `icon`  v = `sap-icon://mileage`
-                        )->a( n = `press` v = client->_event( val    = `ITEM_PRESS`
+                        )->a( n = `text`       v = `{TEXT}`
+                        )->a( n = `icon`       v = `{ICON}`
+                        )->a( n = `href`       v = `{HREF}`
+                        )->a( n = `target`     v = `{TARGET}`
+                        )->a( n = `selectable` v = `{SELECTABLE}`
+                        )->a( n = `expanded`   v = `{EXPANDED}`
+                        )->a( n = `press`      v = client->_event( val    = `ITEM_PRESS`
                                                               t_arg  = VALUE #( ( `${$parameters>/item}.getText()` ) ( `${$parameters>/ctrlKey}` ) ( `${$parameters>/shiftKey}` ) ( `${$parameters>/altKey}` ) ( `${$parameters>/metaKey}` ) )
                                                               s_ctrl = VALUE #( check_prevent_default = prevent_default ) )
-                        )->leaf( n = `NavigationListItem` ns = `tnt`
-                            )->a( n = `text`  v = `Driven`
-                            )->a( n = `press` v = client->_event( val    = `ITEM_PRESS`
-                                                                  t_arg  = VALUE #( ( `${$parameters>/item}.getText()` ) ( `${$parameters>/ctrlKey}` ) ( `${$parameters>/shiftKey}` ) ( `${$parameters>/altKey}` ) ( `${$parameters>/metaKey}` ) )
-                                                                  s_ctrl = VALUE #( check_prevent_default = prevent_default ) )
-                        )->leaf( n = `NavigationListItem` ns = `tnt`
-                            )->a( n = `text`  v = `Walked`
-                            )->a( n = `press` v = client->_event( val    = `ITEM_PRESS`
-                                                                  t_arg  = VALUE #( ( `${$parameters>/item}.getText()` ) ( `${$parameters>/ctrlKey}` ) ( `${$parameters>/shiftKey}` ) ( `${$parameters>/altKey}` ) ( `${$parameters>/metaKey}` ) )
-                                                                  s_ctrl = VALUE #( check_prevent_default = prevent_default ) )
 
+                        )->open( n = `items` ns = `tnt`
+                            )->leaf( n = `NavigationListItem` ns = `tnt`
+                                )->a( n = `text`  v = `{TEXT}`
+                                )->a( n = `press` v = client->_event( val    = `ITEM_PRESS`
+                                                              t_arg  = VALUE #( ( `${$parameters>/item}.getText()` ) ( `${$parameters>/ctrlKey}` ) ( `${$parameters>/shiftKey}` ) ( `${$parameters>/altKey}` ) ( `${$parameters>/metaKey}` ) )
+                                                              s_ctrl = VALUE #( check_prevent_default = prevent_default ) )
+
+                        )->shut(
                     )->shut(
-                    )->leaf( n = `NavigationListItem` ns = `tnt`
-                        )->a( n = `text`       v = `Link 1`
-                        )->a( n = `icon`       v = `sap-icon://attachment`
-                        )->a( n = `selectable` v = `false`
-                        )->a( n = `href`       v = `https://sap.com`
-                        )->a( n = `target`     v = `_blank`
-                        )->a( n = `press`      v = client->_event( val    = `ITEM_PRESS`
-                                                                   t_arg  = VALUE #( ( `${$parameters>/item}.getText()` ) ( `${$parameters>/ctrlKey}` ) ( `${$parameters>/shiftKey}` ) ( `${$parameters>/altKey}` ) ( `${$parameters>/metaKey}` ) )
-                                                                   s_ctrl = VALUE #( check_prevent_default = prevent_default ) )
-                    )->leaf( n = `NavigationListItem` ns = `tnt`
-                        )->a( n = `text`       v = `Link 2`
-                        )->a( n = `icon`       v = `sap-icon://attachment`
-                        )->a( n = `selectable` v = `false`
-                        )->a( n = `href`       v = `https://sap.com`
-                        )->a( n = `target`     v = `_blank`
-                        )->a( n = `press`      v = client->_event( val    = `ITEM_PRESS`
-                                                                   t_arg  = VALUE #( ( `${$parameters>/item}.getText()` ) ( `${$parameters>/ctrlKey}` ) ( `${$parameters>/shiftKey}` ) ( `${$parameters>/altKey}` ) ( `${$parameters>/metaKey}` ) )
-                                                                   s_ctrl = VALUE #( check_prevent_default = prevent_default ) )
-
                 )->shut(
 
                 )->open( n = `fixedItem` ns = `tnt`
@@ -193,14 +192,19 @@ CLASS z2ui5_cl_ai_app_241 IMPLEMENTATION.
         popup_quickcreate_display( ).
 
       WHEN `CREATE_ITEM`.
-        " original: the Create button adds a new NavigationListItem to the list;
-        " dynamic addItem to the statically declared list is not expressible, so
-        " the entered values are echoed instead of a real item being added
-        DATA(lv_name) = COND string( WHEN create_name IS NOT INITIAL
-                                     THEN create_name
-                                     ELSE `New Navigation Item` ).
+        " the Create button: addItem( new NavigationListItem({ text: sName ||
+        " 'New Navigation Item', expanded: true, icon: sIcon || 'sap-icon://building' }) )
+        " - reproduced 1:1 by appending the row the bound list renders
+        INSERT VALUE #( text       = COND #( WHEN create_name IS NOT INITIAL
+                                             THEN create_name
+                                             ELSE `New Navigation Item` )
+                        icon       = COND #( WHEN create_icon IS NOT INITIAL
+                                             THEN create_icon
+                                             ELSE `sap-icon://building` )
+                        selectable = abap_true
+                        expanded   = abap_true ) INTO TABLE t_nav_items.
         client->popup_destroy( ).
-        client->message_toast_display( |Create '{ lv_name }' - dynamic addItem is not reproduced| ).
+        client->view_model_update( ).
 
     ENDCASE.
 
@@ -253,6 +257,24 @@ CLASS z2ui5_cl_ai_app_241 IMPLEMENTATION.
                     )->a( n = `press` v = client->_event_client( client->cs_event-popup_close ) ).
 
     client->popup_display( popup->stringify( ) ).
+
+  ENDMETHOD.
+
+
+  METHOD model_init.
+
+    " the five items the sample declares on the main NavigationList, with the
+    " two children of Mileage
+    t_nav_items = VALUE #(
+      selectable = abap_true
+      ( text = `Home`     icon = `sap-icon://home` )
+      ( text = `Building` icon = `sap-icon://building` )
+      ( text = `Mileage`  icon = `sap-icon://mileage`
+        items = VALUE #( ( text = `Driven` ) ( text = `Walked` ) ) )
+      ( text = `Link 1` icon = `sap-icon://attachment` selectable = abap_false
+        href = `https://sap.com` target = `_blank` )
+      ( text = `Link 2` icon = `sap-icon://attachment` selectable = abap_false
+        href = `https://sap.com` target = `_blank` ) ).
 
   ENDMETHOD.
 
