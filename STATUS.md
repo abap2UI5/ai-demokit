@@ -17,7 +17,7 @@ TRAINING.md; for what abap2UI5 can express see CAPABILITIES.md._
 |---|---|
 | Ports | **293** sidecars in `meta/` (src/01: 177 · src/02: 67 · src/03: 19 · src/04: 19 · src/05: 11) |
 | Status ladder | 86 `generated` · 146 `reviewed` · 61 `checked` (live-verified) |
-| Deviations | 4 DROPPED_171 · 119 IMPROVISED · 494 NOTE · 121 POST_171 |
+| Deviations | 4 DROPPED_171 · 118 IMPROVISED · 495 NOTE · 121 POST_171 |
 | Open LIVE_TESTs | **0 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
 | Declared gate skips | 6 structural-diff · 3 render-smoke (each re-verified per run — a stale skip FAILS) |
 | Out-of-scope ported samples | `z2ui5_cl_ai_app_121 (sap.m.sample.UploadSet — deprecated)` · `z2ui5_cl_ai_app_136 (sap.f.sample.SidePanelSingle — control @since 1.107)` · `z2ui5_cl_ai_app_141 (sap.ui.core.sample.InvisibleMessage — control @since 1.78)` · `z2ui5_cl_ai_app_165 (sap.f.sample.ProductSwitchNavigation — control @since 1.72)` · `z2ui5_cl_ai_app_203 (sap.m.sample.OverflowToolbarTokenizer — control @since 1.139)` — all decided KEEP permanently 2026-07-30 (per-app rationale in ui5/scope-exceptions.json, revertible); the source-backed scope gate stays hard for NEW undecided entries |
@@ -28,7 +28,7 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
 
 ## Open findings (backlog)
 
-- [ ] **IMPROVISED harvest — 5 of 6 requests implemented, 6 probes owed**
+- [ ] **IMPROVISED harvest — all 6 requests implemented, probes measured**
   (2026-08-05). The repo's purpose is to expose framework gaps, but the gaps
   were sitting in 136 `IMPROVISED` sidecar texts while `pr/` held exactly one
   open request. All 136 are now classified — repeatably, by
@@ -38,7 +38,7 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
 
   | Verdict | # | Meaning |
   |---|---:|---|
-  | GAP | 15 | a framework gap — 6 requests filed, **5 implemented upstream the same day** |
+  | GAP | 15 | a framework gap — 6 requests filed, **all implemented upstream the same day** |
   | PROBE | 16 | a *suspected* gap whose premise is unverified — measure before filing |
   | REWORK | 16 | expressible today; the port under-delivers (review backlog) |
   | BOUNDARY | 16 | outside abap2UI5 by nature (client-only APIs, sample-local JS) |
@@ -70,12 +70,14 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
     deleted the sticky Label + three CheckBoxes from their view — are plain
     REWORK against app 009's pattern, not gap victims. Open, in the rework
     backlog below.
-  - `model-empty-vs-default` is only **half** closed. `omit_initial` is
-    all-or-nothing per bind, and a boolean that must send `false` cannot live
-    with that (`abap_false` IS initial, so the filter drops it and the control
-    falls back to its default `true`). App 049 carries its two boolean columns
-    as strings + an expression binding — its only remaining binding-value
-    deviation. The path-scoped half stays open in `pr/model-empty-vs-default`.
+  - `model-empty-vs-default` was filed as one request and needed **two**
+    changes. `omit_initial` is all-or-nothing per bind, and a boolean that must
+    send `false` cannot live with that (`abap_false` IS initial, so the filter
+    drops it and the control falls back to its default `true`) — app 049's
+    rebuild ran into it the moment it was written. The scoped form
+    (`omit_initial_paths`) followed the same day, so 049 binds
+    `enabled`/`editable` plainly again and has **no binding-value deviation
+    left**; `pr/` now holds only the open-abap request.
 
   **Both pins are on feature branches and MUST become main SHAs before this
   change is merged** (same rule the linter pin already carries): `A2UI5_PIN`

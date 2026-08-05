@@ -19,8 +19,8 @@ CLASS z2ui5_cl_ai_app_049 DEFINITION PUBLIC.
         stepmode              TYPE string,
         validationmode        TYPE string,
         valuestate            TYPE string,
-        enabled               TYPE string,
-        editable              TYPE string,
+        enabled               TYPE abap_bool,
+        editable              TYPE abap_bool,
       END OF ty_s_row.
     DATA modeldata TYPE STANDARD TABLE OF ty_s_row WITH EMPTY KEY.
 
@@ -52,20 +52,36 @@ CLASS z2ui5_cl_ai_app_049 IMPLEMENTATION.
     DATA(view) = z2ui5_cl_ai_xml=>factory( ).
 
     " one bound CustomListItem template over /modelData, like the original.
-    " It only works because the rows are bound with omit_initial: every row
+    " It only works because the rows are bound with omit_initial_paths: every row
     " fills a DIFFERENT subset of the StepInput properties, and an initial ABAP
     " field would otherwise arrive as `` and override the control's own default
-    " (an enum-typed property rejects it outright). The two boolean properties
-    " are the exception - see the sidecar: an explicit false cannot ride along,
-    " so they carry the original's literal and an expression binding converts it
+    " (an enum-typed property rejects it outright). The omission is SCOPED to
+    " those columns, because the two booleans must send their explicit false
     view->open( n = `View` ns = `mvc`
             )->a( n = `xmlns`     v = `sap.m`
             )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
             )->open( `List`
                 )->a( n = `id`    v = `idTable`
-                )->a( n = `items` v = client->_bind( val          = modeldata
-                                                     omit_initial = abap_true )
+                )->a( n = `items` v = client->_bind(
+                                          val                = modeldata
+                                          " scoped to the columns that may vanish: an
+                                          " abap_false MUST reach the client (the disabled
+                                          " and the read-only row), and false is itself
+                                          " initial - the blanket flag would drop it
+                                          omit_initial_paths = VALUE #( ( `VALUE` )
+                                                                        ( `MIN` )
+                                                                        ( `MAX` )
+                                                                        ( `STEP` )
+                                                                        ( `LARGERSTEP` )
+                                                                        ( `DISPLAYVALUEPRECISION` )
+                                                                        ( `WIDTH` )
+                                                                        ( `FIELDWIDTH` )
+                                                                        ( `DESCRIPTION` )
+                                                                        ( `TEXTALIGN` )
+                                                                        ( `STEPMODE` )
+                                                                        ( `VALIDATIONMODE` )
+                                                                        ( `VALUESTATE` ) ) )
 
                 )->open( `CustomListItem`
                     )->open( `HBox`
@@ -93,8 +109,8 @@ CLASS z2ui5_cl_ai_app_049 IMPLEMENTATION.
                                 )->a( n = `largerStep`            v = `{LARGERSTEP}`
                                 )->a( n = `stepMode`              v = `{STEPMODE}`
                                 )->a( n = `valueState`            v = `{VALUESTATE}`
-                                )->a( n = `enabled`               v = `{= ${ENABLED} !== 'false' }`
-                                )->a( n = `editable`              v = `{= ${EDITABLE} !== 'false' }`
+                                )->a( n = `enabled`               v = `{ENABLED}`
+                                )->a( n = `editable`              v = `{EDITABLE}`
                                 )->a( n = `description`           v = `{DESCRIPTION}`
                                 )->a( n = `fieldWidth`            v = `{FIELDWIDTH}`
                                 )->a( n = `textAlign`             v = `{TEXTALIGN}`
@@ -113,37 +129,41 @@ CLASS z2ui5_cl_ai_app_049 IMPLEMENTATION.
   METHOD model_init.
 
     " the controller's aData, row for row - a property a row does not set stays
-    " INITIAL here and omit_initial keeps it out of the model, so the StepInput
-    " falls back to its own default exactly as in the original
+    " INITIAL here and omit_initial_paths keeps it out of the model, so the
+    " StepInput falls back to its own default exactly as in the original. The two
+    " BOOLEAN columns are outside that list and therefore always travel: the rows
+    " that the sample leaves untouched send the control default (true) explicitly,
+    " and the disabled / read-only row sends its false - which the blanket
+    " omit_initial would have swallowed
     modeldata = VALUE #(
         ( label = `Step = 1 (default); value = 6, min = 5, max = 15, width = 120px`
-          value = 6 min = 5 max = 15 width = `120px` )
+          value = 6 min = 5 max = 15 width = `120px` enabled = abap_true editable = abap_true )
         ( label = `Step = 1 (default); value = 6, min = 5, max = 15, width = 120px, with validation on LiveChange`
-          value = 6 min = 5 max = 15 width = `120px` validationmode = `LiveChange` )
+          value = 6 min = 5 max = 15 width = `120px` validationmode = `LiveChange` enabled = abap_true editable = abap_true )
         ( label = `Step = 5, no value, no min, no max, width = 120px`
-          step = 5 width = `120px` )
+          step = 5 width = `120px` enabled = abap_true editable = abap_true )
         ( label = `Step = 5, no value, no min, no max, width = 120px, largerStep = 3`
-          step = 5 width = `120px` largerstep = 3 )
+          step = 5 width = `120px` largerstep = 3 enabled = abap_true editable = abap_true )
         ( label = `Step = 1.1, no value, displayValuePrecision = 1, min = -6, max = 23.5, width = 120px`
-          step = '1.1' min = -6 max = '23.5' width = `120px` displayvalueprecision = 1 )
+          step = '1.1' min = -6 max = '23.5' width = `120px` displayvalueprecision = 1 enabled = abap_true editable = abap_true )
         ( label = `Disabled, value = 12.3, displayValuePrecision = 1, width = 120px`
-          value = '12.3' enabled = `false` width = `120px` displayvalueprecision = 1 )
+          value = '12.3' enabled = abap_false editable = abap_true width = `120px` displayvalueprecision = 1 )
         ( label = `Read only, value = 123, default width of 100%`
-          editable = `false` value = 123 )
+          editable = abap_false enabled = abap_true value = 123 )
         ( label = `Step = 0.05; value = 1.32, displayValuePrecision = 3, min = -5, max = 15`
-          value = '1.32' step = '0.05' min = -5 max = 15 displayvalueprecision = 3 )
+          value = '1.32' step = '0.05' min = -5 max = 15 displayvalueprecision = 3 enabled = abap_true editable = abap_true )
         ( label = `Step = 1.05; value = 1.5675, displayValuePrecision = 2, no Min and Max`
-          value = '1.5675' step = '1.05' displayvalueprecision = 2 )
+          value = '1.5675' step = '1.05' displayvalueprecision = 2 enabled = abap_true editable = abap_true )
         ( label = `Step = -1 (which becomes 1), value = 20, width = 120px`
-          value = 20 step = -1 width = `120px` )
+          value = 20 step = -1 width = `120px` enabled = abap_true editable = abap_true )
         ( label = `Step = 1 (default); value = 6, min = 5, max = 15, width = 240px, with added description and default fieldWidth 50%`
-          value = 6 min = 5 max = 15 width = `240px` description = `EUR` )
+          value = 6 min = 5 max = 15 width = `240px` description = `EUR` enabled = abap_true editable = abap_true )
         ( label = `Step = 1 (default); value = 160, with added description and fieldWidth set to 70%`
-          value = 160 fieldwidth = `70%` description = `EUR` )
+          value = 160 fieldwidth = `70%` description = `EUR` enabled = abap_true editable = abap_true )
         ( label = `Step = 1 (default); value = 160, align:Center`
-          value = 160 textalign = `Center` )
+          value = 160 textalign = `Center` enabled = abap_true editable = abap_true )
         ( label = `Step = 5, stepMode = Multiple, min = -40, max = 100, value = 10,`
-          value = 10 step = 5 max = 100 min = -40 stepmode = `Multiple` ) ).
+          value = 10 step = 5 max = 100 min = -40 stepmode = `Multiple` enabled = abap_true editable = abap_true ) ).
 
   ENDMETHOD.
 

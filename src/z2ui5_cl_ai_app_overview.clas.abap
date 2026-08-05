@@ -3057,19 +3057,19 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         notes = `POST-1.71: sap.m.StandardListItem infoStateInverted (since 1.74) is kept 1:1 from the original view; needs a UI5 release >= 1.74 to render.`
         post171 = `sap.m.StandardListItem infoStateInverted (since 1.74) is kept 1:1 from the original view; needs a UI5 release >= 1.74 to render.` ) ).
 
-    lv_text1 = `IMPROVISED: the sample binds a List to the JSON model /modelData and renders one templated CustomListItem per row. **Rebuilt as that ONE bound template on 2026-08-05** (it used to be 14 unrolled` &&
-               ` static items): the rows are bound with client->_bind( val = modeldata omit_initial = abap_true ), the parameter added upstream for exactly this shape (pr/model-empty-vs-default), so a property a row` &&
-               ` does not set stays ABSENT from the model and the StepInput keeps its own default instead of receiving ````. The dropped template property valueState is back as well. Residual: the two BOOLEAN` &&
-               ` properties cannot ride along - an explicit false is itself initial in ABAP, so omit_initial would drop it and the disabled/read-only rows would render enabled. They carry the original's literal in a` &&
-               ` string field and an expression binding converts it (enabled='{= ${ENABLED} !== \'false\' }', editable likewise), which is the only place the port's binding value differs from the original's` &&
-               ` {enabled}/{editable}. A path-scoped omit_initial would close that too - the open half of pr/model-empty-vs-default. // NOTE: the change toast was switched to a roundtrip-free client-composed toast on`.
-    lv_text1 = lv_text1 && ` 2026-07-22 (control_global MESSAGE_TOAST.show, template ``Value changed to '{0}'`` with get_t_arg single-quote escaping; on_event dropped, init-only) - re-verify changing a StepInput toasts "Value` &&
-               ` changed to '<value>'" with the quotes intact. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): ArrowUp + Enter on the first StepInput fires change and toasts` &&
-               ` "Value changed to '<value>'" with the quotes intact; the other StepInputs are the identical wire.`.
+    lv_text1 = `NOTE: the sample binds a List to the JSON model /modelData and renders one templated CustomListItem per row. **Rebuilt as that ONE bound template on 2026-08-05** (it used to be 14 unrolled static` &&
+               ` items): the rows are bound with client->_bind( val = modeldata omit_initial_paths = ... ), the parameter added upstream for exactly this shape (pr/model-empty-vs-default), so a property a row does` &&
+               ` not set stays ABSENT from the model and the StepInput keeps its own default instead of receiving ````. The dropped template property valueState is back as well. The omission is SCOPED to the` &&
+               ` numeric/string columns because the two BOOLEAN properties must send their explicit false (abap_false is itself initial, so the blanket flag would have dropped it and the disabled / read-only row` &&
+               ` would render enabled) - which is why the port binds enabled/editable as plain {ENABLED}/{EDITABLE} again, with no expression binding and no binding-value deviation left. Rows the sample leaves` &&
+               ` untouched send the control default true explicitly. // NOTE: the change toast was switched to a roundtrip-free client-composed toast on 2026-07-22 (control_global MESSAGE_TOAST.show, template ``Value`.
+    lv_text1 = lv_text1 && ` changed to '{0}'`` with get_t_arg single-quote escaping; on_event dropped, init-only) - re-verify changing a StepInput toasts "Value changed to '<value>'" with the quotes intact. **e2e-verified` &&
+               ` 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): ArrowUp + Enter on the first StepInput fires change and toasts "Value changed to '<value>'" with the quotes intact; the other` &&
+               ` StepInputs are the identical wire.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.StepInput`                       name = `StepInput`                           class = `z2ui5_cl_ai_app_049` path = `src/01/b02/z2ui5_cl_ai_app_049.clas.abap`
-        score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.40`
         notes = lv_text1 ) ).
 
