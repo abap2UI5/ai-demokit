@@ -18,7 +18,7 @@ on:
       - 'web/**'
       - '.github/workflows/deploy_web.yaml'
   schedule:
-    - cron: '0 8 * * *'   # daily; picks up upstream abap2UI5 framework changes
+    - cron: '0 8 * * *'   # daily; picks up merged port changes and A2UI5_PIN bumps (framework is pinned, see bump_a2ui5.yaml)
 
 permissions:
   contents: read

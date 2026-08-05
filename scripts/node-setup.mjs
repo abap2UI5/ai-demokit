@@ -6,15 +6,20 @@
  * this repo's deps, then builds the backend. After this, `npm run node:serve`
  * starts the server on http://localhost:3000.
  *
- * Re-runnable: if .abap2UI5 already exists it is updated (git pull) instead of
+ * Re-runnable: if .abap2UI5 already exists it is updated instead of
  * re-cloned. Override the source with A2UI5_REPO / A2UI5_BRANCH env vars.
+ *
+ * By default the checkout is fixed at the commit in A2UI5_PIN (repo root), so
+ * a build today and a build next week run against the same framework. Setting
+ * A2UI5_BRANCH (or removing the pin file) tracks a branch tip instead.
  */
 import { execSync } from 'child_process';
 import fs from 'fs';
-import { IN_REPO_A2UI5, REPO_ROOT } from './lib-a2ui5.mjs';
+import { IN_REPO_A2UI5, REPO_ROOT, readA2UI5Pin } from './lib-a2ui5.mjs';
 
 const REPO = process.env.A2UI5_REPO || 'https://github.com/abap2UI5/abap2UI5';
 const BRANCH = process.env.A2UI5_BRANCH || '';
+const PIN = BRANCH ? null : readA2UI5Pin();
 
 const run = (cmd, cwd = REPO_ROOT) => {
   console.log(`\n$ ${cmd}   (in ${cwd})`);
@@ -24,11 +29,22 @@ const run = (cmd, cwd = REPO_ROOT) => {
 // 1. clone (or update) abap2UI5 into .abap2UI5
 if (fs.existsSync(`${IN_REPO_A2UI5}/node/srv/express.mjs`)) {
   console.log('node-setup: .abap2UI5 already present — updating');
-  try { run('git pull --ff-only', IN_REPO_A2UI5); } catch { console.log('node-setup: git pull skipped (local changes / detached) — using existing checkout'); }
+  if (PIN) {
+    try {
+      run(`git fetch --depth 1 origin ${PIN}`, IN_REPO_A2UI5);
+      run(`git checkout --detach ${PIN}`, IN_REPO_A2UI5);
+    } catch { console.log('node-setup: pin checkout failed (offline / local changes) — using existing checkout'); }
+  } else {
+    try { run('git pull --ff-only', IN_REPO_A2UI5); } catch { console.log('node-setup: git pull skipped (local changes / detached) — using existing checkout'); }
+  }
 } else {
   fs.rmSync(IN_REPO_A2UI5, { recursive: true, force: true });
   const branch = BRANCH ? `--branch ${BRANCH} ` : '';
   run(`git clone --depth 1 ${branch}${REPO} .abap2UI5`);
+  if (PIN) {
+    run(`git fetch --depth 1 origin ${PIN}`, IN_REPO_A2UI5);
+    run(`git checkout --detach ${PIN}`, IN_REPO_A2UI5);
+  }
 }
 
 // 2. install deps — the framework (transpiler, express, runtime) and this repo
