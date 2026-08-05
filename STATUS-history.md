@@ -7,6 +7,41 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## 2026-08-05 (fifth round) — IMPROVISED means what it says now, and two families closed
+
+**The metric was fixed first.** More than half of the corpus' 118 IMPROVISED
+deviations were a decided rule working as decided — the thin frontend, the
+single default model, mock flattening, BlockBase inlining, fragments composed
+into the one port view. Those render identically, so they are `NOTE`s;
+IMPROVISED is meant to say "a behaviour of the original is lost or
+substituted" (the 2026-07-27 review retyped app 108 the other way for exactly
+that reason). `improvised-cluster.mjs --retype-policy --write` did the sweep:
+safe because a gate declaration matches the deviation TEXT, never its type
+(`structural-diff` reads `d.what`), and not blind because an entry whose text
+still NAMES a loss is held back and listed — 8 of 73 were (261's dropped
+Expanded view, 267/269's lost model indirection, 012's routing, the BlockBase
+wrappers that lose their ids). **136 → 53.**
+
+**`imperative-aggregation` is closed** with app **241**, the last of the four:
+the sample's Create button does `getItem().addItem( new NavigationListItem(…) )`,
+so the main NavigationList is a bound aggregation now and creating appends a
+row with the sample's own defaults. Its rows use `omit_initial_paths`, with
+`SELECTABLE` deliberately outside the list — the two external links must send
+their explicit `false`. None of 076/077/203/241 was a framework gap.
+
+**`event-veto` is half closed.** App **136**'s "an event veto is not
+expressible" predated `s_ctrl-check_prevent_default` (merged 2026-07-30). The
+flag is baked per wire at render time, and that is enough there because the
+DIRECTION of the next toggle is known — an expanded panel can only collapse —
+so the flag is whichever switch applies, the switches are two-way bound, and
+the toggle round-trip re-bakes it. The handler is the original's if/else,
+toast and switch reset included. App **247** is the genuine residual and now
+says why: its veto is per COLUMN while the flag is per wire, and
+`columnResize` is declared on the Table, not the Column.
+
+IMPROVISED: **51 across 43 ports** — 8 GAP (all implemented upstream), 5 PROBE,
+14 REWORK, 16 BOUNDARY, 8 POLICY.
+
 ## 2026-08-05 (fourth round) — the REWORK list cleared, two new linter rules, the last request closed
 
 Four rounds in one day, all measured rather than argued.
