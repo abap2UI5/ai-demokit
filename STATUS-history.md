@@ -7,6 +7,62 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## 2026-08-05 (third round) — the biggest PROBE family measured: not a gap, six ports reworked
+
+`event-value-unreachable` was the largest open family of the harvest (7
+deviations) and rested on one sentence repeated across seven sidecars: the
+value the original reads is **not transportable**, because it sits in an array
+or a control reference on the event. That sentence is now **measured and
+false**.
+
+`scripts/probes/event-arg-expression-probe.mjs` boots the real OpenUI5 (the
+`@openui5/*` packages the linter installs), creates a view whose controls carry
+`.eB('EVT', <candidate>)` — exactly what `get_t_arg` emits for a `$`-prefixed
+arg — fires the event and reports what the handler **received**. Six
+candidates, all resolving:
+
+| candidate | got |
+|---|---|
+| `${$parameters>/value} + '%'` (already shipped) | `60%` |
+| `$event.oSource.getSelectedDates()[0].getStartDate()` | the picked Date |
+| the three LOCAL date parts as three args | `2026, 3, 17` |
+| `${$parameters>/tokens}[0].getKey()` | `k1` |
+| class-name ternary over `getMetadata().getName()` | `B pressed` |
+| `${$parameters>/sizes}.join(',')` | `30,70` |
+
+So indexed access, chained calls, arithmetic, array joins and ternaries are all
+inside the expression grammar. **Six of the seven ports are reworked:**
+
+- **139 / 151 / 177 / 220** — the four calendar ports reported the **server
+  date** where the original formats the clicked day. They now transport the day
+  as its three LOCAL parts (year, month+1, day — not `toISOString()`, which
+  shifts the day for any user east of Greenwich), each guarded by
+  `getSelectedDates().length > 0`. That guard buys 177 its original else-branch
+  for free: re-clicking the same day removes it, year 0 arrives, the Text falls
+  back to "No Date Selected". 220 had no `select` wire at all and gained one,
+  with `DateFormat({style:'long'})`'s English rendering composed in ABAP (the
+  app-024 precedent). Residual in all four: the Today/Focus buttons still only
+  write text — `addSelectedDate`/`focusDate` take a DateRange/Date **object**
+  no wire can construct.
+- **228** — the sample's whole `handleMenuItemPress` branch (skip a submenu
+  parent, `getValue() + ' entered'` for a MenuTextFieldItem, `getText() +
+  ' pressed'` otherwise) now travels as ONE client expression into the composed
+  toast. The old rationale confused the layers: the class cannot be inspected
+  by the BACKEND, but the expression runs on the client, where the sample's own
+  code runs too.
+- **186** — both PaneContainer resize toasts carry their `oldSizes`/`newSizes`
+  arrays again via `.join( ',' )`, each guarded because the first resize has no
+  old sizes.
+
+**App 109 stays as it is, and its sidecar now says why properly:** its
+`selectedDatesChange` parameter is an array of `DateRange` CONTROLS that the
+original formats **per entry**, and the expression grammar has **no loop** —
+the same boundary as app 060's parent-chain breadcrumb. Indexed access would
+have worked for a single range; a per-entry map does not exist.
+
+The `event-without-handler` advisory budget ratchets 7 → 4 with the four
+calendar wires. IMPROVISED is down to 124 (from 136 at the start of the day).
+
 ## 2026-08-05 (second half) — the five requests implemented upstream, six ports rebuilt on them
 
 Same day, three repos: the framework requests the harvest filed were

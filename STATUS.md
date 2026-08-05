@@ -17,7 +17,7 @@ TRAINING.md; for what abap2UI5 can express see CAPABILITIES.md._
 |---|---|
 | Ports | **293** sidecars in `meta/` (src/01: 177 · src/02: 67 · src/03: 19 · src/04: 19 · src/05: 11) |
 | Status ladder | 86 `generated` · 146 `reviewed` · 61 `checked` (live-verified) |
-| Deviations | 4 DROPPED_171 · 130 IMPROVISED · 483 NOTE · 121 POST_171 |
+| Deviations | 4 DROPPED_171 · 124 IMPROVISED · 489 NOTE · 121 POST_171 |
 | Open LIVE_TESTs | **0 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
 | Declared gate skips | 6 structural-diff · 3 render-smoke (each re-verified per run — a stale skip FAILS) |
 | Out-of-scope ported samples | `z2ui5_cl_ai_app_121 (sap.m.sample.UploadSet — deprecated)` · `z2ui5_cl_ai_app_136 (sap.f.sample.SidePanelSingle — control @since 1.107)` · `z2ui5_cl_ai_app_141 (sap.ui.core.sample.InvisibleMessage — control @since 1.78)` · `z2ui5_cl_ai_app_165 (sap.f.sample.ProductSwitchNavigation — control @since 1.72)` · `z2ui5_cl_ai_app_203 (sap.m.sample.OverflowToolbarTokenizer — control @since 1.139)` — all decided KEEP permanently 2026-07-30 (per-app rationale in ui5/scope-exceptions.json, revertible); the source-backed scope gate stays hard for NEW undecided entries |
@@ -84,24 +84,29 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   a syntax error to ABAP_STANDARD/CLOUD/702), and `@abap2ui5/linter` is pinned
   at the commit that mirrors the two new global targets.
 
-  **The 6 PROBE families are the open work** — each is a plausible gap that a
+  **The PROBE families are the open work** (the biggest one is now measured and closed) — each is a plausible gap that a
   measurement could refute, and this repo's rule is that a request is filed on
   evidence, not on a rationale (cf. the withdrawn `urlhelper-abap-api`, whose
   premise was simply wrong — and now `table-set-sticky`, whose premise was half
   wrong). In descending value:
-  - `event-value-unreachable` (7 deviations, apps 109/139/151/177/186/220/228):
-    the value the original reads sits in an **array or a control reference** on
-    the event — `getSelectedDates()[0].getStartDate()`, an array of `DateRange`
-    controls, `oldSizes`/`newSizes`, a `getMetadata().getName()` branch. But an
-    event arg is a **full UI5 expression** (`EventHandlerResolver` →
-    `BindingParser.parseExpression`, the capability `pr/menu-item-selected-path`
-    established, and the `css` wires of 138/267/269 now use its string-concat
-    half), so indexed access and a ternary may already work. Probe it with app
-    220 (`sap.ui.unified.Calendar`): wire
-    `$event.oSource.getSelectedDates()[0].getStartDate()` and see whether the
-    picked day arrives. Four calendar ports (139/151/177/220) currently show
-    the **server date** instead of the clicked one — the largest single
-    behaviour loss left in the corpus.
+  - ~~`event-value-unreachable`~~ **measured and closed 2026-08-05** — it was
+    the biggest family (7 deviations) and it was **not a gap at all**.
+    `scripts/probes/event-arg-expression-probe.mjs` boots real OpenUI5, wires
+    each candidate the way the framework emits it, fires the event and reports
+    what the handler received: **all six candidates resolve** — indexed access
+    into an array-valued getter, indexed access into an array PARAMETER,
+    chained calls, arithmetic, `.join( ',' )` over an array, and a class-name
+    ternary. Six of the seven ports are reworked (see the journal): the four
+    calendar ports (139/151/177/220) now report the **clicked day** instead of
+    the server date — including 177's re-click deselect, reproduced through a
+    `getSelectedDates().length > 0` guard in the wire — 228 composes the
+    sample's full submenu/MenuTextFieldItem branch in one expression, and 186's
+    two resize toasts carry their pane-size arrays. App **109** keeps its
+    name-only `selectedDatesChange` toast: that parameter is an array of
+    `DateRange` CONTROLS the original iterates and formats **per entry**, and
+    the expression grammar has no loop (the same boundary as app 060's
+    breadcrumb). Its sidecar is corrected to say that instead of "control
+    references are not transportable".
   - `imperative-aggregation` (4, apps 076/077/203/241): `addToken`/`addItem`/
     `removeItem` over statically declared children. App 085 already answers it
     (fold the static children into a bound aggregation); confirm that is always

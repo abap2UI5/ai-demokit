@@ -13,11 +13,13 @@ CLASS z2ui5_cl_ai_app_220 DEFINITION PUBLIC.
     DATA max_date          TYPE string.
     DATA t_disabled        TYPE ty_t_disabled.
     DATA show_week_numbers TYPE abap_bool.
+    DATA selected_date     TYPE string.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
 
     METHODS view_display.
+    METHODS on_event.
     METHODS model_init.
 
   PRIVATE SECTION.
@@ -32,6 +34,8 @@ CLASS z2ui5_cl_ai_app_220 IMPLEMENTATION.
     IF client->check_on_init( ).
       model_init( ).
       view_display( ).
+    ELSEIF client->check_on_event( ).
+      on_event( ).
     ENDIF.
 
   ENDMETHOD.
@@ -46,8 +50,11 @@ CLASS z2ui5_cl_ai_app_220 IMPLEMENTATION.
     " curated module converts them at the point of use (needs UI5 >= 1.74). The
     " original's imperative Switch handler (setShowWeekNumbers) is replaced by a
     " two-way binding shared between the Switch state and Calendar showWeekNumbers
-    " (thin frontend); its select handler (formats the picked day into a Text) has
-    " no bindable equivalent and is dropped.
+    " (thin frontend). handleCalendarSelect formats the picked day into the Text:
+    " the day is read out of the event as a UI5 EXPRESSION - indexed access and
+    " chained calls resolve there (measured with
+    " scripts/probes/event-arg-expression-probe.mjs) - and the long-style English
+    " rendering of DateFormat.getInstance({style:'long'}) is composed in ABAP.
     view->open( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`      v = `sap.ui.layout`
         )->a( n = `xmlns:u`      v = `sap.ui.unified`
@@ -65,6 +72,11 @@ CLASS z2ui5_cl_ai_app_220 IMPLEMENTATION.
                 )->a( n = `maxDate`         v = |\{ path: '{ client->_bind( val = max_date path = abap_true ) }', formatter: 'Formatter.DateCreateObject' \}|
                 )->a( n = `disabledDates`   v = client->_bind( t_disabled )
                 )->a( n = `showWeekNumbers` v = client->_bind( show_week_numbers )
+                )->a( n = `select`          v = client->_event( val   = `CAL_SELECT`
+                                                                t_arg = VALUE #(
+                                                                  ( `$event.oSource.getSelectedDates().length > 0 ? $event.oSource.getSelectedDates()[0].getStartDate().getFullYear() : 0` )
+                                                                  ( `$event.oSource.getSelectedDates().length > 0 ? $event.oSource.getSelectedDates()[0].getStartDate().getMonth() + 1 : 0` )
+                                                                  ( `$event.oSource.getSelectedDates().length > 0 ? $event.oSource.getSelectedDates()[0].getStartDate().getDate() : 0` ) ) )
 
                 )->open( n = `disabledDates` ns = `u`
                     )->leaf( n = `DateRange` ns = `u`
@@ -82,7 +94,7 @@ CLASS z2ui5_cl_ai_app_220 IMPLEMENTATION.
                     )->a( n = `text` v = `Selected Date:`
                 )->leaf( `Text`
                     )->a( n = `id`   v = `selectedDate`
-                    )->a( n = `text` v = `No Date Selected`
+                    )->a( n = `text` v = client->_bind( selected_date )
 
             )->shut(
             )->open( n = `HorizontalLayout` ns = `l`
@@ -106,6 +118,35 @@ CLASS z2ui5_cl_ai_app_220 IMPLEMENTATION.
   ENDMETHOD.
 
 
+  METHOD on_event.
+
+    CASE client->get( )-event.
+
+      WHEN `CAL_SELECT`.
+        " handleCalendarSelect: DateFormat.getInstance({style:'long'}).format(oDate)
+        " - the English long form ('March 17, 2026'). The day arrives as its three
+        " LOCAL parts; year 0 means the re-click cleared the selection
+        DATA(year) = client->get_event_arg( ).
+        IF year IS INITIAL OR year = `0`.
+          selected_date = `No Date Selected`.
+        ELSE.
+          DATA(month) = CONV i( client->get_event_arg( 2 ) ).
+          selected_date = |{ SWITCH string( month
+                                            WHEN 1 THEN `January`   WHEN 2 THEN `February`
+                                            WHEN 3 THEN `March`     WHEN 4 THEN `April`
+                                            WHEN 5 THEN `May`       WHEN 6 THEN `June`
+                                            WHEN 7 THEN `July`      WHEN 8 THEN `August`
+                                            WHEN 9 THEN `September` WHEN 10 THEN `October`
+                                            WHEN 11 THEN `November` WHEN 12 THEN `December` ) }| &&
+                          | { CONV i( client->get_event_arg( 3 ) ) }, { year }|.
+        ENDIF.
+        client->view_model_update( ).
+
+    ENDCASE.
+
+  ENDMETHOD.
+
+
   METHOD model_init.
 
     " original values are UI5Date.getInstance(year, month0, day) - month is
@@ -113,6 +154,7 @@ CLASS z2ui5_cl_ai_app_220 IMPLEMENTATION.
     min_date          = `2000-01-01`.
     max_date          = `2050-12-31`.
     show_week_numbers = abap_true.
+    selected_date     = `No Date Selected`.
     t_disabled        = VALUE #(
       ( start = `2016-01-04` end = `2016-01-10` )
       ( start = `2016-01-15` end = `` ) ).

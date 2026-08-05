@@ -2948,10 +2948,12 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` transports ${$parameters>/weekNumber} and startDateChange transports ${$parameters>/date}, and the toast texts append them exactly as the original does ('...\n\nweek number is <n>' / '...\n\nNew` &&
                ` start date is <date>') - until 2026-07-28 the port toasted only the event name, which the sidecar itself flagged as a faked value where the transport exists. Two stay name-only, for different` &&
                ` reasons: viewChange because the original's toast carries no value either, and selectedDatesChange because its selectedDates parameter is an ARRAY OF DateRange CONTROLS which the original iterates and`.
-    lv_text1 = lv_text1 && ` formats (oRange.getStartDate().toDateString() per entry) - control references are not transportable as event args, so that toast keeps the event name alone. The transported start date is the` &&
-               ` client-side string form of the JS Date, not the original's oStartDate.toString() rendering, so the exact wording of that one line can differ. // POST-1.71: Formatter.DateCreateObject is referenced` &&
-               ` via core:require (UI5 >= 1.74). sap.m.SinglePlanningCalendar and its DayView/WorkWeekView/WeekView/MonthView are since 1.61 (in scope). Also the SinglePlanningCalendar events weekNumberPress and` &&
-               ` selectedDatesChange (@since 1.123) are kept 1:1 from the original view; newer than 1.71, declared per the property-171 policy.`.
+    lv_text1 = lv_text1 && ` formats (oRange.getStartDate().toDateString() per entry) - each entry has to be formatted separately and the client expression grammar has NO LOOP - measured 2026-08-05 with` &&
+               ` scripts/probes/event-arg-expression-probe.mjs, which showed that indexed access and chained calls DO resolve (so ``[0].getStartDate()`` would work for a single range), but a per-entry map does not` &&
+               ` exist. The same boundary as app 060's parent-chain breadcrumb; the toast keeps the event name alone. The transported start date is the client-side string form of the JS Date, not the original's` &&
+               ` oStartDate.toString() rendering, so the exact wording of that one line can differ. // POST-1.71: Formatter.DateCreateObject is referenced via core:require (UI5 >= 1.74). sap.m.SinglePlanningCalendar` &&
+               ` and its DayView/WorkWeekView/WeekView/MonthView are since 1.61 (in scope). Also the SinglePlanningCalendar events weekNumberPress and selectedDatesChange (@since 1.123) are kept 1:1 from the original` &&
+               ` view; newer than 1.71, declared per the property-171 policy.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.SinglePlanningCalendar`          name = `SinglePlanningCalendarDateSelection` class = `z2ui5_cl_ai_app_109` path = `src/01/b14/z2ui5_cl_ai_app_109.clas.abap`
         score = 4
@@ -4156,14 +4158,15 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
     lv_text1 = `NOTE: The original keeps the three pane sizes in a separate 'sizes' JSON model ({sizes>/pane1}, {sizes>/pane2}, {sizes>/pane3}) bound on the three SplitterLayoutData.size properties and echoed in each` &&
                ` pane's Text label. abap2UI5 has one default model, so pane1/pane2/pane3 are folded into it and bound directly - the 'sizes>' prefix is dropped and the last path segment is identical, which` &&
                ` structural-diff matches. Same data, renders identically. // NOTE: The shared 123-row demo ProductCollection (sap/ui/demo/mock/products.json) is inlined into model_init with the three columns the` &&
-               ` sample binds - ProductId, Name and Quantity (the List's title/counter and the Select's Item key/text). Quantity is the mock integer; the full row set is kept. // IMPROVISED: The two PaneContainer` &&
-               ` resize handlers (resize='.onRootContainerResize' on the root container and resize='.onInnerContainerResize' on the inner container) are dropped. Both only compose an informational MessageToast` &&
-               ` listing the oldSizes/newSizes pane-size arrays reported by the resize event; that array-valued container-resize event has no bound-model equivalent, so the resize attribute is not reproduced. No app`.
-    lv_text1 = lv_text1 && ` state depends on it.`.
+               ` sample binds - ProductId, Name and Quantity (the List's title/counter and the Select's Item key/text). Quantity is the mock integer; the full row set is kept. // NOTE: The two PaneContainer resize` &&
+               ` handlers (resize='.onRootContainerResize' on the root container and resize='.onInnerContainerResize' on the inner one) compose an informational MessageToast listing the oldSizes/newSizes pane-size` &&
+               ` arrays. **Reproduced roundtrip-free since 2026-08-05**: measured with scripts/probes/event-arg-expression-probe.mjs, ``.join( ',' )`` over an ARRAY-valued event parameter resolves inside an event`.
+    lv_text1 = lv_text1 && ` arg, so both arrays travel into a client-composed toast with the original's two-line text (each guarded, since the first resize carries no oldSizes). The earlier rationale - 'an array-valued` &&
+               ` container-resize event has no bound-model equivalent' - looked for a MODEL equivalent where the client expression was the answer.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.ResponsiveSplitter`      name = `ResponsiveSplitter`                  class = `z2ui5_cl_ai_app_186` path = `src/02/b10/z2ui5_cl_ai_app_186.clas.abap`
-        score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.38`
         notes = lv_text1 ) ).
 
@@ -4292,14 +4295,19 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = lv_text1 ) ).
 
+    lv_text1 = `NOTE: Calendar with primaryCalendarType Islamic / secondaryCalendarType Gregorian. The picked day IS transportable after all - measured 2026-08-05 with` &&
+               ` ``scripts/probes/event-arg-expression-probe.mjs`` against real OpenUI5: an event arg is a full UI5 expression, and indexed access into an array-valued getter plus chained calls resolve there` &&
+               ` (``$event.oSource.getSelectedDates()[0].getStartDate()``). The earlier rationale - 'select carries no date parameter and the selected DateRange is control state' - was wrong. The wire carries the` &&
+               ` three LOCAL date parts as three expression args (year, month+1, day) rather than ``toISOString( )``, which would shift the day for any user east of Greenwich, and each arg is guarded by` &&
+               ` ``getSelectedDates().length > 0`` so a re-click that clears the selection arrives as year 0. App 151 now writes the SELECTED day (Gregorian yyyy-MM-dd, matching its label) instead of the server date.` &&
+               ` Residual: 'Focus Today' - the original only calls focusDate(today) and changes no text; the port keeps writing today's date and does not move the calendar focus, since focusDate takes a Date OBJECT` &&
+               ` no wire can construct.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarCalendarType`                class = `z2ui5_cl_ai_app_151` path = `src/02/b08/z2ui5_cl_ai_app_151.clas.abap`
-        score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22.0`
-        notes = `IMPROVISED: Calendar with primaryCalendarType Islamic / secondaryCalendarType Gregorian. select and 'Focus Today' are wired to backend events that write the current server date (Gregorian yyyy-MM-dd)` &&
-                 ` into the bound Text; the original formatted the actually selected day into the Text (select) and only focused today via focusDate (Focus Today, no text change). The selected day is not read from the` &&
-                 ` event and the calendar focus is not moved - a material behavior substitution, not just an unverified wiring.` ) ).
+        notes = lv_text1 ) ).
 
     lv_text1 = `NOTE: The object-typed calendar date properties (Calendar.minDate, Calendar.maxDate and the disabledDates DateRange startDate/endDate) are fed from plain ISO strings in the model and converted at the` &&
                ` point of use with Formatter.DateCreateObject from the curated module (core:require='{Formatter: z2ui5/model/formatter}'). A plain string binding would crash view creation (Date must be a JS/UI5Date` &&
@@ -4310,41 +4318,51 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` null }" - written as a backtick literal so the braces survive to the attribute. Probe-verified against the real OpenUI5 runtime (scripts/probes/calendar-empty-enddate-probe.mjs, headless Chromium,` &&
                ` calendar focused on the affected month): the old binding throws and renders 0 days, the guarded one yields endDate null for the empty row and renders all 42. This also matters for the semantics, not` &&
                ` only the crash: Month._checkDateEnabled disables a single day ONLY through the no-endDate branch (the range branch compares strictly exclusive, oTimeStamp > start && < end), so seeding end = start` &&
-               ` would disable nothing. // IMPROVISED: The Calendar select handler (handleCalendarSelect) formats the picked day with DateFormat and writes it into the 'selectedDate' Text; this is imperative` &&
-               ` presentation with no bindable equivalent (the select event parameter is a DateRange control reference, not a value that can be transported), so the select attribute is dropped and the selectedDate`.
-    lv_text1 = lv_text1 && ` Text keeps its initial 'No Date Selected' text. // NOTE: The original Switch (state='true') toggles Calendar week numbers via an imperative change handler (setShowWeekNumbers). This is folded into a` &&
-               ` two-way binding shared by the Switch state and a Calendar showWeekNumbers property (both bound to show_week_numbers, seeded true), so the toggle runs on the client with no round-trip - the` &&
-               ` thin-frontend move. The Switch change attribute is therefore dropped and a showWeekNumbers attribute (absent from the original view) is added. // POST-1.71: Formatter.DateCreateObject is referenced` &&
-               ` via core:require, which needs UI5 >= 1.74. sap.ui.unified.Calendar itself and its minDate/maxDate/disabledDates/showWeekNumbers members are all <= 1.71 (in scope).`.
+               ` would disable nothing. // NOTE: handleCalendarSelect formats the picked day with DateFormat.getInstance({style:'long'}) and writes it into the 'selectedDate' Text. The picked day IS transportable` &&
+               ` after all - measured 2026-08-05 with ``scripts/probes/event-arg-expression-probe.mjs`` against real OpenUI5: an event arg is a full UI5 expression, and indexed access into an array-valued getter plus`.
+    lv_text1 = lv_text1 && ` chained calls resolve there (``$event.oSource.getSelectedDates()[0].getStartDate()``). The earlier rationale - 'select carries no date parameter and the selected DateRange is control state' - was` &&
+               ` wrong. The wire carries the three LOCAL date parts as three expression args (year, month+1, day) rather than ``toISOString( )``, which would shift the day for any user east of Greenwich, and each arg` &&
+               ` is guarded by ``getSelectedDates().length > 0`` so a re-click that clears the selection arrives as year 0. The port reproduces it: the select wire was added (the Text is bound instead of carrying the` &&
+               ` literal 'No Date Selected'), and the English long form ('March 17, 2026') is composed in ABAP from the transported parts - the thin-frontend answer to a locale formatter, as in app 024. // NOTE: The` &&
+               ` original Switch (state='true') toggles Calendar week numbers via an imperative change handler (setShowWeekNumbers). This is folded into a two-way binding shared by the Switch state and a Calendar`.
+    lv_text1 = lv_text1 && ` showWeekNumbers property (both bound to show_week_numbers, seeded true), so the toggle runs on the client with no round-trip - the thin-frontend move. The Switch change attribute is therefore dropped` &&
+               ` and a showWeekNumbers attribute (absent from the original view) is added. // POST-1.71: Formatter.DateCreateObject is referenced via core:require, which needs UI5 >= 1.74. sap.ui.unified.Calendar` &&
+               ` itself and its minDate/maxDate/disabledDates/showWeekNumbers members are all <= 1.71 (in scope).`.
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarMinMax`                      class = `z2ui5_cl_ai_app_220` path = `src/02/b10/z2ui5_cl_ai_app_220.clas.abap`
         score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22.0`
         is_post171 = abap_true
         notes = lv_text1
         post171 = `Formatter.DateCreateObject is referenced via core:require, which needs UI5 >= 1.74. sap.ui.unified.Calendar itself and its minDate/maxDate/disabledDates/showWeekNumbers members are all <= 1.71 (in` &&
                  ` scope).` ) ).
 
+    lv_text1 = `NOTE: The picked day IS transportable after all - measured 2026-08-05 with ``scripts/probes/event-arg-expression-probe.mjs`` against real OpenUI5: an event arg is a full UI5 expression, and indexed` &&
+               ` access into an array-valued getter plus chained calls resolve there (``$event.oSource.getSelectedDates()[0].getStartDate()``). The earlier rationale - 'select carries no date parameter and the` &&
+               ` selected DateRange is control state' - was wrong. The wire carries the three LOCAL date parts as three expression args (year, month+1, day) rather than ``toISOString( )``, which would shift the day` &&
+               ` for any user east of Greenwich, and each arg is guarded by ``getSelectedDates().length > 0`` so a re-click that clears the selection arrives as year 0. App 139 now formats the SELECTED day as the` &&
+               ` original's yyyy-MM-dd (DateFormat pattern) instead of the server date. Residual: 'Select Today' still only writes the text - the server date IS today, so the text is 1:1, but the calendar's own` &&
+               ` highlight is not moved, because addSelectedDate takes a DateRange CONTROL that no wire can construct.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarSingleDaySelection`          class = `z2ui5_cl_ai_app_139` path = `src/02/b05/z2ui5_cl_ai_app_139.clas.abap`
-        score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22.0`
-        notes = `IMPROVISED: Calendar.select and the 'Select Today' button are wired to backend events that write the current server date (yyyy-MM-dd) into the bound status Text. The original formatted` &&
-                 ` getSelectedDates()[0].getStartDate() / added a DateRange(today) with DateFormat + UI5Date; the actually clicked day is not transported back (Calendar.select carries no date parameter and the selected` &&
-                 ` DateRange is control state), so selecting a day other than today shows the server date instead - a material simplification.` ) ).
+        notes = lv_text1 ) ).
 
-    lv_text1 = `IMPROVISED: CalendarDateInterval.select and the 'Select Today' button are wired to backend events that write the current server date (yyyy-MM-dd) into the bound status Text. The original formatted` &&
-               ` getSelectedDates()[0].getStartDate() with DateFormat, and handleCalendarSelect additionally toggled the day off when the same date was re-clicked (removeSelectedDate). Reading the actually clicked` &&
-               ` day out of the event is not transportable (select carries no date parameter and getSelectedDates()[0] needs array indexing the $-arg expression parser does not offer), so both actions report the` &&
-               ` server date and the re-click deselect is lost; the select/press attributes are kept. // NOTE: The CAL_SELECT / SELECT_TODAY round-trips updating the bound selectedDate Text are unverified in a` &&
-               ` running system. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): 'Select Today' round-trips and the bound #selectedDate Text shows the yyyy-MM-dd value;` &&
-               ` CAL_SELECT is the same handler.`.
+    lv_text1 = `NOTE: The picked day IS transportable after all - measured 2026-08-05 with ``scripts/probes/event-arg-expression-probe.mjs`` against real OpenUI5: an event arg is a full UI5 expression, and indexed` &&
+               ` access into an array-valued getter plus chained calls resolve there (``$event.oSource.getSelectedDates()[0].getStartDate()``). The earlier rationale - 'select carries no date parameter and the` &&
+               ` selected DateRange is control state' - was wrong. The wire carries the three LOCAL date parts as three expression args (year, month+1, day) rather than ``toISOString( )``, which would shift the day` &&
+               ` for any user east of Greenwich, and each arg is guarded by ``getSelectedDates().length > 0`` so a re-click that clears the selection arrives as year 0. App 177 now formats the SELECTED day as` &&
+               ` yyyy-MM-dd, and the original's else-branch is reproduced exactly: re-clicking the same day removes it from the selection, the guard reports year 0 and the Text falls back to 'No Date Selected'.` &&
+               ` Residual: 'Select Today' writes the text (server date = today) without moving the calendar's highlight. // NOTE: The CAL_SELECT / SELECT_TODAY round-trips updating the bound selectedDate Text are`.
+    lv_text1 = lv_text1 && ` unverified in a running system. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): 'Select Today' round-trips and the bound #selectedDate Text shows the yyyy-MM-dd` &&
+               ` value; CAL_SELECT is the same handler.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.CalendarDateInterval`   name = `CalendarDateIntervalBasic`           class = `z2ui5_cl_ai_app_177` path = `src/02/b10/z2ui5_cl_ai_app_177.clas.abap`
-        score = 3
-        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.30.0`
         notes = lv_text1 ) ).
 
@@ -4474,11 +4492,11 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
     lv_text1 = `POST-1.71: Button.ariaHasPopup (since UI5 1.84) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.84 to render it. // NOTE: anchored open works since the framework` &&
                ` fallback of 2026-07-27 (pr/unified-menu-open-anchored, implemented): the openBy dispatch detects that sap.ui.unified.Menu has no openBy and calls open(false, anchor, 'begin top', 'begin bottom',` &&
                ` anchor) with the button as opener and dock reference - the previously declared no-op wire is now functional, unchanged in the port. Still dropped either way: the keyboard flag (controller` &&
-               ` attachBrowserEvent tab/keyup tracking) and the explicit Popup.Dock.BeginTop/BeginBottom constants (default docking is visually equivalent). // IMPROVISED: the sample's handleMenuItemPress branches on` &&
-               ` the runtime item: ``if (oItem.getSubmenu()) return;`` (do nothing for a parent that only opens its submenu) and ``if (oItem.getMetadata().getName() === 'sap.ui.unified.MenuTextFieldItem') sMessage =` &&
-               ` item.getValue() + ' entered'`` else ``item.getText() + ' pressed'``. This walks the client-side control tree / inspects the control class, which the thin backend cannot do - and the roundtrip-free`.
-    lv_text1 = lv_text1 && ` MESSAGE_TOAST.show template cannot branch. The port composes a single toast "'<text>' pressed" from ${$parameters>/item}.getText() for every itemSelect, dropping the submenu-parent guard and the` &&
-               ` MenuTextFieldItem getValue()/'entered' branch (same class of limit as app 060's parent-chain breadcrumb, which the server cannot walk). The itemSelect event and every item are declared 1:1. // NOTE:` &&
+               ` attachBrowserEvent tab/keyup tracking) and the explicit Popup.Dock.BeginTop/BeginBottom constants (default docking is visually equivalent). // NOTE: the sample's handleMenuItemPress branches on the` &&
+               ` runtime item: a parent that only opens its submenu is skipped, a sap.ui.unified.MenuTextFieldItem reports getValue() + ' entered', every other item getText() + ' pressed'. **Reproduced 1:1 since` &&
+               ` 2026-08-05**: measured with scripts/probes/event-arg-expression-probe.mjs, a class-name ternary resolves inside an event arg, so the whole branch travels as ONE client expression and the`.
+    lv_text1 = lv_text1 && ` client-composed toast (a {0} template) prints exactly what the original composes - including the empty text for a submenu parent. The earlier claim that the class cannot be inspected was about the` &&
+               ` BACKEND; the expression runs on the client, where the sample's own code runs too. Distinct from app 060's parent-chain breadcrumb, which stays impossible: the expression grammar has no loop. // NOTE:` &&
                ` the fragment Menu (added in the controller via getView().addDependent(this._menu)) is declared 1:1 inside the Button's ``dependents`` aggregation (the addDependent equivalent, same as app 060) -` &&
                ` structurally identical, no loss; structural-diff ignores the aggregation name. // NOTE: the selected item text is read with ${$parameters>/item}.getText() (a method call on the resolved MenuItemBase` &&
                ` control), NOT ${$parameters>/item/text}: the $parameters model exposes 'item' as the control object and UI5 keeps properties in the control's internal store, so the path .../item/text reads an` &&
@@ -4489,7 +4507,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.Menu`                   name = `MenuMenuEventing`                    class = `z2ui5_cl_ai_app_228` path = `src/02/b10/z2ui5_cl_ai_app_228.clas.abap`
         score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
         since = `1.21.0`
         is_post171 = abap_true

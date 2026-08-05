@@ -141,6 +141,17 @@ demo-kit controllers that do `MessageToast.show("…" + evt.getParameter(…))`
 with the whole expression-binding grammar — method calls, `isA('…')`, string
 concatenation, ternaries. Use it for anything the client can compute from the
 event without a round-trip.
+**Measured 2026-08-05 — what the arg grammar actually supports**
+(`scripts/probes/event-arg-expression-probe.mjs`, real OpenUI5, one candidate
+per shape): indexed access into an array-valued getter
+(`$event.oSource.getSelectedDates()[0].getStartDate()`), indexed access into an
+array *parameter* (`${$parameters>/tokens}[0].getKey()`), chained calls,
+arithmetic (`getMonth() + 1`), `.join( ',' )` over an array parameter and a
+class-name ternary all resolve. Transport LOCAL date parts rather than
+`toISOString( )` — the latter shifts the day for any user east of Greenwich —
+and guard an indexed access (`…getSelectedDates().length > 0 ? … : 0`), which
+doubles as the original's "nothing selected" branch. Proving ports: 139/151/177/220
+(the clicked day), 228 (a class branch), 186 (array joins).
 **Boundary — a menu-item ancestor breadcrumb is NOT transportable** (measured
 in a browser on OpenUI5 1.152, and against the transpiled backend): the
 expression grammar has **no loop**, and `sap.m.Menu` re-parents its items
