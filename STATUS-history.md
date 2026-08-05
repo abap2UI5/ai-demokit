@@ -7,6 +7,56 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## 2026-08-05 (fourth round) — the REWORK list cleared, two new linter rules, the last request closed
+
+Four rounds in one day, all measured rather than argued.
+
+**The imperative-aggregation family is closed** (076/077/203/241 minus 241).
+Two new probe candidates answered it against real OpenUI5:
+`removeToken`/`removeItem` accept an **ID STRING** (`ManagedObject.removeAggregation`
+resolves it), so a static aggregation child can be removed through a wire that
+can only carry strings; and UI5 runs a **`;`-separated PAIR** of event
+handlers, so one event drives two client actions without a round-trip.
+- **203** folds the first tokenizer's static tokens into a bound aggregation
+  (the app-085 pattern) so onAddToken appends a row with the original's
+  empty-input toast, and deletes the three other tokenizers' static tokens by
+  id, roundtrip-free, with the original's "Token deleted: X" toast.
+- **076/077** remove the notification item AND toast its title on the same
+  close event, both client-side. The NotificationList gained an `id` (the wire
+  needs a target for `removeItem`) — the port's only extra attribute.
+- **241** is the one left: its Create button appends a `NavigationListItem` to
+  a statically declared list, so the fold has to cover the whole nested
+  navigation tree. Still REWORK, not a gap.
+
+**022/235** got their sticky Label + three CheckBoxes back on app 009's proven
+bound-array pattern, **166**'s semantic actions stopped being static toasts
+(showFooter/edit visibility as bound state, the `Messaging.addMessages` seed
+through the `cc.MessageManager` bridge, the MessagePopover declared in the
+indicator's dependents), and **233** finally uses two capabilities that had
+shipped in July and sat unused: the compound `binding_call` OR-filter and
+`open( searchValue )`.
+
+**Two lessons from 166 became linter rules** (the distillation rule, and both
+mirror how this corpus learns):
+- `escaped-brace-in-backtick` — brace escaping is a `|…|` TEMPLATE rule. A
+  backtick literal has no escape processing, so `\{ path: … \}` lands in the
+  attribute verbatim and UI5 never sees a binding. Only the render gate caught
+  it. Measured over the corpus, the first cut reported five `<style>` ports
+  (where the backslash MUST survive), so the rule now fires only when the value
+  IS a binding.
+- the **`css` property allowlist** is mirrored as a closed set with an
+  `ACTION_ARGS` slot that applies only when the method is `css`, and
+  `check-upstream` guards that mirror like the `GLOBAL_TARGETS` one.
+
+**The last framework request closed itself the same day it was written.**
+`model-empty-vs-default` needed two changes: the blanket `omit_initial` and,
+because a boolean that must send `abap_false` is itself initial, the scoped
+`omit_initial_paths`. With both, app 049 binds `enabled`/`editable` plainly
+again and has **no binding-value deviation left**; `pr/` holds only the
+open-abap-core request now.
+
+IMPROVISED: 136 → **118**.
+
 ## 2026-08-05 (third round) — the biggest PROBE family measured: not a gap, six ports reworked
 
 `event-value-unreachable` was the largest open family of the harvest (7
