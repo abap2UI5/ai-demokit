@@ -17,9 +17,9 @@ TRAINING.md; for what abap2UI5 can express see CAPABILITIES.md._
 |---|---|
 | Ports | **293** sidecars in `meta/` (src/01: 177 · src/02: 67 · src/03: 19 · src/04: 19 · src/05: 11) |
 | Status ladder | 86 `generated` · 146 `reviewed` · 61 `checked` (live-verified) |
-| Deviations | 4 DROPPED_171 · 39 IMPROVISED · 574 NOTE · 122 POST_171 |
+| Deviations | 5 DROPPED_171 · 38 IMPROVISED · 579 NOTE · 122 POST_171 |
 | Open LIVE_TESTs | **0 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
-| Declared gate skips | 3 structural-diff · 3 render-smoke (each re-verified per run — a stale skip FAILS) |
+| Declared gate skips | 2 structural-diff · 3 render-smoke (each re-verified per run — a stale skip FAILS) |
 | Out-of-scope ported samples | `z2ui5_cl_ai_app_121 (sap.m.sample.UploadSet — deprecated)` · `z2ui5_cl_ai_app_136 (sap.f.sample.SidePanelSingle — control @since 1.107)` · `z2ui5_cl_ai_app_141 (sap.ui.core.sample.InvisibleMessage — control @since 1.78)` · `z2ui5_cl_ai_app_165 (sap.f.sample.ProductSwitchNavigation — control @since 1.72)` · `z2ui5_cl_ai_app_203 (sap.m.sample.OverflowToolbarTokenizer — control @since 1.139)` — all decided KEEP permanently 2026-07-30 (per-app rationale in ui5/scope-exceptions.json, revertible); the source-backed scope gate stays hard for NEW undecided entries |
 
 _Coverage per library (ported / in scope) is generated into the [README](README.md#coverage); one row per sample in [api.md](api.md)._
@@ -40,7 +40,7 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   |---|---:|---:|---|
   | GAP | 15 | 8 | a framework gap — 6 requests filed, **all implemented upstream the same day** |
   | PROBE | 16 | 5 | a *suspected* gap whose premise is unverified — measure before filing |
-  | REWORK | 16 | 2 | expressible today; the port under-delivers (review backlog) — 115 and 118, the two big rebuilds |
+  | REWORK | 16 | 1 | expressible today; the port under-delivers (review backlog) — 118, the last big rebuild (115 done 2026-08-05) |
   | BOUNDARY | 16 | 16 | outside abap2UI5 by nature (client-only APIs, sample-local JS) |
   | POLICY | 73 | 8 | a decided corpus rule; the rest are `NOTE`s now (see below) |
 
@@ -332,6 +332,24 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   an ABAP `COND` rebuilds the original if/else). The two remaining hits
   (118/203) are deliberately dropped interactions, declared IMPROVISED.
   Re-run the probe after any batch that adds toast wires.
+  **Closed 2026-08-05 — app 115**, the larger of the two rebuilds the harvest
+  left in REWORK. It was a 3-column breadth probe over 5 seeded rows with a
+  `structural_diff` skip; it is now the full `sap.ui.table.sample.Basic`:
+  all **13** columns (Text/Input/Label/ObjectStatus/`u:Currency`/ComboBox/
+  Link/Button/CheckBox/Select/MultiInput/`c:Icon`/DatePicker templates) over
+  the complete 123-row mock, with the Suppliers/Categories arrays
+  `initSampleDataModel` derives and the two Available formatters computed in
+  ABAP (`AVAILABLESTATE`/`AVAILABLEICON`, thin-frontend rule). The skip is
+  **gone** — structural-diff now runs it and the only difference left is the
+  declared `p:ColumnAIAction` (`sap.m.plugins` @1.136, DROPPED_171). The two
+  display-only handlers (`handleDetailsPress`, `onPaste`) resolve on the
+  client through `control_global MESSAGE_TOAST` with the row/parameter value
+  as an event argument; only `updateMultipleSelection`, which mutates the
+  model, stays a round-trip. The original's `key="{ProductId}"` on the
+  `/Categories`-bound suggestion template is ported **verbatim** (it yields an
+  empty key there — the sample's own quirk) rather than repaired, and the
+  handler mirrors its filter-by-removed-key. IMPROVISED **39 → 38**; the
+  REWORK family is down to app **118** alone.
 - [ ] **App 203 out of scope via `@ui5-experimental-since`** —
   `sap.m.OverflowToolbarTokenizer` is experimental since 1.139 with no plain
   `@since`, which the scanners misread as base-version until 2026-07-27

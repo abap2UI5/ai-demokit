@@ -4207,15 +4207,26 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         since = `1.16.0`
         notes = lv_text1 ) ).
 
-    lv_text1 = `IMPROVISED: Breadth-probe: a minimal sap.ui.table.Table (grid table, distinct from sap.m.Table) with 3 columns + template cells over a small ABAP model. The original's full 13-column set` &&
-               ` (Input/ObjectStatus/Currency/ComboBox/Link/Button/CheckBox/Select/MultiInput/Icon/DatePicker cells, formatters, derived Suppliers/Categories arrays), the p:ColumnAIAction plugin (post-1.71) and paste` &&
-               ` handling are omitted, and only 5 of the 123 /ProductCollection rows are seeded. Review 2026-07-27: two seeded literals contradicting the mock were corrected (ITelO Vault supplier Smartcard Corp ->` &&
-               ` Technocom, Comfort Easy price 1650 -> 1679, the wrong-neighbour-copy class); the reduction itself needs rework toward a faithful rebuild (full rows per the retired-SUBSET_DATA policy; only the` &&
-               ` post-1.71 plugin may stay dropped, as DROPPED_171).`.
+    lv_text1 = `NOTE: Rebuilt 1:1 from the breadth probe 2026-08-05: all THIRTEEN columns (Text/Input/Label/ObjectStatus/u:Currency/ComboBox/Link/Button/CheckBox/Select/MultiInput/c:Icon/DatePicker templates) over` &&
+               ` the full 123-row /ProductCollection of the shared demo mock (sap/ui/demo/mock/products.json), with the Suppliers and Categories arrays the controller derives from it in initSampleDataModel.` &&
+               ` ProductPicUrl values are absolutized to the OpenUI5 host (https://sdk.openui5.org/test-resources/...) per the asset-URL rule; the mock carries them host-relative. // NOTE: The controller's two` &&
+               ` formatters (Available -> 'Success'/'Error' via ObjectStatus.state, Available -> 'sap-icon://accept'/'sap-icon://decline' via Icon.src) are computed in ABAP into the derived fields AVAILABLESTATE /` &&
+               ` AVAILABLEICON and bound plainly (thin-frontend rule). The Available and Heavy fields initSampleDataModel derives (Status === 'Available', WeightMeasure > 1000) are derived in model_init the same way;` &&
+               ` Heavy stays a STRING because the CheckBox binding declares type 'sap.ui.model.type.String' in the original. // NOTE: DeliveryDate: the original computes Date.now() - (i % 10 * 4 days), a moving`.
+    lv_text1 = lv_text1 && ` value, so it is anchored on a FIXED base date here (the corpus rule for now/random values, apps 164/181/289) and carried as an ISO date STRING rather than a JS epoch number. The DatePicker keeps its` &&
+               ` typed binding (sap.ui.model.type.Date) but its formatOptions source pattern becomes 'yyyy-MM-dd' instead of 'timestamp' - the model field type changed, the control binding did not (CAPABILITIES date` &&
+               ` row). // NOTE: The MultiInput's suggestionItems template carries key="{ProductId}" in the original although it is bound over /Categories, whose rows only have a Name - so a token added from a` &&
+               ` suggestion gets an empty key there. The quirk is ported verbatim (key={PRODUCTID}) rather than repaired; the tokenUpdate handler mirrors the original's filter-by-removed-key, which drops the` &&
+               ` empty-key tokens together, and additionally gates on the event's update type ('removed') because the original recomputes from the post-update token list instead of reacting to a type. // NOTE: The` &&
+               ` controller's three handlers are all display-only and resolve on the client: handleDetailsPress toasts the row's ProductId, onPaste toasts the pasted data - both composed through control_global`.
+    lv_text1 = lv_text1 && ` MESSAGE_TOAST with the row/parameter value as an event argument, so neither needs a round-trip. updateMultipleSelection genuinely mutates the model, so it stays a backend event (TOKEN_UPDATE): the` &&
+               ` removed token key and the row's binding context path travel and ABAP deletes the row's token entry. // 1.71: sap.m.plugins.ColumnAIAction (@since 1.136, on the Product Name column, with the` &&
+               ` controller's onAIActionPress opening an AI-hint dialog) is dropped: sap.m.plugins does not exist in UI5 1.71, which the corpus targets. The column itself is present, only the plugin aggregation and` &&
+               ` its press handler are missing.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `Basic`                               class = `z2ui5_cl_ai_app_115` path = `src/02/b01/z2ui5_cl_ai_app_115.clas.abap`
-        score = 2
-        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = lv_text1 ) ).
 
     lv_text1 = `IMPROVISED: onColumnResize is reduced: the original buffers per-column resize messages, joins them and toasts 'Column <label> was resized to <width>.', and calls oEvent.preventDefault() to block` &&
