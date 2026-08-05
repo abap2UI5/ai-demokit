@@ -826,13 +826,13 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         since = `1.46`
         notes = lv_text1 ) ).
 
-    lv_text1 = `IMPROVISED: The original binds two named models inside the cards (cities> for the ComboBoxes, products> for the revenue List); abap2UI5 keeps one default model, so those bind directly` &&
-               ` ({cities>/cities} -> {/CITIES}, {products>/productItems} -> {/PRODUCTITEMS}, prefix dropped, last segment identical). The RevealGrid toggle (a sample-local JS debug overlay module), the three` &&
-               ` property Switches, the GridContainer columnsChange, the GenericTile press and the f:Card header press are controller handlers in the original; here each raises a STATIC-text client MESSAGE_TOAST. The` &&
-               ` controller's onInit attachLayoutChange handler (swapping sapUiSmallMargin/sapUiTinyMargin on layoutXS/S) is dropped entirely. Review 2026-07-27: several of these substitutions under-deliver against` &&
-               ` CAPABILITIES - the three Switches set BINDABLE GridContainer properties (snapToRow/allowDenseFill/inlineBlockLayout could be two-way bound to the Switch states, prefer-a-bindable-property rule, app` &&
-               ` 048 idiom), the press toasts fake values readable from the event ($event.oSource metadata name), and columnsCountText could carry the columns parameter - flagged for rework, not promoted. // NOTE:`.
-    lv_text1 = lv_text1 && ` The ComboBox items keep the original binding-info sorter 1:1 ({path:'/CITIES', sorter:{path:'TEXT'}} - restored 2026-07-27; an earlier version had dropped it although CAPABILITIES marks binding` &&
+    lv_text1 = `NOTE: The original binds two named models inside the cards (cities> for the ComboBoxes, products> for the revenue List); abap2UI5 keeps one default model, so those bind directly ({cities>/cities} ->` &&
+               ` {/CITIES}, {products>/productItems} -> {/PRODUCTITEMS}, prefix dropped, last segment identical). **Sidecar corrected 2026-08-05**: the rest of the text still described the port before its rework and` &&
+               ` called the handlers STATIC toasts. They are not: the three property Switches are two-way bound to the GridContainer's snapToRow / allowDenseFill / inlineBlockLayout (prefer-a-bindable-property, the` &&
+               ` app-007/048/128 pattern), columnsChange round-trips its columns parameter, and the GenericTile / f:Card header presses compose their toast from $event.oSource.getMetadata().getName() instead of a` &&
+               ` fixed string. What stays dropped: the RevealGrid toggle (a sample-local JS debug overlay, same as apps 145/222/271) and the onInit attachLayoutChange handler that swaps` &&
+               ` sapUiSmallMargin/sapUiTinyMargin on the layoutXS/S breakpoints - a class swap on a live breakpoint change, for which no wire exists (the device> model is read per round-trip, not per resize). //`.
+    lv_text1 = lv_text1 && ` NOTE: The ComboBox items keep the original binding-info sorter 1:1 ({path:'/CITIES', sorter:{path:'TEXT'}} - restored 2026-07-27; an earlier version had dropped it although CAPABILITIES marks binding` &&
                ` sorters expressible). The sap.ui.integration Card keeps its original external manifest reference (cardManifest.json). The two long lorem-ipsum filler Texts are abbreviated to short placeholders.` &&
                ` cities.json (7) and products.json (3) are inlined in full (the unbound 'status' mock column stays out of the row type per the rows-not-columns rule). // NOTE: Faked-event-value audit fix` &&
                ` (2026-07-30): the four substituted handlers are now the original behaviours. onSnapToRowChange / onAllowDenseFillChange / onInlineBlockLayoutChange: each Switch state is two-way bound and the` &&
@@ -845,8 +845,8 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` (the getMetadata().getName() expression resolves); the switch bindings and columns counter remain unexercised.`.
     result = VALUE #( BASE result
       ( module = `sap.f`              control = `sap.f.GridContainer`                   name = `GridContainer`                       class = `z2ui5_cl_ai_app_168` path = `src/04/b07/z2ui5_cl_ai_app_168.clas.abap`
-        score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.65`
         notes = lv_text1 ) ).
 
@@ -937,6 +937,13 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         post171 = `The GridList customLayout uses sap.ui.layout.cssgrid.ResponsiveColumnLayout and per-item ResponsiveColumnItemLayoutData with columns/rows (control + members since 1.72), kept 1:1; requires a UI5` &&
                  ` release >= 1.72.` ) ).
 
+    lv_text1 = `NOTE: The sample's UI is a trigger Button plus two explanatory Texts, and the ProductSwitch itself lives in ProductSwitchPopover.fragment.xml, opened on press. **Rebuilt 1:1 on 2026-08-05** (the` &&
+               ` 2026-07-27 review had flagged the 'no JS controller' rationale as refuted): the fragment is a core:FragmentDefinition shown through popover_display( by_id = pSwitchBtn ), the three products come from` &&
+               ` model/data.json into a bound ProductSwitch items aggregation, and fnChange - a toast 'Redirecting to <targetSrc>' plus URLHelper.redirect( targetSrc, true ) - is two client actions chained on the one` &&
+               ` change event, both reading the pressed item off the event (${$parameters>/itemPressed}.getTargetSrc()). The port now has NO structural difference from the original at all. // POST-1.71:` &&
+               ` sap.f.ProductSwitch and sap.f.ProductSwitchItem are controls @since 1.72 - one minor release past the 1.71 line. The sample IS the ProductSwitch, so the port is one of the five decided scope` &&
+               ` exceptions (ui5/scope-exceptions.json, KEEP 2026-07-30); the controls only became visible to the property gate on 2026-08-05, when the popover fragment was rebuilt instead of substituted by a toast.`.
+    lv_text1 = lv_text1 && ` The app needs a UI5 release >= 1.72.`.
     result = VALUE #( BASE result
       ( module = `sap.f`              control = `sap.f.ProductSwitch`                   name = `ProductSwitchNavigation`             class = `z2ui5_cl_ai_app_165` path = `src/04/b07/z2ui5_cl_ai_app_165.clas.abap`
         score = 3
@@ -944,10 +951,10 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         since = `1.72`
         since_post171 = abap_true
         is_post171 = abap_true
-        notes = `NOTE: The sample's UI is a trigger Button plus two explanatory Texts, and the ProductSwitch itself lives in ProductSwitchPopover.fragment.xml, opened on press. **Rebuilt 1:1 on 2026-08-05** (the` &&
-                 ` 2026-07-27 review had flagged the 'no JS controller' rationale as refuted): the fragment is a core:FragmentDefinition shown through popover_display( by_id = pSwitchBtn ), the three products come from` &&
-                 ` model/data.json into a bound ProductSwitch items aggregation, and fnChange - a toast 'Redirecting to <targetSrc>' plus URLHelper.redirect( targetSrc, true ) - is two client actions chained on the one` &&
-                 ` change event, both reading the pressed item off the event (${$parameters>/itemPressed}.getTargetSrc()). The port now has NO structural difference from the original at all.` ) ).
+        notes = lv_text1
+        post171 = `sap.f.ProductSwitch and sap.f.ProductSwitchItem are controls @since 1.72 - one minor release past the 1.71 line. The sample IS the ProductSwitch, so the port is one of the five decided scope` &&
+                 ` exceptions (ui5/scope-exceptions.json, KEEP 2026-07-30); the controls only became visible to the property gate on 2026-08-05, when the popover fragment was rebuilt instead of substituted by a toast.` &&
+                 ` The app needs a UI5 release >= 1.72.` ) ).
 
     lv_text1 = `NOTE: The original keeps header/object data in nested paths on one JSON model (title, showFooter, titleSnappedContent/text, titleExpandedContent/text, objectDescription/category|center|email|status).` &&
                ` abap2UI5 keeps one default model and render-smoke does not mock nested structures, so those paths are folded to flat fields bound via _bind (last path segment identical, which structural-diff` &&
@@ -2681,18 +2688,18 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
 
     lv_text1 = `NOTE: The object-typed calendar date properties (PlanningCalendar.startDate, CalendarAppointment.startDate/endDate) are fed from plain ISO strings in the model and converted at the point of use with` &&
                ` Formatter.DateCreateObject from the curated module (core:require='{Formatter: z2ui5/model/formatter}'). The original's UI5Date.getInstance(year, month0, day, ...) values are normalized to ISO 1:1` &&
-               ` (month is 0-based; day/month overflow rolled forward exactly as the JS Date constructor does). // IMPROVISED: appointmentSelect / intervalSelect / the ToggleButton toggleDayNamesLine are wired to` &&
-               ` simple toasts. The original opens a MessageBox with the selected appointment title + count, appends a new appointment on interval select, and toggles the day-names line — those interactive behaviors` &&
-               ` are lost here although partly expressible: showDayNamesLine (@since 1.50) is a bindable property (two-way flag + view_model_update, the prefer-a-bindable-property rule), the MessageBox is` &&
-               ` client->message_box_display and the appointment title is client-resolvable via ${$parameters>/appointment}.getTitle(); only the date-object event parameters for the interval append are genuinely`.
-    lv_text1 = lv_text1 && ` unverified. Review 2026-07-27: needs rework, retyped from NOTE - a lost behavior is IMPROVISED, not NOTE. // POST-1.71: Formatter.DateCreateObject is referenced via core:require, which needs UI5 >=` &&
+               ` (month is 0-based; day/month overflow rolled forward exactly as the JS Date constructor does). // NOTE: appointmentSelect / intervalSelect / the toggleDayNamesLine ToggleButton are reproduced since` &&
+               ` 2026-08-05, after the 2026-07-27 review had retyped the entry from NOTE to IMPROVISED because a lost behaviour is not a NOTE. handleAppointmentSelect's MessageBox is composed in ABAP from values the` &&
+               ` event carries (${$parameters>/appointment}.getTitle() / .getSelected(), $event.oSource.getSelectedAppointments().length and the appointments array length for the no-appointment branch), so both` &&
+               ` branches of the original read exactly as before - the message is modal, so the round-trip costs nothing visible. handleIntervalSelect appends the sample's new appointment ('new appointment', Type09)`.
+    lv_text1 = lv_text1 && ` over the selected interval, whose start/end travel as their LOCAL parts (a UTC toISOString( ) would shift the day). toggleDayNamesLine is the bindable showDayNamesLine (@since 1.50) shared with the` &&
+               ` ToggleButton's pressed state, so the press attribute is not emitted - the prefer-a-bindable-property rule. // POST-1.71: Formatter.DateCreateObject is referenced via core:require, which needs UI5 >=` &&
                ` 1.74. sap.m.PlanningCalendar itself is since 1.34 (in scope). Also sap.ui.unified.CalendarAppointment.ariaHasPopup (@since 1.150.0) is kept 1:1 from the original view (ariaHasPopup='{ariaHasPopup}');` &&
                ` newer than 1.71, declared. Was undeclared because the property gate was sap.m-only (now extended to all libs, 2026-07-24).`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.PlanningCalendar`                name = `PlanningCalendarSingle`              class = `z2ui5_cl_ai_app_108` path = `src/01/b14/z2ui5_cl_ai_app_108.clas.abap`
         score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.34`
         is_post171 = abap_true
         checked = `CHECKED (2026-07-27): verified in a running system 2026-07-27 - PlanningCalendar renders all appointments/interval headers via Formatter.DateCreateObject; interactions toast as declared`
@@ -3593,12 +3600,12 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
     result = VALUE #( BASE result
       ( module = `sap.ui.codeeditor`  control = `sap.ui.codeeditor.CodeEditor`          name = `CodeEditor`                          class = `z2ui5_cl_ai_app_114` path = `src/02/b01/z2ui5_cl_ai_app_114.clas.abap`
         score = 2
-        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.46`
-        notes = `IMPROVISED: Breadth-probe: the ACE-based sap.ui.codeeditor CodeEditor (a wrapped third-party editor). The value literal is shortened to 4 of the original's 12 language entries (against the` &&
-                 ` verbatim-data rule) - a loss, retyped from NOTE at the 2026-07-27 review. Escaping concern found at the same review: the original view.xml carries the value's literal braces backslash-escaped` &&
-                 ` (value='\{...'), but the port builds the value in a |...| template whose \{ collapses to a raw brace, so the serialized attribute starts with an unescaped { that the XMLView binding parser will read` &&
-                 ` as a binding-info object - needs the surviving-backslash form (\\\{ in the template, or a backtick literal) plus a live/render verification. Needs rework.` ) ).
+        notes = `NOTE: Breadth-probe: the ACE-based sap.ui.codeeditor CodeEditor (a wrapped third-party editor). **Both findings of the 2026-07-27 review are fixed (2026-08-05)**: the value carries all TWELVE language` &&
+                 ` entries of the original verbatim (it had been shortened to four, against the verbatim-data rule), and the brace escaping is right. The original's own view.xml writes value='\{…' - the backslash has` &&
+                 ` to SURVIVE into the serialized attribute or the XMLView parser reads the JSON braces as a binding - so the braces come from ``backtick`` literals (taken verbatim) while the body uses |…| templates` &&
+                 ` for the real newlines; inside a template \{ would collapse to a bare brace. That distinction is now a linter rule of its own (escaped-brace-in-backtick, the mirror of collapsed-brace-in-style).` ) ).
 
     lv_text1 = `NOTE: The original's onSelectTab swaps the CodeEditor value per selected key imperatively (A -> example2, B -> example1, any other key -> setValue() i.e. empty) and its onInit seeds the hint '//` &&
                ` select tabs to see value of CodeEditor changing'. Rebuilt on the client with no round-trip: selectedKey is two-way bound to selected_key (seeded with the original's literal 'invalidKey') and the` &&

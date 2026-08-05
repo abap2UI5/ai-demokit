@@ -27,7 +27,11 @@ CLASS z2ui5_cl_ai_app_114 IMPLEMENTATION.
 
     DATA(view) = z2ui5_cl_ai_xml=>factory( ).
 
-    " literal braces in an attribute value must be escaped, else the XMLView parser reads them as a binding
+    " the JSON value carries literal braces, which the XMLView parser would read
+    " as a binding - the original escapes them in its own view.xml (value='\{...').
+    " The escape has to SURVIVE into the serialized attribute, so the braces come
+    " from `backtick` literals (verbatim) while the body uses |…| templates for
+    " the real newlines: inside a template \{ would collapse to a bare brace
     view->open( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.ui.codeeditor`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
@@ -35,7 +39,20 @@ CLASS z2ui5_cl_ai_app_114 IMPLEMENTATION.
 
         )->leaf( `CodeEditor`
             )->a( n = `type`   v = `json`
-            )->a( n = `value`  v = |\{\n  "English" : "Hello world",\n  "German" : "Hallo Welt",\n  "Japanese" : "こんにちは世界",\n  "Russian" : "Здравствуй мир"\n\}|
+            )->a( n = `value`  v = `\{` &&
+                                    |\n\t\t"Chinese" : "你好世界",| &&
+                                    |\n\t\t"Dutch" : "Hallo wereld",| &&
+                                    |\n\t\t"English" : "Hello world",| &&
+                                    |\n\t\t"French" : "Bonjour monde",| &&
+                                    |\n\t\t"German" : "Hallo Welt",| &&
+                                    |\n\t\t"Greek" : "γειά σου κόσμος",| &&
+                                    |\n\t\t"Italian" : "Ciao mondo",| &&
+                                    |\n\t\t"Japanese" : "こんにちは世界",| &&
+                                    |\n\t\t"Korean" : "여보세요 세계",| &&
+                                    |\n\t\t"Portuguese" : "Olá mundo",| &&
+                                    |\n\t\t"Russian" : "Здравствуй мир",| &&
+                                    |\n\t\t"Spanish" : "Hola mundo"| &&
+                                    |\n\t| && `\}`
             )->a( n = `height` v = `300px` ).
 
     client->view_display( view->stringify( ) ).

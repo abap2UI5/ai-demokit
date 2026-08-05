@@ -7,6 +7,43 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## 2026-08-05 (seventh round) — 108, 114, 168 and a quoting boundary
+
+- **108** (`PlanningCalendarSingle`) was the one port the 2026-07-27 review
+  retyped from NOTE to IMPROVISED ("a lost behavior is IMPROVISED, not NOTE"),
+  and all three of its lost behaviours are back. `handleAppointmentSelect`'s
+  MessageBox is composed in ABAP from values the event carries — the
+  appointment's title and new selected state, the number of selected
+  appointments, and the appointments-array length for the branch where the
+  interval hit no appointment — so both branches read exactly as in the
+  original; the message is modal, so the round-trip costs nothing visible.
+  `handleIntervalSelect` appends the sample's own new appointment
+  ('new appointment', Type09) over the selected interval, whose start/end travel
+  as LOCAL parts. `toggleDayNamesLine` is the bindable `showDayNamesLine`
+  (@since 1.50) shared with the ToggleButton's `pressed` state.
+- **114** carries all TWELVE language entries of the CodeEditor value again (it
+  had been cut to four) and gets the brace escaping right: the braces come from
+  `backtick` literals, which take the backslash verbatim, while the body uses
+  `|…|` templates for the real newlines. Exactly the distinction that became the
+  `escaped-brace-in-backtick` linter rule this morning.
+- **168** needed no code — like 167, its sidecar still described the port before
+  its rework and called handlers "STATIC toasts" that are bound properties and
+  value-carrying toasts today. Corrected, with the two genuine drops named: the
+  RevealGrid debug overlay and the `attachLayoutChange` margin swap.
+- **165**'s rebuild made `sap.f.ProductSwitch`/`ProductSwitchItem` visible to the
+  property gate for the first time (the port used to substitute them with a
+  toast), so the port now declares them POST_171 — it is one of the five decided
+  scope exceptions anyway.
+
+**A new boundary, measured:** an event-arg expression cannot contain a DOUBLE
+quote. The handler rides in a double-quoted XML attribute, so the first `"`
+ends it and the view fails to parse. The probe found it while checking whether
+a whole composed message fits in one arg (it does, `\n` included) — a message
+that wraps a value in quotes therefore puts them in the client-composed template
+or composes in ABAP. Recorded in CAPABILITIES next to the grammar it belongs to.
+
+IMPROVISED: 45 → **42**.
+
 ## 2026-08-05 (sixth round) — six of the flagged breadth-probe ports
 
 The 2026-07-27 review flagged thirteen ports as under-delivering and named the

@@ -121,6 +121,14 @@ const CANDIDATES = [
     expect: 'both handlers run (the probe records the LAST one, so SECOND proves the chain)',
   },
   {
+    key: 'ternary-with-newline',
+    what: "one arg carrying a whole composed message: nested ternary + concat + a literal \\n. NOTE the quoting boundary found here: a DOUBLE quote cannot appear in the expression, because the handler rides in a double-quoted XML attribute - so a message that wraps a value in quotes puts them in the TEMPLATE, not the expression",
+    ports: "108 (the appointment MessageBox: title + selected state + count, or the else-branch count)",
+    xml: `<Button id="c" text="B" press=".eB('EVT', \${$parameters>/item} ? (\${$parameters>/item} + ' ' + (\${$parameters>/on} ? 'selected' : 'deselected') + '. \\n Selected: ' + \${$parameters>/n}) : (\${$parameters>/n} + ' selected'))"/>`,
+    fire: `c.firePress({ item: 'Meeting', on: true, n: 3 })`,
+    expect: "Meeting selected. <newline> Selected: 3",
+  },
+  {
     key: 'array-join',
     what: 'a whole array parameter joined into one string — ${$parameters>/newSizes}.join(",")',
     ports: "186 (ResponsiveSplitter resize oldSizes/newSizes)",

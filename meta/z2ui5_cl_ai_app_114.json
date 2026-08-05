@@ -12,8 +12,8 @@
   "checked": null,
   "deviations": [
     {
-      "type": "IMPROVISED",
-      "what": "Breadth-probe: the ACE-based sap.ui.codeeditor CodeEditor (a wrapped third-party editor). The value literal is shortened to 4 of the original's 12 language entries (against the verbatim-data rule) - a loss, retyped from NOTE at the 2026-07-27 review. Escaping concern found at the same review: the original view.xml carries the value's literal braces backslash-escaped (value='\\{...'), but the port builds the value in a |...| template whose \\{ collapses to a raw brace, so the serialized attribute starts with an unescaped { that the XMLView binding parser will read as a binding-info object - needs the surviving-backslash form (\\\\\\{ in the template, or a backtick literal) plus a live/render verification. Needs rework."
+      "type": "NOTE",
+      "what": "Breadth-probe: the ACE-based sap.ui.codeeditor CodeEditor (a wrapped third-party editor). **Both findings of the 2026-07-27 review are fixed (2026-08-05)**: the value carries all TWELVE language entries of the original verbatim (it had been shortened to four, against the verbatim-data rule), and the brace escaping is right. The original's own view.xml writes value='\\{…' - the backslash has to SURVIVE into the serialized attribute or the XMLView parser reads the JSON braces as a binding - so the braces come from `backtick` literals (taken verbatim) while the body uses |…| templates for the real newlines; inside a template \\{ would collapse to a bare brace. That distinction is now a linter rule of its own (escaped-brace-in-backtick, the mirror of collapsed-brace-in-style)."
     }
   ]
 }
