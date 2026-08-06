@@ -17,7 +17,7 @@ TRAINING.md; for what abap2UI5 can express see CAPABILITIES.md._
 |---|---|
 | Ports | **293** sidecars in `meta/` (src/01: 177 · src/02: 67 · src/03: 19 · src/04: 19 · src/05: 11) |
 | Status ladder | 86 `generated` · 146 `reviewed` · 61 `checked` (live-verified) |
-| Deviations | 5 DROPPED_171 · 30 IMPROVISED · 587 NOTE · 122 POST_171 |
+| Deviations | 5 DROPPED_171 · 29 IMPROVISED · 588 NOTE · 122 POST_171 |
 | Open LIVE_TESTs | **0 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
 | Declared gate skips | 2 structural-diff · 3 render-smoke (each re-verified per run — a stale skip FAILS) |
 | Out-of-scope ported samples | `z2ui5_cl_ai_app_121 (sap.m.sample.UploadSet — deprecated)` · `z2ui5_cl_ai_app_136 (sap.f.sample.SidePanelSingle — control @since 1.107)` · `z2ui5_cl_ai_app_141 (sap.ui.core.sample.InvisibleMessage — control @since 1.78)` · `z2ui5_cl_ai_app_165 (sap.f.sample.ProductSwitchNavigation — control @since 1.72)` · `z2ui5_cl_ai_app_203 (sap.m.sample.OverflowToolbarTokenizer — control @since 1.139)` — all decided KEEP permanently 2026-07-30 (per-app rationale in ui5/scope-exceptions.json, revertible); the source-backed scope gate stays hard for NEW undecided entries |
@@ -143,8 +143,19 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
     optional third `t_arg` and dispatch picks the innermost OPEN scope, so 232
     registers `Ctrl+S` twice (unscoped → `SAVE`, popover-scoped → `PSAVE`) and
     its last residual deviation is closed.
-  - `template-clone-id` (1, app 012): one port, named as an open idea in its own
-    sidecar, premise unmeasured. File only if a second sample needs it.
+  - ~~`template-clone-id`~~ **measured and closed 2026-08-06**, and the
+    measurement changed the request. Three sidecars called an aggregation
+    template's clone ids *nondeterministic*;
+    `scripts/probes/aggregation-item-probe.mjs` shows they are not — UI5 mints
+    `<templateId>-<parentId>-<index>` and they survive a model refresh **and** a
+    reorder. The real gap is that the parent id carries the view prefix the
+    framework assigns at runtime (`v1--tpl-v1--car-0`), which the backend never
+    sees. So the fix is not "make the ids stable" but "resolve where the prefix
+    is known": every control-resolving argument kind now accepts
+    `<id>/<aggregation>/<index>` (`aggregation-item-address`, implemented
+    upstream), and app 012 re-syncs its two Carousels again. **PROBE is down to
+    one entry** — app 109's per-entry `DateRange` formatting, which the
+    expression grammar has no loop for.
 
   **REWORK** adds three entries to the review backlog below that were not in
   it: app 166 (semantic action toasts + the missing `Messaging.addMessages`

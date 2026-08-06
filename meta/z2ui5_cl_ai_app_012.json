@@ -39,8 +39,8 @@
       "what": "Panel expand: the controller's onPanelExpanded (walking the sibling HBox controls and calling setVisible) is replaced by a bound VISIBLE flag per comparison value row, toggled in the PANEL_EXPANDED event via t_arg ${KEY} + ${$parameters>/expand}; the description HBox's literal visible=\"false\" becomes the {VISIBLE} binding (initial false)."
     },
     {
-      "type": "IMPROVISED",
-      "what": "snapped/expanded Carousel re-sync stays dropped although Carousel.setActivePage is whitelisted upstream since 2026-07-20 (pr/control-methods-openby-setactivepage): the carousels' pages are aggregation-template CLONES whose ids (templateId-parentId-index, view-prefixed; nondeterministic under extended change detection) are not addressable from the backend - restoring the re-sync would need an index-based page-resolution mechanism, a new framework idea if more samples turn out to need it."
+      "type": "NOTE",
+      "what": "The snapped/expanded Carousel re-sync is reproduced since 2026-08-06. The original's _updateCarouselsActivePage hands each Carousel its own page AT THE SAME INDEX - carousel.setActivePage( carousel.getPages()[ iFirstItem ] ) - and those pages are aggregation-template CLONES. Measured 2026-08-06 (scripts/probes/aggregation-item-probe.mjs, real OpenUI5): their ids ARE deterministic and stable, even across a reorder - UI5 mints <templateId>-<parentId>-<index> - but the parent id carries the VIEW PREFIX the framework assigns at runtime (v1--tpl-v1--car-0), which the backend never sees, so it cannot spell one. The earlier sidecar called them 'nondeterministic', which the probe refutes; the gap was the prefix, not the determinism. Wherever a CONTROL_BY_ID argument takes a control id it now also takes an aggregation ITEM, addressed positionally as <id>/<aggregation>/<index> (pr/aggregation-item-address, implemented upstream), resolved on the client where both the prefix and the aggregation are known. Both carousels are re-synced on every PAGE_CHANGED, as in the original."
     },
     {
       "type": "NOTE",

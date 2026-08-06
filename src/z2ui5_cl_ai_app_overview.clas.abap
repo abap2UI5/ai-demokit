@@ -1294,19 +1294,22 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` visiblePagesCount could bind {device>/resize/width} directly, but the count is also capped at the number of SELECTED products and then drives comparison_props_build, which slices the props table` &&
                ` server-side per page window - so a client-side count would desync the props it is supposed to index. The round-trip decision stays; what the live model closes is the class-swap family (app 168), not` &&
                ` this one. // NOTE: Panel expand: the controller's onPanelExpanded (walking the sibling HBox controls and calling setVisible) is replaced by a bound VISIBLE flag per comparison value row, toggled in` &&
-               ` the PANEL_EXPANDED event via t_arg ${KEY} + ${$parameters>/expand}; the description HBox's literal visible="false" becomes the {VISIBLE} binding (initial false). // IMPROVISED: snapped/expanded` &&
-               ` Carousel re-sync stays dropped although Carousel.setActivePage is whitelisted upstream since 2026-07-20 (pr/control-methods-openby-setactivepage): the carousels' pages are aggregation-template CLONES`.
-    lv_text1 = lv_text1 && ` whose ids (templateId-parentId-index, view-prefixed; nondeterministic under extended change detection) are not addressable from the backend - restoring the re-sync would need an index-based` &&
-               ` page-resolution mechanism, a new framework idea if more samples turn out to need it. // NOTE: the DynamicPageTitle stateChange handler (.onStateChange, add/removeSnappedContent of the snapped` &&
-               ` Carousel as a Carousel-animation workaround) is dropped together with its stateChange attribute - imperative aggregation surgery with no framework equivalent; the snapped/expanded content still` &&
-               ` switches natively with the DynamicPage header state. // NOTE: comparison Props are built from a fixed 19-key list in the mock JSON key order (the original iterates the FIRST selected product's own` &&
-               ` keys, skipping ProductPicUrl - so a first product without DateOfSale would drop that row, and missing values rendered '<strong>undefined</strong>' where the port renders an empty <strong></strong>);` &&
-               ` selected products are taken in model row order, not click order; the original's per-product information cache is unnecessary server-side. The controller's handleButtonPress (MessageBox) is dead code`.
-    lv_text1 = lv_text1 && ` referenced by no view and not ported.`.
+               ` the PANEL_EXPANDED event via t_arg ${KEY} + ${$parameters>/expand}; the description HBox's literal visible="false" becomes the {VISIBLE} binding (initial false). // NOTE: The snapped/expanded` &&
+               ` Carousel re-sync is reproduced since 2026-08-06. The original's _updateCarouselsActivePage hands each Carousel its own page AT THE SAME INDEX - carousel.setActivePage( carousel.getPages()[ iFirstItem`.
+    lv_text1 = lv_text1 && ` ] ) - and those pages are aggregation-template CLONES. Measured 2026-08-06 (scripts/probes/aggregation-item-probe.mjs, real OpenUI5): their ids ARE deterministic and stable, even across a reorder -` &&
+               ` UI5 mints <templateId>-<parentId>-<index> - but the parent id carries the VIEW PREFIX the framework assigns at runtime (v1--tpl-v1--car-0), which the backend never sees, so it cannot spell one. The` &&
+               ` earlier sidecar called them 'nondeterministic', which the probe refutes; the gap was the prefix, not the determinism. Wherever a CONTROL_BY_ID argument takes a control id it now also takes an` &&
+               ` aggregation ITEM, addressed positionally as <id>/<aggregation>/<index> (pr/aggregation-item-address, implemented upstream), resolved on the client where both the prefix and the aggregation are known.` &&
+               ` Both carousels are re-synced on every PAGE_CHANGED, as in the original. // NOTE: the DynamicPageTitle stateChange handler (.onStateChange, add/removeSnappedContent of the snapped Carousel as a` &&
+               ` Carousel-animation workaround) is dropped together with its stateChange attribute - imperative aggregation surgery with no framework equivalent; the snapped/expanded content still switches natively`.
+    lv_text1 = lv_text1 && ` with the DynamicPage header state. // NOTE: comparison Props are built from a fixed 19-key list in the mock JSON key order (the original iterates the FIRST selected product's own keys, skipping` &&
+               ` ProductPicUrl - so a first product without DateOfSale would drop that row, and missing values rendered '<strong>undefined</strong>' where the port renders an empty <strong></strong>); selected` &&
+               ` products are taken in model row order, not click order; the original's per-product information cache is unnecessary server-side. The controller's handleButtonPress (MessageBox) is dead code` &&
+               ` referenced by no view and not ported.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.ComparisonPattern`               name = `ComparisonPattern`                   class = `z2ui5_cl_ai_app_012` path = `src/01/b05/z2ui5_cl_ai_app_012.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 reworked, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
         ui5_only = abap_true
         checked = `CHECKED (2026-07-20): verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed)`

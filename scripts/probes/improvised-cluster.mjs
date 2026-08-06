@@ -159,7 +159,8 @@ const FAMILIES = [
   },
   {
     key: 'template-clone-id',
-    verdict: 'PROBE',
+    verdict: 'GAP',
+    pr: 'aggregation-item-address',
     label: 'a control cloned from an aggregation template is not addressable by id',
     re: /aggregation-template CLONES|template-clone|index-based page resolution/i,
   },
