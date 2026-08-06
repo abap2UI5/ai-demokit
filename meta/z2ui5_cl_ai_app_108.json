@@ -6,7 +6,7 @@
   "batch": "b14",
   "audit": {
     "frontend_action": false,
-    "event_t_arg": false
+    "event_t_arg": true
   },
   "status": "checked",
   "checked": {
@@ -19,8 +19,8 @@
       "what": "The object-typed calendar date properties (PlanningCalendar.startDate, CalendarAppointment.startDate/endDate) are fed from plain ISO strings in the model and converted at the point of use with Formatter.DateCreateObject from the curated module (core:require='{Formatter: z2ui5/model/formatter}'). The original's UI5Date.getInstance(year, month0, day, ...) values are normalized to ISO 1:1 (month is 0-based; day/month overflow rolled forward exactly as the JS Date constructor does)."
     },
     {
-      "type": "IMPROVISED",
-      "what": "appointmentSelect / intervalSelect / the ToggleButton toggleDayNamesLine are wired to simple toasts. The original opens a MessageBox with the selected appointment title + count, appends a new appointment on interval select, and toggles the day-names line — those interactive behaviors are lost here although partly expressible: showDayNamesLine (@since 1.50) is a bindable property (two-way flag + view_model_update, the prefer-a-bindable-property rule), the MessageBox is client->message_box_display and the appointment title is client-resolvable via ${$parameters>/appointment}.getTitle(); only the date-object event parameters for the interval append are genuinely unverified. Review 2026-07-27: needs rework, retyped from NOTE - a lost behavior is IMPROVISED, not NOTE."
+      "type": "NOTE",
+      "what": "appointmentSelect / intervalSelect / the toggleDayNamesLine ToggleButton are reproduced since 2026-08-05, after the 2026-07-27 review had retyped the entry from NOTE to IMPROVISED because a lost behaviour is not a NOTE. handleAppointmentSelect's MessageBox is composed in ABAP from values the event carries (${$parameters>/appointment}.getTitle() / .getSelected(), $event.oSource.getSelectedAppointments().length and the appointments array length for the no-appointment branch), so both branches of the original read exactly as before - the message is modal, so the round-trip costs nothing visible. handleIntervalSelect appends the sample's new appointment ('new appointment', Type09) over the selected interval, whose start/end travel as their LOCAL parts (a UTC toISOString( ) would shift the day). toggleDayNamesLine is the bindable showDayNamesLine (@since 1.50) shared with the ToggleButton's pressed state, so the press attribute is not emitted - the prefer-a-bindable-property rule."
     },
     {
       "type": "POST_171",

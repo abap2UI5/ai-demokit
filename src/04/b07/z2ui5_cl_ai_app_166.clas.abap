@@ -24,11 +24,20 @@ CLASS z2ui5_cl_ai_app_166 DEFINITION PUBLIC.
     DATA email       TYPE string    VALUE `office@piproucts.com`.
     DATA status      TYPE string    VALUE `Success`.
     DATA showfooter  TYPE abap_bool VALUE abap_false.
+    DATA edit_visible TYPE abap_bool VALUE abap_true.
+
+    TYPES: BEGIN OF ty_s_message,
+             type    TYPE string,
+             message TYPE string,
+             target  TYPE string,
+           END OF ty_s_message.
+    DATA t_messages TYPE STANDARD TABLE OF ty_s_message WITH EMPTY KEY.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
 
     METHODS view_display.
+    METHODS on_event.
     METHODS model_init.
 
   PRIVATE SECTION.
@@ -43,6 +52,8 @@ CLASS z2ui5_cl_ai_app_166 IMPLEMENTATION.
     IF client->check_on_init( ).
       model_init( ).
       view_display( ).
+    ELSEIF client->check_on_event( ).
+      on_event( ).
     ENDIF.
 
   ENDMETHOD.
@@ -58,6 +69,7 @@ CLASS z2ui5_cl_ai_app_166 IMPLEMENTATION.
         )->a( n = `xmlns`           v = `sap.m`
         )->a( n = `xmlns:layout`    v = `sap.ui.layout`
         )->a( n = `xmlns:semantic`  v = `sap.f.semantic`
+        )->a( n = `xmlns:z2ui5`     v = `z2ui5.cc`
 
         )->open( n = `SemanticPage` ns = `semantic`
             )->a( n = `id`                          v = `mySemanticPage`
@@ -112,6 +124,18 @@ CLASS z2ui5_cl_ai_app_166 IMPLEMENTATION.
                 )->shut(
             )->shut(
 
+            " onInit: Messaging.addMessages( new Message({ message: 'Something wrong
+            " happened', type: Error }) ) - the app-authored message goes through the
+            " z2ui5.cc.MessageManager companion control (app 065 idiom), so the
+            " MessagesIndicator carries its count and the MessagePopover its content.
+            " It renders nothing, so it lives in the page's dependents - content
+            " takes exactly one child
+            )->open( n = `dependents` ns = `semantic`
+                )->leaf( n = `MessageManager` ns = `z2ui5`
+                    )->a( n = `items` v = client->_bind( t_messages )
+
+            )->shut(
+
             )->open( n = `content` ns = `semantic`
                 )->open( `Table`
                     )->a( n = `id`    v = `idProductsTable`
@@ -153,12 +177,15 @@ CLASS z2ui5_cl_ai_app_166 IMPLEMENTATION.
                 )->shut(
             )->shut(
 
-            " the original controller handlers (onEdit, onSave, onCancel, onMessagesButtonPress) are replaced by client toasts, see sidecar
+            " the original controller handlers are reproduced: onEdit/onSave/onCancel
+            " drive showFooter and the Edit action's visibility (bound state, so the
+            " decision stays in ABAP), and onSave alerts like the original MessageBox
             )->open( n = `titleMainAction` ns = `semantic`
                 )->leaf( n = `TitleMainAction` ns = `semantic`
-                    )->a( n = `id`    v = `editAction`
-                    )->a( n = `text`  v = `Edit`
-                    )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Edit` ) ) )
+                    )->a( n = `id`      v = `editAction`
+                    )->a( n = `text`    v = `Edit`
+                    )->a( n = `visible` v = client->_bind( edit_visible )
+                    )->a( n = `press`   v = client->_event( `EDIT` )
 
             )->shut(
 
@@ -187,7 +214,7 @@ CLASS z2ui5_cl_ai_app_166 IMPLEMENTATION.
             )->open( n = `footerMainAction` ns = `semantic`
                 )->leaf( n = `FooterMainAction` ns = `semantic`
                     )->a( n = `text`  v = `Save`
-                    )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Save` ) ) )
+                    )->a( n = `press` v = client->_event( `SAVE` )
 
             )->shut(
 
@@ -195,14 +222,36 @@ CLASS z2ui5_cl_ai_app_166 IMPLEMENTATION.
                 )->leaf( `Button`
                     )->a( n = `id`    v = `cancelAction`
                     )->a( n = `text`  v = `Cancel`
-                    )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Cancel` ) ) )
+                    )->a( n = `press` v = client->_event( `CANCEL` )
 
             )->shut(
 
             )->open( n = `messagesIndicator` ns = `semantic`
-                )->leaf( n = `MessagesIndicator` ns = `semantic`
-                    )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Messages` ) ) )
+                )->open( n = `MessagesIndicator` ns = `semantic`
+                    )->a( n = `id`    v = `messagesIndicatorBtn`
+                    " onMessagesButtonPress builds a MessagePopover over the message>
+                    " model and opens it at the button - declared in dependents and
+                    " opened roundtrip-free (app 066 idiom)
+                    )->a( n = `press` v = client->_event_client( val   = client->cs_event-control_by_id
+                                                                 t_arg = VALUE #( ( `messagePopover` )
+                                                                                  ( `toggleBy` )
+                                                                                  ( `$event.oSource.sId` ) ) )
 
+                    )->open( n = `dependents` ns = `semantic`
+                        )->open( `MessagePopover`
+                            )->a( n = `id`    v = `messagePopover`
+                            )->a( n = `items` v = `{ path: 'message>/' }`
+
+                            )->open( `items`
+                                )->leaf( `MessageItem`
+                                    )->a( n = `type`        v = `{message>type}`
+                                    )->a( n = `title`       v = `{message>message}`
+                                    )->a( n = `description` v = `{message>description}`
+
+                            )->shut(
+                        )->shut(
+                    )->shut(
+                )->shut(
             )->shut(
 
             )->open( n = `draftIndicator` ns = `semantic`
@@ -214,7 +263,43 @@ CLASS z2ui5_cl_ai_app_166 IMPLEMENTATION.
   ENDMETHOD.
 
 
+  METHOD on_event.
+
+    CASE client->get( )-event.
+
+      WHEN `EDIT`.
+        " onEdit: showFooter( true ) + the Edit action hides itself
+        showfooter   = abap_true.
+        edit_visible = abap_false.
+        client->view_model_update( ).
+
+      WHEN `SAVE`.
+        " onSave: showFooter( false ), the Edit action is back, and the original
+        " MessageBox.alert( 'Successfully saved!' )
+        showfooter   = abap_false.
+        edit_visible = abap_true.
+        client->message_box_display( text = `Successfully saved!`
+                                     type = `information` ).
+        client->view_model_update( ).
+
+      WHEN `CANCEL`.
+        " onCancel: same state reset, without the alert
+        showfooter   = abap_false.
+        edit_visible = abap_true.
+        client->view_model_update( ).
+
+    ENDCASE.
+
+  ENDMETHOD.
+
+
   METHOD model_init.
+
+    " the single Error message the controller seeds on init
+    t_messages = VALUE #( ( type    = `Error`
+                            message = `Something wrong happened`
+                            target  = `` ) ).
+
 
     productcollection = VALUE #(
       ( name = `Power Projector 4713` productid = `1239102` category = `Projector` suppliername = `Titanium` )

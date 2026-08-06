@@ -27,7 +27,7 @@
       "what": "url on the link tiles (since UI5 1.76) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.76 to render it."
     },
     {
-      "type": "IMPROVISED",
+      "type": "NOTE",
       "what": "the relative test-resources image and backgroundImage paths are resolved to absolute sdk.openui5.org URLs so the tile images load standalone."
     },
     {

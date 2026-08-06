@@ -27,6 +27,7 @@ CLASS z2ui5_cl_ai_app_108 DEFINITION PUBLIC.
            END OF ty_s_person.
     DATA t_people TYPE STANDARD TABLE OF ty_s_person WITH EMPTY KEY.
     DATA start_date TYPE string.
+    DATA show_day_names TYPE abap_bool.
 
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
@@ -73,13 +74,43 @@ CLASS z2ui5_cl_ai_app_108 IMPLEMENTATION.
 
             )->open( `PlanningCalendar`
                 )->a( n = `id`                        v = `PC1`
+                " toggleDayNamesLine flips PC1.showDayNamesLine - a bindable property
+                " (@since 1.50), so the ToggleButton and the calendar share the field
+                )->a( n = `showDayNamesLine`          v = client->_bind( show_day_names )
                 )->a( n = `showRowHeaders`            v = `false`
                 )->a( n = `startDate`                 v = |\{ path: '{ client->_bind( val = start_date path = abap_true ) }', formatter: 'Formatter.DateCreateObject' \}|
                 )->a( n = `viewKey`                   v = `Day`
                 )->a( n = `rows`                      v = client->_bind( t_people )
                 )->a( n = `appointmentsVisualization` v = `Filled`
-                )->a( n = `appointmentSelect`         v = client->_event( `APPT_SELECT` )
-                )->a( n = `intervalSelect`            v = client->_event( `INTERVAL_SELECT` )
+                " handleAppointmentSelect: MessageBox with the appointment title, its
+                " new selected state and the number of selected appointments - or, when
+                " the interval selection hit no appointment, the count of them. Every
+                " value is client-readable, so it travels and ABAP composes both
+                " branches (the message is modal anyway, so the round-trip is free)
+                )->a( n = `appointmentSelect`         v = client->_event(
+                          val   = `APPT_SELECT`
+                          t_arg = VALUE #(
+                            ( `${$parameters>/appointment} ? ${$parameters>/appointment}.getTitle() : ''` )
+                            ( `${$parameters>/appointment} ? ${$parameters>/appointment}.getSelected() : false` )
+                            ( `$event.oSource.getSelectedAppointments().length` )
+                            ( `${$parameters>/appointments} ? ${$parameters>/appointments}.length : 0` ) ) )
+                " handleIntervalSelect pushes a new appointment ('new appointment',
+                " Type09) over the selected interval into the model - reproduced by
+                " appending that row, with the interval's start/end carried as their
+                " LOCAL parts (a UTC toISOString( ) would shift the day)
+                )->a( n = `intervalSelect`            v = client->_event(
+                          val   = `INTERVAL_SELECT`
+                          t_arg = VALUE #(
+                            ( `${$parameters>/startDate}.getFullYear()` )
+                            ( `${$parameters>/startDate}.getMonth() + 1` )
+                            ( `${$parameters>/startDate}.getDate()` )
+                            ( `${$parameters>/startDate}.getHours()` )
+                            ( `${$parameters>/startDate}.getMinutes()` )
+                            ( `${$parameters>/endDate}.getFullYear()` )
+                            ( `${$parameters>/endDate}.getMonth() + 1` )
+                            ( `${$parameters>/endDate}.getDate()` )
+                            ( `${$parameters>/endDate}.getHours()` )
+                            ( `${$parameters>/endDate}.getMinutes()` ) ) )
                 )->a( n = `showEmptyIntervalHeaders`  v = `false`
 
                 )->open( `toolbarContent`
@@ -89,7 +120,7 @@ CLASS z2ui5_cl_ai_app_108 IMPLEMENTATION.
                     )->leaf( `ToggleButton`
                         )->a( n = `icon`    v = `sap-icon://decrease-line-height`
                         )->a( n = `tooltip` v = `Toggle Day Names Line`
-                        )->a( n = `press`   v = client->_event( `TOGGLE` )
+                        )->a( n = `pressed` v = client->_bind( show_day_names )
 
                 )->shut(
                 )->open( `rows`
@@ -132,13 +163,37 @@ CLASS z2ui5_cl_ai_app_108 IMPLEMENTATION.
     CASE client->get( )-event.
 
       WHEN `APPT_SELECT`.
-        client->message_toast_display( `Appointment selected` ).
+        DATA(appt_title) = client->get_event_arg( ).
+        IF appt_title IS NOT INITIAL.
+          DATA(selected) = COND string( WHEN client->get_event_arg( 2 ) = abap_true
+                                        THEN `selected`
+                                        ELSE `deselected` ).
+          client->message_box_display(
+              text = |'{ appt_title }' { selected }. \n Selected appointments: { client->get_event_arg( 3 ) }|
+              type = `show` ).
+        ELSE.
+          client->message_box_display( text = |{ client->get_event_arg( 4 ) } Appointments selected|
+                                       type = `show` ).
+        ENDIF.
 
       WHEN `INTERVAL_SELECT`.
-        client->message_toast_display( `Interval selected` ).
-
-      WHEN `TOGGLE`.
-        client->message_toast_display( `Day names line toggled` ).
+        " the pushed appointment: start/end of the selected interval, title
+        " 'new appointment', type Type09 - on the first person, as in the original
+        DATA(iso_start) = |{ client->get_event_arg( ) }-{ CONV i( client->get_event_arg( 2 ) ) WIDTH = 2 ALIGN = RIGHT PAD = '0' }| &&
+                          |-{ CONV i( client->get_event_arg( 3 ) ) WIDTH = 2 ALIGN = RIGHT PAD = '0' }| &&
+                          |T{ CONV i( client->get_event_arg( 4 ) ) WIDTH = 2 ALIGN = RIGHT PAD = '0' }| &&
+                          |:{ CONV i( client->get_event_arg( 5 ) ) WIDTH = 2 ALIGN = RIGHT PAD = '0' }:00|.
+        DATA(iso_end) = |{ client->get_event_arg( 6 ) }-{ CONV i( client->get_event_arg( 7 ) ) WIDTH = 2 ALIGN = RIGHT PAD = '0' }| &&
+                        |-{ CONV i( client->get_event_arg( 8 ) ) WIDTH = 2 ALIGN = RIGHT PAD = '0' }| &&
+                        |T{ CONV i( client->get_event_arg( 9 ) ) WIDTH = 2 ALIGN = RIGHT PAD = '0' }| &&
+                        |:{ CONV i( client->get_event_arg( 10 ) ) WIDTH = 2 ALIGN = RIGHT PAD = '0' }:00|.
+        IF lines( t_people ) > 0.
+          INSERT VALUE #( start_at = iso_start
+                          end_at   = iso_end
+                          title    = `new appointment`
+                          type     = `Type09` ) INTO TABLE t_people[ 1 ]-t_appointments.
+        ENDIF.
+        client->view_model_update( ).
 
     ENDCASE.
 

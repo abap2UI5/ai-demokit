@@ -24,8 +24,8 @@
       "what": "Two of the custom colors cannot ride an XML string[] attribute - the parser splits on commas, so hsl(0,100%,71%) and rgb(255,234,234) become their exact hex equivalents #ff6b6b and #ffeaea (same rendered swatches, different notation; sap.ui.core.CSSColor validation rejects any comma-escaping workaround)."
     },
     {
-      "type": "IMPROVISED",
-      "what": "handleLiveChange is DROPPED (the liveChange wire on the shared displayMode popover): the original paints the pressed button's icon via raw DOM styling (getDomRef().firstChild.firstChild.style.color = rgba(r,g,b,alpha) from the liveChange parameters) - direct DOM manipulation outside any bindable property, not expressible in the thin frontend. The popover itself (shared with the non-liveChange button) works 1:1; only the icon recoloring effect is lost. Also NOT ported: onExit's popover destroy calls - the declared dependents die with the view."
+      "type": "NOTE",
+      "what": "handleLiveChange is reproduced since 2026-08-06, and the earlier verdict - 'direct DOM manipulation outside any bindable property, not expressible in the thin frontend' - was too quick. The original paints the liveChangeButton's ICON by writing rgba(r,g,b,alpha) onto getDomRef().firstChild.firstChild.style.color, i.e. the icon span, and the framework's `css` action deliberately writes only on a control's OWN DOM node (the pr/control-inline-style entry excludes internal DOM on purpose). Measured instead of assumed (scripts/probes/, real OpenUI5): the icon span INHERITS color from the button root, so setting it there gives the identical computed colour without touching internal DOM. The wire is roundtrip-free - the rgba() string is composed on the client from the four liveChange parameters, an event argument being a full UI5 expression. Still NOT ported: onExit's popover destroy calls - the declared dependents die with the view."
     },
     {
       "type": "NOTE",

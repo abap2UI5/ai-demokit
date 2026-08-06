@@ -20,7 +20,7 @@
       "what": "Button.ariaHasPopup (since UI5 1.84) kept on the message-popover button. The Button.type value 'Negative' (a sap.m.ButtonType value since 1.73) is what the sample's buttonTypeFormatter returns for the highest-severity Error message."
     },
     {
-      "type": "IMPROVISED",
+      "type": "NOTE",
       "what": "the MessagePopover (built in the controller and addDependent'ed to the button) is declared 1:1 in the button's `dependents` aggregation; the controller's oMessagePopover.toggle(button) becomes a roundtrip-free client->_event_client( cs_event-control_by_id, toggleBy ) on the button press (anchored by id), and onActiveTitlePress's MessageToast.show becomes a roundtrip-free client->_event_client( cs_event-control_global, MESSAGE_TOAST/show ); the app is now init-only (no on_event). Previously client->follow_up_action( cs_event-control_by_id, toggleBy ) anchored to the button's DOM ref ($event.oSource.sId) - open-if-closed / close-if-open."
     },
     {

@@ -86,8 +86,12 @@ CLASS z2ui5_cl_ai_app_233 IMPLEMENTATION.
                 )->a( n = `id`      v = `selectDialog`
                 )->a( n = `title`   v = `Purchases`
                 )->a( n = `items`   v = client->_bind( t_purchases )
-                )->a( n = `search`  v = client->_event_client( val   = client->cs_event-binding_call
-                                                               t_arg = VALUE #( ( `selectDialog` ) ( `items` ) ( `filter` ) ( `SUPPLIERNAME` ) ( `Contains` ) ( `${$parameters>/value}` ) ) )
+                " handleValueHelpSearch/_getCombinedFilter build an OR over PurchaseID
+                " and SupplierName. The compound binding_call payload is one JSON
+                " string, so the value cannot be substituted client-side - the search
+                " round-trips and the backend issues the compound filter (app 022 idiom)
+                )->a( n = `search`  v = client->_event( val   = `VH_SEARCH`
+                                                        t_arg = VALUE #( ( `${$parameters>/value}` ) ) )
                 )->a( n = `confirm` v = client->_event( val   = `VH_CONFIRM`
                                                         t_arg = VALUE #( ( `${$parameters>/selectedItem}.getDescription()` ) ) )
 
@@ -121,8 +125,12 @@ CLASS z2ui5_cl_ai_app_233 IMPLEMENTATION.
                             )->a( n = `showValueHelp`   v = `true`
                             )->a( n = `change`          v = client->_event( `CHANGE` )
                             " opens unfiltered: the original pre-filters and calls open(sInputValue) - see meta deviation
+                            " _filterAndOpenValueHelpDialog opens the dialog with the
+                            " current input value: open( ) takes that search string
                             )->a( n = `valueHelpRequest` v = client->_event_client( val   = client->cs_event-control_by_id
-                                                                                    t_arg = VALUE #( ( `selectDialog` ) ( `open` ) ) )
+                                                                                    t_arg = VALUE #( ( `selectDialog` )
+                                                                                                     ( `open` )
+                                                                                                     ( `$event.oSource.getValue()` ) ) )
                             )->a( n = `suggestionItems` v = client->_bind( t_purchases )
                             )->a( n = `suggestionItemSelected` v = client->_event( val   = `SUGGEST`
                                                                                    t_arg = VALUE #( ( `${$parameters>/selectedItem}.getKey()` ) ) )
@@ -416,6 +424,18 @@ CLASS z2ui5_cl_ai_app_233 IMPLEMENTATION.
         " handleInputSuggestionItemSelected: the picked suggestion's key
         set_selection( client->get_event_arg( ) ).
         view_display( ).
+
+      WHEN `VH_SEARCH`.
+        " _getCombinedFilter: PurchaseID Contains value OR SupplierName Contains
+        " value - one group, so the two entries OR (the compound form shipped with
+        " pr/binding-call-compound-filters)
+        DATA(search_value) = client->get_event_arg( ).
+        client->follow_up_action(
+            val   = client->cs_event-binding_call
+            t_arg = VALUE #( ( `selectDialog` )
+                             ( `items` )
+                             ( `filter` )
+                             ( |[[["PURCHASEID","Contains","{ search_value }"],["SUPPLIERNAME","Contains","{ search_value }"]]]| ) ) ).
 
       WHEN `VH_CONFIRM`.
         " handleValueHelpConfirm: the picked item's description = PurchaseID

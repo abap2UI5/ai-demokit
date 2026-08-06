@@ -116,7 +116,12 @@ CLASS z2ui5_cl_ai_app_168 IMPLEMENTATION.
 
             )->open( n = `GridContainer` ns = `f`
                 )->a( n = `id`                v = `demoGrid`
-                )->a( n = `class`             v = `sapUiSmallMargin`
+                " the onInit attachLayoutChange handler: tiny margin on the two
+                " narrow layouts, small margin otherwise. Bound to the shared
+                " device model's breakpoint since 2026-08-05 - the class follows
+                " a live resize with no wire and no roundtrip, exactly like the
+                " original's handler
+                )->a( n = `class`             v = |\{= $\{device>/media/range\} === 'Phone' ? 'sapUiTinyMargin' : 'sapUiSmallMargin' \}|
                 " added attrs (declared): the switch-driven properties the original
                 " set imperatively (setSnapToRow / setAllowDenseFill / setInlineBlockLayout)
                 )->a( n = `snapToRow`         v = client->_bind( snap_to_row )

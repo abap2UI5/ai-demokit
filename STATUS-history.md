@@ -7,6 +7,404 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## 2026-08-05 (eighth round) — three breadth probes become faithful ports
+
+- **117** (`sap.f.Card`) is **1:1**: both cards instead of one simplified one -
+  the booking card with its two sorted city ComboBoxes, DatePicker and Book
+  button, and the whole second card (revenue List, CustomListItem template,
+  Title/Text, ObjectStatus state). The named models fold into the default model,
+  the ComboBox sorter rides along as a raw binding-info string. The gate then
+  reported its `structural_diff` skip as **STALE** — no differences remain — and
+  the skip is gone. That ratchet earns its keep.
+- **121** (`sap.m.upload.UploadSet`) is **1:1** too. It had three INVENTED rows;
+  both rows of the sample's own `items.json` are there verbatim now, with the
+  five ObjectMarkers and four ObjectStatuses of the first, the item template's
+  markers/statuses aggregations and uploadState, the UploadSet's file-size and
+  media-type properties, and the full toolbar incl. the
+  `UploadSetToolbarPlaceholder`. Skip gone as well.
+- **116** (`sap.uxap.ObjectPageSubSection`) has all three subsections and all
+  ten MultiViewBlock positions again, each inlined with its block view's
+  content. MultiViewBlock ships two views and picks by the block MODE; abap2UI5
+  has no BlockBase mode, so each block carries the variant its subsection asks
+  for — what the sample renders on load. The per-block runtime switching is the
+  declared residual.
+
+**A tooling lesson worth keeping:** 116's first version built its eight blocks
+through a helper method, and the structural diff reconstructs views
+**statically** — it saw one SimpleForm instead of ten and reported the port as
+missing everything. Views stay written out; a helper hides the view from the
+gate that judges it.
+
+Remaining from the flagged list: **115** (`sap.ui.table.Basic` — 13 columns,
+derived Suppliers/Categories, a MultiInput with tokens + suggestions, the full
+123-row mock) and **118** (`sap.ui.integration.CardsLayout` — several
+manifest-driven Cards, the hard one). Both are half-a-day ports, not one-liners.
+
+IMPROVISED: 42 → **39**.
+
+## 2026-08-05 (seventh round) — 108, 114, 168 and a quoting boundary
+
+- **108** (`PlanningCalendarSingle`) was the one port the 2026-07-27 review
+  retyped from NOTE to IMPROVISED ("a lost behavior is IMPROVISED, not NOTE"),
+  and all three of its lost behaviours are back. `handleAppointmentSelect`'s
+  MessageBox is composed in ABAP from values the event carries — the
+  appointment's title and new selected state, the number of selected
+  appointments, and the appointments-array length for the branch where the
+  interval hit no appointment — so both branches read exactly as in the
+  original; the message is modal, so the round-trip costs nothing visible.
+  `handleIntervalSelect` appends the sample's own new appointment
+  ('new appointment', Type09) over the selected interval, whose start/end travel
+  as LOCAL parts. `toggleDayNamesLine` is the bindable `showDayNamesLine`
+  (@since 1.50) shared with the ToggleButton's `pressed` state.
+- **114** carries all TWELVE language entries of the CodeEditor value again (it
+  had been cut to four) and gets the brace escaping right: the braces come from
+  `backtick` literals, which take the backslash verbatim, while the body uses
+  `|…|` templates for the real newlines. Exactly the distinction that became the
+  `escaped-brace-in-backtick` linter rule this morning.
+- **168** needed no code — like 167, its sidecar still described the port before
+  its rework and called handlers "STATIC toasts" that are bound properties and
+  value-carrying toasts today. Corrected, with the two genuine drops named: the
+  RevealGrid debug overlay and the `attachLayoutChange` margin swap.
+- **165**'s rebuild made `sap.f.ProductSwitch`/`ProductSwitchItem` visible to the
+  property gate for the first time (the port used to substitute them with a
+  toast), so the port now declares them POST_171 — it is one of the five decided
+  scope exceptions anyway.
+
+**A new boundary, measured:** an event-arg expression cannot contain a DOUBLE
+quote. The handler rides in a double-quoted XML attribute, so the first `"`
+ends it and the view fails to parse. The probe found it while checking whether
+a whole composed message fits in one arg (it does, `\n` included) — a message
+that wraps a value in quotes therefore puts them in the client-composed template
+or composes in ABAP. Recorded in CAPABILITIES next to the grammar it belongs to.
+
+IMPROVISED: 45 → **42**.
+
+## 2026-08-05 (sixth round) — six of the flagged breadth-probe ports
+
+The 2026-07-27 review flagged thirteen ports as under-delivering and named the
+technique for each; this round works that list.
+
+- **119** injects the sample's `css/style.css` through a `core:HTML` content
+  attribute, so the FixFlex background colours are back.
+- **169**'s eight Sliders resize their grid wrappers again. The original walks
+  the DOM to find the wrapper below each slider; every wrapper is statically
+  known in the view, so each pair is a two-way bound value plus a width
+  expression binding — roundtrip-free, the app-176 idiom.
+- **221**'s three home Buttons reset their sibling IconTabHeader again. First
+  attempt used `control_by_id setSelectedKey` and the **linter said no**:
+  `settable-property-via-action`, because `selectedKey` is bindable. The rule
+  was right — the port binds the key and resets it from the event handler.
+- **222**'s Slider resizes its Panel through the same binding pair (the Panel
+  HAS a width property, unlike the `sap.m.Page` of 138/267/269). Its RevealGrid
+  toggle stays dropped: a sample-local JS debug overlay is not a capability.
+- **165** is rebuilt 1:1 — the ProductSwitch popover fragment via
+  `popover_display( by_id )`, the three products bound from `model/data.json`,
+  and `fnChange`'s toast + `URLHelper.redirect` as two client actions chained
+  on one change event, both reading the pressed item off the event. The port
+  now has **no structural difference from the original at all**.
+- **167** needed no code: its sidecar still described the pre-rework port and
+  called handlers "STATIC toasts" that had long since been wired (bound
+  `sideExpanded`, the item text in the toast, `to()` for the NavContainer, the
+  user popover, the Create Item dialog). Corrected — a stale rationale is a
+  defect like any other, and this one would have sent the next reader to redo
+  finished work.
+
+IMPROVISED: 51 → **45**.
+
+## 2026-08-05 (fifth round) — IMPROVISED means what it says now, and two families closed
+
+**The metric was fixed first.** More than half of the corpus' 118 IMPROVISED
+deviations were a decided rule working as decided — the thin frontend, the
+single default model, mock flattening, BlockBase inlining, fragments composed
+into the one port view. Those render identically, so they are `NOTE`s;
+IMPROVISED is meant to say "a behaviour of the original is lost or
+substituted" (the 2026-07-27 review retyped app 108 the other way for exactly
+that reason). `improvised-cluster.mjs --retype-policy --write` did the sweep:
+safe because a gate declaration matches the deviation TEXT, never its type
+(`structural-diff` reads `d.what`), and not blind because an entry whose text
+still NAMES a loss is held back and listed — 8 of 73 were (261's dropped
+Expanded view, 267/269's lost model indirection, 012's routing, the BlockBase
+wrappers that lose their ids). **136 → 53.**
+
+**`imperative-aggregation` is closed** with app **241**, the last of the four:
+the sample's Create button does `getItem().addItem( new NavigationListItem(…) )`,
+so the main NavigationList is a bound aggregation now and creating appends a
+row with the sample's own defaults. Its rows use `omit_initial_paths`, with
+`SELECTABLE` deliberately outside the list — the two external links must send
+their explicit `false`. None of 076/077/203/241 was a framework gap.
+
+**`event-veto` is half closed.** App **136**'s "an event veto is not
+expressible" predated `s_ctrl-check_prevent_default` (merged 2026-07-30). The
+flag is baked per wire at render time, and that is enough there because the
+DIRECTION of the next toggle is known — an expanded panel can only collapse —
+so the flag is whichever switch applies, the switches are two-way bound, and
+the toggle round-trip re-bakes it. The handler is the original's if/else,
+toast and switch reset included. App **247** is the genuine residual and now
+says why: its veto is per COLUMN while the flag is per wire, and
+`columnResize` is declared on the Table, not the Column.
+
+IMPROVISED: **51 across 43 ports** — 8 GAP (all implemented upstream), 5 PROBE,
+14 REWORK, 16 BOUNDARY, 8 POLICY.
+
+## 2026-08-05 (fourth round) — the REWORK list cleared, two new linter rules, the last request closed
+
+Four rounds in one day, all measured rather than argued.
+
+**The imperative-aggregation family is closed** (076/077/203/241 minus 241).
+Two new probe candidates answered it against real OpenUI5:
+`removeToken`/`removeItem` accept an **ID STRING** (`ManagedObject.removeAggregation`
+resolves it), so a static aggregation child can be removed through a wire that
+can only carry strings; and UI5 runs a **`;`-separated PAIR** of event
+handlers, so one event drives two client actions without a round-trip.
+- **203** folds the first tokenizer's static tokens into a bound aggregation
+  (the app-085 pattern) so onAddToken appends a row with the original's
+  empty-input toast, and deletes the three other tokenizers' static tokens by
+  id, roundtrip-free, with the original's "Token deleted: X" toast.
+- **076/077** remove the notification item AND toast its title on the same
+  close event, both client-side. The NotificationList gained an `id` (the wire
+  needs a target for `removeItem`) — the port's only extra attribute.
+- **241** is the one left: its Create button appends a `NavigationListItem` to
+  a statically declared list, so the fold has to cover the whole nested
+  navigation tree. Still REWORK, not a gap.
+
+**022/235** got their sticky Label + three CheckBoxes back on app 009's proven
+bound-array pattern, **166**'s semantic actions stopped being static toasts
+(showFooter/edit visibility as bound state, the `Messaging.addMessages` seed
+through the `cc.MessageManager` bridge, the MessagePopover declared in the
+indicator's dependents), and **233** finally uses two capabilities that had
+shipped in July and sat unused: the compound `binding_call` OR-filter and
+`open( searchValue )`.
+
+**Two lessons from 166 became linter rules** (the distillation rule, and both
+mirror how this corpus learns):
+- `escaped-brace-in-backtick` — brace escaping is a `|…|` TEMPLATE rule. A
+  backtick literal has no escape processing, so `\{ path: … \}` lands in the
+  attribute verbatim and UI5 never sees a binding. Only the render gate caught
+  it. Measured over the corpus, the first cut reported five `<style>` ports
+  (where the backslash MUST survive), so the rule now fires only when the value
+  IS a binding.
+- the **`css` property allowlist** is mirrored as a closed set with an
+  `ACTION_ARGS` slot that applies only when the method is `css`, and
+  `check-upstream` guards that mirror like the `GLOBAL_TARGETS` one.
+
+**The last framework request closed itself the same day it was written.**
+`model-empty-vs-default` needed two changes: the blanket `omit_initial` and,
+because a boolean that must send `abap_false` is itself initial, the scoped
+`omit_initial_paths`. With both, app 049 binds `enabled`/`editable` plainly
+again and has **no binding-value deviation left**; `pr/` holds only the
+open-abap-core request now.
+
+IMPROVISED: 136 → **118**.
+
+## 2026-08-05 (third round) — the biggest PROBE family measured: not a gap, six ports reworked
+
+`event-value-unreachable` was the largest open family of the harvest (7
+deviations) and rested on one sentence repeated across seven sidecars: the
+value the original reads is **not transportable**, because it sits in an array
+or a control reference on the event. That sentence is now **measured and
+false**.
+
+`scripts/probes/event-arg-expression-probe.mjs` boots the real OpenUI5 (the
+`@openui5/*` packages the linter installs), creates a view whose controls carry
+`.eB('EVT', <candidate>)` — exactly what `get_t_arg` emits for a `$`-prefixed
+arg — fires the event and reports what the handler **received**. Six
+candidates, all resolving:
+
+| candidate | got |
+|---|---|
+| `${$parameters>/value} + '%'` (already shipped) | `60%` |
+| `$event.oSource.getSelectedDates()[0].getStartDate()` | the picked Date |
+| the three LOCAL date parts as three args | `2026, 3, 17` |
+| `${$parameters>/tokens}[0].getKey()` | `k1` |
+| class-name ternary over `getMetadata().getName()` | `B pressed` |
+| `${$parameters>/sizes}.join(',')` | `30,70` |
+
+So indexed access, chained calls, arithmetic, array joins and ternaries are all
+inside the expression grammar. **Six of the seven ports are reworked:**
+
+- **139 / 151 / 177 / 220** — the four calendar ports reported the **server
+  date** where the original formats the clicked day. They now transport the day
+  as its three LOCAL parts (year, month+1, day — not `toISOString()`, which
+  shifts the day for any user east of Greenwich), each guarded by
+  `getSelectedDates().length > 0`. That guard buys 177 its original else-branch
+  for free: re-clicking the same day removes it, year 0 arrives, the Text falls
+  back to "No Date Selected". 220 had no `select` wire at all and gained one,
+  with `DateFormat({style:'long'})`'s English rendering composed in ABAP (the
+  app-024 precedent). Residual in all four: the Today/Focus buttons still only
+  write text — `addSelectedDate`/`focusDate` take a DateRange/Date **object**
+  no wire can construct.
+- **228** — the sample's whole `handleMenuItemPress` branch (skip a submenu
+  parent, `getValue() + ' entered'` for a MenuTextFieldItem, `getText() +
+  ' pressed'` otherwise) now travels as ONE client expression into the composed
+  toast. The old rationale confused the layers: the class cannot be inspected
+  by the BACKEND, but the expression runs on the client, where the sample's own
+  code runs too.
+- **186** — both PaneContainer resize toasts carry their `oldSizes`/`newSizes`
+  arrays again via `.join( ',' )`, each guarded because the first resize has no
+  old sizes.
+
+**App 109 stays as it is, and its sidecar now says why properly:** its
+`selectedDatesChange` parameter is an array of `DateRange` CONTROLS that the
+original formats **per entry**, and the expression grammar has **no loop** —
+the same boundary as app 060's parent-chain breadcrumb. Indexed access would
+have worked for a single range; a per-entry map does not exist.
+
+The `event-without-handler` advisory budget ratchets 7 → 4 with the four
+calendar wires. IMPROVISED is down to 124 (from 136 at the start of the day).
+
+## 2026-08-05 (second half) — the five requests implemented upstream, six ports rebuilt on them
+
+Same day, three repos: the framework requests the harvest filed were
+implemented in abap2UI5, mirrored in the linter, and consumed by the corpus.
+
+**abap2UI5** (`_bind( omit_initial )`, `CONTROL_METHODS` `css` and `setSticky`,
+the `controlIdOrNull` argument kind with `setSelectedSection`/`setSelectedItem`,
+the `INVISIBLE_MESSAGE` and `FORMATTING` global targets). `npm run verify`
+green; 7 new JS specs and one ABAP unit test asserting an initial field stays
+absent from the serialized model. Two things were learned while implementing:
+
+- **`get_t_arg` drops a TRAILING empty argument**, so "clear this association"
+  arrived as a no-arg call and only worked by the control's own `undefined`
+  handling. `castArgs` now pads a missing trailing argument when — and only
+  when — its declared kind is nullable, so the null is explicit. Every other
+  kind keeps the no-padding rule that makes `open()` a true no-arg call.
+- **The `api-snapshot` gate reported an appended OPTIONAL parameter as a rule-5
+  violation**, although rule 5 allows exactly that ("new optional
+  parameters"). It distinguishes an additive optional parameter from a real
+  signature change now — same clauses, nothing reordered, every appended
+  parameter optional or defaulted — and still requires recording it.
+
+**abap2UI5-linter**: the hand-maintained `GLOBAL_TARGETS` mirror gained the two
+new targets (without it a correct wire fails `view_gates` as "not an accepted
+global object"). `check-upstream` also parsed `word:` pairs out of `//`
+comments inside a methods block — the payload example `{ CODE: { digits: n } }`
+read as two methods — so it strips line comments before matching now.
+
+**ai-demokit**: six ports rebuilt, each sidecar deviation moved
+`IMPROVISED → NOTE`.
+
+- **049** (`sap.m.sample.StepInput`) is the structural one: 14 unrolled static
+  items became the sample's ONE bound `CustomListItem` template again, bound
+  with `omit_initial`, and the template property `valueState` — dropped because
+  no row sets it — is back. It also found the **open half** of its own request:
+  `omit_initial` is all-or-nothing per bind, and `abap_false` IS initial, so
+  the two boolean columns (`enabled`/`editable`) would be dropped and the
+  disabled/read-only rows would render editable. They carry the original's
+  literal in a string column plus an expression binding — the port's only
+  remaining binding-value deviation, and the reason
+  `pr/model-empty-vs-default` stays open for path scoping.
+- **138 / 267 / 269**: the width Sliders resize their container again through
+  `css`, roundtrip-free, with `${$parameters>/value} + '%'` as the argument —
+  the string-concat half of the "an event arg is a full UI5 expression"
+  capability, used here for the first time.
+- **263** clears `selectedSection` with an empty argument instead of naming the
+  first section; **289** announces its regenerated MessageStrip assertively;
+  **196** registers BGN4/WWWW so list five renders 4 and 5 decimals.
+
+**A premise died on the way, and it is recorded rather than dropped:**
+`table-set-sticky` claimed neither a bound array property nor a whitelist entry
+was a proven path. **App 009 binds `sticky` to an ABAP string table and is
+live-verified** — the bound path worked all along. The whitelist entry still
+closes a footgun (an imperative `setSticky` silently received a string through
+the generalized allowlist), but apps 022/235, which deleted the sticky Label +
+three CheckBoxes from their view, are plain REWORK against app 009's pattern,
+not gap victims. That is the second request in this repo's history whose
+premise did not survive contact with the source (after `urlhelper-abap-api`),
+which is why the harvest classifies unverified premises as PROBE and not GAP.
+
+**Pins are on feature branches** until the three PRs merge: `A2UI5_PIN`, a
+`"branch"` entry on the abap2UI5 dependency in all three abaplint configs
+(without it `_bind( omit_initial )` is a syntax error to ABAP_STANDARD/CLOUD/
+702) and the `@abap2ui5/linter` commit. All three MUST become main SHAs before
+merge — the rule STATUS.md already carries for the linter pin.
+
+App 049 carries a new `render_smoke` skip: its bound template binds the numeric
+StepInput properties over rows that deliberately do not set them, and UI5 logs
+"must be a number" — which the ORIGINAL sample produces just as well, since its
+own template binds `min='{min}'` over rows without a min. The skip goes when
+the render gate treats an absent numeric path as the control default.
+
+## 2026-08-05 — IMPROVISED harvest: 136 improvisations classified, 6 framework requests filed
+
+No new port in this round. The corpus had **136 `IMPROVISED` deviations** and
+`pr/` held **one** open request — i.e. the repo was accumulating evidence of
+framework gaps faster than it was forwarding them, which inverts its stated
+purpose. This round converts the existing porting work into product output
+instead of adding coverage.
+
+**The classification is a probe, not a reading.**
+`scripts/probes/improvised-cluster.mjs` sorts every `IMPROVISED` entry into one
+of five verdicts (GAP · PROBE · REWORK · BOUNDARY · POLICY) by ordered family
+regexes, first match wins, review verdicts ("needs rework", "is WRONG", "is
+refuted") matched *before* the topical families so a flagged port cannot hide
+inside its own topic. `--strict` fails on an entry that matches no family:
+that is the ratchet — a new improvisation shape has to be consciously judged
+gap-or-not instead of joining the pile. It is deliberately **not** in
+`npm run gates`; classifying is a reviewer's call, not a generation-time one.
+
+Result: **GAP 15 · PROBE 16 · REWORK 16 · BOUNDARY 16 · POLICY 73.**
+
+The POLICY share is the finding behind the finding: **more than half** of what
+the corpus calls an improvisation is the thin-frontend rule, the single default
+model, mock flattening or BlockBase inlining working as decided — 15 BlockBase
+inlinings, 13 named-model folds, 18 thin-frontend recomputations, 11 mock
+flattenings. Those are behaviour-identical and read more like `NOTE`s than
+`IMPROVISED`s. Retyping them is left out of this change on purpose: gate
+declarations match on deviation text, so a sweep of that size deserves its own
+round.
+
+**Six requests filed**, each verified against the framework source before
+writing (the corpus rule that killed `urlhelper-abap-api` on a wrong premise):
+
+- `model-empty-vs-default` — `z2ui5_cl_core_srv_model->main_json_stringify`
+  serializes with `iv_ignore_empty = abap_false`, so an initial ABAP field
+  arrives as an explicit `""`: enum properties reject it, control defaults are
+  overridden, and app 049 had to **unroll a bound List into static items**
+  because a template whose rows set different property subsets cannot work.
+  The escape hatch already exists and no port uses it — `_bind( custom_filter )`
+  is applied at exactly that point and `z2ui5_cl_ajson_filter_lib=>create_empty_filter( )`
+  drops empty nodes — so the ask is ergonomics + path scoping
+  (`omit_initial`), not a new mechanism. The highest-value of the six: the only
+  gap that forces a *structural* deviation.
+- `control-inline-style` — `sap.m.Page` has no `width` property, so the three
+  DynamicSideContent/Grid sliders that resize their container by
+  `byId(…).$().width(v + '%')` have nothing to bind and no method to call;
+  `addStyleClass` carries a class name but no value. Asked for `css:
+  ["string","string"]` on the control's own DOM ref (apps 138/267/269, plus
+  250's icon tint as an explicitly optional half).
+- `table-set-sticky` — `setSticky` is reachable through the generalized
+  allowlist but `castArgAuto` infers a **string**, so the array never arrives.
+  One line (`setSticky: ["object"]`, the shipped `setHiddenInPopin` shape)
+  undoes app 009's server-side array mirror and gives apps 022/235 back the
+  Label + three CheckBoxes they deleted from the view.
+- `control-method-null-arg` — `castArgAuto("")` returns `false`, never `null`,
+  so an association reset (`setSelectedSection(null)`, app 263) has no wire.
+  The concept ships already for exactly one kind (`within`); asked for a
+  general `controlIdOrNull`.
+- `invisible-message-announce` — `sap.ui.core.InvisibleMessage` is a singleton:
+  no id for `CONTROL_BY_ID`, no entry in `GLOBAL_TARGETS`. Filed despite a
+  single porting hit (app 289) because it is the only possible route to an ARIA
+  live announcement for **any** abap2UI5 app, and backend-driven content change
+  is what the framework does.
+- `custom-currency-formatting` — no `FORMATTING` global target, so
+  `Formatting.setCustomCurrencies` (app 196's whole subject) is unreachable;
+  affects any app with a non-standard `CURRDEC`, not just the sample.
+
+**Six probe families are owed** (STATUS.md carries them). The biggest:
+`event-value-unreachable` (7 deviations) rests on the premise that a value in
+an array or a control reference cannot be transported — but an event arg is a
+**full UI5 expression** (`EventHandlerResolver` → `BindingParser.parseExpression`),
+which `pr/menu-item-selected-path` established and no port has tested for
+indexed access. Four calendar ports (139/151/177/220) show the **server date**
+instead of the clicked day; if `$event.oSource.getSelectedDates()[0].getStartDate()`
+resolves, that is the corpus' largest remaining behaviour loss closed without a
+framework change at all.
+
+Two REWORK entries the earlier sweeps had missed also came out of it: app 166
+(the `Messaging.addMessages` seed is expressible via `cc.MessageManager`) and
+app 233 (compound `binding_call` OR-filter and `open(searchValue)` both shipped
+since 2026-07-20, both unused).
+
 ## 2026-08-04 — gate-integrity round: linter bump, pattern-lint split, ratchet, LIVE_TEST closure path
 
 One change set across linter + ai-demokit, driven by a full gates/tooling

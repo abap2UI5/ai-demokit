@@ -12,11 +12,11 @@
   "checked": null,
   "deviations": [
     {
-      "type": "IMPROVISED",
+      "type": "NOTE",
       "what": "The original configures a single shared dialog imperatively per button (oButton.data() CustomData -> setMultiSelect/setDraggable/setResizable/setRememberSelections/setConfirmButtonText/addStyleClass). abap2UI5 binds those SelectDialog properties two-way and each button's handler sets them before opening (responsivePadding toggles the style class via control_by_id addStyleClass/removeStyleClass). The core:CustomData is kept on the buttons for fidelity; the dialog is declared once in mvc:dependents and opened via follow_up_action( cs_event-control_by_id, open )."
     },
     {
-      "type": "IMPROVISED",
+      "type": "NOTE",
       "what": "The ObjectNumber weightState is business logic (parseFloat thresholds), so it is computed in ABAP (WEIGHT_STATE, thin-frontend principle) and bound state='{WEIGHT_STATE}' instead of the frontend Formatter.weightState; core:require is therefore dropped and the Currency binding keeps the full standard type path 'sap.ui.model.type.Currency' 1:1. The full 123-row /ProductCollection is inlined (ProductPicUrl is not needed — the table cells carry no icon)."
     },
     {

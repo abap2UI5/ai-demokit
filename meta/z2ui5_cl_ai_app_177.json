@@ -6,14 +6,14 @@
   "batch": "b10",
   "audit": {
     "frontend_action": false,
-    "event_t_arg": false
+    "event_t_arg": true
   },
   "status": "reviewed",
   "checked": null,
   "deviations": [
     {
-      "type": "IMPROVISED",
-      "what": "CalendarDateInterval.select and the 'Select Today' button are wired to backend events that write the current server date (yyyy-MM-dd) into the bound status Text. The original formatted getSelectedDates()[0].getStartDate() with DateFormat, and handleCalendarSelect additionally toggled the day off when the same date was re-clicked (removeSelectedDate). Reading the actually clicked day out of the event is not transportable (select carries no date parameter and getSelectedDates()[0] needs array indexing the $-arg expression parser does not offer), so both actions report the server date and the re-click deselect is lost; the select/press attributes are kept."
+      "type": "NOTE",
+      "what": "The picked day IS transportable after all - measured 2026-08-05 with `scripts/probes/event-arg-expression-probe.mjs` against real OpenUI5: an event arg is a full UI5 expression, and indexed access into an array-valued getter plus chained calls resolve there (`$event.oSource.getSelectedDates()[0].getStartDate()`). The earlier rationale - 'select carries no date parameter and the selected DateRange is control state' - was wrong. The wire carries the three LOCAL date parts as three expression args (year, month+1, day) rather than `toISOString( )`, which would shift the day for any user east of Greenwich, and each arg is guarded by `getSelectedDates().length > 0` so a re-click that clears the selection arrives as year 0. App 177 now formats the SELECTED day as yyyy-MM-dd, and the original's else-branch is reproduced exactly: re-clicking the same day removes it from the selection, the guard reports year 0 and the Text falls back to 'No Date Selected'. Residual: 'Select Today' writes the text (server date = today) without moving the calendar's highlight."
     },
     {
       "type": "NOTE",

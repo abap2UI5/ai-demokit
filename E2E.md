@@ -4,6 +4,22 @@ The ports are ABAP apps. With the abap2UI5 transpiler they run on a **Node
 backend** (open-abap runtime + express), so you can start any port and click
 through it in a normal browser — no SAP system needed.
 
+
+## Never run `e2e:build` alongside anything else in the abap2UI5 checkout
+
+`npm run e2e:build` downports a COPY of the framework into `<abap2UI5>/node/downport`
+and transpiles it into `<abap2UI5>/node/output`. `npm run verify` in the framework
+does the same thing, into the same two directories, and `abaplint --fix` rewrites
+files in place while it runs. Running them concurrently corrupts the working tree:
+on 2026-08-06 a parallel `verify` left **86 files under `src/` rewritten to their
+downported v702 form** — `RAISE` parser errors and unresolved types everywhere, with
+nothing in either command's output saying so.
+
+The build takes ~25 minutes and holds the checkout for all of it. Start it, wait for
+`e2e-build: done`, and only then touch the framework again. `git status` in the
+abap2UI5 checkout is the check: if `src/` is dirty after a build, restore it with
+`git checkout -- src/` and re-run `npm run app2abap` for the generated `src/01/03`.
+
 ## Quick start (two commands)
 
 ```sh

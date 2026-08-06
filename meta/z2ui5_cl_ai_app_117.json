@@ -5,19 +5,15 @@
   "file": "src/04/b01/z2ui5_cl_ai_app_117.clas.abap",
   "batch": "b01",
   "audit": {
-    "frontend_action": false,
-    "event_t_arg": false
+    "frontend_action": true,
+    "event_t_arg": true
   },
   "status": "generated",
   "checked": null,
   "deviations": [
     {
-      "type": "IMPROVISED",
-      "what": "Breadth-probe: sap.f.Card with a sap.f.cards.Header and a simplified content body - the original's From/To ComboBoxes (cities> named model), DatePicker and Book button are represented by a Text + a 'Buy Now' Button, and the sample's entire second Card (Project Cloud Transformation: List of CustomListItems over the products> named model with Title/Text/ObjectStatus) is dropped. Review 2026-07-27: both named models fold into the default model per CAPABILITIES 'Named JSON models' (the mocks are archived under ui5/sap.f/Card/model/), so the full sample is expressible - needs rework to a faithful rebuild."
+      "type": "NOTE",
+      "what": "**Rebuilt 1:1 on 2026-08-05** - it was a breadth probe that showed one simplified card. Both cards of the sample are there now: the booking card with its two sorted city ComboBoxes, the DatePicker and the Book button (whose fixed explanation toast is composed on the client), and the whole second card - the revenue List with its CustomListItem template, Title/Text and the ObjectStatus state. The two named models fold into the one default model (cities> -> T_CITIES, products> -> T_PRODUCTS, last path segment identical) and the ComboBox sorter rides along as a raw binding-info string. The port has NO structural difference from the original left, so its structural_diff skip is gone - the gate reported it stale, which is what that ratchet is for."
     }
-  ],
-  "structural_diff": {
-    "skip": true,
-    "reason": "breadth/capability probe — renders the control but is not a faithful 1:1 rebuild of the full sample"
-  }
+  ]
 }

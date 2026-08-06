@@ -117,6 +117,15 @@ CLASS z2ui5_cl_ai_app_267 IMPLEMENTATION.
                     )->leaf( `Slider`
                         )->a( n = `id`      v = `DSCWidthSlider`
                         )->a( n = `value`   v = `100`
+                        " handleSliderChange: the container is a sap.m.Page, which
+                        " has no width property - the `css` control method writes
+                        " the percentage onto its DOM node like the original jQuery
+                        )->a( n = `liveChange` v = client->_event_client(
+                                  val   = client->cs_event-control_by_id
+                                  t_arg = VALUE #( ( `sideContentContainer` )
+                                                   ( `css` )
+                                                   ( `width` )
+                                                   ( `${$parameters>/value} + '%'` ) ) )
                         " onBeforeRendering: setVisible(!Device.system.phone) -
                         " the shared device> model expresses that declaratively
                         )->a( n = `visible` v = |\{= !$\{device>/system/phone\}\}|

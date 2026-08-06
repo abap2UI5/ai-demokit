@@ -21,7 +21,16 @@ CLASS z2ui5_cl_ai_app_119 IMPLEMENTATION.
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns`     v = `sap.m`
+        )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `height`    v = `100%`
+
+        " the sample's css/style.css (loaded via the manifest resources.css),
+        " injected through a core:HTML content attribute - the documented way to
+        " carry a stylesheet into an abap2UI5 view (CAPABILITIES 'Custom CSS',
+        " apps 026/028/169). Literal braces are escaped \{ \} or the XMLView
+        " binding parser reads them as a binding and the view dies
+        )->leaf( n = `HTML` ns = `core`
+            )->a( n = `content` v = `<style>.fixFlexVertical > .sapUiFixFlexFixed \{background: #D7E9FF;\} .fixFlexVertical > .sapUiFixFlexFlexible \{background: #A9CFFF;\}</style>`
         )->open( n = `FixFlex` ns = `l`
             )->a( n = `class` v = `fixFlexVertical`
             )->open( n = `fixContent` ns = `l`

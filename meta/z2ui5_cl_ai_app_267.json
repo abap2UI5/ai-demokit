@@ -16,8 +16,8 @@
       "what": "The named img> model ({img>/products/pic1} and {img>/products/pic3}, loaded from sap/ui/demo/mock/img.json) is resolved STATICALLY to the two image URLs it points at (HT-7777-large.jpg for the main content, HT-6100-large.jpg for the side content, on the sdk.openui5.org host per the offline asset rule). abap2UI5 serves one default model and these are pure display assets that never change, so a lossy-by-definition static fold (app 006 precedent) rather than a NOTE-worthy prefix drop - the live model indirection is gone."
     },
     {
-      "type": "IMPROVISED",
-      "what": "The Slider's liveChange attribute is dropped: handleSliderChange resizes the DynamicSideContent's container by writing a percentage width straight onto its DOM node (byId('sideContentContainer').$().width(iValue + '%')). The container is a sap.m.Page, which has no width property to bind, so there is nothing to two-way bind the slider value to (apps 213/214 hit the same jQuery-width idiom on controls that DO have a width, and bound it there). The Slider is kept 1:1 with its value='100' so the sample's footer is complete, but moving it has no effect."
+      "type": "NOTE",
+      "what": "The Slider's liveChange is reproduced roundtrip-free since 2026-08-05: handleSliderChange resizes the DynamicSideContent's container by writing a percentage width onto its DOM node (byId('sideContentContainer').$().width(iValue + '%')), and the container is a sap.m.Page, which has no width property. The `css` control method (pr/control-inline-style) performs that write from the wire - _event_client( control_by_id, sideContentContainer / css / width / ${$parameters>/value} + '%' ) - so the drag has its original effect; apps 213/214 keep the bound-property path where the target HAS a width."
     },
     {
       "type": "NOTE",

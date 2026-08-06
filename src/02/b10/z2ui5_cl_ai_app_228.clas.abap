@@ -26,6 +26,15 @@ CLASS z2ui5_cl_ai_app_228 IMPLEMENTATION.
 
   METHOD view_display.
 
+    " the item branch of handleMenuItemPress as ONE client expression: skip a
+    " parent that only opens its submenu, report a MenuTextFieldItem's VALUE and
+    " every other item's text - split over three lines only for the ABAP line limit
+    DATA(item) = `${$parameters>/item}`.
+    DATA(item_message) = |{ item }.getSubmenu() ? '' : (| &&
+                         |{ item }.getMetadata().getName() === 'sap.ui.unified.MenuTextFieldItem'| &&
+                         | ? "'" + { item }.getValue() + "' entered"| &&
+                         | : "'" + { item }.getText() + "' pressed")|.
+
     DATA(view) = z2ui5_cl_ai_xml=>factory( ).
 
     view->open( n = `View` ns = `mvc`
@@ -51,8 +60,14 @@ CLASS z2ui5_cl_ai_app_228 IMPLEMENTATION.
                         )->a( n = `id` v = `theMenu`
                         " menu-level eventing: one handler for every item, composed on the frontend
                         " (1:1 with MessageToast.show("'" + item.getText() + "' pressed"))
+                        " handleMenuItemPress branches on the runtime item: a parent that
+                        " only opens its submenu is skipped, a MenuTextFieldItem reports its
+                        " VALUE + ' entered', everything else its text + ' pressed'. All three
+                        " fit in ONE expression arg - measured with
+                        " scripts/probes/event-arg-expression-probe.mjs, a class-name ternary
+                        " resolves - so the toast text is composed on the client 1:1
                         )->a( n = `itemSelect` v = client->_event_client( val   = client->cs_event-control_global
-                                                                          t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `'{0}' pressed` ) ( `${$parameters>/item}.getText()` ) ) )
+                                                                          t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0}` ) ( item_message ) ) )
 
                         )->leaf( n = `MenuItem` ns = `u`
                             )->a( n = `text` v = `My 1st Item`

@@ -787,13 +787,13 @@ CLASS z2ui5_cl_ai_app_263 IMPLEMENTATION.
       WHEN `NAVIGATE`.
         " onNavigate: when page2 becomes the destination and the checkbox is
         " ticked, the controller calls setSelectedSection(null) so the page
-        " reopens on its first visible section. An empty association value is
-        " not transportable, so the first section id is set instead - the same
-        " result UX-rule-wise (_adjustSelectedSectionByUXRules falls back to
-        " the first visible section) plus the scroll to the top it triggers.
+        " reopens on its first visible section. Reproduced 1:1 since the
+        " association setters take an EMPTY argument as null (the
+        " controlIdOrNull argument kind); the earlier substitute - naming the
+        " first section explicitly - is gone.
         IF reset_check = abap_true AND client->get_event_arg( ) CS `page2`.
           client->follow_up_action( val   = client->cs_event-control_by_id
-                                    t_arg = VALUE #( ( `ObjectPageLayout` ) ( `setSelectedSection` ) ( `goals` ) ) ).
+                                    t_arg = VALUE #( ( `ObjectPageLayout` ) ( `setSelectedSection` ) ( `` ) ) ).
         ENDIF.
     ENDCASE.
 

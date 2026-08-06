@@ -41,7 +41,9 @@ CLASS z2ui5_cl_ai_app_138 IMPLEMENTATION.
     " carries its currentBreakpoint parameter to the backend, which enables the
     " Toggle button on breakpoint S exactly as _updateToggleButtonState does,
     " and the Toggle press flips the bound showSideContent (the property behind
-    " toggle( )). The Slider's DOM resize has no bindable equivalent - see sidecar
+    " toggle( )). The Slider's DOM resize is roundtrip-free too since the `css`
+    " control method exists: sap.m.Page has no width property, so the width goes
+    " onto the container's DOM node, like the original's jQuery .width( )
     view->open( n = `View` ns = `mvc`
         )->a( n = `height`    v = `100%`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
@@ -94,8 +96,14 @@ CLASS z2ui5_cl_ai_app_138 IMPLEMENTATION.
                         )->a( n = `id`      v = `toggleButton`
                         )->a( n = `enabled` v = client->_bind( toggle_enabled )
                     )->leaf( `Slider`
-                        )->a( n = `id`    v = `DSCWidthSlider`
-                        )->a( n = `value` v = `100`
+                        )->a( n = `id`         v = `DSCWidthSlider`
+                        )->a( n = `value`      v = `100`
+                        )->a( n = `liveChange` v = client->_event_client(
+                                  val   = client->cs_event-control_by_id
+                                  t_arg = VALUE #( ( `sideContentContainer` )
+                                                   ( `css` )
+                                                   ( `width` )
+                                                   ( `${$parameters>/value} + '%'` ) ) )
                     )->leaf( `Text`
                         )->a( n = `id`      v = `DSCWidthHintText`
                         )->a( n = `text`    v = `Best view in full screen mode`

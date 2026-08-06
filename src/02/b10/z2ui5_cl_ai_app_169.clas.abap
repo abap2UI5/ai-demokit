@@ -3,6 +3,15 @@ CLASS z2ui5_cl_ai_app_169 DEFINITION PUBLIC.
   PUBLIC SECTION.
     INTERFACES z2ui5_if_app.
 
+    DATA slider_value1 TYPE i VALUE 100.
+    DATA slider_value2 TYPE i VALUE 100.
+    DATA slider_value3 TYPE i VALUE 100.
+    DATA slider_value4 TYPE i VALUE 100.
+    DATA slider_value5 TYPE i VALUE 100.
+    DATA slider_value6 TYPE i VALUE 100.
+    DATA slider_value7 TYPE i VALUE 100.
+    DATA slider_value8 TYPE i VALUE 100.
+
   PROTECTED SECTION.
     DATA client TYPE REF TO z2ui5_if_client.
 
@@ -67,12 +76,16 @@ CLASS z2ui5_cl_ai_app_169 IMPLEMENTATION.
                 )->a( n = `type`     v = `Information`
                 )->a( n = `showIcon` v = `true`
 
+            " onSliderMoved resizes the grid wrapper BELOW this slider (the
+            " original walks the DOM to find it). Each wrapper is statically
+            " known here, so the pair is a roundtrip-free binding: the value
+            " two-way bound, the wrapper width an expression over it (app 176)
             )->leaf( `Slider`
-                )->a( n = `value` v = `100`
+                )->a( n = `value` v = client->_bind( slider_value1 )
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
 
             )->open( n = `VerticalLayout` ns = `l`
-                )->a( n = `width` v = `100%`
+                )->a( n = `width` v = |\{= ${ client->_bind( slider_value1 ) } + '%' \}|
                 )->a( n = `class` v = `gridWrapper`
                 )->open( n = `Grid` ns = `l`
                     )->a( n = `containerQuery` v = `true`
@@ -103,12 +116,16 @@ CLASS z2ui5_cl_ai_app_169 IMPLEMENTATION.
                 )->a( n = `type`     v = `Information`
                 )->a( n = `showIcon` v = `true`
 
+            " onSliderMoved resizes the grid wrapper BELOW this slider (the
+            " original walks the DOM to find it). Each wrapper is statically
+            " known here, so the pair is a roundtrip-free binding: the value
+            " two-way bound, the wrapper width an expression over it (app 176)
             )->leaf( `Slider`
-                )->a( n = `value` v = `100`
+                )->a( n = `value` v = client->_bind( slider_value2 )
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
 
             )->open( n = `VerticalLayout` ns = `l`
-                )->a( n = `width` v = `100%`
+                )->a( n = `width` v = |\{= ${ client->_bind( slider_value2 ) } + '%' \}|
                 )->a( n = `class` v = `gridWrapper`
                 )->open( n = `Grid` ns = `l`
                     )->a( n = `containerQuery` v = `true`
@@ -149,12 +166,16 @@ CLASS z2ui5_cl_ai_app_169 IMPLEMENTATION.
                 )->a( n = `type`     v = `Information`
                 )->a( n = `showIcon` v = `true`
 
+            " onSliderMoved resizes the grid wrapper BELOW this slider (the
+            " original walks the DOM to find it). Each wrapper is statically
+            " known here, so the pair is a roundtrip-free binding: the value
+            " two-way bound, the wrapper width an expression over it (app 176)
             )->leaf( `Slider`
-                )->a( n = `value` v = `100`
+                )->a( n = `value` v = client->_bind( slider_value3 )
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
 
             )->open( n = `VerticalLayout` ns = `l`
-                )->a( n = `width` v = `100%`
+                )->a( n = `width` v = |\{= ${ client->_bind( slider_value3 ) } + '%' \}|
                 )->a( n = `class` v = `gridWrapper`
                 )->open( n = `Grid` ns = `l`
                     )->a( n = `containerQuery` v = `true`
@@ -185,12 +206,16 @@ CLASS z2ui5_cl_ai_app_169 IMPLEMENTATION.
                 )->a( n = `type`     v = `Information`
                 )->a( n = `showIcon` v = `true`
 
+            " onSliderMoved resizes the grid wrapper BELOW this slider (the
+            " original walks the DOM to find it). Each wrapper is statically
+            " known here, so the pair is a roundtrip-free binding: the value
+            " two-way bound, the wrapper width an expression over it (app 176)
             )->leaf( `Slider`
-                )->a( n = `value` v = `100`
+                )->a( n = `value` v = client->_bind( slider_value4 )
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
 
             )->open( n = `VerticalLayout` ns = `l`
-                )->a( n = `width` v = `100%`
+                )->a( n = `width` v = |\{= ${ client->_bind( slider_value4 ) } + '%' \}|
                 )->a( n = `class` v = `gridWrapper`
                 )->open( n = `Grid` ns = `l`
                     )->a( n = `containerQuery` v = `true`
@@ -224,12 +249,16 @@ CLASS z2ui5_cl_ai_app_169 IMPLEMENTATION.
                 )->a( n = `type`     v = `Information`
                 )->a( n = `showIcon` v = `true`
 
+            " onSliderMoved resizes the grid wrapper BELOW this slider (the
+            " original walks the DOM to find it). Each wrapper is statically
+            " known here, so the pair is a roundtrip-free binding: the value
+            " two-way bound, the wrapper width an expression over it (app 176)
             )->leaf( `Slider`
-                )->a( n = `value` v = `100`
+                )->a( n = `value` v = client->_bind( slider_value5 )
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
 
             )->open( n = `VerticalLayout` ns = `l`
-                )->a( n = `width` v = `100%`
+                )->a( n = `width` v = |\{= ${ client->_bind( slider_value5 ) } + '%' \}|
                 )->a( n = `class` v = `gridWrapper`
                 )->open( n = `Grid` ns = `l`
                     )->a( n = `containerQuery` v = `true`
@@ -268,12 +297,16 @@ CLASS z2ui5_cl_ai_app_169 IMPLEMENTATION.
                 )->a( n = `type`     v = `Information`
                 )->a( n = `showIcon` v = `true`
 
+            " onSliderMoved resizes the grid wrapper BELOW this slider (the
+            " original walks the DOM to find it). Each wrapper is statically
+            " known here, so the pair is a roundtrip-free binding: the value
+            " two-way bound, the wrapper width an expression over it (app 176)
             )->leaf( `Slider`
-                )->a( n = `value` v = `100`
+                )->a( n = `value` v = client->_bind( slider_value6 )
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
 
             )->open( n = `VerticalLayout` ns = `l`
-                )->a( n = `width` v = `100%`
+                )->a( n = `width` v = |\{= ${ client->_bind( slider_value6 ) } + '%' \}|
                 )->a( n = `class` v = `gridWrapper`
                 )->open( n = `Grid` ns = `l`
                     )->a( n = `containerQuery` v = `true`
@@ -309,12 +342,16 @@ CLASS z2ui5_cl_ai_app_169 IMPLEMENTATION.
                 )->a( n = `type`     v = `Information`
                 )->a( n = `showIcon` v = `true`
 
+            " onSliderMoved resizes the grid wrapper BELOW this slider (the
+            " original walks the DOM to find it). Each wrapper is statically
+            " known here, so the pair is a roundtrip-free binding: the value
+            " two-way bound, the wrapper width an expression over it (app 176)
             )->leaf( `Slider`
-                )->a( n = `value` v = `100`
+                )->a( n = `value` v = client->_bind( slider_value7 )
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
 
             )->open( n = `VerticalLayout` ns = `l`
-                )->a( n = `width` v = `100%`
+                )->a( n = `width` v = |\{= ${ client->_bind( slider_value7 ) } + '%' \}|
                 )->a( n = `class` v = `gridWrapper`
                 )->open( n = `Grid` ns = `l`
                     )->a( n = `containerQuery` v = `true`
@@ -346,12 +383,16 @@ CLASS z2ui5_cl_ai_app_169 IMPLEMENTATION.
                 )->a( n = `type`     v = `Information`
                 )->a( n = `showIcon` v = `true`
 
+            " onSliderMoved resizes the grid wrapper BELOW this slider (the
+            " original walks the DOM to find it). Each wrapper is statically
+            " known here, so the pair is a roundtrip-free binding: the value
+            " two-way bound, the wrapper width an expression over it (app 176)
             )->leaf( `Slider`
-                )->a( n = `value` v = `100`
+                )->a( n = `value` v = client->_bind( slider_value8 )
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
 
             )->open( n = `VerticalLayout` ns = `l`
-                )->a( n = `width` v = `100%`
+                )->a( n = `width` v = |\{= ${ client->_bind( slider_value8 ) } + '%' \}|
                 )->a( n = `class` v = `gridWrapper`
                 )->open( n = `Grid` ns = `l`
                     )->a( n = `containerQuery` v = `true`

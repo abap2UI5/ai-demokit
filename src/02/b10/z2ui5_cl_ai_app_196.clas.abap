@@ -137,6 +137,14 @@ CLASS z2ui5_cl_ai_app_196 IMPLEMENTATION.
 
     client->view_display( view->stringify( ) ).
 
+    " the controller's Formatting.setCustomCurrencies({BGN4:{digits:4},
+    " WWWW:{digits:5}}) - list five renders those two codes with 4 and 5
+    " decimals instead of the standard digit count
+    client->follow_up_action( val   = client->cs_event-control_global
+                              t_arg = VALUE #( ( `FORMATTING` )
+                                               ( `setCustomCurrencies` )
+                                               ( `{"BGN4":{"digits":4},"WWWW":{"digits":5}}` ) ) ).
+
   ENDMETHOD.
 
 

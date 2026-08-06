@@ -174,6 +174,10 @@ CLASS z2ui5_cl_ai_app_012 IMPLEMENTATION.
                                         )->a( n = `text`  v = `{PRODUCT_ID}`
                                     )->leaf( `Input`
                                         )->a( n = `value`       v = `{QUANTITY}`
+                                        " the ORIGINAL writes type="{Text}" (Main.view.xml): it meant the
+                                        " literal enum value and wrote a binding, so the property falls back
+                                        " to its default. Ported verbatim rather than repaired
+                                        " abap2ui5lint-disable-next-line unknown-binding-path -- the sample's own quirk
                                         )->a( n = `type`        v = `{Text}`
                                         )->a( n = `description` v = `{UOM}`
                                         )->a( n = `fieldWidth`  v = `{60%}`
@@ -458,6 +462,19 @@ CLASS z2ui5_cl_ai_app_012 IMPLEMENTATION.
           first_item = 0.
         ENDIF.
         comparison_props_build( ).
+        " _updateCarouselsActivePage: the original keeps the two Carousels in
+        " step by handing each its own page AT THE SAME INDEX
+        " (carousel.setActivePage( carousel.getPages()[ iFirstItem ] )). Those
+        " pages are aggregation-template CLONES with no id the backend can
+        " spell, so they are addressed positionally since 2026-08-06
+        client->follow_up_action( val   = client->cs_event-control_by_id
+                                  t_arg = VALUE #( ( `carousel-snapped` )
+                                                   ( `setActivePage` )
+                                                   ( |carousel-snapped/pages/{ first_item }| ) ) ).
+        client->follow_up_action( val   = client->cs_event-control_by_id
+                                  t_arg = VALUE #( ( `carousel-expanded` )
+                                                   ( `setActivePage` )
+                                                   ( |carousel-expanded/pages/{ first_item }| ) ) ).
         client->view_model_update( ).
 
       WHEN `PANEL_EXPANDED`.

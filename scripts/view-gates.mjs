@@ -68,7 +68,7 @@ const ADVISORY_TYPES = new Set(['missing-accessibility', 'event-without-handler'
  * Counts pinned 2026-08-04. */
 const ADVISORY_BUDGET = {
   'missing-accessibility': 41,
-  'event-without-handler': 7,
+  'event-without-handler': 4, // ratcheted down 2026-08-05: the four calendar ports wired their select handler
   'unknown-event-parameter': 1, // app 268: ColorPickerPopover forwards colorString undeclared — works live
 };
 

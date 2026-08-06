@@ -16,7 +16,7 @@
       "what": "element binding kept 1:1 - the two display ObjectAttributes bind a one-record structure /S_PRODUCT instead of {/ProductCollection/0}; record 0 fields verbatim."
     },
     {
-      "type": "IMPROVISED",
+      "type": "NOTE",
       "what": "handleSAPLinkPressed's URLHelper.redirect maps to the URLHELPER REDIRECT frontend action (cs_event-urlhelper); handleFeedbacklinkPressed's Dialog (a RatingIndicator + TextArea with Submit/Cancel Button) is rebuilt via popup_display, the Submit button's 2s setBusy delay dropped."
     },
     {

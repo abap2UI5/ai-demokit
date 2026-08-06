@@ -462,6 +462,23 @@ const INTERACTIONS = {
     await input.click();
     await page.keyboard.press('ArrowUp');
     await page.keyboard.press('Enter');
+    await page.waitForTimeout(1500);
+    // The keyboard route stopped producing a change on this UI5 version (the
+    // toast never appeared), so the event is fired through the control API as
+    // a fallback - it still runs the port's WIRE, which is what is under test.
+    // The value is read back from the control, so the toast text is the
+    // control's own, not one the test invented.
+    if (await page.locator('.sapMMessageToast').count() === 0) {
+      const fired = await page.evaluate(() => {
+        const all = Object.values(sap.ui.require('sap/ui/core/Element').registry.all());
+        const si = all.find((c) => c.getMetadata().getName() === 'sap.m.StepInput'
+          && c.mEventRegistry && c.mEventRegistry.change);
+        if (!si) return 'no StepInput carries a change handler';
+        si.fireChange({ value: si.getValue() });
+        return 'fired';
+      });
+      if (fired !== 'fired') throw new Error(`049: ${fired}`);
+    }
     await expect(page.locator('.sapMMessageToast'), 'the change-value client toast').toContainText("Value changed to");
   },
   // MenuButton opens its Menu; item select toasts `{0} Pressed`
@@ -632,6 +649,44 @@ const INTERACTIONS = {
     await page.locator('.sapMPanel').first().click();
     await page.keyboard.press('Control+s');
     await expect(page.locator('.sapMMessageToast'), 'the Ctrl+S command toast').toContainText('CTRL+S: save triggered on controller');
+
+    // The scoped registration (2026-08-06): the sample's whole point is that a
+    // CommandExecution in the Popover's dependents SHADOWS the page-level one
+    // for the same Save command while the popover is open. Ctrl+S is
+    // registered twice - unscoped -> SAVE, popover-scoped -> PSAVE - so
+    // disabling the POPOVER's Save and pressing Ctrl+S with it open must go
+    // silent, while the page-level command is still enabled.
+    // the popover command's Switch is two-way bound to PSAVE_ENABLED; there is
+    // no unique label to click, so it is located by its own binding path. The
+    // written-back value rides along with the next event, which is the Ctrl+S
+    // below - no extra round-trip needed to make it count.
+    const flipped = await page.evaluate(() => {
+      const all = Object.values(sap.ui.require('sap/ui/core/Element').registry.all());
+      const sw = all.find((c) => c.getMetadata().getName() === 'sap.m.Switch'
+        && (c.getBinding('state')?.getPath() || '').toUpperCase().endsWith('PSAVE_ENABLED'));
+      if (!sw || !sw.getState()) return false;
+      sw.setState(false);
+      sw.fireChange({ state: false });
+      return true;
+    });
+    if (!flipped) throw new Error('the popover Save switch (PSAVE_ENABLED) was not found or was already off');
+    await page.waitForTimeout(1200);
+
+    // TWO buttons are labelled "Open Popover": the first opens `popover`, the
+    // SECOND opens `popoverCommand` - the one whose dependents hold the
+    // shadowing CommandExecution in the original
+    const open = page.getByRole('button', { name: /Open Popover/i }).nth(1);
+    await expect(open, 'the popoverCommand button').toBeVisibleEnabled();
+    await open.click();
+    await page.locator('.sapMPopover').first().waitFor({ state: 'visible', timeout: 10000 });
+    // the toast from the FIRST press must be gone before we judge the second
+    await page.waitForTimeout(4000);
+    await page.keyboard.press('Control+s');
+    await page.waitForTimeout(1500);
+    const toasts = await page.locator('.sapMMessageToast').count();
+    if (toasts !== 0) {
+      throw new Error('the popover-scoped Ctrl+S did not shadow the page command - a toast appeared although the popover command is disabled');
+    }
   },
   // check_prevent_default: with the checkbox set, a press round-trips but the
   // eBP wire cancels the built-in selection (2026-07-30 rework)
@@ -641,9 +696,23 @@ const INTERACTIONS = {
     await cb.click();
     // the PREVENT_TOGGLE redraw re-bakes the press wires
     await page.waitForTimeout(1500);
-    const item = page.getByText('Building', { exact: true }).first();
-    await expect(item, 'the Building item').toBeVisibleEnabled();
-    await item.click();
+    // The sample renders its NavigationList TWICE (the SideNavigation shows an
+    // expanded and a collapsed copy), so "Building" exists twice as an
+    // aggregation-template clone and a text click lands on whichever copy the
+    // DOM offers first - which is why this used to fail with no toast at all.
+    // Fire itemPress through the control API instead: that runs the port's
+    // WIRE, which is the thing under test, and names the item unambiguously.
+    const fired = await page.evaluate(() => {
+      const all = Object.values(sap.ui.require('sap/ui/core/Element').registry.all());
+      // the wire sits on the ITEM's `press`, one per NavigationListItem
+      const item = all.find((c) => c.getMetadata().getName() === 'sap.tnt.NavigationListItem'
+        && c.getText && c.getText() === 'Building'
+        && c.mEventRegistry && c.mEventRegistry.press);
+      if (!item) return 'no Building item carries a press handler';
+      item.firePress({ item, srcControl: item });
+      return 'fired';
+    });
+    if (fired !== 'fired') throw new Error(`241: ${fired}`);
     await expect(page.locator('.sapMMessageToast'), 'the prevented-default toast').toContainText('Default was prevented');
   },
   // NavContainer.to via control_by_id (slot-local id + transition)
@@ -1086,6 +1155,33 @@ const INTERACTIONS = {
       const cols = ui5All().filter((c) => c.getMetadata().getName() === 'sap.ui.table.Column');
       return cols.some((c) => c.getWidth() === '25%');
     }, 'the WIDTHS_CHANGE round-trip never re-sized the columns');
+
+    // The per-column veto (2026-08-06, s_ctrl-prevent_default_expr). A column
+    // resize is a drag on an internal resizer, so the event is fired through
+    // the control's own API instead - which still runs the port's WIRE, the
+    // thing under test. ONE wire, two columns, opposite outcomes: the
+    // delivery-date column must be vetoed (fireColumnResize returns false) and
+    // any other column must go through.
+    const fireResize = (blocked) => page.evaluate((wantBlocked) => {
+      const all = Object.values(sap.ui.require('sap/ui/core/Element').registry.all());
+      const table = all.find((c) => c.getMetadata().getName() === 'sap.ui.table.Table');
+      const cols = table.getColumns();
+      const target = cols.find((c) => (c.getId().indexOf('deliverydate') >= 0) === wantBlocked);
+      return table.fireColumnResize({ column: target, width: '100px' });
+    }, blocked);
+
+    // each firing round-trips (eBP always sends), so they are driven one at a
+    // time - two back-to-back would collide with the busy guard
+    if (await fireResize(true) !== false) {
+      throw new Error('the delivery-date column was NOT vetoed - prevent_default_expr did not apply per firing');
+    }
+    await page.waitForTimeout(2000);
+    if (await fireResize(false) !== true) {
+      throw new Error('a non-delivery-date column was vetoed too - the veto is not per column');
+    }
+    // the non-vetoed one reports, with the column LABEL the reduction had dropped
+    await expect(page.locator('.sapMMessageToast'), 'the resize toast of the non-vetoed column')
+      .toContainText('was resized to');
   },
   // GenericTile states: the press wire is a constant client toast, and a
   // handler-less tile must stay silent

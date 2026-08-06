@@ -50,8 +50,11 @@ CLASS z2ui5_cl_ai_app_186 IMPLEMENTATION.
     " from the default model ({/ProductCollection}); abap2UI5 has one default
     " model, so the sizes are folded into it (the 'sizes>' prefix is dropped -
     " last path segment identical, which structural-diff matches). The two
-    " PaneContainer 'resize' handlers only show an informational MessageToast of
-    " the new pane sizes (an oldSizes/newSizes array event) and are dropped.
+    " PaneContainer 'resize' handlers show an informational MessageToast of the
+    " old/new pane sizes. Reproduced roundtrip-free since 2026-08-05: an event
+    " arg is a full UI5 expression and .join( ',' ) over an ARRAY parameter
+    " resolves (measured with scripts/probes/event-arg-expression-probe.mjs),
+    " so both size arrays travel into the client-composed toast 1:1.
     view->open( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`    v = `sap.ui.layout`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
@@ -63,6 +66,12 @@ CLASS z2ui5_cl_ai_app_186 IMPLEMENTATION.
             )->a( n = `defaultPane` v = `default`
 
             )->open( n = `PaneContainer` ns = `l`
+                )->a( n = `resize` v = client->_event_client( val   = client->cs_event-control_global
+                                                              t_arg = VALUE #( ( `MESSAGE_TOAST` )
+                                                                               ( `show` )
+                                                                               ( `Root container is resized.\nOld panes sizes = [{0}]\nNew panes sizes = [{1}]` )
+                                                                               ( `${$parameters>/oldSizes} ? ${$parameters>/oldSizes}.join(',') : ''` )
+                                                                               ( `${$parameters>/newSizes} ? ${$parameters>/newSizes}.join(',') : ''` ) ) )
 
                 )->open( n = `SplitPane` ns = `l`
                     )->a( n = `requiredParentWidth` v = `400`
@@ -95,6 +104,12 @@ CLASS z2ui5_cl_ai_app_186 IMPLEMENTATION.
 
                 )->open( n = `PaneContainer` ns = `l`
                     )->a( n = `orientation` v = `Vertical`
+                    )->a( n = `resize`      v = client->_event_client( val   = client->cs_event-control_global
+                                                                       t_arg = VALUE #( ( `MESSAGE_TOAST` )
+                                                                                        ( `show` )
+                                                                                        ( `Inner container is resized.\nOld panes sizes = [{0}]\nNew panes sizes = [{1}]` )
+                                                                                        ( `${$parameters>/oldSizes} ? ${$parameters>/oldSizes}.join(',') : ''` )
+                                                                                        ( `${$parameters>/newSizes} ? ${$parameters>/newSizes}.join(',') : ''` ) ) )
 
                     )->open( n = `SplitPane` ns = `l`
                         )->a( n = `requiredParentWidth` v = `600`

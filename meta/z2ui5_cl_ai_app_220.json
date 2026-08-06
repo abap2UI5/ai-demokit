@@ -6,7 +6,7 @@
   "batch": "b10",
   "audit": {
     "frontend_action": false,
-    "event_t_arg": false
+    "event_t_arg": true
   },
   "status": "generated",
   "checked": null,
@@ -20,8 +20,8 @@
       "what": "The second disabled range is a SINGLE day: the original's row omits end entirely (undefined is falsy), and one bound DateRange template cannot omit an attribute per row. A plain formatter binding over the empty end field crashed the app - Formatter.DateCreateObject('') is new Date('') = Invalid Date, DateRange.endDate accepts it (type object) and Month._checkDateEnabled then runs CalendarDate.fromLocalJSDate on every TRUTHY endDate, which throws. Fixed 2026-07-28 by guarding the conversion in the binding itself: endDate=\"{= ${END} ? Formatter.DateCreateObject(${END}) : null }\" - written as a backtick literal so the braces survive to the attribute. Probe-verified against the real OpenUI5 runtime (scripts/probes/calendar-empty-enddate-probe.mjs, headless Chromium, calendar focused on the affected month): the old binding throws and renders 0 days, the guarded one yields endDate null for the empty row and renders all 42. This also matters for the semantics, not only the crash: Month._checkDateEnabled disables a single day ONLY through the no-endDate branch (the range branch compares strictly exclusive, oTimeStamp > start && < end), so seeding end = start would disable nothing."
     },
     {
-      "type": "IMPROVISED",
-      "what": "The Calendar select handler (handleCalendarSelect) formats the picked day with DateFormat and writes it into the 'selectedDate' Text; this is imperative presentation with no bindable equivalent (the select event parameter is a DateRange control reference, not a value that can be transported), so the select attribute is dropped and the selectedDate Text keeps its initial 'No Date Selected' text."
+      "type": "NOTE",
+      "what": "handleCalendarSelect formats the picked day with DateFormat.getInstance({style:'long'}) and writes it into the 'selectedDate' Text. The picked day IS transportable after all - measured 2026-08-05 with `scripts/probes/event-arg-expression-probe.mjs` against real OpenUI5: an event arg is a full UI5 expression, and indexed access into an array-valued getter plus chained calls resolve there (`$event.oSource.getSelectedDates()[0].getStartDate()`). The earlier rationale - 'select carries no date parameter and the selected DateRange is control state' - was wrong. The wire carries the three LOCAL date parts as three expression args (year, month+1, day) rather than `toISOString( )`, which would shift the day for any user east of Greenwich, and each arg is guarded by `getSelectedDates().length > 0` so a re-click that clears the selection arrives as year 0. The port reproduces it: the select wire was added (the Text is bound instead of carrying the literal 'No Date Selected'), and the English long form ('March 17, 2026') is composed in ABAP from the transported parts - the thin-frontend answer to a locale formatter, as in app 024."
     },
     {
       "type": "NOTE",

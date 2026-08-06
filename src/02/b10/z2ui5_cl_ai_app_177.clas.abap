@@ -45,7 +45,16 @@ CLASS z2ui5_cl_ai_app_177 IMPLEMENTATION.
             )->leaf( n = `CalendarDateInterval` ns = `u`
                 )->a( n = `id`     v = `calendar`
                 )->a( n = `width`  v = `320px`
-                )->a( n = `select` v = client->_event( `CAL_SELECT` )
+                " the picked day is read out of the event as a UI5 EXPRESSION - indexed
+                " access and chained calls resolve there (measured with
+                " scripts/probes/event-arg-expression-probe.mjs). The LOCAL date parts
+                " travel, not toISOString( ), which would shift the day east of
+                " Greenwich; the length guard reproduces the deselect case
+                )->a( n = `select` v = client->_event( val   = `CAL_SELECT`
+                                                       t_arg = VALUE #(
+                                                         ( `$event.oSource.getSelectedDates().length > 0 ? $event.oSource.getSelectedDates()[0].getStartDate().getFullYear() : 0` )
+                                                         ( `$event.oSource.getSelectedDates().length > 0 ? $event.oSource.getSelectedDates()[0].getStartDate().getMonth() + 1 : 0` )
+                                                         ( `$event.oSource.getSelectedDates().length > 0 ? $event.oSource.getSelectedDates()[0].getStartDate().getDate() : 0` ) ) )
 
             )->open( n = `VerticalLayout` ns = `l`
                 )->leaf( `Button`
@@ -71,12 +80,24 @@ CLASS z2ui5_cl_ai_app_177 IMPLEMENTATION.
 
     CASE client->get( )-event.
 
-      WHEN `CAL_SELECT` OR `SELECT_TODAY`.
-        " original: CalendarDateInterval.select formats getSelectedDates()[0] to
-        " yyyy-MM-dd and toggles the day off when re-clicked; 'Select Today' adds
-        " a DateRange(today) and reformats. Reading the clicked day out of the
-        " transpiled event is simplified here — both actions report the current
-        " server date in the same yyyy-MM-dd shape.
+      WHEN `CAL_SELECT`.
+        " handleCalendarSelect: format getSelectedDates()[0] as yyyy-MM-dd, and
+        " show 'No Date Selected' when the re-click removed the day again - the
+        " original's if/else over the selection length, reproduced 1:1 because
+        " the length guard travels in the wire (year 0 = nothing selected)
+        DATA(year) = client->get_event_arg( ).
+        IF year IS INITIAL OR year = `0`.
+          selected_date = `No Date Selected`.
+        ELSE.
+          selected_date = |{ year }-{ CONV i( client->get_event_arg( 2 ) ) WIDTH = 2 ALIGN = RIGHT PAD = '0' }| &&
+                          |-{ CONV i( client->get_event_arg( 3 ) ) WIDTH = 2 ALIGN = RIGHT PAD = '0' }|.
+        ENDIF.
+        client->view_model_update( ).
+
+      WHEN `SELECT_TODAY`.
+        " handleSelectToday adds a DateRange(today) and reformats - the server
+        " date IS today, so the text matches; only the calendar's own highlight
+        " is not moved (addSelectedDate takes a DateRange CONTROL)
         selected_date = |{ sy-datum+0(4) }-{ sy-datum+4(2) }-{ sy-datum+6(2) }|.
         client->view_model_update( ).
 
