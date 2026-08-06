@@ -3911,15 +3911,31 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                  ` cannot hold a JS Date object in the JSON model, so a source formatOption { source: { pattern: 'HH:mm:ss' } } is added to each TimeType binding and the field is a parseable time string ('13:30:00') -` &&
                  ` the abap2UI5 equivalent of the Date-object model. Without it view creation crashes ('Time must be a Date object'). Same idiom applies to any TypeTime/TypeDateTime sample whose model is an object; a` &&
                  ` plain string binding is not enough (CAPABILITIES date-object row). // NOTE: The original seeds the current time; a fixed time (13:30:00) is used here so the port is deterministic - a client-only` &&
-                 ` display value.` )
+                 ` display value.` ) ).
+
+    lv_text1 = `NOTE: Rebuilt 1:1 from the breadth probe 2026-08-06: the f:ShellBar (title/secondTitle/homeIcon/copilot/search/notifications/productSwitcher/notificationsNumber, its f:menu Menu+MenuItem and its` &&
+               ` f:profile Avatar), the four-tab IconTabBar and both f:GridContainers with all EIGHT sap.ui.integration widgets:Card instances, each with its f:GridContainerItemLayoutData and the sample's own` &&
+               ` layout/layoutS GridContainerSettings. The earlier port was a single Card with an invented manifest. // NOTE: The eight card manifests come from model/cardManifests.json verbatim. The original carries` &&
+               ` them in a named ``manifests>`` model and binds {manifests>/timeline}; abap2UI5 has one default model, so each manifest is a field bound with _bind - the last path segment stays identical, which is` &&
+               ` what structural-diff matches. The JSON never enters the view XML (a raw { would be read as a binding), it travels as model data. Asset URLs inside the manifests are absolutized to the OpenUI5 host` &&
+               ` per the asset-URL rule; the mock carries them host-relative. The model's unused ninth entry ('table') is not seeded - the sample's view binds eight. // NOTE: The controller's three members are all`.
+    lv_text1 = lv_text1 && ` resolved without a round-trip. resolveCardUrl is a formatter turning the component card's relative manifest path into a URL - computed in ABAP instead (thin-frontend rule). onAction toasts the` &&
+               ` navigation URL off the event, composed through control_global MESSAGE_TOAST with ${$parameters>/parameters}.url as the argument. onInit's date is DateFormat over UI5Date.getInstance(), a MOVING` &&
+               ` value, so it is anchored on a fixed date here (the corpus rule for now/random values, apps 164/181/289). // POST-1.71: sap.f.cards.CardBadgeCustomData (@since 1.128, with` &&
+               ` icon/state/announcementText/visibilityMode) is kept 1:1 on the three badged cards, and sap.m.Avatar in the ShellBar's profile is @since 1.73; the Card ``action`` event's ``parameters`` parameter is` &&
+               ` @since 1.76. All newer than UI5 1.71, declared per the property-171 policy - the app needs a runtime that has them. // NOTE: The 'component' Card keeps its manifest, which is a URL to a UI5 COMPONENT` &&
+               ` card (componentCard/manifest.json) rather than an inline card definition. It points at the OpenUI5 host, so whether the component itself loads depends on that host's CORS policy - the card renders`.
+    lv_text1 = lv_text1 && ` either way, and abap2UI5 has no place to ship a UI5 Component of its own. Declared rather than dropped, so the port keeps the sample's eight cards.`.
+    result = VALUE #( BASE result
       ( module = `sap.ui.integration` control = `sap.ui.integration.Card`               name = `CardsLayout`                         class = `z2ui5_cl_ai_app_118` path = `src/02/b01/z2ui5_cl_ai_app_118.clas.abap`
-        score = 2
-        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
         since = `1.62`
-        notes = `IMPROVISED: Breadth-probe of the declarative-card paradigm: a sap.ui.integration.widgets.Card whose whole UI comes from a JSON manifest. The manifest is carried as an ABAP string and bound to the` &&
-                 ` Card, and its content (title/subtitle/3 list items) is invented for the probe - it does not come from the sample. The original page (f:ShellBar, IconTabBar with IconTabFilters, f:GridContainer with` &&
-                 ` layout settings, several w:Cards over the manifests> named model incl. card:CardBadgeCustomData badges and GridContainerItemLayoutData) is dropped entirely. Needs rework for a faithful rebuild; the` &&
-                 ` multi-manifest binding + external component card manifests remain the hard part (render_smoke notes integration Cards need external manifests).` ) ).
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `sap.f.cards.CardBadgeCustomData (@since 1.128, with icon/state/announcementText/visibilityMode) is kept 1:1 on the three badged cards, and sap.m.Avatar in the ShellBar's profile is @since 1.73; the` &&
+                 ` Card ``action`` event's ``parameters`` parameter is @since 1.76. All newer than UI5 1.71, declared per the property-171 policy - the app needs a runtime that has them.` ) ).
 
     lv_text1 = `NOTE: The sample itself is a Link + Image pointing at the Card Explorer tool (the actual integration Cards live in that tool); Link and Image reproduced 1:1. Since 2026-07-30 the Image press is the` &&
                ` original onImagePress 1:1: URLHelper.redirect('test-resources/sap/ui/integration/demokit/cardExplorer/index.html', true) via _event_client( cs_event-urlhelper, REDIRECT + { URL, NEW_WINDOW: true } )` &&
