@@ -69,6 +69,20 @@ CLASS z2ui5_cl_ai_app_250 IMPLEMENTATION.
                 )->a( n = `displayMode`            v = `Simplified`
                 )->a( n = `colorSelect`            v = client->_event_client( val   = client->cs_event-control_global
                                                                               t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Color Selected: value - {0}, \n defaultAction - {1}` ) ( `${$parameters>/value}` ) ( `${$parameters>/defaultAction}` ) ) )
+                " handleLiveChange paints the liveChangeButton's icon in the
+                " colour being picked. The original writes the rgba() straight
+                " onto the ICON's DOM node; the `css` action writes on the
+                " button's OWN node instead - measured 2026-08-06: the icon
+                " INHERITS color from the button root, so the effect is the
+                " same without reaching into internal DOM. The rgba() string is
+                " composed on the client from the four event parameters
+                )->a( n = `liveChange`             v = client->_event_client(
+                          val   = client->cs_event-control_by_id
+                          t_arg = VALUE #( ( `liveChangeButton` )
+                                           ( `css` )
+                                           ( `color` )
+                                           ( `'rgba(' + ${$parameters>/r} + ',' + ${$parameters>/g} + ',' + ` &&
+                                             `${$parameters>/b} + ',' + ${$parameters>/alpha} + ')'` ) ) )
             )->leaf( `ColorPalettePopover`
                 )->a( n = `id`                      v = `oColorPaletteSelectedColor`
                 )->a( n = `colors`                  v = `lightgray,lightblue,cornflowerblue,darkslateblue`

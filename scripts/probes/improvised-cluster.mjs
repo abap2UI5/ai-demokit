@@ -86,6 +86,11 @@ const FAMILIES = [
     re: /Math\.random|randomi[sz]e|made DETERMINISTIC/i,
   },
   {
+    /* The `css` action closes this family; what is left out on purpose is a
+     * reach into a control's INTERNAL DOM. App 250, the one port that seemed to
+     * need it, does not: the icon inherits color from the button root
+     * (measured 2026-08-06). Kept as a family so a genuine internal-DOM case
+     * lands here rather than unclassified. */
     key: 'dom-style',
     verdict: 'GAP',
     pr: 'control-inline-style',
@@ -165,10 +170,15 @@ const FAMILIES = [
     re: /aggregation-template CLONES|template-clone|index-based page resolution/i,
   },
   {
+    /* The display-only half of this was a gap and is closed (pr/live-device-model:
+     * the device model refreshes and publishes /media/range). What remains is a
+     * resize -> BACKEND event wire, for a recalculation whose result feeds a
+     * SERVER-side slice - and that is deliberately not offered: it is chatty by
+     * construction, and one port is not enough to file on. A boundary with the
+     * idea recorded, not a gap sitting open. */
     key: 'window-resize-event',
-    verdict: 'GAP',
-    pr: 'live-device-model',
-    label: 'no live window-resize / breakpoint wire: device metrics are read once per round-trip',
+    verdict: 'BOUNDARY',
+    label: 'no resize -> BACKEND wire; the display-only half is closed by the live device model',
     re: /ResizeHandler|live recalculation on window resize/i,
   },
   {

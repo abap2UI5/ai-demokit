@@ -17,7 +17,7 @@ TRAINING.md; for what abap2UI5 can express see CAPABILITIES.md._
 |---|---|
 | Ports | **293** sidecars in `meta/` (src/01: 177 · src/02: 67 · src/03: 19 · src/04: 19 · src/05: 11) |
 | Status ladder | 86 `generated` · 146 `reviewed` · 61 `checked` (live-verified) |
-| Deviations | 5 DROPPED_171 · 28 IMPROVISED · 592 NOTE · 123 POST_171 |
+| Deviations | 5 DROPPED_171 · 27 IMPROVISED · 593 NOTE · 123 POST_171 |
 | Open LIVE_TESTs | **0 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
 | Declared gate skips | 2 structural-diff · 3 render-smoke (each re-verified per run — a stale skip FAILS) |
 | Out-of-scope ported samples | `z2ui5_cl_ai_app_121 (sap.m.sample.UploadSet — deprecated)` · `z2ui5_cl_ai_app_136 (sap.f.sample.SidePanelSingle — control @since 1.107)` · `z2ui5_cl_ai_app_141 (sap.ui.core.sample.InvisibleMessage — control @since 1.78)` · `z2ui5_cl_ai_app_165 (sap.f.sample.ProductSwitchNavigation — control @since 1.72)` · `z2ui5_cl_ai_app_203 (sap.m.sample.OverflowToolbarTokenizer — control @since 1.139)` — all decided KEEP permanently 2026-07-30 (per-app rationale in ui5/scope-exceptions.json, revertible); the source-backed scope gate stays hard for NEW undecided entries |
@@ -38,10 +38,10 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
 
   | Verdict | at the harvest | today | Meaning |
   |---|---:|---:|---|
-  | GAP | 15 | 2 | a framework gap — 10 requests filed across three sweeps, **all implemented upstream the same day**; what is left are 250's reach into a control's internal DOM and 012's server-side page slice |
+  | GAP | 15 | **0** | a framework gap — 10 requests filed across three sweeps, **all implemented upstream the same day**, and the last two entries turned out not to be gaps (below) |
   | PROBE | 16 | 1 | a *suspected* gap whose premise is unverified — measure before filing |
   | REWORK | 16 | **0** | expressible today; the port under-delivers — **empty since 2026-08-06** (115 and 118, the two big rebuilds, are done) |
-  | BOUNDARY | 16 | 17 | outside abap2UI5 by nature (client-only APIs, sample-local JS, the deterministic-corpus rule) |
+  | BOUNDARY | 16 | 18 | outside abap2UI5 by nature (client-only APIs, sample-local JS, the deterministic-corpus rule, a deliberately unoffered resize round-trip) |
   | POLICY | 73 | 8 | a decided corpus rule; the rest are `NOTE`s now (see below) |
 
   The **POLICY half was the headline number**: 73 of 136 improvisations were
@@ -205,6 +205,25 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   `z2ui5_cl_util_xml` escapes every attribute value, so the parser never sees
   a bare quote. The `double-quote-escaped` candidate proves it (`"[" + n + "]"`
   → `[7]`), and CAPABILITIES no longer claims the boundary.
+
+  **GAP reached zero on 2026-08-06**, and neither of the last two entries was
+  closed by a framework change — both were closed by measuring.
+  - App **250**'s `handleLiveChange` was written off as *"direct DOM
+    manipulation outside any bindable property, not expressible in the thin
+    frontend"*. The original paints the button's ICON by writing `rgba(…)` onto
+    `getDomRef().firstChild.firstChild`, and the `css` action deliberately
+    writes only on a control's OWN node. But a probe against real OpenUI5 shows
+    the icon span **inherits** `color` from the button root — same computed
+    colour, no internal DOM touched. The wire is roundtrip-free: the `rgba()`
+    string is composed on the client from the four `liveChange` parameters. The
+    verdict had been reached too quickly.
+  - App **012**'s resize recalculation is reclassified as a **BOUNDARY**.
+    Closing it would need a resize → BACKEND event wire, and that is
+    deliberately not offered: it is chatty by construction, and every
+    display-only case it would serve is already covered by the live device
+    model without a round-trip. The one case it genuinely serves is 012's, where
+    the count feeds a server-side slice — one port is not enough to file on, so
+    the idea is recorded in the sidecar for the second sample that needs it.
 
   **App 118 closed the REWORK column on 2026-08-06**, the second of the two
   big rebuilds. It had been a single `widgets:Card` with an INVENTED manifest;
