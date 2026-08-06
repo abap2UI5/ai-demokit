@@ -271,6 +271,19 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   resize. This is the second time an e2e interaction caught something no unit
   test could — the first was the sap.tnt hollow pass on 2026-07-30.
 
+  **The full 293-port sweep found two PRE-EXISTING interaction failures**, and
+  they are recorded rather than left as noise: app **049** (its StepInput
+  `Value changed to …` client toast) and app **241** (the `Default was
+  prevented` toast — the checkbox IS written back, `getSelected()` reads true,
+  but no toast appears at all). Neither is caused by this session's framework
+  changes, and that was established by elimination rather than assumed: with
+  the new `eBP` signature patched back to its old form in the transpiled
+  backend they still fail, and with the device model's refresh handlers removed
+  on top of that they still fail. A third failure, app 248, was a timeout that
+  passed on re-run. **291 of 293 pass**, including the two new interactions.
+  Open: 049 and 241 need their own investigation — both are backend-toast
+  round-trips whose event apparently never fires in this headless environment.
+
   A build trap cost about an hour and is written down in E2E.md so it does not
   again: `npm run e2e:build` and the framework's own `npm run verify` downport
   into the SAME two directories, and running them concurrently left 86 files

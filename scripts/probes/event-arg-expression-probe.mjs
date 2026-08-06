@@ -137,6 +137,14 @@ const CANDIDATES = [
     expect: '[7] — if this resolves, the recorded boundary was an artefact of the probe, not the framework',
   },
   {
+    key: 'bare-true-literal',
+    what: "a bare `true` as an argument - what the flag form of the veto would emit for eBP's condition slot. UI5's EventHandlerResolver parses each argument itself; a reserved word ($event, $controller) and a ${...} binding are known to work, a plain boolean literal is NOT obviously part of that grammar",
+    ports: '241 (check_prevent_default), and every existing eBP wire',
+    xml: `<Button id="c" text="B" press=".eB('EVT', true, 'after')"/>`,
+    fire: `c.firePress()`,
+    expect: 'true then "after" - if the handler is never called, the literal breaks the whole expression',
+  },
+  {
     key: 'array-join',
     what: 'a whole array parameter joined into one string — ${$parameters>/newSizes}.join(",")',
     ports: "186 (ResponsiveSplitter resize oldSizes/newSizes)",
