@@ -17,7 +17,7 @@ TRAINING.md; for what abap2UI5 can express see CAPABILITIES.md._
 |---|---|
 | Ports | **293** sidecars in `meta/` (src/01: 177 · src/02: 67 · src/03: 19 · src/04: 19 · src/05: 11) |
 | Status ladder | 86 `generated` · 146 `reviewed` · 61 `checked` (live-verified) |
-| Deviations | 5 DROPPED_171 · 37 IMPROVISED · 580 NOTE · 122 POST_171 |
+| Deviations | 5 DROPPED_171 · 31 IMPROVISED · 586 NOTE · 122 POST_171 |
 | Open LIVE_TESTs | **0 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
 | Declared gate skips | 2 structural-diff · 3 render-smoke (each re-verified per run — a stale skip FAILS) |
 | Out-of-scope ported samples | `z2ui5_cl_ai_app_121 (sap.m.sample.UploadSet — deprecated)` · `z2ui5_cl_ai_app_136 (sap.f.sample.SidePanelSingle — control @since 1.107)` · `z2ui5_cl_ai_app_141 (sap.ui.core.sample.InvisibleMessage — control @since 1.78)` · `z2ui5_cl_ai_app_165 (sap.f.sample.ProductSwitchNavigation — control @since 1.72)` · `z2ui5_cl_ai_app_203 (sap.m.sample.OverflowToolbarTokenizer — control @since 1.139)` — all decided KEEP permanently 2026-07-30 (per-app rationale in ui5/scope-exceptions.json, revertible); the source-backed scope gate stays hard for NEW undecided entries |
@@ -186,6 +186,24 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   `z2ui5_cl_util_xml` escapes every attribute value, so the parser never sees
   a bare quote. The `double-quote-escaped` candidate proves it (`"[" + n + "]"`
   → `[7]`), and CAPABILITIES no longer claims the boundary.
+
+  **A classifier defect fell out of the next sweep (2026-08-06), and it cut
+  the count by six.** Two families were matching text that says the port
+  AVOIDED their problem: `empty-vs-default` caught "initialized to 'None' so
+  no empty string reaches the enum", "the expression can never emit an empty
+  enum value", "a harmless string property, no enum/default override" — four
+  ports filed as gap victims for *working around the gap correctly* — and
+  `array-property` still carried apps 022/235's claim that "neither an array
+  property binding nor a setSticky whitelist entry is a proven path", which
+  had been false when it was written (app 009 binds it and is live-verified)
+  and which those ports' own views had already disproved: both have the
+  sticky Label and the three CheckBoxes back. Both patterns are tightened,
+  the six sidecars corrected rather than deleted, and a new
+  `random-determinism` family holds app 289 — a randomised original becoming a
+  deterministic rotation IS a substitution, so it stays `IMPROVISED`, but as a
+  BOUNDARY: the determinism is a corpus requirement no framework change would
+  ever close. **31 IMPROVISED, and only 2 GAP entries left** (250's internal
+  DOM reach, 012's server-side page slice).
 
   **A linter defect fell out of app 115's rebuild**, and it was silent:
   `aggregationPath` matched the first `path:` with a GREEDY `[^}]*`, which

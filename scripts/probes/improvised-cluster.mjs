@@ -66,7 +66,24 @@ const FAMILIES = [
     verdict: 'GAP',
     pr: 'model-empty-vs-default',
     label: 'an initial ABAP field serializes as "" and overrides the UI5 property default',
-    re: /empty (?:ABAP )?model field|empty string is rejected|no empty string reaches|never emit an empty enum|binds? as ""|empty enum value|rows without \w+ carry an empty string/i,
+    /* Only where the empty value actually COSTS something. The first version
+     * of this pattern matched the phrases a port uses to say it AVOIDED the
+     * problem - "initialized to 'None' so no empty string reaches the enum",
+     * "the expression can never emit an empty enum value", "a harmless string
+     * property, no enum/default override" - and filed four such ports as gap
+     * victims (2026-08-06). A workaround that works is a NOTE, not a gap. */
+    re: /empty (?:ABAP )?model field|overrides? the (?:UI5 )?(?:property )?default|falls back to (?:its|the) default because|binds? as ""/i,
+  },
+  {
+    /* Deciding is backend work, and a corpus that must be diffable cannot
+     * carry Math.random() - so a randomised original becomes a deterministic
+     * rotation. The randomness IS substituted, so the entry stays IMPROVISED;
+     * it is a BOUNDARY rather than a gap because no framework change would
+     * ever close it - the determinism is a deliberate corpus requirement. */
+    key: 'random-determinism',
+    verdict: 'BOUNDARY',
+    label: 'a randomised original becomes a deterministic rotation (the corpus must stay diffable)',
+    re: /Math\.random|randomi[sz]e|made DETERMINISTIC/i,
   },
   {
     key: 'dom-style',
@@ -227,7 +244,7 @@ const FAMILIES = [
     key: 'thin-frontend',
     verdict: 'POLICY',
     label: 'frontend formatter / imperative setter replaced by ABAP-computed data or a bound property',
-    re: /two-way|expression binding|thin[- ]frontend|prefer a bindable property|business logic|computed in ABAP|expressed as bound properties|two-way bound?|bound two-way|precomputed|deterministic|formatter|validation messages|companion control/i,
+    re: /two-way|expression binding|thin[- ]frontend|prefer a bindable property|business logic|computed in ABAP|expressed as bound properties|two-way bound?|bound two-way|precomputed|deterministic|formatter|validation messages|companion control|becomes a binding|sets both imperatively|the original sets .* imperatively/i,
   },
   {
     key: 'view-composition',

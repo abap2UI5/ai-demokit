@@ -19,7 +19,7 @@
       "what": "the pattern's three views (App.view with sap.m.App id=rootControl, Main.view, Comparison.view) plus manifest routing are merged into ONE view: the App hosts the Main Page and the Comparison f:DynamicPage (id page-comparison added) directly as its pages; the router's navTo(\"page2\") is mapped to the documented NavContainer frontend action follow_up_action( cs_event-control_by_id, rootControl//to/page-comparison ) with the default slide transition (CAPABILITIES nav row); hash-based routing / browser-back navigation is not wired; the view controllerName attributes are dropped."
     },
     {
-      "type": "IMPROVISED",
+      "type": "NOTE",
       "what": "named models flattened into the single default model: the Comparison view's settings> model becomes the bound PAGES_COUNT/IS_DESKTOP fields (pagesCount initialized to 1, the CarouselLayout.visiblePagesCount UI5 default, instead of the original's undefined-until-routeMatched), and its products> model (Products/Props) becomes T_COMP_PRODUCTS/T_COMP_PROPS; the shared mock products.json default model is flattened into a flat upper-cased row type (all 20 JSON columns kept; rows without DateOfSale carry an empty string where the original JSON omits the key - a harmless string property, no enum/default override)."
     },
     {

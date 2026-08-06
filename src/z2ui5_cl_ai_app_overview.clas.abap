@@ -1228,37 +1228,37 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` PopinLayout switch with a Block default) is expressed as bound properties instead of a round-trip (AGENTS 'prefer a bindable property'): the ComboBox's change attribute is dropped, its selectedKey is` &&
                ` bound two-way, and the Table gains a popinLayout expression binding that reproduces the switch including its Block default. // NOTE: the controller's onToggleInfoToolbar (ToggleButton press handler` &&
                ` calling getInfoToolbar().setVisible(!pressed)) is expressed as bound properties instead of a round-trip: the ToggleButton's press attribute is dropped, its pressed property is bound two-way, and the`.
-    lv_text1 = lv_text1 && ` infoToolbar's OverflowToolbar gains a visible={= !pressed } expression binding. // IMPROVISED: the controller's onSelect (imperative oTable.setSticky array maintenance from the CheckBox text +` &&
-               ` selected parameter) becomes a sticky property on the Table bound to a plain string table: each CheckBox select event round-trips ${$source>/text} and ${$parameters>/selected}, the ABAP handler` &&
-               ` inserts/removes that option and pushes the model back via view_model_update. // 1.71: the p:ColumnAIAction column plugin (sap.m.plugins, since UI5 1.136 - far newer than 1.71) is dropped with its` &&
-               ` dependents aggregation, the xmlns:p namespace and the press toast - the plugin class does not exist on a 1.71 runtime, so keeping it would break view creation there (same decision as app 022). //` &&
-               ` NOTE: the original derives the ObjectNumber weight state in its frontend Formatter.js (weightState: KG conversion + Success/Warning/Error thresholds). That is business logic, so - abap2UI5 being a` &&
-               ` thin frontend - it is computed in ABAP model_init into a WEIGHT_STATE field and bound state="{WEIGHT_STATE}", not via a frontend formatter (core:require dropped). Visually 1:1 with the original.`.
+    lv_text1 = lv_text1 && ` infoToolbar's OverflowToolbar gains a visible={= !pressed } expression binding. // NOTE: the controller's onSelect (imperative oTable.setSticky array maintenance from the CheckBox text + selected` &&
+               ` parameter) becomes a sticky property on the Table bound to a plain string table: each CheckBox select event round-trips ${$source>/text} and ${$parameters>/selected}, the ABAP handler inserts/removes` &&
+               ` that option and pushes the model back via view_model_update. This is the bound-array path working, not a gap: Table.sticky takes an ABAP string table directly, live-verified here, and apps 022/235` &&
+               ` were reworked onto the same pattern 2026-08-05/06. // 1.71: the p:ColumnAIAction column plugin (sap.m.plugins, since UI5 1.136 - far newer than 1.71) is dropped with its dependents aggregation, the` &&
+               ` xmlns:p namespace and the press toast - the plugin class does not exist on a 1.71 runtime, so keeping it would break view creation there (same decision as app 022). // NOTE: the original derives the`.
+    lv_text1 = lv_text1 && ` ObjectNumber weight state in its frontend Formatter.js (weightState: KG conversion + Success/Warning/Error thresholds). That is business logic, so - abap2UI5 being a thin frontend - it is computed in` &&
+               ` ABAP model_init into a WEIGHT_STATE field and bound state="{WEIGHT_STATE}", not via a frontend formatter (core:require dropped). Visually 1:1 with the original.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Column`                          name = `Table`                               class = `z2ui5_cl_ai_app_009` path = `src/01/b05/z2ui5_cl_ai_app_009.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
         since = `1.12`
         checked = `CHECKED (2026-07-20): verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed)`
         notes = lv_text1 ) ).
 
     lv_text1 = `NOTE: the sample is an OPA-test demo: only the UI app under applicationUnderTest/ (Table.view.xml, Table.controller.js, Formatter.js, products.json) is ported 1:1; the qunit/OPA harness files` &&
-               ` (OpaTableTest.qunit.js, Test.qunit.html, testsuite.qunit.*) are test infrastructure without UI and are not ported. // IMPROVISED: the controller's onPopinLayoutChanged` &&
-               ` (byId(idProductsTable).setPopinLayout per the ComboBox selectedKey switch) is a pure client-side path: two-way bound ComboBox selectedKey feeding a popinLayout expression binding with the same` &&
-               ` GridLarge/GridSmall-else-Block fallback (extra attributes vs the original view, original change handler dropped) - no round-trip, same pattern as app 009; the expression can never emit an empty enum` &&
-               ` value. // NOTE: the controller-built sap.m.Dialog of onMessageDialogPress (title Message, type Message, a Text 'Success' as content, an OK beginButton Button that closes it) is rebuilt 1:1 as a` &&
-               ` core:FragmentDefinition shown via client->popup_display on the ColumnListItem press event; the OK Button closes roundtrip-free via the frontend action _event_client( cs_event-popup_close ), and the`.
-    lv_text1 = lv_text1 && ` original's afterClose destroy is the framework's popup lifecycle. The Dialog, its Text and its Button are extra controls vs the original view.xml (controller-created there). // NOTE: model` &&
-               ` flattening: the sample's LOCAL applicationUnderTest/products.json (123 rows) is moved into the default model verbatim, unbound columns dropped. Note: the local file is NOT identical to the shared` &&
-               ` mock ui5/mock/products.json - same 123 ProductIds, but HT-9995 differs in content (local: Smartphone Cover / 15 EUR vs mock: Tablet Pouch / 20 EUR); the port follows the local file, the sample's` &&
-               ` actual model source. // NOTE: the original derives the ObjectNumber weight state in its frontend Formatter.js (weightState: KG conversion + Success/Warning/Error thresholds). That is business logic,` &&
-               ` so - abap2UI5 being a thin frontend - it is computed in ABAP model_init into a WEIGHT_STATE field and bound state="{WEIGHT_STATE}", not via a frontend formatter (core:require dropped). Visually 1:1` &&
-               ` with the original.`.
+               ` (OpaTableTest.qunit.js, Test.qunit.html, testsuite.qunit.*) are test infrastructure without UI and are not ported. // NOTE: the controller's onPopinLayoutChanged (byId(idProductsTable).setPopinLayout` &&
+               ` per the ComboBox selectedKey switch) is a pure client-side path: two-way bound ComboBox selectedKey feeding a popinLayout expression binding with the same GridLarge/GridSmall-else-Block fallback` &&
+               ` (extra attributes vs the original view, original change handler dropped) - no round-trip, same pattern as app 009; the expression can never emit an empty enum value. // NOTE: the controller-built` &&
+               ` sap.m.Dialog of onMessageDialogPress (title Message, type Message, a Text 'Success' as content, an OK beginButton Button that closes it) is rebuilt 1:1 as a core:FragmentDefinition shown via` &&
+               ` client->popup_display on the ColumnListItem press event; the OK Button closes roundtrip-free via the frontend action _event_client( cs_event-popup_close ), and the original's afterClose destroy is`.
+    lv_text1 = lv_text1 && ` the framework's popup lifecycle. The Dialog, its Text and its Button are extra controls vs the original view.xml (controller-created there). // NOTE: model flattening: the sample's LOCAL` &&
+               ` applicationUnderTest/products.json (123 rows) is moved into the default model verbatim, unbound columns dropped. Note: the local file is NOT identical to the shared mock ui5/mock/products.json - same` &&
+               ` 123 ProductIds, but HT-9995 differs in content (local: Smartphone Cover / 15 EUR vs mock: Tablet Pouch / 20 EUR); the port follows the local file, the sample's actual model source. // NOTE: the` &&
+               ` original derives the ObjectNumber weight state in its frontend Formatter.js (weightState: KG conversion + Success/Warning/Error thresholds). That is business logic, so - abap2UI5 being a thin` &&
+               ` frontend - it is computed in ABAP model_init into a WEIGHT_STATE field and bound state="{WEIGHT_STATE}", not via a frontend formatter (core:require dropped). Visually 1:1 with the original.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.ColumnListItem`                  name = `TableTest`                           class = `z2ui5_cl_ai_app_010` path = `src/01/b05/z2ui5_cl_ai_app_010.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, reviewed, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth` &&
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, reviewed, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth` &&
                  ` a close look.`
         since = `1.12`
         checked = `CHECKED (2026-07-20): verified in a running system - human pass 2026-07-20: app starts and renders like the original; no interaction paths were open for this port`
@@ -1281,32 +1281,32 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
     lv_text1 = `IMPROVISED: the pattern's three views (App.view with sap.m.App id=rootControl, Main.view, Comparison.view) plus manifest routing are merged into ONE view: the App hosts the Main Page and the` &&
                ` Comparison f:DynamicPage (id page-comparison added) directly as its pages; the router's navTo("page2") is mapped to the documented NavContainer frontend action follow_up_action(` &&
                ` cs_event-control_by_id, rootControl//to/page-comparison ) with the default slide transition (CAPABILITIES nav row); hash-based routing / browser-back navigation is not wired; the view controllerName` &&
-               ` attributes are dropped. // IMPROVISED: named models flattened into the single default model: the Comparison view's settings> model becomes the bound PAGES_COUNT/IS_DESKTOP fields (pagesCount` &&
-               ` initialized to 1, the CarouselLayout.visiblePagesCount UI5 default, instead of the original's undefined-until-routeMatched), and its products> model (Products/Props) becomes` &&
-               ` T_COMP_PRODUCTS/T_COMP_PROPS; the shared mock products.json default model is flattened into a flat upper-cased row type (all 20 JSON columns kept; rows without DateOfSale carry an empty string where`.
-    lv_text1 = lv_text1 && ` the original JSON omits the key - a harmless string property, no enum/default override). // NOTE: the '.formatter.url' iconSrc formatter flattened to absolute https://sdk.openui5.org image URLs -` &&
-               ` source-verified against the now-archived app/model/formatter.js (it only prefixes '../../../../../../', i.e. resolves to the test-resources root), so the absolute URLs are the faithful equivalent. //` &&
-               ` NOTE: compare button: the controller's onSelection setText/setVisible is replaced by bound COMPARE_TEXT/COMPARE_VISIBLE model properties updated in the SELECTION handler (same count>1 logic, text` &&
-               ` only refreshed while shown, like the original); the ColumnListItem gains a selected="{SELECTED}" two-way binding - the sanctioned selection-read pattern (CAPABILITIES 'Controller-read list` &&
-               ` selection') replacing getSelectedContextPaths - which is an extra attribute vs the original template, and the initial visible="false"/absent text of the Button become bindings. // IMPROVISED: the` &&
-               ` ResizeHandler-driven pagesCount/isDesktop recalculation (_onResize/_getPagesCount) is replaced by a one-shot computation at COMPARE time from client->get( )-s_device-resize-width using the original's`.
-    lv_text1 = lv_text1 && ` 600/1024 thresholds and the cap at the selected-items count; no live recalculation on window resize. Re-judged 2026-08-05 against the now-live device model (pr/live-device-model): it does NOT close` &&
-               ` this one. visiblePagesCount could bind {device>/resize/width} directly, but the count is also capped at the number of SELECTED products and then drives comparison_props_build, which slices the props` &&
-               ` table server-side per page window - so a client-side count would desync the props it is supposed to index. The round-trip decision stays; what the live model closes is the class-swap family (app` &&
-               ` 168), not this one. // NOTE: Panel expand: the controller's onPanelExpanded (walking the sibling HBox controls and calling setVisible) is replaced by a bound VISIBLE flag per comparison value row,` &&
-               ` toggled in the PANEL_EXPANDED event via t_arg ${KEY} + ${$parameters>/expand}; the description HBox's literal visible="false" becomes the {VISIBLE} binding (initial false). // IMPROVISED:` &&
-               ` snapped/expanded Carousel re-sync stays dropped although Carousel.setActivePage is whitelisted upstream since 2026-07-20 (pr/control-methods-openby-setactivepage): the carousels' pages are`.
-    lv_text1 = lv_text1 && ` aggregation-template CLONES whose ids (templateId-parentId-index, view-prefixed; nondeterministic under extended change detection) are not addressable from the backend - restoring the re-sync would` &&
-               ` need an index-based page-resolution mechanism, a new framework idea if more samples turn out to need it. // NOTE: the DynamicPageTitle stateChange handler (.onStateChange, add/removeSnappedContent of` &&
-               ` the snapped Carousel as a Carousel-animation workaround) is dropped together with its stateChange attribute - imperative aggregation surgery with no framework equivalent; the snapped/expanded content` &&
-               ` still switches natively with the DynamicPage header state. // NOTE: comparison Props are built from a fixed 19-key list in the mock JSON key order (the original iterates the FIRST selected product's` &&
-               ` own keys, skipping ProductPicUrl - so a first product without DateOfSale would drop that row, and missing values rendered '<strong>undefined</strong>' where the port renders an empty` &&
-               ` <strong></strong>); selected products are taken in model row order, not click order; the original's per-product information cache is unnecessary server-side. The controller's handleButtonPress`.
-    lv_text1 = lv_text1 && ` (MessageBox) is dead code referenced by no view and not ported.`.
+               ` attributes are dropped. // NOTE: named models flattened into the single default model: the Comparison view's settings> model becomes the bound PAGES_COUNT/IS_DESKTOP fields (pagesCount initialized to` &&
+               ` 1, the CarouselLayout.visiblePagesCount UI5 default, instead of the original's undefined-until-routeMatched), and its products> model (Products/Props) becomes T_COMP_PRODUCTS/T_COMP_PROPS; the shared` &&
+               ` mock products.json default model is flattened into a flat upper-cased row type (all 20 JSON columns kept; rows without DateOfSale carry an empty string where the original JSON omits the key - a`.
+    lv_text1 = lv_text1 && ` harmless string property, no enum/default override). // NOTE: the '.formatter.url' iconSrc formatter flattened to absolute https://sdk.openui5.org image URLs - source-verified against the` &&
+               ` now-archived app/model/formatter.js (it only prefixes '../../../../../../', i.e. resolves to the test-resources root), so the absolute URLs are the faithful equivalent. // NOTE: compare button: the` &&
+               ` controller's onSelection setText/setVisible is replaced by bound COMPARE_TEXT/COMPARE_VISIBLE model properties updated in the SELECTION handler (same count>1 logic, text only refreshed while shown,` &&
+               ` like the original); the ColumnListItem gains a selected="{SELECTED}" two-way binding - the sanctioned selection-read pattern (CAPABILITIES 'Controller-read list selection') replacing` &&
+               ` getSelectedContextPaths - which is an extra attribute vs the original template, and the initial visible="false"/absent text of the Button become bindings. // IMPROVISED: the ResizeHandler-driven` &&
+               ` pagesCount/isDesktop recalculation (_onResize/_getPagesCount) is replaced by a one-shot computation at COMPARE time from client->get( )-s_device-resize-width using the original's 600/1024 thresholds`.
+    lv_text1 = lv_text1 && ` and the cap at the selected-items count; no live recalculation on window resize. Re-judged 2026-08-05 against the now-live device model (pr/live-device-model): it does NOT close this one.` &&
+               ` visiblePagesCount could bind {device>/resize/width} directly, but the count is also capped at the number of SELECTED products and then drives comparison_props_build, which slices the props table` &&
+               ` server-side per page window - so a client-side count would desync the props it is supposed to index. The round-trip decision stays; what the live model closes is the class-swap family (app 168), not` &&
+               ` this one. // NOTE: Panel expand: the controller's onPanelExpanded (walking the sibling HBox controls and calling setVisible) is replaced by a bound VISIBLE flag per comparison value row, toggled in` &&
+               ` the PANEL_EXPANDED event via t_arg ${KEY} + ${$parameters>/expand}; the description HBox's literal visible="false" becomes the {VISIBLE} binding (initial false). // IMPROVISED: snapped/expanded` &&
+               ` Carousel re-sync stays dropped although Carousel.setActivePage is whitelisted upstream since 2026-07-20 (pr/control-methods-openby-setactivepage): the carousels' pages are aggregation-template CLONES`.
+    lv_text1 = lv_text1 && ` whose ids (templateId-parentId-index, view-prefixed; nondeterministic under extended change detection) are not addressable from the backend - restoring the re-sync would need an index-based` &&
+               ` page-resolution mechanism, a new framework idea if more samples turn out to need it. // NOTE: the DynamicPageTitle stateChange handler (.onStateChange, add/removeSnappedContent of the snapped` &&
+               ` Carousel as a Carousel-animation workaround) is dropped together with its stateChange attribute - imperative aggregation surgery with no framework equivalent; the snapped/expanded content still` &&
+               ` switches natively with the DynamicPage header state. // NOTE: comparison Props are built from a fixed 19-key list in the mock JSON key order (the original iterates the FIRST selected product's own` &&
+               ` keys, skipping ProductPicUrl - so a first product without DateOfSale would drop that row, and missing values rendered '<strong>undefined</strong>' where the port renders an empty <strong></strong>);` &&
+               ` selected products are taken in model row order, not click order; the original's per-product information cache is unnecessary server-side. The controller's handleButtonPress (MessageBox) is dead code`.
+    lv_text1 = lv_text1 && ` referenced by no view and not ported.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.ComparisonPattern`               name = `ComparisonPattern`                   class = `z2ui5_cl_ai_app_012` path = `src/01/b05/z2ui5_cl_ai_app_012.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 4 reworked, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 reworked, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
         ui5_only = abap_true
         checked = `CHECKED (2026-07-20): verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed)`
@@ -1446,8 +1446,8 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` is the UTC string '2023-03-31T10:32:30Z' instead of the original's local-time UI5Date, and DTP3/DTP5 'now' comes from server sy-datum/sy-uzeit instead of the browser clock. // IMPROVISED: the` &&
                ` controller's byId('DTP6').setInitialFocusedDateValue(UI5Date.getInstance(2017, 5, 13, 11, 12, 13)) is expressed as a bound initialFocusedDateValue property with the Formatter.DateCreateObject module` &&
                ` formatter over the model string '2017-06-13T11:12:13' (CAPABILITIES date-object row) - extra initialFocusedDateValue attribute on DTP6 plus xmlns:core and core:require on the view root vs the`.
-    lv_text1 = lv_text1 && ` original view.xml. // IMPROVISED: the controller's handleChange becomes a CHANGE round-trip: the source control id, entered value and valid flag travel via $event.oSource.sId / ${$parameters>/value}` &&
-               ` / ${$parameters>/valid}; the textResult Text.text becomes a binding and every change-firing picker (DTP1/2/3/4/6/7) gets an added bound valueState attribute, initialized to 'None' so no empty string` &&
+    lv_text1 = lv_text1 && ` original view.xml. // NOTE: the controller's handleChange becomes a CHANGE round-trip: the source control id, entered value and valid flag travel via $event.oSource.sId / ${$parameters>/value} /` &&
+               ` ${$parameters>/valid}; the textResult Text.text becomes a binding and every change-firing picker (DTP1/2/3/4/6/7) gets an added bound valueState attribute, initialized to 'None' so no empty string` &&
                ` reaches the enum-typed property - the original sets both imperatively on the controls. // NOTE: the view-level attachParseError/attachValidationSuccess handlers of the original controller (valueState` &&
                ` Error/None on binding parse errors in the data-binding panel) are covered by the framework's automatic handleValidation registration on every view slot (CAPABILITIES MessageManager row,` &&
                ` pr/message-model) - no port code needed. // NOTE: model flattening: the original model's valueDTP9 is bound by no control in the view and is dropped; valueDTP11 (null in the original) serializes as` &&
@@ -1458,7 +1458,7 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.DateTimePicker`                  name = `DateTimePicker`                      class = `z2ui5_cl_ai_app_018` path = `src/01/b06/z2ui5_cl_ai_app_018.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 reworked, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
         since = `1.38.0`
         is_post171 = abap_true
@@ -1593,18 +1593,21 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` the backend maintains the set (a set operation is backend work; setSticky was whitelisted upstream in the same round for the imperative case, but the bound path is the thin-frontend one). The three` &&
                ` controls come from the appended sap.m.sample.Table view, which this port rebuilds inline, so they count as extra against the archived FacetFilter original. The neighbouring onPopinLayoutChanged is` &&
                ` unchanged and still expressed as bound properties (the app-009 pattern), so the ComboBox ``change`` attribute stays dropped: its selectedKey is bound two-way and the Table's popinLayout is an`.
-    lv_text1 = lv_text1 && ` expression binding over it, including the Block default. // IMPROVISED: the sticky options Label and the three sticky CheckBox controls (with their select handlers) are dropped - Table.sticky is an` &&
-               ` array-valued property the controller mutates via setSticky, and neither an array property binding nor a setSticky whitelist entry is a proven path; a bound-array LIVE_TEST port could disprove this` &&
-               ` later. // 1.71: the p:ColumnAIAction column plugin (sap.m.plugins, far newer than UI5 1.71) is dropped with its dependents aggregation and press toast - the plugin class does not exist on a 1.71` &&
-               ` runtime, so keeping it would crash view creation there. // NOTE: the original's nested items-binding filter (ORs inside each facet group, AND across the groups, model untouched) is expressed 1:1 as a` &&
-               ` declarative compound filter: apply_filter builds the groups JSON from the two-way bound selected flags and schedules follow_up_action cs_event-binding_call filter on idProductsTable/items (compound` &&
-               ` groups implemented upstream 2026-07-20, pr/binding-call-compound-filters); the earlier ABAP-side model rebuild and the t_products_all mirror are gone. // NOTE: the original derives the ObjectNumber`.
-    lv_text1 = lv_text1 && ` weight state in its frontend Formatter.js (weightState: KG conversion + Success/Warning/Error thresholds). That is business logic, so - abap2UI5 being a thin frontend - it is computed in ABAP` &&
-               ` model_init into a WEIGHT_STATE field and bound state="{WEIGHT_STATE}", not via a frontend formatter (core:require dropped). Visually 1:1 with the original.`.
+    lv_text1 = lv_text1 && ` expression binding over it, including the Block default. // NOTE: Restored 2026-08-05/06. The sticky options Label and the three sticky CheckBoxes are present and work: Table.sticky is an` &&
+               ` ARRAY-valued property, and binding it to a plain ABAP string table IS the proven path - app 009 does exactly that and is live-verified. Each CheckBox select round-trips ${$source>/text} and` &&
+               ` ${$parameters>/selected}, the ABAP handler inserts or removes that option and pushes the model back, which is the array maintenance the original's onSelect does with setSticky. The sidecar's earlier` &&
+               ` claim - that neither an array property binding nor a setSticky whitelist entry was a proven path - was FALSE when it was written and is corrected here rather than quietly deleted; the whitelist entry` &&
+               ` that followed (CONTROL_METHODS setSticky) closes a different footgun, an imperative call that silently received a string. // 1.71: the p:ColumnAIAction column plugin (sap.m.plugins, far newer than` &&
+               ` UI5 1.71) is dropped with its dependents aggregation and press toast - the plugin class does not exist on a 1.71 runtime, so keeping it would crash view creation there. // NOTE: the original's nested`.
+    lv_text1 = lv_text1 && ` items-binding filter (ORs inside each facet group, AND across the groups, model untouched) is expressed 1:1 as a declarative compound filter: apply_filter builds the groups JSON from the two-way` &&
+               ` bound selected flags and schedules follow_up_action cs_event-binding_call filter on idProductsTable/items (compound groups implemented upstream 2026-07-20, pr/binding-call-compound-filters); the` &&
+               ` earlier ABAP-side model rebuild and the t_products_all mirror are gone. // NOTE: the original derives the ObjectNumber weight state in its frontend Formatter.js (weightState: KG conversion +` &&
+               ` Success/Warning/Error thresholds). That is business logic, so - abap2UI5 being a thin frontend - it is computed in ABAP model_init into a WEIGHT_STATE field and bound state="{WEIGHT_STATE}", not via` &&
+               ` a frontend formatter (core:require dropped). Visually 1:1 with the original.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.FacetFilter`                     name = `FacetFilterLight`                    class = `z2ui5_cl_ai_app_022` path = `src/01/b04/z2ui5_cl_ai_app_022.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
         checked = `CHECKED (2026-07-20): verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed); live-checked reference example for: compound` &&
                  ` binding_call filter, curated formatter module, two-way facet selection`
@@ -1624,18 +1627,20 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` maintains the set (a set operation is backend work; setSticky was whitelisted upstream in the same round for the imperative case, but the bound path is the thin-frontend one). The three controls come` &&
                ` from the appended sap.m.sample.Table view, which this port rebuilds inline, so they count as extra against the archived FacetFilter original. The neighbouring onPopinLayoutChanged is unchanged and` &&
                ` still expressed as bound properties (the app-009 pattern), so the ComboBox ``change`` attribute stays dropped: its selectedKey is bound two-way and the Table's popinLayout is an expression binding` &&
-               ` over it, including the Block default. // IMPROVISED: the sticky options Label and the three sticky CheckBox controls (with their select handlers) are dropped - Table.sticky is an array-valued` &&
-               ` property the controller mutates via setSticky, and neither an array property binding nor a setSticky whitelist entry is a proven path; a bound-array LIVE_TEST port could disprove this later. // 1.71:`.
-    lv_text1 = lv_text1 && ` the p:ColumnAIAction column plugin (sap.m.plugins, far newer than UI5 1.71) is dropped with its dependents aggregation and press toast - the plugin class does not exist on a 1.71 runtime, so keeping` &&
-               ` it would crash view creation there. // NOTE: the original's nested items-binding filter (ORs inside each facet group, AND across the groups, model untouched) is expressed 1:1 as a declarative` &&
-               ` compound filter: apply_filter builds the groups JSON from the two-way bound selected flags and schedules follow_up_action cs_event-binding_call filter on idProductsTable/items (compound groups` &&
-               ` implemented upstream 2026-07-20, pr/binding-call-compound-filters). // NOTE: the original derives the ObjectNumber weight state in its frontend Formatter.js (weightState: KG conversion +` &&
-               ` Success/Warning/Error thresholds). That is business logic, so - abap2UI5 being a thin frontend - it is computed in ABAP model_init into a WEIGHT_STATE field and bound state="{WEIGHT_STATE}", not via` &&
-               ` a frontend formatter (core:require dropped). Visually 1:1 with the original.`.
+               ` over it, including the Block default. // NOTE: Restored 2026-08-05/06. The sticky options Label and the three sticky CheckBoxes are present and work: Table.sticky is an ARRAY-valued property, and` &&
+               ` binding it to a plain ABAP string table IS the proven path - app 009 does exactly that and is live-verified. Each CheckBox select round-trips ${$source>/text} and ${$parameters>/selected}, the ABAP`.
+    lv_text1 = lv_text1 && ` handler inserts or removes that option and pushes the model back, which is the array maintenance the original's onSelect does with setSticky. The sidecar's earlier claim - that neither an array` &&
+               ` property binding nor a setSticky whitelist entry was a proven path - was FALSE when it was written and is corrected here rather than quietly deleted; the whitelist entry that followed` &&
+               ` (CONTROL_METHODS setSticky) closes a different footgun, an imperative call that silently received a string. // 1.71: the p:ColumnAIAction column plugin (sap.m.plugins, far newer than UI5 1.71) is` &&
+               ` dropped with its dependents aggregation and press toast - the plugin class does not exist on a 1.71 runtime, so keeping it would crash view creation there. // NOTE: the original's nested` &&
+               ` items-binding filter (ORs inside each facet group, AND across the groups, model untouched) is expressed 1:1 as a declarative compound filter: apply_filter builds the groups JSON from the two-way` &&
+               ` bound selected flags and schedules follow_up_action cs_event-binding_call filter on idProductsTable/items (compound groups implemented upstream 2026-07-20, pr/binding-call-compound-filters). // NOTE:`.
+    lv_text1 = lv_text1 && ` the original derives the ObjectNumber weight state in its frontend Formatter.js (weightState: KG conversion + Success/Warning/Error thresholds). That is business logic, so - abap2UI5 being a thin` &&
+               ` frontend - it is computed in ABAP model_init into a WEIGHT_STATE field and bound state="{WEIGHT_STATE}", not via a frontend formatter (core:require dropped). Visually 1:1 with the original.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.FacetFilter`                     name = `FacetFilterSimple`                   class = `z2ui5_cl_ai_app_235` path = `src/01/b19/z2ui5_cl_ai_app_235.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result

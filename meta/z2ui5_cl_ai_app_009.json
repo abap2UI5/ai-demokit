@@ -27,8 +27,8 @@
       "what": "the controller's onToggleInfoToolbar (ToggleButton press handler calling getInfoToolbar().setVisible(!pressed)) is expressed as bound properties instead of a round-trip: the ToggleButton's press attribute is dropped, its pressed property is bound two-way, and the infoToolbar's OverflowToolbar gains a visible={= !pressed } expression binding."
     },
     {
-      "type": "IMPROVISED",
-      "what": "the controller's onSelect (imperative oTable.setSticky array maintenance from the CheckBox text + selected parameter) becomes a sticky property on the Table bound to a plain string table: each CheckBox select event round-trips ${$source>/text} and ${$parameters>/selected}, the ABAP handler inserts/removes that option and pushes the model back via view_model_update."
+      "type": "NOTE",
+      "what": "the controller's onSelect (imperative oTable.setSticky array maintenance from the CheckBox text + selected parameter) becomes a sticky property on the Table bound to a plain string table: each CheckBox select event round-trips ${$source>/text} and ${$parameters>/selected}, the ABAP handler inserts/removes that option and pushes the model back via view_model_update. This is the bound-array path working, not a gap: Table.sticky takes an ABAP string table directly, live-verified here, and apps 022/235 were reworked onto the same pattern 2026-08-05/06."
     },
     {
       "type": "DROPPED_171",
