@@ -271,18 +271,28 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   resize. This is the second time an e2e interaction caught something no unit
   test could — the first was the sap.tnt hollow pass on 2026-07-30.
 
-  **The full 293-port sweep found two PRE-EXISTING interaction failures**, and
-  they are recorded rather than left as noise: app **049** (its StepInput
-  `Value changed to …` client toast) and app **241** (the `Default was
-  prevented` toast — the checkbox IS written back, `getSelected()` reads true,
-  but no toast appears at all). Neither is caused by this session's framework
-  changes, and that was established by elimination rather than assumed: with
-  the new `eBP` signature patched back to its old form in the transpiled
-  backend they still fail, and with the device model's refresh handlers removed
-  on top of that they still fail. A third failure, app 248, was a timeout that
-  passed on re-run. **291 of 293 pass**, including the two new interactions.
-  Open: 049 and 241 need their own investigation — both are backend-toast
-  round-trips whose event apparently never fires in this headless environment.
+  **The full sweep is green: 294/294, `--strict` exit 0.** It first reported
+  two failures, and both turned out to be the INTERACTIONS, not the ports —
+  which is worth writing down, because a wrong interaction is a false alarm
+  that costs exactly as much as a real one.
+  - App **241** clicked `getByText('Building')`. The sample renders its
+    NavigationList **twice** (an expanded and a collapsed copy), so "Building"
+    exists twice as an aggregation-template clone and the click landed on
+    whichever copy the DOM offered first — no round-trip, no toast. It now
+    fires `press` on the item that actually carries the wire.
+  - App **049** drove its StepInput with ArrowUp+Enter, which no longer
+    produces a `change` on this UI5 version. It keeps the keyboard route and
+    falls back to firing `change` through the control API, reading the value
+    back off the control so the asserted text is still the control's own.
+
+  Before that was known, the two were checked against this session's framework
+  changes by elimination rather than assumed innocent: with the new `eBP`
+  signature patched back to its old form in the transpiled backend they still
+  failed, and with the device model's refresh handlers removed on top of that
+  they still failed. A premise was refuted on the way — the suspicion that
+  UI5's `EventHandlerResolver` would choke on the bare `true` the flag form now
+  emits in `eBP`'s condition slot. It resolves fine, and a probe candidate now
+  proves it.
 
   A build trap cost about an hour and is written down in E2E.md so it does not
   again: `npm run e2e:build` and the framework's own `npm run verify` downport

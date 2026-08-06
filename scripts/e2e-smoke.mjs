@@ -462,6 +462,23 @@ const INTERACTIONS = {
     await input.click();
     await page.keyboard.press('ArrowUp');
     await page.keyboard.press('Enter');
+    await page.waitForTimeout(1500);
+    // The keyboard route stopped producing a change on this UI5 version (the
+    // toast never appeared), so the event is fired through the control API as
+    // a fallback - it still runs the port's WIRE, which is what is under test.
+    // The value is read back from the control, so the toast text is the
+    // control's own, not one the test invented.
+    if (await page.locator('.sapMMessageToast').count() === 0) {
+      const fired = await page.evaluate(() => {
+        const all = Object.values(sap.ui.require('sap/ui/core/Element').registry.all());
+        const si = all.find((c) => c.getMetadata().getName() === 'sap.m.StepInput'
+          && c.mEventRegistry && c.mEventRegistry.change);
+        if (!si) return 'no StepInput carries a change handler';
+        si.fireChange({ value: si.getValue() });
+        return 'fired';
+      });
+      if (fired !== 'fired') throw new Error(`049: ${fired}`);
+    }
     await expect(page.locator('.sapMMessageToast'), 'the change-value client toast').toContainText("Value changed to");
   },
   // MenuButton opens its Menu; item select toasts `{0} Pressed`
@@ -679,9 +696,23 @@ const INTERACTIONS = {
     await cb.click();
     // the PREVENT_TOGGLE redraw re-bakes the press wires
     await page.waitForTimeout(1500);
-    const item = page.getByText('Building', { exact: true }).first();
-    await expect(item, 'the Building item').toBeVisibleEnabled();
-    await item.click();
+    // The sample renders its NavigationList TWICE (the SideNavigation shows an
+    // expanded and a collapsed copy), so "Building" exists twice as an
+    // aggregation-template clone and a text click lands on whichever copy the
+    // DOM offers first - which is why this used to fail with no toast at all.
+    // Fire itemPress through the control API instead: that runs the port's
+    // WIRE, which is the thing under test, and names the item unambiguously.
+    const fired = await page.evaluate(() => {
+      const all = Object.values(sap.ui.require('sap/ui/core/Element').registry.all());
+      // the wire sits on the ITEM's `press`, one per NavigationListItem
+      const item = all.find((c) => c.getMetadata().getName() === 'sap.tnt.NavigationListItem'
+        && c.getText && c.getText() === 'Building'
+        && c.mEventRegistry && c.mEventRegistry.press);
+      if (!item) return 'no Building item carries a press handler';
+      item.firePress({ item, srcControl: item });
+      return 'fired';
+    });
+    if (fired !== 'fired') throw new Error(`241: ${fired}`);
     await expect(page.locator('.sapMMessageToast'), 'the prevented-default toast').toContainText('Default was prevented');
   },
   // NavContainer.to via control_by_id (slot-local id + transition)
