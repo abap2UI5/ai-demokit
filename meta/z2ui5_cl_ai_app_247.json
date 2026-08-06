@@ -5,15 +5,15 @@
   "file": "src/02/b12/z2ui5_cl_ai_app_247.clas.abap",
   "batch": "b12",
   "audit": {
-    "frontend_action": true,
+    "frontend_action": false,
     "event_t_arg": true
   },
   "status": "reviewed",
   "checked": null,
   "deviations": [
     {
-      "type": "IMPROVISED",
-      "what": "onColumnResize is reduced: the original buffers per-column resize messages, joins them and toasts 'Column <label> was resized to <width>.', and calls oEvent.preventDefault() to block resizing the deliverydate column. The backend cannot preventDefault a client-side column resize (no CONTROL_METHODS / event hook for it) and cannot read the column label off the event, so columnResize is wired to a roundtrip-free client MessageToast (control_global MESSAGE_TOAST.show 'Column was resized to {0}.' filled by ${$parameters>/width}); the per-column preventDefault and the column-label text are dropped. Re-judged 2026-08-05 against the veto flag (s_ctrl-check_prevent_default) that closed app 136: it does NOT help here. The flag is baked per WIRE at render time, and this veto is per COLUMN - the sample blocks resizing one column while allowing the others through the same event. A per-column wire is not available either (columnResize is declared on the Table, not on the Column). This stays the open half of the event-veto family."
+      "type": "NOTE",
+      "what": "onColumnResize is reproduced 1:1 since 2026-08-05, when the framework gained s_ctrl-prevent_default_expr (pr/conditional-prevent-default, implemented upstream). The original vetoes resizing ONE column (byId('deliverydate')) and reports every other one; the flag form of the veto is baked per WIRE at render time and would have frozen the whole table, so the port carries the condition as a client expression instead: `${$parameters>/column}.getId().indexOf('deliverydate') >= 0`. The event is sent either way (that is eBP's contract), so the if/else of the original's handler lives in on_event: the vetoed column reports nothing, every other one gets the sample's own text with its LABEL and the new width, both transported off the event parameter. Two things the earlier reduction dropped are therefore back - the per-column veto and the column label. What stays dropped is the 50ms BUFFER: the original collects the messages of a burst and toasts them joined, a debounce with no abap2UI5 equivalent, so each resize toasts on its own. The toast also moved from a client MESSAGE_TOAST to the backend, because the decision whether to toast at all is the same if/else."
     },
     {
       "type": "NOTE",

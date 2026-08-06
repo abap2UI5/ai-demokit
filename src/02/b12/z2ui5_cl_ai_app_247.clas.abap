@@ -71,8 +71,18 @@ CLASS z2ui5_cl_ai_app_247 IMPLEMENTATION.
                     )->a( n = `id`            v = `table`
                     )->a( n = `selectionMode` v = `MultiToggle`
                     )->a( n = `rows`          v = client->_bind( t_products )
-                    )->a( n = `columnResize`  v = client->_event_client( val   = client->cs_event-control_global
-                                                                         t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Column was resized to {0}.` ) ( `${$parameters>/width}` ) ) )
+                    " onColumnResize 1:1 since 2026-08-05: the delivery-date
+                    " column cannot be resized (the original's preventDefault
+                    " branch), every other column reports its LABEL and the new
+                    " width. The veto is per COLUMN, so it rides on the wire as
+                    " an expression - the flag form would freeze the whole table
+                    )->a( n = `columnResize`  v = client->_event(
+                              val    = `COLUMN_RESIZE`
+                              t_arg  = VALUE #( ( `${$parameters>/column}.getId()` )
+                                                ( `${$parameters>/column}.getLabel().getText()` )
+                                                ( `${$parameters>/width}` ) )
+                              s_ctrl = VALUE #(
+                                prevent_default_expr = `${$parameters>/column}.getId().indexOf('deliverydate') >= 0` ) )
                     )->a( n = `ariaLabelledBy` v = `title`
 
                     )->open( `extension`
@@ -196,6 +206,16 @@ CLASS z2ui5_cl_ai_app_247 IMPLEMENTATION.
       WHEN `WIDTHS_CHANGE`.
         set_widths( client->get_event_arg( ) ).
         client->view_model_update( ).
+
+      WHEN `COLUMN_RESIZE`.
+        " the client already vetoed the delivery-date column before the
+        " roundtrip; the event arrives either way, so the if/else of the
+        " original's handler is reproduced here - the vetoed column reports
+        " nothing, every other one gets the sample's own message text
+        DATA(column_id) = client->get_event_arg( ).
+        IF column_id NS `deliverydate`.
+          client->message_toast_display( |Column '{ client->get_event_arg( 2 ) }' was resized to { client->get_event_arg( 3 ) }.| ).
+        ENDIF.
     ENDCASE.
 
   ENDMETHOD.

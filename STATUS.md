@@ -17,7 +17,7 @@ TRAINING.md; for what abap2UI5 can express see CAPABILITIES.md._
 |---|---|
 | Ports | **293** sidecars in `meta/` (src/01: 177 · src/02: 67 · src/03: 19 · src/04: 19 · src/05: 11) |
 | Status ladder | 86 `generated` · 146 `reviewed` · 61 `checked` (live-verified) |
-| Deviations | 5 DROPPED_171 · 38 IMPROVISED · 579 NOTE · 122 POST_171 |
+| Deviations | 5 DROPPED_171 · 37 IMPROVISED · 580 NOTE · 122 POST_171 |
 | Open LIVE_TESTs | **0 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
 | Declared gate skips | 2 structural-diff · 3 render-smoke (each re-verified per run — a stale skip FAILS) |
 | Out-of-scope ported samples | `z2ui5_cl_ai_app_121 (sap.m.sample.UploadSet — deprecated)` · `z2ui5_cl_ai_app_136 (sap.f.sample.SidePanelSingle — control @since 1.107)` · `z2ui5_cl_ai_app_141 (sap.ui.core.sample.InvisibleMessage — control @since 1.78)` · `z2ui5_cl_ai_app_165 (sap.f.sample.ProductSwitchNavigation — control @since 1.72)` · `z2ui5_cl_ai_app_203 (sap.m.sample.OverflowToolbarTokenizer — control @since 1.139)` — all decided KEEP permanently 2026-07-30 (per-app rationale in ui5/scope-exceptions.json, revertible); the source-backed scope gate stays hard for NEW undecided entries |
@@ -28,7 +28,7 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
 
 ## Open findings (backlog)
 
-- [ ] **IMPROVISED harvest — 6 requests implemented, 2 more filed, probes measured**
+- [ ] **IMPROVISED harvest — 8 requests implemented, probes measured**
   (2026-08-05). The repo's purpose is to expose framework gaps, but the gaps
   were sitting in 136 `IMPROVISED` sidecar texts while `pr/` held exactly one
   open request. All 136 are now classified — repeatably, by
@@ -38,7 +38,7 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
 
   | Verdict | at the harvest | today | Meaning |
   |---|---:|---:|---|
-  | GAP | 15 | 10 | a framework gap — 6 requests filed, **all implemented upstream the same day**; the second sweep added 2 more, both measured first |
+  | GAP | 15 | 9 | a framework gap — 8 requests filed across two sweeps, **all implemented upstream the same day** |
   | PROBE | 16 | 3 | a *suspected* gap whose premise is unverified — measure before filing |
   | REWORK | 16 | 1 | expressible today; the port under-delivers (review backlog) — 118, the last big rebuild (115 done 2026-08-05) |
   | BOUNDARY | 16 | 16 | outside abap2UI5 by nature (client-only APIs, sample-local JS) |
@@ -85,12 +85,13 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
     `enabled`/`editable` plainly again and has **no binding-value deviation
     left**; `pr/` now holds only the open-abap request.
 
-  **Both pins are on feature branches and MUST become main SHAs before this
-  change is merged** (same rule the linter pin already carries): `A2UI5_PIN`
-  points at the abap2UI5 branch commit, the three abaplint configs carry a
-  `"branch"` on the abap2UI5 dependency (without it `_bind( omit_initial )` is
-  a syntax error to ABAP_STANDARD/CLOUD/702), and `@abap2ui5/linter` is pinned
-  at the commit that mirrors the two new global targets.
+  **All three pins are on feature branches and MUST become main SHAs before
+  this change is merged**: `A2UI5_PIN` points at the abap2UI5 branch commit,
+  the three abaplint configs carry a `"branch"` on the abap2UI5 dependency
+  (without it `_bind( omit_initial )` and `s_ctrl-prevent_default_expr` are
+  syntax errors to ABAP_STANDARD/CLOUD/702), and `@abap2ui5/linter` is pinned
+  at the commit that mirrors the new global targets, the `eBP` stub and the
+  `/media/range` model path.
 
   **The PROBE families are the open work** (the biggest one is now measured and closed) — each is a plausible gap that a
   measurement could refute, and this repo's rule is that a request is filed on
@@ -147,7 +148,7 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   question "are there any NEW request ideas left in the corpus" was answered by
   probing the two leftover families that had a mechanism behind them rather than
   a rationale. Both premises held, so both are filed:
-  - **`pr/live-device-model`** — the shared `device>` model is
+  - **`live-device-model`** (**implemented upstream the same day**) — the shared `device>` model is
     `new JSONModel(Device)`, wrapping the LIVE `sap.ui.Device` object. Device
     mutates itself on resize/rotation, but a JSONModel only notifies its
     bindings when told, so it never is: `scripts/probes/device-model-live-probe.mjs`
@@ -161,7 +162,7 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
     which is what a live breakpoint branch actually wants, has **no bindable
     path at all** (`Device.media` is methods only) — so the request adds
     `/media/range` alongside the refresh.
-  - **`pr/conditional-prevent-default`** — the veto flag is a boolean baked per
+  - **`conditional-prevent-default`** (**implemented upstream the same day**) — the veto flag is a boolean baked per
     WIRE, so it cannot block one row/column and let the rest through the same
     event (app 247). The proposal reuses the mechanism that is already there: a
     `$`-prefixed value is emitted raw and resolved by
@@ -171,6 +172,32 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
     predicate, two columns: the blocked one is vetoed
     (`fireColumnResize` → `false`), the free one goes through, and both still
     round-trip with an identical payload.
+
+  Both landed as `s_ctrl-prevent_default_expr` and a refreshing device model
+  with a new `{device>/media/range}` path, and the corpus consumed them the
+  same day: app **247** vetoes its delivery-date column again (and reports the
+  column LABEL, which the reduction had also dropped), app **168**'s
+  `attachLayoutChange` class swap is a live expression binding. App **012**
+  is honestly NOT closed — its page count feeds a server-side slice, so a
+  client-side count would desync the props it indexes; its sidecar says so.
+  A third correction came out of the same round: the `ternary-with-newline`
+  candidate had recorded that **a double quote cannot appear in an event-arg
+  expression**. It can — that was measured on RAW XML, while
+  `z2ui5_cl_util_xml` escapes every attribute value, so the parser never sees
+  a bare quote. The `double-quote-escaped` candidate proves it (`"[" + n + "]"`
+  → `[7]`), and CAPABILITIES no longer claims the boundary.
+
+  **A linter defect fell out of app 115's rebuild**, and it was silent:
+  `aggregationPath` matched the first `path:` with a GREEDY `[^}]*`, which
+  runs past a nested object — there is no `}` before `sorter: {` — and
+  captured the INNER path. So `{path:'/CATEGORIES', sorter:{path:'NAME'}}`,
+  the ordinary sorted aggregation, resolved against `/NAME`, the row shape
+  came out null, and **every relative field below such an aggregation stopped
+  being checked**. One lazy quantifier fixes it, and the fixed rule reports
+  three findings it had been blind to — all three the UI5 samples' own quirks
+  that the ports carry verbatim (`type="{Text}"` in 012/094,
+  `key="{ProductId}"` over `/Categories` in 115), each now carrying a
+  `abap2ui5lint-disable-next-line` with that rationale.
 
   One gate consequence to re-check later: app 049 now declares a
   `render_smoke` skip. Its bound template binds the numeric StepInput

@@ -830,17 +830,20 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` {/CITIES}, {products>/productItems} -> {/PRODUCTITEMS}, prefix dropped, last segment identical). **Sidecar corrected 2026-08-05**: the rest of the text still described the port before its rework and` &&
                ` called the handlers STATIC toasts. They are not: the three property Switches are two-way bound to the GridContainer's snapToRow / allowDenseFill / inlineBlockLayout (prefer-a-bindable-property, the` &&
                ` app-007/048/128 pattern), columnsChange round-trips its columns parameter, and the GenericTile / f:Card header presses compose their toast from $event.oSource.getMetadata().getName() instead of a` &&
-               ` fixed string. What stays dropped: the RevealGrid toggle (a sample-local JS debug overlay, same as apps 145/222/271) and the onInit attachLayoutChange handler that swaps` &&
-               ` sapUiSmallMargin/sapUiTinyMargin on the layoutXS/S breakpoints - a class swap on a live breakpoint change, for which no wire exists (the device> model is read per round-trip, not per resize). //`.
-    lv_text1 = lv_text1 && ` NOTE: The ComboBox items keep the original binding-info sorter 1:1 ({path:'/CITIES', sorter:{path:'TEXT'}} - restored 2026-07-27; an earlier version had dropped it although CAPABILITIES marks binding` &&
-               ` sorters expressible). The sap.ui.integration Card keeps its original external manifest reference (cardManifest.json). The two long lorem-ipsum filler Texts are abbreviated to short placeholders.` &&
-               ` cities.json (7) and products.json (3) are inlined in full (the unbound 'status' mock column stays out of the row type per the rows-not-columns rule). // NOTE: Faked-event-value audit fix` &&
-               ` (2026-07-30): the four substituted handlers are now the original behaviours. onSnapToRowChange / onAllowDenseFillChange / onInlineBlockLayoutChange: each Switch state is two-way bound and the` &&
-               ` GridContainer binds snapToRow/allowDenseFill/inlineBlockLayout (added attrs) to the same fields, so the toggles drive the grid entirely client-side (the 007/128 pattern) - the three Switch change` &&
-               ` attributes are DROPPED for the binding (they only carried the imperative setter). onGridColumnsChange: the columnsChange wire round-trips ${$parameters>/columns} and recomputes the bound`.
-    lv_text1 = lv_text1 && ` columnsCountText text ('Current grid columns count: <n>'; text is an added attr on the Text). onPress (tiles + card): client-composed toast 'Press was fired on - {0}' filled by` &&
-               ` $event.oSource.getMetadata().getName(), the original's exact text. onRevealGrid: the Reveal Grid button's press attribute is DROPPED, undecorated - RevealGrid is a sample-local JS helper (grid` &&
-               ` outline overlay) with no declarative equivalent (the app-145 precedent); the earlier static toasts ('Reveal Grid', 'Snap to row', 'Allow dense fill', 'Inline block layout', 'Columns changed', 'Tile` &&
+               ` fixed string. What stays dropped: the RevealGrid toggle (a sample-local JS debug overlay, same as apps 145/222/271) The onInit attachLayoutChange handler that swaps sapUiSmallMargin/sapUiTinyMargin`.
+    lv_text1 = lv_text1 && ` on the narrow breakpoints was dropped for the same reason until 2026-08-05 - a class swap on a LIVE breakpoint change, for which no wire existed (the device> model was a snapshot: it wrapped the live` &&
+               ` sap.ui.Device object but never notified its bindings). The framework now refreshes it on resize/rotation and publishes the current media range as {device>/media/range} (pr/live-device-model,` &&
+               ` implemented upstream), so the class is a plain expression binding on the GridContainer - ``{= ${device>/media/range} === 'Phone' ? 'sapUiTinyMargin' : 'sapUiSmallMargin' }`` - and follows a live` &&
+               ` resize with no wire and no round-trip, which is what the original's handler does. The three-way layoutXS/layoutS split folds into the one Phone range (< 600px), the same threshold the sample's own` &&
+               ` layout data uses. // NOTE: The ComboBox items keep the original binding-info sorter 1:1 ({path:'/CITIES', sorter:{path:'TEXT'}} - restored 2026-07-27; an earlier version had dropped it although` &&
+               ` CAPABILITIES marks binding sorters expressible). The sap.ui.integration Card keeps its original external manifest reference (cardManifest.json). The two long lorem-ipsum filler Texts are abbreviated`.
+    lv_text1 = lv_text1 && ` to short placeholders. cities.json (7) and products.json (3) are inlined in full (the unbound 'status' mock column stays out of the row type per the rows-not-columns rule). // NOTE: Faked-event-value` &&
+               ` audit fix (2026-07-30): the four substituted handlers are now the original behaviours. onSnapToRowChange / onAllowDenseFillChange / onInlineBlockLayoutChange: each Switch state is two-way bound and` &&
+               ` the GridContainer binds snapToRow/allowDenseFill/inlineBlockLayout (added attrs) to the same fields, so the toggles drive the grid entirely client-side (the 007/128 pattern) - the three Switch change` &&
+               ` attributes are DROPPED for the binding (they only carried the imperative setter). onGridColumnsChange: the columnsChange wire round-trips ${$parameters>/columns} and recomputes the bound` &&
+               ` columnsCountText text ('Current grid columns count: <n>'; text is an added attr on the Text). onPress (tiles + card): client-composed toast 'Press was fired on - {0}' filled by` &&
+               ` $event.oSource.getMetadata().getName(), the original's exact text. onRevealGrid: the Reveal Grid button's press attribute is DROPPED, undecorated - RevealGrid is a sample-local JS helper (grid`.
+    lv_text1 = lv_text1 && ` outline overlay) with no declarative equivalent (the app-145 precedent); the earlier static toasts ('Reveal Grid', 'Snap to row', 'Allow dense fill', 'Inline block layout', 'Columns changed', 'Tile` &&
                ` pressed', 'Card pressed') are gone. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the first GenericTile press toasts 'Press was fired on - sap.m.GenericTile'` &&
                ` (the getMetadata().getName() expression resolves); the switch bindings and columns counter remain unexercised.`.
     result = VALUE #( BASE result
@@ -1287,16 +1290,19 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` only refreshed while shown, like the original); the ColumnListItem gains a selected="{SELECTED}" two-way binding - the sanctioned selection-read pattern (CAPABILITIES 'Controller-read list` &&
                ` selection') replacing getSelectedContextPaths - which is an extra attribute vs the original template, and the initial visible="false"/absent text of the Button become bindings. // IMPROVISED: the` &&
                ` ResizeHandler-driven pagesCount/isDesktop recalculation (_onResize/_getPagesCount) is replaced by a one-shot computation at COMPARE time from client->get( )-s_device-resize-width using the original's`.
-    lv_text1 = lv_text1 && ` 600/1024 thresholds and the cap at the selected-items count; no live recalculation on window resize. // NOTE: Panel expand: the controller's onPanelExpanded (walking the sibling HBox controls and` &&
-               ` calling setVisible) is replaced by a bound VISIBLE flag per comparison value row, toggled in the PANEL_EXPANDED event via t_arg ${KEY} + ${$parameters>/expand}; the description HBox's literal` &&
-               ` visible="false" becomes the {VISIBLE} binding (initial false). // IMPROVISED: snapped/expanded Carousel re-sync stays dropped although Carousel.setActivePage is whitelisted upstream since 2026-07-20` &&
-               ` (pr/control-methods-openby-setactivepage): the carousels' pages are aggregation-template CLONES whose ids (templateId-parentId-index, view-prefixed; nondeterministic under extended change detection)` &&
-               ` are not addressable from the backend - restoring the re-sync would need an index-based page-resolution mechanism, a new framework idea if more samples turn out to need it. // NOTE: the` &&
-               ` DynamicPageTitle stateChange handler (.onStateChange, add/removeSnappedContent of the snapped Carousel as a Carousel-animation workaround) is dropped together with its stateChange attribute -`.
-    lv_text1 = lv_text1 && ` imperative aggregation surgery with no framework equivalent; the snapped/expanded content still switches natively with the DynamicPage header state. // NOTE: comparison Props are built from a fixed` &&
-               ` 19-key list in the mock JSON key order (the original iterates the FIRST selected product's own keys, skipping ProductPicUrl - so a first product without DateOfSale would drop that row, and missing` &&
-               ` values rendered '<strong>undefined</strong>' where the port renders an empty <strong></strong>); selected products are taken in model row order, not click order; the original's per-product` &&
-               ` information cache is unnecessary server-side. The controller's handleButtonPress (MessageBox) is dead code referenced by no view and not ported.`.
+    lv_text1 = lv_text1 && ` 600/1024 thresholds and the cap at the selected-items count; no live recalculation on window resize. Re-judged 2026-08-05 against the now-live device model (pr/live-device-model): it does NOT close` &&
+               ` this one. visiblePagesCount could bind {device>/resize/width} directly, but the count is also capped at the number of SELECTED products and then drives comparison_props_build, which slices the props` &&
+               ` table server-side per page window - so a client-side count would desync the props it is supposed to index. The round-trip decision stays; what the live model closes is the class-swap family (app` &&
+               ` 168), not this one. // NOTE: Panel expand: the controller's onPanelExpanded (walking the sibling HBox controls and calling setVisible) is replaced by a bound VISIBLE flag per comparison value row,` &&
+               ` toggled in the PANEL_EXPANDED event via t_arg ${KEY} + ${$parameters>/expand}; the description HBox's literal visible="false" becomes the {VISIBLE} binding (initial false). // IMPROVISED:` &&
+               ` snapped/expanded Carousel re-sync stays dropped although Carousel.setActivePage is whitelisted upstream since 2026-07-20 (pr/control-methods-openby-setactivepage): the carousels' pages are`.
+    lv_text1 = lv_text1 && ` aggregation-template CLONES whose ids (templateId-parentId-index, view-prefixed; nondeterministic under extended change detection) are not addressable from the backend - restoring the re-sync would` &&
+               ` need an index-based page-resolution mechanism, a new framework idea if more samples turn out to need it. // NOTE: the DynamicPageTitle stateChange handler (.onStateChange, add/removeSnappedContent of` &&
+               ` the snapped Carousel as a Carousel-animation workaround) is dropped together with its stateChange attribute - imperative aggregation surgery with no framework equivalent; the snapped/expanded content` &&
+               ` still switches natively with the DynamicPage header state. // NOTE: comparison Props are built from a fixed 19-key list in the mock JSON key order (the original iterates the FIRST selected product's` &&
+               ` own keys, skipping ProductPicUrl - so a first product without DateOfSale would drop that row, and missing values rendered '<strong>undefined</strong>' where the port renders an empty` &&
+               ` <strong></strong>); selected products are taken in model row order, not click order; the original's per-product information cache is unnecessary server-side. The controller's handleButtonPress`.
+    lv_text1 = lv_text1 && ` (MessageBox) is dead code referenced by no view and not ported.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.ComparisonPattern`               name = `ComparisonPattern`                   class = `z2ui5_cl_ai_app_012` path = `src/01/b05/z2ui5_cl_ai_app_012.clas.abap`
         score = 5
@@ -4229,28 +4235,29 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = lv_text1 ) ).
 
-    lv_text1 = `IMPROVISED: onColumnResize is reduced: the original buffers per-column resize messages, joins them and toasts 'Column <label> was resized to <width>.', and calls oEvent.preventDefault() to block` &&
-               ` resizing the deliverydate column. The backend cannot preventDefault a client-side column resize (no CONTROL_METHODS / event hook for it) and cannot read the column label off the event, so` &&
-               ` columnResize is wired to a roundtrip-free client MessageToast (control_global MESSAGE_TOAST.show 'Column was resized to {0}.' filled by ${$parameters>/width}); the per-column preventDefault and the` &&
-               ` column-label text are dropped. Re-judged 2026-08-05 against the veto flag (s_ctrl-check_prevent_default) that closed app 136: it does NOT help here. The flag is baked per WIRE at render time, and` &&
-               ` this veto is per COLUMN - the sample blocks resizing one column while allowing the others through the same event. A per-column wire is not available either (columnResize is declared on the Table, not` &&
-               ` on the Column). This stays the open half of the event-veto family. // NOTE: Named-model fold with a nested config object: the original binds each Column width to the`.
-    lv_text1 = lv_text1 && ` ui>/widths/{name,category,image,quantity,date} single object on a separate JSONModel. abap2UI5 has one default model; a nested single-object bind is proven only for row-relative sub-paths` &&
-               ` (CAPABILITIES 'Nested single (non-array) structure', app 171) - a top-level struct-component _bind is unproven in this corpus, and writing '/WIDTHS/NAME' as a literal path is disallowed. So the` &&
-               ` widths object is folded to five top-level string fields named exactly name/category/image/quantity/date (the sanctioned named-model prefix-drop idiom), each bound via client->_bind so the last path` &&
-               ` segment still matches the original (structural-diff normalizes on the last segment). onColumnWidthsChange (SegmentedButton Static/Flexible/Mixed) is reproduced faithfully: the selected key is` &&
-               ` transported via ${$parameters>/item}.getKey() and the width set is recomputed in ABAP (thin-frontend) + view_model_update. // NOTE: DeliveryDate is seeded deterministically. The original computes` &&
-               ` DeliveryDate = Date.now() - (i % 10 * 4 days) per load (non-deterministic timestamps); the port uses a fixed base (2026-07-25 in epoch ms) minus the same (i % 10 * 4 days) offset, kept as an epoch-ms`.
-    lv_text1 = lv_text1 && ` value bound through the original {path:'DeliveryDate', type:'sap.ui.model.type.Date', formatOptions:{source:{pattern:'timestamp'}}} typed binding. // NOTE: ProductPicUrl is resolved to the OpenUI5` &&
-               ` host: the mock stores the host-relative 'test-resources/sap/ui/documentation/sdk/images/HT-xxxx.jpg'; the port stores the absolute 'https://sdk.openui5.org/test-resources/...' per the asset-URL rule,` &&
-               ` keeping the original {ProductPicUrl} binding. Full 123-row ProductCollection inlined (Name/Category/ProductPicUrl/Quantity/DeliveryDate). // NOTE: **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs` &&
-               ` interaction, transpiled backend + real browser): the SegmentedButton width switch really round-trips: picking 'Flexible' sends WIDTHS_CHANGE with ${$parameters>/item}.getKey(), the backend recomputes` &&
-               ` the widths and the Table's columns come back at 25%. The button sits in an OverflowToolbar, where it renders as a Select - drivable once the 'Additional Options' popover is open (AGENTS 10).` &&
-               ` Residual: the columnResize client toast (a real column drag) and the timestamp-typed DeliveryDate formatting.`.
+    lv_text1 = `NOTE: onColumnResize is reproduced 1:1 since 2026-08-05, when the framework gained s_ctrl-prevent_default_expr (pr/conditional-prevent-default, implemented upstream). The original vetoes resizing ONE` &&
+               ` column (byId('deliverydate')) and reports every other one; the flag form of the veto is baked per WIRE at render time and would have frozen the whole table, so the port carries the condition as a` &&
+               ` client expression instead: ``${$parameters>/column}.getId().indexOf('deliverydate') >= 0``. The event is sent either way (that is eBP's contract), so the if/else of the original's handler lives in` &&
+               ` on_event: the vetoed column reports nothing, every other one gets the sample's own text with its LABEL and the new width, both transported off the event parameter. Two things the earlier reduction` &&
+               ` dropped are therefore back - the per-column veto and the column label. What stays dropped is the 50ms BUFFER: the original collects the messages of a burst and toasts them joined, a debounce with no` &&
+               ` abap2UI5 equivalent, so each resize toasts on its own. The toast also moved from a client MESSAGE_TOAST to the backend, because the decision whether to toast at all is the same if/else. // NOTE:`.
+    lv_text1 = lv_text1 && ` Named-model fold with a nested config object: the original binds each Column width to the ui>/widths/{name,category,image,quantity,date} single object on a separate JSONModel. abap2UI5 has one` &&
+               ` default model; a nested single-object bind is proven only for row-relative sub-paths (CAPABILITIES 'Nested single (non-array) structure', app 171) - a top-level struct-component _bind is unproven in` &&
+               ` this corpus, and writing '/WIDTHS/NAME' as a literal path is disallowed. So the widths object is folded to five top-level string fields named exactly name/category/image/quantity/date (the sanctioned` &&
+               ` named-model prefix-drop idiom), each bound via client->_bind so the last path segment still matches the original (structural-diff normalizes on the last segment). onColumnWidthsChange` &&
+               ` (SegmentedButton Static/Flexible/Mixed) is reproduced faithfully: the selected key is transported via ${$parameters>/item}.getKey() and the width set is recomputed in ABAP (thin-frontend) +` &&
+               ` view_model_update. // NOTE: DeliveryDate is seeded deterministically. The original computes DeliveryDate = Date.now() - (i % 10 * 4 days) per load (non-deterministic timestamps); the port uses a`.
+    lv_text1 = lv_text1 && ` fixed base (2026-07-25 in epoch ms) minus the same (i % 10 * 4 days) offset, kept as an epoch-ms value bound through the original {path:'DeliveryDate', type:'sap.ui.model.type.Date',` &&
+               ` formatOptions:{source:{pattern:'timestamp'}}} typed binding. // NOTE: ProductPicUrl is resolved to the OpenUI5 host: the mock stores the host-relative` &&
+               ` 'test-resources/sap/ui/documentation/sdk/images/HT-xxxx.jpg'; the port stores the absolute 'https://sdk.openui5.org/test-resources/...' per the asset-URL rule, keeping the original {ProductPicUrl}` &&
+               ` binding. Full 123-row ProductCollection inlined (Name/Category/ProductPicUrl/Quantity/DeliveryDate). // NOTE: **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real` &&
+               ` browser): the SegmentedButton width switch really round-trips: picking 'Flexible' sends WIDTHS_CHANGE with ${$parameters>/item}.getKey(), the backend recomputes the widths and the Table's columns` &&
+               ` come back at 25%. The button sits in an OverflowToolbar, where it renders as a Select - drivable once the 'Additional Options' popover is open (AGENTS 10). Residual: the columnResize client toast (a`.
+    lv_text1 = lv_text1 && ` real column drag) and the timestamp-typed DeliveryDate formatting.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `ColumnResizing`                      class = `z2ui5_cl_ai_app_247` path = `src/02/b12/z2ui5_cl_ai_app_247.clas.abap`
-        score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result

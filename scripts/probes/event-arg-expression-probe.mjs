@@ -122,11 +122,19 @@ const CANDIDATES = [
   },
   {
     key: 'ternary-with-newline',
-    what: "one arg carrying a whole composed message: nested ternary + concat + a literal \\n. NOTE the quoting boundary found here: a DOUBLE quote cannot appear in the expression, because the handler rides in a double-quoted XML attribute - so a message that wraps a value in quotes puts them in the TEMPLATE, not the expression",
+    what: "one arg carrying a whole composed message: nested ternary + concat + a literal \\n. the 2026-08-05 run recorded a quoting boundary here (\"a double quote cannot appear in the expression\") - WRONG, see the double-quote-escaped candidate below: that was measured on raw XML, and abap2UI5 escapes every attribute value",
     ports: "108 (the appointment MessageBox: title + selected state + count, or the else-branch count)",
     xml: `<Button id="c" text="B" press=".eB('EVT', \${$parameters>/item} ? (\${$parameters>/item} + ' ' + (\${$parameters>/on} ? 'selected' : 'deselected') + '. \\n Selected: ' + \${$parameters>/n}) : (\${$parameters>/n} + ' selected'))"/>`,
     fire: `c.firePress({ item: 'Meeting', on: true, n: 3 })`,
     expect: "Meeting selected. <newline> Selected: 3",
+  },
+  {
+    key: 'double-quote-escaped',
+    what: "a DOUBLE QUOTE inside the expression, escaped the way abap2UI5 actually emits it (&quot;). The 2026-08-05 run recorded 'a double quote cannot appear in the expression' - but that was measured on RAW XML, and z2ui5_cl_util_xml escapes every attribute value through cv_format_e_xml_attr, so the parser never sees a bare quote. Re-measured properly",
+    ports: '108 (a message that wraps a value in quotes), any composed text',
+    xml: `<Button id="c" text="B" press=".eB('EVT', &quot;[&quot; + \${$parameters>/n} + &quot;]&quot;)"/>`,
+    fire: `c.firePress({ n: 7 })`,
+    expect: '[7] — if this resolves, the recorded boundary was an artefact of the probe, not the framework',
   },
   {
     key: 'array-join',

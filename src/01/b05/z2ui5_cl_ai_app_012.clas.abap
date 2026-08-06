@@ -174,6 +174,10 @@ CLASS z2ui5_cl_ai_app_012 IMPLEMENTATION.
                                         )->a( n = `text`  v = `{PRODUCT_ID}`
                                     )->leaf( `Input`
                                         )->a( n = `value`       v = `{QUANTITY}`
+                                        " the ORIGINAL writes type="{Text}" (Main.view.xml): it meant the
+                                        " literal enum value and wrote a binding, so the property falls back
+                                        " to its default. Ported verbatim rather than repaired
+                                        " abap2ui5lint-disable-next-line unknown-binding-path -- the sample's own quirk
                                         )->a( n = `type`        v = `{Text}`
                                         )->a( n = `description` v = `{UOM}`
                                         )->a( n = `fieldWidth`  v = `{60%}`

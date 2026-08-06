@@ -265,6 +265,10 @@ CLASS z2ui5_cl_ai_app_115 IMPLEMENTATION.
                                     )->shut(
                                     )->open( n = `suggestionItems` ns = `m`
                                         )->leaf( n = `Item` ns = `c`
+                                            " the ORIGINAL writes key="{ProductId}" on a template bound
+                                            " over /Categories, whose rows only have a Name - its own quirk,
+                                            " ported verbatim (sidecar NOTE)
+                                            " abap2ui5lint-disable-next-line unknown-binding-path -- the sample's own quirk
                                             )->a( n = `key`  v = `{PRODUCTID}`
                                             )->a( n = `text` v = `{NAME}`
 
