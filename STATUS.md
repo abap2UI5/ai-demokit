@@ -257,6 +257,21 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   ever close. **31 IMPROVISED, and only 2 GAP entries left** (250's internal
   DOM reach, 012's server-side page slice).
 
+  **Two new linter rules, 2026-08-06**, distilled from traps this session hit
+  rather than from the corpus (neither fires on any of the 295 files — both are
+  things the corpus has avoided by hand so far, which is exactly what a rule
+  should make impossible to hit again). `trailing-empty-event-arg`: `get_t_arg`
+  buffers an empty argument and flushes it only when a later non-empty one
+  follows, so an empty entry BETWEEN filled ones keeps its slot and a TRAILING
+  one disappears — the handler's `get_event_arg( n )` reads initial with no
+  error anywhere. That is what forced the second half of the
+  `control-method-null-arg` fix upstream, and the framework's padding covers a
+  nullable declared kind on a control method only, never a backend `_event`.
+  `json-literal-in-attribute`: UI5 parses a leading `{` as a binding, so a raw
+  JSON object literal in a view attribute is read as a binding path and the
+  attribute ends up empty — the classic way to lose an integration Card's
+  manifest, which is why app 118 keeps its eight in the model.
+
   **A linter defect fell out of app 115's rebuild**, and it was silent:
   `aggregationPath` matched the first `path:` with a GREEDY `[^}]*`, which
   runs past a nested object — there is no `}` before `sorter: {` — and
