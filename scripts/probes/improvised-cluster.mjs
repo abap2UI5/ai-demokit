@@ -172,7 +172,8 @@ const FAMILIES = [
   },
   {
     key: 'shortcut-scope',
-    verdict: 'PROBE',
+    verdict: 'GAP',
+    pr: 'keyboard-shortcut-scope',
     label: 'the keyboard-shortcut registry is document-global; no popup-local command scope',
     re: /document-global|popover-local command scope/i,
   },

@@ -17,7 +17,7 @@ TRAINING.md; for what abap2UI5 can express see CAPABILITIES.md._
 |---|---|
 | Ports | **293** sidecars in `meta/` (src/01: 177 · src/02: 67 · src/03: 19 · src/04: 19 · src/05: 11) |
 | Status ladder | 86 `generated` · 146 `reviewed` · 61 `checked` (live-verified) |
-| Deviations | 5 DROPPED_171 · 31 IMPROVISED · 586 NOTE · 122 POST_171 |
+| Deviations | 5 DROPPED_171 · 30 IMPROVISED · 587 NOTE · 122 POST_171 |
 | Open LIVE_TESTs | **0 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
 | Declared gate skips | 2 structural-diff · 3 render-smoke (each re-verified per run — a stale skip FAILS) |
 | Out-of-scope ported samples | `z2ui5_cl_ai_app_121 (sap.m.sample.UploadSet — deprecated)` · `z2ui5_cl_ai_app_136 (sap.f.sample.SidePanelSingle — control @since 1.107)` · `z2ui5_cl_ai_app_141 (sap.ui.core.sample.InvisibleMessage — control @since 1.78)` · `z2ui5_cl_ai_app_165 (sap.f.sample.ProductSwitchNavigation — control @since 1.72)` · `z2ui5_cl_ai_app_203 (sap.m.sample.OverflowToolbarTokenizer — control @since 1.139)` — all decided KEEP permanently 2026-07-30 (per-app rationale in ui5/scope-exceptions.json, revertible); the source-backed scope gate stays hard for NEW undecided entries |
@@ -134,9 +134,17 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
     sweep below.
   - ~~`window-resize-event`~~ **measured and filed 2026-08-05** as
     `pr/live-device-model` — see the second sweep below.
-  - `template-clone-id` (1, app 012) and `shortcut-scope` (1, app 232): one port
-    each, each already named as an open idea in its own sidecar, and neither
-    premise is measured. File only if a second sample needs them.
+  - ~~`shortcut-scope`~~ **closed 2026-08-06** — filed and implemented the same
+    day as `keyboard-shortcut-scope`. The registry was keyed by key combination
+    alone, so a second registration of the same combo replaced the first and a
+    popover-local command could not shadow the page-level one — which is
+    exactly what app 232's sample demonstrates, with its own toggle for the
+    difference. `cs_event-keyboard_shortcut` now takes a view slot as an
+    optional third `t_arg` and dispatch picks the innermost OPEN scope, so 232
+    registers `Ctrl+S` twice (unscoped → `SAVE`, popover-scoped → `PSAVE`) and
+    its last residual deviation is closed.
+  - `template-clone-id` (1, app 012): one port, named as an open idea in its own
+    sidecar, premise unmeasured. File only if a second sample needs it.
 
   **REWORK** adds three entries to the review backlog below that were not in
   it: app 166 (semantic action toasts + the missing `Messaging.addMessages`

@@ -254,6 +254,15 @@ CLASS z2ui5_cl_ai_app_232 IMPLEMENTATION.
                               t_arg = VALUE #( ( `Ctrl+S` ) ( `SAVE` ) ) ).
     client->follow_up_action( val   = client->cs_event-keyboard_shortcut
                               t_arg = VALUE #( ( `Ctrl+D` ) ( `DELETE` ) ) ).
+    " CE_SAVE_POPOVER: the sample's point is that a CommandExecution in a
+    " Popover's dependents SHADOWS the page-level one for the same command
+    " while the popover is open - so Ctrl+S is registered a second time,
+    " scoped to the popover slot, and fires PSAVE (which the popover's own
+    " enabled/visible flags gate) instead of SAVE
+    client->follow_up_action( val   = client->cs_event-keyboard_shortcut
+                              t_arg = VALUE #( ( `Ctrl+S` )
+                                               ( `PSAVE` )
+                                               ( client->cs_view-popover ) ) ).
 
   ENDMETHOD.
 
