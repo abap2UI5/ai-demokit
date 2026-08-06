@@ -3659,23 +3659,25 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` combo -> named backend event), and every command-triggering button (press='cmd:Save' / press='cmd:Delete') fires the same backend SAVE/DELETE/PSAVE events, so shortcut and button share one command` &&
                ` path like the original command bus; the backend gates each command on its enabled/visible flags, so a disabled command's button press or shortcut does nothing, as with a disabled CommandExecution.` &&
                ` The last residual closed 2026-08-06: the shortcut registry used to be document-GLOBAL, so the original's popover-local command scope (CE_SAVE_POPOVER shadowing CE_SAVE for the same Save command while` &&
-               ` the popover is open) could not be expressed - Ctrl+S always hit the page-level command and its flags. cs_event-keyboard_shortcut now takes an optional third t_arg, a view slot to scope the`.
-    lv_text1 = lv_text1 && ` registration to (implemented upstream, pr/keyboard-shortcut-scope), and dispatch picks the innermost OPEN scope. Ctrl+S is therefore registered twice - unscoped -> SAVE, and scoped to cs_view-popover` &&
-               ` -> PSAVE - so the popover's own enabled/visible flags gate the command exactly while it is open, and the page-level one applies again once it closes. The three CommandExecution CONTROLS themselves` &&
-               ` stay dropped (abap2UI5 renders no such element); what they DO is now fully reproduced. // NOTE: The $cmd> command model bindings enabled='{$cmd>Save/enabled}' / enabled='{$cmd>Delete/enabled}' on the` &&
-               ` popover footer buttons have no command model to bind to (CommandExecution dropped), so they are folded to default-model booleans: the popover buttons bind enabled to {/SAVE_ENABLED}/{/DELETE_ENABLED}` &&
-               ` (page popover) and {/PSAVE_ENABLED}/{/DELETE_ENABLED} (command popover). Correspondingly the controller's onToggleSave/onToggleDelete/onTogglePopoverSave (byId('CE_SAVE').setEnabled(state)) and the` &&
-               ` *Visibility variants (setVisible) are reproduced as two-way bindings: each Switch state is bound two-way to the matching boolean and the popover buttons additionally bind visible to`.
-    lv_text1 = lv_text1 && ` {/SAVE_VISIBLE}/{/DELETE_VISIBLE}/{/PSAVE_VISIBLE}, so the switches drive the command-buttons client-side with no round-trip. Consequently the Switch change attributes (change='.onToggleSave' etc., 6` &&
-               ` of them) are DROPPED and replaced by the two-way state binding; the enabled binding value differs from the original $cmd> path. The flags travel with the next event's two-way model update, which is` &&
-               ` how the server-side command gating reads the current switch state. // NOTE: The manifest-declared viewModel named JSON model (bindings {viewModel>/value}, {viewModel>/countries},` &&
-               ` {viewModel>/selected}, {viewModel>key}, {viewModel>text}) is folded onto the one default model as value/t_countries/selected with the same leaf names and the controller's addData seed values` &&
-               ` (HelloWorld!, DZ Algeria / AR Argentina) - a pure prefix-drop, renders identically, structural-diff 0 diffs. // POST-1.71: sap.m.Button.ariaHasPopup (since UI5 1.84) is newer than 1.71 but kept for` &&
-               ` the 1:1 port - the two Open-Popover buttons carry ariaHasPopup='Dialog' as in the original; the app needs a UI5 release >= 1.84 to render it. // NOTE: live-verified 2026-08-04 (nightly e2e`.
-    lv_text1 = lv_text1 && ` interaction): unverified in a running system: (a) the two Open-Popover buttons open the popover anchored to the button via control_by_id openBy ($event.oSource.sId); (b) the Ctrl+S / Ctrl+D` &&
-               ` keyboard_shortcut registrations firing the backend SAVE/DELETE round-trips and their enabled/visible server-side gating; (c) the switch-driven two-way enabled/visible of the popover buttons. The e2e` &&
-               ` interaction (keyboard Ctrl+S -> save toast) covers (b) for the page-level Save. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): Ctrl+S fires the SAVE round-trip` &&
-               ` and toasts 'CTRL+S: save triggered on controller'.`.
+               ` the popover is open) could not be expressed - Ctrl+S always hit the page-level command and its flags. cs_event-keyboard_shortcut now takes an optional third t_arg scoping the registration`.
+    lv_text1 = lv_text1 && ` (implemented upstream, pr/keyboard-shortcut-scope). The scope here is the CONTROL id: this Popover is declared in the view's dependents and opened with control_by_id openBy, so it never enters the` &&
+               ` framework's popover SLOT - the slot-only form of the request would never have fired, which the e2e interaction found immediately and the upstream change then covered. Ctrl+S is therefore registered` &&
+               ` twice - unscoped -> SAVE, and scoped to cs_view-popover -> PSAVE - so the popover's own enabled/visible flags gate the command exactly while it is open, and the page-level one applies again once it` &&
+               ` closes. The three CommandExecution CONTROLS themselves stay dropped (abap2UI5 renders no such element); what they DO is now fully reproduced. **e2e-verified 2026-08-06** (scripts/e2e-smoke.mjs` &&
+               ` interaction, transpiled backend + real browser): with the popover's own Save switched off and the popover open, Ctrl+S goes silent, while the page-level command is still enabled and fires with the` &&
+               ` popover closed. // NOTE: The $cmd> command model bindings enabled='{$cmd>Save/enabled}' / enabled='{$cmd>Delete/enabled}' on the popover footer buttons have no command model to bind to`.
+    lv_text1 = lv_text1 && ` (CommandExecution dropped), so they are folded to default-model booleans: the popover buttons bind enabled to {/SAVE_ENABLED}/{/DELETE_ENABLED} (page popover) and {/PSAVE_ENABLED}/{/DELETE_ENABLED}` &&
+               ` (command popover). Correspondingly the controller's onToggleSave/onToggleDelete/onTogglePopoverSave (byId('CE_SAVE').setEnabled(state)) and the *Visibility variants (setVisible) are reproduced as` &&
+               ` two-way bindings: each Switch state is bound two-way to the matching boolean and the popover buttons additionally bind visible to {/SAVE_VISIBLE}/{/DELETE_VISIBLE}/{/PSAVE_VISIBLE}, so the switches` &&
+               ` drive the command-buttons client-side with no round-trip. Consequently the Switch change attributes (change='.onToggleSave' etc., 6 of them) are DROPPED and replaced by the two-way state binding; the` &&
+               ` enabled binding value differs from the original $cmd> path. The flags travel with the next event's two-way model update, which is how the server-side command gating reads the current switch state. //`.
+    lv_text1 = lv_text1 && ` NOTE: The manifest-declared viewModel named JSON model (bindings {viewModel>/value}, {viewModel>/countries}, {viewModel>/selected}, {viewModel>key}, {viewModel>text}) is folded onto the one default` &&
+               ` model as value/t_countries/selected with the same leaf names and the controller's addData seed values (HelloWorld!, DZ Algeria / AR Argentina) - a pure prefix-drop, renders identically,` &&
+               ` structural-diff 0 diffs. // POST-1.71: sap.m.Button.ariaHasPopup (since UI5 1.84) is newer than 1.71 but kept for the 1:1 port - the two Open-Popover buttons carry ariaHasPopup='Dialog' as in the` &&
+               ` original; the app needs a UI5 release >= 1.84 to render it. // NOTE: live-verified 2026-08-04 (nightly e2e interaction): unverified in a running system: (a) the two Open-Popover buttons open the` &&
+               ` popover anchored to the button via control_by_id openBy ($event.oSource.sId); (b) the Ctrl+S / Ctrl+D keyboard_shortcut registrations firing the backend SAVE/DELETE round-trips and their` &&
+               ` enabled/visible server-side gating; (c) the switch-driven two-way enabled/visible of the popover buttons. The e2e interaction (keyboard Ctrl+S -> save toast) covers (b) for the page-level Save.`.
+    lv_text1 = lv_text1 && ` **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): Ctrl+S fires the SAVE round-trip and toasts 'CTRL+S: save triggered on controller'.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.core`        control = `sap.ui.core.CommandExecution`          name = `Commands`                            class = `z2ui5_cl_ai_app_232` path = `src/02/b10/z2ui5_cl_ai_app_232.clas.abap`
         score = 5
@@ -4272,20 +4274,21 @@ CLASS z2ui5_cl_ai_app_overview IMPLEMENTATION.
                ` client expression instead: ``${$parameters>/column}.getId().indexOf('deliverydate') >= 0``. The event is sent either way (that is eBP's contract), so the if/else of the original's handler lives in` &&
                ` on_event: the vetoed column reports nothing, every other one gets the sample's own text with its LABEL and the new width, both transported off the event parameter. Two things the earlier reduction` &&
                ` dropped are therefore back - the per-column veto and the column label. What stays dropped is the 50ms BUFFER: the original collects the messages of a burst and toasts them joined, a debounce with no` &&
-               ` abap2UI5 equivalent, so each resize toasts on its own. The toast also moved from a client MESSAGE_TOAST to the backend, because the decision whether to toast at all is the same if/else. // NOTE:`.
-    lv_text1 = lv_text1 && ` Named-model fold with a nested config object: the original binds each Column width to the ui>/widths/{name,category,image,quantity,date} single object on a separate JSONModel. abap2UI5 has one` &&
-               ` default model; a nested single-object bind is proven only for row-relative sub-paths (CAPABILITIES 'Nested single (non-array) structure', app 171) - a top-level struct-component _bind is unproven in` &&
-               ` this corpus, and writing '/WIDTHS/NAME' as a literal path is disallowed. So the widths object is folded to five top-level string fields named exactly name/category/image/quantity/date (the sanctioned` &&
-               ` named-model prefix-drop idiom), each bound via client->_bind so the last path segment still matches the original (structural-diff normalizes on the last segment). onColumnWidthsChange` &&
-               ` (SegmentedButton Static/Flexible/Mixed) is reproduced faithfully: the selected key is transported via ${$parameters>/item}.getKey() and the width set is recomputed in ABAP (thin-frontend) +` &&
-               ` view_model_update. // NOTE: DeliveryDate is seeded deterministically. The original computes DeliveryDate = Date.now() - (i % 10 * 4 days) per load (non-deterministic timestamps); the port uses a`.
-    lv_text1 = lv_text1 && ` fixed base (2026-07-25 in epoch ms) minus the same (i % 10 * 4 days) offset, kept as an epoch-ms value bound through the original {path:'DeliveryDate', type:'sap.ui.model.type.Date',` &&
-               ` formatOptions:{source:{pattern:'timestamp'}}} typed binding. // NOTE: ProductPicUrl is resolved to the OpenUI5 host: the mock stores the host-relative` &&
-               ` 'test-resources/sap/ui/documentation/sdk/images/HT-xxxx.jpg'; the port stores the absolute 'https://sdk.openui5.org/test-resources/...' per the asset-URL rule, keeping the original {ProductPicUrl}` &&
-               ` binding. Full 123-row ProductCollection inlined (Name/Category/ProductPicUrl/Quantity/DeliveryDate). // NOTE: **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real` &&
-               ` browser): the SegmentedButton width switch really round-trips: picking 'Flexible' sends WIDTHS_CHANGE with ${$parameters>/item}.getKey(), the backend recomputes the widths and the Table's columns` &&
-               ` come back at 25%. The button sits in an OverflowToolbar, where it renders as a Select - drivable once the 'Additional Options' popover is open (AGENTS 10). Residual: the columnResize client toast (a`.
-    lv_text1 = lv_text1 && ` real column drag) and the timestamp-typed DeliveryDate formatting.`.
+               ` abap2UI5 equivalent, so each resize toasts on its own. The toast also moved from a client MESSAGE_TOAST to the backend, because the decision whether to toast at all is the same if/else.`.
+    lv_text1 = lv_text1 && ` **e2e-verified 2026-08-06** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): one wire, two columns, opposite outcomes - firing columnResize on the delivery-date column returns` &&
+               ` false (vetoed) and on any other column returns true, and the non-vetoed one toasts its label and width. // NOTE: Named-model fold with a nested config object: the original binds each Column width to` &&
+               ` the ui>/widths/{name,category,image,quantity,date} single object on a separate JSONModel. abap2UI5 has one default model; a nested single-object bind is proven only for row-relative sub-paths` &&
+               ` (CAPABILITIES 'Nested single (non-array) structure', app 171) - a top-level struct-component _bind is unproven in this corpus, and writing '/WIDTHS/NAME' as a literal path is disallowed. So the` &&
+               ` widths object is folded to five top-level string fields named exactly name/category/image/quantity/date (the sanctioned named-model prefix-drop idiom), each bound via client->_bind so the last path` &&
+               ` segment still matches the original (structural-diff normalizes on the last segment). onColumnWidthsChange (SegmentedButton Static/Flexible/Mixed) is reproduced faithfully: the selected key is`.
+    lv_text1 = lv_text1 && ` transported via ${$parameters>/item}.getKey() and the width set is recomputed in ABAP (thin-frontend) + view_model_update. // NOTE: DeliveryDate is seeded deterministically. The original computes` &&
+               ` DeliveryDate = Date.now() - (i % 10 * 4 days) per load (non-deterministic timestamps); the port uses a fixed base (2026-07-25 in epoch ms) minus the same (i % 10 * 4 days) offset, kept as an epoch-ms` &&
+               ` value bound through the original {path:'DeliveryDate', type:'sap.ui.model.type.Date', formatOptions:{source:{pattern:'timestamp'}}} typed binding. // NOTE: ProductPicUrl is resolved to the OpenUI5` &&
+               ` host: the mock stores the host-relative 'test-resources/sap/ui/documentation/sdk/images/HT-xxxx.jpg'; the port stores the absolute 'https://sdk.openui5.org/test-resources/...' per the asset-URL rule,` &&
+               ` keeping the original {ProductPicUrl} binding. Full 123-row ProductCollection inlined (Name/Category/ProductPicUrl/Quantity/DeliveryDate). // NOTE: **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs`.
+    lv_text1 = lv_text1 && ` interaction, transpiled backend + real browser): the SegmentedButton width switch really round-trips: picking 'Flexible' sends WIDTHS_CHANGE with ${$parameters>/item}.getKey(), the backend recomputes` &&
+               ` the widths and the Table's columns come back at 25%. The button sits in an OverflowToolbar, where it renders as a Select - drivable once the 'Additional Options' popover is open (AGENTS 10).` &&
+               ` Residual: the columnResize client toast (a real column drag) and the timestamp-typed DeliveryDate formatting.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `ColumnResizing`                      class = `z2ui5_cl_ai_app_247` path = `src/02/b12/z2ui5_cl_ai_app_247.clas.abap`
         score = 4

@@ -257,6 +257,26 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   ever close. **31 IMPROVISED, and only 2 GAP entries left** (250's internal
   DOM reach, 012's server-side page slice).
 
+  **The two new wires are e2e-verified, and the e2e found a design error in
+  one of them** (2026-08-06). App 232's interaction failed on the first run:
+  the shortcut scope had been built as a VIEW SLOT only, and the sample's
+  Popover is a CONTROL declared in the view's dependents and opened with
+  `openBy` — it never enters the framework's popover slot, so the scoped
+  registration could never fire and Ctrl+S kept hitting the page command. The
+  upstream change now takes a control id as a scope too (a control scope beats
+  a slot scope, being the more specific statement), and both interactions pass
+  against a real browser and a transpiled backend: 232 goes silent on Ctrl+S
+  with the popover's own Save off and the popover open, and 247 vetoes exactly
+  the delivery-date column through the same wire that lets every other column
+  resize. This is the second time an e2e interaction caught something no unit
+  test could — the first was the sap.tnt hollow pass on 2026-07-30.
+
+  A build trap cost about an hour and is written down in E2E.md so it does not
+  again: `npm run e2e:build` and the framework's own `npm run verify` downport
+  into the SAME two directories, and running them concurrently left 86 files
+  under abap2UI5's `src/` rewritten to their v702 form, with nothing in either
+  command's output saying so.
+
   **Two new linter rules, 2026-08-06**, distilled from traps this session hit
   rather than from the corpus (neither fires on any of the 295 files — both are
   things the corpus has avoided by hand so far, which is exactly what a rule
