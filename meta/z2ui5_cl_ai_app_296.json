@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_ai_app_296",
+  "sample": "sap.m.sample.ViewSettingsDialogCustomFilterDetails",
+  "entity": "sap.m.ViewSettingsDialog",
+  "file": "src/01/b24/z2ui5_cl_ai_app_296.clas.abap",
+  "batch": "b24",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The controller-loaded Dialog fragment is declared in the view's mvc:dependents aggregation and opened 1:1 via follow_up_action( cs_event-control_by_id, settingsDialog open ), the equivalent of the controller's _getDialog().then(oDialog => oDialog.open())."
+    },
+    {
+      "type": "NOTE",
+      "what": "The ViewSettingsDialog carries a bound filterSearchOperator attribute the original does not have. The original calls setFilterSearchOperator( mLibrary.StringFilterOperator.Contains / AnyWordStartsWith ) imperatively right before opening; it is an ordinary bindable property, so the port binds it and the two buttons just write the ABAP field."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "The third button, 'Search Case Sensitive Contains', loses its case sensitivity. The original installs a live JS function through setFilterSearchCallback( caseSensitiveStringContains ) - a callback the frontend evaluates per keystroke, which no backend payload can carry and which the framework deliberately has no route for (a runtime-compiled JS string was rejected for security). The port falls back to the closest built-in operator, the case-INSENSITIVE Contains, so the button still filters but matches regardless of case. The other two buttons are unaffected."
+    }
+  ]
+}
