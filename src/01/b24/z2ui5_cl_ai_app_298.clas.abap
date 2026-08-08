@@ -475,7 +475,12 @@ CLASS z2ui5_cl_ai_app_298 IMPLEMENTATION.
     ENDIF.
 
     TRY.
-        z2ui5_cl_ajson=>parse( lv_json )->to_abap( IMPORTING ev_container = result ).
+        " the frontend marshals a control with ALL its public properties
+        " (enabled, textDirection, wrapping, ...), so only the fields this port
+        " models are mapped - a plain to_abap( ) fails on the first extra one
+        z2ui5_cl_ajson=>parse( lv_json
+          )->to_abap_corresponding_only(
+          )->to_abap( IMPORTING ev_container = result ).
       CATCH z2ui5_cx_ajson_error.
         CLEAR result.
     ENDTRY.
