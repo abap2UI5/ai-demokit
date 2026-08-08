@@ -1,0 +1,43 @@
+{
+  "class": "z2ui5_cl_ai_app_297",
+  "sample": "sap.m.sample.ViewSettingsDialogCustomTabs",
+  "entity": "sap.m.ViewSettingsDialog",
+  "file": "src/01/b24/z2ui5_cl_ai_app_297.clas.abap",
+  "batch": "b24",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "All three controller-loaded fragments (Dialog / DialogSingleCustomTab / DialogSingleCustomTabWithDatePicker) are declared in the view's mvc:dependents aggregation and opened 1:1 via follow_up_action( cs_event-control_by_id, <id> open ). confirm forwards the public filterString event parameter (${$parameters>/filterString}) and toasts it when non-empty, like the original handleConfirm."
+    },
+    {
+      "type": "POST_171",
+      "what": "ViewSettingsDialog.beforeClose is @since 1.132 - newer than the 1.71 floor. It is the event the original's handleBeforeClose hangs on to veto closing while the DatePicker is invalid, so a faithful port cannot drop it; the app needs a UI5 release >= 1.132 for that third dialog."
+    },
+    {
+      "type": "NOTE",
+      "what": "The beforeClose veto is reproduced with s_ctrl-prevent_default_expr: a client expression over the bound date_value_state field decides per firing whether the close is cancelled, which is what the original's conditional oEvent.preventDefault() does. The event still reaches the backend, which adds the 'The entered date is invalid' toast - so the decision travels as data, not as a controller branch."
+    },
+    {
+      "type": "NOTE",
+      "what": "The DatePicker carries bound valueState and valueStateText attributes the original does not have, and its change event reports the public valid parameter (${$parameters>/valid}). The original's validateDate sets both imperatively in the controller; both are bindable properties, so the port computes the state in ABAP (thin frontend) and binds it. The error text is identical."
+    },
+    {
+      "type": "NOTE",
+      "what": "The three fragments each use id='app-settings' for their ViewSettingsCustomTab, and the first two additionally repeat the whole Settings-tab id set (VSDThemeLabel, VSDThemeButtons, VSDsap_hcb, VSDsap_quartzlight, VSDCompactModeButtons, VSDcompactOn, VSDcompactOff, VSDRTLButtons, VSDRTLOn, VSDRTLOff). In UI5 those are separate fragment id scopes; abap2UI5 renders all three dialogs into ONE view, where the duplicates would collide. The second and third dialog therefore carry suffixed ids (app-settings-single, app-settings-datepicker, and the Single suffix on the repeated Settings-tab ids). Only the id VALUES differ - every control and attribute is the original's."
+    },
+    {
+      "type": "NOTE",
+      "what": "The Settings tab body is written out twice instead of through a helper method, mirroring the original, which also carries one copy per fragment. A builder-returning helper would hide the open/shut tree from the static view gates."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "The custom tabs are inert, exactly as in the original: the SegmentedButtons for Theme, Compact Content Density and Right To Left Mode carry no handler in the sample either, so nothing is applied when they are pressed. The sample's own style.css (the .vsdSetting / .vsd-dp spacing rules) is not reproduced - the class attributes stay on the controls, only the stylesheet is missing, so the tab content renders slightly tighter than the original."
+    }
+  ]
+}

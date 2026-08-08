@@ -1,0 +1,31 @@
+{
+  "class": "z2ui5_cl_ai_app_295",
+  "sample": "sap.m.sample.ViewSettingsDialogCustom",
+  "entity": "sap.m.ViewSettingsDialog",
+  "file": "src/01/b24/z2ui5_cl_ai_app_295.clas.abap",
+  "batch": "b24",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The controller-loaded Dialog fragment is declared in the view's mvc:dependents aggregation and opened 1:1 via follow_up_action( cs_event-control_by_id, settingsDialog open ). confirm/cancel/resetFilters become backend events; confirm forwards the public filterString event parameter (${$parameters>/filterString}) and toasts it together with the slider value, like the original handleConfirm."
+    },
+    {
+      "type": "NOTE",
+      "what": "The Slider carries a bound value attribute the original does not have: the sample seeds and restores it imperatively (oSlider.setValue in the fragment-load callback, in handleCancel and in handleResetFilters). A bound ABAP field is the abap2UI5 equivalent of all three, so the initial value 50 comes from model_init and cancel/reset just write the field."
+    },
+    {
+      "type": "NOTE",
+      "what": "ViewSettingsCustomItem carries bound filterCount and selected attributes the original does not have. The original drives both imperatively (setFilterCount/setSelected in handleSliderChange, handleCancel and handleResetFilters); both are ordinary bindable properties, so the port binds them and computes the state in ABAP."
+    },
+    {
+      "type": "NOTE",
+      "what": "Thin frontend: the comparisons that decide the filter state - new slider value against the last confirmed one (handleSliderChange), and the confirmed value against the reset value 50 (handleCancel) - are computed in ABAP instead of in the controller. filterResetValue/filterPreviousValue become the constant c_reset_value and the protected previous_value; behaviour is identical."
+    }
+  ]
+}
