@@ -1,0 +1,343 @@
+CLASS z2ui5_cl_dmo_app_303 DEFINITION PUBLIC.
+
+  PUBLIC SECTION.
+    INTERFACES z2ui5_if_app.
+
+    DATA selectedkey TYPE string.
+
+    TYPES: BEGIN OF ty_s_sub_item,
+             title TYPE string,
+             key   TYPE string,
+           END OF ty_s_sub_item.
+    TYPES: BEGIN OF ty_s_nav_item,
+             title TYPE string,
+             icon  TYPE string,
+             key   TYPE string,
+             items TYPE STANDARD TABLE OF ty_s_sub_item WITH EMPTY KEY,
+           END OF ty_s_nav_item.
+    DATA navigation TYPE STANDARD TABLE OF ty_s_nav_item WITH EMPTY KEY.
+
+  PROTECTED SECTION.
+    DATA client TYPE REF TO z2ui5_if_client.
+
+    METHODS view_display.
+    METHODS on_event.
+    METHODS model_init.
+
+  PRIVATE SECTION.
+ENDCLASS.
+
+
+CLASS z2ui5_cl_dmo_app_303 IMPLEMENTATION.
+
+  METHOD z2ui5_if_app~main.
+
+    me->client = client.
+    IF client->check_on_init( ).
+      model_init( ).
+      view_display( ).
+    ELSEIF client->check_on_event( ).
+      on_event( ).
+    ENDIF.
+
+  ENDMETHOD.
+
+
+  METHOD view_display.
+
+    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+
+    view->open( n = `View` ns = `mvc`
+        )->a( n = `xmlns`     v = `sap.m`
+        )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
+        )->a( n = `xmlns:tnt` v = `sap.tnt`
+        )->a( n = `height`    v = `100%`
+
+        )->open( n = `ToolPage` ns = `tnt`
+            )->a( n = `id` v = `toolPage`
+
+            )->open( n = `header` ns = `tnt`
+                )->open( n = `ToolHeader` ns = `tnt`
+                    )->leaf( `Image`
+                        )->a( n = `height` v = `1.5rem`
+                        )->a( n = `class`  v = `sapUiSmallMarginBegin`
+                        )->a( n = `src`    v = `https://www.sap.com/dam/application/shared/logos/sap-logo-svg.svg`
+
+                    )->open( `Title`
+                        )->a( n = `level`    v = `H1`
+                        )->a( n = `text`     v = `Product Name`
+                        )->a( n = `wrapping` v = `false`
+                        )->a( n = `id`       v = `productName`
+
+                        )->open( `layoutData`
+                            )->leaf( `OverflowToolbarLayoutData`
+                                )->a( n = `priority` v = `Disappear`
+
+                        )->shut(
+                    )->shut(
+                    )->open( `Text`
+                        )->a( n = `text`     v = `Second Тitle`
+                        )->a( n = `wrapping` v = `false`
+                        )->a( n = `id`       v = `secondTitle`
+
+                        )->open( `layoutData`
+                            )->leaf( `OverflowToolbarLayoutData`
+                                )->a( n = `priority` v = `Disappear`
+
+                        )->shut(
+                    )->shut(
+
+                    )->leaf( `ToolbarSpacer`
+
+                    )->open( `SearchField`
+                        )->a( n = `width` v = `25rem`
+                        )->a( n = `id`    v = `searchField`
+
+                        )->open( `layoutData`
+                            )->leaf( `OverflowToolbarLayoutData`
+                                )->a( n = `priority` v = `Low`
+                                )->a( n = `group`    v = `1`
+
+                        )->shut(
+                    )->shut(
+
+                    )->leaf( `Button`
+                        )->a( n = `visible` v = `false`
+                        )->a( n = `icon`    v = `sap-icon://search`
+                        )->a( n = `type`    v = `Transparent`
+                        )->a( n = `id`      v = `searchButton`
+                        )->a( n = `tooltip` v = `Search`
+
+                    )->open( `OverflowToolbarButton`
+                        )->a( n = `icon`    v = `sap-icon://source-code`
+                        )->a( n = `type`    v = `Transparent`
+                        )->a( n = `tooltip` v = `Action 1`
+                        )->a( n = `text`    v = `Action 1`
+
+                        )->open( `layoutData`
+                            )->leaf( `OverflowToolbarLayoutData`
+                                )->a( n = `group` v = `2`
+
+                        )->shut(
+                    )->shut(
+                    )->open( `OverflowToolbarButton`
+                        )->a( n = `icon`    v = `sap-icon://card`
+                        )->a( n = `type`    v = `Transparent`
+                        )->a( n = `tooltip` v = `Action 2`
+                        )->a( n = `text`    v = `Action 2`
+
+                        )->open( `layoutData`
+                            )->leaf( `OverflowToolbarLayoutData`
+                                )->a( n = `group` v = `2`
+
+                        )->shut(
+                    )->shut(
+                    )->open( `ToolbarSeparator`
+                        )->open( `layoutData`
+                            )->leaf( `OverflowToolbarLayoutData`
+                                )->a( n = `group` v = `2`
+
+                        )->shut(
+                    )->shut(
+
+                    )->leaf( `OverflowToolbarButton`
+                        )->a( n = `icon` v = `sap-icon://action-settings`
+                        )->a( n = `type` v = `Transparent`
+                        )->a( n = `text` v = `Settings`
+
+                    )->open( `Button`
+                        )->a( n = `icon`    v = `sap-icon://bell`
+                        )->a( n = `type`    v = `Transparent`
+                        )->a( n = `tooltip` v = `Notification`
+
+                        )->open( `layoutData`
+                            )->leaf( `OverflowToolbarLayoutData`
+                                )->a( n = `priority` v = `NeverOverflow`
+
+                        )->shut(
+                    )->shut(
+
+                    )->leaf( n = `ToolHeaderUtilitySeparator` ns = `tnt`
+
+                    )->leaf( `ToolbarSpacer`
+                        )->a( n = `width` v = `1.125rem`
+
+                    )->open( `Avatar`
+                        )->a( n = `src`         v = `https://sdk.openui5.org/test-resources/sap/tnt/images/Woman_avatar_01.png`
+                        )->a( n = `displaySize` v = `XS`
+                        )->a( n = `tooltip`     v = `Profile`
+
+                        )->open( `layoutData`
+                            )->leaf( `OverflowToolbarLayoutData`
+                                )->a( n = `priority` v = `NeverOverflow`
+
+                        )->shut(
+                    )->shut(
+                )->shut(
+            )->shut(
+
+            )->open( n = `subHeader` ns = `tnt`
+                )->open( n = `ToolHeader` ns = `tnt`
+                    )->open( `IconTabHeader`
+                        )->a( n = `selectedKey` v = client->_bind( selectedkey )
+                        )->a( n = `items`       v = |\{path: '{ client->_bind( val = navigation path = abap_true ) }'\}|
+                        )->a( n = `select`      v = client->_event( val   = `ITEM_SELECT`
+                                                                    t_arg = VALUE #( ( `${$parameters>/item}.getKey()` ) ) )
+                        )->a( n = `mode`        v = `Inline`
+
+                        )->open( `layoutData`
+                            )->leaf( `OverflowToolbarLayoutData`
+                                )->a( n = `priority`   v = `NeverOverflow`
+                                )->a( n = `shrinkable` v = `true`
+
+                        )->shut(
+                        )->open( `items`
+                            )->open( `IconTabFilter`
+                                )->a( n = `items`           v = `{ITEMS}`
+                                )->a( n = `text`            v = `{TITLE}`
+                                )->a( n = `key`             v = `{KEY}`
+                                )->a( n = `interactionMode` v = `SelectLeavesOnly`
+
+                                )->open( `items`
+                                    )->leaf( `IconTabFilter`
+                                        )->a( n = `text` v = `{TITLE}`
+                                        )->a( n = `key`  v = `{KEY}`
+
+                                )->shut(
+                            )->shut(
+                        )->shut(
+                    )->shut(
+                )->shut(
+            )->shut(
+
+            )->open( n = `mainContents` ns = `tnt`
+                )->open( `NavContainer`
+                    )->a( n = `id`          v = `pageContainer`
+                    )->a( n = `initialPage` v = `page1`
+
+                    )->open( `pages`
+                        )->open( `ScrollContainer`
+                            )->a( n = `id`         v = `page1`
+                            )->a( n = `horizontal` v = `false`
+                            )->a( n = `vertical`   v = `true`
+                            )->a( n = `height`     v = `100%`
+                            )->a( n = `class`      v = `sapUiContentPadding`
+
+                            )->leaf( `Text`
+                                )->a( n = `text` v = `Home`
+
+                        )->shut(
+                        )->open( `ScrollContainer`
+                            )->a( n = `id`         v = `page2`
+                            )->a( n = `horizontal` v = `false`
+                            )->a( n = `vertical`   v = `true`
+                            )->a( n = `height`     v = `100%`
+                            )->a( n = `class`      v = `sapUiContentPadding`
+
+                            )->leaf( `Text`
+                                )->a( n = `text` v = `Applications`
+
+                        )->shut(
+                        )->open( `ScrollContainer`
+                            )->a( n = `id`         v = `page3`
+                            )->a( n = `horizontal` v = `false`
+                            )->a( n = `vertical`   v = `true`
+                            )->a( n = `height`     v = `100%`
+                            )->a( n = `class`      v = `sapUiContentPadding`
+
+                            )->leaf( `Text`
+                                )->a( n = `text` v = `Users and Groups`
+
+                        )->shut(
+                        )->open( `ScrollContainer`
+                            )->a( n = `id`         v = `page4`
+                            )->a( n = `horizontal` v = `false`
+                            )->a( n = `vertical`   v = `true`
+                            )->a( n = `height`     v = `100%`
+                            )->a( n = `class`      v = `sapUiContentPadding`
+
+                            )->leaf( `Text`
+                                )->a( n = `text` v = `Identity`
+
+                        )->shut(
+                        )->open( `ScrollContainer`
+                            )->a( n = `id`         v = `page5`
+                            )->a( n = `horizontal` v = `false`
+                            )->a( n = `vertical`   v = `true`
+                            )->a( n = `height`     v = `100%`
+                            )->a( n = `class`      v = `sapUiContentPadding`
+
+                            )->leaf( `Text`
+                                )->a( n = `text` v = `Provisioning`
+
+                        )->shut(
+                        )->open( `ScrollContainer`
+                            )->a( n = `id`         v = `page6`
+                            )->a( n = `horizontal` v = `false`
+                            )->a( n = `vertical`   v = `true`
+                            )->a( n = `height`     v = `100%`
+                            )->a( n = `class`      v = `sapUiContentPadding`
+
+                            )->leaf( `Text`
+                                )->a( n = `text` v = `Monitoring`
+
+                        )->shut(
+                        )->open( `ScrollContainer`
+                            )->a( n = `id`         v = `page7`
+                            )->a( n = `horizontal` v = `false`
+                            )->a( n = `vertical`   v = `true`
+                            )->a( n = `height`     v = `100%`
+                            )->a( n = `class`      v = `sapUiContentPadding`
+
+                            )->leaf( `Text`
+                                )->a( n = `text` v = `Resources` ).
+
+    client->view_display( view->stringify( ) ).
+
+  ENDMETHOD.
+
+
+  METHOD on_event.
+
+    CASE client->get( )-event.
+
+      WHEN `ITEM_SELECT`.
+        " original onItemSelect: pageContainer.to( the selected item's key )
+        client->follow_up_action( val   = client->cs_event-control_by_id
+                                  t_arg = VALUE #( ( `pageContainer` )
+                                                   ( `to` )
+                                                   ( client->get_event_arg( ) ) ) ).
+
+    ENDCASE.
+
+  ENDMETHOD.
+
+
+  METHOD model_init.
+
+    " model/data.json of the sample, inlined 1:1
+    selectedkey = `page1`.
+
+    navigation = VALUE #(
+      ( title = `Home`         key = `page1` )
+      ( title = `Applications` key = `page2` )
+      ( title = `Users and Groups`
+        items = VALUE #( ( title = `User 1` key = `page3` )
+                         ( title = `User 2` key = `page3` )
+                         ( title = `User 3` key = `page3` ) ) )
+      ( title = `Identity`
+        items = VALUE #( ( title = `Identity 1` key = `page4` )
+                         ( title = `Identity 2` key = `page4` )
+                         ( title = `Identity 3` key = `page4` ) ) )
+      ( title = `Provisioning` key = `page5` )
+      ( title = `Monitoring` icon = `sap-icon://unwired`
+        items = VALUE #( ( title = `Monitoring 1` key = `page6` )
+                         ( title = `Monitoring 2` key = `page6` ) ) )
+      ( title = `Resources`
+        items = VALUE #( ( title = `Resource 1` key = `page7` )
+                         ( title = `Resource 2` key = `page7` )
+                         ( title = `Resource 3` key = `page7` ) ) ) ).
+
+  ENDMETHOD.
+
+ENDCLASS.

@@ -1,0 +1,39 @@
+{
+  "class": "z2ui5_cl_dmo_app_303",
+  "sample": "sap.tnt.sample.ToolPageHorizontalNavigation",
+  "entity": "sap.tnt.ToolPage",
+  "file": "src/05/b08/z2ui5_cl_dmo_app_303.clas.abap",
+  "batch": "b08",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "onItemSelect does byId('pageContainer').to(createId(item.getKey())); the port transports the key with ${$parameters>/item}.getKey() and calls the same method through follow_up_action( control_by_id, 'pageContainer', 'to', <key> ) - the NavContainer has no bindable current-page property."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "_handleMediaChange is dropped. The controller attaches a sap.ui.Device.media handler and, per StdExt range (LargeDesktop/Desktop/Tablet/Phone), toggles the visibility of productName/secondTitle/searchField/searchButton and shows a MessageToast naming the range. abap2UI5 does serve the device> model, but it publishes the media range on the Std set only ({device>/media/range} = Phone/Tablet/Desktop), which cannot tell StdExt's LargeDesktop from Desktop - the very distinction two of the four branches turn on - and a resize does not round-trip, so the range toasts have no equivalent either. The four controls therefore keep the visibility the view declares (searchButton visible=false, the rest visible) and no range toast is shown."
+    },
+    {
+      "type": "POST_171",
+      "what": "sap.tnt.ToolPage aggregation subHeader (@since 1.93) carries the horizontal IconTabHeader navigation - it is the whole point of this sample and is kept 1:1. Newer than UI5 1.71."
+    },
+    {
+      "type": "POST_171",
+      "what": "IconTabFilter.interactionMode=\"SelectLeavesOnly\" (@since 1.121) is kept 1:1 on the top-level filter template, and sap.m.Avatar (control @since 1.73) is kept 1:1 as the profile avatar of the ToolHeader. Both newer than UI5 1.71."
+    },
+    {
+      "type": "NOTE",
+      "what": "the profile Avatar src 'test-resources/sap/tnt/images/Woman_avatar_01.png' is absolutized to the OpenUI5 host (https://sdk.openui5.org/test-resources/sap/tnt/images/Woman_avatar_01.png) per the repository asset-URL rule; the original uses the relative path."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "not yet run in a system: the IconTabHeader select -> NavContainer 'to' frontend action and the two-way bound selectedKey."
+    }
+  ]
+}

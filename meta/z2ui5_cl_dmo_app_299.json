@@ -1,0 +1,39 @@
+{
+  "class": "z2ui5_cl_dmo_app_299",
+  "sample": "sap.tnt.sample.SideNavigationActions",
+  "entity": "sap.tnt.SideNavigation",
+  "file": "src/05/b08/z2ui5_cl_dmo_app_299.clas.abap",
+  "batch": "b08",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "onCollapseExpandPress (byId('sideNavigation').setExpanded(!expanded)) is reproduced by two-way binding SideNavigation.expanded to a boolean model field, seeded false exactly like the original literal, and flipping it on the TOGGLE_EXPAND round-trip."
+    },
+    {
+      "type": "NOTE",
+      "what": "quickActionPress dialog: the controller-built sap.m.Dialog is expressed as a core:FragmentDefinition shown via client->popup_display. Its Dialog, Label, Input and Button controls are extra vs the archived V.view.xml, which declares none of them; the two Inputs are two-way bound (create_name/create_icon) instead of read imperatively via Element.getElementById(...).getValue()."
+    },
+    {
+      "type": "NOTE",
+      "what": "the Create button does sideNavigation.getItem().addItem( new NavigationListItem({ text, expanded: true, icon }) ), so the main tnt:NavigationList is a BOUND aggregation here (the app-241 pattern): the four static tnt:NavigationListItem entries (Home/Building/Mileage/Transport) collapse into one bound template, so three NavigationListItem controls are missing vs the original count, and creating appends a row with the same defaults ('New Navigation Item' / sap-icon://building). The rows bind with omit_initial_paths for EXPANDED so an item that does not set it keeps the control default."
+    },
+    {
+      "type": "POST_171",
+      "what": "NavigationListItem.selectable (@since 1.116) is kept 1:1 (selectable=false on the Quick Create and External Link fixedItem entries). @since verified in sap.tnt/src/sap/tnt/NavigationListItem.js."
+    },
+    {
+      "type": "POST_171",
+      "what": "NavigationListItem.design=\"Action\" and NavigationListItem.ariaHasPopup=\"Dialog\" (both @since 1.133) are kept 1:1 on the Quick Create item. @since verified in sap.tnt/src/sap/tnt/NavigationListItem.js."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "not yet run in a system: the TOGGLE_EXPAND round-trip (collapse/expand), the quick-create popup round-trip and the Create append (new row shows up in the bound NavigationList with the typed name/icon or the defaults)."
+    }
+  ]
+}

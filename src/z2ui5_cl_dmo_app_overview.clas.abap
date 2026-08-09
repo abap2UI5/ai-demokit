@@ -3544,6 +3544,56 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` sap.tnt.NavigationListGroup (control @since 1.121) is used 1:1 for the 'New', 'Recently used' and 'Restricted' groups. Newer than UI5 1.71; declared per the property-171 policy (control-level, app` &&
                  ` 152 Avatar precedent - the gate only checks members), so the app needs UI5 >= 1.121 to render the groups. Found by the 2026-07-27 review sweep.` ) ).
 
+    lv_text1 = `NOTE: onCollapseExpandPress (byId('sideNavigation').setExpanded(!expanded)) is reproduced by two-way binding SideNavigation.expanded to a boolean model field, seeded false exactly like the original` &&
+               ` literal, and flipping it on the TOGGLE_EXPAND round-trip. // NOTE: quickActionPress dialog: the controller-built sap.m.Dialog is expressed as a core:FragmentDefinition shown via` &&
+               ` client->popup_display. Its Dialog, Label, Input and Button controls are extra vs the archived V.view.xml, which declares none of them; the two Inputs are two-way bound (create_name/create_icon)` &&
+               ` instead of read imperatively via Element.getElementById(...).getValue(). // NOTE: the Create button does sideNavigation.getItem().addItem( new NavigationListItem({ text, expanded: true, icon }) ), so` &&
+               ` the main tnt:NavigationList is a BOUND aggregation here (the app-241 pattern): the four static tnt:NavigationListItem entries (Home/Building/Mileage/Transport) collapse into one bound template, so` &&
+               ` three NavigationListItem controls are missing vs the original count, and creating appends a row with the same defaults ('New Navigation Item' / sap-icon://building). The rows bind with`.
+    lv_text1 = lv_text1 && ` omit_initial_paths for EXPANDED so an item that does not set it keeps the control default. // POST-1.71: NavigationListItem.selectable (@since 1.116) is kept 1:1 (selectable=false on the Quick Create` &&
+               ` and External Link fixedItem entries). @since verified in sap.tnt/src/sap/tnt/NavigationListItem.js. // POST-1.71: NavigationListItem.design="Action" and NavigationListItem.ariaHasPopup="Dialog" (both` &&
+               ` @since 1.133) are kept 1:1 on the Quick Create item. @since verified in sap.tnt/src/sap/tnt/NavigationListItem.js. // LIVE-TEST: not yet run in a system: the TOGGLE_EXPAND round-trip` &&
+               ` (collapse/expand), the quick-create popup round-trip and the Create append (new row shows up in the bound NavigationList with the typed name/icon or the defaults).`.
+    result = VALUE #( BASE result
+      ( module = `sap.tnt`            control = `sap.tnt.SideNavigation`                name = `SideNavigationActions`                 class = `z2ui5_cl_dmo_app_299` path = `src/05/b08/z2ui5_cl_dmo_app_299.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.34`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `NavigationListItem.selectable (@since 1.116) is kept 1:1 (selectable=false on the Quick Create and External Link fixedItem entries). @since verified in sap.tnt/src/sap/tnt/NavigationListItem.js. //` &&
+                 ` NavigationListItem.design="Action" and NavigationListItem.ariaHasPopup="Dialog" (both @since 1.133) are kept 1:1 on the Quick Create item. @since verified in` &&
+                 ` sap.tnt/src/sap/tnt/NavigationListItem.js.` ) ).
+
+    lv_text1 = `NOTE: onToggleSideNav does Fragment.load('Popover.fragment.xml') + openBy(the ShellBar menu button). The port rebuilds the fragment 1:1 in popover_sidenav_display and shows it with` &&
+               ` client->popover_display( xml, by_id ), anchoring on the menu button id transported as ${$parameters>/button}.getId() in the TOGGLE_SIDE_NAV t_arg. The original's toggle branch (close when already` &&
+               ` open) is not reproduced: the backend cannot know whether the popover is still open (the user can dismiss it by clicking outside), so every menuButtonPressed re-opens it. // NOTE: onItemSelect sets` &&
+               ` the target page's Text imperatively (oText.setText('Fired event to load page ' + key.replace('page',''))) and calls oNavCon.to(page). The port two-way binds the Text controls instead - the home page` &&
+               ` keeps its own field (home_text, seeded with the original lorem-ipsum literal) and the twelve page1..page12 Texts share one field (page_text), which is observationally identical because the` &&
+               ` NavContainer shows exactly one page and every page is reached through its own select. Navigation itself is the 1:1 frontend action follow_up_action( control_by_id, 'pageContainer', 'to', <page id> ).`.
+    lv_text1 = lv_text1 && ` The added text bindings are extra attributes on the originally empty <Text/> elements. // NOTE: onQuickActionPress builds a sap.m.Dialog imperatively (new Dialog({...}).open()); expressed as a` &&
+               ` core:FragmentDefinition shown via client->popup_display. Its Dialog, Text and two Button controls are extra vs the archived V.view.xml/Popover.fragment.xml. The Create button only closes the dialog,` &&
+               ` exactly like the original. // POST-1.71: sap.m.Avatar (control @since 1.73) is kept 1:1 in the ShellBar's f:profile aggregation (initials 'SN'). Newer than UI5 1.71 (app 152 precedent, control-level` &&
+               ` declaration). // POST-1.71: sap.tnt.NavigationListGroup (control @since 1.121) is used 1:1 for the 'Business Areas for selected user role' group. Newer than UI5 1.71. // POST-1.71:` &&
+               ` NavigationListItem.selectable (@since 1.116) is kept 1:1 (selectable=false on Manufacturing management, Employee Services, Create, App Finder and Legal). // POST-1.71:` &&
+               ` NavigationListItem.design="Action" and NavigationListItem.ariaHasPopup="Dialog" (both @since 1.133) are kept 1:1 on the Create item; SideNavigation.design="Plain" (@since 1.132) is kept 1:1 on the`.
+    lv_text1 = lv_text1 && ` popover's side navigation. // LIVE-TEST: not yet run in a system: the ShellBar menuButtonPressed -> anchored popover round-trip, the itemSelect -> NavContainer 'to' frontend action plus the bound` &&
+               ` page text, and the quick-create popup. // NOTE: two URLs are re-hosted per the repository's offline asset/host rule: the ShellBar homeIcon './resources/sap/ui/documentation/sdk/images/logo_sap.png'` &&
+               ` is absolutized to https://sdk.openui5.org/resources/sap/ui/documentation/sdk/images/logo_sap.png (app 110 precedent), and the 'App Finder' href https://openui5.hana.ondemand.com/demoapps points at` &&
+               ` the commercial SAPUI5 host, so it is served from https://sdk.openui5.org/demoapps instead.`.
+    result = VALUE #( BASE result
+      ( module = `sap.tnt`            control = `sap.tnt.SideNavigation`                name = `SideNavigationOverlayMode`             class = `z2ui5_cl_dmo_app_301` path = `src/05/b08/z2ui5_cl_dmo_app_301.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.34`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `sap.m.Avatar (control @since 1.73) is kept 1:1 in the ShellBar's f:profile aggregation (initials 'SN'). Newer than UI5 1.71 (app 152 precedent, control-level declaration). //` &&
+                 ` sap.tnt.NavigationListGroup (control @since 1.121) is used 1:1 for the 'Business Areas for selected user role' group. Newer than UI5 1.71. // NavigationListItem.selectable (@since 1.116) is kept 1:1` &&
+                 ` (selectable=false on Manufacturing management, Employee Services, Create, App Finder and Legal). // NavigationListItem.design="Action" and NavigationListItem.ariaHasPopup="Dialog" (both @since 1.133)` &&
+                 ` are kept 1:1 on the Create item; SideNavigation.design="Plain" (@since 1.132) is kept 1:1 on the popover's side navigation.` ) ).
+
     lv_text1 = `POST-1.71: NavigationListItemBase.press event (@since 1.133) is the whole point of this sample; wired 1:1 on every NavigationListItem (press) to a backend ITEM_PRESS event. @since verified in` &&
                ` fork-openui5/src/sap.tnt/src/sap/tnt/NavigationListItemBase.js:74-79. Requires a UI5 release >= 1.133. // POST-1.71: The press event parameters ctrlKey/shiftKey/altKey/metaKey (@since 1.137) are` &&
                ` transported via ${$parameters>/ctrlKey} etc. in the ITEM_PRESS t_arg and echoed into the toast, exactly as the original itemPress reads them. @since verified NavigationListItemBase.js:88-109.` &&
@@ -3626,6 +3676,29 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         notes = lv_text1
         post171 = lv_text2 ) ).
 
+    lv_text1 = `NOTE: onCollapseExpandPress (byId('sideNavigation').setExpanded(!expanded)) is reproduced by two-way binding SideNavigation.expanded to a boolean model field, seeded true exactly like the original` &&
+               ` literal, and flipping it on the TOGGLE_EXPAND round-trip. // NOTE: quickActionPress dialog: the controller-built sap.m.Dialog is expressed as a core:FragmentDefinition shown via` &&
+               ` client->popup_display. Its Dialog, Label, Input and Button controls are extra vs the archived V.view.xml, which declares none of them; the two Inputs are two-way bound (create_name/create_icon)` &&
+               ` instead of read imperatively via Element.getElementById(...).getValue(). // IMPROVISED: the Create button of the quick-create dialog does sideNavigation.getItem().addItem( new NavigationListItem(...)` &&
+               ` ) in the original. Here it only closes the dialog: the main tnt:NavigationList mixes tnt:NavigationListItem and tnt:NavigationListGroup children, and abap2UI5 binds an aggregation with ONE template` &&
+               ` control, so a bound list (the app-241/299 pattern) cannot reproduce that mixed structure. The 24 static NavigationListItem entries and both NavigationListGroups are kept 1:1 instead - view fidelity`.
+    lv_text1 = lv_text1 && ` wins over the append behaviour, which is the loss declared here. // POST-1.71: sap.tnt.NavigationListGroup (control @since 1.121) is used 1:1 for the 'System & Administration Management' and` &&
+               ` 'Business operations' groups. Newer than UI5 1.71; the app needs UI5 >= 1.121 to render them. // POST-1.71: NavigationListItem.selectable (@since 1.116) is kept 1:1 (selectable=false on the` &&
+               ` training-portal, service-management, financial-reports, CRM, Quick Create and SAP Support entries). // POST-1.71: NavigationListItem.design="Action" and NavigationListItem.ariaHasPopup="Dialog" (both` &&
+               ` @since 1.133) are kept 1:1 on the Quick Create item. // LIVE-TEST: not yet run in a system: the TOGGLE_EXPAND round-trip (collapse/expand of the 20rem side navigation) and the quick-create popup` &&
+               ` round-trip.`.
+    result = VALUE #( BASE result
+      ( module = `sap.tnt`            control = `sap.tnt.SideNavigation`                name = `SideNavigationWrapping`                class = `z2ui5_cl_dmo_app_300` path = `src/05/b08/z2ui5_cl_dmo_app_300.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.34`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `sap.tnt.NavigationListGroup (control @since 1.121) is used 1:1 for the 'System & Administration Management' and 'Business operations' groups. Newer than UI5 1.71; the app needs UI5 >= 1.121 to render` &&
+                 ` them. // NavigationListItem.selectable (@since 1.116) is kept 1:1 (selectable=false on the training-portal, service-management, financial-reports, CRM, Quick Create and SAP Support entries). //` &&
+                 ` NavigationListItem.design="Action" and NavigationListItem.ariaHasPopup="Dialog" (both @since 1.133) are kept 1:1 on the Quick Create item.` ) ).
+
     lv_text1 = `NOTE: the two 'Prоduct Name' menu/select texts contain CYRILLIC SMALL LETTER O (U+043E) in place of the Latin o - reproduced verbatim from the original V.view.xml, which carries the same homoglyph` &&
                ` (upstream defect kept for 1:1 fidelity; do not ASCII-fix it). // NOTE: live-verified 2026-08-04 (nightly e2e interaction): The SAP-logo Image and profile Avatar presses show client-side MessageToasts` &&
                ` ('Logo pressed!' / 'Avatar pressed!'), matching the original onLogoPressed / onAvatarPressed. The original's Device.media handler (which toggles productName/secondTitle/searchField/searchButton` &&
@@ -3702,6 +3775,55 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         is_post171 = abap_true
         notes = lv_text1
         post171 = lv_text2 ) ).
+
+    lv_text1 = `NOTE: onItemSelect does byId('pageContainer').to(createId(item.getKey())); the port transports the key with ${$parameters>/item}.getKey() and calls the same method through follow_up_action(` &&
+               ` control_by_id, 'pageContainer', 'to', <key> ) - the NavContainer has no bindable current-page property. // IMPROVISED: _handleMediaChange is dropped. The controller attaches a sap.ui.Device.media` &&
+               ` handler and, per StdExt range (LargeDesktop/Desktop/Tablet/Phone), toggles the visibility of productName/secondTitle/searchField/searchButton and shows a MessageToast naming the range. abap2UI5 does` &&
+               ` serve the device> model, but it publishes the media range on the Std set only ({device>/media/range} = Phone/Tablet/Desktop), which cannot tell StdExt's LargeDesktop from Desktop - the very` &&
+               ` distinction two of the four branches turn on - and a resize does not round-trip, so the range toasts have no equivalent either. The four controls therefore keep the visibility the view declares` &&
+               ` (searchButton visible=false, the rest visible) and no range toast is shown. // POST-1.71: sap.tnt.ToolPage aggregation subHeader (@since 1.93) carries the horizontal IconTabHeader navigation - it is`.
+    lv_text1 = lv_text1 && ` the whole point of this sample and is kept 1:1. Newer than UI5 1.71. // POST-1.71: IconTabFilter.interactionMode="SelectLeavesOnly" (@since 1.121) is kept 1:1 on the top-level filter template, and` &&
+               ` sap.m.Avatar (control @since 1.73) is kept 1:1 as the profile avatar of the ToolHeader. Both newer than UI5 1.71. // NOTE: the profile Avatar src 'test-resources/sap/tnt/images/Woman_avatar_01.png'` &&
+               ` is absolutized to the OpenUI5 host (https://sdk.openui5.org/test-resources/sap/tnt/images/Woman_avatar_01.png) per the repository asset-URL rule; the original uses the relative path. // LIVE-TEST:` &&
+               ` not yet run in a system: the IconTabHeader select -> NavContainer 'to' frontend action and the two-way bound selectedKey.`.
+    result = VALUE #( BASE result
+      ( module = `sap.tnt`            control = `sap.tnt.ToolPage`                      name = `ToolPageHorizontalNavigation`          class = `z2ui5_cl_dmo_app_303` path = `src/05/b08/z2ui5_cl_dmo_app_303.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.34`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `sap.tnt.ToolPage aggregation subHeader (@since 1.93) carries the horizontal IconTabHeader navigation - it is the whole point of this sample and is kept 1:1. Newer than UI5 1.71. //` &&
+                 ` IconTabFilter.interactionMode="SelectLeavesOnly" (@since 1.121) is kept 1:1 on the top-level filter template, and sap.m.Avatar (control @since 1.73) is kept 1:1 as the profile avatar of the` &&
+                 ` ToolHeader. Both newer than UI5 1.71.` ) ).
+
+    lv_text1 = `NOTE: onItemSelect does byId('pageContainer').to(createId(item.getKey())); the port transports the key with ${$parameters>/item}.getKey() and calls the same method through follow_up_action(` &&
+               ` control_by_id, 'pageContainer', 'to', <key> ) - the NavContainer has no bindable current-page property. The IconTabHeader and the SideNavigation share the one two-way bound selectedKey, exactly like` &&
+               ` the original's {/selectedKey}. // NOTE: onSideNavButtonPress sets ToolPage.sideExpanded imperatively; the property is bindable, so the port two-way binds it (sideExpanded, an attribute the original` &&
+               ` view does not declare) and flips it on the SIDE_NAV_TOGGLE round-trip. _setToggleButtonTooltip is reproduced the same way: the toggle Button's tooltip is bound and updated from the pre-toggle state,` &&
+               ` seeded at init from !Device.system.desktop via the device data the framework mirrors server-side (client->get( )-s_device-system). // NOTE: the device> named model bindings visible="{=` &&
+               ` ${device>/system/phone}}" (toggle Button, side SideNavigation) and visible="{=! ${device>/system/phone}}" (subHeader ToolHeader) are kept 1:1 - abap2UI5 serves the device> model on every view slot`.
+    lv_text1 = lv_text1 && ` (CAPABILITIES.md), so the original's phone branch stays a branch. // IMPROVISED: _handleMediaChange is dropped. The controller attaches a sap.ui.Device.media handler and, per StdExt range` &&
+               ` (LargeDesktop/Desktop/Tablet/Phone), toggles the visibility of productName/secondTitle/searchField/searchButton and shows a MessageToast naming the range. The device> model publishes the media range` &&
+               ` on the Std set only ({device>/media/range} = Phone/Tablet/Desktop), which cannot tell StdExt's LargeDesktop from Desktop - the distinction two of the four branches turn on - and a resize does not` &&
+               ` round-trip, so the range toasts have no equivalent either. The four controls keep the visibility the view declares (searchButton visible=false, the rest visible). // POST-1.71: sap.tnt.ToolPage` &&
+               ` aggregation subHeader (@since 1.93) carries the horizontal IconTabHeader navigation and is kept 1:1; IconTabFilter.interactionMode="SelectLeavesOnly" (@since 1.121) is kept 1:1 on the top-level` &&
+               ` filter template; sap.m.Avatar (control @since 1.73) is kept 1:1 as the ToolHeader profile avatar. All newer than UI5 1.71. // NOTE: the profile Avatar src`.
+    lv_text1 = lv_text1 && ` 'test-resources/sap/tnt/images/Woman_avatar_01.png' is absolutized to the OpenUI5 host (https://sdk.openui5.org/test-resources/sap/tnt/images/Woman_avatar_01.png) per the repository asset-URL rule;` &&
+               ` the original uses the relative path. The ENABLED/EXPANDED fields the templates bind are absent from model/data.json, so every row carries the UI5 property default (true) explicitly - a flat ABAP row` &&
+               ` would otherwise serialize them as empty and override that default. // LIVE-TEST: not yet run in a system: the IconTabHeader / SideNavigation select -> NavContainer 'to' frontend action, the two-way` &&
+               ` bound selectedKey and the SIDE_NAV_TOGGLE round-trip (sideExpanded plus the tooltip flip).`.
+    result = VALUE #( BASE result
+      ( module = `sap.tnt`            control = `sap.tnt.ToolPage`                      name = `ToolPageNavigation`                    class = `z2ui5_cl_dmo_app_302` path = `src/05/b08/z2ui5_cl_dmo_app_302.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.34`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `sap.tnt.ToolPage aggregation subHeader (@since 1.93) carries the horizontal IconTabHeader navigation and is kept 1:1; IconTabFilter.interactionMode="SelectLeavesOnly" (@since 1.121) is kept 1:1 on the` &&
+                 ` top-level filter template; sap.m.Avatar (control @since 1.73) is kept 1:1 as the ToolHeader profile avatar. All newer than UI5 1.71.` ) ).
 
     result = VALUE #( BASE result
       ( module = `sap.ui.codeeditor`  control = `sap.ui.codeeditor.CodeEditor`          name = `CodeEditor`                            class = `z2ui5_cl_dmo_app_114` path = `src/02/b01/z2ui5_cl_dmo_app_114.clas.abap`
