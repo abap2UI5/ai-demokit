@@ -4325,6 +4325,12 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         since = `1.30`
         notes = lv_text1 ) ).
 
+    result = VALUE #( BASE result
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.FixFlex`                 name = `FixFlexFixedSize`                      class = `z2ui5_cl_dmo_app_338` path = `src/02/b18/z2ui5_cl_dmo_app_338.clas.abap`
+        score = 1
+        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.25.0` ) ).
+
     lv_text1 = `NOTE: The original binds the Image src against a separate 'img' JSON model ({img>/products/pic1}) loaded from sap/ui/demo/mock/img.json. abap2UI5 serves one default model, so the picture path is` &&
                ` folded into it and the src binds it directly (client->_bind( pic1 )) - the 'img>' prefix is dropped and the last path segment is identical, which structural-diff matches. The mock's host-relative` &&
                ` path is resolved to the OpenUI5 host (sdk.openui5.org) per the asset-URL rule. // NOTE: The sample's style.css (background colours on the FixFlex fixed/flexible areas, referenced by` &&
@@ -4909,6 +4915,16 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22.0` )
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.Splitter`                name = `Splitter3`                             class = `z2ui5_cl_dmo_app_339` path = `src/02/b18/z2ui5_cl_dmo_app_339.clas.abap`
+        score = 1
+        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.22.0` )
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.Splitter`                name = `Splitter4`                             class = `z2ui5_cl_dmo_app_340` path = `src/02/b18/z2ui5_cl_dmo_app_340.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.22.0`
+        notes = `NOTE: the original view writes minSize="200px" on the third SplitterLayoutData, but sap.ui.layout.SplitterLayoutData.minSize is typed int - UI5 cannot parse the px suffix. The port writes the numeric` &&
+                 ` value 200 the original means.` )
       ( module = `sap.ui.layout`      control = `sap.ui.layout.Splitter`                name = `SplitterNested1`                       class = `z2ui5_cl_dmo_app_266` path = `src/02/b14/z2ui5_cl_dmo_app_266.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`

@@ -1,0 +1,14 @@
+{
+  "class": "z2ui5_cl_dmo_app_339",
+  "sample": "sap.ui.layout.sample.Splitter3",
+  "entity": "sap.ui.layout.Splitter",
+  "file": "src/02/b18/z2ui5_cl_dmo_app_339.clas.abap",
+  "batch": "b18",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": []
+}
