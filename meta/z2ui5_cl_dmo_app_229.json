@@ -1,0 +1,40 @@
+{
+  "class": "z2ui5_cl_dmo_app_229",
+  "sample": "sap.m.sample.Popover",
+  "entity": "sap.m.Popover",
+  "file": "src/01/b18/z2ui5_cl_dmo_app_229.clas.abap",
+  "batch": "b18",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "each button press builds a core:FragmentDefinition Popover server-side and shows it anchored via client->popover_display( xml = ... by_id = $event.oSource.sId ); the footer buttons close it via follow_up_action( cs_event-popover_close )"
+  },
+  "status": "reviewed",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "Button.ariaHasPopup (since UI5 1.84) is kept 1:1 on the two view buttons (ariaHasPopup='Dialog'); the app needs a UI5 release >= 1.84 to render it."
+    },
+    {
+      "type": "NOTE",
+      "what": "handlePopoverPress/handleResizablePopoverPress lazily Fragment.load a Popover and openBy(button). The port builds each popover as a core:FragmentDefinition on the button-press round-trip and shows it anchored to the pressed button via client->popover_display( xml = ..., by_id = $event.oSource.sId ) - the popover XML parameter is named `xml` (not `val` like popup_display). This is a server-round-trip where the original is a client-side Fragment.load, but it is faithful (lazy either way) and matches app 094."
+    },
+    {
+      "type": "NOTE",
+      "what": "the original oPopover.bindElement('/ProductCollection/0') binds each popover to a single record; the port seeds that record's fields (name, productpicurl) at the default-model root and the popover's relative bindings {NAME}/{PRODUCTPICURL} resolve against the root - same data, structural-diff matches on the last path segment (app 175 single-record-flatten idiom). No bind_element needed because the record is the static row 0, not a per-row selection. **Corrected 2026-08-01**: those bindings were written RELATIVE ({FIELD}) and a relative path on a control with no binding context resolves against nothing — the fields rendered EMPTY in the running app (measured with the e2e harness, the app-207 class). They are now bound ABSOLUTELY through client->_bind( field ), which is what a root-seeded record needs."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleEmailPress does byId('myPopover').close() + MessageToast.show('E-Mail has been sent'), and handleClose does byId('myResizablePopover').close(); both close the popover slot via follow_up_action( cs_event-popover_close ) (there is one popover slot open at a time), the email variant additionally toasting via message_toast_display."
+    },
+    {
+      "type": "NOTE",
+      "what": "the JSONModel is loaded from the shared sap/ui/demo/mock/products.json; only the single record /ProductCollection/0 is bound, so only its name + picture URL are seeded. The mock's host-relative ProductPicUrl ('test-resources/...') is resolved to an absolute sdk.openui5.org URL."
+    },
+    {
+      "type": "NOTE",
+      "what": "live-verified 2026-08-04 (nightly e2e interaction): partly verified 2026-08-01 (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the first popover opens anchored to its button (popover_display by_id = $event.oSource.sId) AND the root-seeded record now reaches it - the popover shows 'Notebook Basic 15' (it rendered empty until the relative bindings were made absolute the same day, see the corrected NOTE above). Still unverified in a running system: the second popover's placement, and that the Email / Close footer buttons close it (popover_close) with the Email one opening the mail client."
+    }
+  ]
+}

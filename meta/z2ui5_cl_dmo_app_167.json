@@ -1,0 +1,31 @@
+{
+  "class": "z2ui5_cl_dmo_app_167",
+  "sample": "sap.tnt.sample.ToolPage",
+  "entity": "sap.tnt.ToolPage",
+  "file": "src/05/b06/z2ui5_cl_dmo_app_167.clas.abap",
+  "batch": "b06",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "NavigationListItem.selectable is the expression binding {= ${items}.length > 3} in the original; per the thin-frontend rule that presentation logic is computed in ABAP into a flat 'selectable' field (children count > 3) and bound directly. **Sidecar corrected 2026-08-05**: the text still described the port as it looked before its rework and claimed the controller handlers were STATIC toasts - they are not, and have not been for a while. onSideNavButtonPress is the two-way bound ToolPage.sideExpanded (prefer-a-bindable-property); onItemPress carries the item text into a client-composed toast (${$parameters>/item}.getText(), the app-060/172 idiom); onItemSelect navigates the NavContainer roundtrip-free through control_by_id 'to' with the key resolved on the client; handleUserNamePress rebuilds the controller's Popover (no header, Bottom, three transparent buttons) and opens it at the pressed button; onQuickActionPress reproduces the design=Action guard and the Create Item dialog. What remains is the selectable computation above - a bound field instead of the original's expression - which is the thin-frontend rule working."
+    },
+    {
+      "type": "POST_171",
+      "what": "Several members newer than UI5 1.71 are kept 1:1 from the original. sap.tnt.NavigationListItem: selectable (@since 1.116), design (@since 1.133.0, sap.tnt.NavigationListItemDesign), press (event, @since 1.133 on NavigationListItemBase), ariaHasPopup (@since 1.133.0). sap.m.Button.ariaHasPopup (@since 1.84) on the header 'Alan Smith' button. Declared per the property-171 policy; the tnt members were previously mis/under-declared (the earlier note cited only sap.m.Button 1.84 for ariaHasPopup, which is the Button version, not the tnt member's 1.133) because the property gate is blind to sap.tnt - corrected by the non-sap.m @since audit 2026-07-24. NavigationListItem.expanded is also kept 1:1; its @since reads 1.121 because the property was relocated to the new sap.tnt.NavigationListItemBase in 1.121 (the property itself predates 1.71), but the property gate resolves the base-class version, so it is declared here for the gate."
+    },
+    {
+      "type": "NOTE",
+      "what": "The full 14-item navigation tree (with its nested child lists, incl. Root Item 3's 38 children) and the 4-item fixed navigation are inlined from data.json. Where data.json omits a property the UI5 default is seeded explicitly (enabled true, expanded false, and on Fixed Item 1-3 the enum fields ariaHasPopup None / design Default - an empty string would throw in validateProperty). The page2 ScrollContainer's multi-paragraph lorem-ipsum filler text is abbreviated to a short placeholder."
+    },
+    {
+      "type": "NOTE",
+      "what": "Faked-event-value audit fix (2026-07-30): four substituted handlers are now the original behaviours. onItemPress: client-composed toast 'Fired itemPress, item: {0}' filled by ${$parameters>/item}.getText() (was the static 'Item pressed'). onItemSelect: pageContainer.to(item key page) via roundtrip-free _event_client control_by_id 'to' with ${$parameters>/item}.getKey() (was a static toast; a key without a matching page logs a NavContainer error client-side exactly like the original's createId miss). onSideNavButtonPress: ToolPage.sideExpanded is two-way bound (added attr, declared) and flipped on the SIDE_TOGGLE round-trip; the button's tooltip is bound (added attr, declared) and set from the PRE-toggle state ('Large/Small Size Navigation') exactly like _setToggleButtonTooltip; init seeds the desktop default 'Small Size Navigation' (the Device.system.desktop branch resolved statically). handleUserNamePress: the controller-built Popover (showHeader false, Bottom, Feedback/Help/Logout transparent buttons, sapMOTAPopover sapTntToolHeaderPopover classes) is rebuilt 1:1 via popover_display by_id = $event.oSource.sId - Popover + 3 Buttons are extra controls vs the original view.xml (controller-built). onQuickActionPress: the design guard runs server-side on the transported ${$source>/design} and a design=Action item opens the 'Create Item' Message Dialog (Text 'Create New Navigation List Item', Create/Cancel closing via popup_close) via popup_display - Dialog/Text/Button extra controls declared here too. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): Child Item 1 press toasts 'Fired itemPress, item: Child Item 1' and the Alan Smith press opens the Feedback/Help/Logout popover; the side toggle, key navigation target and Quick Create dialog remain unexercised."
+    }
+  ]
+}

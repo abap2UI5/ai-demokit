@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_dmo_app_251",
+  "sample": "sap.m.sample.BusyDialogLight",
+  "entity": "sap.m.BusyDialog",
+  "file": "src/01/b19/z2ui5_cl_dmo_app_251.clas.abap",
+  "batch": "b19",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "BusyDialog.fragment.xml is inlined into the l:dependents aggregation - the core:Fragment reference element ('core:Fragment' fragmentName sap.m.sample.BusyDialogLight.BusyDialog) is dropped for the inlined BusyDialog, per the fragment-inlining rule. handlePress is the app-147 idiom: the SHOW_BUSY round-trip issues follow_up_action control_by_id BusyDialog open plus START_TIMER CLOSE_BUSY 3000, and the timer round-trip closes the dialog - the setTimeout(close, 3000) equivalent with one round-trip latency added to the 3s."
+    },
+    {
+      "type": "NOTE",
+      "what": "unverified in a running system: the open + 3s timer + close chain on the dependents-declared BusyDialog. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the full chain runs green - the button opens the BusyDialog (attached) and the CLOSE_BUSY timer round-trip detaches it after ~3s."
+    }
+  ]
+}

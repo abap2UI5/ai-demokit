@@ -23,13 +23,13 @@ Follow it exactly so every port looks the same and stays maintainable.
 `*.json` mock data. All of these are also copied verbatim into the sample's
 `ui5/<library>/<SampleName>/` folder (AGENTS.md §4).
 
-**Output** — one class `z2ui5_cl_ai_app_<n>` implementing `z2ui5_if_app`, whose
+**Output** — one class `z2ui5_cl_dmo_app_<n>` implementing `z2ui5_if_app`, whose
 view is a **1:1** rebuild of the sample's XML.
 
 #### Class layout
 
 ```abap
-CLASS z2ui5_cl_ai_app_<n> DEFINITION PUBLIC.       " lowercase, not FINAL
+CLASS z2ui5_cl_dmo_app_<n> DEFINITION PUBLIC.       " lowercase, not FINAL
 
   PUBLIC SECTION.
     INTERFACES z2ui5_if_app.

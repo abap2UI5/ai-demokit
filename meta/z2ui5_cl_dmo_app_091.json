@@ -1,0 +1,36 @@
+{
+  "class": "z2ui5_cl_dmo_app_091",
+  "sample": "sap.m.sample.TimePickerHidden",
+  "entity": "sap.m.TimePicker",
+  "file": "src/01/b11/z2ui5_cl_dmo_app_091.clas.abap",
+  "batch": "b11",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "openBy is roundtrip-free via _event_client( control_by_id, openBy ) and the change toast composes `Time selected: {0}` via control_global MESSAGE_TOAST.show - both roundtrip-free, so the app is init-only"
+  },
+  "status": "reviewed",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "openTimePicker (byId('HiddenTP').openBy(source.getDomRef())) is the app-016 openBy pattern: the source sId is transported via $event.oSource.sId and replayed as a control_by_id/openBy follow-up action."
+    },
+    {
+      "type": "POST_171",
+      "what": "Button.ariaHasPopup (since 1.84), Link.ariaHasPopup (since 1.86) and TimePicker.hideInput (since 1.97) are kept 1:1; needs a UI5 release providing them."
+    },
+    {
+      "type": "NOTE",
+      "what": "the hidden TimePicker openBy is wired roundtrip-free via client->_event_client( cs_event-control_by_id, openBy ) on each anchor press ($event.oSource.sId) - the original's byId('HiddenTP').openBy(getDomRef()) 1:1; the change toast is now roundtrip-free too (control_global MESSAGE_TOAST.show), so the app is init-only."
+    },
+    {
+      "type": "NOTE",
+      "what": "the openBy was switched to roundtrip-free _event_client on 2026-07-22 - re-verify each anchor opens the hidden TimePicker. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the 'Open Time Picker' anchor opens the hidden TimePicker popover; the remaining anchors are the identical wire."
+    },
+    {
+      "type": "NOTE",
+      "what": "live-verified 2026-08-04 (nightly e2e interaction): the change toast was switched to a roundtrip-free client-composed toast on 2026-07-22 (control_global MESSAGE_TOAST.show, template `Time selected: {0}` filled by ${$parameters>/value}; on_event dropped, init-only) - re-verify picking a time toasts \"Time selected: <value>\"."
+    }
+  ]
+}

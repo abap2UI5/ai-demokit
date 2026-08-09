@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /*
- * Generates the in-system overview app src/z2ui5_cl_ai_app_overview.clas.*
+ * Generates the in-system overview app src/z2ui5_cl_dmo_app_overview.clas.*
  * — an abap2UI5 app that lists every ported sample as one row of a table with
  * columns: Module, Control (-> OpenUI5 API), Sample (name -> OpenUI5 repo
  * source, ↗ -> live OpenUI5 fullscreen sample), abap2UI5 (class name ->
@@ -24,7 +24,7 @@ import { fileURLToPath } from 'url';
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = path.join(ROOT, 'src');
 const META = path.join(ROOT, 'meta');
-const CLASS = 'z2ui5_cl_ai_app_overview';
+const CLASS = 'z2ui5_cl_dmo_app_overview';
 const OUT_ABAP = path.join(SRC, `${CLASS}.clas.abap`);
 const OUT_XML = path.join(SRC, `${CLASS}.clas.xml`);
 

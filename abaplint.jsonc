@@ -82,8 +82,8 @@
     },
     "object_naming": {
       "patternKind": "required",
-      "clas": "^Z2UI5_CL_AI_",
-      "intf": "^Z2UI5_IF_API_"
+      "clas": "^Z2UI5_CL_DMO_",
+      "intf": "^Z2UI5_IF_DMO_"
     },
     "functional_writing": true,
     "no_chained_assignment": true,

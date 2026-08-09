@@ -56,4 +56,4 @@ run('node scripts/e2e-build.mjs');
 
 console.log('\nnode-setup: done ✔');
 console.log('Start the server with:   npm run node:serve');
-console.log('Then open:               http://localhost:3000/?app_start=z2ui5_cl_ai_app_overview');
+console.log('Then open:               http://localhost:3000/?app_start=z2ui5_cl_dmo_app_overview');

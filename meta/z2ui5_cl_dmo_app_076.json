@@ -1,0 +1,32 @@
+{
+  "class": "z2ui5_cl_dmo_app_076",
+  "sample": "sap.m.sample.NotificationListItem",
+  "entity": "sap.m.NotificationListItem",
+  "file": "src/01/b09/z2ui5_cl_dmo_app_076.clas.abap",
+  "batch": "b09",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "press/close compose `Item Pressed: {0}`/`Item Closed: {0}` (+ ${$source>/title}); accept/reject/error are static control_global toasts - all roundtrip-free, so the app is init-only"
+  },
+  "status": "reviewed",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "onItemClose is reproduced 1:1 since 2026-08-05. The original removes the item from its list (oList.removeItem(oItem)) and toasts its title; the port does BOTH client-side on the same event: UI5 runs a ';'-separated pair of event handlers (measured with scripts/probes/event-arg-expression-probe.mjs), so the wire chains control_by_id removeItem with the client-composed toast. The item travels as its own id ($event.oSource.getId()), which ManagedObject.removeAggregation accepts (measured in the same probe). The NotificationList gained an `id` the original does not carry - removeItem needs a target for the wire; that is the port's only extra attribute here. The earlier 'static items, so close only toasts' rationale is retired."
+    },
+    {
+      "type": "POST_171",
+      "what": "the NotificationList container control (since UI5 1.90) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.90 to render it (control-level, invisible to the member-level property gate)."
+    },
+    {
+      "type": "NOTE",
+      "what": "the sample's demo-kit authorPicture image paths (test-resources/sap/m/images/Woman_04.png, headerImg2.jpg, female_BaySu.jpg) are resolved to absolute sdk.openui5.org URLs."
+    },
+    {
+      "type": "NOTE",
+      "what": "live-verified 2026-08-04 (nightly e2e interaction): all toasts were switched to roundtrip-free client-composed control_global toasts on 2026-07-22 (the app is now init-only) - re-verify press/close/accept/reject/error each toast their text. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the 'Accept' footer button toasts 'Accept Button Pressed'; item press/close toasts are the identical wire but unexercised."
+    }
+  ]
+}

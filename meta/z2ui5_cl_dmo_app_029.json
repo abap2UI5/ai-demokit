@@ -1,0 +1,31 @@
+{
+  "class": "z2ui5_cl_dmo_app_029",
+  "sample": "sap.m.sample.HeaderContainer",
+  "entity": "sap.m.HeaderContainer",
+  "file": "src/01/b06/z2ui5_cl_dmo_app_029.clas.abap",
+  "batch": "b06",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "reviewed",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "the Select's literal selectedKey=\"1\" is replaced by a two-way binding {SELECTED_KEY} (seeded '1'); scrollStepByItem on both HeaderContainers is now a pure client-side expression binding over it ({= ${SELECTED_KEY} === 'px' ? 0 : +${SELECTED_KEY} }), so the original Select's change handler (.scrollChanged) is dropped - no round-trip. This is the prefer-a-bindable-property/expression pattern (like the app 019). The original controller reads oEvent.getParameter('selectedItem').getKey(), which has no public $parameters path (selectedItem is a control; reading private control internals is banned)."
+    },
+    {
+      "type": "NOTE",
+      "what": "the controller's setScrollStepByItem(0 | Number(key)) on both containers is reproduced by the scrollStepByItem expression binding above (px -> 0, else the number); seeded via SELECTED_KEY='1' it matches the UI5 property default (HeaderContainer.js defaultValue: 1), so the initial arrow scroll is one item and selecting px sets 0 (px stepping via scrollStep), exactly like the controller - all client-side, no scroll_step_by_item field."
+    },
+    {
+      "type": "NOTE",
+      "what": "the NumericContent press ('Fire press' MessageToast) is wired roundtrip-free via client->_event_client( cs_event-control_global, MESSAGE_TOAST/show ) - the original's client-side MessageToast.show 1:1; the app is now init-only (no on_event). An unused xmlns:l namespace was dropped."
+    },
+    {
+      "type": "NOTE",
+      "what": "live-verified 2026-08-04 (nightly e2e interaction): the scroll-step selection and the tile-press toast were switched from server round-trips to client-side expression binding / _event_client( control_global ) on 2026-07-22 - re-verify in a running system that selecting an item/px still changes the arrow scroll step on both containers and that pressing a NumericContent still toasts 'Fire press'. **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): pressing the first NumericContent tile raises its client-composed toast ('Fire press'). The scroll-step Select (item/px) is NOT covered - it sits in the sample's option area and needs a human check."
+    }
+  ]
+}

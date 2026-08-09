@@ -40,11 +40,11 @@ const ONLY = process.argv.includes('--only')
   ? (process.argv[process.argv.indexOf('--only') + 1] || '').split(',').map((s) => s.trim()).filter(Boolean)
   : null;
 if (ONLY && !ONLY.length) {
-  console.error('e2e-smoke: --only needs a comma-separated class list (e.g. --only z2ui5_cl_ai_app_001)');
+  console.error('e2e-smoke: --only needs a comma-separated class list (e.g. --only z2ui5_cl_dmo_app_001)');
   process.exit(2);
 }
 // the overview app is checked alongside the numbered ports (see INTERACTIONS)
-const OVERVIEW = 'z2ui5_cl_ai_app_overview';
+const OVERVIEW = 'z2ui5_cl_dmo_app_overview';
 
 const A2 = resolveA2UI5();
 if (!A2) { console.error('abap2UI5 checkout not found — run `npm run node:setup` or set A2UI5_HOME'); process.exit(1); }
@@ -148,7 +148,7 @@ import { benign } from './lib-smoke.mjs';
 //     reaches the SelectDialog's confirm headless) and the hidden-picker
 //     openBy class (016/256/257, Popover.onfocusin recursion)
 const INTERACTIONS = {
-  z2ui5_cl_ai_app_005: async (page, expect) => {
+  z2ui5_cl_dmo_app_005: async (page, expect) => {
     const btn = page.getByRole('button', { name: 'Default', exact: true }).first();
     await expect(btn, 'a "Default" press button').toBeVisibleEnabled();
     await btn.click();
@@ -156,7 +156,7 @@ const INTERACTIONS = {
   },
   // LIVE_TEST closures 2026-08-04: the last three LIVE_TEST deviations that
   // had no interaction yet — each drives exactly the wire its deviation names
-  z2ui5_cl_ai_app_043: async (page, expect) => {
+  z2ui5_cl_dmo_app_043: async (page, expect) => {
     // the ACTIVE OverflowToolbar press round-trips, the backend flips the
     // two-way bound `expanded`, and the third panel opens — observable as the
     // expand arrow's aria-expanded flipping
@@ -167,7 +167,7 @@ const INTERACTIONS = {
     await expect(page.locator(`[id$="expandablePanel"] [aria-expanded="${before === 'true' ? 'false' : 'true'}"]`).first(),
       'the two-way expanded binding flipped by the toolbar round-trip').toBeVisibleEnabled();
   },
-  z2ui5_cl_ai_app_096: async (page, expect) => {
+  z2ui5_cl_dmo_app_096: async (page, expect) => {
     // the mode radio group sits on the SECOND detail page — navigate there
     // first (which itself exercises the control_by_id `to detailDetail` wire).
     // selectedIndex is bound two-way; picking `hide` round-trips MODE_BTN and
@@ -183,7 +183,7 @@ const INTERACTIONS = {
     await expect(page.locator('.sapMMessageToast'), 'the mode-change toast derived from the round-tripped index')
       .toContainText('Split Container mode is changed to: HideMode');
   },
-  z2ui5_cl_ai_app_149: async (page, expect) => {
+  z2ui5_cl_dmo_app_149: async (page, expect) => {
     // the urlhelper REDIRECT with NEW_WINDOW on the Image press — the popup
     // opening on the relative Card Explorer URL is the whole wire
     const img = page.locator('.sapMImg').first();
@@ -198,13 +198,13 @@ const INTERACTIONS = {
     }
     await popup.close();
   },
-  z2ui5_cl_ai_app_019: async (page, expect) => {
+  z2ui5_cl_dmo_app_019: async (page, expect) => {
     const btn = page.getByRole('button', { name: 'Approve', exact: true }).first();
     await expect(btn, 'the "Approve" dialog button').toBeVisibleEnabled();
     await btn.click();
     await expect(page.locator('.sapMDialog'), 'the popup_display Dialog').toContainText('Do you want to submit this order?');
   },
-  z2ui5_cl_ai_app_060: async (page, expect) => {
+  z2ui5_cl_dmo_app_060: async (page, expect) => {
     const btn = page.getByRole('button', { name: 'Open Menu', exact: true }).first();
     await expect(btn, 'the "Open Menu" anchor button').toBeVisibleEnabled();
     await btn.click();
@@ -226,14 +226,14 @@ const INTERACTIONS = {
     await child.click();
     await expect(page.locator('.sapMMessageToast').last(), 'the nested-item toast (leaf text)').toContainText('Action triggered on item: Official Store');
   },
-  z2ui5_cl_ai_app_094: async (page, expect) => {
+  z2ui5_cl_dmo_app_094: async (page, expect) => {
     const link = page.locator('.sapMListTbl a.sapMLnk').first();
     await expect(link, 'the first product-ID link').toBeVisibleEnabled();
     await link.click();
     await expect(page.locator('.sapMPopover'), 'the BIND_ELEMENT-bound popover').toContainText('Action');
   },
   // server round-trip on a two-way bound control property (busy flips in ABAP)
-  z2ui5_cl_ai_app_130: async (page, expect) => {
+  z2ui5_cl_dmo_app_130: async (page, expect) => {
     const btn = page.getByRole('button', { name: 'Toggle Busy State of Both Controls' }).first();
     await expect(btn, 'the busy-toggle button').toBeVisibleEnabled();
     await btn.click();
@@ -243,7 +243,7 @@ const INTERACTIONS = {
     await expect(page.locator('.sapUiLocalBusy').first(), 'the bound control turning busy after the round-trip').toBeVisibleEnabled();
   },
   // roundtrip-free control_by_id openBy on a hidden picker (the app-016 idiom)
-  z2ui5_cl_ai_app_091: async (page, expect) => {
+  z2ui5_cl_dmo_app_091: async (page, expect) => {
     const btn = page.getByRole('button', { name: 'Open Time Picker', exact: true }).first();
     await expect(btn, 'the openBy anchor button').toBeVisibleEnabled();
     await btn.click();
@@ -251,7 +251,7 @@ const INTERACTIONS = {
   },
   // popup_display TableSelectDialog with the FULL 123-row mock + the
   // client-side binding_call Contains search (no round-trip)
-  z2ui5_cl_ai_app_104: async (page, expect) => {
+  z2ui5_cl_dmo_app_104: async (page, expect) => {
     const btn = page.getByRole('button', { name: 'Show Table Select Dialog', exact: true }).first();
     await expect(btn, 'the dialog button').toBeVisibleEnabled();
     await btn.click();
@@ -263,7 +263,7 @@ const INTERACTIONS = {
   },
   // SegmentedButton selectionChange → server round-trip flips the bound
   // GridList.mode (checkboxes appear only in MultiSelect mode)
-  z2ui5_cl_ai_app_133: async (page, expect) => {
+  z2ui5_cl_dmo_app_133: async (page, expect) => {
     const seg = page.getByText('MultiSelect', { exact: true }).first();
     await expect(seg, 'the MultiSelect segment').toBeVisibleEnabled();
     await seg.click();
@@ -271,7 +271,7 @@ const INTERACTIONS = {
   },
   // sap.ui.unified.Menu anchored open via the 2026-07-27 openBy→open()
   // fallback (no own openBy on this control)
-  z2ui5_cl_ai_app_227: async (page, expect) => {
+  z2ui5_cl_dmo_app_227: async (page, expect) => {
     const btn = page.getByRole('button', { name: 'Open Menu', exact: true }).first();
     await expect(btn, 'the menu anchor button').toBeVisibleEnabled();
     await btn.click();
@@ -279,7 +279,7 @@ const INTERACTIONS = {
   },
   // FeedInput action dialog → enablePostButton round-trip (whitelisted
   // bool method, 2026-07-27) + server-side popup_destroy
-  z2ui5_cl_ai_app_236: async (page, expect) => {
+  z2ui5_cl_dmo_app_236: async (page, expect) => {
     const action = page.locator("[id*='feedActionPlain'] button").first();
     await expect(action, 'the FeedInput action button').toBeVisibleEnabled();
     await action.click();
@@ -288,7 +288,7 @@ const INTERACTIONS = {
     await page.locator('.sapMDialog').waitFor({ state: 'hidden', timeout: 10000 });
   },
   // two-way bound SideNavigation.expanded (tags variant) flipped on a round-trip
-  z2ui5_cl_ai_app_132: async (page, expect) => {
+  z2ui5_cl_dmo_app_132: async (page, expect) => {
     const nav = page.locator('.sapTntSideNavigation').first();
     await expect(nav, 'the SideNavigation').toBeVisibleEnabled();
     await page.getByRole('button', { name: 'Toggle Collapse/Expand', exact: true }).first().click();
@@ -304,7 +304,7 @@ const INTERACTIONS = {
   },
   // TreeTable JSONTreeBinding: nested-structure model root + roundtrip-free
   // expandToLevel/collapseAll via control_by_id (new port 2026-07-30)
-  z2ui5_cl_ai_app_248: async (page, expect) => {
+  z2ui5_cl_dmo_app_248: async (page, expect) => {
     // widen so the toolbar buttons stay out of the overflow menu
     await page.setViewportSize({ width: 1900, height: 900 });
     await expect(page.getByText('Women', { exact: true }).first(), 'the first root category').toBeVisibleEnabled();
@@ -318,7 +318,7 @@ const INTERACTIONS = {
   },
   // ButtonWithBadge: BadgeCustomData.value and StepInput.value share one
   // two-way field - the badge follows the stepper client-side (new port)
-  z2ui5_cl_ai_app_249: async (page, expect) => {
+  z2ui5_cl_dmo_app_249: async (page, expect) => {
     const badge = page.locator('.sapMBadgeIndicator').first();
     await badge.waitFor({ state: 'attached', timeout: 10000 });
     // the badge value lives in the data-badge attribute (CSS content)
@@ -338,7 +338,7 @@ const INTERACTIONS = {
   // ColorPalettePopover: dependents-declared popup-mode control, openBy
   // roundtrip-free (new port; the swatches render zero-height headless, so
   // only the anchored open is asserted)
-  z2ui5_cl_ai_app_250: async (page, expect) => {
+  z2ui5_cl_dmo_app_250: async (page, expect) => {
     const btn = page.locator('.sapMBtn').first();
     await expect(btn, 'the first action button').toBeVisibleEnabled();
     await btn.click();
@@ -348,7 +348,7 @@ const INTERACTIONS = {
     );
   },
   // BusyDialog open + START_TIMER close chain (the 147 idiom on a dialog)
-  z2ui5_cl_ai_app_251: async (page, expect) => {
+  z2ui5_cl_dmo_app_251: async (page, expect) => {
     const btn = page.getByRole('button', { name: 'Show Light Busy Dialog', exact: true }).first();
     await expect(btn, 'the busy-dialog button').toBeVisibleEnabled();
     await btn.click();
@@ -359,7 +359,7 @@ const INTERACTIONS = {
   },
   // Carousel customLayout + the set_size_limit follow-up: exactly 10 of the
   // 123 bound rows render (the page indicator counts them)
-  z2ui5_cl_ai_app_252: async (page, expect) => {
+  z2ui5_cl_dmo_app_252: async (page, expect) => {
     await expect(page.getByText('Notebook Basic 15', { exact: true }).first(), 'the first product card').toBeVisibleEnabled();
     // exactly 10 of the 123 bound rows become pages (the set_size_limit cap);
     // the numeric indicator counts scroll POSITIONS, so count the items
@@ -370,7 +370,7 @@ const INTERACTIONS = {
     );
   },
   // Icon press → static client toast (the sample's stethoscope budget icon)
-  z2ui5_cl_ai_app_122: async (page, expect) => {
+  z2ui5_cl_dmo_app_122: async (page, expect) => {
     const icon = page.locator('.sapUiIconPointer').first();
     await icon.waitFor({ state: 'attached', timeout: 10000 });
     // the icon sits in a zero-height row headless - dispatch the click
@@ -378,14 +378,14 @@ const INTERACTIONS = {
     await expect(page.locator('.sapMMessageToast'), 'the Over budget toast').toContainText('Over budget!');
   },
   // NumericContent press → the original's 'Fire press' toast
-  z2ui5_cl_ai_app_157: async (page, expect) => {
+  z2ui5_cl_dmo_app_157: async (page, expect) => {
     const tile = page.locator('.sapMNC').first();
     await expect(tile, 'the first NumericContent').toBeVisibleEnabled();
     await tile.click();
     await expect(page.locator('.sapMMessageToast'), 'the press toast').toContainText('Fire press');
   },
   // two-way bound FlexibleColumnLayout.layout flipped on a round-trip
-  z2ui5_cl_ai_app_234: async (page, expect) => {
+  z2ui5_cl_dmo_app_234: async (page, expect) => {
     const item = page.locator('.sapMSLI, .sapMLIB').first();
     await expect(item, 'the first master list item').toBeVisibleEnabled();
     await item.click();
@@ -401,7 +401,7 @@ const INTERACTIONS = {
     );
   },
   // GenericTag → Card popover fragment (the 170/238 class, 238's own wire)
-  z2ui5_cl_ai_app_238: async (page, expect) => {
+  z2ui5_cl_dmo_app_238: async (page, expect) => {
     const tag = page.locator('.sapMGenericTag').first();
     await expect(tag, 'the GenericTag').toBeVisibleEnabled();
     await tag.click();
@@ -414,7 +414,7 @@ const INTERACTIONS = {
   },
   // prevent-default itemClose + MessageBox.confirm + bound-row removal
   // (2026-07-30 audit fix)
-  z2ui5_cl_ai_app_093: async (page, expect) => {
+  z2ui5_cl_dmo_app_093: async (page, expect) => {
     const close = page.locator('.sapMTSItemCloseBtnCnt button').first();
     await close.waitFor({ state: 'attached', timeout: 10000 });
     await close.click({ force: true });
@@ -425,7 +425,7 @@ const INTERACTIONS = {
   },
   // ToolPage audit fix: itemPress toast with the real item text + the
   // user-name popover (both 2026-07-30)
-  z2ui5_cl_ai_app_167: async (page, expect) => {
+  z2ui5_cl_dmo_app_167: async (page, expect) => {
     const item = page.getByText('Child Item 1', { exact: true }).first();
     await expect(item, 'the Child Item 1 nav entry').toBeVisibleEnabled();
     await item.click();
@@ -435,14 +435,14 @@ const INTERACTIONS = {
     await expect(page.locator('.sapMPopover'), 'the user popover').toContainText('Feedback');
   },
   // GridContainer audit fix: press toast composed from getMetadata().getName()
-  z2ui5_cl_ai_app_168: async (page, expect) => {
+  z2ui5_cl_dmo_app_168: async (page, expect) => {
     const tile = page.locator('.sapMGT').first();
     await expect(tile, 'the first GenericTile').toBeVisibleEnabled();
     await tile.click();
     await expect(page.locator('.sapMMessageToast'), 'the metadata-name toast').toContainText('Press was fired on - sap.m.GenericTile');
   },
   // client-composed toast from ${$source>/text} on a Breadcrumbs Link
-  z2ui5_cl_ai_app_003: async (page, expect) => {
+  z2ui5_cl_dmo_app_003: async (page, expect) => {
     // the headless layout collapses every breadcrumb link into the overflow
     // Select - open the picker and choose the link (fires the link press)
     const picker = page.locator('.sapMBreadcrumbs .sapMSlt').first();
@@ -454,7 +454,7 @@ const INTERACTIONS = {
     await expect(page.locator('.sapMMessageToast'), 'the ${$source>/text} client toast').toContainText('Products has been activated');
   },
   // StepInput increment → change event → client-composed value toast
-  z2ui5_cl_ai_app_049: async (page, expect) => {
+  z2ui5_cl_dmo_app_049: async (page, expect) => {
     // the +/- icons render zero-size in the headless layout - drive the value
     // with the keyboard instead (ArrowUp then Enter fires the change event)
     const input = page.locator('.sapMStepInput input').first();
@@ -482,7 +482,7 @@ const INTERACTIONS = {
     await expect(page.locator('.sapMMessageToast'), 'the change-value client toast').toContainText("Value changed to");
   },
   // MenuButton opens its Menu; item select toasts `{0} Pressed`
-  z2ui5_cl_ai_app_061: async (page, expect) => {
+  z2ui5_cl_dmo_app_061: async (page, expect) => {
     const btn = page.getByRole('button', { name: 'File', exact: true }).first();
     await expect(btn, 'the "File" MenuButton').toBeVisibleEnabled();
     await btn.click();
@@ -492,7 +492,7 @@ const INTERACTIONS = {
     await expect(page.locator('.sapMMessageToast'), 'the item-select client toast').toContainText('Action triggered on item: Save');
   },
   // MessagePopover toggleBy (dependents-declared, message table bound)
-  z2ui5_cl_ai_app_066: async (page, expect) => {
+  z2ui5_cl_dmo_app_066: async (page, expect) => {
     const btn = page.locator("[id*='messagePopoverBtn']").first();
     await expect(btn, 'the message-popover toggle button').toBeVisibleEnabled();
     await btn.click();
@@ -500,49 +500,49 @@ const INTERACTIONS = {
   },
   // MessagePopover toggle + the 2026-07-30 RELATIVE_ONLY URL policy: opening
   // the popover renders the markup links and fires urlValidated → toast
-  z2ui5_cl_ai_app_067: async (page, expect) => {
+  z2ui5_cl_dmo_app_067: async (page, expect) => {
     const btn = page.locator("[id*='messagePopoverBtn']").first();
     await expect(btn, 'the message-popover toggle button').toBeVisibleEnabled();
     await btn.click();
     await expect(page.locator('.sapMMsgPopover, .sapMPopover').first(), 'the toggled MessagePopover').toContainText('Error message');
   },
   // ObjectListItem press → `Pressed : {0}` client toast
-  z2ui5_cl_ai_app_074: async (page, expect) => {
+  z2ui5_cl_dmo_app_074: async (page, expect) => {
     const item = page.locator('.sapMObjLItem').first();
     await expect(item, 'the first ObjectListItem').toBeVisibleEnabled();
     await item.click();
     await expect(page.locator('.sapMMessageToast'), 'the press client toast').toContainText('Pressed :');
   },
   // NotificationListItem footer button → static client toast
-  z2ui5_cl_ai_app_076: async (page, expect) => {
+  z2ui5_cl_dmo_app_076: async (page, expect) => {
     const btn = page.getByRole('button', { name: 'Accept', exact: true }).first();
     await expect(btn, 'the "Accept" notification button').toBeVisibleEnabled();
     await btn.click();
     await expect(page.locator('.sapMMessageToast'), 'the accept client toast').toContainText('Accept Button Pressed');
   },
   // ToggleButton → the `{N?true:false}` conditional placeholder toast
-  z2ui5_cl_ai_app_080: async (page, expect) => {
+  z2ui5_cl_dmo_app_080: async (page, expect) => {
     const btn = page.getByRole('button', { name: 'Pressed', exact: true }).first();
     await expect(btn, 'the "Pressed" toggle button').toBeVisibleEnabled();
     await btn.click();
     await expect(page.locator('.sapMMessageToast'), 'the conditional-placeholder toast').toContainText('Unpressed');
   },
   // popup_display SelectDialog with the product mock
-  z2ui5_cl_ai_app_103: async (page, expect) => {
+  z2ui5_cl_dmo_app_103: async (page, expect) => {
     const btn = page.getByRole('button', { name: 'Show Select Dialog', exact: true }).first();
     await expect(btn, 'the dialog button').toBeVisibleEnabled();
     await btn.click();
     await expect(page.locator('.sapMDialog'), 'the SelectDialog').toContainText('Select Product');
   },
   // semantic MultiSelectAction: ${$source>/pressed} → server-composed toast
-  z2ui5_cl_ai_app_107: async (page, expect) => {
+  z2ui5_cl_dmo_app_107: async (page, expect) => {
     const btn = page.getByRole('button', { name: 'Multiple Selection', exact: true }).first();
     await expect(btn, 'the MultiSelectAction button').toBeVisibleEnabled();
     await btn.click();
     await expect(page.locator('.sapMMessageToast'), 'the toggle-state toast').toContainText('MultiSelect Pressed');
   },
   // popover_display with an embedded unified ColorPicker (2026-07-30 rework)
-  z2ui5_cl_ai_app_112: async (page, expect) => {
+  z2ui5_cl_dmo_app_112: async (page, expect) => {
     const btn = page.getByRole('button', { name: 'Open ColorPicker in a ResponsivePopover', exact: true }).first();
     await expect(btn, 'the popover button').toBeVisibleEnabled();
     await btn.click();
@@ -551,7 +551,7 @@ const INTERACTIONS = {
     await expect(page.locator(".sapMPopover:has([class*='ColorPicker'])").first(), 'the popover with the embedded ColorPicker').toBeVisibleEnabled();
   },
   // two-way bound SideNavigation.expanded flipped on a round-trip
-  z2ui5_cl_ai_app_128: async (page, expect) => {
+  z2ui5_cl_dmo_app_128: async (page, expect) => {
     const nav = page.locator('.sapTntSideNavigation').first();
     await expect(nav, 'the SideNavigation').toBeVisibleEnabled();
     const btn = page.getByRole('button', { name: 'Toggle Collapse/Expand', exact: true }).first();
@@ -568,14 +568,14 @@ const INTERACTIONS = {
     );
   },
   // ToolHeader logo Image press → static client toast
-  z2ui5_cl_ai_app_134: async (page, expect) => {
+  z2ui5_cl_dmo_app_134: async (page, expect) => {
     const logo = page.locator("img[src*='SAP_Logo']").first();
     await expect(logo, 'the SAP logo image').toBeVisibleEnabled();
     await logo.click();
     await expect(page.locator('.sapMMessageToast'), 'the logo client toast').toContainText('Logo pressed!');
   },
   // global BusyIndicator show(0) + START_TIMER hide chain (2026-07-30 rework)
-  z2ui5_cl_ai_app_147: async (page, expect) => {
+  z2ui5_cl_dmo_app_147: async (page, expect) => {
     const btn = page.getByRole('button', { name: 'Show BusyIndicator', exact: true }).nth(1);
     await expect(btn, 'the zero-delay busy button').toBeVisibleEnabled();
     await btn.click();
@@ -598,7 +598,7 @@ const INTERACTIONS = {
     );
   },
   // NumericContent press → static client toast
-  z2ui5_cl_ai_app_156: async (page, expect) => {
+  z2ui5_cl_dmo_app_156: async (page, expect) => {
     const tile = page.locator('.sapMNC').first();
     await expect(tile, 'the first NumericContent').toBeVisibleEnabled();
     await tile.click();
@@ -606,14 +606,14 @@ const INTERACTIONS = {
   },
   // GenericTag press → Card popover rebuilt from the sample fragment
   // (2026-07-30 rework)
-  z2ui5_cl_ai_app_170: async (page, expect) => {
+  z2ui5_cl_dmo_app_170: async (page, expect) => {
     const tag = page.locator('.sapMGenericTag').first();
     await expect(tag, 'the SR GenericTag').toBeVisibleEnabled();
     await tag.click();
     await expect(page.locator('.sapMPopover'), 'the Card popover').toContainText('Sales Revenue');
   },
   // CAL_SELECT/SELECT_TODAY round-trip updating the bound selectedDate Text
-  z2ui5_cl_ai_app_177: async (page, expect) => {
+  z2ui5_cl_dmo_app_177: async (page, expect) => {
     const btn = page.getByRole('button', { name: 'Select Today', exact: true }).first();
     await expect(btn, 'the Select Today button').toBeVisibleEnabled();
     await btn.click();
@@ -628,14 +628,14 @@ const INTERACTIONS = {
     );
   },
   // ObjectListItem press → `Pressed : {0}` client toast (markers variant)
-  z2ui5_cl_ai_app_198: async (page, expect) => {
+  z2ui5_cl_dmo_app_198: async (page, expect) => {
     const item = page.locator('.sapMObjLItem').first();
     await expect(item, 'the first ObjectListItem').toBeVisibleEnabled();
     await item.click();
     await expect(page.locator('.sapMMessageToast'), 'the press client toast').toContainText('Pressed :');
   },
   // popover_display anchored via $event.oSource.sId + relative {NAME} bindings
-  z2ui5_cl_ai_app_229: async (page, expect) => {
+  z2ui5_cl_dmo_app_229: async (page, expect) => {
     const btn = page.getByRole('button', { name: 'Show Popover', exact: true }).first();
     await expect(btn, 'the popover button').toBeVisibleEnabled();
     await btn.click();
@@ -645,7 +645,7 @@ const INTERACTIONS = {
     await expect(page.locator('.sapMPopover'), 'the bound product name').toContainText('Notebook Basic 15');
   },
   // KEYBOARD_SHORTCUT: Ctrl+S fires the backend SAVE command (2026-07-30)
-  z2ui5_cl_ai_app_232: async (page, expect) => {
+  z2ui5_cl_dmo_app_232: async (page, expect) => {
     await page.locator('.sapMPanel').first().click();
     await page.keyboard.press('Control+s');
     await expect(page.locator('.sapMMessageToast'), 'the Ctrl+S command toast').toContainText('CTRL+S: save triggered on controller');
@@ -690,7 +690,7 @@ const INTERACTIONS = {
   },
   // check_prevent_default: with the checkbox set, a press round-trips but the
   // eBP wire cancels the built-in selection (2026-07-30 rework)
-  z2ui5_cl_ai_app_241: async (page, expect) => {
+  z2ui5_cl_dmo_app_241: async (page, expect) => {
     const cb = page.locator("[id*='preventDefaultCheckbox']").first();
     await expect(cb, 'the prevent-default checkbox').toBeVisibleEnabled();
     await cb.click();
@@ -716,14 +716,14 @@ const INTERACTIONS = {
     await expect(page.locator('.sapMMessageToast'), 'the prevented-default toast').toContainText('Default was prevented');
   },
   // NavContainer.to via control_by_id (slot-local id + transition)
-  z2ui5_cl_ai_app_242: async (page, expect) => {
+  z2ui5_cl_dmo_app_242: async (page, expect) => {
     const btn = page.getByRole('button', { name: 'To 2', exact: true }).first();
     await expect(btn, 'the To 2 nav button').toBeVisibleEnabled();
     await btn.click();
     await expect(page.getByText('Page 2', { exact: true }).first(), 'page 2 after the to() call').toBeVisibleEnabled();
   },
   // popover_display ResponsivePopover with custom footer
-  z2ui5_cl_ai_app_243: async (page, expect) => {
+  z2ui5_cl_dmo_app_243: async (page, expect) => {
     const btn = page.getByRole('button', { name: 'Popover with Custom Footer', exact: true }).first();
     await expect(btn, 'the popover button').toBeVisibleEnabled();
     await btn.click();
@@ -732,13 +732,13 @@ const INTERACTIONS = {
   },
   // DynamicPage.breakpointChange → bound Avatar displaySize + toast
   // (2026-07-30 rework; needs UI5 >= 1.147)
-  z2ui5_cl_ai_app_244: async (page, expect) => {
+  z2ui5_cl_dmo_app_244: async (page, expect) => {
     await page.setViewportSize({ width: 500, height: 800 });
     await expect(page.locator('.sapMMessageToast'), 'the media-range toast').toContainText('Media Range:');
   },
   // FileUploader UPLOAD round-trip: empty value → 'Choose a file first'
   // (2026-07-30 rework)
-  z2ui5_cl_ai_app_246: async (page, expect) => {
+  z2ui5_cl_dmo_app_246: async (page, expect) => {
     const btn = page.getByRole('button', { name: 'Upload File', exact: true }).first();
     await expect(btn, 'the Upload File button').toBeVisibleEnabled();
     await btn.click();
@@ -746,7 +746,7 @@ const INTERACTIONS = {
   },
   // uxap batch b05 (2026-07-31)
   // ObjectPageDynamicHeaderTitle backgroundDesign + backgroundDesignAnchorBar
-  z2ui5_cl_ai_app_258: async (page, expect) => {
+  z2ui5_cl_dmo_app_258: async (page, expect) => {
     await expect(page.locator('.sapUxAPObjectPageHeaderTitle'), 'the dynamic header title').toContainText('Denise Smith');
     await expect(page.locator('.sapUxAPObjectPageNavigation'), 'the anchor bar').toContainText('Section 1');
     // the blocks are the inlined SimpleForms, not the sample's BlockBase
@@ -756,13 +756,13 @@ const INTERACTIONS = {
     await expect(page.locator('.sapUxAPObjectPageNavigationTranslucent').last(), 'the Translucent anchor bar').toBeVisibleEnabled();
   },
   // ProgressIndicator + RatingIndicator header facets
-  z2ui5_cl_ai_app_259: async (page, expect) => {
+  z2ui5_cl_dmo_app_259: async (page, expect) => {
     await expect(page.locator('.sapMPI').first(), 'the header ProgressIndicator').toContainText('42%');
     await expect(page.locator('.sapMRI').first(), 'the header RatingIndicator').toBeVisibleEnabled();
     await expect(page.locator('.sapUxAPObjectPageSection').first(), 'the goals section').toContainText('Evangelize the UI framework');
   },
   // preserveHeaderStateOnScroll
-  z2ui5_cl_ai_app_260: async (page, expect) => {
+  z2ui5_cl_dmo_app_260: async (page, expect) => {
     await expect(page.locator('.sapUxAPObjectPageLayout'), 'the preserved header content').toContainText('Cost Center');
     await expect(page.locator('.sapUiForm').first(), 'the inlined GoalsBlock form').toContainText('Mentor junior developers');
     // preserveHeaderStateOnScroll: the header content stays shown while the
@@ -772,7 +772,7 @@ const INTERACTIONS = {
     await expect(page.getByText('Cost Center', { exact: true }).first(), 'the header content after scrolling').toBeVisibleEnabled();
   },
   // subSectionLayout="TitleOnLeft" + the EmploymentBlockJob ModelMapping fold
-  z2ui5_cl_ai_app_261: async (page, expect) => {
+  z2ui5_cl_dmo_app_261: async (page, expect) => {
     await expect(page.locator('.sapUxAPObjectPageLayout'), 'the object page').toContainText('Denise Smith');
     const section = page.getByText('Job Relationship', { exact: true }).first();
     await expect(section, 'the Job Relationship subsection title').toBeVisibleEnabled();
@@ -780,7 +780,7 @@ const INTERACTIONS = {
     await expect(page.locator('.sapUxAPObjectPageLayout'), 'the folded ModelMapping records').toContainText('Michael Adams');
   },
   // ObjectPageLayout.showFooter two-way bound, flipped by a round-trip
-  z2ui5_cl_ai_app_262: async (page, expect) => {
+  z2ui5_cl_dmo_app_262: async (page, expect) => {
     const btn = page.getByRole('button', { name: 'Toggle Footer', exact: true }).first();
     await expect(btn, 'the Toggle Footer button').toBeVisibleEnabled();
     await btn.click();
@@ -796,7 +796,7 @@ const INTERACTIONS = {
     await expect(page.locator('.sapMMessageToast').last(), 'the breadcrumb client toast').toContainText('Page 1 a very long link clicked');
   },
   // NavContainer.to via _event_client(control_by_id) + the navigate round-trip
-  z2ui5_cl_ai_app_263: async (page, expect) => {
+  z2ui5_cl_dmo_app_263: async (page, expect) => {
     const item = page.getByText('To ObjectPage', { exact: true }).first();
     await expect(item, 'the navigating list item').toBeVisibleEnabled();
     await item.click();
@@ -808,7 +808,7 @@ const INTERACTIONS = {
   },
   // batch b13 (2026-07-31) — boundFilters (@1.146)
   // typing a prefix re-filters the bound rows; Toggle Filters re-bakes the set
-  z2ui5_cl_ai_app_264: async (page, expect) => {
+  z2ui5_cl_dmo_app_264: async (page, expect) => {
     const rows = page.locator('.sapUiTableRow:not(.sapUiTableRowHidden)');
     await expect(page.locator('.sapUiTable'), 'the employees table').toContainText('Walldorf');
     const input = page.locator('input.sapMInputBaseInner').first();
@@ -830,7 +830,7 @@ const INTERACTIONS = {
     void rows;
   },
   // HeaderContainer: the NumericContent press raises a client toast
-  z2ui5_cl_ai_app_029: async (page, expect) => {
+  z2ui5_cl_dmo_app_029: async (page, expect) => {
     const tile = page.locator('.sapMNC').first();
     await expect(tile, 'the first NumericContent tile').toBeVisibleEnabled();
     await tile.click();
@@ -838,7 +838,7 @@ const INTERACTIONS = {
   },
   // tnt NavigationList: the two toolbar buttons flip bound control state
   // server-side (the original used byId().setExpanded / setVisible)
-  z2ui5_cl_ai_app_123: async (page, expect) => {
+  z2ui5_cl_dmo_app_123: async (page, expect) => {
     const nav = page.locator('.sapTntNL').first();
     await expect(nav, 'the navigation list').toContainText('Sub Item 3');
     const btn = page.getByRole('button', { name: 'Show/Hide SubItem 3', exact: true }).first();
@@ -854,7 +854,7 @@ const INTERACTIONS = {
   },
   // SideNavigation.expanded two-way bound, flipped on a round-trip (starts
   // collapsed = icons only), plus the itemSelect client toast
-  z2ui5_cl_ai_app_172: async (page, expect) => {
+  z2ui5_cl_dmo_app_172: async (page, expect) => {
     const btn = page.getByRole('button', { name: 'Toggle Collapse/Expand', exact: true }).first();
     await expect(btn, 'the collapse/expand button').toBeVisibleEnabled();
     await btn.click();
@@ -869,7 +869,7 @@ const INTERACTIONS = {
   // template must bind the ABSOLUTE path /LISTTYPE — a relative {LISTTYPE}
   // resolves against the row, leaves every item Inactive and kills the Select
   // (fixed 2026-07-31, see the 207 sidecar). The click-through stays a human check.
-  z2ui5_cl_ai_app_207: async (page, expect) => {
+  z2ui5_cl_dmo_app_207: async (page, expect) => {
     await expect(page.locator('.sapMList'), 'the product list').toContainText('Notebook Basic 15');
     const shape = await page.evaluate(() => {
       const El = sap.ui.require('sap/ui/core/Element');
@@ -896,7 +896,7 @@ const INTERACTIONS = {
   },
   // sap.ui.unified.Menu opened through the 2026-07-27 openBy fallback
   // (open(false, anchor, …) for a control without its own openBy)
-  z2ui5_cl_ai_app_228: async (page, expect) => {
+  z2ui5_cl_dmo_app_228: async (page, expect) => {
     const btn = page.getByRole('button', { name: 'Open Menu', exact: true }).first();
     await expect(btn, 'the menu anchor button').toBeVisibleEnabled();
     await btn.click();
@@ -906,21 +906,21 @@ const INTERACTIONS = {
     await expect(page.locator('.sapMMessageToast').last(), 'the itemSelect client toast').toContainText("'My 1st Item' pressed");
   },
   // SplitApp navigation driven from the backend (control_by_id to/toDetail/…)
-  z2ui5_cl_ai_app_097: async (page, expect) => {
+  z2ui5_cl_dmo_app_097: async (page, expect) => {
     const btn = page.getByRole('button', { name: 'Go to Detail page2', exact: true }).first();
     await expect(btn, 'the detail-navigation button').toBeVisibleEnabled();
     await btn.click();
     await expect(page.locator('.sapMSplitApp'), 'the second detail page after the round-trip').toContainText('Detail Detail');
   },
   // FileUploader: the upload cycle reduced to client toasts
-  z2ui5_cl_ai_app_126: async (page, expect) => {
+  z2ui5_cl_dmo_app_126: async (page, expect) => {
     const btn = page.getByRole('button', { name: 'Upload File', exact: true }).first();
     await expect(btn, 'the Upload File button').toBeVisibleEnabled();
     await btn.click();
     await expect(page.locator('.sapMMessageToast').last(), 'the upload-started client toast').toContainText('Uploading file to the local server');
   },
   // per-row bound filter: each row's Select lists only its region's managers
-  z2ui5_cl_ai_app_265: async (page, expect) => {
+  z2ui5_cl_dmo_app_265: async (page, expect) => {
     await expect(page.locator('.sapUiTable'), 'the customers table').toContainText('TechCorp Solutions');
     const select = page.locator('.sapMSlt').first();
     await expect(select, 'the first row Select').toBeVisibleEnabled();
@@ -933,7 +933,7 @@ const INTERACTIONS = {
   // follows the transported breakpoint (the original enables it on S only).
   // Shrinking the viewport into the S range is the only way to make the
   // round-trip fire, so this drives the resize itself.
-  z2ui5_cl_ai_app_267: async (page, expect) => {
+  z2ui5_cl_dmo_app_267: async (page, expect) => {
     await expect(page.locator('body'), 'main and side content side by side').toContainText('Side content');
     await page.setViewportSize({ width: 400, height: 900 });
     await waitForUi5(page, () => {
@@ -944,7 +944,7 @@ const INTERACTIONS = {
   // anchored open of a per-row ColorPickerPopover (control_by_id openBy with a
   // domRef arg). The change/liveChange round-trips need a real colour pick in
   // the picker's own controls and stay a human check.
-  z2ui5_cl_ai_app_268: async (page, expect) => {
+  z2ui5_cl_dmo_app_268: async (page, expect) => {
     // the value-help icon (id …-vhi) gets a ZERO-size box in the headless
     // layout (the theme CSS that sizes sapUiIcon never loads), so a normal
     // click fails actionability — dispatch the DOM click the Icon listens for
@@ -958,7 +958,7 @@ const INTERACTIONS = {
   // DynamicSideContent driven from the backend: the two setShowSideContent
   // follow-up actions (hide from the side content's own Close button, show
   // from the footer button whose `visible` the breakpoint round-trip drives)
-  z2ui5_cl_ai_app_269: async (page, expect) => {
+  z2ui5_cl_dmo_app_269: async (page, expect) => {
     await expect(page.locator('.sapMList'), 'the feed list').toContainText('Alexandrina Victoria');
     const close = page.getByRole('button', { name: 'Close', exact: true }).first();
     await expect(close, 'the side-content Close button').toBeVisibleEnabled();
@@ -977,7 +977,7 @@ const INTERACTIONS = {
   },
   // the controller's jQuery panel width became an expression binding on the
   // Slider value — moving the slider must resize the Panel with no round-trip
-  z2ui5_cl_ai_app_270: async (page, expect) => {
+  z2ui5_cl_dmo_app_270: async (page, expect) => {
     await expect(page.locator('body'), 'the nested grid boxes').toContainText('E Box');
     // the slider handle carries a zero-size box headless (unstyled), so it is
     // focused through the DOM and driven by keyboard — a real user gesture
@@ -987,7 +987,7 @@ const INTERACTIONS = {
   // GridResponsiveLayout: the layoutChange round-trip names the active
   // GridSettings aggregation, and the containerQuery expression binding
   // follows the SegmentedButton with no round-trip of its own
-  z2ui5_cl_ai_app_271: async (page, expect) => {
+  z2ui5_cl_dmo_app_271: async (page, expect) => {
     const tiles = await page.locator('.demoBox').count();
     if (tiles !== 12) throw new Error(`expected the sample's twelve grid tiles, got ${tiles}`);
     // a GridLayoutBase extends ManagedObject, NOT Element — it is in no
@@ -1007,19 +1007,19 @@ const INTERACTIONS = {
   // bound valueState / valueStateText over a 5-row aggregation: each state
   // must reach the DOM exactly once (render-smoke only sees the mocked model).
   // One generic assertion, shared by the three value-state pickers.
-  z2ui5_cl_ai_app_253: (page, expect) => valueStateRows(page, expect, 'DatePicker'),
-  z2ui5_cl_ai_app_254: (page, expect) => valueStateRows(page, expect, 'DateRangeSelection'),
-  z2ui5_cl_ai_app_255: (page, expect) => valueStateRows(page, expect, 'DateTimePicker'),
+  z2ui5_cl_dmo_app_253: (page, expect) => valueStateRows(page, expect, 'DatePicker'),
+  z2ui5_cl_dmo_app_254: (page, expect) => valueStateRows(page, expect, 'DateRangeSelection'),
+  z2ui5_cl_dmo_app_255: (page, expect) => valueStateRows(page, expect, 'DateTimePicker'),
   // the "controller sets a width from a slider" class — 144 keeps the
   // round-trip (the bound width is composed in ABAP), 176/213/214 dissolve it
   // into an expression binding; all four must end at 99 % after one key press
-  z2ui5_cl_ai_app_144: (page) => sliderDrivenWidth(page, 'sap.m.Panel'),
-  z2ui5_cl_ai_app_176: (page) => sliderDrivenWidth(page, 'sap.m.Panel'),
-  z2ui5_cl_ai_app_213: (page) => sliderDrivenWidth(page, 'sap.m.Panel'),
-  z2ui5_cl_ai_app_214: (page) => sliderDrivenWidth(page, 'sap.ui.layout.VerticalLayout'),
+  z2ui5_cl_dmo_app_144: (page) => sliderDrivenWidth(page, 'sap.m.Panel'),
+  z2ui5_cl_dmo_app_176: (page) => sliderDrivenWidth(page, 'sap.m.Panel'),
+  z2ui5_cl_dmo_app_213: (page) => sliderDrivenWidth(page, 'sap.m.Panel'),
+  z2ui5_cl_dmo_app_214: (page) => sliderDrivenWidth(page, 'sap.ui.layout.VerticalLayout'),
   // the device branch resolved server-side (app 012 precedent): a desktop run
   // must seed the else-branch widths, not the phone ones
-  z2ui5_cl_ai_app_173: async (page) => {
+  z2ui5_cl_dmo_app_173: async (page) => {
     await waitForUi5(page, () => {
       const w = ui5All().filter((c) => c.getMetadata().getName() === 'sap.m.Image').map((c) => c.getWidth());
       return ['5em', '10em', '15em'].every((x) => w.includes(x));
@@ -1027,29 +1027,29 @@ const INTERACTIONS = {
   },
   // element-bound single record: the folded row really resolves against the
   // serialized default model (render-smoke only sees a mocked one)
-  z2ui5_cl_ai_app_206: async (page, expect) => {
+  z2ui5_cl_dmo_app_206: async (page, expect) => {
     await expect(page.locator('body'), 'the element-bound product').toContainText('Notebook Professional 15');
     await expect(page.locator('body'), 'the bound description').toContainText('2,80 GHz quad core');
   },
-  z2ui5_cl_ai_app_209: async (page, expect) => {
+  z2ui5_cl_dmo_app_209: async (page, expect) => {
     await expect(page.locator('body'), 'the element-bound product').toContainText('Notebook Basic 15');
     await expect(page.locator('body'), 'the bound supplier').toContainText('Very Best Screens');
   },
   // the sorter inside the raw binding-info string really sorts: unsorted, the
   // first row would be "Notebook Basic 15" (the model's first record)
-  z2ui5_cl_ai_app_225: async (page, expect) => {
+  z2ui5_cl_dmo_app_225: async (page, expect) => {
     const first = page.locator('.sapMListTblRow:not(.sapMListTblHeader)').first();
     await expect(first, 'the first table row after the NAME sorter').toContainText('10" Portable DVD player');
   },
   // a record flattened onto the model root must be bound ABSOLUTELY — these
   // four rendered empty until 2026-08-01 (the app-207 class, see AGENTS §5)
-  z2ui5_cl_ai_app_195: async (page, expect) => {
+  z2ui5_cl_dmo_app_195: async (page, expect) => {
     await expect(page.locator('.sapMList'), 'the root-seeded record in the list').toContainText('Notebook Basic 15');
     await expect(page.locator('.sapMList'), 'the bound description').toContainText('HT-1000');
   },
   // the controller's setAlternateRowColors / highlight toggling replaced by
   // two-way bound ToggleButtons + an expression binding on RowSettings
-  z2ui5_cl_ai_app_174: async (page, expect) => {
+  z2ui5_cl_dmo_app_174: async (page, expect) => {
     // the toolbar controls all live in the OverflowToolbar's popover here —
     // open it first ("Additional Options"), then they ARE drivable (2026-08-01)
     const more = page.getByRole('button', { name: 'Additional Options' }).first();
@@ -1084,7 +1084,7 @@ const INTERACTIONS = {
   },
   // fieldGroupIds + validateFieldGroup: leaving a group fires the event with
   // the group's ids, and the backend classifies it into ITS MessageStrip
-  z2ui5_cl_ai_app_272: async (page, expect) => {
+  z2ui5_cl_dmo_app_272: async (page, expect) => {
     const billing = page.locator('#BillingName input, [id$="BillingName-inner"]').first();
     await expect(billing, 'the BillingName input').toBeVisibleEnabled();
     await billing.click();
@@ -1099,7 +1099,7 @@ const INTERACTIONS = {
   },
   // five controller-built Message Dialogs as popup_display fragments; the OK
   // button closes client-side (popup_close), so a second open must work too
-  z2ui5_cl_ai_app_273: async (page, expect) => {
+  z2ui5_cl_dmo_app_273: async (page, expect) => {
     const open = async (label, text) => {
       const btn = page.getByRole('button', { name: label, exact: true }).first();
       await expect(btn, `the "${label}" button`).toBeVisibleEnabled();
@@ -1116,7 +1116,7 @@ const INTERACTIONS = {
   // ShellBar SearchManager: liveChange composes its toast on the client
   // ('{0} liveChange event value is: {1}'), typing also drives the backend
   // suggest round-trip
-  z2ui5_cl_ai_app_218: async (page, expect) => {
+  z2ui5_cl_dmo_app_218: async (page, expect) => {
     // the ShellBar renders the SearchManager collapsed — the Search button
     // expands the field, and only then is there an input to type into
     const open = page.getByRole('button', { name: 'Search' }).first();
@@ -1130,7 +1130,7 @@ const INTERACTIONS = {
   },
   // three controller-built Dialogs with the shared product list; the two
   // footer buttons close client-side (popup_close)
-  z2ui5_cl_ai_app_274: async (page, expect) => {
+  z2ui5_cl_dmo_app_274: async (page, expect) => {
     const btn = page.getByRole('button', { name: 'Dialog with Fullscreen Toggle', exact: true }).first();
     await expect(btn, 'the plain-dialog button').toBeVisibleEnabled();
     await btn.click();
@@ -1142,7 +1142,7 @@ const INTERACTIONS = {
   },
   // the width-switch round-trip: the SegmentedButton sits in an
   // OverflowToolbar, so the overflow popover is opened first (2026-08-01)
-  z2ui5_cl_ai_app_247: async (page, expect) => {
+  z2ui5_cl_dmo_app_247: async (page, expect) => {
     const more = page.getByRole('button', { name: 'Additional Options' }).first();
     await expect(more, 'the overflow button').toBeVisibleEnabled();
     await more.click();
@@ -1185,7 +1185,7 @@ const INTERACTIONS = {
   },
   // GenericTile states: the press wire is a constant client toast, and a
   // handler-less tile must stay silent
-  z2ui5_cl_ai_app_275: async (page, expect) => {
+  z2ui5_cl_dmo_app_275: async (page, expect) => {
     const tiles = page.locator('.sapMGT');
     await expect(tiles.first(), 'the first tile').toBeVisibleEnabled();
     await expect(page.locator('body'), 'the tile headers').toContainText('Status Loaded - with press event');
@@ -1195,7 +1195,7 @@ const INTERACTIONS = {
   },
   // client-side growing: the list starts at the threshold and the More
   // trigger appends the next page — no backend wire at all
-  z2ui5_cl_ai_app_276: async (page, expect) => {
+  z2ui5_cl_dmo_app_276: async (page, expect) => {
     const rows = page.locator('.sapMLIB.sapMSLI');
     await expect(rows.first(), 'the first list row').toBeVisibleEnabled();
     const before = await rows.count();
@@ -1205,14 +1205,14 @@ const INTERACTIONS = {
   },
   // the controller's phone/orientation MessageStrip rule became one device-
   // model expression: on a desktop viewport the strip must be VISIBLE
-  z2ui5_cl_ai_app_277: async (page, expect) => {
+  z2ui5_cl_dmo_app_277: async (page, expect) => {
     await expect(page.locator('body'), 'the device-model driven MessageStrip')
       .toContainText('Move the splitter to see the container based popin behaviour');
     await expect(page.locator('.sapMListTblHeader').first(), 'the left table header').toBeVisibleEnabled();
     await expect(page.locator('body'), 'both panes bound to the same collection').toContainText('Notebook Basic 15');
   },
   // the a11y announce round-trip: pressing any button writes the status Text
-  z2ui5_cl_ai_app_141: async (page, expect) => {
+  z2ui5_cl_dmo_app_141: async (page, expect) => {
     const btn = page.getByRole('button', { name: 'Success', exact: true }).first();
     await expect(btn, 'the Success button').toBeVisibleEnabled();
     await btn.click();
@@ -1221,7 +1221,7 @@ const INTERACTIONS = {
   },
   // Wizard: the footer Cancel goes through a backend round-trip that opens a
   // MessageBox (message_box_display with a YES/NO onclose action)
-  z2ui5_cl_ai_app_101: async (page, expect) => {
+  z2ui5_cl_dmo_app_101: async (page, expect) => {
     await expect(page.locator('body'), 'the first wizard step').toContainText('Product Type');
     const cancel = page.getByRole('button', { name: 'Cancel', exact: true }).first();
     await expect(cancel, 'the wizard Cancel button').toBeVisibleEnabled();
@@ -1232,7 +1232,7 @@ const INTERACTIONS = {
   // u:Currency over four inlined arrays: the real backend model must reach
   // the control and be formatted with its currency (locale-independent parts
   // only — the digit grouping is the browser's, not the port's)
-  z2ui5_cl_ai_app_196: async (page, expect) => {
+  z2ui5_cl_dmo_app_196: async (page, expect) => {
     const lists = page.locator('.sapMList');
     await expect(lists.first(), 'the first currency list').toBeVisibleEnabled();
     await expect(page.locator('body'), 'the bound EUR row').toContainText('EUR');
@@ -1246,7 +1246,7 @@ const INTERACTIONS = {
   // its confirm round-trip stay a human check: the dialog row has no layout
   // box headless and neither a click nor a keyboard Enter reaches the
   // SelectDialog's confirm (measured 2026-08-01).
-  z2ui5_cl_ai_app_233: async (page, expect) => {
+  z2ui5_cl_dmo_app_233: async (page, expect) => {
     const inp = page.locator('.sapMInputBaseInner').first();
     if (!(await inp.count())) throw new Error('the PurchaseID input did not render');
     await page.evaluate(() => document.querySelector('.sapMInputBaseInner').focus());
@@ -1257,7 +1257,7 @@ const INTERACTIONS = {
   // ColorPalette: the swatches have a zero-height box headless, so a colour
   // is picked the keyboard way — focus the swatch, press Enter — and the
   // client-composed toast carries ${$parameters>/value} and /defaultAction
-  z2ui5_cl_ai_app_008: async (page, expect) => {
+  z2ui5_cl_dmo_app_008: async (page, expect) => {
     const sw = page.locator('.sapMColorPaletteSquare');
     if (!(await sw.count())) throw new Error('the ColorPalette rendered no swatches');
     await page.evaluate(() => document.querySelector('.sapMColorPaletteSquare').focus());
@@ -1267,17 +1267,17 @@ const INTERACTIONS = {
   },
   // faked-event-value fixes (2026-08-01): the toast must carry the item's
   // own id, not a constant
-  z2ui5_cl_ai_app_133: async (page, expect) => {
+  z2ui5_cl_dmo_app_133: async (page, expect) => {
     const item = page.locator('.sapFGridListItem, .sapMLIB').first();
     await expect(item, 'the first grid list item').toBeVisibleEnabled();
     await item.click();
     await expect(page.locator('.sapMMessageToast').last(), 'the press toast naming the item id')
       .toContainText('Pressed item with ID');
   },
-  z2ui5_cl_ai_app_142: (page) => formFieldValues(page),
-  z2ui5_cl_ai_app_175: (page) => formFieldValues(page),
+  z2ui5_cl_dmo_app_142: (page) => formFieldValues(page),
+  z2ui5_cl_dmo_app_175: (page) => formFieldValues(page),
   // Grid element-binding to an array path + index-relative child bindings
-  z2ui5_cl_ai_app_226: async (page, expect) => {
+  z2ui5_cl_dmo_app_226: async (page, expect) => {
     await expect(page.locator('body'), 'the {0/INTROTEXT1} index-relative binding')
       .toContainText('This Grid Layout sample application demonstrates');
   },
@@ -1287,7 +1287,7 @@ const INTERACTIONS = {
   // sandbox serves only /resources/ locally, so the error path already fires
   // at boot. This asserts the swap survives the explicit Set-wrong-src
   // round-trip; the load->HAS_ERROR-false leg stays a human check.
-  z2ui5_cl_ai_app_279: async (page, expect) => {
+  z2ui5_cl_dmo_app_279: async (page, expect) => {
     const btn = page.getByRole('button', { name: 'Set wrong src', exact: true }).first();
     await expect(btn, 'the Set-wrong-src button').toBeVisibleEnabled();
     await btn.click();
@@ -1303,7 +1303,7 @@ const INTERACTIONS = {
   // a delay: abap2UI5 serializes round-trips, so keystrokes fired while one is
   // in flight are dropped and GET_VALUE would hold the last COMPLETED value
   // (measured 2026-08-02 — see the port's sidecar NOTE).
-  z2ui5_cl_ai_app_280: async (page, expect) => {
+  z2ui5_cl_dmo_app_280: async (page, expect) => {
     const ta = page.locator('textarea').first();
     await expect(ta, 'the TextArea').toBeVisibleEnabled();
     await ta.click();
@@ -1324,7 +1324,7 @@ const INTERACTIONS = {
   // Escape reaches the picker once focus sits in the item list, an outside
   // click does not dismiss it, and getPicker() is null on the registry
   // instance (measured 2026-08-02). That leg is live-verified instead.
-  z2ui5_cl_ai_app_281: async (page, expect) => {
+  z2ui5_cl_dmo_app_281: async (page, expect) => {
     const inp = page.locator('.sapMMultiComboBox input, .sapMInputBaseInner').first();
     await expect(inp, 'the MultiComboBox input').toBeVisibleEnabled();
     // the F4 open is timing-sensitive — retry until the picker lists items
@@ -1503,7 +1503,7 @@ async function checkPort(browser, cls) {
 
 const metas = fs.readdirSync(META).filter((f) => f.endsWith('.json'))
   .map((f) => JSON.parse(fs.readFileSync(path.join(META, f), 'utf8')))
-  .filter((m) => /^z2ui5_cl_ai_app_\d+$/.test(m.class))
+  .filter((m) => /^z2ui5_cl_dmo_app_\d+$/.test(m.class))
   .filter((m) => !ONLY || ONLY.some((o) => m.class.endsWith(o)));
 metas.sort((a, b) => a.class.localeCompare(b.class));
 
@@ -1519,7 +1519,7 @@ const browser = fs.existsSync(LOCAL_CHROMIUM)
 let failed = 0;
 for (const m of metas) {
   const errs = await checkPort(browser, m.class);
-  const cls = m.class.replace('z2ui5_cl_ai_app_', '');
+  const cls = m.class.replace('z2ui5_cl_dmo_app_', '');
   if (errs.length) { failed++; console.log(`FAIL  ${cls}  ${errs[0]}`); }
   else console.log(`pass  ${cls}${INTERACTIONS[m.class] ? '  (+interaction)' : ''}`);
 }

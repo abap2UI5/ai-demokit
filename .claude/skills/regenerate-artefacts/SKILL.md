@@ -27,7 +27,7 @@ scripts.**
   **Sample** (→ OpenUI5 repo source, ↗ → live fullscreen sample) · **ABAP**
   (→ generated class, `—` = not ported; those rows are the backlog). There is
   no separate deprecated-controls section — everything sits in this table.
-- **`src/z2ui5_cl_ai_app_overview.clas.*`** — the in-system overview **app**:
+- **`src/z2ui5_cl_dmo_app_overview.clas.*`** — the in-system overview **app**:
   an abap2UI5 app that lists every ported app as one row of a `sap.m.Table`,
   sorted by module → control → sample. Columns (all plain text — links moved to
   the trailing **Open** column): **Module** · **Control** · **Since** (the UI5
@@ -52,7 +52,7 @@ scripts.**
   All source links point at OpenUI5; only the class + start links are local.
   The per-row URLs are built in `view_display` (the start URL needs the
   runtime system origin), the static facts come from `get_catalog`. Ports are
-  numbered gap-free `z2ui5_cl_ai_app_001..NNN` in this same overview order; a
+  numbered gap-free `z2ui5_cl_dmo_app_001..NNN` in this same overview order; a
   renumber is a repo-wide rename (class token, sidecar `class`/`file`, and
   every `app NNN` doc reference) followed by a regenerate.
 

@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_dmo_app_119",
+  "sample": "sap.ui.layout.sample.FixFlexVertical",
+  "entity": "sap.ui.layout.FixFlex",
+  "file": "src/02/b01/z2ui5_cl_dmo_app_119.clas.abap",
+  "batch": "b01",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The named-model image path (img>/products/pic1) is resolved to the static OpenUI5 product image https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-7777-large.jpg (the mock's actual pic1 value, host-absolutized; wrong-neighbour HT-1000 copy fixed by the 2026-07-24 data audit). Image.src carries the static value where the original binds {img>/products/pic1} - the app-006 static-fold class."
+    },
+    {
+      "type": "NOTE",
+      "what": "The sample's css/style.css (the .fixFlexVertical > .sapUiFixFlexFixed / .sapUiFixFlexFlexible background colours, loaded via the manifest resources.css) is INJECTED since 2026-08-05 through a core:HTML content attribute - the documented way to carry a stylesheet into an abap2UI5 view (CAPABILITIES 'Custom CSS', apps 026/028). The class attributes were already 1:1, so the decorative backgrounds are back; the core:HTML leaf is the one control the original view does not declare. The 2026-07-27 review flagged exactly this as rework."
+    }
+  ]
+}

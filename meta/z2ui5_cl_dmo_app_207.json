@@ -1,0 +1,28 @@
+{
+  "class": "z2ui5_cl_dmo_app_207",
+  "sample": "sap.m.sample.ListItemTypes",
+  "entity": "sap.m.List",
+  "file": "src/01/b17/z2ui5_cl_dmo_app_207.clas.abap",
+  "batch": "b17",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "press/detailPress toast roundtrip-free via control_global MESSAGE_TOAST.show; the Select drives item type via a shared two-way binding, so the app is init-only (no on_event)"
+  },
+  "status": "reviewed",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "the original wires a change handler on the type Select (handleSelectChange, which loops the list items calling item.setType). selectedKey and every StandardListItem type share one two-way bound field (LISTTYPE), so a selection re-types all items client-side and the Select.change attribute is deliberately MISSING vs the original view (AGENTS prefer-a-bindable-property rule; app 003 precedent). The added StandardListItem type binding is not in the original view. **Corrected 2026-07-31 (found by the e2e interaction):** the template first bound the shared field RELATIVELY ({LISTTYPE}), which resolves against the ROW context - the rows carry no such field, so the items stayed Inactive and the Select had no effect at all. The template now binds the absolute path through client->_bind( listtype ), which is what a shared root-level field needs inside a bound aggregation."
+    },
+    {
+      "type": "NOTE",
+      "what": "the ProductPicUrl icon values are stored as absolute https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/*.jpg URLs (the mock's host-relative test-resources paths rewritten to the OpenUI5 host per the runtime asset-URL rule). Same 123-row set, kept verbatim otherwise."
+    },
+    {
+      "type": "NOTE",
+      "what": "unverified originally: (a) handlePress/handleDetailPress as roundtrip-free client toasts (control_global MESSAGE_TOAST.show of \"'press' event fired!\" / \"'detailPress' event fired!\"); (b) the Select selectedKey <-> item type two-way binding re-typing all rows. **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the list renders, every StandardListItem binds its type to the ABSOLUTE path /LISTTYPE (the regression that bit us - a relative {LISTTYPE} would resolve against the row and kill the Select), AND the click-through now runs: opening the OverflowToolbar's 'Additional Options' popover makes the type Select drivable, and picking 'Navigation' re-types every bound row. The earlier claim that the popover is not drivable headless was wrong (AGENTS 10, 2026-08-01). Still not covered: the press/detailPress toasts."
+    }
+  ]
+}

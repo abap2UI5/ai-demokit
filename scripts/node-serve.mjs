@@ -22,6 +22,6 @@ if (!fs.existsSync(path.join(A2, 'node/output/init.mjs'))) {
 }
 
 console.log(`node-serve: abap2UI5 at ${A2}`);
-console.log('open http://localhost:3000/?app_start=z2ui5_cl_ai_app_overview');
+console.log('open http://localhost:3000/?app_start=z2ui5_cl_dmo_app_overview');
 const child = spawn('node', [path.join(A2, 'node/srv/express.mjs')], { stdio: 'inherit', env: process.env });
 child.on('exit', (code) => process.exit(code ?? 0));
