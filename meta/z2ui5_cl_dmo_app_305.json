@@ -1,0 +1,35 @@
+{
+  "class": "z2ui5_cl_dmo_app_305",
+  "sample": "sap.ui.unified.sample.CalendarDateDeselection",
+  "entity": "sap.ui.unified.Calendar",
+  "file": "src/02/b15/z2ui5_cl_dmo_app_305.clas.abap",
+  "batch": "b15",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "handleCalendarSelect/_updateText read the picked day off the control (oCalendar.getSelectedDates()[0].getStartDate()) and format it yyyy-MM-dd. The port transports it as three UI5 expression args (year, month+1, day - the LOCAL parts, not toISOString( ), which would shift the day east of Greenwich), each guarded by getSelectedDates().length > 0, and formats server-side; the Text gets a two-way bound text attribute instead of setText (app 139 idiom, probe-verified). The controller's oLastSelectedJSDate becomes a server-side field, so the second click on the same day is recognised exactly as in the original."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "the deselection is only reproduced on the LABEL, not on the calendar itself: the original calls oCalendar.removeSelectedDate(oSelectedDate), which takes a DateRange CONTROL instance no wire can address, so the day stays visually highlighted while the text goes back to 'No Date Selected'."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "onInit does byId('calendar').displayDate(UI5Date.getInstance(2021, 6, 1)) to open the calendar on July 2021. Calendar exposes no bindable property for the displayed month and displayDate() takes a JS Date argument, which the frontend-action wire cannot carry (CONTROL_METHODS casts only string/int/bool/controlId/anchor kinds), so the port opens on the current month."
+    },
+    {
+      "type": "POST_171",
+      "what": "Calendar.showCurrentDateButton (@since 1.95) is kept 1:1 from the original view. Newer than UI5 1.71."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "not yet run in a system: the CAL_SELECT expression-arg round-trip and the same-day second click clearing the label."
+    }
+  ]
+}

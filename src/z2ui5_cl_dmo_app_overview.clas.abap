@@ -4586,6 +4586,25 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         since = `1.22.0`
         notes = lv_text1 ) ).
 
+    lv_text1 = `NOTE: handleCalendarSelect/_updateText read the picked day off the control (oCalendar.getSelectedDates()[0].getStartDate()) and format it yyyy-MM-dd. The port transports it as three UI5 expression` &&
+               ` args (year, month+1, day - the LOCAL parts, not toISOString( ), which would shift the day east of Greenwich), each guarded by getSelectedDates().length > 0, and formats server-side; the Text gets a` &&
+               ` two-way bound text attribute instead of setText (app 139 idiom, probe-verified). The controller's oLastSelectedJSDate becomes a server-side field, so the second click on the same day is recognised` &&
+               ` exactly as in the original. // IMPROVISED: the deselection is only reproduced on the LABEL, not on the calendar itself: the original calls oCalendar.removeSelectedDate(oSelectedDate), which takes a` &&
+               ` DateRange CONTROL instance no wire can address, so the day stays visually highlighted while the text goes back to 'No Date Selected'. // IMPROVISED: onInit does` &&
+               ` byId('calendar').displayDate(UI5Date.getInstance(2021, 6, 1)) to open the calendar on July 2021. Calendar exposes no bindable property for the displayed month and displayDate() takes a JS Date`.
+    lv_text1 = lv_text1 && ` argument, which the frontend-action wire cannot carry (CONTROL_METHODS casts only string/int/bool/controlId/anchor kinds), so the port opens on the current month. // POST-1.71:` &&
+               ` Calendar.showCurrentDateButton (@since 1.95) is kept 1:1 from the original view. Newer than UI5 1.71. // LIVE-TEST: not yet run in a system: the CAL_SELECT expression-arg round-trip and the same-day` &&
+               ` second click clearing the label.`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarDateDeselection`               class = `z2ui5_cl_dmo_app_305` path = `src/02/b15/z2ui5_cl_dmo_app_305.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.22.0`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `Calendar.showCurrentDateButton (@since 1.95) is kept 1:1 from the original view. Newer than UI5 1.71.` ) ).
+
     lv_text1 = `NOTE: The object-typed calendar date properties (Calendar.minDate, Calendar.maxDate and the disabledDates DateRange startDate/endDate) are fed from plain ISO strings in the model and converted at the` &&
                ` point of use with Formatter.DateCreateObject from the curated module (core:require='{Formatter: z2ui5/model/formatter}'). A plain string binding would crash view creation (Date must be a JS/UI5Date` &&
                ` object). The original's UI5Date.getInstance(year, month0, day) values are normalized to ISO 1:1 (month is 0-based: minDate 2000-01-01, maxDate 2050-12-31, disabled ranges 2016-01-04..2016-01-10 and` &&
@@ -4615,6 +4634,35 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         post171 = `Formatter.DateCreateObject is referenced via core:require, which needs UI5 >= 1.74. sap.ui.unified.Calendar itself and its minDate/maxDate/disabledDates/showWeekNumbers members are all <= 1.71 (in` &&
                  ` scope).` ) ).
 
+    lv_text1 = `NOTE: handleCalendarSelect walks oCalendar.getSelectedDates() and rebuilds the JSON model with one yyyy-MM-dd string per selected day. An event arg is a full UI5 expression but the grammar has no` &&
+               ` loop, so the wire carries a FIXED set of 31 index-guarded expression args (one per selectable slot), each formatting getSelectedDates()[i].getStartDate() to yyyy-MM-dd from its LOCAL parts on the` &&
+               ` client and yielding an empty string past the end of the aggregation. on_event stops at the first empty arg and rebuilds the bound table from the rest. // IMPROVISED: the 31-slot cap is a real limit,` &&
+               ` not a formality: 31 is the most days one displayed month can hold, but the user can navigate months and keep selecting, and every day past the 31st is silently dropped from the list (the calendar` &&
+               ` itself still shows it selected). A loop-free expression grammar leaves no way to transport a variable-length aggregation in one arg. // IMPROVISED: handleRemoveSelection calls` &&
+               ` byId('calendar').removeAllSelectedDates() and then clears the model. Only the model half is reproducible: the frontend-action method denylist blocks every 'removeAll*' name`.
+    lv_text1 = lv_text1 && ` (CONTROL_METHOD_DENY_PREFIXES in app/webapp/core/FrontendAction.js, aimed at the GENERIC reflection mutators), so the named per-aggregation removeAllSelectedDates cannot be called either - the list` &&
+               ` empties but the days stay highlighted in the calendar. Filed as pr/control-method-named-removeall. // LIVE-TEST: not yet run in a system: the multi-select round-trip filling the List and the Remove` &&
+               ` All button clearing it.`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarMultipleDaySelection`          class = `z2ui5_cl_dmo_app_307` path = `src/02/b15/z2ui5_cl_dmo_app_307.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.22.0`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: handleCalendarSelect/_updateText read the picked day off the control (oCalendar.getSelectedDates()[0].getStartDate()) and format it yyyy-MM-dd. The port transports it as three UI5 expression` &&
+               ` args (year, month+1, day - the LOCAL parts, not toISOString( ), which would shift the day east of Greenwich), each guarded by getSelectedDates().length > 0, and formats server-side; the Text gets a` &&
+               ` two-way bound text attribute instead of setText (app 139 idiom, probe-verified). // NOTE: handleSelectToday does removeAllSelectedDates() + addSelectedDate(new DateRange({startDate: today})) and` &&
+               ` reformats. The port only writes the text: the server date IS today, so the label is 1:1, but the calendar's own highlight of that day is not moved - addSelectedDate takes a DateRange CONTROL, which` &&
+               ` no wire can construct (same residual as app 139). // LIVE-TEST: not yet run in a system: the CAL_SELECT expression-arg round-trip across the two displayed months and the SELECT_TODAY text update.`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarMultipleMonth`                 class = `z2ui5_cl_dmo_app_304` path = `src/02/b15/z2ui5_cl_dmo_app_304.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.22.0`
+        notes = lv_text1 ) ).
+
     lv_text1 = `NOTE: The picked day IS transportable after all - measured 2026-08-05 with ``scripts/probes/event-arg-expression-probe.mjs`` against real OpenUI5: an event arg is a full UI5 expression, and indexed` &&
                ` access into an array-valued getter plus chained calls resolve there (``$event.oSource.getSelectedDates()[0].getStartDate()``). The earlier rationale - 'select carries no date parameter and the` &&
                ` selected DateRange is control state' - was wrong. The wire carries the three LOCAL date parts as three expression args (year, month+1, day) rather than ``toISOString( )``, which would shift the day` &&
@@ -4627,6 +4675,40 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22.0`
         notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: handleCalendarSelect/_updateText read the picked interval off the control (getSelectedDates()[0].getStartDate()/getEndDate()) and format both ends yyyy-MM-dd. The port transports six UI5` &&
+               ` expression args (the LOCAL year/month+1/day of each end, not toISOString( ), which would shift the day east of Greenwich), each guarded so a missing end arrives as 0 and renders the original's 'No` &&
+               ` Date Selected'; the two Texts get two-way bound text attributes instead of setText (app 139 idiom, probe-verified). // NOTE: handleWeekNumberSelect reads the weekNumber and the weekDays DateRange` &&
+               ` parameters; both travel as expression args (${$parameters>/weekNumber} and the local date parts of ${$parameters>/weekDays}.getStartDate()/getEndDate()), and the every-fifth-week refusal toast is` &&
+               ` composed server-side, exactly as the original composes it. // IMPROVISED: the refusal is only a toast: the original also calls oEvent.preventDefault() so the forbidden week is NOT selected. abap2UI5` &&
+               ` bakes s_ctrl-check_prevent_default into the handler at RENDER time (app 241), which cannot express a condition evaluated per event (weekNumber % 5 === 0), so the week highlights and only the message`.
+    lv_text1 = lv_text1 && ` says it is not allowed. // LIVE-TEST: not yet run in a system: the CAL_SELECT interval round-trip and the WEEK_SELECT branch (toast on every fifth week, labels otherwise).`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarSingleIntervalSelection`       class = `z2ui5_cl_dmo_app_306` path = `src/02/b15/z2ui5_cl_dmo_app_306.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.22.0`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: handleShowSpecialDays adds the special dates and the legend items imperatively (oCal.addSpecialDate(new DateTypeRange({...})), oLeg.addItem(new CalendarLegendItem({...}))) and destroys them` &&
+               ` again when the ToggleButton is released. The port binds the two Calendars' specialDates and the two CalendarLegends' items aggregations to four ABAP tables and fills/clears them on the` &&
+               ` SHOW_SPECIAL_DAYS round-trip, so the u:DateTypeRange and u:CalendarLegendItem templates plus the specialDates/items aggregation nodes are extra vs the archived view.xml (which declares none of them).` &&
+               ` The ToggleButton also gains a two-way bound pressed attribute so its state survives the round-trip. Every date is day n of the CURRENT month, exactly like the original's setDate(n) on a fresh` &&
+               ` reference date. // NOTE: DateTypeRange.startDate/endDate are typed 'object' and demand a real JS Date; the model carries ISO strings and Formatter.DateCreateObject (the curated formatter pack)` &&
+               ` converts them at the point of use via core:require. endDate is set on exactly one range, so its conversion is guarded with an expression binding - an unguarded new Date('') is an Invalid Date, which`.
+    lv_text1 = lv_text1 && ` is truthy and takes the whole view down. Rows without color/secondaryType/tooltip bind through omit_initial_paths so the UI5 default applies instead of an empty string. // POST-1.71:` &&
+               ` DateTypeRange.color (@since 1.76) and DateTypeRange.secondaryType (@since 1.81) are kept 1:1 from the original controller, and the Formatter.DateCreateObject core:require path needs UI5 >= 1.74. All` &&
+               ` newer than UI5 1.71. // LIVE-TEST: not yet run in a system: the ToggleButton round-trip filling and clearing both calendars' special dates and both legends.`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarSpecialDaysLegend`             class = `z2ui5_cl_dmo_app_308` path = `src/02/b15/z2ui5_cl_dmo_app_308.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.22.0`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `DateTypeRange.color (@since 1.76) and DateTypeRange.secondaryType (@since 1.81) are kept 1:1 from the original controller, and the Formatter.DateCreateObject core:require path needs UI5 >= 1.74. All` &&
+                 ` newer than UI5 1.71.` ) ).
 
     lv_text1 = `NOTE: The picked day IS transportable after all - measured 2026-08-05 with ``scripts/probes/event-arg-expression-probe.mjs`` against real OpenUI5: an event arg is a full UI5 expression, and indexed` &&
                ` access into an array-valued getter plus chained calls resolve there (``$event.oSource.getSelectedDates()[0].getStartDate()``). The earlier rationale - 'select carries no date parameter and the` &&
@@ -4660,6 +4742,33 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         post171 = `DateTypeRange.startDate is a date-object (type object) property, so it is bound through core:require="{Formatter: 'z2ui5/model/formatter'}" + formatter 'Formatter.DateCreateObject' (the curated` &&
                  ` module), which needs UI5 >= 1.74 - a plain ISO-string binding would crash view creation (CAPABILITIES 'Date-object properties'; same idiom as apps 108/109). The xmlns:core + core:require were added` &&
                  ` for it; the original view had neither.` ) ).
+
+    lv_text1 = `NOTE: openPopover builds a sap.m.ResponsivePopover with a nested sap.ui.unified.ColorPicker imperatively and calls openBy(oEvent.getSource()). The port expresses it as a core:FragmentDefinition shown` &&
+               ` with client->popover_display( xml, by_id = $event.oSource.sId ) - the CAPABILITIES.md 1:1 path for a controller-built popover. Its ResponsivePopover, ColorPicker and the two Buttons are extra vs the` &&
+               ` archived View.view.xml, which declares only the inline ColorPicker and the trigger Button. // NOTE: the controller's Device.system.phone branch (phone: keep the header and add Submit/Cancel buttons;` &&
+               ` otherwise setShowHeader(false)) stays a branch: abap2UI5 serves the device> named model on every view slot, so ResponsivePopover.showHeader and the two buttons' visible bind {=` &&
+               ` ${device>/system/phone}} instead of being resolved to one value at render time (apps 277/279 precedent). Both buttons close the popover client-side via _event_client( popover_close ), matching the` &&
+               ` original's oRP.close(). // LIVE-TEST: not yet run in a system: the anchored popover round-trip and the phone-only Submit/Cancel buttons.`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.unified`     control = `sap.ui.unified.ColorPicker`            name = `ColorPicker`                           class = `z2ui5_cl_dmo_app_309` path = `src/02/b15/z2ui5_cl_dmo_app_309.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.48.0`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: openPopover builds a sap.m.ResponsivePopover with a nested sap.ui.unified.ColorPicker imperatively and calls openBy(oEvent.getSource()). The port expresses it as a core:FragmentDefinition shown` &&
+               ` with client->popover_display( xml, by_id = $event.oSource.sId ) - the CAPABILITIES.md 1:1 path for a controller-built popover. Its ResponsivePopover, ColorPicker and the two Buttons are extra vs the` &&
+               ` archived View.view.xml, which declares only the inline ColorPicker and the trigger Button. The Large displayMode (@since 1.58) is kept 1:1 on both pickers. // NOTE: the controller's` &&
+               ` Device.system.phone branch (phone: keep the header and add Submit/Cancel buttons; otherwise setShowHeader(false)) stays a branch: abap2UI5 serves the device> named model on every view slot, so` &&
+               ` ResponsivePopover.showHeader and the two buttons' visible bind {= ${device>/system/phone}} instead of being resolved to one value at render time (apps 277/279 precedent). Both buttons close the` &&
+               ` popover client-side via _event_client( popover_close ), matching the original's oRP.close(). // LIVE-TEST: not yet run in a system: the anchored popover round-trip and the phone-only Submit/Cancel` &&
+               ` buttons.`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.unified`     control = `sap.ui.unified.ColorPicker`            name = `ColorPickerLarge`                      class = `z2ui5_cl_dmo_app_310` path = `src/02/b15/z2ui5_cl_dmo_app_310.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.48.0`
+        notes = lv_text1 ) ).
 
     lv_text1 = `NOTE: Breadth-probe (cross-library capability test). Inline sap.ui.unified ColorPicker (HSL / Simplified); the view itself is a 1:1 rebuild. Since 2026-07-30 the button's controller-built` &&
                ` ResponsivePopover-with-ColorPicker is reproduced 1:1 via popover_display( xml = fragment by_id = $event.oSource.sId ): a core:FragmentDefinition with ResponsivePopover (title 'Color Picker'), a` &&
@@ -4790,6 +4899,25 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         is_post171 = abap_true
         notes = lv_text1
         post171 = `Button.ariaHasPopup (since UI5 1.84) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.84 to render it.` ) ).
+
+    lv_text1 = `NOTE: handlePressOpenMenu lazily loads Menu.fragment.xml and calls menu.open(bKeyboard, oButton, Popup.Dock.BeginTop, Popup.Dock.BeginBottom, oButton). The port inlines the fragment into the Button's` &&
+               ` dependents aggregation (the declarative addDependent equivalent, app 060/227) and opens it client-side through control_by_id/openBy with $event.oSource.sId as the anchor: the openBy dispatch detects` &&
+               ` that sap.ui.unified.Menu has no own openBy and falls back to open(false, anchor, 'begin top', 'begin bottom', anchor) - the same call the original makes. Dropped either way: the keyboard flag the` &&
+               ` controller collects from a 'tab keyup' browser event (open's first argument), and the explicit Dock constants, which the fallback hardcodes to the same values. // NOTE: namespace representation: the` &&
+               ` archived Menu.fragment.xml declares xmlns="sap.ui.unified", so its Menu, MenuItem and MenuItemGroup controls are unprefixed there, while Page.view.xml declares xmlns="sap.m". One port view can carry`.
+    lv_text1 = lv_text1 && ` only one default namespace, so it keeps sap.m (matching the view) and writes the two Menu controls, the fourteen MenuItem controls and the three MenuItemGroup controls with the u: prefix. Same tree,` &&
+               ` different prefix - no functional difference. // POST-1.71: sap.ui.unified.MenuItemGroup (control @since 1.127) with itemSelectionMode SingleSelect/MultiSelect and MenuItem.selected (@since 1.127) are` &&
+               ` the whole point of this sample and are kept 1:1; sap.m.Button.ariaHasPopup (@since 1.84) is kept 1:1 on the trigger button. All newer than UI5 1.71. // LIVE-TEST: not yet run in a system: the` &&
+               ` anchored open of the unified Menu and the selectable item groups (single/multi select state).`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.unified`     control = `sap.ui.unified.Menu`                   name = `MenuSelectable`                        class = `z2ui5_cl_dmo_app_311` path = `src/02/b15/z2ui5_cl_dmo_app_311.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.21.0`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `sap.ui.unified.MenuItemGroup (control @since 1.127) with itemSelectionMode SingleSelect/MultiSelect and MenuItem.selected (@since 1.127) are the whole point of this sample and are kept 1:1;` &&
+                 ` sap.m.Button.ariaHasPopup (@since 1.84) is kept 1:1 on the trigger button. All newer than UI5 1.71.` ) ).
 
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.HeaderFacetPattern`           name = `ObjectPageSectionShowTitle`            class = `z2ui5_cl_dmo_app_200` path = `src/03/b02/z2ui5_cl_dmo_app_200.clas.abap`
