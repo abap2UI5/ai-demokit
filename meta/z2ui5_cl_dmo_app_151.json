@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_dmo_app_151",
+  "sample": "sap.ui.unified.sample.CalendarCalendarType",
+  "entity": "sap.ui.unified.Calendar",
+  "file": "src/02/b08/z2ui5_cl_dmo_app_151.clas.abap",
+  "batch": "b08",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "Calendar with primaryCalendarType Islamic / secondaryCalendarType Gregorian. The picked day IS transportable after all - measured 2026-08-05 with `scripts/probes/event-arg-expression-probe.mjs` against real OpenUI5: an event arg is a full UI5 expression, and indexed access into an array-valued getter plus chained calls resolve there (`$event.oSource.getSelectedDates()[0].getStartDate()`). The earlier rationale - 'select carries no date parameter and the selected DateRange is control state' - was wrong. The wire carries the three LOCAL date parts as three expression args (year, month+1, day) rather than `toISOString( )`, which would shift the day for any user east of Greenwich, and each arg is guarded by `getSelectedDates().length > 0` so a re-click that clears the selection arrives as year 0. App 151 now writes the SELECTED day (Gregorian yyyy-MM-dd, matching its label) instead of the server date. Residual: 'Focus Today' - the original only calls focusDate(today) and changes no text; the port keeps writing today's date and does not move the calendar focus, since focusDate takes a Date OBJECT no wire can construct."
+    }
+  ]
+}

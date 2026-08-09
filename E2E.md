@@ -27,7 +27,7 @@ npm run node:setup     # once: clone abap2UI5 into .abap2UI5, install everything
 npm run node:serve     # start the Node backend on http://localhost:3000
 ```
 
-Then open <http://localhost:3000/?app_start=z2ui5_cl_ai_app_overview>.
+Then open <http://localhost:3000/?app_start=z2ui5_cl_dmo_app_overview>.
 
 `node:setup` clones abap2UI5 into `.abap2UI5` (in-repo, git-ignored), runs
 `npm ci` there and here, and builds the backend. Re-run it any time to pull the
@@ -60,7 +60,7 @@ one flat table (the only view of the catalog), and every row has a **Start this 
 button that launches the port right there.
 
 ```
-http://localhost:3000/?app_start=z2ui5_cl_ai_app_overview
+http://localhost:3000/?app_start=z2ui5_cl_dmo_app_overview
 ```
 
 ## Open a single port directly
@@ -68,12 +68,12 @@ http://localhost:3000/?app_start=z2ui5_cl_ai_app_overview
 Start any port via the `?app_start=<class>` query parameter:
 
 ```
-http://localhost:3000/?app_start=z2ui5_cl_ai_app_005     # Button
-http://localhost:3000/?app_start=z2ui5_cl_ai_app_060     # Menu
-http://localhost:3000/?app_start=z2ui5_cl_ai_app_092     # TableAutoPopin
+http://localhost:3000/?app_start=z2ui5_cl_dmo_app_005     # Button
+http://localhost:3000/?app_start=z2ui5_cl_dmo_app_060     # Menu
+http://localhost:3000/?app_start=z2ui5_cl_dmo_app_092     # TableAutoPopin
 ```
 
-The class name is `z2ui5_cl_ai_app_<NNN>` — see `meta/` or the overview app for
+The class name is `z2ui5_cl_dmo_app_<NNN>` — see `meta/` or the overview app for
 the list. UI5 itself loads from the public CDN (`sdk.openui5.org`), so this
 needs internet access on your machine (the CI sandbox blocks it, which is why
 `npm run e2e` routes UI5 to the local `@openui5` packages instead).

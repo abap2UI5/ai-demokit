@@ -1,0 +1,35 @@
+{
+  "class": "z2ui5_cl_dmo_app_291",
+  "sample": "sap.m.sample.NotificationListGroupBindings",
+  "entity": "sap.m.NotificationListGroup",
+  "file": "src/01/b23/z2ui5_cl_dmo_app_291.clas.abap",
+  "batch": "b23",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "sap.m.NotificationList (control since UI5 1.90) is the container the sample binds its groups to and is kept 1:1, like the other notification ports (076/077). templateShareable: true is a binding-info parameter, not a control member, so no gate can see it - it is kept verbatim on all four aggregation bindings and declared here by policy (apps 264/265 precedent). The app needs a UI5 release >= 1.90."
+    },
+    {
+      "type": "NOTE",
+      "what": "three levels of bound aggregation, which is what the sample is about: NotificationList.items over the groups, NotificationListGroup.items over that group's items, and buttons over the group's and the item's own button rows. The ABAP model mirrors that as nested tables (ty_t_group > groupitems ty_t_item > itembuttons ty_t_button), and every relative binding inside a template addresses its own row."
+    },
+    {
+      "type": "NOTE",
+      "what": "four of the five controller handlers compose their toast from the pressed control and stay on the client, roundtrip-free: onGroupClose and onListItemPress with ${$source>/title}, onGroupButtonPress and onItemButtonPress with ${$source>/text}. Only onItemClose needs the backend, because it REMOVES the row (oList.removeItem): the item's own title travels as a $-prefixed event arg and the handler deletes that row from every group before pushing the model back. The titles are unique in this data; a real app would carry a key."
+    },
+    {
+      "type": "NOTE",
+      "what": "the priorityFormatter is dropped. It maps a value that is not a sap.ui.core.Priority to Priority.None - presentation logic that the thin-frontend rule puts in the backend, and the mock's priorities (High, Low) are all valid anyway, so the port binds PRIORITY directly. A model_init that seeded an unknown value would have to map it there."
+    },
+    {
+      "type": "NOTE",
+      "what": "the item rows bind datetime={CREATIONDATE}, but only the GROUPS carry a creationDate in the mock and the group template does not bind it - so the field exists on the item row type and stays empty on both items, exactly as the original renders it."
+    }
+  ]
+}

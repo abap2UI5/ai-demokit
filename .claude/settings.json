@@ -36,8 +36,8 @@
     ],
     "deny": [
       "Edit(api.md)",
-      "Edit(src/z2ui5_cl_ai_app_overview.clas.abap)",
-      "Edit(src/z2ui5_cl_ai_app_overview.clas.xml)"
+      "Edit(src/z2ui5_cl_dmo_app_overview.clas.abap)",
+      "Edit(src/z2ui5_cl_dmo_app_overview.clas.xml)"
     ]
   }
 }

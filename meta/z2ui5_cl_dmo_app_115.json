@@ -1,0 +1,39 @@
+{
+  "class": "z2ui5_cl_dmo_app_115",
+  "sample": "sap.ui.table.sample.Basic",
+  "entity": "sap.ui.table.Table",
+  "file": "src/02/b01/z2ui5_cl_dmo_app_115.clas.abap",
+  "batch": "b01",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "Rebuilt 1:1 from the breadth probe 2026-08-05: all THIRTEEN columns (Text/Input/Label/ObjectStatus/u:Currency/ComboBox/Link/Button/CheckBox/Select/MultiInput/c:Icon/DatePicker templates) over the full 123-row /ProductCollection of the shared demo mock (sap/ui/demo/mock/products.json), with the Suppliers and Categories arrays the controller derives from it in initSampleDataModel. ProductPicUrl values are absolutized to the OpenUI5 host (https://sdk.openui5.org/test-resources/...) per the asset-URL rule; the mock carries them host-relative."
+    },
+    {
+      "type": "NOTE",
+      "what": "The controller's two formatters (Available -> 'Success'/'Error' via ObjectStatus.state, Available -> 'sap-icon://accept'/'sap-icon://decline' via Icon.src) are computed in ABAP into the derived fields AVAILABLESTATE / AVAILABLEICON and bound plainly (thin-frontend rule). The Available and Heavy fields initSampleDataModel derives (Status === 'Available', WeightMeasure > 1000) are derived in model_init the same way; Heavy stays a STRING because the CheckBox binding declares type 'sap.ui.model.type.String' in the original."
+    },
+    {
+      "type": "NOTE",
+      "what": "DeliveryDate: the original computes Date.now() - (i % 10 * 4 days), a moving value, so it is anchored on a FIXED base date here (the corpus rule for now/random values, apps 164/181/289) and carried as an ISO date STRING rather than a JS epoch number. The DatePicker keeps its typed binding (sap.ui.model.type.Date) but its formatOptions source pattern becomes 'yyyy-MM-dd' instead of 'timestamp' - the model field type changed, the control binding did not (CAPABILITIES date row)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The MultiInput's suggestionItems template carries key=\"{ProductId}\" in the original although it is bound over /Categories, whose rows only have a Name - so a token added from a suggestion gets an empty key there. The quirk is ported verbatim (key={PRODUCTID}) rather than repaired; the tokenUpdate handler mirrors the original's filter-by-removed-key, which drops the empty-key tokens together, and additionally gates on the event's update type ('removed') because the original recomputes from the post-update token list instead of reacting to a type."
+    },
+    {
+      "type": "NOTE",
+      "what": "The controller's three handlers are all display-only and resolve on the client: handleDetailsPress toasts the row's ProductId, onPaste toasts the pasted data - both composed through control_global MESSAGE_TOAST with the row/parameter value as an event argument, so neither needs a round-trip. updateMultipleSelection genuinely mutates the model, so it stays a backend event (TOKEN_UPDATE): the removed token key and the row's binding context path travel and ABAP deletes the row's token entry."
+    },
+    {
+      "type": "DROPPED_171",
+      "what": "sap.m.plugins.ColumnAIAction (@since 1.136, on the Product Name column, with the controller's onAIActionPress opening an AI-hint dialog) is dropped: sap.m.plugins does not exist in UI5 1.71, which the corpus targets. The column itself is present, only the plugin aggregation and its press handler are missing."
+    }
+  ]
+}

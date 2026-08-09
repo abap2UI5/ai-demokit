@@ -1,0 +1,24 @@
+{
+  "class": "z2ui5_cl_dmo_app_147",
+  "sample": "sap.ui.core.sample.BusyIndicator",
+  "entity": "sap.ui.core.BusyIndicator",
+  "file": "src/02/b07/z2ui5_cl_dmo_app_147.clas.abap",
+  "batch": "b07",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "all three button presses are roundtrip-free _event_client( control_global, MESSAGE_TOAST.show ) substitutions"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "Since 2026-07-30 the global sap.ui.core.BusyIndicator behaviour is reproduced 1:1: each button fires a backend event whose response chains follow_up_action( control_global BUSY_INDICATOR show [delay] ) with the original's delay (default / 0 / 2000) plus follow_up_action( start_timer HIDE_BUSY duration ) (4000 / 4000 / 1000); the HIDE_BUSY timer round-trip then issues BUSY_INDICATOR hide - the frontend-action form of showBusyIndicator(iDuration, iDelay) + setTimeout(hideBusyIndicator). START_TIMER's single-slot semantics (a new timer replaces the pending one) match the original's clearTimeout of _sTimeoutId. Timing nuance: the hide fires after duration + one round-trip latency, and the show after the press round-trip - a few ms later than the original's purely client-side call; the press attributes are rewired from the controller handler names to backend events (the earlier MessageToast substitution is gone)."
+    },
+    {
+      "type": "NOTE",
+      "what": "the BUSY_INDICATOR show/hide chain and the START_TIMER HIDE_BUSY round-trips are unverified in a running system - verify the overlay appears (default and zero delay), disappears after ~4s, and never appears in the 2s-delay/1s-duration case. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the zero-delay button shows the global overlay (#sapUiBusyIndicator) and the HIDE_BUSY timer round-trip removes it after ~4s; the default-delay and 2s-delay/1s-duration buttons are the identical wire with different literals."
+    }
+  ]
+}

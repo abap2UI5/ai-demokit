@@ -1,0 +1,26 @@
+{
+  "class": "z2ui5_cl_dmo_app_084",
+  "sample": "sap.m.sample.UrlHelper",
+  "entity": "sap.m.URLHelper",
+  "file": "src/01/b10/z2ui5_cl_dmo_app_084.clas.abap",
+  "batch": "b10",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "checked",
+  "checked": {
+    "date": "2026-07-27",
+    "note": "verified in a running system 2026-07-27 - URLHelper tel/sms/email triggers and REDIRECT all fire correctly"
+  },
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "element binding kept 1:1 - a one-record structure /S_SUPPLIER instead of {/SupplierCollection/0}."
+    },
+    {
+      "type": "NOTE",
+      "what": "URLHelper.triggerTel/triggerSms/triggerEmail/redirect map 1:1 to the URLHELPER frontend action (cs_event-urlhelper): TRIGGER_TEL/TRIGGER_SMS take the number as a plain string param, TRIGGER_EMAIL/REDIRECT take a { EMAIL/URL, ... } object-literal t_arg (get_t_arg emits {-prefixed args raw as UI5 event-handler object literals). open_new_tab is NOT used - it is same-origin-only (isValidRedirectURL)."
+    }
+  ]
+}

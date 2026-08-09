@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_dmo_app_138",
+  "sample": "sap.ui.layout.sample.DynamicSideContent",
+  "entity": "sap.ui.layout.DynamicSideContent",
+  "file": "src/02/b05/z2ui5_cl_dmo_app_138.clas.abap",
+  "batch": "b05",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "Two of the original's three controller behaviours are now reproduced rather than wired to nothing. (a) breakpointChanged carries its own currentBreakpoint event parameter to the backend (t_arg ${$parameters>/currentBreakpoint}) and on_event enables the Toggle button exactly when it is 'S' - what _updateToggleButtonState does; the port therefore adds an enabled attribute to the Toggle Button, which the original sets from the controller. (b) handleToggleClick calls DynamicSideContent.toggle( ); the port binds showSideContent (the property that setter writes, default true) and flips it in on_event, so the press has an effect. Both were dead wires before this rework - BP_CHANGED and TOGGLE fired round-trips this class never dispatched (pattern-lint dead-event-wire). The original also calls _updateToggleButtonState once in onAfterRendering; abap2UI5 has no equivalent hook, so the button starts disabled and takes its state from the first breakpointChanged event."
+    },
+    {
+      "type": "NOTE",
+      "what": "The width Slider's liveChange is reproduced roundtrip-free since 2026-08-05. The original's handleSliderChange resizes the containing Page through jQuery - this.byId('sideContentContainer').$().width(iValue + '%') - i.e. it writes a CSS width straight onto the rendered DOM node, and sap.m.Page has no width property to bind. The `css` control method added upstream for this class of gap (pr/control-inline-style) does the same write from the wire: _event_client( control_by_id, sideContentContainer / css / width / ${$parameters>/value} + '%' ), the arg being a full UI5 expression (CAPABILITIES). The Slider keeps its value='100' literal and now resizes the page again."
+    },
+    {
+      "type": "NOTE",
+      "what": "The hint Text.visible is bound to a boolean model field (initial true); the original used a literal visible='getVisible()' (a sample quirk) toggled per Device.system.phone in onBeforeRendering. The two long body texts are shortened representative Lorem (not gate-compared, static)."
+    }
+  ]
+}

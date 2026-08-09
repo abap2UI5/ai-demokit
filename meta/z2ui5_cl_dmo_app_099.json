@@ -1,0 +1,31 @@
+{
+  "class": "z2ui5_cl_dmo_app_099",
+  "sample": "sap.m.sample.QuickViewCard",
+  "entity": "sap.m.QuickViewCard",
+  "file": "src/01/b12/z2ui5_cl_dmo_app_099.clas.abap",
+  "batch": "b12",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "reviewed",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The QuickViewCard fragment is inlined into the main view instead of a separate core:Fragment include, so the port has no core:Fragment control. The nested pages/groups/elements are a nested ABAP table (t_pages) bound 1:1; relative child aggregations (groups, elements) keep the original binding-info form."
+    },
+    {
+      "type": "NOTE",
+      "what": "The external Navigate-Back button drives the card 1:1 via follow_up_action( cs_event-control_by_id, navigateBack ) — navigateBack was whitelisted in the paired abap2UI5 change. afterNavigate forwards the public isTopPage parameter and enables the button while the card is not on its top page. The navigate toast is simplified to a fixed message (the original distinguishes the clicked link's text vs the back button via navOrigin, a control reference that is not transportable as an event arg)."
+    },
+    {
+      "type": "NOTE",
+      "what": "Elements without an elementType in the source JSON (Address, Slogan) are filled with the QuickViewGroupElementType default 'text', and every element row seeds target '_blank' (the QuickViewGroupElement.target default) - absent JSON properties must not serialize as empty strings, which would override the UI5 defaults. onAfterRendering's 320px maxWidth tweak is dropped."
+    },
+    {
+      "type": "POST_171",
+      "what": "sap.m.Avatar (control since 1.73) is kept 1:1 as the page icon via the QuickViewPage avatar aggregation, which itself is since UI5 1.92 - so the app needs UI5 >= 1.92 to render the avatar."
+    }
+  ]
+}

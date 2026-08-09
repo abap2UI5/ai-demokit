@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_dmo_app_203",
+  "sample": "sap.m.sample.OverflowToolbarTokenizer",
+  "entity": "sap.m.OverflowToolbarTokenizer",
+  "file": "src/01/b17/z2ui5_cl_dmo_app_203.clas.abap",
+  "batch": "b17",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "the token interaction is reproduced since 2026-08-05, in the two shapes the sample needs. The FIRST tokenizer - the one onAddToken/onTokenDelete work on - has its three static tokens folded into a bound aggregation (the app-085 pattern), so adding appends a row (with the original's empty-input toast and the input cleared afterwards) and deleting removes the row by key; that costs 3 static Token controls against the original's 24, the port now declaring one bound template instead. The other three tokenizers keep their static tokens and delete them roundtrip-free through control_by_id removeToken with the token's ID - measured with scripts/probes/event-arg-expression-probe.mjs, ManagedObject.removeAggregation accepts an id and the token really leaves the aggregation - plus the original's 'Token deleted: X' toast. The earlier claim (imperative control mutation over static tokens is 'not expressible without inventing a bound token model') was half wrong: the bound model is what the sample's own add path needs, and removal by id needs no model at all."
+    },
+    {
+      "type": "POST_171",
+      "what": "sap.m.OverflowToolbar ariaHasPopup (since 1.79.0) is kept 1:1 from the original view; needs a UI5 release >= 1.79 to render."
+    },
+    {
+      "type": "POST_171",
+      "what": "REVIEW FINDING (out of scope, maintainer decision needed): the ported control sap.m.OverflowToolbarTokenizer itself is tagged @ui5-experimental-since 1.139 in the OpenUI5 source and carries NO plain @since tag, so scripts/scope-of.mjs misreads it as base-version (<= 1.71, 'no @since header') and the property gate cannot see it either. The sample is out of porting scope per AGENTS §1 (control must exist since UI5 1.71); the app needs a UI5 release >= 1.139 (experimental API) to render. Either drop the port or add a ui5/scope-exceptions.json entry; scope-of.mjs should also learn @ui5-experimental-since."
+    }
+  ]
+}

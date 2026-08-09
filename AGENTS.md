@@ -50,7 +50,7 @@ reads the files directly. **Read the matching guide BEFORE starting the task**
 generated table), `STATUS-history.md` (~228 KB journal), `CAPABILITIES.md`
 (~45 KB — grep for the feature row), `scripts/e2e-smoke.mjs` (~80 KB),
 `scripts/generate-overview.mjs` (~58 KB),
-`src/z2ui5_cl_ai_app_overview.clas.abap` (generated).
+`src/z2ui5_cl_dmo_app_overview.clas.abap` (generated).
 
 ---
 
@@ -198,7 +198,7 @@ cloud and 702 checks — the former `src/06` smart control ports live there now
 
 ### Class naming
 
-Ports are named `z2ui5_cl_ai_app_<n>` (lowercase). `<n>` is a stable, unique
+Ports are named `z2ui5_cl_dmo_app_<n>` (lowercase). `<n>` is a stable, unique
 number; it is the app's identity linking a port to its template (see §4).
 
 ---
@@ -251,10 +251,10 @@ source of truth:
 
 ```jsonc
 {
-  "class":   "z2ui5_cl_ai_app_007",
+  "class":   "z2ui5_cl_dmo_app_007",
   "sample":  "sap.m.sample.CheckBoxTriState",   // join key to ui5/<lib>/<Name>/
   "entity":  "sap.m.CheckBox",
-  "file":    "src/01/b02/z2ui5_cl_ai_app_007.clas.abap",
+  "file":    "src/01/b02/z2ui5_cl_dmo_app_007.clas.abap",
   "batch":   "b02",
   "audit":   { "frontend_action": false,        // uses _event_client? (note: which)
                "event_t_arg": true },           // passes t_arg in ANY event wire?
@@ -374,7 +374,7 @@ Three abaplint checks run on every pull request; all must report **0 issues**:
 
 The **root** `abaplint.jsonc` carries the full curated rule set (correctness +
 style aligned with §8: `keyword_case`, `types_naming ^TY_`,
-`object_naming ^Z2UI5_CL_AI_`, `unused_*`, `obsolete_statement`,
+`object_naming ^Z2UI5_CL_DMO_`, `unused_*`, `obsolete_statement`,
 `avoid_use` incl. `defaultKey` — always `WITH EMPTY KEY`, `commented_code`,
 `definitions_top`, `whitespace_end`, …). The cloud/702 configs stay on the
 correctness core, because the 702 config also drives `abaplint --fix` in the
@@ -456,7 +456,7 @@ which `npm ci` / `npm install` runs automatically via the `prepare` script.
 
 Four artefacts are generated, never hand-edited — edit the scripts instead:
 the `README.md` coverage block, the `STATUS.md` state block, `api.md`, and the
-in-system overview app `src/z2ui5_cl_ai_app_overview.clas.*`. They regenerate
+in-system overview app `src/z2ui5_cl_dmo_app_overview.clas.*`. They regenerate
 as part of `npm run gates` (or via the individual `generate-*.mjs` scripts)
 and must leave `git diff` clean before every commit — the `meta_valid` CI job
 enforces exactly that. The full spec (overview app columns and behaviour, the

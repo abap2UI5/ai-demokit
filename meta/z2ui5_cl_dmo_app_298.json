@@ -1,0 +1,51 @@
+{
+  "class": "z2ui5_cl_dmo_app_298",
+  "sample": "sap.m.sample.TableViewSettingsDialog",
+  "entity": "sap.m.Table",
+  "file": "src/01/b24/z2ui5_cl_dmo_app_298.clas.abap",
+  "batch": "b24",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "The whole column-header menu is newer than the 1.71 floor: sap.m.table.columnmenu.Menu, QuickSort, QuickSortItem and ActionItem are @since 1.110, QuickResize is @since 1.137, and the sap.m.Column headerMenu association that points at it is @since 1.98.0. The sample's ColumnMenu fragment is nothing but those controls, so a faithful port cannot avoid them - the app needs a UI5 release >= 1.137 for the menu, the rest of the table renders on 1.71."
+    },
+    {
+      "type": "NOTE",
+      "what": "All four controller-loaded fragments (ColumnMenu, SortDialog, GroupDialog, FilterDialog) are declared in the view's mvc:dependents aggregation and opened 1:1 via follow_up_action( cs_event-control_by_id, <id> open ). The three ViewSettingsDialogs are anonymous in the original (the controller keeps them in a map keyed by fragment name); the port gives each the id it is opened by - sortDialog, groupDialog, filterDialog."
+    },
+    {
+      "type": "NOTE",
+      "what": "The confirm handlers read the selected ViewSettingsItem CONTROLS (${$parameters>/sortItem}, ${$parameters>/groupItem}, ${$parameters>/filterItems}) rather than a display string: the frontend marshals each control into its id plus its public properties, so the backend gets the real keys. That is the same information the original's mParams.sortItem.getKey() / oItem.getKey() reads."
+    },
+    {
+      "type": "NOTE",
+      "what": "Thin frontend: sorting, filtering and the filter-bar text are computed in ABAP over the model table instead of through sap.ui.model.Sorter/Filter on the items binding. The filter item keys keep the original's own encoding (WeightMeasure___LE___1000___X - field, operator, value1, value2 separated by three underscores), which the port splits exactly like the controller's handleFilterDialogConfirm does. The infoToolbar visible flag and the filter label are bound instead of set imperatively on vsdFilterBar / vsdFilterLabel."
+    },
+    {
+      "type": "NOTE",
+      "what": "Formatter.weightState (parseFloat plus the 0/1000/2000 ValueState thresholds) is computed in ABAP and bound as a finished value (state=\"{WEIGHT_STATE}\"), the thin-frontend rule and the same treatment as app 009 on this mock. The Currency parts binding on the Price ObjectNumber is kept verbatim as a raw binding-info string."
+    },
+    {
+      "type": "NOTE",
+      "what": "The QuickSort change wire carries the event's declared key and sortOrder parameters. The first draft used ${$parameters>/item}, which sap.m.table.columnmenu.QuickSort does not declare - the view gate's event-parameter check caught it before it could arrive empty at runtime."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "Grouping loses its group headers. The original's mGroupFunctions build a sap.ui.model.Sorter group key per row - a plain supplier name, and for Price a bucketed '100 EUR or less' / 'Between 100 and 1000 EUR' / 'More than 1000 EUR' label. abap2UI5 has no client-side grouping function, so the port sorts the table by the chosen field instead: the rows end up in the same order, but without the grey group header rows. The reset button clears the grouping like the original's resetGroupDialog."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "The context-menu ToggleButton reports its state as a toast instead of attaching a sap.m.Menu as the table's contextMenu aggregation. The original's onToggleContextMenu builds the Menu imperatively in the controller and swaps it in and out; the aggregation itself is not driven by any bindable property, and the sample's menu carries no behaviour beyond opening."
+    },
+    {
+      "type": "NOTE",
+      "what": "Device.system.desktop adds sapUiSizeCompact to each dialog in the original. The port drops that: abap2UI5 exposes the device data as {device>/system/desktop}, but a style class is not a bindable property, and the density is a global app decision rather than a per-dialog one here."
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_dmo_app_177",
+  "sample": "sap.ui.unified.sample.CalendarDateIntervalBasic",
+  "entity": "sap.ui.unified.CalendarDateInterval",
+  "file": "src/02/b10/z2ui5_cl_dmo_app_177.clas.abap",
+  "batch": "b10",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "reviewed",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The picked day IS transportable after all - measured 2026-08-05 with `scripts/probes/event-arg-expression-probe.mjs` against real OpenUI5: an event arg is a full UI5 expression, and indexed access into an array-valued getter plus chained calls resolve there (`$event.oSource.getSelectedDates()[0].getStartDate()`). The earlier rationale - 'select carries no date parameter and the selected DateRange is control state' - was wrong. The wire carries the three LOCAL date parts as three expression args (year, month+1, day) rather than `toISOString( )`, which would shift the day for any user east of Greenwich, and each arg is guarded by `getSelectedDates().length > 0` so a re-click that clears the selection arrives as year 0. App 177 now formats the SELECTED day as yyyy-MM-dd, and the original's else-branch is reproduced exactly: re-clicking the same day removes it from the selection, the guard reports year 0 and the Text falls back to 'No Date Selected'. Residual: 'Select Today' writes the text (server date = today) without moving the calendar's highlight."
+    },
+    {
+      "type": "NOTE",
+      "what": "The CAL_SELECT / SELECT_TODAY round-trips updating the bound selectedDate Text are unverified in a running system. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): 'Select Today' round-trips and the bound #selectedDate Text shows the yyyy-MM-dd value; CAL_SELECT is the same handler."
+    }
+  ]
+}

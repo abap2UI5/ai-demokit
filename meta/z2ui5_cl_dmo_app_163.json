@@ -1,0 +1,24 @@
+{
+  "class": "z2ui5_cl_dmo_app_163",
+  "sample": "sap.m.sample.ToolbarResponsive",
+  "entity": "sap.m.OverflowToolbar",
+  "file": "src/01/b17/z2ui5_cl_dmo_app_163.clas.abap",
+  "batch": "b17",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "button presses show static client-composed toasts (control_global MESSAGE_TOAST.show, per-button hardcoded text) - see the IMPROVISED deviation, flagged for rework"
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "Both halves of the controller are now reproduced instead of faked. (a) onPress toasts oEvent.getSource().getText(); the port transports that value - control_global MESSAGE_TOAST.show with the template '{0}' filled by ${$source>/text} (the app-003 shape) - instead of hardcoding each button's caption, so the icon-only Print button toasts its (empty) text exactly as the original does. (b) onOpen Fragment.loads ActionSheet.fragment.xml and calls openBy(button): the port rebuilds that fragment 1:1 in on_event (ActionSheet title 'Menu', showCancelButton, placement Top, the five Buttons with their icons and visible bindings) and anchors it with client->popover_display( by_id = $event.oSource.sId ) - the overflow Button therefore fires a real backend event instead of a placeholder 'Overflow' toast. The fragment's {range>/isPhone} / {range>/isPhoneOrTablet} bindings fold onto the default model like the view's (a new isphone field joins the existing range flags)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The original drives the footer toolbar button visibility from a separate 'range' media JSON model ({range>/isNoPhone}, isNotPhoneOrTablet, isTablet, isPhoneOrTablet). abap2UI5 has one default model, so the flags live flat in it and visible binds them directly - the 'range>' prefix is dropped; the last path segment is identical, which structural-diff matches. Values use the desktop media ranges (the original filled them from Device.media - a client-only decision)."
+    }
+  ]
+}

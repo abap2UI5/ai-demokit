@@ -1,10 +1,17 @@
+[![namespace](https://img.shields.io/badge/namespace-z2ui5__cl__dmo-blue)](abaplint.jsonc)
+[![dependency](https://img.shields.io/badge/dependency-abap2UI5-blue)](https://github.com/abap2UI5/abap2UI5)
+<br>
+<br>
 [![ABAP_STANDARD](https://github.com/abap2UI5/ai-demokit/actions/workflows/ABAP_STANDARD.yaml/badge.svg)](https://github.com/abap2UI5/ai-demokit/actions/workflows/ABAP_STANDARD.yaml)
 [![ABAP_CLOUD](https://github.com/abap2UI5/ai-demokit/actions/workflows/ABAP_CLOUD.yaml/badge.svg)](https://github.com/abap2UI5/ai-demokit/actions/workflows/ABAP_CLOUD.yaml)
 [![ABAP_702](https://github.com/abap2UI5/ai-demokit/actions/workflows/ABAP_702.yaml/badge.svg)](https://github.com/abap2UI5/ai-demokit/actions/workflows/ABAP_702.yaml)
 <br>
-[![auto_downport](https://github.com/abap2UI5/ai-demokit/actions/workflows/auto_downport.yaml/badge.svg)](https://github.com/abap2UI5/ai-demokit/actions/workflows/auto_downport.yaml)
+[![checks](https://github.com/abap2UI5/ai-demokit/actions/workflows/checks.yaml/badge.svg)](https://github.com/abap2UI5/ai-demokit/actions/workflows/checks.yaml)
+[![e2e_nightly](https://github.com/abap2UI5/ai-demokit/actions/workflows/e2e_nightly.yaml/badge.svg)](https://github.com/abap2UI5/ai-demokit/actions/workflows/e2e_nightly.yaml)
 <br>
+[![auto_downport](https://github.com/abap2UI5/ai-demokit/actions/workflows/auto_downport.yaml/badge.svg)](https://github.com/abap2UI5/ai-demokit/actions/workflows/auto_downport.yaml)
 [![generate_result](https://github.com/abap2UI5/ai-demokit/actions/workflows/generate_result.yaml/badge.svg)](https://github.com/abap2UI5/ai-demokit/actions/workflows/generate_result.yaml)
+[![deploy_web](https://github.com/abap2UI5/ai-demokit/actions/workflows/deploy_web.yaml/badge.svg)](https://github.com/abap2UI5/ai-demokit/actions/workflows/deploy_web.yaml)
 
 # abap2UI5 ai-demokit
 
@@ -25,7 +32,7 @@ _Last generated: <!-- last-run -->2026-07-20 06:21 UTC<!-- /last-run -->_
 >   run fully client-side (transpiled ABAP + sql.js WASM). Built from
 >   [`web/`](web) into [`docs/`](docs); see [`web/README.md`](web/README.md).
 > - **In your ABAP system:** pull this repo and start
->   **`z2ui5_cl_ai_app_overview`**, which lists every generated sample and
+>   **`z2ui5_cl_dmo_app_overview`**, which lists every generated sample and
 >   launches it right in your system.
 
 ## Pipeline
@@ -59,7 +66,7 @@ You are porting one official UI5 demo kit sample to abap2UI5.
 
 Input:  the sample's original files (Component.js, *.view.xml, controller,
         manifest.json) from the OpenUI5 checkout.
-Output: one ABAP class z2ui5_cl_ai_app_<n> implementing z2ui5_if_app, that
+Output: one ABAP class z2ui5_cl_dmo_app_<n> implementing z2ui5_if_app, that
         rebuilds the sample's UI and behaviour 1:1.
 
 Rules:
@@ -133,7 +140,7 @@ Rules:
   POST_171 deviation naming the member (the property gate checks this).
 - Must pass abaplint for ABAP_STANDARD, ABAP_CLOUD and ABAP_702 (downport).
 - The class carries NO ABAP Doc header. Write the port's sidecar
-  meta/z2ui5_cl_ai_app_<n>.json instead (sample, entity, file, batch, audit,
+  meta/z2ui5_cl_dmo_app_<n>.json instead (sample, entity, file, batch, audit,
   status, deviations) - see AGENTS.md section 5 and the port-a-sample guide; validate with
   node scripts/validate-meta.mjs.
 - Any runtime asset URLs the sample uses (test-resources / resources images)
@@ -223,7 +230,7 @@ Control metadata from OpenUI5 **1.152.0**.
 
 For the full **control-level** view — one row per sample (Module · Control ·
 Since · Deprecated · Sample · ABAP), every link pointing at OpenUI5 — see
-**[api.md](api.md)**, or the in-system overview app `z2ui5_cl_ai_app_overview`,
+**[api.md](api.md)**, or the in-system overview app `z2ui5_cl_dmo_app_overview`,
 where the **Sample** column links the OpenUI5 source (its ↗ opens the live
 sample) and the **abap2UI5** column links the generated class (its ↗ starts the
 app in the system).

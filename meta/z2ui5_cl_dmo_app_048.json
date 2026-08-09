@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_dmo_app_048",
+  "sample": "sap.m.sample.Select",
+  "entity": "sap.m.Select",
+  "file": "src/01/b02/z2ui5_cl_dmo_app_048.clas.abap",
+  "batch": "b02",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "reviewed",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "the original controller seeds three byte-identical product arrays (/ProductCollection, /ProductCollection2, /ProductCollection3) and binds one Select to each; the port folds them into the single shared table /T_PRODUCTS feeding all three Selects - same rows, same sorter, each Select keeps its own two-way selectedKey, so rendering and behaviour are identical."
+    }
+  ]
+}

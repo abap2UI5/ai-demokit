@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_dmo_app_265",
+  "sample": "sap.ui.core.sample.BoundFilters.FilteredListInTable",
+  "entity": "sap.ui.model.Filter",
+  "file": "src/02/b13/z2ui5_cl_dmo_app_265.clas.abap",
+  "batch": "b13",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "The sample's whole point is the binding-info parameter 'boundFilters', 'Supported since 1.146.0' (source: fork-openui5/src/sap.ui.core/src/sap/ui/base/ManagedObject.js:3711; the manifest declares minUI5Version 1.146.0). Here it filters each row's Select items by the RELATIVE row field value1: '{REGION}', so every row lists only the account managers of its own region and re-filters when that row's region changes. Passed through 1:1 as a raw binding-info string; a binding-info parameter is invisible to the property gate, so this is a by-policy declaration and the app needs UI5 >= 1.146."
+    },
+    {
+      "type": "NOTE",
+      "what": "No named models in this sample - both arrays (/customers, /accountManagers) already live in the default model and are bound with client->_bind (the Select's items path via _bind( val = t_accountmanagers path = abap_true ), never as text). Inside the binding-info strings the paths use the ABAP upper-cased field names: 'REGION' in the boundFilters entry and {parts: ['FIRSTNAME', 'LASTNAME']} in the core:Item text, matching the original's 'region' / ['firstName', 'lastName']. Full mock row set inlined (20 customers, 13 account managers, byte-identical to Component.js)."
+    },
+    {
+      "type": "NOTE",
+      "what": "Unverified in a running system: that each row's Select really shows only its region's account managers (per-row bound filter over a relative value), that forceSelection='false' plus selectedKey={ACCOUNTMANAGERID} preselects the right manager, and that the composite {parts: [...]} item text renders 'First Last'. **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the first row's Select lists 'John Smith' (Americas, the row's own region) and NOT 'Yuki Tanaka' (APJ) - the per-row bound filter over the relative value1 '{REGION}' works. Residual: the forceSelection='false' / selectedKey preselection is not separately asserted."
+    }
+  ]
+}

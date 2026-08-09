@@ -1,0 +1,36 @@
+{
+  "class": "z2ui5_cl_dmo_app_227",
+  "sample": "sap.ui.unified.sample.MenuItemEventing",
+  "entity": "sap.ui.unified.Menu",
+  "file": "src/02/b10/z2ui5_cl_dmo_app_227.clas.abap",
+  "batch": "b10",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "init-only, roundtrip-free like app 060: the button press wires control_by_id openBy anchored to the button ($event.oSource.sId); each MenuItem/MenuTextFieldItem select composes its toast on the frontend via control_global MESSAGE_TOAST.show (template + ${$parameters>/item}.getText()/getValue()), so there is no on_event"
+  },
+  "status": "reviewed",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "Button.ariaHasPopup (since UI5 1.84) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.84 to render it."
+    },
+    {
+      "type": "NOTE",
+      "what": "anchored open works since the framework fallback of 2026-07-27 (pr/unified-menu-open-anchored, implemented): the openBy dispatch detects that sap.ui.unified.Menu has no openBy and calls open(false, anchor, 'begin top', 'begin bottom', anchor) with the button as opener and dock reference - the previously declared no-op wire is now functional, unchanged in the port. Still dropped either way: the keyboard flag (controller attachBrowserEvent tab/keyup tracking) and the explicit Popup.Dock.BeginTop/BeginBottom constants (default docking is visually equivalent)."
+    },
+    {
+      "type": "NOTE",
+      "what": "the fragment Menu (added in the controller via getView().addDependent(this._menu)) is declared 1:1 inside the Button's `dependents` aggregation (the addDependent equivalent, same as app 060) - structurally identical, no loss; structural-diff ignores the aggregation name."
+    },
+    {
+      "type": "NOTE",
+      "what": "the selected item text/value is read with ${$parameters>/item}.getText() (and .getValue() for the MenuTextFieldItem), a method call on the resolved MenuItemBase control, NOT ${$parameters>/item/text}: the $parameters model exposes 'item' as the control object and UI5 keeps properties in the control's internal store, so the path .../item/text reads an undefined field and the toast arrives empty (same finding as app 060)."
+    },
+    {
+      "type": "NOTE",
+      "what": "live-verified 2026-08-04 (nightly e2e interaction): unverified in a running system: (a) the button press opens the Menu via the 2026-07-27 anchored-open fallback - verify the open in a running system; (b) each MenuItem select toasts \"'<text>' pressed\" via ${$parameters>/item}.getText() and the MenuTextFieldItem select toasts \"'<value>' entered\" via ${$parameters>/item}.getValue(). **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the button press opens the sap.ui.unified.Menu anchored via the openBy->open() fallback ('My 1st Item' visible); the item-select toasts remain unexercised."
+    }
+  ]
+}

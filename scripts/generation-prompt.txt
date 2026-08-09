@@ -2,7 +2,7 @@ You are porting one official UI5 demo kit sample to abap2UI5.
 
 Input:  the sample's original files (Component.js, *.view.xml, controller,
         manifest.json) from the OpenUI5 checkout.
-Output: one ABAP class z2ui5_cl_ai_app_<n> implementing z2ui5_if_app, that
+Output: one ABAP class z2ui5_cl_dmo_app_<n> implementing z2ui5_if_app, that
         rebuilds the sample's UI and behaviour 1:1.
 
 Rules:
@@ -76,7 +76,7 @@ Rules:
   POST_171 deviation naming the member (the property gate checks this).
 - Must pass abaplint for ABAP_STANDARD, ABAP_CLOUD and ABAP_702 (downport).
 - The class carries NO ABAP Doc header. Write the port's sidecar
-  meta/z2ui5_cl_ai_app_<n>.json instead (sample, entity, file, batch, audit,
+  meta/z2ui5_cl_dmo_app_<n>.json instead (sample, entity, file, batch, audit,
   status, deviations) - see AGENTS.md section 5 and the port-a-sample guide; validate with
   node scripts/validate-meta.mjs.
 - Any runtime asset URLs the sample uses (test-resources / resources images)

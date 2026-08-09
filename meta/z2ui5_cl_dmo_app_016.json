@@ -1,0 +1,39 @@
+{
+  "class": "z2ui5_cl_dmo_app_016",
+  "sample": "sap.m.sample.DatePickerHidden",
+  "entity": "sap.m.DatePicker",
+  "file": "src/01/b05/z2ui5_cl_dmo_app_016.clas.abap",
+  "batch": "b05",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "openBy is now wired roundtrip-free in the view via _event_client( control_by_id, openBy, $event.oSource.sId ) (was a follow_up_action round-trip); the date-changed toast composes `Date selected: {0}` via control_global MESSAGE_TOAST.show - so the app is init-only"
+  },
+  "status": "checked",
+  "checked": {
+    "date": "2026-08-02",
+    "note": "verified in a running system - human live check 2026-08-02 (maintainer), re-check after the 2026-07-22 roundtrip-free rework: each anchor opens the hidden DatePicker and picking a date toasts the value. Live-checked reference example for: frontend action (openBy/domRef), $event.oSource.sId anchor transport, POST_171 discipline"
+  },
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "Button.ariaHasPopup (since UI5 1.84) is newer than 1.71 but kept for the 1:1 port on both Buttons - the app needs a UI5 release >= 1.84 to render it."
+    },
+    {
+      "type": "POST_171",
+      "what": "Link.ariaHasPopup (since UI5 1.86) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.86 to render it."
+    },
+    {
+      "type": "POST_171",
+      "what": "DatePicker.hideInput (since UI5 1.97) is newer than 1.71 but kept for the 1:1 port - the sample's central property (the picker input stays hidden, opened only via the anchor controls); openBy is also since 1.97, so the app needs a UI5 release >= 1.97 to render this sample's behavior."
+    },
+    {
+      "type": "NOTE",
+      "what": "the 2026-07-22 rework (openBy via _event_client instead of follow_up_action, client-composed date toast, app became init-only) is live-verified on 2026-08-02 - each anchor opens the hidden DatePicker and picking a date toasts the value."
+    },
+    {
+      "type": "NOTE",
+      "what": "the headless e2e finding of 2026-07-30 (clicking an openBy anchor opens the popover, then Popover.onfocusin recurses off the hideInput input - Maximum call stack size exceeded) is resolved as HEADLESS-ONLY: the picker opens and works in a real browser (2026-08-02 live check). The check covered the visible behaviour; the browser console was not necessarily inspected for a silent recursion warning. The e2e interaction stays deliberately unarmed for this app - app 091 covers the hidden-picker openBy class."
+    }
+  ]
+}
