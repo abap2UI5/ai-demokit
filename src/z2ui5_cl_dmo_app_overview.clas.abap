@@ -3544,6 +3544,56 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` sap.tnt.NavigationListGroup (control @since 1.121) is used 1:1 for the 'New', 'Recently used' and 'Restricted' groups. Newer than UI5 1.71; declared per the property-171 policy (control-level, app` &&
                  ` 152 Avatar precedent - the gate only checks members), so the app needs UI5 >= 1.121 to render the groups. Found by the 2026-07-27 review sweep.` ) ).
 
+    lv_text1 = `NOTE: onCollapseExpandPress (byId('sideNavigation').setExpanded(!expanded)) is reproduced by two-way binding SideNavigation.expanded to a boolean model field, seeded false exactly like the original` &&
+               ` literal, and flipping it on the TOGGLE_EXPAND round-trip. // NOTE: quickActionPress dialog: the controller-built sap.m.Dialog is expressed as a core:FragmentDefinition shown via` &&
+               ` client->popup_display. Its Dialog, Label, Input and Button controls are extra vs the archived V.view.xml, which declares none of them; the two Inputs are two-way bound (create_name/create_icon)` &&
+               ` instead of read imperatively via Element.getElementById(...).getValue(). // NOTE: the Create button does sideNavigation.getItem().addItem( new NavigationListItem({ text, expanded: true, icon }) ), so` &&
+               ` the main tnt:NavigationList is a BOUND aggregation here (the app-241 pattern): the four static tnt:NavigationListItem entries (Home/Building/Mileage/Transport) collapse into one bound template, so` &&
+               ` three NavigationListItem controls are missing vs the original count, and creating appends a row with the same defaults ('New Navigation Item' / sap-icon://building). The rows bind with`.
+    lv_text1 = lv_text1 && ` omit_initial_paths for EXPANDED so an item that does not set it keeps the control default. // POST-1.71: NavigationListItem.selectable (@since 1.116) is kept 1:1 (selectable=false on the Quick Create` &&
+               ` and External Link fixedItem entries). @since verified in sap.tnt/src/sap/tnt/NavigationListItem.js. // POST-1.71: NavigationListItem.design="Action" and NavigationListItem.ariaHasPopup="Dialog" (both` &&
+               ` @since 1.133) are kept 1:1 on the Quick Create item. @since verified in sap.tnt/src/sap/tnt/NavigationListItem.js. // LIVE-TEST: not yet run in a system: the TOGGLE_EXPAND round-trip` &&
+               ` (collapse/expand), the quick-create popup round-trip and the Create append (new row shows up in the bound NavigationList with the typed name/icon or the defaults).`.
+    result = VALUE #( BASE result
+      ( module = `sap.tnt`            control = `sap.tnt.SideNavigation`                name = `SideNavigationActions`                 class = `z2ui5_cl_dmo_app_299` path = `src/05/b08/z2ui5_cl_dmo_app_299.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.34`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `NavigationListItem.selectable (@since 1.116) is kept 1:1 (selectable=false on the Quick Create and External Link fixedItem entries). @since verified in sap.tnt/src/sap/tnt/NavigationListItem.js. //` &&
+                 ` NavigationListItem.design="Action" and NavigationListItem.ariaHasPopup="Dialog" (both @since 1.133) are kept 1:1 on the Quick Create item. @since verified in` &&
+                 ` sap.tnt/src/sap/tnt/NavigationListItem.js.` ) ).
+
+    lv_text1 = `NOTE: onToggleSideNav does Fragment.load('Popover.fragment.xml') + openBy(the ShellBar menu button). The port rebuilds the fragment 1:1 in popover_sidenav_display and shows it with` &&
+               ` client->popover_display( xml, by_id ), anchoring on the menu button id transported as ${$parameters>/button}.getId() in the TOGGLE_SIDE_NAV t_arg. The original's toggle branch (close when already` &&
+               ` open) is not reproduced: the backend cannot know whether the popover is still open (the user can dismiss it by clicking outside), so every menuButtonPressed re-opens it. // NOTE: onItemSelect sets` &&
+               ` the target page's Text imperatively (oText.setText('Fired event to load page ' + key.replace('page',''))) and calls oNavCon.to(page). The port two-way binds the Text controls instead - the home page` &&
+               ` keeps its own field (home_text, seeded with the original lorem-ipsum literal) and the twelve page1..page12 Texts share one field (page_text), which is observationally identical because the` &&
+               ` NavContainer shows exactly one page and every page is reached through its own select. Navigation itself is the 1:1 frontend action follow_up_action( control_by_id, 'pageContainer', 'to', <page id> ).`.
+    lv_text1 = lv_text1 && ` The added text bindings are extra attributes on the originally empty <Text/> elements. // NOTE: onQuickActionPress builds a sap.m.Dialog imperatively (new Dialog({...}).open()); expressed as a` &&
+               ` core:FragmentDefinition shown via client->popup_display. Its Dialog, Text and two Button controls are extra vs the archived V.view.xml/Popover.fragment.xml. The Create button only closes the dialog,` &&
+               ` exactly like the original. // POST-1.71: sap.m.Avatar (control @since 1.73) is kept 1:1 in the ShellBar's f:profile aggregation (initials 'SN'). Newer than UI5 1.71 (app 152 precedent, control-level` &&
+               ` declaration). // POST-1.71: sap.tnt.NavigationListGroup (control @since 1.121) is used 1:1 for the 'Business Areas for selected user role' group. Newer than UI5 1.71. // POST-1.71:` &&
+               ` NavigationListItem.selectable (@since 1.116) is kept 1:1 (selectable=false on Manufacturing management, Employee Services, Create, App Finder and Legal). // POST-1.71:` &&
+               ` NavigationListItem.design="Action" and NavigationListItem.ariaHasPopup="Dialog" (both @since 1.133) are kept 1:1 on the Create item; SideNavigation.design="Plain" (@since 1.132) is kept 1:1 on the`.
+    lv_text1 = lv_text1 && ` popover's side navigation. // LIVE-TEST: not yet run in a system: the ShellBar menuButtonPressed -> anchored popover round-trip, the itemSelect -> NavContainer 'to' frontend action plus the bound` &&
+               ` page text, and the quick-create popup. // NOTE: two URLs are re-hosted per the repository's offline asset/host rule: the ShellBar homeIcon './resources/sap/ui/documentation/sdk/images/logo_sap.png'` &&
+               ` is absolutized to https://sdk.openui5.org/resources/sap/ui/documentation/sdk/images/logo_sap.png (app 110 precedent), and the 'App Finder' href https://openui5.hana.ondemand.com/demoapps points at` &&
+               ` the commercial SAPUI5 host, so it is served from https://sdk.openui5.org/demoapps instead.`.
+    result = VALUE #( BASE result
+      ( module = `sap.tnt`            control = `sap.tnt.SideNavigation`                name = `SideNavigationOverlayMode`             class = `z2ui5_cl_dmo_app_301` path = `src/05/b08/z2ui5_cl_dmo_app_301.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.34`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `sap.m.Avatar (control @since 1.73) is kept 1:1 in the ShellBar's f:profile aggregation (initials 'SN'). Newer than UI5 1.71 (app 152 precedent, control-level declaration). //` &&
+                 ` sap.tnt.NavigationListGroup (control @since 1.121) is used 1:1 for the 'Business Areas for selected user role' group. Newer than UI5 1.71. // NavigationListItem.selectable (@since 1.116) is kept 1:1` &&
+                 ` (selectable=false on Manufacturing management, Employee Services, Create, App Finder and Legal). // NavigationListItem.design="Action" and NavigationListItem.ariaHasPopup="Dialog" (both @since 1.133)` &&
+                 ` are kept 1:1 on the Create item; SideNavigation.design="Plain" (@since 1.132) is kept 1:1 on the popover's side navigation.` ) ).
+
     lv_text1 = `POST-1.71: NavigationListItemBase.press event (@since 1.133) is the whole point of this sample; wired 1:1 on every NavigationListItem (press) to a backend ITEM_PRESS event. @since verified in` &&
                ` fork-openui5/src/sap.tnt/src/sap/tnt/NavigationListItemBase.js:74-79. Requires a UI5 release >= 1.133. // POST-1.71: The press event parameters ctrlKey/shiftKey/altKey/metaKey (@since 1.137) are` &&
                ` transported via ${$parameters>/ctrlKey} etc. in the ITEM_PRESS t_arg and echoed into the toast, exactly as the original itemPress reads them. @since verified NavigationListItemBase.js:88-109.` &&
@@ -3626,6 +3676,29 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         notes = lv_text1
         post171 = lv_text2 ) ).
 
+    lv_text1 = `NOTE: onCollapseExpandPress (byId('sideNavigation').setExpanded(!expanded)) is reproduced by two-way binding SideNavigation.expanded to a boolean model field, seeded true exactly like the original` &&
+               ` literal, and flipping it on the TOGGLE_EXPAND round-trip. // NOTE: quickActionPress dialog: the controller-built sap.m.Dialog is expressed as a core:FragmentDefinition shown via` &&
+               ` client->popup_display. Its Dialog, Label, Input and Button controls are extra vs the archived V.view.xml, which declares none of them; the two Inputs are two-way bound (create_name/create_icon)` &&
+               ` instead of read imperatively via Element.getElementById(...).getValue(). // IMPROVISED: the Create button of the quick-create dialog does sideNavigation.getItem().addItem( new NavigationListItem(...)` &&
+               ` ) in the original. Here it only closes the dialog: the main tnt:NavigationList mixes tnt:NavigationListItem and tnt:NavigationListGroup children, and abap2UI5 binds an aggregation with ONE template` &&
+               ` control, so a bound list (the app-241/299 pattern) cannot reproduce that mixed structure. The 24 static NavigationListItem entries and both NavigationListGroups are kept 1:1 instead - view fidelity`.
+    lv_text1 = lv_text1 && ` wins over the append behaviour, which is the loss declared here. // POST-1.71: sap.tnt.NavigationListGroup (control @since 1.121) is used 1:1 for the 'System & Administration Management' and` &&
+               ` 'Business operations' groups. Newer than UI5 1.71; the app needs UI5 >= 1.121 to render them. // POST-1.71: NavigationListItem.selectable (@since 1.116) is kept 1:1 (selectable=false on the` &&
+               ` training-portal, service-management, financial-reports, CRM, Quick Create and SAP Support entries). // POST-1.71: NavigationListItem.design="Action" and NavigationListItem.ariaHasPopup="Dialog" (both` &&
+               ` @since 1.133) are kept 1:1 on the Quick Create item. // LIVE-TEST: not yet run in a system: the TOGGLE_EXPAND round-trip (collapse/expand of the 20rem side navigation) and the quick-create popup` &&
+               ` round-trip.`.
+    result = VALUE #( BASE result
+      ( module = `sap.tnt`            control = `sap.tnt.SideNavigation`                name = `SideNavigationWrapping`                class = `z2ui5_cl_dmo_app_300` path = `src/05/b08/z2ui5_cl_dmo_app_300.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.34`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `sap.tnt.NavigationListGroup (control @since 1.121) is used 1:1 for the 'System & Administration Management' and 'Business operations' groups. Newer than UI5 1.71; the app needs UI5 >= 1.121 to render` &&
+                 ` them. // NavigationListItem.selectable (@since 1.116) is kept 1:1 (selectable=false on the training-portal, service-management, financial-reports, CRM, Quick Create and SAP Support entries). //` &&
+                 ` NavigationListItem.design="Action" and NavigationListItem.ariaHasPopup="Dialog" (both @since 1.133) are kept 1:1 on the Quick Create item.` ) ).
+
     lv_text1 = `NOTE: the two 'Prоduct Name' menu/select texts contain CYRILLIC SMALL LETTER O (U+043E) in place of the Latin o - reproduced verbatim from the original V.view.xml, which carries the same homoglyph` &&
                ` (upstream defect kept for 1:1 fidelity; do not ASCII-fix it). // NOTE: live-verified 2026-08-04 (nightly e2e interaction): The SAP-logo Image and profile Avatar presses show client-side MessageToasts` &&
                ` ('Logo pressed!' / 'Avatar pressed!'), matching the original onLogoPressed / onAvatarPressed. The original's Device.media handler (which toggles productName/secondTitle/searchField/searchButton` &&
@@ -3702,6 +3775,55 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         is_post171 = abap_true
         notes = lv_text1
         post171 = lv_text2 ) ).
+
+    lv_text1 = `NOTE: onItemSelect does byId('pageContainer').to(createId(item.getKey())); the port transports the key with ${$parameters>/item}.getKey() and calls the same method through follow_up_action(` &&
+               ` control_by_id, 'pageContainer', 'to', <key> ) - the NavContainer has no bindable current-page property. // IMPROVISED: _handleMediaChange is dropped. The controller attaches a sap.ui.Device.media` &&
+               ` handler and, per StdExt range (LargeDesktop/Desktop/Tablet/Phone), toggles the visibility of productName/secondTitle/searchField/searchButton and shows a MessageToast naming the range. abap2UI5 does` &&
+               ` serve the device> model, but it publishes the media range on the Std set only ({device>/media/range} = Phone/Tablet/Desktop), which cannot tell StdExt's LargeDesktop from Desktop - the very` &&
+               ` distinction two of the four branches turn on - and a resize does not round-trip, so the range toasts have no equivalent either. The four controls therefore keep the visibility the view declares` &&
+               ` (searchButton visible=false, the rest visible) and no range toast is shown. // POST-1.71: sap.tnt.ToolPage aggregation subHeader (@since 1.93) carries the horizontal IconTabHeader navigation - it is`.
+    lv_text1 = lv_text1 && ` the whole point of this sample and is kept 1:1. Newer than UI5 1.71. // POST-1.71: IconTabFilter.interactionMode="SelectLeavesOnly" (@since 1.121) is kept 1:1 on the top-level filter template, and` &&
+               ` sap.m.Avatar (control @since 1.73) is kept 1:1 as the profile avatar of the ToolHeader. Both newer than UI5 1.71. // NOTE: the profile Avatar src 'test-resources/sap/tnt/images/Woman_avatar_01.png'` &&
+               ` is absolutized to the OpenUI5 host (https://sdk.openui5.org/test-resources/sap/tnt/images/Woman_avatar_01.png) per the repository asset-URL rule; the original uses the relative path. // LIVE-TEST:` &&
+               ` not yet run in a system: the IconTabHeader select -> NavContainer 'to' frontend action and the two-way bound selectedKey.`.
+    result = VALUE #( BASE result
+      ( module = `sap.tnt`            control = `sap.tnt.ToolPage`                      name = `ToolPageHorizontalNavigation`          class = `z2ui5_cl_dmo_app_303` path = `src/05/b08/z2ui5_cl_dmo_app_303.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.34`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `sap.tnt.ToolPage aggregation subHeader (@since 1.93) carries the horizontal IconTabHeader navigation - it is the whole point of this sample and is kept 1:1. Newer than UI5 1.71. //` &&
+                 ` IconTabFilter.interactionMode="SelectLeavesOnly" (@since 1.121) is kept 1:1 on the top-level filter template, and sap.m.Avatar (control @since 1.73) is kept 1:1 as the profile avatar of the` &&
+                 ` ToolHeader. Both newer than UI5 1.71.` ) ).
+
+    lv_text1 = `NOTE: onItemSelect does byId('pageContainer').to(createId(item.getKey())); the port transports the key with ${$parameters>/item}.getKey() and calls the same method through follow_up_action(` &&
+               ` control_by_id, 'pageContainer', 'to', <key> ) - the NavContainer has no bindable current-page property. The IconTabHeader and the SideNavigation share the one two-way bound selectedKey, exactly like` &&
+               ` the original's {/selectedKey}. // NOTE: onSideNavButtonPress sets ToolPage.sideExpanded imperatively; the property is bindable, so the port two-way binds it (sideExpanded, an attribute the original` &&
+               ` view does not declare) and flips it on the SIDE_NAV_TOGGLE round-trip. _setToggleButtonTooltip is reproduced the same way: the toggle Button's tooltip is bound and updated from the pre-toggle state,` &&
+               ` seeded at init from !Device.system.desktop via the device data the framework mirrors server-side (client->get( )-s_device-system). // NOTE: the device> named model bindings visible="{=` &&
+               ` ${device>/system/phone}}" (toggle Button, side SideNavigation) and visible="{=! ${device>/system/phone}}" (subHeader ToolHeader) are kept 1:1 - abap2UI5 serves the device> model on every view slot`.
+    lv_text1 = lv_text1 && ` (CAPABILITIES.md), so the original's phone branch stays a branch. // IMPROVISED: _handleMediaChange is dropped. The controller attaches a sap.ui.Device.media handler and, per StdExt range` &&
+               ` (LargeDesktop/Desktop/Tablet/Phone), toggles the visibility of productName/secondTitle/searchField/searchButton and shows a MessageToast naming the range. The device> model publishes the media range` &&
+               ` on the Std set only ({device>/media/range} = Phone/Tablet/Desktop), which cannot tell StdExt's LargeDesktop from Desktop - the distinction two of the four branches turn on - and a resize does not` &&
+               ` round-trip, so the range toasts have no equivalent either. The four controls keep the visibility the view declares (searchButton visible=false, the rest visible). // POST-1.71: sap.tnt.ToolPage` &&
+               ` aggregation subHeader (@since 1.93) carries the horizontal IconTabHeader navigation and is kept 1:1; IconTabFilter.interactionMode="SelectLeavesOnly" (@since 1.121) is kept 1:1 on the top-level` &&
+               ` filter template; sap.m.Avatar (control @since 1.73) is kept 1:1 as the ToolHeader profile avatar. All newer than UI5 1.71. // NOTE: the profile Avatar src`.
+    lv_text1 = lv_text1 && ` 'test-resources/sap/tnt/images/Woman_avatar_01.png' is absolutized to the OpenUI5 host (https://sdk.openui5.org/test-resources/sap/tnt/images/Woman_avatar_01.png) per the repository asset-URL rule;` &&
+               ` the original uses the relative path. The ENABLED/EXPANDED fields the templates bind are absent from model/data.json, so every row carries the UI5 property default (true) explicitly - a flat ABAP row` &&
+               ` would otherwise serialize them as empty and override that default. // LIVE-TEST: not yet run in a system: the IconTabHeader / SideNavigation select -> NavContainer 'to' frontend action, the two-way` &&
+               ` bound selectedKey and the SIDE_NAV_TOGGLE round-trip (sideExpanded plus the tooltip flip).`.
+    result = VALUE #( BASE result
+      ( module = `sap.tnt`            control = `sap.tnt.ToolPage`                      name = `ToolPageNavigation`                    class = `z2ui5_cl_dmo_app_302` path = `src/05/b08/z2ui5_cl_dmo_app_302.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.34`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `sap.tnt.ToolPage aggregation subHeader (@since 1.93) carries the horizontal IconTabHeader navigation and is kept 1:1; IconTabFilter.interactionMode="SelectLeavesOnly" (@since 1.121) is kept 1:1 on the` &&
+                 ` top-level filter template; sap.m.Avatar (control @since 1.73) is kept 1:1 as the ToolHeader profile avatar. All newer than UI5 1.71.` ) ).
 
     result = VALUE #( BASE result
       ( module = `sap.ui.codeeditor`  control = `sap.ui.codeeditor.CodeEditor`          name = `CodeEditor`                            class = `z2ui5_cl_dmo_app_114` path = `src/02/b01/z2ui5_cl_dmo_app_114.clas.abap`
@@ -4203,6 +4325,12 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         since = `1.30`
         notes = lv_text1 ) ).
 
+    result = VALUE #( BASE result
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.FixFlex`                 name = `FixFlexFixedSize`                      class = `z2ui5_cl_dmo_app_338` path = `src/02/b18/z2ui5_cl_dmo_app_338.clas.abap`
+        score = 1
+        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.25.0` ) ).
+
     lv_text1 = `NOTE: The original binds the Image src against a separate 'img' JSON model ({img>/products/pic1}) loaded from sap/ui/demo/mock/img.json. abap2UI5 serves one default model, so the picture path is` &&
                ` folded into it and the src binds it directly (client->_bind( pic1 )) - the 'img>' prefix is dropped and the last path segment is identical, which structural-diff matches. The mock's host-relative` &&
                ` path is resolved to the OpenUI5 host (sdk.openui5.org) per the asset-URL rule. // NOTE: The sample's style.css (background colours on the FixFlex fixed/flexible areas, referenced by` &&
@@ -4233,6 +4361,236 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         since = `1.25.0`
         notes = lv_text1 ) ).
 
+    lv_text1 = `NOTE: _showFormFragment swaps the Page content between Display.fragment.xml and Change.fragment.xml (removeAllContent + insertContent). Both fragments are inlined into the one port view instead and` &&
+               ` switched by the two-way bound edit_mode flag on each VBox's visible attribute, so no core:Fragment reference is left and the Page gains a content aggregation the original view.xml does not declare.` &&
+               ` structural-diff unions both fragments into the original side, so the control set matches exactly (0 diffs); the added visible attributes carry the switch. // NOTE: _toggleButtonsAndView sets` &&
+               ` edit/save/cancel visible imperatively; the port binds those three visible attributes to the same edit_mode flag (an expression binding for the negated Edit case). handleEditPress clones the record` &&
+               ` into server-side backup fields so handleCancelPress can restore it exactly like the original's Object.assign clone; handleSavePress just leaves edit mode. // NOTE: the original loads` &&
+               ` sap/ui/demo/mock/supplier.json and does bindElement('/SupplierCollection/0'); abap2UI5 serves one default model with no element binding, so the row-0 fields are seeded at the model root and bound`.
+    lv_text1 = lv_text1 && ` ABSOLUTELY (client->_bind( suppliername ) etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. Composite texts such as {Street}` &&
+               ` {HouseNumber} keep their composite form with the absolute paths. // NOTE: the Edit button starts enabled="true" instead of the original's enabled="false" plus attachRequestCompleted: the ABAP model` &&
+               ` is seeded synchronously in model_init, so the state the original reaches after the mock request completes is the state the port starts in. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel` &&
+               ` round-trips (form swap through the bound visible flags and the Cancel restore).`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form_Column_oneGroup`                  class = `z2ui5_cl_dmo_app_320` path = `src/02/b18/z2ui5_cl_dmo_app_320.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.16.0`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: _showFormFragment swaps the Page content between Display.fragment.xml and Change.fragment.xml (removeAllContent + insertContent). Both fragments are inlined into the one port view instead and` &&
+               ` switched by the two-way bound edit_mode flag on each VBox's visible attribute, so no core:Fragment reference is left and the Page gains a content aggregation the original view.xml does not declare.` &&
+               ` structural-diff unions both fragments into the original side, so the control set matches exactly (0 diffs); the added visible attributes carry the switch. // NOTE: _toggleButtonsAndView sets` &&
+               ` edit/save/cancel visible imperatively; the port binds those three visible attributes to the same edit_mode flag (an expression binding for the negated Edit case). handleEditPress clones the record` &&
+               ` into server-side backup fields so handleCancelPress can restore it exactly like the original's Object.assign clone; handleSavePress just leaves edit mode. // NOTE: the original loads` &&
+               ` sap/ui/demo/mock/supplier.json and does bindElement('/SupplierCollection/0'); abap2UI5 serves one default model with no element binding, so the row-0 fields are seeded at the model root and bound`.
+    lv_text1 = lv_text1 && ` ABSOLUTELY (client->_bind( suppliername ) etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. Composite texts such as {Street}` &&
+               ` {HouseNumber} keep their composite form with the absolute paths. // NOTE: the Edit button starts enabled="true" instead of the original's enabled="false" plus attachRequestCompleted: the ABAP model` &&
+               ` is seeded synchronously in model_init, so the state the original reaches after the mock request completes is the state the port starts in. // NOTE: the fragments bind {EMail} while the mock key is` &&
+               ` Email, so in the original that field renders empty. The port binds the real Email value (john.smith@sap.com) - structural-diff matches either way (it compares the last path segment` &&
+               ` case-insensitively), but the address is actually shown here. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel` &&
+               ` restore).`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form_Column_oneGroup234`               class = `z2ui5_cl_dmo_app_321` path = `src/02/b18/z2ui5_cl_dmo_app_321.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.16.0`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: _showFormFragment swaps the Page content between Display.fragment.xml and Change.fragment.xml (removeAllContent + insertContent). Both fragments are inlined into the one port view instead and` &&
+               ` switched by the two-way bound edit_mode flag on each VBox's visible attribute, so no core:Fragment reference is left and the Page gains a content aggregation the original view.xml does not declare.` &&
+               ` structural-diff unions both fragments into the original side, so the control set matches exactly (0 diffs); the added visible attributes carry the switch. // NOTE: _toggleButtonsAndView sets` &&
+               ` edit/save/cancel visible imperatively; the port binds those three visible attributes to the same edit_mode flag (an expression binding for the negated Edit case). handleEditPress clones the record` &&
+               ` into server-side backup fields so handleCancelPress can restore it exactly like the original's Object.assign clone; handleSavePress just leaves edit mode. // NOTE: the original loads` &&
+               ` sap/ui/demo/mock/supplier.json and does bindElement('/SupplierCollection/0'); abap2UI5 serves one default model with no element binding, so the row-0 fields are seeded at the model root and bound`.
+    lv_text1 = lv_text1 && ` ABSOLUTELY (client->_bind( suppliername ) etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. Composite texts such as {Street}` &&
+               ` {HouseNumber} keep their composite form with the absolute paths. // NOTE: the Edit button starts enabled="true" instead of the original's enabled="false" plus attachRequestCompleted: the ABAP model` &&
+               ` is seeded synchronously in model_init, so the state the original reaches after the mock request completes is the state the port starts in. // NOTE: the fragments bind {EMail} while the mock key is` &&
+               ` Email, so in the original that field renders empty. The port binds the real Email value (john.smith@sap.com) - structural-diff matches either way (it compares the last path segment` &&
+               ` case-insensitively), but the address is actually shown here. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel` &&
+               ` restore).`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form_Column_threeGroups234`            class = `z2ui5_cl_dmo_app_322` path = `src/02/b18/z2ui5_cl_dmo_app_322.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.16.0`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: _showFormFragment swaps the Page content between Display.fragment.xml and Change.fragment.xml (removeAllContent + insertContent). Both fragments are inlined into the one port view instead and` &&
+               ` switched by the two-way bound edit_mode flag on each VBox's visible attribute, so no core:Fragment reference is left and the Page gains a content aggregation the original view.xml does not declare.` &&
+               ` structural-diff unions both fragments into the original side, so the control set matches exactly (0 diffs); the added visible attributes carry the switch. // NOTE: _toggleButtonsAndView sets` &&
+               ` edit/save/cancel visible imperatively; the port binds those three visible attributes to the same edit_mode flag (an expression binding for the negated Edit case). handleEditPress clones the record` &&
+               ` into server-side backup fields so handleCancelPress can restore it exactly like the original's Object.assign clone; handleSavePress just leaves edit mode. // NOTE: the original loads` &&
+               ` sap/ui/demo/mock/supplier.json and does bindElement('/SupplierCollection/0'); abap2UI5 serves one default model with no element binding, so the row-0 fields are seeded at the model root and bound`.
+    lv_text1 = lv_text1 && ` ABSOLUTELY (client->_bind( suppliername ) etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. Composite texts such as {Street}` &&
+               ` {HouseNumber} keep their composite form with the absolute paths. // NOTE: the Edit button starts enabled="true" instead of the original's enabled="false" plus attachRequestCompleted: the ABAP model` &&
+               ` is seeded synchronously in model_init, so the state the original reaches after the mock request completes is the state the port starts in. // NOTE: the fragments bind {EMail} while the mock key is` &&
+               ` Email, so in the original that field renders empty. The port binds the real Email value (john.smith@sap.com) - structural-diff matches either way (it compares the last path segment` &&
+               ` case-insensitively), but the address is actually shown here. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel` &&
+               ` restore).`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form_Column_threeGroups346`            class = `z2ui5_cl_dmo_app_323` path = `src/02/b18/z2ui5_cl_dmo_app_323.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.16.0`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: _showFormFragment swaps the Page content between Display.fragment.xml and Change.fragment.xml (removeAllContent + insertContent). Both fragments are inlined into the one port view instead and` &&
+               ` switched by the two-way bound edit_mode flag on each VBox's visible attribute, so no core:Fragment reference is left and the Page gains a content aggregation the original view.xml does not declare.` &&
+               ` structural-diff unions both fragments into the original side, so the control set matches exactly (0 diffs); the added visible attributes carry the switch. // NOTE: _toggleButtonsAndView sets` &&
+               ` edit/save/cancel visible imperatively; the port binds those three visible attributes to the same edit_mode flag (an expression binding for the negated Edit case). handleEditPress clones the record` &&
+               ` into server-side backup fields so handleCancelPress can restore it exactly like the original's Object.assign clone; handleSavePress just leaves edit mode. // NOTE: the original loads` &&
+               ` sap/ui/demo/mock/supplier.json and does bindElement('/SupplierCollection/0'); abap2UI5 serves one default model with no element binding, so the row-0 fields are seeded at the model root and bound`.
+    lv_text1 = lv_text1 && ` ABSOLUTELY (client->_bind( suppliername ) etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. Composite texts such as {Street}` &&
+               ` {HouseNumber} keep their composite form with the absolute paths. // NOTE: the Edit button starts enabled="true" instead of the original's enabled="false" plus attachRequestCompleted: the ABAP model` &&
+               ` is seeded synchronously in model_init, so the state the original reaches after the mock request completes is the state the port starts in. // NOTE: the fragments bind {EMail} while the mock key is` &&
+               ` Email, so in the original that field renders empty. The port binds the real Email value (john.smith@sap.com) - structural-diff matches either way (it compares the last path segment` &&
+               ` case-insensitively), but the address is actually shown here. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel` &&
+               ` restore).`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form_Column_twoGroups234`              class = `z2ui5_cl_dmo_app_324` path = `src/02/b18/z2ui5_cl_dmo_app_324.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.16.0`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: _showFormFragment swaps the Page content between Display.fragment.xml and Change.fragment.xml (removeAllContent + insertContent). Both fragments are inlined into the one port view instead and` &&
+               ` switched by the two-way bound edit_mode flag on each VBox's visible attribute, so no core:Fragment reference is left and the Page gains a content aggregation the original view.xml does not declare.` &&
+               ` structural-diff unions both fragments into the original side, so the control set matches; the added visible attributes carry the switch. // NOTE: _toggleButtonsAndView sets edit/save/cancel visible` &&
+               ` imperatively; the port binds those three visible attributes to the same edit_mode flag (expression binding for the negated Edit case). handleEditPress clones the record into six server-side backup` &&
+               ` fields so handleCancelPress can restore it exactly like the original's Object.assign clone; handleSavePress just leaves edit mode. // NOTE: the original loads sap/ui/demo/mock/supplier.json and does` &&
+               ` bindElement('/SupplierCollection/0'); abap2UI5 serves one default model with no element binding, so the row-0 fields are seeded at the model root and bound ABSOLUTELY (client->_bind( suppliername )`.
+    lv_text1 = lv_text1 && ` etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. The two composite Texts ({Street} {HouseNumber}, {ZIPCode} {City}) keep their` &&
+               ` composite form with the absolute paths. // NOTE: the Edit button starts enabled="true" instead of the original's enabled="false" plus attachRequestCompleted: the ABAP model is seeded synchronously in` &&
+               ` model_init, so the state the original reaches after the mock request completes is the state the port starts in. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap` &&
+               ` through the bound visible flags and the Cancel restore).`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form354`                               class = `z2ui5_cl_dmo_app_312` path = `src/02/b18/z2ui5_cl_dmo_app_312.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.16.0`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: _showFormFragment swaps the Page content between Display.fragment.xml and Change.fragment.xml (removeAllContent + insertContent). Both fragments are inlined into the one port view instead and` &&
+               ` switched by the two-way bound edit_mode flag on each VBox's visible attribute, so no core:Fragment reference is left and the Page gains a content aggregation the original view.xml does not declare.` &&
+               ` structural-diff unions both fragments into the original side, so the control set matches; the added visible attributes carry the switch. // NOTE: _toggleButtonsAndView sets edit/save/cancel visible` &&
+               ` imperatively; the port binds those three visible attributes to the same edit_mode flag (expression binding for the negated Edit case). handleEditPress clones the record into six server-side backup` &&
+               ` fields so handleCancelPress can restore it exactly like the original's Object.assign clone; handleSavePress just leaves edit mode. // NOTE: the original loads sap/ui/demo/mock/supplier.json and does` &&
+               ` bindElement('/SupplierCollection/0'); abap2UI5 serves one default model with no element binding, so the row-0 fields are seeded at the model root and bound ABSOLUTELY (client->_bind( suppliername )`.
+    lv_text1 = lv_text1 && ` etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. The two composite Texts ({Street} {HouseNumber}, {ZIPCode} {City}) keep their` &&
+               ` composite form with the absolute paths. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel restore).`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form354wide`                           class = `z2ui5_cl_dmo_app_313` path = `src/02/b18/z2ui5_cl_dmo_app_313.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.16.0`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: _showFormFragment swaps the Page content between Display.fragment.xml and Change.fragment.xml (removeAllContent + insertContent). Both fragments are inlined into the one port view instead and` &&
+               ` switched by the two-way bound edit_mode flag on each VBox's visible attribute, so no core:Fragment reference is left and the Page gains a content aggregation the original view.xml does not declare.` &&
+               ` structural-diff unions both fragments into the original side, so the control set matches; the added visible attributes carry the switch. // NOTE: _toggleButtonsAndView sets edit/save/cancel visible` &&
+               ` imperatively; the port binds those three visible attributes to the same edit_mode flag (expression binding for the negated Edit case). handleEditPress clones the record into six server-side backup` &&
+               ` fields so handleCancelPress can restore it exactly like the original's Object.assign clone; handleSavePress just leaves edit mode. // NOTE: the original loads sap/ui/demo/mock/supplier.json and does` &&
+               ` bindElement('/SupplierCollection/0'); abap2UI5 serves one default model with no element binding, so the row-0 fields are seeded at the model root and bound ABSOLUTELY (client->_bind( suppliername )`.
+    lv_text1 = lv_text1 && ` etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. The two composite Texts ({Street} {HouseNumber}, {ZIPCode} {City}) keep their` &&
+               ` composite form with the absolute paths. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel restore).`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form354wideDual`                       class = `z2ui5_cl_dmo_app_314` path = `src/02/b18/z2ui5_cl_dmo_app_314.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.16.0`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: _showFormFragment swaps the Page content between Display.fragment.xml and Change.fragment.xml (removeAllContent + insertContent). Both fragments are inlined into the one port view instead and` &&
+               ` switched by the two-way bound edit_mode flag on each VBox's visible attribute, so no core:Fragment reference is left and the Page gains a content aggregation the original view.xml does not declare.` &&
+               ` structural-diff unions both fragments into the original side, so the control set matches exactly (0 diffs); the added visible attributes carry the switch. // NOTE: _toggleButtonsAndView sets` &&
+               ` edit/save/cancel visible imperatively; the port binds those three visible attributes to the same edit_mode flag (an expression binding for the negated Edit case). handleEditPress clones the record` &&
+               ` into server-side backup fields so handleCancelPress can restore it exactly like the original's Object.assign clone; handleSavePress just leaves edit mode. // NOTE: the original loads` &&
+               ` sap/ui/demo/mock/supplier.json and does bindElement('/SupplierCollection/0'); abap2UI5 serves one default model with no element binding, so the row-0 fields are seeded at the model root and bound`.
+    lv_text1 = lv_text1 && ` ABSOLUTELY (client->_bind( suppliername ) etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. Composite texts such as {Street}` &&
+               ` {HouseNumber} keep their composite form with the absolute paths. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel` &&
+               ` restore).`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form471`                               class = `z2ui5_cl_dmo_app_315` path = `src/02/b18/z2ui5_cl_dmo_app_315.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.16.0`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: _showFormFragment swaps the Page content between Display.fragment.xml and Change.fragment.xml (removeAllContent + insertContent). Both fragments are inlined into the one port view instead and` &&
+               ` switched by the two-way bound edit_mode flag on each VBox's visible attribute, so no core:Fragment reference is left and the Page gains a content aggregation the original view.xml does not declare.` &&
+               ` structural-diff unions both fragments into the original side, so the control set matches exactly (0 diffs); the added visible attributes carry the switch. // NOTE: _toggleButtonsAndView sets` &&
+               ` edit/save/cancel visible imperatively; the port binds those three visible attributes to the same edit_mode flag (an expression binding for the negated Edit case). handleEditPress clones the record` &&
+               ` into server-side backup fields so handleCancelPress can restore it exactly like the original's Object.assign clone; handleSavePress just leaves edit mode. // NOTE: the original loads` &&
+               ` sap/ui/demo/mock/supplier.json and does bindElement('/SupplierCollection/0'); abap2UI5 serves one default model with no element binding, so the row-0 fields are seeded at the model root and bound`.
+    lv_text1 = lv_text1 && ` ABSOLUTELY (client->_bind( suppliername ) etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. Composite texts such as {Street}` &&
+               ` {HouseNumber} keep their composite form with the absolute paths. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel` &&
+               ` restore).`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form480`                               class = `z2ui5_cl_dmo_app_316` path = `src/02/b18/z2ui5_cl_dmo_app_316.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: _showFormFragment swaps the Page content between Display.fragment.xml and Change.fragment.xml (removeAllContent + insertContent). Both fragments are inlined into the one port view instead and` &&
+               ` switched by the two-way bound edit_mode flag on each VBox's visible attribute, so no core:Fragment reference is left and the Page gains a content aggregation the original view.xml does not declare.` &&
+               ` structural-diff unions both fragments into the original side, so the control set matches exactly (0 diffs); the added visible attributes carry the switch. // NOTE: _toggleButtonsAndView sets` &&
+               ` edit/save/cancel visible imperatively; the port binds those three visible attributes to the same edit_mode flag (an expression binding for the negated Edit case). handleEditPress clones the record` &&
+               ` into server-side backup fields so handleCancelPress can restore it exactly like the original's Object.assign clone; handleSavePress just leaves edit mode. // NOTE: the original loads` &&
+               ` sap/ui/demo/mock/supplier.json and does bindElement('/SupplierCollection/0'); abap2UI5 serves one default model with no element binding, so the row-0 fields are seeded at the model root and bound`.
+    lv_text1 = lv_text1 && ` ABSOLUTELY (client->_bind( suppliername ) etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. Composite texts such as {Street}` &&
+               ` {HouseNumber} keep their composite form with the absolute paths. // NOTE: the fragments bind {EMail} while the mock key is Email, so in the original that field renders empty. The port binds the real` &&
+               ` Email value (john.smith@sap.com) - structural-diff matches either way (it compares the last path segment case-insensitively), but the address is actually shown here. // LIVE-TEST: not yet run in a` &&
+               ` system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel restore).`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form480_12120`                         class = `z2ui5_cl_dmo_app_317` path = `src/02/b18/z2ui5_cl_dmo_app_317.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.16.0`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: _showFormFragment swaps the Page content between Display.fragment.xml and Change.fragment.xml (removeAllContent + insertContent). Both fragments are inlined into the one port view instead and` &&
+               ` switched by the two-way bound edit_mode flag on each VBox's visible attribute, so no core:Fragment reference is left and the Page gains a content aggregation the original view.xml does not declare.` &&
+               ` structural-diff unions both fragments into the original side, so the control set matches exactly (0 diffs); the added visible attributes carry the switch. // NOTE: _toggleButtonsAndView sets` &&
+               ` edit/save/cancel visible imperatively; the port binds those three visible attributes to the same edit_mode flag (an expression binding for the negated Edit case). handleEditPress clones the record` &&
+               ` into server-side backup fields so handleCancelPress can restore it exactly like the original's Object.assign clone; handleSavePress just leaves edit mode. // NOTE: the original loads` &&
+               ` sap/ui/demo/mock/supplier.json and does bindElement('/SupplierCollection/0'); abap2UI5 serves one default model with no element binding, so the row-0 fields are seeded at the model root and bound`.
+    lv_text1 = lv_text1 && ` ABSOLUTELY (client->_bind( suppliername ) etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. Composite texts such as {Street}` &&
+               ` {HouseNumber} keep their composite form with the absolute paths. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel` &&
+               ` restore).`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form480_12120Dual`                     class = `z2ui5_cl_dmo_app_318` path = `src/02/b18/z2ui5_cl_dmo_app_318.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.16.0`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: _showFormFragment swaps the Page content between Display.fragment.xml and Change.fragment.xml (removeAllContent + insertContent). Both fragments are inlined into the one port view instead and` &&
+               ` switched by the two-way bound edit_mode flag on each VBox's visible attribute, so no core:Fragment reference is left and the Page gains a content aggregation the original view.xml does not declare.` &&
+               ` structural-diff unions both fragments into the original side, so the control set matches exactly (0 diffs); the added visible attributes carry the switch. // NOTE: _toggleButtonsAndView sets` &&
+               ` edit/save/cancel visible imperatively; the port binds those three visible attributes to the same edit_mode flag (an expression binding for the negated Edit case). handleEditPress clones the record` &&
+               ` into server-side backup fields so handleCancelPress can restore it exactly like the original's Object.assign clone; handleSavePress just leaves edit mode. // NOTE: the original loads` &&
+               ` sap/ui/demo/mock/supplier.json and does bindElement('/SupplierCollection/0'); abap2UI5 serves one default model with no element binding, so the row-0 fields are seeded at the model root and bound`.
+    lv_text1 = lv_text1 && ` ABSOLUTELY (client->_bind( suppliername ) etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. Composite texts such as {Street}` &&
+               ` {HouseNumber} keep their composite form with the absolute paths. // NOTE: the fragments bind {EMail} while the mock key is Email, so in the original that field renders empty. The port binds the real` &&
+               ` Email value (john.smith@sap.com) - structural-diff matches either way (it compares the last path segment case-insensitively), but the address is actually shown here. // NOTE: Rating` &&
+               ` (RatingIndicator.value) and Disposable (ProgressIndicator.percentValue) are numeric UI5 properties, so their ABAP fields are typed i, not string - a bound value that serializes as a JSON string is` &&
+               ` rejected on a numeric property. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel restore).`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form480_Trial`                         class = `z2ui5_cl_dmo_app_319` path = `src/02/b18/z2ui5_cl_dmo_app_319.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.16.0`
+        notes = lv_text1 ) ).
+
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `FormToolbar`                           class = `z2ui5_cl_dmo_app_142` path = `src/02/b06/z2ui5_cl_dmo_app_142.clas.abap`
         score = 3
@@ -4241,7 +4599,249 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         notes = `NOTE: sap.ui.layout.form.Form with two FormContainers, per-container toolbars, ResponsiveGridLayout, FormElements with GridData layoutData and a Select. The original bound an element context` &&
                  ` (/SupplierCollection/0 from the shared demo supplier.json); flattened here to top-level model fields the {…} bindings resolve against. **Corrected 2026-08-01**: those bindings were written RELATIVE` &&
                  ` ({FIELD}) and a relative path on a control with no binding context resolves against nothing — the fields rendered EMPTY in the running app (measured with the e2e harness, the app-207 class). They are` &&
-                 ` now bound ABSOLUTELY through client->_bind( field ), which is what a root-seeded record needs.` )
+                 ` now bound ABSOLUTELY through client->_bind( field ), which is what a root-seeded record needs.` ) ).
+
+    lv_text1 = `NOTE: _showFormFragment swaps the Page content between Display.fragment.xml and Change.fragment.xml (removeAllContent + insertContent). Both fragments are inlined into the one port view instead and` &&
+               ` switched by the two-way bound edit_mode flag on each VBox's visible attribute, so no core:Fragment reference is left and the Page gains a content aggregation the original view.xml does not declare.` &&
+               ` structural-diff unions both fragments into the original side, so the control set matches exactly (0 diffs); the added visible attributes carry the switch. // NOTE: _toggleButtonsAndView sets` &&
+               ` edit/save/cancel visible imperatively; the port binds those three visible attributes to the same edit_mode flag (an expression binding for the negated Edit case). handleEditPress clones the record` &&
+               ` into server-side backup fields so handleCancelPress can restore it exactly like the original's Object.assign clone; handleSavePress just leaves edit mode. // NOTE: the original loads` &&
+               ` sap/ui/demo/mock/supplier.json and does bindElement('/SupplierCollection/0'); abap2UI5 serves one default model with no element binding, so the row-0 fields are seeded at the model root and bound`.
+    lv_text1 = lv_text1 && ` ABSOLUTELY (client->_bind( suppliername ) etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. Composite texts such as {Street}` &&
+               ` {HouseNumber} keep their composite form with the absolute paths. // NOTE: the Edit button starts enabled="true" instead of the original's enabled="false" plus attachRequestCompleted: the ABAP model` &&
+               ` is seeded synchronously in model_init, so the state the original reaches after the mock request completes is the state the port starts in. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel` &&
+               ` round-trips (form swap through the bound visible flags and the Cancel restore).`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm_Column_oneGroup`            class = `z2ui5_cl_dmo_app_333` path = `src/02/b18/z2ui5_cl_dmo_app_333.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.16.0`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: _showFormFragment swaps the Page content between Display.fragment.xml and Change.fragment.xml (removeAllContent + insertContent). Both fragments are inlined into the one port view instead and` &&
+               ` switched by the two-way bound edit_mode flag on each VBox's visible attribute, so no core:Fragment reference is left and the Page gains a content aggregation the original view.xml does not declare.` &&
+               ` structural-diff unions both fragments into the original side, so the control set matches exactly (0 diffs); the added visible attributes carry the switch. // NOTE: _toggleButtonsAndView sets` &&
+               ` edit/save/cancel visible imperatively; the port binds those three visible attributes to the same edit_mode flag (an expression binding for the negated Edit case). handleEditPress clones the record` &&
+               ` into server-side backup fields so handleCancelPress can restore it exactly like the original's Object.assign clone; handleSavePress just leaves edit mode. // NOTE: the original loads` &&
+               ` sap/ui/demo/mock/supplier.json and does bindElement('/SupplierCollection/0'); abap2UI5 serves one default model with no element binding, so the row-0 fields are seeded at the model root and bound`.
+    lv_text1 = lv_text1 && ` ABSOLUTELY (client->_bind( suppliername ) etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. Composite texts such as {Street}` &&
+               ` {HouseNumber} keep their composite form with the absolute paths. // NOTE: the Edit button starts enabled="true" instead of the original's enabled="false" plus attachRequestCompleted: the ABAP model` &&
+               ` is seeded synchronously in model_init, so the state the original reaches after the mock request completes is the state the port starts in. // NOTE: the fragments bind {EMail} while the mock key is` &&
+               ` Email, so in the original that field renders empty. The port binds the real Email value (john.smith@sap.com) - structural-diff matches either way (it compares the last path segment` &&
+               ` case-insensitively), but the address is actually shown here. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel` &&
+               ` restore).`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm_Column_oneGroup234`         class = `z2ui5_cl_dmo_app_334` path = `src/02/b18/z2ui5_cl_dmo_app_334.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.16.0`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: _showFormFragment swaps the Page content between Display.fragment.xml and Change.fragment.xml (removeAllContent + insertContent). Both fragments are inlined into the one port view instead and` &&
+               ` switched by the two-way bound edit_mode flag on each VBox's visible attribute, so no core:Fragment reference is left and the Page gains a content aggregation the original view.xml does not declare.` &&
+               ` structural-diff unions both fragments into the original side, so the control set matches exactly (0 diffs); the added visible attributes carry the switch. // NOTE: _toggleButtonsAndView sets` &&
+               ` edit/save/cancel visible imperatively; the port binds those three visible attributes to the same edit_mode flag (an expression binding for the negated Edit case). handleEditPress clones the record` &&
+               ` into server-side backup fields so handleCancelPress can restore it exactly like the original's Object.assign clone; handleSavePress just leaves edit mode. // NOTE: the original loads` &&
+               ` sap/ui/demo/mock/supplier.json and does bindElement('/SupplierCollection/0'); abap2UI5 serves one default model with no element binding, so the row-0 fields are seeded at the model root and bound`.
+    lv_text1 = lv_text1 && ` ABSOLUTELY (client->_bind( suppliername ) etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. Composite texts such as {Street}` &&
+               ` {HouseNumber} keep their composite form with the absolute paths. // NOTE: the Edit button starts enabled="true" instead of the original's enabled="false" plus attachRequestCompleted: the ABAP model` &&
+               ` is seeded synchronously in model_init, so the state the original reaches after the mock request completes is the state the port starts in. // NOTE: the fragments bind {EMail} while the mock key is` &&
+               ` Email, so in the original that field renders empty. The port binds the real Email value (john.smith@sap.com) - structural-diff matches either way (it compares the last path segment` &&
+               ` case-insensitively), but the address is actually shown here. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel` &&
+               ` restore).`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm_Column_threeGroups234`      class = `z2ui5_cl_dmo_app_335` path = `src/02/b18/z2ui5_cl_dmo_app_335.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.16.0`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: _showFormFragment swaps the Page content between Display.fragment.xml and Change.fragment.xml (removeAllContent + insertContent). Both fragments are inlined into the one port view instead and` &&
+               ` switched by the two-way bound edit_mode flag on each VBox's visible attribute, so no core:Fragment reference is left and the Page gains a content aggregation the original view.xml does not declare.` &&
+               ` structural-diff unions both fragments into the original side, so the control set matches exactly (0 diffs); the added visible attributes carry the switch. // NOTE: _toggleButtonsAndView sets` &&
+               ` edit/save/cancel visible imperatively; the port binds those three visible attributes to the same edit_mode flag (an expression binding for the negated Edit case). handleEditPress clones the record` &&
+               ` into server-side backup fields so handleCancelPress can restore it exactly like the original's Object.assign clone; handleSavePress just leaves edit mode. // NOTE: the original loads` &&
+               ` sap/ui/demo/mock/supplier.json and does bindElement('/SupplierCollection/0'); abap2UI5 serves one default model with no element binding, so the row-0 fields are seeded at the model root and bound`.
+    lv_text1 = lv_text1 && ` ABSOLUTELY (client->_bind( suppliername ) etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. Composite texts such as {Street}` &&
+               ` {HouseNumber} keep their composite form with the absolute paths. // NOTE: the Edit button starts enabled="true" instead of the original's enabled="false" plus attachRequestCompleted: the ABAP model` &&
+               ` is seeded synchronously in model_init, so the state the original reaches after the mock request completes is the state the port starts in. // NOTE: the fragments bind {EMail} while the mock key is` &&
+               ` Email, so in the original that field renders empty. The port binds the real Email value (john.smith@sap.com) - structural-diff matches either way (it compares the last path segment` &&
+               ` case-insensitively), but the address is actually shown here. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel` &&
+               ` restore).`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm_Column_threeGroups346`      class = `z2ui5_cl_dmo_app_336` path = `src/02/b18/z2ui5_cl_dmo_app_336.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.16.0`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: _showFormFragment swaps the Page content between Display.fragment.xml and Change.fragment.xml (removeAllContent + insertContent). Both fragments are inlined into the one port view instead and` &&
+               ` switched by the two-way bound edit_mode flag on each VBox's visible attribute, so no core:Fragment reference is left and the Page gains a content aggregation the original view.xml does not declare.` &&
+               ` structural-diff unions both fragments into the original side, so the control set matches exactly (0 diffs); the added visible attributes carry the switch. // NOTE: _toggleButtonsAndView sets` &&
+               ` edit/save/cancel visible imperatively; the port binds those three visible attributes to the same edit_mode flag (an expression binding for the negated Edit case). handleEditPress clones the record` &&
+               ` into server-side backup fields so handleCancelPress can restore it exactly like the original's Object.assign clone; handleSavePress just leaves edit mode. // NOTE: the original loads` &&
+               ` sap/ui/demo/mock/supplier.json and does bindElement('/SupplierCollection/0'); abap2UI5 serves one default model with no element binding, so the row-0 fields are seeded at the model root and bound`.
+    lv_text1 = lv_text1 && ` ABSOLUTELY (client->_bind( suppliername ) etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. Composite texts such as {Street}` &&
+               ` {HouseNumber} keep their composite form with the absolute paths. // NOTE: the Edit button starts enabled="true" instead of the original's enabled="false" plus attachRequestCompleted: the ABAP model` &&
+               ` is seeded synchronously in model_init, so the state the original reaches after the mock request completes is the state the port starts in. // NOTE: the fragments bind {EMail} while the mock key is` &&
+               ` Email, so in the original that field renders empty. The port binds the real Email value (john.smith@sap.com) - structural-diff matches either way (it compares the last path segment` &&
+               ` case-insensitively), but the address is actually shown here. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel` &&
+               ` restore).`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm_Column_twoGroups234`        class = `z2ui5_cl_dmo_app_337` path = `src/02/b18/z2ui5_cl_dmo_app_337.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.16.0`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: _showFormFragment swaps the Page content between Display.fragment.xml and Change.fragment.xml (removeAllContent + insertContent). Both fragments are inlined into the one port view instead and` &&
+               ` switched by the two-way bound edit_mode flag on each VBox's visible attribute, so no core:Fragment reference is left and the Page gains a content aggregation the original view.xml does not declare.` &&
+               ` structural-diff unions both fragments into the original side, so the control set matches exactly (0 diffs); the added visible attributes carry the switch. // NOTE: _toggleButtonsAndView sets` &&
+               ` edit/save/cancel visible imperatively; the port binds those three visible attributes to the same edit_mode flag (an expression binding for the negated Edit case). handleEditPress clones the record` &&
+               ` into server-side backup fields so handleCancelPress can restore it exactly like the original's Object.assign clone; handleSavePress just leaves edit mode. // NOTE: the original loads` &&
+               ` sap/ui/demo/mock/supplier.json and does bindElement('/SupplierCollection/0'); abap2UI5 serves one default model with no element binding, so the row-0 fields are seeded at the model root and bound`.
+    lv_text1 = lv_text1 && ` ABSOLUTELY (client->_bind( suppliername ) etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. Composite texts such as {Street}` &&
+               ` {HouseNumber} keep their composite form with the absolute paths. // NOTE: the Edit button starts enabled="true" instead of the original's enabled="false" plus attachRequestCompleted: the ABAP model` &&
+               ` is seeded synchronously in model_init, so the state the original reaches after the mock request completes is the state the port starts in. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel` &&
+               ` round-trips (form swap through the bound visible flags and the Cancel restore).`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm354`                         class = `z2ui5_cl_dmo_app_325` path = `src/02/b18/z2ui5_cl_dmo_app_325.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.16.0`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: _showFormFragment swaps the Page content between Display.fragment.xml and Change.fragment.xml (removeAllContent + insertContent). Both fragments are inlined into the one port view instead and` &&
+               ` switched by the two-way bound edit_mode flag on each VBox's visible attribute, so no core:Fragment reference is left and the Page gains a content aggregation the original view.xml does not declare.` &&
+               ` structural-diff unions both fragments into the original side, so the control set matches exactly (0 diffs); the added visible attributes carry the switch. // NOTE: _toggleButtonsAndView sets` &&
+               ` edit/save/cancel visible imperatively; the port binds those three visible attributes to the same edit_mode flag (an expression binding for the negated Edit case). handleEditPress clones the record` &&
+               ` into server-side backup fields so handleCancelPress can restore it exactly like the original's Object.assign clone; handleSavePress just leaves edit mode. // NOTE: the original loads` &&
+               ` sap/ui/demo/mock/supplier.json and does bindElement('/SupplierCollection/0'); abap2UI5 serves one default model with no element binding, so the row-0 fields are seeded at the model root and bound`.
+    lv_text1 = lv_text1 && ` ABSOLUTELY (client->_bind( suppliername ) etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. Composite texts such as {Street}` &&
+               ` {HouseNumber} keep their composite form with the absolute paths. // NOTE: the Edit button starts enabled="true" instead of the original's enabled="false" plus attachRequestCompleted: the ABAP model` &&
+               ` is seeded synchronously in model_init, so the state the original reaches after the mock request completes is the state the port starts in. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel` &&
+               ` round-trips (form swap through the bound visible flags and the Cancel restore).`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm354wide`                     class = `z2ui5_cl_dmo_app_326` path = `src/02/b18/z2ui5_cl_dmo_app_326.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.16.0`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: _showFormFragment swaps the Page content between Display.fragment.xml and Change.fragment.xml (removeAllContent + insertContent). Both fragments are inlined into the one port view instead and` &&
+               ` switched by the two-way bound edit_mode flag on each VBox's visible attribute, so no core:Fragment reference is left and the Page gains a content aggregation the original view.xml does not declare.` &&
+               ` structural-diff unions both fragments into the original side, so the control set matches exactly (0 diffs); the added visible attributes carry the switch. // NOTE: _toggleButtonsAndView sets` &&
+               ` edit/save/cancel visible imperatively; the port binds those three visible attributes to the same edit_mode flag (an expression binding for the negated Edit case). handleEditPress clones the record` &&
+               ` into server-side backup fields so handleCancelPress can restore it exactly like the original's Object.assign clone; handleSavePress just leaves edit mode. // NOTE: the original loads` &&
+               ` sap/ui/demo/mock/supplier.json and does bindElement('/SupplierCollection/0'); abap2UI5 serves one default model with no element binding, so the row-0 fields are seeded at the model root and bound`.
+    lv_text1 = lv_text1 && ` ABSOLUTELY (client->_bind( suppliername ) etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. Composite texts such as {Street}` &&
+               ` {HouseNumber} keep their composite form with the absolute paths. // NOTE: the Edit button starts enabled="true" instead of the original's enabled="false" plus attachRequestCompleted: the ABAP model` &&
+               ` is seeded synchronously in model_init, so the state the original reaches after the mock request completes is the state the port starts in. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel` &&
+               ` round-trips (form swap through the bound visible flags and the Cancel restore).`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm354wideDual`                 class = `z2ui5_cl_dmo_app_327` path = `src/02/b18/z2ui5_cl_dmo_app_327.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.16.0`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: _showFormFragment swaps the Page content between Display.fragment.xml and Change.fragment.xml (removeAllContent + insertContent). Both fragments are inlined into the one port view instead and` &&
+               ` switched by the two-way bound edit_mode flag on each VBox's visible attribute, so no core:Fragment reference is left and the Page gains a content aggregation the original view.xml does not declare.` &&
+               ` structural-diff unions both fragments into the original side, so the control set matches exactly (0 diffs); the added visible attributes carry the switch. // NOTE: _toggleButtonsAndView sets` &&
+               ` edit/save/cancel visible imperatively; the port binds those three visible attributes to the same edit_mode flag (an expression binding for the negated Edit case). handleEditPress clones the record` &&
+               ` into server-side backup fields so handleCancelPress can restore it exactly like the original's Object.assign clone; handleSavePress just leaves edit mode. // NOTE: the original loads` &&
+               ` sap/ui/demo/mock/supplier.json and does bindElement('/SupplierCollection/0'); abap2UI5 serves one default model with no element binding, so the row-0 fields are seeded at the model root and bound`.
+    lv_text1 = lv_text1 && ` ABSOLUTELY (client->_bind( suppliername ) etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. Composite texts such as {Street}` &&
+               ` {HouseNumber} keep their composite form with the absolute paths. // NOTE: the Edit button starts enabled="true" instead of the original's enabled="false" plus attachRequestCompleted: the ABAP model` &&
+               ` is seeded synchronously in model_init, so the state the original reaches after the mock request completes is the state the port starts in. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel` &&
+               ` round-trips (form swap through the bound visible flags and the Cancel restore).`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm471`                         class = `z2ui5_cl_dmo_app_328` path = `src/02/b18/z2ui5_cl_dmo_app_328.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.16.0`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: _showFormFragment swaps the Page content between Display.fragment.xml and Change.fragment.xml (removeAllContent + insertContent). Both fragments are inlined into the one port view instead and` &&
+               ` switched by the two-way bound edit_mode flag on each VBox's visible attribute, so no core:Fragment reference is left and the Page gains a content aggregation the original view.xml does not declare.` &&
+               ` structural-diff unions both fragments into the original side, so the control set matches exactly (0 diffs); the added visible attributes carry the switch. // NOTE: _toggleButtonsAndView sets` &&
+               ` edit/save/cancel visible imperatively; the port binds those three visible attributes to the same edit_mode flag (an expression binding for the negated Edit case). handleEditPress clones the record` &&
+               ` into server-side backup fields so handleCancelPress can restore it exactly like the original's Object.assign clone; handleSavePress just leaves edit mode. // NOTE: the original loads` &&
+               ` sap/ui/demo/mock/supplier.json and does bindElement('/SupplierCollection/0'); abap2UI5 serves one default model with no element binding, so the row-0 fields are seeded at the model root and bound`.
+    lv_text1 = lv_text1 && ` ABSOLUTELY (client->_bind( suppliername ) etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. Composite texts such as {Street}` &&
+               ` {HouseNumber} keep their composite form with the absolute paths. // NOTE: the Edit button starts enabled="true" instead of the original's enabled="false" plus attachRequestCompleted: the ABAP model` &&
+               ` is seeded synchronously in model_init, so the state the original reaches after the mock request completes is the state the port starts in. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel` &&
+               ` round-trips (form swap through the bound visible flags and the Cancel restore).`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm480`                         class = `z2ui5_cl_dmo_app_329` path = `src/02/b18/z2ui5_cl_dmo_app_329.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: _showFormFragment swaps the Page content between Display.fragment.xml and Change.fragment.xml (removeAllContent + insertContent). Both fragments are inlined into the one port view instead and` &&
+               ` switched by the two-way bound edit_mode flag on each VBox's visible attribute, so no core:Fragment reference is left and the Page gains a content aggregation the original view.xml does not declare.` &&
+               ` structural-diff unions both fragments into the original side, so the control set matches exactly (0 diffs); the added visible attributes carry the switch. // NOTE: _toggleButtonsAndView sets` &&
+               ` edit/save/cancel visible imperatively; the port binds those three visible attributes to the same edit_mode flag (an expression binding for the negated Edit case). handleEditPress clones the record` &&
+               ` into server-side backup fields so handleCancelPress can restore it exactly like the original's Object.assign clone; handleSavePress just leaves edit mode. // NOTE: the original loads` &&
+               ` sap/ui/demo/mock/supplier.json and does bindElement('/SupplierCollection/0'); abap2UI5 serves one default model with no element binding, so the row-0 fields are seeded at the model root and bound`.
+    lv_text1 = lv_text1 && ` ABSOLUTELY (client->_bind( suppliername ) etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. Composite texts such as {Street}` &&
+               ` {HouseNumber} keep their composite form with the absolute paths. // NOTE: the fragments bind {EMail} while the mock key is Email, so in the original that field renders empty. The port binds the real` &&
+               ` Email value (john.smith@sap.com) - structural-diff matches either way (it compares the last path segment case-insensitively), but the address is actually shown here. // LIVE-TEST: not yet run in a` &&
+               ` system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel restore).`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm480_12120`                   class = `z2ui5_cl_dmo_app_330` path = `src/02/b18/z2ui5_cl_dmo_app_330.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.16.0`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: _showFormFragment swaps the Page content between Display.fragment.xml and Change.fragment.xml (removeAllContent + insertContent). Both fragments are inlined into the one port view instead and` &&
+               ` switched by the two-way bound edit_mode flag on each VBox's visible attribute, so no core:Fragment reference is left and the Page gains a content aggregation the original view.xml does not declare.` &&
+               ` structural-diff unions both fragments into the original side, so the control set matches exactly (0 diffs); the added visible attributes carry the switch. // NOTE: _toggleButtonsAndView sets` &&
+               ` edit/save/cancel visible imperatively; the port binds those three visible attributes to the same edit_mode flag (an expression binding for the negated Edit case). handleEditPress clones the record` &&
+               ` into server-side backup fields so handleCancelPress can restore it exactly like the original's Object.assign clone; handleSavePress just leaves edit mode. // NOTE: the original loads` &&
+               ` sap/ui/demo/mock/supplier.json and does bindElement('/SupplierCollection/0'); abap2UI5 serves one default model with no element binding, so the row-0 fields are seeded at the model root and bound`.
+    lv_text1 = lv_text1 && ` ABSOLUTELY (client->_bind( suppliername ) etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. Composite texts such as {Street}` &&
+               ` {HouseNumber} keep their composite form with the absolute paths. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel` &&
+               ` restore).`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm480_12120Dual`               class = `z2ui5_cl_dmo_app_331` path = `src/02/b18/z2ui5_cl_dmo_app_331.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.16.0`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: _showFormFragment swaps the Page content between Display.fragment.xml and Change.fragment.xml (removeAllContent + insertContent). Both fragments are inlined into the one port view instead and` &&
+               ` switched by the two-way bound edit_mode flag on each VBox's visible attribute, so no core:Fragment reference is left and the Page gains a content aggregation the original view.xml does not declare.` &&
+               ` structural-diff unions both fragments into the original side, so the control set matches exactly (0 diffs); the added visible attributes carry the switch. // NOTE: _toggleButtonsAndView sets` &&
+               ` edit/save/cancel visible imperatively; the port binds those three visible attributes to the same edit_mode flag (an expression binding for the negated Edit case). handleEditPress clones the record` &&
+               ` into server-side backup fields so handleCancelPress can restore it exactly like the original's Object.assign clone; handleSavePress just leaves edit mode. // NOTE: the original loads` &&
+               ` sap/ui/demo/mock/supplier.json and does bindElement('/SupplierCollection/0'); abap2UI5 serves one default model with no element binding, so the row-0 fields are seeded at the model root and bound`.
+    lv_text1 = lv_text1 && ` ABSOLUTELY (client->_bind( suppliername ) etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. Composite texts such as {Street}` &&
+               ` {HouseNumber} keep their composite form with the absolute paths. // NOTE: the fragments bind {EMail} while the mock key is Email, so in the original that field renders empty. The port binds the real` &&
+               ` Email value (john.smith@sap.com) - structural-diff matches either way (it compares the last path segment case-insensitively), but the address is actually shown here. // NOTE: Rating` &&
+               ` (RatingIndicator.value) and Disposable (ProgressIndicator.percentValue) are numeric UI5 properties, so their ABAP fields are typed i, not string - a bound value that serializes as a JSON string is` &&
+               ` rejected on a numeric property. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel restore).`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm480_Trial`                   class = `z2ui5_cl_dmo_app_332` path = `src/02/b18/z2ui5_cl_dmo_app_332.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.16.0`
+        notes = lv_text1 ) ).
+
+    result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleFormToolbar`                     class = `z2ui5_cl_dmo_app_175` path = `src/02/b10/z2ui5_cl_dmo_app_175.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -4315,6 +4915,16 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22.0` )
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.Splitter`                name = `Splitter3`                             class = `z2ui5_cl_dmo_app_339` path = `src/02/b18/z2ui5_cl_dmo_app_339.clas.abap`
+        score = 1
+        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.22.0` )
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.Splitter`                name = `Splitter4`                             class = `z2ui5_cl_dmo_app_340` path = `src/02/b18/z2ui5_cl_dmo_app_340.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.22.0`
+        notes = `NOTE: the original view writes minSize="200px" on the third SplitterLayoutData, but sap.ui.layout.SplitterLayoutData.minSize is typed int - UI5 cannot parse the px suffix. The port writes the numeric` &&
+                 ` value 200 the original means.` )
       ( module = `sap.ui.layout`      control = `sap.ui.layout.Splitter`                name = `SplitterNested1`                       class = `z2ui5_cl_dmo_app_266` path = `src/02/b14/z2ui5_cl_dmo_app_266.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -4464,6 +5074,25 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         since = `1.22.0`
         notes = lv_text1 ) ).
 
+    lv_text1 = `NOTE: handleCalendarSelect/_updateText read the picked day off the control (oCalendar.getSelectedDates()[0].getStartDate()) and format it yyyy-MM-dd. The port transports it as three UI5 expression` &&
+               ` args (year, month+1, day - the LOCAL parts, not toISOString( ), which would shift the day east of Greenwich), each guarded by getSelectedDates().length > 0, and formats server-side; the Text gets a` &&
+               ` two-way bound text attribute instead of setText (app 139 idiom, probe-verified). The controller's oLastSelectedJSDate becomes a server-side field, so the second click on the same day is recognised` &&
+               ` exactly as in the original. // IMPROVISED: the deselection is only reproduced on the LABEL, not on the calendar itself: the original calls oCalendar.removeSelectedDate(oSelectedDate), which takes a` &&
+               ` DateRange CONTROL instance no wire can address, so the day stays visually highlighted while the text goes back to 'No Date Selected'. // IMPROVISED: onInit does` &&
+               ` byId('calendar').displayDate(UI5Date.getInstance(2021, 6, 1)) to open the calendar on July 2021. Calendar exposes no bindable property for the displayed month and displayDate() takes a JS Date`.
+    lv_text1 = lv_text1 && ` argument, which the frontend-action wire cannot carry (CONTROL_METHODS casts only string/int/bool/controlId/anchor kinds), so the port opens on the current month. // POST-1.71:` &&
+               ` Calendar.showCurrentDateButton (@since 1.95) is kept 1:1 from the original view. Newer than UI5 1.71. // LIVE-TEST: not yet run in a system: the CAL_SELECT expression-arg round-trip and the same-day` &&
+               ` second click clearing the label.`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarDateDeselection`               class = `z2ui5_cl_dmo_app_305` path = `src/02/b15/z2ui5_cl_dmo_app_305.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.22.0`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `Calendar.showCurrentDateButton (@since 1.95) is kept 1:1 from the original view. Newer than UI5 1.71.` ) ).
+
     lv_text1 = `NOTE: The object-typed calendar date properties (Calendar.minDate, Calendar.maxDate and the disabledDates DateRange startDate/endDate) are fed from plain ISO strings in the model and converted at the` &&
                ` point of use with Formatter.DateCreateObject from the curated module (core:require='{Formatter: z2ui5/model/formatter}'). A plain string binding would crash view creation (Date must be a JS/UI5Date` &&
                ` object). The original's UI5Date.getInstance(year, month0, day) values are normalized to ISO 1:1 (month is 0-based: minDate 2000-01-01, maxDate 2050-12-31, disabled ranges 2016-01-04..2016-01-10 and` &&
@@ -4493,6 +5122,35 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         post171 = `Formatter.DateCreateObject is referenced via core:require, which needs UI5 >= 1.74. sap.ui.unified.Calendar itself and its minDate/maxDate/disabledDates/showWeekNumbers members are all <= 1.71 (in` &&
                  ` scope).` ) ).
 
+    lv_text1 = `NOTE: handleCalendarSelect walks oCalendar.getSelectedDates() and rebuilds the JSON model with one yyyy-MM-dd string per selected day. An event arg is a full UI5 expression but the grammar has no` &&
+               ` loop, so the wire carries a FIXED set of 31 index-guarded expression args (one per selectable slot), each formatting getSelectedDates()[i].getStartDate() to yyyy-MM-dd from its LOCAL parts on the` &&
+               ` client and yielding an empty string past the end of the aggregation. on_event stops at the first empty arg and rebuilds the bound table from the rest. // IMPROVISED: the 31-slot cap is a real limit,` &&
+               ` not a formality: 31 is the most days one displayed month can hold, but the user can navigate months and keep selecting, and every day past the 31st is silently dropped from the list (the calendar` &&
+               ` itself still shows it selected). A loop-free expression grammar leaves no way to transport a variable-length aggregation in one arg. // IMPROVISED: handleRemoveSelection calls` &&
+               ` byId('calendar').removeAllSelectedDates() and then clears the model. Only the model half is reproducible: the frontend-action method denylist blocks every 'removeAll*' name`.
+    lv_text1 = lv_text1 && ` (CONTROL_METHOD_DENY_PREFIXES in app/webapp/core/FrontendAction.js, aimed at the GENERIC reflection mutators), so the named per-aggregation removeAllSelectedDates cannot be called either - the list` &&
+               ` empties but the days stay highlighted in the calendar. Filed as pr/control-method-named-removeall. // LIVE-TEST: not yet run in a system: the multi-select round-trip filling the List and the Remove` &&
+               ` All button clearing it.`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarMultipleDaySelection`          class = `z2ui5_cl_dmo_app_307` path = `src/02/b15/z2ui5_cl_dmo_app_307.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.22.0`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: handleCalendarSelect/_updateText read the picked day off the control (oCalendar.getSelectedDates()[0].getStartDate()) and format it yyyy-MM-dd. The port transports it as three UI5 expression` &&
+               ` args (year, month+1, day - the LOCAL parts, not toISOString( ), which would shift the day east of Greenwich), each guarded by getSelectedDates().length > 0, and formats server-side; the Text gets a` &&
+               ` two-way bound text attribute instead of setText (app 139 idiom, probe-verified). // NOTE: handleSelectToday does removeAllSelectedDates() + addSelectedDate(new DateRange({startDate: today})) and` &&
+               ` reformats. The port only writes the text: the server date IS today, so the label is 1:1, but the calendar's own highlight of that day is not moved - addSelectedDate takes a DateRange CONTROL, which` &&
+               ` no wire can construct (same residual as app 139). // LIVE-TEST: not yet run in a system: the CAL_SELECT expression-arg round-trip across the two displayed months and the SELECT_TODAY text update.`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarMultipleMonth`                 class = `z2ui5_cl_dmo_app_304` path = `src/02/b15/z2ui5_cl_dmo_app_304.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.22.0`
+        notes = lv_text1 ) ).
+
     lv_text1 = `NOTE: The picked day IS transportable after all - measured 2026-08-05 with ``scripts/probes/event-arg-expression-probe.mjs`` against real OpenUI5: an event arg is a full UI5 expression, and indexed` &&
                ` access into an array-valued getter plus chained calls resolve there (``$event.oSource.getSelectedDates()[0].getStartDate()``). The earlier rationale - 'select carries no date parameter and the` &&
                ` selected DateRange is control state' - was wrong. The wire carries the three LOCAL date parts as three expression args (year, month+1, day) rather than ``toISOString( )``, which would shift the day` &&
@@ -4505,6 +5163,40 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22.0`
         notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: handleCalendarSelect/_updateText read the picked interval off the control (getSelectedDates()[0].getStartDate()/getEndDate()) and format both ends yyyy-MM-dd. The port transports six UI5` &&
+               ` expression args (the LOCAL year/month+1/day of each end, not toISOString( ), which would shift the day east of Greenwich), each guarded so a missing end arrives as 0 and renders the original's 'No` &&
+               ` Date Selected'; the two Texts get two-way bound text attributes instead of setText (app 139 idiom, probe-verified). // NOTE: handleWeekNumberSelect reads the weekNumber and the weekDays DateRange` &&
+               ` parameters; both travel as expression args (${$parameters>/weekNumber} and the local date parts of ${$parameters>/weekDays}.getStartDate()/getEndDate()), and the every-fifth-week refusal toast is` &&
+               ` composed server-side, exactly as the original composes it. // IMPROVISED: the refusal is only a toast: the original also calls oEvent.preventDefault() so the forbidden week is NOT selected. abap2UI5` &&
+               ` bakes s_ctrl-check_prevent_default into the handler at RENDER time (app 241), which cannot express a condition evaluated per event (weekNumber % 5 === 0), so the week highlights and only the message`.
+    lv_text1 = lv_text1 && ` says it is not allowed. // LIVE-TEST: not yet run in a system: the CAL_SELECT interval round-trip and the WEEK_SELECT branch (toast on every fifth week, labels otherwise).`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarSingleIntervalSelection`       class = `z2ui5_cl_dmo_app_306` path = `src/02/b15/z2ui5_cl_dmo_app_306.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        since = `1.22.0`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: handleShowSpecialDays adds the special dates and the legend items imperatively (oCal.addSpecialDate(new DateTypeRange({...})), oLeg.addItem(new CalendarLegendItem({...}))) and destroys them` &&
+               ` again when the ToggleButton is released. The port binds the two Calendars' specialDates and the two CalendarLegends' items aggregations to four ABAP tables and fills/clears them on the` &&
+               ` SHOW_SPECIAL_DAYS round-trip, so the u:DateTypeRange and u:CalendarLegendItem templates plus the specialDates/items aggregation nodes are extra vs the archived view.xml (which declares none of them).` &&
+               ` The ToggleButton also gains a two-way bound pressed attribute so its state survives the round-trip. Every date is day n of the CURRENT month, exactly like the original's setDate(n) on a fresh` &&
+               ` reference date. // NOTE: DateTypeRange.startDate/endDate are typed 'object' and demand a real JS Date; the model carries ISO strings and Formatter.DateCreateObject (the curated formatter pack)` &&
+               ` converts them at the point of use via core:require. endDate is set on exactly one range, so its conversion is guarded with an expression binding - an unguarded new Date('') is an Invalid Date, which`.
+    lv_text1 = lv_text1 && ` is truthy and takes the whole view down. Rows without color/secondaryType/tooltip bind through omit_initial_paths so the UI5 default applies instead of an empty string. // POST-1.71:` &&
+               ` DateTypeRange.color (@since 1.76) and DateTypeRange.secondaryType (@since 1.81) are kept 1:1 from the original controller, and the Formatter.DateCreateObject core:require path needs UI5 >= 1.74. All` &&
+               ` newer than UI5 1.71. // LIVE-TEST: not yet run in a system: the ToggleButton round-trip filling and clearing both calendars' special dates and both legends.`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarSpecialDaysLegend`             class = `z2ui5_cl_dmo_app_308` path = `src/02/b15/z2ui5_cl_dmo_app_308.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.22.0`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `DateTypeRange.color (@since 1.76) and DateTypeRange.secondaryType (@since 1.81) are kept 1:1 from the original controller, and the Formatter.DateCreateObject core:require path needs UI5 >= 1.74. All` &&
+                 ` newer than UI5 1.71.` ) ).
 
     lv_text1 = `NOTE: The picked day IS transportable after all - measured 2026-08-05 with ``scripts/probes/event-arg-expression-probe.mjs`` against real OpenUI5: an event arg is a full UI5 expression, and indexed` &&
                ` access into an array-valued getter plus chained calls resolve there (``$event.oSource.getSelectedDates()[0].getStartDate()``). The earlier rationale - 'select carries no date parameter and the` &&
@@ -4538,6 +5230,33 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         post171 = `DateTypeRange.startDate is a date-object (type object) property, so it is bound through core:require="{Formatter: 'z2ui5/model/formatter'}" + formatter 'Formatter.DateCreateObject' (the curated` &&
                  ` module), which needs UI5 >= 1.74 - a plain ISO-string binding would crash view creation (CAPABILITIES 'Date-object properties'; same idiom as apps 108/109). The xmlns:core + core:require were added` &&
                  ` for it; the original view had neither.` ) ).
+
+    lv_text1 = `NOTE: openPopover builds a sap.m.ResponsivePopover with a nested sap.ui.unified.ColorPicker imperatively and calls openBy(oEvent.getSource()). The port expresses it as a core:FragmentDefinition shown` &&
+               ` with client->popover_display( xml, by_id = $event.oSource.sId ) - the CAPABILITIES.md 1:1 path for a controller-built popover. Its ResponsivePopover, ColorPicker and the two Buttons are extra vs the` &&
+               ` archived View.view.xml, which declares only the inline ColorPicker and the trigger Button. // NOTE: the controller's Device.system.phone branch (phone: keep the header and add Submit/Cancel buttons;` &&
+               ` otherwise setShowHeader(false)) stays a branch: abap2UI5 serves the device> named model on every view slot, so ResponsivePopover.showHeader and the two buttons' visible bind {=` &&
+               ` ${device>/system/phone}} instead of being resolved to one value at render time (apps 277/279 precedent). Both buttons close the popover client-side via _event_client( popover_close ), matching the` &&
+               ` original's oRP.close(). // LIVE-TEST: not yet run in a system: the anchored popover round-trip and the phone-only Submit/Cancel buttons.`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.unified`     control = `sap.ui.unified.ColorPicker`            name = `ColorPicker`                           class = `z2ui5_cl_dmo_app_309` path = `src/02/b15/z2ui5_cl_dmo_app_309.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.48.0`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: openPopover builds a sap.m.ResponsivePopover with a nested sap.ui.unified.ColorPicker imperatively and calls openBy(oEvent.getSource()). The port expresses it as a core:FragmentDefinition shown` &&
+               ` with client->popover_display( xml, by_id = $event.oSource.sId ) - the CAPABILITIES.md 1:1 path for a controller-built popover. Its ResponsivePopover, ColorPicker and the two Buttons are extra vs the` &&
+               ` archived View.view.xml, which declares only the inline ColorPicker and the trigger Button. The Large displayMode (@since 1.58) is kept 1:1 on both pickers. // NOTE: the controller's` &&
+               ` Device.system.phone branch (phone: keep the header and add Submit/Cancel buttons; otherwise setShowHeader(false)) stays a branch: abap2UI5 serves the device> named model on every view slot, so` &&
+               ` ResponsivePopover.showHeader and the two buttons' visible bind {= ${device>/system/phone}} instead of being resolved to one value at render time (apps 277/279 precedent). Both buttons close the` &&
+               ` popover client-side via _event_client( popover_close ), matching the original's oRP.close(). // LIVE-TEST: not yet run in a system: the anchored popover round-trip and the phone-only Submit/Cancel` &&
+               ` buttons.`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.unified`     control = `sap.ui.unified.ColorPicker`            name = `ColorPickerLarge`                      class = `z2ui5_cl_dmo_app_310` path = `src/02/b15/z2ui5_cl_dmo_app_310.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.48.0`
+        notes = lv_text1 ) ).
 
     lv_text1 = `NOTE: Breadth-probe (cross-library capability test). Inline sap.ui.unified ColorPicker (HSL / Simplified); the view itself is a 1:1 rebuild. Since 2026-07-30 the button's controller-built` &&
                ` ResponsivePopover-with-ColorPicker is reproduced 1:1 via popover_display( xml = fragment by_id = $event.oSource.sId ): a core:FragmentDefinition with ResponsivePopover (title 'Color Picker'), a` &&
@@ -4668,6 +5387,25 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         is_post171 = abap_true
         notes = lv_text1
         post171 = `Button.ariaHasPopup (since UI5 1.84) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.84 to render it.` ) ).
+
+    lv_text1 = `NOTE: handlePressOpenMenu lazily loads Menu.fragment.xml and calls menu.open(bKeyboard, oButton, Popup.Dock.BeginTop, Popup.Dock.BeginBottom, oButton). The port inlines the fragment into the Button's` &&
+               ` dependents aggregation (the declarative addDependent equivalent, app 060/227) and opens it client-side through control_by_id/openBy with $event.oSource.sId as the anchor: the openBy dispatch detects` &&
+               ` that sap.ui.unified.Menu has no own openBy and falls back to open(false, anchor, 'begin top', 'begin bottom', anchor) - the same call the original makes. Dropped either way: the keyboard flag the` &&
+               ` controller collects from a 'tab keyup' browser event (open's first argument), and the explicit Dock constants, which the fallback hardcodes to the same values. // NOTE: namespace representation: the` &&
+               ` archived Menu.fragment.xml declares xmlns="sap.ui.unified", so its Menu, MenuItem and MenuItemGroup controls are unprefixed there, while Page.view.xml declares xmlns="sap.m". One port view can carry`.
+    lv_text1 = lv_text1 && ` only one default namespace, so it keeps sap.m (matching the view) and writes the two Menu controls, the fourteen MenuItem controls and the three MenuItemGroup controls with the u: prefix. Same tree,` &&
+               ` different prefix - no functional difference. // POST-1.71: sap.ui.unified.MenuItemGroup (control @since 1.127) with itemSelectionMode SingleSelect/MultiSelect and MenuItem.selected (@since 1.127) are` &&
+               ` the whole point of this sample and are kept 1:1; sap.m.Button.ariaHasPopup (@since 1.84) is kept 1:1 on the trigger button. All newer than UI5 1.71. // LIVE-TEST: not yet run in a system: the` &&
+               ` anchored open of the unified Menu and the selectable item groups (single/multi select state).`.
+    result = VALUE #( BASE result
+      ( module = `sap.ui.unified`     control = `sap.ui.unified.Menu`                   name = `MenuSelectable`                        class = `z2ui5_cl_dmo_app_311` path = `src/02/b15/z2ui5_cl_dmo_app_311.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.21.0`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `sap.ui.unified.MenuItemGroup (control @since 1.127) with itemSelectionMode SingleSelect/MultiSelect and MenuItem.selected (@since 1.127) are the whole point of this sample and are kept 1:1;` &&
+                 ` sap.m.Button.ariaHasPopup (@since 1.84) is kept 1:1 on the trigger button. All newer than UI5 1.71.` ) ).
 
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.HeaderFacetPattern`           name = `ObjectPageSectionShowTitle`            class = `z2ui5_cl_dmo_app_200` path = `src/03/b02/z2ui5_cl_dmo_app_200.clas.abap`

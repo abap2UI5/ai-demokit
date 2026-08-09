@@ -437,6 +437,15 @@ array into a typed ABAP `VALUE #( )` literal. Usage, flags, the `OPENUI5_SRC`
 sparse-clone recipe and the type-inference rules are in
 **`.claude/skills/scaffold-a-port/SKILL.md`**.
 
+`npm run form-family <dir> <class> <sample> <out>`
+(`scripts/form-family-to-abap.mjs`) rebuilds ONE sample of the sap.ui.layout
+Form/SimpleForm display-vs-change family (apps 312..337). Those 26 samples
+share one `Page.controller.js`, so the port shape is fixed and only the
+fragment bodies differ. It is deliberately narrow — it knows that controller,
+its supplier fields and its event names, and throws on anything else rather
+than guessing; the output is reviewed and its sidecar written by hand, exactly
+like a hand-written port. Regenerating 312..337 with it is byte-identical.
+
 Artefact regeneration is automated by the tracked **`.githooks/pre-commit`**
 hook: on every commit it regenerates the overview app, the coverage docs and
 the STATUS.md state block and stages them, so they never drift from `meta/`

@@ -1,0 +1,31 @@
+{
+  "class": "z2ui5_cl_dmo_app_306",
+  "sample": "sap.ui.unified.sample.CalendarSingleIntervalSelection",
+  "entity": "sap.ui.unified.Calendar",
+  "file": "src/02/b15/z2ui5_cl_dmo_app_306.clas.abap",
+  "batch": "b15",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "handleCalendarSelect/_updateText read the picked interval off the control (getSelectedDates()[0].getStartDate()/getEndDate()) and format both ends yyyy-MM-dd. The port transports six UI5 expression args (the LOCAL year/month+1/day of each end, not toISOString( ), which would shift the day east of Greenwich), each guarded so a missing end arrives as 0 and renders the original's 'No Date Selected'; the two Texts get two-way bound text attributes instead of setText (app 139 idiom, probe-verified)."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleWeekNumberSelect reads the weekNumber and the weekDays DateRange parameters; both travel as expression args (${$parameters>/weekNumber} and the local date parts of ${$parameters>/weekDays}.getStartDate()/getEndDate()), and the every-fifth-week refusal toast is composed server-side, exactly as the original composes it."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "the refusal is only a toast: the original also calls oEvent.preventDefault() so the forbidden week is NOT selected. abap2UI5 bakes s_ctrl-check_prevent_default into the handler at RENDER time (app 241), which cannot express a condition evaluated per event (weekNumber % 5 === 0), so the week highlights and only the message says it is not allowed."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "not yet run in a system: the CAL_SELECT interval round-trip and the WEEK_SELECT branch (toast on every fifth week, labels otherwise)."
+    }
+  ]
+}

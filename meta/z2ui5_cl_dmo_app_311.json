@@ -1,0 +1,31 @@
+{
+  "class": "z2ui5_cl_dmo_app_311",
+  "sample": "sap.ui.unified.sample.MenuSelectable",
+  "entity": "sap.ui.unified.Menu",
+  "file": "src/02/b15/z2ui5_cl_dmo_app_311.clas.abap",
+  "batch": "b15",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "handlePressOpenMenu lazily loads Menu.fragment.xml and calls menu.open(bKeyboard, oButton, Popup.Dock.BeginTop, Popup.Dock.BeginBottom, oButton). The port inlines the fragment into the Button's dependents aggregation (the declarative addDependent equivalent, app 060/227) and opens it client-side through control_by_id/openBy with $event.oSource.sId as the anchor: the openBy dispatch detects that sap.ui.unified.Menu has no own openBy and falls back to open(false, anchor, 'begin top', 'begin bottom', anchor) - the same call the original makes. Dropped either way: the keyboard flag the controller collects from a 'tab keyup' browser event (open's first argument), and the explicit Dock constants, which the fallback hardcodes to the same values."
+    },
+    {
+      "type": "NOTE",
+      "what": "namespace representation: the archived Menu.fragment.xml declares xmlns=\"sap.ui.unified\", so its Menu, MenuItem and MenuItemGroup controls are unprefixed there, while Page.view.xml declares xmlns=\"sap.m\". One port view can carry only one default namespace, so it keeps sap.m (matching the view) and writes the two Menu controls, the fourteen MenuItem controls and the three MenuItemGroup controls with the u: prefix. Same tree, different prefix - no functional difference."
+    },
+    {
+      "type": "POST_171",
+      "what": "sap.ui.unified.MenuItemGroup (control @since 1.127) with itemSelectionMode SingleSelect/MultiSelect and MenuItem.selected (@since 1.127) are the whole point of this sample and are kept 1:1; sap.m.Button.ariaHasPopup (@since 1.84) is kept 1:1 on the trigger button. All newer than UI5 1.71."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "not yet run in a system: the anchored open of the unified Menu and the selectable item groups (single/multi select state)."
+    }
+  ]
+}
