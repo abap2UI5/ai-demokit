@@ -71,7 +71,20 @@ function resolveSample(str) {
   if (lib) return { lib, name, entity: `${lib}.${name}` }; // explicit lib, not in universe
   console.error(`sample "${name}" not found in ui5/universe.json — pass a qualified <lib>/<name>`); process.exit(1);
 }
+/* ui5/entity-overrides.json supplies the owning entity where the upstream
+ * docuindex has a gap (generate-coverage.mjs, generate-status.mjs and
+ * scope-of.mjs all apply it). Without it here the sidecar keeps the
+ * universe's null, and generate-overview.mjs dies sorting on entity.
+ * Found 2026-08-09 on sap.ui.layout.sample.Form480 / SimpleForm480. */
+const OVERRIDES = (() => {
+  const f = path.join(UI5, 'entity-overrides.json');
+  return fs.existsSync(f) ? JSON.parse(fs.readFileSync(f, 'utf8')).overrides || {} : {};
+})();
 const resolved = resolveSample(input);
+if (!resolved.entity || resolved.entity.includes('.sample.')) {
+  const override = OVERRIDES[`${resolved.lib}.sample.${resolved.name}`];
+  if (override) resolved.entity = override;
+}
 const { lib, name, entity } = resolved;
 
 // ---------- scope + hold-out pre-checks ----------

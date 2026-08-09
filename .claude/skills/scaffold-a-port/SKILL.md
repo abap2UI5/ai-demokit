@@ -76,6 +76,23 @@ that is the actual porting work):
   a display-only value bound into a text template (keeps the exact decimals,
   e.g. dimensions `40.8`). Do **not** leave a decimal column as `TYPE i`.
 
+- **`npm run form-family -- <ui5/sap.ui.layout/Sample> <class> <sample id> <out.clas.abap>`**
+  (`scripts/form-family-to-abap.mjs`) — rebuilds one sample of the
+  **sap.ui.layout Form/SimpleForm display-vs-change family** (apps 312..337).
+  All 26 share one `Page.controller.js` (Page content swapped between
+  `Display.fragment.xml` and `Change.fragment.xml`, three header Buttons,
+  `bindElement('/SupplierCollection/0')`), so the port shape is fixed and only
+  the fragment bodies differ: both fragments inlined and switched by the
+  two-way bound `edit_mode` flag, the row-0 fields seeded at the model root and
+  bound **absolutely**, Edit/Save/Cancel with a server-side clone. Deliberately
+  **narrow** — it knows this family's controller, its supplier fields and its
+  event names, and **throws** on an unknown `{Field}`, a missing header Button
+  or a missing `Page id="page"` instead of guessing. Output is reviewed and its
+  sidecar written by hand like any port; regenerating 312..337 is
+  byte-identical and `structural-diff` reports 0 differences for all of them.
+  Do **not** grow it into a general XML->builder converter — the porting work
+  is the judgement it refuses to make.
+
 Artefact regeneration is automated by the tracked **`.githooks/pre-commit`**
 hook: on every commit it regenerates the overview app, the coverage docs and
 the STATUS.md state block and stages them, so they never drift from `meta/`

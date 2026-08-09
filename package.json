@@ -12,6 +12,7 @@
     "view-gates": "node scripts/view-gates.mjs --strict",
     "scaffold": "node scripts/scaffold.mjs",
     "json-to-abap": "node scripts/json-to-abap.mjs",
+    "form-family": "node scripts/form-family-to-abap.mjs",
     "node:setup": "node scripts/node-setup.mjs",
     "node:build": "node scripts/e2e-build.mjs",
     "node:serve": "node scripts/node-serve.mjs",
