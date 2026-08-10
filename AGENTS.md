@@ -430,6 +430,8 @@ artefacts must leave the tree clean, exactly as the `meta_valid` CI job checks).
 npm ci               # once - installs abaplint, @abap2ui5/linter + the OpenUI5 runtime
 npm run gates:full   # gates + `npx abaplint ./abaplint.jsonc` (0 issues)
                      #       + view-gates --strict (properties/structure/headless render)
+npm test             # fixture tests for the gate/generator tooling itself
+                     # (scripts/test/, golden-file based; also a CI job)
 ```
 
 

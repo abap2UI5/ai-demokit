@@ -1,0 +1,6 @@
+{
+	"ProductCollection": [
+		{ "Name": "Gladiator MX", "City": "Hamburg", "Image": "img/product1.jpg" },
+		{ "Name": "Proctra X", "City": "Berlin", "Image": "img/product2.jpg" }
+	]
+}

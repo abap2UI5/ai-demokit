@@ -1,0 +1,8 @@
+z2ui5_cl_dmo_app_001 (sap.m.sample.FixtureGood):
+    declared  attr missing  Text.wrapping
+z2ui5_cl_dmo_app_002 (sap.m.sample.FixtureBad):
+  ! UNDECLARED  control extra  Button: original 0 vs port 1
+  ! UNDECLARED  attr missing  List.headerText
+  ! UNDECLARED  binding value  Page.title: original {title} vs port `Static Title`
+
+2 ports checked, 2 with structural diffs, 3 undeclared differences, 0 declared skips (re-verified), 0 stale skip(s).

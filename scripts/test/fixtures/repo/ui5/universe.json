@@ -1,0 +1,13 @@
+{
+ "release": "1.152.0",
+ "libs": [
+  {
+   "lib": "sap.m",
+   "samples": [
+    { "name": "FixtureBad", "entity": "sap.m.List", "since": "1.16", "deprecated": null },
+    { "name": "FixtureGood", "entity": "sap.m.Page", "since": "1.12", "deprecated": null },
+    { "name": "FixtureOpen", "entity": "sap.m.Button", "since": null, "deprecated": null }
+   ]
+  }
+ ]
+}
