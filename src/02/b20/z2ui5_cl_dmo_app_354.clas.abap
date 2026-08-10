@@ -281,8 +281,11 @@ CLASS z2ui5_cl_dmo_app_354 IMPLEMENTATION.
 
     IF global_filter IS NOT INITIAL.
       DATA(lv_query) = to_upper( global_filter ).
-      DELETE t_products WHERE     to_upper( name )     NS lv_query
-                              AND to_upper( category ) NS lv_query.
+      LOOP AT t_products INTO DATA(ls_row).
+        IF to_upper( ls_row-name ) NS lv_query AND to_upper( ls_row-category ) NS lv_query.
+          DELETE t_products INDEX sy-tabix.
+        ENDIF.
+      ENDLOOP.
     ENDIF.
 
     IF availability_filter_on = abap_true.
@@ -367,21 +370,21 @@ CLASS z2ui5_cl_dmo_app_354 IMPLEMENTATION.
         currencycode = `EUR` quantity = 35 )
       ( name = `Media Keyboard` category = `Keyboards` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1065.jpg` available = abap_true availablestate = `Success` status = `Available` price = 26
         currencycode = `EUR` quantity = 26 )
-      ( name = `Mousepad` category = `Mousepads` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1066.jpg` available = abap_true availablestate = `Success` status = `Available` price = 6.99
+      ( name = `Mousepad` category = `Mousepads` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1066.jpg` available = abap_true availablestate = `Success` status = `Available` price = `6.99`
         currencycode = `EUR` quantity = 12 )
-      ( name = `Ergo Mousepad` category = `Mousepads` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1067.jpg` available = abap_false availablestate = `Error` status = `Out of Stock` price = 8.99
+      ( name = `Ergo Mousepad` category = `Mousepads` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1067.jpg` available = abap_false availablestate = `Error` status = `Out of Stock` price = `8.99`
         currencycode = `EUR` quantity = 16 )
-      ( name = `Designer Mousepad` category = `Mousepads` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1068.jpg` available = abap_true availablestate = `Success` status = `Available` price = 12.99
+      ( name = `Designer Mousepad` category = `Mousepads` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1068.jpg` available = abap_true availablestate = `Success` status = `Available` price = `12.99`
         currencycode = `EUR` quantity = 26 )
       ( name = `Universal card reader` category = `Computer System Accessories` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1069.jpg` available = abap_true availablestate = `Success` status = `Available`
         price = 14 currencycode = `EUR` quantity = 22 )
-      ( name = `Proctra X` category = `Graphic Cards` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1070.jpg` available = abap_false availablestate = `Error` status = `Out of Stock` price = 70.9
+      ( name = `Proctra X` category = `Graphic Cards` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1070.jpg` available = abap_false availablestate = `Error` status = `Out of Stock` price = `70.9`
         currencycode = `EUR` quantity = 15 )
-      ( name = `Gladiator MX` category = `Graphic Cards` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1071.jpg` available = abap_false availablestate = `Error` status = `Discontinued` price = 81.7
+      ( name = `Gladiator MX` category = `Graphic Cards` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1071.jpg` available = abap_false availablestate = `Error` status = `Discontinued` price = `81.7`
         currencycode = `EUR` quantity = 16 )
-      ( name = `Hurricane GX` category = `Graphic Cards` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1072.jpg` available = abap_true availablestate = `Success` status = `Available` price = 101.2
+      ( name = `Hurricane GX` category = `Graphic Cards` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1072.jpg` available = abap_true availablestate = `Success` status = `Available` price = `101.2`
         currencycode = `EUR` quantity = 13 )
-      ( name = `Hurricane GX/LN` category = `Graphic Cards` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1073.jpg` available = abap_false availablestate = `Error` status = `Out of Stock` price = 139.99
+      ( name = `Hurricane GX/LN` category = `Graphic Cards` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1073.jpg` available = abap_false availablestate = `Error` status = `Out of Stock` price = `139.99`
         currencycode = `EUR` quantity = 5 )
       ( name = `Photo Scan` category = `Scanners` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1080.jpg` available = abap_false availablestate = `Error` status = `Out of Stock` price = 129
         currencycode = `EUR` quantity = 8 )
@@ -405,9 +408,9 @@ CLASS z2ui5_cl_dmo_app_354 IMPLEMENTATION.
         currencycode = `EUR` quantity = 18 )
       ( name = `Lovely Sound Stereo` category = `Accessories` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1097.jpg` available = abap_false availablestate = `Error` status = `Out of Stock` price = 29
         currencycode = `EUR` quantity = 21 )
-      ( name = `Smart Office` category = `Software` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1100.jpg` available = abap_false availablestate = `Error` status = `Out of Stock` price = 89.9
+      ( name = `Smart Office` category = `Software` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1100.jpg` available = abap_false availablestate = `Error` status = `Out of Stock` price = `89.9`
         currencycode = `EUR` quantity = 25 )
-      ( name = `Smart Design` category = `Software` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1101.jpg` available = abap_true availablestate = `Success` status = `Available` price = 79.9
+      ( name = `Smart Design` category = `Software` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1101.jpg` available = abap_true availablestate = `Success` status = `Available` price = `79.9`
         currencycode = `EUR` quantity = 26 )
       ( name = `Smart Network` category = `Software` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1102.jpg` available = abap_true availablestate = `Success` status = `Available` price = 69
         currencycode = `EUR` quantity = 28 )
@@ -419,16 +422,16 @@ CLASS z2ui5_cl_dmo_app_354 IMPLEMENTATION.
         currencycode = `EUR` quantity = 17 )
       ( name = `Smart Firewall` category = `Software` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1106.jpg` available = abap_false availablestate = `Error` status = `Discontinued` price = 34
         currencycode = `EUR` quantity = 19 )
-      ( name = `Smart Money` category = `Software` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1107.jpg` available = abap_false availablestate = `Error` status = `Out of Stock` price = 29.9
+      ( name = `Smart Money` category = `Software` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1107.jpg` available = abap_false availablestate = `Error` status = `Out of Stock` price = `29.9`
         currencycode = `EUR` quantity = 18 )
-      ( name = `PC Lock` category = `Computer System Accessories` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1110.jpg` available = abap_true availablestate = `Success` status = `Available` price = 8.9
+      ( name = `PC Lock` category = `Computer System Accessories` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1110.jpg` available = abap_true availablestate = `Success` status = `Available` price = `8.9`
         currencycode = `EUR` quantity = 14 )
       ( name = `Notebook Lock` category = `Computer System Accessories` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1111.jpg` available = abap_true availablestate = `Success` status = `Available`
-        price = 6.9 currencycode = `EUR` quantity = 20 )
+        price = `6.9` currencycode = `EUR` quantity = 20 )
       ( name = `Web cam reality` category = `Computer System Accessories` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1112.jpg` available = abap_false availablestate = `Error` status = `Out of Stock`
         price = 39 currencycode = `EUR` quantity = 27 )
       ( name = `Screen clean` category = `Computer System Accessories` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1113.jpg` available = abap_true availablestate = `Success` status = `Available`
-        price = 2.3 currencycode = `EUR` quantity = 17 )
+        price = `2.3` currencycode = `EUR` quantity = 17 )
       ( name = `Fabric bag professional` category = `Computer System Accessories` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1114.jpg` available = abap_true availablestate = `Success`
         status = `Available` price = 31 currencycode = `EUR` quantity = 14 )
       ( name = `Wireless DSL Router` category = `Telecommunications` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1115.jpg` available = abap_true availablestate = `Success` status = `Available` price = 49
@@ -480,17 +483,17 @@ CLASS z2ui5_cl_dmo_app_354 IMPLEMENTATION.
       ( name = `Gaming Monster Pro` category = `Desktop Computers` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1603.jpg` available = abap_false availablestate = `Error` status = `Discontinued`
         price = 1700 currencycode = `EUR` quantity = 25 )
       ( name = `7" Widescreen Portable DVD Player w MP3` category = `Accessories` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2000.jpg` available = abap_true availablestate = `Success`
-        status = `Available` price = 249.99 currencycode = `EUR` quantity = 20 )
+        status = `Available` price = `249.99` currencycode = `EUR` quantity = 20 )
       ( name = `10" Portable DVD player` category = `Accessories` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2001.jpg` available = abap_true availablestate = `Success` status = `Available`
-        price = 449.99 currencycode = `EUR` quantity = 21 )
+        price = `449.99` currencycode = `EUR` quantity = 21 )
       ( name = `Portable DVD Player with 9" LCD Monitor` category = `Accessories` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2002.jpg` available = abap_true availablestate = `Success`
-        status = `Available` price = 853.99 currencycode = `EUR` quantity = 50 )
+        status = `Available` price = `853.99` currencycode = `EUR` quantity = 50 )
       ( name = `CD/DVD case: 264 sleeves` category = `Accessories` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2025.jpg` available = abap_false availablestate = `Error` status = `Discontinued`
-        price = 44.99 currencycode = `EUR` quantity = 26 )
+        price = `44.99` currencycode = `EUR` quantity = 26 )
       ( name = `Audio/Video Cable Kit - 4m` category = `Accessories` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2026.jpg` available = abap_true availablestate = `Success` status = `Available`
-        price = 29.99 currencycode = `EUR` quantity = 16 )
+        price = `29.99` currencycode = `EUR` quantity = 16 )
       ( name = `Removable CD/DVD Laser Labels` category = `Accessories` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2027.jpg` available = abap_false availablestate = `Error` status = `Discontinued`
-        price = 8.99 currencycode = `EUR` quantity = 25 )
+        price = `8.99` currencycode = `EUR` quantity = 25 )
       ( name = `Beam Breaker B-1` category = `Accessories` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6100.jpg` available = abap_false availablestate = `Error` status = `Out of Stock` price = 469
         currencycode = `EUR` quantity = 32 )
       ( name = `Beam Breaker B-2` category = `Accessories` productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6101.jpg` available = abap_true availablestate = `Success` status = `Available` price = 679

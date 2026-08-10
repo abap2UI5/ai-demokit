@@ -5176,10 +5176,25 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         since = `1.16.0`
         notes = lv_text1 ) ).
 
+    lv_text1 = `NOTE: Both filters are applied in ABAP and the Table binds the RESULT, so the controller's Filter objects and its binding.filter( ) calls become one server-side selection - the thin-frontend move. The` &&
+               ` SearchField's query filters Name OR Status (the original's _oTxtFilter), the facet selections are ANDed across the two lists and ORed inside each one (its _oFacetFilter), and only a list with a` &&
+               ` selection takes part - exactly the two nested Filter groups. handleFacetFilterReset clears every selection and clearAllFilters (the noData Link) clears both filters at once. // NOTE: handleListClose` &&
+               ` reads the selected items off the control; the port binds each FacetFilterItem's selected flag two-way instead (an added attribute), so listClose only has to tell the backend that the flags are back -` &&
+               ` the app-022 idiom. FacetFilterList.key and FacetFilterItem.key are bound to {TYPE} and {TEXT} rather than the original's {key}: the mock's /ProductCollectionStats/Filters carries no ``key`` field at`.
+    lv_text1 = lv_text1 && ` all (the original's binding resolves to nothing), and the list's type / the value's text ARE the identity the filter works on. // NOTE: The named ``ui>`` model (filterValue) is folded onto the one` &&
+               ` default model, prefix dropped and leaf name kept. /ProductCollectionStats/Filters is inlined verbatim - both facet lists (Category with 16 values, SupplierName with 12) with their counts. The full` &&
+               ` 123-row catalog is returned by a method rather than held in a public attribute: only the filtered rows are bound, so only they belong in the model that travels on every round-trip (the overview-app` &&
+               ` lesson in AGENTS section 10). The controller's formatAvailableToObjectState is precomputed into the AVAILABLESTATE column, since business logic belongs in the backend. // IMPROVISED: The footer` &&
+               ` OverflowToolbar stays empty: onInit lazily requires sap/ui/table/sample/TableExampleUtils and appends a ToolbarSpacer plus its createInfoButton( ) to it. That helper lives in the demo kit's own` &&
+               ` sample folder, not in any UI5 library, and only opens a popover pointing at the sample's source. Every sap.ui.table sample of this batch drops it the same way. // LIVE-TEST: Unverified in a running`.
+    lv_text1 = lv_text1 && ` system: whether the two-way bound FacetFilterItem selected flags return with the listClose round-trip and produce the expected server-side selection, and whether the noData Link appears when the` &&
+               ` filters leave no rows.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `Aggregations`                                  class = `z2ui5_cl_dmo_app_352` path = `src/02/b20/z2ui5_cl_dmo_app_352.clas.abap`
-        score = 1
-        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` ) ).
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        notes = lv_text1 ) ).
 
     lv_text1 = `NOTE: Rebuilt 1:1 from the breadth probe 2026-08-05: all THIRTEEN columns (Text/Input/Label/ObjectStatus/u:Currency/ComboBox/Link/Button/CheckBox/Select/MultiInput/c:Icon/DatePicker templates) over` &&
                ` the full 123-row /ProductCollection of the shared demo mock (sap/ui/demo/mock/products.json), with the Suppliers and Categories arrays the controller derives from it in initSampleDataModel.` &&
@@ -5440,10 +5455,33 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         post171 = `sap.ui.table.Table.rowMode (aggregation, @since 1.119) is used 1:1 (the RowModes sample binds rowMode to the folded 'ui>' state). Newer than UI5 1.71; declared per the property-171 policy. Previously` &&
                  ` undeclared because the property gate is blind to sap.ui.table (properties.json holds sap.m only); found by the non-sap.m @since audit 2026-07-24.` ) ).
 
+    lv_text1 = `POST-1.71: Three post-1.71 members are kept 1:1 because the sample is built on them: sap.ui.table.Table.rowMode (aggregation, @since 1.119) with the control sap.ui.table.rowmodes.Fixed it holds,` &&
+               ` sap.m.plugins.PasteProvider (@since 1.91) in the toolbar Button's dependents, and sap.ui.table.plugins.MultiSelectionPlugin's selectionMode property (@since 1.100). Declared per the fidelity-first` &&
+               ` property-171 policy, so the app needs a UI5 release >= 1.119. // NOTE: The sample writes its two plugin controls with a DOTTED element name and no namespace prefix (<plugins.MultiSelectionPlugin>` &&
+               ` under the sap.ui.table default xmlns, <m:plugins.PasteProvider>), which UI5 resolves as a sub-package of the element's namespace. The port declares real prefixes for those two packages instead` &&
+               ` (xmlns:tp="sap.ui.table.plugins", xmlns:mp="sap.m.plugins") and writes tp:MultiSelectionPlugin / mp:PasteProvider - the same two controls, a namespace-representation difference only. structural-diff` &&
+               ` compares the qualified name, so it reports the dotted names as missing and the prefixed ones as extra. // NOTE: onSelectChange disappears: the selection-mode Select's selectedKey and the`.
+    lv_text1 = lv_text1 && ` MultiSelectionPlugin's selectionMode bind the SAME field, so picking a mode drives the plugin with no round-trip - the prefer-a-bindable-property rule. The named ``ui>`` model (the three modes and` &&
+               ` the initial one) is folded onto the one default model, prefix dropped and leaf names kept. // IMPROVISED: The copy half of the sample is dropped, and with it the toolbar's copy Button: onInit creates` &&
+               ` a sap.m.plugins.CellSelector and a sap.m.plugins.CopyProvider in JS (guarded by window.isSecureContext), adds both to the table's dependents and appends the CopyProvider's generated copy Button to` &&
+               ` the toolbar. Building controls at runtime is the capability boundary CAPABILITIES marks as not expressible, and the CopyProvider's extractData/copy callbacks are app-authored JS formatters. The` &&
+               ` declared PasteProvider Button of the view is kept 1:1. onPaste consequently loses its cell-range branch - the CellSelector that would supply the range is gone - so the port reports the pasted data at` &&
+               ` TABLE level, which is the same handler's other branch, with the original's message text. // NOTE: The sample serves its rows from an in-page OData MockServer (over the sibling OData sample's`.
+    lv_text1 = lv_text1 && ` metadata.xml and mock data). An abap2UI5 app has a real ABAP backend, so the mock service is replaced by the model itself: all 115 rows of ProductSet.json are inlined and the Table binds them` &&
+               ` directly - the server-side paging illusion is what that costs, while threshold, enableBusyIndicator and the noData BusyIndicator stay 1:1. ProductSet.json lives in the sibling OData sample folder` &&
+               ` upstream; it is archived into this sample's folder too so the port is verifiable offline. The six column labels are metadata bindings in the original ({/#Product/Name/@sap:label} and friends), which` &&
+               ` only an OData model can resolve, and are replaced by the literal sap:label texts from metadata.xml. The numeric columns stay TYPE string so the mock's exact decimals survive. // LIVE-TEST: Unverified` &&
+               ` in a running system: whether the paste event delivers the pasted data array to get_event_arg, and whether the bound selectionMode reaches the plugin without a round-trip.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `SelectCopyPaste`                               class = `z2ui5_cl_dmo_app_360` path = `src/02/b20/z2ui5_cl_dmo_app_360.clas.abap`
-        score = 1
-        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` ) ).
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `Three post-1.71 members are kept 1:1 because the sample is built on them: sap.ui.table.Table.rowMode (aggregation, @since 1.119) with the control sap.ui.table.rowmodes.Fixed it holds,` &&
+                 ` sap.m.plugins.PasteProvider (@since 1.91) in the toolbar Button's dependents, and sap.ui.table.plugins.MultiSelectionPlugin's selectionMode property (@since 1.100). Declared per the fidelity-first` &&
+                 ` property-171 policy, so the app needs a UI5 release >= 1.119.` ) ).
 
     lv_text1 = `NOTE: Three of the four controller setters become bound properties. The behaviour Select's selectedKey and the Table's selectionBehavior share one field, and the Switch's state and the Table's` &&
                ` enableSelectAll share another - so onBehaviourModeChange and onSwitchChange disappear and their wires with them: the behaviour Select keeps no change attribute and the Switch loses Switch.change` &&
@@ -5519,13 +5557,39 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         post171 = `sap.ui.table.Table.rowMode (aggregation, @since 1.119) and the control sap.ui.table.rowmodes.Fixed it holds are used 1:1 - the sample declares them in its view and the freeze demo drives the row` &&
                  ` mode's fixedTopRowCount / fixedBottomRowCount. Both are newer than UI5 1.71; declared per the fidelity-first property-171 policy, so the app needs a UI5 release >= 1.119.` ) ).
 
+    lv_text1 = `IMPROVISED: The sample's rows come from an OData v2 tree binding over a mock service: the Nodes entity is a FLAT list carrying HierarchyLevel / NodeID / ParentNodeID / DrillState, and the binding's` &&
+               ` treeAnnotationProperties (hierarchyLevelFor, hierarchyNodeFor, hierarchyParentNodeFor, hierarchyDrillStateFor) tell the ODataTreeBinding how to assemble it into a tree. abap2UI5 serves one JSON` &&
+               ` model, so there is no ODataTreeBinding and no annotation to read: the same sixteen nodes are modelled NESTED instead (one children table per level) and bound with the arrayNames parameter - the JSON` &&
+               ` tree binding the framework does support (the app-248 idiom). The rendered tree is identical, every node keeps all four of its own fields and the four columns are unchanged; what is lost is the` &&
+               ` annotation-driven assembly itself, and with it the countMode: 'Inline' parameter, which is an OData request option. // NOTE: localService/mockdata/Nodes.json is inlined in full - all sixteen nodes` &&
+               ` with the mock's own ids, levels, descriptions, parent ids and drill states; the root nodes' ParentNodeID is null in the JSON and becomes the empty string in the flat ABAP row type. The mock server`.
+    lv_text1 = lv_text1 && ` itself (localService/mockserver.js over localService/metadata.xml) has no counterpart in an abap2UI5 app, whose backend IS the service. // LIVE-TEST: Unverified in a running system: whether the` &&
+               ` nested model plus arrayNames renders the same expandable tree the OData tree binding produces.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.table`       control = `sap.ui.table.TreeTable`                name = `TreeTable.BasicODataTreeBinding`               class = `z2ui5_cl_dmo_app_364` path = `src/02/b20/z2ui5_cl_dmo_app_364.clas.abap`
-        score = 1
-        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: Collapse all and Expand first level are reproduced 1:1 as frontend actions: onCollapseAll / onExpandFirstLevel call the TreeTable's own collapseAll( ) and expandToLevel( 1 ), which have no` &&
+               ` bindable equivalent (the expansion state lives in the control), so they go through _event_client control_by_id TreeTable/collapseAll and TreeTable/expandToLevel with the level as its argument -` &&
+               ` roundtrip-free, exactly what the buttons do in the original. // IMPROVISED: The hierarchy MAINTENANCE half of the sample - Cut, Paste and the drag & drop re-parenting - is dropped, and with it the` &&
+               ` DragDropInfo's dragStart and drop attributes; the Cut and Paste buttons keep their labels, icons and the Paste button's enabled="false" from the view but do nothing. All three handlers move a node to` &&
+               ` an ARBITRARY new parent (onDrop pushes the dragged row's data into the dropped row's ``categories`` array and blanks the source; onCut/onPaste do the same through a clipboard). A JSON tree binding` &&
+               ` needs the children nested under their parent, and an ABAP nesting is TYPED and fixed-depth (article inside group inside area inside root, as the JSON's own four levels are), so a node cannot be`.
+    lv_text1 = lv_text1 && ` re-parented to a level of a different type - which is precisely what these handlers do. The row-to-node resolution itself would be transportable (a drop event can ship` &&
+               ` ${$parameters>/draggedControl}.getBindingContext().getPath()), so this is a limit of modelling a tree as typed ABAP data, not of the event wire. // NOTE: Clothing.json is inlined 1:1 - the full tree` &&
+               ` (Women/Men/Girls/Boys) with every leaf's amount/currency/size - as nested types, one per level, so absent leaf fields exist only where the JSON carries them and the Size Select stays hidden via the` &&
+               ` original's !!${size} guard. It is byte-identical to the file the sibling TreeTable.JSONTreeBinding sample uses, which app 248 ports; the model and its types are shared with that port. The rows` &&
+               ` binding keeps the original's arrayNames parameter with the ABAP (upper-cased) array name. // LIVE-TEST: Unverified in a running system: the two control_by_id wires (collapseAll, and expandToLevel` &&
+               ` with its numeric argument - a listed CONTROL_METHODS entry, so the argument is declared and reaches the method).`.
+    result = VALUE #( BASE result
       ( module = `sap.ui.table`       control = `sap.ui.table.TreeTable`                name = `TreeTable.HierarchyMaintenanceJSONTreeBinding` class = `z2ui5_cl_dmo_app_365` path = `src/02/b20/z2ui5_cl_dmo_app_365.clas.abap`
-        score = 1
-        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` ) ).
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        notes = lv_text1 ) ).
 
     lv_text1 = `NOTE: The onInit JSONModel('.../Clothing.json') load is folded into model_init: the full tree (Women/Men/Girls/Boys, every article with amount/currency/size) plus the /sizes list, 1:1 from the mock.` &&
                ` The tree keeps the original's shape - nested types per level under a CATALOG-CLOTHING structure, so the rows binding path '/CATALOG/CLOTHING' with parameters { arrayNames: ['CATEGORIES'] } mirrors` &&
@@ -5548,10 +5612,21 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = lv_text1 ) ).
 
+    lv_text1 = `IMPROVISED: The sample's rows come from an OData v2 tree binding over a mock service: the Nodes entity is a FLAT list carrying HierarchyLevel / NodeID / ParentNodeID / DrillState, and the service` &&
+               ` METADATA carries the same hierarchy annotations, which the ODataTreeBinding reads on its own. abap2UI5 serves one JSON model, so there is no ODataTreeBinding and no annotation to read: the same` &&
+               ` sixteen nodes are modelled NESTED instead (one children table per level) and bound with the arrayNames parameter - the JSON tree binding the framework does support (the app-248 idiom). The rendered` &&
+               ` tree is identical, every node keeps all four of its own fields and the four columns are unchanged; what is lost is the annotation-driven assembly itself, and with it the countMode: 'Inline'` &&
+               ` parameter, which is an OData request option. numberOfExpandedLevels: 1 IS kept as a binding parameter, so the first level opens like in the original. // NOTE: This sample has no controller at all` &&
+               ` (the view names none); the port is correspondingly static - a bare check_on_init branch with model_init and view_display, no on_event. // NOTE: localService/mockdata/Nodes.json is inlined in full -`.
+    lv_text1 = lv_text1 && ` all sixteen nodes with the mock's own ids, levels, descriptions, parent ids and drill states; the root nodes' ParentNodeID is null in the JSON and becomes the empty string in the flat ABAP row type.` &&
+               ` The mock server itself (localService/mockserver.js over localService/metadata.xml) has no counterpart in an abap2UI5 app, whose backend IS the service. // LIVE-TEST: Unverified in a running system:` &&
+               ` whether the nested model plus arrayNames renders the same expandable tree the OData tree binding produces.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.table`       control = `sap.ui.table.TreeTable`                name = `TreeTable.ODataAnnotationsTreeBinding`         class = `z2ui5_cl_dmo_app_366` path = `src/02/b20/z2ui5_cl_dmo_app_366.clas.abap`
-        score = 1
-        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` ) ).
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        notes = lv_text1 ) ).
 
     lv_text1 = `NOTE: Calendar with primaryCalendarType Islamic / secondaryCalendarType Gregorian. The picked day IS transportable after all - measured 2026-08-05 with` &&
                ` ``scripts/probes/event-arg-expression-probe.mjs`` against real OpenUI5: an event arg is a full UI5 expression, and indexed access into an array-valued getter plus chained calls resolve there` &&

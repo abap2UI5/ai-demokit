@@ -69,7 +69,10 @@ const ADVISORY_TYPES = new Set(['missing-accessibility', 'event-without-handler'
 const ADVISORY_BUDGET = {
   // raised 2026-08-09 (batch b08, sap.tnt): the two ToolPage ports keep the
   // original's alt-less sap.m.Image logo 1:1 — adding an alt would invent text
-  'missing-accessibility': 43,
+  // raised 2026-08-10 (batch b19, app 350 ProductHomeLayout): the same shape —
+  // a tnt:ToolHeader with the alt-less SAP logo Image and the icon-only
+  // search/bell Buttons the sample gives no tooltip; both kept 1:1
+  'missing-accessibility': 45,
   'event-without-handler': 4, // ratcheted down 2026-08-05: the four calendar ports wired their select handler
   'unknown-event-parameter': 1, // app 268: ColorPickerPopover forwards colorString undeclared — works live
 };

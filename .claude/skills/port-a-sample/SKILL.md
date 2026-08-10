@@ -423,6 +423,27 @@ these entries.
 
 #### Porting gotchas (distilled lessons — same discipline as AGENTS.md §10)
 
+- **A bare decimal literal is not valid ABAP** — `price = 2.3` inside a
+  `VALUE #( )` lexes as `2` · `.` · `3`, and the dot ENDS the statement, so the
+  whole block becomes a parser error (and a generated 123-row block reports it
+  once per row). Write the number as a character literal, `` price = `2.3` ``,
+  which converts into the packed field on assignment (the app-174 style);
+  integers stay bare. abaplint catches it, but only after the file is written —
+  a data generator must emit it right (batch b20).
+- **`DELETE itab WHERE` takes no functional expression** — `DELETE t WHERE
+  to_upper( name ) NS q.` is a parser error, the `WHERE` of an internal-table
+  statement accepts only comparisons of components against values. Loop
+  instead: `LOOP AT t INTO DATA(row). IF … . DELETE t INDEX sy-tabix. ENDIF.
+  ENDLOOP.` (apps 352/354).
+- **A DOTTED element name in the original view is a sub-package, not a
+  control name** — `<plugins.MultiSelectionPlugin>` under a `sap.ui.table`
+  default `xmlns` (and `<m:plugins.PasteProvider>`) resolves as
+  `sap.ui.table.plugins.MultiSelectionPlugin` / `sap.m.plugins.PasteProvider`.
+  The builder has no such form, so declare a real prefix
+  (`xmlns:tp="sap.ui.table.plugins"`) and write `tp:MultiSelectionPlugin`;
+  structural-diff compares the qualified name, so name the swap in a
+  deviation (app 360).
+
 - **The default namespace is not always `sap.m`.** A `sap.uxap` / `sap.ui.table`
   sample often declares its own library as `xmlns` and gives **`sap.m` the
   prefix** (`xmlns:m="sap.m"`, `<m:List>`). Copy that assignment as-is:

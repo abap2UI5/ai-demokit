@@ -423,21 +423,21 @@ CLASS z2ui5_cl_dmo_app_363 IMPLEMENTATION.
         productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1064.jpg` heavy = `false` category = `Keyboards` deliverydate = 1781654400000 )
       ( name = `Media Keyboard` productid = `HT-1065` quantity = 26 status = `Available` availablestate = `Success` availableicon = `sap-icon://accept` price = 26 currencycode = `EUR` suppliername = `Oxynum`
         productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1065.jpg` heavy = `false` category = `Keyboards` deliverydate = 1784764800000 )
-      ( name = `Mousepad` productid = `HT-1066` quantity = 12 status = `Available` availablestate = `Success` availableicon = `sap-icon://accept` price = 6.99 currencycode = `EUR` suppliername = `Oxynum`
+      ( name = `Mousepad` productid = `HT-1066` quantity = 12 status = `Available` availablestate = `Success` availableicon = `sap-icon://accept` price = `6.99` currencycode = `EUR` suppliername = `Oxynum`
         productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1066.jpg` heavy = `false` category = `Mousepads` deliverydate = 1784419200000 )
-      ( name = `Ergo Mousepad` productid = `HT-1067` quantity = 16 status = `Out of Stock` availablestate = `Error` availableicon = `sap-icon://decline` price = 8.99 currencycode = `EUR` suppliername = `Oxynum`
+      ( name = `Ergo Mousepad` productid = `HT-1067` quantity = 16 status = `Out of Stock` availablestate = `Error` availableicon = `sap-icon://decline` price = `8.99` currencycode = `EUR` suppliername = `Oxynum`
         productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1067.jpg` heavy = `false` category = `Mousepads` deliverydate = 1784073600000 )
-      ( name = `Designer Mousepad` productid = `HT-1068` quantity = 26 status = `Available` availablestate = `Success` availableicon = `sap-icon://accept` price = 12.99 currencycode = `EUR` suppliername = `Fasttech`
+      ( name = `Designer Mousepad` productid = `HT-1068` quantity = 26 status = `Available` availablestate = `Success` availableicon = `sap-icon://accept` price = `12.99` currencycode = `EUR` suppliername = `Fasttech`
         productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1068.jpg` heavy = `false` category = `Mousepads` deliverydate = 1783728000000 )
       ( name = `Universal card reader` productid = `HT-1069` quantity = 22 status = `Available` availablestate = `Success` availableicon = `sap-icon://accept` price = 14 currencycode = `EUR` suppliername = `Fasttech`
         productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1069.jpg` heavy = `false` category = `Computer System Accessories` deliverydate = 1783382400000 )
-      ( name = `Proctra X` productid = `HT-1070` quantity = 15 status = `Out of Stock` availablestate = `Error` availableicon = `sap-icon://decline` price = 70.9 currencycode = `EUR` suppliername = `Ultrasonic United`
+      ( name = `Proctra X` productid = `HT-1070` quantity = 15 status = `Out of Stock` availablestate = `Error` availableicon = `sap-icon://decline` price = `70.9` currencycode = `EUR` suppliername = `Ultrasonic United`
         productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1070.jpg` heavy = `false` category = `Graphic Cards` deliverydate = 1783036800000 )
-      ( name = `Gladiator MX` productid = `HT-1071` quantity = 16 status = `Discontinued` availablestate = `Error` availableicon = `sap-icon://decline` price = 81.7 currencycode = `EUR` suppliername = `Ultrasonic United`
+      ( name = `Gladiator MX` productid = `HT-1071` quantity = 16 status = `Discontinued` availablestate = `Error` availableicon = `sap-icon://decline` price = `81.7` currencycode = `EUR` suppliername = `Ultrasonic United`
         productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1071.jpg` heavy = `false` category = `Graphic Cards` deliverydate = 1782691200000 )
-      ( name = `Hurricane GX` productid = `HT-1072` quantity = 13 status = `Available` availablestate = `Success` availableicon = `sap-icon://accept` price = 101.2 currencycode = `EUR` suppliername = `Ultrasonic United`
+      ( name = `Hurricane GX` productid = `HT-1072` quantity = 13 status = `Available` availablestate = `Success` availableicon = `sap-icon://accept` price = `101.2` currencycode = `EUR` suppliername = `Ultrasonic United`
         productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1072.jpg` heavy = `false` category = `Graphic Cards` deliverydate = 1782345600000 )
-      ( name = `Hurricane GX/LN` productid = `HT-1073` quantity = 5 status = `Out of Stock` availablestate = `Error` availableicon = `sap-icon://decline` price = 139.99 currencycode = `EUR` suppliername = `Smartcards`
+      ( name = `Hurricane GX/LN` productid = `HT-1073` quantity = 5 status = `Out of Stock` availablestate = `Error` availableicon = `sap-icon://decline` price = `139.99` currencycode = `EUR` suppliername = `Smartcards`
         productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1073.jpg` heavy = `false` category = `Graphic Cards` deliverydate = 1782000000000 )
       ( name = `Photo Scan` productid = `HT-1080` quantity = 8 status = `Out of Stock` availablestate = `Error` availableicon = `sap-icon://decline` price = 129 currencycode = `EUR` suppliername = `Printer for All`
         productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1080.jpg` heavy = `false` category = `Scanners` deliverydate = 1781654400000 )
@@ -461,9 +461,9 @@ CLASS z2ui5_cl_dmo_app_363 IMPLEMENTATION.
         productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1096.jpg` heavy = `false` category = `Accessories` deliverydate = 1782000000000 )
       ( name = `Lovely Sound Stereo` productid = `HT-1097` quantity = 21 status = `Out of Stock` availablestate = `Error` availableicon = `sap-icon://decline` price = 29 currencycode = `EUR` suppliername = `Fasttech`
         productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1097.jpg` heavy = `false` category = `Accessories` deliverydate = 1781654400000 )
-      ( name = `Smart Office` productid = `HT-1100` quantity = 25 status = `Out of Stock` availablestate = `Error` availableicon = `sap-icon://decline` price = 89.9 currencycode = `EUR` suppliername = `Technocom`
+      ( name = `Smart Office` productid = `HT-1100` quantity = 25 status = `Out of Stock` availablestate = `Error` availableicon = `sap-icon://decline` price = `89.9` currencycode = `EUR` suppliername = `Technocom`
         productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1100.jpg` heavy = `false` category = `Software` deliverydate = 1784764800000 )
-      ( name = `Smart Design` productid = `HT-1101` quantity = 26 status = `Available` availablestate = `Success` availableicon = `sap-icon://accept` price = 79.9 currencycode = `EUR` suppliername = `Technocom`
+      ( name = `Smart Design` productid = `HT-1101` quantity = 26 status = `Available` availablestate = `Success` availableicon = `sap-icon://accept` price = `79.9` currencycode = `EUR` suppliername = `Technocom`
         productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1101.jpg` heavy = `false` category = `Software` deliverydate = 1784419200000 )
       ( name = `Smart Network` productid = `HT-1102` quantity = 28 status = `Available` availablestate = `Success` availableicon = `sap-icon://accept` price = 69 currencycode = `EUR` suppliername = `Technocom`
         productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1102.jpg` heavy = `false` category = `Software` deliverydate = 1784073600000 )
@@ -475,15 +475,15 @@ CLASS z2ui5_cl_dmo_app_363 IMPLEMENTATION.
         productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1105.jpg` heavy = `false` category = `Software` deliverydate = 1783036800000 )
       ( name = `Smart Firewall` productid = `HT-1106` quantity = 19 status = `Discontinued` availablestate = `Error` availableicon = `sap-icon://decline` price = 34 currencycode = `EUR` suppliername = `Brainsoft`
         productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1106.jpg` heavy = `false` category = `Software` deliverydate = 1782691200000 )
-      ( name = `Smart Money` productid = `HT-1107` quantity = 18 status = `Out of Stock` availablestate = `Error` availableicon = `sap-icon://decline` price = 29.9 currencycode = `EUR` suppliername = `Brainsoft`
+      ( name = `Smart Money` productid = `HT-1107` quantity = 18 status = `Out of Stock` availablestate = `Error` availableicon = `sap-icon://decline` price = `29.9` currencycode = `EUR` suppliername = `Brainsoft`
         productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1107.jpg` heavy = `false` category = `Software` deliverydate = 1782345600000 )
-      ( name = `PC Lock` productid = `HT-1110` quantity = 14 status = `Available` availablestate = `Success` availableicon = `sap-icon://accept` price = 8.9 currencycode = `EUR` suppliername = `Red Point Stores`
+      ( name = `PC Lock` productid = `HT-1110` quantity = 14 status = `Available` availablestate = `Success` availableicon = `sap-icon://accept` price = `8.9` currencycode = `EUR` suppliername = `Red Point Stores`
         productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1110.jpg` heavy = `false` category = `Computer System Accessories` deliverydate = 1782000000000 )
-      ( name = `Notebook Lock` productid = `HT-1111` quantity = 20 status = `Available` availablestate = `Success` availableicon = `sap-icon://accept` price = 6.9 currencycode = `EUR` suppliername = `Red Point Stores`
+      ( name = `Notebook Lock` productid = `HT-1111` quantity = 20 status = `Available` availablestate = `Success` availableicon = `sap-icon://accept` price = `6.9` currencycode = `EUR` suppliername = `Red Point Stores`
         productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1111.jpg` heavy = `false` category = `Computer System Accessories` deliverydate = 1781654400000 )
       ( name = `Web cam reality` productid = `HT-1112` quantity = 27 status = `Out of Stock` availablestate = `Error` availableicon = `sap-icon://decline` price = 39 currencycode = `EUR` suppliername = `Red Point Stores`
         productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1112.jpg` heavy = `false` category = `Computer System Accessories` deliverydate = 1784764800000 )
-      ( name = `Screen clean` productid = `HT-1113` quantity = 17 status = `Available` availablestate = `Success` availableicon = `sap-icon://accept` price = 2.3 currencycode = `EUR` suppliername = `Red Point Stores`
+      ( name = `Screen clean` productid = `HT-1113` quantity = 17 status = `Available` availablestate = `Success` availableicon = `sap-icon://accept` price = `2.3` currencycode = `EUR` suppliername = `Red Point Stores`
         productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1113.jpg` heavy = `false` category = `Computer System Accessories` deliverydate = 1784419200000 )
       ( name = `Fabric bag professional` productid = `HT-1114` quantity = 14 status = `Available` availablestate = `Success` availableicon = `sap-icon://accept` price = 31 currencycode = `EUR` suppliername = `Red Point Stores`
         productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1114.jpg` heavy = `false` category = `Computer System Accessories` deliverydate = 1784073600000 )
@@ -535,17 +535,17 @@ CLASS z2ui5_cl_dmo_app_363 IMPLEMENTATION.
         productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1602.jpg` heavy = `false` category = `Desktop Computers` deliverydate = 1783036800000 )
       ( name = `Gaming Monster Pro` productid = `HT-1603` quantity = 25 status = `Discontinued` availablestate = `Error` availableicon = `sap-icon://decline` price = 1700 currencycode = `EUR` suppliername = `Titanium`
         productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1603.jpg` heavy = `false` category = `Desktop Computers` deliverydate = 1782691200000 )
-      ( name = `7" Widescreen Portable DVD Player w MP3` productid = `HT-2000` quantity = 20 status = `Available` availablestate = `Success` availableicon = `sap-icon://accept` price = 249.99 currencycode = `EUR` suppliername = `Titanium`
+      ( name = `7" Widescreen Portable DVD Player w MP3` productid = `HT-2000` quantity = 20 status = `Available` availablestate = `Success` availableicon = `sap-icon://accept` price = `249.99` currencycode = `EUR` suppliername = `Titanium`
         productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2000.jpg` heavy = `false` category = `Accessories` deliverydate = 1782345600000 )
-      ( name = `10" Portable DVD player` productid = `HT-2001` quantity = 21 status = `Available` availablestate = `Success` availableicon = `sap-icon://accept` price = 449.99 currencycode = `EUR` suppliername = `Titanium`
+      ( name = `10" Portable DVD player` productid = `HT-2001` quantity = 21 status = `Available` availablestate = `Success` availableicon = `sap-icon://accept` price = `449.99` currencycode = `EUR` suppliername = `Titanium`
         productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2001.jpg` heavy = `false` category = `Accessories` deliverydate = 1782000000000 )
-      ( name = `Portable DVD Player with 9" LCD Monitor` productid = `HT-2002` quantity = 50 status = `Available` availablestate = `Success` availableicon = `sap-icon://accept` price = 853.99 currencycode = `EUR` suppliername = `Technocom`
+      ( name = `Portable DVD Player with 9" LCD Monitor` productid = `HT-2002` quantity = 50 status = `Available` availablestate = `Success` availableicon = `sap-icon://accept` price = `853.99` currencycode = `EUR` suppliername = `Technocom`
         productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2002.jpg` heavy = `false` category = `Accessories` deliverydate = 1781654400000 )
-      ( name = `CD/DVD case: 264 sleeves` productid = `HT-2025` quantity = 26 status = `Discontinued` availablestate = `Error` availableicon = `sap-icon://decline` price = 44.99 currencycode = `EUR` suppliername = `Titanium`
+      ( name = `CD/DVD case: 264 sleeves` productid = `HT-2025` quantity = 26 status = `Discontinued` availablestate = `Error` availableicon = `sap-icon://decline` price = `44.99` currencycode = `EUR` suppliername = `Titanium`
         productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2025.jpg` heavy = `false` category = `Accessories` deliverydate = 1784764800000 )
-      ( name = `Audio/Video Cable Kit - 4m` productid = `HT-2026` quantity = 16 status = `Available` availablestate = `Success` availableicon = `sap-icon://accept` price = 29.99 currencycode = `EUR` suppliername = `Titanium`
+      ( name = `Audio/Video Cable Kit - 4m` productid = `HT-2026` quantity = 16 status = `Available` availablestate = `Success` availableicon = `sap-icon://accept` price = `29.99` currencycode = `EUR` suppliername = `Titanium`
         productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2026.jpg` heavy = `false` category = `Accessories` deliverydate = 1784419200000 )
-      ( name = `Removable CD/DVD Laser Labels` productid = `HT-2027` quantity = 25 status = `Discontinued` availablestate = `Error` availableicon = `sap-icon://decline` price = 8.99 currencycode = `EUR` suppliername = `Titanium`
+      ( name = `Removable CD/DVD Laser Labels` productid = `HT-2027` quantity = 25 status = `Discontinued` availablestate = `Error` availableicon = `sap-icon://decline` price = `8.99` currencycode = `EUR` suppliername = `Titanium`
         productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-2027.jpg` heavy = `false` category = `Accessories` deliverydate = 1784073600000 )
       ( name = `Beam Breaker B-1` productid = `HT-6100` quantity = 32 status = `Out of Stock` availablestate = `Error` availableicon = `sap-icon://decline` price = 469 currencycode = `EUR` suppliername = `Titanium`
         productpicurl = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6100.jpg` heavy = `false` category = `Accessories` deliverydate = 1783728000000 )
