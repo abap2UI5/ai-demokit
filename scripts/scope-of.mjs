@@ -24,6 +24,9 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import {
+  loadUniverseSnapshot, loadEntityOverrides, loadNonAppFamilies, nonAppFamilyFor,
+} from './lib-universe.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OPENUI5_DIR = process.env.OPENUI5_SRC
@@ -95,29 +98,17 @@ function metaFromSource(file, entity) {
 // A control can be perfectly 1.71-clean and the sample still be out of scope
 // because it is not an app view (OPA5/gherkin test pages, Component routing,
 // view-templating / XMLComposite authoring demos). generate-coverage.mjs
-// applies the same list; keep the two verdicts identical.
-const NONAPP_FILE = path.join(ROOT, 'ui5', 'scope-nonapp.json');
-const nonAppFamilies = fs.existsSync(NONAPP_FILE)
-  ? JSON.parse(fs.readFileSync(NONAPP_FILE, 'utf8')).families || []
-  : [];
-function nonAppFor({ lib, name, entity }) {
-  return nonAppFamilies.find((f) =>
-    (!f.lib || f.lib === lib)
-    && (!f.entityPrefix || (entity || '').startsWith(f.entityPrefix))
-    && (!f.namePrefix || (name || '').startsWith(f.namePrefix))
-    && (f.entityPrefix || f.namePrefix)) || null;
-}
+// applies the same list through the same lib-universe matcher; the two
+// verdicts stay identical by construction.
+const nonAppFamilies = loadNonAppFamilies();
+const nonAppFor = (info) => nonAppFamilyFor(nonAppFamilies, info);
 // ui5/entity-overrides.json supplies the owning entity where the upstream
 // docuindex has none (universe.json then carries entity:null) — apply it here
 // too, or a non-app family matched by entityPrefix would never fire.
-const OVERRIDES_FILE = path.join(ROOT, 'ui5', 'entity-overrides.json');
-const entityOverrides = fs.existsSync(OVERRIDES_FILE)
-  ? JSON.parse(fs.readFileSync(OVERRIDES_FILE, 'utf8')).overrides || {}
-  : {};
+const entityOverrides = loadEntityOverrides();
 function sampleInfo(sample) {
-  const uni = path.join(ROOT, 'ui5', 'universe.json');
-  if (!fs.existsSync(uni)) return null;
-  const d = JSON.parse(fs.readFileSync(uni, 'utf8'));
+  const d = loadUniverseSnapshot();
+  if (!d) return null;
   for (const l of d.libs || []) for (const s of l.samples || []) {
     if (s.name !== sample) continue;
     const entity = entityOverrides[`${l.lib}.sample.${s.name}`] || s.entity;

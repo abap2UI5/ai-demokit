@@ -35,6 +35,11 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import {
+  loadUniverseSnapshot, loadPropertiesControls, loadEntityOverrides,
+  loadNonAppFamilies, loadUniverseExcludes, nonAppFamilyFor, sinceLeq171,
+  enrichFromProperties as enrichSample,
+} from './lib-universe.mjs';
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const META = path.join(ROOT, 'meta');
@@ -67,27 +72,19 @@ const bareControl = (entity) => entity.slice(entity.lastIndexOf('.') + 1);
 // the porting scope (AGENTS.md §1): a sample is IN SCOPE when its control
 // existed by UI5 1.71 (empty since = older than tracking) and is not
 // deprecated (legacy-free ready). Everything else is listed but not ported.
-const sinceLeq171 = (since) => {
-  if (!since) return true;
-  const m = String(since).match(/^(\d+)\.(\d+)/);
-  return m ? (+m[1] < 1 || (+m[1] === 1 && +m[2] <= 71)) : false;
-};
+// (sinceLeq171 comes from lib-universe.mjs — one definition for every gate.)
 // --- non-app sample families (maintainer decision 2026-07-31) --------------
 // ui5/scope-nonapp.json lists families whose control is in scope by the 1.71
 // rule but that are not app views at all — UI5's own test infrastructure
 // (OPA5/gherkin/matchers), Component routing across several views, and the
 // view-type / XML-templating / XMLComposite authoring demos. They are out of
 // scope: listed in api.md, never offered by --backlog, never ported.
-const NONAPP_FILE = path.join(ROOT, 'ui5', 'scope-nonapp.json');
-const nonAppFamilies = fs.existsSync(NONAPP_FILE)
-  ? JSON.parse(fs.readFileSync(NONAPP_FILE, 'utf8')).families || []
-  : [];
+// scope-of.mjs applies the same list via the same lib-universe matcher; the
+// two verdicts must stay identical (AGENTS §1).
+const nonAppFamilies = loadNonAppFamilies();
 // -> the matching family (with its reason) or null
-const nonAppFamily = (lib, s) => nonAppFamilies.find((f) =>
-  (!f.lib || f.lib === lib)
-  && (!f.entityPrefix || (s.entity || '').startsWith(f.entityPrefix))
-  && (!f.namePrefix || s.name.startsWith(f.namePrefix))
-  && (f.entityPrefix || f.namePrefix)) || null;
+const nonAppFamily = (lib, s) =>
+  nonAppFamilyFor(nonAppFamilies, { lib, name: s.name, entity: s.entity });
 
 // -> 'in' | 'deprecated' | 'newer' | 'nonapp' | 'unknown'. An entity containing
 // '.sample.' is the sample id itself (demo apps without an owning control,
@@ -108,34 +105,16 @@ const scopeOf = (lib, s) =>
 // @since/@deprecated parsed from the OpenUI5 sources (the linter's generate-metadata.mjs);
 // fill the snapshot's nulls from it so the scope verdict matches
 // scripts/scope-of.mjs offline.
-const PROPS_FILE = path.join(ROOT, 'ui5', 'properties.json');
-const propsControls = fs.existsSync(PROPS_FILE)
-  ? JSON.parse(fs.readFileSync(PROPS_FILE, 'utf8')).controls || {}
-  : {};
-function enrichFromProperties(s) {
-  const c = s.entity && propsControls[s.entity];
-  if (!c) return s;
-  return {
-    ...s,
-    since: s.since || c.since || null,
-    deprecated: s.deprecated || c.deprecated || null,
-  };
-}
+const propsControls = loadPropertiesControls();
+const enrichFromProperties = (s) => enrichSample(propsControls, s);
 
 // --- curated universe fixups (both the build and the offline-load path) -----
 // ui5/universe-excludes.json: demokit sample/ dirs that are not samples
 // (shared helpers, test infra, group folders with nested samples).
 // ui5/entity-overrides.json: sample id -> owning entity where the upstream
 // docuindex has no mapping, so real samples get proper scope + API links.
-const EXCLUDES_FILE = path.join(ROOT, 'ui5', 'universe-excludes.json');
-const OVERRIDES_FILE = path.join(ROOT, 'ui5', 'entity-overrides.json');
-const excludeSet = new Set(
-  (fs.existsSync(EXCLUDES_FILE)
-    ? JSON.parse(fs.readFileSync(EXCLUDES_FILE, 'utf8')).excludes || []
-    : []).map((e) => `${e.lib}\t${e.name}`));
-const entityOverrides = fs.existsSync(OVERRIDES_FILE)
-  ? JSON.parse(fs.readFileSync(OVERRIDES_FILE, 'utf8')).overrides || {}
-  : {};
+const excludeSet = loadUniverseExcludes();
+const entityOverrides = loadEntityOverrides();
 function applyUniverseFixups(u) {
   return {
     ...u,
@@ -255,11 +234,12 @@ if (fs.existsSync(OPENUI5_DIR)) {
   universe = { release, libs: ulibs };
   fs.writeFileSync(SNAPSHOT, JSON.stringify(universe, null, 1) + '\n');
   console.log(`universe snapshot refreshed from ${OPENUI5_DIR} -> ${path.relative(ROOT, SNAPSHOT)}`);
-} else if (fs.existsSync(SNAPSHOT)) {
-  universe = JSON.parse(fs.readFileSync(SNAPSHOT, 'utf8'));
 } else {
-  console.error(`neither an OpenUI5 checkout (${OPENUI5_DIR}) nor ${path.relative(ROOT, SNAPSHOT)} found.`);
-  process.exit(1);
+  universe = loadUniverseSnapshot();
+  if (!universe) {
+    console.error(`neither an OpenUI5 checkout (${OPENUI5_DIR}) nor ${path.relative(ROOT, SNAPSHOT)} found.`);
+    process.exit(1);
+  }
 }
 
 universe = applyUniverseFixups(universe);

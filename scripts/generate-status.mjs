@@ -19,6 +19,9 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import {
+  loadUniverseSnapshot, loadPropertiesControls, loadEntityOverrides, sinceLeq171,
+} from './lib-universe.mjs';
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const META = path.join(ROOT, 'meta');
@@ -51,19 +54,14 @@ for (const p of ports) {
   if (p.render_smoke?.skip) rsmokeSkips++;
 }
 
-// --- scope verdict per ported sample (same fallback as generate-coverage) ----
-const uni = JSON.parse(fs.readFileSync(path.join(ROOT, 'ui5', 'universe.json'), 'utf8'));
-const props = JSON.parse(fs.readFileSync(path.join(ROOT, 'ui5', 'properties.json'), 'utf8')).controls || {};
-const overrides = fs.existsSync(path.join(ROOT, 'ui5', 'entity-overrides.json'))
-  ? JSON.parse(fs.readFileSync(path.join(ROOT, 'ui5', 'entity-overrides.json'), 'utf8')).overrides || {}
-  : {};
+// --- scope verdict per ported sample (same fallback as generate-coverage,
+//     via the shared lib-universe loaders) ------------------------------------
+const uni = loadUniverseSnapshot();
+if (!uni) { console.error('ui5/universe.json missing — the state block needs the sample-universe snapshot.'); process.exit(1); }
+const props = loadPropertiesControls();
+const overrides = loadEntityOverrides();
 const uniMap = new Map();
 for (const l of uni.libs) for (const s of l.samples) uniMap.set(`${l.lib}.sample.${s.name}`, s);
-const sinceLeq171 = (since) => {
-  if (!since) return true;
-  const m = String(since).match(/^(\d+)\.(\d+)/);
-  return m ? (+m[1] < 1 || (+m[1] === 1 && +m[2] <= 71)) : false;
-};
 const outOfScope = [];
 for (const p of ports) {
   const s = uniMap.get(p.sample);
