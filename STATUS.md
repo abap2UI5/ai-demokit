@@ -42,13 +42,16 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   folder.
 - [ ] **LIVE_TEST debt → e2e interactions.** The open `LIVE_TEST` count (see
   the generated table) is the corpus' unverified-behaviour backlog. The
-  systematic close path is the e2e harness: grow the `INTERACTIONS` map in
-  `scripts/e2e-smoke.mjs` (one generic assertion per LIVE_TEST class —
-  client-composed toast, popup/popover open, binding_call) and, after a green
+  systematic close path is the e2e harness: add a per-port interaction module
+  under `meta/interactions/<class>.mjs` (one generic assertion per LIVE_TEST
+  class — client-composed toast, popup/popover open, binding_call; the
+  directory's README carries the coverage catalogue) and, after a green
   run, `node scripts/close-live-tests.mjs --close <nums>` converts the
   verified entries into `NOTE`s mechanically (text kept verbatim, so gate
-  declarations keep matching). Since 2026-08-04 every LIVE_TEST port has an
-  interaction (043/096/149 were the last three without one) and a red
+  declarations keep matching). The 2026-08-04 state "every LIVE_TEST port
+  has an interaction" no longer holds: the batches added since (apps
+  299–366) ship their LIVE_TESTs without interactions — `validate-meta`
+  reports that gap count as an advisory so it stays visible. A red
   nightly opens/updates an issue instead of hiding in the Actions tab.
   Every green interaction is human live-check time saved.
 - [ ] **Property-gate residual limits** (documented in AGENTS §5): enum

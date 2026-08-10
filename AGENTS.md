@@ -48,9 +48,11 @@ reads the files directly. **Read the matching guide BEFORE starting the task**
 
 **Large files — grep them, never read them whole:** `api.md` (~316 KB
 generated table), `STATUS-history.md` (~228 KB journal), `CAPABILITIES.md`
-(~45 KB — grep for the feature row), `scripts/e2e-smoke.mjs` (~80 KB),
+(~45 KB — grep for the feature row),
 `scripts/generate-overview.mjs` (~58 KB),
-`src/z2ui5_cl_dmo_app_overview.clas.abap` (generated).
+`src/z2ui5_cl_dmo_app_overview.clas.abap` (generated). (The e2e
+interactions live as one module per port under `meta/interactions/` —
+read only the port you work on.)
 
 ---
 

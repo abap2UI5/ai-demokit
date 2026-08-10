@@ -7,6 +7,37 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## 2026-08-10 — the INTERACTIONS map becomes one module per port, and the map had a silent duplicate
+
+The ~1200-line hand-authored `INTERACTIONS` map inside `scripts/e2e-smoke.mjs`
+is externalized to `meta/interactions/<class>.mjs` — one module per port,
+default-exporting the untouched `async (page, expect) => { … }`; shared
+assertions moved verbatim to `scripts/lib-e2e.mjs`; the driver just loads the
+directory. The migration was mechanical and is proven: a new
+`--dump-interactions` mode prints every loaded interaction (key + source), and
+the dump before/after the split is **identical for all 105 effective
+entries**.
+
+105, not 106 — the extraction found the map carried **two**
+`z2ui5_cl_dmo_app_133` keys. A JS object literal keeps the LAST duplicate
+key, so the older entry (SegmentedButton `selectionChange` → bound
+`GridList.mode`) had been silently dead since the 2026-08-01 faked-event-value
+fix added the second one; nothing ever reported it. The same trap class as the
+duplicate `"branch"` keys in the 702 abaplint config (also this session, see
+`check_pins`): a duplicate key in a keyed literal is invisible to every
+consumer that parses it. The per-file layout makes it impossible by
+construction — the map is keyed by FILENAME now. The shadowed leg is kept as
+a comment in `meta/interactions/z2ui5_cl_dmo_app_133.mjs` pending a merge
+decision (it exercises a different wire than the surviving entry).
+
+`validate-meta` now guards the directory: an orphan module (no port sidecar)
+is a hard error; a port with an open LIVE_TEST deviation but no module is an
+**advisory** gap count — the 2026-08-04 "every LIVE_TEST port has an
+interaction" state no longer holds (the since-added batches, apps 299–366,
+ship 61 LIVE_TESTs with no interaction yet), so the check reports instead of
+failing every batch commit. `close-live-tests.mjs` reads the directory
+instead of regexing the smoke script.
+
 ## 2026-08-10 — completed backlog items relocated from STATUS.md
 
 STATUS.md keeps only OPEN work now; every closed `[x]` backlog item moved

@@ -3,8 +3,9 @@
  * close-live-tests — turn verified LIVE_TEST deviations into NOTEs.
  *
  * A LIVE_TEST deviation says "this wire is not verified in a running app".
- * The nightly e2e (e2e_nightly.yaml) runs every port with its INTERACTIONS
- * entry — the moment that entry drives exactly the wire the deviation names
+ * The nightly e2e (e2e_nightly.yaml) runs every port with its interaction
+ * module (meta/interactions/<class>.mjs) — the moment that module drives
+ * exactly the wire the deviation names
  * and stays green, the deviation is closable. Closing used to be manual
  * (STATUS.md kept a standing reminder); this script does the mechanical part
  * without the known trap: the deviation TEXT is kept VERBATIM (only prefixed),
@@ -38,10 +39,13 @@ if (closeAt !== -1 && !toClose.length) {
   process.exit(2);
 }
 
-// the INTERACTIONS map keys, read from the smoke script itself — an entry is
-// the precondition for closure (no interaction, nothing verified the wire)
-const smoke = fs.readFileSync(path.join(ROOT, 'scripts', 'e2e-smoke.mjs'), 'utf8');
-const interactions = new Set([...smoke.matchAll(/^  (z2ui5_cl_dmo_app_\d+):/gm)].map((m) => m[1]));
+// the interaction set — one module per port under meta/interactions/ (the
+// same directory e2e-smoke.mjs loads); an entry is the precondition for
+// closure (no interaction, nothing verified the wire)
+const INTERACTIONS_DIR = path.join(ROOT, 'meta', 'interactions');
+const interactions = new Set(fs.existsSync(INTERACTIONS_DIR)
+  ? fs.readdirSync(INTERACTIONS_DIR).filter((f) => f.endsWith('.mjs')).map((f) => f.replace(/\.mjs$/, ''))
+  : []);
 
 const today = new Date().toISOString().slice(0, 10);
 let closed = 0;
@@ -59,7 +63,7 @@ for (const f of fs.readdirSync(META).filter((f) => /app_\d+\.json$/.test(f)).sor
 
   if (!toClose || !toClose.includes(num)) continue;
   if (!hasInteraction) {
-    console.error(`refusing to close ${m.class}: no INTERACTIONS entry in e2e-smoke.mjs — nothing ever verified the wire`);
+    console.error(`refusing to close ${m.class}: no meta/interactions/${m.class}.mjs — nothing ever verified the wire`);
     process.exitCode = 1;
     continue;
   }
@@ -78,7 +82,7 @@ for (const f of fs.readdirSync(META).filter((f) => /app_\d+\.json$/.test(f)).sor
 if (!toClose) {
   console.log('LIVE_TEST closure candidates (close only what the nightly ran GREEN):\n');
   for (const c of candidates) {
-    console.log(`  ${c.hasInteraction ? 'ready  ' : 'BLOCKED'}  ${c.num}  ${c.count} LIVE_TEST deviation(s)${c.hasInteraction ? '' : ' — no INTERACTIONS entry yet'}`);
+    console.log(`  ${c.hasInteraction ? 'ready  ' : 'BLOCKED'}  ${c.num}  ${c.count} LIVE_TEST deviation(s)${c.hasInteraction ? '' : ' — no meta/interactions module yet'}`);
   }
   console.log(`\n${candidates.length} port(s) carry LIVE_TEST; ${candidates.filter((c) => c.hasInteraction).length} have an interaction.`);
   console.log('Close with: node scripts/close-live-tests.mjs --close <num> [<num> …]');

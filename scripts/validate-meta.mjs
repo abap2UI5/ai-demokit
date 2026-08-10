@@ -79,6 +79,7 @@ function usesEventTArg(src) {
 
 let errors = 0;
 const err = (m) => { console.log(`ERROR ${m}`); errors++; };
+const liveTestClasses = [];
 
 function walk(dir, out = []) {
   for (const name of fs.readdirSync(dir)) {
@@ -192,6 +193,7 @@ for (const sf of sidecars.sort()) {
     if (d.type === 'SUBSET_DATA') err(`${sf}: SUBSET_DATA is retired - inline the full mock row set instead`);
     if (!d.what) err(`${sf}: deviation without "what" text`);
   }
+  if (m.class && (m.deviations || []).some((d) => d.type === 'LIVE_TEST')) liveTestClasses.push(m.class);
   if (m.file) {
     const abs = path.join(ROOT, m.file);
     if (!fs.existsSync(abs)) err(`${sf}: file "${m.file}" does not exist`);
@@ -231,6 +233,35 @@ for (const cls of ports) if (!sidecarSet.has(cls)) err(`port ${cls} has no meta/
 const portSet = new Set(ports);
 for (const cls of sidecarSet) if (!portSet.has(cls)) err(`meta/${cls}.json has no port class`);
 
+/* e2e interaction modules — meta/interactions/<class>.mjs (see the README
+ * there; loaded by scripts/e2e-smoke.mjs, keyed by filename).
+ *   - HARD: every module must belong to a port sidecar (or the overview app)
+ *     — an orphan module is a renamed/deleted port's leftover and would never
+ *     run again.
+ *   - ADVISORY: every port with an open LIVE_TEST deviation should have a
+ *     module — that is the automated close path (STATUS.md). Not a hard gate
+ *     yet: the newest batches ship their LIVE_TESTs before their interactions
+ *     are written (61 gaps when this check was wired, 2026-08-10), so the
+ *     count is reported to keep the debt visible instead of failing every
+ *     batch commit. */
+const INTERACTIONS_DIR = path.join(META, 'interactions');
+const OVERVIEW_CLASS = 'z2ui5_cl_dmo_app_overview';
+let interactionGaps = [];
+if (fs.existsSync(INTERACTIONS_DIR)) {
+  const mods = fs.readdirSync(INTERACTIONS_DIR)
+    .filter((f) => f.endsWith('.mjs'))
+    .map((f) => f.replace(/\.mjs$/, ''));
+  const validClasses = new Set([...sidecars.map((f) => f.replace(/\.json$/, '')), OVERVIEW_CLASS]);
+  for (const c of mods) {
+    if (!validClasses.has(c)) err(`meta/interactions/${c}.mjs matches no port sidecar (or the overview app) — orphan interaction module`);
+  }
+  const modSet = new Set(mods);
+  interactionGaps = liveTestClasses.filter((c) => !modSet.has(c)).sort();
+  if (interactionGaps.length) {
+    console.log(`note: ${interactionGaps.length} port(s) with an open LIVE_TEST deviation have no meta/interactions/<class>.mjs yet — the e2e close path cannot verify them (advisory; the newest batches' interaction debt)`);
+  }
+}
+
 /* Gap-free numbering (regenerate-artefacts): deleting a port renumbers the
  * tail, so the sequence stays contiguous. KNOWN_GAPS carries the one historic
  * exception — 231 was deleted without renumbering the ~60 ports above it, and
@@ -248,5 +279,5 @@ for (let n = 1; n <= (nums[nums.length - 1] ?? 0); n++) {
   }
 }
 
-console.log(`validate-meta: ${sidecars.length} sidecars, ${ports.length} ports, ${errors} error(s).`);
+console.log(`validate-meta: ${sidecars.length} sidecars, ${ports.length} ports, ${errors} error(s)${interactionGaps.length ? ` (${interactionGaps.length} LIVE_TEST interaction gap(s), advisory)` : ''}.`);
 process.exit(errors ? 1 : 0);
