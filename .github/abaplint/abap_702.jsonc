@@ -10,13 +10,17 @@
     },
     {
       "url": "https://github.com/abap2UI5/abap2UI5",
-      // TEMPORARY: the ports use _bind( omit_initial ) and the css / setSticky /
-      // controlIdOrNull / INVISIBLE_MESSAGE / FORMATTING wires, which live on this
-      // abap2UI5 branch until it is merged. MUST go back to main (drop this line)
-      // before this change is merged - same rule as the linter pin in STATUS.md.
-      "branch": "claude/ai-demokit-next-steps-0b5cp2",
+      // TEMPORARY: the ports use _bind( json = abap_true ) (apps 118/341 - the
+      // sap.ui.integration Card manifests), which lives on this abap2UI5 branch
+      // until it is merged. The 702 branch is rebuilt from main by the
+      // framework's auto_downport, so it cannot carry the parameter before the
+      // merge; pointing at the feature branch keeps this build honest until it
+      // does. MUST go back to "702" before this change is merged - same rule as
+      // the linter pin in STATUS.md. (The stale pin of the already-merged
+      // ai-demokit-next-steps branch that sat here is dropped with it: the
+      // branch is gone upstream, so this config could not resolve at all.)
+      "branch": "claude/portier-demokit-sap-ui-samples-9ek4hj",
       "folder": "/abap2UI5",
-      "branch": "702",
       "files": "/src/**/*.*"
     }
   ],

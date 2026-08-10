@@ -29,11 +29,11 @@
     },
     {
       "type": "LIVE_TEST",
-      "what": "Unverified in a running system: whether an empty-string manifest renders the Card as the original's manifest-less placeholder, whether the model_init push through view_model_update makes all eleven Cards pick up their manifest, and the control_by_id refresh wire on the second press."
+      "what": "Unverified in a running system: whether the eleven spliced JSON manifests render their Cards, whether an empty-string manifest shows the original's manifest-less placeholder before the first press, and the control_by_id refresh wire on the second press."
     },
     {
-      "type": "IMPROVISED",
-      "what": "Source-verified framework gap (pr/card-manifest-object): sap.ui.integration.widgets.Card.createManifest treats a STRING manifest as a manifest URL (`if (typeof vManifest === \"string\") { mOptions.manifestUrl = vManifest; }`, Card.js) - an inline manifest must reach the control as a JS OBJECT. abap2UI5 has no way to put a raw JSON object into a model value: every model value is typed ABAP data, and a card manifest's keys (`sap.app`, `sap.card`, `_version`) are not valid ABAP field names, so it cannot be modelled as a structure either. The port therefore carries each manifest as the bound JSON STRING (the sample's real manifest data, inlined verbatim so the port stays data-faithful and the eleven Cards stay 1:1), knowing UI5 will read it as a URL until the framework can carry a raw JSON payload - the request is filed under pr/card-manifest-object. Unlike LazyLoading (app 342), whose manifests are one file each and can be bound as real URLs, CardsLoading keeps all eleven inside one combined manifests/cardManifests.json, so no per-card URL exists upstream to bind instead."
+      "type": "NOTE",
+      "what": "The eleven manifests reach the Cards as real JSON OBJECTS through client->_bind( val = manifest_x json = abap_true ). This port is what raised that flag: sap.ui.integration.widgets.Card.createManifest branches on the JS type and reads a STRING manifest as a manifest URL (`if (typeof vManifest === \"string\") { mOptions.manifestUrl = vManifest; }`, Card.js), so an inline manifest has to arrive as an object - and a model value could not be one: every value is typed ABAP data, and a manifest's keys (`sap.app`, `sap.card`, `_version`) are not valid ABAP field names, so it cannot be modelled as a structure either. The framework now splices such a string into the model as a JSON node instead of quoting it (pr/card-manifest-object, implemented upstream), which is why CardsLoading works at all: unlike LazyLoading (app 342) it keeps all eleven manifests in one combined manifests/cardManifests.json, so there is no per-card URL to bind instead."
     }
   ]
 }

@@ -87,7 +87,7 @@ CLASS z2ui5_cl_dmo_app_341 IMPLEMENTATION.
 
             )->open( n = `Card` ns = `w`
                 )->a( n = `id`       v = `listTest`
-                )->a( n = `manifest` v = client->_bind( manifest_listtest )
+                )->a( n = `manifest` v = client->_bind( val = manifest_listtest json = abap_true )
 
                 )->open( n = `layoutData` ns = `w`
                     )->leaf( n = `GridContainerItemLayoutData` ns = `f`
@@ -98,7 +98,7 @@ CLASS z2ui5_cl_dmo_app_341 IMPLEMENTATION.
 
             )->open( n = `Card` ns = `w`
                 )->a( n = `id`       v = `list`
-                )->a( n = `manifest` v = client->_bind( manifest_list )
+                )->a( n = `manifest` v = client->_bind( val = manifest_list json = abap_true )
 
                 )->open( n = `layoutData` ns = `w`
                     )->leaf( n = `GridContainerItemLayoutData` ns = `f`
@@ -109,7 +109,7 @@ CLASS z2ui5_cl_dmo_app_341 IMPLEMENTATION.
 
             )->open( n = `Card` ns = `w`
                 )->a( n = `id`       v = `error`
-                )->a( n = `manifest` v = client->_bind( manifest_error )
+                )->a( n = `manifest` v = client->_bind( val = manifest_error json = abap_true )
 
                 )->open( n = `layoutData` ns = `w`
                     )->leaf( n = `GridContainerItemLayoutData` ns = `f`
@@ -120,7 +120,7 @@ CLASS z2ui5_cl_dmo_app_341 IMPLEMENTATION.
 
             )->open( n = `Card` ns = `w`
                 )->a( n = `id`       v = `all`
-                )->a( n = `manifest` v = client->_bind( manifest_all )
+                )->a( n = `manifest` v = client->_bind( val = manifest_all json = abap_true )
 
                 )->open( n = `layoutData` ns = `w`
                     )->leaf( n = `GridContainerItemLayoutData` ns = `f`
@@ -131,7 +131,7 @@ CLASS z2ui5_cl_dmo_app_341 IMPLEMENTATION.
 
             )->open( n = `Card` ns = `w`
                 )->a( n = `id`       v = `descriptionTitle`
-                )->a( n = `manifest` v = client->_bind( manifest_descriptiontitle )
+                )->a( n = `manifest` v = client->_bind( val = manifest_descriptiontitle json = abap_true )
 
                 )->open( n = `layoutData` ns = `w`
                     )->leaf( n = `GridContainerItemLayoutData` ns = `f`
@@ -142,7 +142,7 @@ CLASS z2ui5_cl_dmo_app_341 IMPLEMENTATION.
 
             )->open( n = `Card` ns = `w`
                 )->a( n = `id`       v = `iconTitle`
-                )->a( n = `manifest` v = client->_bind( manifest_icontitle )
+                )->a( n = `manifest` v = client->_bind( val = manifest_icontitle json = abap_true )
 
                 )->open( n = `layoutData` ns = `w`
                     )->leaf( n = `GridContainerItemLayoutData` ns = `f`
@@ -153,7 +153,7 @@ CLASS z2ui5_cl_dmo_app_341 IMPLEMENTATION.
 
             )->open( n = `Card` ns = `w`
                 )->a( n = `id`       v = `table`
-                )->a( n = `manifest` v = client->_bind( manifest_table )
+                )->a( n = `manifest` v = client->_bind( val = manifest_table json = abap_true )
 
                 )->open( n = `layoutData` ns = `w`
                     )->leaf( n = `GridContainerItemLayoutData` ns = `f`
@@ -164,7 +164,7 @@ CLASS z2ui5_cl_dmo_app_341 IMPLEMENTATION.
 
             )->open( n = `Card` ns = `w`
                 )->a( n = `id`       v = `analytical`
-                )->a( n = `manifest` v = client->_bind( manifest_analytical )
+                )->a( n = `manifest` v = client->_bind( val = manifest_analytical json = abap_true )
 
                 )->open( n = `layoutData` ns = `w`
                     )->leaf( n = `GridContainerItemLayoutData` ns = `f`
@@ -175,7 +175,7 @@ CLASS z2ui5_cl_dmo_app_341 IMPLEMENTATION.
 
             )->open( n = `Card` ns = `w`
                 )->a( n = `id`       v = `calendar`
-                )->a( n = `manifest` v = client->_bind( manifest_calendar )
+                )->a( n = `manifest` v = client->_bind( val = manifest_calendar json = abap_true )
 
                 )->open( n = `layoutData` ns = `w`
                     )->leaf( n = `GridContainerItemLayoutData` ns = `f`
@@ -186,7 +186,7 @@ CLASS z2ui5_cl_dmo_app_341 IMPLEMENTATION.
 
             )->open( n = `Card` ns = `w`
                 )->a( n = `id`       v = `object`
-                )->a( n = `manifest` v = client->_bind( manifest_object )
+                )->a( n = `manifest` v = client->_bind( val = manifest_object json = abap_true )
 
                 )->open( n = `layoutData` ns = `w`
                     )->leaf( n = `GridContainerItemLayoutData` ns = `f`
@@ -197,7 +197,7 @@ CLASS z2ui5_cl_dmo_app_341 IMPLEMENTATION.
 
             )->open( n = `Card` ns = `w`
                 )->a( n = `id`       v = `timeline`
-                )->a( n = `manifest` v = client->_bind( manifest_timeline )
+                )->a( n = `manifest` v = client->_bind( val = manifest_timeline json = abap_true )
 
                 )->open( n = `layoutData` ns = `w`
                     )->leaf( n = `GridContainerItemLayoutData` ns = `f`

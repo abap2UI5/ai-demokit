@@ -4132,15 +4132,17 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` f:profile Avatar), the four-tab IconTabBar and both f:GridContainers with all EIGHT sap.ui.integration widgets:Card instances, each with its f:GridContainerItemLayoutData and the sample's own` &&
                ` layout/layoutS GridContainerSettings. The earlier port was a single Card with an invented manifest. // NOTE: The eight card manifests come from model/cardManifests.json verbatim. The original carries` &&
                ` them in a named ``manifests>`` model and binds {manifests>/timeline}; abap2UI5 has one default model, so each manifest is a field bound with _bind - the last path segment stays identical, which is` &&
-               ` what structural-diff matches. The JSON never enters the view XML (a raw { would be read as a binding), it travels as model data. Asset URLs inside the manifests are absolutized to the OpenUI5 host` &&
-               ` per the asset-URL rule; the mock carries them host-relative. The model's unused ninth entry ('table') is not seeded - the sample's view binds eight. // NOTE: The controller's three members are all`.
-    lv_text1 = lv_text1 && ` resolved without a round-trip. resolveCardUrl is a formatter turning the component card's relative manifest path into a URL - computed in ABAP instead (thin-frontend rule). onAction toasts the` &&
-               ` navigation URL off the event, composed through control_global MESSAGE_TOAST with ${$parameters>/parameters}.url as the argument. onInit's date is DateFormat over UI5Date.getInstance(), a MOVING` &&
-               ` value, so it is anchored on a fixed date here (the corpus rule for now/random values, apps 164/181/289). // POST-1.71: sap.f.cards.CardBadgeCustomData (@since 1.128, with` &&
-               ` icon/state/announcementText/visibilityMode) is kept 1:1 on the three badged cards, and sap.m.Avatar in the ShellBar's profile is @since 1.73; the Card ``action`` event's ``parameters`` parameter is` &&
-               ` @since 1.76. All newer than UI5 1.71, declared per the property-171 policy - the app needs a runtime that has them. // NOTE: The 'component' Card keeps its manifest, which is a URL to a UI5 COMPONENT` &&
-               ` card (componentCard/manifest.json) rather than an inline card definition. It points at the OpenUI5 host, so whether the component itself loads depends on that host's CORS policy - the card renders`.
-    lv_text1 = lv_text1 && ` either way, and abap2UI5 has no place to ship a UI5 Component of its own. Declared rather than dropped, so the port keeps the sample's eight cards.`.
+               ` what structural-diff matches. The seven INLINE manifests are bound with json = abap_true, so they reach the Card as JSON objects: a string manifest is read as a manifest URL (Card.createManifest),` &&
+               ` which is what the eighth ('component') card genuinely is, so that one stays a plain string bind. Corrected 2026-08-10 with pr/card-manifest-object - before the flag existed the seven inline manifests`.
+    lv_text1 = lv_text1 && ` were quoted strings the control would have fetched as URLs. The JSON never enters the view XML (a raw { would be read as a binding), it travels as model data. Asset URLs inside the manifests are` &&
+               ` absolutized to the OpenUI5 host per the asset-URL rule; the mock carries them host-relative. The model's unused ninth entry ('table') is not seeded - the sample's view binds eight. // NOTE: The` &&
+               ` controller's three members are all resolved without a round-trip. resolveCardUrl is a formatter turning the component card's relative manifest path into a URL - computed in ABAP instead` &&
+               ` (thin-frontend rule). onAction toasts the navigation URL off the event, composed through control_global MESSAGE_TOAST with ${$parameters>/parameters}.url as the argument. onInit's date is DateFormat` &&
+               ` over UI5Date.getInstance(), a MOVING value, so it is anchored on a fixed date here (the corpus rule for now/random values, apps 164/181/289). // POST-1.71: sap.f.cards.CardBadgeCustomData (@since` &&
+               ` 1.128, with icon/state/announcementText/visibilityMode) is kept 1:1 on the three badged cards, and sap.m.Avatar in the ShellBar's profile is @since 1.73; the Card ``action`` event's ``parameters```.
+    lv_text1 = lv_text1 && ` parameter is @since 1.76. All newer than UI5 1.71, declared per the property-171 policy - the app needs a runtime that has them. // NOTE: The 'component' Card keeps its manifest, which is a URL to a` &&
+               ` UI5 COMPONENT card (componentCard/manifest.json) rather than an inline card definition. It points at the OpenUI5 host, so whether the component itself loads depends on that host's CORS policy - the` &&
+               ` card renders either way, and abap2UI5 has no place to ship a UI5 Component of its own. Declared rather than dropped, so the port keeps the sample's eight cards.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.integration` control = `sap.ui.integration.Card`               name = `CardsLayout`                                   class = `z2ui5_cl_dmo_app_118` path = `src/02/b01/z2ui5_cl_dmo_app_118.clas.abap`
         score = 5
@@ -4177,18 +4179,17 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` visible for as long as the real request takes, just not artificially stretched. Consequently onExit's stub restore has no counterpart either. // NOTE: onFormSubmit's two branches are both reproduced:` &&
                ` the first press publishes the manifests through the model (the original's setManifest branch), every later press issues a follow_up_action control_by_id <cardId>/refresh for each of the eleven Cards`.
     lv_text1 = lv_text1 && ` (the original's oCard.refresh() branch). refresh( ) is a public sap.ui.integration.widgets.Card method that does not match the FrontendAction deny regex, so it runs through the unlisted-method path;` &&
-               ` it is unverified in a running system. // LIVE-TEST: Unverified in a running system: whether an empty-string manifest renders the Card as the original's manifest-less placeholder, whether the` &&
-               ` model_init push through view_model_update makes all eleven Cards pick up their manifest, and the control_by_id refresh wire on the second press. // IMPROVISED: Source-verified framework gap` &&
-               ` (pr/card-manifest-object): sap.ui.integration.widgets.Card.createManifest treats a STRING manifest as a manifest URL (``if (typeof vManifest === "string") { mOptions.manifestUrl = vManifest; }``,` &&
-               ` Card.js) - an inline manifest must reach the control as a JS OBJECT. abap2UI5 has no way to put a raw JSON object into a model value: every model value is typed ABAP data, and a card manifest's keys` &&
-               ` (``sap.app``, ``sap.card``, ``_version``) are not valid ABAP field names, so it cannot be modelled as a structure either. The port therefore carries each manifest as the bound JSON STRING (the`.
-    lv_text1 = lv_text1 && ` sample's real manifest data, inlined verbatim so the port stays data-faithful and the eleven Cards stay 1:1), knowing UI5 will read it as a URL until the framework can carry a raw JSON payload - the` &&
-               ` request is filed under pr/card-manifest-object. Unlike LazyLoading (app 342), whose manifests are one file each and can be bound as real URLs, CardsLoading keeps all eleven inside one combined` &&
-               ` manifests/cardManifests.json, so no per-card URL exists upstream to bind instead.`.
+               ` it is unverified in a running system. // LIVE-TEST: Unverified in a running system: whether the eleven spliced JSON manifests render their Cards, whether an empty-string manifest shows the original's` &&
+               ` manifest-less placeholder before the first press, and the control_by_id refresh wire on the second press. // NOTE: The eleven manifests reach the Cards as real JSON OBJECTS through client->_bind( val` &&
+               ` = manifest_x json = abap_true ). This port is what raised that flag: sap.ui.integration.widgets.Card.createManifest branches on the JS type and reads a STRING manifest as a manifest URL (``if (typeof` &&
+               ` vManifest === "string") { mOptions.manifestUrl = vManifest; }``, Card.js), so an inline manifest has to arrive as an object - and a model value could not be one: every value is typed ABAP data, and a`.
+    lv_text1 = lv_text1 && ` manifest's keys (``sap.app``, ``sap.card``, ``_version``) are not valid ABAP field names, so it cannot be modelled as a structure either. The framework now splices such a string into the model as a` &&
+               ` JSON node instead of quoting it (pr/card-manifest-object, implemented upstream), which is why CardsLoading works at all: unlike LazyLoading (app 342) it keeps all eleven manifests in one combined` &&
+               ` manifests/cardManifests.json, so there is no per-card URL to bind instead.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.integration` control = `sap.ui.integration.widgets.Card`       name = `CardsLoading`                                  class = `z2ui5_cl_dmo_app_341` path = `src/02/b19/z2ui5_cl_dmo_app_341.clas.abap`
         score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
         since = `1.62`
         notes = lv_text1 ) ).
