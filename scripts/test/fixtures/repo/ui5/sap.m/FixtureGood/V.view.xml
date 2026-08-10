@@ -1,0 +1,5 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="fixture.good.C">
+	<Page title="{title}">
+		<Text text="{name}" wrapping="true"/>
+	</Page>
+</mvc:View>

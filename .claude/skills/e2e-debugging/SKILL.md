@@ -1,12 +1,15 @@
 ---
 name: e2e-debugging
-description: Running and debugging the Playwright e2e smoke: build freshness and stale servers, zero-size unthemed controls, overflow popovers, viewport-dependent wires, HTTPS-only device APIs, ASSERTION_FAILED runtime causes. Use when running npm run e2e, adding an INTERACTIONS entry, closing a LIVE_TEST deviation, or when an e2e failure looks like a broken port.
+description: Running and debugging the Playwright e2e smoke: build freshness and stale servers, zero-size unthemed controls, overflow popovers, viewport-dependent wires, HTTPS-only device APIs, ASSERTION_FAILED runtime causes. Use when running npm run e2e, adding a meta/interactions module, closing a LIVE_TEST deviation, or when an e2e failure looks like a broken port.
 ---
 
 # E2E smoke — debugging guide
 
-The harness itself (build, serve, run, INTERACTIONS map) is documented in
-`E2E.md`; the `e2e_smoke` gate row is in the `run-the-gates` guide. This guide
+The harness itself (build, serve, run) is documented in `E2E.md`; the
+per-port interactions live as one module each under `meta/interactions/`
+(coverage catalogue in that directory's README, shared assertions in
+`scripts/lib-e2e.mjs`); the `e2e_smoke` gate row is in the `run-the-gates`
+guide. This guide
 collects the lessons that make e2e failures readable — most "broken port"
 verdicts below turned out to be harness effects.
 

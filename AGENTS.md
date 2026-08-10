@@ -48,9 +48,11 @@ reads the files directly. **Read the matching guide BEFORE starting the task**
 
 **Large files — grep them, never read them whole:** `api.md` (~316 KB
 generated table), `STATUS-history.md` (~228 KB journal), `CAPABILITIES.md`
-(~45 KB — grep for the feature row), `scripts/e2e-smoke.mjs` (~80 KB),
+(~45 KB — grep for the feature row),
 `scripts/generate-overview.mjs` (~58 KB),
-`src/z2ui5_cl_dmo_app_overview.clas.abap` (generated).
+`src/z2ui5_cl_dmo_app_overview.clas.abap` (generated). (The e2e
+interactions live as one module per port under `meta/interactions/` —
+read only the port you work on.)
 
 ---
 
@@ -389,7 +391,9 @@ rebuilds the `702` branch on every push to `main`.
 
 The `checks` workflow runs the deterministic gates on every PR; the heavy
 `e2e_smoke` runs in `e2e_nightly.yaml` (scheduled + on demand). The gate set:
-`pattern_lint`, `structural_diff`, `view_gates` (properties + structure +
+`pattern_lint`, `check_pins` (A2UI5_PIN well-formed, no stray/duplicate
+`"branch"` on the abap2UI5 dependency in any abaplint config),
+`structural_diff`, `view_gates` (properties + structure +
 headless render — the three former view gates, now run from
 [abap2UI5-linter](https://github.com/abap2UI5/linter) with only the
 corpus policy kept here in `scripts/view-gates.mjs`), `data_fidelity`,
@@ -426,6 +430,8 @@ artefacts must leave the tree clean, exactly as the `meta_valid` CI job checks).
 npm ci               # once - installs abaplint, @abap2ui5/linter + the OpenUI5 runtime
 npm run gates:full   # gates + `npx abaplint ./abaplint.jsonc` (0 issues)
                      #       + view-gates --strict (properties/structure/headless render)
+npm test             # fixture tests for the gate/generator tooling itself
+                     # (scripts/test/, golden-file based; also a CI job)
 ```
 
 

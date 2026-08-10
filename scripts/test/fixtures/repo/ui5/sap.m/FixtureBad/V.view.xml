@@ -1,0 +1,5 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m" controllerName="fixture.bad.C">
+	<Page title="{title}">
+		<List headerText="{header}"/>
+	</Page>
+</mvc:View>

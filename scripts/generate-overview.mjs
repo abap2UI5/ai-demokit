@@ -20,6 +20,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { loadUniverseSnapshot, loadPropertiesControls, enrichFromProperties } from './lib-universe.mjs';
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = path.join(ROOT, 'src');
@@ -39,7 +40,8 @@ function walk(dir, out = []) {
 
 // control availability from the sample-universe snapshot (same source as the
 // coverage docs): the release a control appeared in + whether it is deprecated
-const uni = JSON.parse(fs.readFileSync(path.join(ROOT, 'ui5', 'universe.json'), 'utf8'));
+const uni = loadUniverseSnapshot();
+if (!uni) { console.error('ui5/universe.json missing — the overview needs the sample-universe snapshot.'); process.exit(1); }
 const uniMap = new Map();
 for (const lib of uni.libs) for (const s of lib.samples) uniMap.set(`${lib.lib}|${s.name}`, s);
 
@@ -56,10 +58,7 @@ for (const lib of uni.libs) for (const s of lib.samples) uniMap.set(`${lib.lib}|
 // disagreed depending on whether npm ci had run. When the @openui5 packages
 // ARE installed, the snapshot is cross-checked against their sources and a
 // stale snapshot fails the run; rebuild it with --update-entities.
-const OPENUI5_CONTROLS = (() => {
-  try { return JSON.parse(fs.readFileSync(path.join(ROOT, 'ui5', 'properties.json'), 'utf8')).controls || {}; }
-  catch { return {}; }
-})();
+const OPENUI5_CONTROLS = loadPropertiesControls();
 const ENTITIES_FILE = path.join(ROOT, 'ui5', 'openui5-entities.json');
 const EXTRA_ENTITIES = new Set((() => {
   try { return JSON.parse(fs.readFileSync(ENTITIES_FILE, 'utf8')).entities || []; }
@@ -68,17 +67,12 @@ const EXTRA_ENTITIES = new Set((() => {
 const OPENUI5_PKG = path.join(ROOT, 'node_modules', '@openui5');
 const OPENUI5_LIBS = fs.existsSync(OPENUI5_PKG) ? fs.readdirSync(OPENUI5_PKG) : [];
 
-// scope fallback (same as generate-coverage.mjs):
+// scope fallback (the same lib-universe enrichment generate-coverage uses):
 // the universe snapshot carries since:null for most controls, so fill the
 // nulls from the control-level @since/@deprecated that the linter's generate-metadata.mjs
 // parses out of the OpenUI5 sources — the overview's Since column and the
 // deprecation strikethrough then match the authoritative scope verdict.
-for (const s of uniMap.values()) {
-  const c = s.entity && OPENUI5_CONTROLS[s.entity];
-  if (!c) continue;
-  if (!s.since && c.since) s.since = c.since;
-  if (!s.deprecated && c.deprecated) s.deprecated = c.deprecated;
-}
+for (const [k, s] of uniMap) uniMap.set(k, enrichFromProperties(OPENUI5_CONTROLS, s));
 // per-library text (library.js + .library manifest) - catches OpenUI5 entities
 // that have no own module: statics/helpers (sap.m.URLHelper, in library.js) and
 // CSS-class doc entities (sap.ui.core.StandardMargins/ContainerPadding, in .library)
