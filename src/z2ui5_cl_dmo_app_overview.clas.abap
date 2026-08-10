@@ -5696,13 +5696,15 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` loop, so the wire carries a FIXED set of 31 index-guarded expression args (one per selectable slot), each formatting getSelectedDates()[i].getStartDate() to yyyy-MM-dd from its LOCAL parts on the` &&
                ` client and yielding an empty string past the end of the aggregation. on_event stops at the first empty arg and rebuilds the bound table from the rest. // IMPROVISED: the 31-slot cap is a real limit,` &&
                ` not a formality: 31 is the most days one displayed month can hold, but the user can navigate months and keep selecting, and every day past the 31st is silently dropped from the list (the calendar` &&
-               ` itself still shows it selected). A loop-free expression grammar leaves no way to transport a variable-length aggregation in one arg. // LIVE-TEST: not yet run in a system: the multi-select round-trip` &&
-               ` filling the List, and the Remove All button clearing both the List and the calendar's own highlighting (the removeAllSelectedDates follow-up action).`.
+               ` itself still shows it selected). A loop-free expression grammar leaves no way to transport a variable-length aggregation in one arg. // NOTE: e2e-verified 2026-08-10 (scripts/e2e-smoke.mjs` &&
+               ` interaction, transpiled backend + real browser): a day is selected the keyboard way (the day cell carries no clickable layout box headless), the 31-slot expression round-trip fills the List, and`.
+    lv_text1 = lv_text1 && ` "Remove All Selected Dates" clears BOTH sides - the List returns to its "No Dates Selected" noData text AND .sapUiCalItemSel drops to zero, which is the removeAllSelectedDates follow-up action doing` &&
+               ` what no model write could: sap.ui.unified.Calendar writes selectedDates itself. The assertion has real discriminating power - before abap2UI5 #2535 the list emptied and the days stayed highlighted,` &&
+               ` which is exactly the state it now rejects.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarMultipleDaySelection`                  class = `z2ui5_cl_dmo_app_307` path = `src/02/b15/z2ui5_cl_dmo_app_307.clas.abap`
         score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22.0`
         notes = lv_text1 ) ).
 
