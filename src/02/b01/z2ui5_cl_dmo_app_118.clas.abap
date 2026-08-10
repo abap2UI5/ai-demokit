@@ -110,7 +110,7 @@ CLASS z2ui5_cl_dmo_app_118 IMPLEMENTATION.
                         )->shut(
 
                         )->open( n = `Card` ns = `w`
-                            )->a( n = `manifest` v = client->_bind( manifest_timeline )
+                            )->a( n = `manifest` v = client->_bind( val = manifest_timeline json = abap_true )
                             " onAction toasts the navigation URL off the event - it
                             " resolves on the client, so the action needs no roundtrip
                             )->a( n = `action`   v = client->_event_client(
@@ -137,7 +137,7 @@ CLASS z2ui5_cl_dmo_app_118 IMPLEMENTATION.
                             )->shut(
                         )->shut(
                         )->open( n = `Card` ns = `w`
-                            )->a( n = `manifest` v = client->_bind( manifest_object )
+                            )->a( n = `manifest` v = client->_bind( val = manifest_object json = abap_true )
                             " onAction toasts the navigation URL off the event - it
                             " resolves on the client, so the action needs no roundtrip
                             )->a( n = `action`   v = client->_event_client(
@@ -184,7 +184,7 @@ CLASS z2ui5_cl_dmo_app_118 IMPLEMENTATION.
                             )->shut(
                         )->shut(
                         )->open( n = `Card` ns = `w`
-                            )->a( n = `manifest` v = client->_bind( manifest_calendar )
+                            )->a( n = `manifest` v = client->_bind( val = manifest_calendar json = abap_true )
                             " onAction toasts the navigation URL off the event - it
                             " resolves on the client, so the action needs no roundtrip
                             )->a( n = `action`   v = client->_event_client(
@@ -230,7 +230,7 @@ CLASS z2ui5_cl_dmo_app_118 IMPLEMENTATION.
                         )->shut(
 
                         )->open( n = `Card` ns = `w`
-                            )->a( n = `manifest` v = client->_bind( manifest_stackedcolumn )
+                            )->a( n = `manifest` v = client->_bind( val = manifest_stackedcolumn json = abap_true )
 
                             )->open( n = `layoutData` ns = `w`
                                 )->leaf( n = `GridContainerItemLayoutData` ns = `f`
@@ -240,7 +240,7 @@ CLASS z2ui5_cl_dmo_app_118 IMPLEMENTATION.
                             )->shut(
                         )->shut(
                         )->open( n = `Card` ns = `w`
-                            )->a( n = `manifest` v = client->_bind( manifest_donut )
+                            )->a( n = `manifest` v = client->_bind( val = manifest_donut json = abap_true )
 
                             )->open( n = `layoutData` ns = `w`
                                 )->leaf( n = `GridContainerItemLayoutData` ns = `f`
@@ -250,7 +250,7 @@ CLASS z2ui5_cl_dmo_app_118 IMPLEMENTATION.
                             )->shut(
                         )->shut(
                         )->open( n = `Card` ns = `w`
-                            )->a( n = `manifest` v = client->_bind( manifest_list1 )
+                            )->a( n = `manifest` v = client->_bind( val = manifest_list1 json = abap_true )
                             )->a( n = `baseUrl`  v = `./`
 
                             )->open( n = `layoutData` ns = `w`
@@ -260,7 +260,7 @@ CLASS z2ui5_cl_dmo_app_118 IMPLEMENTATION.
                             )->shut(
                         )->shut(
                         )->open( n = `Card` ns = `w`
-                            )->a( n = `manifest` v = client->_bind( manifest_list2 )
+                            )->a( n = `manifest` v = client->_bind( val = manifest_list2 json = abap_true )
                             )->a( n = `baseUrl`  v = `./`
                             " onAction toasts the navigation URL off the event - it
                             " resolves on the client, so the action needs no roundtrip

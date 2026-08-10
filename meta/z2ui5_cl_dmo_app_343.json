@@ -1,0 +1,31 @@
+{
+  "class": "z2ui5_cl_dmo_app_343",
+  "sample": "sap.ui.layout.sample.BlockLayoutCustomBackgroundPerCell",
+  "entity": "sap.ui.layout.BlockLayout",
+  "file": "src/02/b19/z2ui5_cl_dmo_app_343.clas.abap",
+  "batch": "b19",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The six core:Fragment references (sap.ui.layout.sample.BlockLayoutCustomBackgroundPerCell.ColorSelect) are inlined: abap2UI5 serves one view per round-trip, so a fragmentName has no file to resolve. The fragment's content (VBox with the two Labels and the two Selects over eleven ColorSet and six ColorShade core:Item entries) is written into each of the six cells verbatim, so the rendered result is identical; the dropped core:Fragment elements are what structural-diff reports."
+    },
+    {
+      "type": "NOTE",
+      "what": "Each cell keeps its own element binding: binding=\"{/cellN}\" is built from client->_bind( val = cellN path = abap_true ) rather than a hard-coded path, and the model carries one nested structure per cell (colorset/colorshade) so the fragment's relative {COLORSET}/{COLORSHADE} bindings resolve against the cell context exactly as in the original - no flattening to the model root was needed, and the two Selects write back into their own cell."
+    },
+    {
+      "type": "NOTE",
+      "what": "resources/sample.css is injected through a core:HTML <style> leaf (abap2UI5 ships no separate stylesheet), so the port adds one core:HTML control the original view does not have. The CSS braces are escaped \\{ \\} in a backtick literal so the XMLView parser does not read them as bindings, and the background-image url(\"Night_sky.jpg\") is absolutized to the OpenUI5 host (https://sdk.openui5.org/test-resources/sap/ui/layout/demokit/sample/BlockLayoutCustomBackgroundPerCell/resources/Night_sky.jpg) per the asset-URL rule - relative to the served app it would not resolve."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "Unverified in a running system: whether the per-cell context binding round-trips (a Select changing its cell's colorSet/colorShade writes back into the nested ABAP structure) and whether the injected stylesheet paints the image cell."
+    }
+  ]
+}

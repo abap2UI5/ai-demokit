@@ -15,11 +15,11 @@ TRAINING.md; for what abap2UI5 can express see CAPABILITIES.md._
 
 | Aspect | State |
 |---|---|
-| Ports | **339** sidecars in `meta/` (src/01: 181 · src/02: 104 · src/03: 19 · src/04: 19 · src/05: 16) |
-| Status ladder | 132 `generated` · 146 `reviewed` · 61 `checked` (live-verified) |
-| Deviations | 5 DROPPED_171 · 39 IMPROVISED · 39 LIVE_TEST · 748 NOTE · 140 POST_171 |
-| Open LIVE_TESTs | **39 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
-| Declared gate skips | 2 structural-diff · 4 render-smoke (each re-verified per run — a stale skip FAILS) |
+| Ports | **365** sidecars in `meta/` (src/01: 181 · src/02: 130 · src/03: 19 · src/04: 19 · src/05: 16) |
+| Status ladder | 158 `generated` · 146 `reviewed` · 61 `checked` (live-verified) |
+| Deviations | 5 DROPPED_171 · 58 IMPROVISED · 62 LIVE_TEST · 827 NOTE · 148 POST_171 |
+| Open LIVE_TESTs | **62 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
+| Declared gate skips | 2 structural-diff · 5 render-smoke (each re-verified per run — a stale skip FAILS) |
 | Out-of-scope ported samples | `z2ui5_cl_dmo_app_121 (sap.m.sample.UploadSet — deprecated)` · `z2ui5_cl_dmo_app_136 (sap.f.sample.SidePanelSingle — control @since 1.107)` · `z2ui5_cl_dmo_app_141 (sap.ui.core.sample.InvisibleMessage — control @since 1.78)` · `z2ui5_cl_dmo_app_165 (sap.f.sample.ProductSwitchNavigation — control @since 1.72)` · `z2ui5_cl_dmo_app_203 (sap.m.sample.OverflowToolbarTokenizer — control @since 1.139)` — all decided KEEP permanently 2026-07-30 (per-app rationale in ui5/scope-exceptions.json, revertible); the source-backed scope gate stays hard for NEW undecided entries |
 
 _Coverage per library (ported / in scope) is generated into the [README](README.md#coverage); one row per sample in [api.md](api.md)._
@@ -92,6 +92,17 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   syntax errors to ABAP_STANDARD/CLOUD/702), and `@abap2ui5/linter` is pinned
   at the commit that mirrors the new global targets, the `eBP` stub and the
   `/media/range` model path.
+
+  **Re-pinned 2026-08-10 for `_bind( json = abap_true )`** (the
+  `card-manifest-object` request, implemented upstream). Same rule, same three
+  places, and the 702 config needed a real fix rather than a re-point: it still
+  carried the `"branch"` of the already-merged-and-deleted
+  `ai-demokit-next-steps` branch **next to** its own `"branch": "702"` - two
+  keys for one dependency, the first of them pointing at a branch that no
+  longer exists. It is now a single key on the current feature branch. At merge
+  time it goes back to `"702"`, and only after the framework's `auto_downport`
+  has rebuilt that branch from the merged main - until then the 702 branch
+  cannot know the new parameter.
 
   **The PROBE families are the open work** (the biggest one is now measured and closed) — each is a plausible gap that a
   measurement could refute, and this repo's rule is that a request is filed on

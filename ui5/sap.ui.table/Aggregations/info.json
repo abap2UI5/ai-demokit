@@ -1,0 +1,18 @@
+[
+	{
+		"title" : "Aggregation 'extension'",
+		"text"	: "A section above the table which, for example, can be used for a toolbar or a facet filter. If no extension is given the section is hidden."
+	},{
+		"title" : "Aggregation 'columns'",
+		"text"	: "Aggregation to define the columns of the table incl. their headers and the data cell templates."
+	},{
+		"title" : "Aggregation 'rows'",
+		"text"	: "The data aggregation of the table. This aggregation MUST be bound to some data model."
+	},{
+		"title" : "Aggregation 'noData'",
+		"text"	: "The value for the 'noData' aggregation can be either a string value or a control instance. It is shown, in case there is no data for the Table available."
+	},{
+		"title" : "Aggregation 'footer'",
+		"text"	: "The value for the 'footer' aggregation can also be either a string value or a control instance. The footer section is rendered below the table. If no footer is given the section is hidden."
+	}
+]

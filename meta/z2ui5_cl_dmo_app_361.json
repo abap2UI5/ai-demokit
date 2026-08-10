@@ -1,0 +1,39 @@
+{
+  "class": "z2ui5_cl_dmo_app_361",
+  "sample": "sap.ui.table.sample.Selection",
+  "entity": "sap.ui.table.Table",
+  "file": "src/02/b20/z2ui5_cl_dmo_app_361.clas.abap",
+  "batch": "b20",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "Three of the four controller setters become bound properties. The behaviour Select's selectedKey and the Table's selectionBehavior share one field, and the Switch's state and the Table's enableSelectAll share another - so onBehaviourModeChange and onSwitchChange disappear and their wires with them: the behaviour Select keeps no change attribute and the Switch loses Switch.change entirely (the only attribute structural-diff reports missing). onSelectionModeChange is the one that KEEPS its change wire, because it is not a plain setter: it REFUSES the deprecated All mode with a MessageToast and leaves the table on its previous mode. The port therefore keeps the Select's key and the Table's selectionMode as two separate fields and copies one into the other in the handler, snapping the Select back when All was picked - exactly the original's behaviour."
+    },
+    {
+      "type": "NOTE",
+      "what": "getSelectedIndices / getContextByIndex read state that lives in the CONTROL, not in the model. Rather than faking a value, the port mirrors the selection into the model: the Table's rowSelectionChange event carries ${$parameters>/rowIndices} and ${$parameters>/rowIndex} to the backend, and the two buttons then report from that - the index list, or 'no item selected' when it is empty, exactly as the original branches. getContextByIndex toasts the last selected row's model path (/T_PRODUCTS/<n>), which is what a sap.ui.model.Context renders as when the original passes it to MessageToast. clearSelection stays imperative because the selection is control state: follow_up_action control_by_id table1/clearSelection, plus clearing the mirrored fields."
+    },
+    {
+      "type": "NOTE",
+      "what": "The named `selectionmodel>` model (the SelectionMode / SelectionBehavior enum values the controller enumerates at runtime, skipping Multi) is folded onto the one default model as two tables; the values are the sap.ui.table enum members as of the current release. The controller's two formatters are computed in ABAP per the thin-frontend principle: formatAvailableToObjectState and formatAvailableToIcon become the precomputed AVAILABLESTATE (Success/Error) and AVAILABLEICON (sap-icon://accept / sap-icon://decline) columns. handleDetailsPress is client-composed and roundtrip-free: control_global MESSAGE_TOAST with 'Details for product with id {0}' and the row's ${PRODUCTID}."
+    },
+    {
+      "type": "NOTE",
+      "what": "The Suppliers and Categories collections the controller derives from the products (the distinct SupplierName / Category values in first-appearance order) are inlined as their own tables, and the two in-cell dropdowns keep the original's binding-info form with templateShareable - only the path switches to the ABAP table. The Heavy CheckBox and the DeliveryDate DatePicker keep their typed complex bindings 1:1 with the path pointed at the ABAP field."
+    },
+    {
+      "type": "NOTE",
+      "what": "The shared 123-row demo ProductCollection (sap/ui/demo/mock/products.json) is inlined with the columns the twelve table columns bind. The original computes DeliveryDate from Date.now() with an i-mod-10 offset in 4-day steps; a fixed base date (2026-07-23) is used here so the port is deterministic - the corpus convention of app 164. ProductPicUrl values point at the OpenUI5 host per the asset-URL rule; the mock carries them host-relative."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "Unverified in a running system: whether rowSelectionChange delivers the index array as JSON to get_event_arg, whether the two bound Selects drive selectionMode/selectionBehavior without a round-trip, and the control_by_id clearSelection wire."
+    }
+  ]
+}

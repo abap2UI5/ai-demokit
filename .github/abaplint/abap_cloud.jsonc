@@ -10,11 +10,11 @@
     },
     {
       "url": "https://github.com/abap2UI5/abap2UI5",
-      // TEMPORARY: the ports use _bind( omit_initial ) and the css / setSticky /
-      // controlIdOrNull / INVISIBLE_MESSAGE / FORMATTING wires, which live on this
-      // abap2UI5 branch until it is merged. MUST go back to main (drop this line)
-      // before this change is merged - same rule as the linter pin in STATUS.md.
-      "branch": "claude/ai-demokit-next-steps-0b5cp2",
+      // TEMPORARY: the ports use _bind( json = abap_true ) (apps 118/341 - the
+      // sap.ui.integration Card manifests), which lives on this abap2UI5 branch
+      // until it is merged. MUST go back to main (drop this line) before this
+      // change is merged - same rule as the linter pin in STATUS.md.
+      "branch": "claude/portier-demokit-sap-ui-samples-9ek4hj",
       "folder": "/abap2UI5",
       "files": "/src/**/*.*"
     }

@@ -1,0 +1,31 @@
+{
+  "class": "z2ui5_cl_dmo_app_349",
+  "sample": "sap.ui.layout.sample.GridTemplateRows",
+  "entity": "sap.ui.layout.cssgrid.CSSGrid",
+  "file": "src/02/b19/z2ui5_cl_dmo_app_349.clas.abap",
+  "batch": "b19",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "Both controller handlers become plain bindings, so the port drops the Slider.liveChange and the two ComboBox.change attributes that only carried the imperative setters. (a) onSliderMoved calls byId('panelCSSGrid').setWidth(fValue + '%'); sap.m.Panel HAS a width property, so the Slider's value is two-way bound and the Panel's width is an expression binding over it - roundtrip-free, the app-222/176 idiom. (b) onInputChanged calls setGridTemplateRows / setGridTemplateColumns depending on which ComboBox fired; each ComboBox value is two-way bound and the CSSGrid binds the matching property to the SAME field, so picking or typing a template reaches the grid with no dispatcher."
+    },
+    {
+      "type": "NOTE",
+      "what": "The grid's gridTemplateColumns starts from the cTem ComboBox's preselected item text \"1fr 1fr\" rather than the view's literal \"repeat(2,1fr)\": both express the same two equal columns, and binding the grid to the ComboBox field is what makes the selection drive the grid at all. gridTemplateRows keeps \"1fr 2fr 1fr\", which is both the view literal and the rFr item text. The ComboBoxes keep their selectedKey attributes 1:1."
+    },
+    {
+      "type": "NOTE",
+      "what": "css/main.css (.sapMFlexBox.demoBox and the white .sapMTitle/.sapMText inside it) is injected through an extra core:HTML <style> leaf - abap2UI5 ships no separate stylesheet, and without the rules the six demo boxes render unstyled. The CSS braces are escaped \\{ \\} in a backtick literal so the XMLView parser does not read them as bindings."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "Unverified in a running system: whether a ComboBox free-text entry (the original reads the change event's value, not the selected key) round-trips into the bound field and re-templates the grid."
+    }
+  ]
+}

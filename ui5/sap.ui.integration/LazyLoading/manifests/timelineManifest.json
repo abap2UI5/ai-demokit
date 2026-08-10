@@ -1,0 +1,39 @@
+{
+	"_version": "1.81.0",
+	"sap.app": {
+		"id": "cardsdemo.timelineContent.card1",
+		"type": "card"
+	},
+	"sap.card": {
+		"type": "Timeline",
+		"header": {
+			"title": "Upcoming Activities",
+			"subtitle": "For Today"
+		},
+		"content": {
+			"maxItems": "3",
+			"data": {
+				"request": {
+					"url": "sap/ui/integration/sample/LazyLoading/manifests/activities.json"
+				}
+			},
+			"item": {
+				"dateTime": {
+					"label": "Time",
+					"value": "{Time}"
+				},
+				"description": {
+					"label": "Description",
+					"value": "{Description}"
+				},
+				"title": {
+					"label": "Title",
+					"value": "{Title}"
+				},
+				"icon": {
+					"src": "{Icon}"
+				}
+			}
+		}
+	}
+}
