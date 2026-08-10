@@ -5,7 +5,7 @@
   "file": "src/02/b15/z2ui5_cl_dmo_app_307.clas.abap",
   "batch": "b15",
   "audit": {
-    "frontend_action": false,
+    "frontend_action": true,
     "event_t_arg": true
   },
   "status": "generated",
@@ -20,12 +20,8 @@
       "what": "the 31-slot cap is a real limit, not a formality: 31 is the most days one displayed month can hold, but the user can navigate months and keep selecting, and every day past the 31st is silently dropped from the list (the calendar itself still shows it selected). A loop-free expression grammar leaves no way to transport a variable-length aggregation in one arg."
     },
     {
-      "type": "IMPROVISED",
-      "what": "handleRemoveSelection calls byId('calendar').removeAllSelectedDates() and then clears the model. Only the model half is reproducible: the frontend-action method denylist blocks every 'removeAll*' name (CONTROL_METHOD_DENY_PREFIXES in app/webapp/core/FrontendAction.js, aimed at the GENERIC reflection mutators), so the named per-aggregation removeAllSelectedDates cannot be called either - the list empties but the days stay highlighted in the calendar. Filed as pr/control-method-named-removeall."
-    },
-    {
       "type": "LIVE_TEST",
-      "what": "not yet run in a system: the multi-select round-trip filling the List and the Remove All button clearing it."
+      "what": "not yet run in a system: the multi-select round-trip filling the List, and the Remove All button clearing both the List and the calendar's own highlighting (the removeAllSelectedDates follow-up action)."
     }
   ]
 }

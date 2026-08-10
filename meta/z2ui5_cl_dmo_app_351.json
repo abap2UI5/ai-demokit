@@ -5,8 +5,8 @@
   "file": "src/02/b19/z2ui5_cl_dmo_app_351.clas.abap",
   "batch": "b19",
   "audit": {
-    "frontend_action": true,
-    "event_t_arg": true
+    "frontend_action": false,
+    "event_t_arg": false
   },
   "status": "generated",
   "checked": null,
@@ -25,7 +25,7 @@
     },
     {
       "type": "NOTE",
-      "what": "btnChangeOrientation flips Splitter.orientation, which IS a bindable property, so the port binds it and flips the model field instead of calling the setter (the prefer-a-bindable-property rule). btnInvalidateSplitter has no bindable equivalent - invalidate( ) forces a re-render without changing a property - so it stays a follow_up_action control_by_id mainSplitter/invalidate; invalidate is a public control method that does not match the FrontendAction deny regex. The Splitter's resize event is wired to the backend, which increments the counter and writes the timestamped 'Resize # n' text the original's handler writes."
+      "what": "btnChangeOrientation flips Splitter.orientation, which IS a bindable property, so the port binds it and flips the model field instead of calling the setter (the prefer-a-bindable-property rule). btnInvalidateSplitter has no bindable equivalent either - invalidate( ) forces a re-render without changing a property - and it needs none: invalidate is denied by the frontend action allowlist (the render lifecycle belongs to the framework, CONTROL_METHOD_DENY_PREFIXES), and the round-trip the button already makes ends in view_model_update( ), which re-renders the slot. So the button keeps its wire and its effect, with no control method called. The Splitter's resize event is wired to the backend, which increments the counter and writes the timestamped 'Resize # n' text the original's handler writes."
     },
     {
       "type": "IMPROVISED",
@@ -37,7 +37,7 @@
     },
     {
       "type": "LIVE_TEST",
-      "what": "Unverified in a running system: whether inserting/deleting a row re-renders the bound contentAreas aggregation, whether the shared table keeps the option row and the layout data in sync while dragging a splitter bar, and the control_by_id invalidate wire."
+      "what": "Unverified in a running system: whether inserting/deleting a row re-renders the bound contentAreas aggregation, whether the shared table keeps the option row and the layout data in sync while dragging a splitter bar, and whether the Invalidate button's plain round-trip re-renders the Splitter the way the original's invalidate( ) does."
     }
   ]
 }

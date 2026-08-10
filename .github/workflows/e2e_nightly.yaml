@@ -57,18 +57,36 @@ jobs:
     # A red nightly is a regression in a LIVE_TEST-class wire — it must reach
     # someone, not sit in the Actions tab until the next release. One issue is
     # kept per breakage (updated, not duplicated) and it references the run.
-    - name: Open or update the nightly-failure issue
+    #
+    # The issue is the PREFERRED channel, not the only one, and it must never be
+    # the reason the job is red: issues can be disabled on the repository (they
+    # were, from 2026-07-27 to 2026-08-10, so every red nightly reported a
+    # `gh` failure on top of the real one and none of them reached anybody).
+    # The step summary always gets written, so the verdict survives either way.
+    - name: Report the nightly failure
       if: failure()
+      continue-on-error: true
       env:
         GH_TOKEN: ${{ github.token }}
         RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
       run: |
-        set -e
         title="e2e nightly is red"
         body="The nightly e2e smoke failed: ${RUN_URL}
 
         Every FAIL line in the run log is a port whose live wire regressed (or a harness effect — see .claude/skills/e2e-debugging). This issue is updated by each red nightly and should be closed when the nightly is green again."
-        existing=$(gh issue list --state open --search "in:title \"$title\"" --json number --jq '.[0].number // empty')
+
+        {
+          echo "## $title"
+          echo
+          echo "The nightly e2e smoke failed — every FAIL line in the run log is a port"
+          echo "whose live wire regressed (or a harness effect, see"
+          echo ".claude/skills/e2e-debugging)."
+        } >> "$GITHUB_STEP_SUMMARY"
+
+        if ! existing=$(gh issue list --state open --search "in:title \"$title\"" --json number --jq '.[0].number // empty' 2>&1); then
+          echo "::warning::could not reach the issue tracker ($existing) — the step summary above is the only report"
+          exit 0
+        fi
         if [ -n "$existing" ]; then
           gh issue comment "$existing" --body "Still red: ${RUN_URL}"
         else

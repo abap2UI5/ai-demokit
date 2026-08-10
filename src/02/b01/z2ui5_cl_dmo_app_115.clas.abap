@@ -317,9 +317,16 @@ CLASS z2ui5_cl_dmo_app_115 IMPLEMENTATION.
         DATA(row_index) = CONV i( substring_after( val = row_path
                                                    sub = `/`
                                                    occ = -1 ) ).
-        IF update_type = `removed` AND row_index + 1 <= lines( productcollection ).
-          DELETE productcollection[ row_index + 1 ]-additionalcategoriesselection WHERE key = removed_key.
-          client->view_model_update( ).
+        " the row is addressed through a field symbol, not a table expression:
+        " abaplint's downport leaves an itab[ ] TARGET of INSERT/DELETE in
+        " place, and the 702 parser rejects it
+        DATA(row_no) = row_index + 1.
+        IF update_type = `removed`.
+          READ TABLE productcollection INDEX row_no ASSIGNING FIELD-SYMBOL(<product>).
+          IF sy-subrc = 0.
+            DELETE <product>-additionalcategoriesselection WHERE key = removed_key.
+            client->view_model_update( ).
+          ENDIF.
         ENDIF.
 
     ENDCASE.
