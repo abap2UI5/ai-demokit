@@ -10,5 +10,18 @@
   },
   "status": "generated",
   "checked": null,
-  "deviations": []
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "The original binds the Table.columns aggregation to the OData METAMODEL and builds every Column in a JS factory (columnFactory), so its view declares no columns at all. A control-returning factory is the capability boundary CAPABILITIES marks as not expressible - and the decision it makes belongs in the backend anyway (thin frontend). The port therefore drops the Table.columns binding attribute and writes out the twenty-one Columns the factory produces from the sample's own metadata.xml, with the same rules: visible unless sap:visible=\"false\" or a unit-of-measure / currency-code semantic, the width derived from maxLength (>50 -> 15rem, >9 -> 10rem, else 5rem, absent maxLength counting as 10), sortProperty / filterProperty only where sap:sortable / sap:filterable is true, End alignment for the Edm.Decimal columns, the sap:label as the header text, and a u:Currency template for the one property whose sap:unit carries the currency-code semantic (Price over CurrencyCode) - every other one a plain non-wrapping Text. structural-diff therefore reports 21 extra Column, 21 extra m:Label, 20 extra m:Text and one extra u:Currency, all of them the controller-built ones."
+    },
+    {
+      "type": "NOTE",
+      "what": "The sample serves its rows from an in-page OData MockServer (sap/ui/core/util/MockServer over metadata.xml, autoRespondAfter 2000, threshold 15). An abap2UI5 app has a real ABAP backend, so the mock service is replaced by the model itself: all 115 rows of ProductSet.json are inlined with every property the metadata declares, because the metadata-driven columns render all of them. What that costs is the server-side paging illusion and with it the dataRequested/dataReceived handlers that swap the noData BusyIndicator in and out; the noData BusyIndicator, threshold and enableBusyIndicator are kept 1:1 on the control. ProductSet.json lives in the sibling OData sample folder upstream (the MockServer's sMockdataBaseUrl points there); it is archived into this sample's folder too so the port is verifiable offline. The numeric columns stay TYPE string so the mock's exact decimals survive."
+    },
+    {
+      "type": "NOTE",
+      "what": "Fully static port apart from the model: once the column factory is resolved in ABAP the sample has no event at all, so the class is the app-051 shape (a bare check_on_init branch with model_init and view_display, no on_event)."
+    }
+  ]
 }

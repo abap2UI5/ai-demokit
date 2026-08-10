@@ -5332,16 +5332,72 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         post171 = `sap.ui.table.plugins.MultiSelectionPlugin is @since 1.64 and in scope, but its enableNotification property is @since 1.71 and its selectionMode property @since 1.100; both are kept 1:1 since the` &&
                  ` sample is about exactly this plugin. Declared per the fidelity-first property-171 policy, so the app needs a UI5 release >= 1.100.` ) ).
 
+    lv_text1 = `POST-1.71: sap.ui.table.Table.scrollThreshold (@since 1.128) is kept 1:1 from the sample's view - it is one of the two paging knobs (with threshold) this sample is about. Newer than UI5 1.71; declared` &&
+               ` per the fidelity-first property-171 policy, so the app needs a UI5 release >= 1.128. // NOTE: The sample serves its rows from an in-page OData MockServer (sap/ui/core/util/MockServer over` &&
+               ` metadata.xml, autoRespondAfter 2000, operationMode Server, threshold 15, scrollThreshold 50). An abap2UI5 app has a real ABAP backend, so the mock service is replaced by the model itself: all 115` &&
+               ` rows of the sample's own ProductSet.json are inlined and the Table binds them directly. What that costs is the server-side paging illusion - the rows arrive in one model instead of in threshold-sized` &&
+               ` batches - and with it the dataRequested/dataReceived handlers that swap the noData BusyIndicator in and out; the noData BusyIndicator, threshold, scrollThreshold and enableBusyIndicator are all kept` &&
+               ` 1:1 on the control. // IMPROVISED: onOperationModeChange re-binds the rows with the picked sap.ui.model.odata.OperationMode (Server / Client / Auto) - a binding parameter of an OData model, which has`.
+    lv_text1 = lv_text1 && ` no counterpart when the rows come from an ABAP model. The SegmentedButton is kept 1:1 with its three items and stays two-way bound, and picking a mode still re-reads the rows (which is the other half` &&
+               ` of what the handler does, via onModelRefresh), but the mode itself no longer changes how the data is fetched. onModelRefresh's binding.refresh( true ) is the plain re-read. // NOTE: The named ``ui>``` &&
+               ` model (operationModes, selectedOperationMode) is folded onto the one default model, prefix dropped and leaf names kept. The six column labels are metadata bindings in the original` &&
+               ` ({/#Product/Name/@sap:label} and friends), which only an OData model can resolve; they are replaced by the literal sap:label texts from the sample's own metadata.xml (Product Name, Product ID,` &&
+               ` Category, Supplier Company Name, Unit Price, Dimensions). sortProperty / filterProperty carry the ABAP (upper-cased) field names. The Price cell keeps the original's typed String binding and the` &&
+               ` dimensions cell its {WIDTH}x{HEIGHT}x{DEPTH} {DIMUNIT} template; the numeric columns stay TYPE string so the mock's exact decimals survive. // IMPROVISED: The footer's info button is dropped: onInit`.
+    lv_text1 = lv_text1 && ` lazily requires sap/ui/table/sample/TableExampleUtils and appends a ToolbarSpacer plus its createInfoButton( ) to the toolbar that also carries the operation-mode SegmentedButton. That helper lives` &&
+               ` in the demo kit's own sample folder, not in any UI5 library, and only opens a popover pointing at the sample's source. Every sap.ui.table sample of this batch drops it the same way. // LIVE-TEST:` &&
+               ` Unverified in a running system: whether the 115-row model renders with the sample's threshold/scrollThreshold settings, and whether the refresh and operation-mode round-trips re-read the rows.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `OData`                                         class = `z2ui5_cl_dmo_app_357` path = `src/02/b20/z2ui5_cl_dmo_app_357.clas.abap`
-        score = 1
-        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `sap.ui.table.Table.scrollThreshold (@since 1.128) is kept 1:1 from the sample's view - it is one of the two paging knobs (with threshold) this sample is about. Newer than UI5 1.71; declared per the` &&
+                 ` fidelity-first property-171 policy, so the app needs a UI5 release >= 1.128.` ) ).
+
+    lv_text1 = `IMPROVISED: The original binds the Table.columns aggregation to the OData METAMODEL and builds every Column in a JS factory (columnFactory), so its view declares no columns at all. A control-returning` &&
+               ` factory is the capability boundary CAPABILITIES marks as not expressible - and the decision it makes belongs in the backend anyway (thin frontend). The port therefore drops the Table.columns binding` &&
+               ` attribute and writes out the twenty-one Columns the factory produces from the sample's own metadata.xml, with the same rules: visible unless sap:visible="false" or a unit-of-measure / currency-code` &&
+               ` semantic, the width derived from maxLength (>50 -> 15rem, >9 -> 10rem, else 5rem, absent maxLength counting as 10), sortProperty / filterProperty only where sap:sortable / sap:filterable is true, End` &&
+               ` alignment for the Edm.Decimal columns, the sap:label as the header text, and a u:Currency template for the one property whose sap:unit carries the currency-code semantic (Price over CurrencyCode) -`.
+    lv_text1 = lv_text1 && ` every other one a plain non-wrapping Text. structural-diff therefore reports 21 extra Column, 21 extra m:Label, 20 extra m:Text and one extra u:Currency, all of them the controller-built ones. //` &&
+               ` NOTE: The sample serves its rows from an in-page OData MockServer (sap/ui/core/util/MockServer over metadata.xml, autoRespondAfter 2000, threshold 15). An abap2UI5 app has a real ABAP backend, so the` &&
+               ` mock service is replaced by the model itself: all 115 rows of ProductSet.json are inlined with every property the metadata declares, because the metadata-driven columns render all of them. What that` &&
+               ` costs is the server-side paging illusion and with it the dataRequested/dataReceived handlers that swap the noData BusyIndicator in and out; the noData BusyIndicator, threshold and enableBusyIndicator` &&
+               ` are kept 1:1 on the control. ProductSet.json lives in the sibling OData sample folder upstream (the MockServer's sMockdataBaseUrl points there); it is archived into this sample's folder too so the`.
+    lv_text1 = lv_text1 && ` port is verifiable offline. The numeric columns stay TYPE string so the mock's exact decimals survive. // NOTE: Fully static port apart from the model: once the column factory is resolved in ABAP the` &&
+               ` sample has no event at all, so the class is the app-051 shape (a bare check_on_init branch with model_init and view_display, no on_event).`.
+    result = VALUE #( BASE result
       ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `OData2`                                        class = `z2ui5_cl_dmo_app_358` path = `src/02/b20/z2ui5_cl_dmo_app_358.clas.abap`
-        score = 1
-        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `POST-1.71: sap.ui.table.RowSettings.navigated (@since 1.72) is used 1:1 - it is the property the sample's 'Toggle Navigated Indicators' button drives. Newer than UI5 1.71; declared per the` &&
+               ` fidelity-first property-171 policy, so the app needs a UI5 release >= 1.72. // NOTE: The original builds a DIFFERENT RowAction template per mode in the controller (five handlers returning a fresh` &&
+               ` RowAction with its RowActionItems, handed to setRowActionTemplate/setRowActionCount). Building controls at runtime is the capability boundary CAPABILITIES marks as not expressible, and the decision` &&
+               ` behind it is data, so the port declares the UNION of the items once - Navigation, Delete, Attachment, Search, Edit, Analyze - and switches them with bound visible flags plus a bound rowActionCount` &&
+               ` that the backend sets from the picked mode. Every mode renders exactly the items the original's handler would return: Navigation (1 action), Navigation & Delete, Navigation & Custom (the Edit item),` &&
+               ` Multiple Actions (all four), No Actions (count 0). The Navigation item keeps the original's per-row visible="{Available}" condition, ANDed with the mode flag in an expression binding. structural-diff`.
+    lv_text1 = lv_text1 && ` sees the rowActionTemplate subtree as added controls, which is what the controller built. // NOTE: onNavIndicatorsToggle sets or destroys a RowSettings template; the port declares the RowSettings` &&
+               ` once and makes its navigated an expression binding over the ToggleButton's two-way bound state AND the row's own NavigatedState - so the toggle needs no handler at all and its press attribute goes` &&
+               ` away. The original marks the SECOND product as navigated (i === 1), which the model reproduces. // NOTE: handleActionPress is client-composed and roundtrip-free: control_global MESSAGE_TOAST with` &&
+               ` 'Item {0} pressed for product with id {1}', filled by ${$parameters>/item}.getText() || ${$parameters>/item}.getType() and ${$parameters>/row}.getBindingContext().getProperty('PRODUCTID') - the same` &&
+               ` two values the original reads off the event, an event arg being a full UI5 expression. The named ``modes>`` model is folded onto the one default model, prefix dropped and leaf names kept. // NOTE:` &&
+               ` The shared 123-row demo ProductCollection (sap/ui/demo/mock/products.json) is inlined with the four columns the sample binds plus the derived Available flag the Navigation item's visible binding`.
+    lv_text1 = lv_text1 && ` needs - the controller derives it the same way (Status === 'Available'). // LIVE-TEST: Unverified in a running system: whether the bound rowActionCount plus the per-item visible flags reproduce each` &&
+               ` mode's row actions, and whether the two-argument client-composed toast fills both placeholders.`.
+    result = VALUE #( BASE result
       ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `RowAction`                                     class = `z2ui5_cl_dmo_app_359` path = `src/02/b20/z2ui5_cl_dmo_app_359.clas.abap`
-        score = 1
-        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` ) ).
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `sap.ui.table.RowSettings.navigated (@since 1.72) is used 1:1 - it is the property the sample's 'Toggle Navigated Indicators' button drives. Newer than UI5 1.71; declared per the fidelity-first` &&
+                 ` property-171 policy, so the app needs a UI5 release >= 1.72.` ) ).
 
     lv_text1 = `NOTE: The three toolbar handlers imperatively mutate Table properties in the original controller: onSelectionModeChange calls setSelectionMode, onAlternateToggle calls setAlternateRowColors,` &&
                ` onHighlightToggle swaps the rowSettingsTemplate between a RowSettings and null. abap2UI5 is a thin frontend, so all three are reproduced as two-way property bindings on the one default model with no` &&
