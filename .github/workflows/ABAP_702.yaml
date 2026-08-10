@@ -2,6 +2,10 @@ name: ABAP_702
 
 on:
   pull_request:
+  # also on main, so the README badge carries this gate's real verdict -
+  # a workflow that never runs on the default branch shows "no status"
+  push:
+    branches: [main]
 
 permissions:
   contents: read

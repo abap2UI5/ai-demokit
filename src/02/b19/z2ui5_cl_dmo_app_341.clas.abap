@@ -6,8 +6,9 @@ CLASS z2ui5_cl_dmo_app_341 DEFINITION PUBLIC.
     " manifests/cardManifests.json, one field per Card the view binds. The
     " original carries them in a named `manifests>` model the controller pushes
     " into the Cards on submit; abap2UI5 has one default model, so each manifest
-    " is a bound field - empty until "Start loading" is pressed, exactly like
-    " the original's manifest-less Cards
+    " is a bound field - the JSON literal `null` until "Start loading" is
+    " pressed, which is how a manifest-less Card reaches the client here
+    CONSTANTS c_no_manifest TYPE string VALUE `null`.
     DATA manifest_listtest         TYPE string.
     DATA manifest_list             TYPE string.
     DATA manifest_error            TYPE string.
@@ -38,7 +39,23 @@ CLASS z2ui5_cl_dmo_app_341 IMPLEMENTATION.
     me->client = client.
     IF client->check_on_init( ).
       " no model_init here: the sample's Cards start WITHOUT a manifest and are
-      " filled by the "Start loading" press - so the model is seeded there
+      " filled by the "Start loading" press - so the model is seeded there.
+      " The eleven fields still have to carry the JSON literal `null` rather
+      " than stay empty: their bind splices the string into the model as a JSON
+      " NODE (_bind( json = abap_true )), and an empty string is not JSON - it
+      " raises. `null` IS, and a null manifest is exactly the manifest-less
+      " Card the original renders before its first onFormSubmit
+      manifest_listtest         = c_no_manifest.
+      manifest_list             = c_no_manifest.
+      manifest_error            = c_no_manifest.
+      manifest_all              = c_no_manifest.
+      manifest_descriptiontitle = c_no_manifest.
+      manifest_icontitle        = c_no_manifest.
+      manifest_table            = c_no_manifest.
+      manifest_analytical       = c_no_manifest.
+      manifest_calendar         = c_no_manifest.
+      manifest_object           = c_no_manifest.
+      manifest_timeline         = c_no_manifest.
       view_display( ).
     ELSEIF client->check_on_event( ).
       on_event( ).
@@ -220,7 +237,7 @@ CLASS z2ui5_cl_dmo_app_341 IMPLEMENTATION.
         " press) or refreshes an already-loaded Card. Same split here: the first
         " press publishes the manifests through the model, every later press
         " calls refresh( ) on each Card via a frontend action
-        IF manifest_listtest IS INITIAL.
+        IF manifest_listtest = c_no_manifest.
           model_init( ).
           client->view_model_update( ).
         ELSE.

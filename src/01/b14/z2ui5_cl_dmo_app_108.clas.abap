@@ -187,11 +187,15 @@ CLASS z2ui5_cl_dmo_app_108 IMPLEMENTATION.
                         |-{ CONV i( client->get_event_arg( 8 ) ) WIDTH = 2 ALIGN = RIGHT PAD = '0' }| &&
                         |T{ CONV i( client->get_event_arg( 9 ) ) WIDTH = 2 ALIGN = RIGHT PAD = '0' }| &&
                         |:{ CONV i( client->get_event_arg( 10 ) ) WIDTH = 2 ALIGN = RIGHT PAD = '0' }:00|.
-        IF lines( t_people ) > 0.
+        " the row is addressed through a field symbol, not a table expression:
+        " abaplint's downport leaves an itab[ ] TARGET of INSERT/DELETE in
+        " place, and the 702 parser rejects it
+        READ TABLE t_people INDEX 1 ASSIGNING FIELD-SYMBOL(<person>).
+        IF sy-subrc = 0.
           INSERT VALUE #( start_at = iso_start
                           end_at   = iso_end
                           title    = `new appointment`
-                          type     = `Type09` ) INTO TABLE t_people[ 1 ]-t_appointments.
+                          type     = `Type09` ) INTO TABLE <person>-t_appointments.
         ENDIF.
         client->view_model_update( ).
 

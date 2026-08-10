@@ -5126,16 +5126,17 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` carries both (minsize_text bound to the Input, minsize bound to the layout data) and the Input's change event triggers the parse - the ABAP equivalent of the original's` &&
                ` parseInt(oEvent.getParameter('value')). No row index has to travel: the whole table returns two-way, so the handler re-parses every row. Size and Resizable need no event at all - they are plain` &&
                ` two-way bindings shared by the Input/CheckBox and the layout data. // NOTE: btnChangeOrientation flips Splitter.orientation, which IS a bindable property, so the port binds it and flips the model` &&
-               ` field instead of calling the setter (the prefer-a-bindable-property rule). btnInvalidateSplitter has no bindable equivalent - invalidate( ) forces a re-render without changing a property - so it`.
-    lv_text1 = lv_text1 && ` stays a follow_up_action control_by_id mainSplitter/invalidate; invalidate is a public control method that does not match the FrontendAction deny regex. The Splitter's resize event is wired to the` &&
-               ` backend, which increments the counter and writes the timestamped 'Resize # n' text the original's handler writes. // IMPROVISED: createExampleContent randomizes the added area (Math.random for size` &&
-               ` 'auto' vs 50-350px and for maxSize), which the corpus does not reproduce - the port alternates deterministically between 'auto' and '150px' so it renders the same every run. Its maxSize is dropped` &&
-               ` entirely for a different reason: sap.ui.layout.SplitterLayoutData has NO maxSize property (the original's object literal sets a key the control ignores), and writing it makes XMLView.create reject` &&
-               ` the view. Its height="100%" is dropped too - the bound Button template is shared with the three declared areas, which set only width. // NOTE: css/splitter.css (.options, .options .paddingRight,` &&
-               ` .optionTitle) is injected through an extra core:HTML <style> leaf, since abap2UI5 ships no separate stylesheet; the class names are on the controls the original also puts them on. The eventStatus`.
-    lv_text1 = lv_text1 && ` Text keeps its 'Nothing happened so far...' initial label, and the resize timestamp uses the ABAP system date/time in the user's format where the original uses UI5Date.getInstance().toLocaleString()` &&
-               ` - a real event timestamp, not an anchored one. // LIVE-TEST: Unverified in a running system: whether inserting/deleting a row re-renders the bound contentAreas aggregation, whether the shared table` &&
-               ` keeps the option row and the layout data in sync while dragging a splitter bar, and the control_by_id invalidate wire.`.
+               ` field instead of calling the setter (the prefer-a-bindable-property rule). btnInvalidateSplitter has no bindable equivalent either - invalidate( ) forces a re-render without changing a property - and`.
+    lv_text1 = lv_text1 && ` it needs none: invalidate is denied by the frontend action allowlist (the render lifecycle belongs to the framework, CONTROL_METHOD_DENY_PREFIXES), and the round-trip the button already makes ends in` &&
+               ` view_model_update( ), which re-renders the slot. So the button keeps its wire and its effect, with no control method called. The Splitter's resize event is wired to the backend, which increments the` &&
+               ` counter and writes the timestamped 'Resize # n' text the original's handler writes. // IMPROVISED: createExampleContent randomizes the added area (Math.random for size 'auto' vs 50-350px and for` &&
+               ` maxSize), which the corpus does not reproduce - the port alternates deterministically between 'auto' and '150px' so it renders the same every run. Its maxSize is dropped entirely for a different` &&
+               ` reason: sap.ui.layout.SplitterLayoutData has NO maxSize property (the original's object literal sets a key the control ignores), and writing it makes XMLView.create reject the view. Its height="100%"` &&
+               ` is dropped too - the bound Button template is shared with the three declared areas, which set only width. // NOTE: css/splitter.css (.options, .options .paddingRight, .optionTitle) is injected`.
+    lv_text1 = lv_text1 && ` through an extra core:HTML <style> leaf, since abap2UI5 ships no separate stylesheet; the class names are on the controls the original also puts them on. The eventStatus Text keeps its 'Nothing` &&
+               ` happened so far...' initial label, and the resize timestamp uses the ABAP system date/time in the user's format where the original uses UI5Date.getInstance().toLocaleString() - a real event` &&
+               ` timestamp, not an anchored one. // LIVE-TEST: Unverified in a running system: whether inserting/deleting a row re-renders the bound contentAreas aggregation, whether the shared table keeps the option` &&
+               ` row and the layout data in sync while dragging a splitter bar, and whether the Invalidate button's plain round-trip re-renders the Splitter the way the original's invalidate( ) does.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.Splitter`                name = `Splitter`                                      class = `z2ui5_cl_dmo_app_351` path = `src/02/b19/z2ui5_cl_dmo_app_351.clas.abap`
         score = 5
@@ -5695,16 +5696,15 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` loop, so the wire carries a FIXED set of 31 index-guarded expression args (one per selectable slot), each formatting getSelectedDates()[i].getStartDate() to yyyy-MM-dd from its LOCAL parts on the` &&
                ` client and yielding an empty string past the end of the aggregation. on_event stops at the first empty arg and rebuilds the bound table from the rest. // IMPROVISED: the 31-slot cap is a real limit,` &&
                ` not a formality: 31 is the most days one displayed month can hold, but the user can navigate months and keep selecting, and every day past the 31st is silently dropped from the list (the calendar` &&
-               ` itself still shows it selected). A loop-free expression grammar leaves no way to transport a variable-length aggregation in one arg. // IMPROVISED: handleRemoveSelection calls` &&
-               ` byId('calendar').removeAllSelectedDates() and then clears the model. Only the model half is reproducible: the frontend-action method denylist blocks every 'removeAll*' name`.
-    lv_text1 = lv_text1 && ` (CONTROL_METHOD_DENY_PREFIXES in app/webapp/core/FrontendAction.js, aimed at the GENERIC reflection mutators), so the named per-aggregation removeAllSelectedDates cannot be called either - the list` &&
-               ` empties but the days stay highlighted in the calendar. Filed as pr/control-method-named-removeall. // LIVE-TEST: not yet run in a system: the multi-select round-trip filling the List and the Remove` &&
-               ` All button clearing it.`.
+               ` itself still shows it selected). A loop-free expression grammar leaves no way to transport a variable-length aggregation in one arg. // NOTE: e2e-verified 2026-08-10 (scripts/e2e-smoke.mjs` &&
+               ` interaction, transpiled backend + real browser): a day is selected the keyboard way (the day cell carries no clickable layout box headless), the 31-slot expression round-trip fills the List, and`.
+    lv_text1 = lv_text1 && ` "Remove All Selected Dates" clears BOTH sides - the List returns to its "No Dates Selected" noData text AND .sapUiCalItemSel drops to zero, which is the removeAllSelectedDates follow-up action doing` &&
+               ` what no model write could: sap.ui.unified.Calendar writes selectedDates itself. The assertion has real discriminating power - before abap2UI5 #2535 the list emptied and the days stayed highlighted,` &&
+               ` which is exactly the state it now rejects.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarMultipleDaySelection`                  class = `z2ui5_cl_dmo_app_307` path = `src/02/b15/z2ui5_cl_dmo_app_307.clas.abap`
-        score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
-                 ` look.`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22.0`
         notes = lv_text1 ) ).
 

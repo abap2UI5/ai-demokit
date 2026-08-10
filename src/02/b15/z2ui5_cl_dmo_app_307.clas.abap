@@ -104,8 +104,12 @@ CLASS z2ui5_cl_dmo_app_307 IMPLEMENTATION.
 
       WHEN `REMOVE_SELECTION`.
         " handleRemoveSelection: removeAllSelectedDates( ) + clear the model.
-        " Only the model part is reproducible - see the declared deviation
+        " selectedDates is written by the control itself, so the aggregation
+        " has to be emptied on the control - the model half alone would leave
+        " the days highlighted
         CLEAR selecteddates.
+        client->follow_up_action( val   = client->cs_event-control_by_id
+                                  t_arg = VALUE #( ( `calendar` ) ( `removeAllSelectedDates` ) ) ).
         client->view_model_update( ).
 
     ENDCASE.
