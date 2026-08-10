@@ -389,7 +389,9 @@ rebuilds the `702` branch on every push to `main`.
 
 The `checks` workflow runs the deterministic gates on every PR; the heavy
 `e2e_smoke` runs in `e2e_nightly.yaml` (scheduled + on demand). The gate set:
-`pattern_lint`, `structural_diff`, `view_gates` (properties + structure +
+`pattern_lint`, `check_pins` (A2UI5_PIN well-formed, no stray/duplicate
+`"branch"` on the abap2UI5 dependency in any abaplint config),
+`structural_diff`, `view_gates` (properties + structure +
 headless render — the three former view gates, now run from
 [abap2UI5-linter](https://github.com/abap2UI5/linter) with only the
 corpus policy kept here in `scripts/view-gates.mjs`), `data_fidelity`,

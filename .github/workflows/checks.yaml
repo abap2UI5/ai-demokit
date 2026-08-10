@@ -25,6 +25,20 @@ jobs:
         node-version: '22'
     - run: node scripts/pattern-lint.mjs
 
+  check_pins:
+    # the abap2UI5 pin policy: A2UI5_PIN is a well-formed commit SHA and no
+    # abaplint config carries a stray/duplicate "branch" on the abap2UI5
+    # dependency (only abap_702.jsonc's "702" is allowlisted) — a silent
+    # second pin once pointed at a deleted branch (STATUS-history 2026-08-10)
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+    - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
+      with:
+        node-version: '22'
+    - run: node scripts/check-pins.mjs
+
   structural_diff:
     runs-on: ubuntu-latest
     timeout-minutes: 10
