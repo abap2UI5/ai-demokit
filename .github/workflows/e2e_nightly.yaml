@@ -85,8 +85,12 @@ jobs:
           echo ".claude/skills/e2e-debugging)."
         } >> "$GITHUB_STEP_SUMMARY"
 
-        if ! existing=$(gh issue list --state open --search "in:title \"$title\"" --json number --jq '.[0].number // empty' 2>&1); then
-          echo "::warning::could not reach the issue tracker ($existing) — the step summary above is the only report"
+        # stderr goes to a file, NOT into `existing`: the value is used as an
+        # issue number below, and a gh warning on a SUCCEEDING call would end up
+        # in it just as readily as an error message on a failing one
+        gh_err=$(mktemp)
+        if ! existing=$(gh issue list --state open --search "in:title \"$title\"" --json number --jq '.[0].number // empty' 2>"$gh_err"); then
+          echo "::warning::could not reach the issue tracker ($(tr '\n' ' ' <"$gh_err")) — the step summary above is the only report"
           exit 0
         fi
         if [ -n "$existing" ]; then
