@@ -5229,29 +5229,113 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = lv_text1 ) ).
 
+    lv_text1 = `POST-1.71: sap.m.plugins.ContextMenuSetting (@since 1.121, scope="Selection") is kept 1:1 in both tables' dependents - it is what makes the table's context menu act on the selected row, which the` &&
+               ` sample's two context menus rely on. Newer than UI5 1.71; declared per the fidelity-first property-171 policy, so the app needs a UI5 release >= 1.121. // NOTE: The original keeps ONE collection and` &&
+               ` splits the two tables by a Rank filter (Rank = 0 available, Rank > 0 selected, sorted by Rank descending), moving a row by rewriting its Rank; the rank arithmetic (initialRank / defaultRank / the` &&
+               ` Before-Between-After algorithm) exists only to encode an ORDER inside one array. With abap2UI5's one default model the port keeps two model tables instead, so a move is an insert plus a delete and` &&
+               ` the row order IS the rank - same rendered result, no rank column. Consequently each Table's rows binding is a plain aggregation binding rather than the original's filters/sorter binding-info. //` &&
+               ` NOTE: Both DragInfo/DragDropInfo lose their dragStart attribute: onDragStart only stashes the dragged row's binding context in the drag session so the drop handler can find it again, which is a`.
+    lv_text1 = lv_text1 && ` client-side workaround for something the drop event already carries. The port ships it on the drop instead - ${$parameters>/draggedControl}.getIndex(), plus ${$parameters>/droppedControl}.getIndex()` &&
+               ` and ${$parameters>/dropPosition} for table 2 - and does the move/reorder arithmetic in ABAP (the app-148 idiom). A fourth argument tells the two cases apart, because table 2 receives both an incoming` &&
+               ` move and an internal reorder through the same handler: ${$parameters>/draggedControl}.getParent().getId().indexOf('table2') >= 0, an event arg being a full UI5 expression. Client indices are 0-based` &&
+               ` and ABAP rows 1-based, and every index is range-checked before it is used as a table index - a nonsense index splices harmlessly in JS but dumps in ABAP (the app-148 lesson). // NOTE:` &&
+               ` getSelectedRowContext reads the selected row off the control; the port mirrors it into the backend instead - each table's rowSelectionChange carries ${$parameters>/rowIndex}, and` &&
+               ` onBeforeOpenContextMenu (which the original uses to select the row under the cursor before opening the menu) carries the same parameter. The two arrow buttons and the context-menu items then work off`.
+    lv_text1 = lv_text1 && ` that, with the original's 'Please select a row!' toast when nothing is selected. moveUp/moveDown become an index swap in the selected table, which is what the original's Between-rank arithmetic` &&
+               ` achieves. // IMPROVISED: The footer info button is dropped: onInit lazily requires sap/ui/table/sample/TableExampleUtils and appends a ToolbarSpacer plus its createInfoButton( ) to the toolbar. That` &&
+               ` helper lives in the demo kit's own sample folder, not in any UI5 library, and only opens a popover pointing at the sample's source. Every sap.ui.table sample of this batch drops it the same way. //` &&
+               ` NOTE: The shared 123-row demo ProductCollection (sap/ui/demo/mock/products.json) is inlined with the three columns both tables bind; every product starts in the available table, which is exactly what` &&
+               ` the original's initialRank = 0 means. The Quantity columns keep the original's typed complex binding with the path switched to the ABAP field. // LIVE-TEST: Unverified in a running system: whether` &&
+               ` the drop wires deliver the row indices and drop position as expected, whether the internal-vs-external drag expression resolves, and whether the context menu's beforeOpenContextMenu round-trip`.
+    lv_text1 = lv_text1 && ` arrives before the menu item press.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `DnD`                                           class = `z2ui5_cl_dmo_app_353` path = `src/02/b20/z2ui5_cl_dmo_app_353.clas.abap`
-        score = 1
-        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `sap.m.plugins.ContextMenuSetting (@since 1.121, scope="Selection") is kept 1:1 in both tables' dependents - it is what makes the table's context menu act on the selected row, which the sample's two` &&
+                 ` context menus rely on. Newer than UI5 1.71; declared per the fidelity-first property-171 policy, so the app needs a UI5 release >= 1.121.` ) ).
+
+    lv_text1 = `NOTE: Every filter of this sample is applied in ABAP and the Table binds the RESULT, so the controller's Filter objects and its binding.filter( ) calls become one server-side selection - the` &&
+               ` thin-frontend move. The global SearchField filter (Name OR Category contains the query), the availability toggle and the price band are ANDed exactly as _filter( ) combines them, and clearAllFilters` &&
+               ` resets all three. The Table's filter event carries the pressed column's filterProperty and the entered value (${$parameters>/column}.getFilterProperty() and ${$parameters>/value}) and sets` &&
+               ` s_ctrl-check_prevent_default: the original vetoes the built-in filter only for the price column, here the model is already the filtered result, so it is vetoed for every column. The price column` &&
+               ` keeps its special rule - a +/- 20 BAND around the entered value rather than an exact match, which is the point of the original's filterPrice. // NOTE: The named ``ui>`` model (globalFilter,` &&
+               ` availabilityFilterOn, cellFilterOn) is folded onto the one default model, prefix dropped and leaf names kept. cellFilterOn needs no handler at all - the ToggleButton's pressed and the Table's`.
+    lv_text1 = lv_text1 && ` enableCellFilter bind the same field, which is what the original's two-way {ui>/cellFilterOn} binding already does. The availability ToggleButton keeps its pressed binding AND its press wire, because` &&
+               ` pressing it has to re-run the server-side selection. The filterProperty values are the ABAP (upper-cased) field names, since that is what the backend switches on. // NOTE: The full 123-row catalog is` &&
+               ` returned by a method rather than held in a public attribute: only the filtered rows are bound, so only they belong in the model that travels on every round-trip (the overview-app lesson in AGENTS` &&
+               ` section 10). The controller's formatAvailableToObjectState is precomputed into the AVAILABLESTATE column, since business logic belongs in the backend, and the boolean Available is kept as its own` &&
+               ` column because the availability filter needs it. ProductPicUrl values point at the OpenUI5 host per the asset-URL rule; the mock carries them host-relative. // IMPROVISED: The footer OverflowToolbar`.
+    lv_text1 = lv_text1 && ` stays empty: onInit lazily requires sap/ui/table/sample/TableExampleUtils and appends a ToolbarSpacer plus its createInfoButton( ) to it. That helper lives in the demo kit's own sample folder, not in` &&
+               ` any UI5 library, and only opens a popover pointing at the sample's source. Every sap.ui.table sample of this batch drops it the same way. // LIVE-TEST: Unverified in a running system: whether the` &&
+               ` column filter event's prevented default plus the server-side selection show the expected rows, and whether the enableCellFilter binding lets a cell filter fire that same event.`.
+    result = VALUE #( BASE result
       ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `Filtering`                                     class = `z2ui5_cl_dmo_app_354` path = `src/02/b20/z2ui5_cl_dmo_app_354.clas.abap`
-        score = 1
-        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: The two menu-entry toggles need no handler at all: each ToggleButton's pressed and the Table property it drives (enableColumnFreeze / enableCellFilter) bind the SAME field on the one default` &&
+               ` model, which is exactly what the original's two-way {ui>/showFreezeMenuEntry} and {ui>/enableCellFilter} bindings do - only the ``ui>`` prefix is dropped. The port is therefore fully static apart` &&
+               ` from the model: no on_event, no round-trip. // IMPROVISED: The three CONTROLLER-BUILT menus are dropped, and with them the third ToggleButton's press and the Table's beforeOpenContextMenu attribute.` &&
+               ` (a) associateHeaderMenus creates a sap.m.table.columnmenu.Menu plus ActionItems in JS and associates it with the name/productId/quantity columns via setHeaderMenu - a control-returning factory, the` &&
+               ` capability boundary CAPABILITIES marks as not expressible, and its two handlers (onQuantityCustomItemSelect, onQuantitySort) go with it. (b) onToggleContextMenu builds a sap.m.Menu with two bound` &&
+               ` MenuItems and hands it to setContextMenu / destroyContextMenu; an aggregation of controls built at runtime has no bindable equivalent either. (c) onProductIdCellContextMenu builds a`.
+    lv_text1 = lv_text1 && ` sap.ui.unified.Menu on the fly and opens it docked to the clicked cell's DOM ref. The columns, their sortProperty/filterProperty and the table's own header menus are unaffected - what is lost is the` &&
+               ` sample's custom menu content. // NOTE: The shared 123-row demo ProductCollection (sap/ui/demo/mock/products.json) is inlined with the five columns the sample binds. The original computes DeliveryDate` &&
+               ` from Date.now() with an i-mod-10 offset in 4-day steps; a fixed base date (2026-07-23) is used here so the port is deterministic - the corpus convention of app 164. The Quantity and Delivery Date` &&
+               ` columns keep the original's typed complex bindings with the path switched to the ABAP field, and sortProperty/filterProperty carry the ABAP (upper-cased) field names. ProductPicUrl values point at` &&
+               ` the OpenUI5 host per the asset-URL rule. // IMPROVISED: The footer OverflowToolbar stays empty: onInit lazily requires sap/ui/table/sample/TableExampleUtils and appends a ToolbarSpacer plus its` &&
+               ` createInfoButton( ) to it. That helper lives in the demo kit's own sample folder, not in any UI5 library, and only opens a popover pointing at the sample's source. Every sap.ui.table sample of this`.
+    lv_text1 = lv_text1 && ` batch drops it the same way.`.
+    result = VALUE #( BASE result
       ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `Menus`                                         class = `z2ui5_cl_dmo_app_355` path = `src/02/b20/z2ui5_cl_dmo_app_355.clas.abap`
-        score = 1
-        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = lv_text1 ) ).
+
+    result = VALUE #( BASE result
       ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `MultiHeader`                                   class = `z2ui5_cl_dmo_app_137` path = `src/02/b05/z2ui5_cl_dmo_app_137.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `NOTE: sap.ui.table grid Table with multi-level column headers (multiLabels + headerSpan '3,2'/'2') and an extension OverflowToolbar. The 5 contact rows are inlined from the controller's JSON model;` &&
-                 ` column templates bind {SUPPLIER}/{STREET}/{CITY}/{PHONE}/{OPENORDERS} 1:1.` )
+                 ` column templates bind {SUPPLIER}/{STREET}/{CITY}/{PHONE}/{OPENORDERS} 1:1.` ) ).
+
+    lv_text1 = `NOTE: The sample serves its rows from an in-page OData MockServer (sap/ui/core/util/MockServer over metadata.xml, autoRespondAfter 2000, operationMode Server, threshold 15). An abap2UI5 app has a real` &&
+               ` ABAP backend, so the mock service is replaced by the model itself: all 115 rows of the sample's own ProductSet.json are inlined and the Table binds them directly. What that costs is the sample's` &&
+               ` server-side paging illusion - the rows arrive in one model instead of in threshold-sized batches - and with it the enableBusyIndicator's visible effect; both attributes are kept 1:1 on the control.` &&
+               ` ProductSet.json lives in the sibling OData sample folder upstream (the MockServer's sMockdataBaseUrl points there); it is archived into this sample's folder too so the port is verifiable offline. //` &&
+               ` NOTE: The named ``config>`` model (limit, showHeaderSelector, selectionModes, selectionMode) is folded onto the one default model, prefix dropped and leaf names kept. Two of the three config controls`.
+    lv_text1 = lv_text1 && ` then need no handler at all: the selection-mode Select's selectedKey and the plugin's selectionMode share one field, and the ToggleButton's pressed and the plugin's showHeaderSelector share another -` &&
+               ` which is what the original's two-way {config>/...} bindings already do. The limit keeps its change wire because onLimitChange is not a plain setter: it validates the entry, and the port carries the` &&
+               ` limit twice (an integer for the plugin, the Input's string next to it) because sap.m.Input.value is a string property while the plugin's limit is an integer - the original bridges that with a typed` &&
+               ` binding, the port parses it in ABAP and snaps the Input back with the same message on a bad entry. // NOTE: onSelectionChange reads state that lives in the plugin, so the wire carries it:` &&
+               ` ${$parameters>/limitReached} and ${$source>}.getSelectedIndices().length (an event arg is a full UI5 expression), and the backend composes the same three messages - 'Selection cleared.', 'n row(s)` &&
+               ` selected.' and the limit-reached variant naming the current limit. // NOTE: The six column labels are metadata bindings in the original ({/#Product/Name/@sap:label} and friends), which only an OData`.
+    lv_text1 = lv_text1 && ` model can resolve. They are replaced by the literal sap:label texts from the sample's own metadata.xml (Product Name, Product ID, Prod. Cat., Company Name, Unit Price, Dimensions) - the same strings` &&
+               ` the OData model would have produced. sortProperty / filterProperty carry the ABAP (upper-cased) field names. The Price cell keeps the original's typed String binding and the dimensions cell its` &&
+               ` {WIDTH}x{HEIGHT}x{DEPTH} {DIMUNIT} template; the numeric columns stay TYPE string so the mock's exact decimals survive (the display-only rule of the porting recipe). // POST-1.71:` &&
+               ` sap.ui.table.plugins.MultiSelectionPlugin is @since 1.64 and in scope, but its enableNotification property is @since 1.71 and its selectionMode property @since 1.100; both are kept 1:1 since the` &&
+               ` sample is about exactly this plugin. Declared per the fidelity-first property-171 policy, so the app needs a UI5 release >= 1.100. // LIVE-TEST: Unverified in a running system: whether the plugin` &&
+               ` honours the bound limit / selectionMode / showHeaderSelector without a round-trip, and whether the selectionChange expression argument reports the selected count.`.
+    result = VALUE #( BASE result
       ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `MultiSelectionPlugin`                          class = `z2ui5_cl_dmo_app_356` path = `src/02/b20/z2ui5_cl_dmo_app_356.clas.abap`
-        score = 1
-        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
-      ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `OData`                                         class = `z2ui5_cl_dmo_app_357` path = `src/02/b20/z2ui5_cl_dmo_app_357.clas.abap`
-        score = 1
-        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` ) ).
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `sap.ui.table.plugins.MultiSelectionPlugin is @since 1.64 and in scope, but its enableNotification property is @since 1.71 and its selectionMode property @since 1.100; both are kept 1:1 since the` &&
+                 ` sample is about exactly this plugin. Declared per the fidelity-first property-171 policy, so the app needs a UI5 release >= 1.100.` ) ).
 
     result = VALUE #( BASE result
+      ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `OData`                                         class = `z2ui5_cl_dmo_app_357` path = `src/02/b20/z2ui5_cl_dmo_app_357.clas.abap`
+        score = 1
+        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
       ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `OData2`                                        class = `z2ui5_cl_dmo_app_358` path = `src/02/b20/z2ui5_cl_dmo_app_358.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
