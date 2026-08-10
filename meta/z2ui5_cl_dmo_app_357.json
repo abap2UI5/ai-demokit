@@ -1,0 +1,14 @@
+{
+  "class": "z2ui5_cl_dmo_app_357",
+  "sample": "sap.ui.table.sample.OData",
+  "entity": "sap.ui.table.Table",
+  "file": "src/02/b20/z2ui5_cl_dmo_app_357.clas.abap",
+  "batch": "b20",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": []
+}

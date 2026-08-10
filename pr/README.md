@@ -39,6 +39,7 @@ implemented upstream the same day** - see the Implemented table.
 | Request | Summary | Priority |
 |---------|---------|----------|
 | [`open-abap-xml-escaping`](open-abap-xml-escaping/) | high — breaks every round-trip of the Pages demo's front door |
+| [`card-manifest-object`](card-manifest-object/) | high — an inline `sap.ui.integration` card manifest cannot reach the control at all (a string model value is read as a manifest URL) |
 
 _`menu-item-selected-path` left this list on 2026-07-31: it was closed by
 **option 2** of its own proposal — a documented capability boundary, measured

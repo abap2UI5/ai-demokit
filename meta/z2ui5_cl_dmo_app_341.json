@@ -1,0 +1,39 @@
+{
+  "class": "z2ui5_cl_dmo_app_341",
+  "sample": "sap.ui.integration.sample.CardsLoading",
+  "entity": "sap.ui.integration.widgets.Card",
+  "file": "src/02/b19/z2ui5_cl_dmo_app_341.clas.abap",
+  "batch": "b19",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The eleven card manifests come from manifests/cardManifests.json verbatim. The original carries them in a named `manifests>` model and the controller pushes them into the Cards on submit; abap2UI5 has one default model, so each manifest is a bound field on it (the `manifests>` prefix is dropped, the last path segment stays identical, which is what structural-diff matches). model_init is deliberately NOT called from main: the sample's Cards start without a manifest and only get one on the first 'Start loading' press, so the model is seeded in on_event and pushed with view_model_update - the manifest-less initial state is reproduced 1:1."
+    },
+    {
+      "type": "NOTE",
+      "what": "The manifests' relative data request URLs (sap/ui/integration/sample/CardsLoading/manifests/listData1.json and friends) are absolutized to the OpenUI5 host (https://sdk.openui5.org/test-resources/sap/ui/integration/demokit/sample/CardsLoading/manifests/...), because the original resolves them at runtime through sap.ui.require.toUrl inside its sinon stub and that resolution has no server-side equivalent. The deliberate typo of the 'error' card (listDat2.json instead of listData2.json - it is the sample's error test case) is kept verbatim so the card still demonstrates the request-failure state."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "The sample's actual point - an ARTIFICIAL loading delay - is not reproducible: the controller monkey-patches sap.ui.integration.util.RequestDataProvider._fetch with a sinon stub (sap/ui/thirdparty/sinon-4) that wraps every card data request in a setTimeout of the entered number of seconds. There is no server-side equivalent for delaying a request the CLIENT issues to a foreign host, and stubbing a UI5 private module from the backend would be exactly the kind of frontend logic the thin-frontend principle forbids. The Input keeps its literal value=\"-1\" from the view (the original view holds the value too; only the client stub reads it), so the loading placeholders are still visible for as long as the real request takes, just not artificially stretched. Consequently onExit's stub restore has no counterpart either."
+    },
+    {
+      "type": "NOTE",
+      "what": "onFormSubmit's two branches are both reproduced: the first press publishes the manifests through the model (the original's setManifest branch), every later press issues a follow_up_action control_by_id <cardId>/refresh for each of the eleven Cards (the original's oCard.refresh() branch). refresh( ) is a public sap.ui.integration.widgets.Card method that does not match the FrontendAction deny regex, so it runs through the unlisted-method path; it is unverified in a running system."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "Unverified in a running system: whether an empty-string manifest renders the Card as the original's manifest-less placeholder, whether the model_init push through view_model_update makes all eleven Cards pick up their manifest, and the control_by_id refresh wire on the second press."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "Source-verified framework gap (pr/card-manifest-object): sap.ui.integration.widgets.Card.createManifest treats a STRING manifest as a manifest URL (`if (typeof vManifest === \"string\") { mOptions.manifestUrl = vManifest; }`, Card.js) - an inline manifest must reach the control as a JS OBJECT. abap2UI5 has no way to put a raw JSON object into a model value: every model value is typed ABAP data, and a card manifest's keys (`sap.app`, `sap.card`, `_version`) are not valid ABAP field names, so it cannot be modelled as a structure either. The port therefore carries each manifest as the bound JSON STRING (the sample's real manifest data, inlined verbatim so the port stays data-faithful and the eleven Cards stay 1:1), knowing UI5 will read it as a URL until the framework can carry a raw JSON payload - the request is filed under pr/card-manifest-object. Unlike LazyLoading (app 342), whose manifests are one file each and can be bound as real URLs, CardsLoading keeps all eleven inside one combined manifests/cardManifests.json, so no per-card URL exists upstream to bind instead."
+    }
+  ]
+}

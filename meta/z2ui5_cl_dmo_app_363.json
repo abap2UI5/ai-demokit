@@ -1,0 +1,14 @@
+{
+  "class": "z2ui5_cl_dmo_app_363",
+  "sample": "sap.ui.table.sample.TableFreeze",
+  "entity": "sap.ui.table.Table",
+  "file": "src/02/b20/z2ui5_cl_dmo_app_363.clas.abap",
+  "batch": "b20",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": []
+}

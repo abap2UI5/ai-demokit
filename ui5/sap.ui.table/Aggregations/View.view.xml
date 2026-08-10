@@ -1,0 +1,105 @@
+<mvc:View
+	controllerName="sap.ui.table.sample.Aggregations.Controller"
+	xmlns="sap.ui.table"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:u="sap.ui.unified"
+	xmlns:c="sap.ui.core"
+	xmlns:m="sap.m"
+	height="100%">
+	<m:Page
+		showHeader="false"
+		enableScrolling="false"
+		class="sapUiContentPadding">
+		<m:content>
+			<Table
+				id="table"
+				selectionMode="MultiToggle"
+				rows="{/ProductCollection}"
+				ariaLabelledBy="title">
+				<extension>
+					<m:HBox>
+						<m:items>
+							<c:Icon src="sap-icon://cart" alt="Cart" size="1.25rem"/>
+							<m:Title text="Shopping Portal" titleStyle="H3" class="sapUiTinyMarginBeginEnd"/>
+						</m:items>
+					</m:HBox>
+					<m:OverflowToolbar style="Clear">
+						<m:Title id="title" text="Products"/>
+						<m:ToolbarSpacer/>
+						<m:SearchField
+							placeholder="Filter"
+							value="{ui>/filterValue}"
+							search=".handleTxtFilter"
+							width="15rem"/>
+					</m:OverflowToolbar>
+					<m:FacetFilter
+						id="facetFilter"
+						type="Simple"
+						showReset="true"
+						showPopoverOKButton="true"
+						reset=".handleFacetFilterReset"
+						lists="{/ProductCollectionStats/Filters}">
+						<m:lists>
+							<m:FacetFilterList
+								title="{type}"
+								key="{key}"
+								mode="MultiSelect"
+								listClose=".handleListClose"
+								items="{ path: 'values', templateShareable: false }" >
+								<m:items>
+									<m:FacetFilterItem
+										text="{text}"
+										key="{key}"/>
+								</m:items>
+							</m:FacetFilterList>
+						</m:lists>
+					</m:FacetFilter>
+				</extension>
+				<noData>
+					<m:Link
+						class="sapUiMediumMargin"
+						text="No Data found. Press here to reset all filters."
+						press=".clearAllFilters"/>
+				</noData>
+				<columns>
+					<Column width="11rem">
+						<m:Label text="Product Name" />
+						<template>
+							<m:Text text="{Name}" wrapping="false" />
+						</template>
+					</Column>
+					<Column width="11rem">
+						<m:Label text="Category" />
+						<template>
+							<m:Text text="{Category}" wrapping="false" />
+						</template>
+					</Column>
+					<Column width="12rem">
+						<m:Label text="Supplier" />
+						<template>
+							<m:Text text="{SupplierName}" wrapping="false" />
+						</template>
+					</Column>
+					<Column width="9rem">
+						<m:Label text="Status" />
+						<template>
+							<m:ObjectStatus text="{Status}" state="{
+								path: 'Available',
+								formatter: '.formatAvailableToObjectState'
+							}"/>
+						</template>
+					</Column>
+					<Column width="9rem">
+						<m:Label text="Price" />
+						<template>
+							<u:Currency value="{Price}" currency="{CurrencyCode}"/>
+						</template>
+					</Column>
+				</columns>
+				<footer>
+					<m:OverflowToolbar id="infobar"></m:OverflowToolbar>
+				</footer>
+			</Table>
+		</m:content>
+	</m:Page>
+</mvc:View>

@@ -1,0 +1,14 @@
+{
+  "class": "z2ui5_cl_dmo_app_366",
+  "sample": "sap.ui.table.sample.TreeTable.ODataAnnotationsTreeBinding",
+  "entity": "sap.ui.table.TreeTable",
+  "file": "src/02/b20/z2ui5_cl_dmo_app_366.clas.abap",
+  "batch": "b20",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": []
+}

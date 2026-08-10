@@ -1,0 +1,12 @@
+.options {
+	margin: 1rem 2rem;
+}
+
+.options .paddingRight {
+	padding-right: 0.5rem;
+}
+
+.optionTitle {
+	font-weight: bold;
+	margin-right: 4rem;
+}
