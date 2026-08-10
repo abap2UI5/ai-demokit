@@ -5303,16 +5303,83 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
     result = VALUE #( BASE result
       ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `SelectCopyPaste`                               class = `z2ui5_cl_dmo_app_360` path = `src/02/b20/z2ui5_cl_dmo_app_360.clas.abap`
         score = 1
-        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
+        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` ) ).
+
+    lv_text1 = `NOTE: Three of the four controller setters become bound properties. The behaviour Select's selectedKey and the Table's selectionBehavior share one field, and the Switch's state and the Table's` &&
+               ` enableSelectAll share another - so onBehaviourModeChange and onSwitchChange disappear and their wires with them: the behaviour Select keeps no change attribute and the Switch loses Switch.change` &&
+               ` entirely (the only attribute structural-diff reports missing). onSelectionModeChange is the one that KEEPS its change wire, because it is not a plain setter: it REFUSES the deprecated All mode with a` &&
+               ` MessageToast and leaves the table on its previous mode. The port therefore keeps the Select's key and the Table's selectionMode as two separate fields and copies one into the other in the handler,` &&
+               ` snapping the Select back when All was picked - exactly the original's behaviour. // NOTE: getSelectedIndices / getContextByIndex read state that lives in the CONTROL, not in the model. Rather than` &&
+               ` faking a value, the port mirrors the selection into the model: the Table's rowSelectionChange event carries ${$parameters>/rowIndices} and ${$parameters>/rowIndex} to the backend, and the two buttons`.
+    lv_text1 = lv_text1 && ` then report from that - the index list, or 'no item selected' when it is empty, exactly as the original branches. getContextByIndex toasts the last selected row's model path (/T_PRODUCTS/<n>), which` &&
+               ` is what a sap.ui.model.Context renders as when the original passes it to MessageToast. clearSelection stays imperative because the selection is control state: follow_up_action control_by_id` &&
+               ` table1/clearSelection, plus clearing the mirrored fields. // NOTE: The named ``selectionmodel>`` model (the SelectionMode / SelectionBehavior enum values the controller enumerates at runtime,` &&
+               ` skipping Multi) is folded onto the one default model as two tables; the values are the sap.ui.table enum members as of the current release. The controller's two formatters are computed in ABAP per` &&
+               ` the thin-frontend principle: formatAvailableToObjectState and formatAvailableToIcon become the precomputed AVAILABLESTATE (Success/Error) and AVAILABLEICON (sap-icon://accept / sap-icon://decline)` &&
+               ` columns. handleDetailsPress is client-composed and roundtrip-free: control_global MESSAGE_TOAST with 'Details for product with id {0}' and the row's ${PRODUCTID}. // NOTE: The Suppliers and`.
+    lv_text1 = lv_text1 && ` Categories collections the controller derives from the products (the distinct SupplierName / Category values in first-appearance order) are inlined as their own tables, and the two in-cell dropdowns` &&
+               ` keep the original's binding-info form with templateShareable - only the path switches to the ABAP table. The Heavy CheckBox and the DeliveryDate DatePicker keep their typed complex bindings 1:1 with` &&
+               ` the path pointed at the ABAP field. // NOTE: The shared 123-row demo ProductCollection (sap/ui/demo/mock/products.json) is inlined with the columns the twelve table columns bind. The original` &&
+               ` computes DeliveryDate from Date.now() with an i-mod-10 offset in 4-day steps; a fixed base date (2026-07-23) is used here so the port is deterministic - the corpus convention of app 164.` &&
+               ` ProductPicUrl values point at the OpenUI5 host per the asset-URL rule; the mock carries them host-relative. // LIVE-TEST: Unverified in a running system: whether rowSelectionChange delivers the index` &&
+               ` array as JSON to get_event_arg, whether the two bound Selects drive selectionMode/selectionBehavior without a round-trip, and the control_by_id clearSelection wire.`.
+    result = VALUE #( BASE result
       ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `Selection`                                     class = `z2ui5_cl_dmo_app_361` path = `src/02/b20/z2ui5_cl_dmo_app_361.clas.abap`
-        score = 1
-        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `NOTE: Every sort of this sample happens in ABAP. The three toolbar buttons (sortCategoriesAndName / sortCategories / clearAllSortings) and the column header menu all fire a backend event, the model` &&
+               ` comes back SORTed and each Column's sortOrder is bound so the indicator follows - the thin-frontend equivalent of the original's oTable.sort( column, order, extend ) and setSortOrder calls.` &&
+               ` clearAllSortings re-seeds the model, which restores the mock's own row order, and resets every indicator to None (the original's binding.sort(null) + _resetSortingState). sortCategories keeps the` &&
+               ` original's alternating ascending/descending on repeated presses. // NOTE: The Table's sort event carries the pressed column's sortProperty and the requested sortOrder to the backend` &&
+               ` (${$parameters>/column}.getSortProperty() and ${$parameters>/sortOrder} - an event arg is a full UI5 expression) and sets s_ctrl-check_prevent_default, so the control's own client-side sort never` &&
+               ` runs. The original vetoes it only for the delivery-date column; here the model is the single source of truth for every column, so all of them are vetoed and sorted server-side. The delivery-date`.
+    lv_text1 = lv_text1 && ` column is why the original needs a veto at all: its cells hold dd/MM/yyyy STRINGS, which no text compare can order, so it installs a custom Sorter.fnCompare that parses them. The port sorts the` &&
+               ` underlying timestamp instead - the same result without any frontend logic. 'No multi-column sorting' is kept: every other indicator is reset before the pressed column is sorted. // NOTE: The row type` &&
+               ` carries the raw DeliveryDate timestamp next to the formatted DeliveryDateStr, because that timestamp is the sort key the original's custom compare function reconstructs by parsing. The bound` &&
+               ` sortProperty values are the ABAP (upper-cased) field names (NAME, CATEGORY, QUANTITY, DELIVERYDATESTR) rather than the original's JSON key names, since that is what the backend switches on. // NOTE:` &&
+               ` The shared 123-row demo ProductCollection (sap/ui/demo/mock/products.json) is inlined with the five columns the sample binds. The original computes DeliveryDate from Date.now() with an i-mod-10` &&
+               ` offset in 4-day steps; a fixed base date (2026-07-23) is used here so the port is deterministic - the corpus convention of app 164 - and DeliveryDateStr is that timestamp formatted dd/MM/yyyy,`.
+    lv_text1 = lv_text1 && ` exactly what the controller's DateFormat produces. ProductPicUrl values point at the OpenUI5 host per the asset-URL rule; the mock carries them host-relative. The Quantity and Delivery Date columns` &&
+               ` keep the original's typed complex bindings 1:1, with their path switched to the ABAP field name. // IMPROVISED: The footer OverflowToolbar stays empty: onInit lazily requires` &&
+               ` sap/ui/table/sample/TableExampleUtils and appends a ToolbarSpacer plus its createInfoButton( ) to it. That helper lives in the demo kit's own sample folder, not in any UI5 library, and only opens a` &&
+               ` popover pointing at the sample's source - there is nothing to port it to. Every sap.ui.table sample of this batch drops it the same way. // LIVE-TEST: Unverified in a running system: whether the sort` &&
+               ` event's prevented default plus the server-side SORT produce the expected order for each column, and whether the bound Column.sortOrder renders the header indicator.`.
+    result = VALUE #( BASE result
       ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `Sorting`                                       class = `z2ui5_cl_dmo_app_362` path = `src/02/b20/z2ui5_cl_dmo_app_362.clas.abap`
-        score = 1
-        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        notes = lv_text1 ) ).
+
+    lv_text1 = `POST-1.71: sap.ui.table.Table.rowMode (aggregation, @since 1.119) and the control sap.ui.table.rowmodes.Fixed it holds are used 1:1 - the sample declares them in its view and the freeze demo drives` &&
+               ` the row mode's fixedTopRowCount / fixedBottomRowCount. Both are newer than UI5 1.71; declared per the fidelity-first property-171 policy, so the app needs a UI5 release >= 1.119. // NOTE: buttonPress` &&
+               ` becomes a clamp instead of three setters: the three count Inputs are two-way bound and the Table's fixedColumnCount plus the rowMode's fixedTopRowCount / fixedBottomRowCount bind the SAME fields, so` &&
+               ` the Apply press only has to run the original's validation (fixed column count against the column total, fixed top + bottom rows against the visible row total) and push the corrected values back -` &&
+               ` with the same two MessageToast texts, verbatim. The two totals the original reads off the live control (getColumns().length, getRows().length) are constants here: twelve columns as declared in the` &&
+               ` view, and the ten visible rows the Fixed row mode defaults to. // NOTE: The controller's two formatters are computed in ABAP, per the thin-frontend principle: formatAvailableToObjectState and`.
+    lv_text1 = lv_text1 && ` formatAvailableToIcon become the precomputed AVAILABLESTATE (Success/Error) and AVAILABLEICON (sap-icon://accept / sap-icon://decline) columns the ObjectStatus and core:Icon bind. handleDetailsPress` &&
+               ` is client-composed and needs no round-trip at all: control_global MESSAGE_TOAST with 'Details for product with id {0}' and the row's ${PRODUCTID} as the argument, which is what the original builds` &&
+               ` from the row's binding context. // NOTE: The Suppliers and Categories collections the controller derives from the products (the distinct SupplierName / Category values in first-appearance order) are` &&
+               ` inlined as their own tables, and the two in-cell dropdowns keep the original's binding-info form with templateShareable - only the path switches to the ABAP table. The Heavy CheckBox and the` &&
+               ` DeliveryDate DatePicker keep their typed complex bindings 1:1 with the path pointed at the ABAP field. // NOTE: The shared 123-row demo ProductCollection (sap/ui/demo/mock/products.json) is inlined` &&
+               ` with the columns the twelve table columns bind. The original computes DeliveryDate from Date.now() with an i-mod-10 offset in 4-day steps; a fixed base date (2026-07-23) is used here so the port is`.
+    lv_text1 = lv_text1 && ` deterministic - the corpus convention of app 164. Heavy is WeightMeasure > 1000 as the string the typed CheckBox binding expects. ProductPicUrl values point at the OpenUI5 host per the asset-URL` &&
+               ` rule; the mock carries them host-relative. // LIVE-TEST: Unverified in a running system: whether the bound fixedColumnCount and the bound rowMode counts freeze the expected columns/rows, and whether` &&
+               ` the Apply clamp round-trip updates the Inputs.`.
+    result = VALUE #( BASE result
       ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `TableFreeze`                                   class = `z2ui5_cl_dmo_app_363` path = `src/02/b20/z2ui5_cl_dmo_app_363.clas.abap`
-        score = 1
-        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = `sap.ui.table.Table.rowMode (aggregation, @since 1.119) and the control sap.ui.table.rowmodes.Fixed it holds are used 1:1 - the sample declares them in its view and the freeze demo drives the row` &&
+                 ` mode's fixedTopRowCount / fixedBottomRowCount. Both are newer than UI5 1.71; declared per the fidelity-first property-171 policy, so the app needs a UI5 release >= 1.119.` ) ).
+
+    result = VALUE #( BASE result
       ( module = `sap.ui.table`       control = `sap.ui.table.TreeTable`                name = `TreeTable.BasicODataTreeBinding`               class = `z2ui5_cl_dmo_app_364` path = `src/02/b20/z2ui5_cl_dmo_app_364.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
