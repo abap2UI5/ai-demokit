@@ -39,6 +39,16 @@ implemented upstream the same day** - see the Implemented table.
 | Request | Summary | Priority |
 |---------|---------|----------|
 | [`open-abap-xml-escaping`](open-abap-xml-escaping/) | `CALL TRANSFORMATION id` writes element values raw, so a model value containing `<` produces a draft the transpiled `CL_IXML` cannot parse back | high — breaks every round-trip of the Pages demo's front door |
+| [`event-auto-model-update`](event-auto-model-update/) | detect a model change during an event round-trip and send the model automatically — removes the mandatory `view_model_update( )` (230 calls / 125 ports) and its silent-stale-UI failure mode. **Implemented, always on** (abap2UI5 PR #2545), pending merge | medium — ergonomics + a bug class no gate can see |
+| [`frontend-action-named-api`](frontend-action-named-api/) | named frontend-action API over the positional `t_arg` wire (425 + 99 calls / 130 ports) — **deferred to a future dedicated ACTION OBJECT** (maintainer decision 2026-08-11; a per-method variant was implemented and reverted, see the folder) | medium — the corpus' most error-prone API, four arg-shape incidents to date |
+
+The two 2026-08-11 rows came out of the corpus review "can the samples get
+simpler?": sample-side, the round-trip→binding and dead-wire sweeps (see
+STATUS.md) have exhausted what 1:1 fidelity allows — the remaining
+simplification potential sits in the framework API, which is what these
+request. The review's third request, `app-lifecycle-base-class`, was
+**declined** the same day (see the Declined table): apps stay interface-only
+and the dispatcher boilerplate is accepted.
 
 The two requests filed on 2026-08-09 — `control-method-named-removeall` (abap2UI5)
 and `linter-openui5-1151` (linter) — were both implemented upstream the next
@@ -56,6 +66,7 @@ capability as the by-product (see the Implemented table)._
 |---------|----------|
 | urlhelper-abap-api | **Withdrawn 2026-07-22 — the premise was wrong.** The `URLHELPER` frontend action *is* callable from ABAP: `cs_event-urlhelper` with `TRIGGER_TEL`/`TRIGGER_SMS` (number as a plain string param) and `TRIGGER_EMAIL`/`REDIRECT` (a `{ EMAIL/URL, … }` object-literal `t_arg` — `get_t_arg` emits `{`-prefixed args raw as UI5 event-handler object literals). App 084 ported 1:1 this way; apps 041/073's external links switched from the (same-origin-only) `open_new_tab` to `urlhelper` REDIRECT. Captured as a CAPABILITIES.md convention instead of a framework change |
 | named-json-models | **Too complicated with the current abap2UI5 approach** — every view slot serializes exactly one ABAP-fed default JSONModel per roundtrip; a second named model would have to be carried through bind, serialization and model-update on every slot. Declined for now, possibly worth re-discussing in the future if the model layer changes. Workaround stays: flatten into the default model or resolve statically (IMPROVISED deviation, apps 006/031/046, same family app 044) |
+| app-lifecycle-base-class | **Declined 2026-08-11 — deliberate: abap2UI5 apps stay interface-only.** The proposal was an optional abstract `z2ui5_cl_app` with `on_init`/`on_event`/`on_navigated` hooks, to remove the identical 12-line dispatcher every app hand-writes (366/366 classes here, ~4.4k lines in this corpus). Maintainer decision: **too much overhead for the gain** — an app implements `z2ui5_if_app` and nothing else, and the dispatcher boilerplate is accepted in exchange for keeping the app contract a single interface with no inheritance, no base-class lifecycle to learn and no second way to write an app. Do not re-propose a base class, and do not add lifecycle hooks to `z2ui5_if_app`; the dispatcher stays hand-written per app (pattern-lint keeps its shape uniform here) |
 | message-manager-binding | **Half already covered, half implemented** — first recorded (b07) as "not filed, already covered": reading messages IS covered by the `message>` auto-collection (2026-07-18) and the plain-table MessagePopover (app 038). But porting `MessagePopoverMessageHandling` (b08) showed the **write** half — the controller's `MessageManager.addMessages` with custom text/target — was not expressible. Implemented 2026-07-20 as the `z2ui5.cc.MessageManager` companion control (see Implemented table) |
 
 ## Implemented (folders removed)
