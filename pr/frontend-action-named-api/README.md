@@ -1,9 +1,17 @@
 # pr/frontend-action-named-api — named wrappers for the positional `t_arg` wire
 
-**Status: open** — proposal for
-[abap2UI5/abap2UI5](https://github.com/abap2UI5/abap2UI5), surfaced by the
-2026-08-11 corpus review. Purely additive API sugar: the wire and the frontend
-stay byte-identical, so the thin-frontend principle is untouched.
+**Status: implemented on branch, pending merge** — implemented 2026-08-11 on
+the abap2UI5 branch `claude/ai-demokit-samples-simplify-kneyyl`: 7 new
+`z2ui5_if_client` methods (`toast_client`, `control_call`,
+`control_call_client`, `binding_filter`/`binding_sort` + `_client` twins),
+each a thin delegation that assembles the generic positional `t_arg` and is
+unit-tested byte-identical to the hand-written form; all abaplint builds, the
+transpiled unit suite and the JS/guide/API-snapshot gates green.
+`keyboard_shortcut` was left on the generic API (3 corpus uses). Before the
+corpus adopts the named forms, the linter rules that parse the generic calls
+(`frontend-action-unknown-id`, the client-composed-toast checks) need to read
+them too. Delete this folder once the branch is merged upstream. Original
+proposal below.
 
 ## Motivation
 
