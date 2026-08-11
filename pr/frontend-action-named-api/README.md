@@ -19,6 +19,103 @@ object exists, ports keep using the generic
 `follow_up_action`/`_event_client`; do not re-add per-method wrappers to
 `z2ui5_if_client`. Original proposal below.
 
+## Design notes for the action object (collected 2026-08-11)
+
+Requirements and decisions gathered in the review discussion, so the future
+design starts from them instead of rediscovering them.
+
+### Candidate method catalog
+
+Grouped by domain; wire mapping in parentheses. Priority order = the corpus
+usage numbers in the status note above — the **core** group carries almost
+all traffic.
+
+**Core** (the reverted set): `toast( template, t_arg )`
+(CONTROL_GLOBAL/MESSAGE_TOAST/show) · `control_call( id, method, t_arg,
+view )` (CONTROL_BY_ID) · `binding_filter( id, aggregation, path, operator,
+value1, value2 )` / `binding_sort( id, aggregation, path, descending,
+group )` (BINDING_CALL).
+
+**Control special forms** (today hidden method tokens inside CONTROL_BY_ID —
+as named methods they become discoverable): `open_by( id, anchor_id, view )`
+/ `toggle_by( … )` (the whole anchored-popup idiom family) · `css( id,
+property, value )` (the whitelisted CSS declaration) · `bind_element( view,
+index, path )` (today the least intuitive t_arg layout — path via `_bind`,
+braces stripped by the serializer).
+
+**Browser & page**: `focus( id )` · `scroll_to( x, y )` ·
+`scroll_into_view( id )` · `set_title( text )` · `set_favicon( url )` ·
+`clipboard_copy( text )` · `download( b64, filename )` ·
+`open_new_tab( url )` · `redirect( url )` / `mail_to( … )` / `tel( … )` /
+`sms( … )` (the four URLHELPER triggers as separate methods instead of the
+object-literal t_arg) · `reload( )` · `history_back( )` ·
+`play_audio( url )` · `store_data( … )`.
+
+**Time & keyboard**: `timer( interval_ms, event )` (START_TIMER) ·
+`shortcut( combination, event, scope )` (KEYBOARD_SHORTCUT incl. the scope
+semantics — lowest usage but the hardest signature to remember).
+
+**UI5 global singletons** (today CONTROL_GLOBAL tokens one has to look up):
+`busy( val )` (BUSY_INDICATOR) · `announce( text, mode )`
+(INVISIBLE_MESSAGE — the only ARIA-live route, practically undiscoverable
+without the idiom guide) · `set_theme( theme )` (THEMING) ·
+`custom_currency( code, digits )` (FORMATTING) · `popup_within_area( id )`
+(POPUP/setWithinArea).
+
+**Deliberately out**: `smart_variant_init` / `filter_bar_variant_init` (too
+special, generic API suffices) and everything under `cs_event`'s
+"obsolete?" block.
+
+### Delivery form — decided against runtime detection
+
+The idea "detect at runtime whether the RETURNING value is consumed: if yes
+it is a view wire, if no a direct follow-up" was examined and **rejected**:
+
+- `IS SUPPLIED` is not allowed for `RETURNING` parameters, and there is no
+  signal anyway — a functional call always binds the result, a standalone
+  call discards it; the callee cannot tell the two apart.
+- It DOES work with an `EXPORTING handler` parameter (`IS SUPPLIED` is legal
+  there) — but an EXPORTING parameter cannot be called functionally, which
+  kills the inline view-chain form `)->a( n = `press` v = action->toast( … ) )`
+  that carries most of the traffic (295 of ~520 calls are view wires).
+- Half of the idea exists already by accident: `follow_up_action( )` accepts
+  raw JS and the `_event_client` handler string IS executable JS — but
+  routing framework events through the JS-string path would regress the
+  deliberate pure-data serialization (`get_event_client_json`: follow-ups
+  travel as JSON arrays, escaping entirely in ABAP).
+- Even if detectable, behavior switching on result consumption is
+  action-at-a-distance: a handler string assigned to a variable but never
+  built into the view silently does nothing (exactly the silent-failure
+  class the dead-event-wire rule and auto-model-update exist to kill), and
+  pulling a result into a variable for logging would change runtime
+  behavior.
+
+**Recommended surface instead — one method set, explicit terminal verb:**
+
+```abap
+)->a( n = `press` v = client->action( )->toast( template = `Hello {0}` … )->as_handler( ) )
+client->action( )->toast( template = `Saved` )->run( ).
+```
+
+The verb makes explicit what today is implicit in choosing
+`follow_up_action` vs `_event_client`; both forms stay functional and
+inline-usable. (Runner-up: two entry points `action( )` / `action_client( )`
+with a single method list each.)
+
+### Principles carried over from the reverted implementation
+
+- **Byte-identity as the test contract**: every method is unit-tested to
+  emit exactly the wire of the hand-written generic form.
+- **Pure assembly, no wire change**: `FrontendAction.js` untouched, all
+  generic-path rules (allow/deny list, argument kinds, `id/aggregation/index`
+  addressing) apply unchanged; the generic API remains the escape hatch.
+- **UI5 version floors in the ABAP Doc per method** (`announce` ≥ 1.78,
+  `popup_within_area` ≥ 1.89, `custom_currency` ≥ 1.120) — today they hide
+  in the interface's collective comment.
+- Before the corpus adopts the object, the linter rules that parse the
+  generic calls (`frontend-action-unknown-id`, the client-composed-toast
+  checks) must read the named forms too.
+
 ## Motivation
 
 The frontend-action surface (`follow_up_action` and `_event_client`) is the
