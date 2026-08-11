@@ -1,17 +1,23 @@
 # pr/frontend-action-named-api — named wrappers for the positional `t_arg` wire
 
-**Status: implemented on branch, pending merge** — implemented 2026-08-11 on
-the abap2UI5 branch `claude/ai-demokit-samples-simplify-kneyyl`: 7 new
-`z2ui5_if_client` methods (`toast_client`, `control_call`,
-`control_call_client`, `binding_filter`/`binding_sort` + `_client` twins),
-each a thin delegation that assembles the generic positional `t_arg` and is
-unit-tested byte-identical to the hand-written form; all abaplint builds, the
-transpiled unit suite and the JS/guide/API-snapshot gates green.
-`keyboard_shortcut` was left on the generic API (3 corpus uses). Before the
-corpus adopts the named forms, the linter rules that parse the generic calls
-(`frontend-action-unknown-id`, the client-composed-toast checks) need to read
-them too. Delete this folder once the branch is merged upstream. Original
-proposal below.
+**Status: open — deferred to a future ACTION OBJECT (maintainer decision
+2026-08-11).** The per-method variant WAS implemented and then deliberately
+reverted the same day: 7 `z2ui5_if_client` methods (`toast_client`,
+`control_call`/`control_call_client`, `binding_filter`/`binding_sort` +
+`_client` twins), thin delegations unit-tested **byte-identical** to the
+generic positional form — preserved in abap2UI5 git history on branch
+`claude/ai-demokit-samples-simplify-kneyyl` (`f1a1813`, reverted by
+`208b7ec`) and recorded in the framework's AGENTS.md Design Decisions.
+Direction instead: collect these actions in **one dedicated action object**
+with a designed surface rather than growing the client interface method by
+method; observe real usage first, design later. This folder stays open as
+the collected requirements for that object — the corpus usage numbers below
+(295 control_global wires / 137 control_by_id / 25 binding_call / 3
+keyboard_shortcut) are the priority order, and the reverted commit is the
+reference for wire fidelity and the byte-identity test approach. Until the
+object exists, ports keep using the generic
+`follow_up_action`/`_event_client`; do not re-add per-method wrappers to
+`z2ui5_if_client`. Original proposal below.
 
 ## Motivation
 
