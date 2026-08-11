@@ -39,7 +39,7 @@ implemented upstream the same day** - see the Implemented table.
 | Request | Summary | Priority |
 |---------|---------|----------|
 | [`open-abap-xml-escaping`](open-abap-xml-escaping/) | `CALL TRANSFORMATION id` writes element values raw, so a model value containing `<` produces a draft the transpiled `CL_IXML` cannot parse back | high — breaks every round-trip of the Pages demo's front door |
-| [`event-auto-model-update`](event-auto-model-update/) | detect a model change during an event round-trip and send the model automatically — removes the mandatory `view_model_update( )` (230 calls / 125 ports) and its silent-stale-UI failure mode | medium — ergonomics + a bug class no gate can see |
+| [`event-auto-model-update`](event-auto-model-update/) | detect a model change during an event round-trip and send the model automatically — removes the mandatory `view_model_update( )` (230 calls / 125 ports) and its silent-stale-UI failure mode. **Implemented, always on** (abap2UI5 PR #2545), pending merge | medium — ergonomics + a bug class no gate can see |
 | [`frontend-action-named-api`](frontend-action-named-api/) | named frontend-action API over the positional `t_arg` wire (425 + 99 calls / 130 ports) — **deferred to a future dedicated ACTION OBJECT** (maintainer decision 2026-08-11; a per-method variant was implemented and reverted, see the folder) | medium — the corpus' most error-prone API, four arg-shape incidents to date |
 
 The two 2026-08-11 rows came out of the corpus review "can the samples get

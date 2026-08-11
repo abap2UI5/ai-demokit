@@ -1,14 +1,29 @@
 # pr/event-auto-model-update — push the model automatically when an event round-trip changed it
 
-**Status: implemented on branch, pending merge** — implemented 2026-08-11 as
-the **opt-in** variant (`client->set_model_auto_update( )`, remembered on the
-app like `set_nav_routing`; snapshot after delta-apply/before `main( )`,
-compare in `main_end`, response byte-identical to an explicit
-`view_model_update( )`, unchanged model still responds `{}`) on the abap2UI5
-branch `claude/ai-demokit-samples-simplify-kneyyl` — all three abaplint
-builds, the transpiled unit suite (4 new tests) and the JS/guide/API-snapshot
-gates green. Delete this folder once that branch is merged upstream (pr/
-convention: folders hold open requests only). Original proposal below.
+**Status: implemented on branch, pending merge** — implemented 2026-08-11 on
+the abap2UI5 branch `claude/ai-demokit-samples-simplify-kneyyl`
+(PR [abap2UI5#2545](https://github.com/abap2UI5/abap2UI5/pull/2545)), and
+**always on**: snapshot after delta-apply / before `main( )`, compare in
+`main_end`, response byte-identical to an explicit `view_model_update( )`,
+unchanged model still responds `{}`. It shipped first as an opt-in
+(`set_model_auto_update( )`); the maintainer decided the same day that the
+behaviour should simply be the default, so the activation method was
+withdrawn again — the public API is byte-identical to before.
+`view_model_update( )` **stays in the interface and keeps working**: for the
+ordinary "changed data, now push" case it is now redundant, but it still
+FORCES the unchanged model out, which detection cannot express (resetting a
+control that wrote a bound property on its own). Popup/popover own their own
+model instance, so `popup_model_update( )` / `popover_model_update( )` are
+still required. All three abaplint builds, the transpiled unit suite (4
+tests) and the JS/guide/API-snapshot gates green.
+
+**Consequence for this corpus (do NOT bulk-remove yet):** the 230
+`view_model_update( )` calls in 125 ports become redundant once the branch is
+merged AND the `A2UI5_PIN` moved — but not before, and removing them is a
+separate, gate-verified change (the ports must keep working against the
+pinned framework version). Delete this folder once the branch is merged
+upstream (pr/ convention: folders hold open requests only). Original proposal
+below.
 
 ## Motivation
 
