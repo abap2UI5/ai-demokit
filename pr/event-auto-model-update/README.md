@@ -1,10 +1,14 @@
 # pr/event-auto-model-update — push the model automatically when an event round-trip changed it
 
-**Status: open** — proposal for
-[abap2UI5/abap2UI5](https://github.com/abap2UI5/abap2UI5), surfaced by the
-2026-08-11 corpus review ("can the samples get simpler?"). No workaround
-needed here — `view_model_update( )` works; this is about removing a
-mandatory line and, more importantly, a silent-failure class.
+**Status: implemented on branch, pending merge** — implemented 2026-08-11 as
+the **opt-in** variant (`client->set_model_auto_update( )`, remembered on the
+app like `set_nav_routing`; snapshot after delta-apply/before `main( )`,
+compare in `main_end`, response byte-identical to an explicit
+`view_model_update( )`, unchanged model still responds `{}`) on the abap2UI5
+branch `claude/ai-demokit-samples-simplify-kneyyl` — all three abaplint
+builds, the transpiled unit suite (4 new tests) and the JS/guide/API-snapshot
+gates green. Delete this folder once that branch is merged upstream (pr/
+convention: folders hold open requests only). Original proposal below.
 
 ## Motivation
 
