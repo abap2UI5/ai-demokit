@@ -66,11 +66,46 @@ Costs and options, honestly:
   when no change is detected today's `'{}'` short-circuit is lost). For large
   models that is measurable CPU — worth a benchmark against `db_save( )`,
   which already XML-serializes the full app state every round-trip anyway.
+- The "before" stringify cannot be replaced by a hash stored at the previous
+  render: the incoming two-way deltas already mutate the state before
+  `main( )`, so a stale hash would false-positive on every delta-carrying
+  event. The clean comparison point is after delta-apply, before `main( )`.
 - If default-on is judged too invasive, an **opt-in** keeps it free for
   everyone else: `client->set_model_auto_update( )` once in `check_on_init`
   (mirroring `set_nav_routing`), or a marker on `z2ui5_if_app`.
   `view_model_update( )` stays supported either way — existing apps are
   unaffected.
+
+## Payload trade-off — deliberate non-pushes lose their suppression
+
+A per-push response is **full-model already**: `view_model_update( )` sends
+`model_json_stringify( )` whole, not a delta — changing one scalar ships the
+whole bound table today too. Auto-detection therefore never makes a single
+push bigger, and an unchanged model still responds `'{}'`. What it does
+change is *when* pushes happen: change-triggered instead of
+developer-declared. An app mutates its model without pushing for two
+reasons:
+
+1. **forgot** — the silent-stale-UI bug this request wants to remove;
+2. **deliberately** — server-side bookkeeping in a public attribute, data
+   prepared for a later popup, a change the currently rendered view does not
+   bind. Today that costs nothing; with auto-detection it ships the full
+   model.
+
+Case 2 is a real optimization valve, so default-on needs one of:
+
+- **opt-in** (see above) — large-model apps simply keep it off;
+- **default-on + per-round-trip suppression** (`client->skip_model_update( )`)
+  — inverts the burden: the rare deliberate case becomes explicit, the common
+  forgotten case disappears;
+- **response-side model deltas** — the symmetric counterpart of the request
+  direction, which is already delta-based. Sending only changed paths would
+  fix the "one scalar → whole table" cost for the *explicit*
+  `view_model_update( )` too, and the before/after diff computes exactly
+  those paths as a by-product. It is however a real model-layer rework (the
+  frontend would merge instead of replace) — the same category in which
+  `named-json-models` was declined — so it is listed as the long-term shape,
+  not as a precondition.
 
 ## Example
 
