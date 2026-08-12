@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_180",
   "sample": "sap.ui.core.sample.TypeFileSize",
   "entity": "sap.ui.model.type.FileSize",
-  "file": "src/02/z2ui5_cl_dmo_app_180.clas.abap",
+  "file": "src/02/02/z2ui5_cl_dmo_app_180.clas.abap",
   "batch": "b10",
   "audit": {
     "frontend_action": false,

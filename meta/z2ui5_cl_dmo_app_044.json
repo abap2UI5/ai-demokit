@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_044",
   "sample": "sap.m.sample.PDFViewerPopup",
   "entity": "sap.m.PDFViewer",
-  "file": "src/01/z2ui5_cl_dmo_app_044.clas.abap",
+  "file": "src/02/01/z2ui5_cl_dmo_app_044.clas.abap",
   "batch": "b03",
   "audit": {
     "frontend_action": true,

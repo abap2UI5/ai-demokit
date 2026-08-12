@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_179",
   "sample": "sap.ui.core.sample.TypeFloat",
   "entity": "sap.ui.model.type.Float",
-  "file": "src/02/z2ui5_cl_dmo_app_179.clas.abap",
+  "file": "src/02/02/z2ui5_cl_dmo_app_179.clas.abap",
   "batch": "b10",
   "audit": {
     "frontend_action": false,

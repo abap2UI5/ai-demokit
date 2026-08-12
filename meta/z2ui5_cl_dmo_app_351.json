@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_351",
   "sample": "sap.ui.layout.sample.Splitter",
   "entity": "sap.ui.layout.Splitter",
-  "file": "src/02/z2ui5_cl_dmo_app_351.clas.abap",
+  "file": "src/01/02/z2ui5_cl_dmo_app_351.clas.abap",
   "batch": "b19",
   "audit": {
     "frontend_action": false,

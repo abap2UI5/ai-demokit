@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_309",
   "sample": "sap.ui.unified.sample.ColorPicker",
   "entity": "sap.ui.unified.ColorPicker",
-  "file": "src/02/z2ui5_cl_dmo_app_309.clas.abap",
+  "file": "src/01/02/z2ui5_cl_dmo_app_309.clas.abap",
   "batch": "b15",
   "audit": {
     "frontend_action": true,

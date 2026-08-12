@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_218",
   "sample": "sap.f.sample.ShellBarWithSearch",
   "entity": "sap.f.ShellBar",
-  "file": "src/04/z2ui5_cl_dmo_app_218.clas.abap",
+  "file": "src/02/04/z2ui5_cl_dmo_app_218.clas.abap",
   "batch": "b07",
   "audit": {
     "frontend_action": true,

@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_287",
   "sample": "sap.m.sample.IconTabBarBadges",
   "entity": "sap.m.IconTabBar",
-  "file": "src/01/z2ui5_cl_dmo_app_287.clas.abap",
+  "file": "src/02/01/z2ui5_cl_dmo_app_287.clas.abap",
   "batch": "b21",
   "audit": {
     "frontend_action": false,

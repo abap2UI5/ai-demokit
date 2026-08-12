@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_294",
   "sample": "sap.m.sample.MessageViewWithGrouping",
   "entity": "sap.m.MessageView",
-  "file": "src/01/z2ui5_cl_dmo_app_294.clas.abap",
+  "file": "src/01/01/z2ui5_cl_dmo_app_294.clas.abap",
   "batch": "b23",
   "audit": {
     "frontend_action": true,

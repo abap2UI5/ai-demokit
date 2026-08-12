@@ -152,7 +152,7 @@ edited directly in the sidecar. The shape:
   "class":   "z2ui5_cl_dmo_app_040",
   "sample":  "sap.m.sample.MultiInput",
   "entity":  "sap.m.MultiInput",
-  "file":    "src/01/z2ui5_cl_dmo_app_040.clas.abap",
+  "file":    "src/01/01/z2ui5_cl_dmo_app_040.clas.abap",
   "batch":   "b02",
   "audit":   { "frontend_action": false, "event_t_arg": false },
   "status":  "generated",              // generated | reviewed | checked

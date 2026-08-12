@@ -22,6 +22,7 @@ import { fileURLToPath } from 'url';
 import {
   loadUniverseSnapshot, loadPropertiesControls, loadEntityOverrides, sinceLeq171,
 } from './lib-universe.mjs';
+import { CAT_CTEXT, LIB_CTEXT } from './lib-packages.mjs';
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const META = path.join(ROOT, 'meta');
@@ -39,7 +40,8 @@ for (const mf of fs.readdirSync(META).sort()) {
 const statusCount = { generated: 0, reviewed: 0, checked: 0 };
 const devCount = {};
 const liveTestPorts = new Set();
-const libCount = {}; // src/01 -> n
+const catCount = {}; // src/01 -> n  (UI5 flavour x release, AGENTS §3)
+const libCount = {}; // sap.m -> n
 let sdiffSkips = 0;
 let rsmokeSkips = 0;
 for (const p of ports) {
@@ -48,8 +50,12 @@ for (const p of ports) {
     devCount[d.type] = (devCount[d.type] || 0) + 1;
     if (d.type === 'LIVE_TEST') liveTestPorts.add(p.class);
   }
-  const m = String(p.file || '').match(/^src\/(\d+)\//);
-  if (m) libCount[`src/${m[1]}`] = (libCount[`src/${m[1]}`] || 0) + 1;
+  const m = String(p.file || '').match(/^src\/(\d+)\/(\d+)\//);
+  if (m) {
+    catCount[`src/${m[1]}`] = (catCount[`src/${m[1]}`] || 0) + 1;
+    const lib = LIB_CTEXT[m[2]] || `src/../${m[2]}`;
+    libCount[lib] = (libCount[lib] || 0) + 1;
+  }
   if (p.structural_diff?.skip) sdiffSkips++;
   if (p.render_smoke?.skip) rsmokeSkips++;
 }
@@ -78,6 +84,9 @@ for (const p of ports) {
 const devLine = Object.keys(devCount).sort()
   .map((t) => `${devCount[t]} ${t}`)
   .join(' · ') || 'none';
+const catLine = Object.keys(catCount).sort()
+  .map((k) => `${k} ${CAT_CTEXT[k.slice(-2)]}: ${catCount[k]}`)
+  .join(' · ');
 const libLine = Object.keys(libCount).sort()
   .map((k) => `${k}: ${libCount[k]}`)
   .join(' · ');
@@ -85,7 +94,8 @@ const libLine = Object.keys(libCount).sort()
 const lines = [];
 lines.push('| Aspect | State |');
 lines.push('|---|---|');
-lines.push(`| Ports | **${ports.length}** sidecars in \`meta/\` (${libLine}) |`);
+lines.push(`| Ports | **${ports.length}** sidecars in \`meta/\` (${catLine}) |`);
+lines.push(`| Per library | ${libLine} |`);
 lines.push(`| Status ladder | ${statusCount.generated} \`generated\` · ${statusCount.reviewed} \`reviewed\` · ${statusCount.checked} \`checked\` (live-verified) |`);
 lines.push(`| Deviations | ${devLine} |`);
 lines.push(`| Open LIVE_TESTs | **${liveTestPorts.size} ports** carry at least one \`LIVE_TEST\` deviation — the automated close path is the e2e interaction harness (AGENTS §6 \`e2e_smoke\`) |`);

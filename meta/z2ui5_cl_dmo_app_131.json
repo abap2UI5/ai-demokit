@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_131",
   "sample": "sap.ui.core.sample.BasicThemeParameters",
   "entity": "sap.ui.core.theming.Parameters",
-  "file": "src/02/z2ui5_cl_dmo_app_131.clas.abap",
+  "file": "src/01/02/z2ui5_cl_dmo_app_131.clas.abap",
   "batch": "b03",
   "audit": { "frontend_action": false, "event_t_arg": false },
   "status": "reviewed",

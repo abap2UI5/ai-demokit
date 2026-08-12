@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_247",
   "sample": "sap.ui.table.sample.ColumnResizing",
   "entity": "sap.ui.table.Table",
-  "file": "src/02/z2ui5_cl_dmo_app_247.clas.abap",
+  "file": "src/01/02/z2ui5_cl_dmo_app_247.clas.abap",
   "batch": "b12",
   "audit": {
     "frontend_action": false,

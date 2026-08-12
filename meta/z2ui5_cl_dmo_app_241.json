@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_241",
   "sample": "sap.tnt.sample.SideNavigationPressEvent",
   "entity": "sap.tnt.SideNavigation",
-  "file": "src/05/z2ui5_cl_dmo_app_241.clas.abap",
+  "file": "src/02/05/z2ui5_cl_dmo_app_241.clas.abap",
   "batch": "b07",
   "audit": {
     "frontend_action": true,

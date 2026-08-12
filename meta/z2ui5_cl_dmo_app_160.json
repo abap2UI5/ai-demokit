@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_160",
   "sample": "sap.m.sample.Link",
   "entity": "sap.m.Link",
-  "file": "src/01/z2ui5_cl_dmo_app_160.clas.abap",
+  "file": "src/02/01/z2ui5_cl_dmo_app_160.clas.abap",
   "batch": "b16",
   "audit": {
     "frontend_action": false,

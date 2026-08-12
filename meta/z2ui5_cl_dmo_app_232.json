@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_232",
   "sample": "sap.ui.core.sample.Commands",
   "entity": "sap.ui.core.CommandExecution",
-  "file": "src/02/z2ui5_cl_dmo_app_232.clas.abap",
+  "file": "src/02/02/z2ui5_cl_dmo_app_232.clas.abap",
   "batch": "b10",
   "audit": {
     "frontend_action": true,

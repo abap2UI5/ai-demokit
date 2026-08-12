@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_108",
   "sample": "sap.m.sample.PlanningCalendarSingle",
   "entity": "sap.m.PlanningCalendar",
-  "file": "src/01/z2ui5_cl_dmo_app_108.clas.abap",
+  "file": "src/02/01/z2ui5_cl_dmo_app_108.clas.abap",
   "batch": "b14",
   "audit": {
     "frontend_action": false,

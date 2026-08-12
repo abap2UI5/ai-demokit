@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_148",
   "sample": "sap.f.sample.GridListDragAndDrop",
   "entity": "sap.f.GridList",
-  "file": "src/04/z2ui5_cl_dmo_app_148.clas.abap",
+  "file": "src/01/04/z2ui5_cl_dmo_app_148.clas.abap",
   "batch": "b05",
   "audit": {
     "frontend_action": false,

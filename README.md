@@ -75,8 +75,8 @@ controls are listed as out of scope. The pipeline:
    (`src/<library>/test/<library path>/demokit/sample/<Name>/`, second segment
    with dots as slashes, e.g. `src/sap.tnt/test/sap/tnt/…`).
 2. **Generate** — rebuild each sample 1:1 as an abap2UI5 app (`z2ui5_if_app`),
-   filed by library under `src/<NN>` (`src/01` = `sap.m`, see AGENTS §3) —
-   one ABAP package per library, flat.
+   filed under `src/<category>/<library>` (`src/01/01` = OpenUI5 ≤ 1.71, `sap.m`
+   — see AGENTS §3); both levels are derived from the port's `meta/` sidecar.
 3. **Store templates** — keep the original UI5 JS/XML templates in
    [`ui5/`](ui5), one folder per sample — only ported samples are archived;
    each batch copies its samples over from the OpenUI5 checkout.
