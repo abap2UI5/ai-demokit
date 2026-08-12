@@ -25,6 +25,8 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { libFolder, catFolder, CAT_CTEXT, LIB_CTEXT } from './lib-packages.mjs';
+import { isSapui5Lib, loadUniverseSnapshot, withSapui5 } from './lib-universe.mjs';
+import { verdict as sapui5Verdict } from './scope-of.mjs';
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const META = path.join(ROOT, 'meta');
@@ -49,7 +51,10 @@ if (!input) {
 }
 
 // ---------- resolve the sample -> { lib, name, entity } ----------
-const universe = JSON.parse(fs.readFileSync(path.join(UI5, 'universe.json'), 'utf8'));
+// both halves of the universe: ui5/universe.json (OpenUI5) merged with
+// ui5/universe-sapui5.json when present (AGENTS §3), so a SAPUI5 sample
+// resolves by bare name like any other
+const universe = withSapui5(loadUniverseSnapshot());
 function lookupUniverse(name, lib) {
   // collect ALL matches — a bare name existing in two libs must error as
   // ambiguous, not silently scaffold against whichever lib comes first
@@ -115,8 +120,22 @@ const { lib, name, entity } = resolved;
     ? JSON.parse(fs.readFileSync(propsFile, 'utf8')).controls || {}
     : {};
   const c = entity && propsControls[entity];
-  const since = resolved.since || c?.since || null;
-  const deprecated = resolved.deprecated || c?.deprecated || null;
+  let since = resolved.since || c?.since || null;
+  let deprecated = resolved.deprecated || c?.deprecated || null;
+  /* SAPUI5 has no committed metadata snapshot: ui5/properties.json is built
+   * from the OpenUI5 sources and universe.json's SAPUI5 half carries whatever
+   * the SDK docuindex gave. Both can leave since/deprecated null, and a null
+   * reads as "release-clean" below — which would wave through a DEPRECATED
+   * SAPUI5 control (sap.suite.ui.microchart.RadialMicroChart, @deprecated
+   * 1.135, is exactly that shape). Take the facts from the same source
+   * scope-of.mjs uses, the pinned @sapui5 packages. */
+  if (isSapui5Lib(lib) && entity && !deprecated) {
+    const v = sapui5Verdict(entity);
+    if (v && !v.reason.startsWith('UNRESOLVED')) {
+      since = v.since || since;
+      if (/^OUT_OF_SCOPE \(deprecated/.test(v.reason)) deprecated = v.reason.replace(/^OUT_OF_SCOPE \(|\)\s*\[.*$/g, '');
+    }
+  }
   const nonappFile = path.join(UI5, 'scope-nonapp.json');
   const families = fs.existsSync(nonappFile)
     ? JSON.parse(fs.readFileSync(nonappFile, 'utf8')).families || []
@@ -169,20 +188,36 @@ if (!libNr) {
 const catNr = catFolder({ sample: `${lib}.sample.${name}`, entity, deviations: [] });
 const folder = `${catNr}/${libNr}`;
 
-// ---------- locate the OpenUI5 template dir ----------
+// ---------- locate the template dir ----------
+// Two source kinds, because the two UI5 flavours ship their samples differently:
+//   OpenUI5 — a checkout (OPENUI5_SRC), samples under
+//             src/<lib>/test/<lib path>/demokit/sample/<Name>
+//   SAPUI5  — NOT on GitHub, and the `@sapui5/*` npm packages carry only `src/`
+//             (no demokit trees), so its samples come from a mirror of the SDK's
+//             test-resources: SAPUI5_SRC, either laid out like a checkout (same
+//             pattern as above) or flat as <root>/<lib>/<Name>, which is what a
+//             per-sample SDK download naturally produces.
 const libPath = lib.replace(/\./g, '/');
-const SRC_ROOTS = [process.env.OPENUI5_SRC, path.join(ROOT, 'openui5'), path.join(ROOT, '..', 'fork-openui5'), path.join(ROOT, '..', 'openui5')].filter(Boolean);
+const sapui5Lib = isSapui5Lib(lib);
 // a GROUP-nested sample is named `<Group>.<Child>` (TreeTable.JSONTreeBinding)
 // — its source folder is sample/<Group>/<Child>; the ui5/ archive folder keeps
 // the dotted name (ui5/<lib>/<Group>.<Child>/)
 const namePath = name.replace(/\./g, '/');
+const OPENUI5_ROOTS = [process.env.OPENUI5_SRC, path.join(ROOT, 'openui5'), path.join(ROOT, '..', 'fork-openui5'), path.join(ROOT, '..', 'openui5')].filter(Boolean);
+const SAPUI5_ROOTS = [process.env.SAPUI5_SRC, path.join(ROOT, 'sapui5'), path.join(ROOT, '..', 'sapui5')].filter(Boolean);
+const candidates = sapui5Lib
+  ? SAPUI5_ROOTS.flatMap((r) => [
+      path.join(r, 'src', lib, 'test', libPath, 'demokit', 'sample', namePath),
+      path.join(r, lib, namePath),
+    ])
+  : OPENUI5_ROOTS.map((r) => path.join(r, 'src', lib, 'test', libPath, 'demokit', 'sample', namePath));
 let templateDir = null;
-for (const r of SRC_ROOTS) {
-  const cand = path.join(r, 'src', lib, 'test', libPath, 'demokit', 'sample', namePath);
+for (const cand of candidates) {
   if (fs.existsSync(cand)) { templateDir = cand; break; }
 }
 if (!templateDir) {
-  console.error(`template not found for ${lib}/${name}. Looked under:\n  ${SRC_ROOTS.map((r) => path.join(r, 'src', lib, 'test', libPath, 'demokit', 'sample', namePath)).join('\n  ')}\nSet OPENUI5_SRC to your OpenUI5 checkout.`);
+  const env = sapui5Lib ? 'SAPUI5_SRC to your SAPUI5 sample mirror' : 'OPENUI5_SRC to your OpenUI5 checkout';
+  console.error(`template not found for ${lib}/${name}. Looked under:\n  ${candidates.join('\n  ')}\nSet ${env}.`);
   process.exit(1);
 }
 

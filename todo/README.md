@@ -124,20 +124,27 @@ someone else's interpretation to be ported one day.
 than 1.71, a control outside OpenUI5, or a runtime the sample cannot ship. None
 of the three groups is portable here.
 
-**SAPUI5-only controls (14)** — they belong in `src/03` / `src/04`, which are
-declared but **closed** (AGENTS §3), and their libraries are not in the universe
-snapshot at all (`ui5/universe.json` covers the ten OpenUI5 libraries). The
+**SAPUI5-only controls (14)** — they belong in `src/03` / `src/04`. The
 `@since` column is the class-level tag from the pinned `@sapui5/*` packages, so
 it is the real release fact — and for **eleven** of the fourteen it puts the
-control in the `<= 1.71` half: the release is not what blocks them, the closed
-`src/03`/`src/04` question is. The other three are blocked twice over, by a
-class-level deprecation as well (the two `sap.gantt` rows and `RadialMicroChart`,
-below).
+control in the `<= 1.71` half. The other three are blocked by a class-level
+deprecation (the two `sap.gantt` rows and `RadialMicroChart`, below), which is
+the normal §1 rule and has nothing to do with the flavour.
 
-Every row is `node scripts/scope-of.mjs <entity>`-verified (2026-08-12): the
-script falls back to the `@sapui5/*` packages and answers `OUT_OF_SCOPE
-(SAPUI5-only library — src/03/src/04 are not open, AGENTS §3)`, or the
-deprecation where there is one. **Four of the rows name a real SAPUI5 demo kit
+> **Superseded the same day:** these rows were dropped while `src/03` / `src/04`
+> were closed. That decision was reversed hours later (AGENTS §3, 2026-08-12) —
+> a SAPUI5-only sample is now judged by the ordinary scope rules, and
+> `scope-of.mjs` answers `IN_SCOPE … [SAPUI5-only, @sapui5 package]` for the
+> eleven release-clean ones. **Deleting these files stays right** — an ai-demokit
+> port is a rebuild of the *demo kit original*, never of another repo's
+> interpretation, so the classes were never the source anyway. What changes is
+> the backlog: their eleven samples are now legitimate candidates, blocked only
+> until `SAPUI5_SRC` carries the originals and `ui5/universe-sapui5.json` lists
+> them.
+
+Every row was `node scripts/scope-of.mjs <entity>`-verified (2026-08-12) against
+the `@sapui5/*` packages, which is also where the deprecations came from.
+**Four of the rows name a real SAPUI5 demo kit
 sample in their ABAP Doc URL** (`sap.suite.ui.microchart.sample.*` for the three
 Interactive charts and `RadialMicroChart`) — so the SAPUI5 demo kit does have
 samples this repo could rebuild one day; they are simply not in

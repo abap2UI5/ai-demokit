@@ -25,7 +25,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import {
-  loadUniverseSnapshot, loadEntityOverrides, loadNonAppFamilies, nonAppFamilyFor,
+  loadUniverseSnapshot, withSapui5, loadEntityOverrides, loadNonAppFamilies, nonAppFamilyFor,
 } from './lib-universe.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -127,7 +127,7 @@ const nonAppFor = (info) => nonAppFamilyFor(nonAppFamilies, info);
 // too, or a non-app family matched by entityPrefix would never fire.
 const entityOverrides = loadEntityOverrides();
 function sampleInfo(sample) {
-  const d = loadUniverseSnapshot();
+  const d = withSapui5(loadUniverseSnapshot());
   if (!d) return null;
   for (const l of d.libs || []) for (const s of l.samples || []) {
     if (s.name !== sample) continue;
@@ -140,10 +140,11 @@ function sampleInfo(sample) {
 function verdict(entity) {
   const hit = sourceFor(entity);
   if (!hit) return { entity, ok: false, reason: 'UNRESOLVED (no source .js found — check the entity name / fork checkout)' };
-  // A SAPUI5-only control is out of scope for a DIFFERENT reason than its
-  // @since: the repo has no verified home for it yet (AGENTS §3). Say so, and
-  // still report the release facts — they are what decides src/03 vs src/04
-  // once those packages open.
+  // A SAPUI5-only control is judged by the SAME rules as an OpenUI5 one since
+  // src/03 / src/04 opened (AGENTS §3): release-clean and not deprecated is
+  // IN_SCOPE. The tag stays on every verdict because the flavour is what picks
+  // src/03 / src/04 over src/01 / src/02, and because the facts come from a
+  // pinned @sapui5 package rather than the checkout.
   const tag = hit.root === 'sapui5' ? ' [SAPUI5-only, @sapui5 package]' : '';
   const { since, deprecated } = metaFromSource(hit.file, entity);
   if (deprecated) {
@@ -153,14 +154,21 @@ function verdict(entity) {
   if (v && gt(v, THRESHOLD)) {
     return { entity, ok: false, since, reason: `OUT_OF_SCOPE (control @since ${since} > 1.71)${tag}` };
   }
-  if (hit.root === 'sapui5') {
-    return { entity, ok: false, since, reason: `OUT_OF_SCOPE (SAPUI5-only library — src/03/src/04 are not open, AGENTS §3); release-clean: @since ${since || '<=1.71 (no @since header)'}` };
-  }
-  return { entity, ok: true, since, reason: `IN_SCOPE (@since ${since || '<=1.71 (no @since header)'})` };
+  return { entity, ok: true, since, reason: `IN_SCOPE (@since ${since || '<=1.71 (no @since header)'})${tag}` };
 }
 
-const argv = process.argv.slice(2);
-if (!argv.length) {
+/* The verdict is also read programmatically — scaffold.mjs needs the SAPUI5
+ * facts, which live in the @sapui5 packages and in no committed snapshot
+ * (ui5/properties.json is OpenUI5-only), so its own offline scope check would
+ * pass a deprecated SAPUI5 control. One source for the verdict, therefore:
+ * export it, and run the CLI only when this file IS the entry point. */
+export { verdict, sampleInfo };
+
+const isMain = process.argv[1]
+  && path.resolve(process.argv[1]) === path.resolve(fileURLToPath(import.meta.url));
+
+const argv = isMain ? process.argv.slice(2) : [];
+if (isMain && !argv.length) {
   console.error('usage: node scripts/scope-of.mjs <entity...> | --sample <SampleName...>');
   process.exit(2);
 }
@@ -191,10 +199,12 @@ if (argv[0] === '--sample') {
   entities = argv;
 }
 
-let allOk = !notOk;
-for (const e of entities) {
-  const r = verdict(e);
-  if (!r.ok) allOk = false;
-  console.log(`${(r.entity || '').padEnd(34)} ${r.reason}`);
+if (isMain) {
+  let allOk = !notOk;
+  for (const e of entities) {
+    const r = verdict(e);
+    if (!r.ok) allOk = false;
+    console.log(`${(r.entity || '').padEnd(34)} ${r.reason}`);
+  }
+  process.exit(allOk ? 0 : 1);
 }
-process.exit(allOk ? 0 : 1);

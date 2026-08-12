@@ -20,7 +20,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { loadUniverseSnapshot, loadPropertiesControls, enrichFromProperties } from './lib-universe.mjs';
+import { loadUniverseSnapshot, withSapui5, loadPropertiesControls, enrichFromProperties } from './lib-universe.mjs';
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = path.join(ROOT, 'src');
@@ -40,7 +40,7 @@ function walk(dir, out = []) {
 
 // control availability from the sample-universe snapshot (same source as the
 // coverage docs): the release a control appeared in + whether it is deprecated
-const uni = loadUniverseSnapshot();
+const uni = withSapui5(loadUniverseSnapshot());
 if (!uni) { console.error('ui5/universe.json missing — the overview needs the sample-universe snapshot.'); process.exit(1); }
 const uniMap = new Map();
 for (const lib of uni.libs) for (const s of lib.samples) uniMap.set(`${lib.lib}|${s.name}`, s);
