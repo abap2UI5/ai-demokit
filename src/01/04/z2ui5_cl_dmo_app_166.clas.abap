@@ -232,8 +232,8 @@ CLASS z2ui5_cl_dmo_app_166 IMPLEMENTATION.
                     " onMessagesButtonPress builds a MessagePopover over the message>
                     " model and opens it at the button - declared in dependents and
                     " opened roundtrip-free (app 066 idiom)
-                    )->a( n = `press` v = client->_event_client( val   = client->cs_event-control_by_id
-                                                                 t_arg = VALUE #( ( `messagePopover` )
+                    )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_by_id
+                                                                    t_arg = VALUE #( ( `messagePopover` )
                                                                                   ( `toggleBy` )
                                                                                   ( `$event.oSource.sId` ) ) )
 

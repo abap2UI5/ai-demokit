@@ -96,11 +96,11 @@ CLASS z2ui5_cl_dmo_app_133 IMPLEMENTATION.
             )->a( n = `headerText`      v = client->_bind( header_text )
             )->a( n = `mode`            v = client->_bind( mode )
             )->a( n = `items`           v = client->_bind( t_products )
-            )->a( n = `selectionChange` v = client->_event_client( val   = client->cs_event-control_global
-                                                                   t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0?Selected:Unselected} item with ID {1}` )
+            )->a( n = `selectionChange` v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                      t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0?Selected:Unselected} item with ID {1}` )
                                                                                         ( `${$parameters>/selected}` ) ( `${$parameters>/listItem}.getId()` ) ) )
-            )->a( n = `delete`          v = client->_event_client( val   = client->cs_event-control_global
-                                                                   t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Delete item with ID {0}` )
+            )->a( n = `delete`          v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                      t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Delete item with ID {0}` )
                                                                                         ( `${$parameters>/listItem}.getId()` ) ) )
             )->a( n = `class`           v = `sapUiResponsiveContentPadding`
 
@@ -112,11 +112,11 @@ CLASS z2ui5_cl_dmo_app_133 IMPLEMENTATION.
             )->shut(
 
             )->open( n = `GridListItem` ns = `f`
-                )->a( n = `detailPress` v = client->_event_client( val   = client->cs_event-control_global
-                                                                   t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Request details for item with ID {0}` )
+                )->a( n = `detailPress` v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                      t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Request details for item with ID {0}` )
                                                                                         ( `$event.oSource.sId` ) ) )
-                )->a( n = `press`       v = client->_event_client( val   = client->cs_event-control_global
-                                                                   t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Pressed item with ID {0}` )
+                )->a( n = `press`       v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                      t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Pressed item with ID {0}` )
                                                                                         ( `$event.oSource.sId` ) ) )
                 )->a( n = `counter`     v = `{QUANTITY}`
                 )->a( n = `highlight`   v = `{STATUS}`

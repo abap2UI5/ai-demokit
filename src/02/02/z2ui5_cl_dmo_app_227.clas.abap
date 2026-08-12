@@ -43,8 +43,8 @@ CLASS z2ui5_cl_dmo_app_227 IMPLEMENTATION.
                 )->a( n = `ariaHasPopup` v = `Menu`
                 " the sample opens the Menu anchored to the button via oMenu.open( kbd, button, ... );
                 " sap.ui.unified.Menu has no openBy and open cannot receive the anchor - see pr/ (no-op today)
-                )->a( n = `press`        v = client->_event_client( val   = client->cs_event-control_by_id
-                                                                    t_arg = VALUE #( ( `theMenu` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
+                )->a( n = `press`        v = client->follow_up_action( val   = client->cs_event-control_by_id
+                                                                       t_arg = VALUE #( ( `theMenu` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
 
                 )->open( `dependents`
                     )->open( n = `Menu` ns = `u`
@@ -54,12 +54,12 @@ CLASS z2ui5_cl_dmo_app_227 IMPLEMENTATION.
                             )->a( n = `text`   v = `My 1st Item`
                             )->a( n = `icon`   v = `sap-icon://save`
                             " compose the toast on the frontend (1:1 with MessageToast.show("'" + item.getText() + "' pressed"))
-                            )->a( n = `select` v = client->_event_client( val   = client->cs_event-control_global
-                                                                          t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `'{0}' pressed` ) ( `${$parameters>/item}.getText()` ) ) )
+                            )->a( n = `select` v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                             t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `'{0}' pressed` ) ( `${$parameters>/item}.getText()` ) ) )
                         )->leaf( n = `MenuItem` ns = `u`
                             )->a( n = `text`   v = `My 2nd Item`
-                            )->a( n = `select` v = client->_event_client( val   = client->cs_event-control_global
-                                                                          t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `'{0}' pressed` ) ( `${$parameters>/item}.getText()` ) ) )
+                            )->a( n = `select` v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                             t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `'{0}' pressed` ) ( `${$parameters>/item}.getText()` ) ) )
 
                         )->open( n = `MenuItem` ns = `u`
                             )->a( n = `text` v = `My 3rd Item`
@@ -68,12 +68,12 @@ CLASS z2ui5_cl_dmo_app_227 IMPLEMENTATION.
 
                                 )->leaf( n = `MenuItem` ns = `u`
                                     )->a( n = `text`   v = `1st Sub Item`
-                                    )->a( n = `select` v = client->_event_client( val   = client->cs_event-control_global
-                                                                                  t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `'{0}' pressed` ) ( `${$parameters>/item}.getText()` ) ) )
+                                    )->a( n = `select` v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                                     t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `'{0}' pressed` ) ( `${$parameters>/item}.getText()` ) ) )
                                 )->leaf( n = `MenuItem` ns = `u`
                                     )->a( n = `text`   v = `2nd Sub Item`
-                                    )->a( n = `select` v = client->_event_client( val   = client->cs_event-control_global
-                                                                                  t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `'{0}' pressed` ) ( `${$parameters>/item}.getText()` ) ) )
+                                    )->a( n = `select` v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                                     t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `'{0}' pressed` ) ( `${$parameters>/item}.getText()` ) ) )
                                 )->leaf( n = `MenuItem` ns = `u`
                                     )->a( n = `text`    v = `3rd Sub Item but inactive`
                                     )->a( n = `enabled` v = `false`
@@ -83,12 +83,12 @@ CLASS z2ui5_cl_dmo_app_227 IMPLEMENTATION.
                         )->leaf( n = `MenuItem` ns = `u`
                             )->a( n = `text`          v = `My 4th Item`
                             )->a( n = `startsSection` v = `true`
-                            )->a( n = `select`        v = client->_event_client( val   = client->cs_event-control_global
-                                                                                 t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `'{0}' pressed` ) ( `${$parameters>/item}.getText()` ) ) )
+                            )->a( n = `select`        v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                                    t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `'{0}' pressed` ) ( `${$parameters>/item}.getText()` ) ) )
                         )->leaf( n = `MenuItem` ns = `u`
                             )->a( n = `text`   v = `My 5th Item`
-                            )->a( n = `select` v = client->_event_client( val   = client->cs_event-control_global
-                                                                          t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `'{0}' pressed` ) ( `${$parameters>/item}.getText()` ) ) )
+                            )->a( n = `select` v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                             t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `'{0}' pressed` ) ( `${$parameters>/item}.getText()` ) ) )
 
                         )->leaf( n = `MenuTextFieldItem` ns = `u`
                             )->a( n = `label`         v = `Find`
@@ -96,8 +96,8 @@ CLASS z2ui5_cl_dmo_app_227 IMPLEMENTATION.
                             )->a( n = `startsSection` v = `true`
                             )->a( n = `icon`          v = `sap-icon://filter`
                             " 1:1 with MessageToast.show("'" + item.getValue() + "' entered")
-                            )->a( n = `select`        v = client->_event_client( val   = client->cs_event-control_global
-                                                                                 t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `'{0}' entered` ) ( `${$parameters>/item}.getValue()` ) ) )
+                            )->a( n = `select`        v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                                    t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `'{0}' entered` ) ( `${$parameters>/item}.getValue()` ) ) )
 
                     )->shut(
                 )->shut(

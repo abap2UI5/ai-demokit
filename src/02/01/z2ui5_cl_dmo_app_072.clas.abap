@@ -149,16 +149,16 @@ CLASS z2ui5_cl_dmo_app_072 IMPLEMENTATION.
                     )->a( n = `class`   v = `sapUiSmallMarginBottom`
                     )->a( n = `active`  v = `true`
                     )->a( n = `binding` v = |\{{ client->_bind( val = t_products path = abap_true ) }/0\}|
-                    )->a( n = `press`   v = client->_event_client( val   = client->cs_event-control_global
-                                                                   t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `PRESS fired!` ) ) )
+                    )->a( n = `press`   v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                      t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `PRESS fired!` ) ) )
                     )->a( n = `number`  v = num
                     )->a( n = `unit`    v = `{CURRENCY_CODE}`
                 )->leaf( `ObjectNumber`
                     )->a( n = `class`   v = `sapUiSmallMarginBottom`
                     )->a( n = `active`  v = `true`
                     )->a( n = `binding` v = |\{{ client->_bind( val = t_products path = abap_true ) }/1\}|
-                    )->a( n = `press`   v = client->_event_client( val   = client->cs_event-control_global
-                                                                   t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `PRESS fired!` ) ) )
+                    )->a( n = `press`   v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                      t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `PRESS fired!` ) ) )
                     )->a( n = `number`  v = num
                     )->a( n = `unit`    v = `{CURRENCY_CODE}`
                     )->a( n = `state`   v = `Error`
@@ -166,8 +166,8 @@ CLASS z2ui5_cl_dmo_app_072 IMPLEMENTATION.
                     )->a( n = `class`   v = `sapUiSmallMarginBottom`
                     )->a( n = `active`  v = `true`
                     )->a( n = `binding` v = |\{{ client->_bind( val = t_products path = abap_true ) }/2\}|
-                    )->a( n = `press`   v = client->_event_client( val   = client->cs_event-control_global
-                                                                   t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `PRESS fired!` ) ) )
+                    )->a( n = `press`   v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                      t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `PRESS fired!` ) ) )
                     )->a( n = `number`  v = num
                     )->a( n = `unit`    v = `{CURRENCY_CODE}`
                     )->a( n = `state`   v = `Warning`
@@ -175,8 +175,8 @@ CLASS z2ui5_cl_dmo_app_072 IMPLEMENTATION.
                     )->a( n = `class`   v = `sapUiSmallMarginBottom`
                     )->a( n = `active`  v = `true`
                     )->a( n = `binding` v = |\{{ client->_bind( val = t_products path = abap_true ) }/3\}|
-                    )->a( n = `press`   v = client->_event_client( val   = client->cs_event-control_global
-                                                                   t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `PRESS fired!` ) ) )
+                    )->a( n = `press`   v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                      t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `PRESS fired!` ) ) )
                     )->a( n = `number`  v = num
                     )->a( n = `unit`    v = `{CURRENCY_CODE}`
                     )->a( n = `state`   v = `Success`
@@ -184,8 +184,8 @@ CLASS z2ui5_cl_dmo_app_072 IMPLEMENTATION.
                     )->a( n = `class`   v = `sapUiSmallMarginBottom`
                     )->a( n = `active`  v = `true`
                     )->a( n = `binding` v = |\{{ client->_bind( val = t_products path = abap_true ) }/4\}|
-                    )->a( n = `press`   v = client->_event_client( val   = client->cs_event-control_global
-                                                                   t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `PRESS fired!` ) ) )
+                    )->a( n = `press`   v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                      t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `PRESS fired!` ) ) )
                     )->a( n = `number`  v = num
                     )->a( n = `unit`    v = `{CURRENCY_CODE}`
                     )->a( n = `state`   v = `Information`
@@ -207,8 +207,8 @@ CLASS z2ui5_cl_dmo_app_072 IMPLEMENTATION.
                     )->a( n = `active`   v = `true`
                     )->a( n = `inverted` v = `true`
                     )->a( n = `binding`  v = |\{{ client->_bind( val = t_products path = abap_true ) }/0\}|
-                    )->a( n = `press`    v = client->_event_client( val   = client->cs_event-control_global
-                                                                    t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `PRESS fired!` ) ) )
+                    )->a( n = `press`    v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                       t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `PRESS fired!` ) ) )
                     )->a( n = `number`   v = num
                     )->a( n = `unit`     v = `{CURRENCY_CODE}`
                 )->leaf( `ObjectNumber`
@@ -216,8 +216,8 @@ CLASS z2ui5_cl_dmo_app_072 IMPLEMENTATION.
                     )->a( n = `active`   v = `true`
                     )->a( n = `inverted` v = `true`
                     )->a( n = `binding`  v = |\{{ client->_bind( val = t_products path = abap_true ) }/1\}|
-                    )->a( n = `press`    v = client->_event_client( val   = client->cs_event-control_global
-                                                                    t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `PRESS fired!` ) ) )
+                    )->a( n = `press`    v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                       t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `PRESS fired!` ) ) )
                     )->a( n = `number`   v = num
                     )->a( n = `unit`     v = `{CURRENCY_CODE}`
                     )->a( n = `state`    v = `Error`
@@ -226,8 +226,8 @@ CLASS z2ui5_cl_dmo_app_072 IMPLEMENTATION.
                     )->a( n = `active`   v = `true`
                     )->a( n = `inverted` v = `true`
                     )->a( n = `binding`  v = |\{{ client->_bind( val = t_products path = abap_true ) }/2\}|
-                    )->a( n = `press`    v = client->_event_client( val   = client->cs_event-control_global
-                                                                    t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `PRESS fired!` ) ) )
+                    )->a( n = `press`    v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                       t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `PRESS fired!` ) ) )
                     )->a( n = `number`   v = num
                     )->a( n = `unit`     v = `{CURRENCY_CODE}`
                     )->a( n = `state`    v = `Warning`
@@ -236,8 +236,8 @@ CLASS z2ui5_cl_dmo_app_072 IMPLEMENTATION.
                     )->a( n = `active`   v = `true`
                     )->a( n = `inverted` v = `true`
                     )->a( n = `binding`  v = |\{{ client->_bind( val = t_products path = abap_true ) }/3\}|
-                    )->a( n = `press`    v = client->_event_client( val   = client->cs_event-control_global
-                                                                    t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `PRESS fired!` ) ) )
+                    )->a( n = `press`    v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                       t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `PRESS fired!` ) ) )
                     )->a( n = `number`   v = num
                     )->a( n = `unit`     v = `{CURRENCY_CODE}`
                     )->a( n = `state`    v = `Success`
@@ -246,8 +246,8 @@ CLASS z2ui5_cl_dmo_app_072 IMPLEMENTATION.
                     )->a( n = `active`   v = `true`
                     )->a( n = `inverted` v = `true`
                     )->a( n = `binding`  v = |\{{ client->_bind( val = t_products path = abap_true ) }/4\}|
-                    )->a( n = `press`    v = client->_event_client( val   = client->cs_event-control_global
-                                                                    t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `PRESS fired!` ) ) )
+                    )->a( n = `press`    v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                       t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `PRESS fired!` ) ) )
                     )->a( n = `number`   v = num
                     )->a( n = `unit`     v = `{CURRENCY_CODE}`
                     )->a( n = `state`    v = `Information`
@@ -279,8 +279,8 @@ CLASS z2ui5_cl_dmo_app_072 IMPLEMENTATION.
                 )->a( n = `class`      v = `sapMObjectNumberLarge`
                 )->a( n = `active`     v = `true`
                 )->a( n = `binding`    v = |\{{ client->_bind( val = t_products path = abap_true ) }/5\}|
-                )->a( n = `press`      v = client->_event_client( val   = client->cs_event-control_global
-                                                                  t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `PRESS fired!` ) ) )
+                )->a( n = `press`      v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                     t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `PRESS fired!` ) ) )
                 )->a( n = `number`     v = num
                 )->a( n = `unit`       v = `{CURRENCY_CODE}`
                 )->a( n = `emphasized` v = `false`
@@ -298,8 +298,8 @@ CLASS z2ui5_cl_dmo_app_072 IMPLEMENTATION.
                         )->a( n = `class`      v = `sapMObjectNumberLongText`
                         )->a( n = `active`     v = `true`
                         )->a( n = `binding`    v = |\{{ client->_bind( val = t_products path = abap_true ) }/5\}|
-                        )->a( n = `press`      v = client->_event_client( val   = client->cs_event-control_global
-                                                                          t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `PRESS fired!` ) ) )
+                        )->a( n = `press`      v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                             t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `PRESS fired!` ) ) )
                         )->a( n = `number`     v = `12345678901234567890`
                         )->a( n = `unit`       v = `{CURRENCY_CODE}`
                         )->a( n = `emphasized` v = `false`

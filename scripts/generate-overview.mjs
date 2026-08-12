@@ -202,7 +202,7 @@ for (const mf of fs.readdirSync(META)) {
   // audit flags - which framework wiring the port actually uses, read straight
   // from its ABAP source. They no longer have a column of their own (the Audit
   // column was dropped 2026-07-29); they feed the Rating's test-priority term.
-  // _event_client / follow_up_action t_arg is detected as a t_arg keyword before
+  // follow_up_action t_arg is detected as a t_arg keyword before
   // the call's first ")" (val/view args carry no ")", so this is reliable here).
   // "literal binding" = a binding path written by name in clear text ({FIELD} or
   // {/Path}, or a path:'name' inside a { } template) instead of via client->_bind,
@@ -404,13 +404,13 @@ const maxHoist = Math.max(0, ...rows.map((r) => r.hoisted));
 const catalogDecl = Array.from({ length: maxHoist }, (_, i) => `    DATA lv_text${i + 1} TYPE string.`).join('\n');
 
 // --- client-side (roundtrip-free) filter & sort, both via cs_event-binding_call
-// wired through _event_client (see abap2UI5 z2ui5_if_client / FrontendAction.js):
+// wired through follow_up_action (see abap2UI5 z2ui5_if_client / FrontendAction.js):
 // the value/direction is resolved on the frontend, the model stays untouched. ---
 const ID_TABLE = 'idOverviewTable';
 // a Contains filter on the FILTER blob column; valExpr is a client-resolved
 // $-expression (the search field's newValue/query). Empty value clears it.
 const filterCall = (valExpr) =>
-  'client->_event_client( val = client->cs_event-binding_call' +
+  'client->follow_up_action( val = client->cs_event-binding_call' +
   ` t_arg = VALUE #( ( \`${ID_TABLE}\` ) ( \`items\` ) ( \`filter\` ) ( \`FILTER\` ) ( \`Contains\` ) ( \`${valExpr}\` ) ) )`;
 // a Sorter on one column path; descending passes the string `X` (the framework
 // reads this positional t_arg element as an abap_bool - X/space), ascending omits
@@ -418,7 +418,7 @@ const filterCall = (valExpr) =>
 // char-typed abap_true (`abap_true` and a string row are incompatible under the
 // strict ABAP syntax check).
 const sortCall = (path, desc) =>
-  'client->_event_client( val = client->cs_event-binding_call' +
+  'client->follow_up_action( val = client->cs_event-binding_call' +
   ` t_arg = VALUE #( ( \`${ID_TABLE}\` ) ( \`items\` ) ( \`sort\` ) ( \`${path}\` )${desc ? ' ( `X` )' : ''} ) )`;
 
 // a sortable column: header label + ascending/descending sort icons (client-side)
@@ -508,7 +508,7 @@ const abap = `"! Generated overview app - lists every abap2UI5 api sample app in
 "! substring over the text columns (module, control, since, sample,
 "! class) only, and each sortable column header carries ascending/
 "! descending sort icons - both run entirely on the frontend
-"! (cs_event-binding_call via _event_client, no server round-trip). Do not edit
+"! (cs_event-binding_call via follow_up_action, no server round-trip). Do not edit
 "! by hand - regenerate with scripts/generate-overview.mjs
 CLASS ${CLASS} DEFINITION PUBLIC.
 
@@ -871,7 +871,7 @@ CLASS ${CLASS} IMPLEMENTATION.
                 )->open( \`subHeader\`
                     )->open( \`OverflowToolbar\`
                         " client-side filter over the table: liveChange/search run
-                        " a binding_call Contains filter via _event_client (no round-trip)
+                        " a binding_call Contains filter via follow_up_action (no round-trip)
                         )->leaf( \`SearchField\`
                             )->a( n = \`placeholder\` v = \`Search the table - module, control, since, sample, class\`
                             )->a( n = \`width\`       v = \`24rem\`
@@ -971,7 +971,7 @@ ${columnsBlock}
                                         )->a( n = \`icon\`    v = \`sap-icon://action\`
                                         )->a( n = \`type\`    v = \`Transparent\`
                                         )->a( n = \`tooltip\` v = \`Start this abap2UI5 app in a new tab\`
-                                        )->a( n = \`press\`   v = client->_event_client( val = client->cs_event-open_new_tab t_arg = VALUE #( ( \`\${START_URL}\` ) ) )
+                                        )->a( n = \`press\`   v = client->follow_up_action( val = client->cs_event-open_new_tab t_arg = VALUE #( ( \`\${START_URL}\` ) ) )
                                     )->leaf( \`Button\`
                                         )->a( n = \`icon\`    v = \`sap-icon://information\`
                                         )->a( n = \`type\`    v = \`Transparent\`
@@ -1086,8 +1086,8 @@ ${catalogStatements}
     " sdk.openui5.org / github.com, so the redirect goes through the URLHELPER
     " frontend action, whose REDIRECT takes a URL/NEW_WINDOW object-literal
     " t_arg - NEW_WINDOW true is what target="_blank" did on the former Links.
-    result = client->_event_client( val   = client->cs_event-urlhelper
-                                    t_arg = VALUE #( ( \`REDIRECT\` ) ( |\\{ URL: '{ url }', NEW_WINDOW: true \\}| ) ) ).
+    result = client->follow_up_action( val   = client->cs_event-urlhelper
+                                       t_arg = VALUE #( ( \`REDIRECT\` ) ( |\\{ URL: '{ url }', NEW_WINDOW: true \\}| ) ) ).
 
   ENDMETHOD.
 

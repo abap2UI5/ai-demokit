@@ -39,8 +39,8 @@ CLASS z2ui5_cl_dmo_app_063 IMPLEMENTATION.
                 )->leaf( `NewsContent`
                     )->a( n = `contentText` v = `SAP Unveils Powerful New Player Comparison Tool Exclusively on NFL.com`
                     )->a( n = `subheader`   v = `August 21, 2013`
-                    )->a( n = `press`       v = client->_event_client( val   = client->cs_event-control_global
-                                                                       t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The news content is pressed.` ) ) ) ).
+                    )->a( n = `press`       v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                          t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The news content is pressed.` ) ) ) ).
 
     client->view_display( view->stringify( ) ).
 

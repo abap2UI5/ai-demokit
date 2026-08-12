@@ -312,7 +312,7 @@ that stops at the deepest node.
   `CASE client->get( )-event.` … `WHEN \`NAME\`.` … `ENDCASE` — even for a single
   event (never an `IF check_on_event( )`). After changing bound data in an event,
   call `client->view_model_update( )` to push it back (no full redraw).
-- **Client handle strings (`_event`, `_bind`, `_event_client`, …) are
+- **Client handle strings (`_event`, `_bind`, `follow_up_action`, …) are
   written inline at each control — never captured in a variable**, even when
   the same call repeats on many controls and even inside expression bindings
   (human decision, apps 005/053/007; pattern-lint blocks
@@ -557,7 +557,7 @@ these entries.
   two-way so it travels with the next event, and re-apply the binding operation
   in `view_display` via `follow_up_action( cs_event-binding_call … )` when the
   restored value is non-initial (the overview app's search). Sort state stays
-  client-only: an `_event_client` sort cannot write to the model, so it is
+  client-only: a view-wired `follow_up_action` sort cannot write to the model, so it is
   deliberately lost.
 - **A listed control method silently drops arguments beyond its
   declared kinds** — `castArgs` in `FrontendAction.js` maps over the

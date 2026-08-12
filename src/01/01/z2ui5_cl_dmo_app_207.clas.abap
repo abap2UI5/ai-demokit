@@ -102,8 +102,8 @@ CLASS z2ui5_cl_dmo_app_207 IMPLEMENTATION.
                 " LISTTYPE, so the relative form never followed the Select
                 " (found by the e2e interaction 2026-07-31)
                 )->a( n = `type`             v = client->_bind( listtype )
-                )->a( n = `press`            v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `'press' event fired!` ) ) )
-                )->a( n = `detailPress`      v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `'detailPress' event fired!` ) ) ) ).
+                )->a( n = `press`            v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `'press' event fired!` ) ) )
+                )->a( n = `detailPress`      v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `'detailPress' event fired!` ) ) ) ).
 
     client->view_display( view->stringify( ) ).
 

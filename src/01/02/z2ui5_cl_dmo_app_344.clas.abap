@@ -129,7 +129,7 @@ CLASS z2ui5_cl_dmo_app_344 IMPLEMENTATION.
                         )->a( n = `id`         v = `DSCWidthSlider`
                         )->a( n = `value`      v = `100`
                         )->a( n = `visible`    v = `{= !${device>/system/phone} }`
-                        )->a( n = `liveChange` v = client->_event_client(
+                        )->a( n = `liveChange` v = client->follow_up_action(
                                   val   = client->cs_event-control_by_id
                                   t_arg = VALUE #( ( `sideContentContainer` )
                                                    ( `css` )

@@ -65,10 +65,10 @@ CLASS z2ui5_cl_dmo_app_244 IMPLEMENTATION.
                             )->a( n = `currentLocationText` v = `Responsive Avatar Demo`
                             )->leaf( `Link`
                                 )->a( n = `text`  v = `Home`
-                                )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Home pressed` ) ) )
+                                )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Home pressed` ) ) )
                             )->leaf( `Link`
                                 )->a( n = `text`  v = `Examples`
-                                )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Examples pressed` ) ) )
+                                )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Examples pressed` ) ) )
 
                     )->shut(
                     )->shut(
@@ -139,7 +139,7 @@ CLASS z2ui5_cl_dmo_app_244 IMPLEMENTATION.
                             )->a( n = `displaySize` v = client->_bind( avatar_size )
                             )->a( n = `class`       v = `sapUiSmallMarginEnd`
                             )->a( n = `src`         v = `https://sdk.openui5.org/test-resources/sap/uxap/images/imageID_275314.png`
-                            )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Avatar pressed` ) ) )
+                            )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Avatar pressed` ) ) )
 
                         )->open( n = `VerticalLayout` ns = `layout`
                             )->a( n = `class` v = `sapUiSmallMarginBeginEnd`

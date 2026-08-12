@@ -142,8 +142,8 @@ CLASS z2ui5_cl_dmo_app_168 IMPLEMENTATION.
                     )->open( `GenericTile`
                         )->a( n = `header` v = `Sales Fulfillment Application Title`
                         )->a( n = `subheader` v = `Subtitle`
-                        )->a( n = `press` v = client->_event_client( val   = client->cs_event-control_global
-                                                                     t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Press was fired on - {0}` ) ( `$event.oSource.getMetadata().getName()` ) ) )
+                        )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                        t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Press was fired on - {0}` ) ( `$event.oSource.getMetadata().getName()` ) ) )
                         )->open( `layoutData`
                             )->leaf( n = `GridContainerItemLayoutData` ns = `f` )->a( n = `minRows` v = `2` )->a( n = `columns` v = `2`
 
@@ -187,8 +187,8 @@ CLASS z2ui5_cl_dmo_app_168 IMPLEMENTATION.
                                 )->a( n = `title`    v = `Buy bus ticket on-line`
                                 )->a( n = `subtitle` v = `Buy a single drive ticket for a date`
                                 )->a( n = `iconSrc`  v = `sap-icon://bus-public-transport`
-                                )->a( n = `press`    v = client->_event_client( val   = client->cs_event-control_global
-                                                                                t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Press was fired on - {0}` ) ( `$event.oSource.getMetadata().getName()` ) ) )
+                                )->a( n = `press`    v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                                   t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Press was fired on - {0}` ) ( `$event.oSource.getMetadata().getName()` ) ) )
 
                         )->shut(
                         )->open( n = `content` ns = `f`

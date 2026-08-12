@@ -62,15 +62,15 @@ CLASS z2ui5_cl_dmo_app_066 IMPLEMENTATION.
                         )->a( n = `type`         v = client->_bind( highest_type )
                         )->a( n = `text`         v = client->_bind( highest_count )
                         )->a( n = `ariaHasPopup` v = `Dialog`
-                        )->a( n = `press`        v = client->_event_client( val   = client->cs_event-control_by_id
-                                                                            t_arg = VALUE #( ( `messagePopover` ) ( `toggleBy` ) ( `messagePopoverBtn` ) ) )
+                        )->a( n = `press`        v = client->follow_up_action( val   = client->cs_event-control_by_id
+                                                                               t_arg = VALUE #( ( `messagePopover` ) ( `toggleBy` ) ( `messagePopoverBtn` ) ) )
 
                         )->open( `dependents`
                             )->open( `MessagePopover`
                                 )->a( n = `id`              v = `messagePopover`
                                 )->a( n = `items`           v = client->_bind( t_messages )
-                                )->a( n = `activeTitlePress` v = client->_event_client( val   = client->cs_event-control_global
-                                                                                        t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Active title is pressed` ) ) )
+                                )->a( n = `activeTitlePress` v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                                           t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Active title is pressed` ) ) )
 
                                 )->open( `MessageItem`
                                     )->a( n = `type`        v = `{TYPE}`

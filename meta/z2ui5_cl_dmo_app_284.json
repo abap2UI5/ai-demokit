@@ -22,7 +22,7 @@
     },
     {
       "type": "NOTE",
-      "what": "activeTitlePress keeps the original's client-side MessageToast.show('Active title pressed') as a roundtrip-free _event_client MESSAGE_TOAST show - the text is static, so nothing has to travel."
+      "what": "activeTitlePress keeps the original's client-side MessageToast.show('Active title pressed') as a roundtrip-free follow_up_action MESSAGE_TOAST show - the text is static, so nothing has to travel."
     },
     {
       "type": "NOTE",

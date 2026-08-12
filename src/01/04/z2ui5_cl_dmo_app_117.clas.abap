@@ -113,7 +113,7 @@ CLASS z2ui5_cl_dmo_app_117 IMPLEMENTATION.
                         " client, so the press needs no round-trip
                         )->leaf( `Button`
                             )->a( n = `text`  v = `Book`
-                            )->a( n = `press` v = client->_event_client(
+                            )->a( n = `press` v = client->follow_up_action(
                                       val   = client->cs_event-control_global
                                       t_arg = VALUE #( ( `MESSAGE_TOAST` )
                                                        ( `show` )

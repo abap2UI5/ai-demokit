@@ -75,7 +75,7 @@ CLASS z2ui5_cl_dmo_app_237 IMPLEMENTATION.
                 )->leaf( `ObjectMarker`
                     )->a( n = `type`           v = `{TYPE}`
                     )->a( n = `additionalInfo` v = `{ADDITIONALINFO}`
-                    )->a( n = `press`          v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} marker pressed!` ) ( `${$parameters>/type}` ) ) ) ).
+                    )->a( n = `press`          v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} marker pressed!` ) ( `${$parameters>/type}` ) ) ) ).
 
     client->view_display( view->stringify( ) ).
 

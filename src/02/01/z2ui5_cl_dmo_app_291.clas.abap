@@ -89,16 +89,16 @@ CLASS z2ui5_cl_dmo_app_291 IMPLEMENTATION.
                     )->a( n = `title`           v = `{TITLE}`
                     )->a( n = `showCloseButton` v = `{SHOWCLOSEBUTTON}`
                     )->a( n = `showEmptyGroup`  v = `{SHOWEMPTYGROUP}`
-                    )->a( n = `close`           v = client->_event_client( val   = client->cs_event-control_global
-                                                                           t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Group Closed: {0}` ) ( `${$source>/title}` ) ) )
+                    )->a( n = `close`           v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                              t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Group Closed: {0}` ) ( `${$source>/title}` ) ) )
                     )->a( n = `items`           v = |\{ path: 'GROUPITEMS', templateShareable: true \}|
                     )->a( n = `buttons`         v = |\{ path: 'GROUPBUTTONS', templateShareable: true \}|
 
                     )->open( `buttons`
                         )->leaf( `Button`
                             )->a( n = `text`  v = `{TEXT}`
-                            )->a( n = `press` v = client->_event_client( val   = client->cs_event-control_global
-                                                                         t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Group Button '{0}' Pressed` ) ( `${$source>/text}` ) ) )
+                            )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                            t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Group Button '{0}' Pressed` ) ( `${$source>/text}` ) ) )
 
                     )->shut(
 
@@ -111,8 +111,8 @@ CLASS z2ui5_cl_dmo_app_291 IMPLEMENTATION.
                         )->a( n = `priority`          v = `{PRIORITY}`
                         )->a( n = `close`             v = client->_event( val   = `ITEM_CLOSE`
                                                                           t_arg = VALUE #( ( `${TITLE}` ) ) )
-                        )->a( n = `press`             v = client->_event_client( val   = client->cs_event-control_global
-                                                                                 t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
+                        )->a( n = `press`             v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                                    t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                         )->a( n = `authorPicture`     v = `{AUTHORPICTURE}`
                         )->a( n = `authorInitials`    v = `{AUTHORINITIALS}`
                         )->a( n = `authorAvatarColor` v = `{AUTHORAVATARCOLOR}`
@@ -121,8 +121,8 @@ CLASS z2ui5_cl_dmo_app_291 IMPLEMENTATION.
                         )->open( `buttons`
                             )->leaf( `Button`
                                 )->a( n = `text`  v = `{TEXT}`
-                                )->a( n = `press` v = client->_event_client( val   = client->cs_event-control_global
-                                                                             t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Button '{0}' Pressed` ) ( `${$source>/text}` ) ) ) ).
+                                )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                                t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Button '{0}' Pressed` ) ( `${$source>/text}` ) ) ) ).
 
     client->view_display( view->stringify( ) ).
 

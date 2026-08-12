@@ -56,8 +56,8 @@ CLASS z2ui5_cl_dmo_app_242 IMPLEMENTATION.
                 )->a( n = `class`  v = `navContainerControl sapUiSmallMarginBottom`
                 " onNavigationFinished: MessageToast.show("Navigation to page '" + to.getTitle() + "' finished")
                 " - client-composed toast, the {0} placeholder filled by the resolved page title
-                )->a( n = `navigationFinished` v = client->_event_client( val   = client->cs_event-control_global
-                                                                          t_arg = VALUE #( ( `MESSAGE_TOAST` )
+                )->a( n = `navigationFinished` v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                             t_arg = VALUE #( ( `MESSAGE_TOAST` )
                                                                                            ( `show` )
                                                                                            ( `Navigation to page '{0}' finished` )
                                                                                            ( `${$parameters>/to}.getTitle()` ) ) )

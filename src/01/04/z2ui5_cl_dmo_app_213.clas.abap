@@ -69,7 +69,7 @@ CLASS z2ui5_cl_dmo_app_213 IMPLEMENTATION.
 
                 )->open( n = `customLayout` ns = `f`
                     )->open( n = `GridResponsiveLayout` ns = `grid`
-                        )->a( n = `layoutChange` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Layout changed to {0}` ) ( `${$parameters>/layout}` ) ) )
+                        )->a( n = `layoutChange` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Layout changed to {0}` ) ( `${$parameters>/layout}` ) ) )
 
                         )->open( n = `layoutS` ns = `grid`
                             )->leaf( n = `GridSettings` ns = `grid`

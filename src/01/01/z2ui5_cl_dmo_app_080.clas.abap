@@ -49,7 +49,8 @@ CLASS z2ui5_cl_dmo_app_080 IMPLEMENTATION.
                     )->open( `contentRight`
                         )->leaf( `ToggleButton`
                             )->a( n = `icon`  v = `sap-icon://edit`
-                            )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} {1?Pressed:Unpressed}` ) ( `$event.oSource.sId` ) ( `$event.oSource.getPressed()` ) ) )
+                            )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                            t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} {1?Pressed:Unpressed}` ) ( `$event.oSource.sId` ) ( `$event.oSource.getPressed()` ) ) )
 
                     )->shut(
                 )->shut(
@@ -62,22 +63,26 @@ CLASS z2ui5_cl_dmo_app_080 IMPLEMENTATION.
                             )->a( n = `text`    v = `Pressed`
                             )->a( n = `enabled` v = `true`
                             )->a( n = `pressed` v = `true`
-                            )->a( n = `press`   v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} {1?Pressed:Unpressed}` ) ( `$event.oSource.sId` ) ( `$event.oSource.getPressed()` ) ) )
+                            )->a( n = `press`   v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                              t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} {1?Pressed:Unpressed}` ) ( `$event.oSource.sId` ) ( `$event.oSource.getPressed()` ) ) )
                         )->leaf( `ToggleButton`
                             )->a( n = `text`    v = `Pressed & Disabled`
                             )->a( n = `enabled` v = `false`
                             )->a( n = `pressed` v = `true`
-                            )->a( n = `press`   v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} {1?Pressed:Unpressed}` ) ( `$event.oSource.sId` ) ( `$event.oSource.getPressed()` ) ) )
+                            )->a( n = `press`   v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                              t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} {1?Pressed:Unpressed}` ) ( `$event.oSource.sId` ) ( `$event.oSource.getPressed()` ) ) )
 
                     )->shut(
                     )->open( `contentRight`
                         )->leaf( `ToggleButton`
                             )->a( n = `icon`  v = `sap-icon://action`
-                            )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} {1?Pressed:Unpressed}` ) ( `$event.oSource.sId` ) ( `$event.oSource.getPressed()` ) ) )
+                            )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                            t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} {1?Pressed:Unpressed}` ) ( `$event.oSource.sId` ) ( `$event.oSource.getPressed()` ) ) )
                         )->leaf( `ToggleButton`
                             )->a( n = `icon`    v = `sap-icon://home`
                             )->a( n = `enabled` v = `false`
-                            )->a( n = `press`   v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} {1?Pressed:Unpressed}` ) ( `$event.oSource.sId` ) ( `$event.oSource.getPressed()` ) ) )
+                            )->a( n = `press`   v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                              t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} {1?Pressed:Unpressed}` ) ( `$event.oSource.sId` ) ( `$event.oSource.getPressed()` ) ) )
 
                     )->shut(
                 )->shut(
@@ -87,7 +92,7 @@ CLASS z2ui5_cl_dmo_app_080 IMPLEMENTATION.
                 )->open( `ToggleButton`
                     )->a( n = `text`    v = `Disabled`
                     )->a( n = `enabled` v = `false`
-                    )->a( n = `press`   v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} {1?Pressed:Unpressed}` ) ( `$event.oSource.sId` ) ( `$event.oSource.getPressed()` ) ) )
+                    )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} {1?Pressed:Unpressed}` ) ( `$event.oSource.sId` ) ( `$event.oSource.getPressed()` ) ) )
                     )->open( `layoutData`
                         )->leaf( `FlexItemData`
                             )->a( n = `growFactor` v = `1`
@@ -98,7 +103,7 @@ CLASS z2ui5_cl_dmo_app_080 IMPLEMENTATION.
                     )->a( n = `text`    v = `Pressed`
                     )->a( n = `enabled` v = `true`
                     )->a( n = `pressed` v = `true`
-                    )->a( n = `press`   v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} {1?Pressed:Unpressed}` ) ( `$event.oSource.sId` ) ( `$event.oSource.getPressed()` ) ) )
+                    )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} {1?Pressed:Unpressed}` ) ( `$event.oSource.sId` ) ( `$event.oSource.getPressed()` ) ) )
                     )->open( `layoutData`
                         )->leaf( `FlexItemData`
                             )->a( n = `growFactor` v = `1`
@@ -108,7 +113,7 @@ CLASS z2ui5_cl_dmo_app_080 IMPLEMENTATION.
                 )->open( `ToggleButton`
                     )->a( n = `icon`    v = `sap-icon://action`
                     )->a( n = `enabled` v = `true`
-                    )->a( n = `press`   v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} {1?Pressed:Unpressed}` ) ( `$event.oSource.sId` ) ( `$event.oSource.getPressed()` ) ) )
+                    )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} {1?Pressed:Unpressed}` ) ( `$event.oSource.sId` ) ( `$event.oSource.getPressed()` ) ) )
                     )->open( `layoutData`
                         )->leaf( `FlexItemData`
                             )->a( n = `growFactor` v = `1`
@@ -124,10 +129,12 @@ CLASS z2ui5_cl_dmo_app_080 IMPLEMENTATION.
                             )->a( n = `text`    v = `Pressed & Disabled`
                             )->a( n = `enabled` v = `false`
                             )->a( n = `pressed` v = `true`
-                            )->a( n = `press`   v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} {1?Pressed:Unpressed}` ) ( `$event.oSource.sId` ) ( `$event.oSource.getPressed()` ) ) )
+                            )->a( n = `press`   v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                              t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} {1?Pressed:Unpressed}` ) ( `$event.oSource.sId` ) ( `$event.oSource.getPressed()` ) ) )
                         )->leaf( `ToggleButton`
                             )->a( n = `icon`  v = `sap-icon://action`
-                            )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} {1?Pressed:Unpressed}` ) ( `$event.oSource.sId` ) ( `$event.oSource.getPressed()` ) ) )
+                            )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                            t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} {1?Pressed:Unpressed}` ) ( `$event.oSource.sId` ) ( `$event.oSource.getPressed()` ) ) )
 
                     )->shut(
                 )->shut(

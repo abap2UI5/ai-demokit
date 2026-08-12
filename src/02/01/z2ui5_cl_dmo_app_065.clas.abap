@@ -221,8 +221,8 @@ CLASS z2ui5_cl_dmo_app_065 IMPLEMENTATION.
                         )->a( n = `ariaHasPopup` v = `Dialog`
                         " original: this.oMP.toggle(oEvent.getSource()) - a pure client-side toggle, so
                         " wired roundtrip-free (no on_event) anchored to the button by its own id
-                        )->a( n = `press`        v = client->_event_client( val   = client->cs_event-control_by_id
-                                                                            t_arg = VALUE #( ( `messagePopover` ) ( `toggleBy` ) ( `messagePopoverBtn` ) ) )
+                        )->a( n = `press`        v = client->follow_up_action( val   = client->cs_event-control_by_id
+                                                                               t_arg = VALUE #( ( `messagePopover` ) ( `toggleBy` ) ( `messagePopoverBtn` ) ) )
 
                         )->open( `dependents`
                             )->open( `MessagePopover`

@@ -42,8 +42,8 @@ CLASS z2ui5_cl_dmo_app_311 IMPLEMENTATION.
                 " handlePressOpenMenu does menu.open( kbd, button, BeginTop, BeginBottom, button );
                 " the openBy dispatch falls back to exactly that call for a
                 " sap.ui.unified.Menu, anchored on the pressed button
-                )->a( n = `press`        v = client->_event_client( val   = client->cs_event-control_by_id
-                                                                    t_arg = VALUE #( ( `theMenu` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
+                )->a( n = `press`        v = client->follow_up_action( val   = client->cs_event-control_by_id
+                                                                       t_arg = VALUE #( ( `theMenu` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
                 )->a( n = `ariaHasPopup` v = `Menu`
 
                 " the controller adds the loaded fragment with addDependent; the

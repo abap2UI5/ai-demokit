@@ -93,8 +93,8 @@ CLASS z2ui5_cl_dmo_app_073 IMPLEMENTATION.
                     )->a( n = `text`   v = `www.sap.com`
                     )->a( n = `active` v = `true`
                     " the original handleSAPLinkPressed - URLHelper redirect as the URLHELPER REDIRECT frontend action (see sidecar)
-                    )->a( n = `press`  v = client->_event_client( val   = client->cs_event-urlhelper
-                                                                  t_arg = VALUE #( ( `REDIRECT` ) ( |\{ URL: 'http://www.sap.com', NEW_WINDOW: true \}| ) ) )
+                    )->a( n = `press`  v = client->follow_up_action( val   = client->cs_event-urlhelper
+                                                                     t_arg = VALUE #( ( `REDIRECT` ) ( |\{ URL: 'http://www.sap.com', NEW_WINDOW: true \}| ) ) )
 
                 )->leaf( `Label`
                     )->a( n = `text`   v = `Active Object Attribute which has only title, therefore no link is displayed`
@@ -176,7 +176,7 @@ CLASS z2ui5_cl_dmo_app_073 IMPLEMENTATION.
                 )->open( `endButton`
                     )->leaf( `Button`
                         )->a( n = `text`  v = `Cancel`
-                        )->a( n = `press` v = client->_event_client( client->cs_event-popup_close )
+                        )->a( n = `press` v = client->follow_up_action( client->cs_event-popup_close )
 
                 )->shut(
             )->shut( ).

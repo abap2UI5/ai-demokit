@@ -195,7 +195,7 @@ CLASS z2ui5_cl_dmo_app_010 IMPLEMENTATION.
             )->open( `beginButton`
                 )->leaf( `Button`
                     )->a( n = `text`  v = `OK`
-                    )->a( n = `press` v = client->_event_client( client->cs_event-popup_close ) ).
+                    )->a( n = `press` v = client->follow_up_action( client->cs_event-popup_close ) ).
 
     client->popup_display( popup->stringify( ) ).
 

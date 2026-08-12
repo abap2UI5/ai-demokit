@@ -112,15 +112,15 @@ CLASS z2ui5_cl_dmo_app_267 IMPLEMENTATION.
                         )->a( n = `type`    v = `Accept`
                         )->a( n = `id`      v = `equalSplitToggleButton`
                         )->a( n = `enabled` v = client->_bind( toggle_enabled )
-                        )->a( n = `press`   v = client->_event_client( val   = client->cs_event-control_by_id
-                                                                       t_arg = VALUE #( ( `DynamicSideContent` ) ( `toggle` ) ) )
+                        )->a( n = `press`   v = client->follow_up_action( val   = client->cs_event-control_by_id
+                                                                          t_arg = VALUE #( ( `DynamicSideContent` ) ( `toggle` ) ) )
                     )->leaf( `Slider`
                         )->a( n = `id`      v = `DSCWidthSlider`
                         )->a( n = `value`   v = `100`
                         " handleSliderChange: the container is a sap.m.Page, which
                         " has no width property - the `css` control method writes
                         " the percentage onto its DOM node like the original jQuery
-                        )->a( n = `liveChange` v = client->_event_client(
+                        )->a( n = `liveChange` v = client->follow_up_action(
                                   val   = client->cs_event-control_by_id
                                   t_arg = VALUE #( ( `sideContentContainer` )
                                                    ( `css` )

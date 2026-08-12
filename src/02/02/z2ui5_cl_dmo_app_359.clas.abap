@@ -171,7 +171,7 @@ CLASS z2ui5_cl_dmo_app_359 IMPLEMENTATION.
                             )->leaf( `RowActionItem`
                                 )->a( n = `type`    v = `Navigation`
                                 )->a( n = `visible` v = |\{= ${ client->_bind( show_navigation ) } && $\{AVAILABLE\} \}|
-                                )->a( n = `press`   v = client->_event_client(
+                                )->a( n = `press`   v = client->follow_up_action(
                                           val   = client->cs_event-control_global
                                           t_arg = VALUE #( ( `MESSAGE_TOAST` )
                                                            ( `show` )
@@ -182,7 +182,7 @@ CLASS z2ui5_cl_dmo_app_359 IMPLEMENTATION.
                             )->leaf( `RowActionItem`
                                 )->a( n = `type`    v = `Delete`
                                 )->a( n = `visible` v = client->_bind( show_delete )
-                                )->a( n = `press`   v = client->_event_client(
+                                )->a( n = `press`   v = client->follow_up_action(
                                           val   = client->cs_event-control_global
                                           t_arg = VALUE #( ( `MESSAGE_TOAST` )
                                                            ( `show` )
@@ -194,7 +194,7 @@ CLASS z2ui5_cl_dmo_app_359 IMPLEMENTATION.
                                 )->a( n = `icon`    v = `sap-icon://attachment`
                                 )->a( n = `text`    v = `Attachment`
                                 )->a( n = `visible` v = client->_bind( show_multi )
-                                )->a( n = `press`   v = client->_event_client(
+                                )->a( n = `press`   v = client->follow_up_action(
                                           val   = client->cs_event-control_global
                                           t_arg = VALUE #( ( `MESSAGE_TOAST` )
                                                            ( `show` )
@@ -206,7 +206,7 @@ CLASS z2ui5_cl_dmo_app_359 IMPLEMENTATION.
                                 )->a( n = `icon`    v = `sap-icon://search`
                                 )->a( n = `text`    v = `Search`
                                 )->a( n = `visible` v = client->_bind( show_multi )
-                                )->a( n = `press`   v = client->_event_client(
+                                )->a( n = `press`   v = client->follow_up_action(
                                           val   = client->cs_event-control_global
                                           t_arg = VALUE #( ( `MESSAGE_TOAST` )
                                                            ( `show` )
@@ -218,7 +218,7 @@ CLASS z2ui5_cl_dmo_app_359 IMPLEMENTATION.
                                 )->a( n = `icon`    v = `sap-icon://edit`
                                 )->a( n = `text`    v = `Edit`
                                 )->a( n = `visible` v = client->_bind( show_edit )
-                                )->a( n = `press`   v = client->_event_client(
+                                )->a( n = `press`   v = client->follow_up_action(
                                           val   = client->cs_event-control_global
                                           t_arg = VALUE #( ( `MESSAGE_TOAST` )
                                                            ( `show` )
@@ -230,7 +230,7 @@ CLASS z2ui5_cl_dmo_app_359 IMPLEMENTATION.
                                 )->a( n = `icon`    v = `sap-icon://line-chart`
                                 )->a( n = `text`    v = `Analyze`
                                 )->a( n = `visible` v = client->_bind( show_multi )
-                                )->a( n = `press`   v = client->_event_client(
+                                )->a( n = `press`   v = client->follow_up_action(
                                           val   = client->cs_event-control_global
                                           t_arg = VALUE #( ( `MESSAGE_TOAST` )
                                                            ( `show` )

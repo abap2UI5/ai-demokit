@@ -25,7 +25,7 @@
     },
     {
       "type": "NOTE",
-      "what": "handleImage3Press is MessageToast.show('The image has been pressed') with a CONSTANT text, so the press wire is the roundtrip-free client toast (_event_client cs_event-control_global MESSAGE_TOAST.show, app 005 idiom) and the app stays init-only."
+      "what": "handleImage3Press is MessageToast.show('The image has been pressed') with a CONSTANT text, so the press wire is the roundtrip-free client toast (follow_up_action cs_event-control_global MESSAGE_TOAST.show, app 005 idiom) and the app stays init-only."
     }
   ]
 }

@@ -17,7 +17,7 @@
     },
     {
       "type": "NOTE",
-      "what": "The width Slider's liveChange is reproduced roundtrip-free since 2026-08-05. The original's handleSliderChange resizes the containing Page through jQuery - this.byId('sideContentContainer').$().width(iValue + '%') - i.e. it writes a CSS width straight onto the rendered DOM node, and sap.m.Page has no width property to bind. The `css` control method added upstream for this class of gap (pr/control-inline-style) does the same write from the wire: _event_client( control_by_id, sideContentContainer / css / width / ${$parameters>/value} + '%' ), the arg being a full UI5 expression (CAPABILITIES). The Slider keeps its value='100' literal and now resizes the page again."
+      "what": "The width Slider's liveChange is reproduced roundtrip-free since 2026-08-05. The original's handleSliderChange resizes the containing Page through jQuery - this.byId('sideContentContainer').$().width(iValue + '%') - i.e. it writes a CSS width straight onto the rendered DOM node, and sap.m.Page has no width property to bind. The `css` control method added upstream for this class of gap (pr/control-inline-style) does the same write from the wire: follow_up_action( control_by_id, sideContentContainer / css / width / ${$parameters>/value} + '%' ), the arg being a full UI5 expression (CAPABILITIES). The Slider keeps its value='100' literal and now resizes the page again."
     },
     {
       "type": "NOTE",

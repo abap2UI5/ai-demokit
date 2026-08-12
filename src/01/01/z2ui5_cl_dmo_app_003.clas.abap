@@ -54,22 +54,22 @@ CLASS z2ui5_cl_dmo_app_003 IMPLEMENTATION.
                     )->a( n = `separatorStyle`      v = client->_bind( selected )
 
                     )->leaf( `Link`
-                        )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} has been activated` ) ( `${$source>/text}` ) ) )
+                        )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} has been activated` ) ( `${$source>/text}` ) ) )
                         )->a( n = `text`  v = `Products`
                     )->leaf( `Link`
-                        )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} has been activated` ) ( `${$source>/text}` ) ) )
+                        )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} has been activated` ) ( `${$source>/text}` ) ) )
                         )->a( n = `text`  v = `Suppliers`
                     )->leaf( `Link`
-                        )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} has been activated` ) ( `${$source>/text}` ) ) )
+                        )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} has been activated` ) ( `${$source>/text}` ) ) )
                         )->a( n = `text`  v = `Titanium`
                     )->leaf( `Link`
-                        )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} has been activated` ) ( `${$source>/text}` ) ) )
+                        )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} has been activated` ) ( `${$source>/text}` ) ) )
                         )->a( n = `text`  v = `Ultra portable`
                     )->leaf( `Link`
-                        )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} has been activated` ) ( `${$source>/text}` ) ) )
+                        )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} has been activated` ) ( `${$source>/text}` ) ) )
                         )->a( n = `text`  v = `12 inch`
                     )->leaf( `Link`
-                        )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} has been activated` ) ( `${$source>/text}` ) ) )
+                        )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} has been activated` ) ( `${$source>/text}` ) ) )
                         )->a( n = `text`  v = `Super portable deluxe`
 
                 )->shut(

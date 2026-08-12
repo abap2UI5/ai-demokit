@@ -13,7 +13,7 @@
   "deviations": [
     {
       "type": "NOTE",
-      "what": "The four u:ColorPickerPopover controls are EXTRA in the port (original 0 vs port 4): the controller creates them lazily in JS (new ColorPickerPopover('oColorPickerPopover', { colorString: 'blue', mode: 'HSL', change: ... }) and the Large/Simplified/liveChange variants) and opens each with openBy(oEvent.getSource()). abap2UI5 declares them up front in the Table's dependents aggregation with the same ids, colorStrings (blue/green/pink/orange), displayModes and mode='HSL', and each Input's valueHelpRequest opens its own popover roundtrip-free via _event_client( control_by_id, <id>/openBy/$event.oSource.sId ) - the anchored-open idiom of apps 016/060. Same controls, same configuration, declared instead of constructed; the lazy instantiation and the onExit destroy() are gone with the JS."
+      "what": "The four u:ColorPickerPopover controls are EXTRA in the port (original 0 vs port 4): the controller creates them lazily in JS (new ColorPickerPopover('oColorPickerPopover', { colorString: 'blue', mode: 'HSL', change: ... }) and the Large/Simplified/liveChange variants) and opens each with openBy(oEvent.getSource()). abap2UI5 declares them up front in the Table's dependents aggregation with the same ids, colorStrings (blue/green/pink/orange), displayModes and mode='HSL', and each Input's valueHelpRequest opens its own popover roundtrip-free via follow_up_action( control_by_id, <id>/openBy/$event.oSource.sId ) - the anchored-open idiom of apps 016/060. Same controls, same configuration, declared instead of constructed; the lazy instantiation and the onExit destroy() are gone with the JS."
     },
     {
       "type": "IMPROVISED",

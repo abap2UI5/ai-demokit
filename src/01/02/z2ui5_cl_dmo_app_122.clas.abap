@@ -104,7 +104,7 @@ CLASS z2ui5_cl_dmo_app_122 IMPLEMENTATION.
                 )->a( n = `src`   v = `sap-icon://stethoscope`
                 )->a( n = `class` v = `size5`
                 )->a( n = `color` v = `#8875E7`
-                )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Over budget!` ) ) )
+                )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Over budget!` ) ) )
                 )->open( n = `layoutData` ns = `core`
                     )->leaf( `FlexItemData`
                         )->a( n = `growFactor` v = `1` ).

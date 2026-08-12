@@ -59,8 +59,8 @@ CLASS z2ui5_cl_dmo_app_401 IMPLEMENTATION.
             )->a( n = `id`                       v = `ObjectPageLayout`
             )->a( n = `showTitleInHeaderContent` v = `true`
             )->a( n = `showEditHeaderButton`     v = `true`
-            )->a( n = `editHeaderButtonPress`    v = client->_event_client( val   = client->cs_event-control_global
-                                                                            t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `An edit box should appear when you click on the "Edit header" button` ) ) )
+            )->a( n = `editHeaderButtonPress`    v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                               t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `An edit box should appear when you click on the "Edit header" button` ) ) )
             )->a( n = `headerContentPinned`      v = `true`
             )->a( n = `upperCaseAnchorBar`       v = `false`
             " the controller's toggleFooter flips showFooter imperatively; a
@@ -76,12 +76,12 @@ CLASS z2ui5_cl_dmo_app_401 IMPLEMENTATION.
 
                             )->leaf( n = `Link` ns = `m`
                                 )->a( n = `text`  v = `Page 1 a very long link`
-                                )->a( n = `press` v = client->_event_client( val   = client->cs_event-control_global
-                                                                             t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Page 1 a very long link clicked` ) ) )
+                                )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                                t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Page 1 a very long link clicked` ) ) )
                             )->leaf( n = `Link` ns = `m`
                                 )->a( n = `text`  v = `Page 2 long link`
-                                )->a( n = `press` v = client->_event_client( val   = client->cs_event-control_global
-                                                                             t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Page 2 long link clicked` ) ) )
+                                )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                                t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Page 2 long link clicked` ) ) )
 
                         )->shut(
                     )->shut(

@@ -113,7 +113,7 @@ CLASS z2ui5_cl_dmo_app_118 IMPLEMENTATION.
                             )->a( n = `manifest` v = client->_bind( val = manifest_timeline json = abap_true )
                             " onAction toasts the navigation URL off the event - it
                             " resolves on the client, so the action needs no roundtrip
-                            )->a( n = `action`   v = client->_event_client(
+                            )->a( n = `action`   v = client->follow_up_action(
                                       val   = client->cs_event-control_global
                                       t_arg = VALUE #( ( `MESSAGE_TOAST` )
                                                        ( `show` )
@@ -140,7 +140,7 @@ CLASS z2ui5_cl_dmo_app_118 IMPLEMENTATION.
                             )->a( n = `manifest` v = client->_bind( val = manifest_object json = abap_true )
                             " onAction toasts the navigation URL off the event - it
                             " resolves on the client, so the action needs no roundtrip
-                            )->a( n = `action`   v = client->_event_client(
+                            )->a( n = `action`   v = client->follow_up_action(
                                       val   = client->cs_event-control_global
                                       t_arg = VALUE #( ( `MESSAGE_TOAST` )
                                                        ( `show` )
@@ -158,7 +158,7 @@ CLASS z2ui5_cl_dmo_app_118 IMPLEMENTATION.
                             )->a( n = `manifest` v = client->_bind( manifest_component )
                             " onAction toasts the navigation URL off the event - it
                             " resolves on the client, so the action needs no roundtrip
-                            )->a( n = `action`   v = client->_event_client(
+                            )->a( n = `action`   v = client->follow_up_action(
                                       val   = client->cs_event-control_global
                                       t_arg = VALUE #( ( `MESSAGE_TOAST` )
                                                        ( `show` )
@@ -187,7 +187,7 @@ CLASS z2ui5_cl_dmo_app_118 IMPLEMENTATION.
                             )->a( n = `manifest` v = client->_bind( val = manifest_calendar json = abap_true )
                             " onAction toasts the navigation URL off the event - it
                             " resolves on the client, so the action needs no roundtrip
-                            )->a( n = `action`   v = client->_event_client(
+                            )->a( n = `action`   v = client->follow_up_action(
                                       val   = client->cs_event-control_global
                                       t_arg = VALUE #( ( `MESSAGE_TOAST` )
                                                        ( `show` )
@@ -264,7 +264,7 @@ CLASS z2ui5_cl_dmo_app_118 IMPLEMENTATION.
                             )->a( n = `baseUrl`  v = `./`
                             " onAction toasts the navigation URL off the event - it
                             " resolves on the client, so the action needs no roundtrip
-                            )->a( n = `action`   v = client->_event_client(
+                            )->a( n = `action`   v = client->follow_up_action(
                                       val   = client->cs_event-control_global
                                       t_arg = VALUE #( ( `MESSAGE_TOAST` )
                                                        ( `show` )

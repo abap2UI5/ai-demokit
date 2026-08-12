@@ -39,7 +39,7 @@ CLASS z2ui5_cl_dmo_app_198 IMPLEMENTATION.
                 )->a( n = `title`      v = `Gladiator MX`
                 )->a( n = `type`       v = `Active`
                 " the controller's MessageToast.show("Pressed : " + getSource().getTitle()) is composed roundtrip-free on the client
-                )->a( n = `press`      v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Pressed : {0}` ) ( `${$source>/title}` ) ) )
+                )->a( n = `press`      v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Pressed : {0}` ) ( `${$source>/title}` ) ) )
                 )->a( n = `number`     v = `87.50`
                 )->a( n = `numberUnit` v = `EUR`
 
@@ -65,7 +65,7 @@ CLASS z2ui5_cl_dmo_app_198 IMPLEMENTATION.
             )->open( `ObjectListItem`
                 )->a( n = `title`      v = `Hurricane GX`
                 )->a( n = `type`       v = `Active`
-                )->a( n = `press`      v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Pressed : {0}` ) ( `${$source>/title}` ) ) )
+                )->a( n = `press`      v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Pressed : {0}` ) ( `${$source>/title}` ) ) )
                 )->a( n = `number`     v = `235`
                 )->a( n = `numberUnit` v = `EUR`
 
@@ -91,7 +91,7 @@ CLASS z2ui5_cl_dmo_app_198 IMPLEMENTATION.
             )->open( `ObjectListItem`
                 )->a( n = `title`      v = `Power Projector 4713`
                 )->a( n = `type`       v = `Active`
-                )->a( n = `press`      v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Pressed : {0}` ) ( `${$source>/title}` ) ) )
+                )->a( n = `press`      v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Pressed : {0}` ) ( `${$source>/title}` ) ) )
                 )->a( n = `number`     v = `135`
                 )->a( n = `numberUnit` v = `EUR`
 
@@ -119,7 +119,7 @@ CLASS z2ui5_cl_dmo_app_198 IMPLEMENTATION.
             )->open( `ObjectListItem`
                 )->a( n = `title`      v = `Webcam`
                 )->a( n = `type`       v = `Active`
-                )->a( n = `press`      v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Pressed : {0}` ) ( `${$source>/title}` ) ) )
+                )->a( n = `press`      v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Pressed : {0}` ) ( `${$source>/title}` ) ) )
                 )->a( n = `number`     v = `15`
                 )->a( n = `numberUnit` v = `EUR`
 

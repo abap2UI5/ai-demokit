@@ -46,7 +46,7 @@ CLASS z2ui5_cl_dmo_app_061 IMPLEMENTATION.
                         )->open( `MenuItem`
                             )->a( n = `text`  v = `Edit`
                             )->a( n = `icon`  v = `sap-icon://edit`
-                            )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} Pressed` ) ( `$event.oSource.sId` ) ) )
+                            )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} Pressed` ) ( `$event.oSource.sId` ) ) )
                             )->open( `customData`
                                 )->leaf( n = `CustomData` ns = `core`
                                     )->a( n = `key`   v = `target`
@@ -57,11 +57,11 @@ CLASS z2ui5_cl_dmo_app_061 IMPLEMENTATION.
                         )->leaf( `MenuItem`
                             )->a( n = `text`  v = `Save`
                             )->a( n = `icon`  v = `sap-icon://save`
-                            )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} Pressed` ) ( `$event.oSource.sId` ) ) )
+                            )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} Pressed` ) ( `$event.oSource.sId` ) ) )
                         )->leaf( `MenuItem`
                             )->a( n = `text`  v = `Open`
                             )->a( n = `icon`  v = `sap-icon://open-folder`
-                            )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} Pressed` ) ( `$event.oSource.sId` ) ) )
+                            )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} Pressed` ) ( `$event.oSource.sId` ) ) )
 
                     )->shut(
                 )->shut(
@@ -73,7 +73,7 @@ CLASS z2ui5_cl_dmo_app_061 IMPLEMENTATION.
                 )->a( n = `useDefaultActionOnly` v = `true`
                 )->open( `menu`
                     )->open( `Menu`
-                        )->a( n = `itemSelected` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` ) ( `${$parameters>/item}.getText()` ) ) )
+                        )->a( n = `itemSelected` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` ) ( `${$parameters>/item}.getText()` ) ) )
                         )->open( `MenuItem`
                             )->a( n = `text` v = `basic`
                             )->a( n = `icon` v = `sap-icon://chalkboard`
@@ -119,7 +119,7 @@ CLASS z2ui5_cl_dmo_app_061 IMPLEMENTATION.
                 )->a( n = `useDefaultActionOnly` v = `true`
                 )->open( `menu`
                     )->open( `Menu`
-                        )->a( n = `itemSelected` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` ) ( `${$parameters>/item}.getText()` ) ) )
+                        )->a( n = `itemSelected` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` ) ( `${$parameters>/item}.getText()` ) ) )
                         )->open( `MenuItem`
                             )->a( n = `text` v = `basic`
                             )->a( n = `icon` v = `sap-icon://chalkboard`
@@ -156,7 +156,7 @@ CLASS z2ui5_cl_dmo_app_061 IMPLEMENTATION.
                 )->a( n = `text` v = `File`
                 )->open( `menu`
                     )->open( `Menu`
-                        )->a( n = `itemSelected` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` ) ( `${$parameters>/item}.getText()` ) ) )
+                        )->a( n = `itemSelected` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` ) ( `${$parameters>/item}.getText()` ) ) )
                         )->leaf( `MenuItem`
                             )->a( n = `text` v = `Edit`
                             )->a( n = `icon` v = `sap-icon://edit`
@@ -176,11 +176,11 @@ CLASS z2ui5_cl_dmo_app_061 IMPLEMENTATION.
             )->open( `MenuButton`
                 )->a( n = `text`           v = `File Menu`
                 )->a( n = `buttonMode`     v = `Split`
-                )->a( n = `defaultAction`  v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Default action triggered` ) ) )
-                )->a( n = `beforeMenuOpen` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `beforeMenuOpen is fired` ) ) )
+                )->a( n = `defaultAction`  v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Default action triggered` ) ) )
+                )->a( n = `beforeMenuOpen` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `beforeMenuOpen is fired` ) ) )
                 )->open( `menu`
                     )->open( `Menu`
-                        )->a( n = `itemSelected` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` ) ( `${$parameters>/item}.getText()` ) ) )
+                        )->a( n = `itemSelected` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` ) ( `${$parameters>/item}.getText()` ) ) )
                         )->leaf( `MenuItem`
                             )->a( n = `text` v = `Edit`
                             )->a( n = `icon` v = `sap-icon://edit`
@@ -200,11 +200,11 @@ CLASS z2ui5_cl_dmo_app_061 IMPLEMENTATION.
             )->open( `MenuButton`
                 )->a( n = `text`           v = `File Menu`
                 )->a( n = `buttonMode`     v = `Split`
-                )->a( n = `defaultAction`  v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Default action triggered` ) ) )
-                )->a( n = `beforeMenuOpen` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `beforeMenuOpen is fired` ) ) )
+                )->a( n = `defaultAction`  v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Default action triggered` ) ) )
+                )->a( n = `beforeMenuOpen` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `beforeMenuOpen is fired` ) ) )
                 )->open( `menu`
                     )->open( `Menu`
-                        )->a( n = `itemSelected` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` ) ( `${$parameters>/item}.getText()` ) ) )
+                        )->a( n = `itemSelected` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` ) ( `${$parameters>/item}.getText()` ) ) )
                         )->leaf( `MenuItem`
                             )->a( n = `text` v = `Edit`
                             )->a( n = `icon` v = `sap-icon://edit`
@@ -224,12 +224,12 @@ CLASS z2ui5_cl_dmo_app_061 IMPLEMENTATION.
             )->open( `MenuButton`
                 )->a( n = `text`                v = `File Menu`
                 )->a( n = `buttonMode`          v = `Split`
-                )->a( n = `defaultAction`       v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Default action triggered` ) ) )
-                )->a( n = `beforeMenuOpen`      v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `beforeMenuOpen is fired` ) ) )
+                )->a( n = `defaultAction`       v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Default action triggered` ) ) )
+                )->a( n = `beforeMenuOpen`      v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `beforeMenuOpen is fired` ) ) )
                 )->a( n = `useDefaultActionOnly` v = `true`
                 )->open( `menu`
                     )->open( `Menu`
-                        )->a( n = `itemSelected` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` ) ( `${$parameters>/item}.getText()` ) ) )
+                        )->a( n = `itemSelected` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` ) ( `${$parameters>/item}.getText()` ) ) )
                         )->leaf( `MenuItem`
                             )->a( n = `text` v = `Edit`
                             )->a( n = `icon` v = `sap-icon://edit`
@@ -250,12 +250,12 @@ CLASS z2ui5_cl_dmo_app_061 IMPLEMENTATION.
                 )->a( n = `text`                v = `Accept`
                 )->a( n = `buttonMode`          v = `Split`
                 )->a( n = `type`                v = `Accept`
-                )->a( n = `defaultAction`       v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Accepted` ) ) )
-                )->a( n = `beforeMenuOpen`      v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `beforeMenuOpen is fired` ) ) )
+                )->a( n = `defaultAction`       v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Accepted` ) ) )
+                )->a( n = `beforeMenuOpen`      v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `beforeMenuOpen is fired` ) ) )
                 )->a( n = `useDefaultActionOnly` v = `true`
                 )->open( `menu`
                     )->open( `Menu`
-                        )->a( n = `itemSelected` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` ) ( `${$parameters>/item}.getText()` ) ) )
+                        )->a( n = `itemSelected` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` ) ( `${$parameters>/item}.getText()` ) ) )
                         )->leaf( `MenuItem`
                             )->a( n = `text` v = `Send the response now`
                             )->a( n = `icon` v = `sap-icon://response`
@@ -274,13 +274,13 @@ CLASS z2ui5_cl_dmo_app_061 IMPLEMENTATION.
                 )->a( n = `text` v = `Menu button with menuPosition set to Right Bottom which in RTL will stay on the Right`
             )->open( `MenuButton`
                 )->a( n = `text`                v = `File Menu`
-                )->a( n = `defaultAction`       v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Default action triggered` ) ) )
-                )->a( n = `beforeMenuOpen`      v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `beforeMenuOpen is fired` ) ) )
+                )->a( n = `defaultAction`       v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Default action triggered` ) ) )
+                )->a( n = `beforeMenuOpen`      v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `beforeMenuOpen is fired` ) ) )
                 )->a( n = `useDefaultActionOnly` v = `true`
                 )->a( n = `menuPosition`        v = `RightBottom`
                 )->open( `menu`
                     )->open( `Menu`
-                        )->a( n = `itemSelected` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` ) ( `${$parameters>/item}.getText()` ) ) )
+                        )->a( n = `itemSelected` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` ) ( `${$parameters>/item}.getText()` ) ) )
                         )->leaf( `MenuItem`
                             )->a( n = `text` v = `Edit`
                             )->a( n = `icon` v = `sap-icon://edit`
@@ -303,7 +303,7 @@ CLASS z2ui5_cl_dmo_app_061 IMPLEMENTATION.
                 )->a( n = `menuPosition`        v = `BeginBottom`
                 )->open( `menu`
                     )->open( `Menu`
-                        )->a( n = `itemSelected` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` ) ( `${$parameters>/item}.getText()` ) ) )
+                        )->a( n = `itemSelected` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` ) ( `${$parameters>/item}.getText()` ) ) )
                         )->open( `MenuItem`
                             )->a( n = `text` v = `basic`
                             )->a( n = `icon` v = `sap-icon://chalkboard`

@@ -42,10 +42,10 @@ CLASS z2ui5_cl_dmo_app_126 IMPLEMENTATION.
                 )->a( n = `name`           v = `myFileUpload`
                 )->a( n = `uploadUrl`      v = `upload/`
                 )->a( n = `tooltip`        v = `Upload your file to the local server`
-                )->a( n = `uploadComplete` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `File upload complete. Status: 200 (Upload Success)` ) ) )
+                )->a( n = `uploadComplete` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `File upload complete. Status: 200 (Upload Success)` ) ) )
             )->leaf( `Button`
                 )->a( n = `text`  v = `Upload File`
-                )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Uploading file to the local server ...` ) ) ) ).
+                )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Uploading file to the local server ...` ) ) ) ).
 
     client->view_display( view->stringify( ) ).
 

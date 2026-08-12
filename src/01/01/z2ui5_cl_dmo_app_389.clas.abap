@@ -45,8 +45,8 @@ CLASS z2ui5_cl_dmo_app_389 IMPLEMENTATION.
             )->a( n = `class`     v = `sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout`
             )->a( n = `header`    v = `Cumulative Totals`
             )->a( n = `subheader` v = `Expenses`
-            )->a( n = `press`     v = client->_event_client( val   = client->cs_event-control_global
-                                                             t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The GenericTile is pressed.` ) ) )
+            )->a( n = `press`     v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The GenericTile is pressed.` ) ) )
 
             )->open( `TileContent`
                 )->a( n = `unit`   v = `Unit`
@@ -64,8 +64,8 @@ CLASS z2ui5_cl_dmo_app_389 IMPLEMENTATION.
             )->a( n = `class`     v = `sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout`
             )->a( n = `header`    v = `Cumulative Totals`
             )->a( n = `subheader` v = `Expenses`
-            )->a( n = `press`     v = client->_event_client( val   = client->cs_event-control_global
-                                                             t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The GenericTile is pressed.` ) ) )
+            )->a( n = `press`     v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The GenericTile is pressed.` ) ) )
 
             )->open( `TileContent`
                 )->a( n = `unit`   v = `Unit`

@@ -24,7 +24,7 @@
     },
     {
       "type": "NOTE",
-      "what": "the original keeps each Dialog in a controller field and reuses it (if (!this.oDialog) ...); abap2UI5 rebuilds the fragment per open, which is the framework's popup lifecycle - the same deviation the other popup ports carry. The OK button's press (this.oDialog.close()) is reproduced roundtrip-free as _event_client( cs_event-popup_close )."
+      "what": "the original keeps each Dialog in a controller field and reuses it (if (!this.oDialog) ...); abap2UI5 rebuilds the fragment per open, which is the framework's popup lifecycle - the same deviation the other popup ports carry. The OK button's press (this.oDialog.close()) is reproduced roundtrip-free as follow_up_action( cs_event-popup_close )."
     },
     {
       "type": "NOTE",

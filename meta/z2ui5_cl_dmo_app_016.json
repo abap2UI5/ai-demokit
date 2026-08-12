@@ -7,7 +7,7 @@
   "audit": {
     "frontend_action": true,
     "event_t_arg": true,
-    "note": "openBy is now wired roundtrip-free in the view via _event_client( control_by_id, openBy, $event.oSource.sId ) (was a follow_up_action round-trip); the date-changed toast composes `Date selected: {0}` via control_global MESSAGE_TOAST.show - so the app is init-only"
+    "note": "openBy is now wired roundtrip-free in the view via follow_up_action( control_by_id, openBy, $event.oSource.sId ) (was a scheduled round-trip); the date-changed toast composes `Date selected: {0}` via control_global MESSAGE_TOAST.show - so the app is init-only"
   },
   "status": "checked",
   "checked": {
@@ -29,7 +29,7 @@
     },
     {
       "type": "NOTE",
-      "what": "the 2026-07-22 rework (openBy via _event_client instead of follow_up_action, client-composed date toast, app became init-only) is live-verified on 2026-08-02 - each anchor opens the hidden DatePicker and picking a date toasts the value."
+      "what": "the 2026-07-22 rework (openBy via follow_up_action instead of follow_up_action, client-composed date toast, app became init-only) is live-verified on 2026-08-02 - each anchor opens the hidden DatePicker and picking a date toasts the value."
     },
     {
       "type": "NOTE",

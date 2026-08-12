@@ -123,13 +123,13 @@ CLASS z2ui5_cl_dmo_app_365 IMPLEMENTATION.
 
                             )->leaf( n = `Button` ns = `m`
                                 )->a( n = `text`  v = `Collapse all`
-                                )->a( n = `press` v = client->_event_client(
+                                )->a( n = `press` v = client->follow_up_action(
                                           val   = client->cs_event-control_by_id
                                           t_arg = VALUE #( ( `TreeTable` ) ( `collapseAll` ) ) )
 
                             )->leaf( n = `Button` ns = `m`
                                 )->a( n = `text`  v = `Expand first level`
-                                )->a( n = `press` v = client->_event_client(
+                                )->a( n = `press` v = client->follow_up_action(
                                           val   = client->cs_event-control_by_id
                                           t_arg = VALUE #( ( `TreeTable` ) ( `expandToLevel` ) ( `1` ) ) )
 

@@ -39,8 +39,8 @@ CLASS z2ui5_cl_dmo_app_250 IMPLEMENTATION.
             )->leaf( `ColorPalettePopover`
                 )->a( n = `id`           v = `oColorPalettePopoverFull`
                 )->a( n = `defaultColor` v = `black`
-                )->a( n = `colorSelect`  v = client->_event_client( val   = client->cs_event-control_global
-                                                                    t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Color Selected: value - {0}, \n defaultAction - {1}` ) ( `${$parameters>/value}` ) ( `${$parameters>/defaultAction}` ) ) )
+                )->a( n = `colorSelect`  v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                       t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Color Selected: value - {0}, \n defaultAction - {1}` ) ( `${$parameters>/value}` ) ( `${$parameters>/defaultAction}` ) ) )
             )->leaf( `ColorPalettePopover`
                 )->a( n = `id`                     v = `oColorPalettePopoverCustom`
                 )->a( n = `defaultColor`           v = `white`
@@ -49,26 +49,26 @@ CLASS z2ui5_cl_dmo_app_250 IMPLEMENTATION.
                 " attribute (the parser splits on commas) - their hex equivalents
                 " #ff6b6b / #ffeaea render the same swatches (declared)
                 )->a( n = `colors`                 v = `#292f36,#4ecdc4,#3a506b,#ff6b6b,white,lightcyan,#ffeaea`
-                )->a( n = `colorSelect`            v = client->_event_client( val   = client->cs_event-control_global
-                                                                              t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Color Selected: value - {0}, \n defaultAction - {1}` ) ( `${$parameters>/value}` ) ( `${$parameters>/defaultAction}` ) ) )
+                )->a( n = `colorSelect`            v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                                 t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Color Selected: value - {0}, \n defaultAction - {1}` ) ( `${$parameters>/value}` ) ( `${$parameters>/defaultAction}` ) ) )
             )->leaf( `ColorPalettePopover`
                 )->a( n = `id`                   v = `oColorPalettePopoverMinDef`
                 )->a( n = `showMoreColorsButton` v = `false`
                 )->a( n = `colors`               v = `red,#ffff00`
-                )->a( n = `colorSelect`          v = client->_event_client( val   = client->cs_event-control_global
-                                                                            t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Color Selected: value - {0}, \n defaultAction - {1}` ) ( `${$parameters>/value}` ) ( `${$parameters>/defaultAction}` ) ) )
+                )->a( n = `colorSelect`          v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                               t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Color Selected: value - {0}, \n defaultAction - {1}` ) ( `${$parameters>/value}` ) ( `${$parameters>/defaultAction}` ) ) )
             )->leaf( `ColorPalettePopover`
                 )->a( n = `id`                     v = `oColorPalettePopoverMin`
                 )->a( n = `showDefaultColorButton` v = `false`
                 )->a( n = `showMoreColorsButton`   v = `false`
-                )->a( n = `colorSelect`            v = client->_event_client( val   = client->cs_event-control_global
-                                                                              t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Color Selected: value - {0}, \n defaultAction - {1}` ) ( `${$parameters>/value}` ) ( `${$parameters>/defaultAction}` ) ) )
+                )->a( n = `colorSelect`            v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                                 t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Color Selected: value - {0}, \n defaultAction - {1}` ) ( `${$parameters>/value}` ) ( `${$parameters>/defaultAction}` ) ) )
             )->leaf( `ColorPalettePopover`
                 )->a( n = `id`                     v = `oColorPaletteDisplayMode`
                 )->a( n = `showDefaultColorButton` v = `false`
                 )->a( n = `displayMode`            v = `Simplified`
-                )->a( n = `colorSelect`            v = client->_event_client( val   = client->cs_event-control_global
-                                                                              t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Color Selected: value - {0}, \n defaultAction - {1}` ) ( `${$parameters>/value}` ) ( `${$parameters>/defaultAction}` ) ) )
+                )->a( n = `colorSelect`            v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                                 t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Color Selected: value - {0}, \n defaultAction - {1}` ) ( `${$parameters>/value}` ) ( `${$parameters>/defaultAction}` ) ) )
                 " handleLiveChange paints the liveChangeButton's icon in the
                 " colour being picked. The original writes the rgba() straight
                 " onto the ICON's DOM node; the `css` action writes on the
@@ -76,7 +76,7 @@ CLASS z2ui5_cl_dmo_app_250 IMPLEMENTATION.
                 " INHERITS color from the button root, so the effect is the
                 " same without reaching into internal DOM. The rgba() string is
                 " composed on the client from the four event parameters
-                )->a( n = `liveChange`             v = client->_event_client(
+                )->a( n = `liveChange`             v = client->follow_up_action(
                           val   = client->cs_event-control_by_id
                           t_arg = VALUE #( ( `liveChangeButton` )
                                            ( `css` )
@@ -117,8 +117,8 @@ CLASS z2ui5_cl_dmo_app_250 IMPLEMENTATION.
                 )->leaf( `Button`
                     )->a( n = `icon`         v = `sap-icon://text-color`
                     )->a( n = `ariaHasPopup` v = `Dialog`
-                    )->a( n = `press`        v = client->_event_client( val   = client->cs_event-control_by_id
-                                                                        t_arg = VALUE #( ( `oColorPalettePopoverFull` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
+                    )->a( n = `press`        v = client->follow_up_action( val   = client->cs_event-control_by_id
+                                                                           t_arg = VALUE #( ( `oColorPalettePopoverFull` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
 
             )->shut(
             )->open( `ColumnListItem`
@@ -127,8 +127,8 @@ CLASS z2ui5_cl_dmo_app_250 IMPLEMENTATION.
                 )->leaf( `Button`
                     )->a( n = `icon`         v = `sap-icon://color-fill`
                     )->a( n = `ariaHasPopup` v = `Dialog`
-                    )->a( n = `press`        v = client->_event_client( val   = client->cs_event-control_by_id
-                                                                        t_arg = VALUE #( ( `oColorPalettePopoverMin` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
+                    )->a( n = `press`        v = client->follow_up_action( val   = client->cs_event-control_by_id
+                                                                           t_arg = VALUE #( ( `oColorPalettePopoverMin` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
 
             )->shut(
             )->open( `ColumnListItem`
@@ -137,8 +137,8 @@ CLASS z2ui5_cl_dmo_app_250 IMPLEMENTATION.
                 )->leaf( `Button`
                     )->a( n = `icon`         v = `sap-icon://color-fill`
                     )->a( n = `ariaHasPopup` v = `Dialog`
-                    )->a( n = `press`        v = client->_event_client( val   = client->cs_event-control_by_id
-                                                                        t_arg = VALUE #( ( `oColorPalettePopoverCustom` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
+                    )->a( n = `press`        v = client->follow_up_action( val   = client->cs_event-control_by_id
+                                                                           t_arg = VALUE #( ( `oColorPalettePopoverCustom` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
 
             )->shut(
             )->open( `ColumnListItem`
@@ -147,8 +147,8 @@ CLASS z2ui5_cl_dmo_app_250 IMPLEMENTATION.
                 )->leaf( `Button`
                     )->a( n = `icon`         v = `sap-icon://palette`
                     )->a( n = `ariaHasPopup` v = `Dialog`
-                    )->a( n = `press`        v = client->_event_client( val   = client->cs_event-control_by_id
-                                                                        t_arg = VALUE #( ( `oColorPalettePopoverMinDef` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
+                    )->a( n = `press`        v = client->follow_up_action( val   = client->cs_event-control_by_id
+                                                                           t_arg = VALUE #( ( `oColorPalettePopoverMinDef` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
 
             )->shut(
             )->open( `ColumnListItem`
@@ -157,8 +157,8 @@ CLASS z2ui5_cl_dmo_app_250 IMPLEMENTATION.
                 )->leaf( `Button`
                     )->a( n = `icon`         v = `sap-icon://color-fill`
                     )->a( n = `ariaHasPopup` v = `Dialog`
-                    )->a( n = `press`        v = client->_event_client( val   = client->cs_event-control_by_id
-                                                                        t_arg = VALUE #( ( `oColorPaletteDisplayMode` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
+                    )->a( n = `press`        v = client->follow_up_action( val   = client->cs_event-control_by_id
+                                                                           t_arg = VALUE #( ( `oColorPaletteDisplayMode` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
 
             )->shut(
             )->open( `ColumnListItem`
@@ -168,8 +168,8 @@ CLASS z2ui5_cl_dmo_app_250 IMPLEMENTATION.
                     )->a( n = `id`           v = `liveChangeButton`
                     )->a( n = `icon`         v = `sap-icon://color-fill`
                     )->a( n = `ariaHasPopup` v = `Dialog`
-                    )->a( n = `press`        v = client->_event_client( val   = client->cs_event-control_by_id
-                                                                        t_arg = VALUE #( ( `oColorPaletteDisplayMode` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
+                    )->a( n = `press`        v = client->follow_up_action( val   = client->cs_event-control_by_id
+                                                                           t_arg = VALUE #( ( `oColorPaletteDisplayMode` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
 
             )->shut(
             )->open( `ColumnListItem`
@@ -178,8 +178,8 @@ CLASS z2ui5_cl_dmo_app_250 IMPLEMENTATION.
                 )->leaf( `Button`
                     )->a( n = `icon`         v = `sap-icon://cursor-arrow`
                     )->a( n = `ariaHasPopup` v = `Dialog`
-                    )->a( n = `press`        v = client->_event_client( val   = client->cs_event-control_by_id
-                                                                        t_arg = VALUE #( ( `oColorPaletteSelectedColor` ) ( `openBy` ) ( `$event.oSource.sId` ) ) ) ).
+                    )->a( n = `press`        v = client->follow_up_action( val   = client->cs_event-control_by_id
+                                                                           t_arg = VALUE #( ( `oColorPaletteSelectedColor` ) ( `openBy` ) ( `$event.oSource.sId` ) ) ) ).
 
     client->view_display( view->stringify( ) ).
 

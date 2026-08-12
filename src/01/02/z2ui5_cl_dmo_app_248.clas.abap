@@ -109,20 +109,20 @@ CLASS z2ui5_cl_dmo_app_248 IMPLEMENTATION.
                             )->leaf( n = `ToolbarSpacer` ns = `m`
                             )->leaf( n = `Button` ns = `m`
                                 )->a( n = `text`  v = `Collapse all`
-                                )->a( n = `press` v = client->_event_client( val   = client->cs_event-control_by_id
-                                                                             t_arg = VALUE #( ( `TreeTableBasic` ) ( `collapseAll` ) ) )
+                                )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_by_id
+                                                                                t_arg = VALUE #( ( `TreeTableBasic` ) ( `collapseAll` ) ) )
                             )->leaf( n = `Button` ns = `m`
                                 )->a( n = `text`  v = `Collapse selection`
-                                )->a( n = `press` v = client->_event_client( val   = client->cs_event-control_by_id
-                                                                             t_arg = VALUE #( ( `TreeTableBasic` ) ( `collapse` ) ( `$event.oSource.getParent().getParent().getSelectedIndices()` ) ) )
+                                )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_by_id
+                                                                                t_arg = VALUE #( ( `TreeTableBasic` ) ( `collapse` ) ( `$event.oSource.getParent().getParent().getSelectedIndices()` ) ) )
                             )->leaf( n = `Button` ns = `m`
                                 )->a( n = `text`  v = `Expand first level`
-                                )->a( n = `press` v = client->_event_client( val   = client->cs_event-control_by_id
-                                                                             t_arg = VALUE #( ( `TreeTableBasic` ) ( `expandToLevel` ) ( `1` ) ) )
+                                )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_by_id
+                                                                                t_arg = VALUE #( ( `TreeTableBasic` ) ( `expandToLevel` ) ( `1` ) ) )
                             )->leaf( n = `Button` ns = `m`
                                 )->a( n = `text`  v = `Expand selection`
-                                )->a( n = `press` v = client->_event_client( val   = client->cs_event-control_by_id
-                                                                             t_arg = VALUE #( ( `TreeTableBasic` ) ( `expand` ) ( `$event.oSource.getParent().getParent().getSelectedIndices()` ) ) )
+                                )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_by_id
+                                                                                t_arg = VALUE #( ( `TreeTableBasic` ) ( `expand` ) ( `$event.oSource.getParent().getParent().getSelectedIndices()` ) ) )
 
                     )->shut(
                     )->shut(

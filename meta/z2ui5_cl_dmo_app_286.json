@@ -18,7 +18,7 @@
     },
     {
       "type": "NOTE",
-      "what": "each Link keeps the original's client-side MessageToast.show(evt.getSource().getText() + ' has been clicked') as a roundtrip-free _event_client MESSAGE_TOAST with the template '{0} has been clicked' filled by ${$source>/text} - the text comes from the pressed Link itself, exactly as in the original, and nothing travels to the backend. The class therefore has no on_event and no model at all."
+      "what": "each Link keeps the original's client-side MessageToast.show(evt.getSource().getText() + ' has been clicked') as a roundtrip-free follow_up_action MESSAGE_TOAST with the template '{0} has been clicked' filled by ${$source>/text} - the text comes from the pressed Link itself, exactly as in the original, and nothing travels to the backend. The class therefore has no on_event and no model at all."
     }
   ]
 }

@@ -374,7 +374,7 @@ source of truth:
   "entity":  "sap.m.CheckBox",
   "file":    "src/01/01/z2ui5_cl_dmo_app_007.clas.abap",  // DERIVED - see §3
   "batch":   "b02",           // generation/PR bookkeeping - NOT a folder
-  "audit":   { "frontend_action": false,        // uses _event_client? (note: which)
+  "audit":   { "frontend_action": false,        // uses follow_up_action? (note: which)
                "event_t_arg": true },           // passes t_arg in ANY event wire?
                                                 // both flags are DERIVED-checked
                                                 // against the class by validate-meta
@@ -466,7 +466,7 @@ booleans, the 1.71 rule in practice, deviation types, porting gotchas) lives in
 reviewing any port; it is the authoritative long form of the generation rules.
 
 The recurring hard idioms (named models, typed bindings, expression bindings,
-`_event_client`, popups, fragments, …) and the worked reference ports are in
+`follow_up_action`, popups, fragments, …) and the worked reference ports are in
 **`.claude/skills/idiom-lookup/SKILL.md`** — scan it before porting, and
 consult it whenever the original does something the recipe does not cover 1:1.
 
@@ -635,7 +635,7 @@ DSAG Leitfaden, then the samples style. Essentials:
   multi-line rationale belongs in the sidecar, not the code (app 039).
 - **Named view slots go through the `cs_view-*` constants, never a literal.**
   For a `control_by_id` action the view is its own `view` parameter on
-  `follow_up_action` / `_event_client` (no longer a positional `t_arg` slot):
+  `follow_up_action` (no longer a positional `t_arg` slot):
   it defaults to `cs_view-main` (omit it for a main-view control — the id then
   resolves across all open slots), and for a popup/popover control pass
   `view = client->cs_view-popup` (`-popover` / `-nested` / `-nested2`), not the

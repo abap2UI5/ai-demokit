@@ -66,8 +66,8 @@ CLASS z2ui5_cl_dmo_app_290 IMPLEMENTATION.
                 )->a( n = `id`          v = `valueHelpDialog`
                 )->a( n = `title`       v = `Products`
                 )->a( n = `items`       v = client->_bind( t_products )
-                )->a( n = `search`      v = client->_event_client( val   = client->cs_event-binding_call
-                                                                   t_arg = VALUE #( ( `valueHelpDialog` ) ( `items` ) ( `filter` ) ( `NAME` ) ( `Contains` ) ( `${$parameters>/value}` ) ) )
+                )->a( n = `search`      v = client->follow_up_action( val   = client->cs_event-binding_call
+                                                                      t_arg = VALUE #( ( `valueHelpDialog` ) ( `items` ) ( `filter` ) ( `NAME` ) ( `Contains` ) ( `${$parameters>/value}` ) ) )
                 )->a( n = `confirm`     v = client->_event( `VALUE_HELP_CLOSE` )
                 )->a( n = `cancel`      v = client->_event( `VALUE_HELP_CLOSE` )
                 )->a( n = `multiSelect` v = `true`

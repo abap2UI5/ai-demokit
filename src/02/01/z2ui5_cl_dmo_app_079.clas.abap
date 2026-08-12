@@ -65,8 +65,8 @@ CLASS z2ui5_cl_dmo_app_079 IMPLEMENTATION.
                         )->leaf( `ToolbarSpacer`
                         )->leaf( `Button`
                             )->a( n = `icon`  v = `sap-icon://settings`
-                            )->a( n = `press` v = client->_event_client( val   = client->cs_event-control_global
-                                                                         t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Header toolbar button pressed.` ) ) )
+                            )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                            t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Header toolbar button pressed.` ) ) )
 
                     )->shut(
                 )->shut(

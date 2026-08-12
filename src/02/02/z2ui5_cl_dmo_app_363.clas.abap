@@ -241,7 +241,7 @@ CLASS z2ui5_cl_dmo_app_363 IMPLEMENTATION.
                             )->open( `template`
                                 )->leaf( n = `Button` ns = `m`
                                     )->a( n = `text`  v = `Show Details`
-                                    )->a( n = `press` v = client->_event_client(
+                                    )->a( n = `press` v = client->follow_up_action(
                                               val   = client->cs_event-control_global
                                               t_arg = VALUE #( ( `MESSAGE_TOAST` )
                                                                ( `show` )

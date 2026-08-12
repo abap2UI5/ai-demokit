@@ -173,8 +173,8 @@ CLASS z2ui5_cl_dmo_app_232 IMPLEMENTATION.
                     )->leaf( `Button`
                         )->a( n = `text`         v = `Open Popover`
                         )->a( n = `ariaHasPopup` v = `Dialog`
-                        )->a( n = `press`        v = client->_event_client( val   = client->cs_event-control_by_id
-                                                                            t_arg = VALUE #( ( `popover` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
+                        )->a( n = `press`        v = client->follow_up_action( val   = client->cs_event-control_by_id
+                                                                               t_arg = VALUE #( ( `popover` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
 
                 )->shut(
 
@@ -184,8 +184,8 @@ CLASS z2ui5_cl_dmo_app_232 IMPLEMENTATION.
                     )->leaf( `Button`
                         )->a( n = `text`         v = `Open Popover`
                         )->a( n = `ariaHasPopup` v = `Dialog`
-                        )->a( n = `press`        v = client->_event_client( val   = client->cs_event-control_by_id
-                                                                            t_arg = VALUE #( ( `popoverCommand` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
+                        )->a( n = `press`        v = client->follow_up_action( val   = client->cs_event-control_by_id
+                                                                               t_arg = VALUE #( ( `popoverCommand` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
 
                 )->shut(
 

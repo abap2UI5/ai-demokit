@@ -84,8 +84,8 @@ CLASS z2ui5_cl_dmo_app_015 IMPLEMENTATION.
                     )->open( `items`
                         )->leaf( `Button`
                             )->a( n = `icon`  v = `{REF}`
-                            )->a( n = `press` v = client->_event_client( val   = client->cs_event-control_global
-                                                                         t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Button pressed` ) ) )
+                            )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                            t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Button pressed` ) ) )
                             )->a( n = `class` v = `sapUiSmallMarginEnd`
 
                         )->open( `Input`

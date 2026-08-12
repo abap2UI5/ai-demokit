@@ -54,7 +54,7 @@ CLASS z2ui5_cl_dmo_app_263 IMPLEMENTATION.
     DATA(view) = z2ui5_cl_ai_xml=>factory( ).
 
     " Navigation: _navTo(page) is the client-side NavContainer.to() - wired
-    " roundtrip-free via _event_client( control_by_id ). The navigate event
+    " roundtrip-free via follow_up_action( control_by_id ). The navigate event
     " itself goes to the backend (NAVIGATE) because onNavigate reads the
     " checkbox state before resetting the ObjectPage's selected section.
     " Blocks: every SharedBlocks BlockBase is inlined with its view content
@@ -89,8 +89,8 @@ CLASS z2ui5_cl_dmo_app_263 IMPLEMENTATION.
 
                     )->open( n = `List` ns = `m`
                         )->leaf( n = `StandardListItem` ns = `m`
-                            )->a( n = `press` v = client->_event_client( val   = client->cs_event-control_by_id
-                                                                         t_arg = VALUE #( ( `navigationContainer` ) ( `to` ) ( `page2` ) ) )
+                            )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_by_id
+                                                                            t_arg = VALUE #( ( `navigationContainer` ) ( `to` ) ( `page2` ) ) )
                             )->a( n = `title` v = `To ObjectPage`
                             )->a( n = `type`  v = `Navigation`
 
@@ -108,8 +108,8 @@ CLASS z2ui5_cl_dmo_app_263 IMPLEMENTATION.
                 )->a( n = `id`              v = `page2`
                 )->a( n = `title`           v = `Page 2`
                 )->a( n = `showNavButton`   v = `true`
-                )->a( n = `navButtonPress`  v = client->_event_client( val   = client->cs_event-control_by_id
-                                                                       t_arg = VALUE #( ( `navigationContainer` ) ( `to` ) ( `page1` ) ) )
+                )->a( n = `navButtonPress`  v = client->follow_up_action( val   = client->cs_event-control_by_id
+                                                                          t_arg = VALUE #( ( `navigationContainer` ) ( `to` ) ( `page1` ) ) )
 
                 )->open( `ObjectPageLayout`
                     )->a( n = `id`                       v = `ObjectPageLayout`

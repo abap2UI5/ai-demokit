@@ -42,7 +42,7 @@ CLASS z2ui5_cl_dmo_app_005 IMPLEMENTATION.
                 )->open( `Toolbar`
                     )->leaf( `Button`
                         )->a( n = `type`  v = `Back`
-                        )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} Pressed` ) ( `$event.oSource.sId` ) ) )
+                        )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} Pressed` ) ( `$event.oSource.sId` ) ) )
                     )->leaf( `ToolbarSpacer`
                     )->leaf( `Title`
                         )->a( n = `text`  v = `Title`
@@ -51,7 +51,7 @@ CLASS z2ui5_cl_dmo_app_005 IMPLEMENTATION.
                     )->leaf( `Button`
                         )->a( n = `icon`           v = `sap-icon://edit`
                         )->a( n = `type`           v = `Transparent`
-                        )->a( n = `press`          v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} Pressed` ) ( `$event.oSource.sId` ) ) )
+                        )->a( n = `press`          v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} Pressed` ) ( `$event.oSource.sId` ) ) )
                         )->a( n = `ariaLabelledBy` v = `editButtonLabel`
 
                 )->shut(
@@ -62,15 +62,15 @@ CLASS z2ui5_cl_dmo_app_005 IMPLEMENTATION.
                     )->leaf( `ToolbarSpacer`
                     )->leaf( `Button`
                         )->a( n = `text`  v = `Default`
-                        )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} Pressed` ) ( `$event.oSource.sId` ) ) )
+                        )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} Pressed` ) ( `$event.oSource.sId` ) ) )
                     )->leaf( `Button`
                         )->a( n = `type`  v = `Reject`
                         )->a( n = `text`  v = `Reject`
-                        )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} Pressed` ) ( `$event.oSource.sId` ) ) )
+                        )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} Pressed` ) ( `$event.oSource.sId` ) ) )
                     )->leaf( `Button`
                         )->a( n = `icon`           v = `sap-icon://action`
                         )->a( n = `type`           v = `Transparent`
-                        )->a( n = `press`          v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} Pressed` ) ( `$event.oSource.sId` ) ) )
+                        )->a( n = `press`          v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} Pressed` ) ( `$event.oSource.sId` ) ) )
                         )->a( n = `ariaLabelledBy` v = `actionButtonLabel`
                     )->leaf( `ToolbarSpacer`
 
@@ -81,7 +81,7 @@ CLASS z2ui5_cl_dmo_app_005 IMPLEMENTATION.
                 )->open( `HBox`
                     )->open( `Button`
                         )->a( n = `text`            v = `Default`
-                        )->a( n = `press`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} Pressed` ) ( `$event.oSource.sId` ) ) )
+                        )->a( n = `press`           v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} Pressed` ) ( `$event.oSource.sId` ) ) )
                         )->a( n = `ariaDescribedBy` v = `defaultButtonDescription genericButtonDescription`
 
                         )->open( `layoutData`
@@ -93,7 +93,7 @@ CLASS z2ui5_cl_dmo_app_005 IMPLEMENTATION.
                     )->open( `Button`
                         )->a( n = `type`            v = `Accept`
                         )->a( n = `text`            v = `Accept`
-                        )->a( n = `press`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} Pressed` ) ( `$event.oSource.sId` ) ) )
+                        )->a( n = `press`           v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} Pressed` ) ( `$event.oSource.sId` ) ) )
                         )->a( n = `ariaDescribedBy` v = `acceptButtonDescription genericButtonDescription`
 
                         )->open( `layoutData`
@@ -105,7 +105,7 @@ CLASS z2ui5_cl_dmo_app_005 IMPLEMENTATION.
                     )->open( `Button`
                         )->a( n = `type`            v = `Reject`
                         )->a( n = `text`            v = `Reject`
-                        )->a( n = `press`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} Pressed` ) ( `$event.oSource.sId` ) ) )
+                        )->a( n = `press`           v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} Pressed` ) ( `$event.oSource.sId` ) ) )
                         )->a( n = `ariaDescribedBy` v = `rejectButtonDescription genericButtonDescription`
 
                         )->open( `layoutData`
@@ -116,7 +116,7 @@ CLASS z2ui5_cl_dmo_app_005 IMPLEMENTATION.
                     )->shut(
                     )->open( `Button`
                         )->a( n = `text`            v = `Coming Soon`
-                        )->a( n = `press`           v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} Pressed` ) ( `$event.oSource.sId` ) ) )
+                        )->a( n = `press`           v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} Pressed` ) ( `$event.oSource.sId` ) ) )
                         )->a( n = `ariaDescribedBy` v = `comingSoonButtonDescription genericButtonDescription`
                         )->a( n = `enabled`         v = `false`
 
@@ -159,14 +159,14 @@ CLASS z2ui5_cl_dmo_app_005 IMPLEMENTATION.
                     )->leaf( `Button`
                         )->a( n = `type`  v = `Emphasized`
                         )->a( n = `text`  v = `Emphasized`
-                        )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} Pressed` ) ( `$event.oSource.sId` ) ) )
+                        )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} Pressed` ) ( `$event.oSource.sId` ) ) )
                     )->leaf( `Button`
                         )->a( n = `text`  v = `Default`
-                        )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} Pressed` ) ( `$event.oSource.sId` ) ) )
+                        )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} Pressed` ) ( `$event.oSource.sId` ) ) )
                     )->leaf( `Button`
                         )->a( n = `icon`  v = `sap-icon://action`
                         )->a( n = `type`  v = `Transparent`
-                        )->a( n = `press` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} Pressed` ) ( `$event.oSource.sId` ) ) ) ).
+                        )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} Pressed` ) ( `$event.oSource.sId` ) ) ) ).
 
     client->view_display( view->stringify( ) ).
 

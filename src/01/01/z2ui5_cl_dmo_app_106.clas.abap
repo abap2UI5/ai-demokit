@@ -155,8 +155,8 @@ CLASS z2ui5_cl_dmo_app_106 IMPLEMENTATION.
                     )->shut(
                     )->open( n = `messagesIndicator` ns = `semantic`
                         )->open( n = `MessagesIndicator` ns = `semantic`
-                            )->a( n = `press` v = client->_event_client( val   = client->cs_event-control_by_id
-                                                                         t_arg = VALUE #( ( `semMessagePopover` ) ( `toggleBy` ) ( `$event.oSource.sId` ) ) )
+                            )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_by_id
+                                                                            t_arg = VALUE #( ( `semMessagePopover` ) ( `toggleBy` ) ( `$event.oSource.sId` ) ) )
 
                             " the original's controller-built MessagePopover over the
                             " message model, declared as a dependent of its anchor

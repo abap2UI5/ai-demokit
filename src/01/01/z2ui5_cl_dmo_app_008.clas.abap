@@ -50,8 +50,8 @@ CLASS z2ui5_cl_dmo_app_008 IMPLEMENTATION.
             )->leaf( `Label`
                 )->a( n = `text` v = `Choose Color`
             )->leaf( `ColorPalette`
-                )->a( n = `colorSelect` v = client->_event_client( val   = client->cs_event-control_global
-                                                                   t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Color Selected: value - {0}, \n defaultAction - {1}` ) ( `${$parameters>/value}` ) ( `${$parameters>/defaultAction}` ) ) ) ).
+                )->a( n = `colorSelect` v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                      t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Color Selected: value - {0}, \n defaultAction - {1}` ) ( `${$parameters>/value}` ) ( `${$parameters>/defaultAction}` ) ) ) ).
 
     client->view_display( view->stringify( ) ).
 

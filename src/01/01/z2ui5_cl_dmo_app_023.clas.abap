@@ -36,15 +36,15 @@ CLASS z2ui5_cl_dmo_app_023 IMPLEMENTATION.
             )->a( n = `contentText` v = `@@notify Great outcome of the Presentation today. The new functionality and the new design was well received.`
             )->a( n = `subheader`   v = `about 1 minute ago in Computer Market`
             )->a( n = `class`       v = `sapUiSmallMargin`
-            )->a( n = `press`       v = client->_event_client( val   = client->cs_event-control_global
-                                                               t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The feed content is pressed.` ) ) )
+            )->a( n = `press`       v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                  t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The feed content is pressed.` ) ) )
         )->leaf( `FeedContent`
             )->a( n = `contentText` v = `@@notify Great outcome of the Presentation today. The new functionality and the new design was well received.`
             )->a( n = `subheader`   v = `about 1 minute ago in Computer Market`
             )->a( n = `value`       v = `999`
             )->a( n = `class`       v = `sapUiSmallMargin`
-            )->a( n = `press`       v = client->_event_client( val   = client->cs_event-control_global
-                                                               t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The feed content is pressed.` ) ) ) ).
+            )->a( n = `press`       v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                  t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The feed content is pressed.` ) ) ) ).
 
     client->view_display( view->stringify( ) ).
 

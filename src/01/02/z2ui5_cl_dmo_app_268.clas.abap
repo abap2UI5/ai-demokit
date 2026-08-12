@@ -120,8 +120,8 @@ CLASS z2ui5_cl_dmo_app_268 IMPLEMENTATION.
                         )->a( n = `placeholder`      v = `Enter Color ...`
                         )->a( n = `showValueHelp`    v = `true`
                         )->a( n = `value`            v = client->_bind( color_d )
-                        )->a( n = `valueHelpRequest` v = client->_event_client( val   = client->cs_event-control_by_id
-                                                                                t_arg = VALUE #( ( `oColorPickerPopover` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
+                        )->a( n = `valueHelpRequest` v = client->follow_up_action( val   = client->cs_event-control_by_id
+                                                                                   t_arg = VALUE #( ( `oColorPickerPopover` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
 
                 )->shut(
             )->shut(
@@ -137,8 +137,8 @@ CLASS z2ui5_cl_dmo_app_268 IMPLEMENTATION.
                         )->a( n = `placeholder`      v = `Enter Color ...`
                         )->a( n = `showValueHelp`    v = `true`
                         )->a( n = `value`            v = client->_bind( color_l )
-                        )->a( n = `valueHelpRequest` v = client->_event_client( val   = client->cs_event-control_by_id
-                                                                                t_arg = VALUE #( ( `oColorPickerLargePopover` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
+                        )->a( n = `valueHelpRequest` v = client->follow_up_action( val   = client->cs_event-control_by_id
+                                                                                   t_arg = VALUE #( ( `oColorPickerLargePopover` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
 
                 )->shut(
             )->shut(
@@ -154,8 +154,8 @@ CLASS z2ui5_cl_dmo_app_268 IMPLEMENTATION.
                         )->a( n = `placeholder`      v = `Enter Color ...`
                         )->a( n = `showValueHelp`    v = `true`
                         )->a( n = `value`            v = client->_bind( color_s )
-                        )->a( n = `valueHelpRequest` v = client->_event_client( val   = client->cs_event-control_by_id
-                                                                                t_arg = VALUE #( ( `oColorPickerSimpplifiedPopover` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
+                        )->a( n = `valueHelpRequest` v = client->follow_up_action( val   = client->cs_event-control_by_id
+                                                                                   t_arg = VALUE #( ( `oColorPickerSimpplifiedPopover` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
 
                 )->shut(
             )->shut(
@@ -171,8 +171,8 @@ CLASS z2ui5_cl_dmo_app_268 IMPLEMENTATION.
                         )->a( n = `placeholder`      v = `Enter Color ...`
                         )->a( n = `showValueHelp`    v = `true`
                         )->a( n = `value`            v = client->_bind( color_lc )
-                        )->a( n = `valueHelpRequest` v = client->_event_client( val   = client->cs_event-control_by_id
-                                                                                t_arg = VALUE #( ( `oColorPickerLiveChangePopover` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
+                        )->a( n = `valueHelpRequest` v = client->follow_up_action( val   = client->cs_event-control_by_id
+                                                                                   t_arg = VALUE #( ( `oColorPickerLiveChangePopover` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
                     )->leaf( `Text`
                         )->a( n = `id`   v = `liveChangeText`
                         )->a( n = `text` v = client->_bind( live_change_text )
