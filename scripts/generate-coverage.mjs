@@ -36,7 +36,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import {
-  loadUniverseSnapshot, withSapui5, loadPropertiesControls, loadEntityOverrides,
+  loadUniverseSnapshot, loadPropertiesControls, loadEntityOverrides,
   loadNonAppFamilies, loadUniverseExcludes, nonAppFamilyFor, sinceLeq171,
   enrichFromProperties as enrichSample,
 } from './lib-universe.mjs';
@@ -233,12 +233,9 @@ if (fs.existsSync(OPENUI5_DIR)) {
   }
   universe = { release, libs: ulibs };
   fs.writeFileSync(SNAPSHOT, JSON.stringify(universe, null, 1) + '\n');
-  // the file keeps the OpenUI5 half only - the SAPUI5 snapshot is merged AFTER
-  // the write, so a refresh can never drop it (lib-universe.withSapui5)
-  universe = withSapui5(universe);
   console.log(`universe snapshot refreshed from ${OPENUI5_DIR} -> ${path.relative(ROOT, SNAPSHOT)}`);
 } else {
-  universe = withSapui5(loadUniverseSnapshot());
+  universe = loadUniverseSnapshot();
   if (!universe) {
     console.error(`neither an OpenUI5 checkout (${OPENUI5_DIR}) nor ${path.relative(ROOT, SNAPSHOT)} found.`);
     process.exit(1);
@@ -357,7 +354,7 @@ const matched = new Set(libs.flatMap((e) => e.samples.map((s) => `${e.lib}\t${s.
 for (const key of ported.keys()) {
   if (matched.has(key)) continue;
   const sampleId = key.replace('\t', '.sample.');
-  console.warn(`WARNING: orphan port ${sampleId} — not in the sample universe (renamed/removed upstream, outside FOCUS_LIBS, or a SAPUI5 sample missing from ui5/universe-sapui5.json — AGENTS §3)`);
+  console.warn(`WARNING: orphan port ${sampleId} — not in the sample universe (renamed/removed upstream, or outside FOCUS_LIBS?)`);
 }
 
 // --- 3. render --------------------------------------------------------------

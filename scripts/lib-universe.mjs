@@ -31,56 +31,6 @@ export function loadUniverseSnapshot() {
 }
 export const UNIVERSE_SNAPSHOT_PATH = path.join(UI5, 'universe.json');
 
-/* --- the SAPUI5 half of the universe (AGENTS §3, src/03 / src/04) ----------
- * SAPUI5 is not on GitHub and the `@sapui5/*` npm packages ship only `src/`
- * (no demokit/sample trees), so its samples cannot be enumerated from a
- * checkout the way ui5/universe.json is built. They come from their own
- * committed snapshot instead, in the SAME shape, built from the SAPUI5 SDK's
- * per-library demokit/docuindex.json.
- *
- * The two snapshots stay separate FILES on purpose: generate-coverage rebuilds
- * ui5/universe.json wholesale from an OpenUI5 checkout, and a merged file would
- * lose every SAPUI5 row on the next refresh. They are merged at LOAD time, by
- * the callers, through withSapui5() below — so both the offline path and the
- * rebuild path see the same universe.
- *
- * While ui5/universe-sapui5.json is absent, every one of these is a no-op and
- * the tools behave exactly as before. */
-export const UNIVERSE_SAPUI5_PATH = path.join(UI5, 'universe-sapui5.json');
-
-/** ui5/universe-sapui5.json parsed, or null when the snapshot is absent. */
-export function loadSapui5UniverseSnapshot() {
-  return fs.existsSync(UNIVERSE_SAPUI5_PATH)
-    ? JSON.parse(fs.readFileSync(UNIVERSE_SAPUI5_PATH, 'utf8'))
-    : null;
-}
-
-/** universe + the SAPUI5 snapshot, merged per library. Returns the input
- *  unchanged (same object) when there is no SAPUI5 snapshot, so a caller can
- *  wrap unconditionally. */
-export function withSapui5(universe) {
-  const extra = loadSapui5UniverseSnapshot();
-  if (!universe || !extra?.libs?.length) return universe;
-  const libs = universe.libs.map((l) => ({ ...l, samples: [...l.samples] }));
-  for (const e of extra.libs) {
-    const hit = libs.find((l) => l.lib === e.lib);
-    if (hit) {
-      const known = new Set(hit.samples.map((s) => s.name));
-      hit.samples.push(...(e.samples || []).filter((s) => !known.has(s.name)));
-      hit.samples.sort((a, b) => a.name.localeCompare(b.name));
-    } else {
-      libs.push({ ...e, samples: [...(e.samples || [])] });
-    }
-  }
-  return { ...universe, libs, sapui5Release: extra.release || null };
-}
-
-/** true for a library that ships with SAPUI5 only — the flavour that decides
- *  src/03 / src/04 (scripts/lib-packages.mjs owns the same list for paths). */
-export function isSapui5Lib(lib) {
-  return /^sap\.(suite|viz|gantt|ndc|ui\.comp|ui\.vbm|ui\.vk)(\.|$)/.test(String(lib || ''));
-}
-
 /** ui5/properties.json -> the control catalog ({} when absent/unreadable). */
 export function loadPropertiesControls() {
   return readJson(path.join(UI5, 'properties.json'), {}).controls || {};

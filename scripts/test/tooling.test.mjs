@@ -38,8 +38,7 @@ const GOLDEN = path.join(HERE, 'fixtures', 'golden');
 
 // scripts under test (plus their only local import); copied into the fixture
 // root so their ROOT resolution lands on the fixture corpus
-const SCRIPTS = ['structural-diff.mjs', 'data-fidelity.mjs', 'generate-coverage.mjs', 'lib-universe.mjs',
-  'import-sapui5-sample.mjs', 'scope-of.mjs'];
+const SCRIPTS = ['structural-diff.mjs', 'data-fidelity.mjs', 'generate-coverage.mjs', 'lib-universe.mjs'];
 
 function makeFixtureRoot() {
   const root = fs.mkdtempSync(path.join(os.tmpdir(), 'demokit-tooling-test-'));
@@ -125,80 +124,5 @@ test('generate-coverage: a ported out-of-scope sample without an exception is a 
     assert.match(r.errout, /ported sample sap\.m\.sample\.FixtureBad is out of scope \(deprecated\)/);
   } finally {
     fs.rmSync(root, { recursive: true, force: true });
-  }
-});
-
-/* --- import-sapui5-sample: the guard rails --------------------------------
- * The happy path needs the pinned @sapui5 packages (the control facts come
- * from there, never from the download), which a temp fixture root has no
- * node_modules for — so these cover the refusals that decide correctness
- * BEFORE any control is judged: a download that is not a sample, one from the
- * wrong flavour, and one that is missing a file its own manifest declares. */
-function makeDownload(sampleId, files, declared) {
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'demokit-sapui5-dl-'));
-  for (const [name, body] of Object.entries(files)) {
-    fs.mkdirSync(path.dirname(path.join(dir, name)), { recursive: true });
-    fs.writeFileSync(path.join(dir, name), body);
-  }
-  if (sampleId) {
-    fs.writeFileSync(path.join(dir, 'manifest.json'), JSON.stringify({
-      'sap.app': { id: sampleId },
-      'sap.ui5': { config: { sample: { files: declared || Object.keys(files) } } },
-    }, null, 1));
-  }
-  return dir;
-}
-
-test('import-sapui5-sample: refuses a directory that is not a sample download', () => {
-  const root = makeFixtureRoot();
-  const dl = makeDownload(null, { 'V.view.xml': '<mvc:View/>' });
-  try {
-    const r = run(root, 'import-sapui5-sample.mjs', dl, '--entity', 'sap.suite.ui.commons.Timeline');
-    assert.equal(r.code, 1);
-    assert.match(r.errout, /no manifest\.json/);
-  } finally {
-    fs.rmSync(root, { recursive: true, force: true });
-    fs.rmSync(dl, { recursive: true, force: true });
-  }
-});
-
-test('import-sapui5-sample: refuses an OpenUI5 sample (that is scaffold.mjs\'s job)', () => {
-  const root = makeFixtureRoot();
-  const dl = makeDownload('sap.m.sample.Label', { 'V.view.xml': '<mvc:View/>' });
-  try {
-    const r = run(root, 'import-sapui5-sample.mjs', dl, '--entity', 'sap.m.Label');
-    assert.equal(r.code, 1);
-    assert.match(r.errout, /sap\.m is an OpenUI5 library/);
-  } finally {
-    fs.rmSync(root, { recursive: true, force: true });
-    fs.rmSync(dl, { recursive: true, force: true });
-  }
-});
-
-test('import-sapui5-sample: refuses a download missing a file its manifest declares', () => {
-  const root = makeFixtureRoot();
-  const dl = makeDownload('sap.suite.ui.commons.sample.Timeline',
-    { 'V.view.xml': '<mvc:View/>' }, ['V.view.xml', 'C.controller.js']);
-  try {
-    const r = run(root, 'import-sapui5-sample.mjs', dl, '--entity', 'sap.suite.ui.commons.Timeline');
-    assert.equal(r.code, 1);
-    assert.match(r.errout, /incomplete download/);
-    assert.match(r.errout, /C\.controller\.js/);
-  } finally {
-    fs.rmSync(root, { recursive: true, force: true });
-    fs.rmSync(dl, { recursive: true, force: true });
-  }
-});
-
-test('import-sapui5-sample: refuses without --entity, which no download carries', () => {
-  const root = makeFixtureRoot();
-  const dl = makeDownload('sap.suite.ui.commons.sample.Timeline', { 'V.view.xml': '<mvc:View/>' });
-  try {
-    const r = run(root, 'import-sapui5-sample.mjs', dl);
-    assert.equal(r.code, 1);
-    assert.match(r.errout, /pass --entity/);
-  } finally {
-    fs.rmSync(root, { recursive: true, force: true });
-    fs.rmSync(dl, { recursive: true, force: true });
   }
 });

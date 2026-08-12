@@ -20,7 +20,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import {
-  loadUniverseSnapshot, withSapui5, loadPropertiesControls, loadEntityOverrides, sinceLeq171,
+  loadUniverseSnapshot, loadPropertiesControls, loadEntityOverrides, sinceLeq171,
 } from './lib-universe.mjs';
 import { CAT_CTEXT, LIB_CTEXT } from './lib-packages.mjs';
 
@@ -62,7 +62,7 @@ for (const p of ports) {
 
 // --- scope verdict per ported sample (same fallback as generate-coverage,
 //     via the shared lib-universe loaders) ------------------------------------
-const uni = withSapui5(loadUniverseSnapshot());
+const uni = loadUniverseSnapshot();
 if (!uni) { console.error('ui5/universe.json missing — the state block needs the sample-universe snapshot.'); process.exit(1); }
 const props = loadPropertiesControls();
 const overrides = loadEntityOverrides();

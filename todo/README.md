@@ -8,7 +8,8 @@ would invite the same 53 classes to be re-imported and re-analysed.
 [abap2UI5/samples](https://github.com/abap2UI5/samples) (21 from `src/00/02`
 "restricted - release/version", 32 from `src/01/03` "Control Library") and
 parked here to be triaged into ports — or dropped. On 2026-08-12 every one of
-them got its decision: **1 rebuilt as a port, 52 dropped.** The samples repo
+them got its decision: **1 rebuilt as a port, 14 collected in `src/03`, 38
+dropped.** The samples repo
 keeps its copies; this was an import for triage, not a move.
 
 > The imported classes are built on the framework's own `z2ui5_cl_xml_view`
@@ -118,64 +119,64 @@ someone else's interpretation to be ported one day.
 
 ---
 
-## Dropped — restricted (21 of 21)
+## restricted (21) — 14 collected in `src/03`, 7 dropped
 
 "restricted - release/version" in the samples repo: needs a UI5 release newer
 than 1.71, a control outside OpenUI5, or a runtime the sample cannot ship. None
-of the three groups is portable here.
+of them is *portable* here — but that is not the same as worthless.
 
-**SAPUI5-only controls (14)** — they belong in `src/03` / `src/04`. The
-`@since` column is the class-level tag from the pinned `@sapui5/*` packages, so
-it is the real release fact — and for **eleven** of the fourteen it puts the
-control in the `<= 1.71` half. The other three are blocked by a class-level
-deprecation (the two `sap.gantt` rows and `RadialMicroChart`, below), which is
-the normal §1 rule and has nothing to do with the flavour.
+**SAPUI5-only controls (14) — collected, not dropped.** They were first dropped
+on the day of the import, while `src/03` / `src/04` were closed. The decision
+that followed (AGENTS §3) is that a SAPUI5-only control cannot be **ported** —
+there is no demo kit original to rebuild against, since SAPUI5 ships no public
+sample tree — but its sample is worth **collecting**: `src/03` holds them as
+`z2ui5_cl_dmo_sapui5_001..014`, tidied to this repo's lint level, outside the
+port machinery. So these 14 came back, and this table is the map from the
+imported class to its collected one.
 
-> **Superseded the same day:** these rows were dropped while `src/03` / `src/04`
-> were closed. That decision was reversed hours later (AGENTS §3, 2026-08-12) —
-> a SAPUI5-only sample is now judged by the ordinary scope rules, and
-> `scope-of.mjs` answers `IN_SCOPE … [SAPUI5-only, @sapui5 package]` for the
-> eleven release-clean ones. **Deleting these files stays right** — an ai-demokit
-> port is a rebuild of the *demo kit original*, never of another repo's
-> interpretation, so the classes were never the source anyway. What changes is
-> the backlog: their eleven samples are now legitimate candidates, blocked only
-> until `SAPUI5_SRC` carries the originals and `ui5/universe-sapui5.json` lists
-> them.
+The `@since` column is the class-level tag from the pinned `@sapui5/*`
+packages, so it is the real release fact — and for **eleven** of the fourteen it
+puts the control in the `<= 1.71` half. The other three carry a class-level
+deprecation (the two `sap.gantt` rows and `RadialMicroChart`); they are
+collected too, with the deprecation in their ABAP Doc header, as a record of the
+control rather than a recommendation.
 
-Every row was `node scripts/scope-of.mjs <entity>`-verified (2026-08-12) against
-the `@sapui5/*` packages, which is also where the deprecations came from.
-**Four of the rows name a real SAPUI5 demo kit
+Every row is `node scripts/scope-of.mjs <entity>`-verified (2026-08-12): the
+script falls back to the `@sapui5/*` packages and answers `OUT_OF_SCOPE
+(SAPUI5-only library — no 1:1 port, collect it in src/03 instead)`, or the
+deprecation where there is one. **Four of the rows name a real SAPUI5 demo kit
 sample in their ABAP Doc URL** (`sap.suite.ui.microchart.sample.*` for the three
 Interactive charts and `RadialMicroChart`) — so the SAPUI5 demo kit does have
 samples this repo could rebuild one day; they are simply not in
 `ui5/universe.json`, which snapshots the ten OpenUI5 libraries only, and so
 appear in no coverage table.
 
-| Sample class | Library | Control | class `@since` |
-|---|---|---|---|
-| `z2ui5_cl_smp_app_013` | `sap.suite.ui.microchart` | `InteractiveDonutChart` | 1.42 |
-| `z2ui5_cl_smp_app_014` | `sap.suite.ui.microchart` | `InteractiveLineChart` | 1.42 |
-| `z2ui5_cl_smp_app_016` | `sap.suite.ui.microchart` | `InteractiveBarChart` | 1.42 |
-| `z2ui5_cl_smp_app_029` | `sap.suite.ui.microchart` | `RadialMicroChart` | 1.36, **DEPRECATED 1.135** |
-| `z2ui5_cl_smp_app_076` | `sap.gantt` | `GanttChartWithTable` | **DEPRECATED 1.64** |
-| `z2ui5_cl_smp_app_091` | `sap.suite.ui.commons` | `ProcessFlow` | base (no tag) |
-| `z2ui5_cl_smp_app_113` | `sap.suite.ui.commons` | `Timeline` | base (no tag) |
-| `z2ui5_cl_smp_app_123` | `sap.ui.vbm / sap.ui.vk` | `AnalyticMap` | base (no tag) |
-| `z2ui5_cl_smp_app_124` | `sap.ndc` | `BarcodeScannerButton` | base (no tag) |
-| `z2ui5_cl_smp_app_179` | `sap.gantt` | `GanttChartContainer` | **DEPRECATED 1.64** |
-| `z2ui5_cl_smp_app_182` | `sap.suite.ui.commons` | `networkgraph.Graph` | 1.50 |
-| `z2ui5_cl_smp_app_196` | `sap.suite.ui.commons` | `statusindicator.StatusIndicator` | 1.50 |
-| `z2ui5_cl_smp_app_308` | `sap.suite.ui.microchart` | `HarveyBallMicroChart` | 1.34 |
-| `z2ui5_cl_smp_app_312` | `sap.viz + sap.ui.comp` | `VizFrame + filterbar.FilterBar` | 1.22 / base |
+| Sample class | Library | Control | class `@since` | collected as |
+|---|---|---|---|---|
+| `z2ui5_cl_smp_app_013` | `sap.suite.ui.microchart` | `InteractiveDonutChart` | 1.42 | `z2ui5_cl_dmo_sapui5_001` |
+| `z2ui5_cl_smp_app_014` | `sap.suite.ui.microchart` | `InteractiveLineChart` | 1.42 | `z2ui5_cl_dmo_sapui5_002` |
+| `z2ui5_cl_smp_app_016` | `sap.suite.ui.microchart` | `InteractiveBarChart` | 1.42 | `z2ui5_cl_dmo_sapui5_003` |
+| `z2ui5_cl_smp_app_029` | `sap.suite.ui.microchart` | `RadialMicroChart` | 1.36, **DEPRECATED 1.135** | `z2ui5_cl_dmo_sapui5_004` |
+| `z2ui5_cl_smp_app_076` | `sap.gantt` | `GanttChartWithTable` | **DEPRECATED 1.64** | `z2ui5_cl_dmo_sapui5_013` |
+| `z2ui5_cl_smp_app_091` | `sap.suite.ui.commons` | `ProcessFlow` | base (no tag) | `z2ui5_cl_dmo_sapui5_006` |
+| `z2ui5_cl_smp_app_113` | `sap.suite.ui.commons` | `Timeline` | base (no tag) | `z2ui5_cl_dmo_sapui5_007` |
+| `z2ui5_cl_smp_app_123` | `sap.ui.vbm / sap.ui.vk` | `AnalyticMap` | base (no tag) | `z2ui5_cl_dmo_sapui5_010` |
+| `z2ui5_cl_smp_app_124` | `sap.ndc` | `BarcodeScannerButton` | base (no tag) | `z2ui5_cl_dmo_sapui5_011` |
+| `z2ui5_cl_smp_app_179` | `sap.gantt` | `GanttChartContainer` | **DEPRECATED 1.64** | `z2ui5_cl_dmo_sapui5_014` |
+| `z2ui5_cl_smp_app_182` | `sap.suite.ui.commons` | `networkgraph.Graph` | 1.50 | `z2ui5_cl_dmo_sapui5_008` |
+| `z2ui5_cl_smp_app_196` | `sap.suite.ui.commons` | `statusindicator.StatusIndicator` | 1.50 | `z2ui5_cl_dmo_sapui5_009` |
+| `z2ui5_cl_smp_app_308` | `sap.suite.ui.microchart` | `HarveyBallMicroChart` | 1.34 | `z2ui5_cl_dmo_sapui5_005` |
+| `z2ui5_cl_smp_app_312` | `sap.viz + sap.ui.comp` | `VizFrame + filterbar.FilterBar` | 1.22 / base | `z2ui5_cl_dmo_sapui5_012` |
 
-The two `sap.gantt` rows are out of scope by the **normal** rule, not by the
-SAPUI5 question: both controls are class-deprecated since 1.64 in favour of
-`sap.gantt.simple.*`, and ai-demokit never ports a deprecated control (AGENTS
-§1). Taking them over would mean rebuilding on the successor — a different
-sample. `RadialMicroChart` is the same case one release line later: the import
-table first carried only its `@since 1.36`, and the scope-of pass found the
-class-level deprecation as of 1.135 on top. So even if `src/03` opened tomorrow,
-three of these fourteen would stay out.
+The two `sap.gantt` rows would be out of scope by the **normal** rule even
+without the SAPUI5 question: both controls are class-deprecated since 1.64 in
+favour of `sap.gantt.simple.*`, and this repo never *ports* a deprecated control
+(AGENTS §1). `RadialMicroChart` is the same case one release line later — the
+import table first carried only its `@since 1.36`, and the scope-of pass found
+the deprecation as of 1.135 on top. Collecting them is a different act from
+porting them: the header of each says the control is deprecated and points at
+the demo kit for its successor, which is knowledge the collection exists to
+carry.
 
 **OpenUI5, restricted for other reasons (3)** — no demo kit original to rebuild,
 so out of scope here whatever happens to `src/03`/`src/04`:
