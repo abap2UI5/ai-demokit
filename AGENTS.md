@@ -303,6 +303,21 @@ What changed with the decision, concretely:
   exists. **No template, no port**: without the original there is nothing for
   `structural_diff` to compare against, and a port that no gate can check is not
   a port this repo ships.
+- **`scripts/import-sapui5-sample.mjs` fills that mirror** from one downloaded
+  sample — the SDK's own "Download Sample" archive, which is the only route
+  where the host is not reachable (a sandbox that allow-lists outbound hosts
+  blocks `ui5.sap.com`; the demo kit is then readable in a browser and nowhere
+  else). It reads the sample id and the file list out of `manifest.json`,
+  refuses an incomplete download (AGENTS §4), takes `@since`/`@deprecated` from
+  the pinned `@sapui5` packages via `scope-of`'s verdict rather than from the
+  download, refuses a deprecated control, and writes both the template folder
+  and the `ui5/universe-sapui5.json` row. After it,
+  `npm run scaffold <lib>.sample.<Name>` behaves exactly as for OpenUI5.
+
+The whole chain is verified end to end on a synthetic download (2026-08-12):
+import → universe row → `scaffold` files the port at `src/03/06/` with the
+`SAPUI5 <= 1.71 / sap.suite` package and archives the template under
+`ui5/sap.suite.ui.microchart/<Name>/`.
 
 Two gates stay weaker for SAPUI5 than for OpenUI5, and a port must say so in its
 sidecar rather than pretend otherwise: the **property gate** is blind (gap 1
