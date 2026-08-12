@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_101",
   "sample": "sap.m.sample.Wizard",
   "entity": "sap.m.Wizard",
-  "file": "src/01/b12/z2ui5_cl_dmo_app_101.clas.abap",
+  "file": "src/01/z2ui5_cl_dmo_app_101.clas.abap",
   "batch": "b12",
   "audit": {
     "frontend_action": true,

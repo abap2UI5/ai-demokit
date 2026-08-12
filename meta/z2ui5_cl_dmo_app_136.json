@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_136",
   "sample": "sap.f.sample.SidePanelSingle",
   "entity": "sap.f.SidePanel",
-  "file": "src/04/b03/z2ui5_cl_dmo_app_136.clas.abap",
+  "file": "src/04/z2ui5_cl_dmo_app_136.clas.abap",
   "batch": "b03",
   "audit": {
     "frontend_action": false,

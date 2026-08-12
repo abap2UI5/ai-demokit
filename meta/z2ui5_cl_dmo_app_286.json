@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_286",
   "sample": "sap.m.sample.BreadcrumbsWithCurrentPageLink",
   "entity": "sap.m.Breadcrumbs",
-  "file": "src/01/b21/z2ui5_cl_dmo_app_286.clas.abap",
+  "file": "src/01/z2ui5_cl_dmo_app_286.clas.abap",
   "batch": "b21",
   "audit": {
     "frontend_action": true,

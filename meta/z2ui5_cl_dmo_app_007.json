@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_007",
   "sample": "sap.m.sample.CheckBoxTriState",
   "entity": "sap.m.CheckBox",
-  "file": "src/01/b02/z2ui5_cl_dmo_app_007.clas.abap",
+  "file": "src/01/z2ui5_cl_dmo_app_007.clas.abap",
   "batch": "b02",
   "audit": {
     "frontend_action": false,

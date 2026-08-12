@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_240",
   "sample": "sap.ui.unified.sample.CalendarLegendNavigation",
   "entity": "sap.ui.unified.CalendarLegend",
-  "file": "src/02/b11/z2ui5_cl_dmo_app_240.clas.abap",
+  "file": "src/02/z2ui5_cl_dmo_app_240.clas.abap",
   "batch": "b11",
   "audit": {
     "frontend_action": false,

@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_129",
   "sample": "sap.ui.core.sample.TypeInteger",
   "entity": "sap.ui.model.type.Integer",
-  "file": "src/02/b03/z2ui5_cl_dmo_app_129.clas.abap",
+  "file": "src/02/z2ui5_cl_dmo_app_129.clas.abap",
   "batch": "b03",
   "audit": { "frontend_action": false, "event_t_arg": false },
   "status": "reviewed",

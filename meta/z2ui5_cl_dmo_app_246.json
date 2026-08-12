@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_246",
   "sample": "sap.ui.unified.sample.FileUploaderComplex",
   "entity": "sap.ui.unified.FileUploader",
-  "file": "src/02/b12/z2ui5_cl_dmo_app_246.clas.abap",
+  "file": "src/02/z2ui5_cl_dmo_app_246.clas.abap",
   "batch": "b12",
   "audit": {
     "frontend_action": true,

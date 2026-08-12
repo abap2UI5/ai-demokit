@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_264",
   "sample": "sap.ui.core.sample.BoundFilters.FilterBar",
   "entity": "sap.ui.model.Filter",
-  "file": "src/02/b13/z2ui5_cl_dmo_app_264.clas.abap",
+  "file": "src/02/z2ui5_cl_dmo_app_264.clas.abap",
   "batch": "b13",
   "audit": {
     "frontend_action": false,

@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_139",
   "sample": "sap.ui.unified.sample.CalendarSingleDaySelection",
   "entity": "sap.ui.unified.Calendar",
-  "file": "src/02/b05/z2ui5_cl_dmo_app_139.clas.abap",
+  "file": "src/02/z2ui5_cl_dmo_app_139.clas.abap",
   "batch": "b05",
   "audit": {
     "frontend_action": false,

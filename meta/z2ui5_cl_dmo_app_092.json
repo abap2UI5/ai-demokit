@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_092",
   "sample": "sap.m.sample.TableAutoPopin",
   "entity": "sap.m.Table",
-  "file": "src/01/b11/z2ui5_cl_dmo_app_092.clas.abap",
+  "file": "src/01/z2ui5_cl_dmo_app_092.clas.abap",
   "batch": "b11",
   "audit": {
     "frontend_action": true,

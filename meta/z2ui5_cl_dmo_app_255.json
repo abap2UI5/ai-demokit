@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_255",
   "sample": "sap.m.sample.DateTimePickerValueState",
   "entity": "sap.m.DateTimePicker",
-  "file": "src/01/b19/z2ui5_cl_dmo_app_255.clas.abap",
+  "file": "src/01/z2ui5_cl_dmo_app_255.clas.abap",
   "batch": "b19",
   "audit": {
     "frontend_action": false,

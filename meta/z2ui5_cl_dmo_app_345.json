@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_345",
   "sample": "sap.ui.layout.sample.GridProperties",
   "entity": "sap.ui.layout.Grid",
-  "file": "src/02/b19/z2ui5_cl_dmo_app_345.clas.abap",
+  "file": "src/02/z2ui5_cl_dmo_app_345.clas.abap",
   "batch": "b19",
   "audit": {
     "frontend_action": false,

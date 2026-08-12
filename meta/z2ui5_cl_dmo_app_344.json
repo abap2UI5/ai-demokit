@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_344",
   "sample": "sap.ui.layout.sample.DynamicSideContentPosition",
   "entity": "sap.ui.layout.DynamicSideContent",
-  "file": "src/02/b19/z2ui5_cl_dmo_app_344.clas.abap",
+  "file": "src/02/z2ui5_cl_dmo_app_344.clas.abap",
   "batch": "b19",
   "audit": {
     "frontend_action": true,

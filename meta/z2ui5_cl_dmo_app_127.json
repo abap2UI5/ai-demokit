@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_127",
   "sample": "sap.ui.core.sample.InvisibleText",
   "entity": "sap.ui.core.InvisibleText",
-  "file": "src/02/b02/z2ui5_cl_dmo_app_127.clas.abap",
+  "file": "src/02/z2ui5_cl_dmo_app_127.clas.abap",
   "batch": "b02",
   "audit": {
     "frontend_action": true,

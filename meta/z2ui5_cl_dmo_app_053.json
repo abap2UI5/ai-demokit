@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_053",
   "sample": "sap.m.sample.ToolbarShrinkable",
   "entity": "sap.m.Toolbar",
-  "file": "src/01/b03/z2ui5_cl_dmo_app_053.clas.abap",
+  "file": "src/01/z2ui5_cl_dmo_app_053.clas.abap",
   "batch": "b03",
   "audit": {
     "frontend_action": false,

@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_111",
   "sample": "sap.f.sample.GridListBasic",
   "entity": "sap.f.GridList",
-  "file": "src/04/b01/z2ui5_cl_dmo_app_111.clas.abap",
+  "file": "src/04/z2ui5_cl_dmo_app_111.clas.abap",
   "batch": "b01",
   "audit": { "frontend_action": false, "event_t_arg": false },
   "status": "reviewed",

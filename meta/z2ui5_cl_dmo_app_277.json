@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_277",
   "sample": "sap.m.sample.TableContextualWidthDynamic",
   "entity": "sap.m.Table",
-  "file": "src/01/b15/z2ui5_cl_dmo_app_277.clas.abap",
+  "file": "src/01/z2ui5_cl_dmo_app_277.clas.abap",
   "batch": "b15",
   "audit": {
     "frontend_action": false,

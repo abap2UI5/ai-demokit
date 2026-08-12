@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_117",
   "sample": "sap.f.sample.Card",
   "entity": "sap.f.Card",
-  "file": "src/04/b01/z2ui5_cl_dmo_app_117.clas.abap",
+  "file": "src/04/z2ui5_cl_dmo_app_117.clas.abap",
   "batch": "b01",
   "audit": {
     "frontend_action": true,

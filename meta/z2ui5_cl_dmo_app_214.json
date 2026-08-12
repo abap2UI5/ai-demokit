@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_214",
   "sample": "sap.ui.layout.sample.BlockLayoutDefault",
   "entity": "sap.ui.layout.BlockLayout",
-  "file": "src/02/b10/z2ui5_cl_dmo_app_214.clas.abap",
+  "file": "src/02/z2ui5_cl_dmo_app_214.clas.abap",
   "batch": "b10",
   "audit": {
     "frontend_action": false,

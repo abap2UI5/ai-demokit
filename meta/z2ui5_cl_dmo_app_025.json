@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_025",
   "sample": "sap.m.sample.FeedListItem",
   "entity": "sap.m.FeedListItem",
-  "file": "src/01/b06/z2ui5_cl_dmo_app_025.clas.abap",
+  "file": "src/01/z2ui5_cl_dmo_app_025.clas.abap",
   "batch": "b06",
   "audit": {
     "frontend_action": false,

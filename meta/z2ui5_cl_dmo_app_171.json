@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_171",
   "sample": "sap.ui.unified.sample.CurrencyInTable",
   "entity": "sap.ui.unified.Currency",
-  "file": "src/02/b10/z2ui5_cl_dmo_app_171.clas.abap",
+  "file": "src/02/z2ui5_cl_dmo_app_171.clas.abap",
   "batch": "b10",
   "audit": {
     "frontend_action": false,

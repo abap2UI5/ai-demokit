@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_244",
   "sample": "sap.f.sample.DynamicPageResponsiveAvatar",
   "entity": "sap.f.DynamicPage",
-  "file": "src/04/b10/z2ui5_cl_dmo_app_244.clas.abap",
+  "file": "src/04/z2ui5_cl_dmo_app_244.clas.abap",
   "batch": "b10",
   "audit": {
     "frontend_action": true,

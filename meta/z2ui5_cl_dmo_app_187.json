@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_187",
   "sample": "sap.uxap.sample.AnchorBarNoPopover",
   "entity": "sap.uxap.ObjectPageLayout",
-  "file": "src/03/b02/z2ui5_cl_dmo_app_187.clas.abap",
+  "file": "src/03/z2ui5_cl_dmo_app_187.clas.abap",
   "batch": "b02",
   "audit": {
     "frontend_action": false,

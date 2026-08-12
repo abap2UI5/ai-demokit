@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_045",
   "sample": "sap.m.sample.RangeSlider",
   "entity": "sap.m.RangeSlider",
-  "file": "src/01/b02/z2ui5_cl_dmo_app_045.clas.abap",
+  "file": "src/01/z2ui5_cl_dmo_app_045.clas.abap",
   "batch": "b02",
   "audit": {
     "frontend_action": false,

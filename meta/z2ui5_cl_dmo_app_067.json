@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_067",
   "sample": "sap.m.sample.MessagePopoverAsyncMessageHandling",
   "entity": "sap.m.MessagePopover",
-  "file": "src/01/b08/z2ui5_cl_dmo_app_067.clas.abap",
+  "file": "src/01/z2ui5_cl_dmo_app_067.clas.abap",
   "batch": "b08",
   "audit": {
     "frontend_action": true,

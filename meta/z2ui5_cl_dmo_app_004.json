@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_004",
   "sample": "sap.m.sample.BusyDialog",
   "entity": "sap.m.BusyDialog",
-  "file": "src/01/b05/z2ui5_cl_dmo_app_004.clas.abap",
+  "file": "src/01/z2ui5_cl_dmo_app_004.clas.abap",
   "batch": "b05",
   "audit": {
     "frontend_action": true,
