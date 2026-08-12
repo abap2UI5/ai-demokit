@@ -13,31 +13,62 @@
 [![generate_result](https://github.com/abap2UI5/ai-demokit/actions/workflows/generate_result.yaml/badge.svg)](https://github.com/abap2UI5/ai-demokit/actions/workflows/generate_result.yaml)
 [![deploy_web](https://github.com/abap2UI5/ai-demokit/actions/workflows/deploy_web.yaml/badge.svg)](https://github.com/abap2UI5/ai-demokit/actions/workflows/deploy_web.yaml)
 
-# abap2UI5 ai-demokit
+# abap2UI5 — samples-controls
 
 _Last generated: <!-- last-run -->2026-07-20 06:21 UTC<!-- /last-run -->_
 
-> **This repository is AI-generated.** From every official UI5 demo kit
-> sample of the ten covered libraries (**`sap.m`**, `sap.f`, `sap.ui.core`,
-> `sap.ui.layout`, `sap.ui.table`, `sap.ui.unified`, `sap.uxap`, `sap.tnt`,
-> `sap.ui.codeeditor`, `sap.ui.integration`) whose control **exists since
-> UI5 1.71** and is **not deprecated** (legacy-free ready) it automatically
-> builds an abap2UI5 app, exposing the **functional gaps** between what UI5
-> offers and what abap2UI5 can already express — so they can be closed.
-> Deprecated or newer controls are listed as out of scope.
->
-> See the result in **[api.md](api.md)**, or try it live — two ways:
-> - **In your browser (no backend):** open the GitHub Pages demo at
->   **https://abap2ui5.github.io/ai-demokit/** — the framework and all ports
->   run fully client-side (transpiled ABAP + sql.js WASM). Built from
->   [`web/`](web) into [`docs/`](docs); see [`web/README.md`](web/README.md).
-> - **In your ABAP system:** pull this repo and start
->   **`z2ui5_cl_dmo_app_overview`**, which lists every generated sample and
->   launches it right in your system.
+**Learn how to use every UI5 control in ABAP — the UI5 Demo Kit rebuilt with
+abap2UI5.**
 
-## Pipeline
+You know the drill from the [UI5 Demo Kit](https://sdk.openui5.org): pick a
+control, open its sample, copy the pattern. This repository brings that
+experience to ABAP — the official demo kit samples of ten UI5 libraries
+(`sap.m`, `sap.f`, `sap.ui.core`, `sap.ui.layout`, `sap.ui.table`,
+`sap.ui.unified`, `sap.uxap`, `sap.tnt`, `sap.ui.codeeditor`,
+`sap.ui.integration`), rebuilt 1:1 as ready-to-run abap2UI5 apps. Wondering
+how to express a control in ABAP? Its sample is already here — or on its way.
 
-A coding agent runs the pipeline:
+#### Try it in 60 seconds
+
+1. Install [abap2UI5](https://github.com/abap2UI5/abap2UI5).
+2. Pull this repository with [abapGit](https://abapgit.org).
+3. Start **`z2ui5_cl_dmo_app_overview`** — every sample in one searchable
+   table: each row links the original UI5 sample and its ABAP rebuild, and
+   one click starts the app right in your system.
+
+No ABAP system at hand? Open the
+[GitHub Pages demo](https://abap2ui5.github.io/ai-demokit/) — the framework
+and every sample run fully client-side in your browser.
+
+#### The learning path
+
+This repository is step 2 of 3 — the control reference of the abap2UI5 sample
+family:
+
+|      | Repository | What you learn | Where to start |
+|------|------------|----------------|----------------|
+| 1️⃣ | [**samples**](https://github.com/abap2UI5/samples) | **the abap2UI5 basics** — bindings, events, popups, navigation, complete apps | run `Z2UI5_CL_SMP_APP_000` |
+| 2️⃣ | **samples-controls** — 📍 *you are here* | **how to use every UI5 control** — the UI5 Demo Kit rebuilt with abap2UI5 | run `z2ui5_cl_dmo_app_overview` |
+| 3️⃣ | [**samples-stack**](https://github.com/abap2UI5/samples-ext) | **how abap2UI5 plays with your stack** — OData, RAP, WebSockets, the Fiori Launchpad and more | pick your technology in its package table |
+
+#### Learn by comparing
+
+Every port keeps the structure of its original, so the two read side by side:
+the UI5 original (JS/XML) in [`ui5/`](ui5), the ABAP rebuild in [`src/`](src),
+and [api.md](api.md) as the full index — one row per demo kit sample, with
+links to both. The most effective way to learn a control: open its demo kit
+sample and its ABAP class next to each other and compare line by line.
+
+<details>
+<summary><b>How this repository is built</b> — the generation pipeline</summary>
+<br>
+
+This repository is generated and gated by an AI coding agent: from every
+official demo kit sample of the covered libraries whose control **exists
+since UI5 1.71** and is **not deprecated** (legacy-free ready), it builds an
+abap2UI5 app — exposing the **functional gaps** between what UI5 offers and
+what abap2UI5 can already express, so they can be closed. Deprecated or newer
+controls are listed as out of scope. The pipeline:
 
 1. **Read** — clone [OpenUI5](https://github.com/SAP/openui5) and scan every
    demo kit sample of the covered libraries
@@ -158,7 +189,25 @@ Ports are filed by the sample's UI5 library — `src/01` (`sap.m`), `src/02`
 (`sap.ui.*`), `src/03` (`sap.uxap`), `src/04` (`sap.f`), `src/05` (`sap.tnt`)
 — one flat ABAP package per library; see AGENTS §3 for the folder table. The
 generation/review batch a port came from is recorded in its
-`meta/<class>.json`, not in the tree.
+`meta/<class>.json`, not in the tree. The browser demo is built from
+[`web/`](web) into [`docs/`](docs); see [`web/README.md`](web/README.md).
+
+#### Repo map
+
+| File | What it is |
+|------|------------|
+| [`AGENTS.md`](AGENTS.md) | The complete generation rulebook (conventions, skeleton, gates) |
+| [`CAPABILITIES.md`](CAPABILITIES.md) | What abap2UI5 can express — each entry backed by a proving port or a source-verified trace |
+| [`TRAINING.md`](TRAINING.md) | The improvement loop: batches, quality ladder, reference repositories |
+| [`STATUS.md`](STATUS.md) | Generated point-in-time state + the open findings backlog |
+| [`STATUS-history.md`](STATUS-history.md) | The chronological journal (batches, probes, audits) |
+| [`api.md`](api.md) | One row per demo kit sample: ported, backlog or out of scope |
+| [`meta/`](meta) | One sidecar per port — status, checked, typed deviations |
+| [`pr/`](pr) | Forwardable improvement requests for the abap2UI5 framework, distilled from porting gaps |
+| [ai-mcp](https://github.com/abap2UI5/ai-mcp) | MCP server for AI coding agents — capability queries, view validation, deploy, headless run + screenshot on this repo's infrastructure (separate repository) |
+| [abap2UI5-linter](https://github.com/abap2UI5/linter) | The view gates as standalone CLI, library and GitHub Action — extracted from this repo and now used BY it (`scripts/view-gates.mjs`) |
+
+</details>
 
 ## Compatibility
 
@@ -183,21 +232,6 @@ CI enforces this on every change:
 Every port also carries a machine-readable sidecar `meta/<class>.json`
 (sample, status, declared deviations) — the source of truth the overview app,
 the coverage and the structural diff read from.
-
-## Repo map
-
-| File | What it is |
-|------|------------|
-| [`AGENTS.md`](AGENTS.md) | The complete generation rulebook (conventions, skeleton, gates) |
-| [`CAPABILITIES.md`](CAPABILITIES.md) | What abap2UI5 can express — each entry backed by a proving port or a source-verified trace |
-| [`TRAINING.md`](TRAINING.md) | The improvement loop: batches, quality ladder, reference repositories |
-| [`STATUS.md`](STATUS.md) | Generated point-in-time state + the open findings backlog |
-| [`STATUS-history.md`](STATUS-history.md) | The chronological journal (batches, probes, audits) |
-| [`api.md`](api.md) | One row per demo kit sample: ported, backlog or out of scope |
-| [`meta/`](meta) | One sidecar per port — status, checked, typed deviations |
-| [`pr/`](pr) | Forwardable improvement requests for the abap2UI5 framework, distilled from porting gaps |
-| [ai-mcp](https://github.com/abap2UI5/ai-mcp) | MCP server for AI coding agents — capability queries, view validation, deploy, headless run + screenshot on this repo's infrastructure (separate repository) |
-| [abap2UI5-linter](https://github.com/abap2UI5/linter) | The view gates as standalone CLI, library and GitHub Action — extracted from this repo and now used BY it (`scripts/view-gates.mjs`) |
 
 ## Coverage
 
