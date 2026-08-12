@@ -1,5 +1,6 @@
 [![namespace](https://img.shields.io/badge/namespace-z2ui5__cl__dmo-blue)](abaplint.jsonc)
 [![dependency](https://img.shields.io/badge/dependency-abap2UI5-blue)](https://github.com/abap2UI5/abap2UI5)
+![ABAP NW 7.02 to ABAP Cloud](https://img.shields.io/badge/ABAP-NW%207.02%20%E2%86%92%20Cloud-blue)
 <br>
 <br>
 [![ABAP_STANDARD](https://github.com/abap2UI5/samples-controls/actions/workflows/ABAP_STANDARD.yaml/badge.svg)](https://github.com/abap2UI5/samples-controls/actions/workflows/ABAP_STANDARD.yaml)
