@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_122",
   "sample": "sap.ui.core.sample.Icon",
   "entity": "sap.ui.core.Icon",
-  "file": "src/02/b02/z2ui5_cl_dmo_app_122.clas.abap",
+  "file": "src/02/z2ui5_cl_dmo_app_122.clas.abap",
   "batch": "b02",
   "audit": {
     "frontend_action": true,

@@ -44,9 +44,8 @@ A coding agent runs the pipeline:
    (`src/<library>/test/<library path>/demokit/sample/<Name>/`, second segment
    with dots as slashes, e.g. `src/sap.tnt/test/sap/tnt/…`).
 2. **Generate** — rebuild each sample 1:1 as an abap2UI5 app (`z2ui5_if_app`),
-   filed by library under `src/<NN>` (`src/01` = `sap.m`, see AGENTS §3) in
-   batch subpackages (`b01`, `b02`, …) — one batch of related samples per
-   package.
+   filed by library under `src/<NN>` (`src/01` = `sap.m`, see AGENTS §3) —
+   one ABAP package per library, flat.
 3. **Store templates** — keep the original UI5 JS/XML templates in
    [`ui5/`](ui5), one folder per sample — only ported samples are archived;
    each batch copies its samples over from the OpenUI5 checkout.
@@ -157,8 +156,9 @@ Rules:
 
 Ports are filed by the sample's UI5 library — `src/01` (`sap.m`), `src/02`
 (`sap.ui.*`), `src/03` (`sap.uxap`), `src/04` (`sap.f`), `src/05` (`sap.tnt`)
-— and grouped into batch subpackages `src/<NN>/b<nn>` (one generation/review
-batch = one ABAP package); see AGENTS §3 for the folder table.
+— one flat ABAP package per library; see AGENTS §3 for the folder table. The
+generation/review batch a port came from is recorded in its
+`meta/<class>.json`, not in the tree.
 
 ## Compatibility
 

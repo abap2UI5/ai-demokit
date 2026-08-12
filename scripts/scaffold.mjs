@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 /*
  * Port scaffolder — turn an OpenUI5 demo-kit sample into a ready-to-fill port
- * skeleton, so the mechanical boilerplate (template archive, batch folder,
- * package, class stub, clas.xml, meta sidecar, next app number, lib→folder) is
- * done for you and only the view rebuild remains.
+ * skeleton, so the mechanical boilerplate (template archive, library package,
+ * class stub, clas.xml, meta sidecar, next app number, lib→folder) is done for
+ * you and only the view rebuild remains.
  *
  *   node scripts/scaffold.mjs <sample> [options]
  *
@@ -11,8 +11,8 @@
  *              sap.ui.table/RowModes          (lib/name)
  *              RowModes                        (bare name — looked up in universe.json)
  *
- *   --batch <bNN>   target an explicit batch folder
- *   --new-batch     create the next batch folder in the library
+ *   --batch <bNN>   stamp an explicit batch into the meta sidecar
+ *   --new-batch     open the next batch number for the library
  *   --dry-run       print what would be created, write nothing
  *
  * Leaves the view as a TODO placeholder: structural_diff will (correctly) fail
@@ -191,17 +191,26 @@ for (const f of fs.readdirSync(META)) { const m = f.match(/app_(\d+)\.json$/); i
 const num = String(maxNum + 1).padStart(3, '0');
 const cls = `z2ui5_cl_dmo_app_${num}`;
 
-// ---------- batch folder ----------
-const libDir = path.join(SRC, folder);
-const existingBatches = fs.existsSync(libDir) ? fs.readdirSync(libDir).filter((d) => /^b\d+$/.test(d)).sort() : [];
+// ---------- batch ----------
+// The batch is generation/PR bookkeeping only — it lives in the meta sidecar,
+// not in the tree (the b<nn> subpackages were flattened away: one package per
+// library, AGENTS §3). So the batch numbering is read back from the sidecars
+// of this library instead of from the folder names.
+const libBatches = [...new Set(
+  fs.readdirSync(META)
+    .filter((f) => f.endsWith('.json'))
+    .map((f) => { try { return JSON.parse(fs.readFileSync(path.join(META, f), 'utf8')); } catch { return null; } })
+    .filter((m) => m && new RegExp(`^src/${folder}/`).test(m.file || '') && /^b\d+$/.test(m.batch || ''))
+    .map((m) => m.batch),
+)].sort();
 let batch;
 if (flags.batch) batch = flags.batch;
-else if (flags.newBatch || !existingBatches.length) {
-  const maxB = existingBatches.length ? Math.max(...existingBatches.map((b) => +b.slice(1))) : 0;
+else if (flags.newBatch || !libBatches.length) {
+  const maxB = libBatches.length ? Math.max(...libBatches.map((b) => +b.slice(1))) : 0;
   batch = `b${String(maxB + 1).padStart(2, '0')}`;
-} else batch = existingBatches[existingBatches.length - 1];
-const batchDir = path.join(libDir, batch);
-const relFile = `src/${folder}/${batch}/${cls}.clas.abap`;
+} else batch = libBatches[libBatches.length - 1];
+const libDir = path.join(SRC, folder);
+const relFile = `src/${folder}/${cls}.clas.abap`;
 
 // ---------- build artifacts ----------
 const DEVC = `﻿<?xml version="1.0" encoding="utf-8"?>
@@ -209,7 +218,7 @@ const DEVC = `﻿<?xml version="1.0" encoding="utf-8"?>
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <DEVC>
-    <CTEXT>faithful ports</CTEXT>
+    <CTEXT>${lib.startsWith('sap.ui') ? 'sap.ui' : lib}</CTEXT>
    </DEVC>
   </asx:values>
  </asx:abap>
@@ -330,13 +339,13 @@ if (fs.existsSync(targetAbap)) { console.error(`refusing to overwrite existing $
 // ---------- summary ----------
 const created = [
   relFile,
-  `src/${folder}/${batch}/${cls}.clas.xml`,
+  `src/${folder}/${cls}.clas.xml`,
   `meta/${cls}.json`,
-  ...(fs.existsSync(path.join(batchDir, 'package.devc.xml')) ? [] : [`src/${folder}/${batch}/package.devc.xml`]),
+  ...(fs.existsSync(path.join(libDir, 'package.devc.xml')) ? [] : [`src/${folder}/package.devc.xml`]),
   ...templateFiles.map((f) => `ui5/${lib}/${name}/${f}`),
 ];
 console.log(`scaffold ${cls}  (${lib}.sample.${name} — ${entity})`);
-console.log(`  library src/${folder}  batch ${batch}${existingBatches.includes(batch) ? '' : ' (new)'}`);
+console.log(`  library src/${folder}  batch ${batch}${libBatches.includes(batch) ? '' : ' (new)'}`);
 console.log(`  template: ${path.relative(ROOT, templateDir)}`);
 console.log('  files:');
 for (const f of created) console.log(`    + ${f}`);
@@ -344,10 +353,10 @@ for (const f of created) console.log(`    + ${f}`);
 if (flags.dryRun) { console.log('\n(dry-run — nothing written)'); process.exit(0); }
 
 // ---------- write ----------
-fs.mkdirSync(batchDir, { recursive: true });
-if (!fs.existsSync(path.join(batchDir, 'package.devc.xml'))) fs.writeFileSync(path.join(batchDir, 'package.devc.xml'), DEVC);
+fs.mkdirSync(libDir, { recursive: true });
+if (!fs.existsSync(path.join(libDir, 'package.devc.xml'))) fs.writeFileSync(path.join(libDir, 'package.devc.xml'), DEVC);
 fs.writeFileSync(targetAbap, clasAbap);
-fs.writeFileSync(path.join(ROOT, `src/${folder}/${batch}/${cls}.clas.xml`), clasXml);
+fs.writeFileSync(path.join(ROOT, `src/${folder}/${cls}.clas.xml`), clasXml);
 fs.writeFileSync(path.join(META, `${cls}.json`), JSON.stringify(meta, null, 2) + '\n');
 fs.mkdirSync(ui5Dest, { recursive: true });
 for (const rel of templateFiles) {

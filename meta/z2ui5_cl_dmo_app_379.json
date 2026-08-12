@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_379",
   "sample": "sap.m.sample.IconTabBarInlineMode",
   "entity": "sap.m.IconTabBar",
-  "file": "src/01/b26/z2ui5_cl_dmo_app_379.clas.abap",
+  "file": "src/01/z2ui5_cl_dmo_app_379.clas.abap",
   "batch": "b26",
   "audit": {
     "frontend_action": false,

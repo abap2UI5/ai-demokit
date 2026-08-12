@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_343",
   "sample": "sap.ui.layout.sample.BlockLayoutCustomBackgroundPerCell",
   "entity": "sap.ui.layout.BlockLayout",
-  "file": "src/02/b19/z2ui5_cl_dmo_app_343.clas.abap",
+  "file": "src/02/z2ui5_cl_dmo_app_343.clas.abap",
   "batch": "b19",
   "audit": {
     "frontend_action": false,

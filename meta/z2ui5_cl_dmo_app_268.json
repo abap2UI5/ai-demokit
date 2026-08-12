@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_268",
   "sample": "sap.ui.unified.sample.ColorPickerPopover",
   "entity": "sap.ui.unified.ColorPickerPopover",
-  "file": "src/02/b14/z2ui5_cl_dmo_app_268.clas.abap",
+  "file": "src/02/z2ui5_cl_dmo_app_268.clas.abap",
   "batch": "b14",
   "audit": {
     "frontend_action": true,

@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_213",
   "sample": "sap.f.sample.GridListBreakPoints",
   "entity": "sap.f.GridList",
-  "file": "src/04/b07/z2ui5_cl_dmo_app_213.clas.abap",
+  "file": "src/04/z2ui5_cl_dmo_app_213.clas.abap",
   "batch": "b07",
   "audit": {
     "frontend_action": true,

@@ -35,14 +35,16 @@ not flow back as (a) a rule and (b) a reference example is wasted training signa
 
 ## The batch process
 
-Work happens in batches of ~10 related samples (one control family), each in
-its own subpackage `src/01/b<nn>` (= one ABAP package in the system) and one
-PR. Per batch:
+Work happens in batches of ~10 related samples (one control family), each one
+PR. A batch is **not** a package: ports go straight into their library package
+`src/<NN>/` (flat, AGENTS §3), and the batch id lives in the `batch` field of
+each port's `meta/<class>.json`. Per batch:
 
 1. **Generate** — the agent picks ~10 related samples from the in-scope
    backlog (`node scripts/generate-coverage.mjs --backlog` — only controls that
    exist since UI5 1.71 and are not deprecated, see AGENTS §1) and ports them
-   into a new `b<nn>` folder, prompt fed with AGENTS.md, CAPABILITIES.md and
+   under a new `b<nn>` batch id (`npm run scaffold … --new-batch`), prompt fed
+   with AGENTS.md, CAPABILITIES.md and
    the 2–3 nearest `checked` ports. Pick **breadth-first**: `NEW-CONTROL` rows
    (control not covered by any port yet) before further samples of covered
    controls, and never rows marked `HOLDOUT` (see below) — one port per
@@ -71,8 +73,8 @@ PR. Per batch:
    and diff: a re-appearing old mistake means the rule was too weak.
    Corrections-per-batch is the improvement curve; it must trend down.
 
-A batch folder is closed once merged — follow-ups amend the port in place, new
-ports go into the next `b<nn>`.
+A batch is closed once merged — follow-ups amend the port in place, new ports
+get the next `b<nn>` batch id.
 
 ## Reference repositories
 
@@ -150,7 +152,7 @@ edited directly in the sidecar. The shape:
   "class":   "z2ui5_cl_dmo_app_040",
   "sample":  "sap.m.sample.MultiInput",
   "entity":  "sap.m.MultiInput",
-  "file":    "src/01/b02/z2ui5_cl_dmo_app_040.clas.abap",
+  "file":    "src/01/z2ui5_cl_dmo_app_040.clas.abap",
   "batch":   "b02",
   "audit":   { "frontend_action": false, "event_t_arg": false },
   "status":  "generated",              // generated | reviewed | checked

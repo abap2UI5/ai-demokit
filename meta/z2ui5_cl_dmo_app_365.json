@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_365",
   "sample": "sap.ui.table.sample.TreeTable.HierarchyMaintenanceJSONTreeBinding",
   "entity": "sap.ui.table.TreeTable",
-  "file": "src/02/b20/z2ui5_cl_dmo_app_365.clas.abap",
+  "file": "src/02/z2ui5_cl_dmo_app_365.clas.abap",
   "batch": "b20",
   "audit": {
     "frontend_action": true,

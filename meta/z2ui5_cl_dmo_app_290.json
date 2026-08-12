@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_290",
   "sample": "sap.m.sample.MultiInputValueHelp",
   "entity": "sap.m.MultiInput",
-  "file": "src/01/b22/z2ui5_cl_dmo_app_290.clas.abap",
+  "file": "src/01/z2ui5_cl_dmo_app_290.clas.abap",
   "batch": "b22",
   "audit": {
     "frontend_action": true,

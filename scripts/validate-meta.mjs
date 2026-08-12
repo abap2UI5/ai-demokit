@@ -8,7 +8,7 @@
  * validator keeps the sidecars honest:
  *
  *   - schema: required fields, closed status/deviation-type vocabulary
- *   - referential: file exists, class matches, batch matches the path,
+ *   - referential: file exists in a library package, class matches,
  *     the ui5/ template folder for the sample is archived
  *   - completeness: every port class has exactly one sidecar
  *
@@ -90,9 +90,10 @@ function walk(dir, out = []) {
   return out;
 }
 
-// port classes = every class in a batch subpackage src/<lib>/b<nn>/
+// port classes = every class in a library package src/<nn>/ (the overview app
+// sits directly under src/ and is not a port)
 const ports = walk(SRC)
-  .filter((f) => f.endsWith('.clas.abap') && /src\/[^/]+\/b\d+\//.test(f.split(path.sep).join('/')))
+  .filter((f) => f.endsWith('.clas.abap') && /src\/\d+\/[^/]+$/.test(f.split(path.sep).join('/')))
   .map((f) => path.basename(f, '.clas.abap'));
 
 const sidecars = fs.existsSync(META)
@@ -198,8 +199,11 @@ for (const sf of sidecars.sort()) {
     const abs = path.join(ROOT, m.file);
     if (!fs.existsSync(abs)) err(`${sf}: file "${m.file}" does not exist`);
     else if (path.basename(abs, '.clas.abap') !== m.class) err(`${sf}: file does not match class`);
-    const batch = m.file.match(/^src\/[^/]+\/(b\d+)\//)?.[1] ?? null;
-    if (batch !== m.batch) err(`${sf}: batch "${m.batch}" does not match path ("${batch}")`);
+    // ports live directly in their library package src/<nn>/ — the b<nn> batch
+    // subpackages were flattened away (AGENTS §3), so the batch is no longer
+    // derivable from the path and is checked for shape only
+    if (!/^src\/\d+\/[^/]+\.clas\.abap$/.test(m.file)) err(`${sf}: file "${m.file}" is not in a library package src/<nn>/`);
+    if (!/^b\d+$/.test(m.batch || '')) err(`${sf}: batch "${m.batch}" is not a b<nn> batch id`);
     // audit.frontend_action must match the class — a 2026-08-03 sweep found
     // 24 drifted flags (both directions), so the fact is now derived-checked
     if (fs.existsSync(abs)) {

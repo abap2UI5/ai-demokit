@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_291",
   "sample": "sap.m.sample.NotificationListGroupBindings",
   "entity": "sap.m.NotificationListGroup",
-  "file": "src/01/b23/z2ui5_cl_dmo_app_291.clas.abap",
+  "file": "src/01/z2ui5_cl_dmo_app_291.clas.abap",
   "batch": "b23",
   "audit": {
     "frontend_action": true,

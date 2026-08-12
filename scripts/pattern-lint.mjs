@@ -225,7 +225,7 @@ for (const f of walk(SRC, '.xml').sort()) {
 
 for (const f of walk(SRC).sort()) {
   const rel = path.relative(ROOT, f).split(path.sep).join('/');
-  const isPort = /^src\/[^/]+\/b\d+\//.test(rel);
+  const isPort = /^src\/\d+\/[^/]+$/.test(rel);
   const content = fs.readFileSync(f, 'utf8');
   for (const rule of RULES) {
     if (rule.portsOnly && !isPort) continue;

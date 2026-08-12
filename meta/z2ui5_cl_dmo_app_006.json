@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_006",
   "sample": "sap.m.sample.CarouselWithControls",
   "entity": "sap.m.Carousel",
-  "file": "src/01/b04/z2ui5_cl_dmo_app_006.clas.abap",
+  "file": "src/01/z2ui5_cl_dmo_app_006.clas.abap",
   "batch": "b04",
   "audit": {
     "frontend_action": false,

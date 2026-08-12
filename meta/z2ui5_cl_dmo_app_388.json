@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_388",
   "sample": "sap.m.sample.GenericTileAsFeedTile",
   "entity": "sap.m.GenericTile",
-  "file": "src/01/b27/z2ui5_cl_dmo_app_388.clas.abap",
+  "file": "src/01/z2ui5_cl_dmo_app_388.clas.abap",
   "batch": "b27",
   "audit": {
     "frontend_action": true,

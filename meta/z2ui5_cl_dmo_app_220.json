@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_220",
   "sample": "sap.ui.unified.sample.CalendarMinMax",
   "entity": "sap.ui.unified.Calendar",
-  "file": "src/02/b10/z2ui5_cl_dmo_app_220.clas.abap",
+  "file": "src/02/z2ui5_cl_dmo_app_220.clas.abap",
   "batch": "b10",
   "audit": {
     "frontend_action": false,

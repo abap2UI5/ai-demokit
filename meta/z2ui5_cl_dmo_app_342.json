@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_342",
   "sample": "sap.ui.integration.sample.LazyLoading",
   "entity": "sap.ui.integration.widgets.Card",
-  "file": "src/02/b19/z2ui5_cl_dmo_app_342.clas.abap",
+  "file": "src/02/z2ui5_cl_dmo_app_342.clas.abap",
   "batch": "b19",
   "audit": {
     "frontend_action": false,

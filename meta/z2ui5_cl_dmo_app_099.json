@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_099",
   "sample": "sap.m.sample.QuickViewCard",
   "entity": "sap.m.QuickViewCard",
-  "file": "src/01/b12/z2ui5_cl_dmo_app_099.clas.abap",
+  "file": "src/01/z2ui5_cl_dmo_app_099.clas.abap",
   "batch": "b12",
   "audit": {
     "frontend_action": true,

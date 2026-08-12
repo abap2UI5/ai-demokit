@@ -177,13 +177,16 @@ by the UI5 **library** of the demo kit sample they rebuild:
 The split key is the **second-level namespace** of the sample's entity. New
 libraries get the next free `src/NN` folder with a matching `package.devc.xml`.
 
-Inside a library folder, ports are grouped into **batch subpackages**
-`src/<NN>/b<nn>/` — one folder per generation/review batch (~10 related
-samples, e.g. `b01` display & navigation), each with its own
-`package.devc.xml`, so every batch is a separate ABAP package in the system
-and one PR in git. A port's batch is recorded in its `meta/<class>.json`
-(derived from the path). New ports always go into a new batch folder, never
-into a closed one — see TRAINING.md for the batch process.
+A library folder is **flat**: every port of that library sits directly in
+`src/<NN>/`, and the library is the only ABAP package. There is no second
+level — the former batch subpackages `src/<NN>/b<nn>/` were flattened away
+(2026-08-12): 67 packages for 365 ports, 20 of them holding a single class,
+most of them carrying the CTEXT `faithful ports`. A batch is a property of the
+generation run, not of the port, so it stays where it belongs — in the port's
+`meta/<class>.json` as the `batch` field. It is **no longer derivable from the
+path**; `scaffold.mjs` reads the next batch number back from the sidecars of
+the library. One batch is still one PR — see TRAINING.md for the batch
+process — it is just no longer one package.
 
 Because `FOLDER_LOGIC=PREFIX`, class names never encode the folder — moving a
 class between folders needs no rename.
@@ -268,8 +271,8 @@ source of truth:
   "class":   "z2ui5_cl_dmo_app_007",
   "sample":  "sap.m.sample.CheckBoxTriState",   // join key to ui5/<lib>/<Name>/
   "entity":  "sap.m.CheckBox",
-  "file":    "src/01/b02/z2ui5_cl_dmo_app_007.clas.abap",
-  "batch":   "b02",
+  "file":    "src/01/z2ui5_cl_dmo_app_007.clas.abap",
+  "batch":   "b02",           // generation/PR bookkeeping - NOT a folder
   "audit":   { "frontend_action": false,        // uses _event_client? (note: which)
                "event_t_arg": true },           // passes t_arg in ANY event wire?
                                                 // both flags are DERIVED-checked
@@ -283,7 +286,8 @@ source of truth:
 
 - The generator writes the sidecar **together with** the class; overview app
   and coverage read only `meta/` (§7). `node scripts/validate-meta.mjs` checks
-  schema + referential integrity (file/batch/template exist) and runs in CI.
+  schema + referential integrity (file/template exist, file sits in a
+  library package) and runs in CI.
 - A human live check promotes `status` to `checked` and fills `checked`
   directly in the sidecar; `reviewed` is a manual promotion too. (There is no
   `golden` status — the category was retired; former golden ports are plain

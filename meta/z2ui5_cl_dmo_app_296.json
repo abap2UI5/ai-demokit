@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_296",
   "sample": "sap.m.sample.ViewSettingsDialogCustomFilterDetails",
   "entity": "sap.m.ViewSettingsDialog",
-  "file": "src/01/b24/z2ui5_cl_dmo_app_296.clas.abap",
+  "file": "src/01/z2ui5_cl_dmo_app_296.clas.abap",
   "batch": "b24",
   "audit": {
     "frontend_action": true,

@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_145",
   "sample": "sap.ui.layout.sample.GridAutoFlow",
   "entity": "sap.ui.layout.cssgrid.CSSGrid",
-  "file": "src/02/b06/z2ui5_cl_dmo_app_145.clas.abap",
+  "file": "src/02/z2ui5_cl_dmo_app_145.clas.abap",
   "batch": "b06",
   "audit": {
     "frontend_action": false,

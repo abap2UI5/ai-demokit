@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_083",
   "sample": "sap.m.sample.StandardListItemAvatar",
   "entity": "sap.m.StandardListItem",
-  "file": "src/01/b10/z2ui5_cl_dmo_app_083.clas.abap",
+  "file": "src/01/z2ui5_cl_dmo_app_083.clas.abap",
   "batch": "b10",
   "audit": {
     "frontend_action": false,

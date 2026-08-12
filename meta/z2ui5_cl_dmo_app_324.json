@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_324",
   "sample": "sap.ui.layout.sample.Form_Column_twoGroups234",
   "entity": "sap.ui.layout.form.Form",
-  "file": "src/02/b18/z2ui5_cl_dmo_app_324.clas.abap",
+  "file": "src/02/z2ui5_cl_dmo_app_324.clas.abap",
   "batch": "b18",
   "audit": {
     "frontend_action": false,

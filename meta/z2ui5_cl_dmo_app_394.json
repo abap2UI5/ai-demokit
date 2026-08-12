@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_394",
   "sample": "sap.m.sample.FlexBoxOpposingAlignment",
   "entity": "sap.m.FlexBox",
-  "file": "src/01/b28/z2ui5_cl_dmo_app_394.clas.abap",
+  "file": "src/01/z2ui5_cl_dmo_app_394.clas.abap",
   "batch": "b28",
   "audit": {
     "frontend_action": false,

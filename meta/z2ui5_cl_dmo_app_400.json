@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_400",
   "sample": "sap.m.sample.ObjectHeaderCircleImage",
   "entity": "sap.m.ObjectHeader",
-  "file": "src/01/b28/z2ui5_cl_dmo_app_400.clas.abap",
+  "file": "src/01/z2ui5_cl_dmo_app_400.clas.abap",
   "batch": "b28",
   "audit": {
     "frontend_action": false,

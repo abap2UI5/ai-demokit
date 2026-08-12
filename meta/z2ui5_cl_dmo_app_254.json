@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_254",
   "sample": "sap.m.sample.DateRangeSelectionValueState",
   "entity": "sap.m.DateRangeSelection",
-  "file": "src/01/b19/z2ui5_cl_dmo_app_254.clas.abap",
+  "file": "src/01/z2ui5_cl_dmo_app_254.clas.abap",
   "batch": "b19",
   "audit": {
     "frontend_action": false,

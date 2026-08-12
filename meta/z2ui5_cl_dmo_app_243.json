@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_243",
   "sample": "sap.m.sample.ResponsivePopover",
   "entity": "sap.m.ResponsivePopover",
-  "file": "src/01/b19/z2ui5_cl_dmo_app_243.clas.abap",
+  "file": "src/01/z2ui5_cl_dmo_app_243.clas.abap",
   "batch": "b19",
   "audit": {
     "frontend_action": true,

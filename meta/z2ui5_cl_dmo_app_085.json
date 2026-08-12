@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_085",
   "sample": "sap.m.sample.TokenizerBasic",
   "entity": "sap.m.Tokenizer",
-  "file": "src/01/b10/z2ui5_cl_dmo_app_085.clas.abap",
+  "file": "src/01/z2ui5_cl_dmo_app_085.clas.abap",
   "batch": "b10",
   "audit": {
     "frontend_action": false,

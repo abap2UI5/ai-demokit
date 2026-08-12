@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_015",
   "sample": "sap.m.sample.CustomTreeItem",
   "entity": "sap.m.CustomTreeItem",
-  "file": "src/01/b05/z2ui5_cl_dmo_app_015.clas.abap",
+  "file": "src/01/z2ui5_cl_dmo_app_015.clas.abap",
   "batch": "b05",
   "audit": {
     "frontend_action": true,
