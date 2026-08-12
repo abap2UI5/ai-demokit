@@ -4,11 +4,12 @@
  *
  * A port's path is src/<category>/<library>/<class>.clas.abap:
  *
- *   category — UI5 flavour x release, derived from the port's own meta sidecar
- *              (AGENTS §3): the flavour from the libraries the port touches,
- *              the release from whether it keeps a post-1.71 member (a POST_171
- *              deviation). Both facts live in the sidecar, so the category is a
- *              pure function of it — no OpenUI5 checkout needed.
+ *   category — UI5 flavour x release (AGENTS §3): the flavour from the libraries
+ *              the port touches, the release from whether it needs a runtime
+ *              newer than 1.71 — a kept post-1.71 member (a POST_171 deviation
+ *              in the sidecar) or a post-1.71 control (a pinned @since in
+ *              ui5/scope-exceptions.json). Both sources are committed here, so
+ *              the category is offline and deterministic — no OpenUI5 checkout.
  *   library  — the second-level namespace of the SAMPLE (`sap.m.sample.X` ->
  *              sap.m), the same key generate-overview/-coverage group by. It is
  *              not always the entity's library: `sap.m.sample.ContainerNoPadding`
@@ -16,6 +17,10 @@
  *              Numbered once and globally — a library keeps its number in every
  *              category folder.
  */
+
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 
 // second-level namespace -> library package number. One registry for all four
 // category folders, so sap.m is `01` under src/01 and under src/02 alike.
@@ -72,9 +77,31 @@ export function isSapui5Only(ns) {
   return SAPUI5_ONLY.test(String(ns || ''));
 }
 
-/** a port keeps a member newer than 1.71 — every one of them is a POST_171 deviation */
+/* Ports whose CONTROL itself is newer than 1.71. A kept post-1.71 MEMBER is
+ * always a POST_171 deviation, but a post-1.71 control needs none — the sample
+ * uses it as the original does. Such a port can only exist as a maintainer-
+ * decided entry in ui5/scope-exceptions.json (the scope gate blocks every other
+ * one), and that entry pins the control's @since, so the file is a complete and
+ * offline list of the ports the deviations alone would misfile as <= 1.71. */
+let postControls = null;
+function post171Controls() {
+  if (postControls) return postControls;
+  postControls = new Set();
+  const f = path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'ui5', 'scope-exceptions.json');
+  if (!fs.existsSync(f)) return postControls;
+  for (const e of JSON.parse(fs.readFileSync(f, 'utf8')).exceptions || []) {
+    const since = String(e.decided?.since || '');
+    if (!since) continue;
+    const [maj, min] = since.split('.').map(Number);
+    if (maj > 1 || (maj === 1 && min > 71)) postControls.add(e.class);
+  }
+  return postControls;
+}
+
+/** the port needs a UI5 runtime newer than 1.71 — a kept post-1.71 member, or a post-1.71 control */
 export function isPost171(meta) {
-  return (meta.deviations || []).some((d) => d.type === 'POST_171');
+  return (meta.deviations || []).some((d) => d.type === 'POST_171')
+    || post171Controls().has(meta.class);
 }
 
 /** category package number for a meta sidecar ("01".."04") */

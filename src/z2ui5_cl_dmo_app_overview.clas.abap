@@ -4170,7 +4170,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.ui.core`        control = `sap.ui.core.InvisibleMessage`          name = `InvisibleMessage`                              class = `z2ui5_cl_dmo_app_141` path = `src/01/02/z2ui5_cl_dmo_app_141.clas.abap`
+      ( module = `sap.ui.core`        control = `sap.ui.core.InvisibleMessage`          name = `InvisibleMessage`                              class = `z2ui5_cl_dmo_app_141` path = `src/02/02/z2ui5_cl_dmo_app_141.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.78`

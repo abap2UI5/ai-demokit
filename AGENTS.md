@@ -176,8 +176,8 @@ requirement.
 
 | Folder   | CTEXT (`package.devc.xml`) | Runs on | Status |
 |----------|----------------------------|---------|--------|
-| `src/01` | `OpenUI5 <= 1.71` | any OpenUI5/SAPUI5 from 1.71 on — the portable half | 281 ports |
-| `src/02` | `OpenUI5 > 1.71`  | needs a UI5 runtime newer than 1.71 | 120 ports |
+| `src/01` | `OpenUI5 <= 1.71` | any OpenUI5/SAPUI5 from 1.71 on — the portable half | 280 ports |
+| `src/02` | `OpenUI5 > 1.71`  | needs a UI5 runtime newer than 1.71 | 121 ports |
 | `src/03` | `SAPUI5 <= 1.71`  | needs SAPUI5 (a library OpenUI5 does not ship) | empty |
 | `src/04` | `SAPUI5 > 1.71`   | needs SAPUI5 **and** a runtime newer than 1.71 | empty |
 
@@ -206,14 +206,24 @@ entity and still belongs to sap.m. New libraries get the next free number in
 06–09 are pre-assigned but only created once a port lands in them.
 
 **Both levels are derived, not chosen.** `scripts/lib-packages.mjs` computes the
-whole path from the port's own `meta/<class>.json` — the library from `sample`,
-the flavour from the libraries the port touches, the release from whether the
-port carries a `POST_171` deviation — and `validate-meta` fails when a file sits
-anywhere else, naming the folder it belongs in. So **declaring the first
-`POST_171` deviation on a port moves it from `src/01/<lib>/` to
-`src/02/<lib>/`** (and dropping the last one moves it back); `scaffold.mjs`
-starts every fresh port in the `<= 1.71` half of its flavour, which is where a
-port with no deviations belongs.
+whole path — the library from the sidecar's `sample`, the flavour from the
+libraries the port touches, the release from whether the port needs a runtime
+newer than 1.71 — and `validate-meta` fails when a file sits anywhere else,
+naming the folder it belongs in. A port needs a newer runtime in two ways, and
+both are committed facts, so the verdict is offline and deterministic:
+
+- it **keeps a post-1.71 member** — always a `POST_171` deviation in the sidecar;
+- its **control itself is post-1.71** — which needs no deviation (the sample uses
+  the control as the original does) and can only exist as a maintainer-decided
+  entry in `ui5/scope-exceptions.json`, since the scope gate blocks every other
+  post-1.71 control. That entry pins the control's `@since`, which is what
+  `lib-packages.mjs` reads (app 141, `sap.ui.core.InvisibleMessage` @1.78, is
+  the case with no deviation at all).
+
+So **declaring the first `POST_171` deviation on a port moves it from
+`src/01/<lib>/` to `src/02/<lib>/`** (and dropping the last one moves it back);
+`scaffold.mjs` starts every fresh port in the `<= 1.71` half of its flavour,
+which is where a port with no deviations belongs.
 
 Below the library there is **no further level**: the former batch subpackages
 `src/<NN>/b<nn>/` were flattened away (2026-08-12): 67 packages for 365 ports,
