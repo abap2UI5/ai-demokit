@@ -85,12 +85,16 @@ generating or reviewing):
   (public API surface only: `z2ui5_if_client` and what it reaches — never
   build on internals) and recorded in CAPABILITIES.md as **source-verified**.
   A live check remains the final confirmation for rendering/UX.
-- **`abap2UI5/samples` (branch `cloud`)** — the truth about what is
-  *idiomatic*. Its `src/01/08/*` tree is the direct analogue of our ports
-  (all ABAP-Cloud-ready, 1.71+, non-deprecated). Canonical external references
-  for generation prompts:
-  `src/01/08/00/z2ui5_cl_demo_app_022` (lifecycle + scalar state),
-  `…_app_038` (popup/popover), `…_app_375` (full dispatcher + event args).
+- **`abap2UI5/samples`** (branch `main` — the `cloud` branch was dropped and
+  its `src/01/08/*` tree is gone; the samples now live under `src/01/01`
+  "Basic I", `src/01/02` "Basic II" and `src/01/03` "Control Library") — the
+  truth about what is *idiomatic*. Canonical external references for generation
+  prompts: `src/01/01/z2ui5_cl_smp_app_027` (expression binding),
+  `src/01/01/z2ui5_cl_smp_app_012` (popup/popover paths),
+  `src/01/01/z2ui5_cl_smp_app_167` (event args via `t_args`).
+  Note its `src/01/03` is no longer a parallel set of demo kit rebuilds — those
+  are collected HERE (AGENTS.md §1), so that tree is not a coverage reference
+  any more.
   **Do NOT imitate** where samples conflict with this repo's rules: samples
   put `main` last (we: first, call-order), require an ABAP Doc header (we: forbidden —
   sidecar instead), use inline `check_on_event( 'X' )` for few events
@@ -111,7 +115,9 @@ generating or reviewing):
 ## Quality ladder
 
 Every port sits on exactly one rung; `checked` ports may be used as prompt
-references and are the ones that graduate to the curated samples repo.
+references. They no longer graduate out to the curated samples repo — since
+2026-08-12 the demo kit rebuilds stay here (AGENTS.md §1), so `checked` is the
+top rung rather than a hand-off.
 
 | Status | Meaning | Gate |
 |---|---|---|
