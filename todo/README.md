@@ -15,16 +15,36 @@ port under `src/<category>/<library>/` — not by being moved.
 > over is a rewrite against the demo kit original, never a copy of the file.
 
 Imported 53 classes on 2026-08-12: 21 from `src/00/02` ("restricted -
-release/version") and 32 from `src/01/03` ("Control Library").
+release/version") and 32 from `src/01/03` ("Control Library"). **52 left** — one
+was taken over as a port and its file deleted (see the taken-over row below).
 
 ---
 
-## control-library/ — 32 classes from samples `src/01/03`
+## control-library/ — 31 classes from samples `src/01/03`
 
 1:1 rebuilds of UI5 demo kit samples, i.e. exactly what ai-demokit does — so
 these are the direct-overlap candidates. The demo kit sample id comes from the
 class' own ABAP Doc URL; where the URL points at an entity rather than a sample,
 there is nothing to join on and the row says so.
+
+### Taken over as a port (1)
+
+| Sample class | Demo kit sample | ai-demokit port |
+|---|---|---|
+| `z2ui5_cl_smp_app_243` (deleted) | `sap.m.sample.StandardNegativeMarginsTwoSided` | `z2ui5_cl_dmo_app_403` |
+
+Its ABAP Doc URL names only `sap.m.Text`, so the first triage filed it under
+"URL names only the entity" and joined it to the (covered) `sap.m.Text` rows.
+The **`<DESCRIPT>`** told the real story — `sap.m.Text - with class -Standard
+Margins - Negative Margins` — and the class body is the demo kit sample
+`sap.m.sample.StandardNegativeMarginsTwoSided` line for line: `Page
+showHeader=false` + `Info` sub-header toolbar, then four `Panel`s carrying
+`sapUi{Tiny,Small,Medium,Large}NegativeMarginBeginEnd`. That sample had no port
+(entity `sap.ui.core.StandardMargins`, 1 of 7 samples ported), so it was
+rebuilt against the demo kit original as `z2ui5_cl_dmo_app_403` and the file
+here deleted. **Lesson for the remaining rows: the entity in `<DESCRIPT>` is
+the control the class was filed under, not necessarily the sample it rebuilds —
+read the class body before trusting an "entity covered" verdict.**
 
 ### Already covered by an ai-demokit port (14)
 
@@ -48,7 +68,7 @@ kept so the overlap is documented rather than rediscovered.
 | [`z2ui5_cl_smp_app_209`](control-library/z2ui5_cl_smp_app_209.clas.abap) | `sap.tnt.sample.InfoLabel` | `z2ui5_cl_dmo_app_113` |
 | [`z2ui5_cl_smp_app_330`](control-library/z2ui5_cl_smp_app_330.clas.abap) | `sap.uxap.sample.ObjectPageSectionShowTitle` | `z2ui5_cl_dmo_app_200` |
 
-### Open — no ai-demokit port for this sample (18)
+### Open — no ai-demokit port for this sample (17)
 
 "Entity covered" = ai-demokit already has a port of the same control from a
 *different* demo kit sample. That is the near-duplicate check the batch planning
@@ -58,6 +78,16 @@ entity means the row needs a reason beyond "not ported yet".
 The entity column is read off the `<DESCRIPT>` convention `<entity> - <text>`, so
 it is a hint, not a verified fact — confirm with `node scripts/scope-of.mjs <entity>`
 before acting on a row.
+
+**Every named sample in this table is a HOLDOUT** (`ui5/holdout.json`): `Label`,
+`RadioButtonGroup`, `BusyIndicator`, `RatingIndicator`, `MessageStrip`,
+`SearchField`. So the three rows the table marks "entity covered: **no**" — the
+ones that read like the strongest candidates — are exactly the ones that must
+**not** be ported: the hold-out set is regenerated from scratch to measure the
+generator (TRAINING.md), and `scaffold.mjs` refuses them. The rows worth a
+second look are the *unnamed* ones: their URL names only the entity, so — as
+`z2ui5_cl_smp_app_243` showed — the class may still rebuild a specific, unported
+demo kit sample that no join could find.
 
 | Sample class | Demo kit sample | Entity (from DESCRIPT) | Entity covered here |
 |---|---|---|---|
@@ -69,7 +99,6 @@ before acting on a row.
 | [`z2ui5_cl_smp_app_215`](control-library/z2ui5_cl_smp_app_215.clas.abap) | `sap.m.sample.BusyIndicator` | `sap.m.BusyIndicator` | **no** |
 | [`z2ui5_cl_smp_app_220`](control-library/z2ui5_cl_smp_app_220.clas.abap) | `sap.m.sample.RatingIndicator` | `sap.m.RatingIndicator` | **no** |
 | [`z2ui5_cl_smp_app_238`](control-library/z2ui5_cl_smp_app_238.clas.abap) | `sap.m.sample.MessageStrip` | `sap.m.MessageStrip` | yes — 2 port(s): `z2ui5_cl_dmo_app_062`, `z2ui5_cl_dmo_app_289` |
-| [`z2ui5_cl_smp_app_243`](control-library/z2ui5_cl_smp_app_243.clas.abap) | — (URL names only the entity) | `sap.m.Text` | yes — 2 port(s): `z2ui5_cl_dmo_app_051`, `z2ui5_cl_dmo_app_372` |
 | [`z2ui5_cl_smp_app_296`](control-library/z2ui5_cl_smp_app_296.clas.abap) | `sap.m.sample.SearchField` | `sap.m.SearchField` | yes — 1 port(s): `z2ui5_cl_dmo_app_090` |
 | [`z2ui5_cl_smp_app_366`](control-library/z2ui5_cl_smp_app_366.clas.abap) | — (URL names only the entity) | `sap.m.Page` | yes — 1 port(s): `z2ui5_cl_dmo_app_089` |
 | [`z2ui5_cl_smp_app_369`](control-library/z2ui5_cl_smp_app_369.clas.abap) | — (URL names only the entity) | `sap.m.ObjectNumber` | yes — 1 port(s): `z2ui5_cl_dmo_app_072` |

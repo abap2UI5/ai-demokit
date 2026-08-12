@@ -15,9 +15,9 @@ TRAINING.md; for what abap2UI5 can express see CAPABILITIES.md._
 
 | Aspect | State |
 |---|---|
-| Ports | **401** sidecars in `meta/` (src/01 OpenUI5 <= 1.71: 280 · src/02 OpenUI5 > 1.71: 121) |
-| Per library | sap.f: 19 · sap.m: 215 · sap.tnt: 16 · sap.ui: 130 · sap.uxap: 21 |
-| Status ladder | 194 `generated` · 146 `reviewed` · 61 `checked` (live-verified) |
+| Ports | **402** sidecars in `meta/` (src/01 OpenUI5 <= 1.71: 281 · src/02 OpenUI5 > 1.71: 121) |
+| Per library | sap.f: 19 · sap.m: 216 · sap.tnt: 16 · sap.ui: 130 · sap.uxap: 21 |
+| Status ladder | 195 `generated` · 146 `reviewed` · 61 `checked` (live-verified) |
 | Deviations | 5 DROPPED_171 · 58 IMPROVISED · 62 LIVE_TEST · 854 NOTE · 160 POST_171 |
 | Open LIVE_TESTs | **62 ports** carry at least one `LIVE_TEST` deviation — the automated close path is the e2e interaction harness (AGENTS §6 `e2e_smoke`) |
 | Declared gate skips | 2 structural-diff · 5 render-smoke (each re-verified per run — a stale skip FAILS) |

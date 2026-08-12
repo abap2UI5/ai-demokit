@@ -3676,6 +3676,9 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         notes = `NOTE: the /ProductCollectionStats/Counts values are flattened to the default model fields /TOTAL, /OK, /HEAVY, /OVERWEIGHT (verbatim counts).` )
       ( module = `sap.m`              control = `sap.ui.core.StandardMargins`           name = `StandardMarginsAll`                            class = `z2ui5_cl_dmo_app_088` path = `src/01/01/z2ui5_cl_dmo_app_088.clas.abap`
         score = 1
+        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
+      ( module = `sap.m`              control = `sap.ui.core.StandardMargins`           name = `StandardNegativeMarginsTwoSided`               class = `z2ui5_cl_dmo_app_403` path = `src/01/01/z2ui5_cl_dmo_app_403.clas.abap`
+        score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` ) ).
 
     lv_text1 = `NOTE: The two toggles the original drives from its controller are now bound and dispatched instead of decorative. onToggleFooter flips DynamicPage.showFooter - the port binds showFooter to a boolean` &&
