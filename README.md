@@ -2,16 +2,16 @@
 [![dependency](https://img.shields.io/badge/dependency-abap2UI5-blue)](https://github.com/abap2UI5/abap2UI5)
 <br>
 <br>
-[![ABAP_STANDARD](https://github.com/abap2UI5/ai-demokit/actions/workflows/ABAP_STANDARD.yaml/badge.svg)](https://github.com/abap2UI5/ai-demokit/actions/workflows/ABAP_STANDARD.yaml)
-[![ABAP_CLOUD](https://github.com/abap2UI5/ai-demokit/actions/workflows/ABAP_CLOUD.yaml/badge.svg)](https://github.com/abap2UI5/ai-demokit/actions/workflows/ABAP_CLOUD.yaml)
-[![ABAP_702](https://github.com/abap2UI5/ai-demokit/actions/workflows/ABAP_702.yaml/badge.svg)](https://github.com/abap2UI5/ai-demokit/actions/workflows/ABAP_702.yaml)
+[![ABAP_STANDARD](https://github.com/abap2UI5/samples-controls/actions/workflows/ABAP_STANDARD.yaml/badge.svg)](https://github.com/abap2UI5/samples-controls/actions/workflows/ABAP_STANDARD.yaml)
+[![ABAP_CLOUD](https://github.com/abap2UI5/samples-controls/actions/workflows/ABAP_CLOUD.yaml/badge.svg)](https://github.com/abap2UI5/samples-controls/actions/workflows/ABAP_CLOUD.yaml)
+[![ABAP_702](https://github.com/abap2UI5/samples-controls/actions/workflows/ABAP_702.yaml/badge.svg)](https://github.com/abap2UI5/samples-controls/actions/workflows/ABAP_702.yaml)
 <br>
-[![checks](https://github.com/abap2UI5/ai-demokit/actions/workflows/checks.yaml/badge.svg)](https://github.com/abap2UI5/ai-demokit/actions/workflows/checks.yaml)
-[![e2e_nightly](https://github.com/abap2UI5/ai-demokit/actions/workflows/e2e_nightly.yaml/badge.svg)](https://github.com/abap2UI5/ai-demokit/actions/workflows/e2e_nightly.yaml)
+[![checks](https://github.com/abap2UI5/samples-controls/actions/workflows/checks.yaml/badge.svg)](https://github.com/abap2UI5/samples-controls/actions/workflows/checks.yaml)
+[![e2e_nightly](https://github.com/abap2UI5/samples-controls/actions/workflows/e2e_nightly.yaml/badge.svg)](https://github.com/abap2UI5/samples-controls/actions/workflows/e2e_nightly.yaml)
 <br>
-[![auto_downport](https://github.com/abap2UI5/ai-demokit/actions/workflows/auto_downport.yaml/badge.svg)](https://github.com/abap2UI5/ai-demokit/actions/workflows/auto_downport.yaml)
-[![generate_result](https://github.com/abap2UI5/ai-demokit/actions/workflows/generate_result.yaml/badge.svg)](https://github.com/abap2UI5/ai-demokit/actions/workflows/generate_result.yaml)
-[![deploy_web](https://github.com/abap2UI5/ai-demokit/actions/workflows/deploy_web.yaml/badge.svg)](https://github.com/abap2UI5/ai-demokit/actions/workflows/deploy_web.yaml)
+[![auto_downport](https://github.com/abap2UI5/samples-controls/actions/workflows/auto_downport.yaml/badge.svg)](https://github.com/abap2UI5/samples-controls/actions/workflows/auto_downport.yaml)
+[![generate_result](https://github.com/abap2UI5/samples-controls/actions/workflows/generate_result.yaml/badge.svg)](https://github.com/abap2UI5/samples-controls/actions/workflows/generate_result.yaml)
+[![deploy_web](https://github.com/abap2UI5/samples-controls/actions/workflows/deploy_web.yaml/badge.svg)](https://github.com/abap2UI5/samples-controls/actions/workflows/deploy_web.yaml)
 
 # abap2UI5 — samples-controls
 
@@ -37,7 +37,7 @@ how to express a control in ABAP? Its sample is already here — or on its way.
    one click starts the app right in your system.
 
 No ABAP system at hand? Open the
-[GitHub Pages demo](https://abap2ui5.github.io/ai-demokit/) — the framework
+[GitHub Pages demo](https://abap2ui5.github.io/samples-controls/) — the framework
 and every sample run fully client-side in your browser.
 
 #### The learning path
