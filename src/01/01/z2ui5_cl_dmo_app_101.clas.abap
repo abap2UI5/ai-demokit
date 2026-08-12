@@ -485,7 +485,6 @@ CLASS z2ui5_cl_dmo_app_101 IMPLEMENTATION.
         product_name_state   = COND #( WHEN name_ok = abap_true THEN `None` ELSE `Error` ).
         product_weight_state = COND #( WHEN weight_ok = abap_true THEN `None` ELSE `Error` ).
         step2_validated      = xsdbool( name_ok = abap_true AND weight_ok = abap_true ).
-        client->view_model_update( ).
 
       WHEN `OPTIONAL_ACTIVATE`.
         client->message_toast_display( `This event is fired on activate of Step3.` ).

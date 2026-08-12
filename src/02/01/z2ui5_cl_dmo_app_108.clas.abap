@@ -197,7 +197,6 @@ CLASS z2ui5_cl_dmo_app_108 IMPLEMENTATION.
                           title    = `new appointment`
                           type     = `Type09` ) INTO TABLE <person>-t_appointments.
         ENDIF.
-        client->view_model_update( ).
 
     ENDCASE.
 

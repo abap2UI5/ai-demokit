@@ -259,7 +259,6 @@ CLASS z2ui5_cl_dmo_app_235 IMPLEMENTATION.
         ELSE.
           DELETE t_sticky WHERE table_line = sticky_text.
         ENDIF.
-        client->view_model_update( ).
 
       WHEN `RESET`.
         " like handleFacetFilterReset: clear the two-way bound selection flags and re-filter
@@ -315,7 +314,6 @@ CLASS z2ui5_cl_dmo_app_235 IMPLEMENTATION.
     " like _filterModel (ORs inside a group, AND across the groups) - declarative compound filter on the items binding, model untouched
     client->follow_up_action( val   = client->cs_event-binding_call
                               t_arg = VALUE #( ( `idProductsTable` ) ( `items` ) ( `filter` ) ( json_groups ) ) ).
-    client->view_model_update( ).
 
   ENDMETHOD.
 

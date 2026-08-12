@@ -140,7 +140,6 @@ CLASS z2ui5_cl_dmo_app_291 IMPLEMENTATION.
         LOOP AT t_groups REFERENCE INTO DATA(group).
           DELETE group->groupitems WHERE title = lv_title.
         ENDLOOP.
-        client->view_model_update( ).
         client->message_toast_display( |Item Closed: { lv_title }| ).
 
     ENDCASE.

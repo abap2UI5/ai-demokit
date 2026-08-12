@@ -590,13 +590,11 @@ CLASS z2ui5_cl_dmo_app_350 IMPLEMENTATION.
         " current column count from model/home.json's per-breakpoint table
         currentbreakpoint = client->get_event_arg( ).
         columns_apply( currentbreakpoint ).
-        client->view_model_update( ).
 
       WHEN `COLUMNS_CHANGE`.
         " onColumnsChange: below 14 grid columns the users / user-provisioning
         " cards stay 4 columns wide, from 14 on they take 5
         card_columns = COND #( WHEN CONV i( client->get_event_arg( ) ) < 14 THEN 4 ELSE 5 ).
-        client->view_model_update( ).
 
     ENDCASE.
 

@@ -400,7 +400,6 @@ CLASS z2ui5_cl_dmo_app_104 IMPLEMENTATION.
     resizable    = resize.
     remember     = rem.
     confirm_text = confirmtext.
-    client->view_model_update( ).
 
     IF responsive = abap_true.
       client->follow_up_action( val   = client->cs_event-control_by_id

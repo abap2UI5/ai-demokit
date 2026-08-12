@@ -82,15 +82,12 @@ CLASS z2ui5_cl_dmo_app_021 IMPLEMENTATION.
 
       WHEN `SET_SAVING_DRAFT`.
         state = `Saving`.
-        client->view_model_update( ).
 
       WHEN `SHOW_DRAFT_SAVED`.
         state = `Saved`.
-        client->view_model_update( ).
 
       WHEN `CLEAR_DRAFT_STATE`.
         state = `Clear`.
-        client->view_model_update( ).
 
     ENDCASE.
 

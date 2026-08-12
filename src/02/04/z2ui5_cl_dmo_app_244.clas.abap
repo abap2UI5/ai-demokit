@@ -280,7 +280,6 @@ CLASS z2ui5_cl_dmo_app_244 IMPLEMENTATION.
         " toggleFooter: setShowFooter(!getShowFooter()) - reproduced by flipping
         " the two-way bound flag and pushing the model back to the client
         show_footer = xsdbool( show_footer = abap_false ).
-        client->view_model_update( ).
 
       WHEN `BREAKPOINT_CHANGE`.
         " onBreakpointChange: map the media range to the Avatar size (Phone M,
@@ -292,7 +291,6 @@ CLASS z2ui5_cl_dmo_app_244 IMPLEMENTATION.
                                 WHEN `Phone`  THEN `M`
                                 WHEN `Tablet` THEN `L`
                                 ELSE `XL` ).
-        client->view_model_update( ).
         client->message_toast_display( |Media Range: { lv_range } ({ lv_width }px)| ).
     ENDCASE.
 

@@ -213,7 +213,6 @@ CLASS z2ui5_cl_dmo_app_070 IMPLEMENTATION.
           pi_b_value   = value.
           pi_b_display = |{ value }%|.
         ENDIF.
-        client->view_model_update( ).
     ENDCASE.
 
   ENDMETHOD.

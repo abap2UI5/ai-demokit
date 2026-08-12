@@ -319,7 +319,6 @@ CLASS z2ui5_cl_dmo_app_065 IMPLEMENTATION.
                                  THEN `Personal, Contact`
                                  ELSE `Personal, Information` ).
         ENDLOOP.
-        client->view_model_update( ).
         " original: oMP.openBy(oButton) after the values are set - open the popover anchored to the button
         client->follow_up_action( val   = client->cs_event-control_by_id
                                   t_arg = VALUE #( ( `messagePopover` ) ( `openBy` ) ( `messagePopoverBtn` ) ) ).
@@ -328,7 +327,6 @@ CLASS z2ui5_cl_dmo_app_065 IMPLEMENTATION.
         " the sample's onChange manually adds/removes required-field and constraint messages; here
         " the typed binding + constraints collect those AUTOMATICALLY into the message> model
         " (no app code), so the handler only pushes the model back
-        client->view_model_update( ).
 
     ENDCASE.
 

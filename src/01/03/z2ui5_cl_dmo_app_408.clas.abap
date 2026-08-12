@@ -127,7 +127,6 @@ CLASS z2ui5_cl_dmo_app_408 IMPLEMENTATION.
         subsectionlayout = COND #( WHEN subsectionlayout = `TitleOnTop`
                                    THEN `TitleOnLeft`
                                    ELSE `TitleOnTop` ).
-        client->view_model_update( ).
     ENDCASE.
 
   ENDMETHOD.

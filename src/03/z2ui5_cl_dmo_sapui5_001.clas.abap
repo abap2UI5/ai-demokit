@@ -194,7 +194,6 @@ CLASS z2ui5_cl_dmo_sapui5_001 IMPLEMENTATION.
           ( text = `3rd` percent = `15.0` )
           ( text = `4th` percent = `15.0` ) ).
       total_count = lines( counts ).
-      client->view_model_update( ).
     ENDIF.
 
   ENDMETHOD.

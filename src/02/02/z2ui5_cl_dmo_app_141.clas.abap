@@ -100,7 +100,6 @@ CLASS z2ui5_cl_dmo_app_141 IMPLEMENTATION.
         " InvisibleMessage a11y service and echoes it into the status Text.
         " The pressed button's identity is not read back here (simplified).
         statustext = `A new message was sent to the invisible messaging service.`.
-        client->view_model_update( ).
 
     ENDCASE.
 

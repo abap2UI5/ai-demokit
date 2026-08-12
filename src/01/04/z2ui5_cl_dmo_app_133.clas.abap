@@ -160,7 +160,6 @@ CLASS z2ui5_cl_dmo_app_133 IMPLEMENTATION.
       WHEN `MODE_CHANGE`.
         " original onModeChange: setMode(key) + setHeaderText('GridList with mode ' + key)
         header_text = |GridList with mode { mode }|.
-        client->view_model_update( ).
 
     ENDCASE.
 

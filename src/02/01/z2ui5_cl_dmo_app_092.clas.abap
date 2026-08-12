@@ -236,7 +236,6 @@ CLASS z2ui5_cl_dmo_app_092 IMPLEMENTATION.
         " t_hidden, and the table's hiddenInPopin is bound to the same field -
         " so the sample's setHiddenInPopin(getSelectedKeys()) needs no action,
         " only the model push
-        client->view_model_update( ).
     ENDCASE.
 
   ENDMETHOD.

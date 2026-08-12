@@ -181,7 +181,6 @@ CLASS z2ui5_cl_dmo_app_269 IMPLEMENTATION.
         DATA(lv_breakpoint) = client->get_event_arg( ).
         toggle_enabled = xsdbool( lv_breakpoint = `S` ).
         show_side_btn  = xsdbool( lv_breakpoint <> `S` ).
-        client->view_model_update( ).
 
       WHEN `SIDE_CONTENT_HIDE`.
         " handleSideContentHide: setShowSideContent(false) + re-evaluate the
@@ -189,14 +188,12 @@ CLASS z2ui5_cl_dmo_app_269 IMPLEMENTATION.
         " the flag is bound two-way and only flipped here
         show_side_content = abap_false.
         show_side_btn     = abap_true.
-        client->view_model_update( ).
 
       WHEN `SIDE_CONTENT_SHOW`.
         " handleSideContentShow: setShowSideContent(true); the button hides
         " itself again because the side content is visible now
         show_side_content = abap_true.
         show_side_btn     = abap_false.
-        client->view_model_update( ).
     ENDCASE.
 
   ENDMETHOD.

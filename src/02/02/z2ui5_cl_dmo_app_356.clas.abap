@@ -281,7 +281,6 @@ CLASS z2ui5_cl_dmo_app_356 IMPLEMENTATION.
 
     ENDCASE.
 
-    client->view_model_update( ).
 
   ENDMETHOD.
 

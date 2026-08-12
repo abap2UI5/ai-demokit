@@ -93,7 +93,6 @@ CLASS z2ui5_cl_dmo_app_151 IMPLEMENTATION.
           selected_date = |{ year }-{ CONV i( client->get_event_arg( 2 ) ) WIDTH = 2 ALIGN = RIGHT PAD = '0' }| &&
                           |-{ CONV i( client->get_event_arg( 3 ) ) WIDTH = 2 ALIGN = RIGHT PAD = '0' }|.
         ENDIF.
-        client->view_model_update( ).
 
       WHEN `FOCUS_TODAY`.
         " handleFocusToday only calls focusDate(today) - it changes no text in
@@ -101,7 +100,6 @@ CLASS z2ui5_cl_dmo_app_151 IMPLEMENTATION.
         " is what the button visibly does here; the calendar focus itself is not
         " moved (focusDate takes a Date OBJECT no wire can construct)
         selected_date = |{ sy-datum+0(4) }-{ sy-datum+4(2) }-{ sy-datum+6(2) }|.
-        client->view_model_update( ).
 
     ENDCASE.
 

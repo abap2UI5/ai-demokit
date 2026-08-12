@@ -260,7 +260,6 @@ CLASS z2ui5_cl_dmo_app_249 IMPLEMENTATION.
                                     t_arg = VALUE #( ( `BadgedButton` ) ( `setBadgeMinValue` ) ( |{ badgemin }| ) ) ).
         ELSE.
           badgemin = min_accepted.
-          client->view_model_update( ).
         ENDIF.
 
       WHEN `MAX_CHANGE`.
@@ -273,7 +272,6 @@ CLASS z2ui5_cl_dmo_app_249 IMPLEMENTATION.
                                     t_arg = VALUE #( ( `BadgedButton` ) ( `setBadgeMaxValue` ) ( |{ badgemax }| ) ) ).
         ELSE.
           badgemax = max_accepted.
-          client->view_model_update( ).
         ENDIF.
 
     ENDCASE.

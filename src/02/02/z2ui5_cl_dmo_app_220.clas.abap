@@ -140,7 +140,6 @@ CLASS z2ui5_cl_dmo_app_220 IMPLEMENTATION.
                                             WHEN 11 THEN `November` WHEN 12 THEN `December` ) }| &&
                           | { CONV i( client->get_event_arg( 3 ) ) }, { year }|.
         ENDIF.
-        client->view_model_update( ).
 
     ENDCASE.
 

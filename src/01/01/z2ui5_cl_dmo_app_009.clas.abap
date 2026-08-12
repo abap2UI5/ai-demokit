@@ -207,7 +207,6 @@ CLASS z2ui5_cl_dmo_app_009 IMPLEMENTATION.
         ELSE.
           DELETE t_sticky WHERE table_line = sticky_text.
         ENDIF.
-        client->view_model_update( ).
 
     ENDCASE.
 

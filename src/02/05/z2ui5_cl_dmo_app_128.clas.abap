@@ -160,12 +160,10 @@ CLASS z2ui5_cl_dmo_app_128 IMPLEMENTATION.
       WHEN `TOGGLE_EXPAND`.
         " original onCollapseExpandPress: toggles SideNavigation.expanded
         expanded = xsdbool( expanded = abap_false ).
-        client->view_model_update( ).
 
       WHEN `TOGGLE_WALKED`.
         " original onHideShowWalkedPress: toggles the 'walked' item visibility
         walked_visible = xsdbool( walked_visible = abap_false ).
-        client->view_model_update( ).
 
     ENDCASE.
 

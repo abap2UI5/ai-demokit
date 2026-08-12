@@ -342,7 +342,6 @@ CLASS z2ui5_cl_dmo_app_168 IMPLEMENTATION.
       WHEN `COLUMNS_CHANGE`.
         " onGridColumnsChange: setText('Current grid columns count: ' + columns)
         columns_text = |Current grid columns count: { client->get_event_arg( ) }|.
-        client->view_model_update( ).
 
     ENDCASE.
 

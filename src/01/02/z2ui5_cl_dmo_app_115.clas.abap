@@ -325,7 +325,6 @@ CLASS z2ui5_cl_dmo_app_115 IMPLEMENTATION.
           READ TABLE productcollection INDEX row_no ASSIGNING FIELD-SYMBOL(<product>).
           IF sy-subrc = 0.
             DELETE <product>-additionalcategoriesselection WHERE key = removed_key.
-            client->view_model_update( ).
           ENDIF.
         ENDIF.
 

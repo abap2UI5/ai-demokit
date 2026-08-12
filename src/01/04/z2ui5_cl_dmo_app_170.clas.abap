@@ -310,7 +310,6 @@ CLASS z2ui5_cl_dmo_app_170 IMPLEMENTATION.
 
       WHEN `TOGGLE_FOOTER`.
         showfooter = xsdbool( showfooter = abap_false ).
-        client->view_model_update( ).
 
       WHEN `TOGGLE_AREA_PRIORITY`.
         " original toggleAreaPriority: flip areaShrinkRatio between the
@@ -318,7 +317,6 @@ CLASS z2ui5_cl_dmo_app_170 IMPLEMENTATION.
         areashrinkratio = COND #( WHEN areashrinkratio = `1:1.6:1.6`
                                   THEN `1.6:1:1.6`
                                   ELSE `1:1.6:1.6` ).
-        client->view_model_update( ).
 
       WHEN `OPEN_POPOVER`.
         " original onPressOpenPopover: Fragment.load(view/Card.fragment.xml)

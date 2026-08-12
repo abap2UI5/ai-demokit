@@ -94,7 +94,6 @@ CLASS z2ui5_cl_dmo_app_130 IMPLEMENTATION.
         " original onAction: sets both controls busy, then clears after 5s
         " (setTimeout). The client-side auto-reset is simplified to a toggle.
         busy = xsdbool( busy = abap_false ).
-        client->view_model_update( ).
 
     ENDCASE.
 

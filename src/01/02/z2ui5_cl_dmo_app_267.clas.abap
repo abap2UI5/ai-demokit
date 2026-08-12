@@ -144,7 +144,6 @@ CLASS z2ui5_cl_dmo_app_267 IMPLEMENTATION.
         " _updateToggleButtonState: the Toggle button is enabled on the S
         " breakpoint only
         toggle_enabled = xsdbool( client->get_event_arg( ) = `S` ).
-        client->view_model_update( ).
     ENDCASE.
 
   ENDMETHOD.

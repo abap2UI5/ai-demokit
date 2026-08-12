@@ -278,7 +278,6 @@ CLASS z2ui5_cl_dmo_app_271 IMPLEMENTATION.
         info_text = COND string( WHEN lv_layout = `layout`
                                  THEN `Layout size is: layoutM or layoutL`
                                  ELSE |Layout size is: { lv_layout }| ).
-        client->view_model_update( ).
     ENDCASE.
 
   ENDMETHOD.

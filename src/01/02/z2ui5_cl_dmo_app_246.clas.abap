@@ -100,7 +100,6 @@ CLASS z2ui5_cl_dmo_app_246 IMPLEMENTATION.
           client->follow_up_action( val   = client->cs_event-control_by_id
                                     t_arg = VALUE #( ( `fileUploader` ) ( `clear` ) ) ).
           file_value = ``.
-          client->view_model_update( ).
         ENDIF.
 
     ENDCASE.

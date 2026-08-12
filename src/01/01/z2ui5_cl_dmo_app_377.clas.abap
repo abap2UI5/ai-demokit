@@ -188,7 +188,6 @@ CLASS z2ui5_cl_dmo_app_377 IMPLEMENTATION.
     CASE client->get( )-event.
       WHEN `FILTER_SELECT`.
         table_filter( client->get_event_arg( ) ).
-        client->view_model_update( ).
     ENDCASE.
 
   ENDMETHOD.

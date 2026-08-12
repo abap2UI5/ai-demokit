@@ -143,7 +143,6 @@ CLASS z2ui5_cl_dmo_app_099 IMPLEMENTATION.
       WHEN `AFTER_NAV`.
         " enable the back button while the card is not on its top page (original afterNavigate isTopPage)
         back_enabled = xsdbool( client->get_event_arg( ) = abap_false ).
-        client->view_model_update( ).
 
     ENDCASE.
 

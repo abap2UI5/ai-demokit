@@ -93,11 +93,9 @@ CLASS z2ui5_cl_dmo_app_294 IMPLEMENTATION.
 
       WHEN `ITEM_SELECT`.
         back_visible = abap_true.
-        client->popup_model_update( ).
 
       WHEN `NAV_BACK`.
         back_visible = abap_false.
-        client->popup_model_update( ).
         client->follow_up_action( val   = client->cs_event-control_by_id
                                   view  = client->cs_view-popup
                                   t_arg = VALUE #( ( `messageView` ) ( `navigateBack` ) ) ).

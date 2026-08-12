@@ -153,7 +153,6 @@ CLASS z2ui5_cl_dmo_app_148 IMPLEMENTATION.
           INSERT item INTO t_items INDEX drop_pos + 2.
         ENDIF.
 
-        client->view_model_update( ).
 
     ENDCASE.
 

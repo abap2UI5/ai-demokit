@@ -396,33 +396,26 @@ CLASS z2ui5_cl_dmo_app_272 IMPLEMENTATION.
             discount_visible = abap_true.
         ENDCASE.
         client->message_toast_display( |Validation of field group '{ lv_group }' triggered.| ).
-        client->view_model_update( ).
 
       WHEN `CLOSE_BILLING`.
         billing_visible = abap_false.
-        client->view_model_update( ).
 
       WHEN `CLOSE_DISCOUNT`.
         discount_visible = abap_false.
-        client->view_model_update( ).
 
       WHEN `CLOSE_CREDIT`.
         credit_visible = abap_false.
-        client->view_model_update( ).
 
       WHEN `CLOSE_ONLINE`.
         online_visible = abap_false.
-        client->view_model_update( ).
 
       WHEN `ACCEPT`.
         hide_messages( ).
         client->message_toast_display( `Accept triggered` ).
-        client->view_model_update( ).
 
       WHEN `CANCEL`.
         hide_messages( ).
         client->message_toast_display( `Cancel triggered` ).
-        client->view_model_update( ).
 
       WHEN `RESET`.
         " onReset: hide the messages and setData({}) - every bound field back
@@ -443,7 +436,6 @@ CLASS z2ui5_cl_dmo_app_272 IMPLEMENTATION.
         onlinemail               = VALUE #( ).
         onlinetwitter            = VALUE #( ).
         client->message_toast_display( `Reset triggered` ).
-        client->view_model_update( ).
 
     ENDCASE.
 

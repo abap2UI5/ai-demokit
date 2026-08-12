@@ -85,12 +85,10 @@ CLASS z2ui5_cl_dmo_app_284 IMPLEMENTATION.
         " itemSelect reveals the back button and retitles the dialog
         back_visible = abap_true.
         dialog_title = `Message Details`.
-        client->popup_model_update( ).
 
       WHEN `NAV_BACK`.
         back_visible = abap_false.
         dialog_title = `Messages`.
-        client->popup_model_update( ).
         client->follow_up_action( val   = client->cs_event-control_by_id
                                   view  = client->cs_view-popup
                                   t_arg = VALUE #( ( `messageView` ) ( `navigateBack` ) ) ).

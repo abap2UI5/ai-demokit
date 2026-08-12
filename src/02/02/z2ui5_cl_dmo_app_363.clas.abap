@@ -343,7 +343,6 @@ CLASS z2ui5_cl_dmo_app_363 IMPLEMENTATION.
           client->message_toast_display( `Sum of fixed row count and bottom row count exceeds the total row count. Input values got updated.` ).
         ENDIF.
 
-        client->view_model_update( ).
 
     ENDCASE.
 

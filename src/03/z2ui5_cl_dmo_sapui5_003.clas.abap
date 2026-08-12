@@ -160,7 +160,6 @@ CLASS z2ui5_cl_dmo_sapui5_003 IMPLEMENTATION.
           selected = selected + 1.
         ENDIF.
         client->message_toast_display( |selectionChanged - { selected } of 3 selected| ).
-        client->view_model_update( ).
 
       WHEN `BAR_PRESS`.
         client->message_toast_display( `press - the bar chart was clicked` ).

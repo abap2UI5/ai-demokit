@@ -708,7 +708,6 @@ CLASS z2ui5_cl_dmo_app_401 IMPLEMENTATION.
       WHEN `TOGGLE_FOOTER`.
         " the controller's toggleFooter: setShowFooter( !getShowFooter( ) )
         show_footer = xsdbool( show_footer = abap_false ).
-        client->view_model_update( ).
     ENDCASE.
 
   ENDMETHOD.

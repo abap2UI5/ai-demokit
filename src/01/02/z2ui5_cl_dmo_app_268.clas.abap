@@ -193,28 +193,23 @@ CLASS z2ui5_cl_dmo_app_268 IMPLEMENTATION.
         " known statically.
       WHEN `CHANGE_D`.
         color_d = client->get_event_arg( ).
-        client->view_model_update( ).
         client->message_toast_display( |Chosen color string: { color_d }| ).
 
       WHEN `CHANGE_L`.
         color_l = client->get_event_arg( ).
-        client->view_model_update( ).
         client->message_toast_display( |Chosen color string: { color_l }| ).
 
       WHEN `CHANGE_S`.
         color_s = client->get_event_arg( ).
-        client->view_model_update( ).
         client->message_toast_display( |Chosen color string: { color_s }| ).
 
       WHEN `CHANGE_LC`.
         color_lc = client->get_event_arg( ).
-        client->view_model_update( ).
         client->message_toast_display( |Chosen color string: { color_lc }| ).
 
       WHEN `LIVE_CHANGE`.
         " handleLiveChange: the Text under the last Input follows the picker
         live_change_text = client->get_event_arg( ).
-        client->view_model_update( ).
     ENDCASE.
 
   ENDMETHOD.

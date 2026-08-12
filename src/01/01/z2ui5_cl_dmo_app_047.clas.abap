@@ -181,7 +181,6 @@ CLASS z2ui5_cl_dmo_app_047 IMPLEMENTATION.
                        WHEN `three` THEN `Three` ).
         client->message_toast_display( |oEvent.getParameter('item').getText(): '{ text }' selected| ).
         selected_item_text = |getSelectedItem(): { text }|.
-        client->view_model_update( ).
 
     ENDCASE.
 

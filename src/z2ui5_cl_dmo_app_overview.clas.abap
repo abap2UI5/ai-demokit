@@ -764,11 +764,11 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` BREAKPOINT_CHANGE transports ${$parameters>/currentRange} and ${$parameters>/currentWidth}, the backend maps Phone->M / Tablet->L / else XL into the two-way bound Avatar displaySize ({/AVATAR_SIZE},` &&
                ` an added attribute on both Avatars, seeded XL) and toasts Media Range: <range> (<width>px) exactly like onBreakpointChange. @since verified fork-openui5/src/sap.f/src/sap/f/DynamicPage.js:315.` &&
                ` Requires a UI5 release >= 1.147; on older releases the event never fires and the Avatars keep the seeded XL (the property gate is blind to sap.f event params). // NOTE: live-verified 2026-08-04`.
-    lv_text1 = lv_text1 && ` (nightly e2e interaction): showFooter is two-way bound ({/SHOW_FOOTER}, default true) and the Toggle Footer button flips it on a round-trip (view_model_update) - the faithful abap2UI5 form of the` &&
-               ` controller's setShowFooter(!getShowFooter()); the scalar literal showFooter="true" -> binding is not a structural diff. The Home/Examples/Avatar presses raise client-composed MessageToasts via` &&
-               ` _event_client control_global MESSAGE_TOAST (roundtrip-free, apps 005/060). Both the footer round-trip and the toast wiring are unverified in a running system. // NOTE: The two Avatar src values point` &&
-               ` at the sdk.openui5.org host (https://sdk.openui5.org/test-resources/sap/uxap/images/imageID_275314.png) per the offline asset-URL rule; the original uses the relative ./test-resources path. Literal` &&
-               ` src values are not compared by structural-diff.`.
+    lv_text1 = lv_text1 && ` (nightly e2e interaction): showFooter is two-way bound ({/SHOW_FOOTER}, default true) and the Toggle Footer button flips it on a round-trip - the faithful abap2UI5 form of the controller's` &&
+               ` setShowFooter(!getShowFooter()); the scalar literal showFooter="true" -> binding is not a structural diff. The Home/Examples/Avatar presses raise client-composed MessageToasts via _event_client` &&
+               ` control_global MESSAGE_TOAST (roundtrip-free, apps 005/060). Both the footer round-trip and the toast wiring are unverified in a running system. // NOTE: The two Avatar src values point at the` &&
+               ` sdk.openui5.org host (https://sdk.openui5.org/test-resources/sap/uxap/images/imageID_275314.png) per the offline asset-URL rule; the original uses the relative ./test-resources path. Literal src` &&
+               ` values are not compared by structural-diff.`.
     lv_text2 = `sap.m.Avatar (control @since 1.73, incl. its src/class/press members) is used 1:1 in snappedContent and the DynamicPageHeader; needs UI5 >= 1.73. DynamicPage is the in-scope headline control (@1.42);` &&
                ` Avatar is a secondary control kept 1:1 per the post-1.71 member policy. // sap.f.DynamicPage.breakpointChange (@since 1.147, incl. its currentRange/currentWidth parameters) is the whole point of this` &&
                ` sample and is wired 1:1 since 2026-07-30 as a view attribute (an added attr - the original attaches it imperatively in onInit via attachBreakpointChange): BREAKPOINT_CHANGE transports` &&
@@ -893,12 +893,12 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
 
     lv_text1 = `NOTE: The drop now reorders the list for real. CAPABILITIES marks drag & drop reorder expressible, so the earlier 'reorder logic not reproduced' was a wrong improvisation: the drop event ships the two` &&
                ` row indices and the insert position as client-side resolved $-args (${$parameters>/draggedControl/oParent}.indexOfItem(${$parameters>/draggedControl}), the same for droppedControl, and` &&
-               ` ${$parameters>/dropPosition}), and on_event rebuilds the original onDrop arithmetic 1:1 in ABAP - remove the dragged row, decrement the drop index when dragging downwards, insert Before or After -` &&
-               ` then view_model_update. Client indices are 0-based, ABAP table rows 1-based, which is the only difference to the JS splice. Both indices are range-checked before use: they arrive from the frontend,` &&
-               ` and where JS would splice a nonsense index harmlessly, an ABAP table read on it dumps. Before this rework the drop fired a DROP event this class never dispatched (a dead wire, pattern-lint` &&
-               ` dead-event-wire). // NOTE: The GridDropInfo control from sap.f.dnd keeps a hyphen-free 'dndgrid' xmlns alias instead of the original 'dnd-grid' (the alias only names the same sap.f.dnd URI; it makes`.
-    lv_text1 = lv_text1 && ` the control statically visible to the checks). // NOTE: 27 items inlined from model/data.json; absent enum fields defaulted (highlight None, type Inactive) so the bound GridListItem properties stay` &&
-               ` valid. Template binds counter/highlight/type/unread + title/subtitle 1:1.`.
+               ` ${$parameters>/dropPosition}), and on_event rebuilds the original onDrop arithmetic 1:1 in ABAP - remove the dragged row, decrement the drop index when dragging downwards, insert Before or After, and` &&
+               ` the round-trip pushes the reordered model back. Client indices are 0-based, ABAP table rows 1-based, which is the only difference to the JS splice. Both indices are range-checked before use: they` &&
+               ` arrive from the frontend, and where JS would splice a nonsense index harmlessly, an ABAP table read on it dumps. Before this rework the drop fired a DROP event this class never dispatched (a dead` &&
+               ` wire, pattern-lint dead-event-wire). // NOTE: The GridDropInfo control from sap.f.dnd keeps a hyphen-free 'dndgrid' xmlns alias instead of the original 'dnd-grid' (the alias only names the same`.
+    lv_text1 = lv_text1 && ` sap.f.dnd URI; it makes the control statically visible to the checks). // NOTE: 27 items inlined from model/data.json; absent enum fields defaulted (highlight None, type Inactive) so the bound` &&
+               ` GridListItem properties stay valid. Template binds counter/highlight/type/unread + title/subtitle 1:1.`.
     result = VALUE #( BASE result
       ( module = `sap.f`              control = `sap.f.GridList`                        name = `GridListDragAndDrop`                           class = `z2ui5_cl_dmo_app_148` path = `src/01/04/z2ui5_cl_dmo_app_148.clas.abap`
         score = 3
@@ -1242,11 +1242,11 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` calling getInfoToolbar().setVisible(!pressed)) is expressed as bound properties instead of a round-trip: the ToggleButton's press attribute is dropped, its pressed property is bound two-way, and the`.
     lv_text1 = lv_text1 && ` infoToolbar's OverflowToolbar gains a visible={= !pressed } expression binding. // NOTE: the controller's onSelect (imperative oTable.setSticky array maintenance from the CheckBox text + selected` &&
                ` parameter) becomes a sticky property on the Table bound to a plain string table: each CheckBox select event round-trips ${$source>/text} and ${$parameters>/selected}, the ABAP handler inserts/removes` &&
-               ` that option and pushes the model back via view_model_update. This is the bound-array path working, not a gap: Table.sticky takes an ABAP string table directly, live-verified here, and apps 022/235` &&
-               ` were reworked onto the same pattern 2026-08-05/06. // 1.71: the p:ColumnAIAction column plugin (sap.m.plugins, since UI5 1.136 - far newer than 1.71) is dropped with its dependents aggregation, the` &&
-               ` xmlns:p namespace and the press toast - the plugin class does not exist on a 1.71 runtime, so keeping it would break view creation there (same decision as app 022). // NOTE: the original derives the`.
-    lv_text1 = lv_text1 && ` ObjectNumber weight state in its frontend Formatter.js (weightState: KG conversion + Success/Warning/Error thresholds). That is business logic, so - abap2UI5 being a thin frontend - it is computed in` &&
-               ` ABAP model_init into a WEIGHT_STATE field and bound state="{WEIGHT_STATE}", not via a frontend formatter (core:require dropped). Visually 1:1 with the original.`.
+               ` that option and pushes the model back on the round-trip. This is the bound-array path working, not a gap: Table.sticky takes an ABAP string table directly, live-verified here, and apps 022/235 were` &&
+               ` reworked onto the same pattern 2026-08-05/06. // 1.71: the p:ColumnAIAction column plugin (sap.m.plugins, since UI5 1.136 - far newer than 1.71) is dropped with its dependents aggregation, the` &&
+               ` xmlns:p namespace and the press toast - the plugin class does not exist on a 1.71 runtime, so keeping it would break view creation there (same decision as app 022). // NOTE: the original derives the` &&
+               ` ObjectNumber weight state in its frontend Formatter.js (weightState: KG conversion + Success/Warning/Error thresholds). That is business logic, so - abap2UI5 being a thin frontend - it is computed in`.
+    lv_text1 = lv_text1 && ` ABAP model_init into a WEIGHT_STATE field and bound state="{WEIGHT_STATE}", not via a frontend formatter (core:require dropped). Visually 1:1 with the original.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Column`                          name = `Table`                                         class = `z2ui5_cl_dmo_app_009` path = `src/01/01/z2ui5_cl_dmo_app_009.clas.abap`
         score = 5
@@ -1949,8 +1949,8 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` load leg cannot be checked headless (the seeded image sits on sdk.openui5.org).`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Image`                           name = `ImageErrorWithIllustration`                    class = `z2ui5_cl_dmo_app_279` path = `src/02/01/z2ui5_cl_dmo_app_279.clas.abap`
-        score = 4
-        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         is_post171 = abap_true
         checked = `CHECKED (2026-08-02): verified in a running system - human live check 2026-08-02 (maintainer): app started and exercised, no findings.`
         notes = lv_text1
@@ -3328,12 +3328,11 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` TabContainer.selectedItem is an association a bound-row clone cannot address from the backend, the one residual difference). itemCloseHandler reproduced 1:1 since 2026-07-30: the itemClose wire` &&
                ` carries s_ctrl-check_prevent_default (the original calls oEvent.preventDefault() unconditionally) and transports ${$parameters>/item}.getName() plus the row index via` &&
                ` ${$parameters>/item/oParent}.indexOfItem(${$parameters>/item}) (the dnd-idiom index transport); the backend raises MessageBox.confirm (Do you want to close the tab '<name>'?, onclose CLOSE_DECIDE)` &&
-               ` and on OK deletes the row + view_model_update (the bound-aggregation removeItem) and toasts 'Item closed: <name>' (duration 500), on Cancel toasts 'Item close canceled: <name>' - exactly the` &&
-               ` original's onClose branches. The pending name/index live in protected state across the confirm round-trip. The earlier static 'Close requested' toast (tab never removable) is gone. // NOTE:`.
-    lv_text1 = lv_text1 && ` live-verified 2026-08-04 (nightly e2e interaction): the prevent-default itemClose + MessageBox.confirm + row-delete chain and the index transport via the oParent indexOfItem form are unverified in a` &&
-               ` running system; the e2e interaction covers open-confirm-OK-removes end to end in the transpiled harness. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): covered` &&
-               ` end to end: close icon -> confirm box with the item name -> OK -> row removed + 'Item closed:' toast (needs the 2026-07-30 Messages.js onclose fix - under the broken wire the OK action never` &&
-               ` arrived).`.
+               ` and on OK deletes the row (the bound-aggregation removeItem) and toasts 'Item closed: <name>' (duration 500), on Cancel toasts 'Item close canceled: <name>' - exactly the original's onClose branches.` &&
+               ` The pending name/index live in protected state across the confirm round-trip. The earlier static 'Close requested' toast (tab never removable) is gone. // NOTE: live-verified 2026-08-04 (nightly e2e`.
+    lv_text1 = lv_text1 && ` interaction): the prevent-default itemClose + MessageBox.confirm + row-delete chain and the index transport via the oParent indexOfItem form are unverified in a running system; the e2e interaction` &&
+               ` covers open-confirm-OK-removes end to end in the transpiled harness. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): covered end to end: close icon -> confirm` &&
+               ` box with the item name -> OK -> row removed + 'Item closed:' toast (needs the 2026-07-30 Messages.js onclose fix - under the broken wire the OK action never arrived).`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.TabContainer`                    name = `TabContainer`                                  class = `z2ui5_cl_dmo_app_093` path = `src/01/01/z2ui5_cl_dmo_app_093.clas.abap`
         score = 3
@@ -3718,10 +3717,10 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
     lv_text1 = `NOTE: The two toggles the original drives from its controller are now bound and dispatched instead of decorative. onToggleFooter flips DynamicPage.showFooter - the port binds showFooter to a boolean` &&
                ` member (an attribute the original view does not carry: it relies on the property default false and the controller's setter). toggleAreaPriority alternates DynamicPageTitle.areaShrinkRatio between the` &&
                ` property default '1:1.6:1.6' (read from the metadata in the original, verified in sap/f/DynamicPageTitle.js) and '1.6:1:1.6'; the port carries that as an expression binding over a boolean flag, so` &&
-               ` the title reflects exactly the same two states. Both Button press wires now reach an on_event dispatcher that flips the flag and calls view_model_update - one backend round-trip per press, the` &&
-               ` abap2UI5 equivalent of the controller call. Before this rework both were wired to TOGGLE_PRIO/TOGGLE_FOOTER events this class never dispatched (dead wires, pattern-lint dead-event-wire). // NOTE:` &&
-               ` f:DynamicPage with title (heading, expanded/snapped tnt:InfoLabel, actions), pinnable header (ObjectAttributes), content (two long Texts) and footer. The footer message Button binds text and`.
-    lv_text1 = lv_text1 && ` visible='{= !!${/MESSAGESLENGTH}}' to a model field (initial 0), reproducing the original {/messagesLength} wiring.`.
+               ` the title reflects exactly the same two states. Both Button press wires now reach an on_event dispatcher that flips the flag - one backend round-trip per press, the abap2UI5 equivalent of the` &&
+               ` controller call. Before this rework both were wired to TOGGLE_PRIO/TOGGLE_FOOTER events this class never dispatched (dead wires, pattern-lint dead-event-wire). // NOTE: f:DynamicPage with title` &&
+               ` (heading, expanded/snapped tnt:InfoLabel, actions), pinnable header (ObjectAttributes), content (two long Texts) and footer. The footer message Button binds text and visible='{=`.
+    lv_text1 = lv_text1 && ` !!${/MESSAGESLENGTH}}' to a model field (initial 0), reproducing the original {/messagesLength} wiring.`.
     result = VALUE #( BASE result
       ( module = `sap.tnt`            control = `sap.f.DynamicPage`                     name = `InfoLabelInDynamicPage`                        class = `z2ui5_cl_dmo_app_143` path = `src/01/05/z2ui5_cl_dmo_app_143.clas.abap`
         score = 3
@@ -4461,9 +4460,9 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
 
     lv_text1 = `NOTE: The eleven card manifests come from manifests/cardManifests.json verbatim. The original carries them in a named ``manifests>`` model and the controller pushes them into the Cards on submit;` &&
                ` abap2UI5 has one default model, so each manifest is a bound field on it (the ``manifests>`` prefix is dropped, the last path segment stays identical, which is what structural-diff matches).` &&
-               ` model_init is deliberately NOT called from main: the sample's Cards start without a manifest and only get one on the first 'Start loading' press, so the model is seeded in on_event and pushed with` &&
-               ` view_model_update - the manifest-less initial state is reproduced 1:1. // NOTE: The manifests' relative data request URLs (sap/ui/integration/sample/CardsLoading/manifests/listData1.json and friends)` &&
-               ` are absolutized to the OpenUI5 host (https://sdk.openui5.org/test-resources/sap/ui/integration/demokit/sample/CardsLoading/manifests/...), because the original resolves them at runtime through` &&
+               ` model_init is deliberately NOT called from main: the sample's Cards start without a manifest and only get one on the first 'Start loading' press, so the model is seeded in on_event and pushed on that` &&
+               ` round-trip - the manifest-less initial state is reproduced 1:1. // NOTE: The manifests' relative data request URLs (sap/ui/integration/sample/CardsLoading/manifests/listData1.json and friends) are` &&
+               ` absolutized to the OpenUI5 host (https://sdk.openui5.org/test-resources/sap/ui/integration/demokit/sample/CardsLoading/manifests/...), because the original resolves them at runtime through` &&
                ` sap.ui.require.toUrl inside its sinon stub and that resolution has no server-side equivalent. The deliberate typo of the 'error' card (listDat2.json instead of listData2.json - it is the sample's`.
     lv_text1 = lv_text1 && ` error test case) is kept verbatim so the card still demonstrates the request-failure state. // IMPROVISED: The sample's actual point - an ARTIFICIAL loading delay - is not reproducible: the` &&
                ` controller monkey-patches sap.ui.integration.util.RequestDataProvider._fetch with a sinon stub (sap/ui/thirdparty/sinon-4) that wraps every card data request in a setTimeout of the entered number of` &&
@@ -5420,16 +5419,16 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` parseInt(oEvent.getParameter('value')). No row index has to travel: the whole table returns two-way, so the handler re-parses every row. Size and Resizable need no event at all - they are plain` &&
                ` two-way bindings shared by the Input/CheckBox and the layout data. // NOTE: btnChangeOrientation flips Splitter.orientation, which IS a bindable property, so the port binds it and flips the model` &&
                ` field instead of calling the setter (the prefer-a-bindable-property rule). btnInvalidateSplitter has no bindable equivalent either - invalidate( ) forces a re-render without changing a property - and`.
-    lv_text1 = lv_text1 && ` it needs none: invalidate is denied by the frontend action allowlist (the render lifecycle belongs to the framework, CONTROL_METHOD_DENY_PREFIXES), and the round-trip the button already makes ends in` &&
-               ` view_model_update( ), which re-renders the slot. So the button keeps its wire and its effect, with no control method called. The Splitter's resize event is wired to the backend, which increments the` &&
-               ` counter and writes the timestamped 'Resize # n' text the original's handler writes. // IMPROVISED: createExampleContent randomizes the added area (Math.random for size 'auto' vs 50-350px and for` &&
-               ` maxSize), which the corpus does not reproduce - the port alternates deterministically between 'auto' and '150px' so it renders the same every run. Its maxSize is dropped entirely for a different` &&
-               ` reason: sap.ui.layout.SplitterLayoutData has NO maxSize property (the original's object literal sets a key the control ignores), and writing it makes XMLView.create reject the view. Its height="100%"` &&
-               ` is dropped too - the bound Button template is shared with the three declared areas, which set only width. // NOTE: css/splitter.css (.options, .options .paddingRight, .optionTitle) is injected`.
-    lv_text1 = lv_text1 && ` through an extra core:HTML <style> leaf, since abap2UI5 ships no separate stylesheet; the class names are on the controls the original also puts them on. The eventStatus Text keeps its 'Nothing` &&
-               ` happened so far...' initial label, and the resize timestamp uses the ABAP system date/time in the user's format where the original uses UI5Date.getInstance().toLocaleString() - a real event` &&
-               ` timestamp, not an anchored one. // LIVE-TEST: Unverified in a running system: whether inserting/deleting a row re-renders the bound contentAreas aggregation, whether the shared table keeps the option` &&
-               ` row and the layout data in sync while dragging a splitter bar, and whether the Invalidate button's plain round-trip re-renders the Splitter the way the original's invalidate( ) does.`.
+    lv_text1 = lv_text1 && ` it needs none: invalidate is denied by the frontend action allowlist (the render lifecycle belongs to the framework, CONTROL_METHOD_DENY_PREFIXES), and the round-trip the button already makes` &&
+               ` re-renders the slot by itself. So the button keeps its wire and its effect, with no control method called. The Splitter's resize event is wired to the backend, which increments the counter and writes` &&
+               ` the timestamped 'Resize # n' text the original's handler writes. // IMPROVISED: createExampleContent randomizes the added area (Math.random for size 'auto' vs 50-350px and for maxSize), which the` &&
+               ` corpus does not reproduce - the port alternates deterministically between 'auto' and '150px' so it renders the same every run. Its maxSize is dropped entirely for a different reason:` &&
+               ` sap.ui.layout.SplitterLayoutData has NO maxSize property (the original's object literal sets a key the control ignores), and writing it makes XMLView.create reject the view. Its height="100%" is` &&
+               ` dropped too - the bound Button template is shared with the three declared areas, which set only width. // NOTE: css/splitter.css (.options, .options .paddingRight, .optionTitle) is injected through`.
+    lv_text1 = lv_text1 && ` an extra core:HTML <style> leaf, since abap2UI5 ships no separate stylesheet; the class names are on the controls the original also puts them on. The eventStatus Text keeps its 'Nothing happened so` &&
+               ` far...' initial label, and the resize timestamp uses the ABAP system date/time in the user's format where the original uses UI5Date.getInstance().toLocaleString() - a real event timestamp, not an` &&
+               ` anchored one. // LIVE-TEST: Unverified in a running system: whether inserting/deleting a row re-renders the bound contentAreas aggregation, whether the shared table keeps the option row and the` &&
+               ` layout data in sync while dragging a splitter bar, and whether the Invalidate button's plain round-trip re-renders the Splitter the way the original's invalidate( ) does.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.layout`      control = `sap.ui.layout.Splitter`                name = `Splitter`                                      class = `z2ui5_cl_dmo_app_351` path = `src/01/02/z2ui5_cl_dmo_app_351.clas.abap`
         score = 5
@@ -5525,14 +5524,14 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` (CAPABILITIES 'Nested single (non-array) structure', app 171) - a top-level struct-component _bind is unproven in this corpus, and writing '/WIDTHS/NAME' as a literal path is disallowed. So the` &&
                ` widths object is folded to five top-level string fields named exactly name/category/image/quantity/date (the sanctioned named-model prefix-drop idiom), each bound via client->_bind so the last path` &&
                ` segment still matches the original (structural-diff normalizes on the last segment). onColumnWidthsChange (SegmentedButton Static/Flexible/Mixed) is reproduced faithfully: the selected key is`.
-    lv_text1 = lv_text1 && ` transported via ${$parameters>/item}.getKey() and the width set is recomputed in ABAP (thin-frontend) + view_model_update. // NOTE: DeliveryDate is seeded deterministically. The original computes` &&
-               ` DeliveryDate = Date.now() - (i % 10 * 4 days) per load (non-deterministic timestamps); the port uses a fixed base (2026-07-25 in epoch ms) minus the same (i % 10 * 4 days) offset, kept as an epoch-ms` &&
-               ` value bound through the original {path:'DeliveryDate', type:'sap.ui.model.type.Date', formatOptions:{source:{pattern:'timestamp'}}} typed binding. // NOTE: ProductPicUrl is resolved to the OpenUI5` &&
-               ` host: the mock stores the host-relative 'test-resources/sap/ui/documentation/sdk/images/HT-xxxx.jpg'; the port stores the absolute 'https://sdk.openui5.org/test-resources/...' per the asset-URL rule,` &&
-               ` keeping the original {ProductPicUrl} binding. Full 123-row ProductCollection inlined (Name/Category/ProductPicUrl/Quantity/DeliveryDate). // NOTE: **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs`.
-    lv_text1 = lv_text1 && ` interaction, transpiled backend + real browser): the SegmentedButton width switch really round-trips: picking 'Flexible' sends WIDTHS_CHANGE with ${$parameters>/item}.getKey(), the backend recomputes` &&
-               ` the widths and the Table's columns come back at 25%. The button sits in an OverflowToolbar, where it renders as a Select - drivable once the 'Additional Options' popover is open (AGENTS 10).` &&
-               ` Residual: the columnResize client toast (a real column drag) and the timestamp-typed DeliveryDate formatting.`.
+    lv_text1 = lv_text1 && ` transported via ${$parameters>/item}.getKey() and the width set is recomputed in ABAP (thin-frontend) and pushed back on the round-trip. // NOTE: DeliveryDate is seeded deterministically. The` &&
+               ` original computes DeliveryDate = Date.now() - (i % 10 * 4 days) per load (non-deterministic timestamps); the port uses a fixed base (2026-07-25 in epoch ms) minus the same (i % 10 * 4 days) offset,` &&
+               ` kept as an epoch-ms value bound through the original {path:'DeliveryDate', type:'sap.ui.model.type.Date', formatOptions:{source:{pattern:'timestamp'}}} typed binding. // NOTE: ProductPicUrl is` &&
+               ` resolved to the OpenUI5 host: the mock stores the host-relative 'test-resources/sap/ui/documentation/sdk/images/HT-xxxx.jpg'; the port stores the absolute 'https://sdk.openui5.org/test-resources/...'` &&
+               ` per the asset-URL rule, keeping the original {ProductPicUrl} binding. Full 123-row ProductCollection inlined (Name/Category/ProductPicUrl/Quantity/DeliveryDate). // NOTE: **e2e-verified 2026-08-01**` &&
+               ` (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the SegmentedButton width switch really round-trips: picking 'Flexible' sends WIDTHS_CHANGE with ${$parameters>/item}.getKey(),`.
+    lv_text1 = lv_text1 && ` the backend recomputes the widths and the Table's columns come back at 25%. The button sits in an OverflowToolbar, where it renders as a Select - drivable once the 'Additional Options' popover is` &&
+               ` open (AGENTS 10). Residual: the columnResize client toast (a real column drag) and the timestamp-typed DeliveryDate formatting.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `ColumnResizing`                                class = `z2ui5_cl_dmo_app_247` path = `src/01/02/z2ui5_cl_dmo_app_247.clas.abap`
         score = 4
@@ -6150,8 +6149,8 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
     lv_text1 = lv_text1 && ` stay a human check.`.
     result = VALUE #( BASE result
       ( module = `sap.ui.unified`     control = `sap.ui.unified.ColorPickerPopover`     name = `ColorPickerPopover`                            class = `z2ui5_cl_dmo_app_268` path = `src/01/02/z2ui5_cl_dmo_app_268.clas.abap`
-        score = 5
-        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.48.0`
         notes = lv_text1 ) ).
 
@@ -6333,10 +6332,10 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` sibling after its core:HTML div instead of inside it - a control cannot be wrapped by core:HTML markup, which carries markup in a string attribute only (app 239 precedent). // NOTE: Named-model`.
     lv_text1 = lv_text1 && ` prefix-drop (app 230/261 precedent): the controller's ConfigModel (JSONModel {subSectionLayout: 'TitleOnTop'}) is folded onto the one default model -` &&
                ` subSectionLayout='{ConfigModel>/subSectionLayout}' becomes the two-way bound root field ({/SUBSECTIONLAYOUT}), seeded 'TitleOnTop' exactly as onInit does. Same leaf name, same data, renders` &&
-               ` identically. The controller's toggleTitle handler becomes the TOGGLE_TITLE event branch flipping the field between TitleOnTop and TitleOnLeft plus view_model_update; the press='.toggleTitle' wire on` &&
-               ` the ObjectPageHeaderActionButton is client->_event('TOGGLE_TITLE'). // LIVE-TEST: Round-trip behaviour not verified in a running system: the 'toggle title' ObjectPageHeaderActionButton fires` &&
-               ` TOGGLE_TITLE, the backend flips subsectionlayout between TitleOnTop and TitleOnLeft and pushes it back via view_model_update - whether the bound subSectionLayout property re-layouts the subsection` &&
-               ` titles live, and the overall ObjectPage rendering of the eight inlined core:HTML blocks, remain to be checked.`.
+               ` identically. The controller's toggleTitle handler becomes the TOGGLE_TITLE event branch flipping the field between TitleOnTop and TitleOnLeft; the press='.toggleTitle' wire on the` &&
+               ` ObjectPageHeaderActionButton is client->_event('TOGGLE_TITLE'). // LIVE-TEST: Round-trip behaviour not verified in a running system: the 'toggle title' ObjectPageHeaderActionButton fires` &&
+               ` TOGGLE_TITLE, the backend flips subsectionlayout between TitleOnTop and TitleOnLeft and pushes it back on the round-trip - whether the bound subSectionLayout property re-layouts the subsection titles` &&
+               ` live, and the overall ObjectPage rendering of the eight inlined core:HTML blocks, remain to be checked.`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.BlockBase`                    name = `ObjectPageBlockBase`                           class = `z2ui5_cl_dmo_app_408` path = `src/01/03/z2ui5_cl_dmo_app_408.clas.abap`
         score = 4
@@ -6490,8 +6489,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` core:FragmentDefinition/ResponsivePopover via client->popover_display( xml = ... by_id = ... ) anchored at the event source transported as $event.oSource.sId, i.e. the ObjectPageHeader control rather` &&
                ` than the marker icon's DOM node - the popover placement (Bottom) is preserved, only the exact anchor element differs. The controller's oPopoverChanges.setModel(oEvent.getSource().getModel()) folds` &&
                ` away: abap2UI5 serves one default model and the fragment binds nothing. // LIVE-TEST: Round-trip behaviour unverified in a running system: the MARK_CHANGES_PRESS wire (markChangesPress ->`.
-    lv_text1 = lv_text1 && ` popover_display of the ResponsivePopover anchored by $event.oSource.sId) and the TOGGLE_HEADER_CONTENT wire (press -> xsdbool flip of the two-way bound showHeaderContent + view_model_update) have not` &&
-               ` been live-tested.`.
+    lv_text1 = lv_text1 && ` popover_display of the ResponsivePopover anchored by $event.oSource.sId) and the TOGGLE_HEADER_CONTENT wire (press -> xsdbool flip of the two-way bound showHeaderContent) have not been live-tested.`.
     result = VALUE #( BASE result
       ( module = `sap.uxap`           control = `sap.uxap.ObjectPageHeader`             name = `AlternativeProfileObjectPageHeader`            class = `z2ui5_cl_dmo_app_414` path = `src/01/03/z2ui5_cl_dmo_app_414.clas.abap`
         score = 5
@@ -6755,14 +6753,14 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` and toasts 'Media Range: <range> (<width>px) / Avatar Size: <size>' exactly like onBreakpointChange. Same wiring as app 244 (the sap.f.DynamicPage twin of this sample). Requires a UI5 release >=` &&
                ` 1.147; on older releases the event never fires and both Avatars keep the seeded L. // POST-1.71: sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity` &&
                ` sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar (id snappedAvatar) and the headerContent avatar (id headerAvatar). Needs a UI5 runtime >= 1.73. // NOTE: showFooter is two-way bound`.
-    lv_text1 = lv_text1 && ` ({/SHOW_FOOTER}, seeded false = the original's ObjectPageLayout default, since the sample sets no showFooter attribute) and the Toggle Footer button flips it on a round-trip (view_model_update) - the` &&
-               ` faithful abap2UI5 form of the controller's setShowFooter(!getShowFooter()); a scalar literal -> binding is not a structural diff. The two breadcrumb Link presses and the editHeaderButtonPress raise` &&
-               ` client-composed MessageToasts via _event_client control_global MESSAGE_TOAST (roundtrip-free, apps 005/060/244). Footer round-trip, toast wiring and the editHeaderButtonPress attribute are unverified` &&
-               ` in a running system. **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the Toggle Footer press flips the two-way bound showFooter over a real` &&
-               ` round-trip (the footer with Accept/Reject appears), and the breadcrumb entry raises its client-composed toast 'Page 1 a very long link clicked' (at this viewport the Breadcrumbs collapse into a` &&
-               ` Select, so the entry is picked from its list). Residual: editHeaderButtonPress - the ObjectPage's pencil button only appears on header hover, so its toast stays a human check. // NOTE: Both Avatar`.
-    lv_text1 = lv_text1 && ` src values point at the sdk.openui5.org host (https://sdk.openui5.org/test-resources/sap/uxap/images/imageID_275314.png) per the offline asset-URL rule; the original uses the relative` &&
-               ` ./test-resources path. Literal src values are not compared by structural-diff.`.
+    lv_text1 = lv_text1 && ` ({/SHOW_FOOTER}, seeded false = the original's ObjectPageLayout default, since the sample sets no showFooter attribute) and the Toggle Footer button flips it on a round-trip - the faithful abap2UI5` &&
+               ` form of the controller's setShowFooter(!getShowFooter()); a scalar literal -> binding is not a structural diff. The two breadcrumb Link presses and the editHeaderButtonPress raise client-composed` &&
+               ` MessageToasts via _event_client control_global MESSAGE_TOAST (roundtrip-free, apps 005/060/244). Footer round-trip, toast wiring and the editHeaderButtonPress attribute are unverified in a running` &&
+               ` system. **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the Toggle Footer press flips the two-way bound showFooter over a real round-trip (the` &&
+               ` footer with Accept/Reject appears), and the breadcrumb entry raises its client-composed toast 'Page 1 a very long link clicked' (at this viewport the Breadcrumbs collapse into a Select, so the entry` &&
+               ` is picked from its list). Residual: editHeaderButtonPress - the ObjectPage's pencil button only appears on header hover, so its toast stays a human check. // NOTE: Both Avatar src values point at the`.
+    lv_text1 = lv_text1 && ` sdk.openui5.org host (https://sdk.openui5.org/test-resources/sap/uxap/images/imageID_275314.png) per the offline asset-URL rule; the original uses the relative ./test-resources path. Literal src` &&
+               ` values are not compared by structural-diff.`.
     lv_text2 = `sap.uxap.ObjectPageLayout.breakpointChange (@since 1.147, incl. its currentRange / currentWidth parameters) is the whole point of this sample and is wired 1:1 as a view attribute (an added attr - the` &&
                ` original attaches it imperatively in onInit via attachBreakpointChange): BREAKPOINT_CHANGE transports ${$parameters>/currentRange} and ${$parameters>/currentWidth}, the backend maps Phone->M /` &&
                ` Tablet->L / Desktop and DesktopExtraLarge->XL into the two-way bound Avatar displaySize ({/AVATAR_SIZE}, an added attribute on both Avatars, seeded L like the controller's default branch) and toasts` &&

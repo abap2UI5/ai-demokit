@@ -25,7 +25,7 @@
     },
     {
       "type": "NOTE",
-      "what": "btnChangeOrientation flips Splitter.orientation, which IS a bindable property, so the port binds it and flips the model field instead of calling the setter (the prefer-a-bindable-property rule). btnInvalidateSplitter has no bindable equivalent either - invalidate( ) forces a re-render without changing a property - and it needs none: invalidate is denied by the frontend action allowlist (the render lifecycle belongs to the framework, CONTROL_METHOD_DENY_PREFIXES), and the round-trip the button already makes ends in view_model_update( ), which re-renders the slot. So the button keeps its wire and its effect, with no control method called. The Splitter's resize event is wired to the backend, which increments the counter and writes the timestamped 'Resize # n' text the original's handler writes."
+      "what": "btnChangeOrientation flips Splitter.orientation, which IS a bindable property, so the port binds it and flips the model field instead of calling the setter (the prefer-a-bindable-property rule). btnInvalidateSplitter has no bindable equivalent either - invalidate( ) forces a re-render without changing a property - and it needs none: invalidate is denied by the frontend action allowlist (the render lifecycle belongs to the framework, CONTROL_METHOD_DENY_PREFIXES), and the round-trip the button already makes re-renders the slot by itself. So the button keeps its wire and its effect, with no control method called. The Splitter's resize event is wired to the backend, which increments the counter and writes the timestamped 'Resize # n' text the original's handler writes."
     },
     {
       "type": "IMPROVISED",

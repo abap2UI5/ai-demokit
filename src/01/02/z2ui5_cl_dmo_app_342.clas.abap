@@ -118,7 +118,6 @@ CLASS z2ui5_cl_dmo_app_342 IMPLEMENTATION.
 
       WHEN `FORM_SUBMIT`.
         cards_build( ).
-        client->view_model_update( ).
 
     ENDCASE.
 

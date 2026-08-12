@@ -99,7 +99,6 @@ CLASS z2ui5_cl_dmo_app_305 IMPLEMENTATION.
             last_selected = picked.
           ENDIF.
         ENDIF.
-        client->view_model_update( ).
 
     ENDCASE.
 

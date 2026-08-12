@@ -358,7 +358,6 @@ CLASS z2ui5_cl_dmo_app_298 IMPLEMENTATION.
         ELSEIF group_key = `Price`.
           SORT t_products BY price ASCENDING.
         ENDIF.
-        client->view_model_update( ).
 
       WHEN `GROUP_RESET`.
         group_key = ``.
@@ -416,7 +415,6 @@ CLASS z2ui5_cl_dmo_app_298 IMPLEMENTATION.
       ENDLOOP.
     ENDLOOP.
 
-    client->view_model_update( ).
 
   ENDMETHOD.
 
@@ -444,7 +442,6 @@ CLASS z2ui5_cl_dmo_app_298 IMPLEMENTATION.
       SORT t_products BY (field) ASCENDING.
     ENDIF.
 
-    client->view_model_update( ).
 
   ENDMETHOD.
 

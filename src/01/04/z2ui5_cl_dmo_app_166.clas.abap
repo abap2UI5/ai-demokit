@@ -271,7 +271,6 @@ CLASS z2ui5_cl_dmo_app_166 IMPLEMENTATION.
         " onEdit: showFooter( true ) + the Edit action hides itself
         showfooter   = abap_true.
         edit_visible = abap_false.
-        client->view_model_update( ).
 
       WHEN `SAVE`.
         " onSave: showFooter( false ), the Edit action is back, and the original
@@ -280,13 +279,11 @@ CLASS z2ui5_cl_dmo_app_166 IMPLEMENTATION.
         edit_visible = abap_true.
         client->message_box_display( text = `Successfully saved!`
                                      type = `information` ).
-        client->view_model_update( ).
 
       WHEN `CANCEL`.
         " onCancel: same state reset, without the alert
         showfooter   = abap_false.
         edit_visible = abap_true.
-        client->view_model_update( ).
 
     ENDCASE.
 

@@ -120,7 +120,6 @@ CLASS z2ui5_cl_dmo_app_172 IMPLEMENTATION.
       WHEN `TOGGLE_EXPAND`.
         " original onCollapseExpandPress: toggles SideNavigation.expanded
         expanded = xsdbool( expanded = abap_false ).
-        client->view_model_update( ).
 
     ENDCASE.
 

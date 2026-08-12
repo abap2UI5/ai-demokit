@@ -236,7 +236,6 @@ CLASS z2ui5_cl_dmo_app_018 IMPLEMENTATION.
         ELSEIF source_id CP `*DTP7`.
           vs_dtp7 = state.
         ENDIF.
-        client->view_model_update( ).
 
     ENDCASE.
 

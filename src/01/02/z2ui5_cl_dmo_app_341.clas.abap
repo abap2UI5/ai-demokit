@@ -239,7 +239,6 @@ CLASS z2ui5_cl_dmo_app_341 IMPLEMENTATION.
         " calls refresh( ) on each Card via a frontend action
         IF manifest_listtest = c_no_manifest.
           model_init( ).
-          client->view_model_update( ).
         ELSE.
           LOOP AT VALUE string_table( ( `listTest` ) ( `list` ) ( `error` ) ( `all` )
                                       ( `descriptionTitle` ) ( `iconTitle` ) ( `table` )

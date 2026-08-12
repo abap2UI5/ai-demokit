@@ -13,7 +13,7 @@
   "deviations": [
     {
       "type": "NOTE",
-      "what": "The eleven card manifests come from manifests/cardManifests.json verbatim. The original carries them in a named `manifests>` model and the controller pushes them into the Cards on submit; abap2UI5 has one default model, so each manifest is a bound field on it (the `manifests>` prefix is dropped, the last path segment stays identical, which is what structural-diff matches). model_init is deliberately NOT called from main: the sample's Cards start without a manifest and only get one on the first 'Start loading' press, so the model is seeded in on_event and pushed with view_model_update - the manifest-less initial state is reproduced 1:1."
+      "what": "The eleven card manifests come from manifests/cardManifests.json verbatim. The original carries them in a named `manifests>` model and the controller pushes them into the Cards on submit; abap2UI5 has one default model, so each manifest is a bound field on it (the `manifests>` prefix is dropped, the last path segment stays identical, which is what structural-diff matches). model_init is deliberately NOT called from main: the sample's Cards start without a manifest and only get one on the first 'Start loading' press, so the model is seeded in on_event and pushed on that round-trip - the manifest-less initial state is reproduced 1:1."
     },
     {
       "type": "NOTE",

@@ -286,7 +286,6 @@ CLASS z2ui5_cl_dmo_app_167 IMPLEMENTATION.
                                  THEN `Large Size Navigation`
                                  ELSE `Small Size Navigation` ).
         sideexpanded = xsdbool( sideexpanded = abap_false ).
-        client->view_model_update( ).
 
       WHEN `USER_POPOVER`.
         " handleUserNamePress: the controller-built Popover (no header, Bottom,

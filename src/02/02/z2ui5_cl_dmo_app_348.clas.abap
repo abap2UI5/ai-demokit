@@ -401,7 +401,6 @@ CLASS z2ui5_cl_dmo_app_348 IMPLEMENTATION.
       WHEN `LAYOUT_CHANGE`.
         " onLayoutChange: setProperty('/currentBreakpoint', event layout)
         currentbreakpoint = client->get_event_arg( ).
-        client->view_model_update( ).
 
     ENDCASE.
 

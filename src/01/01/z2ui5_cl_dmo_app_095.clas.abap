@@ -72,12 +72,10 @@ CLASS z2ui5_cl_dmo_app_095 IMPLEMENTATION.
         " the static id 'TPS2' stands in for the original's runtime oTP.getId()
         result_text = |TimePickerSliders TPS2: { time_value }|.
         client->popup_destroy( ).
-        client->view_model_update( ).
 
       WHEN `CANCEL_PRESS`.
         time_value = time_value_old.
         client->popup_destroy( ).
-        client->view_model_update( ).
 
     ENDCASE.
 

@@ -261,12 +261,10 @@ CLASS z2ui5_cl_dmo_app_331 IMPLEMENTATION.
         backup_url          = url.
         backup_twitter      = twitter.
         edit_mode           = abap_true.
-        client->view_model_update( ).
 
       WHEN `SAVE`.
         " handleSavePress: keep the edited values, back to the Display form
         edit_mode = abap_false.
-        client->view_model_update( ).
 
       WHEN `CANCEL`.
         " handleCancelPress: restore the cloned record, back to the Display form
@@ -279,7 +277,6 @@ CLASS z2ui5_cl_dmo_app_331 IMPLEMENTATION.
         url          = backup_url.
         twitter      = backup_twitter.
         edit_mode    = abap_false.
-        client->view_model_update( ).
 
     ENDCASE.
 

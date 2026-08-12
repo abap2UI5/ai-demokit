@@ -124,7 +124,6 @@ CLASS z2ui5_cl_dmo_app_043 IMPLEMENTATION.
         " a bindable property, so the flag is bound two-way and only flipped
         " here - no frontend action, and the state survives a view rebuild
         expanded = xsdbool( expanded = abap_false ).
-        client->view_model_update( ).
 
     ENDCASE.
 

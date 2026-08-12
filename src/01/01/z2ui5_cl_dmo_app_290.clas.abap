@@ -136,7 +136,6 @@ CLASS z2ui5_cl_dmo_app_290 IMPLEMENTATION.
           t_tokens = VALUE #( BASE t_tokens ( text = product->name ) ).
           product->selected = abap_false.
         ENDLOOP.
-        client->view_model_update( ).
 
     ENDCASE.
 

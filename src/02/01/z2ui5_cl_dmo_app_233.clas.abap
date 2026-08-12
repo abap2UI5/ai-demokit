@@ -418,7 +418,6 @@ CLASS z2ui5_cl_dmo_app_233 IMPLEMENTATION.
         IF input_value IS INITIAL.
           inputpopulated = abap_false.
         ENDIF.
-        client->view_model_update( ).
 
       WHEN `SUGGEST`.
         " handleInputSuggestionItemSelected: the picked suggestion's key

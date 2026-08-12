@@ -346,7 +346,6 @@ CLASS z2ui5_cl_dmo_app_301 IMPLEMENTATION.
         ENDIF.
 
         client->popover_destroy( ).
-        client->view_model_update( ).
 
       WHEN `QUICK_CREATE`.
         " original onQuickActionPress: opens the create dialog and closes the popover

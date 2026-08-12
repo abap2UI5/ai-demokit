@@ -100,7 +100,6 @@ CLASS z2ui5_cl_dmo_app_093 IMPLEMENTATION.
       WHEN `ADD`.
         " addNewButtonPressHandler: add a new, empty employee tab
         APPEND VALUE #( name = `New employee` modified = abap_false ) TO t_employees.
-        client->view_model_update( ).
       WHEN `CLOSE`.
         " itemCloseHandler: confirm before closing; the answer comes back as
         " the CLOSE_DECIDE event's action argument
@@ -115,7 +114,6 @@ CLASS z2ui5_cl_dmo_app_093 IMPLEMENTATION.
         IF client->get_event_arg( ) = `OK`.
           IF close_index >= 0 AND close_index < lines( t_employees ).
             DELETE t_employees INDEX close_index + 1.
-            client->view_model_update( ).
           ENDIF.
           client->message_toast_display( text = |Item closed: { close_name }| duration = `500` ).
         ELSE.

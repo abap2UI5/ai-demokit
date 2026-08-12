@@ -100,7 +100,6 @@ CLASS z2ui5_cl_dmo_app_307 IMPLEMENTATION.
           ENDIF.
           INSERT VALUE #( date = day ) INTO TABLE selecteddates.
         ENDDO.
-        client->view_model_update( ).
 
       WHEN `REMOVE_SELECTION`.
         " handleRemoveSelection: removeAllSelectedDates( ) + clear the model.
@@ -110,7 +109,6 @@ CLASS z2ui5_cl_dmo_app_307 IMPLEMENTATION.
         CLEAR selecteddates.
         client->follow_up_action( val   = client->cs_event-control_by_id
                                   t_arg = VALUE #( ( `calendar` ) ( `removeAllSelectedDates` ) ) ).
-        client->view_model_update( ).
 
     ENDCASE.
 

@@ -122,14 +122,12 @@ CLASS z2ui5_cl_dmo_app_085 IMPLEMENTATION.
         APPEND VALUE #( text = text key = text ) TO t_tokens.
         client->message_toast_display( |Token added: { text }| ).
         input_value = ``.
-        client->view_model_update( ).
       WHEN `DELETE`.
         " onTokenDelete: remove the deleted token(s) by key from the bound model; the toast carries the text like the original's oToken.getText()
         DATA(key) = client->get_event_arg( ).
         DATA(deleted_text) = VALUE #( t_tokens[ key = key ]-text OPTIONAL ).
         DELETE t_tokens WHERE key = key.
         client->message_toast_display( |Token deleted: { deleted_text }| ).
-        client->view_model_update( ).
     ENDCASE.
 
   ENDMETHOD.
