@@ -128,15 +128,28 @@ of the three groups is portable here.
 declared but **closed** (AGENTS §3), and their libraries are not in the universe
 snapshot at all (`ui5/universe.json` covers the ten OpenUI5 libraries). The
 `@since` column is the class-level tag from the pinned `@sapui5/*` packages, so
-it is the real release fact — and it puts every one of them in the `<= 1.71`
-half, i.e. the release is never what blocks them.
+it is the real release fact — and for **eleven** of the fourteen it puts the
+control in the `<= 1.71` half: the release is not what blocks them, the closed
+`src/03`/`src/04` question is. The other three are blocked twice over, by a
+class-level deprecation as well (the two `sap.gantt` rows and `RadialMicroChart`,
+below).
+
+Every row is `node scripts/scope-of.mjs <entity>`-verified (2026-08-12): the
+script falls back to the `@sapui5/*` packages and answers `OUT_OF_SCOPE
+(SAPUI5-only library — src/03/src/04 are not open, AGENTS §3)`, or the
+deprecation where there is one. **Four of the rows name a real SAPUI5 demo kit
+sample in their ABAP Doc URL** (`sap.suite.ui.microchart.sample.*` for the three
+Interactive charts and `RadialMicroChart`) — so the SAPUI5 demo kit does have
+samples this repo could rebuild one day; they are simply not in
+`ui5/universe.json`, which snapshots the ten OpenUI5 libraries only, and so
+appear in no coverage table.
 
 | Sample class | Library | Control | class `@since` |
 |---|---|---|---|
 | `z2ui5_cl_smp_app_013` | `sap.suite.ui.microchart` | `InteractiveDonutChart` | 1.42 |
 | `z2ui5_cl_smp_app_014` | `sap.suite.ui.microchart` | `InteractiveLineChart` | 1.42 |
 | `z2ui5_cl_smp_app_016` | `sap.suite.ui.microchart` | `InteractiveBarChart` | 1.42 |
-| `z2ui5_cl_smp_app_029` | `sap.suite.ui.microchart` | `RadialMicroChart` | 1.36 |
+| `z2ui5_cl_smp_app_029` | `sap.suite.ui.microchart` | `RadialMicroChart` | 1.36, **DEPRECATED 1.135** |
 | `z2ui5_cl_smp_app_076` | `sap.gantt` | `GanttChartWithTable` | **DEPRECATED 1.64** |
 | `z2ui5_cl_smp_app_091` | `sap.suite.ui.commons` | `ProcessFlow` | base (no tag) |
 | `z2ui5_cl_smp_app_113` | `sap.suite.ui.commons` | `Timeline` | base (no tag) |
@@ -152,7 +165,10 @@ The two `sap.gantt` rows are out of scope by the **normal** rule, not by the
 SAPUI5 question: both controls are class-deprecated since 1.64 in favour of
 `sap.gantt.simple.*`, and ai-demokit never ports a deprecated control (AGENTS
 §1). Taking them over would mean rebuilding on the successor — a different
-sample.
+sample. `RadialMicroChart` is the same case one release line later: the import
+table first carried only its `@since 1.36`, and the scope-of pass found the
+class-level deprecation as of 1.135 on top. So even if `src/03` opened tomorrow,
+three of these fourteen would stay out.
 
 **OpenUI5, restricted for other reasons (3)** — no demo kit original to rebuild,
 so out of scope here whatever happens to `src/03`/`src/04`:
