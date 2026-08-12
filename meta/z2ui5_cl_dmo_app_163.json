@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_163",
   "sample": "sap.m.sample.ToolbarResponsive",
   "entity": "sap.m.OverflowToolbar",
-  "file": "src/01/z2ui5_cl_dmo_app_163.clas.abap",
+  "file": "src/01/01/z2ui5_cl_dmo_app_163.clas.abap",
   "batch": "b17",
   "audit": {
     "frontend_action": true,

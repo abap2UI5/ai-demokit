@@ -728,7 +728,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
     DATA lv_text2 TYPE string.
 
     result = VALUE #(
-      ( module = `sap.f`              control = `sap.f.Card`                            name = `Card`                                          class = `z2ui5_cl_dmo_app_117` path = `src/04/z2ui5_cl_dmo_app_117.clas.abap`
+      ( module = `sap.f`              control = `sap.f.Card`                            name = `Card`                                          class = `z2ui5_cl_dmo_app_117` path = `src/01/04/z2ui5_cl_dmo_app_117.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.64`
@@ -752,7 +752,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
     lv_text1 = lv_text1 && ` string keeps the exact value; TYPE i would truncate (an earlier version did, via json-to-abap's first-row inference — tool since fixed). Price stays packed (DECIMALS 2) for the Currency type binding,` &&
                ` decimals preserved.`.
     result = VALUE #( BASE result
-      ( module = `sap.f`              control = `sap.f.DynamicPage`                     name = `DynamicPageFreeStyle`                          class = `z2ui5_cl_dmo_app_170` path = `src/04/z2ui5_cl_dmo_app_170.clas.abap`
+      ( module = `sap.f`              control = `sap.f.DynamicPage`                     name = `DynamicPageFreeStyle`                          class = `z2ui5_cl_dmo_app_170` path = `src/01/04/z2ui5_cl_dmo_app_170.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.42`
@@ -776,7 +776,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` Avatars, seeded XL) and toasts Media Range: <range> (<width>px) exactly like onBreakpointChange. @since verified fork-openui5/src/sap.f/src/sap/f/DynamicPage.js:315. Requires a UI5 release >= 1.147;` &&
                ` on older releases the event never fires and the Avatars keep the seeded XL (the property gate is blind to sap.f event params).`.
     result = VALUE #( BASE result
-      ( module = `sap.f`              control = `sap.f.DynamicPage`                     name = `DynamicPageResponsiveAvatar`                   class = `z2ui5_cl_dmo_app_244` path = `src/04/z2ui5_cl_dmo_app_244.clas.abap`
+      ( module = `sap.f`              control = `sap.f.DynamicPage`                     name = `DynamicPageResponsiveAvatar`                   class = `z2ui5_cl_dmo_app_244` path = `src/02/04/z2ui5_cl_dmo_app_244.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.42`
@@ -801,7 +801,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` (transpiled-framework interaction, scripts/e2e-smoke.mjs): the GenericTag press opens the Card popover with the NumericHeader rendering ('Sales Revenue'; asserted on text - the popover box measures` &&
                ` empty headless); the layoutData-button variant is the identical wire.`.
     result = VALUE #( BASE result
-      ( module = `sap.f`              control = `sap.f.DynamicPage`                     name = `DynamicPageWithStickySubheader`                class = `z2ui5_cl_dmo_app_238` path = `src/04/z2ui5_cl_dmo_app_238.clas.abap`
+      ( module = `sap.f`              control = `sap.f.DynamicPage`                     name = `DynamicPageWithStickySubheader`                class = `z2ui5_cl_dmo_app_238` path = `src/01/04/z2ui5_cl_dmo_app_238.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.42`
@@ -820,7 +820,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` with no user-visible effect and is not reproduced - all three pages exist from the start. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): pressing the first` &&
                ` master list item round-trips LIST_PRESS and the mid column renders (the two-way bound layout flipped to TwoColumnsBeginExpanded).`.
     result = VALUE #( BASE result
-      ( module = `sap.f`              control = `sap.f.FlexibleColumnLayout`            name = `FlexibleColumnLayoutSimple`                    class = `z2ui5_cl_dmo_app_234` path = `src/04/z2ui5_cl_dmo_app_234.clas.abap`
+      ( module = `sap.f`              control = `sap.f.FlexibleColumnLayout`            name = `FlexibleColumnLayoutSimple`                    class = `z2ui5_cl_dmo_app_234` path = `src/01/04/z2ui5_cl_dmo_app_234.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.46`
@@ -847,20 +847,20 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` pressed', 'Card pressed') are gone. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the first GenericTile press toasts 'Press was fired on - sap.m.GenericTile'` &&
                ` (the getMetadata().getName() expression resolves); the switch bindings and columns counter remain unexercised.`.
     result = VALUE #( BASE result
-      ( module = `sap.f`              control = `sap.f.GridContainer`                   name = `GridContainer`                                 class = `z2ui5_cl_dmo_app_168` path = `src/04/z2ui5_cl_dmo_app_168.clas.abap`
+      ( module = `sap.f`              control = `sap.f.GridContainer`                   name = `GridContainer`                                 class = `z2ui5_cl_dmo_app_168` path = `src/01/04/z2ui5_cl_dmo_app_168.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.65`
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.f`              control = `sap.f.GridList`                        name = `GridListBasic`                                 class = `z2ui5_cl_dmo_app_111` path = `src/04/z2ui5_cl_dmo_app_111.clas.abap`
+      ( module = `sap.f`              control = `sap.f.GridList`                        name = `GridListBasic`                                 class = `z2ui5_cl_dmo_app_111` path = `src/01/04/z2ui5_cl_dmo_app_111.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.60`
         notes = `NOTE: The Slider drives the panel width via a roundtrip-free expression binding ({= ${slider} + '%' }) over the two-way slider value, instead of the original onSliderMoved setWidth handler;` &&
                  ` Slider.liveChange is therefore not wired (the width tracks the slider client-side). The full 27-row item set is inlined.` )
-      ( module = `sap.f`              control = `sap.f.GridList`                        name = `GridListBoxContainer`                          class = `z2ui5_cl_dmo_app_144` path = `src/04/z2ui5_cl_dmo_app_144.clas.abap`
+      ( module = `sap.f`              control = `sap.f.GridList`                        name = `GridListBoxContainer`                          class = `z2ui5_cl_dmo_app_144` path = `src/01/04/z2ui5_cl_dmo_app_144.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.60`
@@ -875,14 +875,14 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` custom f:headerToolbar (Toolbar with Title, ToolbarSpacer, SearchField - the SearchField has no handler in the original). The 27 items are inlined 1:1 from the sample's own model/items.json; the` &&
                ` GridListItem template (VBox>VBox+FlexItemData, Title, Label) binds {TITLE}/{SUBTITLE} 1:1.`.
     result = VALUE #( BASE result
-      ( module = `sap.f`              control = `sap.f.GridList`                        name = `GridListBoxContainerGrouping`                  class = `z2ui5_cl_dmo_app_176` path = `src/04/z2ui5_cl_dmo_app_176.clas.abap`
+      ( module = `sap.f`              control = `sap.f.GridList`                        name = `GridListBoxContainerGrouping`                  class = `z2ui5_cl_dmo_app_176` path = `src/01/04/z2ui5_cl_dmo_app_176.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.60`
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.f`              control = `sap.f.GridList`                        name = `GridListBreakPoints`                           class = `z2ui5_cl_dmo_app_213` path = `src/04/z2ui5_cl_dmo_app_213.clas.abap`
+      ( module = `sap.f`              control = `sap.f.GridList`                        name = `GridListBreakPoints`                           class = `z2ui5_cl_dmo_app_213` path = `src/01/04/z2ui5_cl_dmo_app_213.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.60`
@@ -900,7 +900,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
     lv_text1 = lv_text1 && ` the control statically visible to the checks). // NOTE: 27 items inlined from model/data.json; absent enum fields defaulted (highlight None, type Inactive) so the bound GridListItem properties stay` &&
                ` valid. Template binds counter/highlight/type/unread + title/subtitle 1:1.`.
     result = VALUE #( BASE result
-      ( module = `sap.f`              control = `sap.f.GridList`                        name = `GridListDragAndDrop`                           class = `z2ui5_cl_dmo_app_148` path = `src/04/z2ui5_cl_dmo_app_148.clas.abap`
+      ( module = `sap.f`              control = `sap.f.GridList`                        name = `GridListDragAndDrop`                           class = `z2ui5_cl_dmo_app_148` path = `src/01/04/z2ui5_cl_dmo_app_148.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.60`
@@ -917,7 +917,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` used to toast a CONSTANT ('Selection changed', 'Delete item', 'Request details', 'Pressed item') and dropped the item identity the original shows. The ids are the runtime UI5 ids, exactly as in the` &&
                ` original.`.
     result = VALUE #( BASE result
-      ( module = `sap.f`              control = `sap.f.GridList`                        name = `GridListModes`                                 class = `z2ui5_cl_dmo_app_133` path = `src/04/z2ui5_cl_dmo_app_133.clas.abap`
+      ( module = `sap.f`              control = `sap.f.GridList`                        name = `GridListModes`                                 class = `z2ui5_cl_dmo_app_133` path = `src/01/04/z2ui5_cl_dmo_app_133.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.60`
@@ -931,7 +931,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` Fully static view reproduced 1:1: a ToggleButton, a Slider (value=100), and a Panel (headerToolbar Toolbar+Title) hosting an f:GridList with a ResponsiveColumnLayout and five static f:GridListItems`.
     lv_text1 = lv_text1 && ` (columns/rows 4/4, 3/2, 3/2, 1/1, 1/1), each a VBox with a Title and 1..5 Labels; no bound data.`.
     result = VALUE #( BASE result
-      ( module = `sap.f`              control = `sap.f.GridList`                        name = `GridListResponsiveColumnLayout`                class = `z2ui5_cl_dmo_app_222` path = `src/04/z2ui5_cl_dmo_app_222.clas.abap`
+      ( module = `sap.f`              control = `sap.f.GridList`                        name = `GridListResponsiveColumnLayout`                class = `z2ui5_cl_dmo_app_222` path = `src/02/04/z2ui5_cl_dmo_app_222.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.60`
@@ -948,7 +948,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` exceptions (ui5/scope-exceptions.json, KEEP 2026-07-30); the controls only became visible to the property gate on 2026-08-05, when the popover fragment was rebuilt instead of substituted by a toast.`.
     lv_text1 = lv_text1 && ` The app needs a UI5 release >= 1.72.`.
     result = VALUE #( BASE result
-      ( module = `sap.f`              control = `sap.f.ProductSwitch`                   name = `ProductSwitchNavigation`                       class = `z2ui5_cl_dmo_app_165` path = `src/04/z2ui5_cl_dmo_app_165.clas.abap`
+      ( module = `sap.f`              control = `sap.f.ProductSwitch`                   name = `ProductSwitchNavigation`                       class = `z2ui5_cl_dmo_app_165` path = `src/02/04/z2ui5_cl_dmo_app_165.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.72`
@@ -969,14 +969,14 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` SendEmail / SendMessage semantic actions keep their built-in behaviour and the DraftIndicator shows state Saved. Structurally that adds three controls the original view does not declare - the` &&
                ` z2ui5:MessageManager bridge plus the MessagePopover and its MessageItem template - because the original builds the popover in the controller and seeds the message through the Messaging API.`.
     result = VALUE #( BASE result
-      ( module = `sap.f`              control = `sap.f.semantic.SemanticPage`           name = `SemanticPage`                                  class = `z2ui5_cl_dmo_app_166` path = `src/04/z2ui5_cl_dmo_app_166.clas.abap`
+      ( module = `sap.f`              control = `sap.f.semantic.SemanticPage`           name = `SemanticPage`                                  class = `z2ui5_cl_dmo_app_166` path = `src/01/04/z2ui5_cl_dmo_app_166.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.46.0`
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.f`              control = `sap.f.ShellBar`                        name = `ShellBar`                                      class = `z2ui5_cl_dmo_app_110` path = `src/04/z2ui5_cl_dmo_app_110.clas.abap`
+      ( module = `sap.f`              control = `sap.f.ShellBar`                        name = `ShellBar`                                      class = `z2ui5_cl_dmo_app_110` path = `src/02/04/z2ui5_cl_dmo_app_110.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.63`
@@ -989,7 +989,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` Avatar), so the app needs UI5 >= 1.73 to render the avatar. Added at the 2026-07-27 review sweep - the control-level @since is invisible to the member-level property gate.` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.f`              control = `sap.f.ShellBar`                        name = `ShellBarWithMenuButton`                        class = `z2ui5_cl_dmo_app_152` path = `src/04/z2ui5_cl_dmo_app_152.clas.abap`
+      ( module = `sap.f`              control = `sap.f.ShellBar`                        name = `ShellBarWithMenuButton`                        class = `z2ui5_cl_dmo_app_152` path = `src/02/04/z2ui5_cl_dmo_app_152.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.63`
@@ -1017,7 +1017,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` UI5 1.73) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.73 to render it. @since verified in sap/m/Avatar.js:99 (control-level, which the member-level property gate` &&
                ` never saw).`.
     result = VALUE #( BASE result
-      ( module = `sap.f`              control = `sap.f.ShellBar`                        name = `ShellBarWithSearch`                            class = `z2ui5_cl_dmo_app_218` path = `src/04/z2ui5_cl_dmo_app_218.clas.abap`
+      ( module = `sap.f`              control = `sap.f.ShellBar`                        name = `ShellBarWithSearch`                            class = `z2ui5_cl_dmo_app_218` path = `src/02/04/z2ui5_cl_dmo_app_218.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.63`
@@ -1034,7 +1034,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
     lv_text1 = lv_text1 && ` in the model either way. // POST-1.71: the SidePanel and SidePanelItem controls (both since UI5 1.107) are newer than 1.71 but are the whole point of this sample and kept for the 1:1 port - the app` &&
                ` needs a UI5 release >= 1.107 to render it. @since verified in sap/f/SidePanel.js and sap/f/SidePanelItem.js:34 (control-level, which the member-level property gate never saw).`.
     result = VALUE #( BASE result
-      ( module = `sap.f`              control = `sap.f.SidePanel`                       name = `SidePanelSingle`                               class = `z2ui5_cl_dmo_app_136` path = `src/04/z2ui5_cl_dmo_app_136.clas.abap`
+      ( module = `sap.f`              control = `sap.f.SidePanel`                       name = `SidePanelSingle`                               class = `z2ui5_cl_dmo_app_136` path = `src/02/04/z2ui5_cl_dmo_app_136.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.107`
@@ -1045,15 +1045,15 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` it. @since verified in sap/f/SidePanel.js and sap/f/SidePanelItem.js:34 (control-level, which the member-level property gate never saw).` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.ActionListItem`                  name = `ActionListItem`                                class = `z2ui5_cl_dmo_app_001` path = `src/01/z2ui5_cl_dmo_app_001.clas.abap`
+      ( module = `sap.m`              control = `sap.m.ActionListItem`                  name = `ActionListItem`                                class = `z2ui5_cl_dmo_app_001` path = `src/01/01/z2ui5_cl_dmo_app_001.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         checked = `CHECKED (2026-07-20): verified in a running system - human pass 2026-07-20: app starts and renders like the original; no interaction paths were open for this port` )
-      ( module = `sap.m`              control = `sap.m.Bar`                             name = `Page`                                          class = `z2ui5_cl_dmo_app_002` path = `src/01/z2ui5_cl_dmo_app_002.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Bar`                             name = `Page`                                          class = `z2ui5_cl_dmo_app_002` path = `src/01/01/z2ui5_cl_dmo_app_002.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         checked = `CHECKED (2026-07-20): verified in a running system - human pass 2026-07-20: app starts and renders like the original; no interaction paths were open for this port` )
-      ( module = `sap.m`              control = `sap.m.Bar`                             name = `ToolbarVsBar`                                  class = `z2ui5_cl_dmo_app_189` path = `src/01/z2ui5_cl_dmo_app_189.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Bar`                             name = `ToolbarVsBar`                                  class = `z2ui5_cl_dmo_app_189` path = `src/01/01/z2ui5_cl_dmo_app_189.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` ) ).
 
@@ -1063,7 +1063,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` each breadcrumb link toasts "<text> has been activated". **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the overflow-picker entry 'Products' fires the link` &&
                ` press and toasts 'Products has been activated' (the headless layout collapses the links into the Breadcrumbs overflow Select; the picker path exercises the same press wire).`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.Breadcrumbs`                     name = `Breadcrumbs`                                   class = `z2ui5_cl_dmo_app_003` path = `src/01/z2ui5_cl_dmo_app_003.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Breadcrumbs`                     name = `Breadcrumbs`                                   class = `z2ui5_cl_dmo_app_003` path = `src/01/01/z2ui5_cl_dmo_app_003.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.34`
@@ -1072,7 +1072,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.Breadcrumbs`                     name = `BreadcrumbsWithCurrentPageLink`                class = `z2ui5_cl_dmo_app_286` path = `src/01/z2ui5_cl_dmo_app_286.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Breadcrumbs`                     name = `BreadcrumbsWithCurrentPageLink`                class = `z2ui5_cl_dmo_app_286` path = `src/02/01/z2ui5_cl_dmo_app_286.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.34`
@@ -1093,7 +1093,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
     lv_text1 = lv_text1 && ` view, dialog) is dropped: it only copies the compact-density class when the view itself carries it, which the sample view does not; abap2UI5's popup slot has no per-view density sync, so there is` &&
                ` nothing to propagate.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.BusyDialog`                      name = `BusyDialog`                                    class = `z2ui5_cl_dmo_app_004` path = `src/01/z2ui5_cl_dmo_app_004.clas.abap`
+      ( module = `sap.m`              control = `sap.m.BusyDialog`                      name = `BusyDialog`                                    class = `z2ui5_cl_dmo_app_004` path = `src/01/01/z2ui5_cl_dmo_app_004.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, reviewed, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a` &&
                  ` close look.`
@@ -1106,13 +1106,13 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` close chain on the dependents-declared BusyDialog. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the full chain runs green - the button opens the BusyDialog` &&
                ` (attached) and the CLOSE_BUSY timer round-trip detaches it after ~3s.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.BusyDialog`                      name = `BusyDialogLight`                               class = `z2ui5_cl_dmo_app_251` path = `src/01/z2ui5_cl_dmo_app_251.clas.abap`
+      ( module = `sap.m`              control = `sap.m.BusyDialog`                      name = `BusyDialogLight`                               class = `z2ui5_cl_dmo_app_251` path = `src/01/01/z2ui5_cl_dmo_app_251.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.Button`                          name = `Button`                                        class = `z2ui5_cl_dmo_app_005` path = `src/01/z2ui5_cl_dmo_app_005.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Button`                          name = `Button`                                        class = `z2ui5_cl_dmo_app_005` path = `src/01/01/z2ui5_cl_dmo_app_005.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         checked = `CHECKED (2026-07-15): manually verified in a running system - each press toasts the pressed button's client-side control id, read via the event arg $event.oSource.sId, exactly like the original.`
@@ -1134,7 +1134,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` round-trips incl. the reset-on-invalid path and the setBadgeMin/MaxValue follow-ups. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): (a) is covered - the badge`.
     lv_text1 = lv_text1 && ` renders data-badge 1 and follows the StepInput to 2 after ArrowUp+Enter (the change event carries the two-way write); the MIN/MAX validation round-trips remain unexercised.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.Button`                          name = `ButtonWithBadge`                               class = `z2ui5_cl_dmo_app_249` path = `src/01/z2ui5_cl_dmo_app_249.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Button`                          name = `ButtonWithBadge`                               class = `z2ui5_cl_dmo_app_249` path = `src/02/01/z2ui5_cl_dmo_app_249.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         is_post171 = abap_true
@@ -1144,7 +1144,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` badgeStyle; the badge itself needs >= 1.80.` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.Carousel`                        name = `Carousel`                                      class = `z2ui5_cl_dmo_app_398` path = `src/01/z2ui5_cl_dmo_app_398.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Carousel`                        name = `Carousel`                                      class = `z2ui5_cl_dmo_app_398` path = `src/02/01/z2ui5_cl_dmo_app_398.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         is_post171 = abap_true
@@ -1154,7 +1154,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` (app 031 precedent) - same images, same order, same rendering.`
         post171 = `ariaLabelledBy on sap.m.Carousel (since UI5 1.125, source-verified in Carousel.js) is newer than 1.71 but kept for the 1:1 port - it is what links the Carousel to the sample's Title. The app needs a` &&
                  ` UI5 release >= 1.125 for the association to take effect; the Carousel itself renders on 1.71.` )
-      ( module = `sap.m`              control = `sap.m.Carousel`                        name = `CarouselWithControls`                          class = `z2ui5_cl_dmo_app_006` path = `src/01/z2ui5_cl_dmo_app_006.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Carousel`                        name = `CarouselWithControls`                          class = `z2ui5_cl_dmo_app_006` path = `src/02/01/z2ui5_cl_dmo_app_006.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         is_post171 = abap_true
@@ -1175,7 +1175,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` exactly 10 carousel items render from the 123 bound rows (the set_size_limit(10, MAIN) follow-up caps the binding) with the first product card visible; the pages-count input and scrollMode flip` &&
                ` remain unexercised but are the proven 007/128 client-side class.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.Carousel`                        name = `CarouselWithMorePages`                         class = `z2ui5_cl_dmo_app_252` path = `src/01/z2ui5_cl_dmo_app_252.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Carousel`                        name = `CarouselWithMorePages`                         class = `z2ui5_cl_dmo_app_252` path = `src/02/01/z2ui5_cl_dmo_app_252.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         is_post171 = abap_true
@@ -1184,7 +1184,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` to render both.` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.CheckBox`                        name = `CheckBox`                                      class = `z2ui5_cl_dmo_app_155` path = `src/01/z2ui5_cl_dmo_app_155.clas.abap`
+      ( module = `sap.m`              control = `sap.m.CheckBox`                        name = `CheckBox`                                      class = `z2ui5_cl_dmo_app_155` path = `src/02/01/z2ui5_cl_dmo_app_155.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         is_post171 = abap_true
@@ -1192,14 +1192,14 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` reproduced 1:1. // POST-1.71: CheckBox.required (@since 1.121, the 'Required option' CheckBox) is used 1:1. Newer than UI5 1.71; declared per the property-171 policy, so the app needs UI5 >= 1.121 to` &&
                  ` render the required state.`
         post171 = `CheckBox.required (@since 1.121, the 'Required option' CheckBox) is used 1:1. Newer than UI5 1.71; declared per the property-171 policy, so the app needs UI5 >= 1.121 to render the required state.` )
-      ( module = `sap.m`              control = `sap.m.CheckBox`                        name = `CheckBoxTriState`                              class = `z2ui5_cl_dmo_app_007` path = `src/01/z2ui5_cl_dmo_app_007.clas.abap`
+      ( module = `sap.m`              control = `sap.m.CheckBox`                        name = `CheckBoxTriState`                              class = `z2ui5_cl_dmo_app_007` path = `src/01/01/z2ui5_cl_dmo_app_007.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         checked = `CHECKED (2026-07-15): manually verified in a running system - the select-all parent checkbox and its tri-state expression bindings behave like the original.; live-checked reference example for:` &&
                  ` expression bindings, two-way bind, boolean event arg` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.ColorPalette`                    name = `ColorPalette`                                  class = `z2ui5_cl_dmo_app_008` path = `src/01/z2ui5_cl_dmo_app_008.clas.abap`
+      ( module = `sap.m`              control = `sap.m.ColorPalette`                    name = `ColorPalette`                                  class = `z2ui5_cl_dmo_app_008` path = `src/01/01/z2ui5_cl_dmo_app_008.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.54`
@@ -1224,7 +1224,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` toast argument resolution. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the first action button opens its ColorPalettePopover anchored (palette content` &&
                ` attached); the other five configurations are the identical wire.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.ColorPalette`                    name = `ColorPalettePopover`                           class = `z2ui5_cl_dmo_app_250` path = `src/01/z2ui5_cl_dmo_app_250.clas.abap`
+      ( module = `sap.m`              control = `sap.m.ColorPalette`                    name = `ColorPalettePopover`                           class = `z2ui5_cl_dmo_app_250` path = `src/02/01/z2ui5_cl_dmo_app_250.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -1248,7 +1248,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
     lv_text1 = lv_text1 && ` ObjectNumber weight state in its frontend Formatter.js (weightState: KG conversion + Success/Warning/Error thresholds). That is business logic, so - abap2UI5 being a thin frontend - it is computed in` &&
                ` ABAP model_init into a WEIGHT_STATE field and bound state="{WEIGHT_STATE}", not via a frontend formatter (core:require dropped). Visually 1:1 with the original.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.Column`                          name = `Table`                                         class = `z2ui5_cl_dmo_app_009` path = `src/01/z2ui5_cl_dmo_app_009.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Column`                          name = `Table`                                         class = `z2ui5_cl_dmo_app_009` path = `src/01/01/z2ui5_cl_dmo_app_009.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -1268,7 +1268,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` original derives the ObjectNumber weight state in its frontend Formatter.js (weightState: KG conversion + Success/Warning/Error thresholds). That is business logic, so - abap2UI5 being a thin` &&
                ` frontend - it is computed in ABAP model_init into a WEIGHT_STATE field and bound state="{WEIGHT_STATE}", not via a frontend formatter (core:require dropped). Visually 1:1 with the original.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.ColumnListItem`                  name = `TableTest`                                     class = `z2ui5_cl_dmo_app_010` path = `src/01/z2ui5_cl_dmo_app_010.clas.abap`
+      ( module = `sap.m`              control = `sap.m.ColumnListItem`                  name = `TableTest`                                     class = `z2ui5_cl_dmo_app_010` path = `src/01/01/z2ui5_cl_dmo_app_010.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, reviewed, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth` &&
                  ` a close look.`
@@ -1277,19 +1277,19 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.ComboBox`                        name = `ComboBox`                                      class = `z2ui5_cl_dmo_app_011` path = `src/01/z2ui5_cl_dmo_app_011.clas.abap`
+      ( module = `sap.m`              control = `sap.m.ComboBox`                        name = `ComboBox`                                      class = `z2ui5_cl_dmo_app_011` path = `src/01/01/z2ui5_cl_dmo_app_011.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22` )
-      ( module = `sap.m`              control = `sap.m.ComboBox`                        name = `ComboBox2Columns`                              class = `z2ui5_cl_dmo_app_193` path = `src/01/z2ui5_cl_dmo_app_193.clas.abap`
+      ( module = `sap.m`              control = `sap.m.ComboBox`                        name = `ComboBox2Columns`                              class = `z2ui5_cl_dmo_app_193` path = `src/01/01/z2ui5_cl_dmo_app_193.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22` )
-      ( module = `sap.m`              control = `sap.m.ComboBox`                        name = `ComboBoxGrouping`                              class = `z2ui5_cl_dmo_app_199` path = `src/01/z2ui5_cl_dmo_app_199.clas.abap`
+      ( module = `sap.m`              control = `sap.m.ComboBox`                        name = `ComboBoxGrouping`                              class = `z2ui5_cl_dmo_app_199` path = `src/01/01/z2ui5_cl_dmo_app_199.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22` )
-      ( module = `sap.m`              control = `sap.m.ComboBox`                        name = `ComboBoxWrapping`                              class = `z2ui5_cl_dmo_app_384` path = `src/01/z2ui5_cl_dmo_app_384.clas.abap`
+      ( module = `sap.m`              control = `sap.m.ComboBox`                        name = `ComboBoxWrapping`                              class = `z2ui5_cl_dmo_app_384` path = `src/01/01/z2ui5_cl_dmo_app_384.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22` ) ).
@@ -1326,7 +1326,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` products are taken in model row order, not click order; the original's per-product information cache is unnecessary server-side. The controller's handleButtonPress (MessageBox) is dead code`.
     lv_text1 = lv_text1 && ` referenced by no view and not ported.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.ComparisonPattern`               name = `ComparisonPattern`                             class = `z2ui5_cl_dmo_app_012` path = `src/01/z2ui5_cl_dmo_app_012.clas.abap`
+      ( module = `sap.m`              control = `sap.m.ComparisonPattern`               name = `ComparisonPattern`                             class = `z2ui5_cl_dmo_app_012` path = `src/01/01/z2ui5_cl_dmo_app_012.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -1345,7 +1345,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` XML is rebuilt per open, forcing showCookieDetails=false like the original's openCookieSettingsDialog) and client->popup_destroy in the close handlers; the original's empty 'insert your ... logic` &&
                ` here' placeholders remain as backend event branches (ACCEPT_ALL_COOKIES/REJECT_ALL_COOKIES/SAVE_COOKIES) that only close the dialog.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.CookieSettingsDialogPattern`     name = `CookieSettingsDialogPattern`                   class = `z2ui5_cl_dmo_app_013` path = `src/01/z2ui5_cl_dmo_app_013.clas.abap`
+      ( module = `sap.m`              control = `sap.m.CookieSettingsDialogPattern`     name = `CookieSettingsDialogPattern`                   class = `z2ui5_cl_dmo_app_013` path = `src/01/01/z2ui5_cl_dmo_app_013.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 reworked, reviewed, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth` &&
                  ` a close look.`
@@ -1360,7 +1360,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` via t_arg ${PRODUCT_PIC_URL} - the original reads evt.getSource().getTarget(), whose target property is bound to the same column. The Close button maps to client->_event_client( popup_close ); the` &&
                ` original's afterClose destroy is handled by the framework's popup lifecycle and is not wired separately.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.CustomListItem`                  name = `CustomListItem`                                class = `z2ui5_cl_dmo_app_014` path = `src/01/z2ui5_cl_dmo_app_014.clas.abap`
+      ( module = `sap.m`              control = `sap.m.CustomListItem`                  name = `CustomListItem`                                class = `z2ui5_cl_dmo_app_014` path = `src/01/01/z2ui5_cl_dmo_app_014.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, reviewed, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a` &&
                  ` close look.`
@@ -1368,7 +1368,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.CustomTreeItem`                  name = `CustomTreeItem`                                class = `z2ui5_cl_dmo_app_015` path = `src/01/z2ui5_cl_dmo_app_015.clas.abap`
+      ( module = `sap.m`              control = `sap.m.CustomTreeItem`                  name = `CustomTreeItem`                                class = `z2ui5_cl_dmo_app_015` path = `src/01/01/z2ui5_cl_dmo_app_015.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.48.0`
@@ -1386,7 +1386,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` hideInput input - Maximum call stack size exceeded) is resolved as HEADLESS-ONLY: the picker opens and works in a real browser (2026-08-02 live check). The check covered the visible behaviour; the`.
     lv_text1 = lv_text1 && ` browser console was not necessarily inspected for a silent recursion warning. The e2e interaction stays deliberately unarmed for this app - app 091 covers the hidden-picker openBy class.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.DatePicker`                      name = `DatePickerHidden`                              class = `z2ui5_cl_dmo_app_016` path = `src/01/z2ui5_cl_dmo_app_016.clas.abap`
+      ( module = `sap.m`              control = `sap.m.DatePicker`                      name = `DatePickerHidden`                              class = `z2ui5_cl_dmo_app_016` path = `src/02/01/z2ui5_cl_dmo_app_016.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, reviewed, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a` &&
                  ` close look.`
@@ -1405,7 +1405,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` exactly once (sapMInputBaseContentWrapper<State> on the DatePicker) and the bound valueStateText of the Warning row is written into the value-state node. Residual (nothing headless can assert): the` &&
                ` value-state message popup's wrapping of the long text, which needs the theme CSS the harness does not load.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.DatePicker`                      name = `DatePickerValueState`                          class = `z2ui5_cl_dmo_app_253` path = `src/01/z2ui5_cl_dmo_app_253.clas.abap`
+      ( module = `sap.m`              control = `sap.m.DatePicker`                      name = `DatePickerValueState`                          class = `z2ui5_cl_dmo_app_253` path = `src/01/01/z2ui5_cl_dmo_app_253.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22.0`
@@ -1423,7 +1423,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` attribute vs the original view.xml (there the Text has no text attribute). // NOTE: the controller's _iEvent counter is omitted - it is incremented in handleChange but never displayed or otherwise` &&
                ` used in the sample.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.DateRangeSelection`              name = `DateRangeSelection`                            class = `z2ui5_cl_dmo_app_017` path = `src/01/z2ui5_cl_dmo_app_017.clas.abap`
+      ( module = `sap.m`              control = `sap.m.DateRangeSelection`              name = `DateRangeSelection`                            class = `z2ui5_cl_dmo_app_017` path = `src/02/01/z2ui5_cl_dmo_app_017.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -1440,7 +1440,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` anchored open of the hideInput picker and the change-value toast both work in a real browser. The 016 headless finding (Popover.onfocusin recursion on the hidden input) is therefore headless-only for` &&
                ` this control too; no e2e interaction is armed for the hidden-picker class.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.DateRangeSelection`              name = `DateRangeSelectionHidden`                      class = `z2ui5_cl_dmo_app_256` path = `src/01/z2ui5_cl_dmo_app_256.clas.abap`
+      ( module = `sap.m`              control = `sap.m.DateRangeSelection`              name = `DateRangeSelectionHidden`                      class = `z2ui5_cl_dmo_app_256` path = `src/02/01/z2ui5_cl_dmo_app_256.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, reviewed, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a` &&
                  ` close look.`
@@ -1456,7 +1456,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` exactly once (sapMInputBaseContentWrapper<State> on the DateRangeSelection) and the bound valueStateText of the Warning row is written into the value-state node. Residual (nothing headless can` &&
                ` assert): the value-state message popup's wrapping of the long text, which needs the theme CSS the harness does not load.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.DateRangeSelection`              name = `DateRangeSelectionValueState`                  class = `z2ui5_cl_dmo_app_254` path = `src/01/z2ui5_cl_dmo_app_254.clas.abap`
+      ( module = `sap.m`              control = `sap.m.DateRangeSelection`              name = `DateRangeSelectionValueState`                  class = `z2ui5_cl_dmo_app_254` path = `src/01/01/z2ui5_cl_dmo_app_254.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22.0`
@@ -1478,7 +1478,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` is kept for the 1:1 port. // POST-1.71: timezone (since UI5 1.99) on DTP8 is kept for the 1:1 port. // POST-1.71: core:require of the z2ui5/model/formatter module on the view root needs UI5 >= 1.74,` &&
                ` and the sap.ui.model.odata.type.DateTimeWithTimezone binding type of DTP10/DTP11 (since UI5 1.99) is kept 1:1 - the app needs a UI5 release >= 1.99 overall.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.DateTimePicker`                  name = `DateTimePicker`                                class = `z2ui5_cl_dmo_app_018` path = `src/01/z2ui5_cl_dmo_app_018.clas.abap`
+      ( module = `sap.m`              control = `sap.m.DateTimePicker`                  name = `DateTimePicker`                                class = `z2ui5_cl_dmo_app_018` path = `src/02/01/z2ui5_cl_dmo_app_018.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -1496,7 +1496,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` anchored open of the hideInput picker and the change-value toast both work in a real browser. The 016 headless finding (Popover.onfocusin recursion on the hidden input) is therefore headless-only for` &&
                ` this control too; no e2e interaction is armed for the hidden-picker class.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.DateTimePicker`                  name = `DateTimePickerHidden`                          class = `z2ui5_cl_dmo_app_257` path = `src/01/z2ui5_cl_dmo_app_257.clas.abap`
+      ( module = `sap.m`              control = `sap.m.DateTimePicker`                  name = `DateTimePickerHidden`                          class = `z2ui5_cl_dmo_app_257` path = `src/02/01/z2ui5_cl_dmo_app_257.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, reviewed, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a` &&
                  ` close look.`
@@ -1512,7 +1512,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` exactly once (sapMInputBaseContentWrapper<State> on the DateTimePicker) and the bound valueStateText of the Warning row is written into the value-state node. Residual (nothing headless can assert):` &&
                ` the value-state message popup's wrapping of the long text, which needs the theme CSS the harness does not load.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.DateTimePicker`                  name = `DateTimePickerValueState`                      class = `z2ui5_cl_dmo_app_255` path = `src/01/z2ui5_cl_dmo_app_255.clas.abap`
+      ( module = `sap.m`              control = `sap.m.DateTimePicker`                  name = `DateTimePickerValueState`                      class = `z2ui5_cl_dmo_app_255` path = `src/01/01/z2ui5_cl_dmo_app_255.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.38.0`
@@ -1528,7 +1528,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` round-trip). // NOTE: Cancel: the approve dialog (no inputs) closes client-side via _event_client popup_close; the three note dialogs cancel through a backend DIALOG_CANCEL event + popup_destroy so` &&
                ` the two-way model sync keeps the typed note across a reopen, matching the original's reused cached dialog instances.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.Dialog`                          name = `DialogConfirm`                                 class = `z2ui5_cl_dmo_app_019` path = `src/01/z2ui5_cl_dmo_app_019.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Dialog`                          name = `DialogConfirm`                                 class = `z2ui5_cl_dmo_app_019` path = `src/01/01/z2ui5_cl_dmo_app_019.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, reviewed, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth` &&
                  ` a close look.`
@@ -1549,7 +1549,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` Residual (nothing headless can assert): the fullscreen toggle itself (needs UI5 >= 1.149) and the resizable/draggable behaviour of the other two dialogs, which differ only in the flags the same` &&
                ` builder writes.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.Dialog`                          name = `DialogFullScreen`                              class = `z2ui5_cl_dmo_app_274` path = `src/01/z2ui5_cl_dmo_app_274.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Dialog`                          name = `DialogFullScreen`                              class = `z2ui5_cl_dmo_app_274` path = `src/02/01/z2ui5_cl_dmo_app_274.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, reviewed, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth` &&
                  ` a close look.`
@@ -1570,7 +1570,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` title/state/text and close again on the Emphasized OK button (popup_close, no round-trip) - the second open proves the rebuild-per-open lifecycle works. The other three differ only in the three` &&
                ` literals the same builder method fills in, and render-smoke covers their views.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.Dialog`                          name = `DialogMessage`                                 class = `z2ui5_cl_dmo_app_273` path = `src/01/z2ui5_cl_dmo_app_273.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Dialog`                          name = `DialogMessage`                                 class = `z2ui5_cl_dmo_app_273` path = `src/01/01/z2ui5_cl_dmo_app_273.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, reviewed, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth` &&
                  ` a close look.`
@@ -1583,7 +1583,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` SupplierCollection record, full row set, values verifiable offline. // NOTE: element binding binding="{/T_SUPPLIERS/0}" with relative DisplayListItem value bindings - the binding= context mechanism` &&
                ` is already live-verified via app 041 (checked 2026-07-19); the /0 array-index path variant is a plain JSONModel path resolution, source-decidable, so no LIVE_TEST is carried.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.DisplayListItem`                 name = `DisplayListItem`                               class = `z2ui5_cl_dmo_app_020` path = `src/01/z2ui5_cl_dmo_app_020.clas.abap`
+      ( module = `sap.m`              control = `sap.m.DisplayListItem`                 name = `DisplayListItem`                               class = `z2ui5_cl_dmo_app_020` path = `src/01/01/z2ui5_cl_dmo_app_020.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 3 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         checked = `CHECKED (2026-07-20): verified in a running system - human pass 2026-07-20: app starts and renders like the original; no interaction paths were open for this port`
@@ -1596,7 +1596,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` button twice in direct succession does not re-run the indicator - the model value is unchanged, so no binding change fires and setState is not called again (the original re-queues on every method` &&
                ` call); pressing a different button in between restores the behaviour.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.DraftIndicator`                  name = `DraftIndicator`                                class = `z2ui5_cl_dmo_app_021` path = `src/01/z2ui5_cl_dmo_app_021.clas.abap`
+      ( module = `sap.m`              control = `sap.m.DraftIndicator`                  name = `DraftIndicator`                                class = `z2ui5_cl_dmo_app_021` path = `src/01/01/z2ui5_cl_dmo_app_021.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.32.0`
@@ -1627,7 +1627,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` Success/Warning/Error thresholds). That is business logic, so - abap2UI5 being a thin frontend - it is computed in ABAP model_init into a WEIGHT_STATE field and bound state="{WEIGHT_STATE}", not via` &&
                ` a frontend formatter (core:require dropped). Visually 1:1 with the original.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.FacetFilter`                     name = `FacetFilterLight`                              class = `z2ui5_cl_dmo_app_022` path = `src/01/z2ui5_cl_dmo_app_022.clas.abap`
+      ( module = `sap.m`              control = `sap.m.FacetFilter`                     name = `FacetFilterLight`                              class = `z2ui5_cl_dmo_app_022` path = `src/01/01/z2ui5_cl_dmo_app_022.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -1660,18 +1660,18 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
     lv_text1 = lv_text1 && ` the original derives the ObjectNumber weight state in its frontend Formatter.js (weightState: KG conversion + Success/Warning/Error thresholds). That is business logic, so - abap2UI5 being a thin` &&
                ` frontend - it is computed in ABAP model_init into a WEIGHT_STATE field and bound state="{WEIGHT_STATE}", not via a frontend formatter (core:require dropped). Visually 1:1 with the original.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.FacetFilter`                     name = `FacetFilterSimple`                             class = `z2ui5_cl_dmo_app_235` path = `src/01/z2ui5_cl_dmo_app_235.clas.abap`
+      ( module = `sap.m`              control = `sap.m.FacetFilter`                     name = `FacetFilterSimple`                             class = `z2ui5_cl_dmo_app_235` path = `src/01/01/z2ui5_cl_dmo_app_235.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.FeedContent`                     name = `FeedContent`                                   class = `z2ui5_cl_dmo_app_023` path = `src/01/z2ui5_cl_dmo_app_023.clas.abap`
+      ( module = `sap.m`              control = `sap.m.FeedContent`                     name = `FeedContent`                                   class = `z2ui5_cl_dmo_app_023` path = `src/01/01/z2ui5_cl_dmo_app_023.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.34`
         checked = `CHECKED (2026-07-20): verified in a running system - human pass 2026-07-20: app starts and renders like the original; no interaction paths were open for this port` )
-      ( module = `sap.m`              control = `sap.m.FeedInput`                       name = `Feed`                                          class = `z2ui5_cl_dmo_app_024` path = `src/01/z2ui5_cl_dmo_app_024.clas.abap`
+      ( module = `sap.m`              control = `sap.m.FeedInput`                       name = `Feed`                                          class = `z2ui5_cl_dmo_app_024` path = `src/01/01/z2ui5_cl_dmo_app_024.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -1695,7 +1695,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` response (the app-019 toast+destroy precedent, but with a control method). **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the action dialog's 'Enable Post` &&
                ` Button' click runs the enablePostButton follow-up and the popup_destroy closes the dialog in the same response.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.FeedInput`                       name = `FeedInput`                                     class = `z2ui5_cl_dmo_app_236` path = `src/01/z2ui5_cl_dmo_app_236.clas.abap`
+      ( module = `sap.m`              control = `sap.m.FeedInput`                       name = `FeedInput`                                     class = `z2ui5_cl_dmo_app_236` path = `src/02/01/z2ui5_cl_dmo_app_236.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -1705,7 +1705,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         post171 = `the FeedInput 'actions' aggregation (a Button next to the text area) is @since 1.139 - kept 1:1 on the last two FeedInputs; the app needs a UI5 release >= 1.139 to render it.` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.FeedListItem`                    name = `FeedListItem`                                  class = `z2ui5_cl_dmo_app_025` path = `src/01/z2ui5_cl_dmo_app_025.clas.abap`
+      ( module = `sap.m`              control = `sap.m.FeedListItem`                    name = `FeedListItem`                                  class = `z2ui5_cl_dmo_app_025` path = `src/01/01/z2ui5_cl_dmo_app_025.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.12`
@@ -1714,15 +1714,15 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` - the aggregation index equals the model index for this bound list, so the spliced row is the same. // NOTE: feed.json entries 2 and 4 have no Actions property; the flat ABAP row type serializes` &&
                  ` ACTIONS as an empty array ([] instead of undefined) - the actions aggregation renders no actions either way, and an empty array is not an empty-string/enum hazard. // NOTE: the relative AuthorPicUrl` &&
                  ` asset paths (test-resources/sap/m/images/*.jpg) are rewritten to absolute https://sdk.openui5.org/test-resources/... per the project rule for runtime asset URLs.` )
-      ( module = `sap.m`              control = `sap.m.FlexBox`                         name = `FlexBoxBasicAlignment`                         class = `z2ui5_cl_dmo_app_392` path = `src/01/z2ui5_cl_dmo_app_392.clas.abap`
+      ( module = `sap.m`              control = `sap.m.FlexBox`                         name = `FlexBoxBasicAlignment`                         class = `z2ui5_cl_dmo_app_392` path = `src/01/01/z2ui5_cl_dmo_app_392.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
-      ( module = `sap.m`              control = `sap.m.FlexBox`                         name = `FlexBoxDirectionOrder`                         class = `z2ui5_cl_dmo_app_393` path = `src/01/z2ui5_cl_dmo_app_393.clas.abap`
+      ( module = `sap.m`              control = `sap.m.FlexBox`                         name = `FlexBoxDirectionOrder`                         class = `z2ui5_cl_dmo_app_393` path = `src/01/01/z2ui5_cl_dmo_app_393.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.FlexBox`                         name = `FlexBoxGap`                                    class = `z2ui5_cl_dmo_app_158` path = `src/01/z2ui5_cl_dmo_app_158.clas.abap`
+      ( module = `sap.m`              control = `sap.m.FlexBox`                         name = `FlexBoxGap`                                    class = `z2ui5_cl_dmo_app_158` path = `src/02/01/z2ui5_cl_dmo_app_158.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         is_post171 = abap_true
@@ -1730,27 +1730,27 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` 1.134) are used 1:1 - they are the sample's whole point. Newer than UI5 1.71; declared per the property-171 policy, so the app needs UI5 >= 1.134 to render the gaps.`
         post171 = `FlexBox.gap, FlexBox.columnGap and FlexBox.rowGap (all @since 1.134) are used 1:1 - they are the sample's whole point. Newer than UI5 1.71; declared per the property-171 policy, so the app needs UI5` &&
                  ` >= 1.134 to render the gaps.` )
-      ( module = `sap.m`              control = `sap.m.FlexBox`                         name = `FlexBoxNested`                                 class = `z2ui5_cl_dmo_app_026` path = `src/01/z2ui5_cl_dmo_app_026.clas.abap`
+      ( module = `sap.m`              control = `sap.m.FlexBox`                         name = `FlexBoxNested`                                 class = `z2ui5_cl_dmo_app_026` path = `src/01/01/z2ui5_cl_dmo_app_026.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         checked = `CHECKED (2026-07-19): verified in a running system - human visual pass 2026-07-19 over all apps: the six flex items and the h2 headings render with their injected-CSS background colours like the` &&
                  ` original.`
         notes = `NOTE: the original colours .item1..item6 and the h2 headings via a separate style.css; here it is injected as a core:HTML content attribute (a style tag, minified - see CAPABILITIES.md; the EXTRA` &&
                  ` core:HTML control vs the original view). Confirmed rendering via the human visual pass 2026-07-19.` )
-      ( module = `sap.m`              control = `sap.m.FlexBox`                         name = `FlexBoxOpposingAlignment`                      class = `z2ui5_cl_dmo_app_394` path = `src/01/z2ui5_cl_dmo_app_394.clas.abap`
+      ( module = `sap.m`              control = `sap.m.FlexBox`                         name = `FlexBoxOpposingAlignment`                      class = `z2ui5_cl_dmo_app_394` path = `src/01/01/z2ui5_cl_dmo_app_394.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.FlexBox`                         name = `FlexBoxRenderType`                             class = `z2ui5_cl_dmo_app_190` path = `src/01/z2ui5_cl_dmo_app_190.clas.abap`
+      ( module = `sap.m`              control = `sap.m.FlexBox`                         name = `FlexBoxRenderType`                             class = `z2ui5_cl_dmo_app_190` path = `src/01/01/z2ui5_cl_dmo_app_190.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
-      ( module = `sap.m`              control = `sap.m.FormattedText`                   name = `FormattedText`                                 class = `z2ui5_cl_dmo_app_154` path = `src/01/z2ui5_cl_dmo_app_154.clas.abap`
+      ( module = `sap.m`              control = `sap.m.FormattedText`                   name = `FormattedText`                                 class = `z2ui5_cl_dmo_app_154` path = `src/01/01/z2ui5_cl_dmo_app_154.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.38.0`
         notes = `NOTE: FormattedText.htmlText bound to a model field holding the original controller's demo HTML string (headings, link, list, pre, code, cite, dl) 1:1.` )
-      ( module = `sap.m`              control = `sap.m.GenericTag`                      name = `GenericTag`                                    class = `z2ui5_cl_dmo_app_027` path = `src/01/z2ui5_cl_dmo_app_027.clas.abap`
+      ( module = `sap.m`              control = `sap.m.GenericTag`                      name = `GenericTag`                                    class = `z2ui5_cl_dmo_app_027` path = `src/02/01/z2ui5_cl_dmo_app_027.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.62.0`
@@ -1768,7 +1768,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` (test-resources/sap/m/demokit/sample/GenericTileAsFeedTile/images/NewsImage1.png and NewsImage2.png); they are kept verbatim and only host-absolutized to https://sdk.openui5.org/ per the runtime` &&
                ` asset-URL rule, so the images resolve against the OpenUI5 host exactly as in the demo kit.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.GenericTile`                     name = `GenericTileAsFeedTile`                         class = `z2ui5_cl_dmo_app_388` path = `src/01/z2ui5_cl_dmo_app_388.clas.abap`
+      ( module = `sap.m`              control = `sap.m.GenericTile`                     name = `GenericTileAsFeedTile`                         class = `z2ui5_cl_dmo_app_388` path = `src/01/01/z2ui5_cl_dmo_app_388.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.34.0`
@@ -1780,7 +1780,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` resolved to absolute sdk.openui5.org URLs so the tile images load standalone. // NOTE: the custom CSS class tileLayout (float: left) is kept and its style.css injected via a core:HTML content` &&
                ` attribute (see CAPABILITIES.md; the EXTRA core:HTML control vs the original view). Confirmed rendering via the human visual pass 2026-07-19.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.GenericTile`                     name = `GenericTileAsKPITile`                          class = `z2ui5_cl_dmo_app_028` path = `src/01/z2ui5_cl_dmo_app_028.clas.abap`
+      ( module = `sap.m`              control = `sap.m.GenericTile`                     name = `GenericTileAsKPITile`                          class = `z2ui5_cl_dmo_app_028` path = `src/02/01/z2ui5_cl_dmo_app_028.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, reviewed, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a` &&
                  ` close look.`
@@ -1793,7 +1793,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.76 to render it.` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.GenericTile`                     name = `GenericTileAsMonitorTile`                      class = `z2ui5_cl_dmo_app_389` path = `src/01/z2ui5_cl_dmo_app_389.clas.abap`
+      ( module = `sap.m`              control = `sap.m.GenericTile`                     name = `GenericTileAsMonitorTile`                      class = `z2ui5_cl_dmo_app_389` path = `src/01/01/z2ui5_cl_dmo_app_389.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.34.0`
@@ -1811,7 +1811,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
     lv_text1 = lv_text1 && ` kit. The sample's own images/headerImg2.jpg is referenced by no control in the view and is therefore not seeded. // NOTE: live-verified on 2026-08-02 (maintainer live check): the Loading / Failed /` &&
                ` Disabled tiles paint their placeholder, error and disabled visuals and the SlideTile slides between its two tiles.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.GenericTile`                     name = `GenericTileStates`                             class = `z2ui5_cl_dmo_app_275` path = `src/01/z2ui5_cl_dmo_app_275.clas.abap`
+      ( module = `sap.m`              control = `sap.m.GenericTile`                     name = `GenericTileStates`                             class = `z2ui5_cl_dmo_app_275` path = `src/01/01/z2ui5_cl_dmo_app_275.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -1831,14 +1831,14 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` press'. **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): pressing the first NumericContent tile raises its client-composed toast ('Fire press'). The` &&
                ` scroll-step Select (item/px) is NOT covered - it sits in the sample's option area and needs a human check.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.HeaderContainer`                 name = `HeaderContainer`                               class = `z2ui5_cl_dmo_app_029` path = `src/01/z2ui5_cl_dmo_app_029.clas.abap`
+      ( module = `sap.m`              control = `sap.m.HeaderContainer`                 name = `HeaderContainer`                               class = `z2ui5_cl_dmo_app_029` path = `src/01/01/z2ui5_cl_dmo_app_029.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.44.0`
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.HeaderContainer`                 name = `HeaderContainerVM`                             class = `z2ui5_cl_dmo_app_157` path = `src/01/z2ui5_cl_dmo_app_157.clas.abap`
+      ( module = `sap.m`              control = `sap.m.HeaderContainer`                 name = `HeaderContainerVM`                             class = `z2ui5_cl_dmo_app_157` path = `src/01/01/z2ui5_cl_dmo_app_157.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.44.0`
@@ -1856,7 +1856,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` packed. The mock mixes integers (30) and one-decimal values (40.8) in these columns and they are only bound into the text template "{WIDTH} x {DEPTH} x {HEIGHT} {DIM_UNIT}", so a fixed DECIMALS would` &&
                ` render 30 as 30.0.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabBar`                                    class = `z2ui5_cl_dmo_app_377` path = `src/01/z2ui5_cl_dmo_app_377.clas.abap`
+      ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabBar`                                    class = `z2ui5_cl_dmo_app_377` path = `src/01/01/z2ui5_cl_dmo_app_377.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = lv_text1 ) ).
@@ -1869,7 +1869,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` IconTabBar binds the one field TAB_DENSITY (added attribute, no structural diff) and only the RadioButtonGroup round-trips: its selectedIndex is bound two-way and the three values are derived`.
     lv_text1 = lv_text1 && ` server-side, per the prefer-a-bindable-property rule (linter rule settable-property-via-action).`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabBarBadges`                              class = `z2ui5_cl_dmo_app_287` path = `src/01/z2ui5_cl_dmo_app_287.clas.abap`
+      ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabBarBadges`                              class = `z2ui5_cl_dmo_app_287` path = `src/02/01/z2ui5_cl_dmo_app_287.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         is_post171 = abap_true
@@ -1878,35 +1878,35 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` policy, the property gate does not resolve it) and sap.m.IconTabFilter.items (since 1.77, the nested sub-tabs of iconTabBar8). The app needs a UI5 release >= 1.80.` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabBarFiori2`                              class = `z2ui5_cl_dmo_app_378` path = `src/01/z2ui5_cl_dmo_app_378.clas.abap`
+      ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabBarFiori2`                              class = `z2ui5_cl_dmo_app_378` path = `src/01/01/z2ui5_cl_dmo_app_378.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `NOTE: the original binds expanded="{device>/isNoPhone}" (a demo-kit helper model that abap2UI5 does not carry); expressed over the framework own device> model as the expression {=` &&
                  ` !${device>/system/phone} } - same truth value, different binding text (app 030 precedent, live-verified there on desktop and phone emulation).` )
-      ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabBarInlineMode`                          class = `z2ui5_cl_dmo_app_379` path = `src/01/z2ui5_cl_dmo_app_379.clas.abap`
+      ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabBarInlineMode`                          class = `z2ui5_cl_dmo_app_379` path = `src/01/01/z2ui5_cl_dmo_app_379.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `NOTE: the original binds expanded="{device>/isNoPhone}" (a demo-kit helper model that abap2UI5 does not carry); expressed over the framework own device> model as the expression {=` &&
                  ` !${device>/system/phone} } - same truth value, different binding text (app 030 precedent, live-verified there on desktop and phone emulation).` )
-      ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabBarMulti`                               class = `z2ui5_cl_dmo_app_380` path = `src/01/z2ui5_cl_dmo_app_380.clas.abap`
+      ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabBarMulti`                               class = `z2ui5_cl_dmo_app_380` path = `src/01/01/z2ui5_cl_dmo_app_380.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `NOTE: the original binds expanded="{device>/isNoPhone}" (a demo-kit helper model that abap2UI5 does not carry); expressed over the framework own device> model as the expression {=` &&
                  ` !${device>/system/phone} } - same truth value, different binding text (app 030 precedent, live-verified there on desktop and phone emulation).` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabBarNoIcons`                             class = `z2ui5_cl_dmo_app_381` path = `src/01/z2ui5_cl_dmo_app_381.clas.abap`
+      ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabBarNoIcons`                             class = `z2ui5_cl_dmo_app_381` path = `src/01/01/z2ui5_cl_dmo_app_381.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `NOTE: the original binds expanded="{device>/isNoPhone}" (a demo-kit helper model that abap2UI5 does not carry); expressed over the framework own device> model as the expression {=` &&
                  ` !${device>/system/phone} } - same truth value, different binding text (app 030 precedent, live-verified there on desktop and phone emulation).` )
-      ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabBarStretchContent`                      class = `z2ui5_cl_dmo_app_030` path = `src/01/z2ui5_cl_dmo_app_030.clas.abap`
+      ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabBarStretchContent`                      class = `z2ui5_cl_dmo_app_030` path = `src/01/01/z2ui5_cl_dmo_app_030.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         checked = `CHECKED (2026-07-20): verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed); incl. the phone-emulation device> check`
         notes = `NOTE: the original binds expanded="{device>/isNoPhone}" (a demo-kit helper model); expressed over the framework's device> model as the expression {= !${device>/system/phone} } - same truth value,` &&
                  ` different binding text. Confirmed on desktop and phone emulation in the 2026-07-20 live check.` )
-      ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabBarSubTabs`                             class = `z2ui5_cl_dmo_app_382` path = `src/01/z2ui5_cl_dmo_app_382.clas.abap`
+      ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabBarSubTabs`                             class = `z2ui5_cl_dmo_app_382` path = `src/02/01/z2ui5_cl_dmo_app_382.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         is_post171 = abap_true
@@ -1916,10 +1916,10 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` needs a UI5 release >= 1.77.` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabSeparator`                              class = `z2ui5_cl_dmo_app_383` path = `src/01/z2ui5_cl_dmo_app_383.clas.abap`
+      ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabSeparator`                              class = `z2ui5_cl_dmo_app_383` path = `src/01/01/z2ui5_cl_dmo_app_383.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
-      ( module = `sap.m`              control = `sap.m.IconTabHeader`                   name = `IconTabHeader`                                 class = `z2ui5_cl_dmo_app_055` path = `src/01/z2ui5_cl_dmo_app_055.clas.abap`
+      ( module = `sap.m`              control = `sap.m.IconTabHeader`                   name = `IconTabHeader`                                 class = `z2ui5_cl_dmo_app_055` path = `src/01/01/z2ui5_cl_dmo_app_055.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.15` ) ).
@@ -1931,7 +1931,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` kit's named img model is not carried. // NOTE: handleImage3Press is MessageToast.show('The image has been pressed') with a CONSTANT text, so the press wire is the roundtrip-free client toast` &&
                ` (_event_client cs_event-control_global MESSAGE_TOAST.show, app 005 idiom) and the app stays init-only.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.Image`                           name = `Image`                                         class = `z2ui5_cl_dmo_app_399` path = `src/01/z2ui5_cl_dmo_app_399.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Image`                           name = `Image`                                         class = `z2ui5_cl_dmo_app_399` path = `src/02/01/z2ui5_cl_dmo_app_399.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         is_post171 = abap_true
@@ -1948,7 +1948,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
     lv_text1 = lv_text1 && ` leaves HAS_ERROR false and Set-wrong-src fires error, hides the Image and reveals the IllustratedMessage. The error->swap half is additionally e2e-verified (scripts/e2e-smoke.mjs interaction); the` &&
                ` load leg cannot be checked headless (the seeded image sits on sdk.openui5.org).`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.Image`                           name = `ImageErrorWithIllustration`                    class = `z2ui5_cl_dmo_app_279` path = `src/01/z2ui5_cl_dmo_app_279.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Image`                           name = `ImageErrorWithIllustration`                    class = `z2ui5_cl_dmo_app_279` path = `src/02/01/z2ui5_cl_dmo_app_279.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         is_post171 = abap_true
@@ -1958,14 +1958,14 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` fallback. No gate sees it (the control is not in ui5/properties.json), so this entry is declared by policy; the app needs a UI5 release >= 1.98.` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.Image`                           name = `ImageModeBackground`                           class = `z2ui5_cl_dmo_app_031` path = `src/01/z2ui5_cl_dmo_app_031.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Image`                           name = `ImageModeBackground`                           class = `z2ui5_cl_dmo_app_031` path = `src/01/01/z2ui5_cl_dmo_app_031.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         checked = `CHECKED (2026-07-20): verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed); incl. the phone-emulation device> check`
         notes = `NOTE: the original binds src/mode to a JSONModel (img>/products, /imageMode); these fixed sample values are inlined here as literals (mode Background, the HT-7777 / HT-6100 demo images). height/width` &&
                  ` are restored over the device> model, see below. // NOTE: the custom CSS class imageContainer (light blue background) of the box4 HBox is kept and the sample's styles.css injected via a core:HTML` &&
                  ` content attribute (CAPABILITIES.md CSS row, as apps 028/026; the EXTRA core:HTML control vs the original view). Confirmed rendering via the human visual pass 2026-07-19.` )
-      ( module = `sap.m`              control = `sap.m.ImageContent`                    name = `ImageContent`                                  class = `z2ui5_cl_dmo_app_056` path = `src/01/z2ui5_cl_dmo_app_056.clas.abap`
+      ( module = `sap.m`              control = `sap.m.ImageContent`                    name = `ImageContent`                                  class = `z2ui5_cl_dmo_app_056` path = `src/01/01/z2ui5_cl_dmo_app_056.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.38`
@@ -2000,7 +2000,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` PurchaseID and redrawing; (b) suggestionItemSelected transporting ${$parameters>/selectedItem}.getKey(); (d) the SelectDialog search (binding_call filter) and its confirm arg - the dialog row has no` &&
                ` layout box headless and neither a click nor a keyboard Enter reaches the confirm; (e) the ObjectPageLayout/IllustratedMessage/Table rendering.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.InitialPagePattern`              name = `InitialPagePattern`                            class = `z2ui5_cl_dmo_app_233` path = `src/01/z2ui5_cl_dmo_app_233.clas.abap`
+      ( module = `sap.m`              control = `sap.m.InitialPagePattern`              name = `InitialPagePattern`                            class = `z2ui5_cl_dmo_app_233` path = `src/02/01/z2ui5_cl_dmo_app_233.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -2012,7 +2012,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` (autocomplete='false'); the app needs a UI5 release >= 1.108 to render it. Not tracked by property-check (declared by policy).` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.Input`                           name = `InputDescription`                              class = `z2ui5_cl_dmo_app_367` path = `src/01/z2ui5_cl_dmo_app_367.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Input`                           name = `InputDescription`                              class = `z2ui5_cl_dmo_app_367` path = `src/02/01/z2ui5_cl_dmo_app_367.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         is_post171 = abap_true
@@ -2020,16 +2020,16 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` is newer than 1.71 but kept for the 1:1 port - it carries the sample's whole point, the InvisibleText referenced by aria-describedby.`
         post171 = `showClearIcon (since UI5 1.94) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.94 to render it. // ariaDescribedBy (since UI5 1.90 on sap.m.Input) is newer than 1.71` &&
                  ` but kept for the 1:1 port - it carries the sample's whole point, the InvisibleText referenced by aria-describedby.` )
-      ( module = `sap.m`              control = `sap.m.Input`                           name = `InputPassword`                                 class = `z2ui5_cl_dmo_app_368` path = `src/01/z2ui5_cl_dmo_app_368.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Input`                           name = `InputPassword`                                 class = `z2ui5_cl_dmo_app_368` path = `src/01/01/z2ui5_cl_dmo_app_368.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
-      ( module = `sap.m`              control = `sap.m.Input`                           name = `InputTypes`                                    class = `z2ui5_cl_dmo_app_159` path = `src/01/z2ui5_cl_dmo_app_159.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Input`                           name = `InputTypes`                                    class = `z2ui5_cl_dmo_app_159` path = `src/01/01/z2ui5_cl_dmo_app_159.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `NOTE: Five Inputs demonstrating the input types Text / Email / Tel / Number / Url with labelFor Labels, reproduced 1:1.` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.Input`                           name = `InputValueState`                               class = `z2ui5_cl_dmo_app_032` path = `src/01/z2ui5_cl_dmo_app_032.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Input`                           name = `InputValueState`                               class = `z2ui5_cl_dmo_app_032` path = `src/02/01/z2ui5_cl_dmo_app_032.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         is_post171 = abap_true
@@ -2040,10 +2040,10 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` to suppress.`
         post171 = `showClearIcon (since UI5 1.94) on three inputs is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.94 to render it. // the two formattedValueStateText aggregations (a` &&
                  ` FormattedText carrying Links, since UI5 1.78) are newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.78 to render them.` )
-      ( module = `sap.m`              control = `sap.m.Input`                           name = `InputWrapping`                                 class = `z2ui5_cl_dmo_app_369` path = `src/01/z2ui5_cl_dmo_app_369.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Input`                           name = `InputWrapping`                                 class = `z2ui5_cl_dmo_app_369` path = `src/01/01/z2ui5_cl_dmo_app_369.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
-      ( module = `sap.m`              control = `sap.m.InputListItem`                   name = `InputListItem`                                 class = `z2ui5_cl_dmo_app_057` path = `src/01/z2ui5_cl_dmo_app_057.clas.abap`
+      ( module = `sap.m`              control = `sap.m.InputListItem`                   name = `InputListItem`                                 class = `z2ui5_cl_dmo_app_057` path = `src/01/01/z2ui5_cl_dmo_app_057.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` ) ).
 
@@ -2053,21 +2053,21 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` binding on the single default model (the original's named 'initialData' JSONModel /currentValue is flattened). liveChange is wired but the current value already flows back via the two-way binding on` &&
                ` each roundtrip, so the handler is a no-op (the original setProperty('/currentValue', ...) keeps it live between keystrokes).`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.InputModelUpdate`                name = `InputModelUpdate`                              class = `z2ui5_cl_dmo_app_102` path = `src/01/z2ui5_cl_dmo_app_102.clas.abap`
+      ( module = `sap.m`              control = `sap.m.InputModelUpdate`                name = `InputModelUpdate`                              class = `z2ui5_cl_dmo_app_102` path = `src/01/01/z2ui5_cl_dmo_app_102.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         ui5_only = abap_true
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.Label`                           name = `LabelProperties`                               class = `z2ui5_cl_dmo_app_058` path = `src/01/z2ui5_cl_dmo_app_058.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Label`                           name = `LabelProperties`                               class = `z2ui5_cl_dmo_app_058` path = `src/01/01/z2ui5_cl_dmo_app_058.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `NOTE: the four controller handlers (onDisplayOnlyChange/onWrappingChange/onHyphenationChange/onWidthChange) are replaced by a roundtrip-free binding model, so the Switch ``change`` and Slider` &&
                  ` ``liveChange`` event attributes are dropped: the three Switches bind their ``state`` two-way to display_only/wrapping/hyphenation, the two result Labels bind ``displayOnly`` and ``wrapping`` to the` &&
                  ` same variables, and ``wrappingType`` (added on the two Labels, not present in the sample view) plus both container ``width`` values derive live via ``{= }`` expression bindings (wrappingType =` &&
                  ` hyphenation ? 'Hyphenated' : 'Normal'; width = slider_value + '%'). Same technique as app 007.` )
-      ( module = `sap.m`              control = `sap.m.LightBox`                        name = `LightBox`                                      class = `z2ui5_cl_dmo_app_059` path = `src/01/z2ui5_cl_dmo_app_059.clas.abap`
+      ( module = `sap.m`              control = `sap.m.LightBox`                        name = `LightBox`                                      class = `z2ui5_cl_dmo_app_059` path = `src/01/01/z2ui5_cl_dmo_app_059.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `NOTE: the Image src and LightBoxItem imageSrc keep the sample's original demokit sdk asset paths (test-resources/sap/ui/documentation/sdk/images/...) as literals 1:1; abap2UI5 does not serve those` &&
@@ -2081,7 +2081,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` text matched the original. // POST-1.71: Link.icon (sap-icon://cart, sap-icon://globe) and Link.endIcon (sap-icon://inspect) are @since 1.128 and used 1:1 - the 'Links with Icons' group is the` &&
                ` sample's point. Newer than UI5 1.71; declared per the property-171 policy, so the app needs UI5 >= 1.128 to render the icons.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.Link`                            name = `Link`                                          class = `z2ui5_cl_dmo_app_160` path = `src/01/z2ui5_cl_dmo_app_160.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Link`                            name = `Link`                                          class = `z2ui5_cl_dmo_app_160` path = `src/02/01/z2ui5_cl_dmo_app_160.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.12`
@@ -2091,13 +2091,13 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` per the property-171 policy, so the app needs UI5 >= 1.128 to render the icons.` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.Link`                            name = `LinkEmphasized`                                class = `z2ui5_cl_dmo_app_033` path = `src/01/z2ui5_cl_dmo_app_033.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Link`                            name = `LinkEmphasized`                                class = `z2ui5_cl_dmo_app_033` path = `src/01/01/z2ui5_cl_dmo_app_033.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.12`
         checked = `CHECKED (2026-07-19): verified in a running system - human visual pass 2026-07-19 over all apps: the Currency composite binding renders the formatted price per currency (raw binding-info string over` &&
                  ` PRICE TYPE p).` )
-      ( module = `sap.m`              control = `sap.m.List`                            name = `ListCounter`                                   class = `z2ui5_cl_dmo_app_034` path = `src/01/z2ui5_cl_dmo_app_034.clas.abap`
+      ( module = `sap.m`              control = `sap.m.List`                            name = `ListCounter`                                   class = `z2ui5_cl_dmo_app_034` path = `src/02/01/z2ui5_cl_dmo_app_034.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         is_post171 = abap_true
@@ -2112,7 +2112,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` client->_bind( field ), which is what a root-seeded record needs. // NOTE: ProductPicUrl is stored as the absolute https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-1000.jpg` &&
                ` (the mock's host-relative test-resources path rewritten to the OpenUI5 host per the runtime asset-URL rule).`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.List`                            name = `ListFooter`                                    class = `z2ui5_cl_dmo_app_195` path = `src/01/z2ui5_cl_dmo_app_195.clas.abap`
+      ( module = `sap.m`              control = `sap.m.List`                            name = `ListFooter`                                    class = `z2ui5_cl_dmo_app_195` path = `src/01/01/z2ui5_cl_dmo_app_195.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = lv_text1 ) ).
@@ -2124,7 +2124,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` real browser): the list starts at exactly the growingThreshold of 4 rows and the More trigger appends the next page (8 rows) - client-side paging over the whole bound collection, with no backend wire` &&
                ` involved.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.List`                            name = `ListGrowing`                                   class = `z2ui5_cl_dmo_app_276` path = `src/01/z2ui5_cl_dmo_app_276.clas.abap`
+      ( module = `sap.m`              control = `sap.m.List`                            name = `ListGrowing`                                   class = `z2ui5_cl_dmo_app_276` path = `src/01/01/z2ui5_cl_dmo_app_276.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         checked = `CHECKED (2026-08-02): verified in a running system - human live check 2026-08-02 (maintainer): app started and exercised, no findings.`
@@ -2142,16 +2142,16 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` Select), AND the click-through now runs: opening the OverflowToolbar's 'Additional Options' popover makes the type Select drivable, and picking 'Navigation' re-types every bound row. The earlier` &&
                ` claim that the popover is not drivable headless was wrong (AGENTS 10, 2026-08-01). Still not covered: the press/detailPress toasts.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.List`                            name = `ListItemTypes`                                 class = `z2ui5_cl_dmo_app_207` path = `src/01/z2ui5_cl_dmo_app_207.clas.abap`
+      ( module = `sap.m`              control = `sap.m.List`                            name = `ListItemTypes`                                 class = `z2ui5_cl_dmo_app_207` path = `src/01/01/z2ui5_cl_dmo_app_207.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.List`                            name = `ListNoData`                                    class = `z2ui5_cl_dmo_app_035` path = `src/01/z2ui5_cl_dmo_app_035.clas.abap`
+      ( module = `sap.m`              control = `sap.m.List`                            name = `ListNoData`                                    class = `z2ui5_cl_dmo_app_035` path = `src/01/01/z2ui5_cl_dmo_app_035.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
-      ( module = `sap.m`              control = `sap.m.List`                            name = `ListSelection`                                 class = `z2ui5_cl_dmo_app_224` path = `src/01/z2ui5_cl_dmo_app_224.clas.abap`
+      ( module = `sap.m`              control = `sap.m.List`                            name = `ListSelection`                                 class = `z2ui5_cl_dmo_app_224` path = `src/01/01/z2ui5_cl_dmo_app_224.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `NOTE: The List mode and the Select selectedKey are two-way bound to one default-model field mode (seeded MultiSelect, a valid sap.m.ListMode), reproducing the original controller's` &&
@@ -2160,7 +2160,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` binds (Name, ProductId, ProductPicUrl) - a column subset, not a row subset. ProductPicUrl relative asset paths are rehosted to the OpenUI5 host https://sdk.openui5.org/ per the asset-URL rule.` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.MaskInput`                       name = `MaskInput`                                     class = `z2ui5_cl_dmo_app_153` path = `src/01/z2ui5_cl_dmo_app_153.clas.abap`
+      ( module = `sap.m`              control = `sap.m.MaskInput`                       name = `MaskInput`                                     class = `z2ui5_cl_dmo_app_153` path = `src/02/01/z2ui5_cl_dmo_app_153.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.34.0`
@@ -2194,7 +2194,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` item: {0}`` filled by ${$parameters>/item}.getText()) - re-verify selecting a menu item toasts "Action triggered on item: <text>". **e2e-verified 2026-07-30** (transpiled-framework interaction,` &&
                ` scripts/e2e-smoke.mjs): selecting 'Hide Existing Sites' toasts 'Action triggered on item: Hide Existing Sites'.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.Menu`                            name = `Menu`                                          class = `z2ui5_cl_dmo_app_060` path = `src/01/z2ui5_cl_dmo_app_060.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Menu`                            name = `Menu`                                          class = `z2ui5_cl_dmo_app_060` path = `src/02/01/z2ui5_cl_dmo_app_060.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, reviewed, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth` &&
                  ` a close look.`
@@ -2220,7 +2220,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` button/menu still toasts its text. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): opening the 'File' MenuButton and selecting 'Save' toasts 'Action triggered` &&
                ` on item: Save' (the ${$parameters>/item}.getText() template resolves); the remaining buttons/defaultAction wires are the same class but unexercised.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.MenuButton`                      name = `MenuButton`                                    class = `z2ui5_cl_dmo_app_061` path = `src/01/z2ui5_cl_dmo_app_061.clas.abap`
+      ( module = `sap.m`              control = `sap.m.MenuButton`                      name = `MenuButton`                                    class = `z2ui5_cl_dmo_app_061` path = `src/02/01/z2ui5_cl_dmo_app_061.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, reviewed, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth` &&
                  ` a close look.`
@@ -2236,7 +2236,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` emphasizedAction option (since UI5 1.75) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.75 to render it. // POST-1.71: the MessageBox dependentOn option (since UI5` &&
                ` 1.124) is restored via message_box_display's dependenton parameter, pointing at the view layout (id messageBoxHost) instead of the view object; the app needs a UI5 release >= 1.124 for it.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.MessageBox`                      name = `MessageBox`                                    class = `z2ui5_cl_dmo_app_278` path = `src/01/z2ui5_cl_dmo_app_278.clas.abap`
+      ( module = `sap.m`              control = `sap.m.MessageBox`                      name = `MessageBox`                                    class = `z2ui5_cl_dmo_app_278` path = `src/02/01/z2ui5_cl_dmo_app_278.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.21.2`
@@ -2252,7 +2252,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` port - the app needs a UI5 release >= 1.75 to render it. // POST-1.71: the MessageBox dependentOn option (since UI5 1.124) is restored via message_box_display's dependenton parameter, pointing at the` &&
                ` view layout (id messageBoxHost); the app needs a UI5 release >= 1.124 to render it.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.MessageBox`                      name = `MessageBoxInitialFocus`                        class = `z2ui5_cl_dmo_app_036` path = `src/01/z2ui5_cl_dmo_app_036.clas.abap`
+      ( module = `sap.m`              control = `sap.m.MessageBox`                      name = `MessageBoxInitialFocus`                        class = `z2ui5_cl_dmo_app_036` path = `src/02/01/z2ui5_cl_dmo_app_036.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.21.2`
@@ -2275,7 +2275,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` active title still toasts. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the button toggles the MessagePopover open (the bound message items render); the` &&
                ` active-title toast remains unexercised.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.MessagePopover`                  name = `MessagePopover`                                class = `z2ui5_cl_dmo_app_066` path = `src/01/z2ui5_cl_dmo_app_066.clas.abap`
+      ( module = `sap.m`              control = `sap.m.MessagePopover`                  name = `MessagePopover`                                class = `z2ui5_cl_dmo_app_066` path = `src/02/01/z2ui5_cl_dmo_app_066.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, reviewed, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth` &&
                  ` a close look.`
@@ -2302,7 +2302,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` link in the first message renders disabled after validation while relative links stay clickable. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the button` &&
                ` toggles the MessagePopover open (the 'Error message' item renders its markup).`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.MessagePopover`                  name = `MessagePopoverAsyncMessageHandling`            class = `z2ui5_cl_dmo_app_067` path = `src/01/z2ui5_cl_dmo_app_067.clas.abap`
+      ( module = `sap.m`              control = `sap.m.MessagePopover`                  name = `MessagePopoverAsyncMessageHandling`            class = `z2ui5_cl_dmo_app_067` path = `src/02/01/z2ui5_cl_dmo_app_067.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -2336,7 +2336,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` 'Personal, Information') and carried on the Message code field (sap.ui.core.message.Message has no groupName slot), bound groupName="{message>code}" - no frontend expression. Only Email sits in the` &&
                ` Contact group, all others in Information, matching the original's headers.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.MessagePopover`                  name = `MessagePopoverMessageHandling`                 class = `z2ui5_cl_dmo_app_065` path = `src/01/z2ui5_cl_dmo_app_065.clas.abap`
+      ( module = `sap.m`              control = `sap.m.MessagePopover`                  name = `MessagePopoverMessageHandling`                 class = `z2ui5_cl_dmo_app_065` path = `src/02/01/z2ui5_cl_dmo_app_065.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, reviewed, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth` &&
                  ` a close look.`
@@ -2357,7 +2357,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` exactly that (pr/invisible-message-announce) carries the announcement instead: follow_up_action( control_global, INVISIBLE_MESSAGE / announce / <text> / Assertive ) right after the model update, with` &&
                ` the same text the original composes. It is lazy-required, so a runtime older than UI5 1.78 logs 'not available' instead of failing the app.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.MessageStrip`                    name = `DynamicMessageStripGenerator`                  class = `z2ui5_cl_dmo_app_289` path = `src/01/z2ui5_cl_dmo_app_289.clas.abap`
+      ( module = `sap.m`              control = `sap.m.MessageStrip`                    name = `DynamicMessageStripGenerator`                  class = `z2ui5_cl_dmo_app_289` path = `src/01/01/z2ui5_cl_dmo_app_289.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.30`
@@ -2372,7 +2372,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
     lv_text1 = lv_text1 && ` ABAP string fields on the single default model and bound 1:1 (text={/...}); field names differ from the JSON keys (default->default_text etc.) but values are display-only, so the binding-value diff` &&
                ` does not apply.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.MessageStrip`                    name = `MessageStripWithEnableFormattedText`           class = `z2ui5_cl_dmo_app_062` path = `src/01/z2ui5_cl_dmo_app_062.clas.abap`
+      ( module = `sap.m`              control = `sap.m.MessageStrip`                    name = `MessageStripWithEnableFormattedText`           class = `z2ui5_cl_dmo_app_062` path = `src/02/01/z2ui5_cl_dmo_app_062.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.30`
@@ -2383,7 +2383,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` namespace decls (xmlns:core, core:require on the view root) are not in the sample view.` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.MessageToast`                    name = `MessageToast`                                  class = `z2ui5_cl_dmo_app_037` path = `src/01/z2ui5_cl_dmo_app_037.clas.abap`
+      ( module = `sap.m`              control = `sap.m.MessageToast`                    name = `MessageToast`                                  class = `z2ui5_cl_dmo_app_037` path = `src/01/01/z2ui5_cl_dmo_app_037.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.9.2` ) ).
@@ -2399,7 +2399,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` defaults: markupDescription is false on all six messages (never set in the original), activeTitle false except on the last one, and the counter of the second message (Warning without description) is` &&
                ` 0 - ListItemBaseRenderer.renderCounter only renders a truthy counter, so 0 and 'absent' render identically.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.MessageView`                     name = `MessageViewInsideDialog`                       class = `z2ui5_cl_dmo_app_284` path = `src/01/z2ui5_cl_dmo_app_284.clas.abap`
+      ( module = `sap.m`              control = `sap.m.MessageView`                     name = `MessageViewInsideDialog`                       class = `z2ui5_cl_dmo_app_284` path = `src/01/01/z2ui5_cl_dmo_app_284.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -2407,7 +2407,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.MessageView`                     name = `MessageViewMessageManager`                     class = `z2ui5_cl_dmo_app_038` path = `src/01/z2ui5_cl_dmo_app_038.clas.abap`
+      ( module = `sap.m`              control = `sap.m.MessageView`                     name = `MessageViewMessageManager`                     class = `z2ui5_cl_dmo_app_038` path = `src/01/01/z2ui5_cl_dmo_app_038.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.46`
@@ -2427,7 +2427,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` counter={COUNTER} 1:1, but no message in the sample sets a counter - a flat ABAP row serializes it as 0, which ListItemBaseRenderer renders exactly like an absent counter (it only renders a truthy` &&
                ` one). The two ungrouped messages carry no groupName, which is what makes them appear outside the two Purchase Order groups.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.MessageView`                     name = `MessageViewWithGrouping`                       class = `z2ui5_cl_dmo_app_294` path = `src/01/z2ui5_cl_dmo_app_294.clas.abap`
+      ( module = `sap.m`              control = `sap.m.MessageView`                     name = `MessageViewWithGrouping`                       class = `z2ui5_cl_dmo_app_294` path = `src/01/01/z2ui5_cl_dmo_app_294.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -2435,7 +2435,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.MultiComboBox`                   name = `MultiComboBoxGrouping`                         class = `z2ui5_cl_dmo_app_039` path = `src/01/z2ui5_cl_dmo_app_039.clas.abap`
+      ( module = `sap.m`              control = `sap.m.MultiComboBox`                   name = `MultiComboBoxGrouping`                         class = `z2ui5_cl_dmo_app_039` path = `src/01/01/z2ui5_cl_dmo_app_039.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22.0`
@@ -2452,7 +2452,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` text). The selectionFinish leg is NOT machine-checkable: it fires only when the picker CLOSES, and headless neither F4 nor Escape reaches the picker once focus sits in the item list, an outside click`.
     lv_text1 = lv_text1 && ` does not dismiss it and getPicker() is null on the registry instance (measured 2026-08-02) - the armed interaction covers the selectionChange leg only.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.MultiComboBox`                   name = `MultiComboBoxSelectAll`                        class = `z2ui5_cl_dmo_app_281` path = `src/01/z2ui5_cl_dmo_app_281.clas.abap`
+      ( module = `sap.m`              control = `sap.m.MultiComboBox`                   name = `MultiComboBoxSelectAll`                        class = `z2ui5_cl_dmo_app_281` path = `src/02/01/z2ui5_cl_dmo_app_281.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22.0`
@@ -2462,7 +2462,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         post171 = `showSelectAll (since UI5 1.111) is the sample's whole point and kept 1:1 - the app needs a UI5 release >= 1.111 for the select-all checkbox in the picker.` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.MultiComboBox`                   name = `MultiComboBoxWrapping`                         class = `z2ui5_cl_dmo_app_385` path = `src/01/z2ui5_cl_dmo_app_385.clas.abap`
+      ( module = `sap.m`              control = `sap.m.MultiComboBox`                   name = `MultiComboBoxWrapping`                         class = `z2ui5_cl_dmo_app_385` path = `src/01/01/z2ui5_cl_dmo_app_385.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22.0` ) ).
@@ -2475,7 +2475,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` stray placeholder attributes on the two Labels (not a Label property) are dropped. // POST-1.71: showClearIcon (since UI5 1.94) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5` &&
                ` release >= 1.94 to render it.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.MultiInput`                      name = `MultiInput`                                    class = `z2ui5_cl_dmo_app_040` path = `src/01/z2ui5_cl_dmo_app_040.clas.abap`
+      ( module = `sap.m`              control = `sap.m.MultiInput`                      name = `MultiInput`                                    class = `z2ui5_cl_dmo_app_040` path = `src/02/01/z2ui5_cl_dmo_app_040.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         is_post171 = abap_true
@@ -2494,16 +2494,16 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` sorter: { path: 'Name' } } shape 1:1 as a raw binding-info string, with the path from client->_bind and the sorter path switched to the ABAP field NAME. The Component's oModel.setSizeLimit(1000000)` &&
                ` has no counterpart: an abap2UI5 model carries whatever the ABAP table holds, so all 123 rows are bound without a limit to raise.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.MultiInput`                      name = `MultiInputValueHelp`                           class = `z2ui5_cl_dmo_app_290` path = `src/01/z2ui5_cl_dmo_app_290.clas.abap`
+      ( module = `sap.m`              control = `sap.m.MultiInput`                      name = `MultiInputValueHelp`                           class = `z2ui5_cl_dmo_app_290` path = `src/01/01/z2ui5_cl_dmo_app_290.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.MultiInput`                      name = `MultiInputValueStates`                         class = `z2ui5_cl_dmo_app_386` path = `src/01/z2ui5_cl_dmo_app_386.clas.abap`
+      ( module = `sap.m`              control = `sap.m.MultiInput`                      name = `MultiInputValueStates`                         class = `z2ui5_cl_dmo_app_386` path = `src/01/01/z2ui5_cl_dmo_app_386.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
-      ( module = `sap.m`              control = `sap.m.MultiInput`                      name = `MultiInputWrapping`                            class = `z2ui5_cl_dmo_app_387` path = `src/01/z2ui5_cl_dmo_app_387.clas.abap`
+      ( module = `sap.m`              control = `sap.m.MultiInput`                      name = `MultiInputWrapping`                            class = `z2ui5_cl_dmo_app_387` path = `src/01/01/z2ui5_cl_dmo_app_387.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` ) ).
 
@@ -2522,7 +2522,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
     lv_text1 = lv_text1 && ` Select is applied before NAV runs, and that navigationFinished fires the client-composed toast with the resolved page title. **e2e-verified 2026-07-30** (transpiled-framework interaction,` &&
                ` scripts/e2e-smoke.mjs): the 'To 2' button navigates to Page 2 via the control_by_id to() call; the transition-type select and back() remain unexercised.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.NavContainer`                    name = `NavContainer`                                  class = `z2ui5_cl_dmo_app_242` path = `src/01/z2ui5_cl_dmo_app_242.clas.abap`
+      ( module = `sap.m`              control = `sap.m.NavContainer`                    name = `NavContainer`                                  class = `z2ui5_cl_dmo_app_242` path = `src/02/01/z2ui5_cl_dmo_app_242.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -2531,7 +2531,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         post171 = `NavContainer.navigationFinished (event, since UI5 1.111.0) is kept 1:1 - it is wired to a client-composed MessageToast; the app needs a UI5 release >= 1.111 to fire it.` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.NewsContent`                     name = `NewsContent`                                   class = `z2ui5_cl_dmo_app_063` path = `src/01/z2ui5_cl_dmo_app_063.clas.abap`
+      ( module = `sap.m`              control = `sap.m.NewsContent`                     name = `NewsContent`                                   class = `z2ui5_cl_dmo_app_063` path = `src/01/01/z2ui5_cl_dmo_app_063.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.34` ) ).
@@ -2543,7 +2543,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` NOTE: the original's showCloseButton="falseue" typo on two items is corrected to false, otherwise UI5 boolean parsing rejects it. // POST-1.71: the NotificationList container control (since UI5 1.90)` &&
                ` is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.90 to render it (control-level, invisible to the member-level property gate).`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.NotificationListGroup`           name = `NotificationListGroup`                         class = `z2ui5_cl_dmo_app_077` path = `src/01/z2ui5_cl_dmo_app_077.clas.abap`
+      ( module = `sap.m`              control = `sap.m.NotificationListGroup`           name = `NotificationListGroup`                         class = `z2ui5_cl_dmo_app_077` path = `src/02/01/z2ui5_cl_dmo_app_077.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.34`
@@ -2563,7 +2563,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` (High, Low) are all valid anyway, so the port binds PRIORITY directly. A model_init that seeded an unknown value would have to map it there. // NOTE: the item rows bind datetime={CREATIONDATE}, but` &&
                ` only the GROUPS carry a creationDate in the mock and the group template does not bind it - so the field exists on the item row type and stays empty on both items, exactly as the original renders it.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.NotificationListGroup`           name = `NotificationListGroupBindings`                 class = `z2ui5_cl_dmo_app_291` path = `src/01/z2ui5_cl_dmo_app_291.clas.abap`
+      ( module = `sap.m`              control = `sap.m.NotificationListGroup`           name = `NotificationListGroupBindings`                 class = `z2ui5_cl_dmo_app_291` path = `src/02/01/z2ui5_cl_dmo_app_291.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -2584,7 +2584,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` toast their text. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the 'Accept' footer button toasts 'Accept Button Pressed'; item press/close toasts are the` &&
                ` identical wire but unexercised.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.NotificationListItem`            name = `NotificationListItem`                          class = `z2ui5_cl_dmo_app_076` path = `src/01/z2ui5_cl_dmo_app_076.clas.abap`
+      ( module = `sap.m`              control = `sap.m.NotificationListItem`            name = `NotificationListItem`                          class = `z2ui5_cl_dmo_app_076` path = `src/02/01/z2ui5_cl_dmo_app_076.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.34`
@@ -2594,32 +2594,32 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` property gate).` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.NumericContent`                  name = `NumericContentDifColors`                       class = `z2ui5_cl_dmo_app_156` path = `src/01/z2ui5_cl_dmo_app_156.clas.abap`
+      ( module = `sap.m`              control = `sap.m.NumericContent`                  name = `NumericContentDifColors`                       class = `z2ui5_cl_dmo_app_156` path = `src/01/01/z2ui5_cl_dmo_app_156.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.34`
         notes = `NOTE: The NumericContent / GenericTile presses show a client MessageToast ('The numeric content is pressed.'), matching the original press handler. Four NumericContents (value colors` &&
                  ` Good/Critical/Error, indicators) plus a GenericTile > TileContent > NumericContent are reproduced 1:1. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): pressing` &&
                  ` the first NumericContent toasts 'The numeric content is pressed.'; the other tiles are the identical wire.` )
-      ( module = `sap.m`              control = `sap.m.NumericContent`                  name = `NumericContentIcon`                            class = `z2ui5_cl_dmo_app_064` path = `src/01/z2ui5_cl_dmo_app_064.clas.abap`
+      ( module = `sap.m`              control = `sap.m.NumericContent`                  name = `NumericContentIcon`                            class = `z2ui5_cl_dmo_app_064` path = `src/01/01/z2ui5_cl_dmo_app_064.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.34`
         notes = `NOTE: the second NumericContent keeps the sample's original demokit test-resources image path (test-resources/sap/m/demokit/sample/NumericContentIcon/images/grass.jpg) as the icon literal 1:1;` &&
                  ` abap2UI5 does not serve that static asset, so it does not render offline (the first tile's sap-icon://travel-expense does). The image is archived under ui5/sap.m/NumericContentIcon/images/.` )
-      ( module = `sap.m`              control = `sap.m.NumericContent`                  name = `NumericContentWithoutMargin`                   class = `z2ui5_cl_dmo_app_390` path = `src/01/z2ui5_cl_dmo_app_390.clas.abap`
+      ( module = `sap.m`              control = `sap.m.NumericContent`                  name = `NumericContentWithoutMargin`                   class = `z2ui5_cl_dmo_app_390` path = `src/01/01/z2ui5_cl_dmo_app_390.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.34` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.ObjectAttribute`                 name = `ObjectAttributeInTable`                        class = `z2ui5_cl_dmo_app_191` path = `src/01/z2ui5_cl_dmo_app_191.clas.abap`
+      ( module = `sap.m`              control = `sap.m.ObjectAttribute`                 name = `ObjectAttributeInTable`                        class = `z2ui5_cl_dmo_app_191` path = `src/01/01/z2ui5_cl_dmo_app_191.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.12`
         notes = `NOTE: the JSONModel is defined inline in the original controller's onInit (an array of {product, supplier} rows under /modelData); it is moved verbatim into ABAP model_init (all 10 rows kept) and` &&
                  ` bound on the one default model. Pure prefix/root rename (/modelData -> the default model root), same data, renders identically.` )
-      ( module = `sap.m`              control = `sap.m.ObjectAttribute`                 name = `ObjectAttributes`                              class = `z2ui5_cl_dmo_app_073` path = `src/01/z2ui5_cl_dmo_app_073.clas.abap`
+      ( module = `sap.m`              control = `sap.m.ObjectAttribute`                 name = `ObjectAttributes`                              class = `z2ui5_cl_dmo_app_073` path = `src/02/01/z2ui5_cl_dmo_app_073.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.12`
@@ -2635,7 +2635,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` a shortened data set. // NOTE: the active ObjectAttribute 'www.sap.com' opens via the URLHELPER REDIRECT frontend action (cs_event-urlhelper, { URL, NEW_WINDOW } object param) - not open_new_tab,` &&
                ` which is same-origin-only.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.ObjectHeader`                    name = `ObjectHeader`                                  class = `z2ui5_cl_dmo_app_041` path = `src/01/z2ui5_cl_dmo_app_041.clas.abap`
+      ( module = `sap.m`              control = `sap.m.ObjectHeader`                    name = `ObjectHeader`                                  class = `z2ui5_cl_dmo_app_041` path = `src/01/01/z2ui5_cl_dmo_app_041.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.12`
@@ -2644,13 +2644,13 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.ObjectHeader`                    name = `ObjectHeaderCircleImage`                       class = `z2ui5_cl_dmo_app_400` path = `src/01/z2ui5_cl_dmo_app_400.clas.abap`
+      ( module = `sap.m`              control = `sap.m.ObjectHeader`                    name = `ObjectHeaderCircleImage`                       class = `z2ui5_cl_dmo_app_400` path = `src/01/01/z2ui5_cl_dmo_app_400.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.12`
         notes = `NOTE: the ObjectHeader icon path test-resources/sap/m/images/Woman_04.png is kept verbatim and only host-absolutized to https://sdk.openui5.org/ per the runtime asset-URL rule, so the image resolves` &&
                  ` against the OpenUI5 host exactly as in the demo kit.` )
-      ( module = `sap.m`              control = `sap.m.ObjectHeader`                    name = `ObjectHeaderCondensed`                         class = `z2ui5_cl_dmo_app_201` path = `src/01/z2ui5_cl_dmo_app_201.clas.abap`
+      ( module = `sap.m`              control = `sap.m.ObjectHeader`                    name = `ObjectHeaderCondensed`                         class = `z2ui5_cl_dmo_app_201` path = `src/01/01/z2ui5_cl_dmo_app_201.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.12`
@@ -2666,14 +2666,14 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` interaction, transpiled backend + real browser): the element-bound record resolves in the running app - the title 'Notebook Professional 15' and the bound description render. This is the port that` &&
                ` exposed the relative-binding defect (see the corrected NOTE above): it rendered EMPTY until the fields were bound absolutely. Residual: the Currency type's locale formatting of the number.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.ObjectHeader`                    name = `ObjectHeaderImage`                             class = `z2ui5_cl_dmo_app_206` path = `src/01/z2ui5_cl_dmo_app_206.clas.abap`
+      ( module = `sap.m`              control = `sap.m.ObjectHeader`                    name = `ObjectHeaderImage`                             class = `z2ui5_cl_dmo_app_206` path = `src/01/01/z2ui5_cl_dmo_app_206.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.12`
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.ObjectHeader`                    name = `ObjectHeaderMarkers`                           class = `z2ui5_cl_dmo_app_197` path = `src/01/z2ui5_cl_dmo_app_197.clas.abap`
+      ( module = `sap.m`              control = `sap.m.ObjectHeader`                    name = `ObjectHeaderMarkers`                           class = `z2ui5_cl_dmo_app_197` path = `src/01/01/z2ui5_cl_dmo_app_197.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.12`
@@ -2690,20 +2690,20 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
     lv_text1 = lv_text1 && ` resolves in the running app - the title 'Notebook Basic 15' and the Manufacturer attribute 'Very Best Screens' render. Like 206 this port rendered EMPTY until the fields were bound absolutely (see` &&
                ` the corrected NOTE above). Residual: the ObjectMarker icons, which need the theme CSS the harness does not load.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.ObjectHeader`                    name = `ObjectHeaderResponsiveV`                       class = `z2ui5_cl_dmo_app_209` path = `src/01/z2ui5_cl_dmo_app_209.clas.abap`
+      ( module = `sap.m`              control = `sap.m.ObjectHeader`                    name = `ObjectHeaderResponsiveV`                       class = `z2ui5_cl_dmo_app_209` path = `src/01/01/z2ui5_cl_dmo_app_209.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.12`
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.ObjectIdentifier`                name = `ObjectIdentifier`                              class = `z2ui5_cl_dmo_app_071` path = `src/01/z2ui5_cl_dmo_app_071.clas.abap`
+      ( module = `sap.m`              control = `sap.m.ObjectIdentifier`                name = `ObjectIdentifier`                              class = `z2ui5_cl_dmo_app_071` path = `src/01/01/z2ui5_cl_dmo_app_071.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.12`
         notes = `NOTE: element binding kept 1:1 - the VerticalLayout binds a one-record structure /S_PRODUCT in the default model instead of {/ProductCollection/0}; titleClicked's MessageBox.alert becomes` &&
                  ` message_box_display. // NOTE: the model holds exactly the bound record /ProductCollection/0 (Notebook Basic 15) of ui5/mock/products.json, verbatim - the original's own single-record binding.` )
-      ( module = `sap.m`              control = `sap.m.ObjectListItem`                  name = `ObjectListItem`                                class = `z2ui5_cl_dmo_app_074` path = `src/01/z2ui5_cl_dmo_app_074.clas.abap`
+      ( module = `sap.m`              control = `sap.m.ObjectListItem`                  name = `ObjectListItem`                                class = `z2ui5_cl_dmo_app_074` path = `src/01/01/z2ui5_cl_dmo_app_074.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.12`
@@ -2713,14 +2713,14 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` <name>'; the other rows are the identical template wire.` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.ObjectListItem`                  name = `ObjectListItemMarkers`                         class = `z2ui5_cl_dmo_app_198` path = `src/01/z2ui5_cl_dmo_app_198.clas.abap`
+      ( module = `sap.m`              control = `sap.m.ObjectListItem`                  name = `ObjectListItemMarkers`                         class = `z2ui5_cl_dmo_app_198` path = `src/01/01/z2ui5_cl_dmo_app_198.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.12`
         notes = `NOTE: the list-item press was built as a roundtrip-free client-composed toast (control_global MESSAGE_TOAST.show, template ``Pressed : {0}`` filled by ${$source>/title}, reproducing the controller's` &&
                  ` MessageToast.show("Pressed : " + oEvent.getSource().getTitle())) - re-verify pressing an item toasts "Pressed : <title>". **e2e-verified 2026-07-30** (transpiled-framework interaction,` &&
                  ` scripts/e2e-smoke.mjs): pressing the first ObjectListItem toasts 'Pressed : <title>' (the ${$source>/title} template resolves).` )
-      ( module = `sap.m`              control = `sap.m.ObjectMarker`                    name = `ObjectMarker`                                  class = `z2ui5_cl_dmo_app_237` path = `src/01/z2ui5_cl_dmo_app_237.clas.abap`
+      ( module = `sap.m`              control = `sap.m.ObjectMarker`                    name = `ObjectMarker`                                  class = `z2ui5_cl_dmo_app_237` path = `src/01/01/z2ui5_cl_dmo_app_237.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.38`
@@ -2730,7 +2730,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` (cs_event-control_global MESSAGE_TOAST, template '{0} marker pressed!' filled by ${$parameters>/type}). The press attribute is kept, so structural-diff sees no difference.` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.ObjectNumber`                    name = `ObjectNumber`                                  class = `z2ui5_cl_dmo_app_072` path = `src/01/z2ui5_cl_dmo_app_072.clas.abap`
+      ( module = `sap.m`              control = `sap.m.ObjectNumber`                    name = `ObjectNumber`                                  class = `z2ui5_cl_dmo_app_072` path = `src/02/01/z2ui5_cl_dmo_app_072.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.12`
@@ -2739,7 +2739,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` /T_PRODUCTS/0..5 (index binding), Price+CurrencyCode verbatim. // POST-1.71: ObjectNumber.inverted, ObjectNumber.active and ObjectNumber.press (all since UI5 1.86) are kept 1:1 for the` &&
                  ` inverted/interactive variants; needs UI5 >= 1.86.`
         post171 = `ObjectNumber.inverted, ObjectNumber.active and ObjectNumber.press (all since UI5 1.86) are kept 1:1 for the inverted/interactive variants; needs UI5 >= 1.86.` )
-      ( module = `sap.m`              control = `sap.m.ObjectStatus`                    name = `ObjectStatus`                                  class = `z2ui5_cl_dmo_app_042` path = `src/01/z2ui5_cl_dmo_app_042.clas.abap`
+      ( module = `sap.m`              control = `sap.m.ObjectStatus`                    name = `ObjectStatus`                                  class = `z2ui5_cl_dmo_app_042` path = `src/02/01/z2ui5_cl_dmo_app_042.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, reviewed, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a` &&
                  ` close look.`
@@ -2753,15 +2753,15 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` 1.120 to render them all (>= 1.75 for Indication06-Indication08).` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.OverflowToolbar`                 name = `TitleToolBar`                                  class = `z2ui5_cl_dmo_app_395` path = `src/01/z2ui5_cl_dmo_app_395.clas.abap`
+      ( module = `sap.m`              control = `sap.m.OverflowToolbar`                 name = `TitleToolBar`                                  class = `z2ui5_cl_dmo_app_395` path = `src/01/01/z2ui5_cl_dmo_app_395.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.28` )
-      ( module = `sap.m`              control = `sap.m.OverflowToolbar`                 name = `ToolbarAlignment`                              class = `z2ui5_cl_dmo_app_396` path = `src/01/z2ui5_cl_dmo_app_396.clas.abap`
+      ( module = `sap.m`              control = `sap.m.OverflowToolbar`                 name = `ToolbarAlignment`                              class = `z2ui5_cl_dmo_app_396` path = `src/01/01/z2ui5_cl_dmo_app_396.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.28` )
-      ( module = `sap.m`              control = `sap.m.OverflowToolbar`                 name = `ToolbarDesign`                                 class = `z2ui5_cl_dmo_app_086` path = `src/01/z2ui5_cl_dmo_app_086.clas.abap`
+      ( module = `sap.m`              control = `sap.m.OverflowToolbar`                 name = `ToolbarDesign`                                 class = `z2ui5_cl_dmo_app_086` path = `src/01/01/z2ui5_cl_dmo_app_086.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.28`
@@ -2777,7 +2777,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
     lv_text1 = lv_text1 && ` the flags live flat in it and visible binds them directly - the 'range>' prefix is dropped; the last path segment is identical, which structural-diff matches. Values use the desktop media ranges (the` &&
                ` original filled them from Device.media - a client-only decision).`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.OverflowToolbar`                 name = `ToolbarResponsive`                             class = `z2ui5_cl_dmo_app_163` path = `src/01/z2ui5_cl_dmo_app_163.clas.abap`
+      ( module = `sap.m`              control = `sap.m.OverflowToolbar`                 name = `ToolbarResponsive`                             class = `z2ui5_cl_dmo_app_163` path = `src/01/01/z2ui5_cl_dmo_app_163.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16`
@@ -2794,7 +2794,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` porting scope per AGENTS §1 (control must exist since UI5 1.71); the app needs a UI5 release >= 1.139 (experimental API) to render. Either drop the port or add a ui5/scope-exceptions.json entry;` &&
                ` scope-of.mjs should also learn @ui5-experimental-since.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.OverflowToolbarTokenizer`        name = `OverflowToolbarTokenizer`                      class = `z2ui5_cl_dmo_app_203` path = `src/01/z2ui5_cl_dmo_app_203.clas.abap`
+      ( module = `sap.m`              control = `sap.m.OverflowToolbarTokenizer`        name = `OverflowToolbarTokenizer`                      class = `z2ui5_cl_dmo_app_203` path = `src/02/01/z2ui5_cl_dmo_app_203.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.139`
@@ -2807,17 +2807,17 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` (experimental API) to render. Either drop the port or add a ui5/scope-exceptions.json entry; scope-of.mjs should also learn @ui5-experimental-since.` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.Page`                            name = `PageStandardClasses`                           class = `z2ui5_cl_dmo_app_089` path = `src/01/z2ui5_cl_dmo_app_089.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Page`                            name = `PageStandardClasses`                           class = `z2ui5_cl_dmo_app_089` path = `src/01/01/z2ui5_cl_dmo_app_089.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `NOTE: element binding kept 1:1 - a one-record structure /S_PRODUCT instead of {/ProductCollection/0}; the IconTabBar expanded stays bound to {device>/isNoPhone} (runtime device model).` )
-      ( module = `sap.m`              control = `sap.m.Panel`                           name = `Panel`                                         class = `z2ui5_cl_dmo_app_397` path = `src/01/z2ui5_cl_dmo_app_397.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Panel`                           name = `Panel`                                         class = `z2ui5_cl_dmo_app_397` path = `src/01/01/z2ui5_cl_dmo_app_397.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16`
         notes = `NOTE: the first Panel's Image binds src="{img>/products/pic1}" against the demo kit's named img JSONModel (sap/ui/demo/mock/img.json). abap2UI5 serves one default model, so the fixed value is inlined` &&
                  ` as a literal and host-absolutized to https://sdk.openui5.org/ (app 031 precedent) - same image, same rendering.` )
-      ( module = `sap.m`              control = `sap.m.Panel`                           name = `PanelBackgroundDesign`                         class = `z2ui5_cl_dmo_app_292` path = `src/01/z2ui5_cl_dmo_app_292.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Panel`                           name = `PanelBackgroundDesign`                         class = `z2ui5_cl_dmo_app_292` path = `src/01/01/z2ui5_cl_dmo_app_292.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16`
@@ -2833,7 +2833,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
     lv_text1 = lv_text1 && ` checklist, all listed checks passed - kept here as context. A fresh live run (toolbar press expands and collapses the third panel, and a manual expand/collapse of the panel header survives the next` &&
                ` round-trip) restamps this port to checked.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.Panel`                           name = `PanelExpanded`                                 class = `z2ui5_cl_dmo_app_043` path = `src/01/z2ui5_cl_dmo_app_043.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Panel`                           name = `PanelExpanded`                                 class = `z2ui5_cl_dmo_app_043` path = `src/01/01/z2ui5_cl_dmo_app_043.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16`
@@ -2845,7 +2845,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` it is how the sample demonstrates the PDFViewer's loading error. // NOTE: the controller keeps the two paths in closure variables and swaps /Source with setProperty. Here they are PROTECTED CONSTANTS` &&
                ` and only the bound SOURCE field is public - a value that exists solely to be assigned is not model data (AGENTS section 10, every PUBLIC attribute is persisted app state).`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.PDFViewer`                       name = `PDFViewerEmbedded`                             class = `z2ui5_cl_dmo_app_288` path = `src/01/z2ui5_cl_dmo_app_288.clas.abap`
+      ( module = `sap.m`              control = `sap.m.PDFViewer`                       name = `PDFViewerEmbedded`                             class = `z2ui5_cl_dmo_app_288` path = `src/01/01/z2ui5_cl_dmo_app_288.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.48`
@@ -2859,7 +2859,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` 1.121, backported to maintenance patches down to 1.71.63; the original controller passes isTrustedSource: true) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.121 (or`.
     lv_text1 = lv_text1 && ` a patched maintenance release) to render it.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.PDFViewer`                       name = `PDFViewerPopup`                                class = `z2ui5_cl_dmo_app_044` path = `src/01/z2ui5_cl_dmo_app_044.clas.abap`
+      ( module = `sap.m`              control = `sap.m.PDFViewer`                       name = `PDFViewerPopup`                                class = `z2ui5_cl_dmo_app_044` path = `src/02/01/z2ui5_cl_dmo_app_044.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, reviewed, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a` &&
                  ` close look.`
@@ -2881,7 +2881,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` 1.74. sap.m.PlanningCalendar itself is since 1.34 (in scope). Also sap.ui.unified.CalendarAppointment.ariaHasPopup (@since 1.150.0) is kept 1:1 from the original view (ariaHasPopup='{ariaHasPopup}');` &&
                ` newer than 1.71, declared. Was undeclared because the property gate was sap.m-only (now extended to all libs, 2026-07-24).`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.PlanningCalendar`                name = `PlanningCalendarSingle`                        class = `z2ui5_cl_dmo_app_108` path = `src/01/z2ui5_cl_dmo_app_108.clas.abap`
+      ( module = `sap.m`              control = `sap.m.PlanningCalendar`                name = `PlanningCalendarSingle`                        class = `z2ui5_cl_dmo_app_108` path = `src/02/01/z2ui5_cl_dmo_app_108.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.34`
@@ -2907,7 +2907,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` empty until the relative bindings were made absolute the same day, see the corrected NOTE above). Still unverified in a running system: the second popover's placement, and that the Email / Close` &&
                ` footer buttons close it (popover_close) with the Email one opening the mail client.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.Popover`                         name = `Popover`                                       class = `z2ui5_cl_dmo_app_229` path = `src/01/z2ui5_cl_dmo_app_229.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Popover`                         name = `Popover`                                       class = `z2ui5_cl_dmo_app_229` path = `src/02/01/z2ui5_cl_dmo_app_229.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -2916,7 +2916,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         post171 = `Button.ariaHasPopup (since UI5 1.84) is kept 1:1 on the two view buttons (ariaHasPopup='Dialog'); the app needs a UI5 release >= 1.84 to render it.` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.Popover`                         name = `PopoverControllingCloseBehavior`               class = `z2ui5_cl_dmo_app_094` path = `src/01/z2ui5_cl_dmo_app_094.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Popover`                         name = `PopoverControllingCloseBehavior`               class = `z2ui5_cl_dmo_app_094` path = `src/02/01/z2ui5_cl_dmo_app_094.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         is_post171 = abap_true
@@ -2939,7 +2939,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` the absolute {/ProductCollection} - so that element binding has no effect and has no counterpart here. // POST-1.71: sap.m.Button.ariaHasPopup (since UI5 1.84) is kept 1:1 on all three buttons - the` &&
                ` app needs a UI5 release >= 1.84 for the aria-haspopup attribute.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.Popover`                         name = `PopoverWithinArea`                             class = `z2ui5_cl_dmo_app_285` path = `src/01/z2ui5_cl_dmo_app_285.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Popover`                         name = `PopoverWithinArea`                             class = `z2ui5_cl_dmo_app_285` path = `src/02/01/z2ui5_cl_dmo_app_285.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -2948,7 +2948,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         post171 = `sap.m.Button.ariaHasPopup (since UI5 1.84) is kept 1:1 on all three buttons - the app needs a UI5 release >= 1.84 for the aria-haspopup attribute.` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.ProgressIndicator`               name = `ProgressIndicator`                             class = `z2ui5_cl_dmo_app_070` path = `src/01/z2ui5_cl_dmo_app_070.clas.abap`
+      ( module = `sap.m`              control = `sap.m.ProgressIndicator`               name = `ProgressIndicator`                             class = `z2ui5_cl_dmo_app_070` path = `src/02/01/z2ui5_cl_dmo_app_070.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.13.1`
@@ -2957,7 +2957,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` original's controller byId(...).setPercentValue/setDisplayValue calls. // POST-1.71: ProgressIndicator.displayAnimation (since UI5 1.73) is kept 1:1 on the no-animation ProgressIndicator; needs UI5` &&
                  ` >= 1.73.`
         post171 = `ProgressIndicator.displayAnimation (since UI5 1.73) is kept 1:1 on the no-animation ProgressIndicator; needs UI5 >= 1.73.` )
-      ( module = `sap.m`              control = `sap.m.PullToRefresh`                   name = `PullToRefresh`                                 class = `z2ui5_cl_dmo_app_081` path = `src/01/z2ui5_cl_dmo_app_081.clas.abap`
+      ( module = `sap.m`              control = `sap.m.PullToRefresh`                   name = `PullToRefresh`                                 class = `z2ui5_cl_dmo_app_081` path = `src/01/01/z2ui5_cl_dmo_app_081.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.9.2`
@@ -2977,7 +2977,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` (faked-event-value audit): the port used to toast the constant 'A QuickView link was clicked' and dropped both the link identity and the back-button branch. The navigate event now transports` &&
                ` ${$parameters>/navOrigin} ? ${$parameters>/navOrigin}.getText() : '' and the ABAP COND rebuilds the original's if/else.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.QuickView`                       name = `QuickView`                                     class = `z2ui5_cl_dmo_app_100` path = `src/01/z2ui5_cl_dmo_app_100.clas.abap`
+      ( module = `sap.m`              control = `sap.m.QuickView`                       name = `QuickView`                                     class = `z2ui5_cl_dmo_app_100` path = `src/02/01/z2ui5_cl_dmo_app_100.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -2996,7 +2996,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
     lv_text1 = lv_text1 && ` is dropped. // POST-1.71: sap.m.Avatar (control since 1.73) is kept 1:1 as the page icon via the QuickViewPage avatar aggregation, which itself is since UI5 1.92 - so the app needs UI5 >= 1.92 to` &&
                ` render the avatar.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.QuickViewCard`                   name = `QuickViewCard`                                 class = `z2ui5_cl_dmo_app_099` path = `src/01/z2ui5_cl_dmo_app_099.clas.abap`
+      ( module = `sap.m`              control = `sap.m.QuickViewCard`                   name = `QuickViewCard`                                 class = `z2ui5_cl_dmo_app_099` path = `src/02/01/z2ui5_cl_dmo_app_099.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.28.11`
@@ -3005,13 +3005,13 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         post171 = `sap.m.Avatar (control since 1.73) is kept 1:1 as the page icon via the QuickViewPage avatar aggregation, which itself is since UI5 1.92 - so the app needs UI5 >= 1.92 to render the avatar.` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.RadioButton`                     name = `RadioButton`                                   class = `z2ui5_cl_dmo_app_069` path = `src/01/z2ui5_cl_dmo_app_069.clas.abap`
+      ( module = `sap.m`              control = `sap.m.RadioButton`                     name = `RadioButton`                                   class = `z2ui5_cl_dmo_app_069` path = `src/02/01/z2ui5_cl_dmo_app_069.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         is_post171 = abap_true
         notes = `POST-1.71: RadioButton.wrapping and RadioButton.wrappingType (both since UI5 1.126) are kept 1:1 on the wrapping-demo group; the app needs a UI5 release >= 1.126 to render them.`
         post171 = `RadioButton.wrapping and RadioButton.wrappingType (both since UI5 1.126) are kept 1:1 on the wrapping-demo group; the app needs a UI5 release >= 1.126 to render them.` )
-      ( module = `sap.m`              control = `sap.m.RangeSlider`                     name = `RangeSlider`                                   class = `z2ui5_cl_dmo_app_045` path = `src/01/z2ui5_cl_dmo_app_045.clas.abap`
+      ( module = `sap.m`              control = `sap.m.RangeSlider`                     name = `RangeSlider`                                   class = `z2ui5_cl_dmo_app_045` path = `src/01/01/z2ui5_cl_dmo_app_045.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.38`
@@ -3035,7 +3035,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` from the root-seeded record, and that the action/footer buttons close the popover (popover_close). **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the 'Popover` &&
                ` with Custom Footer' press opens the ResponsivePopover anchored with its OK/Cancel footer; the phone-Dialog variant remains unexercised.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.ResponsivePopover`               name = `ResponsivePopover`                             class = `z2ui5_cl_dmo_app_243` path = `src/01/z2ui5_cl_dmo_app_243.clas.abap`
+      ( module = `sap.m`              control = `sap.m.ResponsivePopover`               name = `ResponsivePopover`                             class = `z2ui5_cl_dmo_app_243` path = `src/02/01/z2ui5_cl_dmo_app_243.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -3045,17 +3045,17 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         post171 = `Button.ariaHasPopup (since UI5 1.84.0) is kept 1:1 on the two trigger buttons (ariaHasPopup='Dialog'); the app needs a UI5 release >= 1.84 to render it.` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.ScrollContainer`                 name = `ScrollContainer`                               class = `z2ui5_cl_dmo_app_046` path = `src/01/z2ui5_cl_dmo_app_046.clas.abap`
+      ( module = `sap.m`              control = `sap.m.ScrollContainer`                 name = `ScrollContainer`                               class = `z2ui5_cl_dmo_app_046` path = `src/01/01/z2ui5_cl_dmo_app_046.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         checked = `CHECKED (2026-07-20): verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed); incl. the phone-emulation device> check`
         notes = `NOTE: the Image src binds {img>/products/pic1} in the original, a JSON image model not available server-side; a static demo image URL is used instead.` )
-      ( module = `sap.m`              control = `sap.m.SearchField`                     name = `DialogSearch`                                  class = `z2ui5_cl_dmo_app_090` path = `src/01/z2ui5_cl_dmo_app_090.clas.abap`
+      ( module = `sap.m`              control = `sap.m.SearchField`                     name = `DialogSearch`                                  class = `z2ui5_cl_dmo_app_090` path = `src/01/01/z2ui5_cl_dmo_app_090.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `NOTE: the Dialog (loaded from a fragment in the original) is built and shown via popup_display on the button press; its content is static text, so the bindElement /ProductCollection/0 is a no-op and` &&
                  ` dropped.` )
-      ( module = `sap.m`              control = `sap.m.SegmentedButton`                 name = `SegmentedButton`                               class = `z2ui5_cl_dmo_app_047` path = `src/01/z2ui5_cl_dmo_app_047.clas.abap`
+      ( module = `sap.m`              control = `sap.m.SegmentedButton`                 name = `SegmentedButton`                               class = `z2ui5_cl_dmo_app_047` path = `src/01/01/z2ui5_cl_dmo_app_047.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         checked = `CHECKED (2026-07-20): verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed)`
@@ -3063,26 +3063,26 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` selectedKey is two-way bound, so the selection arrives with the event and no private event path is needed - the documented 1:1 path for controller-read selection (CAPABILITIES.md), not a workaround.` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.SegmentedButton`                 name = `SegmentedButtonLI`                             class = `z2ui5_cl_dmo_app_391` path = `src/01/z2ui5_cl_dmo_app_391.clas.abap`
+      ( module = `sap.m`              control = `sap.m.SegmentedButton`                 name = `SegmentedButtonLI`                             class = `z2ui5_cl_dmo_app_391` path = `src/01/01/z2ui5_cl_dmo_app_391.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
-      ( module = `sap.m`              control = `sap.m.Select`                          name = `Select`                                        class = `z2ui5_cl_dmo_app_048` path = `src/01/z2ui5_cl_dmo_app_048.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Select`                          name = `Select`                                        class = `z2ui5_cl_dmo_app_048` path = `src/01/01/z2ui5_cl_dmo_app_048.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `NOTE: the original controller seeds three byte-identical product arrays (/ProductCollection, /ProductCollection2, /ProductCollection3) and binds one Select to each; the port folds them into the single` &&
                  ` shared table /T_PRODUCTS feeding all three Selects - same rows, same sorter, each Select keeps its own two-way selectedKey, so rendering and behaviour are identical.` )
-      ( module = `sap.m`              control = `sap.m.Select`                          name = `SelectValueState`                              class = `z2ui5_cl_dmo_app_373` path = `src/01/z2ui5_cl_dmo_app_373.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Select`                          name = `SelectValueState`                              class = `z2ui5_cl_dmo_app_373` path = `src/01/01/z2ui5_cl_dmo_app_373.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `NOTE: the original controller assigns one and the same aProducts array to four model keys (/ErrorProductCollection, /WarningProductCollection, /SuccessProductCollection, /InformationProductCollection)` &&
                  ` and binds one Select to each; the port folds them into the single shared table /T_PRODUCTS feeding all four Selects - same 16 rows, same sorter on NAME, each Select keeps its own two-way selectedKey,` &&
                  ` so rendering and behaviour are identical (app 048 precedent).` )
-      ( module = `sap.m`              control = `sap.m.Select`                          name = `SelectWithIcons`                               class = `z2ui5_cl_dmo_app_205` path = `src/01/z2ui5_cl_dmo_app_205.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Select`                          name = `SelectWithIcons`                               class = `z2ui5_cl_dmo_app_205` path = `src/01/01/z2ui5_cl_dmo_app_205.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.Select`                          name = `SelectWithWrappedItemText`                     class = `z2ui5_cl_dmo_app_374` path = `src/01/z2ui5_cl_dmo_app_374.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Select`                          name = `SelectWithWrappedItemText`                     class = `z2ui5_cl_dmo_app_374` path = `src/01/01/z2ui5_cl_dmo_app_374.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` ) ).
 
@@ -3098,7 +3098,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` views are valid. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the 'Show Select Dialog' popup opens with the 'Select Product' title; the per-button variants,` &&
                ` search and copy-back remain unexercised. // POST-1.71: sap.m.SelectDialog.searchPlaceholder (since 1.110) is kept 1:1 on the value-help dialog; needs UI5 >= 1.110.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.SelectDialog`                    name = `SelectDialog`                                  class = `z2ui5_cl_dmo_app_103` path = `src/01/z2ui5_cl_dmo_app_103.clas.abap`
+      ( module = `sap.m`              control = `sap.m.SelectDialog`                    name = `SelectDialog`                                  class = `z2ui5_cl_dmo_app_103` path = `src/02/01/z2ui5_cl_dmo_app_103.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -3107,11 +3107,11 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         post171 = `sap.m.SelectDialog.searchPlaceholder (since 1.110) is kept 1:1 on the value-help dialog; needs UI5 >= 1.110.` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.SelectList`                      name = `SelectList`                                    class = `z2ui5_cl_dmo_app_075` path = `src/01/z2ui5_cl_dmo_app_075.clas.abap`
+      ( module = `sap.m`              control = `sap.m.SelectList`                      name = `SelectList`                                    class = `z2ui5_cl_dmo_app_075` path = `src/01/01/z2ui5_cl_dmo_app_075.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.26.0` )
-      ( module = `sap.m`              control = `sap.m.SelectList`                      name = `SelectListWithIcons`                           class = `z2ui5_cl_dmo_app_211` path = `src/01/z2ui5_cl_dmo_app_211.clas.abap`
+      ( module = `sap.m`              control = `sap.m.SelectList`                      name = `SelectListWithIcons`                           class = `z2ui5_cl_dmo_app_211` path = `src/01/01/z2ui5_cl_dmo_app_211.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.26.0` ) ).
@@ -3126,7 +3126,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` /ProductCollectionStats/Filters (the two ``type`` values Category and SupplierName; the per-type ``values`` sub-arrays are unused by the Select). The binding keeps the original sorter { path: 'Name'` &&
                ` } 1:1 — a no-op there too, since the Filters entries carry ``type``, not ``Name``.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.semantic.SemanticPage`           name = `SemanticPage`                                  class = `z2ui5_cl_dmo_app_107` path = `src/01/z2ui5_cl_dmo_app_107.clas.abap`
+      ( module = `sap.m`              control = `sap.m.semantic.SemanticPage`           name = `SemanticPage`                                  class = `z2ui5_cl_dmo_app_107` path = `src/01/01/z2ui5_cl_dmo_app_107.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.30.0`
@@ -3143,14 +3143,14 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` } 1:1 — a no-op there too, since the Filters entries carry ``type``, not ``Name``. // NOTE: Same as SemanticPage but the MasterPage and DetailPage carry floatingFooter='true' and the MasterPage drops` &&
                ` the PageAccessibleLandmarkInfo (matching the SemanticPageFloatingFooter variant).`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.semantic.SemanticPage`           name = `SemanticPageFloatingFooter`                    class = `z2ui5_cl_dmo_app_106` path = `src/01/z2ui5_cl_dmo_app_106.clas.abap`
+      ( module = `sap.m`              control = `sap.m.semantic.SemanticPage`           name = `SemanticPageFloatingFooter`                    class = `z2ui5_cl_dmo_app_106` path = `src/01/01/z2ui5_cl_dmo_app_106.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.30.0`
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.semantic.SemanticPage`           name = `SemanticPageFullScreen`                        class = `z2ui5_cl_dmo_app_105` path = `src/01/z2ui5_cl_dmo_app_105.clas.abap`
+      ( module = `sap.m`              control = `sap.m.semantic.SemanticPage`           name = `SemanticPageFullScreen`                        class = `z2ui5_cl_dmo_app_105` path = `src/01/01/z2ui5_cl_dmo_app_105.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.30.0`
@@ -3171,7 +3171,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` and its DayView/WorkWeekView/WeekView/MonthView are since 1.61 (in scope). Also the SinglePlanningCalendar events weekNumberPress and selectedDatesChange (@since 1.123) are kept 1:1 from the original` &&
                ` view; newer than 1.71, declared per the property-171 policy.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.SinglePlanningCalendar`          name = `SinglePlanningCalendarDateSelection`           class = `z2ui5_cl_dmo_app_109` path = `src/01/z2ui5_cl_dmo_app_109.clas.abap`
+      ( module = `sap.m`              control = `sap.m.SinglePlanningCalendar`          name = `SinglePlanningCalendarDateSelection`           class = `z2ui5_cl_dmo_app_109` path = `src/02/01/z2ui5_cl_dmo_app_109.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.61`
@@ -3181,10 +3181,10 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` SinglePlanningCalendar events weekNumberPress and selectedDatesChange (@since 1.123) are kept 1:1 from the original view; newer than 1.71, declared per the property-171 policy.` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.Slider`                          name = `Slider`                                        class = `z2ui5_cl_dmo_app_068` path = `src/01/z2ui5_cl_dmo_app_068.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Slider`                          name = `Slider`                                        class = `z2ui5_cl_dmo_app_068` path = `src/01/01/z2ui5_cl_dmo_app_068.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
-      ( module = `sap.m`              control = `sap.m.SlideTile`                       name = `SlideTile`                                     class = `z2ui5_cl_dmo_app_082` path = `src/01/z2ui5_cl_dmo_app_082.clas.abap`
+      ( module = `sap.m`              control = `sap.m.SlideTile`                       name = `SlideTile`                                     class = `z2ui5_cl_dmo_app_082` path = `src/01/01/z2ui5_cl_dmo_app_082.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.34`
@@ -3201,7 +3201,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` diff) and the handler only assigns the chosen mode - the prefer-a-bindable-property rule, gated by the linter rule settable-property-via-action. The state then survives a view rebuild instead of` &&
                ` living only in the control.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.SplitApp`                        name = `SplitApp`                                      class = `z2ui5_cl_dmo_app_097` path = `src/01/z2ui5_cl_dmo_app_097.clas.abap`
+      ( module = `sap.m`              control = `sap.m.SplitApp`                        name = `SplitApp`                                      class = `z2ui5_cl_dmo_app_097` path = `src/01/01/z2ui5_cl_dmo_app_097.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = lv_text1 ) ).
@@ -3219,16 +3219,16 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` form it replaces WAS verified: verified in a running system 2026-07-27 - SplitContainer toDetail/toMaster/backDetail/backMaster/setMode navigation works across modes (2026-07-27) - kept as context. A` &&
                ` fresh live run (each radio button switches the split mode and the toast names it) restamps this port to checked.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.SplitContainer`                  name = `SplitContainer`                                class = `z2ui5_cl_dmo_app_096` path = `src/01/z2ui5_cl_dmo_app_096.clas.abap`
+      ( module = `sap.m`              control = `sap.m.SplitContainer`                  name = `SplitContainer`                                class = `z2ui5_cl_dmo_app_096` path = `src/01/01/z2ui5_cl_dmo_app_096.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.StandardListItem`                name = `StandardListItem`                              class = `z2ui5_cl_dmo_app_212` path = `src/01/z2ui5_cl_dmo_app_212.clas.abap`
+      ( module = `sap.m`              control = `sap.m.StandardListItem`                name = `StandardListItem`                              class = `z2ui5_cl_dmo_app_212` path = `src/01/01/z2ui5_cl_dmo_app_212.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
-      ( module = `sap.m`              control = `sap.m.StandardListItem`                name = `StandardListItemAvatar`                        class = `z2ui5_cl_dmo_app_083` path = `src/01/z2ui5_cl_dmo_app_083.clas.abap`
+      ( module = `sap.m`              control = `sap.m.StandardListItem`                name = `StandardListItemAvatar`                        class = `z2ui5_cl_dmo_app_083` path = `src/02/01/z2ui5_cl_dmo_app_083.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         is_post171 = abap_true
@@ -3237,18 +3237,18 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` kept for the 1:1 port - the app needs a UI5 release >= 1.98 to render it. Aggregation/control-level, invisible to the attribute-scanning property gate.`
         post171 = `the sap.m.Avatar control (since UI5 1.73) is newer than 1.71 but kept for the 1:1 port on three items. // the StandardListItem avatar aggregation (since UI5 1.98) is newer than 1.71 but kept for the` &&
                  ` 1:1 port - the app needs a UI5 release >= 1.98 to render it. Aggregation/control-level, invisible to the attribute-scanning property gate.` )
-      ( module = `sap.m`              control = `sap.m.StandardListItem`                name = `StandardListItemDescription`                   class = `z2ui5_cl_dmo_app_202` path = `src/01/z2ui5_cl_dmo_app_202.clas.abap`
+      ( module = `sap.m`              control = `sap.m.StandardListItem`                name = `StandardListItemDescription`                   class = `z2ui5_cl_dmo_app_202` path = `src/01/01/z2ui5_cl_dmo_app_202.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.StandardListItem`                name = `StandardListItemInfo`                          class = `z2ui5_cl_dmo_app_208` path = `src/01/z2ui5_cl_dmo_app_208.clas.abap`
+      ( module = `sap.m`              control = `sap.m.StandardListItem`                name = `StandardListItemInfo`                          class = `z2ui5_cl_dmo_app_208` path = `src/01/01/z2ui5_cl_dmo_app_208.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `NOTE: the original binds infoState via the presentation-only formatter '.formatter.status' (maps the already-classified Status Available->Success / Out of Stock->Warning / Discontinued->Error / else` &&
                  ` None to a ValueState). abap2UI5 being a thin frontend, the info state is derived in the backend into the INFOSTATE field and bound directly (infoState="{INFOSTATE}"); same output, no loss. All 123` &&
                  ` mock rows (Name/Status) kept verbatim; the List items sorter:{path:'NAME'} is kept 1:1 as a raw binding-info string.` )
-      ( module = `sap.m`              control = `sap.m.StandardListItem`                name = `StandardListItemInfoStateInverted`             class = `z2ui5_cl_dmo_app_204` path = `src/01/z2ui5_cl_dmo_app_204.clas.abap`
+      ( module = `sap.m`              control = `sap.m.StandardListItem`                name = `StandardListItemInfoStateInverted`             class = `z2ui5_cl_dmo_app_204` path = `src/02/01/z2ui5_cl_dmo_app_204.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         is_post171 = abap_true
@@ -3256,7 +3256,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         post171 = `sap.m.StandardListItem infoStateInverted (since 1.74) is kept 1:1 from the original view; needs a UI5 release >= 1.74 to render.` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.StandardListItem`                name = `StandardListItemWrapping`                      class = `z2ui5_cl_dmo_app_376` path = `src/01/z2ui5_cl_dmo_app_376.clas.abap`
+      ( module = `sap.m`              control = `sap.m.StandardListItem`                name = `StandardListItemWrapping`                      class = `z2ui5_cl_dmo_app_376` path = `src/02/01/z2ui5_cl_dmo_app_376.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         is_post171 = abap_true
@@ -3279,18 +3279,18 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): ArrowUp + Enter on the first StepInput fires change and toasts "Value changed to '<value>'" with the quotes intact; the other` &&
                ` StepInputs are the identical wire.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.StepInput`                       name = `StepInput`                                     class = `z2ui5_cl_dmo_app_049` path = `src/01/z2ui5_cl_dmo_app_049.clas.abap`
+      ( module = `sap.m`              control = `sap.m.StepInput`                       name = `StepInput`                                     class = `z2ui5_cl_dmo_app_049` path = `src/01/01/z2ui5_cl_dmo_app_049.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.40`
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.StepInput`                       name = `StepInputValueState`                           class = `z2ui5_cl_dmo_app_375` path = `src/01/z2ui5_cl_dmo_app_375.clas.abap`
+      ( module = `sap.m`              control = `sap.m.StepInput`                       name = `StepInputValueState`                           class = `z2ui5_cl_dmo_app_375` path = `src/01/01/z2ui5_cl_dmo_app_375.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.40` )
-      ( module = `sap.m`              control = `sap.m.Switch`                          name = `Switch`                                        class = `z2ui5_cl_dmo_app_050` path = `src/01/z2ui5_cl_dmo_app_050.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Switch`                          name = `Switch`                                        class = `z2ui5_cl_dmo_app_050` path = `src/01/01/z2ui5_cl_dmo_app_050.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` ) ).
 
@@ -3305,14 +3305,14 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` end to end: close icon -> confirm box with the item name -> OK -> row removed + 'Item closed:' toast (needs the 2026-07-30 Messages.js onclose fix - under the broken wire the OK action never` &&
                ` arrived).`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.TabContainer`                    name = `TabContainer`                                  class = `z2ui5_cl_dmo_app_093` path = `src/01/z2ui5_cl_dmo_app_093.clas.abap`
+      ( module = `sap.m`              control = `sap.m.TabContainer`                    name = `TabContainer`                                  class = `z2ui5_cl_dmo_app_093` path = `src/01/01/z2ui5_cl_dmo_app_093.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.34`
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.Table`                           name = `TableAlternateRowColors`                       class = `z2ui5_cl_dmo_app_210` path = `src/01/z2ui5_cl_dmo_app_210.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Table`                           name = `TableAlternateRowColors`                       class = `z2ui5_cl_dmo_app_210` path = `src/01/01/z2ui5_cl_dmo_app_210.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16` ) ).
@@ -3332,7 +3332,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
     lv_text1 = lv_text1 && ` field T_HIDDEN and the selectionFinish handler only pushes the model. The JSON array the port used to build by hand for the frontend action is gone (prefer-a-bindable-property rule, linter rule` &&
                ` settable-property-via-action).`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.Table`                           name = `TableAutoPopin`                                class = `z2ui5_cl_dmo_app_092` path = `src/01/z2ui5_cl_dmo_app_092.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Table`                           name = `TableAutoPopin`                                class = `z2ui5_cl_dmo_app_092` path = `src/02/01/z2ui5_cl_dmo_app_092.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -3353,7 +3353,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` (nightly e2e interaction): still unverified: the phone-portrait branch of the MessageStrip expression (!${device>/system/phone} || ${device>/orientation/landscape}) - it needs a real device rotation,` &&
                ` which neither the desktop live check nor the headless harness performs.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.Table`                           name = `TableContextualWidthDynamic`                   class = `z2ui5_cl_dmo_app_277` path = `src/01/z2ui5_cl_dmo_app_277.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Table`                           name = `TableContextualWidthDynamic`                   class = `z2ui5_cl_dmo_app_277` path = `src/01/01/z2ui5_cl_dmo_app_277.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -3367,7 +3367,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` browser): the sorter inside the raw binding-info string really sorts: the first rendered row is '10" Portable DVD player', not the model's first record ('Notebook Basic 15'). Residual (nothing` &&
                ` headless can assert deterministically): the Currency type's locale formatting of Price/CurrencyCode.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.Table`                           name = `TableStrictLayout`                             class = `z2ui5_cl_dmo_app_225` path = `src/01/z2ui5_cl_dmo_app_225.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Table`                           name = `TableStrictLayout`                             class = `z2ui5_cl_dmo_app_225` path = `src/02/01/z2ui5_cl_dmo_app_225.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16`
@@ -3397,7 +3397,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` beyond opening. // NOTE: Device.system.desktop adds sapUiSizeCompact to each dialog in the original. The port drops that: abap2UI5 exposes the device data as {device>/system/desktop}, but a style`.
     lv_text1 = lv_text1 && ` class is not a bindable property, and the density is a global app decision rather than a per-dialog one here.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.Table`                           name = `TableViewSettingsDialog`                       class = `z2ui5_cl_dmo_app_298` path = `src/01/z2ui5_cl_dmo_app_298.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Table`                           name = `TableViewSettingsDialog`                       class = `z2ui5_cl_dmo_app_298` path = `src/02/01/z2ui5_cl_dmo_app_298.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -3421,7 +3421,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` interaction, scripts/e2e-smoke.mjs): the dialog opens with the full 123-row mock and the client-side Contains search filters to 'Gladiator MX'; multi-select confirm and the value-help copy-back` &&
                ` remain unexercised. // POST-1.71: sap.m.TableSelectDialog.searchPlaceholder (since 1.110) is kept 1:1 on the value-help dialog; needs UI5 >= 1.110.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.TableSelectDialog`               name = `TableSelectDialog`                             class = `z2ui5_cl_dmo_app_104` path = `src/01/z2ui5_cl_dmo_app_104.clas.abap`
+      ( module = `sap.m`              control = `sap.m.TableSelectDialog`               name = `TableSelectDialog`                             class = `z2ui5_cl_dmo_app_104` path = `src/02/01/z2ui5_cl_dmo_app_104.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -3431,21 +3431,21 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         post171 = `sap.m.TableSelectDialog.searchPlaceholder (since 1.110) is kept 1:1 on the value-help dialog; needs UI5 >= 1.110.` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.Text`                            name = `Text`                                          class = `z2ui5_cl_dmo_app_051` path = `src/01/z2ui5_cl_dmo_app_051.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Text`                            name = `Text`                                          class = `z2ui5_cl_dmo_app_051` path = `src/01/01/z2ui5_cl_dmo_app_051.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
-      ( module = `sap.m`              control = `sap.m.Text`                            name = `TextMaxLines`                                  class = `z2ui5_cl_dmo_app_372` path = `src/01/z2ui5_cl_dmo_app_372.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Text`                            name = `TextMaxLines`                                  class = `z2ui5_cl_dmo_app_372` path = `src/01/01/z2ui5_cl_dmo_app_372.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
-      ( module = `sap.m`              control = `sap.m.TextArea`                        name = `TextArea`                                      class = `z2ui5_cl_dmo_app_052` path = `src/01/z2ui5_cl_dmo_app_052.clas.abap`
+      ( module = `sap.m`              control = `sap.m.TextArea`                        name = `TextArea`                                      class = `z2ui5_cl_dmo_app_052` path = `src/01/01/z2ui5_cl_dmo_app_052.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.9.0` )
-      ( module = `sap.m`              control = `sap.m.TextArea`                        name = `TextAreaGrowing`                               class = `z2ui5_cl_dmo_app_370` path = `src/01/z2ui5_cl_dmo_app_370.clas.abap`
+      ( module = `sap.m`              control = `sap.m.TextArea`                        name = `TextAreaGrowing`                               class = `z2ui5_cl_dmo_app_370` path = `src/01/01/z2ui5_cl_dmo_app_370.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.9.0` )
-      ( module = `sap.m`              control = `sap.m.TextArea`                        name = `TextAreaValueStates`                           class = `z2ui5_cl_dmo_app_371` path = `src/01/z2ui5_cl_dmo_app_371.clas.abap`
+      ( module = `sap.m`              control = `sap.m.TextArea`                        name = `TextAreaValueStates`                           class = `z2ui5_cl_dmo_app_371` path = `src/01/01/z2ui5_cl_dmo_app_371.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.9.0` ) ).
@@ -3457,7 +3457,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` TextArea itself held abc. The original updates its Text client-side on every keystroke, so under fast typing the port lags and can skip intermediate values; it converges as soon as typing pauses.` &&
                ` Inherent to moving the handler into the backend, not a wiring defect - the e2e interaction therefore types with a delay.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.TextArea`                        name = `TextAreaValueUpdate`                           class = `z2ui5_cl_dmo_app_280` path = `src/01/z2ui5_cl_dmo_app_280.clas.abap`
+      ( module = `sap.m`              control = `sap.m.TextArea`                        name = `TextAreaValueUpdate`                           class = `z2ui5_cl_dmo_app_280` path = `src/01/01/z2ui5_cl_dmo_app_280.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.9.0`
@@ -3466,7 +3466,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.TileContent`                     name = `TileContent`                                   class = `z2ui5_cl_dmo_app_078` path = `src/01/z2ui5_cl_dmo_app_078.clas.abap`
+      ( module = `sap.m`              control = `sap.m.TileContent`                     name = `TileContent`                                   class = `z2ui5_cl_dmo_app_078` path = `src/01/01/z2ui5_cl_dmo_app_078.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.34.0` ) ).
@@ -3480,7 +3480,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
     lv_text1 = lv_text1 && ` 2026-07-22 (control_global MESSAGE_TOAST.show, template ``Time selected: {0}`` filled by ${$parameters>/value}; on_event dropped, init-only) - re-verify picking a time toasts "Time selected:` &&
                ` <value>".`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.TimePicker`                      name = `TimePickerHidden`                              class = `z2ui5_cl_dmo_app_091` path = `src/01/z2ui5_cl_dmo_app_091.clas.abap`
+      ( module = `sap.m`              control = `sap.m.TimePicker`                      name = `TimePickerHidden`                              class = `z2ui5_cl_dmo_app_091` path = `src/02/01/z2ui5_cl_dmo_app_091.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -3490,14 +3490,14 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         post171 = `Button.ariaHasPopup (since 1.84), Link.ariaHasPopup (since 1.86) and TimePicker.hideInput (since 1.97) are kept 1:1; needs a UI5 release providing them.` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.TimePickerSliders`               name = `TimePickerSliders`                             class = `z2ui5_cl_dmo_app_095` path = `src/01/z2ui5_cl_dmo_app_095.clas.abap`
+      ( module = `sap.m`              control = `sap.m.TimePickerSliders`               name = `TimePickerSliders`                             class = `z2ui5_cl_dmo_app_095` path = `src/01/01/z2ui5_cl_dmo_app_095.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.54`
         notes = `NOTE: The picked time is transported to the backend via a two-way value binding on TimePickerSliders (an extra attribute; the original reads it imperatively with oTP.getValue()). OK composes the` &&
                  ` result text from the current time_value, Cancel restores the pre-open value captured on OPEN_DIALOG (the attachAfterOpen equivalent). // NOTE: The result text uses the static control id 'TPS2'` &&
                  ` because the original's runtime-generated oTP.getId() cannot be reproduced. The cosmetic collapseAll() on the sliders as the dialog closes is dropped (no visible effect on a closing dialog).` )
-      ( module = `sap.m`              control = `sap.m.Title`                           name = `TitleLink`                                     class = `z2ui5_cl_dmo_app_079` path = `src/01/z2ui5_cl_dmo_app_079.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Title`                           name = `TitleLink`                                     class = `z2ui5_cl_dmo_app_079` path = `src/02/01/z2ui5_cl_dmo_app_079.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.27.0`
@@ -3508,7 +3508,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` render it. Aggregation-level, invisible to the attribute-scanning property gate.` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.ToggleButton`                    name = `ToggleButton`                                  class = `z2ui5_cl_dmo_app_080` path = `src/01/z2ui5_cl_dmo_app_080.clas.abap`
+      ( module = `sap.m`              control = `sap.m.ToggleButton`                    name = `ToggleButton`                                  class = `z2ui5_cl_dmo_app_080` path = `src/01/01/z2ui5_cl_dmo_app_080.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `NOTE: onPress toasts the source control id + Pressed/Unpressed; both arrive via $event.oSource (sId and getPressed()) - the earlier ${$source>/pressed} binding did not resolve at runtime. // NOTE: the` &&
@@ -3518,7 +3518,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` are the identical wire.` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.Tokenizer`                       name = `TokenizerBasic`                                class = `z2ui5_cl_dmo_app_085` path = `src/01/z2ui5_cl_dmo_app_085.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Tokenizer`                       name = `TokenizerBasic`                                class = `z2ui5_cl_dmo_app_085` path = `src/02/01/z2ui5_cl_dmo_app_085.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22`
@@ -3529,7 +3529,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` tokens, so the port shows one bound Token template + 3 static Token vs the original's 3+3. // NOTE: the CheckBox select handler becomes a live two-way selected/editable bind on the first Tokenizer.` &&
                  ` // POST-1.71: tokenDelete (since UI5 1.82) on the first Tokenizer is newer than 1.71 but kept for the 1:1 port (the original wires the same event) - the app needs a UI5 release >= 1.82 to render it.`
         post171 = `tokenDelete (since UI5 1.82) on the first Tokenizer is newer than 1.71 but kept for the 1:1 port (the original wires the same event) - the app needs a UI5 release >= 1.82 to render it.` )
-      ( module = `sap.m`              control = `sap.m.Toolbar`                         name = `ToolbarShrinkable`                             class = `z2ui5_cl_dmo_app_053` path = `src/01/z2ui5_cl_dmo_app_053.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Toolbar`                         name = `ToolbarShrinkable`                             class = `z2ui5_cl_dmo_app_053` path = `src/01/01/z2ui5_cl_dmo_app_053.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16`
@@ -3538,7 +3538,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` a client-side expression binding {= slider + '%' } on each Toolbar width - no event round-trip, resizes instantly like the original; the documented preferred path (CAPABILITIES.md), not a workaround.` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.Tree`                            name = `Tree`                                          class = `z2ui5_cl_dmo_app_054` path = `src/01/z2ui5_cl_dmo_app_054.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Tree`                            name = `Tree`                                          class = `z2ui5_cl_dmo_app_054` path = `src/01/01/z2ui5_cl_dmo_app_054.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.42`
@@ -3552,7 +3552,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` and UploadSet.afterItemRemoved (since UI5 1.83) kept for the 1:1 port - surfaced when the property gate gained the sap.m/upload sub-package (control-level source scan 2026-07-26). The whole control`.
     lv_text1 = lv_text1 && ` is deprecated out-of-scope debt anyway (pr/scope-since-from-source).`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.upload.UploadSet`                name = `UploadSet`                                     class = `z2ui5_cl_dmo_app_121` path = `src/01/z2ui5_cl_dmo_app_121.clas.abap`
+      ( module = `sap.m`              control = `sap.m.upload.UploadSet`                name = `UploadSet`                                     class = `z2ui5_cl_dmo_app_121` path = `src/02/01/z2ui5_cl_dmo_app_121.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.63`
@@ -3564,7 +3564,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` 2026-07-26). The whole control is deprecated out-of-scope debt anyway (pr/scope-since-from-source).` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.URLHelper`                       name = `UrlHelper`                                     class = `z2ui5_cl_dmo_app_084` path = `src/01/z2ui5_cl_dmo_app_084.clas.abap`
+      ( module = `sap.m`              control = `sap.m.URLHelper`                       name = `UrlHelper`                                     class = `z2ui5_cl_dmo_app_084` path = `src/01/01/z2ui5_cl_dmo_app_084.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.10`
@@ -3579,7 +3579,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` instead of the original _presetFiltersInit which adds them imperatively with sap.ui.model.Filter arrays as CustomData. The Filter payload is inert in this sample (no list is bound — confirm only` &&
                ` shows the filterString), so only the three visible preset filter options are reproduced. This adds 3 ViewSettingsItem over the original fragment count.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.ViewSettingsDialog`              name = `ViewSettingsDialog`                            class = `z2ui5_cl_dmo_app_098` path = `src/01/z2ui5_cl_dmo_app_098.clas.abap`
+      ( module = `sap.m`              control = `sap.m.ViewSettingsDialog`              name = `ViewSettingsDialog`                            class = `z2ui5_cl_dmo_app_098` path = `src/01/01/z2ui5_cl_dmo_app_098.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16`
@@ -3594,7 +3594,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
     lv_text1 = lv_text1 && ` state - new slider value against the last confirmed one (handleSliderChange), and the confirmed value against the reset value 50 (handleCancel) - are computed in ABAP instead of in the controller.` &&
                ` filterResetValue/filterPreviousValue become the constant c_reset_value and the protected previous_value; behaviour is identical.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.ViewSettingsDialog`              name = `ViewSettingsDialogCustom`                      class = `z2ui5_cl_dmo_app_295` path = `src/01/z2ui5_cl_dmo_app_295.clas.abap`
+      ( module = `sap.m`              control = `sap.m.ViewSettingsDialog`              name = `ViewSettingsDialogCustom`                      class = `z2ui5_cl_dmo_app_295` path = `src/01/01/z2ui5_cl_dmo_app_295.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16`
@@ -3608,7 +3608,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` was rejected for security). The port falls back to the closest built-in operator, the case-INSENSITIVE Contains, so the button still filters but matches regardless of case. The other two buttons are`.
     lv_text1 = lv_text1 && ` unaffected.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.ViewSettingsDialog`              name = `ViewSettingsDialogCustomFilterDetails`         class = `z2ui5_cl_dmo_app_296` path = `src/01/z2ui5_cl_dmo_app_296.clas.abap`
+      ( module = `sap.m`              control = `sap.m.ViewSettingsDialog`              name = `ViewSettingsDialogCustomFilterDetails`         class = `z2ui5_cl_dmo_app_296` path = `src/01/01/z2ui5_cl_dmo_app_296.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16`
@@ -3630,7 +3630,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` Content Density and Right To Left Mode carry no handler in the sample either, so nothing is applied when they are pressed. The sample's own style.css (the .vsdSetting / .vsd-dp spacing rules) is not` &&
                ` reproduced - the class attributes stay on the controls, only the stylesheet is missing, so the tab content renders slightly tighter than the original.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.ViewSettingsDialog`              name = `ViewSettingsDialogCustomTabs`                  class = `z2ui5_cl_dmo_app_297` path = `src/01/z2ui5_cl_dmo_app_297.clas.abap`
+      ( module = `sap.m`              control = `sap.m.ViewSettingsDialog`              name = `ViewSettingsDialogCustomTabs`                  class = `z2ui5_cl_dmo_app_297` path = `src/02/01/z2ui5_cl_dmo_app_297.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -3647,7 +3647,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` model_init (REPLACE ALL OCCURRENCES OF two spaces WITH space + nbsp) and the finished text is bound plainly ({TEXT}, {ADDITIONALTEXT}); the 'formatter' key is dropped from the bindings. Output is` &&
                ` identical.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.WhitespacePattern`               name = `WhitespacePattern`                             class = `z2ui5_cl_dmo_app_185` path = `src/01/z2ui5_cl_dmo_app_185.clas.abap`
+      ( module = `sap.m`              control = `sap.m.WhitespacePattern`               name = `WhitespacePattern`                             class = `z2ui5_cl_dmo_app_185` path = `src/01/01/z2ui5_cl_dmo_app_185.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         ui5_only = abap_true
@@ -3663,18 +3663,18 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` transpiled backend + real browser): the first wizard step renders and the footer Cancel really round-trips - message_box_display opens the MessageBox 'Are you sure you want to cancel your report?'` &&
                ` with its YES/NO onclose action. Still needs an in-system check: step validation gating the Next button, the complete/edit navigation, the goToStep scroll and the submit/cancel reset itself.`.
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.m.Wizard`                          name = `Wizard`                                        class = `z2ui5_cl_dmo_app_101` path = `src/01/z2ui5_cl_dmo_app_101.clas.abap`
+      ( module = `sap.m`              control = `sap.m.Wizard`                          name = `Wizard`                                        class = `z2ui5_cl_dmo_app_101` path = `src/01/01/z2ui5_cl_dmo_app_101.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.30`
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.m`              control = `sap.ui.core.ContainerPadding`          name = `ContainerNoPadding`                            class = `z2ui5_cl_dmo_app_087` path = `src/01/z2ui5_cl_dmo_app_087.clas.abap`
+      ( module = `sap.m`              control = `sap.ui.core.ContainerPadding`          name = `ContainerNoPadding`                            class = `z2ui5_cl_dmo_app_087` path = `src/01/01/z2ui5_cl_dmo_app_087.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `NOTE: the /ProductCollectionStats/Counts values are flattened to the default model fields /TOTAL, /OK, /HEAVY, /OVERWEIGHT (verbatim counts).` )
-      ( module = `sap.m`              control = `sap.ui.core.StandardMargins`           name = `StandardMarginsAll`                            class = `z2ui5_cl_dmo_app_088` path = `src/01/z2ui5_cl_dmo_app_088.clas.abap`
+      ( module = `sap.m`              control = `sap.ui.core.StandardMargins`           name = `StandardMarginsAll`                            class = `z2ui5_cl_dmo_app_088` path = `src/01/01/z2ui5_cl_dmo_app_088.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` ) ).
 
@@ -3686,14 +3686,14 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` f:DynamicPage with title (heading, expanded/snapped tnt:InfoLabel, actions), pinnable header (ObjectAttributes), content (two long Texts) and footer. The footer message Button binds text and`.
     lv_text1 = lv_text1 && ` visible='{= !!${/MESSAGESLENGTH}}' to a model field (initial 0), reproducing the original {/messagesLength} wiring.`.
     result = VALUE #( BASE result
-      ( module = `sap.tnt`            control = `sap.f.DynamicPage`                     name = `InfoLabelInDynamicPage`                        class = `z2ui5_cl_dmo_app_143` path = `src/05/z2ui5_cl_dmo_app_143.clas.abap`
+      ( module = `sap.tnt`            control = `sap.f.DynamicPage`                     name = `InfoLabelInDynamicPage`                        class = `z2ui5_cl_dmo_app_143` path = `src/01/05/z2ui5_cl_dmo_app_143.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.54`
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.tnt`            control = `sap.tnt.InfoLabel`                     name = `InfoLabel`                                     class = `z2ui5_cl_dmo_app_113` path = `src/05/z2ui5_cl_dmo_app_113.clas.abap`
+      ( module = `sap.tnt`            control = `sap.tnt.InfoLabel`                     name = `InfoLabel`                                     class = `z2ui5_cl_dmo_app_113` path = `src/02/05/z2ui5_cl_dmo_app_113.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.54`
@@ -3713,7 +3713,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` and all bound columns kept. Width/Depth/Height are TYPE string (display-only values in a text template with variable decimals like 3.1/1.8 - packed with fixed DECIMALS would add trailing zeros). Pure`.
     lv_text1 = lv_text1 && ` prefix-drop, renders identically.`.
     result = VALUE #( BASE result
-      ( module = `sap.tnt`            control = `sap.tnt.InfoLabel`                     name = `InfoLabelInTable`                              class = `z2ui5_cl_dmo_app_192` path = `src/05/z2ui5_cl_dmo_app_192.clas.abap`
+      ( module = `sap.tnt`            control = `sap.tnt.InfoLabel`                     name = `InfoLabelInTable`                              class = `z2ui5_cl_dmo_app_192` path = `src/01/05/z2ui5_cl_dmo_app_192.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.54`
@@ -3725,7 +3725,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` real browser): 'Show/Hide SubItem 3' removes exactly one of the two same-named sub items (the bound visible flag flipped on a round-trip) and 'Toggle Collapse/Expand' collapses the NavigationList so` &&
                ` the item texts disappear - both toolbar buttons reproduce the original byId().setVisible/setExpanded server-side.`.
     result = VALUE #( BASE result
-      ( module = `sap.tnt`            control = `sap.tnt.NavigationList`                name = `NavigationList`                                class = `z2ui5_cl_dmo_app_123` path = `src/05/z2ui5_cl_dmo_app_123.clas.abap`
+      ( module = `sap.tnt`            control = `sap.tnt.NavigationList`                name = `NavigationList`                                class = `z2ui5_cl_dmo_app_123` path = `src/01/05/z2ui5_cl_dmo_app_123.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.34`
@@ -3741,7 +3741,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` groups. Newer than UI5 1.71; declared per the property-171 policy (control-level, app 152 Avatar precedent - the gate only checks members), so the app needs UI5 >= 1.121 to render the groups. Found` &&
                ` by the 2026-07-27 review sweep.`.
     result = VALUE #( BASE result
-      ( module = `sap.tnt`            control = `sap.tnt.SideNavigation`                name = `SideNavigation`                                class = `z2ui5_cl_dmo_app_128` path = `src/05/z2ui5_cl_dmo_app_128.clas.abap`
+      ( module = `sap.tnt`            control = `sap.tnt.SideNavigation`                name = `SideNavigation`                                class = `z2ui5_cl_dmo_app_128` path = `src/02/05/z2ui5_cl_dmo_app_128.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.34`
@@ -3763,7 +3763,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` @since 1.133) are kept 1:1 on the Quick Create item. @since verified in sap.tnt/src/sap/tnt/NavigationListItem.js. // LIVE-TEST: not yet run in a system: the TOGGLE_EXPAND round-trip` &&
                ` (collapse/expand), the quick-create popup round-trip and the Create append (new row shows up in the bound NavigationList with the typed name/icon or the defaults).`.
     result = VALUE #( BASE result
-      ( module = `sap.tnt`            control = `sap.tnt.SideNavigation`                name = `SideNavigationActions`                         class = `z2ui5_cl_dmo_app_299` path = `src/05/z2ui5_cl_dmo_app_299.clas.abap`
+      ( module = `sap.tnt`            control = `sap.tnt.SideNavigation`                name = `SideNavigationActions`                         class = `z2ui5_cl_dmo_app_299` path = `src/02/05/z2ui5_cl_dmo_app_299.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.34`
@@ -3790,7 +3790,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` is absolutized to https://sdk.openui5.org/resources/sap/ui/documentation/sdk/images/logo_sap.png (app 110 precedent), and the 'App Finder' href https://openui5.hana.ondemand.com/demoapps points at` &&
                ` the commercial SAPUI5 host, so it is served from https://sdk.openui5.org/demoapps instead.`.
     result = VALUE #( BASE result
-      ( module = `sap.tnt`            control = `sap.tnt.SideNavigation`                name = `SideNavigationOverlayMode`                     class = `z2ui5_cl_dmo_app_301` path = `src/05/z2ui5_cl_dmo_app_301.clas.abap`
+      ( module = `sap.tnt`            control = `sap.tnt.SideNavigation`                name = `SideNavigationOverlayMode`                     class = `z2ui5_cl_dmo_app_301` path = `src/02/05/z2ui5_cl_dmo_app_301.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -3830,7 +3830,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` verified NavigationListItem.js:101-103. // NavigationListItem.design="Action" and NavigationListItem.ariaHasPopup="Dialog" (both @since 1.133.0) are kept 1:1 on the Quick Create item. @since verified` &&
                ` NavigationListItem.js:131-139.`.
     result = VALUE #( BASE result
-      ( module = `sap.tnt`            control = `sap.tnt.SideNavigation`                name = `SideNavigationPressEvent`                      class = `z2ui5_cl_dmo_app_241` path = `src/05/z2ui5_cl_dmo_app_241.clas.abap`
+      ( module = `sap.tnt`            control = `sap.tnt.SideNavigation`                name = `SideNavigationPressEvent`                      class = `z2ui5_cl_dmo_app_241` path = `src/02/05/z2ui5_cl_dmo_app_241.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.34`
@@ -3848,7 +3848,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` the 1:1 equivalent of the original MessageToast.show(``Item selected: ${sText}``). Same idiom as app 060; CAPABILITIES marks it expressible, live render/click check pending. **e2e-verified` &&
                ` 2026-07-31** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): selecting 'Office 01' raises the client-composed 'Item selected: Office 01' toast.`.
     result = VALUE #( BASE result
-      ( module = `sap.tnt`            control = `sap.tnt.SideNavigation`                name = `SideNavigationUnselectableParents`             class = `z2ui5_cl_dmo_app_172` path = `src/05/z2ui5_cl_dmo_app_172.clas.abap`
+      ( module = `sap.tnt`            control = `sap.tnt.SideNavigation`                name = `SideNavigationUnselectableParents`             class = `z2ui5_cl_dmo_app_172` path = `src/02/05/z2ui5_cl_dmo_app_172.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.34`
@@ -3876,7 +3876,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` Indication19, Indication20 (@since 1.120) carried by all 8 ObjectStatus tag states (enum values are invisible at the attribute-name level). The app needs UI5 >= 1.121 to render groups and tags. Found`.
     lv_text2 = lv_text2 && ` by the 2026-07-27 review sweep.`.
     result = VALUE #( BASE result
-      ( module = `sap.tnt`            control = `sap.tnt.SideNavigation`                name = `SideNavigationWithTags`                        class = `z2ui5_cl_dmo_app_132` path = `src/05/z2ui5_cl_dmo_app_132.clas.abap`
+      ( module = `sap.tnt`            control = `sap.tnt.SideNavigation`                name = `SideNavigationWithTags`                        class = `z2ui5_cl_dmo_app_132` path = `src/02/05/z2ui5_cl_dmo_app_132.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.34`
@@ -3896,7 +3896,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` @since 1.133) are kept 1:1 on the Quick Create item. // LIVE-TEST: not yet run in a system: the TOGGLE_EXPAND round-trip (collapse/expand of the 20rem side navigation) and the quick-create popup` &&
                ` round-trip.`.
     result = VALUE #( BASE result
-      ( module = `sap.tnt`            control = `sap.tnt.SideNavigation`                name = `SideNavigationWrapping`                        class = `z2ui5_cl_dmo_app_300` path = `src/05/z2ui5_cl_dmo_app_300.clas.abap`
+      ( module = `sap.tnt`            control = `sap.tnt.SideNavigation`                name = `SideNavigationWrapping`                        class = `z2ui5_cl_dmo_app_300` path = `src/02/05/z2ui5_cl_dmo_app_300.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -3918,7 +3918,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` avatar in both ToolHeaders (src image, displaySize XS, press). Newer than UI5 1.71; declared per the property-171 policy (control-level, app 152 precedent), so the app needs UI5 >= 1.73 to render the` &&
                ` avatars. Found by the 2026-07-27 review sweep.`.
     result = VALUE #( BASE result
-      ( module = `sap.tnt`            control = `sap.tnt.ToolHeader`                    name = `ToolHeader`                                    class = `z2ui5_cl_dmo_app_134` path = `src/05/z2ui5_cl_dmo_app_134.clas.abap`
+      ( module = `sap.tnt`            control = `sap.tnt.ToolHeader`                    name = `ToolHeader`                                    class = `z2ui5_cl_dmo_app_134` path = `src/02/05/z2ui5_cl_dmo_app_134.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.34`
@@ -3936,7 +3936,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
     lv_text1 = lv_text1 && ` 2026-07-27. // NOTE: Fully static view reproduced 1:1: three tnt:ToolHeaders, each with a home Button, an IconTabHeader (mode='Inline', backgroundDesign='Transparent', selectedKey='invalidKey') with` &&
                ` OverflowToolbarLayoutData, search/comment Buttons and a MenuButton with a Menu (Edit/Save). The second/third ToolHeaders use nested IconTabFilter items; no bound data.`.
     result = VALUE #( BASE result
-      ( module = `sap.tnt`            control = `sap.tnt.ToolHeader`                    name = `ToolHeaderIconTabHeader`                       class = `z2ui5_cl_dmo_app_221` path = `src/05/z2ui5_cl_dmo_app_221.clas.abap`
+      ( module = `sap.tnt`            control = `sap.tnt.ToolHeader`                    name = `ToolHeaderIconTabHeader`                       class = `z2ui5_cl_dmo_app_221` path = `src/02/05/z2ui5_cl_dmo_app_221.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.34`
@@ -3976,7 +3976,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` to sap.tnt - corrected by the non-sap.m @since audit 2026-07-24. NavigationListItem.expanded is also kept 1:1; its @since reads 1.121 because the property was relocated to the new` &&
                ` sap.tnt.NavigationListItemBase in 1.121 (the property itself predates 1.71), but the property gate resolves the base-class version, so it is declared here for the gate.`.
     result = VALUE #( BASE result
-      ( module = `sap.tnt`            control = `sap.tnt.ToolPage`                      name = `ToolPage`                                      class = `z2ui5_cl_dmo_app_167` path = `src/05/z2ui5_cl_dmo_app_167.clas.abap`
+      ( module = `sap.tnt`            control = `sap.tnt.ToolPage`                      name = `ToolPage`                                      class = `z2ui5_cl_dmo_app_167` path = `src/02/05/z2ui5_cl_dmo_app_167.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.34`
@@ -3995,7 +3995,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` is absolutized to the OpenUI5 host (https://sdk.openui5.org/test-resources/sap/tnt/images/Woman_avatar_01.png) per the repository asset-URL rule; the original uses the relative path. // LIVE-TEST:` &&
                ` not yet run in a system: the IconTabHeader select -> NavContainer 'to' frontend action and the two-way bound selectedKey.`.
     result = VALUE #( BASE result
-      ( module = `sap.tnt`            control = `sap.tnt.ToolPage`                      name = `ToolPageHorizontalNavigation`                  class = `z2ui5_cl_dmo_app_303` path = `src/05/z2ui5_cl_dmo_app_303.clas.abap`
+      ( module = `sap.tnt`            control = `sap.tnt.ToolPage`                      name = `ToolPageHorizontalNavigation`                  class = `z2ui5_cl_dmo_app_303` path = `src/02/05/z2ui5_cl_dmo_app_303.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -4023,7 +4023,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` would otherwise serialize them as empty and override that default. // LIVE-TEST: not yet run in a system: the IconTabHeader / SideNavigation select -> NavContainer 'to' frontend action, the two-way` &&
                ` bound selectedKey and the SIDE_NAV_TOGGLE round-trip (sideExpanded plus the tooltip flip).`.
     result = VALUE #( BASE result
-      ( module = `sap.tnt`            control = `sap.tnt.ToolPage`                      name = `ToolPageNavigation`                            class = `z2ui5_cl_dmo_app_302` path = `src/05/z2ui5_cl_dmo_app_302.clas.abap`
+      ( module = `sap.tnt`            control = `sap.tnt.ToolPage`                      name = `ToolPageNavigation`                            class = `z2ui5_cl_dmo_app_302` path = `src/02/05/z2ui5_cl_dmo_app_302.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -4034,7 +4034,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` top-level filter template; sap.m.Avatar (control @since 1.73) is kept 1:1 as the ToolHeader profile avatar. All newer than UI5 1.71.` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.ui.codeeditor`  control = `sap.ui.codeeditor.CodeEditor`          name = `CodeEditor`                                    class = `z2ui5_cl_dmo_app_114` path = `src/02/z2ui5_cl_dmo_app_114.clas.abap`
+      ( module = `sap.ui.codeeditor`  control = `sap.ui.codeeditor.CodeEditor`          name = `CodeEditor`                                    class = `z2ui5_cl_dmo_app_114` path = `src/01/02/z2ui5_cl_dmo_app_114.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.46`
@@ -4050,7 +4050,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` which the original XML does not carry because its controller sets the value. The original's unreachable default branch (a key that is neither A nor B can only be the initial 'invalidKey') therefore` &&
                ` shows the init hint rather than an empty editor; the two example strings are inlined verbatim, including the original's own A/B swap.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.codeeditor`  control = `sap.ui.codeeditor.CodeEditor`          name = `CodeEditorIconTabHeader`                       class = `z2ui5_cl_dmo_app_150` path = `src/02/z2ui5_cl_dmo_app_150.clas.abap`
+      ( module = `sap.ui.codeeditor`  control = `sap.ui.codeeditor.CodeEditor`          name = `CodeEditorIconTabHeader`                       class = `z2ui5_cl_dmo_app_150` path = `src/01/02/z2ui5_cl_dmo_app_150.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.46`
@@ -4065,7 +4065,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
     lv_text1 = lv_text1 && ` **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the zero-delay button shows the global overlay (#sapUiBusyIndicator) and the HIDE_BUSY timer round-trip removes` &&
                ` it after ~4s; the default-delay and 2s-delay/1s-duration buttons are the identical wire with different literals.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.core`        control = `sap.ui.core.BusyIndicator`             name = `BusyIndicator`                                 class = `z2ui5_cl_dmo_app_147` path = `src/02/z2ui5_cl_dmo_app_147.clas.abap`
+      ( module = `sap.ui.core`        control = `sap.ui.core.BusyIndicator`             name = `BusyIndicator`                                 class = `z2ui5_cl_dmo_app_147` path = `src/01/02/z2ui5_cl_dmo_app_147.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = lv_text1 ) ).
@@ -4095,7 +4095,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` enabled/visible server-side gating; (c) the switch-driven two-way enabled/visible of the popover buttons. The e2e interaction (keyboard Ctrl+S -> save toast) covers (b) for the page-level Save.`.
     lv_text1 = lv_text1 && ` **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): Ctrl+S fires the SAVE round-trip and toasts 'CTRL+S: save triggered on controller'.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.core`        control = `sap.ui.core.CommandExecution`          name = `Commands`                                      class = `z2ui5_cl_dmo_app_232` path = `src/02/z2ui5_cl_dmo_app_232.clas.abap`
+      ( module = `sap.ui.core`        control = `sap.ui.core.CommandExecution`          name = `Commands`                                      class = `z2ui5_cl_dmo_app_232` path = `src/02/02/z2ui5_cl_dmo_app_232.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -4106,7 +4106,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` 1.84 to render it.` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.ui.core`        control = `sap.ui.core.Control`                   name = `ControlBusyIndicator`                          class = `z2ui5_cl_dmo_app_130` path = `src/02/z2ui5_cl_dmo_app_130.clas.abap`
+      ( module = `sap.ui.core`        control = `sap.ui.core.Control`                   name = `ControlBusyIndicator`                          class = `z2ui5_cl_dmo_app_130` path = `src/01/02/z2ui5_cl_dmo_app_130.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `NOTE: The 'Toggle Busy State' button flips a boolean model field bound to Panel1.busy and the Icon.busy (both added to carry the binding; the original set busy imperatively via byId().setBusy). The` &&
@@ -4126,7 +4126,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` no control in the view, so every input starts empty exactly as in the original. // NOTE: live-verified on 2026-08-02 (maintainer live check): legs (c) and (d) too - each strip closes only itself, and` &&
                ` Submit/Cancel/Reset behave as the original.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.core`        control = `sap.ui.core.Control`                   name = `FieldGroup`                                    class = `z2ui5_cl_dmo_app_272` path = `src/02/z2ui5_cl_dmo_app_272.clas.abap`
+      ( module = `sap.ui.core`        control = `sap.ui.core.Control`                   name = `FieldGroup`                                    class = `z2ui5_cl_dmo_app_272` path = `src/01/02/z2ui5_cl_dmo_app_272.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -4134,7 +4134,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.ui.core`        control = `sap.ui.core.HTML`                      name = `Html`                                          class = `z2ui5_cl_dmo_app_120` path = `src/02/z2ui5_cl_dmo_app_120.clas.abap`
+      ( module = `sap.ui.core`        control = `sap.ui.core.HTML`                      name = `Html`                                          class = `z2ui5_cl_dmo_app_120` path = `src/01/02/z2ui5_cl_dmo_app_120.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `NOTE: Raw HTML injected via the sap.ui.core.HTML content attribute, written as decoded markup (the builder xml-escapes it into the attribute value; the original view.xml carries it entity-encoded).` &&
@@ -4149,7 +4149,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
     lv_text1 = lv_text1 && ` keeps the view 1:1 with the original XML, which also carries content="" on all three, and loses the sample's actual payload - the visible hyphenated text. This is the sample's whole point, so the` &&
                ` port is a structural port only.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.core`        control = `sap.ui.core.hyphenation.Hyphenation`   name = `HyphenationAPI`                                class = `z2ui5_cl_dmo_app_146` path = `src/02/z2ui5_cl_dmo_app_146.clas.abap`
+      ( module = `sap.ui.core`        control = `sap.ui.core.hyphenation.Hyphenation`   name = `HyphenationAPI`                                class = `z2ui5_cl_dmo_app_146` path = `src/01/02/z2ui5_cl_dmo_app_146.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.60`
@@ -4163,14 +4163,14 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` frontend action, matching the original controller's handleStethoscopePress (MessageToast.show). **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the Icon press`.
     lv_text1 = lv_text1 && ` (dispatched click - the icon row renders zero-height headless) toasts 'Over budget!'.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.core`        control = `sap.ui.core.Icon`                      name = `Icon`                                          class = `z2ui5_cl_dmo_app_122` path = `src/02/z2ui5_cl_dmo_app_122.clas.abap`
+      ( module = `sap.ui.core`        control = `sap.ui.core.Icon`                      name = `Icon`                                          class = `z2ui5_cl_dmo_app_122` path = `src/01/02/z2ui5_cl_dmo_app_122.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.11.1`
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.ui.core`        control = `sap.ui.core.InvisibleMessage`          name = `InvisibleMessage`                              class = `z2ui5_cl_dmo_app_141` path = `src/02/z2ui5_cl_dmo_app_141.clas.abap`
+      ( module = `sap.ui.core`        control = `sap.ui.core.InvisibleMessage`          name = `InvisibleMessage`                              class = `z2ui5_cl_dmo_app_141` path = `src/01/02/z2ui5_cl_dmo_app_141.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.78`
@@ -4180,7 +4180,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` generic confirmation (the a11y live-region announce and the per-button identity are not reproduced server-side). The original's 'Infromation' button-text typo is kept 1:1. **e2e-verified 2026-08-01**` &&
                  ` (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): pressing a button really round-trips and the bound status Text shows 'A new message was sent to the invisible messaging` &&
                  ` service.'. What stays unverifiable by machine is the announcement itself - a live region has no assertable rendering.` )
-      ( module = `sap.ui.core`        control = `sap.ui.core.InvisibleText`             name = `InvisibleText`                                 class = `z2ui5_cl_dmo_app_127` path = `src/02/z2ui5_cl_dmo_app_127.clas.abap`
+      ( module = `sap.ui.core`        control = `sap.ui.core.InvisibleText`             name = `InvisibleText`                                 class = `z2ui5_cl_dmo_app_127` path = `src/01/02/z2ui5_cl_dmo_app_127.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.27.0`
@@ -4199,13 +4199,13 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` of the literal-CSS case (app 028), where braces inside a core:HTML content must be escaped. The markup is written decoded (<div ...>) because the builder re-escapes it on stringify. // NOTE: the` &&
                ` third cell's empty class="" attribute of the original Text is dropped - an empty class list is a no-op and the builder writes no attribute for an empty value.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.core`        control = `sap.ui.core.theming`                   name = `ThemeCustomClasses`                            class = `z2ui5_cl_dmo_app_283` path = `src/02/z2ui5_cl_dmo_app_283.clas.abap`
+      ( module = `sap.ui.core`        control = `sap.ui.core.theming`                   name = `ThemeCustomClasses`                            class = `z2ui5_cl_dmo_app_283` path = `src/01/02/z2ui5_cl_dmo_app_283.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.ui.core`        control = `sap.ui.core.theming.Parameters`        name = `BasicThemeParameters`                          class = `z2ui5_cl_dmo_app_131` path = `src/02/z2ui5_cl_dmo_app_131.clas.abap`
+      ( module = `sap.ui.core`        control = `sap.ui.core.theming.Parameters`        name = `BasicThemeParameters`                          class = `z2ui5_cl_dmo_app_131` path = `src/01/02/z2ui5_cl_dmo_app_131.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `NOTE: The sample itself is just a MessageStrip + Link pointing at the Theme Parameter Toolbox (the real demo content lives in that external tool); reproduced 1:1. The Link href is the original's` &&
@@ -4228,7 +4228,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` prefix re-filters the bound rows (no 'Development' row left), clearing the prefix brings every row back (the odata String type maps '' to null, so an empty prefix drops the filter instead of matching` &&
                ` nothing), and 'Show Personal Filters' re-bakes the binding into the personal pair (the first/last name inputs appear). That is the whole boundFilters + re-bake-redraw claim.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.core`        control = `sap.ui.model.Filter`                   name = `BoundFilters.FilterBar`                        class = `z2ui5_cl_dmo_app_264` path = `src/02/z2ui5_cl_dmo_app_264.clas.abap`
+      ( module = `sap.ui.core`        control = `sap.ui.model.Filter`                   name = `BoundFilters.FilterBar`                        class = `z2ui5_cl_dmo_app_264` path = `src/02/02/z2ui5_cl_dmo_app_264.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         is_post171 = abap_true
@@ -4248,7 +4248,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the first row's Select lists 'John Smith' (Americas, the row's own region) and NOT 'Yuki Tanaka' (APJ) - the per-row bound` &&
                ` filter over the relative value1 '{REGION}' works. Residual: the forceSelection='false' / selectedKey preselection is not separately asserted.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.core`        control = `sap.ui.model.Filter`                   name = `BoundFilters.FilteredListInTable`              class = `z2ui5_cl_dmo_app_265` path = `src/02/z2ui5_cl_dmo_app_265.clas.abap`
+      ( module = `sap.ui.core`        control = `sap.ui.model.Filter`                   name = `BoundFilters.FilteredListInTable`              class = `z2ui5_cl_dmo_app_265` path = `src/02/02/z2ui5_cl_dmo_app_265.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         is_post171 = abap_true
@@ -4258,7 +4258,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` row's region changes. Passed through 1:1 as a raw binding-info string; a binding-info parameter is invisible to the property gate, so this is a by-policy declaration and the app needs UI5 >= 1.146.` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.ui.core`        control = `sap.ui.model.type.Currency`            name = `TypeCurrency`                                  class = `z2ui5_cl_dmo_app_135` path = `src/02/z2ui5_cl_dmo_app_135.clas.abap`
+      ( module = `sap.ui.core`        control = `sap.ui.model.type.Currency`            name = `TypeCurrency`                                  class = `z2ui5_cl_dmo_app_135` path = `src/01/02/z2ui5_cl_dmo_app_135.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `NOTE: Composite data-type binding paradigm: the Currency type is pulled in via core:require and every Input/Text binds a composite parts:['/amount','/currency'] with type:'CurrencyType' plus` &&
@@ -4271,13 +4271,13 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` a FormatException on every binding and the view stays empty. // NOTE: the original seeds the CURRENT date (UI5Date.getInstance()); a fixed date (2026-08-02) is used here so the port is deterministic` &&
                ` - a display-only value. The Relative Time form therefore shows the distance to that fixed day, not to today.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.core`        control = `sap.ui.model.type.Date`                name = `TypeDateAsDate`                                class = `z2ui5_cl_dmo_app_282` path = `src/02/z2ui5_cl_dmo_app_282.clas.abap`
+      ( module = `sap.ui.core`        control = `sap.ui.model.type.Date`                name = `TypeDateAsDate`                                class = `z2ui5_cl_dmo_app_282` path = `src/01/02/z2ui5_cl_dmo_app_282.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.ui.core`        control = `sap.ui.model.type.Date`                name = `TypeDateAsString`                              class = `z2ui5_cl_dmo_app_181` path = `src/02/z2ui5_cl_dmo_app_181.clas.abap`
+      ( module = `sap.ui.core`        control = `sap.ui.model.type.Date`                name = `TypeDateAsString`                              class = `z2ui5_cl_dmo_app_181` path = `src/01/02/z2ui5_cl_dmo_app_181.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `NOTE: Data-type binding paradigm: sap.ui.model.type.Date is pulled via core:require={DateType: 'sap/ui/model/type/Date'} and every DatePicker/Text keeps the original { path, type: 'DateType',` &&
@@ -4292,13 +4292,13 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` original controller derives at runtime from the DateTimeType's getPlaceholderText(), is likewise seeded as a static representative value ('e.g. Dec 31, 2026, 11:59:58 PM' - the en medium-style`.
     lv_text1 = lv_text1 && ` DateTime placeholder) since the port has no controller to compute it.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.core`        control = `sap.ui.model.type.DateTime`            name = `TypeDateTime`                                  class = `z2ui5_cl_dmo_app_183` path = `src/02/z2ui5_cl_dmo_app_183.clas.abap`
+      ( module = `sap.ui.core`        control = `sap.ui.model.type.DateTime`            name = `TypeDateTime`                                  class = `z2ui5_cl_dmo_app_183` path = `src/01/02/z2ui5_cl_dmo_app_183.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.ui.core`        control = `sap.ui.model.type.FileSize`            name = `TypeFileSize`                                  class = `z2ui5_cl_dmo_app_180` path = `src/02/z2ui5_cl_dmo_app_180.clas.abap`
+      ( module = `sap.ui.core`        control = `sap.ui.model.type.FileSize`            name = `TypeFileSize`                                  class = `z2ui5_cl_dmo_app_180` path = `src/02/02/z2ui5_cl_dmo_app_180.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         is_post171 = abap_true
@@ -4310,7 +4310,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` view-root require attributes).` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.ui.core`        control = `sap.ui.model.type.Float`               name = `TypeFloat`                                     class = `z2ui5_cl_dmo_app_179` path = `src/02/z2ui5_cl_dmo_app_179.clas.abap`
+      ( module = `sap.ui.core`        control = `sap.ui.model.type.Float`               name = `TypeFloat`                                     class = `z2ui5_cl_dmo_app_179` path = `src/02/02/z2ui5_cl_dmo_app_179.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         is_post171 = abap_true
@@ -4320,14 +4320,14 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` JSON) is serialized by abap2UI5 as /NUMBER, so the original raw '/number' paths are written as '/NUMBER'.`
         post171 = `core:require on the view root (module preloading for the FloatType alias) is kept 1:1 from the original view.xml; core:require needs UI5 >= 1.74 (declared by policy - the property gate cannot see` &&
                  ` view-root require attributes).` )
-      ( module = `sap.ui.core`        control = `sap.ui.model.type.Integer`             name = `TypeInteger`                                   class = `z2ui5_cl_dmo_app_129` path = `src/02/z2ui5_cl_dmo_app_129.clas.abap`
+      ( module = `sap.ui.core`        control = `sap.ui.model.type.Integer`             name = `TypeInteger`                                   class = `z2ui5_cl_dmo_app_129` path = `src/01/02/z2ui5_cl_dmo_app_129.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `NOTE: Data-type binding paradigm: the Integer type module is pulled in with core:require='{IntegerType: sap/ui/model/type/Integer}' and the Input/Text bindings carry type:'IntegerType' plus` &&
                  ` formatOptions (min/maxIntegerDigits) 1:1. The single model field 'number' (initial '123') is serialized by abap2UI5 as /NUMBER, so the original raw '/number' paths are written as '/NUMBER'.` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.ui.core`        control = `sap.ui.model.type.Time`                name = `TypeTimeAsTime`                                class = `z2ui5_cl_dmo_app_182` path = `src/02/z2ui5_cl_dmo_app_182.clas.abap`
+      ( module = `sap.ui.core`        control = `sap.ui.model.type.Time`                name = `TypeTimeAsTime`                                class = `z2ui5_cl_dmo_app_182` path = `src/01/02/z2ui5_cl_dmo_app_182.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `IMPROVISED: The original model value is a JS Date object (UI5Date.getInstance()) and every TimeType binding has NO source formatOption (the type's default model format is a Date object). abap2UI5` &&
@@ -4352,7 +4352,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` UI5 COMPONENT card (componentCard/manifest.json) rather than an inline card definition. It points at the OpenUI5 host, so whether the component itself loads depends on that host's CORS policy - the` &&
                ` card renders either way, and abap2UI5 has no place to ship a UI5 Component of its own. Declared rather than dropped, so the port keeps the sample's eight cards.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.integration` control = `sap.ui.integration.Card`               name = `CardsLayout`                                   class = `z2ui5_cl_dmo_app_118` path = `src/02/z2ui5_cl_dmo_app_118.clas.abap`
+      ( module = `sap.ui.integration` control = `sap.ui.integration.Card`               name = `CardsLayout`                                   class = `z2ui5_cl_dmo_app_118` path = `src/02/02/z2ui5_cl_dmo_app_118.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -4368,7 +4368,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` the new tab, as the original would. // NOTE: live-verified 2026-08-04 (nightly e2e interaction): the urlhelper REDIRECT on the Image press (new-window open of the relative Card Explorer URL) is` &&
                ` unverified in a running system; the same REDIRECT action class is live-verified in app 084.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.integration` control = `sap.ui.integration.widgets.Card`       name = `CardExplorer`                                  class = `z2ui5_cl_dmo_app_149` path = `src/02/z2ui5_cl_dmo_app_149.clas.abap`
+      ( module = `sap.ui.integration` control = `sap.ui.integration.widgets.Card`       name = `CardExplorer`                                  class = `z2ui5_cl_dmo_app_149` path = `src/01/02/z2ui5_cl_dmo_app_149.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.62`
@@ -4395,7 +4395,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` JSON node instead of quoting it (pr/card-manifest-object, implemented upstream), which is why CardsLoading works at all: unlike LazyLoading (app 342) it keeps all eleven manifests in one combined` &&
                ` manifests/cardManifests.json, so there is no per-card URL to bind instead.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.integration` control = `sap.ui.integration.widgets.Card`       name = `CardsLoading`                                  class = `z2ui5_cl_dmo_app_341` path = `src/02/z2ui5_cl_dmo_app_341.clas.abap`
+      ( module = `sap.ui.integration` control = `sap.ui.integration.widgets.Card`       name = `CardsLoading`                                  class = `z2ui5_cl_dmo_app_341` path = `src/01/02/z2ui5_cl_dmo_app_341.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -4419,7 +4419,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` system: whether the bound items aggregation instantiates the Cards with their per-row manifest URL, columns and dataMode, and whether the number-of-cards Input round-trip rebuilds the container as` &&
                ` the original's destroyItems/addItem loop does.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.integration` control = `sap.ui.integration.widgets.Card`       name = `LazyLoading`                                   class = `z2ui5_cl_dmo_app_342` path = `src/02/z2ui5_cl_dmo_app_342.clas.abap`
+      ( module = `sap.ui.integration` control = `sap.ui.integration.widgets.Card`       name = `LazyLoading`                                   class = `z2ui5_cl_dmo_app_342` path = `src/01/02/z2ui5_cl_dmo_app_342.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -4427,7 +4427,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.BlockLayout`             name = `BlockLayoutCustomBackground`                   class = `z2ui5_cl_dmo_app_140` path = `src/02/z2ui5_cl_dmo_app_140.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.BlockLayout`             name = `BlockLayoutCustomBackground`                   class = `z2ui5_cl_dmo_app_140` path = `src/02/02/z2ui5_cl_dmo_app_140.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.34`
@@ -4449,7 +4449,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` resolve. // LIVE-TEST: Unverified in a running system: whether the per-cell context binding round-trips (a Select changing its cell's colorSet/colorShade writes back into the nested ABAP structure)` &&
                ` and whether the injected stylesheet paints the image cell.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.BlockLayout`             name = `BlockLayoutCustomBackgroundPerCell`            class = `z2ui5_cl_dmo_app_343` path = `src/02/z2ui5_cl_dmo_app_343.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.BlockLayout`             name = `BlockLayoutCustomBackgroundPerCell`            class = `z2ui5_cl_dmo_app_343` path = `src/01/02/z2ui5_cl_dmo_app_343.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.34`
@@ -4464,7 +4464,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
     lv_text1 = lv_text1 && ` (productid,name,suppliername,width,depth,height,dimunit,weightmeasure,weightunit,price,currencycode). Dimension and weight fields are TYPE string to preserve exact decimals for the display templates;` &&
                ` price is TYPE p DECIMALS 2 for the sap.ui.model.type.Currency binding. Data verified against the mock.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.BlockLayout`             name = `BlockLayoutDefault`                            class = `z2ui5_cl_dmo_app_214` path = `src/02/z2ui5_cl_dmo_app_214.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.BlockLayout`             name = `BlockLayoutDefault`                            class = `z2ui5_cl_dmo_app_214` path = `src/01/02/z2ui5_cl_dmo_app_214.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.34`
@@ -4476,7 +4476,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` wiring; it is seeded with the enum default Default (a valid BlockBackgroundType) because an empty enum value crashes validateProperty. The original controller loads sap/ui/demo/mock/products.json as` &&
                ` the unnamed model but no view binding references it, so it is not reproduced.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.BlockLayout`             name = `BlockLayoutLinkTitle`                          class = `z2ui5_cl_dmo_app_223` path = `src/02/z2ui5_cl_dmo_app_223.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.BlockLayout`             name = `BlockLayoutLinkTitle`                          class = `z2ui5_cl_dmo_app_223` path = `src/01/02/z2ui5_cl_dmo_app_223.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.34`
@@ -4492,7 +4492,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` carry raw HTML in the content attribute (the builder xml-escapes it, matching the original's escaped &lt;header&gt;/&lt;aside&gt;/&lt;article&gt;/&lt;footer&gt; content 1:1, including the original's` &&
                ` quirks: the double space in '<aside  ...>Navigation</aside >' and the mismatched '<aside ...>Related Links</article>' close tag).`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.cssgrid.CSSGrid`         name = `CSSGrid`                                       class = `z2ui5_cl_dmo_app_124` path = `src/02/z2ui5_cl_dmo_app_124.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.cssgrid.CSSGrid`         name = `CSSGrid`                                       class = `z2ui5_cl_dmo_app_124` path = `src/01/02/z2ui5_cl_dmo_app_124.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.60`
@@ -4507,7 +4507,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
     lv_text1 = lv_text1 && ` the view (structurally 1:1) but does nothing. Previously the press fired a REVEAL backend event no branch handled, which looked like behaviour and was none. The sample's actual subject - gridAutoFlow` &&
                ` - is fully reproduced; the reveal overlay is a debugging aid around it. // NOTE: grid:CSSGrid with gridAutoFlow + 10 VBox demo boxes, four carrying GridItemLayoutData row/column spans, 1:1.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.cssgrid.CSSGrid`         name = `GridAutoFlow`                                  class = `z2ui5_cl_dmo_app_145` path = `src/02/z2ui5_cl_dmo_app_145.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.cssgrid.CSSGrid`         name = `GridAutoFlow`                                  class = `z2ui5_cl_dmo_app_145` path = `src/01/02/z2ui5_cl_dmo_app_145.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.60`
@@ -4521,7 +4521,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` so the XMLView parser does not read them as bindings; the view also declares xmlns:core for it, which the original does not need. // NOTE: Fully static port: the sample has no model and - once the`.
     lv_text1 = lv_text1 && ` RevealGrid toggle is dropped - no event either, so the class is the app-051 shape (a bare check_on_init branch with view_display, no model_init, no on_event).`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.cssgrid.CSSGrid`         name = `GridAutoRows`                                  class = `z2ui5_cl_dmo_app_346` path = `src/02/z2ui5_cl_dmo_app_346.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.cssgrid.CSSGrid`         name = `GridAutoRows`                                  class = `z2ui5_cl_dmo_app_346` path = `src/01/02/z2ui5_cl_dmo_app_346.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.60`
@@ -4536,7 +4536,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
     lv_text1 = lv_text1 && ` serializes acceptably for the CSSGrid's CSSSize properties (the two Inputs carry no value attribute in the original either, so the grid starts on gridGap alone), and whether the Panel width` &&
                ` expression follows the slider live.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.cssgrid.CSSGrid`         name = `GridGap`                                       class = `z2ui5_cl_dmo_app_347` path = `src/02/z2ui5_cl_dmo_app_347.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.cssgrid.CSSGrid`         name = `GridGap`                                       class = `z2ui5_cl_dmo_app_347` path = `src/01/02/z2ui5_cl_dmo_app_347.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.60`
@@ -4555,7 +4555,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` same data, same leaf name. It is seeded empty like the original, so the Text reads 'Current breakpoint: ' until the first layoutChange fires. // LIVE-TEST: Unverified in a running system: whether the` &&
                ` layoutChange round-trip fills the breakpoint Text as the panel is resized, and whether the Panel width expression follows the slider live.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.cssgrid.CSSGrid`         name = `GridResponsiveColumnLayout`                    class = `z2ui5_cl_dmo_app_348` path = `src/02/z2ui5_cl_dmo_app_348.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.cssgrid.CSSGrid`         name = `GridResponsiveColumnLayout`                    class = `z2ui5_cl_dmo_app_348` path = `src/02/02/z2ui5_cl_dmo_app_348.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -4580,7 +4580,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` interaction): Unverified in a running system: (a) the layoutChange round-trip (${$parameters>/layout}) writing 'Layout size is: layoutS/layoutM or layoutL/layoutXL' into the bound Text; (b) that the`.
     lv_text1 = lv_text1 && ` containerQuery expression binding really re-evaluates the GridResponsiveLayout when the segment switches; (c) that the three GridSettings breakpoints lay the twelve tiles out as in the original.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.cssgrid.CSSGrid`         name = `GridResponsiveness`                            class = `z2ui5_cl_dmo_app_271` path = `src/02/z2ui5_cl_dmo_app_271.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.cssgrid.CSSGrid`         name = `GridResponsiveness`                            class = `z2ui5_cl_dmo_app_271` path = `src/01/02/z2ui5_cl_dmo_app_271.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.60`
@@ -4596,7 +4596,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` braces are escaped \{ \} in a backtick literal so the XMLView parser does not read them as bindings. // LIVE-TEST: Unverified in a running system: whether a ComboBox free-text entry (the original` &&
                ` reads the change event's value, not the selected key) round-trips into the bound field and re-templates the grid.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.cssgrid.CSSGrid`         name = `GridTemplateRows`                              class = `z2ui5_cl_dmo_app_349` path = `src/02/z2ui5_cl_dmo_app_349.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.cssgrid.CSSGrid`         name = `GridTemplateRows`                              class = `z2ui5_cl_dmo_app_349` path = `src/01/02/z2ui5_cl_dmo_app_349.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.60`
@@ -4610,7 +4610,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` the Panel with no round-trip: the value goes 100 -> 99 and the Panel's width follows as '99%' through the expression binding, so the controller's jQuery width is fully replaced. The nested CSSGrid`.
     lv_text1 = lv_text1 && ` renders its E/F/G boxes. Residual (nothing headless can assert): the visual grid placement from GridItemLayoutData (gridColumn '1 / 3'), which needs the theme CSS the harness does not load.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.cssgrid.CSSGrid`         name = `NestedGrids`                                   class = `z2ui5_cl_dmo_app_270` path = `src/02/z2ui5_cl_dmo_app_270.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.cssgrid.CSSGrid`         name = `NestedGrids`                                   class = `z2ui5_cl_dmo_app_270` path = `src/01/02/z2ui5_cl_dmo_app_270.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.60`
@@ -4638,7 +4638,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` Unverified in a running system: the layoutChange and columnsChange round-trips re-laying out the four groups and widening the two group-1 cards, and whether the two card manifest URLs load from the` &&
                ` OpenUI5 host (their images are relative to the manifest, which is what an absolute manifest URL makes resolvable).`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.cssgrid.CSSGrid`         name = `ProductHomeLayout`                             class = `z2ui5_cl_dmo_app_350` path = `src/02/z2ui5_cl_dmo_app_350.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.cssgrid.CSSGrid`         name = `ProductHomeLayout`                             class = `z2ui5_cl_dmo_app_350` path = `src/02/02/z2ui5_cl_dmo_app_350.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -4661,7 +4661,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` true); the original used a literal visible='getVisible()' (a sample quirk) toggled per Device.system.phone in onBeforeRendering. The two long body texts are shortened representative Lorem (not` &&
                ` gate-compared, static).`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.DynamicSideContent`      name = `DynamicSideContent`                            class = `z2ui5_cl_dmo_app_138` path = `src/02/z2ui5_cl_dmo_app_138.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.DynamicSideContent`      name = `DynamicSideContent`                            class = `z2ui5_cl_dmo_app_138` path = `src/01/02/z2ui5_cl_dmo_app_138.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.30`
@@ -4677,7 +4677,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` round-trip transports 'S' and the footer Toggle button becomes enabled through the two-way bound flag - the whole _updateToggleButtonState wire. The main/side content render side by side beforehand.` &&
                ` Residual (nothing headless can assert): that toggle() then really swaps main and side content visually, and the Slider's device-model visible flag on a real phone.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.DynamicSideContent`      name = `DynamicSideContentEqualSplit`                  class = `z2ui5_cl_dmo_app_267` path = `src/02/z2ui5_cl_dmo_app_267.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.DynamicSideContent`      name = `DynamicSideContentEqualSplit`                  class = `z2ui5_cl_dmo_app_267` path = `src/01/02/z2ui5_cl_dmo_app_267.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.30`
@@ -4696,7 +4696,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` breakpointChanged round-trip enabling the Toggle button on S, the showSideContent flip, and the Slider's css width write on the container Page. The same three wires are live-verified on app 138 (the` &&
                ` plain DynamicSideContent sample), which uses them identically.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.DynamicSideContent`      name = `DynamicSideContentPosition`                    class = `z2ui5_cl_dmo_app_344` path = `src/02/z2ui5_cl_dmo_app_344.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.DynamicSideContent`      name = `DynamicSideContentPosition`                    class = `z2ui5_cl_dmo_app_344` path = `src/01/02/z2ui5_cl_dmo_app_344.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.30`
@@ -4719,14 +4719,14 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` visible flag comes from the breakpointChanged round-trip) and brings it back through SIDE_CONTENT_SHOW. Residual (nothing headless can assert): the FeedListItem layout with its remote author` &&
                ` pictures, and toggle() on a real S-breakpoint device.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.DynamicSideContent`      name = `DynamicSideContentProduct`                     class = `z2ui5_cl_dmo_app_269` path = `src/02/z2ui5_cl_dmo_app_269.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.DynamicSideContent`      name = `DynamicSideContentProduct`                     class = `z2ui5_cl_dmo_app_269` path = `src/01/02/z2ui5_cl_dmo_app_269.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.30`
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.FixFlex`                 name = `FixFlexFixedSize`                              class = `z2ui5_cl_dmo_app_338` path = `src/02/z2ui5_cl_dmo_app_338.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.FixFlex`                 name = `FixFlexFixedSize`                              class = `z2ui5_cl_dmo_app_338` path = `src/01/02/z2ui5_cl_dmo_app_338.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.25.0` ) ).
@@ -4737,14 +4737,14 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` class='fixFlexHorizontal') is loaded via the manifest in the original; abap2UI5 ships no separate css file, so it is injected via a core:HTML <style> node with the CSS braces escaped. This adds a` &&
                ` core:HTML control not present in the original view - an extra control IS flagged by structural-diff (control extra), declared here by name.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.FixFlex`                 name = `FixFlexHorizontal`                             class = `z2ui5_cl_dmo_app_219` path = `src/02/z2ui5_cl_dmo_app_219.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.FixFlex`                 name = `FixFlexHorizontal`                             class = `z2ui5_cl_dmo_app_219` path = `src/01/02/z2ui5_cl_dmo_app_219.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.25.0`
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.FixFlex`                 name = `FixFlexMinFlexSize`                            class = `z2ui5_cl_dmo_app_215` path = `src/02/z2ui5_cl_dmo_app_215.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.FixFlex`                 name = `FixFlexMinFlexSize`                            class = `z2ui5_cl_dmo_app_215` path = `src/01/02/z2ui5_cl_dmo_app_215.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.25.0` ) ).
@@ -4755,7 +4755,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` INJECTED since 2026-08-05 through a core:HTML content attribute - the documented way to carry a stylesheet into an abap2UI5 view (CAPABILITIES 'Custom CSS', apps 026/028). The class attributes were` &&
                ` already 1:1, so the decorative backgrounds are back; the core:HTML leaf is the one control the original view does not declare. The 2026-07-27 review flagged exactly this as rework.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.FixFlex`                 name = `FixFlexVertical`                               class = `z2ui5_cl_dmo_app_119` path = `src/02/z2ui5_cl_dmo_app_119.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.FixFlex`                 name = `FixFlexVertical`                               class = `z2ui5_cl_dmo_app_119` path = `src/01/02/z2ui5_cl_dmo_app_119.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.25.0`
@@ -4772,7 +4772,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` is seeded synchronously in model_init, so the state the original reaches after the mock request completes is the state the port starts in. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel` &&
                ` round-trips (form swap through the bound visible flags and the Cancel restore).`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form_Column_oneGroup`                          class = `z2ui5_cl_dmo_app_320` path = `src/02/z2ui5_cl_dmo_app_320.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form_Column_oneGroup`                          class = `z2ui5_cl_dmo_app_320` path = `src/01/02/z2ui5_cl_dmo_app_320.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -4792,7 +4792,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` case-insensitively), but the address is actually shown here. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel` &&
                ` restore).`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form_Column_oneGroup234`                       class = `z2ui5_cl_dmo_app_321` path = `src/02/z2ui5_cl_dmo_app_321.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form_Column_oneGroup234`                       class = `z2ui5_cl_dmo_app_321` path = `src/01/02/z2ui5_cl_dmo_app_321.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -4812,7 +4812,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` case-insensitively), but the address is actually shown here. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel` &&
                ` restore).`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form_Column_threeGroups234`                    class = `z2ui5_cl_dmo_app_322` path = `src/02/z2ui5_cl_dmo_app_322.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form_Column_threeGroups234`                    class = `z2ui5_cl_dmo_app_322` path = `src/01/02/z2ui5_cl_dmo_app_322.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -4832,7 +4832,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` case-insensitively), but the address is actually shown here. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel` &&
                ` restore).`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form_Column_threeGroups346`                    class = `z2ui5_cl_dmo_app_323` path = `src/02/z2ui5_cl_dmo_app_323.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form_Column_threeGroups346`                    class = `z2ui5_cl_dmo_app_323` path = `src/01/02/z2ui5_cl_dmo_app_323.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -4852,7 +4852,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` case-insensitively), but the address is actually shown here. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel` &&
                ` restore).`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form_Column_twoGroups234`                      class = `z2ui5_cl_dmo_app_324` path = `src/02/z2ui5_cl_dmo_app_324.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form_Column_twoGroups234`                      class = `z2ui5_cl_dmo_app_324` path = `src/01/02/z2ui5_cl_dmo_app_324.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -4870,7 +4870,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` model_init, so the state the original reaches after the mock request completes is the state the port starts in. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap` &&
                ` through the bound visible flags and the Cancel restore).`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form354`                                       class = `z2ui5_cl_dmo_app_312` path = `src/02/z2ui5_cl_dmo_app_312.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form354`                                       class = `z2ui5_cl_dmo_app_312` path = `src/01/02/z2ui5_cl_dmo_app_312.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -4886,7 +4886,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
     lv_text1 = lv_text1 && ` etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. The two composite Texts ({Street} {HouseNumber}, {ZIPCode} {City}) keep their` &&
                ` composite form with the absolute paths. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel restore).`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form354wide`                                   class = `z2ui5_cl_dmo_app_313` path = `src/02/z2ui5_cl_dmo_app_313.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form354wide`                                   class = `z2ui5_cl_dmo_app_313` path = `src/01/02/z2ui5_cl_dmo_app_313.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16.0`
@@ -4901,7 +4901,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
     lv_text1 = lv_text1 && ` etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. The two composite Texts ({Street} {HouseNumber}, {ZIPCode} {City}) keep their` &&
                ` composite form with the absolute paths. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel restore).`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form354wideDual`                               class = `z2ui5_cl_dmo_app_314` path = `src/02/z2ui5_cl_dmo_app_314.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form354wideDual`                               class = `z2ui5_cl_dmo_app_314` path = `src/01/02/z2ui5_cl_dmo_app_314.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16.0`
@@ -4917,7 +4917,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` {HouseNumber} keep their composite form with the absolute paths. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel` &&
                ` restore).`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form471`                                       class = `z2ui5_cl_dmo_app_315` path = `src/02/z2ui5_cl_dmo_app_315.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form471`                                       class = `z2ui5_cl_dmo_app_315` path = `src/01/02/z2ui5_cl_dmo_app_315.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16.0`
@@ -4933,7 +4933,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` {HouseNumber} keep their composite form with the absolute paths. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel` &&
                ` restore).`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form480`                                       class = `z2ui5_cl_dmo_app_316` path = `src/02/z2ui5_cl_dmo_app_316.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form480`                                       class = `z2ui5_cl_dmo_app_316` path = `src/01/02/z2ui5_cl_dmo_app_316.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = lv_text1 ) ).
@@ -4949,7 +4949,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` Email value (john.smith@sap.com) - structural-diff matches either way (it compares the last path segment case-insensitively), but the address is actually shown here. // LIVE-TEST: not yet run in a` &&
                ` system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel restore).`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form480_12120`                                 class = `z2ui5_cl_dmo_app_317` path = `src/02/z2ui5_cl_dmo_app_317.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form480_12120`                                 class = `z2ui5_cl_dmo_app_317` path = `src/01/02/z2ui5_cl_dmo_app_317.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -4966,7 +4966,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` {HouseNumber} keep their composite form with the absolute paths. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel` &&
                ` restore).`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form480_12120Dual`                             class = `z2ui5_cl_dmo_app_318` path = `src/02/z2ui5_cl_dmo_app_318.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form480_12120Dual`                             class = `z2ui5_cl_dmo_app_318` path = `src/01/02/z2ui5_cl_dmo_app_318.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16.0`
@@ -4984,7 +4984,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` (RatingIndicator.value) and Disposable (ProgressIndicator.percentValue) are numeric UI5 properties, so their ABAP fields are typed i, not string - a bound value that serializes as a JSON string is` &&
                ` rejected on a numeric property. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel restore).`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form480_Trial`                                 class = `z2ui5_cl_dmo_app_319` path = `src/02/z2ui5_cl_dmo_app_319.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `Form480_Trial`                                 class = `z2ui5_cl_dmo_app_319` path = `src/01/02/z2ui5_cl_dmo_app_319.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -4992,7 +4992,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `FormToolbar`                                   class = `z2ui5_cl_dmo_app_142` path = `src/02/z2ui5_cl_dmo_app_142.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.Form`               name = `FormToolbar`                                   class = `z2ui5_cl_dmo_app_142` path = `src/01/02/z2ui5_cl_dmo_app_142.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16.0`
@@ -5012,7 +5012,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` is seeded synchronously in model_init, so the state the original reaches after the mock request completes is the state the port starts in. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel` &&
                ` round-trips (form swap through the bound visible flags and the Cancel restore).`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm_Column_oneGroup`                    class = `z2ui5_cl_dmo_app_333` path = `src/02/z2ui5_cl_dmo_app_333.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm_Column_oneGroup`                    class = `z2ui5_cl_dmo_app_333` path = `src/01/02/z2ui5_cl_dmo_app_333.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -5032,7 +5032,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` case-insensitively), but the address is actually shown here. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel` &&
                ` restore).`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm_Column_oneGroup234`                 class = `z2ui5_cl_dmo_app_334` path = `src/02/z2ui5_cl_dmo_app_334.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm_Column_oneGroup234`                 class = `z2ui5_cl_dmo_app_334` path = `src/01/02/z2ui5_cl_dmo_app_334.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -5052,7 +5052,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` case-insensitively), but the address is actually shown here. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel` &&
                ` restore).`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm_Column_threeGroups234`              class = `z2ui5_cl_dmo_app_335` path = `src/02/z2ui5_cl_dmo_app_335.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm_Column_threeGroups234`              class = `z2ui5_cl_dmo_app_335` path = `src/01/02/z2ui5_cl_dmo_app_335.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -5072,7 +5072,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` case-insensitively), but the address is actually shown here. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel` &&
                ` restore).`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm_Column_threeGroups346`              class = `z2ui5_cl_dmo_app_336` path = `src/02/z2ui5_cl_dmo_app_336.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm_Column_threeGroups346`              class = `z2ui5_cl_dmo_app_336` path = `src/01/02/z2ui5_cl_dmo_app_336.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -5092,7 +5092,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` case-insensitively), but the address is actually shown here. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel` &&
                ` restore).`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm_Column_twoGroups234`                class = `z2ui5_cl_dmo_app_337` path = `src/02/z2ui5_cl_dmo_app_337.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm_Column_twoGroups234`                class = `z2ui5_cl_dmo_app_337` path = `src/01/02/z2ui5_cl_dmo_app_337.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -5110,7 +5110,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` is seeded synchronously in model_init, so the state the original reaches after the mock request completes is the state the port starts in. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel` &&
                ` round-trips (form swap through the bound visible flags and the Cancel restore).`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm354`                                 class = `z2ui5_cl_dmo_app_325` path = `src/02/z2ui5_cl_dmo_app_325.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm354`                                 class = `z2ui5_cl_dmo_app_325` path = `src/01/02/z2ui5_cl_dmo_app_325.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -5128,7 +5128,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` is seeded synchronously in model_init, so the state the original reaches after the mock request completes is the state the port starts in. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel` &&
                ` round-trips (form swap through the bound visible flags and the Cancel restore).`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm354wide`                             class = `z2ui5_cl_dmo_app_326` path = `src/02/z2ui5_cl_dmo_app_326.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm354wide`                             class = `z2ui5_cl_dmo_app_326` path = `src/01/02/z2ui5_cl_dmo_app_326.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -5146,7 +5146,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` is seeded synchronously in model_init, so the state the original reaches after the mock request completes is the state the port starts in. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel` &&
                ` round-trips (form swap through the bound visible flags and the Cancel restore).`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm354wideDual`                         class = `z2ui5_cl_dmo_app_327` path = `src/02/z2ui5_cl_dmo_app_327.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm354wideDual`                         class = `z2ui5_cl_dmo_app_327` path = `src/01/02/z2ui5_cl_dmo_app_327.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -5164,7 +5164,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` is seeded synchronously in model_init, so the state the original reaches after the mock request completes is the state the port starts in. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel` &&
                ` round-trips (form swap through the bound visible flags and the Cancel restore).`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm471`                                 class = `z2ui5_cl_dmo_app_328` path = `src/02/z2ui5_cl_dmo_app_328.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm471`                                 class = `z2ui5_cl_dmo_app_328` path = `src/01/02/z2ui5_cl_dmo_app_328.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -5182,7 +5182,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` is seeded synchronously in model_init, so the state the original reaches after the mock request completes is the state the port starts in. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel` &&
                ` round-trips (form swap through the bound visible flags and the Cancel restore).`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm480`                                 class = `z2ui5_cl_dmo_app_329` path = `src/02/z2ui5_cl_dmo_app_329.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm480`                                 class = `z2ui5_cl_dmo_app_329` path = `src/01/02/z2ui5_cl_dmo_app_329.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -5199,7 +5199,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` Email value (john.smith@sap.com) - structural-diff matches either way (it compares the last path segment case-insensitively), but the address is actually shown here. // LIVE-TEST: not yet run in a` &&
                ` system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel restore).`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm480_12120`                           class = `z2ui5_cl_dmo_app_330` path = `src/02/z2ui5_cl_dmo_app_330.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm480_12120`                           class = `z2ui5_cl_dmo_app_330` path = `src/01/02/z2ui5_cl_dmo_app_330.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -5216,7 +5216,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` {HouseNumber} keep their composite form with the absolute paths. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel` &&
                ` restore).`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm480_12120Dual`                       class = `z2ui5_cl_dmo_app_331` path = `src/02/z2ui5_cl_dmo_app_331.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm480_12120Dual`                       class = `z2ui5_cl_dmo_app_331` path = `src/01/02/z2ui5_cl_dmo_app_331.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16.0`
@@ -5234,7 +5234,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` (RatingIndicator.value) and Disposable (ProgressIndicator.percentValue) are numeric UI5 properties, so their ABAP fields are typed i, not string - a bound value that serializes as a JSON string is` &&
                ` rejected on a numeric property. // LIVE-TEST: not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel restore).`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm480_Trial`                           class = `z2ui5_cl_dmo_app_332` path = `src/02/z2ui5_cl_dmo_app_332.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleForm480_Trial`                           class = `z2ui5_cl_dmo_app_332` path = `src/01/02/z2ui5_cl_dmo_app_332.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -5242,7 +5242,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleFormToolbar`                             class = `z2ui5_cl_dmo_app_175` path = `src/02/z2ui5_cl_dmo_app_175.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.form.SimpleForm`         name = `SimpleFormToolbar`                             class = `z2ui5_cl_dmo_app_175` path = `src/01/02/z2ui5_cl_dmo_app_175.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16.0`
@@ -5261,14 +5261,14 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` view.xml carries them HTML-entity-encoded (&lt;div ...&gt;) and the builder re-escapes the literal on stringify. Multi-line div contents in the original are written single-line here (whitespace-only` &&
                ` difference, not a binding).`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.Grid`                    name = `GridData`                                      class = `z2ui5_cl_dmo_app_169` path = `src/02/z2ui5_cl_dmo_app_169.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.Grid`                    name = `GridData`                                      class = `z2ui5_cl_dmo_app_169` path = `src/01/02/z2ui5_cl_dmo_app_169.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.15.0`
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.Grid`                    name = `GridInfo`                                      class = `z2ui5_cl_dmo_app_194` path = `src/02/z2ui5_cl_dmo_app_194.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.Grid`                    name = `GridInfo`                                      class = `z2ui5_cl_dmo_app_194` path = `src/01/02/z2ui5_cl_dmo_app_194.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.15.0` ) ).
@@ -5281,7 +5281,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` not read them as bindings; without the rules behind them the 37 example divs would render as unstyled empty boxes (the app-122/124 lesson). // LIVE-TEST: Unverified in a running system: whether the`.
     lv_text1 = lv_text1 && ` expression binding over the Slider value resizes its own wrapper live while dragging (it needs no round-trip, so it should follow the slider continuously, unlike the original's per-event DOM write).`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.Grid`                    name = `GridProperties`                                class = `z2ui5_cl_dmo_app_345` path = `src/02/z2ui5_cl_dmo_app_345.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.Grid`                    name = `GridProperties`                                class = `z2ui5_cl_dmo_app_345` path = `src/01/02/z2ui5_cl_dmo_app_345.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.15.0`
@@ -5294,14 +5294,14 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` + real browser): the Grid element-binding to the array path resolves against the serialized default model: the {0/INTROTEXT1} index-relative binding renders its real text in the running app.` &&
                ` Residual: the GridData breakpoint behaviour (visibleOnSmall / moveForward), which needs real viewport rendering.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.Grid`                    name = `GridXL`                                        class = `z2ui5_cl_dmo_app_226` path = `src/02/z2ui5_cl_dmo_app_226.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.Grid`                    name = `GridXL`                                        class = `z2ui5_cl_dmo_app_226` path = `src/01/02/z2ui5_cl_dmo_app_226.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.15.0`
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.HorizontalLayout`        name = `HorizontalLayout`                              class = `z2ui5_cl_dmo_app_162` path = `src/02/z2ui5_cl_dmo_app_162.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.HorizontalLayout`        name = `HorizontalLayout`                              class = `z2ui5_cl_dmo_app_162` path = `src/01/02/z2ui5_cl_dmo_app_162.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16.0`
@@ -5318,7 +5318,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
     lv_text1 = lv_text1 && ` arg, so both arrays travel into a client-composed toast with the original's two-line text (each guarded, since the first resize carries no oldSizes). The earlier rationale - 'an array-valued` &&
                ` container-resize event has no bound-model equivalent' - looked for a MODEL equivalent where the client expression was the answer.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.ResponsiveSplitter`      name = `ResponsiveSplitter`                            class = `z2ui5_cl_dmo_app_186` path = `src/02/z2ui5_cl_dmo_app_186.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.ResponsiveSplitter`      name = `ResponsiveSplitter`                            class = `z2ui5_cl_dmo_app_186` path = `src/01/02/z2ui5_cl_dmo_app_186.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.38`
@@ -5346,7 +5346,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` timestamp, not an anchored one. // LIVE-TEST: Unverified in a running system: whether inserting/deleting a row re-renders the bound contentAreas aggregation, whether the shared table keeps the option` &&
                ` row and the layout data in sync while dragging a splitter bar, and whether the Invalidate button's plain round-trip re-renders the Splitter the way the original's invalidate( ) does.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.Splitter`                name = `Splitter`                                      class = `z2ui5_cl_dmo_app_351` path = `src/02/z2ui5_cl_dmo_app_351.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.Splitter`                name = `Splitter`                                      class = `z2ui5_cl_dmo_app_351` path = `src/01/02/z2ui5_cl_dmo_app_351.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -5354,21 +5354,21 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.Splitter`                name = `Splitter2`                                     class = `z2ui5_cl_dmo_app_125` path = `src/02/z2ui5_cl_dmo_app_125.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.Splitter`                name = `Splitter2`                                     class = `z2ui5_cl_dmo_app_125` path = `src/01/02/z2ui5_cl_dmo_app_125.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22.0` )
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.Splitter`                name = `Splitter3`                                     class = `z2ui5_cl_dmo_app_339` path = `src/02/z2ui5_cl_dmo_app_339.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.Splitter`                name = `Splitter3`                                     class = `z2ui5_cl_dmo_app_339` path = `src/01/02/z2ui5_cl_dmo_app_339.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22.0` )
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.Splitter`                name = `Splitter4`                                     class = `z2ui5_cl_dmo_app_340` path = `src/02/z2ui5_cl_dmo_app_340.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.Splitter`                name = `Splitter4`                                     class = `z2ui5_cl_dmo_app_340` path = `src/01/02/z2ui5_cl_dmo_app_340.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22.0`
         notes = `NOTE: the original view writes minSize="200px" on the third SplitterLayoutData, but sap.ui.layout.SplitterLayoutData.minSize is typed int - UI5 cannot parse the px suffix. The port writes the numeric` &&
                  ` value 200 the original means.` )
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.Splitter`                name = `SplitterNested1`                               class = `z2ui5_cl_dmo_app_266` path = `src/02/z2ui5_cl_dmo_app_266.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.Splitter`                name = `SplitterNested1`                               class = `z2ui5_cl_dmo_app_266` path = `src/01/02/z2ui5_cl_dmo_app_266.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22.0` ) ).
@@ -5380,7 +5380,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` 1:1 on the default model and the seed reproduces the device branch server-side from client->get( )-s_device-system (app 012 precedent, review fix 2026-07-27); the phone-branch seeding is unverified` &&
                ` in a running system.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.layout`      control = `sap.ui.layout.VerticalLayout`          name = `VerticalLayout`                                class = `z2ui5_cl_dmo_app_173` path = `src/02/z2ui5_cl_dmo_app_173.clas.abap`
+      ( module = `sap.ui.layout`      control = `sap.ui.layout.VerticalLayout`          name = `VerticalLayout`                                class = `z2ui5_cl_dmo_app_173` path = `src/01/02/z2ui5_cl_dmo_app_173.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.16.0`
@@ -5400,7 +5400,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
     lv_text1 = lv_text1 && ` system: whether the two-way bound FacetFilterItem selected flags return with the listClose round-trip and produce the expected server-side selection, and whether the noData Link appears when the` &&
                ` filters leave no rows.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `Aggregations`                                  class = `z2ui5_cl_dmo_app_352` path = `src/02/z2ui5_cl_dmo_app_352.clas.abap`
+      ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `Aggregations`                                  class = `z2ui5_cl_dmo_app_352` path = `src/01/02/z2ui5_cl_dmo_app_352.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -5423,7 +5423,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` controller's onAIActionPress opening an AI-hint dialog) is dropped: sap.m.plugins does not exist in UI5 1.71, which the corpus targets. The column itself is present, only the plugin aggregation and` &&
                ` its press handler are missing.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `Basic`                                         class = `z2ui5_cl_dmo_app_115` path = `src/02/z2ui5_cl_dmo_app_115.clas.abap`
+      ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `Basic`                                         class = `z2ui5_cl_dmo_app_115` path = `src/01/02/z2ui5_cl_dmo_app_115.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = lv_text1 ) ).
@@ -5449,7 +5449,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` the widths and the Table's columns come back at 25%. The button sits in an OverflowToolbar, where it renders as a Select - drivable once the 'Additional Options' popover is open (AGENTS 10).` &&
                ` Residual: the columnResize client toast (a real column drag) and the timestamp-typed DeliveryDate formatting.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `ColumnResizing`                                class = `z2ui5_cl_dmo_app_247` path = `src/02/z2ui5_cl_dmo_app_247.clas.abap`
+      ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `ColumnResizing`                                class = `z2ui5_cl_dmo_app_247` path = `src/01/02/z2ui5_cl_dmo_app_247.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = lv_text1 ) ).
@@ -5474,7 +5474,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` the drop wires deliver the row indices and drop position as expected, whether the internal-vs-external drag expression resolves, and whether the context menu's beforeOpenContextMenu round-trip`.
     lv_text1 = lv_text1 && ` arrives before the menu item press.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `DnD`                                           class = `z2ui5_cl_dmo_app_353` path = `src/02/z2ui5_cl_dmo_app_353.clas.abap`
+      ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `DnD`                                           class = `z2ui5_cl_dmo_app_353` path = `src/02/02/z2ui5_cl_dmo_app_353.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -5498,7 +5498,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` any UI5 library, and only opens a popover pointing at the sample's source. Every sap.ui.table sample of this batch drops it the same way. // LIVE-TEST: Unverified in a running system: whether the` &&
                ` column filter event's prevented default plus the server-side selection show the expected rows, and whether the enableCellFilter binding lets a cell filter fire that same event.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `Filtering`                                     class = `z2ui5_cl_dmo_app_354` path = `src/02/z2ui5_cl_dmo_app_354.clas.abap`
+      ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `Filtering`                                     class = `z2ui5_cl_dmo_app_354` path = `src/01/02/z2ui5_cl_dmo_app_354.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -5518,13 +5518,13 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` createInfoButton( ) to it. That helper lives in the demo kit's own sample folder, not in any UI5 library, and only opens a popover pointing at the sample's source. Every sap.ui.table sample of this`.
     lv_text1 = lv_text1 && ` batch drops it the same way.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `Menus`                                         class = `z2ui5_cl_dmo_app_355` path = `src/02/z2ui5_cl_dmo_app_355.clas.abap`
+      ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `Menus`                                         class = `z2ui5_cl_dmo_app_355` path = `src/01/02/z2ui5_cl_dmo_app_355.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `MultiHeader`                                   class = `z2ui5_cl_dmo_app_137` path = `src/02/z2ui5_cl_dmo_app_137.clas.abap`
+      ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `MultiHeader`                                   class = `z2ui5_cl_dmo_app_137` path = `src/01/02/z2ui5_cl_dmo_app_137.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `NOTE: sap.ui.table grid Table with multi-level column headers (multiLabels + headerSpan '3,2'/'2') and an extension OverflowToolbar. The 5 contact rows are inlined from the controller's JSON model;` &&
@@ -5548,7 +5548,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` sample is about exactly this plugin. Declared per the fidelity-first property-171 policy, so the app needs a UI5 release >= 1.100. // LIVE-TEST: Unverified in a running system: whether the plugin` &&
                ` honours the bound limit / selectionMode / showHeaderSelector without a round-trip, and whether the selectionChange expression argument reports the selected count.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `MultiSelectionPlugin`                          class = `z2ui5_cl_dmo_app_356` path = `src/02/z2ui5_cl_dmo_app_356.clas.abap`
+      ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `MultiSelectionPlugin`                          class = `z2ui5_cl_dmo_app_356` path = `src/02/02/z2ui5_cl_dmo_app_356.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -5573,7 +5573,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` in the demo kit's own sample folder, not in any UI5 library, and only opens a popover pointing at the sample's source. Every sap.ui.table sample of this batch drops it the same way. // LIVE-TEST:` &&
                ` Unverified in a running system: whether the 115-row model renders with the sample's threshold/scrollThreshold settings, and whether the refresh and operation-mode round-trips re-read the rows.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `OData`                                         class = `z2ui5_cl_dmo_app_357` path = `src/02/z2ui5_cl_dmo_app_357.clas.abap`
+      ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `OData`                                         class = `z2ui5_cl_dmo_app_357` path = `src/02/02/z2ui5_cl_dmo_app_357.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -5595,7 +5595,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
     lv_text1 = lv_text1 && ` port is verifiable offline. The numeric columns stay TYPE string so the mock's exact decimals survive. // NOTE: Fully static port apart from the model: once the column factory is resolved in ABAP the` &&
                ` sample has no event at all, so the class is the app-051 shape (a bare check_on_init branch with model_init and view_display, no on_event).`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `OData2`                                        class = `z2ui5_cl_dmo_app_358` path = `src/02/z2ui5_cl_dmo_app_358.clas.abap`
+      ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `OData2`                                        class = `z2ui5_cl_dmo_app_358` path = `src/01/02/z2ui5_cl_dmo_app_358.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = lv_text1 ) ).
@@ -5615,7 +5615,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
     lv_text1 = lv_text1 && ` needs - the controller derives it the same way (Status === 'Available'). // LIVE-TEST: Unverified in a running system: whether the bound rowActionCount plus the per-item visible flags reproduce each` &&
                ` mode's row actions, and whether the two-argument client-composed toast fills both placeholders.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `RowAction`                                     class = `z2ui5_cl_dmo_app_359` path = `src/02/z2ui5_cl_dmo_app_359.clas.abap`
+      ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `RowAction`                                     class = `z2ui5_cl_dmo_app_359` path = `src/02/02/z2ui5_cl_dmo_app_359.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -5641,7 +5641,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` Select sets Table.selectionMode. They all sit in the OverflowToolbar, which IS drivable once its 'Additional Options' popover is open (AGENTS 10). All @since-checked members are <= 1.71 so no` &&
                ` POST_171 is needed (RowSettings 1.48, RowSettings.highlightText 1.62, Table.alternateRowColors 1.52, u:Currency 1.21.1).`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `RowHighlights`                                 class = `z2ui5_cl_dmo_app_174` path = `src/02/z2ui5_cl_dmo_app_174.clas.abap`
+      ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `RowHighlights`                                 class = `z2ui5_cl_dmo_app_174` path = `src/01/02/z2ui5_cl_dmo_app_174.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = lv_text1 ) ).
@@ -5656,7 +5656,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` .Date with timestamp source). // POST-1.71: sap.ui.table.Table.rowMode (aggregation, @since 1.119) is used 1:1 (the RowModes sample binds rowMode to the folded 'ui>' state). Newer than UI5 1.71;` &&
                ` declared per the property-171 policy. Previously undeclared because the property gate is blind to sap.ui.table (properties.json holds sap.m only); found by the non-sap.m @since audit 2026-07-24.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `RowModes`                                      class = `z2ui5_cl_dmo_app_164` path = `src/02/z2ui5_cl_dmo_app_164.clas.abap`
+      ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `RowModes`                                      class = `z2ui5_cl_dmo_app_164` path = `src/02/02/z2ui5_cl_dmo_app_164.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         is_post171 = abap_true
@@ -5683,7 +5683,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` only an OData model can resolve, and are replaced by the literal sap:label texts from metadata.xml. The numeric columns stay TYPE string so the mock's exact decimals survive. // LIVE-TEST: Unverified` &&
                ` in a running system: whether the paste event delivers the pasted data array to get_event_arg, and whether the bound selectionMode reaches the plugin without a round-trip.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `SelectCopyPaste`                               class = `z2ui5_cl_dmo_app_360` path = `src/02/z2ui5_cl_dmo_app_360.clas.abap`
+      ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `SelectCopyPaste`                               class = `z2ui5_cl_dmo_app_360` path = `src/02/02/z2ui5_cl_dmo_app_360.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -5712,7 +5712,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` ProductPicUrl values point at the OpenUI5 host per the asset-URL rule; the mock carries them host-relative. // LIVE-TEST: Unverified in a running system: whether rowSelectionChange delivers the index` &&
                ` array as JSON to get_event_arg, whether the two bound Selects drive selectionMode/selectionBehavior without a round-trip, and the control_by_id clearSelection wire.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `Selection`                                     class = `z2ui5_cl_dmo_app_361` path = `src/02/z2ui5_cl_dmo_app_361.clas.abap`
+      ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `Selection`                                     class = `z2ui5_cl_dmo_app_361` path = `src/01/02/z2ui5_cl_dmo_app_361.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -5736,7 +5736,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` popover pointing at the sample's source - there is nothing to port it to. Every sap.ui.table sample of this batch drops it the same way. // LIVE-TEST: Unverified in a running system: whether the sort` &&
                ` event's prevented default plus the server-side SORT produce the expected order for each column, and whether the bound Column.sortOrder renders the header indicator.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `Sorting`                                       class = `z2ui5_cl_dmo_app_362` path = `src/02/z2ui5_cl_dmo_app_362.clas.abap`
+      ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `Sorting`                                       class = `z2ui5_cl_dmo_app_362` path = `src/01/02/z2ui5_cl_dmo_app_362.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -5758,7 +5758,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` rule; the mock carries them host-relative. // LIVE-TEST: Unverified in a running system: whether the bound fixedColumnCount and the bound rowMode counts freeze the expected columns/rows, and whether` &&
                ` the Apply clamp round-trip updates the Inputs.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `TableFreeze`                                   class = `z2ui5_cl_dmo_app_363` path = `src/02/z2ui5_cl_dmo_app_363.clas.abap`
+      ( module = `sap.ui.table`       control = `sap.ui.table.Table`                    name = `TableFreeze`                                   class = `z2ui5_cl_dmo_app_363` path = `src/02/02/z2ui5_cl_dmo_app_363.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -5776,7 +5776,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
     lv_text1 = lv_text1 && ` itself (localService/mockserver.js over localService/metadata.xml) has no counterpart in an abap2UI5 app, whose backend IS the service. // LIVE-TEST: Unverified in a running system: whether the` &&
                ` nested model plus arrayNames renders the same expandable tree the OData tree binding produces.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.table`       control = `sap.ui.table.TreeTable`                name = `TreeTable.BasicODataTreeBinding`               class = `z2ui5_cl_dmo_app_364` path = `src/02/z2ui5_cl_dmo_app_364.clas.abap`
+      ( module = `sap.ui.table`       control = `sap.ui.table.TreeTable`                name = `TreeTable.BasicODataTreeBinding`               class = `z2ui5_cl_dmo_app_364` path = `src/01/02/z2ui5_cl_dmo_app_364.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -5795,7 +5795,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` binding keeps the original's arrayNames parameter with the ABAP (upper-cased) array name. // LIVE-TEST: Unverified in a running system: the two control_by_id wires (collapseAll, and expandToLevel` &&
                ` with its numeric argument - a listed CONTROL_METHODS entry, so the argument is declared and reaches the method).`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.table`       control = `sap.ui.table.TreeTable`                name = `TreeTable.HierarchyMaintenanceJSONTreeBinding` class = `z2ui5_cl_dmo_app_365` path = `src/02/z2ui5_cl_dmo_app_365.clas.abap`
+      ( module = `sap.ui.table`       control = `sap.ui.table.TreeTable`                name = `TreeTable.HierarchyMaintenanceJSONTreeBinding` class = `z2ui5_cl_dmo_app_365` path = `src/01/02/z2ui5_cl_dmo_app_365.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -5817,7 +5817,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` hides it again; (c) selection expand/collapse and (d) the two-way Select remain unexercised. Environment note: the transpiled runtime serializes packed AMOUNT as a numeric string, which is why the` &&
                ` Currency guard compares > 0 instead of truthiness.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.table`       control = `sap.ui.table.TreeTable`                name = `TreeTable.JSONTreeBinding`                     class = `z2ui5_cl_dmo_app_248` path = `src/02/z2ui5_cl_dmo_app_248.clas.abap`
+      ( module = `sap.ui.table`       control = `sap.ui.table.TreeTable`                name = `TreeTable.JSONTreeBinding`                     class = `z2ui5_cl_dmo_app_248` path = `src/01/02/z2ui5_cl_dmo_app_248.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = lv_text1 ) ).
@@ -5832,7 +5832,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` The mock server itself (localService/mockserver.js over localService/metadata.xml) has no counterpart in an abap2UI5 app, whose backend IS the service. // LIVE-TEST: Unverified in a running system:` &&
                ` whether the nested model plus arrayNames renders the same expandable tree the OData tree binding produces.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.table`       control = `sap.ui.table.TreeTable`                name = `TreeTable.ODataAnnotationsTreeBinding`         class = `z2ui5_cl_dmo_app_366` path = `src/02/z2ui5_cl_dmo_app_366.clas.abap`
+      ( module = `sap.ui.table`       control = `sap.ui.table.TreeTable`                name = `TreeTable.ODataAnnotationsTreeBinding`         class = `z2ui5_cl_dmo_app_366` path = `src/01/02/z2ui5_cl_dmo_app_366.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -5846,7 +5846,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` Residual: 'Focus Today' - the original only calls focusDate(today) and changes no text; the port keeps writing today's date and does not move the calendar focus, since focusDate takes a Date OBJECT` &&
                ` no wire can construct.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarCalendarType`                          class = `z2ui5_cl_dmo_app_151` path = `src/02/z2ui5_cl_dmo_app_151.clas.abap`
+      ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarCalendarType`                          class = `z2ui5_cl_dmo_app_151` path = `src/01/02/z2ui5_cl_dmo_app_151.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22.0`
@@ -5862,7 +5862,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` Calendar.showCurrentDateButton (@since 1.95) is kept 1:1 from the original view. Newer than UI5 1.71. // LIVE-TEST: not yet run in a system: the CAL_SELECT expression-arg round-trip and the same-day` &&
                ` second click clearing the label.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarDateDeselection`                       class = `z2ui5_cl_dmo_app_305` path = `src/02/z2ui5_cl_dmo_app_305.clas.abap`
+      ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarDateDeselection`                       class = `z2ui5_cl_dmo_app_305` path = `src/02/02/z2ui5_cl_dmo_app_305.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -5891,7 +5891,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` and a showWeekNumbers attribute (absent from the original view) is added. // POST-1.71: Formatter.DateCreateObject is referenced via core:require, which needs UI5 >= 1.74. sap.ui.unified.Calendar` &&
                ` itself and its minDate/maxDate/disabledDates/showWeekNumbers members are all <= 1.71 (in scope).`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarMinMax`                                class = `z2ui5_cl_dmo_app_220` path = `src/02/z2ui5_cl_dmo_app_220.clas.abap`
+      ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarMinMax`                                class = `z2ui5_cl_dmo_app_220` path = `src/02/02/z2ui5_cl_dmo_app_220.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22.0`
@@ -5910,7 +5910,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` what no model write could: sap.ui.unified.Calendar writes selectedDates itself. The assertion has real discriminating power - before abap2UI5 #2535 the list emptied and the days stayed highlighted,` &&
                ` which is exactly the state it now rejects.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarMultipleDaySelection`                  class = `z2ui5_cl_dmo_app_307` path = `src/02/z2ui5_cl_dmo_app_307.clas.abap`
+      ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarMultipleDaySelection`                  class = `z2ui5_cl_dmo_app_307` path = `src/01/02/z2ui5_cl_dmo_app_307.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22.0`
@@ -5922,7 +5922,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` reformats. The port only writes the text: the server date IS today, so the label is 1:1, but the calendar's own highlight of that day is not moved - addSelectedDate takes a DateRange CONTROL, which` &&
                ` no wire can construct (same residual as app 139). // LIVE-TEST: not yet run in a system: the CAL_SELECT expression-arg round-trip across the two displayed months and the SELECT_TODAY text update.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarMultipleMonth`                         class = `z2ui5_cl_dmo_app_304` path = `src/02/z2ui5_cl_dmo_app_304.clas.abap`
+      ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarMultipleMonth`                         class = `z2ui5_cl_dmo_app_304` path = `src/01/02/z2ui5_cl_dmo_app_304.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22.0`
@@ -5935,7 +5935,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` original's yyyy-MM-dd (DateFormat pattern) instead of the server date. Residual: 'Select Today' still only writes the text - the server date IS today, so the text is 1:1, but the calendar's own` &&
                ` highlight is not moved, because addSelectedDate takes a DateRange CONTROL that no wire can construct.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarSingleDaySelection`                    class = `z2ui5_cl_dmo_app_139` path = `src/02/z2ui5_cl_dmo_app_139.clas.abap`
+      ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarSingleDaySelection`                    class = `z2ui5_cl_dmo_app_139` path = `src/01/02/z2ui5_cl_dmo_app_139.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22.0`
@@ -5949,7 +5949,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` bakes s_ctrl-check_prevent_default into the handler at RENDER time (app 241), which cannot express a condition evaluated per event (weekNumber % 5 === 0), so the week highlights and only the message`.
     lv_text1 = lv_text1 && ` says it is not allowed. // LIVE-TEST: not yet run in a system: the CAL_SELECT interval round-trip and the WEEK_SELECT branch (toast on every fifth week, labels otherwise).`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarSingleIntervalSelection`               class = `z2ui5_cl_dmo_app_306` path = `src/02/z2ui5_cl_dmo_app_306.clas.abap`
+      ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarSingleIntervalSelection`               class = `z2ui5_cl_dmo_app_306` path = `src/01/02/z2ui5_cl_dmo_app_306.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -5966,7 +5966,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` DateTypeRange.color (@since 1.76) and DateTypeRange.secondaryType (@since 1.81) are kept 1:1 from the original controller, and the Formatter.DateCreateObject core:require path needs UI5 >= 1.74. All` &&
                ` newer than UI5 1.71. // LIVE-TEST: not yet run in a system: the ToggleButton round-trip filling and clearing both calendars' special dates and both legends.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarSpecialDaysLegend`                     class = `z2ui5_cl_dmo_app_308` path = `src/02/z2ui5_cl_dmo_app_308.clas.abap`
+      ( module = `sap.ui.unified`     control = `sap.ui.unified.Calendar`               name = `CalendarSpecialDaysLegend`                     class = `z2ui5_cl_dmo_app_308` path = `src/02/02/z2ui5_cl_dmo_app_308.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22.0`
@@ -5984,7 +5984,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
     lv_text1 = lv_text1 && ` unverified in a running system. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): 'Select Today' round-trips and the bound #selectedDate Text shows the yyyy-MM-dd` &&
                ` value; CAL_SELECT is the same handler.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.unified`     control = `sap.ui.unified.CalendarDateInterval`   name = `CalendarDateIntervalBasic`                     class = `z2ui5_cl_dmo_app_177` path = `src/02/z2ui5_cl_dmo_app_177.clas.abap`
+      ( module = `sap.ui.unified`     control = `sap.ui.unified.CalendarDateInterval`   name = `CalendarDateIntervalBasic`                     class = `z2ui5_cl_dmo_app_177` path = `src/01/02/z2ui5_cl_dmo_app_177.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.30.0`
@@ -5998,7 +5998,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` way. The 10 legend items (Type01..Type10 / 'Placeholder 1..10') and 20 special dates (per type: day i and day i+12 of the current month) are computed server-side in model_init from sy-datum, so the`.
     lv_text1 = lv_text1 && ` special dates track the current month exactly as the original UI5Date.getInstance() logic did.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.unified`     control = `sap.ui.unified.CalendarLegend`         name = `CalendarLegendNavigation`                      class = `z2ui5_cl_dmo_app_240` path = `src/02/z2ui5_cl_dmo_app_240.clas.abap`
+      ( module = `sap.ui.unified`     control = `sap.ui.unified.CalendarLegend`         name = `CalendarLegendNavigation`                      class = `z2ui5_cl_dmo_app_240` path = `src/02/02/z2ui5_cl_dmo_app_240.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22.0`
@@ -6015,7 +6015,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` ${device>/system/phone}} instead of being resolved to one value at render time (apps 277/279 precedent). Both buttons close the popover client-side via _event_client( popover_close ), matching the` &&
                ` original's oRP.close(). // LIVE-TEST: not yet run in a system: the anchored popover round-trip and the phone-only Submit/Cancel buttons.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.unified`     control = `sap.ui.unified.ColorPicker`            name = `ColorPicker`                                   class = `z2ui5_cl_dmo_app_309` path = `src/02/z2ui5_cl_dmo_app_309.clas.abap`
+      ( module = `sap.ui.unified`     control = `sap.ui.unified.ColorPicker`            name = `ColorPicker`                                   class = `z2ui5_cl_dmo_app_309` path = `src/01/02/z2ui5_cl_dmo_app_309.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.48.0`
@@ -6029,7 +6029,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` popover client-side via _event_client( popover_close ), matching the original's oRP.close(). // LIVE-TEST: not yet run in a system: the anchored popover round-trip and the phone-only Submit/Cancel` &&
                ` buttons.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.unified`     control = `sap.ui.unified.ColorPicker`            name = `ColorPickerLarge`                              class = `z2ui5_cl_dmo_app_310` path = `src/02/z2ui5_cl_dmo_app_310.clas.abap`
+      ( module = `sap.ui.unified`     control = `sap.ui.unified.ColorPicker`            name = `ColorPickerLarge`                              class = `z2ui5_cl_dmo_app_310` path = `src/01/02/z2ui5_cl_dmo_app_310.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.48.0`
@@ -6044,7 +6044,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
     lv_text1 = lv_text1 && ` unverified in a running system. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the button press opens the ResponsivePopover anchored with the embedded` &&
                ` ColorPicker attached (the picker's inner sliders render zero-size headless, so only the container is asserted).`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.unified`     control = `sap.ui.unified.ColorPicker`            name = `ColorPickerSimplified`                         class = `z2ui5_cl_dmo_app_112` path = `src/02/z2ui5_cl_dmo_app_112.clas.abap`
+      ( module = `sap.ui.unified`     control = `sap.ui.unified.ColorPicker`            name = `ColorPickerSimplified`                         class = `z2ui5_cl_dmo_app_112` path = `src/01/02/z2ui5_cl_dmo_app_112.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.48.0`
@@ -6064,7 +6064,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` anchored at the input (control_by_id openBy + domRef), with the ColorPicker inside it. Picking a colour needs the picker's own drag/slider controls, which carry zero-size boxes headless, so (b)/(c)`.
     lv_text1 = lv_text1 && ` stay a human check.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.unified`     control = `sap.ui.unified.ColorPickerPopover`     name = `ColorPickerPopover`                            class = `z2ui5_cl_dmo_app_268` path = `src/02/z2ui5_cl_dmo_app_268.clas.abap`
+      ( module = `sap.ui.unified`     control = `sap.ui.unified.ColorPickerPopover`     name = `ColorPickerPopover`                            class = `z2ui5_cl_dmo_app_268` path = `src/01/02/z2ui5_cl_dmo_app_268.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.48.0`
@@ -6079,14 +6079,14 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
     lv_text1 = lv_text1 && ` render, the u:Currency controls come up and their currencies (EUR, JPY) are on screen. Residual: the exact digit formatting per list (maxPrecision, the custom BGN4/WWWW digits), which is the` &&
                ` browser's locale formatting rather than the port's data.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.unified`     control = `sap.ui.unified.Currency`               name = `Currency`                                      class = `z2ui5_cl_dmo_app_196` path = `src/02/z2ui5_cl_dmo_app_196.clas.abap`
+      ( module = `sap.ui.unified`     control = `sap.ui.unified.Currency`               name = `Currency`                                      class = `z2ui5_cl_dmo_app_196` path = `src/01/02/z2ui5_cl_dmo_app_196.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.21.1`
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.ui.unified`     control = `sap.ui.unified.Currency`               name = `CurrencyInTable`                               class = `z2ui5_cl_dmo_app_171` path = `src/02/z2ui5_cl_dmo_app_171.clas.abap`
+      ( module = `sap.ui.unified`     control = `sap.ui.unified.Currency`               name = `CurrencyInTable`                               class = `z2ui5_cl_dmo_app_171` path = `src/01/02/z2ui5_cl_dmo_app_171.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.21.1`
@@ -6094,7 +6094,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         notes = `NOTE: live-verified 2026-07-27: u:Currency binds a nested object path (value={transactionAmount/size}, currency={transactionAmount/currency}). Ported as a nested ABAP structure TRANSACTION_AMOUNT` &&
                  ` (fields SIZE/CURRENCY), bound {TRANSACTION_AMOUNT/SIZE} / {TRANSACTION_AMOUNT/CURRENCY}. CAPABILITIES.md documents nested TABLES/trees but not a nested single (non-array) structure within a row, so` &&
                  ` the nested-object serialization + relative sub-path binding needs a live render check.` )
-      ( module = `sap.ui.unified`     control = `sap.ui.unified.FileUploader`           name = `FileUploaderBasic`                             class = `z2ui5_cl_dmo_app_126` path = `src/02/z2ui5_cl_dmo_app_126.clas.abap`
+      ( module = `sap.ui.unified`     control = `sap.ui.unified.FileUploader`           name = `FileUploaderBasic`                             class = `z2ui5_cl_dmo_app_126` path = `src/01/02/z2ui5_cl_dmo_app_126.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `NOTE: live-verified 2026-08-04 (nightly e2e interaction): The full upload cycle is backend/endpoint dependent, so it is reduced to client-side MessageToasts: 'Upload File' press shows an` &&
@@ -6114,7 +6114,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` but not yet live-verified in a running system. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): pressing 'Upload File' with no chosen file round-trips and toasts` &&
                ` 'Choose a file first'; the change/typeMissmatch toasts need a real file dialog and remain unexercised.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.unified`     control = `sap.ui.unified.FileUploader`           name = `FileUploaderComplex`                           class = `z2ui5_cl_dmo_app_246` path = `src/02/z2ui5_cl_dmo_app_246.clas.abap`
+      ( module = `sap.ui.unified`     control = `sap.ui.unified.FileUploader`           name = `FileUploaderComplex`                           class = `z2ui5_cl_dmo_app_246` path = `src/01/02/z2ui5_cl_dmo_app_246.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = lv_text1 ) ).
@@ -6131,7 +6131,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` toasts "'<value>' entered" via ${$parameters>/item}.getValue(). **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the button press opens the sap.ui.unified.Menu` &&
                ` anchored via the openBy->open() fallback ('My 1st Item' visible); the item-select toasts remain unexercised.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.unified`     control = `sap.ui.unified.Menu`                   name = `MenuItemEventing`                              class = `z2ui5_cl_dmo_app_227` path = `src/02/z2ui5_cl_dmo_app_227.clas.abap`
+      ( module = `sap.ui.unified`     control = `sap.ui.unified.Menu`                   name = `MenuItemEventing`                              class = `z2ui5_cl_dmo_app_227` path = `src/02/02/z2ui5_cl_dmo_app_227.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -6156,7 +6156,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` interaction, transpiled backend + real browser): the button press opens the sap.ui.unified.Menu through the 2026-07-27 openBy fallback (open(false, anchor, ...) for a control without its own openBy)` &&
                ` and selecting an item raises the client-composed "'My 1st Item' pressed" toast.`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.unified`     control = `sap.ui.unified.Menu`                   name = `MenuMenuEventing`                              class = `z2ui5_cl_dmo_app_228` path = `src/02/z2ui5_cl_dmo_app_228.clas.abap`
+      ( module = `sap.ui.unified`     control = `sap.ui.unified.Menu`                   name = `MenuMenuEventing`                              class = `z2ui5_cl_dmo_app_228` path = `src/02/02/z2ui5_cl_dmo_app_228.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -6175,7 +6175,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` the whole point of this sample and are kept 1:1; sap.m.Button.ariaHasPopup (@since 1.84) is kept 1:1 on the trigger button. All newer than UI5 1.71. // LIVE-TEST: not yet run in a system: the` &&
                ` anchored open of the unified Menu and the selectable item groups (single/multi select state).`.
     result = VALUE #( BASE result
-      ( module = `sap.ui.unified`     control = `sap.ui.unified.Menu`                   name = `MenuSelectable`                                class = `z2ui5_cl_dmo_app_311` path = `src/02/z2ui5_cl_dmo_app_311.clas.abap`
+      ( module = `sap.ui.unified`     control = `sap.ui.unified.Menu`                   name = `MenuSelectable`                                class = `z2ui5_cl_dmo_app_311` path = `src/02/02/z2ui5_cl_dmo_app_311.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.21.0`
@@ -6185,7 +6185,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` sap.m.Button.ariaHasPopup (@since 1.84) is kept 1:1 on the trigger button. All newer than UI5 1.71.` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.uxap`           control = `sap.uxap.HeaderFacetPattern`           name = `ObjectPageSectionShowTitle`                    class = `z2ui5_cl_dmo_app_200` path = `src/03/z2ui5_cl_dmo_app_200.clas.abap`
+      ( module = `sap.uxap`           control = `sap.uxap.HeaderFacetPattern`           name = `ObjectPageSectionShowTitle`                    class = `z2ui5_cl_dmo_app_200` path = `src/02/03/z2ui5_cl_dmo_app_200.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         ui5_only = abap_true
@@ -6205,7 +6205,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` BlockBase wrapper is inlined to its own view content: its forms:SimpleForm (core:Title + two Text) is rendered directly, since ObjectPageSubSection/block content is standard controls (CAPABILITIES`.
     lv_text1 = lv_text1 && ` BlockBase row, apps 161/178). ModelMappingBlock and ModelMapping are therefore both absent and a forms:SimpleForm/core:Title/Text are present in their place.`.
     result = VALUE #( BASE result
-      ( module = `sap.uxap`           control = `sap.uxap.ModelMapping`                 name = `BoundModelMapping`                             class = `z2ui5_cl_dmo_app_230` path = `src/03/z2ui5_cl_dmo_app_230.clas.abap`
+      ( module = `sap.uxap`           control = `sap.uxap.ModelMapping`                 name = `BoundModelMapping`                             class = `z2ui5_cl_dmo_app_230` path = `src/01/03/z2ui5_cl_dmo_app_230.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.26`
@@ -6221,7 +6221,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the anchor bar renders with the sapUxAPObjectPageNavigationTranslucent class, the dynamic header title shows 'Denise Smith' and` &&
                ` every inlined block form renders. Residual (nothing e2e can assert): the title's backgroundDesign='Solid' is a pure paint property with no own DOM marker.`.
     result = VALUE #( BASE result
-      ( module = `sap.uxap`           control = `sap.uxap.ObjectPageDynamicHeaderTitle` name = `ObjectPageHeaderBackgroundDesign`              class = `z2ui5_cl_dmo_app_258` path = `src/03/z2ui5_cl_dmo_app_258.clas.abap`
+      ( module = `sap.uxap`           control = `sap.uxap.ObjectPageDynamicHeaderTitle` name = `ObjectPageHeaderBackgroundDesign`              class = `z2ui5_cl_dmo_app_258` path = `src/01/03/z2ui5_cl_dmo_app_258.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = lv_text1 ) ).
@@ -6241,7 +6241,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
     lv_text1 = lv_text1 && ` real browser): the header ProgressIndicator renders and displays '42%' (so UI5 parses the '42%' string on the float property exactly like the original) and the RatingIndicator renders; the goals` &&
                ` section shows its inlined block content.`.
     result = VALUE #( BASE result
-      ( module = `sap.uxap`           control = `sap.uxap.ObjectPageDynamicHeaderTitle` name = `ObjectPageProgressRatingIndicators`            class = `z2ui5_cl_dmo_app_259` path = `src/03/z2ui5_cl_dmo_app_259.clas.abap`
+      ( module = `sap.uxap`           control = `sap.uxap.ObjectPageDynamicHeaderTitle` name = `ObjectPageProgressRatingIndicators`            class = `z2ui5_cl_dmo_app_259` path = `src/02/03/z2ui5_cl_dmo_app_259.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         is_post171 = abap_true
@@ -6259,7 +6259,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` PersonalBlockPart1, PersonalBlockPart2) are absent from the port and seven form:SimpleForm controls with their core:Title, m:Label and m:Text content are present in their place (the m:Label count`.
     lv_text1 = lv_text1 && ` rises from 3 to 15). The blocks carry no controller behaviour to port; the ObjectPageModel (employee.json) the controller loads is never bound by the view, so no default model is seeded.`.
     result = VALUE #( BASE result
-      ( module = `sap.uxap`           control = `sap.uxap.ObjectPageHeader`             name = `KPIObjectPageHeader`                           class = `z2ui5_cl_dmo_app_217` path = `src/03/z2ui5_cl_dmo_app_217.clas.abap`
+      ( module = `sap.uxap`           control = `sap.uxap.ObjectPageHeader`             name = `KPIObjectPageHeader`                           class = `z2ui5_cl_dmo_app_217` path = `src/01/03/z2ui5_cl_dmo_app_217.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.26`
@@ -6278,13 +6278,13 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` Static sample: no controller behaviour, no model, no events - only view_display. All members used (ObjectPageHeaderActionButton.text/type/icon/tooltip/hideText/hideIcon @since 1.26,` &&
                ` ObjectPageDynamicHeaderTitle @since 1.52, ObjectPageLayout.showTitleInHeaderContent/upperCaseAnchorBar, SimpleForm.maxContainerCols/layout/editable) are <= 1.71 - no POST_171 needed.`.
     result = VALUE #( BASE result
-      ( module = `sap.uxap`           control = `sap.uxap.ObjectPageHeaderActionButton` name = `ObjectPageHeaderActionButtons`                 class = `z2ui5_cl_dmo_app_239` path = `src/03/z2ui5_cl_dmo_app_239.clas.abap`
+      ( module = `sap.uxap`           control = `sap.uxap.ObjectPageHeaderActionButton` name = `ObjectPageHeaderActionButtons`                 class = `z2ui5_cl_dmo_app_239` path = `src/01/03/z2ui5_cl_dmo_app_239.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.uxap`           control = `sap.uxap.ObjectPageHeaderContent`      name = `HeaderContent`                                 class = `z2ui5_cl_dmo_app_216` path = `src/03/z2ui5_cl_dmo_app_216.clas.abap`
+      ( module = `sap.uxap`           control = `sap.uxap.ObjectPageHeaderContent`      name = `HeaderContent`                                 class = `z2ui5_cl_dmo_app_216` path = `src/01/03/z2ui5_cl_dmo_app_216.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.30`
@@ -6300,7 +6300,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` present in their place. GoalsBlock has no controller behaviour to port. // POST-1.71: the sap.m.Avatar control (since UI5 1.73) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5`.
     lv_text1 = lv_text1 && ` release >= 1.73 to render it. @since verified in sap/m/Avatar.js:99 (control-level, which the member-level property gate never saw).`.
     result = VALUE #( BASE result
-      ( module = `sap.uxap`           control = `sap.uxap.ObjectPageHeaderContent`      name = `ObjectPageHeaderContentPriorities`             class = `z2ui5_cl_dmo_app_188` path = `src/03/z2ui5_cl_dmo_app_188.clas.abap`
+      ( module = `sap.uxap`           control = `sap.uxap.ObjectPageHeaderContent`      name = `ObjectPageHeaderContentPriorities`             class = `z2ui5_cl_dmo_app_188` path = `src/02/03/z2ui5_cl_dmo_app_188.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.30`
@@ -6316,7 +6316,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` control. Consequently all four blockcolor:BlockBlue controls (and their id attributes bbt1/bbt2/bbt3/bbt4) are absent from the port and four core:HTML controls are present in their place. The empty` &&
                ` BlockBlueCtrl controller (a no-op onParentBlockModeChange stub) carries no behaviour to port.`.
     result = VALUE #( BASE result
-      ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `AnchorBarNoPopover`                            class = `z2ui5_cl_dmo_app_187` path = `src/03/z2ui5_cl_dmo_app_187.clas.abap`
+      ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `AnchorBarNoPopover`                            class = `z2ui5_cl_dmo_app_187` path = `src/01/03/z2ui5_cl_dmo_app_187.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.26`
@@ -6332,7 +6332,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` through 1:1 but the scroll behaviour was not verified in a running system. **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): after scrolling the` &&
                ` ObjectPage wrapper to 1500px the header content ('Cost Center') is still visible - that IS preserveHeaderStateOnScroll; without it the header snaps away.`.
     result = VALUE #( BASE result
-      ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `ObjectPageHeaderExpanded`                      class = `z2ui5_cl_dmo_app_260` path = `src/03/z2ui5_cl_dmo_app_260.clas.abap`
+      ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `ObjectPageHeaderExpanded`                      class = `z2ui5_cl_dmo_app_260` path = `src/01/03/z2ui5_cl_dmo_app_260.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.26`
@@ -6359,7 +6359,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
     lv_text1 = lv_text1 && ` it, and the footer starts hidden as it does in the original. The round-trip toggle itself is not verified in a running system yet. // NOTE: The four asset paths (the imageID_275314.png avatar twice,` &&
                ` linkedin.png and Twitter.png) are kept exactly as the original writes them - './test-resources/sap/uxap/images/...' - matching app 261, which carries the same relative form for the same two images.`.
     result = VALUE #( BASE result
-      ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `ObjectPageOnJSON`                              class = `z2ui5_cl_dmo_app_401` path = `src/03/z2ui5_cl_dmo_app_401.clas.abap`
+      ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `ObjectPageOnJSON`                              class = `z2ui5_cl_dmo_app_401` path = `src/02/03/z2ui5_cl_dmo_app_401.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -6396,7 +6396,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` so the selected section has no stable DOM marker. // NOTE: The Avatar / Image src values point at the sdk.openui5.org host (imageID_275314.png, linkedin.png, Twitter.png, person.png) per the offline` &&
                ` asset-URL rule; the original and HRData.json use the relative ./test-resources path.`.
     result = VALUE #( BASE result
-      ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `ObjectPageResetSelectedSection`                class = `z2ui5_cl_dmo_app_263` path = `src/03/z2ui5_cl_dmo_app_263.clas.abap`
+      ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `ObjectPageResetSelectedSection`                class = `z2ui5_cl_dmo_app_263` path = `src/02/03/z2ui5_cl_dmo_app_263.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
                  ` look.`
@@ -6427,7 +6427,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` releases the event never fires and both Avatars keep the seeded L. // sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): the` &&
                ` snappedHeading avatar (id snappedAvatar) and the headerContent avatar (id headerAvatar). Needs a UI5 runtime >= 1.73.`.
     result = VALUE #( BASE result
-      ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `ObjectPageResponsiveAvatar`                    class = `z2ui5_cl_dmo_app_262` path = `src/03/z2ui5_cl_dmo_app_262.clas.abap`
+      ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `ObjectPageResponsiveAvatar`                    class = `z2ui5_cl_dmo_app_262` path = `src/02/03/z2ui5_cl_dmo_app_262.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.26`
@@ -6443,7 +6443,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` their place (the original side counts the two block VIEWS once, not their ten instances), and their Label/Text children move to the m: prefix - 6 vs 32 each, the same shape every BlockBase port in`.
     lv_text1 = lv_text1 && ` this corpus declares. The view is written out per block rather than through a helper method, so the structural diff can reconstruct it statically.`.
     result = VALUE #( BASE result
-      ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `ObjectPageSubSection`                          class = `z2ui5_cl_dmo_app_116` path = `src/03/z2ui5_cl_dmo_app_116.clas.abap`
+      ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `ObjectPageSubSection`                          class = `z2ui5_cl_dmo_app_116` path = `src/01/03/z2ui5_cl_dmo_app_116.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.26`
@@ -6466,7 +6466,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` ObjectPage renders and the folded emp1>/emp2> ModelMapping records show ('Michael Adams'), and the Job Relationship subsection title is there. The TitleOnLeft layout itself stays a human check:` &&
                ` measured in the source, subSectionLayout only changes the subsection's grid column math (ObjectPageSubSection._calculateLayoutConfiguration) - it emits no own CSS class an assertion could hook onto.`.
     result = VALUE #( BASE result
-      ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `ObjectPageTitleOnLeft`                         class = `z2ui5_cl_dmo_app_261` path = `src/03/z2ui5_cl_dmo_app_261.clas.abap`
+      ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `ObjectPageTitleOnLeft`                         class = `z2ui5_cl_dmo_app_261` path = `src/02/03/z2ui5_cl_dmo_app_261.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.26`
@@ -6485,7 +6485,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` NOTE: The sample has no controller at all - no model, no event handlers - so the port is init-only with neither model_init nor on_event, which is behaviour-identical. The two avatar/image paths are` &&
                ` kept exactly as the original writes them ('./test-resources/sap/uxap/images/imageID_275314.png'), matching app 261 on the same asset.`.
     result = VALUE #( BASE result
-      ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `ObjectPageWithHeaderContainer`                 class = `z2ui5_cl_dmo_app_402` path = `src/03/z2ui5_cl_dmo_app_402.clas.abap`
+      ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `ObjectPageWithHeaderContainer`                 class = `z2ui5_cl_dmo_app_402` path = `src/02/03/z2ui5_cl_dmo_app_402.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.26`
@@ -6495,7 +6495,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` on the sample's own imageID_275314.png. Needs a UI5 runtime >= 1.73.` ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `SingleView`                                    class = `z2ui5_cl_dmo_app_161` path = `src/03/z2ui5_cl_dmo_app_161.clas.abap`
+      ( module = `sap.uxap`           control = `sap.uxap.ObjectPageLayout`             name = `SingleView`                                    class = `z2ui5_cl_dmo_app_161` path = `src/01/03/z2ui5_cl_dmo_app_161.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.26`
@@ -6512,14 +6512,14 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
     lv_text1 = lv_text1 && ` xmlns:blockcolor='sap.uxap.sample.SharedBlocks' declaration is dropped and xmlns:core='sap.ui.core' added. The block sources are not archived into ui5/ (matching the scaffolder), read from the` &&
                ` checkout's SharedBlocks/BlockBlueTn.view.xml.`.
     result = VALUE #( BASE result
-      ( module = `sap.uxap`           control = `sap.uxap.ObjectPageSection`            name = `ObjectPageSection`                             class = `z2ui5_cl_dmo_app_184` path = `src/03/z2ui5_cl_dmo_app_184.clas.abap`
+      ( module = `sap.uxap`           control = `sap.uxap.ObjectPageSection`            name = `ObjectPageSection`                             class = `z2ui5_cl_dmo_app_184` path = `src/01/03/z2ui5_cl_dmo_app_184.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.26`
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
-      ( module = `sap.uxap`           control = `sap.uxap.ObjectPageSubSection`         name = `ObjectPageSubSectionBackground`                class = `z2ui5_cl_dmo_app_293` path = `src/03/z2ui5_cl_dmo_app_293.clas.abap`
+      ( module = `sap.uxap`           control = `sap.uxap.ObjectPageSubSection`         name = `ObjectPageSubSectionBackground`                class = `z2ui5_cl_dmo_app_293` path = `src/01/03/z2ui5_cl_dmo_app_293.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.26` ) ).
@@ -6531,7 +6531,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` names, so structural-diff matches 0 diffs. Full 123-row ProductCollection inlined verbatim; only the columns the view binds are kept as fields. The Price Currency composite type binding is kept 1:1` &&
                ` (price TYPE p) - standard client-side type, no version issue.`.
     result = VALUE #( BASE result
-      ( module = `sap.uxap`           control = `sap.uxap.ObjectPageSubSection`         name = `ObjectPageSubSectionHiddenTitle`               class = `z2ui5_cl_dmo_app_245` path = `src/03/z2ui5_cl_dmo_app_245.clas.abap`
+      ( module = `sap.uxap`           control = `sap.uxap.ObjectPageSubSection`         name = `ObjectPageSubSectionHiddenTitle`               class = `z2ui5_cl_dmo_app_245` path = `src/01/03/z2ui5_cl_dmo_app_245.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.26`
@@ -6544,7 +6544,7 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                ` three blockcolor:BlockBlue controls (and their id attributes) are absent from the port and three core:HTML controls are present in their place. The empty BlockBlueCtrl controller (a no-op` &&
                ` onParentBlockModeChange stub) carries no behaviour to port.`.
     result = VALUE #( BASE result
-      ( module = `sap.uxap`           control = `sap.uxap.ObjectPageSubSection`         name = `ObjectPageSubSectionWithActions`               class = `z2ui5_cl_dmo_app_178` path = `src/03/z2ui5_cl_dmo_app_178.clas.abap`
+      ( module = `sap.uxap`           control = `sap.uxap.ObjectPageSubSection`         name = `ObjectPageSubSectionWithActions`               class = `z2ui5_cl_dmo_app_178` path = `src/01/03/z2ui5_cl_dmo_app_178.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.26`

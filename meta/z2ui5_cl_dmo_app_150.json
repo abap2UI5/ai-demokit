@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_150",
   "sample": "sap.ui.codeeditor.sample.CodeEditorIconTabHeader",
   "entity": "sap.ui.codeeditor.CodeEditor",
-  "file": "src/02/z2ui5_cl_dmo_app_150.clas.abap",
+  "file": "src/01/02/z2ui5_cl_dmo_app_150.clas.abap",
   "batch": "b08",
   "audit": {
     "frontend_action": false,

@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_182",
   "sample": "sap.ui.core.sample.TypeTimeAsTime",
   "entity": "sap.ui.model.type.Time",
-  "file": "src/02/z2ui5_cl_dmo_app_182.clas.abap",
+  "file": "src/01/02/z2ui5_cl_dmo_app_182.clas.abap",
   "batch": "b10",
   "audit": {
     "frontend_action": false,

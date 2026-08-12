@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_221",
   "sample": "sap.tnt.sample.ToolHeaderIconTabHeader",
   "entity": "sap.tnt.ToolHeader",
-  "file": "src/05/z2ui5_cl_dmo_app_221.clas.abap",
+  "file": "src/02/05/z2ui5_cl_dmo_app_221.clas.abap",
   "batch": "b06",
   "audit": {
     "frontend_action": false,

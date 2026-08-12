@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_292",
   "sample": "sap.m.sample.PanelBackgroundDesign",
   "entity": "sap.m.Panel",
-  "file": "src/01/z2ui5_cl_dmo_app_292.clas.abap",
+  "file": "src/01/01/z2ui5_cl_dmo_app_292.clas.abap",
   "batch": "b23",
   "audit": {
     "frontend_action": false,

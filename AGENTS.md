@@ -163,41 +163,81 @@ plain JS/XML held for reference and to feed the generator.
 
 ## 3. Repository layout — the ABAP ports
 
-abapGit project, `FOLDER_LOGIC=PREFIX`, `STARTING_FOLDER=/src/`. Ports are split
-by the UI5 **library** of the demo kit sample they rebuild:
+abapGit project, `FOLDER_LOGIC=PREFIX`, `STARTING_FOLDER=/src/`. A port's path is
 
-| Folder   | CTEXT (`package.devc.xml`) | Library namespace | Status |
-|----------|----------------------------|-------------------|--------|
-| `src/01` | `sap.m`    | `sap.m`    | exists |
-| `src/02` | `sap.ui`   | `sap.ui.*` (core, layout, unified, table, integration, codeeditor, model.type) | exists |
-| `src/03` | `sap.uxap` | `sap.uxap` | exists |
-| `src/04` | `sap.f`    | `sap.f`    | exists |
-| `src/05` | `sap.tnt`  | `sap.tnt`  | exists |
+```
+src/<category>/<library>/<class>.clas.abap
+```
 
-The split key is the **second-level namespace** of the sample's entity. New
-libraries get the next free `src/NN` folder with a matching `package.devc.xml`.
+**Level 1 — the category: what a system needs to run the port** (UI5 flavour x
+release). This is the level an installer cares about: everything in `src/01`
+runs on the oldest supported stack, and each further folder raises exactly one
+requirement.
 
-A library folder is **flat**: every port of that library sits directly in
-`src/<NN>/`, and the library is the only ABAP package. There is no second
-level — the former batch subpackages `src/<NN>/b<nn>/` were flattened away
-(2026-08-12): 67 packages for 365 ports, 20 of them holding a single class,
-most of them carrying the CTEXT `faithful ports`. A batch is a property of the
-generation run, not of the port, so it stays where it belongs — in the port's
-`meta/<class>.json` as the `batch` field. It is **no longer derivable from the
-path**; `scaffold.mjs` reads the next batch number back from the sidecars of
-the library. One batch is still one PR — see TRAINING.md for the batch
-process — it is just no longer one package.
+| Folder   | CTEXT (`package.devc.xml`) | Runs on | Status |
+|----------|----------------------------|---------|--------|
+| `src/01` | `OpenUI5 <= 1.71` | any OpenUI5/SAPUI5 from 1.71 on — the portable half | 281 ports |
+| `src/02` | `OpenUI5 > 1.71`  | needs a UI5 runtime newer than 1.71 | 120 ports |
+| `src/03` | `SAPUI5 <= 1.71`  | needs SAPUI5 (a library OpenUI5 does not ship) | empty |
+| `src/04` | `SAPUI5 > 1.71`   | needs SAPUI5 **and** a runtime newer than 1.71 | empty |
+
+**Level 2 — the library** of the demo kit sample, numbered once and globally: a
+library keeps the same number in every category folder, so `src/01/01` and
+`src/02/01` are both `sap.m`.
+
+| Folder | CTEXT | Library namespace |
+|--------|-------|-------------------|
+| `01` | `sap.m`     | `sap.m` |
+| `02` | `sap.ui`    | `sap.ui.*` (core, layout, unified, table, integration, codeeditor, model.type) |
+| `03` | `sap.uxap`  | `sap.uxap` |
+| `04` | `sap.f`     | `sap.f` |
+| `05` | `sap.tnt`   | `sap.tnt` |
+| `06` | `sap.suite` | `sap.suite.*` — SAPUI5 only, reserved |
+| `07` | `sap.viz`   | `sap.viz` — SAPUI5 only, reserved |
+| `08` | `sap.gantt` | `sap.gantt` — SAPUI5 only, reserved |
+| `09` | `sap.ndc`   | `sap.ndc` — SAPUI5 only, reserved |
+
+The library split key is the **second-level namespace of the sample**
+(`sap.m.sample.ContainerNoPadding` → `sap.m`), the same key
+`generate-overview.mjs` / `generate-coverage.mjs` group by. It is deliberately
+*not* the entity's namespace: that sample documents a `sap.ui.core` CSS-class
+entity and still belongs to sap.m. New libraries get the next free number in
+`scripts/lib-packages.mjs` plus a `package.devc.xml` with the matching CTEXT;
+06–09 are pre-assigned but only created once a port lands in them.
+
+**Both levels are derived, not chosen.** `scripts/lib-packages.mjs` computes the
+whole path from the port's own `meta/<class>.json` — the library from `sample`,
+the flavour from the libraries the port touches, the release from whether the
+port carries a `POST_171` deviation — and `validate-meta` fails when a file sits
+anywhere else, naming the folder it belongs in. So **declaring the first
+`POST_171` deviation on a port moves it from `src/01/<lib>/` to
+`src/02/<lib>/`** (and dropping the last one moves it back); `scaffold.mjs`
+starts every fresh port in the `<= 1.71` half of its flavour, which is where a
+port with no deviations belongs.
+
+Below the library there is **no further level**: the former batch subpackages
+`src/<NN>/b<nn>/` were flattened away (2026-08-12): 67 packages for 365 ports,
+20 of them holding a single class, most of them carrying the CTEXT
+`faithful ports`. A batch is a property of the generation run, not of the port,
+so it stays where it belongs — in the port's `meta/<class>.json` as the `batch`
+field. It is **not derivable from the path**; `scaffold.mjs` reads the next
+batch number back from the sidecars of the library, across both of that
+library's category folders. One batch is still one PR — see TRAINING.md for the
+batch process — it is just not one package.
 
 Because `FOLDER_LOGIC=PREFIX`, class names never encode the folder — moving a
 class between folders needs no rename.
 
-### OpenUI5 only — no SAPUI5-only library in this repo
+### SAPUI5 — `src/03` / `src/04` exist, but are still closed
 
-**Every port in this repo rebuilds an OpenUI5 demo kit sample, and every control
-it uses must be part of OpenUI5.** A library that ships with SAPUI5 only
-(`sap.ui.comp` smart controls, `sap.suite.*`, `sap.viz.*`, `sap.gantt.*`, …) is
-out of scope here — full stop. It has no `src/NN` folder, no `ui5/<lib>/`
-template folder, and no entry in the coverage tables.
+**Every port in this repo today rebuilds an OpenUI5 demo kit sample, and every
+control it uses is part of OpenUI5.** The `src/03` / `src/04` packages exist so
+the category scheme is complete and a SAPUI5 port has a defined home — they are
+**not** an open door. Nothing may be filed there until the verification gap
+below is answered; until then a library that ships with SAPUI5 only
+(`sap.ui.comp` smart controls, `sap.suite.*`, `sap.viz.*`, `sap.gantt.*`,
+`sap.ndc`, `sap.ui.vbm`, …) stays out of scope, with no `ui5/<lib>/` template
+folder and no entry in the coverage tables.
 
 The reason is not taste, it is that the whole machinery is built on an OpenUI5
 checkout: `ui5/universe.json` (the sample universe), `ui5/properties.json` (the
@@ -205,11 +245,13 @@ property gate) and `render_smoke` (which serves the `@openui5/*` packages) can
 none of them see a control that OpenUI5 does not ship. A SAPUI5-only port
 therefore sits outside all three checks and is unverifiable here —
 `generate-coverage.mjs` reports it as an **orphan port**, which is the correct
-answer, not a false alarm to suppress.
+answer, not a false alarm to suppress. Opening `src/03` / `src/04` means
+deciding what replaces those three checks for a port they cannot reach.
 
-Curated SAPUI5-only demos belong in [abap2UI5/samples](https://github.com/abap2UI5/samples)
-instead, under `src/00/` (*extended*), where the build strips them before the
-cloud and 702 checks — the former `src/06` smart control ports live there now
+Until then, curated SAPUI5-only demos belong in
+[abap2UI5/samples](https://github.com/abap2UI5/samples) instead, under `src/00/`
+(*extended*), where the build strips them before the cloud and 702 checks — the
+former `src/06` smart control ports live there now
 (`z2ui5_cl_demo_app_475`–`_479`), rebuilt on the framework's own
 `z2ui5_cl_xml_view` builder.
 
@@ -271,7 +313,7 @@ source of truth:
   "class":   "z2ui5_cl_dmo_app_007",
   "sample":  "sap.m.sample.CheckBoxTriState",   // join key to ui5/<lib>/<Name>/
   "entity":  "sap.m.CheckBox",
-  "file":    "src/01/z2ui5_cl_dmo_app_007.clas.abap",
+  "file":    "src/01/01/z2ui5_cl_dmo_app_007.clas.abap",  // DERIVED - see §3
   "batch":   "b02",           // generation/PR bookkeeping - NOT a folder
   "audit":   { "frontend_action": false,        // uses _event_client? (note: which)
                "event_t_arg": true },           // passes t_arg in ANY event wire?

@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_026",
   "sample": "sap.m.sample.FlexBoxNested",
   "entity": "sap.m.FlexBox",
-  "file": "src/01/z2ui5_cl_dmo_app_026.clas.abap",
+  "file": "src/01/01/z2ui5_cl_dmo_app_026.clas.abap",
   "batch": "b04",
   "audit": {
     "frontend_action": false,

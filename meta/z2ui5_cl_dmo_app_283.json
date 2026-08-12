@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_283",
   "sample": "sap.ui.core.sample.ThemeCustomClasses",
   "entity": "sap.ui.core.theming",
-  "file": "src/02/z2ui5_cl_dmo_app_283.clas.abap",
+  "file": "src/01/02/z2ui5_cl_dmo_app_283.clas.abap",
   "batch": "b16",
   "audit": {
     "frontend_action": false,

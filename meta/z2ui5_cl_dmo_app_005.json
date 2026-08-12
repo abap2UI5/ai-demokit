@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_005",
   "sample": "sap.m.sample.Button",
   "entity": "sap.m.Button",
-  "file": "src/01/z2ui5_cl_dmo_app_005.clas.abap",
+  "file": "src/01/01/z2ui5_cl_dmo_app_005.clas.abap",
   "batch": "b03",
   "audit": {
     "frontend_action": true,

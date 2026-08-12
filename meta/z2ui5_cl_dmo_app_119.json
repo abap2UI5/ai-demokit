@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_119",
   "sample": "sap.ui.layout.sample.FixFlexVertical",
   "entity": "sap.ui.layout.FixFlex",
-  "file": "src/02/z2ui5_cl_dmo_app_119.clas.abap",
+  "file": "src/01/02/z2ui5_cl_dmo_app_119.clas.abap",
   "batch": "b01",
   "audit": {
     "frontend_action": false,

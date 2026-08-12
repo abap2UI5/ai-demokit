@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_091",
   "sample": "sap.m.sample.TimePickerHidden",
   "entity": "sap.m.TimePicker",
-  "file": "src/01/z2ui5_cl_dmo_app_091.clas.abap",
+  "file": "src/02/01/z2ui5_cl_dmo_app_091.clas.abap",
   "batch": "b11",
   "audit": {
     "frontend_action": true,

@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_176",
   "sample": "sap.f.sample.GridListBoxContainerGrouping",
   "entity": "sap.f.GridList",
-  "file": "src/04/z2ui5_cl_dmo_app_176.clas.abap",
+  "file": "src/01/04/z2ui5_cl_dmo_app_176.clas.abap",
   "batch": "b07",
   "audit": {
     "frontend_action": false,

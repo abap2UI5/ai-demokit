@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_192",
   "sample": "sap.tnt.sample.InfoLabelInTable",
   "entity": "sap.tnt.InfoLabel",
-  "file": "src/05/z2ui5_cl_dmo_app_192.clas.abap",
+  "file": "src/01/05/z2ui5_cl_dmo_app_192.clas.abap",
   "batch": "b06",
   "audit": {
     "frontend_action": false,

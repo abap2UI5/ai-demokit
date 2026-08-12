@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_156",
   "sample": "sap.m.sample.NumericContentDifColors",
   "entity": "sap.m.NumericContent",
-  "file": "src/01/z2ui5_cl_dmo_app_156.clas.abap",
+  "file": "src/01/01/z2ui5_cl_dmo_app_156.clas.abap",
   "batch": "b15",
   "audit": {
     "frontend_action": true,

@@ -24,6 +24,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { libFolder, catFolder, CAT_CTEXT, LIB_CTEXT } from './lib-packages.mjs';
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const META = path.join(ROOT, 'meta');
@@ -156,17 +157,17 @@ const { lib, name, entity } = resolved;
   }
 }
 
-// ---------- lib -> src folder ----------
-function srcFolder(lib) {
-  if (lib === 'sap.m') return '01';
-  if (lib.startsWith('sap.ui')) return '02';
-  if (lib === 'sap.uxap') return '03';
-  if (lib === 'sap.f') return '04';
-  if (lib === 'sap.tnt') return '05';
-  return null;
+// ---------- entity -> src/<category>/<library> ----------
+// The category is derived from the sidecar (AGENTS §3); a fresh scaffold has no
+// deviation yet, so it always starts in the <= 1.71 half of its flavour. Declare
+// a POST_171 deviation later and validate-meta names the folder to move it to.
+const libNr = libFolder(lib);
+if (!libNr) {
+  console.error(`no library package for "${lib}" — extend LIB_FOLDER in scripts/lib-packages.mjs`);
+  process.exit(1);
 }
-const folder = srcFolder(lib);
-if (!folder) { console.error(`no src/ folder mapping for library "${lib}" (known: sap.m, sap.ui.*, sap.uxap, sap.f, sap.tnt)`); process.exit(1); }
+const catNr = catFolder({ sample: `${lib}.sample.${name}`, entity, deviations: [] });
+const folder = `${catNr}/${libNr}`;
 
 // ---------- locate the OpenUI5 template dir ----------
 const libPath = lib.replace(/\./g, '/');
@@ -200,7 +201,9 @@ const libBatches = [...new Set(
   fs.readdirSync(META)
     .filter((f) => f.endsWith('.json'))
     .map((f) => { try { return JSON.parse(fs.readFileSync(path.join(META, f), 'utf8')); } catch { return null; } })
-    .filter((m) => m && new RegExp(`^src/${folder}/`).test(m.file || '') && /^b\d+$/.test(m.batch || ''))
+    // a batch is per library, and a library now spans both release halves of
+    // its flavour — so match the library level across every category folder
+    .filter((m) => m && new RegExp(`^src/\\d+/${libNr}/`).test(m.file || '') && /^b\d+$/.test(m.batch || ''))
     .map((m) => m.batch),
 )].sort();
 let batch;
@@ -213,17 +216,19 @@ const libDir = path.join(SRC, folder);
 const relFile = `src/${folder}/${cls}.clas.abap`;
 
 // ---------- build artifacts ----------
-const DEVC = `﻿<?xml version="1.0" encoding="utf-8"?>
+const devc = (ctext) => `﻿<?xml version="1.0" encoding="utf-8"?>
 <abapGit version="v1.0.0" serializer="LCL_OBJECT_DEVC" serializer_version="v1.0.0">
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <DEVC>
-    <CTEXT>${lib.startsWith('sap.ui') ? 'sap.ui' : lib}</CTEXT>
+    <CTEXT>${ctext.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</CTEXT>
    </DEVC>
   </asx:values>
  </asx:abap>
 </abapGit>
 `;
+const CAT_DEVC = devc(CAT_CTEXT[catNr]);
+const DEVC = devc(LIB_CTEXT[libNr]);
 const clasAbap = `CLASS ${cls} DEFINITION PUBLIC.
 
   PUBLIC SECTION.
@@ -341,11 +346,12 @@ const created = [
   relFile,
   `src/${folder}/${cls}.clas.xml`,
   `meta/${cls}.json`,
+  ...(fs.existsSync(path.join(SRC, catNr, 'package.devc.xml')) ? [] : [`src/${catNr}/package.devc.xml`]),
   ...(fs.existsSync(path.join(libDir, 'package.devc.xml')) ? [] : [`src/${folder}/package.devc.xml`]),
   ...templateFiles.map((f) => `ui5/${lib}/${name}/${f}`),
 ];
 console.log(`scaffold ${cls}  (${lib}.sample.${name} — ${entity})`);
-console.log(`  library src/${folder}  batch ${batch}${libBatches.includes(batch) ? '' : ' (new)'}`);
+console.log(`  package src/${folder}  (${CAT_CTEXT[catNr]} / ${LIB_CTEXT[libNr]})  batch ${batch}${libBatches.includes(batch) ? '' : ' (new)'}`);
 console.log(`  template: ${path.relative(ROOT, templateDir)}`);
 console.log('  files:');
 for (const f of created) console.log(`    + ${f}`);
@@ -354,6 +360,7 @@ if (flags.dryRun) { console.log('\n(dry-run — nothing written)'); process.exit
 
 // ---------- write ----------
 fs.mkdirSync(libDir, { recursive: true });
+if (!fs.existsSync(path.join(SRC, catNr, 'package.devc.xml'))) fs.writeFileSync(path.join(SRC, catNr, 'package.devc.xml'), CAT_DEVC);
 if (!fs.existsSync(path.join(libDir, 'package.devc.xml'))) fs.writeFileSync(path.join(libDir, 'package.devc.xml'), DEVC);
 fs.writeFileSync(targetAbap, clasAbap);
 fs.writeFileSync(path.join(ROOT, `src/${folder}/${cls}.clas.xml`), clasXml);

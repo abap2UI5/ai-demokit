@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_385",
   "sample": "sap.m.sample.MultiComboBoxWrapping",
   "entity": "sap.m.MultiComboBox",
-  "file": "src/01/z2ui5_cl_dmo_app_385.clas.abap",
+  "file": "src/01/01/z2ui5_cl_dmo_app_385.clas.abap",
   "batch": "b27",
   "audit": {
     "frontend_action": false,

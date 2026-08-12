@@ -44,8 +44,8 @@ A coding agent runs the pipeline:
    (`src/<library>/test/<library path>/demokit/sample/<Name>/`, second segment
    with dots as slashes, e.g. `src/sap.tnt/test/sap/tnt/…`).
 2. **Generate** — rebuild each sample 1:1 as an abap2UI5 app (`z2ui5_if_app`),
-   filed by library under `src/<NN>` (`src/01` = `sap.m`, see AGENTS §3) —
-   one ABAP package per library, flat.
+   filed under `src/<category>/<library>` (`src/01/01` = OpenUI5 ≤ 1.71, `sap.m`
+   — see AGENTS §3); both levels are derived from the port's `meta/` sidecar.
 3. **Store templates** — keep the original UI5 JS/XML templates in
    [`ui5/`](ui5), one folder per sample — only ported samples are archived;
    each batch copies its samples over from the OpenUI5 checkout.
@@ -154,11 +154,15 @@ Rules:
 
 </details>
 
-Ports are filed by the sample's UI5 library — `src/01` (`sap.m`), `src/02`
-(`sap.ui.*`), `src/03` (`sap.uxap`), `src/04` (`sap.f`), `src/05` (`sap.tnt`)
-— one flat ABAP package per library; see AGENTS §3 for the folder table. The
-generation/review batch a port came from is recorded in its
-`meta/<class>.json`, not in the tree.
+Ports are filed by **what a system needs to run them** first, by UI5 library
+second: `src/01` (OpenUI5 ≤ 1.71 — the portable half), `src/02` (OpenUI5
+> 1.71), `src/03` (SAPUI5 ≤ 1.71) and `src/04` (SAPUI5 > 1.71), each holding one
+package per library — `01` (`sap.m`), `02` (`sap.ui.*`), `03` (`sap.uxap`), `04`
+(`sap.f`), `05` (`sap.tnt`). So everything under `src/01` installs on the oldest
+supported stack, and each further folder raises exactly one requirement.
+`src/03`/`src/04` exist for completeness and are still empty — see AGENTS §3 for
+the folder tables and why. The generation/review batch a port came from is
+recorded in its `meta/<class>.json`, not in the tree.
 
 ## Compatibility
 

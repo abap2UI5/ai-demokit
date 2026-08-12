@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_376",
   "sample": "sap.m.sample.StandardListItemWrapping",
   "entity": "sap.m.StandardListItem",
-  "file": "src/01/z2ui5_cl_dmo_app_376.clas.abap",
+  "file": "src/02/01/z2ui5_cl_dmo_app_376.clas.abap",
   "batch": "b25",
   "audit": {
     "frontend_action": false,

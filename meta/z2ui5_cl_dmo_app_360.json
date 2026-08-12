@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_360",
   "sample": "sap.ui.table.sample.SelectCopyPaste",
   "entity": "sap.ui.table.Table",
-  "file": "src/02/z2ui5_cl_dmo_app_360.clas.abap",
+  "file": "src/02/02/z2ui5_cl_dmo_app_360.clas.abap",
   "batch": "b20",
   "audit": {
     "frontend_action": false,

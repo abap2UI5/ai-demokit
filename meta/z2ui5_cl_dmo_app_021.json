@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_021",
   "sample": "sap.m.sample.DraftIndicator",
   "entity": "sap.m.DraftIndicator",
-  "file": "src/01/z2ui5_cl_dmo_app_021.clas.abap",
+  "file": "src/01/01/z2ui5_cl_dmo_app_021.clas.abap",
   "batch": "b06",
   "audit": {
     "frontend_action": false,
