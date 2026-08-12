@@ -129,9 +129,21 @@ The pipeline (run by a coding agent):
    in-system overview app: every sample marked ✅ ported / ❌ missing, with a
    coverage figure per module.
 
-Curated, hand-reviewed samples ultimately graduate to the
-[abap2UI5/samples](https://github.com/abap2UI5/samples) repo. Everything here is
-machine-generated and carries the "not yet manually reviewed" marker (§5).
+Everything here is machine-generated and carries the "not yet manually
+reviewed" marker (§5).
+
+**This repository is the home of the pure control samples** (maintainer
+decision, 2026-08-12). The curated
+[abap2UI5/samples](https://github.com/abap2UI5/samples) repo used to keep its
+own 1:1 demo kit rebuilds under `src/01/03`; 78 of those were the same
+originals this repo covers, and that redundancy was removed by porting the
+missing half here (apps 367–402) and dropping all 78 there. So the flow is no
+longer "curated samples graduate out of this repo" for demo kit rebuilds —
+those stay here, and only three kinds remain in the samples repo: a **1.71-safe
+variant** of a sample whose port here declares `POST_171` (that repo is
+downported to 702), a sample in our **hold-out set** (`ui5/holdout.json`), and
+a **free-style control demo** with no single demo kit original. A `checked`
+port here is still the reviewed artifact; it just no longer moves.
 
 ---
 

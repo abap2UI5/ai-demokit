@@ -1,0 +1,39 @@
+<mvc:View
+	controllerName="sap.m.sample.StandardListItemWrapping.List"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns="sap.m">
+	<List
+		id="myList"
+		mode="MultiSelect"
+		items="{
+			path: '/names'
+		}">
+		<headerToolbar>
+			<Toolbar>
+				<Title text="Wrapping texts"/>
+				<ToolbarSpacer/>
+				<ToggleButton
+					text="Toggle Wrapping"
+					pressed="{/wrapping}"/>
+				<ToggleButton
+					text="Toggle Inverted"
+					pressed="{/inverted}"/>
+			</Toolbar>
+		</headerToolbar>
+		<items>
+			<StandardListItem
+				title="{title}"
+				description="{desc}"
+				icon="{icon}"
+				iconInset="false"
+				highlight="{highlight}"
+				info="{info}"
+				infoState="{highlight}"
+				infoIcon="{infoIcon}"
+				infoStateInverted="{/inverted}"
+				type="Detail"
+				wrapping="{/wrapping}"
+				wrapCharLimit="{wrapCharLimit}"/>
+		</items>
+	</List>
+</mvc:View>

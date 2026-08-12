@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_dmo_app_373",
+  "sample": "sap.m.sample.SelectValueState",
+  "entity": "sap.m.Select",
+  "file": "src/01/b25/z2ui5_cl_dmo_app_373.clas.abap",
+  "batch": "b25",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "the original controller assigns one and the same aProducts array to four model keys (/ErrorProductCollection, /WarningProductCollection, /SuccessProductCollection, /InformationProductCollection) and binds one Select to each; the port folds them into the single shared table /T_PRODUCTS feeding all four Selects - same 16 rows, same sorter on NAME, each Select keeps its own two-way selectedKey, so rendering and behaviour are identical (app 048 precedent)."
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "class": "z2ui5_cl_dmo_app_371",
+  "sample": "sap.m.sample.TextAreaValueStates",
+  "entity": "sap.m.TextArea",
+  "file": "src/01/b25/z2ui5_cl_dmo_app_371.clas.abap",
+  "batch": "b25",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": []
+}

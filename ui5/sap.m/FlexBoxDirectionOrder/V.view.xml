@@ -1,0 +1,50 @@
+<mvc:View
+	xmlns="sap.m"
+	xmlns:mvc="sap.ui.core.mvc"
+	xmlns:l="sap.ui.layout">
+	<VBox>
+		<Panel headerText="Reverse, horizontal">
+			<FlexBox direction="RowReverse" alignItems="Start">
+				<Button text="1" type="Emphasized" />
+				<Button text="2" type="Reject" />
+				<Button text="3" type="Accept" />
+			</FlexBox>
+		</Panel>
+
+		<Panel headerText="Top to bottom, vertical">
+			<FlexBox direction="Column" alignItems="Start">
+				<Button text="1" type="Emphasized" />
+				<Button text="2" type="Reject" />
+				<Button text="3" type="Accept" />
+			</FlexBox>
+		</Panel>
+
+		<Panel headerText="Bottom to top, reverse vertical">
+			<FlexBox direction="ColumnReverse" alignItems="Start">
+				<Button text="1" type="Emphasized" />
+				<Button text="2" type="Reject" />
+				<Button text="3" type="Accept" />
+			</FlexBox>
+		</Panel>
+
+		<Panel headerText="Arbitrary flex item order">
+			<FlexBox alignItems="Start">
+				<Button text="1" type="Emphasized" class="sapUiTinyMarginEnd">
+					<layoutData>
+						<FlexItemData order="2" />
+					</layoutData>
+				</Button>
+				<Button text="2" type="Reject" class="sapUiTinyMarginEnd">
+					<layoutData>
+						<FlexItemData order="3" />
+					</layoutData>
+				</Button>
+				<Button text="3" type="Accept" class="sapUiTinyMarginEnd">
+					<layoutData>
+						<FlexItemData order="1" />
+					</layoutData>
+				</Button>
+			</FlexBox>
+		</Panel>
+	</VBox>
+</mvc:View>
