@@ -90,7 +90,7 @@ CLASS z2ui5_cl_dmo_app_115 IMPLEMENTATION.
                     )->a( n = `rows`           v = client->_bind( productcollection )
                     )->a( n = `selectionMode`  v = `MultiToggle`
                     " onPaste toasts the pasted data - composed on the client
-                    )->a( n = `paste`          v = client->_event_client(
+                    )->a( n = `paste`          v = client->follow_up_action(
                               val   = client->cs_event-control_global
                               t_arg = VALUE #( ( `MESSAGE_TOAST` )
                                                ( `show` )
@@ -201,7 +201,7 @@ CLASS z2ui5_cl_dmo_app_115 IMPLEMENTATION.
                                 " field resolves on the client, so no round-trip
                                 )->leaf( n = `Button` ns = `m`
                                     )->a( n = `text`  v = `Show Details`
-                                    )->a( n = `press` v = client->_event_client(
+                                    )->a( n = `press` v = client->follow_up_action(
                                               val   = client->cs_event-control_global
                                               t_arg = VALUE #( ( `MESSAGE_TOAST` )
                                                                ( `show` )
@@ -325,7 +325,6 @@ CLASS z2ui5_cl_dmo_app_115 IMPLEMENTATION.
           READ TABLE productcollection INDEX row_no ASSIGNING FIELD-SYMBOL(<product>).
           IF sy-subrc = 0.
             DELETE <product>-additionalcategoriesselection WHERE key = removed_key.
-            client->view_model_update( ).
           ENDIF.
         ENDIF.
 

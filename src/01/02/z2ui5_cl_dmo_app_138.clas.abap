@@ -98,7 +98,7 @@ CLASS z2ui5_cl_dmo_app_138 IMPLEMENTATION.
                     )->leaf( `Slider`
                         )->a( n = `id`         v = `DSCWidthSlider`
                         )->a( n = `value`      v = `100`
-                        )->a( n = `liveChange` v = client->_event_client(
+                        )->a( n = `liveChange` v = client->follow_up_action(
                                   val   = client->cs_event-control_by_id
                                   t_arg = VALUE #( ( `sideContentContainer` )
                                                    ( `css` )
@@ -121,13 +121,11 @@ CLASS z2ui5_cl_dmo_app_138 IMPLEMENTATION.
       WHEN `BP_CHANGED`.
         " _updateToggleButtonState: the button is only enabled on breakpoint S
         toggle_enabled = xsdbool( client->get_event_arg( ) = `S` ).
-        client->view_model_update( ).
 
       WHEN `TOGGLE`.
         " DynamicSideContent.toggle( ) swaps main and side content on S; the
         " bound showSideContent is the property that setter writes
         show_side = xsdbool( show_side = abap_false ).
-        client->view_model_update( ).
 
     ENDCASE.
 

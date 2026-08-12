@@ -24,7 +24,7 @@
     },
     {
       "type": "NOTE",
-      "what": "the controller-built Dialog of handlePress (Image + Close button, afterClose destroy) is rebuilt 1:1 as a core:FragmentDefinition -> Dialog shown via client->popup_display (the CAPABILITIES.md pattern, app 042). The Link press ships the row's ProductPicUrl via t_arg ${PRODUCT_PIC_URL} - the original reads evt.getSource().getTarget(), whose target property is bound to the same column. The Close button maps to client->_event_client( popup_close ); the original's afterClose destroy is handled by the framework's popup lifecycle and is not wired separately."
+      "what": "the controller-built Dialog of handlePress (Image + Close button, afterClose destroy) is rebuilt 1:1 as a core:FragmentDefinition -> Dialog shown via client->popup_display (the CAPABILITIES.md pattern, app 042). The Link press ships the row's ProductPicUrl via t_arg ${PRODUCT_PIC_URL} - the original reads evt.getSource().getTarget(), whose target property is bound to the same column. The Close button maps to client->follow_up_action( popup_close ); the original's afterClose destroy is handled by the framework's popup lifecycle and is not wired separately."
     }
   ]
 }

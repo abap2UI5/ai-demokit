@@ -85,7 +85,6 @@ CLASS z2ui5_cl_dmo_app_081 IMPLEMENTATION.
           shown = shown + 1.
         ENDIF.
         t_products = VALUE #( FOR i = 1 WHILE i <= shown ( all[ i ] ) ).
-        client->view_model_update( ).
     ENDCASE.
 
   ENDMETHOD.

@@ -92,12 +92,10 @@ CLASS z2ui5_cl_dmo_app_288 IMPLEMENTATION.
       WHEN `PATH_CORRECT`.
         " onCorrectPathClick: setProperty( '/Source', validPath )
         source = c_valid.
-        client->view_model_update( ).
 
       WHEN `PATH_INCORRECT`.
         " onIncorrectPathClick: setProperty( '/Source', invalidPath )
         source = c_invalid.
-        client->view_model_update( ).
 
     ENDCASE.
 

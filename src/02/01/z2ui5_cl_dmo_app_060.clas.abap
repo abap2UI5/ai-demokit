@@ -41,8 +41,8 @@ CLASS z2ui5_cl_dmo_app_060 IMPLEMENTATION.
                 )->a( n = `ariaHasPopup` v = `Menu`
                 " toggle the menu anchored to the pressed button, roundtrip-free
                 " (1:1 with the sample's client-side isOpen()/openBy/close)
-                )->a( n = `press`        v = client->_event_client( val   = client->cs_event-control_by_id
-                                                                    t_arg = VALUE #( ( `theMenu` ) ( `toggleBy` ) ( `$event.oSource.sId` ) ) )
+                )->a( n = `press`        v = client->follow_up_action( val   = client->cs_event-control_by_id
+                                                                       t_arg = VALUE #( ( `theMenu` ) ( `toggleBy` ) ( `$event.oSource.sId` ) ) )
 
                 )->open( `dependents`
                     )->open( `Menu`
@@ -50,8 +50,8 @@ CLASS z2ui5_cl_dmo_app_060 IMPLEMENTATION.
                         " compose the toast on the frontend (1:1 with the sample's
                         " MessageToast.show("Action triggered on item: " + item.getText())),
                         " roundtrip-free - {0} is filled by the client-resolved item text
-                        )->a( n = `itemSelected` v = client->_event_client( val   = client->cs_event-control_global
-                                                                            t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` ) ( `${$parameters>/item}.getText()` ) ) )
+                        )->a( n = `itemSelected` v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                               t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` ) ( `${$parameters>/item}.getText()` ) ) )
 
                         )->leaf( `MenuItem`
                             )->a( n = `text` v = `Hide Existing Sites`

@@ -7,7 +7,7 @@
   "audit": {
     "frontend_action": false,
     "event_t_arg": true,
-    "note": "toggle is wired roundtrip-free via _event_client( control_global, MESSAGE_TOAST.show )"
+    "note": "toggle is wired roundtrip-free via follow_up_action( control_global, MESSAGE_TOAST.show )"
   },
   "status": "reviewed",
   "checked": null,

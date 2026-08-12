@@ -89,6 +89,25 @@ const ADVISORY_BUDGET = {
   'missing-accessibility': 55,
   'event-without-handler': 4, // ratcheted down 2026-08-05: the four calendar ports wired their select handler
   'unknown-event-parameter': 1, // app 268: ColorPickerPopover forwards colorString undeclared — works live
+  // both entries below are new rules from the 2026-08-12 linter bump (363c6e9),
+  // budgeted here because the bump PR is where the debt decision belongs:
+  // apps 101/102/144/268/280/407 — a liveChange/live wire that round-trips per
+  // keystroke. Every one is the sample's POINT (live name validation, the live
+  // Slider/ColorPicker/SearchField readout), so the original's live handler is
+  // what a 1:1 port carries; the final-value event the rule prefers would be a
+  // fidelity deviation, not a fix
+  'live-event-roundtrip': 6,
+  // apps 005/080/121/127/236 — a press/post wired next to a LITERAL
+  // enabled="false". The rule doc grants this exact case ("a 1:1 port of a
+  // sample demonstrating the disabled STATE legitimately carries the original's
+  // handler") - all five samples exist to SHOW the disabled control.
+  // NOTE: only app 121 is currently counted. The other four are frontend wires,
+  // and the linter's reconstructor recognises `_event_client` but not
+  // `follow_up_action` (lib/reconstruct.mjs), so since the rename those four
+  // handlers are dropped from the reconstructed view instead of judged. Budget
+  // kept at the TRUE count so the tally is right again once the linter closes
+  // that gap
+  'event-on-disabled-control': 5,
 };
 
 const metas = fs.readdirSync(META)

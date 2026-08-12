@@ -205,7 +205,6 @@ CLASS z2ui5_cl_dmo_app_247 IMPLEMENTATION.
     CASE client->get( )-event.
       WHEN `WIDTHS_CHANGE`.
         set_widths( client->get_event_arg( ) ).
-        client->view_model_update( ).
 
       WHEN `COLUMN_RESIZE`.
         " the client already vetoed the delivery-date column before the

@@ -111,7 +111,7 @@ CLASS z2ui5_cl_dmo_app_203 IMPLEMENTATION.
                         " static here, so the wire removes it by ID - removeAggregation accepts
                         " an id (measured, scripts/probes/event-arg-expression-probe.mjs) - and
                         " the toast is composed on the client from the same event
-                        )->a( n = `tokenDelete` v = client->_event_client(
+                        )->a( n = `tokenDelete` v = client->follow_up_action(
                                   val   = client->cs_event-control_by_id
                                   t_arg = VALUE #( ( `overflowToolbarTokenizer` )
                                                    ( `removeToken` )
@@ -179,7 +179,7 @@ CLASS z2ui5_cl_dmo_app_203 IMPLEMENTATION.
                         " static here, so the wire removes it by ID - removeAggregation accepts
                         " an id (measured, scripts/probes/event-arg-expression-probe.mjs) - and
                         " the toast is composed on the client from the same event
-                        )->a( n = `tokenDelete` v = client->_event_client(
+                        )->a( n = `tokenDelete` v = client->follow_up_action(
                                   val   = client->cs_event-control_by_id
                                   t_arg = VALUE #( ( `tokenizerMaxWidth` )
                                                    ( `removeToken` )
@@ -400,7 +400,6 @@ CLASS z2ui5_cl_dmo_app_203 IMPLEMENTATION.
                         key  = new_token ) INTO TABLE t_tokens.
         client->message_toast_display( |Token added: { new_token }| ).
         CLEAR new_token.
-        client->view_model_update( ).
 
       WHEN `TOKEN_DELETE`.
         " onTokenDelete: remove the deleted token and toast its text
@@ -408,7 +407,6 @@ CLASS z2ui5_cl_dmo_app_203 IMPLEMENTATION.
         DATA(deleted) = VALUE #( t_tokens[ key = deleted_key ] OPTIONAL ).
         DELETE t_tokens WHERE key = deleted_key.
         client->message_toast_display( |Token deleted: { deleted-text }| ).
-        client->view_model_update( ).
 
     ENDCASE.
 

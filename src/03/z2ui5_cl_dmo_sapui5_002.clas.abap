@@ -222,7 +222,6 @@ CLASS z2ui5_cl_dmo_sapui5_002 IMPLEMENTATION.
           selected = selected + 1.
         ENDIF.
         client->message_toast_display( |selectionChanged - { selected } of 6 selected| ).
-        client->view_model_update( ).
 
     ENDCASE.
 

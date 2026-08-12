@@ -56,7 +56,7 @@ CLASS z2ui5_cl_dmo_app_134 IMPLEMENTATION.
                 )->open( `Image`
                     )->a( n = `src`        v = `https://sdk.openui5.org/test-resources/sap/tnt/images/SAP_Logo.png`
                     )->a( n = `decorative` v = `false`
-                    )->a( n = `press`      v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Logo pressed!` ) ) )
+                    )->a( n = `press`      v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Logo pressed!` ) ) )
                     )->a( n = `tooltip`    v = `SAP Logo`
                     )->a( n = `width`      v = `60px`
                     )->a( n = `height`     v = `30px`
@@ -160,7 +160,7 @@ CLASS z2ui5_cl_dmo_app_134 IMPLEMENTATION.
                 )->open( `Avatar`
                     )->a( n = `src`         v = `https://sdk.openui5.org/test-resources/sap/tnt/images/Woman_avatar_01.png`
                     )->a( n = `displaySize` v = `XS`
-                    )->a( n = `press`       v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Avatar pressed!` ) ) )
+                    )->a( n = `press`       v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Avatar pressed!` ) ) )
                     )->a( n = `tooltip`     v = `Profile`
                     )->open( `layoutData`
                         )->leaf( `OverflowToolbarLayoutData`
@@ -177,7 +177,7 @@ CLASS z2ui5_cl_dmo_app_134 IMPLEMENTATION.
                 )->open( `Image`
                     )->a( n = `src`        v = `https://sdk.openui5.org/test-resources/sap/tnt/images/SAP_Logo.png`
                     )->a( n = `decorative` v = `false`
-                    )->a( n = `press`      v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Logo pressed!` ) ) )
+                    )->a( n = `press`      v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Logo pressed!` ) ) )
                     )->a( n = `tooltip`    v = `SAP Logo`
                     )->a( n = `width`      v = `60px`
                     )->a( n = `height`     v = `30px`
@@ -200,7 +200,7 @@ CLASS z2ui5_cl_dmo_app_134 IMPLEMENTATION.
                 )->open( `Avatar`
                     )->a( n = `src`         v = `https://sdk.openui5.org/test-resources/sap/tnt/images/Woman_avatar_01.png`
                     )->a( n = `displaySize` v = `XS`
-                    )->a( n = `press`       v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Avatar pressed!` ) ) )
+                    )->a( n = `press`       v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Avatar pressed!` ) ) )
                     )->a( n = `tooltip`     v = `Profile`
                     )->open( `layoutData`
                         )->leaf( `OverflowToolbarLayoutData`

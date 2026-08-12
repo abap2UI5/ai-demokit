@@ -47,8 +47,8 @@ CLASS z2ui5_cl_dmo_app_149 IMPLEMENTATION.
                 )->a( n = `class` v = `sapUiSmallMargin`
                 " original onImagePress: URLHelper.redirect(url, true) - 1:1 via the
                 " urlhelper REDIRECT frontend action (same relative target as the Link)
-                )->a( n = `press` v = client->_event_client( val   = client->cs_event-urlhelper
-                                                             t_arg = VALUE #( ( `REDIRECT` )
+                )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-urlhelper
+                                                                t_arg = VALUE #( ( `REDIRECT` )
                                                                               ( |\{ URL: 'test-resources/sap/ui/integration/demokit/cardExplorer/index.html', NEW_WINDOW: true \}| ) ) ) ).
 
     client->view_display( view->stringify( ) ).

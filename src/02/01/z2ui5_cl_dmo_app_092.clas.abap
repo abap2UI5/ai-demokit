@@ -85,8 +85,8 @@ CLASS z2ui5_cl_dmo_app_092 IMPLEMENTATION.
             )->a( n = `width`           v = |\{= ${ client->_bind( width_pct ) } + '%' \}|
             " onPopinChanged: MessageToast.show('Number of hidden pop-ins: ' +
             " hiddenInPopin.length) - client-composed, roundtrip-free
-            )->a( n = `popinChanged`    v = client->_event_client( val   = client->cs_event-control_global
-                                                                   t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Number of hidden pop-ins: {0}` ) ( `${$parameters>/hiddenInPopin}.length` ) ) )
+            )->a( n = `popinChanged`    v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                      t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Number of hidden pop-ins: {0}` ) ( `${$parameters>/hiddenInPopin}.length` ) ) )
             )->a( n = `items`           v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
 
             )->open( `headerToolbar`
@@ -236,7 +236,6 @@ CLASS z2ui5_cl_dmo_app_092 IMPLEMENTATION.
         " t_hidden, and the table's hiddenInPopin is bound to the same field -
         " so the sample's setHiddenInPopin(getSelectedKeys()) needs no action,
         " only the model push
-        client->view_model_update( ).
     ENDCASE.
 
   ENDMETHOD.

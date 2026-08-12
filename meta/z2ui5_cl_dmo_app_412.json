@@ -25,11 +25,11 @@
     },
     {
       "type": "NOTE",
-      "what": "The controller's two constant-text MessageToast handlers are wired as round-trip-free client toasts (_event_client cs_event-control_global MESSAGE_TOAST show, app 005/401 idiom): onExternalApplicationLinkPress ('Navigate to external application.') on the 'Robotech (234242343)' and 'Average User Rating' links, and onAnotherPageLinkPress ('Navigate to another page in the same application (List of delivery items)') on the 'Status' link."
+      "what": "The controller's two constant-text MessageToast handlers are wired as round-trip-free client toasts (follow_up_action cs_event-control_global MESSAGE_TOAST show, app 005/401 idiom): onExternalApplicationLinkPress ('Navigate to external application.') on the 'Robotech (234242343)' and 'Average User Rating' links, and onAnotherPageLinkPress ('Navigate to another page in the same application (List of delivery items)') on the 'Status' link."
     },
     {
       "type": "NOTE",
-      "what": "onOrderDetailsPress does oObjectPageLayout.setSelectedSection(byId('orderDetailsSection')). sap.uxap.ObjectPageLayout.selectedSection is an ASSOCIATION, so it cannot be data-bound (app 263 precedent); the 'Order Details' header link is wired round-trip-free via _event_client( control_by_id, ObjectPageLayout / setSelectedSection / orderDetailsSection ) - the controlIdOrNull argument kind resolves the section id to the control, exactly like the original's byId lookup."
+      "what": "onOrderDetailsPress does oObjectPageLayout.setSelectedSection(byId('orderDetailsSection')). sap.uxap.ObjectPageLayout.selectedSection is an ASSOCIATION, so it cannot be data-bound (app 263 precedent); the 'Order Details' header link is wired round-trip-free via follow_up_action( control_by_id, ObjectPageLayout / setSelectedSection / orderDetailsSection ) - the controlIdOrNull argument kind resolves the section id to the control, exactly like the original's byId lookup."
     },
     {
       "type": "NOTE",
@@ -53,7 +53,7 @@
     },
     {
       "type": "LIVE_TEST",
-      "what": "Round-trip behaviour not verified in a running system: the TITLE_SELECTOR event with its $event.oSource.sId anchor and the popover_display of the QuickView fragment at the pressed link (including the pageLink navigation to companyEmployeePageId inside the popover), the _event_client setSelectedSection frontend action on the 'Order Details' link, and the two client toasts."
+      "what": "Round-trip behaviour not verified in a running system: the TITLE_SELECTOR event with its $event.oSource.sId anchor and the popover_display of the QuickView fragment at the pressed link (including the pageLink navigation to companyEmployeePageId inside the popover), the follow_up_action setSelectedSection frontend action on the 'Order Details' link, and the two client toasts."
     }
   ]
 }

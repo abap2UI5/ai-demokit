@@ -21,7 +21,7 @@
     },
     {
       "type": "NOTE",
-      "what": "the four MessageToast handlers are reproduced as roundtrip-free CLIENT-COMPOSED toasts (_event_client cs_event-control_global MESSAGE_TOAST.show with a {N} template): onSelectionChange as '{0?Selected:Unselected} item with ID {1}' over ${$parameters>/selected} and ${$parameters>/listItem}.getId(), onDelete as 'Delete item with ID {0}', and onDetailPress/onPress as 'Request details for item with ID {0}' / 'Pressed item with ID {0}' over $event.oSource.sId. **Corrected 2026-08-01** (faked-event-value audit): all four used to toast a CONSTANT ('Selection changed', 'Delete item', 'Request details', 'Pressed item') and dropped the item identity the original shows. The ids are the runtime UI5 ids, exactly as in the original."
+      "what": "the four MessageToast handlers are reproduced as roundtrip-free CLIENT-COMPOSED toasts (follow_up_action cs_event-control_global MESSAGE_TOAST.show with a {N} template): onSelectionChange as '{0?Selected:Unselected} item with ID {1}' over ${$parameters>/selected} and ${$parameters>/listItem}.getId(), onDelete as 'Delete item with ID {0}', and onDetailPress/onPress as 'Request details for item with ID {0}' / 'Pressed item with ID {0}' over $event.oSource.sId. **Corrected 2026-08-01** (faked-event-value audit): all four used to toast a CONSTANT ('Selection changed', 'Delete item', 'Request details', 'Pressed item') and dropped the item identity the original shows. The ids are the runtime UI5 ids, exactly as in the original."
     }
   ]
 }

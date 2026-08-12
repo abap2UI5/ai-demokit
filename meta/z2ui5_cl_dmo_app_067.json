@@ -18,7 +18,7 @@
     },
     {
       "type": "NOTE",
-      "what": "the MessagePopover (built in the controller) is declared 1:1 in the button's `dependents`; the controller's toggle(button) becomes a roundtrip-free client->_event_client( cs_event-control_by_id, toggleBy ) on the button press (anchored by id), and onActiveTitlePress's MessageToast.show becomes roundtrip-free client->_event_client( cs_event-control_global, MESSAGE_TOAST/show ); the app is now init-only. Anchored to $event.oSource.sId."
+      "what": "the MessagePopover (built in the controller) is declared 1:1 in the button's `dependents`; the controller's toggle(button) becomes a roundtrip-free client->follow_up_action( cs_event-control_by_id, toggleBy ) on the button press (anchored by id), and onActiveTitlePress's MessageToast.show becomes roundtrip-free client->follow_up_action( cs_event-control_global, MESSAGE_TOAST/show ); the app is now init-only. Anchored to $event.oSource.sId."
     },
     {
       "type": "NOTE",
@@ -34,7 +34,7 @@
     },
     {
       "type": "NOTE",
-      "what": "live-verified 2026-08-04 (nightly e2e interaction): the toggle and the active-title toast were switched to roundtrip-free _event_client on 2026-07-22, and the 2026-07-30 RELATIVE_ONLY URL policy + urlValidated toast are new since the 2026-07-22 live check (status reset checked -> generated): re-verify the button toggles the MessagePopover, an active title toasts, and the absolute http link in the first message renders disabled after validation while relative links stay clickable. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the button toggles the MessagePopover open (the 'Error message' item renders its markup)."
+      "what": "live-verified 2026-08-04 (nightly e2e interaction): the toggle and the active-title toast were switched to roundtrip-free follow_up_action on 2026-07-22, and the 2026-07-30 RELATIVE_ONLY URL policy + urlValidated toast are new since the 2026-07-22 live check (status reset checked -> generated): re-verify the button toggles the MessagePopover, an active title toasts, and the absolute http link in the first message renders disabled after validation while relative links stay clickable. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the button toggles the MessagePopover open (the 'Error message' item renders its markup)."
     }
   ]
 }

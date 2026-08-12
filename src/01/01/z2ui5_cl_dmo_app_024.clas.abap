@@ -91,7 +91,6 @@ CLASS z2ui5_cl_dmo_app_024 IMPLEMENTATION.
                         date           = date_formatted
                         text           = client->get_event_arg( ) )
                INTO t_entries INDEX 1.
-        client->view_model_update( ).
 
       WHEN `SENDER_PRESS`.
         client->message_toast_display( |Clicked on Link: { client->get_event_arg( ) }| ).

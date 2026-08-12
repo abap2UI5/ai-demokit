@@ -64,7 +64,6 @@ CLASS z2ui5_cl_dmo_app_013 IMPLEMENTATION.
 
       WHEN `SHOW_COOKIE_DETAILS`.
         show_cookie_details = abap_true.
-        client->popup_model_update( ).
         " the original moves the focus to the Save Preferences action
         client->follow_up_action( val   = client->cs_event-control_by_id
                                   view  = client->cs_view-popup
@@ -89,7 +88,6 @@ CLASS z2ui5_cl_dmo_app_013 IMPLEMENTATION.
         ELSE.
           " the cancel action navigates back to the preview
           show_cookie_details = abap_false.
-          client->popup_model_update( ).
           client->follow_up_action( val   = client->cs_event-control_by_id
                                     view  = client->cs_view-popup
                                     t_arg = VALUE #( ( `actionSetPreferences` ) ( `focus` ) ) ).

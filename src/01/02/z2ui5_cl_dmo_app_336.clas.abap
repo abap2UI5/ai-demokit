@@ -325,12 +325,10 @@ CLASS z2ui5_cl_dmo_app_336 IMPLEMENTATION.
         backup_fax          = fax.
         backup_email        = email.
         edit_mode           = abap_true.
-        client->view_model_update( ).
 
       WHEN `SAVE`.
         " handleSavePress: keep the edited values, back to the Display form
         edit_mode = abap_false.
-        client->view_model_update( ).
 
       WHEN `CANCEL`.
         " handleCancelPress: restore the cloned record, back to the Display form
@@ -349,7 +347,6 @@ CLASS z2ui5_cl_dmo_app_336 IMPLEMENTATION.
         fax          = backup_fax.
         email        = backup_email.
         edit_mode    = abap_false.
-        client->view_model_update( ).
 
     ENDCASE.
 

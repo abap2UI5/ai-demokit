@@ -17,7 +17,7 @@
     },
     {
       "type": "NOTE",
-      "what": "The Slider's liveChange is reproduced roundtrip-free since 2026-08-05: handleSliderChange writes a percentage width straight onto the container's DOM node, and that container is a sap.m.Page with no width property. The `css` control method (pr/control-inline-style) does the same write from the wire - _event_client( control_by_id, sideContentContainer / css / width / ${$parameters>/value} + '%' ). Apps 213/214 keep the bound-property path where the target control HAS a width."
+      "what": "The Slider's liveChange is reproduced roundtrip-free since 2026-08-05: handleSliderChange writes a percentage width straight onto the container's DOM node, and that container is a sap.m.Page with no width property. The `css` control method (pr/control-inline-style) does the same write from the wire - follow_up_action( control_by_id, sideContentContainer / css / width / ${$parameters>/value} + '%' ). Apps 213/214 keep the bound-property path where the target control HAS a width."
     },
     {
       "type": "NOTE",

@@ -52,8 +52,8 @@ CLASS z2ui5_cl_dmo_app_228 IMPLEMENTATION.
                 )->a( n = `ariaHasPopup` v = `Menu`
                 " the sample opens the Menu anchored to the button via oMenu.open( kbd, button, ... );
                 " sap.ui.unified.Menu has no openBy and open cannot receive the anchor - see pr/ (no-op today)
-                )->a( n = `press`        v = client->_event_client( val   = client->cs_event-control_by_id
-                                                                    t_arg = VALUE #( ( `theMenu` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
+                )->a( n = `press`        v = client->follow_up_action( val   = client->cs_event-control_by_id
+                                                                       t_arg = VALUE #( ( `theMenu` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
 
                 )->open( `dependents`
                     )->open( n = `Menu` ns = `u`
@@ -66,8 +66,8 @@ CLASS z2ui5_cl_dmo_app_228 IMPLEMENTATION.
                         " fit in ONE expression arg - measured with
                         " scripts/probes/event-arg-expression-probe.mjs, a class-name ternary
                         " resolves - so the toast text is composed on the client 1:1
-                        )->a( n = `itemSelect` v = client->_event_client( val   = client->cs_event-control_global
-                                                                          t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0}` ) ( item_message ) ) )
+                        )->a( n = `itemSelect` v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                             t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0}` ) ( item_message ) ) )
 
                         )->leaf( n = `MenuItem` ns = `u`
                             )->a( n = `text` v = `My 1st Item`

@@ -138,8 +138,8 @@ CLASS z2ui5_cl_dmo_app_269 IMPLEMENTATION.
                         )->a( n = `type`    v = `Accept`
                         )->a( n = `id`      v = `toggleButton`
                         )->a( n = `enabled` v = client->_bind( toggle_enabled )
-                        )->a( n = `press`   v = client->_event_client( val   = client->cs_event-control_by_id
-                                                                       t_arg = VALUE #( ( `DynamicSideContent` ) ( `toggle` ) ) )
+                        )->a( n = `press`   v = client->follow_up_action( val   = client->cs_event-control_by_id
+                                                                          t_arg = VALUE #( ( `DynamicSideContent` ) ( `toggle` ) ) )
                     )->leaf( `Button`
                         )->a( n = `text`    v = `Open Side Content`
                         )->a( n = `id`      v = `showSideContentButton`
@@ -152,7 +152,7 @@ CLASS z2ui5_cl_dmo_app_269 IMPLEMENTATION.
                         " handleSliderChange: the container is a sap.m.Page, which
                         " has no width property - the `css` control method writes
                         " the percentage onto its DOM node like the original jQuery
-                        )->a( n = `liveChange` v = client->_event_client(
+                        )->a( n = `liveChange` v = client->follow_up_action(
                                   val   = client->cs_event-control_by_id
                                   t_arg = VALUE #( ( `sideContentContainer` )
                                                    ( `css` )
@@ -181,7 +181,6 @@ CLASS z2ui5_cl_dmo_app_269 IMPLEMENTATION.
         DATA(lv_breakpoint) = client->get_event_arg( ).
         toggle_enabled = xsdbool( lv_breakpoint = `S` ).
         show_side_btn  = xsdbool( lv_breakpoint <> `S` ).
-        client->view_model_update( ).
 
       WHEN `SIDE_CONTENT_HIDE`.
         " handleSideContentHide: setShowSideContent(false) + re-evaluate the
@@ -189,14 +188,12 @@ CLASS z2ui5_cl_dmo_app_269 IMPLEMENTATION.
         " the flag is bound two-way and only flipped here
         show_side_content = abap_false.
         show_side_btn     = abap_true.
-        client->view_model_update( ).
 
       WHEN `SIDE_CONTENT_SHOW`.
         " handleSideContentShow: setShowSideContent(true); the button hides
         " itself again because the side content is visible now
         show_side_content = abap_true.
         show_side_btn     = abap_false.
-        client->view_model_update( ).
     ENDCASE.
 
   ENDMETHOD.

@@ -146,7 +146,7 @@ CLASS z2ui5_cl_dmo_app_274 IMPLEMENTATION.
                 )->leaf( `Button`
                     )->a( n = `type`  v = `Emphasized`
                     )->a( n = `text`  v = `OK`
-                    )->a( n = `press` v = client->_event_client( client->cs_event-popup_close )
+                    )->a( n = `press` v = client->follow_up_action( client->cs_event-popup_close )
 
             )->shut( ).
     ENDIF.
@@ -154,7 +154,7 @@ CLASS z2ui5_cl_dmo_app_274 IMPLEMENTATION.
     dialog->open( `endButton`
             )->leaf( `Button`
                 )->a( n = `text`  v = `Close`
-                )->a( n = `press` v = client->_event_client( client->cs_event-popup_close ) ).
+                )->a( n = `press` v = client->follow_up_action( client->cs_event-popup_close ) ).
 
     client->popup_display( popup->stringify( ) ).
 

@@ -77,7 +77,6 @@ CLASS z2ui5_cl_dmo_app_007 IMPLEMENTATION.
         child1 = client->get_event_arg( ).
         child2 = client->get_event_arg( ).
         child3 = client->get_event_arg( ).
-        client->view_model_update( ).
 
     ENDCASE.
 

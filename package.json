@@ -34,7 +34,7 @@
   },
   "homepage": "https://github.com/abap2UI5/samples-controls#readme",
   "devDependencies": {
-    "@abap2ui5/linter": "github:abap2UI5/linter#0cd5b0f2faf96ea44ba6d7b3222a2fe483862660",
+    "@abap2ui5/linter": "github:abap2UI5/linter#363c6e92b08696d31089892c7e02da92b827b061",
     "@abaplint/cli": "^2.120.3",
     "@openui5/sap.f": "^1.151.0",
     "@openui5/sap.m": "^1.151.0",

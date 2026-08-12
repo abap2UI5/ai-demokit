@@ -126,12 +126,10 @@ CLASS z2ui5_cl_dmo_app_123 IMPLEMENTATION.
       WHEN `TOGGLE_EXPAND`.
         " original onCollapseExpandPress: getExpanded() -> setExpanded(!bExpanded)
         expanded = xsdbool( expanded = abap_false ).
-        client->view_model_update( ).
 
       WHEN `TOGGLE_SUB3`.
         " original onHideShowSubItemPress: toggles subItemThree visibility
         sub3_visible = xsdbool( sub3_visible = abap_false ).
-        client->view_model_update( ).
 
     ENDCASE.
 

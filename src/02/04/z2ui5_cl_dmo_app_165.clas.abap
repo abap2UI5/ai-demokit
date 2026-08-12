@@ -97,13 +97,13 @@ CLASS z2ui5_cl_dmo_app_165 IMPLEMENTATION.
                         " fnChange toasts 'Redirecting to <targetSrc>' and calls
                         " URLHelper.redirect( targetSrc, true ) - both are client
                         " actions, chained on one event
-                        )->a( n = `change` v = client->_event_client(
+                        )->a( n = `change` v = client->follow_up_action(
                                   val   = client->cs_event-control_global
                                   t_arg = VALUE #( ( `MESSAGE_TOAST` )
                                                    ( `show` )
                                                    ( `Redirecting to {0}` )
                                                    ( `${$parameters>/itemPressed}.getTargetSrc()` ) ) ) && `; ` &&
-                                              client->_event_client(
+                                              client->follow_up_action(
                                   val   = client->cs_event-urlhelper
                                   t_arg = VALUE #( ( `REDIRECT` )
                                                    ( `\{ URL: ${$parameters>/itemPressed}.getTargetSrc(), NEW_WINDOW: true \}` ) ) )

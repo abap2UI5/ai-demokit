@@ -83,8 +83,8 @@ CLASS z2ui5_cl_dmo_app_103 IMPLEMENTATION.
                 )->a( n = `id`         v = `mySelectDialog`
                 )->a( n = `noDataText` v = `No Products Found`
                 )->a( n = `title`      v = `Select Product`
-                )->a( n = `search`     v = client->_event_client( val   = client->cs_event-binding_call
-                                                                  t_arg = VALUE #( ( `mySelectDialog` ) ( `items` ) ( `filter` ) ( `NAME` ) ( `Contains` ) ( `${$parameters>/value}` ) ) )
+                )->a( n = `search`     v = client->follow_up_action( val   = client->cs_event-binding_call
+                                                                     t_arg = VALUE #( ( `mySelectDialog` ) ( `items` ) ( `filter` ) ( `NAME` ) ( `Contains` ) ( `${$parameters>/value}` ) ) )
                 )->a( n = `confirm`    v = client->_event( `CONFIRM` )
                 )->a( n = `cancel`     v = client->_event( `CONFIRM` )
                 )->a( n = `multiSelect`        v = client->_bind( multi_select )
@@ -110,8 +110,8 @@ CLASS z2ui5_cl_dmo_app_103 IMPLEMENTATION.
                 )->a( n = `id`                v = `valueHelpDialog`
                 )->a( n = `noDataText`        v = `No Products Found`
                 )->a( n = `title`             v = `Select Product`
-                )->a( n = `search`            v = client->_event_client( val   = client->cs_event-binding_call
-                                                                         t_arg = VALUE #( ( `valueHelpDialog` ) ( `items` ) ( `filter` ) ( `NAME` ) ( `Contains` ) ( `${$parameters>/value}` ) ) )
+                )->a( n = `search`            v = client->follow_up_action( val   = client->cs_event-binding_call
+                                                                            t_arg = VALUE #( ( `valueHelpDialog` ) ( `items` ) ( `filter` ) ( `NAME` ) ( `Contains` ) ( `${$parameters>/value}` ) ) )
                 )->a( n = `searchPlaceholder` v = `Search Products`
                 )->a( n = `confirm`           v = client->_event( `VH_CLOSE` )
                 )->a( n = `cancel`            v = client->_event( `VH_CLOSE` )
@@ -347,7 +347,6 @@ CLASS z2ui5_cl_dmo_app_103 IMPLEMENTATION.
     confirm_text      = confirmtext.
     draggable         = drag.
     resizable         = resize.
-    client->view_model_update( ).
 
     IF responsive = abap_true.
       client->follow_up_action( val   = client->cs_event-control_by_id

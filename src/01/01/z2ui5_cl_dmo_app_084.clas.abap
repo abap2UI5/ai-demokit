@@ -56,26 +56,26 @@ CLASS z2ui5_cl_dmo_app_084 IMPLEMENTATION.
                     )->a( n = `label` v = `Telephone`
                     )->a( n = `value` v = `{TEL}`
                     )->a( n = `type`  v = `Active`
-                    )->a( n = `press` v = client->_event_client( val   = client->cs_event-urlhelper
-                                                                 t_arg = VALUE #( ( `TRIGGER_TEL` ) ( s_supplier-tel ) ) )
+                    )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-urlhelper
+                                                                    t_arg = VALUE #( ( `TRIGGER_TEL` ) ( s_supplier-tel ) ) )
                 )->leaf( `DisplayListItem`
                     )->a( n = `label` v = `SMS`
                     )->a( n = `value` v = `{SMS}`
                     )->a( n = `type`  v = `Active`
-                    )->a( n = `press` v = client->_event_client( val   = client->cs_event-urlhelper
-                                                                 t_arg = VALUE #( ( `TRIGGER_SMS` ) ( s_supplier-sms ) ) )
+                    )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-urlhelper
+                                                                    t_arg = VALUE #( ( `TRIGGER_SMS` ) ( s_supplier-sms ) ) )
                 )->leaf( `DisplayListItem`
                     )->a( n = `label` v = `Email`
                     )->a( n = `value` v = `{EMAIL}`
                     )->a( n = `type`  v = `Active`
-                    )->a( n = `press` v = client->_event_client( val   = client->cs_event-urlhelper
-                                                                 t_arg = VALUE #( ( `TRIGGER_EMAIL` ) ( |\{ EMAIL: '{ s_supplier-email }', SUBJECT: 'Info Request', NEW_WINDOW: true \}| ) ) )
+                    )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-urlhelper
+                                                                    t_arg = VALUE #( ( `TRIGGER_EMAIL` ) ( |\{ EMAIL: '{ s_supplier-email }', SUBJECT: 'Info Request', NEW_WINDOW: true \}| ) ) )
                 )->leaf( `DisplayListItem`
                     )->a( n = `label` v = `Website`
                     )->a( n = `value` v = `{URL}`
                     )->a( n = `type`  v = `Active`
-                    )->a( n = `press` v = client->_event_client( val   = client->cs_event-urlhelper
-                                                                 t_arg = VALUE #( ( `REDIRECT` ) ( |\{ URL: '{ s_supplier-url }', NEW_WINDOW: true \}| ) ) )
+                    )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-urlhelper
+                                                                    t_arg = VALUE #( ( `REDIRECT` ) ( |\{ URL: '{ s_supplier-url }', NEW_WINDOW: true \}| ) ) )
 
             )->shut(
         )->shut( ).

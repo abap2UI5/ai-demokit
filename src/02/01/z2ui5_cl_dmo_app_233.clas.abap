@@ -127,8 +127,8 @@ CLASS z2ui5_cl_dmo_app_233 IMPLEMENTATION.
                             " opens unfiltered: the original pre-filters and calls open(sInputValue) - see meta deviation
                             " _filterAndOpenValueHelpDialog opens the dialog with the
                             " current input value: open( ) takes that search string
-                            )->a( n = `valueHelpRequest` v = client->_event_client( val   = client->cs_event-control_by_id
-                                                                                    t_arg = VALUE #( ( `selectDialog` )
+                            )->a( n = `valueHelpRequest` v = client->follow_up_action( val   = client->cs_event-control_by_id
+                                                                                       t_arg = VALUE #( ( `selectDialog` )
                                                                                                      ( `open` )
                                                                                                      ( `$event.oSource.getValue()` ) ) )
                             )->a( n = `suggestionItems` v = client->_bind( t_purchases )
@@ -418,7 +418,6 @@ CLASS z2ui5_cl_dmo_app_233 IMPLEMENTATION.
         IF input_value IS INITIAL.
           inputpopulated = abap_false.
         ENDIF.
-        client->view_model_update( ).
 
       WHEN `SUGGEST`.
         " handleInputSuggestionItemSelected: the picked suggestion's key

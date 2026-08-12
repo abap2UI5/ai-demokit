@@ -445,14 +445,12 @@ CLASS z2ui5_cl_dmo_app_012 IMPLEMENTATION.
         ELSE.
           compare_visible = abap_false.
         ENDIF.
-        client->view_model_update( ).
 
       WHEN `COMPARE`.
         comparison_build( ).
         " the router's navTo("page2") mapped to the NavContainer `to` frontend action
         client->follow_up_action( val   = client->cs_event-control_by_id
                                   t_arg = VALUE #( ( `rootControl` ) ( `to` ) ( `page-comparison` ) ) ).
-        client->view_model_update( ).
 
       WHEN `PAGE_CHANGED`.
         DATA(page_arg) = client->get_event_arg( ).
@@ -475,7 +473,6 @@ CLASS z2ui5_cl_dmo_app_012 IMPLEMENTATION.
                                   t_arg = VALUE #( ( `carousel-expanded` )
                                                    ( `setActivePage` )
                                                    ( |carousel-expanded/pages/{ first_item }| ) ) ).
-        client->view_model_update( ).
 
       WHEN `PANEL_EXPANDED`.
         DATA(prop_key) = client->get_event_arg( ).
@@ -485,7 +482,6 @@ CLASS z2ui5_cl_dmo_app_012 IMPLEMENTATION.
           LOOP AT <s_prop>-values ASSIGNING FIELD-SYMBOL(<s_value>).
             <s_value>-visible = expanded.
           ENDLOOP.
-          client->view_model_update( ).
         ENDIF.
 
     ENDCASE.

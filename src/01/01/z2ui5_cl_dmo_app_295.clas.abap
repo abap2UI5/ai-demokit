@@ -134,7 +134,6 @@ CLASS z2ui5_cl_dmo_app_295 IMPLEMENTATION.
     filter_count    = COND #( WHEN active = abap_true THEN 1 ELSE 0 ).
     filter_selected = active.
 
-    client->view_model_update( ).
 
   ENDMETHOD.
 

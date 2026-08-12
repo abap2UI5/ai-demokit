@@ -28,7 +28,7 @@
     },
     {
       "type": "NOTE",
-      "what": "the List binds the shared demo mock products.json /ProductCollection (all 123 rows, Name + Quantity - the only two fields the StandardListItem binds) inlined into model_init; the original loads the same file through a JSONModel. Both dialog buttons (OK and Close) close the dialog client-side via _event_client( cs_event-popup_close ), the direct form of the original's this.oDialog.close()."
+      "what": "the List binds the shared demo mock products.json /ProductCollection (all 123 rows, Name + Quantity - the only two fields the StandardListItem binds) inlined into model_init; the original loads the same file through a JSONModel. Both dialog buttons (OK and Close) close the dialog client-side via follow_up_action( cs_event-popup_close ), the direct form of the original's this.oDialog.close()."
     },
     {
       "type": "NOTE",

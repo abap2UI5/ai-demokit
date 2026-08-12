@@ -17,7 +17,7 @@
     },
     {
       "type": "NOTE",
-      "what": "the controller's only handler is MessageToast.show with the CONSTANT text 'The GenericTile is pressed.', so every press wire is the roundtrip-free client toast (_event_client cs_event-control_global MESSAGE_TOAST.show, app 005/275 idiom) and the app stays init-only."
+      "what": "the controller's only handler is MessageToast.show with the CONSTANT text 'The GenericTile is pressed.', so every press wire is the roundtrip-free client toast (follow_up_action cs_event-control_global MESSAGE_TOAST.show, app 005/275 idiom) and the app stays init-only."
     },
     {
       "type": "NOTE",

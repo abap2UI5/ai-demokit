@@ -33,7 +33,7 @@
     },
     {
       "type": "NOTE",
-      "what": "The page navigation is roundtrip-free _event_client( control_by_id, navigationContainer / to / page1|page2 ) - the client-side equivalent of the controller's _navTo (oNavContainer.to(oPage)); 'to' is whitelisted in CONTROL_METHODS. Neither the navigation, the NAVIGATE round-trip nor the setSelectedSection follow-up was verified in a running system. **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the 'To ObjectPage' list item navigates to page 2 (NavContainer.to via _event_client control_by_id, ObjectPage with 'Denise Smith' renders) and the nav-back button returns to page 1. Residual: the setSelectedSection reset itself (NAVIGATE round-trip with the checkbox ticked) is not asserted - the page has no icon tab bar, so the selected section has no stable DOM marker."
+      "what": "The page navigation is roundtrip-free follow_up_action( control_by_id, navigationContainer / to / page1|page2 ) - the client-side equivalent of the controller's _navTo (oNavContainer.to(oPage)); 'to' is whitelisted in CONTROL_METHODS. Neither the navigation, the NAVIGATE round-trip nor the setSelectedSection follow-up was verified in a running system. **e2e-verified 2026-07-31** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the 'To ObjectPage' list item navigates to page 2 (NavContainer.to via follow_up_action control_by_id, ObjectPage with 'Denise Smith' renders) and the nav-back button returns to page 1. Residual: the setSelectedSection reset itself (NAVIGATE round-trip with the checkbox ticked) is not asserted - the page has no icon tab bar, so the selected section has no stable DOM marker."
     },
     {
       "type": "NOTE",

@@ -21,11 +21,11 @@
     },
     {
       "type": "NOTE",
-      "what": "Named-model prefix-drop (app 230/261 precedent): the controller's ConfigModel (JSONModel {subSectionLayout: 'TitleOnTop'}) is folded onto the one default model - subSectionLayout='{ConfigModel>/subSectionLayout}' becomes the two-way bound root field ({/SUBSECTIONLAYOUT}), seeded 'TitleOnTop' exactly as onInit does. Same leaf name, same data, renders identically. The controller's toggleTitle handler becomes the TOGGLE_TITLE event branch flipping the field between TitleOnTop and TitleOnLeft plus view_model_update; the press='.toggleTitle' wire on the ObjectPageHeaderActionButton is client->_event('TOGGLE_TITLE')."
+      "what": "Named-model prefix-drop (app 230/261 precedent): the controller's ConfigModel (JSONModel {subSectionLayout: 'TitleOnTop'}) is folded onto the one default model - subSectionLayout='{ConfigModel>/subSectionLayout}' becomes the two-way bound root field ({/SUBSECTIONLAYOUT}), seeded 'TitleOnTop' exactly as onInit does. Same leaf name, same data, renders identically. The controller's toggleTitle handler becomes the TOGGLE_TITLE event branch flipping the field between TitleOnTop and TitleOnLeft; the press='.toggleTitle' wire on the ObjectPageHeaderActionButton is client->_event('TOGGLE_TITLE')."
     },
     {
       "type": "LIVE_TEST",
-      "what": "Round-trip behaviour not verified in a running system: the 'toggle title' ObjectPageHeaderActionButton fires TOGGLE_TITLE, the backend flips subsectionlayout between TitleOnTop and TitleOnLeft and pushes it back via view_model_update - whether the bound subSectionLayout property re-layouts the subsection titles live, and the overall ObjectPage rendering of the eight inlined core:HTML blocks, remain to be checked."
+      "what": "Round-trip behaviour not verified in a running system: the 'toggle title' ObjectPageHeaderActionButton fires TOGGLE_TITLE, the backend flips subsectionlayout between TitleOnTop and TitleOnLeft and pushes it back on the round-trip - whether the bound subSectionLayout property re-layouts the subsection titles live, and the overall ObjectPage rendering of the eight inlined core:HTML blocks, remain to be checked."
     }
   ]
 }

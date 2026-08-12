@@ -157,8 +157,8 @@ CLASS z2ui5_cl_dmo_app_412 IMPLEMENTATION.
                             " scrolled roundtrip-free via the control_by_id frontend action
                             )->leaf( n = `Link` ns = `m`
                                 )->a( n = `text`  v = `Order Details`
-                                )->a( n = `press` v = client->_event_client( val   = client->cs_event-control_by_id
-                                                                             t_arg = VALUE #( ( `ObjectPageLayout` ) ( `setSelectedSection` ) ( `orderDetailsSection` ) ) )
+                                )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_by_id
+                                                                                t_arg = VALUE #( ( `ObjectPageLayout` ) ( `setSelectedSection` ) ( `orderDetailsSection` ) ) )
 
                         )->shut(
 
@@ -192,8 +192,8 @@ CLASS z2ui5_cl_dmo_app_412 IMPLEMENTATION.
                                 )->a( n = `class` v = `sapUiTinyMarginEnd`
                             )->leaf( n = `Link` ns = `m`
                                 )->a( n = `text`  v = `Robotech (234242343)`
-                                )->a( n = `press` v = client->_event_client( val   = client->cs_event-control_global
-                                                                             t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Navigate to external application.` ) ) )
+                                )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                                t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Navigate to external application.` ) ) )
 
                         )->shut(
                     )->shut(
@@ -314,8 +314,8 @@ CLASS z2ui5_cl_dmo_app_412 IMPLEMENTATION.
 
                             )->leaf( n = `Link` ns = `m`
                                 )->a( n = `text`  v = `Status`
-                                )->a( n = `press` v = client->_event_client( val   = client->cs_event-control_global
-                                                                             t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` )
+                                )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                                t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` )
                                                                                               ( `Navigate to another page in the same application (List of delivery items)` ) ) )
 
                         )->shut(
@@ -373,8 +373,8 @@ CLASS z2ui5_cl_dmo_app_412 IMPLEMENTATION.
 
                             )->leaf( n = `Link` ns = `m`
                                 )->a( n = `text`  v = `Average User Rating`
-                                )->a( n = `press` v = client->_event_client( val   = client->cs_event-control_global
-                                                                             t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Navigate to external application.` ) ) )
+                                )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                                t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Navigate to external application.` ) ) )
 
                         )->shut(
 

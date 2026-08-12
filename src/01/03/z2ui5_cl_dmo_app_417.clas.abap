@@ -235,7 +235,6 @@ CLASS z2ui5_cl_dmo_app_417 IMPLEMENTATION.
         " or while the side content is hidden
         breakpoint = client->get_event_arg( ).
         open_btn_visible = xsdbool( breakpoint = `S` OR show_side = abap_false ).
-        client->view_model_update( ).
 
       WHEN `OPEN_SIDE_CONTENT`.
         " handleSCBtnPress shows the side content - on S the original calls
@@ -243,7 +242,6 @@ CLASS z2ui5_cl_dmo_app_417 IMPLEMENTATION.
         " then hides its own button and moves the focus to the Close button
         show_side        = abap_true.
         open_btn_visible = abap_false.
-        client->view_model_update( ).
         client->follow_up_action( val   = client->cs_event-set_focus
                                   t_arg = VALUE #( ( `closeSideContentBtn` ) ) ).
 
@@ -252,7 +250,6 @@ CLASS z2ui5_cl_dmo_app_417 IMPLEMENTATION.
         " again and moves the focus back to it
         show_side        = abap_false.
         open_btn_visible = abap_true.
-        client->view_model_update( ).
         client->follow_up_action( val   = client->cs_event-set_focus
                                   t_arg = VALUE #( ( `openSideContentBtn` ) ) ).
 

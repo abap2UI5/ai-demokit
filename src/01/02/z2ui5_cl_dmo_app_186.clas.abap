@@ -66,8 +66,8 @@ CLASS z2ui5_cl_dmo_app_186 IMPLEMENTATION.
             )->a( n = `defaultPane` v = `default`
 
             )->open( n = `PaneContainer` ns = `l`
-                )->a( n = `resize` v = client->_event_client( val   = client->cs_event-control_global
-                                                              t_arg = VALUE #( ( `MESSAGE_TOAST` )
+                )->a( n = `resize` v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                 t_arg = VALUE #( ( `MESSAGE_TOAST` )
                                                                                ( `show` )
                                                                                ( `Root container is resized.\nOld panes sizes = [{0}]\nNew panes sizes = [{1}]` )
                                                                                ( `${$parameters>/oldSizes} ? ${$parameters>/oldSizes}.join(',') : ''` )
@@ -104,8 +104,8 @@ CLASS z2ui5_cl_dmo_app_186 IMPLEMENTATION.
 
                 )->open( n = `PaneContainer` ns = `l`
                     )->a( n = `orientation` v = `Vertical`
-                    )->a( n = `resize`      v = client->_event_client( val   = client->cs_event-control_global
-                                                                       t_arg = VALUE #( ( `MESSAGE_TOAST` )
+                    )->a( n = `resize`      v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                          t_arg = VALUE #( ( `MESSAGE_TOAST` )
                                                                                         ( `show` )
                                                                                         ( `Inner container is resized.\nOld panes sizes = [{0}]\nNew panes sizes = [{1}]` )
                                                                                         ( `${$parameters>/oldSizes} ? ${$parameters>/oldSizes}.join(',') : ''` )

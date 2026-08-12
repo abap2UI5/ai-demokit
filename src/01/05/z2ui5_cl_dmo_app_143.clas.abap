@@ -170,11 +170,9 @@ CLASS z2ui5_cl_dmo_app_143 IMPLEMENTATION.
         " the original reads the current areaShrinkRatio and alternates it with
         " the property default; the flag carries the same two-state information
         shrink_wide = xsdbool( shrink_wide = abap_false ).
-        client->view_model_update( ).
 
       WHEN `TOGGLE_FOOTER`.
         show_footer = xsdbool( show_footer = abap_false ).
-        client->view_model_update( ).
 
     ENDCASE.
 

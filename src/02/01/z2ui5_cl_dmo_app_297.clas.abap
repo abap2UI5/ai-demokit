@@ -383,7 +383,6 @@ CLASS z2ui5_cl_dmo_app_297 IMPLEMENTATION.
           date_value_state      = `Error`.
           date_value_state_text = `Invalid date. Please enter a date in the correct format.`.
         ENDIF.
-        client->view_model_update( ).
 
       WHEN `BEFORE_CLOSE`.
         " the client already vetoed the close when the state is Error (see the

@@ -56,8 +56,8 @@ CLASS z2ui5_cl_dmo_app_262 IMPLEMENTATION.
             )->a( n = `id`                       v = `ObjectPageLayout`
             )->a( n = `showTitleInHeaderContent` v = `true`
             )->a( n = `showEditHeaderButton`     v = `true`
-            )->a( n = `editHeaderButtonPress`    v = client->_event_client( val   = client->cs_event-control_global
-                                                                            t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Edit header button pressed` ) ) )
+            )->a( n = `editHeaderButtonPress`    v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                               t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Edit header button pressed` ) ) )
             )->a( n = `upperCaseAnchorBar`       v = `false`
             " added wires (declared): the footer flag the controller toggles
             " imperatively, and the breakpointChange the controller attaches
@@ -74,12 +74,12 @@ CLASS z2ui5_cl_dmo_app_262 IMPLEMENTATION.
 
                             )->leaf( n = `Link` ns = `m`
                                 )->a( n = `text`  v = `Home`
-                                )->a( n = `press` v = client->_event_client( val   = client->cs_event-control_global
-                                                                             t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Page 1 a very long link clicked` ) ) )
+                                )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                                t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Page 1 a very long link clicked` ) ) )
                             )->leaf( n = `Link` ns = `m`
                                 )->a( n = `text`  v = `Examples`
-                                )->a( n = `press` v = client->_event_client( val   = client->cs_event-control_global
-                                                                             t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Page 2 long link clicked` ) ) )
+                                )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                                t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Page 2 long link clicked` ) ) )
 
                         )->shut(
                     )->shut(
@@ -308,7 +308,6 @@ CLASS z2ui5_cl_dmo_app_262 IMPLEMENTATION.
         " toggleFooter: setShowFooter(!getShowFooter()) - reproduced by flipping
         " the two-way bound flag and pushing the model back to the client
         show_footer = xsdbool( show_footer = abap_false ).
-        client->view_model_update( ).
 
       WHEN `BREAKPOINT_CHANGE`.
         " onBreakpointChange: map the media range to the Avatar size (Phone M,
@@ -322,7 +321,6 @@ CLASS z2ui5_cl_dmo_app_262 IMPLEMENTATION.
                                 WHEN `Desktop` THEN `XL`
                                 WHEN `DesktopExtraLarge` THEN `XL`
                                 ELSE `L` ).
-        client->view_model_update( ).
         client->message_toast_display( |Media Range: { lv_range } ({ lv_width }px)\nAvatar Size: { avatar_size }| ).
     ENDCASE.
 

@@ -174,19 +174,16 @@ CLASS z2ui5_cl_dmo_app_234 IMPLEMENTATION.
         " like handleListPress: open the mid column (TwoColumnsBeginExpanded) and toast
         layout = `TwoColumnsBeginExpanded`.
         client->message_toast_display( `Loading mid column...` ).
-        client->view_model_update( ).
 
       WHEN `DETAIL_PRESS`.
         " like handleDetailPress: open the end column (ThreeColumnsMidExpanded) and toast
         layout = `ThreeColumnsMidExpanded`.
         client->message_toast_display( `Loading end column...` ).
-        client->view_model_update( ).
 
       WHEN `CLOSE`.
         " like handleClose: back to the mid column (TwoColumnsBeginExpanded) and toast
         layout = `TwoColumnsBeginExpanded`.
         client->message_toast_display( `Closing end column...` ).
-        client->view_model_update( ).
 
     ENDCASE.
 

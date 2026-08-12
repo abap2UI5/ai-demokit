@@ -28,7 +28,7 @@
     },
     {
       "type": "NOTE",
-      "what": "Cancel: the approve dialog (no inputs) closes client-side via _event_client popup_close; the three note dialogs cancel through a backend DIALOG_CANCEL event + popup_destroy so the two-way model sync keeps the typed note across a reopen, matching the original's reused cached dialog instances."
+      "what": "Cancel: the approve dialog (no inputs) closes client-side via follow_up_action popup_close; the three note dialogs cancel through a backend DIALOG_CANCEL event + popup_destroy so the two-way model sync keeps the typed note across a reopen, matching the original's reused cached dialog instances."
     }
   ]
 }

@@ -33,7 +33,7 @@
     },
     {
       "type": "NOTE",
-      "what": "the controller's handleMessagePopoverPress (this.oMP.toggle(oEvent.getSource())) becomes a roundtrip-free client->_event_client( cs_event-control_by_id, toggleBy ) wired on the button press (anchored to the button by its id 'messagePopoverBtn'), matching the original's client-side toggle 1:1 - no SHOW_MESSAGES round-trip's DOM ref ($event.oSource.sId), the MessagePopover carrying id=messagePopover - open-if-closed / close-if-open, same frontend-action pattern as apps 066/067."
+      "what": "the controller's handleMessagePopoverPress (this.oMP.toggle(oEvent.getSource())) becomes a roundtrip-free client->follow_up_action( cs_event-control_by_id, toggleBy ) wired on the button press (anchored to the button by its id 'messagePopoverBtn'), matching the original's client-side toggle 1:1 - no SHOW_MESSAGES round-trip's DOM ref ($event.oSource.sId), the MessagePopover carrying id=messagePopover - open-if-closed / close-if-open, same frontend-action pattern as apps 066/067."
     },
     {
       "type": "NOTE",

@@ -14,7 +14,7 @@
   "deviations": [
     {
       "type": "NOTE",
-      "what": "handleValueHelp is reproduced 1:1 through two follow-up actions in the order the controller has them: cs_event-binding_call filters the dialog's items binding by NAME Contains the typed value (the model stays untouched, exactly like oValueHelpDialog.getBinding('items').filter([...])), then cs_event-control_by_id open( value ) opens it with that same value in its search field - CONTROL_METHODS declares open's optional string argument, so oValueHelpDialog.open(sInputValue) travels whole. The MultiInput's value is bound two-way so the typed text is on the server when valueHelpRequest fires. The dialog's own search event keeps the roundtrip-free _event_client binding_call form (app 103 idiom)."
+      "what": "handleValueHelp is reproduced 1:1 through two follow-up actions in the order the controller has them: cs_event-binding_call filters the dialog's items binding by NAME Contains the typed value (the model stays untouched, exactly like oValueHelpDialog.getBinding('items').filter([...])), then cs_event-control_by_id open( value ) opens it with that same value in its search field - CONTROL_METHODS declares open's optional string argument, so oValueHelpDialog.open(sInputValue) travels whole. The MultiInput's value is bound two-way so the typed text is on the server when valueHelpRequest fires. The dialog's own search event keeps the roundtrip-free follow_up_action binding_call form (app 103 idiom)."
     },
     {
       "type": "NOTE",

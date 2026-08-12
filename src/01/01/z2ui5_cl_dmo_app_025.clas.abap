@@ -105,7 +105,6 @@ CLASS z2ui5_cl_dmo_app_025 IMPLEMENTATION.
           " the original's removeItem: splice the entry out of the collection (index arrives zero-based)
           DATA(index) = CONV i( client->get_event_arg( 2 ) ) + 1.
           DELETE t_entry_collection INDEX index.
-          client->view_model_update( ).
           client->message_toast_display( `Item deleted` ).
         ELSE.
           client->message_toast_display( |Action "{ action }" pressed.| ).

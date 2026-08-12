@@ -48,34 +48,34 @@ CLASS z2ui5_cl_dmo_app_286 IMPLEMENTATION.
 
                 )->leaf( `Link`
                     )->a( n = `text`  v = `Home`
-                    )->a( n = `press` v = client->_event_client( val   = client->cs_event-control_global
-                                                                 t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} has been clicked` ) ( `${$source>/text}` ) ) )
+                    )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                    t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} has been clicked` ) ( `${$source>/text}` ) ) )
                 )->leaf( `Link`
                     )->a( n = `text`  v = `Page 1`
-                    )->a( n = `press` v = client->_event_client( val   = client->cs_event-control_global
-                                                                 t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} has been clicked` ) ( `${$source>/text}` ) ) )
+                    )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                    t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} has been clicked` ) ( `${$source>/text}` ) ) )
                 )->leaf( `Link`
                     )->a( n = `text`  v = `Page 2`
-                    )->a( n = `press` v = client->_event_client( val   = client->cs_event-control_global
-                                                                 t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} has been clicked` ) ( `${$source>/text}` ) ) )
+                    )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                    t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} has been clicked` ) ( `${$source>/text}` ) ) )
                 )->leaf( `Link`
                     )->a( n = `text`  v = `Page 3`
-                    )->a( n = `press` v = client->_event_client( val   = client->cs_event-control_global
-                                                                 t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} has been clicked` ) ( `${$source>/text}` ) ) )
+                    )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                    t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} has been clicked` ) ( `${$source>/text}` ) ) )
                 )->leaf( `Link`
                     )->a( n = `text`  v = `Page 4`
-                    )->a( n = `press` v = client->_event_client( val   = client->cs_event-control_global
-                                                                 t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} has been clicked` ) ( `${$source>/text}` ) ) )
+                    )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                    t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} has been clicked` ) ( `${$source>/text}` ) ) )
                 )->leaf( `Link`
                     )->a( n = `text`  v = `Page 5`
-                    )->a( n = `press` v = client->_event_client( val   = client->cs_event-control_global
-                                                                 t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} has been clicked` ) ( `${$source>/text}` ) ) )
+                    )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                    t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} has been clicked` ) ( `${$source>/text}` ) ) )
 
                 )->open( `currentLocation`
                     )->leaf( `Link`
                         )->a( n = `text`  v = `Page 6`
-                        )->a( n = `press` v = client->_event_client( val   = client->cs_event-control_global
-                                                                     t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} has been clicked` ) ( `${$source>/text}` ) ) ) ).
+                        )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                        t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} has been clicked` ) ( `${$source>/text}` ) ) ) ).
 
     client->view_display( view->stringify( ) ).
 

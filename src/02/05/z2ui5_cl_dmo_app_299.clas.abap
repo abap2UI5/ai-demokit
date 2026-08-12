@@ -112,7 +112,6 @@ CLASS z2ui5_cl_dmo_app_299 IMPLEMENTATION.
       WHEN `TOGGLE_EXPAND`.
         " original onCollapseExpandPress: toggles SideNavigation.expanded
         expanded = xsdbool( expanded = abap_false ).
-        client->view_model_update( ).
 
       WHEN `QUICK_CREATE`.
         popup_quickcreate_display( ).
@@ -129,7 +128,6 @@ CLASS z2ui5_cl_dmo_app_299 IMPLEMENTATION.
                                            ELSE `sap-icon://building` )
                         expanded = abap_true ) INTO TABLE t_nav_items.
         client->popup_destroy( ).
-        client->view_model_update( ).
 
     ENDCASE.
 
@@ -179,7 +177,7 @@ CLASS z2ui5_cl_dmo_app_299 IMPLEMENTATION.
             )->open( `endButton`
                 )->leaf( `Button`
                     )->a( n = `text`  v = `Cancel`
-                    )->a( n = `press` v = client->_event_client( client->cs_event-popup_close ) ).
+                    )->a( n = `press` v = client->follow_up_action( client->cs_event-popup_close ) ).
 
     client->popup_display( popup->stringify( ) ).
 

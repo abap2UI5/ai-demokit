@@ -45,21 +45,21 @@ CLASS z2ui5_cl_dmo_app_236 IMPLEMENTATION.
             )->a( n = `text`  v = `Without Icon`
             )->a( n = `class` v = `sapUiSmallMarginTop sapUiTinyMarginBottom`
         )->leaf( `FeedInput`
-            )->a( n = `post`     v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Posted new feed entry: {0}` ) ( `${$parameters>/value}` ) ) )
+            )->a( n = `post`     v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Posted new feed entry: {0}` ) ( `${$parameters>/value}` ) ) )
             )->a( n = `showIcon` v = `false`
 
         )->leaf( `Label`
             )->a( n = `text`  v = `With Icon Placeholder`
             )->a( n = `class` v = `sapUiSmallMarginTop sapUiTinyMarginBottom`
         )->leaf( `FeedInput`
-            )->a( n = `post`     v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Posted new feed entry: {0}` ) ( `${$parameters>/value}` ) ) )
+            )->a( n = `post`     v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Posted new feed entry: {0}` ) ( `${$parameters>/value}` ) ) )
             )->a( n = `showIcon` v = `true`
 
         )->leaf( `Label`
             )->a( n = `text`  v = `With Icon`
             )->a( n = `class` v = `sapUiSmallMarginTop sapUiTinyMarginBottom`
         )->leaf( `FeedInput`
-            )->a( n = `post`     v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Posted new feed entry: {0}` ) ( `${$parameters>/value}` ) ) )
+            )->a( n = `post`     v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Posted new feed entry: {0}` ) ( `${$parameters>/value}` ) ) )
             )->a( n = `showIcon` v = `true`
             " test-resources image rehosted to the OpenUI5 host per the asset-URL rule
             )->a( n = `icon`     v = `https://sdk.openui5.org/test-resources/sap/m/images/george_washington.jpg`
@@ -68,7 +68,7 @@ CLASS z2ui5_cl_dmo_app_236 IMPLEMENTATION.
             )->a( n = `text`  v = `Disabled`
             )->a( n = `class` v = `sapUiSmallMarginTop sapUiTinyMarginBottom`
         )->leaf( `FeedInput`
-            )->a( n = `post`     v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Posted new feed entry: {0}` ) ( `${$parameters>/value}` ) ) )
+            )->a( n = `post`     v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Posted new feed entry: {0}` ) ( `${$parameters>/value}` ) ) )
             )->a( n = `enabled`  v = `false`
             )->a( n = `showIcon` v = `true`
             )->a( n = `icon`     v = `https://sdk.openui5.org/test-resources/sap/m/images/george_washington.jpg`
@@ -77,14 +77,14 @@ CLASS z2ui5_cl_dmo_app_236 IMPLEMENTATION.
             )->a( n = `text`  v = `Rows Set to 5`
             )->a( n = `class` v = `sapUiSmallMarginTop sapUiTinyMarginBottom`
         )->leaf( `FeedInput`
-            )->a( n = `post` v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Posted new feed entry: {0}` ) ( `${$parameters>/value}` ) ) )
+            )->a( n = `post` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Posted new feed entry: {0}` ) ( `${$parameters>/value}` ) ) )
             )->a( n = `rows` v = `5`
 
         )->leaf( `Label`
             )->a( n = `text`  v = `With Exceeded Text`
             )->a( n = `class` v = `sapUiSmallMarginTop sapUiTinyMarginBottom`
         )->leaf( `FeedInput`
-            )->a( n = `post`             v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Posted new feed entry: {0}` ) ( `${$parameters>/value}` ) ) )
+            )->a( n = `post`             v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Posted new feed entry: {0}` ) ( `${$parameters>/value}` ) ) )
             )->a( n = `maxLength`        v = `20`
             )->a( n = `showExceededText` v = `true`
 
@@ -92,7 +92,7 @@ CLASS z2ui5_cl_dmo_app_236 IMPLEMENTATION.
             )->a( n = `text`  v = `With Growing`
             )->a( n = `class` v = `sapUiSmallMarginTop sapUiTinyMarginBottom`
         )->leaf( `FeedInput`
-            )->a( n = `post`    v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Posted new feed entry: {0}` ) ( `${$parameters>/value}` ) ) )
+            )->a( n = `post`    v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Posted new feed entry: {0}` ) ( `${$parameters>/value}` ) ) )
             )->a( n = `growing` v = `true`
 
         )->leaf( `Label`
@@ -100,7 +100,7 @@ CLASS z2ui5_cl_dmo_app_236 IMPLEMENTATION.
             )->a( n = `class` v = `sapUiSmallMarginTop sapUiTinyMarginBottom`
         )->open( `FeedInput`
             )->a( n = `id`       v = `feedActionPlain`
-            )->a( n = `post`     v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Posted new feed entry: {0}` ) ( `${$parameters>/value}` ) ) )
+            )->a( n = `post`     v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Posted new feed entry: {0}` ) ( `${$parameters>/value}` ) ) )
             )->a( n = `showIcon` v = `false`
 
             )->open( `actions`
@@ -116,7 +116,7 @@ CLASS z2ui5_cl_dmo_app_236 IMPLEMENTATION.
             )->a( n = `class` v = `sapUiSmallMarginTop sapUiTinyMarginBottom`
         )->open( `FeedInput`
             )->a( n = `id`       v = `feedActionIcon`
-            )->a( n = `post`     v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Posted new feed entry: {0}` ) ( `${$parameters>/value}` ) ) )
+            )->a( n = `post`     v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Posted new feed entry: {0}` ) ( `${$parameters>/value}` ) ) )
             )->a( n = `showIcon` v = `true`
 
             )->open( `actions`

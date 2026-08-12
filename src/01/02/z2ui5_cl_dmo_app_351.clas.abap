@@ -220,7 +220,6 @@ CLASS z2ui5_cl_dmo_app_351 IMPLEMENTATION.
       lr_row->title = |ContentArea #{ sy-tabix }|.
     ENDLOOP.
 
-    client->view_model_update( ).
 
   ENDMETHOD.
 

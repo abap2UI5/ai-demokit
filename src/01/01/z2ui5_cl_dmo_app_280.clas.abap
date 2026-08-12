@@ -84,7 +84,6 @@ CLASS z2ui5_cl_dmo_app_280 IMPLEMENTATION.
         " the original controller writes the event's value into the getValue Text,
         " deliberately bypassing the model - here it is the backend that holds it
         get_value = client->get_event_arg( ).
-        client->view_model_update( ).
 
     ENDCASE.
 

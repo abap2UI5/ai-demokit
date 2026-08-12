@@ -165,7 +165,6 @@ CLASS z2ui5_cl_dmo_app_308 IMPLEMENTATION.
           CLEAR t_legend1.
           CLEAR t_legend2.
         ENDIF.
-        client->view_model_update( ).
 
     ENDCASE.
 

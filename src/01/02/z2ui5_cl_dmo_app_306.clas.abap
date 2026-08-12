@@ -111,7 +111,6 @@ CLASS z2ui5_cl_dmo_app_306 IMPLEMENTATION.
                                 THEN `No Date Selected`
                                 ELSE |{ client->get_event_arg( 4 ) }-{ CONV i( client->get_event_arg( 5 ) ) WIDTH = 2 ALIGN = RIGHT PAD = '0' }| &&
                                      |-{ CONV i( client->get_event_arg( 6 ) ) WIDTH = 2 ALIGN = RIGHT PAD = '0' }| ).
-        client->view_model_update( ).
 
       WHEN `WEEK_SELECT`.
         " handleWeekNumberSelect: every fifth calendar week is refused with a
@@ -128,7 +127,6 @@ CLASS z2ui5_cl_dmo_app_306 IMPLEMENTATION.
                                   THEN `No Date Selected`
                                   ELSE |{ client->get_event_arg( 5 ) }-{ CONV i( client->get_event_arg( 6 ) ) WIDTH = 2 ALIGN = RIGHT PAD = '0' }| &&
                                        |-{ CONV i( client->get_event_arg( 7 ) ) WIDTH = 2 ALIGN = RIGHT PAD = '0' }| ).
-          client->view_model_update( ).
         ENDIF.
 
     ENDCASE.

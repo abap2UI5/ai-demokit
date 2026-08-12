@@ -46,7 +46,7 @@ scripts.**
   second view of the same catalog (the module→control→sample `sap.m.Tree`
   alternative was removed). The **search field** filters the table on the
   client (`binding_call` `Contains` over a per-row `filter` blob via
-  `_event_client` — no round-trip). Each column header also carries
+  `follow_up_action` — no round-trip). Each column header also carries
   client-side ascending/descending **sort** icons via the same `binding_call`
   mechanism. **Every link opens in a new browser tab** (`target="_blank"`).
   All source links point at OpenUI5; only the class + start links are local.

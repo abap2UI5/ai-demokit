@@ -177,7 +177,6 @@ CLASS z2ui5_cl_dmo_app_017 IMPLEMENTATION.
         ELSEIF source_id CS `DRS5`.
           drs5_value_state = value_state.
         ENDIF.
-        client->view_model_update( ).
 
     ENDCASE.
 

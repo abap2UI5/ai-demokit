@@ -62,8 +62,8 @@ CLASS z2ui5_cl_dmo_app_275 IMPLEMENTATION.
             )->a( n = `class`     v = `sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout`
             )->a( n = `header`    v = `Status Loaded - with press event`
             )->a( n = `subheader` v = `Subheader`
-            )->a( n = `press`     v = client->_event_client( val   = client->cs_event-control_global
-                                                             t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The generic tile is pressed.` ) ) )
+            )->a( n = `press`     v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The generic tile is pressed.` ) ) )
 
             )->open( `TileContent`
                 )->a( n = `unit`   v = `Unit`
@@ -100,8 +100,8 @@ CLASS z2ui5_cl_dmo_app_275 IMPLEMENTATION.
             )->a( n = `header`    v = `Status Loading - with press event`
             )->a( n = `subheader` v = `Subheader`
             )->a( n = `state`     v = `Loading`
-            )->a( n = `press`     v = client->_event_client( val   = client->cs_event-control_global
-                                                             t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The generic tile is pressed.` ) ) )
+            )->a( n = `press`     v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The generic tile is pressed.` ) ) )
 
             )->open( `TileContent`
                 )->a( n = `unit`   v = `Unit`
@@ -143,8 +143,8 @@ CLASS z2ui5_cl_dmo_app_275 IMPLEMENTATION.
             )->a( n = `subheader` v = `Subheader`
             )->a( n = `frameType` v = `TwoByOne`
             )->a( n = `state`     v = `Failed`
-            )->a( n = `press`     v = client->_event_client( val   = client->cs_event-control_global
-                                                             t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The generic tile is pressed.` ) ) )
+            )->a( n = `press`     v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The generic tile is pressed.` ) ) )
 
             )->open( `TileContent`
                 )->a( n = `unit`   v = `Unit`
@@ -182,8 +182,8 @@ CLASS z2ui5_cl_dmo_app_275 IMPLEMENTATION.
                 )->a( n = `backgroundImage` v = `https://sdk.openui5.org/test-resources/sap/m/demokit/sample/GenericTileAsFeedTile/images/NewsImage2.png`
                 )->a( n = `frameType`       v = `TwoByOne`
                 )->a( n = `state`           v = `Loaded`
-                )->a( n = `press`           v = client->_event_client( val   = client->cs_event-control_global
-                                                                       t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The generic tile is pressed.` ) ) )
+                )->a( n = `press`           v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                          t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The generic tile is pressed.` ) ) )
 
                 )->open( `TileContent`
                     )->a( n = `unit`   v = `Unit`
@@ -220,8 +220,8 @@ CLASS z2ui5_cl_dmo_app_275 IMPLEMENTATION.
             )->a( n = `header`    v = `Status Disabled - with press event`
             )->a( n = `subheader` v = `Subheader`
             )->a( n = `state`     v = `Disabled`
-            )->a( n = `press`     v = client->_event_client( val   = client->cs_event-control_global
-                                                             t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The generic tile is pressed.` ) ) )
+            )->a( n = `press`     v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The generic tile is pressed.` ) ) )
 
             )->open( `TileContent`
                 )->a( n = `footer` v = `Footer`

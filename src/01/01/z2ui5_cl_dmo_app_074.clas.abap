@@ -58,7 +58,7 @@ CLASS z2ui5_cl_dmo_app_074 IMPLEMENTATION.
                 )->a( n = `title`      v = `{NAME}`
                 )->a( n = `type`       v = `Active`
                 " client-composed toast, roundtrip-free - re-verify live (see sidecar LIVE_TEST)
-                )->a( n = `press`      v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Pressed : {0}` ) ( `${NAME}` ) ) )
+                )->a( n = `press`      v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Pressed : {0}` ) ( `${NAME}` ) ) )
                 )->a( n = `number`     v = |\{ parts:[\{path:'PRICE'\},\{path:'CURRENCY_CODE'\}], type: 'sap.ui.model.type.Currency', formatOptions: \{showMeasure: false\} \}|
                 )->a( n = `numberUnit` v = `{CURRENCY_CODE}`
 

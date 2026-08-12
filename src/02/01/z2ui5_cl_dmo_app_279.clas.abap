@@ -92,18 +92,15 @@ CLASS z2ui5_cl_dmo_app_279 IMPLEMENTATION.
       WHEN `LOAD`.
 
         has_error = abap_false.
-        client->view_model_update( ).
 
       WHEN `ERROR`.
 
         has_error = abap_true.
-        client->view_model_update( ).
 
       WHEN `SET_SRC`.
 
         " original: the img> model's /products/pic1 is overwritten with a dead url
         image_src = `/some/random/url`.
-        client->view_model_update( ).
 
     ENDCASE.
 

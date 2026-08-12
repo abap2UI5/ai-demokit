@@ -67,8 +67,8 @@ CLASS z2ui5_cl_dmo_app_399 IMPLEMENTATION.
                         )->a( n = `src`         v = pic3
                         )->a( n = `width`       v = image_width
                         )->a( n = `decorative`  v = `false`
-                        )->a( n = `press`       v = client->_event_client( val   = client->cs_event-control_global
-                                                                           t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The image has been pressed` ) ) )
+                        )->a( n = `press`       v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                              t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The image has been pressed` ) ) )
 
                 )->shut(
                 )->open( `VBox`

@@ -50,12 +50,12 @@ CLASS z2ui5_cl_dmo_app_246 IMPLEMENTATION.
                 )->a( n = `value`          v = client->_bind( file_value )
                 )->a( n = `uploadUrl`      v = `upload/`
                 )->a( n = `tooltip`        v = `Upload your file to the local server`
-                )->a( n = `uploadComplete` v = client->_event_client( val   = client->cs_event-control_global
-                                                                      t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `File upload complete. Status: 200 (Upload Success)` ) ) )
-                )->a( n = `change`         v = client->_event_client( val   = client->cs_event-control_global
-                                                                      t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Press 'Upload File' to upload file '{0}'` ) ( `${$parameters>/newValue}` ) ) )
-                )->a( n = `typeMissmatch`  v = client->_event_client( val   = client->cs_event-control_global
-                                                                      t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The file type *.{0} is not supported. Choose one of the following types: txt, jpg` ) ( `${$parameters>/fileType}` ) ) )
+                )->a( n = `uploadComplete` v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                         t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `File upload complete. Status: 200 (Upload Success)` ) ) )
+                )->a( n = `change`         v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                         t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Press 'Upload File' to upload file '{0}'` ) ( `${$parameters>/newValue}` ) ) )
+                )->a( n = `typeMissmatch`  v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                         t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The file type *.{0} is not supported. Choose one of the following types: txt, jpg` ) ( `${$parameters>/fileType}` ) ) )
                 )->a( n = `style`          v = `Emphasized`
                 )->a( n = `fileType`       v = `txt,jpg`
                 )->a( n = `placeholder`    v = `Choose a file for Upload...`
@@ -100,7 +100,6 @@ CLASS z2ui5_cl_dmo_app_246 IMPLEMENTATION.
           client->follow_up_action( val   = client->cs_event-control_by_id
                                     t_arg = VALUE #( ( `fileUploader` ) ( `clear` ) ) ).
           file_value = ``.
-          client->view_model_update( ).
         ENDIF.
 
     ENDCASE.

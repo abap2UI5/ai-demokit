@@ -201,7 +201,6 @@ CLASS z2ui5_cl_dmo_app_097 IMPLEMENTATION.
                               WHEN 1 THEN `StretchCompressMode`
                               WHEN 2 THEN `HideMode`
                               WHEN 3 THEN `PopoverMode` ).
-        client->view_model_update( ).
         client->message_toast_display( text = |Split Container mode is changed to: { mode }| duration = `5000` ).
 
     ENDCASE.

@@ -30,7 +30,6 @@ CLASS z2ui5_cl_dmo_sapui5_011 IMPLEMENTATION.
         mv_scan_type  = lt_arg[ 2 ].
         "implement further processing here...
         "...
-        client->view_model_update( ).
         RETURN.
     ENDCASE.
 

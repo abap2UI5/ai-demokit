@@ -657,7 +657,6 @@ CLASS z2ui5_cl_dmo_app_287 IMPLEMENTATION.
                                      WHEN 0 THEN `Cozy`
                                      WHEN 1 THEN `Compact`
                                      WHEN 2 THEN `Inherit` ).
-        client->view_model_update( ).
 
     ENDCASE.
 

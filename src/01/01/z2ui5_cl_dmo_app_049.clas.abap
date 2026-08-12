@@ -115,8 +115,8 @@ CLASS z2ui5_cl_dmo_app_049 IMPLEMENTATION.
                                 )->a( n = `fieldWidth`            v = `{FIELDWIDTH}`
                                 )->a( n = `textAlign`             v = `{TEXTALIGN}`
                                 )->a( n = `validationMode`        v = `{VALIDATIONMODE}`
-                                )->a( n = `change`                v = client->_event_client( val   = client->cs_event-control_global
-                                                                                             t_arg = VALUE #( ( `MESSAGE_TOAST` )
+                                )->a( n = `change`                v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                                                t_arg = VALUE #( ( `MESSAGE_TOAST` )
                                                                                                               ( `show` )
                                                                                                               ( `Value changed to '{0}'` )
                                                                                                               ( `${$parameters>/value}` ) ) ) ).

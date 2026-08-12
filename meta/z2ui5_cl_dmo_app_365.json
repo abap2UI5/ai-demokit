@@ -13,7 +13,7 @@
   "deviations": [
     {
       "type": "NOTE",
-      "what": "Collapse all and Expand first level are reproduced 1:1 as frontend actions: onCollapseAll / onExpandFirstLevel call the TreeTable's own collapseAll( ) and expandToLevel( 1 ), which have no bindable equivalent (the expansion state lives in the control), so they go through _event_client control_by_id TreeTable/collapseAll and TreeTable/expandToLevel with the level as its argument - roundtrip-free, exactly what the buttons do in the original."
+      "what": "Collapse all and Expand first level are reproduced 1:1 as frontend actions: onCollapseAll / onExpandFirstLevel call the TreeTable's own collapseAll( ) and expandToLevel( 1 ), which have no bindable equivalent (the expansion state lives in the control), so they go through follow_up_action control_by_id TreeTable/collapseAll and TreeTable/expandToLevel with the level as its argument - roundtrip-free, exactly what the buttons do in the original."
     },
     {
       "type": "IMPROVISED",

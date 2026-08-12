@@ -105,7 +105,6 @@ CLASS z2ui5_cl_dmo_app_144 IMPLEMENTATION.
       WHEN `SLIDER`.
         " original onSliderMoved: byId('panelForGridList').setWidth(value + '%')
         panel_width = |{ slider_value }%|.
-        client->view_model_update( ).
 
     ENDCASE.
 

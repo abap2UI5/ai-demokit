@@ -284,7 +284,6 @@ CLASS z2ui5_cl_dmo_app_414 IMPLEMENTATION.
       WHEN `TOGGLE_HEADER_CONTENT`.
         " handlePress: the original toggles the layout's showHeaderContent state
         show_header_content = xsdbool( show_header_content = abap_false ).
-        client->view_model_update( ).
 
       WHEN `MARK_CHANGES_PRESS`.
         " handleMarkChangesPress: the PopoverUnsavedChanges fragment, built

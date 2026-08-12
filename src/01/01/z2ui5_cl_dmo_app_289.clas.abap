@@ -98,7 +98,6 @@ CLASS z2ui5_cl_dmo_app_289 IMPLEMENTATION.
                                        WHEN 0 THEN `Success` ).
         show_icon     = xsdbool( press_count MOD 2 = 1 ).
         show_close    = xsdbool( press_count MOD 3 <> 0 ).
-        client->view_model_update( ).
 
         " onInit takes an InvisibleMessage instance and _generateMsgStrip
         " announces the new strip assertively. InvisibleMessage is a singleton

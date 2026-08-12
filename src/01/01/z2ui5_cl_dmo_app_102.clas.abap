@@ -74,7 +74,6 @@ CLASS z2ui5_cl_dmo_app_102 IMPLEMENTATION.
         " original dataReceived: if the input is still untouched, bind it to Employees(1)/FirstName
         IF current_value = initial_value.
           current_value = `Nancy`.
-          client->view_model_update( ).
         ENDIF.
 
     ENDCASE.

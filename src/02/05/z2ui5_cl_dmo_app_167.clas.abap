@@ -184,13 +184,13 @@ CLASS z2ui5_cl_dmo_app_167 IMPLEMENTATION.
             )->open( n = `sideContent` ns = `tnt`
                 )->open( n = `SideNavigation` ns = `tnt`
                     )->a( n = `expanded`    v = `true`
-                    )->a( n = `itemPress`   v = client->_event_client( val   = client->cs_event-control_global
-                                                                       t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Fired itemPress, item: {0}` ) ( `${$parameters>/item}.getText()` ) ) )
+                    )->a( n = `itemPress`   v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                          t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Fired itemPress, item: {0}` ) ( `${$parameters>/item}.getText()` ) ) )
                     )->a( n = `selectedKey` v = client->_bind( selectedkey )
                     " onItemSelect: pageContainer.to(createId(item.getKey())) - the key
                     " resolves client-side and the to() runs roundtrip-free
-                    )->a( n = `itemSelect`  v = client->_event_client( val   = client->cs_event-control_by_id
-                                                                       t_arg = VALUE #( ( `pageContainer` ) ( `to` ) ( `${$parameters>/item}.getKey()` ) ) )
+                    )->a( n = `itemSelect`  v = client->follow_up_action( val   = client->cs_event-control_by_id
+                                                                          t_arg = VALUE #( ( `pageContainer` ) ( `to` ) ( `${$parameters>/item}.getKey()` ) ) )
                     )->open( n = `NavigationList` ns = `tnt`
                         )->a( n = `items` v = client->_bind( navigation )
                         )->open( n = `NavigationListItem` ns = `tnt`
@@ -286,7 +286,6 @@ CLASS z2ui5_cl_dmo_app_167 IMPLEMENTATION.
                                  THEN `Large Size Navigation`
                                  ELSE `Small Size Navigation` ).
         sideexpanded = xsdbool( sideexpanded = abap_false ).
-        client->view_model_update( ).
 
       WHEN `USER_POPOVER`.
         " handleUserNamePress: the controller-built Popover (no header, Bottom,
@@ -338,13 +337,13 @@ CLASS z2ui5_cl_dmo_app_167 IMPLEMENTATION.
                       )->leaf( `Button`
                           )->a( n = `type`  v = `Emphasized`
                           )->a( n = `text`  v = `Create`
-                          )->a( n = `press` v = client->_event_client( client->cs_event-popup_close )
+                          )->a( n = `press` v = client->follow_up_action( client->cs_event-popup_close )
 
                   )->shut(
                   )->open( `endButton`
                       )->leaf( `Button`
                           )->a( n = `text`  v = `Cancel`
-                          )->a( n = `press` v = client->_event_client( client->cs_event-popup_close ) ).
+                          )->a( n = `press` v = client->follow_up_action( client->cs_event-popup_close ) ).
 
           client->popup_display( popup->stringify( ) ).
         ENDIF.

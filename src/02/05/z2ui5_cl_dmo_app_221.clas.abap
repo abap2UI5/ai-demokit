@@ -392,7 +392,6 @@ CLASS z2ui5_cl_dmo_app_221 IMPLEMENTATION.
           WHEN OTHERS.
             selected_key3 = `invalidKey`.
         ENDCASE.
-        client->view_model_update( ).
 
     ENDCASE.
 

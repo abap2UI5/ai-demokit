@@ -92,9 +92,9 @@ CLASS z2ui5_cl_dmo_app_218 IMPLEMENTATION.
             )->open( `searchManager`
                 )->open( `SearchManager`
                     )->a( n = `id`                v = `searchField`
-                    )->a( n = `search`            v = client->_event_client( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} search event is fired` ) ( `$event.oSource.sId` ) ) )
-                    )->a( n = `liveChange`        v = client->_event_client( val = client->cs_event-control_global
-                                                                             t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} liveChange event value is: {1}` ) ( `$event.oSource.sId` ) ( `${$parameters>/newValue}` ) ) )
+                    )->a( n = `search`            v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} search event is fired` ) ( `$event.oSource.sId` ) ) )
+                    )->a( n = `liveChange`        v = client->follow_up_action( val = client->cs_event-control_global
+                                                                                t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} liveChange event value is: {1}` ) ( `$event.oSource.sId` ) ( `${$parameters>/newValue}` ) ) )
                     )->a( n = `suggest`           v = client->_event( val = `SUGGEST` t_arg = VALUE #( ( `${$parameters>/suggestValue}` ) ) )
                     )->a( n = `enableSuggestions` v = `true`
                     )->a( n = `suggestionItems`   v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|

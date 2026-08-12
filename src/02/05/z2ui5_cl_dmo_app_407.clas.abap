@@ -415,7 +415,6 @@ CLASS z2ui5_cl_dmo_app_407 IMPLEMENTATION.
           search_value = ``.
           apply_filter( ).
         ENDIF.
-        client->view_model_update( ).
 
       WHEN `ITEM_SELECT`.
         " onItemSelect: navContainer.to( item key ) - only when a page with that
@@ -439,7 +438,6 @@ CLASS z2ui5_cl_dmo_app_407 IMPLEMENTATION.
         " highlightedText is bound to the same value the filter runs on
         search_value = client->get_event_arg( ).
         apply_filter( ).
-        client->view_model_update( ).
 
       WHEN `SEARCH`.
         " onSearch: announce the match count; nothing to announce on an empty query
@@ -477,13 +475,13 @@ CLASS z2ui5_cl_dmo_app_407 IMPLEMENTATION.
                 )->leaf( `Button`
                     )->a( n = `type`  v = `Emphasized`
                     )->a( n = `text`  v = `Create`
-                    )->a( n = `press` v = client->_event_client( client->cs_event-popup_close )
+                    )->a( n = `press` v = client->follow_up_action( client->cs_event-popup_close )
 
             )->shut(
             )->open( `endButton`
                 )->leaf( `Button`
                     )->a( n = `text`  v = `Cancel`
-                    )->a( n = `press` v = client->_event_client( client->cs_event-popup_close ) ).
+                    )->a( n = `press` v = client->follow_up_action( client->cs_event-popup_close ) ).
 
     client->popup_display( popup->stringify( ) ).
 

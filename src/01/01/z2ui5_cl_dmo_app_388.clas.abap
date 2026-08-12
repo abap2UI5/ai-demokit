@@ -45,8 +45,8 @@ CLASS z2ui5_cl_dmo_app_388 IMPLEMENTATION.
             )->a( n = `class`     v = `sapUiTinyMarginBegin sapUiTinyMarginTop tileLayout`
             )->a( n = `header`    v = `Feed Tile that shows updates of the last feeds given to a specific topic:`
             )->a( n = `frameType` v = `TwoByOne`
-            )->a( n = `press`     v = client->_event_client( val   = client->cs_event-control_global
-                                                             t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The GenericTile is pressed.` ) ) )
+            )->a( n = `press`     v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The GenericTile is pressed.` ) ) )
 
             )->open( `TileContent`
                 )->a( n = `footer` v = `New Notifications`
@@ -67,8 +67,8 @@ CLASS z2ui5_cl_dmo_app_388 IMPLEMENTATION.
                     " asset path kept verbatim, only host-absolutized to the OpenUI5 host
                     )->a( n = `backgroundImage` v = `https://sdk.openui5.org/test-resources/sap/m/demokit/sample/GenericTileAsFeedTile/images/NewsImage1.png`
                     )->a( n = `frameType`       v = `TwoByOne`
-                    )->a( n = `press`           v = client->_event_client( val   = client->cs_event-control_global
-                                                                           t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The GenericTile is pressed.` ) ) )
+                    )->a( n = `press`           v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                              t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The GenericTile is pressed.` ) ) )
 
                     )->open( `TileContent`
                         )->a( n = `footer` v = `August 21, 2016`
@@ -82,8 +82,8 @@ CLASS z2ui5_cl_dmo_app_388 IMPLEMENTATION.
                 )->open( `GenericTile`
                     )->a( n = `backgroundImage` v = `https://sdk.openui5.org/test-resources/sap/m/demokit/sample/GenericTileAsFeedTile/images/NewsImage2.png`
                     )->a( n = `frameType`       v = `TwoByOne`
-                    )->a( n = `press`           v = client->_event_client( val   = client->cs_event-control_global
-                                                                           t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The GenericTile is pressed.` ) ) )
+                    )->a( n = `press`           v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                              t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The GenericTile is pressed.` ) ) )
 
                     )->open( `TileContent`
                         )->a( n = `footer` v = `August 21, 2016`
