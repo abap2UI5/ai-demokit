@@ -155,26 +155,35 @@ Everything lives on the working branch, in separate top-level trees:
 |---------|---------|
 | `src/`  | The generated abap2UI5 ports (`*.clas.abap`) — the abapGit project (§3). |
 | `ui5/`  | The original UI5 demo kit templates (JS/XML/manifest), one folder per ported sample (§4). |
-| `todo/` | Imported abap2UI5 samples awaiting a decision — a staging area, **not** a package. |
+| `todo/` | Staging area for imported abap2UI5 samples — **empty**, holds only the closed triage record. |
 
 Keep them separate: only `src/` is the abapGit / abaplint scope; `ui5/` is
 plain JS/XML held for reference and to feed the generator.
 
-**`todo/` is outside `src/` on purpose.** It holds copies of samples from
-[abap2UI5/samples](https://github.com/abap2UI5/samples) — the `src/00/02`
-"restricted" set and the `src/01/03` "Control Library" set, imported 2026-08-12
-— parked for triage against this repo's corpus. Nothing in it is a port: no
-`meta/` sidecar, no `ui5/` template, and no gate walks it (`STARTING_FOLDER=/src/`,
-abaplint globs `/src/**`), so nothing there can reach a system.
+**`todo/` is outside `src/` on purpose** and is **exhausted**: the 53 samples
+imported from [abap2UI5/samples](https://github.com/abap2UI5/samples) on
+2026-08-12 (the `src/00/02` "restricted" set and the `src/01/03` "Control
+Library" set) were all triaged the same day — 1 rebuilt as a port
+(`z2ui5_cl_dmo_app_403`), 52 dropped. Only `todo/README.md` is left; it carries
+the full decision table plus the re-import recipe, and stays so the same 53
+classes are not re-imported and re-analysed. Nothing there was ever a port: no
+`meta/` sidecar, no `ui5/` template, and no gate walks it
+(`STARTING_FOLDER=/src/`, abaplint globs `/src/**`), so nothing there could reach
+a system.
 
-A file leaves `todo/` by being **rebuilt** as a `z2ui5_cl_dmo_app_<n>` port
-under `src/<category>/<library>/`, never by being moved: the samples are built
-on the framework's `z2ui5_cl_xml_view`, ports use `z2ui5_cl_ai_xml` (§5), and a
-port is a 1:1 rebuild of the *demo kit original*, not of another repo's
-interpretation of it. Delete a file there once its decision is made — ported, or
-dropped with the reason recorded in `todo/README.md`, which carries the full
-inventory (which rows ai-demokit already covers, and why the rest do or do not
-qualify).
+Should samples be imported again, the same rules apply. A file leaves `todo/` by
+being **rebuilt** as a `z2ui5_cl_dmo_app_<n>` port under
+`src/<category>/<library>/`, never by being moved: the samples are built on the
+framework's `z2ui5_cl_xml_view`, ports use `z2ui5_cl_ai_xml` (§5), and a port is
+a 1:1 rebuild of the *demo kit original*, not of another repo's interpretation of
+it. Delete a file there once its decision is made — ported, or dropped with the
+reason recorded in `todo/README.md`. Three traps that decided rows last time: the
+entity in `<DESCRIPT>` is the control the class was *filed under*, not
+necessarily the sample it *rebuilds* (read the body of every class whose URL
+names only an entity — that is where the one take-over was hiding); a
+hold-out sample (`ui5/holdout.json`) must never be ported however uncovered its
+control looks; and an unported sample that differs from a ported one by a single
+attribute is a near-duplicate to skip (§1), not a take-over.
 
 ---
 
