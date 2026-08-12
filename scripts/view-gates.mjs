@@ -72,7 +72,13 @@ const ADVISORY_BUDGET = {
   // raised 2026-08-10 (batch b19, app 350 ProductHomeLayout): the same shape —
   // a tnt:ToolHeader with the alt-less SAP logo Image and the icon-only
   // search/bell Buttons the sample gives no tooltip; both kept 1:1
-  'missing-accessibility': 45,
+  // raised 2026-08-12 (batches b25–b28 + uxap b07, the samples-repo backlog):
+  // five more of the same shape — the alt-less sap.m.Image in apps 397/399
+  // (img>/products/pic1) and 401 (the uxap linkedin/Twitter icons), and the
+  // icon-only Buttons apps 395/397 inherit from their OverflowToolbar
+  // originals. Every one is alt/tooltip-less in the demo kit sample itself,
+  // so supplying one would invent text the original does not have
+  'missing-accessibility': 50,
   'event-without-handler': 4, // ratcheted down 2026-08-05: the four calendar ports wired their select handler
   'unknown-event-parameter': 1, // app 268: ColorPickerPopover forwards colorString undeclared — works live
 };
