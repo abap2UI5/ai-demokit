@@ -1,6 +1,6 @@
-# AGENTS.md — ai-demokit
+# AGENTS.md — samples-controls
 
-Single source of truth for agents working on **abap2UI5 ai-demokit**.
+Single source of truth for agents working on **abap2UI5 samples-controls** (formerly ai-demokit).
 
 > These instructions OVERRIDE any default behavior and must be followed exactly.
 > This entire project is in **English** — code, comments, commit messages, PRs.

@@ -10,7 +10,7 @@ Delete this folder once the fix is upstream and the patch can go.
 ## Motivation
 
 On the in-browser demo
-(<https://abap2ui5.github.io/ai-demokit/?app_start=z2ui5_cl_dmo_app_overview>)
+(<https://abap2ui5.github.io/samples-controls/?app_start=z2ui5_cl_dmo_app_overview>)
 every backend round-trip of the overview app died with
 
 ```
