@@ -3,7 +3,7 @@
  <asx:abap xmlns:asx="http://www.sap.com/abapxml" version="1.0">
   <asx:values>
    <DEVC>
-    <CTEXT>SAPUI5 &lt;= 1.71</CTEXT>
+    <CTEXT>SAPUI5-only controls - collection</CTEXT>
    </DEVC>
   </asx:values>
  </asx:abap>

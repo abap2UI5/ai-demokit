@@ -161,8 +161,14 @@ const RULES = [
       if (!/INTERFACES\s+z2ui5_if_app/i.test(content)) return out; // ports only
       if (!/->_event\(/.test(content)) return out;
       if (/on_event/.test(content)) return out; // matches check_on_event too
+      /* A class may also dispatch inline, straight off the event name — the
+       * samples style, which the src/03 SAPUI5 collection is written in
+       * (AGENTS §3). `CASE client->get( )-event.` with a WHEN branch IS a
+       * dispatcher, so the wire is not dead; ports still have to use on_event,
+       * which the method-order rules below enforce for them. */
+      if (/get\(\s*\)-event/.test(content) && /\bWHEN\b/.test(content)) return out;
       const m = content.match(/->_event\(/);
-      out.push({ line: lineOf(content, m.index), text: '_event( ) wired but no on_event/check_on_event in the class' });
+      out.push({ line: lineOf(content, m.index), text: '_event( ) wired but no on_event/check_on_event dispatcher and no CASE on get( )-event' });
       return out;
     },
   },
