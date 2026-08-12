@@ -147,12 +147,18 @@ CLASS z2ui5_cl_dmo_sapui5_003 IMPLEMENTATION.
       WHEN `BAR_CHANGED`.
         " the chart's points are two-way bound, so the new selection is already
         " in the model when this fires - nothing has to be read off the event
+        " counted per flag - a VALUE string_table over abap_bool fields does not
+        " survive the transpiler's downported INSERT (types not compatible)
         DATA(selected) = 0.
-        LOOP AT VALUE string_table( ( sel1 ) ( sel2 ) ( sel3 ) ) INTO DATA(flag).
-          IF flag = abap_true.
-            selected = selected + 1.
-          ENDIF.
-        ENDLOOP.
+        IF sel1 = abap_true.
+          selected = selected + 1.
+        ENDIF.
+        IF sel2 = abap_true.
+          selected = selected + 1.
+        ENDIF.
+        IF sel3 = abap_true.
+          selected = selected + 1.
+        ENDIF.
         client->message_toast_display( |selectionChanged - { selected } of 3 selected| ).
         client->view_model_update( ).
 
