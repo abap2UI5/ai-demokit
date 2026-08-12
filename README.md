@@ -1,11 +1,10 @@
+![ABAP NW 7.02 to ABAP Cloud](https://img.shields.io/badge/ABAP-NW%207.02%20%E2%86%92%20Cloud-blue)
 [![namespace](https://img.shields.io/badge/namespace-z2ui5__cl__dmo-blue)](abaplint.jsonc)
 [![dependency](https://img.shields.io/badge/dependency-abap2UI5-blue)](https://github.com/abap2UI5/abap2UI5)
-![ABAP NW 7.02 to ABAP Cloud](https://img.shields.io/badge/ABAP-NW%207.02%20%E2%86%92%20Cloud-blue)
 <br>
 <br>
 [![ABAP_STANDARD](https://github.com/abap2UI5/samples-controls/actions/workflows/ABAP_STANDARD.yaml/badge.svg)](https://github.com/abap2UI5/samples-controls/actions/workflows/ABAP_STANDARD.yaml)
 [![ABAP_CLOUD](https://github.com/abap2UI5/samples-controls/actions/workflows/ABAP_CLOUD.yaml/badge.svg)](https://github.com/abap2UI5/samples-controls/actions/workflows/ABAP_CLOUD.yaml)
-[![ABAP_702](https://github.com/abap2UI5/samples-controls/actions/workflows/ABAP_702.yaml/badge.svg)](https://github.com/abap2UI5/samples-controls/actions/workflows/ABAP_702.yaml)
 <br>
 [![checks](https://github.com/abap2UI5/samples-controls/actions/workflows/checks.yaml/badge.svg)](https://github.com/abap2UI5/samples-controls/actions/workflows/checks.yaml)
 [![e2e_nightly](https://github.com/abap2UI5/samples-controls/actions/workflows/e2e_nightly.yaml/badge.svg)](https://github.com/abap2UI5/samples-controls/actions/workflows/e2e_nightly.yaml)
