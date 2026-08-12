@@ -1,0 +1,35 @@
+{
+  "class": "z2ui5_cl_dmo_app_410",
+  "sample": "sap.uxap.sample.BlockBaseEventing",
+  "entity": "sap.uxap.BlockBase",
+  "file": "src/01/03/z2ui5_cl_dmo_app_410.clas.abap",
+  "batch": "b08",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "Block-content inlining with a folded block event (app 187/239/261 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the blocks aggregation holds the sample's own BlockBase control sample:EventingBlock (xmlns:sample='sap.uxap.sample.BlockBaseEventing.controller.blocks', id='block', dummy='onDummy'), a lazy-loading wrapper around EventingBlock.view.xml whose JS declares a custom 'dummy' event. The block controller's onInnerDummy delegates the inner Button press to the parent block (this.oParentBlock.fireDummy(oEvent.getParameters())) so the outside world sees the event as fired by the block itself, and the main controller's onDummy shows MessageToast 'dummy event fired by control ' + oEvent.getSource().getId() - the point of the sample. abap2UI5 has no custom-control layer, so the block is inlined and the two-hop eventing indirection folds to one thin-frontend wire: the Button press round-trips as event DUMMY carrying $event.oSource.getParent().getParent().sId - the runtime id of the outer m:VBox, which stands in for the block and carries its id 'block', the exact analogue of oParentBlock - and on_event composes the same toast text server-side via message_toast_display. Absent as a result: the sample:EventingBlock control with its id and dummy attributes."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "The EventingBlock view's content is two nested html:div wrappers (class='dummyContainer1' and class='dummyContainer2') around the Button. A core:HTML leaf carries markup in a string attribute only and cannot wrap a UI5 control (app 239 precedent), so each html:div becomes an m:VBox carrying the same CSS class - the injected stylesheet's .dummyContainer2 rule (display:inline-block) then overrides the FlexBox display exactly as it styles the original div, so the inner container shrink-wraps the Button. The two m:VBox controls are extra vs the original views (the html:div elements themselves are lowercase, aggregation-level in the diff)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The EventingBlock controller's onInit injects the sample's styles.css as a link element into document.head; here the two rules (.dummyContainer1 padding 1em, height 4em, background-color #A9EAFF; .dummyContainer2 display:inline-block) are injected as a style tag in a core:HTML content attribute (apps 026/028 idiom, literal braces escaped as backslash-brace; the EXTRA core:HTML control vs the original views), placed as first child of the view root before the ObjectPageLayout so it occupies no blocks grid cell."
+    },
+    {
+      "type": "NOTE",
+      "what": "Namespace representation and block-root fold (app 239 precedent): EventingBlock.view.xml declares sap.m as its default xmlns, so its Button is bare there; the single port view keeps the main view's default xmlns sap.uxap, so the inlined button is m:Button - control counts are prefix-sensitive in structural-diff, the bare Button (with its text and press attributes) reads as missing with m:Button in its place. The block's own root mvc:View wrapper is dropped with the content-only inlining, so its width='100%' attribute (attr View.width) is absent; the main view root keeps height='100%'."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "Unverified in a running system: (a) the DUMMY press round-trip - the $event.oSource.getParent().getParent().sId parent-chain arg resolving to the stand-in VBox's runtime id and the server-composed message_toast_display text; (b) the injected .dummyContainer2 display:inline-block rule winning over the m:VBox flex display so the inner container shrink-wraps the button like the original html:div."
+    }
+  ]
+}

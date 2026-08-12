@@ -82,7 +82,11 @@ const ADVISORY_BUDGET = {
   // the same shape — the icon-only group-2 / action-settings Buttons in the
   // AnalyticalTable's OverflowToolbar extension, tooltip-less in both demo kit
   // samples; a tooltip here would be invented text, not a port
-  'missing-accessibility': 52,
+  // raised 2026-08-12 (batch b08 uxap, apps 413/414/417): three more of the
+  // same shape — the alt-less social-icon / profile sap.m.Images the
+  // ObjectPageHeader samples ship without alt; kept 1:1, an alt would be
+  // invented text
+  'missing-accessibility': 55,
   'event-without-handler': 4, // ratcheted down 2026-08-05: the four calendar ports wired their select handler
   'unknown-event-parameter': 1, // app 268: ColorPickerPopover forwards colorString undeclared — works live
 };

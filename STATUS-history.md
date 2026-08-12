@@ -7,6 +7,39 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## 2026-08-12 — batch b08 (uxap): the whole covered-control(1) tail of sap.uxap, 10 ports (apps 408–417)
+
+The corpus-wide breadth phase is done — `--backlog` offers no `NEW-CONTROL`
+row that is not a HOLDOUT — so this batch is the depth phase's cheapest
+slice: **all ten sap.uxap samples whose control has exactly one port**
+(`covered-control(1)`), closing the BlockBase, ModelMapping,
+HeaderFacetPattern and ObjectPageHeader families' n=1 tails in one PR.
+sap.uxap moves 21 → 31 of 45. Every port green on the full chain (abaplint
+×2 here + 702 in CI, pattern-lint, validate-meta, structural-diff --strict,
+data-fidelity, view-gates --strict incl. render).
+
+| app | sample | the idiom it adds |
+|---|---|---|
+| 408 | ObjectPageBlockBase | `columnLayout` blocks as `core:HTML` leaves; ConfigModel prefix-drop + `subSectionLayout` toggle round-trip |
+| 409 | BlockBaseBlockInBlock | a block instantiating a block — both levels inlined to ONE nested-div `core:HTML` leaf |
+| 410 | BlockBaseEventing | the block-event indirection (`fireDummy` on `oParentBlock`) folded to one wire via `$event.oSource.getParent().getParent().sId`; `html:div` wrappers → classed `m:VBox` |
+| 411 | MPModelMapping | the static-path `ModelMapping` sibling of app 230, same root-fold, IMPROVISED per the config-control-drop rule |
+| 412 | ObjectPageWithLinksAndObjectStatus | QuickView fragment 1:1 via `popover_display`, enum-default seeding, `setSelectedSection` association via `control_by_id` |
+| 413 | ProfileObjectPageHeader | classic header with `navigationBar` Bar — fully static, the dead `ObjectPageModel` stays unseeded |
+| 414 | AlternativeProfileObjectPageHeader | `showHeaderContent` two-way bound; unsaved-changes ResponsivePopover anchored via `$event.oSource.sId` |
+| 415 | ObjectPageHeaderWithAllControls | ALL classic-header members; two anchored popover fragments, one chain per fragment; `buttons` named model folded |
+| 416 | ChildObjectPage | `isChildPage` + breadcrumbs; the `.onFormat` controller formatter computed in `model_init` |
+| 417 | ObjectPageDynamicSideContentBtn | `DynamicSideContent` around an ObjectPage: bound `showSideContent`, `breakpointChanged` t_arg, `SET_FOCUS` follow-ups |
+
+The `missing-accessibility` advisory budget rose 52 → 55 for the three
+alt-less profile/social `sap.m.Image`s the ObjectPageHeader samples ship
+without alt (413/414/417) — same shape as every earlier raise, an alt would
+be invented text. Nothing else in the batch needed a new capability: the
+established BlockBase-inlining, popover-fragment and named-model-fold
+idioms carried all ten, which is the depth-phase signal working as
+intended. The ten LIVE_TESTs join the interaction backlog (the advisory
+count in `validate-meta`).
+
 ## 2026-08-12 — sap.tnt closed at 100 % (app 407, UI5 runtime 1.150 → 1.151) plus two backlog one-liners
 
 Three small items from the STATUS.md backlog, one commit:
