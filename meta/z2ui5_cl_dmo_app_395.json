@@ -1,0 +1,14 @@
+{
+  "class": "z2ui5_cl_dmo_app_395",
+  "sample": "sap.m.sample.TitleToolBar",
+  "entity": "sap.m.OverflowToolbar",
+  "file": "src/01/b28/z2ui5_cl_dmo_app_395.clas.abap",
+  "batch": "b28",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": []
+}

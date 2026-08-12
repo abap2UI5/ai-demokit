@@ -1,0 +1,8 @@
+<mvc:View xmlns:mvc="sap.ui.core.mvc" xmlns="sap.m">
+	<Panel headerText="Horizontally opposing flex items">
+		<FlexBox alignItems="Start" justifyContent="SpaceBetween">
+			<Button text="1" type="Accept" />
+			<Button text="2" type="Reject" />
+		</FlexBox>
+	</Panel>
+</mvc:View>
