@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_105",
   "sample": "sap.m.sample.SemanticPageFullScreen",
   "entity": "sap.m.semantic.SemanticPage",
-  "file": "src/01/z2ui5_cl_dmo_app_105.clas.abap",
+  "file": "src/01/01/z2ui5_cl_dmo_app_105.clas.abap",
   "batch": "b13",
   "audit": {
     "frontend_action": false,

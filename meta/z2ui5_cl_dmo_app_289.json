@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_289",
   "sample": "sap.m.sample.DynamicMessageStripGenerator",
   "entity": "sap.m.MessageStrip",
-  "file": "src/01/z2ui5_cl_dmo_app_289.clas.abap",
+  "file": "src/01/01/z2ui5_cl_dmo_app_289.clas.abap",
   "batch": "b22",
   "audit": {
     "frontend_action": true,

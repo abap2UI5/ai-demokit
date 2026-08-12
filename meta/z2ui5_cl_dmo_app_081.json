@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_081",
   "sample": "sap.m.sample.PullToRefresh",
   "entity": "sap.m.PullToRefresh",
-  "file": "src/01/z2ui5_cl_dmo_app_081.clas.abap",
+  "file": "src/01/01/z2ui5_cl_dmo_app_081.clas.abap",
   "batch": "b10",
   "audit": {
     "frontend_action": false,

@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_168",
   "sample": "sap.f.sample.GridContainer",
   "entity": "sap.f.GridContainer",
-  "file": "src/04/z2ui5_cl_dmo_app_168.clas.abap",
+  "file": "src/01/04/z2ui5_cl_dmo_app_168.clas.abap",
   "batch": "b07",
   "audit": {
     "frontend_action": true,

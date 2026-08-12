@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_293",
   "sample": "sap.uxap.sample.ObjectPageSubSectionBackground",
   "entity": "sap.uxap.ObjectPageSubSection",
-  "file": "src/03/z2ui5_cl_dmo_app_293.clas.abap",
+  "file": "src/01/03/z2ui5_cl_dmo_app_293.clas.abap",
   "batch": "b06",
   "audit": {
     "frontend_action": false,

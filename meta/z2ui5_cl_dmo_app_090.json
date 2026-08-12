@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_090",
   "sample": "sap.m.sample.DialogSearch",
   "entity": "sap.m.SearchField",
-  "file": "src/01/z2ui5_cl_dmo_app_090.clas.abap",
+  "file": "src/01/01/z2ui5_cl_dmo_app_090.clas.abap",
   "batch": "b11",
   "audit": {
     "frontend_action": true,

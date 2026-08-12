@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_096",
   "sample": "sap.m.sample.SplitContainer",
   "entity": "sap.m.SplitContainer",
-  "file": "src/01/z2ui5_cl_dmo_app_096.clas.abap",
+  "file": "src/01/01/z2ui5_cl_dmo_app_096.clas.abap",
   "batch": "b12",
   "audit": {
     "frontend_action": true,

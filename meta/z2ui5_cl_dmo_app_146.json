@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_146",
   "sample": "sap.ui.core.sample.HyphenationAPI",
   "entity": "sap.ui.core.hyphenation.Hyphenation",
-  "file": "src/02/z2ui5_cl_dmo_app_146.clas.abap",
+  "file": "src/01/02/z2ui5_cl_dmo_app_146.clas.abap",
   "batch": "b07",
   "audit": {
     "frontend_action": false,

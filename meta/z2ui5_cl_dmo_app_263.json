@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_263",
   "sample": "sap.uxap.sample.ObjectPageResetSelectedSection",
   "entity": "sap.uxap.ObjectPageLayout",
-  "file": "src/03/z2ui5_cl_dmo_app_263.clas.abap",
+  "file": "src/02/03/z2ui5_cl_dmo_app_263.clas.abap",
   "batch": "b05",
   "audit": {
     "frontend_action": true,

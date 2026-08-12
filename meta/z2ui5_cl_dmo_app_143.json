@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_143",
   "sample": "sap.tnt.sample.InfoLabelInDynamicPage",
   "entity": "sap.f.DynamicPage",
-  "file": "src/05/z2ui5_cl_dmo_app_143.clas.abap",
+  "file": "src/01/05/z2ui5_cl_dmo_app_143.clas.abap",
   "batch": "b05",
   "audit": {
     "frontend_action": false,

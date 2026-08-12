@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_237",
   "sample": "sap.m.sample.ObjectMarker",
   "entity": "sap.m.ObjectMarker",
-  "file": "src/01/z2ui5_cl_dmo_app_237.clas.abap",
+  "file": "src/01/01/z2ui5_cl_dmo_app_237.clas.abap",
   "batch": "b19",
   "audit": {
     "frontend_action": true,

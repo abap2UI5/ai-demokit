@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_278",
   "sample": "sap.m.sample.MessageBox",
   "entity": "sap.m.MessageBox",
-  "file": "src/01/z2ui5_cl_dmo_app_278.clas.abap",
+  "file": "src/02/01/z2ui5_cl_dmo_app_278.clas.abap",
   "batch": "b15",
   "audit": {
     "frontend_action": false,

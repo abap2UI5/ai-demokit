@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_037",
   "sample": "sap.m.sample.MessageToast",
   "entity": "sap.m.MessageToast",
-  "file": "src/01/z2ui5_cl_dmo_app_037.clas.abap",
+  "file": "src/01/01/z2ui5_cl_dmo_app_037.clas.abap",
   "batch": "b03",
   "audit": {
     "frontend_action": false,

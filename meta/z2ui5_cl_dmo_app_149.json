@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_149",
   "sample": "sap.ui.integration.sample.CardExplorer",
   "entity": "sap.ui.integration.widgets.Card",
-  "file": "src/02/z2ui5_cl_dmo_app_149.clas.abap",
+  "file": "src/01/02/z2ui5_cl_dmo_app_149.clas.abap",
   "batch": "b08",
   "audit": {
     "frontend_action": true,

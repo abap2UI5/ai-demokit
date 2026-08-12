@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_234",
   "sample": "sap.f.sample.FlexibleColumnLayoutSimple",
   "entity": "sap.f.FlexibleColumnLayout",
-  "file": "src/04/z2ui5_cl_dmo_app_234.clas.abap",
+  "file": "src/01/04/z2ui5_cl_dmo_app_234.clas.abap",
   "batch": "b08",
   "audit": {
     "frontend_action": false,

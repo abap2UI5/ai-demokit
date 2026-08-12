@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_258",
   "sample": "sap.uxap.sample.ObjectPageHeaderBackgroundDesign",
   "entity": "sap.uxap.ObjectPageDynamicHeaderTitle",
-  "file": "src/03/z2ui5_cl_dmo_app_258.clas.abap",
+  "file": "src/01/03/z2ui5_cl_dmo_app_258.clas.abap",
   "batch": "b05",
   "audit": {
     "frontend_action": false,

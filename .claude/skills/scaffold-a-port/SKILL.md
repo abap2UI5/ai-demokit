@@ -40,10 +40,14 @@ that is the actual porting work):
 
 - **`npm run scaffold <sample>`** (`scripts/scaffold.mjs`) — from an OpenUI5
   demo-kit sample id/name it archives the template into `ui5/<lib>/<Name>/`,
-  picks the next app number, files the port flat into its library package
-  `src/<lib>/` and stamps the batch id into the sidecar (`--new-batch` /
-  `--batch bNN` — batches are meta, not folders), and writes the class stub,
-  `clas.xml`, `package.devc.xml` and a valid `meta/` sidecar. Since 2026-08-04 it **enforces the two pre-checks
+  picks the next app number, files the port into
+  `src/<category>/<library>/` (AGENTS §3 — a fresh port starts in the `<= 1.71`
+  half of its flavour, i.e. `src/01/<lib>/` for an OpenUI5 sample; declaring the
+  first `POST_171` deviation later moves it to `src/02/<lib>/`, and
+  `validate-meta` names the target folder) and stamps the batch id into the
+  sidecar (`--new-batch` / `--batch bNN` — batches are meta, not folders), and
+  writes the class stub, `clas.xml`, both `package.devc.xml` levels and a valid
+  `meta/` sidecar. Since 2026-08-04 it **enforces the two pre-checks
   that used to be manual**: a HOLDOUT sample (`ui5/holdout.json`) and an
   out-of-scope sample (same verdict as `generate-coverage.mjs` `scopeOf`:
   1.71 floor, deprecation, non-app family — facts from the universe enriched

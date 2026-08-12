@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_250",
   "sample": "sap.m.sample.ColorPalettePopover",
   "entity": "sap.m.ColorPalette",
-  "file": "src/01/z2ui5_cl_dmo_app_250.clas.abap",
+  "file": "src/02/01/z2ui5_cl_dmo_app_250.clas.abap",
   "batch": "b19",
   "audit": {
     "frontend_action": true,

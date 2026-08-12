@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_228",
   "sample": "sap.ui.unified.sample.MenuMenuEventing",
   "entity": "sap.ui.unified.Menu",
-  "file": "src/02/z2ui5_cl_dmo_app_228.clas.abap",
+  "file": "src/02/02/z2ui5_cl_dmo_app_228.clas.abap",
   "batch": "b10",
   "audit": {
     "frontend_action": true,

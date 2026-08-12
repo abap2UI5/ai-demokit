@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_272",
   "sample": "sap.ui.core.sample.FieldGroup",
   "entity": "sap.ui.core.Control",
-  "file": "src/02/z2ui5_cl_dmo_app_272.clas.abap",
+  "file": "src/01/02/z2ui5_cl_dmo_app_272.clas.abap",
   "batch": "b15",
   "audit": {
     "frontend_action": false,

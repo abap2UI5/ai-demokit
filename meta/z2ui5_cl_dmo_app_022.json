@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_022",
   "sample": "sap.m.sample.FacetFilterLight",
   "entity": "sap.m.FacetFilter",
-  "file": "src/01/z2ui5_cl_dmo_app_022.clas.abap",
+  "file": "src/01/01/z2ui5_cl_dmo_app_022.clas.abap",
   "batch": "b04",
   "audit": {
     "frontend_action": true,

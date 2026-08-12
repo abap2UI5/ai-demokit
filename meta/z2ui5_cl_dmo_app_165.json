@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_165",
   "sample": "sap.f.sample.ProductSwitchNavigation",
   "entity": "sap.f.ProductSwitch",
-  "file": "src/04/z2ui5_cl_dmo_app_165.clas.abap",
+  "file": "src/02/04/z2ui5_cl_dmo_app_165.clas.abap",
   "batch": "b07",
   "audit": {
     "frontend_action": true,

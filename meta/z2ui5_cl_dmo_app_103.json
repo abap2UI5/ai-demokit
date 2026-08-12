@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_103",
   "sample": "sap.m.sample.SelectDialog",
   "entity": "sap.m.SelectDialog",
-  "file": "src/01/z2ui5_cl_dmo_app_103.clas.abap",
+  "file": "src/02/01/z2ui5_cl_dmo_app_103.clas.abap",
   "batch": "b12",
   "audit": {
     "frontend_action": true,

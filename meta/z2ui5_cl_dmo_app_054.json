@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_054",
   "sample": "sap.m.sample.Tree",
   "entity": "sap.m.Tree",
-  "file": "src/01/z2ui5_cl_dmo_app_054.clas.abap",
+  "file": "src/01/01/z2ui5_cl_dmo_app_054.clas.abap",
   "batch": "b04",
   "audit": {
     "frontend_action": false,

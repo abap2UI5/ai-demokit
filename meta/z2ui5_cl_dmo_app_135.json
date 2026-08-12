@@ -2,7 +2,7 @@
   "class": "z2ui5_cl_dmo_app_135",
   "sample": "sap.ui.core.sample.TypeCurrency",
   "entity": "sap.ui.model.type.Currency",
-  "file": "src/02/z2ui5_cl_dmo_app_135.clas.abap",
+  "file": "src/01/02/z2ui5_cl_dmo_app_135.clas.abap",
   "batch": "b04",
   "audit": { "frontend_action": false, "event_t_arg": false },
   "status": "reviewed",
