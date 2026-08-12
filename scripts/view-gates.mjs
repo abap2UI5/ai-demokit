@@ -78,7 +78,11 @@ const ADVISORY_BUDGET = {
   // icon-only Buttons apps 395/397 inherit from their OverflowToolbar
   // originals. Every one is alt/tooltip-less in the demo kit sample itself,
   // so supplying one would invent text the original does not have
-  'missing-accessibility': 50,
+  // raised 2026-08-12 (batch b30, apps 405/406 PageListReport*): two more of
+  // the same shape — the icon-only group-2 / action-settings Buttons in the
+  // AnalyticalTable's OverflowToolbar extension, tooltip-less in both demo kit
+  // samples; a tooltip here would be invented text, not a port
+  'missing-accessibility': 52,
   'event-without-handler': 4, // ratcheted down 2026-08-05: the four calendar ports wired their select handler
   'unknown-event-parameter': 1, // app 268: ColorPickerPopover forwards colorString undeclared — works live
 };
