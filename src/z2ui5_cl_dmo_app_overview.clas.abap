@@ -2835,8 +2835,10 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` would not be the sample.` )
       ( module = `sap.m`              control = `sap.m.Page`                            name = `PageStandardClasses`                           class = `z2ui5_cl_dmo_app_089` path = `src/01/01/z2ui5_cl_dmo_app_089.clas.abap`
         score = 2
-        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        notes = `NOTE: element binding kept 1:1 - a one-record structure /S_PRODUCT instead of {/ProductCollection/0}; the IconTabBar expanded stays bound to {device>/isNoPhone} (runtime device model).` ) ).
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `NOTE: element binding kept 1:1 - a one-record structure /S_PRODUCT instead of {/ProductCollection/0}. // NOTE: the original binds expanded="{device>/isNoPhone}" (a demo-kit helper model that abap2UI5` &&
+                 ` does not carry); expressed over the framework own device> model as the expression {= !${device>/system/phone} } - same truth value, different binding text (app 030 precedent, live-verified there on` &&
+                 ` desktop and phone emulation).` ) ).
 
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Panel`                           name = `Panel`                                         class = `z2ui5_cl_dmo_app_397` path = `src/01/01/z2ui5_cl_dmo_app_397.clas.abap`
@@ -3868,6 +3870,54 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
       ( module = `sap.tnt`            control = `sap.tnt.SideNavigation`                name = `SideNavigationPressEvent`                      class = `z2ui5_cl_dmo_app_241` path = `src/02/05/z2ui5_cl_dmo_app_241.clas.abap`
         score = 5
         score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.34`
+        is_post171 = abap_true
+        notes = lv_text1
+        post171 = lv_text2 ) ).
+
+    lv_text1 = `IMPROVISED: The control-returning item factory is resolved server-side. The original binds the main list as items="{path: '/navigation', factory: '.navigationItemFactory'}" - a JS factory that returns` &&
+               ` a NavigationListGroup for a type=group row and a NavigationListItem otherwise; abap2UI5 cannot ship a frontend factory function. The port declares the /navigation top level statically (its shape is` &&
+               ` fixed in the mock: one plain Home item, then the two groups) and keeps everything below model-bound: each tnt:NavigationListGroup binds its items table ({/T_GROUP1} / {/T_GROUP2}) with the factory's` &&
+               ` _createNavigationItem as a bound tnt:NavigationListItem template (nested {ITEMS} sub-template and sap.m.ObjectStatus tag with the original's visible="{= !!${TAGTEXT} }" expression, both levels). So` &&
+               ` the port view carries extra controls the original view built at runtime - NavigationListGroup (2), NavigationListItem (Home plus the two-level template per group), ObjectStatus tags - and the main` &&
+               ` NavigationList drops the original's items/factory attribute in favour of the static skeleton. // IMPROVISED: The search keeps filtered fixed items in the fixedItem section. The original's`.
+    lv_text1 = lv_text1 && ` _executeSearch merges navigation and fixedNavigation into ONE filtered array, sets it as /navigation and empties /fixedNavigation, so a matching fixed item is re-rendered inside the scrollable main` &&
+               ` list. The port filters each list in place instead: the group tables and the fixed table ({/T_FIXED} instead of {/fixedNavigation}) are reduced to the matching rows (title or tagText contains,` &&
+               ` case-insensitive; a matching parent keeps all children; empty groups and a non-matching Home hide via bound visible flags). Same visible rows, but a matching fixed item stays pinned at the bottom` &&
+               ` instead of moving into the main list. // NOTE: Thin frontend: onLiveChange's _executeSearch and setHighlightedText become one LIVE_CHANGE round-trip that filters the tables in ABAP and updates the` &&
+               ` model - NavigationList.highlightedText is a bindable property, so it shares the search field's two-way bound value instead of the setter. onSearch's announceSearchMatchCount stays a control method` &&
+               ` (no bindable equivalent) and is invoked via follow_up_action( control_by_id, navigationList, announceSearchMatchCount, <count> ) with the count computed in ABAP like the original's recursive`.
+    lv_text1 = lv_text1 && ` title-only _countItems. abap2UI5 serializes round-trips, so very fast typing can skip intermediate filter states (they converge on the next pause); the search field's value is two-way bound so the` &&
+               ` filter state survives the round-trip. // NOTE: onMenuTogglePress toggles ToolPage.sideExpanded imperatively; the property is bindable, so the port two-way binds it (sideExpanded, an attribute the` &&
+               ` original view does not declare) and flips it on the MENU_TOGGLE round-trip - collapsing also clears the bound search value and restores the unfiltered lists, like the original's reset of the search` &&
+               ` field, the highlight and the model (app 302 precedent). // NOTE: onItemSelect does navContainer.to(createId(key)) guarded by getPage(); the port transports ${$parameters>/item}.getKey() and calls the` &&
+               ` same method through follow_up_action( control_by_id, navContainer, to, <key> ) guarded by the four page ids (home, myAccounts, myOrders, CustomerManagement) - the NavContainer has no bindable` &&
+               ` current-page property (app 302 precedent). onItemPress reads the pressed item's key from ${$source>/key} (the factory wires press on every created item, the port wires it on the Home item, both group`.
+    lv_text1 = lv_text1 && ` templates, the nested sub-item template and the fixed template); only the quickCreate key acts, opening the controller-built Create Item Dialog 1:1 via popup_display (type Message, a content Text and` &&
+               ` two Button controls - the Emphasized Create and the Cancel - both just close, so the port view carries that extra Dialog/Text/Button set). // NOTE: The ENABLED, HASEXPANDER, EXPANDED, SELECTABLE,` &&
+               ` ARIAHASPOPUP, DESIGN and TAGSTATE fields the templates bind are partly absent from model/data.json rows; every ABAP row carries the UI5 property default explicitly (true / true / true / true / None /` &&
+               ` Default / None) - a flat row would otherwise serialize an empty value, which UI5 rejects on the enum-typed properties and which would override the boolean defaults. The header Image keeps the` &&
+               ` original's relative src ./images/SAP_Logo.png verbatim (the sample folder itself ships no such file upstream). // POST-1.71: The sample's core feature is newer than the 1.71 floor and is kept 1:1:` &&
+               ` sap.tnt.SideNavigationSearchField (control @since 1.151), the SideNavigation.filterSection aggregation that hosts it (@since 1.151), NavigationList.highlightedText (@since 1.151), the`.
+    lv_text1 = lv_text1 && ` NavigationList.announceSearchMatchCount control method (@since 1.151, invoked via follow_up_action - a method is invisible to the property gate, declared by policy) and the SearchField ariaControls` &&
+               ` association (@since 1.150). The app needs UI5 >= 1.151; the repo's @openui5 runtime pin was raised from 1.150.0 to 1.151.0 with this port so the render and e2e gates exercise it. // POST-1.71: Kept` &&
+               ` 1:1 but newer than UI5 1.71 in the navigation tree: sap.tnt.NavigationListGroup (control @since 1.121, the two group rows); NavigationListItem.selectable (@since 1.116); the tag aggregation (@since` &&
+               ` 1.149) with its sap.m.ObjectStatus and the IndicationColor enum values Indication15/16/17/18/20 (@since 1.120); design and ariaHasPopup (@since 1.133.0, incl. the design=Action / ariaHasPopup=Dialog` &&
+               ` values on the Quick Create row); expanded and hasExpander read as @since 1.121 because they live on the newer base class NavigationListItemBase - both predate 1.71 on NavigationListItem itself,` &&
+               ` declared per the relocated-member note. // LIVE-TEST: not yet run in a system: the LIVE_CHANGE filter round-trip (bound group tables, visible flags, highlightedText), the SEARCH`.
+    lv_text1 = lv_text1 && ` announceSearchMatchCount frontend action, the ITEM_SELECT to-page action, the quickCreate popup and the MENU_TOGGLE collapse-resets-search path.`.
+    lv_text2 = `The sample's core feature is newer than the 1.71 floor and is kept 1:1: sap.tnt.SideNavigationSearchField (control @since 1.151), the SideNavigation.filterSection aggregation that hosts it (@since` &&
+               ` 1.151), NavigationList.highlightedText (@since 1.151), the NavigationList.announceSearchMatchCount control method (@since 1.151, invoked via follow_up_action - a method is invisible to the property` &&
+               ` gate, declared by policy) and the SearchField ariaControls association (@since 1.150). The app needs UI5 >= 1.151; the repo's @openui5 runtime pin was raised from 1.150.0 to 1.151.0 with this port so` &&
+               ` the render and e2e gates exercise it. // Kept 1:1 but newer than UI5 1.71 in the navigation tree: sap.tnt.NavigationListGroup (control @since 1.121, the two group rows); NavigationListItem.selectable` &&
+               ` (@since 1.116); the tag aggregation (@since 1.149) with its sap.m.ObjectStatus and the IndicationColor enum values Indication15/16/17/18/20 (@since 1.120); design and ariaHasPopup (@since 1.133.0,` &&
+               ` incl. the design=Action / ariaHasPopup=Dialog values on the Quick Create row); expanded and hasExpander read as @since 1.121 because they live on the newer base class NavigationListItemBase - both`.
+    lv_text2 = lv_text2 && ` predate 1.71 on NavigationListItem itself, declared per the relocated-member note.`.
+    result = VALUE #( BASE result
+      ( module = `sap.tnt`            control = `sap.tnt.SideNavigation`                name = `SideNavigationSearch`                          class = `z2ui5_cl_dmo_app_407` path = `src/02/05/z2ui5_cl_dmo_app_407.clas.abap`
+        score = 5
+        score_tip = `Rating 5 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 reworked, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close` &&
+                 ` look.`
         since = `1.34`
         is_post171 = abap_true
         notes = lv_text1

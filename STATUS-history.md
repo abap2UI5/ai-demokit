@@ -7,6 +7,41 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## 2026-08-12 — sap.tnt closed at 100 % (app 407, UI5 runtime 1.150 → 1.151) plus two backlog one-liners
+
+Three small items from the STATUS.md backlog, one commit:
+
+- **App 298's trailing-`.0` dimensions are fixed** — `Width`/`Depth`/`Height`
+  went from `p LENGTH 4 DECIMALS 1` to `TYPE string` (the `port-a-sample`
+  rule for display-only values with variable decimals in a text template;
+  app 377 already did it on the same mock). The three fields are bound only
+  into the `{WIDTH} x {DEPTH} x {HEIGHT} {DIM_UNIT}` template, so nothing
+  else changes; the port now renders `30 x 18 x 3 cm` like the original.
+- **App 089's dead device binding is fixed** — `expanded="{device>/isNoPhone}"`
+  bound a demo-kit helper property the framework's raw `device>` model does
+  not carry, so it resolved to nothing; now the app-030 expression
+  `{= !${device>/system/phone} }`, and the sidecar NOTE says so instead of
+  calling the verbatim form intentional.
+- **`sap.tnt.sample.SideNavigationSearch` is ported (app 407, batch b09)** —
+  the last in-scope sap.tnt sample; the library is the seventh at 100 %.
+  The sample's core feature (`SideNavigationSearchField`, `filterSection`,
+  `highlightedText`, `announceSearchMatchCount`) is entirely `@since 1.151`,
+  so **the `@openui5` runtime pin moved 1.150.0 → 1.151.0** (1.151.0 is the
+  newest npm release; the metadata snapshot was already 1.152) — the full
+  `view-gates --strict` run passes all 406 ports on the new runtime, 0
+  regressions, advisory counts unchanged. The port resolves the
+  `navigationItemFactory` server-side: the `/navigation` top level (one item,
+  two groups) is declared statically, each `NavigationListGroup` binds its
+  items table with the factory's item shape as a two-level bound template,
+  and the search filters the tables in ABAP on the `liveChange` round-trip —
+  `highlightedText` and the field's `value` share one two-way bound variable,
+  so the highlight follows the filter for free. Filtered fixed items stay in
+  the `fixedItem` section instead of merging into the main list (declared
+  IMPROVISED, like the factory resolution itself). `announceSearchMatchCount`
+  runs as a `control_by_id` action with the count computed like the
+  original's `_countItems`; the quick-create Dialog is a 1:1
+  `popup_display` fragment.
+
 ## 2026-08-12 — the samples-repo control-sample backlog is closed here (36 ports, apps 367–402)
 
 The curated [samples](https://github.com/abap2UI5/samples) repo carries 98
