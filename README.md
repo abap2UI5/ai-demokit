@@ -49,7 +49,7 @@ family:
 |------|------------|----------------|----------------|
 | 1️⃣ | [**samples**](https://github.com/abap2UI5/samples) | **the abap2UI5 basics** — bindings, events, popups, navigation, complete apps | run `Z2UI5_CL_SMP_APP_000` |
 | 2️⃣ | **samples-controls** — 📍 *you are here* | **how to use every UI5 control** — the UI5 Demo Kit rebuilt with abap2UI5 | run `z2ui5_cl_dmo_app_overview` |
-| 3️⃣ | [**samples-stack**](https://github.com/abap2UI5/samples-ext) | **how abap2UI5 plays with your stack** — OData, RAP, WebSockets, the Fiori Launchpad and more | pick your technology in its package table |
+| 3️⃣ | [**samples-stack**](https://github.com/abap2UI5/samples-stack) | **how abap2UI5 plays with your stack** — OData, RAP, WebSockets, the Fiori Launchpad and more | pick your technology in its package table |
 
 #### Learn by comparing
 
