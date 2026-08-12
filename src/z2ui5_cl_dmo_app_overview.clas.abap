@@ -1901,10 +1901,23 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` (autocomplete='false'); the app needs a UI5 release >= 1.108 to render it. Not tracked by property-check (declared by policy).` ) ).
 
     result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.Input`                           name = `InputDescription`                              class = `z2ui5_cl_dmo_app_367` path = `src/01/b25/z2ui5_cl_dmo_app_367.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        is_post171 = abap_true
+        notes = `POST-1.71: showClearIcon (since UI5 1.94) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.94 to render it. // POST-1.71: ariaDescribedBy (since UI5 1.90 on sap.m.Input)` &&
+                 ` is newer than 1.71 but kept for the 1:1 port - it carries the sample's whole point, the InvisibleText referenced by aria-describedby.`
+        post171 = `showClearIcon (since UI5 1.94) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.94 to render it. // ariaDescribedBy (since UI5 1.90 on sap.m.Input) is newer than 1.71` &&
+                 ` but kept for the 1:1 port - it carries the sample's whole point, the InvisibleText referenced by aria-describedby.` )
+      ( module = `sap.m`              control = `sap.m.Input`                           name = `InputPassword`                                 class = `z2ui5_cl_dmo_app_368` path = `src/01/b25/z2ui5_cl_dmo_app_368.clas.abap`
+        score = 1
+        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
       ( module = `sap.m`              control = `sap.m.Input`                           name = `InputTypes`                                    class = `z2ui5_cl_dmo_app_159` path = `src/01/b16/z2ui5_cl_dmo_app_159.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        notes = `NOTE: Five Inputs demonstrating the input types Text / Email / Tel / Number / Url with labelFor Labels, reproduced 1:1.` )
+        notes = `NOTE: Five Inputs demonstrating the input types Text / Email / Tel / Number / Url with labelFor Labels, reproduced 1:1.` ) ).
+
+    result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Input`                           name = `InputValueState`                               class = `z2ui5_cl_dmo_app_032` path = `src/01/b02/z2ui5_cl_dmo_app_032.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -1916,6 +1929,9 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` to suppress.`
         post171 = `showClearIcon (since UI5 1.94) on three inputs is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.94 to render it. // the two formattedValueStateText aggregations (a` &&
                  ` FormattedText carrying Links, since UI5 1.78) are newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.78 to render them.` )
+      ( module = `sap.m`              control = `sap.m.Input`                           name = `InputWrapping`                                 class = `z2ui5_cl_dmo_app_369` path = `src/01/b25/z2ui5_cl_dmo_app_369.clas.abap`
+        score = 1
+        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
       ( module = `sap.m`              control = `sap.m.InputListItem`                   name = `InputListItem`                                 class = `z2ui5_cl_dmo_app_057` path = `src/01/b07/z2ui5_cl_dmo_app_057.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` ) ).
@@ -2903,7 +2919,16 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `NOTE: the original controller seeds three byte-identical product arrays (/ProductCollection, /ProductCollection2, /ProductCollection3) and binds one Select to each; the port folds them into the single` &&
                  ` shared table /T_PRODUCTS feeding all three Selects - same rows, same sorter, each Select keeps its own two-way selectedKey, so rendering and behaviour are identical.` )
+      ( module = `sap.m`              control = `sap.m.Select`                          name = `SelectValueState`                              class = `z2ui5_cl_dmo_app_373` path = `src/01/b25/z2ui5_cl_dmo_app_373.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `NOTE: the original controller assigns one and the same aProducts array to four model keys (/ErrorProductCollection, /WarningProductCollection, /SuccessProductCollection, /InformationProductCollection)` &&
+                 ` and binds one Select to each; the port folds them into the single shared table /T_PRODUCTS feeding all four Selects - same 16 rows, same sorter on NAME, each Select keeps its own two-way selectedKey,` &&
+                 ` so rendering and behaviour are identical (app 048 precedent).` )
       ( module = `sap.m`              control = `sap.m.Select`                          name = `SelectWithIcons`                               class = `z2ui5_cl_dmo_app_205` path = `src/01/b17/z2ui5_cl_dmo_app_205.clas.abap`
+        score = 1
+        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
+      ( module = `sap.m`              control = `sap.m.Select`                          name = `SelectWithWrappedItemText`                     class = `z2ui5_cl_dmo_app_374` path = `src/01/b25/z2ui5_cl_dmo_app_374.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` ) ).
 
@@ -3076,6 +3101,20 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         notes = `POST-1.71: sap.m.StandardListItem infoStateInverted (since 1.74) is kept 1:1 from the original view; needs a UI5 release >= 1.74 to render.`
         post171 = `sap.m.StandardListItem infoStateInverted (since 1.74) is kept 1:1 from the original view; needs a UI5 release >= 1.74 to render.` ) ).
 
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.StandardListItem`                name = `StandardListItemWrapping`                      class = `z2ui5_cl_dmo_app_376` path = `src/01/b25/z2ui5_cl_dmo_app_376.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        is_post171 = abap_true
+        notes = `POST-1.71: infoIcon (since UI5 1.150) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.150 to render the status icon next to the info text. // POST-1.71:` &&
+                 ` infoStateInverted (since UI5 1.74) is newer than 1.71 but kept for the 1:1 port - it is what the sample's Toggle Inverted button drives. // POST-1.71: wrapCharLimit (since UI5 1.94) is newer than` &&
+                 ` 1.71 but kept for the 1:1 port - it is the property the last two rows of the sample demonstrate. // NOTE: the original controller seeds only wrapping: false; /inverted is never seeded, so the Toggle` &&
+                 ` Inverted button starts from an undefined model value that UI5 reads as not pressed. The port seeds inverted = abap_false explicitly, which is the same initial rendering - a flat ABAP row cannot carry` &&
+                 ` an absent field.`
+        post171 = `infoIcon (since UI5 1.150) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.150 to render the status icon next to the info text. // infoStateInverted (since UI5 1.74) is` &&
+                 ` newer than 1.71 but kept for the 1:1 port - it is what the sample's Toggle Inverted button drives. // wrapCharLimit (since UI5 1.94) is newer than 1.71 but kept for the 1:1 port - it is the property` &&
+                 ` the last two rows of the sample demonstrate.` ) ).
+
     lv_text1 = `NOTE: the sample binds a List to the JSON model /modelData and renders one templated CustomListItem per row. **Rebuilt as that ONE bound template on 2026-08-05** (it used to be 14 unrolled static` &&
                ` items): the rows are bound with client->_bind( val = modeldata omit_initial_paths = ... ), the parameter added upstream for exactly this shape (pr/model-empty-vs-default), so a property a row does` &&
                ` not set stays ABSENT from the model and the StepInput keeps its own default instead of receiving ````. The dropped template property valueState is back as well. The omission is SCOPED to the` &&
@@ -3093,6 +3132,10 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         notes = lv_text1 ) ).
 
     result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.StepInput`                       name = `StepInputValueState`                           class = `z2ui5_cl_dmo_app_375` path = `src/01/b25/z2ui5_cl_dmo_app_375.clas.abap`
+        score = 1
+        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.40` )
       ( module = `sap.m`              control = `sap.m.Switch`                          name = `Switch`                                        class = `z2ui5_cl_dmo_app_050` path = `src/01/b02/z2ui5_cl_dmo_app_050.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` ) ).
@@ -3237,7 +3280,18 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
       ( module = `sap.m`              control = `sap.m.Text`                            name = `Text`                                          class = `z2ui5_cl_dmo_app_051` path = `src/01/b01/z2ui5_cl_dmo_app_051.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
+      ( module = `sap.m`              control = `sap.m.Text`                            name = `TextMaxLines`                                  class = `z2ui5_cl_dmo_app_372` path = `src/01/b25/z2ui5_cl_dmo_app_372.clas.abap`
+        score = 1
+        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
       ( module = `sap.m`              control = `sap.m.TextArea`                        name = `TextArea`                                      class = `z2ui5_cl_dmo_app_052` path = `src/01/b01/z2ui5_cl_dmo_app_052.clas.abap`
+        score = 1
+        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.9.0` )
+      ( module = `sap.m`              control = `sap.m.TextArea`                        name = `TextAreaGrowing`                               class = `z2ui5_cl_dmo_app_370` path = `src/01/b25/z2ui5_cl_dmo_app_370.clas.abap`
+        score = 1
+        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.9.0` )
+      ( module = `sap.m`              control = `sap.m.TextArea`                        name = `TextAreaValueStates`                           class = `z2ui5_cl_dmo_app_371` path = `src/01/b25/z2ui5_cl_dmo_app_371.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.9.0` ) ).

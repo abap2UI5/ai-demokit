@@ -62,7 +62,11 @@ function parseXml(xml) {
   const attrs = new Map();             // simple control name -> Set(attr names)
   const values = new Map();            // simple control name -> Map(attr -> Set(values))
   const clean = xml.replace(/<!--[\s\S]*?-->/g, '');
-  const tagRe = /<([A-Za-z_][\w.:-]*)((?:[^>"]|"[^"]*")*?)\/?>/g;
+  // XML permits BOTH quote styles, so the tag body must skip single-quoted runs
+  // too — otherwise a `text='7" Widescreen …'` value opens a double-quote run
+  // that swallows the tag boundary and merges the following sibling into this
+  // tag, undercounting it (sap.m.sample.InputWrapping read 2 of 3 core:Items).
+  const tagRe = /<([A-Za-z_][\w.:-]*)((?:[^>"']|"[^"]*"|'[^']*')*?)\/?>/g;
   let m;
   while ((m = tagRe.exec(clean)) !== null) {
     const qname = m[1];
@@ -70,13 +74,13 @@ function parseXml(xml) {
     controls.set(qname, (controls.get(qname) || 0) + 1);
     const set = attrs.get(simpleName(qname)) || new Set();
     const vmap = values.get(simpleName(qname)) || new Map();
-    const attrRe = /([\w.:-]+)\s*=\s*"([^"]*)"/g;
+    const attrRe = /([\w.:-]+)\s*=\s*(?:"([^"]*)"|'([^']*)')/g;
     let a;
     while ((a = attrRe.exec(m[2])) !== null) {
       if (a[1].startsWith('xmlns') || IGNORED_ATTRS.has(a[1])) continue;
       set.add(a[1]);
       const vset = vmap.get(a[1]) || new Set();
-      vset.add(a[2]);
+      vset.add(a[2] !== undefined ? a[2] : a[3]);
       vmap.set(a[1], vset);
     }
     attrs.set(simpleName(qname), set);
