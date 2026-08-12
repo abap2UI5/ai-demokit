@@ -65,7 +65,7 @@ CLASS z2ui5_cl_dmo_app_401 IMPLEMENTATION.
             )->a( n = `upperCaseAnchorBar`       v = `false`
             " the controller's toggleFooter flips showFooter imperatively; a
             " bindable property beats a frontend action, so it is bound two-way
-            )->a( n = `showFooter`               v = z2ui5_cl_ai_xml=>as_bool( show_footer )
+            )->a( n = `showFooter`               v = client->_bind( show_footer )
 
             )->open( `headerTitle`
                 )->open( `ObjectPageDynamicHeaderTitle`
