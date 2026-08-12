@@ -144,3 +144,20 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   closing it means renumbering the ~60 ports above (class names, sidecars,
   e2e INTERACTIONS keys, history references) — a maintainer decision, not a
   gate side effect. Any NEW gap fails the gate.
+- [ ] **App 298 renders the products mock's integer dimensions with a
+  trailing `.0`.** Its row type declares `Width`/`Depth`/`Height` as
+  `p LENGTH 4 DECIMALS 1`, but the shared mock mixes integers (`30`) with
+  one-decimal values (`40.8`) in those columns and they are only bound into
+  the text template `{WIDTH} x {DEPTH} x {HEIGHT} {DIM_UNIT}` — so the port
+  shows `30.0 x 18.0 x 3.0 cm` where the original shows `30 x 18 x 3 cm`.
+  `port-a-sample` already states the rule (a display-only value with variable
+  decimals in a text template stays `TYPE string`); app 377 follows it on the
+  same mock. No gate sees this — `data-fidelity` does not compare numbers.
+  Fixing 298 is a one-line type change plus a re-check of its `checked` state.
+- [ ] **App 089 binds a device-model path the framework does not carry.**
+  `expanded="{device>/isNoPhone}"` is kept verbatim from the demo kit, but
+  `isNoPhone` is a demo-kit helper property; the framework's `device>` model
+  wraps raw `sap.ui.Device`, which has no such key, so the binding resolves to
+  nothing. Apps 030 and 378–381 express the same intent as
+  `{= !${device>/system/phone} }`. The sidecar's NOTE currently describes the
+  verbatim form as intentional.

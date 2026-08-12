@@ -7,6 +7,71 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## 2026-08-12 — the samples-repo control-sample backlog is closed here (36 ports, apps 367–402)
+
+The curated [samples](https://github.com/abap2UI5/samples) repo carries 98
+1:1 demo kit rebuilds under `src/01/03` ("Control Library") plus three retired
+ones under `src/00/99`. Matched against `api.md` on the sample id, **57 of
+those 101 already had a port here** — the same original rebuilt twice across
+the two repos — and **43 were still backlog**. This session ports the backlog
+half so the redundancy can be resolved in favour of this repo.
+
+**36 of the 43, not all 43.** Six are HOLDOUT samples (`ui5/holdout.json`:
+BusyIndicator, Label, MessageStrip, RadioButtonGroup, RatingIndicator,
+SearchField) and porting them from an existing reviewed implementation would
+destroy exactly the measurement they exist for — `scaffold.mjs` refuses them
+and that refusal is correct. The 37th, `sap.m.sample.PlanningCalendar`, sits in
+the samples repo's retired `src/00/99` and belongs to a separate decision.
+
+Five batches, every one green on the full gate chain (abaplint ×3,
+pattern-lint, validate-meta, structural-diff --strict, data-fidelity,
+view-gates --strict incl. the render gate):
+
+| batch | apps | family |
+|---|---|---|
+| `src/01/b25` | 367–376 | input/text value states and wrapping |
+| `src/01/b26` | 377–383 | the whole IconTabBar family |
+| `src/01/b27` | 384–391 | combo/multi-input wrapping, tiles, SegmentedButtonLI |
+| `src/01/b28` | 392–400 | FlexBox, OverflowToolbar, Panel, Carousel, Image, ObjectHeader |
+| `src/03/b07` | 401–402 | the two remaining sap.uxap ObjectPage samples |
+
+Nothing new had to be invented: every idiom the 36 needed already had a
+precedent in the corpus, which is the useful signal. 377 reuses app 298's
+123-row products mock, its ABAP-computed `weightState` and its verbatim
+Currency parts binding, and turns `onFilterSelect`'s nested
+`sap.ui.model.Filter`s into an ABAP filter driven by `${$parameters>/key}`.
+378–381 express the demo kit's `{device>/isNoPhone}` helper model as
+`{= !${device>/system/phone} }` (app 030). 388/389 follow app 275 for the tile
+family's two shared idioms — the one-rule `style.css` through a `core:HTML`
+style leaf and the constant-text `MessageToast` as a client toast. 397–401 fold
+the named `img>` model into inlined, host-absolutized asset URLs (app 031).
+401/402 are the SharedBlocks shape app 261 established: every `BlockBase`
+inlined to its own view content, and 401's six `uxap:ModelMapping` elements
+folded onto default-model root fields (app 230).
+
+**One gate bug found and fixed.** `structural-diff.mjs`'s tag-body pattern only
+skipped **double**-quoted attribute runs. `sap.m.sample.InputWrapping` writes
+its `core:Item` texts in single quotes and one of them contains a `"`
+(`text='7" Widescreen …'`), which opened a double-quote run that swallowed the
+tag boundary and merged the following sibling into that tag: the gate read
+**2 of 3** `core:Item`s and reported a correct port as `control extra`. Both
+quote styles are handled now, on the tag and on the attribute level. The fix
+changes no existing port's verdict (137 → 137 ports with diffs, 0 undeclared
+both before and after) — 18 archived originals use single quotes somewhere, but
+only this one has an embedded double quote.
+
+**Advisory ratchet 45 → 50.** Five more alt-less `sap.m.Image`s and icon-only
+`Button`s (apps 395/397/399/401), each alt/tooltip-less in the demo kit sample
+itself — the same shape as the two earlier raises, so supplying one would
+invent text the original does not have.
+
+**Two pre-existing findings surfaced on the way** (recorded in STATUS.md, not
+touched here): app 298 types the products mock's `Width`/`Depth`/`Height` as
+packed `DECIMALS 1`, which renders the mock's integer `30` as `30.0` in the
+`{WIDTH} x {DEPTH} x {HEIGHT}` template — app 377 uses `TYPE string` per the
+spec's own rule for that case; and app 089 keeps `expanded="{device>/isNoPhone}"`
+verbatim, a path the framework's `device>` model does not carry.
+
 ## 2026-08-10 — the INTERACTIONS map becomes one module per port, and the map had a silent duplicate
 
 The ~1200-line hand-authored `INTERACTIONS` map inside `scripts/e2e-smoke.mjs`
