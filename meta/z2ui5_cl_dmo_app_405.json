@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_dmo_app_405",
+  "sample": "sap.m.sample.PageListReportToolbar",
+  "entity": "sap.m.Page",
+  "file": "src/02/01/z2ui5_cl_dmo_app_405.clas.abap",
+  "batch": "b30",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "The sample's AnalyticalTable declares its row mode through the rowMode aggregation with a sap.ui.table.rowmodes.Auto instance - both the aggregation (sap.ui.table.Table.rowMode) and the control (sap.ui.table.rowmodes.Auto) are @since 1.119, i.e. newer than the 1.71 floor. Kept 1:1 per the fidelity-first policy (AGENTS §5), same as app 164 (the RowModes sample) which declares the same aggregation; the app needs a UI5 release >= 1.119 to render the table at its intended row height. The pre-1.119 alternative (visibleRowCountMode='Auto' + rowHeight) is a different, deprecated API and would not be the sample."
+    }
+  ]
+}

@@ -141,9 +141,10 @@ function verdict(entity) {
   const hit = sourceFor(entity);
   if (!hit) return { entity, ok: false, reason: 'UNRESOLVED (no source .js found — check the entity name / fork checkout)' };
   // A SAPUI5-only control is out of scope for a DIFFERENT reason than its
-  // @since: the repo has no verified home for it yet (AGENTS §3). Say so, and
-  // still report the release facts — they are what decides src/03 vs src/04
-  // once those packages open.
+  // @since: there is no demo kit original to rebuild against (SAPUI5 ships no
+  // sample tree), so it is collected in src/03 rather than ported (AGENTS §3).
+  // Report the release facts anyway — they decide whether collecting it is
+  // worth it, and a deprecated control is not.
   const tag = hit.root === 'sapui5' ? ' [SAPUI5-only, @sapui5 package]' : '';
   const { since, deprecated } = metaFromSource(hit.file, entity);
   if (deprecated) {
@@ -154,7 +155,7 @@ function verdict(entity) {
     return { entity, ok: false, since, reason: `OUT_OF_SCOPE (control @since ${since} > 1.71)${tag}` };
   }
   if (hit.root === 'sapui5') {
-    return { entity, ok: false, since, reason: `OUT_OF_SCOPE (SAPUI5-only library — src/03/src/04 are not open, AGENTS §3); release-clean: @since ${since || '<=1.71 (no @since header)'}` };
+    return { entity, ok: false, since, reason: `OUT_OF_SCOPE (SAPUI5-only library — no 1:1 port, collect it in src/03 instead, AGENTS §3); release-clean: @since ${since || '<=1.71 (no @since header)'}` };
   }
   return { entity, ok: true, since, reason: `IN_SCOPE (@since ${since || '<=1.71 (no @since header)'})` };
 }

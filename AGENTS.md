@@ -155,26 +155,36 @@ Everything lives on the working branch, in separate top-level trees:
 |---------|---------|
 | `src/`  | The generated abap2UI5 ports (`*.clas.abap`) — the abapGit project (§3). |
 | `ui5/`  | The original UI5 demo kit templates (JS/XML/manifest), one folder per ported sample (§4). |
-| `todo/` | Imported abap2UI5 samples awaiting a decision — a staging area, **not** a package. |
+| `todo/` | Staging area for imported abap2UI5 samples — **empty**, holds only the closed triage record. |
 
 Keep them separate: only `src/` is the abapGit / abaplint scope; `ui5/` is
 plain JS/XML held for reference and to feed the generator.
 
-**`todo/` is outside `src/` on purpose.** It holds copies of samples from
-[abap2UI5/samples](https://github.com/abap2UI5/samples) — the `src/00/02`
-"restricted" set and the `src/01/03` "Control Library" set, imported 2026-08-12
-— parked for triage against this repo's corpus. Nothing in it is a port: no
-`meta/` sidecar, no `ui5/` template, and no gate walks it (`STARTING_FOLDER=/src/`,
-abaplint globs `/src/**`), so nothing there can reach a system.
+**`todo/` is outside `src/` on purpose** and is **exhausted**: the 53 samples
+imported from [abap2UI5/samples](https://github.com/abap2UI5/samples) on
+2026-08-12 (the `src/00/02` "restricted" set and the `src/01/03` "Control
+Library" set) were all triaged the same day — 1 rebuilt as a port
+(`z2ui5_cl_dmo_app_403`), 14 collected in `src/03` (the SAPUI5-only ones), 38
+dropped. Only `todo/README.md` is left; it carries
+the full decision table plus the re-import recipe, and stays so the same 53
+classes are not re-imported and re-analysed. Nothing there was ever a port: no
+`meta/` sidecar, no `ui5/` template, and no gate walks it
+(`STARTING_FOLDER=/src/`, abaplint globs `/src/**`), so nothing there could reach
+a system.
 
-A file leaves `todo/` by being **rebuilt** as a `z2ui5_cl_dmo_app_<n>` port
-under `src/<category>/<library>/`, never by being moved: the samples are built
-on the framework's `z2ui5_cl_xml_view`, ports use `z2ui5_cl_ai_xml` (§5), and a
-port is a 1:1 rebuild of the *demo kit original*, not of another repo's
-interpretation of it. Delete a file there once its decision is made — ported, or
-dropped with the reason recorded in `todo/README.md`, which carries the full
-inventory (which rows ai-demokit already covers, and why the rest do or do not
-qualify).
+Should samples be imported again, the same rules apply. A file leaves `todo/` by
+being **rebuilt** as a `z2ui5_cl_dmo_app_<n>` port under
+`src/<category>/<library>/`, never by being moved: the samples are built on the
+framework's `z2ui5_cl_xml_view`, ports use `z2ui5_cl_ai_xml` (§5), and a port is
+a 1:1 rebuild of the *demo kit original*, not of another repo's interpretation of
+it. Delete a file there once its decision is made — ported, or dropped with the
+reason recorded in `todo/README.md`. Three traps that decided rows last time: the
+entity in `<DESCRIPT>` is the control the class was *filed under*, not
+necessarily the sample it *rebuilds* (read the body of every class whose URL
+names only an entity — that is where the one take-over was hiding); a
+hold-out sample (`ui5/holdout.json`) must never be ported however uncovered its
+control looks; and an unported sample that differs from a ported one by a single
+attribute is a near-duplicate to skip (§1), not a take-over.
 
 ---
 
@@ -195,12 +205,12 @@ requirement.
 |----------|----------------------------|---------|--------|
 | `src/01` | `OpenUI5 <= 1.71` | any OpenUI5/SAPUI5 from 1.71 on — the portable half | 280 ports |
 | `src/02` | `OpenUI5 > 1.71`  | needs a UI5 runtime newer than 1.71 | 121 ports |
-| `src/03` | `SAPUI5 <= 1.71`  | needs SAPUI5 (a library OpenUI5 does not ship) | empty |
-| `src/04` | `SAPUI5 > 1.71`   | needs SAPUI5 **and** a runtime newer than 1.71 | empty |
+| `src/03` | `SAPUI5-only controls - collection` | needs SAPUI5 (a library OpenUI5 does not ship) | 14 samples, **not** ports — see below |
 
 **Level 2 — the library** of the demo kit sample, numbered once and globally: a
 library keeps the same number in every category folder, so `src/01/01` and
-`src/02/01` are both `sap.m`.
+`src/02/01` are both `sap.m`. It applies to the two **port** folders only;
+`src/03` is flat, because a collection has nothing to derive a path from.
 
 | Folder | CTEXT | Library namespace |
 |--------|-------|-------------------|
@@ -209,10 +219,10 @@ library keeps the same number in every category folder, so `src/01/01` and
 | `03` | `sap.uxap`  | `sap.uxap` |
 | `04` | `sap.f`     | `sap.f` |
 | `05` | `sap.tnt`   | `sap.tnt` |
-| `06` | `sap.suite` | `sap.suite.*` — SAPUI5 only, reserved |
-| `07` | `sap.viz`   | `sap.viz` — SAPUI5 only, reserved |
-| `08` | `sap.gantt` | `sap.gantt` — SAPUI5 only, reserved |
-| `09` | `sap.ndc`   | `sap.ndc` — SAPUI5 only, reserved |
+| `06` | `sap.suite` | `sap.suite.*` — SAPUI5 only, unused (the collection is flat) |
+| `07` | `sap.viz`   | `sap.viz` — SAPUI5 only, unused |
+| `08` | `sap.gantt` | `sap.gantt` — SAPUI5 only, unused |
+| `09` | `sap.ndc`   | `sap.ndc` — SAPUI5 only, unused |
 
 The library split key is the **second-level namespace of the sample**
 (`sap.m.sample.ContainerNoPadding` → `sap.m`), the same key
@@ -255,74 +265,59 @@ batch process — it is just not one package.
 Because `FOLDER_LOGIC=PREFIX`, class names never encode the folder — moving a
 class between folders needs no rename.
 
-### SAPUI5 — `src/03` / `src/04` exist, but are still closed
+### SAPUI5 — `src/03` collects, it does not port
 
-**Every port in this repo today rebuilds an OpenUI5 demo kit sample, and every
-control it uses is part of OpenUI5.** The `src/03` / `src/04` packages exist so
-the category scheme is complete and a SAPUI5 port has a defined home — they are
-**not** an open door. Nothing may be filed there until the verification gap
-below is answered; until then a library that ships with SAPUI5 only
-(`sap.ui.comp` smart controls, `sap.suite.*`, `sap.viz.*`, `sap.gantt.*`,
-`sap.ndc`, `sap.ui.vbm`, …) stays out of scope, with no `ui5/<lib>/` template
-folder and no entry in the coverage tables.
+**1:1 porting is for OpenUI5 only.** Every port in this repo rebuilds an
+OpenUI5 demo kit sample against its archived original, and that is what the two
+port folders (`src/01`, `src/02`) hold. A control that ships with SAPUI5 only
+(`sap.suite.*`, `sap.viz.*`, `sap.gantt.*`, `sap.ndc`, `sap.ui.comp`,
+`sap.ui.vbm`/`.vk`) cannot be ported that way, for one blunt reason: **there is
+no original to rebuild against**. SAPUI5 is not on GitHub, and the public
+`@sapui5/*` npm packages ship `src/` and nothing else — no `demokit/sample`
+tree — so `ui5/<lib>/<Name>/` cannot be filled and `structural_diff` has
+nothing to compare. (Trying to close that gap was reverted with this section:
+the templates would have to come from the SDK web app, which no offline,
+reproducible pipeline can rely on.)
 
-The reason is not taste, it is that the whole machinery is built on an OpenUI5
-checkout: `ui5/universe.json` (the sample universe), `ui5/properties.json` (the
-property gate) and `render_smoke` (which serves the `@openui5/*` packages) can
-none of them see a control that OpenUI5 does not ship. A SAPUI5-only port
-therefore sits outside all three checks and is unverifiable here —
-`generate-coverage.mjs` reports it as an **orphan port**, which is the correct
-answer, not a false alarm to suppress. Opening `src/03` / `src/04` means
-closing those three gaps.
+**`src/03` is the answer instead: a collection, not a package of ports.** It
+holds hand-written abap2UI5 samples for SAPUI5-only controls — how the control
+is expressed with the framework, as orientation. That is a knowledge store, so:
 
-#### What the SAPUI5 sources already give us
+- **flat** (`src/03/<class>.clas.abap`), because there is no path to derive:
+  no library level, and no `<= 1.71` / `> 1.71` split — that split is a porting
+  concern about which runtime a *rebuild* needs. `src/04` was deleted with it;
+- **no `meta/<class>.json` sidecar, no `ui5/` template, no coverage row.** The
+  AI machinery does not touch it and must not: `validate-meta`'s port detector
+  matches `src/<cc>/<ll>/` (two numeric levels), and `structural_diff`,
+  `data_fidelity`, `view_gates`, the overview app and the coverage tables are
+  all sidecar-driven. A class here is invisible to every one of them **by
+  construction**, not by an exclusion list that could rot;
+- **classes are `z2ui5_cl_dmo_sapui5_<nnn>`**, in the samples style (the
+  framework's own `z2ui5_cl_xml_view` builder, dispatch inline on
+  `CASE client->get( )-event.`) — the `z2ui5_cl_ai_xml` rule in §5 is a *port*
+  rule and does not reach here;
+- **ABAP hygiene still applies.** `abaplint` and `pattern-lint` walk all of
+  `src/`, and the collection is held to them like any other ABAP in this repo:
+  no commented-out code, `ty_`/`ty_s_`/`ty_t_` types, explicit `EMPTY KEY`, no
+  dead event wires. The samples came in with 52 such findings; they were fixed,
+  not suppressed;
+- **each class carries an ABAP Doc header** naming the control, why it is
+  collected rather than ported, and its SAPUI5 demo kit link. A **deprecated**
+  control says so there — it is collected as a record of the control, never as
+  a recommendation (`RadialMicroChart` @1.135, both `sap.gantt` @1.64).
 
-The **`@sapui5/*` npm packages are public** and ship the same JSDoc'd
-`src/sap/…` tree as `@openui5/*` (`@sapui5/distribution-metadata` lists 76
-libraries). Eight of them are pinned in `package.json` at 1.151.0 —
-`sap.suite.ui.commons`, `sap.suite.ui.microchart`, `sap.ui.comp`, `sap.ui.vbm`,
-`sap.ui.vk`, `sap.ndc`, `sap.viz`, `sap.gantt` — so a SAPUI5 control's
-class-level `@since`/`@deprecated` is readable offline and reproducibly.
+Assets are the one place the collection diverges from a repo rule on purpose:
+`data_fidelity` forbids a non-OpenUI5 host for a *port*'s assets (§6), and the
+SAPUI5 samples legitimately load their images from `ui5.sap.com/test-resources`
+— there is no OpenUI5 equivalent. The gate never sees them (no sidecar), which
+is the correct outcome, not a loophole.
 
-`scripts/scope-of.mjs` uses them: it falls back to
-`node_modules/@sapui5/<lib>/src/` when an entity is not in the OpenUI5 checkout,
-and reports a SAPUI5 verdict as such — `OUT_OF_SCOPE (SAPUI5-only library …)`
-plus the release facts that would decide `src/03` vs `src/04`. OpenUI5 verdicts
-are untouched: they still come only from the checkout, never from a package
-that may lag the release the sample universe was built at.
-
-#### The three gaps still open
-
-1. **`ui5/properties.json` does not cover the SAPUI5 libraries.** It is built by
-   the LINTER's `generate-metadata.mjs`, whose library list and `@openui5/`
-   scope are hardcoded — and it must stay the only parser (a second one drifted
-   before, §7). The extension is written up in
-   [`pr/linter-sapui5-metadata`](pr/linter-sapui5-metadata/). Until it lands the
-   property gate is blind there, and a control absent from the snapshot is
-   **silently passed** — the worst of its three answers.
-2. **No sample templates.** SAPUI5 demo kit samples live only in the demo kit
-   web app (`ui5.sap.com/test-resources/<lib>/demokit/sample/<Name>/`); SAPUI5
-   has no public git repo, and the npm packages ship no `test/` tree (nor do
-   the `@openui5` ones — that is why the universe comes from a git clone). No
-   template means no `ui5/<lib>/<Name>/`, so `structural_diff` and
-   `data_fidelity` have nothing to compare a port against.
-3. **No built themes.** `@openui5/themelib_sap_horizon` carries CSS for the
-   OpenUI5 libraries only, there is no `@sapui5` themelib on npm, and the
-   library packages ship `.less` with zero `.css`. `render_smoke` would draw
-   unthemed zero-size controls — the failure mode the `e2e-debugging` guide
-   already documents.
-
-Until then, curated SAPUI5-only demos belong in
-[abap2UI5/samples](https://github.com/abap2UI5/samples) instead, under `src/00/`
-(*extended*), where the build strips them before the cloud and 702 checks — the
-former `src/06` smart control ports live there now
-(`z2ui5_cl_demo_app_475`–`_479`), rebuilt on the framework's own
-`z2ui5_cl_xml_view` builder.
-
-### Class naming
-
-Ports are named `z2ui5_cl_dmo_app_<n>` (lowercase). `<n>` is a stable, unique
-number; it is the app's identity linking a port to its template (see §4).
+`scripts/scope-of.mjs` reports a SAPUI5-only control as
+`OUT_OF_SCOPE (SAPUI5-only library — no 1:1 port, collect it in src/03 instead)`
+plus its release facts, and reads them from the pinned `@sapui5/*` packages
+(eight of them, at 1.151.0) — so a control's `@since` / `@deprecated` is still
+answerable offline and reproducibly, which is what decides whether collecting it
+is worth it at all.
 
 ---
 

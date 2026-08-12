@@ -2807,10 +2807,38 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` (experimental API) to render. Either drop the port or add a ui5/scope-exceptions.json entry; scope-of.mjs should also learn @ui5-experimental-since.` ) ).
 
     result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.Page`                            name = `PageListReportIconTabBar`                      class = `z2ui5_cl_dmo_app_406` path = `src/02/01/z2ui5_cl_dmo_app_406.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        is_post171 = abap_true
+        notes = `POST-1.71: The sample's AnalyticalTable declares its row mode through the rowMode aggregation with a sap.ui.table.rowmodes.Auto instance - both the aggregation (sap.ui.table.Table.rowMode) and the` &&
+                 ` control (sap.ui.table.rowmodes.Auto) are @since 1.119, i.e. newer than the 1.71 floor. Kept 1:1 per the fidelity-first policy (AGENTS §5), same as app 164 (the RowModes sample) which declares the` &&
+                 ` same aggregation; the app needs a UI5 release >= 1.119 to render the table at its intended row height. The pre-1.119 alternative (visibleRowCountMode='Auto' + rowHeight) is a different, deprecated` &&
+                 ` API and would not be the sample.`
+        post171 = `The sample's AnalyticalTable declares its row mode through the rowMode aggregation with a sap.ui.table.rowmodes.Auto instance - both the aggregation (sap.ui.table.Table.rowMode) and the control` &&
+                 ` (sap.ui.table.rowmodes.Auto) are @since 1.119, i.e. newer than the 1.71 floor. Kept 1:1 per the fidelity-first policy (AGENTS §5), same as app 164 (the RowModes sample) which declares the same` &&
+                 ` aggregation; the app needs a UI5 release >= 1.119 to render the table at its intended row height. The pre-1.119 alternative (visibleRowCountMode='Auto' + rowHeight) is a different, deprecated API and` &&
+                 ` would not be the sample.` ) ).
+
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.Page`                            name = `PageListReportToolbar`                         class = `z2ui5_cl_dmo_app_405` path = `src/02/01/z2ui5_cl_dmo_app_405.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        is_post171 = abap_true
+        notes = `POST-1.71: The sample's AnalyticalTable declares its row mode through the rowMode aggregation with a sap.ui.table.rowmodes.Auto instance - both the aggregation (sap.ui.table.Table.rowMode) and the` &&
+                 ` control (sap.ui.table.rowmodes.Auto) are @since 1.119, i.e. newer than the 1.71 floor. Kept 1:1 per the fidelity-first policy (AGENTS §5), same as app 164 (the RowModes sample) which declares the` &&
+                 ` same aggregation; the app needs a UI5 release >= 1.119 to render the table at its intended row height. The pre-1.119 alternative (visibleRowCountMode='Auto' + rowHeight) is a different, deprecated` &&
+                 ` API and would not be the sample.`
+        post171 = `The sample's AnalyticalTable declares its row mode through the rowMode aggregation with a sap.ui.table.rowmodes.Auto instance - both the aggregation (sap.ui.table.Table.rowMode) and the control` &&
+                 ` (sap.ui.table.rowmodes.Auto) are @since 1.119, i.e. newer than the 1.71 floor. Kept 1:1 per the fidelity-first policy (AGENTS §5), same as app 164 (the RowModes sample) which declares the same` &&
+                 ` aggregation; the app needs a UI5 release >= 1.119 to render the table at its intended row height. The pre-1.119 alternative (visibleRowCountMode='Auto' + rowHeight) is a different, deprecated API and` &&
+                 ` would not be the sample.` )
       ( module = `sap.m`              control = `sap.m.Page`                            name = `PageStandardClasses`                           class = `z2ui5_cl_dmo_app_089` path = `src/01/01/z2ui5_cl_dmo_app_089.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
-        notes = `NOTE: element binding kept 1:1 - a one-record structure /S_PRODUCT instead of {/ProductCollection/0}; the IconTabBar expanded stays bound to {device>/isNoPhone} (runtime device model).` )
+        notes = `NOTE: element binding kept 1:1 - a one-record structure /S_PRODUCT instead of {/ProductCollection/0}; the IconTabBar expanded stays bound to {device>/isNoPhone} (runtime device model).` ) ).
+
+    result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Panel`                           name = `Panel`                                         class = `z2ui5_cl_dmo_app_397` path = `src/01/01/z2ui5_cl_dmo_app_397.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -3490,6 +3518,10 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         post171 = `Button.ariaHasPopup (since 1.84), Link.ariaHasPopup (since 1.86) and TimePicker.hideInput (since 1.97) are kept 1:1; needs a UI5 release providing them.` ) ).
 
     result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.TimePicker`                      name = `TimePickerValueState`                          class = `z2ui5_cl_dmo_app_404` path = `src/01/01/z2ui5_cl_dmo_app_404.clas.abap`
+        score = 1
+        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.32` )
       ( module = `sap.m`              control = `sap.m.TimePickerSliders`               name = `TimePickerSliders`                             class = `z2ui5_cl_dmo_app_095` path = `src/01/01/z2ui5_cl_dmo_app_095.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -3675,6 +3707,9 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = `NOTE: the /ProductCollectionStats/Counts values are flattened to the default model fields /TOTAL, /OK, /HEAVY, /OVERWEIGHT (verbatim counts).` )
       ( module = `sap.m`              control = `sap.ui.core.StandardMargins`           name = `StandardMarginsAll`                            class = `z2ui5_cl_dmo_app_088` path = `src/01/01/z2ui5_cl_dmo_app_088.clas.abap`
+        score = 1
+        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
+      ( module = `sap.m`              control = `sap.ui.core.StandardMargins`           name = `StandardNegativeMarginsTwoSided`               class = `z2ui5_cl_dmo_app_403` path = `src/01/01/z2ui5_cl_dmo_app_403.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` ) ).
 
