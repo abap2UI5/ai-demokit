@@ -147,17 +147,34 @@ port here is still the reviewed artifact; it just no longer moves.
 
 ---
 
-## 2. Layout — two trees in one branch
+## 2. Layout — three trees in one branch
 
-Everything lives on the working branch, in two separate top-level trees:
+Everything lives on the working branch, in separate top-level trees:
 
 | Path    | Content |
 |---------|---------|
 | `src/`  | The generated abap2UI5 ports (`*.clas.abap`) — the abapGit project (§3). |
 | `ui5/`  | The original UI5 demo kit templates (JS/XML/manifest), one folder per ported sample (§4). |
+| `todo/` | Imported abap2UI5 samples awaiting a decision — a staging area, **not** a package. |
 
 Keep them separate: only `src/` is the abapGit / abaplint scope; `ui5/` is
 plain JS/XML held for reference and to feed the generator.
+
+**`todo/` is outside `src/` on purpose.** It holds copies of samples from
+[abap2UI5/samples](https://github.com/abap2UI5/samples) — the `src/00/02`
+"restricted" set and the `src/01/03` "Control Library" set, imported 2026-08-12
+— parked for triage against this repo's corpus. Nothing in it is a port: no
+`meta/` sidecar, no `ui5/` template, and no gate walks it (`STARTING_FOLDER=/src/`,
+abaplint globs `/src/**`), so nothing there can reach a system.
+
+A file leaves `todo/` by being **rebuilt** as a `z2ui5_cl_dmo_app_<n>` port
+under `src/<category>/<library>/`, never by being moved: the samples are built
+on the framework's `z2ui5_cl_xml_view`, ports use `z2ui5_cl_ai_xml` (§5), and a
+port is a 1:1 rebuild of the *demo kit original*, not of another repo's
+interpretation of it. Delete a file there once its decision is made — ported, or
+dropped with the reason recorded in `todo/README.md`, which carries the full
+inventory (which rows ai-demokit already covers, and why the rest do or do not
+qualify).
 
 ---
 
