@@ -1,6 +1,6 @@
-# web — run the ai-demokit ports in the browser (GitHub Pages)
+# web — run the samples-controls ports in the browser (GitHub Pages)
 
-This folder builds a **fully client-side** version of the ai-demokit ports:
+This folder builds a **fully client-side** version of the samples-controls ports:
 the abap2UI5 framework and every `z2ui5_cl_dmo_app_*` port are transpiled to
 JavaScript, bundled with webpack, and run in the browser with **no ABAP
 backend** — the transpiled `z2ui5_cl_http_handler` answers the app's own
