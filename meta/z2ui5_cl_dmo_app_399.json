@@ -1,0 +1,31 @@
+{
+  "class": "z2ui5_cl_dmo_app_399",
+  "sample": "sap.m.sample.Image",
+  "entity": "sap.m.Image",
+  "file": "src/01/z2ui5_cl_dmo_app_399.clas.abap",
+  "batch": "b28",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "ariaDetails on sap.m.Image (since UI5 1.79) is newer than 1.71 but kept for the 1:1 port - it links the active-state Image to its explaining Text. The app needs a UI5 release >= 1.79 for the association to take effect."
+    },
+    {
+      "type": "NOTE",
+      "what": "the controller resolves imageWidth once at init from Device.system.phone (5em on phone, 10em otherwise). The port keeps it a live branch over the framework's device> model as the expression {= ${device>/system/phone} ? '5em' : '10em' } instead of resolving it to one value (app 031/046 precedent) - a device BRANCH stays a branch."
+    },
+    {
+      "type": "NOTE",
+      "what": "the img>/products/pic1 and pic3 values and the sample's own images/sap-logo.svg are inlined as literals and host-absolutized to https://sdk.openui5.org/ - abap2UI5 serves one default model and the demo kit's named img model is not carried."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleImage3Press is MessageToast.show('The image has been pressed') with a CONSTANT text, so the press wire is the roundtrip-free client toast (_event_client cs_event-control_global MESSAGE_TOAST.show, app 005 idiom) and the app stays init-only."
+    }
+  ]
+}

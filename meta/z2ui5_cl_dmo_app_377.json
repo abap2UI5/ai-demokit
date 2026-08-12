@@ -1,0 +1,31 @@
+{
+  "class": "z2ui5_cl_dmo_app_377",
+  "sample": "sap.m.sample.IconTabBar",
+  "entity": "sap.m.IconTabBar",
+  "file": "src/01/z2ui5_cl_dmo_app_377.clas.abap",
+  "batch": "b26",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "Thin frontend: onFilterSelect builds nested sap.ui.model.Filters and calls oBinding.filter() on the table's items binding; the port carries the selected tab key into on_event via ${$parameters>/key} and filters the model table in ABAP instead. The controller's thresholds are reproduced exactly - the weight is normalised to grams, below 1000 g is Ok, 1000 to 5000 g is Heavy, above that is Overweight, and the All tab clears the filter. Same rows in the same sorter order, one round-trip per tab switch."
+    },
+    {
+      "type": "NOTE",
+      "what": "Formatter.weightState (the 0/1000/2000 ValueState thresholds) is computed in ABAP and bound as a finished value (state=\"{WEIGHT_STATE}\"), the thin-frontend rule and the same treatment as apps 009 and 298 on this mock. The Currency parts binding on the Price ObjectNumber is kept verbatim as a raw binding-info string."
+    },
+    {
+      "type": "NOTE",
+      "what": "The four tab counts bind /ProductCollectionStats/Counts/Total and .../Weight/{Ok,Heavy,Overweight} of the shared mock - a precomputed stats object, not a collection. abap2UI5 has one flat default model, so they become the four scalar fields COUNT_TOTAL, COUNT_OK, COUNT_HEAVY, COUNT_OVERWEIGHT seeded with the mock's own 123/53/51/19. Same values, same rendering; the counts stay static exactly as in the original, which never recomputes them either."
+    },
+    {
+      "type": "NOTE",
+      "what": "Width, Depth and Height are typed as ABAP string rather than packed. The mock mixes integers (30) and one-decimal values (40.8) in these columns and they are only bound into the text template \"{WIDTH} x {DEPTH} x {HEIGHT} {DIM_UNIT}\", so a fixed DECIMALS would render 30 as 30.0."
+    }
+  ]
+}

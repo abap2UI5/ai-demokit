@@ -1,0 +1,14 @@
+{
+  "class": "z2ui5_cl_dmo_app_372",
+  "sample": "sap.m.sample.TextMaxLines",
+  "entity": "sap.m.Text",
+  "file": "src/01/z2ui5_cl_dmo_app_372.clas.abap",
+  "batch": "b25",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": []
+}

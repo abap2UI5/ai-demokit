@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_dmo_app_379",
+  "sample": "sap.m.sample.IconTabBarInlineMode",
+  "entity": "sap.m.IconTabBar",
+  "file": "src/01/z2ui5_cl_dmo_app_379.clas.abap",
+  "batch": "b26",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "the original binds expanded=\"{device>/isNoPhone}\" (a demo-kit helper model that abap2UI5 does not carry); expressed over the framework own device> model as the expression {= !${device>/system/phone} } - same truth value, different binding text (app 030 precedent, live-verified there on desktop and phone emulation)."
+    }
+  ]
+}

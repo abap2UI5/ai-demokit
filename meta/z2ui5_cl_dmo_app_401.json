@@ -1,0 +1,47 @@
+{
+  "class": "z2ui5_cl_dmo_app_401",
+  "sample": "sap.uxap.sample.ObjectPageOnJSON",
+  "entity": "sap.uxap.ObjectPageLayout",
+  "file": "src/03/z2ui5_cl_dmo_app_401.clas.abap",
+  "batch": "b07",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "Block->content inlining (app 188/217/261 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the blocks / moreBlocks aggregations hold SharedBlocks BlockBase controls - goals:GoalsBlock, personal:BlockPhoneNumber / BlockSocial / BlockAdresses / BlockMailing / PersonalBlockPart1 / PersonalBlockPart2, employment:BlockJobInfoPart1 / BlockJobInfoPart2 / BlockJobInfoPart3 / BlockEmpDetailPart1 / BlockEmpDetailPart2 / BlockEmpDetailPart3 / EmploymentBlockJob. Each BlockBase is only a lazy-loading wrapper around a static view (a forms:SimpleForm with core:Title / m:Label / m:Text, or a layout:HorizontalLayout / layout:VerticalLayout tree), so every block view is inlined 1:1 into its aggregation. Absent as a result: the 14 BlockBase controls with their ids and their columnLayout / showSubSectionMore properties, plus the block views' own mvc:View roots with their width='100%'. Present in their place: forms:SimpleForm, core:Title and the additional m:Label / m:Text / layout:VerticalLayout / layout:HorizontalLayout the block views contain."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "EmploymentBlockJob is a two-view BlockBase (Collapsed / Expanded, selected by the block mode, with showSubSectionMore='true' offering the toggle) whose views bind six internal named models emp1>..emp6> that six uxap:ModelMapping elements map onto ObjectPageModel>/Employee/0..5. abap2UI5 serves one default model and has no BlockBase mode toggle, so: the Collapsed view (the block's initial state, two employees - a layout:Grid / layout:VerticalLayout tree with layout:GridData layoutData) is inlined, and emp1>/emp2> are folded onto default-model root fields bound via client->_bind (app 230/261 precedent). Lost: the six ModelMapping config controls, the Expanded view with employees 3-6, the more/less toggle behind showSubSectionMore, and the mapping indirection - the two records are resolved statically to HRData.json /Employee/0 (Michael Adams, Scrum Master) and /Employee/1 (John Miller, Product Owner)."
+    },
+    {
+      "type": "POST_171",
+      "what": "headerContentPinned on sap.uxap.ObjectPageLayout (since UI5 1.93) is newer than 1.71 but kept for the 1:1 port - the sample opens with a pinned header content. The app needs a UI5 release >= 1.93 for it to take effect."
+    },
+    {
+      "type": "POST_171",
+      "what": "the heading aggregation of sap.uxap.ObjectPageSection (since UI5 1.106) is newer than 1.71 but kept for the 1:1 port - the Goals and Personal sections each carry an m:MessageStrip in it. The app needs a UI5 release >= 1.106 to show those two strips."
+    },
+    {
+      "type": "POST_171",
+      "what": "sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar and the headerContent avatar (displaySize='L'), both on the sample's own imageID_275314.png. Needs a UI5 runtime >= 1.73."
+    },
+    {
+      "type": "NOTE",
+      "what": "The controller's three constant-text MessageToast handlers (handleLink1Press, handleLink2Press, handleEditBtnPress) are wired as round-trip-free client toasts (_event_client cs_event-control_global MESSAGE_TOAST.show, app 005 idiom), so the two breadcrumb Links and the edit-header button behave exactly as in the original without a backend round-trip."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "toggleFooter does oObjectPageLayout.setShowFooter(!getShowFooter()). showFooter IS a bindable property, so the port binds it two-way (as_bool) and flips the ABAP flag in on_event instead of calling the setter through a frontend action - the bindable-property-beats-frontend-action rule. The showFooter attribute is therefore present in the port where the original view does not write it, and the footer starts hidden as it does in the original. The round-trip toggle itself is not verified in a running system yet."
+    },
+    {
+      "type": "NOTE",
+      "what": "The four asset paths (the imageID_275314.png avatar twice, linkedin.png and Twitter.png) are kept exactly as the original writes them - './test-resources/sap/uxap/images/...' - matching app 261, which carries the same relative form for the same two images."
+    }
+  ]
+}

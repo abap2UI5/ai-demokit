@@ -1,0 +1,14 @@
+{
+  "class": "z2ui5_cl_dmo_app_383",
+  "sample": "sap.m.sample.IconTabSeparator",
+  "entity": "sap.m.IconTabBar",
+  "file": "src/01/z2ui5_cl_dmo_app_383.clas.abap",
+  "batch": "b26",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": []
+}

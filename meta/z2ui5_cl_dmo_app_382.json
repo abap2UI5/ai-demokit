@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_dmo_app_382",
+  "sample": "sap.m.sample.IconTabBarSubTabs",
+  "entity": "sap.m.IconTabBar",
+  "file": "src/01/z2ui5_cl_dmo_app_382.clas.abap",
+  "batch": "b26",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "the sap.m.IconTabFilter items aggregation (nested sub tabs) is @since 1.77, newer than the 1.71 floor, but it IS the sample - both IconTabBars exist to show sub tabs. Kept for the 1:1 port; the app needs a UI5 release >= 1.77."
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_dmo_app_389",
+  "sample": "sap.m.sample.GenericTileAsMonitorTile",
+  "entity": "sap.m.GenericTile",
+  "file": "src/01/z2ui5_cl_dmo_app_389.clas.abap",
+  "batch": "b27",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "the sample's own style.css (one rule: .tileLayout floats left) is injected through an extra core:HTML style leaf (app 275 precedent) - one control the archived Page.view.xml does not have (core:HTML 0 -> 1). The literal braces of the CSS rule are escaped in the ABAP literal because the XMLView parser reads an unescaped brace in an attribute value as a binding."
+    },
+    {
+      "type": "NOTE",
+      "what": "the controller's only handler is MessageToast.show with the CONSTANT text 'The GenericTile is pressed.', so every press wire is the roundtrip-free client toast (_event_client cs_event-control_global MESSAGE_TOAST.show, app 005/275 idiom) and the app stays init-only."
+    }
+  ]
+}

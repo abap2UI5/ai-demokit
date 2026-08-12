@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_dmo_app_402",
+  "sample": "sap.uxap.sample.ObjectPageWithHeaderContainer",
+  "entity": "sap.uxap.ObjectPageLayout",
+  "file": "src/03/z2ui5_cl_dmo_app_402.clas.abap",
+  "batch": "b07",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "Block->content inlining (app 188/217/261 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the blocks / moreBlocks aggregations hold SharedBlocks BlockBase controls - goals:GoalsBlock, personal:BlockPhoneNumber / BlockSocial / BlockAdresses / BlockMailing / PersonalBlockPart1 / PersonalBlockPart2, employment:BlockJobInfoPart1 / BlockJobInfoPart2 / BlockJobInfoPart3 / BlockEmpDetailPart1 / BlockEmpDetailPart2 / BlockEmpDetailPart3. Each BlockBase is only a lazy-loading wrapper around a static view (a forms:SimpleForm with core:Title / m:Label / m:Text, or a layout:HorizontalLayout / layout:VerticalLayout tree), so every block view is inlined 1:1 into its aggregation. Absent as a result: the 13 BlockBase controls with their ids and their columnLayout / class='sapUxAPObjectPageSubSectionAlignContent' properties, plus the block views' own mvc:View roots with their width='100%'. Present in their place: forms:SimpleForm, core:Title and the additional m:Label / m:Text / layout:VerticalLayout / layout:HorizontalLayout the block views contain."
+    },
+    {
+      "type": "POST_171",
+      "what": "sap.m.Avatar is a control @since 1.73 (kept for 1:1 fidelity, the sample entity sap.uxap.ObjectPageLayout is in scope): the snappedHeading avatar and the HeaderContainer avatar (displaySize='L'), both on the sample's own imageID_275314.png. Needs a UI5 runtime >= 1.73."
+    },
+    {
+      "type": "NOTE",
+      "what": "The sample has no controller at all - no model, no event handlers - so the port is init-only with neither model_init nor on_event, which is behaviour-identical. The two avatar/image paths are kept exactly as the original writes them ('./test-resources/sap/uxap/images/imageID_275314.png'), matching app 261 on the same asset."
+    }
+  ]
+}
