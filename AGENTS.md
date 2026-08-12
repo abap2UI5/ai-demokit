@@ -256,7 +256,44 @@ none of them see a control that OpenUI5 does not ship. A SAPUI5-only port
 therefore sits outside all three checks and is unverifiable here —
 `generate-coverage.mjs` reports it as an **orphan port**, which is the correct
 answer, not a false alarm to suppress. Opening `src/03` / `src/04` means
-deciding what replaces those three checks for a port they cannot reach.
+closing those three gaps.
+
+#### What the SAPUI5 sources already give us
+
+The **`@sapui5/*` npm packages are public** and ship the same JSDoc'd
+`src/sap/…` tree as `@openui5/*` (`@sapui5/distribution-metadata` lists 76
+libraries). Eight of them are pinned in `package.json` at 1.151.0 —
+`sap.suite.ui.commons`, `sap.suite.ui.microchart`, `sap.ui.comp`, `sap.ui.vbm`,
+`sap.ui.vk`, `sap.ndc`, `sap.viz`, `sap.gantt` — so a SAPUI5 control's
+class-level `@since`/`@deprecated` is readable offline and reproducibly.
+
+`scripts/scope-of.mjs` uses them: it falls back to
+`node_modules/@sapui5/<lib>/src/` when an entity is not in the OpenUI5 checkout,
+and reports a SAPUI5 verdict as such — `OUT_OF_SCOPE (SAPUI5-only library …)`
+plus the release facts that would decide `src/03` vs `src/04`. OpenUI5 verdicts
+are untouched: they still come only from the checkout, never from a package
+that may lag the release the sample universe was built at.
+
+#### The three gaps still open
+
+1. **`ui5/properties.json` does not cover the SAPUI5 libraries.** It is built by
+   the LINTER's `generate-metadata.mjs`, whose library list and `@openui5/`
+   scope are hardcoded — and it must stay the only parser (a second one drifted
+   before, §7). The extension is written up in
+   [`pr/linter-sapui5-metadata`](pr/linter-sapui5-metadata/). Until it lands the
+   property gate is blind there, and a control absent from the snapshot is
+   **silently passed** — the worst of its three answers.
+2. **No sample templates.** SAPUI5 demo kit samples live only in the demo kit
+   web app (`ui5.sap.com/test-resources/<lib>/demokit/sample/<Name>/`); SAPUI5
+   has no public git repo, and the npm packages ship no `test/` tree (nor do
+   the `@openui5` ones — that is why the universe comes from a git clone). No
+   template means no `ui5/<lib>/<Name>/`, so `structural_diff` and
+   `data_fidelity` have nothing to compare a port against.
+3. **No built themes.** `@openui5/themelib_sap_horizon` carries CSS for the
+   OpenUI5 libraries only, there is no `@sapui5` themelib on npm, and the
+   library packages ship `.less` with zero `.css`. `render_smoke` would draw
+   unthemed zero-size controls — the failure mode the `e2e-debugging` guide
+   already documents.
 
 Until then, curated SAPUI5-only demos belong in
 [abap2UI5/samples](https://github.com/abap2UI5/samples) instead, under `src/00/`

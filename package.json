@@ -47,6 +47,14 @@
     "@openui5/sap.ui.unified": "^1.150.0",
     "@openui5/sap.uxap": "1.150.0",
     "@openui5/themelib_sap_horizon": "^1.150.0",
+    "@sapui5/sap.gantt": "1.151.0",
+    "@sapui5/sap.ndc": "1.151.0",
+    "@sapui5/sap.suite.ui.commons": "1.151.0",
+    "@sapui5/sap.suite.ui.microchart": "1.151.0",
+    "@sapui5/sap.ui.comp": "1.151.0",
+    "@sapui5/sap.ui.vbm": "1.151.0",
+    "@sapui5/sap.ui.vk": "1.151.0",
+    "@sapui5/sap.viz": "1.151.0",
     "playwright": "^1.61.1"
   },
   "engines": {

@@ -49,6 +49,20 @@ function gt(a, b) {
   return false;
 }
 
+/* SAPUI5-only libraries have no public checkout to point OPENUI5_SRC at — SAPUI5
+ * is not on GitHub. Their sources come from the `@sapui5/*` npm packages
+ * instead, which ship the same JSDoc'd `src/sap/…` tree as the `@openui5/*`
+ * ones (pinned in package.json, so the verdict is reproducible). This reporter
+ * therefore reads two kinds of root, and prints which one answered — an OpenUI5
+ * verdict must never come from a package that silently lags the checkout the
+ * sample universe was built from. */
+const SAPUI5_PKGS = path.join(ROOT, 'node_modules', '@sapui5');
+const SAPUI5_ROOTS = fs.existsSync(SAPUI5_PKGS)
+  ? fs.readdirSync(SAPUI5_PKGS)
+      .map((p) => path.join(SAPUI5_PKGS, p, 'src'))
+      .filter((p) => fs.existsSync(p))
+  : [];
+
 // entity "sap.f.AvatarGroup" -> the source .js whose path ends in "sap/f/AvatarGroup.js"
 function sourceFor(entity) {
   const suffix = path.sep + entity.replace(/\./g, path.sep) + '.js';
@@ -69,7 +83,13 @@ function sourceFor(entity) {
   })(SRC);
   // prefer the canonical "<lib>/src/..." location if several match
   hits.sort((a, b) => (a.includes(`${path.sep}src${path.sep}`) ? -1 : 1) - (b.includes(`${path.sep}src${path.sep}`) ? -1 : 1));
-  return hits[0] || null;
+  if (hits[0]) return { file: hits[0], root: 'openui5' };
+  // not in the OpenUI5 checkout — try the pinned SAPUI5 packages
+  for (const r of SAPUI5_ROOTS) {
+    const f = path.join(r, entity.replace(/\./g, path.sep) + '.js');
+    if (fs.existsSync(f)) return { file: f, root: 'sapui5' };
+  }
+  return null;
 }
 
 // class-level JSDoc @since / @deprecated ONLY. These live in the class-doc block,
@@ -118,15 +138,23 @@ function sampleInfo(sample) {
 }
 
 function verdict(entity) {
-  const file = sourceFor(entity);
-  if (!file) return { entity, ok: false, reason: 'UNRESOLVED (no source .js found — check the entity name / fork checkout)' };
-  const { since, deprecated } = metaFromSource(file, entity);
+  const hit = sourceFor(entity);
+  if (!hit) return { entity, ok: false, reason: 'UNRESOLVED (no source .js found — check the entity name / fork checkout)' };
+  // A SAPUI5-only control is out of scope for a DIFFERENT reason than its
+  // @since: the repo has no verified home for it yet (AGENTS §3). Say so, and
+  // still report the release facts — they are what decides src/03 vs src/04
+  // once those packages open.
+  const tag = hit.root === 'sapui5' ? ' [SAPUI5-only, @sapui5 package]' : '';
+  const { since, deprecated } = metaFromSource(hit.file, entity);
   if (deprecated) {
-    return { entity, ok: false, since, reason: `OUT_OF_SCOPE (deprecated${deprecated.since ? ` since ${deprecated.since}` : ''}${deprecated.text ? ` — ${deprecated.text.replace(/\s+/g, ' ').slice(0, 80)}` : ''})` };
+    return { entity, ok: false, since, reason: `OUT_OF_SCOPE (deprecated${deprecated.since ? ` since ${deprecated.since}` : ''}${deprecated.text ? ` — ${deprecated.text.replace(/\s+/g, ' ').slice(0, 80)}` : ''})${tag}` };
   }
   const v = parseVer(since);
   if (v && gt(v, THRESHOLD)) {
-    return { entity, ok: false, since, reason: `OUT_OF_SCOPE (control @since ${since} > 1.71)` };
+    return { entity, ok: false, since, reason: `OUT_OF_SCOPE (control @since ${since} > 1.71)${tag}` };
+  }
+  if (hit.root === 'sapui5') {
+    return { entity, ok: false, since, reason: `OUT_OF_SCOPE (SAPUI5-only library — src/03/src/04 are not open, AGENTS §3); release-clean: @since ${since || '<=1.71 (no @since header)'}` };
   }
   return { entity, ok: true, since, reason: `IN_SCOPE (@since ${since || '<=1.71 (no @since header)'})` };
 }
