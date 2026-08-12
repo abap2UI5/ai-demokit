@@ -1278,6 +1278,10 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
       ( module = `sap.m`              control = `sap.m.ComboBox`                        name = `ComboBoxGrouping`                              class = `z2ui5_cl_dmo_app_199` path = `src/01/b17/z2ui5_cl_dmo_app_199.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.22` )
+      ( module = `sap.m`              control = `sap.m.ComboBox`                        name = `ComboBoxWrapping`                              class = `z2ui5_cl_dmo_app_384` path = `src/01/b27/z2ui5_cl_dmo_app_384.clas.abap`
+        score = 1
+        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.22` ) ).
 
     lv_text1 = `IMPROVISED: the pattern's three views (App.view with sap.m.App id=rootControl, Main.view, Comparison.view) plus manifest routing are merged into ONE view: the App hosts the Main Page and the` &&
@@ -1738,6 +1742,19 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` no event; the rendered view is a faithful 1:1 rebuild.`
         post171 = `ariaLabelledBy (since UI5 1.97) on the labeled GenericTag is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.97 to render it.` ) ).
 
+    lv_text1 = `NOTE: the sample's own style.css (one rule: .tileLayout floats left) is injected through an extra core:HTML style leaf (app 275 precedent) - one control the archived Page.view.xml does not have` &&
+               ` (core:HTML 0 -> 1). The literal braces of the CSS rule are escaped in the ABAP literal because the XMLView parser reads an unescaped brace in an attribute value as a binding. // NOTE: the` &&
+               ` controller's only handler is MessageToast.show with the CONSTANT text 'The GenericTile is pressed.', so every press wire is the roundtrip-free client toast (_event_client cs_event-control_global` &&
+               ` MESSAGE_TOAST.show, app 005/275 idiom) and the app stays init-only. // NOTE: the two SlideTile tiles carry backgroundImage paths into the sample's own images folder` &&
+               ` (test-resources/sap/m/demokit/sample/GenericTileAsFeedTile/images/NewsImage1.png and NewsImage2.png); they are kept verbatim and only host-absolutized to https://sdk.openui5.org/ per the runtime` &&
+               ` asset-URL rule, so the images resolve against the OpenUI5 host exactly as in the demo kit.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.GenericTile`                     name = `GenericTileAsFeedTile`                         class = `z2ui5_cl_dmo_app_388` path = `src/01/b27/z2ui5_cl_dmo_app_388.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.34.0`
+        notes = lv_text1 ) ).
+
     lv_text1 = `POST-1.71: frameType values OneByHalf / TwoByHalf (since UI5 1.83) are newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.83 to render them; OneByOne / TwoByOne (1.71) were` &&
                ` never affected. // POST-1.71: systemInfo and appShortcut (since UI5 1.92) are newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.92 to render them. // POST-1.71: url on the` &&
                ` link tiles (since UI5 1.76) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.76 to render it. // NOTE: the relative test-resources image and backgroundImage paths are` &&
@@ -1755,6 +1772,16 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         post171 = `frameType values OneByHalf / TwoByHalf (since UI5 1.83) are newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.83 to render them; OneByOne / TwoByOne (1.71) were never` &&
                  ` affected. // systemInfo and appShortcut (since UI5 1.92) are newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.92 to render them. // url on the link tiles (since UI5 1.76)` &&
                  ` is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.76 to render it.` ) ).
+
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.GenericTile`                     name = `GenericTileAsMonitorTile`                      class = `z2ui5_cl_dmo_app_389` path = `src/01/b27/z2ui5_cl_dmo_app_389.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.34.0`
+        notes = `NOTE: the sample's own style.css (one rule: .tileLayout floats left) is injected through an extra core:HTML style leaf (app 275 precedent) - one control the archived Page.view.xml does not have` &&
+                 ` (core:HTML 0 -> 1). The literal braces of the CSS rule are escaped in the ABAP literal because the XMLView parser reads an unescaped brace in an attribute value as a binding. // NOTE: the` &&
+                 ` controller's only handler is MessageToast.show with the CONSTANT text 'The GenericTile is pressed.', so every press wire is the roundtrip-free client toast (_event_client cs_event-control_global` &&
+                 ` MESSAGE_TOAST.show, app 005/275 idiom) and the app stays init-only.` ) ).
 
     lv_text1 = `NOTE: the sample's style.css (one rule: .tileLayout floats left) is injected through an extra core:HTML style leaf (app 122/124/270 precedent) - one control the archived Page.view.xml does not have` &&
                ` (core:HTML 0 -> 1). The literal braces of the CSS rule are escaped in the ABAP literal because the XMLView parser reads an unescaped brace in an attribute value as a binding. // NOTE: the` &&
@@ -2400,6 +2427,12 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         notes = lv_text1
         post171 = `showSelectAll (since UI5 1.111) is the sample's whole point and kept 1:1 - the app needs a UI5 release >= 1.111 for the select-all checkbox in the picker.` ) ).
 
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.MultiComboBox`                   name = `MultiComboBoxWrapping`                         class = `z2ui5_cl_dmo_app_385` path = `src/01/b27/z2ui5_cl_dmo_app_385.clas.abap`
+        score = 1
+        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.22.0` ) ).
+
     lv_text1 = `NOTE: the controller's onInit pre-sets the tokens on both MultiInputs (Token 1..6 and one long token); they are declared statically in the view's tokens aggregation instead - same rendering` &&
                ` (CAPABILITIES.md marks controller-filled aggregations as expressible, the tokens aggregation is public since UI5 1.16), so this is a faithful 1:1, not a workaround. // NOTE: the controller's onInit` &&
                ` addValidator on multiInput1 and multiInput2 (typing free text + Enter -> new Token({key: text, text})) is wired via the bundled invisible companion control z2ui5.cc.MultiInputExt` &&
@@ -2431,6 +2464,14 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 3 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         notes = lv_text1 ) ).
+
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.MultiInput`                      name = `MultiInputValueStates`                         class = `z2ui5_cl_dmo_app_386` path = `src/01/b27/z2ui5_cl_dmo_app_386.clas.abap`
+        score = 1
+        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
+      ( module = `sap.m`              control = `sap.m.MultiInput`                      name = `MultiInputWrapping`                            class = `z2ui5_cl_dmo_app_387` path = `src/01/b27/z2ui5_cl_dmo_app_387.clas.abap`
+        score = 1
+        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` ) ).
 
     lv_text1 = `POST-1.71: NavContainer.navigationFinished (event, since UI5 1.111.0) is kept 1:1 - it is wired to a client-composed MessageToast; the app needs a UI5 release >= 1.111 to fire it. // NOTE: handleNav` &&
                ` does navCon.to( byId(target), animationSelect.getSelectedKey() ) / navCon.back() imperatively. The port keeps the NavContainer id='navCon' and drives navigation via a round-trip: each To-button's` &&
@@ -2532,14 +2573,18 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
         since = `1.34`
         notes = `NOTE: the second NumericContent keeps the sample's original demokit test-resources image path (test-resources/sap/m/demokit/sample/NumericContentIcon/images/grass.jpg) as the icon literal 1:1;` &&
                  ` abap2UI5 does not serve that static asset, so it does not render offline (the first tile's sap-icon://travel-expense does). The image is archived under ui5/sap.m/NumericContentIcon/images/.` )
+      ( module = `sap.m`              control = `sap.m.NumericContent`                  name = `NumericContentWithoutMargin`                   class = `z2ui5_cl_dmo_app_390` path = `src/01/b27/z2ui5_cl_dmo_app_390.clas.abap`
+        score = 1
+        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        since = `1.34` ) ).
+
+    result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.ObjectAttribute`                 name = `ObjectAttributeInTable`                        class = `z2ui5_cl_dmo_app_191` path = `src/01/b17/z2ui5_cl_dmo_app_191.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         since = `1.12`
         notes = `NOTE: the JSONModel is defined inline in the original controller's onInit (an array of {product, supplier} rows under /modelData); it is moved verbatim into ABAP model_init (all 10 rows kept) and` &&
-                 ` bound on the one default model. Pure prefix/root rename (/modelData -> the default model root), same data, renders identically.` ) ).
-
-    result = VALUE #( BASE result
+                 ` bound on the one default model. Pure prefix/root rename (/modelData -> the default model root), same data, renders identically.` )
       ( module = `sap.m`              control = `sap.m.ObjectAttribute`                 name = `ObjectAttributes`                              class = `z2ui5_cl_dmo_app_073` path = `src/01/b09/z2ui5_cl_dmo_app_073.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 2 noted, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -2964,6 +3009,9 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` selectedKey is two-way bound, so the selection arrives with the event and no private event path is needed - the documented 1:1 path for controller-read selection (CAPABILITIES.md), not a workaround.` ) ).
 
     result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.SegmentedButton`                 name = `SegmentedButtonLI`                             class = `z2ui5_cl_dmo_app_391` path = `src/01/b27/z2ui5_cl_dmo_app_391.clas.abap`
+        score = 1
+        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
       ( module = `sap.m`              control = `sap.m.Select`                          name = `Select`                                        class = `z2ui5_cl_dmo_app_048` path = `src/01/b02/z2ui5_cl_dmo_app_048.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
@@ -2977,7 +3025,9 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` so rendering and behaviour are identical (app 048 precedent).` )
       ( module = `sap.m`              control = `sap.m.Select`                          name = `SelectWithIcons`                               class = `z2ui5_cl_dmo_app_205` path = `src/01/b17/z2ui5_cl_dmo_app_205.clas.abap`
         score = 1
-        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
+        score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` ) ).
+
+    result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Select`                          name = `SelectWithWrappedItemText`                     class = `z2ui5_cl_dmo_app_374` path = `src/01/b25/z2ui5_cl_dmo_app_374.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` ) ).

@@ -1,0 +1,14 @@
+{
+  "class": "z2ui5_cl_dmo_app_384",
+  "sample": "sap.m.sample.ComboBoxWrapping",
+  "entity": "sap.m.ComboBox",
+  "file": "src/01/b27/z2ui5_cl_dmo_app_384.clas.abap",
+  "batch": "b27",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": []
+}
