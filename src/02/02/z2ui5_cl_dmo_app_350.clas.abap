@@ -206,8 +206,9 @@ CLASS z2ui5_cl_dmo_app_350 IMPLEMENTATION.
                                     )->a( n = `height`   v = `100%`
 
                                     )->open( n = `layoutData` ns = `widgets`
+                                        " onColumnsChange writes iCardColumns onto this card's layoutData
                                         )->leaf( n = `GridContainerItemLayoutData` ns = `f`
-                                            )->a( n = `columns` v = `4`
+                                            )->a( n = `columns` v = client->_bind( card_columns )
                                             )->a( n = `minRows` v = `6`
 
                                     )->shut(
@@ -217,8 +218,9 @@ CLASS z2ui5_cl_dmo_app_350 IMPLEMENTATION.
                                     )->a( n = `height` v = `100%`
 
                                     )->open( n = `layoutData` ns = `f`
+                                        " onColumnsChange writes iCardColumns onto this card's layoutData
                                         )->leaf( n = `GridContainerItemLayoutData` ns = `f`
-                                            )->a( n = `columns` v = `4`
+                                            )->a( n = `columns` v = client->_bind( card_columns )
                                             )->a( n = `minRows` v = `6`
 
                                     )->shut(

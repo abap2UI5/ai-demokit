@@ -13,9 +13,9 @@ CLASS z2ui5_cl_dmo_app_298 DEFINITION PUBLIC.
         weight_state   TYPE string,
         price          TYPE p LENGTH 8 DECIMALS 2,
         currency_code  TYPE string,
-        width          TYPE p LENGTH 4 DECIMALS 1,
-        depth          TYPE p LENGTH 4 DECIMALS 1,
-        height         TYPE p LENGTH 4 DECIMALS 1,
+        width          TYPE string,
+        depth          TYPE string,
+        height         TYPE string,
         dim_unit       TYPE string,
       END OF ty_s_product.
     DATA t_products TYPE STANDARD TABLE OF ty_s_product WITH EMPTY KEY.

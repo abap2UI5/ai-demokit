@@ -1,0 +1,31 @@
+{
+  "class": "z2ui5_cl_dmo_app_416",
+  "sample": "sap.uxap.sample.ChildObjectPage",
+  "entity": "sap.uxap.ObjectPageHeader",
+  "file": "src/01/03/z2ui5_cl_dmo_app_416.clas.abap",
+  "batch": "b08",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "Block->content inlining (app 217/401/402 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'). The original blocks/moreBlocks aggregations each hold a custom BlockBase control from the sample's SharedBlocks JS: goals:GoalsBlock (id goalsblock), personal:BlockPhoneNumber (id phone), personal:BlockSocial (id social), personal:BlockAdresses (id adresses), personal:BlockMailing (id mailing, columnLayout=1), personal:PersonalBlockPart1 (id part1, columnLayout=1) and personal:PersonalBlockPart2 (id part2, columnLayout=1). A BlockBase is only a lazy-loading wrapper around a view, and ObjectPageSubSection.blocks/moreBlocks accept any sap.ui.core.Control, so each block's rendered content (a sap.ui.layout.form.SimpleForm) is inlined directly here as a form:SimpleForm holding its core:Title, m:Label and m:Text children. Consequently all seven block controls (GoalsBlock, BlockPhoneNumber, BlockSocial, BlockAdresses, BlockMailing, PersonalBlockPart1, PersonalBlockPart2) are absent from the port and seven form:SimpleForm controls with their core:Title, m:Label and m:Text content are present in their place. The blocks carry no controller behaviour to port; the ObjectPageModel (employee.json) and the default products.json model the controller loads are never bound by the view, so neither is seeded."
+    },
+    {
+      "type": "NOTE",
+      "what": "The controller's named 'buttons' JSONModel ({ text: 'working binding', icon: 'sap-icon://chain-link' }) is folded onto the one default model root (same-data prefix-drop): the fifth ObjectPageHeaderActionButton's text='{buttons>/text}' becomes the bound root field {/TEXT} seeded 'working binding', the sixth button's icon='{buttons>/icon}' becomes {/ICON} seeded 'sap-icon://chain-link' - same values, same leaf names, identical render. The sixth button's composite text binding {path:'/text', model:'buttons', formatter:'.onFormat'} runs the controller formatter .onFormat, which ignores its input and returns the constant 'formatted link'; per the thin-frontend rule that result is computed in model_init and bound as {/FORMATTED_TEXT} (apps 009/010/022/092 formatter precedent)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The ObjectPageHeader objectImageURI points at the sdk.openui5.org host (https://sdk.openui5.org/test-resources/sap/uxap/images/imageID_275314.png) per the offline asset-URL rule; the original uses the relative ./test-resources path (apps 244/262/263 carry the same absolutization for the same image). Literal attribute values are not compared by structural-diff."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "Unverified in a running system: the breadcrumb m:Link press round-trip (event LINK2_PRESS) - the controller's handleLink2Press constant-text MessageToast is served via client->message_toast_display( 'Page 2 long link clicked' ) from on_event."
+    }
+  ]
+}

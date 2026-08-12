@@ -83,7 +83,9 @@ CLASS z2ui5_cl_dmo_app_089 IMPLEMENTATION.
                 )->shut(
 
                 )->open( `IconTabBar`
-                    )->a( n = `expanded` v = `{device>/isNoPhone}`
+                    " the original's isNoPhone is a demo-kit helper the framework's raw
+                    " device> model does not carry; !phone expresses the same (app 030)
+                    )->a( n = `expanded` v = `{= !${device>/system/phone} }`
                     )->a( n = `class`    v = `sapUiSmallMarginBottom sapUiResponsiveContentPadding`
                     )->open( `items`
                         )->open( `IconTabFilter`
