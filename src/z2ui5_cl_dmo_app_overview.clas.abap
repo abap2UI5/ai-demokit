@@ -1800,6 +1800,21 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` vertical HeaderContainers — one of eight NumericContents, one of five TileContents (each wrapping a NumericContent) — reproduced 1:1. **e2e-verified 2026-07-30** (transpiled-framework interaction,` &&
                  ` scripts/e2e-smoke.mjs): pressing the first NumericContent toasts 'Fire press'; the other tiles are the identical wire.` ) ).
 
+    lv_text1 = `NOTE: Thin frontend: onFilterSelect builds nested sap.ui.model.Filters and calls oBinding.filter() on the table's items binding; the port carries the selected tab key into on_event via` &&
+               ` ${$parameters>/key} and filters the model table in ABAP instead. The controller's thresholds are reproduced exactly - the weight is normalised to grams, below 1000 g is Ok, 1000 to 5000 g is Heavy,` &&
+               ` above that is Overweight, and the All tab clears the filter. Same rows in the same sorter order, one round-trip per tab switch. // NOTE: Formatter.weightState (the 0/1000/2000 ValueState thresholds)` &&
+               ` is computed in ABAP and bound as a finished value (state="{WEIGHT_STATE}"), the thin-frontend rule and the same treatment as apps 009 and 298 on this mock. The Currency parts binding on the Price` &&
+               ` ObjectNumber is kept verbatim as a raw binding-info string. // NOTE: The four tab counts bind /ProductCollectionStats/Counts/Total and .../Weight/{Ok,Heavy,Overweight} of the shared mock - a` &&
+               ` precomputed stats object, not a collection. abap2UI5 has one flat default model, so they become the four scalar fields COUNT_TOTAL, COUNT_OK, COUNT_HEAVY, COUNT_OVERWEIGHT seeded with the mock's own`.
+    lv_text1 = lv_text1 && ` 123/53/51/19. Same values, same rendering; the counts stay static exactly as in the original, which never recomputes them either. // NOTE: Width, Depth and Height are typed as ABAP string rather than` &&
+               ` packed. The mock mixes integers (30) and one-decimal values (40.8) in these columns and they are only bound into the text template "{WIDTH} x {DEPTH} x {HEIGHT} {DIM_UNIT}", so a fixed DECIMALS would` &&
+               ` render 30 as 30.0.`.
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabBar`                                    class = `z2ui5_cl_dmo_app_377` path = `src/01/b26/z2ui5_cl_dmo_app_377.clas.abap`
+        score = 4
+        score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 0 reworked). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = lv_text1 ) ).
+
     lv_text1 = `POST-1.71: two members and one control newer than UI5 1.71 are kept 1:1 because they ARE the sample: sap.m.BadgeCustomData (control since 1.80, the badge marker in every customData aggregation -` &&
                ` declared by policy, the property gate does not resolve it) and sap.m.IconTabFilter.items (since 1.77, the nested sub-tabs of iconTabBar8). The app needs a UI5 release >= 1.80. // NOTE: onInit adds 30` &&
                ` IconTabFilters to iconTabBar0 imperatively (text 'Tab n', key n, a Text 'Content n', and a BadgeCustomData visible on the 19th). The port builds that as a bound aggregation over T_TABS with one` &&
@@ -1817,12 +1832,47 @@ CLASS z2ui5_cl_dmo_app_overview IMPLEMENTATION.
                  ` policy, the property gate does not resolve it) and sap.m.IconTabFilter.items (since 1.77, the nested sub-tabs of iconTabBar8). The app needs a UI5 release >= 1.80.` ) ).
 
     result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabBarFiori2`                              class = `z2ui5_cl_dmo_app_378` path = `src/01/b26/z2ui5_cl_dmo_app_378.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `NOTE: the original binds expanded="{device>/isNoPhone}" (a demo-kit helper model that abap2UI5 does not carry); expressed over the framework own device> model as the expression {=` &&
+                 ` !${device>/system/phone} } - same truth value, different binding text (app 030 precedent, live-verified there on desktop and phone emulation).` )
+      ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabBarInlineMode`                          class = `z2ui5_cl_dmo_app_379` path = `src/01/b26/z2ui5_cl_dmo_app_379.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `NOTE: the original binds expanded="{device>/isNoPhone}" (a demo-kit helper model that abap2UI5 does not carry); expressed over the framework own device> model as the expression {=` &&
+                 ` !${device>/system/phone} } - same truth value, different binding text (app 030 precedent, live-verified there on desktop and phone emulation).` )
+      ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabBarMulti`                               class = `z2ui5_cl_dmo_app_380` path = `src/01/b26/z2ui5_cl_dmo_app_380.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `NOTE: the original binds expanded="{device>/isNoPhone}" (a demo-kit helper model that abap2UI5 does not carry); expressed over the framework own device> model as the expression {=` &&
+                 ` !${device>/system/phone} } - same truth value, different binding text (app 030 precedent, live-verified there on desktop and phone emulation).` ) ).
+
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabBarNoIcons`                             class = `z2ui5_cl_dmo_app_381` path = `src/01/b26/z2ui5_cl_dmo_app_381.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        notes = `NOTE: the original binds expanded="{device>/isNoPhone}" (a demo-kit helper model that abap2UI5 does not carry); expressed over the framework own device> model as the expression {=` &&
+                 ` !${device>/system/phone} } - same truth value, different binding text (app 030 precedent, live-verified there on desktop and phone emulation).` )
       ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabBarStretchContent`                      class = `z2ui5_cl_dmo_app_030` path = `src/01/b04/z2ui5_cl_dmo_app_030.clas.abap`
         score = 3
         score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, reviewed). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         checked = `CHECKED (2026-07-20): verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed); incl. the phone-emulation device> check`
         notes = `NOTE: the original binds expanded="{device>/isNoPhone}" (a demo-kit helper model); expressed over the framework's device> model as the expression {= !${device>/system/phone} } - same truth value,` &&
                  ` different binding text. Confirmed on desktop and phone emulation in the 2026-07-20 live check.` )
+      ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabBarSubTabs`                             class = `z2ui5_cl_dmo_app_382` path = `src/01/b26/z2ui5_cl_dmo_app_382.clas.abap`
+        score = 3
+        score_tip = `Rating 3 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
+        is_post171 = abap_true
+        notes = `POST-1.71: the sap.m.IconTabFilter items aggregation (nested sub tabs) is @since 1.77, newer than the 1.71 floor, but it IS the sample - both IconTabBars exist to show sub tabs. Kept for the 1:1 port;` &&
+                 ` the app needs a UI5 release >= 1.77.`
+        post171 = `the sap.m.IconTabFilter items aggregation (nested sub tabs) is @since 1.77, newer than the 1.71 floor, but it IS the sample - both IconTabBars exist to show sub tabs. Kept for the 1:1 port; the app` &&
+                 ` needs a UI5 release >= 1.77.` ) ).
+
+    result = VALUE #( BASE result
+      ( module = `sap.m`              control = `sap.m.IconTabBar`                      name = `IconTabSeparator`                              class = `z2ui5_cl_dmo_app_383` path = `src/01/b26/z2ui5_cl_dmo_app_383.clas.abap`
+        score = 2
+        score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.` )
       ( module = `sap.m`              control = `sap.m.IconTabHeader`                   name = `IconTabHeader`                                 class = `z2ui5_cl_dmo_app_055` path = `src/01/b07/z2ui5_cl_dmo_app_055.clas.abap`
         score = 1
         score_tip = `Rating 1 of 5 - how much attention this port deserves (complexity + rework + review + test-priority). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
