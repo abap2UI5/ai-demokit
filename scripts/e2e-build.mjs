@@ -77,6 +77,14 @@ function main() {
   console.log(`e2e-build: copied ${ports} ports + framework into node/downport`);
   if (EXCLUDE.size) console.log(`e2e-build: excluded (not served): ${[...EXCLUDE].join(', ')}`);
 
+  // 2b. rewire the view-wired follow_up_action( ) calls ON THE COPY. The
+  //     transpiler does not model `IS SUPPLIED` for a RETURNING parameter, so
+  //     the branch that returns the roundtrip-free wire is dead and every
+  //     handler written into a view attribute comes out empty. Same patch the
+  //     browser build applies (web/ci/patch_follow_up_action.mjs is the single
+  //     source, and carries the full analysis).
+  execSync(`node ${path.join(AIDEMOKIT, 'web/ci/patch_follow_up_action.mjs')} ${downport}`, { stdio: 'inherit' });
+
   // 3. downport the copy to v702 (in place, on the copy) — abaplint --fix, a few
   //    passes to settle, then the framework's two sed fixups
   // the config's `files` glob is relative to the config file's directory, so

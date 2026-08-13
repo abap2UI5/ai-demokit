@@ -7,6 +7,81 @@ same-change discipline as AGENTS.md §10). The current point-in-time state
 [STATUS.md](STATUS.md). Numbers quoted inside these sections are snapshots
 of their date and are NOT kept current._
 
+## 2026-08-13 — namespace `dmo` → `smpc`, the red badges, and why the nightly went red
+
+Three unrelated pieces of housekeeping, one of which turned into a real
+finding.
+
+**The object namespace is `z2ui5_cl_smpc_`.** The repository is
+`samples-controls`; the prefix still carried the generic `dmo` of the
+ai-demokit days, which said nothing about which corpus an object belongs to
+in a system that also pulls `samples` (`Z2UI5_CL_SMP_`). Mechanical
+throughout — 1387 files renamed, plus the abaplint `object_naming` patterns,
+the generators and gate scripts, the `meta/` sidecars and interaction
+modules, the fixture corpus, the four generated artefacts and the committed
+Pages bundle. The full offline chain is clean at the new names (abaplint on
+both the standard and cloud configs, pattern-lint, validate-meta,
+structural-diff --strict, data-fidelity, the tooling tests, view-gates
+--strict 416/416).
+
+**Four badges were reporting on the CI, not on the code.** ABAP_702 and
+auto_downport both run `npm run downport` under a 10-minute budget; the step
+needs ~44 passes of the downport rule and 300+ more of `definitions_top` at
+416 ports, so every run since the corpus outgrew that died mid-step and the
+badges read "cancelled". e2e_nightly takes ~40 min against a 45-minute
+budget — six of the last twelve nightlies were cancelled timeouts rather
+than verdicts. bump_a2ui5 had never succeeded: it ran `npx playwright
+install` before any `npm ci`, so npx fetched the current release and
+installed THAT browser build, node-setup's own `npm ci` then put the pinned
+playwright in place, and the smoke asked for a build nobody had downloaded.
+Budgets raised (60/60/90), `npm ci` moved first, and every action re-pinned
+to its current release.
+
+**The nightly's 27 failing ports are a transpiler gap, not broken ports.**
+The 2026-08-11 nightly was green at 365 ports; the first one after the
+corpus renamed its 439 `_event_client( )` wires to `follow_up_action( )`
+failed 27. `follow_up_action( )` tells its view-wired form from its
+statement form with `IF result IS SUPPLIED`, which is correct ABAP — for a
+RETURNING parameter the predicate is true exactly when the method is called
+functionally, and on a real server the corpus works. The transpiler does not
+model it: it compiles the predicate to `(INPUT && INPUT.result)` and emits
+the same call shape for both forms, so the wired branch is dead code. From
+the actual built backend:
+
+```js
+// the caller (app 003, a wired press)
+v: (await this.client.get().z2ui5_if_client$follow_up_action({val: …, t_arg: temp1}))
+// the callee
+async z2ui5_if_client$follow_up_action(INPUT) { …
+  if ((INPUT && INPUT.result)) {          // no caller ever sets it
+```
+
+So every handler written into a view attribute arrives as the empty string
+and the control reaches the browser with no handler at all — app 049's e2e
+says it outright, *"no StepInput carries a change handler"*. Reproduced on
+the pinned transpiler 2.13.40 and the newest published 2.13.59, so it is not
+a stale pin. The Pages demo runs the same transpiled backend, which means
+the breakage was live for its users, not only in CI.
+
+Filed as `pr/transpiler-returning-is-supplied` (minimal repro + emitted JS +
+the proposed change: pass the returning slot in `INPUT` when the result is
+consumed). Until it lands, `web/ci/patch_follow_up_action.mjs` rewrites the
+CONSUMED form back to `_event_client( )` — the same wire without the second
+role, so there is nothing for it to detect — **in the build copy only**, in
+both transpiled builds, exactly the shape of the open-abap XML patch beside
+it. 431 call sites: 430 in the corpus, one in the framework's own
+`z2ui5_cl_app_startup` (`open_new_tab`). The committed corpus keeps
+`follow_up_action( )`; the classification was verified exhaustively over the
+corpus (430 consumed · 129 statement · none spanning lines · the remaining
+10 occurrences are prose inside the overview app's generated notes).
+
+Measured end to end, not argued: the unpatched build reproduces the
+nightly's failures locally (003, 008), and the patched build over the same
+corpus reports **417 app(s), 0 failing** — all 27 gone, including the two
+`Maximum call stack size exceeded` page errors (016/256, an empty `press=""`
+reaching UI5) and app 233, which had been red since 2026-08-09 for the same
+reason on a wire that already used the new name.
+
 ## 2026-08-12 — batch b08 (uxap): the whole covered-control(1) tail of sap.uxap, 10 ports (apps 408–417)
 
 The corpus-wide breadth phase is done — `--backlog` offers no `NEW-CONTROL`

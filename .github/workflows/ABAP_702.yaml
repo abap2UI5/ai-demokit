@@ -22,9 +22,11 @@ jobs:
     # full re-parse, and it grows with every batch. It outgrew the 10 minutes
     # this job used to allow some time ago: EVERY run since then died in that
     # step, so the badge has been reading "cancelled" for a timeout rather
-    # than for a v702 finding. Measured ~15 min locally at 416 ports; 45
-    # leaves room for a few more batches.
-    timeout-minutes: 45
+    # than for a v702 finding. The downport rule alone needs ~44 passes and
+    # definitions_top then settles one statement per pass over 300+ more, so
+    # the whole step measures well over half an hour at 416 ports; 60 leaves
+    # room for a few more batches.
+    timeout-minutes: 60
     steps:
     - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
     - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0

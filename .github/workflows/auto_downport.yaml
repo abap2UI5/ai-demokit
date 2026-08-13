@@ -23,7 +23,7 @@ jobs:
     # same `npm run downport` as ABAP_702, same budget — see the note there.
     # Every run of this workflow had been dying in that step too, which is why
     # the 702 branch stopped being rebuilt.
-    timeout-minutes: 45
+    timeout-minutes: 60
     steps:
     - name: Checkout Repository
       uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1

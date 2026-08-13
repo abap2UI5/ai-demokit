@@ -41,6 +41,20 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   script, the two clone steps (`web/package.json` assemble,
   `scripts/e2e-build.mjs`) and the `folder` lib entries, and delete the pr/
   folder.
+- [ ] **`IS SUPPLIED` on a RETURNING parameter — patched here, open upstream.**
+  `follow_up_action( )` tells its view-wired form from its statement form with
+  `IF result IS SUPPLIED`, which is correct ABAP but always false in
+  transpiled code: the transpiler compiles it to `INPUT.result` and no call
+  site ever sets that key (verified on transpiler 2.13.40 and 2.13.59 — the
+  emitted JS is in the pr/ folder). So every handler wired into a view
+  attribute arrives empty, which is what took 26 ports red in the nightly of
+  2026-08-13 and is live on the Pages demo. Both transpiled builds now rewrite
+  the 430 consumed call sites back to `_event_client( )` **in the build copy**
+  (`web/ci/patch_follow_up_action.mjs`); the committed corpus keeps
+  `follow_up_action( )`, which is right on a real server. The request is filed
+  as `pr/transpiler-returning-is-supplied`. When it is merged upstream: drop
+  the patch script, its two call sites (`web/package.json` assemble,
+  `scripts/e2e-build.mjs`) and delete the pr/ folder.
 - [ ] **LIVE_TEST debt → e2e interactions.** The open `LIVE_TEST` count (see
   the generated table) is the corpus' unverified-behaviour backlog. The
   systematic close path is the e2e harness: add a per-port interaction module
