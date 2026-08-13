@@ -407,6 +407,9 @@ const catalogDecl = Array.from({ length: maxHoist }, (_, i) => `    DATA lv_text
 // wired through follow_up_action (see abap2UI5 z2ui5_if_client / FrontendAction.js):
 // the value/direction is resolved on the frontend, the model stays untouched. ---
 const ID_TABLE = 'idOverviewTable';
+// the shared overview header's navigation event - the class to jump to travels
+// as its event argument (see render_header / on_event)
+const EV_NAV = 'NAV_APP';
 // a Contains filter on the FILTER blob column; valExpr is a client-resolved
 // $-expression (the search field's newValue/query). Empty value clears it.
 const filterCall = (valExpr) =>
@@ -473,6 +476,17 @@ const abap = `"! Generated overview app - lists every abap2UI5 api sample app in
 "! can vary per row). There is no per-SAMPLE Since column - whether a sample needs
 "! a release newer than 1.71 is carried by the Hide-newer-than-1.71 filter and
 "! spelled out in the Open column's info popover.
+"! The page header carries the SHARED OVERVIEW HEADER of the abap2UI5 family
+"! (render_header): six transparent icon buttons pointing at the framework start
+"! page, the three sample repositories, the documentation and this repository,
+"! each explaining itself in its tooltip. Every repository is installed on its
+"! own, so each button decides for itself - class_installed( ) instantiates the
+"! target class, an installed overview app is entered with nav_app_call( ) (the
+"! back button returns), and a missing one opens its GitHub repository through
+"! the same URLHELPER REDIRECT wire the link popover uses, saying so in the
+"! tooltip. This repository's own entry stays visible but disabled, so the row
+"! reads the same in all three overviews - keep it in sync with the copies in
+"! abap2UI5/samples and abap2UI5/samples-stack.
 "! Three header checkboxes (default all on) filter the table
 "! entirely on the client via each row's visible expression: Hide non-OpenUI5,
 "! Hide newer than 1.71 (2020), Hide deprecated (the ui5_only flag behind the
@@ -599,8 +613,53 @@ CLASS ${CLASS} DEFINITION PUBLIC.
 
     DATA client TYPE REF TO z2ui5_if_client.
 
+    " the overview apps of the abap2UI5 family, in the order the shared header
+    " renders them - each repository is installed on its own, so the header
+    " asks per entry whether its overview app is on THIS system
+    CONSTANTS:
+      BEGIN OF cs_overview,
+        startup      TYPE string VALUE \`z2ui5_cl_app_startup\`,
+        samples      TYPE string VALUE \`z2ui5_cl_smp_app_000\`,
+        samples_old  TYPE string VALUE \`z2ui5_cl_demo_app_g00\`,
+        controls     TYPE string VALUE \`z2ui5_cl_smpc_app_overview\`,
+        controls_old TYPE string VALUE \`z2ui5_cl_dmo_app_overview\`,
+        stack        TYPE string VALUE \`z2ui5_cl_smpe_app_00\`,
+      END OF cs_overview.
+
+    CONSTANTS:
+      BEGIN OF cs_url,
+        docs      TYPE string VALUE \`https://abap2UI5.org\`,
+        framework TYPE string VALUE \`https://github.com/abap2UI5/abap2UI5\`,
+        samples   TYPE string VALUE \`https://github.com/abap2UI5/samples\`,
+        controls  TYPE string VALUE \`https://github.com/abap2UI5/samples-controls\`,
+        stack     TYPE string VALUE \`https://github.com/abap2UI5/samples-stack\`,
+      END OF cs_url.
+
     METHODS view_display.
     METHODS on_event.
+    " The header every abap2UI5 overview app shares - see the class
+    " documentation. Keep it in sync with the copies in abap2UI5/samples and
+    " abap2UI5/samples-stack.
+    METHODS render_header
+      IMPORTING
+        page TYPE REF TO z2ui5_cl_ai_xml.
+    METHODS header_button
+      IMPORTING
+        toolbar   TYPE REF TO z2ui5_cl_ai_xml
+        icon      TYPE string
+        tooltip   TYPE string
+        href      TYPE string
+        class     TYPE string OPTIONAL
+        " the overview app's PREVIOUS name, tried when CLASS is not on the
+        " system: a repository that renamed its overview app is installed under
+        " both names in the wild for a while
+        class_old TYPE string OPTIONAL
+        here      TYPE abap_bool DEFAULT abap_false.
+    METHODS class_installed
+      IMPORTING
+        val           TYPE string
+      RETURNING
+        VALUE(result) TYPE abap_bool.
     METHODS row_of
       IMPORTING
         val           TYPE string
@@ -645,6 +704,10 @@ CLASS ${CLASS} IMPLEMENTATION.
 
 
   METHOD on_event.
+
+    " the app the shared header navigates to (WHEN \`${EV_NAV}\` below) - declared
+    " here because abaplint wants every definition at the top of the routine
+    DATA li_app TYPE REF TO z2ui5_if_app.
 
     CASE client->get( )-event.
 
@@ -797,6 +860,17 @@ CLASS ${CLASS} IMPLEMENTATION.
         client->popover_display( xml   = info->stringify( )
                                  by_id = client->get_event_arg( 2 ) ).
 
+      WHEN \`${EV_NAV}\`.
+        " a button of the shared header whose target overview app is on this
+        " system - the class travels as the event argument and is resolved
+        " here, so a repository that is NOT installed cannot break this one
+        DATA(lv_nav) = to_upper( client->get_event_arg( ) ).
+        TRY.
+            CREATE OBJECT li_app TYPE (lv_nav).
+            client->nav_app_call( li_app ).
+          CATCH cx_root ##NO_HANDLER.
+        ENDTRY.
+
     ENDCASE.
 
   ENDMETHOD.
@@ -854,7 +928,7 @@ CLASS ${CLASS} IMPLEMENTATION.
 
     DATA(view) = z2ui5_cl_ai_xml=>factory( ).
 
-    view->open( n = \`View\` ns = \`mvc\`
+    DATA(page) = view->open( n = \`View\` ns = \`mvc\`
         )->a( n = \`xmlns\`      v = \`sap.m\`
         )->a( n = \`xmlns:mvc\`  v = \`sap.ui.core.mvc\`
         )->a( n = \`xmlns:core\` v = \`sap.ui.core\`
@@ -866,9 +940,11 @@ CLASS ${CLASS} IMPLEMENTATION.
             )->open( \`Page\`
                 )->a( n = \`title\`          v = |abap2UI5 Demo Kit (\{ lines( t_app ) \})|
                 )->a( n = \`navButtonPress\` v = client->_event_nav_app_leave( )
-                )->a( n = \`showNavButton\`  v = z2ui5_cl_ai_xml=>as_bool( client->check_app_prev_stack( ) )
+                )->a( n = \`showNavButton\`  v = z2ui5_cl_ai_xml=>as_bool( client->check_app_prev_stack( ) ) ).
 
-                )->open( \`subHeader\`
+    render_header( page ).
+
+    page->open( \`subHeader\`
                     )->open( \`OverflowToolbar\`
                         " client-side filter over the table: liveChange/search run
                         " a binding_call Contains filter via follow_up_action (no round-trip)
@@ -1074,6 +1150,108 @@ ${columnsBlock}
 ${catalogDecl}
 
 ${catalogStatements}
+
+  ENDMETHOD.
+
+
+  METHOD render_header.
+
+    DATA(toolbar) = page->open( \`headerContent\` ).
+
+    header_button( toolbar = toolbar
+                   icon    = \`sap-icon://home\`
+                   tooltip = \`abap2UI5 - the start page of the framework\`
+                   class   = cs_overview-startup
+                   href    = cs_url-framework ).
+
+    header_button( toolbar   = toolbar
+                   icon      = \`sap-icon://lightbulb\`
+                   tooltip   = \`Samples - binding, events, popups, tables and much more\`
+                   class     = cs_overview-samples
+                   class_old = cs_overview-samples_old
+                   href      = cs_url-samples ).
+
+    header_button( toolbar = toolbar
+                   icon    = \`sap-icon://palette\`
+                   tooltip = \`Controls - the UI5 Demo Kit, rebuilt with abap2UI5\`
+                   class   = cs_overview-controls
+                   href    = cs_url-controls
+                   here    = abap_true ).
+
+    header_button( toolbar = toolbar
+                   icon    = \`sap-icon://database\`
+                   tooltip = \`Stack - OData, RAP, WebSockets and the Fiori Launchpad\`
+                   class   = cs_overview-stack
+                   href    = cs_url-stack ).
+
+    header_button( toolbar = toolbar
+                   icon    = \`sap-icon://learning-assistant\`
+                   tooltip = \`Documentation - guides, tutorials and the API reference\`
+                   href    = cs_url-docs ).
+
+    header_button( toolbar = toolbar
+                   icon    = \`sap-icon://source-code\`
+                   tooltip = \`GitHub - the source code of this repository\`
+                   href    = cs_url-controls ).
+
+  ENDMETHOD.
+
+
+  METHOD header_button.
+
+    DATA target TYPE string.
+
+    DATA(button) = toolbar->leaf( \`Button\` ).
+    button->a( n = \`icon\` v = icon
+        )->a( n = \`type\` v = \`Transparent\` ).
+
+    IF here = abap_true.
+      " where you are: the button stays, so every overview shows the same row,
+      " but there is nowhere to go
+      button->a( n = \`tooltip\` v = |{ tooltip } - you are here|
+          )->a( n = \`enabled\` v = z2ui5_cl_ai_xml=>as_bool( abap_false ) ).
+      RETURN.
+    ENDIF.
+
+    IF class IS NOT INITIAL AND class_installed( class ) = abap_true.
+      target = class.
+    ELSEIF class_old IS NOT INITIAL AND class_installed( class_old ) = abap_true.
+      target = class_old.
+    ENDIF.
+
+    IF target IS NOT INITIAL.
+      " installed on this system: jump right into it, the back button returns
+      button->a( n = \`tooltip\` v = tooltip
+          )->a( n = \`press\`   v = client->_event( val   = \`${EV_NAV}\`
+                                                  t_arg = VALUE #( ( target ) ) ) ).
+      RETURN.
+    ENDIF.
+
+    " not on this system: open the repository that carries it - link_press is
+    " the same URLHELPER REDIRECT wire the popover's link buttons use
+    button->a( n = \`tooltip\` v = COND #( WHEN class IS INITIAL
+                                         THEN tooltip
+                                         ELSE |{ tooltip } - not installed, opens GitHub| )
+        )->a( n = \`press\`   v = link_press( href ) ).
+
+  ENDMETHOD.
+
+
+  METHOD class_installed.
+
+    " the same question the framework's start page asks: an absent, inactive
+    " or not-activatable class raises here, it does not return a flag. The name
+    " has to be upper case - the repository stores it that way, and the class
+    " constants above follow the repository's lower-case spelling rule.
+    DATA obj TYPE REF TO object ##NEEDED.
+    DATA(name) = to_upper( val ).
+
+    TRY.
+        CREATE OBJECT obj TYPE (name).
+        result = abap_true.
+      CATCH cx_root ##CATCH_ALL.
+        result = abap_false.
+    ENDTRY.
 
   ENDMETHOD.
 
