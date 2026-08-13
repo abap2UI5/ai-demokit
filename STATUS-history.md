@@ -75,6 +75,13 @@ it. 431 call sites: 430 in the corpus, one in the framework's own
 corpus (430 consumed · 129 statement · none spanning lines · the remaining
 10 occurrences are prose inside the overview app's generated notes).
 
+Measured end to end, not argued: the unpatched build reproduces the
+nightly's failures locally (003, 008), and the patched build over the same
+corpus reports **417 app(s), 0 failing** — all 27 gone, including the two
+`Maximum call stack size exceeded` page errors (016/256, an empty `press=""`
+reaching UI5) and app 233, which had been red since 2026-08-09 for the same
+reason on a wire that already used the new name.
+
 ## 2026-08-12 — batch b08 (uxap): the whole covered-control(1) tail of sap.uxap, 10 ports (apps 408–417)
 
 The corpus-wide breadth phase is done — `--backlog` offers no `NEW-CONTROL`
