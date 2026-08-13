@@ -151,9 +151,9 @@ CLASS z2ui5_cl_smpc_app_196 IMPLEMENTATION.
   METHOD model_init.
 
     " inline mock data of the sample's controller (the four JSONModel arrays).
-    " NOTE: the controller's Formatting.setCustomCurrencies (BGN4/WWWW digit
-    " definitions) is a frontend i18n config, not expressible in the thin
-    " frontend — list five renders BGN4/WWWW with UI5's default digit count
+    " the controller's Formatting.setCustomCurrencies (BGN4/WWWW digit
+    " definitions) is reproduced in on_rendering( ), so list five renders
+    " those two codes with 4 and 5 decimals like the original
     variousnumberdatamodel = VALUE #(
         ( currency = `EUR` price = `2300.12` )
         ( currency = `EUR` price = `38` )
