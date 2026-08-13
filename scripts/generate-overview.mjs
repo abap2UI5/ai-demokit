@@ -618,10 +618,12 @@ CLASS ${CLASS} DEFINITION PUBLIC.
     " asks per entry whether its overview app is on THIS system
     CONSTANTS:
       BEGIN OF cs_overview,
-        startup  TYPE string VALUE \`z2ui5_cl_app_startup\`,
-        samples  TYPE string VALUE \`z2ui5_cl_smp_app_000\`,
-        controls TYPE string VALUE \`z2ui5_cl_dmo_app_overview\`,
-        stack    TYPE string VALUE \`z2ui5_cl_smpe_app_00\`,
+        startup      TYPE string VALUE \`z2ui5_cl_app_startup\`,
+        samples      TYPE string VALUE \`z2ui5_cl_smp_app_000\`,
+        samples_old  TYPE string VALUE \`z2ui5_cl_demo_app_g00\`,
+        controls     TYPE string VALUE \`z2ui5_cl_smpc_app_overview\`,
+        controls_old TYPE string VALUE \`z2ui5_cl_dmo_app_overview\`,
+        stack        TYPE string VALUE \`z2ui5_cl_smpe_app_00\`,
       END OF cs_overview.
 
     CONSTANTS:
@@ -643,12 +645,16 @@ CLASS ${CLASS} DEFINITION PUBLIC.
         page TYPE REF TO z2ui5_cl_ai_xml.
     METHODS header_button
       IMPORTING
-        toolbar TYPE REF TO z2ui5_cl_ai_xml
-        icon    TYPE string
-        tooltip TYPE string
-        href    TYPE string
-        class   TYPE string OPTIONAL
-        here    TYPE abap_bool DEFAULT abap_false.
+        toolbar   TYPE REF TO z2ui5_cl_ai_xml
+        icon      TYPE string
+        tooltip   TYPE string
+        href      TYPE string
+        class     TYPE string OPTIONAL
+        " the overview app's PREVIOUS name, tried when CLASS is not on the
+        " system: a repository that renamed its overview app is installed under
+        " both names in the wild for a while
+        class_old TYPE string OPTIONAL
+        here      TYPE abap_bool DEFAULT abap_false.
     METHODS class_installed
       IMPORTING
         val           TYPE string
@@ -1158,11 +1164,12 @@ ${catalogStatements}
                    class   = cs_overview-startup
                    href    = cs_url-framework ).
 
-    header_button( toolbar = toolbar
-                   icon    = \`sap-icon://lightbulb\`
-                   tooltip = \`Samples - binding, events, popups, tables and much more\`
-                   class   = cs_overview-samples
-                   href    = cs_url-samples ).
+    header_button( toolbar   = toolbar
+                   icon      = \`sap-icon://lightbulb\`
+                   tooltip   = \`Samples - binding, events, popups, tables and much more\`
+                   class     = cs_overview-samples
+                   class_old = cs_overview-samples_old
+                   href      = cs_url-samples ).
 
     header_button( toolbar = toolbar
                    icon    = \`sap-icon://palette\`
@@ -1192,6 +1199,8 @@ ${catalogStatements}
 
   METHOD header_button.
 
+    DATA target TYPE string.
+
     DATA(button) = toolbar->leaf( \`Button\` ).
     button->a( n = \`icon\` v = icon
         )->a( n = \`type\` v = \`Transparent\` ).
@@ -1205,10 +1214,16 @@ ${catalogStatements}
     ENDIF.
 
     IF class IS NOT INITIAL AND class_installed( class ) = abap_true.
+      target = class.
+    ELSEIF class_old IS NOT INITIAL AND class_installed( class_old ) = abap_true.
+      target = class_old.
+    ENDIF.
+
+    IF target IS NOT INITIAL.
       " installed on this system: jump right into it, the back button returns
       button->a( n = \`tooltip\` v = tooltip
           )->a( n = \`press\`   v = client->_event( val   = \`${EV_NAV}\`
-                                                  t_arg = VALUE #( ( class ) ) ) ).
+                                                  t_arg = VALUE #( ( target ) ) ) ).
       RETURN.
     ENDIF.
 
