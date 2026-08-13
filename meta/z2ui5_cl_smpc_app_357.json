@@ -1,0 +1,39 @@
+{
+  "class": "z2ui5_cl_smpc_app_357",
+  "sample": "sap.ui.table.sample.OData",
+  "entity": "sap.ui.table.Table",
+  "file": "src/02/02/z2ui5_cl_smpc_app_357.clas.abap",
+  "batch": "b20",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "sap.ui.table.Table.scrollThreshold (@since 1.128) is kept 1:1 from the sample's view - it is one of the two paging knobs (with threshold) this sample is about. Newer than UI5 1.71; declared per the fidelity-first property-171 policy, so the app needs a UI5 release >= 1.128."
+    },
+    {
+      "type": "NOTE",
+      "what": "The sample serves its rows from an in-page OData MockServer (sap/ui/core/util/MockServer over metadata.xml, autoRespondAfter 2000, operationMode Server, threshold 15, scrollThreshold 50). An abap2UI5 app has a real ABAP backend, so the mock service is replaced by the model itself: all 115 rows of the sample's own ProductSet.json are inlined and the Table binds them directly. What that costs is the server-side paging illusion - the rows arrive in one model instead of in threshold-sized batches - and with it the dataRequested/dataReceived handlers that swap the noData BusyIndicator in and out; the noData BusyIndicator, threshold, scrollThreshold and enableBusyIndicator are all kept 1:1 on the control."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "onOperationModeChange re-binds the rows with the picked sap.ui.model.odata.OperationMode (Server / Client / Auto) - a binding parameter of an OData model, which has no counterpart when the rows come from an ABAP model. The SegmentedButton is kept 1:1 with its three items and stays two-way bound, and picking a mode still re-reads the rows (which is the other half of what the handler does, via onModelRefresh), but the mode itself no longer changes how the data is fetched. onModelRefresh's binding.refresh( true ) is the plain re-read."
+    },
+    {
+      "type": "NOTE",
+      "what": "The named `ui>` model (operationModes, selectedOperationMode) is folded onto the one default model, prefix dropped and leaf names kept. The six column labels are metadata bindings in the original ({/#Product/Name/@sap:label} and friends), which only an OData model can resolve; they are replaced by the literal sap:label texts from the sample's own metadata.xml (Product Name, Product ID, Category, Supplier Company Name, Unit Price, Dimensions). sortProperty / filterProperty carry the ABAP (upper-cased) field names. The Price cell keeps the original's typed String binding and the dimensions cell its {WIDTH}x{HEIGHT}x{DEPTH} {DIMUNIT} template; the numeric columns stay TYPE string so the mock's exact decimals survive."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "The footer's info button is dropped: onInit lazily requires sap/ui/table/sample/TableExampleUtils and appends a ToolbarSpacer plus its createInfoButton( ) to the toolbar that also carries the operation-mode SegmentedButton. That helper lives in the demo kit's own sample folder, not in any UI5 library, and only opens a popover pointing at the sample's source. Every sap.ui.table sample of this batch drops it the same way."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "Unverified in a running system: whether the 115-row model renders with the sample's threshold/scrollThreshold settings, and whether the refresh and operation-mode round-trips re-read the rows."
+    }
+  ]
+}

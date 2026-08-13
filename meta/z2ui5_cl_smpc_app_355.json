@@ -1,0 +1,31 @@
+{
+  "class": "z2ui5_cl_smpc_app_355",
+  "sample": "sap.ui.table.sample.Menus",
+  "entity": "sap.ui.table.Table",
+  "file": "src/01/02/z2ui5_cl_smpc_app_355.clas.abap",
+  "batch": "b20",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The two menu-entry toggles need no handler at all: each ToggleButton's pressed and the Table property it drives (enableColumnFreeze / enableCellFilter) bind the SAME field on the one default model, which is exactly what the original's two-way {ui>/showFreezeMenuEntry} and {ui>/enableCellFilter} bindings do - only the `ui>` prefix is dropped. The port is therefore fully static apart from the model: no on_event, no round-trip."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "The three CONTROLLER-BUILT menus are dropped, and with them the third ToggleButton's press and the Table's beforeOpenContextMenu attribute. (a) associateHeaderMenus creates a sap.m.table.columnmenu.Menu plus ActionItems in JS and associates it with the name/productId/quantity columns via setHeaderMenu - a control-returning factory, the capability boundary CAPABILITIES marks as not expressible, and its two handlers (onQuantityCustomItemSelect, onQuantitySort) go with it. (b) onToggleContextMenu builds a sap.m.Menu with two bound MenuItems and hands it to setContextMenu / destroyContextMenu; an aggregation of controls built at runtime has no bindable equivalent either. (c) onProductIdCellContextMenu builds a sap.ui.unified.Menu on the fly and opens it docked to the clicked cell's DOM ref. The columns, their sortProperty/filterProperty and the table's own header menus are unaffected - what is lost is the sample's custom menu content."
+    },
+    {
+      "type": "NOTE",
+      "what": "The shared 123-row demo ProductCollection (sap/ui/demo/mock/products.json) is inlined with the five columns the sample binds. The original computes DeliveryDate from Date.now() with an i-mod-10 offset in 4-day steps; a fixed base date (2026-07-23) is used here so the port is deterministic - the corpus convention of app 164. The Quantity and Delivery Date columns keep the original's typed complex bindings with the path switched to the ABAP field, and sortProperty/filterProperty carry the ABAP (upper-cased) field names. ProductPicUrl values point at the OpenUI5 host per the asset-URL rule."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "The footer OverflowToolbar stays empty: onInit lazily requires sap/ui/table/sample/TableExampleUtils and appends a ToolbarSpacer plus its createInfoButton( ) to it. That helper lives in the demo kit's own sample folder, not in any UI5 library, and only opens a popover pointing at the sample's source. Every sap.ui.table sample of this batch drops it the same way."
+    }
+  ]
+}

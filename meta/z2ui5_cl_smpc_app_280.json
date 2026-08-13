@@ -1,0 +1,26 @@
+{
+  "class": "z2ui5_cl_smpc_app_280",
+  "sample": "sap.m.sample.TextAreaValueUpdate",
+  "entity": "sap.m.TextArea",
+  "file": "src/01/01/z2ui5_cl_smpc_app_280.clas.abap",
+  "batch": "b15",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "checked",
+  "checked": {
+    "date": "2026-08-02",
+    "note": "verified in a running system - human live check 2026-08-02 (maintainer): app started and exercised, no findings. Both legs are additionally e2e-verified (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): with the Switch off the liveChange round-trip fills GET_VALUE while model.getProperty() stays behind, and after flipping it the model follows."
+  },
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "the sample's whole point is the difference between the control's own value and the model property while valueLiveUpdate is off, so the getValue Text must NOT be bound to the same field as the TextArea. The port keeps them apart the same way: liveChange carries ${$parameters>/value} into the backend, which writes it to the separate field GET_VALUE - the second Text stays bound to the TextArea's own model field, which only updates when valueLiveUpdate is on (or on blur)."
+    },
+    {
+      "type": "NOTE",
+      "what": "behavioural limit of the liveChange round-trip, measured 2026-08-02 in the e2e harness: abap2UI5 serializes round-trips, so keystrokes typed while one is in flight are DROPPED, not queued - typing abc with no delay left GET_VALUE at a (the value of the last COMPLETED round-trip), while the TextArea itself held abc. The original updates its Text client-side on every keystroke, so under fast typing the port lags and can skip intermediate values; it converges as soon as typing pauses. Inherent to moving the handler into the backend, not a wiring defect - the e2e interaction therefore types with a delay."
+    }
+  ]
+}

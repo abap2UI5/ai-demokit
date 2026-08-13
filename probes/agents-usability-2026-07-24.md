@@ -59,7 +59,7 @@ extract**:
   prompt: aggregation namespace, always-escape-braces-in-`|…|`, and the
   one-default-model / typed-binding rule. Re-spliced into `README.md` via
   `generate-coverage.mjs`.
-- **`src/z2ui5_cl_dmo_app_overview.clas.abap`** — regenerated; the committed copy
+- **`src/z2ui5_cl_smpc_app_overview.clas.abap`** — regenerated; the committed copy
   was stale (missing the `ui5_only` field), the known "system push carries stale
   generated files" gotcha. Deterministic/idempotent regen from `meta/`.
 

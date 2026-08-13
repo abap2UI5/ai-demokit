@@ -1,0 +1,35 @@
+{
+  "class": "z2ui5_cl_smpc_app_352",
+  "sample": "sap.ui.table.sample.Aggregations",
+  "entity": "sap.ui.table.Table",
+  "file": "src/01/02/z2ui5_cl_smpc_app_352.clas.abap",
+  "batch": "b20",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "Both filters are applied in ABAP and the Table binds the RESULT, so the controller's Filter objects and its binding.filter( ) calls become one server-side selection - the thin-frontend move. The SearchField's query filters Name OR Status (the original's _oTxtFilter), the facet selections are ANDed across the two lists and ORed inside each one (its _oFacetFilter), and only a list with a selection takes part - exactly the two nested Filter groups. handleFacetFilterReset clears every selection and clearAllFilters (the noData Link) clears both filters at once."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleListClose reads the selected items off the control; the port binds each FacetFilterItem's selected flag two-way instead (an added attribute), so listClose only has to tell the backend that the flags are back - the app-022 idiom. FacetFilterList.key and FacetFilterItem.key are bound to {TYPE} and {TEXT} rather than the original's {key}: the mock's /ProductCollectionStats/Filters carries no `key` field at all (the original's binding resolves to nothing), and the list's type / the value's text ARE the identity the filter works on."
+    },
+    {
+      "type": "NOTE",
+      "what": "The named `ui>` model (filterValue) is folded onto the one default model, prefix dropped and leaf name kept. /ProductCollectionStats/Filters is inlined verbatim - both facet lists (Category with 16 values, SupplierName with 12) with their counts. The full 123-row catalog is returned by a method rather than held in a public attribute: only the filtered rows are bound, so only they belong in the model that travels on every round-trip (the overview-app lesson in AGENTS section 10). The controller's formatAvailableToObjectState is precomputed into the AVAILABLESTATE column, since business logic belongs in the backend."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "The footer OverflowToolbar stays empty: onInit lazily requires sap/ui/table/sample/TableExampleUtils and appends a ToolbarSpacer plus its createInfoButton( ) to it. That helper lives in the demo kit's own sample folder, not in any UI5 library, and only opens a popover pointing at the sample's source. Every sap.ui.table sample of this batch drops it the same way."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "Unverified in a running system: whether the two-way bound FacetFilterItem selected flags return with the listClose round-trip and produce the expected server-side selection, and whether the noData Link appears when the filters leave no rows."
+    }
+  ]
+}

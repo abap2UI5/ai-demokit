@@ -1,0 +1,22 @@
+{
+  "class": "z2ui5_cl_smpc_app_034",
+  "sample": "sap.m.sample.ListCounter",
+  "entity": "sap.m.List",
+  "file": "src/02/01/z2ui5_cl_smpc_app_034.clas.abap",
+  "batch": "b04",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "checked",
+  "checked": {
+    "date": "2026-07-21",
+    "note": "verified in a running system - human visual check 2026-07-21: the Products list renders the 11 rows with their Quantity counters (display-only app, no interaction to exercise)."
+  },
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "headerLevel=\"H2\" on the List (since UI5 1.117) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.117 to render it."
+    }
+  ]
+}

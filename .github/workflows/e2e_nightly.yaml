@@ -23,17 +23,22 @@ concurrency:
 jobs:
   e2e:
     runs-on: ubuntu-latest
-    timeout-minutes: 45
+    # Wall clock grows with the corpus: ~19 min transpile + ~4 s per port.
+    # At 416 ports the 45 min this job used to allow was already too short —
+    # 2026-08-02/04/06/07/10/12 all died mid-smoke as "cancelled", i.e. the
+    # badge went grey for a timeout, not for a regression. Sized for roughly
+    # twice today's ~40 min so a growing corpus does not silently re-hit it.
+    timeout-minutes: 90
     steps:
-    - name: Checkout ai-demokit
+    - name: Checkout samples-controls
       uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
     - name: Set up Node.js
-      uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
+      uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
       with:
         node-version: '22'
 
-    - name: Install ai-demokit dependencies
+    - name: Install samples-controls dependencies
       run: npm ci
 
     - name: Install Playwright Chromium

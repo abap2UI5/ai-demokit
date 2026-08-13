@@ -1,0 +1,39 @@
+{
+  "class": "z2ui5_cl_smpc_app_319",
+  "sample": "sap.ui.layout.sample.Form480_Trial",
+  "entity": "sap.ui.layout.form.Form",
+  "file": "src/01/02/z2ui5_cl_smpc_app_319.clas.abap",
+  "batch": "b18",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "_showFormFragment swaps the Page content between Display.fragment.xml and Change.fragment.xml (removeAllContent + insertContent). Both fragments are inlined into the one port view instead and switched by the two-way bound edit_mode flag on each VBox's visible attribute, so no core:Fragment reference is left and the Page gains a content aggregation the original view.xml does not declare. structural-diff unions both fragments into the original side, so the control set matches exactly (0 diffs); the added visible attributes carry the switch."
+    },
+    {
+      "type": "NOTE",
+      "what": "_toggleButtonsAndView sets edit/save/cancel visible imperatively; the port binds those three visible attributes to the same edit_mode flag (an expression binding for the negated Edit case). handleEditPress clones the record into server-side backup fields so handleCancelPress can restore it exactly like the original's Object.assign clone; handleSavePress just leaves edit mode."
+    },
+    {
+      "type": "NOTE",
+      "what": "the original loads sap/ui/demo/mock/supplier.json and does bindElement('/SupplierCollection/0'); abap2UI5 serves one default model with no element binding, so the row-0 fields are seeded at the model root and bound ABSOLUTELY (client->_bind( suppliername ) etc.) rather than with the fragments' relative {SupplierName} - a relative path would have no context to resolve against. Composite texts such as {Street} {HouseNumber} keep their composite form with the absolute paths."
+    },
+    {
+      "type": "NOTE",
+      "what": "the fragments bind {EMail} while the mock key is Email, so in the original that field renders empty. The port binds the real Email value (john.smith@sap.com) - structural-diff matches either way (it compares the last path segment case-insensitively), but the address is actually shown here."
+    },
+    {
+      "type": "NOTE",
+      "what": "Rating (RatingIndicator.value) and Disposable (ProgressIndicator.percentValue) are numeric UI5 properties, so their ABAP fields are typed i, not string - a bound value that serializes as a JSON string is rejected on a numeric property."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "not yet run in a system: the Edit/Save/Cancel round-trips (form swap through the bound visible flags and the Cancel restore)."
+    }
+  ]
+}

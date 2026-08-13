@@ -44,7 +44,7 @@ const fix = (cmd) => { try { execSync(cmd, { cwd: A2, stdio: ['ignore', 'ignore'
 // skip is never silent). Add a port here only with a reason if the transpiler
 // chokes on it. The overview app IS served — it is the local front door,
 // listing every port with a ?app_start= launch link (open
-// ?app_start=z2ui5_cl_dmo_app_overview). It is not a numbered port, so
+// ?app_start=z2ui5_cl_smpc_app_overview). It is not a numbered port, so
 // e2e-smoke never picks it up.
 const EXCLUDE = new Set([]);
 
@@ -72,7 +72,7 @@ function main() {
     const cls = base.replace(/\.(clas|intf)\..*$/, '');
     if (EXCLUDE.has(cls)) continue;
     fs.copyFileSync(f, path.join(downport, base));
-    if (/^z2ui5_cl_dmo_app_\d+\.clas\.abap$/.test(base)) ports++;
+    if (/^z2ui5_cl_smpc_app_\d+\.clas\.abap$/.test(base)) ports++;
   }
   console.log(`e2e-build: copied ${ports} ports + framework into node/downport`);
   if (EXCLUDE.size) console.log(`e2e-build: excluded (not served): ${[...EXCLUDE].join(', ')}`);
@@ -129,7 +129,7 @@ function main() {
   sh(`npx abap_transpile ./e2e-transpile.json`);
   fs.rmSync(tcfgPath, { force: true });
 
-  const built = fs.readdirSync(output).filter((f) => /^z2ui5_cl_dmo_app_\d+\.clas\.mjs$/.test(f)).length;
+  const built = fs.readdirSync(output).filter((f) => /^z2ui5_cl_smpc_app_\d+\.clas\.mjs$/.test(f)).length;
   console.log(`e2e-build: done — ${built} ports transpiled into node/output`);
 }
 

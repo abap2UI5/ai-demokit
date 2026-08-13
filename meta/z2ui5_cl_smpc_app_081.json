@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_smpc_app_081",
+  "sample": "sap.m.sample.PullToRefresh",
+  "entity": "sap.m.PullToRefresh",
+  "file": "src/01/01/z2ui5_cl_smpc_app_081.clas.abap",
+  "batch": "b10",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "the incremental backend load is reproduced 1:1: the model starts with the first product and each pull-to-refresh (REFRESH) appends the next until the full /ProductCollection is shown (fill_all + shown counter)."
+    }
+  ]
+}

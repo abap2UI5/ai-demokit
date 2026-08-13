@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_smpc_app_254",
+  "sample": "sap.m.sample.DateRangeSelectionValueState",
+  "entity": "sap.m.DateRangeSelection",
+  "file": "src/01/01/z2ui5_cl_smpc_app_254.clas.abap",
+  "batch": "b19",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The onInit-seeded JSON model rides 1:1 in model_init (5 rows, the derived label texts written out); every row carries a valueState so the absent-enum-empty-string trap does not apply, and the rows without a valueStateText keep the empty string (falls back to the state default text like the original undefined) - the app-253 pattern."
+    },
+    {
+      "type": "NOTE",
+      "what": "**e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): all five rows render from the real backend model - the labels arrive, each of the four non-None value states reaches the DOM exactly once (sapMInputBaseContentWrapper<State> on the DateRangeSelection) and the bound valueStateText of the Warning row is written into the value-state node. Residual (nothing headless can assert): the value-state message popup's wrapping of the long text, which needs the theme CSS the harness does not load."
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_smpc_app_367",
+  "sample": "sap.m.sample.InputDescription",
+  "entity": "sap.m.Input",
+  "file": "src/02/01/z2ui5_cl_smpc_app_367.clas.abap",
+  "batch": "b25",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "showClearIcon (since UI5 1.94) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.94 to render it."
+    },
+    {
+      "type": "POST_171",
+      "what": "ariaDescribedBy (since UI5 1.90 on sap.m.Input) is newer than 1.71 but kept for the 1:1 port - it carries the sample's whole point, the InvisibleText referenced by aria-describedby."
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "class": "z2ui5_cl_smpc_app_274",
+  "sample": "sap.m.sample.DialogFullScreen",
+  "entity": "sap.m.Dialog",
+  "file": "src/02/01/z2ui5_cl_smpc_app_274.clas.abap",
+  "batch": "b15",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": false
+  },
+  "status": "checked",
+  "checked": {
+    "date": "2026-08-02",
+    "note": "verified in a running system - human live check 2026-08-02 (maintainer): app started and exercised, no findings."
+  },
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "sap.m.Dialog.showFullScreenButton is @since 1.149 - it is the very property this sample demonstrates, so dropping it would drop the sample. Kept 1:1 (fidelity-first, the corpus-wide POST_171 policy); the app needs UI5 >= 1.149 to show the toggle, everything else renders on 1.71."
+    },
+    {
+      "type": "NOTE",
+      "what": "the original builds its three Dialogs imperatively in the controller (new Dialog({...}).open(), each cached in a controller field and added as a view dependent); the port expresses each as a core:FragmentDefinition popup shown via client->popup_display on the button press (app 019/273 precedent). Every fragment control is therefore EXTRA vs the archived V.view.xml, which holds only the three trigger Buttons: Dialog, List, StandardListItem and the dialog's own OK/Close Buttons (Button 3 -> 5, Dialog/List/StandardListItem 0 -> 1 per open dialog)."
+    },
+    {
+      "type": "NOTE",
+      "what": "the three dialogs differ only in resizable / draggable / the fixed contentWidth+contentHeight and in the first one's extra Emphasized OK begin button, so the port builds them through one popup_products_display( resizable draggable sized begin_ok ) method. Each flag is written ONLY when the original passes it - the plain dialog gets no resizable='false' and no contentWidth, so no attribute the original never sets is added."
+    },
+    {
+      "type": "NOTE",
+      "what": "the List binds the shared demo mock products.json /ProductCollection (all 123 rows, Name + Quantity - the only two fields the StandardListItem binds) inlined into model_init; the original loads the same file through a JSONModel. Both dialog buttons (OK and Close) close the dialog client-side via follow_up_action( cs_event-popup_close ), the direct form of the original's this.oDialog.close()."
+    },
+    {
+      "type": "NOTE",
+      "what": "**e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the plain dialog opens with its title 'Available Products' and the bound 123-row product list inside it, and the Close button closes it client-side (popup_close). Residual (nothing headless can assert): the fullscreen toggle itself (needs UI5 >= 1.149) and the resizable/draggable behaviour of the other two dialogs, which differ only in the flags the same builder writes."
+    }
+  ]
+}
