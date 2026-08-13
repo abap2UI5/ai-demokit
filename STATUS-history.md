@@ -152,7 +152,7 @@ the dump before/after the split is **identical for all 105 effective
 entries**.
 
 105, not 106 — the extraction found the map carried **two**
-`z2ui5_cl_dmo_app_133` keys. A JS object literal keeps the LAST duplicate
+`z2ui5_cl_smpc_app_133` keys. A JS object literal keeps the LAST duplicate
 key, so the older entry (SegmentedButton `selectionChange` → bound
 `GridList.mode`) had been silently dead since the 2026-08-01 faked-event-value
 fix added the second one; nothing ever reported it. The same trap class as the
@@ -160,7 +160,7 @@ duplicate `"branch"` keys in the 702 abaplint config (also this session, see
 `check_pins`): a duplicate key in a keyed literal is invisible to every
 consumer that parses it. The per-file layout makes it impossible by
 construction — the map is keyed by FILENAME now. The shadowed leg is kept as
-a comment in `meta/interactions/z2ui5_cl_dmo_app_133.mjs` pending a merge
+a comment in `meta/interactions/z2ui5_cl_smpc_app_133.mjs` pending a merge
 decision (it exercises a different wire than the surviving entry).
 
 `validate-meta` now guards the directory: an orphan module (no port sidecar)
@@ -1924,7 +1924,7 @@ Three findings from a repository review, fixed in one change:
   a debug overlay (the same drop as app 145).
 - **A stale transpiled backend now has a named signature** (AGENTS §10): a
   brand-new port fails e2e with `backend HTTP 500` whose body reads *"The app
-  'Z2UI5_CL_DMO_APP_269' does not exist in the system"*. That is always a missing
+  'Z2UI5_CL_SMPC_APP_269' does not exist in the system"*. That is always a missing
   `npm run node:build`, never a port defect. Two companion rules from the same
   round: never run `e2e-smoke` while a build is in flight (`e2e-build` wipes
   `node/output` first, so the run dies silently), and never wait for a build
@@ -2266,7 +2266,7 @@ Three findings from a repository review, fixed in one change:
 ## Pages demo: `Network error: ASSERTION_FAILED` on the overview's links / info popovers (2026-07-31)
 
 - **User report**: on
-  <https://abap2ui5.github.io/ai-demokit/?app_start=z2ui5_cl_dmo_app_overview>,
+  <https://abap2ui5.github.io/ai-demokit/?app_start=z2ui5_cl_smpc_app_overview>,
   pressing the chain-link or the information button of any row answered
   `Network error: ASSERTION_FAILED`. Those two buttons are the overview's only
   backend round-trips (everything else is `_event_client`), so the demo's front
@@ -3813,7 +3813,7 @@ Two user decisions this day:
   (abaplint, structural-diff `--strict`, validate-meta, pattern-lint,
   property-check, render-smoke `--strict`).
 - **Rating (1–5) in the overview app.** A sortable **Rating** column in
-  `z2ui5_cl_dmo_app_overview` scores, "by feel", how much attention a port
+  `z2ui5_cl_smpc_app_overview` scores, "by feel", how much attention a port
   deserves — not a strict deviation count. Four things push it up (all
   additive): **complexity** (a big view / rich interaction — LOC, `_event*`/
   `follow_up_action` count, control count), **rework** (every non-1:1
@@ -4640,5 +4640,5 @@ Infrastructure:
   `checks` workflow runs pattern-lint, structural-diff --strict and a
   generated-artifacts sync check on every PR.
 - [x] ~~AGENTS.md §5 "Worked references" points at nonexistent
-  `src/04/z2ui5_cl_dmo_app_416`; §8 names the wrong builder classes~~ — fixed
+  `src/04/z2ui5_cl_smpc_app_416`; §8 names the wrong builder classes~~ — fixed
   2026-07-16 (416 row replaced by app 007, §8 corrected to `z2ui5_cl_ai_xml`).

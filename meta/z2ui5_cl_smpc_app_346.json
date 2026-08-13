@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_smpc_app_346",
+  "sample": "sap.ui.layout.sample.GridAutoRows",
+  "entity": "sap.ui.layout.cssgrid.CSSGrid",
+  "file": "src/01/02/z2ui5_cl_smpc_app_346.clas.abap",
+  "batch": "b19",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "The 'Reveal Grid' ToggleButton keeps its label but loses its press attribute: onRevealGrid calls RevealGrid.toggle(['grid1','grid2'], view) from the sample-local module RevealGrid/RevealGrid.js, which measures the rendered grid and draws an absolutely positioned outline overlay over every grid cell. That is a sample-only JS helper with its own CSS, not a control, property or whitelisted control method, and it is not loadable in an abap2UI5 app - the same drop as apps 145/222/271. onExit's RevealGrid.destroy goes with it, and RevealGrid/RevealGrid.css is not injected either since nothing renders those classes."
+    },
+    {
+      "type": "NOTE",
+      "what": "css/main.css (.sapMFlexBox.demoBox, .demoBox .sapMText, .sapMText.message) is injected through an extra core:HTML <style> leaf, because abap2UI5 ships no separate stylesheet - without the rules behind them the 26 demo boxes would render as unstyled text (the app-122/124 lesson). The CSS braces are escaped \\{ \\} in a backtick literal so the XMLView parser does not read them as bindings; the view also declares xmlns:core for it, which the original does not need."
+    },
+    {
+      "type": "NOTE",
+      "what": "Fully static port: the sample has no model and - once the RevealGrid toggle is dropped - no event either, so the class is the app-051 shape (a bare check_on_init branch with view_display, no model_init, no on_event)."
+    }
+  ]
+}

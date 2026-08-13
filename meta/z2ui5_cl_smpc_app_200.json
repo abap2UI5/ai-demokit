@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_smpc_app_200",
+  "sample": "sap.uxap.sample.ObjectPageSectionShowTitle",
+  "entity": "sap.uxap.HeaderFacetPattern",
+  "file": "src/02/03/z2ui5_cl_smpc_app_200.clas.abap",
+  "batch": "b02",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "reviewed",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "sap.uxap.ObjectPageSubSection.showTitle (showTitle='false' on the 'Order Details' and 'Products' subsections) exists only since UI5 1.77 - kept 1:1 (fidelity wins), so the app needs a UI5 release >= 1.77 to render it. Also kept 1:1: the sap.m.Avatar control (since 1.73) with its displayShape (Square) and displaySize (L) properties, used in the snapped heading and header content."
+    },
+    {
+      "type": "NOTE",
+      "what": "The two robot.png avatar assets use the sample's relative './test-resources/sap/uxap/images/robot.png' path; rewritten to the absolute sdk.openui5.org host ('https://sdk.openui5.org/test-resources/sap/uxap/images/robot.png') per the offline asset-URL rule. Same asset, literal src value only - structural-diff compares literal attribute names, not values."
+    }
+  ]
+}

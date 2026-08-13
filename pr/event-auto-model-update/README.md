@@ -31,7 +31,7 @@ After changing bound data in an event handler, every app must remember to call
 `client->view_model_update( )` — or the UI silently shows stale data. Measured
 over this corpus: **230 calls in 125 of 365 ports**, and in the minimal ports
 the call is half of the handler body, e.g. app 348
-(`src/02/b19/z2ui5_cl_dmo_app_348.clas.abap`):
+(`src/02/b19/z2ui5_cl_smpc_app_348.clas.abap`):
 
 ```abap
 WHEN `LAYOUT_CHANGE`.
@@ -128,7 +128,7 @@ Case 2 is a real optimization valve, so default-on needs one of:
 
 ## Example
 
-App 007 (`sap.m.CheckBox` tri-state, `src/01/b02/z2ui5_cl_dmo_app_007.clas.abap`) today:
+App 007 (`sap.m.CheckBox` tri-state, `src/01/b02/z2ui5_cl_smpc_app_007.clas.abap`) today:
 
 ```abap
 WHEN `PARENT_CLICKED`.

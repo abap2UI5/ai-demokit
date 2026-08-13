@@ -90,9 +90,9 @@ test('data-fidelity: invented value and unknown asset fail, verbatim data passes
     const r = run(root, 'data-fidelity.mjs');
     assert.equal(r.code, 1, 'the invented fixture data must fail the gate');
     assertGolden('data-fidelity.out', r.out);
-    assert.match(r.out, /z2ui5_cl_dmo_app_002: asset `wrong-HT-9999\.jpg` appears nowhere/);
-    assert.match(r.out, /z2ui5_cl_dmo_app_002: table row 2 field `city` = "Atlantis"/);
-    assert.ok(!r.out.includes('z2ui5_cl_dmo_app_001:'), 'the verbatim port must produce no finding');
+    assert.match(r.out, /z2ui5_cl_smpc_app_002: asset `wrong-HT-9999\.jpg` appears nowhere/);
+    assert.match(r.out, /z2ui5_cl_smpc_app_002: table row 2 field `city` = "Atlantis"/);
+    assert.ok(!r.out.includes('z2ui5_cl_smpc_app_001:'), 'the verbatim port must produce no finding');
   } finally {
     fs.rmSync(root, { recursive: true, force: true });
   }

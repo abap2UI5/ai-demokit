@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_smpc_app_249",
+  "sample": "sap.m.sample.ButtonWithBadge",
+  "entity": "sap.m.Button",
+  "file": "src/02/01/z2ui5_cl_smpc_app_249.clas.abap",
+  "batch": "b19",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "The badge API is newer than 1.71 and kept 1:1 per the fidelity-first member policy: sap.m.BadgeCustomData (control @since 1.80, secondary control - sap.m.Button is the in-scope headline entity, the app-244 Avatar precedent), Button.badgeStyle (@since 1.132) and the BadgeEnabler methods setBadgeMinValue/setBadgeMaxValue driven via control_by_id. The app needs a UI5 release >= 1.132 to render the badgeStyle; the badge itself needs >= 1.80."
+    },
+    {
+      "type": "NOTE",
+      "what": "Thin-frontend rewires, all declared: (a) the StepInput's change='.currentChangeHandler' attribute is DROPPED - StepInput.value and BadgeCustomData.value are two-way bound to the same /BADGECURRENT field, so the badge follows the stepper client-side (the 007/128 pattern; the original copied the value imperatively via getBadgeCustomData().setValue()); BadgeCustomData.value is that binding instead of the original's empty literal, and its empty visible literal is the explicit default true. (b) minChangeHandler/maxChangeHandler run server-side (business logic in ABAP): the two-way bound min/max round-trip on change, the accepted-range check (1 <= min <= max <= 9999) mirrors the original incl. resetting the field to the last accepted value on an invalid entry, and the accepted value reaches the button via follow_up_action control_by_id setBadgeMin/MaxValue (public BadgeEnabler methods via the generalized allowlist). Not copied: the original maxChangeHandler's quirk of calling setBadgeMaxValue once BEFORE validating - the accepted path is identical. (c) onInit's initial currentChangeHandler() call is unnecessary - the binding seeds the badge. (d) badgeMin/badgeMax are TYPE i - the original model carries them as strings, but the bound values are numeric-only and the numeric-bound-as-string lint (app-053 lesson) wants the model to serialize real numbers; Input.value coerces either way."
+    },
+    {
+      "type": "NOTE",
+      "what": "live-verified 2026-08-04 (nightly e2e interaction): unverified in a running system: (a) the shared /BADGECURRENT binding driving badge and StepInput; (b) the icon/text expression bindings over /BUTTONWITHICON//BUTTONWITHTEXT; (c) the MIN_CHANGE/MAX_CHANGE validation round-trips incl. the reset-on-invalid path and the setBadgeMin/MaxValue follow-ups. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): (a) is covered - the badge renders data-badge 1 and follows the StepInput to 2 after ArrowUp+Enter (the change event carries the two-way write); the MIN/MAX validation round-trips remain unexercised."
+    }
+  ]
+}

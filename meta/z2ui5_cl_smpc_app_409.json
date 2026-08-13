@@ -1,0 +1,31 @@
+{
+  "class": "z2ui5_cl_smpc_app_409",
+  "sample": "sap.uxap.sample.BlockBaseBlockInBlock",
+  "entity": "sap.uxap.BlockBase",
+  "file": "src/01/03/z2ui5_cl_smpc_app_409.clas.abap",
+  "batch": "b08",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "Block->content inlining, two levels deep (app 161/178/261 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'): the blocks aggregation holds the custom BlockBase blockinblock:Block (id='block', mode='Collapsed'), whose view content is an html:div (height:24em, background #A9EAFF) that itself instantiates a second BlockBase sample:InnerBlock (id='vendorName') - the block-in-block point of the sample - whose view content is another html:div (height:16em, blue, margin 1em). Both block views are pure HTML with no controls, so the whole two-level structure is rendered as ONE core:HTML leaf carrying the nested divs verbatim in its content attribute (the 161/178 form; a core:HTML cannot wrap another control, but here the inner level is markup too, so nothing is flattened away). Absent as a result: the two BlockBase controls blockinblock:Block and sample:InnerBlock with their ids and the block-mode config mode='Collapsed' (both block JS classes declare no additional views, so the mode selects nothing and Collapsed has no visual effect), plus the block views' own mvc:View roots (they carry only xmlns declarations - no width/height to lose). Present in their place: one core:HTML."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "The two uxap ModelMapping config controls are dropped: the main view's ModelMapping (externalModelName='jsonModel' externalPath='/Vendor' internalModelName='FirstBlock') inside blockinblock:Block, and Block.view.xml's uxap:ModelMapping (externalModelName='FirstBlock' externalPath='VendorName' internalModelName='NameDisplay') inside sample:InnerBlock. abap2UI5 serves one default model and the inlining removes the BlockBase internal-model machinery the mappings configure (app 230 precedent - dropping a declared config control is a loss even when it renders identically). In this sample the mapped chain carries no data at all in the original either: no jsonModel is ever instantiated (the manifest declares no models and there is no controller), and InnerBlock's view binds nothing against NameDisplay - the mappings are pure demonstration config, so nothing renders differently and there is no data to fold statically; the port consequently has no model_init."
+    },
+    {
+      "type": "NOTE",
+      "what": "Static sample: no model, no controller, no event handlers - the port is init-only with neither model_init nor on_event, which is behaviour-identical. All members used (ObjectPageLayout.id/upperCaseAnchorBar, ObjectPageHeader.objectTitle, ObjectPageSection.titleUppercase/title, ObjectPageSubSection.title/titleUppercase, core:HTML content) are <= 1.71 per ui5/properties.json - no POST_171 needed, the port stays in src/01/03."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "Rendering not verified in a running system: the core:HTML nested-div block content inside the ObjectPageSubSection blocks aggregation (the light-blue 24em outer div containing the blue 16em inner div with 1em margin) is render-gate green but the visual result was not checked live. There is no round-trip to verify - the app is static."
+    }
+  ]
+}

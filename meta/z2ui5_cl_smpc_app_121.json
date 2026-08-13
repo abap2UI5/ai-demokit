@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_smpc_app_121",
+  "sample": "sap.m.sample.UploadSet",
+  "entity": "sap.m.upload.UploadSet",
+  "file": "src/02/01/z2ui5_cl_smpc_app_121.clas.abap",
+  "batch": "b13",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "reviewed",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "**Rebuilt on 2026-08-05** - it was a breadth probe with THREE INVENTED rows (Screenshot.png / Notes.txt / Report.doc) and a reduced toolbar. Both rows of the sample's own items.json are there verbatim now (Business Plan Agenda.doc with its five ObjectMarkers and four ObjectStatuses, Picture of a woman.png with its two), the item template carries the markers/statuses aggregations and uploadState, the UploadSet its terminationEnabled / maxFileNameLength / maxFileSize / mediaTypes / uploadUrl, and the toolbar its three buttons plus the UploadSetToolbarPlaceholder. The asset URLs point at the OpenUI5 host per the offline asset rule. The port has no structural difference from the original left, so its breadth-probe structural_diff skip is gone. Upload itself still targets the abap2UI5 FileUploader path in a live system, and the control stays a decided scope exception (sap.m.upload.UploadSet is deprecated, KEEP 2026-07-30)."
+    },
+    {
+      "type": "POST_171",
+      "what": "UploadSet.mode (since UI5 1.100) and UploadSet.afterItemRemoved (since UI5 1.83) kept for the 1:1 port - surfaced when the property gate gained the sap.m/upload sub-package (control-level source scan 2026-07-26). The whole control is deprecated out-of-scope debt anyway (pr/scope-since-from-source)."
+    }
+  ]
+}

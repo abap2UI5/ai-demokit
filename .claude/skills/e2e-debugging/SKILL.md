@@ -19,7 +19,7 @@ verdicts below turned out to be harness effects.
   leftover `node .abap2UI5/node/srv/express.mjs` from a debug run keeps port
   3000 (the harness' own spawn then fails silently and the browser talks to
   the stale server). The unmistakable symptom for a **brand-new** port is
-  `backend HTTP 500` whose body reads *"The app 'Z2UI5_CL_DMO_APP_nnn' does not
+  `backend HTTP 500` whose body reads *"The app 'Z2UI5_CL_SMPC_APP_nnn' does not
   exist in the system"* — that is a missing rebuild, never a port defect.
   Never run `e2e-smoke` while a build is in flight (`e2e-build` wipes
   `node/output` first, so the run dies with no output). **Never wait on or

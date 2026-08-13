@@ -77,8 +77,8 @@
     },
     "object_naming": {
       "patternKind": "required",
-      "clas": "^Z2UI5_CL_DMO_",
-      "intf": "^Z2UI5_IF_DMO_"
+      "clas": "^Z2UI5_CL_SMPC_",
+      "intf": "^Z2UI5_IF_SMPC_"
     },
     "functional_writing": true,
     "no_chained_assignment": true,

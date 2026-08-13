@@ -1,0 +1,39 @@
+{
+  "class": "z2ui5_cl_smpc_app_360",
+  "sample": "sap.ui.table.sample.SelectCopyPaste",
+  "entity": "sap.ui.table.Table",
+  "file": "src/02/02/z2ui5_cl_smpc_app_360.clas.abap",
+  "batch": "b20",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "Three post-1.71 members are kept 1:1 because the sample is built on them: sap.ui.table.Table.rowMode (aggregation, @since 1.119) with the control sap.ui.table.rowmodes.Fixed it holds, sap.m.plugins.PasteProvider (@since 1.91) in the toolbar Button's dependents, and sap.ui.table.plugins.MultiSelectionPlugin's selectionMode property (@since 1.100). Declared per the fidelity-first property-171 policy, so the app needs a UI5 release >= 1.119."
+    },
+    {
+      "type": "NOTE",
+      "what": "The sample writes its two plugin controls with a DOTTED element name and no namespace prefix (<plugins.MultiSelectionPlugin> under the sap.ui.table default xmlns, <m:plugins.PasteProvider>), which UI5 resolves as a sub-package of the element's namespace. The port declares real prefixes for those two packages instead (xmlns:tp=\"sap.ui.table.plugins\", xmlns:mp=\"sap.m.plugins\") and writes tp:MultiSelectionPlugin / mp:PasteProvider - the same two controls, a namespace-representation difference only. structural-diff compares the qualified name, so it reports the dotted names as missing and the prefixed ones as extra."
+    },
+    {
+      "type": "NOTE",
+      "what": "onSelectChange disappears: the selection-mode Select's selectedKey and the MultiSelectionPlugin's selectionMode bind the SAME field, so picking a mode drives the plugin with no round-trip - the prefer-a-bindable-property rule. The named `ui>` model (the three modes and the initial one) is folded onto the one default model, prefix dropped and leaf names kept."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "The copy half of the sample is dropped, and with it the toolbar's copy Button: onInit creates a sap.m.plugins.CellSelector and a sap.m.plugins.CopyProvider in JS (guarded by window.isSecureContext), adds both to the table's dependents and appends the CopyProvider's generated copy Button to the toolbar. Building controls at runtime is the capability boundary CAPABILITIES marks as not expressible, and the CopyProvider's extractData/copy callbacks are app-authored JS formatters. The declared PasteProvider Button of the view is kept 1:1. onPaste consequently loses its cell-range branch - the CellSelector that would supply the range is gone - so the port reports the pasted data at TABLE level, which is the same handler's other branch, with the original's message text."
+    },
+    {
+      "type": "NOTE",
+      "what": "The sample serves its rows from an in-page OData MockServer (over the sibling OData sample's metadata.xml and mock data). An abap2UI5 app has a real ABAP backend, so the mock service is replaced by the model itself: all 115 rows of ProductSet.json are inlined and the Table binds them directly - the server-side paging illusion is what that costs, while threshold, enableBusyIndicator and the noData BusyIndicator stay 1:1. ProductSet.json lives in the sibling OData sample folder upstream; it is archived into this sample's folder too so the port is verifiable offline. The six column labels are metadata bindings in the original ({/#Product/Name/@sap:label} and friends), which only an OData model can resolve, and are replaced by the literal sap:label texts from metadata.xml. The numeric columns stay TYPE string so the mock's exact decimals survive."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "Unverified in a running system: whether the paste event delivers the pasted data array to get_event_arg, and whether the bound selectionMode reaches the plugin without a round-trip."
+    }
+  ]
+}

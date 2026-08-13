@@ -1,3 +1,3 @@
-ERROR z2ui5_cl_dmo_app_002: asset `wrong-HT-9999.jpg` appears nowhere in the sample's archived files/mocks (ui5/sap.m/FixtureBad/) — wrong-neighbour copy? Fix the value or declare it in a deviation naming `wrong-HT-9999.jpg`
-ERROR z2ui5_cl_dmo_app_002: table row 2 field `city` = "Atlantis" but the mock ProductCollection row has "Berlin" — data must stay verbatim (declare the field/value in a deviation if intentional)
+ERROR z2ui5_cl_smpc_app_002: asset `wrong-HT-9999.jpg` appears nowhere in the sample's archived files/mocks (ui5/sap.m/FixtureBad/) — wrong-neighbour copy? Fix the value or declare it in a deviation naming `wrong-HT-9999.jpg`
+ERROR z2ui5_cl_smpc_app_002: table row 2 field `city` = "Atlantis" but the mock ProductCollection row has "Berlin" — data must stay verbatim (declare the field/value in a deviation if intentional)
 data-fidelity: 2 ports checked, 0 skipped (declared), 2 error(s).

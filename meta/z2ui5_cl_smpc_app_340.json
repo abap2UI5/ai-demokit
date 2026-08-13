@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_smpc_app_340",
+  "sample": "sap.ui.layout.sample.Splitter4",
+  "entity": "sap.ui.layout.Splitter",
+  "file": "src/01/02/z2ui5_cl_smpc_app_340.clas.abap",
+  "batch": "b18",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "the original view writes minSize=\"200px\" on the third SplitterLayoutData, but sap.ui.layout.SplitterLayoutData.minSize is typed int - UI5 cannot parse the px suffix. The port writes the numeric value 200 the original means."
+    }
+  ]
+}

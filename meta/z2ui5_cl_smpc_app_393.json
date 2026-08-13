@@ -1,0 +1,14 @@
+{
+  "class": "z2ui5_cl_smpc_app_393",
+  "sample": "sap.m.sample.FlexBoxDirectionOrder",
+  "entity": "sap.m.FlexBox",
+  "file": "src/01/01/z2ui5_cl_smpc_app_393.clas.abap",
+  "batch": "b28",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": []
+}

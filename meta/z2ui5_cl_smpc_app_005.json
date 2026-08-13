@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_smpc_app_005",
+  "sample": "sap.m.sample.Button",
+  "entity": "sap.m.Button",
+  "file": "src/01/01/z2ui5_cl_smpc_app_005.clas.abap",
+  "batch": "b03",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true,
+    "note": "each press composes its toast on the frontend (control_global MESSAGE_TOAST.show with the template `{0} Pressed`, {0} filled by $event.oSource.sId) - roundtrip-free, 1:1 with the sample's MessageToast.show(evt.getSource().getId() + \" Pressed\")"
+  },
+  "status": "checked",
+  "checked": {
+    "date": "2026-07-15",
+    "note": "manually verified in a running system - each press toasts the pressed button's client-side control id, read via the event arg $event.oSource.sId, exactly like the original."
+  },
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "the toast was switched from a message_toast_display round-trip to a roundtrip-free client-composed toast on 2026-07-22 (control_global MESSAGE_TOAST.show, template `{0} Pressed` filled by $event.oSource.sId; the app is now init-only) - re-verify each button still toasts \"<id> Pressed\". **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the 'Default' button press toasts 'Pressed' (the $event.oSource.sId template resolves); the other buttons are the identical wire."
+    }
+  ]
+}

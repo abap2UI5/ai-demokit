@@ -9,7 +9,7 @@ runs for EVERY port regardless. Shared assertions live in
 (`import { … } from '../../scripts/lib-e2e.mjs'`).
 
 One file per port keys the map by FILENAME, so a duplicate key is impossible
-by construction — the old in-file map carried two `z2ui5_cl_dmo_app_133`
+by construction — the old in-file map carried two `z2ui5_cl_smpc_app_133`
 entries and the last one silently won (the shadowed leg is preserved as a
 comment in that file, pending a merge decision).
 

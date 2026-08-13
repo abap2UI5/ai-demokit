@@ -57,7 +57,7 @@ for (const f of fs.readdirSync(META).filter((f) => /app_\d+\.json$/.test(f)).sor
   const m = JSON.parse(text);
   const live = (m.deviations || []).filter((d) => d.type === 'LIVE_TEST');
   if (!live.length) continue;
-  const num = m.class.replace('z2ui5_cl_dmo_app_', '');
+  const num = m.class.replace('z2ui5_cl_smpc_app_', '');
   const hasInteraction = interactions.has(m.class);
   candidates.push({ num, cls: m.class, count: live.length, hasInteraction });
 

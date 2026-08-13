@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_smpc_app_160",
+  "sample": "sap.m.sample.Link",
+  "entity": "sap.m.Link",
+  "file": "src/02/01/z2ui5_cl_smpc_app_160.clas.abap",
+  "batch": "b16",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "handleLinkPress opens MessageBox.alert('Link was clicked!') in the original, and both wired Links now do exactly that: the press fires a LINK_PRESSED backend event and on_event calls client->message_box_display( text = 'Link was clicked!' type = 'alert' ) - the framework's 1:1 form (CAPABILITIES marks sap.m.MessageBox expressible, app 036 is the reference). Until 2026-07-28 the presses were reduced to a client-composed MessageToast 'Link pressed', which the sidecar itself had already flagged as a wrong improvisation (the app-042 lesson class): neither the control nor the text matched the original."
+    },
+    {
+      "type": "POST_171",
+      "what": "Link.icon (sap-icon://cart, sap-icon://globe) and Link.endIcon (sap-icon://inspect) are @since 1.128 and used 1:1 - the 'Links with Icons' group is the sample's point. Newer than UI5 1.71; declared per the property-171 policy, so the app needs UI5 >= 1.128 to render the icons."
+    }
+  ]
+}

@@ -307,7 +307,7 @@ const rows = [];
 for (const f of fs.readdirSync(META).sort()) {
   if (!f.endsWith('.json')) continue;
   const m = JSON.parse(fs.readFileSync(path.join(META, f), 'utf8'));
-  const port = f.replace('z2ui5_cl_dmo_app_', '').replace('.json', '');
+  const port = f.replace('z2ui5_cl_smpc_app_', '').replace('.json', '');
   for (const d of m.deviations || []) {
     if (d.type !== 'IMPROVISED') continue;
     const what = String(d.what || '').replace(/\s+/g, ' ');
@@ -331,7 +331,7 @@ if (retype) {
     const byPort = new Map();
     for (const r of move) byPort.set(r.port, (byPort.get(r.port) || 0) + 1);
     for (const [port] of byPort) {
-      const file = path.join(META, `z2ui5_cl_dmo_app_${port}.json`);
+      const file = path.join(META, `z2ui5_cl_smpc_app_${port}.json`);
       const m = JSON.parse(fs.readFileSync(file, 'utf8'));
       for (const d of m.deviations) {
         if (d.type !== 'IMPROVISED') continue;

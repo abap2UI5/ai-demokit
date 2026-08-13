@@ -259,7 +259,7 @@ for (const cls of sidecarSet) if (!portSet.has(cls)) err(`meta/${cls}.json has n
  *     count is reported to keep the debt visible instead of failing every
  *     batch commit. */
 const INTERACTIONS_DIR = path.join(META, 'interactions');
-const OVERVIEW_CLASS = 'z2ui5_cl_dmo_app_overview';
+const OVERVIEW_CLASS = 'z2ui5_cl_smpc_app_overview';
 let interactionGaps = [];
 if (fs.existsSync(INTERACTIONS_DIR)) {
   const mods = fs.readdirSync(INTERACTIONS_DIR)

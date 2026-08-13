@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_smpc_app_248",
+  "sample": "sap.ui.table.sample.TreeTable.JSONTreeBinding",
+  "entity": "sap.ui.table.TreeTable",
+  "file": "src/01/02/z2ui5_cl_smpc_app_248.clas.abap",
+  "batch": "b12",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The onInit JSONModel('.../Clothing.json') load is folded into model_init: the full tree (Women/Men/Girls/Boys, every article with amount/currency/size) plus the /sizes list, 1:1 from the mock. The tree keeps the original's shape - nested types per level under a CATALOG-CLOTHING structure, so the rows binding path '/CATALOG/CLOTHING' with parameters { arrayNames: ['CATEGORIES'] } mirrors {path:'/catalog/clothing', parameters:{arrayNames:['categories']}}. Homogeneous-type caveat: a level-3 leaf article (Jewelry/Necklace class) carries an empty CATEGORIES array (the ABAP row type is one shape per level) - JSONTreeBinding treats an empty child array as a leaf, so it renders like the original's absent property; and a level-3 CATEGORY row (Dresses) carries initial AMOUNT/CURRENCY/SIZE fields its original JSON node omits - SIZE '' keeps the Select hidden through the original's own !!SIZE guard, and the Price guard below keeps the cell empty."
+    },
+    {
+      "type": "NOTE",
+      "what": "Currency.value is the guarded expression binding `{= ${AMOUNT} > 0 ? ${AMOUNT} : null }` (a numeric-string 0.00 from the transpiled runtime is truthy, so the guard compares > 0 instead of testing truthiness) instead of the original's plain {amount}: a category row's own AMOUNT serializes as 0 (initial packed - a flat ABAP row serializes every field), and an unguarded 0 would render '0.00' where the original's absent JSON property renders an empty Price cell. The app-220 optional-value-guard idiom (backtick literal so the braces reach the attribute verbatim); leaf amounts are all > 0, so no real price is masked."
+    },
+    {
+      "type": "NOTE",
+      "what": "live-verified 2026-08-04 (nightly e2e interaction): unverified in a running system: (a) the nested-structure model root (/CATALOG/CLOTHING via _bind on the catalog-clothing component) feeding the TreeTable rows binding with arrayNames; (b) Collapse all / Expand first level via roundtrip-free follow_up_action control_by_id (collapseAll whitelisted, expandToLevel int); (c) Collapse/Expand selection 1:1 via the $event.oSource.getParent().getParent().getSelectedIndices() expression - the resolved index array reaches the unlisted-but-public collapse/expand methods through castArgAuto untouched; (d) the two-way Select selectedKey writing a changed size back into the tree row. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): (a) and (b) are covered - the tree renders its root categories from the nested-structure model, Expand first level reveals the second level (Accessories) and Collapse all hides it again; (c) selection expand/collapse and (d) the two-way Select remain unexercised. Environment note: the transpiled runtime serializes packed AMOUNT as a numeric string, which is why the Currency guard compares > 0 instead of truthiness."
+    }
+  ]
+}

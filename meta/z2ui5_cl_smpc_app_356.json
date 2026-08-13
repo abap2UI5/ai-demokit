@@ -1,0 +1,39 @@
+{
+  "class": "z2ui5_cl_smpc_app_356",
+  "sample": "sap.ui.table.sample.MultiSelectionPlugin",
+  "entity": "sap.ui.table.Table",
+  "file": "src/02/02/z2ui5_cl_smpc_app_356.clas.abap",
+  "batch": "b20",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The sample serves its rows from an in-page OData MockServer (sap/ui/core/util/MockServer over metadata.xml, autoRespondAfter 2000, operationMode Server, threshold 15). An abap2UI5 app has a real ABAP backend, so the mock service is replaced by the model itself: all 115 rows of the sample's own ProductSet.json are inlined and the Table binds them directly. What that costs is the sample's server-side paging illusion - the rows arrive in one model instead of in threshold-sized batches - and with it the enableBusyIndicator's visible effect; both attributes are kept 1:1 on the control. ProductSet.json lives in the sibling OData sample folder upstream (the MockServer's sMockdataBaseUrl points there); it is archived into this sample's folder too so the port is verifiable offline."
+    },
+    {
+      "type": "NOTE",
+      "what": "The named `config>` model (limit, showHeaderSelector, selectionModes, selectionMode) is folded onto the one default model, prefix dropped and leaf names kept. Two of the three config controls then need no handler at all: the selection-mode Select's selectedKey and the plugin's selectionMode share one field, and the ToggleButton's pressed and the plugin's showHeaderSelector share another - which is what the original's two-way {config>/...} bindings already do. The limit keeps its change wire because onLimitChange is not a plain setter: it validates the entry, and the port carries the limit twice (an integer for the plugin, the Input's string next to it) because sap.m.Input.value is a string property while the plugin's limit is an integer - the original bridges that with a typed binding, the port parses it in ABAP and snaps the Input back with the same message on a bad entry."
+    },
+    {
+      "type": "NOTE",
+      "what": "onSelectionChange reads state that lives in the plugin, so the wire carries it: ${$parameters>/limitReached} and ${$source>}.getSelectedIndices().length (an event arg is a full UI5 expression), and the backend composes the same three messages - 'Selection cleared.', 'n row(s) selected.' and the limit-reached variant naming the current limit."
+    },
+    {
+      "type": "NOTE",
+      "what": "The six column labels are metadata bindings in the original ({/#Product/Name/@sap:label} and friends), which only an OData model can resolve. They are replaced by the literal sap:label texts from the sample's own metadata.xml (Product Name, Product ID, Prod. Cat., Company Name, Unit Price, Dimensions) - the same strings the OData model would have produced. sortProperty / filterProperty carry the ABAP (upper-cased) field names. The Price cell keeps the original's typed String binding and the dimensions cell its {WIDTH}x{HEIGHT}x{DEPTH} {DIMUNIT} template; the numeric columns stay TYPE string so the mock's exact decimals survive (the display-only rule of the porting recipe)."
+    },
+    {
+      "type": "POST_171",
+      "what": "sap.ui.table.plugins.MultiSelectionPlugin is @since 1.64 and in scope, but its enableNotification property is @since 1.71 and its selectionMode property @since 1.100; both are kept 1:1 since the sample is about exactly this plugin. Declared per the fidelity-first property-171 policy, so the app needs a UI5 release >= 1.100."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "Unverified in a running system: whether the plugin honours the bound limit / selectionMode / showHeaderSelector without a round-trip, and whether the selectionChange expression argument reports the selected count."
+    }
+  ]
+}

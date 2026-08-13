@@ -1,0 +1,31 @@
+{
+  "class": "z2ui5_cl_smpc_app_168",
+  "sample": "sap.f.sample.GridContainer",
+  "entity": "sap.f.GridContainer",
+  "file": "src/01/04/z2ui5_cl_smpc_app_168.clas.abap",
+  "batch": "b07",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "render_smoke": {
+    "skip": true,
+    "reason": "The grid contains a sap.ui.integration.widgets.Card whose manifest is an external file (test-resources/.../cardManifest.json) that the static headless harness cannot serve - 'resource could not be loaded ... Not Found'. Verified against the render each run: the skip is honoured only while it still errors. The view renders in a real browser and passes the e2e gate."
+  },
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The original binds two named models inside the cards (cities> for the ComboBoxes, products> for the revenue List); abap2UI5 keeps one default model, so those bind directly ({cities>/cities} -> {/CITIES}, {products>/productItems} -> {/PRODUCTITEMS}, prefix dropped, last segment identical). **Sidecar corrected 2026-08-05**: the rest of the text still described the port before its rework and called the handlers STATIC toasts. They are not: the three property Switches are two-way bound to the GridContainer's snapToRow / allowDenseFill / inlineBlockLayout (prefer-a-bindable-property, the app-007/048/128 pattern), columnsChange round-trips its columns parameter, and the GenericTile / f:Card header presses compose their toast from $event.oSource.getMetadata().getName() instead of a fixed string. What stays dropped: the RevealGrid toggle (a sample-local JS debug overlay, same as apps 145/222/271) The onInit attachLayoutChange handler that swaps sapUiSmallMargin/sapUiTinyMargin on the narrow breakpoints was dropped for the same reason until 2026-08-05 - a class swap on a LIVE breakpoint change, for which no wire existed (the device> model was a snapshot: it wrapped the live sap.ui.Device object but never notified its bindings). The framework now refreshes it on resize/rotation and publishes the current media range as {device>/media/range} (pr/live-device-model, implemented upstream), so the class is a plain expression binding on the GridContainer - `{= ${device>/media/range} === 'Phone' ? 'sapUiTinyMargin' : 'sapUiSmallMargin' }` - and follows a live resize with no wire and no round-trip, which is what the original's handler does. The three-way layoutXS/layoutS split folds into the one Phone range (< 600px), the same threshold the sample's own layout data uses."
+    },
+    {
+      "type": "NOTE",
+      "what": "The ComboBox items keep the original binding-info sorter 1:1 ({path:'/CITIES', sorter:{path:'TEXT'}} - restored 2026-07-27; an earlier version had dropped it although CAPABILITIES marks binding sorters expressible). The sap.ui.integration Card keeps its original external manifest reference (cardManifest.json). The two long lorem-ipsum filler Texts are abbreviated to short placeholders. cities.json (7) and products.json (3) are inlined in full (the unbound 'status' mock column stays out of the row type per the rows-not-columns rule)."
+    },
+    {
+      "type": "NOTE",
+      "what": "Faked-event-value audit fix (2026-07-30): the four substituted handlers are now the original behaviours. onSnapToRowChange / onAllowDenseFillChange / onInlineBlockLayoutChange: each Switch state is two-way bound and the GridContainer binds snapToRow/allowDenseFill/inlineBlockLayout (added attrs) to the same fields, so the toggles drive the grid entirely client-side (the 007/128 pattern) - the three Switch change attributes are DROPPED for the binding (they only carried the imperative setter). onGridColumnsChange: the columnsChange wire round-trips ${$parameters>/columns} and recomputes the bound columnsCountText text ('Current grid columns count: <n>'; text is an added attr on the Text). onPress (tiles + card): client-composed toast 'Press was fired on - {0}' filled by $event.oSource.getMetadata().getName(), the original's exact text. onRevealGrid: the Reveal Grid button's press attribute is DROPPED, undecorated - RevealGrid is a sample-local JS helper (grid outline overlay) with no declarative equivalent (the app-145 precedent); the earlier static toasts ('Reveal Grid', 'Snap to row', 'Allow dense fill', 'Inline block layout', 'Columns changed', 'Tile pressed', 'Card pressed') are gone. **e2e-verified 2026-07-30** (transpiled-framework interaction, scripts/e2e-smoke.mjs): the first GenericTile press toasts 'Press was fired on - sap.m.GenericTile' (the getMetadata().getName() expression resolves); the switch bindings and columns counter remain unexercised."
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_smpc_app_217",
+  "sample": "sap.uxap.sample.KPIObjectPageHeader",
+  "entity": "sap.uxap.ObjectPageHeader",
+  "file": "src/01/03/z2ui5_cl_smpc_app_217.clas.abap",
+  "batch": "b02",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "reviewed",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "Block->content inlining (app 188/178/161 precedent, CAPABILITIES 'Custom BlockBase blocks in a sap.uxap.ObjectPageLayout'). The original blocks/moreBlocks aggregations each hold a custom BlockBase control from the sample's SharedBlocks JS: goals:GoalsBlock (id goalsblock), personal:BlockPhoneNumber (id phone), personal:BlockSocial (id social), personal:BlockAdresses (id adresses), personal:BlockMailing (id mailing, columnLayout=1), personal:PersonalBlockPart1 (id part1, columnLayout=1) and personal:PersonalBlockPart2 (id part2, columnLayout=1). A BlockBase is only a lazy-loading wrapper around a view, and ObjectPageSubSection.blocks/moreBlocks accept any sap.ui.core.Control, so each block's rendered content (a sap.ui.layout.form.SimpleForm) is inlined directly here as a form:SimpleForm holding its core:Title, m:Label and m:Text children. Consequently all seven block controls (GoalsBlock, BlockPhoneNumber, BlockSocial, BlockAdresses, BlockMailing, PersonalBlockPart1, PersonalBlockPart2) are absent from the port and seven form:SimpleForm controls with their core:Title, m:Label and m:Text content are present in their place (the m:Label count rises from 3 to 15). The blocks carry no controller behaviour to port; the ObjectPageModel (employee.json) the controller loads is never bound by the view, so no default model is seeded."
+    }
+  ]
+}

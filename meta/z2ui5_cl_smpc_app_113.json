@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_smpc_app_113",
+  "sample": "sap.tnt.sample.InfoLabel",
+  "entity": "sap.tnt.InfoLabel",
+  "file": "src/02/05/z2ui5_cl_smpc_app_113.clas.abap",
+  "batch": "b01",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "reviewed",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "Ten sap.tnt InfoLabels across color schemes / render modes / icon / displayOnly, in FlexBox rows - a full 1:1 rebuild of the sample view (static, no controller logic). Originally generated as a breadth-probe; the 2026-07-27 review fixed the last row's label text ('Any Color Scheme in Display Only Mode' - had been invented as 'Color Scheme 10') and removed the stale structural_diff skip."
+    },
+    {
+      "type": "POST_171",
+      "what": "sap.tnt.InfoLabel.icon (@since 1.74) is used 1:1 (one InfoLabel carries icon='sap-icon://home-share'). Newer than UI5 1.71; declared per the property-171 policy. Previously undeclared because the property gate is blind to sap.tnt; found by the non-sap.m @since audit 2026-07-24."
+    }
+  ]
+}

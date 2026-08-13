@@ -1,0 +1,39 @@
+{
+  "class": "z2ui5_cl_smpc_app_417",
+  "sample": "sap.uxap.sample.ObjectPageDynamicSideContentBtn",
+  "entity": "sap.uxap.ObjectPageHeader",
+  "file": "src/01/03/z2ui5_cl_smpc_app_417.clas.abap",
+  "batch": "b08",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "All three controller behaviours are reproduced through bound properties instead of the imperative setters. (a) handleSCBtnPress / handleSideContentHide drive the side content through the two-way bound showSideContent property (the property setShowSideContent writes; the original view's literal showSideContent=\"false\" becomes the binding's initial value). On breakpoint S the original calls toggle( ) instead of the setter, and toggle only flips side-content visibility on S, so both branches fold into the same bound flip: OPEN_SIDE_CONTENT sets it true, CLOSE_SIDE_CONTENT false (apps 138/344 precedent). (b) The open button's visibility (the controller's oOPSideContentBtn.setVisible calls) is the bound visible attribute the port adds on the sideContentButton m:Button - an attribute the original view does not carry. (c) updateToggleButtonState: breakpointChanged carries its own currentBreakpoint event parameter to the backend (t_arg ${$parameters>/currentBreakpoint}) and on_event recomputes the open button's visibility exactly as the controller does - visible when the breakpoint is 'S' or the side content is hidden. The focus moves (closeSideContentBtn after opening, openSideContentBtn after closing - the original's setTimeout focus) go through the SET_FOCUS follow-up action; focus has no bindable equivalent. onAfterRendering seeds sCurrentBreakpoint once; abap2UI5 has no equivalent hook, so the port takes the breakpoint from the first breakpointChanged event (app 138 precedent)."
+    },
+    {
+      "type": "NOTE",
+      "what": "style.css (.sapUiTheme-sap_bluecrystal .sapUiDSC gets background-color rgb(242, 248, 252) - a blue-crystal-theme-only rule) is injected through a core:HTML <style> leaf, so the port adds one core:HTML control the original view does not have - abap2UI5 ships no separate stylesheet. The CSS braces are escaped \\{ \\} in a backtick literal so the XMLView parser does not read them as bindings (app 344 precedent)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The controller's JSONModel (SharedJSONData/employee.json, set as the named 'ObjectPageModel') is never bound by any control in this view - every text is a literal - so the port seeds no model data and has no model_init (app 217/260 precedent); the two bound flags are control state, seeded inline in main."
+    },
+    {
+      "type": "NOTE",
+      "what": "The three image assets point at the sdk.openui5.org host per the offline asset-URL rule - https://sdk.openui5.org/test-resources/sap/uxap/images/imageID_273624.png (objectImageURI), twitterIcon.png and linkedInIcon.png (the two m:Image src values); the original uses relative test-resources paths (app 263 precedent)."
+    },
+    {
+      "type": "NOTE",
+      "what": "The original's empty blocks and moreBlocks aggregation tags on the paymentSubSection ObjectPageSubSection are not written - they hold no children, and aggregation elements are optional in XML (ignored by the structural diff). The side content's long Lorem Text keeps the original wording verbatim with the XML attribute's line breaks and tab indentation normalized to single spaces, as an XML attribute-value parser would (app 344 precedent)."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "Unverified in a running system: the breakpointChanged round-trip transporting currentBreakpoint and recomputing the open button's bound visible flag, the showSideContent flip on the two press round-trips, and the SET_FOCUS follow-up on the openSideContentBtn / closeSideContentBtn ids. The breakpointChanged transport and the showSideContent flip use the same wiring that is e2e-verified on app 267 and live on apps 138/344."
+    }
+  ]
+}

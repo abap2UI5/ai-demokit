@@ -3,31 +3,31 @@
  "exceptions": [
   {
    "sample": "sap.m.sample.UploadSet",
-   "class": "z2ui5_cl_dmo_app_121",
+   "class": "z2ui5_cl_smpc_app_121",
    "decided": { "scope": "deprecated", "since": "1.63", "deprecated": "1.129" },
    "reason": "KEEP permanently (decided 2026-07-30, session decision under the standing continue-with-everything mandate; revertible by deleting the port + this entry): sap.m.UploadSet is deprecated but the port is gate-verified and exercises upload-set idioms no other port covers; deleting it would remove working training signal. The hard gate keeps blocking NEW deprecated-control ports."
   },
   {
    "sample": "sap.f.sample.SidePanelSingle",
-   "class": "z2ui5_cl_dmo_app_136",
+   "class": "z2ui5_cl_smpc_app_136",
    "decided": { "scope": "newer", "since": "1.107", "deprecated": null },
    "reason": "KEEP permanently (decided 2026-07-30, same mandate; revertible): sap.f.SidePanel is @since 1.107 - a post-1.71 CONTROL rather than member, kept as the corpus-wide fidelity-first policy already keeps post-1.71 members; the app declares the runtime floor it needs."
   },
   {
    "sample": "sap.ui.core.sample.InvisibleMessage",
-   "class": "z2ui5_cl_dmo_app_141",
+   "class": "z2ui5_cl_smpc_app_141",
    "decided": { "scope": "newer", "since": "1.78", "deprecated": null },
    "reason": "KEEP permanently (decided 2026-07-30, same mandate; revertible): sap.ui.core.InvisibleMessage is @since 1.78, the accessibility-announcement idiom exists nowhere else in the corpus; needs UI5 >= 1.78 only."
   },
   {
    "sample": "sap.f.sample.ProductSwitchNavigation",
-   "class": "z2ui5_cl_dmo_app_165",
+   "class": "z2ui5_cl_smpc_app_165",
    "decided": { "scope": "newer", "since": "1.72", "deprecated": null },
    "reason": "KEEP permanently (decided 2026-07-30, same mandate; revertible): sap.f.ProductSwitch is @since 1.72 - one minor release past the 1.71 line, the most borderline of the six; the port is the only ProductSwitch coverage."
   },
   {
    "sample": "sap.m.sample.OverflowToolbarTokenizer",
-   "class": "z2ui5_cl_dmo_app_203",
+   "class": "z2ui5_cl_smpc_app_203",
    "decided": { "scope": "newer", "since": "1.139", "deprecated": null },
    "reason": "KEEP permanently (decided 2026-07-30, same mandate; revertible): sap.m.OverflowToolbarTokenizer is @ui5-experimental-since 1.139 - experimental API may change, which the sidecar declares; the port documents the experimental-tag scanner lesson and needs UI5 >= 1.139."
   }

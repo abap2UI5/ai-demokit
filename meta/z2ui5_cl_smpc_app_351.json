@@ -1,0 +1,43 @@
+{
+  "class": "z2ui5_cl_smpc_app_351",
+  "sample": "sap.ui.layout.sample.Splitter",
+  "entity": "sap.ui.layout.Splitter",
+  "file": "src/01/02/z2ui5_cl_smpc_app_351.clas.abap",
+  "batch": "b19",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The Splitter's content areas become a BOUND aggregation over one model table, so the three declared areas and every area the buttons add come from the same place. structural-diff therefore sees fewer declared controls than the original: Button 7 vs 5 and l:SplitterLayoutData 3 vs 1 - the three content Buttons with their three SplitterLayoutData collapse into one bound template (the four action Buttons of the HorizontalLayout are unchanged). This is what lets btnAddContentArea / btnRemoveContentArea work without addContentArea/removeContentArea calls: they insert or delete a row."
+    },
+    {
+      "type": "NOTE",
+      "what": "showLayoutOptions( ) builds the whole options panel in JS (an HBox per content area with a title Text, 'Resizable:' + CheckBox, 'Size (CSS):' + Input, 'Min-Size: (in px)' + Input) and re-builds it after every change. The port binds the mainOptions VerticalLayout's content to the SAME table with that HBox as its template, so the option row and the layout data are two views of one model row - a CheckBox or Size Input writes straight into the SplitterLayoutData with no per-row change closure. structural-diff reports the added controls the original view does not declare: HBox, CheckBox, two Input and four more Text (five vs one)."
+    },
+    {
+      "type": "NOTE",
+      "what": "Min-Size needs one round-trip and gets one: sap.ui.layout.SplitterLayoutData.minSize is an INTEGER while sap.m.Input.value is a string, so the row carries both (minsize_text bound to the Input, minsize bound to the layout data) and the Input's change event triggers the parse - the ABAP equivalent of the original's parseInt(oEvent.getParameter('value')). No row index has to travel: the whole table returns two-way, so the handler re-parses every row. Size and Resizable need no event at all - they are plain two-way bindings shared by the Input/CheckBox and the layout data."
+    },
+    {
+      "type": "NOTE",
+      "what": "btnChangeOrientation flips Splitter.orientation, which IS a bindable property, so the port binds it and flips the model field instead of calling the setter (the prefer-a-bindable-property rule). btnInvalidateSplitter has no bindable equivalent either - invalidate( ) forces a re-render without changing a property - and it needs none: invalidate is denied by the frontend action allowlist (the render lifecycle belongs to the framework, CONTROL_METHOD_DENY_PREFIXES), and the round-trip the button already makes re-renders the slot by itself. So the button keeps its wire and its effect, with no control method called. The Splitter's resize event is wired to the backend, which increments the counter and writes the timestamped 'Resize # n' text the original's handler writes."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "createExampleContent randomizes the added area (Math.random for size 'auto' vs 50-350px and for maxSize), which the corpus does not reproduce - the port alternates deterministically between 'auto' and '150px' so it renders the same every run. Its maxSize is dropped entirely for a different reason: sap.ui.layout.SplitterLayoutData has NO maxSize property (the original's object literal sets a key the control ignores), and writing it makes XMLView.create reject the view. Its height=\"100%\" is dropped too - the bound Button template is shared with the three declared areas, which set only width."
+    },
+    {
+      "type": "NOTE",
+      "what": "css/splitter.css (.options, .options .paddingRight, .optionTitle) is injected through an extra core:HTML <style> leaf, since abap2UI5 ships no separate stylesheet; the class names are on the controls the original also puts them on. The eventStatus Text keeps its 'Nothing happened so far...' initial label, and the resize timestamp uses the ABAP system date/time in the user's format where the original uses UI5Date.getInstance().toLocaleString() - a real event timestamp, not an anchored one."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "Unverified in a running system: whether inserting/deleting a row re-renders the bound contentAreas aggregation, whether the shared table keeps the option row and the layout data in sync while dragging a splitter bar, and whether the Invalidate button's plain round-trip re-renders the Splitter the way the original's invalidate( ) does."
+    }
+  ]
+}

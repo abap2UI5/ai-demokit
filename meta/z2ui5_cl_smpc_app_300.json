@@ -1,0 +1,43 @@
+{
+  "class": "z2ui5_cl_smpc_app_300",
+  "sample": "sap.tnt.sample.SideNavigationWrapping",
+  "entity": "sap.tnt.SideNavigation",
+  "file": "src/02/05/z2ui5_cl_smpc_app_300.clas.abap",
+  "batch": "b08",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "onCollapseExpandPress (byId('sideNavigation').setExpanded(!expanded)) is reproduced by two-way binding SideNavigation.expanded to a boolean model field, seeded true exactly like the original literal, and flipping it on the TOGGLE_EXPAND round-trip."
+    },
+    {
+      "type": "NOTE",
+      "what": "quickActionPress dialog: the controller-built sap.m.Dialog is expressed as a core:FragmentDefinition shown via client->popup_display. Its Dialog, Label, Input and Button controls are extra vs the archived V.view.xml, which declares none of them; the two Inputs are two-way bound (create_name/create_icon) instead of read imperatively via Element.getElementById(...).getValue()."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "the Create button of the quick-create dialog does sideNavigation.getItem().addItem( new NavigationListItem(...) ) in the original. Here it only closes the dialog: the main tnt:NavigationList mixes tnt:NavigationListItem and tnt:NavigationListGroup children, and abap2UI5 binds an aggregation with ONE template control, so a bound list (the app-241/299 pattern) cannot reproduce that mixed structure. The 24 static NavigationListItem entries and both NavigationListGroups are kept 1:1 instead - view fidelity wins over the append behaviour, which is the loss declared here."
+    },
+    {
+      "type": "POST_171",
+      "what": "sap.tnt.NavigationListGroup (control @since 1.121) is used 1:1 for the 'System & Administration Management' and 'Business operations' groups. Newer than UI5 1.71; the app needs UI5 >= 1.121 to render them."
+    },
+    {
+      "type": "POST_171",
+      "what": "NavigationListItem.selectable (@since 1.116) is kept 1:1 (selectable=false on the training-portal, service-management, financial-reports, CRM, Quick Create and SAP Support entries)."
+    },
+    {
+      "type": "POST_171",
+      "what": "NavigationListItem.design=\"Action\" and NavigationListItem.ariaHasPopup=\"Dialog\" (both @since 1.133) are kept 1:1 on the Quick Create item."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "not yet run in a system: the TOGGLE_EXPAND round-trip (collapse/expand of the 20rem side navigation) and the quick-create popup round-trip."
+    }
+  ]
+}
