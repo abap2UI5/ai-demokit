@@ -410,6 +410,7 @@ const ID_TABLE = 'idOverviewTable';
 // the shared overview header's navigation event - the class to jump to travels
 // as its event argument (see render_header / on_event)
 const EV_NAV = 'NAV_APP';
+const EV_INSTALL = 'INSTALL';
 // a Contains filter on the FILTER blob column; valExpr is a client-resolved
 // $-expression (the search field's newValue/query). Empty value clears it.
 const filterCall = (valExpr) =>
@@ -476,17 +477,19 @@ const abap = `"! Generated overview app - lists every abap2UI5 api sample app in
 "! can vary per row). There is no per-SAMPLE Since column - whether a sample needs
 "! a release newer than 1.71 is carried by the Hide-newer-than-1.71 filter and
 "! spelled out in the Open column's info popover.
-"! The page header carries the SHARED OVERVIEW HEADER of the abap2UI5 family
-"! (render_header): six transparent icon buttons pointing at the framework start
-"! page, the three sample repositories, the documentation and this repository,
-"! each explaining itself in its tooltip. Every repository is installed on its
-"! own, so each button decides for itself - class_installed( ) instantiates the
-"! target class, an installed overview app is entered with nav_app_call( ) (the
-"! back button returns), and a missing one opens its GitHub repository through
-"! the same URLHELPER REDIRECT wire the link popover uses, saying so in the
-"! tooltip. This repository's own entry stays visible but disabled, so the row
-"! reads the same in all three overviews - keep it in sync with the copies in
-"! abap2UI5/samples and abap2UI5/samples-stack.
+"! The page has no header of its own: render_header( ) puts a Bar into its
+"! customHeader, with the back button and the title on the left and the SHARED
+"! OVERVIEW HEADER of the abap2UI5 family on the right - one core:Icon per
+"! sample repository, a ToolbarSeparator, then the documentation and this
+"! repository, each explaining itself in its tooltip. Every repository is
+"! installed on its own, so each icon decides for itself - class_installed( )
+"! instantiates the target class, an installed overview app is entered with
+"! nav_app_call( ) (the back button returns), and a missing one opens a popover
+"! saying it has to be installed first, with the link to its repository. There
+"! are two states and no more: active, and the ONE inactive icon - this
+"! repository's own entry, greyed out with no press, so the row reads the same
+"! in all three overviews. Keep it in sync with the copies in abap2UI5/samples
+"! and abap2UI5/samples-stack.
 "! Three header checkboxes (default all on) filter the table
 "! entirely on the client via each row's visible expression: Hide non-OpenUI5,
 "! Hide newer than 1.71 (2020), Hide deprecated (the ui5_only flag behind the
@@ -616,9 +619,18 @@ CLASS ${CLASS} DEFINITION PUBLIC.
     " the overview apps of the abap2UI5 family, in the order the shared header
     " renders them - each repository is installed on its own, so the header
     " asks per entry whether its overview app is on THIS system
+    " sap.ui.core.IconColor knows no blue - Positive, Critical, Negative and
+    " Neutral are the semantic four - so the interactive icons of the header
+    " carry the accent of the sap_horizon theme as a plain CSS colour, and the
+    " one that leads nowhere keeps the semantic grey
+    CONSTANTS:
+      BEGIN OF cs_color,
+        active   TYPE string VALUE \`#0064D9\`,
+        inactive TYPE string VALUE \`Neutral\`,
+      END OF cs_color.
+
     CONSTANTS:
       BEGIN OF cs_overview,
-        startup      TYPE string VALUE \`z2ui5_cl_app_startup\`,
         samples      TYPE string VALUE \`z2ui5_cl_smp_app_000\`,
         samples_old  TYPE string VALUE \`z2ui5_cl_demo_app_g00\`,
         controls     TYPE string VALUE \`z2ui5_cl_smpc_app_overview\`,
@@ -629,7 +641,6 @@ CLASS ${CLASS} DEFINITION PUBLIC.
     CONSTANTS:
       BEGIN OF cs_url,
         docs      TYPE string VALUE \`https://abap2UI5.org\`,
-        framework TYPE string VALUE \`https://github.com/abap2UI5/abap2UI5\`,
         samples   TYPE string VALUE \`https://github.com/abap2UI5/samples\`,
         controls  TYPE string VALUE \`https://github.com/abap2UI5/samples-controls\`,
         stack     TYPE string VALUE \`https://github.com/abap2UI5/samples-stack\`,
@@ -642,12 +653,29 @@ CLASS ${CLASS} DEFINITION PUBLIC.
     " abap2UI5/samples-stack.
     METHODS render_header
       IMPORTING
-        page TYPE REF TO z2ui5_cl_ai_xml.
+        page  TYPE REF TO z2ui5_cl_ai_xml
+        title TYPE string.
+    " the vertical line that groups the header row: the sample repositories of
+    " the family first, then what leaves the system
+    METHODS header_separator
+      IMPORTING
+        toolbar TYPE REF TO z2ui5_cl_ai_xml.
+    " A repository that is not on this system stays clickable and says what is
+    " missing - a popover on the icon that was pressed, with the GitHub link to
+    " install it from.
+    METHODS install_display
+      IMPORTING
+        anchor TYPE string
+        href   TYPE string
+        name   TYPE string.
     METHODS header_button
       IMPORTING
         toolbar   TYPE REF TO z2ui5_cl_ai_xml
         icon      TYPE string
-        tooltip   TYPE string
+        " the entry's name - the tooltip opens with it and the popover of an
+        " uninstalled repository is titled after it
+        name      TYPE string
+        descr     TYPE string
         href      TYPE string
         class     TYPE string OPTIONAL
         " the overview app's PREVIOUS name, tried when CLASS is not on the
@@ -860,6 +888,13 @@ CLASS ${CLASS} IMPLEMENTATION.
         client->popover_display( xml   = info->stringify( )
                                  by_id = client->get_event_arg( 2 ) ).
 
+      WHEN \`${EV_INSTALL}\`.
+        " a header icon whose repository is not on this system - anchor class,
+        " GitHub URL and repository name travel as the event arguments
+        install_display( anchor = client->get_event_arg( )
+                         href   = client->get_event_arg( 2 )
+                         name   = client->get_event_arg( 3 ) ).
+
       WHEN \`${EV_NAV}\`.
         " a button of the shared header whose target overview app is on this
         " system - the class travels as the event argument and is resolved
@@ -937,12 +972,12 @@ CLASS ${CLASS} IMPLEMENTATION.
             " Shell on/off = letterboxing (limited app width); two-way bound so the
             " header Switch toggles it live on the client
             )->a( n = \`appWidthLimited\` v = |\\{= !!\${ client->_bind( shell_on ) } \\}|
-            )->open( \`Page\`
-                )->a( n = \`title\`          v = |abap2UI5 Demo Kit (\{ lines( t_app ) \})|
-                )->a( n = \`navButtonPress\` v = client->_event_nav_app_leave( )
-                )->a( n = \`showNavButton\`  v = z2ui5_cl_ai_xml=>as_bool( client->check_app_prev_stack( ) ) ).
+            )->open( \`Page\` ).
 
-    render_header( page ).
+    " title and back button come with the custom header (render_header), not
+    " with the page - a Page renders either its own header or a custom one
+    render_header( page  = page
+                   title = |abap2UI5 Demo Kit (\{ lines( t_app ) \})| ).
 
     page->open( \`subHeader\`
                     )->open( \`OverflowToolbar\`
@@ -1156,50 +1191,104 @@ ${catalogStatements}
 
   METHOD render_header.
 
-    DATA(toolbar) = page->open( \`headerContent\` ).
+    DATA(bar) = page->open( \`customHeader\` )->open( \`Bar\` ).
 
-    header_button( toolbar = toolbar
-                   icon    = \`sap-icon://home\`
-                   tooltip = \`abap2UI5 - the start page of the framework\`
-                   class   = cs_overview-startup
-                   href    = cs_url-framework ).
+    " left: what the stock page header would render on its own
+    DATA(left) = bar->open( \`contentLeft\` ).
 
-    header_button( toolbar   = toolbar
+    left->leaf( \`Button\`
+        )->a( n = \`icon\`    v = \`sap-icon://nav-back\`
+        )->a( n = \`type\`    v = \`Transparent\`
+        )->a( n = \`tooltip\` v = \`Back\`
+        )->a( n = \`visible\` v = z2ui5_cl_ai_xml=>as_bool( client->check_app_prev_stack( ) )
+        )->a( n = \`press\`   v = client->_event_nav_app_leave( ) ).
+
+    left->leaf( \`Title\`
+        )->a( n = \`text\`  v = title
+        )->a( n = \`level\` v = \`H2\` ).
+
+    " right: the sample repositories of the abap2UI5 family, one icon each ...
+    DATA(right) = bar->open( \`contentRight\` ).
+
+    header_button( toolbar   = right
                    icon      = \`sap-icon://lightbulb\`
-                   tooltip   = \`Samples - binding, events, popups, tables and much more\`
+                   name      = \`Samples\`
+                   descr     = \`binding, events, popups, tables and much more\`
                    class     = cs_overview-samples
                    class_old = cs_overview-samples_old
                    href      = cs_url-samples ).
 
-    header_button( toolbar = toolbar
+    header_button( toolbar = right
                    icon    = \`sap-icon://palette\`
-                   tooltip = \`Controls - the UI5 Demo Kit, rebuilt with abap2UI5\`
+                   name    = \`Control Samples\`
+                   descr   = \`the UI5 Demo Kit, rebuilt with abap2UI5\`
                    class   = cs_overview-controls
                    href    = cs_url-controls
                    here    = abap_true ).
 
-    header_button( toolbar = toolbar
+    header_button( toolbar = right
                    icon    = \`sap-icon://database\`
-                   tooltip = \`Stack - OData, RAP, WebSockets and the Fiori Launchpad\`
+                   name    = \`Stack Samples\`
+                   descr   = \`OData, RAP, WebSockets and the Fiori Launchpad\`
                    class   = cs_overview-stack
                    href    = cs_url-stack ).
 
-    " the four repository buttons above lead to an app, the two links below
-    " lead out of the system - a gap tells the two groups apart
-    toolbar->leaf( \`ToolbarSpacer\`
-        )->a( n = \`width\` v = \`1rem\` ).
+    " ... and then, set apart by a separator line, the two entries that leave
+    " the system: the three icons above open an app, these open a site
+    header_separator( right ).
 
-    header_button( toolbar = toolbar
+    header_button( toolbar = right
                    icon    = \`sap-icon://learning-assistant\`
-                   tooltip = \`Documentation - guides, tutorials and the API reference\`
+                   name    = \`Documentation\`
+                   descr   = \`guides, tutorials and the API reference\`
                    href    = cs_url-docs ).
 
     " not source-code: in the shared header that icon is reserved for the
     " per-sample source links the overviews render in their lists
-    header_button( toolbar = toolbar
-                   icon    = \`sap-icon://chain-link\`
-                   tooltip = \`GitHub - the source code of this repository\`
+    header_button( toolbar = right
+                   icon    = \`sap-icon://globe\`
+                   name    = \`GitHub\`
+                   descr   = \`the source code of this repository\`
                    href    = cs_url-controls ).
+
+  ENDMETHOD.
+
+
+  METHOD header_separator.
+
+    toolbar->leaf( \`ToolbarSeparator\`
+        )->a( n = \`class\` v = \`sapUiSmallMarginBegin sapUiSmallMarginEnd\` ).
+
+  ENDMETHOD.
+
+
+  METHOD install_display.
+
+    DATA(info) = z2ui5_cl_ai_xml=>factory( ).
+
+    info->open( n = \`FragmentDefinition\` ns = \`core\`
+        )->a( n = \`xmlns\`      v = \`sap.m\`
+        )->a( n = \`xmlns:core\` v = \`sap.ui.core\`
+
+        )->open( \`Popover\`
+            )->a( n = \`title\`        v = |{ name } - not installed|
+            )->a( n = \`placement\`    v = \`Bottom\`
+            )->a( n = \`contentWidth\` v = \`26rem\`
+
+            )->open( \`VBox\`
+                )->a( n = \`class\` v = \`sapUiContentPadding\`
+
+                )->leaf( \`Text\`
+                    )->a( n = \`text\` v = |This system does not have { name } installed, so there is no app to | &&
+                                          |jump to. Install the repository with abapGit, then this icon opens it right here.|
+                )->leaf( \`Link\`
+                    )->a( n = \`text\`   v = href
+                    )->a( n = \`href\`   v = href
+                    )->a( n = \`target\` v = \`_blank\`
+                    )->a( n = \`class\`  v = \`sapUiSmallMarginTop\` ).
+
+    client->popover_display( xml   = info->stringify( )
+                             by_id = anchor ).
 
   ENDMETHOD.
 
@@ -1207,39 +1296,82 @@ ${catalogStatements}
   METHOD header_button.
 
     DATA target TYPE string.
+    DATA hint   TYPE string.
+    DATA color  TYPE string.
+    DATA press  TYPE string.
 
-    DATA(button) = toolbar->leaf( \`Button\` ).
-    button->a( n = \`icon\` v = icon
-        )->a( n = \`type\` v = \`Transparent\` ).
+    DATA(tooltip) = |{ name } - { descr }|.
 
     IF here = abap_true.
-      " where you are: the button stays, so every overview shows the same row,
-      " but there is nowhere to go
-      button->a( n = \`tooltip\` v = |{ tooltip } - you are here|
-          )->a( n = \`enabled\` v = z2ui5_cl_ai_xml=>as_bool( abap_false ) ).
-      RETURN.
+
+      " where you are: the entry stays, so every overview shows the same row,
+      " but there is nowhere to go - and no press
+      hint  = |{ tooltip } - you are here|.
+      color = cs_color-inactive.
+
+    ELSE.
+
+      color = cs_color-active.
+
+      IF class IS NOT INITIAL AND class_installed( class ) = abap_true.
+        target = class.
+      ELSEIF class_old IS NOT INITIAL AND class_installed( class_old ) = abap_true.
+        target = class_old.
+      ENDIF.
+
+      IF target IS NOT INITIAL.
+        " installed on this system: jump right into it, the back button returns
+        hint  = tooltip.
+        press = client->_event( val   = \`${EV_NAV}\`
+                                t_arg = VALUE #( ( target ) ) ).
+
+      ELSEIF class IS INITIAL.
+        " no CLASS to look for: the documentation and GitHub entries are no
+        " destination inside the system to begin with, they open their site -
+        " link_press is the same URLHELPER REDIRECT wire the link popover uses
+        hint  = tooltip.
+        press = link_press( href ).
+
+      ELSE.
+        " a repository that is not on this system is a normal, active entry -
+        " the press says what is missing and where to get it (install_display),
+        " instead of dropping the user on GitHub without a word
+        hint  = |{ tooltip } - not installed on this system|.
+        press = client->_event( val   = \`${EV_INSTALL}\`
+                                t_arg = VALUE #( ( class )
+                                                 ( href )
+                                                 ( name ) ) ).
+      ENDIF.
+
     ENDIF.
 
-    IF class IS NOT INITIAL AND class_installed( class ) = abap_true.
-      target = class.
-    ELSEIF class_old IS NOT INITIAL AND class_installed( class_old ) = abap_true.
-      target = class_old.
+    " a core:Icon, not a Button: on 1.71 a Button cannot carry a colour - the
+    " coloured sap.m.ButtonType values (Critical, Neutral, ...) are 1.73+ - and
+    " the colour is what separates the active entries from the ONE inactive
+    " one, the overview you are already in. Everything else is active, whether
+    " its repository is on this system or not. The class name doubles as the
+    " icon id, so install_display( ) can anchor its popover to the icon pressed
+    toolbar->leaf( n = \`Icon\` ns = \`core\`
+        )->a( n = \`src\`     v = icon
+        )->a( n = \`size\`    v = \`1.125rem\`
+        )->a( n = \`class\`   v = \`sapUiTinyMarginBeginEnd\`
+        )->a( n = \`tooltip\` v = hint ).
+
+    " a( ) writes on the element just added, and an EMPTY attribute would be
+    " rendered as one - color="" is not a valid IconColor and press="" is not a
+    " valid handler, so the three optional ones are added only when they carry
+    " something
+    IF class IS NOT INITIAL.
+      toolbar->a( n = \`id\` v = class ).
     ENDIF.
 
-    IF target IS NOT INITIAL.
-      " installed on this system: jump right into it, the back button returns
-      button->a( n = \`tooltip\` v = tooltip
-          )->a( n = \`press\`   v = client->_event( val   = \`${EV_NAV}\`
-                                                  t_arg = VALUE #( ( target ) ) ) ).
-      RETURN.
+    IF color IS NOT INITIAL.
+      toolbar->a( n = \`color\` v = color ).
     ENDIF.
 
-    " not on this system: open the repository that carries it - link_press is
-    " the same URLHELPER REDIRECT wire the popover's link buttons use
-    button->a( n = \`tooltip\` v = COND #( WHEN class IS INITIAL
-                                         THEN tooltip
-                                         ELSE |{ tooltip } - not installed, opens GitHub| )
-        )->a( n = \`press\`   v = link_press( href ) ).
+    IF press IS NOT INITIAL.
+      toolbar->a( n = \`press\` v = press ).
+    ENDIF.
 
   ENDMETHOD.
 
