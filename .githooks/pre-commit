@@ -21,8 +21,8 @@ node "$DIR/scripts/generate-coverage.mjs" >/dev/null
 node "$DIR/scripts/generate-status.mjs" >/dev/null
 
 git add -- \
-  "$DIR/src/z2ui5_cl_dmo_app_overview.clas.abap" \
-  "$DIR/src/z2ui5_cl_dmo_app_overview.clas.xml" \
+  "$DIR/src/z2ui5_cl_smpc_app_overview.clas.abap" \
+  "$DIR/src/z2ui5_cl_smpc_app_overview.clas.xml" \
   "$DIR/api.md" \
   "$DIR/README.md" \
   "$DIR/STATUS.md"

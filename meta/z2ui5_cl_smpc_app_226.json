@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_smpc_app_226",
+  "sample": "sap.ui.layout.sample.GridXL",
+  "entity": "sap.ui.layout.Grid",
+  "file": "src/01/02/z2ui5_cl_smpc_app_226.clas.abap",
+  "batch": "b10",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "reviewed",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The original binds against the default JSONModel (no named model); the InformationCollection array is reproduced 1:1 on the one abap2UI5 default model. The Grid binding={/InformationCollection} element-binding and the index-relative child bindings ({0/introText1}, {3/ProductPicUrl2}, {1/ProductPicUrl}, {2/ProductPicUrl}, {1/ProductPicUrl2}, {0/Description1}, {0/Description2}) are kept verbatim with upper-cased field names."
+    },
+    {
+      "type": "NOTE",
+      "what": "Image asset URLs are host-prefixed to https://sdk.openui5.org/ per the project asset-URL rule: the static demoAppsTeaser.png src, and the bound ProductPicUrl/ProductPicUrl2 values seeded in model_init (originally host-relative test-resources/ paths)."
+    },
+    {
+      "type": "NOTE",
+      "what": "**e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the Grid element-binding to the array path resolves against the serialized default model: the {0/INTROTEXT1} index-relative binding renders its real text in the running app. Residual: the GridData breakpoint behaviour (visibleOnSmall / moveForward), which needs real viewport rendering."
+    }
+  ]
+}

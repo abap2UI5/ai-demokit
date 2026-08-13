@@ -19,10 +19,12 @@ permissions:
 jobs:
   bump:
     runs-on: ubuntu-latest
-    timeout-minutes: 60
+    # same full build + smoke the nightly runs, so the same budget (see
+    # e2e_nightly.yaml) plus the browser install
+    timeout-minutes: 90
     steps:
     - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-    - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
+    - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
       with:
         node-version: '22'
 
@@ -39,7 +41,17 @@ jobs:
         fi
 
     # the proof: full build + smoke at the new pin, exactly what node-setup
-    # gives a user and what deploy_web will ship
+    # gives a user and what deploy_web will ship.
+    #
+    # `npm ci` must come FIRST. Without it there is no local playwright, so
+    # `npx` fetches the CURRENT release into a temp prefix and installs THAT
+    # version's browser build; node-setup then runs its own `npm ci`, which
+    # puts the pinned playwright in place, and the smoke asks for a browser
+    # build that was never downloaded. That is exactly how the only bump_a2ui5
+    # run so far died (2026-08-11: "Executable doesn't exist at
+    # …/chromium_headless_shell-1228" right after installing build 1234).
+    - if: steps.pin.outputs.changed == 'true'
+      run: npm ci
     - if: steps.pin.outputs.changed == 'true'
       run: npx playwright install --with-deps chromium
     - if: steps.pin.outputs.changed == 'true'

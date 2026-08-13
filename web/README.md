@@ -1,7 +1,7 @@
 # web — run the samples-controls ports in the browser (GitHub Pages)
 
 This folder builds a **fully client-side** version of the samples-controls ports:
-the abap2UI5 framework and every `z2ui5_cl_dmo_app_*` port are transpiled to
+the abap2UI5 framework and every `z2ui5_cl_smpc_app_*` port are transpiled to
 JavaScript, bundled with webpack, and run in the browser with **no ABAP
 backend** — the transpiled `z2ui5_cl_http_handler` answers the app's own
 roundtrips in-page (a `fetch` interceptor), and sql.js (WASM) provides the
@@ -13,13 +13,13 @@ It is a thin adaptation of the official
 (transpiler, express-icf-shim and webpacking by
 [larshp](https://github.com/larshp)) — the only change is that it assembles
 **this repo's ports** instead of the `samples` repo, and lands on the port
-overview (`z2ui5_cl_dmo_app_overview`) instead of the framework home page.
+overview (`z2ui5_cl_smpc_app_overview`) instead of the framework home page.
 
 ## How it works
 
 1. **assemble** — clone the abap2UI5 framework into `src/` (which brings the
    `z2ui5_cl_ai_xml` builder along), then copy this repo's `../src` (every
-   `z2ui5_cl_dmo_app_*` port + the overview) into `src/ai-demokit/`.
+   `z2ui5_cl_smpc_app_*` port + the overview) into `src/ai-demokit/`.
 2. **downport** — copy `src/` → `downport/` and `abaplint --fix` it to v702
    (the transpiler cannot take modern ABAP directly).
 3. **transpile** — `@abaplint/transpiler` emits `output/*.mjs` (+ the
@@ -49,7 +49,7 @@ in a restricted sandbox — there the controls render but stay unthemed.
 
 ## Landing page
 
-`app/index.html` sets `?app_start=z2ui5_cl_dmo_app_overview` when no app is
+`app/index.html` sets `?app_start=z2ui5_cl_smpc_app_overview` when no app is
 requested, so the bare Pages URL opens the port overview. Each overview row
 has a *"Start this abap2UI5 app in a new tab"* link (`?app_start=<class>`).
 

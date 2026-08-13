@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_smpc_app_225",
+  "sample": "sap.m.sample.TableStrictLayout",
+  "entity": "sap.m.Table",
+  "file": "src/02/01/z2ui5_cl_smpc_app_225.clas.abap",
+  "batch": "b17",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "reviewed",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "sap.m.Table autoPopinMode (since UI5 1.76) kept 1:1 from the original; needs a UI5 release >= 1.76 to render."
+    },
+    {
+      "type": "POST_171",
+      "what": "sap.m.plugins.ColumnResizer (since UI5 1.91) kept 1:1 in the Table dependents aggregation; needs a UI5 release >= 1.91 to render. The Table fixedLayout='Strict' value is also newer than 1.71 (a value-level extension of the 1.22 property, invisible to the property gate; the source JSDoc carries no value-level @since) - covered by the same >= 1.91 floor."
+    },
+    {
+      "type": "NOTE",
+      "what": "**e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the sorter inside the raw binding-info string really sorts: the first rendered row is '10\" Portable DVD player', not the model's first record ('Notebook Basic 15'). Residual (nothing headless can assert deterministically): the Currency type's locale formatting of Price/CurrencyCode."
+    }
+  ]
+}

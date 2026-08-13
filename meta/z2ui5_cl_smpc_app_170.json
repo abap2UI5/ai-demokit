@@ -1,0 +1,35 @@
+{
+  "class": "z2ui5_cl_smpc_app_170",
+  "sample": "sap.f.sample.DynamicPageFreeStyle",
+  "entity": "sap.f.DynamicPage",
+  "file": "src/01/04/z2ui5_cl_smpc_app_170.clas.abap",
+  "batch": "b07",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The controller's Card popover (onPressOpenPopover, wired to the GenericTag press and the 'Button with layoutData' press) is reproduced 1:1 since 2026-07-30: both presses fire OPEN_POPOVER with $event.oSource.sId and the backend rebuilds view/Card.fragment.xml verbatim (Popover placement Bottom / showHeader false / contentWidth 300px > f:Card > card:NumericHeader 'Sales Revenue' with the two card:NumericSideIndicator Target/Deviation rows) shown via popover_display( by_id = pressed control ) - the Fragment.load + openBy equivalent. The fragment's Popover, Card, NumericHeader and NumericSideIndicator controls are counted by structural-diff against the union that includes the original's own Card.fragment.xml, so the counts match; both press attributes are restored 1:1."
+    },
+    {
+      "type": "NOTE",
+      "what": "The Edit button's press='.toggleAreaPriority' is reproduced since 2026-07-30: DynamicPageTitle.areaShrinkRatio is two-way bound ({/AREASHRINKRATIO}, an added attribute vs the original view - declared here) seeded with the metadata default 1:1.6:1.6, and the TOGGLE_AREA_PRIORITY round-trip flips it to 1.6:1:1.6 and back (the controller read the default from getMetadata().getProperty('areaShrinkRatio').getDefaultValue(); the port seeds the same literal - re-verify should UI5 ever change the default)."
+    },
+    {
+      "type": "NOTE",
+      "what": "showFooter is two-way bound to a model flag ({/SHOWFOOTER}, default false) and the 'Toggle Footer' button flips it via a TOGGLE_FOOTER round-trip + re-render; the original toggles it imperatively (setShowFooter). headerExpanded and toggleHeaderOnTitleClick are likewise bound to model flags (both default true) - the original binds {/headerExpanded}/{/titleClickable} against a model that never sets them, so they fall back to the control defaults, reproduced here explicitly."
+    },
+    {
+      "type": "NOTE",
+      "what": "The shared 123-row demo ProductCollection (sap/ui/demo/mock/products.json) is inlined with the columns the table binds (Name, ProductId, SupplierName, Width, Depth, Height, DimUnit, Price, CurrencyCode). The Price/CurrencyCode Currency composite type binding and the items sorter (path 'Name') are kept 1:1 as raw binding-info strings."
+    },
+    {
+      "type": "NOTE",
+      "what": "Width/Depth/Height are TYPE string (not i): the mock carries decimal dimensions (40.8, 3.1) and they bind display-only into a text template ({WIDTH} x {DEPTH} x {HEIGHT} {DIMUNIT}), so a string keeps the exact value; TYPE i would truncate (an earlier version did, via json-to-abap's first-row inference — tool since fixed). Price stays packed (DECIMALS 2) for the Currency type binding, decimals preserved."
+    }
+  ]
+}

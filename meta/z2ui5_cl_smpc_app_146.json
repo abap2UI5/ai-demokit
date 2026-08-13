@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_smpc_app_146",
+  "sample": "sap.ui.core.sample.HyphenationAPI",
+  "entity": "sap.ui.core.hyphenation.Hyphenation",
+  "file": "src/01/02/z2ui5_cl_smpc_app_146.clas.abap",
+  "batch": "b07",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The original's onSliderMoved sets the three Panel widths imperatively (setWidth(value + \"%\")). Rebuilt 1:1 on the client, the thin-frontend way (same shape as the checked app 053): the Slider value is two-way bound to slider_value (seeded 100, the original's literal) and each Panel width carries the expression binding {= slider_value + '%' } instead of the literal 100%. The liveChange attribute is therefore dropped - no backend round-trip fires while dragging, and the resize behaves as in the original. Before this rework the liveChange was wired to a SLIDER backend event the class never dispatched (dead wire, pattern-lint dead-event-wire)."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "The three core:HTML panels stay empty. The original controller fills them from sap/ui/core/hyphenation/Hyphenation - it awaits hyph.initialize() per language and then writes the hyphenated text into each HTML control. That is an asynchronous client-side API with a promise chain and no declarative form: it is neither a binding nor one of the whitelisted control methods, and the hyphenation itself cannot be done on the ABAP side (the algorithm and its language dictionaries live in the browser). The port therefore keeps the view 1:1 with the original XML, which also carries content=\"\" on all three, and loses the sample's actual payload - the visible hyphenated text. This is the sample's whole point, so the port is a structural port only."
+    }
+  ]
+}

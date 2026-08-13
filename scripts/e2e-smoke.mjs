@@ -43,12 +43,12 @@ const ONLY = process.argv.includes('--only')
   ? (process.argv[process.argv.indexOf('--only') + 1] || '').split(',').map((s) => s.trim()).filter(Boolean)
   : null;
 if (ONLY && !ONLY.length) {
-  console.error('e2e-smoke: --only needs a comma-separated class list (e.g. --only z2ui5_cl_dmo_app_001)');
+  console.error('e2e-smoke: --only needs a comma-separated class list (e.g. --only z2ui5_cl_smpc_app_001)');
   process.exit(2);
 }
 // the overview app is checked alongside the numbered ports (its interaction
 // module sits in meta/interactions/ like every other)
-const OVERVIEW = 'z2ui5_cl_dmo_app_overview';
+const OVERVIEW = 'z2ui5_cl_smpc_app_overview';
 
 // richer per-port checks (optional): ONE MODULE PER PORT under
 // meta/interactions/<class>.mjs, each default-exporting
@@ -60,7 +60,7 @@ const OVERVIEW = 'z2ui5_cl_dmo_app_overview';
 // backlog; the per-class coverage catalogue lives in
 // meta/interactions/README.md. Keying the map by FILENAME makes a duplicate
 // key impossible by construction (the old in-file map carried two
-// z2ui5_cl_dmo_app_133 entries — the last one silently won).
+// z2ui5_cl_smpc_app_133 entries — the last one silently won).
 const INTERACTIONS_DIR = path.join(META, 'interactions');
 const INTERACTIONS = {};
 for (const f of fs.readdirSync(INTERACTIONS_DIR).sort()) {
@@ -209,7 +209,7 @@ async function checkPort(browser, cls) {
 
 const metas = fs.readdirSync(META).filter((f) => f.endsWith('.json'))
   .map((f) => JSON.parse(fs.readFileSync(path.join(META, f), 'utf8')))
-  .filter((m) => /^z2ui5_cl_dmo_app_\d+$/.test(m.class))
+  .filter((m) => /^z2ui5_cl_smpc_app_\d+$/.test(m.class))
   .filter((m) => !ONLY || ONLY.some((o) => m.class.endsWith(o)));
 metas.sort((a, b) => a.class.localeCompare(b.class));
 
@@ -225,7 +225,7 @@ const browser = fs.existsSync(LOCAL_CHROMIUM)
 let failed = 0;
 for (const m of metas) {
   const errs = await checkPort(browser, m.class);
-  const cls = m.class.replace('z2ui5_cl_dmo_app_', '');
+  const cls = m.class.replace('z2ui5_cl_smpc_app_', '');
   if (errs.length) { failed++; console.log(`FAIL  ${cls}  ${errs[0]}`); }
   else console.log(`pass  ${cls}${INTERACTIONS[m.class] ? '  (+interaction)' : ''}`);
 }

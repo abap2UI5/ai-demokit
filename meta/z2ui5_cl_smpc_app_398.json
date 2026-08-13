@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_smpc_app_398",
+  "sample": "sap.m.sample.Carousel",
+  "entity": "sap.m.Carousel",
+  "file": "src/02/01/z2ui5_cl_smpc_app_398.clas.abap",
+  "batch": "b28",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "POST_171",
+      "what": "ariaLabelledBy on sap.m.Carousel (since UI5 1.125, source-verified in Carousel.js) is newer than 1.71 but kept for the 1:1 port - it is what links the Carousel to the sample's Title. The app needs a UI5 release >= 1.125 for the association to take effect; the Carousel itself renders on 1.71."
+    },
+    {
+      "type": "NOTE",
+      "what": "the four Images bind src against the demo kit's named img JSONModel (img>/products/pic1, pic2, pic3, screw). abap2UI5 serves one default model, so the four fixed values are inlined as literals off one shared base URL and host-absolutized to https://sdk.openui5.org/ (app 031 precedent) - same images, same order, same rendering."
+    }
+  ]
+}

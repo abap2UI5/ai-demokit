@@ -1,0 +1,39 @@
+{
+  "class": "z2ui5_cl_smpc_app_362",
+  "sample": "sap.ui.table.sample.Sorting",
+  "entity": "sap.ui.table.Table",
+  "file": "src/01/02/z2ui5_cl_smpc_app_362.clas.abap",
+  "batch": "b20",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "Every sort of this sample happens in ABAP. The three toolbar buttons (sortCategoriesAndName / sortCategories / clearAllSortings) and the column header menu all fire a backend event, the model comes back SORTed and each Column's sortOrder is bound so the indicator follows - the thin-frontend equivalent of the original's oTable.sort( column, order, extend ) and setSortOrder calls. clearAllSortings re-seeds the model, which restores the mock's own row order, and resets every indicator to None (the original's binding.sort(null) + _resetSortingState). sortCategories keeps the original's alternating ascending/descending on repeated presses."
+    },
+    {
+      "type": "NOTE",
+      "what": "The Table's sort event carries the pressed column's sortProperty and the requested sortOrder to the backend (${$parameters>/column}.getSortProperty() and ${$parameters>/sortOrder} - an event arg is a full UI5 expression) and sets s_ctrl-check_prevent_default, so the control's own client-side sort never runs. The original vetoes it only for the delivery-date column; here the model is the single source of truth for every column, so all of them are vetoed and sorted server-side. The delivery-date column is why the original needs a veto at all: its cells hold dd/MM/yyyy STRINGS, which no text compare can order, so it installs a custom Sorter.fnCompare that parses them. The port sorts the underlying timestamp instead - the same result without any frontend logic. 'No multi-column sorting' is kept: every other indicator is reset before the pressed column is sorted."
+    },
+    {
+      "type": "NOTE",
+      "what": "The row type carries the raw DeliveryDate timestamp next to the formatted DeliveryDateStr, because that timestamp is the sort key the original's custom compare function reconstructs by parsing. The bound sortProperty values are the ABAP (upper-cased) field names (NAME, CATEGORY, QUANTITY, DELIVERYDATESTR) rather than the original's JSON key names, since that is what the backend switches on."
+    },
+    {
+      "type": "NOTE",
+      "what": "The shared 123-row demo ProductCollection (sap/ui/demo/mock/products.json) is inlined with the five columns the sample binds. The original computes DeliveryDate from Date.now() with an i-mod-10 offset in 4-day steps; a fixed base date (2026-07-23) is used here so the port is deterministic - the corpus convention of app 164 - and DeliveryDateStr is that timestamp formatted dd/MM/yyyy, exactly what the controller's DateFormat produces. ProductPicUrl values point at the OpenUI5 host per the asset-URL rule; the mock carries them host-relative. The Quantity and Delivery Date columns keep the original's typed complex bindings 1:1, with their path switched to the ABAP field name."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "The footer OverflowToolbar stays empty: onInit lazily requires sap/ui/table/sample/TableExampleUtils and appends a ToolbarSpacer plus its createInfoButton( ) to it. That helper lives in the demo kit's own sample folder, not in any UI5 library, and only opens a popover pointing at the sample's source - there is nothing to port it to. Every sap.ui.table sample of this batch drops it the same way."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "Unverified in a running system: whether the sort event's prevented default plus the server-side SORT produce the expected order for each column, and whether the bound Column.sortOrder renders the header indicator."
+    }
+  ]
+}

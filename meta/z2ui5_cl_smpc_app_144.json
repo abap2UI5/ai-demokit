@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_smpc_app_144",
+  "sample": "sap.f.sample.GridListBoxContainer",
+  "entity": "sap.f.GridList",
+  "file": "src/01/04/z2ui5_cl_smpc_app_144.clas.abap",
+  "batch": "b04",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "reviewed",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "**e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): one keyboard step on the Slider carries the value into the backend, the round-trip recomposes the Panel width and the Panel really renders at 99% - the imperative setWidth is fully replaced. Residual (nothing headless can assert): the visual GridList reflow inside the resized panel."
+    },
+    {
+      "type": "NOTE",
+      "what": "GridList with a grid:GridBoxLayout (boxMinWidth 17rem) and a GridListItem template (VBox + FlexItemData, Title, Label). The 27 items are inlined from model/items.json; the template binds {TITLE}/{SUBTITLE} 1:1."
+    }
+  ]
+}

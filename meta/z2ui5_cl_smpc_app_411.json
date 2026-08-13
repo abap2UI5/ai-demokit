@@ -1,0 +1,19 @@
+{
+  "class": "z2ui5_cl_smpc_app_411",
+  "sample": "sap.uxap.sample.MPModelMapping",
+  "entity": "sap.uxap.ModelMapping",
+  "file": "src/01/03/z2ui5_cl_smpc_app_411.clas.abap",
+  "batch": "b08",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "Named-model fold + BlockBase inline: the sample's whole point is the uxap:ModelMapping element inside a custom BlockBase (sample:ModelMappingBlock), which maps the external named model jsonModel (externalModelName='jsonModel') at the static externalPath='/Employee' onto the block's internal named model Contact (internalModelName='Contact'), so {Contact>firstName}/{Contact>lastName} render John/Miller. abap2UI5 serves a single default model - a second, independent ABAP-fed named model was DECLINED 2026-07-19 (pr/named-json-models) - so the two named models are folded into the one default model: firstName/lastName are seeded at the default-model root from the controller's jsonModel /Employee record and bound absolutely via client->_bind as {/FIRSTNAME}/{/LASTNAME} (last-segment match with the original {Contact>firstName}/{Contact>lastName}). Lost, and why this is IMPROVISED rather than a pure prefix-drop NOTE (port-a-sample deviation refinement, app 230 precedent): the ModelMapping config control (the sample entity, zero visual output but the declared artifact the sample demonstrates) and the ModelMappingBlock BlockBase wrapper with its id='block' are both absent, and the external-to-internal mapping indirection is resolved statically at port time. The ModelMappingBlock is inlined to its own view content (CAPABILITIES BlockBase row, apps 161/188/261): its forms:SimpleForm (core:Title 'My name' + two Text) renders directly in the port view; the block view's own mvc:View root is dropped with it (that root carries only xmlns declarations - no width/height or other attributes - and the main view's mvc:View root carries only xmlns declarations plus controllerName). ModelMappingBlock and ModelMapping are therefore both absent and a forms:SimpleForm/core:Title/Text are present in their place; the render is pixel-identical to the original."
+    }
+  ]
+}

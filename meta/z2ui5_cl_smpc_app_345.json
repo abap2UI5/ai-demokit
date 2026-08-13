@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_smpc_app_345",
+  "sample": "sap.ui.layout.sample.GridProperties",
+  "entity": "sap.ui.layout.Grid",
+  "file": "src/01/02/z2ui5_cl_smpc_app_345.clas.abap",
+  "batch": "b19",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The eleven Sliders lose their Slider.liveChange attribute: the original's onSliderMoved walks the DOM to find the NEXT grid wrapper (oSlider.$().parent().next().find('.gridWrapper')) and calls setWidth(iValue + '%') on it. The port binds each Slider's value two-way instead and makes the matching wrapper's width an expression binding over it - width=\"{= ${/SLIDERnn} + '%' }\" - so the resize happens entirely on the client, with no round-trip, no DOM walk and no frontend action. That is the bindable-property route the porting recipe asks for over an imperative setWidth (sap.ui.layout.VerticalLayout.width is a plain bindable property)."
+    },
+    {
+      "type": "NOTE",
+      "what": "resources/styles.css (.GridPropertiesSample .exampleDiv and .contrastColor) is injected through an extra core:HTML <style> leaf, so the port has 38 core:HTML controls where the original view has 37 - abap2UI5 ships no separate stylesheet. The CSS braces are escaped \\{ \\} in a backtick literal so the XMLView parser does not read them as bindings; without the rules behind them the 37 example divs would render as unstyled empty boxes (the app-122/124 lesson)."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "Unverified in a running system: whether the expression binding over the Slider value resizes its own wrapper live while dragging (it needs no round-trip, so it should follow the slider continuously, unlike the original's per-event DOM write)."
+    }
+  ]
+}
