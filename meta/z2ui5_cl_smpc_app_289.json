@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_smpc_app_289",
+  "sample": "sap.m.sample.DynamicMessageStripGenerator",
+  "entity": "sap.m.MessageStrip",
+  "file": "src/01/01/z2ui5_cl_smpc_app_289.clas.abap",
+  "batch": "b22",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "the original's view.xml has no MessageStrip at all: showMsgStrip destroys the previous one and _generateMsgStrip creates a new sap.m.MessageStrip in the controller, adding it to the VerticalLayout. The port declares that MessageStrip in the view (one control more than the original view.xml) and binds its four varying properties - text, type, showIcon, showCloseButton - plus visible, which keeps it hidden until the button has been pressed once. Destroy-and-recreate then has no counterpart: rebinding the same control is the abap2UI5 form of the same result."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "the original randomizes: sType = aTypes[Math.round(Math.random() * 3)] and both flags from Math.round(Math.random()). Deciding is backend work, so the choice moves to ABAP - and it is made DETERMINISTIC there: a press counter rotates the type through Information/Warning/Error/Success and the two flags through their combinations, so every press still changes the strip but the port is reproducible (the corpus rule for random/current-date values, apps 164/181). MessageStrip.type carries the control's own default Information until the first press, because an empty string is rejected on an enum property."
+    },
+    {
+      "type": "NOTE",
+      "what": "the accessibility announcement is reproduced since 2026-08-05: onInit takes an sap.ui.core.InvisibleMessage instance and _generateMsgStrip calls announce('New Information Bar of type ...', Assertive) on it. InvisibleMessage is a JS singleton, not a control in the view, so no CONTROL_BY_ID wire can address it - the INVISIBLE_MESSAGE global target added for exactly that (pr/invisible-message-announce) carries the announcement instead: follow_up_action( control_global, INVISIBLE_MESSAGE / announce / <text> / Assertive ) right after the model update, with the same text the original composes. It is lazy-required, so a runtime older than UI5 1.78 logs 'not available' instead of failing the app."
+    }
+  ]
+}

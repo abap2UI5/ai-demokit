@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_smpc_app_201",
+  "sample": "sap.m.sample.ObjectHeaderCondensed",
+  "entity": "sap.m.ObjectHeader",
+  "file": "src/01/01/z2ui5_cl_smpc_app_201.clas.abap",
+  "batch": "b17",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "reviewed",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "the ObjectHeader keeps the original element binding and its relative field bindings 1:1 (title {Name}, condensed, numberUnit {CurrencyCode}, the ObjectAttribute composite text and the sap.ui.model.type.Currency number binding over Price/CurrencyCode); only the binding context path changes - a one-record structure /S_PRODUCT in the default model instead of {/ProductCollection/0}, since the port does not carry the whole collection."
+    },
+    {
+      "type": "NOTE",
+      "what": "the model holds exactly the bound record /ProductCollection/0 (Notebook Basic 15) of ui5/mock/products.json, verbatim - this is the original sample's own single-record binding {/ProductCollection/0}, not a shortened data set."
+    }
+  ]
+}

@@ -1,0 +1,27 @@
+{
+  "class": "z2ui5_cl_smpc_app_347",
+  "sample": "sap.ui.layout.sample.GridGap",
+  "entity": "sap.ui.layout.cssgrid.CSSGrid",
+  "file": "src/01/02/z2ui5_cl_smpc_app_347.clas.abap",
+  "batch": "b19",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "Both controller handlers become plain bindings, so the port drops the Slider.liveChange and the three Input.change attributes that only carried the imperative setters. (a) onSliderMoved calls byId('panelCSSGrid').setWidth(fValue + '%'); sap.m.Panel HAS a width property, so the Slider's value is two-way bound and the Panel's width is an expression binding over it - roundtrip-free, the app-222/176 idiom. (b) onInputChanged switches on the Input id and calls setGridGap / setGridRowGap / setGridColumnGap; each Input is two-way bound to its own field and the CSSGrid binds the matching property to the SAME field, so typing a value reaches the grid with no dispatcher at all."
+    },
+    {
+      "type": "NOTE",
+      "what": "css/main.css (.sapMFlexBox.demoBox, .demoBox .sapMText, .sapMText.infoText) is injected through an extra core:HTML <style> leaf - abap2UI5 ships no separate stylesheet, and without the rules the ten demo boxes render unstyled. The CSS braces are escaped \\{ \\} in a backtick literal so the XMLView parser does not read them as bindings; the view declares xmlns:core for it, which the original does not need."
+    },
+    {
+      "type": "LIVE_TEST",
+      "what": "Unverified in a running system: whether an empty gridRowGap / gridColumnGap serializes acceptably for the CSSGrid's CSSSize properties (the two Inputs carry no value attribute in the original either, so the grid starts on gridGap alone), and whether the Panel width expression follows the slider live."
+    }
+  ]
+}

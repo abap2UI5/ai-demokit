@@ -190,7 +190,7 @@ if (!templateDir) {
 let maxNum = 0;
 for (const f of fs.readdirSync(META)) { const m = f.match(/app_(\d+)\.json$/); if (m) maxNum = Math.max(maxNum, +m[1]); }
 const num = String(maxNum + 1).padStart(3, '0');
-const cls = `z2ui5_cl_dmo_app_${num}`;
+const cls = `z2ui5_cl_smpc_app_${num}`;
 
 // ---------- batch ----------
 // The batch is generation/PR bookkeeping only — it lives in the meta sidecar,

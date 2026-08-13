@@ -50,7 +50,7 @@ reads the files directly. **Read the matching guide BEFORE starting the task**
 generated table), `STATUS-history.md` (~228 KB journal), `CAPABILITIES.md`
 (~45 KB — grep for the feature row),
 `scripts/generate-overview.mjs` (~58 KB),
-`src/z2ui5_cl_dmo_app_overview.clas.abap` (generated). (The e2e
+`src/z2ui5_cl_smpc_app_overview.clas.abap` (generated). (The e2e
 interactions live as one module per port under `meta/interactions/` —
 read only the port you work on.)
 
@@ -164,7 +164,7 @@ plain JS/XML held for reference and to feed the generator.
 imported from [abap2UI5/samples](https://github.com/abap2UI5/samples) on
 2026-08-12 (the `src/00/02` "restricted" set and the `src/01/03` "Control
 Library" set) were all triaged the same day — 1 rebuilt as a port
-(`z2ui5_cl_dmo_app_403`), 14 collected in `src/03` (the SAPUI5-only ones), 38
+(`z2ui5_cl_smpc_app_403`), 14 collected in `src/03` (the SAPUI5-only ones), 38
 dropped. Only `todo/README.md` is left; it carries
 the full decision table plus the re-import recipe, and stays so the same 53
 classes are not re-imported and re-analysed. Nothing there was ever a port: no
@@ -173,7 +173,7 @@ classes are not re-imported and re-analysed. Nothing there was ever a port: no
 a system.
 
 Should samples be imported again, the same rules apply. A file leaves `todo/` by
-being **rebuilt** as a `z2ui5_cl_dmo_app_<n>` port under
+being **rebuilt** as a `z2ui5_cl_smpc_app_<n>` port under
 `src/<category>/<library>/`, never by being moved: the samples are built on the
 framework's `z2ui5_cl_xml_view`, ports use `z2ui5_cl_ai_xml` (§5), and a port is
 a 1:1 rebuild of the *demo kit original*, not of another repo's interpretation of
@@ -292,7 +292,7 @@ is expressed with the framework, as orientation. That is a knowledge store, so:
   `data_fidelity`, `view_gates`, the overview app and the coverage tables are
   all sidecar-driven. A class here is invisible to every one of them **by
   construction**, not by an exclusion list that could rot;
-- **classes are `z2ui5_cl_dmo_sapui5_<nnn>`**, in the samples style (the
+- **classes are `z2ui5_cl_smpc_sapui5_<nnn>`**, in the samples style (the
   framework's own `z2ui5_cl_xml_view` builder, dispatch inline on
   `CASE client->get( )-event.`) — the `z2ui5_cl_ai_xml` rule in §5 is a *port*
   rule and does not reach here;
@@ -369,10 +369,10 @@ source of truth:
 
 ```jsonc
 {
-  "class":   "z2ui5_cl_dmo_app_007",
+  "class":   "z2ui5_cl_smpc_app_007",
   "sample":  "sap.m.sample.CheckBoxTriState",   // join key to ui5/<lib>/<Name>/
   "entity":  "sap.m.CheckBox",
-  "file":    "src/01/01/z2ui5_cl_dmo_app_007.clas.abap",  // DERIVED - see §3
+  "file":    "src/01/01/z2ui5_cl_smpc_app_007.clas.abap",  // DERIVED - see §3
   "batch":   "b02",           // generation/PR bookkeeping - NOT a folder
   "audit":   { "frontend_action": false,        // uses follow_up_action? (note: which)
                "event_t_arg": true },           // passes t_arg in ANY event wire?
@@ -493,7 +493,7 @@ Three abaplint checks run on every pull request; all must report **0 issues**:
 
 The **root** `abaplint.jsonc` carries the full curated rule set (correctness +
 style aligned with §8: `keyword_case`, `types_naming ^TY_`,
-`object_naming ^Z2UI5_CL_DMO_`, `unused_*`, `obsolete_statement`,
+`object_naming ^Z2UI5_CL_SMPC_`, `unused_*`, `obsolete_statement`,
 `avoid_use` incl. `defaultKey` — always `WITH EMPTY KEY`, `commented_code`,
 `definitions_top`, `whitespace_end`, …). The cloud/702 configs stay on the
 correctness core, because the 702 config also drives `abaplint --fix` in the
@@ -588,7 +588,7 @@ which `npm ci` / `npm install` runs automatically via the `prepare` script.
 
 Four artefacts are generated, never hand-edited — edit the scripts instead:
 the `README.md` coverage block, the `STATUS.md` state block, `api.md`, and the
-in-system overview app `src/z2ui5_cl_dmo_app_overview.clas.*`. They regenerate
+in-system overview app `src/z2ui5_cl_smpc_app_overview.clas.*`. They regenerate
 as part of `npm run gates` (or via the individual `generate-*.mjs` scripts)
 and must leave `git diff` clean before every commit — the `meta_valid` CI job
 enforces exactly that. The full spec (overview app columns and behaviour, the

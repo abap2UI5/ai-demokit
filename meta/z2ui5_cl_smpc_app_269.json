@@ -1,0 +1,39 @@
+{
+  "class": "z2ui5_cl_smpc_app_269",
+  "sample": "sap.ui.layout.sample.DynamicSideContentProduct",
+  "entity": "sap.ui.layout.DynamicSideContent",
+  "file": "src/01/02/z2ui5_cl_smpc_app_269.clas.abap",
+  "batch": "b14",
+  "audit": {
+    "frontend_action": true,
+    "event_t_arg": true
+  },
+  "status": "generated",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "IMPROVISED",
+      "what": "The named img> model ({img>/products/pic1}, from sap/ui/demo/mock/img.json) is resolved STATICALLY to the URL it points at (HT-7777-large.jpg, on the sdk.openui5.org host per the offline asset rule) - same fold and same reasoning as app 267: a pure display asset that never changes, but the live model indirection is gone."
+    },
+    {
+      "type": "NOTE",
+      "what": "The Slider's liveChange is reproduced roundtrip-free since 2026-08-05: handleSliderChange writes a percentage width straight onto the container's DOM node, and that container is a sap.m.Page with no width property. The `css` control method (pr/control-inline-style) does the same write from the wire - follow_up_action( control_by_id, sideContentContainer / css / width / ${$parameters>/value} + '%' ). Apps 213/214 keep the bound-property path where the target control HAS a width."
+    },
+    {
+      "type": "NOTE",
+      "what": "The controller's media model (new JSONModel(Device.system)) is abap2UI5's shared device> model, so every {media>/phone} binding becomes {= !${device>/system/phone}} on the same data - the Close button, the Slider and the width hint Text keep their original visibility rules. A device-branch fold onto the framework's own model, no loss."
+    },
+    {
+      "type": "NOTE",
+      "what": "handleSideContentHide / handleSideContentShow call oDSC.setShowSideContent(false/true) in the original. DynamicSideContent.showSideContent is a bindable property, so the port binds it two-way and only flips the flag server-side (added attribute, no structural diff) - the prefer-a-bindable-property rule, now gated by the linter rule settable-property-via-action. The state then survives a view rebuild, and the control's own toggle( ) - the Toggle button's client-side wire, kept as it is - writes back into the model instead of drifting from it."
+    },
+    {
+      "type": "IMPROVISED",
+      "what": "updateShowSideContentButtonVisibility is reproduced only by its breakpoint half. The original computes !(breakpoint === 'S' || oDSC.isSideContentVisible()), i.e. it also hides the 'Open Side Content' button whenever the side content happens to be visible; isSideContentVisible() is client state the backend cannot read. The port keeps the button's visibility bound to the breakpoint (visible unless 'S') and flips the same flag in the two press handlers (hide -> button shows, show -> button hides), which matches the original in every path the sample offers - but a side-content visibility change caused by anything else (e.g. the Toggle button) does not update it."
+    },
+    {
+      "type": "NOTE",
+      "what": "**e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): the feed list renders all four feed.json rows, the side content's Close button hides the side content through the SIDE_CONTENT_HIDE follow-up action (setShowSideContent false), the Open Side Content button then shows (its visible flag comes from the breakpointChanged round-trip) and brings it back through SIDE_CONTENT_SHOW. Residual (nothing headless can assert): the FeedListItem layout with its remote author pictures, and toggle() on a real S-breakpoint device."
+    }
+  ]
+}

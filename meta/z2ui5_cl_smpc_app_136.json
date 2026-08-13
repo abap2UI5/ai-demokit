@@ -1,0 +1,24 @@
+{
+  "class": "z2ui5_cl_smpc_app_136",
+  "sample": "sap.f.sample.SidePanelSingle",
+  "entity": "sap.f.SidePanel",
+  "file": "src/02/04/z2ui5_cl_smpc_app_136.clas.abap",
+  "batch": "b03",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": true,
+    "note": "toggle is wired roundtrip-free via follow_up_action( control_global, MESSAGE_TOAST.show )"
+  },
+  "status": "reviewed",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "onToggle vetoes the NEXT toggle when the matching switch is on (event.preventDefault) and resets that switch. **Reproduced 2026-08-05**: the framework's veto flag (s_ctrl-check_prevent_default, merged 2026-07-30 - AFTER this port was written, which is why the sidecar said 'an event veto is not expressible') is baked into the wire at RENDER time, and that is enough here because the DIRECTION of the next toggle is known - an expanded panel can only collapse next. The flag is therefore the switch that applies to that direction, the two Switches are two-way bound, and the toggle round-trip re-renders so the flag is rebuilt from the state the client just sent back. The handler is the original's if/else: on a vetoed direction it toasts 'I am prevented COLLAPSE/EXPAND event' and clears that switch, otherwise it keeps the new expanded state. Residual: the veto costs a round-trip per toggle, where the original decides in the handler - the state the decision needs (the switches) lives in the model either way."
+    },
+    {
+      "type": "POST_171",
+      "what": "the SidePanel and SidePanelItem controls (both since UI5 1.107) are newer than 1.71 but are the whole point of this sample and kept for the 1:1 port - the app needs a UI5 release >= 1.107 to render it. @since verified in sap/f/SidePanel.js and sap/f/SidePanelItem.js:34 (control-level, which the member-level property gate never saw)."
+    }
+  ]
+}

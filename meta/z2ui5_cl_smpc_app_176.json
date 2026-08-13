@@ -1,0 +1,23 @@
+{
+  "class": "z2ui5_cl_smpc_app_176",
+  "sample": "sap.f.sample.GridListBoxContainerGrouping",
+  "entity": "sap.f.GridList",
+  "file": "src/01/04/z2ui5_cl_smpc_app_176.clas.abap",
+  "batch": "b07",
+  "audit": {
+    "frontend_action": false,
+    "event_t_arg": false
+  },
+  "status": "reviewed",
+  "checked": null,
+  "deviations": [
+    {
+      "type": "NOTE",
+      "what": "The Slider's `liveChange` attribute is dropped (the expression binding needs no event). **e2e-verified 2026-08-01** (scripts/e2e-smoke.mjs interaction, transpiled backend + real browser): one keyboard step on the Slider moves the Panel width to 99% with no round-trip at all - the expression binding replaces onSliderMoved completely. Residual: the grouped GridList's visual reflow."
+    },
+    {
+      "type": "NOTE",
+      "what": "GridList with a group sorter on items ({path, sorter:{path:'GROUP', descending:false, group:true}}, default group headers), an empty grid:GridBoxLayout customLayout, growing/growingThreshold, and a custom f:headerToolbar (Toolbar with Title, ToolbarSpacer, SearchField - the SearchField has no handler in the original). The 27 items are inlined 1:1 from the sample's own model/items.json; the GridListItem template (VBox>VBox+FlexItemData, Title, Label) binds {TITLE}/{SUBTITLE} 1:1."
+    }
+  ]
+}
