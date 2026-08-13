@@ -6997,13 +6997,20 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                    class   = cs_overview-stack
                    href    = cs_url-stack ).
 
+    " the four repository buttons above lead to an app, the two links below
+    " lead out of the system - a gap tells the two groups apart
+    toolbar->leaf( `ToolbarSpacer`
+        )->a( n = `width` v = `1rem` ).
+
     header_button( toolbar = toolbar
                    icon    = `sap-icon://learning-assistant`
                    tooltip = `Documentation - guides, tutorials and the API reference`
                    href    = cs_url-docs ).
 
+    " not source-code: in the shared header that icon is reserved for the
+    " per-sample source links the overviews render in their lists
     header_button( toolbar = toolbar
-                   icon    = `sap-icon://source-code`
+                   icon    = `sap-icon://chain-link`
                    tooltip = `GitHub - the source code of this repository`
                    href    = cs_url-controls ).
 
