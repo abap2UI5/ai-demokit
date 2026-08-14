@@ -38,136 +38,136 @@ CLASS z2ui5_cl_smpc_app_137 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.ui.table`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns:m`   v = `sap.m`
         )->a( n = `height`    v = `100%`
 
-        )->open( n = `Page` ns = `m`
+        )->ele( n = `Page` ns = `m`
             )->a( n = `showHeader`      v = `false`
             )->a( n = `enableScrolling` v = `false`
             )->a( n = `class`           v = `sapUiContentPadding`
 
-            )->open( n = `content` ns = `m`
-                )->open( `Table`
+            )->ele( n = `content` ns = `m`
+                )->ele( `Table`
                     )->a( n = `id`                v = `table1`
                     )->a( n = `ariaLabelledBy`    v = `title`
                     )->a( n = `selectionMode`     v = `MultiToggle`
                     )->a( n = `rows`              v = client->_bind( modeldata )
                     )->a( n = `enableColumnFreeze` v = `true`
 
-                    )->open( `extension`
-                        )->open( n = `OverflowToolbar` ns = `m`
+                    )->ele( `extension`
+                        )->ele( n = `OverflowToolbar` ns = `m`
                             )->a( n = `style` v = `Clear`
-                            )->leaf( n = `Title` ns = `m`
+                            )->tag( n = `Title` ns = `m`
                                 )->a( n = `id`   v = `title`
                                 )->a( n = `text` v = `Contacts`
 
-                    )->shut(
-                    )->shut(
+                    )->end(
+                    )->end(
 
-                    )->open( `columns`
-                        )->open( `Column`
+                    )->ele( `columns`
+                        )->ele( `Column`
                             )->a( n = `width`          v = `11rem`
                             )->a( n = `sortProperty`   v = `supplier`
                             )->a( n = `filterProperty` v = `supplier`
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text`      v = `Supplier`
                                 )->a( n = `textAlign` v = `Center`
                                 )->a( n = `width`     v = `100%`
-                            )->open( `template`
-                                )->leaf( n = `Text` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text` v = `{SUPPLIER}`
 
-                        )->shut(
-                        )->shut(
+                        )->end(
+                        )->end(
 
-                        )->open( `Column`
+                        )->ele( `Column`
                             )->a( n = `width`          v = `11rem`
                             )->a( n = `sortProperty`   v = `street`
                             )->a( n = `filterProperty` v = `street`
                             )->a( n = `headerSpan`     v = `3,2`
-                            )->open( `multiLabels`
-                                )->leaf( n = `Label` ns = `m`
+                            )->ele( `multiLabels`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text`      v = `Contact`
                                     )->a( n = `textAlign` v = `Center`
                                     )->a( n = `width`     v = `100%`
-                                )->leaf( n = `Label` ns = `m`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text`      v = `Address`
                                     )->a( n = `textAlign` v = `Center`
                                     )->a( n = `width`     v = `100%`
-                                )->leaf( n = `Label` ns = `m`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text`      v = `Street`
                                     )->a( n = `textAlign` v = `Center`
                                     )->a( n = `width`     v = `100%`
 
-                            )->shut(
-                            )->open( `template`
-                                )->leaf( n = `Text` ns = `m`
+                            )->end(
+                            )->ele( `template`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text`     v = `{STREET}`
                                     )->a( n = `wrapping` v = `false`
 
-                        )->shut(
-                        )->shut(
+                        )->end(
+                        )->end(
 
-                        )->open( `Column`
+                        )->ele( `Column`
                             )->a( n = `width`        v = `11rem`
                             )->a( n = `sortProperty` v = `city`
                             )->a( n = `headerSpan`   v = `2`
-                            )->open( `multiLabels`
-                                )->leaf( n = `Label` ns = `m`
+                            )->ele( `multiLabels`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = `Contact`
-                                )->leaf( n = `Label` ns = `m`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = `Address`
-                                )->leaf( n = `Label` ns = `m`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text`      v = `City`
                                     )->a( n = `textAlign` v = `Center`
                                     )->a( n = `width`     v = `100%`
 
-                            )->shut(
-                            )->open( `template`
-                                )->leaf( n = `Input` ns = `m`
+                            )->end(
+                            )->ele( `template`
+                                )->tag( n = `Input` ns = `m`
                                     )->a( n = `value` v = `{CITY}`
 
-                        )->shut(
-                        )->shut(
+                        )->end(
+                        )->end(
 
-                        )->open( `Column`
+                        )->ele( `Column`
                             )->a( n = `width`        v = `11rem`
                             )->a( n = `sortProperty` v = `phone`
-                            )->open( `multiLabels`
-                                )->leaf( n = `Label` ns = `m`
+                            )->ele( `multiLabels`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = `Contact`
-                                )->leaf( n = `Label` ns = `m`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text`      v = `Phone`
                                     )->a( n = `textAlign` v = `Center`
                                     )->a( n = `width`     v = `100%`
 
-                            )->shut(
-                            )->open( `template`
-                                )->leaf( n = `Input` ns = `m`
+                            )->end(
+                            )->ele( `template`
+                                )->tag( n = `Input` ns = `m`
                                     )->a( n = `value` v = `{PHONE}`
 
-                        )->shut(
-                        )->shut(
+                        )->end(
+                        )->end(
 
-                        )->open( `Column`
+                        )->ele( `Column`
                             )->a( n = `width` v = `8rem`
                             )->a( n = `hAlign` v = `End`
-                            )->open( `multiLabels`
-                                )->leaf( n = `Label` ns = `m`
+                            )->ele( `multiLabels`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `visible` v = `false`
-                                )->leaf( n = `Label` ns = `m`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `visible` v = `false`
-                                )->leaf( n = `Label` ns = `m`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = `Open Orders`
 
-                            )->shut(
-                            )->open( `template`
-                                )->leaf( n = `Text` ns = `m`
+                            )->end(
+                            )->ele( `template`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text` v = `{OPENORDERS}` ).
 
     client->view_display( view->stringify( ) ).

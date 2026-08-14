@@ -26,173 +26,173 @@ CLASS z2ui5_cl_smpc_app_189 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `height`    v = `100%`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
 
-        )->open( `Page`
+        )->ele( `Page`
             )->a( n = `title`         v = `Bar can center a Title.`
             )->a( n = `titleLevel`    v = `H2`
             )->a( n = `class`         v = `sapUiContentPadding`
             )->a( n = `showNavButton` v = `true`
 
-            )->open( `headerContent`
-                )->leaf( `Button`
+            )->ele( `headerContent`
+                )->tag( `Button`
                     )->a( n = `icon` v = `sap-icon://action`
 
-            )->shut(
-            )->open( `subHeader`
-                )->open( `Toolbar`
-                    )->leaf( `Button`
+            )->end(
+            )->ele( `subHeader`
+                )->ele( `Toolbar`
+                    )->tag( `Button`
                         )->a( n = `type`    v = `Back`
                         )->a( n = `tooltip` v = `Back`
-                    )->leaf( `ToolbarSpacer`
-                    )->leaf( `Title`
+                    )->tag( `ToolbarSpacer`
+                    )->tag( `Title`
                         )->a( n = `text`  v = `Toolbar center`
                         )->a( n = `level` v = `H3`
-                    )->leaf( `ToolbarSpacer`
+                    )->tag( `ToolbarSpacer`
 
-                )->shut(
-            )->shut(
-            )->open( `content`
-                )->leaf( `MessageStrip`
+                )->end(
+            )->end(
+            )->ele( `content`
+                )->tag( `MessageStrip`
                     )->a( n = `text`  v = `A Toolbar's centering technique will be slightly off the center if there is a button on the left.`
                     )->a( n = `class` v = `sapUiTinyMargin`
 
-                )->open( `Toolbar`
-                    )->open( `Label`
+                )->ele( `Toolbar`
+                    )->ele( `Label`
                         )->a( n = `text` v = `Toolbar can shrink content in case of overflow.`
 
-                        )->open( `layoutData`
-                            )->leaf( `ToolbarLayoutData`
+                        )->ele( `layoutData`
+                            )->tag( `ToolbarLayoutData`
                                 )->a( n = `shrinkable` v = `false`
 
-                        )->shut(
-                    )->shut(
-                    )->open( `Button`
+                        )->end(
+                    )->end(
+                    )->ele( `Button`
                         )->a( n = `text` v = `Accept`
                         )->a( n = `type` v = `Accept`
 
-                        )->open( `layoutData`
-                            )->leaf( `ToolbarLayoutData`
+                        )->ele( `layoutData`
+                            )->tag( `ToolbarLayoutData`
                                 )->a( n = `shrinkable` v = `true`
 
-                        )->shut(
-                    )->shut(
-                    )->open( `Label`
+                        )->end(
+                    )->end(
+                    )->ele( `Label`
                         )->a( n = `text` v = `This is a long non-shrinkable label.`
 
-                        )->open( `layoutData`
-                            )->leaf( `ToolbarLayoutData`
+                        )->ele( `layoutData`
+                            )->tag( `ToolbarLayoutData`
                                 )->a( n = `shrinkable` v = `false`
 
-                        )->shut(
-                    )->shut(
-                    )->open( `Button`
+                        )->end(
+                    )->end(
+                    )->ele( `Button`
                         )->a( n = `text` v = `Reject`
                         )->a( n = `type` v = `Reject`
 
-                        )->open( `layoutData`
-                            )->leaf( `ToolbarLayoutData`
+                        )->ele( `layoutData`
+                            )->tag( `ToolbarLayoutData`
                                 )->a( n = `shrinkable` v = `true`
 
-                        )->shut(
-                    )->shut(
-                    )->open( `Button`
+                        )->end(
+                    )->end(
+                    )->ele( `Button`
                         )->a( n = `text` v = `Big Big Big Big Big Big Big Big Button`
 
-                        )->open( `layoutData`
-                            )->leaf( `ToolbarLayoutData`
+                        )->ele( `layoutData`
+                            )->tag( `ToolbarLayoutData`
                                 )->a( n = `shrinkable` v = `true`
 
-                        )->shut(
-                    )->shut(
-                )->shut(
-                )->leaf( `Label`
+                        )->end(
+                    )->end(
+                )->end(
+                )->tag( `Label`
 
-                )->open( `Bar`
-                    )->open( `contentLeft`
-                        )->leaf( `Label`
+                )->ele( `Bar`
+                    )->ele( `contentLeft`
+                        )->tag( `Label`
                             )->a( n = `text` v = `Bar cannot really handle overflow it just cuts the content.`
 
-                    )->shut(
-                    )->open( `contentMiddle`
-                        )->leaf( `Button`
+                    )->end(
+                    )->ele( `contentMiddle`
+                        )->tag( `Button`
                             )->a( n = `text` v = `Accept`
                             )->a( n = `type` v = `Accept`
-                        )->leaf( `Label`
+                        )->tag( `Label`
                             )->a( n = `text` v = `This is a long non-shrinkable label.`
-                        )->leaf( `Button`
+                        )->tag( `Button`
                             )->a( n = `text` v = `Reject`
                             )->a( n = `type` v = `Reject`
-                        )->leaf( `Button`
+                        )->tag( `Button`
                             )->a( n = `text` v = `Edit`
-                        )->leaf( `Button`
+                        )->tag( `Button`
                             )->a( n = `text` v = `Big Big Big Big Big Big Big Big Button`
 
-                    )->shut(
-                )->shut(
-                )->leaf( `Label`
+                    )->end(
+                )->end(
+                )->tag( `Label`
 
-                )->open( `OverflowToolbar`
-                    )->open( `Label`
+                )->ele( `OverflowToolbar`
+                    )->ele( `Label`
                         )->a( n = `text` v = `OverflowToolbar provides a See more (...) button for overflow.`
 
-                        )->open( `layoutData`
-                            )->leaf( `ToolbarLayoutData`
+                        )->ele( `layoutData`
+                            )->tag( `ToolbarLayoutData`
                                 )->a( n = `shrinkable` v = `false`
 
-                        )->shut(
-                    )->shut(
-                    )->open( `Button`
+                        )->end(
+                    )->end(
+                    )->ele( `Button`
                         )->a( n = `text` v = `Accept`
                         )->a( n = `type` v = `Accept`
 
-                        )->open( `layoutData`
-                            )->leaf( `ToolbarLayoutData`
+                        )->ele( `layoutData`
+                            )->tag( `ToolbarLayoutData`
                                 )->a( n = `shrinkable` v = `true`
 
-                        )->shut(
-                    )->shut(
-                    )->open( `Label`
+                        )->end(
+                    )->end(
+                    )->ele( `Label`
                         )->a( n = `text` v = `This is a long non-shrinkable label`
 
-                        )->open( `layoutData`
-                            )->leaf( `ToolbarLayoutData`
+                        )->ele( `layoutData`
+                            )->tag( `ToolbarLayoutData`
                                 )->a( n = `shrinkable` v = `false`
 
-                        )->shut(
-                    )->shut(
-                    )->open( `Button`
+                        )->end(
+                    )->end(
+                    )->ele( `Button`
                         )->a( n = `text` v = `Reject`
                         )->a( n = `type` v = `Reject`
 
-                        )->open( `layoutData`
-                            )->leaf( `ToolbarLayoutData`
+                        )->ele( `layoutData`
+                            )->tag( `ToolbarLayoutData`
                                 )->a( n = `shrinkable` v = `true`
 
-                        )->shut(
-                    )->shut(
-                    )->open( `Button`
+                        )->end(
+                    )->end(
+                    )->ele( `Button`
                         )->a( n = `text` v = `Big Big Big Big Big Big Big Big Button`
 
-                        )->open( `layoutData`
-                            )->leaf( `ToolbarLayoutData`
+                        )->ele( `layoutData`
+                            )->tag( `ToolbarLayoutData`
                                 )->a( n = `shrinkable` v = `true`
 
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
-            )->open( `footer`
-                )->open( `Toolbar`
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
+            )->ele( `footer`
+                )->ele( `Toolbar`
 
-                )->shut(
-            )->shut(
-        )->shut( ).
+                )->end(
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

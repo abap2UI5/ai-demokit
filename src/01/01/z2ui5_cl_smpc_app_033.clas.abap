@@ -45,84 +45,84 @@ CLASS z2ui5_cl_smpc_app_033 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
-        )->open( `Table`
+        )->ele( `Table`
             )->a( n = `id`    v = `idProductsTable`
             )->a( n = `inset` v = `false`
             )->a( n = `items` v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
 
-            )->open( `headerToolbar`
-                )->open( `Toolbar`
-                    )->leaf( `Title`
+            )->ele( `headerToolbar`
+                )->ele( `Toolbar`
+                    )->tag( `Title`
                         )->a( n = `text`  v = `Products`
                         )->a( n = `level` v = `H2`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( `columns`
-                )->open( `Column`
+            )->ele( `columns`
+                )->ele( `Column`
                     )->a( n = `width` v = `12em`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Product`
 
-                )->shut(
-                )->open( `Column`
+                )->end(
+                )->ele( `Column`
                     )->a( n = `minScreenWidth` v = `Tablet`
                     )->a( n = `demandPopin`    v = `true`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Supplier`
 
-                )->shut(
-                )->open( `Column`
+                )->end(
+                )->ele( `Column`
                     )->a( n = `minScreenWidth` v = `Tablet`
                     )->a( n = `demandPopin`    v = `true`
                     )->a( n = `hAlign`         v = `End`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Dimensions`
 
-                )->shut(
-                )->open( `Column`
+                )->end(
+                )->ele( `Column`
                     )->a( n = `minScreenWidth` v = `Tablet`
                     )->a( n = `demandPopin`    v = `true`
                     )->a( n = `hAlign`         v = `End`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Weight`
 
-                )->shut(
-                )->open( `Column`
+                )->end(
+                )->ele( `Column`
                     )->a( n = `hAlign` v = `End`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Price`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( `items`
-                )->open( `ColumnListItem`
-                    )->open( `cells`
-                        )->leaf( `Link`
+            )->ele( `items`
+                )->ele( `ColumnListItem`
+                    )->ele( `cells`
+                        )->tag( `Link`
                             )->a( n = `text`       v = `{PRODUCT_ID}`
                             )->a( n = `emphasized` v = `true`
                             )->a( n = `href`       v = `{PRODUCT_PIC_URL}`
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `{SUPPLIER_NAME}`
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `{WIDTH} x {DEPTH} x {HEIGHT} {DIM_UNIT}`
-                        )->leaf( `ObjectNumber`
+                        )->tag( `ObjectNumber`
                             )->a( n = `number` v = `{WEIGHT_MEASURE}`
                             )->a( n = `unit`   v = `{WEIGHT_UNIT}`
-                        )->leaf( `ObjectNumber`
+                        )->tag( `ObjectNumber`
                             )->a( n = `number` v = |\{ parts:[\{path:'PRICE'\},\{path:'CURRENCY_CODE'\}], type:'sap.ui.model.type.Currency', formatOptions:\{showMeasure:false\} \}|
                             )->a( n = `unit`   v = `{CURRENCY_CODE}` ).
 

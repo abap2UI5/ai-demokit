@@ -175,7 +175,7 @@ a system.
 Should samples be imported again, the same rules apply. A file leaves `todo/` by
 being **rebuilt** as a `z2ui5_cl_smpc_app_<n>` port under
 `src/<category>/<library>/`, never by being moved: the samples are built on the
-framework's `z2ui5_cl_xml_view`, ports use `z2ui5_cl_ai_xml` (§5), and a port is
+framework's `z2ui5_cl_xml_view`, ports use `z2ui5_cl_ui5_view_builder` (§5), and a port is
 a 1:1 rebuild of the *demo kit original*, not of another repo's interpretation of
 it. Delete a file there once its decision is made — ported, or dropped with the
 reason recorded in `todo/README.md`. Three traps that decided rows last time: the
@@ -294,7 +294,7 @@ is expressed with the framework, as orientation. That is a knowledge store, so:
   construction**, not by an exclusion list that could rot;
 - **classes are `z2ui5_cl_smpc_sapui5_<nnn>`**, in the samples style (the
   framework's own `z2ui5_cl_xml_view` builder, dispatch inline on
-  `CASE client->get( )-event.`) — the `z2ui5_cl_ai_xml` rule in §5 is a *port*
+  `CASE client->get( )-event.`) — the `z2ui5_cl_ui5_view_builder` rule in §5 is a *port*
   rule and does not reach here;
 - **ABAP hygiene still applies.** `abaplint` and `pattern-lint` walk all of
   `src/`, and the collection is held to them like any other ABAP in this repo:
@@ -460,7 +460,7 @@ source of truth:
 ### The porting recipe — on-demand guides
 
 The complete step-by-step recipe (class layout, dispatcher, `model_init`,
-`view_display` with `z2ui5_cl_ai_xml`, formatting rules, data binding & events,
+`view_display` with `z2ui5_cl_ui5_view_builder`, formatting rules, data binding & events,
 booleans, the 1.71 rule in practice, deviation types, porting gotchas) lives in
 **`.claude/skills/port-a-sample/SKILL.md`** — read it in full before writing or
 reviewing any port; it is the authoritative long form of the generation rules.
@@ -616,7 +616,7 @@ DSAG Leitfaden, then the samples style. Essentials:
 
 - **Booleans use `abap_true` / `abap_false`, never the character literals `'X'` /
   `' '`** (Clean ABAP "Use abap_true and abap_false"); build them with
-  `xsdbool( )`, feed a bound view attribute through `z2ui5_cl_ai_xml=>as_bool( )`.
+  `xsdbool( )`, feed a bound view attribute through the builder's `a( b = … )`.
   The **one deliberate exception is a positional `t_arg` element** (`t_arg TYPE
   string_table`): those are wire-protocol string tokens, so the descending flag of
   a `binding_call` sort etc. may be written as the plain string `` `X` `` — though
@@ -651,7 +651,7 @@ DSAG Leitfaden, then the samples style. Essentials:
 - Lifecycle: chain `check_on_init( )` / `check_on_navigated( )` /
   `check_on_event( )` with `ELSEIF`. Re-display the view in the
   `check_on_navigated( )` branch.
-- Build views with `z2ui5_cl_ai_xml` (see the `port-a-sample` guide — the only
+- Build views with `z2ui5_cl_ui5_view_builder` (see the `port-a-sample` guide — the only
   view builder used in this repo; the class itself lives in the **abap2UI5 core
   repo** under *its* `src/02/` — not this repo's `src/02/`, which is the
   `sap.ui` port package); `client->view_display( view->stringify( ) )` as a
@@ -660,7 +660,7 @@ DSAG Leitfaden, then the samples style. Essentials:
   never put a literal UI5 element (`<mvc:View>`) or any other `<tag>` in a `"!`
   comment — write it plain (`mvc:View element`) or escape it as `&lt;tag&gt;`.
   A `<tag>` there is flagged as an unsupported *and* unclosed HTML tag (was a
-  warning on `z2ui5_cl_ai_xml`, and again on the headless frontend simulator —
+  warning on `z2ui5_cl_ui5_view_builder`, and again on the headless frontend simulator —
   since moved to [abap2UI5/test](https://github.com/abap2UI5/test) — where a
   placeholder `<class name>` had to become `&lt;class name&gt;`).
 

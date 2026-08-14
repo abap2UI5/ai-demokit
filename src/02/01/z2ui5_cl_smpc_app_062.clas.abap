@@ -35,9 +35,9 @@ CLASS z2ui5_cl_smpc_app_062 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`      v = `sap.ui.layout`
         )->a( n = `xmlns:core`   v = `sap.ui.core`
         )->a( n = `xmlns:mvc`    v = `sap.ui.core.mvc`
@@ -45,32 +45,32 @@ CLASS z2ui5_cl_smpc_app_062 IMPLEMENTATION.
         " POST-1.71: core:require (since UI5 1.74) wires the curated formatter module; not in the sample view
         )->a( n = `core:require` v = `{Formatter: 'z2ui5/model/formatter'}`
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
             )->a( n = `width` v = `100%`
 
-            )->open( n = `content` ns = `l`
-                )->leaf( `MessageStrip`
+            )->ele( n = `content` ns = `l`
+                )->tag( `MessageStrip`
                     )->a( n = `text`                v = client->_bind( default_text )
                     )->a( n = `enableFormattedText` v = `true`
                     )->a( n = `showIcon`            v = `true`
                     )->a( n = `showCloseButton`     v = `true`
                     )->a( n = `class`               v = `sapUiMediumMarginBottom`
-                )->leaf( `MessageStrip`
+                )->tag( `MessageStrip`
                     )->a( n = `text`                v = client->_bind( error_text )
                     )->a( n = `type`                v = `Error`
                     )->a( n = `enableFormattedText` v = `true`
                     )->a( n = `showIcon`            v = `true`
                     )->a( n = `showCloseButton`     v = `true`
                     )->a( n = `class`               v = `sapUiMediumMarginBottom`
-                )->leaf( `MessageStrip`
+                )->tag( `MessageStrip`
                     )->a( n = `text`                v = client->_bind( warning_text )
                     )->a( n = `type`                v = `Warning`
                     )->a( n = `enableFormattedText` v = `true`
                     )->a( n = `showIcon`            v = `true`
                     )->a( n = `showCloseButton`     v = `true`
                     )->a( n = `class`               v = `sapUiMediumMarginBottom`
-                )->leaf( `MessageStrip`
+                )->tag( `MessageStrip`
                     )->a( n = `text`                v = client->_bind( success_text )
                     )->a( n = `type`                v = `Success`
                     )->a( n = `enableFormattedText` v = `true`
@@ -78,7 +78,7 @@ CLASS z2ui5_cl_smpc_app_062 IMPLEMENTATION.
                     )->a( n = `showCloseButton`     v = `true`
                     )->a( n = `class`               v = `sapUiMediumMarginBottom`
 
-                )->open( `MessageStrip`
+                )->ele( `MessageStrip`
                     )->a( n = `text`                v = `Information with multiple links %%0 %%1 %%2`
                     )->a( n = `enableFormattedText` v = `true`
                     )->a( n = `showIcon`            v = `true`
@@ -86,28 +86,28 @@ CLASS z2ui5_cl_smpc_app_062 IMPLEMENTATION.
                     )->a( n = `class`               v = `sapUiMediumMarginBottom`
 
                     " POST-1.71: the controls aggregation (since UI5 1.129) kept 1:1 for the multi-link formatted text
-                    )->open( `controls`
-                        )->leaf( `Link`
+                    )->ele( `controls`
+                        )->tag( `Link`
                             )->a( n = `href` v = `http://www.sap.com`
                             )->a( n = `text` v = `Link 1`
-                        )->leaf( `Link`
+                        )->tag( `Link`
                             )->a( n = `href` v = `http://www.sap.com`
                             )->a( n = `text` v = `Link 2`
-                        )->leaf( `Link`
+                        )->tag( `Link`
                             )->a( n = `href` v = `http://www.sap.com`
                             )->a( n = `text` v = `Link 3`
 
-                    )->shut(
-                )->shut(
+                    )->end(
+                )->end(
 
-                )->leaf( `MessageStrip`
+                )->tag( `MessageStrip`
                     )->a( n = `text`                v = client->_bind( inline_icons_unicode )
                     )->a( n = `type`                v = `Warning`
                     )->a( n = `enableFormattedText` v = `true`
                     )->a( n = `showIcon`            v = `true`
                     )->a( n = `showCloseButton`     v = `true`
                     )->a( n = `class`               v = `sapUiMediumMarginBottom`
-                )->leaf( `MessageStrip`
+                )->tag( `MessageStrip`
                     " the controller-built inline-icon string is stored with icon placeholders and expanded by Formatter.expandInlineIcons (see sidecar)
                     )->a( n = `text`                v = |\{ path: '{ client->_bind( val = inline_icons_helper path = abap_true ) }', formatter: 'Formatter.expandInlineIcons' \}|
                     )->a( n = `type`                v = `Success`

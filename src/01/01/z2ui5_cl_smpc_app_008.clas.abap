@@ -26,30 +26,30 @@ CLASS z2ui5_cl_smpc_app_008 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns:form` v = `sap.ui.layout.form`
 
-        )->open( n = `SimpleForm` ns = `form`
+        )->ele( n = `SimpleForm` ns = `form`
             )->a( n = `editable`                v = `true`
             )->a( n = `backgroundDesign`        v = `Transparent`
             )->a( n = `singleContainerFullSize` v = `true`
             )->a( n = `layout`                  v = `ResponsiveGridLayout`
 
-            )->open( n = `toolbar` ns = `form`
-                )->open( `Toolbar`
-                    )->leaf( `Title`
+            )->ele( n = `toolbar` ns = `form`
+                )->ele( `Toolbar`
+                    )->tag( `Title`
                         )->a( n = `text` v = `Color Palette in a Form`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `text` v = `Choose Color`
-            )->leaf( `ColorPalette`
+            )->tag( `ColorPalette`
                 )->a( n = `colorSelect` v = client->follow_up_action( val   = client->cs_event-control_global
                                                                       t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Color Selected: value - {0}, \n defaultAction - {1}` ) ( `${$parameters>/value}` ) ( `${$parameters>/defaultAction}` ) ) ) ).
 

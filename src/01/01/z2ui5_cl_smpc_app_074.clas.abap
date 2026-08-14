@@ -44,17 +44,17 @@ CLASS z2ui5_cl_smpc_app_074 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
 
-        )->open( `List`
+        )->ele( `List`
             )->a( n = `items`      v = client->_bind( t_products )
             )->a( n = `headerText` v = `Products`
 
-            )->open( `ObjectListItem`
+            )->ele( `ObjectListItem`
                 )->a( n = `title`      v = `{NAME}`
                 )->a( n = `type`       v = `Active`
                 " client-composed toast, roundtrip-free - re-verify live (see sidecar LIVE_TEST)
@@ -62,20 +62,20 @@ CLASS z2ui5_cl_smpc_app_074 IMPLEMENTATION.
                 )->a( n = `number`     v = |\{ parts:[\{path:'PRICE'\},\{path:'CURRENCY_CODE'\}], type: 'sap.ui.model.type.Currency', formatOptions: \{showMeasure: false\} \}|
                 )->a( n = `numberUnit` v = `{CURRENCY_CODE}`
 
-                )->open( `firstStatus`
-                    )->leaf( `ObjectStatus`
+                )->ele( `firstStatus`
+                    )->tag( `ObjectStatus`
                         )->a( n = `text`  v = `{STATUS}`
                         " the original's '.formatter.status' (Status -> ValueState) is precomputed into STATUS_STATE
                         )->a( n = `state` v = `{STATUS_STATE}`
 
-                )->shut(
-                )->leaf( `ObjectAttribute`
+                )->end(
+                )->tag( `ObjectAttribute`
                     )->a( n = `text` v = `{WEIGHT_MEASURE} {WEIGHT_UNIT}`
-                )->leaf( `ObjectAttribute`
+                )->tag( `ObjectAttribute`
                     )->a( n = `text` v = `{WIDTH} x {DEPTH} x {HEIGHT} {DIM_UNIT}`
 
-            )->shut(
-        )->shut( ).
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

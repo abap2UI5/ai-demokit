@@ -41,65 +41,65 @@ CLASS z2ui5_cl_smpc_app_171 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns:u`   v = `sap.ui.unified`
 
-        )->open( `Table`
+        )->ele( `Table`
             )->a( n = `id`    v = `idProductsTable`
             )->a( n = `items` v = client->_bind( t_modeldata )
 
-            )->open( `columns`
-                )->open( `Column`
+            )->ele( `columns`
+                )->ele( `Column`
                     )->a( n = `id`     v = `exapnseColumn`
                     )->a( n = `hAlign` v = `Begin`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Expense`
 
-                )->shut(
-                )->open( `Column`
+                )->end(
+                )->ele( `Column`
                     )->a( n = `id`     v = `transactionAmountColumn`
                     )->a( n = `hAlign` v = `End`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Transaction amount`
 
-                )->shut(
-                )->open( `Column`
+                )->end(
+                )->ele( `Column`
                     )->a( n = `id`     v = `exchangeRateColumn`
                     )->a( n = `hAlign` v = `End`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Exchange rate`
 
-                )->shut(
-                )->open( `Column`
+                )->end(
+                )->ele( `Column`
                     )->a( n = `id`     v = `amountColumn`
                     )->a( n = `hAlign` v = `End`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Amount`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( `items`
-                )->open( `ColumnListItem`
-                    )->open( `cells`
-                        )->leaf( `ObjectIdentifier`
+            )->ele( `items`
+                )->ele( `ColumnListItem`
+                    )->ele( `cells`
+                        )->tag( `ObjectIdentifier`
                             )->a( n = `text` v = `{EXPENSE}`
-                        )->leaf( n = `Currency` ns = `u`
+                        )->tag( n = `Currency` ns = `u`
                             )->a( n = `value`        v = `{TRANSACTION_AMOUNT/SIZE}`
                             )->a( n = `currency`     v = `{TRANSACTION_AMOUNT/CURRENCY}`
                             )->a( n = `maxPrecision` v = `2`
                             )->a( n = `useSymbol`    v = `false`
-                        )->leaf( `ObjectNumber`
+                        )->tag( `ObjectNumber`
                             )->a( n = `number` v = |\{ path: 'EXCHANGE_RATE', type: 'sap.ui.model.type.Float', formatOptions: \{ minFractionDigits: 5, maxFractionDigits: 5 \} \}|
-                        )->leaf( `ObjectNumber`
+                        )->tag( `ObjectNumber`
                             )->a( n = `number` v = |\{ path: 'AMOUNT', type: 'sap.ui.model.type.Float', formatOptions: \{ minFractionDigits: 2, maxFractionDigits: 2 \} \}|
                             )->a( n = `unit`   v = `EUR` ).
 

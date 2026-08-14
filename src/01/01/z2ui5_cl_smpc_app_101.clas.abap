@@ -48,9 +48,9 @@ CLASS z2ui5_cl_smpc_app_101 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns:form` v = `sap.ui.layout.form`
@@ -58,30 +58,30 @@ CLASS z2ui5_cl_smpc_app_101 IMPLEMENTATION.
         )->a( n = `xmlns:u`    v = `sap.ui.unified`
         )->a( n = `height`     v = `100%`
 
-        )->open( `NavContainer`
+        )->ele( `NavContainer`
             )->a( n = `id` v = `wizardNavContainer`
 
-            )->open( `pages`
-                )->open( `Page`
+            )->ele( `pages`
+                )->ele( `Page`
                     )->a( n = `id`         v = `wizardContentPage`
                     )->a( n = `showHeader` v = `false`
 
-                    )->open( `content`
-                        )->open( `Wizard`
+                    )->ele( `content`
+                        )->ele( `Wizard`
                             )->a( n = `id`       v = `CreateProductWizard`
                             )->a( n = `class`    v = `sapUiResponsivePadding--header sapUiResponsivePadding--content`
                             )->a( n = `complete` v = client->_event( `WIZARD_COMPLETE` )
 
-                            )->open( `WizardStep`
+                            )->ele( `WizardStep`
                                 )->a( n = `id`        v = `ProductTypeStep`
                                 )->a( n = `title`     v = `Product Type`
                                 )->a( n = `validated` v = `true`
 
-                                )->leaf( `MessageStrip`
+                                )->tag( `MessageStrip`
                                     )->a( n = `class`    v = `sapUiSmallMarginBottom`
                                     )->a( n = `text`     v = `The Wizard control is supposed to break down large tasks, into smaller steps, easier for the user to work with.`
                                     )->a( n = `showIcon` v = `true`
-                                )->leaf( `Text`
+                                )->tag( `Text`
                                     )->a( n = `class` v = `sapUiSmallMarginBottom`
                                     )->a( n = `text`  v = `Sed fermentum, mi et tristique ullamcorper, sapien sapien faucibus sem, quis pretium nibh lorem malesuada diam. ` &&
                                                           `Nulla quis arcu aliquet, feugiat massa semper, volutpat diam. Nam vitae ante posuere, molestie neque sit amet, dapibus velit. ` &&
@@ -89,68 +89,68 @@ CLASS z2ui5_cl_smpc_app_101 IMPLEMENTATION.
                                                           `Praesent vitae commodo felis, ut iaculis felis. Fusce quis eleifend sapien, eget facilisis nibh. Suspendisse est velit, scelerisque ut commodo eget, dignissim quis metus. ` &&
                                                           `Cras faucibus consequat gravida. Curabitur vitae quam felis. Phasellus ac leo eleifend, commodo tortor et, varius quam. Aliquam erat volutpat`
 
-                                )->open( `HBox`
+                                )->ele( `HBox`
                                     )->a( n = `alignItems`      v = `Center`
                                     )->a( n = `justifyContent`  v = `Center`
                                     )->a( n = `width`           v = `100%`
 
-                                    )->open( `SegmentedButton`
+                                    )->ele( `SegmentedButton`
                                         )->a( n = `width`           v = `320px`
                                         )->a( n = `selectedKey`     v = client->_bind( product_type )
                                         )->a( n = `selectionChange` v = client->_event( `SET_PRODUCT_TYPE` )
 
-                                        )->open( `items`
-                                            )->leaf( `SegmentedButtonItem`
+                                        )->ele( `items`
+                                            )->tag( `SegmentedButtonItem`
                                                 )->a( n = `icon` v = `sap-icon://iphone`
                                                 )->a( n = `text` v = `Mobile`
                                                 )->a( n = `key`  v = `Mobile`
-                                            )->leaf( `SegmentedButtonItem`
+                                            )->tag( `SegmentedButtonItem`
                                                 )->a( n = `icon` v = `sap-icon://sys-monitor`
                                                 )->a( n = `text` v = `Desktop`
                                                 )->a( n = `key`  v = `Desktop`
-                                            )->leaf( `SegmentedButtonItem`
+                                            )->tag( `SegmentedButtonItem`
                                                 )->a( n = `icon` v = `sap-icon://database`
                                                 )->a( n = `text` v = `Other`
                                                 )->a( n = `key`  v = `Other`
 
-                                        )->shut(
-                                    )->shut(
-                                )->shut(
-                            )->shut(
+                                        )->end(
+                                    )->end(
+                                )->end(
+                            )->end(
 
-                            )->open( `WizardStep`
+                            )->ele( `WizardStep`
                                 )->a( n = `id`        v = `ProductInfoStep`
                                 )->a( n = `validated` v = client->_bind( step2_validated )
                                 )->a( n = `title`     v = `Product Information`
                                 )->a( n = `activate`  v = client->_event( `ADDITIONAL_INFO` )
 
-                                )->leaf( `MessageStrip`
+                                )->tag( `MessageStrip`
                                     )->a( n = `class`    v = `sapUiSmallMarginBottom`
                                     )->a( n = `text`     v = `Validation in the wizard is controlled by calling the validateStep(Step) and invalidateStep(Step) methods `
                                     )->a( n = `showIcon` v = `true`
-                                )->leaf( `Text`
+                                )->tag( `Text`
                                     )->a( n = `text` v = `Cras tellus leo, volutpat vitae ullamcorper eu, posuere malesuada nisl. Integer pellentesque leo sit amet dui vehicula, quis ullamcorper est pulvinar. ` &&
                                                         `Nam in libero sem. Suspendisse arcu metus, molestie a turpis a, molestie aliquet dui. Donec pulvinar, sapien et viverra imperdiet, orci erat porttitor nulla, ` &&
                                                         `eget commodo metus nibh nec ipsum. Aliquam lacinia euismod metus, sollicitudin pellentesque purus volutpat eget. Pellentesque egestas erat quis eros convallis mattis.`
 
-                                )->open( n = `SimpleForm` ns = `form`
+                                )->ele( n = `SimpleForm` ns = `form`
                                     )->a( n = `editable` v = `true`
                                     )->a( n = `layout`   v = `ResponsiveGridLayout`
 
-                                    )->leaf( `Label`
+                                    )->tag( `Label`
                                         )->a( n = `text`     v = `Name`
                                         )->a( n = `required` v = `true`
-                                    )->leaf( `Input`
+                                    )->tag( `Input`
                                         )->a( n = `valueStateText` v = `Enter 6 symbols or more`
                                         )->a( n = `valueState`     v = client->_bind( product_name_state )
                                         )->a( n = `id`             v = `ProductName`
                                         )->a( n = `liveChange`     v = client->_event( `ADDITIONAL_INFO` )
                                         )->a( n = `placeholder`    v = `Enter name with length greater than 6`
                                         )->a( n = `value`          v = client->_bind( product_name )
-                                    )->leaf( `Label`
+                                    )->tag( `Label`
                                         )->a( n = `text`     v = `Weight`
                                         )->a( n = `required` v = `true`
-                                    )->leaf( `Input`
+                                    )->tag( `Input`
                                         )->a( n = `valueStateText` v = `Enter digits`
                                         )->a( n = `valueState`     v = client->_bind( product_weight_state )
                                         )->a( n = `id`             v = `ProductWeight`
@@ -158,316 +158,316 @@ CLASS z2ui5_cl_smpc_app_101 IMPLEMENTATION.
                                         )->a( n = `type`           v = `Number`
                                         )->a( n = `placeholder`    v = `Enter digits`
                                         )->a( n = `value`          v = client->_bind( product_weight )
-                                    )->leaf( `Label`
+                                    )->tag( `Label`
                                         )->a( n = `text` v = `Manufacturer`
 
-                                    )->open( `Select`
+                                    )->ele( `Select`
                                         )->a( n = `selectedKey` v = client->_bind( product_manufacturer )
 
-                                        )->leaf( n = `Item` ns = `core`
+                                        )->tag( n = `Item` ns = `core`
                                             )->a( n = `key`  v = `Apple`
                                             )->a( n = `text` v = `Apple`
-                                        )->leaf( n = `Item` ns = `core`
+                                        )->tag( n = `Item` ns = `core`
                                             )->a( n = `key`  v = `Microsoft`
                                             )->a( n = `text` v = `Microsoft`
-                                        )->leaf( n = `Item` ns = `core`
+                                        )->tag( n = `Item` ns = `core`
                                             )->a( n = `key`  v = `Google`
                                             )->a( n = `text` v = `Google`
-                                        )->leaf( n = `Item` ns = `core`
+                                        )->tag( n = `Item` ns = `core`
                                             )->a( n = `key`  v = `Sony`
                                             )->a( n = `text` v = `Sony`
-                                        )->leaf( n = `Item` ns = `core`
+                                        )->tag( n = `Item` ns = `core`
                                             )->a( n = `key`  v = `Samsung`
                                             )->a( n = `text` v = `Samsung`
-                                        )->leaf( n = `Item` ns = `core`
+                                        )->tag( n = `Item` ns = `core`
                                             )->a( n = `key`  v = `Logitech`
                                             )->a( n = `text` v = `Logitech`
 
-                                    )->shut(
-                                    )->leaf( `Label`
+                                    )->end(
+                                    )->tag( `Label`
                                         )->a( n = `text` v = `Description`
-                                    )->leaf( `TextArea`
+                                    )->tag( `TextArea`
                                         )->a( n = `value` v = client->_bind( product_description )
                                         )->a( n = `rows`  v = `8`
 
-                                )->shut(
-                            )->shut(
+                                )->end(
+                            )->end(
 
-                            )->open( `WizardStep`
+                            )->ele( `WizardStep`
                                 )->a( n = `id`        v = `OptionalInfoStep`
                                 )->a( n = `validated` v = `true`
                                 )->a( n = `activate`  v = client->_event( `OPTIONAL_ACTIVATE` )
                                 )->a( n = `title`     v = `Optional Information`
 
-                                )->leaf( `MessageStrip`
+                                )->tag( `MessageStrip`
                                     )->a( n = `class`    v = `sapUiSmallMarginBottom`
                                     )->a( n = `text`     v = `You can validate steps by default with the validated='true' property of the step. The next button is always enabled.`
                                     )->a( n = `showIcon` v = `true`
-                                )->leaf( `Text`
+                                )->tag( `Text`
                                     )->a( n = `text` v = `Integer pellentesque leo sit amet dui vehicula, quis ullamcorper est pulvinar. Nam in libero sem. Suspendisse arcu metus, molestie a turpis a, molestie aliquet dui. ` &&
                                                         `Donec pellentesque leo sit amet dui vehicula, quis ullamcorper est pulvinar. Nam in libero sem. Suspendisse arcu metus, molestie a turpis a, molestie aliquet dui. ` &&
                                                         `Donec pulvinar, sapien corper eu, posuere malesuada nisl.`
 
-                                )->open( n = `SimpleForm` ns = `form`
+                                )->ele( n = `SimpleForm` ns = `form`
                                     )->a( n = `editable` v = `true`
                                     )->a( n = `layout`   v = `ResponsiveGridLayout`
 
-                                    )->leaf( `Label`
+                                    )->tag( `Label`
                                         )->a( n = `text` v = `Cover photo`
-                                    )->leaf( n = `FileUploader` ns = `u`
+                                    )->tag( n = `FileUploader` ns = `u`
                                         )->a( n = `width`       v = `100%`
                                         )->a( n = `tooltip`     v = `Upload product cover photo to the local server`
                                         )->a( n = `style`       v = `Emphasized`
                                         )->a( n = `placeholder` v = `Choose a file for Upload...`
-                                    )->leaf( `Label`
+                                    )->tag( `Label`
                                         )->a( n = `text` v = `Manufacturing date`
-                                    )->leaf( `DatePicker`
+                                    )->tag( `DatePicker`
                                         )->a( n = `id`            v = `DP3`
                                         )->a( n = `displayFormat` v = `short`
                                         )->a( n = `value`         v = client->_bind( manufacturing_date )
-                                    )->leaf( `Label`
+                                    )->tag( `Label`
                                         )->a( n = `text` v = `Availability`
 
-                                    )->open( `SegmentedButton`
+                                    )->ele( `SegmentedButton`
                                         )->a( n = `selectedKey` v = client->_bind( availability_type )
 
-                                        )->open( `items`
-                                            )->leaf( `SegmentedButtonItem`
+                                        )->ele( `items`
+                                            )->tag( `SegmentedButtonItem`
                                                 )->a( n = `key`  v = `In store`
                                                 )->a( n = `text` v = `In store`
-                                            )->leaf( `SegmentedButtonItem`
+                                            )->tag( `SegmentedButtonItem`
                                                 )->a( n = `key`  v = `In depot`
                                                 )->a( n = `text` v = `In depot`
-                                            )->leaf( `SegmentedButtonItem`
+                                            )->tag( `SegmentedButtonItem`
                                                 )->a( n = `key`  v = `In repository`
                                                 )->a( n = `text` v = `In repository`
-                                            )->leaf( `SegmentedButtonItem`
+                                            )->tag( `SegmentedButtonItem`
                                                 )->a( n = `key`  v = `Out of stock`
                                                 )->a( n = `text` v = `Out of stock`
 
-                                        )->shut(
-                                    )->shut(
-                                    )->leaf( `Label`
+                                        )->end(
+                                    )->end(
+                                    )->tag( `Label`
                                         )->a( n = `text` v = `Size`
-                                    )->leaf( `Input`
+                                    )->tag( `Input`
                                         )->a( n = `value` v = client->_bind( size )
 
-                                    )->open( `ComboBox`
+                                    )->ele( `ComboBox`
                                         )->a( n = `maxWidth`    v = `100px`
                                         )->a( n = `selectedKey` v = client->_bind( measurement )
 
-                                        )->leaf( n = `Item` ns = `core`
+                                        )->tag( n = `Item` ns = `core`
                                             )->a( n = `key`  v = `X`
                                             )->a( n = `text` v = `X`
-                                        )->leaf( n = `Item` ns = `core`
+                                        )->tag( n = `Item` ns = `core`
                                             )->a( n = `key`  v = `Y`
                                             )->a( n = `text` v = `Y`
-                                        )->leaf( n = `Item` ns = `core`
+                                        )->tag( n = `Item` ns = `core`
                                             )->a( n = `key`  v = `Z`
                                             )->a( n = `text` v = `Z`
 
-                                    )->shut(
-                                )->shut(
-                            )->shut(
+                                    )->end(
+                                )->end(
+                            )->end(
 
-                            )->open( `WizardStep`
+                            )->ele( `WizardStep`
                                 )->a( n = `id`        v = `PricingStep`
                                 )->a( n = `activate`  v = client->_event( `PRICING_ACTIVATE` )
                                 )->a( n = `complete`  v = client->_event( `PRICING_COMPLETE` )
                                 )->a( n = `validated` v = `true`
                                 )->a( n = `title`     v = `Pricing`
 
-                                )->leaf( `MessageStrip`
+                                )->tag( `MessageStrip`
                                     )->a( n = `class`    v = `sapUiSmallMarginBottom`
                                     )->a( n = `text`     v = `You can use the wizard previousStep() and nextStep() methods to navigate from step to step without validation. ` &&
                                                             `Also you can use the GoToStep(step) method to scroll programmatically to previously visited steps.`
                                     )->a( n = `showIcon` v = `true`
 
-                                )->open( n = `SimpleForm` ns = `form`
+                                )->ele( n = `SimpleForm` ns = `form`
                                     )->a( n = `editable` v = `true`
                                     )->a( n = `layout`   v = `ResponsiveGridLayout`
 
-                                    )->leaf( `Label`
+                                    )->tag( `Label`
                                         )->a( n = `text` v = `Price`
-                                    )->leaf( `Input`
+                                    )->tag( `Input`
                                         )->a( n = `value` v = client->_bind( product_price )
-                                    )->leaf( `Label`
+                                    )->tag( `Label`
                                         )->a( n = `text` v = `Discount group`
 
-                                    )->open( `ComboBox`
+                                    )->ele( `ComboBox`
                                         )->a( n = `selectedKey` v = client->_bind( discount_group )
 
-                                        )->leaf( n = `Item` ns = `core`
+                                        )->tag( n = `Item` ns = `core`
                                             )->a( n = `key`  v = `Kids`
                                             )->a( n = `text` v = `Kids`
-                                        )->leaf( n = `Item` ns = `core`
+                                        )->tag( n = `Item` ns = `core`
                                             )->a( n = `key`  v = `Teens`
                                             )->a( n = `text` v = `Teens`
-                                        )->leaf( n = `Item` ns = `core`
+                                        )->tag( n = `Item` ns = `core`
                                             )->a( n = `key`  v = `Adults`
                                             )->a( n = `text` v = `Adults`
-                                        )->leaf( n = `Item` ns = `core`
+                                        )->tag( n = `Item` ns = `core`
                                             )->a( n = `key`  v = `Elderly`
                                             )->a( n = `text` v = `Elderly`
 
-                                    )->shut(
-                                    )->leaf( `Label`
+                                    )->end(
+                                    )->tag( `Label`
                                         )->a( n = `text` v = ` VAT is included`
-                                    )->leaf( `CheckBox`
+                                    )->tag( `CheckBox`
                                         )->a( n = `selected` v = client->_bind( product_vat )
 
-                                )->shut(
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                    )->open( `footer`
-                        )->open( `OverflowToolbar`
-                            )->leaf( `ToolbarSpacer`
-                            )->leaf( `Button`
+                                )->end(
+                            )->end(
+                        )->end(
+                    )->end(
+                    )->ele( `footer`
+                        )->ele( `OverflowToolbar`
+                            )->tag( `ToolbarSpacer`
+                            )->tag( `Button`
                                 )->a( n = `text`  v = `Cancel`
                                 )->a( n = `press` v = client->_event( `WIZARD_CANCEL` )
 
-                        )->shut(
-                    )->shut(
-                )->shut(
-                )->open( `Page`
+                        )->end(
+                    )->end(
+                )->end(
+                )->ele( `Page`
                     )->a( n = `id`         v = `wizardReviewPage`
                     )->a( n = `showHeader` v = `false`
 
-                    )->open( `content`
-                        )->open( n = `SimpleForm` ns = `form`
+                    )->ele( `content`
+                        )->ele( n = `SimpleForm` ns = `form`
                             )->a( n = `title`    v = `1. Product Type`
                             )->a( n = `editable` v = `false`
                             )->a( n = `layout`   v = `ResponsiveGridLayout`
 
-                            )->open( n = `content` ns = `form`
-                                )->leaf( `Label`
+                            )->ele( n = `content` ns = `form`
+                                )->tag( `Label`
                                     )->a( n = `text` v = `Type`
-                                )->leaf( `Text`
+                                )->tag( `Text`
                                     )->a( n = `id`   v = `ProductTypeChosen`
                                     )->a( n = `text` v = client->_bind( product_type )
-                                )->leaf( `Link`
+                                )->tag( `Link`
                                     )->a( n = `press` v = client->_event( `EDIT_STEP_1` )
                                     )->a( n = `text`  v = `Edit`
 
-                        )->shut(
-                        )->shut(
-                        )->open( n = `SimpleForm` ns = `form`
+                        )->end(
+                        )->end(
+                        )->ele( n = `SimpleForm` ns = `form`
                             )->a( n = `title`    v = `2. Product Information`
                             )->a( n = `editable` v = `false`
                             )->a( n = `layout`   v = `ResponsiveGridLayout`
 
-                            )->open( n = `content` ns = `form`
-                                )->leaf( `Label`
+                            )->ele( n = `content` ns = `form`
+                                )->tag( `Label`
                                     )->a( n = `text` v = `Name`
-                                )->leaf( `Text`
+                                )->tag( `Text`
                                     )->a( n = `id`   v = `ProductNameChosen`
                                     )->a( n = `text` v = client->_bind( product_name )
-                                )->leaf( `Label`
+                                )->tag( `Label`
                                     )->a( n = `text` v = `Weight`
-                                )->leaf( `Text`
+                                )->tag( `Text`
                                     )->a( n = `id`   v = `ProductWeightChosen`
                                     )->a( n = `text` v = client->_bind( product_weight )
-                                )->leaf( `Label`
+                                )->tag( `Label`
                                     )->a( n = `text` v = `Manufacturer`
-                                )->leaf( `Text`
+                                )->tag( `Text`
                                     )->a( n = `id`   v = `ProductManufacturerChosen`
                                     )->a( n = `text` v = client->_bind( product_manufacturer )
-                                )->leaf( `Label`
+                                )->tag( `Label`
                                     )->a( n = `text` v = `Description`
-                                )->leaf( `Text`
+                                )->tag( `Text`
                                     )->a( n = `id`   v = `ProductDescriptionChosen`
                                     )->a( n = `text` v = client->_bind( product_description )
-                                )->leaf( `Link`
+                                )->tag( `Link`
                                     )->a( n = `press` v = client->_event( `EDIT_STEP_2` )
                                     )->a( n = `text`  v = `Edit`
 
-                        )->shut(
-                        )->shut(
-                        )->open( n = `SimpleForm` ns = `form`
+                        )->end(
+                        )->end(
+                        )->ele( n = `SimpleForm` ns = `form`
                             )->a( n = `title`    v = `3. Optional Information`
                             )->a( n = `editable` v = `false`
                             )->a( n = `layout`   v = `ResponsiveGridLayout`
 
-                            )->open( n = `content` ns = `form`
-                                )->leaf( `Label`
+                            )->ele( n = `content` ns = `form`
+                                )->tag( `Label`
                                     )->a( n = `text` v = `Some text`
-                                )->leaf( `Text`
+                                )->tag( `Text`
                                     )->a( n = `text` v = `Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. `
 
-                                )->leaf( `Label`
+                                )->tag( `Label`
                                     )->a( n = `text` v = `Manufacturing Date`
-                                )->leaf( `Text`
+                                )->tag( `Text`
                                     )->a( n = `id`   v = `ManufacturingDate`
                                     )->a( n = `text` v = client->_bind( manufacturing_date )
-                                )->leaf( `Label`
+                                )->tag( `Label`
                                     )->a( n = `text` v = `Availability`
-                                )->leaf( `Text`
+                                )->tag( `Text`
                                     )->a( n = `id`   v = `AvailabilityChosen`
                                     )->a( n = `text` v = client->_bind( availability_type )
-                                )->leaf( `Label`
+                                )->tag( `Label`
                                     )->a( n = `text` v = `Size`
 
-                                )->open( `HBox`
-                                    )->leaf( `Text`
+                                )->ele( `HBox`
+                                    )->tag( `Text`
                                         )->a( n = `id`   v = `Size`
                                         )->a( n = `text` v = client->_bind( size )
-                                    )->leaf( `Text`
+                                    )->tag( `Text`
                                         )->a( n = `id`    v = `Size2`
                                         )->a( n = `class` v = `sapUiTinyMarginBegin`
                                         )->a( n = `text`  v = client->_bind( measurement )
 
-                                )->shut(
-                                )->leaf( `Link`
+                                )->end(
+                                )->tag( `Link`
                                     )->a( n = `press` v = client->_event( `EDIT_STEP_3` )
                                     )->a( n = `text`  v = `Edit`
 
-                        )->shut(
-                        )->shut(
-                        )->open( n = `SimpleForm` ns = `form`
+                        )->end(
+                        )->end(
+                        )->ele( n = `SimpleForm` ns = `form`
                             )->a( n = `title`    v = `4. Pricing`
                             )->a( n = `editable` v = `false`
                             )->a( n = `layout`   v = `ResponsiveGridLayout`
 
-                            )->open( n = `content` ns = `form`
-                                )->leaf( `Label`
+                            )->ele( n = `content` ns = `form`
+                                )->tag( `Label`
                                     )->a( n = `text` v = `Price`
-                                )->leaf( `Text`
+                                )->tag( `Text`
                                     )->a( n = `id`   v = `ProductPriceChosen`
                                     )->a( n = `text` v = client->_bind( product_price )
-                                )->leaf( `Label`
+                                )->tag( `Label`
                                     )->a( n = `text` v = `Discount Group`
-                                )->leaf( `Text`
+                                )->tag( `Text`
                                     )->a( n = `id`   v = `DiscountGroupChosen`
                                     )->a( n = `text` v = client->_bind( discount_group )
-                                )->leaf( `Label`
+                                )->tag( `Label`
                                     )->a( n = `text` v = `VAT Included`
-                                )->leaf( `Text`
+                                )->tag( `Text`
                                     )->a( n = `id`   v = `ProductVATChosen`
                                     )->a( n = `text` v = client->_bind( product_vat )
-                                )->leaf( `Link`
+                                )->tag( `Link`
                                     )->a( n = `press` v = client->_event( `EDIT_STEP_4` )
                                     )->a( n = `text`  v = `Edit`
 
-                        )->shut(
-                        )->shut(
-                    )->shut(
-                    )->open( `footer`
-                        )->open( `Bar`
-                            )->open( `contentRight`
-                                )->leaf( `Button`
+                        )->end(
+                        )->end(
+                    )->end(
+                    )->ele( `footer`
+                        )->ele( `Bar`
+                            )->ele( `contentRight`
+                                )->tag( `Button`
                                     )->a( n = `text`  v = `Submit`
                                     )->a( n = `press` v = client->_event( `WIZARD_SUBMIT` )
-                                )->leaf( `Button`
+                                )->tag( `Button`
                                     )->a( n = `text`  v = `Cancel`
                                     )->a( n = `press` v = client->_event( `WIZARD_CANCEL` )
 
-                        )->shut(
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
-        )->shut( ).
+                        )->end(
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

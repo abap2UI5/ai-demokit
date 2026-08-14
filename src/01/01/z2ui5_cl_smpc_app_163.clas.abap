@@ -37,65 +37,65 @@ CLASS z2ui5_cl_smpc_app_163 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " The original drives the overflow toolbar's button visibility from a
     " separate 'range' media model ({range>/isNoPhone} ...). abap2UI5 has one
     " default model, so those flags live flat in it and visible binds them
     " directly (the 'range>' prefix is dropped - last path segment identical,
     " which structural-diff matches).
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `height`    v = `100%`
 
-        )->open( `Page`
+        )->ele( `Page`
             )->a( n = `showHeader` v = `false`
 
-            )->open( `content`
-                )->leaf( `Text`
+            )->ele( `content`
+                )->tag( `Text`
                     )->a( n = `text`  v = `See the actions in the footer toolbar.`
                     )->a( n = `class` v = `sapUiSmallMargin`
 
-            )->shut(
+            )->end(
 
-            )->open( `footer`
-                )->open( `Toolbar`
-                    )->leaf( `ToolbarSpacer`
-                    )->leaf( `Button`
+            )->ele( `footer`
+                )->ele( `Toolbar`
+                    )->tag( `ToolbarSpacer`
+                    )->tag( `Button`
                         )->a( n = `text`  v = `Approve`
                         )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0}` ) ( `${$source>/text}` ) ) )
                         )->a( n = `type`  v = `Accept`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text`  v = `Reject`
                         )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0}` ) ( `${$source>/text}` ) ) )
                         )->a( n = `type`  v = `Reject`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text`    v = `Mark as Favorite`
                         )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0}` ) ( `${$source>/text}` ) ) )
                         )->a( n = `visible` v = client->_bind( isnophone )
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text`    v = `Send Email`
                         )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0}` ) ( `${$source>/text}` ) ) )
                         )->a( n = `visible` v = client->_bind( isnophone )
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text`    v = `Share`
                         )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0}` ) ( `${$source>/text}` ) ) )
                         )->a( n = `visible` v = client->_bind( isnophone )
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text`    v = `Print`
                         )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0}` ) ( `${$source>/text}` ) ) )
                         )->a( n = `visible` v = client->_bind( isnotphoneortablet )
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `icon`    v = `sap-icon://print`
                         )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0}` ) ( `${$source>/text}` ) ) )
                         )->a( n = `visible` v = client->_bind( istablet )
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text`    v = `Export as Excel`
                         )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0}` ) ( `${$source>/text}` ) ) )
                         )->a( n = `visible` v = client->_bind( isnotphoneortablet )
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `icon`    v = `sap-icon://overflow`
                         )->a( n = `press`   v = client->_event( val   = `OPEN_SHEET`
                                                                 t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
@@ -113,39 +113,39 @@ CLASS z2ui5_cl_smpc_app_163 IMPLEMENTATION.
       WHEN `OPEN_SHEET`.
         " onOpen: Fragment.load( ActionSheet.fragment.xml ) + openBy( button ) -
         " rebuilt 1:1 as a popover anchored to the pressed overflow button
-        DATA(sheet) = z2ui5_cl_ai_xml=>factory( ).
+        DATA(sheet) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-        sheet->open( n = `FragmentDefinition` ns = `core`
+        sheet->ele( n = `FragmentDefinition` ns = `core`
             )->a( n = `xmlns`      v = `sap.m`
             )->a( n = `xmlns:core` v = `sap.ui.core`
 
-            )->open( `ActionSheet`
+            )->ele( `ActionSheet`
                 )->a( n = `title`            v = `Menu`
                 )->a( n = `showCancelButton` v = `true`
                 )->a( n = `placement`        v = `Top`
 
-                )->open( `buttons`
-                    )->leaf( `Button`
+                )->ele( `buttons`
+                    )->tag( `Button`
                         )->a( n = `text`    v = `Mark as Favorite`
                         )->a( n = `icon`    v = `sap-icon://favorite`
                         )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0}` ) ( `${$source>/text}` ) ) )
                         )->a( n = `visible` v = client->_bind( isphone )
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text`    v = `Send Email`
                         )->a( n = `icon`    v = `sap-icon://email`
                         )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0}` ) ( `${$source>/text}` ) ) )
                         )->a( n = `visible` v = client->_bind( isphone )
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text`    v = `Share`
                         )->a( n = `icon`    v = `sap-icon://share-2`
                         )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0}` ) ( `${$source>/text}` ) ) )
                         )->a( n = `visible` v = client->_bind( isphone )
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text`    v = `Print`
                         )->a( n = `icon`    v = `sap-icon://print`
                         )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0}` ) ( `${$source>/text}` ) ) )
                         )->a( n = `visible` v = client->_bind( isphone )
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text`    v = `Export as Excel`
                         )->a( n = `icon`    v = `sap-icon://excel-attachment`
                         )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0}` ) ( `${$source>/text}` ) ) )

@@ -36,60 +36,60 @@ CLASS z2ui5_cl_smpc_app_003 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns:l`    v = `sap.ui.layout`
         )->a( n = `xmlns:core` v = `sap.ui.core`
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
             )->a( n = `width` v = `100%`
 
-            )->open( n = `content` ns = `l`
-                )->open( `Breadcrumbs`
+            )->ele( n = `content` ns = `l`
+                )->ele( `Breadcrumbs`
                     )->a( n = `currentLocationText` v = `Laptop`
                     )->a( n = `separatorStyle`      v = client->_bind( selected )
 
-                    )->leaf( `Link`
+                    )->tag( `Link`
                         )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} has been activated` ) ( `${$source>/text}` ) ) )
                         )->a( n = `text`  v = `Products`
-                    )->leaf( `Link`
+                    )->tag( `Link`
                         )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} has been activated` ) ( `${$source>/text}` ) ) )
                         )->a( n = `text`  v = `Suppliers`
-                    )->leaf( `Link`
+                    )->tag( `Link`
                         )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} has been activated` ) ( `${$source>/text}` ) ) )
                         )->a( n = `text`  v = `Titanium`
-                    )->leaf( `Link`
+                    )->tag( `Link`
                         )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} has been activated` ) ( `${$source>/text}` ) ) )
                         )->a( n = `text`  v = `Ultra portable`
-                    )->leaf( `Link`
+                    )->tag( `Link`
                         )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} has been activated` ) ( `${$source>/text}` ) ) )
                         )->a( n = `text`  v = `12 inch`
-                    )->leaf( `Link`
+                    )->tag( `Link`
                         )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} has been activated` ) ( `${$source>/text}` ) ) )
                         )->a( n = `text`  v = `Super portable deluxe`
 
-                )->shut(
-                )->open( `HBox`
+                )->end(
+                )->ele( `HBox`
                     )->a( n = `alignItems` v = `Center`
 
-                    )->open( `items`
-                        )->leaf( `Label`
+                    )->ele( `items`
+                        )->tag( `Label`
                             )->a( n = `labelFor` v = `separatorSelect`
                             )->a( n = `text`     v = `Change separator style`
 
                         " no change event: selectedKey and separatorStyle share the same
                         " two-way bound path, so picking a separator updates instantly client-side
-                        )->open( `Select`
+                        )->ele( `Select`
                             )->a( n = `class`       v = `sapUiSmallMarginBegin`
                             )->a( n = `id`          v = `separatorSelect`
                             )->a( n = `selectedKey` v = client->_bind( selected )
                             )->a( n = `items`       v = client->_bind( t_items )
 
-                            )->leaf( n = `Item` ns = `core`
+                            )->tag( n = `Item` ns = `core`
                                 )->a( n = `key`  v = `{KEY}`
                                 )->a( n = `text` v = `{TEXT}` ).
 

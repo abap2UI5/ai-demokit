@@ -49,23 +49,23 @@ CLASS z2ui5_cl_smpc_app_025 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
             )->a( n = `width` v = `100%`
 
-            )->open( n = `content` ns = `l`
-                )->open( `List`
+            )->ele( n = `content` ns = `l`
+                )->ele( `List`
                     )->a( n = `headerText` v = `Feed Entries`
                     )->a( n = `items`      v = client->_bind( t_entry_collection )
 
-                    )->open( `FeedListItem`
+                    )->ele( `FeedListItem`
                         )->a( n = `sender`                   v = `{AUTHOR}`
                         )->a( n = `icon`                     v = `{AUTHOR_PIC_URL}`
                         )->a( n = `senderPress`              v = client->_event( val   = `PRESSED`
@@ -79,7 +79,7 @@ CLASS z2ui5_cl_smpc_app_025 IMPLEMENTATION.
                         )->a( n = `actions`                  v = `{path: 'ACTIONS', templateShareable: false}`
 
                         " the item index for the original's removeItem travels via the List's indexOfItem on the event's item parameter
-                        )->leaf( `FeedListItemAction`
+                        )->tag( `FeedListItemAction`
                             )->a( n = `text`  v = `{TEXT}`
                             )->a( n = `icon`  v = `{ICON}`
                             )->a( n = `key`   v = `{KEY}`

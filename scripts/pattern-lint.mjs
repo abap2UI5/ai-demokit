@@ -124,28 +124,28 @@ const RULES = [
     },
   },
   {
-    id: 'blank-between-shuts',
+    id: 'blank-between-ends',
     level: 'warn',
-    doc: 'blank line between two )->shut( lines — §5 formatting: none after a shut or between shuts (a blank before the next open/leaf sibling block is fine)',
+    doc: 'blank line between two )->end( lines — §5 formatting: none after an end or between ends (a blank before the next ele/tag sibling block is fine)',
     find(content) {
       const out = [];
-      for (const m of content.matchAll(/->shut\(\s*\n[ \t]*\n[ \t]*\)->shut\(/g)) {
-        out.push({ line: lineOf(content, m.index), text: 'blank line separating two shuts' });
+      for (const m of content.matchAll(/->end\(\s*\n[ \t]*\n[ \t]*\)->end\(/g)) {
+        out.push({ line: lineOf(content, m.index), text: 'blank line separating two ends' });
       }
       return out;
     },
   },
   {
-    id: 'no-blank-before-shut',
+    id: 'no-blank-before-end',
     level: 'warn',
-    doc: 'a )->shut( must be preceded by a blank line (or another shut) — §5 formatting: a blank before every shut',
+    doc: 'a )->end( must be preceded by a blank line (or another end) — §5 formatting: a blank before every end',
     find(content) {
       const out = [];
       const lines = content.split('\n');
       lines.forEach((l, i) => {
-        if (!/->shut\(\s*\)?\.?\s*$/.test(l)) return;
+        if (!/->end\(\s*\)?\.?\s*$/.test(l)) return;
         const prev = lines[i - 1] ?? '';
-        if (prev.trim() !== '' && !/->shut\(/.test(prev)) {
+        if (prev.trim() !== '' && !/->end\(/.test(prev)) {
           out.push({ line: i + 1, text: `preceded by: ${prev.trim().slice(0, 60)}` });
         }
       });

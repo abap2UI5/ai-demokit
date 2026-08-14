@@ -42,36 +42,36 @@ CLASS z2ui5_cl_smpc_app_197 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `height`    v = `100%`
 
-        )->open( `Page`
+        )->ele( `Page`
             " element binding kept 1:1 - the context is the one-record structure instead of {/ProductCollection/0}
             )->a( n = `binding`    v = client->_bind( s_product )
             )->a( n = `showHeader` v = `false`
 
-            )->open( `ObjectHeader`
+            )->ele( `ObjectHeader`
                 )->a( n = `title`      v = `{NAME}`
                 )->a( n = `number`     v = |\{ parts:[\{path:'PRICE'\},\{path:'CURRENCYCODE'\}], type: 'sap.ui.model.type.Currency', formatOptions: \{showMeasure: false\} \}|
                 )->a( n = `numberUnit` v = `{CURRENCYCODE}`
                 )->a( n = `responsive` v = `true`
                 )->a( n = `class`      v = `sapUiResponsivePadding--header`
 
-                )->leaf( `ObjectAttribute`
+                )->tag( `ObjectAttribute`
                     )->a( n = `text` v = `{WEIGHTMEASURE} {WEIGHTUNIT}`
-                )->leaf( `ObjectAttribute`
+                )->tag( `ObjectAttribute`
                     )->a( n = `text` v = `{WIDTH} x {DEPTH} x {HEIGHT} {DIMUNIT}`
 
-                )->open( `markers`
-                    )->leaf( `ObjectMarker`
+                )->ele( `markers`
+                    )->tag( `ObjectMarker`
                         )->a( n = `type` v = `Favorite`
-                    )->leaf( `ObjectMarker`
+                    )->tag( `ObjectMarker`
                         )->a( n = `type` v = `Flagged`
-                    )->leaf( `ObjectMarker`
+                    )->tag( `ObjectMarker`
                         )->a( n = `type` v = `Draft` ).
 
     client->view_display( view->stringify( ) ).

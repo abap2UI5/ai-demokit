@@ -34,29 +34,29 @@ CLASS z2ui5_cl_smpc_app_267 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " handleToggleClick calls DynamicSideContent.toggle() - reproduced
     " roundtrip-free with control_by_id (a public control method). The Slider's
     " liveChange sets the container width through jQuery in the original, which
     " has no abap2UI5 equivalent (app 213/214 precedent); the Slider stays with
     " its two-way bound value. The img> model folds to the mock's literal URLs.
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `height`    v = `100%`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
-        )->open( `Page`
+        )->ele( `Page`
             )->a( n = `showHeader`    v = `false`
             )->a( n = `showNavButton` v = `false`
 
-            )->open( `Page`
+            )->ele( `Page`
                 )->a( n = `id`            v = `sideContentContainer`
                 )->a( n = `showHeader`    v = `false`
                 )->a( n = `showNavButton` v = `false`
 
-                )->open( n = `DynamicSideContent` ns = `l`
+                )->ele( n = `DynamicSideContent` ns = `l`
                     )->a( n = `id`                v = `DynamicSideContent`
                     )->a( n = `class`             v = `sapUiDSCExplored sapUiContentPadding`
                     )->a( n = `containerQuery`    v = `true`
@@ -64,15 +64,15 @@ CLASS z2ui5_cl_smpc_app_267 IMPLEMENTATION.
                     )->a( n = `breakpointChanged` v = client->_event( val   = `BREAKPOINT_CHANGED`
                                                                       t_arg = VALUE #( ( `${$parameters>/currentBreakpoint}` ) ) )
 
-                    )->open( `VBox`
-                        )->leaf( `Title`
+                    )->ele( `VBox`
+                        )->tag( `Title`
                             )->a( n = `level` v = `H1`
                             )->a( n = `text`  v = `Main content`
-                        )->leaf( `Image`
+                        )->tag( `Image`
                             )->a( n = `src`           v = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-7777-large.jpg`
                             )->a( n = `densityAware`  v = `false`
                             )->a( n = `width`         v = `10em`
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor `
                                               && `incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud `
                                               && `exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure `
@@ -80,18 +80,18 @@ CLASS z2ui5_cl_smpc_app_267 IMPLEMENTATION.
                                               && `Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt `
                                               && `mollit anim id est laborum.`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( n = `sideContent` ns = `l`
-                        )->open( `VBox`
-                            )->leaf( `Title`
+                    )->ele( n = `sideContent` ns = `l`
+                        )->ele( `VBox`
+                            )->tag( `Title`
                                 )->a( n = `level` v = `H1`
                                 )->a( n = `text`  v = `Side content`
-                            )->leaf( `Image`
+                            )->tag( `Image`
                                 )->a( n = `src`          v = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6100-large.jpg`
                                 )->a( n = `densityAware` v = `false`
                                 )->a( n = `width`        v = `10em`
-                            )->leaf( `Text`
+                            )->tag( `Text`
                                 )->a( n = `class` v = `sapUiDSCRightText`
                                 )->a( n = `text`  v = `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor `
                                                    && `incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud `
@@ -100,21 +100,21 @@ CLASS z2ui5_cl_smpc_app_267 IMPLEMENTATION.
                                                    && `Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt `
                                                    && `mollit anim id est laborum.`
 
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( `footer`
-                )->open( `Toolbar`
-                    )->leaf( `Button`
+            )->ele( `footer`
+                )->ele( `Toolbar`
+                    )->tag( `Button`
                         )->a( n = `text`    v = `Toggle`
                         )->a( n = `type`    v = `Accept`
                         )->a( n = `id`      v = `equalSplitToggleButton`
                         )->a( n = `enabled` v = client->_bind( toggle_enabled )
                         )->a( n = `press`   v = client->follow_up_action( val   = client->cs_event-control_by_id
                                                                           t_arg = VALUE #( ( `DynamicSideContent` ) ( `toggle` ) ) )
-                    )->leaf( `Slider`
+                    )->tag( `Slider`
                         )->a( n = `id`      v = `DSCWidthSlider`
                         )->a( n = `value`   v = `100`
                         " handleSliderChange: the container is a sap.m.Page, which

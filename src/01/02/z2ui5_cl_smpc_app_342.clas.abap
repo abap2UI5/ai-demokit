@@ -50,12 +50,12 @@ CLASS z2ui5_cl_smpc_app_342 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the sample's SimpleForm (request time, number of cards, dataMode, Start
     " loading) and the f:GridContainer the controller fills with Cards - bound
     " to the model here, with the Card as the aggregation template
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns:f`    v = `sap.f`
@@ -63,47 +63,47 @@ CLASS z2ui5_cl_smpc_app_342 IMPLEMENTATION.
         )->a( n = `xmlns:form` v = `sap.ui.layout.form`
         )->a( n = `height`     v = `100%`
 
-        )->open( n = `SimpleForm` ns = `form`
+        )->ele( n = `SimpleForm` ns = `form`
             )->a( n = `editable` v = `true`
             )->a( n = `width`    v = `40rem`
 
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `text` v = `Time for requesting the card data`
-            )->leaf( `Input`
+            )->tag( `Input`
                 )->a( n = `id`          v = `loadingSeconds`
                 )->a( n = `width`       v = `8rem`
                 )->a( n = `type`        v = `Number`
                 )->a( n = `description` v = `seconds`
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `text` v = `Number of cards`
-            )->leaf( `Input`
+            )->tag( `Input`
                 )->a( n = `id`    v = `numberOfCards`
                 )->a( n = `width` v = `4rem`
                 )->a( n = `type`  v = `Number`
                 )->a( n = `value` v = client->_bind( numberofcards )
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `text` v = `dataMode to 'Active'`
-            )->leaf( `CheckBox`
+            )->tag( `CheckBox`
                 )->a( n = `id`       v = `dataMode`
                 )->a( n = `selected` v = client->_bind( datamode_active )
-            )->leaf( `Button`
+            )->tag( `Button`
                 )->a( n = `text`  v = `Start loading`
                 )->a( n = `type`  v = `Emphasized`
                 )->a( n = `press` v = client->_event( `FORM_SUBMIT` )
 
-        )->shut(
+        )->end(
 
-        )->open( n = `GridContainer` ns = `f`
+        )->ele( n = `GridContainer` ns = `f`
             )->a( n = `id`    v = `cardsContainer`
             )->a( n = `class` v = `sapUiSmallMargin`
             )->a( n = `items` v = client->_bind( t_cards )
 
-            )->open( n = `Card` ns = `w`
+            )->ele( n = `Card` ns = `w`
                 )->a( n = `manifest` v = `{MANIFEST}`
                 )->a( n = `dataMode` v = `{DATAMODE}`
 
-                )->open( n = `layoutData` ns = `w`
-                    )->leaf( n = `GridContainerItemLayoutData` ns = `f`
+                )->ele( n = `layoutData` ns = `w`
+                    )->tag( n = `GridContainerItemLayoutData` ns = `f`
                         )->a( n = `columns` v = `{COLUMNS}`
                         )->a( n = `minRows` v = `4` ).
 

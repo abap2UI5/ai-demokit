@@ -32,156 +32,156 @@ CLASS z2ui5_cl_smpc_app_132 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns:tnt` v = `sap.tnt`
         )->a( n = `height`    v = `100%`
 
-        )->open( `VBox`
+        )->ele( `VBox`
             )->a( n = `renderType` v = `Bare`
             )->a( n = `alignItems` v = `Start`
             )->a( n = `height`     v = `100%`
 
-            )->leaf( `Button`
+            )->tag( `Button`
                 )->a( n = `text`  v = `Toggle Collapse/Expand`
                 )->a( n = `icon`  v = `sap-icon://menu2`
                 )->a( n = `press` v = client->_event( `TOGGLE_EXPAND` )
 
-            )->open( n = `SideNavigation` ns = `tnt`
+            )->ele( n = `SideNavigation` ns = `tnt`
                 )->a( n = `id`          v = `sideNavigation`
                 )->a( n = `selectedKey` v = `myAccounts`
                 )->a( n = `expanded`    v = client->_bind( expanded )
 
-                )->open( n = `NavigationList` ns = `tnt`
+                )->ele( n = `NavigationList` ns = `tnt`
 
-                    )->leaf( n = `NavigationListItem` ns = `tnt`
+                    )->tag( n = `NavigationListItem` ns = `tnt`
                         )->a( n = `text` v = `Dashboard`
                         )->a( n = `icon` v = `sap-icon://home`
 
                     " expanded reads @since 1.121 (relocated to NavigationListItemBase), selectable is @since 1.116,
                     " tag is @since 1.149 and the Indication15-20 states are @since 1.120 - all kept 1:1 (POST_171)
-                    )->open( n = `NavigationListItem` ns = `tnt`
+                    )->ele( n = `NavigationListItem` ns = `tnt`
                         )->a( n = `text`       v = `Favorites`
                         )->a( n = `icon`       v = `sap-icon://favorite`
                         )->a( n = `expanded`   v = `true`
                         )->a( n = `selectable` v = `false`
-                        )->open( n = `tag` ns = `tnt`
-                            )->leaf( `ObjectStatus`
+                        )->ele( n = `tag` ns = `tnt`
+                            )->tag( `ObjectStatus`
                                 )->a( n = `text`     v = `3 Items`
                                 )->a( n = `state`    v = `Indication17`
                                 )->a( n = `inverted` v = `true`
 
-                        )->shut(
-                        )->leaf( n = `NavigationListItem` ns = `tnt`
+                        )->end(
+                        )->tag( n = `NavigationListItem` ns = `tnt`
                             )->a( n = `text` v = `My Accounts`
                             )->a( n = `id`   v = `myAccounts`
-                        )->open( n = `NavigationListItem` ns = `tnt`
+                        )->ele( n = `NavigationListItem` ns = `tnt`
                             )->a( n = `text` v = `My Orders`
-                            )->open( n = `tag` ns = `tnt`
-                                )->leaf( `ObjectStatus`
+                            )->ele( n = `tag` ns = `tnt`
+                                )->tag( `ObjectStatus`
                                     )->a( n = `text`     v = `5 Pending`
                                     )->a( n = `state`    v = `Indication20`
                                     )->a( n = `inverted` v = `true`
 
-                        )->shut(
-                        )->shut(
-                        )->leaf( n = `NavigationListItem` ns = `tnt`
+                        )->end(
+                        )->end(
+                        )->tag( n = `NavigationListItem` ns = `tnt`
                             )->a( n = `text` v = `My Reports`
 
-                    )->shut(
+                    )->end(
 
                     " NavigationListGroup is a control @since 1.121 - kept 1:1 (POST_171)
-                    )->open( n = `NavigationListGroup` ns = `tnt`
+                    )->ele( n = `NavigationListGroup` ns = `tnt`
                         )->a( n = `text` v = `Business Operations`
-                        )->open( n = `NavigationListItem` ns = `tnt`
+                        )->ele( n = `NavigationListItem` ns = `tnt`
                             )->a( n = `text` v = `Inventory`
                             )->a( n = `icon` v = `sap-icon://product`
-                            )->open( n = `tag` ns = `tnt`
-                                )->leaf( `ObjectStatus`
+                            )->ele( n = `tag` ns = `tnt`
+                                )->tag( `ObjectStatus`
                                     )->a( n = `text`     v = `Low Stock`
                                     )->a( n = `state`    v = `Indication18`
                                     )->a( n = `inverted` v = `true`
 
-                        )->shut(
-                        )->shut(
-                        )->leaf( n = `NavigationListItem` ns = `tnt`
+                        )->end(
+                        )->end(
+                        )->tag( n = `NavigationListItem` ns = `tnt`
                             )->a( n = `text` v = `Analytics`
                             )->a( n = `icon` v = `sap-icon://bar-chart`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( n = `NavigationListItem` ns = `tnt`
+                    )->ele( n = `NavigationListItem` ns = `tnt`
                         )->a( n = `text` v = `API Explorer`
                         )->a( n = `icon` v = `sap-icon://explorer`
-                        )->open( n = `tag` ns = `tnt`
-                            )->leaf( `ObjectStatus`
+                        )->ele( n = `tag` ns = `tnt`
+                            )->tag( `ObjectStatus`
                                 )->a( n = `text`     v = `Beta`
                                 )->a( n = `state`    v = `Indication15`
                                 )->a( n = `inverted` v = `true`
 
-                    )->shut(
-                    )->shut(
+                    )->end(
+                    )->end(
 
-                    )->open( n = `NavigationListItem` ns = `tnt`
+                    )->ele( n = `NavigationListItem` ns = `tnt`
                         )->a( n = `text`     v = `Projects`
                         )->a( n = `icon`     v = `sap-icon://project-definition-triangle`
                         )->a( n = `expanded` v = `true`
-                        )->open( n = `tag` ns = `tnt`
-                            )->leaf( `ObjectStatus`
+                        )->ele( n = `tag` ns = `tnt`
+                            )->tag( `ObjectStatus`
                                 )->a( n = `text`     v = `2 Active`
                                 )->a( n = `state`    v = `Indication16`
                                 )->a( n = `inverted` v = `true`
 
-                        )->shut(
-                        )->leaf( n = `NavigationListItem` ns = `tnt`
+                        )->end(
+                        )->tag( n = `NavigationListItem` ns = `tnt`
                             )->a( n = `text` v = `Project Alpha`
-                        )->open( n = `NavigationListItem` ns = `tnt`
+                        )->ele( n = `NavigationListItem` ns = `tnt`
                             )->a( n = `text` v = `Project Beta`
-                            )->open( n = `tag` ns = `tnt`
-                                )->leaf( `ObjectStatus`
+                            )->ele( n = `tag` ns = `tnt`
+                                )->tag( `ObjectStatus`
                                     )->a( n = `text`     v = `Experimental`
                                     )->a( n = `state`    v = `Indication19`
                                     )->a( n = `inverted` v = `true`
 
-                        )->shut(
-                        )->shut(
-                    )->shut(
-                    )->leaf( n = `NavigationListItem` ns = `tnt`
+                        )->end(
+                        )->end(
+                    )->end(
+                    )->tag( n = `NavigationListItem` ns = `tnt`
                         )->a( n = `text` v = `Documentation`
                         )->a( n = `icon` v = `sap-icon://sys-help`
-                    )->leaf( n = `NavigationListItem` ns = `tnt`
+                    )->tag( n = `NavigationListItem` ns = `tnt`
                         )->a( n = `text` v = `Sandbox`
                         )->a( n = `icon` v = `sap-icon://lab`
-                    )->open( n = `NavigationListItem` ns = `tnt`
+                    )->ele( n = `NavigationListItem` ns = `tnt`
                         )->a( n = `text` v = `Notifications`
                         )->a( n = `icon` v = `sap-icon://bell`
-                        )->open( n = `tag` ns = `tnt`
-                            )->leaf( `ObjectStatus`
+                        )->ele( n = `tag` ns = `tnt`
+                            )->tag( `ObjectStatus`
                                 )->a( n = `text`     v = `8 New`
                                 )->a( n = `state`    v = `Indication18`
                                 )->a( n = `inverted` v = `true`
 
-                    )->shut(
-                    )->shut(
-                )->shut(
+                    )->end(
+                    )->end(
+                )->end(
 
-                )->open( n = `fixedItem` ns = `tnt`
-                    )->open( n = `NavigationList` ns = `tnt`
-                        )->open( n = `NavigationListItem` ns = `tnt`
+                )->ele( n = `fixedItem` ns = `tnt`
+                    )->ele( n = `NavigationList` ns = `tnt`
+                        )->ele( n = `NavigationListItem` ns = `tnt`
                             )->a( n = `text` v = `Support`
                             )->a( n = `icon` v = `sap-icon://sys-help-2`
-                            )->open( n = `tag` ns = `tnt`
-                                )->leaf( `ObjectStatus`
+                            )->ele( n = `tag` ns = `tnt`
+                                )->tag( `ObjectStatus`
                                     )->a( n = `text`     v = `24/7`
                                     )->a( n = `state`    v = `Indication16`
                                     )->a( n = `inverted` v = `true`
 
-                        )->shut(
-                        )->shut(
-                        )->leaf( n = `NavigationListItem` ns = `tnt`
+                        )->end(
+                        )->end(
+                        )->tag( n = `NavigationListItem` ns = `tnt`
                             )->a( n = `text` v = `Settings`
                             )->a( n = `icon` v = `sap-icon://action-settings` ).
 

@@ -26,68 +26,68 @@ CLASS z2ui5_cl_smpc_app_403 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `height`     v = `100%`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:core` v = `sap.ui.core`
 
-        )->open( `Page`
+        )->ele( `Page`
             )->a( n = `showHeader` v = `false`
             )->a( n = `class`      v = `sapUiContentPadding`
 
-            )->open( `subHeader`
-                )->open( `Toolbar`
+            )->ele( `subHeader`
+                )->ele( `Toolbar`
                     )->a( n = `design` v = `Info`
 
-                    )->leaf( n = `Icon` ns = `core`
+                    )->tag( n = `Icon` ns = `core`
                         )->a( n = `src` v = `sap-icon://begin`
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `This sample demonstrates classes which let you to add negative margin at two opposite sides (begin/end).`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( `Panel`
+            )->ele( `Panel`
                 )->a( n = `class` v = `sapUiTinyNegativeMarginBeginEnd`
 
-                )->open( `content`
-                    )->leaf( `Text`
+                )->ele( `content`
+                    )->tag( `Text`
                         )->a( n = `text`  v = `This panel uses margin class 'sapUiTinyNegativeMarginBeginEnd' to add a -0.5rem space at the panel's left and right sides.`
                         )->a( n = `class` v = `sapMH4FontSize`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( `Panel`
+            )->ele( `Panel`
                 )->a( n = `class` v = `sapUiSmallNegativeMarginBeginEnd`
 
-                )->open( `content`
-                    )->leaf( `Text`
+                )->ele( `content`
+                    )->tag( `Text`
                         )->a( n = `text`  v = `This panel uses margin class 'sapUiSmallNegativeMarginBeginEnd' to add a -1rem space at the panel's left and right sides.`
                         )->a( n = `class` v = `sapMH4FontSize`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( `Panel`
+            )->ele( `Panel`
                 )->a( n = `class` v = `sapUiMediumNegativeMarginBeginEnd`
 
-                )->open( `content`
-                    )->leaf( `Text`
+                )->ele( `content`
+                    )->tag( `Text`
                         )->a( n = `text`  v = `This panel uses margin class 'sapUiMediumNegativeMarginBeginEnd' to add a -2rem space at the panel's left and right sides.`
                         )->a( n = `class` v = `sapMH4FontSize`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( `Panel`
+            )->ele( `Panel`
                 )->a( n = `class` v = `sapUiLargeNegativeMarginBeginEnd`
 
-                )->open( `content`
-                    )->leaf( `Text`
+                )->ele( `content`
+                    )->tag( `Text`
                         )->a( n = `text`  v = `This panel uses margin class 'sapUiLargeNegativeMarginBeginEnd' to add a -3rem space at the panel's left and right sides.`
                         )->a( n = `class` v = `sapMH4FontSize` ).
 

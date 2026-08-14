@@ -26,28 +26,28 @@ CLASS z2ui5_cl_smpc_app_055 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
 
-        )->open( `IconTabHeader`
+        )->ele( `IconTabHeader`
             )->a( n = `mode` v = `Inline`
 
-            )->open( `items`
-                )->leaf( `IconTabFilter`
+            )->ele( `items`
+                )->tag( `IconTabFilter`
                     )->a( n = `key`  v = `info`
                     )->a( n = `text` v = `Info`
-                )->leaf( `IconTabFilter`
+                )->tag( `IconTabFilter`
                     )->a( n = `key`   v = `attachments`
                     )->a( n = `text`  v = `Attachments`
                     )->a( n = `count` v = `3`
-                )->leaf( `IconTabFilter`
+                )->tag( `IconTabFilter`
                     )->a( n = `key`   v = `notes`
                     )->a( n = `text`  v = `Notes`
                     )->a( n = `count` v = `12`
-                )->leaf( `IconTabFilter`
+                )->tag( `IconTabFilter`
                     )->a( n = `key`  v = `people`
                     )->a( n = `text` v = `People` ).
 

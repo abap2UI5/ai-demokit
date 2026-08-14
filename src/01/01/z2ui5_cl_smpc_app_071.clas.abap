@@ -38,26 +38,26 @@ CLASS z2ui5_cl_smpc_app_071 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
             " element binding kept 1:1 - a one-record structure /S_PRODUCT instead of {/ProductCollection/0}
             )->a( n = `binding` v = client->_bind( s_product )
             )->a( n = `class`   v = `sapUiContentPadding`
             )->a( n = `width`   v = `100%`
 
-            )->leaf( `ObjectIdentifier`
+            )->tag( `ObjectIdentifier`
                 )->a( n = `title`       v = `{NAME}`
                 )->a( n = `text`        v = `{DESCRIPTION}`
                 )->a( n = `titleActive` v = `true`
                 )->a( n = `titlePress`  v = client->_event( `TITLE_PRESS` )
 
-        )->shut( ).
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

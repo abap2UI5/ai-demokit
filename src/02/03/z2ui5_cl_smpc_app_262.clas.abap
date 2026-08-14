@@ -34,7 +34,7 @@ CLASS z2ui5_cl_smpc_app_262 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " sap.uxap ObjectPage with a responsive Avatar (app 244 is the sap.f
     " DynamicPage twin of this sample). showFooter is two-way bound to a model
@@ -45,14 +45,14 @@ CLASS z2ui5_cl_smpc_app_262 IMPLEMENTATION.
     " wired as a view attribute (the original attaches it in onInit) and drives
     " both Avatars' bound displaySize. test-resources image URLs point at the
     " sdk.openui5.org host (offline rule).
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `height`       v = `100%`
         )->a( n = `xmlns`        v = `sap.uxap`
         )->a( n = `xmlns:mvc`    v = `sap.ui.core.mvc`
         )->a( n = `xmlns:m`      v = `sap.m`
         )->a( n = `xmlns:layout` v = `sap.ui.layout`
 
-        )->open( `ObjectPageLayout`
+        )->ele( `ObjectPageLayout`
             )->a( n = `id`                       v = `ObjectPageLayout`
             )->a( n = `showTitleInHeaderContent` v = `true`
             )->a( n = `showEditHeaderButton`     v = `true`
@@ -66,119 +66,119 @@ CLASS z2ui5_cl_smpc_app_262 IMPLEMENTATION.
             )->a( n = `breakpointChange`         v = client->_event( val   = `BREAKPOINT_CHANGE`
                                                                      t_arg = VALUE #( ( `${$parameters>/currentRange}` ) ( `${$parameters>/currentWidth}` ) ) )
 
-            )->open( `headerTitle`
-                )->open( `ObjectPageDynamicHeaderTitle`
-                    )->open( `breadcrumbs`
-                        )->open( n = `Breadcrumbs` ns = `m`
+            )->ele( `headerTitle`
+                )->ele( `ObjectPageDynamicHeaderTitle`
+                    )->ele( `breadcrumbs`
+                        )->ele( n = `Breadcrumbs` ns = `m`
                             )->a( n = `currentLocationText` v = `Responsive Avatar Demo`
 
-                            )->leaf( n = `Link` ns = `m`
+                            )->tag( n = `Link` ns = `m`
                                 )->a( n = `text`  v = `Home`
                                 )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
                                                                                 t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Page 1 a very long link clicked` ) ) )
-                            )->leaf( n = `Link` ns = `m`
+                            )->tag( n = `Link` ns = `m`
                                 )->a( n = `text`  v = `Examples`
                                 )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
                                                                                 t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Page 2 long link clicked` ) ) )
 
-                        )->shut(
-                    )->shut(
+                        )->end(
+                    )->end(
 
-                    )->open( `expandedHeading`
-                        )->open( n = `HBox` ns = `m`
-                            )->leaf( n = `Title` ns = `m`
+                    )->ele( `expandedHeading`
+                        )->ele( n = `HBox` ns = `m`
+                            )->tag( n = `Title` ns = `m`
                                 )->a( n = `text`     v = `Denise Smith`
                                 )->a( n = `wrapping` v = `true`
-                            )->leaf( n = `ObjectMarker` ns = `m`
+                            )->tag( n = `ObjectMarker` ns = `m`
                                 )->a( n = `type`  v = `Favorite`
                                 )->a( n = `class` v = `sapUiTinyMarginBegin`
 
-                        )->shut(
-                    )->shut(
+                        )->end(
+                    )->end(
 
-                    )->open( `snappedHeading`
-                        )->open( n = `FlexBox` ns = `m`
+                    )->ele( `snappedHeading`
+                        )->ele( n = `FlexBox` ns = `m`
                             )->a( n = `fitContainer` v = `true`
                             )->a( n = `alignItems`   v = `Center`
 
-                            )->leaf( n = `Avatar` ns = `m`
+                            )->tag( n = `Avatar` ns = `m`
                                 )->a( n = `id`          v = `snappedAvatar`
                                 )->a( n = `src`         v = `https://sdk.openui5.org/test-resources/sap/uxap/images/imageID_275314.png`
                                 )->a( n = `class`       v = `sapUiTinyMarginEnd`
                                 )->a( n = `displaySize` v = client->_bind( avatar_size )
-                            )->leaf( n = `Title` ns = `m`
+                            )->tag( n = `Title` ns = `m`
                                 )->a( n = `text`     v = `Denise Smith`
                                 )->a( n = `wrapping` v = `true`
 
-                        )->shut(
-                    )->shut(
+                        )->end(
+                    )->end(
 
-                    )->open( `expandedContent`
-                        )->leaf( n = `Text` ns = `m`
+                    )->ele( `expandedContent`
+                        )->tag( n = `Text` ns = `m`
                             )->a( n = `text` v = `Senior UI Developer`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( `snappedContent`
-                        )->leaf( n = `Text` ns = `m`
+                    )->ele( `snappedContent`
+                        )->tag( n = `Text` ns = `m`
                             )->a( n = `text` v = `Senior UI Developer`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( `actions`
-                        )->open( n = `OverflowToolbarButton` ns = `m`
+                    )->ele( `actions`
+                        )->ele( n = `OverflowToolbarButton` ns = `m`
                             )->a( n = `icon`    v = `sap-icon://edit`
                             )->a( n = `text`    v = `Edit`
                             )->a( n = `type`    v = `Emphasized`
                             )->a( n = `tooltip` v = `edit`
 
-                            )->open( n = `layoutData` ns = `m`
-                                )->leaf( n = `OverflowToolbarLayoutData` ns = `m`
+                            )->ele( n = `layoutData` ns = `m`
+                                )->tag( n = `OverflowToolbarLayoutData` ns = `m`
                                     )->a( n = `priority` v = `NeverOverflow`
 
-                            )->shut(
-                        )->shut(
+                            )->end(
+                        )->end(
 
-                        )->leaf( n = `Button` ns = `m`
+                        )->tag( n = `Button` ns = `m`
                             )->a( n = `text`  v = `Toggle Footer`
                             )->a( n = `press` v = client->_event( `TOGGLE_FOOTER` )
 
-                    )->shut(
-                )->shut(
-            )->shut(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( `headerContent`
-                )->open( n = `FlexBox` ns = `m`
+            )->ele( `headerContent`
+                )->ele( n = `FlexBox` ns = `m`
                     )->a( n = `wrap` v = `Wrap`
 
-                    )->leaf( n = `Avatar` ns = `m`
+                    )->tag( n = `Avatar` ns = `m`
                         )->a( n = `id`          v = `headerAvatar`
                         )->a( n = `class`       v = `sapUiSmallMarginEnd`
                         )->a( n = `src`         v = `https://sdk.openui5.org/test-resources/sap/uxap/images/imageID_275314.png`
                         )->a( n = `displaySize` v = client->_bind( avatar_size )
 
-                    )->open( n = `VerticalLayout` ns = `layout`
+                    )->ele( n = `VerticalLayout` ns = `layout`
                         )->a( n = `class` v = `sapUiSmallMarginBeginEnd`
 
-                        )->leaf( n = `Link` ns = `m`
+                        )->tag( n = `Link` ns = `m`
                             )->a( n = `text` v = `+33 6 4512 5158`
-                        )->leaf( n = `Link` ns = `m`
+                        )->tag( n = `Link` ns = `m`
                             )->a( n = `text` v = `DeniseSmith@sap.com`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( n = `VerticalLayout` ns = `layout`
+                    )->ele( n = `VerticalLayout` ns = `layout`
                         )->a( n = `class` v = `sapUiSmallMarginBeginEnd`
 
-                        )->leaf( n = `Label` ns = `m`
+                        )->tag( n = `Label` ns = `m`
                             )->a( n = `text` v = `San Jose, USA`
-                        )->leaf( n = `Label` ns = `m`
+                        )->tag( n = `Label` ns = `m`
                             )->a( n = `text` v = `Resize the browser to see the Avatar adapt`
 
-                    )->shut(
-                )->shut(
+                    )->end(
+                )->end(
 
-                )->leaf( n = `MessageStrip` ns = `m`
+                )->tag( n = `MessageStrip` ns = `m`
                     )->a( n = `text`     v = `The Avatar size changes automatically based on screen size: `
                                           && `Phone (M), Tablet (L), Desktop/DesktopExtraLarge (XL). `
                                           && `This is handled using the breakpointChange event.`
@@ -186,111 +186,111 @@ CLASS z2ui5_cl_smpc_app_262 IMPLEMENTATION.
                     )->a( n = `showIcon` v = `true`
                     )->a( n = `class`    v = `sapUiTinyMarginTopBottom`
 
-            )->shut(
+            )->end(
 
-            )->open( `sections`
-                )->open( `ObjectPageSection`
+            )->ele( `sections`
+                )->ele( `ObjectPageSection`
                     )->a( n = `titleUppercase` v = `false`
                     )->a( n = `title`          v = `About`
 
-                    )->open( `subSections`
-                        )->open( `ObjectPageSubSection`
-                            )->open( `blocks`
-                                )->open( n = `VerticalLayout` ns = `layout`
-                                    )->leaf( n = `Title` ns = `m`
+                    )->ele( `subSections`
+                        )->ele( `ObjectPageSubSection`
+                            )->ele( `blocks`
+                                )->ele( n = `VerticalLayout` ns = `layout`
+                                    )->tag( n = `Title` ns = `m`
                                         )->a( n = `text`  v = `Responsive Avatar Example`
                                         )->a( n = `level` v = `H3`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `This sample demonstrates how to use the breakpointChange event to make Avatar sizes responsive.`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `The ObjectPageLayout fires the breakpointChange event whenever its width changes and crosses a breakpoint.`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `The application can handle this event to adjust UI elements like Avatar sizes accordingly.`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `class` v = `sapUiSmallMarginTop`
                                         )->a( n = `text`  v = `Breakpoints:`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `- Phone: < 600px -> Avatar size M (4rem)`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `- Tablet: 600px - 1024px -> Avatar size L (5rem)`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `- Desktop: 1024px - 1439px -> Avatar size XL (7rem)`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `- DesktopExtraLarge: >= 1440px -> Avatar size XL (7rem)`
 
-                                )->shut(
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                )->shut(
+                                )->end(
+                            )->end(
+                        )->end(
+                    )->end(
+                )->end(
 
-                )->open( `ObjectPageSection`
+                )->ele( `ObjectPageSection`
                     )->a( n = `titleUppercase` v = `false`
                     )->a( n = `title`          v = `Implementation`
 
-                    )->open( `subSections`
-                        )->open( `ObjectPageSubSection`
-                            )->open( `blocks`
-                                )->open( n = `VerticalLayout` ns = `layout`
-                                    )->leaf( n = `Title` ns = `m`
+                    )->ele( `subSections`
+                        )->ele( `ObjectPageSubSection`
+                            )->ele( `blocks`
+                                )->ele( n = `VerticalLayout` ns = `layout`
+                                    )->tag( n = `Title` ns = `m`
                                         )->a( n = `text`  v = `How it Works`
                                         )->a( n = `level` v = `H3`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `1. Attach to the breakpointChange event in the controller's onInit method`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `2. In the event handler, get the currentRange parameter (Phone/Tablet/Desktop/DesktopExtraLarge)`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `3. Map the range to appropriate Avatar sizes using a switch statement`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `4. Update the Avatar's displaySize property`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `class` v = `sapUiSmallMarginTop`
                                         )->a( n = `text`  v = `The event provides two parameters:`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `- currentRange: The media range name (Phone, Tablet, Desktop, or DesktopExtraLarge)`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `- currentWidth: The current width of the control in pixels`
 
-                                )->shut(
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                )->shut(
+                                )->end(
+                            )->end(
+                        )->end(
+                    )->end(
+                )->end(
 
-                )->open( `ObjectPageSection`
+                )->ele( `ObjectPageSection`
                     )->a( n = `titleUppercase` v = `false`
                     )->a( n = `title`          v = `Additional Content`
 
-                    )->open( `subSections`
-                        )->open( `ObjectPageSubSection`
-                            )->open( `blocks`
-                                )->open( n = `VerticalLayout` ns = `layout`
-                                    )->leaf( n = `Title` ns = `m`
+                    )->ele( `subSections`
+                        )->ele( `ObjectPageSubSection`
+                            )->ele( `blocks`
+                                )->ele( n = `VerticalLayout` ns = `layout`
+                                    )->tag( n = `Title` ns = `m`
                                         )->a( n = `text`  v = `Benefits`
                                         )->a( n = `level` v = `H3`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `- Full application control over responsive behavior`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `- Simple event-based API`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `- Can be used for any responsive UI adjustments, not just Avatars`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `- Works seamlessly with FlexibleColumnLayout and other container controls`
 
-                                )->shut(
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
+                                )->end(
+                            )->end(
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( `footer`
-                )->open( n = `OverflowToolbar` ns = `m`
-                    )->leaf( n = `ToolbarSpacer` ns = `m`
-                    )->leaf( n = `Button` ns = `m`
+            )->ele( `footer`
+                )->ele( n = `OverflowToolbar` ns = `m`
+                    )->tag( n = `ToolbarSpacer` ns = `m`
+                    )->tag( n = `Button` ns = `m`
                         )->a( n = `type` v = `Accept`
                         )->a( n = `text` v = `Accept`
-                    )->leaf( n = `Button` ns = `m`
+                    )->tag( n = `Button` ns = `m`
                         )->a( n = `type` v = `Reject`
                         )->a( n = `text` v = `Reject`
 

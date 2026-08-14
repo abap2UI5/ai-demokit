@@ -26,31 +26,31 @@ CLASS z2ui5_cl_smpc_app_371 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
             )->a( n = `width` v = `100%`
 
-            )->open( n = `content` ns = `l`
-                )->leaf( `TextArea`
+            )->ele( n = `content` ns = `l`
+                )->tag( `TextArea`
                     )->a( n = `valueState`  v = `Warning`
                     )->a( n = `placeholder` v = `ValueState : Warning`
                     )->a( n = `width`       v = `100%`
-                )->leaf( `TextArea`
+                )->tag( `TextArea`
                     )->a( n = `valueState`  v = `Error`
                     )->a( n = `placeholder` v = `ValueState : Error`
                     )->a( n = `width`       v = `100%`
-                )->leaf( `TextArea`
+                )->tag( `TextArea`
                     )->a( n = `valueState`  v = `Success`
                     )->a( n = `placeholder` v = `ValueState : Success`
                     )->a( n = `width`       v = `100%`
-                )->leaf( `TextArea`
+                )->tag( `TextArea`
                     )->a( n = `valueState`  v = `Information`
                     )->a( n = `placeholder` v = `ValueState : Information`
                     )->a( n = `width`       v = `100%` ).

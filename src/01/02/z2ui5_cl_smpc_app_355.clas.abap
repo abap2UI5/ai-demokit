@@ -44,26 +44,26 @@ CLASS z2ui5_cl_smpc_app_355 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the column-menu demo. The two menu-entry toggles are two-way bound and
     " the Table's enableColumnFreeze / enableCellFilter bind the same fields,
     " so both work entirely on the client - which is what the original's
     " {ui>/...} two-way bindings already do.
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.ui.table`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns:u`   v = `sap.ui.unified`
         )->a( n = `xmlns:m`   v = `sap.m`
         )->a( n = `height`    v = `100%`
 
-        )->open( n = `Page` ns = `m`
+        )->ele( n = `Page` ns = `m`
             )->a( n = `showHeader`      v = `false`
             )->a( n = `enableScrolling` v = `false`
             )->a( n = `class`           v = `sapUiContentPadding`
 
-            )->open( n = `content` ns = `m`
-                )->open( `Table`
+            )->ele( n = `content` ns = `m`
+                )->ele( `Table`
                     )->a( n = `id`                 v = `table`
                     )->a( n = `selectionMode`      v = `MultiToggle`
                     )->a( n = `rows`               v = client->_bind( t_products )
@@ -71,34 +71,34 @@ CLASS z2ui5_cl_smpc_app_355 IMPLEMENTATION.
                     )->a( n = `enableCellFilter`   v = client->_bind( enable_cell_filter )
                     )->a( n = `ariaLabelledBy`     v = `title`
 
-                    )->open( `extension`
-                        )->open( n = `OverflowToolbar` ns = `m`
+                    )->ele( `extension`
+                        )->ele( n = `OverflowToolbar` ns = `m`
                             )->a( n = `style` v = `Clear`
 
-                            )->leaf( n = `Title` ns = `m`
+                            )->tag( n = `Title` ns = `m`
                                 )->a( n = `id`   v = `title`
                                 )->a( n = `text` v = `Products`
 
-                            )->leaf( n = `ToolbarSpacer` ns = `m`
+                            )->tag( n = `ToolbarSpacer` ns = `m`
 
-                            )->leaf( n = `ToggleButton` ns = `m`
+                            )->tag( n = `ToggleButton` ns = `m`
                                 )->a( n = `icon`    v = `sap-icon://resize-horizontal`
                                 )->a( n = `tooltip` v = `Enable / Disable Freezing Menu Entries`
                                 )->a( n = `pressed` v = client->_bind( show_freeze_menu_entry )
 
-                            )->leaf( n = `ToggleButton` ns = `m`
+                            )->tag( n = `ToggleButton` ns = `m`
                                 )->a( n = `icon`    v = `sap-icon://filter`
                                 )->a( n = `tooltip` v = `Enable / Disable Cell Filter`
                                 )->a( n = `pressed` v = client->_bind( enable_cell_filter )
 
-                            )->leaf( n = `ToggleButton` ns = `m`
+                            )->tag( n = `ToggleButton` ns = `m`
                                 )->a( n = `icon`    v = `sap-icon://menu`
                                 )->a( n = `tooltip` v = `Enable / Disable Custom Context Menu`
 
-                        )->shut(
-                    )->shut(
-                    )->open( `columns`
-                        )->open( `Column`
+                        )->end(
+                    )->end(
+                    )->ele( `columns`
+                        )->ele( `Column`
                             )->a( n = `id`                  v = `name`
                             )->a( n = `width`               v = `11rem`
                             )->a( n = `sortProperty`        v = `NAME`
@@ -106,85 +106,85 @@ CLASS z2ui5_cl_smpc_app_355 IMPLEMENTATION.
                             )->a( n = `showFilterMenuEntry` v = `true`
                             )->a( n = `showSortMenuEntry`   v = `true`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Product Name`
 
-                            )->open( `template`
-                                )->leaf( n = `Text` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text`     v = `{NAME}`
                                     )->a( n = `wrapping` v = `false`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `id`             v = `productId`
                             )->a( n = `filterProperty` v = `PRODUCTID`
                             )->a( n = `sortProperty`   v = `PRODUCTID`
                             )->a( n = `width`          v = `11rem`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Product Id`
 
-                            )->open( `template`
-                                )->leaf( n = `Text` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text`     v = `{PRODUCTID}`
                                     )->a( n = `wrapping` v = `false`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `id`    v = `image`
                             )->a( n = `width` v = `9rem`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Image`
 
-                            )->open( `template`
-                                )->leaf( n = `Link` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Link` ns = `m`
                                     )->a( n = `text`   v = `Show Image`
                                     )->a( n = `href`   v = `{PRODUCTPICURL}`
                                     )->a( n = `target` v = `_blank`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `id`           v = `quantity`
                             )->a( n = `width`        v = `6rem`
                             )->a( n = `hAlign`       v = `End`
                             )->a( n = `sortProperty` v = `QUANTITY`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Quantity`
 
-                            )->open( `template`
-                                )->leaf( n = `Label` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = |\{ path: 'QUANTITY', type: 'sap.ui.model.type.Integer' \}|
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `width` v = `9rem`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Delivery Date`
 
-                            )->open( `template`
-                                )->leaf( n = `Text` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text`     v = |\{ path: 'DELIVERYDATE', type: 'sap.ui.model.type.Date', formatOptions: \{ source: \{ pattern: 'timestamp' \} \} \}|
                                     )->a( n = `wrapping` v = `false`
 
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                    )->open( `footer`
-                        )->leaf( n = `OverflowToolbar` ns = `m`
+                            )->end(
+                        )->end(
+                    )->end(
+                    )->ele( `footer`
+                        )->tag( n = `OverflowToolbar` ns = `m`
                             )->a( n = `id` v = `infobar`
 
-                    )->shut(
-                )->shut(
-            )->shut(
-        )->shut(
-    )->shut( ).
+                    )->end(
+                )->end(
+            )->end(
+        )->end(
+    )->end( ).
 
     client->view_display( view->stringify( ) ).
 

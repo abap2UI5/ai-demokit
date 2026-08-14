@@ -43,20 +43,20 @@ CLASS z2ui5_cl_smpc_app_066 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `height`    v = `100%`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
 
-        )->open( `Page`
+        )->ele( `Page`
             )->a( n = `showHeader` v = `false`
 
-            )->open( `footer`
-                )->open( `OverflowToolbar`
+            )->ele( `footer`
+                )->ele( `OverflowToolbar`
 
-                    )->open( `Button`
+                    )->ele( `Button`
                         )->a( n = `id`           v = `messagePopoverBtn`
                         )->a( n = `icon`         v = client->_bind( highest_icon )
                         )->a( n = `type`         v = client->_bind( highest_type )
@@ -65,14 +65,14 @@ CLASS z2ui5_cl_smpc_app_066 IMPLEMENTATION.
                         )->a( n = `press`        v = client->follow_up_action( val   = client->cs_event-control_by_id
                                                                                t_arg = VALUE #( ( `messagePopover` ) ( `toggleBy` ) ( `messagePopoverBtn` ) ) )
 
-                        )->open( `dependents`
-                            )->open( `MessagePopover`
+                        )->ele( `dependents`
+                            )->ele( `MessagePopover`
                                 )->a( n = `id`              v = `messagePopover`
                                 )->a( n = `items`           v = client->_bind( t_messages )
                                 )->a( n = `activeTitlePress` v = client->follow_up_action( val   = client->cs_event-control_global
                                                                                            t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Active title is pressed` ) ) )
 
-                                )->open( `MessageItem`
+                                )->ele( `MessageItem`
                                     )->a( n = `type`        v = `{TYPE}`
                                     )->a( n = `title`       v = `{TITLE}`
                                     )->a( n = `activeTitle` v = `{ACTIVE}`
@@ -80,23 +80,23 @@ CLASS z2ui5_cl_smpc_app_066 IMPLEMENTATION.
                                     )->a( n = `subtitle`    v = `{SUBTITLE}`
                                     )->a( n = `counter`     v = `{COUNTER}`
 
-                                    )->open( `link`
-                                        )->leaf( `Link`
+                                    )->ele( `link`
+                                        )->tag( `Link`
                                             )->a( n = `text`   v = `Show more information`
                                             )->a( n = `href`   v = `http://sap.com`
                                             )->a( n = `target` v = `_blank`
 
-                                    )->shut(
-                                )->shut(
-                            )->shut(
-                        )->shut(
-                    )->shut(
+                                    )->end(
+                                )->end(
+                            )->end(
+                        )->end(
+                    )->end(
 
-                    )->leaf( `ToolbarSpacer`
+                    )->tag( `ToolbarSpacer`
 
-                )->shut(
-            )->shut(
-        )->shut( ).
+                )->end(
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

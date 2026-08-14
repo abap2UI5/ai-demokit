@@ -52,13 +52,13 @@ CLASS z2ui5_cl_smpc_app_353 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the two-table move demo. Both tables bind their own model table, the two
     " arrow buttons and the context menus move the selected row across, and the
     " drag & drop wires ship the dragged / dropped row indices plus the drop
     " position so the move and the reorder happen in ABAP.
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`         v = `sap.ui.table`
         )->a( n = `xmlns:plugins` v = `sap.m.plugins`
         )->a( n = `xmlns:dnd`     v = `sap.ui.core.dnd`
@@ -67,16 +67,16 @@ CLASS z2ui5_cl_smpc_app_353 IMPLEMENTATION.
         )->a( n = `xmlns:m`       v = `sap.m`
         )->a( n = `height`        v = `100%`
 
-        )->open( n = `Page` ns = `m`
+        )->ele( n = `Page` ns = `m`
             )->a( n = `showHeader`      v = `false`
             )->a( n = `enableScrolling` v = `false`
             )->a( n = `class`           v = `sapUiContentPadding`
 
-            )->open( n = `content` ns = `m`
-                )->open( n = `HBox` ns = `m`
+            )->ele( n = `content` ns = `m`
+                )->ele( n = `HBox` ns = `m`
                     )->a( n = `renderType` v = `Bare`
 
-                    )->open( `Table`
+                    )->ele( `Table`
                         )->a( n = `id`                    v = `table1`
                         )->a( n = `selectionMode`         v = `Single`
                         )->a( n = `ariaLabelledBy`        v = `title`
@@ -86,103 +86,103 @@ CLASS z2ui5_cl_smpc_app_353 IMPLEMENTATION.
                         )->a( n = `rowSelectionChange`    v = client->_event( val   = `SELECT_1`
                                                                               t_arg = VALUE #( ( `${$parameters>/rowIndex}` ) ) )
 
-                        )->open( `extension`
-                            )->open( n = `OverflowToolbar` ns = `m`
+                        )->ele( `extension`
+                            )->ele( n = `OverflowToolbar` ns = `m`
                                 )->a( n = `id`    v = `infobar`
                                 )->a( n = `style` v = `Clear`
 
-                                )->leaf( n = `Title` ns = `m`
+                                )->tag( n = `Title` ns = `m`
                                     )->a( n = `id`   v = `title`
                                     )->a( n = `text` v = `Available Products`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `dependents`
-                            )->leaf( n = `ContextMenuSetting` ns = `plugins`
+                            )->end(
+                        )->end(
+                        )->ele( `dependents`
+                            )->tag( n = `ContextMenuSetting` ns = `plugins`
                                 )->a( n = `scope` v = `Selection`
 
-                        )->shut(
-                        )->open( `contextMenu`
-                            )->open( n = `Menu` ns = `m`
-                                )->leaf( n = `MenuItem` ns = `m`
+                        )->end(
+                        )->ele( `contextMenu`
+                            )->ele( n = `Menu` ns = `m`
+                                )->tag( n = `MenuItem` ns = `m`
                                     )->a( n = `text`  v = `Move to Selected Products`
                                     )->a( n = `press` v = client->_event( `MOVE_TO_2` )
 
-                            )->shut(
-                        )->shut(
-                        )->open( `columns`
-                            )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `columns`
+                            )->ele( `Column`
                                 )->a( n = `sortProperty`   v = `Name`
                                 )->a( n = `filterProperty` v = `Name`
 
-                                )->leaf( n = `Text` ns = `m`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text` v = `Product Name`
 
-                                )->open( `template`
-                                    )->leaf( n = `Text` ns = `m`
+                                )->ele( `template`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text`     v = `{NAME}`
                                         )->a( n = `wrapping` v = `false`
 
-                                )->shut(
-                            )->shut(
-                            )->open( `Column`
+                                )->end(
+                            )->end(
+                            )->ele( `Column`
                                 )->a( n = `sortProperty`   v = `Category`
                                 )->a( n = `filterProperty` v = `Category`
 
-                                )->leaf( n = `Text` ns = `m`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text` v = `Category`
 
-                                )->open( `template`
-                                    )->leaf( n = `Text` ns = `m`
+                                )->ele( `template`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text`     v = `{CATEGORY}`
                                         )->a( n = `wrapping` v = `false`
 
-                                )->shut(
-                            )->shut(
-                            )->open( `Column`
+                                )->end(
+                            )->end(
+                            )->ele( `Column`
                                 )->a( n = `hAlign`       v = `End`
                                 )->a( n = `width`        v = `6rem`
                                 )->a( n = `sortProperty` v = `Quantity`
 
-                                )->leaf( n = `Text` ns = `m`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text` v = `Quantity`
 
-                                )->open( `template`
-                                    )->leaf( n = `Text` ns = `m`
+                                )->ele( `template`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = |\{ path: 'QUANTITY', type: 'sap.ui.model.type.Integer' \}|
 
-                                )->shut(
-                            )->shut(
-                        )->shut(
-                        )->open( `dragDropConfig`
-                            )->leaf( n = `DragInfo` ns = `dnd`
+                                )->end(
+                            )->end(
+                        )->end(
+                        )->ele( `dragDropConfig`
+                            )->tag( n = `DragInfo` ns = `dnd`
                                 )->a( n = `groupName`         v = `moveToTable2`
                                 )->a( n = `sourceAggregation` v = `rows`
 
-                            )->leaf( n = `DropInfo` ns = `dnd`
+                            )->tag( n = `DropInfo` ns = `dnd`
                                 )->a( n = `groupName` v = `moveToTable1`
                                 )->a( n = `drop`      v = client->_event( val   = `DROP_TO_1`
                                                                           t_arg = VALUE #( ( `${$parameters>/draggedControl}.getIndex()` ) ) )
 
-                        )->shut(
-                    )->shut(
-                    )->open( n = `VBox` ns = `m`
+                        )->end(
+                    )->end(
+                    )->ele( n = `VBox` ns = `m`
                         )->a( n = `justifyContent` v = `Center`
                         )->a( n = `class`          v = `sapUiTinyMarginBeginEnd`
 
-                        )->leaf( n = `Button` ns = `m`
+                        )->tag( n = `Button` ns = `m`
                             )->a( n = `class`   v = `sapUiTinyMarginBottom`
                             )->a( n = `icon`    v = `sap-icon://navigation-right-arrow`
                             )->a( n = `tooltip` v = `Move to selected`
                             )->a( n = `press`   v = client->_event( `MOVE_TO_2` )
 
-                        )->leaf( n = `Button` ns = `m`
+                        )->tag( n = `Button` ns = `m`
                             )->a( n = `icon`    v = `sap-icon://navigation-left-arrow`
                             )->a( n = `tooltip` v = `Move to available`
                             )->a( n = `press`   v = client->_event( `MOVE_TO_1` )
 
-                    )->shut(
-                    )->open( `Table`
+                    )->end(
+                    )->ele( `Table`
                         )->a( n = `id`                    v = `table2`
                         )->a( n = `selectionMode`         v = `Single`
                         )->a( n = `ariaLabelledBy`        v = `title2`
@@ -193,92 +193,92 @@ CLASS z2ui5_cl_smpc_app_353 IMPLEMENTATION.
                                                                               t_arg = VALUE #( ( `${$parameters>/rowIndex}` ) ) )
                         )->a( n = `noData`                v = `Please drag-and-drop products here.`
 
-                        )->open( `dependents`
-                            )->leaf( n = `ContextMenuSetting` ns = `plugins`
+                        )->ele( `dependents`
+                            )->tag( n = `ContextMenuSetting` ns = `plugins`
                                 )->a( n = `scope` v = `Selection`
 
-                        )->shut(
-                        )->open( `contextMenu`
-                            )->open( n = `Menu` ns = `m`
-                                )->leaf( n = `MenuItem` ns = `m`
+                        )->end(
+                        )->ele( `contextMenu`
+                            )->ele( n = `Menu` ns = `m`
+                                )->tag( n = `MenuItem` ns = `m`
                                     )->a( n = `text`  v = `Move to Available Products`
                                     )->a( n = `press` v = client->_event( `MOVE_TO_1` )
 
-                                )->leaf( n = `MenuItem` ns = `m`
+                                )->tag( n = `MenuItem` ns = `m`
                                     )->a( n = `text`  v = `Move up`
                                     )->a( n = `press` v = client->_event( `MOVE_UP` )
 
-                                )->leaf( n = `MenuItem` ns = `m`
+                                )->tag( n = `MenuItem` ns = `m`
                                     )->a( n = `text`  v = `Move down`
                                     )->a( n = `press` v = client->_event( `MOVE_DOWN` )
 
-                            )->shut(
-                        )->shut(
-                        )->open( `extension`
-                            )->open( n = `OverflowToolbar` ns = `m`
+                            )->end(
+                        )->end(
+                        )->ele( `extension`
+                            )->ele( n = `OverflowToolbar` ns = `m`
                                 )->a( n = `style` v = `Clear`
 
-                                )->leaf( n = `Title` ns = `m`
+                                )->tag( n = `Title` ns = `m`
                                     )->a( n = `id`   v = `title2`
                                     )->a( n = `text` v = `Selected Products`
 
-                                )->leaf( n = `ToolbarSpacer` ns = `m`
+                                )->tag( n = `ToolbarSpacer` ns = `m`
 
-                                )->leaf( n = `Button` ns = `m`
+                                )->tag( n = `Button` ns = `m`
                                     )->a( n = `icon`    v = `sap-icon://navigation-up-arrow`
                                     )->a( n = `tooltip` v = `Move up`
                                     )->a( n = `press`   v = client->_event( `MOVE_UP` )
 
-                                )->leaf( n = `Button` ns = `m`
+                                )->tag( n = `Button` ns = `m`
                                     )->a( n = `icon`    v = `sap-icon://navigation-down-arrow`
                                     )->a( n = `tooltip` v = `Move down`
                                     )->a( n = `press`   v = client->_event( `MOVE_DOWN` )
 
-                            )->shut(
-                        )->shut(
-                        )->open( `columns`
-                            )->open( `Column`
-                                )->leaf( n = `Text` ns = `m`
+                            )->end(
+                        )->end(
+                        )->ele( `columns`
+                            )->ele( `Column`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text` v = `Product Name`
 
-                                )->open( `template`
-                                    )->leaf( n = `Text` ns = `m`
+                                )->ele( `template`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text`     v = `{NAME}`
                                         )->a( n = `wrapping` v = `false`
 
-                                )->shut(
-                            )->shut(
-                            )->open( `Column`
-                                )->leaf( n = `Text` ns = `m`
+                                )->end(
+                            )->end(
+                            )->ele( `Column`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text` v = `Category`
 
-                                )->open( `template`
-                                    )->leaf( n = `Text` ns = `m`
+                                )->ele( `template`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text`     v = `{CATEGORY}`
                                         )->a( n = `wrapping` v = `false`
 
-                                )->shut(
-                            )->shut(
-                            )->open( `Column`
+                                )->end(
+                            )->end(
+                            )->ele( `Column`
                                 )->a( n = `hAlign` v = `End`
                                 )->a( n = `width`  v = `6rem`
 
-                                )->leaf( n = `Text` ns = `m`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text` v = `Quantity`
 
-                                )->open( `template`
-                                    )->leaf( n = `Text` ns = `m`
+                                )->ele( `template`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = |\{ path: 'QUANTITY', type: 'sap.ui.model.type.Integer' \}|
 
-                                )->shut(
-                            )->shut(
-                        )->shut(
-                        )->open( `dragDropConfig`
-                            )->leaf( n = `DragInfo` ns = `dnd`
+                                )->end(
+                            )->end(
+                        )->end(
+                        )->ele( `dragDropConfig`
+                            )->tag( n = `DragInfo` ns = `dnd`
                                 )->a( n = `groupName`         v = `moveToTable1`
                                 )->a( n = `sourceAggregation` v = `rows`
 
-                            )->leaf( n = `DropInfo` ns = `dnd`
+                            )->tag( n = `DropInfo` ns = `dnd`
                                 )->a( n = `groupName`         v = `moveToTable2`
                                 )->a( n = `targetAggregation` v = `rows`
                                 )->a( n = `dropPosition`      v = `Between`
@@ -288,7 +288,7 @@ CLASS z2ui5_cl_smpc_app_353 IMPLEMENTATION.
                                                                              ( `${$parameters>/dropPosition}` )
                                                                              ( `${$parameters>/draggedControl}.getParent().getId().indexOf('table2') >= 0` ) ) )
 
-                            )->leaf( n = `DragDropInfo` ns = `dnd`
+                            )->tag( n = `DragDropInfo` ns = `dnd`
                                 )->a( n = `sourceAggregation` v = `rows`
                                 )->a( n = `targetAggregation` v = `rows`
                                 )->a( n = `dropPosition`      v = `Between`
@@ -298,12 +298,12 @@ CLASS z2ui5_cl_smpc_app_353 IMPLEMENTATION.
                                                                              ( `${$parameters>/dropPosition}` )
                                                                              ( `${$parameters>/draggedControl}.getParent().getId().indexOf('table2') >= 0` ) ) )
 
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
-        )->shut(
-    )->shut( ).
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
+        )->end(
+    )->end( ).
 
     client->view_display( view->stringify( ) ).
 

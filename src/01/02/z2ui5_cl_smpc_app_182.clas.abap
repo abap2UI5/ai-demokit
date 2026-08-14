@@ -31,7 +31,7 @@ CLASS z2ui5_cl_smpc_app_182 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " sap.ui.model.type.Time data-type binding (TypeTimeAsTime). TimeType is
     " pulled via core:require; the TimePicker and the three style Texts keep the
@@ -39,14 +39,14 @@ CLASS z2ui5_cl_smpc_app_182 IMPLEMENTATION.
     " with an ADDED source formatOption { source: { pattern: 'HH:mm:ss' } } so the
     " parseable string model revives into the type (see sidecar IMPROVISED - the
     " original model value is a JS Date object abap2UI5 cannot hold).
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`        v = `sap.m`
         )->a( n = `xmlns:mvc`    v = `sap.ui.core.mvc`
         )->a( n = `xmlns:form`   v = `sap.ui.layout.form`
         )->a( n = `xmlns:core`   v = `sap.ui.core`
         )->a( n = `core:require` v = `{TimeType: 'sap/ui/model/type/Time'}`
 
-        )->open( n = `SimpleForm` ns = `form`
+        )->ele( n = `SimpleForm` ns = `form`
             )->a( n = `width`      v = `auto`
             )->a( n = `class`      v = `sapUiResponsiveMargin`
             )->a( n = `layout`     v = `ResponsiveGridLayout`
@@ -59,16 +59,16 @@ CLASS z2ui5_cl_smpc_app_182 IMPLEMENTATION.
             )->a( n = `columnsM`   v = `1`
             )->a( n = `title`      v = `Time Input`
 
-            )->open( n = `content` ns = `form`
-                )->leaf( `Label`
+            )->ele( n = `content` ns = `form`
+                )->tag( `Label`
                     )->a( n = `text` v = `Time`
-                )->leaf( `TimePicker`
+                )->tag( `TimePicker`
                     )->a( n = `value` v = |\{ path: '{ client->_bind( val = time path = abap_true ) }', type: 'TimeType', formatOptions: \{ source: \{ pattern: 'HH:mm:ss' \} \} \}|
 
-        )->shut(
-        )->shut(
+        )->end(
+        )->end(
 
-        )->open( n = `SimpleForm` ns = `form`
+        )->ele( n = `SimpleForm` ns = `form`
             )->a( n = `width`      v = `auto`
             )->a( n = `class`      v = `sapUiResponsiveMargin`
             )->a( n = `layout`     v = `ResponsiveGridLayout`
@@ -80,22 +80,22 @@ CLASS z2ui5_cl_smpc_app_182 IMPLEMENTATION.
             )->a( n = `columnsM`   v = `1`
             )->a( n = `title`      v = `Style`
 
-            )->open( n = `content` ns = `form`
-                )->leaf( `Label`
+            )->ele( n = `content` ns = `form`
+                )->tag( `Label`
                     )->a( n = `text` v = `Short`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = time path = abap_true ) }', type: 'TimeType', formatOptions: \{ style: 'short', source: \{ pattern: 'HH:mm:ss' \} \} \}|
-                )->leaf( `Label`
+                )->tag( `Label`
                     )->a( n = `text` v = `Medium`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = time path = abap_true ) }', type: 'TimeType', formatOptions: \{ style: 'medium', source: \{ pattern: 'HH:mm:ss' \} \} \}|
-                )->leaf( `Label`
+                )->tag( `Label`
                     )->a( n = `text` v = `Long`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = time path = abap_true ) }', type: 'TimeType', formatOptions: \{ style: 'long', source: \{ pattern: 'HH:mm:ss' \} \} \}|
 
-        )->shut(
-        )->shut( ).
+        )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

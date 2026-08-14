@@ -60,121 +60,121 @@ CLASS z2ui5_cl_smpc_app_377 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
 
-        )->open( `IconTabBar`
+        )->ele( `IconTabBar`
             )->a( n = `id`     v = `idIconTabBar`
             )->a( n = `select` v = client->_event( val   = `FILTER_SELECT`
                                                    t_arg = VALUE #( ( `${$parameters>/key}` ) ) )
             )->a( n = `class`  v = `sapUiResponsiveContentPadding`
 
-            )->open( `items`
-                )->leaf( `IconTabFilter`
+            )->ele( `items`
+                )->tag( `IconTabFilter`
                     )->a( n = `showAll` v = `true`
                     )->a( n = `count`   v = client->_bind( count_total )
                     )->a( n = `text`    v = `Products`
                     )->a( n = `key`     v = `All`
-                )->leaf( `IconTabSeparator`
-                )->leaf( `IconTabFilter`
+                )->tag( `IconTabSeparator`
+                )->tag( `IconTabFilter`
                     )->a( n = `icon`      v = `sap-icon://begin`
                     )->a( n = `iconColor` v = `Positive`
                     )->a( n = `count`     v = client->_bind( count_ok )
                     )->a( n = `text`      v = `Ok`
                     )->a( n = `key`       v = `Ok`
-                )->leaf( `IconTabFilter`
+                )->tag( `IconTabFilter`
                     )->a( n = `icon`      v = `sap-icon://compare`
                     )->a( n = `iconColor` v = `Critical`
                     )->a( n = `count`     v = client->_bind( count_heavy )
                     )->a( n = `text`      v = `Heavy`
                     )->a( n = `key`       v = `Heavy`
-                )->leaf( `IconTabFilter`
+                )->tag( `IconTabFilter`
                     )->a( n = `icon`      v = `sap-icon://inventory`
                     )->a( n = `iconColor` v = `Negative`
                     )->a( n = `count`     v = client->_bind( count_overweight )
                     )->a( n = `text`      v = `Overweight`
                     )->a( n = `key`       v = `Overweight`
 
-            )->shut(
+            )->end(
 
-            )->open( `content`
-                )->open( `Table`
+            )->ele( `content`
+                )->ele( `Table`
                     )->a( n = `id`             v = `productsTable`
                     )->a( n = `inset`          v = `false`
                     )->a( n = `showSeparators` v = `Inner`
                     )->a( n = `headerText`     v = `Products`
                     )->a( n = `items`          v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
 
-                    )->open( `infoToolbar`
-                        )->open( `OverflowToolbar`
-                            )->leaf( `Label`
+                    )->ele( `infoToolbar`
+                        )->ele( `OverflowToolbar`
+                            )->tag( `Label`
                                 )->a( n = `text` v = `Wide range of available products`
 
-                        )->shut(
-                    )->shut(
+                        )->end(
+                    )->end(
 
-                    )->open( `columns`
-                        )->open( `Column`
+                    )->ele( `columns`
+                        )->ele( `Column`
                             )->a( n = `width` v = `12em`
 
-                            )->leaf( `Text`
+                            )->tag( `Text`
                                 )->a( n = `text` v = `Product`
 
-                        )->shut(
-                        )->open( `Column`
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `minScreenWidth` v = `Tablet`
                             )->a( n = `demandPopin`    v = `true`
 
-                            )->leaf( `Text`
+                            )->tag( `Text`
                                 )->a( n = `text` v = `Supplier`
 
-                        )->shut(
-                        )->open( `Column`
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `minScreenWidth` v = `Desktop`
                             )->a( n = `demandPopin`    v = `true`
                             )->a( n = `hAlign`         v = `End`
 
-                            )->leaf( `Text`
+                            )->tag( `Text`
                                 )->a( n = `text` v = `Dimensions`
 
-                        )->shut(
-                        )->open( `Column`
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `minScreenWidth` v = `Desktop`
                             )->a( n = `demandPopin`    v = `true`
                             )->a( n = `hAlign`         v = `Center`
 
-                            )->leaf( `Text`
+                            )->tag( `Text`
                                 )->a( n = `text` v = `Weight`
 
-                        )->shut(
-                        )->open( `Column`
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `hAlign` v = `End`
 
-                            )->leaf( `Text`
+                            )->tag( `Text`
                                 )->a( n = `text` v = `Price`
 
-                        )->shut(
-                    )->shut(
+                        )->end(
+                    )->end(
 
-                    )->open( `items`
-                        )->open( `ColumnListItem`
-                            )->open( `cells`
-                                )->leaf( `ObjectIdentifier`
+                    )->ele( `items`
+                        )->ele( `ColumnListItem`
+                            )->ele( `cells`
+                                )->tag( `ObjectIdentifier`
                                     )->a( n = `title` v = `{NAME}`
                                     )->a( n = `text`  v = `{PRODUCT_ID}`
-                                )->leaf( `Text`
+                                )->tag( `Text`
                                     )->a( n = `text` v = `{SUPPLIER_NAME}`
-                                )->leaf( `Text`
+                                )->tag( `Text`
                                     )->a( n = `text` v = `{WIDTH} x {DEPTH} x {HEIGHT} {DIM_UNIT}`
-                                )->leaf( `ObjectNumber`
+                                )->tag( `ObjectNumber`
                                     )->a( n = `number` v = `{WEIGHT_MEASURE}`
                                     )->a( n = `unit`   v = `{WEIGHT_UNIT}`
                                     " Formatter.weightState computed in ABAP, bound as a finished value
                                     )->a( n = `state`  v = `{WEIGHT_STATE}`
-                                )->leaf( `ObjectNumber`
+                                )->tag( `ObjectNumber`
                                     )->a( n = `number` v = |\{ parts: [\{ path: 'PRICE' \}, \{ path: 'CURRENCY_CODE' \}], type: 'sap.ui.model.type.Currency', formatOptions: \{ showMeasure: false \} \}|
                                     )->a( n = `unit`   v = `{CURRENCY_CODE}` ).
 

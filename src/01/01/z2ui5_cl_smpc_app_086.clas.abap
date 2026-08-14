@@ -37,65 +37,65 @@ CLASS z2ui5_cl_smpc_app_086 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `height`     v = `100%`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns:form` v = `sap.ui.layout.form`
         )->a( n = `xmlns`      v = `sap.m`
 
-        )->open( `Page`
+        )->ele( `Page`
             )->a( n = `showHeader` v = `false`
 
-            )->open( `content`
-                )->open( n = `SimpleForm` ns = `form`
+            )->ele( `content`
+                )->ele( n = `SimpleForm` ns = `form`
                     )->a( n = `editable` v = `true`
                     )->a( n = `width`    v = `320px`
                     )->a( n = `layout`   v = `ColumnLayout`
 
-                    )->leaf( `Label`
+                    )->tag( `Label`
                         )->a( n = `text` v = `Design`
-                    )->open( `Select`
+                    )->ele( `Select`
                         )->a( n = `selectedKey` v = client->_bind( design )
                         )->a( n = `items`       v = client->_bind( t_design_types )
-                        )->leaf( n = `Item` ns = `core`
+                        )->tag( n = `Item` ns = `core`
                             )->a( n = `key`  v = `{KEY}`
                             )->a( n = `text` v = `{KEY}`
 
-                    )->shut(
-                    )->leaf( `Label`
+                    )->end(
+                    )->tag( `Label`
                         )->a( n = `text` v = `Style`
-                    )->open( `Select`
+                    )->ele( `Select`
                         )->a( n = `selectedKey` v = client->_bind( style )
                         )->a( n = `items`       v = client->_bind( t_style_types )
-                        )->leaf( n = `Item` ns = `core`
+                        )->tag( n = `Item` ns = `core`
                             )->a( n = `key`  v = `{KEY}`
                             )->a( n = `text` v = `{KEY}`
 
-                    )->shut(
-                )->shut(
+                    )->end(
+                )->end(
 
-                )->open( `OverflowToolbar`
+                )->ele( `OverflowToolbar`
                     )->a( n = `id`     v = `contentTb`
                     )->a( n = `class`  v = `sapUiSmallMarginTop`
                     " onSelectDesign/onSelectStyle setDesign/setStyle become two-way bound design/style
                     )->a( n = `design` v = client->_bind( design )
                     )->a( n = `style`  v = client->_bind( style )
-                    )->leaf( `Label`
+                    )->tag( `Label`
                         )->a( n = `text` v = `Toolbar content `
                     " bActionContext (selected design is not Info) is an expression over the bound design
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text`    v = `Action1`
                         )->a( n = `visible` v = |\{= ${ client->_bind( design ) } !== 'Info' \}|
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text`    v = `Action2`
                         )->a( n = `visible` v = |\{= ${ client->_bind( design ) } !== 'Info' \}|
 
-                )->shut(
-            )->shut(
-        )->shut( ).
+                )->end(
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

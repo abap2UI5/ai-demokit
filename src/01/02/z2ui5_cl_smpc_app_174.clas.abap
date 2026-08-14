@@ -49,13 +49,13 @@ CLASS z2ui5_cl_smpc_app_174 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " sap.ui.table grid Table (RowHighlights sample). The row highlight bar
     " reads the status the backend classifies per row in model_init. The
     " toolbar Select and ToggleButtons two-way bind the selection mode, the
     " alternate row colors and the highlight-visibility flag directly.
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`         v = `sap.ui.table`
         )->a( n = `xmlns:mvc`     v = `sap.ui.core.mvc`
         )->a( n = `xmlns:unified` v = `sap.ui.unified`
@@ -63,124 +63,124 @@ CLASS z2ui5_cl_smpc_app_174 IMPLEMENTATION.
         )->a( n = `xmlns:m`       v = `sap.m`
         )->a( n = `height`        v = `100%`
 
-        )->open( n = `Page` ns = `m`
+        )->ele( n = `Page` ns = `m`
             )->a( n = `showHeader`      v = `false`
             )->a( n = `enableScrolling` v = `false`
             )->a( n = `class`           v = `sapUiContentPadding`
 
-            )->open( n = `content` ns = `m`
-                )->open( `Table`
+            )->ele( n = `content` ns = `m`
+                )->ele( `Table`
                     )->a( n = `id`                 v = `table`
                     )->a( n = `rows`               v = client->_bind( t_products )
                     )->a( n = `selectionMode`      v = client->_bind( selection_mode )
                     )->a( n = `alternateRowColors` v = client->_bind( alternate_row_colors )
                     )->a( n = `ariaLabelledBy`     v = `title`
 
-                    )->open( `extension`
-                        )->open( n = `OverflowToolbar` ns = `m`
+                    )->ele( `extension`
+                        )->ele( n = `OverflowToolbar` ns = `m`
                             )->a( n = `style` v = `Clear`
-                            )->leaf( n = `Title` ns = `m`
+                            )->tag( n = `Title` ns = `m`
                                 )->a( n = `id`   v = `title`
                                 )->a( n = `text` v = `Products`
-                            )->leaf( n = `ToolbarSpacer` ns = `m`
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `ToolbarSpacer` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `SelectionMode:`
-                            )->open( n = `Select` ns = `m`
+                            )->ele( n = `Select` ns = `m`
                                 )->a( n = `id`          v = `select`
                                 )->a( n = `selectedKey` v = client->_bind( selection_mode )
-                                )->open( n = `items` ns = `m`
-                                    )->leaf( n = `Item` ns = `core`
+                                )->ele( n = `items` ns = `m`
+                                    )->tag( n = `Item` ns = `core`
                                         )->a( n = `key`  v = `MultiToggle`
                                         )->a( n = `text` v = `MultiToggle`
-                                    )->leaf( n = `Item` ns = `core`
+                                    )->tag( n = `Item` ns = `core`
                                         )->a( n = `key`  v = `Single`
                                         )->a( n = `text` v = `Single`
-                                    )->leaf( n = `Item` ns = `core`
+                                    )->tag( n = `Item` ns = `core`
                                         )->a( n = `key`  v = `None`
                                         )->a( n = `text` v = `None`
 
-                            )->shut(
-                            )->shut(
-                            )->leaf( n = `ToggleButton` ns = `m`
+                            )->end(
+                            )->end(
+                            )->tag( n = `ToggleButton` ns = `m`
                                 )->a( n = `text`    v = `Toggle Highlights`
                                 )->a( n = `pressed` v = client->_bind( show_highlights )
-                            )->leaf( n = `ToggleButton` ns = `m`
+                            )->tag( n = `ToggleButton` ns = `m`
                                 )->a( n = `text`    v = `Toggle Alternate Row Colors`
                                 )->a( n = `pressed` v = client->_bind( alternate_row_colors )
 
-                    )->shut(
-                    )->shut(
+                    )->end(
+                    )->end(
 
-                    )->open( `rowSettingsTemplate`
-                        )->leaf( `RowSettings`
+                    )->ele( `rowSettingsTemplate`
+                        )->tag( `RowSettings`
                             )->a( n = `highlight`     v = |\{= ${ client->_bind( show_highlights ) } ? $\{STATUS\} : 'None' \}|
                             )->a( n = `highlightText` v = `{STATUSTEXT}`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( `columns`
-                        )->open( `Column`
+                    )->ele( `columns`
+                        )->ele( `Column`
                             )->a( n = `sortProperty`   v = `Status`
                             )->a( n = `filterProperty` v = `Status`
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Status`
-                            )->open( `template`
-                                )->leaf( n = `Text` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text`     v = `{STATUS}`
                                     )->a( n = `wrapping` v = `false`
 
-                        )->shut(
-                        )->shut(
+                        )->end(
+                        )->end(
 
-                        )->open( `Column`
-                            )->leaf( n = `Label` ns = `m`
+                        )->ele( `Column`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Product Name`
-                            )->open( `template`
-                                )->leaf( n = `Text` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text`     v = `{NAME}`
                                     )->a( n = `wrapping` v = `false`
 
-                        )->shut(
-                        )->shut(
+                        )->end(
+                        )->end(
 
-                        )->open( `Column`
-                            )->leaf( n = `Label` ns = `m`
+                        )->ele( `Column`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Product Id`
-                            )->open( `template`
-                                )->leaf( n = `Text` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text`     v = `{PRODUCTID}`
                                     )->a( n = `wrapping` v = `false`
 
-                        )->shut(
-                        )->shut(
+                        )->end(
+                        )->end(
 
-                        )->open( `Column`
+                        )->ele( `Column`
                             )->a( n = `hAlign` v = `End`
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Quantity`
-                            )->open( `template`
-                                )->leaf( n = `Text` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text`     v = `{QUANTITY}`
                                     )->a( n = `wrapping` v = `false`
 
-                        )->shut(
-                        )->shut(
+                        )->end(
+                        )->end(
 
-                        )->open( `Column`
-                            )->leaf( n = `Label` ns = `m`
+                        )->ele( `Column`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Price`
-                            )->open( `template`
-                                )->leaf( n = `Currency` ns = `unified`
+                            )->ele( `template`
+                                )->tag( n = `Currency` ns = `unified`
                                     )->a( n = `value`    v = `{PRICE}`
                                     )->a( n = `currency` v = `{CURRENCYCODE}`
 
-                        )->shut(
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
-        )->shut(
-    )->shut( ).
+                        )->end(
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
+        )->end(
+    )->end( ).
 
     client->view_display( view->stringify( ) ).
 

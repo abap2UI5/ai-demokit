@@ -32,18 +32,18 @@ CLASS z2ui5_cl_smpc_app_013 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
             )->a( n = `width` v = `100%`
 
-            )->leaf( `Button`
+            )->tag( `Button`
                 )->a( n = `text`  v = `Open Cookie Settings Dialog`
                 )->a( n = `press` v = client->_event( `OPEN_COOKIE_SETTINGS_DIALOG` )
                 )->a( n = `class` v = `sapUiSmallMarginBottom` ).
@@ -100,87 +100,87 @@ CLASS z2ui5_cl_smpc_app_013 IMPLEMENTATION.
 
   METHOD dialog_display.
 
-    DATA(popup) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(popup) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    popup->open( n = `FragmentDefinition` ns = `core`
+    popup->ele( n = `FragmentDefinition` ns = `core`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:f`    v = `sap.f`
         )->a( n = `xmlns:grid` v = `sap.ui.layout.cssgrid`
         )->a( n = `xmlns:core` v = `sap.ui.core`
 
-        )->open( `Dialog`
+        )->ele( `Dialog`
             )->a( n = `title`        v = `Cookie Settings (Sample)`
             )->a( n = `contentWidth` v = `45rem`
 
-            )->open( `content`
+            )->ele( `content`
                 " the original's custom:DivContainer (demo-kit-internal sap.ui.documentation control) rebuilt as a VBox
-                )->open( `VBox`
+                )->ele( `VBox`
                     )->a( n = `class` v = `sapUiSmallMargin`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text`    v = `We use cookies and SAP Web Analytics to improve your experience on our site. By continuing to use this site, you consent to use our cookies.`
                         )->a( n = `visible` v = |\{= !${ client->_bind( show_cookie_details ) } \}|
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text`    v = `We use cookies to improve your experience on our site. By continuing to use this site, you consent to use our cookies.`
                         )->a( n = `visible` v = |\{= !${ client->_bind( show_cookie_details ) } \}|
 
-                    )->open( n = `GridList` ns = `f`
+                    )->ele( n = `GridList` ns = `f`
                         )->a( n = `visible` v = client->_bind( show_cookie_details )
 
-                        )->open( n = `customLayout` ns = `f`
-                            )->leaf( n = `GridBasicLayout` ns = `grid`
+                        )->ele( n = `customLayout` ns = `f`
+                            )->tag( n = `GridBasicLayout` ns = `grid`
                                 )->a( n = `gridTemplateColumns` v = `1fr`
                                 )->a( n = `gridGap`             v = `1rem`
 
-                        )->shut(
-                        )->open( n = `GridListItem` ns = `f`
-                            )->open( `HBox`
+                        )->end(
+                        )->ele( n = `GridListItem` ns = `f`
+                            )->ele( `HBox`
                                 )->a( n = `justifyContent` v = `SpaceBetween`
                                 )->a( n = `class`          v = `sapUiSmallMarginBeginEnd sapUiSmallMarginTop`
 
-                                )->open( `VBox`
-                                    )->leaf( `Title`
+                                )->ele( `VBox`
+                                    )->tag( `Title`
                                         )->a( n = `text` v = `Required Cookies`
-                                    )->leaf( `Text`
+                                    )->tag( `Text`
                                         )->a( n = `text` v = `These cookies are required to enable core site functionality.`
 
-                                )->shut(
-                                )->leaf( `Switch`
+                                )->end(
+                                )->tag( `Switch`
                                     )->a( n = `class` v = `sapUiSmallMarginBegin`
 
-                            )->shut(
-                            )->open( `Panel`
+                            )->end(
+                            )->ele( `Panel`
                                 )->a( n = `headerText` v = `More Info`
                                 )->a( n = `expandable` v = `true`
                                 )->a( n = `class`      v = `sapUiTinyMarginTop`
 
-                                )->leaf( `Text`
+                                )->tag( `Text`
                                     )->a( n = `text` v = `We use cookies to improve your experience on our site. By continuing to use this site, you consent to use our cookies.`
 
-                            )->shut(
-                        )->shut(
-                        )->open( n = `GridListItem` ns = `f`
-                            )->open( `HBox`
+                            )->end(
+                        )->end(
+                        )->ele( n = `GridListItem` ns = `f`
+                            )->ele( `HBox`
                                 )->a( n = `justifyContent` v = `SpaceBetween`
                                 )->a( n = `class`          v = `sapUiSmallMarginBeginEnd sapUiSmallMarginTop`
 
-                                )->open( `VBox`
-                                    )->leaf( `Title`
+                                )->ele( `VBox`
+                                    )->tag( `Title`
                                         )->a( n = `text` v = `Functional Cookies`
-                                    )->leaf( `Text`
+                                    )->tag( `Text`
                                         )->a( n = `text` v = `These cookies are used to analyse site usage for the purpose of measuring and improving site performance.`
 
-                                )->shut(
-                                )->leaf( `Switch`
+                                )->end(
+                                )->tag( `Switch`
                                     )->a( n = `class` v = `sapUiSmallMarginBegin`
 
-                            )->shut(
-                            )->open( `Panel`
+                            )->end(
+                            )->ele( `Panel`
                                 )->a( n = `headerText` v = `More Info`
                                 )->a( n = `expandable` v = `true`
                                 )->a( n = `class`      v = `sapUiTinyMarginTop`
 
-                                )->leaf( `Text`
+                                )->tag( `Text`
                                     )->a( n = `text`
                                              v = `This site uses SAP Web Analytics to analyze how users use this site. The information generated (including a part of your IP address and a browser ID) ` &&
                                                  `will be transmitted to and stored by SAP on its servers. Cookies are used to identify your repeat visit and your visit origin page. ` &&
@@ -188,49 +188,49 @@ CLASS z2ui5_cl_smpc_app_013 IMPLEMENTATION.
                                                  `If you would like to opt-in for SAP Web Analytics tracking, please specify your preference using the "On"/"Off" switch above. ` &&
                                                  `By opt-in, you consent to the processing of analytics data about you in the manner and for the purposes set out above.`
 
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
-            )->open( `buttons`
-                )->open( `Button`
+                            )->end(
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
+            )->ele( `buttons`
+                )->ele( `Button`
                     )->a( n = `text`    v = `Accept All`
                     )->a( n = `type`    v = `Emphasized`
                     )->a( n = `press`   v = client->_event( `ACCEPT_ALL_COOKIES` )
                     )->a( n = `visible` v = |\{=! ${ client->_bind( show_cookie_details ) } \}|
 
-                    )->open( `layoutData`
-                        )->leaf( `OverflowToolbarLayoutData`
+                    )->ele( `layoutData`
+                        )->tag( `OverflowToolbarLayoutData`
                             )->a( n = `priority` v = `NeverOverflow`
 
-                    )->shut(
-                )->shut(
-                )->leaf( `Button`
+                    )->end(
+                )->end(
+                )->tag( `Button`
                     )->a( n = `text`    v = `Set Preferences`
                     )->a( n = `id`      v = `actionSetPreferences`
                     )->a( n = `type`    v = `Ghost`
                     )->a( n = `press`   v = client->_event( `SHOW_COOKIE_DETAILS` )
                     )->a( n = `visible` v = |\{= !${ client->_bind( show_cookie_details ) } \}|
 
-                )->open( `Button`
+                )->ele( `Button`
                     )->a( n = `text`    v = `Reject All`
                     )->a( n = `press`   v = client->_event( `REJECT_ALL_COOKIES` )
                     )->a( n = `visible` v = |\{=! ${ client->_bind( show_cookie_details ) } \}|
 
-                    )->open( `layoutData`
-                        )->leaf( `OverflowToolbarLayoutData`
+                    )->ele( `layoutData`
+                        )->tag( `OverflowToolbarLayoutData`
                             )->a( n = `priority` v = `NeverOverflow`
 
-                    )->shut(
-                )->shut(
-                )->leaf( `Button`
+                    )->end(
+                )->end(
+                )->tag( `Button`
                     )->a( n = `text`    v = `Save Preferences`
                     )->a( n = `id`      v = `actionSavePreferences`
                     )->a( n = `type`    v = `Emphasized`
                     )->a( n = `press`   v = client->_event( `SAVE_COOKIES` )
                     )->a( n = `visible` v = client->_bind( show_cookie_details )
-                )->leaf( `Button`
+                )->tag( `Button`
                     )->a( n = `text`    v = `Cancel`
                     )->a( n = `press`   v = client->_event( `CANCEL_PRESS` )
                     )->a( n = `visible` v = client->_bind( show_cookie_details ) ).

@@ -26,93 +26,93 @@ CLASS z2ui5_cl_smpc_app_190 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
 
-        )->open( `VBox`
-            )->open( `Panel`
+        )->ele( `VBox`
+            )->ele( `Panel`
                 )->a( n = `headerText` v = `Render Type - Div`
 
-                )->open( `FlexBox`
+                )->ele( `FlexBox`
                     )->a( n = `renderType` v = `Div`
 
-                    )->open( `Button`
+                    )->ele( `Button`
                         )->a( n = `text`  v = `Some text`
                         )->a( n = `type`  v = `Emphasized`
                         )->a( n = `class` v = `sapUiSmallMarginEnd`
 
-                        )->open( `layoutData`
-                            )->leaf( `FlexItemData`
+                        )->ele( `layoutData`
+                            )->tag( `FlexItemData`
                                 )->a( n = `growFactor` v = `3`
 
-                        )->shut(
-                    )->shut(
-                    )->open( `Input`
+                        )->end(
+                    )->end(
+                    )->ele( `Input`
                         )->a( n = `value` v = `Some value`
                         )->a( n = `width` v = `auto`
                         )->a( n = `class` v = `sapUiSmallMarginEnd`
 
-                        )->open( `layoutData`
-                            )->leaf( `FlexItemData`
+                        )->ele( `layoutData`
+                            )->tag( `FlexItemData`
                                 )->a( n = `growFactor` v = `2`
 
-                        )->shut(
-                    )->shut(
-                    )->open( `Button`
+                        )->end(
+                    )->end(
+                    )->ele( `Button`
                         )->a( n = `icon` v = `sap-icon://download`
 
-                        )->open( `layoutData`
-                            )->leaf( `FlexItemData`
+                        )->ele( `layoutData`
+                            )->tag( `FlexItemData`
                                 )->a( n = `growFactor` v = `1`
 
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
-            )->open( `Panel`
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
+            )->ele( `Panel`
                 )->a( n = `headerText` v = `Render Type - Bare`
 
-                )->open( `FlexBox`
+                )->ele( `FlexBox`
                     )->a( n = `renderType` v = `Bare`
 
-                    )->open( `Button`
+                    )->ele( `Button`
                         )->a( n = `text`  v = `Some text`
                         )->a( n = `type`  v = `Emphasized`
                         )->a( n = `class` v = `sapUiSmallMarginEnd`
 
-                        )->open( `layoutData`
-                            )->leaf( `FlexItemData`
+                        )->ele( `layoutData`
+                            )->tag( `FlexItemData`
                                 )->a( n = `growFactor` v = `3`
 
-                        )->shut(
-                    )->shut(
-                    )->open( `Input`
+                        )->end(
+                    )->end(
+                    )->ele( `Input`
                         )->a( n = `value` v = `Some value`
                         )->a( n = `width` v = `auto`
                         )->a( n = `class` v = `sapUiSmallMarginEnd`
 
-                        )->open( `layoutData`
-                            )->leaf( `FlexItemData`
+                        )->ele( `layoutData`
+                            )->tag( `FlexItemData`
                                 )->a( n = `growFactor` v = `2`
 
-                        )->shut(
-                    )->shut(
-                    )->open( `Button`
+                        )->end(
+                    )->end(
+                    )->ele( `Button`
                         )->a( n = `icon` v = `sap-icon://download`
 
-                        )->open( `layoutData`
-                            )->leaf( `FlexItemData`
+                        )->ele( `layoutData`
+                            )->tag( `FlexItemData`
                                 )->a( n = `growFactor` v = `1`
 
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
-        )->shut( ).
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

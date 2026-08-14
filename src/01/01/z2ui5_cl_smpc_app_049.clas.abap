@@ -49,7 +49,7 @@ CLASS z2ui5_cl_smpc_app_049 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " one bound CustomListItem template over /modelData, like the original.
     " It only works because the rows are bound with omit_initial_paths: every row
@@ -57,11 +57,11 @@ CLASS z2ui5_cl_smpc_app_049 IMPLEMENTATION.
     " field would otherwise arrive as `` and override the control's own default
     " (an enum-typed property rejects it outright). The omission is SCOPED to
     " those columns, because the two booleans must send their explicit false
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
             )->a( n = `xmlns`     v = `sap.m`
             )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
-            )->open( `List`
+            )->ele( `List`
                 )->a( n = `id`    v = `idTable`
                 )->a( n = `items` v = client->_bind(
                                           val                = modeldata
@@ -83,23 +83,23 @@ CLASS z2ui5_cl_smpc_app_049 IMPLEMENTATION.
                                                                         ( `VALIDATIONMODE` )
                                                                         ( `VALUESTATE` ) ) )
 
-                )->open( `CustomListItem`
-                    )->open( `HBox`
+                )->ele( `CustomListItem`
+                    )->ele( `HBox`
                         )->a( n = `class`          v = `sapUiTinyMargin`
                         )->a( n = `justifyContent` v = `SpaceBetween`
                         )->a( n = `alignItems`     v = `Center`
 
-                        )->open( `VBox`
+                        )->ele( `VBox`
                             )->a( n = `class` v = `sapUiSmallMarginEnd`
 
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text`     v = `{LABEL}`
                                 )->a( n = `wrapping` v = `true`
 
-                        )->shut(
-                        )->open( `VBox`
+                        )->end(
+                        )->ele( `VBox`
 
-                            )->leaf( `StepInput`
+                            )->tag( `StepInput`
                                 )->a( n = `value`                 v = `{VALUE}`
                                 )->a( n = `displayValuePrecision` v = `{DISPLAYVALUEPRECISION}`
                                 )->a( n = `min`                   v = `{MIN}`

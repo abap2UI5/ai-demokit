@@ -54,15 +54,15 @@ CLASS z2ui5_cl_smpc_app_092 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `height`     v = `100%`
 
-        )->leaf( `MessageStrip`
+        )->tag( `MessageStrip`
             )->a( n = `id`              v = `idMessageStrip`
             )->a( n = `text`            v = `Move the slider to see the automatic pop-in behavior based on the importance of the columns.`
             )->a( n = `type`            v = `Success`
@@ -70,11 +70,11 @@ CLASS z2ui5_cl_smpc_app_092 IMPLEMENTATION.
             )->a( n = `showCloseButton` v = `true`
             )->a( n = `class`           v = `sapUiMediumMarginBottom`
 
-        )->leaf( `Slider`
+        )->tag( `Slider`
             )->a( n = `id`         v = `widthSlider`
             )->a( n = `value`      v = client->_bind( width_pct )
 
-        )->open( `Table`
+        )->ele( `Table`
             )->a( n = `id`              v = `idProductsTable`
             )->a( n = `autoPopinMode`   v = `true`
             )->a( n = `contextualWidth` v = `Auto`
@@ -89,139 +89,139 @@ CLASS z2ui5_cl_smpc_app_092 IMPLEMENTATION.
                                                                       t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Number of hidden pop-ins: {0}` ) ( `${$parameters>/hiddenInPopin}.length` ) ) )
             )->a( n = `items`           v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
 
-            )->open( `headerToolbar`
-                )->open( `OverflowToolbar`
-                    )->leaf( `Title`
+            )->ele( `headerToolbar`
+                )->ele( `OverflowToolbar`
+                    )->tag( `Title`
                         )->a( n = `text`  v = `Products`
                         )->a( n = `level` v = `H2`
-                    )->leaf( `ToolbarSpacer`
-                    )->leaf( `Label`
+                    )->tag( `ToolbarSpacer`
+                    )->tag( `Label`
                         )->a( n = `text`     v = `Hide columns with importance`
                         )->a( n = `labelFor` v = `idMultiComboBox`
-                    )->open( `MultiComboBox`
+                    )->ele( `MultiComboBox`
                         )->a( n = `id`              v = `idMultiComboBox`
                         )->a( n = `width`           v = `10rem`
                         )->a( n = `selectedKeys`    v = client->_bind( t_hidden )
                         )->a( n = `selectionFinish` v = client->_event( `HIDE` )
-                        )->open( `items`
-                            )->leaf( n = `Item` ns = `core`
+                        )->ele( `items`
+                            )->tag( n = `Item` ns = `core`
                                 )->a( n = `key`  v = `None`
                                 )->a( n = `text` v = `None`
-                            )->leaf( n = `Item` ns = `core`
+                            )->tag( n = `Item` ns = `core`
                                 )->a( n = `key`  v = `Low`
                                 )->a( n = `text` v = `Low`
-                            )->leaf( n = `Item` ns = `core`
+                            )->tag( n = `Item` ns = `core`
                                 )->a( n = `key`  v = `Medium`
                                 )->a( n = `text` v = `Medium`
-                            )->leaf( n = `Item` ns = `core`
+                            )->tag( n = `Item` ns = `core`
                                 )->a( n = `key`  v = `High`
                                 )->a( n = `text` v = `High`
 
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( `columns`
-                )->open( `Column`
+            )->ele( `columns`
+                )->ele( `Column`
                     )->a( n = `width`      v = `14em`
                     )->a( n = `importance` v = `High`
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Product`
 
-                )->shut(
-                )->open( `Column`
+                )->end(
+                )->ele( `Column`
                     )->a( n = `width`      v = `auto`
                     )->a( n = `importance` v = `None`
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Description`
 
-                )->shut(
-                )->open( `Column`
+                )->end(
+                )->ele( `Column`
                     )->a( n = `width`      v = `8em`
                     )->a( n = `importance` v = `Low`
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Category`
 
-                )->shut(
-                )->open( `Column`
+                )->end(
+                )->ele( `Column`
                     )->a( n = `width`      v = `8%`
                     )->a( n = `importance` v = `None`
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Main Category`
 
-                )->shut(
-                )->open( `Column`
+                )->end(
+                )->ele( `Column`
                     )->a( n = `width`      v = `8em`
                     )->a( n = `importance` v = `None`
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Supplier`
 
-                )->shut(
-                )->open( `Column`
+                )->end(
+                )->ele( `Column`
                     )->a( n = `width`      v = `10em`
                     )->a( n = `importance` v = `Low`
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Dimensions`
 
-                )->shut(
-                )->open( `Column`
+                )->end(
+                )->ele( `Column`
                     )->a( n = `width`      v = `6em`
                     )->a( n = `hAlign`     v = `Center`
                     )->a( n = `importance` v = `Low`
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Weight`
 
-                )->shut(
-                )->open( `Column`
+                )->end(
+                )->ele( `Column`
                     )->a( n = `width`      v = `6%`
                     )->a( n = `hAlign`     v = `Center`
                     )->a( n = `importance` v = `Medium`
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Quantity`
 
-                )->shut(
-                )->open( `Column`
+                )->end(
+                )->ele( `Column`
                     )->a( n = `width`      v = `6em`
                     )->a( n = `hAlign`     v = `End`
                     )->a( n = `importance` v = `High`
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Price`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( `items`
-                )->open( `ColumnListItem`
+            )->ele( `items`
+                )->ele( `ColumnListItem`
                     )->a( n = `vAlign` v = `Middle`
-                    )->open( `cells`
-                        )->leaf( `ObjectIdentifier`
+                    )->ele( `cells`
+                        )->tag( `ObjectIdentifier`
                             )->a( n = `title` v = `{NAME}`
                             )->a( n = `text`  v = `{PRODUCT_ID}`
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `{DESCRIPTION}`
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `{CATEGORY}`
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `{MAIN_CATEGORY}`
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `{SUPPLIER_NAME}`
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `{WIDTH} x {DEPTH} x {HEIGHT} {DIM_UNIT}`
-                        )->leaf( `ObjectNumber`
+                        )->tag( `ObjectNumber`
                             )->a( n = `number` v = `{WEIGHT_MEASURE}`
                             )->a( n = `unit`   v = `{WEIGHT_UNIT}`
                             )->a( n = `state`  v = `{WEIGHT_STATE}`
-                        )->leaf( `ObjectNumber`
+                        )->tag( `ObjectNumber`
                             )->a( n = `number` v = `{QUANTITY}`
-                        )->leaf( `ObjectNumber`
+                        )->tag( `ObjectNumber`
                             )->a( n = `number` v = |\{ parts:[\{path:'PRICE'\},\{path:'CURRENCY_CODE'\}], type: 'sap.ui.model.type.Currency', formatOptions: \{showMeasure: false\} \}|
                             )->a( n = `unit`   v = `{CURRENCY_CODE}`
 
-                    )->shut(
-                )->shut(
-            )->shut(
-        )->shut( ).
+                    )->end(
+                )->end(
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

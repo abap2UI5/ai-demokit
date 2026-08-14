@@ -37,13 +37,13 @@ CLASS z2ui5_cl_smpc_app_030 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
-        )->open( `IconTabBar`
+        )->ele( `IconTabBar`
             )->a( n = `id`                   v = `idIconTabBarStretchContent`
             )->a( n = `stretchContentHeight` v = `true`
             )->a( n = `backgroundDesign`     v = `Transparent`
@@ -53,48 +53,48 @@ CLASS z2ui5_cl_smpc_app_030 IMPLEMENTATION.
             )->a( n = `expanded`             v = `{= !${device>/system/phone} }`
             )->a( n = `class`                v = `sapUiResponsiveContentPadding`
 
-            )->open( `items`
-                )->open( `IconTabFilter`
+            )->ele( `items`
+                )->ele( `IconTabFilter`
                     )->a( n = `text` v = `Products`
                     )->a( n = `key`  v = `products`
 
-                    )->open( `ScrollContainer`
+                    )->ele( `ScrollContainer`
                         )->a( n = `height`     v = `100%`
                         )->a( n = `width`      v = `100%`
                         )->a( n = `horizontal` v = `false`
                         )->a( n = `vertical`   v = `true`
 
-                        )->open( `List`
+                        )->ele( `List`
                             )->a( n = `items` v = client->_bind( t_products )
 
-                            )->leaf( `StandardListItem`
+                            )->tag( `StandardListItem`
                                 )->a( n = `title`   v = `{NAME}`
                                 )->a( n = `counter` v = `{QUANTITY}`
 
-                        )->shut(
-                    )->shut(
-                )->shut(
-                )->open( `IconTabFilter`
+                        )->end(
+                    )->end(
+                )->end(
+                )->ele( `IconTabFilter`
                     )->a( n = `text` v = `Attachments`
                     )->a( n = `key`  v = `attachments`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Attachments go here ...`
 
-                )->shut(
-                )->open( `IconTabFilter`
+                )->end(
+                )->ele( `IconTabFilter`
                     )->a( n = `text` v = `Notes`
                     )->a( n = `key`  v = `notes`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Notes go here ...`
 
-                )->shut(
-                )->open( `IconTabFilter`
+                )->end(
+                )->ele( `IconTabFilter`
                     )->a( n = `text` v = `People`
                     )->a( n = `key`  v = `people`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `People content goes here ...` ).
 
     client->view_display( view->stringify( ) ).

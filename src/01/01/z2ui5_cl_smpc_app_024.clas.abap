@@ -41,23 +41,23 @@ CLASS z2ui5_cl_smpc_app_024 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
 
-        )->leaf( `FeedInput`
+        )->tag( `FeedInput`
             )->a( n = `post`  v = client->_event( val   = `POST`
                                                   t_arg = VALUE #( ( `${$parameters>/value}` ) ) )
             )->a( n = `icon`  v = `https://sdk.openui5.org/test-resources/sap/m/images/dronning_victoria.jpg`
             )->a( n = `class` v = `sapUiSmallMarginTopBottom`
 
-        )->open( `List`
+        )->ele( `List`
             )->a( n = `showSeparators` v = `Inner`
             )->a( n = `items`          v = client->_bind( t_entries )
 
-            )->leaf( `FeedListItem`
+            )->tag( `FeedListItem`
                 )->a( n = `sender`                   v = `{AUTHOR}`
                 )->a( n = `icon`                     v = `{AUTHOR_PIC_URL}`
                 )->a( n = `senderPress`              v = client->_event( val   = `SENDER_PRESS`

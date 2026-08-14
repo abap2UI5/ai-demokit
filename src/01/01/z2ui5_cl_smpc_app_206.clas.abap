@@ -40,18 +40,18 @@ CLASS z2ui5_cl_smpc_app_206 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the original binds the ObjectHeader to a single record {/ProductCollection/5};
     " that element binding is flattened onto the default model root (fields seeded
     " in model_init with products.json row 5). The fields are bound ABSOLUTELY:
     " a relative {NAME} on a control with no binding context resolves against
     " nothing and renders empty (measured 2026-08-01, the app-207 class)
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
-        )->open( `ObjectHeader`
+        )->ele( `ObjectHeader`
             )->a( n = `icon`             v = client->_bind( productpicurl )
             )->a( n = `iconDensityAware` v = `false`
             )->a( n = `iconAlt`          v = client->_bind( name )
@@ -62,18 +62,18 @@ CLASS z2ui5_cl_smpc_app_206 IMPLEMENTATION.
             )->a( n = `numberUnit`       v = client->_bind( currencycode )
             )->a( n = `class`            v = `sapUiResponsivePadding--header`
 
-            )->open( `statuses`
-                )->leaf( `ObjectStatus`
+            )->ele( `statuses`
+                )->tag( `ObjectStatus`
                     )->a( n = `text`  v = `In Stock`
                     )->a( n = `state` v = `Success`
 
-            )->shut(
+            )->end(
 
-            )->leaf( `ObjectAttribute`
+            )->tag( `ObjectAttribute`
                 )->a( n = `text` v = |{ client->_bind( weightmeasure ) } { client->_bind( weightunit ) }|
-            )->leaf( `ObjectAttribute`
+            )->tag( `ObjectAttribute`
                 )->a( n = `text` v = |{ client->_bind( width ) } x { client->_bind( depth ) } x { client->_bind( height ) } { client->_bind( dimunit ) }|
-            )->leaf( `ObjectAttribute`
+            )->tag( `ObjectAttribute`
                 )->a( n = `text` v = client->_bind( description ) ).
 
     client->view_display( view->stringify( ) ).

@@ -28,15 +28,15 @@ CLASS z2ui5_cl_smpc_app_222 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns:grid` v = `sap.ui.layout.cssgrid`
         )->a( n = `xmlns:f`    v = `sap.f`
 
-        )->leaf( `ToggleButton`
+        )->tag( `ToggleButton`
             )->a( n = `id`    v = `revealGrid`
             )->a( n = `text`  v = `Reveal Grid`
             )->a( n = `class` v = `sapUiSmallMargin`
@@ -44,151 +44,151 @@ CLASS z2ui5_cl_smpc_app_222 IMPLEMENTATION.
         " onSliderMoved sets the width of byId('panelForGridList') - the Panel HAS
         " a width property, so the resize is a roundtrip-free binding pair (the
         " app-176/213 idiom) instead of a jQuery write
-        )->leaf( `Slider`
+        )->tag( `Slider`
             )->a( n = `value` v = client->_bind( slider_value )
 
-        )->open( `Panel`
+        )->ele( `Panel`
             )->a( n = `id`               v = `panelForGridList`
             )->a( n = `width`            v = |\{= ${ client->_bind( slider_value ) } + '%' \}|
             )->a( n = `backgroundDesign` v = `Transparent`
 
-            )->open( `headerToolbar`
-                )->open( `Toolbar`
+            )->ele( `headerToolbar`
+                )->ele( `Toolbar`
                     )->a( n = `height` v = `3rem`
-                    )->leaf( `Title`
+                    )->tag( `Title`
                         )->a( n = `text` v = `GridList with ResponsiveColumnLayout`
 
-            )->shut(
-            )->shut(
+            )->end(
+            )->end(
 
-            )->open( n = `GridList` ns = `f`
+            )->ele( n = `GridList` ns = `f`
                 )->a( n = `id` v = `grid1`
 
-                )->open( n = `customLayout` ns = `f`
-                    )->leaf( n = `ResponsiveColumnLayout` ns = `grid`
+                )->ele( n = `customLayout` ns = `f`
+                    )->tag( n = `ResponsiveColumnLayout` ns = `grid`
 
-                )->shut(
+                )->end(
 
-                )->open( n = `GridListItem` ns = `f`
-                    )->open( n = `layoutData` ns = `f`
-                        )->leaf( n = `ResponsiveColumnItemLayoutData` ns = `grid`
+                )->ele( n = `GridListItem` ns = `f`
+                    )->ele( n = `layoutData` ns = `f`
+                        )->tag( n = `ResponsiveColumnItemLayoutData` ns = `grid`
                             )->a( n = `columns` v = `4`
                             )->a( n = `rows`    v = `4`
 
-                    )->shut(
-                    )->open( `VBox`
+                    )->end(
+                    )->ele( `VBox`
                         )->a( n = `class` v = `sapUiSmallMargin`
-                        )->leaf( `Title`
+                        )->tag( `Title`
                             )->a( n = `text`     v = `4 / 4`
                             )->a( n = `wrapping` v = `true`
-                        )->leaf( `Label`
+                        )->tag( `Label`
                             )->a( n = `text`     v = `Subtitle`
                             )->a( n = `wrapping` v = `true`
 
-                    )->shut(
-                )->shut(
+                    )->end(
+                )->end(
 
-                )->open( n = `GridListItem` ns = `f`
-                    )->open( n = `layoutData` ns = `f`
-                        )->leaf( n = `ResponsiveColumnItemLayoutData` ns = `grid`
+                )->ele( n = `GridListItem` ns = `f`
+                    )->ele( n = `layoutData` ns = `f`
+                        )->tag( n = `ResponsiveColumnItemLayoutData` ns = `grid`
                             )->a( n = `columns` v = `3`
                             )->a( n = `rows`    v = `2`
 
-                    )->shut(
-                    )->open( `VBox`
+                    )->end(
+                    )->ele( `VBox`
                         )->a( n = `class` v = `sapUiSmallMargin`
-                        )->leaf( `Title`
+                        )->tag( `Title`
                             )->a( n = `text`     v = `3 / 2`
                             )->a( n = `wrapping` v = `true`
-                        )->leaf( `Label`
+                        )->tag( `Label`
                             )->a( n = `text`     v = `Subtitle`
                             )->a( n = `wrapping` v = `true`
-                        )->leaf( `Label`
+                        )->tag( `Label`
                             )->a( n = `text`     v = `Subtitle`
                             )->a( n = `wrapping` v = `true`
-                        )->leaf( `Label`
+                        )->tag( `Label`
                             )->a( n = `text`     v = `Subtitle`
                             )->a( n = `wrapping` v = `true`
 
-                    )->shut(
-                )->shut(
+                    )->end(
+                )->end(
 
-                )->open( n = `GridListItem` ns = `f`
-                    )->open( n = `layoutData` ns = `f`
-                        )->leaf( n = `ResponsiveColumnItemLayoutData` ns = `grid`
+                )->ele( n = `GridListItem` ns = `f`
+                    )->ele( n = `layoutData` ns = `f`
+                        )->tag( n = `ResponsiveColumnItemLayoutData` ns = `grid`
                             )->a( n = `columns` v = `3`
                             )->a( n = `rows`    v = `2`
 
-                    )->shut(
-                    )->open( `VBox`
+                    )->end(
+                    )->ele( `VBox`
                         )->a( n = `class` v = `sapUiSmallMargin`
-                        )->leaf( `Title`
+                        )->tag( `Title`
                             )->a( n = `text`     v = `3 / 2`
                             )->a( n = `wrapping` v = `true`
-                        )->leaf( `Label`
+                        )->tag( `Label`
                             )->a( n = `text`     v = `Subtitle`
                             )->a( n = `wrapping` v = `true`
-                        )->leaf( `Label`
+                        )->tag( `Label`
                             )->a( n = `text`     v = `Subtitle`
                             )->a( n = `wrapping` v = `true`
-                        )->leaf( `Label`
+                        )->tag( `Label`
                             )->a( n = `text`     v = `Subtitle`
                             )->a( n = `wrapping` v = `true`
 
-                    )->shut(
-                )->shut(
+                    )->end(
+                )->end(
 
-                )->open( n = `GridListItem` ns = `f`
-                    )->open( n = `layoutData` ns = `f`
-                        )->leaf( n = `ResponsiveColumnItemLayoutData` ns = `grid`
+                )->ele( n = `GridListItem` ns = `f`
+                    )->ele( n = `layoutData` ns = `f`
+                        )->tag( n = `ResponsiveColumnItemLayoutData` ns = `grid`
                             )->a( n = `columns` v = `1`
                             )->a( n = `rows`    v = `1`
 
-                    )->shut(
-                    )->open( `VBox`
+                    )->end(
+                    )->ele( `VBox`
                         )->a( n = `class` v = `sapUiSmallMargin`
-                        )->leaf( `Title`
+                        )->tag( `Title`
                             )->a( n = `text`     v = `1 / 1`
                             )->a( n = `wrapping` v = `true`
-                        )->leaf( `Label`
+                        )->tag( `Label`
                             )->a( n = `text`     v = `Subtitle`
                             )->a( n = `wrapping` v = `true`
 
-                    )->shut(
-                )->shut(
+                    )->end(
+                )->end(
 
-                )->open( n = `GridListItem` ns = `f`
-                    )->open( n = `layoutData` ns = `f`
-                        )->leaf( n = `ResponsiveColumnItemLayoutData` ns = `grid`
+                )->ele( n = `GridListItem` ns = `f`
+                    )->ele( n = `layoutData` ns = `f`
+                        )->tag( n = `ResponsiveColumnItemLayoutData` ns = `grid`
                             )->a( n = `columns` v = `1`
                             )->a( n = `rows`    v = `1`
 
-                    )->shut(
-                    )->open( `VBox`
+                    )->end(
+                    )->ele( `VBox`
                         )->a( n = `class` v = `sapUiSmallMargin`
-                        )->leaf( `Title`
+                        )->tag( `Title`
                             )->a( n = `text`     v = `1 / 1`
                             )->a( n = `wrapping` v = `true`
-                        )->leaf( `Label`
+                        )->tag( `Label`
                             )->a( n = `text`     v = `Subtitle`
                             )->a( n = `wrapping` v = `true`
-                        )->leaf( `Label`
+                        )->tag( `Label`
                             )->a( n = `text`     v = `Subtitle`
                             )->a( n = `wrapping` v = `true`
-                        )->leaf( `Label`
+                        )->tag( `Label`
                             )->a( n = `text`     v = `Subtitle`
                             )->a( n = `wrapping` v = `true`
-                        )->leaf( `Label`
+                        )->tag( `Label`
                             )->a( n = `text`     v = `Subtitle`
                             )->a( n = `wrapping` v = `true`
-                        )->leaf( `Label`
+                        )->tag( `Label`
                             )->a( n = `text`     v = `Subtitle`
                             )->a( n = `wrapping` v = `true`
 
-                    )->shut(
-                )->shut(
-            )->shut(
-        )->shut( ).
+                    )->end(
+                )->end(
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

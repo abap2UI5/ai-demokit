@@ -42,13 +42,13 @@ CLASS z2ui5_cl_smpc_app_117 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " both cards of the sample, rebuilt 1:1. The two named models fold into the
     " one default model (cities> -> T_CITIES, products> -> T_PRODUCTS; the last
     " path segment stays identical, which is what structural-diff matches), and
     " the sorter of the two ComboBoxes rides along as a raw binding-info string
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`        v = `sap.m`
         )->a( n = `xmlns:mvc`    v = `sap.ui.core.mvc`
         )->a( n = `xmlns:f`      v = `sap.f`
@@ -57,61 +57,61 @@ CLASS z2ui5_cl_smpc_app_117 IMPLEMENTATION.
         )->a( n = `displayBlock` v = `true`
         )->a( n = `height`       v = `100%`
 
-        )->open( n = `Card` ns = `f`
+        )->ele( n = `Card` ns = `f`
             )->a( n = `class` v = `sapUiMediumMargin`
             )->a( n = `width` v = `300px`
 
-            )->open( n = `header` ns = `f`
-                )->leaf( n = `Header` ns = `card`
+            )->ele( n = `header` ns = `f`
+                )->tag( n = `Header` ns = `card`
                     )->a( n = `title`    v = `Buy bus ticket on-line`
                     )->a( n = `subtitle` v = `Buy a single-ride ticket for a date`
                     )->a( n = `iconSrc`  v = `sap-icon://bus-public-transport`
 
-            )->shut(
-            )->open( n = `content` ns = `f`
-                )->open( `VBox`
+            )->end(
+            )->ele( n = `content` ns = `f`
+                )->ele( `VBox`
                     )->a( n = `height`         v = `110px`
                     )->a( n = `class`          v = `sapUiSmallMargin`
                     )->a( n = `justifyContent` v = `SpaceBetween`
 
-                    )->open( `HBox`
+                    )->ele( `HBox`
                         )->a( n = `justifyContent` v = `SpaceBetween`
 
-                        )->open( `ComboBox`
+                        )->ele( `ComboBox`
                             )->a( n = `width`       v = `120px`
                             )->a( n = `placeholder` v = `From City`
                             )->a( n = `items`       v = |\{ path: '{ client->_bind( val = t_cities path = abap_true ) }', sorter: \{ path: 'TEXT' \} \}|
 
-                            )->open( `items`
-                                )->leaf( n = `Item` ns = `core`
+                            )->ele( `items`
+                                )->tag( n = `Item` ns = `core`
                                     )->a( n = `key`  v = `{KEY}`
                                     )->a( n = `text` v = `{TEXT}`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `ComboBox`
+                            )->end(
+                        )->end(
+                        )->ele( `ComboBox`
                             )->a( n = `width`       v = `120px`
                             )->a( n = `placeholder` v = `To City`
                             )->a( n = `items`       v = |\{ path: '{ client->_bind( val = t_cities path = abap_true ) }', sorter: \{ path: 'TEXT' \} \}|
 
-                            )->open( `items`
-                                )->leaf( n = `Item` ns = `core`
+                            )->ele( `items`
+                                )->tag( n = `Item` ns = `core`
                                     )->a( n = `key`  v = `{KEY}`
                                     )->a( n = `text` v = `{TEXT}`
 
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                    )->open( `HBox`
+                            )->end(
+                        )->end(
+                    )->end(
+                    )->ele( `HBox`
                         )->a( n = `renderType`     v = `Bare`
                         )->a( n = `justifyContent` v = `SpaceBetween`
 
-                        )->leaf( `DatePicker`
+                        )->tag( `DatePicker`
                             )->a( n = `width`       v = `200px`
                             )->a( n = `placeholder` v = `Choose Date ...`
                         " onBookPress only toasts a fixed explanation - composed on the
                         " client, so the press needs no round-trip
-                        )->leaf( `Button`
+                        )->tag( `Button`
                             )->a( n = `text`  v = `Book`
                             )->a( n = `press` v = client->follow_up_action(
                                       val   = client->cs_event-control_global
@@ -122,43 +122,43 @@ CLASS z2ui5_cl_smpc_app_117 IMPLEMENTATION.
                             )->a( n = `type`  v = `Emphasized`
                             )->a( n = `class` v = `sapUiTinyMarginBegin`
 
-                    )->shut(
-                )->shut(
-            )->shut(
-        )->shut(
+                    )->end(
+                )->end(
+            )->end(
+        )->end(
 
-        )->open( n = `Card` ns = `f`
+        )->ele( n = `Card` ns = `f`
             )->a( n = `class` v = `sapUiMediumMargin`
             )->a( n = `width` v = `300px`
 
-            )->open( n = `header` ns = `f`
-                )->leaf( n = `Header` ns = `card`
+            )->ele( n = `header` ns = `f`
+                )->tag( n = `Header` ns = `card`
                     )->a( n = `title`    v = `Project Cloud Transformation`
                     )->a( n = `subtitle` v = `Revenue per Product | EUR`
 
-            )->shut(
-            )->open( n = `content` ns = `f`
-                )->open( `List`
+            )->end(
+            )->ele( n = `content` ns = `f`
+                )->ele( `List`
                     )->a( n = `class`          v = `sapUiSmallMarginBottom`
                     )->a( n = `showSeparators` v = `None`
                     )->a( n = `items`          v = client->_bind( t_products )
 
-                    )->open( `CustomListItem`
-                        )->open( `HBox`
+                    )->ele( `CustomListItem`
+                        )->ele( `HBox`
                             )->a( n = `alignItems`     v = `Center`
                             )->a( n = `justifyContent` v = `SpaceBetween`
 
-                            )->open( `VBox`
+                            )->ele( `VBox`
                                 )->a( n = `class` v = `sapUiSmallMarginBegin sapUiSmallMarginTopBottom`
 
-                                )->leaf( `Title`
+                                )->tag( `Title`
                                     )->a( n = `level` v = `H3`
                                     )->a( n = `text`  v = `{TITLE}`
-                                )->leaf( `Text`
+                                )->tag( `Text`
                                     )->a( n = `text` v = `{SUBTITLE}`
 
-                            )->shut(
-                            )->leaf( `ObjectStatus`
+                            )->end(
+                            )->tag( `ObjectStatus`
                                 )->a( n = `class` v = `sapUiTinyMargin sapUiSmallMarginEnd`
                                 )->a( n = `text`  v = `{REVENUE}`
                                 )->a( n = `state` v = `{STATUSSCHEMA}` ).

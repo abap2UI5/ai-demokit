@@ -26,11 +26,11 @@ CLASS z2ui5_cl_smpc_app_200 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " robot.png avatar assets rewritten from the sample's relative
     " ./test-resources path to the sdk.openui5.org host (offline asset rule)
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `height`      v = `100%`
         )->a( n = `xmlns`       v = `sap.uxap`
         )->a( n = `xmlns:mvc`   v = `sap.ui.core.mvc`
@@ -38,445 +38,445 @@ CLASS z2ui5_cl_smpc_app_200 IMPLEMENTATION.
         )->a( n = `xmlns:core`  v = `sap.ui.core`
         )->a( n = `xmlns:forms` v = `sap.ui.layout.form`
 
-        )->open( `ObjectPageLayout`
+        )->ele( `ObjectPageLayout`
             )->a( n = `id`                 v = `ObjectPageLayout`
             )->a( n = `upperCaseAnchorBar` v = `false`
 
-            )->open( `headerTitle`
-                )->open( `ObjectPageDynamicHeaderTitle`
+            )->ele( `headerTitle`
+                )->ele( `ObjectPageDynamicHeaderTitle`
 
-                    )->open( `expandedHeading`
-                        )->leaf( n = `Title` ns = `m`
+                    )->ele( `expandedHeading`
+                        )->tag( n = `Title` ns = `m`
                             )->a( n = `text` v = `Robot Arm Series 9`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( `snappedHeading`
-                        )->open( n = `HBox` ns = `m`
+                    )->ele( `snappedHeading`
+                        )->ele( n = `HBox` ns = `m`
                             " POST-1.71: sap.m.Avatar (since 1.73) kept 1:1, here and in headerContent
-                            )->leaf( n = `Avatar` ns = `m`
+                            )->tag( n = `Avatar` ns = `m`
                                 )->a( n = `src`          v = `https://sdk.openui5.org/test-resources/sap/uxap/images/robot.png`
                                 )->a( n = `class`        v = `sapUiMediumMarginEnd`
                                 )->a( n = `displayShape` v = `Square`
 
-                            )->open( n = `VBox` ns = `m`
-                                )->leaf( n = `Title` ns = `m`
+                            )->ele( n = `VBox` ns = `m`
+                                )->tag( n = `Title` ns = `m`
                                     )->a( n = `text` v = `Robot Arm Series 9`
-                                )->leaf( n = `Label` ns = `m`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = `PO-48865`
 
-                            )->shut(
-                        )->shut(
-                    )->shut(
+                            )->end(
+                        )->end(
+                    )->end(
 
-                    )->open( `expandedContent`
-                        )->leaf( n = `Label` ns = `m`
+                    )->ele( `expandedContent`
+                        )->tag( n = `Label` ns = `m`
                             )->a( n = `text` v = `PO-48865`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( `snappedTitleOnMobile`
-                        )->leaf( n = `Title` ns = `m`
+                    )->ele( `snappedTitleOnMobile`
+                        )->tag( n = `Title` ns = `m`
                             )->a( n = `text` v = `Robot Arm Series 9`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( `actions`
-                        )->leaf( n = `Button` ns = `m`
+                    )->ele( `actions`
+                        )->tag( n = `Button` ns = `m`
                             )->a( n = `text` v = `Edit`
                             )->a( n = `type` v = `Emphasized`
-                        )->leaf( n = `Button` ns = `m`
+                        )->tag( n = `Button` ns = `m`
                             )->a( n = `text` v = `Delete`
-                        )->leaf( n = `Button` ns = `m`
+                        )->tag( n = `Button` ns = `m`
                             )->a( n = `text` v = `Simulate Assembly`
 
-                    )->shut(
-                )->shut(
-            )->shut(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( `headerContent`
-                )->open( n = `FlexBox` ns = `m`
+            )->ele( `headerContent`
+                )->ele( n = `FlexBox` ns = `m`
                     )->a( n = `wrap`         v = `Wrap`
                     )->a( n = `fitContainer` v = `true`
 
-                    )->leaf( n = `Avatar` ns = `m`
+                    )->tag( n = `Avatar` ns = `m`
                         )->a( n = `src`          v = `https://sdk.openui5.org/test-resources/sap/uxap/images/robot.png`
                         )->a( n = `class`        v = `sapUiMediumMarginEnd`
                         )->a( n = `displayShape` v = `Square`
                         )->a( n = `displaySize`  v = `L`
 
-                    )->open( n = `VBox` ns = `m`
+                    )->ele( n = `VBox` ns = `m`
                         )->a( n = `class` v = `sapUiLargeMarginEnd sapUiSmallMarginBottom`
 
-                        )->open( n = `HBox` ns = `m`
+                        )->ele( n = `HBox` ns = `m`
                             )->a( n = `class`      v = `sapUiTinyMarginBottom`
                             )->a( n = `renderType` v = `Bare`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text`  v = `Manufacturer:`
                                 )->a( n = `class` v = `sapUiTinyMarginEnd`
-                            )->leaf( n = `Text` ns = `m`
+                            )->tag( n = `Text` ns = `m`
                                 )->a( n = `text` v = ` Robotech`
 
-                        )->shut(
+                        )->end(
 
-                        )->open( n = `HBox` ns = `m`
+                        )->ele( n = `HBox` ns = `m`
                             )->a( n = `class`      v = `sapUiTinyMarginBottom`
                             )->a( n = `renderType` v = `Bare`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text`  v = `Factory:`
                                 )->a( n = `class` v = `sapUiTinyMarginEnd`
-                            )->leaf( n = `Text` ns = `m`
+                            )->tag( n = `Text` ns = `m`
                                 )->a( n = `text` v = ` Orlando, Florida`
 
-                        )->shut(
+                        )->end(
 
-                        )->open( n = `HBox` ns = `m`
-                            )->leaf( n = `Label` ns = `m`
+                        )->ele( n = `HBox` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text`  v = `Supplier:`
                                 )->a( n = `class` v = `sapUiTinyMarginEnd`
-                            )->leaf( n = `Link` ns = `m`
+                            )->tag( n = `Link` ns = `m`
                                 )->a( n = `text` v = `Robotech (234242343)`
 
-                        )->shut(
-                    )->shut(
+                        )->end(
+                    )->end(
 
-                    )->open( n = `VBox` ns = `m`
+                    )->ele( n = `VBox` ns = `m`
                         )->a( n = `class` v = `sapUiLargeMarginEnd sapUiSmallMarginBottom`
 
-                        )->leaf( n = `Title` ns = `m`
+                        )->tag( n = `Title` ns = `m`
                             )->a( n = `text`  v = `Status`
                             )->a( n = `class` v = `sapUiTinyMarginBottom`
-                        )->leaf( n = `ObjectStatus` ns = `m`
+                        )->tag( n = `ObjectStatus` ns = `m`
                             )->a( n = `text`  v = `Delivery`
                             )->a( n = `state` v = `Success`
                             )->a( n = `class` v = `sapMObjectStatusLarge`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( n = `VBox` ns = `m`
+                    )->ele( n = `VBox` ns = `m`
                         )->a( n = `class` v = `sapUiLargeMarginEnd sapUiSmallMarginBottom`
 
-                        )->leaf( n = `Title` ns = `m`
+                        )->tag( n = `Title` ns = `m`
                             )->a( n = `text`  v = `Delivery Time`
                             )->a( n = `class` v = `sapUiTinyMarginBottom`
-                        )->leaf( n = `ObjectStatus` ns = `m`
+                        )->tag( n = `ObjectStatus` ns = `m`
                             )->a( n = `text`  v = `12 Days`
                             )->a( n = `icon`  v = `sap-icon://shipping-status`
                             )->a( n = `class` v = `sapMObjectStatusLarge`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( n = `VBox` ns = `m`
+                    )->ele( n = `VBox` ns = `m`
                         )->a( n = `class` v = `sapUiLargeMarginEnd sapUiSmallMarginBottom`
 
-                        )->leaf( n = `Title` ns = `m`
+                        )->tag( n = `Title` ns = `m`
                             )->a( n = `text`  v = `Assembly Option`
                             )->a( n = `class` v = `sapUiTinyMarginBottom`
-                        )->leaf( n = `ObjectStatus` ns = `m`
+                        )->tag( n = `ObjectStatus` ns = `m`
                             )->a( n = `text`  v = `To Be Selected`
                             )->a( n = `state` v = `Error`
                             )->a( n = `class` v = `sapMObjectStatusLarge`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( n = `VBox` ns = `m`
+                    )->ele( n = `VBox` ns = `m`
                         )->a( n = `class` v = `sapUiLargeMarginEnd`
 
-                        )->leaf( n = `Title` ns = `m`
+                        )->tag( n = `Title` ns = `m`
                             )->a( n = `text`  v = `Monthly Leasing Instalment`
                             )->a( n = `class` v = `sapUiTinyMarginBottom`
-                        )->leaf( n = `ObjectNumber` ns = `m`
+                        )->tag( n = `ObjectNumber` ns = `m`
                             )->a( n = `number`     v = `379.99`
                             )->a( n = `unit`       v = `USD`
                             )->a( n = `emphasized` v = `false`
                             )->a( n = `class`      v = `sapMObjectNumberLarge`
 
-                    )->shut(
-                )->shut(
-            )->shut(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( `sections`
-                )->open( `ObjectPageSection`
+            )->ele( `sections`
+                )->ele( `ObjectPageSection`
                     )->a( n = `titleUppercase` v = `false`
                     )->a( n = `title`          v = `General Information`
 
-                    )->open( `subSections`
-                        )->open( `ObjectPageSubSection`
+                    )->ele( `subSections`
+                        )->ele( `ObjectPageSubSection`
                             )->a( n = `title`     v = `Order Details`
                             " POST-1.71: showTitle (since 1.77) kept 1:1, here and on the Products subsection
                             )->a( n = `showTitle` v = `false`
 
-                            )->open( `blocks`
-                                )->open( n = `SimpleForm` ns = `forms`
+                            )->ele( `blocks`
+                                )->ele( n = `SimpleForm` ns = `forms`
                                     )->a( n = `class`    v = `sapUxAPObjectPageSubSectionAlignContent`
                                     )->a( n = `layout`   v = `ColumnLayout`
                                     )->a( n = `columnsM` v = `2`
                                     )->a( n = `columnsL` v = `3`
                                     )->a( n = `columnsXL` v = `4`
 
-                                    )->leaf( n = `Title` ns = `core`
+                                    )->tag( n = `Title` ns = `core`
                                         )->a( n = `text` v = `Order Details`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Order ID`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `589946637`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Cotract`
-                                    )->leaf( n = `Link` ns = `m`
+                                    )->tag( n = `Link` ns = `m`
                                         )->a( n = `text` v = `10045876`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Transaction Date:`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `May 6, 2018`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Expected Delivery Date`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `June 23, 2018`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Factory`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `Orlando, FL`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Supplier`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `Robotech`
-                                    )->leaf( n = `Title` ns = `core`
+                                    )->tag( n = `Title` ns = `core`
                                         )->a( n = `text` v = `Configuration Accounts`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Model`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `Robot Arm Series 9`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Color`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `White (default)`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Socket`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `Default Socket 10`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Leasing Instalment`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `379.99 USD per month`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Axis`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `6 Axis`
 
-                                )->shut(
-                            )->shut(
-                        )->shut(
+                                )->end(
+                            )->end(
+                        )->end(
 
-                        )->open( `ObjectPageSubSection`
+                        )->ele( `ObjectPageSubSection`
                             )->a( n = `title`     v = `Products`
                             )->a( n = `showTitle` v = `false`
 
-                            )->open( `blocks`
-                                )->open( n = `Table` ns = `m`
+                            )->ele( `blocks`
+                                )->ele( n = `Table` ns = `m`
                                     )->a( n = `class` v = `sapUxAPObjectPageSubSectionAlignContent`
                                     )->a( n = `width` v = `auto`
 
-                                    )->open( n = `headerToolbar` ns = `m`
-                                        )->open( n = `OverflowToolbar` ns = `m`
-                                            )->leaf( n = `Title` ns = `m`
+                                    )->ele( n = `headerToolbar` ns = `m`
+                                        )->ele( n = `OverflowToolbar` ns = `m`
+                                            )->tag( n = `Title` ns = `m`
                                                 )->a( n = `text`  v = `Products`
                                                 )->a( n = `level` v = `H2`
-                                            )->leaf( n = `ToolbarSpacer` ns = `m`
-                                            )->leaf( n = `SearchField` ns = `m`
+                                            )->tag( n = `ToolbarSpacer` ns = `m`
+                                            )->tag( n = `SearchField` ns = `m`
                                                 )->a( n = `width` v = `17.5rem`
-                                            )->leaf( n = `OverflowToolbarButton` ns = `m`
+                                            )->tag( n = `OverflowToolbarButton` ns = `m`
                                                 )->a( n = `tooltip` v = `Sort`
                                                 )->a( n = `text`    v = `Sort`
                                                 )->a( n = `icon`    v = `sap-icon://sort`
-                                            )->leaf( n = `OverflowToolbarButton` ns = `m`
+                                            )->tag( n = `OverflowToolbarButton` ns = `m`
                                                 )->a( n = `tooltip` v = `Filter`
                                                 )->a( n = `text`    v = `Filter`
                                                 )->a( n = `icon`    v = `sap-icon://filter`
-                                            )->leaf( n = `OverflowToolbarButton` ns = `m`
+                                            )->tag( n = `OverflowToolbarButton` ns = `m`
                                                 )->a( n = `tooltip` v = `Group`
                                                 )->a( n = `text`    v = `Group`
                                                 )->a( n = `icon`    v = `sap-icon://group-2`
-                                            )->leaf( n = `OverflowToolbarButton` ns = `m`
+                                            )->tag( n = `OverflowToolbarButton` ns = `m`
                                                 )->a( n = `tooltip` v = `Settings`
                                                 )->a( n = `text`    v = `Settings`
                                                 )->a( n = `icon`    v = `sap-icon://action-settings`
 
-                                        )->shut(
-                                    )->shut(
+                                        )->end(
+                                    )->end(
 
-                                    )->open( n = `columns` ns = `m`
-                                        )->open( n = `Column` ns = `m`
-                                            )->leaf( n = `Text` ns = `m`
+                                    )->ele( n = `columns` ns = `m`
+                                        )->ele( n = `Column` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `Document Number`
 
-                                        )->shut(
+                                        )->end(
 
-                                        )->open( n = `Column` ns = `m`
+                                        )->ele( n = `Column` ns = `m`
                                             )->a( n = `minScreenWidth` v = `Tablet`
                                             )->a( n = `demandPopin`    v = `true`
 
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `Company`
 
-                                        )->shut(
+                                        )->end(
 
-                                        )->open( n = `Column` ns = `m`
+                                        )->ele( n = `Column` ns = `m`
                                             )->a( n = `minScreenWidth` v = `Tablet`
                                             )->a( n = `demandPopin`    v = `true`
 
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `Contact Person`
 
-                                        )->shut(
+                                        )->end(
 
-                                        )->open( n = `Column` ns = `m`
+                                        )->ele( n = `Column` ns = `m`
                                             )->a( n = `minScreenWidth` v = `Tablet`
                                             )->a( n = `demandPopin`    v = `true`
 
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `Posting Date`
 
-                                        )->shut(
+                                        )->end(
 
-                                        )->open( n = `Column` ns = `m`
+                                        )->ele( n = `Column` ns = `m`
                                             )->a( n = `hAlign` v = `End`
 
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `Amount (Local Currency)`
 
-                                        )->shut(
-                                    )->shut(
+                                        )->end(
+                                    )->end(
 
-                                    )->open( n = `items` ns = `m`
-                                        )->open( n = `ColumnListItem` ns = `m`
-                                            )->leaf( n = `Link` ns = `m`
+                                    )->ele( n = `items` ns = `m`
+                                        )->ele( n = `ColumnListItem` ns = `m`
+                                            )->tag( n = `Link` ns = `m`
                                                 )->a( n = `text` v = `10223882001820`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `Jologa`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `Denise Smith`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `11/15/19`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `12,897.00 EUR`
 
-                                        )->shut(
+                                        )->end(
 
-                                        )->open( n = `ColumnListItem` ns = `m`
-                                            )->leaf( n = `Link` ns = `m`
+                                        )->ele( n = `ColumnListItem` ns = `m`
+                                            )->tag( n = `Link` ns = `m`
                                                 )->a( n = `text` v = `10223882001820`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `Jologa`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `Denise Smith`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `11/15/19`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `12,897.00 EUR`
 
-                                        )->shut(
+                                        )->end(
 
-                                        )->open( n = `ColumnListItem` ns = `m`
-                                            )->leaf( n = `Link` ns = `m`
+                                        )->ele( n = `ColumnListItem` ns = `m`
+                                            )->tag( n = `Link` ns = `m`
                                                 )->a( n = `text` v = `10223882001820`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `Jologa`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `Denise Smith`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `11/15/19`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `12,897.00 EUR`
 
-                                        )->shut(
+                                        )->end(
 
-                                        )->open( n = `ColumnListItem` ns = `m`
-                                            )->leaf( n = `Link` ns = `m`
+                                        )->ele( n = `ColumnListItem` ns = `m`
+                                            )->tag( n = `Link` ns = `m`
                                                 )->a( n = `text` v = `10223882001820`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `Jologa`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `Denise Smith`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `11/15/19`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `12,897.00 EUR`
 
-                                        )->shut(
+                                        )->end(
 
-                                        )->open( n = `ColumnListItem` ns = `m`
-                                            )->leaf( n = `Link` ns = `m`
+                                        )->ele( n = `ColumnListItem` ns = `m`
+                                            )->tag( n = `Link` ns = `m`
                                                 )->a( n = `text` v = `10223882001820`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `Jologa`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `Denise Smith`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `11/15/19`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `12,897.00 EUR`
 
-                                        )->shut(
-                                    )->shut(
-                                )->shut(
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                )->shut(
+                                        )->end(
+                                    )->end(
+                                )->end(
+                            )->end(
+                        )->end(
+                    )->end(
+                )->end(
 
-                )->open( `ObjectPageSection`
+                )->ele( `ObjectPageSection`
                     )->a( n = `titleUppercase` v = `false`
                     )->a( n = `title`          v = `Contact Information`
 
-                    )->open( `subSections`
-                        )->open( `ObjectPageSubSection`
+                    )->ele( `subSections`
+                        )->ele( `ObjectPageSubSection`
                             )->a( n = `title` v = `Contact Information`
 
-                            )->open( `blocks`
-                                )->open( n = `SimpleForm` ns = `forms`
+                            )->ele( `blocks`
+                                )->ele( n = `SimpleForm` ns = `forms`
                                     )->a( n = `class`    v = `sapUxAPObjectPageSubSectionAlignContent`
                                     )->a( n = `layout`   v = `ColumnLayout`
                                     )->a( n = `columnsM` v = `2`
                                     )->a( n = `columnsL` v = `3`
                                     )->a( n = `columnsXL` v = `4`
 
-                                    )->leaf( n = `Title` ns = `core`
+                                    )->tag( n = `Title` ns = `core`
                                         )->a( n = `text` v = `Phone Numbers`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Home`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `+ 1 415-321-1234`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Office phone`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `+ 1 415-321-5555`
-                                    )->leaf( n = `Title` ns = `core`
+                                    )->tag( n = `Title` ns = `core`
                                         )->a( n = `text` v = `Social Accounts`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `LinkedIn`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `/DeniseSmith`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Twitter`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `@DeniseSmith`
-                                    )->leaf( n = `Title` ns = `core`
+                                    )->tag( n = `Title` ns = `core`
                                         )->a( n = `text` v = `Addresses`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Home Address`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `2096 Mission Street`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Mailing Address`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `PO Box 32114`
-                                    )->leaf( n = `Title` ns = `core`
+                                    )->tag( n = `Title` ns = `core`
                                         )->a( n = `text` v = `Mailing Address`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Work`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `DeniseSmith@sap.com` ).
 
     client->view_display( view->stringify( ) ).

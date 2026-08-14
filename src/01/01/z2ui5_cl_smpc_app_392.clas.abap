@@ -26,219 +26,219 @@ CLASS z2ui5_cl_smpc_app_392 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
-        )->open( `VBox`
-            )->open( `Panel`
+        )->ele( `VBox`
+            )->ele( `Panel`
                 )->a( n = `headerText` v = `Upper left`
 
-                )->open( `FlexBox`
+                )->ele( `FlexBox`
                     )->a( n = `height`         v = `100px`
                     )->a( n = `alignItems`     v = `Start`
                     )->a( n = `justifyContent` v = `Start`
 
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text`  v = `1`
                         )->a( n = `type`  v = `Emphasized`
                         )->a( n = `class` v = `sapUiSmallMarginEnd`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text`  v = `2`
                         )->a( n = `type`  v = `Reject`
                         )->a( n = `class` v = `sapUiSmallMarginEnd`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text` v = `3`
                         )->a( n = `type` v = `Accept`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( `Panel`
+            )->ele( `Panel`
                 )->a( n = `headerText` v = `Upper center`
 
-                )->open( `FlexBox`
+                )->ele( `FlexBox`
                     )->a( n = `height`         v = `100px`
                     )->a( n = `alignItems`     v = `Start`
                     )->a( n = `justifyContent` v = `Center`
 
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text`  v = `1`
                         )->a( n = `type`  v = `Emphasized`
                         )->a( n = `class` v = `sapUiSmallMarginEnd`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text`  v = `2`
                         )->a( n = `type`  v = `Reject`
                         )->a( n = `class` v = `sapUiSmallMarginEnd`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text` v = `3`
                         )->a( n = `type` v = `Accept`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( `Panel`
+            )->ele( `Panel`
                 )->a( n = `headerText` v = `Upper right`
 
-                )->open( `FlexBox`
+                )->ele( `FlexBox`
                     )->a( n = `height`         v = `100px`
                     )->a( n = `alignItems`     v = `Start`
                     )->a( n = `justifyContent` v = `End`
 
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text`  v = `1`
                         )->a( n = `type`  v = `Emphasized`
                         )->a( n = `class` v = `sapUiSmallMarginEnd`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text`  v = `2`
                         )->a( n = `type`  v = `Reject`
                         )->a( n = `class` v = `sapUiSmallMarginEnd`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text` v = `3`
                         )->a( n = `type` v = `Accept`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( `Panel`
+            )->ele( `Panel`
                 )->a( n = `headerText` v = `Middle left`
 
-                )->open( `FlexBox`
+                )->ele( `FlexBox`
                     )->a( n = `height`         v = `100px`
                     )->a( n = `alignItems`     v = `Center`
                     )->a( n = `justifyContent` v = `Start`
 
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text`  v = `1`
                         )->a( n = `type`  v = `Emphasized`
                         )->a( n = `class` v = `sapUiSmallMarginEnd`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text`  v = `2`
                         )->a( n = `type`  v = `Reject`
                         )->a( n = `class` v = `sapUiSmallMarginEnd`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text` v = `3`
                         )->a( n = `type` v = `Accept`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( `Panel`
+            )->ele( `Panel`
                 )->a( n = `headerText` v = `Middle center`
 
-                )->open( `FlexBox`
+                )->ele( `FlexBox`
                     )->a( n = `height`         v = `100px`
                     )->a( n = `alignItems`     v = `Center`
                     )->a( n = `justifyContent` v = `Center`
 
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text`  v = `1`
                         )->a( n = `type`  v = `Emphasized`
                         )->a( n = `class` v = `sapUiSmallMarginEnd`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text`  v = `2`
                         )->a( n = `type`  v = `Reject`
                         )->a( n = `class` v = `sapUiSmallMarginEnd`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text` v = `3`
                         )->a( n = `type` v = `Accept`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( `Panel`
+            )->ele( `Panel`
                 )->a( n = `headerText` v = `Middle right`
 
-                )->open( `FlexBox`
+                )->ele( `FlexBox`
                     )->a( n = `height`         v = `100px`
                     )->a( n = `alignItems`     v = `Center`
                     )->a( n = `justifyContent` v = `End`
 
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text`  v = `1`
                         )->a( n = `type`  v = `Emphasized`
                         )->a( n = `class` v = `sapUiSmallMarginEnd`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text`  v = `2`
                         )->a( n = `type`  v = `Reject`
                         )->a( n = `class` v = `sapUiSmallMarginEnd`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text` v = `3`
                         )->a( n = `type` v = `Accept`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( `Panel`
+            )->ele( `Panel`
                 )->a( n = `headerText` v = `Lower left`
 
-                )->open( `FlexBox`
+                )->ele( `FlexBox`
                     )->a( n = `height`         v = `100px`
                     )->a( n = `alignItems`     v = `End`
                     )->a( n = `justifyContent` v = `Start`
 
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text`  v = `1`
                         )->a( n = `type`  v = `Emphasized`
                         )->a( n = `class` v = `sapUiSmallMarginEnd`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text`  v = `2`
                         )->a( n = `type`  v = `Reject`
                         )->a( n = `class` v = `sapUiSmallMarginEnd`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text` v = `3`
                         )->a( n = `type` v = `Accept`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( `Panel`
+            )->ele( `Panel`
                 )->a( n = `headerText` v = `Lower center`
 
-                )->open( `FlexBox`
+                )->ele( `FlexBox`
                     )->a( n = `height`         v = `100px`
                     )->a( n = `alignItems`     v = `End`
                     )->a( n = `justifyContent` v = `Center`
 
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text`  v = `1`
                         )->a( n = `type`  v = `Emphasized`
                         )->a( n = `class` v = `sapUiSmallMarginEnd`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text`  v = `2`
                         )->a( n = `type`  v = `Reject`
                         )->a( n = `class` v = `sapUiSmallMarginEnd`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text` v = `3`
                         )->a( n = `type` v = `Accept`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( `Panel`
+            )->ele( `Panel`
                 )->a( n = `headerText` v = `Lower right`
 
-                )->open( `FlexBox`
+                )->ele( `FlexBox`
                     )->a( n = `height`         v = `100px`
                     )->a( n = `alignItems`     v = `End`
                     )->a( n = `justifyContent` v = `End`
 
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text`  v = `1`
                         )->a( n = `type`  v = `Emphasized`
                         )->a( n = `class` v = `sapUiSmallMarginEnd`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text`  v = `2`
                         )->a( n = `type`  v = `Reject`
                         )->a( n = `class` v = `sapUiSmallMarginEnd`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text` v = `3`
                         )->a( n = `type` v = `Accept`
 
-                )->shut(
-            )->shut( ).
+                )->end(
+            )->end( ).
 
     client->view_display( view->stringify( ) ).
 

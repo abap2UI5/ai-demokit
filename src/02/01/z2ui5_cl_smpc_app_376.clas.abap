@@ -43,34 +43,34 @@ CLASS z2ui5_cl_smpc_app_376 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
 
-        )->open( `List`
+        )->ele( `List`
             )->a( n = `id`    v = `myList`
             )->a( n = `mode`  v = `MultiSelect`
             )->a( n = `items` v = |\{ path: '{ client->_bind( val = t_names path = abap_true ) }' \}|
 
-            )->open( `headerToolbar`
-                )->open( `Toolbar`
-                    )->leaf( `Title`
+            )->ele( `headerToolbar`
+                )->ele( `Toolbar`
+                    )->tag( `Title`
                         )->a( n = `text` v = `Wrapping texts`
-                    )->leaf( `ToolbarSpacer`
-                    )->leaf( `ToggleButton`
+                    )->tag( `ToolbarSpacer`
+                    )->tag( `ToggleButton`
                         )->a( n = `text`    v = `Toggle Wrapping`
                         )->a( n = `pressed` v = client->_bind( wrapping )
-                    )->leaf( `ToggleButton`
+                    )->tag( `ToggleButton`
                         )->a( n = `text`    v = `Toggle Inverted`
                         )->a( n = `pressed` v = client->_bind( inverted )
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( `items`
-                )->leaf( `StandardListItem`
+            )->ele( `items`
+                )->tag( `StandardListItem`
                     )->a( n = `title`             v = `{TITLE}`
                     )->a( n = `description`       v = `{DESC}`
                     )->a( n = `icon`              v = `{ICON}`

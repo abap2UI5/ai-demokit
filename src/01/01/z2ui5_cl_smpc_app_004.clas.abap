@@ -32,18 +32,18 @@ CLASS z2ui5_cl_smpc_app_004 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
             )->a( n = `width` v = `100%`
 
-            )->leaf( `Button`
+            )->tag( `Button`
                 )->a( n = `text`  v = `Show Busy Dialog`
                 )->a( n = `press` v = client->_event( `OPEN_DIALOG` )
                 )->a( n = `class` v = `sapUiSmallMarginBottom` ).
@@ -89,14 +89,14 @@ CLASS z2ui5_cl_smpc_app_004 IMPLEMENTATION.
 
   METHOD popup_display.
 
-    DATA(popup) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(popup) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    popup->open( n = `FragmentDefinition` ns = `core`
+    popup->ele( n = `FragmentDefinition` ns = `core`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:core` v = `sap.ui.core`
 
         " id added so the backend timer event can close the dialog via control_by_id
-        )->leaf( `BusyDialog`
+        )->tag( `BusyDialog`
             )->a( n = `id`               v = `busyDialog`
             )->a( n = `title`            v = `Loading Data`
             )->a( n = `text`             v = `... now loading the data from a far away server`

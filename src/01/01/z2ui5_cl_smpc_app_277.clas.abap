@@ -36,9 +36,9 @@ CLASS z2ui5_cl_smpc_app_277 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:l`    v = `sap.ui.layout`
         )->a( n = `xmlns:core` v = `sap.ui.core`
@@ -48,7 +48,7 @@ CLASS z2ui5_cl_smpc_app_277 IMPLEMENTATION.
         " portrait and show it again in landscape; that whole handler pair is
         " one expression binding on the shared device model, which UI5 keeps
         " current on every rotation - no round-trip, no controller
-        )->leaf( `MessageStrip`
+        )->tag( `MessageStrip`
             )->a( n = `id`              v = `idMessageStrip`
             )->a( n = `text`            v = `Move the splitter to see the container based popin behaviour with dynamic width.`
             )->a( n = `type`            v = `Success`
@@ -57,156 +57,156 @@ CLASS z2ui5_cl_smpc_app_277 IMPLEMENTATION.
             )->a( n = `class`           v = `sapUiMediumMarginBottom`
             )->a( n = `visible`         v = |\{= !$\{device>/system/phone\} \|\| $\{device>/orientation/landscape\} \}|
 
-        )->open( n = `ResponsiveSplitter` ns = `l`
+        )->ele( n = `ResponsiveSplitter` ns = `l`
             )->a( n = `height` v = `100%`
 
-            )->open( n = `PaneContainer` ns = `l`
+            )->ele( n = `PaneContainer` ns = `l`
 
-                )->open( n = `SplitPane` ns = `l`
+                )->ele( n = `SplitPane` ns = `l`
                     )->a( n = `requiredParentWidth` v = `500`
 
-                )->open( `Table`
+                )->ele( `Table`
                     )->a( n = `id`              v = `idProductsTableleft`
                     )->a( n = `contextualWidth` v = `Auto`
                     )->a( n = `popinLayout`     v = `GridSmall`
                     )->a( n = `headerText`      v = `Products`
                     )->a( n = `items`           v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }' \}|
 
-                    )->open( `columns`
-                        )->open( `Column`
-                            )->open( `header`
-                                )->leaf( `Text`
+                    )->ele( `columns`
+                        )->ele( `Column`
+                            )->ele( `header`
+                                )->tag( `Text`
                                     )->a( n = `text` v = `Product`
 
-                        )->shut(
-                        )->shut(
+                        )->end(
+                        )->end(
 
-                        )->open( `Column`
+                        )->ele( `Column`
                             )->a( n = `minScreenWidth` v = `phone`
                             )->a( n = `demandPopin`    v = `true`
 
-                            )->open( `header`
-                                )->leaf( `Text`
+                            )->ele( `header`
+                                )->tag( `Text`
                                     )->a( n = `text` v = `Supplier`
 
-                        )->shut(
-                        )->shut(
+                        )->end(
+                        )->end(
 
-                        )->open( `Column`
+                        )->ele( `Column`
                             )->a( n = `minScreenWidth` v = `tablet`
                             )->a( n = `demandPopin`    v = `true`
                             )->a( n = `hAlign`         v = `Center`
 
-                            )->open( `header`
-                                )->leaf( `Text`
+                            )->ele( `header`
+                                )->tag( `Text`
                                     )->a( n = `text` v = `Status`
 
-                        )->shut(
-                        )->shut(
+                        )->end(
+                        )->end(
 
-                        )->open( `Column`
+                        )->ele( `Column`
                             )->a( n = `minScreenWidth` v = `Phone`
                             )->a( n = `demandPopin`    v = `true`
                             )->a( n = `hAlign`         v = `End`
 
-                            )->open( `header`
-                                )->leaf( `Text`
+                            )->ele( `header`
+                                )->tag( `Text`
                                     )->a( n = `text` v = `Quantity`
 
-                        )->shut(
-                        )->shut(
-                    )->shut(
+                        )->end(
+                        )->end(
+                    )->end(
 
-                    )->open( `items`
-                        )->open( `ColumnListItem`
-                            )->open( `cells`
-                                )->leaf( `Label`
+                    )->ele( `items`
+                        )->ele( `ColumnListItem`
+                            )->ele( `cells`
+                                )->tag( `Label`
                                     )->a( n = `text` v = `{NAME}`
-                                )->leaf( `Label`
+                                )->tag( `Label`
                                     )->a( n = `text` v = `{SUPPLIERNAME}`
-                                )->leaf( `Label`
+                                )->tag( `Label`
                                     )->a( n = `text` v = `{STATUS}`
-                                )->leaf( `Label`
+                                )->tag( `Label`
                                     )->a( n = `text` v = `{QUANTITY}`
 
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                )->shut(
-                )->shut(
+                            )->end(
+                        )->end(
+                    )->end(
+                )->end(
+                )->end(
 
-                )->open( n = `SplitPane` ns = `l`
+                )->ele( n = `SplitPane` ns = `l`
                     )->a( n = `requiredParentWidth` v = `400`
 
-                )->open( `Table`
+                )->ele( `Table`
                     )->a( n = `id`              v = `idProductsTableright`
                     )->a( n = `contextualWidth` v = `Auto`
                     )->a( n = `popinLayout`     v = `GridSmall`
                     )->a( n = `headerText`      v = `Products`
                     )->a( n = `items`           v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }' \}|
 
-                    )->open( `columns`
-                        )->open( `Column`
-                            )->open( `header`
-                                )->leaf( `Text`
+                    )->ele( `columns`
+                        )->ele( `Column`
+                            )->ele( `header`
+                                )->tag( `Text`
                                     )->a( n = `text` v = `Product`
 
-                        )->shut(
-                        )->shut(
+                        )->end(
+                        )->end(
 
-                        )->open( `Column`
+                        )->ele( `Column`
                             )->a( n = `minScreenWidth` v = `phone`
                             )->a( n = `demandPopin`    v = `true`
 
-                            )->open( `header`
-                                )->leaf( `Text`
+                            )->ele( `header`
+                                )->tag( `Text`
                                     )->a( n = `text` v = `Supplier`
 
-                        )->shut(
-                        )->shut(
+                        )->end(
+                        )->end(
 
-                        )->open( `Column`
+                        )->ele( `Column`
                             )->a( n = `minScreenWidth` v = `tablet`
                             )->a( n = `demandPopin`    v = `true`
                             )->a( n = `hAlign`         v = `Center`
 
-                            )->open( `header`
-                                )->leaf( `Text`
+                            )->ele( `header`
+                                )->tag( `Text`
                                     )->a( n = `text` v = `Status`
 
-                        )->shut(
-                        )->shut(
+                        )->end(
+                        )->end(
 
-                        )->open( `Column`
+                        )->ele( `Column`
                             )->a( n = `minScreenWidth` v = `Phone`
                             )->a( n = `demandPopin`    v = `true`
                             )->a( n = `hAlign`         v = `End`
 
-                            )->open( `header`
-                                )->leaf( `Text`
+                            )->ele( `header`
+                                )->tag( `Text`
                                     )->a( n = `text` v = `Quantity`
 
-                        )->shut(
-                        )->shut(
-                    )->shut(
+                        )->end(
+                        )->end(
+                    )->end(
 
-                    )->open( `items`
-                        )->open( `ColumnListItem`
-                            )->open( `cells`
-                                )->leaf( `Label`
+                    )->ele( `items`
+                        )->ele( `ColumnListItem`
+                            )->ele( `cells`
+                                )->tag( `Label`
                                     )->a( n = `text` v = `{NAME}`
-                                )->leaf( `Label`
+                                )->tag( `Label`
                                     )->a( n = `text` v = `{SUPPLIERNAME}`
-                                )->leaf( `Label`
+                                )->tag( `Label`
                                     )->a( n = `text` v = `{STATUS}`
-                                )->leaf( `Label`
+                                )->tag( `Label`
                                     )->a( n = `text` v = `{QUANTITY}`
 
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                )->shut(
-                )->shut(
+                            )->end(
+                        )->end(
+                    )->end(
+                )->end(
+                )->end(
 
                     ).
 

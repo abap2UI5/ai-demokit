@@ -49,35 +49,35 @@ CLASS z2ui5_cl_smpc_app_307 IMPLEMENTATION.
         |($event.oSource.getSelectedDates()[{ i }].getStartDate().getDate() < 10 ? '0' : '') + | &&
         |$event.oSource.getSelectedDates()[{ i }].getStartDate().getDate() : ''| ) ).
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:u`   v = `sap.ui.unified`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `class`     v = `viewPadding`
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
 
-            )->leaf( n = `Calendar` ns = `u`
+            )->tag( n = `Calendar` ns = `u`
                 )->a( n = `id`                v = `calendar`
                 )->a( n = `select`            v = client->_event( val   = `CAL_SELECT`
                                                                   t_arg = date_args )
                 )->a( n = `intervalSelection` v = `false`
                 )->a( n = `singleSelection`   v = `false`
-            )->leaf( `Button`
+            )->tag( `Button`
                 )->a( n = `press` v = client->_event( `REMOVE_SELECTION` )
                 )->a( n = `text`  v = `Remove All Selected Dates`
 
-            )->open( `List`
+            )->ele( `List`
                 )->a( n = `id`         v = `selectedDatesList`
                 )->a( n = `class`      v = `labelMarginLeft`
                 )->a( n = `noDataText` v = `No Dates Selected`
                 )->a( n = `headerText` v = `Selected Dates (yyyy-mm-dd)`
                 )->a( n = `items`      v = |\{path: '{ client->_bind( val = selecteddates path = abap_true ) }'\}|
 
-                )->leaf( `StandardListItem`
+                )->tag( `StandardListItem`
                     )->a( n = `title` v = `{DATE}` ).
 
     client->view_display( view->stringify( ) ).

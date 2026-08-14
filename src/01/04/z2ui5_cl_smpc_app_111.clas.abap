@@ -35,49 +35,49 @@ CLASS z2ui5_cl_smpc_app_111 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns:f`   v = `sap.f`
 
-        )->leaf( `Slider`
+        )->tag( `Slider`
             )->a( n = `value` v = client->_bind( slider_value )
 
-        )->open( `Panel`
+        )->ele( `Panel`
             )->a( n = `id`               v = `panelForGridList`
             )->a( n = `backgroundDesign` v = `Transparent`
             " original onSliderMoved sets the panel width imperatively; here it is a roundtrip-free expression binding over the slider value
             )->a( n = `width`            v = |\{= ${ client->_bind( slider_value ) } + '%' \}|
 
-            )->open( `headerToolbar`
-                )->open( `Toolbar`
+            )->ele( `headerToolbar`
+                )->ele( `Toolbar`
                     )->a( n = `height` v = `3rem`
-                    )->leaf( `Title`
+                    )->tag( `Title`
                         )->a( n = `text` v = `GridList with default grid layout`
 
-            )->shut(
-            )->shut(
-            )->open( n = `GridList` ns = `f`
+            )->end(
+            )->end(
+            )->ele( n = `GridList` ns = `f`
                 )->a( n = `id`         v = `gridList`
                 )->a( n = `headerText` v = `GridList header`
                 )->a( n = `items`      v = client->_bind( t_items )
 
-                )->open( n = `GridListItem` ns = `f`
-                    )->open( `VBox`
+                )->ele( n = `GridListItem` ns = `f`
+                    )->ele( `VBox`
                         )->a( n = `class` v = `sapUiSmallMargin`
 
-                        )->open( `layoutData`
-                            )->leaf( `FlexItemData`
+                        )->ele( `layoutData`
+                            )->tag( `FlexItemData`
                                 )->a( n = `growFactor`   v = `1`
                                 )->a( n = `shrinkFactor` v = `0`
 
-                        )->shut(
-                        )->leaf( `Title`
+                        )->end(
+                        )->tag( `Title`
                             )->a( n = `text`     v = `{TITLE}`
                             )->a( n = `wrapping` v = `true`
-                        )->leaf( `Label`
+                        )->tag( `Label`
                             )->a( n = `text`     v = `{SUBTITLE}`
                             )->a( n = `wrapping` v = `true` ).
 

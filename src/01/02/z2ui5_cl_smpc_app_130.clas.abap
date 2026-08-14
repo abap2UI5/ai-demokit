@@ -32,49 +32,49 @@ CLASS z2ui5_cl_smpc_app_130 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `height`     v = `100%`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns`      v = `sap.m`
 
-        )->open( `Page`
+        )->ele( `Page`
             )->a( n = `class`      v = `sapUiFioriObjectPage`
             )->a( n = `showHeader` v = `false`
 
-            )->open( `content`
-                )->open( `Toolbar`
-                    )->leaf( `Button`
+            )->ele( `content`
+                )->ele( `Toolbar`
+                    )->tag( `Button`
                         )->a( n = `icon`  v = `sap-icon://action`
                         )->a( n = `text`  v = `Toggle Busy State of Both Controls`
                         )->a( n = `press` v = client->_event( `TOGGLE_BUSY` )
 
-                )->shut(
+                )->end(
 
-                )->open( `Panel`
+                )->ele( `Panel`
                     )->a( n = `id`                 v = `panel1`
                     )->a( n = `busy`               v = client->_bind( busy )
                     )->a( n = `busyIndicatorDelay` v = `0`
                     )->a( n = `headerText`         v = `Default BusyIndicator (No Delay)`
 
-                    )->leaf( `ToolbarSpacer`
-                    )->open( `content`
-                        )->leaf( `Text`
+                    )->tag( `ToolbarSpacer`
+                    )->ele( `content`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Lorem ipsum dolor st amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et ` &&
                                                  `accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur ` &&
                                                  `sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. Lorem ipsum dolor sit amet, consetetur sadipscing ` &&
                                                  `elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat`
 
-                    )->shut(
-                )->shut(
+                    )->end(
+                )->end(
 
-                )->open( `Panel`
+                )->ele( `Panel`
                     )->a( n = `id`         v = `panel2`
                     )->a( n = `headerText` v = `Small BusyIndicator (Default Delay)`
 
-                    )->leaf( n = `Icon` ns = `core`
+                    )->tag( n = `Icon` ns = `core`
                         )->a( n = `id`    v = `panel2-icon`
                         )->a( n = `busy`  v = client->_bind( busy )
                         )->a( n = `src`   v = `sap-icon://nutrition-activity`

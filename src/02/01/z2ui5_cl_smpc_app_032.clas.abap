@@ -33,85 +33,85 @@ CLASS z2ui5_cl_smpc_app_032 IMPLEMENTATION.
                          `Extra long text used as a warning message - 3. Extra long text used as a warning message - 4. ` &&
                          `Extra long text used as a warning message - 5.`.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
-        )->open( `VBox`
+        )->ele( `VBox`
             )->a( n = `class` v = `sapUiSmallMargin`
 
-            )->leaf( `Input`
+            )->tag( `Input`
                 )->a( n = `value` v = `Value state None`
                 )->a( n = `class` v = `sapUiSmallMarginTopBottom`
 
-            )->leaf( `Input`
+            )->tag( `Input`
                 )->a( n = `showClearIcon` v = `true`
                 )->a( n = `valueState`    v = `Success`
                 )->a( n = `value`         v = `Value state Success`
                 )->a( n = `class`         v = `sapUiSmallMarginTopBottom`
 
-            )->leaf( `Input`
+            )->tag( `Input`
                 )->a( n = `showClearIcon`  v = `true`
                 )->a( n = `valueState`     v = `Warning`
                 )->a( n = `valueStateText` v = warning_text
                 )->a( n = `value`          v = `Value state Warning.`
                 )->a( n = `class`          v = `sapUiSmallMarginTopBottom`
 
-            )->open( `Input`
+            )->ele( `Input`
                 )->a( n = `showClearIcon` v = `true`
                 )->a( n = `valueState`    v = `Warning`
                 )->a( n = `value`         v = `Value state Warning with message containing a link.`
                 )->a( n = `class`         v = `sapUiSmallMarginTopBottom`
 
-                )->open( `formattedValueStateText`
-                    )->open( `FormattedText`
+                )->ele( `formattedValueStateText`
+                    )->ele( `FormattedText`
                         )->a( n = `htmlText` v = `There is a conflict with the current value. Recommendation based on: %%0`
 
-                        )->open( `controls`
-                            )->leaf( `Link`
+                        )->ele( `controls`
+                            )->tag( `Link`
                                 )->a( n = `text`  v = `See more information`
                                 )->a( n = `href`  v = ``
                                 )->a( n = `press` v = client->_event( `LINK_PRESS` )
 
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->leaf( `Input`
+            )->tag( `Input`
                 )->a( n = `valueState` v = `Error`
                 )->a( n = `value`      v = `Value state Error`
                 )->a( n = `class`      v = `sapUiSmallMarginTopBottom`
 
-            )->leaf( `Input`
+            )->tag( `Input`
                 )->a( n = `valueState` v = `Information`
                 )->a( n = `value`      v = `Value state Information`
                 )->a( n = `class`      v = `sapUiSmallMarginTopBottom`
 
-            )->open( `Input`
+            )->ele( `Input`
                 )->a( n = `valueState` v = `Information`
                 )->a( n = `value`      v = `Value state Information with message containing multiple links.`
                 )->a( n = `class`      v = `sapUiSmallMarginTopBottom`
 
-                )->open( `formattedValueStateText`
-                    )->open( `FormattedText`
+                )->ele( `formattedValueStateText`
+                    )->ele( `FormattedText`
                         )->a( n = `htmlText` v = `Recommendation based on: %%0 and %%1.`
 
-                        )->open( `controls`
-                            )->leaf( `Link`
+                        )->ele( `controls`
+                            )->tag( `Link`
                                 )->a( n = `text`  v = `link 1`
                                 )->a( n = `press` v = client->_event( `LINK_PRESS` )
-                            )->leaf( `Link`
+                            )->tag( `Link`
                                 )->a( n = `text`  v = `link 2`
                                 )->a( n = `press` v = client->_event( `LINK_PRESS` )
 
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
-        )->shut( ).
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

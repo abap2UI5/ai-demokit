@@ -35,24 +35,24 @@ CLASS z2ui5_cl_smpc_app_276 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " growing is a pure client-side feature of sap.m.List: the whole
     " collection is in the model and the control pages through it, so the
     " port has no growing wire at all - the app stays init-only
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
-        )->open( `List`
+        )->ele( `List`
             )->a( n = `items`               v = client->_bind( t_products )
             )->a( n = `headerText`          v = `Products`
             )->a( n = `growing`             v = `true`
             )->a( n = `growingThreshold`    v = `4`
             )->a( n = `growingScrollToLoad` v = `false`
 
-            )->leaf( `StandardListItem`
+            )->tag( `StandardListItem`
                 )->a( n = `title`            v = `{NAME}`
                 )->a( n = `description`      v = `{PRODUCTID}`
                 )->a( n = `icon`             v = `{PRODUCTPICURL}`

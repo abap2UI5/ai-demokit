@@ -26,34 +26,34 @@ CLASS z2ui5_cl_smpc_app_390 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
-        )->leaf( `Label`
+        )->tag( `Label`
             )->a( n = `text` v = `Numeric content with margins`
-        )->leaf( `NumericContent`
+        )->tag( `NumericContent`
             )->a( n = `value`      v = `65.5`
             )->a( n = `scale`      v = `MM`
             )->a( n = `class`      v = `sapUiSmallMargin`
             )->a( n = `withMargin` v = `true`
-        )->leaf( `NumericContent`
+        )->tag( `NumericContent`
             )->a( n = `value`      v = `65.5`
             )->a( n = `scale`      v = `MM`
             )->a( n = `valueColor` v = `Good`
             )->a( n = `indicator`  v = `Up`
             )->a( n = `class`      v = `sapUiSmallMargin`
             )->a( n = `withMargin` v = `true`
-        )->leaf( `NumericContent`
+        )->tag( `NumericContent`
             )->a( n = `value`      v = `6666`
             )->a( n = `scale`      v = `MM`
             )->a( n = `valueColor` v = `Critical`
             )->a( n = `indicator`  v = `Up`
             )->a( n = `class`      v = `sapUiSmallMargin`
             )->a( n = `withMargin` v = `true`
-        )->leaf( `NumericContent`
+        )->tag( `NumericContent`
             )->a( n = `value`      v = `65.5`
             )->a( n = `scale`      v = `MM`
             )->a( n = `valueColor` v = `Error`
@@ -61,28 +61,28 @@ CLASS z2ui5_cl_smpc_app_390 IMPLEMENTATION.
             )->a( n = `class`      v = `sapUiSmallMargin`
             )->a( n = `withMargin` v = `true`
 
-        )->leaf( `Label`
+        )->tag( `Label`
             )->a( n = `text` v = `Numeric content without margins`
-        )->leaf( `NumericContent`
+        )->tag( `NumericContent`
             )->a( n = `value`      v = `65.5`
             )->a( n = `scale`      v = `MM`
             )->a( n = `class`      v = `sapUiSmallMargin`
             )->a( n = `withMargin` v = `false`
-        )->leaf( `NumericContent`
+        )->tag( `NumericContent`
             )->a( n = `value`      v = `65.5`
             )->a( n = `scale`      v = `MM`
             )->a( n = `valueColor` v = `Good`
             )->a( n = `indicator`  v = `Up`
             )->a( n = `class`      v = `sapUiSmallMargin`
             )->a( n = `withMargin` v = `false`
-        )->leaf( `NumericContent`
+        )->tag( `NumericContent`
             )->a( n = `value`      v = `6666`
             )->a( n = `scale`      v = `MM`
             )->a( n = `valueColor` v = `Critical`
             )->a( n = `indicator`  v = `Up`
             )->a( n = `class`      v = `sapUiSmallMargin`
             )->a( n = `withMargin` v = `false`
-        )->leaf( `NumericContent`
+        )->tag( `NumericContent`
             )->a( n = `value`      v = `65.5`
             )->a( n = `scale`      v = `MM`
             )->a( n = `valueColor` v = `Error`

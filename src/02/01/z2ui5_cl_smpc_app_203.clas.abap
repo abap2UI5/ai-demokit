@@ -38,18 +38,18 @@ CLASS z2ui5_cl_smpc_app_203 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:l`    v = `sap.ui.layout`
         )->a( n = `xmlns:core` v = `sap.ui.core`
 
-        )->open( `Toolbar`
+        )->ele( `Toolbar`
             " sap.m.OverflowToolbarTokenizer is @ui5-experimental-since 1.139 (no plain @since tag,
             " invisible to scope-of/property gate) - out of 1.71 scope, see the sidecar deviation
-            )->open( `OverflowToolbarTokenizer`
+            )->ele( `OverflowToolbarTokenizer`
                 )->a( n = `id`        v = `toolbarTokenizer`
                 )->a( n = `width`     v = `50%`
                 )->a( n = `labelText` v = `Tokenizer in sap.m.Toolbar:`
@@ -59,51 +59,51 @@ CLASS z2ui5_cl_smpc_app_203 IMPLEMENTATION.
                 )->a( n = `tokens`    v = client->_bind( t_tokens )
                 )->a( n = `tokenDelete` v = client->_event( val   = `TOKEN_DELETE`
                                                             t_arg = VALUE #( ( `${$parameters>/tokens}[0].getKey()` ) ) )
-                )->open( `tokens`
-                    )->leaf( `Token`
+                )->ele( `tokens`
+                    )->tag( `Token`
                         )->a( n = `text` v = `{TEXT}`
                         )->a( n = `key`  v = `{KEY}`
 
-                )->shut(
-            )->shut(
-            )->leaf( `Text`
+                )->end(
+            )->end(
+            )->tag( `Text`
                 )->a( n = `text`  v = `Enter a token to add:`
                 )->a( n = `width` v = `150px`
-            )->leaf( `Input`
+            )->tag( `Input`
                 )->a( n = `id`    v = `NewTokenInput`
                 )->a( n = `width` v = `200px`
                 )->a( n = `value` v = client->_bind( new_token )
-            )->leaf( `Button`
+            )->tag( `Button`
                 )->a( n = `text`  v = `Add Token`
                 )->a( n = `press` v = client->_event( `ADD_TOKEN` )
 
-        )->shut(
-        )->open( n = `VerticalLayout` ns = `l`
+        )->end(
+        )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
             )->a( n = `width` v = `100%`
 
-            )->open( `Label`
+            )->ele( `Label`
                 )->a( n = `text` v = `OverflowToolbar with Tokenizer`
-                )->open( `layoutData`
-                    )->leaf( `OverflowToolbarLayoutData`
+                )->ele( `layoutData`
+                    )->tag( `OverflowToolbarLayoutData`
                         )->a( n = `priority` v = `Low`
 
-                )->shut(
-            )->shut(
-            )->open( `OverflowToolbar`
+                )->end(
+            )->end(
+            )->ele( `OverflowToolbar`
                 )->a( n = `id`    v = `otbFilter`
                 )->a( n = `width` v = `auto`
-                )->open( `content`
-                    )->open( `Button`
+                )->ele( `content`
+                    )->ele( `Button`
                         )->a( n = `icon` v = `sap-icon://notes`
                         )->a( n = `text` v = `Notes`
-                        )->open( `layoutData`
-                            )->leaf( `OverflowToolbarLayoutData`
+                        )->ele( `layoutData`
+                            )->tag( `OverflowToolbarLayoutData`
                                 )->a( n = `priority` v = `Low`
 
-                        )->shut(
-                    )->shut(
-                    )->open( `OverflowToolbarTokenizer`
+                        )->end(
+                    )->end(
+                    )->ele( `OverflowToolbarTokenizer`
                         )->a( n = `id`        v = `overflowToolbarTokenizer`
                         )->a( n = `width`     v = `75%`
                         )->a( n = `labelText` v = `Filter by:`
@@ -116,61 +116,61 @@ CLASS z2ui5_cl_smpc_app_203 IMPLEMENTATION.
                                   t_arg = VALUE #( ( `overflowToolbarTokenizer` )
                                                    ( `removeToken` )
                                                    ( `${$parameters>/tokens}[0].getId()` ) ) )
-                        )->open( `layoutData`
-                            )->leaf( `OverflowToolbarLayoutData`
+                        )->ele( `layoutData`
+                            )->tag( `OverflowToolbarLayoutData`
                                 )->a( n = `priority` v = `High`
 
-                        )->shut(
-                        )->open( `tokens`
-                            )->leaf( `Token`
+                        )->end(
+                        )->ele( `tokens`
+                            )->tag( `Token`
                                 )->a( n = `text` v = `Token 1`
                                 )->a( n = `key`  v = `0001`
-                            )->leaf( `Token`
+                            )->tag( `Token`
                                 )->a( n = `text` v = `Token 2`
                                 )->a( n = `key`  v = `0002`
-                            )->leaf( `Token`
+                            )->tag( `Token`
                                 )->a( n = `text` v = `Token 3`
                                 )->a( n = `key`  v = `0003`
-                            )->leaf( `Token`
+                            )->tag( `Token`
                                 )->a( n = `text` v = `Token 4`
                                 )->a( n = `key`  v = `0004`
-                            )->leaf( `Token`
+                            )->tag( `Token`
                                 )->a( n = `text` v = `Token 5`
                                 )->a( n = `key`  v = `0005`
-                            )->leaf( `Token`
+                            )->tag( `Token`
                                 )->a( n = `text` v = `Token 6`
                                 )->a( n = `key`  v = `0006`
-                            )->leaf( `Token`
+                            )->tag( `Token`
                                 )->a( n = `text` v = `Token 7`
                                 )->a( n = `key`  v = `0007`
-                            )->leaf( `Token`
+                            )->tag( `Token`
                                 )->a( n = `text` v = `Token 8`
                                 )->a( n = `key`  v = `0008`
 
-                        )->shut(
-                    )->shut(
-                    )->leaf( `ToolbarSpacer`
+                        )->end(
+                    )->end(
+                    )->tag( `ToolbarSpacer`
 
-                )->shut(
-            )->shut(
-            )->leaf( `Label`
+                )->end(
+            )->end(
+            )->tag( `Label`
                 )->a( n = `text` v = `Tokenizer with max-width in OverflowToolbar`
 
-            )->open( `OverflowToolbar`
+            )->ele( `OverflowToolbar`
                 )->a( n = `id`    v = `otbMaxWidth`
                 )->a( n = `width` v = `100%`
-                )->open( `content`
-                    )->open( `Button`
+                )->ele( `content`
+                    )->ele( `Button`
                         )->a( n = `icon` v = `sap-icon://add`
                         )->a( n = `text` v = `Add custom criteria`
                         )->a( n = `type` v = `Transparent`
-                        )->open( `layoutData`
-                            )->leaf( `OverflowToolbarLayoutData`
+                        )->ele( `layoutData`
+                            )->tag( `OverflowToolbarLayoutData`
                                 )->a( n = `priority` v = `Low`
 
-                        )->shut(
-                    )->shut(
-                    )->open( `OverflowToolbarTokenizer`
+                        )->end(
+                    )->end(
+                    )->ele( `OverflowToolbarTokenizer`
                         )->a( n = `id`        v = `tokenizerMaxWidth`
                         )->a( n = `width`     v = `45%`
                         )->a( n = `maxWidth`  v = `85%`
@@ -184,199 +184,199 @@ CLASS z2ui5_cl_smpc_app_203 IMPLEMENTATION.
                                   t_arg = VALUE #( ( `tokenizerMaxWidth` )
                                                    ( `removeToken` )
                                                    ( `${$parameters>/tokens}[0].getId()` ) ) )
-                        )->open( `layoutData`
-                            )->leaf( `OverflowToolbarLayoutData`
+                        )->ele( `layoutData`
+                            )->tag( `OverflowToolbarLayoutData`
                                 )->a( n = `priority` v = `High`
 
-                        )->shut(
-                        )->open( `tokens`
-                            )->leaf( `Token`
+                        )->end(
+                        )->ele( `tokens`
+                            )->tag( `Token`
                                 )->a( n = `text` v = `Token 1`
                                 )->a( n = `key`  v = `0001`
-                            )->leaf( `Token`
+                            )->tag( `Token`
                                 )->a( n = `text` v = `Token 2`
                                 )->a( n = `key`  v = `0002`
-                            )->leaf( `Token`
+                            )->tag( `Token`
                                 )->a( n = `text` v = `Token 3`
                                 )->a( n = `key`  v = `0003`
-                            )->leaf( `Token`
+                            )->tag( `Token`
                                 )->a( n = `text` v = `Token 4`
                                 )->a( n = `key`  v = `0004`
-                            )->leaf( `Token`
+                            )->tag( `Token`
                                 )->a( n = `text` v = `Token 5`
                                 )->a( n = `key`  v = `0005`
-                            )->leaf( `Token`
+                            )->tag( `Token`
                                 )->a( n = `text` v = `Token 1`
                                 )->a( n = `key`  v = `0006`
-                            )->leaf( `Token`
+                            )->tag( `Token`
                                 )->a( n = `text` v = `Token 2`
                                 )->a( n = `key`  v = `0007`
-                            )->leaf( `Token`
+                            )->tag( `Token`
                                 )->a( n = `text` v = `Token 3`
                                 )->a( n = `key`  v = `0008`
 
-                        )->shut(
-                    )->shut(
-                    )->open( `Title`
+                        )->end(
+                    )->end(
+                    )->ele( `Title`
                         )->a( n = `text`  v = `Title with Icon`
                         )->a( n = `level` v = `H1`
-                        )->open( `layoutData`
-                            )->leaf( `OverflowToolbarLayoutData`
+                        )->ele( `layoutData`
+                            )->tag( `OverflowToolbarLayoutData`
                                 )->a( n = `priority` v = `Low`
 
-                        )->shut(
-                    )->shut(
-                    )->leaf( n = `Icon` ns = `core`
+                        )->end(
+                    )->end(
+                    )->tag( n = `Icon` ns = `core`
                         )->a( n = `src` v = `sap-icon://collaborate`
-                    )->leaf( `ToolbarSpacer`
+                    )->tag( `ToolbarSpacer`
 
-                    )->open( `Text`
+                    )->ele( `Text`
                         )->a( n = `text` v = `Just a Simple Text`
-                        )->open( `layoutData`
-                            )->leaf( `OverflowToolbarLayoutData`
+                        )->ele( `layoutData`
+                            )->tag( `OverflowToolbarLayoutData`
                                 )->a( n = `priority` v = `Low`
 
-                        )->shut(
-                    )->shut(
-                    )->open( `Button`
+                        )->end(
+                    )->end(
+                    )->ele( `Button`
                         )->a( n = `text` v = `Accept`
                         )->a( n = `type` v = `Accept`
-                        )->open( `layoutData`
-                            )->leaf( `OverflowToolbarLayoutData`
+                        )->ele( `layoutData`
+                            )->tag( `OverflowToolbarLayoutData`
                                 )->a( n = `priority` v = `Low`
 
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
-            )->leaf( `Label`
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
+            )->tag( `Label`
                 )->a( n = `text`  v = `Complex OverflowToolbar with input controls`
                 )->a( n = `width` v = `100%`
 
-            )->open( `OverflowToolbar`
+            )->ele( `OverflowToolbar`
                 )->a( n = `id`           v = `otbComplex`
                 )->a( n = `width`        v = `100%`
                 )->a( n = `ariaHasPopup` v = `dialog`
                 )->a( n = `tooltip`      v = `This is a bar with tokenizer`
-                )->open( `content`
-                    )->leaf( n = `Icon` ns = `core`
+                )->ele( `content`
+                    )->tag( n = `Icon` ns = `core`
                         )->a( n = `src` v = `sap-icon://collaborate`
 
-                    )->open( `Label`
+                    )->ele( `Label`
                         )->a( n = `text` v = `Input controls`
-                        )->open( `layoutData`
-                            )->leaf( `OverflowToolbarLayoutData`
+                        )->ele( `layoutData`
+                            )->tag( `OverflowToolbarLayoutData`
                                 )->a( n = `priority` v = `Low`
 
-                        )->shut(
-                    )->shut(
-                    )->open( `Button`
+                        )->end(
+                    )->end(
+                    )->ele( `Button`
                         )->a( n = `text` v = `Regular Button`
-                        )->open( `layoutData`
-                            )->leaf( `OverflowToolbarLayoutData`
+                        )->ele( `layoutData`
+                            )->tag( `OverflowToolbarLayoutData`
                                 )->a( n = `priority` v = `Low`
 
-                        )->shut(
-                    )->shut(
-                    )->open( `ToggleButton`
+                        )->end(
+                    )->end(
+                    )->ele( `ToggleButton`
                         )->a( n = `text` v = `Toggle me`
-                        )->open( `layoutData`
-                            )->leaf( `OverflowToolbarLayoutData`
+                        )->ele( `layoutData`
+                            )->tag( `OverflowToolbarLayoutData`
                                 )->a( n = `priority` v = `Low`
 
-                        )->shut(
-                    )->shut(
-                    )->open( `Input`
+                        )->end(
+                    )->end(
+                    )->ele( `Input`
                         )->a( n = `placeholder` v = `Input`
                         )->a( n = `width`       v = `200px`
-                        )->open( `layoutData`
-                            )->leaf( `OverflowToolbarLayoutData`
+                        )->ele( `layoutData`
+                            )->tag( `OverflowToolbarLayoutData`
                                 )->a( n = `priority` v = `Low`
 
-                        )->shut(
-                    )->shut(
-                    )->open( `DateTimePicker`
+                        )->end(
+                    )->end(
+                    )->ele( `DateTimePicker`
                         )->a( n = `placeholder` v = `DateTimePicker`
                         )->a( n = `width`       v = `200px`
-                        )->open( `layoutData`
-                            )->leaf( `OverflowToolbarLayoutData`
+                        )->ele( `layoutData`
+                            )->tag( `OverflowToolbarLayoutData`
                                 )->a( n = `priority` v = `Low`
 
-                        )->shut(
-                    )->shut(
-                    )->open( `DateRangeSelection`
+                        )->end(
+                    )->end(
+                    )->ele( `DateRangeSelection`
                         )->a( n = `placeholder` v = `DateRangeSelection`
                         )->a( n = `width`       v = `200px`
-                        )->open( `layoutData`
-                            )->leaf( `OverflowToolbarLayoutData`
+                        )->ele( `layoutData`
+                            )->tag( `OverflowToolbarLayoutData`
                                 )->a( n = `priority` v = `Low`
 
-                        )->shut(
-                    )->shut(
-                    )->open( `RadioButton`
+                        )->end(
+                    )->end(
+                    )->ele( `RadioButton`
                         )->a( n = `text`      v = `Option a`
                         )->a( n = `groupName` v = `a`
-                        )->open( `layoutData`
-                            )->leaf( `OverflowToolbarLayoutData`
+                        )->ele( `layoutData`
+                            )->tag( `OverflowToolbarLayoutData`
                                 )->a( n = `priority` v = `Low`
 
-                        )->shut(
-                    )->shut(
-                    )->open( `RadioButton`
+                        )->end(
+                    )->end(
+                    )->ele( `RadioButton`
                         )->a( n = `text`      v = `Option b`
                         )->a( n = `groupName` v = `a`
-                        )->open( `layoutData`
-                            )->leaf( `OverflowToolbarLayoutData`
+                        )->ele( `layoutData`
+                            )->tag( `OverflowToolbarLayoutData`
                                 )->a( n = `priority` v = `Low`
 
-                        )->shut(
-                    )->shut(
-                    )->open( `OverflowToolbarTokenizer`
+                        )->end(
+                    )->end(
+                    )->ele( `OverflowToolbarTokenizer`
                         )->a( n = `id`        v = `tokenizerShowItems`
                         )->a( n = `width`     v = `35%`
                         )->a( n = `labelText` v = `Show items:`
                         " tokenDelete event handler dropped - it removes static tokens imperatively
-                        )->open( `layoutData`
-                            )->leaf( `OverflowToolbarLayoutData`
+                        )->ele( `layoutData`
+                            )->tag( `OverflowToolbarLayoutData`
                                 )->a( n = `priority` v = `High`
 
-                        )->shut(
-                        )->open( `tokens`
-                            )->leaf( `Token`
+                        )->end(
+                        )->ele( `tokens`
+                            )->tag( `Token`
                                 )->a( n = `text` v = `Token 1`
                                 )->a( n = `key`  v = `0001`
-                            )->leaf( `Token`
+                            )->tag( `Token`
                                 )->a( n = `text` v = `Token 2`
                                 )->a( n = `key`  v = `0002`
-                            )->leaf( `Token`
+                            )->tag( `Token`
                                 )->a( n = `text` v = `Token 3`
                                 )->a( n = `key`  v = `0003`
-                            )->leaf( `Token`
+                            )->tag( `Token`
                                 )->a( n = `text` v = `Token 4 - long text example`
                                 )->a( n = `key`  v = `0004`
-                            )->leaf( `Token`
+                            )->tag( `Token`
                                 )->a( n = `text` v = `Token 5`
                                 )->a( n = `key`  v = `0005`
 
-                        )->shut(
-                    )->shut(
-                    )->open( `SegmentedButton`
-                        )->open( `items`
-                            )->leaf( `SegmentedButtonItem`
+                        )->end(
+                    )->end(
+                    )->ele( `SegmentedButton`
+                        )->ele( `items`
+                            )->tag( `SegmentedButtonItem`
                                 )->a( n = `text` v = `Left Button`
-                            )->leaf( `SegmentedButtonItem`
+                            )->tag( `SegmentedButtonItem`
                                 )->a( n = `icon`    v = `sap-icon://notes`
                                 )->a( n = `tooltip` v = `Notes`
-                            )->leaf( `SegmentedButtonItem`
+                            )->tag( `SegmentedButtonItem`
                                 )->a( n = `text`    v = `Disabled Button`
                                 )->a( n = `enabled` v = `false`
-                            )->leaf( `SegmentedButtonItem`
+                            )->tag( `SegmentedButtonItem`
                                 )->a( n = `text` v = `Right Button`
 
-                        )->shut(
-                    )->shut(
-                    )->leaf( `ToolbarSpacer`
-                    )->leaf( `Title`
+                        )->end(
+                    )->end(
+                    )->tag( `ToolbarSpacer`
+                    )->tag( `Title`
                         )->a( n = `text`  v = `Example Title`
                         )->a( n = `level` v = `H1` ).
 

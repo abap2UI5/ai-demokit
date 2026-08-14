@@ -48,11 +48,11 @@ CLASS z2ui5_cl_smpc_app_333 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " _showFormFragment swaps the Page content between the Display and the Change
     " fragment; both are inlined here and switched by one bound flag instead
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `height`     v = `100%`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns`      v = `sap.m`
@@ -60,132 +60,132 @@ CLASS z2ui5_cl_smpc_app_333 IMPLEMENTATION.
         )->a( n = `xmlns:f`    v = `sap.ui.layout.form`
         )->a( n = `xmlns:core` v = `sap.ui.core`
 
-        )->open( `Page`
+        )->ele( `Page`
             )->a( n = `id`         v = `page`
             )->a( n = `showHeader` v = `true`
 
-            )->open( `customHeader`
-                )->open( `Bar`
-                    )->open( `contentRight`
+            )->ele( `customHeader`
+                )->ele( `Bar`
+                    )->ele( `contentRight`
                         " the original enables Edit once the mock request completes; the ABAP model is seeded synchronously, so it starts enabled
-                        )->leaf( `Button`
+                        )->tag( `Button`
                             )->a( n = `id`      v = `edit`
                             )->a( n = `text`    v = `Edit`
                             )->a( n = `enabled` v = `true`
                             )->a( n = `visible` v = |\{= !${ client->_bind( edit_mode ) }\}|
                             )->a( n = `press`   v = client->_event( `EDIT` )
-                        )->leaf( `Button`
+                        )->tag( `Button`
                             )->a( n = `id`      v = `save`
                             )->a( n = `text`    v = `Save`
                             )->a( n = `type`    v = `Emphasized`
                             )->a( n = `visible` v = client->_bind( edit_mode )
                             )->a( n = `press`   v = client->_event( `SAVE` )
-                        )->leaf( `Button`
+                        )->tag( `Button`
                             )->a( n = `id`      v = `cancel`
                             )->a( n = `text`    v = `Cancel`
                             )->a( n = `visible` v = client->_bind( edit_mode )
                             )->a( n = `press`   v = client->_event( `CANCEL` )
 
-                    )->shut(
-                )->shut(
-            )->shut(
-            )->open( `content`
+                    )->end(
+                )->end(
+            )->end(
+            )->ele( `content`
                 " Display.fragment.xml
-                )->open( `VBox`
+                )->ele( `VBox`
                     )->a( n = `class`   v = `sapUiSmallMargin`
                     )->a( n = `visible` v = |\{= !${ client->_bind( edit_mode ) }\}|
 
-                    )->open( n = `SimpleForm` ns = `f`
+                    )->ele( n = `SimpleForm` ns = `f`
                         )->a( n = `id`       v = `SimpleFormDisplayColumn_oneGroup`
                         )->a( n = `editable` v = `false`
                         )->a( n = `layout`   v = `ColumnLayout`
                         )->a( n = `title`    v = `Address`
 
-                        )->open( n = `content` ns = `f`
-                            )->leaf( `Label`
+                        )->ele( n = `content` ns = `f`
+                            )->tag( `Label`
                                 )->a( n = `text` v = `Name`
-                            )->leaf( `Text`
+                            )->tag( `Text`
                                 )->a( n = `id`   v = `nameText`
                                 )->a( n = `text` v = client->_bind( suppliername )
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text` v = `Street/No.`
-                            )->leaf( `Text`
+                            )->tag( `Text`
                                 )->a( n = `text` v = |{ client->_bind( street ) } { client->_bind( housenumber ) }|
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text` v = `ZIP Code/City`
-                            )->leaf( `Text`
+                            )->tag( `Text`
                                 )->a( n = `text` v = |{ client->_bind( zipcode ) } { client->_bind( city ) }|
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text` v = `Country`
-                            )->leaf( `Text`
+                            )->tag( `Text`
                                 )->a( n = `id`   v = `countryText`
                                 )->a( n = `text` v = client->_bind( country )
 
-                        )->shut(
-                    )->shut(
-                )->shut(
+                        )->end(
+                    )->end(
+                )->end(
                 " Change.fragment.xml
-                )->open( `VBox`
+                )->ele( `VBox`
                     )->a( n = `class`   v = `sapUiSmallMargin`
                     )->a( n = `visible` v = client->_bind( edit_mode )
 
-                    )->open( n = `SimpleForm` ns = `f`
+                    )->ele( n = `SimpleForm` ns = `f`
                         )->a( n = `id`       v = `SimpleFormChangeColumn_oneGroup`
                         )->a( n = `editable` v = `true`
                         )->a( n = `layout`   v = `ColumnLayout`
                         )->a( n = `title`    v = `Address`
 
-                        )->open( n = `content` ns = `f`
-                            )->leaf( `Label`
+                        )->ele( n = `content` ns = `f`
+                            )->tag( `Label`
                                 )->a( n = `text` v = `Name`
-                            )->leaf( `Input`
+                            )->tag( `Input`
                                 )->a( n = `id`    v = `name`
                                 )->a( n = `value` v = client->_bind( suppliername )
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text` v = `Street/No.`
-                            )->leaf( `Input`
+                            )->tag( `Input`
                                 )->a( n = `value` v = client->_bind( street )
 
-                            )->open( `Input`
+                            )->ele( `Input`
                                 )->a( n = `value` v = client->_bind( housenumber )
 
-                                )->open( `layoutData`
-                                    )->leaf( n = `ColumnElementData` ns = `f`
+                                )->ele( `layoutData`
+                                    )->tag( n = `ColumnElementData` ns = `f`
                                         )->a( n = `cellsSmall` v = `2`
                                         )->a( n = `cellsLarge` v = `1`
 
-                                )->shut(
-                            )->shut(
-                            )->leaf( `Label`
+                                )->end(
+                            )->end(
+                            )->tag( `Label`
                                 )->a( n = `text` v = `ZIP Code/City`
 
-                            )->open( `Input`
+                            )->ele( `Input`
                                 )->a( n = `value` v = client->_bind( zipcode )
 
-                                )->open( `layoutData`
-                                    )->leaf( n = `ColumnElementData` ns = `f`
+                                )->ele( `layoutData`
+                                    )->tag( n = `ColumnElementData` ns = `f`
                                         )->a( n = `cellsSmall` v = `3`
                                         )->a( n = `cellsLarge` v = `2`
 
-                                )->shut(
-                            )->shut(
-                            )->leaf( `Input`
+                                )->end(
+                            )->end(
+                            )->tag( `Input`
                                 )->a( n = `value` v = client->_bind( city )
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text` v = `Country`
 
-                            )->open( `Select`
+                            )->ele( `Select`
                                 )->a( n = `id`          v = `country`
                                 )->a( n = `selectedKey` v = client->_bind( country )
 
-                                )->open( `items`
-                                    )->leaf( n = `Item` ns = `core`
+                                )->ele( `items`
+                                    )->tag( n = `Item` ns = `core`
                                         )->a( n = `text` v = `England`
                                         )->a( n = `key`  v = `England`
-                                    )->leaf( n = `Item` ns = `core`
+                                    )->tag( n = `Item` ns = `core`
                                         )->a( n = `text` v = `Germany`
                                         )->a( n = `key`  v = `Germany`
-                                    )->leaf( n = `Item` ns = `core`
+                                    )->tag( n = `Item` ns = `core`
                                         )->a( n = `text` v = `USA`
                                         )->a( n = `key`  v = `USA` ).
 

@@ -96,93 +96,93 @@ CLASS z2ui5_cl_smpc_app_407 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns:tnt` v = `sap.tnt`
         )->a( n = `height`    v = `100%`
 
-        )->open( n = `ToolPage` ns = `tnt`
+        )->ele( n = `ToolPage` ns = `tnt`
             )->a( n = `id`           v = `toolPage`
             " onMenuTogglePress toggles ToolPage.sideExpanded imperatively; the
             " property is bindable, so it is two-way bound here (app 302)
             )->a( n = `sideExpanded` v = client->_bind( side_expanded )
 
-            )->open( n = `header` ns = `tnt`
-                )->open( n = `ToolHeader` ns = `tnt`
-                    )->leaf( `Button`
+            )->ele( n = `header` ns = `tnt`
+                )->ele( n = `ToolHeader` ns = `tnt`
+                    )->tag( `Button`
                         )->a( n = `id`      v = `menuToggleButton`
                         )->a( n = `icon`    v = `sap-icon://menu2`
                         )->a( n = `tooltip` v = `Menu`
                         )->a( n = `type`    v = `Transparent`
                         )->a( n = `press`   v = client->_event( `MENU_TOGGLE` )
-                    )->leaf( `Image`
+                    )->tag( `Image`
                         )->a( n = `src`        v = `./images/SAP_Logo.png`
                         )->a( n = `tooltip`    v = `SAP logo`
                         )->a( n = `decorative` v = `false`
-                    )->leaf( `Title`
+                    )->tag( `Title`
                         )->a( n = `text`     v = `Product name`
                         )->a( n = `wrapping` v = `false`
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text`     v = `Second title`
                         )->a( n = `wrapping` v = `false`
-                    )->leaf( `ToolbarSpacer`
+                    )->tag( `ToolbarSpacer`
 
-                    )->open( `SearchField`
+                    )->ele( `SearchField`
                         )->a( n = `width` v = `16rem`
-                        )->open( `layoutData`
-                            )->leaf( `OverflowToolbarLayoutData`
+                        )->ele( `layoutData`
+                            )->tag( `OverflowToolbarLayoutData`
                                 )->a( n = `priority` v = `Low`
                                 )->a( n = `group`    v = `1`
 
-                        )->shut(
-                    )->shut(
-                    )->open( `ToolbarSpacer`
-                        )->open( `layoutData`
-                            )->leaf( `OverflowToolbarLayoutData`
+                        )->end(
+                    )->end(
+                    )->ele( `ToolbarSpacer`
+                        )->ele( `layoutData`
+                            )->tag( `OverflowToolbarLayoutData`
                                 )->a( n = `priority` v = `Low`
                                 )->a( n = `group`    v = `1`
 
-                        )->shut(
-                    )->shut(
-                    )->open( `ToolbarSeparator`
-                        )->open( `layoutData`
-                            )->leaf( `OverflowToolbarLayoutData`
+                        )->end(
+                    )->end(
+                    )->ele( `ToolbarSeparator`
+                        )->ele( `layoutData`
+                            )->tag( `OverflowToolbarLayoutData`
                                 )->a( n = `group` v = `2`
 
-                        )->shut(
-                    )->shut(
+                        )->end(
+                    )->end(
 
-                    )->leaf( `OverflowToolbarButton`
+                    )->tag( `OverflowToolbarButton`
                         )->a( n = `text` v = `Settings`
                         )->a( n = `type` v = `Transparent`
                         )->a( n = `icon` v = `sap-icon://action-settings`
 
-                    )->open( `Button`
+                    )->ele( `Button`
                         )->a( n = `tooltip` v = `Notifications`
                         )->a( n = `type`    v = `Transparent`
                         )->a( n = `icon`    v = `sap-icon://bell`
-                        )->open( `layoutData`
-                            )->leaf( `OverflowToolbarLayoutData`
+                        )->ele( `layoutData`
+                            )->tag( `OverflowToolbarLayoutData`
                                 )->a( n = `priority` v = `NeverOverflow`
 
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( n = `sideContent` ns = `tnt`
-                )->open( n = `SideNavigation` ns = `tnt`
+            )->ele( n = `sideContent` ns = `tnt`
+                )->ele( n = `SideNavigation` ns = `tnt`
                     )->a( n = `id`         v = `sideNavigation`
                     )->a( n = `itemSelect` v = client->_event( val   = `ITEM_SELECT`
                                                                t_arg = VALUE #( ( `${$parameters>/item}.getKey()` ) ) )
 
-                    )->open( n = `filterSection` ns = `tnt`
+                    )->ele( n = `filterSection` ns = `tnt`
                         " value is two-way bound so the filter state survives the round-trip;
                         " liveChange transports the typed value, search the submitted query
-                        )->leaf( n = `SideNavigationSearchField` ns = `tnt`
+                        )->tag( n = `SideNavigationSearchField` ns = `tnt`
                             )->a( n = `id`           v = `sideNavigationSearchField`
                             )->a( n = `ariaControls` v = `sideNavigation`
                             )->a( n = `value`        v = client->_bind( search_value )
@@ -191,9 +191,9 @@ CLASS z2ui5_cl_smpc_app_407 IMPLEMENTATION.
                             )->a( n = `search`       v = client->_event( val   = `SEARCH`
                                                                          t_arg = VALUE #( ( `${$parameters>/query}` ) ) )
 
-                    )->shut(
-                    )->open( n = `item` ns = `tnt`
-                        )->open( n = `NavigationList` ns = `tnt`
+                    )->end(
+                    )->ele( n = `item` ns = `tnt`
+                        )->ele( n = `NavigationList` ns = `tnt`
                             )->a( n = `id`              v = `navigationList`
                             " setHighlightedText follows the typed value in the original;
                             " the property is bindable, so it shares the search field's value
@@ -202,7 +202,7 @@ CLASS z2ui5_cl_smpc_app_407 IMPLEMENTATION.
                             " navigationItemFactory resolved server-side: the /navigation rows
                             " are this static item/group/group skeleton, the group items stay
                             " model-bound and the search filters them in ABAP
-                            )->leaf( n = `NavigationListItem` ns = `tnt`
+                            )->tag( n = `NavigationListItem` ns = `tnt`
                                 )->a( n = `text`    v = `Home`
                                 )->a( n = `icon`    v = `sap-icon://home`
                                 )->a( n = `key`     v = `home`
@@ -210,13 +210,13 @@ CLASS z2ui5_cl_smpc_app_407 IMPLEMENTATION.
                                 )->a( n = `press`   v = client->_event( val   = `ITEM_PRESS`
                                                                         t_arg = VALUE #( ( `${$source>/key}` ) ) )
 
-                            )->open( n = `NavigationListGroup` ns = `tnt`
+                            )->ele( n = `NavigationListGroup` ns = `tnt`
                                 )->a( n = `text`     v = `Business Operations`
                                 )->a( n = `expanded` v = `true`
                                 )->a( n = `visible`  v = client->_bind( group1_visible )
                                 )->a( n = `items`    v = client->_bind( t_group1 )
 
-                                )->open( n = `NavigationListItem` ns = `tnt`
+                                )->ele( n = `NavigationListItem` ns = `tnt`
                                     )->a( n = `text`         v = `{TITLE}`
                                     )->a( n = `icon`         v = `{ICON}`
                                     )->a( n = `enabled`      v = `{ENABLED}`
@@ -232,15 +232,15 @@ CLASS z2ui5_cl_smpc_app_407 IMPLEMENTATION.
                                     )->a( n = `press`        v = client->_event( val   = `ITEM_PRESS`
                                                                                  t_arg = VALUE #( ( `${$source>/key}` ) ) )
 
-                                    )->open( n = `tag` ns = `tnt`
-                                        )->leaf( `ObjectStatus`
+                                    )->ele( n = `tag` ns = `tnt`
+                                        )->tag( `ObjectStatus`
                                             )->a( n = `text`     v = `{TAGTEXT}`
                                             )->a( n = `state`    v = `{TAGSTATE}`
                                             )->a( n = `inverted` v = `true`
                                             )->a( n = `visible`  v = `{= !!${TAGTEXT} }`
 
-                                    )->shut(
-                                    )->open( n = `NavigationListItem` ns = `tnt`
+                                    )->end(
+                                    )->ele( n = `NavigationListItem` ns = `tnt`
                                         )->a( n = `selectable`   v = `{SELECTABLE}`
                                         )->a( n = `text`         v = `{TITLE}`
                                         )->a( n = `key`          v = `{KEY}`
@@ -252,25 +252,25 @@ CLASS z2ui5_cl_smpc_app_407 IMPLEMENTATION.
                                         )->a( n = `press`        v = client->_event( val   = `ITEM_PRESS`
                                                                                      t_arg = VALUE #( ( `${$source>/key}` ) ) )
 
-                                        )->open( n = `tag` ns = `tnt`
-                                            )->leaf( `ObjectStatus`
+                                        )->ele( n = `tag` ns = `tnt`
+                                            )->tag( `ObjectStatus`
                                                 )->a( n = `text`     v = `{TAGTEXT}`
                                                 )->a( n = `state`    v = `{TAGSTATE}`
                                                 )->a( n = `inverted` v = `true`
                                                 )->a( n = `visible`  v = `{= !!${TAGTEXT} }`
 
-                                        )->shut(
-                                    )->shut(
-                                )->shut(
-                            )->shut(
+                                        )->end(
+                                    )->end(
+                                )->end(
+                            )->end(
 
-                            )->open( n = `NavigationListGroup` ns = `tnt`
+                            )->ele( n = `NavigationListGroup` ns = `tnt`
                                 )->a( n = `text`     v = `System & Administration`
                                 )->a( n = `expanded` v = `true`
                                 )->a( n = `visible`  v = client->_bind( group2_visible )
                                 )->a( n = `items`    v = client->_bind( t_group2 )
 
-                                )->open( n = `NavigationListItem` ns = `tnt`
+                                )->ele( n = `NavigationListItem` ns = `tnt`
                                     )->a( n = `text`         v = `{TITLE}`
                                     )->a( n = `icon`         v = `{ICON}`
                                     )->a( n = `enabled`      v = `{ENABLED}`
@@ -286,15 +286,15 @@ CLASS z2ui5_cl_smpc_app_407 IMPLEMENTATION.
                                     )->a( n = `press`        v = client->_event( val   = `ITEM_PRESS`
                                                                                  t_arg = VALUE #( ( `${$source>/key}` ) ) )
 
-                                    )->open( n = `tag` ns = `tnt`
-                                        )->leaf( `ObjectStatus`
+                                    )->ele( n = `tag` ns = `tnt`
+                                        )->tag( `ObjectStatus`
                                             )->a( n = `text`     v = `{TAGTEXT}`
                                             )->a( n = `state`    v = `{TAGSTATE}`
                                             )->a( n = `inverted` v = `true`
                                             )->a( n = `visible`  v = `{= !!${TAGTEXT} }`
 
-                                    )->shut(
-                                    )->open( n = `NavigationListItem` ns = `tnt`
+                                    )->end(
+                                    )->ele( n = `NavigationListItem` ns = `tnt`
                                         )->a( n = `selectable`   v = `{SELECTABLE}`
                                         )->a( n = `text`         v = `{TITLE}`
                                         )->a( n = `key`          v = `{KEY}`
@@ -306,25 +306,25 @@ CLASS z2ui5_cl_smpc_app_407 IMPLEMENTATION.
                                         )->a( n = `press`        v = client->_event( val   = `ITEM_PRESS`
                                                                                      t_arg = VALUE #( ( `${$source>/key}` ) ) )
 
-                                        )->open( n = `tag` ns = `tnt`
-                                            )->leaf( `ObjectStatus`
+                                        )->ele( n = `tag` ns = `tnt`
+                                            )->tag( `ObjectStatus`
                                                 )->a( n = `text`     v = `{TAGTEXT}`
                                                 )->a( n = `state`    v = `{TAGSTATE}`
                                                 )->a( n = `inverted` v = `true`
                                                 )->a( n = `visible`  v = `{= !!${TAGTEXT} }`
 
-                                        )->shut(
-                                    )->shut(
-                                )->shut(
-                            )->shut(
-                        )->shut(
-                    )->shut(
+                                        )->end(
+                                    )->end(
+                                )->end(
+                            )->end(
+                        )->end(
+                    )->end(
 
-                    )->open( n = `fixedItem` ns = `tnt`
-                        )->open( n = `NavigationList` ns = `tnt`
+                    )->ele( n = `fixedItem` ns = `tnt`
+                        )->ele( n = `NavigationList` ns = `tnt`
                             )->a( n = `items` v = client->_bind( t_fixed )
 
-                            )->open( n = `NavigationListItem` ns = `tnt`
+                            )->ele( n = `NavigationListItem` ns = `tnt`
                                 )->a( n = `text`         v = `{TITLE}`
                                 )->a( n = `selectable`   v = `{SELECTABLE}`
                                 )->a( n = `icon`         v = `{ICON}`
@@ -336,66 +336,66 @@ CLASS z2ui5_cl_smpc_app_407 IMPLEMENTATION.
                                 )->a( n = `press`        v = client->_event( val   = `ITEM_PRESS`
                                                                              t_arg = VALUE #( ( `${$source>/key}` ) ) )
 
-                                )->open( n = `tag` ns = `tnt`
-                                    )->leaf( `ObjectStatus`
+                                )->ele( n = `tag` ns = `tnt`
+                                    )->tag( `ObjectStatus`
                                         )->a( n = `text`     v = `{TAGTEXT}`
                                         )->a( n = `state`    v = `{TAGSTATE}`
                                         )->a( n = `inverted` v = `true`
                                         )->a( n = `visible`  v = `{= !!${TAGTEXT} }`
 
-                                )->shut(
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
+                                )->end(
+                            )->end(
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( n = `mainContents` ns = `tnt`
-                )->open( `NavContainer`
+            )->ele( n = `mainContents` ns = `tnt`
+                )->ele( `NavContainer`
                     )->a( n = `id` v = `navContainer`
 
-                    )->open( `pages`
-                        )->open( `ScrollContainer`
+                    )->ele( `pages`
+                        )->ele( `ScrollContainer`
                             )->a( n = `id`         v = `home`
                             )->a( n = `horizontal` v = `false`
                             )->a( n = `vertical`   v = `true`
                             )->a( n = `height`     v = `100%`
                             )->a( n = `class`      v = `sapUiContentPadding`
 
-                            )->leaf( `Text`
+                            )->tag( `Text`
                                 )->a( n = `text` v = `This is the home page`
 
-                        )->shut(
-                        )->open( `ScrollContainer`
+                        )->end(
+                        )->ele( `ScrollContainer`
                             )->a( n = `id`         v = `myAccounts`
                             )->a( n = `horizontal` v = `false`
                             )->a( n = `vertical`   v = `true`
                             )->a( n = `height`     v = `100%`
                             )->a( n = `class`      v = `sapUiContentPadding`
 
-                            )->leaf( `Text`
+                            )->tag( `Text`
                                 )->a( n = `text` v = `This is my accounts page`
 
-                        )->shut(
-                        )->open( `ScrollContainer`
+                        )->end(
+                        )->ele( `ScrollContainer`
                             )->a( n = `id`         v = `myOrders`
                             )->a( n = `horizontal` v = `false`
                             )->a( n = `vertical`   v = `true`
                             )->a( n = `height`     v = `100%`
                             )->a( n = `class`      v = `sapUiContentPadding`
 
-                            )->leaf( `Text`
+                            )->tag( `Text`
                                 )->a( n = `text` v = `This is my orders page`
 
-                        )->shut(
-                        )->open( `ScrollContainer`
+                        )->end(
+                        )->ele( `ScrollContainer`
                             )->a( n = `id`         v = `CustomerManagement`
                             )->a( n = `horizontal` v = `false`
                             )->a( n = `vertical`   v = `true`
                             )->a( n = `height`     v = `100%`
                             )->a( n = `class`      v = `sapUiContentPadding`
 
-                            )->leaf( `Text`
+                            )->tag( `Text`
                                 )->a( n = `text` v = `This is customer management page` ).
 
     client->view_display( view->stringify( ) ).
@@ -456,30 +456,30 @@ CLASS z2ui5_cl_smpc_app_407 IMPLEMENTATION.
 
   METHOD popup_quick_create.
 
-    DATA(popup) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(popup) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    popup->open( n = `FragmentDefinition` ns = `core`
+    popup->ele( n = `FragmentDefinition` ns = `core`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns`      v = `sap.m`
 
-        )->open( `Dialog`
+        )->ele( `Dialog`
             )->a( n = `title` v = `Create Item`
             )->a( n = `type`  v = `Message`
 
-            )->open( `content`
-                )->leaf( `Text`
+            )->ele( `content`
+                )->tag( `Text`
                     )->a( n = `text` v = `Create New Navigation List Item.`
 
-            )->shut(
-            )->open( `beginButton`
-                )->leaf( `Button`
+            )->end(
+            )->ele( `beginButton`
+                )->tag( `Button`
                     )->a( n = `type`  v = `Emphasized`
                     )->a( n = `text`  v = `Create`
                     )->a( n = `press` v = client->follow_up_action( client->cs_event-popup_close )
 
-            )->shut(
-            )->open( `endButton`
-                )->leaf( `Button`
+            )->end(
+            )->ele( `endButton`
+                )->tag( `Button`
                     )->a( n = `text`  v = `Cancel`
                     )->a( n = `press` v = client->follow_up_action( client->cs_event-popup_close ) ).
 

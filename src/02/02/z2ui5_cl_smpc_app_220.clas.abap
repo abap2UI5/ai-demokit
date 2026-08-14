@@ -43,7 +43,7 @@ CLASS z2ui5_cl_smpc_app_220 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " Calendar min/max/disabled dates are typed "object" and demand real JS Date
     " objects; the model keeps ISO strings and Formatter.DateCreateObject from the
@@ -55,7 +55,7 @@ CLASS z2ui5_cl_smpc_app_220 IMPLEMENTATION.
     " chained calls resolve there (measured with
     " scripts/probes/event-arg-expression-probe.mjs) - and the long-style English
     " rendering of DateFormat.getInstance({style:'long'}) is composed in ABAP.
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`      v = `sap.ui.layout`
         )->a( n = `xmlns:u`      v = `sap.ui.unified`
         )->a( n = `xmlns:mvc`    v = `sap.ui.core.mvc`
@@ -64,9 +64,9 @@ CLASS z2ui5_cl_smpc_app_220 IMPLEMENTATION.
         )->a( n = `class`        v = `viewPadding`
         )->a( n = `core:require` v = `{Formatter: 'z2ui5/model/formatter'}`
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
 
-            )->open( n = `Calendar` ns = `u`
+            )->ele( n = `Calendar` ns = `u`
                 )->a( n = `id`              v = `calendar`
                 )->a( n = `minDate`         v = |\{ path: '{ client->_bind( val = min_date path = abap_true ) }', formatter: 'Formatter.DateCreateObject' \}|
                 )->a( n = `maxDate`         v = |\{ path: '{ client->_bind( val = max_date path = abap_true ) }', formatter: 'Formatter.DateCreateObject' \}|
@@ -78,40 +78,40 @@ CLASS z2ui5_cl_smpc_app_220 IMPLEMENTATION.
                                                                   ( `$event.oSource.getSelectedDates().length > 0 ? $event.oSource.getSelectedDates()[0].getStartDate().getMonth() + 1 : 0` )
                                                                   ( `$event.oSource.getSelectedDates().length > 0 ? $event.oSource.getSelectedDates()[0].getStartDate().getDate() : 0` ) ) )
 
-                )->open( n = `disabledDates` ns = `u`
-                    )->leaf( n = `DateRange` ns = `u`
+                )->ele( n = `disabledDates` ns = `u`
+                    )->tag( n = `DateRange` ns = `u`
                         )->a( n = `startDate` v = |\{ path: 'START', formatter: 'Formatter.DateCreateObject' \}|
                         " the second range is a single day and carries no end: an empty string
                         " through DateCreateObject is an Invalid Date, which Month._checkDateEnabled
                         " throws on - the guard keeps endDate null there (probe-verified, see sidecar)
                         )->a( n = `endDate`   v = `{= ${END} ? Formatter.DateCreateObject(${END}) : null }`
 
-                )->shut(
-            )->shut(
-            )->open( n = `HorizontalLayout` ns = `l`
+                )->end(
+            )->end(
+            )->ele( n = `HorizontalLayout` ns = `l`
 
-                )->leaf( `Label`
+                )->tag( `Label`
                     )->a( n = `text` v = `Selected Date:`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `id`   v = `selectedDate`
                     )->a( n = `text` v = client->_bind( selected_date )
 
-            )->shut(
-            )->open( n = `HorizontalLayout` ns = `l`
+            )->end(
+            )->ele( n = `HorizontalLayout` ns = `l`
 
-                )->open( `FlexBox`
+                )->ele( `FlexBox`
                     )->a( n = `height`         v = `100px`
                     )->a( n = `alignItems`     v = `Center`
                     )->a( n = `justifyContent` v = `Start`
 
-                    )->leaf( `Label`
+                    )->tag( `Label`
                         )->a( n = `text` v = `Toggle week numbers:`
-                    )->leaf( `Switch`
+                    )->tag( `Switch`
                         )->a( n = `state` v = client->_bind( show_week_numbers )
 
-                )->shut(
-            )->shut(
-        )->shut( ).
+                )->end(
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

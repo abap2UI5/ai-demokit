@@ -26,139 +26,139 @@ CLASS z2ui5_cl_smpc_app_396 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `height`     v = `100%`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns`      v = `sap.m`
 
-        )->open( `Page`
-            )->leaf( n = `InvisibleText` ns = `core`
+        )->ele( `Page`
+            )->tag( n = `InvisibleText` ns = `core`
                 )->a( n = `id`   v = `inputLabel`
                 )->a( n = `text` v = `Input label`
-            )->leaf( `MessageStrip`
+            )->tag( `MessageStrip`
                 )->a( n = `text`  v = `Left and Right aligned content.`
                 )->a( n = `class` v = `sapUiTinyMargin`
 
-            )->open( `OverflowToolbar`
+            )->ele( `OverflowToolbar`
                 )->a( n = `class` v = `sapUiMediumMarginTop`
 
-                )->leaf( `Button`
+                )->tag( `Button`
                     )->a( n = `text` v = `Reject`
                     )->a( n = `type` v = `Reject`
-                )->leaf( `ToolbarSpacer`
-                )->leaf( `Button`
+                )->tag( `ToolbarSpacer`
+                )->tag( `Button`
                     )->a( n = `text` v = `Accept`
                     )->a( n = `type` v = `Accept`
 
-            )->shut(
+            )->end(
 
-            )->leaf( `MessageStrip`
+            )->tag( `MessageStrip`
                 )->a( n = `text`  v = `Centered content.`
                 )->a( n = `class` v = `sapUiTinyMargin`
 
-            )->open( `OverflowToolbar`
+            )->ele( `OverflowToolbar`
                 )->a( n = `class` v = `sapUiMediumMarginTop`
 
-                )->leaf( `ToolbarSpacer`
-                )->leaf( `Button`
+                )->tag( `ToolbarSpacer`
+                )->tag( `Button`
                     )->a( n = `text` v = `Centered content`
                     )->a( n = `type` v = `Accept`
-                )->leaf( `ToolbarSpacer`
+                )->tag( `ToolbarSpacer`
 
-            )->shut(
+            )->end(
 
-            )->leaf( `MessageStrip`
+            )->tag( `MessageStrip`
                 )->a( n = `text`  v = `Right Aligned Content.`
                 )->a( n = `class` v = `sapUiTinyMargin`
 
-            )->open( `OverflowToolbar`
+            )->ele( `OverflowToolbar`
                 )->a( n = `class` v = `sapUiMediumMarginTop`
 
-                )->leaf( `ToolbarSpacer`
-                )->leaf( `Button`
+                )->tag( `ToolbarSpacer`
+                )->tag( `Button`
                     )->a( n = `text` v = `Right aligned content`
                     )->a( n = `type` v = `Accept`
 
-            )->shut(
+            )->end(
 
-            )->leaf( `MessageStrip`
+            )->tag( `MessageStrip`
                 )->a( n = `text`  v = `You can have as many sections as you want with ToolbarSpacer.`
                 )->a( n = `class` v = `sapUiTinyMargin`
 
-            )->open( `OverflowToolbar`
+            )->ele( `OverflowToolbar`
                 )->a( n = `class` v = `sapUiMediumMarginTop`
 
-                )->leaf( `Button`
+                )->tag( `Button`
                     )->a( n = `text` v = `Accept`
                     )->a( n = `type` v = `Accept`
-                )->leaf( `ToolbarSpacer`
-                )->leaf( `CheckBox`
+                )->tag( `ToolbarSpacer`
+                )->tag( `CheckBox`
                     )->a( n = `text` v = `CheckBox`
-                )->leaf( `ToolbarSpacer`
-                )->leaf( `Button`
+                )->tag( `ToolbarSpacer`
+                )->tag( `Button`
                     )->a( n = `tooltip` v = `Dropdown`
                     )->a( n = `icon`    v = `sap-icon://drop-down-list`
-                )->leaf( `ToolbarSpacer`
-                )->leaf( `RadioButton`
+                )->tag( `ToolbarSpacer`
+                )->tag( `RadioButton`
                     )->a( n = `text` v = `RadioButton`
-                )->leaf( `ToolbarSpacer`
-                )->leaf( `Button`
+                )->tag( `ToolbarSpacer`
+                )->tag( `Button`
                     )->a( n = `text` v = `Reject`
                     )->a( n = `type` v = `Reject`
 
-            )->shut(
+            )->end(
 
-            )->leaf( `MessageStrip`
+            )->tag( `MessageStrip`
                 )->a( n = `text`
                          v = `Flexible Toolbar Spacers share the free horizontal space equally, thus content centering is not as precise as in Bar.`
                 )->a( n = `class` v = `sapUiTinyMargin`
 
-            )->open( `OverflowToolbar`
+            )->ele( `OverflowToolbar`
                 )->a( n = `class` v = `sapUiMediumMarginTop`
 
-                )->leaf( `Button`
+                )->tag( `Button`
                     )->a( n = `text` v = `This is a very long button text. This is a very long button text.`
-                )->leaf( `ToolbarSpacer`
-                )->leaf( `Button`
+                )->tag( `ToolbarSpacer`
+                )->tag( `Button`
                     )->a( n = `text` v = `Centered Button`
-                )->leaf( `ToolbarSpacer`
-                )->leaf( `Button`
+                )->tag( `ToolbarSpacer`
+                )->tag( `Button`
                     )->a( n = `text` v = `Short Button`
 
-            )->shut(
+            )->end(
 
-            )->leaf( `MessageStrip`
+            )->tag( `MessageStrip`
                 )->a( n = `text`  v = `ToolbarSpacer does not have to be flexible, a fixed width can be specified too.`
                 )->a( n = `class` v = `sapUiTinyMargin`
 
-            )->open( `OverflowToolbar`
+            )->ele( `OverflowToolbar`
                 )->a( n = `class` v = `sapUiMediumMarginTop`
 
-                )->leaf( `Input`
+                )->tag( `Input`
                     )->a( n = `ariaLabelledBy` v = `inputLabel`
                     )->a( n = `width`          v = `100px`
                     )->a( n = `placeholder`    v = `First Name`
-                )->leaf( `Input`
+                )->tag( `Input`
                     )->a( n = `ariaLabelledBy` v = `inputLabel`
                     )->a( n = `width`          v = `100px`
                     )->a( n = `placeholder`    v = `Last Name`
-                )->leaf( `ToolbarSpacer`
+                )->tag( `ToolbarSpacer`
                     )->a( n = `width` v = `40px`
-                )->leaf( `Input`
+                )->tag( `Input`
                     )->a( n = `ariaLabelledBy` v = `inputLabel`
                     )->a( n = `type`           v = `Email`
                     )->a( n = `width`          v = `100px`
                     )->a( n = `placeholder`    v = `Email`
-                )->leaf( `Input`
+                )->tag( `Input`
                     )->a( n = `ariaLabelledBy` v = `inputLabel`
                     )->a( n = `type`           v = `Number`
                     )->a( n = `width`          v = `80px`
                     )->a( n = `placeholder`    v = `Age`
-                )->leaf( `ToolbarSpacer`
-                )->leaf( `Button`
+                )->tag( `ToolbarSpacer`
+                )->tag( `Button`
                     )->a( n = `text` v = `Submit`
                     )->a( n = `type` v = `Accept` ).
 

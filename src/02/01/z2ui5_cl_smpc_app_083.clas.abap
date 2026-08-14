@@ -36,71 +36,71 @@ CLASS z2ui5_cl_smpc_app_083 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the original binds the List element to /ProductCollection and the items address rows by index ({0/Name}..{3/Name})
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
 
-        )->open( `List`
+        )->ele( `List`
             )->a( n = `id`         v = `ShortProductList`
             )->a( n = `headerText` v = `Products`
             )->a( n = `binding`    v = |\{{ client->_bind( val = t_products path = abap_true ) }\}|
 
-            )->open( `items`
-                )->open( `StandardListItem`
+            )->ele( `items`
+                )->ele( `StandardListItem`
                     )->a( n = `title`          v = `{0/NAME}`
                     )->a( n = `description`    v = `{0/PRODUCT_ID}`
                     )->a( n = `iconDensityAware` v = `false`
                     )->a( n = `iconInset`      v = `false`
                     )->a( n = `adaptTitleSize` v = `false`
                     " the avatar aggregation (since UI5 1.98) and sap.m.Avatar (since 1.73) are kept 1:1 - needs UI5 >= 1.98
-                    )->open( `avatar`
-                        )->leaf( `Avatar`
+                    )->ele( `avatar`
+                        )->tag( `Avatar`
                             )->a( n = `src`          v = `{0/PRODUCT_PIC_URL}`
                             )->a( n = `displayShape` v = `Square`
                             )->a( n = `imageFitType` v = `Cover`
                             )->a( n = `showBorder`   v = `true`
 
-                    )->shut(
-                )->shut(
-                )->open( `StandardListItem`
+                    )->end(
+                )->end(
+                )->ele( `StandardListItem`
                     )->a( n = `title`          v = `{1/NAME}`
                     )->a( n = `description`    v = ``
                     )->a( n = `iconInset`      v = `false`
                     )->a( n = `adaptTitleSize` v = `false`
-                    )->open( `avatar`
-                        )->leaf( `Avatar`
+                    )->ele( `avatar`
+                        )->tag( `Avatar`
                             )->a( n = `src`        v = `{1/PRODUCT_PIC_URL}`
                             )->a( n = `showBorder` v = `true`
 
-                    )->shut(
-                )->shut(
-                )->open( `StandardListItem`
+                    )->end(
+                )->end(
+                )->ele( `StandardListItem`
                     )->a( n = `title`          v = `{2/NAME}`
                     )->a( n = `description`    v = `{2/PRODUCT_ID}`
                     )->a( n = `iconDensityAware` v = `false`
                     )->a( n = `iconInset`      v = `true`
                     )->a( n = `adaptTitleSize` v = `false`
-                    )->open( `avatar`
-                        )->leaf( `Avatar`
+                    )->ele( `avatar`
+                        )->tag( `Avatar`
                             )->a( n = `src`          v = `{2/PRODUCT_PIC_URL}`
                             )->a( n = `displayShape` v = `Square`
                             )->a( n = `showBorder`   v = `true`
 
-                    )->shut(
-                )->shut(
-                )->leaf( `StandardListItem`
+                    )->end(
+                )->end(
+                )->tag( `StandardListItem`
                     )->a( n = `title`          v = `{3/NAME}`
                     )->a( n = `icon`           v = `{3/PRODUCT_PIC_URL}`
                     )->a( n = `iconDensityAware` v = `false`
                     )->a( n = `iconInset`      v = `false`
                     )->a( n = `adaptTitleSize` v = `false`
 
-            )->shut(
-        )->shut( ).
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

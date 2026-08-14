@@ -30,50 +30,50 @@ CLASS z2ui5_cl_smpc_app_145 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the original's onRadioButtonSelected switches the CSSGrid gridAutoFlow per
     " selected index in JS; rebuilt on the client as a two-way bound
     " selectedIndex plus the same switch as a gridAutoFlow expression binding -
     " no round-trip. The Reveal Grid ToggleButton loses its press (see sidecar)
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns:grid` v = `sap.ui.layout.cssgrid`
 
-        )->leaf( `ToggleButton`
+        )->tag( `ToggleButton`
             )->a( n = `id`    v = `revealGrid`
             )->a( n = `text`  v = `Reveal Grid`
             )->a( n = `class` v = `sapUiSmallMargin`
 
-        )->open( `Panel`
+        )->ele( `Panel`
             )->a( n = `width`  v = `100%`
             )->a( n = `height` v = `100%`
 
-            )->open( `headerToolbar`
-                )->open( `OverflowToolbar`
+            )->ele( `headerToolbar`
+                )->ele( `OverflowToolbar`
                     )->a( n = `height` v = `3rem`
-                    )->leaf( `Title`
+                    )->tag( `Title`
                         )->a( n = `text` v = `gridAutoFlow property example`
 
-            )->shut(
-            )->shut(
+            )->end(
+            )->end(
 
-            )->open( `RadioButtonGroup`
+            )->ele( `RadioButtonGroup`
                 )->a( n = `class`         v = `sapUiSmallMargin`
                 )->a( n = `selectedIndex` v = client->_bind( selected_index )
-                )->leaf( `RadioButton`
+                )->tag( `RadioButton`
                     )->a( n = `text` v = `Column - Vertical placement in columns`
-                )->leaf( `RadioButton`
+                )->tag( `RadioButton`
                     )->a( n = `text` v = `ColumnDense - Vertical placement in columns and filling empty spaces`
-                )->leaf( `RadioButton`
+                )->tag( `RadioButton`
                     )->a( n = `text` v = `Row - Horizontal placement in rows`
-                )->leaf( `RadioButton`
+                )->tag( `RadioButton`
                     )->a( n = `text` v = `RowDense - Horizontal placement in rows and filling empty spaces`
 
-            )->shut(
+            )->end(
 
-            )->open( n = `CSSGrid` ns = `grid`
+            )->ele( n = `CSSGrid` ns = `grid`
                 )->a( n = `id`                  v = `grid1`
                 )->a( n = `gridAutoFlow`        v = |\{= ${ client->_bind( selected_index ) } === 0 ? 'Column'| &&
                                                     | : (${ client->_bind( selected_index ) } === 1 ? 'ColumnDense'| &&
@@ -84,92 +84,92 @@ CLASS z2ui5_cl_smpc_app_145 IMPLEMENTATION.
                 )->a( n = `gridAutoColumns`     v = `1fr`
                 )->a( n = `gridGap`             v = `0.5rem`
 
-            )->open( `VBox`
+            )->ele( `VBox`
                 )->a( n = `class` v = `demoBox`
-                )->open( `layoutData`
-                    )->leaf( n = `GridItemLayoutData` ns = `grid`
+                )->ele( `layoutData`
+                    )->tag( n = `GridItemLayoutData` ns = `grid`
                         )->a( n = `gridRow` v = `span 2`
 
-                )->shut(
-                )->leaf( `Text`
+                )->end(
+                )->tag( `Text`
                     )->a( n = `text`     v = `One (2 rows)`
                     )->a( n = `wrapping` v = `true`
 
-            )->shut(
-            )->open( `VBox`
+            )->end(
+            )->ele( `VBox`
                 )->a( n = `class` v = `demoBox`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text`     v = `Two`
                     )->a( n = `wrapping` v = `true`
 
-            )->shut(
-            )->open( `VBox`
+            )->end(
+            )->ele( `VBox`
                 )->a( n = `class` v = `demoBox`
-                )->open( `layoutData`
-                    )->leaf( n = `GridItemLayoutData` ns = `grid`
+                )->ele( `layoutData`
+                    )->tag( n = `GridItemLayoutData` ns = `grid`
                         )->a( n = `gridRow` v = `span 2`
 
-                )->shut(
-                )->leaf( `Text`
+                )->end(
+                )->tag( `Text`
                     )->a( n = `text`     v = `Three (2 rows)`
                     )->a( n = `wrapping` v = `true`
 
-            )->shut(
-            )->open( `VBox`
+            )->end(
+            )->ele( `VBox`
                 )->a( n = `class` v = `demoBox`
-                )->open( `layoutData`
-                    )->leaf( n = `GridItemLayoutData` ns = `grid`
+                )->ele( `layoutData`
+                    )->tag( n = `GridItemLayoutData` ns = `grid`
                         )->a( n = `gridColumn` v = `span 2`
 
-                )->shut(
-                )->leaf( `Text`
+                )->end(
+                )->tag( `Text`
                     )->a( n = `text`     v = `Four (2 columns)`
                     )->a( n = `wrapping` v = `true`
 
-            )->shut(
-            )->open( `VBox`
+            )->end(
+            )->ele( `VBox`
                 )->a( n = `class` v = `demoBox`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text`     v = `Five`
                     )->a( n = `wrapping` v = `true`
 
-            )->shut(
-            )->open( `VBox`
+            )->end(
+            )->ele( `VBox`
                 )->a( n = `class` v = `demoBox`
-                )->open( `layoutData`
-                    )->leaf( n = `GridItemLayoutData` ns = `grid`
+                )->ele( `layoutData`
+                    )->tag( n = `GridItemLayoutData` ns = `grid`
                         )->a( n = `gridColumn` v = `span 2`
 
-                )->shut(
-                )->leaf( `Text`
+                )->end(
+                )->tag( `Text`
                     )->a( n = `text`     v = `Six (2 columns)`
                     )->a( n = `wrapping` v = `true`
 
-            )->shut(
-            )->open( `VBox`
+            )->end(
+            )->ele( `VBox`
                 )->a( n = `class` v = `demoBox`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text`     v = `Seven`
                     )->a( n = `wrapping` v = `true`
 
-            )->shut(
-            )->open( `VBox`
+            )->end(
+            )->ele( `VBox`
                 )->a( n = `class` v = `demoBox`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text`     v = `Eight`
                     )->a( n = `wrapping` v = `true`
 
-            )->shut(
-            )->open( `VBox`
+            )->end(
+            )->ele( `VBox`
                 )->a( n = `class` v = `demoBox`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text`     v = `Nine`
                     )->a( n = `wrapping` v = `true`
 
-            )->shut(
-            )->open( `VBox`
+            )->end(
+            )->ele( `VBox`
                 )->a( n = `class` v = `demoBox`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text`     v = `Ten`
                     )->a( n = `wrapping` v = `true` ).
 

@@ -34,22 +34,22 @@ CLASS z2ui5_cl_smpc_app_242 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
 
         " the sample's style.css (border around the NavContainer), injected via a
         " core:HTML content attribute (see CAPABILITIES.md); braces escaped \{ \}
-        )->leaf( n = `HTML` ns = `core`
+        )->tag( n = `HTML` ns = `core`
             )->a( n = `content` v = `<style>.navContainerControl\{border-color:#888;border-style:solid;border-width:0.0625em;\}</style>`
 
-        )->open( `VBox`
+        )->ele( `VBox`
             )->a( n = `class` v = `sapUiSmallMargin`
 
-            )->open( `NavContainer`
+            )->ele( `NavContainer`
                 )->a( n = `id`     v = `navCon`
                 )->a( n = `width`  v = `98%`
                 )->a( n = `height` v = `16em`
@@ -62,167 +62,167 @@ CLASS z2ui5_cl_smpc_app_242 IMPLEMENTATION.
                                                                                            ( `Navigation to page '{0}' finished` )
                                                                                            ( `${$parameters>/to}.getTitle()` ) ) )
 
-                )->open( `Page`
+                )->ele( `Page`
                     )->a( n = `id`    v = `p1`
                     )->a( n = `title` v = `Page 1`
 
-                    )->open( `footer`
-                        )->open( `OverflowToolbar`
-                            )->leaf( `Button`
+                    )->ele( `footer`
+                        )->ele( `OverflowToolbar`
+                            )->tag( `Button`
                                 )->a( n = `text` v = `Action 1`
 
-                    )->shut(
-                    )->shut(
-                )->shut(
-                )->open( `Page`
+                    )->end(
+                    )->end(
+                )->end(
+                )->ele( `Page`
                     )->a( n = `id`    v = `p2`
                     )->a( n = `title` v = `Page 2`
 
-                    )->open( `footer`
-                        )->open( `OverflowToolbar`
-                            )->leaf( `Button`
+                    )->ele( `footer`
+                        )->ele( `OverflowToolbar`
+                            )->tag( `Button`
                                 )->a( n = `text` v = `Action 2`
 
-                    )->shut(
-                    )->shut(
-                )->shut(
-                )->open( `Page`
+                    )->end(
+                    )->end(
+                )->end(
+                )->ele( `Page`
                     )->a( n = `id`    v = `p3`
                     )->a( n = `title` v = `Page 3`
 
-                    )->open( `footer`
-                        )->open( `OverflowToolbar`
-                            )->leaf( `Button`
+                    )->ele( `footer`
+                        )->ele( `OverflowToolbar`
+                            )->tag( `Button`
                                 )->a( n = `text` v = `Action 3`
 
-                    )->shut(
-                    )->shut(
-                )->shut(
-                )->open( `Page`
+                    )->end(
+                    )->end(
+                )->end(
+                )->ele( `Page`
                     )->a( n = `id`    v = `p4`
                     )->a( n = `title` v = `Page 4`
 
-                    )->open( `footer`
-                        )->open( `OverflowToolbar`
-                            )->leaf( `Button`
+                    )->ele( `footer`
+                        )->ele( `OverflowToolbar`
+                            )->tag( `Button`
                                 )->a( n = `text` v = `Action 4`
 
-                    )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
+                    )->end(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( `HBox`
-                )->open( `Button`
+            )->ele( `HBox`
+                )->ele( `Button`
                     )->a( n = `text`  v = `To 1`
                     )->a( n = `press` v = client->_event( val = `NAV` t_arg = VALUE #( ( `p1` ) ) )
 
-                    )->open( `layoutData`
-                        )->leaf( `FlexItemData`
+                    )->ele( `layoutData`
+                        )->tag( `FlexItemData`
                             )->a( n = `growFactor` v = `1`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( `customData`
-                        )->leaf( n = `CustomData` ns = `core`
+                    )->ele( `customData`
+                        )->tag( n = `CustomData` ns = `core`
                             )->a( n = `key`   v = `target`
                             )->a( n = `value` v = `p1`
 
-                    )->shut(
-                )->shut(
-                )->open( `Button`
+                    )->end(
+                )->end(
+                )->ele( `Button`
                     )->a( n = `text`  v = `To 2`
                     )->a( n = `press` v = client->_event( val = `NAV` t_arg = VALUE #( ( `p2` ) ) )
 
-                    )->open( `layoutData`
-                        )->leaf( `FlexItemData`
+                    )->ele( `layoutData`
+                        )->tag( `FlexItemData`
                             )->a( n = `growFactor` v = `1`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( `customData`
-                        )->leaf( n = `CustomData` ns = `core`
+                    )->ele( `customData`
+                        )->tag( n = `CustomData` ns = `core`
                             )->a( n = `key`   v = `target`
                             )->a( n = `value` v = `p2`
 
-                    )->shut(
-                )->shut(
-                )->open( `Button`
+                    )->end(
+                )->end(
+                )->ele( `Button`
                     )->a( n = `text`  v = `To 3`
                     )->a( n = `press` v = client->_event( val = `NAV` t_arg = VALUE #( ( `p3` ) ) )
 
-                    )->open( `layoutData`
-                        )->leaf( `FlexItemData`
+                    )->ele( `layoutData`
+                        )->tag( `FlexItemData`
                             )->a( n = `growFactor` v = `1`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( `customData`
-                        )->leaf( n = `CustomData` ns = `core`
+                    )->ele( `customData`
+                        )->tag( n = `CustomData` ns = `core`
                             )->a( n = `key`   v = `target`
                             )->a( n = `value` v = `p3`
 
-                    )->shut(
-                )->shut(
-                )->open( `Button`
+                    )->end(
+                )->end(
+                )->ele( `Button`
                     )->a( n = `text`  v = `To 4`
                     )->a( n = `press` v = client->_event( val = `NAV` t_arg = VALUE #( ( `p4` ) ) )
 
-                    )->open( `layoutData`
-                        )->leaf( `FlexItemData`
+                    )->ele( `layoutData`
+                        )->tag( `FlexItemData`
                             )->a( n = `growFactor` v = `1`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( `customData`
-                        )->leaf( n = `CustomData` ns = `core`
+                    )->ele( `customData`
+                        )->tag( n = `CustomData` ns = `core`
                             )->a( n = `key`   v = `target`
                             )->a( n = `value` v = `p4`
 
-                    )->shut(
-                )->shut(
-            )->shut(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( `HBox`
-                )->open( `Button`
+            )->ele( `HBox`
+                )->ele( `Button`
                     )->a( n = `text`  v = `Back`
                     )->a( n = `type`  v = `Back`
                     )->a( n = `press` v = client->_event( `NAV_BACK` )
 
-                    )->open( `layoutData`
-                        )->leaf( `FlexItemData`
+                    )->ele( `layoutData`
+                        )->tag( `FlexItemData`
                             )->a( n = `growFactor` v = `1`
 
-                    )->shut(
-                )->shut(
-                )->open( `Select`
+                    )->end(
+                )->end(
+                )->ele( `Select`
                     )->a( n = `id`          v = `animationSelect`
                     )->a( n = `selectedKey` v = client->_bind( animation )
 
-                    )->leaf( n = `Item` ns = `core`
+                    )->tag( n = `Item` ns = `core`
                         )->a( n = `text` v = `Slide animation`
                         )->a( n = `key`  v = `slide`
-                    )->leaf( n = `Item` ns = `core`
+                    )->tag( n = `Item` ns = `core`
                         )->a( n = `text` v = `Base slide animation`
                         )->a( n = `key`  v = `baseSlide`
-                    )->leaf( n = `Item` ns = `core`
+                    )->tag( n = `Item` ns = `core`
                         )->a( n = `text` v = `Fade animation`
                         )->a( n = `key`  v = `fade`
-                    )->leaf( n = `Item` ns = `core`
+                    )->tag( n = `Item` ns = `core`
                         )->a( n = `text` v = `Flip animation`
                         )->a( n = `key`  v = `flip`
-                    )->leaf( n = `Item` ns = `core`
+                    )->tag( n = `Item` ns = `core`
                         )->a( n = `text` v = `Show animation`
                         )->a( n = `key`  v = `show`
 
-                    )->open( `layoutData`
-                        )->leaf( `FlexItemData`
+                    )->ele( `layoutData`
+                        )->tag( `FlexItemData`
                             )->a( n = `growFactor` v = `1`
 
-                    )->shut(
-                )->shut(
-            )->shut(
-        )->shut( ).
+                    )->end(
+                )->end(
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

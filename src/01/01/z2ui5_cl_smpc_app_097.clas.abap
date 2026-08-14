@@ -32,133 +32,133 @@ CLASS z2ui5_cl_smpc_app_097 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`        v = `sap.m`
         )->a( n = `xmlns:mvc`    v = `sap.ui.core.mvc`
         )->a( n = `xmlns:custom` v = `http://schemas.sap.com/sapui5/extension/sap.ui.core.CustomData/1`
 
-        )->open( `SplitApp`
+        )->ele( `SplitApp`
             )->a( n = `id`            v = `SplitAppDemo`
             )->a( n = `mode`          v = client->_bind( mode )
             )->a( n = `initialDetail` v = `detail`
             )->a( n = `initialMaster` v = `master`
 
-            )->open( `detailPages`
-                )->open( `Page`
+            )->ele( `detailPages`
+                )->ele( `Page`
                     )->a( n = `id`               v = `detail`
                     )->a( n = `title`            v = `Detail 1`
                     )->a( n = `backgroundDesign` v = `Solid`
 
-                    )->leaf( `Label`
+                    )->tag( `Label`
                         )->a( n = `text` v = `Detail page 1`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text`  v = `Go to Detail page2`
                         )->a( n = `press` v = client->_event( `NAV_TO_DETAIL` )
 
-                )->shut(
-                )->open( `Page`
+                )->end(
+                )->ele( `Page`
                     )->a( n = `id`               v = `detailDetail`
                     )->a( n = `title`            v = `Detail Detail`
                     )->a( n = `backgroundDesign` v = `Solid`
                     )->a( n = `showNavButton`    v = `true`
                     )->a( n = `navButtonPress`   v = client->_event( `DETAIL_BACK` )
 
-                    )->open( `VBox`
+                    )->ele( `VBox`
                         )->a( n = `class` v = `sapUiSmallMargin`
 
-                        )->leaf( `Label`
+                        )->tag( `Label`
                             )->a( n = `text` v = `This is Detail Page2`
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Here you could change the Split Application mode. After the mode change, resize the browser window to see the difference in the master form behaviour.`
 
-                        )->open( `RadioButtonGroup`
+                        )->ele( `RadioButtonGroup`
                             )->a( n = `columns`       v = `1`
                             )->a( n = `width`         v = `500px`
                             )->a( n = `class`         v = `sapUiMediumMarginBottom`
                             )->a( n = `selectedIndex` v = client->_bind( mode_idx )
                             )->a( n = `select`        v = client->_event( `MODE_BTN` )
 
-                            )->leaf( `RadioButton`
+                            )->tag( `RadioButton`
                                 )->a( n = `id`                  v = `RB1-1`
                                 )->a( n = `text`                v = `show/hide`
                                 )->a( n = `selected`            v = `true`
                                 )->a( n = `custom:splitAppMode` v = `ShowHideMode`
-                            )->leaf( `RadioButton`
+                            )->tag( `RadioButton`
                                 )->a( n = `id`                  v = `RB1-2`
                                 )->a( n = `text`                v = `stretch/compress`
                                 )->a( n = `custom:splitAppMode` v = `StretchCompressMode`
-                            )->leaf( `RadioButton`
+                            )->tag( `RadioButton`
                                 )->a( n = `id`                  v = `RB1-3`
                                 )->a( n = `text`                v = `hide`
                                 )->a( n = `custom:splitAppMode` v = `HideMode`
-                            )->leaf( `RadioButton`
+                            )->tag( `RadioButton`
                                 )->a( n = `id`                  v = `RB1-4`
                                 )->a( n = `text`                v = `popover`
                                 )->a( n = `custom:splitAppMode` v = `PopoverMode`
 
-                    )->shut(
-                    )->shut(
-                )->shut(
-                )->open( `Page`
+                    )->end(
+                    )->end(
+                )->end(
+                )->ele( `Page`
                     )->a( n = `id`               v = `detail2`
                     )->a( n = `title`            v = `Detail 3 Page`
                     )->a( n = `backgroundDesign` v = `Solid`
                     )->a( n = `showNavButton`    v = `true`
                     )->a( n = `navButtonPress`   v = client->_event( `DETAIL_BACK` )
 
-                    )->leaf( `Label`
+                    )->tag( `Label`
                         )->a( n = `text` v = `This is Detail Page3`
-                    )->leaf( `Input`
-                    )->leaf( `Label`
+                    )->tag( `Input`
+                    )->tag( `Label`
                         )->a( n = `text` v = `Label 2`
-                    )->leaf( `Input`
-                    )->leaf( `Label`
+                    )->tag( `Input`
+                    )->tag( `Label`
                         )->a( n = `text` v = `Label 3`
-                    )->leaf( `Input`
-                    )->leaf( `Label`
+                    )->tag( `Input`
+                    )->tag( `Label`
                         )->a( n = `text` v = `Label 4`
-                    )->leaf( `Input`
-                    )->leaf( `Label`
+                    )->tag( `Input`
+                    )->tag( `Label`
                         )->a( n = `text` v = `Label 5`
-                    )->leaf( `Input`
+                    )->tag( `Input`
 
-                )->shut(
-            )->shut(
-            )->open( `masterPages`
-                )->open( `Page`
+                )->end(
+            )->end(
+            )->ele( `masterPages`
+                )->ele( `Page`
                     )->a( n = `id`               v = `master`
                     )->a( n = `title`            v = `Master 1`
                     )->a( n = `backgroundDesign` v = `List`
 
-                    )->open( `List`
-                        )->leaf( `StandardListItem`
+                    )->ele( `List`
+                        )->tag( `StandardListItem`
                             )->a( n = `title` v = `To Master2`
                             )->a( n = `type`  v = `Navigation`
                             )->a( n = `press` v = client->_event( `GO_TO_MASTER` )
 
-                )->shut(
-                )->shut(
-                )->open( `Page`
+                )->end(
+                )->end(
+                )->ele( `Page`
                     )->a( n = `id`               v = `master2`
                     )->a( n = `title`            v = `Master 2`
                     )->a( n = `backgroundDesign` v = `List`
                     )->a( n = `showNavButton`    v = `true`
                     )->a( n = `navButtonPress`   v = client->_event( `MASTER_BACK` )
 
-                    )->open( `List`
-                        )->leaf( `StandardListItem`
+                    )->ele( `List`
+                        )->tag( `StandardListItem`
                             )->a( n = `title`     v = `To Detail 1`
                             )->a( n = `type`      v = `Active`
                             )->a( n = `custom:to` v = `detail`
                             )->a( n = `press`     v = client->_event( val = `NAV_DETAIL` t_arg = VALUE #( ( `detail` ) ) )
-                        )->leaf( `StandardListItem`
+                        )->tag( `StandardListItem`
                             )->a( n = `title`     v = `To Detail 2`
                             )->a( n = `type`      v = `Active`
                             )->a( n = `custom:to` v = `detailDetail`
                             )->a( n = `press`     v = client->_event( val = `NAV_DETAIL` t_arg = VALUE #( ( `detailDetail` ) ) )
-                        )->leaf( `StandardListItem`
+                        )->tag( `StandardListItem`
                             )->a( n = `title`     v = `To Detail 3`
                             )->a( n = `type`      v = `Active`
                             )->a( n = `custom:to` v = `detail2`

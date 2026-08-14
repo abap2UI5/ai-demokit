@@ -26,109 +26,109 @@ CLASS z2ui5_cl_smpc_app_393 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
 
-        )->open( `VBox`
-            )->open( `Panel`
+        )->ele( `VBox`
+            )->ele( `Panel`
                 )->a( n = `headerText` v = `Reverse, horizontal`
 
-                )->open( `FlexBox`
+                )->ele( `FlexBox`
                     )->a( n = `direction`  v = `RowReverse`
                     )->a( n = `alignItems` v = `Start`
 
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text` v = `1`
                         )->a( n = `type` v = `Emphasized`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text` v = `2`
                         )->a( n = `type` v = `Reject`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text` v = `3`
                         )->a( n = `type` v = `Accept`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( `Panel`
+            )->ele( `Panel`
                 )->a( n = `headerText` v = `Top to bottom, vertical`
 
-                )->open( `FlexBox`
+                )->ele( `FlexBox`
                     )->a( n = `direction`  v = `Column`
                     )->a( n = `alignItems` v = `Start`
 
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text` v = `1`
                         )->a( n = `type` v = `Emphasized`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text` v = `2`
                         )->a( n = `type` v = `Reject`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text` v = `3`
                         )->a( n = `type` v = `Accept`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( `Panel`
+            )->ele( `Panel`
                 )->a( n = `headerText` v = `Bottom to top, reverse vertical`
 
-                )->open( `FlexBox`
+                )->ele( `FlexBox`
                     )->a( n = `direction`  v = `ColumnReverse`
                     )->a( n = `alignItems` v = `Start`
 
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text` v = `1`
                         )->a( n = `type` v = `Emphasized`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text` v = `2`
                         )->a( n = `type` v = `Reject`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text` v = `3`
                         )->a( n = `type` v = `Accept`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( `Panel`
+            )->ele( `Panel`
                 )->a( n = `headerText` v = `Arbitrary flex item order`
 
-                )->open( `FlexBox`
+                )->ele( `FlexBox`
                     )->a( n = `alignItems` v = `Start`
 
-                    )->open( `Button`
+                    )->ele( `Button`
                         )->a( n = `text`  v = `1`
                         )->a( n = `type`  v = `Emphasized`
                         )->a( n = `class` v = `sapUiTinyMarginEnd`
 
-                        )->open( `layoutData`
-                            )->leaf( `FlexItemData`
+                        )->ele( `layoutData`
+                            )->tag( `FlexItemData`
                                 )->a( n = `order` v = `2`
 
-                        )->shut(
-                    )->shut(
-                    )->open( `Button`
+                        )->end(
+                    )->end(
+                    )->ele( `Button`
                         )->a( n = `text`  v = `2`
                         )->a( n = `type`  v = `Reject`
                         )->a( n = `class` v = `sapUiTinyMarginEnd`
 
-                        )->open( `layoutData`
-                            )->leaf( `FlexItemData`
+                        )->ele( `layoutData`
+                            )->tag( `FlexItemData`
                                 )->a( n = `order` v = `3`
 
-                        )->shut(
-                    )->shut(
-                    )->open( `Button`
+                        )->end(
+                    )->end(
+                    )->ele( `Button`
                         )->a( n = `text`  v = `3`
                         )->a( n = `type`  v = `Accept`
                         )->a( n = `class` v = `sapUiTinyMarginEnd`
 
-                        )->open( `layoutData`
-                            )->leaf( `FlexItemData`
+                        )->ele( `layoutData`
+                            )->tag( `FlexItemData`
                                 )->a( n = `order` v = `1` ).
 
     client->view_display( view->stringify( ) ).

@@ -50,9 +50,9 @@ CLASS z2ui5_cl_smpc_app_018 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc`    v = `sap.ui.core.mvc`
         )->a( n = `xmlns:layout` v = `sap.ui.layout`
         )->a( n = `xmlns:form`   v = `sap.ui.layout.form`
@@ -60,27 +60,27 @@ CLASS z2ui5_cl_smpc_app_018 IMPLEMENTATION.
         )->a( n = `xmlns:core`   v = `sap.ui.core`
         )->a( n = `core:require` v = `{Formatter: 'z2ui5/model/formatter'}`
 
-        )->open( `Panel`
+        )->ele( `Panel`
             )->a( n = `id`         v = `dateTimePanel`
             )->a( n = `headerText` v = `When DateTimePicker change events are fired the selected date and time is displayed in the Text control`
             )->a( n = `width`      v = `auto`
 
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `text`     v = `Simple DateTimePicker`
                 )->a( n = `labelFor` v = `DTP1`
             " valueState bound on every change-firing picker - the original handleChange sets it from the event's valid flag
-            )->leaf( `DateTimePicker`
+            )->tag( `DateTimePicker`
                 )->a( n = `id`          v = `DTP1`
                 )->a( n = `placeholder` v = `Enter Date`
                 )->a( n = `valueState`  v = client->_bind( vs_dtp1 )
                 )->a( n = `change`      v = client->_event( val   = `CHANGE`
                                                             t_arg = VALUE #( ( `$event.oSource.sId` ) ( `${$parameters>/value}` ) ( `${$parameters>/valid}` ) ) )
                 )->a( n = `class`       v = `sapUiSmallMarginBottom`
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `text`     v = `With initialFocusedDateValue UI5Date.getInstance(2017, 5, 13, 11, 12, 13)`
                 )->a( n = `labelFor` v = `DTP6`
             " the controller's setInitialFocusedDateValue, bound via the framework's Formatter.DateCreateObject module formatter
-            )->leaf( `DateTimePicker`
+            )->tag( `DateTimePicker`
                 )->a( n = `id`                      v = `DTP6`
                 )->a( n = `placeholder`             v = `Enter Date`
                 )->a( n = `initialFocusedDateValue` v = |\{ path: '{ client->_bind( val = init_focus_dtp6 path = abap_true ) }', formatter: 'Formatter.DateCreateObject' \}|
@@ -88,11 +88,11 @@ CLASS z2ui5_cl_smpc_app_018 IMPLEMENTATION.
                 )->a( n = `change`                  v = client->_event( val   = `CHANGE`
                                                                         t_arg = VALUE #( ( `$event.oSource.sId` ) ( `${$parameters>/value}` ) ( `${$parameters>/valid}` ) ) )
                 )->a( n = `class`                   v = `sapUiSmallMarginBottom`
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `text`     v = `DateTimePicker with given Value, Formatter, and with shortcuts for current date and current time`
                 )->a( n = `labelFor` v = `DTP2`
             " every DateTime type binding gets a source pattern - the ABAP model carries date strings, not JS Date objects
-            )->leaf( `DateTimePicker`
+            )->tag( `DateTimePicker`
                 )->a( n = `id`                    v = `DTP2`
                 )->a( n = `showCurrentDateButton` v = `true`
                 )->a( n = `showCurrentTimeButton` v = `true`
@@ -102,10 +102,10 @@ CLASS z2ui5_cl_smpc_app_018 IMPLEMENTATION.
                 )->a( n = `change`                v = client->_event( val   = `CHANGE`
                                                                       t_arg = VALUE #( ( `$event.oSource.sId` ) ( `${$parameters>/value}` ) ( `${$parameters>/valid}` ) ) )
                 )->a( n = `class`                 v = `sapUiSmallMarginBottom`
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `text`     v = `DateTimePicker with given Value and Formatter`
                 )->a( n = `labelFor` v = `DTP3`
-            )->leaf( `DateTimePicker`
+            )->tag( `DateTimePicker`
                 )->a( n = `id`         v = `DTP3`
                 )->a( n = `value`
                          v = |\{ 'path': '{ client->_bind( val = value_dtp3 path = abap_true ) }', 'type': 'sap.ui.model.type.DateTime', 'formatOptions': \{ 'pattern': 'M/d/yy h:mm a', 'source': \{ 'pattern': 'yyyy-MM-dd HH:mm:ss' \} \} \}|
@@ -113,10 +113,10 @@ CLASS z2ui5_cl_smpc_app_018 IMPLEMENTATION.
                 )->a( n = `change`     v = client->_event( val   = `CHANGE`
                                                            t_arg = VALUE #( ( `$event.oSource.sId` ) ( `${$parameters>/value}` ) ( `${$parameters>/valid}` ) ) )
                 )->a( n = `class`      v = `sapUiSmallMarginBottom`
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `text`     v = `DateTimePicker with Islamic date and secondary Gregorian date in calendar`
                 )->a( n = `labelFor` v = `DTP4`
-            )->leaf( `DateTimePicker`
+            )->tag( `DateTimePicker`
                 )->a( n = `id`                    v = `DTP4`
                 )->a( n = `value`
                          v = |\{ 'path': '{ client->_bind( val = value_dtp4 path = abap_true ) }', 'type': 'sap.ui.model.type.DateTime',| &&
@@ -126,10 +126,10 @@ CLASS z2ui5_cl_smpc_app_018 IMPLEMENTATION.
                 )->a( n = `change`                v = client->_event( val   = `CHANGE`
                                                                       t_arg = VALUE #( ( `$event.oSource.sId` ) ( `${$parameters>/value}` ) ( `${$parameters>/valid}` ) ) )
                 )->a( n = `class`                 v = `sapUiSmallMarginBottom`
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `text`     v = `DateTimePicker with steps for minutes and seconds sliders`
                 )->a( n = `labelFor` v = `DTP7`
-            )->leaf( `DateTimePicker`
+            )->tag( `DateTimePicker`
                 )->a( n = `id`          v = `DTP7`
                 )->a( n = `valueFormat` v = `yyyy-MM-dd-HH-mm-ss`
                 )->a( n = `minutesStep` v = `3`
@@ -139,39 +139,39 @@ CLASS z2ui5_cl_smpc_app_018 IMPLEMENTATION.
                                                             t_arg = VALUE #( ( `$event.oSource.sId` ) ( `${$parameters>/value}` ) ( `${$parameters>/valid}` ) ) )
                 )->a( n = `class`       v = `sapUiSmallMarginBottom`
             " the original handleChange writes the change event result into this text
-            )->leaf( `Text`
+            )->tag( `Text`
                 )->a( n = `id`    v = `textResult`
                 )->a( n = `text`  v = client->_bind( text_result )
                 )->a( n = `class` v = `sapUiSmallMargin`
 
-            )->shut(
-        )->open( `Panel`
+            )->end(
+        )->ele( `Panel`
             )->a( n = `id`         v = `dataBindingDateTimePanel`
             )->a( n = `headerText` v = `DateTimePicker using data binding`
             )->a( n = `width`      v = `auto`
 
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `text`     v = `DateTimePicker using DataBinding`
                 )->a( n = `labelFor` v = `DTP5`
-            )->leaf( `DateTimePicker`
+            )->tag( `DateTimePicker`
                 )->a( n = `id`    v = `DTP5`
                 )->a( n = `value`
                          v = |\{ path: '{ client->_bind( val = value_dtp5 path = abap_true ) }', type: 'sap.ui.model.type.DateTime', formatOptions: \{ style: 'medium', strictParsing: true, source: \{ pattern: 'yyyy-MM-dd HH:mm:ss' \} \} \}|
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `text`     v = `DateTimePicker using DataBinding with value and timezone`
                 )->a( n = `labelFor` v = `DTP10`
             " the DateTimeOffset parts carry constraints V4 true - the flat ABAP model ships ISO strings, not JS Date objects
-            )->leaf( `DateTimePicker`
+            )->tag( `DateTimePicker`
                 )->a( n = `id`    v = `DTP10`
                 )->a( n = `value`
                          v = |\{ parts: [ \{ path: '{ client->_bind( val = value_dtp10 path = abap_true ) }', type: 'sap.ui.model.odata.type.DateTimeOffset', constraints: \{ V4: true \} \},| &&
                              | \{ path: '{ client->_bind( val = timezone_dtp10 path = abap_true ) }', type: 'sap.ui.model.odata.type.String' \} ], type: 'sap.ui.model.odata.type.DateTimeWithTimezone' \}|
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `text`     v = `DateTimePicker using DataBinding with null value and timezone`
                 )->a( n = `labelFor` v = `DTP11`
-            )->leaf( `DateTimePicker`
+            )->tag( `DateTimePicker`
                 )->a( n = `id`                    v = `DTP11`
                 )->a( n = `showTimezone`          v = `true`
                 )->a( n = `showCurrentTimeButton` v = `true`
@@ -180,8 +180,8 @@ CLASS z2ui5_cl_smpc_app_018 IMPLEMENTATION.
                              | \{ path: '{ client->_bind( val = timezone_dtp11 path = abap_true ) }', type: 'sap.ui.model.odata.type.String' \} ], type: 'sap.ui.model.odata.type.DateTimeWithTimezone' \}|
                 )->a( n = `class`                 v = `sapUiSmallMarginBottom`
 
-            )->shut(
-        )->open( n = `SimpleForm` ns = `form`
+            )->end(
+        )->ele( n = `SimpleForm` ns = `form`
             )->a( n = `id`         v = `simpleForm`
             )->a( n = `columnsL`   v = `1`
             )->a( n = `columnsM`   v = `1`
@@ -190,13 +190,13 @@ CLASS z2ui5_cl_smpc_app_018 IMPLEMENTATION.
             )->a( n = `labelSpanM` v = `12`
             )->a( n = `layout`     v = `ResponsiveGridLayout`
 
-            )->leaf( `Title`
+            )->tag( `Title`
                 )->a( n = `text`       v = `Using a timezone`
                 )->a( n = `titleStyle` v = `H4`
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `text`     v = `Showing the timezone label`
                 )->a( n = `labelFor` v = `DTP8`
-            )->leaf( `DateTimePicker`
+            )->tag( `DateTimePicker`
                 )->a( n = `id`           v = `DTP8`
                 )->a( n = `value`
                          v = |\{ path: '{ client->_bind( val = value_dtp8 path = abap_true ) }', type: 'sap.ui.model.type.DateTime', formatOptions: \{ 'style': 'medium', source: \{ pattern: 'yyyy-MM-dd HH:mm:ss' \} \} \}|

@@ -34,18 +34,18 @@ CLASS z2ui5_cl_smpc_app_136 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:f`    v = `sap.f`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `height`     v = `100%`
 
-        )->open( `Page`
-            )->open( `content`
-                )->open( n = `SidePanel` ns = `f`
+        )->ele( `Page`
+            )->ele( `content`
+                )->ele( n = `SidePanel` ns = `f`
                     )->a( n = `id`     v = `mySidePanel`
                     " onToggle vetoes the NEXT toggle when the matching switch is on
                     " (preventDefault) and resets that switch. The framework's veto flag
@@ -60,84 +60,84 @@ CLASS z2ui5_cl_smpc_app_136 IMPLEMENTATION.
                                                                      THEN prevent_collapse
                                                                      ELSE prevent_expand ) ) )
 
-                    )->open( n = `mainContent` ns = `f`
-                        )->leaf( `Button`
+                    )->ele( n = `mainContent` ns = `f`
+                        )->tag( `Button`
                             )->a( n = `text` v = `Button 1`
-                        )->leaf( `Button`
+                        )->tag( `Button`
                             )->a( n = `text` v = `Button 2`
-                        )->open( `VBox`
+                        )->ele( `VBox`
                             )->a( n = `class` v = `sapUiSmallMarginTopBottom`
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text` v = `Prevent next toggle (expand) event`
-                            )->leaf( `Switch`
+                            )->tag( `Switch`
                                 )->a( n = `id`    v = `preventExpand`
                                 )->a( n = `state` v = client->_bind( prevent_expand )
                                 )->a( n = `type`  v = `AcceptReject`
                                 )->a( n = `class` v = `sapUiSmallMarginBottom`
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text` v = `Prevent next toggle (collapse) event`
-                            )->leaf( `Switch`
+                            )->tag( `Switch`
                                 )->a( n = `id`    v = `preventCollapse`
                                 )->a( n = `state` v = client->_bind( prevent_collapse )
                                 )->a( n = `type`  v = `AcceptReject`
                                 )->a( n = `class` v = `sapUiSmallMarginBottom`
 
-                        )->shut(
-                        )->leaf( `Text`
+                        )->end(
+                        )->tag( `Text`
                             )->a( n = `text` v = `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ` &&
                                                  `ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint ` &&
                                                  `occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum`
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ` &&
                                                  `ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint ` &&
                                                  `occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum`
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ` &&
                                                  `ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint ` &&
                                                  `occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum`
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ` &&
                                                  `ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint ` &&
                                                  `occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum`
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ` &&
                                                  `ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint ` &&
                                                  `occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum`
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ` &&
                                                  `ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint ` &&
                                                  `occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum`
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ` &&
                                                  `ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint ` &&
                                                  `occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum`
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ` &&
                                                  `ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint ` &&
                                                  `occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum`
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ` &&
                                                  `ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint ` &&
                                                  `occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum`
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ` &&
                                                  `ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint ` &&
                                                  `occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( n = `items` ns = `f`
-                        )->open( n = `SidePanelItem` ns = `f`
+                    )->ele( n = `items` ns = `f`
+                        )->ele( n = `SidePanelItem` ns = `f`
                             )->a( n = `icon` v = `sap-icon://building`
                             )->a( n = `text` v = `Go to office`
-                            )->open( `VBox`
-                                )->leaf( `Text`
+                            )->ele( `VBox`
+                                )->tag( `Text`
                                     )->a( n = `text`  v = `Static Content`
                                     )->a( n = `class` v = `sapUiSmallMarginBottom`
-                                )->leaf( `Text`
+                                )->tag( `Text`
                                     )->a( n = `text` v = `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.`
-                                )->leaf( `Switch`
-                                )->leaf( `Button`
+                                )->tag( `Switch`
+                                )->tag( `Button`
                                     )->a( n = `text` v = `Press me` ).
 
     client->view_display( view->stringify( ) ).

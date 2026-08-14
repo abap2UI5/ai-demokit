@@ -45,13 +45,13 @@ CLASS z2ui5_cl_smpc_app_245 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " sap.uxap ObjectPageLayout demonstrating ObjectPageSubSection.showTitle=false
     " (the promoted, hidden-title subsection hosting the Products table). Two
     " SimpleForm subsections precede it. The ObjectNumber weight state is computed
     " in ABAP (thin frontend) instead of the original frontend .weightState.
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc`   v = `sap.ui.core.mvc`
         )->a( n = `xmlns:core`  v = `sap.ui.core`
         )->a( n = `xmlns:forms` v = `sap.ui.layout.form`
@@ -59,209 +59,209 @@ CLASS z2ui5_cl_smpc_app_245 IMPLEMENTATION.
         )->a( n = `xmlns`       v = `sap.m`
         )->a( n = `height`      v = `100%`
 
-        )->open( n = `ObjectPageLayout` ns = `uxap`
+        )->ele( n = `ObjectPageLayout` ns = `uxap`
             )->a( n = `id`               v = `ObjectPageLayout`
             )->a( n = `upperCaseAnchorBar` v = `false`
 
-            )->open( n = `headerTitle` ns = `uxap`
-                )->leaf( n = `ObjectPageHeader` ns = `uxap`
+            )->ele( n = `headerTitle` ns = `uxap`
+                )->tag( n = `ObjectPageHeader` ns = `uxap`
                     )->a( n = `objectTitle`    v = `ObjectPageSubSection with hidden title`
                     )->a( n = `objectSubtitle` v = `This example demonstrates the showTitle property set to false.`
 
-            )->shut(
+            )->end(
 
-            )->open( n = `sections` ns = `uxap`
-                )->open( n = `ObjectPageSection` ns = `uxap`
+            )->ele( n = `sections` ns = `uxap`
+                )->ele( n = `ObjectPageSection` ns = `uxap`
                     )->a( n = `titleUppercase` v = `false`
                     )->a( n = `title`          v = `Sample Forms`
 
-                    )->open( n = `subSections` ns = `uxap`
-                        )->open( n = `ObjectPageSubSection` ns = `uxap`
+                    )->ele( n = `subSections` ns = `uxap`
+                        )->ele( n = `ObjectPageSubSection` ns = `uxap`
                             )->a( n = `title`          v = `First Sample Form`
                             )->a( n = `titleUppercase` v = `false`
 
-                            )->open( n = `blocks` ns = `uxap`
-                                )->open( n = `SimpleForm` ns = `forms`
+                            )->ele( n = `blocks` ns = `uxap`
+                                )->ele( n = `SimpleForm` ns = `forms`
                                     )->a( n = `title`    v = `Location`
                                     )->a( n = `editable` v = `false`
                                     )->a( n = `layout`   v = `ColumnLayout`
 
-                                    )->leaf( `Label`
+                                    )->tag( `Label`
                                         )->a( n = `text` v = `Country`
-                                    )->leaf( `Text`
+                                    )->tag( `Text`
                                         )->a( n = `text` v = `France`
-                                    )->leaf( `Label`
+                                    )->tag( `Label`
                                         )->a( n = `text` v = `Subsidiary`
-                                    )->leaf( `Text`
+                                    )->tag( `Text`
                                         )->a( n = `text` v = `SAP France`
 
-                            )->shut(
-                            )->shut(
-                        )->shut(
+                            )->end(
+                            )->end(
+                        )->end(
 
-                        )->open( n = `ObjectPageSubSection` ns = `uxap`
+                        )->ele( n = `ObjectPageSubSection` ns = `uxap`
                             )->a( n = `title`          v = `Second Sample Form`
                             )->a( n = `titleUppercase` v = `false`
 
-                            )->open( n = `blocks` ns = `uxap`
-                                )->open( n = `SimpleForm` ns = `forms`
+                            )->ele( n = `blocks` ns = `uxap`
+                                )->ele( n = `SimpleForm` ns = `forms`
                                     )->a( n = `title`    v = `Location`
                                     )->a( n = `editable` v = `false`
                                     )->a( n = `layout`   v = `ColumnLayout`
 
-                                    )->leaf( `Label`
+                                    )->tag( `Label`
                                         )->a( n = `text` v = `Country`
-                                    )->leaf( `Text`
+                                    )->tag( `Text`
                                         )->a( n = `text` v = `France`
-                                    )->leaf( `Label`
+                                    )->tag( `Label`
                                         )->a( n = `text` v = `Subsidiary`
-                                    )->leaf( `Text`
+                                    )->tag( `Text`
                                         )->a( n = `text` v = `SAP France`
-                                    )->leaf( `Label`
+                                    )->tag( `Label`
                                         )->a( n = `text` v = `Building`
-                                    )->leaf( `Text`
+                                    )->tag( `Text`
                                         )->a( n = `text` v = `LVL B`
-                                    )->leaf( `Label`
+                                    )->tag( `Label`
                                         )->a( n = `text` v = `Room`
-                                    )->leaf( `Text`
+                                    )->tag( `Text`
                                         )->a( n = `text` v = `AppHaus`
 
-                            )->shut(
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                )->shut(
+                            )->end(
+                            )->end(
+                        )->end(
+                    )->end(
+                )->end(
 
-                )->open( n = `ObjectPageSection` ns = `uxap`
+                )->ele( n = `ObjectPageSection` ns = `uxap`
                     )->a( n = `titleUppercase` v = `false`
                     )->a( n = `showTitle`      v = `false`
 
-                    )->open( n = `subSections` ns = `uxap`
-                        )->open( n = `ObjectPageSubSection` ns = `uxap`
+                    )->ele( n = `subSections` ns = `uxap`
+                        )->ele( n = `ObjectPageSubSection` ns = `uxap`
                             )->a( n = `title`          v = `Promoted SubSection with Hidden Title`
                             )->a( n = `titleUppercase` v = `false`
 
-                            )->open( `Table`
+                            )->ele( `Table`
                                 )->a( n = `headerText` v = `Products`
                                 )->a( n = `items`      v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'SUPPLIERNAME', descending: false \} \}|
 
-                                )->open( `headerToolbar`
-                                    )->open( `OverflowToolbar`
-                                        )->open( `content`
-                                            )->leaf( `Title`
+                                )->ele( `headerToolbar`
+                                    )->ele( `OverflowToolbar`
+                                        )->ele( `content`
+                                            )->tag( `Title`
                                                 )->a( n = `text`  v = `Products`
                                                 )->a( n = `level` v = `H2`
-                                            )->leaf( `ToolbarSpacer`
-                                            )->open( `ComboBox`
+                                            )->tag( `ToolbarSpacer`
+                                            )->ele( `ComboBox`
                                                 )->a( n = `id`          v = `idPopinLayout`
                                                 )->a( n = `placeholder` v = `Popin layout options`
-                                                )->open( `items`
-                                                    )->leaf( n = `Item` ns = `core`
+                                                )->ele( `items`
+                                                    )->tag( n = `Item` ns = `core`
                                                         )->a( n = `text` v = `Block`
                                                         )->a( n = `key`  v = `Block`
-                                                    )->leaf( n = `Item` ns = `core`
+                                                    )->tag( n = `Item` ns = `core`
                                                         )->a( n = `text` v = `Grid Large`
                                                         )->a( n = `key`  v = `GridLarge`
-                                                    )->leaf( n = `Item` ns = `core`
+                                                    )->tag( n = `Item` ns = `core`
                                                         )->a( n = `text` v = `Grid Small`
                                                         )->a( n = `key`  v = `GridSmall`
 
-                                            )->shut(
-                                            )->shut(
-                                            )->leaf( `Label`
+                                            )->end(
+                                            )->end(
+                                            )->tag( `Label`
                                                 )->a( n = `text` v = `Sticky options:`
-                                            )->leaf( `CheckBox`
+                                            )->tag( `CheckBox`
                                                 )->a( n = `text` v = `ColumnHeaders`
-                                            )->leaf( `CheckBox`
+                                            )->tag( `CheckBox`
                                                 )->a( n = `text` v = `HeaderToolbar`
-                                            )->leaf( `CheckBox`
+                                            )->tag( `CheckBox`
                                                 )->a( n = `text` v = `InfoToolbar`
-                                            )->leaf( `ToggleButton`
+                                            )->tag( `ToggleButton`
                                                 )->a( n = `id`   v = `toggleInfoToolbar`
                                                 )->a( n = `text` v = `Hide/Show InfoToolbar`
 
-                                )->shut(
-                                )->shut(
-                                )->shut(
+                                )->end(
+                                )->end(
+                                )->end(
 
-                                )->open( `infoToolbar`
-                                    )->open( `OverflowToolbar`
-                                        )->leaf( `Label`
+                                )->ele( `infoToolbar`
+                                    )->ele( `OverflowToolbar`
+                                        )->tag( `Label`
                                             )->a( n = `text` v = `Wide range of available products`
 
-                                )->shut(
-                                )->shut(
+                                )->end(
+                                )->end(
 
-                                )->open( `columns`
-                                    )->open( `Column`
+                                )->ele( `columns`
+                                    )->ele( `Column`
                                         )->a( n = `mergeDuplicates` v = `true`
-                                        )->open( `header`
-                                            )->leaf( `Text`
+                                        )->ele( `header`
+                                            )->tag( `Text`
                                                 )->a( n = `text` v = `Supplier`
 
-                                    )->shut(
-                                    )->shut(
-                                    )->open( `Column`
+                                    )->end(
+                                    )->end(
+                                    )->ele( `Column`
                                         )->a( n = `mergeDuplicates` v = `true`
-                                        )->open( `header`
-                                            )->leaf( `Text`
+                                        )->ele( `header`
+                                            )->tag( `Text`
                                                 )->a( n = `text` v = `Product`
 
-                                    )->shut(
-                                    )->shut(
-                                    )->open( `Column`
+                                    )->end(
+                                    )->end(
+                                    )->ele( `Column`
                                         )->a( n = `minScreenWidth` v = `Tablet`
                                         )->a( n = `demandPopin`    v = `true`
                                         )->a( n = `hAlign`         v = `End`
-                                        )->open( `header`
-                                            )->leaf( `Text`
+                                        )->ele( `header`
+                                            )->tag( `Text`
                                                 )->a( n = `text` v = `Dimensions`
 
-                                    )->shut(
-                                    )->shut(
-                                    )->open( `Column`
+                                    )->end(
+                                    )->end(
+                                    )->ele( `Column`
                                         )->a( n = `minScreenWidth` v = `Tablet`
                                         )->a( n = `demandPopin`    v = `true`
                                         )->a( n = `hAlign`         v = `Center`
-                                        )->open( `header`
-                                            )->leaf( `Text`
+                                        )->ele( `header`
+                                            )->tag( `Text`
                                                 )->a( n = `text` v = `Weight`
 
-                                    )->shut(
-                                    )->shut(
-                                    )->open( `Column`
+                                    )->end(
+                                    )->end(
+                                    )->ele( `Column`
                                         )->a( n = `hAlign` v = `End`
-                                        )->open( `header`
-                                            )->leaf( `Text`
+                                        )->ele( `header`
+                                            )->tag( `Text`
                                                 )->a( n = `text` v = `Price`
 
-                                )->shut(
-                                )->shut(
-                                )->shut(
+                                )->end(
+                                )->end(
+                                )->end(
 
-                                )->open( `ColumnListItem`
-                                    )->leaf( `Text`
+                                )->ele( `ColumnListItem`
+                                    )->tag( `Text`
                                         )->a( n = `text` v = `{SUPPLIERNAME}`
-                                    )->leaf( `ObjectIdentifier`
+                                    )->tag( `ObjectIdentifier`
                                         )->a( n = `title` v = `{NAME}`
                                         )->a( n = `text`  v = `{PRODUCTID}`
-                                    )->leaf( `Text`
+                                    )->tag( `Text`
                                         )->a( n = `text` v = `{WIDTH} x {DEPTH} x {HEIGHT} {DIMUNIT}`
-                                    )->leaf( `ObjectNumber`
+                                    )->tag( `ObjectNumber`
                                         )->a( n = `number` v = `{WEIGHTMEASURE}`
                                         )->a( n = `unit`   v = `{WEIGHTUNIT}`
                                         )->a( n = `state`  v = `{WEIGHTSTATE}`
-                                    )->leaf( `ObjectNumber`
+                                    )->tag( `ObjectNumber`
                                         )->a( n = `number` v = |\{ parts:[\{path:'PRICE'\},\{path:'CURRENCYCODE'\}], type: 'sap.ui.model.type.Currency', formatOptions: \{showMeasure: false\} \}|
                                         )->a( n = `unit`   v = `{CURRENCYCODE}`
 
-                            )->shut(
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
-        )->shut( ).
+                            )->end(
+                            )->end(
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

@@ -49,23 +49,23 @@ CLASS z2ui5_cl_smpc_app_285 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
 
-        )->open( n = `HorizontalLayout` ns = `l`
+        )->ele( n = `HorizontalLayout` ns = `l`
             )->a( n = `class` v = `sapUiMediumMargin`
 
-            )->leaf( `Button`
+            )->tag( `Button`
                 )->a( n = `text`         v = `Show Popover With Image`
                 )->a( n = `press`        v = client->_event( val = `POPOVER_IMAGE` t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
                 )->a( n = `class`        v = `sapUiLargeMargin`
                 )->a( n = `ariaHasPopup` v = `Dialog`
 
-            )->open( `VBox`
+            )->ele( `VBox`
                 )->a( n = `id`               v = `withinArea`
                 )->a( n = `backgroundDesign` v = `Solid`
                 )->a( n = `height`           v = `30rem`
@@ -73,25 +73,25 @@ CLASS z2ui5_cl_smpc_app_285 IMPLEMENTATION.
                 )->a( n = `alignItems`       v = `Center`
                 )->a( n = `justifyContent`   v = `Center`
 
-                )->leaf( `Button`
+                )->tag( `Button`
                     )->a( n = `text`         v = `Show Inside Popover`
                     )->a( n = `press`        v = client->_event( val = `POPOVER_INNER` t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
                     )->a( n = `ariaHasPopup` v = `Dialog`
 
-                )->open( `layoutData`
-                    )->leaf( `FlexItemData`
+                )->ele( `layoutData`
+                    )->tag( `FlexItemData`
                         )->a( n = `backgroundDesign` v = `Solid`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( `FlexBox`
+            )->ele( `FlexBox`
                 )->a( n = `direction`      v = `Column`
                 )->a( n = `alignItems`     v = `End`
                 )->a( n = `justifyContent` v = `End`
                 )->a( n = `height`         v = `30rem`
 
-                )->leaf( `Button`
+                )->tag( `Button`
                     )->a( n = `text`         v = `Show Popover with List`
                     )->a( n = `press`        v = client->_event( val = `POPOVER_LIST` t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
                     )->a( n = `ariaHasPopup` v = `Dialog`
@@ -130,22 +130,22 @@ CLASS z2ui5_cl_smpc_app_285 IMPLEMENTATION.
 
   METHOD popover_image_display.
 
-    DATA(popover) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(popover) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the fragment's relative {Name}/{ProductPicUrl} come from the popover's
     " bindElement( '/ProductCollection/0' ); that record is seeded at the model
     " root here, so both bind absolutely
-    popover->open( n = `FragmentDefinition` ns = `core`
+    popover->ele( n = `FragmentDefinition` ns = `core`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:core` v = `sap.ui.core`
 
-        )->open( `Popover`
+        )->ele( `Popover`
             )->a( n = `id`            v = `myPopover`
             )->a( n = `title`         v = client->_bind( name )
             )->a( n = `contentHeight` v = `20em`
             )->a( n = `placement`     v = `Right`
 
-            )->leaf( `Image`
+            )->tag( `Image`
                 )->a( n = `src`          v = client->_bind( productpicurl )
                 )->a( n = `width`        v = `18em`
                 )->a( n = `densityAware` v = `false` ).
@@ -158,23 +158,23 @@ CLASS z2ui5_cl_smpc_app_285 IMPLEMENTATION.
 
   METHOD popover_list_display.
 
-    DATA(popover) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(popover) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    popover->open( n = `FragmentDefinition` ns = `core`
+    popover->ele( n = `FragmentDefinition` ns = `core`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:core` v = `sap.ui.core`
 
-        )->open( `Popover`
+        )->ele( `Popover`
             )->a( n = `id`        v = `myListPopover`
             )->a( n = `title`     v = `Products`
             )->a( n = `placement` v = `Left`
 
-            )->open( `List`
+            )->ele( `List`
                 )->a( n = `id`    v = `list`
                 )->a( n = `items` v = client->_bind( t_products )
 
-                )->open( `items`
-                    )->leaf( `StandardListItem`
+                )->ele( `items`
+                    )->tag( `StandardListItem`
                         )->a( n = `title`            v = `{NAME}`
                         )->a( n = `description`      v = `{PRODUCTID}`
                         )->a( n = `type`             v = `Active`
@@ -190,22 +190,22 @@ CLASS z2ui5_cl_smpc_app_285 IMPLEMENTATION.
 
   METHOD popover_inner_display.
 
-    DATA(popover) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(popover) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    popover->open( n = `FragmentDefinition` ns = `core`
+    popover->ele( n = `FragmentDefinition` ns = `core`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:core` v = `sap.ui.core`
 
-        )->open( `Popover`
+        )->ele( `Popover`
             )->a( n = `id`        v = `myInnerPopover`
             )->a( n = `placement` v = `Left`
 
-            )->open( `List`
+            )->ele( `List`
                 )->a( n = `id`    v = `inner-List`
                 )->a( n = `items` v = client->_bind( t_products )
 
-                )->open( `items`
-                    )->leaf( `StandardListItem`
+                )->ele( `items`
+                    )->tag( `StandardListItem`
                         )->a( n = `title`            v = `{NAME}`
                         )->a( n = `description`      v = `{PRODUCTID}`
                         )->a( n = `type`             v = `Active`

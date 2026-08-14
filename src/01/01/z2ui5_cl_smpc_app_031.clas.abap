@@ -33,52 +33,52 @@ CLASS z2ui5_cl_smpc_app_031 IMPLEMENTATION.
     " the original's device-dependent image size (5em phone / 10em otherwise), expressed over the framework's device> model
     DATA(size) = `{= ${device>/system/phone} ? '5em' : '10em' }`.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:l`    v = `sap.ui.layout`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns:core` v = `sap.ui.core`
 
         " the sample's styles.css, injected via a core:HTML content attribute (see CAPABILITIES.md)
-        )->leaf( n = `HTML` ns = `core`
+        )->tag( n = `HTML` ns = `core`
             " literal braces escaped \{ \} - the XMLView binding parser reads unescaped braces as a binding
             )->a( n = `content` v = `<style>.imageContainer\{background-color:#A9EAFF\}</style>`
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
             )->a( n = `width` v = `100%`
 
-            )->open( n = `content` ns = `l`
-                )->open( n = `Grid` ns = `l`
+            )->ele( n = `content` ns = `l`
+                )->ele( n = `Grid` ns = `l`
                     )->a( n = `defaultSpan` v = `XL3 L3 M6 S12`
 
-                    )->open( n = `content` ns = `l`
-                        )->open( `VBox`
+                    )->ele( n = `content` ns = `l`
+                        )->ele( `VBox`
                             )->a( n = `alignItems` v = `Center`
 
-                            )->open( `Image`
+                            )->ele( `Image`
                                 )->a( n = `src`    v = pic1
                                 )->a( n = `mode`   v = `Background`
                                 )->a( n = `height` v = size
                                 )->a( n = `width`  v = size
 
-                                )->open( `layoutData`
-                                    )->leaf( `FlexItemData`
+                                )->ele( `layoutData`
+                                    )->tag( `FlexItemData`
                                         )->a( n = `growFactor` v = `1`
 
-                                )->shut(
-                            )->shut(
-                            )->leaf( `Text`
+                                )->end(
+                            )->end(
+                            )->tag( `Text`
                                 )->a( n = `text`  v = `Background covers the entire container`
                                 )->a( n = `class` v = `sapUiSmallMarginTop`
 
-                        )->shut(
-                        )->open( `VBox`
+                        )->end(
+                        )->ele( `VBox`
                             )->a( n = `alignItems` v = `Center`
 
-                            )->open( `Image`
+                            )->ele( `Image`
                                 )->a( n = `src`                v = pic1
                                 )->a( n = `mode`               v = `Background`
                                 )->a( n = `height`             v = size
@@ -86,21 +86,21 @@ CLASS z2ui5_cl_smpc_app_031 IMPLEMENTATION.
                                 )->a( n = `backgroundPosition` v = `center`
                                 )->a( n = `width`              v = size
 
-                                )->open( `layoutData`
-                                    )->leaf( `FlexItemData`
+                                )->ele( `layoutData`
+                                    )->tag( `FlexItemData`
                                         )->a( n = `growFactor` v = `1`
 
-                                )->shut(
-                            )->shut(
-                            )->leaf( `Text`
+                                )->end(
+                            )->end(
+                            )->tag( `Text`
                                 )->a( n = `text`  v = `Center placed background`
                                 )->a( n = `class` v = `sapUiSmallMarginTop`
 
-                        )->shut(
-                        )->open( `VBox`
+                        )->end(
+                        )->ele( `VBox`
                             )->a( n = `alignItems` v = `Center`
 
-                            )->open( `Image`
+                            )->ele( `Image`
                                 )->a( n = `src`              v = pic1
                                 )->a( n = `mode`             v = `Background`
                                 )->a( n = `height`           v = size
@@ -108,24 +108,24 @@ CLASS z2ui5_cl_smpc_app_031 IMPLEMENTATION.
                                 )->a( n = `backgroundRepeat` v = `repeat`
                                 )->a( n = `width`            v = size
 
-                                )->open( `layoutData`
-                                    )->leaf( `FlexItemData`
+                                )->ele( `layoutData`
+                                    )->tag( `FlexItemData`
                                         )->a( n = `growFactor` v = `1`
 
-                                )->shut(
-                            )->shut(
-                            )->leaf( `Text`
+                                )->end(
+                            )->end(
+                            )->tag( `Text`
                                 )->a( n = `text`  v = `Repeating background`
                                 )->a( n = `class` v = `sapUiSmallMarginTop`
 
-                        )->shut(
-                        )->open( `VBox`
+                        )->end(
+                        )->ele( `VBox`
                             )->a( n = `alignItems` v = `Center`
 
-                            )->open( `HBox`
+                            )->ele( `HBox`
                                 )->a( n = `class` v = `imageContainer`
 
-                                )->leaf( `Image`
+                                )->tag( `Image`
                                     )->a( n = `src`                v = pic3
                                     )->a( n = `mode`               v = `Background`
                                     )->a( n = `height`             v = size
@@ -133,12 +133,12 @@ CLASS z2ui5_cl_smpc_app_031 IMPLEMENTATION.
                                     )->a( n = `backgroundPosition` v = `center center`
                                     )->a( n = `width`              v = `6em`
 
-                            )->shut(
-                            )->leaf( `Text`
+                            )->end(
+                            )->tag( `Text`
                                 )->a( n = `text`  v = `The background adjusts its lower dimension in order to fit in the container`
                                 )->a( n = `class` v = `sapUiSmallMarginTop`
 
-                        )->shut( ).
+                        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

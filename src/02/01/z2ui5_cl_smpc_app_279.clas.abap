@@ -34,30 +34,30 @@ CLASS z2ui5_cl_smpc_app_279 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
             )->a( n = `width` v = `100%`
 
-            )->open( n = `content` ns = `l`
-                )->open( n = `Grid` ns = `l`
+            )->ele( n = `content` ns = `l`
+                )->ele( n = `Grid` ns = `l`
                     )->a( n = `defaultSpan` v = `XL3 L3 M6 S12`
 
-                    )->open( n = `content` ns = `l`
-                        )->open( `VBox`
+                    )->ele( n = `content` ns = `l`
+                        )->ele( `VBox`
                             )->a( n = `alignItems` v = `Center`
 
-                            )->leaf( `Button`
+                            )->tag( `Button`
                                 )->a( n = `text`  v = `Set wrong src`
                                 )->a( n = `press` v = client->_event( `SET_SRC` )
 
-                            )->open( `Image`
+                            )->ele( `Image`
                                 )->a( n = `load`    v = client->_event( `LOAD` )
                                 )->a( n = `error`   v = client->_event( `ERROR` )
                                 )->a( n = `visible` v = |\{= !${ client->_bind( has_error ) } \}|
@@ -67,14 +67,14 @@ CLASS z2ui5_cl_smpc_app_279 IMPLEMENTATION.
                                 )->a( n = `height`  v = |\{= $\{device>/system/phone\} ? '5em' : '10em' \}|
                                 )->a( n = `width`   v = |\{= $\{device>/system/phone\} ? '5em' : '10em' \}|
 
-                                )->open( `layoutData`
-                                    )->leaf( `FlexItemData`
+                                )->ele( `layoutData`
+                                    )->tag( `FlexItemData`
                                         )->a( n = `growFactor` v = `1`
 
-                                )->shut(
-                            )->shut(
+                                )->end(
+                            )->end(
 
-                            )->leaf( `IllustratedMessage`
+                            )->tag( `IllustratedMessage`
                                 )->a( n = `description`      v = `Image was not found`
                                 )->a( n = `title`            v = `Not Found`
                                 )->a( n = `illustrationType` v = `sapIllus-ErrorScreen`

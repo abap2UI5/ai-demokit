@@ -50,355 +50,355 @@ CLASS z2ui5_cl_smpc_app_214 IMPLEMENTATION.
                   `At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. ` &&
                   `Lorem ipsum dolor sit amet, consetetur sadipscing elitr.`.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:l`    v = `sap.ui.layout`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns:form` v = `sap.ui.layout.form`
 
-        )->open( n = `SimpleForm` ns = `form`
+        )->ele( n = `SimpleForm` ns = `form`
             )->a( n = `editable`         v = `true`
             )->a( n = `backgroundDesign` v = `Transparent`
             )->a( n = `layout`           v = `ColumnLayout`
 
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `text` v = `Parent width`
-            )->leaf( `Slider`
+            )->tag( `Slider`
                 )->a( n = `id`    v = `widthSlider`
                 )->a( n = `value` v = client->_bind( slider_value )
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `id`   v = `backgroundLabel`
                 )->a( n = `text` v = `Background`
 
-            )->open( `SegmentedButton`
+            )->ele( `SegmentedButton`
                 )->a( n = `selectedKey`     v = client->_bind( selectedbackground )
                 )->a( n = `ariaDescribedBy` v = `backgroundLabel`
                 )->a( n = `ariaLabelledBy`  v = `backgroundLabel`
 
-                )->open( `items`
-                    )->leaf( `SegmentedButtonItem`
+                )->ele( `items`
+                    )->tag( `SegmentedButtonItem`
                         )->a( n = `key`  v = `Default`
                         )->a( n = `text` v = `Default`
-                    )->leaf( `SegmentedButtonItem`
+                    )->tag( `SegmentedButtonItem`
                         )->a( n = `key`  v = `Light`
                         )->a( n = `text` v = `Light`
-                    )->leaf( `SegmentedButtonItem`
+                    )->tag( `SegmentedButtonItem`
                         )->a( n = `key`  v = `Accent`
                         )->a( n = `text` v = `Accent`
-                    )->leaf( `SegmentedButtonItem`
+                    )->tag( `SegmentedButtonItem`
                         )->a( n = `key`  v = `Dashboard`
                         )->a( n = `text` v = `Dashboard`
 
-                )->shut(
-            )->shut(
-        )->shut(
+                )->end(
+            )->end(
+        )->end(
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `id`    v = `containerLayout`
             )->a( n = `width` v = |\{= ${ client->_bind( slider_value ) } + '%' \}|
 
-            )->open( n = `BlockLayout` ns = `l`
+            )->ele( n = `BlockLayout` ns = `l`
                 )->a( n = `id`         v = `BlockLayout`
                 )->a( n = `background` v = client->_bind( selectedbackground )
 
-                )->open( n = `BlockLayoutRow` ns = `l`
+                )->ele( n = `BlockLayoutRow` ns = `l`
                     )->a( n = `accentCells` v = `Accent1`
 
-                    )->open( n = `BlockLayoutCell` ns = `l`
+                    )->ele( n = `BlockLayoutCell` ns = `l`
                         )->a( n = `id`    v = `Accent1`
                         )->a( n = `width` v = `2`
                         )->a( n = `title` v = `Left aligned heading`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = lorem
 
-                        )->open( `RadioButtonGroup`
+                        )->ele( `RadioButtonGroup`
                             )->a( n = `columns`       v = `2`
                             )->a( n = `selectedIndex` v = `2`
                             )->a( n = `class`         v = `sapUiMediumMarginTop`
 
-                            )->leaf( `RadioButton`
+                            )->tag( `RadioButton`
                                 )->a( n = `id`   v = `RB2-1`
                                 )->a( n = `text` v = `Option 1`
-                            )->leaf( `RadioButton`
+                            )->tag( `RadioButton`
                                 )->a( n = `id`       v = `RB2-2`
                                 )->a( n = `text`     v = `Option 2`
                                 )->a( n = `editable` v = `false`
-                            )->leaf( `RadioButton`
+                            )->tag( `RadioButton`
                                 )->a( n = `id`   v = `RB2-3`
                                 )->a( n = `text` v = `Option 3`
 
-                        )->shut(
-                    )->shut(
-                    )->open( n = `BlockLayoutCell` ns = `l`
+                        )->end(
+                    )->end(
+                    )->ele( n = `BlockLayoutCell` ns = `l`
                         )->a( n = `title` v = `25% width cell`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = lorem
 
-                    )->shut(
-                    )->open( n = `BlockLayoutCell` ns = `l`
+                    )->end(
+                    )->ele( n = `BlockLayoutCell` ns = `l`
                         )->a( n = `titleAlignment` v = `End`
                         )->a( n = `title`          v = `End aligned heading`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.`
 
-                    )->shut(
-                )->shut(
+                    )->end(
+                )->end(
 
-                )->open( n = `BlockLayoutRow` ns = `l`
-                    )->open( n = `BlockLayoutCell` ns = `l`
+                )->ele( n = `BlockLayoutRow` ns = `l`
+                    )->ele( n = `BlockLayoutCell` ns = `l`
                         )->a( n = `title` v = `50% width cell`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = lorem
 
-                    )->shut(
-                    )->open( n = `BlockLayoutCell` ns = `l`
+                    )->end(
+                    )->ele( n = `BlockLayoutCell` ns = `l`
                         )->a( n = `title` v = `50% width cell`
 
-                        )->leaf( `FeedInput`
+                        )->tag( `FeedInput`
                             )->a( n = `showIcon` v = `true`
-                        )->leaf( `FeedInput`
+                        )->tag( `FeedInput`
                             )->a( n = `showIcon` v = `true`
 
-                    )->shut(
-                )->shut(
+                    )->end(
+                )->end(
 
-                )->open( n = `BlockLayoutRow` ns = `l`
+                )->ele( n = `BlockLayoutRow` ns = `l`
                     )->a( n = `scrollable` v = `true`
 
-                    )->open( n = `BlockLayoutCell` ns = `l`
+                    )->ele( n = `BlockLayoutCell` ns = `l`
                         )->a( n = `width` v = `50`
                         )->a( n = `title` v = `Cell inside scrollable row`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = lorem
 
-                    )->shut(
-                    )->open( n = `BlockLayoutCell` ns = `l`
+                    )->end(
+                    )->ele( n = `BlockLayoutCell` ns = `l`
                         )->a( n = `width`          v = `100`
                         )->a( n = `title`          v = `Centered Heading`
                         )->a( n = `titleAlignment` v = `Center`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore`
 
-                    )->shut(
-                    )->open( n = `BlockLayoutCell` ns = `l`
-                        )->leaf( `Text`
+                    )->end(
+                    )->ele( n = `BlockLayoutCell` ns = `l`
+                        )->tag( `Text`
                             )->a( n = `text` v = lorem
 
-                    )->shut(
-                    )->open( n = `BlockLayoutCell` ns = `l`
+                    )->end(
+                    )->ele( n = `BlockLayoutCell` ns = `l`
                         )->a( n = `width` v = `90`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = lorem
 
-                    )->shut(
-                    )->open( n = `BlockLayoutCell` ns = `l`
-                        )->leaf( `Text`
+                    )->end(
+                    )->ele( n = `BlockLayoutCell` ns = `l`
+                        )->tag( `Text`
                             )->a( n = `text` v = lorem
 
-                    )->shut(
-                    )->open( n = `BlockLayoutCell` ns = `l`
-                        )->leaf( `Text`
+                    )->end(
+                    )->ele( n = `BlockLayoutCell` ns = `l`
+                        )->tag( `Text`
                             )->a( n = `text` v = lorem
 
-                    )->shut(
-                )->shut(
+                    )->end(
+                )->end(
 
-                )->open( n = `BlockLayoutRow` ns = `l`
-                    )->open( n = `BlockLayoutCell` ns = `l`
+                )->ele( n = `BlockLayoutRow` ns = `l`
+                    )->ele( n = `BlockLayoutCell` ns = `l`
                         )->a( n = `title` v = `75% width cell`
                         )->a( n = `width` v = `3`
 
-                        )->open( n = `SimpleForm` ns = `form`
+                        )->ele( n = `SimpleForm` ns = `form`
                             )->a( n = `editable`         v = `true`
                             )->a( n = `backgroundDesign` v = `Transparent`
                             )->a( n = `layout`           v = `ResponsiveGridLayout`
 
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text` v = `Name on card`
-                            )->leaf( `Input`
-                            )->leaf( `Label`
+                            )->tag( `Input`
+                            )->tag( `Label`
                                 )->a( n = `text` v = `Card number`
-                            )->leaf( `Input`
-                            )->leaf( `Label`
+                            )->tag( `Input`
+                            )->tag( `Label`
                                 )->a( n = `text` v = `Security code`
-                            )->leaf( `Input`
-                            )->leaf( `Label`
+                            )->tag( `Input`
+                            )->tag( `Label`
                                 )->a( n = `text` v = `Expiration date`
-                            )->leaf( `DatePicker`
+                            )->tag( `DatePicker`
 
-                        )->shut(
+                        )->end(
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = lorem
 
-                    )->shut(
-                    )->open( n = `BlockLayoutCell` ns = `l`
+                    )->end(
+                    )->ele( n = `BlockLayoutCell` ns = `l`
                         )->a( n = `title` v = `25% width cell`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = lorem
 
-                    )->shut(
-                )->shut(
+                    )->end(
+                )->end(
 
-                )->open( n = `BlockLayoutRow` ns = `l`
-                    )->open( n = `BlockLayoutCell` ns = `l`
+                )->ele( n = `BlockLayoutRow` ns = `l`
+                    )->ele( n = `BlockLayoutCell` ns = `l`
                         )->a( n = `title` v = `25% width cell`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = lorem
 
-                    )->shut(
-                    )->open( n = `BlockLayoutCell` ns = `l`
+                    )->end(
+                    )->ele( n = `BlockLayoutCell` ns = `l`
                         )->a( n = `title` v = `25% width cell`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = lorem
 
-                    )->shut(
-                    )->open( n = `BlockLayoutCell` ns = `l`
+                    )->end(
+                    )->ele( n = `BlockLayoutCell` ns = `l`
                         )->a( n = `title` v = `25% width cell`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = lorem
 
-                    )->shut(
-                    )->open( n = `BlockLayoutCell` ns = `l`
+                    )->end(
+                    )->ele( n = `BlockLayoutCell` ns = `l`
                         )->a( n = `title` v = `25% width cell`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = lorem
 
-                    )->shut(
-                )->shut(
+                    )->end(
+                )->end(
 
-                )->open( n = `BlockLayoutRow` ns = `l`
-                    )->open( n = `BlockLayoutCell` ns = `l`
-                        )->leaf( `Text`
+                )->ele( n = `BlockLayoutRow` ns = `l`
+                    )->ele( n = `BlockLayoutCell` ns = `l`
+                        )->tag( `Text`
                             )->a( n = `text` v = lorem
 
-                    )->shut(
-                )->shut(
+                    )->end(
+                )->end(
 
-                )->open( n = `BlockLayoutRow` ns = `l`
-                    )->open( n = `BlockLayoutCell` ns = `l`
-                        )->leaf( `Text`
+                )->ele( n = `BlockLayoutRow` ns = `l`
+                    )->ele( n = `BlockLayoutCell` ns = `l`
+                        )->tag( `Text`
                             )->a( n = `text` v = lorem
 
-                    )->shut(
-                )->shut(
+                    )->end(
+                )->end(
 
-                )->open( n = `BlockLayoutRow` ns = `l`
-                    )->open( n = `BlockLayoutCell` ns = `l`
-                        )->leaf( `Text`
+                )->ele( n = `BlockLayoutRow` ns = `l`
+                    )->ele( n = `BlockLayoutCell` ns = `l`
+                        )->tag( `Text`
                             )->a( n = `text` v = lorem
 
-                    )->shut(
-                )->shut(
+                    )->end(
+                )->end(
 
-                )->open( n = `BlockLayoutRow` ns = `l`
+                )->ele( n = `BlockLayoutRow` ns = `l`
                     )->a( n = `accentCells` v = `Accent2`
 
-                    )->open( n = `BlockLayoutCell` ns = `l`
+                    )->ele( n = `BlockLayoutCell` ns = `l`
                         )->a( n = `id` v = `Accent2`
 
-                        )->leaf( `MessageStrip`
+                        )->tag( `MessageStrip`
                             )->a( n = `text` v = `You can use the cells with 100% width, if you set the vertical property of the row to true`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = lorem
 
-                    )->shut(
-                )->shut(
+                    )->end(
+                )->end(
 
-                )->open( n = `BlockLayoutRow` ns = `l`
+                )->ele( n = `BlockLayoutRow` ns = `l`
                     )->a( n = `accentCells` v = `Accent3`
 
-                    )->open( n = `BlockLayoutCell` ns = `l`
+                    )->ele( n = `BlockLayoutCell` ns = `l`
                         )->a( n = `id` v = `Accent3`
 
-                        )->open( `Table`
+                        )->ele( `Table`
                             )->a( n = `id`    v = `idProductsTable`
                             )->a( n = `inset` v = `false`
                             )->a( n = `items` v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
 
-                            )->open( `columns`
-                                )->open( `Column`
+                            )->ele( `columns`
+                                )->ele( `Column`
                                     )->a( n = `width` v = `12em`
 
-                                    )->leaf( `Text`
+                                    )->tag( `Text`
                                         )->a( n = `text` v = `Product`
 
-                                )->shut(
-                                )->open( `Column`
+                                )->end(
+                                )->ele( `Column`
                                     )->a( n = `minScreenWidth` v = `Tablet`
                                     )->a( n = `demandPopin`    v = `true`
 
-                                    )->leaf( `Text`
+                                    )->tag( `Text`
                                         )->a( n = `text` v = `Supplier`
 
-                                )->shut(
-                                )->open( `Column`
+                                )->end(
+                                )->ele( `Column`
                                     )->a( n = `minScreenWidth` v = `Tablet`
                                     )->a( n = `demandPopin`    v = `true`
                                     )->a( n = `hAlign`         v = `Right`
 
-                                    )->leaf( `Text`
+                                    )->tag( `Text`
                                         )->a( n = `text` v = `Dimensions`
 
-                                )->shut(
-                                )->open( `Column`
+                                )->end(
+                                )->ele( `Column`
                                     )->a( n = `minScreenWidth` v = `Tablet`
                                     )->a( n = `demandPopin`    v = `true`
                                     )->a( n = `hAlign`         v = `Center`
 
-                                    )->leaf( `Text`
+                                    )->tag( `Text`
                                         )->a( n = `text` v = `Weight`
 
-                                )->shut(
-                                )->open( `Column`
+                                )->end(
+                                )->ele( `Column`
                                     )->a( n = `hAlign` v = `Right`
 
-                                    )->leaf( `Text`
+                                    )->tag( `Text`
                                         )->a( n = `text` v = `Price`
 
-                                )->shut(
-                            )->shut(
+                                )->end(
+                            )->end(
 
-                            )->open( `items`
-                                )->open( `ColumnListItem`
-                                    )->open( `cells`
-                                        )->leaf( `ObjectIdentifier`
+                            )->ele( `items`
+                                )->ele( `ColumnListItem`
+                                    )->ele( `cells`
+                                        )->tag( `ObjectIdentifier`
                                             )->a( n = `title` v = `{NAME}`
                                             )->a( n = `text`  v = `{PRODUCTID}`
-                                        )->leaf( `Text`
+                                        )->tag( `Text`
                                             )->a( n = `text` v = `{SUPPLIERNAME}`
-                                        )->leaf( `Text`
+                                        )->tag( `Text`
                                             )->a( n = `text` v = `{WIDTH} x {DEPTH} x {HEIGHT} {DIMUNIT}`
-                                        )->leaf( `ObjectNumber`
+                                        )->tag( `ObjectNumber`
                                             )->a( n = `number` v = `{WEIGHTMEASURE}`
                                             )->a( n = `unit`   v = `{WEIGHTUNIT}`
-                                        )->leaf( `ObjectNumber`
+                                        )->tag( `ObjectNumber`
                                             )->a( n = `number` v = |\{ parts:[\{path:'PRICE'\},\{path:'CURRENCYCODE'\}], type:'sap.ui.model.type.Currency' \}|
                                             )->a( n = `unit`   v = `{CURRENCYCODE}`
 
-                                    )->shut(
-                                )->shut(
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
-        )->shut( ).
+                                    )->end(
+                                )->end(
+                            )->end(
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

@@ -33,22 +33,22 @@ CLASS z2ui5_cl_smpc_app_221 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns:tnt` v = `sap.tnt`
         )->a( n = `height`    v = `100%`
 
-        )->leaf( `Text`
+        )->tag( `Text`
             )->a( n = `text`  v = `Simple IconTabHeader`
             )->a( n = `class` v = `sapUiTinyMarginTop sapUiSmallMarginBegin`
 
-        )->open( n = `ToolHeader` ns = `tnt`
+        )->ele( n = `ToolHeader` ns = `tnt`
             )->a( n = `class` v = `sapUiTinyMarginTop sapUiTinyMarginEnd sapUiTinyMarginBegin`
 
-            )->open( `Button`
+            )->ele( `Button`
                 )->a( n = `icon` v = `sap-icon://home`
                 " onHomePress resets the sibling IconTabHeader to 'invalidKey', i.e.
                 " deselects every tab. The original finds that header by walking the
@@ -58,85 +58,85 @@ CLASS z2ui5_cl_smpc_app_221 IMPLEMENTATION.
                 )->a( n = `press` v = client->_event( val   = `HOME_PRESS`
                                                       t_arg = VALUE #( ( `1` ) ) )
                 )->a( n = `type` v = `Transparent`
-                )->open( `layoutData`
-                    )->leaf( `OverflowToolbarLayoutData`
+                )->ele( `layoutData`
+                    )->tag( `OverflowToolbarLayoutData`
                         )->a( n = `priority` v = `NeverOverflow`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( `IconTabHeader`
+            )->ele( `IconTabHeader`
                 )->a( n = `id`               v = `iconTabHeader`
                 )->a( n = `selectedKey`      v = client->_bind( selected_key1 )
                 )->a( n = `backgroundDesign` v = `Transparent`
                 )->a( n = `mode`             v = `Inline`
-                )->open( `layoutData`
-                    )->leaf( `OverflowToolbarLayoutData`
+                )->ele( `layoutData`
+                    )->tag( `OverflowToolbarLayoutData`
                         )->a( n = `priority`   v = `NeverOverflow`
                         )->a( n = `shrinkable` v = `true`
 
-                )->shut(
-                )->open( `items`
-                    )->leaf( `IconTabFilter`
+                )->end(
+                )->ele( `items`
+                    )->tag( `IconTabFilter`
                         )->a( n = `text` v = `Documentation`
-                    )->leaf( `IconTabFilter`
+                    )->tag( `IconTabFilter`
                         )->a( n = `text` v = `Explored`
-                    )->leaf( `IconTabFilter`
+                    )->tag( `IconTabFilter`
                         )->a( n = `text` v = `API Reference`
-                    )->leaf( `IconTabFilter`
+                    )->tag( `IconTabFilter`
                         )->a( n = `text` v = `Demo Apps`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( `Button`
+            )->ele( `Button`
                 )->a( n = `icon` v = `sap-icon://search`
                 )->a( n = `type` v = `Transparent`
-                )->open( `layoutData`
-                    )->leaf( `OverflowToolbarLayoutData`
+                )->ele( `layoutData`
+                    )->tag( `OverflowToolbarLayoutData`
                         )->a( n = `priority` v = `NeverOverflow`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( `Button`
+            )->ele( `Button`
                 )->a( n = `icon` v = `sap-icon://comment`
                 )->a( n = `type` v = `Transparent`
-                )->open( `layoutData`
-                    )->leaf( `OverflowToolbarLayoutData`
+                )->ele( `layoutData`
+                    )->tag( `OverflowToolbarLayoutData`
                         )->a( n = `priority` v = `NeverOverflow`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( `MenuButton`
+            )->ele( `MenuButton`
                 )->a( n = `icon` v = `sap-icon://hint`
                 )->a( n = `type` v = `Transparent`
-                )->open( `layoutData`
-                    )->leaf( `OverflowToolbarLayoutData`
+                )->ele( `layoutData`
+                    )->tag( `OverflowToolbarLayoutData`
                         )->a( n = `priority` v = `NeverOverflow`
 
-                )->shut(
-                )->open( `Menu`
-                    )->leaf( `MenuItem`
+                )->end(
+                )->ele( `Menu`
+                    )->tag( `MenuItem`
                         )->a( n = `text` v = `Edit`
                         )->a( n = `icon` v = `sap-icon://edit`
-                    )->leaf( `MenuItem`
+                    )->tag( `MenuItem`
                         )->a( n = `text` v = `Save`
                         )->a( n = `icon` v = `sap-icon://save`
 
-                )->shut(
-            )->shut(
-        )->shut(
+                )->end(
+            )->end(
+        )->end(
 
-        )->leaf( `Text`
+        )->tag( `Text`
             )->a( n = `text`  v = `IconTabHeader with one interaction for the tab - opening the sub-items list`
             )->a( n = `class` v = `sapUiLargeMarginTop sapUiSmallMarginBegin`
 
-        )->open( n = `ToolHeader` ns = `tnt`
+        )->ele( n = `ToolHeader` ns = `tnt`
             )->a( n = `class` v = `sapUiTinyMargin sapUiTinyMarginTop`
 
-            )->open( `Button`
+            )->ele( `Button`
                 )->a( n = `icon` v = `sap-icon://home`
                 " onHomePress resets the sibling IconTabHeader to 'invalidKey', i.e.
                 " deselects every tab. The original finds that header by walking the
@@ -146,121 +146,121 @@ CLASS z2ui5_cl_smpc_app_221 IMPLEMENTATION.
                 )->a( n = `press` v = client->_event( val   = `HOME_PRESS`
                                                       t_arg = VALUE #( ( `2` ) ) )
                 )->a( n = `type` v = `Transparent`
-                )->open( `layoutData`
-                    )->leaf( `OverflowToolbarLayoutData`
+                )->ele( `layoutData`
+                    )->tag( `OverflowToolbarLayoutData`
                         )->a( n = `priority` v = `NeverOverflow`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( `IconTabHeader`
+            )->ele( `IconTabHeader`
                 )->a( n = `id`               v = `iconTabHeaderOneClickArea`
                 )->a( n = `selectedKey`      v = client->_bind( selected_key2 )
                 )->a( n = `backgroundDesign` v = `Transparent`
                 )->a( n = `mode`             v = `Inline`
-                )->open( `layoutData`
-                    )->leaf( `OverflowToolbarLayoutData`
+                )->ele( `layoutData`
+                    )->tag( `OverflowToolbarLayoutData`
                         )->a( n = `priority`   v = `NeverOverflow`
                         )->a( n = `shrinkable` v = `true`
 
-                )->shut(
-                )->open( `items`
-                    )->open( `IconTabFilter`
+                )->end(
+                )->ele( `items`
+                    )->ele( `IconTabFilter`
                         )->a( n = `text`            v = `Users`
                         )->a( n = `interactionMode` v = `SelectLeavesOnly`
-                        )->open( `items`
-                            )->leaf( `IconTabFilter`
+                        )->ele( `items`
+                            )->tag( `IconTabFilter`
                                 )->a( n = `text` v = `User 1`
-                            )->leaf( `IconTabFilter`
+                            )->tag( `IconTabFilter`
                                 )->a( n = `text` v = `User 2`
-                            )->leaf( `IconTabFilter`
+                            )->tag( `IconTabFilter`
                                 )->a( n = `text` v = `User 3`
 
-                        )->shut(
-                    )->shut(
+                        )->end(
+                    )->end(
 
-                    )->open( `IconTabFilter`
+                    )->ele( `IconTabFilter`
                         )->a( n = `text`            v = `Identity`
                         )->a( n = `interactionMode` v = `SelectLeavesOnly`
-                        )->open( `items`
-                            )->leaf( `IconTabFilter`
+                        )->ele( `items`
+                            )->tag( `IconTabFilter`
                                 )->a( n = `text` v = `Identity 1`
-                            )->leaf( `IconTabFilter`
+                            )->tag( `IconTabFilter`
                                 )->a( n = `text` v = `Identity 2`
-                            )->leaf( `IconTabFilter`
+                            )->tag( `IconTabFilter`
                                 )->a( n = `text` v = `Identity 3`
-                            )->leaf( `IconTabFilter`
+                            )->tag( `IconTabFilter`
                                 )->a( n = `text` v = `Identity 4`
-                            )->leaf( `IconTabFilter`
+                            )->tag( `IconTabFilter`
                                 )->a( n = `text` v = `Identity 5`
 
-                        )->shut(
-                    )->shut(
+                        )->end(
+                    )->end(
 
-                    )->open( `IconTabFilter`
+                    )->ele( `IconTabFilter`
                         )->a( n = `text`            v = `Monitoring`
                         )->a( n = `interactionMode` v = `SelectLeavesOnly`
-                        )->open( `items`
-                            )->leaf( `IconTabFilter`
+                        )->ele( `items`
+                            )->tag( `IconTabFilter`
                                 )->a( n = `text` v = `Monitoring 1`
-                            )->leaf( `IconTabFilter`
+                            )->tag( `IconTabFilter`
                                 )->a( n = `text` v = `Monitoring 2`
-                            )->leaf( `IconTabFilter`
+                            )->tag( `IconTabFilter`
                                 )->a( n = `text` v = `Monitoring 3`
 
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( `Button`
+            )->ele( `Button`
                 )->a( n = `icon` v = `sap-icon://search`
                 )->a( n = `type` v = `Transparent`
-                )->open( `layoutData`
-                    )->leaf( `OverflowToolbarLayoutData`
+                )->ele( `layoutData`
+                    )->tag( `OverflowToolbarLayoutData`
                         )->a( n = `priority` v = `NeverOverflow`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( `Button`
+            )->ele( `Button`
                 )->a( n = `icon` v = `sap-icon://comment`
                 )->a( n = `type` v = `Transparent`
-                )->open( `layoutData`
-                    )->leaf( `OverflowToolbarLayoutData`
+                )->ele( `layoutData`
+                    )->tag( `OverflowToolbarLayoutData`
                         )->a( n = `priority` v = `NeverOverflow`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( `MenuButton`
+            )->ele( `MenuButton`
                 )->a( n = `icon` v = `sap-icon://hint`
                 )->a( n = `type` v = `Transparent`
-                )->open( `layoutData`
-                    )->leaf( `OverflowToolbarLayoutData`
+                )->ele( `layoutData`
+                    )->tag( `OverflowToolbarLayoutData`
                         )->a( n = `priority` v = `NeverOverflow`
 
-                )->shut(
-                )->open( `Menu`
-                    )->leaf( `MenuItem`
+                )->end(
+                )->ele( `Menu`
+                    )->tag( `MenuItem`
                         )->a( n = `text` v = `Edit`
                         )->a( n = `icon` v = `sap-icon://edit`
-                    )->leaf( `MenuItem`
+                    )->tag( `MenuItem`
                         )->a( n = `text` v = `Save`
                         )->a( n = `icon` v = `sap-icon://save`
 
-                )->shut(
-            )->shut(
-        )->shut(
+                )->end(
+            )->end(
+        )->end(
 
-        )->leaf( `Text`
+        )->tag( `Text`
             )->a( n = `text`  v = `IconTabHeader with two interaction areas for the tab - selecting it or opening the sub-items list`
             )->a( n = `class` v = `sapUiLargeMarginTop sapUiSmallMarginBegin`
 
-        )->open( n = `ToolHeader` ns = `tnt`
+        )->ele( n = `ToolHeader` ns = `tnt`
             )->a( n = `class` v = `sapUiTinyMargin sapUiTinyMarginTop`
 
-            )->open( `Button`
+            )->ele( `Button`
                 )->a( n = `icon` v = `sap-icon://home`
                 " onHomePress resets the sibling IconTabHeader to 'invalidKey', i.e.
                 " deselects every tab. The original finds that header by walking the
@@ -270,109 +270,109 @@ CLASS z2ui5_cl_smpc_app_221 IMPLEMENTATION.
                 )->a( n = `press` v = client->_event( val   = `HOME_PRESS`
                                                       t_arg = VALUE #( ( `3` ) ) )
                 )->a( n = `type` v = `Transparent`
-                )->open( `layoutData`
-                    )->leaf( `OverflowToolbarLayoutData`
+                )->ele( `layoutData`
+                    )->tag( `OverflowToolbarLayoutData`
                         )->a( n = `priority` v = `NeverOverflow`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( `IconTabHeader`
+            )->ele( `IconTabHeader`
                 )->a( n = `id`               v = `iconTabHeaderTwoClickArea`
                 )->a( n = `selectedKey`      v = client->_bind( selected_key3 )
                 )->a( n = `backgroundDesign` v = `Transparent`
                 )->a( n = `mode`             v = `Inline`
-                )->open( `layoutData`
-                    )->leaf( `OverflowToolbarLayoutData`
+                )->ele( `layoutData`
+                    )->tag( `OverflowToolbarLayoutData`
                         )->a( n = `priority`   v = `NeverOverflow`
                         )->a( n = `shrinkable` v = `true`
 
-                )->shut(
-                )->open( `items`
-                    )->open( `IconTabFilter`
+                )->end(
+                )->ele( `items`
+                    )->ele( `IconTabFilter`
                         )->a( n = `text` v = `Users`
-                        )->open( `items`
-                            )->leaf( `IconTabFilter`
+                        )->ele( `items`
+                            )->tag( `IconTabFilter`
                                 )->a( n = `text` v = `User 1`
-                            )->leaf( `IconTabFilter`
+                            )->tag( `IconTabFilter`
                                 )->a( n = `text` v = `User 2`
-                            )->leaf( `IconTabFilter`
+                            )->tag( `IconTabFilter`
                                 )->a( n = `text` v = `User 3`
 
-                        )->shut(
-                    )->shut(
+                        )->end(
+                    )->end(
 
-                    )->open( `IconTabFilter`
+                    )->ele( `IconTabFilter`
                         )->a( n = `text` v = `Identity`
-                        )->open( `items`
-                            )->leaf( `IconTabFilter`
+                        )->ele( `items`
+                            )->tag( `IconTabFilter`
                                 )->a( n = `text` v = `Identity 1`
-                            )->leaf( `IconTabFilter`
+                            )->tag( `IconTabFilter`
                                 )->a( n = `text` v = `Identity 2`
-                            )->leaf( `IconTabFilter`
+                            )->tag( `IconTabFilter`
                                 )->a( n = `text` v = `Identity 3`
-                            )->leaf( `IconTabFilter`
+                            )->tag( `IconTabFilter`
                                 )->a( n = `text` v = `Identity 4`
-                            )->leaf( `IconTabFilter`
+                            )->tag( `IconTabFilter`
                                 )->a( n = `text` v = `Identity 5`
 
-                        )->shut(
-                    )->shut(
+                        )->end(
+                    )->end(
 
-                    )->open( `IconTabFilter`
+                    )->ele( `IconTabFilter`
                         )->a( n = `text` v = `Monitoring`
-                        )->open( `items`
-                            )->leaf( `IconTabFilter`
+                        )->ele( `items`
+                            )->tag( `IconTabFilter`
                                 )->a( n = `text` v = `Monitoring 1`
-                            )->leaf( `IconTabFilter`
+                            )->tag( `IconTabFilter`
                                 )->a( n = `text` v = `Monitoring 2`
-                            )->leaf( `IconTabFilter`
+                            )->tag( `IconTabFilter`
                                 )->a( n = `text` v = `Monitoring 3`
 
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( `Button`
+            )->ele( `Button`
                 )->a( n = `icon` v = `sap-icon://search`
                 )->a( n = `type` v = `Transparent`
-                )->open( `layoutData`
-                    )->leaf( `OverflowToolbarLayoutData`
+                )->ele( `layoutData`
+                    )->tag( `OverflowToolbarLayoutData`
                         )->a( n = `priority` v = `NeverOverflow`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( `Button`
+            )->ele( `Button`
                 )->a( n = `icon` v = `sap-icon://comment`
                 )->a( n = `type` v = `Transparent`
-                )->open( `layoutData`
-                    )->leaf( `OverflowToolbarLayoutData`
+                )->ele( `layoutData`
+                    )->tag( `OverflowToolbarLayoutData`
                         )->a( n = `priority` v = `NeverOverflow`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( `MenuButton`
+            )->ele( `MenuButton`
                 )->a( n = `icon` v = `sap-icon://hint`
                 )->a( n = `type` v = `Transparent`
-                )->open( `layoutData`
-                    )->leaf( `OverflowToolbarLayoutData`
+                )->ele( `layoutData`
+                    )->tag( `OverflowToolbarLayoutData`
                         )->a( n = `priority` v = `NeverOverflow`
 
-                )->shut(
-                )->open( `Menu`
-                    )->leaf( `MenuItem`
+                )->end(
+                )->ele( `Menu`
+                    )->tag( `MenuItem`
                         )->a( n = `text` v = `Edit`
                         )->a( n = `icon` v = `sap-icon://edit`
-                    )->leaf( `MenuItem`
+                    )->tag( `MenuItem`
                         )->a( n = `text` v = `Save`
                         )->a( n = `icon` v = `sap-icon://save`
 
-                )->shut(
-            )->shut(
-        )->shut( ).
+                )->end(
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

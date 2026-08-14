@@ -38,85 +38,85 @@ CLASS z2ui5_cl_smpc_app_194 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
-        )->open( n = `Grid` ns = `l`
+        )->ele( n = `Grid` ns = `l`
             )->a( n = `binding`     v = client->_bind( t_persons )
             )->a( n = `class`       v = `sapUiSmallMarginTop`
             )->a( n = `hSpacing`    v = `2`
             )->a( n = `defaultSpan` v = `L6 M6 S10`
 
-            )->open( n = `content` ns = `l`
-                )->open( `Image`
+            )->ele( n = `content` ns = `l`
+                )->ele( `Image`
                     )->a( n = `src`   v = `{0/CONTACTPICURL}`
                     )->a( n = `width` v = `100%`
 
-                    )->open( `layoutData`
-                        )->leaf( n = `GridData` ns = `l`
+                    )->ele( `layoutData`
+                        )->tag( n = `GridData` ns = `l`
                             )->a( n = `span`       v = `L3 M3 S8`
                             )->a( n = `linebreakL` v = `true`
                             )->a( n = `linebreakM` v = `true`
                             )->a( n = `linebreakS` v = `true`
 
-                    )->shut(
-                )->shut(
+                    )->end(
+                )->end(
 
-                )->open( `VBox`
-                    )->leaf( `Text`
+                )->ele( `VBox`
+                    )->tag( `Text`
                         )->a( n = `text`  v = `{0/FIRSTNAME} {0/LASTNAME}`
                         )->a( n = `class` v = `nameTitle`
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `{0/DESCRIPTION}`
 
-                )->shut(
+                )->end(
 
-                )->open( `Image`
+                )->ele( `Image`
                     )->a( n = `src`   v = `{1/CONTACTPICURL}`
                     )->a( n = `width` v = `100%`
 
-                    )->open( `layoutData`
-                        )->leaf( n = `GridData` ns = `l`
+                    )->ele( `layoutData`
+                        )->tag( n = `GridData` ns = `l`
                             )->a( n = `span`       v = `L3 M3 S8`
                             )->a( n = `linebreakL` v = `true`
                             )->a( n = `linebreakM` v = `true`
                             )->a( n = `linebreakS` v = `true`
 
-                    )->shut(
-                )->shut(
+                    )->end(
+                )->end(
 
-                )->open( `VBox`
-                    )->leaf( `Text`
+                )->ele( `VBox`
+                    )->tag( `Text`
                         )->a( n = `text`  v = `{1/FIRSTNAME} {1/LASTNAME}`
                         )->a( n = `class` v = `nameTitle`
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `{1/DESCRIPTION}`
 
-                )->shut(
+                )->end(
 
-                )->open( `Image`
+                )->ele( `Image`
                     )->a( n = `src`   v = `{2/CONTACTPICURL}`
                     )->a( n = `width` v = `100%`
 
-                    )->open( `layoutData`
-                        )->leaf( n = `GridData` ns = `l`
+                    )->ele( `layoutData`
+                        )->tag( n = `GridData` ns = `l`
                             )->a( n = `span`       v = `L3 M3 S8`
                             )->a( n = `linebreakL` v = `true`
                             )->a( n = `linebreakM` v = `true`
                             )->a( n = `linebreakS` v = `true`
 
-                    )->shut(
-                )->shut(
+                    )->end(
+                )->end(
 
-                )->open( `VBox`
-                    )->leaf( `Text`
+                )->ele( `VBox`
+                    )->tag( `Text`
                         )->a( n = `text`  v = `{2/FIRSTNAME} {2/LASTNAME}`
                         )->a( n = `class` v = `nameTitle`
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `{2/DESCRIPTION}` ).
 
     client->view_display( view->stringify( ) ).

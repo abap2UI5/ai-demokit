@@ -44,7 +44,7 @@ CLASS z2ui5_cl_smpc_app_269 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " The controller's media model (new JSONModel(Device.system)) is the shared
     " device> model here, so {media>/phone} becomes {device>/system/phone}.
@@ -52,22 +52,22 @@ CLASS z2ui5_cl_smpc_app_269 IMPLEMENTATION.
     " control_by_id; the breakpointChanged round-trip keeps the two button
     " flags in sync exactly like updateToggleButtonState /
     " updateShowSideContentButtonVisibility.
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `height`    v = `100%`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
-        )->open( `Page`
+        )->ele( `Page`
             )->a( n = `showHeader`    v = `false`
             )->a( n = `showNavButton` v = `false`
 
-            )->open( `Page`
+            )->ele( `Page`
                 )->a( n = `id`            v = `sideContentContainer`
                 )->a( n = `showHeader`    v = `false`
                 )->a( n = `showNavButton` v = `false`
 
-                )->open( n = `DynamicSideContent` ns = `l`
+                )->ele( n = `DynamicSideContent` ns = `l`
                     )->a( n = `id`                  v = `DynamicSideContent`
                     )->a( n = `class`               v = `sapUiDSCExplored sapUiContentPadding`
                     )->a( n = `containerQuery`      v = `true`
@@ -76,15 +76,15 @@ CLASS z2ui5_cl_smpc_app_269 IMPLEMENTATION.
                     )->a( n = `breakpointChanged`   v = client->_event( val   = `BREAKPOINT_CHANGED`
                                                                         t_arg = VALUE #( ( `${$parameters>/currentBreakpoint}` ) ) )
 
-                    )->open( `VBox`
-                        )->leaf( `Title`
+                    )->ele( `VBox`
+                        )->tag( `Title`
                             )->a( n = `level` v = `H1`
                             )->a( n = `text`  v = `Product`
-                        )->leaf( `Image`
+                        )->tag( `Image`
                             )->a( n = `src`          v = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-7777-large.jpg`
                             )->a( n = `densityAware` v = `false`
                             )->a( n = `width`        v = `10em`
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor `
                                               && `incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud `
                                               && `exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure `
@@ -92,60 +92,60 @@ CLASS z2ui5_cl_smpc_app_269 IMPLEMENTATION.
                                               && `Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt `
                                               && `mollit anim id est laborum.`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( n = `sideContent` ns = `l`
-                        )->open( `Toolbar`
-                            )->leaf( `Title`
+                    )->ele( n = `sideContent` ns = `l`
+                        )->ele( `Toolbar`
+                            )->tag( `Title`
                                 )->a( n = `text` v = `Comments`
-                            )->leaf( `ToolbarSpacer`
-                            )->leaf( `Button`
+                            )->tag( `ToolbarSpacer`
+                            )->tag( `Button`
                                 )->a( n = `text`    v = `Close`
                                 )->a( n = `type`    v = `Transparent`
                                 )->a( n = `visible` v = |\{= !$\{device>/system/phone\}\}|
                                 )->a( n = `press`   v = client->_event( `SIDE_CONTENT_HIDE` )
 
-                        )->shut(
+                        )->end(
 
-                        )->open( n = `VerticalLayout` ns = `l`
+                        )->ele( n = `VerticalLayout` ns = `l`
                             )->a( n = `width` v = `100%`
 
-                            )->open( `List`
+                            )->ele( `List`
                                 )->a( n = `items` v = client->_bind( t_entrycollection )
 
-                                )->leaf( `FeedListItem`
+                                )->tag( `FeedListItem`
                                     )->a( n = `sender`    v = `{AUTHOR}`
                                     )->a( n = `icon`      v = `{AUTHORPICURL}`
                                     )->a( n = `info`      v = `{TYPE}`
                                     )->a( n = `timestamp` v = `{DATE}`
                                     )->a( n = `text`      v = `{TEXT}`
 
-                            )->shut(
+                            )->end(
 
-                            )->leaf( `FeedInput`
+                            )->tag( `FeedInput`
                                 )->a( n = `showIcon` v = `true`
                                 )->a( n = `icon`     v = `http://upload.wikimedia.org/wikipedia/commons/2/25/George_Washington_as_CIC_of_the_Continental_Army_bust.jpg`
 
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( `footer`
-                )->open( `Toolbar`
-                    )->leaf( `Button`
+            )->ele( `footer`
+                )->ele( `Toolbar`
+                    )->tag( `Button`
                         )->a( n = `text`    v = `Toggle`
                         )->a( n = `type`    v = `Accept`
                         )->a( n = `id`      v = `toggleButton`
                         )->a( n = `enabled` v = client->_bind( toggle_enabled )
                         )->a( n = `press`   v = client->follow_up_action( val   = client->cs_event-control_by_id
                                                                           t_arg = VALUE #( ( `DynamicSideContent` ) ( `toggle` ) ) )
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text`    v = `Open Side Content`
                         )->a( n = `id`      v = `showSideContentButton`
                         )->a( n = `visible` v = client->_bind( show_side_btn )
                         )->a( n = `press`   v = client->_event( `SIDE_CONTENT_SHOW` )
-                    )->leaf( `Slider`
+                    )->tag( `Slider`
                         )->a( n = `id`      v = `DSCWidthSlider`
                         )->a( n = `value`   v = `100`
                         )->a( n = `visible` v = |\{= !$\{device>/system/phone\}\}|
@@ -158,7 +158,7 @@ CLASS z2ui5_cl_smpc_app_269 IMPLEMENTATION.
                                                    ( `css` )
                                                    ( `width` )
                                                    ( `${$parameters>/value} + '%'` ) ) )
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `id`      v = `DSCWidthHintText`
                         )->a( n = `text`    v = `Best view in full screen`
                         )->a( n = `visible` v = |\{= !$\{device>/system/phone\}\}|

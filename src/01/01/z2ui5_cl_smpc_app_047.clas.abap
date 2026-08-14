@@ -32,137 +32,137 @@ CLASS z2ui5_cl_smpc_app_047 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `height`    v = `100%`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
-        )->open( `Page`
+        )->ele( `Page`
             )->a( n = `showHeader` v = `false`
             )->a( n = `class`      v = `sapUiContentPadding`
 
-            )->open( `subHeader`
-                )->open( `OverflowToolbar`
-                    )->leaf( `ToolbarSpacer`
+            )->ele( `subHeader`
+                )->ele( `OverflowToolbar`
+                    )->tag( `ToolbarSpacer`
 
-                    )->open( `SegmentedButton`
+                    )->ele( `SegmentedButton`
                         )->a( n = `selectedKey` v = `kids`
 
-                        )->open( `items`
-                            )->leaf( `SegmentedButtonItem`
+                        )->ele( `items`
+                            )->tag( `SegmentedButtonItem`
                                 )->a( n = `text` v = `Kids`
                                 )->a( n = `key`  v = `kids`
-                            )->leaf( `SegmentedButtonItem`
+                            )->tag( `SegmentedButtonItem`
                                 )->a( n = `text` v = `Adults`
-                            )->leaf( `SegmentedButtonItem`
+                            )->tag( `SegmentedButtonItem`
                                 )->a( n = `text` v = `Seniors`
 
-                        )->shut(
-                    )->shut(
-                    )->leaf( `ToolbarSpacer`
+                        )->end(
+                    )->end(
+                    )->tag( `ToolbarSpacer`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( `VBox`
+            )->ele( `VBox`
                 )->a( n = `width` v = `100%`
 
-                )->open( `SegmentedButton`
+                )->ele( `SegmentedButton`
                     )->a( n = `selectedKey` v = `satellite`
                     )->a( n = `class`       v = `sapUiSmallMarginBottom`
 
-                    )->open( `items`
-                        )->leaf( `SegmentedButtonItem`
+                    )->ele( `items`
+                        )->tag( `SegmentedButtonItem`
                             )->a( n = `text` v = `Map`
-                        )->leaf( `SegmentedButtonItem`
+                        )->tag( `SegmentedButtonItem`
                             )->a( n = `text` v = `Satellite`
                             )->a( n = `key`  v = `satellite`
-                        )->leaf( `SegmentedButtonItem`
+                        )->tag( `SegmentedButtonItem`
                             )->a( n = `text` v = `Hybrid`
 
-                    )->shut(
-                )->shut(
-                )->open( `SegmentedButton`
+                    )->end(
+                )->end(
+                )->ele( `SegmentedButton`
                     )->a( n = `selectedKey` v = `competitor`
                     )->a( n = `class`       v = `sapUiSmallMarginBottom`
 
-                    )->open( `items`
-                        )->leaf( `SegmentedButtonItem`
+                    )->ele( `items`
+                        )->tag( `SegmentedButtonItem`
                             )->a( n = `icon` v = `sap-icon://taxi`
-                        )->leaf( `SegmentedButtonItem`
+                        )->tag( `SegmentedButtonItem`
                             )->a( n = `icon` v = `sap-icon://lab`
-                        )->leaf( `SegmentedButtonItem`
+                        )->tag( `SegmentedButtonItem`
                             )->a( n = `icon` v = `sap-icon://competitor`
                             )->a( n = `key`  v = `competitor`
 
-                    )->shut(
-                )->shut(
-                )->open( `SegmentedButton`
+                    )->end(
+                )->end(
+                )->ele( `SegmentedButton`
                     )->a( n = `class` v = `sapUiSmallMarginBottom`
 
-                    )->open( `items`
-                        )->leaf( `SegmentedButtonItem`
+                    )->ele( `items`
+                        )->tag( `SegmentedButtonItem`
                             )->a( n = `text` v = `Selected`
-                        )->leaf( `SegmentedButtonItem`
+                        )->tag( `SegmentedButtonItem`
                             )->a( n = `text` v = `Enabled`
-                        )->leaf( `SegmentedButtonItem`
+                        )->tag( `SegmentedButtonItem`
                             )->a( n = `text`    v = `Disabled`
                             )->a( n = `enabled` v = `false`
 
-                    )->shut(
-                )->shut(
-                )->leaf( `Label`
+                    )->end(
+                )->end(
+                )->tag( `Label`
                     )->a( n = `text` v = `Fire selectionChange event`
 
                 " selectedKey two-way bound + item keys (port addition) - selection read server-side without a private event path
-                )->open( `SegmentedButton`
+                )->ele( `SegmentedButton`
                     )->a( n = `id`              v = `SB1`
                     )->a( n = `selectedKey`     v = client->_bind( selected_key )
                     )->a( n = `selectionChange` v = client->_event( `SELECTION_CHANGE` )
 
-                    )->open( `items`
-                        )->leaf( `SegmentedButtonItem`
+                    )->ele( `items`
+                        )->tag( `SegmentedButtonItem`
                             )->a( n = `key`  v = `one`
                             )->a( n = `text` v = `One`
-                        )->leaf( `SegmentedButtonItem`
+                        )->tag( `SegmentedButtonItem`
                             )->a( n = `key`  v = `two`
                             )->a( n = `text` v = `Two`
-                        )->leaf( `SegmentedButtonItem`
+                        )->tag( `SegmentedButtonItem`
                             )->a( n = `key`  v = `three`
                             )->a( n = `text` v = `Three`
 
-                    )->shut(
-                )->shut(
-                )->leaf( `Text`
+                    )->end(
+                )->end(
+                )->tag( `Text`
                     )->a( n = `id`   v = `selectedItemPreview`
                     )->a( n = `text` v = client->_bind( selected_item_text )
 
-            )->shut(
+            )->end(
 
-            )->open( `footer`
-                )->open( `OverflowToolbar`
-                    )->leaf( `ToolbarSpacer`
+            )->ele( `footer`
+                )->ele( `OverflowToolbar`
+                    )->tag( `ToolbarSpacer`
 
-                    )->open( `SegmentedButton`
+                    )->ele( `SegmentedButton`
                         )->a( n = `selectedKey` v = `small`
 
-                        )->open( `items`
-                            )->leaf( `SegmentedButtonItem`
+                        )->ele( `items`
+                            )->tag( `SegmentedButtonItem`
                                 )->a( n = `text` v = `Small`
                                 )->a( n = `key`  v = `small`
-                            )->leaf( `SegmentedButtonItem`
+                            )->tag( `SegmentedButtonItem`
                                 )->a( n = `text` v = `Medium`
-                            )->leaf( `SegmentedButtonItem`
+                            )->tag( `SegmentedButtonItem`
                                 )->a( n = `text` v = `Large`
 
-                        )->shut(
-                    )->shut(
-                    )->leaf( `ToolbarSpacer`
+                        )->end(
+                    )->end(
+                    )->tag( `ToolbarSpacer`
 
-                )->shut(
-            )->shut( ).
+                )->end(
+            )->end( ).
 
     client->view_display( view->stringify( ) ).
 

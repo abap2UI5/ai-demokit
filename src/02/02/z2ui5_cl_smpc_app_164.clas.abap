@@ -45,14 +45,14 @@ CLASS z2ui5_cl_smpc_app_164 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " sap.ui.table grid Table (RowModes sample). The original splits UI state
     " into a separate 'ui' JSON model ({ui>/rowMode}); with abap2UI5's single
     " default model that field is folded into the default model and rowMode /
     " selectedKey bind it directly (the 'ui>' prefix is dropped - last path
     " segment identical, which structural-diff matches).
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.ui.table`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns:u`   v = `sap.ui.unified`
@@ -60,106 +60,106 @@ CLASS z2ui5_cl_smpc_app_164 IMPLEMENTATION.
         )->a( n = `xmlns:m`   v = `sap.m`
         )->a( n = `height`    v = `100%`
 
-        )->open( n = `Page` ns = `m`
+        )->ele( n = `Page` ns = `m`
             )->a( n = `showHeader` v = `false`
             )->a( n = `class`      v = `sapUiContentPadding`
 
-            )->open( n = `content` ns = `m`
-                )->open( `Table`
+            )->ele( n = `content` ns = `m`
+                )->ele( `Table`
                     )->a( n = `id`             v = `table`
                     )->a( n = `selectionMode`  v = `MultiToggle`
                     )->a( n = `rows`           v = client->_bind( productcollection )
                     )->a( n = `rowMode`        v = client->_bind( rowmode )
                     )->a( n = `ariaLabelledBy` v = `title`
 
-                    )->open( `extension`
-                        )->open( n = `OverflowToolbar` ns = `m`
+                    )->ele( `extension`
+                        )->ele( n = `OverflowToolbar` ns = `m`
                             )->a( n = `style` v = `Clear`
-                            )->leaf( n = `Title` ns = `m`
+                            )->tag( n = `Title` ns = `m`
                                 )->a( n = `id`   v = `title`
                                 )->a( n = `text` v = `Products`
 
-                    )->shut(
-                    )->shut(
+                    )->end(
+                    )->end(
 
-                    )->open( `columns`
-                        )->open( `Column`
+                    )->ele( `columns`
+                        )->ele( `Column`
                             )->a( n = `filterProperty` v = `Name`
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Product Name`
-                            )->open( `template`
-                                )->leaf( n = `Text` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text`     v = `{NAME}`
                                     )->a( n = `wrapping` v = `false`
 
-                        )->shut(
-                        )->shut(
+                        )->end(
+                        )->end(
 
-                        )->open( `Column`
+                        )->ele( `Column`
                             )->a( n = `filterProperty` v = `Category`
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Category`
-                            )->open( `template`
-                                )->leaf( n = `Text` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text`     v = `{CATEGORY}`
                                     )->a( n = `wrapping` v = `false`
 
-                        )->shut(
-                        )->shut(
+                        )->end(
+                        )->end(
 
-                        )->open( `Column`
-                            )->leaf( n = `Label` ns = `m`
+                        )->ele( `Column`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Image`
-                            )->open( `template`
-                                )->leaf( n = `Link` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Link` ns = `m`
                                     )->a( n = `text`   v = `Show Image`
                                     )->a( n = `href`   v = `{PRODUCTPICURL}`
                                     )->a( n = `target` v = `_blank`
 
-                        )->shut(
-                        )->shut(
+                        )->end(
+                        )->end(
 
-                        )->open( `Column`
-                            )->leaf( n = `Label` ns = `m`
+                        )->ele( `Column`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Quantity`
-                            )->open( `template`
-                                )->leaf( n = `Label` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = |\{ path: 'QUANTITY', type: 'sap.ui.model.type.Integer' \}|
 
-                        )->shut(
-                        )->shut(
+                        )->end(
+                        )->end(
 
-                        )->open( `Column`
-                            )->leaf( n = `Label` ns = `m`
+                        )->ele( `Column`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Delivery Date`
-                            )->open( `template`
-                                )->leaf( n = `Text` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text`     v = |\{ path: 'DELIVERYDATE', type: 'sap.ui.model.type.Date', formatOptions: \{ source: \{ pattern: 'timestamp' \} \} \}|
                                     )->a( n = `wrapping` v = `false`
 
-                        )->shut(
-                        )->shut(
-                    )->shut(
+                        )->end(
+                        )->end(
+                    )->end(
 
-                    )->open( `footer`
-                        )->open( n = `OverflowToolbar` ns = `m`
+                    )->ele( `footer`
+                        )->ele( n = `OverflowToolbar` ns = `m`
                             )->a( n = `id` v = `infobar`
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text`     v = `Row Mode:`
                                 )->a( n = `labelFor` v = `rowMode`
-                            )->open( n = `SegmentedButton` ns = `m`
+                            )->ele( n = `SegmentedButton` ns = `m`
                                 )->a( n = `id`          v = `rowMode`
                                 )->a( n = `selectedKey` v = client->_bind( rowmode )
-                                )->open( n = `items` ns = `m`
-                                    )->leaf( n = `SegmentedButtonItem` ns = `m`
+                                )->ele( n = `items` ns = `m`
+                                    )->tag( n = `SegmentedButtonItem` ns = `m`
                                         )->a( n = `icon`    v = `sap-icon://locked`
                                         )->a( n = `key`     v = `Fixed`
                                         )->a( n = `tooltip` v = `Fixed`
-                                    )->leaf( n = `SegmentedButtonItem` ns = `m`
+                                    )->tag( n = `SegmentedButtonItem` ns = `m`
                                         )->a( n = `icon`    v = `sap-icon://restart`
                                         )->a( n = `key`     v = `Auto`
                                         )->a( n = `tooltip` v = `Auto`
-                                    )->leaf( n = `SegmentedButtonItem` ns = `m`
+                                    )->tag( n = `SegmentedButtonItem` ns = `m`
                                         )->a( n = `icon`    v = `sap-icon://resize-vertical`
                                         )->a( n = `key`     v = `Interactive`
                                         )->a( n = `tooltip` v = `Interactive` ).

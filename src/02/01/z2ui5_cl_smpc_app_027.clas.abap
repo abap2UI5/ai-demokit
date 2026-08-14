@@ -26,170 +26,170 @@ CLASS z2ui5_cl_smpc_app_027 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
             )->a( n = `width` v = `100%`
 
-            )->open( n = `Grid` ns = `l`
+            )->ele( n = `Grid` ns = `l`
                 )->a( n = `class`       v = `sapUiSmallMarginBottom`
                 )->a( n = `hSpacing`    v = `0`
                 )->a( n = `vSpacing`    v = `0`
                 )->a( n = `defaultSpan` v = `L4 M6 S12`
                 )->a( n = `width`       v = `100%`
 
-                )->open( `FlexBox`
+                )->ele( `FlexBox`
                     )->a( n = `class`          v = `sapUiTinyMarginBottom`
                     )->a( n = `direction`      v = `Column`
                     )->a( n = `fitContainer`   v = `true`
                     )->a( n = `alignItems`     v = `Start`
                     )->a( n = `justifyContent` v = `Start`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text`  v = `Generic Tag - KPI`
                         )->a( n = `class` v = `sapUiSmallMarginBottom`
 
-                    )->open( `GenericTag`
+                    )->ele( `GenericTag`
                         )->a( n = `text`   v = `Project Cost`
                         )->a( n = `design` v = `StatusIconHidden`
                         )->a( n = `status` v = `Error`
                         )->a( n = `class`  v = `sapUiSmallMarginBottom`
 
-                        )->leaf( `ObjectNumber`
+                        )->tag( `ObjectNumber`
                             )->a( n = `state`      v = `Error`
                             )->a( n = `emphasized` v = `false`
                             )->a( n = `number`     v = `3.5M`
                             )->a( n = `unit`       v = `EUR`
 
-                    )->shut(
-                    )->open( `GenericTag`
+                    )->end(
+                    )->ele( `GenericTag`
                         )->a( n = `text`   v = `Project Cost`
                         )->a( n = `design` v = `StatusIconHidden`
                         )->a( n = `status` v = `Warning`
                         )->a( n = `class`  v = `sapUiSmallMarginBottom`
 
-                        )->leaf( `ObjectNumber`
+                        )->tag( `ObjectNumber`
                             )->a( n = `state`      v = `Warning`
                             )->a( n = `emphasized` v = `false`
                             )->a( n = `number`     v = `2.4M`
                             )->a( n = `unit`       v = `EUR`
 
-                    )->shut(
-                    )->open( `GenericTag`
+                    )->end(
+                    )->ele( `GenericTag`
                         )->a( n = `text`   v = `Project Cost`
                         )->a( n = `design` v = `StatusIconHidden`
                         )->a( n = `status` v = `Success`
                         )->a( n = `class`  v = `sapUiSmallMarginBottom`
 
-                        )->leaf( `ObjectNumber`
+                        )->tag( `ObjectNumber`
                             )->a( n = `state`      v = `Success`
                             )->a( n = `emphasized` v = `false`
                             )->a( n = `number`     v = `1.6M`
                             )->a( n = `unit`       v = `EUR`
 
-                    )->shut(
-                    )->open( `GenericTag`
+                    )->end(
+                    )->ele( `GenericTag`
                         )->a( n = `text`   v = `PC`
                         )->a( n = `design` v = `StatusIconHidden`
                         )->a( n = `status` v = `Error`
                         )->a( n = `class`  v = `sapUiSmallMarginBottom`
 
-                        )->leaf( `ObjectNumber`
+                        )->tag( `ObjectNumber`
                             )->a( n = `state`      v = `Error`
                             )->a( n = `emphasized` v = `false`
                             )->a( n = `number`     v = `35`
                             )->a( n = `unit`       v = `%`
 
-                    )->shut(
-                    )->open( `GenericTag`
+                    )->end(
+                    )->ele( `GenericTag`
                         )->a( n = `text`   v = `PC`
                         )->a( n = `design` v = `StatusIconHidden`
                         )->a( n = `status` v = `Warning`
                         )->a( n = `class`  v = `sapUiSmallMarginBottom`
 
-                        )->leaf( `ObjectNumber`
+                        )->tag( `ObjectNumber`
                             )->a( n = `state`      v = `Warning`
                             )->a( n = `emphasized` v = `false`
                             )->a( n = `number`     v = `71`
                             )->a( n = `unit`       v = `%`
 
-                    )->shut(
-                    )->open( `GenericTag`
+                    )->end(
+                    )->ele( `GenericTag`
                         )->a( n = `text`   v = `PC`
                         )->a( n = `design` v = `StatusIconHidden`
                         )->a( n = `status` v = `Success`
                         )->a( n = `class`  v = `sapUiSmallMarginBottom`
 
-                        )->leaf( `ObjectNumber`
+                        )->tag( `ObjectNumber`
                             )->a( n = `state`      v = `Success`
                             )->a( n = `emphasized` v = `false`
                             )->a( n = `number`     v = `96`
                             )->a( n = `unit`       v = `%`
 
-                    )->shut(
-                )->shut(
-                )->open( `FlexBox`
+                    )->end(
+                )->end(
+                )->ele( `FlexBox`
                     )->a( n = `direction`      v = `Column`
                     )->a( n = `fitContainer`   v = `true`
                     )->a( n = `alignItems`     v = `Start`
                     )->a( n = `justifyContent` v = `Start`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text`  v = `Generic Tag - KPI (error handling)`
                         )->a( n = `class` v = `sapUiSmallMarginBottom`
-                    )->leaf( `GenericTag`
+                    )->tag( `GenericTag`
                         )->a( n = `text`       v = `Project Cost`
                         )->a( n = `design`     v = `StatusIconHidden`
                         )->a( n = `status`     v = `Error`
                         )->a( n = `valueState` v = `Error`
                         )->a( n = `class`      v = `sapUiSmallMarginBottom`
 
-                )->shut(
-                )->open( `FlexBox`
+                )->end(
+                )->ele( `FlexBox`
                     )->a( n = `direction`      v = `Column`
                     )->a( n = `fitContainer`   v = `true`
                     )->a( n = `alignItems`     v = `Start`
                     )->a( n = `justifyContent` v = `Start`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text`  v = `Generic Tag - Situation`
                         )->a( n = `class` v = `sapUiSmallMarginBottom`
-                    )->leaf( `GenericTag`
+                    )->tag( `GenericTag`
                         )->a( n = `text`   v = `Shortage Expected`
                         )->a( n = `status` v = `Warning`
                         )->a( n = `class`  v = `sapUiSmallMarginBottom`
-                    )->leaf( `GenericTag`
+                    )->tag( `GenericTag`
                         )->a( n = `text`   v = `Material Shortage`
                         )->a( n = `status` v = `Warning`
                         )->a( n = `class`  v = `sapUiSmallMarginBottom`
 
-                )->shut(
-                )->open( `FlexBox`
+                )->end(
+                )->ele( `FlexBox`
                     )->a( n = `direction`      v = `Column`
                     )->a( n = `fitContainer`   v = `true`
                     )->a( n = `alignItems`     v = `Start`
                     )->a( n = `justifyContent` v = `Start`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text`  v = `Generic Tag with label`
                         )->a( n = `id`    v = `genericTagLabel`
                         )->a( n = `class` v = `sapUiSmallMarginBottom`
 
                     " ariaLabelledBy (since UI5 1.97) kept for the 1:1 port
-                    )->open( `GenericTag`
+                    )->ele( `GenericTag`
                         )->a( n = `ariaLabelledBy` v = `genericTagLabel`
                         )->a( n = `text`           v = `Project Cost`
                         )->a( n = `design`         v = `StatusIconHidden`
                         )->a( n = `status`         v = `Error`
                         )->a( n = `class`          v = `sapUiSmallMarginBottom`
 
-                        )->leaf( `ObjectNumber`
+                        )->tag( `ObjectNumber`
                             )->a( n = `state`      v = `Error`
                             )->a( n = `emphasized` v = `false`
                             )->a( n = `number`     v = `3.5M`

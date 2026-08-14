@@ -52,18 +52,18 @@ CLASS z2ui5_cl_smpc_app_121 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`        v = `sap.m`
         )->a( n = `xmlns:mvc`    v = `sap.ui.core.mvc`
         )->a( n = `xmlns:upload` v = `sap.m.upload`
         )->a( n = `height`       v = `100%`
 
-        )->open( `Page`
+        )->ele( `Page`
             )->a( n = `showHeader` v = `false`
 
-            )->open( n = `UploadSet` ns = `upload`
+            )->ele( n = `UploadSet` ns = `upload`
                 )->a( n = `id`            v = `UploadSet`
                 )->a( n = `instantUpload` v = `true`
                 )->a( n = `showIcons`     v = `true`
@@ -79,28 +79,28 @@ CLASS z2ui5_cl_smpc_app_121 IMPLEMENTATION.
                 )->a( n = `selectionChanged`  v = client->_event( `SELECTION` )
                 )->a( n = `afterItemRemoved`  v = client->_event( `REMOVED` )
 
-                )->open( n = `toolbar` ns = `upload`
-                    )->open( `OverflowToolbar`
-                        )->leaf( `ToolbarSpacer`
-                        )->leaf( `Button`
+                )->ele( n = `toolbar` ns = `upload`
+                    )->ele( `OverflowToolbar`
+                        )->tag( `ToolbarSpacer`
+                        )->tag( `Button`
                             )->a( n = `id`    v = `uploadSelectedButton`
                             )->a( n = `text`  v = `Upload selected`
                             )->a( n = `press` v = client->_event( `UPLOAD` )
-                        )->leaf( `Button`
+                        )->tag( `Button`
                             )->a( n = `id`    v = `downloadSelectedButton`
                             )->a( n = `text`  v = `Download selected`
                             )->a( n = `press` v = client->_event( `DOWNLOAD` )
-                        )->leaf( `Button`
+                        )->tag( `Button`
                             )->a( n = `id`      v = `versionButton`
                             )->a( n = `enabled` v = `false`
                             )->a( n = `text`    v = `Upload a new version`
                             )->a( n = `press`   v = client->_event( `VERSION` )
-                        )->leaf( n = `UploadSetToolbarPlaceholder` ns = `upload`
+                        )->tag( n = `UploadSetToolbarPlaceholder` ns = `upload`
 
-                )->shut(
-                )->shut(
-                )->open( n = `items` ns = `upload`
-                    )->open( n = `UploadSetItem` ns = `upload`
+                )->end(
+                )->end(
+                )->ele( n = `items` ns = `upload`
+                    )->ele( n = `UploadSetItem` ns = `upload`
                         )->a( n = `fileName`     v = `{FILENAME}`
                         )->a( n = `mediaType`    v = `{MEDIATYPE}`
                         )->a( n = `url`          v = `{URL}`
@@ -109,14 +109,14 @@ CLASS z2ui5_cl_smpc_app_121 IMPLEMENTATION.
                         )->a( n = `statuses`     v = `{STATUSES}`
                         )->a( n = `uploadState`  v = `{UPLOADSTATE}`
 
-                        )->open( n = `markers` ns = `upload`
-                            )->leaf( `ObjectMarker`
+                        )->ele( n = `markers` ns = `upload`
+                            )->tag( `ObjectMarker`
                                 )->a( n = `type`       v = `{TYPE}`
                                 )->a( n = `visibility` v = `{VISIBILITY}`
 
-                        )->shut(
-                        )->open( n = `statuses` ns = `upload`
-                            )->leaf( `ObjectStatus`
+                        )->end(
+                        )->ele( n = `statuses` ns = `upload`
+                            )->tag( `ObjectStatus`
                                 )->a( n = `title`  v = `{TITLE}`
                                 )->a( n = `text`   v = `{TEXT}`
                                 )->a( n = `state`  v = `{STATE}`

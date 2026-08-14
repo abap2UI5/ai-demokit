@@ -45,14 +45,14 @@ CLASS z2ui5_cl_smpc_app_093 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `height`    v = `100%`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
 
-        )->open( `TabContainer`
+        )->ele( `TabContainer`
             )->a( n = `items`             v = client->_bind( t_employees )
             )->a( n = `id`                v = `myTabContainer`
             )->a( n = `showAddNewButton`  v = `true`
@@ -65,29 +65,29 @@ CLASS z2ui5_cl_smpc_app_093 IMPLEMENTATION.
                                                               t_arg  = VALUE #( ( `${$parameters>/item}.getName()` ) ( `${$parameters>/item/oParent}.indexOfItem(${$parameters>/item})` ) )
                                                               s_ctrl = VALUE #( check_prevent_default = abap_true ) )
 
-            )->open( `items`
-                )->open( `TabContainerItem`
+            )->ele( `items`
+                )->ele( `TabContainerItem`
                     )->a( n = `name`     v = `{NAME}`
                     )->a( n = `modified` v = `{MODIFIED}`
-                    )->open( `content`
-                        )->leaf( `Label`
+                    )->ele( `content`
+                        )->tag( `Label`
                             )->a( n = `text` v = `First Name:`
-                        )->leaf( `Input`
+                        )->tag( `Input`
                             )->a( n = `value` v = `{EMP_FIRST_NAME}`
-                        )->leaf( `Label`
+                        )->tag( `Label`
                             )->a( n = `text` v = `Last Name:`
-                        )->leaf( `Input`
+                        )->tag( `Input`
                             )->a( n = `value` v = `{EMP_LAST_NAME}`
-                        )->leaf( `Label`
+                        )->tag( `Label`
                             )->a( n = `text` v = `Salary:`
-                        )->leaf( `Input`
+                        )->tag( `Input`
                             )->a( n = `value`       v = `{SALARY}`
                             )->a( n = `description` v = `EUR`
 
-                    )->shut(
-                )->shut(
-            )->shut(
-        )->shut( ).
+                    )->end(
+                )->end(
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

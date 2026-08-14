@@ -41,34 +41,34 @@ CLASS z2ui5_cl_smpc_app_081 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `height`    v = `100%`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
 
-        )->open( `Page`
+        )->ele( `Page`
             )->a( n = `showHeader` v = `false`
 
-            )->open( `content`
-                )->leaf( `PullToRefresh`
+            )->ele( `content`
+                )->tag( `PullToRefresh`
                     )->a( n = `id`      v = `pullToRefresh`
                     )->a( n = `refresh` v = client->_event( `REFRESH` )
-                )->open( `List`
+                )->ele( `List`
                     )->a( n = `id`    v = `list`
                     )->a( n = `items` v = client->_bind( t_products )
 
-                    )->leaf( `StandardListItem`
+                    )->tag( `StandardListItem`
                         )->a( n = `title`            v = `{NAME}`
                         )->a( n = `description`      v = `{PRODUCT_ID}`
                         )->a( n = `icon`             v = `{PRODUCT_PIC_URL}`
                         )->a( n = `iconDensityAware` v = `false`
                         )->a( n = `iconInset`        v = `false`
 
-                )->shut(
-            )->shut(
-        )->shut( ).
+                )->end(
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

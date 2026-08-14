@@ -43,12 +43,12 @@ CLASS z2ui5_cl_smpc_app_240 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " DateTypeRange.startDate is typed "object" and demands a real JS Date; the
     " model keeps ISO strings and Formatter.DateCreateObject converts them at the
     " point of use (needs UI5 >= 1.74)
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`      v = `sap.ui.layout`
         )->a( n = `xmlns:u`      v = `sap.ui.unified`
         )->a( n = `xmlns:mvc`    v = `sap.ui.core.mvc`
@@ -57,29 +57,29 @@ CLASS z2ui5_cl_smpc_app_240 IMPLEMENTATION.
         )->a( n = `class`        v = `viewPadding`
         )->a( n = `core:require` v = `{Formatter: 'z2ui5/model/formatter'}`
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
 
-            )->open( n = `Calendar` ns = `u`
+            )->ele( n = `Calendar` ns = `u`
                 )->a( n = `id`                v = `calendar`
                 )->a( n = `legend`            v = `legend`
                 )->a( n = `intervalSelection` v = `true`
                 )->a( n = `specialDates`      v = client->_bind( t_special )
 
-                )->open( n = `specialDates` ns = `u`
-                    )->leaf( n = `DateTypeRange` ns = `u`
+                )->ele( n = `specialDates` ns = `u`
+                    )->tag( n = `DateTypeRange` ns = `u`
                         )->a( n = `startDate` v = `{ path: 'START_DATE', formatter: 'Formatter.DateCreateObject' }`
                         )->a( n = `type`      v = `{TYPE}`
                         )->a( n = `tooltip`   v = `{TOOLTIP}`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( n = `CalendarLegend` ns = `u`
+            )->ele( n = `CalendarLegend` ns = `u`
                 )->a( n = `id`    v = `legend`
                 )->a( n = `items` v = client->_bind( t_legend )
 
-                )->open( n = `items` ns = `u`
-                    )->leaf( n = `CalendarLegendItem` ns = `u`
+                )->ele( n = `items` ns = `u`
+                    )->tag( n = `CalendarLegendItem` ns = `u`
                         )->a( n = `type` v = `{TYPE}`
                         )->a( n = `text` v = `{TEXT}` ).
 

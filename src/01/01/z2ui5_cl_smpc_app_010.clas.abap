@@ -50,110 +50,110 @@ CLASS z2ui5_cl_smpc_app_010 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc`    v = `sap.ui.core.mvc`
         )->a( n = `xmlns:core`   v = `sap.ui.core`
         )->a( n = `xmlns`        v = `sap.m`
 
-        )->open( `Table`
+        )->ele( `Table`
             )->a( n = `id`          v = `idProductsTable`
             )->a( n = `inset`       v = `false`
             )->a( n = `items`       v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
             " the controller's onPopinLayoutChanged switch lives in this expression binding (as app 534) - never emits an empty enum value
             )->a( n = `popinLayout` v = |\{= ${ client->_bind( popin_layout ) } === 'GridLarge' \|\| ${ client->_bind( popin_layout ) } === 'GridSmall' ? ${ client->_bind( popin_layout ) } : 'Block' \}|
 
-            )->open( `headerToolbar`
-                )->open( `Toolbar`
-                    )->open( `content`
-                        )->leaf( `Title`
+            )->ele( `headerToolbar`
+                )->ele( `Toolbar`
+                    )->ele( `content`
+                        )->tag( `Title`
                             )->a( n = `text`  v = `Products`
                             )->a( n = `level` v = `H2`
-                        )->leaf( `ToolbarSpacer`
+                        )->tag( `ToolbarSpacer`
 
-                        )->open( `ComboBox`
+                        )->ele( `ComboBox`
                             )->a( n = `id`          v = `idPopinLayout`
                             )->a( n = `placeholder` v = `Popin layout options`
                             " original change handler dropped - the two-way selectedKey feeds the popinLayout expression binding
                             )->a( n = `selectedKey` v = client->_bind( popin_layout )
 
-                            )->open( `items`
-                                )->leaf( n = `Item` ns = `core`
+                            )->ele( `items`
+                                )->tag( n = `Item` ns = `core`
                                     )->a( n = `text` v = `Block`
                                     )->a( n = `key`  v = `Block`
-                                )->leaf( n = `Item` ns = `core`
+                                )->tag( n = `Item` ns = `core`
                                     )->a( n = `text` v = `Grid Large`
                                     )->a( n = `key`  v = `GridLarge`
-                                )->leaf( n = `Item` ns = `core`
+                                )->tag( n = `Item` ns = `core`
                                     )->a( n = `text` v = `Grid Small`
                                     )->a( n = `key`  v = `GridSmall`
 
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
-            )->open( `columns`
-                )->open( `Column`
+                            )->end(
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
+            )->ele( `columns`
+                )->ele( `Column`
                     )->a( n = `width` v = `12em`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Product`
 
-                )->shut(
-                )->open( `Column`
+                )->end(
+                )->ele( `Column`
                     )->a( n = `minScreenWidth` v = `Tablet`
                     )->a( n = `demandPopin`    v = `true`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Supplier`
 
-                )->shut(
-                )->open( `Column`
+                )->end(
+                )->ele( `Column`
                     )->a( n = `minScreenWidth` v = `Desktop`
                     )->a( n = `demandPopin`    v = `true`
                     )->a( n = `hAlign`         v = `End`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Dimensions`
 
-                )->shut(
-                )->open( `Column`
+                )->end(
+                )->ele( `Column`
                     )->a( n = `minScreenWidth` v = `Desktop`
                     )->a( n = `demandPopin`    v = `true`
                     )->a( n = `hAlign`         v = `Center`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Weight`
 
-                )->shut(
-                )->open( `Column`
+                )->end(
+                )->ele( `Column`
                     )->a( n = `hAlign` v = `End`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Price`
 
-                )->shut(
-            )->shut(
-            )->open( `items`
-                )->open( `ColumnListItem`
+                )->end(
+            )->end(
+            )->ele( `items`
+                )->ele( `ColumnListItem`
                     )->a( n = `type`  v = `Navigation`
                     )->a( n = `press` v = client->_event( `MESSAGE_DIALOG_PRESS` )
 
-                    )->open( `cells`
-                        )->leaf( `ObjectIdentifier`
+                    )->ele( `cells`
+                        )->tag( `ObjectIdentifier`
                             )->a( n = `title` v = `{NAME}`
                             )->a( n = `text`  v = `{PRODUCT_ID}`
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `{SUPPLIER_NAME}`
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `{WIDTH} x {DEPTH} x {HEIGHT} {DIM_UNIT}`
-                        )->leaf( `ObjectNumber`
+                        )->tag( `ObjectNumber`
                             )->a( n = `number` v = `{WEIGHT_MEASURE}`
                             )->a( n = `unit`   v = `{WEIGHT_UNIT}`
                             )->a( n = `state`  v = `{WEIGHT_STATE}`
-                        )->leaf( `ObjectNumber`
+                        )->tag( `ObjectNumber`
                             )->a( n = `number` v = `{ parts: [{path: 'PRICE'}, {path: 'CURRENCY_CODE'}], type: 'sap.ui.model.type.Currency', formatOptions: {showMeasure: false} }`
                             )->a( n = `unit`   v = `{CURRENCY_CODE}` ).
 
@@ -177,23 +177,23 @@ CLASS z2ui5_cl_smpc_app_010 IMPLEMENTATION.
   METHOD popup_message_display.
 
     " the controller-built message Dialog, shown as a popup fragment
-    DATA(popup) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(popup) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    popup->open( n = `FragmentDefinition` ns = `core`
+    popup->ele( n = `FragmentDefinition` ns = `core`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns`      v = `sap.m`
 
-        )->open( `Dialog`
+        )->ele( `Dialog`
             )->a( n = `title` v = `Message`
             )->a( n = `type`  v = `Message`
 
-            )->open( `content`
-                )->leaf( `Text`
+            )->ele( `content`
+                )->tag( `Text`
                     )->a( n = `text` v = `Success`
 
-            )->shut(
-            )->open( `beginButton`
-                )->leaf( `Button`
+            )->end(
+            )->ele( `beginButton`
+                )->tag( `Button`
                     )->a( n = `text`  v = `OK`
                     )->a( n = `press` v = client->follow_up_action( client->cs_event-popup_close ) ).
 

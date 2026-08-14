@@ -26,24 +26,24 @@ CLASS z2ui5_cl_smpc_app_372 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
             )->a( n = `width` v = `100%`
 
-            )->leaf( `Text`
+            )->tag( `Text`
                 )->a( n = `text`
                          v = `Lorem ipsum dolor st amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam ` &&
                              `voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. ` &&
                              `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam ` &&
                              `voluptua. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat`
-            )->leaf( `Text`
+            )->tag( `Text`
                 )->a( n = `maxLines` v = `4`
                 )->a( n = `text`
                          v = `4 Maxlines ... Lorem ipsum dolor st amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam ` &&
@@ -51,7 +51,7 @@ CLASS z2ui5_cl_smpc_app_372 IMPLEMENTATION.
                              `dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam ` &&
                              `erat, sed diam voluptua. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna ` &&
                              `aliquyam erat`
-            )->leaf( `Text`
+            )->tag( `Text`
                 )->a( n = `maxLines` v = `3`
                 )->a( n = `text`
                          v = `3 Maxlines ... Lorem ipsum dolor st amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam ` &&
@@ -59,7 +59,7 @@ CLASS z2ui5_cl_smpc_app_372 IMPLEMENTATION.
                              `dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam ` &&
                              `erat, sed diam voluptua. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna ` &&
                              `aliquyam erat`
-            )->leaf( `Text`
+            )->tag( `Text`
                 )->a( n = `maxLines` v = `2`
                 )->a( n = `text`
                          v = `2 Maxlines ... Lorem ipsum dolor st amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam ` &&
@@ -67,7 +67,7 @@ CLASS z2ui5_cl_smpc_app_372 IMPLEMENTATION.
                              `dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam ` &&
                              `erat, sed diam voluptua. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna ` &&
                              `aliquyam erat`
-            )->leaf( `Text`
+            )->tag( `Text`
                 )->a( n = `wrapping` v = `false`
                 )->a( n = `text`
                          v = `No wrapping ... Lorem ipsum dolor st amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam ` &&
@@ -75,7 +75,7 @@ CLASS z2ui5_cl_smpc_app_372 IMPLEMENTATION.
                              `dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam ` &&
                              `erat, sed diam voluptua. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna ` &&
                              `aliquyam erat`
-            )->leaf( `MessageStrip`
+            )->tag( `MessageStrip`
                 )->a( n = `type` v = `Warning`
                 )->a( n = `text`
                          v = `Note: The multi line overflow indicator depends on the browser line clamping support. For such browsers this will be shown as ellipsis, for the ` &&

@@ -26,51 +26,51 @@ CLASS z2ui5_cl_smpc_app_380 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
 
-        )->open( `IconTabBar`
+        )->ele( `IconTabBar`
             )->a( n = `id`       v = `idIconTabBarMulti`
             " device> exposes raw sap.ui.Device, so !phone expresses the
             " demo kit helper model's isNoPhone (app 030 precedent)
             )->a( n = `expanded` v = `{= !${device>/system/phone} }`
             )->a( n = `class`    v = `sapUiResponsiveContentPadding`
 
-            )->open( `items`
-                )->open( `IconTabFilter`
+            )->ele( `items`
+                )->ele( `IconTabFilter`
                     )->a( n = `icon` v = `sap-icon://hint`
                     )->a( n = `key`  v = `info`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Info content goes here ...`
 
-                )->shut(
-                )->open( `IconTabFilter`
+                )->end(
+                )->ele( `IconTabFilter`
                     )->a( n = `icon`  v = `sap-icon://attachment`
                     )->a( n = `key`   v = `attachments`
                     )->a( n = `count` v = `3`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Attachments go here ...`
 
-                )->shut(
-                )->open( `IconTabFilter`
+                )->end(
+                )->ele( `IconTabFilter`
                     )->a( n = `icon`  v = `sap-icon://notes`
                     )->a( n = `key`   v = `notes`
                     )->a( n = `count` v = `12`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Notes go here ...`
 
-                )->shut(
-                )->open( `IconTabFilter`
+                )->end(
+                )->ele( `IconTabFilter`
                     )->a( n = `icon` v = `sap-icon://group`
                     )->a( n = `key`  v = `people`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `People content goes here ...` ).
 
     client->view_display( view->stringify( ) ).

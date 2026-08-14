@@ -35,9 +35,9 @@ CLASS z2ui5_cl_smpc_app_040 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `height`      v = `100%`
         )->a( n = `xmlns`       v = `sap.m`
         )->a( n = `xmlns:mvc`   v = `sap.ui.core.mvc`
@@ -45,16 +45,16 @@ CLASS z2ui5_cl_smpc_app_040 IMPLEMENTATION.
         )->a( n = `xmlns:core`  v = `sap.ui.core`
         )->a( n = `xmlns:z2ui5` v = `z2ui5.cc`
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
             )->a( n = `width` v = `100%`
 
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `text`     v = `Enter a search term, e.g. “Notebook”, and add matching products as tokens`
                 )->a( n = `width`    v = `100%`
                 )->a( n = `labelFor` v = `multiInput`
 
-            )->open( `MultiInput`
+            )->ele( `MultiInput`
                 )->a( n = `width`           v = `70%`
                 )->a( n = `showClearIcon`   v = `true`
                 )->a( n = `id`              v = `multiInput`
@@ -62,66 +62,66 @@ CLASS z2ui5_cl_smpc_app_040 IMPLEMENTATION.
                 )->a( n = `placeholder`     v = `Products...`
                 )->a( n = `showValueHelp`   v = `false`
 
-                )->leaf( n = `Item` ns = `core`
+                )->tag( n = `Item` ns = `core`
                     )->a( n = `key`  v = `{PRODUCT_ID}`
                     )->a( n = `text` v = `{NAME}`
 
-            )->shut(
-            )->leaf( `Label`
+            )->end(
+            )->tag( `Label`
                 )->a( n = `text`     v = `MultiInput with pre-selected tokens`
                 )->a( n = `labelFor` v = `multiInput1`
 
             " the tokens the original controller pre-sets in onInit
-            )->open( `MultiInput`
+            )->ele( `MultiInput`
                 )->a( n = `id`             v = `multiInput1`
                 )->a( n = `showSuggestion` v = `false`
                 )->a( n = `width`          v = `70%`
                 )->a( n = `showValueHelp`  v = `false`
 
-                )->open( `tokens`
-                    )->leaf( `Token`
+                )->ele( `tokens`
+                    )->tag( `Token`
                         )->a( n = `key`  v = `0001`
                         )->a( n = `text` v = `Token 1`
-                    )->leaf( `Token`
+                    )->tag( `Token`
                         )->a( n = `key`  v = `0002`
                         )->a( n = `text` v = `Token 2`
-                    )->leaf( `Token`
+                    )->tag( `Token`
                         )->a( n = `key`  v = `0003`
                         )->a( n = `text` v = `Token 3`
-                    )->leaf( `Token`
+                    )->tag( `Token`
                         )->a( n = `key`  v = `0004`
                         )->a( n = `text` v = `Token 4`
-                    )->leaf( `Token`
+                    )->tag( `Token`
                         )->a( n = `key`  v = `0005`
                         )->a( n = `text` v = `Token 5`
-                    )->leaf( `Token`
+                    )->tag( `Token`
                         )->a( n = `key`  v = `0006`
                         )->a( n = `text` v = `Token 6`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
             " original onInit addValidator on multiInput1, installed by the invisible z2ui5.cc.MultiInputExt companion
-            )->leaf( n = `MultiInputExt` ns = `z2ui5`
+            )->tag( n = `MultiInputExt` ns = `z2ui5`
                 )->a( n = `MultiInputId` v = `multiInput1`
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `text`     v = `MultiInput with single long token`
                 )->a( n = `labelFor` v = `multiInput2`
 
-            )->open( `MultiInput`
+            )->ele( `MultiInput`
                 )->a( n = `id`             v = `multiInput2`
                 )->a( n = `showSuggestion` v = `false`
                 )->a( n = `width`          v = `300px`
                 )->a( n = `showValueHelp`  v = `false`
 
-                )->open( `tokens`
-                    )->leaf( `Token`
+                )->ele( `tokens`
+                    )->tag( `Token`
                         )->a( n = `key`  v = `longText`
                         )->a( n = `text` v = `Very long long long long long long long text`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
             " same validator on multiInput2, as in the original onInit
-            )->leaf( n = `MultiInputExt` ns = `z2ui5`
+            )->tag( n = `MultiInputExt` ns = `z2ui5`
                 )->a( n = `MultiInputId` v = `multiInput2` ).
 
     client->view_display( view->stringify( ) ).

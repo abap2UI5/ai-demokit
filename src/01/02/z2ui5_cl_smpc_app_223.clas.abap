@@ -31,174 +31,174 @@ CLASS z2ui5_cl_smpc_app_223 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:l`    v = `sap.ui.layout`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns:form` v = `sap.ui.layout.form`
 
-        )->open( n = `SimpleForm` ns = `form`
+        )->ele( n = `SimpleForm` ns = `form`
             )->a( n = `editable`         v = `true`
             )->a( n = `backgroundDesign` v = `Transparent`
             )->a( n = `layout`           v = `ResponsiveGridLayout`
 
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `text` v = `Parent width`
-            )->leaf( `Slider`
+            )->tag( `Slider`
                 )->a( n = `id`    v = `widthSlider`
                 )->a( n = `value` v = client->_bind( slidervalue )
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `id`   v = `backgroundLabel`
                 )->a( n = `text` v = `Background`
 
-            )->open( `SegmentedButton`
+            )->ele( `SegmentedButton`
                 )->a( n = `selectedKey`     v = client->_bind( selectedbackground )
                 )->a( n = `ariaDescribedBy` v = `backgroundLabel`
                 )->a( n = `ariaLabelledBy`  v = `backgroundLabel`
 
-                )->open( `items`
-                    )->leaf( `SegmentedButtonItem`
+                )->ele( `items`
+                    )->tag( `SegmentedButtonItem`
                         )->a( n = `key`  v = `Default`
                         )->a( n = `text` v = `Default`
-                    )->leaf( `SegmentedButtonItem`
+                    )->tag( `SegmentedButtonItem`
                         )->a( n = `key`  v = `Light`
                         )->a( n = `text` v = `Light`
-                    )->leaf( `SegmentedButtonItem`
+                    )->tag( `SegmentedButtonItem`
                         )->a( n = `key`  v = `Dashboard`
                         )->a( n = `text` v = `Dashboard`
 
-                )->shut(
-            )->shut(
-        )->shut(
+                )->end(
+            )->end(
+        )->end(
 
-        )->leaf( `MessageStrip`
+        )->tag( `MessageStrip`
             )->a( n = `type` v = `Warning`
             )->a( n = `text` v = `Note: Usage of Disabled, Emphasized or Subtle links as titles is not recommended. ` &&
                                  `Dark background designs, for example Accent, are not fully supported with regards to Accessibility when used with links as titles.`
             )->a( n = `class` v = `sapUiSmallMarginBeginEnd sapUiSmallMarginTop`
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `id`    v = `containerLayout`
             )->a( n = `width` v = |\{= ${ client->_bind( slidervalue ) } + '%' \}|
 
-            )->open( n = `BlockLayout` ns = `l`
+            )->ele( n = `BlockLayout` ns = `l`
                 )->a( n = `id`         v = `BlockLayout`
                 )->a( n = `background` v = client->_bind( selectedbackground )
 
-                )->open( n = `BlockLayoutRow` ns = `l`
+                )->ele( n = `BlockLayoutRow` ns = `l`
                     )->a( n = `accentCells` v = `Accent1`
 
-                    )->open( n = `BlockLayoutCell` ns = `l`
+                    )->ele( n = `BlockLayoutCell` ns = `l`
                         )->a( n = `id`    v = `Accent1`
                         )->a( n = `width` v = `2`
                         )->a( n = `title` v = `Left aligned heading`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. ` &&
                                                  `At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. ` &&
                                                  `Lorem ipsum dolor sit amet, consetetur sadipscing elitr.`
 
-                        )->open( n = `titleLink` ns = `l`
-                            )->leaf( `Link`
+                        )->ele( n = `titleLink` ns = `l`
+                            )->tag( `Link`
                                 )->a( n = `text` v = `This is a title link`
                                 )->a( n = `href` v = `https://sdk.openui5.org/`
 
-                    )->shut(
-                    )->shut(
+                    )->end(
+                    )->end(
 
-                    )->open( n = `BlockLayoutCell` ns = `l`
+                    )->ele( n = `BlockLayoutCell` ns = `l`
                         )->a( n = `title` v = `This is just a title`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. ` &&
                                                  `At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. ` &&
                                                  `Lorem ipsum dolor sit amet, consetetur sadipscing elitr.`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( n = `BlockLayoutCell` ns = `l`
+                    )->ele( n = `BlockLayoutCell` ns = `l`
                         )->a( n = `titleAlignment` v = `End`
                         )->a( n = `title`          v = `End aligned heading`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.`
 
-                        )->open( n = `titleLink` ns = `l`
-                            )->leaf( `Link`
+                        )->ele( n = `titleLink` ns = `l`
+                            )->tag( `Link`
                                 )->a( n = `text`     v = `This is a title link - wrapping true`
                                 )->a( n = `href`     v = `https://sdk.openui5.org/`
                                 )->a( n = `wrapping` v = `true`
 
-                    )->shut(
-                    )->shut(
-                )->shut(
+                    )->end(
+                    )->end(
+                )->end(
 
-                )->open( n = `BlockLayoutRow` ns = `l`
-                    )->open( n = `BlockLayoutCell` ns = `l`
+                )->ele( n = `BlockLayoutRow` ns = `l`
+                    )->ele( n = `BlockLayoutCell` ns = `l`
                         )->a( n = `title` v = `This is just a title`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. ` &&
                                                  `At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. ` &&
                                                  `Lorem ipsum dolor sit amet, consetetur sadipscing elitr.`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( n = `BlockLayoutCell` ns = `l`
+                    )->ele( n = `BlockLayoutCell` ns = `l`
                         )->a( n = `title` v = `25% width cell`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. ` &&
                                                  `At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. ` &&
                                                  `Lorem ipsum dolor sit amet, consetetur sadipscing elitr.`
 
-                        )->open( n = `titleLink` ns = `l`
-                            )->leaf( `Link`
+                        )->ele( n = `titleLink` ns = `l`
+                            )->tag( `Link`
                                 )->a( n = `text` v = `This is a title link`
                                 )->a( n = `href` v = `https://sdk.openui5.org/`
 
-                    )->shut(
-                    )->shut(
+                    )->end(
+                    )->end(
 
-                    )->open( n = `BlockLayoutCell` ns = `l`
+                    )->ele( n = `BlockLayoutCell` ns = `l`
                         )->a( n = `title` v = `25% width cell`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. ` &&
                                                  `At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. ` &&
                                                  `Lorem ipsum dolor sit amet, consetetur sadipscing elitr.`
 
-                        )->open( n = `titleLink` ns = `l`
-                            )->leaf( `Link`
+                        )->ele( n = `titleLink` ns = `l`
+                            )->tag( `Link`
                                 )->a( n = `text`   v = `This is a title link - open in new window`
                                 )->a( n = `href`   v = `https://sdk.openui5.org/`
                                 )->a( n = `target` v = `_blank`
 
-                    )->shut(
-                    )->shut(
+                    )->end(
+                    )->end(
 
-                    )->open( n = `BlockLayoutCell` ns = `l`
+                    )->ele( n = `BlockLayoutCell` ns = `l`
                         )->a( n = `title` v = `25% width cell`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. ` &&
                                                  `At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. ` &&
                                                  `Lorem ipsum dolor sit amet, consetetur sadipscing elitr.`
 
-                        )->open( n = `titleLink` ns = `l`
-                            )->leaf( `Link`
+                        )->ele( n = `titleLink` ns = `l`
+                            )->tag( `Link`
                                 )->a( n = `text`     v = `This is a title link - wrapping true`
                                 )->a( n = `href`     v = `https://sdk.openui5.org/`
                                 )->a( n = `wrapping` v = `true`
 
-                    )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
-        )->shut( ).
+                    )->end(
+                    )->end(
+                )->end(
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

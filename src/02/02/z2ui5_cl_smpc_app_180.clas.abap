@@ -29,16 +29,16 @@ CLASS z2ui5_cl_smpc_app_180 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc`    v = `sap.ui.core.mvc`
         )->a( n = `xmlns:form`   v = `sap.ui.layout.form`
         )->a( n = `xmlns`        v = `sap.m`
         )->a( n = `xmlns:core`   v = `sap.ui.core`
         )->a( n = `core:require` v = `{FileSizeType: 'sap/ui/model/type/FileSize'}`
 
-        )->open( n = `SimpleForm` ns = `form`
+        )->ele( n = `SimpleForm` ns = `form`
             )->a( n = `class`      v = `sapUiResponsiveMargin`
             )->a( n = `layout`     v = `ResponsiveGridLayout`
             )->a( n = `editable`   v = `true`
@@ -50,15 +50,15 @@ CLASS z2ui5_cl_smpc_app_180 IMPLEMENTATION.
             )->a( n = `columnsM`   v = `1`
             )->a( n = `title`      v = `FileSize Input`
 
-            )->open( n = `content` ns = `form`
-                )->leaf( `Label`
+            )->ele( n = `content` ns = `form`
+                )->tag( `Label`
                     )->a( n = `text` v = `FileSize`
-                )->leaf( `Input`
+                )->tag( `Input`
                     )->a( n = `value` v = |\{ path: '{ client->_bind( val = filesize path = abap_true ) }', type: 'FileSizeType' \}|
 
-        )->shut(
+        )->end(
 
-        )->open( n = `SimpleForm` ns = `form`
+        )->ele( n = `SimpleForm` ns = `form`
             )->a( n = `class`      v = `sapUiResponsiveMargin`
             )->a( n = `layout`     v = `ResponsiveGridLayout`
             )->a( n = `labelSpanL` v = `3`
@@ -69,19 +69,19 @@ CLASS z2ui5_cl_smpc_app_180 IMPLEMENTATION.
             )->a( n = `columnsM`   v = `1`
             )->a( n = `title`      v = `Min Integer Digits (minimal number of non-fraction digits)`
 
-            )->open( n = `content` ns = `form`
-                )->leaf( `Label`
+            )->ele( n = `content` ns = `form`
+                )->tag( `Label`
                     )->a( n = `text` v = `3 digits`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = filesize path = abap_true ) }', type: 'FileSizeType', formatOptions: \{ minIntegerDigits: 3 \} \}|
-                )->leaf( `Label`
+                )->tag( `Label`
                     )->a( n = `text` v = `5 digits`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = filesize path = abap_true ) }', type: 'FileSizeType', formatOptions: \{ minIntegerDigits: 5 \} \}|
 
-        )->shut(
+        )->end(
 
-        )->open( n = `SimpleForm` ns = `form`
+        )->ele( n = `SimpleForm` ns = `form`
             )->a( n = `width`      v = `auto`
             )->a( n = `class`      v = `sapUiResponsiveMargin`
             )->a( n = `layout`     v = `ResponsiveGridLayout`
@@ -93,19 +93,19 @@ CLASS z2ui5_cl_smpc_app_180 IMPLEMENTATION.
             )->a( n = `columnsM`   v = `1`
             )->a( n = `title`      v = `Max Integer Digits (maximal number of non-fraction digits)`
 
-            )->open( n = `content` ns = `form`
-                )->leaf( `Label`
+            )->ele( n = `content` ns = `form`
+                )->tag( `Label`
                     )->a( n = `text` v = `2 digits`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = filesize path = abap_true ) }', type: 'FileSizeType', formatOptions: \{ maxIntegerDigits: 2 \} \}|
-                )->leaf( `Label`
+                )->tag( `Label`
                     )->a( n = `text` v = `5 digits`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = filesize path = abap_true ) }', type: 'FileSizeType', formatOptions: \{ maxIntegerDigits: 5 \} \}|
 
-        )->shut(
+        )->end(
 
-        )->open( n = `SimpleForm` ns = `form`
+        )->ele( n = `SimpleForm` ns = `form`
             )->a( n = `width`      v = `auto`
             )->a( n = `class`      v = `sapUiResponsiveMargin`
             )->a( n = `layout`     v = `ResponsiveGridLayout`
@@ -117,19 +117,19 @@ CLASS z2ui5_cl_smpc_app_180 IMPLEMENTATION.
             )->a( n = `columnsM`   v = `1`
             )->a( n = `title`      v = `Min Fraction Digits (minimal number of fraction digits)`
 
-            )->open( n = `content` ns = `form`
-                )->leaf( `Label`
+            )->ele( n = `content` ns = `form`
+                )->tag( `Label`
                     )->a( n = `text` v = `2 digits`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = filesize path = abap_true ) }', type: 'FileSizeType', formatOptions: \{ minFractionDigits: 2 \} \}|
-                )->leaf( `Label`
+                )->tag( `Label`
                     )->a( n = `text` v = `5 digits`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = filesize path = abap_true ) }', type: 'FileSizeType', formatOptions: \{ minFractionDigits: 5 \} \}|
 
-        )->shut(
+        )->end(
 
-        )->open( n = `SimpleForm` ns = `form`
+        )->ele( n = `SimpleForm` ns = `form`
             )->a( n = `width`      v = `auto`
             )->a( n = `class`      v = `sapUiResponsiveMargin`
             )->a( n = `layout`     v = `ResponsiveGridLayout`
@@ -141,14 +141,14 @@ CLASS z2ui5_cl_smpc_app_180 IMPLEMENTATION.
             )->a( n = `columnsM`   v = `1`
             )->a( n = `title`      v = `Max Fraction Digits (maximal number of fraction digits)`
 
-            )->open( n = `content` ns = `form`
-                )->leaf( `Label`
+            )->ele( n = `content` ns = `form`
+                )->tag( `Label`
                     )->a( n = `text` v = `2 digits`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = filesize path = abap_true ) }', type: 'FileSizeType', formatOptions: \{ maxFractionDigits: 2 \} \}|
-                )->leaf( `Label`
+                )->tag( `Label`
                     )->a( n = `text` v = `5 digits`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = filesize path = abap_true ) }', type: 'FileSizeType', formatOptions: \{ maxFractionDigits: 5 \} \}| ).
 
     client->view_display( view->stringify( ) ).

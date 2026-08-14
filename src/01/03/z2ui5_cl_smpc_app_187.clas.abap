@@ -26,7 +26,7 @@ CLASS z2ui5_cl_smpc_app_187 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " Block->content inlining (app 178/161 precedent): the original blocks
     " aggregations each hold a custom BlockBase control blockcolor:BlockBlue
@@ -35,112 +35,112 @@ CLASS z2ui5_cl_smpc_app_187 IMPLEMENTATION.
     " Since ObjectPageSubSection.blocks accepts any sap.ui.core.Control, each
     " blockcolor:BlockBlue is inlined here as a core:HTML div - no custom JS
     " control needed, thin frontend preserved.
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `height`     v = `100%`
         )->a( n = `xmlns`      v = `sap.uxap`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns:m`    v = `sap.m`
         )->a( n = `xmlns:core` v = `sap.ui.core`
 
-        )->open( `ObjectPageLayout`
+        )->ele( `ObjectPageLayout`
             )->a( n = `id`                   v = `ObjectPageLayout`
             )->a( n = `showAnchorBarPopover` v = `false`
             )->a( n = `upperCaseAnchorBar`   v = `false`
 
-            )->open( `headerTitle`
-                )->open( `ObjectPageDynamicHeaderTitle`
+            )->ele( `headerTitle`
+                )->ele( `ObjectPageDynamicHeaderTitle`
 
-                    )->open( `heading`
-                        )->leaf( n = `Title` ns = `m`
+                    )->ele( `heading`
+                        )->tag( n = `Title` ns = `m`
                             )->a( n = `text` v = `Navigation to sections`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( `snappedTitleOnMobile`
-                        )->leaf( n = `Title` ns = `m`
+                    )->ele( `snappedTitleOnMobile`
+                        )->tag( n = `Title` ns = `m`
                             )->a( n = `text` v = `Navigation to sections`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( `actions`
-                        )->leaf( n = `Button` ns = `m`
+                    )->ele( `actions`
+                        )->tag( n = `Button` ns = `m`
                             )->a( n = `text` v = `Edit`
                             )->a( n = `type` v = `Emphasized`
-                        )->leaf( n = `Button` ns = `m`
+                        )->tag( n = `Button` ns = `m`
                             )->a( n = `type` v = `Transparent`
                             )->a( n = `text` v = `Delete`
-                        )->leaf( n = `Button` ns = `m`
+                        )->tag( n = `Button` ns = `m`
                             )->a( n = `type` v = `Transparent`
                             )->a( n = `text` v = `Copy`
-                        )->leaf( n = `OverflowToolbarButton` ns = `m`
+                        )->tag( n = `OverflowToolbarButton` ns = `m`
                             )->a( n = `icon`    v = `sap-icon://action`
                             )->a( n = `type`    v = `Transparent`
                             )->a( n = `text`    v = `Share`
                             )->a( n = `tooltip` v = `action`
 
-                    )->shut(
-                )->shut(
-            )->shut(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( `headerContent`
-                )->leaf( n = `Title` ns = `m`
+            )->ele( `headerContent`
+                )->tag( n = `Title` ns = `m`
                     )->a( n = `text`       v = `This example shows how to change the default behavior in order to be able to navigate to sections instead of subsections, using the Anchor Bar`
                     )->a( n = `titleStyle` v = `H6`
 
-            )->shut(
+            )->end(
 
-            )->open( `sections`
-                )->open( `ObjectPageSection`
+            )->ele( `sections`
+                )->ele( `ObjectPageSection`
                     )->a( n = `titleUppercase` v = `false`
                     )->a( n = `title`          v = `Section 1`
 
-                    )->open( `subSections`
-                        )->open( `ObjectPageSubSection`
+                    )->ele( `subSections`
+                        )->ele( `ObjectPageSubSection`
                             )->a( n = `title`          v = `Subsection 1.1`
                             )->a( n = `titleUppercase` v = `false`
 
-                            )->open( `blocks`
-                                )->leaf( n = `HTML` ns = `core`
+                            )->ele( `blocks`
+                                )->tag( n = `HTML` ns = `core`
                                     )->a( n = `content` v = `<div style="height:4em; background-color: #A9EAFF ;"></div>`
 
-                            )->shut(
-                        )->shut(
+                            )->end(
+                        )->end(
 
-                        )->open( `ObjectPageSubSection`
+                        )->ele( `ObjectPageSubSection`
                             )->a( n = `title`          v = `Subsection 1.2`
                             )->a( n = `titleUppercase` v = `false`
 
-                            )->open( `blocks`
-                                )->leaf( n = `HTML` ns = `core`
+                            )->ele( `blocks`
+                                )->tag( n = `HTML` ns = `core`
                                     )->a( n = `content` v = `<div style="height:4em; background-color: #A9EAFF ;"></div>`
 
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                )->shut(
+                            )->end(
+                        )->end(
+                    )->end(
+                )->end(
 
-                )->open( `ObjectPageSection`
+                )->ele( `ObjectPageSection`
                     )->a( n = `titleUppercase` v = `false`
                     )->a( n = `title`          v = `Section 2`
 
-                    )->open( `subSections`
-                        )->open( `ObjectPageSubSection`
+                    )->ele( `subSections`
+                        )->ele( `ObjectPageSubSection`
                             )->a( n = `title`          v = `Subsection 2.1`
                             )->a( n = `titleUppercase` v = `false`
 
-                            )->open( `blocks`
-                                )->leaf( n = `HTML` ns = `core`
+                            )->ele( `blocks`
+                                )->tag( n = `HTML` ns = `core`
                                     )->a( n = `content` v = `<div style="height:4em; background-color: #A9EAFF ;"></div>`
 
-                            )->shut(
-                        )->shut(
+                            )->end(
+                        )->end(
 
-                        )->open( `ObjectPageSubSection`
+                        )->ele( `ObjectPageSubSection`
                             )->a( n = `title`          v = `Subsection 2.2`
                             )->a( n = `titleUppercase` v = `false`
 
-                            )->open( `blocks`
-                                )->leaf( n = `HTML` ns = `core`
+                            )->ele( `blocks`
+                                )->tag( n = `HTML` ns = `core`
                                     )->a( n = `content` v = `<div style="height:4em; background-color: #A9EAFF ;"></div>` ).
 
     client->view_display( view->stringify( ) ).

@@ -43,13 +43,13 @@ CLASS z2ui5_cl_smpc_app_041 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
-        )->open( `ObjectHeader`
+        )->ele( `ObjectHeader`
             " element binding kept 1:1 - the context is the one-record structure instead of {/ProductCollection/0}
             )->a( n = `binding`    v = client->_bind( s_product )
             )->a( n = `title`      v = `{NAME}`
@@ -57,23 +57,23 @@ CLASS z2ui5_cl_smpc_app_041 IMPLEMENTATION.
             )->a( n = `numberUnit` v = `{CURRENCY_CODE}`
             )->a( n = `class`      v = `sapUiResponsivePadding--header`
 
-            )->open( `statuses`
-                )->leaf( `ObjectStatus`
+            )->ele( `statuses`
+                )->tag( `ObjectStatus`
                     )->a( n = `text`  v = `Some Damaged`
                     )->a( n = `state` v = `Error`
-                )->leaf( `ObjectStatus`
+                )->tag( `ObjectStatus`
                     )->a( n = `text`  v = `In Stock`
                     )->a( n = `state` v = `Success`
 
-            )->shut(
+            )->end(
 
-            )->leaf( `ObjectAttribute`
+            )->tag( `ObjectAttribute`
                 )->a( n = `text` v = `{WEIGHT_MEASURE} {WEIGHT_UNIT}`
-            )->leaf( `ObjectAttribute`
+            )->tag( `ObjectAttribute`
                 )->a( n = `text` v = `{WIDTH} x {DEPTH} x {HEIGHT} {DIM_UNIT}`
-            )->leaf( `ObjectAttribute`
+            )->tag( `ObjectAttribute`
                 )->a( n = `text` v = `{DESCRIPTION}`
-            )->leaf( `ObjectAttribute`
+            )->tag( `ObjectAttribute`
                 )->a( n = `text`   v = `www.sap.com`
                 )->a( n = `active` v = `true`
                 )->a( n = `press`  v = client->follow_up_action( val   = client->cs_event-urlhelper

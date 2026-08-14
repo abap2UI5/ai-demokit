@@ -45,12 +45,12 @@ CLASS z2ui5_cl_smpc_app_118 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the full sample: the f:ShellBar, the four-tab IconTabBar and the two
     " f:GridContainers with all EIGHT integration Cards, each rendering from
     " its own declarative JSON manifest carried as a bound ABAP string
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns:f`    v = `sap.f`
@@ -58,7 +58,7 @@ CLASS z2ui5_cl_smpc_app_118 IMPLEMENTATION.
         )->a( n = `xmlns:w`    v = `sap.ui.integration.widgets`
         )->a( n = `height`     v = `100%`
 
-        )->open( n = `ShellBar` ns = `f`
+        )->ele( n = `ShellBar` ns = `f`
             )->a( n = `title`               v = `Drone Hive`
             )->a( n = `secondTitle`         v = client->_bind( date )
             )->a( n = `homeIcon`            v = client->_bind( homeiconurl )
@@ -69,47 +69,47 @@ CLASS z2ui5_cl_smpc_app_118 IMPLEMENTATION.
             )->a( n = `notificationsNumber` v = `2`
             )->a( n = `class`               v = `sapUiSmallMarginTop sapUiSmallMarginBegin`
 
-            )->open( n = `menu` ns = `f`
-                )->open( `Menu`
-                    )->leaf( `MenuItem`
+            )->ele( n = `menu` ns = `f`
+                )->ele( `Menu`
+                    )->tag( `MenuItem`
                         )->a( n = `text` v = `Drone Hive`
                         )->a( n = `icon` v = client->_bind( homeiconurl )
 
-                )->shut(
-            )->shut(
-            )->open( n = `profile` ns = `f`
-                )->leaf( `Avatar`
+                )->end(
+            )->end(
+            )->ele( n = `profile` ns = `f`
+                )->tag( `Avatar`
                     )->a( n = `initials` v = `UI`
 
-            )->shut(
-        )->shut(
+            )->end(
+        )->end(
 
-        )->open( `IconTabBar`
+        )->ele( `IconTabBar`
             )->a( n = `id`                     v = `idIconTabBar`
             )->a( n = `headerBackgroundDesign` v = `Transparent`
             )->a( n = `class`                  v = `sapUiResponsiveContentPadding sapUiSmallMarginBegin`
 
-            )->open( `items`
-                )->open( `IconTabFilter`
+            )->ele( `items`
+                )->ele( `IconTabFilter`
                     )->a( n = `text` v = `Home`
 
-                    )->open( n = `GridContainer` ns = `f`
-                        )->open( n = `layout` ns = `f`
-                            )->leaf( n = `GridContainerSettings` ns = `f`
+                    )->ele( n = `GridContainer` ns = `f`
+                        )->ele( n = `layout` ns = `f`
+                            )->tag( n = `GridContainerSettings` ns = `f`
                                 )->a( n = `rowSize`    v = `5rem`
                                 )->a( n = `columnSize` v = `5rem`
                                 )->a( n = `gap`        v = `1rem`
 
-                        )->shut(
-                        )->open( n = `layoutS` ns = `f`
-                            )->leaf( n = `GridContainerSettings` ns = `f`
+                        )->end(
+                        )->ele( n = `layoutS` ns = `f`
+                            )->tag( n = `GridContainerSettings` ns = `f`
                                 )->a( n = `rowSize`    v = `5rem`
                                 )->a( n = `columnSize` v = `5rem`
                                 )->a( n = `gap`        v = `0.5rem`
 
-                        )->shut(
+                        )->end(
 
-                        )->open( n = `Card` ns = `w`
+                        )->ele( n = `Card` ns = `w`
                             )->a( n = `manifest` v = client->_bind( val = manifest_timeline json = abap_true )
                             " onAction toasts the navigation URL off the event - it
                             " resolves on the client, so the action needs no roundtrip
@@ -120,23 +120,23 @@ CLASS z2ui5_cl_smpc_app_118 IMPLEMENTATION.
                                                        ( `URL: {0}` )
                                                        ( `${$parameters>/parameters}.url` ) ) )
 
-                            )->open( n = `customData` ns = `w`
-                                )->leaf( n = `CardBadgeCustomData` ns = `card`
+                            )->ele( n = `customData` ns = `w`
+                                )->tag( n = `CardBadgeCustomData` ns = `card`
                                     )->a( n = `value` v = `Updated`
                                     )->a( n = `icon` v = `sap-icon://status-in-process`
                                     )->a( n = `state` v = `Indication03`
                                     )->a( n = `announcementText` v = `The card is recently updated.`
 
-                            )->shut(
+                            )->end(
 
-                            )->open( n = `layoutData` ns = `w`
-                                )->leaf( n = `GridContainerItemLayoutData` ns = `f`
+                            )->ele( n = `layoutData` ns = `w`
+                                )->tag( n = `GridContainerItemLayoutData` ns = `f`
                                     )->a( n = `minRows` v = `4`
                                     )->a( n = `columns` v = `4`
 
-                            )->shut(
-                        )->shut(
-                        )->open( n = `Card` ns = `w`
+                            )->end(
+                        )->end(
+                        )->ele( n = `Card` ns = `w`
                             )->a( n = `manifest` v = client->_bind( val = manifest_object json = abap_true )
                             " onAction toasts the navigation URL off the event - it
                             " resolves on the client, so the action needs no roundtrip
@@ -147,14 +147,14 @@ CLASS z2ui5_cl_smpc_app_118 IMPLEMENTATION.
                                                        ( `URL: {0}` )
                                                        ( `${$parameters>/parameters}.url` ) ) )
 
-                            )->open( n = `layoutData` ns = `w`
-                                )->leaf( n = `GridContainerItemLayoutData` ns = `f`
+                            )->ele( n = `layoutData` ns = `w`
+                                )->tag( n = `GridContainerItemLayoutData` ns = `f`
                                     )->a( n = `minRows` v = `4`
                                     )->a( n = `columns` v = `3`
 
-                            )->shut(
-                        )->shut(
-                        )->open( n = `Card` ns = `w`
+                            )->end(
+                        )->end(
+                        )->ele( n = `Card` ns = `w`
                             )->a( n = `manifest` v = client->_bind( manifest_component )
                             " onAction toasts the navigation URL off the event - it
                             " resolves on the client, so the action needs no roundtrip
@@ -165,25 +165,25 @@ CLASS z2ui5_cl_smpc_app_118 IMPLEMENTATION.
                                                        ( `URL: {0}` )
                                                        ( `${$parameters>/parameters}.url` ) ) )
 
-                            )->open( n = `customData` ns = `w`
-                                )->leaf( n = `CardBadgeCustomData` ns = `card`
+                            )->ele( n = `customData` ns = `w`
+                                )->tag( n = `CardBadgeCustomData` ns = `card`
                                     )->a( n = `value` v = `New`
                                     )->a( n = `announcementText` v = `Card was newly added.`
-                                )->leaf( n = `CardBadgeCustomData` ns = `card`
+                                )->tag( n = `CardBadgeCustomData` ns = `card`
                                     )->a( n = `icon` v = `sap-icon://pushpin-off`
                                     )->a( n = `visibilityMode` v = `Persist`
                                     )->a( n = `announcementText` v = `The card is pinned on top.`
 
-                            )->shut(
+                            )->end(
 
-                            )->open( n = `layoutData` ns = `w`
-                                )->leaf( n = `GridContainerItemLayoutData` ns = `f`
+                            )->ele( n = `layoutData` ns = `w`
+                                )->tag( n = `GridContainerItemLayoutData` ns = `f`
                                     )->a( n = `minRows` v = `5`
                                     )->a( n = `columns` v = `6`
 
-                            )->shut(
-                        )->shut(
-                        )->open( n = `Card` ns = `w`
+                            )->end(
+                        )->end(
+                        )->ele( n = `Card` ns = `w`
                             )->a( n = `manifest` v = client->_bind( val = manifest_calendar json = abap_true )
                             " onAction toasts the navigation URL off the event - it
                             " resolves on the client, so the action needs no roundtrip
@@ -194,72 +194,72 @@ CLASS z2ui5_cl_smpc_app_118 IMPLEMENTATION.
                                                        ( `URL: {0}` )
                                                        ( `${$parameters>/parameters}.url` ) ) )
 
-                            )->open( n = `customData` ns = `w`
-                                )->leaf( n = `CardBadgeCustomData` ns = `card`
+                            )->ele( n = `customData` ns = `w`
+                                )->tag( n = `CardBadgeCustomData` ns = `card`
                                     )->a( n = `value` v = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum congue libero ut blandit faucibus. Phasellus sed urna id tortor consequat accumsan eget at leo. Cras quis arcu magna.`
                                     )->a( n = `announcementText` v = `Lorem ipsum`
 
-                            )->shut(
+                            )->end(
 
-                            )->open( n = `layoutData` ns = `w`
-                                )->leaf( n = `GridContainerItemLayoutData` ns = `f`
+                            )->ele( n = `layoutData` ns = `w`
+                                )->tag( n = `GridContainerItemLayoutData` ns = `f`
                                     )->a( n = `minRows` v = `4`
                                     )->a( n = `columns` v = `4`
 
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                    )->leaf( `Title`
+                            )->end(
+                        )->end(
+                    )->end(
+                    )->tag( `Title`
                         )->a( n = `text`       v = `Incidents`
                         )->a( n = `titleStyle` v = `H2`
                         )->a( n = `class`      v = `sapUiSmallMarginBottom sapUiSmallMarginTop sapUiSmallMarginBegin`
-                    )->open( n = `GridContainer` ns = `f`
-                        )->open( n = `layout` ns = `f`
-                            )->leaf( n = `GridContainerSettings` ns = `f`
+                    )->ele( n = `GridContainer` ns = `f`
+                        )->ele( n = `layout` ns = `f`
+                            )->tag( n = `GridContainerSettings` ns = `f`
                                 )->a( n = `rowSize`    v = `5rem`
                                 )->a( n = `columnSize` v = `5rem`
                                 )->a( n = `gap`        v = `1rem`
 
-                        )->shut(
-                        )->open( n = `layoutS` ns = `f`
-                            )->leaf( n = `GridContainerSettings` ns = `f`
+                        )->end(
+                        )->ele( n = `layoutS` ns = `f`
+                            )->tag( n = `GridContainerSettings` ns = `f`
                                 )->a( n = `rowSize`    v = `5rem`
                                 )->a( n = `columnSize` v = `5rem`
                                 )->a( n = `gap`        v = `0.5rem`
 
-                        )->shut(
+                        )->end(
 
-                        )->open( n = `Card` ns = `w`
+                        )->ele( n = `Card` ns = `w`
                             )->a( n = `manifest` v = client->_bind( val = manifest_stackedcolumn json = abap_true )
 
-                            )->open( n = `layoutData` ns = `w`
-                                )->leaf( n = `GridContainerItemLayoutData` ns = `f`
+                            )->ele( n = `layoutData` ns = `w`
+                                )->tag( n = `GridContainerItemLayoutData` ns = `f`
                                     )->a( n = `rows` v = `5`
                                     )->a( n = `columns` v = `4`
 
-                            )->shut(
-                        )->shut(
-                        )->open( n = `Card` ns = `w`
+                            )->end(
+                        )->end(
+                        )->ele( n = `Card` ns = `w`
                             )->a( n = `manifest` v = client->_bind( val = manifest_donut json = abap_true )
 
-                            )->open( n = `layoutData` ns = `w`
-                                )->leaf( n = `GridContainerItemLayoutData` ns = `f`
+                            )->ele( n = `layoutData` ns = `w`
+                                )->tag( n = `GridContainerItemLayoutData` ns = `f`
                                     )->a( n = `rows` v = `4`
                                     )->a( n = `columns` v = `4`
 
-                            )->shut(
-                        )->shut(
-                        )->open( n = `Card` ns = `w`
+                            )->end(
+                        )->end(
+                        )->ele( n = `Card` ns = `w`
                             )->a( n = `manifest` v = client->_bind( val = manifest_list1 json = abap_true )
                             )->a( n = `baseUrl`  v = `./`
 
-                            )->open( n = `layoutData` ns = `w`
-                                )->leaf( n = `GridContainerItemLayoutData` ns = `f`
+                            )->ele( n = `layoutData` ns = `w`
+                                )->tag( n = `GridContainerItemLayoutData` ns = `f`
                                     )->a( n = `columns` v = `4`
 
-                            )->shut(
-                        )->shut(
-                        )->open( n = `Card` ns = `w`
+                            )->end(
+                        )->end(
+                        )->ele( n = `Card` ns = `w`
                             )->a( n = `manifest` v = client->_bind( val = manifest_list2 json = abap_true )
                             )->a( n = `baseUrl`  v = `./`
                             " onAction toasts the navigation URL off the event - it
@@ -271,19 +271,19 @@ CLASS z2ui5_cl_smpc_app_118 IMPLEMENTATION.
                                                        ( `URL: {0}` )
                                                        ( `${$parameters>/parameters}.url` ) ) )
 
-                            )->open( n = `layoutData` ns = `w`
-                                )->leaf( n = `GridContainerItemLayoutData` ns = `f`
+                            )->ele( n = `layoutData` ns = `w`
+                                )->tag( n = `GridContainerItemLayoutData` ns = `f`
                                     )->a( n = `columns` v = `4`
 
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                )->shut(
-                )->leaf( `IconTabFilter`
+                            )->end(
+                        )->end(
+                    )->end(
+                )->end(
+                )->tag( `IconTabFilter`
                     )->a( n = `text` v = `Team Distribution`
-                )->leaf( `IconTabFilter`
+                )->tag( `IconTabFilter`
                     )->a( n = `text` v = `Drone Maintenance`
-                )->leaf( `IconTabFilter`
+                )->tag( `IconTabFilter`
                     )->a( n = `text` v = `Drone Development` ).
 
     client->view_display( view->stringify( ) ).

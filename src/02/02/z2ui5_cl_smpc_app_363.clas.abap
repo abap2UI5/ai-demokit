@@ -64,13 +64,13 @@ CLASS z2ui5_cl_smpc_app_363 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the freeze demo: the three count Inputs are two-way bound and the Table's
     " fixedColumnCount and the rowMode's fixedTopRowCount / fixedBottomRowCount
     " bind the same fields, so the Apply press only clamps them in ABAP - the
     " validation the original does in buttonPress before calling the setters.
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`          v = `sap.ui.table`
         )->a( n = `xmlns:rowmodes` v = `sap.ui.table.rowmodes`
         )->a( n = `xmlns:mvc`      v = `sap.ui.core.mvc`
@@ -79,167 +79,167 @@ CLASS z2ui5_cl_smpc_app_363 IMPLEMENTATION.
         )->a( n = `xmlns:m`        v = `sap.m`
         )->a( n = `height`         v = `100%`
 
-        )->open( n = `Page` ns = `m`
+        )->ele( n = `Page` ns = `m`
             )->a( n = `showHeader`      v = `false`
             )->a( n = `enableScrolling` v = `false`
             )->a( n = `class`           v = `sapUiContentPadding`
 
-            )->open( n = `content` ns = `m`
-                )->open( `Table`
+            )->ele( n = `content` ns = `m`
+                )->ele( `Table`
                     )->a( n = `id`               v = `table1`
                     )->a( n = `rows`             v = client->_bind( t_products )
                     )->a( n = `selectionMode`    v = `MultiToggle`
                     )->a( n = `fixedColumnCount` v = client->_bind( fixed_column_count )
                     )->a( n = `ariaLabelledBy`   v = `title`
 
-                    )->open( `extension`
-                        )->open( n = `OverflowToolbar` ns = `m`
+                    )->ele( `extension`
+                        )->ele( n = `OverflowToolbar` ns = `m`
                             )->a( n = `style` v = `Clear`
 
-                            )->leaf( n = `Title` ns = `m`
+                            )->tag( n = `Title` ns = `m`
                                 )->a( n = `id`   v = `title`
                                 )->a( n = `text` v = `Products`
 
-                            )->leaf( n = `ToolbarSpacer` ns = `m`
+                            )->tag( n = `ToolbarSpacer` ns = `m`
 
-                            )->leaf( n = `Input` ns = `m`
+                            )->tag( n = `Input` ns = `m`
                                 )->a( n = `id`          v = `inputColumn`
                                 )->a( n = `width`       v = `20%`
                                 )->a( n = `placeholder` v = `fixed column count`
                                 )->a( n = `tooltip`     v = `fixed column count`
                                 )->a( n = `value`       v = client->_bind( fixed_column_count )
 
-                            )->leaf( n = `Input` ns = `m`
+                            )->tag( n = `Input` ns = `m`
                                 )->a( n = `id`          v = `inputRow`
                                 )->a( n = `width`       v = `20%`
                                 )->a( n = `placeholder` v = `fixed row count`
                                 )->a( n = `tooltip`     v = `fixed row count`
                                 )->a( n = `value`       v = client->_bind( fixed_top_row_count )
 
-                            )->leaf( n = `Input` ns = `m`
+                            )->tag( n = `Input` ns = `m`
                                 )->a( n = `id`          v = `inputBottomRow`
                                 )->a( n = `width`       v = `20%`
                                 )->a( n = `placeholder` v = `fixed bottom row count`
                                 )->a( n = `tooltip`     v = `fixed bottom row count`
                                 )->a( n = `value`       v = client->_bind( fixed_bottom_row_count )
 
-                            )->leaf( n = `Button` ns = `m`
+                            )->tag( n = `Button` ns = `m`
                                 )->a( n = `id`    v = `button`
                                 )->a( n = `text`  v = `Apply`
                                 )->a( n = `press` v = client->_event( `APPLY` )
 
-                        )->shut(
-                    )->shut(
-                    )->open( `rowMode`
-                        )->leaf( n = `Fixed` ns = `rowmodes`
+                        )->end(
+                    )->end(
+                    )->ele( `rowMode`
+                        )->tag( n = `Fixed` ns = `rowmodes`
                             )->a( n = `fixedTopRowCount`    v = client->_bind( fixed_top_row_count )
                             )->a( n = `fixedBottomRowCount` v = client->_bind( fixed_bottom_row_count )
 
-                    )->shut(
-                    )->open( `columns`
-                        )->open( `Column`
+                    )->end(
+                    )->ele( `columns`
+                        )->ele( `Column`
                             )->a( n = `width` v = `11rem`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Product Name`
 
-                            )->open( `template`
-                                )->leaf( n = `Text` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text`     v = `{NAME}`
                                     )->a( n = `wrapping` v = `false`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `width` v = `11rem`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Product Id`
 
-                            )->open( `template`
-                                )->leaf( n = `Input` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Input` ns = `m`
                                     )->a( n = `value` v = `{PRODUCTID}`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `width`  v = `6rem`
                             )->a( n = `hAlign` v = `End`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Quantity`
 
-                            )->open( `template`
-                                )->leaf( n = `Label` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = `{QUANTITY}`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `width` v = `9rem`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Status`
 
-                            )->open( `template`
-                                )->leaf( n = `ObjectStatus` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `ObjectStatus` ns = `m`
                                     )->a( n = `text`  v = `{STATUS}`
                                     )->a( n = `state` v = `{AVAILABLESTATE}`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `width` v = `9rem`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Price`
 
-                            )->open( `template`
-                                )->leaf( n = `Currency` ns = `u`
+                            )->ele( `template`
+                                )->tag( n = `Currency` ns = `u`
                                     )->a( n = `value`    v = `{PRICE}`
                                     )->a( n = `currency` v = `{CURRENCYCODE}`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `width` v = `12rem`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Supplier`
 
-                            )->open( `template`
-                                )->open( n = `ComboBox` ns = `m`
+                            )->ele( `template`
+                                )->ele( n = `ComboBox` ns = `m`
                                     )->a( n = `value` v = `{SUPPLIERNAME}`
                                     )->a( n = `items` v = |\{ path: '{ client->_bind( val = t_suppliers path = abap_true ) }', templateShareable: false \}|
 
-                                    )->leaf( n = `Item` ns = `c`
+                                    )->tag( n = `Item` ns = `c`
                                         )->a( n = `text` v = `{NAME}`
 
-                                )->shut(
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                                )->end(
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `width` v = `9rem`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Image`
 
-                            )->open( `template`
-                                )->leaf( n = `Link` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Link` ns = `m`
                                     )->a( n = `text`   v = `Show Image`
                                     )->a( n = `href`   v = `{PRODUCTPICURL}`
                                     )->a( n = `target` v = `_blank`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `width` v = `9rem`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Details`
 
-                            )->open( `template`
-                                )->leaf( n = `Button` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Button` ns = `m`
                                     )->a( n = `text`  v = `Show Details`
                                     )->a( n = `press` v = client->follow_up_action(
                                               val   = client->cs_event-control_global
@@ -248,69 +248,69 @@ CLASS z2ui5_cl_smpc_app_363 IMPLEMENTATION.
                                                                ( `Details for product with id {0}` )
                                                                ( `${PRODUCTID}` ) ) )
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `width` v = `7rem`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Heavy Weight`
 
-                            )->open( `template`
-                                )->leaf( n = `CheckBox` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `CheckBox` ns = `m`
                                     )->a( n = `selected` v = |\{ path: 'HEAVY', type: 'sap.ui.model.type.String' \}|
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `width` v = `12rem`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Category`
 
-                            )->open( `template`
-                                )->open( n = `Select` ns = `m`
+                            )->ele( `template`
+                                )->ele( n = `Select` ns = `m`
                                     )->a( n = `selectedKey` v = `{CATEGORY}`
                                     )->a( n = `items`       v = |\{ path: '{ client->_bind( val = t_categories path = abap_true ) }', templateShareable: false \}|
 
-                                    )->leaf( n = `Item` ns = `c`
+                                    )->tag( n = `Item` ns = `c`
                                         )->a( n = `text` v = `{NAME}`
                                         )->a( n = `key`  v = `{NAME}`
 
-                                )->shut(
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                                )->end(
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `width`  v = `6rem`
                             )->a( n = `hAlign` v = `Center`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Status`
 
-                            )->open( `template`
-                                )->leaf( n = `Icon` ns = `c`
+                            )->ele( `template`
+                                )->tag( n = `Icon` ns = `c`
                                     )->a( n = `src` v = `{AVAILABLEICON}`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `width`  v = `11rem`
                             )->a( n = `hAlign` v = `Center`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Delivery Date`
 
-                            )->open( `template`
-                                )->leaf( n = `DatePicker` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `DatePicker` ns = `m`
                                     )->a( n = `value` v = |\{ path: 'DELIVERYDATE', type: 'sap.ui.model.type.Date', formatOptions: \{ source: \{ pattern: 'timestamp' \} \} \}|
 
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
-        )->shut(
-    )->shut( ).
+                            )->end(
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
+        )->end(
+    )->end( ).
 
     client->view_display( view->stringify( ) ).
 

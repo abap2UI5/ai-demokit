@@ -43,9 +43,9 @@ CLASS z2ui5_cl_smpc_app_234 IMPLEMENTATION.
 
     " the three column views (List/Detail/DetailDetail) are inlined into one view;
     " the original's nested mvc:XMLView reference in beginColumnPages is dropped
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`        v = `sap.m`
         )->a( n = `xmlns:mvc`    v = `sap.ui.core.mvc`
         )->a( n = `xmlns:f`      v = `sap.f`
@@ -54,112 +54,112 @@ CLASS z2ui5_cl_smpc_app_234 IMPLEMENTATION.
 
         " FlexibleColumnLayout carries the f: prefix here (default xmlns is sap.m for the pages);
         " layout is bound two-way in place of the controller's setLayout calls
-        )->open( n = `FlexibleColumnLayout` ns = `f`
+        )->ele( n = `FlexibleColumnLayout` ns = `f`
             )->a( n = `id`     v = `fcl`
             )->a( n = `layout` v = client->_bind( layout )
 
-            )->open( n = `beginColumnPages` ns = `f`
-                )->open( `Page`
+            )->ele( n = `beginColumnPages` ns = `f`
+                )->ele( `Page`
                     )->a( n = `id`    v = `listPage`
                     )->a( n = `title` v = `List page`
 
-                    )->open( `Table`
+                    )->ele( `Table`
                         )->a( n = `items` v = client->_bind( t_list )
 
-                        )->open( `columns`
-                            )->open( `Column`
-                                )->leaf( `Label`
+                        )->ele( `columns`
+                            )->ele( `Column`
+                                )->tag( `Label`
                                     )->a( n = `text` v = `List`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `items`
-                            )->open( `ColumnListItem`
+                            )->end(
+                        )->end(
+                        )->ele( `items`
+                            )->ele( `ColumnListItem`
                                 )->a( n = `type`   v = `Navigation`
                                 )->a( n = `vAlign` v = `Middle`
                                 )->a( n = `press`  v = client->_event( `LIST_PRESS` )
 
-                                )->open( `cells`
-                                    )->leaf( `Text`
+                                )->ele( `cells`
+                                    )->tag( `Text`
                                         )->a( n = `text` v = `{TEXT}`
 
-                                )->shut(
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
-            )->open( n = `midColumnPages` ns = `f`
-                )->open( `Page`
+                                )->end(
+                            )->end(
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
+            )->ele( n = `midColumnPages` ns = `f`
+                )->ele( `Page`
                     )->a( n = `id`    v = `detailPage`
                     )->a( n = `title` v = `Detail page`
 
-                    )->open( `Table`
+                    )->ele( `Table`
                         )->a( n = `items` v = client->_bind( t_detail )
 
-                        )->open( `columns`
-                            )->open( `Column`
-                                )->leaf( `Label`
+                        )->ele( `columns`
+                            )->ele( `Column`
+                                )->tag( `Label`
                                     )->a( n = `text` v = `Detail List`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `items`
-                            )->open( `ColumnListItem`
+                            )->end(
+                        )->end(
+                        )->ele( `items`
+                            )->ele( `ColumnListItem`
                                 )->a( n = `type`   v = `Navigation`
                                 )->a( n = `vAlign` v = `Middle`
                                 )->a( n = `press`  v = client->_event( `DETAIL_PRESS` )
 
-                                )->open( `cells`
-                                    )->leaf( `Text`
+                                )->ele( `cells`
+                                    )->tag( `Text`
                                         )->a( n = `text` v = `{TEXT}`
 
-                                )->shut(
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
-            )->open( n = `endColumnPages` ns = `f`
-                )->open( `Page`
+                                )->end(
+                            )->end(
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
+            )->ele( n = `endColumnPages` ns = `f`
+                )->ele( `Page`
                     )->a( n = `id`               v = `detailDetailPage`
                     )->a( n = `title`            v = `DetailDetail page`
                     )->a( n = `backgroundDesign` v = `Transparent`
 
-                    )->open( `headerContent`
-                        )->leaf( `Button`
+                    )->ele( `headerContent`
+                        )->tag( `Button`
                             )->a( n = `type`    v = `Transparent`
                             )->a( n = `icon`    v = `sap-icon://decline`
                             )->a( n = `press`   v = client->_event( `CLOSE` )
                             )->a( n = `tooltip` v = `Close end column`
 
-                    )->shut(
-                    )->open( `content`
-                        )->open( `Table`
+                    )->end(
+                    )->ele( `content`
+                        )->ele( `Table`
                             )->a( n = `items` v = client->_bind( t_detaildetail )
 
-                            )->open( `columns`
-                                )->open( `Column`
-                                    )->leaf( `Label`
+                            )->ele( `columns`
+                                )->ele( `Column`
+                                    )->tag( `Label`
                                         )->a( n = `text` v = `DetailDetail List`
 
-                                )->shut(
-                            )->shut(
-                            )->open( `items`
-                                )->open( `ColumnListItem`
+                                )->end(
+                            )->end(
+                            )->ele( `items`
+                                )->ele( `ColumnListItem`
                                     )->a( n = `vAlign` v = `Middle`
 
-                                    )->open( `cells`
-                                        )->leaf( `Text`
+                                    )->ele( `cells`
+                                        )->tag( `Text`
                                             )->a( n = `text` v = `{TEXT}`
 
-                                    )->shut(
-                                )->shut(
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut( ).
+                                    )->end(
+                                )->end(
+                            )->end(
+                        )->end(
+                    )->end(
+                )->end(
+            )->end( ).
 
     client->view_display( view->stringify( ) ).
 

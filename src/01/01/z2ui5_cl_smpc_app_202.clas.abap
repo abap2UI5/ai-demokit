@@ -35,19 +35,19 @@ CLASS z2ui5_cl_smpc_app_202 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
 
-        )->open( `List`
+        )->ele( `List`
             )->a( n = `id`         v = `ShortProductList`
             )->a( n = `headerText` v = `Products`
             )->a( n = `items`      v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
 
-            )->open( `items`
-                )->leaf( `StandardListItem`
+            )->ele( `items`
+                )->tag( `StandardListItem`
                     )->a( n = `title`       v = `{NAME}`
                     )->a( n = `description` v = `{PRODUCTID}` ).
 

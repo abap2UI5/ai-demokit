@@ -38,95 +38,95 @@ CLASS z2ui5_cl_smpc_app_026 IMPLEMENTATION.
                 `.nestedFlexboxes .item6\{padding:1rem;background-color:#FF8598\}` &&
                 `.nestedFlexboxes h2\{color:#32363a\}</style>`.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns:core` v = `sap.ui.core`
 
-        )->leaf( n = `HTML` ns = `core`
+        )->tag( n = `HTML` ns = `core`
             )->a( n = `content` v = css
 
-        )->open( `HBox`
+        )->ele( `HBox`
             )->a( n = `fitContainer` v = `true`
             )->a( n = `alignItems`   v = `Stretch`
             )->a( n = `class`        v = `sapUiSmallMargin nestedFlexboxes`
 
-            )->open( n = `HTML` ns = `core`
+            )->ele( n = `HTML` ns = `core`
                 )->a( n = `content` v = `<h2>1</h2>`
 
-                )->open( n = `layoutData` ns = `core`
-                    )->leaf( `FlexItemData`
+                )->ele( n = `layoutData` ns = `core`
+                    )->tag( `FlexItemData`
                         )->a( n = `growFactor` v = `2`
                         )->a( n = `styleClass` v = `item1`
 
-                )->shut(
-            )->shut(
-            )->open( n = `HTML` ns = `core`
+                )->end(
+            )->end(
+            )->ele( n = `HTML` ns = `core`
                 )->a( n = `content` v = `<h2>2</h2>`
 
-                )->open( n = `layoutData` ns = `core`
-                    )->leaf( `FlexItemData`
+                )->ele( n = `layoutData` ns = `core`
+                    )->tag( `FlexItemData`
                         )->a( n = `growFactor` v = `3`
                         )->a( n = `styleClass` v = `item2`
 
-                )->shut(
-            )->shut(
-            )->open( `VBox`
+                )->end(
+            )->end(
+            )->ele( `VBox`
                 )->a( n = `fitContainer` v = `true`
 
-                )->open( `layoutData`
-                    )->leaf( `FlexItemData`
+                )->ele( `layoutData`
+                    )->tag( `FlexItemData`
                         )->a( n = `growFactor` v = `7`
 
-                )->shut(
-                )->open( n = `HTML` ns = `core`
+                )->end(
+                )->ele( n = `HTML` ns = `core`
                     )->a( n = `content` v = `<h2>3</h2>`
 
-                    )->open( n = `layoutData` ns = `core`
-                        )->leaf( `FlexItemData`
+                    )->ele( n = `layoutData` ns = `core`
+                        )->tag( `FlexItemData`
                             )->a( n = `growFactor` v = `5`
                             )->a( n = `styleClass` v = `item3`
 
-                    )->shut(
-                )->shut(
-                )->open( `HBox`
+                    )->end(
+                )->end(
+                )->ele( `HBox`
                     )->a( n = `fitContainer` v = `true`
                     )->a( n = `alignItems`   v = `Stretch`
 
-                    )->open( `layoutData`
-                        )->leaf( `FlexItemData`
+                    )->ele( `layoutData`
+                        )->tag( `FlexItemData`
                             )->a( n = `growFactor` v = `3`
 
-                    )->shut(
-                    )->open( n = `HTML` ns = `core`
+                    )->end(
+                    )->ele( n = `HTML` ns = `core`
                         )->a( n = `content` v = `<h2>4</h2>`
 
-                        )->open( n = `layoutData` ns = `core`
-                            )->leaf( `FlexItemData`
+                        )->ele( n = `layoutData` ns = `core`
+                            )->tag( `FlexItemData`
                                 )->a( n = `growFactor` v = `1`
                                 )->a( n = `styleClass` v = `item4`
 
-                        )->shut(
-                    )->shut(
-                    )->open( n = `HTML` ns = `core`
+                        )->end(
+                    )->end(
+                    )->ele( n = `HTML` ns = `core`
                         )->a( n = `content` v = `<h2>5</h2>`
 
-                        )->open( n = `layoutData` ns = `core`
-                            )->leaf( `FlexItemData`
+                        )->ele( n = `layoutData` ns = `core`
+                            )->tag( `FlexItemData`
                                 )->a( n = `growFactor` v = `1`
                                 )->a( n = `styleClass` v = `item5`
 
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
-            )->open( n = `HTML` ns = `core`
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
+            )->ele( n = `HTML` ns = `core`
                 )->a( n = `content` v = `<h2>6</h2>`
 
-                )->open( n = `layoutData` ns = `core`
-                    )->leaf( `FlexItemData`
+                )->ele( n = `layoutData` ns = `core`
+                    )->tag( `FlexItemData`
                         )->a( n = `growFactor` v = `5`
                         )->a( n = `styleClass` v = `item6` ).
 

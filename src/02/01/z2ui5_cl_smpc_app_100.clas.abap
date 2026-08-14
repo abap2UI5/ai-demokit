@@ -64,37 +64,37 @@ CLASS z2ui5_cl_smpc_app_100 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
-        )->open( `VBox`
+        )->ele( `VBox`
             )->a( n = `class` v = `sapUiSmallMargin`
 
-            )->leaf( `Button`
+            )->tag( `Button`
                 )->a( n = `id`           v = `employeeQuickView`
                 )->a( n = `text`         v = `Employee QuickView`
                 )->a( n = `width`        v = `200px`
                 )->a( n = `press`        v = client->_event( `EMPLOYEE` )
                 )->a( n = `class`        v = `sapUiSmallMarginBottom`
                 )->a( n = `ariaHasPopup` v = `Dialog`
-            )->leaf( `Button`
+            )->tag( `Button`
                 )->a( n = `id`           v = `showQuickView`
                 )->a( n = `text`         v = `Company QuickView`
                 )->a( n = `width`        v = `200px`
                 )->a( n = `press`        v = client->_event( `COMPANY` )
                 )->a( n = `class`        v = `sapUiSmallMarginBottom`
                 )->a( n = `ariaHasPopup` v = `Dialog`
-            )->leaf( `Button`
+            )->tag( `Button`
                 )->a( n = `id`           v = `genericQuickView`
                 )->a( n = `text`         v = `Generic QuickView`
                 )->a( n = `width`        v = `200px`
                 )->a( n = `press`        v = client->_event( `GENERIC` )
                 )->a( n = `class`        v = `sapUiSmallMarginBottom`
                 )->a( n = `ariaHasPopup` v = `Dialog`
-            )->leaf( `Button`
+            )->tag( `Button`
                 )->a( n = `id`           v = `genericQuickViewNoHeader`
                 )->a( n = `text`         v = `Generic QuickView No Header Set`
                 )->a( n = `width`        v = `250px`
@@ -141,13 +141,13 @@ CLASS z2ui5_cl_smpc_app_100 IMPLEMENTATION.
 
   METHOD popup_quickview_display.
 
-    DATA(popup) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(popup) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    popup->open( n = `FragmentDefinition` ns = `core`
+    popup->ele( n = `FragmentDefinition` ns = `core`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:core` v = `sap.ui.core`
 
-        )->open( `QuickView`
+        )->ele( `QuickView`
             )->a( n = `id`       v = `quickView`
             )->a( n = `pages`    v = client->_bind( t_pages )
             " onNavigate reads the navOrigin link and names it in the toast;
@@ -155,7 +155,7 @@ CLASS z2ui5_cl_smpc_app_100 IMPLEMENTATION.
             )->a( n = `navigate` v = client->_event( val   = `NAVIGATE`
                                                      t_arg = VALUE #( ( `${$parameters>/navOrigin} ? ${$parameters>/navOrigin}.getText() : ''` ) ) )
 
-            )->open( `QuickViewPage`
+            )->ele( `QuickViewPage`
                 )->a( n = `pageId`      v = `{PAGEID}`
                 )->a( n = `header`      v = `{HEADER}`
                 )->a( n = `title`       v = `{TITLE}`
@@ -163,17 +163,17 @@ CLASS z2ui5_cl_smpc_app_100 IMPLEMENTATION.
                 )->a( n = `description` v = `{DESCRIPTION}`
                 )->a( n = `groups`      v = `{path: 'GROUPS', templateShareable: true}`
 
-                )->open( `avatar`
-                    )->leaf( `Avatar`
+                )->ele( `avatar`
+                    )->tag( `Avatar`
                         )->a( n = `src`          v = `{ICON}`
                         )->a( n = `displayShape` v = `{DISPLAYSHAPE}`
 
-                )->shut(
-                )->open( `QuickViewGroup`
+                )->end(
+                )->ele( `QuickViewGroup`
                     )->a( n = `heading`  v = `{HEADING}`
                     )->a( n = `elements` v = `{path: 'ELEMENTS', templateShareable: true}`
 
-                    )->leaf( `QuickViewGroupElement`
+                    )->tag( `QuickViewGroupElement`
                         )->a( n = `label`        v = `{LABEL}`
                         )->a( n = `value`        v = `{VALUE}`
                         )->a( n = `url`          v = `{URL}`
@@ -182,9 +182,9 @@ CLASS z2ui5_cl_smpc_app_100 IMPLEMENTATION.
                         )->a( n = `emailSubject` v = `{EMAILSUBJECT}`
                         )->a( n = `target`       v = `{TARGET}`
 
-                )->shut(
-            )->shut(
-        )->shut( ).
+                )->end(
+            )->end(
+        )->end( ).
 
     client->popover_display( xml   = popup->stringify( )
                              by_id = by_id ).

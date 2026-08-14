@@ -51,14 +51,14 @@ CLASS z2ui5_cl_smpc_app_308 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " DateTypeRange.startDate/endDate are typed "object" and demand a real JS Date;
     " the model keeps ISO strings and Formatter.DateCreateObject converts them at
     " the point of use (needs UI5 >= 1.74). endDate is optional, so its conversion
     " is guarded - new Date('') is an Invalid Date, which is truthy and kills the
     " whole view
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`      v = `sap.ui.layout`
         )->a( n = `xmlns:u`      v = `sap.ui.unified`
         )->a( n = `xmlns:mvc`    v = `sap.ui.core.mvc`
@@ -67,9 +67,9 @@ CLASS z2ui5_cl_smpc_app_308 IMPLEMENTATION.
         )->a( n = `class`        v = `viewPadding`
         )->a( n = `core:require` v = `{Formatter: 'z2ui5/model/formatter'}`
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
 
-            )->open( n = `Calendar` ns = `u`
+            )->ele( n = `Calendar` ns = `u`
                 )->a( n = `id`                v = `calendar1`
                 )->a( n = `legend`            v = `legend1`
                 )->a( n = `intervalSelection` v = `true`
@@ -79,8 +79,8 @@ CLASS z2ui5_cl_smpc_app_308 IMPLEMENTATION.
                                                                                     ( `SECONDARY_TYPE` )
                                                                                     ( `TOOLTIP` ) ) )
 
-                )->open( n = `specialDates` ns = `u`
-                    )->leaf( n = `DateTypeRange` ns = `u`
+                )->ele( n = `specialDates` ns = `u`
+                    )->tag( n = `DateTypeRange` ns = `u`
                         )->a( n = `startDate`     v = `{ path: 'START_DATE', formatter: 'Formatter.DateCreateObject' }`
                         )->a( n = `endDate`       v = `{= ${END_DATE} ? Formatter.DateCreateObject(${END_DATE}) : null }`
                         )->a( n = `type`          v = `{TYPE}`
@@ -88,22 +88,22 @@ CLASS z2ui5_cl_smpc_app_308 IMPLEMENTATION.
                         )->a( n = `tooltip`       v = `{TOOLTIP}`
                         )->a( n = `color`         v = `{COLOR}`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( n = `CalendarLegend` ns = `u`
+            )->ele( n = `CalendarLegend` ns = `u`
                 )->a( n = `id`    v = `legend1`
                 )->a( n = `items` v = client->_bind( t_legend1 )
 
-                )->open( n = `items` ns = `u`
-                    )->leaf( n = `CalendarLegendItem` ns = `u`
+                )->ele( n = `items` ns = `u`
+                    )->tag( n = `CalendarLegendItem` ns = `u`
                         )->a( n = `type` v = `{TYPE}`
                         )->a( n = `text` v = `{TEXT}`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( n = `Calendar` ns = `u`
+            )->ele( n = `Calendar` ns = `u`
                 )->a( n = `id`           v = `calendar2`
                 )->a( n = `legend`       v = `legend2`
                 )->a( n = `specialDates` v = client->_bind(
@@ -112,8 +112,8 @@ CLASS z2ui5_cl_smpc_app_308 IMPLEMENTATION.
                                                                                ( `SECONDARY_TYPE` )
                                                                                ( `TOOLTIP` ) ) )
 
-                )->open( n = `specialDates` ns = `u`
-                    )->leaf( n = `DateTypeRange` ns = `u`
+                )->ele( n = `specialDates` ns = `u`
+                    )->tag( n = `DateTypeRange` ns = `u`
                         )->a( n = `startDate`     v = `{ path: 'START_DATE', formatter: 'Formatter.DateCreateObject' }`
                         )->a( n = `endDate`       v = `{= ${END_DATE} ? Formatter.DateCreateObject(${END_DATE}) : null }`
                         )->a( n = `type`          v = `{TYPE}`
@@ -121,23 +121,23 @@ CLASS z2ui5_cl_smpc_app_308 IMPLEMENTATION.
                         )->a( n = `tooltip`       v = `{TOOLTIP}`
                         )->a( n = `color`         v = `{COLOR}`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( n = `CalendarLegend` ns = `u`
+            )->ele( n = `CalendarLegend` ns = `u`
                 )->a( n = `id`            v = `legend2`
                 )->a( n = `standardItems` v = `Today`
                 )->a( n = `items`         v = client->_bind( t_legend2 )
 
-                )->open( n = `items` ns = `u`
-                    )->leaf( n = `CalendarLegendItem` ns = `u`
+                )->ele( n = `items` ns = `u`
+                    )->tag( n = `CalendarLegendItem` ns = `u`
                         )->a( n = `type` v = `{TYPE}`
                         )->a( n = `text` v = `{TEXT}`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->leaf( `ToggleButton`
+            )->tag( `ToggleButton`
                 )->a( n = `text`    v = `Special Days`
                 )->a( n = `pressed` v = client->_bind( pressed )
                 )->a( n = `press`   v = client->_event( val   = `SHOW_SPECIAL_DAYS`

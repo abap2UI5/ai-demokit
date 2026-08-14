@@ -26,32 +26,32 @@ CLASS z2ui5_cl_smpc_app_395 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `height`     v = `100%`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns`      v = `sap.m`
 
-        )->open( `OverflowToolbar`
+        )->ele( `OverflowToolbar`
             )->a( n = `design` v = `Transparent`
             )->a( n = `height` v = `3rem`
 
-            )->leaf( `Title`
+            )->tag( `Title`
                 )->a( n = `text` v = `Title Only`
 
-        )->shut(
+        )->end(
 
-        )->open( `OverflowToolbar`
+        )->ele( `OverflowToolbar`
             )->a( n = `design` v = `Transparent`
             )->a( n = `height` v = `3rem`
 
-            )->leaf( `Title`
+            )->tag( `Title`
                 )->a( n = `text` v = `Title and Actions`
-            )->leaf( `ToolbarSpacer`
-            )->leaf( `Button`
+            )->tag( `ToolbarSpacer`
+            )->tag( `Button`
                 )->a( n = `icon` v = `sap-icon://group-2`
-            )->leaf( `Button`
+            )->tag( `Button`
                 )->a( n = `icon` v = `sap-icon://action-settings` ).
 
     client->view_display( view->stringify( ) ).

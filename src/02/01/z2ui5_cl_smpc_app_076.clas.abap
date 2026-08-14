@@ -26,26 +26,26 @@ CLASS z2ui5_cl_smpc_app_076 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `class`     v = `sapUiBodyBackground sapContrastPlus`
 
-        )->open( `VBox`
+        )->ele( `VBox`
             )->a( n = `class` v = `sapUiSmallMargin`
-            )->open( `NotificationList`
+            )->ele( `NotificationList`
                 " id added: oList.removeItem( oItem ) needs a target for the wire
                 )->a( n = `id` v = `notificationList`
-                )->open( `layoutData`
-                    )->leaf( `FlexItemData`
+                )->ele( `layoutData`
+                    )->tag( `FlexItemData`
                         )->a( n = `maxWidth` v = `600px`
 
-                )->shut(
+                )->end(
 
-                )->open( `NotificationListItem`
+                )->ele( `NotificationListItem`
                     )->a( n = `title`           v = `New order (#2525) With a very long title - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent feugiat, turpis vel scelerisque pharetra, tellus odio ` &&
                                                      `vehicula dolor, nec elementum lectus turpis at nunc.`
                     )->a( n = `description`     v = `And with a very long description and long labels of the action buttons - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent feugiat, turpis vel ` &&
@@ -69,18 +69,18 @@ CLASS z2ui5_cl_smpc_app_076 IMPLEMENTATION.
                     )->a( n = `press`           v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                     )->a( n = `authorName`      v = `Jean Doe`
                     )->a( n = `authorPicture`   v = `https://sdk.openui5.org/test-resources/sap/m/images/Woman_04.png`
-                    )->open( `buttons`
-                        )->leaf( `Button`
+                    )->ele( `buttons`
+                        )->tag( `Button`
                             )->a( n = `text`  v = `Accept All Requested Information`
                             )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Accept Button Pressed` ) ) )
-                        )->leaf( `Button`
+                        )->tag( `Button`
                             )->a( n = `text`  v = `Reject All Requested Information`
                             )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Reject Button Pressed` ) ) )
 
-                    )->shut(
-                )->shut(
+                    )->end(
+                )->end(
 
-                )->leaf( `NotificationListItem`
+                )->tag( `NotificationListItem`
                     )->a( n = `title`           v = `New order (#2524), without action buttons`
                     )->a( n = `description`     v = `Short description`
                     )->a( n = `showCloseButton` v = `true`
@@ -100,7 +100,7 @@ CLASS z2ui5_cl_smpc_app_076 IMPLEMENTATION.
                     )->a( n = `authorName`      v = `Office Notification`
                     )->a( n = `authorPicture`   v = `sap-icon://group`
 
-                )->open( `NotificationListItem`
+                )->ele( `NotificationListItem`
                     )->a( n = `title`             v = `New order (#2523) With a long title - Lorem ipsum dolor sit amet, consectetur adipiscing elit.`
                     )->a( n = `description`       v = `And short description`
                     )->a( n = `showCloseButton`   v = `false`
@@ -120,20 +120,20 @@ CLASS z2ui5_cl_smpc_app_076 IMPLEMENTATION.
                     )->a( n = `authorName`        v = `Patricia Clark`
                     )->a( n = `authorInitials`    v = `PC`
                     )->a( n = `authorAvatarColor` v = `Accent8`
-                    )->open( `buttons`
-                        )->leaf( `Button`
+                    )->ele( `buttons`
+                        )->tag( `Button`
                             )->a( n = `text`  v = `Accept`
                             )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Accept Button Pressed` ) ) )
                             )->a( n = `icon`  v = `sap-icon://accept`
-                        )->leaf( `Button`
+                        )->tag( `Button`
                             )->a( n = `text`  v = `Reject`
                             )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Reject Button Pressed` ) ) )
                             )->a( n = `icon`  v = `sap-icon://sys-cancel`
 
-                    )->shut(
-                )->shut(
+                    )->end(
+                )->end(
 
-                )->leaf( `NotificationListItem`
+                )->tag( `NotificationListItem`
                     )->a( n = `title`             v = `New order (#2522)`
                     )->a( n = `description`       v = `With a very long description - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent feugiat, turpis vel scelerisque pharetra, tellus odio vehicula ` &&
                                                        `dolor, nec elementum lectus turpis at nunc.`
@@ -155,7 +155,7 @@ CLASS z2ui5_cl_smpc_app_076 IMPLEMENTATION.
                     )->a( n = `authorInitials`    v = `JS`
                     )->a( n = `authorAvatarColor` v = `Accent4`
 
-                )->leaf( `NotificationListItem`
+                )->tag( `NotificationListItem`
                     )->a( n = `title`           v = `New order (#2521)`
                     )->a( n = `description`     v = `With a very long description and no action buttons below - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent feugiat, turpis vel scelerisque ` &&
                                                      `pharetra, tellus odio vehicula dolor, nec elementum lectus turpis at ` &&
@@ -177,7 +177,7 @@ CLASS z2ui5_cl_smpc_app_076 IMPLEMENTATION.
                     )->a( n = `authorName`      v = `John Smith`
                     )->a( n = `authorPicture`   v = `https://sdk.openui5.org/test-resources/sap/m/images/headerImg2.jpg`
 
-                )->open( `NotificationListItem`
+                )->ele( `NotificationListItem`
                     )->a( n = `title`           v = `New order (#2525) With a very long title and truncation disabled by default! Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent feugiat, turpis vel ` &&
                                                      `scelerisque pharetra, tellus odio vehicula dolor, nec elementum ` &&
                                                      `lectus turpis at nunc.`
@@ -201,15 +201,15 @@ CLASS z2ui5_cl_smpc_app_076 IMPLEMENTATION.
                     )->a( n = `authorName`      v = `Jean Doe`
                     )->a( n = `authorPicture`   v = `https://sdk.openui5.org/test-resources/sap/m/images/Woman_04.png`
                     )->a( n = `truncate`        v = `false`
-                    )->open( `buttons`
-                        )->leaf( `Button`
+                    )->ele( `buttons`
+                        )->tag( `Button`
                             )->a( n = `text`  v = `Accept`
                             )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Accept Button Pressed` ) ) )
 
-                    )->shut(
-                )->shut(
+                    )->end(
+                )->end(
 
-                )->open( `NotificationListItem`
+                )->ele( `NotificationListItem`
                     )->a( n = `title`              v = `New order (#2525) With a very long title and with truncation enabled but 'Show More' hidden! Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent ` &&
                                                         `feugiat, turpis vel scelerisque pharetra, tellus odio vehicula dolor, ` &&
                                                         `nec elementum lectus turpis at nunc.`
@@ -234,18 +234,18 @@ CLASS z2ui5_cl_smpc_app_076 IMPLEMENTATION.
                     )->a( n = `authorPicture`      v = `https://sdk.openui5.org/test-resources/sap/m/images/Woman_04.png`
                     )->a( n = `hideShowMoreButton` v = `true`
                     )->a( n = `showButtons`        v = `false`
-                    )->open( `buttons`
-                        )->leaf( `Button`
+                    )->ele( `buttons`
+                        )->tag( `Button`
                             )->a( n = `text`  v = `Accept`
                             )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Accept Button Pressed` ) ) )
-                        )->leaf( `Button`
+                        )->tag( `Button`
                             )->a( n = `text`  v = `Reject`
                             )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Reject Button Pressed` ) ) )
 
-                    )->shut(
-                )->shut(
+                    )->end(
+                )->end(
 
-                )->open( `NotificationListItem`
+                )->ele( `NotificationListItem`
                     )->a( n = `title`           v = `New order (#2523) With a long title without description - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet`
                     )->a( n = `showCloseButton` v = `false`
                     )->a( n = `unread`          v = `false`
@@ -263,25 +263,25 @@ CLASS z2ui5_cl_smpc_app_076 IMPLEMENTATION.
                     )->a( n = `press`           v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                     )->a( n = `authorName`      v = `Patricia Clark`
                     )->a( n = `authorPicture`   v = `https://sdk.openui5.org/test-resources/sap/m/images/female_BaySu.jpg`
-                    )->open( `buttons`
-                        )->leaf( `Button`
+                    )->ele( `buttons`
+                        )->tag( `Button`
                             )->a( n = `text`  v = `Accept`
                             )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Accept Button Pressed` ) ) )
                             )->a( n = `icon`  v = `sap-icon://accept`
-                        )->leaf( `Button`
+                        )->tag( `Button`
                             )->a( n = `text`  v = `Reject`
                             )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Reject Button Pressed` ) ) )
                             )->a( n = `icon`  v = `sap-icon://sys-cancel`
                         " the original's onErrorPress sets a MessageStrip processingMessage on the item - shown as a toast here
-                        )->leaf( `Button`
+                        )->tag( `Button`
                             )->a( n = `text`  v = `Get Error`
                             )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Error: Something went wrong.` ) ) )
                             )->a( n = `icon`  v = `sap-icon://sys-cancel`
 
-                    )->shut(
-                )->shut(
+                    )->end(
+                )->end(
 
-                )->leaf( `NotificationListItem`
+                )->tag( `NotificationListItem`
                     )->a( n = `title`           v = `New order (#2523) With a long title without description`
                     )->a( n = `showCloseButton` v = `true`
                     )->a( n = `unread`          v = `false`
@@ -298,8 +298,8 @@ CLASS z2ui5_cl_smpc_app_076 IMPLEMENTATION.
                                                                                             ( `${$source>/title}` ) ) )
                     )->a( n = `press`           v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
 
-            )->shut(
-        )->shut( ).
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

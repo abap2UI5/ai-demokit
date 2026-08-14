@@ -35,18 +35,18 @@ CLASS z2ui5_cl_smpc_app_228 IMPLEMENTATION.
                          | ? "'" + { item }.getValue() + "' entered"| &&
                          | : "'" + { item }.getText() + "' pressed")|.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:u`   v = `sap.ui.unified`
         )->a( n = `class`     v = `viewPadding`
 
-        )->open( n = `HorizontalLayout` ns = `l`
+        )->ele( n = `HorizontalLayout` ns = `l`
 
-            )->open( `Button`
+            )->ele( `Button`
                 )->a( n = `id`           v = `openMenu`
                 )->a( n = `text`         v = `Open Menu`
                 )->a( n = `ariaHasPopup` v = `Menu`
@@ -55,8 +55,8 @@ CLASS z2ui5_cl_smpc_app_228 IMPLEMENTATION.
                 )->a( n = `press`        v = client->follow_up_action( val   = client->cs_event-control_by_id
                                                                        t_arg = VALUE #( ( `theMenu` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
 
-                )->open( `dependents`
-                    )->open( n = `Menu` ns = `u`
+                )->ele( `dependents`
+                    )->ele( n = `Menu` ns = `u`
                         )->a( n = `id` v = `theMenu`
                         " menu-level eventing: one handler for every item, composed on the frontend
                         " (1:1 with MessageToast.show("'" + item.getText() + "' pressed"))
@@ -69,43 +69,43 @@ CLASS z2ui5_cl_smpc_app_228 IMPLEMENTATION.
                         )->a( n = `itemSelect` v = client->follow_up_action( val   = client->cs_event-control_global
                                                                              t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0}` ) ( item_message ) ) )
 
-                        )->leaf( n = `MenuItem` ns = `u`
+                        )->tag( n = `MenuItem` ns = `u`
                             )->a( n = `text` v = `My 1st Item`
                             )->a( n = `icon` v = `sap-icon://save`
-                        )->leaf( n = `MenuItem` ns = `u`
+                        )->tag( n = `MenuItem` ns = `u`
                             )->a( n = `text` v = `My 2nd Item`
 
-                        )->open( n = `MenuItem` ns = `u`
+                        )->ele( n = `MenuItem` ns = `u`
                             )->a( n = `text` v = `My 3rd Item`
 
-                            )->open( n = `Menu` ns = `u`
+                            )->ele( n = `Menu` ns = `u`
 
-                                )->leaf( n = `MenuItem` ns = `u`
+                                )->tag( n = `MenuItem` ns = `u`
                                     )->a( n = `text` v = `1st Sub Item`
-                                )->leaf( n = `MenuItem` ns = `u`
+                                )->tag( n = `MenuItem` ns = `u`
                                     )->a( n = `text` v = `2nd Sub Item`
-                                )->leaf( n = `MenuItem` ns = `u`
+                                )->tag( n = `MenuItem` ns = `u`
                                     )->a( n = `text`    v = `3rd Sub Item but inactive`
                                     )->a( n = `enabled` v = `false`
 
-                            )->shut(
-                        )->shut(
-                        )->leaf( n = `MenuItem` ns = `u`
+                            )->end(
+                        )->end(
+                        )->tag( n = `MenuItem` ns = `u`
                             )->a( n = `text`          v = `My 4th Item`
                             )->a( n = `startsSection` v = `true`
-                        )->leaf( n = `MenuItem` ns = `u`
+                        )->tag( n = `MenuItem` ns = `u`
                             )->a( n = `text` v = `My 5th Item`
 
-                        )->leaf( n = `MenuTextFieldItem` ns = `u`
+                        )->tag( n = `MenuTextFieldItem` ns = `u`
                             )->a( n = `label`         v = `Find`
                             )->a( n = `enabled`       v = `true`
                             )->a( n = `startsSection` v = `true`
                             )->a( n = `icon`          v = `sap-icon://filter`
 
-                    )->shut(
-                )->shut(
-            )->shut(
-        )->shut( ).
+                    )->end(
+                )->end(
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

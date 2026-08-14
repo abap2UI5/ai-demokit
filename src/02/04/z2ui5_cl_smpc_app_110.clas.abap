@@ -26,16 +26,16 @@ CLASS z2ui5_cl_smpc_app_110 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`        v = `sap.f`
         )->a( n = `xmlns:mvc`    v = `sap.ui.core.mvc`
         )->a( n = `xmlns:m`      v = `sap.m`
         )->a( n = `xmlns:layout` v = `sap.ui.layout`
         )->a( n = `height`       v = `100%`
 
-        )->open( `ShellBar`
+        )->ele( `ShellBar`
             )->a( n = `title`               v = `Application Title`
             )->a( n = `secondTitle`         v = `Short description`
             )->a( n = `homeIcon`            v = `https://sdk.openui5.org/resources/sap/ui/documentation/sdk/images/logo_sap.png`
@@ -44,19 +44,19 @@ CLASS z2ui5_cl_smpc_app_110 IMPLEMENTATION.
             )->a( n = `showNotifications`   v = `true`
             )->a( n = `notificationsNumber` v = `2`
 
-            )->open( `menu`
-                )->open( n = `Menu` ns = `m`
-                    )->leaf( n = `MenuItem` ns = `m`
+            )->ele( `menu`
+                )->ele( n = `Menu` ns = `m`
+                    )->tag( n = `MenuItem` ns = `m`
                         )->a( n = `text` v = `Flight booking`
                         )->a( n = `icon` v = `sap-icon://flight`
-                    )->leaf( n = `MenuItem` ns = `m`
+                    )->tag( n = `MenuItem` ns = `m`
                         )->a( n = `text` v = `Car rental`
                         )->a( n = `icon` v = `sap-icon://car-rental`
 
-            )->shut(
-            )->shut(
-            )->open( `profile`
-                )->leaf( n = `Avatar` ns = `m`
+            )->end(
+            )->end(
+            )->ele( `profile`
+                )->tag( n = `Avatar` ns = `m`
                     )->a( n = `initials` v = `UI` ).
 
     client->view_display( view->stringify( ) ).

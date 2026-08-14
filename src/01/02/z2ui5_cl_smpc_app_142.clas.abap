@@ -37,40 +37,40 @@ CLASS z2ui5_cl_smpc_app_142 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns:l`    v = `sap.ui.layout`
         )->a( n = `xmlns:f`    v = `sap.ui.layout.form`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns`      v = `sap.m`
 
-        )->open( `VBox`
+        )->ele( `VBox`
             )->a( n = `class` v = `sapUiSmallMargin`
 
-            )->open( n = `Form` ns = `f`
+            )->ele( n = `Form` ns = `f`
                 )->a( n = `id`            v = `FormToolbar`
                 )->a( n = `editable`      v = `true`
                 )->a( n = `ariaLabelledBy` v = `Title1`
 
-                )->open( n = `toolbar` ns = `f`
-                    )->open( `Toolbar`
+                )->ele( n = `toolbar` ns = `f`
+                    )->ele( `Toolbar`
                         )->a( n = `id` v = `TB1`
-                        )->leaf( `Title`
+                        )->tag( `Title`
                             )->a( n = `id`   v = `Title1`
                             )->a( n = `text` v = `Address`
-                        )->leaf( `ToolbarSpacer`
-                        )->leaf( `Button`
+                        )->tag( `ToolbarSpacer`
+                        )->tag( `Button`
                             )->a( n = `icon` v = `sap-icon://settings`
-                        )->leaf( `Button`
+                        )->tag( `Button`
                             )->a( n = `icon` v = `sap-icon://drop-down-list`
 
-                    )->shut(
-                )->shut(
+                    )->end(
+                )->end(
 
-                )->open( n = `layout` ns = `f`
-                    )->leaf( n = `ResponsiveGridLayout` ns = `f`
+                )->ele( n = `layout` ns = `f`
+                    )->tag( n = `ResponsiveGridLayout` ns = `f`
                         )->a( n = `labelSpanXL`             v = `4`
                         )->a( n = `labelSpanL`              v = `3`
                         )->a( n = `labelSpanM`              v = `4`
@@ -85,117 +85,117 @@ CLASS z2ui5_cl_smpc_app_142 IMPLEMENTATION.
                         )->a( n = `columnsM`               v = `1`
                         )->a( n = `singleContainerFullSize` v = `false`
 
-                )->shut(
+                )->end(
 
-                )->open( n = `formContainers` ns = `f`
+                )->ele( n = `formContainers` ns = `f`
 
-                    )->open( n = `FormContainer` ns = `f`
+                    )->ele( n = `FormContainer` ns = `f`
                         )->a( n = `ariaLabelledBy` v = `Title2`
-                        )->open( n = `toolbar` ns = `f`
-                            )->open( `Toolbar`
-                                )->leaf( `Title`
+                        )->ele( n = `toolbar` ns = `f`
+                            )->ele( `Toolbar`
+                                )->tag( `Title`
                                     )->a( n = `id`   v = `Title2`
                                     )->a( n = `text` v = `Office`
-                                )->leaf( `ToolbarSpacer`
-                                )->leaf( `Button`
+                                )->tag( `ToolbarSpacer`
+                                )->tag( `Button`
                                     )->a( n = `icon` v = `sap-icon://settings`
 
-                        )->shut(
-                        )->shut(
+                        )->end(
+                        )->end(
 
-                        )->open( n = `formElements` ns = `f`
-                            )->open( n = `FormElement` ns = `f`
+                        )->ele( n = `formElements` ns = `f`
+                            )->ele( n = `FormElement` ns = `f`
                                 )->a( n = `label` v = `Name`
-                                )->open( n = `fields` ns = `f`
-                                    )->leaf( `Input`
+                                )->ele( n = `fields` ns = `f`
+                                    )->tag( `Input`
                                         )->a( n = `value` v = client->_bind( suppliername )
                                         )->a( n = `id`    v = `name`
 
-                            )->shut(
-                            )->shut(
-                            )->open( n = `FormElement` ns = `f`
+                            )->end(
+                            )->end(
+                            )->ele( n = `FormElement` ns = `f`
                                 )->a( n = `label` v = `Street`
-                                )->open( n = `fields` ns = `f`
-                                    )->leaf( `Input`
+                                )->ele( n = `fields` ns = `f`
+                                    )->tag( `Input`
                                         )->a( n = `value` v = client->_bind( street )
-                                    )->open( `Input`
+                                    )->ele( `Input`
                                         )->a( n = `value` v = client->_bind( housenumber )
-                                        )->open( `layoutData`
-                                            )->leaf( n = `GridData` ns = `l`
+                                        )->ele( `layoutData`
+                                            )->tag( n = `GridData` ns = `l`
                                                 )->a( n = `span` v = `XL2 L1 M3 S4`
 
-                                    )->shut(
-                                    )->shut(
-                            )->shut(
-                            )->shut(
-                            )->open( n = `FormElement` ns = `f`
+                                    )->end(
+                                    )->end(
+                            )->end(
+                            )->end(
+                            )->ele( n = `FormElement` ns = `f`
                                 )->a( n = `label` v = `ZIP Code/City`
-                                )->open( n = `fields` ns = `f`
-                                    )->open( `Input`
+                                )->ele( n = `fields` ns = `f`
+                                    )->ele( `Input`
                                         )->a( n = `value` v = client->_bind( zipcode )
-                                        )->open( `layoutData`
-                                            )->leaf( n = `GridData` ns = `l`
+                                        )->ele( `layoutData`
+                                            )->tag( n = `GridData` ns = `l`
                                                 )->a( n = `span` v = `XL2 L1 M3 S4`
 
-                                    )->shut(
-                                    )->shut(
-                                    )->leaf( `Input`
+                                    )->end(
+                                    )->end(
+                                    )->tag( `Input`
                                         )->a( n = `value` v = client->_bind( city )
 
-                            )->shut(
-                            )->shut(
-                            )->open( n = `FormElement` ns = `f`
+                            )->end(
+                            )->end(
+                            )->ele( n = `FormElement` ns = `f`
                                 )->a( n = `label` v = `Country`
-                                )->open( n = `fields` ns = `f`
-                                    )->open( `Select`
+                                )->ele( n = `fields` ns = `f`
+                                    )->ele( `Select`
                                         )->a( n = `width`       v = `100%`
                                         )->a( n = `id`          v = `country`
                                         )->a( n = `selectedKey` v = client->_bind( country )
-                                        )->leaf( n = `Item` ns = `core`
+                                        )->tag( n = `Item` ns = `core`
                                             )->a( n = `text` v = `Germany`
                                             )->a( n = `key`  v = `Germany`
-                                        )->leaf( n = `Item` ns = `core`
+                                        )->tag( n = `Item` ns = `core`
                                             )->a( n = `text` v = `USA`
                                             )->a( n = `key`  v = `USA`
-                                        )->leaf( n = `Item` ns = `core`
+                                        )->tag( n = `Item` ns = `core`
                                             )->a( n = `text` v = `England`
                                             )->a( n = `key`  v = `England`
 
-                            )->shut(
-                            )->shut(
-                            )->shut(
-                        )->shut(
-                    )->shut(
+                            )->end(
+                            )->end(
+                            )->end(
+                        )->end(
+                    )->end(
 
-                    )->open( n = `FormContainer` ns = `f`
+                    )->ele( n = `FormContainer` ns = `f`
                         )->a( n = `ariaLabelledBy` v = `Title3`
-                        )->open( n = `toolbar` ns = `f`
-                            )->open( `Toolbar`
-                                )->leaf( `Title`
+                        )->ele( n = `toolbar` ns = `f`
+                            )->ele( `Toolbar`
+                                )->tag( `Title`
                                     )->a( n = `id`   v = `Title3`
                                     )->a( n = `text` v = `Online`
-                                )->leaf( `ToolbarSpacer`
-                                )->leaf( `Button`
+                                )->tag( `ToolbarSpacer`
+                                )->tag( `Button`
                                     )->a( n = `icon` v = `sap-icon://settings`
 
-                        )->shut(
-                        )->shut(
+                        )->end(
+                        )->end(
 
-                        )->open( n = `formElements` ns = `f`
-                            )->open( n = `FormElement` ns = `f`
+                        )->ele( n = `formElements` ns = `f`
+                            )->ele( n = `FormElement` ns = `f`
                                 )->a( n = `label` v = `Web`
-                                )->open( n = `fields` ns = `f`
-                                    )->leaf( `Input`
+                                )->ele( n = `fields` ns = `f`
+                                    )->tag( `Input`
                                         )->a( n = `value` v = client->_bind( url )
                                         )->a( n = `type`  v = `Url`
                                         )->a( n = `id`    v = `url`
 
-                            )->shut(
-                            )->shut(
-                            )->open( n = `FormElement` ns = `f`
+                            )->end(
+                            )->end(
+                            )->ele( n = `FormElement` ns = `f`
                                 )->a( n = `label` v = `Twitter`
-                                )->open( n = `fields` ns = `f`
-                                    )->leaf( `Input`
+                                )->ele( n = `fields` ns = `f`
+                                    )->tag( `Input`
                                         )->a( n = `value` v = client->_bind( twitter )
                                         )->a( n = `id`    v = `twitter` ).
 

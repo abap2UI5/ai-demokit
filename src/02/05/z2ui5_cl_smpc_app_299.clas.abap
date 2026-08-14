@@ -43,25 +43,25 @@ CLASS z2ui5_cl_smpc_app_299 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns:tnt` v = `sap.tnt`
         )->a( n = `height`    v = `100%`
 
-        )->open( `VBox`
+        )->ele( `VBox`
             )->a( n = `renderType` v = `Bare`
             )->a( n = `alignItems` v = `Start`
             )->a( n = `height`     v = `100%`
 
-            )->leaf( `Button`
+            )->tag( `Button`
                 )->a( n = `text`  v = `Toggle Collapse/Expand`
                 )->a( n = `icon`  v = `sap-icon://menu2`
                 )->a( n = `press` v = client->_event( `TOGGLE_EXPAND` )
 
-            )->open( n = `SideNavigation` ns = `tnt`
+            )->ele( n = `SideNavigation` ns = `tnt`
                 )->a( n = `id`          v = `sideNavigation`
                 )->a( n = `selectedKey` v = `walked`
                 )->a( n = `expanded`    v = client->_bind( expanded )
@@ -71,21 +71,21 @@ CLASS z2ui5_cl_smpc_app_299 IMPLEMENTATION.
                 " the list is a bound aggregation (the app-241 pattern) instead of four
                 " static entries: creating appends a row. EXPANDED is omitted while
                 " initial so an item that does not set it keeps the control default
-                )->open( n = `NavigationList` ns = `tnt`
+                )->ele( n = `NavigationList` ns = `tnt`
                     )->a( n = `items` v = client->_bind(
                                               val                = t_nav_items
                                               omit_initial_paths = VALUE #( ( `EXPANDED` ) ) )
 
-                    )->leaf( n = `NavigationListItem` ns = `tnt`
+                    )->tag( n = `NavigationListItem` ns = `tnt`
                         )->a( n = `text`     v = `{TEXT}`
                         )->a( n = `icon`     v = `{ICON}`
                         )->a( n = `expanded` v = `{EXPANDED}`
 
-                )->shut(
+                )->end(
 
-                )->open( n = `fixedItem` ns = `tnt`
-                    )->open( n = `NavigationList` ns = `tnt`
-                        )->leaf( n = `NavigationListItem` ns = `tnt`
+                )->ele( n = `fixedItem` ns = `tnt`
+                    )->ele( n = `NavigationList` ns = `tnt`
+                        )->tag( n = `NavigationListItem` ns = `tnt`
                             )->a( n = `ariaHasPopup` v = `Dialog`
                             )->a( n = `id`           v = `quickCreate`
                             )->a( n = `press`        v = client->_event( `QUICK_CREATE` )
@@ -93,7 +93,7 @@ CLASS z2ui5_cl_smpc_app_299 IMPLEMENTATION.
                             )->a( n = `icon`         v = `sap-icon://write-new`
                             )->a( n = `design`       v = `Action`
                             )->a( n = `selectable`   v = `false`
-                        )->leaf( n = `NavigationListItem` ns = `tnt`
+                        )->tag( n = `NavigationListItem` ns = `tnt`
                             )->a( n = `selectable` v = `false`
                             )->a( n = `href`       v = `https://sap.com`
                             )->a( n = `target`     v = `_blank`
@@ -138,44 +138,44 @@ CLASS z2ui5_cl_smpc_app_299 IMPLEMENTATION.
 
     " original quickActionPress builds this Dialog imperatively (new Dialog({...}).open());
     " expressed as a core:FragmentDefinition shown via popup_display (declared deviation)
-    DATA(popup) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(popup) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    popup->open( n = `FragmentDefinition` ns = `core`
+    popup->ele( n = `FragmentDefinition` ns = `core`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns`      v = `sap.m`
 
-        )->open( `Dialog`
+        )->ele( `Dialog`
             )->a( n = `type`  v = `Message`
             )->a( n = `title` v = `Create Navigation List Item`
 
-            )->open( `content`
-                )->leaf( `Label`
+            )->ele( `content`
+                )->tag( `Label`
                     )->a( n = `text`     v = `Name:`
                     )->a( n = `labelFor` v = `navigationItemName`
-                )->leaf( `Input`
+                )->tag( `Input`
                     )->a( n = `id`          v = `navigationItemName`
                     )->a( n = `width`       v = `100%`
                     )->a( n = `placeholder` v = `Name`
                     )->a( n = `value`       v = client->_bind( create_name )
-                )->leaf( `Label`
+                )->tag( `Label`
                     )->a( n = `text`     v = `Icon:`
                     )->a( n = `labelFor` v = `navigationItemIcon`
-                )->leaf( `Input`
+                )->tag( `Input`
                     )->a( n = `id`          v = `navigationItemIcon`
                     )->a( n = `width`       v = `100%`
                     )->a( n = `placeholder` v = `sap-icon://home`
                     )->a( n = `value`       v = client->_bind( create_icon )
 
-            )->shut(
-            )->open( `beginButton`
-                )->leaf( `Button`
+            )->end(
+            )->ele( `beginButton`
+                )->tag( `Button`
                     )->a( n = `type`  v = `Emphasized`
                     )->a( n = `text`  v = `Create`
                     )->a( n = `press` v = client->_event( `CREATE_ITEM` )
 
-            )->shut(
-            )->open( `endButton`
-                )->leaf( `Button`
+            )->end(
+            )->ele( `endButton`
+                )->tag( `Button`
                     )->a( n = `text`  v = `Cancel`
                     )->a( n = `press` v = client->follow_up_action( client->cs_event-popup_close ) ).
 

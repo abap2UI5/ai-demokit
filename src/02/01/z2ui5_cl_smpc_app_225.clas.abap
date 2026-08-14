@@ -44,15 +44,15 @@ CLASS z2ui5_cl_smpc_app_225 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`         v = `sap.m`
         )->a( n = `xmlns:mvc`     v = `sap.ui.core.mvc`
         )->a( n = `xmlns:core`    v = `sap.ui.core`
         )->a( n = `xmlns:plugins` v = `sap.m.plugins`
 
-        )->open( `Table`
+        )->ele( `Table`
             )->a( n = `id`              v = `idProductsTable`
             )->a( n = `fixedLayout`     v = `Strict`
             )->a( n = `autoPopinMode`   v = `true`
@@ -60,74 +60,74 @@ CLASS z2ui5_cl_smpc_app_225 IMPLEMENTATION.
             )->a( n = `growing`         v = `true`
             )->a( n = `items`           v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
 
-            )->open( `dependents`
-                )->leaf( n = `ColumnResizer` ns = `plugins`
+            )->ele( `dependents`
+                )->tag( n = `ColumnResizer` ns = `plugins`
 
-            )->shut(
-            )->open( `columns`
-                )->open( `Column`
+            )->end(
+            )->ele( `columns`
+                )->ele( `Column`
                     )->a( n = `width` v = `12em`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Product`
 
-                )->shut(
-                )->open( `Column`
+                )->end(
+                )->ele( `Column`
                     )->a( n = `width` v = `150px`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Supplier`
 
-                )->shut(
-                )->open( `Column`
+                )->end(
+                )->ele( `Column`
                     )->a( n = `width`  v = `25%`
                     )->a( n = `hAlign` v = `End`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Dimensions`
 
-                )->shut(
-                )->open( `Column`
+                )->end(
+                )->ele( `Column`
                     )->a( n = `width`  v = `10rem`
                     )->a( n = `hAlign` v = `Center`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Weight`
 
-                )->shut(
-                )->open( `Column`
+                )->end(
+                )->ele( `Column`
                     )->a( n = `width`  v = `100px`
                     )->a( n = `hAlign` v = `End`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Price`
 
-                )->shut(
-            )->shut(
-            )->open( `items`
-                )->open( `ColumnListItem`
+                )->end(
+            )->end(
+            )->ele( `items`
+                )->ele( `ColumnListItem`
                     )->a( n = `vAlign` v = `Middle`
 
-                    )->open( `cells`
-                        )->leaf( `ObjectIdentifier`
+                    )->ele( `cells`
+                        )->tag( `ObjectIdentifier`
                             )->a( n = `title` v = `{NAME}`
                             )->a( n = `text`  v = `{PRODUCTID}`
                             )->a( n = `class` v = `sapUiTinyMarginTopBottom`
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `{SUPPLIERNAME}`
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `{WIDTH} x {DEPTH} x {HEIGHT} {DIMUNIT}`
-                        )->leaf( `ObjectNumber`
+                        )->tag( `ObjectNumber`
                             )->a( n = `number` v = `{WEIGHTMEASURE}`
                             )->a( n = `unit`   v = `{WEIGHTUNIT}`
-                        )->leaf( `ObjectNumber`
+                        )->tag( `ObjectNumber`
                             )->a( n = `number` v = |\{ parts:[\{path:'PRICE'\},\{path:'CURRENCYCODE'\}], type: 'sap.ui.model.type.Currency', formatOptions: \{showMeasure: false\} \}|
                             )->a( n = `unit`   v = `{CURRENCYCODE}`
 
-                    )->shut(
-                )->shut(
-            )->shut(
-        )->shut( ).
+                    )->end(
+                )->end(
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

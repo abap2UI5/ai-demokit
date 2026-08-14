@@ -42,34 +42,34 @@ CLASS z2ui5_cl_smpc_app_014 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns`      v = `sap.m`
 
-        )->open( `List`
+        )->ele( `List`
             )->a( n = `headerText` v = `Custom Content`
             )->a( n = `mode`       v = `Delete`
             )->a( n = `items`      v = client->_bind( t_products )
 
-            )->open( `CustomListItem`
-                )->open( `HBox`
-                    )->leaf( n = `Icon` ns = `core`
+            )->ele( `CustomListItem`
+                )->ele( `HBox`
+                    )->tag( n = `Icon` ns = `core`
                         )->a( n = `size`  v = `2rem`
                         )->a( n = `src`   v = `sap-icon://attachment-photo`
                         )->a( n = `class` v = `sapUiSmallMarginBegin sapUiSmallMarginTopBottom`
 
-                    )->open( `VBox`
+                    )->ele( `VBox`
                         )->a( n = `class` v = `sapUiSmallMarginBegin sapUiSmallMarginTopBottom`
 
-                        )->leaf( `Link`
+                        )->tag( `Link`
                             )->a( n = `text`   v = `{NAME}`
                             )->a( n = `target` v = `{PRODUCT_PIC_URL}`
                             )->a( n = `press`  v = client->_event( val   = `LINK_PRESS`
                                                                    t_arg = VALUE #( ( `${PRODUCT_PIC_URL}` ) ) )
-                        )->leaf( `Label`
+                        )->tag( `Label`
                             )->a( n = `text` v = `{PRODUCT_ID}` ).
 
     client->view_display( view->stringify( ) ).
@@ -92,18 +92,18 @@ CLASS z2ui5_cl_smpc_app_014 IMPLEMENTATION.
   METHOD popup_display_image.
 
     " the controller-built Dialog (handlePress), rebuilt as a fragment shown via popup_display
-    DATA(popup) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(popup) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    popup->open( n = `FragmentDefinition` ns = `core`
+    popup->ele( n = `FragmentDefinition` ns = `core`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:core` v = `sap.ui.core`
 
-        )->open( `Dialog`
-            )->leaf( `Image`
+        )->ele( `Dialog`
+            )->tag( `Image`
                 )->a( n = `src` v = pic_url
 
-            )->open( `beginButton`
-                )->leaf( `Button`
+            )->ele( `beginButton`
+                )->tag( `Button`
                     )->a( n = `text`  v = `Close`
                     )->a( n = `press` v = client->follow_up_action( client->cs_event-popup_close ) ).
 

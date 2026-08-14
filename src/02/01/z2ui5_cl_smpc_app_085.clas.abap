@@ -40,35 +40,35 @@ CLASS z2ui5_cl_smpc_app_085 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:l`    v = `sap.ui.layout`
         )->a( n = `xmlns:core` v = `sap.ui.core`
 
-        )->open( n = `HorizontalLayout` ns = `l`
+        )->ele( n = `HorizontalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
-            )->leaf( `Input`
+            )->tag( `Input`
                 )->a( n = `id`          v = `tokenInput`
                 )->a( n = `placeholder` v = `Insert token text`
                 )->a( n = `width`       v = `320px`
                 )->a( n = `value`       v = client->_bind( input_value )
-            )->leaf( `Button`
+            )->tag( `Button`
                 )->a( n = `class` v = `sapUiTinyMarginStart`
                 )->a( n = `text`  v = `Add Token`
                 )->a( n = `press` v = client->_event( `ADD` )
-            )->leaf( `CheckBox`
+            )->tag( `CheckBox`
                 )->a( n = `text`     v = `Editable`
                 )->a( n = `selected` v = client->_bind( editable )
 
-        )->shut(
+        )->end(
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
             )->a( n = `width` v = `100%`
-            )->open( `Tokenizer`
+            )->ele( `Tokenizer`
                 )->a( n = `id`          v = `tokenizer`
                 )->a( n = `width`       v = `65%`
                 )->a( n = `editable`    v = client->_bind( editable )
@@ -76,37 +76,37 @@ CLASS z2ui5_cl_smpc_app_085 IMPLEMENTATION.
                                                             t_arg = VALUE #( ( `$event.getParameter('tokens')[0].getKey()` ) ) )
                 )->a( n = `tokens`      v = client->_bind( t_tokens )
 
-                )->leaf( `Token`
+                )->tag( `Token`
                     )->a( n = `text` v = `{TEXT}`
                     )->a( n = `key`  v = `{KEY}`
 
-            )->shut(
-        )->shut(
+            )->end(
+        )->end(
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `text`  v = `Disabled tokenizer`
                 )->a( n = `class` v = `sapUiLargeMarginTop`
                 )->a( n = `width` v = `100%`
-            )->open( `Tokenizer`
+            )->ele( `Tokenizer`
                 )->a( n = `id`      v = `tokenizerDisabled`
                 )->a( n = `width`   v = `320px`
                 )->a( n = `enabled` v = `false`
-                )->open( `tokens`
-                    )->leaf( `Token`
+                )->ele( `tokens`
+                    )->tag( `Token`
                         )->a( n = `text` v = `Disabled token`
                         )->a( n = `key`  v = `1`
-                    )->leaf( `Token`
+                    )->tag( `Token`
                         )->a( n = `text` v = `Disabled token 2`
                         )->a( n = `key`  v = `2`
-                    )->leaf( `Token`
+                    )->tag( `Token`
                         )->a( n = `text` v = `Another disabled token`
                         )->a( n = `key`  v = `3`
 
-                )->shut(
-            )->shut(
-        )->shut( ).
+                )->end(
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

@@ -45,19 +45,19 @@ CLASS z2ui5_cl_smpc_app_215 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `height`    v = `100%`
 
-        )->open( n = `FixFlex` ns = `l`
+        )->ele( n = `FixFlex` ns = `l`
             )->a( n = `minFlexSize` v = `400`
 
-            )->open( n = `fixContent` ns = `l`
-                )->open( `ObjectHeader`
+            )->ele( n = `fixContent` ns = `l`
+                )->ele( `ObjectHeader`
                     )->a( n = `responsive`          v = `true`
                     )->a( n = `fullScreenOptimized` v = `true`
                     )->a( n = `binding`             v = |\{{ client->_bind( val = t_product_collection path = abap_true ) }/0\}|
@@ -68,104 +68,104 @@ CLASS z2ui5_cl_smpc_app_215 IMPLEMENTATION.
                     )->a( n = `numberState`         v = `Success`
                     )->a( n = `backgroundDesign`    v = `Translucent`
 
-                    )->open( `attributes`
-                        )->leaf( `ObjectAttribute`
+                    )->ele( `attributes`
+                        )->tag( `ObjectAttribute`
                             )->a( n = `title` v = `Manufacturer`
                             )->a( n = `text`  v = `{SUPPLIERNAME}`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( `statuses`
-                        )->leaf( `ObjectStatus`
+                    )->ele( `statuses`
+                        )->tag( `ObjectStatus`
                             )->a( n = `title` v = `Approval`
                             )->a( n = `text`  v = `Pending`
                             )->a( n = `state` v = `Warning`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( `markers`
-                        )->leaf( `ObjectMarker`
+                    )->ele( `markers`
+                        )->tag( `ObjectMarker`
                             )->a( n = `type` v = `Flagged`
-                        )->leaf( `ObjectMarker`
+                        )->tag( `ObjectMarker`
                             )->a( n = `type` v = `Favorite`
 
-                    )->shut(
-                )->shut(
-            )->shut(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( n = `flexContent` ns = `l`
-                )->open( `Table`
+            )->ele( n = `flexContent` ns = `l`
+                )->ele( `Table`
                     )->a( n = `id`               v = `idProductsTable`
                     )->a( n = `items`            v = |\{ path: '{ client->_bind( val = t_product_collection path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
                     )->a( n = `growing`          v = `true`
                     )->a( n = `growingThreshold` v = `50`
 
-                    )->open( `headerToolbar`
-                        )->open( `OverflowToolbar`
-                            )->leaf( `Title`
+                    )->ele( `headerToolbar`
+                        )->ele( `OverflowToolbar`
+                            )->tag( `Title`
                                 )->a( n = `text`  v = `Products`
                                 )->a( n = `level` v = `H2`
 
-                        )->shut(
-                    )->shut(
+                        )->end(
+                    )->end(
 
-                    )->open( `columns`
-                        )->open( `Column`
+                    )->ele( `columns`
+                        )->ele( `Column`
                             )->a( n = `width` v = `12em`
 
-                            )->leaf( `Text`
+                            )->tag( `Text`
                                 )->a( n = `text` v = `Product`
 
-                        )->shut(
-                        )->open( `Column`
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `minScreenWidth` v = `Tablet`
                             )->a( n = `demandPopin`    v = `true`
 
-                            )->leaf( `Text`
+                            )->tag( `Text`
                                 )->a( n = `text` v = `Supplier`
 
-                        )->shut(
-                        )->open( `Column`
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `minScreenWidth` v = `Tablet`
                             )->a( n = `demandPopin`    v = `true`
                             )->a( n = `hAlign`         v = `Right`
 
-                            )->leaf( `Text`
+                            )->tag( `Text`
                                 )->a( n = `text` v = `Dimensions`
 
-                        )->shut(
-                        )->open( `Column`
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `minScreenWidth` v = `Tablet`
                             )->a( n = `demandPopin`    v = `true`
                             )->a( n = `hAlign`         v = `Center`
 
-                            )->leaf( `Text`
+                            )->tag( `Text`
                                 )->a( n = `text` v = `Weight`
 
-                        )->shut(
-                        )->open( `Column`
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `hAlign` v = `Right`
 
-                            )->leaf( `Text`
+                            )->tag( `Text`
                                 )->a( n = `text` v = `Price`
 
-                        )->shut(
-                    )->shut(
+                        )->end(
+                    )->end(
 
-                    )->open( `items`
-                        )->open( `ColumnListItem`
-                            )->open( `cells`
-                                )->leaf( `ObjectIdentifier`
+                    )->ele( `items`
+                        )->ele( `ColumnListItem`
+                            )->ele( `cells`
+                                )->tag( `ObjectIdentifier`
                                     )->a( n = `title` v = `{NAME}`
                                     )->a( n = `text`  v = `{PRODUCTID}`
-                                )->leaf( `Text`
+                                )->tag( `Text`
                                     )->a( n = `text` v = `{SUPPLIERNAME}`
-                                )->leaf( `Text`
+                                )->tag( `Text`
                                     )->a( n = `text` v = `{WIDTH} x {DEPTH} x {HEIGHT} {DIMUNIT}`
-                                )->leaf( `ObjectNumber`
+                                )->tag( `ObjectNumber`
                                     )->a( n = `number` v = `{WEIGHTMEASURE}`
                                     )->a( n = `unit`   v = `{WEIGHTUNIT}`
-                                )->leaf( `ObjectNumber`
+                                )->tag( `ObjectNumber`
                                     )->a( n = `number` v = |\{ parts:[\{path:'PRICE'\},\{path:'CURRENCYCODE'\}], type:'sap.ui.model.type.Currency', formatOptions:\{showMeasure:false\} \}|
                                     )->a( n = `unit`   v = `{CURRENCYCODE}` ).
 

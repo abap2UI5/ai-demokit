@@ -36,7 +36,7 @@ CLASS z2ui5_cl_smpc_app_271 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " onSliderMoved sets the Panel width imperatively - sap.m.Panel has a width
     " property, so it is the bound expression (app 214/270 form).
@@ -44,7 +44,7 @@ CLASS z2ui5_cl_smpc_app_271 IMPLEMENTATION.
     " 'true'); the SegmentedButton key and the layout's containerQuery share one
     " two-way bound field, so the switch works client-side without a round-trip.
     " layoutChange round-trips the active layout name into the info Text.
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns:grid` v = `sap.ui.layout.cssgrid`
@@ -52,212 +52,212 @@ CLASS z2ui5_cl_smpc_app_271 IMPLEMENTATION.
         )->a( n = `xmlns:core` v = `sap.ui.core`
 
         " the sample's css/main.css (app 122/124 precedent); braces escaped
-        )->leaf( n = `HTML` ns = `core`
+        )->tag( n = `HTML` ns = `core`
             )->a( n = `content` v = `<style>.sapMFlexBox.demoBox\{border-radius:10px;` &&
                                     `background-color:#427cac;text-align:center\}` &&
                                     `.demoBox .sapMText\{color:#ffffff\}` &&
                                     `.sapMText.message\{font-weight:bold\}</style>`
 
-        )->leaf( `ToggleButton`
+        )->tag( `ToggleButton`
             )->a( n = `id`    v = `revealGrid`
             )->a( n = `text`  v = `Reveal Grid`
             )->a( n = `class` v = `sapUiSmallMargin`
 
-        )->leaf( `Slider`
+        )->tag( `Slider`
             )->a( n = `value` v = client->_bind( slider_value )
             )->a( n = `class` v = `sapUiSmallMarginBottom`
 
-        )->open( `Panel`
+        )->ele( `Panel`
             )->a( n = `id`    v = `panelCSSGrid`
             )->a( n = `width` v = |\{= ${ client->_bind( slider_value ) } + '%' \}|
 
-            )->open( `headerToolbar`
-                )->open( `OverflowToolbar`
+            )->ele( `headerToolbar`
+                )->ele( `OverflowToolbar`
                     )->a( n = `height` v = `3rem`
 
-                    )->leaf( `Title`
+                    )->tag( `Title`
                         )->a( n = `text` v = `GridResponsiveness example`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->leaf( `Text`
+            )->tag( `Text`
                 )->a( n = `class` v = `message sapUiSmallMarginBottom`
                 )->a( n = `id`    v = `infoTxt`
                 )->a( n = `width` v = `100%`
                 )->a( n = `text`  v = client->_bind( info_text )
-            )->leaf( `Text`
+            )->tag( `Text`
                 )->a( n = `text` v = `Responsive behaviour is fully configurable by the developer. It is possible to `
                                   && `pass a GridResponsiveLayout to the customLayout aggregation of the CSSGrid and `
                                   && `configure how it will look in different breakpoints (S, M, L, XL). The breakpoints `
                                   && `can be calculated either by the screen size or by the grid container (with `
                                   && `containerQuery property).`
 
-            )->open( `HBox`
+            )->ele( `HBox`
                 )->a( n = `alignItems`  v = `Center`
                 )->a( n = `renderType`  v = `Bare`
                 )->a( n = `class`       v = `sapUiSmallMarginBottom sapUiSmallMarginTop`
 
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text`  v = `GridResponsiveLayout containerQuery:`
                     )->a( n = `class` v = `sapUiTinyMarginEnd`
 
-                )->open( `SegmentedButton`
+                )->ele( `SegmentedButton`
                     )->a( n = `selectedKey` v = client->_bind( container_query )
 
-                    )->open( `items`
-                        )->leaf( `SegmentedButtonItem`
+                    )->ele( `items`
+                        )->tag( `SegmentedButtonItem`
                             )->a( n = `key`  v = `true`
                             )->a( n = `text` v = `true`
-                        )->leaf( `SegmentedButtonItem`
+                        )->tag( `SegmentedButtonItem`
                             )->a( n = `key`  v = `false`
                             )->a( n = `text` v = `false`
 
-                    )->shut(
-                )->shut(
-            )->shut(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( n = `CSSGrid` ns = `grid`
+            )->ele( n = `CSSGrid` ns = `grid`
                 )->a( n = `id` v = `grid1`
 
-                )->open( n = `customLayout` ns = `grid`
-                    )->open( n = `GridResponsiveLayout` ns = `grid`
+                )->ele( n = `customLayout` ns = `grid`
+                    )->ele( n = `GridResponsiveLayout` ns = `grid`
                         )->a( n = `containerQuery` v = |\{= ${ client->_bind( container_query ) } === 'true' \}|
                         )->a( n = `layoutChange`   v = client->_event( val   = `LAYOUT_CHANGE`
                                                                        t_arg = VALUE #( ( `${$parameters>/layout}` ) ) )
 
-                        )->open( n = `layoutS` ns = `grid`
-                            )->leaf( n = `GridSettings` ns = `grid`
+                        )->ele( n = `layoutS` ns = `grid`
+                            )->tag( n = `GridSettings` ns = `grid`
                                 )->a( n = `gridTemplateColumns` v = `repeat(auto-fit, 8rem)`
                                 )->a( n = `gridAutoRows`        v = `5rem`
                                 )->a( n = `gridRowGap`          v = `1rem`
                                 )->a( n = `gridColumnGap`       v = `1rem`
 
-                        )->shut(
+                        )->end(
 
-                        )->open( n = `layout` ns = `grid`
-                            )->leaf( n = `GridSettings` ns = `grid`
+                        )->ele( n = `layout` ns = `grid`
+                            )->tag( n = `GridSettings` ns = `grid`
                                 )->a( n = `gridTemplateColumns` v = `repeat(auto-fit, 12rem)`
                                 )->a( n = `gridAutoRows`        v = `5rem`
                                 )->a( n = `gridRowGap`          v = `1rem`
                                 )->a( n = `gridColumnGap`       v = `1rem`
 
-                        )->shut(
+                        )->end(
 
-                        )->open( n = `layoutXL` ns = `grid`
-                            )->leaf( n = `GridSettings` ns = `grid`
+                        )->ele( n = `layoutXL` ns = `grid`
+                            )->tag( n = `GridSettings` ns = `grid`
                                 )->a( n = `gridTemplateColumns` v = `repeat(auto-fit, 20rem)`
                                 )->a( n = `gridAutoRows`        v = `5rem`
                                 )->a( n = `gridRowGap`          v = `1rem`
                                 )->a( n = `gridColumnGap`       v = `1rem`
 
-                        )->shut(
-                    )->shut(
-                )->shut(
+                        )->end(
+                    )->end(
+                )->end(
 
-                )->open( `VBox`
+                )->ele( `VBox`
                     )->a( n = `class` v = `demoBox`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text`     v = `A`
                         )->a( n = `wrapping` v = `true`
 
-                )->shut(
+                )->end(
 
-                )->open( `VBox`
+                )->ele( `VBox`
                     )->a( n = `class` v = `demoBox`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text`     v = `B`
                         )->a( n = `wrapping` v = `true`
 
-                )->shut(
+                )->end(
 
-                )->open( `VBox`
+                )->ele( `VBox`
                     )->a( n = `class` v = `demoBox`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text`     v = `C`
                         )->a( n = `wrapping` v = `true`
 
-                )->shut(
+                )->end(
 
-                )->open( `VBox`
+                )->ele( `VBox`
                     )->a( n = `class` v = `demoBox`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text`     v = `D`
                         )->a( n = `wrapping` v = `true`
 
-                )->shut(
+                )->end(
 
-                )->open( `VBox`
+                )->ele( `VBox`
                     )->a( n = `class` v = `demoBox`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text`     v = `E`
                         )->a( n = `wrapping` v = `true`
 
-                )->shut(
+                )->end(
 
-                )->open( `VBox`
+                )->ele( `VBox`
                     )->a( n = `class` v = `demoBox`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text`     v = `F`
                         )->a( n = `wrapping` v = `true`
 
-                )->shut(
+                )->end(
 
-                )->open( `VBox`
+                )->ele( `VBox`
                     )->a( n = `class` v = `demoBox`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text`     v = `G`
                         )->a( n = `wrapping` v = `true`
 
-                )->shut(
+                )->end(
 
-                )->open( `VBox`
+                )->ele( `VBox`
                     )->a( n = `class` v = `demoBox`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text`     v = `H`
                         )->a( n = `wrapping` v = `true`
 
-                )->shut(
+                )->end(
 
-                )->open( `VBox`
+                )->ele( `VBox`
                     )->a( n = `class` v = `demoBox`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text`     v = `I`
                         )->a( n = `wrapping` v = `true`
 
-                )->shut(
+                )->end(
 
-                )->open( `VBox`
+                )->ele( `VBox`
                     )->a( n = `class` v = `demoBox`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text`     v = `J`
                         )->a( n = `wrapping` v = `true`
 
-                )->shut(
+                )->end(
 
-                )->open( `VBox`
+                )->ele( `VBox`
                     )->a( n = `class` v = `demoBox`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text`     v = `K`
                         )->a( n = `wrapping` v = `true`
 
-                )->shut(
+                )->end(
 
-                )->open( `VBox`
+                )->ele( `VBox`
                     )->a( n = `class` v = `demoBox`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text`     v = `L`
                         )->a( n = `wrapping` v = `true`
 

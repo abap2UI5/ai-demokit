@@ -30,15 +30,15 @@ CLASS z2ui5_cl_smpc_app_154 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
 
-        )->open( `VBox`
+        )->ele( `VBox`
             )->a( n = `class` v = `sapUiMediumMargin`
-            )->leaf( `FormattedText`
+            )->tag( `FormattedText`
                 )->a( n = `htmlText` v = client->_bind( html ) ).
 
     client->view_display( view->stringify( ) ).

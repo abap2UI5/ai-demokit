@@ -34,7 +34,7 @@ CLASS z2ui5_cl_smpc_app_183 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " sap.ui.model.type.DateTime data-type binding (TypeDateTime). DateTimeType is
     " pulled via core:require; the DateTimePicker, the Input and the style/pattern/
@@ -42,14 +42,14 @@ CLASS z2ui5_cl_smpc_app_183 IMPLEMENTATION.
     " binding 1:1. Each binding carries an added source formatOption so the parseable
     " string model revives into the type (see sidecar) - a literal single-quote in a
     " display pattern keeps the original's backslash escape (\') inside the |...| template.
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`        v = `sap.m`
         )->a( n = `xmlns:mvc`    v = `sap.ui.core.mvc`
         )->a( n = `xmlns:form`   v = `sap.ui.layout.form`
         )->a( n = `xmlns:core`   v = `sap.ui.core`
         )->a( n = `core:require` v = `{DateTimeType: 'sap/ui/model/type/DateTime'}`
 
-        )->open( n = `SimpleForm` ns = `form`
+        )->ele( n = `SimpleForm` ns = `form`
             )->a( n = `width`      v = `auto`
             )->a( n = `class`      v = `sapUiResponsiveMargin`
             )->a( n = `layout`     v = `ResponsiveGridLayout`
@@ -62,22 +62,22 @@ CLASS z2ui5_cl_smpc_app_183 IMPLEMENTATION.
             )->a( n = `columnsM`   v = `1`
             )->a( n = `title`      v = `Date Input`
 
-            )->open( n = `content` ns = `form`
-                )->leaf( `Label`
+            )->ele( n = `content` ns = `form`
+                )->tag( `Label`
                     )->a( n = `text` v = `DateTime in DateTimePicker`
-                )->leaf( `DateTimePicker`
+                )->tag( `DateTimePicker`
                     )->a( n = `value` v = |\{ path: '{ client->_bind( val = dtvalue path = abap_true ) }', type: 'DateTimeType', formatOptions: \{ source: \{ pattern: 'yyyy-MM-dd HH:mm:ss' \} \} \}|
-                )->leaf( `Label`
+                )->tag( `Label`
                     )->a( n = `text` v = `DateTime in Input`
-                )->leaf( `Input`
+                )->tag( `Input`
                     )->a( n = `id`          v = `dtInput`
                     )->a( n = `placeholder` v = client->_bind( dtpattern )
                     )->a( n = `value`       v = |\{ path: '{ client->_bind( val = dtvalue path = abap_true ) }', type: 'DateTimeType', formatOptions: \{ source: \{ pattern: 'yyyy-MM-dd HH:mm:ss' \} \} \}|
 
-        )->shut(
-        )->shut(
+        )->end(
+        )->end(
 
-        )->open( n = `SimpleForm` ns = `form`
+        )->ele( n = `SimpleForm` ns = `form`
             )->a( n = `width`      v = `auto`
             )->a( n = `class`      v = `sapUiResponsiveMargin`
             )->a( n = `layout`     v = `ResponsiveGridLayout`
@@ -89,24 +89,24 @@ CLASS z2ui5_cl_smpc_app_183 IMPLEMENTATION.
             )->a( n = `columnsM`   v = `1`
             )->a( n = `title`      v = `Style`
 
-            )->open( n = `content` ns = `form`
-                )->leaf( `Label`
+            )->ele( n = `content` ns = `form`
+                )->tag( `Label`
                     )->a( n = `text` v = `Short`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = dtvalue path = abap_true ) }', type: 'DateTimeType', formatOptions: \{ style: 'short', source: \{ pattern: 'yyyy-MM-dd HH:mm:ss' \} \} \}|
-                )->leaf( `Label`
+                )->tag( `Label`
                     )->a( n = `text` v = `Medium`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = dtvalue path = abap_true ) }', type: 'DateTimeType', formatOptions: \{ style: 'medium', source: \{ pattern: 'yyyy-MM-dd HH:mm:ss' \} \} \}|
-                )->leaf( `Label`
+                )->tag( `Label`
                     )->a( n = `text` v = `Long`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = dtvalue path = abap_true ) }', type: 'DateTimeType', formatOptions: \{ style: 'long', source: \{ pattern: 'yyyy-MM-dd HH:mm:ss' \} \} \}|
 
-        )->shut(
-        )->shut(
+        )->end(
+        )->end(
 
-        )->open( n = `SimpleForm` ns = `form`
+        )->ele( n = `SimpleForm` ns = `form`
             )->a( n = `width`      v = `auto`
             )->a( n = `class`      v = `sapUiResponsiveMargin`
             )->a( n = `layout`     v = `ResponsiveGridLayout`
@@ -118,24 +118,24 @@ CLASS z2ui5_cl_smpc_app_183 IMPLEMENTATION.
             )->a( n = `columnsM`   v = `1`
             )->a( n = `title`      v = `Pattern`
 
-            )->open( n = `content` ns = `form`
-                )->leaf( `Label`
+            )->ele( n = `content` ns = `form`
+                )->tag( `Label`
                     )->a( n = `text` v = `yyyy-MM-dd'T'HH:mm:ss`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = dtvalue path = abap_true ) }', type: 'DateTimeType', formatOptions: \{ pattern: 'yyyy-MM-dd\\'T\\'HH:mm:ss', source: \{ pattern: 'yyyy-MM-dd HH:mm:ss' \} \} \}|
-                )->leaf( `Label`
+                )->tag( `Label`
                     )->a( n = `text` v = `yyyyMMdd HHmmss`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = dtvalue path = abap_true ) }', type: 'DateTimeType', formatOptions: \{ pattern: 'yyyyMMdd HHmmss', source: \{ pattern: 'yyyy-MM-dd HH:mm:ss' \} \} \}|
-                )->leaf( `Label`
+                )->tag( `Label`
                     )->a( n = `text` v = `HH:mm`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = dtvalue path = abap_true ) }', type: 'DateTimeType', formatOptions: \{ pattern: 'HH:mm', source: \{ pattern: 'yyyy-MM-dd HH:mm:ss' \} \} \}|
 
-        )->shut(
-        )->shut(
+        )->end(
+        )->end(
 
-        )->open( n = `SimpleForm` ns = `form`
+        )->ele( n = `SimpleForm` ns = `form`
             )->a( n = `width`      v = `auto`
             )->a( n = `class`      v = `sapUiResponsiveMargin`
             )->a( n = `layout`     v = `ResponsiveGridLayout`
@@ -147,16 +147,16 @@ CLASS z2ui5_cl_smpc_app_183 IMPLEMENTATION.
             )->a( n = `columnsM`   v = `1`
             )->a( n = `title`      v = `UTC formatted`
 
-            )->open( n = `content` ns = `form`
-                )->leaf( `Label`
+            )->ele( n = `content` ns = `form`
+                )->tag( `Label`
                     )->a( n = `text` v = `UTC`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = dtvalue path = abap_true ) }', type: 'DateTimeType', formatOptions: \{ pattern: 'yyyy-MM-dd\\'T\\'HH:mm:ss', UTC: true, source: \{ pattern: 'yyyy-MM-dd HH:mm:ss' \} \} \}|
 
-        )->shut(
-        )->shut(
+        )->end(
+        )->end(
 
-        )->open( n = `SimpleForm` ns = `form`
+        )->ele( n = `SimpleForm` ns = `form`
             )->a( n = `width`      v = `auto`
             )->a( n = `class`      v = `sapUiResponsiveMargin`
             )->a( n = `layout`     v = `ResponsiveGridLayout`
@@ -168,14 +168,14 @@ CLASS z2ui5_cl_smpc_app_183 IMPLEMENTATION.
             )->a( n = `columnsM`   v = `1`
             )->a( n = `title`      v = `Relative Time Format`
 
-            )->open( n = `content` ns = `form`
-                )->leaf( `Label`
+            )->ele( n = `content` ns = `form`
+                )->tag( `Label`
                     )->a( n = `text` v = `Relative Time`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = dtvalue path = abap_true ) }', type: 'DateTimeType', formatOptions: \{ relative: true, relativeScale: 'auto', source: \{ pattern: 'yyyy-MM-dd HH:mm:ss' \} \} \}|
 
-        )->shut(
-        )->shut( ).
+        )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

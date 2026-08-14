@@ -35,97 +35,97 @@ CLASS z2ui5_cl_smpc_app_072 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the shared Currency number binding (parts Price + CurrencyCode, showMeasure off), reused on every ObjectNumber
     DATA(num) = |\{ parts:[\{path:'PRICE'\},\{path:'CURRENCY_CODE'\}], type: 'sap.ui.model.type.Currency', formatOptions: \{showMeasure: false\} \}|.
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
             )->a( n = `width` v = `100%`
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `text`   v = `ObjectNumber`
                 )->a( n = `class`  v = `sapUiSmallMarginTop`
                 )->a( n = `design` v = `Bold`
-            )->open( n = `HorizontalLayout` ns = `l`
+            )->ele( n = `HorizontalLayout` ns = `l`
                 )->a( n = `class` v = `sapUiContentPadding`
                 " element binding kept 1:1 - each ObjectNumber index-binds a record of the default-model table T_PRODUCTS (see sidecar)
-                )->leaf( `ObjectNumber`
+                )->tag( `ObjectNumber`
                     )->a( n = `class`   v = `sapUiSmallMarginBottom`
                     )->a( n = `binding` v = |\{{ client->_bind( val = t_products path = abap_true ) }/0\}|
                     )->a( n = `number`  v = num
                     )->a( n = `unit`    v = `{CURRENCY_CODE}`
-                )->leaf( `ObjectNumber`
+                )->tag( `ObjectNumber`
                     )->a( n = `class`   v = `sapUiSmallMarginBottom`
                     )->a( n = `binding` v = |\{{ client->_bind( val = t_products path = abap_true ) }/1\}|
                     )->a( n = `number`  v = num
                     )->a( n = `unit`    v = `{CURRENCY_CODE}`
                     )->a( n = `state`   v = `Error`
-                )->leaf( `ObjectNumber`
+                )->tag( `ObjectNumber`
                     )->a( n = `class`   v = `sapUiSmallMarginBottom`
                     )->a( n = `binding` v = |\{{ client->_bind( val = t_products path = abap_true ) }/2\}|
                     )->a( n = `number`  v = num
                     )->a( n = `unit`    v = `{CURRENCY_CODE}`
                     )->a( n = `state`   v = `Warning`
-                )->leaf( `ObjectNumber`
+                )->tag( `ObjectNumber`
                     )->a( n = `class`   v = `sapUiSmallMarginBottom`
                     )->a( n = `binding` v = |\{{ client->_bind( val = t_products path = abap_true ) }/3\}|
                     )->a( n = `number`  v = num
                     )->a( n = `unit`    v = `{CURRENCY_CODE}`
                     )->a( n = `state`   v = `Success`
-                )->leaf( `ObjectNumber`
+                )->tag( `ObjectNumber`
                     )->a( n = `class`   v = `sapUiSmallMarginBottom`
                     )->a( n = `binding` v = |\{{ client->_bind( val = t_products path = abap_true ) }/4\}|
                     )->a( n = `number`  v = num
                     )->a( n = `unit`    v = `{CURRENCY_CODE}`
                     )->a( n = `state`   v = `Information`
 
-            )->shut(
-        )->shut(
+            )->end(
+        )->end(
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
             )->a( n = `width` v = `100%`
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `text`   v = `Inverted ObjectNumber`
                 )->a( n = `class`  v = `sapUiSmallMarginTop`
                 )->a( n = `design` v = `Bold`
-            )->open( n = `HorizontalLayout` ns = `l`
+            )->ele( n = `HorizontalLayout` ns = `l`
                 )->a( n = `class` v = `sapUiContentPadding`
                 " POST-1.71: inverted, active and press (since UI5 1.86) kept 1:1
-                )->leaf( `ObjectNumber`
+                )->tag( `ObjectNumber`
                     )->a( n = `class`    v = `sapUiSmallMarginBottom`
                     )->a( n = `inverted` v = `true`
                     )->a( n = `binding`  v = |\{{ client->_bind( val = t_products path = abap_true ) }/0\}|
                     )->a( n = `number`   v = num
                     )->a( n = `unit`     v = `{CURRENCY_CODE}`
-                )->leaf( `ObjectNumber`
+                )->tag( `ObjectNumber`
                     )->a( n = `class`    v = `sapUiSmallMarginBottom`
                     )->a( n = `inverted` v = `true`
                     )->a( n = `binding`  v = |\{{ client->_bind( val = t_products path = abap_true ) }/1\}|
                     )->a( n = `number`   v = num
                     )->a( n = `unit`     v = `{CURRENCY_CODE}`
                     )->a( n = `state`    v = `Error`
-                )->leaf( `ObjectNumber`
+                )->tag( `ObjectNumber`
                     )->a( n = `class`    v = `sapUiSmallMarginBottom`
                     )->a( n = `inverted` v = `true`
                     )->a( n = `binding`  v = |\{{ client->_bind( val = t_products path = abap_true ) }/2\}|
                     )->a( n = `number`   v = num
                     )->a( n = `unit`     v = `{CURRENCY_CODE}`
                     )->a( n = `state`    v = `Warning`
-                )->leaf( `ObjectNumber`
+                )->tag( `ObjectNumber`
                     )->a( n = `class`    v = `sapUiSmallMarginBottom`
                     )->a( n = `inverted` v = `true`
                     )->a( n = `binding`  v = |\{{ client->_bind( val = t_products path = abap_true ) }/3\}|
                     )->a( n = `number`   v = num
                     )->a( n = `unit`     v = `{CURRENCY_CODE}`
                     )->a( n = `state`    v = `Success`
-                )->leaf( `ObjectNumber`
+                )->tag( `ObjectNumber`
                     )->a( n = `class`    v = `sapUiSmallMarginBottom`
                     )->a( n = `inverted` v = `true`
                     )->a( n = `binding`  v = |\{{ client->_bind( val = t_products path = abap_true ) }/4\}|
@@ -133,19 +133,19 @@ CLASS z2ui5_cl_smpc_app_072 IMPLEMENTATION.
                     )->a( n = `unit`     v = `{CURRENCY_CODE}`
                     )->a( n = `state`    v = `Information`
 
-            )->shut(
-        )->shut(
+            )->end(
+        )->end(
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
             )->a( n = `width` v = `100%`
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `text`   v = `Interactive ObjectNumber`
                 )->a( n = `class`  v = `sapUiSmallMarginTop`
                 )->a( n = `design` v = `Bold`
-            )->open( n = `HorizontalLayout` ns = `l`
+            )->ele( n = `HorizontalLayout` ns = `l`
                 )->a( n = `class` v = `sapUiContentPadding`
-                )->leaf( `ObjectNumber`
+                )->tag( `ObjectNumber`
                     )->a( n = `class`   v = `sapUiSmallMarginBottom`
                     )->a( n = `active`  v = `true`
                     )->a( n = `binding` v = |\{{ client->_bind( val = t_products path = abap_true ) }/0\}|
@@ -153,7 +153,7 @@ CLASS z2ui5_cl_smpc_app_072 IMPLEMENTATION.
                                                                       t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `PRESS fired!` ) ) )
                     )->a( n = `number`  v = num
                     )->a( n = `unit`    v = `{CURRENCY_CODE}`
-                )->leaf( `ObjectNumber`
+                )->tag( `ObjectNumber`
                     )->a( n = `class`   v = `sapUiSmallMarginBottom`
                     )->a( n = `active`  v = `true`
                     )->a( n = `binding` v = |\{{ client->_bind( val = t_products path = abap_true ) }/1\}|
@@ -162,7 +162,7 @@ CLASS z2ui5_cl_smpc_app_072 IMPLEMENTATION.
                     )->a( n = `number`  v = num
                     )->a( n = `unit`    v = `{CURRENCY_CODE}`
                     )->a( n = `state`   v = `Error`
-                )->leaf( `ObjectNumber`
+                )->tag( `ObjectNumber`
                     )->a( n = `class`   v = `sapUiSmallMarginBottom`
                     )->a( n = `active`  v = `true`
                     )->a( n = `binding` v = |\{{ client->_bind( val = t_products path = abap_true ) }/2\}|
@@ -171,7 +171,7 @@ CLASS z2ui5_cl_smpc_app_072 IMPLEMENTATION.
                     )->a( n = `number`  v = num
                     )->a( n = `unit`    v = `{CURRENCY_CODE}`
                     )->a( n = `state`   v = `Warning`
-                )->leaf( `ObjectNumber`
+                )->tag( `ObjectNumber`
                     )->a( n = `class`   v = `sapUiSmallMarginBottom`
                     )->a( n = `active`  v = `true`
                     )->a( n = `binding` v = |\{{ client->_bind( val = t_products path = abap_true ) }/3\}|
@@ -180,7 +180,7 @@ CLASS z2ui5_cl_smpc_app_072 IMPLEMENTATION.
                     )->a( n = `number`  v = num
                     )->a( n = `unit`    v = `{CURRENCY_CODE}`
                     )->a( n = `state`   v = `Success`
-                )->leaf( `ObjectNumber`
+                )->tag( `ObjectNumber`
                     )->a( n = `class`   v = `sapUiSmallMarginBottom`
                     )->a( n = `active`  v = `true`
                     )->a( n = `binding` v = |\{{ client->_bind( val = t_products path = abap_true ) }/4\}|
@@ -190,19 +190,19 @@ CLASS z2ui5_cl_smpc_app_072 IMPLEMENTATION.
                     )->a( n = `unit`    v = `{CURRENCY_CODE}`
                     )->a( n = `state`   v = `Information`
 
-            )->shut(
-        )->shut(
+            )->end(
+        )->end(
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
             )->a( n = `width` v = `100%`
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `text`   v = `Inverted Interactive ObjectNumber`
                 )->a( n = `class`  v = `sapUiSmallMarginTop`
                 )->a( n = `design` v = `Bold`
-            )->open( n = `HorizontalLayout` ns = `l`
+            )->ele( n = `HorizontalLayout` ns = `l`
                 )->a( n = `class` v = `sapUiContentPadding`
-                )->leaf( `ObjectNumber`
+                )->tag( `ObjectNumber`
                     )->a( n = `class`    v = `sapUiSmallMarginBottom`
                     )->a( n = `active`   v = `true`
                     )->a( n = `inverted` v = `true`
@@ -211,7 +211,7 @@ CLASS z2ui5_cl_smpc_app_072 IMPLEMENTATION.
                                                                        t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `PRESS fired!` ) ) )
                     )->a( n = `number`   v = num
                     )->a( n = `unit`     v = `{CURRENCY_CODE}`
-                )->leaf( `ObjectNumber`
+                )->tag( `ObjectNumber`
                     )->a( n = `class`    v = `sapUiSmallMarginBottom`
                     )->a( n = `active`   v = `true`
                     )->a( n = `inverted` v = `true`
@@ -221,7 +221,7 @@ CLASS z2ui5_cl_smpc_app_072 IMPLEMENTATION.
                     )->a( n = `number`   v = num
                     )->a( n = `unit`     v = `{CURRENCY_CODE}`
                     )->a( n = `state`    v = `Error`
-                )->leaf( `ObjectNumber`
+                )->tag( `ObjectNumber`
                     )->a( n = `class`    v = `sapUiSmallMarginBottom`
                     )->a( n = `active`   v = `true`
                     )->a( n = `inverted` v = `true`
@@ -231,7 +231,7 @@ CLASS z2ui5_cl_smpc_app_072 IMPLEMENTATION.
                     )->a( n = `number`   v = num
                     )->a( n = `unit`     v = `{CURRENCY_CODE}`
                     )->a( n = `state`    v = `Warning`
-                )->leaf( `ObjectNumber`
+                )->tag( `ObjectNumber`
                     )->a( n = `class`    v = `sapUiSmallMarginBottom`
                     )->a( n = `active`   v = `true`
                     )->a( n = `inverted` v = `true`
@@ -241,7 +241,7 @@ CLASS z2ui5_cl_smpc_app_072 IMPLEMENTATION.
                     )->a( n = `number`   v = num
                     )->a( n = `unit`     v = `{CURRENCY_CODE}`
                     )->a( n = `state`    v = `Success`
-                )->leaf( `ObjectNumber`
+                )->tag( `ObjectNumber`
                     )->a( n = `class`    v = `sapUiSmallMarginBottom`
                     )->a( n = `active`   v = `true`
                     )->a( n = `inverted` v = `true`
@@ -252,18 +252,18 @@ CLASS z2ui5_cl_smpc_app_072 IMPLEMENTATION.
                     )->a( n = `unit`     v = `{CURRENCY_CODE}`
                     )->a( n = `state`    v = `Information`
 
-            )->shut(
-        )->shut(
+            )->end(
+        )->end(
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
             )->a( n = `width` v = `100%`
 
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `text`   v = `ObjectNumber with style sapMObjectNumberLarge applied`
                 )->a( n = `class`  v = `sapUiSmallMarginTop`
                 )->a( n = `design` v = `Bold`
-            )->leaf( `ObjectNumber`
+            )->tag( `ObjectNumber`
                 )->a( n = `class`      v = `sapMObjectNumberLarge`
                 )->a( n = `binding`    v = |\{{ client->_bind( val = t_products path = abap_true ) }/5\}|
                 )->a( n = `number`     v = num
@@ -271,11 +271,11 @@ CLASS z2ui5_cl_smpc_app_072 IMPLEMENTATION.
                 )->a( n = `emphasized` v = `false`
                 )->a( n = `state`      v = `None`
 
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `text`   v = `Interactive ObjectNumber with style sapMObjectNumberLarge applied`
                 )->a( n = `class`  v = `sapUiSmallMarginTop`
                 )->a( n = `design` v = `Bold`
-            )->leaf( `ObjectNumber`
+            )->tag( `ObjectNumber`
                 )->a( n = `class`      v = `sapMObjectNumberLarge`
                 )->a( n = `active`     v = `true`
                 )->a( n = `binding`    v = |\{{ client->_bind( val = t_products path = abap_true ) }/5\}|
@@ -286,15 +286,15 @@ CLASS z2ui5_cl_smpc_app_072 IMPLEMENTATION.
                 )->a( n = `emphasized` v = `false`
                 )->a( n = `state`      v = `None`
 
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `text`   v = `ObjectNumber wrapped via sapMObjectNumberLongText`
                 )->a( n = `class`  v = `sapUiSmallMarginTop`
                 )->a( n = `design` v = `Bold`
-            )->open( `Panel`
+            )->ele( `Panel`
                 )->a( n = `backgroundDesign` v = `Transparent`
                 )->a( n = `width`            v = `100px`
-                )->open( `content`
-                    )->leaf( `ObjectNumber`
+                )->ele( `content`
+                    )->tag( `ObjectNumber`
                         )->a( n = `class`      v = `sapMObjectNumberLongText`
                         )->a( n = `active`     v = `true`
                         )->a( n = `binding`    v = |\{{ client->_bind( val = t_products path = abap_true ) }/5\}|
@@ -305,9 +305,9 @@ CLASS z2ui5_cl_smpc_app_072 IMPLEMENTATION.
                         )->a( n = `emphasized` v = `false`
                         )->a( n = `state`      v = `None`
 
-                )->shut(
-            )->shut(
-        )->shut( ).
+                )->end(
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

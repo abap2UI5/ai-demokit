@@ -42,42 +42,42 @@ CLASS z2ui5_cl_smpc_app_109 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " startDate + CalendarAppointment startDate/endDate are object-typed: the model
     " keeps ISO strings and Formatter.DateCreateObject converts them at the binding
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc`     v = `sap.ui.core.mvc`
         )->a( n = `xmlns:core`    v = `sap.ui.core`
         )->a( n = `xmlns:unified` v = `sap.ui.unified`
         )->a( n = `xmlns`         v = `sap.m`
         )->a( n = `core:require`  v = `{Formatter: 'z2ui5/model/formatter'}`
 
-        )->open( `VBox`
+        )->ele( `VBox`
             )->a( n = `class` v = `sapUiSmallMargin`
 
-            )->open( `OverflowToolbar`
+            )->ele( `OverflowToolbar`
                 )->a( n = `height` v = `100%`
                 )->a( n = `width`  v = `100%`
 
-                )->leaf( `ToolbarSeparator`
-                )->leaf( `Label`
+                )->tag( `ToolbarSeparator`
+                )->tag( `Label`
                     )->a( n = `text` v = `Day selection mode : `
-                )->open( `ToggleButton`
+                )->ele( `ToggleButton`
                     )->a( n = `id`      v = `MultiSelect`
                     )->a( n = `icon`    v = `sap-icon://select-appointments`
                     )->a( n = `tooltip` v = `Enable multi-day selection`
                     )->a( n = `press`   v = client->_event( `PRESS` )
 
-                    )->open( `layoutData`
-                        )->leaf( `OverflowToolbarLayoutData`
+                    )->ele( `layoutData`
+                        )->tag( `OverflowToolbarLayoutData`
                             )->a( n = `priority` v = `NeverOverflow`
 
-                )->shut(
-                )->shut(
-            )->shut(
+                )->end(
+                )->end(
+            )->end(
 
-            )->open( `SinglePlanningCalendar`
+            )->ele( `SinglePlanningCalendar`
                 )->a( n = `id`                  v = `SPC1`
                 )->a( n = `class`               v = `sapUiSmallMarginTop`
                 )->a( n = `title`               v = `My Calendar`
@@ -90,23 +90,23 @@ CLASS z2ui5_cl_smpc_app_109 IMPLEMENTATION.
                 )->a( n = `startDate`           v = |\{ path: '{ client->_bind( val = start_date path = abap_true ) }', formatter: 'Formatter.DateCreateObject' \}|
                 )->a( n = `appointments`        v = client->_bind( t_appointments )
 
-                )->open( `views`
-                    )->leaf( `SinglePlanningCalendarDayView`
+                )->ele( `views`
+                    )->tag( `SinglePlanningCalendarDayView`
                         )->a( n = `key`   v = `DayView`
                         )->a( n = `title` v = `Day`
-                    )->leaf( `SinglePlanningCalendarWorkWeekView`
+                    )->tag( `SinglePlanningCalendarWorkWeekView`
                         )->a( n = `key`   v = `WorkWeekView`
                         )->a( n = `title` v = `Work Week`
-                    )->leaf( `SinglePlanningCalendarWeekView`
+                    )->tag( `SinglePlanningCalendarWeekView`
                         )->a( n = `key`   v = `WeekView`
                         )->a( n = `title` v = `Week`
-                    )->leaf( `SinglePlanningCalendarMonthView`
+                    )->tag( `SinglePlanningCalendarMonthView`
                         )->a( n = `key`   v = `MonthView`
                         )->a( n = `title` v = `Month`
 
-                )->shut(
-                )->open( `appointments`
-                    )->leaf( n = `CalendarAppointment` ns = `unified`
+                )->end(
+                )->ele( `appointments`
+                    )->tag( n = `CalendarAppointment` ns = `unified`
                         )->a( n = `title`     v = `{TITLE}`
                         )->a( n = `text`      v = `{TEXT}`
                         )->a( n = `type`      v = `{TYPE}`

@@ -34,278 +34,278 @@ CLASS z2ui5_cl_smpc_app_297 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`    v = `sap.ui.layout`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns`      v = `sap.m`
 
         " the three controller-loaded fragments, declared in the view's dependents aggregation
-        )->open( n = `dependents` ns = `mvc`
+        )->ele( n = `dependents` ns = `mvc`
 
-            )->open( `ViewSettingsDialog`
+            )->ele( `ViewSettingsDialog`
                 )->a( n = `id`      v = `settingsDialog`
                 )->a( n = `confirm` v = client->_event( val   = `CONFIRM`
                                                         t_arg = VALUE #( ( `${$parameters>/filterString}` ) ) )
 
-                )->open( `sortItems`
-                    )->leaf( `ViewSettingsItem`
+                )->ele( `sortItems`
+                    )->tag( `ViewSettingsItem`
                         )->a( n = `text`     v = `Field 1`
                         )->a( n = `key`      v = `1`
                         )->a( n = `selected` v = `true`
-                    )->leaf( `ViewSettingsItem`
+                    )->tag( `ViewSettingsItem`
                         )->a( n = `text` v = `Field 2`
                         )->a( n = `key`  v = `2`
-                    )->leaf( `ViewSettingsItem`
+                    )->tag( `ViewSettingsItem`
                         )->a( n = `text` v = `Field 3`
                         )->a( n = `key`  v = `3`
 
-                )->shut(
-                )->open( `groupItems`
-                    )->leaf( `ViewSettingsItem`
+                )->end(
+                )->ele( `groupItems`
+                    )->tag( `ViewSettingsItem`
                         )->a( n = `text`     v = `Field 1`
                         )->a( n = `key`      v = `1`
                         )->a( n = `selected` v = `true`
-                    )->leaf( `ViewSettingsItem`
+                    )->tag( `ViewSettingsItem`
                         )->a( n = `text` v = `Field 2`
                         )->a( n = `key`  v = `2`
-                    )->leaf( `ViewSettingsItem`
+                    )->tag( `ViewSettingsItem`
                         )->a( n = `text` v = `Field 3`
                         )->a( n = `key`  v = `3`
 
-                )->shut(
-                )->open( `filterItems`
-                    )->open( `ViewSettingsFilterItem`
+                )->end(
+                )->ele( `filterItems`
+                    )->ele( `ViewSettingsFilterItem`
                         )->a( n = `text` v = `Field1`
                         )->a( n = `key`  v = `1`
 
-                        )->open( `items`
-                            )->leaf( `ViewSettingsItem`
+                        )->ele( `items`
+                            )->tag( `ViewSettingsItem`
                                 )->a( n = `text` v = `Value A`
                                 )->a( n = `key`  v = `1a`
-                            )->leaf( `ViewSettingsItem`
+                            )->tag( `ViewSettingsItem`
                                 )->a( n = `text` v = `Value B`
                                 )->a( n = `key`  v = `1b`
-                            )->leaf( `ViewSettingsItem`
+                            )->tag( `ViewSettingsItem`
                                 )->a( n = `text` v = `Value C`
                                 )->a( n = `key`  v = `1c`
 
-                        )->shut(
-                    )->shut(
-                    )->open( `ViewSettingsFilterItem`
+                        )->end(
+                    )->end(
+                    )->ele( `ViewSettingsFilterItem`
                         )->a( n = `text` v = `Field2`
                         )->a( n = `key`  v = `2`
 
-                        )->open( `items`
-                            )->leaf( `ViewSettingsItem`
+                        )->ele( `items`
+                            )->tag( `ViewSettingsItem`
                                 )->a( n = `text` v = `Value A`
                                 )->a( n = `key`  v = `2a`
-                            )->leaf( `ViewSettingsItem`
+                            )->tag( `ViewSettingsItem`
                                 )->a( n = `text` v = `Value B`
                                 )->a( n = `key`  v = `2b`
-                            )->leaf( `ViewSettingsItem`
+                            )->tag( `ViewSettingsItem`
                                 )->a( n = `text` v = `Value C`
                                 )->a( n = `key`  v = `2c`
 
-                        )->shut(
-                    )->shut(
-                    )->open( `ViewSettingsFilterItem`
+                        )->end(
+                    )->end(
+                    )->ele( `ViewSettingsFilterItem`
                         )->a( n = `text` v = `Field3`
                         )->a( n = `key`  v = `3`
 
-                        )->open( `items`
-                            )->leaf( `ViewSettingsItem`
+                        )->ele( `items`
+                            )->tag( `ViewSettingsItem`
                                 )->a( n = `text` v = `Value A`
                                 )->a( n = `key`  v = `3a`
-                            )->leaf( `ViewSettingsItem`
+                            )->tag( `ViewSettingsItem`
                                 )->a( n = `text` v = `Value B`
                                 )->a( n = `key`  v = `3b`
-                            )->leaf( `ViewSettingsItem`
+                            )->tag( `ViewSettingsItem`
                                 )->a( n = `text` v = `Value C`
                                 )->a( n = `key`  v = `3c`
 
-                        )->shut(
-                    )->shut(
-                )->shut(
-                )->open( `customTabs`
-                    )->open( `ViewSettingsCustomTab`
+                        )->end(
+                    )->end(
+                )->end(
+                )->ele( `customTabs`
+                    )->ele( `ViewSettingsCustomTab`
                         )->a( n = `id`      v = `app-settings`
                         )->a( n = `icon`    v = `sap-icon://action-settings`
                         )->a( n = `title`   v = `Settings`
                         )->a( n = `tooltip` v = `Application Settings`
 
-                        )->open( `content`
-                            )->open( `Panel`
+                        )->ele( `content`
+                            )->ele( `Panel`
                                 )->a( n = `height` v = `338px`
 
-                                )->open( `content`
+                                )->ele( `content`
 
-                                    )->leaf( `Label`
+                                    )->tag( `Label`
                                         )->a( n = `text`   v = `Theme`
                                         )->a( n = `design` v = `Bold`
                                         )->a( n = `id`     v = `VSDThemeLabel`
 
-                                    )->open( `SegmentedButton`
+                                    )->ele( `SegmentedButton`
                                         )->a( n = `class`        v = `vsdSetting`
                                         )->a( n = `selectedItem` v = `VSDsap_quartzlight`
                                         )->a( n = `id`           v = `VSDThemeButtons`
                                         )->a( n = `width`        v = `100%`
 
-                                        )->open( `items`
-                                            )->leaf( `SegmentedButtonItem`
+                                        )->ele( `items`
+                                            )->tag( `SegmentedButtonItem`
                                                 )->a( n = `text` v = `High Contrast Black`
                                                 )->a( n = `id`   v = `VSDsap_hcb`
-                                            )->leaf( `SegmentedButtonItem`
+                                            )->tag( `SegmentedButtonItem`
                                                 )->a( n = `text` v = `Quartz Light`
                                                 )->a( n = `id`   v = `VSDsap_quartzlight`
 
-                                        )->shut(
-                                    )->shut(
+                                        )->end(
+                                    )->end(
 
-                                    )->leaf( `Label`
+                                    )->tag( `Label`
                                         )->a( n = `text`   v = `Compact Content Density`
                                         )->a( n = `design` v = `Bold`
 
-                                    )->open( `SegmentedButton`
+                                    )->ele( `SegmentedButton`
                                         )->a( n = `class`        v = `vsdSetting`
                                         )->a( n = `selectedItem` v = `VSDcompactOn`
                                         )->a( n = `id`           v = `VSDCompactModeButtons`
                                         )->a( n = `width`        v = `100%`
 
-                                        )->open( `items`
-                                            )->leaf( `SegmentedButtonItem`
+                                        )->ele( `items`
+                                            )->tag( `SegmentedButtonItem`
                                                 )->a( n = `text` v = `On`
                                                 )->a( n = `id`   v = `VSDcompactOn`
-                                            )->leaf( `SegmentedButtonItem`
+                                            )->tag( `SegmentedButtonItem`
                                                 )->a( n = `text` v = `Off`
                                                 )->a( n = `id`   v = `VSDcompactOff`
 
-                                        )->shut(
-                                    )->shut(
+                                        )->end(
+                                    )->end(
 
-                                    )->leaf( `Label`
+                                    )->tag( `Label`
                                         )->a( n = `text`   v = `Right To Left Mode`
                                         )->a( n = `design` v = `Bold`
 
-                                    )->open( `SegmentedButton`
+                                    )->ele( `SegmentedButton`
                                         )->a( n = `selectedItem` v = `VSDRTLOff`
                                         )->a( n = `id`           v = `VSDRTLButtons`
                                         )->a( n = `width`        v = `100%`
 
-                                        )->open( `items`
-                                            )->leaf( `SegmentedButtonItem`
+                                        )->ele( `items`
+                                            )->tag( `SegmentedButtonItem`
                                                 )->a( n = `text` v = `On`
                                                 )->a( n = `id`   v = `VSDRTLOn`
-                                            )->leaf( `SegmentedButtonItem`
+                                            )->tag( `SegmentedButtonItem`
                                                 )->a( n = `text` v = `Off`
                                                 )->a( n = `id`   v = `VSDRTLOff`
 
-                                        )->shut(
-                                    )->shut(
-                                )->shut(
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                    )->open( `ViewSettingsCustomTab`
+                                        )->end(
+                                    )->end(
+                                )->end(
+                            )->end(
+                        )->end(
+                    )->end(
+                    )->ele( `ViewSettingsCustomTab`
                         )->a( n = `id`      v = `example-settings`
                         )->a( n = `tooltip` v = `default icon`
 
-                        )->open( `content`
-                            )->leaf( `Button`
+                        )->ele( `content`
+                            )->tag( `Button`
                                 )->a( n = `text` v = `simple button example`
 
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( `ViewSettingsDialog`
+            )->ele( `ViewSettingsDialog`
                 )->a( n = `id`      v = `settingsDialogCustomTab`
                 )->a( n = `confirm` v = client->_event( val   = `CONFIRM`
                                                         t_arg = VALUE #( ( `${$parameters>/filterString}` ) ) )
 
-                )->open( `customTabs`
-                    )->open( `ViewSettingsCustomTab`
+                )->ele( `customTabs`
+                    )->ele( `ViewSettingsCustomTab`
                         )->a( n = `id`      v = `app-settings-single`
                         )->a( n = `icon`    v = `sap-icon://action-settings`
                         )->a( n = `title`   v = `Settings`
                         )->a( n = `tooltip` v = `Application Settings`
 
-                        )->open( `content`
-                            )->open( `Panel`
+                        )->ele( `content`
+                            )->ele( `Panel`
                                 )->a( n = `height` v = `386px`
 
-                                )->leaf( `Label`
+                                )->tag( `Label`
                                     )->a( n = `text`   v = `Theme`
                                     )->a( n = `design` v = `Bold`
                                     )->a( n = `id`     v = `VSDThemeLabelSingle`
 
-                                )->open( `SegmentedButton`
+                                )->ele( `SegmentedButton`
                                     )->a( n = `class`        v = `vsdSetting`
                                     )->a( n = `selectedItem` v = `VSDsap_quartzlightSingle`
                                     )->a( n = `id`           v = `VSDThemeButtonsSingle`
                                     )->a( n = `width`        v = `100%`
 
-                                    )->open( `items`
-                                        )->leaf( `SegmentedButtonItem`
+                                    )->ele( `items`
+                                        )->tag( `SegmentedButtonItem`
                                             )->a( n = `text` v = `High Contrast Black`
                                             )->a( n = `id`   v = `VSDsap_hcbSingle`
-                                        )->leaf( `SegmentedButtonItem`
+                                        )->tag( `SegmentedButtonItem`
                                             )->a( n = `text` v = `Quartz Light`
                                             )->a( n = `id`   v = `VSDsap_quartzlightSingle`
 
-                                    )->shut(
-                                )->shut(
+                                    )->end(
+                                )->end(
 
-                                )->leaf( `Label`
+                                )->tag( `Label`
                                     )->a( n = `text`   v = `Compact Content Density`
                                     )->a( n = `design` v = `Bold`
 
-                                )->open( `SegmentedButton`
+                                )->ele( `SegmentedButton`
                                     )->a( n = `class`        v = `vsdSetting`
                                     )->a( n = `selectedItem` v = `VSDcompactOnSingle`
                                     )->a( n = `id`           v = `VSDCompactModeButtonsSingle`
                                     )->a( n = `width`        v = `100%`
 
-                                    )->open( `items`
-                                        )->leaf( `SegmentedButtonItem`
+                                    )->ele( `items`
+                                        )->tag( `SegmentedButtonItem`
                                             )->a( n = `text` v = `On`
                                             )->a( n = `id`   v = `VSDcompactOnSingle`
-                                        )->leaf( `SegmentedButtonItem`
+                                        )->tag( `SegmentedButtonItem`
                                             )->a( n = `text` v = `Off`
                                             )->a( n = `id`   v = `VSDcompactOffSingle`
 
-                                    )->shut(
-                                )->shut(
+                                    )->end(
+                                )->end(
 
-                                )->leaf( `Label`
+                                )->tag( `Label`
                                     )->a( n = `text`   v = `Right To Left Mode`
                                     )->a( n = `design` v = `Bold`
 
-                                )->open( `SegmentedButton`
+                                )->ele( `SegmentedButton`
                                     )->a( n = `selectedItem` v = `VSDRTLOffSingle`
                                     )->a( n = `id`           v = `VSDRTLButtonsSingle`
                                     )->a( n = `width`        v = `100%`
 
-                                    )->open( `items`
-                                        )->leaf( `SegmentedButtonItem`
+                                    )->ele( `items`
+                                        )->tag( `SegmentedButtonItem`
                                             )->a( n = `text` v = `On`
                                             )->a( n = `id`   v = `VSDRTLOnSingle`
-                                        )->leaf( `SegmentedButtonItem`
+                                        )->tag( `SegmentedButtonItem`
                                             )->a( n = `text` v = `Off`
                                             )->a( n = `id`   v = `VSDRTLOffSingle`
 
-                                    )->shut(
-                                )->shut(
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
+                                    )->end(
+                                )->end(
+                            )->end(
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( `ViewSettingsDialog`
+            )->ele( `ViewSettingsDialog`
                 )->a( n = `id`          v = `settingsDialogDatePicker`
                 )->a( n = `confirm`     v = client->_event( val   = `CONFIRM`
                                                             t_arg = VALUE #( ( `${$parameters>/filterString}` ) ) )
@@ -314,15 +314,15 @@ CLASS z2ui5_cl_smpc_app_297 IMPLEMENTATION.
                           s_ctrl = VALUE #( prevent_default_expr = |${ client->_bind( val  = date_value_state
                                                                                      path = abap_true ) } === 'Error'| ) )
 
-                )->open( `customTabs`
-                    )->open( `ViewSettingsCustomTab`
+                )->ele( `customTabs`
+                    )->ele( `ViewSettingsCustomTab`
                         )->a( n = `id`      v = `app-settings-datepicker`
                         )->a( n = `icon`    v = `sap-icon://action-settings`
                         )->a( n = `title`   v = `Settings`
                         )->a( n = `tooltip` v = `Application Settings`
 
-                        )->open( `content`
-                            )->leaf( `DatePicker`
+                        )->ele( `content`
+                            )->tag( `DatePicker`
                                 )->a( n = `id`             v = `datePicker`
                                 )->a( n = `class`          v = `vsd-dp`
                                 )->a( n = `width`          v = `80%`
@@ -332,23 +332,23 @@ CLASS z2ui5_cl_smpc_app_297 IMPLEMENTATION.
                                           val   = `DATE_CHANGE`
                                           t_arg = VALUE #( ( `${$parameters>/valid}` ) ) )
 
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
-        )->shut(
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
+        )->end(
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
             )->a( n = `width` v = `100%`
 
-            )->leaf( `Button`
+            )->tag( `Button`
                 )->a( n = `text`  v = `Open View Settings Dialog with several tabs`
                 )->a( n = `press` v = client->_event( `OPEN_DIALOG` )
-            )->leaf( `Button`
+            )->tag( `Button`
                 )->a( n = `text`  v = `Open View Settings Dialog with single custom tab`
                 )->a( n = `press` v = client->_event( `OPEN_SINGLE_TAB` )
-            )->leaf( `Button`
+            )->tag( `Button`
                 )->a( n = `text`  v = `Open View Settings Dialog with single custom tab with DatePicker`
                 )->a( n = `press` v = client->_event( `OPEN_DATE_PICKER` ) ).
 

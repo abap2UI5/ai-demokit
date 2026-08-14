@@ -55,18 +55,18 @@ CLASS z2ui5_cl_smpc_app_054 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
-        )->open( `Tree`
+        )->ele( `Tree`
             )->a( n = `id`    v = `Tree`
             " '{path: '/'}' -> bind the root table; the nested `nodes` drive the depth
             )->a( n = `items` v = client->_bind( t_nodes )
 
-            )->leaf( `StandardTreeItem`
+            )->tag( `StandardTreeItem`
                 )->a( n = `title` v = `{TEXT}` ).
 
     client->view_display( view->stringify( ) ).

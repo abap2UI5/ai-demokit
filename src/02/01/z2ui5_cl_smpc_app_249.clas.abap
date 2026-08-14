@@ -45,32 +45,32 @@ CLASS z2ui5_cl_smpc_app_249 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`        v = `sap.m`
         )->a( n = `xmlns:core`   v = `sap.ui.core`
         )->a( n = `xmlns:mvc`    v = `sap.ui.core.mvc`
         )->a( n = `xmlns:layout` v = `sap.ui.layout`
         )->a( n = `height`       v = `100%`
 
-        )->open( `Page`
+        )->ele( `Page`
             )->a( n = `title` v = `Button with Badge`
 
-            )->open( `content`
-                )->open( n = `VerticalLayout` ns = `layout`
+            )->ele( `content`
+                )->ele( n = `VerticalLayout` ns = `layout`
                     )->a( n = `class` v = `sapUiContentPadding`
                     )->a( n = `width` v = `100%`
 
-                    )->open( `Toolbar`
-                        )->open( `content`
-                            )->leaf( `Title`
+                    )->ele( `Toolbar`
+                        )->ele( `content`
+                            )->tag( `Title`
                                 )->a( n = `text` v = `Button`
 
-                        )->shut(
-                    )->shut(
+                        )->end(
+                    )->end(
 
-                    )->open( `Button`
+                    )->ele( `Button`
                         )->a( n = `id`         v = `BadgedButton`
                         )->a( n = `class`      v = `sapUiTinyMarginBeginEnd`
                         )->a( n = `icon`       v = |\{= ${ client->_bind( buttonwithicon ) } ? ${ client->_bind( buttonicon ) } : '' \}|
@@ -78,166 +78,166 @@ CLASS z2ui5_cl_smpc_app_249 IMPLEMENTATION.
                         )->a( n = `badgeStyle` v = client->_bind( badgestyle )
                         )->a( n = `text`       v = |\{= ${ client->_bind( buttonwithtext ) } ? ${ client->_bind( buttontext ) } : '' \}|
 
-                        )->open( `customData`
+                        )->ele( `customData`
                             " the controller drove value via setValue from the StepInput; the
                             " thin-frontend form binds it to the same field (declared)
-                            )->leaf( `BadgeCustomData`
+                            )->tag( `BadgeCustomData`
                                 )->a( n = `key`     v = `badge`
                                 )->a( n = `value`   v = client->_bind( badgecurrent )
                                 )->a( n = `visible` v = `true`
 
-                        )->shut(
-                    )->shut(
+                        )->end(
+                    )->end(
 
-                    )->open( `Toolbar`
+                    )->ele( `Toolbar`
                         )->a( n = `class` v = `sapUiSmallMarginTop`
-                        )->open( `content`
-                            )->leaf( `Title`
+                        )->ele( `content`
+                            )->tag( `Title`
                                 )->a( n = `text` v = `Badge min, max and current values`
 
-                        )->shut(
-                    )->shut(
+                        )->end(
+                    )->end(
 
-                    )->open( `FlexBox`
+                    )->ele( `FlexBox`
                         )->a( n = `class`          v = `sapUiTinyMarginBeginEnd`
                         )->a( n = `alignItems`     v = `Center`
                         )->a( n = `justifyContent` v = `Start`
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `renderWhitespace` v = `true`
                             )->a( n = `width`            v = `150px`
                             )->a( n = `text`             v = `Current badge value is `
-                        )->leaf( `StepInput`
+                        )->tag( `StepInput`
                             )->a( n = `id`    v = `CurrentValue`
                             )->a( n = `value` v = client->_bind( badgecurrent )
                             )->a( n = `width` v = `130px`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( `FlexBox`
+                    )->ele( `FlexBox`
                         )->a( n = `class`          v = `sapUiTinyMarginBeginEnd`
                         )->a( n = `alignItems`     v = `Center`
                         )->a( n = `justifyContent` v = `Start`
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `renderWhitespace` v = `true`
                             )->a( n = `width`            v = `150px`
                             )->a( n = `text`             v = `Limit badge value from `
-                        )->leaf( `Input`
+                        )->tag( `Input`
                             )->a( n = `id`     v = `MinInput`
                             )->a( n = `value`  v = client->_bind( badgemin )
                             )->a( n = `width`  v = `55px`
                             )->a( n = `type`   v = `Number`
                             )->a( n = `change` v = client->_event( `MIN_CHANGE` )
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `renderWhitespace` v = `true`
                             )->a( n = `text`             v = ` to `
-                        )->leaf( `Input`
+                        )->tag( `Input`
                             )->a( n = `id`     v = `MaxInput`
                             )->a( n = `value`  v = client->_bind( badgemax )
                             )->a( n = `width`  v = `55px`
                             )->a( n = `type`   v = `Number`
                             )->a( n = `change` v = client->_event( `MAX_CHANGE` )
 
-                    )->shut(
-                    )->leaf( `Text`
+                    )->end(
+                    )->tag( `Text`
                         )->a( n = `class`            v = `sapUiTinyMarginBeginEnd`
                         )->a( n = `renderWhitespace` v = `true`
                         )->a( n = `text`             v = `(fill something in 'from' and/or 'to' fields to test)`
 
-                    )->open( `Toolbar`
+                    )->ele( `Toolbar`
                         )->a( n = `class` v = `sapUiSmallMarginTop`
-                        )->open( `content`
-                            )->leaf( `Title`
+                        )->ele( `content`
+                            )->tag( `Title`
                                 )->a( n = `text` v = `Button properties`
 
-                        )->shut(
-                    )->shut(
+                        )->end(
+                    )->end(
 
-                    )->open( `FlexBox`
+                    )->ele( `FlexBox`
                         )->a( n = `class`          v = `sapUiTinyMarginBeginEnd`
                         )->a( n = `alignItems`     v = `Center`
                         )->a( n = `justifyContent` v = `Start`
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `renderWhitespace` v = `true`
                             )->a( n = `width`            v = `39px`
                             )->a( n = `text`             v = `Type  `
 
-                        )->open( `Select`
+                        )->ele( `Select`
                             )->a( n = `id`          v = `ButtonType`
                             )->a( n = `selectedKey` v = client->_bind( buttontype )
-                            )->leaf( n = `Item` ns = `core`
+                            )->tag( n = `Item` ns = `core`
                                 )->a( n = `key`  v = `Default`
                                 )->a( n = `text` v = `Default`
-                            )->leaf( n = `Item` ns = `core`
+                            )->tag( n = `Item` ns = `core`
                                 )->a( n = `key`  v = `Ghost`
                                 )->a( n = `text` v = `Ghost`
-                            )->leaf( n = `Item` ns = `core`
+                            )->tag( n = `Item` ns = `core`
                                 )->a( n = `key`  v = `Transparent`
                                 )->a( n = `text` v = `Transparent`
-                            )->leaf( n = `Item` ns = `core`
+                            )->tag( n = `Item` ns = `core`
                                 )->a( n = `key`  v = `Emphasized`
                                 )->a( n = `text` v = `Emphasized`
 
-                        )->shut(
-                    )->shut(
+                        )->end(
+                    )->end(
 
-                    )->open( `FlexBox`
+                    )->ele( `FlexBox`
                         )->a( n = `class`          v = `sapUiTinyMarginBeginEnd`
                         )->a( n = `alignItems`     v = `Center`
                         )->a( n = `justifyContent` v = `Start`
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `renderWhitespace` v = `true`
                             )->a( n = `text`             v = `With `
-                        )->leaf( `CheckBox`
+                        )->tag( `CheckBox`
                             )->a( n = `id`       v = `IconCheckBox`
                             )->a( n = `text`     v = `Icon`
                             )->a( n = `selected` v = client->_bind( buttonwithicon )
-                        )->leaf( `CheckBox`
+                        )->tag( `CheckBox`
                             )->a( n = `id`       v = `TextCheckBox`
                             )->a( n = `text`     v = `Text`
                             )->a( n = `selected` v = client->_bind( buttonwithtext )
 
-                    )->shut(
+                    )->end(
 
-                    )->open( `FlexBox`
+                    )->ele( `FlexBox`
                         )->a( n = `class`          v = `sapUiTinyMarginBeginEnd`
                         )->a( n = `alignItems`     v = `Center`
                         )->a( n = `justifyContent` v = `Start`
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `renderWhitespace` v = `true`
                             )->a( n = `width`            v = `50px`
                             )->a( n = `text`             v = `Badge Style`
 
-                        )->open( `Select`
+                        )->ele( `Select`
                             )->a( n = `id`          v = `BadgeStyle`
                             )->a( n = `selectedKey` v = client->_bind( badgestyle )
-                            )->leaf( n = `Item` ns = `core`
+                            )->tag( n = `Item` ns = `core`
                                 )->a( n = `key`  v = `Default`
                                 )->a( n = `text` v = `Default`
-                            )->leaf( n = `Item` ns = `core`
+                            )->tag( n = `Item` ns = `core`
                                 )->a( n = `key`  v = `Attention`
                                 )->a( n = `text` v = `Attention`
 
-                        )->shut(
-                    )->shut(
+                        )->end(
+                    )->end(
 
-                    )->open( `Toolbar`
+                    )->ele( `Toolbar`
                         )->a( n = `class` v = `sapUiSmallMarginTop`
-                        )->open( `content`
-                            )->leaf( `Title`
+                        )->ele( `content`
+                            )->tag( `Title`
                                 )->a( n = `text` v = `Notes`
 
-                        )->shut(
-                    )->shut(
-                    )->leaf( `Text`
+                        )->end(
+                    )->end(
+                    )->tag( `Text`
                         )->a( n = `class`    v = `sapUiTinyMargin`
                         )->a( n = `wrapping` v = `true`
                         )->a( n = `text`     v = `1. The value displayed in the Badge is controlled by the Button - if the value is below 1, the badge is hidden; if value is above the 9999, it is displayed as 999+`
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `class`    v = `sapUiTinyMargin`
                         )->a( n = `wrapping` v = `true`
                         )->a( n = `text`     v = `2. If an application developer wants to control more precisely the value and appearance of the Badge, ` &&
                                                    `that can be done as it is presented in this sample, but the constraints mentioned in (1) cannot be exceeded!`
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `class`    v = `sapUiTinyMargin`
                         )->a( n = `wrapping` v = `true`
                         )->a( n = `text`     v = `3. Badge can be used with all Button types, but it is recommended to use it only with the following Button types: Default, Ghost, Transparent and Emphasized.` ).

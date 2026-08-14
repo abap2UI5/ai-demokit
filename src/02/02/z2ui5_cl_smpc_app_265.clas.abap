@@ -45,66 +45,66 @@ CLASS z2ui5_cl_smpc_app_265 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " The Select's items binding carries a boundFilters entry whose value1 is
     " the RELATIVE row field {REGION} - each row's Select therefore lists only
     " the account managers of that row's region, and re-filters when the row's
     " region changes. Passed through 1:1 as a raw binding-info string.
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `class`       v = `sapUiSizeCompact`
         )->a( n = `xmlns`       v = `sap.m`
         )->a( n = `xmlns:mvc`   v = `sap.ui.core.mvc`
         )->a( n = `xmlns:table` v = `sap.ui.table`
         )->a( n = `xmlns:core`  v = `sap.ui.core`
 
-        )->open( n = `Table` ns = `table`
+        )->ele( n = `Table` ns = `table`
             )->a( n = `id`   v = `myTable`
             )->a( n = `rows` v = client->_bind( t_customers )
 
-            )->open( n = `extension` ns = `table`
-                )->leaf( `Title`
+            )->ele( n = `extension` ns = `table`
+                )->tag( `Title`
                     )->a( n = `id`   v = `title`
                     )->a( n = `text` v = `Customers`
 
-            )->shut(
+            )->end(
 
-            )->open( n = `columns` ns = `table`
-                )->open( n = `Column` ns = `table`
-                    )->leaf( `Label`
+            )->ele( n = `columns` ns = `table`
+                )->ele( n = `Column` ns = `table`
+                    )->tag( `Label`
                         )->a( n = `text` v = `Customer`
 
-                    )->open( n = `template` ns = `table`
-                        )->leaf( `Text`
+                    )->ele( n = `template` ns = `table`
+                        )->tag( `Text`
                             )->a( n = `text` v = `{NAME}`
 
-                    )->shut(
-                )->shut(
+                    )->end(
+                )->end(
 
-                )->open( n = `Column` ns = `table`
-                    )->leaf( `Label`
+                )->ele( n = `Column` ns = `table`
+                    )->tag( `Label`
                         )->a( n = `text` v = `Region`
 
-                    )->open( n = `template` ns = `table`
-                        )->leaf( `Text`
+                    )->ele( n = `template` ns = `table`
+                        )->tag( `Text`
                             )->a( n = `text` v = `{REGION}`
 
-                    )->shut(
-                )->shut(
+                    )->end(
+                )->end(
 
-                )->open( n = `Column` ns = `table`
-                    )->leaf( `Label`
+                )->ele( n = `Column` ns = `table`
+                    )->tag( `Label`
                         )->a( n = `text` v = `Key Account Manager (filtered by region)`
 
-                    )->open( n = `template` ns = `table`
-                        )->open( `Select`
+                    )->ele( n = `template` ns = `table`
+                        )->ele( `Select`
                             )->a( n = `forceSelection` v = `false`
                             )->a( n = `selectedKey`    v = `{ACCOUNTMANAGERID}`
                             )->a( n = `items`          v = |\{ path: '{ client->_bind( val = t_accountmanagers path = abap_true ) }', | &&
                                                            |templateShareable: false, boundFilters: [\{ path: 'REGION', operator: 'EQ', | &&
                                                            |value1: '\{REGION\}' \}] \}|
 
-                            )->leaf( n = `Item` ns = `core`
+                            )->tag( n = `Item` ns = `core`
                                 )->a( n = `key`  v = `{ID}`
                                 )->a( n = `text` v = |\{parts: ['FIRSTNAME', 'LASTNAME']\}|
 

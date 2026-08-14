@@ -26,54 +26,54 @@ CLASS z2ui5_cl_smpc_app_293 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " this view turns the usual namespace assignment around: sap.uxap is the
     " DEFAULT namespace and sap.m carries the m: prefix. structural-diff
     " compares the qualified control name, so every sap.m control here is
     " written with ns = `m` and the uxap ones with none
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `height`    v = `100%`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns:m`   v = `sap.m`
         )->a( n = `xmlns`     v = `sap.uxap`
 
-        )->open( `ObjectPageLayout`
+        )->ele( `ObjectPageLayout`
             )->a( n = `id`                  v = `ObjectPageLayout`
             )->a( n = `upperCaseAnchorBar`  v = `false`
 
-            )->open( `headerTitle`
-                )->leaf( `ObjectPageHeader`
+            )->ele( `headerTitle`
+                )->tag( `ObjectPageHeader`
                     )->a( n = `objectTitle` v = `Subsection background transparency`
 
-            )->shut(
+            )->end(
 
-            )->open( `sections`
+            )->ele( `sections`
 
-                )->open( `ObjectPageSection`
+                )->ele( `ObjectPageSection`
                     )->a( n = `showTitle` v = `false`
 
-                    )->open( `subSections`
+                    )->ele( `subSections`
 
-                        )->open( `ObjectPageSubSection`
+                        )->ele( `ObjectPageSubSection`
                             )->a( n = `title` v = `Subsection with transparent background:`
                             )->a( n = `class` v = `sapUxAPObjectPageSubSectionTransparentBackground`
 
-                            )->open( `blocks`
-                                )->open( n = `List` ns = `m`
-                                    )->leaf( n = `StandardListItem` ns = `m`
+                            )->ele( `blocks`
+                                )->ele( n = `List` ns = `m`
+                                    )->tag( n = `StandardListItem` ns = `m`
                                         )->a( n = `title` v = `subsection content`
 
-                                )->shut(
-                            )->shut(
-                        )->shut(
+                                )->end(
+                            )->end(
+                        )->end(
 
-                        )->open( `ObjectPageSubSection`
+                        )->ele( `ObjectPageSubSection`
                             )->a( n = `title` v = `Subsection with regular background:`
 
-                            )->open( `blocks`
-                                )->open( n = `List` ns = `m`
-                                    )->leaf( n = `StandardListItem` ns = `m`
+                            )->ele( `blocks`
+                                )->ele( n = `List` ns = `m`
+                                    )->tag( n = `StandardListItem` ns = `m`
                                         )->a( n = `title` v = `subsection content` ).
 
     client->view_display( view->stringify( ) ).

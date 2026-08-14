@@ -55,15 +55,15 @@ CLASS z2ui5_cl_smpc_app_218 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.f`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns:m`   v = `sap.m`
         )->a( n = `height`    v = `100%`
 
-        )->open( `ShellBar`
+        )->ele( `ShellBar`
             )->a( n = `title`               v = `Application Title`
             )->a( n = `secondTitle`         v = `Short description`
             )->a( n = `homeIcon`            v = `https://sdk.openui5.org/resources/sap/ui/documentation/sdk/images/logo_sap.png`
@@ -71,26 +71,26 @@ CLASS z2ui5_cl_smpc_app_218 IMPLEMENTATION.
             )->a( n = `showNotifications`   v = `true`
             )->a( n = `notificationsNumber` v = `2`
 
-            )->open( `menu`
-                )->open( n = `Menu` ns = `m`
-                    )->leaf( n = `MenuItem` ns = `m`
+            )->ele( `menu`
+                )->ele( n = `Menu` ns = `m`
+                    )->tag( n = `MenuItem` ns = `m`
                         )->a( n = `text` v = `Flight booking`
                         )->a( n = `icon` v = `sap-icon://flight`
-                    )->leaf( n = `MenuItem` ns = `m`
+                    )->tag( n = `MenuItem` ns = `m`
                         )->a( n = `text` v = `Car rental`
                         )->a( n = `icon` v = `sap-icon://car-rental`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( `profile`
-                )->leaf( n = `Avatar` ns = `m`
+            )->ele( `profile`
+                )->tag( n = `Avatar` ns = `m`
                     )->a( n = `initials` v = `UI`
 
-            )->shut(
+            )->end(
 
-            )->open( `searchManager`
-                )->open( `SearchManager`
+            )->ele( `searchManager`
+                )->ele( `SearchManager`
                     )->a( n = `id`                v = `searchField`
                     )->a( n = `search`            v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} search event is fired` ) ( `$event.oSource.sId` ) ) )
                     )->a( n = `liveChange`        v = client->follow_up_action( val = client->cs_event-control_global
@@ -99,16 +99,16 @@ CLASS z2ui5_cl_smpc_app_218 IMPLEMENTATION.
                     )->a( n = `enableSuggestions` v = `true`
                     )->a( n = `suggestionItems`   v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
 
-                    )->open( `suggestionItems`
-                        )->leaf( n = `SuggestionItem` ns = `m`
+                    )->ele( `suggestionItems`
+                        )->tag( n = `SuggestionItem` ns = `m`
                             )->a( n = `text`        v = `{NAME}`
                             )->a( n = `description` v = `{PRICE} {CURRENCYCODE}`
                             )->a( n = `key`         v = `{PRODUCTID}`
 
-                    )->shut(
-                )->shut(
-            )->shut(
-        )->shut( ).
+                    )->end(
+                )->end(
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

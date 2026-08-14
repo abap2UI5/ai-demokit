@@ -64,7 +64,7 @@ CLASS z2ui5_cl_smpc_app_115 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the full sample: all THIRTEEN columns over the shared demo mock, with the
     " Suppliers/Categories arrays the controller derives from it. The two
@@ -72,7 +72,7 @@ CLASS z2ui5_cl_smpc_app_115 IMPLEMENTATION.
     " AVAILABLESTATE / AVAILABLEICON, and the DatePicker binding keeps its type
     " but takes an ISO source pattern instead of the original timestamp - the
     " model carries a date STRING, not a JS epoch number (CAPABILITIES date row)
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.ui.table`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns:u`   v = `sap.ui.unified`
@@ -80,13 +80,13 @@ CLASS z2ui5_cl_smpc_app_115 IMPLEMENTATION.
         )->a( n = `xmlns:m`   v = `sap.m`
         )->a( n = `height`    v = `100%`
 
-        )->open( n = `Page` ns = `m`
+        )->ele( n = `Page` ns = `m`
             )->a( n = `showHeader`       v = `false`
             )->a( n = `enableScrolling`  v = `false`
             )->a( n = `class`            v = `sapUiContentPadding`
 
-            )->open( n = `content` ns = `m`
-                )->open( `Table`
+            )->ele( n = `content` ns = `m`
+                )->ele( `Table`
                     )->a( n = `rows`           v = client->_bind( productcollection )
                     )->a( n = `selectionMode`  v = `MultiToggle`
                     " onPaste toasts the pasted data - composed on the client
@@ -98,108 +98,108 @@ CLASS z2ui5_cl_smpc_app_115 IMPLEMENTATION.
                                                ( `${$parameters>/data}` ) ) )
                     )->a( n = `ariaLabelledBy` v = `title`
 
-                    )->open( `extension`
-                        )->open( n = `OverflowToolbar` ns = `m`
+                    )->ele( `extension`
+                        )->ele( n = `OverflowToolbar` ns = `m`
                             )->a( n = `style` v = `Clear`
-                            )->leaf( n = `Title` ns = `m`
+                            )->tag( n = `Title` ns = `m`
                                 )->a( n = `id`   v = `title`
                                 )->a( n = `text` v = `Products`
 
-                        )->shut(
-                    )->shut(
-                    )->open( `columns`
+                        )->end(
+                    )->end(
+                    )->ele( `columns`
 
-                        )->open( `Column`
+                        )->ele( `Column`
                             )->a( n = `width` v = `11rem`
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Product Name`
-                            )->open( `template`
-                                )->leaf( n = `Text` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text`     v = `{NAME}`
                                     )->a( n = `wrapping` v = `false`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `width` v = `11rem`
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Product Id`
-                            )->open( `template`
-                                )->leaf( n = `Input` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Input` ns = `m`
                                     )->a( n = `value` v = `{PRODUCTID}`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `width` v = `6rem`
                             )->a( n = `hAlign` v = `End`
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Quantity`
-                            )->open( `template`
-                                )->leaf( n = `Label` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = `{QUANTITY}`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `width` v = `9rem`
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Status`
-                            )->open( `template`
-                                )->leaf( n = `ObjectStatus` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `ObjectStatus` ns = `m`
                                     )->a( n = `text`  v = `{STATUS}`
                                     )->a( n = `state` v = `{AVAILABLESTATE}`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `width` v = `9rem`
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Price`
-                            )->open( `template`
-                                )->leaf( n = `Currency` ns = `u`
+                            )->ele( `template`
+                                )->tag( n = `Currency` ns = `u`
                                     )->a( n = `value`    v = `{PRICE}`
                                     )->a( n = `currency` v = `{CURRENCYCODE}`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `width` v = `12rem`
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Supplier`
-                            )->open( `template`
-                                )->open( n = `ComboBox` ns = `m`
+                            )->ele( `template`
+                                )->ele( n = `ComboBox` ns = `m`
                                     )->a( n = `value` v = `{SUPPLIERNAME}`
                                     )->a( n = `items` v = |\{ path: '{ client->_bind( val = suppliers path = abap_true ) }', templateShareable: false \}|
 
-                                    )->open( n = `items` ns = `m`
-                                        )->leaf( n = `Item` ns = `c`
+                                    )->ele( n = `items` ns = `m`
+                                        )->tag( n = `Item` ns = `c`
                                             )->a( n = `text` v = `{NAME}`
 
-                                    )->shut(
-                                )->shut(
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                                    )->end(
+                                )->end(
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `width` v = `9rem`
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Image`
-                            )->open( `template`
-                                )->leaf( n = `Link` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Link` ns = `m`
                                     )->a( n = `text`   v = `Show Image`
                                     )->a( n = `href`   v = `{PRODUCTPICURL}`
                                     )->a( n = `target` v = `_blank`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `width` v = `9rem`
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Details`
-                            )->open( `template`
+                            )->ele( `template`
                                 " handleDetailsPress toasts the row's ProductId - the row
                                 " field resolves on the client, so no round-trip
-                                )->leaf( n = `Button` ns = `m`
+                                )->tag( n = `Button` ns = `m`
                                     )->a( n = `text`  v = `Show Details`
                                     )->a( n = `press` v = client->follow_up_action(
                                               val   = client->cs_event-control_global
@@ -208,42 +208,42 @@ CLASS z2ui5_cl_smpc_app_115 IMPLEMENTATION.
                                                                ( `Details for product with id {0}` )
                                                                ( `${PRODUCTID}` ) ) )
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `width` v = `7rem`
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Heavy Weight`
-                            )->open( `template`
-                                )->leaf( n = `CheckBox` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `CheckBox` ns = `m`
                                     )->a( n = `selected` v = |\{ path: 'HEAVY', type: 'sap.ui.model.type.String' \}|
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `width` v = `12rem`
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Main Category`
-                            )->open( `template`
-                                )->open( n = `Select` ns = `m`
+                            )->ele( `template`
+                                )->ele( n = `Select` ns = `m`
                                     )->a( n = `selectedKey` v = `{CATEGORY}`
                                     )->a( n = `items`       v = |\{ path: '{ client->_bind( val = categories path = abap_true ) }', templateShareable: false \}|
 
-                                    )->open( n = `items` ns = `m`
-                                        )->leaf( n = `Item` ns = `c`
+                                    )->ele( n = `items` ns = `m`
+                                        )->tag( n = `Item` ns = `c`
                                             )->a( n = `text` v = `{NAME}`
                                             )->a( n = `key`  v = `{NAME}`
 
-                                    )->shut(
-                                )->shut(
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                                    )->end(
+                                )->end(
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `width` v = `12rem`
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Additional Categories`
-                            )->open( `template`
-                                )->open( n = `MultiInput` ns = `m`
+                            )->ele( `template`
+                                )->ele( n = `MultiInput` ns = `m`
                                     " updateMultipleSelection rewrites the row's token
                                     " table after a delete - the update type, the removed
                                     " key and the row path travel, ABAP removes the entry
@@ -257,14 +257,14 @@ CLASS z2ui5_cl_smpc_app_115 IMPLEMENTATION.
                                     )->a( n = `suggestionItems`  v = |\{ path: '{ client->_bind( val = categories path = abap_true ) }', templateShareable: false, sorter: \{ path: 'NAME' \} \}|
                                     )->a( n = `showValueHelp`    v = `false`
 
-                                    )->open( n = `tokens` ns = `m`
-                                        )->leaf( n = `Token` ns = `m`
+                                    )->ele( n = `tokens` ns = `m`
+                                        )->tag( n = `Token` ns = `m`
                                             )->a( n = `key`  v = `{KEY}`
                                             )->a( n = `text` v = `{NAME}`
 
-                                    )->shut(
-                                    )->open( n = `suggestionItems` ns = `m`
-                                        )->leaf( n = `Item` ns = `c`
+                                    )->end(
+                                    )->ele( n = `suggestionItems` ns = `m`
+                                        )->tag( n = `Item` ns = `c`
                                             " the ORIGINAL writes key="{ProductId}" on a template bound
                                             " over /Categories, whose rows only have a Name - its own quirk,
                                             " ported verbatim (sidecar NOTE)
@@ -272,28 +272,28 @@ CLASS z2ui5_cl_smpc_app_115 IMPLEMENTATION.
                                             )->a( n = `key`  v = `{PRODUCTID}`
                                             )->a( n = `text` v = `{NAME}`
 
-                                    )->shut(
-                                )->shut(
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                                    )->end(
+                                )->end(
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `width`  v = `6rem`
                             )->a( n = `hAlign` v = `Center`
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Status`
-                            )->open( `template`
-                                )->leaf( n = `Icon` ns = `c`
+                            )->ele( `template`
+                                )->tag( n = `Icon` ns = `c`
                                     )->a( n = `src` v = `{AVAILABLEICON}`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `width`  v = `11rem`
                             )->a( n = `hAlign` v = `Center`
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Delivery Date`
-                            )->open( `template`
-                                )->leaf( n = `DatePicker` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `DatePicker` ns = `m`
                                     )->a( n = `value` v = |\{ path: 'DELIVERYDATE', type: 'sap.ui.model.type.Date', formatOptions: \{ source: \{ pattern: 'yyyy-MM-dd' \} \} \}| ).
 
     client->view_display( view->stringify( ) ).

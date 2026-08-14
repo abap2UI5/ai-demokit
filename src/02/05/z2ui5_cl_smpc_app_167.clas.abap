@@ -66,123 +66,123 @@ CLASS z2ui5_cl_smpc_app_167 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns:tnt` v = `sap.tnt`
         )->a( n = `height`    v = `100%`
 
-        )->open( n = `ToolPage` ns = `tnt`
+        )->ele( n = `ToolPage` ns = `tnt`
             )->a( n = `id`           v = `toolPage`
             " added attr (declared): carries onSideNavButtonPress' setSideExpanded
             )->a( n = `sideExpanded` v = client->_bind( sideexpanded )
 
-            )->open( n = `header` ns = `tnt`
-                )->open( n = `ToolHeader` ns = `tnt`
-                    )->open( `Button`
+            )->ele( n = `header` ns = `tnt`
+                )->ele( n = `ToolHeader` ns = `tnt`
+                    )->ele( `Button`
                         )->a( n = `id`      v = `sideNavigationToggleButton`
                         )->a( n = `icon`    v = `sap-icon://menu2`
                         )->a( n = `type`    v = `Transparent`
                         " added attr (declared): the original sets the tooltip imperatively
                         )->a( n = `tooltip` v = client->_bind( toggle_tooltip )
                         )->a( n = `press`   v = client->_event( `SIDE_TOGGLE` )
-                        )->open( `layoutData`
-                            )->leaf( `OverflowToolbarLayoutData` )->a( n = `priority` v = `NeverOverflow`
+                        )->ele( `layoutData`
+                            )->tag( `OverflowToolbarLayoutData` )->a( n = `priority` v = `NeverOverflow`
 
-                        )->shut(
-                    )->shut(
-                    )->leaf( `ToolbarSpacer` )->a( n = `width` v = `20px`
-                    )->open( `Button`
+                        )->end(
+                    )->end(
+                    )->tag( `ToolbarSpacer` )->a( n = `width` v = `20px`
+                    )->ele( `Button`
                         )->a( n = `text` v = `File`
                         )->a( n = `type` v = `Transparent`
-                        )->open( `layoutData`
-                            )->leaf( `OverflowToolbarLayoutData` )->a( n = `priority` v = `Low`
+                        )->ele( `layoutData`
+                            )->tag( `OverflowToolbarLayoutData` )->a( n = `priority` v = `Low`
 
-                        )->shut(
-                    )->shut(
-                    )->open( `Button`
+                        )->end(
+                    )->end(
+                    )->ele( `Button`
                         )->a( n = `text` v = `Edit`
                         )->a( n = `type` v = `Transparent`
-                        )->open( `layoutData`
-                            )->leaf( `OverflowToolbarLayoutData` )->a( n = `priority` v = `Low`
+                        )->ele( `layoutData`
+                            )->tag( `OverflowToolbarLayoutData` )->a( n = `priority` v = `Low`
 
-                        )->shut(
-                    )->shut(
-                    )->open( `Button`
+                        )->end(
+                    )->end(
+                    )->ele( `Button`
                         )->a( n = `text` v = `View`
                         )->a( n = `type` v = `Transparent`
-                        )->open( `layoutData`
-                            )->leaf( `OverflowToolbarLayoutData` )->a( n = `priority` v = `Low`
+                        )->ele( `layoutData`
+                            )->tag( `OverflowToolbarLayoutData` )->a( n = `priority` v = `Low`
 
-                        )->shut(
-                    )->shut(
-                    )->open( `Button`
+                        )->end(
+                    )->end(
+                    )->ele( `Button`
                         )->a( n = `text` v = `Navigate`
                         )->a( n = `type` v = `Transparent`
-                        )->open( `layoutData`
-                            )->leaf( `OverflowToolbarLayoutData` )->a( n = `priority` v = `Low`
+                        )->ele( `layoutData`
+                            )->tag( `OverflowToolbarLayoutData` )->a( n = `priority` v = `Low`
 
-                        )->shut(
-                    )->shut(
-                    )->open( `Button`
+                        )->end(
+                    )->end(
+                    )->ele( `Button`
                         )->a( n = `text` v = `Code`
                         )->a( n = `type` v = `Transparent`
-                        )->open( `layoutData`
-                            )->leaf( `OverflowToolbarLayoutData` )->a( n = `priority` v = `Low`
+                        )->ele( `layoutData`
+                            )->tag( `OverflowToolbarLayoutData` )->a( n = `priority` v = `Low`
 
-                        )->shut(
-                    )->shut(
-                    )->open( `Button`
+                        )->end(
+                    )->end(
+                    )->ele( `Button`
                         )->a( n = `text` v = `Refactor`
                         )->a( n = `type` v = `Transparent`
-                        )->open( `layoutData`
-                            )->leaf( `OverflowToolbarLayoutData` )->a( n = `priority` v = `Low`
+                        )->ele( `layoutData`
+                            )->tag( `OverflowToolbarLayoutData` )->a( n = `priority` v = `Low`
 
-                        )->shut(
-                    )->shut(
-                    )->open( `Button`
+                        )->end(
+                    )->end(
+                    )->ele( `Button`
                         )->a( n = `text` v = `Run`
                         )->a( n = `type` v = `Transparent`
-                        )->open( `layoutData`
-                            )->leaf( `OverflowToolbarLayoutData` )->a( n = `priority` v = `Low`
+                        )->ele( `layoutData`
+                            )->tag( `OverflowToolbarLayoutData` )->a( n = `priority` v = `Low`
 
-                        )->shut(
-                    )->shut(
-                    )->open( `Button`
+                        )->end(
+                    )->end(
+                    )->ele( `Button`
                         )->a( n = `text` v = `Tools`
                         )->a( n = `type` v = `Transparent`
-                        )->open( `layoutData`
-                            )->leaf( `OverflowToolbarLayoutData` )->a( n = `priority` v = `Low`
+                        )->ele( `layoutData`
+                            )->tag( `OverflowToolbarLayoutData` )->a( n = `priority` v = `Low`
 
-                        )->shut(
-                    )->shut(
-                    )->leaf( n = `ToolHeaderUtilitySeparator` ns = `tnt`
-                    )->open( `ToolbarSpacer`
-                        )->open( `layoutData`
-                            )->leaf( `OverflowToolbarLayoutData`
+                        )->end(
+                    )->end(
+                    )->tag( n = `ToolHeaderUtilitySeparator` ns = `tnt`
+                    )->ele( `ToolbarSpacer`
+                        )->ele( `layoutData`
+                            )->tag( `OverflowToolbarLayoutData`
                                 )->a( n = `priority` v = `NeverOverflow`
                                 )->a( n = `minWidth` v = `20px`
 
-                        )->shut(
-                    )->shut(
-                    )->open( `Button`
+                        )->end(
+                    )->end(
+                    )->ele( `Button`
                         )->a( n = `text`         v = `Alan Smith`
                         )->a( n = `type`         v = `Transparent`
                         )->a( n = `press`        v = client->_event( val   = `USER_POPOVER`
                                                                      t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
                         )->a( n = `ariaHasPopup` v = `Menu`
-                        )->open( `layoutData`
-                            )->leaf( `OverflowToolbarLayoutData` )->a( n = `priority` v = `NeverOverflow`
+                        )->ele( `layoutData`
+                            )->tag( `OverflowToolbarLayoutData` )->a( n = `priority` v = `NeverOverflow`
 
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( n = `sideContent` ns = `tnt`
-                )->open( n = `SideNavigation` ns = `tnt`
+            )->ele( n = `sideContent` ns = `tnt`
+                )->ele( n = `SideNavigation` ns = `tnt`
                     )->a( n = `expanded`    v = `true`
                     )->a( n = `itemPress`   v = client->follow_up_action( val   = client->cs_event-control_global
                                                                           t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Fired itemPress, item: {0}` ) ( `${$parameters>/item}.getText()` ) ) )
@@ -191,9 +191,9 @@ CLASS z2ui5_cl_smpc_app_167 IMPLEMENTATION.
                     " resolves client-side and the to() runs roundtrip-free
                     )->a( n = `itemSelect`  v = client->follow_up_action( val   = client->cs_event-control_by_id
                                                                           t_arg = VALUE #( ( `pageContainer` ) ( `to` ) ( `${$parameters>/item}.getKey()` ) ) )
-                    )->open( n = `NavigationList` ns = `tnt`
+                    )->ele( n = `NavigationList` ns = `tnt`
                         )->a( n = `items` v = client->_bind( navigation )
-                        )->open( n = `NavigationListItem` ns = `tnt`
+                        )->ele( n = `NavigationListItem` ns = `tnt`
                             )->a( n = `text`       v = `{TITLE}`
                             )->a( n = `icon`       v = `{ICON}`
                             )->a( n = `enabled`    v = `{ENABLED}`
@@ -201,17 +201,17 @@ CLASS z2ui5_cl_smpc_app_167 IMPLEMENTATION.
                             )->a( n = `items`      v = `{ITEMS}`
                             )->a( n = `selectable` v = `{SELECTABLE}`
                             )->a( n = `key`        v = `{KEY}`
-                            )->leaf( n = `NavigationListItem` ns = `tnt`
+                            )->tag( n = `NavigationListItem` ns = `tnt`
                                 )->a( n = `text`    v = `{TITLE}`
                                 )->a( n = `key`     v = `{KEY}`
                                 )->a( n = `enabled` v = `{ENABLED}`
 
-                        )->shut(
-                    )->shut(
-                    )->open( n = `fixedItem` ns = `tnt`
-                        )->open( n = `NavigationList` ns = `tnt`
+                        )->end(
+                    )->end(
+                    )->ele( n = `fixedItem` ns = `tnt`
+                        )->ele( n = `NavigationList` ns = `tnt`
                             )->a( n = `items` v = client->_bind( fixednavigation )
-                            )->leaf( n = `NavigationListItem` ns = `tnt`
+                            )->tag( n = `NavigationListItem` ns = `tnt`
                                 )->a( n = `text`         v = `{TITLE}`
                                 )->a( n = `icon`         v = `{ICON}`
                                 )->a( n = `ariaHasPopup` v = `{ARIAHASPOPUP}`
@@ -220,55 +220,55 @@ CLASS z2ui5_cl_smpc_app_167 IMPLEMENTATION.
                                                                              t_arg = VALUE #( ( `${$source>/design}` ) ) )
                                 )->a( n = `selectable`   v = `{SELECTABLE}`
 
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( n = `mainContents` ns = `tnt`
-                )->open( `NavContainer`
+            )->ele( n = `mainContents` ns = `tnt`
+                )->ele( `NavContainer`
                     )->a( n = `id`          v = `pageContainer`
                     )->a( n = `initialPage` v = `page2`
-                    )->open( `pages`
-                        )->open( `ScrollContainer`
+                    )->ele( `pages`
+                        )->ele( `ScrollContainer`
                             )->a( n = `id`         v = `root1`
                             )->a( n = `horizontal` v = `false`
                             )->a( n = `vertical`   v = `true`
                             )->a( n = `height`     v = `100%`
                             )->a( n = `class`      v = `sapUiContentPadding`
-                            )->leaf( `Text` )->a( n = `text` v = `This is the root page`
+                            )->tag( `Text` )->a( n = `text` v = `This is the root page`
 
-                        )->shut(
-                        )->open( `ScrollContainer`
+                        )->end(
+                        )->ele( `ScrollContainer`
                             )->a( n = `id`         v = `page1`
                             )->a( n = `horizontal` v = `false`
                             )->a( n = `vertical`   v = `true`
                             )->a( n = `height`     v = `100%`
                             )->a( n = `class`      v = `sapUiContentPadding`
-                            )->leaf( `Text` )->a( n = `text` v = `This is the first page`
+                            )->tag( `Text` )->a( n = `text` v = `This is the first page`
 
-                        )->shut(
-                        )->open( `ScrollContainer`
+                        )->end(
+                        )->ele( `ScrollContainer`
                             )->a( n = `id`         v = `page2`
                             )->a( n = `horizontal` v = `false`
                             )->a( n = `vertical`   v = `true`
                             )->a( n = `height`     v = `100%`
                             )->a( n = `class`      v = `sapUiContentPadding`
-                            )->leaf( `Text` )->a( n = `text` v = `Lorem ipsum dolor sit amet, consectetur adipisicing elit. (content abbreviated from the original filler text)`
+                            )->tag( `Text` )->a( n = `text` v = `Lorem ipsum dolor sit amet, consectetur adipisicing elit. (content abbreviated from the original filler text)`
 
-                        )->shut(
-                        )->open( `ScrollContainer`
+                        )->end(
+                        )->ele( `ScrollContainer`
                             )->a( n = `id`         v = `root2`
                             )->a( n = `horizontal` v = `false`
                             )->a( n = `vertical`   v = `true`
                             )->a( n = `height`     v = `100%`
                             )->a( n = `class`      v = `sapUiContentPadding`
-                            )->leaf( `Text` )->a( n = `text` v = `This is the root page of the second element`
+                            )->tag( `Text` )->a( n = `text` v = `This is the root page of the second element`
 
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut( ).
+                        )->end(
+                    )->end(
+                )->end(
+            )->end( ).
 
     client->view_display( view->stringify( ) ).
 
@@ -290,25 +290,25 @@ CLASS z2ui5_cl_smpc_app_167 IMPLEMENTATION.
       WHEN `USER_POPOVER`.
         " handleUserNamePress: the controller-built Popover (no header, Bottom,
         " three transparent buttons), opened by the pressed user button
-        DATA(popover) = z2ui5_cl_ai_xml=>factory( ).
+        DATA(popover) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-        popover->open( n = `FragmentDefinition` ns = `core`
+        popover->ele( n = `FragmentDefinition` ns = `core`
             )->a( n = `xmlns:core` v = `sap.ui.core`
             )->a( n = `xmlns`      v = `sap.m`
 
-            )->open( `Popover`
+            )->ele( `Popover`
                 )->a( n = `showHeader` v = `false`
                 )->a( n = `placement`  v = `Bottom`
                 )->a( n = `class`      v = `sapMOTAPopover sapTntToolHeaderPopover`
 
-                )->open( `content`
-                    )->leaf( `Button`
+                )->ele( `content`
+                    )->tag( `Button`
                         )->a( n = `text` v = `Feedback`
                         )->a( n = `type` v = `Transparent`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text` v = `Help`
                         )->a( n = `type` v = `Transparent`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text` v = `Logout`
                         )->a( n = `type` v = `Transparent` ).
 
@@ -318,30 +318,30 @@ CLASS z2ui5_cl_smpc_app_167 IMPLEMENTATION.
       WHEN `QUICK_ACTION`.
         " onQuickActionPress: only a design=Action item opens the dialog
         IF client->get_event_arg( ) = `Action`.
-          DATA(popup) = z2ui5_cl_ai_xml=>factory( ).
+          DATA(popup) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-          popup->open( n = `FragmentDefinition` ns = `core`
+          popup->ele( n = `FragmentDefinition` ns = `core`
               )->a( n = `xmlns:core` v = `sap.ui.core`
               )->a( n = `xmlns`      v = `sap.m`
 
-              )->open( `Dialog`
+              )->ele( `Dialog`
                   )->a( n = `title` v = `Create Item`
                   )->a( n = `type`  v = `Message`
 
-                  )->open( `content`
-                      )->leaf( `Text`
+                  )->ele( `content`
+                      )->tag( `Text`
                           )->a( n = `text` v = `Create New Navigation List Item`
 
-                  )->shut(
-                  )->open( `beginButton`
-                      )->leaf( `Button`
+                  )->end(
+                  )->ele( `beginButton`
+                      )->tag( `Button`
                           )->a( n = `type`  v = `Emphasized`
                           )->a( n = `text`  v = `Create`
                           )->a( n = `press` v = client->follow_up_action( client->cs_event-popup_close )
 
-                  )->shut(
-                  )->open( `endButton`
-                      )->leaf( `Button`
+                  )->end(
+                  )->ele( `endButton`
+                      )->tag( `Button`
                           )->a( n = `text`  v = `Cancel`
                           )->a( n = `press` v = client->follow_up_action( client->cs_event-popup_close ) ).
 

@@ -42,117 +42,117 @@ CLASS z2ui5_cl_smpc_app_089 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `height`     v = `100%`
         )->a( n = `xmlns:f`    v = `sap.ui.layout.form`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns`      v = `sap.m`
 
-        )->open( `Page`
+        )->ele( `Page`
             )->a( n = `id`      v = `idPage`
             )->a( n = `title`   v = ` Product XY`
             )->a( n = `class`   v = `sapUiResponsivePadding--header`
             " element binding kept 1:1 - a one-record structure /S_PRODUCT instead of {/ProductCollection/0}
             )->a( n = `binding` v = client->_bind( s_product )
 
-            )->open( `content`
-                )->open( `ObjectHeader`
+            )->ele( `content`
+                )->ele( `ObjectHeader`
                     )->a( n = `title`            v = `{NAME}`
                     )->a( n = `backgroundDesign` v = `Solid`
                     )->a( n = `number`           v = |\{ parts:[\{path:'PRICE'\},\{path:'CURRENCY_CODE'\}], type: 'sap.ui.model.type.Currency', formatOptions: \{showMeasure: false\} \}|
                     )->a( n = `numberUnit`       v = `{CURRENCY_CODE}`
-                    )->open( `attributes`
-                        )->leaf( `ObjectAttribute`
+                    )->ele( `attributes`
+                        )->tag( `ObjectAttribute`
                             )->a( n = `title` v = `Weight`
                             )->a( n = `text`  v = `{WEIGHT_MEASURE} {WEIGHT_UNIT}`
-                        )->leaf( `ObjectAttribute`
+                        )->tag( `ObjectAttribute`
                             )->a( n = `title` v = `Dimensions`
                             )->a( n = `text`  v = `{WIDTH} x {DEPTH} X {HEIGHT} {DIM_UNIT}`
 
-                    )->shut(
-                    )->open( `statuses`
-                        )->leaf( `ObjectStatus`
+                    )->end(
+                    )->ele( `statuses`
+                        )->tag( `ObjectStatus`
                             )->a( n = `title` v = `Status`
                             )->a( n = `text`  v = `In Stock`
                             )->a( n = `state` v = `Success`
 
-                    )->shut(
-                )->shut(
+                    )->end(
+                )->end(
 
-                )->open( `IconTabBar`
+                )->ele( `IconTabBar`
                     " the original's isNoPhone is a demo-kit helper the framework's raw
                     " device> model does not carry; !phone expresses the same (app 030)
                     )->a( n = `expanded` v = `{= !${device>/system/phone} }`
                     )->a( n = `class`    v = `sapUiSmallMarginBottom sapUiResponsiveContentPadding`
-                    )->open( `items`
-                        )->open( `IconTabFilter`
+                    )->ele( `items`
+                        )->ele( `IconTabFilter`
                             )->a( n = `key`  v = `info`
                             )->a( n = `text` v = `Info`
-                            )->open( n = `SimpleForm` ns = `f`
+                            )->ele( n = `SimpleForm` ns = `f`
                                 )->a( n = `layout` v = `ResponsiveGridLayout`
-                                )->open( n = `title` ns = `f`
-                                    )->leaf( n = `Title` ns = `core`
+                                )->ele( n = `title` ns = `f`
+                                    )->tag( n = `Title` ns = `core`
                                         )->a( n = `text` v = `A Form`
 
-                                )->shut(
-                                )->leaf( `Label`
+                                )->end(
+                                )->tag( `Label`
                                     )->a( n = `text` v = `Label`
-                                )->leaf( `Text`
+                                )->tag( `Text`
                                     )->a( n = `text` v = `Value`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `IconTabFilter`
+                            )->end(
+                        )->end(
+                        )->ele( `IconTabFilter`
                             )->a( n = `key`  v = `attachments`
                             )->a( n = `text` v = `Attachments`
-                            )->leaf( `List`
+                            )->tag( `List`
                                 )->a( n = `headerText`     v = `A List`
                                 )->a( n = `showSeparators` v = `Inner`
 
-                        )->shut(
-                        )->open( `IconTabFilter`
+                        )->end(
+                        )->ele( `IconTabFilter`
                             )->a( n = `key`  v = `notes`
                             )->a( n = `text` v = `Notes`
-                            )->leaf( `FeedInput`
+                            )->tag( `FeedInput`
 
-                        )->shut(
-                    )->shut(
-                )->shut(
+                        )->end(
+                    )->end(
+                )->end(
 
-                )->open( n = `SimpleForm` ns = `f`
+                )->ele( n = `SimpleForm` ns = `f`
                     )->a( n = `layout` v = `ResponsiveGridLayout`
                     )->a( n = `class`  v = `sapUiForceWidthAuto sapUiResponsiveMargin`
-                    )->open( n = `title` ns = `f`
-                        )->leaf( n = `Title` ns = `core`
+                    )->ele( n = `title` ns = `f`
+                        )->tag( n = `Title` ns = `core`
                             )->a( n = `text` v = `A Form`
 
-                    )->shut(
-                    )->leaf( `Label`
+                    )->end(
+                    )->tag( `Label`
                         )->a( n = `text` v = `Label`
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Value`
 
-                )->shut(
+                )->end(
 
-                )->leaf( `List`
+                )->tag( `List`
                     )->a( n = `headerText`       v = `A List`
                     )->a( n = `backgroundDesign` v = `Translucent`
                     )->a( n = `width`            v = `auto`
                     )->a( n = `class`            v = `sapUiResponsiveMargin`
-                )->leaf( `Table`
+                )->tag( `Table`
                     )->a( n = `headerText` v = `A Table`
                     )->a( n = `width`      v = `auto`
                     )->a( n = `class`      v = `sapUiResponsiveMargin`
-                )->leaf( `Panel`
+                )->tag( `Panel`
                     )->a( n = `headerText` v = `A Panel`
                     )->a( n = `width`      v = `auto`
                     )->a( n = `class`      v = `sapUiResponsiveMargin`
 
-            )->shut(
-        )->shut( ).
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

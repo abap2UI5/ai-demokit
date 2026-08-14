@@ -29,9 +29,9 @@ CLASS z2ui5_cl_smpc_app_105 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `height`         v = `100%`
         )->a( n = `xmlns:core`     v = `sap.ui.core`
         )->a( n = `xmlns:mvc`      v = `sap.ui.core.mvc`
@@ -40,71 +40,71 @@ CLASS z2ui5_cl_smpc_app_105 IMPLEMENTATION.
         )->a( n = `xmlns:ui`       v = `sap.ca.ui`
         )->a( n = `displayBlock`   v = `true`
 
-        )->open( n = `FullscreenPage` ns = `semantic`
+        )->ele( n = `FullscreenPage` ns = `semantic`
             )->a( n = `title`          v = `FullScreen Page Title`
             )->a( n = `showNavButton`  v = `true`
             )->a( n = `navButtonPress` v = client->_event( `NAV` )
 
-            )->open( n = `addAction` ns = `semantic`
-                )->leaf( n = `AddAction` ns = `semantic`
+            )->ele( n = `addAction` ns = `semantic`
+                )->tag( n = `AddAction` ns = `semantic`
                     )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `AddAction` ) ) )
 
-            )->shut(
-            )->open( n = `editAction` ns = `semantic`
-                )->leaf( n = `EditAction` ns = `semantic`
+            )->end(
+            )->ele( n = `editAction` ns = `semantic`
+                )->tag( n = `EditAction` ns = `semantic`
                     )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `EditAction` ) ) )
 
-            )->shut(
-            )->open( n = `deleteAction` ns = `semantic`
-                )->leaf( n = `DeleteAction` ns = `semantic`
+            )->end(
+            )->ele( n = `deleteAction` ns = `semantic`
+                )->tag( n = `DeleteAction` ns = `semantic`
                     )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `DeleteAction` ) ) )
 
-            )->shut(
-            )->open( n = `flagAction` ns = `semantic`
-                )->leaf( n = `FlagAction` ns = `semantic`
+            )->end(
+            )->ele( n = `flagAction` ns = `semantic`
+                )->tag( n = `FlagAction` ns = `semantic`
                     )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `FlagAction` ) ) )
 
-            )->shut(
-            )->open( n = `favoriteAction` ns = `semantic`
-                )->leaf( n = `FavoriteAction` ns = `semantic`
+            )->end(
+            )->ele( n = `favoriteAction` ns = `semantic`
+                )->tag( n = `FavoriteAction` ns = `semantic`
                     )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `FavoriteAction` ) ) )
 
-            )->shut(
-            )->open( n = `sendEmailAction` ns = `semantic`
-                )->leaf( n = `SendEmailAction` ns = `semantic`
+            )->end(
+            )->ele( n = `sendEmailAction` ns = `semantic`
+                )->tag( n = `SendEmailAction` ns = `semantic`
                     )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `SendEmailAction` ) ) )
 
-            )->shut(
-            )->open( n = `sendMessageAction` ns = `semantic`
-                )->leaf( n = `SendMessageAction` ns = `semantic`
+            )->end(
+            )->ele( n = `sendMessageAction` ns = `semantic`
+                )->tag( n = `SendMessageAction` ns = `semantic`
                     )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `SendMessageAction` ) ) )
 
-            )->shut(
-            )->open( n = `discussInJamAction` ns = `semantic`
-                )->leaf( n = `DiscussInJamAction` ns = `semantic`
+            )->end(
+            )->ele( n = `discussInJamAction` ns = `semantic`
+                )->tag( n = `DiscussInJamAction` ns = `semantic`
                     )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `DiscussInJamAction` ) ) )
 
-            )->shut(
-            )->open( n = `shareInJamAction` ns = `semantic`
-                )->leaf( n = `ShareInJamAction` ns = `semantic`
+            )->end(
+            )->ele( n = `shareInJamAction` ns = `semantic`
+                )->tag( n = `ShareInJamAction` ns = `semantic`
                     )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `ShareInJamAction` ) ) )
 
-            )->shut(
-            )->open( n = `printAction` ns = `semantic`
-                )->leaf( n = `PrintAction` ns = `semantic`
+            )->end(
+            )->ele( n = `printAction` ns = `semantic`
+                )->tag( n = `PrintAction` ns = `semantic`
                     )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `PrintAction` ) ) )
 
-            )->shut(
-            )->open( n = `messagesIndicator` ns = `semantic`
-                )->leaf( n = `MessagesIndicator` ns = `semantic`
+            )->end(
+            )->ele( n = `messagesIndicator` ns = `semantic`
+                )->tag( n = `MessagesIndicator` ns = `semantic`
                     )->a( n = `press` v = client->_event( `MESSAGES` )
 
-            )->shut(
-            )->open( n = `customFooterContent` ns = `semantic`
-                )->leaf( `Button`
+            )->end(
+            )->ele( n = `customFooterContent` ns = `semantic`
+                )->tag( `Button`
                     )->a( n = `text`  v = `CustomFooterBtn`
                     )->a( n = `press` v = client->_event( val = `PRESS` t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
-                )->leaf( `OverflowToolbarButton`
+                )->tag( `OverflowToolbarButton`
                     )->a( n = `icon`  v = `sap-icon://settings`
                     )->a( n = `text`  v = `Settings`
                     )->a( n = `press` v = client->_event( val = `PRESS` t_arg = VALUE #( ( `$event.oSource.sId` ) ) ) ).

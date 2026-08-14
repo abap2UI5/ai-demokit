@@ -32,18 +32,18 @@ CLASS z2ui5_cl_smpc_app_195 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
-        )->open( `List`
+        )->ele( `List`
             )->a( n = `headerText` v = `Products`
             )->a( n = `footerText` v = `This is the footer text`
 
-            )->leaf( `StandardListItem`
+            )->tag( `StandardListItem`
                 )->a( n = `title`            v = client->_bind( name )
                 )->a( n = `description`      v = client->_bind( productid )
                 )->a( n = `icon`             v = client->_bind( productpicurl )

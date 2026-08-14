@@ -35,7 +35,7 @@ CLASS z2ui5_cl_smpc_app_268 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " The controller creates one ColorPickerPopover per display mode lazily and
     " opens it with openBy(input). abap2UI5 declares all four up front in the
@@ -44,38 +44,38 @@ CLASS z2ui5_cl_smpc_app_268 IMPLEMENTATION.
     " idiom of apps 016/060. Each popover's change/liveChange round-trips so
     " the backend can write the value into the Input (handleChange) and the
     " liveChange Text, exactly like the controller does.
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns:u`   v = `sap.ui.unified`
 
-        )->open( `Table`
+        )->ele( `Table`
             )->a( n = `id`         v = `samplesTable`
             )->a( n = `headerText` v = `Color Picker in a Popover`
             )->a( n = `class`      v = `sapUiLargeMarginBottom`
 
-            )->open( `dependents`
-                )->leaf( n = `ColorPickerPopover` ns = `u`
+            )->ele( `dependents`
+                )->tag( n = `ColorPickerPopover` ns = `u`
                     )->a( n = `id`          v = `oColorPickerPopover`
                     )->a( n = `colorString` v = `blue`
                     )->a( n = `mode`        v = `HSL`
                     )->a( n = `change`      v = client->_event( val   = `CHANGE_D`
                                                                 t_arg = VALUE #( ( `${$parameters>/colorString}` ) ) )
-                )->leaf( n = `ColorPickerPopover` ns = `u`
+                )->tag( n = `ColorPickerPopover` ns = `u`
                     )->a( n = `id`          v = `oColorPickerLargePopover`
                     )->a( n = `colorString` v = `green`
                     )->a( n = `displayMode` v = `Large`
                     )->a( n = `mode`        v = `HSL`
                     )->a( n = `change`      v = client->_event( val   = `CHANGE_L`
                                                                 t_arg = VALUE #( ( `${$parameters>/colorString}` ) ) )
-                )->leaf( n = `ColorPickerPopover` ns = `u`
+                )->tag( n = `ColorPickerPopover` ns = `u`
                     )->a( n = `id`          v = `oColorPickerSimpplifiedPopover`
                     )->a( n = `colorString` v = `pink`
                     )->a( n = `displayMode` v = `Simplified`
                     )->a( n = `mode`        v = `HSL`
                     )->a( n = `change`      v = client->_event( val   = `CHANGE_S`
                                                                 t_arg = VALUE #( ( `${$parameters>/colorString}` ) ) )
-                )->leaf( n = `ColorPickerPopover` ns = `u`
+                )->tag( n = `ColorPickerPopover` ns = `u`
                     )->a( n = `id`          v = `oColorPickerLiveChangePopover`
                     )->a( n = `colorString` v = `orange`
                     )->a( n = `displayMode` v = `Large`
@@ -85,35 +85,35 @@ CLASS z2ui5_cl_smpc_app_268 IMPLEMENTATION.
                     )->a( n = `liveChange`  v = client->_event( val   = `LIVE_CHANGE`
                                                                 t_arg = VALUE #( ( `${$parameters>/colorString}` ) ) )
 
-            )->shut(
+            )->end(
 
-            )->open( `columns`
-                )->open( `Column`
+            )->ele( `columns`
+                )->ele( `Column`
                     )->a( n = `width` v = `30%`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Description`
 
-                )->shut(
+                )->end(
 
-                )->open( `Column`
-                    )->leaf( `Text`
+                )->ele( `Column`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Click 'Value help' icon to select color`
 
-                )->shut(
+                )->end(
 
-                )->open( `Column`
-                    )->leaf( `Text`
+                )->ele( `Column`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Value from liveChange event`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( `ColumnListItem`
-                )->open( `cells`
-                    )->leaf( `Label`
+            )->ele( `ColumnListItem`
+                )->ele( `cells`
+                    )->tag( `Label`
                         )->a( n = `text` v = `Default displayMode`
-                    )->leaf( `Input`
+                    )->tag( `Input`
                         )->a( n = `id`               v = `colorD`
                         )->a( n = `type`             v = `Text`
                         )->a( n = `width`            v = `200px`
@@ -123,14 +123,14 @@ CLASS z2ui5_cl_smpc_app_268 IMPLEMENTATION.
                         )->a( n = `valueHelpRequest` v = client->follow_up_action( val   = client->cs_event-control_by_id
                                                                                    t_arg = VALUE #( ( `oColorPickerPopover` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( `ColumnListItem`
-                )->open( `cells`
-                    )->leaf( `Label`
+            )->ele( `ColumnListItem`
+                )->ele( `cells`
+                    )->tag( `Label`
                         )->a( n = `text` v = `Large displayMode`
-                    )->leaf( `Input`
+                    )->tag( `Input`
                         )->a( n = `id`               v = `colorL`
                         )->a( n = `type`             v = `Text`
                         )->a( n = `width`            v = `200px`
@@ -140,14 +140,14 @@ CLASS z2ui5_cl_smpc_app_268 IMPLEMENTATION.
                         )->a( n = `valueHelpRequest` v = client->follow_up_action( val   = client->cs_event-control_by_id
                                                                                    t_arg = VALUE #( ( `oColorPickerLargePopover` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( `ColumnListItem`
-                )->open( `cells`
-                    )->leaf( `Label`
+            )->ele( `ColumnListItem`
+                )->ele( `cells`
+                    )->tag( `Label`
                         )->a( n = `text` v = `Simplified displayMode`
-                    )->leaf( `Input`
+                    )->tag( `Input`
                         )->a( n = `id`               v = `colorS`
                         )->a( n = `type`             v = `Text`
                         )->a( n = `width`            v = `200px`
@@ -157,14 +157,14 @@ CLASS z2ui5_cl_smpc_app_268 IMPLEMENTATION.
                         )->a( n = `valueHelpRequest` v = client->follow_up_action( val   = client->cs_event-control_by_id
                                                                                    t_arg = VALUE #( ( `oColorPickerSimpplifiedPopover` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( `ColumnListItem`
-                )->open( `cells`
-                    )->leaf( `Label`
+            )->ele( `ColumnListItem`
+                )->ele( `cells`
+                    )->tag( `Label`
                         )->a( n = `text` v = `With liveChange`
-                    )->leaf( `Input`
+                    )->tag( `Input`
                         )->a( n = `id`               v = `colorLC`
                         )->a( n = `type`             v = `Text`
                         )->a( n = `width`            v = `200px`
@@ -173,7 +173,7 @@ CLASS z2ui5_cl_smpc_app_268 IMPLEMENTATION.
                         )->a( n = `value`            v = client->_bind( color_lc )
                         )->a( n = `valueHelpRequest` v = client->follow_up_action( val   = client->cs_event-control_by_id
                                                                                    t_arg = VALUE #( ( `oColorPickerLiveChangePopover` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `id`   v = `liveChangeText`
                         )->a( n = `text` v = client->_bind( live_change_text )
 

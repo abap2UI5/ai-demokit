@@ -26,184 +26,184 @@ CLASS z2ui5_cl_smpc_app_134 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns:tnt` v = `sap.tnt`
         )->a( n = `height`    v = `100%`
 
-        )->open( `ScrollContainer`
+        )->ele( `ScrollContainer`
             )->a( n = `vertical` v = `true`
             )->a( n = `height`   v = `100%`
 
-            )->open( n = `ToolHeader` ns = `tnt`
+            )->ele( n = `ToolHeader` ns = `tnt`
                 )->a( n = `id`    v = `shellLikeToolHeader`
                 )->a( n = `class` v = `sapUiTinyMargin`
 
-                )->open( `Button`
+                )->ele( `Button`
                     )->a( n = `icon`    v = `sap-icon://menu2`
                     )->a( n = `type`    v = `Transparent`
                     )->a( n = `tooltip` v = `Menu`
-                    )->open( `layoutData`
-                        )->leaf( `OverflowToolbarLayoutData`
+                    )->ele( `layoutData`
+                        )->tag( `OverflowToolbarLayoutData`
                             )->a( n = `priority` v = `NeverOverflow`
 
-                )->shut(
-                )->shut(
+                )->end(
+                )->end(
                 " image assets rewritten to the OpenUI5 host per the runtime asset-URL rule
-                )->open( `Image`
+                )->ele( `Image`
                     )->a( n = `src`        v = `https://sdk.openui5.org/test-resources/sap/tnt/images/SAP_Logo.png`
                     )->a( n = `decorative` v = `false`
                     )->a( n = `press`      v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Logo pressed!` ) ) )
                     )->a( n = `tooltip`    v = `SAP Logo`
                     )->a( n = `width`      v = `60px`
                     )->a( n = `height`     v = `30px`
-                    )->open( `layoutData`
-                        )->leaf( `OverflowToolbarLayoutData`
+                    )->ele( `layoutData`
+                        )->tag( `OverflowToolbarLayoutData`
                             )->a( n = `priority` v = `NeverOverflow`
 
-                )->shut(
-                )->shut(
-                )->open( `Title`
+                )->end(
+                )->end(
+                )->ele( `Title`
                     )->a( n = `text`     v = `Prоduct Name`
                     )->a( n = `wrapping` v = `false`
                     )->a( n = `id`       v = `productName`
-                    )->open( `layoutData`
-                        )->leaf( `OverflowToolbarLayoutData`
+                    )->ele( `layoutData`
+                        )->tag( `OverflowToolbarLayoutData`
                             )->a( n = `priority` v = `Disappear`
 
-                )->shut(
-                )->shut(
-                )->open( `Text`
+                )->end(
+                )->end(
+                )->ele( `Text`
                     )->a( n = `text`     v = `Second title`
                     )->a( n = `wrapping` v = `false`
                     )->a( n = `id`       v = `secondTitle`
-                    )->open( `layoutData`
-                        )->leaf( `OverflowToolbarLayoutData`
+                    )->ele( `layoutData`
+                        )->tag( `OverflowToolbarLayoutData`
                             )->a( n = `priority` v = `Disappear`
 
-                )->shut(
-                )->shut(
-                )->leaf( `ToolbarSpacer`
-                )->open( `SearchField`
+                )->end(
+                )->end(
+                )->tag( `ToolbarSpacer`
+                )->ele( `SearchField`
                     )->a( n = `width` v = `25rem`
                     )->a( n = `id`    v = `searchField`
-                    )->open( `layoutData`
-                        )->leaf( `OverflowToolbarLayoutData`
+                    )->ele( `layoutData`
+                        )->tag( `OverflowToolbarLayoutData`
                             )->a( n = `priority` v = `Low`
                             )->a( n = `group`    v = `1`
 
-                )->shut(
-                )->shut(
-                )->leaf( `Button`
+                )->end(
+                )->end(
+                )->tag( `Button`
                     )->a( n = `visible` v = `false`
                     )->a( n = `icon`    v = `sap-icon://search`
                     )->a( n = `type`    v = `Transparent`
                     )->a( n = `id`      v = `searchButton`
                     )->a( n = `tooltip` v = `Search`
-                )->open( `OverflowToolbarButton`
+                )->ele( `OverflowToolbarButton`
                     )->a( n = `icon`    v = `sap-icon://da`
                     )->a( n = `type`    v = `Transparent`
                     )->a( n = `tooltip` v = `Joule`
                     )->a( n = `text`    v = `Joule`
-                    )->open( `layoutData`
-                        )->leaf( `OverflowToolbarLayoutData`
+                    )->ele( `layoutData`
+                        )->tag( `OverflowToolbarLayoutData`
                             )->a( n = `group` v = `2`
 
-                )->shut(
-                )->shut(
-                )->open( `OverflowToolbarButton`
+                )->end(
+                )->end(
+                )->ele( `OverflowToolbarButton`
                     )->a( n = `icon`    v = `sap-icon://source-code`
                     )->a( n = `type`    v = `Transparent`
                     )->a( n = `tooltip` v = `Action 1`
                     )->a( n = `text`    v = `Action 1`
-                    )->open( `layoutData`
-                        )->leaf( `OverflowToolbarLayoutData`
+                    )->ele( `layoutData`
+                        )->tag( `OverflowToolbarLayoutData`
                             )->a( n = `group` v = `2`
 
-                )->shut(
-                )->shut(
-                )->open( `OverflowToolbarButton`
+                )->end(
+                )->end(
+                )->ele( `OverflowToolbarButton`
                     )->a( n = `icon`    v = `sap-icon://card`
                     )->a( n = `type`    v = `Transparent`
                     )->a( n = `tooltip` v = `Action 2`
                     )->a( n = `text`    v = `Action 2`
-                    )->open( `layoutData`
-                        )->leaf( `OverflowToolbarLayoutData`
+                    )->ele( `layoutData`
+                        )->tag( `OverflowToolbarLayoutData`
                             )->a( n = `group` v = `2`
 
-                )->shut(
-                )->shut(
-                )->leaf( `OverflowToolbarButton`
+                )->end(
+                )->end(
+                )->tag( `OverflowToolbarButton`
                     )->a( n = `icon` v = `sap-icon://action-settings`
                     )->a( n = `type` v = `Transparent`
                     )->a( n = `text` v = `Settings`
-                )->open( `Button`
+                )->ele( `Button`
                     )->a( n = `icon`    v = `sap-icon://bell`
                     )->a( n = `type`    v = `Transparent`
                     )->a( n = `tooltip` v = `Notification`
-                    )->open( `layoutData`
-                        )->leaf( `OverflowToolbarLayoutData`
+                    )->ele( `layoutData`
+                        )->tag( `OverflowToolbarLayoutData`
                             )->a( n = `priority` v = `NeverOverflow`
 
-                )->shut(
-                )->shut(
-                )->leaf( n = `ToolHeaderUtilitySeparator` ns = `tnt`
-                )->leaf( `OverflowToolbarButton`
+                )->end(
+                )->end(
+                )->tag( n = `ToolHeaderUtilitySeparator` ns = `tnt`
+                )->tag( `OverflowToolbarButton`
                     )->a( n = `icon`    v = `sap-icon://grid`
                     )->a( n = `type`    v = `Transparent`
                     )->a( n = `text`    v = `My Products`
                     )->a( n = `tooltip` v = `My Products`
                 " Avatar is a control @since 1.73 - kept 1:1 (POST_171)
-                )->open( `Avatar`
+                )->ele( `Avatar`
                     )->a( n = `src`         v = `https://sdk.openui5.org/test-resources/sap/tnt/images/Woman_avatar_01.png`
                     )->a( n = `displaySize` v = `XS`
                     )->a( n = `press`       v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Avatar pressed!` ) ) )
                     )->a( n = `tooltip`     v = `Profile`
-                    )->open( `layoutData`
-                        )->leaf( `OverflowToolbarLayoutData`
+                    )->ele( `layoutData`
+                        )->tag( `OverflowToolbarLayoutData`
                             )->a( n = `priority` v = `NeverOverflow`
 
-                )->shut(
-                )->shut(
-            )->shut(
+                )->end(
+                )->end(
+            )->end(
 
-            )->open( n = `ToolHeader` ns = `tnt`
+            )->ele( n = `ToolHeader` ns = `tnt`
                 )->a( n = `id`    v = `shellLikeToolHeaderOnlyMandatoryControls`
                 )->a( n = `class` v = `sapUiTinyMargin sapUiLargeMarginTop`
 
-                )->open( `Image`
+                )->ele( `Image`
                     )->a( n = `src`        v = `https://sdk.openui5.org/test-resources/sap/tnt/images/SAP_Logo.png`
                     )->a( n = `decorative` v = `false`
                     )->a( n = `press`      v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Logo pressed!` ) ) )
                     )->a( n = `tooltip`    v = `SAP Logo`
                     )->a( n = `width`      v = `60px`
                     )->a( n = `height`     v = `30px`
-                    )->open( `layoutData`
-                        )->leaf( `OverflowToolbarLayoutData`
+                    )->ele( `layoutData`
+                        )->tag( `OverflowToolbarLayoutData`
                             )->a( n = `priority` v = `NeverOverflow`
 
-                )->shut(
-                )->shut(
-                )->open( `Title`
+                )->end(
+                )->end(
+                )->ele( `Title`
                     )->a( n = `text`     v = `Prоduct Name`
                     )->a( n = `wrapping` v = `false`
-                    )->open( `layoutData`
-                        )->leaf( `OverflowToolbarLayoutData`
+                    )->ele( `layoutData`
+                        )->tag( `OverflowToolbarLayoutData`
                             )->a( n = `priority` v = `Disappear`
 
-                )->shut(
-                )->shut(
-                )->leaf( `ToolbarSpacer`
-                )->open( `Avatar`
+                )->end(
+                )->end(
+                )->tag( `ToolbarSpacer`
+                )->ele( `Avatar`
                     )->a( n = `src`         v = `https://sdk.openui5.org/test-resources/sap/tnt/images/Woman_avatar_01.png`
                     )->a( n = `displaySize` v = `XS`
                     )->a( n = `press`       v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Avatar pressed!` ) ) )
                     )->a( n = `tooltip`     v = `Profile`
-                    )->open( `layoutData`
-                        )->leaf( `OverflowToolbarLayoutData`
+                    )->ele( `layoutData`
+                        )->tag( `OverflowToolbarLayoutData`
                             )->a( n = `priority` v = `NeverOverflow` ).
 
     client->view_display( view->stringify( ) ).

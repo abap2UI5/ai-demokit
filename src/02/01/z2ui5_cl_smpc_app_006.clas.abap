@@ -43,57 +43,57 @@ CLASS z2ui5_cl_smpc_app_006 IMPLEMENTATION.
       ` Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.` &&
       ` Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat`.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `height`    v = `100%`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
-        )->leaf( `Title`
+        )->tag( `Title`
             )->a( n = `id`    v = `carouselTitle`
             )->a( n = `class` v = `sapUiSmallMarginTop`
             )->a( n = `text`  v = `Carousel with Different Controls`
 
-        )->open( `Carousel`
+        )->ele( `Carousel`
             )->a( n = `ariaLabelledBy` v = `carouselTitle`
             )->a( n = `class`          v = `sapUiContentPadding`
 
-            )->open( n = `VerticalLayout` ns = `l`
-                )->leaf( `Image`
+            )->ele( n = `VerticalLayout` ns = `l`
+                )->tag( `Image`
                     )->a( n = `src` v = base_url && `HT-7777-large.jpg`
                     )->a( n = `alt` v = `Example picture of speakers`
 
-            )->shut(
-            )->leaf( `Image`
+            )->end(
+            )->tag( `Image`
                 )->a( n = `src` v = base_url && `HT-6120-large.jpg`
                 )->a( n = `alt` v = `Example picture of USB flash drive`
 
-            )->leaf( `Text`
+            )->tag( `Text`
                 )->a( n = `class` v = `sapUiSmallMargin`
                 )->a( n = `text`  v = lorem
 
-            )->open( `ScrollContainer`
+            )->ele( `ScrollContainer`
                 )->a( n = `height`     v = `100%`
                 )->a( n = `width`      v = `100%`
                 )->a( n = `horizontal` v = `false`
                 )->a( n = `vertical`   v = `true`
 
-                )->open( `List`
+                )->ele( `List`
                     )->a( n = `headerText` v = `Some List Content 1`
                     )->a( n = `items`      v = client->_bind( t_products )
 
-                    )->leaf( `StandardListItem`
+                    )->tag( `StandardListItem`
                         )->a( n = `title`            v = `{NAME}`
                         )->a( n = `description`      v = `{PRODUCT_ID}`
                         )->a( n = `icon`             v = `{PRODUCT_PIC_URL}`
                         )->a( n = `iconDensityAware` v = `false`
                         )->a( n = `iconInset`        v = `false`
 
-                )->shut(
-            )->shut(
-            )->leaf( `Image`
+                )->end(
+            )->end(
+            )->tag( `Image`
                 )->a( n = `src` v = base_url && `HT-6100-large.jpg`
                 )->a( n = `alt` v = `Example picture of spotlight` ).
 

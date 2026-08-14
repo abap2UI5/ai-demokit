@@ -37,60 +37,60 @@ CLASS z2ui5_cl_smpc_app_207 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:l`    v = `sap.ui.layout`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
 
-        )->open( `List`
+        )->ele( `List`
             )->a( n = `id`                     v = `ProductList`
             )->a( n = `items`                  v = client->_bind( t_products )
             )->a( n = `includeItemInSelection` v = `true`
 
-            )->open( `headerToolbar`
-                )->open( `OverflowToolbar`
-                    )->open( `content`
-                        )->leaf( `Title`
+            )->ele( `headerToolbar`
+                )->ele( `OverflowToolbar`
+                    )->ele( `content`
+                        )->tag( `Title`
                             )->a( n = `text`  v = `Products`
                             )->a( n = `level` v = `H2`
-                        )->leaf( `ToolbarSpacer`
-                        )->leaf( `Label`
+                        )->tag( `ToolbarSpacer`
+                        )->tag( `Label`
                             )->a( n = `text`     v = `List Item type:`
                             )->a( n = `labelFor` v = `state`
 
                         " the Select's change handler is replaced by a two-way binding:
                         " selectedKey and every item's type share the LISTTYPE field, so a
                         " selection re-types all items client-side (original: handleSelectChange)
-                        )->open( `Select`
+                        )->ele( `Select`
                             )->a( n = `id`          v = `state`
                             )->a( n = `selectedKey` v = client->_bind( listtype )
 
-                            )->open( `items`
-                                )->leaf( n = `Item` ns = `core`
+                            )->ele( `items`
+                                )->tag( n = `Item` ns = `core`
                                     )->a( n = `key`  v = `Inactive`
                                     )->a( n = `text` v = `Inactive`
-                                )->leaf( n = `Item` ns = `core`
+                                )->tag( n = `Item` ns = `core`
                                     )->a( n = `key`  v = `Active`
                                     )->a( n = `text` v = `Active`
-                                )->leaf( n = `Item` ns = `core`
+                                )->tag( n = `Item` ns = `core`
                                     )->a( n = `key`  v = `Navigation`
                                     )->a( n = `text` v = `Navigation`
-                                )->leaf( n = `Item` ns = `core`
+                                )->tag( n = `Item` ns = `core`
                                     )->a( n = `key`  v = `Detail`
                                     )->a( n = `text` v = `Detail`
-                                )->leaf( n = `Item` ns = `core`
+                                )->tag( n = `Item` ns = `core`
                                     )->a( n = `key`  v = `DetailAndActive`
                                     )->a( n = `text` v = `Detail And Active`
 
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
-            )->leaf( `StandardListItem`
+                            )->end(
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
+            )->tag( `StandardListItem`
                 )->a( n = `title`            v = `{NAME}`
                 )->a( n = `description`      v = `{PRODUCTID}`
                 )->a( n = `icon`             v = `{PRODUCTPICURL}`

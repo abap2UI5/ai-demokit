@@ -26,98 +26,98 @@ CLASS z2ui5_cl_smpc_app_057 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`    v = `sap.ui.layout`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns`      v = `sap.m`
 
-        )->open( `List`
+        )->ele( `List`
             )->a( n = `headerText` v = `Input`
 
-            )->open( `InputListItem`
+            )->ele( `InputListItem`
                 )->a( n = `label` v = `WLAN`
-                )->leaf( `Switch`
+                )->tag( `Switch`
                     )->a( n = `state` v = `true`
 
-            )->shut(
+            )->end(
 
-            )->open( `InputListItem`
+            )->ele( `InputListItem`
                 )->a( n = `label` v = `Flight Mode`
-                )->leaf( `CheckBox`
+                )->tag( `CheckBox`
                     )->a( n = `selected` v = `true`
 
-            )->shut(
+            )->end(
 
-            )->open( `InputListItem`
+            )->ele( `InputListItem`
                 )->a( n = `label` v = `High Performance`
-                )->leaf( `RadioButton`
+                )->tag( `RadioButton`
                     )->a( n = `groupName` v = `GroupInputListItem`
                     )->a( n = `selected`  v = `true`
 
-            )->shut(
+            )->end(
 
-            )->open( `InputListItem`
+            )->ele( `InputListItem`
                 )->a( n = `label` v = `Battery Saving`
-                )->leaf( `RadioButton`
+                )->tag( `RadioButton`
                     )->a( n = `groupName` v = `GroupInputListItem`
 
-            )->shut(
+            )->end(
 
-            )->open( `InputListItem`
+            )->ele( `InputListItem`
                 )->a( n = `label` v = `Price (EUR)`
-                )->leaf( `Input`
+                )->tag( `Input`
                     )->a( n = `placeholder` v = `Price`
                     )->a( n = `value`       v = `799`
                     )->a( n = `type`        v = `Number`
 
-            )->shut(
+            )->end(
 
-            )->open( `InputListItem`
+            )->ele( `InputListItem`
                 )->a( n = `label` v = `Address`
-                )->leaf( `Input`
+                )->tag( `Input`
                     )->a( n = `placeholder` v = `Address`
                     )->a( n = `value`       v = `Main Rd, Manchester`
 
-            )->shut(
+            )->end(
 
-            )->open( `InputListItem`
+            )->ele( `InputListItem`
                 )->a( n = `label` v = `Country`
-                )->open( `Select`
-                    )->leaf( n = `Item` ns = `core`
+                )->ele( `Select`
+                    )->tag( n = `Item` ns = `core`
                         )->a( n = `key`  v = `GR`
                         )->a( n = `text` v = `Greece`
-                    )->leaf( n = `Item` ns = `core`
+                    )->tag( n = `Item` ns = `core`
                         )->a( n = `key`  v = `MX`
                         )->a( n = `text` v = `Mexico`
-                    )->leaf( n = `Item` ns = `core`
+                    )->tag( n = `Item` ns = `core`
                         )->a( n = `key`  v = `NO`
                         )->a( n = `text` v = `Norway`
-                    )->leaf( n = `Item` ns = `core`
+                    )->tag( n = `Item` ns = `core`
                         )->a( n = `key`  v = `NZ`
                         )->a( n = `text` v = `New Zealand`
-                    )->leaf( n = `Item` ns = `core`
+                    )->tag( n = `Item` ns = `core`
                         )->a( n = `key`  v = `NL`
                         )->a( n = `text` v = `Netherlands`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( `InputListItem`
+            )->ele( `InputListItem`
                 )->a( n = `label` v = `Volume`
-                )->open( `HBox`
+                )->ele( `HBox`
                     )->a( n = `justifyContent` v = `End`
-                    )->leaf( `Slider`
+                    )->tag( `Slider`
                         )->a( n = `min`   v = `0`
                         )->a( n = `max`   v = `10`
                         )->a( n = `value` v = `7`
                         )->a( n = `width` v = `200px`
 
-                )->shut(
-            )->shut(
-        )->shut( ).
+                )->end(
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

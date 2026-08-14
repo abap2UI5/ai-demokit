@@ -29,49 +29,49 @@ CLASS z2ui5_cl_smpc_app_147 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `height`     v = `100%`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns`      v = `sap.m`
 
-        )->open( `Page`
+        )->ele( `Page`
             )->a( n = `class`      v = `sapUiFioriObjectPage`
             )->a( n = `showHeader` v = `false`
 
-            )->open( `content`
-                )->open( `Panel`
-                    )->leaf( `Text`
+            )->ele( `content`
+                )->ele( `Panel`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Press a button to show the global BusyIndicator`
 
-                )->shut(
+                )->end(
 
-                )->open( `Panel`
+                )->ele( `Panel`
                     )->a( n = `headerText` v = `Open BusyIndicator for four seconds (default delay, which is 1 second)`
-                    )->open( `content`
-                        )->leaf( `Button`
+                    )->ele( `content`
+                        )->tag( `Button`
                             )->a( n = `text`  v = `Show BusyIndicator`
                             )->a( n = `press` v = client->_event( `SHOW_4000` )
 
-                    )->shut(
-                )->shut(
+                    )->end(
+                )->end(
 
-                )->open( `Panel`
+                )->ele( `Panel`
                     )->a( n = `headerText` v = `Open BusyIndicator for four seconds (zero delay)`
-                    )->open( `content`
-                        )->leaf( `Button`
+                    )->ele( `content`
+                        )->tag( `Button`
                             )->a( n = `text`  v = `Show BusyIndicator`
                             )->a( n = `press` v = client->_event( `SHOW_4000_0` )
 
-                    )->shut(
-                )->shut(
+                    )->end(
+                )->end(
 
-                )->open( `Panel`
+                )->ele( `Panel`
                     )->a( n = `headerText` v = `Open BusyIndicator for one second (two seconds delay, so it should never appear at all)`
-                    )->open( `content`
-                        )->leaf( `Button`
+                    )->ele( `content`
+                        )->tag( `Button`
                             )->a( n = `text`  v = `Show BusyIndicator`
                             )->a( n = `press` v = client->_event( `SHOW_1000_2000` ) ).
 

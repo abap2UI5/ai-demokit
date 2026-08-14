@@ -37,21 +37,21 @@ CLASS z2ui5_cl_smpc_app_038 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `height`    v = `100%`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
-        )->open( `Page`
+        )->ele( `Page`
             )->a( n = `id`         v = `messageHandlingPage`
             )->a( n = `showHeader` v = `false`
 
-            )->open( `MessageView`
+            )->ele( `MessageView`
                 )->a( n = `items` v = client->_bind( t_messages )
 
-                )->leaf( `MessageItem`
+                )->tag( `MessageItem`
                     )->a( n = `type`        v = `{TYPE}`
                     )->a( n = `title`       v = `{MESSAGE}`
                     )->a( n = `subtitle`    v = `{ADDITIONAL_TEXT}`

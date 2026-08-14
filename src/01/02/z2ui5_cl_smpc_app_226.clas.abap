@@ -40,53 +40,53 @@ CLASS z2ui5_cl_smpc_app_226 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
-        )->open( n = `Grid` ns = `l`
+        )->ele( n = `Grid` ns = `l`
             )->a( n = `binding`     v = |\{{ client->_bind( val = informationcollection path = abap_true ) }\}|
             )->a( n = `hSpacing`    v = `0`
             )->a( n = `defaultSpan` v = `XL6 L6 M6 S12`
             )->a( n = `class`       v = `sapUiSmallMargin`
 
-            )->open( n = `VerticalLayout` ns = `l`
+            )->ele( n = `VerticalLayout` ns = `l`
                 )->a( n = `class` v = `sapUiTinyMarginEnd`
 
-                )->leaf( `Title`
+                )->tag( `Title`
                     )->a( n = `level`      v = `H1`
                     )->a( n = `titleStyle` v = `H1`
                     )->a( n = `text`       v = `Demo App`
                     )->a( n = `class`      v = `sapUiMediumMarginBottom`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text`  v = `{0/INTROTEXT1}`
                     )->a( n = `class` v = `sapUiTinyMarginBottom`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text`  v = `{0/INTROTEXT2}`
                     )->a( n = `class` v = `sapUiTinyMarginBottom`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text`  v = `{0/INTROTEXT3}`
                     )->a( n = `class` v = `sapUiTinyMarginBottom`
 
-            )->shut(
+            )->end(
             " src host-prefixed to sdk.openui5.org per the asset-URL rule (original: relative resources/ path)
-            )->open( `Image`
+            )->ele( `Image`
                 )->a( n = `src`          v = `https://sdk.openui5.org/resources/sap/ui/documentation/sdk/images/demoAppsTeaser.png`
                 )->a( n = `densityAware` v = `false`
                 )->a( n = `width`        v = `100%`
 
-                )->open( `layoutData`
-                    )->leaf( n = `GridData` ns = `l`
+                )->ele( `layoutData`
+                    )->tag( n = `GridData` ns = `l`
                         )->a( n = `visibleS` v = `false`
 
-                )->shut(
-            )->shut(
-        )->shut(
+                )->end(
+            )->end(
+        )->end(
 
-        )->open( n = `Grid` ns = `l`
+        )->ele( n = `Grid` ns = `l`
             )->a( n = `hSpacing`      v = `0`
             )->a( n = `vSpacing`      v = `0`
             )->a( n = `binding`       v = |\{{ client->_bind( val = informationcollection path = abap_true ) }\}|
@@ -94,85 +94,85 @@ CLASS z2ui5_cl_smpc_app_226 IMPLEMENTATION.
             )->a( n = `defaultSpan`   v = `XL5 L5 M5 S12`
             )->a( n = `defaultIndent` v = `XL1 L1 M1`
 
-            )->open( `Title`
+            )->ele( `Title`
                 )->a( n = `level`      v = `H2`
                 )->a( n = `titleStyle` v = `H2`
                 )->a( n = `text`       v = `Products`
 
-                )->open( `layoutData`
-                    )->leaf( n = `GridData` ns = `l`
+                )->ele( `layoutData`
+                    )->tag( n = `GridData` ns = `l`
                         )->a( n = `span`   v = `XL12 L12 M12 S12`
                         )->a( n = `indent` v = `XL0 L0 M0`
 
-                )->shut(
-            )->shut(
-            )->open( `Image`
+                )->end(
+            )->end(
+            )->ele( `Image`
                 )->a( n = `src`          v = `{3/PRODUCTPICURL2}`
                 )->a( n = `densityAware` v = `false`
                 )->a( n = `width`        v = `100%`
 
-                )->open( `layoutData`
-                    )->leaf( n = `GridData` ns = `l`
+                )->ele( `layoutData`
+                    )->tag( n = `GridData` ns = `l`
                         )->a( n = `moveForward` v = `M6`
 
-                )->shut(
-            )->shut(
-            )->open( `Image`
+                )->end(
+            )->end(
+            )->ele( `Image`
                 )->a( n = `src`          v = `{1/PRODUCTPICURL}`
                 )->a( n = `densityAware` v = `false`
                 )->a( n = `width`        v = `100%`
 
-                )->open( `layoutData`
-                    )->leaf( n = `GridData` ns = `l`
+                )->ele( `layoutData`
+                    )->tag( n = `GridData` ns = `l`
                         )->a( n = `moveBackwards` v = `M6`
 
-                )->shut(
-            )->shut(
-        )->shut(
+                )->end(
+            )->end(
+        )->end(
 
-        )->open( n = `Grid` ns = `l`
+        )->ele( n = `Grid` ns = `l`
             )->a( n = `binding`     v = |\{{ client->_bind( val = informationcollection path = abap_true ) }\}|
             )->a( n = `hSpacing`    v = `0`
             )->a( n = `defaultSpan` v = `XL3 L5 M5 S12`
             )->a( n = `class`       v = `sapUiSmallMargin`
 
-            )->open( `Image`
+            )->ele( `Image`
                 )->a( n = `src`          v = `{2/PRODUCTPICURL}`
                 )->a( n = `densityAware` v = `false`
                 )->a( n = `width`        v = `100%`
 
-                )->open( `layoutData`
-                    )->leaf( n = `GridData` ns = `l`
+                )->ele( `layoutData`
+                    )->tag( n = `GridData` ns = `l`
                         )->a( n = `indent` v = `XL1 L1 M1`
 
-                )->shut(
-            )->shut(
-            )->open( n = `VerticalLayout` ns = `l`
+                )->end(
+            )->end(
+            )->ele( n = `VerticalLayout` ns = `l`
                 )->a( n = `class` v = `sapUiTinyMargin`
 
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text`  v = `{0/DESCRIPTION1}`
                     )->a( n = `class` v = `sapUiTinyMarginBottom`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text` v = `{0/DESCRIPTION2}`
 
-            )->shut(
-            )->open( `Image`
+            )->end(
+            )->ele( `Image`
                 )->a( n = `src`          v = `{1/PRODUCTPICURL2}`
                 )->a( n = `densityAware` v = `false`
                 )->a( n = `width`        v = `100%`
 
-                )->open( `layoutData`
-                    )->leaf( n = `GridData` ns = `l`
+                )->ele( `layoutData`
+                    )->tag( n = `GridData` ns = `l`
                         )->a( n = `linebreakXL` v = `false`
                         )->a( n = `linebreakL`  v = `true`
                         )->a( n = `visibleM`    v = `false`
                         )->a( n = `visibleS`    v = `true`
                         )->a( n = `indent`      v = `L1`
 
-                )->shut(
-            )->shut(
-        )->shut( ).
+                )->end(
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

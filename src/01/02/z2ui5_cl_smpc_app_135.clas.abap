@@ -31,16 +31,16 @@ CLASS z2ui5_cl_smpc_app_135 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc`    v = `sap.ui.core.mvc`
         )->a( n = `xmlns:form`   v = `sap.ui.layout.form`
         )->a( n = `xmlns`        v = `sap.m`
         )->a( n = `xmlns:core`   v = `sap.ui.core`
         )->a( n = `core:require` v = `{CurrencyType: 'sap/ui/model/type/Currency'}`
 
-        )->open( n = `SimpleForm` ns = `form`
+        )->ele( n = `SimpleForm` ns = `form`
             )->a( n = `width`      v = `auto`
             )->a( n = `class`      v = `sapUiResponsiveMargin`
             )->a( n = `layout`     v = `ResponsiveGridLayout`
@@ -53,21 +53,21 @@ CLASS z2ui5_cl_smpc_app_135 IMPLEMENTATION.
             )->a( n = `columnsM`   v = `1`
             )->a( n = `title`      v = `Input`
 
-            )->open( n = `content` ns = `form`
-                )->leaf( `Label`
+            )->ele( n = `content` ns = `form`
+                )->tag( `Label`
                     )->a( n = `text` v = `One field`
-                )->leaf( `Input`
+                )->tag( `Input`
                     )->a( n = `value` v = |\{ parts: ['{ client->_bind( val = amount path = abap_true ) }', '{ client->_bind( val = currency path = abap_true ) }'], type: 'CurrencyType' \}|
-                )->leaf( `Label`
+                )->tag( `Label`
                     )->a( n = `text` v = `Two field`
-                )->leaf( `Input`
+                )->tag( `Input`
                     )->a( n = `value` v = |\{ parts: ['{ client->_bind( val = amount path = abap_true ) }', '{ client->_bind( val = currency path = abap_true ) }'], type: 'CurrencyType', formatOptions: \{ showMeasure: false \} \}|
-                )->leaf( `Input`
+                )->tag( `Input`
                     )->a( n = `value` v = |\{ parts: ['{ client->_bind( val = amount path = abap_true ) }', '{ client->_bind( val = currency path = abap_true ) }'], type: 'CurrencyType', formatOptions: \{ showNumber: false \} \}|
 
-        )->shut(
+        )->end(
 
-        )->open( n = `SimpleForm` ns = `form`
+        )->ele( n = `SimpleForm` ns = `form`
             )->a( n = `width`      v = `auto`
             )->a( n = `class`      v = `sapUiResponsiveMargin`
             )->a( n = `layout`     v = `ResponsiveGridLayout`
@@ -79,26 +79,26 @@ CLASS z2ui5_cl_smpc_app_135 IMPLEMENTATION.
             )->a( n = `columnsM`   v = `1`
             )->a( n = `title`      v = `Format options`
 
-            )->open( n = `content` ns = `form`
-                )->leaf( `Label`
+            )->ele( n = `content` ns = `form`
+                )->tag( `Label`
                     )->a( n = `text` v = `Default`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text` v = |\{ parts: ['{ client->_bind( val = amount path = abap_true ) }', '{ client->_bind( val = currency path = abap_true ) }'], type: 'CurrencyType' \}|
-                )->leaf( `Label`
+                )->tag( `Label`
                     )->a( n = `text` v = `preserveDecimals:false`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text` v = |\{ parts: ['{ client->_bind( val = amount path = abap_true ) }', '{ client->_bind( val = currency path = abap_true ) }'], type: 'CurrencyType', formatOptions: \{ preserveDecimals : false \} \}|
-                )->leaf( `Label`
+                )->tag( `Label`
                     )->a( n = `text` v = `currencyCode:false`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text` v = |\{ parts: ['{ client->_bind( val = amount path = abap_true ) }', '{ client->_bind( val = currency path = abap_true ) }'], type: 'CurrencyType', formatOptions: \{ currencyCode : false \} \}|
-                )->leaf( `Label`
+                )->tag( `Label`
                     )->a( n = `text` v = `style:'short'`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text` v = |\{ parts: ['{ client->_bind( val = amount path = abap_true ) }', '{ client->_bind( val = currency path = abap_true ) }'], type: 'CurrencyType', formatOptions: \{ style : 'short' \} \}|
-                )->leaf( `Label`
+                )->tag( `Label`
                     )->a( n = `text` v = `style:'long'`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text` v = |\{ parts: ['{ client->_bind( val = amount path = abap_true ) }', '{ client->_bind( val = currency path = abap_true ) }'], type: 'CurrencyType', formatOptions: \{ style : 'long' \} \}| ).
 
     client->view_display( view->stringify( ) ).

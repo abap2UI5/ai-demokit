@@ -36,7 +36,7 @@ CLASS z2ui5_cl_smpc_app_410 IMPLEMENTATION.
     DATA(css) = `<style>.dummyContainer1\{padding:1em;height:4em;background-color:#A9EAFF\}` &&
                 `.dummyContainer2\{display:inline-block\}</style>`.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " Block-content inlining (app 187/239/261 precedent): the blocks
     " aggregation holds the sample's own BlockBase control sample:EventingBlock
@@ -48,47 +48,47 @@ CLASS z2ui5_cl_smpc_app_410 IMPLEMENTATION.
     " the main controller answers with a toast naming the event source; that
     " two-hop indirection folds to one press wire, transporting the stand-in
     " outer VBox's runtime id, with the toast composed server-side in on_event.
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `height`     v = `100%`
         )->a( n = `xmlns`      v = `sap.uxap`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns:m`    v = `sap.m`
         )->a( n = `xmlns:core` v = `sap.ui.core`
 
-        )->leaf( n = `HTML` ns = `core`
+        )->tag( n = `HTML` ns = `core`
             )->a( n = `content` v = css
 
-        )->open( `ObjectPageLayout`
+        )->ele( `ObjectPageLayout`
             )->a( n = `id`                 v = `ObjectPageLayout`
             )->a( n = `upperCaseAnchorBar` v = `false`
 
-            )->open( `headerTitle`
-                )->leaf( `ObjectPageHeader`
+            )->ele( `headerTitle`
+                )->tag( `ObjectPageHeader`
                     )->a( n = `objectTitle` v = `Eventing Blocks`
 
-            )->shut(
+            )->end(
 
-            )->open( `sections`
-                )->open( `ObjectPageSection`
+            )->ele( `sections`
+                )->ele( `ObjectPageSection`
                     )->a( n = `titleUppercase` v = `false`
                     )->a( n = `title`          v = `example`
 
-                    )->open( `subSections`
-                        )->open( `ObjectPageSubSection`
+                    )->ele( `subSections`
+                        )->ele( `ObjectPageSubSection`
                             )->a( n = `title`          v = `Example`
                             )->a( n = `titleUppercase` v = `false`
 
-                            )->open( `blocks`
+                            )->ele( `blocks`
 
                                 " sample:EventingBlock inlined
-                                )->open( n = `VBox` ns = `m`
+                                )->ele( n = `VBox` ns = `m`
                                     )->a( n = `id`    v = `block`
                                     )->a( n = `class` v = `dummyContainer1`
 
-                                    )->open( n = `VBox` ns = `m`
+                                    )->ele( n = `VBox` ns = `m`
                                         )->a( n = `class` v = `dummyContainer2`
 
-                                        )->leaf( n = `Button` ns = `m`
+                                        )->tag( n = `Button` ns = `m`
                                             )->a( n = `text`  v = `press me to fire an event`
                                             )->a( n = `press` v = client->_event( val   = `DUMMY`
                                                                                   t_arg = VALUE #( ( `$event.oSource.getParent().getParent().sId` ) ) ) ).

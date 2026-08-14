@@ -44,19 +44,19 @@ CLASS z2ui5_cl_smpc_app_287 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " onTabDensityModeSelect sets tabDensityMode on all nine bars from the
     " selected radio button's text; tabDensityMode is a bindable property, so
     " every bar binds the one server-side field instead (see on_event)
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns:f`   v = `sap.ui.layout.form`
 
-        )->open( `Panel`
+        )->ele( `Panel`
 
-            )->open( n = `SimpleForm` ns = `f`
+            )->ele( n = `SimpleForm` ns = `f`
                 )->a( n = `editable`     v = `true`
                 )->a( n = `labelSpanXL`  v = `2`
                 )->a( n = `labelSpanL`   v = `2`
@@ -64,337 +64,337 @@ CLASS z2ui5_cl_smpc_app_287 IMPLEMENTATION.
                 )->a( n = `labelSpanS`   v = `5`
                 )->a( n = `layout`       v = `ResponsiveGridLayout`
 
-                )->leaf( `Label`
+                )->tag( `Label`
                     )->a( n = `text` v = `Tab Density Mode`
 
-                )->open( `RadioButtonGroup`
+                )->ele( `RadioButtonGroup`
                     )->a( n = `columns`       v = `3`
                     )->a( n = `selectedIndex` v = client->_bind( density_idx )
                     )->a( n = `select`        v = client->_event( `DENSITY` )
 
-                    )->leaf( `RadioButton`
+                    )->tag( `RadioButton`
                         )->a( n = `text` v = `Cozy`
-                    )->leaf( `RadioButton`
+                    )->tag( `RadioButton`
                         )->a( n = `text` v = `Compact`
-                    )->leaf( `RadioButton`
+                    )->tag( `RadioButton`
                         )->a( n = `text` v = `Inherit`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( `IconTabBar`
+            )->ele( `IconTabBar`
                 )->a( n = `id`                  v = `iconTabBar0`
                 )->a( n = `enableTabReordering` v = `true`
                 )->a( n = `tabDensityMode`      v = client->_bind( tab_density )
                 )->a( n = `class`               v = `sapUiResponsiveContentPadding`
                 )->a( n = `items`               v = client->_bind( t_tabs )
 
-                )->open( `items`
+                )->ele( `items`
 
-                    )->open( `IconTabFilter`
+                    )->ele( `IconTabFilter`
                         )->a( n = `text` v = `{TEXT}`
                         )->a( n = `key`  v = `{KEY}`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `{CONTENT}`
 
-                        )->open( `customData`
-                            )->leaf( `BadgeCustomData`
+                        )->ele( `customData`
+                            )->tag( `BadgeCustomData`
                                 )->a( n = `visible` v = `{BADGE}`
 
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( `IconTabBar`
+            )->ele( `IconTabBar`
                 )->a( n = `id`             v = `iconTabBar1`
                 )->a( n = `tabDensityMode` v = client->_bind( tab_density )
                 )->a( n = `class`          v = `sapUiResponsiveContentPadding`
 
-                )->open( `items`
+                )->ele( `items`
 
-                    )->open( `IconTabFilter`
+                    )->ele( `IconTabFilter`
                         )->a( n = `text` v = `Info`
                         )->a( n = `key`  v = `info`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Info content goes here ...`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( `IconTabFilter`
+                    )->ele( `IconTabFilter`
                         )->a( n = `text` v = `Attachments`
                         )->a( n = `key`  v = `attachments`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Attachments go here ...`
 
-                        )->open( `customData`
-                            )->leaf( `BadgeCustomData`
+                        )->ele( `customData`
+                            )->tag( `BadgeCustomData`
                                 )->a( n = `visible` v = `true`
 
-                        )->shut(
-                    )->shut(
+                        )->end(
+                    )->end(
 
-                    )->open( `IconTabFilter`
+                    )->ele( `IconTabFilter`
                         )->a( n = `text` v = `Notes`
                         )->a( n = `key`  v = `notes`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Notes go here ...`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( `IconTabFilter`
+                    )->ele( `IconTabFilter`
                         )->a( n = `text` v = `People`
                         )->a( n = `key`  v = `people`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `People content goes here ...`
 
-                    )->shut(
-                )->shut(
-            )->shut(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( `IconTabBar`
+            )->ele( `IconTabBar`
                 )->a( n = `id`             v = `iconTabBar2`
                 )->a( n = `headerMode`     v = `Inline`
                 )->a( n = `tabDensityMode` v = client->_bind( tab_density )
                 )->a( n = `class`          v = `sapUiResponsiveContentPadding`
 
-                )->open( `items`
+                )->ele( `items`
 
-                    )->open( `IconTabFilter`
+                    )->ele( `IconTabFilter`
                         )->a( n = `icon`  v = `sap-icon://process`
                         )->a( n = `count` v = `3`
                         )->a( n = `text`  v = `Info`
                         )->a( n = `key`   v = `info`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Info content goes here ...`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( `IconTabFilter`
+                    )->ele( `IconTabFilter`
                         )->a( n = `icon`  v = `sap-icon://attachment`
                         )->a( n = `count` v = `4321`
                         )->a( n = `text`  v = `Attachments`
                         )->a( n = `key`   v = `attachments`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Attachments go here ...`
 
-                        )->open( `customData`
-                            )->leaf( `BadgeCustomData`
+                        )->ele( `customData`
+                            )->tag( `BadgeCustomData`
                                 )->a( n = `visible` v = `true`
 
-                        )->shut(
-                    )->shut(
+                        )->end(
+                    )->end(
 
-                    )->open( `IconTabFilter`
+                    )->ele( `IconTabFilter`
                         )->a( n = `icon`  v = `sap-icon://notes`
                         )->a( n = `count` v = `333`
                         )->a( n = `text`  v = `Notes`
                         )->a( n = `key`   v = `notes`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Notes go here ...`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( `IconTabFilter`
+                    )->ele( `IconTabFilter`
                         )->a( n = `icon`  v = `sap-icon://hint`
                         )->a( n = `count` v = `34`
                         )->a( n = `text`  v = `People`
                         )->a( n = `key`   v = `people`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `People content goes here ...`
 
-                    )->shut(
-                )->shut(
-            )->shut(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( `IconTabBar`
+            )->ele( `IconTabBar`
                 )->a( n = `id`             v = `iconTabBar3`
                 )->a( n = `tabDensityMode` v = client->_bind( tab_density )
                 )->a( n = `class`          v = `sapUiResponsiveContentPadding`
 
-                )->open( `items`
+                )->ele( `items`
 
-                    )->open( `IconTabFilter`
+                    )->ele( `IconTabFilter`
                         )->a( n = `count` v = `3`
                         )->a( n = `text`  v = `Info`
                         )->a( n = `key`   v = `info`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Info content goes here ...`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( `IconTabFilter`
+                    )->ele( `IconTabFilter`
                         )->a( n = `count` v = `4321`
                         )->a( n = `text`  v = `Attachments`
                         )->a( n = `key`   v = `attachments`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Attachments go here ...`
 
-                        )->open( `customData`
-                            )->leaf( `BadgeCustomData`
+                        )->ele( `customData`
+                            )->tag( `BadgeCustomData`
                                 )->a( n = `visible` v = `true`
 
-                        )->shut(
-                    )->shut(
+                        )->end(
+                    )->end(
 
-                    )->open( `IconTabFilter`
+                    )->ele( `IconTabFilter`
                         )->a( n = `count` v = `333`
                         )->a( n = `text`  v = `Notes`
                         )->a( n = `key`   v = `notes`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Notes go here ...`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( `IconTabFilter`
+                    )->ele( `IconTabFilter`
                         )->a( n = `count` v = `34`
                         )->a( n = `text`  v = `People`
                         )->a( n = `key`   v = `people`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `People content goes here ...`
 
-                    )->shut(
-                )->shut(
-            )->shut(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( `IconTabBar`
+            )->ele( `IconTabBar`
                 )->a( n = `id`             v = `iconTabBar4`
                 )->a( n = `tabDensityMode` v = client->_bind( tab_density )
                 )->a( n = `class`          v = `sapUiResponsiveContentPadding`
 
-                )->open( `items`
+                )->ele( `items`
 
-                    )->open( `IconTabFilter`
+                    )->ele( `IconTabFilter`
                         )->a( n = `icon` v = `sap-icon://hint`
                         )->a( n = `key`  v = `info`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Info content goes here ...`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( `IconTabFilter`
+                    )->ele( `IconTabFilter`
                         )->a( n = `icon`  v = `sap-icon://attachment`
                         )->a( n = `count` v = `3`
                         )->a( n = `key`   v = `attachments`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Attachments go here ...`
 
-                        )->open( `customData`
-                            )->leaf( `BadgeCustomData`
+                        )->ele( `customData`
+                            )->tag( `BadgeCustomData`
                                 )->a( n = `visible` v = `true`
 
-                        )->shut(
-                    )->shut(
+                        )->end(
+                    )->end(
 
-                    )->open( `IconTabFilter`
+                    )->ele( `IconTabFilter`
                         )->a( n = `icon`  v = `sap-icon://notes`
                         )->a( n = `count` v = `12`
                         )->a( n = `key`   v = `notes`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Notes go here ...`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( `IconTabFilter`
+                    )->ele( `IconTabFilter`
                         )->a( n = `icon` v = `sap-icon://group`
                         )->a( n = `key`  v = `people`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `People content goes here ...`
 
-                    )->shut(
-                )->shut(
-            )->shut(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( `IconTabBar`
+            )->ele( `IconTabBar`
                 )->a( n = `id`             v = `iconTabBar5`
                 )->a( n = `tabDensityMode` v = client->_bind( tab_density )
                 )->a( n = `class`          v = `sapUiResponsiveContentPadding`
 
-                )->open( `items`
+                )->ele( `items`
 
-                    )->open( `IconTabFilter`
+                    )->ele( `IconTabFilter`
                         )->a( n = `icon`      v = `sap-icon://hint`
                         )->a( n = `iconColor` v = `Critical`
                         )->a( n = `key`       v = `info`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Info content goes here ...`
 
-                    )->shut(
+                    )->end(
 
-                    )->leaf( `IconTabSeparator`
+                    )->tag( `IconTabSeparator`
                         )->a( n = `icon` v = ``
 
-                    )->open( `IconTabFilter`
+                    )->ele( `IconTabFilter`
                         )->a( n = `icon`      v = `sap-icon://attachment`
                         )->a( n = `iconColor` v = `Neutral`
                         )->a( n = `count`     v = `3`
                         )->a( n = `key`       v = `attachments`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Attachments go here ...`
 
-                        )->open( `customData`
-                            )->leaf( `BadgeCustomData`
+                        )->ele( `customData`
+                            )->tag( `BadgeCustomData`
                                 )->a( n = `visible` v = `true`
 
-                        )->shut(
-                    )->shut(
+                        )->end(
+                    )->end(
 
-                    )->leaf( `IconTabSeparator`
+                    )->tag( `IconTabSeparator`
                         )->a( n = `icon` v = `sap-icon://vertical-grip`
 
-                    )->open( `IconTabFilter`
+                    )->ele( `IconTabFilter`
                         )->a( n = `icon`      v = `sap-icon://notes`
                         )->a( n = `iconColor` v = `Positive`
                         )->a( n = `count`     v = `12`
                         )->a( n = `key`       v = `notes`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Notes go here ...`
 
-                    )->shut(
+                    )->end(
 
-                    )->leaf( `IconTabSeparator`
+                    )->tag( `IconTabSeparator`
                         )->a( n = `icon` v = `sap-icon://process`
 
-                    )->open( `IconTabFilter`
+                    )->ele( `IconTabFilter`
                         )->a( n = `icon`      v = `sap-icon://group`
                         )->a( n = `iconColor` v = `Negative`
                         )->a( n = `key`       v = `people`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `People content goes here ...`
 
-                    )->shut(
-                )->shut(
-            )->shut(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( `IconTabBar`
+            )->ele( `IconTabBar`
                 )->a( n = `id`             v = `iconTabBar6`
                 )->a( n = `tabDensityMode` v = client->_bind( tab_density )
                 )->a( n = `class`          v = `sapUiResponsiveContentPadding`
 
-                )->open( `items`
+                )->ele( `items`
 
-                    )->open( `IconTabFilter`
+                    )->ele( `IconTabFilter`
                         )->a( n = `icon`      v = `sap-icon://begin`
                         )->a( n = `iconColor` v = `Positive`
                         )->a( n = `design`    v = `Horizontal`
@@ -402,15 +402,15 @@ CLASS z2ui5_cl_smpc_app_287 IMPLEMENTATION.
                         )->a( n = `text`      v = `Confirm Ok`
                         )->a( n = `key`       v = `Ok`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Filtered items goes here ...`
 
-                    )->shut(
+                    )->end(
 
-                    )->leaf( `IconTabSeparator`
+                    )->tag( `IconTabSeparator`
                         )->a( n = `icon` v = `sap-icon://open-command-field`
 
-                    )->open( `IconTabFilter`
+                    )->ele( `IconTabFilter`
                         )->a( n = `icon`      v = `sap-icon://compare`
                         )->a( n = `iconColor` v = `Critical`
                         )->a( n = `design`    v = `Horizontal`
@@ -418,17 +418,17 @@ CLASS z2ui5_cl_smpc_app_287 IMPLEMENTATION.
                         )->a( n = `text`      v = `Check Heavys`
                         )->a( n = `key`       v = `Heavy`
 
-                        )->open( `customData`
-                            )->leaf( `BadgeCustomData`
+                        )->ele( `customData`
+                            )->tag( `BadgeCustomData`
                                 )->a( n = `visible` v = `true`
 
-                        )->shut(
-                    )->shut(
+                        )->end(
+                    )->end(
 
-                    )->leaf( `IconTabSeparator`
+                    )->tag( `IconTabSeparator`
                         )->a( n = `icon` v = `sap-icon://open-command-field`
 
-                    )->open( `IconTabFilter`
+                    )->ele( `IconTabFilter`
                         )->a( n = `icon`      v = `sap-icon://inventory`
                         )->a( n = `iconColor` v = `Negative`
                         )->a( n = `design`    v = `Horizontal`
@@ -436,209 +436,209 @@ CLASS z2ui5_cl_smpc_app_287 IMPLEMENTATION.
                         )->a( n = `text`      v = `Claim Overweights`
                         )->a( n = `key`       v = `Overweight`
 
-                    )->shut(
-                )->shut(
-            )->shut(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( `IconTabBar`
+            )->ele( `IconTabBar`
                 )->a( n = `id`             v = `iconTabBar7`
                 )->a( n = `tabDensityMode` v = client->_bind( tab_density )
                 )->a( n = `class`          v = `sapUiResponsiveContentPadding`
 
-                )->open( `items`
+                )->ele( `items`
 
-                    )->open( `IconTabFilter`
+                    )->ele( `IconTabFilter`
                         )->a( n = `showAll` v = `true`
                         )->a( n = `count`   v = `123`
                         )->a( n = `text`    v = `Products`
                         )->a( n = `key`     v = `All`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Filtered items goes here ...`
 
-                        )->open( `customData`
-                            )->leaf( `BadgeCustomData`
+                        )->ele( `customData`
+                            )->tag( `BadgeCustomData`
                                 )->a( n = `visible` v = `true`
 
-                        )->shut(
-                    )->shut(
+                        )->end(
+                    )->end(
 
-                    )->leaf( `IconTabSeparator`
+                    )->tag( `IconTabSeparator`
 
-                    )->open( `IconTabFilter`
+                    )->ele( `IconTabFilter`
                         )->a( n = `icon`      v = `sap-icon://begin`
                         )->a( n = `iconColor` v = `Positive`
                         )->a( n = `count`     v = `53`
                         )->a( n = `text`      v = `Ok`
                         )->a( n = `key`       v = `Ok`
 
-                        )->open( `customData`
-                            )->leaf( `BadgeCustomData`
+                        )->ele( `customData`
+                            )->tag( `BadgeCustomData`
                                 )->a( n = `visible` v = `true`
 
-                        )->shut(
-                    )->shut(
+                        )->end(
+                    )->end(
 
-                    )->open( `IconTabFilter`
+                    )->ele( `IconTabFilter`
                         )->a( n = `icon`      v = `sap-icon://compare`
                         )->a( n = `iconColor` v = `Critical`
                         )->a( n = `count`     v = `51`
                         )->a( n = `text`      v = `Heavy`
                         )->a( n = `key`       v = `Heavy`
 
-                        )->open( `customData`
-                            )->leaf( `BadgeCustomData`
+                        )->ele( `customData`
+                            )->tag( `BadgeCustomData`
                                 )->a( n = `visible` v = `true`
 
-                        )->shut(
-                    )->shut(
+                        )->end(
+                    )->end(
 
-                    )->open( `IconTabFilter`
+                    )->ele( `IconTabFilter`
                         )->a( n = `icon`      v = `sap-icon://inventory`
                         )->a( n = `iconColor` v = `Negative`
                         )->a( n = `count`     v = `19`
                         )->a( n = `text`      v = `Overweight`
                         )->a( n = `key`       v = `Overweight`
 
-                        )->open( `customData`
-                            )->leaf( `BadgeCustomData`
+                        )->ele( `customData`
+                            )->tag( `BadgeCustomData`
                                 )->a( n = `visible` v = `true`
 
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( `IconTabBar`
+            )->ele( `IconTabBar`
                 )->a( n = `id`             v = `iconTabBar8`
                 )->a( n = `tabDensityMode` v = client->_bind( tab_density )
                 )->a( n = `class`          v = `sapUiResponsiveContentPadding`
 
-                )->open( `items`
+                )->ele( `items`
 
-                    )->open( `IconTabFilter`
+                    )->ele( `IconTabFilter`
                         )->a( n = `text` v = `Info`
                         )->a( n = `key`  v = `info`
 
-                        )->open( `items`
+                        )->ele( `items`
 
-                            )->open( `IconTabFilter`
+                            )->ele( `IconTabFilter`
                                 )->a( n = `text` v = `Info one`
 
-                                )->leaf( `Text`
+                                )->tag( `Text`
                                     )->a( n = `text` v = `Info one content goes here...`
 
-                            )->shut(
+                            )->end(
 
-                            )->open( `IconTabFilter`
+                            )->ele( `IconTabFilter`
                                 )->a( n = `text` v = `Info two`
 
-                                )->leaf( `Text`
+                                )->tag( `Text`
                                     )->a( n = `text` v = `Info two content goes here...`
 
-                                )->open( `customData`
-                                    )->leaf( `BadgeCustomData`
+                                )->ele( `customData`
+                                    )->tag( `BadgeCustomData`
                                         )->a( n = `visible` v = `true`
 
-                                )->shut(
-                            )->shut(
+                                )->end(
+                            )->end(
 
-                            )->open( `IconTabFilter`
+                            )->ele( `IconTabFilter`
                                 )->a( n = `text` v = `Info three with badge`
 
-                                )->leaf( `Text`
+                                )->tag( `Text`
                                     )->a( n = `text` v = `Info three content goes here...`
 
-                                )->open( `customData`
-                                    )->leaf( `BadgeCustomData`
+                                )->ele( `customData`
+                                    )->tag( `BadgeCustomData`
                                         )->a( n = `visible` v = `true`
 
-                                )->shut(
-                            )->shut(
+                                )->end(
+                            )->end(
 
-                            )->open( `IconTabFilter`
+                            )->ele( `IconTabFilter`
                                 )->a( n = `text` v = `Info four`
 
-                                )->leaf( `Text`
+                                )->tag( `Text`
                                     )->a( n = `text` v = `Info four content goes here...`
 
-                            )->shut(
-                        )->shut(
-                    )->shut(
+                            )->end(
+                        )->end(
+                    )->end(
 
-                    )->open( `IconTabFilter`
+                    )->ele( `IconTabFilter`
                         )->a( n = `text` v = `Attachments`
                         )->a( n = `key`  v = `attachments`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Attachments own content goes here...`
 
-                        )->open( `customData`
-                            )->leaf( `BadgeCustomData`
+                        )->ele( `customData`
+                            )->tag( `BadgeCustomData`
                                 )->a( n = `visible` v = `true`
 
-                        )->shut(
+                        )->end(
 
-                        )->open( `items`
+                        )->ele( `items`
 
-                            )->open( `IconTabFilter`
+                            )->ele( `IconTabFilter`
                                 )->a( n = `text` v = `Attachment one`
 
-                                )->leaf( `Text`
+                                )->tag( `Text`
                                     )->a( n = `text` v = `Attachment one goes here...`
 
-                            )->shut(
+                            )->end(
 
-                            )->open( `IconTabFilter`
+                            )->ele( `IconTabFilter`
                                 )->a( n = `text` v = `Attachment two`
 
-                                )->leaf( `Text`
+                                )->tag( `Text`
                                     )->a( n = `text` v = `Attachment two goes here...`
 
-                            )->shut(
-                        )->shut(
-                    )->shut(
+                            )->end(
+                        )->end(
+                    )->end(
 
-                    )->open( `IconTabFilter`
+                    )->ele( `IconTabFilter`
                         )->a( n = `text` v = `Notes`
                         )->a( n = `key`  v = `notes`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Notes own content goes here...`
 
-                        )->open( `customData`
-                            )->leaf( `BadgeCustomData`
+                        )->ele( `customData`
+                            )->tag( `BadgeCustomData`
                                 )->a( n = `visible` v = `true`
 
-                        )->shut(
+                        )->end(
 
-                        )->open( `items`
+                        )->ele( `items`
 
-                            )->open( `IconTabFilter`
+                            )->ele( `IconTabFilter`
                                 )->a( n = `text` v = `Note one`
 
-                                )->leaf( `Text`
+                                )->tag( `Text`
                                     )->a( n = `text` v = `Note one goes here...`
 
-                            )->shut(
+                            )->end(
 
-                            )->open( `IconTabFilter`
+                            )->ele( `IconTabFilter`
                                 )->a( n = `text` v = `Note two`
 
-                                )->leaf( `Text`
+                                )->tag( `Text`
                                     )->a( n = `text` v = `Note two goes here...`
 
-                                )->open( `customData`
-                                    )->leaf( `BadgeCustomData`
+                                )->ele( `customData`
+                                    )->tag( `BadgeCustomData`
                                         )->a( n = `visible` v = `true`
 
-                                )->shut(
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
-        )->shut( ).
+                                )->end(
+                            )->end(
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

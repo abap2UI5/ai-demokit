@@ -426,31 +426,31 @@ const sortCall = (path, desc) =>
   ` t_arg = VALUE #( ( \`${ID_TABLE}\` ) ( \`items\` ) ( \`sort\` ) ( \`${path}\` )${desc ? ' ( `X` )' : ''} ) )`;
 
 // a sortable column: header label + ascending/descending sort icons (client-side)
-const sortableColumn = (label, path) => `                        )->open( \`Column\`
-                            )->open( \`HBox\`
+const sortableColumn = (label, path) => `                        )->ele( \`Column\`
+                            )->ele( \`HBox\`
                                 )->a( n = \`alignItems\` v = \`Center\`
 
-                                )->leaf( \`Text\`
+                                )->tag( \`Text\`
                                     )->a( n = \`text\` v = \`${label}\`
-                                )->leaf( \`core:Icon\`
+                                )->tag( \`core:Icon\`
                                     )->a( n = \`src\`     v = \`sap-icon://sort-ascending\`
                                     )->a( n = \`tooltip\` v = \`Sort by ${label} ascending\`
                                     )->a( n = \`class\`   v = \`sapUiTinyMarginBegin\`
                                     )->a( n = \`press\`   v = ${sortCall(path, false)}
-                                )->leaf( \`core:Icon\`
+                                )->tag( \`core:Icon\`
                                     )->a( n = \`src\`     v = \`sap-icon://sort-descending\`
                                     )->a( n = \`tooltip\` v = \`Sort by ${label} descending\`
                                     )->a( n = \`press\`   v = ${sortCall(path, true)}
 
-                            )->shut(
-                        )->shut(`;
+                            )->end(
+                        )->end(`;
 // a plain (non-sortable) column: header label only, plus optional Column attrs
 const plainColumn = (label, attrs = []) => {
   const attrLines = attrs.map(([n, v]) => `                            )->a( n = \`${n}\` v = \`${v}\``).join('\n');
   const head = attrs.length
-    ? `                        )->open( \`Column\`\n${attrLines}\n\n                            )->leaf( \`Text\``
-    : `                        )->open( \`Column\`\n                            )->leaf( \`Text\``;
-  return `${head}\n                                )->a( n = \`text\` v = \`${label}\`\n\n                        )->shut(`;
+    ? `                        )->ele( \`Column\`\n${attrLines}\n\n                            )->tag( \`Text\``
+    : `                        )->ele( \`Column\`\n                            )->tag( \`Text\``;
+  return `${head}\n                                )->a( n = \`text\` v = \`${label}\`\n\n                        )->end(`;
 };
 // column order (mirrored 1:1 by the cells below): Since sits after Control,
 // Version + Open are the trailing non-sortable columns
@@ -653,13 +653,13 @@ CLASS ${CLASS} DEFINITION PUBLIC.
     " abap2UI5/samples-stack.
     METHODS render_header
       IMPORTING
-        page  TYPE REF TO z2ui5_cl_ai_xml
+        page  TYPE REF TO z2ui5_cl_ui5_view_builder
         title TYPE string.
     " the vertical line that groups the header row: the sample repositories of
     " the family first, then what leaves the system
     METHODS header_separator
       IMPORTING
-        toolbar TYPE REF TO z2ui5_cl_ai_xml.
+        toolbar TYPE REF TO z2ui5_cl_ui5_view_builder.
     " A repository that is not on this system stays clickable and says what is
     " missing - a popover on the icon that was pressed, with the GitHub link to
     " install it from.
@@ -670,7 +670,7 @@ CLASS ${CLASS} DEFINITION PUBLIC.
         name   TYPE string.
     METHODS header_button
       IMPORTING
-        toolbar   TYPE REF TO z2ui5_cl_ai_xml
+        toolbar   TYPE REF TO z2ui5_cl_ui5_view_builder
         icon      TYPE string
         " the entry's name - the tooltip opens with it and the popover of an
         " uninstalled repository is titled after it
@@ -750,17 +750,17 @@ CLASS ${CLASS} IMPLEMENTATION.
         DATA(lv_ui5)  = ls_link-ui5_url.
         DATA(lv_abap) = ls_link-abap_url.
 
-        DATA(links) = z2ui5_cl_ai_xml=>factory( ).
-        DATA(box) = links->open( n = \`FragmentDefinition\` ns = \`core\`
+        DATA(links) = z2ui5_cl_ui5_view_builder=>factory( ).
+        DATA(box) = links->ele( n = \`FragmentDefinition\` ns = \`core\`
             )->a( n = \`xmlns\`      v = \`sap.m\`
             )->a( n = \`xmlns:core\` v = \`sap.ui.core\`
 
-            )->open( \`Popover\`
+            )->ele( \`Popover\`
                 )->a( n = \`title\`        v = \`Links\`
                 )->a( n = \`placement\`    v = \`Auto\`
                 )->a( n = \`contentWidth\` v = \`26rem\`
 
-                )->open( \`VBox\`
+                )->ele( \`VBox\`
                     )->a( n = \`class\` v = \`sapUiContentPadding\` ).
 
         " One full-width Transparent Button per target, stacked in the VBox. A
@@ -772,7 +772,7 @@ CLASS ${CLASS} IMPLEMENTATION.
         " The three OpenUI5 targets are empty for a ui5_only row (the control is
         " not in the OpenUI5 checkout), so each renders only when it resolves.
         IF lv_api IS NOT INITIAL.
-          box->leaf( \`Button\`
+          box->tag( \`Button\`
               )->a( n = \`text\`    v = \`Control API Reference\`
               )->a( n = \`icon\`    v = \`sap-icon://document-text\`
               )->a( n = \`type\`    v = \`Transparent\`
@@ -782,7 +782,7 @@ CLASS ${CLASS} IMPLEMENTATION.
               )->a( n = \`press\`   v = link_press( lv_api ) ).
         ENDIF.
         IF lv_ui5 IS NOT INITIAL.
-          box->leaf( \`Button\`
+          box->tag( \`Button\`
               )->a( n = \`text\`    v = \`Sample Link\`
               )->a( n = \`icon\`    v = \`sap-icon://sys-monitor\`
               )->a( n = \`type\`    v = \`Transparent\`
@@ -792,7 +792,7 @@ CLASS ${CLASS} IMPLEMENTATION.
               )->a( n = \`press\`   v = link_press( lv_ui5 ) ).
         ENDIF.
         IF lv_js IS NOT INITIAL.
-          box->leaf( \`Button\`
+          box->tag( \`Button\`
               )->a( n = \`text\`    v = \`Sample Source Code\`
               )->a( n = \`icon\`    v = \`sap-icon://source-code\`
               )->a( n = \`type\`    v = \`Transparent\`
@@ -801,7 +801,7 @@ CLASS ${CLASS} IMPLEMENTATION.
               )->a( n = \`class\`   v = \`sapUiTinyMarginBottom\`
               )->a( n = \`press\`   v = link_press( lv_js ) ).
         ENDIF.
-        box->leaf( \`Button\`
+        box->tag( \`Button\`
             )->a( n = \`text\`    v = \`abap2UI5 Source Code\`
             )->a( n = \`icon\`    v = \`sap-icon://syntax\`
             )->a( n = \`type\`    v = \`Transparent\`
@@ -811,7 +811,7 @@ CLASS ${CLASS} IMPLEMENTATION.
 
         " say why the reference links are missing rather than leaving a gap
         IF lv_api IS INITIAL.
-          box->leaf( \`MessageStrip\`
+          box->tag( \`MessageStrip\`
               )->a( n = \`text\`      v = \`This control is in no OpenUI5 checkout, so this sample has no Control API Reference, Sample Link or Sample Source Code.\`
               )->a( n = \`type\`      v = \`Information\`
               )->a( n = \`showIcon\`  v = \`true\`
@@ -833,27 +833,27 @@ CLASS ${CLASS} IMPLEMENTATION.
         DATA(lv_post171) = ls_info-post171.
         DATA(lv_notes)   = ls_info-notes.
 
-        DATA(info) = z2ui5_cl_ai_xml=>factory( ).
-        DATA(ibox) = info->open( n = \`FragmentDefinition\` ns = \`core\`
+        DATA(info) = z2ui5_cl_ui5_view_builder=>factory( ).
+        DATA(ibox) = info->ele( n = \`FragmentDefinition\` ns = \`core\`
             )->a( n = \`xmlns\`      v = \`sap.m\`
             )->a( n = \`xmlns:core\` v = \`sap.ui.core\`
 
-            )->open( \`Popover\`
+            )->ele( \`Popover\`
                 )->a( n = \`title\`        v = \`Generation notes\`
                 )->a( n = \`placement\`    v = \`Auto\`
                 )->a( n = \`contentWidth\` v = \`30rem\`
 
-                )->open( \`VBox\`
+                )->ele( \`VBox\`
                     )->a( n = \`class\` v = \`sapUiContentPadding\` ).
 
         IF lv_checked IS NOT INITIAL.
-          ibox->leaf( \`ObjectStatus\`
+          ibox->tag( \`ObjectStatus\`
               )->a( n = \`text\`  v = lv_checked
               )->a( n = \`state\` v = \`Success\` ).
         ENDIF.
 
         IF lv_post171 IS NOT INITIAL.
-          ibox->leaf( \`ObjectStatus\`
+          ibox->tag( \`ObjectStatus\`
               )->a( n = \`text\`  v = |Needs a UI5 release newer than 1.71: { lv_post171 }|
               )->a( n = \`state\` v = \`Warning\`
               )->a( n = \`class\` v = \`sapUiTinyMarginTop\` ).
@@ -881,7 +881,7 @@ CLASS ${CLASS} IMPLEMENTATION.
             ENDIF.
           ENDLOOP.
           lv_html = |{ lv_html }</ul>|.
-          ibox->leaf( \`FormattedText\`
+          ibox->tag( \`FormattedText\`
               )->a( n = \`htmlText\` v = lv_html ).
         ENDIF.
 
@@ -961,29 +961,29 @@ CLASS ${CLASS} IMPLEMENTATION.
 
     ENDLOOP.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    DATA(page) = view->open( n = \`View\` ns = \`mvc\`
+    DATA(page) = view->ele( n = \`View\` ns = \`mvc\`
         )->a( n = \`xmlns\`      v = \`sap.m\`
         )->a( n = \`xmlns:mvc\`  v = \`sap.ui.core.mvc\`
         )->a( n = \`xmlns:core\` v = \`sap.ui.core\`
 
-        )->open( \`Shell\`
+        )->ele( \`Shell\`
             " Shell on/off = letterboxing (limited app width); two-way bound so the
             " header Switch toggles it live on the client
             )->a( n = \`appWidthLimited\` v = |\\{= !!\${ client->_bind( shell_on ) } \\}|
-            )->open( \`Page\` ).
+            )->ele( \`Page\` ).
 
     " title and back button come with the custom header (render_header), not
     " with the page - a Page renders either its own header or a custom one
     render_header( page  = page
                    title = |abap2UI5 Demo Kit (\{ lines( t_app ) \})| ).
 
-    page->open( \`subHeader\`
-                    )->open( \`OverflowToolbar\`
+    page->ele( \`subHeader\`
+                    )->ele( \`OverflowToolbar\`
                         " client-side filter over the table: liveChange/search run
                         " a binding_call Contains filter via follow_up_action (no round-trip)
-                        )->leaf( \`SearchField\`
+                        )->tag( \`SearchField\`
                             )->a( n = \`placeholder\` v = \`Search the table - module, control, since, sample, class\`
                             )->a( n = \`width\`       v = \`24rem\`
                             " two-way bound so the typed query is part of the model and
@@ -994,68 +994,68 @@ CLASS ${CLASS} IMPLEMENTATION.
                             )->a( n = \`search\`      v = ${filterCall('${$parameters>/query}')}
                         " default-on filter checkboxes; each is two-way bound and the row
                         " visible expression reacts live (no round-trip)
-                        )->leaf( \`CheckBox\`
+                        )->tag( \`CheckBox\`
                             )->a( n = \`text\`     v = \`Hide non-OpenUI5\`
                             )->a( n = \`selected\` v = client->_bind( hide_non_ui5 )
                             )->a( n = \`tooltip\`  v = \`Hide samples whose control is not part of OpenUI5\`
-                        )->leaf( \`CheckBox\`
+                        )->tag( \`CheckBox\`
                             )->a( n = \`text\`     v = \`Hide newer than 1.71 (2020)\`
                             )->a( n = \`selected\` v = client->_bind( hide_post171 )
                             )->a( n = \`tooltip\`  v = \`Hide samples that need a UI5 release newer than 1.71\`
-                        )->leaf( \`CheckBox\`
+                        )->tag( \`CheckBox\`
                             )->a( n = \`text\`     v = \`Hide deprecated\`
                             )->a( n = \`selected\` v = client->_bind( hide_deprecated )
                             )->a( n = \`tooltip\`  v = \`Hide samples whose control is deprecated\`
-                        )->leaf( \`ToolbarSpacer\`
-                        )->leaf( \`Label\`
+                        )->tag( \`ToolbarSpacer\`
+                        )->tag( \`Label\`
                             )->a( n = \`text\` v = \`Shell\`
                         " Shell on/off = sap.m.Shell letterboxing (two-way, drives appWidthLimited)
-                        )->leaf( \`Switch\`
+                        )->tag( \`Switch\`
                             )->a( n = \`state\`   v = client->_bind( shell_on )
                             )->a( n = \`tooltip\` v = \`Toggle the Shell letterboxing (limited app width)\`
 
-                    )->shut(
-                )->shut(
+                    )->end(
+                )->end(
 
-                )->open( \`Table\`
+                )->ele( \`Table\`
                     )->a( n = \`id\`      v = \`${ID_TABLE}\`
                     )->a( n = \`sticky\`  v = \`ColumnHeaders\`
                     )->a( n = \`items\`   v = client->_bind( t_app )
 
-                    )->open( \`columns\`
+                    )->ele( \`columns\`
 ${columnsBlock}
-                    )->shut(
+                    )->end(
 
-                    )->open( \`items\`
-                        )->open( \`ColumnListItem\`
+                    )->ele( \`items\`
+                        )->ele( \`ColumnListItem\`
                             " header checkboxes filter the table entirely on the client: a
                             " row is hidden when a hide-flag (two-way bound model-root) is set
                             " AND the row carries that trait (UI5_ONLY / IS_POST171 /
                             " IS_DEPRECATED). Expression binding, re-evaluated live on toggle,
                             " no round-trip - like the Shell Switch.
                             )->a( n = \`visible\` v = |\\{= !(\${ client->_bind( hide_non_ui5 ) } && $\\{UI5_ONLY\\}) && !(\${ client->_bind( hide_post171 ) } && $\\{IS_POST171\\}) && !(\${ client->_bind( hide_deprecated ) } && $\\{IS_DEPRECATED\\}) \\}|
-                            )->open( \`cells\`
-                                )->leaf( \`Text\`
+                            )->ele( \`cells\`
+                                )->tag( \`Text\`
                                     )->a( n = \`text\` v = \`{MODULE}\`
                                 " control name, struck through when deprecated (never
                                 " coloured); FormattedText so the strikethrough can vary per row
-                                )->leaf( \`FormattedText\`
+                                )->tag( \`FormattedText\`
                                     )->a( n = \`htmlText\` v = \`{CTRL_HTML}\`
                                     )->a( n = \`tooltip\`  v = \`{DEP_TEXT}\`
                                 " Since: the release the control appeared in; coloured orange
                                 " (Warning) when it is newer than UI5 1.71
-                                )->leaf( \`ObjectStatus\`
+                                )->tag( \`ObjectStatus\`
                                     )->a( n = \`text\`    v = \`{SINCE}\`
                                     )->a( n = \`state\`   v = |\\{= $\\{SINCE_POST171\\} ? 'Warning' : 'None' \\}|
                                     )->a( n = \`tooltip\` v = \`{DEP_TEXT}\`
-                                )->leaf( \`Text\`
+                                )->tag( \`Text\`
                                     )->a( n = \`text\` v = \`{NAME}\`
-                                )->leaf( \`Text\`
+                                )->tag( \`Text\`
                                     )->a( n = \`text\` v = \`{CLASS}\`
                                 " rating 1-5 (by feel): how much attention the port
                                 " deserves - complexity, rework, review, test-priority
                                 " (not coloured); tooltip lists the drivers
-                                )->leaf( \`Text\`
+                                )->tag( \`Text\`
                                     )->a( n = \`text\`    v = \`{SCORE} / 5\`
                                     )->a( n = \`tooltip\` v = \`{SCORE_TIP}\`
 
@@ -1067,8 +1067,8 @@ ${columnsBlock}
                                 " overview open in its own tab; third opens the
                                 " generation-notes popover - shown only on a row that HAS
                                 " something to say (checked / post-1.71 / notes)
-                                )->open( \`HBox\`
-                                    )->leaf( \`Button\`
+                                )->ele( \`HBox\`
+                                    )->tag( \`Button\`
                                         )->a( n = \`icon\`    v = \`sap-icon://chain-link\`
                                         )->a( n = \`type\`    v = \`Transparent\`
                                         )->a( n = \`tooltip\` v = \`Links: Control API Reference, Sample Link, Sample Source Code, abap2UI5 Source Code\`
@@ -1078,12 +1078,12 @@ ${columnsBlock}
                                         " runtime id as the popover anchor
                                         )->a( n = \`press\`   v = client->_event( val = \`LINKS\` t_arg = VALUE #(
                                             ( \`\${CLASS}\` ) ( \`\$event.oSource.sId\` ) ) )
-                                    )->leaf( \`Button\`
+                                    )->tag( \`Button\`
                                         )->a( n = \`icon\`    v = \`sap-icon://action\`
                                         )->a( n = \`type\`    v = \`Transparent\`
                                         )->a( n = \`tooltip\` v = \`Start this abap2UI5 app in a new tab\`
                                         )->a( n = \`press\`   v = client->follow_up_action( val = client->cs_event-open_new_tab t_arg = VALUE #( ( \`\${START_URL}\` ) ) )
-                                    )->leaf( \`Button\`
+                                    )->tag( \`Button\`
                                         )->a( n = \`icon\`    v = \`sap-icon://information\`
                                         )->a( n = \`type\`    v = \`Transparent\`
                                         )->a( n = \`tooltip\` v = \`Generation notes: how this port was built - live-check status, post-1.71 members, deviations\`
@@ -1094,11 +1094,11 @@ ${columnsBlock}
                                         )->a( n = \`press\`   v = client->_event( val = \`INFO\` t_arg = VALUE #(
                                             ( \`\${CLASS}\` ) ( \`\$event.oSource.sId\` ) ) )
 
-                                )->shut(
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                )->shut( ).
+                                )->end(
+                            )->end(
+                        )->end(
+                    )->end(
+                )->end( ).
 
     client->view_display( view->stringify( ) ).
 
@@ -1191,24 +1191,24 @@ ${catalogStatements}
 
   METHOD render_header.
 
-    DATA(bar) = page->open( \`customHeader\` )->open( \`Bar\` ).
+    DATA(bar) = page->ele( \`customHeader\` )->ele( \`Bar\` ).
 
     " left: what the stock page header would render on its own
-    DATA(left) = bar->open( \`contentLeft\` ).
+    DATA(left) = bar->ele( \`contentLeft\` ).
 
-    left->leaf( \`Button\`
+    left->tag( \`Button\`
         )->a( n = \`icon\`    v = \`sap-icon://nav-back\`
         )->a( n = \`type\`    v = \`Transparent\`
         )->a( n = \`tooltip\` v = \`Back\`
-        )->a( n = \`visible\` v = z2ui5_cl_ai_xml=>as_bool( client->check_app_prev_stack( ) )
+        )->a( n = \`visible\` b = client->check_app_prev_stack( )
         )->a( n = \`press\`   v = client->_event_nav_app_leave( ) ).
 
-    left->leaf( \`Title\`
+    left->tag( \`Title\`
         )->a( n = \`text\`  v = title
         )->a( n = \`level\` v = \`H2\` ).
 
     " right: the sample repositories of the abap2UI5 family, one icon each ...
-    DATA(right) = bar->open( \`contentRight\` ).
+    DATA(right) = bar->ele( \`contentRight\` ).
 
     header_button( toolbar   = right
                    icon      = \`sap-icon://lightbulb\`
@@ -1256,7 +1256,7 @@ ${catalogStatements}
 
   METHOD header_separator.
 
-    toolbar->leaf( \`ToolbarSeparator\`
+    toolbar->tag( \`ToolbarSeparator\`
         )->a( n = \`class\` v = \`sapUiSmallMarginBegin sapUiSmallMarginEnd\` ).
 
   ENDMETHOD.
@@ -1264,24 +1264,24 @@ ${catalogStatements}
 
   METHOD install_display.
 
-    DATA(info) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(info) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    info->open( n = \`FragmentDefinition\` ns = \`core\`
+    info->ele( n = \`FragmentDefinition\` ns = \`core\`
         )->a( n = \`xmlns\`      v = \`sap.m\`
         )->a( n = \`xmlns:core\` v = \`sap.ui.core\`
 
-        )->open( \`Popover\`
+        )->ele( \`Popover\`
             )->a( n = \`title\`        v = |{ name } - not installed|
             )->a( n = \`placement\`    v = \`Bottom\`
             )->a( n = \`contentWidth\` v = \`26rem\`
 
-            )->open( \`VBox\`
+            )->ele( \`VBox\`
                 )->a( n = \`class\` v = \`sapUiContentPadding\`
 
-                )->leaf( \`Text\`
+                )->tag( \`Text\`
                     )->a( n = \`text\` v = |This system does not have { name } installed, so there is no app to | &&
                                           |jump to. Install the repository with abapGit, then this icon opens it right here.|
-                )->leaf( \`Link\`
+                )->tag( \`Link\`
                     )->a( n = \`text\`   v = href
                     )->a( n = \`href\`   v = href
                     )->a( n = \`target\` v = \`_blank\`
@@ -1351,7 +1351,7 @@ ${catalogStatements}
     " one, the overview you are already in. Everything else is active, whether
     " its repository is on this system or not. The class name doubles as the
     " icon id, so install_display( ) can anchor its popover to the icon pressed
-    toolbar->leaf( n = \`Icon\` ns = \`core\`
+    toolbar->tag( n = \`Icon\` ns = \`core\`
         )->a( n = \`src\`     v = icon
         )->a( n = \`size\`    v = \`1.125rem\`
         )->a( n = \`class\`   v = \`sapUiTinyMarginBeginEnd\`

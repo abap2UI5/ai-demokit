@@ -1,6 +1,6 @@
 ---
 name: port-a-sample
-description: The complete recipe for rebuilding a UI5 demo kit sample as an abap2UI5 port class - class skeleton, dispatcher, model_init, view building with z2ui5_cl_ai_xml, formatting rules, data binding and events, booleans, the 1.71 rule in practice, deviation types. Use when writing, changing or reviewing any port class under src/.
+description: The complete recipe for rebuilding a UI5 demo kit sample as an abap2UI5 port class - class skeleton, dispatcher, model_init, view building with z2ui5_cl_ui5_view_builder, formatting rules, data binding and events, booleans, the 1.71 rule in practice, deviation types. Use when writing, changing or reviewing any port class under src/.
 ---
 
 # Porting recipe — how a port is built
@@ -156,43 +156,44 @@ picked the default) and overrides non-empty property **defaults** (e.g.
 data, or split the aggregation into per-shape templates (the QuickView port's
 `QuickViewGroupElementType`/`AvatarShape` crashed every page this way).
 
-#### `view_display` — the view via `z2ui5_cl_ai_xml`
+#### `view_display` — the view via `z2ui5_cl_ui5_view_builder`
 
-Build the view with the generic builder **`z2ui5_cl_ai_xml`**. The class lives
+Build the view with the generic builder **`z2ui5_cl_ui5_view_builder`**. The class lives
 in abap2UI5 core (`src/02/`, migrated from this repo) and resolves through the
 abap2UI5 abaplint dependency. It translates a
 UI5 XML view 1:1 by method chaining — every control, property and namespace maps
-directly, nothing is approximated. The four navigation verbs are all 4 chars so
-the `)->` arrows line up:
+directly, nothing is approximated. The navigation verbs are short so the `)->`
+arrows line up:
 
 | Verb | XML meaning | Tree action | Returns |
 |------|-------------|-------------|---------|
-| `open( n ns a )` | open a container tag `<X>` | add child **and descend** into it | the new child |
-| `leaf( n ns a )` | a self-closing tag `<X/>` | add child, **stay** on current node | the same node |
-| `shut( )` | the closing `</X>` | **ascend** to the parent | the parent |
-| `a( n v )` | one `name="value"` | add an attribute to the control just opened/leaf'd | the same node |
+| `ele( n ns )` | open a container tag `<X>` | add child **and descend** into it | the new child |
+| `tag( n ns )` | a self-closing tag `<X/>` | add child, **stay** on current node | the same node |
+| `end( )` | the closing `</X>` | **ascend** to the parent | the parent |
+| `a( n v )` | one `name="value"` | add an attribute to the control just added | the same node |
 
 Arguments: `n` = tag name, `ns` = namespace **prefix** (literal `f`, `l`, `core`,
 `mvc` — omitted for the default `sap.m` namespace).
 
 **Attributes go through `a( n = `key` v = `value` )`**, chained right after the
-control's `open`/`leaf`. `a` always targets that control (the last-added child,
-or the node itself if none yet), so it works after both `open` and `leaf`. `v` is
+control's `ele`/`tag`. `a` always targets that control (the last-added child,
+or the node itself if none yet), so it works after both `ele` and `tag`. `v` is
 any string expression — a literal, a `client->_bind( … )` / `_event( … )` result,
-or a `|…|` template. (An `open`/`leaf` also accepts an up-front `a = VALUE #( ( `key=value` ) … )`
-string table, split on the first `=` — handy for attributes built in a loop.)
+or a `|…|` template. For an ABAP boolean pass `b` instead of `v` (see Booleans
+below); `ele( )`/`tag( )` take `n` and `ns` only — there is no up-front
+attribute table, every attribute gets its own `a( )`.
 
 Both named XML aggregations (`<headerToolbar>`, `<layoutData>`) and controls are
-just `open`/`leaf` calls — an aggregation is a nameless-namespace `open` with no
-attributes, e.g. `)->open( \`headerToolbar\` )` (positional — a single named `n =`
+just `ele`/`tag` calls — an aggregation is a nameless-namespace `ele` with no
+attributes, e.g. `)->ele( \`headerToolbar\` )` (positional — a single named `n =`
 would trip abaplint's `omit_parameter_name`).
 
 **An aggregation carries the same `ns=` as the tag has in the XML** — which is
 its parent control's namespace, not the default one. `<m:content>` under an
-`sap.m.Page` is `)->open( n = \`content\` ns = \`m\` )`; but a default-namespace
+`sap.m.Page` is `)->ele( n = \`content\` ns = \`m\` )`; but a default-namespace
 aggregation like `<columns>` / `<template>` / `<footer>` inside an
 `sap.ui.table.Table` (whose view default `xmlns` is `sap.ui.table`) is the
-nameless `)->open( \`columns\` )`. Copy the prefix from the original tag; a
+nameless `)->ele( \`columns\` )`. Copy the prefix from the original tag; a
 wrong or missing `ns` on an aggregation produces an unknown-aggregation node
 that `render_smoke` rejects. (Worked example: app 164, `sap.ui.table` RowModes —
 `m:content`/`m:OverflowToolbar` prefixed, `columns`/`extension`/`footer`/`template`
@@ -203,34 +204,34 @@ the `<mvc:View>` and declare its `xmlns` namespaces yourself, exactly like any
 other control:
 
 ```abap
-DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-view->open( n = `View` ns = `mvc`
+view->ele( n = `View` ns = `mvc`
     )->a( n = `xmlns`     v = `sap.m`
     )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
     )->a( n = `xmlns:f`   v = `sap.f`
 
-    )->leaf( `Slider`
+    )->tag( `Slider`
         )->a( n = `value`      v = client->_bind( slider_value )
         )->a( n = `liveChange` v = client->_event( `SLIDER_MOVED` )
 
-    )->open( `Panel`
+    )->ele( `Panel`
         )->a( n = `width` v = client->_bind( panel_width )
-        )->open( `headerToolbar`
-            )->open( `Toolbar`
-                )->leaf( `Title`
+        )->ele( `headerToolbar`
+            )->ele( `Toolbar`
+                )->tag( `Title`
                     )->a( n = `text` v = `Header`
 
-            )->shut(
-        )->shut( ).
+            )->end(
+        )->end( ).
 
 client->view_display( view->stringify( ) ).
 ```
 
 `stringify( )` renders the whole tree to the XML string handed to
 `client->view_display( )` as the standalone final statement. **It renders from
-the root, so every tag is closed structurally — trailing `shut( )`s before the
-final `).` are optional.** `shut( )` only moves the *cursor* up to add a sibling
+the root, so every tag is closed structurally — trailing `end( )`s before the
+final `).` are optional.** `end( )` only moves the *cursor* up to add a sibling
 at a higher level; once the last leaf/attr is placed you can end the chain with a
 bare `).` (the still-open View/Panel/… nodes all close in the output). Both
 styles pass every gate — a chain that closes back to the root explicitly, or one
@@ -242,17 +243,17 @@ that stops at the deepest node.
   end; carry it to the **start of the next segment** so it always reads `)->`.
   With the `a()` chain there is no nested `VALUE`, so the whole view ends in a
   single `` ).`` (not `) ).`).
-- **Indent after every `open`.** Each `open( )` shifts its children's `)->` one
-  level (4 spaces) to the right; `shut( )` shifts back left. The `)->` of a
-  `shut` sits at the same column as the `open` it closes.
+- **Indent after every `ele`.** Each `ele( )` shifts its children's `)->` one
+  level (4 spaces) to the right; `end( )` shifts back left. The `)->` of an
+  `end` sits at the same column as the `ele` it closes.
 - **A control's `a()` lines sit one level (4 spaces) in from the control's
   own `)->` line**; align the `v =` column across them.
 - **Blank lines** (attrs never count — they belong to their control):
-  - **never** between consecutive `leaf`s, and **never** after a **one-liner
-    `open`** (an aggregation/container with no attrs) before its first child;
-  - a blank **does** separate an `open` that *has* attrs from its first child,
-    and separates a new `open`/`leaf` block from the previous sibling;
-  - a blank **before** every `shut`; **none** after a `shut` or between `shut`s;
+  - **never** between consecutive `tag`s, and **never** after a **one-liner
+    `ele`** (an aggregation/container with no attrs) before its first child;
+  - a blank **does** separate an `ele` that *has* attrs from its first child,
+    and separates a new `ele`/`tag` block from the previous sibling;
+  - a blank **before** every `end`; **none** after an `end` or between `end`s;
   - **none** between a control and its own `a()`s.
 - Long text/binding values split with `&&` at ~255 chars max per line (§6).
 
@@ -357,10 +358,11 @@ that stops at the deepest node.
 #### Booleans
 
 A literal boolean is just `)->a( n = `editable` v = `true``. **Only** when the
-value comes from an ABAP boolean variable, wrap it with `as_bool( )`:
-`)->a( n = `editable` v = z2ui5_cl_ai_xml=>as_bool( flag )` — a raw
-`abap_false` would otherwise serialise to an empty string. Never feed
-`abap_true`/`abap_false` straight into an attribute value.
+value comes from an ABAP boolean variable, pass it as `b` instead of `v`:
+`)->a( n = `editable` b = flag )` — the builder renders it as `true`/`false`
+itself, while a raw `abap_false` fed through `v` would serialise to an empty
+string. Never feed `abap_true`/`abap_false` straight into `v`. Exactly one of
+the two is passed, never both and never neither.
 
 #### The 1.71 rule in practice
 
@@ -453,8 +455,8 @@ these entries.
 
 - **One builder chain per view — never split it across ABAP statements.** The
   builder keeps its cursor across statements at runtime, so
-  `popover->open( \`Popover\` … ).` followed by a separate
-  `popover->open( \`List\` … ).` *works in a system* — but the linter's
+  `popover->ele( \`Popover\` … ).` followed by a separate
+  `popover->ele( \`List\` … ).` *works in a system* — but the linter's
   reconstructor reads a chain as one statement and re-roots the second one, so
   the document comes out with two roots and the render gate rejects it
   ("Using native HTML content in XMLViews is deprecated"). It also removes the

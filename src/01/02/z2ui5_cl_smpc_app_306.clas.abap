@@ -34,18 +34,18 @@ CLASS z2ui5_cl_smpc_app_306 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:u`   v = `sap.ui.unified`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `class`     v = `viewPadding`
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
 
-            )->leaf( n = `Calendar` ns = `u`
+            )->tag( n = `Calendar` ns = `u`
                 )->a( n = `id`                v = `calendar`
                 " both ends of the picked interval are read out of the event as UI5
                 " EXPRESSIONS - indexed access and chained calls resolve there (app 139
@@ -72,21 +72,21 @@ CLASS z2ui5_cl_smpc_app_306 IMPLEMENTATION.
                                                                     ( `${$parameters>/weekDays}.getEndDate() ? ${$parameters>/weekDays}.getEndDate().getMonth() + 1 : 0` )
                                                                     ( `${$parameters>/weekDays}.getEndDate() ? ${$parameters>/weekDays}.getEndDate().getDate() : 0` ) ) )
 
-            )->open( n = `HorizontalLayout` ns = `l`
-                )->leaf( `Label`
+            )->ele( n = `HorizontalLayout` ns = `l`
+                )->tag( `Label`
                     )->a( n = `text`  v = `Selected From (yyyy-mm-dd):`
                     )->a( n = `class` v = `labelMarginLeft`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `id`    v = `selectedDateFrom`
                     )->a( n = `text`  v = client->_bind( selected_from )
                     )->a( n = `class` v = `labelMarginLeft`
 
-            )->shut(
-            )->open( n = `HorizontalLayout` ns = `l`
-                )->leaf( `Label`
+            )->end(
+            )->ele( n = `HorizontalLayout` ns = `l`
+                )->tag( `Label`
                     )->a( n = `text`  v = `Selected To (yyyy-mm-dd):`
                     )->a( n = `class` v = `labelMarginLeft`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `id`    v = `selectedDateTo`
                     )->a( n = `text`  v = client->_bind( selected_to )
                     )->a( n = `class` v = `labelMarginLeft` ).

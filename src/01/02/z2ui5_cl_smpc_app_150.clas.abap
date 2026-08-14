@@ -33,33 +33,33 @@ CLASS z2ui5_cl_smpc_app_150 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the original's onSelectTab swaps the CodeEditor value per selected key in
     " JS (A -> example2, B -> example1, anything else empty) and onInit seeds the
     " hint text. Rebuilt on the client: selectedKey is two-way bound and the
     " editor value is the same switch as an expression binding - no round-trip
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns:ce`  v = `sap.ui.codeeditor`
         )->a( n = `height`    v = `100%`
 
-        )->open( `IconTabHeader`
+        )->ele( `IconTabHeader`
             )->a( n = `id`          v = `iconTabHeader`
             )->a( n = `selectedKey` v = client->_bind( selected_key )
-            )->open( `items`
-                )->leaf( `IconTabFilter`
+            )->ele( `items`
+                )->tag( `IconTabFilter`
                     )->a( n = `text` v = `A`
                     )->a( n = `key`  v = `A`
-                )->leaf( `IconTabFilter`
+                )->tag( `IconTabFilter`
                     )->a( n = `text` v = `B`
                     )->a( n = `key`  v = `B`
 
-        )->shut(
-        )->shut(
+        )->end(
+        )->end(
 
-        )->leaf( n = `CodeEditor` ns = `ce`
+        )->tag( n = `CodeEditor` ns = `ce`
             )->a( n = `id`     v = `aCodeEditor`
             )->a( n = `height` v = `300px`
             )->a( n = `type`   v = `javascript`
