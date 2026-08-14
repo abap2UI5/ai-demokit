@@ -115,12 +115,12 @@ const ADVISORY_BUDGET = {
   // enabled="false". The rule doc grants this exact case ("a 1:1 port of a
   // sample demonstrating the disabled STATE legitimately carries the original's
   // handler") - all five samples exist to SHOW the disabled control.
-  // NOTE: only app 121 is currently counted. The other four are frontend wires,
-  // and the linter's reconstructor recognises `_event_client` but not
-  // `follow_up_action` (lib/reconstruct.mjs), so since the rename those four
-  // handlers are dropped from the reconstructed view instead of judged. Budget
-  // kept at the TRUE count so the tally is right again once the linter closes
-  // that gap
+  // All five ARE counted since the 2026-08-14 linter bump (0168979): its
+  // reconstructor knew `_event_client` but not `follow_up_action`, so after
+  // the rename the four frontend wires were dropped from the reconstructed
+  // view instead of judged and only app 121 reached the tally. The budget was
+  // deliberately left at the TRUE count of 5 for exactly this moment, and the
+  // count landed on 5 - keep it there rather than ratcheting
   'event-on-disabled-control': 5,
 };
 

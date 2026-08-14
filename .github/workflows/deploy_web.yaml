@@ -48,13 +48,30 @@ jobs:
         run: |
           npm ci
           npm run build
-          npm run webpack:build
 
-      # sanity: the transpiled backend must at least initialize (runs the
-      # framework/ajson unit tests bundled by the transpiler)
-      - name: Smoke — backend initializes
+      # The gate this pipeline did not have. A green build proves nothing here:
+      # the transpiler does not fail on an unresolved type or a wrong runtime
+      # guard, it emits code that THROWS, so a dead bundle builds and deploys
+      # exactly like a working one. Two of them reached the published demo that
+      # way (the z2ui5_cl_http_handler rename -> "Void type" on every request,
+      # and the dissolve guard swallowing the shipped apps -> 500 BINDING_ERROR
+      # on the first roundtrip). Both were one HTTP request away from obvious,
+      # and neither needed a browser, so this asks the built backend to answer:
+      # GET the bootstrap HTML, POST the first roundtrip, POST an event and get
+      # the draft back. It FAILS the run - nothing is deployed untested again.
+      - name: Smoke — the built backend answers
+        working-directory: web
+        run: npm run smoke
+
+      # the transpiled unit run on top (framework + ajson test classes). Kept
+      # non-blocking: it exercises the framework's own tests, not this bundle
+      - name: Smoke — transpiled unit run
         working-directory: web
         run: node output/index.mjs || echo "unit run reported issues (non-blocking)"
+
+      - name: Bundle for Pages
+        working-directory: web
+        run: npm run webpack:build
 
       - uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
         with:
