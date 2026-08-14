@@ -40,11 +40,23 @@ const REQ_TIMEOUT_MS = 180_000;
 
 /* The markers the transpiled runtime uses when it fails. A response carrying
  * one is a failure even when the status is 200 - the framework renders its
- * error page with a 200 in some paths. */
-const FATAL = [
-  'Void type:',
-  'BINDING_ERROR',
-  'LOOP at undefined',
+ * error page with a 200 in some paths.
+ *
+ * Two lists, because the GET response EMBEDS the frontend source: the
+ * bootstrap HTML the backend writes carries the framework's JavaScript, and
+ * that JavaScript talks about failure in comments and in its own error
+ * handling. "getParent is not a function" appears there as prose explaining
+ * why MessagePopover.openBy needs a control - matching it there fails a build
+ * over a comment. So the HTML is judged only by markers the transpiler and the
+ * framework EMIT and no source line spells out, while a JSON response - which
+ * carries data and a view, not code - is judged by the wider set. */
+const FATAL_ANY = [
+  'Void type:',          // the transpiler's stub for an unresolved type
+  'BINDING_ERROR',       // z2ui5_cx_ui5_util_error out of main_attri_search
+  'LOOP at undefined',   // a draft restored without its attribute metadata
+];
+const FATAL_JSON = [
+  ...FATAL_ANY,
   'is not a function',
   'Cannot read properties of undefined',
 ];
@@ -63,6 +75,23 @@ function post(body, contextId) {
 }
 
 const front = () => ({ CONFIG: {}, ORIGIN: `http://localhost:${PORT}`, PATHNAME: '/', SEARCH: '', HASH: '' });
+
+/* Refuse to run against SOMEONE ELSE's server. Without this the gate is worth
+ * nothing: if anything is already listening on the port - a leftover
+ * `npm run express`, a parallel job - the spawn below loses the bind, and the
+ * probe cheerfully passes against the old process while the bundle under test
+ * is never touched. Found the hard way: a deliberately sabotaged bundle
+ * passed this gate green. */
+let occupied = false;
+try {
+  await fetch(BASE, { signal: AbortSignal.timeout(3000) });
+  occupied = true;
+} catch { /* nothing listening, which is what we want */ }
+if (occupied) {
+  console.error(`smoke_backend: FAIL - something is already listening on ${BASE}; `
+    + 'stop it (or set SMOKE_PORT) so the probe reaches the bundle under test');
+  process.exit(1);
+}
 
 const server = spawn(process.execPath, ['srv/express.mjs'], {
   cwd: WEB_ROOT,
@@ -95,7 +124,7 @@ try {
   const getRes = await fetch(BASE, { signal: AbortSignal.timeout(REQ_TIMEOUT_MS) });
   const html = await getRes.text();
   if (!getRes.ok) fail(`GET / answered ${getRes.status}`);
-  const marker = FATAL.find((m) => html.includes(m));
+  const marker = FATAL_ANY.find((m) => html.includes(m));
   if (marker) fail(`GET / carries "${marker}"`);
   else if (!/sap-ui-bootstrap|<script/i.test(html)) fail('GET / returned no bootstrap HTML');
   else console.log(`smoke_backend: GET / ok (${html.length} bytes)`);
@@ -103,7 +132,7 @@ try {
   // --- 2. the first roundtrip ----------------------------------------------
   const firstRes = await post({ S_FRONT: front() });
   const firstText = await firstRes.text();
-  const firstMarker = FATAL.find((m) => firstText.includes(m));
+  const firstMarker = FATAL_JSON.find((m) => firstText.includes(m));
   if (!firstRes.ok) fail(`first POST answered ${firstRes.status}: ${firstText.slice(0, 400)}`);
   else if (firstMarker) fail(`first POST carries "${firstMarker}": ${firstText.slice(0, 400)}`);
   else {
@@ -119,7 +148,7 @@ try {
       const f2 = { ...front(), ID: id, EVENT: 'BUTTON_CHECK', VIEW: 'MAIN' };
       const secondRes = await post({ S_FRONT: f2 }, firstRes.headers.get('sap-contextid'));
       const secondText = await secondRes.text();
-      const secondMarker = FATAL.find((m) => secondText.includes(m));
+      const secondMarker = FATAL_JSON.find((m) => secondText.includes(m));
       if (!secondRes.ok) fail(`event POST answered ${secondRes.status}: ${secondText.slice(0, 400)}`);
       else if (secondMarker) fail(`event POST carries "${secondMarker}": ${secondText.slice(0, 400)}`);
       else {
