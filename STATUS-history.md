@@ -3644,7 +3644,7 @@ runs the **real** app:
 
 - `scripts/e2e-build.mjs` (`npm run e2e:build`) — assembles the transpiled
   backend: copies the abap2UI5 framework src + all 94 ports + the
-  `z2ui5_cl_ai_xml` builder into a build dir, **downports a copy** to v702 with
+  `z2ui5_cl_ui5_view_builder` builder into a build dir, **downports a copy** to v702 with
   the framework's own `.github/abaplint/abap_702.jsonc` rule set (the transpiler
   rejects modern `COND … LET …`; a minimal downport produced undefined-var JS,
   so the full `check_syntax`/`definitions_top` rules are required), then
@@ -4183,7 +4183,7 @@ reviewers), followed by fixes:
   before `CLASS` no longer drops the NOTES, later header markers no longer leak
   into the CHECKED text, literal chunking can no longer split a doubled
   backtick. Output byte-identical on the existing 34 ports.
-- **Builder `z2ui5_cl_ai_xml`** — LF/CR/TAB in attribute values now escape to
+- **The view builder** — LF/CR/TAB in attribute values now escape to
   `&#xA;`/`&#xD;`/`&#x9;` (fixes app 035's lost noDataText line break at the
   root).
 - **App 022 (FacetFilter)** — Reset now really resets (two-way `selected`
@@ -4366,8 +4366,8 @@ A hardening pass over the pipeline itself (builder, gates, planning):
   the app-460 sidecar now names its statically resolved bindings precisely.
 - **Builder hardened + unit-tested** — `a()` on the empty root, `shut()`
   past the root and duplicate attribute names now ASSERT instead of silently
-  producing wrong XML; `z2ui5_cl_ai_xml` carries a local test class
-  (nesting, attr targeting, escaping, `as_bool`).
+  producing wrong XML; the view builder carries a local test class
+  (nesting, attr targeting, escaping, booleans).
 - **Breadth-first batch planning** — `--backlog` sorts samples on uncovered
   controls (`NEW-CONTROL`) first; one port per control before depth
   (AGENTS §1). 190 of 369 backlog samples sit on uncovered controls.
@@ -4649,7 +4649,7 @@ Infrastructure:
 - [x] ~~Builder hardening: `a()` on the empty root is silently dropped; `shut()`
   past the root null-refs; duplicate attribute names render invalid XML~~ —
   done 2026-07-18: all three ASSERT (fail fast at the call site), plus a local
-  unit test class on `z2ui5_cl_ai_xml`.
+  unit test class on the view builder.
 - [x] ~~property-check blind spot (hold-out probe 2026-07-19): the gate only
   scans `a( n = … )` attributes, so a post-1.71 **event parameter** read via
   `${$parameters>/…}` in a `t_arg` slips through undeclared (probe app 618,
@@ -4691,7 +4691,7 @@ Infrastructure:
   (`extractDocsWithHelpers` in render-smoke.mjs). A builder handle is now a
   stack snapshot (root..cursor); `DATA(list) = view->…->open( List )` saves it,
   a builder-returning helper (`METHODS … RETURNING VALUE(result) TYPE REF TO
-  z2ui5_cl_ai_xml`) is parsed once into a relative op-chain, and every
+  z2ui5_cl_ui5_view_builder`) is parsed once into a relative op-chain, and every
   `render_item( list = list … )->leaf( … )` call is inlined re-anchored to its
   argument handle with the non-entry params (`label`) substituted string-aware.
   app 049 reconstructs faithfully (14 CustomListItems, each `HBox` → label
@@ -4716,4 +4716,4 @@ Infrastructure:
   generated-artifacts sync check on every PR.
 - [x] ~~AGENTS.md §5 "Worked references" points at nonexistent
   `src/04/z2ui5_cl_smpc_app_416`; §8 names the wrong builder classes~~ — fixed
-  2026-07-16 (416 row replaced by app 007, §8 corrected to `z2ui5_cl_ai_xml`).
+  2026-07-16 (416 row replaced by app 007, §8 corrected to the view builder).
