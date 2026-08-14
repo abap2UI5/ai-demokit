@@ -58,9 +58,21 @@ const guard = `
     " this guard dissolve() walks client -> action -> core app and
     " main_attri_db_save_srtti clears the core app's MT_ATTRI while saving
     " the draft ("LOOP at undefined" on the next request).
+    " The renamed core set is named class by class, NOT as Z2UI5_CL_UI5_*:
+    " since abap2UI5#2564 that prefix also carries the shipped APPS
+    " (z2ui5_cl_ui5_app_start, z2ui5_cl_ui5_app_hi_world) and the released
+    " API, and guarding an app stops its OWN attributes from being dissolved -
+    " the first POST then answers 500 with "BINDING_ERROR - No class attribute
+    " for binding found" out of main_attri_search.
     DATA lo_diss_guard TYPE REF TO cl_abap_typedescr.
     lo_diss_guard = cl_abap_typedescr=>describe_by_object_ref( lr_ref ).
-    IF lo_diss_guard->absolute_name CP '\\CLASS=Z2UI5_CL_UI5_*'.
+    IF lo_diss_guard->absolute_name CP '\\CLASS=Z2UI5_CL_CORE_*'
+       OR lo_diss_guard->absolute_name CP '\\CLASS=Z2UI5_CL_UI5_SRV_*'
+       OR lo_diss_guard->absolute_name CP '\\CLASS=Z2UI5_CL_UI5_ACTION'
+       OR lo_diss_guard->absolute_name CP '\\CLASS=Z2UI5_CL_UI5_APP_CONT'
+       OR lo_diss_guard->absolute_name CP '\\CLASS=Z2UI5_CL_UI5_CLIENT'
+       OR lo_diss_guard->absolute_name CP '\\CLASS=Z2UI5_CL_UI5_FRONTEND'
+       OR lo_diss_guard->absolute_name CP '\\CLASS=Z2UI5_CL_UI5_HANDLER'.
       RETURN.
     ENDIF.
 `;
