@@ -637,7 +637,10 @@ CLASS ${CLASS} DEFINITION PUBLIC.
         samples_old  TYPE string VALUE \`z2ui5_cl_demo_app_g00\`,
         controls     TYPE string VALUE \`z2ui5_cl_smpc_app_overview\`,
         controls_old TYPE string VALUE \`z2ui5_cl_dmo_app_overview\`,
-        stack        TYPE string VALUE \`z2ui5_cl_smpe_app_00\`,
+        stack        TYPE string VALUE \`z2ui5_cl_smps_app_00\`,
+        " samples-stack moved every object from the SMPE token to SMPS in
+        " 2026-08; an installation that predates it still answers to this name
+        stack_old    TYPE string VALUE \`z2ui5_cl_smpe_app_00\`,
       END OF cs_overview.
 
     CONSTANTS:
@@ -1236,12 +1239,13 @@ ${catalogStatements}
                    href    = cs_url-controls
                    here    = abap_true ).
 
-    header_button( toolbar = right
-                   icon    = \`sap-icon://database\`
-                   name    = \`Stack Samples\`
-                   descr   = \`OData, RAP, WebSockets and the Fiori Launchpad\`
-                   class   = cs_overview-stack
-                   href    = cs_url-stack ).
+    header_button( toolbar   = right
+                   icon      = \`sap-icon://database\`
+                   name      = \`Stack Samples\`
+                   descr     = \`OData, RAP, WebSockets and the Fiori Launchpad\`
+                   class     = cs_overview-stack
+                   class_old = cs_overview-stack_old
+                   href      = cs_url-stack ).
 
     " ... and then, set apart by a wider gap, the two entries that leave the
     " system: the three icons above open an app, these open a site
