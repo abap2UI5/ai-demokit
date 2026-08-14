@@ -22,6 +22,10 @@
     {
       "type": "POST_171",
       "what": "sap.tnt.NavigationListGroup (control @since 1.121) is used 1:1 for the 'New', 'Recently used' and 'Restricted' groups. Newer than UI5 1.71; declared per the property-171 policy (control-level, app 152 Avatar precedent - the gate only checks members), so the app needs UI5 >= 1.121 to render the groups. Found by the 2026-07-27 review sweep."
+    },
+    {
+      "type": "POST_171",
+      "what": "the icon `sap-icon://people-connected` reached the SAP icon font in 1.96 and is kept 1:1 from the original V.view.xml, which names it on the 'People' NavigationListItem of the 'New' group. Newer than the 1.71 floor: there IconPool resolves nothing and the item renders with NO icon, silently - the app needs a UI5 release >= 1.96 to show it."
     }
   ]
 }

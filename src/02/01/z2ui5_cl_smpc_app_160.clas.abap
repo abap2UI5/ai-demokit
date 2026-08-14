@@ -55,6 +55,7 @@ CLASS z2ui5_cl_smpc_app_160 IMPLEMENTATION.
                     )->a( n = `target` v = `_blank`
                     )->a( n = `href`   v = `http://www.sap.com`
 
+            )->end(
         )->end(
 
         )->ele( n = `VerticalLayout` ns = `l`

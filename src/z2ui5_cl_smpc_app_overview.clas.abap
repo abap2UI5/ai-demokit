@@ -14,7 +14,9 @@
 "! The page has no header of its own: render_header( ) puts a Bar into its
 "! customHeader, with the back button and the title on the left and the SHARED
 "! OVERVIEW HEADER of the abap2UI5 family on the right - one core:Icon per
-"! sample repository, a ToolbarSeparator, then the documentation and this
+"! sample repository, then, set apart by a wider margin (NOT a separator
+"! control - a block-level child breaks the row on UI5 1.71, see
+"! render_header( )), the documentation and this
 "! repository, each explaining itself in its tooltip. Every repository is
 "! installed on its own, so each icon decides for itself - class_installed( )
 "! instantiates the target class, an installed overview app is entered with
@@ -189,11 +191,6 @@ CLASS z2ui5_cl_smpc_app_overview DEFINITION PUBLIC.
       IMPORTING
         page  TYPE REF TO z2ui5_cl_ui5_view_builder
         title TYPE string.
-    " the vertical line that groups the header row: the sample repositories of
-    " the family first, then what leaves the system
-    METHODS header_separator
-      IMPORTING
-        toolbar TYPE REF TO z2ui5_cl_ui5_view_builder.
     " A repository that is not on this system stays clickable and says what is
     " missing - a popover on the icon that was pressed, with the GitHub link to
     " install it from.
@@ -216,7 +213,10 @@ CLASS z2ui5_cl_smpc_app_overview DEFINITION PUBLIC.
         " system: a repository that renamed its overview app is installed under
         " both names in the wild for a while
         class_old TYPE string OPTIONAL
-        here      TYPE abap_bool DEFAULT abap_false.
+        here      TYPE abap_bool DEFAULT abap_false
+        " this entry opens a new group of the header row, so it carries the
+        " wider margin that sets the groups apart - see render_header( )
+        group_start TYPE abap_bool DEFAULT abap_false.
     METHODS class_installed
       IMPORTING
         val           TYPE string
@@ -2845,19 +2845,26 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
         notes = `NOTE: the original binds records {/ProductCollection/0..5} of the shared mock; the port carries exactly those 6 records as a default-model table T_PRODUCTS and element-binds each ObjectNumber to` &&
                  ` /T_PRODUCTS/0..5 (index binding), Price+CurrencyCode verbatim. // POST-1.71: ObjectNumber.inverted, ObjectNumber.active and ObjectNumber.press (all since UI5 1.86) are kept 1:1 for the` &&
                  ` inverted/interactive variants; needs UI5 >= 1.86.`
-        post171 = `ObjectNumber.inverted, ObjectNumber.active and ObjectNumber.press (all since UI5 1.86) are kept 1:1 for the inverted/interactive variants; needs UI5 >= 1.86.` )
+        post171 = `ObjectNumber.inverted, ObjectNumber.active and ObjectNumber.press (all since UI5 1.86) are kept 1:1 for the inverted/interactive variants; needs UI5 >= 1.86.` ) ).
+
+    lv_text1 = `POST-1.71: the ObjectStatus state values Indication06-Indication08 (since UI5 1.75) and Indication09-Indication20 (since UI5 1.120) are newer than 1.71 but kept for the 1:1 port - the app needs a UI5` &&
+               ` release >= 1.120 to render them all (>= 1.75 for Indication06-Indication08). // NOTE: the active status press opens the controller-built Dialog 1:1 (core:FragmentDefinition + popup_display): the` &&
+               ` Dialog with its VBox, the two content Texts (one EXTRA Text vs the original view) and the Close Button are EXTRA controls vs the archived view.xml, which only holds the ObjectStatus rows. Confirmed` &&
+               ` working in the 2026-07-20 live check. // POST-1.71: the icon ``sap-icon://information`` reached the SAP icon font in 1.80 and is kept 1:1 from the original V.view.xml, which names it on the two` &&
+               ` 'Currently closed'/'Information' ObjectStatus rows. Newer than the 1.71 floor: there IconPool resolves nothing and the ObjectStatus renders its text with NO icon, silently - the app needs a UI5` &&
+               ` release >= 1.80 to show it. (The framework's own equivalent is sap-icon://message-information, which exists from 1.71 on; using it here would deviate from the original.)`.
+    result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.ObjectStatus`                    name = `ObjectStatus`                                  class = `z2ui5_cl_smpc_app_042` path = `src/02/01/z2ui5_cl_smpc_app_042.clas.abap`
         score = 4
         score_tip = `Rating 4 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted, reviewed, live-test). 1 = simple faithful 1:1, 5 = complex / reworked / worth a` &&
                  ` close look.`
         is_post171 = abap_true
         checked = `CHECKED (2026-07-20): verified in a running system - human live check 2026-07-20 following the interaction checklist (all listed checks passed)`
-        notes = `POST-1.71: the ObjectStatus state values Indication06-Indication08 (since UI5 1.75) and Indication09-Indication20 (since UI5 1.120) are newer than 1.71 but kept for the 1:1 port - the app needs a UI5` &&
-                 ` release >= 1.120 to render them all (>= 1.75 for Indication06-Indication08). // NOTE: the active status press opens the controller-built Dialog 1:1 (core:FragmentDefinition + popup_display): the` &&
-                 ` Dialog with its VBox, the two content Texts (one EXTRA Text vs the original view) and the Close Button are EXTRA controls vs the archived view.xml, which only holds the ObjectStatus rows. Confirmed` &&
-                 ` working in the 2026-07-20 live check.`
+        notes = lv_text1
         post171 = `the ObjectStatus state values Indication06-Indication08 (since UI5 1.75) and Indication09-Indication20 (since UI5 1.120) are newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >=` &&
-                 ` 1.120 to render them all (>= 1.75 for Indication06-Indication08).` ) ).
+                 ` 1.120 to render them all (>= 1.75 for Indication06-Indication08). // the icon ``sap-icon://information`` reached the SAP icon font in 1.80 and is kept 1:1 from the original V.view.xml, which names it` &&
+                 ` on the two 'Currently closed'/'Information' ObjectStatus rows. Newer than the 1.71 floor: there IconPool resolves nothing and the ObjectStatus renders its text with NO icon, silently - the app needs` &&
+                 ` a UI5 release >= 1.80 to show it. (The framework's own equivalent is sap-icon://message-information, which exists from 1.71 on; using it here would deviate from the original.)` ) ).
 
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.OverflowToolbar`                 name = `TitleToolBar`                                  class = `z2ui5_cl_smpc_app_395` path = `src/01/01/z2ui5_cl_smpc_app_395.clas.abap`
@@ -3306,7 +3313,9 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` exist. The same boundary as app 060's parent-chain breadcrumb; the toast keeps the event name alone. The transported start date is the client-side string form of the JS Date, not the original's` &&
                ` oStartDate.toString() rendering, so the exact wording of that one line can differ. // POST-1.71: Formatter.DateCreateObject is referenced via core:require (UI5 >= 1.74). sap.m.SinglePlanningCalendar` &&
                ` and its DayView/WorkWeekView/WeekView/MonthView are since 1.61 (in scope). Also the SinglePlanningCalendar events weekNumberPress and selectedDatesChange (@since 1.123) are kept 1:1 from the original` &&
-               ` view; newer than 1.71, declared per the property-171 policy.`.
+               ` view; newer than 1.71, declared per the property-171 policy. // POST-1.71: the icon ``sap-icon://select-appointments`` reached the SAP icon font in 1.96 and is kept 1:1 from the original`.
+    lv_text1 = lv_text1 && ` Page.view.xml, which names it on the 'Enable multi-day selection' ToggleButton. Newer than the 1.71 floor: there IconPool resolves nothing and the button renders with NO icon, silently - the app` &&
+               ` needs a UI5 release >= 1.96 to show it.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.SinglePlanningCalendar`          name = `SinglePlanningCalendarDateSelection`           class = `z2ui5_cl_smpc_app_109` path = `src/02/01/z2ui5_cl_smpc_app_109.clas.abap`
         score = 4
@@ -3315,7 +3324,9 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
         is_post171 = abap_true
         notes = lv_text1
         post171 = `Formatter.DateCreateObject is referenced via core:require (UI5 >= 1.74). sap.m.SinglePlanningCalendar and its DayView/WorkWeekView/WeekView/MonthView are since 1.61 (in scope). Also the` &&
-                 ` SinglePlanningCalendar events weekNumberPress and selectedDatesChange (@since 1.123) are kept 1:1 from the original view; newer than 1.71, declared per the property-171 policy.` ) ).
+                 ` SinglePlanningCalendar events weekNumberPress and selectedDatesChange (@since 1.123) are kept 1:1 from the original view; newer than 1.71, declared per the property-171 policy. // the icon` &&
+                 ` ``sap-icon://select-appointments`` reached the SAP icon font in 1.96 and is kept 1:1 from the original Page.view.xml, which names it on the 'Enable multi-day selection' ToggleButton. Newer than the` &&
+                 ` 1.71 floor: there IconPool resolves nothing and the button renders with NO icon, silently - the app needs a UI5 release >= 1.96 to show it.` ) ).
 
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Slider`                          name = `Slider`                                        class = `z2ui5_cl_smpc_app_068` path = `src/01/01/z2ui5_cl_smpc_app_068.clas.abap`
@@ -3392,19 +3403,25 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
         notes = `POST-1.71: sap.m.StandardListItem infoStateInverted (since 1.74) is kept 1:1 from the original view; needs a UI5 release >= 1.74 to render.`
         post171 = `sap.m.StandardListItem infoStateInverted (since 1.74) is kept 1:1 from the original view; needs a UI5 release >= 1.74 to render.` ) ).
 
+    lv_text1 = `POST-1.71: infoIcon (since UI5 1.150) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.150 to render the status icon next to the info text. // POST-1.71:` &&
+               ` infoStateInverted (since UI5 1.74) is newer than 1.71 but kept for the 1:1 port - it is what the sample's Toggle Inverted button drives. // POST-1.71: wrapCharLimit (since UI5 1.94) is newer than` &&
+               ` 1.71 but kept for the 1:1 port - it is the property the last two rows of the sample demonstrate. // NOTE: the original controller seeds only wrapping: false; /inverted is never seeded, so the Toggle` &&
+               ` Inverted button starts from an undefined model value that UI5 reads as not pressed. The port seeds inverted = abap_false explicitly, which is the same initial rendering - a flat ABAP row cannot carry` &&
+               ` an absent field. // POST-1.71: the icon ``sap-icon://information`` reached the SAP icon font in 1.80 and is kept 1:1 from the original List.controller.js, which seeds it as the infoIcon of the` &&
+               ` wrapping rows. Newer than the 1.71 floor: there IconPool resolves nothing and the row renders with NO info icon, silently - and infoIcon itself is @since 1.150 anyway, so the icon can only ever show`.
+    lv_text1 = lv_text1 && ` on a release that has both.`.
+    lv_text2 = `infoIcon (since UI5 1.150) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.150 to render the status icon next to the info text. // infoStateInverted (since UI5 1.74) is` &&
+               ` newer than 1.71 but kept for the 1:1 port - it is what the sample's Toggle Inverted button drives. // wrapCharLimit (since UI5 1.94) is newer than 1.71 but kept for the 1:1 port - it is the property` &&
+               ` the last two rows of the sample demonstrate. // the icon ``sap-icon://information`` reached the SAP icon font in 1.80 and is kept 1:1 from the original List.controller.js, which seeds it as the` &&
+               ` infoIcon of the wrapping rows. Newer than the 1.71 floor: there IconPool resolves nothing and the row renders with NO info icon, silently - and infoIcon itself is @since 1.150 anyway, so the icon can` &&
+               ` only ever show on a release that has both.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.StandardListItem`                name = `StandardListItemWrapping`                      class = `z2ui5_cl_smpc_app_376` path = `src/02/01/z2ui5_cl_smpc_app_376.clas.abap`
         score = 2
         score_tip = `Rating 2 of 5 - how much attention this port deserves (complexity + rework + review + test-priority: complex, 1 noted). 1 = simple faithful 1:1, 5 = complex / reworked / worth a close look.`
         is_post171 = abap_true
-        notes = `POST-1.71: infoIcon (since UI5 1.150) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.150 to render the status icon next to the info text. // POST-1.71:` &&
-                 ` infoStateInverted (since UI5 1.74) is newer than 1.71 but kept for the 1:1 port - it is what the sample's Toggle Inverted button drives. // POST-1.71: wrapCharLimit (since UI5 1.94) is newer than` &&
-                 ` 1.71 but kept for the 1:1 port - it is the property the last two rows of the sample demonstrate. // NOTE: the original controller seeds only wrapping: false; /inverted is never seeded, so the Toggle` &&
-                 ` Inverted button starts from an undefined model value that UI5 reads as not pressed. The port seeds inverted = abap_false explicitly, which is the same initial rendering - a flat ABAP row cannot carry` &&
-                 ` an absent field.`
-        post171 = `infoIcon (since UI5 1.150) is newer than 1.71 but kept for the 1:1 port - the app needs a UI5 release >= 1.150 to render the status icon next to the info text. // infoStateInverted (since UI5 1.74) is` &&
-                 ` newer than 1.71 but kept for the 1:1 port - it is what the sample's Toggle Inverted button drives. // wrapCharLimit (since UI5 1.94) is newer than 1.71 but kept for the 1:1 port - it is the property` &&
-                 ` the last two rows of the sample demonstrate.` ) ).
+        notes = lv_text1
+        post171 = lv_text2 ) ).
 
     lv_text1 = `NOTE: the sample binds a List to the JSON model /modelData and renders one templated CustomListItem per row. **Rebuilt as that ONE bound template on 2026-08-05** (it used to be 14 unrolled static` &&
                ` items): the rows are bound with client->_bind( val = modeldata omit_initial_paths = ... ), the parameter added upstream for exactly this shape (pr/model-empty-vs-default), so a property a row does` &&
@@ -3531,7 +3548,11 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` original's resetGroupDialog. // IMPROVISED: The context-menu ToggleButton reports its state as a toast instead of attaching a sap.m.Menu as the table's contextMenu aggregation. The original's` &&
                ` onToggleContextMenu builds the Menu imperatively in the controller and swaps it in and out; the aggregation itself is not driven by any bindable property, and the sample's menu carries no behaviour` &&
                ` beyond opening. // NOTE: Device.system.desktop adds sapUiSizeCompact to each dialog in the original. The port drops that: abap2UI5 exposes the device data as {device>/system/desktop}, but a style`.
-    lv_text1 = lv_text1 && ` class is not a bindable property, and the density is a global app decision rather than a per-dialog one here.`.
+    lv_text1 = lv_text1 && ` class is not a bindable property, and the density is a global app decision rather than a per-dialog one here. // NOTE: the ViewSettingsDialog confirm payloads are unmarshalled with z2ui5_cl_ajson,` &&
+               ` the framework's VENDORED ajson copy (src/00/01) - outside abap2UI5's released API (src/02), which the linter reports as non-released-api and which is waived on those two lines with an` &&
+               ` abap2ui5lint-disable-next-line naming the rule. There is no released alternative: src/02 carries the http handler, the view builder and the four interfaces, none of which parses a string, and a` &&
+               ` sample class installed on its own cannot ship its own ajson copy. The realistic alternative is a hand-rolled parser for a payload UI5 defines, which would be the more fragile of the two. Revisit when` &&
+               ` the framework releases a JSON reader.`.
     result = VALUE #( BASE result
       ( module = `sap.m`              control = `sap.m.Table`                           name = `TableViewSettingsDialog`                       class = `z2ui5_cl_smpc_app_298` path = `src/02/01/z2ui5_cl_smpc_app_298.clas.abap`
         score = 5
@@ -3882,7 +3903,14 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                ` 'External Link' fixedItem entries). Newer than UI5 1.71; declared per the property-171 policy. Was previously undeclared because the property gate is blind to sap.tnt (properties.json holds sap.m`.
     lv_text1 = lv_text1 && ` only); found and corrected by the app-172 cold-read probe 2026-07-24. // POST-1.71: sap.tnt.NavigationListGroup (control @since 1.121) is used 1:1 for the 'New', 'Recently used' and 'Restricted'` &&
                ` groups. Newer than UI5 1.71; declared per the property-171 policy (control-level, app 152 Avatar precedent - the gate only checks members), so the app needs UI5 >= 1.121 to render the groups. Found` &&
-               ` by the 2026-07-27 review sweep.`.
+               ` by the 2026-07-27 review sweep. // POST-1.71: the icon ``sap-icon://people-connected`` reached the SAP icon font in 1.96 and is kept 1:1 from the original V.view.xml, which names it on the 'People'` &&
+               ` NavigationListItem of the 'New' group. Newer than the 1.71 floor: there IconPool resolves nothing and the item renders with NO icon, silently - the app needs a UI5 release >= 1.96 to show it.`.
+    lv_text2 = `NavigationListItem.selectable (@since 1.116) is kept 1:1 from the original (selectable=false on the two 'External Link' fixedItem entries). Newer than UI5 1.71; declared per the property-171 policy.` &&
+               ` Was previously undeclared because the property gate is blind to sap.tnt (properties.json holds sap.m only); found and corrected by the app-172 cold-read probe 2026-07-24. //` &&
+               ` sap.tnt.NavigationListGroup (control @since 1.121) is used 1:1 for the 'New', 'Recently used' and 'Restricted' groups. Newer than UI5 1.71; declared per the property-171 policy (control-level, app` &&
+               ` 152 Avatar precedent - the gate only checks members), so the app needs UI5 >= 1.121 to render the groups. Found by the 2026-07-27 review sweep. // the icon ``sap-icon://people-connected`` reached the` &&
+               ` SAP icon font in 1.96 and is kept 1:1 from the original V.view.xml, which names it on the 'People' NavigationListItem of the 'New' group. Newer than the 1.71 floor: there IconPool resolves nothing` &&
+               ` and the item renders with NO icon, silently - the app needs a UI5 release >= 1.96 to show it.`.
     result = VALUE #( BASE result
       ( module = `sap.tnt`            control = `sap.tnt.SideNavigation`                name = `SideNavigation`                                class = `z2ui5_cl_smpc_app_128` path = `src/02/05/z2ui5_cl_smpc_app_128.clas.abap`
         score = 3
@@ -3890,10 +3918,7 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
         since = `1.34`
         is_post171 = abap_true
         notes = lv_text1
-        post171 = `NavigationListItem.selectable (@since 1.116) is kept 1:1 from the original (selectable=false on the two 'External Link' fixedItem entries). Newer than UI5 1.71; declared per the property-171 policy.` &&
-                 ` Was previously undeclared because the property gate is blind to sap.tnt (properties.json holds sap.m only); found and corrected by the app-172 cold-read probe 2026-07-24. //` &&
-                 ` sap.tnt.NavigationListGroup (control @since 1.121) is used 1:1 for the 'New', 'Recently used' and 'Restricted' groups. Newer than UI5 1.71; declared per the property-171 policy (control-level, app` &&
-                 ` 152 Avatar precedent - the gate only checks members), so the app needs UI5 >= 1.121 to render the groups. Found by the 2026-07-27 review sweep.` ) ).
+        post171 = lv_text2 ) ).
 
     lv_text1 = `NOTE: onCollapseExpandPress (byId('sideNavigation').setExpanded(!expanded)) is reproduced by two-way binding SideNavigation.expanded to a boolean model field, seeded false exactly like the original` &&
                ` literal, and flipping it on the TOGGLE_EXPAND round-trip. // NOTE: quickActionPress dialog: the controller-built sap.m.Dialog is expressed as a core:FragmentDefinition shown via` &&
@@ -4107,7 +4132,8 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
     lv_text1 = lv_text1 && ` including the original's Cyrillic-o typo in 'Prоduct Name'. The SAP_Logo.png and Woman_avatar_01.png srcs are the original's host-relative test-resources/sap/tnt/images/ paths rewritten to the` &&
                ` OpenUI5 host https://sdk.openui5.org/test-resources/sap/tnt/images/ per the runtime asset-URL rule (app 152 precedent). // POST-1.71: sap.m.Avatar (control @since 1.73) is used 1:1 as the profile` &&
                ` avatar in both ToolHeaders (src image, displaySize XS, press). Newer than UI5 1.71; declared per the property-171 policy (control-level, app 152 precedent), so the app needs UI5 >= 1.73 to render the` &&
-               ` avatars. Found by the 2026-07-27 review sweep.`.
+               ` avatars. Found by the 2026-07-27 review sweep. // POST-1.71: the icon ``sap-icon://da`` reached the SAP icon font in 1.96 and is kept 1:1 from the original V.view.xml, which names it on the 'Joule'` &&
+               ` OverflowToolbarButton. Newer than the 1.71 floor: there IconPool resolves nothing and the button renders with NO icon, silently - the app needs a UI5 release >= 1.96 to show it.`.
     result = VALUE #( BASE result
       ( module = `sap.tnt`            control = `sap.tnt.ToolHeader`                    name = `ToolHeader`                                    class = `z2ui5_cl_smpc_app_134` path = `src/02/05/z2ui5_cl_smpc_app_134.clas.abap`
         score = 4
@@ -4116,7 +4142,9 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
         is_post171 = abap_true
         notes = lv_text1
         post171 = `sap.m.Avatar (control @since 1.73) is used 1:1 as the profile avatar in both ToolHeaders (src image, displaySize XS, press). Newer than UI5 1.71; declared per the property-171 policy (control-level,` &&
-                 ` app 152 precedent), so the app needs UI5 >= 1.73 to render the avatars. Found by the 2026-07-27 review sweep.` ) ).
+                 ` app 152 precedent), so the app needs UI5 >= 1.73 to render the avatars. Found by the 2026-07-27 review sweep. // the icon ``sap-icon://da`` reached the SAP icon font in 1.96 and is kept 1:1 from the` &&
+                 ` original V.view.xml, which names it on the 'Joule' OverflowToolbarButton. Newer than the 1.71 floor: there IconPool resolves nothing and the button renders with NO icon, silently - the app needs a` &&
+                 ` UI5 release >= 1.96 to show it.` ) ).
 
     lv_text1 = `NOTE: The three home Buttons reset their sibling IconTabHeader again since 2026-08-05. The original reaches into the DOM (event.oSource.getParent().getDomRef()...) only to FIND that header - each` &&
                ` button knows it statically here - and selectedKey is a BINDABLE property, so the reset is a bound value rather than a frontend action (the prefer-a-bindable-property rule, which the linter enforces):` &&
@@ -7003,6 +7031,16 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
 
   METHOD render_header.
 
+    " ONLY INLINE CONTROLS BELONG INTO A sap.m.Bar. Its content containers
+    " became flex boxes only after 1.71: on the oldest release abap2UI5
+    " supports, .sapMBarLeft/.sapMBarRight are plain absolutely positioned
+    " blocks that lay their children out in normal flow, so a block-level
+    " child - a ToolbarSpacer or a ToolbarSeparator, both of which render a
+    " <div> - starts a new line, and everything from that line on is cut away
+    " by the overflow:hidden the container carries at the bar's height of
+    " 3rem. This row used to put a ToolbarSeparator between its two groups and
+    " lost the documentation and GitHub icons on 1.71 because of it; the gap
+    " now rides on the first icon of the second group (group_start).
     DATA(bar) = page->ele( `customHeader` )->ele( `Bar` ).
 
     " left: what the stock page header would render on its own
@@ -7045,15 +7083,14 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                    class   = cs_overview-stack
                    href    = cs_url-stack ).
 
-    " ... and then, set apart by a separator line, the two entries that leave
-    " the system: the three icons above open an app, these open a site
-    header_separator( right ).
-
-    header_button( toolbar = right
-                   icon    = `sap-icon://learning-assistant`
-                   name    = `Documentation`
-                   descr   = `guides, tutorials and the API reference`
-                   href    = cs_url-docs ).
+    " ... and then, set apart by a wider gap, the two entries that leave the
+    " system: the three icons above open an app, these open a site
+    header_button( toolbar     = right
+                   icon        = `sap-icon://learning-assistant`
+                   name        = `Documentation`
+                   descr       = `guides, tutorials and the API reference`
+                   href        = cs_url-docs
+                   group_start = abap_true ).
 
     " not source-code: in the shared header that icon is reserved for the
     " per-sample source links the overviews render in their lists
@@ -7062,14 +7099,6 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                    name    = `GitHub`
                    descr   = `the source code of this repository`
                    href    = cs_url-controls ).
-
-  ENDMETHOD.
-
-
-  METHOD header_separator.
-
-    toolbar->tag( `ToolbarSeparator`
-        )->a( n = `class` v = `sapUiSmallMarginBegin sapUiSmallMarginEnd` ).
 
   ENDMETHOD.
 
@@ -7163,10 +7192,16 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
     " one, the overview you are already in. Everything else is active, whether
     " its repository is on this system or not. The class name doubles as the
     " icon id, so install_display( ) can anchor its popover to the icon pressed
+    " the wider begin margin is what sets a new group of the row apart - a
+    " margin rather than a separator control, see render_header( )
+    DATA(css_class) = COND string( WHEN group_start = abap_true
+                                   THEN `sapUiMediumMarginBegin sapUiTinyMarginEnd`
+                                   ELSE `sapUiTinyMarginBeginEnd` ).
+
     toolbar->tag( n = `Icon` ns = `core`
         )->a( n = `src`     v = icon
         )->a( n = `size`    v = `1.125rem`
-        )->a( n = `class`   v = `sapUiTinyMarginBeginEnd`
+        )->a( n = `class`   v = css_class
         )->a( n = `tooltip` v = hint ).
 
     " a( ) writes on the element just added, and an EMPTY attribute would be

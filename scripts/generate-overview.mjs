@@ -480,7 +480,9 @@ const abap = `"! Generated overview app - lists every abap2UI5 api sample app in
 "! The page has no header of its own: render_header( ) puts a Bar into its
 "! customHeader, with the back button and the title on the left and the SHARED
 "! OVERVIEW HEADER of the abap2UI5 family on the right - one core:Icon per
-"! sample repository, a ToolbarSeparator, then the documentation and this
+"! sample repository, then, set apart by a wider margin (NOT a separator
+"! control - a block-level child breaks the row on UI5 1.71, see
+"! render_header( )), the documentation and this
 "! repository, each explaining itself in its tooltip. Every repository is
 "! installed on its own, so each icon decides for itself - class_installed( )
 "! instantiates the target class, an installed overview app is entered with
@@ -655,11 +657,6 @@ CLASS ${CLASS} DEFINITION PUBLIC.
       IMPORTING
         page  TYPE REF TO z2ui5_cl_ui5_view_builder
         title TYPE string.
-    " the vertical line that groups the header row: the sample repositories of
-    " the family first, then what leaves the system
-    METHODS header_separator
-      IMPORTING
-        toolbar TYPE REF TO z2ui5_cl_ui5_view_builder.
     " A repository that is not on this system stays clickable and says what is
     " missing - a popover on the icon that was pressed, with the GitHub link to
     " install it from.
@@ -682,7 +679,10 @@ CLASS ${CLASS} DEFINITION PUBLIC.
         " system: a repository that renamed its overview app is installed under
         " both names in the wild for a while
         class_old TYPE string OPTIONAL
-        here      TYPE abap_bool DEFAULT abap_false.
+        here      TYPE abap_bool DEFAULT abap_false
+        " this entry opens a new group of the header row, so it carries the
+        " wider margin that sets the groups apart - see render_header( )
+        group_start TYPE abap_bool DEFAULT abap_false.
     METHODS class_installed
       IMPORTING
         val           TYPE string
@@ -1191,6 +1191,16 @@ ${catalogStatements}
 
   METHOD render_header.
 
+    " ONLY INLINE CONTROLS BELONG INTO A sap.m.Bar. Its content containers
+    " became flex boxes only after 1.71: on the oldest release abap2UI5
+    " supports, .sapMBarLeft/.sapMBarRight are plain absolutely positioned
+    " blocks that lay their children out in normal flow, so a block-level
+    " child - a ToolbarSpacer or a ToolbarSeparator, both of which render a
+    " <div> - starts a new line, and everything from that line on is cut away
+    " by the overflow:hidden the container carries at the bar's height of
+    " 3rem. This row used to put a ToolbarSeparator between its two groups and
+    " lost the documentation and GitHub icons on 1.71 because of it; the gap
+    " now rides on the first icon of the second group (group_start).
     DATA(bar) = page->ele( \`customHeader\` )->ele( \`Bar\` ).
 
     " left: what the stock page header would render on its own
@@ -1233,15 +1243,14 @@ ${catalogStatements}
                    class   = cs_overview-stack
                    href    = cs_url-stack ).
 
-    " ... and then, set apart by a separator line, the two entries that leave
-    " the system: the three icons above open an app, these open a site
-    header_separator( right ).
-
-    header_button( toolbar = right
-                   icon    = \`sap-icon://learning-assistant\`
-                   name    = \`Documentation\`
-                   descr   = \`guides, tutorials and the API reference\`
-                   href    = cs_url-docs ).
+    " ... and then, set apart by a wider gap, the two entries that leave the
+    " system: the three icons above open an app, these open a site
+    header_button( toolbar     = right
+                   icon        = \`sap-icon://learning-assistant\`
+                   name        = \`Documentation\`
+                   descr       = \`guides, tutorials and the API reference\`
+                   href        = cs_url-docs
+                   group_start = abap_true ).
 
     " not source-code: in the shared header that icon is reserved for the
     " per-sample source links the overviews render in their lists
@@ -1250,14 +1259,6 @@ ${catalogStatements}
                    name    = \`GitHub\`
                    descr   = \`the source code of this repository\`
                    href    = cs_url-controls ).
-
-  ENDMETHOD.
-
-
-  METHOD header_separator.
-
-    toolbar->tag( \`ToolbarSeparator\`
-        )->a( n = \`class\` v = \`sapUiSmallMarginBegin sapUiSmallMarginEnd\` ).
 
   ENDMETHOD.
 
@@ -1351,10 +1352,16 @@ ${catalogStatements}
     " one, the overview you are already in. Everything else is active, whether
     " its repository is on this system or not. The class name doubles as the
     " icon id, so install_display( ) can anchor its popover to the icon pressed
+    " the wider begin margin is what sets a new group of the row apart - a
+    " margin rather than a separator control, see render_header( )
+    DATA(css_class) = COND string( WHEN group_start = abap_true
+                                   THEN \`sapUiMediumMarginBegin sapUiTinyMarginEnd\`
+                                   ELSE \`sapUiTinyMarginBeginEnd\` ).
+
     toolbar->tag( n = \`Icon\` ns = \`core\`
         )->a( n = \`src\`     v = icon
         )->a( n = \`size\`    v = \`1.125rem\`
-        )->a( n = \`class\`   v = \`sapUiTinyMarginBeginEnd\`
+        )->a( n = \`class\`   v = css_class
         )->a( n = \`tooltip\` v = hint ).
 
     " a( ) writes on the element just added, and an EMPTY attribute would be

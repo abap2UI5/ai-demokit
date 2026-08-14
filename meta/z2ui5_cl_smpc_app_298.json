@@ -46,6 +46,10 @@
     {
       "type": "NOTE",
       "what": "Device.system.desktop adds sapUiSizeCompact to each dialog in the original. The port drops that: abap2UI5 exposes the device data as {device>/system/desktop}, but a style class is not a bindable property, and the density is a global app decision rather than a per-dialog one here."
+    },
+    {
+      "type": "NOTE",
+      "what": "the ViewSettingsDialog confirm payloads are unmarshalled with z2ui5_cl_ajson, the framework's VENDORED ajson copy (src/00/01) - outside abap2UI5's released API (src/02), which the linter reports as non-released-api and which is waived on those two lines with an abap2ui5lint-disable-next-line naming the rule. There is no released alternative: src/02 carries the http handler, the view builder and the four interfaces, none of which parses a string, and a sample class installed on its own cannot ship its own ajson copy. The realistic alternative is a hand-rolled parser for a payload UI5 defines, which would be the more fragile of the two. Revisit when the framework releases a JSON reader."
     }
   ]
 }

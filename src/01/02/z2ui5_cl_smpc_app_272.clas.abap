@@ -302,66 +302,66 @@ CLASS z2ui5_cl_smpc_app_272 IMPLEMENTATION.
                     )->end(
                     )->end(
 
-                    " the controller's byId(...).setType/setText/setVisible per
-                    " strip is a bound triple here; close sets visible = false
-                    " server-side, exactly like onMsgStripClose
-                    )->tag( `MessageStrip`
-                        )->a( n = `id`              v = `BillingInformationMessage`
-                        )->a( n = `visible`         v = client->_bind( billing_visible )
-                        )->a( n = `text`            v = client->_bind( billing_text )
-                        )->a( n = `type`            v = client->_bind( billing_type )
-                        )->a( n = `showIcon`        v = `true`
-                        )->a( n = `showCloseButton` v = `true`
-                        )->a( n = `close`           v = client->_event( `CLOSE_BILLING` )
-                    )->tag( `MessageStrip`
-                        )->a( n = `id`              v = `DiscountCodeMessage`
-                        )->a( n = `visible`         v = client->_bind( discount_visible )
-                        )->a( n = `text`            v = client->_bind( discount_text )
-                        )->a( n = `type`            v = client->_bind( discount_type )
-                        )->a( n = `showIcon`        v = `true`
-                        )->a( n = `showCloseButton` v = `true`
-                        )->a( n = `close`           v = client->_event( `CLOSE_DISCOUNT` )
-                    )->tag( `MessageStrip`
-                        )->a( n = `id`              v = `CreditCardMessage`
-                        )->a( n = `visible`         v = client->_bind( credit_visible )
-                        )->a( n = `text`            v = client->_bind( credit_text )
-                        )->a( n = `type`            v = client->_bind( credit_type )
-                        )->a( n = `showIcon`        v = `true`
-                        )->a( n = `showCloseButton` v = `true`
-                        )->a( n = `close`           v = client->_event( `CLOSE_CREDIT` )
-                    )->tag( `MessageStrip`
-                        )->a( n = `id`              v = `OnlineMessage`
-                        )->a( n = `visible`         v = client->_bind( online_visible )
-                        )->a( n = `text`            v = client->_bind( online_text )
-                        )->a( n = `type`            v = client->_bind( online_type )
-                        )->a( n = `showIcon`        v = `true`
-                        )->a( n = `showCloseButton` v = `true`
-                        )->a( n = `close`           v = client->_event( `CLOSE_ONLINE` )
+                " the controller's byId(...).setType/setText/setVisible per
+                " strip is a bound triple here; close sets visible = false
+                " server-side, exactly like onMsgStripClose
+                )->tag( `MessageStrip`
+                    )->a( n = `id`              v = `BillingInformationMessage`
+                    )->a( n = `visible`         v = client->_bind( billing_visible )
+                    )->a( n = `text`            v = client->_bind( billing_text )
+                    )->a( n = `type`            v = client->_bind( billing_type )
+                    )->a( n = `showIcon`        v = `true`
+                    )->a( n = `showCloseButton` v = `true`
+                    )->a( n = `close`           v = client->_event( `CLOSE_BILLING` )
+                )->tag( `MessageStrip`
+                    )->a( n = `id`              v = `DiscountCodeMessage`
+                    )->a( n = `visible`         v = client->_bind( discount_visible )
+                    )->a( n = `text`            v = client->_bind( discount_text )
+                    )->a( n = `type`            v = client->_bind( discount_type )
+                    )->a( n = `showIcon`        v = `true`
+                    )->a( n = `showCloseButton` v = `true`
+                    )->a( n = `close`           v = client->_event( `CLOSE_DISCOUNT` )
+                )->tag( `MessageStrip`
+                    )->a( n = `id`              v = `CreditCardMessage`
+                    )->a( n = `visible`         v = client->_bind( credit_visible )
+                    )->a( n = `text`            v = client->_bind( credit_text )
+                    )->a( n = `type`            v = client->_bind( credit_type )
+                    )->a( n = `showIcon`        v = `true`
+                    )->a( n = `showCloseButton` v = `true`
+                    )->a( n = `close`           v = client->_event( `CLOSE_CREDIT` )
+                )->tag( `MessageStrip`
+                    )->a( n = `id`              v = `OnlineMessage`
+                    )->a( n = `visible`         v = client->_bind( online_visible )
+                    )->a( n = `text`            v = client->_bind( online_text )
+                    )->a( n = `type`            v = client->_bind( online_type )
+                    )->a( n = `showIcon`        v = `true`
+                    )->a( n = `showCloseButton` v = `true`
+                    )->a( n = `close`           v = client->_event( `CLOSE_ONLINE` )
 
-                )->end(
+            )->end(
 
-                )->ele( `footer`
-                    )->ele( `Toolbar`
-                        )->ele( `content`
-                            )->tag( `Button`
-                                )->a( n = `id`    v = `submit`
-                                )->a( n = `text`  v = `Submit`
-                                )->a( n = `press` v = client->_event( `ACCEPT` )
-                                )->a( n = `type`  v = `Accept`
-                                )->a( n = `width` v = `33%`
-                            )->tag( `Button`
-                                )->a( n = `id`    v = `reset`
-                                )->a( n = `text`  v = `Reset`
-                                )->a( n = `press` v = client->_event( `RESET` )
-                                )->a( n = `type`  v = `Reject`
-                                )->a( n = `width` v = `33%`
-                            )->tag( `Button`
-                                )->a( n = `id`    v = `cancel`
-                                )->a( n = `text`  v = `Cancel`
-                                )->a( n = `press` v = client->_event( `CANCEL` )
-                                )->a( n = `width` v = `33%`
+            )->ele( `footer`
+                )->ele( `Toolbar`
+                    )->ele( `content`
+                        )->tag( `Button`
+                            )->a( n = `id`    v = `submit`
+                            )->a( n = `text`  v = `Submit`
+                            )->a( n = `press` v = client->_event( `ACCEPT` )
+                            )->a( n = `type`  v = `Accept`
+                            )->a( n = `width` v = `33%`
+                        )->tag( `Button`
+                            )->a( n = `id`    v = `reset`
+                            )->a( n = `text`  v = `Reset`
+                            )->a( n = `press` v = client->_event( `RESET` )
+                            )->a( n = `type`  v = `Reject`
+                            )->a( n = `width` v = `33%`
+                        )->tag( `Button`
+                            )->a( n = `id`    v = `cancel`
+                            )->a( n = `text`  v = `Cancel`
+                            )->a( n = `press` v = client->_event( `CANCEL` )
+                            )->a( n = `width` v = `33%`
 
-                            ).
+                        ).
 
     client->view_display( view->stringify( ) ).
 

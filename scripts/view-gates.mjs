@@ -95,7 +95,12 @@ const ADVISORY_BUDGET = {
   // same shape — the alt-less social-icon / profile sap.m.Images the
   // ObjectPageHeader samples ship without alt; kept 1:1, an alt would be
   // invented text
-  'missing-accessibility': 55,
+  // ratcheted down 2026-08-14 with the linter bump to 51cce10: 6afb902
+  // ("missing-accessibility: stop asking for an attribute UI5 ignores") drops
+  // the findings on controls where the attribute is ignored anyway, so 26 of
+  // the 55 were never real. The ones above stay — they are the alt/tooltip-less
+  // originals, kept 1:1
+  'missing-accessibility': 29,
   'event-without-handler': 4, // ratcheted down 2026-08-05: the four calendar ports wired their select handler
   'unknown-event-parameter': 1, // app 268: ColorPickerPopover forwards colorString undeclared — works live
   // both entries below are new rules from the 2026-08-12 linter bump (363c6e9),
