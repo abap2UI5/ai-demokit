@@ -50,11 +50,15 @@ import { readFileSync, writeFileSync, existsSync, readdirSync, statSync } from "
 import { join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-// The consumed form, on one line: `… v = client->follow_up_action( … )`.
-// Verified exhaustively over the corpus — 430 consumed, 129 statement, ZERO
-// split across lines, and the only other occurrences are prose inside the
-// overview app's generated notes, which never carry the `= ` prefix.
+// The consumed form comes in two shapes. On one line: `… v =
+// client->follow_up_action( … )`. And as a `&&`-chained continuation, where
+// the call starts its own line right after a line ending in `&&` (two client
+// actions chained with `; ` — apps 076, 077 and 165). Verified exhaustively
+// over the corpus — 430 same-line consumed, 25 chained continuations, 104
+// statement calls, and the only other occurrences are prose inside the
+// overview app's generated notes, which match neither shape.
 const WIRED = /(=[ \t]*)client->follow_up_action\(/g;
+const CONTINUED = /^([ \t]*)client->follow_up_action\(/;
 
 function* abapFiles(dir) {
   for (const entry of readdirSync(dir)) {
@@ -76,15 +80,27 @@ export function patchFollowUpAction(root) {
     already += (src.match(/=[ \t]*client->_event_client\(/g) || []).length;
     // comment lines ("! doc, * and " comments) are left as they are: they
     // document the API by its real name
+    // a line ending in `&&` continues a concatenation, so a call starting the
+    // NEXT line is consumed too — comment lines in between leave the state as
+    // it is
+    let concatOpen = false;
     const out = src
       .split("\n")
       .map((line) => {
         const trimmed = line.trimStart();
         if (trimmed.startsWith('"') || trimmed.startsWith("*")) return line;
-        return line.replace(WIRED, (_m, lhs) => {
+        let patched = line.replace(WIRED, (_m, lhs) => {
           calls++;
           return `${lhs}client->_event_client(`;
         });
+        if (concatOpen) {
+          patched = patched.replace(CONTINUED, (_m, indent) => {
+            calls++;
+            return `${indent}client->_event_client(`;
+          });
+        }
+        concatOpen = patched.trimEnd().endsWith("&&");
+        return patched;
       })
       .join("\n");
     if (out !== src) {
