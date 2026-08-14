@@ -65,6 +65,7 @@ CLASS z2ui5_cl_smpc_app_135 IMPLEMENTATION.
                 )->tag( `Input`
                     )->a( n = `value` v = |\{ parts: ['{ client->_bind( val = amount path = abap_true ) }', '{ client->_bind( val = currency path = abap_true ) }'], type: 'CurrencyType', formatOptions: \{ showNumber: false \} \}|
 
+            )->end(
         )->end(
 
         )->ele( n = `SimpleForm` ns = `form`

@@ -26,6 +26,10 @@
     {
       "type": "NOTE",
       "what": "the original controller seeds only wrapping: false; /inverted is never seeded, so the Toggle Inverted button starts from an undefined model value that UI5 reads as not pressed. The port seeds inverted = abap_false explicitly, which is the same initial rendering - a flat ABAP row cannot carry an absent field."
+    },
+    {
+      "type": "POST_171",
+      "what": "the icon `sap-icon://information` reached the SAP icon font in 1.80 and is kept 1:1 from the original List.controller.js, which seeds it as the infoIcon of the wrapping rows. Newer than the 1.71 floor: there IconPool resolves nothing and the row renders with NO info icon, silently - and infoIcon itself is @since 1.150 anyway, so the icon can only ever show on a release that has both."
     }
   ]
 }

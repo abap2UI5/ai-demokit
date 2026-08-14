@@ -57,6 +57,7 @@ CLASS z2ui5_cl_smpc_app_179 IMPLEMENTATION.
                 )->tag( `Input`
                     )->a( n = `value` v = |\{ path: '{ client->_bind( val = number path = abap_true ) }', type: 'FloatType' \}|
 
+            )->end(
         )->end(
 
         )->ele( n = `SimpleForm` ns = `form`
@@ -81,6 +82,7 @@ CLASS z2ui5_cl_smpc_app_179 IMPLEMENTATION.
                 )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = number path = abap_true ) }', type: 'FloatType', formatOptions: \{ minIntegerDigits: 5 \} \}|
 
+            )->end(
         )->end(
 
         )->ele( n = `SimpleForm` ns = `form`
@@ -105,6 +107,7 @@ CLASS z2ui5_cl_smpc_app_179 IMPLEMENTATION.
                 )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = number path = abap_true ) }', type: 'FloatType', formatOptions: \{ maxIntegerDigits: 5 \} \}|
 
+            )->end(
         )->end(
 
         )->ele( n = `SimpleForm` ns = `form`
@@ -129,6 +132,7 @@ CLASS z2ui5_cl_smpc_app_179 IMPLEMENTATION.
                 )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = number path = abap_true ) }', type: 'FloatType', formatOptions: \{ minFractionDigits: 5 \} \}|
 
+            )->end(
         )->end(
 
         )->ele( n = `SimpleForm` ns = `form`

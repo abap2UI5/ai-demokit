@@ -56,6 +56,7 @@ CLASS z2ui5_cl_smpc_app_180 IMPLEMENTATION.
                 )->tag( `Input`
                     )->a( n = `value` v = |\{ path: '{ client->_bind( val = filesize path = abap_true ) }', type: 'FileSizeType' \}|
 
+            )->end(
         )->end(
 
         )->ele( n = `SimpleForm` ns = `form`
@@ -79,6 +80,7 @@ CLASS z2ui5_cl_smpc_app_180 IMPLEMENTATION.
                 )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = filesize path = abap_true ) }', type: 'FileSizeType', formatOptions: \{ minIntegerDigits: 5 \} \}|
 
+            )->end(
         )->end(
 
         )->ele( n = `SimpleForm` ns = `form`
@@ -103,6 +105,7 @@ CLASS z2ui5_cl_smpc_app_180 IMPLEMENTATION.
                 )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = filesize path = abap_true ) }', type: 'FileSizeType', formatOptions: \{ maxIntegerDigits: 5 \} \}|
 
+            )->end(
         )->end(
 
         )->ele( n = `SimpleForm` ns = `form`
@@ -127,6 +130,7 @@ CLASS z2ui5_cl_smpc_app_180 IMPLEMENTATION.
                 )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = filesize path = abap_true ) }', type: 'FileSizeType', formatOptions: \{ minFractionDigits: 5 \} \}|
 
+            )->end(
         )->end(
 
         )->ele( n = `SimpleForm` ns = `form`

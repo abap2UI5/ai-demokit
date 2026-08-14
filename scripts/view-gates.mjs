@@ -95,7 +95,12 @@ const ADVISORY_BUDGET = {
   // same shape — the alt-less social-icon / profile sap.m.Images the
   // ObjectPageHeader samples ship without alt; kept 1:1, an alt would be
   // invented text
-  'missing-accessibility': 55,
+  // ratcheted down 2026-08-14 with the linter bump to 51cce10: 6afb902
+  // ("missing-accessibility: stop asking for an attribute UI5 ignores") drops
+  // the findings on controls where the attribute is ignored anyway, so 26 of
+  // the 55 were never real. The ones above stay — they are the alt/tooltip-less
+  // originals, kept 1:1
+  'missing-accessibility': 29,
   'event-without-handler': 4, // ratcheted down 2026-08-05: the four calendar ports wired their select handler
   'unknown-event-parameter': 1, // app 268: ColorPickerPopover forwards colorString undeclared — works live
   // both entries below are new rules from the 2026-08-12 linter bump (363c6e9),
@@ -110,12 +115,12 @@ const ADVISORY_BUDGET = {
   // enabled="false". The rule doc grants this exact case ("a 1:1 port of a
   // sample demonstrating the disabled STATE legitimately carries the original's
   // handler") - all five samples exist to SHOW the disabled control.
-  // NOTE: only app 121 is currently counted. The other four are frontend wires,
-  // and the linter's reconstructor recognises `_event_client` but not
-  // `follow_up_action` (lib/reconstruct.mjs), so since the rename those four
-  // handlers are dropped from the reconstructed view instead of judged. Budget
-  // kept at the TRUE count so the tally is right again once the linter closes
-  // that gap
+  // All five ARE counted since the 2026-08-14 linter bump (0168979): its
+  // reconstructor knew `_event_client` but not `follow_up_action`, so after
+  // the rename the four frontend wires were dropped from the reconstructed
+  // view instead of judged and only app 121 reached the tally. The budget was
+  // deliberately left at the TRUE count of 5 for exactly this moment, and the
+  // count landed on 5 - keep it there rather than ratcheting
   'event-on-disabled-control': 5,
 };
 

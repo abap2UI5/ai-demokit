@@ -475,9 +475,23 @@ CLASS z2ui5_cl_smpc_app_298 IMPLEMENTATION.
         " the frontend marshals a control with ALL its public properties
         " (enabled, textDirection, wrapping, ...), so only the fields this port
         " models are mapped - a plain to_abap( ) fails on the first extra one
+        "
+        " z2ui5_cl_ajson is the framework's VENDORED ajson copy and lives
+        " outside the released API (src/02), so it may be renamed or
+        " restructured without notice - the linter says so, and it is right.
+        " There is no released JSON reader to use instead: src/02 carries the
+        " http handler, the view builder and the four interfaces, and none of
+        " them parses a string. A sample class is installed on its own and
+        " cannot carry its own ajson copy either, so the choice here is this
+        " call or a hand-rolled parser for a payload UI5 defines - and a
+        " hand-rolled one would be the more fragile of the two. Declared as a
+        " deviation in the sidecar; revisit when the framework releases a JSON
+        " reader.
+        " abap2ui5lint-disable-next-line non-released-api -- no released JSON reader exists; see the comment above and the sidecar deviation
         z2ui5_cl_ajson=>parse( lv_json
           )->to_abap_corresponding_only(
           )->to_abap( IMPORTING ev_container = result ).
+        " abap2ui5lint-disable-next-line non-released-api -- the exception of the call above
       CATCH z2ui5_cx_ajson_error.
         CLEAR result.
     ENDTRY.

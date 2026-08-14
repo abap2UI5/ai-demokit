@@ -3,7 +3,9 @@ import {initializeABAP} from "../output/init.mjs";
 import {cl_express_icf_shim} from "../output/cl_express_icf_shim.clas.mjs";
 await initializeABAP();
 
-const PORT = 3000;
+// PORT from the environment so a second instance (the ci/smoke_backend gate,
+// two checkouts side by side) does not silently answer from the first one
+const PORT = Number(process.env.PORT || 3000);
 
 const app = express();
 app.disable('x-powered-by');

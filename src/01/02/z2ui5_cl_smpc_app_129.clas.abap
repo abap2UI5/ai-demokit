@@ -57,6 +57,7 @@ CLASS z2ui5_cl_smpc_app_129 IMPLEMENTATION.
                 )->tag( `Input`
                     )->a( n = `value` v = |\{ path: '{ client->_bind( val = number path = abap_true ) }', type: 'IntegerType' \}|
 
+            )->end(
         )->end(
 
         )->ele( n = `SimpleForm` ns = `form`
@@ -81,6 +82,7 @@ CLASS z2ui5_cl_smpc_app_129 IMPLEMENTATION.
                 )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = number path = abap_true ) }', type: 'IntegerType', formatOptions: \{ minIntegerDigits: 5 \} \}|
 
+            )->end(
         )->end(
 
         )->ele( n = `SimpleForm` ns = `form`
