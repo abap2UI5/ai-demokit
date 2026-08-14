@@ -236,7 +236,7 @@ for (const mf of fs.readdirSync(META)) {
   // the ports worth a closer manual look. Kept in sync with STATUS.md / AGENTS.md.
   const loc = src ? src.split('\n').length : 0;
   const nInteract = (src.match(/_event(_client)?\s*\(|follow_up_action\s*\(/g) || []).length;
-  const nControls = (src.match(/->\s*(open|leaf)\s*\(/g) || []).length;
+  const nControls = (src.match(/->\s*(ele|tag)\s*\(/g) || []).length;
   const discussed = !!m.checked;
   const cxComplexity =
       (loc > 220 ? 1 : loc > 120 ? 0.6 : loc > 60 ? 0.3 : 0) +
