@@ -51,9 +51,9 @@ CLASS z2ui5_cl_smpc_app_247 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.ui.table`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns:u`   v = `sap.ui.unified`
@@ -61,13 +61,13 @@ CLASS z2ui5_cl_smpc_app_247 IMPLEMENTATION.
         )->a( n = `xmlns:m`   v = `sap.m`
         )->a( n = `height`    v = `100%`
 
-        )->open( n = `Page` ns = `m`
+        )->ele( n = `Page` ns = `m`
             )->a( n = `showHeader` v = `false`
             )->a( n = `class`      v = `sapUiContentPadding`
 
-            )->open( n = `content` ns = `m`
+            )->ele( n = `content` ns = `m`
 
-                )->open( `Table`
+                )->ele( `Table`
                     )->a( n = `id`            v = `table`
                     )->a( n = `selectionMode` v = `MultiToggle`
                     )->a( n = `rows`          v = client->_bind( t_products )
@@ -85,115 +85,115 @@ CLASS z2ui5_cl_smpc_app_247 IMPLEMENTATION.
                                 prevent_default_expr = `${$parameters>/column}.getId().indexOf('deliverydate') >= 0` ) )
                     )->a( n = `ariaLabelledBy` v = `title`
 
-                    )->open( `extension`
-                        )->open( n = `OverflowToolbar` ns = `m`
+                    )->ele( `extension`
+                        )->ele( n = `OverflowToolbar` ns = `m`
                             )->a( n = `style` v = `Clear`
-                            )->leaf( n = `Title` ns = `m`
+                            )->tag( n = `Title` ns = `m`
                                 )->a( n = `id`   v = `title`
                                 )->a( n = `text` v = `Products`
 
-                    )->shut(
-                    )->shut(
-                    )->open( `columns`
+                    )->end(
+                    )->end(
+                    )->ele( `columns`
 
-                        )->open( `Column`
+                        )->ele( `Column`
                             )->a( n = `width`          v = client->_bind( name )
                             )->a( n = `filterProperty` v = `Name`
                             )->a( n = `resizable`      v = `true`
                             )->a( n = `autoResizable`  v = `true`
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Product Name`
 
-                            )->open( `template`
-                                )->leaf( n = `Text` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text`     v = `{NAME}`
                                     )->a( n = `wrapping` v = `false`
 
-                        )->shut(
-                        )->shut(
-                        )->open( `Column`
+                        )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `width`          v = client->_bind( category )
                             )->a( n = `resizable`      v = `true`
                             )->a( n = `filterProperty` v = `Category`
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Category`
 
-                            )->open( `template`
-                                )->leaf( n = `Text` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text`     v = `{CATEGORY}`
                                     )->a( n = `wrapping` v = `false`
 
-                        )->shut(
-                        )->shut(
-                        )->open( `Column`
+                        )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `width`     v = client->_bind( image )
                             )->a( n = `resizable` v = `false`
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Image`
 
-                            )->open( `template`
-                                )->leaf( n = `Link` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Link` ns = `m`
                                     )->a( n = `text`   v = `Show Image`
                                     )->a( n = `href`   v = `{PRODUCTPICURL}`
                                     )->a( n = `target` v = `_blank`
 
-                        )->shut(
-                        )->shut(
-                        )->open( `Column`
+                        )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `width`     v = client->_bind( quantity )
                             )->a( n = `resizable` v = `false`
                             )->a( n = `hAlign`    v = `End`
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Quantity`
 
-                            )->open( `template`
-                                )->leaf( n = `Label` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = |\{ path: 'QUANTITY', type: 'sap.ui.model.type.Integer' \}|
 
-                        )->shut(
-                        )->shut(
-                        )->open( `Column`
+                        )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `id`    v = `deliverydate`
                             )->a( n = `width` v = client->_bind( date )
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Delivery Date`
 
-                            )->open( `template`
-                                )->leaf( n = `Text` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text`     v = |\{ path: 'DELIVERYDATE', type: 'sap.ui.model.type.Date', formatOptions: \{ source: \{ pattern: 'timestamp' \} \} \}|
                                     )->a( n = `wrapping` v = `false`
 
-                        )->shut(
-                        )->shut(
-                    )->shut(
-                    )->open( `footer`
-                        )->open( n = `OverflowToolbar` ns = `m`
+                        )->end(
+                        )->end(
+                    )->end(
+                    )->ele( `footer`
+                        )->ele( n = `OverflowToolbar` ns = `m`
                             )->a( n = `id` v = `infobar`
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text`     v = `Column Widths:`
                                 )->a( n = `labelFor` v = `columnWidths`
-                            )->open( n = `SegmentedButton` ns = `m`
+                            )->ele( n = `SegmentedButton` ns = `m`
                                 )->a( n = `id`              v = `columnWidths`
                                 )->a( n = `selectedKey`     v = `Static`
                                 )->a( n = `selectionChange` v = client->_event( val = `WIDTHS_CHANGE` t_arg = VALUE #( ( `${$parameters>/item}.getKey()` ) ) )
 
-                                )->open( n = `items` ns = `m`
-                                    )->leaf( n = `SegmentedButtonItem` ns = `m`
+                                )->ele( n = `items` ns = `m`
+                                    )->tag( n = `SegmentedButtonItem` ns = `m`
                                         )->a( n = `icon`    v = `sap-icon://color-fill`
                                         )->a( n = `key`     v = `Static`
                                         )->a( n = `tooltip` v = `Static`
-                                    )->leaf( n = `SegmentedButtonItem` ns = `m`
+                                    )->tag( n = `SegmentedButtonItem` ns = `m`
                                         )->a( n = `icon`    v = `sap-icon://overlay`
                                         )->a( n = `key`     v = `Flexible`
                                         )->a( n = `tooltip` v = `Flexible`
-                                    )->leaf( n = `SegmentedButtonItem` ns = `m`
+                                    )->tag( n = `SegmentedButtonItem` ns = `m`
                                         )->a( n = `icon`    v = `sap-icon://business-objects-mobile`
                                         )->a( n = `key`     v = `Mixed`
                                         )->a( n = `tooltip` v = `Mixed`
 
-                    )->shut(
-                    )->shut(
-                    )->shut( ).
+                    )->end(
+                    )->end(
+                    )->end( ).
 
     client->view_display( view->stringify( ) ).
 

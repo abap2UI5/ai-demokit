@@ -37,33 +37,33 @@ CLASS z2ui5_cl_smpc_app_019 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
             )->a( n = `width` v = `100%`
 
-            )->leaf( `Button`
+            )->tag( `Button`
                 )->a( n = `text`  v = `Approve`
                 )->a( n = `width` v = `230px`
                 )->a( n = `press` v = client->_event( `APPROVE_DIALOG` )
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
-            )->leaf( `Button`
+            )->tag( `Button`
                 )->a( n = `text`  v = `Reject`
                 )->a( n = `width` v = `230px`
                 )->a( n = `press` v = client->_event( `REJECT_DIALOG` )
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
-            )->leaf( `Button`
+            )->tag( `Button`
                 )->a( n = `text`  v = `Submit (mandatory note)`
                 )->a( n = `width` v = `230px`
                 )->a( n = `press` v = client->_event( `SUBMIT_DIALOG` )
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
-            )->leaf( `Button`
+            )->tag( `Button`
                 )->a( n = `text`  v = `Confirm (optional note)`
                 )->a( n = `width` v = `230px`
                 )->a( n = `press` v = client->_event( `CONFIRM_DIALOG` )
@@ -116,30 +116,30 @@ CLASS z2ui5_cl_smpc_app_019 IMPLEMENTATION.
 
   METHOD popup_approve_display.
 
-    DATA(popup) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(popup) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    popup->open( n = `FragmentDefinition` ns = `core`
+    popup->ele( n = `FragmentDefinition` ns = `core`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns`      v = `sap.m`
 
-        )->open( `Dialog`
+        )->ele( `Dialog`
             )->a( n = `type`  v = `Message`
             )->a( n = `title` v = `Confirm`
 
-            )->open( `content`
-                )->leaf( `Text`
+            )->ele( `content`
+                )->tag( `Text`
                     )->a( n = `text` v = `Do you want to submit this order?`
 
-            )->shut(
-            )->open( `beginButton`
-                )->leaf( `Button`
+            )->end(
+            )->ele( `beginButton`
+                )->tag( `Button`
                     )->a( n = `type`  v = `Emphasized`
                     )->a( n = `text`  v = `Submit`
                     )->a( n = `press` v = client->_event( `APPROVE_SUBMIT` )
 
-            )->shut(
-            )->open( `endButton`
-                )->leaf( `Button`
+            )->end(
+            )->ele( `endButton`
+                )->tag( `Button`
                     )->a( n = `text`  v = `Cancel`
                     )->a( n = `press` v = client->follow_up_action( client->cs_event-popup_close ) ).
 
@@ -150,37 +150,37 @@ CLASS z2ui5_cl_smpc_app_019 IMPLEMENTATION.
 
   METHOD popup_reject_display.
 
-    DATA(popup) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(popup) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    popup->open( n = `FragmentDefinition` ns = `core`
+    popup->ele( n = `FragmentDefinition` ns = `core`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns`      v = `sap.m`
 
-        )->open( `Dialog`
+        )->ele( `Dialog`
             )->a( n = `title` v = `Reject`
             )->a( n = `type`  v = `Message`
 
-            )->open( `content`
-                )->leaf( `Label`
+            )->ele( `content`
+                )->tag( `Label`
                     )->a( n = `text`     v = `Do you want to reject this order?`
                     )->a( n = `labelFor` v = `rejectionNote`
                 " original reads the note imperatively via getValue - here the value is two-way bound
-                )->leaf( `TextArea`
+                )->tag( `TextArea`
                     )->a( n = `id`          v = `rejectionNote`
                     )->a( n = `value`       v = client->_bind( reject_note )
                     )->a( n = `width`       v = `100%`
                     )->a( n = `placeholder` v = `Add note (optional)`
 
-            )->shut(
-            )->open( `beginButton`
-                )->leaf( `Button`
+            )->end(
+            )->ele( `beginButton`
+                )->tag( `Button`
                     )->a( n = `type`  v = `Emphasized`
                     )->a( n = `text`  v = `Reject`
                     )->a( n = `press` v = client->_event( `REJECT_SUBMIT` )
 
-            )->shut(
-            )->open( `endButton`
-                )->leaf( `Button`
+            )->end(
+            )->ele( `endButton`
+                )->tag( `Button`
                     )->a( n = `text`  v = `Cancel`
                     )->a( n = `press` v = client->_event( `DIALOG_CANCEL` ) ).
 
@@ -191,40 +191,40 @@ CLASS z2ui5_cl_smpc_app_019 IMPLEMENTATION.
 
   METHOD popup_submit_display.
 
-    DATA(popup) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(popup) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    popup->open( n = `FragmentDefinition` ns = `core`
+    popup->ele( n = `FragmentDefinition` ns = `core`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns`      v = `sap.m`
 
-        )->open( `Dialog`
+        )->ele( `Dialog`
             )->a( n = `type`  v = `Message`
             )->a( n = `title` v = `Confirm`
 
-            )->open( `content`
-                )->leaf( `Label`
+            )->ele( `content`
+                )->tag( `Label`
                     )->a( n = `text`     v = `Do you want to submit this order?`
                     )->a( n = `labelFor` v = `submissionNote`
                 " valueLiveUpdate replaces the original liveChange handler feeding the button's enabled state
-                )->leaf( `TextArea`
+                )->tag( `TextArea`
                     )->a( n = `id`              v = `submissionNote`
                     )->a( n = `value`           v = client->_bind( submit_note )
                     )->a( n = `valueLiveUpdate` v = `true`
                     )->a( n = `width`           v = `100%`
                     )->a( n = `placeholder`     v = `Add note (required)`
 
-            )->shut(
-            )->open( `beginButton`
+            )->end(
+            )->ele( `beginButton`
                 " enabled while the note is non-empty - expression binding instead of the liveChange round-trip
-                )->leaf( `Button`
+                )->tag( `Button`
                     )->a( n = `type`    v = `Emphasized`
                     )->a( n = `text`    v = `Submit`
                     )->a( n = `enabled` v = |\{= ${ client->_bind( submit_note ) }.length > 0 \}|
                     )->a( n = `press`   v = client->_event( `SUBMIT_SUBMIT` )
 
-            )->shut(
-            )->open( `endButton`
-                )->leaf( `Button`
+            )->end(
+            )->ele( `endButton`
+                )->tag( `Button`
                     )->a( n = `text`  v = `Cancel`
                     )->a( n = `press` v = client->_event( `DIALOG_CANCEL` ) ).
 
@@ -235,56 +235,56 @@ CLASS z2ui5_cl_smpc_app_019 IMPLEMENTATION.
 
   METHOD popup_confirm_display.
 
-    DATA(popup) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(popup) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    popup->open( n = `FragmentDefinition` ns = `core`
+    popup->ele( n = `FragmentDefinition` ns = `core`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns:l`    v = `sap.ui.layout`
         )->a( n = `xmlns`      v = `sap.m`
 
-        )->open( `Dialog`
+        )->ele( `Dialog`
             )->a( n = `type`  v = `Message`
             )->a( n = `title` v = `Confirm`
 
-            )->open( `content`
-                )->open( n = `HorizontalLayout` ns = `l`
-                    )->open( n = `VerticalLayout` ns = `l`
+            )->ele( `content`
+                )->ele( n = `HorizontalLayout` ns = `l`
+                    )->ele( n = `VerticalLayout` ns = `l`
                         )->a( n = `width` v = `120px`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Type: `
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Delivery: `
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Items count: `
 
-                    )->shut(
-                    )->open( n = `VerticalLayout` ns = `l`
-                        )->leaf( `Text`
+                    )->end(
+                    )->ele( n = `VerticalLayout` ns = `l`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Shopping Cart`
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Jun 26, 2013`
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `2`
 
-                    )->shut(
-                )->shut(
-                )->leaf( `TextArea`
+                    )->end(
+                )->end(
+                )->tag( `TextArea`
                     )->a( n = `id`          v = `confirmationNote`
                     )->a( n = `value`       v = client->_bind( confirm_note )
                     )->a( n = `width`       v = `100%`
                     )->a( n = `placeholder` v = `Add note (optional)`
 
-            )->shut(
-            )->open( `beginButton`
-                )->leaf( `Button`
+            )->end(
+            )->ele( `beginButton`
+                )->tag( `Button`
                     )->a( n = `type`  v = `Emphasized`
                     )->a( n = `text`  v = `Submit`
                     )->a( n = `press` v = client->_event( `CONFIRM_SUBMIT` )
 
-            )->shut(
-            )->open( `endButton`
-                )->leaf( `Button`
+            )->end(
+            )->ele( `endButton`
+                )->tag( `Button`
                     )->a( n = `text`  v = `Cancel`
                     )->a( n = `press` v = client->_event( `DIALOG_CANCEL` ) ).
 

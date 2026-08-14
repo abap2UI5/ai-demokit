@@ -35,24 +35,24 @@ CLASS z2ui5_cl_smpc_app_193 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `height`     v = `100%`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns`      v = `sap.m`
 
-        )->open( `Page`
+        )->ele( `Page`
             )->a( n = `showHeader` v = `false`
             )->a( n = `class`      v = `sapUiContentPadding`
 
-            )->open( `content`
-                )->open( `ComboBox`
+            )->ele( `content`
+                )->ele( `ComboBox`
                     )->a( n = `showSecondaryValues` v = `true`
                     )->a( n = `items`               v = |\{ path: '{ client->_bind( val = t_countries path = abap_true ) }', sorter: \{ path: 'TEXT' \} \}|
 
-                    )->leaf( n = `ListItem` ns = `core`
+                    )->tag( n = `ListItem` ns = `core`
                         )->a( n = `key`            v = `{KEY}`
                         )->a( n = `text`           v = `{TEXT}`
                         )->a( n = `additionalText` v = `{KEY}` ).

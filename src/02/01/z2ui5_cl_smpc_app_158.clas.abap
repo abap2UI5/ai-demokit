@@ -26,123 +26,123 @@ CLASS z2ui5_cl_smpc_app_158 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
 
-        )->open( `VBox`
-            )->open( `Panel`
+        )->ele( `VBox`
+            )->ele( `Panel`
                 )->a( n = `headerText` v = `Gap`
-                )->open( `FlexBox`
+                )->ele( `FlexBox`
                     )->a( n = `alignItems` v = `Start`
                     " gap is @since 1.134 - kept 1:1 (POST_171)
                     )->a( n = `gap` v = `30px`
                     )->a( n = `width`      v = `170px`
                     )->a( n = `wrap`       v = `Wrap`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text` v = `1`
                         )->a( n = `type` v = `Emphasized`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text` v = `2`
                         )->a( n = `type` v = `Reject`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text` v = `3`
                         )->a( n = `type` v = `Accept`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text` v = `4`
                         )->a( n = `type` v = `Emphasized`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text` v = `5`
                         )->a( n = `type` v = `Reject`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text` v = `6`
                         )->a( n = `type` v = `Accept`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text` v = `7`
                         )->a( n = `type` v = `Emphasized`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text` v = `8`
                         )->a( n = `type` v = `Reject`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text` v = `9`
                         )->a( n = `type` v = `Accept`
 
-                )->shut(
-            )->shut(
-            )->open( `Panel`
+                )->end(
+            )->end(
+            )->ele( `Panel`
                 )->a( n = `headerText` v = `Column gap`
-                )->open( `FlexBox`
+                )->ele( `FlexBox`
                     )->a( n = `alignItems` v = `Start`
                     " columnGap is @since 1.134 - kept 1:1 (POST_171)
                     )->a( n = `columnGap` v = `30px`
                     )->a( n = `width`      v = `170px`
                     )->a( n = `wrap`       v = `Wrap`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text` v = `1`
                         )->a( n = `type` v = `Emphasized`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text` v = `2`
                         )->a( n = `type` v = `Reject`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text` v = `3`
                         )->a( n = `type` v = `Accept`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text` v = `4`
                         )->a( n = `type` v = `Emphasized`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text` v = `5`
                         )->a( n = `type` v = `Reject`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text` v = `6`
                         )->a( n = `type` v = `Accept`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text` v = `7`
                         )->a( n = `type` v = `Emphasized`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text` v = `8`
                         )->a( n = `type` v = `Reject`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text` v = `9`
                         )->a( n = `type` v = `Accept`
 
-                )->shut(
-            )->shut(
-            )->open( `Panel`
+                )->end(
+            )->end(
+            )->ele( `Panel`
                 )->a( n = `headerText` v = `Row gap`
-                )->open( `FlexBox`
+                )->ele( `FlexBox`
                     )->a( n = `alignItems` v = `Start`
                     " rowGap is @since 1.134 - kept 1:1 (POST_171)
                     )->a( n = `rowGap` v = `30px`
                     )->a( n = `width`      v = `100px`
                     )->a( n = `wrap`       v = `Wrap`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text` v = `1`
                         )->a( n = `type` v = `Emphasized`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text` v = `2`
                         )->a( n = `type` v = `Reject`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text` v = `3`
                         )->a( n = `type` v = `Accept`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text` v = `4`
                         )->a( n = `type` v = `Emphasized`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text` v = `5`
                         )->a( n = `type` v = `Reject`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text` v = `6`
                         )->a( n = `type` v = `Accept`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text` v = `7`
                         )->a( n = `type` v = `Emphasized`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text` v = `8`
                         )->a( n = `type` v = `Reject`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text` v = `9`
                         )->a( n = `type` v = `Accept`
  ).

@@ -34,84 +34,84 @@ CLASS z2ui5_cl_smpc_app_123 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns:tnt` v = `sap.tnt`
         )->a( n = `height`    v = `100%`
 
-        )->open( `OverflowToolbar`
-            )->leaf( `Button`
+        )->ele( `OverflowToolbar`
+            )->tag( `Button`
                 )->a( n = `text`  v = `Toggle Collapse/Expand`
                 )->a( n = `icon`  v = `sap-icon://menu2`
                 )->a( n = `press` v = client->_event( `TOGGLE_EXPAND` )
-            )->leaf( `Button`
+            )->tag( `Button`
                 )->a( n = `text`  v = `Show/Hide SubItem 3`
                 )->a( n = `icon`  v = `sap-icon://menu2`
                 )->a( n = `press` v = client->_event( `TOGGLE_SUB3` )
 
-        )->shut(
+        )->end(
 
-        )->open( n = `NavigationList` ns = `tnt`
+        )->ele( n = `NavigationList` ns = `tnt`
             )->a( n = `id`          v = `navigationList`
             )->a( n = `width`       v = `320px`
             )->a( n = `selectedKey` v = `subItem3`
             )->a( n = `expanded`    v = client->_bind( expanded )
 
-            )->open( n = `NavigationListItem` ns = `tnt`
+            )->ele( n = `NavigationListItem` ns = `tnt`
                 )->a( n = `text` v = `Item 1`
                 )->a( n = `key`  v = `rootItem1`
                 )->a( n = `icon` v = `sap-icon://employee`
 
-                )->leaf( n = `NavigationListItem` ns = `tnt`
+                )->tag( n = `NavigationListItem` ns = `tnt`
                     )->a( n = `text` v = `Sub Item 1`
-                )->leaf( n = `NavigationListItem` ns = `tnt`
+                )->tag( n = `NavigationListItem` ns = `tnt`
                     )->a( n = `text` v = `Sub Item 2`
-                )->leaf( n = `NavigationListItem` ns = `tnt`
+                )->tag( n = `NavigationListItem` ns = `tnt`
                     )->a( n = `text`    v = `Sub Item 3`
                     )->a( n = `id`      v = `subItemThree`
                     )->a( n = `key`     v = `subItem3`
                     )->a( n = `visible` v = client->_bind( sub3_visible )
-                )->leaf( n = `NavigationListItem` ns = `tnt`
+                )->tag( n = `NavigationListItem` ns = `tnt`
                     )->a( n = `text` v = `Sub Item 4`
-                )->leaf( n = `NavigationListItem` ns = `tnt`
+                )->tag( n = `NavigationListItem` ns = `tnt`
                     )->a( n = `text`    v = `Invisible Sub Item 5`
                     )->a( n = `visible` v = `false`
-                )->leaf( n = `NavigationListItem` ns = `tnt`
+                )->tag( n = `NavigationListItem` ns = `tnt`
                     )->a( n = `text`    v = `Invisible Sub Item 6`
                     )->a( n = `visible` v = `false`
 
-            )->shut(
+            )->end(
 
-            )->open( n = `NavigationListItem` ns = `tnt`
+            )->ele( n = `NavigationListItem` ns = `tnt`
                 )->a( n = `text`    v = `Invisible Section`
                 )->a( n = `icon`    v = `sap-icon://employee`
                 )->a( n = `visible` v = `false`
 
-                )->leaf( n = `NavigationListItem` ns = `tnt`
+                )->tag( n = `NavigationListItem` ns = `tnt`
                     )->a( n = `text` v = `Sub Item 1`
-                )->leaf( n = `NavigationListItem` ns = `tnt`
+                )->tag( n = `NavigationListItem` ns = `tnt`
                     )->a( n = `text` v = `Sub Item 2`
-                )->leaf( n = `NavigationListItem` ns = `tnt`
+                )->tag( n = `NavigationListItem` ns = `tnt`
                     )->a( n = `text` v = `Sub Item 3`
-                )->leaf( n = `NavigationListItem` ns = `tnt`
+                )->tag( n = `NavigationListItem` ns = `tnt`
                     )->a( n = `text` v = `Sub Item 4`
 
-            )->shut(
+            )->end(
 
-            )->open( n = `NavigationListItem` ns = `tnt`
+            )->ele( n = `NavigationListItem` ns = `tnt`
                 )->a( n = `text` v = `Item 2`
                 )->a( n = `icon` v = `sap-icon://building`
 
-                )->leaf( n = `NavigationListItem` ns = `tnt`
+                )->tag( n = `NavigationListItem` ns = `tnt`
                     )->a( n = `text` v = `Sub Item 1`
-                )->leaf( n = `NavigationListItem` ns = `tnt`
+                )->tag( n = `NavigationListItem` ns = `tnt`
                     )->a( n = `text` v = `Sub Item 2`
-                )->leaf( n = `NavigationListItem` ns = `tnt`
+                )->tag( n = `NavigationListItem` ns = `tnt`
                     )->a( n = `text` v = `Sub Item 3`
-                )->leaf( n = `NavigationListItem` ns = `tnt`
+                )->tag( n = `NavigationListItem` ns = `tnt`
                     )->a( n = `text` v = `Sub Item 4` ).
 
     client->view_display( view->stringify( ) ).

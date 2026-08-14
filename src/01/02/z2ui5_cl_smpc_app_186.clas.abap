@@ -43,7 +43,7 @@ CLASS z2ui5_cl_smpc_app_186 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " sap.ui.layout.ResponsiveSplitter. The original binds the pane sizes from a
     " separate 'sizes' JSON model ({sizes>/paneN}) and the product list/select
@@ -55,17 +55,17 @@ CLASS z2ui5_cl_smpc_app_186 IMPLEMENTATION.
     " arg is a full UI5 expression and .join( ',' ) over an ARRAY parameter
     " resolves (measured with scripts/probes/event-arg-expression-probe.mjs),
     " so both size arrays travel into the client-composed toast 1:1.
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`    v = `sap.ui.layout`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `height`     v = `100%`
 
-        )->open( n = `ResponsiveSplitter` ns = `l`
+        )->ele( n = `ResponsiveSplitter` ns = `l`
             )->a( n = `defaultPane` v = `default`
 
-            )->open( n = `PaneContainer` ns = `l`
+            )->ele( n = `PaneContainer` ns = `l`
                 )->a( n = `resize` v = client->follow_up_action( val   = client->cs_event-control_global
                                                                  t_arg = VALUE #( ( `MESSAGE_TOAST` )
                                                                                ( `show` )
@@ -73,36 +73,36 @@ CLASS z2ui5_cl_smpc_app_186 IMPLEMENTATION.
                                                                                ( `${$parameters>/oldSizes} ? ${$parameters>/oldSizes}.join(',') : ''` )
                                                                                ( `${$parameters>/newSizes} ? ${$parameters>/newSizes}.join(',') : ''` ) ) )
 
-                )->open( n = `SplitPane` ns = `l`
+                )->ele( n = `SplitPane` ns = `l`
                     )->a( n = `requiredParentWidth` v = `400`
                     )->a( n = `id`                  v = `default`
 
-                    )->open( n = `layoutData` ns = `l`
-                        )->leaf( n = `SplitterLayoutData` ns = `l`
+                    )->ele( n = `layoutData` ns = `l`
+                        )->tag( n = `SplitterLayoutData` ns = `l`
                             )->a( n = `size` v = client->_bind( pane1 )
 
-                    )->shut(
+                    )->end(
 
-                    )->open( `Panel`
+                    )->ele( `Panel`
                         )->a( n = `headerText` v = `Minimum parent width 400`
                         )->a( n = `height`     v = `100%`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = |LayoutData.size={ client->_bind( pane1 ) }|
 
-                        )->open( `List`
+                        )->ele( `List`
                             )->a( n = `headerText` v = `Products`
                             )->a( n = `items`      v = client->_bind( productcollection )
 
-                            )->leaf( `StandardListItem`
+                            )->tag( `StandardListItem`
                                 )->a( n = `title`   v = `{NAME}`
                                 )->a( n = `counter` v = `{QUANTITY}`
 
-                        )->shut(
-                    )->shut(
-                )->shut(
+                        )->end(
+                    )->end(
+                )->end(
 
-                )->open( n = `PaneContainer` ns = `l`
+                )->ele( n = `PaneContainer` ns = `l`
                     )->a( n = `orientation` v = `Vertical`
                     )->a( n = `resize`      v = client->follow_up_action( val   = client->cs_event-control_global
                                                                           t_arg = VALUE #( ( `MESSAGE_TOAST` )
@@ -111,80 +111,80 @@ CLASS z2ui5_cl_smpc_app_186 IMPLEMENTATION.
                                                                                         ( `${$parameters>/oldSizes} ? ${$parameters>/oldSizes}.join(',') : ''` )
                                                                                         ( `${$parameters>/newSizes} ? ${$parameters>/newSizes}.join(',') : ''` ) ) )
 
-                    )->open( n = `SplitPane` ns = `l`
+                    )->ele( n = `SplitPane` ns = `l`
                         )->a( n = `requiredParentWidth` v = `600`
 
-                        )->open( n = `layoutData` ns = `l`
-                            )->leaf( n = `SplitterLayoutData` ns = `l`
+                        )->ele( n = `layoutData` ns = `l`
+                            )->tag( n = `SplitterLayoutData` ns = `l`
                                 )->a( n = `size` v = client->_bind( pane2 )
 
-                        )->shut(
+                        )->end(
 
-                        )->open( `Panel`
+                        )->ele( `Panel`
                             )->a( n = `headerText` v = `Minimum parent width 600`
 
-                            )->open( `VBox`
-                                )->leaf( `Text`
+                            )->ele( `VBox`
+                                )->tag( `Text`
                                     )->a( n = `text` v = |LayoutData.size={ client->_bind( pane2 ) }|
 
-                                )->open( `Select`
+                                )->ele( `Select`
                                     )->a( n = `forceSelection` v = `false`
                                     )->a( n = `selectedKey`    v = `1239102`
                                     )->a( n = `items`          v = |\{ path: '{ client->_bind( val = productcollection path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
 
-                                    )->leaf( n = `Item` ns = `core`
+                                    )->tag( n = `Item` ns = `core`
                                         )->a( n = `key`  v = `{PRODUCTID}`
                                         )->a( n = `text` v = `{NAME}`
 
-                                )->shut(
-                            )->shut(
-                        )->shut(
-                    )->shut(
+                                )->end(
+                            )->end(
+                        )->end(
+                    )->end(
 
-                    )->open( n = `SplitPane` ns = `l`
+                    )->ele( n = `SplitPane` ns = `l`
                         )->a( n = `requiredParentWidth` v = `800`
 
-                        )->open( n = `layoutData` ns = `l`
-                            )->leaf( n = `SplitterLayoutData` ns = `l`
+                        )->ele( n = `layoutData` ns = `l`
+                            )->tag( n = `SplitterLayoutData` ns = `l`
                                 )->a( n = `size` v = client->_bind( pane3 )
 
-                        )->shut(
+                        )->end(
 
-                        )->open( `Page`
+                        )->ele( `Page`
                             )->a( n = `title` v = `Minimum parent width 800`
 
-                            )->leaf( `Text`
+                            )->tag( `Text`
                                 )->a( n = `text` v = |LayoutData.size={ client->_bind( pane3 ) }|
 
-                            )->open( `footer`
-                                )->open( `OverflowToolbar`
+                            )->ele( `footer`
+                                )->ele( `OverflowToolbar`
                                     )->a( n = `id` v = `otb3`
 
-                                    )->leaf( `Label`
+                                    )->tag( `Label`
                                         )->a( n = `text` v = `Buttons:`
-                                    )->leaf( `ToolbarSpacer`
-                                    )->leaf( `Button`
+                                    )->tag( `ToolbarSpacer`
+                                    )->tag( `Button`
                                         )->a( n = `text` v = `New`
                                         )->a( n = `type` v = `Transparent`
-                                    )->leaf( `Button`
+                                    )->tag( `Button`
                                         )->a( n = `text` v = `Open`
                                         )->a( n = `type` v = `Transparent`
-                                    )->leaf( `Button`
+                                    )->tag( `Button`
                                         )->a( n = `text` v = `Save`
                                         )->a( n = `type` v = `Transparent`
-                                    )->leaf( `Button`
+                                    )->tag( `Button`
                                         )->a( n = `text` v = `Save as`
                                         )->a( n = `type` v = `Transparent`
-                                    )->leaf( `Button`
+                                    )->tag( `Button`
                                         )->a( n = `text` v = `Cut`
                                         )->a( n = `type` v = `Transparent`
-                                    )->leaf( `Button`
+                                    )->tag( `Button`
                                         )->a( n = `text` v = `Copy`
                                         )->a( n = `type` v = `Transparent`
-                                    )->leaf( `Button`
+                                    )->tag( `Button`
                                         )->a( n = `text` v = `Paste`
                                         )->a( n = `type` v = `Transparent`
-                                    )->leaf( `Button`
+                                    )->tag( `Button`
                                         )->a( n = `text` v = `Undo`
                                         )->a( n = `type` v = `Transparent` ).
 

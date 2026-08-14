@@ -38,70 +38,70 @@ CLASS z2ui5_cl_smpc_app_283 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`    v = `sap.ui.layout`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:core` v = `sap.ui.core`
 
-        )->leaf( `MessageStrip`
+        )->tag( `MessageStrip`
             )->a( n = `text`     v = `These css classes are only a subset of the less theming parameters. Be aware that they can not be applied to all use cases. `
                                     && `If possible make use of the less theming parameters. `
             )->a( n = `type`     v = `Warning`
             )->a( n = `showIcon` v = `true`
             )->a( n = `class`    v = `sapUiMediumMarginBottom`
 
-        )->open( `Table`
+        )->ele( `Table`
             )->a( n = `id`    v = `idProductsTable`
             )->a( n = `items` v = client->_bind( t_styles )
 
-            )->open( `columns`
-                )->open( `Column`
+            )->ele( `columns`
+                )->ele( `Column`
                     )->a( n = `width`  v = `22em`
                     )->a( n = `hAlign` v = `Left`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Style Class Name`
 
-                )->shut(
+                )->end(
 
-                )->open( `Column`
+                )->ele( `Column`
                     )->a( n = `demandPopin` v = `true`
                     )->a( n = `hAlign`      v = `Center`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Sample`
 
-                )->shut(
+                )->end(
 
-                )->open( `Column`
+                )->ele( `Column`
                     )->a( n = `minScreenWidth` v = `Tablet`
                     )->a( n = `width`          v = `22em`
                     )->a( n = `hAlign`         v = `Right`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Css String`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( `items`
+            )->ele( `items`
 
-                )->open( `ColumnListItem`
+                )->ele( `ColumnListItem`
 
-                    )->open( `cells`
-                        )->leaf( `Text`
+                    )->ele( `cells`
+                        )->tag( `Text`
                             )->a( n = `text` v = `{STYLECLASS}`
 
                         " the sampled class rides in a REAL binding inside the raw markup, so
                         " these braces stay unescaped; the border style is computed in ABAP
                         " (the original sets it on the DOM node in onAfterRendering)
-                        )->leaf( n = `HTML` ns = `core`
+                        )->tag( n = `HTML` ns = `core`
                             )->a( n = `content` v = `<div class="{STYLECLASS} sampling" style="{BORDERSTYLE}"> Sample </div>`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `{STYLINGSTRING}` ).
 
     client->view_display( view->stringify( ) ).

@@ -46,7 +46,7 @@ CLASS z2ui5_cl_smpc_app_264 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " onToggleFilters replaces the binding's filter set with the other pair
     " (organizational <-> personal). abap2UI5 bakes the binding info at render
@@ -60,7 +60,7 @@ CLASS z2ui5_cl_smpc_app_264 IMPLEMENTATION.
       ELSE |\{ path: 'FIRSTNAME', operator: 'StartsWith', value1: '{ client->_bind( firstname ) }' \}, | &&
            |\{ path: 'LASTNAME', operator: 'StartsWith', value1: '{ client->_bind( lastname ) }' \}| ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `class`       v = `sapUiSizeCompact`
         )->a( n = `xmlns`       v = `sap.m`
         )->a( n = `xmlns:mvc`   v = `sap.ui.core.mvc`
@@ -70,113 +70,113 @@ CLASS z2ui5_cl_smpc_app_264 IMPLEMENTATION.
         " use odata types as they map empty input to null
         )->a( n = `core:require` v = `{StringType: 'sap/ui/model/odata/type/String'}`
 
-        )->open( n = `Table` ns = `table`
+        )->ele( n = `Table` ns = `table`
             )->a( n = `id`   v = `myTable`
             )->a( n = `rows` v = |\{ path: '{ client->_bind( val = t_teammembers path = abap_true ) }', | &&
                                  |boundFilters: [{ lv_boundfilters }] \}|
 
-            )->open( n = `extension` ns = `table`
-                )->leaf( `Title`
+            )->ele( n = `extension` ns = `table`
+                )->tag( `Title`
                     )->a( n = `id`   v = `title`
                     )->a( n = `text` v = `Employees`
 
-                )->open( `Toolbar`
-                    )->leaf( `Label`
+                )->ele( `Toolbar`
+                    )->tag( `Label`
                         )->a( n = `text`     v = `Department prefix`
                         )->a( n = `labelFor` v = `departmentInput`
                         )->a( n = `visible`  v = client->_bind( showorganizational )
-                    )->leaf( `Input`
+                    )->tag( `Input`
                         )->a( n = `id`      v = `departmentInput`
                         )->a( n = `width`   v = `200px`
                         )->a( n = `value`   v = |\{ path: '{ client->_bind( val = departmentprefix path = abap_true ) }', type: 'StringType' \}|
                         )->a( n = `visible` v = client->_bind( showorganizational )
-                    )->leaf( `Label`
+                    )->tag( `Label`
                         )->a( n = `text`     v = `Location prefix`
                         )->a( n = `labelFor` v = `locationInput`
                         )->a( n = `visible`  v = client->_bind( showorganizational )
-                    )->leaf( `Input`
+                    )->tag( `Input`
                         )->a( n = `id`      v = `locationInput`
                         )->a( n = `width`   v = `200px`
                         )->a( n = `value`   v = |\{ path: '{ client->_bind( val = locationprefix path = abap_true ) }', type: 'StringType' \}|
                         )->a( n = `visible` v = client->_bind( showorganizational )
-                    )->leaf( `Label`
+                    )->tag( `Label`
                         )->a( n = `text`     v = `First name prefix`
                         )->a( n = `labelFor` v = `firstNameInput`
                         )->a( n = `visible`  v = |\{= !%{ client->_bind( showorganizational ) }\}|
-                    )->leaf( `Input`
+                    )->tag( `Input`
                         )->a( n = `id`      v = `firstNameInput`
                         )->a( n = `width`   v = `200px`
                         )->a( n = `value`   v = |\{ path: '{ client->_bind( val = firstname path = abap_true ) }', type: 'StringType' \}|
                         )->a( n = `visible` v = |\{= !%{ client->_bind( showorganizational ) }\}|
-                    )->leaf( `Label`
+                    )->tag( `Label`
                         )->a( n = `text`     v = `Last name prefix`
                         )->a( n = `labelFor` v = `lastNameInput`
                         )->a( n = `visible`  v = |\{= !%{ client->_bind( showorganizational ) }\}|
-                    )->leaf( `Input`
+                    )->tag( `Input`
                         )->a( n = `id`      v = `lastNameInput`
                         )->a( n = `width`   v = `200px`
                         )->a( n = `value`   v = |\{ path: '{ client->_bind( val = lastname path = abap_true ) }', type: 'StringType' \}|
                         )->a( n = `visible` v = |\{= !%{ client->_bind( showorganizational ) }\}|
-                    )->leaf( `ToolbarSpacer`
-                    )->leaf( `Button`
+                    )->tag( `ToolbarSpacer`
+                    )->tag( `Button`
                         )->a( n = `id`    v = `toggleFiltersButton`
                         )->a( n = `press` v = client->_event( `TOGGLE_FILTERS` )
                         )->a( n = `text`  v = |\{= %{ client->_bind( showorganizational ) } ? 'Show Personal Filters' : 'Show Organizational Filters'\}|
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( n = `columns` ns = `table`
-                )->open( n = `Column` ns = `table`
-                    )->leaf( `Label`
+            )->ele( n = `columns` ns = `table`
+                )->ele( n = `Column` ns = `table`
+                    )->tag( `Label`
                         )->a( n = `text` v = `Department`
 
-                    )->open( n = `template` ns = `table`
-                        )->leaf( `Text`
+                    )->ele( n = `template` ns = `table`
+                        )->tag( `Text`
                             )->a( n = `text` v = `{DEPARTMENT}`
 
-                    )->shut(
-                )->shut(
+                    )->end(
+                )->end(
 
-                )->open( n = `Column` ns = `table`
-                    )->leaf( `Label`
+                )->ele( n = `Column` ns = `table`
+                    )->tag( `Label`
                         )->a( n = `text` v = `First Name`
 
-                    )->open( n = `template` ns = `table`
-                        )->leaf( `Text`
+                    )->ele( n = `template` ns = `table`
+                        )->tag( `Text`
                             )->a( n = `text` v = `{FIRSTNAME}`
 
-                    )->shut(
-                )->shut(
+                    )->end(
+                )->end(
 
-                )->open( n = `Column` ns = `table`
-                    )->leaf( `Label`
+                )->ele( n = `Column` ns = `table`
+                    )->tag( `Label`
                         )->a( n = `text` v = `Last Name`
 
-                    )->open( n = `template` ns = `table`
-                        )->leaf( `Text`
+                    )->ele( n = `template` ns = `table`
+                        )->tag( `Text`
                             )->a( n = `text` v = `{LASTNAME}`
 
-                    )->shut(
-                )->shut(
+                    )->end(
+                )->end(
 
-                )->open( n = `Column` ns = `table`
-                    )->leaf( `Label`
+                )->ele( n = `Column` ns = `table`
+                    )->tag( `Label`
                         )->a( n = `text` v = `Age`
 
-                    )->open( n = `template` ns = `table`
-                        )->leaf( `Text`
+                    )->ele( n = `template` ns = `table`
+                        )->tag( `Text`
                             )->a( n = `text` v = `{AGE}`
 
-                    )->shut(
-                )->shut(
+                    )->end(
+                )->end(
 
-                )->open( n = `Column` ns = `table`
-                    )->leaf( `Label`
+                )->ele( n = `Column` ns = `table`
+                    )->tag( `Label`
                         )->a( n = `text` v = `Location`
 
-                    )->open( n = `template` ns = `table`
-                        )->leaf( `Text`
+                    )->ele( n = `template` ns = `table`
+                        )->tag( `Text`
                             )->a( n = `text` v = `{LOCATION}`
 
                         ).

@@ -41,43 +41,43 @@ CLASS z2ui5_cl_smpc_app_288 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `height`    v = `100%`
 
-        )->open( `ScrollContainer`
+        )->ele( `ScrollContainer`
             )->a( n = `height`     v = `100%`
             )->a( n = `width`      v = `100%`
             )->a( n = `horizontal` v = `true`
             )->a( n = `vertical`   v = `true`
 
-            )->open( `FlexBox`
+            )->ele( `FlexBox`
                 )->a( n = `direction`  v = `Column`
                 )->a( n = `renderType` v = `Div`
                 )->a( n = `class`      v = `sapUiSmallMargin`
 
-                )->open( `FlexBox`
+                )->ele( `FlexBox`
 
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text`  v = `Correctly Displayed`
                         )->a( n = `press` v = client->_event( `PATH_CORRECT` )
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text`  v = `Loading Error`
                         )->a( n = `press` v = client->_event( `PATH_INCORRECT` )
 
-                )->shut(
+                )->end(
 
-                )->open( `PDFViewer`
+                )->ele( `PDFViewer`
                     )->a( n = `source`          v = client->_bind( source )
                     )->a( n = `isTrustedSource` v = `true`
                     )->a( n = `title`           v = client->_bind( title )
                     )->a( n = `height`          v = client->_bind( height )
 
-                    )->open( `layoutData`
-                        )->leaf( `FlexItemData`
+                    )->ele( `layoutData`
+                        )->tag( `FlexItemData`
                             )->a( n = `growFactor` v = `1` ).
 
     client->view_display( view->stringify( ) ).

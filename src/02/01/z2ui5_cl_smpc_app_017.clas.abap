@@ -50,22 +50,22 @@ CLASS z2ui5_cl_smpc_app_017 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc`    v = `sap.ui.core.mvc`
         )->a( n = `xmlns`        v = `sap.m`
         )->a( n = `xmlns:core`   v = `sap.ui.core`
         )->a( n = `core:require` v = `{Formatter: 'z2ui5/model/formatter'}`
 
-        )->open( `VBox`
+        )->ele( `VBox`
             )->a( n = `class` v = `sapUiSmallMargin`
 
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `text`     v = `DateRangeSelection displayFormat 'yyyy/MM/dd', set via binding:`
                 )->a( n = `labelFor` v = `DRS1`
             " valueState is bound on every DateRangeSelection - the original change handler sets it imperatively on the event source
-            )->leaf( `DateRangeSelection`
+            )->tag( `DateRangeSelection`
                 )->a( n = `id`         v = `DRS1`
                 )->a( n = `class`      v = `DRS1`
                 )->a( n = `value`      v = |\{ 'type': 'sap.ui.model.type.DateInterval', 'formatOptions': \{ 'pattern': 'yyyy/MM/dd' \}, 'parts': [| &&
@@ -77,11 +77,11 @@ CLASS z2ui5_cl_smpc_app_017 IMPLEMENTATION.
                                                                             ( `${$parameters>/to}` )
                                                                             ( `${$parameters>/valid}` ) ) )
                 )->a( n = `valueState` v = client->_bind( drs1_value_state )
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `text`     v = `DateRangeSelection with minDate=2016-01-01 and maxDate=2016-12-31:`
                 )->a( n = `labelFor` v = `DRS2`
             " the original controller's onInit sets minDate/maxDate imperatively - bound here via Formatter.DateCreateObject (core:require on the view root)
-            )->leaf( `DateRangeSelection`
+            )->tag( `DateRangeSelection`
                 )->a( n = `id`         v = `DRS2`
                 )->a( n = `change`     v = client->_event( val   = `CHANGE`
                                                            t_arg = VALUE #( ( `$event.oSource.sId` )
@@ -94,11 +94,11 @@ CLASS z2ui5_cl_smpc_app_017 IMPLEMENTATION.
                 )->a( n = `minDate`    v = |\{ path: '{ client->_bind( val = drs2_min_date path = abap_true ) }', formatter: 'Formatter.DateCreateObject' \}|
                 )->a( n = `maxDate`    v = |\{ path: '{ client->_bind( val = drs2_max_date path = abap_true ) }', formatter: 'Formatter.DateCreateObject' \}|
                 )->a( n = `valueState` v = client->_bind( drs2_value_state )
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `text`     v = `DateRangeSelection with OK button in the footer and with shortcut for today:`
                 )->a( n = `labelFor` v = `DRS3`
             " showCurrentDateButton is since UI5 1.95, kept for the 1:1 port (POST_171)
-            )->leaf( `DateRangeSelection`
+            )->tag( `DateRangeSelection`
                 )->a( n = `id`                    v = `DRS3`
                 )->a( n = `showCurrentDateButton` v = `true`
                 )->a( n = `showFooter`            v = `true`
@@ -111,10 +111,10 @@ CLASS z2ui5_cl_smpc_app_017 IMPLEMENTATION.
                                                       | \{ 'type': 'sap.ui.model.type.Date', 'formatOptions': \{ 'source': \{ 'pattern': 'yyyy-MM-dd' \} \}, 'path': '{ client->_bind( val = drs3_start path = abap_true ) }' \},| &&
                                                       | \{ 'type': 'sap.ui.model.type.Date', 'formatOptions': \{ 'source': \{ 'pattern': 'yyyy-MM-dd' \} \}, 'path': '{ client->_bind( val = drs3_end path = abap_true ) }' \} ] \}|
                 )->a( n = `valueState`            v = client->_bind( drs3_value_state )
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `text`     v = `DateRangeSelection with displayFormat 'MM/yyyy':`
                 )->a( n = `labelFor` v = `DRS4`
-            )->leaf( `DateRangeSelection`
+            )->tag( `DateRangeSelection`
                 )->a( n = `id`         v = `DRS4`
                 )->a( n = `change`     v = client->_event( val   = `CHANGE`
                                                            t_arg = VALUE #( ( `$event.oSource.sId` )
@@ -125,10 +125,10 @@ CLASS z2ui5_cl_smpc_app_017 IMPLEMENTATION.
                                            | \{ 'type': 'sap.ui.model.type.Date', 'formatOptions': \{ 'source': \{ 'pattern': 'yyyy-MM-dd' \} \}, 'path': '{ client->_bind( val = drs4_start path = abap_true ) }' \},| &&
                                            | \{ 'type': 'sap.ui.model.type.Date', 'formatOptions': \{ 'source': \{ 'pattern': 'yyyy-MM-dd' \} \}, 'path': '{ client->_bind( val = drs4_end path = abap_true ) }' \} ] \}|
                 )->a( n = `valueState` v = client->_bind( drs4_value_state )
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `text`     v = `DateRangeSelection with displayFormat 'yyyy':`
                 )->a( n = `labelFor` v = `DRS5`
-            )->leaf( `DateRangeSelection`
+            )->tag( `DateRangeSelection`
                 )->a( n = `id`            v = `DRS5`
                 )->a( n = `displayFormat` v = `yyyy`
                 )->a( n = `change`        v = client->_event( val   = `CHANGE`
@@ -140,11 +140,11 @@ CLASS z2ui5_cl_smpc_app_017 IMPLEMENTATION.
                                               | \{ 'type': 'sap.ui.model.type.Date', 'formatOptions': \{ 'source': \{ 'pattern': 'yyyy-MM-dd' \} \}, 'path': '{ client->_bind( val = drs5_start path = abap_true ) }' \},| &&
                                               | \{ 'type': 'sap.ui.model.type.Date', 'formatOptions': \{ 'source': \{ 'pattern': 'yyyy-MM-dd' \} \}, 'path': '{ client->_bind( val = drs5_end path = abap_true ) }' \} ] \}|
                 )->a( n = `valueState`    v = client->_bind( drs5_value_state )
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `text`     v = `Change event`
                 )->a( n = `labelFor` v = `TextEvent`
             " text is bound - the original change handler sets it imperatively
-            )->leaf( `Text`
+            )->tag( `Text`
                 )->a( n = `id`   v = `TextEvent`
                 )->a( n = `text` v = client->_bind( event_text ) ).
 

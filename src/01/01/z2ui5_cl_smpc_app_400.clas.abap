@@ -26,13 +26,13 @@ CLASS z2ui5_cl_smpc_app_400 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
 
-        )->open( `ObjectHeader`
+        )->ele( `ObjectHeader`
             " asset path kept verbatim, only host-absolutized to the OpenUI5 host
             )->a( n = `icon`             v = `https://sdk.openui5.org/test-resources/sap/m/images/Woman_04.png`
             )->a( n = `iconDensityAware` v = `false`
@@ -43,14 +43,14 @@ CLASS z2ui5_cl_smpc_app_400 IMPLEMENTATION.
             )->a( n = `intro`            v = `Senior Developer`
             )->a( n = `class`            v = `sapUiResponsivePadding--header`
 
-            )->leaf( `ObjectAttribute`
+            )->tag( `ObjectAttribute`
                 )->a( n = `title`  v = `Email address`
                 )->a( n = `text`   v = `DeniseSmith@sap.com`
                 )->a( n = `active` v = `true`
-            )->leaf( `ObjectAttribute`
+            )->tag( `ObjectAttribute`
                 )->a( n = `title` v = `Office Phone`
                 )->a( n = `text`  v = `+33 6 453 564`
-            )->leaf( `ObjectAttribute`
+            )->tag( `ObjectAttribute`
                 )->a( n = `title` v = `Functional Area`
                 )->a( n = `text`  v = `Development` ).
 

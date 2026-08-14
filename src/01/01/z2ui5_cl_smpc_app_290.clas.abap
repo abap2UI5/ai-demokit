@@ -49,9 +49,9 @@ CLASS z2ui5_cl_smpc_app_290 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `height`     v = `100%`
         )->a( n = `xmlns:l`    v = `sap.ui.layout`
         )->a( n = `xmlns:core` v = `sap.ui.core`
@@ -60,9 +60,9 @@ CLASS z2ui5_cl_smpc_app_290 IMPLEMENTATION.
 
         " the value help of Dialog.fragment.xml, declared as a dependent and
         " opened by id - the fragment root itself has no counterpart
-        )->open( n = `dependents` ns = `mvc`
+        )->ele( n = `dependents` ns = `mvc`
 
-            )->open( `SelectDialog`
+            )->ele( `SelectDialog`
                 )->a( n = `id`          v = `valueHelpDialog`
                 )->a( n = `title`       v = `Products`
                 )->a( n = `items`       v = client->_bind( t_products )
@@ -72,7 +72,7 @@ CLASS z2ui5_cl_smpc_app_290 IMPLEMENTATION.
                 )->a( n = `cancel`      v = client->_event( `VALUE_HELP_CLOSE` )
                 )->a( n = `multiSelect` v = `true`
 
-                )->leaf( `StandardListItem`
+                )->tag( `StandardListItem`
                     )->a( n = `icon`             v = `{PRODUCTPICURL}`
                     )->a( n = `iconDensityAware` v = `false`
                     )->a( n = `iconInset`        v = `false`
@@ -82,19 +82,19 @@ CLASS z2ui5_cl_smpc_app_290 IMPLEMENTATION.
                     " rows instead of from the event's selectedItems controls
                     )->a( n = `selected`         v = `{SELECTED}`
 
-            )->shut(
-        )->shut(
+            )->end(
+        )->end(
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
             )->a( n = `width` v = `100%`
 
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `text`     v = `Enter a search term, e.g. “Notebook”, and add matching products as tokens`
                 )->a( n = `width`    v = `100%`
                 )->a( n = `labelFor` v = `multiInput`
 
-            )->open( `MultiInput`
+            )->ele( `MultiInput`
                 )->a( n = `width`            v = `40%`
                 )->a( n = `id`               v = `multiInput`
                 )->a( n = `value`            v = client->_bind( value )
@@ -102,13 +102,13 @@ CLASS z2ui5_cl_smpc_app_290 IMPLEMENTATION.
                 )->a( n = `suggestionItems`  v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
                 )->a( n = `valueHelpRequest` v = client->_event( `VALUE_HELP` )
 
-                )->open( `tokens`
-                    )->leaf( `Token`
+                )->ele( `tokens`
+                    )->tag( `Token`
                         )->a( n = `text` v = `{TEXT}`
 
-                )->shut(
+                )->end(
 
-                )->leaf( n = `Item` ns = `core`
+                )->tag( n = `Item` ns = `core`
                     )->a( n = `key`  v = `{PRODUCTID}`
                     )->a( n = `text` v = `{NAME}` ).
 

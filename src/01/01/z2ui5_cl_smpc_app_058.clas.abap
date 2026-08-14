@@ -33,15 +33,15 @@ CLASS z2ui5_cl_smpc_app_058 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:l`    v = `sap.ui.layout`
         )->a( n = `xmlns:form` v = `sap.ui.layout.form`
 
-        )->open( n = `SimpleForm` ns = `form`
+        )->ele( n = `SimpleForm` ns = `form`
             )->a( n = `layout`          v = `ResponsiveGridLayout`
             )->a( n = `editable`        v = `true`
             )->a( n = `title`           v = `Properties`
@@ -51,67 +51,67 @@ CLASS z2ui5_cl_smpc_app_058 IMPLEMENTATION.
             )->a( n = `labelSpanM`      v = `2`
             )->a( n = `labelSpanS`      v = `5`
 
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `text` v = `Display Only`
             " roundtrip-free rework: the controller handlers are replaced by two-way bindings, the change and liveChange events dropped (see sidecar)
-            )->leaf( `Switch`
+            )->tag( `Switch`
                 )->a( n = `state` v = client->_bind( display_only )
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `text` v = `Wrapping`
-            )->leaf( `Switch`
+            )->tag( `Switch`
                 )->a( n = `id`    v = `wrappingSwitch`
                 )->a( n = `state` v = client->_bind( wrapping )
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `text` v = `Enable Hyphenation`
-            )->leaf( `Switch`
+            )->tag( `Switch`
                 )->a( n = `state` v = client->_bind( hyphenation )
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `text` v = `Container Width`
-            )->leaf( `Slider`
+            )->tag( `Slider`
                 )->a( n = `value` v = client->_bind( slider_value )
 
-        )->shut(
+        )->end(
 
-        )->open( `ScrollContainer`
+        )->ele( `ScrollContainer`
             )->a( n = `id`         v = `containerForm`
             )->a( n = `width`      v = |\{= ${ client->_bind( slider_value ) } + '%'\}|
             )->a( n = `horizontal` v = `false`
             )->a( n = `vertical`   v = `false`
 
-            )->open( n = `SimpleForm` ns = `form`
+            )->ele( n = `SimpleForm` ns = `form`
                 )->a( n = `layout`   v = `ResponsiveGridLayout`
                 )->a( n = `editable` v = `true`
                 )->a( n = `title`    v = `Result in a Form`
 
-                )->leaf( `Label`
+                )->tag( `Label`
                     )->a( n = `id`           v = `labelInForm`
                     )->a( n = `displayOnly`  v = client->_bind( display_only )
                     )->a( n = `wrapping`     v = client->_bind( wrapping )
                     )->a( n = `wrappingType` v = |\{= ${ client->_bind( hyphenation ) } ? 'Hyphenated' : 'Normal'\}|
                     )->a( n = `text`         v = `Labels are used as titles [long test word] forsinglecontrolsorgroups of controls. Label appearance can be influenced by properties`
-                )->leaf( `Input`
+                )->tag( `Input`
 
-            )->shut(
-        )->shut(
+            )->end(
+        )->end(
 
-        )->open( `Panel`
+        )->ele( `Panel`
             )->a( n = `id`         v = `containerLayout`
             )->a( n = `headerText` v = `Result in a Container`
             )->a( n = `width`      v = |\{= ${ client->_bind( slider_value ) } + '%'\}|
 
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `id`           v = `label`
                 )->a( n = `labelFor`     v = `containerInput`
                 )->a( n = `displayOnly`  v = client->_bind( display_only )
                 )->a( n = `wrapping`     v = client->_bind( wrapping )
                 )->a( n = `wrappingType` v = |\{= ${ client->_bind( hyphenation ) } ? 'Hyphenated' : 'Normal'\}|
                 )->a( n = `text`         v = `Labels are used as titles [long test word] forsinglecontrolsorgroups of controls. Label appearance can be influenced by properties`
-            )->leaf( `Input`
+            )->tag( `Input`
                 )->a( n = `id` v = `containerInput`
 
-        )->shut(
+        )->end(
 
-        )->leaf( `MessageStrip`
+        )->tag( `MessageStrip`
             )->a( n = `type`  v = `Warning`
             )->a( n = `text`  v = `Note: Hyphenation is not possible when Wrapping is set to 'false'`
             )->a( n = `class` v = `sapUiSmallMarginBeginEnd sapUiSmallMarginTopBottom` ).

@@ -42,13 +42,13 @@ CLASS z2ui5_cl_smpc_app_201 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
 
-        )->open( `ObjectHeader`
+        )->ele( `ObjectHeader`
             " element binding kept 1:1 - the context is the one-record structure instead of {/ProductCollection/0}
             )->a( n = `binding`    v = client->_bind( s_product )
             )->a( n = `title`      v = `{NAME}`
@@ -57,7 +57,7 @@ CLASS z2ui5_cl_smpc_app_201 IMPLEMENTATION.
             )->a( n = `numberUnit` v = `{CURRENCYCODE}`
             )->a( n = `class`      v = `sapUiResponsivePadding--header`
 
-            )->leaf( `ObjectAttribute`
+            )->tag( `ObjectAttribute`
                 )->a( n = `text` v = `{WEIGHTMEASURE} {WEIGHTUNIT} {WIDTH} x {DEPTH} x {HEIGHT} {DIMUNIT}` ).
 
     client->view_display( view->stringify( ) ).

@@ -45,103 +45,103 @@ CLASS z2ui5_cl_smpc_app_192 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns:tnt`  v = `sap.tnt`
 
         " popinLayout is set imperatively by the original controller (onPopinLayoutChanged) - bound properties here
-        )->open( `Table`
+        )->ele( `Table`
             )->a( n = `id`          v = `idProductsTable`
             )->a( n = `inset`       v = `false`
             )->a( n = `items`       v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
             )->a( n = `popinLayout` v = |\{= ${ client->_bind( popin_layout ) } === 'GridLarge' \|\| ${ client->_bind( popin_layout ) } === 'GridSmall' ? ${ client->_bind( popin_layout ) } : 'Block' \}|
 
-            )->open( `headerToolbar`
-                )->open( `Toolbar`
-                    )->leaf( `Title`
+            )->ele( `headerToolbar`
+                )->ele( `Toolbar`
+                    )->tag( `Title`
                         )->a( n = `text`  v = `Products`
                         )->a( n = `level` v = `H2`
-                    )->leaf( `ToolbarSpacer`
+                    )->tag( `ToolbarSpacer`
 
                     " the original change handler's PopinLayout switch lives in the Table's popinLayout expression binding
-                    )->open( `ComboBox`
+                    )->ele( `ComboBox`
                         )->a( n = `id`          v = `idPopinLayout`
                         )->a( n = `placeholder` v = `Popin layout options`
                         )->a( n = `selectedKey` v = client->_bind( popin_layout )
 
-                        )->open( `items`
-                            )->leaf( n = `Item` ns = `core`
+                        )->ele( `items`
+                            )->tag( n = `Item` ns = `core`
                                 )->a( n = `text` v = `Block`
                                 )->a( n = `key`  v = `Block`
-                            )->leaf( n = `Item` ns = `core`
+                            )->tag( n = `Item` ns = `core`
                                 )->a( n = `text` v = `Grid Large`
                                 )->a( n = `key`  v = `GridLarge`
-                            )->leaf( n = `Item` ns = `core`
+                            )->tag( n = `Item` ns = `core`
                                 )->a( n = `text` v = `Grid Small`
                                 )->a( n = `key`  v = `GridSmall`
 
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
-            )->open( `columns`
-                )->open( `Column`
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
+            )->ele( `columns`
+                )->ele( `Column`
                     )->a( n = `width` v = `12em`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Product`
 
-                )->shut(
-                )->open( `Column`
+                )->end(
+                )->ele( `Column`
                     )->a( n = `minScreenWidth` v = `Tablet`
                     )->a( n = `demandPopin`    v = `true`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Supplier`
 
-                )->shut(
-                )->open( `Column`
+                )->end(
+                )->ele( `Column`
                     )->a( n = `minScreenWidth` v = `Desktop`
                     )->a( n = `demandPopin`    v = `true`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Dimensions`
 
-                )->shut(
-                )->open( `Column`
+                )->end(
+                )->ele( `Column`
                     )->a( n = `minScreenWidth` v = `Desktop`
                     )->a( n = `demandPopin`    v = `true`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Availability`
 
-                )->shut(
-                )->open( `Column`
-                    )->leaf( `Text`
+                )->end(
+                )->ele( `Column`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Price`
 
-                )->shut(
-            )->shut(
-            )->open( `items`
-                )->open( `ColumnListItem`
-                    )->open( `cells`
-                        )->leaf( `ObjectIdentifier`
+                )->end(
+            )->end(
+            )->ele( `items`
+                )->ele( `ColumnListItem`
+                    )->ele( `cells`
+                        )->tag( `ObjectIdentifier`
                             )->a( n = `title` v = `{NAME}`
                             )->a( n = `text`  v = `{PRODUCTID}`
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `{SUPPLIERNAME}`
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `{WIDTH} x {DEPTH} x {HEIGHT} {DIMUNIT}`
                         " colorScheme is derived from Status in ABAP (see the NOTE deviation), not the original frontend formatter
-                        )->leaf( n = `InfoLabel` ns = `tnt`
+                        )->tag( n = `InfoLabel` ns = `tnt`
                             )->a( n = `text`        v = `{STATUS}`
                             )->a( n = `displayOnly` v = `true`
                             )->a( n = `colorScheme` v = `{COLOR_SCHEME}`
-                        )->leaf( `ObjectNumber`
+                        )->tag( `ObjectNumber`
                             )->a( n = `number` v = `{ parts:[{path:'PRICE'},{path:'CURRENCYCODE'}], type: 'sap.ui.model.type.Currency', formatOptions: {showMeasure: false} }`
                             )->a( n = `unit`   v = `{CURRENCYCODE}` ).
 

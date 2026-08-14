@@ -37,19 +37,19 @@ CLASS z2ui5_cl_smpc_app_209 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the original binds the ObjectHeader to a single record {/ProductCollection/0};
     " that element binding is flattened onto the default model root (fields seeded
     " in model_init with products.json row 0). The fields are bound ABSOLUTELY:
     " a relative {NAME} on a control with no binding context resolves against
     " nothing and renders empty (measured 2026-08-01, the app-207 class)
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `height`    v = `100%`
 
-        )->open( `ObjectHeader`
+        )->ele( `ObjectHeader`
             )->a( n = `id`               v = `oh1`
             )->a( n = `responsive`       v = `true`
             )->a( n = `icon`             v = client->_bind( productpicurl )
@@ -59,23 +59,23 @@ CLASS z2ui5_cl_smpc_app_209 IMPLEMENTATION.
             )->a( n = `backgroundDesign` v = `Translucent`
             )->a( n = `class`            v = `sapUiResponsivePadding--header`
 
-            )->leaf( `ObjectAttribute`
+            )->tag( `ObjectAttribute`
                 )->a( n = `title` v = `Manufacturer`
                 )->a( n = `text`  v = client->_bind( suppliername )
-            )->leaf( `ObjectAttribute`
+            )->tag( `ObjectAttribute`
                 )->a( n = `title` v = `Dimension per unit`
                 )->a( n = `text`  v = |{ client->_bind( width ) } x { client->_bind( depth ) } x { client->_bind( height ) } { client->_bind( dimunit ) }|
 
-            )->open( `markers`
-                )->leaf( `ObjectMarker`
+            )->ele( `markers`
+                )->tag( `ObjectMarker`
                     )->a( n = `type` v = `Favorite`
-                )->leaf( `ObjectMarker`
+                )->tag( `ObjectMarker`
                     )->a( n = `type` v = `Flagged`
 
-            )->shut(
+            )->end(
 
-            )->open( `statuses`
-                )->leaf( `ObjectStatus`
+            )->ele( `statuses`
+                )->tag( `ObjectStatus`
                     )->a( n = `title` v = `Approval`
                     )->a( n = `text`  v = `Pending`
                     )->a( n = `state` v = `Warning` ).

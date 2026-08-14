@@ -63,16 +63,16 @@ CLASS z2ui5_cl_smpc_app_104 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:l`    v = `sap.ui.layout`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns:core` v = `sap.ui.core`
 
-        )->open( n = `dependents` ns = `mvc`
-            )->open( `TableSelectDialog`
+        )->ele( n = `dependents` ns = `mvc`
+            )->ele( `TableSelectDialog`
                 )->a( n = `id`         v = `myDialog`
                 )->a( n = `noDataText` v = `No Products Found`
                 )->a( n = `title`      v = `Select Product`
@@ -87,76 +87,76 @@ CLASS z2ui5_cl_smpc_app_104 IMPLEMENTATION.
                 )->a( n = `confirmButtonText`  v = client->_bind( confirm_text )
                 )->a( n = `items` v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME', descending: false \} \}|
 
-                )->open( `ColumnListItem`
+                )->ele( `ColumnListItem`
                     )->a( n = `vAlign` v = `Middle`
-                    )->open( `cells`
-                        )->leaf( `ObjectIdentifier`
+                    )->ele( `cells`
+                        )->tag( `ObjectIdentifier`
                             )->a( n = `title` v = `{NAME}`
                             )->a( n = `text`  v = `{PRODUCT_ID}`
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `{SUPPLIER_NAME}`
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `{WIDTH} x {DEPTH} x {HEIGHT} {DIM_UNIT}`
-                        )->leaf( `ObjectNumber`
+                        )->tag( `ObjectNumber`
                             )->a( n = `number` v = `{WEIGHT_MEASURE}`
                             )->a( n = `unit`   v = `{WEIGHT_UNIT}`
                             )->a( n = `state`  v = `{WEIGHT_STATE}`
-                        )->leaf( `ObjectNumber`
+                        )->tag( `ObjectNumber`
                             )->a( n = `number` v = |\{ parts:[\{path:'PRICE'\},\{path:'CURRENCY_CODE'\}], type: 'sap.ui.model.type.Currency', formatOptions: \{showMeasure: false\} \}|
                             )->a( n = `unit`   v = `{CURRENCY_CODE}`
 
-                    )->shut(
-                )->shut(
-                )->open( `columns`
-                    )->open( `Column`
+                    )->end(
+                )->end(
+                )->ele( `columns`
+                    )->ele( `Column`
                         )->a( n = `width` v = `12em`
-                        )->open( `header`
-                            )->leaf( `Text`
+                        )->ele( `header`
+                            )->tag( `Text`
                                 )->a( n = `text` v = `Product`
 
-                    )->shut(
-                    )->shut(
-                    )->open( `Column`
+                    )->end(
+                    )->end(
+                    )->ele( `Column`
                         )->a( n = `minScreenWidth` v = `Tablet`
                         )->a( n = `demandPopin`    v = `true`
-                        )->open( `header`
-                            )->leaf( `Text`
+                        )->ele( `header`
+                            )->tag( `Text`
                                 )->a( n = `text` v = `Supplier`
 
-                    )->shut(
-                    )->shut(
-                    )->open( `Column`
+                    )->end(
+                    )->end(
+                    )->ele( `Column`
                         )->a( n = `minScreenWidth` v = `Desktop`
                         )->a( n = `demandPopin`    v = `true`
                         )->a( n = `hAlign`         v = `End`
-                        )->open( `header`
-                            )->leaf( `Text`
+                        )->ele( `header`
+                            )->tag( `Text`
                                 )->a( n = `text` v = `Dimensions`
 
-                    )->shut(
-                    )->shut(
-                    )->open( `Column`
+                    )->end(
+                    )->end(
+                    )->ele( `Column`
                         )->a( n = `minScreenWidth` v = `Desktop`
                         )->a( n = `demandPopin`    v = `true`
                         )->a( n = `hAlign`         v = `Center`
-                        )->open( `header`
-                            )->leaf( `Text`
+                        )->ele( `header`
+                            )->tag( `Text`
                                 )->a( n = `text` v = `Weight`
 
-                    )->shut(
-                    )->shut(
-                    )->open( `Column`
+                    )->end(
+                    )->end(
+                    )->ele( `Column`
                         )->a( n = `hAlign` v = `End`
-                        )->open( `header`
-                            )->leaf( `Text`
+                        )->ele( `header`
+                            )->tag( `Text`
                                 )->a( n = `text` v = `Product`
 
-                    )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
+                    )->end(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( `TableSelectDialog`
+            )->ele( `TableSelectDialog`
                 )->a( n = `noDataText`        v = `No Products Found`
                 )->a( n = `title`             v = `Select Product`
                 )->a( n = `search`            v = client->follow_up_action( val   = client->cs_event-binding_call
@@ -168,81 +168,81 @@ CLASS z2ui5_cl_smpc_app_104 IMPLEMENTATION.
                 )->a( n = `id`                v = `valueHelpDialog`
                 )->a( n = `items` v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME', descending: false \} \}|
 
-                )->open( `ColumnListItem`
+                )->ele( `ColumnListItem`
                     )->a( n = `selected` v = `{SELECTED}`
-                    )->open( `cells`
-                        )->leaf( `ObjectIdentifier`
+                    )->ele( `cells`
+                        )->tag( `ObjectIdentifier`
                             )->a( n = `title` v = `{NAME}`
                             )->a( n = `text`  v = `{PRODUCT_ID}`
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `{SUPPLIER_NAME}`
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `{WIDTH} x {DEPTH} x {HEIGHT} {DIM_UNIT}`
-                        )->leaf( `ObjectNumber`
+                        )->tag( `ObjectNumber`
                             )->a( n = `number` v = `{WEIGHT_MEASURE}`
                             )->a( n = `unit`   v = `{WEIGHT_UNIT}`
                             )->a( n = `state`  v = `{WEIGHT_STATE}`
-                        )->leaf( `ObjectNumber`
+                        )->tag( `ObjectNumber`
                             )->a( n = `number` v = |\{ parts:[\{path:'PRICE'\},\{path:'CURRENCY_CODE'\}], type: 'sap.ui.model.type.Currency', formatOptions: \{showMeasure: false\} \}|
                             )->a( n = `unit`   v = `{CURRENCY_CODE}`
 
-                    )->shut(
-                )->shut(
-                )->open( `columns`
-                    )->open( `Column`
+                    )->end(
+                )->end(
+                )->ele( `columns`
+                    )->ele( `Column`
                         )->a( n = `width` v = `12em`
-                        )->open( `header`
-                            )->leaf( `Text`
+                        )->ele( `header`
+                            )->tag( `Text`
                                 )->a( n = `text` v = `Product`
 
-                    )->shut(
-                    )->shut(
-                    )->open( `Column`
+                    )->end(
+                    )->end(
+                    )->ele( `Column`
                         )->a( n = `minScreenWidth` v = `Tablet`
                         )->a( n = `demandPopin`    v = `true`
-                        )->open( `header`
-                            )->leaf( `Text`
+                        )->ele( `header`
+                            )->tag( `Text`
                                 )->a( n = `text` v = `Supplier`
 
-                    )->shut(
-                    )->shut(
-                    )->open( `Column`
+                    )->end(
+                    )->end(
+                    )->ele( `Column`
                         )->a( n = `minScreenWidth` v = `Desktop`
                         )->a( n = `demandPopin`    v = `true`
                         )->a( n = `hAlign`         v = `End`
-                        )->open( `header`
-                            )->leaf( `Text`
+                        )->ele( `header`
+                            )->tag( `Text`
                                 )->a( n = `text` v = `Dimensions`
 
-                    )->shut(
-                    )->shut(
-                    )->open( `Column`
+                    )->end(
+                    )->end(
+                    )->ele( `Column`
                         )->a( n = `minScreenWidth` v = `Desktop`
                         )->a( n = `demandPopin`    v = `true`
                         )->a( n = `hAlign`         v = `Center`
-                        )->open( `header`
-                            )->leaf( `Text`
+                        )->ele( `header`
+                            )->tag( `Text`
                                 )->a( n = `text` v = `Weight`
 
-                    )->shut(
-                    )->shut(
-                    )->open( `Column`
+                    )->end(
+                    )->end(
+                    )->ele( `Column`
                         )->a( n = `hAlign` v = `End`
-                        )->open( `header`
-                            )->leaf( `Text`
+                        )->ele( `header`
+                            )->tag( `Text`
                                 )->a( n = `text` v = `Product`
 
-                    )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
-        )->shut(
+                    )->end(
+                    )->end(
+                )->end(
+            )->end(
+        )->end(
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
             )->a( n = `width` v = `100%`
 
-            )->leaf( `Input`
+            )->tag( `Input`
                 )->a( n = `id`            v = `productInput`
                 )->a( n = `type`          v = `Text`
                 )->a( n = `value`         v = `Astro Phone 6`
@@ -252,97 +252,97 @@ CLASS z2ui5_cl_smpc_app_104 IMPLEMENTATION.
                 )->a( n = `width`         v = `15rem`
                 )->a( n = `class`         v = `sapUiSmallMarginBottom`
 
-            )->open( `Button`
+            )->ele( `Button`
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
                 )->a( n = `text`  v = `Show Table Select Dialog`
                 )->a( n = `press` v = client->_event( `OPEN_1` )
 
-            )->shut(
-            )->open( `Button`
+            )->end(
+            )->ele( `Button`
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
                 )->a( n = `text`  v = `Show Table Select Dialog (Multi)`
                 )->a( n = `press` v = client->_event( `OPEN_2` )
-                )->open( `customData`
-                    )->leaf( n = `CustomData` ns = `core`
+                )->ele( `customData`
+                    )->tag( n = `CustomData` ns = `core`
                         )->a( n = `key`   v = `multi`
                         )->a( n = `value` v = `true`
 
-            )->shut(
-            )->shut(
-            )->open( `Button`
+            )->end(
+            )->end(
+            )->ele( `Button`
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
                 )->a( n = `text`  v = `Show Table Select Dialog (draggable=true)`
                 )->a( n = `press` v = client->_event( `OPEN_3` )
-                )->open( `customData`
-                    )->leaf( n = `CustomData` ns = `core`
+                )->ele( `customData`
+                    )->tag( n = `CustomData` ns = `core`
                         )->a( n = `key`   v = `multi`
                         )->a( n = `value` v = `true`
-                    )->leaf( n = `CustomData` ns = `core`
+                    )->tag( n = `CustomData` ns = `core`
                         )->a( n = `key`   v = `draggable`
                         )->a( n = `value` v = `true`
 
-            )->shut(
-            )->shut(
-            )->open( `Button`
+            )->end(
+            )->end(
+            )->ele( `Button`
                 )->a( n = `text`  v = `Show Table Select Dialog (resizable=true)`
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
                 )->a( n = `press` v = client->_event( `OPEN_4` )
-                )->open( `customData`
-                    )->leaf( n = `CustomData` ns = `core`
+                )->ele( `customData`
+                    )->tag( n = `CustomData` ns = `core`
                         )->a( n = `key`   v = `multi`
                         )->a( n = `value` v = `true`
-                    )->leaf( n = `CustomData` ns = `core`
+                    )->tag( n = `CustomData` ns = `core`
                         )->a( n = `key`   v = `resizable`
                         )->a( n = `value` v = `true`
 
-            )->shut(
-            )->shut(
-            )->open( `Button`
+            )->end(
+            )->end(
+            )->ele( `Button`
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
                 )->a( n = `text`  v = `Show Table Select Dialog (Remember)`
                 )->a( n = `press` v = client->_event( `OPEN_5` )
-                )->open( `customData`
-                    )->leaf( n = `CustomData` ns = `core`
+                )->ele( `customData`
+                    )->tag( n = `CustomData` ns = `core`
                         )->a( n = `key`   v = `multi`
                         )->a( n = `value` v = `true`
-                    )->leaf( n = `CustomData` ns = `core`
+                    )->tag( n = `CustomData` ns = `core`
                         )->a( n = `key`   v = `remember`
                         )->a( n = `value` v = `true`
 
-            )->shut(
-            )->shut(
-            )->open( `Button`
+            )->end(
+            )->end(
+            )->ele( `Button`
                 )->a( n = `text`  v = `Show Table Select Dialog (Custom confirmation button text)`
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
                 )->a( n = `press` v = client->_event( `OPEN_6` )
-                )->open( `customData`
-                    )->leaf( n = `CustomData` ns = `core`
+                )->ele( `customData`
+                    )->tag( n = `CustomData` ns = `core`
                         )->a( n = `key`   v = `multi`
                         )->a( n = `value` v = `true`
-                    )->leaf( n = `CustomData` ns = `core`
+                    )->tag( n = `CustomData` ns = `core`
                         )->a( n = `key`   v = `confirmButtonText`
                         )->a( n = `value` v = `Save`
 
-            )->shut(
-            )->shut(
-            )->open( `Button`
+            )->end(
+            )->end(
+            )->ele( `Button`
                 )->a( n = `text`  v = `Show Table Select Dialog with Responsive Padding`
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
                 )->a( n = `press` v = client->_event( `OPEN_7` )
-                )->open( `customData`
-                    )->leaf( n = `CustomData` ns = `core`
+                )->ele( `customData`
+                    )->tag( n = `CustomData` ns = `core`
                         )->a( n = `key`   v = `resizable`
                         )->a( n = `value` v = `true`
-                    )->leaf( n = `CustomData` ns = `core`
+                    )->tag( n = `CustomData` ns = `core`
                         )->a( n = `key`   v = `draggable`
                         )->a( n = `value` v = `true`
-                    )->leaf( n = `CustomData` ns = `core`
+                    )->tag( n = `CustomData` ns = `core`
                         )->a( n = `key`   v = `responsivePadding`
                         )->a( n = `value` v = `true`
 
-            )->shut(
-            )->shut(
-        )->shut( ).
+            )->end(
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

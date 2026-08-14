@@ -43,28 +43,28 @@ CLASS z2ui5_cl_smpc_app_274 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
             )->a( n = `width` v = `100%`
 
-            )->leaf( `Button`
+            )->tag( `Button`
                 )->a( n = `text`  v = `Dialog with Fullscreen Toggle`
                 )->a( n = `width` v = `280px`
                 )->a( n = `press` v = client->_event( `DIALOG` )
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
-            )->leaf( `Button`
+            )->tag( `Button`
                 )->a( n = `text`  v = `Dialog (Resizable) with Fullscreen Toggle`
                 )->a( n = `width` v = `280px`
                 )->a( n = `press` v = client->_event( `RESIZABLE_DIALOG` )
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
-            )->leaf( `Button`
+            )->tag( `Button`
                 )->a( n = `text`  v = `Dialog (Draggable and Resizable) with Fullscreen Toggle`
                 )->a( n = `width` v = `280px`
                 )->a( n = `press` v = client->_event( `DRAGGABLE_RESIZABLE_DIALOG` )
@@ -107,13 +107,13 @@ CLASS z2ui5_cl_smpc_app_274 IMPLEMENTATION.
 
   METHOD popup_products_display.
 
-    DATA(popup) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(popup) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    DATA(dialog) = popup->open( n = `FragmentDefinition` ns = `core`
+    DATA(dialog) = popup->ele( n = `FragmentDefinition` ns = `core`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns`      v = `sap.m`
 
-        )->open( `Dialog`
+        )->ele( `Dialog`
             )->a( n = `title`                v = `Available Products`
             )->a( n = `showFullScreenButton` v = `true` ).
 
@@ -129,30 +129,30 @@ CLASS z2ui5_cl_smpc_app_274 IMPLEMENTATION.
       dialog->a( n = `draggable` v = `true` ).
     ENDIF.
 
-    dialog->open( `content`
-            )->open( `List`
+    dialog->ele( `content`
+            )->ele( `List`
                 )->a( n = `items` v = client->_bind( t_products )
 
-                )->leaf( `StandardListItem`
+                )->tag( `StandardListItem`
                     )->a( n = `title`   v = `{NAME}`
                     )->a( n = `counter` v = `{QUANTITY}`
 
-            )->shut(
-        )->shut( ).
+            )->end(
+        )->end( ).
 
     " the first dialog is the only one with a begin button
     IF begin_ok = abap_true.
-      dialog->open( `beginButton`
-                )->leaf( `Button`
+      dialog->ele( `beginButton`
+                )->tag( `Button`
                     )->a( n = `type`  v = `Emphasized`
                     )->a( n = `text`  v = `OK`
                     )->a( n = `press` v = client->follow_up_action( client->cs_event-popup_close )
 
-            )->shut( ).
+            )->end( ).
     ENDIF.
 
-    dialog->open( `endButton`
-            )->leaf( `Button`
+    dialog->ele( `endButton`
+            )->tag( `Button`
                 )->a( n = `text`  v = `Close`
                 )->a( n = `press` v = client->follow_up_action( client->cs_event-popup_close ) ).
 

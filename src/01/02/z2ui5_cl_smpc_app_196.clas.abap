@@ -46,90 +46,90 @@ CLASS z2ui5_cl_smpc_app_196 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:u`   v = `sap.ui.unified`
 
-        )->open( n = `Grid` ns = `l`
+        )->ele( n = `Grid` ns = `l`
             )->a( n = `defaultSpan` v = `XL7 L12 M12 S12`
 
-            )->open( `List`
+            )->ele( `List`
                 )->a( n = `id`         v = `listOneId`
                 )->a( n = `headerText` v = `Various currencies with and without decimals`
                 )->a( n = `items`      v = client->_bind( variousnumberdatamodel )
 
-                )->open( `CustomListItem`
-                    )->leaf( n = `Currency` ns = `u`
+                )->ele( `CustomListItem`
+                    )->tag( n = `Currency` ns = `u`
                         )->a( n = `value`     v = `{PRICE}`
                         )->a( n = `currency`  v = `{CURRENCY}`
                         )->a( n = `useSymbol` v = `false`
 
-                )->shut(
-            )->shut(
-            )->open( `List`
+                )->end(
+            )->end(
+            )->ele( `List`
                 )->a( n = `id`         v = `listTwoId`
                 )->a( n = `headerText` v = `Currency without decimals`
                 )->a( n = `items`      v = client->_bind( nondecimalcurrencydatamodel )
 
-                )->open( `CustomListItem`
-                    )->leaf( n = `Currency` ns = `u`
+                )->ele( `CustomListItem`
+                    )->tag( n = `Currency` ns = `u`
                         )->a( n = `value`     v = `{PRICE}`
                         )->a( n = `currency`  v = `{CURRENCY}`
                         )->a( n = `useSymbol` v = `false`
 
-                )->shut(
-            )->shut(
-            )->open( `List`
+                )->end(
+            )->end(
+            )->ele( `List`
                 )->a( n = `id`         v = `listThreeId`
                 )->a( n = `headerText` v = `Currency without decimals using maxPrecision`
                 )->a( n = `items`      v = client->_bind( nondecimalcurrencydatamodel )
 
-                )->open( `CustomListItem`
-                    )->leaf( n = `Currency` ns = `u`
+                )->ele( `CustomListItem`
+                    )->tag( n = `Currency` ns = `u`
                         )->a( n = `value`        v = `{PRICE}`
                         )->a( n = `currency`     v = `{CURRENCY}`
                         )->a( n = `useSymbol`    v = `false`
                         )->a( n = `maxPrecision` v = `0`
 
-                )->shut(
-            )->shut(
-            )->open( `List`
+                )->end(
+            )->end(
+            )->ele( `List`
                 )->a( n = `id`         v = `listFourId`
                 )->a( n = `headerText` v = `Currency with really big numbers`
                 )->a( n = `items`      v = client->_bind( bignumberdatamodel )
 
-                )->open( `CustomListItem`
-                    )->leaf( n = `Currency` ns = `u`
+                )->ele( `CustomListItem`
+                    )->tag( n = `Currency` ns = `u`
                         )->a( n = `stringValue` v = `{PRICE}`
                         )->a( n = `currency`    v = `{CURRENCY}`
                         )->a( n = `useSymbol`   v = `false`
 
-                )->shut(
-            )->shut(
-            )->open( `List`
+                )->end(
+            )->end(
+            )->ele( `List`
                 )->a( n = `id`         v = `listFiveId`
                 )->a( n = `headerText` v = `Custom currencies with decimals`
                 )->a( n = `items`      v = client->_bind( customcurrencydatamodel )
 
-                )->open( `CustomListItem`
-                    )->leaf( n = `Currency` ns = `u`
+                )->ele( `CustomListItem`
+                    )->tag( n = `Currency` ns = `u`
                         )->a( n = `stringValue` v = `{PRICE}`
                         )->a( n = `currency`    v = `{CURRENCY}`
                         )->a( n = `useSymbol`   v = `false`
 
-                )->shut(
-            )->shut(
-            )->open( `List`
+                )->end(
+            )->end(
+            )->ele( `List`
                 )->a( n = `id`         v = `listSixId`
                 )->a( n = `headerText` v = `Different currencies with maxPrecision 3`
                 )->a( n = `items`      v = client->_bind( variousnumberdatamodel )
 
-                )->open( `CustomListItem`
-                    )->leaf( n = `Currency` ns = `u`
+                )->ele( `CustomListItem`
+                    )->tag( n = `Currency` ns = `u`
                         )->a( n = `stringValue`  v = `{PRICE}`
                         )->a( n = `currency`     v = `{CURRENCY}`
                         )->a( n = `useSymbol`    v = `false`

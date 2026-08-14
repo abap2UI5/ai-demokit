@@ -29,16 +29,16 @@ CLASS z2ui5_cl_smpc_app_179 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc`    v = `sap.ui.core.mvc`
         )->a( n = `xmlns:form`   v = `sap.ui.layout.form`
         )->a( n = `xmlns`        v = `sap.m`
         )->a( n = `xmlns:core`   v = `sap.ui.core`
         )->a( n = `core:require` v = `{FloatType: 'sap/ui/model/type/Float'}`
 
-        )->open( n = `SimpleForm` ns = `form`
+        )->ele( n = `SimpleForm` ns = `form`
             )->a( n = `width`      v = `auto`
             )->a( n = `class`      v = `sapUiResponsiveMargin`
             )->a( n = `layout`     v = `ResponsiveGridLayout`
@@ -51,15 +51,15 @@ CLASS z2ui5_cl_smpc_app_179 IMPLEMENTATION.
             )->a( n = `columnsM`   v = `1`
             )->a( n = `title`      v = `Number Input`
 
-            )->open( n = `content` ns = `form`
-                )->leaf( `Label`
+            )->ele( n = `content` ns = `form`
+                )->tag( `Label`
                     )->a( n = `text` v = `Number`
-                )->leaf( `Input`
+                )->tag( `Input`
                     )->a( n = `value` v = |\{ path: '{ client->_bind( val = number path = abap_true ) }', type: 'FloatType' \}|
 
-        )->shut(
+        )->end(
 
-        )->open( n = `SimpleForm` ns = `form`
+        )->ele( n = `SimpleForm` ns = `form`
             )->a( n = `width`      v = `auto`
             )->a( n = `class`      v = `sapUiResponsiveMargin`
             )->a( n = `layout`     v = `ResponsiveGridLayout`
@@ -71,19 +71,19 @@ CLASS z2ui5_cl_smpc_app_179 IMPLEMENTATION.
             )->a( n = `columnsM`   v = `1`
             )->a( n = `title`      v = `Minimal Number of Non-Fraction Digits (minIntegerDigits)`
 
-            )->open( n = `content` ns = `form`
-                )->leaf( `Label`
+            )->ele( n = `content` ns = `form`
+                )->tag( `Label`
                     )->a( n = `text` v = `3 digits`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = number path = abap_true ) }', type: 'FloatType', formatOptions: \{ minIntegerDigits: 3 \} \}|
-                )->leaf( `Label`
+                )->tag( `Label`
                     )->a( n = `text` v = `5 digits`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = number path = abap_true ) }', type: 'FloatType', formatOptions: \{ minIntegerDigits: 5 \} \}|
 
-        )->shut(
+        )->end(
 
-        )->open( n = `SimpleForm` ns = `form`
+        )->ele( n = `SimpleForm` ns = `form`
             )->a( n = `width`      v = `auto`
             )->a( n = `class`      v = `sapUiResponsiveMargin`
             )->a( n = `layout`     v = `ResponsiveGridLayout`
@@ -95,19 +95,19 @@ CLASS z2ui5_cl_smpc_app_179 IMPLEMENTATION.
             )->a( n = `columnsM`   v = `1`
             )->a( n = `title`      v = `Maximal Number of Non-Fraction Digits (maxIntegerDigits)`
 
-            )->open( n = `content` ns = `form`
-                )->leaf( `Label`
+            )->ele( n = `content` ns = `form`
+                )->tag( `Label`
                     )->a( n = `text` v = `2 digits`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = number path = abap_true ) }', type: 'FloatType', formatOptions: \{ maxIntegerDigits: 2 \} \}|
-                )->leaf( `Label`
+                )->tag( `Label`
                     )->a( n = `text` v = `5 digits`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = number path = abap_true ) }', type: 'FloatType', formatOptions: \{ maxIntegerDigits: 5 \} \}|
 
-        )->shut(
+        )->end(
 
-        )->open( n = `SimpleForm` ns = `form`
+        )->ele( n = `SimpleForm` ns = `form`
             )->a( n = `width`      v = `auto`
             )->a( n = `class`      v = `sapUiResponsiveMargin`
             )->a( n = `layout`     v = `ResponsiveGridLayout`
@@ -119,19 +119,19 @@ CLASS z2ui5_cl_smpc_app_179 IMPLEMENTATION.
             )->a( n = `columnsM`   v = `1`
             )->a( n = `title`      v = `Minimal Number of Fraction Digits (minFractionDigits)`
 
-            )->open( n = `content` ns = `form`
-                )->leaf( `Label`
+            )->ele( n = `content` ns = `form`
+                )->tag( `Label`
                     )->a( n = `text` v = `2 digits`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = number path = abap_true ) }', type: 'FloatType', formatOptions: \{ minFractionDigits: 2 \} \}|
-                )->leaf( `Label`
+                )->tag( `Label`
                     )->a( n = `text` v = `5 digits`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = number path = abap_true ) }', type: 'FloatType', formatOptions: \{ minFractionDigits: 5 \} \}|
 
-        )->shut(
+        )->end(
 
-        )->open( n = `SimpleForm` ns = `form`
+        )->ele( n = `SimpleForm` ns = `form`
             )->a( n = `width`      v = `auto`
             )->a( n = `class`      v = `sapUiResponsiveMargin`
             )->a( n = `layout`     v = `ResponsiveGridLayout`
@@ -143,22 +143,22 @@ CLASS z2ui5_cl_smpc_app_179 IMPLEMENTATION.
             )->a( n = `columnsM`   v = `1`
             )->a( n = `title`      v = `Maximal Number of Fraction Digits (maxFractionDigits, overruled by default by preserveDecimals)`
 
-            )->open( n = `content` ns = `form`
-                )->leaf( `Label`
+            )->ele( n = `content` ns = `form`
+                )->tag( `Label`
                     )->a( n = `text` v = `2 digits, default preserveDecimals (true)`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = number path = abap_true ) }', type: 'FloatType', formatOptions: \{ maxFractionDigits: 2 \} \}|
-                )->leaf( `Label`
+                )->tag( `Label`
                     )->a( n = `text` v = `5 digits, default preserveDecimals (true)`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = number path = abap_true ) }', type: 'FloatType', formatOptions: \{ maxFractionDigits: 5 \} \}|
-                )->leaf( `Label`
+                )->tag( `Label`
                     )->a( n = `text` v = `2 digits, preserveDecimals=false`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = number path = abap_true ) }', type: 'FloatType', formatOptions: \{ maxFractionDigits: 2, preserveDecimals: false \} \}|
-                )->leaf( `Label`
+                )->tag( `Label`
                     )->a( n = `text` v = `5 digits, preserveDecimals=false`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = number path = abap_true ) }', type: 'FloatType', formatOptions: \{ maxFractionDigits: 5, preserveDecimals: false \} \}| ).
 
     client->view_display( view->stringify( ) ).

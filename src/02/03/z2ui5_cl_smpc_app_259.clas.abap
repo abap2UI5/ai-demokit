@@ -26,7 +26,7 @@ CLASS z2ui5_cl_smpc_app_259 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " Block->content inlining (app 188/217 precedent): every blocks /
     " moreBlocks aggregation of the original holds a SharedBlocks BlockBase
@@ -34,7 +34,7 @@ CLASS z2ui5_cl_smpc_app_259 IMPLEMENTATION.
     " a lazy-loading wrapper around a view, and each of these views is a static
     " SimpleForm (or layout) - so the view content is inlined here 1:1, keeping
     " the block's own class attribute where the original sets one.
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `height`       v = `100%`
         )->a( n = `xmlns`        v = `sap.uxap`
         )->a( n = `xmlns:mvc`    v = `sap.ui.core.mvc`
@@ -43,209 +43,209 @@ CLASS z2ui5_cl_smpc_app_259 IMPLEMENTATION.
         )->a( n = `xmlns:layout` v = `sap.ui.layout`
         )->a( n = `xmlns:forms`  v = `sap.ui.layout.form`
 
-        )->open( `ObjectPageLayout`
+        )->ele( `ObjectPageLayout`
             )->a( n = `id`                 v = `ObjectPageLayout`
             )->a( n = `upperCaseAnchorBar` v = `false`
 
-            )->open( `headerTitle`
-                )->open( `ObjectPageDynamicHeaderTitle`
-                    )->open( `expandedHeading`
-                        )->leaf( n = `Title` ns = `m`
+            )->ele( `headerTitle`
+                )->ele( `ObjectPageDynamicHeaderTitle`
+                    )->ele( `expandedHeading`
+                        )->tag( n = `Title` ns = `m`
                             )->a( n = `text`     v = `Object Page Header with Progress Indicator and Rating Indicator`
                             )->a( n = `wrapping` v = `true`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( `snappedHeading`
-                        )->open( n = `HBox` ns = `m`
-                            )->open( n = `VBox` ns = `m`
-                                )->leaf( n = `Avatar` ns = `m`
+                    )->ele( `snappedHeading`
+                        )->ele( n = `HBox` ns = `m`
+                            )->ele( n = `VBox` ns = `m`
+                                )->tag( n = `Avatar` ns = `m`
                                     )->a( n = `class`        v = `sapUiSmallMarginEnd`
                                     )->a( n = `displayShape` v = `Square`
                                     )->a( n = `initials`     v = `HF`
 
-                            )->shut(
+                            )->end(
 
-                            )->open( n = `VBox` ns = `m`
-                                )->leaf( n = `Title` ns = `m`
+                            )->ele( n = `VBox` ns = `m`
+                                )->tag( n = `Title` ns = `m`
                                     )->a( n = `text`     v = `Object Page Header with Progress Indicator and Rating Indicator`
                                     )->a( n = `wrapping` v = `true`
-                                )->leaf( n = `Label` ns = `m`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = `Example of an ObjectPage with header facet`
 
-                            )->shut(
-                        )->shut(
-                    )->shut(
+                            )->end(
+                        )->end(
+                    )->end(
 
-                    )->open( `expandedContent`
-                        )->leaf( n = `Label` ns = `m`
+                    )->ele( `expandedContent`
+                        )->tag( n = `Label` ns = `m`
                             )->a( n = `text` v = `Example of an ObjectPage with header facet`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( `snappedTitleOnMobile`
-                        )->leaf( n = `Title` ns = `m`
+                    )->ele( `snappedTitleOnMobile`
+                        )->tag( n = `Title` ns = `m`
                             )->a( n = `text` v = `Object Page Header with Progress Indicator and Rating Indicator`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( `actions`
-                        )->leaf( n = `Button` ns = `m`
+                    )->ele( `actions`
+                        )->tag( n = `Button` ns = `m`
                             )->a( n = `text` v = `Edit`
                             )->a( n = `type` v = `Emphasized`
-                        )->leaf( n = `Button` ns = `m`
+                        )->tag( n = `Button` ns = `m`
                             )->a( n = `text` v = `Delete`
-                        )->leaf( n = `Button` ns = `m`
+                        )->tag( n = `Button` ns = `m`
                             )->a( n = `text` v = `Copy`
-                        )->leaf( n = `OverflowToolbarButton` ns = `m`
+                        )->tag( n = `OverflowToolbarButton` ns = `m`
                             )->a( n = `icon`    v = `sap-icon://action`
                             )->a( n = `type`    v = `Transparent`
                             )->a( n = `text`    v = `Share`
                             )->a( n = `tooltip` v = `action`
 
-                    )->shut(
-                )->shut(
-            )->shut(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( `headerContent`
-                )->open( n = `FlexBox` ns = `m`
+            )->ele( `headerContent`
+                )->ele( n = `FlexBox` ns = `m`
                     )->a( n = `wrap`         v = `Wrap`
                     )->a( n = `fitContainer` v = `true`
 
-                    )->leaf( n = `Avatar` ns = `m`
+                    )->tag( n = `Avatar` ns = `m`
                         )->a( n = `class`        v = `sapUiMediumMarginEnd sapUiSmallMarginBottom`
                         )->a( n = `displayShape` v = `Square`
                         )->a( n = `initials`     v = `HF`
                         )->a( n = `displaySize`  v = `L`
 
-                    )->open( n = `VBox` ns = `m`
+                    )->ele( n = `VBox` ns = `m`
                         )->a( n = `class` v = `sapUiLargeMarginEnd sapUiSmallMarginBottom`
 
-                        )->open( n = `Title` ns = `m`
+                        )->ele( n = `Title` ns = `m`
                             )->a( n = `class` v = `sapUiTinyMarginBottom`
 
-                            )->leaf( n = `Link` ns = `m`
+                            )->tag( n = `Link` ns = `m`
                                 )->a( n = `text` v = `Profile`
 
-                        )->shut(
+                        )->end(
 
-                        )->leaf( n = `Label` ns = `m`
+                        )->tag( n = `Label` ns = `m`
                             )->a( n = `text` v = `Personal Information`
-                        )->leaf( n = `ProgressIndicator` ns = `m`
+                        )->tag( n = `ProgressIndicator` ns = `m`
                             )->a( n = `displayValue` v = `42%`
                             )->a( n = `percentValue` v = `42`
                             )->a( n = `state`        v = `Information`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( n = `VBox` ns = `m`
+                    )->ele( n = `VBox` ns = `m`
                         )->a( n = `class` v = `sapUiSmallMarginBottom sapUiLargeMarginEnd`
 
-                        )->leaf( n = `Title` ns = `m`
+                        )->tag( n = `Title` ns = `m`
                             )->a( n = `text`  v = `Reliability`
                             )->a( n = `class` v = `sapUiTinyMarginBottom`
-                        )->leaf( n = `Label` ns = `m`
+                        )->tag( n = `Label` ns = `m`
                             )->a( n = `text` v = `Based on fulfiled contracts`
-                        )->leaf( n = `RatingIndicator` ns = `m`
+                        )->tag( n = `RatingIndicator` ns = `m`
                             )->a( n = `value`    v = `4`
                             )->a( n = `iconSize` v = `16px`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( n = `VBox` ns = `m`
+                    )->ele( n = `VBox` ns = `m`
                         )->a( n = `width` v = `448px`
                         )->a( n = `class` v = `sapUiSmallMarginBottom`
 
-                        )->open( n = `Title` ns = `m`
+                        )->ele( n = `Title` ns = `m`
                             )->a( n = `class` v = `sapUiTinyMarginBottom`
 
-                            )->leaf( n = `Link` ns = `m`
+                            )->tag( n = `Link` ns = `m`
                                 )->a( n = `text` v = `Product Description`
 
-                        )->shut(
+                        )->end(
 
-                        )->leaf( n = `Text` ns = `m`
+                        )->tag( n = `Text` ns = `m`
                             )->a( n = `text` v = `Top-design high-quality coffee mug - ideal for a comforting moment; `
                                               && `Pack: 6; material: Porcelain - durable dishwasher and microwave-safe `
                                               && `porcelain that cleans easily and is ideal for everyday service. `
                                               && `Comes in two bright colors.`
 
-                    )->shut(
-                )->shut(
-            )->shut(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( `sections`
-                )->open( `ObjectPageSection`
+            )->ele( `sections`
+                )->ele( `ObjectPageSection`
                     )->a( n = `titleUppercase` v = `false`
                     )->a( n = `id`             v = `goalsSection`
                     )->a( n = `title`          v = `2014 Goals Plan`
 
-                    )->open( `subSections`
-                        )->open( `ObjectPageSubSection`
+                    )->ele( `subSections`
+                        )->ele( `ObjectPageSubSection`
                             )->a( n = `id`             v = `goalsSectionSS1`
                             )->a( n = `titleUppercase` v = `false`
 
-                            )->open( `blocks`
+                            )->ele( `blocks`
 
                                 " goals:GoalsBlock inlined
-                                )->open( n = `SimpleForm` ns = `forms`
+                                )->ele( n = `SimpleForm` ns = `forms`
                                     )->a( n = `class`    v = `sapUxAPObjectPageSubSectionAlignContent`
                                     )->a( n = `editable` v = `false`
                                     )->a( n = `layout`   v = `ColumnLayout`
 
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Evangelize the UI framework across the company`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `4 days overdue Cascaded`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Get trained in development management direction`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `Due Nov 21`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Mentor junior developers`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `Due Dec 31 Cascaded`
 
-                                )->shut(
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                )->shut(
+                                )->end(
+                            )->end(
+                        )->end(
+                    )->end(
+                )->end(
 
-                )->open( `ObjectPageSection`
+                )->ele( `ObjectPageSection`
                     )->a( n = `titleUppercase` v = `false`
                     )->a( n = `id`             v = `personalSection`
                     )->a( n = `title`          v = `Personal`
 
-                    )->open( `subSections`
-                        )->open( `ObjectPageSubSection`
+                    )->ele( `subSections`
+                        )->ele( `ObjectPageSubSection`
                             )->a( n = `id`             v = `personalSectionSS1`
                             )->a( n = `title`          v = `Connect`
                             )->a( n = `titleUppercase` v = `false`
 
-                            )->open( `blocks`
+                            )->ele( `blocks`
 
                                 " personal:BlockPhoneNumber inlined
-                                )->open( n = `SimpleForm` ns = `forms`
+                                )->ele( n = `SimpleForm` ns = `forms`
                                     )->a( n = `class`  v = `sapUxAPObjectPageSubSectionAlignContent`
                                     )->a( n = `layout` v = `ColumnLayout`
                                     )->a( n = `width`  v = `100%`
 
-                                    )->leaf( n = `Title` ns = `core`
+                                    )->tag( n = `Title` ns = `core`
                                         )->a( n = `text` v = `Phone Numbers`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Home`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `+ 1 415-321-1234`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Office phone`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `+ 1 415-321-5555`
 
-                                )->shut(
+                                )->end(
 
                                 " personal:BlockSocial inlined
-                                )->open( n = `SimpleForm` ns = `forms`
+                                )->ele( n = `SimpleForm` ns = `forms`
                                     )->a( n = `class`            v = `sapUxAPObjectPageSubSectionAlignContent`
                                     )->a( n = `editable`         v = `false`
                                     )->a( n = `labelSpanL`       v = `4`
@@ -257,117 +257,117 @@ CLASS z2ui5_cl_smpc_app_259 IMPLEMENTATION.
                                     )->a( n = `maxContainerCols` v = `2`
                                     )->a( n = `width`            v = `100%`
 
-                                    )->leaf( n = `Title` ns = `core`
+                                    )->tag( n = `Title` ns = `core`
                                         )->a( n = `text` v = `Social Accounts`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `LinkedIn`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `/DeniseSmith`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Twitter`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `@DeniseSmith`
 
-                                )->shut(
+                                )->end(
 
                                 " personal:BlockAdresses inlined
-                                )->open( n = `SimpleForm` ns = `forms`
+                                )->ele( n = `SimpleForm` ns = `forms`
                                     )->a( n = `class`    v = `sapUxAPObjectPageSubSectionAlignContent`
                                     )->a( n = `layout`   v = `ColumnLayout`
                                     )->a( n = `editable` v = `false`
                                     )->a( n = `width`    v = `100%`
 
-                                    )->leaf( n = `Title` ns = `core`
+                                    )->tag( n = `Title` ns = `core`
                                         )->a( n = `text` v = `Addresses`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Home Address`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `2096 Mission Street`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Mailing Address`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `PO Box 32114`
 
-                                )->shut(
+                                )->end(
 
                                 " personal:BlockMailing inlined (the block's own
                                 " columnLayout='1' is a BlockBase property and
                                 " has no counterpart on the inlined form)
-                                )->open( n = `SimpleForm` ns = `forms`
+                                )->ele( n = `SimpleForm` ns = `forms`
                                     )->a( n = `class`  v = `sapUxAPObjectPageSubSectionAlignContent`
                                     )->a( n = `layout` v = `ColumnLayout`
                                     )->a( n = `width`  v = `100%`
 
-                                    )->leaf( n = `Title` ns = `core`
+                                    )->tag( n = `Title` ns = `core`
                                         )->a( n = `text` v = `Mailing Address`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Work`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `DeniseSmith@sap.com`
 
-                                )->shut(
-                            )->shut(
-                        )->shut(
+                                )->end(
+                            )->end(
+                        )->end(
 
-                        )->open( `ObjectPageSubSection`
+                        )->ele( `ObjectPageSubSection`
                             )->a( n = `id`             v = `personalSectionSS2`
                             )->a( n = `title`          v = `Payment information`
                             )->a( n = `titleUppercase` v = `false`
 
-                            )->open( `blocks`
+                            )->ele( `blocks`
 
                                 " personal:PersonalBlockPart1 inlined
-                                )->open( n = `SimpleForm` ns = `forms`
+                                )->ele( n = `SimpleForm` ns = `forms`
                                     )->a( n = `class`    v = `sapUxAPObjectPageSubSectionAlignContent`
                                     )->a( n = `editable` v = `false`
                                     )->a( n = `layout`   v = `ColumnLayout`
 
-                                    )->leaf( n = `Title` ns = `core`
+                                    )->tag( n = `Title` ns = `core`
                                         )->a( n = `text` v = `Main Payment Method`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Bank Transfer`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `Sparkasse Heimfeld, Germany`
 
-                                )->shut(
-                            )->shut(
+                                )->end(
+                            )->end(
 
-                            )->open( `moreBlocks`
+                            )->ele( `moreBlocks`
 
                                 " personal:PersonalBlockPart2 inlined
-                                )->open( n = `SimpleForm` ns = `forms`
+                                )->ele( n = `SimpleForm` ns = `forms`
                                     )->a( n = `class`    v = `sapUxAPObjectPageSubSectionAlignContent`
                                     )->a( n = `editable` v = `false`
                                     )->a( n = `layout`   v = `ColumnLayout`
 
-                                    )->leaf( n = `Title` ns = `core`
+                                    )->tag( n = `Title` ns = `core`
                                         )->a( n = `text` v = `Payment method for Expenses`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Extra Travel Expenses`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `Cash 100 USD`
 
-                                )->shut(
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                )->shut(
+                                )->end(
+                            )->end(
+                        )->end(
+                    )->end(
+                )->end(
 
-                )->open( `ObjectPageSection`
+                )->ele( `ObjectPageSection`
                     )->a( n = `titleUppercase` v = `false`
                     )->a( n = `id`             v = `employmentSection`
                     )->a( n = `title`          v = `Employment`
 
-                    )->open( `subSections`
-                        )->open( `ObjectPageSubSection`
+                    )->ele( `subSections`
+                        )->ele( `ObjectPageSubSection`
                             )->a( n = `id`             v = `employmentSectionSS1`
                             )->a( n = `title`          v = `Job information`
                             )->a( n = `titleUppercase` v = `false`
 
-                            )->open( `blocks`
+                            )->ele( `blocks`
 
                                 " employment:BlockJobInfoPart1 inlined
-                                )->open( n = `SimpleForm` ns = `forms`
+                                )->ele( n = `SimpleForm` ns = `forms`
                                     )->a( n = `class`            v = `sapUxAPObjectPageSubSectionAlignContent`
                                     )->a( n = `labelSpanL`       v = `4`
                                     )->a( n = `labelSpanM`       v = `4`
@@ -380,33 +380,33 @@ CLASS z2ui5_cl_smpc_app_259 IMPLEMENTATION.
                                     )->a( n = `layout`           v = `ResponsiveGridLayout`
                                     )->a( n = `width`            v = `100%`
 
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Job classification`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `Senior Ui Developer (UIDEV-SR)`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = ` `
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Pay Grade`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `Salary Grade 18 (GR-14)`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = ` `
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Job title`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `Developer`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = ` `
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Local Job Title`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Ui Developer`
 
-                                )->shut(
+                                )->end(
 
                                 " employment:BlockJobInfoPart2 inlined
-                                )->open( n = `SimpleForm` ns = `forms`
+                                )->ele( n = `SimpleForm` ns = `forms`
                                     )->a( n = `class`            v = `sapUxAPObjectPageSubSectionAlignContent`
                                     )->a( n = `labelSpanL`       v = `4`
                                     )->a( n = `labelSpanM`       v = `4`
@@ -419,58 +419,58 @@ CLASS z2ui5_cl_smpc_app_259 IMPLEMENTATION.
                                     )->a( n = `layout`           v = `ResponsiveGridLayout`
                                     )->a( n = `width`            v = `100%`
 
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Employee Class`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `Employee`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = ` `
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `FTE`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `1`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = ` `
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Standard Weekly Hours`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `40`
 
-                                )->shut(
+                                )->end(
 
                                 " employment:BlockJobInfoPart3 inlined
-                                )->open( n = `HorizontalLayout` ns = `layout`
+                                )->ele( n = `HorizontalLayout` ns = `layout`
                                     )->a( n = `class` v = `sapUiSmallMarginTop`
 
-                                    )->open( n = `VerticalLayout` ns = `layout`
-                                        )->leaf( n = `Label` ns = `m`
+                                    )->ele( n = `VerticalLayout` ns = `layout`
+                                        )->tag( n = `Label` ns = `m`
                                             )->a( n = `text` v = `Manager`
 
-                                        )->open( n = `HorizontalLayout` ns = `layout`
-                                            )->open( n = `content` ns = `layout`
-                                                )->open( n = `VerticalLayout` ns = `layout`
-                                                    )->leaf( n = `Text` ns = `m`
+                                        )->ele( n = `HorizontalLayout` ns = `layout`
+                                            )->ele( n = `content` ns = `layout`
+                                                )->ele( n = `VerticalLayout` ns = `layout`
+                                                    )->tag( n = `Text` ns = `m`
                                                         )->a( n = `text` v = `James Smith`
-                                                    )->leaf( n = `Text` ns = `m`
+                                                    )->tag( n = `Text` ns = `m`
                                                         )->a( n = `text` v = `Development Manager`
 
-                                                )->shut(
-                                            )->shut(
-                                        )->shut(
-                                    )->shut(
-                                )->shut(
-                            )->shut(
-                        )->shut(
+                                                )->end(
+                                            )->end(
+                                        )->end(
+                                    )->end(
+                                )->end(
+                            )->end(
+                        )->end(
 
-                        )->open( `ObjectPageSubSection`
+                        )->ele( `ObjectPageSubSection`
                             )->a( n = `id`             v = `employmentSectionSS2`
                             )->a( n = `title`          v = `Employee Details`
                             )->a( n = `titleUppercase` v = `false`
 
-                            )->open( `blocks`
+                            )->ele( `blocks`
 
                                 " employment:BlockEmpDetailPart1 inlined
-                                )->open( n = `SimpleForm` ns = `forms`
+                                )->ele( n = `SimpleForm` ns = `forms`
                                     )->a( n = `class`            v = `sapUxAPObjectPageSubSectionAlignContent`
                                     )->a( n = `labelSpanL`       v = `4`
                                     )->a( n = `labelSpanM`       v = `4`
@@ -483,24 +483,24 @@ CLASS z2ui5_cl_smpc_app_259 IMPLEMENTATION.
                                     )->a( n = `layout`           v = `ResponsiveGridLayout`
                                     )->a( n = `width`            v = `100%`
 
-                                    )->leaf( n = `Title` ns = `core`
+                                    )->tag( n = `Title` ns = `core`
                                         )->a( n = `text` v = `Termination information`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Ok to return`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `No`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Regret Termination`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `Yes`
 
-                                )->shut(
-                            )->shut(
+                                )->end(
+                            )->end(
 
-                            )->open( `moreBlocks`
+                            )->ele( `moreBlocks`
 
                                 " employment:BlockEmpDetailPart2 inlined
-                                )->open( n = `SimpleForm` ns = `forms`
+                                )->ele( n = `SimpleForm` ns = `forms`
                                     )->a( n = `class`            v = `sapUxAPObjectPageSubSectionAlignContent`
                                     )->a( n = `labelSpanL`       v = `4`
                                     )->a( n = `labelSpanM`       v = `4`
@@ -513,27 +513,27 @@ CLASS z2ui5_cl_smpc_app_259 IMPLEMENTATION.
                                     )->a( n = `layout`           v = `ResponsiveGridLayout`
                                     )->a( n = `width`            v = `100%`
 
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Start Date`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `Jan 01, 2001`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `End Date`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `Jun 30, 2014`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Last Date Worked`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `Jun 01, 2014`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Payroll End Date`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `Jun 01, 2014`
 
-                                )->shut(
+                                )->end(
 
                                 " employment:BlockEmpDetailPart3 inlined
-                                )->open( n = `SimpleForm` ns = `forms`
+                                )->ele( n = `SimpleForm` ns = `forms`
                                     )->a( n = `class`            v = `sapUxAPObjectPageSubSectionAlignContent`
                                     )->a( n = `labelSpanL`       v = `4`
                                     )->a( n = `labelSpanM`       v = `4`
@@ -546,21 +546,21 @@ CLASS z2ui5_cl_smpc_app_259 IMPLEMENTATION.
                                     )->a( n = `layout`           v = `ResponsiveGridLayout`
                                     )->a( n = `width`            v = `100%`
 
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Payroll End Date`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `Jan 01, 2014`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Benefits End Date`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `Jun 30, 2014`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Stock End Date`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `Jun 01, 2014`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Eligible for Salary Contribution`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `No`
                                 ).
 

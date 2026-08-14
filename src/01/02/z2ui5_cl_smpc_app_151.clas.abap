@@ -32,19 +32,19 @@ CLASS z2ui5_cl_smpc_app_151 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:u`   v = `sap.ui.unified`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `class`     v = `viewPadding`
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
 
-            )->leaf( n = `Calendar` ns = `u`
+            )->tag( n = `Calendar` ns = `u`
                 )->a( n = `id`                    v = `calendar`
                 )->a( n = `primaryCalendarType`   v = `Islamic`
                 )->a( n = `secondaryCalendarType` v = `Gregorian`
@@ -59,16 +59,16 @@ CLASS z2ui5_cl_smpc_app_151 IMPLEMENTATION.
                                                                         ( `$event.oSource.getSelectedDates().length > 0 ? $event.oSource.getSelectedDates()[0].getStartDate().getMonth() + 1 : 0` )
                                                                         ( `$event.oSource.getSelectedDates().length > 0 ? $event.oSource.getSelectedDates()[0].getStartDate().getDate() : 0` ) ) )
 
-            )->open( n = `HorizontalLayout` ns = `l`
+            )->ele( n = `HorizontalLayout` ns = `l`
                 )->a( n = `allowWrapping` v = `true`
-                )->leaf( `Button`
+                )->tag( `Button`
                     )->a( n = `press` v = client->_event( `FOCUS_TODAY` )
                     )->a( n = `text`  v = `Focus Today`
                     )->a( n = `class` v = `sapUiSmallMarginEnd`
-                )->leaf( `Label`
+                )->tag( `Label`
                     )->a( n = `text`  v = `Selected Date (yyyy-mm-dd):`
                     )->a( n = `class` v = `sapUiSmallMarginEnd`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `id`   v = `selectedDate`
                     )->a( n = `text` v = client->_bind( selected_date ) ).
 

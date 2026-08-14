@@ -26,32 +26,32 @@ CLASS z2ui5_cl_smpc_app_125 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `displayBlock` v = `true`
         )->a( n = `xmlns:l`      v = `sap.ui.layout`
         )->a( n = `xmlns:mvc`    v = `sap.ui.core.mvc`
         )->a( n = `xmlns`        v = `sap.m`
 
-        )->open( `App`
-            )->open( n = `Splitter` ns = `l`
+        )->ele( `App`
+            )->ele( n = `Splitter` ns = `l`
                 )->a( n = `height` v = `500px`
 
-                )->open( `Button`
+                )->ele( `Button`
                     )->a( n = `width` v = `100%`
                     )->a( n = `text`  v = `Content 1`
-                    )->open( `layoutData`
-                        )->leaf( n = `SplitterLayoutData` ns = `l`
+                    )->ele( `layoutData`
+                        )->tag( n = `SplitterLayoutData` ns = `l`
                             )->a( n = `size` v = `300px`
 
-                )->shut(
-                )->shut(
-                )->open( `Button`
+                )->end(
+                )->end(
+                )->ele( `Button`
                     )->a( n = `width` v = `100%`
                     )->a( n = `text`  v = `Content 2`
-                    )->open( `layoutData`
-                        )->leaf( n = `SplitterLayoutData` ns = `l`
+                    )->ele( `layoutData`
+                        )->tag( n = `SplitterLayoutData` ns = `l`
                             )->a( n = `size` v = `auto` ).
 
     client->view_display( view->stringify( ) ).

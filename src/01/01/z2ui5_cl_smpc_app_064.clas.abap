@@ -26,13 +26,13 @@ CLASS z2ui5_cl_smpc_app_064 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
-        )->leaf( `NumericContent`
+        )->tag( `NumericContent`
             )->a( n = `value`      v = `65`
             )->a( n = `scale`      v = `MM`
             )->a( n = `valueColor` v = `Error`
@@ -41,7 +41,7 @@ CLASS z2ui5_cl_smpc_app_064 IMPLEMENTATION.
             )->a( n = `class`      v = `sapUiSmallMargin`
             )->a( n = `press`      v = client->follow_up_action( val   = client->cs_event-control_global
                                                                  t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The numeric content is pressed.` ) ) )
-        )->leaf( `NumericContent`
+        )->tag( `NumericContent`
             )->a( n = `value`      v = `11`
             )->a( n = `scale`      v = `MM`
             )->a( n = `valueColor` v = `Critical`

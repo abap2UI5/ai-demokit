@@ -26,16 +26,16 @@ CLASS z2ui5_cl_smpc_app_152 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc`    v = `sap.ui.core.mvc`
         )->a( n = `xmlns`        v = `sap.f`
         )->a( n = `xmlns:m`      v = `sap.m`
         )->a( n = `xmlns:layout` v = `sap.ui.layout`
         )->a( n = `height`       v = `100%`
 
-        )->open( `ShellBar`
+        )->ele( `ShellBar`
             )->a( n = `id`                  v = `sapFShellBarSample`
             )->a( n = `title`               v = `Application Title`
             )->a( n = `secondTitle`         v = `Short description`
@@ -49,9 +49,9 @@ CLASS z2ui5_cl_smpc_app_152 IMPLEMENTATION.
             )->a( n = `class`               v = `sapFShellBarFCLFPHeader`
             )->a( n = `notificationsNumber` v = `2`
 
-            )->open( `profile`
+            )->ele( `profile`
                 " sap.m.Avatar is @since 1.73 - kept 1:1 (POST_171)
-                )->leaf( n = `Avatar` ns = `m`
+                )->tag( n = `Avatar` ns = `m`
                     )->a( n = `initials` v = `UI` ).
 
     client->view_display( view->stringify( ) ).

@@ -26,26 +26,26 @@ CLASS z2ui5_cl_smpc_app_056 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
-        )->leaf( `ImageContent`
+        )->tag( `ImageContent`
             )->a( n = `class`       v = `sapUiLargeMarginTop sapUiLargeMarginBottom`
             )->a( n = `src`         v = `sap-icon://area-chart`
             )->a( n = `description` v = `Icon`
             )->a( n = `press`       v = client->follow_up_action( val   = client->cs_event-control_global
                                                                   t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The ImageContent is pressed.` ) ) )
-        )->leaf( `ImageContent`
+        )->tag( `ImageContent`
             )->a( n = `class`       v = `sapUiLargeMarginTop sapUiLargeMarginBottom`
             " original demokit test-resources image paths kept 1:1 - not served by abap2UI5 (see sidecar)
             )->a( n = `src`         v = `test-resources/sap/m/demokit/sample/ImageContent/images/ProfileImage_LargeGenTile.png`
             )->a( n = `description` v = `Profile image`
             )->a( n = `press`       v = client->follow_up_action( val   = client->cs_event-control_global
                                                                   t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The ImageContent is pressed.` ) ) )
-        )->leaf( `ImageContent`
+        )->tag( `ImageContent`
             )->a( n = `class`       v = `sapUiLargeMarginTop sapUiLargeMarginBottom`
             )->a( n = `src`         v = `test-resources/sap/m/demokit/sample/ImageContent/images/SAPLogoLargeTile_28px_height.png`
             )->a( n = `description` v = `Logo`

@@ -29,76 +29,76 @@ CLASS z2ui5_cl_smpc_app_082 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the sample's images are served from the demo kit sample folder; resolved to absolute OpenUI5 URLs
     DATA(img) = `https://sdk.openui5.org/test-resources/sap/m/demokit/sample/SlideTile/images/`.
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
 
-            )->open( `SlideTile`
+            )->ele( `SlideTile`
                 )->a( n = `class` v = `sapUiTinyMarginBegin sapUiTinyMarginTop`
-                )->open( `GenericTile`
+                )->ele( `GenericTile`
                     )->a( n = `backgroundImage` v = |{ img }NewsImage2.png|
                     )->a( n = `frameType`       v = `TwoByOne`
                     )->a( n = `press`           v = client->_event( `PRESS_ONE` )
-                    )->open( `TileContent`
+                    )->ele( `TileContent`
                         )->a( n = `footer` v = `August 21, 2016`
-                        )->leaf( `NewsContent`
+                        )->tag( `NewsContent`
                             )->a( n = `contentText` v = `SAP Unveils Powerful New Player Comparision Tool Exclusively on NFL.com`
                             )->a( n = `subheader`   v = `Today, SAP News`
 
-                    )->shut(
-                )->shut(
-                )->open( `GenericTile`
+                    )->end(
+                )->end(
+                )->ele( `GenericTile`
                     )->a( n = `backgroundImage` v = |{ img }NewsImage1.png|
                     )->a( n = `frameType`       v = `TwoByOne`
                     )->a( n = `press`           v = client->_event( `PRESS_TWO` )
-                    )->open( `TileContent`
+                    )->ele( `TileContent`
                         )->a( n = `footer` v = `August 21, 2016`
-                        )->leaf( `NewsContent`
+                        )->tag( `NewsContent`
                             )->a( n = `contentText` v = `Wind Map: Monitoring Real-Time and Forecasted Wind Conditions across the Globe`
                             )->a( n = `subheader`   v = `Today, SAP News`
 
-                    )->shut(
-                )->shut(
-            )->shut(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( `SlideTile`
+            )->ele( `SlideTile`
                 )->a( n = `class`          v = `sapUiTinyMarginBegin sapUiTinyMarginTop`
                 )->a( n = `transitionTime` v = `250`
                 )->a( n = `displayTime`    v = `2500`
-                )->open( `GenericTile`
+                )->ele( `GenericTile`
                     )->a( n = `backgroundImage` v = |{ img }NewsImage1.png|
                     )->a( n = `frameType`       v = `TwoByOne`
                     )->a( n = `press`           v = client->_event( `PRESS_ONE` )
-                    )->open( `TileContent`
+                    )->ele( `TileContent`
                         )->a( n = `footer` v = `August 21, 2016`
-                        )->leaf( `NewsContent`
+                        )->tag( `NewsContent`
                             )->a( n = `contentText` v = `Wind Map: Monitoring Real-Time and Forecasted Wind Conditions across the Globe`
                             )->a( n = `subheader`   v = `Today, SAP News`
 
-                    )->shut(
-                )->shut(
-                )->open( `GenericTile`
+                    )->end(
+                )->end(
+                )->ele( `GenericTile`
                     )->a( n = `backgroundImage` v = |{ img }NewsImage2.png|
                     )->a( n = `frameType`       v = `TwoByOne`
                     )->a( n = `state`           v = `Failed`
-                    )->open( `TileContent`
+                    )->ele( `TileContent`
                         )->a( n = `footer` v = `August 21, 2016`
-                        )->leaf( `NewsContent`
+                        )->tag( `NewsContent`
                             )->a( n = `contentText` v = `SAP Unveils Powerful New Player Comparision Tool Exclusively on NFL.com`
                             )->a( n = `subheader`   v = `Today, SAP News`
 
-                    )->shut(
-                )->shut(
-            )->shut(
-        )->shut( ).
+                    )->end(
+                )->end(
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

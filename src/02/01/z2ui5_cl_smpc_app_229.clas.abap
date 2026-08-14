@@ -37,32 +37,32 @@ CLASS z2ui5_cl_smpc_app_229 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
             )->a( n = `width` v = `100%`
 
-            )->open( n = `content` ns = `l`
-                )->leaf( `Button`
+            )->ele( n = `content` ns = `l`
+                )->tag( `Button`
                     )->a( n = `text`         v = `Show Popover`
                     " handlePopoverPress: the popover is built + anchored to the pressed button
                     )->a( n = `press`        v = client->_event( val   = `SHOW_POPOVER`
                                                                  t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
                     )->a( n = `ariaHasPopup` v = `Dialog`
-                )->leaf( `Button`
+                )->tag( `Button`
                     )->a( n = `press`        v = client->_event( val   = `SHOW_RESIZABLE`
                                                                  t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
                     )->a( n = `text`         v = `Show Resizable Popover`
                     )->a( n = `ariaHasPopup` v = `Dialog`
 
-            )->shut(
-        )->shut( ).
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 
@@ -78,64 +78,64 @@ CLASS z2ui5_cl_smpc_app_229 IMPLEMENTATION.
         " popover is built server-side and shown anchored to the pressed button
         " ($event.oSource.sId); bindElement("/ProductCollection/0") is folded to
         " the root-seeded fields (relative {NAME}/{PRODUCTPICURL} resolve there)
-        DATA(popover) = z2ui5_cl_ai_xml=>factory( ).
-        popover->open( n = `FragmentDefinition` ns = `core`
+        DATA(popover) = z2ui5_cl_ui5_view_builder=>factory( ).
+        popover->ele( n = `FragmentDefinition` ns = `core`
             )->a( n = `xmlns`      v = `sap.m`
             )->a( n = `xmlns:core` v = `sap.ui.core`
-            )->open( `Popover`
+            )->ele( `Popover`
                 )->a( n = `id`           v = `myPopover`
                 )->a( n = `title`        v = client->_bind( name )
                 )->a( n = `class`        v = `sapUiResponsivePadding--header sapUiResponsivePadding--footer`
                 )->a( n = `placement`    v = `Bottom`
                 )->a( n = `initialFocus` v = `email`
-                )->open( `footer`
-                    )->open( `OverflowToolbar`
-                        )->leaf( `ToolbarSpacer`
-                        )->leaf( `Button`
+                )->ele( `footer`
+                    )->ele( `OverflowToolbar`
+                        )->tag( `ToolbarSpacer`
+                        )->tag( `Button`
                             )->a( n = `id`    v = `email`
                             )->a( n = `text`  v = `Email`
                             )->a( n = `press` v = client->_event( `EMAIL` )
 
-                    )->shut(
-                )->shut(
-                )->leaf( `Image`
+                    )->end(
+                )->end(
+                )->tag( `Image`
                     )->a( n = `src`          v = client->_bind( productpicurl )
                     )->a( n = `width`        v = `15em`
                     )->a( n = `densityAware` v = `false`
 
-            )->shut( ).
+            )->end( ).
         client->popover_display( xml   = popover->stringify( )
                                  by_id = client->get_event_arg( ) ).
 
       WHEN `SHOW_RESIZABLE`.
         " handleResizablePopoverPress: the resizable variant, same anchoring
-        DATA(resizable) = z2ui5_cl_ai_xml=>factory( ).
-        resizable->open( n = `FragmentDefinition` ns = `core`
+        DATA(resizable) = z2ui5_cl_ui5_view_builder=>factory( ).
+        resizable->ele( n = `FragmentDefinition` ns = `core`
             )->a( n = `xmlns`      v = `sap.m`
             )->a( n = `xmlns:core` v = `sap.ui.core`
-            )->open( `Popover`
+            )->ele( `Popover`
                 )->a( n = `id`           v = `myResizablePopover`
                 )->a( n = `title`        v = client->_bind( name )
                 )->a( n = `class`        v = `sapUiResponsivePadding--header sapUiResponsivePadding--footer`
                 )->a( n = `placement`    v = `Right`
                 )->a( n = `resizable`    v = `true`
                 )->a( n = `initialFocus` v = `close`
-                )->open( `footer`
-                    )->open( `OverflowToolbar`
-                        )->leaf( `ToolbarSpacer`
-                        )->leaf( `Button`
+                )->ele( `footer`
+                    )->ele( `OverflowToolbar`
+                        )->tag( `ToolbarSpacer`
+                        )->tag( `Button`
                             )->a( n = `id`    v = `close`
                             )->a( n = `text`  v = `Close`
                             )->a( n = `press` v = client->_event( `CLOSE` )
 
-                    )->shut(
-                )->shut(
-                )->leaf( `Image`
+                    )->end(
+                )->end(
+                )->tag( `Image`
                     )->a( n = `src`          v = client->_bind( productpicurl )
                     )->a( n = `width`        v = `15em`
                     )->a( n = `densityAware` v = `false`
 
-            )->shut( ).
+            )->end( ).
         client->popover_display( xml   = resizable->stringify( )
                                  by_id = client->get_event_arg( ) ).
 

@@ -35,23 +35,23 @@ CLASS z2ui5_cl_smpc_app_375 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
 
-        )->open( `FlexBox`
+        )->ele( `FlexBox`
             )->a( n = `items`     v = |\{ path: '{ client->_bind( val = t_model_data path = abap_true ) }' \}|
             )->a( n = `direction` v = `Column`
 
-            )->open( `VBox`
+            )->ele( `VBox`
                 )->a( n = `class` v = `sapUiTinyMargin`
 
-                )->leaf( `Label`
+                )->tag( `Label`
                     )->a( n = `text`     v = `{LABEL}`
                     )->a( n = `labelFor` v = `SI`
-                )->leaf( `StepInput`
+                )->tag( `StepInput`
                     )->a( n = `id`         v = `SI`
                     )->a( n = `width`      v = `100%`
                     )->a( n = `value`      v = `5`

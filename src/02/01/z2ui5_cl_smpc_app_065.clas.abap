@@ -71,9 +71,9 @@ CLASS z2ui5_cl_smpc_app_065 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `height`      v = `100%`
         )->a( n = `xmlns`       v = `sap.m`
         )->a( n = `xmlns:mvc`   v = `sap.ui.core.mvc`
@@ -81,18 +81,18 @@ CLASS z2ui5_cl_smpc_app_065 IMPLEMENTATION.
         )->a( n = `xmlns:f`     v = `sap.ui.layout.form`
         )->a( n = `xmlns:z2ui5` v = `z2ui5.cc`
 
-        )->open( `Page`
+        )->ele( `Page`
             )->a( n = `id`         v = `messageHandlingPage`
             )->a( n = `showHeader` v = `false`
 
-            )->open( `content`
+            )->ele( `content`
 
-                )->open( `VBox`
+                )->ele( `VBox`
                     )->a( n = `id`    v = `formContainer`
                     )->a( n = `class` v = `sapUiSmallMargin`
                     )->a( n = `items` v = client->_bind( t_forms )
 
-                    )->open( n = `SimpleForm` ns = `f`
+                    )->ele( n = `SimpleForm` ns = `f`
                         )->a( n = `editable` v = `true`
                         )->a( n = `layout`   v = `ColumnLayout`
                         )->a( n = `title`    v = `Personal`
@@ -100,69 +100,69 @@ CLASS z2ui5_cl_smpc_app_065 IMPLEMENTATION.
                         )->a( n = `columnsL` v = `2`
                         )->a( n = `columnsXL` v = `2`
 
-                        )->open( n = `content` ns = `f`
-                            )->leaf( n = `Title` ns = `core`
+                        )->ele( n = `content` ns = `f`
+                            )->tag( n = `Title` ns = `core`
                                 )->a( n = `text` v = `Information`
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text` v = `Name`
-                            )->leaf( `Input`
+                            )->tag( `Input`
                                 )->a( n = `required` v = `true`
                                 )->a( n = `value`    v = `{ path: 'NAME', type: 'sap.ui.model.type.String' }`
                                 )->a( n = `change`   v = client->_event( `CHANGE` )
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text` v = `Street/No.`
-                            )->leaf( `Input`
+                            )->tag( `Input`
                                 )->a( n = `value` v = `{STREET_NAME}`
-                            )->leaf( `Input`
+                            )->tag( `Input`
                                 )->a( n = `value` v = `{STREET_NUMBER}`
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text` v = `ZIP Code/City`
-                            )->leaf( `Input`
+                            )->tag( `Input`
                                 )->a( n = `value` v = `{ path: 'ZIP_CODE', type: 'sap.ui.model.type.Integer' }`
-                            )->leaf( `Input`
+                            )->tag( `Input`
                                 )->a( n = `value` v = `{ZIP_CITY}`
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text` v = `Country`
-                            )->open( `Select`
+                            )->ele( `Select`
                                 )->a( n = `selectedKey` v = `{COUNTRY}`
-                                )->leaf( n = `Item` ns = `core`
+                                )->tag( n = `Item` ns = `core`
                                     )->a( n = `key`  v = `England`
                                     )->a( n = `text` v = `England`
-                                )->leaf( n = `Item` ns = `core`
+                                )->tag( n = `Item` ns = `core`
                                     )->a( n = `key`  v = `Germany`
                                     )->a( n = `text` v = `Germany`
-                                )->leaf( n = `Item` ns = `core`
+                                )->tag( n = `Item` ns = `core`
                                     )->a( n = `key`  v = `USA`
                                     )->a( n = `text` v = `USA`
 
-                            )->shut(
-                            )->leaf( n = `Title` ns = `core`
+                            )->end(
+                            )->tag( n = `Title` ns = `core`
                                 )->a( n = `text` v = `Contact`
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text` v = `Email`
-                            )->leaf( `Input`
+                            )->tag( `Input`
                                 )->a( n = `value` v = `{ path: 'EMAIL', type: 'sap.ui.model.type.String', constraints: { search: '^\\w+[\\w-+\\.]*\\@[a-zA-Z]+.[a-zA-Z]+' } }`
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text` v = `Phone Number`
-                            )->leaf( `Input`
+                            )->tag( `Input`
                                 )->a( n = `value` v = `{PHONE_NUMBER}`
-                            )->leaf( `Input`
+                            )->tag( `Input`
                                 )->a( n = `value` v = `{PHONE_TIME}`
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text` v = `Personal website`
-                            )->leaf( `Input`
+                            )->tag( `Input`
                                 )->a( n = `value` v = `{WEBSITE}`
 
-                        )->shut(
-                    )->shut(
-                )->shut(
+                        )->end(
+                    )->end(
+                )->end(
 
-                )->open( `VBox`
+                )->ele( `VBox`
                     )->a( n = `id`    v = `formContainerEmployment`
                     )->a( n = `class` v = `sapUiSmallMargin`
                     )->a( n = `items` v = client->_bind( t_employment )
 
-                    )->open( n = `SimpleForm` ns = `f`
+                    )->ele( n = `SimpleForm` ns = `f`
                         )->a( n = `editable` v = `true`
                         )->a( n = `layout`   v = `ColumnLayout`
                         )->a( n = `title`    v = `Personal`
@@ -170,50 +170,50 @@ CLASS z2ui5_cl_smpc_app_065 IMPLEMENTATION.
                         )->a( n = `columnsL` v = `2`
                         )->a( n = `columnsXL` v = `2`
 
-                        )->open( n = `content` ns = `f`
-                            )->leaf( n = `Title` ns = `core`
+                        )->ele( n = `content` ns = `f`
+                            )->tag( n = `Title` ns = `core`
                                 )->a( n = `text` v = `Information`
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text` v = `Job Classification`
-                            )->leaf( `Input`
+                            )->tag( `Input`
                                 )->a( n = `value` v = `{JOBTITLE}`
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text` v = `Pay Grade`
-                            )->leaf( `Input`
+                            )->tag( `Input`
                                 )->a( n = `value` v = `{PAYGRADE}`
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text` v = `Standard Weekly Hours`
-                            )->leaf( `Input`
+                            )->tag( `Input`
                                 )->a( n = `value`  v = `{ path: 'WEEKLYHOURS', type: 'sap.ui.model.type.Integer', constraints: { maximum: 40 } }`
                                 )->a( n = `change` v = client->_event( `CHANGE` )
-                            )->leaf( n = `Title` ns = `core`
+                            )->tag( n = `Title` ns = `core`
                                 )->a( n = `text` v = `Rating`
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text` v = `Unit`
-                            )->leaf( `Input`
+                            )->tag( `Input`
                                 )->a( n = `value` v = `{UNIT}`
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text` v = `Employee Class`
-                            )->leaf( `Input`
+                            )->tag( `Input`
                                 )->a( n = `value` v = `{CLASS}`
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text` v = `FTE`
-                            )->leaf( `Input`
+                            )->tag( `Input`
                                 )->a( n = `value` v = `{FTE}`
 
-                        )->shut(
-                    )->shut(
-                )->shut(
+                        )->end(
+                    )->end(
+                )->end(
 
-                )->leaf( n = `MessageManager` ns = `z2ui5`
+                )->tag( n = `MessageManager` ns = `z2ui5`
                     )->a( n = `items` v = client->_bind( t_messages )
 
-            )->shut(
+            )->end(
 
-            )->open( `footer`
-                )->open( `OverflowToolbar`
+            )->ele( `footer`
+                )->ele( `OverflowToolbar`
 
-                    )->open( `Button`
+                    )->ele( `Button`
                         )->a( n = `id`           v = `messagePopoverBtn`
                         )->a( n = `visible`      v = |\{= !!$\{message>/\}.length \}|
                         )->a( n = `text`         v = |\{= $\{message>/\}.length \}|
@@ -224,8 +224,8 @@ CLASS z2ui5_cl_smpc_app_065 IMPLEMENTATION.
                         )->a( n = `press`        v = client->follow_up_action( val   = client->cs_event-control_by_id
                                                                                t_arg = VALUE #( ( `messagePopover` ) ( `toggleBy` ) ( `messagePopoverBtn` ) ) )
 
-                        )->open( `dependents`
-                            )->open( `MessagePopover`
+                        )->ele( `dependents`
+                            )->ele( `MessagePopover`
                                 )->a( n = `id`              v = `messagePopover`
                                 )->a( n = `items`           v = `{message>/}`
                                 )->a( n = `groupItems`      v = `true`
@@ -234,7 +234,7 @@ CLASS z2ui5_cl_smpc_app_065 IMPLEMENTATION.
                                 )->a( n = `activeTitlePress` v = client->_event(
                                          val   = `ACTIVE_TITLE`
                                          t_arg = VALUE #( ( `${$parameters>/item}.getBindingContext('message').getObject().getControlIds()[0]` ) ) )
-                                )->leaf( `MessageItem`
+                                )->tag( `MessageItem`
                                     )->a( n = `title`       v = `{message>message}`
                                     )->a( n = `subtitle`    v = `{message>additionalText}`
                                     )->a( n = `type`        v = `{message>type}`
@@ -246,21 +246,21 @@ CLASS z2ui5_cl_smpc_app_065 IMPLEMENTATION.
                                     " getGroupName; only Email sits in the Contact group, the rest in Information
                                     )->a( n = `groupName`   v = `{message>code}`
 
-                            )->shut(
-                        )->shut(
-                    )->shut(
+                            )->end(
+                        )->end(
+                    )->end(
 
-                    )->leaf( `ToolbarSpacer`
-                    )->leaf( `Button`
+                    )->tag( `ToolbarSpacer`
+                    )->tag( `Button`
                         )->a( n = `type`  v = `Emphasized`
                         )->a( n = `text`  v = `Save`
                         )->a( n = `press` v = client->_event( `SAVE` )
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text` v = `Cancel`
 
-                )->shut(
-            )->shut(
-        )->shut( ).
+                )->end(
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

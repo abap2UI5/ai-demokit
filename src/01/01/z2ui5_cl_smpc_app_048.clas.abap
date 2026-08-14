@@ -41,82 +41,82 @@ CLASS z2ui5_cl_smpc_app_048 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `height`     v = `100%`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns`      v = `sap.m`
 
-        )->open( `Page`
+        )->ele( `Page`
             )->a( n = `showHeader` v = `false`
             )->a( n = `class`      v = `sapUiContentPadding`
 
-            )->open( `subHeader`
-                )->open( `Toolbar`
-                    )->leaf( `ToolbarSpacer`
-                    )->open( `Select`
+            )->ele( `subHeader`
+                )->ele( `Toolbar`
+                    )->tag( `ToolbarSpacer`
+                    )->ele( `Select`
                         )->a( n = `forceSelection` v = `false`
                         )->a( n = `selectedKey`    v = client->_bind( selected_product )
                         )->a( n = `items`          v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
 
-                        )->leaf( n = `Item` ns = `core`
+                        )->tag( n = `Item` ns = `core`
                             )->a( n = `key`  v = `{PRODUCT_ID}`
                             )->a( n = `text` v = `{NAME}`
 
-                    )->shut(
-                )->shut(
-            )->shut(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( `content`
-                )->open( `HBox`
+            )->ele( `content`
+                )->ele( `HBox`
                     )->a( n = `justifyContent` v = `SpaceAround`
 
-                    )->open( `Select`
+                    )->ele( `Select`
                         )->a( n = `enabled`        v = client->_bind( enabled )
                         )->a( n = `editable`       v = client->_bind( editable )
                         )->a( n = `forceSelection` v = `false`
                         )->a( n = `selectedKey`    v = client->_bind( selected_product2 )
                         )->a( n = `items`          v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
 
-                        )->leaf( n = `Item` ns = `core`
+                        )->tag( n = `Item` ns = `core`
                             )->a( n = `key`  v = `{PRODUCT_ID}`
                             )->a( n = `text` v = `{NAME}`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( `VBox`
-                        )->open( `HBox`
+                    )->ele( `VBox`
+                        )->ele( `HBox`
                             )->a( n = `alignItems` v = `Center`
 
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text`  v = `Enabled:`
                                 )->a( n = `class` v = `sapUiTinyMarginEnd`
-                            )->leaf( `Switch`
+                            )->tag( `Switch`
                                 )->a( n = `type`  v = `AcceptReject`
                                 )->a( n = `state` v = client->_bind( enabled )
 
-                        )->shut(
-                        )->open( `HBox`
+                        )->end(
+                        )->ele( `HBox`
                             )->a( n = `alignItems` v = `Center`
 
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text`  v = `Editable:`
                                 )->a( n = `class` v = `sapUiTinyMarginEnd`
-                            )->leaf( `Switch`
+                            )->tag( `Switch`
                                 )->a( n = `type`  v = `AcceptReject`
                                 )->a( n = `state` v = client->_bind( editable )
 
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( `footer`
-                )->open( `Toolbar`
-                    )->leaf( `ToolbarSpacer`
-                    )->open( `Select`
+            )->ele( `footer`
+                )->ele( `Toolbar`
+                    )->tag( `ToolbarSpacer`
+                    )->ele( `Select`
                         )->a( n = `forceSelection`  v = `false`
                         )->a( n = `selectedKey`     v = client->_bind( selected_product3 )
                         )->a( n = `type`            v = `IconOnly`
@@ -124,7 +124,7 @@ CLASS z2ui5_cl_smpc_app_048 IMPLEMENTATION.
                         )->a( n = `autoAdjustWidth` v = `true`
                         )->a( n = `items`           v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
 
-                        )->leaf( n = `Item` ns = `core`
+                        )->tag( n = `Item` ns = `core`
                             )->a( n = `key`  v = `{PRODUCT_ID}`
                             )->a( n = `text` v = `{NAME}` ).
 

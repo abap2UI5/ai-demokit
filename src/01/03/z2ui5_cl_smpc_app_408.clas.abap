@@ -32,7 +32,7 @@ CLASS z2ui5_cl_smpc_app_408 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " Block->content inlining (app 161/178 precedent): the blocks aggregations
     " hold SharedBlocks BlockBase controls (blockcolor:BlockBlue and
@@ -40,79 +40,79 @@ CLASS z2ui5_cl_smpc_app_408 IMPLEMENTATION.
     " static view - inlined below as core:HTML leaves (+ one m:Text). The
     " controller's named ConfigModel is folded onto the default model root
     " (app 230 precedent, see sidecar).
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `height`     v = `100%`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns`      v = `sap.uxap`
         )->a( n = `xmlns:m`    v = `sap.m`
         )->a( n = `xmlns:core` v = `sap.ui.core`
 
-        )->open( `ObjectPageLayout`
+        )->ele( `ObjectPageLayout`
             )->a( n = `id`                 v = `ObjectPageLayout`
             )->a( n = `subSectionLayout`   v = client->_bind( subsectionlayout )
             )->a( n = `upperCaseAnchorBar` v = `false`
 
-            )->open( `headerTitle`
-                )->open( `ObjectPageHeader`
+            )->ele( `headerTitle`
+                )->ele( `ObjectPageHeader`
                     )->a( n = `objectTitle` v = `ObjectPage BlockBase`
 
-                    )->open( `actions`
-                        )->leaf( `ObjectPageHeaderActionButton`
+                    )->ele( `actions`
+                        )->tag( `ObjectPageHeaderActionButton`
                             )->a( n = `icon`    v = `sap-icon://synchronize`
                             )->a( n = `press`   v = client->_event( `TOGGLE_TITLE` )
                             )->a( n = `text`    v = `toggle title`
                             )->a( n = `tooltip` v = `synchronize`
 
-                    )->shut(
-                )->shut(
-            )->shut(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( `sections`
-                )->open( `ObjectPageSection`
-                    )->open( `subSections`
-                        )->open( `ObjectPageSubSection`
+            )->ele( `sections`
+                )->ele( `ObjectPageSection`
+                    )->ele( `subSections`
+                        )->ele( `ObjectPageSubSection`
                             )->a( n = `title`          v = `Blocks with columnLayout 1`
                             )->a( n = `titleUppercase` v = `false`
 
-                            )->open( `blocks`
-                                )->leaf( n = `HTML` ns = `core`
+                            )->ele( `blocks`
+                                )->tag( n = `HTML` ns = `core`
                                     )->a( n = `content` v = `<div style="height:4em; background-color: #A9EAFF ;"></div>`
-                                )->leaf( n = `HTML` ns = `core`
+                                )->tag( n = `HTML` ns = `core`
                                     )->a( n = `content` v = `<div style="height:4em; background-color: #A9EAFF ;"></div>`
-                                )->leaf( n = `HTML` ns = `core`
+                                )->tag( n = `HTML` ns = `core`
                                     )->a( n = `content` v = `<div style="height:4em; background-color: #A9EAFF ;"></div>`
 
-                            )->shut(
-                        )->shut(
+                            )->end(
+                        )->end(
 
-                        )->open( `ObjectPageSubSection`
+                        )->ele( `ObjectPageSubSection`
                             )->a( n = `title`          v = `Blocks with columnLayout 2`
                             )->a( n = `titleUppercase` v = `false`
 
-                            )->open( `blocks`
-                                )->leaf( n = `HTML` ns = `core`
+                            )->ele( `blocks`
+                                )->tag( n = `HTML` ns = `core`
                                     )->a( n = `content` v = `<div style="height:auto;min-height:4em; background-color: #A9EAFF ;line-height: 4em;">` &&
                                                             `<a>ShowSubsectionMore = true</a><br/></div>`
                                 " moreContentText stays empty - the BlockBase Expanded mode that
                                 " fills it is dropped with the block control (see sidecar)
-                                )->leaf( n = `Text` ns = `m`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `id` v = `moreContentText`
-                                )->leaf( n = `HTML` ns = `core`
+                                )->tag( n = `HTML` ns = `core`
                                     )->a( n = `content` v = `<div style="height:4em; background-color: #A9EAFF ;"></div>`
 
-                            )->shut(
-                        )->shut(
+                            )->end(
+                        )->end(
 
-                        )->open( `ObjectPageSubSection`
+                        )->ele( `ObjectPageSubSection`
                             )->a( n = `title`          v = `Blocks with columnLayout 3`
                             )->a( n = `titleUppercase` v = `false`
 
-                            )->open( `blocks`
-                                )->leaf( n = `HTML` ns = `core`
+                            )->ele( `blocks`
+                                )->tag( n = `HTML` ns = `core`
                                     )->a( n = `content` v = `<div style="height:4em; background-color: #A9EAFF ;"></div>`
-                                )->leaf( n = `HTML` ns = `core`
+                                )->tag( n = `HTML` ns = `core`
                                     )->a( n = `content` v = `<div style="height:4em; background-color: #A9EAFF ;"></div>`
-                                )->leaf( n = `HTML` ns = `core`
+                                )->tag( n = `HTML` ns = `core`
                                     )->a( n = `content` v = `<div style="height:4em; background-color: #A9EAFF ;"></div>` ).
 
     client->view_display( view->stringify( ) ).

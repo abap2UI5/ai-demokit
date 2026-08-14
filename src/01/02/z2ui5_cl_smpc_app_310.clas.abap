@@ -30,28 +30,28 @@ CLASS z2ui5_cl_smpc_app_310 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `height`    v = `100%`
         )->a( n = `xmlns`     v = `sap.ui.unified`
         )->a( n = `xmlns:m`   v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
-        )->open( n = `Page` ns = `m`
+        )->ele( n = `Page` ns = `m`
             )->a( n = `showHeader`    v = `false`
             )->a( n = `class`         v = `sapUiContentPadding`
             )->a( n = `showNavButton` v = `false`
 
-            )->open( n = `VBox` ns = `m`
+            )->ele( n = `VBox` ns = `m`
                 )->a( n = `class` v = `sapUiSmallMargin`
 
-                )->leaf( `ColorPicker`
+                )->tag( `ColorPicker`
                     )->a( n = `id`   v = `cp`
                     )->a( n = `mode`        v = `HSL`
                     )->a( n = `displayMode` v = `Large`
 
-                )->leaf( n = `Button` ns = `m`
+                )->tag( n = `Button` ns = `m`
                     )->a( n = `text`  v = `Open ColorPicker in a ResponsivePopover`
                     )->a( n = `press` v = client->_event( val   = `OPEN_POPOVER`
                                                           t_arg = VALUE #( ( `$event.oSource.sId` ) ) ) ).
@@ -77,34 +77,34 @@ CLASS z2ui5_cl_smpc_app_310 IMPLEMENTATION.
 
     " openPopover builds the ResponsivePopover imperatively (new ResponsivePopover({...}).openBy(button));
     " expressed as a core:FragmentDefinition shown anchored via popover_display( xml by_id )
-    DATA(popover) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(popover) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    popover->open( n = `FragmentDefinition` ns = `core`
+    popover->ele( n = `FragmentDefinition` ns = `core`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns:u`    v = `sap.ui.unified`
 
-        )->open( `ResponsivePopover`
+        )->ele( `ResponsivePopover`
             )->a( n = `title`      v = `Color Picker`
             " the phone branch stays a branch: the device> model is served on every
             " view slot, so showHeader and the two buttons follow the real device
             )->a( n = `showHeader` v = `{= ${device>/system/phone}}`
 
-            )->open( `content`
-                )->leaf( n = `ColorPicker` ns = `u`
+            )->ele( `content`
+                )->tag( n = `ColorPicker` ns = `u`
                     )->a( n = `mode`        v = `HSL`
                     )->a( n = `displayMode` v = `Large`
 
-            )->shut(
-            )->open( `beginButton`
-                )->leaf( `Button`
+            )->end(
+            )->ele( `beginButton`
+                )->tag( `Button`
                     )->a( n = `text`    v = `Submit`
                     )->a( n = `visible` v = `{= ${device>/system/phone}}`
                     )->a( n = `press`   v = client->follow_up_action( client->cs_event-popover_close )
 
-            )->shut(
-            )->open( `endButton`
-                )->leaf( `Button`
+            )->end(
+            )->ele( `endButton`
+                )->tag( `Button`
                     )->a( n = `text`    v = `Cancel`
                     )->a( n = `visible` v = `{= ${device>/system/phone}}`
                     )->a( n = `press`   v = client->follow_up_action( client->cs_event-popover_close ) ).

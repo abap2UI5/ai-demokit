@@ -31,7 +31,7 @@ CLASS z2ui5_cl_smpc_app_230 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " Named-model fold + BlockBase inline: the original main view holds a custom
     " BlockBase control (sample:ModelMappingBlock) carrying a uxap:ModelMapping
@@ -41,23 +41,23 @@ CLASS z2ui5_cl_smpc_app_230 IMPLEMENTATION.
     " declined), so both named models are folded into the default one: the
     " ModelMappingBlock's own view content (a SimpleForm) is inlined and the
     " Contact> fields are bound on the root ({/FIRSTNAME} / {/LASTNAME}).
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`       v = `sap.m`
         )->a( n = `xmlns:mvc`   v = `sap.ui.core.mvc`
         )->a( n = `xmlns:core`  v = `sap.ui.core`
         )->a( n = `xmlns:forms` v = `sap.ui.layout.form`
 
-        )->open( n = `SimpleForm` ns = `forms`
+        )->ele( n = `SimpleForm` ns = `forms`
             )->a( n = `maxContainerCols` v = `2`
             )->a( n = `editable`         v = `false`
             )->a( n = `layout`           v = `ResponsiveGridLayout`
 
-            )->leaf( n = `Title` ns = `core`
+            )->tag( n = `Title` ns = `core`
                 )->a( n = `text` v = `My name`
 
-            )->leaf( `Text`
+            )->tag( `Text`
                 )->a( n = `text` v = client->_bind( firstname )
-            )->leaf( `Text`
+            )->tag( `Text`
                 )->a( n = `text` v = client->_bind( lastname ) ).
 
     client->view_display( view->stringify( ) ).

@@ -76,13 +76,13 @@ CLASS z2ui5_cl_smpc_app_361 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the selection demo: selectionMode, selectionBehavior and enableSelectAll
     " are bound properties driven by the two Selects and the Switch, and the
     " table reports its selection through rowSelectionChange so the three
     " toolbar buttons can report it from the model.
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.ui.table`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns:u`   v = `sap.ui.unified`
@@ -90,44 +90,44 @@ CLASS z2ui5_cl_smpc_app_361 IMPLEMENTATION.
         )->a( n = `xmlns:m`   v = `sap.m`
         )->a( n = `height`    v = `100%`
 
-        )->open( n = `Page` ns = `m`
+        )->ele( n = `Page` ns = `m`
             )->a( n = `showHeader`      v = `false`
             )->a( n = `enableScrolling` v = `false`
             )->a( n = `class`           v = `sapUiContentPadding`
 
-            )->open( n = `content` ns = `m`
-                )->leaf( n = `Label` ns = `m`
+            )->ele( n = `content` ns = `m`
+                )->tag( n = `Label` ns = `m`
                     )->a( n = `text`     v = `Selection Mode`
                     )->a( n = `labelFor` v = `select1`
 
-                )->open( n = `Select` ns = `m`
+                )->ele( n = `Select` ns = `m`
                     )->a( n = `id`          v = `select1`
                     )->a( n = `width`       v = `100%`
                     )->a( n = `items`       v = client->_bind( t_selectionitems )
                     )->a( n = `selectedKey` v = client->_bind( select_mode_key )
                     )->a( n = `change`      v = client->_event( `MODE_CHANGE` )
 
-                    )->leaf( n = `Item` ns = `c`
+                    )->tag( n = `Item` ns = `c`
                         )->a( n = `key`  v = `{KEY}`
                         )->a( n = `text` v = `{TEXT}`
 
-                )->shut(
-                )->leaf( n = `Label` ns = `m`
+                )->end(
+                )->tag( n = `Label` ns = `m`
                     )->a( n = `text`     v = `Selection Behavior`
                     )->a( n = `labelFor` v = `select2`
 
-                )->open( n = `Select` ns = `m`
+                )->ele( n = `Select` ns = `m`
                     )->a( n = `id`          v = `select2`
                     )->a( n = `width`       v = `100%`
                     )->a( n = `items`       v = client->_bind( t_behavioritems )
                     )->a( n = `selectedKey` v = client->_bind( selection_behavior )
 
-                    )->leaf( n = `Item` ns = `c`
+                    )->tag( n = `Item` ns = `c`
                         )->a( n = `key`  v = `{KEY}`
                         )->a( n = `text` v = `{TEXT}`
 
-                )->shut(
-                )->open( `Table`
+                )->end(
+                )->ele( `Table`
                     )->a( n = `id`                 v = `table1`
                     )->a( n = `rows`               v = client->_bind( t_products )
                     )->a( n = `selectionMode`      v = client->_bind( selection_mode )
@@ -138,143 +138,143 @@ CLASS z2ui5_cl_smpc_app_361 IMPLEMENTATION.
                               t_arg = VALUE #( ( `${$parameters>/rowIndices}` ) ( `${$parameters>/rowIndex}` ) ) )
                     )->a( n = `ariaLabelledBy`     v = `title`
 
-                    )->open( `extension`
-                        )->open( n = `OverflowToolbar` ns = `m`
+                    )->ele( `extension`
+                        )->ele( n = `OverflowToolbar` ns = `m`
                             )->a( n = `style` v = `Clear`
 
-                            )->leaf( n = `Title` ns = `m`
+                            )->tag( n = `Title` ns = `m`
                                 )->a( n = `id`   v = `title`
                                 )->a( n = `text` v = `Products`
 
-                            )->leaf( n = `ToolbarSpacer` ns = `m`
+                            )->tag( n = `ToolbarSpacer` ns = `m`
 
-                            )->leaf( n = `Button` ns = `m`
+                            )->tag( n = `Button` ns = `m`
                                 )->a( n = `icon`    v = `sap-icon://activities`
                                 )->a( n = `tooltip` v = `show indices of selected items`
                                 )->a( n = `press`   v = client->_event( `SHOW_INDICES` )
 
-                            )->leaf( n = `Button` ns = `m`
+                            )->tag( n = `Button` ns = `m`
                                 )->a( n = `icon`    v = `sap-icon://activity-items`
                                 )->a( n = `tooltip` v = `show context of latest selection item`
                                 )->a( n = `press`   v = client->_event( `SHOW_CONTEXT` )
 
-                            )->leaf( n = `Button` ns = `m`
+                            )->tag( n = `Button` ns = `m`
                                 )->a( n = `icon`    v = `sap-icon://decline`
                                 )->a( n = `tooltip` v = `clear selection`
                                 )->a( n = `press`   v = client->_event( `CLEAR_SELECTION` )
 
-                            )->leaf( n = `Switch` ns = `m`
+                            )->tag( n = `Switch` ns = `m`
                                 )->a( n = `state`         v = client->_bind( enable_select_all )
                                 )->a( n = `customTextOn`  v = `on`
                                 )->a( n = `customTextOff` v = `off`
                                 )->a( n = `tooltip`       v = `enable select all items`
 
-                        )->shut(
-                    )->shut(
-                    )->open( `columns`
-                        )->open( `Column`
+                        )->end(
+                    )->end(
+                    )->ele( `columns`
+                        )->ele( `Column`
                             )->a( n = `width` v = `11rem`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Product Name`
 
-                            )->open( `template`
-                                )->leaf( n = `Text` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text`     v = `{NAME}`
                                     )->a( n = `wrapping` v = `false`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `width` v = `11rem`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Product Id`
 
-                            )->open( `template`
-                                )->leaf( n = `Input` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Input` ns = `m`
                                     )->a( n = `value` v = `{PRODUCTID}`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `width`  v = `6rem`
                             )->a( n = `hAlign` v = `End`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Quantity`
 
-                            )->open( `template`
-                                )->leaf( n = `Label` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = `{QUANTITY}`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `width` v = `9rem`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Status`
 
-                            )->open( `template`
-                                )->leaf( n = `ObjectStatus` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `ObjectStatus` ns = `m`
                                     )->a( n = `text`  v = `{STATUS}`
                                     )->a( n = `state` v = `{AVAILABLESTATE}`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `width` v = `9rem`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Price`
 
-                            )->open( `template`
-                                )->leaf( n = `Currency` ns = `u`
+                            )->ele( `template`
+                                )->tag( n = `Currency` ns = `u`
                                     )->a( n = `value`    v = `{PRICE}`
                                     )->a( n = `currency` v = `{CURRENCYCODE}`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `width` v = `12rem`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Supplier`
 
-                            )->open( `template`
-                                )->open( n = `ComboBox` ns = `m`
+                            )->ele( `template`
+                                )->ele( n = `ComboBox` ns = `m`
                                     )->a( n = `value` v = `{SUPPLIERNAME}`
                                     )->a( n = `items` v = |\{ path: '{ client->_bind( val = t_suppliers path = abap_true ) }', templateShareable: false \}|
 
-                                    )->leaf( n = `Item` ns = `c`
+                                    )->tag( n = `Item` ns = `c`
                                         )->a( n = `text` v = `{NAME}`
 
-                                )->shut(
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                                )->end(
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `width` v = `9rem`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Image`
 
-                            )->open( `template`
-                                )->leaf( n = `Link` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Link` ns = `m`
                                     )->a( n = `text`   v = `Show Image`
                                     )->a( n = `href`   v = `{PRODUCTPICURL}`
                                     )->a( n = `target` v = `_blank`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `width` v = `9rem`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Details`
 
-                            )->open( `template`
-                                )->leaf( n = `Button` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Button` ns = `m`
                                     )->a( n = `text`  v = `Show Details`
                                     )->a( n = `press` v = client->follow_up_action(
                                               val   = client->cs_event-control_global
@@ -283,69 +283,69 @@ CLASS z2ui5_cl_smpc_app_361 IMPLEMENTATION.
                                                                ( `Details for product with id {0}` )
                                                                ( `${PRODUCTID}` ) ) )
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `width` v = `7rem`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Heavy Weight`
 
-                            )->open( `template`
-                                )->leaf( n = `CheckBox` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `CheckBox` ns = `m`
                                     )->a( n = `selected` v = |\{ path: 'HEAVY', type: 'sap.ui.model.type.String' \}|
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `width` v = `12rem`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Category`
 
-                            )->open( `template`
-                                )->open( n = `Select` ns = `m`
+                            )->ele( `template`
+                                )->ele( n = `Select` ns = `m`
                                     )->a( n = `selectedKey` v = `{CATEGORY}`
                                     )->a( n = `items`       v = |\{ path: '{ client->_bind( val = t_categories path = abap_true ) }', templateShareable: false \}|
 
-                                    )->leaf( n = `Item` ns = `c`
+                                    )->tag( n = `Item` ns = `c`
                                         )->a( n = `text` v = `{NAME}`
                                         )->a( n = `key`  v = `{NAME}`
 
-                                )->shut(
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                                )->end(
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `width`  v = `6rem`
                             )->a( n = `hAlign` v = `Center`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Status`
 
-                            )->open( `template`
-                                )->leaf( n = `Icon` ns = `c`
+                            )->ele( `template`
+                                )->tag( n = `Icon` ns = `c`
                                     )->a( n = `src` v = `{AVAILABLEICON}`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `width`  v = `11rem`
                             )->a( n = `hAlign` v = `Center`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Delivery Date`
 
-                            )->open( `template`
-                                )->leaf( n = `DatePicker` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `DatePicker` ns = `m`
                                     )->a( n = `value` v = |\{ path: 'DELIVERYDATE', type: 'sap.ui.model.type.Date', formatOptions: \{ source: \{ pattern: 'timestamp' \} \} \}|
 
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
-        )->shut(
-    )->shut( ).
+                            )->end(
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
+        )->end(
+    )->end( ).
 
     client->view_display( view->stringify( ) ).
 

@@ -26,23 +26,23 @@ CLASS z2ui5_cl_smpc_app_394 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
 
-        )->open( `Panel`
+        )->ele( `Panel`
             )->a( n = `headerText` v = `Horizontally opposing flex items`
 
-            )->open( `FlexBox`
+            )->ele( `FlexBox`
                 )->a( n = `alignItems`     v = `Start`
                 )->a( n = `justifyContent` v = `SpaceBetween`
 
-                )->leaf( `Button`
+                )->tag( `Button`
                     )->a( n = `text` v = `1`
                     )->a( n = `type` v = `Accept`
-                )->leaf( `Button`
+                )->tag( `Button`
                     )->a( n = `text` v = `2`
                     )->a( n = `type` v = `Reject` ).
 

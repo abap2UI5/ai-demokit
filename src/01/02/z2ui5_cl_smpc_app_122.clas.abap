@@ -26,9 +26,9 @@ CLASS z2ui5_cl_smpc_app_122 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns`      v = `sap.m`
@@ -38,7 +38,7 @@ CLASS z2ui5_cl_smpc_app_122 IMPLEMENTATION.
         " including the <600px media query, verbatim. Literal braces are escaped
         " \{ \} in a backtick literal: the XMLView parser reads an unescaped
         " brace as a binding
-        )->leaf( n = `HTML` ns = `core`
+        )->tag( n = `HTML` ns = `core`
             )->a( n = `content` v = `<style>` &&
                                     `.size1\{font-size:1.5rem\}` &&
                                     `.size2\{font-size:2.5rem\}` &&
@@ -53,60 +53,60 @@ CLASS z2ui5_cl_smpc_app_122 IMPLEMENTATION.
                                     `.size5\{font-size:5rem\}\}` &&
                                     `</style>`
 
-        )->open( `HBox`
+        )->ele( `HBox`
             )->a( n = `class` v = `sapUiSmallMargin`
 
-            )->open( n = `Icon` ns = `core`
+            )->ele( n = `Icon` ns = `core`
                 )->a( n = `src`   v = `sap-icon://syringe`
                 )->a( n = `class` v = `size1`
                 )->a( n = `color` v = `#031E48`
-                )->open( n = `layoutData` ns = `core`
-                    )->leaf( `FlexItemData`
+                )->ele( n = `layoutData` ns = `core`
+                    )->tag( `FlexItemData`
                         )->a( n = `growFactor` v = `1`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( n = `Icon` ns = `core`
+            )->ele( n = `Icon` ns = `core`
                 )->a( n = `src`   v = `sap-icon://pharmacy`
                 )->a( n = `class` v = `size2`
                 )->a( n = `color` v = `#64E4CE`
-                )->open( n = `layoutData` ns = `core`
-                    )->leaf( `FlexItemData`
+                )->ele( n = `layoutData` ns = `core`
+                    )->tag( `FlexItemData`
                         )->a( n = `growFactor` v = `1`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( n = `Icon` ns = `core`
+            )->ele( n = `Icon` ns = `core`
                 )->a( n = `src`   v = `sap-icon://electrocardiogram`
                 )->a( n = `class` v = `size3`
                 )->a( n = `color` v = `#E69A17`
-                )->open( n = `layoutData` ns = `core`
-                    )->leaf( `FlexItemData`
+                )->ele( n = `layoutData` ns = `core`
+                    )->tag( `FlexItemData`
                         )->a( n = `growFactor` v = `1`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( n = `Icon` ns = `core`
+            )->ele( n = `Icon` ns = `core`
                 )->a( n = `src`   v = `sap-icon://doctor`
                 )->a( n = `class` v = `size4`
                 )->a( n = `color` v = `#1C4C98`
-                )->open( n = `layoutData` ns = `core`
-                    )->leaf( `FlexItemData`
+                )->ele( n = `layoutData` ns = `core`
+                    )->tag( `FlexItemData`
                         )->a( n = `growFactor` v = `1`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( n = `Icon` ns = `core`
+            )->ele( n = `Icon` ns = `core`
                 )->a( n = `src`   v = `sap-icon://stethoscope`
                 )->a( n = `class` v = `size5`
                 )->a( n = `color` v = `#8875E7`
                 )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Over budget!` ) ) )
-                )->open( n = `layoutData` ns = `core`
-                    )->leaf( `FlexItemData`
+                )->ele( n = `layoutData` ns = `core`
+                    )->tag( `FlexItemData`
                         )->a( n = `growFactor` v = `1` ).
 
     client->view_display( view->stringify( ) ).

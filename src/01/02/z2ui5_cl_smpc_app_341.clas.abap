@@ -66,12 +66,12 @@ CLASS z2ui5_cl_smpc_app_341 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the sample's SimpleForm (loading time + Start loading) and the
     " f:GridContainer with the eleven sap.ui.integration Cards, each rendering
     " from its own declarative JSON manifest carried as a bound ABAP string
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns:f`    v = `sap.f`
@@ -79,149 +79,149 @@ CLASS z2ui5_cl_smpc_app_341 IMPLEMENTATION.
         )->a( n = `xmlns:form` v = `sap.ui.layout.form`
         )->a( n = `height`     v = `100%`
 
-        )->open( n = `SimpleForm` ns = `form`
+        )->ele( n = `SimpleForm` ns = `form`
             )->a( n = `editable` v = `true`
             )->a( n = `width`    v = `40rem`
 
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `text` v = `Loading time`
-            )->leaf( `Input`
+            )->tag( `Input`
                 )->a( n = `id`          v = `loadingMinSeconds`
                 )->a( n = `width`       v = `8rem`
                 )->a( n = `type`        v = `Number`
                 )->a( n = `description` v = `seconds`
                 )->a( n = `value`       v = `-1`
-            )->leaf( `Button`
+            )->tag( `Button`
                 )->a( n = `text`  v = `Start loading`
                 )->a( n = `type`  v = `Emphasized`
                 )->a( n = `press` v = client->_event( `FORM_SUBMIT` )
 
-        )->shut(
+        )->end(
 
-        )->open( n = `GridContainer` ns = `f`
+        )->ele( n = `GridContainer` ns = `f`
             )->a( n = `id`    v = `grd`
             )->a( n = `class` v = `sapUiSmallMargin`
 
-            )->open( n = `Card` ns = `w`
+            )->ele( n = `Card` ns = `w`
                 )->a( n = `id`       v = `listTest`
                 )->a( n = `manifest` v = client->_bind( val = manifest_listtest json = abap_true )
 
-                )->open( n = `layoutData` ns = `w`
-                    )->leaf( n = `GridContainerItemLayoutData` ns = `f`
+                )->ele( n = `layoutData` ns = `w`
+                    )->tag( n = `GridContainerItemLayoutData` ns = `f`
                         )->a( n = `columns` v = `4`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( n = `Card` ns = `w`
+            )->ele( n = `Card` ns = `w`
                 )->a( n = `id`       v = `list`
                 )->a( n = `manifest` v = client->_bind( val = manifest_list json = abap_true )
 
-                )->open( n = `layoutData` ns = `w`
-                    )->leaf( n = `GridContainerItemLayoutData` ns = `f`
+                )->ele( n = `layoutData` ns = `w`
+                    )->tag( n = `GridContainerItemLayoutData` ns = `f`
                         )->a( n = `columns` v = `3`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( n = `Card` ns = `w`
+            )->ele( n = `Card` ns = `w`
                 )->a( n = `id`       v = `error`
                 )->a( n = `manifest` v = client->_bind( val = manifest_error json = abap_true )
 
-                )->open( n = `layoutData` ns = `w`
-                    )->leaf( n = `GridContainerItemLayoutData` ns = `f`
+                )->ele( n = `layoutData` ns = `w`
+                    )->tag( n = `GridContainerItemLayoutData` ns = `f`
                         )->a( n = `columns` v = `4`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( n = `Card` ns = `w`
+            )->ele( n = `Card` ns = `w`
                 )->a( n = `id`       v = `all`
                 )->a( n = `manifest` v = client->_bind( val = manifest_all json = abap_true )
 
-                )->open( n = `layoutData` ns = `w`
-                    )->leaf( n = `GridContainerItemLayoutData` ns = `f`
+                )->ele( n = `layoutData` ns = `w`
+                    )->tag( n = `GridContainerItemLayoutData` ns = `f`
                         )->a( n = `columns` v = `4`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( n = `Card` ns = `w`
+            )->ele( n = `Card` ns = `w`
                 )->a( n = `id`       v = `descriptionTitle`
                 )->a( n = `manifest` v = client->_bind( val = manifest_descriptiontitle json = abap_true )
 
-                )->open( n = `layoutData` ns = `w`
-                    )->leaf( n = `GridContainerItemLayoutData` ns = `f`
+                )->ele( n = `layoutData` ns = `w`
+                    )->tag( n = `GridContainerItemLayoutData` ns = `f`
                         )->a( n = `columns` v = `3`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( n = `Card` ns = `w`
+            )->ele( n = `Card` ns = `w`
                 )->a( n = `id`       v = `iconTitle`
                 )->a( n = `manifest` v = client->_bind( val = manifest_icontitle json = abap_true )
 
-                )->open( n = `layoutData` ns = `w`
-                    )->leaf( n = `GridContainerItemLayoutData` ns = `f`
+                )->ele( n = `layoutData` ns = `w`
+                    )->tag( n = `GridContainerItemLayoutData` ns = `f`
                         )->a( n = `columns` v = `4`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( n = `Card` ns = `w`
+            )->ele( n = `Card` ns = `w`
                 )->a( n = `id`       v = `table`
                 )->a( n = `manifest` v = client->_bind( val = manifest_table json = abap_true )
 
-                )->open( n = `layoutData` ns = `w`
-                    )->leaf( n = `GridContainerItemLayoutData` ns = `f`
+                )->ele( n = `layoutData` ns = `w`
+                    )->tag( n = `GridContainerItemLayoutData` ns = `f`
                         )->a( n = `columns` v = `5`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( n = `Card` ns = `w`
+            )->ele( n = `Card` ns = `w`
                 )->a( n = `id`       v = `analytical`
                 )->a( n = `manifest` v = client->_bind( val = manifest_analytical json = abap_true )
 
-                )->open( n = `layoutData` ns = `w`
-                    )->leaf( n = `GridContainerItemLayoutData` ns = `f`
+                )->ele( n = `layoutData` ns = `w`
+                    )->tag( n = `GridContainerItemLayoutData` ns = `f`
                         )->a( n = `columns` v = `6`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( n = `Card` ns = `w`
+            )->ele( n = `Card` ns = `w`
                 )->a( n = `id`       v = `calendar`
                 )->a( n = `manifest` v = client->_bind( val = manifest_calendar json = abap_true )
 
-                )->open( n = `layoutData` ns = `w`
-                    )->leaf( n = `GridContainerItemLayoutData` ns = `f`
+                )->ele( n = `layoutData` ns = `w`
+                    )->tag( n = `GridContainerItemLayoutData` ns = `f`
                         )->a( n = `columns` v = `4`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( n = `Card` ns = `w`
+            )->ele( n = `Card` ns = `w`
                 )->a( n = `id`       v = `object`
                 )->a( n = `manifest` v = client->_bind( val = manifest_object json = abap_true )
 
-                )->open( n = `layoutData` ns = `w`
-                    )->leaf( n = `GridContainerItemLayoutData` ns = `f`
+                )->ele( n = `layoutData` ns = `w`
+                    )->tag( n = `GridContainerItemLayoutData` ns = `f`
                         )->a( n = `columns` v = `5`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( n = `Card` ns = `w`
+            )->ele( n = `Card` ns = `w`
                 )->a( n = `id`       v = `timeline`
                 )->a( n = `manifest` v = client->_bind( val = manifest_timeline json = abap_true )
 
-                )->open( n = `layoutData` ns = `w`
-                    )->leaf( n = `GridContainerItemLayoutData` ns = `f`
+                )->ele( n = `layoutData` ns = `w`
+                    )->tag( n = `GridContainerItemLayoutData` ns = `f`
                         )->a( n = `columns` v = `3`
 
-                )->shut(
-            )->shut( ).
+                )->end(
+            )->end( ).
 
     client->view_display( view->stringify( ) ).
 

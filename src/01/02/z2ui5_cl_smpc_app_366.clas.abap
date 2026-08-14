@@ -71,68 +71,68 @@ CLASS z2ui5_cl_smpc_app_366 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the tree comes from the model's own nesting instead of the OData tree
     " ANNOTATIONS the service metadata carries; numberOfExpandedLevels is kept
     " as a binding parameter, so the first level opens like in the original.
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.ui.table`
         )->a( n = `xmlns:m`   v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
-        )->open( `TreeTable`
+        )->ele( `TreeTable`
             )->a( n = `id`                     v = `treeTable`
             )->a( n = `selectionMode`          v = `Single`
             )->a( n = `enableColumnReordering` v = `false`
             )->a( n = `rows`                   v = |\{ path: '{ client->_bind( val = t_nodes path = abap_true ) }', parameters: \{ arrayNames: ['CHILDREN'], numberOfExpandedLevels: 1 \} \}|
 
-            )->open( `columns`
-                )->open( `Column`
-                    )->leaf( n = `Label` ns = `m`
+            )->ele( `columns`
+                )->ele( `Column`
+                    )->tag( n = `Label` ns = `m`
                         )->a( n = `text` v = `Description`
 
-                    )->open( `template`
-                        )->leaf( n = `Text` ns = `m`
+                    )->ele( `template`
+                        )->tag( n = `Text` ns = `m`
                             )->a( n = `text`     v = `{DESCRIPTION}`
                             )->a( n = `wrapping` v = `false`
 
-                    )->shut(
-                )->shut(
-                )->open( `Column`
-                    )->leaf( n = `Label` ns = `m`
+                    )->end(
+                )->end(
+                )->ele( `Column`
+                    )->tag( n = `Label` ns = `m`
                         )->a( n = `text` v = `HierarchyLevel`
 
-                    )->open( `template`
-                        )->leaf( n = `Text` ns = `m`
+                    )->ele( `template`
+                        )->tag( n = `Text` ns = `m`
                             )->a( n = `text`     v = `{HIERARCHYLEVEL}`
                             )->a( n = `wrapping` v = `false`
 
-                    )->shut(
-                )->shut(
-                )->open( `Column`
-                    )->leaf( n = `Label` ns = `m`
+                    )->end(
+                )->end(
+                )->ele( `Column`
+                    )->tag( n = `Label` ns = `m`
                         )->a( n = `text` v = `NodeID`
 
-                    )->open( `template`
-                        )->leaf( n = `Text` ns = `m`
+                    )->ele( `template`
+                        )->tag( n = `Text` ns = `m`
                             )->a( n = `text`     v = `{NODEID}`
                             )->a( n = `wrapping` v = `false`
 
-                    )->shut(
-                )->shut(
-                )->open( `Column`
-                    )->leaf( n = `Label` ns = `m`
+                    )->end(
+                )->end(
+                )->ele( `Column`
+                    )->tag( n = `Label` ns = `m`
                         )->a( n = `text` v = `ParentNodeID`
 
-                    )->open( `template`
-                        )->leaf( n = `Text` ns = `m`
+                    )->ele( `template`
+                        )->tag( n = `Text` ns = `m`
                             )->a( n = `text`     v = `{PARENTNODEID}`
                             )->a( n = `wrapping` v = `false`
 
-                    )->shut(
-                )->shut(
-            )->shut( ).
+                    )->end(
+                )->end(
+            )->end( ).
 
     client->view_display( view->stringify( ) ).
 

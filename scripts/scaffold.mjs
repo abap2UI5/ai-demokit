@@ -259,18 +259,18 @@ CLASS ${cls} IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " TODO rebuild ui5/${lib}/${name}/*.view.xml 1:1 here (${entity})
-    view->open( n = \`View\` ns = \`mvc\`
+    view->ele( n = \`View\` ns = \`mvc\`
         )->a( n = \`xmlns\`     v = \`sap.m\`
         )->a( n = \`xmlns:mvc\` v = \`sap.ui.core.mvc\`
         )->a( n = \`height\`    v = \`100%\`
 
-        )->open( \`Page\`
+        )->ele( \`Page\`
             )->a( n = \`title\` v = \`${name}\`
 
-            )->leaf( \`Text\`
+            )->tag( \`Text\`
                 )->a( n = \`text\` v = \`TODO: port ${lib}.sample.${name}\` ).
 
     client->view_display( view->stringify( ) ).

@@ -88,10 +88,10 @@ CLASS z2ui5_cl_smpc_app_012 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the sample's App/Main/Comparison views merged into one view: the App hosts both pages, the router's navTo becomes a NavContainer `to` frontend action
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `height`      v = `100%`
         )->a( n = `xmlns`       v = `sap.m`
         )->a( n = `xmlns:mvc`   v = `sap.ui.core.mvc`
@@ -99,80 +99,80 @@ CLASS z2ui5_cl_smpc_app_012 IMPLEMENTATION.
         )->a( n = `xmlns:cards` v = `sap.f.cards`
         )->a( n = `xmlns:l`     v = `sap.ui.layout`
 
-        )->open( `App`
+        )->ele( `App`
             )->a( n = `id` v = `rootControl`
 
-            )->open( `Page`
+            )->ele( `Page`
                 )->a( n = `title` v = `First Page`
 
-                )->open( `content`
-                    )->open( `Table`
+                )->ele( `content`
+                    )->ele( `Table`
                         )->a( n = `id`              v = `idProductsTable`
                         )->a( n = `selectionChange` v = client->_event( `SELECTION` )
                         )->a( n = `mode`            v = `MultiSelect`
                         )->a( n = `inset`           v = `false`
                         )->a( n = `items`           v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
 
-                        )->open( `headerToolbar`
-                            )->open( `Toolbar`
-                                )->leaf( `Title`
+                        )->ele( `headerToolbar`
+                            )->ele( `Toolbar`
+                                )->tag( `Title`
                                     )->a( n = `text`  v = `Laptops`
                                     )->a( n = `level` v = `H2`
-                                )->leaf( `ToolbarSpacer`
+                                )->tag( `ToolbarSpacer`
                                 " the controller's setText/setVisible on selection replaced by bound model properties
-                                )->leaf( `Button`
+                                )->tag( `Button`
                                     )->a( n = `id`      v = `compareBtn`
                                     )->a( n = `text`    v = client->_bind( compare_text )
                                     )->a( n = `visible` v = client->_bind( compare_visible )
                                     )->a( n = `press`   v = client->_event( `COMPARE` )
 
-                            )->shut(
-                        )->shut(
-                        )->open( `columns`
-                            )->open( `Column`
-                                )->leaf( `Text`
+                            )->end(
+                        )->end(
+                        )->ele( `columns`
+                            )->ele( `Column`
+                                )->tag( `Text`
                                     )->a( n = `text` v = `Product`
 
-                            )->shut(
-                            )->open( `Column`
+                            )->end(
+                            )->ele( `Column`
                                 )->a( n = `hAlign`         v = `Center`
                                 )->a( n = `width`          v = `12em`
                                 )->a( n = `minScreenWidth` v = `Tablet`
                                 )->a( n = `demandPopin`    v = `true`
 
-                                )->leaf( `Text`
+                                )->tag( `Text`
                                     )->a( n = `text` v = `Quantity`
 
-                            )->shut(
-                            )->open( `Column`
+                            )->end(
+                            )->ele( `Column`
                                 )->a( n = `minScreenWidth` v = `Tablet`
                                 )->a( n = `demandPopin`    v = `true`
                                 )->a( n = `hAlign`         v = `Center`
 
-                                )->leaf( `Text`
+                                )->tag( `Text`
                                     )->a( n = `text` v = `Weight`
 
-                            )->shut(
-                            )->open( `Column`
+                            )->end(
+                            )->ele( `Column`
                                 )->a( n = `hAlign` v = `End`
 
-                                )->leaf( `Text`
+                                )->tag( `Text`
                                     )->a( n = `text` v = `Unit Price`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `items`
+                            )->end(
+                        )->end(
+                        )->ele( `items`
                             " selected two-way binding added to read the multi-selection in the SELECTION handler (getSelectedContextPaths equivalent)
-                            )->open( `ColumnListItem`
+                            )->ele( `ColumnListItem`
                                 )->a( n = `vAlign`   v = `Middle`
                                 )->a( n = `type`     v = `Inactive`
                                 )->a( n = `selected` v = `{SELECTED}`
 
-                                )->open( `cells`
-                                    )->leaf( `ObjectIdentifier`
+                                )->ele( `cells`
+                                    )->tag( `ObjectIdentifier`
                                         )->a( n = `title` v = `{NAME}`
                                         )->a( n = `text`  v = `{PRODUCT_ID}`
-                                    )->leaf( `Input`
+                                    )->tag( `Input`
                                         )->a( n = `value`       v = `{QUANTITY}`
                                         " the ORIGINAL writes type="{Text}" (Main.view.xml): it meant the
                                         " literal enum value and wrote a binding, so the property falls back
@@ -181,36 +181,36 @@ CLASS z2ui5_cl_smpc_app_012 IMPLEMENTATION.
                                         )->a( n = `type`        v = `{Text}`
                                         )->a( n = `description` v = `{UOM}`
                                         )->a( n = `fieldWidth`  v = `{60%}`
-                                    )->leaf( `ObjectNumber`
+                                    )->tag( `ObjectNumber`
                                         )->a( n = `number` v = `{WEIGHT_MEASURE}`
                                         )->a( n = `unit`   v = `{WEIGHT_UNIT}`
-                                    )->leaf( `ObjectNumber`
+                                    )->tag( `ObjectNumber`
                                         )->a( n = `number` v = |\{ parts:[\{path:'PRICE'\},\{path:'CURRENCY_CODE'\}], type: 'sap.ui.model.type.Currency', formatOptions: \{showMeasure: false\} \}|
                                         )->a( n = `unit`   v = `{CURRENCY_CODE}`
 
-                                )->shut(
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
-            )->open( n = `DynamicPage` ns = `f`
+                                )->end(
+                            )->end(
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
+            )->ele( n = `DynamicPage` ns = `f`
                 )->a( n = `id`    v = `page-comparison`
                 )->a( n = `class` v = `sapUiComparisonContainer`
 
-                )->open( n = `title` ns = `f`
+                )->ele( n = `title` ns = `f`
                     " the original's stateChange handler (add/removeSnappedContent Carousel animation workaround) is dropped - imperative aggregation surgery
-                    )->open( n = `DynamicPageTitle` ns = `f`
+                    )->ele( n = `DynamicPageTitle` ns = `f`
                         )->a( n = `id`               v = `dynamic-page`
                         )->a( n = `backgroundDesign` v = `Transparent`
 
-                        )->open( n = `heading` ns = `f`
-                            )->leaf( `Title`
+                        )->ele( n = `heading` ns = `f`
+                            )->tag( `Title`
                                 )->a( n = `text` v = `Second Page`
 
-                        )->shut(
-                        )->open( n = `snappedContent` ns = `f`
-                            )->open( `Carousel`
+                        )->end(
+                        )->ele( n = `snappedContent` ns = `f`
+                            )->ele( `Carousel`
                                 )->a( n = `height`                 v = `auto`
                                 )->a( n = `class`                  v = `sapUiSmallMarginBottom`
                                 )->a( n = `id`                     v = `carousel-snapped`
@@ -220,33 +220,33 @@ CLASS z2ui5_cl_smpc_app_012 IMPLEMENTATION.
                                 )->a( n = `showPageIndicator`      v = |\{= !${ client->_bind( is_desktop ) } \}|
                                 )->a( n = `pages`                  v = client->_bind( t_comp_products )
 
-                                )->open( `customLayout`
-                                    )->leaf( `CarouselLayout`
+                                )->ele( `customLayout`
+                                    )->tag( `CarouselLayout`
                                         )->a( n = `visiblePagesCount` v = client->_bind( pages_count )
 
-                                )->shut(
-                                )->open( n = `Card` ns = `f`
+                                )->end(
+                                )->ele( n = `Card` ns = `f`
                                     )->a( n = `class` v = `sapUiTinyMarginTop`
 
-                                    )->open( n = `header` ns = `f`
+                                    )->ele( n = `header` ns = `f`
                                         " iconSrc formatter .formatter.url flattened to absolute image URLs in the model
-                                        )->leaf( n = `Header` ns = `cards`
+                                        )->tag( n = `Header` ns = `cards`
                                             )->a( n = `title`            v = `{NAME}`
                                             )->a( n = `subtitle`         v = `{STATUS}`
                                             )->a( n = `iconSrc`          v = `{PRODUCT_PIC_URL}`
                                             )->a( n = `iconDisplayShape` v = `Square`
 
-                                    )->shut(
-                                )->shut(
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                )->shut(
-                )->open( n = `header` ns = `f`
-                    )->open( n = `DynamicPageHeader` ns = `f`
+                                    )->end(
+                                )->end(
+                            )->end(
+                        )->end(
+                    )->end(
+                )->end(
+                )->ele( n = `header` ns = `f`
+                    )->ele( n = `DynamicPageHeader` ns = `f`
                         )->a( n = `backgroundDesign` v = `Transparent`
 
-                        )->open( `Carousel`
+                        )->ele( `Carousel`
                             )->a( n = `height`                 v = `auto`
                             )->a( n = `class`                  v = `sapUiSmallMarginBottom`
                             )->a( n = `id`                     v = `carousel-expanded`
@@ -256,124 +256,124 @@ CLASS z2ui5_cl_smpc_app_012 IMPLEMENTATION.
                             )->a( n = `showPageIndicator`      v = |\{= !${ client->_bind( is_desktop ) } \}|
                             )->a( n = `pages`                  v = client->_bind( t_comp_products )
 
-                            )->open( `customLayout`
-                                )->leaf( `CarouselLayout`
+                            )->ele( `customLayout`
+                                )->tag( `CarouselLayout`
                                     )->a( n = `visiblePagesCount` v = client->_bind( pages_count )
 
-                            )->shut(
-                            )->open( n = `Card` ns = `f`
+                            )->end(
+                            )->ele( n = `Card` ns = `f`
                                 )->a( n = `class` v = `sapUiTinyMarginTop`
 
-                                )->open( n = `header` ns = `f`
-                                    )->leaf( n = `Header` ns = `cards`
+                                )->ele( n = `header` ns = `f`
+                                    )->tag( n = `Header` ns = `cards`
                                         )->a( n = `title`            v = `{NAME}`
                                         )->a( n = `subtitle`         v = `{STATUS}`
                                         )->a( n = `iconSrc`          v = `{PRODUCT_PIC_URL}`
                                         )->a( n = `iconDisplayShape` v = `Square`
 
-                                )->shut(
-                                )->open( n = `content` ns = `f`
-                                    )->open( n = `VerticalLayout` ns = `l`
+                                )->end(
+                                )->ele( n = `content` ns = `f`
+                                    )->ele( n = `VerticalLayout` ns = `l`
                                         )->a( n = `width` v = `100%`
 
-                                        )->open( n = `BlockLayout` ns = `l`
-                                            )->open( n = `BlockLayoutRow` ns = `l`
-                                                )->open( n = `BlockLayoutCell` ns = `l`
-                                                    )->open( `HBox`
-                                                        )->leaf( `Label`
+                                        )->ele( n = `BlockLayout` ns = `l`
+                                            )->ele( n = `BlockLayoutRow` ns = `l`
+                                                )->ele( n = `BlockLayoutCell` ns = `l`
+                                                    )->ele( `HBox`
+                                                        )->tag( `Label`
                                                             )->a( n = `text` v = `Supplier:`
 
-                                                    )->shut(
-                                                    )->open( `HBox`
+                                                    )->end(
+                                                    )->ele( `HBox`
                                                         )->a( n = `class` v = `sapUiSmallMarginBottom`
 
-                                                        )->leaf( `Text`
+                                                        )->tag( `Text`
                                                             )->a( n = `text` v = `{SUPPLIER_NAME}`
 
-                                                    )->shut(
-                                                    )->open( `HBox`
-                                                        )->leaf( `Label`
+                                                    )->end(
+                                                    )->ele( `HBox`
+                                                        )->tag( `Label`
                                                             )->a( n = `text` v = `Main Category:`
 
-                                                    )->shut(
-                                                    )->open( `HBox`
+                                                    )->end(
+                                                    )->ele( `HBox`
                                                         )->a( n = `class` v = `sapUiSmallMarginBottom`
 
-                                                        )->leaf( `Text`
+                                                        )->tag( `Text`
                                                             )->a( n = `text` v = `{MAIN_CATEGORY}`
 
-                                                    )->shut(
-                                                    )->open( `HBox`
-                                                        )->leaf( `Label`
+                                                    )->end(
+                                                    )->ele( `HBox`
+                                                        )->tag( `Label`
                                                             )->a( n = `text` v = `Category:`
 
-                                                    )->shut(
-                                                    )->open( `HBox`
+                                                    )->end(
+                                                    )->ele( `HBox`
                                                         )->a( n = `class` v = `sapUiSmallMarginBottom`
 
-                                                        )->leaf( `Text`
+                                                        )->tag( `Text`
                                                             )->a( n = `text` v = `{CATEGORY}`
 
-                                                    )->shut(
-                                                )->shut(
-                                                )->open( n = `BlockLayoutCell` ns = `l`
-                                                    )->open( `HBox`
-                                                        )->leaf( `Label`
+                                                    )->end(
+                                                )->end(
+                                                )->ele( n = `BlockLayoutCell` ns = `l`
+                                                    )->ele( `HBox`
+                                                        )->tag( `Label`
                                                             )->a( n = `text` v = `Width (cm)`
 
-                                                    )->shut(
-                                                    )->open( `HBox`
+                                                    )->end(
+                                                    )->ele( `HBox`
                                                         )->a( n = `class` v = `sapUiSmallMarginBottom`
 
-                                                        )->leaf( `Text`
+                                                        )->tag( `Text`
                                                             )->a( n = `text` v = `{WIDTH}`
 
-                                                    )->shut(
-                                                    )->open( `HBox`
-                                                        )->leaf( `Label`
+                                                    )->end(
+                                                    )->ele( `HBox`
+                                                        )->tag( `Label`
                                                             )->a( n = `text` v = `Height (cm)`
 
-                                                    )->shut(
-                                                    )->open( `HBox`
+                                                    )->end(
+                                                    )->ele( `HBox`
                                                         )->a( n = `class` v = `sapUiSmallMarginBottom`
 
-                                                        )->leaf( `Text`
+                                                        )->tag( `Text`
                                                             )->a( n = `text` v = `{HEIGHT}`
 
-                                                    )->shut(
-                                                    )->open( `HBox`
-                                                        )->leaf( `Label`
+                                                    )->end(
+                                                    )->ele( `HBox`
+                                                        )->tag( `Label`
                                                             )->a( n = `text` v = `Weight (kg)`
 
-                                                    )->shut(
-                                                    )->open( `HBox`
+                                                    )->end(
+                                                    )->ele( `HBox`
                                                         )->a( n = `class` v = `sapUiSmallMarginBottom`
 
-                                                        )->leaf( `Text`
+                                                        )->tag( `Text`
                                                             )->a( n = `text` v = `{WEIGHT_MEASURE}`
 
-                                                    )->shut(
-                                                )->shut(
-                                            )->shut(
-                                        )->shut(
-                                    )->shut(
-                                )->shut(
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                )->shut(
-                )->open( n = `content` ns = `f`
-                    )->open( `List`
+                                                    )->end(
+                                                )->end(
+                                            )->end(
+                                        )->end(
+                                    )->end(
+                                )->end(
+                            )->end(
+                        )->end(
+                    )->end(
+                )->end(
+                )->ele( n = `content` ns = `f`
+                    )->ele( `List`
                         )->a( n = `id`               v = `listItems`
                         )->a( n = `backgroundDesign` v = `Transparent`
                         )->a( n = `class`            v = `sapUiSmallMarginBottom`
                         )->a( n = `items`            v = client->_bind( t_comp_props )
 
-                        )->open( `items`
-                            )->open( `CustomListItem`
+                        )->ele( `items`
+                            )->ele( `CustomListItem`
                                 )->a( n = `class` v = `sapUiComparisonContent`
 
-                                )->leaf( `Panel`
+                                )->tag( `Panel`
                                     )->a( n = `expandable` v = `true`
                                     )->a( n = `expanded`   v = `false`
                                     )->a( n = `headerText` v = `{KEY}`
@@ -381,45 +381,45 @@ CLASS z2ui5_cl_smpc_app_012 IMPLEMENTATION.
                                     )->a( n = `expand`     v = client->_event( val   = `PANEL_EXPANDED`
                                                                                t_arg = VALUE #( ( `${KEY}` ) ( `${$parameters>/expand}` ) ) )
 
-                                )->open( `HBox`
+                                )->ele( `HBox`
                                     )->a( n = `class`            v = `sapUiTinyMarginTop`
                                     )->a( n = `alignItems`       v = `Start`
                                     )->a( n = `backgroundDesign` v = `Solid`
                                     )->a( n = `items`            v = |\{ path: 'VALUES', templateShareable : true \}|
 
-                                    )->open( `items`
-                                        )->open( `VBox`
+                                    )->ele( `items`
+                                        )->ele( `VBox`
                                             )->a( n = `class` v = `sapUiTinyMarginTopBottom sapUiComparisonItem`
 
-                                            )->open( `layoutData`
-                                                )->leaf( `FlexItemData`
+                                            )->ele( `layoutData`
+                                                )->tag( `FlexItemData`
                                                     )->a( n = `growFactor` v = `1`
                                                     )->a( n = `baseSize`   v = `0`
 
-                                            )->shut(
-                                            )->open( `HBox`
-                                                )->leaf( `FormattedText`
+                                            )->end(
+                                            )->ele( `HBox`
+                                                )->tag( `FormattedText`
                                                     )->a( n = `htmlText` v = `{TEXT}`
 
-                                            )->shut(
+                                            )->end(
                                             " the controller's onPanelExpanded setVisible replaced by the bound VISIBLE flag per value row
-                                            )->open( `HBox`
+                                            )->ele( `HBox`
                                                 )->a( n = `class`   v = `sapUiSmallMarginTop`
                                                 )->a( n = `visible` v = `{VISIBLE}`
 
-                                                )->leaf( `Text`
+                                                )->tag( `Text`
                                                     )->a( n = `text` v = `{DESCRIPTION}`
 
-                                            )->shut(
-                                        )->shut(
-                                    )->shut(
-                                )->shut(
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
-        )->shut( ).
+                                            )->end(
+                                        )->end(
+                                    )->end(
+                                )->end(
+                            )->end(
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
+        )->end( ).
 
     " the original controller's onAfterRendering binding filter: only Laptops are compared
     client->follow_up_action( val   = client->cs_event-binding_call

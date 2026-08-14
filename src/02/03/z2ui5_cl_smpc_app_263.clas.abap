@@ -51,7 +51,7 @@ CLASS z2ui5_cl_smpc_app_263 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " Navigation: _navTo(page) is the client-side NavContainer.to() - wired
     " roundtrip-free via follow_up_action( control_by_id ). The navigate event
@@ -60,7 +60,7 @@ CLASS z2ui5_cl_smpc_app_263 IMPLEMENTATION.
     " Blocks: every SharedBlocks BlockBase is inlined with its view content
     " (app 188/217 precedent); the empN> named models the ModelMapping
     " elements feed are folded onto default-model root fields (app 230).
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `height`       v = `100%`
         )->a( n = `xmlns`        v = `sap.uxap`
         )->a( n = `xmlns:mvc`    v = `sap.ui.core.mvc`
@@ -69,243 +69,243 @@ CLASS z2ui5_cl_smpc_app_263 IMPLEMENTATION.
         )->a( n = `xmlns:layout` v = `sap.ui.layout`
         )->a( n = `xmlns:forms`  v = `sap.ui.layout.form`
 
-        )->open( n = `NavContainer` ns = `m`
+        )->ele( n = `NavContainer` ns = `m`
             )->a( n = `id`       v = `navigationContainer`
             )->a( n = `navigate` v = client->_event( val   = `NAVIGATE`
                                                      t_arg = VALUE #( ( `${$parameters>/toId}` ) ) )
 
-            )->open( n = `Page` ns = `m`
+            )->ele( n = `Page` ns = `m`
                 )->a( n = `id`    v = `page1`
                 )->a( n = `title` v = `Page 1`
 
-                )->open( n = `VerticalLayout` ns = `layout`
+                )->ele( n = `VerticalLayout` ns = `layout`
                     )->a( n = `class` v = `sapUiContentPadding`
                     )->a( n = `width` v = `100%`
 
-                    )->leaf( n = `MessageStrip` ns = `m`
+                    )->tag( n = `MessageStrip` ns = `m`
                         )->a( n = `showIcon` v = `true`
                         )->a( n = `text`     v = `This example shows how to reset the selected section of the ObjectPage `
                                               && `to the first visible and scroll to the top upon revisiting the page.`
 
-                    )->open( n = `List` ns = `m`
-                        )->leaf( n = `StandardListItem` ns = `m`
+                    )->ele( n = `List` ns = `m`
+                        )->tag( n = `StandardListItem` ns = `m`
                             )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_by_id
                                                                             t_arg = VALUE #( ( `navigationContainer` ) ( `to` ) ( `page2` ) ) )
                             )->a( n = `title` v = `To ObjectPage`
                             )->a( n = `type`  v = `Navigation`
 
-                    )->shut(
+                    )->end(
 
-                    )->leaf( n = `CheckBox` ns = `m`
+                    )->tag( n = `CheckBox` ns = `m`
                         )->a( n = `id`       v = `resetCheck`
                         )->a( n = `selected` v = client->_bind( reset_check )
                         )->a( n = `text`     v = `reset its selected section to the first visible and scroll to the top`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( n = `Page` ns = `m`
+            )->ele( n = `Page` ns = `m`
                 )->a( n = `id`              v = `page2`
                 )->a( n = `title`           v = `Page 2`
                 )->a( n = `showNavButton`   v = `true`
                 )->a( n = `navButtonPress`  v = client->follow_up_action( val   = client->cs_event-control_by_id
                                                                           t_arg = VALUE #( ( `navigationContainer` ) ( `to` ) ( `page1` ) ) )
 
-                )->open( `ObjectPageLayout`
+                )->ele( `ObjectPageLayout`
                     )->a( n = `id`                       v = `ObjectPageLayout`
                     )->a( n = `enableLazyLoading`        v = `true`
                     )->a( n = `showTitleInHeaderContent` v = `true`
                     )->a( n = `upperCaseAnchorBar`       v = `false`
 
-                    )->open( `headerTitle`
-                        )->open( `ObjectPageDynamicHeaderTitle`
-                            )->open( `expandedHeading`
-                                )->leaf( n = `Title` ns = `m`
+                    )->ele( `headerTitle`
+                        )->ele( `ObjectPageDynamicHeaderTitle`
+                            )->ele( `expandedHeading`
+                                )->tag( n = `Title` ns = `m`
                                     )->a( n = `text`     v = `Denise Smith`
                                     )->a( n = `wrapping` v = `true`
 
-                            )->shut(
+                            )->end(
 
-                            )->open( `snappedHeading`
-                                )->open( n = `FlexBox` ns = `m`
+                            )->ele( `snappedHeading`
+                                )->ele( n = `FlexBox` ns = `m`
                                     )->a( n = `fitContainer` v = `true`
                                     )->a( n = `alignItems`   v = `Center`
 
-                                    )->leaf( n = `Avatar` ns = `m`
+                                    )->tag( n = `Avatar` ns = `m`
                                         )->a( n = `src`   v = `https://sdk.openui5.org/test-resources/sap/uxap/images/imageID_275314.png`
                                         )->a( n = `class` v = `sapUiTinyMarginEnd`
-                                    )->leaf( n = `Title` ns = `m`
+                                    )->tag( n = `Title` ns = `m`
                                         )->a( n = `text`     v = `Denise Smith`
                                         )->a( n = `wrapping` v = `true`
 
-                                )->shut(
-                            )->shut(
+                                )->end(
+                            )->end(
 
-                            )->open( `expandedContent`
-                                )->leaf( n = `Text` ns = `m`
+                            )->ele( `expandedContent`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text` v = `Senior UI Developer`
 
-                            )->shut(
+                            )->end(
 
-                            )->open( `snappedContent`
-                                )->leaf( n = `Text` ns = `m`
+                            )->ele( `snappedContent`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text` v = `Senior UI Developer`
 
-                            )->shut(
+                            )->end(
 
-                            )->open( `snappedTitleOnMobile`
-                                )->leaf( n = `Title` ns = `m`
+                            )->ele( `snappedTitleOnMobile`
+                                )->tag( n = `Title` ns = `m`
                                     )->a( n = `text` v = `Senior UI Developer`
 
-                            )->shut(
+                            )->end(
 
-                            )->open( `actions`
-                                )->leaf( n = `Button` ns = `m`
+                            )->ele( `actions`
+                                )->tag( n = `Button` ns = `m`
                                     )->a( n = `text` v = `Edit`
                                     )->a( n = `type` v = `Emphasized`
-                                )->leaf( n = `Button` ns = `m`
+                                )->tag( n = `Button` ns = `m`
                                     )->a( n = `type` v = `Transparent`
                                     )->a( n = `text` v = `Delete`
-                                )->leaf( n = `Button` ns = `m`
+                                )->tag( n = `Button` ns = `m`
                                     )->a( n = `type` v = `Transparent`
                                     )->a( n = `text` v = `Copy`
-                                )->leaf( n = `OverflowToolbarButton` ns = `m`
+                                )->tag( n = `OverflowToolbarButton` ns = `m`
                                     )->a( n = `icon`    v = `sap-icon://action`
                                     )->a( n = `type`    v = `Transparent`
                                     )->a( n = `text`    v = `Share`
                                     )->a( n = `tooltip` v = `action`
 
-                            )->shut(
-                        )->shut(
-                    )->shut(
+                            )->end(
+                        )->end(
+                    )->end(
 
-                    )->open( `headerContent`
-                        )->open( n = `FlexBox` ns = `m`
+                    )->ele( `headerContent`
+                        )->ele( n = `FlexBox` ns = `m`
                             )->a( n = `wrap`         v = `Wrap`
                             )->a( n = `fitContainer` v = `true`
 
-                            )->leaf( n = `Avatar` ns = `m`
+                            )->tag( n = `Avatar` ns = `m`
                                 )->a( n = `class`       v = `sapUiSmallMarginEnd`
                                 )->a( n = `src`         v = `https://sdk.openui5.org/test-resources/sap/uxap/images/imageID_275314.png`
                                 )->a( n = `displaySize` v = `L`
 
-                            )->open( n = `VerticalLayout` ns = `layout`
+                            )->ele( n = `VerticalLayout` ns = `layout`
                                 )->a( n = `class` v = `sapUiSmallMarginBeginEnd`
 
-                                )->leaf( n = `Link` ns = `m`
+                                )->tag( n = `Link` ns = `m`
                                     )->a( n = `text` v = `+33 6 4512 5158`
-                                )->leaf( n = `Link` ns = `m`
+                                )->tag( n = `Link` ns = `m`
                                     )->a( n = `text` v = `DeniseSmith@sap.com`
 
-                            )->shut(
+                            )->end(
 
-                            )->open( n = `HorizontalLayout` ns = `layout`
+                            )->ele( n = `HorizontalLayout` ns = `layout`
                                 )->a( n = `class` v = `sapUiSmallMarginBeginEnd`
 
-                                )->leaf( n = `Image` ns = `m`
+                                )->tag( n = `Image` ns = `m`
                                     )->a( n = `src` v = `https://sdk.openui5.org/test-resources/sap/uxap/images/linkedin.png`
-                                )->leaf( n = `Image` ns = `m`
+                                )->tag( n = `Image` ns = `m`
                                     )->a( n = `src`   v = `https://sdk.openui5.org/test-resources/sap/uxap/images/Twitter.png`
                                     )->a( n = `class` v = `sapUiSmallMarginBegin`
 
-                            )->shut(
+                            )->end(
 
-                            )->open( n = `VerticalLayout` ns = `layout`
+                            )->ele( n = `VerticalLayout` ns = `layout`
                                 )->a( n = `class` v = `sapUiSmallMarginBeginEnd`
 
-                                )->leaf( n = `Label` ns = `m`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = `Hello! I am Denise and I use UxAP`
 
-                                )->open( n = `VBox` ns = `m`
-                                    )->leaf( n = `Label` ns = `m`
+                                )->ele( n = `VBox` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Achieved goals`
-                                    )->leaf( n = `ProgressIndicator` ns = `m`
+                                    )->tag( n = `ProgressIndicator` ns = `m`
                                         )->a( n = `percentValue` v = `30`
                                         )->a( n = `displayValue` v = `30%`
 
-                                )->shut(
-                            )->shut(
+                                )->end(
+                            )->end(
 
-                            )->open( n = `VerticalLayout` ns = `layout`
+                            )->ele( n = `VerticalLayout` ns = `layout`
                                 )->a( n = `class` v = `sapUiSmallMarginBeginEnd`
 
-                                )->leaf( n = `Label` ns = `m`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = `San Jose, USA`
 
-                            )->shut(
-                        )->shut(
-                    )->shut(
+                            )->end(
+                        )->end(
+                    )->end(
 
-                    )->open( `sections`
-                        )->open( `ObjectPageSection`
+                    )->ele( `sections`
+                        )->ele( `ObjectPageSection`
                             )->a( n = `titleUppercase` v = `false`
                             )->a( n = `id`             v = `goals`
                             )->a( n = `title`          v = `2014 Goals Plan`
 
-                            )->open( `subSections`
-                                )->open( `ObjectPageSubSection`
+                            )->ele( `subSections`
+                                )->ele( `ObjectPageSubSection`
                                     )->a( n = `id`             v = `goalsSS1`
                                     )->a( n = `titleUppercase` v = `false`
 
-                                    )->open( `blocks`
+                                    )->ele( `blocks`
 
                                         " goals:GoalsBlock inlined
-                                        )->open( n = `SimpleForm` ns = `forms`
+                                        )->ele( n = `SimpleForm` ns = `forms`
                                             )->a( n = `editable` v = `false`
                                             )->a( n = `layout`   v = `ColumnLayout`
 
-                                            )->leaf( n = `Label` ns = `m`
+                                            )->tag( n = `Label` ns = `m`
                                                 )->a( n = `text` v = `Evangelize the UI framework across the company`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `4 days overdue Cascaded`
-                                            )->leaf( n = `Label` ns = `m`
+                                            )->tag( n = `Label` ns = `m`
                                                 )->a( n = `text` v = `Get trained in development management direction`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `Due Nov 21`
-                                            )->leaf( n = `Label` ns = `m`
+                                            )->tag( n = `Label` ns = `m`
                                                 )->a( n = `text` v = `Mentor junior developers`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `Due Dec 31 Cascaded`
 
-                                        )->shut(
-                                    )->shut(
-                                )->shut(
-                            )->shut(
-                        )->shut(
+                                        )->end(
+                                    )->end(
+                                )->end(
+                            )->end(
+                        )->end(
 
-                        )->open( `ObjectPageSection`
+                        )->ele( `ObjectPageSection`
                             )->a( n = `titleUppercase` v = `false`
                             )->a( n = `id`             v = `personal`
                             )->a( n = `title`          v = `Personal`
 
-                            )->open( `subSections`
-                                )->open( `ObjectPageSubSection`
+                            )->ele( `subSections`
+                                )->ele( `ObjectPageSubSection`
                                     )->a( n = `id`             v = `personalSS1`
                                     )->a( n = `title`          v = `Connect`
                                     )->a( n = `titleUppercase` v = `false`
 
-                                    )->open( `blocks`
+                                    )->ele( `blocks`
 
                                         " personal:BlockPhoneNumber inlined
-                                        )->open( n = `SimpleForm` ns = `forms`
+                                        )->ele( n = `SimpleForm` ns = `forms`
                                             )->a( n = `layout` v = `ColumnLayout`
                                             )->a( n = `width`  v = `100%`
 
-                                            )->leaf( n = `Title` ns = `core`
+                                            )->tag( n = `Title` ns = `core`
                                                 )->a( n = `text` v = `Phone Numbers`
-                                            )->leaf( n = `Label` ns = `m`
+                                            )->tag( n = `Label` ns = `m`
                                                 )->a( n = `text` v = `Home`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `+ 1 415-321-1234`
-                                            )->leaf( n = `Label` ns = `m`
+                                            )->tag( n = `Label` ns = `m`
                                                 )->a( n = `text` v = `Office phone`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `+ 1 415-321-5555`
 
-                                        )->shut(
+                                        )->end(
 
                                         " personal:BlockSocial inlined
-                                        )->open( n = `SimpleForm` ns = `forms`
+                                        )->ele( n = `SimpleForm` ns = `forms`
                                             )->a( n = `editable`         v = `false`
                                             )->a( n = `labelSpanL`       v = `4`
                                             )->a( n = `labelSpanM`       v = `4`
@@ -316,111 +316,111 @@ CLASS z2ui5_cl_smpc_app_263 IMPLEMENTATION.
                                             )->a( n = `maxContainerCols` v = `2`
                                             )->a( n = `width`            v = `100%`
 
-                                            )->leaf( n = `Title` ns = `core`
+                                            )->tag( n = `Title` ns = `core`
                                                 )->a( n = `text` v = `Social Accounts`
-                                            )->leaf( n = `Label` ns = `m`
+                                            )->tag( n = `Label` ns = `m`
                                                 )->a( n = `text` v = `LinkedIn`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `/DeniseSmith`
-                                            )->leaf( n = `Label` ns = `m`
+                                            )->tag( n = `Label` ns = `m`
                                                 )->a( n = `text` v = `Twitter`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `@DeniseSmith`
 
-                                        )->shut(
+                                        )->end(
 
                                         " personal:BlockAdresses inlined
-                                        )->open( n = `SimpleForm` ns = `forms`
+                                        )->ele( n = `SimpleForm` ns = `forms`
                                             )->a( n = `layout`   v = `ColumnLayout`
                                             )->a( n = `editable` v = `false`
                                             )->a( n = `width`    v = `100%`
 
-                                            )->leaf( n = `Title` ns = `core`
+                                            )->tag( n = `Title` ns = `core`
                                                 )->a( n = `text` v = `Addresses`
-                                            )->leaf( n = `Label` ns = `m`
+                                            )->tag( n = `Label` ns = `m`
                                                 )->a( n = `text` v = `Home Address`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `2096 Mission Street`
-                                            )->leaf( n = `Label` ns = `m`
+                                            )->tag( n = `Label` ns = `m`
                                                 )->a( n = `text` v = `Mailing Address`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `PO Box 32114`
 
-                                        )->shut(
+                                        )->end(
 
                                         " personal:BlockMailing inlined
-                                        )->open( n = `SimpleForm` ns = `forms`
+                                        )->ele( n = `SimpleForm` ns = `forms`
                                             )->a( n = `layout` v = `ColumnLayout`
                                             )->a( n = `width`  v = `100%`
 
-                                            )->leaf( n = `Title` ns = `core`
+                                            )->tag( n = `Title` ns = `core`
                                                 )->a( n = `text` v = `Mailing Address`
-                                            )->leaf( n = `Label` ns = `m`
+                                            )->tag( n = `Label` ns = `m`
                                                 )->a( n = `text` v = `Work`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `DeniseSmith@sap.com`
 
-                                        )->shut(
-                                    )->shut(
-                                )->shut(
+                                        )->end(
+                                    )->end(
+                                )->end(
 
-                                )->open( `ObjectPageSubSection`
+                                )->ele( `ObjectPageSubSection`
                                     )->a( n = `id`             v = `personalSS2`
                                     )->a( n = `title`          v = `Payment information`
                                     )->a( n = `titleUppercase` v = `false`
 
-                                    )->open( `blocks`
+                                    )->ele( `blocks`
 
                                         " personal:PersonalBlockPart1 inlined
-                                        )->open( n = `SimpleForm` ns = `forms`
+                                        )->ele( n = `SimpleForm` ns = `forms`
                                             )->a( n = `editable` v = `false`
                                             )->a( n = `layout`   v = `ColumnLayout`
 
-                                            )->leaf( n = `Title` ns = `core`
+                                            )->tag( n = `Title` ns = `core`
                                                 )->a( n = `text` v = `Main Payment Method`
-                                            )->leaf( n = `Label` ns = `m`
+                                            )->tag( n = `Label` ns = `m`
                                                 )->a( n = `text` v = `Bank Transfer`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `Sparkasse Heimfeld, Germany`
 
-                                        )->shut(
-                                    )->shut(
+                                        )->end(
+                                    )->end(
 
-                                    )->open( `moreBlocks`
+                                    )->ele( `moreBlocks`
 
                                         " personal:PersonalBlockPart2 inlined
-                                        )->open( n = `SimpleForm` ns = `forms`
+                                        )->ele( n = `SimpleForm` ns = `forms`
                                             )->a( n = `editable` v = `false`
                                             )->a( n = `layout`   v = `ColumnLayout`
 
-                                            )->leaf( n = `Title` ns = `core`
+                                            )->tag( n = `Title` ns = `core`
                                                 )->a( n = `text` v = `Payment method for Expenses`
-                                            )->leaf( n = `Label` ns = `m`
+                                            )->tag( n = `Label` ns = `m`
                                                 )->a( n = `text` v = `Extra Travel Expenses`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `Cash 100 USD`
 
-                                        )->shut(
-                                    )->shut(
-                                )->shut(
-                            )->shut(
-                        )->shut(
+                                        )->end(
+                                    )->end(
+                                )->end(
+                            )->end(
+                        )->end(
 
-                        )->open( `ObjectPageSection`
+                        )->ele( `ObjectPageSection`
                             )->a( n = `titleUppercase` v = `false`
                             )->a( n = `id`             v = `employment`
                             )->a( n = `title`          v = `Employment`
 
-                            )->open( `subSections`
-                                )->open( `ObjectPageSubSection`
+                            )->ele( `subSections`
+                                )->ele( `ObjectPageSubSection`
                                     )->a( n = `id`             v = `employmentSS1`
                                     )->a( n = `title`          v = `Job information`
                                     )->a( n = `titleUppercase` v = `false`
 
-                                    )->open( `blocks`
+                                    )->ele( `blocks`
 
                                         " employment:BlockJobInfoPart1 inlined
-                                        )->open( n = `SimpleForm` ns = `forms`
+                                        )->ele( n = `SimpleForm` ns = `forms`
                                             )->a( n = `labelSpanL`       v = `4`
                                             )->a( n = `labelSpanM`       v = `4`
                                             )->a( n = `editable`         v = `false`
@@ -432,33 +432,33 @@ CLASS z2ui5_cl_smpc_app_263 IMPLEMENTATION.
                                             )->a( n = `layout`           v = `ResponsiveGridLayout`
                                             )->a( n = `width`            v = `100%`
 
-                                            )->leaf( n = `Label` ns = `m`
+                                            )->tag( n = `Label` ns = `m`
                                                 )->a( n = `text` v = `Job classification`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `Senior Ui Developer (UIDEV-SR)`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = ` `
-                                            )->leaf( n = `Label` ns = `m`
+                                            )->tag( n = `Label` ns = `m`
                                                 )->a( n = `text` v = `Pay Grade`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `Salary Grade 18 (GR-14)`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = ` `
-                                            )->leaf( n = `Label` ns = `m`
+                                            )->tag( n = `Label` ns = `m`
                                                 )->a( n = `text` v = `Job title`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `Developer`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = ` `
-                                            )->leaf( n = `Label` ns = `m`
+                                            )->tag( n = `Label` ns = `m`
                                                 )->a( n = `text` v = `Local Job Title`
-                                            )->leaf( n = `Label` ns = `m`
+                                            )->tag( n = `Label` ns = `m`
                                                 )->a( n = `text` v = `Ui Developer`
 
-                                        )->shut(
+                                        )->end(
 
                                         " employment:BlockJobInfoPart2 inlined
-                                        )->open( n = `SimpleForm` ns = `forms`
+                                        )->ele( n = `SimpleForm` ns = `forms`
                                             )->a( n = `labelSpanL`       v = `4`
                                             )->a( n = `labelSpanM`       v = `4`
                                             )->a( n = `editable`         v = `false`
@@ -470,58 +470,58 @@ CLASS z2ui5_cl_smpc_app_263 IMPLEMENTATION.
                                             )->a( n = `layout`           v = `ResponsiveGridLayout`
                                             )->a( n = `width`            v = `100%`
 
-                                            )->leaf( n = `Label` ns = `m`
+                                            )->tag( n = `Label` ns = `m`
                                                 )->a( n = `text` v = `Employee Class`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `Employee`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = ` `
-                                            )->leaf( n = `Label` ns = `m`
+                                            )->tag( n = `Label` ns = `m`
                                                 )->a( n = `text` v = `FTE`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `1`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = ` `
-                                            )->leaf( n = `Label` ns = `m`
+                                            )->tag( n = `Label` ns = `m`
                                                 )->a( n = `text` v = `Standard Weekly Hours`
-                                            )->leaf( n = `Label` ns = `m`
+                                            )->tag( n = `Label` ns = `m`
                                                 )->a( n = `text` v = `40`
 
-                                        )->shut(
+                                        )->end(
 
                                         " employment:BlockJobInfoPart3 inlined
-                                        )->open( n = `HorizontalLayout` ns = `layout`
+                                        )->ele( n = `HorizontalLayout` ns = `layout`
                                             )->a( n = `class` v = `sapUiSmallMarginTop`
 
-                                            )->open( n = `VerticalLayout` ns = `layout`
-                                                )->leaf( n = `Label` ns = `m`
+                                            )->ele( n = `VerticalLayout` ns = `layout`
+                                                )->tag( n = `Label` ns = `m`
                                                     )->a( n = `text` v = `Manager`
 
-                                                )->open( n = `HorizontalLayout` ns = `layout`
-                                                    )->open( n = `content` ns = `layout`
-                                                        )->open( n = `VerticalLayout` ns = `layout`
-                                                            )->leaf( n = `Text` ns = `m`
+                                                )->ele( n = `HorizontalLayout` ns = `layout`
+                                                    )->ele( n = `content` ns = `layout`
+                                                        )->ele( n = `VerticalLayout` ns = `layout`
+                                                            )->tag( n = `Text` ns = `m`
                                                                 )->a( n = `text` v = `James Smith`
-                                                            )->leaf( n = `Text` ns = `m`
+                                                            )->tag( n = `Text` ns = `m`
                                                                 )->a( n = `text` v = `Development Manager`
 
-                                                        )->shut(
-                                                    )->shut(
-                                                )->shut(
-                                            )->shut(
-                                        )->shut(
-                                    )->shut(
-                                )->shut(
+                                                        )->end(
+                                                    )->end(
+                                                )->end(
+                                            )->end(
+                                        )->end(
+                                    )->end(
+                                )->end(
 
-                                )->open( `ObjectPageSubSection`
+                                )->ele( `ObjectPageSubSection`
                                     )->a( n = `id`             v = `employmentSS2`
                                     )->a( n = `title`          v = `Employee Details`
                                     )->a( n = `titleUppercase` v = `false`
 
-                                    )->open( `blocks`
+                                    )->ele( `blocks`
 
                                         " employment:BlockEmpDetailPart1 inlined
-                                        )->open( n = `SimpleForm` ns = `forms`
+                                        )->ele( n = `SimpleForm` ns = `forms`
                                             )->a( n = `labelSpanL`       v = `4`
                                             )->a( n = `labelSpanM`       v = `4`
                                             )->a( n = `editable`         v = `false`
@@ -533,24 +533,24 @@ CLASS z2ui5_cl_smpc_app_263 IMPLEMENTATION.
                                             )->a( n = `layout`           v = `ResponsiveGridLayout`
                                             )->a( n = `width`            v = `100%`
 
-                                            )->leaf( n = `Title` ns = `core`
+                                            )->tag( n = `Title` ns = `core`
                                                 )->a( n = `text` v = `Termination information`
-                                            )->leaf( n = `Label` ns = `m`
+                                            )->tag( n = `Label` ns = `m`
                                                 )->a( n = `text` v = `Ok to return`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `No`
-                                            )->leaf( n = `Label` ns = `m`
+                                            )->tag( n = `Label` ns = `m`
                                                 )->a( n = `text` v = `Regret Termination`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `Yes`
 
-                                        )->shut(
-                                    )->shut(
+                                        )->end(
+                                    )->end(
 
-                                    )->open( `moreBlocks`
+                                    )->ele( `moreBlocks`
 
                                         " employment:BlockEmpDetailPart2 inlined
-                                        )->open( n = `SimpleForm` ns = `forms`
+                                        )->ele( n = `SimpleForm` ns = `forms`
                                             )->a( n = `labelSpanL`       v = `4`
                                             )->a( n = `labelSpanM`       v = `4`
                                             )->a( n = `labelSpanS`       v = `4`
@@ -562,27 +562,27 @@ CLASS z2ui5_cl_smpc_app_263 IMPLEMENTATION.
                                             )->a( n = `layout`           v = `ResponsiveGridLayout`
                                             )->a( n = `width`            v = `100%`
 
-                                            )->leaf( n = `Label` ns = `m`
+                                            )->tag( n = `Label` ns = `m`
                                                 )->a( n = `text` v = `Start Date`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `Jan 01, 2001`
-                                            )->leaf( n = `Label` ns = `m`
+                                            )->tag( n = `Label` ns = `m`
                                                 )->a( n = `text` v = `End Date`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `Jun 30, 2014`
-                                            )->leaf( n = `Label` ns = `m`
+                                            )->tag( n = `Label` ns = `m`
                                                 )->a( n = `text` v = `Last Date Worked`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `Jun 01, 2014`
-                                            )->leaf( n = `Label` ns = `m`
+                                            )->tag( n = `Label` ns = `m`
                                                 )->a( n = `text` v = `Payroll End Date`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `Jun 01, 2014`
 
-                                        )->shut(
+                                        )->end(
 
                                         " employment:BlockEmpDetailPart3 inlined
-                                        )->open( n = `SimpleForm` ns = `forms`
+                                        )->ele( n = `SimpleForm` ns = `forms`
                                             )->a( n = `labelSpanL`       v = `4`
                                             )->a( n = `labelSpanM`       v = `4`
                                             )->a( n = `editable`         v = `false`
@@ -594,184 +594,184 @@ CLASS z2ui5_cl_smpc_app_263 IMPLEMENTATION.
                                             )->a( n = `layout`           v = `ResponsiveGridLayout`
                                             )->a( n = `width`            v = `100%`
 
-                                            )->leaf( n = `Label` ns = `m`
+                                            )->tag( n = `Label` ns = `m`
                                                 )->a( n = `text` v = `Payroll End Date`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `Jan 01, 2014`
-                                            )->leaf( n = `Label` ns = `m`
+                                            )->tag( n = `Label` ns = `m`
                                                 )->a( n = `text` v = `Benefits End Date`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `Jun 30, 2014`
-                                            )->leaf( n = `Label` ns = `m`
+                                            )->tag( n = `Label` ns = `m`
                                                 )->a( n = `text` v = `Stock End Date`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `Jun 01, 2014`
-                                            )->leaf( n = `Label` ns = `m`
+                                            )->tag( n = `Label` ns = `m`
                                                 )->a( n = `text` v = `Eligible for Salary Contribution`
-                                            )->leaf( n = `Text` ns = `m`
+                                            )->tag( n = `Text` ns = `m`
                                                 )->a( n = `text` v = `No`
 
-                                        )->shut(
-                                    )->shut(
-                                )->shut(
+                                        )->end(
+                                    )->end(
+                                )->end(
 
-                                )->open( `ObjectPageSubSection`
+                                )->ele( `ObjectPageSubSection`
                                     )->a( n = `id`             v = `employmentSS3`
                                     )->a( n = `title`          v = `Job Relationship`
                                     )->a( n = `titleUppercase` v = `false`
 
-                                    )->open( `blocks`
+                                    )->ele( `blocks`
 
                                         " employment:EmploymentBlockJob inlined
                                         " with its Collapsed view (the block's
                                         " initial mode); emp1>/emp2> fold onto
                                         " default-model root fields
-                                        )->open( n = `Grid` ns = `layout`
+                                        )->ele( n = `Grid` ns = `layout`
                                             )->a( n = `defaultSpan` v = `L4 M6 S12`
                                             )->a( n = `hSpacing`    v = `0`
                                             )->a( n = `width`       v = `100%`
 
-                                            )->open( n = `content` ns = `layout`
-                                                )->open( n = `VerticalLayout` ns = `layout`
-                                                    )->open( n = `HorizontalLayout` ns = `layout`
-                                                        )->open( n = `Grid` ns = `layout`
+                                            )->ele( n = `content` ns = `layout`
+                                                )->ele( n = `VerticalLayout` ns = `layout`
+                                                    )->ele( n = `HorizontalLayout` ns = `layout`
+                                                        )->ele( n = `Grid` ns = `layout`
                                                             )->a( n = `defaultSpan` v = `L4 M4 S4`
                                                             )->a( n = `hSpacing`    v = `0`
                                                             )->a( n = `width`       v = `100%`
 
-                                                            )->open( n = `content` ns = `layout`
-                                                                )->open( n = `VerticalLayout` ns = `layout`
-                                                                    )->leaf( n = `Label` ns = `m`
+                                                            )->ele( n = `content` ns = `layout`
+                                                                )->ele( n = `VerticalLayout` ns = `layout`
+                                                                    )->tag( n = `Label` ns = `m`
                                                                         )->a( n = `text` v = client->_bind( emp1_name )
-                                                                    )->leaf( n = `Label` ns = `m`
+                                                                    )->tag( n = `Label` ns = `m`
                                                                         )->a( n = `text` v = client->_bind( emp1_job )
 
-                                                                    )->open( n = `layoutData` ns = `layout`
-                                                                        )->leaf( n = `GridData` ns = `layout`
+                                                                    )->ele( n = `layoutData` ns = `layout`
+                                                                        )->tag( n = `GridData` ns = `layout`
                                                                             )->a( n = `span` v = `L12 M12 S12`
 
-                                                                    )->shut(
-                                                                )->shut(
-                                                            )->shut(
-                                                        )->shut(
-                                                    )->shut(
+                                                                    )->end(
+                                                                )->end(
+                                                            )->end(
+                                                        )->end(
+                                                    )->end(
 
-                                                    )->open( n = `layoutData` ns = `layout`
-                                                        )->leaf( n = `GridData` ns = `layout`
+                                                    )->ele( n = `layoutData` ns = `layout`
+                                                        )->tag( n = `GridData` ns = `layout`
                                                             )->a( n = `linebreak` v = `true`
 
-                                                    )->shut(
+                                                    )->end(
 
-                                                    )->open( n = `HorizontalLayout` ns = `layout`
-                                                        )->open( n = `Grid` ns = `layout`
+                                                    )->ele( n = `HorizontalLayout` ns = `layout`
+                                                        )->ele( n = `Grid` ns = `layout`
                                                             )->a( n = `defaultSpan` v = `L4 M4 S4`
                                                             )->a( n = `hSpacing`    v = `0`
                                                             )->a( n = `width`       v = `100%`
 
-                                                            )->open( n = `VerticalLayout` ns = `layout`
-                                                                )->leaf( n = `Label` ns = `m`
+                                                            )->ele( n = `VerticalLayout` ns = `layout`
+                                                                )->tag( n = `Label` ns = `m`
                                                                     )->a( n = `text` v = client->_bind( emp2_name )
-                                                                )->leaf( n = `Label` ns = `m`
+                                                                )->tag( n = `Label` ns = `m`
                                                                     )->a( n = `text` v = client->_bind( emp2_job )
 
-                                                                )->open( n = `layoutData` ns = `layout`
-                                                                    )->leaf( n = `GridData` ns = `layout`
+                                                                )->ele( n = `layoutData` ns = `layout`
+                                                                    )->tag( n = `GridData` ns = `layout`
                                                                         )->a( n = `span` v = `L12 M12 S12`
 
-                                                                )->shut(
-                                                            )->shut(
-                                                        )->shut(
-                                                    )->shut(
-                                                )->shut(
-                                            )->shut(
-                                        )->shut(
-                                    )->shut(
-                                )->shut(
-                            )->shut(
-                        )->shut(
+                                                                )->end(
+                                                            )->end(
+                                                        )->end(
+                                                    )->end(
+                                                )->end(
+                                            )->end(
+                                        )->end(
+                                    )->end(
+                                )->end(
+                            )->end(
+                        )->end(
 
-                        )->open( `ObjectPageSection`
+                        )->ele( `ObjectPageSection`
                             )->a( n = `titleUppercase` v = `false`
                             )->a( n = `id`             v = `connections`
                             )->a( n = `title`          v = `Connections`
 
-                            )->open( `subSections`
-                                )->open( `ObjectPageSubSection`
+                            )->ele( `subSections`
+                                )->ele( `ObjectPageSubSection`
                                     )->a( n = `id`             v = `connectionsSS1`
                                     )->a( n = `titleUppercase` v = `false`
 
-                                    )->open( `blocks`
+                                    )->ele( `blocks`
 
                                         " connections:ConnectionsBlock inlined -
                                         " six Panels over emp1>..emp6>, folded
                                         " onto default-model root fields
-                                        )->open( n = `Panel` ns = `m`
-                                            )->open( n = `VBox` ns = `m`
-                                                )->leaf( n = `Image` ns = `m`
+                                        )->ele( n = `Panel` ns = `m`
+                                            )->ele( n = `VBox` ns = `m`
+                                                )->tag( n = `Image` ns = `m`
                                                     )->a( n = `src` v = client->_bind( emp1_picture )
-                                                )->leaf( n = `Label` ns = `m`
+                                                )->tag( n = `Label` ns = `m`
                                                     )->a( n = `text` v = client->_bind( emp1_name )
-                                                )->leaf( n = `Label` ns = `m`
+                                                )->tag( n = `Label` ns = `m`
                                                     )->a( n = `text` v = client->_bind( emp1_job )
 
-                                            )->shut(
-                                        )->shut(
+                                            )->end(
+                                        )->end(
 
-                                        )->open( n = `Panel` ns = `m`
-                                            )->open( n = `VBox` ns = `m`
-                                                )->leaf( n = `Image` ns = `m`
+                                        )->ele( n = `Panel` ns = `m`
+                                            )->ele( n = `VBox` ns = `m`
+                                                )->tag( n = `Image` ns = `m`
                                                     )->a( n = `src` v = client->_bind( emp2_picture )
-                                                )->leaf( n = `Label` ns = `m`
+                                                )->tag( n = `Label` ns = `m`
                                                     )->a( n = `text` v = client->_bind( emp2_name )
-                                                )->leaf( n = `Label` ns = `m`
+                                                )->tag( n = `Label` ns = `m`
                                                     )->a( n = `text` v = client->_bind( emp2_job )
 
-                                            )->shut(
-                                        )->shut(
+                                            )->end(
+                                        )->end(
 
-                                        )->open( n = `Panel` ns = `m`
-                                            )->open( n = `VBox` ns = `m`
-                                                )->leaf( n = `Image` ns = `m`
+                                        )->ele( n = `Panel` ns = `m`
+                                            )->ele( n = `VBox` ns = `m`
+                                                )->tag( n = `Image` ns = `m`
                                                     )->a( n = `src` v = client->_bind( emp3_picture )
-                                                )->leaf( n = `Label` ns = `m`
+                                                )->tag( n = `Label` ns = `m`
                                                     )->a( n = `text` v = client->_bind( emp3_name )
-                                                )->leaf( n = `Label` ns = `m`
+                                                )->tag( n = `Label` ns = `m`
                                                     )->a( n = `text` v = client->_bind( emp3_job )
 
-                                            )->shut(
-                                        )->shut(
+                                            )->end(
+                                        )->end(
 
-                                        )->open( n = `Panel` ns = `m`
-                                            )->open( n = `VBox` ns = `m`
-                                                )->leaf( n = `Image` ns = `m`
+                                        )->ele( n = `Panel` ns = `m`
+                                            )->ele( n = `VBox` ns = `m`
+                                                )->tag( n = `Image` ns = `m`
                                                     )->a( n = `src` v = client->_bind( emp4_picture )
-                                                )->leaf( n = `Label` ns = `m`
+                                                )->tag( n = `Label` ns = `m`
                                                     )->a( n = `text` v = client->_bind( emp4_name )
-                                                )->leaf( n = `Label` ns = `m`
+                                                )->tag( n = `Label` ns = `m`
                                                     )->a( n = `text` v = client->_bind( emp4_job )
 
-                                            )->shut(
-                                        )->shut(
+                                            )->end(
+                                        )->end(
 
-                                        )->open( n = `Panel` ns = `m`
-                                            )->open( n = `VBox` ns = `m`
-                                                )->leaf( n = `Image` ns = `m`
+                                        )->ele( n = `Panel` ns = `m`
+                                            )->ele( n = `VBox` ns = `m`
+                                                )->tag( n = `Image` ns = `m`
                                                     )->a( n = `src` v = client->_bind( emp5_picture )
-                                                )->leaf( n = `Label` ns = `m`
+                                                )->tag( n = `Label` ns = `m`
                                                     )->a( n = `text` v = client->_bind( emp5_name )
-                                                )->leaf( n = `Label` ns = `m`
+                                                )->tag( n = `Label` ns = `m`
                                                     )->a( n = `text` v = client->_bind( emp5_job )
 
-                                            )->shut(
-                                        )->shut(
+                                            )->end(
+                                        )->end(
 
-                                        )->open( n = `Panel` ns = `m`
-                                            )->open( n = `VBox` ns = `m`
-                                                )->leaf( n = `Image` ns = `m`
+                                        )->ele( n = `Panel` ns = `m`
+                                            )->ele( n = `VBox` ns = `m`
+                                                )->tag( n = `Image` ns = `m`
                                                     )->a( n = `src` v = client->_bind( emp6_picture )
-                                                )->leaf( n = `Label` ns = `m`
+                                                )->tag( n = `Label` ns = `m`
                                                     )->a( n = `text` v = client->_bind( emp6_name )
-                                                )->leaf( n = `Label` ns = `m`
+                                                )->tag( n = `Label` ns = `m`
                                                     )->a( n = `text` v = client->_bind( emp6_job )
 
                                         ).

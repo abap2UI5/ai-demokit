@@ -29,67 +29,67 @@ CLASS z2ui5_cl_smpc_app_278 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
             " id added as the dependentOn anchor of the two message boxes below
             )->a( n = `id`    v = `messageBoxHost`
             )->a( n = `class` v = `sapUiContentPadding`
             )->a( n = `width` v = `100%`
 
-            )->leaf( `Text`
+            )->tag( `Text`
                 )->a( n = `text` v = `Default Behavior`
 
-            )->leaf( `Button`
+            )->tag( `Button`
                 )->a( n = `text`  v = `Confirm`
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
                 )->a( n = `press` v = client->_event( `CONFIRM` )
                 )->a( n = `width` v = `280px`
-            )->leaf( `Button`
+            )->tag( `Button`
                 )->a( n = `text`  v = `Alert`
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
                 )->a( n = `press` v = client->_event( `ALERT` )
                 )->a( n = `width` v = `280px`
-            )->leaf( `Button`
+            )->tag( `Button`
                 )->a( n = `text`  v = `Error`
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
                 )->a( n = `press` v = client->_event( `ERROR` )
                 )->a( n = `width` v = `280px`
-            )->leaf( `Button`
+            )->tag( `Button`
                 )->a( n = `text`  v = `Info`
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
                 )->a( n = `press` v = client->_event( `INFO` )
                 )->a( n = `width` v = `280px`
-            )->leaf( `Button`
+            )->tag( `Button`
                 )->a( n = `text`  v = `Warning`
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
                 )->a( n = `press` v = client->_event( `WARNING` )
                 )->a( n = `width` v = `280px`
-            )->leaf( `Button`
+            )->tag( `Button`
                 )->a( n = `text`  v = `Success`
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
                 )->a( n = `press` v = client->_event( `SUCCESS` )
                 )->a( n = `width` v = `280px`
 
-            )->leaf( `Text`
+            )->tag( `Text`
                 )->a( n = `text` v = `More Actions`
 
-            )->leaf( `Button`
+            )->tag( `Button`
                 )->a( n = `text`  v = `Error with custom action`
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
                 )->a( n = `press` v = client->_event( `ERROR_CUSTOM_ACTION` )
                 )->a( n = `width` v = `280px`
-            )->leaf( `Button`
+            )->tag( `Button`
                 )->a( n = `text`  v = `Warning with two actions`
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
                 )->a( n = `press` v = client->_event( `WARNING_TWO_ACTIONS` )
                 )->a( n = `width` v = `280px`
-            )->leaf( `Button`
+            )->tag( `Button`
                 )->a( n = `text`  v = `Message Box with Responsive Padding`
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
                 )->a( n = `press` v = client->_event( `RESPONSIVE_PADDING` )

@@ -26,21 +26,21 @@ CLASS z2ui5_cl_smpc_app_046 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `height`    v = `100%`
         )->a( n = `width`     v = `100%`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
-        )->open( `ScrollContainer`
+        )->ele( `ScrollContainer`
             )->a( n = `height`    v = `100%`
             )->a( n = `width`     v = `100%`
             )->a( n = `vertical`  v = `true`
             )->a( n = `focusable` v = `true`
 
-            )->leaf( `Image`
+            )->tag( `Image`
                 )->a( n = `src`   v = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-7777-large.jpg`
                 " the original computes 50em/100em from sap/ui/Device in the controller -
                 " expressed client-side over the framework's device> model

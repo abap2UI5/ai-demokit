@@ -30,7 +30,7 @@ CLASS z2ui5_cl_smpc_app_219 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " The original binds the image src against a separate 'img' JSON model
     " ({img>/products/pic1}); abap2UI5 serves one default model, so the picture
@@ -39,34 +39,34 @@ CLASS z2ui5_cl_smpc_app_219 IMPLEMENTATION.
     " (background colours on the fixed/flexible areas) is injected via a
     " core:HTML <style> node - CSS braces escaped \{ \} so the XMLView parser
     " does not read them as bindings.
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns:l`    v = `sap.ui.layout`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `height`     v = `100%`
 
-        )->leaf( n = `HTML` ns = `core`
+        )->tag( n = `HTML` ns = `core`
             )->a( n = `content` v = `<style>.fixFlexHorizontal>.sapUiFixFlexFixed\{background:#D7E9FF\}` &&
                                     `.fixFlexHorizontal>.sapUiFixFlexFlexible\{background:#A9CFFF\}</style>`
 
-        )->open( n = `FixFlex` ns = `l`
+        )->ele( n = `FixFlex` ns = `l`
             )->a( n = `class`    v = `fixFlexHorizontal`
             )->a( n = `vertical` v = `false`
 
-            )->open( n = `fixContent` ns = `l`
-                )->leaf( `Image`
+            )->ele( n = `fixContent` ns = `l`
+                )->tag( `Image`
                     )->a( n = `src`          v = client->_bind( pic1 )
                     )->a( n = `densityAware` v = `true`
 
-            )->shut(
-            )->open( n = `flexContent` ns = `l`
-                )->leaf( `Text`
+            )->end(
+            )->ele( n = `flexContent` ns = `l`
+                )->tag( `Text`
                     )->a( n = `class` v = `column1`
                     )->a( n = `text`  v = `This container is flexible and it will adapts its size to fill the remaining size in the FixFlex control`
 
-            )->shut(
-        )->shut( ).
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

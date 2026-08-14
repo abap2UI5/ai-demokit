@@ -35,7 +35,7 @@ CLASS z2ui5_cl_smpc_app_138 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " two of the three controller behaviours are reproduced: breakpointChanged
     " carries its currentBreakpoint parameter to the backend, which enables the
@@ -44,22 +44,22 @@ CLASS z2ui5_cl_smpc_app_138 IMPLEMENTATION.
     " toggle( )). The Slider's DOM resize is roundtrip-free too since the `css`
     " control method exists: sap.m.Page has no width property, so the width goes
     " onto the container's DOM node, like the original's jQuery .width( )
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `height`    v = `100%`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
 
-        )->open( `Page`
+        )->ele( `Page`
             )->a( n = `showHeader`    v = `false`
             )->a( n = `showNavButton` v = `false`
 
-            )->open( `Page`
+            )->ele( `Page`
                 )->a( n = `id`            v = `sideContentContainer`
                 )->a( n = `showHeader`    v = `false`
                 )->a( n = `showNavButton` v = `false`
 
-                )->open( n = `DynamicSideContent` ns = `l`
+                )->ele( n = `DynamicSideContent` ns = `l`
                     )->a( n = `id`                  v = `DynamicSideContent`
                     )->a( n = `class`               v = `sapUiDSCExplored sapUiContentPadding`
                     )->a( n = `sideContentFallDown` v = `BelowM`
@@ -68,34 +68,34 @@ CLASS z2ui5_cl_smpc_app_138 IMPLEMENTATION.
                     )->a( n = `breakpointChanged`   v = client->_event( val   = `BP_CHANGED`
                                                                         t_arg = VALUE #( ( `${$parameters>/currentBreakpoint}` ) ) )
 
-                    )->leaf( `Title`
+                    )->tag( `Title`
                         )->a( n = `level` v = `H1`
                         )->a( n = `text`  v = `Main content`
-                    )->leaf( `Text`
+                    )->tag( `Text`
                     )->a( n = `text` v = `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ` &&
                                          `ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint ` &&
                                          `occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`
-                    )->open( n = `sideContent` ns = `l`
-                        )->leaf( `Title`
+                    )->ele( n = `sideContent` ns = `l`
+                        )->tag( `Title`
                             )->a( n = `level` v = `H1`
                             )->a( n = `text`  v = `Side content`
-                        )->leaf( `Text`
+                        )->tag( `Text`
                         )->a( n = `text` v = `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ` &&
                                              `ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint ` &&
                                              `occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`
 
-                    )->shut(
-                )->shut(
-            )->shut(
-            )->open( `footer`
-                )->open( `Toolbar`
-                    )->leaf( `Button`
+                    )->end(
+                )->end(
+            )->end(
+            )->ele( `footer`
+                )->ele( `Toolbar`
+                    )->tag( `Button`
                         )->a( n = `text`    v = `Toggle`
                         )->a( n = `type`    v = `Accept`
                         )->a( n = `press`   v = client->_event( `TOGGLE` )
                         )->a( n = `id`      v = `toggleButton`
                         )->a( n = `enabled` v = client->_bind( toggle_enabled )
-                    )->leaf( `Slider`
+                    )->tag( `Slider`
                         )->a( n = `id`         v = `DSCWidthSlider`
                         )->a( n = `value`      v = `100`
                         )->a( n = `liveChange` v = client->follow_up_action(
@@ -104,7 +104,7 @@ CLASS z2ui5_cl_smpc_app_138 IMPLEMENTATION.
                                                    ( `css` )
                                                    ( `width` )
                                                    ( `${$parameters>/value} + '%'` ) ) )
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `id`      v = `DSCWidthHintText`
                         )->a( n = `text`    v = `Best view in full screen mode`
                         )->a( n = `visible` v = client->_bind( hint_visible ) ).

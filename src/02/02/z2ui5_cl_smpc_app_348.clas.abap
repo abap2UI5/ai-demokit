@@ -36,358 +36,358 @@ CLASS z2ui5_cl_smpc_app_348 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the ResponsiveColumnLayout demo with its eight f:Cards. The Panel width
     " follows the Slider through an expression binding (roundtrip-free), and
     " the layout's layoutChange carries its layout parameter to the backend so
     " the "Current breakpoint" Text shows it, like the original's model write.
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`       v = `sap.m`
         )->a( n = `xmlns:mvc`   v = `sap.ui.core.mvc`
         )->a( n = `xmlns:grid`  v = `sap.ui.layout.cssgrid`
         )->a( n = `xmlns:f`     v = `sap.f`
         )->a( n = `xmlns:cards` v = `sap.f.cards`
 
-        )->leaf( `ToggleButton`
+        )->tag( `ToggleButton`
             )->a( n = `id`    v = `revealGrid`
             )->a( n = `text`  v = `Reveal Grid`
             )->a( n = `class` v = `sapUiSmallMargin`
 
-        )->leaf( `Slider`
+        )->tag( `Slider`
             )->a( n = `value` v = client->_bind( slider_value )
             )->a( n = `class` v = `sapUiSmallMarginBottom`
 
-        )->open( `Panel`
+        )->ele( `Panel`
             )->a( n = `width` v = |\{= ${ client->_bind( slider_value ) } + '%'\}|
             )->a( n = `id`    v = `panelCSSGrid`
 
-            )->open( `headerToolbar`
-                )->open( `Toolbar`
+            )->ele( `headerToolbar`
+                )->ele( `Toolbar`
                     )->a( n = `height` v = `3rem`
 
-                    )->leaf( `Title`
+                    )->tag( `Title`
                         )->a( n = `text` v = `Grid with ResponsiveColumnLayout`
 
-                )->shut(
-            )->shut(
-            )->leaf( `Text`
+                )->end(
+            )->end(
+            )->tag( `Text`
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
                 )->a( n = `text`  v = `ResponsiveColumnLayout represents a layout which is configured to display a variable number of columns depending on available screen size.`
 
-            )->leaf( `Text`
+            )->tag( `Text`
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
                 )->a( n = `text`  v = `Grid row's height is dynamically determined by the height of the highest grid element on this row.`
 
-            )->leaf( `Text`
+            )->tag( `Text`
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
                 )->a( n = `text`  v = |Current breakpoint: { client->_bind( currentbreakpoint ) }|
                 )->a( n = `width` v = `100%`
 
-            )->open( n = `CSSGrid` ns = `grid`
+            )->ele( n = `CSSGrid` ns = `grid`
                 )->a( n = `id` v = `grid1`
 
-                )->open( n = `customLayout` ns = `grid`
-                    )->leaf( n = `ResponsiveColumnLayout` ns = `grid`
+                )->ele( n = `customLayout` ns = `grid`
+                    )->tag( n = `ResponsiveColumnLayout` ns = `grid`
                         )->a( n = `layoutChange` v = client->_event( val   = `LAYOUT_CHANGE`
                                                                      t_arg = VALUE #( ( `${$parameters>/layout}` ) ) )
 
-                )->shut(
-                )->open( n = `Card` ns = `f`
-                    )->open( n = `layoutData` ns = `f`
-                        )->leaf( n = `ResponsiveColumnItemLayoutData` ns = `grid`
+                )->end(
+                )->ele( n = `Card` ns = `f`
+                    )->ele( n = `layoutData` ns = `f`
+                        )->tag( n = `ResponsiveColumnItemLayoutData` ns = `grid`
                             )->a( n = `columns` v = `4`
                             )->a( n = `rows`    v = `4`
 
-                    )->shut(
-                    )->open( n = `content` ns = `f`
-                        )->open( `VBox`
+                    )->end(
+                    )->ele( n = `content` ns = `f`
+                        )->ele( `VBox`
                             )->a( n = `class` v = `sapUiSmallMargin`
 
-                            )->leaf( `Title`
+                            )->tag( `Title`
                                 )->a( n = `text`     v = `4 / 4`
                                 )->a( n = `wrapping` v = `true`
 
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text`     v = `Subtitle`
                                 )->a( n = `wrapping` v = `true`
 
-                        )->shut(
-                    )->shut(
-                )->shut(
-                )->open( n = `Card` ns = `f`
-                    )->open( n = `layoutData` ns = `f`
-                        )->leaf( n = `ResponsiveColumnItemLayoutData` ns = `grid`
+                        )->end(
+                    )->end(
+                )->end(
+                )->ele( n = `Card` ns = `f`
+                    )->ele( n = `layoutData` ns = `f`
+                        )->tag( n = `ResponsiveColumnItemLayoutData` ns = `grid`
                             )->a( n = `columns` v = `3`
                             )->a( n = `rows`    v = `3`
 
-                    )->shut(
-                    )->open( n = `content` ns = `f`
-                        )->open( `VBox`
+                    )->end(
+                    )->ele( n = `content` ns = `f`
+                        )->ele( `VBox`
                             )->a( n = `class` v = `sapUiSmallMargin`
 
-                            )->leaf( `Title`
+                            )->tag( `Title`
                                 )->a( n = `text`     v = `3 / 3`
                                 )->a( n = `wrapping` v = `true`
 
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text`     v = `Subtitle Subtitle Subtitle`
                                 )->a( n = `wrapping` v = `true`
 
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text`     v = `Subtitle`
                                 )->a( n = `wrapping` v = `true`
 
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text`     v = `Subtitle`
                                 )->a( n = `wrapping` v = `true`
 
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text`     v = `Subtitle`
                                 )->a( n = `wrapping` v = `true`
 
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text`     v = `Subtitle`
                                 )->a( n = `wrapping` v = `true`
 
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text`     v = `Subtitle`
                                 )->a( n = `wrapping` v = `true`
 
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text`     v = `Subtitle`
                                 )->a( n = `wrapping` v = `true`
 
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text`     v = `Subtitle`
                                 )->a( n = `wrapping` v = `true`
 
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text`     v = `Subtitle`
                                 )->a( n = `wrapping` v = `true`
 
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text`     v = `Subtitle`
                                 )->a( n = `wrapping` v = `true`
 
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text`     v = `Subtitle`
                                 )->a( n = `wrapping` v = `true`
 
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text`     v = `Subtitle`
                                 )->a( n = `wrapping` v = `true`
 
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text`     v = `Subtitle`
                                 )->a( n = `wrapping` v = `true`
 
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text`     v = `Subtitle`
                                 )->a( n = `wrapping` v = `true`
 
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text`     v = `Subtitle`
                                 )->a( n = `wrapping` v = `true`
 
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text`     v = `Subtitle`
                                 )->a( n = `wrapping` v = `true`
 
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text`     v = `Subtitle`
                                 )->a( n = `wrapping` v = `true`
 
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text`     v = `Subtitle`
                                 )->a( n = `wrapping` v = `true`
 
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text`     v = `Subtitle`
                                 )->a( n = `wrapping` v = `true`
 
-                        )->shut(
-                    )->shut(
-                )->shut(
-                )->open( n = `Card` ns = `f`
-                    )->open( n = `layoutData` ns = `f`
-                        )->leaf( n = `ResponsiveColumnItemLayoutData` ns = `grid`
+                        )->end(
+                    )->end(
+                )->end(
+                )->ele( n = `Card` ns = `f`
+                    )->ele( n = `layoutData` ns = `f`
+                        )->tag( n = `ResponsiveColumnItemLayoutData` ns = `grid`
                             )->a( n = `columns` v = `1`
                             )->a( n = `rows`    v = `1`
 
-                    )->shut(
-                    )->open( n = `content` ns = `f`
-                        )->open( `VBox`
+                    )->end(
+                    )->ele( n = `content` ns = `f`
+                        )->ele( `VBox`
                             )->a( n = `class` v = `sapUiSmallMargin`
 
-                            )->leaf( `Title`
+                            )->tag( `Title`
                                 )->a( n = `text`     v = `1 / 1`
                                 )->a( n = `wrapping` v = `true`
 
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text`     v = `Subtitle`
                                 )->a( n = `wrapping` v = `true`
 
-                        )->shut(
-                    )->shut(
-                )->shut(
-                )->open( n = `Card` ns = `f`
-                    )->open( n = `layoutData` ns = `f`
-                        )->leaf( n = `ResponsiveColumnItemLayoutData` ns = `grid`
+                        )->end(
+                    )->end(
+                )->end(
+                )->ele( n = `Card` ns = `f`
+                    )->ele( n = `layoutData` ns = `f`
+                        )->tag( n = `ResponsiveColumnItemLayoutData` ns = `grid`
                             )->a( n = `columns` v = `1`
                             )->a( n = `rows`    v = `1`
 
-                    )->shut(
-                    )->open( n = `content` ns = `f`
-                        )->open( `VBox`
+                    )->end(
+                    )->ele( n = `content` ns = `f`
+                        )->ele( `VBox`
                             )->a( n = `class` v = `sapUiSmallMargin`
 
-                            )->leaf( `Title`
+                            )->tag( `Title`
                                 )->a( n = `text`     v = `1 / 1`
                                 )->a( n = `wrapping` v = `true`
 
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text`     v = `Subtitle`
                                 )->a( n = `wrapping` v = `true`
 
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text`     v = `Subtitle`
                                 )->a( n = `wrapping` v = `true`
 
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text`     v = `Subtitle`
                                 )->a( n = `wrapping` v = `true`
 
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text`     v = `Subtitle`
                                 )->a( n = `wrapping` v = `true`
 
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text`     v = `Subtitle`
                                 )->a( n = `wrapping` v = `true`
 
-                        )->shut(
-                    )->shut(
-                )->shut(
-                )->open( n = `Card` ns = `f`
-                    )->open( n = `layoutData` ns = `f`
-                        )->leaf( n = `ResponsiveColumnItemLayoutData` ns = `grid`
+                        )->end(
+                    )->end(
+                )->end(
+                )->ele( n = `Card` ns = `f`
+                    )->ele( n = `layoutData` ns = `f`
+                        )->tag( n = `ResponsiveColumnItemLayoutData` ns = `grid`
                             )->a( n = `columns` v = `1`
                             )->a( n = `rows`    v = `1`
 
-                    )->shut(
-                    )->open( n = `content` ns = `f`
-                        )->open( `VBox`
+                    )->end(
+                    )->ele( n = `content` ns = `f`
+                        )->ele( `VBox`
                             )->a( n = `class` v = `sapUiSmallMargin`
 
-                            )->leaf( `Title`
+                            )->tag( `Title`
                                 )->a( n = `text`     v = `1 / 1`
                                 )->a( n = `wrapping` v = `true`
 
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text`     v = `Subtitle `
                                 )->a( n = `wrapping` v = `true`
 
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text`     v = `Subtitle `
                                 )->a( n = `wrapping` v = `true`
 
-                        )->shut(
-                    )->shut(
-                )->shut(
-                )->open( n = `Card` ns = `f`
-                    )->open( n = `layoutData` ns = `f`
-                        )->leaf( n = `ResponsiveColumnItemLayoutData` ns = `grid`
+                        )->end(
+                    )->end(
+                )->end(
+                )->ele( n = `Card` ns = `f`
+                    )->ele( n = `layoutData` ns = `f`
+                        )->tag( n = `ResponsiveColumnItemLayoutData` ns = `grid`
                             )->a( n = `columns` v = `3`
                             )->a( n = `rows`    v = `2`
 
-                    )->shut(
-                    )->open( n = `content` ns = `f`
-                        )->open( `VBox`
+                    )->end(
+                    )->ele( n = `content` ns = `f`
+                        )->ele( `VBox`
                             )->a( n = `class` v = `sapUiSmallMargin`
 
-                            )->leaf( `Title`
+                            )->tag( `Title`
                                 )->a( n = `text`     v = `3 / 2`
                                 )->a( n = `wrapping` v = `true`
 
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text`     v = `Subtitle Subtitle Subtitle`
                                 )->a( n = `wrapping` v = `true`
 
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text`     v = `Subtitle`
                                 )->a( n = `wrapping` v = `true`
 
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text`     v = `Subtitle`
                                 )->a( n = `wrapping` v = `true`
 
-                        )->shut(
-                    )->shut(
-                )->shut(
-                )->open( n = `Card` ns = `f`
-                    )->open( n = `layoutData` ns = `f`
-                        )->leaf( n = `ResponsiveColumnItemLayoutData` ns = `grid`
+                        )->end(
+                    )->end(
+                )->end(
+                )->ele( n = `Card` ns = `f`
+                    )->ele( n = `layoutData` ns = `f`
+                        )->tag( n = `ResponsiveColumnItemLayoutData` ns = `grid`
                             )->a( n = `columns` v = `1`
                             )->a( n = `rows`    v = `1`
 
-                    )->shut(
-                    )->open( n = `content` ns = `f`
-                        )->open( `VBox`
+                    )->end(
+                    )->ele( n = `content` ns = `f`
+                        )->ele( `VBox`
                             )->a( n = `class` v = `sapUiSmallMargin`
 
-                            )->leaf( `Title`
+                            )->tag( `Title`
                                 )->a( n = `text`     v = `1 / 1`
                                 )->a( n = `wrapping` v = `true`
 
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text`     v = `Subtitle Subtitle Subtitle`
                                 )->a( n = `wrapping` v = `true`
 
-                        )->shut(
-                    )->shut(
-                )->shut(
-                )->open( n = `Card` ns = `f`
-                    )->open( n = `layoutData` ns = `f`
-                        )->leaf( n = `ResponsiveColumnItemLayoutData` ns = `grid`
+                        )->end(
+                    )->end(
+                )->end(
+                )->ele( n = `Card` ns = `f`
+                    )->ele( n = `layoutData` ns = `f`
+                        )->tag( n = `ResponsiveColumnItemLayoutData` ns = `grid`
                             )->a( n = `columns` v = `1`
                             )->a( n = `rows`    v = `1`
 
-                    )->shut(
-                    )->open( n = `content` ns = `f`
-                        )->open( `VBox`
+                    )->end(
+                    )->ele( n = `content` ns = `f`
+                        )->ele( `VBox`
                             )->a( n = `class` v = `sapUiSmallMargin`
 
-                            )->leaf( `Title`
+                            )->tag( `Title`
                                 )->a( n = `text`     v = `1 / 1`
                                 )->a( n = `wrapping` v = `true`
 
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text`     v = `Subtitle Subtitle Subtitle`
                                 )->a( n = `wrapping` v = `true`
 
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text`     v = `Subtitle`
                                 )->a( n = `wrapping` v = `true`
 
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text`     v = `Subtitle`
                                 )->a( n = `wrapping` v = `true`
 
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text`     v = `Subtitle`
                                 )->a( n = `wrapping` v = `true`
 
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text`     v = `Subtitle`
                                 )->a( n = `wrapping` v = `true`
 
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
-        )->shut(
-    )->shut( ).
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
+        )->end(
+    )->end( ).
 
     client->view_display( view->stringify( ) ).
 

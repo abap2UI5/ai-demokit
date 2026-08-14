@@ -63,25 +63,25 @@ CLASS z2ui5_cl_smpc_app_354 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the filtering demo. Every filter is applied in ABAP and the table binds
     " the filtered rows, so the controller's Filter objects and its
     " binding.filter( ) calls become one server-side selection.
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.ui.table`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns:u`   v = `sap.ui.unified`
         )->a( n = `xmlns:m`   v = `sap.m`
         )->a( n = `height`    v = `100%`
 
-        )->open( n = `Page` ns = `m`
+        )->ele( n = `Page` ns = `m`
             )->a( n = `showHeader`      v = `false`
             )->a( n = `enableScrolling` v = `false`
             )->a( n = `class`           v = `sapUiContentPadding`
 
-            )->open( n = `content` ns = `m`
-                )->open( `Table`
+            )->ele( n = `content` ns = `m`
+                )->ele( `Table`
                     )->a( n = `id`               v = `table`
                     )->a( n = `selectionMode`    v = `MultiToggle`
                     )->a( n = `rows`             v = client->_bind( t_products )
@@ -93,87 +93,87 @@ CLASS z2ui5_cl_smpc_app_354 IMPLEMENTATION.
                                         s_ctrl = VALUE #( check_prevent_default = abap_true ) )
                     )->a( n = `ariaLabelledBy`   v = `title`
 
-                    )->open( `extension`
-                        )->open( n = `OverflowToolbar` ns = `m`
+                    )->ele( `extension`
+                        )->ele( n = `OverflowToolbar` ns = `m`
                             )->a( n = `style` v = `Clear`
 
-                            )->leaf( n = `Title` ns = `m`
+                            )->tag( n = `Title` ns = `m`
                                 )->a( n = `id`   v = `title`
                                 )->a( n = `text` v = `Products`
 
-                            )->leaf( n = `ToolbarSpacer` ns = `m`
+                            )->tag( n = `ToolbarSpacer` ns = `m`
 
-                            )->leaf( n = `ToggleButton` ns = `m`
+                            )->tag( n = `ToggleButton` ns = `m`
                                 )->a( n = `icon`    v = `sap-icon://complete`
                                 )->a( n = `tooltip` v = `Show available products only`
                                 )->a( n = `pressed` v = client->_bind( availability_filter_on )
                                 )->a( n = `press`   v = client->_event( `TOGGLE_AVAILABILITY` )
 
-                            )->leaf( n = `ToggleButton` ns = `m`
+                            )->tag( n = `ToggleButton` ns = `m`
                                 )->a( n = `icon`    v = `sap-icon://grid`
                                 )->a( n = `tooltip` v = `Enable / Disable Cell Filter Functionality`
                                 )->a( n = `pressed` v = client->_bind( cell_filter_on )
 
-                            )->leaf( n = `Button` ns = `m`
+                            )->tag( n = `Button` ns = `m`
                                 )->a( n = `icon`    v = `sap-icon://decline`
                                 )->a( n = `tooltip` v = `Clear all filters`
                                 )->a( n = `press`   v = client->_event( `CLEAR_FILTERS` )
 
-                            )->leaf( n = `ToolbarSeparator` ns = `m`
+                            )->tag( n = `ToolbarSeparator` ns = `m`
 
-                            )->leaf( n = `SearchField` ns = `m`
+                            )->tag( n = `SearchField` ns = `m`
                                 )->a( n = `placeholder` v = `Filter`
                                 )->a( n = `value`       v = client->_bind( global_filter )
                                 )->a( n = `search`      v = client->_event( `SEARCH` )
                                 )->a( n = `width`       v = `15rem`
 
-                        )->shut(
-                    )->shut(
-                    )->open( `columns`
-                        )->open( `Column`
+                        )->end(
+                    )->end(
+                    )->ele( `columns`
+                        )->ele( `Column`
                             )->a( n = `width`          v = `11rem`
                             )->a( n = `filterProperty` v = `NAME`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Product Name`
 
-                            )->open( `template`
-                                )->leaf( n = `Text` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text`     v = `{NAME}`
                                     )->a( n = `wrapping` v = `false`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `width`                 v = `11rem`
                             )->a( n = `filterProperty`        v = `CATEGORY`
                             )->a( n = `defaultFilterOperator` v = `StartsWith`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Category`
 
-                            )->open( `template`
-                                )->leaf( n = `Text` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text`     v = `{CATEGORY}`
                                     )->a( n = `wrapping` v = `false`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `width` v = `9rem`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Image`
 
-                            )->open( `template`
-                                )->leaf( n = `Link` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Link` ns = `m`
                                     )->a( n = `text`   v = `Show Image`
                                     )->a( n = `href`   v = `{PRODUCTPICURL}`
                                     )->a( n = `target` v = `_blank`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `id`                    v = `availability`
                             )->a( n = `width`                 v = `9rem`
                             )->a( n = `filterProperty`        v = `AVAILABLE`
@@ -181,56 +181,56 @@ CLASS z2ui5_cl_smpc_app_354 IMPLEMENTATION.
                             )->a( n = `defaultFilterOperator` v = `EQ`
                             )->a( n = `filterType`            v = `sap.ui.model.type.Boolean`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Status`
 
-                            )->open( `template`
-                                )->leaf( n = `ObjectStatus` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `ObjectStatus` ns = `m`
                                     )->a( n = `text`  v = `{STATUS}`
                                     )->a( n = `state` v = `{AVAILABLESTATE}`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `id`             v = `price`
                             )->a( n = `width`          v = `9rem`
                             )->a( n = `filterProperty` v = `PRICE`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Price`
 
-                            )->open( `template`
-                                )->leaf( n = `Currency` ns = `u`
+                            )->ele( `template`
+                                )->tag( n = `Currency` ns = `u`
                                     )->a( n = `value`    v = `{PRICE}`
                                     )->a( n = `currency` v = `{CURRENCYCODE}`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `width`          v = `6rem`
                             )->a( n = `hAlign`         v = `End`
                             )->a( n = `filterProperty` v = `QUANTITY`
                             )->a( n = `filterType`     v = `sap.ui.model.type.Integer`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Quantity`
 
-                            )->open( `template`
-                                )->leaf( n = `Label` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = |\{ path: 'QUANTITY', type: 'sap.ui.model.type.Integer' \}|
 
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                    )->open( `footer`
-                        )->leaf( n = `OverflowToolbar` ns = `m`
+                            )->end(
+                        )->end(
+                    )->end(
+                    )->ele( `footer`
+                        )->tag( n = `OverflowToolbar` ns = `m`
                             )->a( n = `id` v = `infobar`
 
-                    )->shut(
-                )->shut(
-            )->shut(
-        )->shut(
-    )->shut( ).
+                    )->end(
+                )->end(
+            )->end(
+        )->end(
+    )->end( ).
 
     client->view_display( view->stringify( ) ).
 

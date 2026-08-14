@@ -34,228 +34,228 @@ CLASS z2ui5_cl_smpc_app_059 IMPLEMENTATION.
     " original demokit sdk asset paths kept 1:1 - not served by abap2UI5 (see sidecar)
     DATA(base) = `test-resources/sap/ui/documentation/sdk/images/`.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
 
-        )->leaf( `MessageStrip`
+        )->tag( `MessageStrip`
             )->a( n = `text`  v = `Clicking on each of the images will open a LightBox, showing the real size of the image. Images will be scaled down if their size is bigger than the window size.`
             )->a( n = `class` v = `sapUiSmallMargin`
 
-        )->open( `List`
+        )->ele( `List`
 
-            )->open( `CustomListItem`
-                )->open( `HBox`
+            )->ele( `CustomListItem`
+                )->ele( `HBox`
                     )->a( n = `class` v = `sapUiSmallMargin`
-                    )->open( `Image`
+                    )->ele( `Image`
                         )->a( n = `src`          v = base && `HT-6100.jpg`
                         )->a( n = `decorative`   v = `false`
                         )->a( n = `width`        v = `170px`
                         )->a( n = `densityAware` v = `false`
-                        )->open( `detailBox`
-                            )->open( `LightBox`
-                                )->leaf( `LightBoxItem`
+                        )->ele( `detailBox`
+                            )->ele( `LightBox`
+                                )->tag( `LightBoxItem`
                                     )->a( n = `imageSrc` v = base && `HT-6100-large.jpg`
                                     )->a( n = `alt`      v = `Beamer`
                                     )->a( n = `title`    v = `This is a beamer`
                                     )->a( n = `subtitle` v = `This is beamer's description`
 
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                    )->open( `VBox`
+                            )->end(
+                        )->end(
+                    )->end(
+                    )->ele( `VBox`
                         )->a( n = `class` v = `sapUiSmallMarginBegin`
-                        )->leaf( `Title`
+                        )->tag( `Title`
                             )->a( n = `text` v = `Beamer`
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = lorem
 
-                    )->shut(
-                )->shut(
-            )->shut(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( `CustomListItem`
-                )->open( `HBox`
+            )->ele( `CustomListItem`
+                )->ele( `HBox`
                     )->a( n = `class` v = `sapUiSmallMargin`
-                    )->open( `Image`
+                    )->ele( `Image`
                         )->a( n = `src`          v = base && `HT-6120.jpg`
                         )->a( n = `decorative`   v = `false`
                         )->a( n = `width`        v = `170px`
                         )->a( n = `densityAware` v = `false`
-                        )->open( `detailBox`
-                            )->open( `LightBox`
-                                )->leaf( `LightBoxItem`
+                        )->ele( `detailBox`
+                            )->ele( `LightBox`
+                                )->tag( `LightBoxItem`
                                     )->a( n = `imageSrc` v = base && `HT-6120-large.jpg`
                                     )->a( n = `alt`      v = `USB`
                                     )->a( n = `title`    v = `This is a USB`
                                     )->a( n = `subtitle` v = `This is USB's description`
 
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                    )->open( `VBox`
+                            )->end(
+                        )->end(
+                    )->end(
+                    )->ele( `VBox`
                         )->a( n = `class` v = `sapUiSmallMarginBegin`
-                        )->leaf( `Title`
+                        )->tag( `Title`
                             )->a( n = `text` v = `USB`
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = lorem
 
-                    )->shut(
-                )->shut(
-            )->shut(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( `CustomListItem`
-                )->open( `HBox`
+            )->ele( `CustomListItem`
+                )->ele( `HBox`
                     )->a( n = `class` v = `sapUiSmallMargin`
-                    )->open( `Image`
+                    )->ele( `Image`
                         )->a( n = `src`          v = base && `HT-7777.jpg`
                         )->a( n = `decorative`   v = `false`
                         )->a( n = `width`        v = `170px`
                         )->a( n = `densityAware` v = `false`
-                        )->open( `detailBox`
-                            )->open( `LightBox`
-                                )->leaf( `LightBoxItem`
+                        )->ele( `detailBox`
+                            )->ele( `LightBox`
+                                )->tag( `LightBoxItem`
                                     )->a( n = `imageSrc` v = base && `HT-7777-large.jpg`
                                     )->a( n = `alt`      v = `Speakers`
                                     )->a( n = `title`    v = `These are speakers`
                                     )->a( n = `subtitle` v = `This is speakers' description`
 
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                    )->open( `VBox`
+                            )->end(
+                        )->end(
+                    )->end(
+                    )->ele( `VBox`
                         )->a( n = `class` v = `sapUiSmallMarginBegin`
-                        )->leaf( `Title`
+                        )->tag( `Title`
                             )->a( n = `text` v = `Speakers`
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = lorem
 
-                    )->shut(
-                )->shut(
-            )->shut(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( `CustomListItem`
-                )->open( `HBox`
+            )->ele( `CustomListItem`
+                )->ele( `HBox`
                     )->a( n = `class` v = `sapUiSmallMargin`
-                    )->open( `Image`
+                    )->ele( `Image`
                         )->a( n = `src`          v = base && `nature/ALotOfElephants_small.jpg`
                         )->a( n = `decorative`   v = `false`
                         )->a( n = `width`        v = `170px`
                         )->a( n = `densityAware` v = `false`
-                        )->open( `detailBox`
-                            )->open( `LightBox`
-                                )->leaf( `LightBoxItem`
+                        )->ele( `detailBox`
+                            )->ele( `LightBox`
+                                )->tag( `LightBoxItem`
                                     )->a( n = `imageSrc` v = base && `nature/ALotOfElephants.jpg`
                                     )->a( n = `alt`      v = `Nature image`
                                     )->a( n = `title`    v = `This is a sample image`
                                     )->a( n = `subtitle` v = `This is a place for description`
 
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                    )->open( `VBox`
+                            )->end(
+                        )->end(
+                    )->end(
+                    )->ele( `VBox`
                         )->a( n = `class` v = `sapUiSmallMarginBegin`
-                        )->leaf( `Title`
+                        )->tag( `Title`
                             )->a( n = `text` v = `Nature image`
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = lorem
 
-                    )->shut(
-                )->shut(
-            )->shut(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( `CustomListItem`
-                )->open( `HBox`
+            )->ele( `CustomListItem`
+                )->ele( `HBox`
                     )->a( n = `class` v = `sapUiSmallMargin`
-                    )->open( `Image`
+                    )->ele( `Image`
                         )->a( n = `src`          v = base && `nature/flatFish.jpg`
                         )->a( n = `decorative`   v = `false`
                         )->a( n = `width`        v = `170px`
                         )->a( n = `densityAware` v = `false`
-                        )->open( `detailBox`
-                            )->open( `LightBox`
-                                )->leaf( `LightBoxItem`
+                        )->ele( `detailBox`
+                            )->ele( `LightBox`
+                                )->tag( `LightBoxItem`
                                     )->a( n = `imageSrc` v = base && `nature/flatFish.jpg`
                                     )->a( n = `alt`      v = `Nature image`
                                     )->a( n = `title`    v = `This is a sample image`
                                     )->a( n = `subtitle` v = `This is a place for description`
 
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                    )->open( `VBox`
+                            )->end(
+                        )->end(
+                    )->end(
+                    )->ele( `VBox`
                         )->a( n = `class` v = `sapUiSmallMarginBegin`
-                        )->leaf( `Title`
+                        )->tag( `Title`
                             )->a( n = `text` v = `Nature image`
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = lorem
 
-                    )->shut(
-                )->shut(
-            )->shut(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( `CustomListItem`
-                )->open( `HBox`
+            )->ele( `CustomListItem`
+                )->ele( `HBox`
                     )->a( n = `class` v = `sapUiSmallMargin`
-                    )->open( `Image`
+                    )->ele( `Image`
                         )->a( n = `src`          v = base && `nature/horses.jpg`
                         )->a( n = `decorative`   v = `false`
                         )->a( n = `width`        v = `170px`
                         )->a( n = `densityAware` v = `false`
-                        )->open( `detailBox`
-                            )->open( `LightBox`
-                                )->leaf( `LightBoxItem`
+                        )->ele( `detailBox`
+                            )->ele( `LightBox`
+                                )->tag( `LightBoxItem`
                                     )->a( n = `imageSrc` v = base && `nature/horses.jpg`
                                     )->a( n = `alt`      v = `Nature image`
                                     )->a( n = `title`    v = `This is a sample image`
                                     )->a( n = `subtitle` v = `This is a place for description`
 
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                    )->open( `VBox`
+                            )->end(
+                        )->end(
+                    )->end(
+                    )->ele( `VBox`
                         )->a( n = `class` v = `sapUiSmallMarginBegin`
-                        )->leaf( `Title`
+                        )->tag( `Title`
                             )->a( n = `text` v = `Nature image`
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = lorem
 
-                    )->shut(
-                )->shut(
-            )->shut(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( `CustomListItem`
-                )->open( `HBox`
+            )->ele( `CustomListItem`
+                )->ele( `HBox`
                     )->a( n = `class` v = `sapUiSmallMargin`
-                    )->open( `Image`
+                    )->ele( `Image`
                         )->a( n = `src`          v = base && `nature/elephant.jpg`
                         )->a( n = `decorative`   v = `false`
                         )->a( n = `width`        v = `170px`
                         )->a( n = `densityAware` v = `false`
-                        )->open( `detailBox`
-                            )->open( `LightBox`
-                                )->leaf( `LightBoxItem`
+                        )->ele( `detailBox`
+                            )->ele( `LightBox`
+                                )->tag( `LightBoxItem`
                                     )->a( n = `imageSrc` v = base && `nature/image_does_not_exist.jpg`
                                     )->a( n = `alt`      v = `Nature image`
                                     )->a( n = `title`    v = `This is a sample image`
                                     )->a( n = `subtitle` v = `This is a place for description`
 
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                    )->open( `VBox`
+                            )->end(
+                        )->end(
+                    )->end(
+                    )->ele( `VBox`
                         )->a( n = `class` v = `sapUiSmallMarginBegin`
-                        )->leaf( `Title`
+                        )->tag( `Title`
                             )->a( n = `text` v = `Unavailable image`
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Shows an error when an image could not be loaded, or when it takes too much time to load it.`
 
-                    )->shut(
-                )->shut(
-            )->shut(
-        )->shut( ).
+                    )->end(
+                )->end(
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

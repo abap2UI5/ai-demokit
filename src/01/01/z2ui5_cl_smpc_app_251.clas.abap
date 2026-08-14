@@ -29,26 +29,26 @@ CLASS z2ui5_cl_smpc_app_251 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns:l`    v = `sap.ui.layout`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns`      v = `sap.m`
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
             )->a( n = `width` v = `100%`
 
-            )->open( n = `dependents` ns = `l`
+            )->ele( n = `dependents` ns = `l`
                 " BusyDialog.fragment.xml inlined (the core:Fragment reference
                 " element is dropped, declared)
-                )->leaf( `BusyDialog`
+                )->tag( `BusyDialog`
                     )->a( n = `id` v = `BusyDialog`
 
-            )->shut(
-            )->leaf( `Button`
+            )->end(
+            )->tag( `Button`
                 )->a( n = `text`  v = `Show Light Busy Dialog`
                 )->a( n = `press` v = client->_event( `SHOW_BUSY` )
                 )->a( n = `class` v = `sapUiSmallMarginBottom` ).

@@ -40,56 +40,56 @@ CLASS z2ui5_cl_smpc_app_144 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns:grid` v = `sap.ui.layout.cssgrid`
         )->a( n = `xmlns:f`    v = `sap.f`
 
-        )->leaf( `Slider`
+        )->tag( `Slider`
             )->a( n = `value`      v = client->_bind( slider_value )
             )->a( n = `liveChange` v = client->_event( `SLIDER` )
 
-        )->open( `Panel`
+        )->ele( `Panel`
             )->a( n = `id`               v = `panelForGridList`
             )->a( n = `backgroundDesign` v = `Transparent`
             )->a( n = `width`            v = client->_bind( panel_width )
 
-            )->open( `headerToolbar`
-                )->open( `Toolbar`
+            )->ele( `headerToolbar`
+                )->ele( `Toolbar`
                     )->a( n = `height` v = `3rem`
-                    )->leaf( `Title`
+                    )->tag( `Title`
                         )->a( n = `text` v = `Grid List with GridBoxLayout and minWidth 17rem`
 
-            )->shut(
-            )->shut(
+            )->end(
+            )->end(
 
-            )->open( n = `GridList` ns = `f`
+            )->ele( n = `GridList` ns = `f`
                 )->a( n = `id`         v = `gridList`
                 )->a( n = `headerText` v = `GridList header`
                 )->a( n = `items`      v = client->_bind( t_items )
 
-                )->open( n = `customLayout` ns = `f`
-                    )->leaf( n = `GridBoxLayout` ns = `grid`
+                )->ele( n = `customLayout` ns = `f`
+                    )->tag( n = `GridBoxLayout` ns = `grid`
                         )->a( n = `boxMinWidth` v = `17rem`
 
-                )->shut(
+                )->end(
 
-                )->open( n = `GridListItem` ns = `f`
-                    )->open( `VBox`
+                )->ele( n = `GridListItem` ns = `f`
+                    )->ele( `VBox`
                         )->a( n = `class` v = `sapUiSmallMargin`
-                        )->open( `layoutData`
-                            )->leaf( `FlexItemData`
+                        )->ele( `layoutData`
+                            )->tag( `FlexItemData`
                                 )->a( n = `growFactor`   v = `1`
                                 )->a( n = `shrinkFactor` v = `0`
 
-                        )->shut(
-                        )->leaf( `Title`
+                        )->end(
+                        )->tag( `Title`
                             )->a( n = `text`     v = `{TITLE}`
                             )->a( n = `wrapping` v = `true`
-                        )->leaf( `Label`
+                        )->tag( `Label`
                             )->a( n = `text`     v = `{SUBTITLE}`
                             )->a( n = `wrapping` v = `true` ).
 

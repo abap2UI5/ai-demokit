@@ -43,9 +43,9 @@ CLASS z2ui5_cl_smpc_app_106 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `height`         v = `100%`
         )->a( n = `xmlns:core`     v = `sap.ui.core`
         )->a( n = `xmlns:mvc`      v = `sap.ui.core.mvc`
@@ -55,155 +55,155 @@ CLASS z2ui5_cl_smpc_app_106 IMPLEMENTATION.
         )->a( n = `xmlns:ui`       v = `sap.ca.ui`
         )->a( n = `displayBlock`   v = `true`
 
-        )->open( `SplitContainer`
-            )->open( `masterPages`
-                )->open( n = `MasterPage` ns = `semantic`
+        )->ele( `SplitContainer`
+            )->ele( `masterPages`
+                )->ele( n = `MasterPage` ns = `semantic`
                     )->a( n = `title`          v = `Master Page Title`
                     )->a( n = `floatingFooter` v = `true`
 
-                    )->open( n = `sort` ns = `semantic`
-                        )->open( n = `SortSelect` ns = `semantic`
+                    )->ele( n = `sort` ns = `semantic`
+                        )->ele( n = `SortSelect` ns = `semantic`
                             )->a( n = `change`      v = client->_event( `SELECT_CHANGE` )
                             )->a( n = `selectedKey` v = client->_bind( sort_key )
                             )->a( n = `items` v = |\{ path: '{ client->_bind( val = t_filters path = abap_true ) }', sorter: \{ path: 'Name' \} \}|
 
-                            )->leaf( n = `Item` ns = `core`
+                            )->tag( n = `Item` ns = `core`
                                 )->a( n = `key`  v = `{TYPE}`
                                 )->a( n = `text` v = `{TYPE}`
 
-                    )->shut(
-                    )->shut(
-                    )->open( n = `filter` ns = `semantic`
-                        )->leaf( n = `FilterAction` ns = `semantic`
+                    )->end(
+                    )->end(
+                    )->ele( n = `filter` ns = `semantic`
+                        )->tag( n = `FilterAction` ns = `semantic`
                             )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `FilterAction` ) ) )
 
-                    )->shut(
-                    )->open( n = `group` ns = `semantic`
-                        )->leaf( n = `GroupAction` ns = `semantic`
+                    )->end(
+                    )->ele( n = `group` ns = `semantic`
+                        )->tag( n = `GroupAction` ns = `semantic`
                             )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `GroupAction` ) ) )
 
-                    )->shut(
-                    )->open( n = `addAction` ns = `semantic`
-                        )->leaf( n = `AddAction` ns = `semantic`
+                    )->end(
+                    )->ele( n = `addAction` ns = `semantic`
+                        )->tag( n = `AddAction` ns = `semantic`
                             )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `AddAction` ) ) )
 
-                    )->shut(
-                    )->open( n = `multiSelectAction` ns = `semantic`
-                        )->leaf( n = `MultiSelectAction` ns = `semantic`
+                    )->end(
+                    )->ele( n = `multiSelectAction` ns = `semantic`
+                        )->tag( n = `MultiSelectAction` ns = `semantic`
                             )->a( n = `press` v = client->_event( val   = `MULTI`
                                                                   t_arg = VALUE #( ( `${$source>/pressed}` ) ) )
 
-                    )->shut(
-                )->shut(
-            )->shut(
-            )->open( `detailPages`
-                )->open( n = `DetailPage` ns = `semantic`
+                    )->end(
+                )->end(
+            )->end(
+            )->ele( `detailPages`
+                )->ele( n = `DetailPage` ns = `semantic`
                     )->a( n = `title`          v = `Detail Page Title`
                     )->a( n = `floatingFooter` v = `true`
 
-                    )->open( n = `positiveAction` ns = `semantic`
-                        )->leaf( n = `PositiveAction` ns = `semantic`
+                    )->ele( n = `positiveAction` ns = `semantic`
+                        )->tag( n = `PositiveAction` ns = `semantic`
                             )->a( n = `text`  v = `Positive`
                             )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `PositiveAction` ) ) )
 
-                    )->shut(
-                    )->open( n = `negativeAction` ns = `semantic`
-                        )->leaf( n = `NegativeAction` ns = `semantic`
+                    )->end(
+                    )->ele( n = `negativeAction` ns = `semantic`
+                        )->tag( n = `NegativeAction` ns = `semantic`
                             )->a( n = `text`  v = `Negative`
                             )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `NegativeAction` ) ) )
 
-                    )->shut(
-                    )->open( n = `forwardAction` ns = `semantic`
-                        )->leaf( n = `ForwardAction` ns = `semantic`
+                    )->end(
+                    )->ele( n = `forwardAction` ns = `semantic`
+                        )->tag( n = `ForwardAction` ns = `semantic`
                             )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `ForwardAction` ) ) )
 
-                    )->shut(
-                    )->open( n = `flagAction` ns = `semantic`
-                        )->leaf( n = `FlagAction` ns = `semantic`
+                    )->end(
+                    )->ele( n = `flagAction` ns = `semantic`
+                        )->tag( n = `FlagAction` ns = `semantic`
                             )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `FlagAction` ) ) )
 
-                    )->shut(
-                    )->open( n = `favoriteAction` ns = `semantic`
-                        )->leaf( n = `FavoriteAction` ns = `semantic`
+                    )->end(
+                    )->ele( n = `favoriteAction` ns = `semantic`
+                        )->tag( n = `FavoriteAction` ns = `semantic`
                             )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `FavoriteAction` ) ) )
 
-                    )->shut(
-                    )->open( n = `sendEmailAction` ns = `semantic`
-                        )->leaf( n = `SendEmailAction` ns = `semantic`
+                    )->end(
+                    )->ele( n = `sendEmailAction` ns = `semantic`
+                        )->tag( n = `SendEmailAction` ns = `semantic`
                             )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `SendEmailAction` ) ) )
 
-                    )->shut(
-                    )->open( n = `sendMessageAction` ns = `semantic`
-                        )->leaf( n = `SendMessageAction` ns = `semantic`
+                    )->end(
+                    )->ele( n = `sendMessageAction` ns = `semantic`
+                        )->tag( n = `SendMessageAction` ns = `semantic`
                             )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `SendMessageAction` ) ) )
 
-                    )->shut(
-                    )->open( n = `discussInJamAction` ns = `semantic`
-                        )->leaf( n = `DiscussInJamAction` ns = `semantic`
+                    )->end(
+                    )->ele( n = `discussInJamAction` ns = `semantic`
+                        )->tag( n = `DiscussInJamAction` ns = `semantic`
                             )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `DiscussInJamAction` ) ) )
 
-                    )->shut(
-                    )->open( n = `shareInJamAction` ns = `semantic`
-                        )->leaf( n = `ShareInJamAction` ns = `semantic`
+                    )->end(
+                    )->ele( n = `shareInJamAction` ns = `semantic`
+                        )->tag( n = `ShareInJamAction` ns = `semantic`
                             )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `ShareInJamAction` ) ) )
 
-                    )->shut(
-                    )->open( n = `printAction` ns = `semantic`
-                        )->leaf( n = `PrintAction` ns = `semantic`
+                    )->end(
+                    )->ele( n = `printAction` ns = `semantic`
+                        )->tag( n = `PrintAction` ns = `semantic`
                             )->a( n = `press` v = client->_event( val = `SEM` t_arg = VALUE #( ( `PrintAction` ) ) )
 
-                    )->shut(
-                    )->open( n = `messagesIndicator` ns = `semantic`
-                        )->open( n = `MessagesIndicator` ns = `semantic`
+                    )->end(
+                    )->ele( n = `messagesIndicator` ns = `semantic`
+                        )->ele( n = `MessagesIndicator` ns = `semantic`
                             )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_by_id
                                                                             t_arg = VALUE #( ( `semMessagePopover` ) ( `toggleBy` ) ( `$event.oSource.sId` ) ) )
 
                             " the original's controller-built MessagePopover over the
                             " message model, declared as a dependent of its anchor
-                            )->open( n = `dependents` ns = `semantic`
-                                )->open( `MessagePopover`
+                            )->ele( n = `dependents` ns = `semantic`
+                                )->ele( `MessagePopover`
                                     )->a( n = `id`    v = `semMessagePopover`
                                     )->a( n = `items` v = `{message>/}`
 
-                                    )->leaf( `MessageItem`
+                                    )->tag( `MessageItem`
                                         )->a( n = `description` v = `{message>description}`
                                         )->a( n = `type`        v = `{message>type}`
                                         )->a( n = `title`       v = `{message>message}`
 
-                                )->shut(
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                    )->open( n = `pagingAction` ns = `semantic`
-                        )->leaf( `PagingButton`
+                                )->end(
+                            )->end(
+                        )->end(
+                    )->end(
+                    )->ele( n = `pagingAction` ns = `semantic`
+                        )->tag( `PagingButton`
                             )->a( n = `count`          v = `5`
                             )->a( n = `positionChange` v = client->_event( val = `POSITION` t_arg = VALUE #( ( `${$parameters>/newPosition}` ) ) )
 
-                    )->shut(
-                    )->open( n = `customFooterContent` ns = `semantic`
-                        )->leaf( `OverflowToolbarButton`
+                    )->end(
+                    )->ele( n = `customFooterContent` ns = `semantic`
+                        )->tag( `OverflowToolbarButton`
                             )->a( n = `icon`  v = `sap-icon://settings`
                             )->a( n = `text`  v = `Settings`
                             )->a( n = `press` v = client->_event( val = `PRESS` t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
-                        )->leaf( `OverflowToolbarButton`
+                        )->tag( `OverflowToolbarButton`
                             )->a( n = `icon`  v = `sap-icon://video`
                             )->a( n = `text`  v = `Video`
                             )->a( n = `press` v = client->_event( val = `PRESS` t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
 
-                    )->shut(
-                    )->open( n = `content` ns = `semantic`
+                    )->end(
+                    )->ele( n = `content` ns = `semantic`
                         " added container (declared): the z2ui5.cc.MessageManager bridge
                         " reproducing onInit's MessageManager.addMessages seed
-                        )->leaf( n = `MessageManager` ns = `z2ui5`
+                        )->tag( n = `MessageManager` ns = `z2ui5`
                             )->a( n = `items` v = client->_bind( t_messages )
 
-                    )->shut(
-                    )->open( n = `customShareMenuContent` ns = `semantic`
-                        )->leaf( `Button`
+                    )->end(
+                    )->ele( n = `customShareMenuContent` ns = `semantic`
+                        )->tag( `Button`
                             )->a( n = `text`  v = `CustomShareBtn1`
                             )->a( n = `icon`  v = `sap-icon://color-fill`
                             )->a( n = `press` v = client->_event( val = `PRESS` t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
-                        )->leaf( `Button`
+                        )->tag( `Button`
                             )->a( n = `text`  v = `CustomShareBtn2`
                             )->a( n = `icon`  v = `sap-icon://crop`
                             )->a( n = `press` v = client->_event( val = `PRESS` t_arg = VALUE #( ( `$event.oSource.sId` ) ) ) ).

@@ -24,13 +24,13 @@ CLASS z2ui5_cl_smpc_app_001 IMPLEMENTATION.
                       ( name  = `Proctra X`
                         city  = `Berlin`
                         image = `img/product2.jpg` ) ).
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
-    view->open( `mvc:View`
-      )->open( `Page`
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    view->ele( `mvc:View`
+      )->ele( `Page`
         )->a( n = `title` v = `{TITLE}`
-        )->leaf( `Text`
+        )->tag( `Text`
           )->a( n = `text` v = `{NAME}`
-      )->shut( )->shut( ).
+      )->end( )->end( ).
     client->view_display( view->stringify( ) ).
   ENDMETHOD.
 

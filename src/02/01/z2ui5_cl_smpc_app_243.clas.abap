@@ -37,33 +37,33 @@ CLASS z2ui5_cl_smpc_app_243 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
             )->a( n = `width` v = `100%`
 
-            )->open( n = `content` ns = `l`
-                )->leaf( `Button`
+            )->ele( n = `content` ns = `l`
+                )->tag( `Button`
                     )->a( n = `text`         v = `Show Dialog (phone) or Popover (Other)`
                     " handleResponsivePopoverPress: Fragment.load(Popover) -> openBy(button)
                     )->a( n = `press`        v = client->_event( val   = `SHOW_POPOVER`
                                                                  t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
                     )->a( n = `ariaHasPopup` v = `Dialog`
-                )->leaf( `Button`
+                )->tag( `Button`
                     )->a( n = `text`         v = `Popover with Custom Footer`
                     " handleResponsivePopoverFooterPress: Fragment.load(PopoverFooter) -> openBy(button)
                     )->a( n = `press`        v = client->_event( val   = `SHOW_POPOVER_FOOTER`
                                                                  t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
                     )->a( n = `ariaHasPopup` v = `Dialog`
 
-            )->shut(
-        )->shut( ).
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 
@@ -79,50 +79,50 @@ CLASS z2ui5_cl_smpc_app_243 IMPLEMENTATION.
         " built server-side and shown anchored to the pressed button
         " ($event.oSource.sId); bindElement("/ProductCollection/0") is folded to
         " the root-seeded fields (relative {NAME}/{PRODUCTPICURL} resolve there)
-        DATA(popover) = z2ui5_cl_ai_xml=>factory( ).
-        popover->open( n = `FragmentDefinition` ns = `core`
+        DATA(popover) = z2ui5_cl_ui5_view_builder=>factory( ).
+        popover->ele( n = `FragmentDefinition` ns = `core`
             )->a( n = `xmlns`      v = `sap.m`
             )->a( n = `xmlns:core` v = `sap.ui.core`
 
-            )->open( `ResponsivePopover`
+            )->ele( `ResponsivePopover`
                 )->a( n = `id`        v = `myPopover`
                 )->a( n = `title`     v = client->_bind( name )
                 )->a( n = `class`     v = `sapUiContentPadding`
                 )->a( n = `placement` v = `Bottom`
 
-                )->open( `beginButton`
-                    )->leaf( `Button`
+                )->ele( `beginButton`
+                    )->tag( `Button`
                         )->a( n = `text`  v = `Action-A`
                         )->a( n = `press` v = client->_event( `CLOSE` )
 
-                )->shut(
+                )->end(
 
-                )->open( `endButton`
-                    )->leaf( `Button`
+                )->ele( `endButton`
+                    )->tag( `Button`
                         )->a( n = `text`  v = `Action-B`
                         )->a( n = `press` v = client->_event( `CLOSE` )
 
-                )->shut(
+                )->end(
 
-                )->open( `content`
-                    )->leaf( `Image`
+                )->ele( `content`
+                    )->tag( `Image`
                         )->a( n = `src`   v = client->_bind( productpicurl )
                         )->a( n = `width` v = `15em`
 
-            )->shut(
-            )->shut( ).
+            )->end(
+            )->end( ).
         client->popover_display( xml   = popover->stringify( )
                                  by_id = client->get_event_arg( ) ).
 
       WHEN `SHOW_POPOVER_FOOTER`.
         " PopoverFooter.fragment.xml: a ResponsivePopover with a custom footer
         " OverflowToolbar (OK / Cancel), same anchoring + root-seeded record
-        DATA(footer) = z2ui5_cl_ai_xml=>factory( ).
-        footer->open( n = `FragmentDefinition` ns = `core`
+        DATA(footer) = z2ui5_cl_ui5_view_builder=>factory( ).
+        footer->ele( n = `FragmentDefinition` ns = `core`
             )->a( n = `xmlns`      v = `sap.m`
             )->a( n = `xmlns:core` v = `sap.ui.core`
 
-            )->open( `ResponsivePopover`
+            )->ele( `ResponsivePopover`
                 )->a( n = `id`                 v = `myFooterPopover`
                 )->a( n = `title`              v = client->_bind( name )
                 )->a( n = `class`              v = `sapUiContentPadding`
@@ -130,27 +130,27 @@ CLASS z2ui5_cl_smpc_app_243 IMPLEMENTATION.
                 )->a( n = `contentWidth`       v = `320px`
                 )->a( n = `horizontalScrolling` v = `false`
 
-                )->open( `content`
-                    )->leaf( `Image`
+                )->ele( `content`
+                    )->tag( `Image`
                         )->a( n = `src`   v = client->_bind( productpicurl )
                         )->a( n = `width` v = `15em`
 
-                )->shut(
+                )->end(
 
-                )->open( `footer`
-                    )->open( `OverflowToolbar`
-                        )->open( `content`
-                            )->leaf( `ToolbarSpacer`
-                            )->leaf( `Button`
+                )->ele( `footer`
+                    )->ele( `OverflowToolbar`
+                        )->ele( `content`
+                            )->tag( `ToolbarSpacer`
+                            )->tag( `Button`
                                 )->a( n = `text` v = `OK`
-                            )->leaf( `Button`
+                            )->tag( `Button`
                                 )->a( n = `text`  v = `Cancel`
                                 )->a( n = `press` v = client->_event( `CLOSE` )
 
-                    )->shut(
-                    )->shut(
-            )->shut(
-            )->shut( ).
+                    )->end(
+                    )->end(
+            )->end(
+            )->end( ).
         client->popover_display( xml   = footer->stringify( )
                                  by_id = client->get_event_arg( ) ).
 

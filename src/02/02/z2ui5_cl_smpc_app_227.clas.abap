@@ -26,18 +26,18 @@ CLASS z2ui5_cl_smpc_app_227 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:u`   v = `sap.ui.unified`
         )->a( n = `class`     v = `viewPadding`
 
-        )->open( n = `HorizontalLayout` ns = `l`
+        )->ele( n = `HorizontalLayout` ns = `l`
 
-            )->open( `Button`
+            )->ele( `Button`
                 )->a( n = `id`           v = `openMenu`
                 )->a( n = `text`         v = `Open Menu`
                 )->a( n = `ariaHasPopup` v = `Menu`
@@ -46,51 +46,51 @@ CLASS z2ui5_cl_smpc_app_227 IMPLEMENTATION.
                 )->a( n = `press`        v = client->follow_up_action( val   = client->cs_event-control_by_id
                                                                        t_arg = VALUE #( ( `theMenu` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
 
-                )->open( `dependents`
-                    )->open( n = `Menu` ns = `u`
+                )->ele( `dependents`
+                    )->ele( n = `Menu` ns = `u`
                         )->a( n = `id` v = `theMenu`
 
-                        )->leaf( n = `MenuItem` ns = `u`
+                        )->tag( n = `MenuItem` ns = `u`
                             )->a( n = `text`   v = `My 1st Item`
                             )->a( n = `icon`   v = `sap-icon://save`
                             " compose the toast on the frontend (1:1 with MessageToast.show("'" + item.getText() + "' pressed"))
                             )->a( n = `select` v = client->follow_up_action( val   = client->cs_event-control_global
                                                                              t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `'{0}' pressed` ) ( `${$parameters>/item}.getText()` ) ) )
-                        )->leaf( n = `MenuItem` ns = `u`
+                        )->tag( n = `MenuItem` ns = `u`
                             )->a( n = `text`   v = `My 2nd Item`
                             )->a( n = `select` v = client->follow_up_action( val   = client->cs_event-control_global
                                                                              t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `'{0}' pressed` ) ( `${$parameters>/item}.getText()` ) ) )
 
-                        )->open( n = `MenuItem` ns = `u`
+                        )->ele( n = `MenuItem` ns = `u`
                             )->a( n = `text` v = `My 3rd Item`
 
-                            )->open( n = `Menu` ns = `u`
+                            )->ele( n = `Menu` ns = `u`
 
-                                )->leaf( n = `MenuItem` ns = `u`
+                                )->tag( n = `MenuItem` ns = `u`
                                     )->a( n = `text`   v = `1st Sub Item`
                                     )->a( n = `select` v = client->follow_up_action( val   = client->cs_event-control_global
                                                                                      t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `'{0}' pressed` ) ( `${$parameters>/item}.getText()` ) ) )
-                                )->leaf( n = `MenuItem` ns = `u`
+                                )->tag( n = `MenuItem` ns = `u`
                                     )->a( n = `text`   v = `2nd Sub Item`
                                     )->a( n = `select` v = client->follow_up_action( val   = client->cs_event-control_global
                                                                                      t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `'{0}' pressed` ) ( `${$parameters>/item}.getText()` ) ) )
-                                )->leaf( n = `MenuItem` ns = `u`
+                                )->tag( n = `MenuItem` ns = `u`
                                     )->a( n = `text`    v = `3rd Sub Item but inactive`
                                     )->a( n = `enabled` v = `false`
 
-                            )->shut(
-                        )->shut(
-                        )->leaf( n = `MenuItem` ns = `u`
+                            )->end(
+                        )->end(
+                        )->tag( n = `MenuItem` ns = `u`
                             )->a( n = `text`          v = `My 4th Item`
                             )->a( n = `startsSection` v = `true`
                             )->a( n = `select`        v = client->follow_up_action( val   = client->cs_event-control_global
                                                                                     t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `'{0}' pressed` ) ( `${$parameters>/item}.getText()` ) ) )
-                        )->leaf( n = `MenuItem` ns = `u`
+                        )->tag( n = `MenuItem` ns = `u`
                             )->a( n = `text`   v = `My 5th Item`
                             )->a( n = `select` v = client->follow_up_action( val   = client->cs_event-control_global
                                                                              t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `'{0}' pressed` ) ( `${$parameters>/item}.getText()` ) ) )
 
-                        )->leaf( n = `MenuTextFieldItem` ns = `u`
+                        )->tag( n = `MenuTextFieldItem` ns = `u`
                             )->a( n = `label`         v = `Find`
                             )->a( n = `enabled`       v = `true`
                             )->a( n = `startsSection` v = `true`
@@ -99,10 +99,10 @@ CLASS z2ui5_cl_smpc_app_227 IMPLEMENTATION.
                             )->a( n = `select`        v = client->follow_up_action( val   = client->cs_event-control_global
                                                                                     t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `'{0}' entered` ) ( `${$parameters>/item}.getValue()` ) ) )
 
-                    )->shut(
-                )->shut(
-            )->shut(
-        )->shut( ).
+                    )->end(
+                )->end(
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

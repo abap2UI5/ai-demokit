@@ -26,21 +26,21 @@ CLASS z2ui5_cl_smpc_app_368 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
             )->a( n = `width` v = `100%`
 
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `text`     v = `Password`
                 )->a( n = `labelFor` v = `passwordInput`
-            )->leaf( `Input`
+            )->tag( `Input`
                 )->a( n = `id`          v = `passwordInput`
                 )->a( n = `type`        v = `Password`
                 )->a( n = `placeholder` v = `Enter password` ).

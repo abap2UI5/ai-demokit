@@ -36,22 +36,22 @@ CLASS z2ui5_cl_smpc_app_301 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:tnt` v = `sap.tnt`
         )->a( n = `xmlns:f`   v = `sap.f`
         )->a( n = `height`    v = `100%`
 
-        )->open( `App`
-            )->open( n = `ToolPage` ns = `tnt`
+        )->ele( `App`
+            )->ele( n = `ToolPage` ns = `tnt`
                 )->a( n = `id`    v = `myPage`
                 )->a( n = `class` v = `sapUiResponsivePadding--header`
 
-                )->open( n = `header` ns = `tnt`
-                    )->open( n = `ShellBar` ns = `f`
+                )->ele( n = `header` ns = `tnt`
+                    )->ele( n = `ShellBar` ns = `f`
                         )->a( n = `id`                  v = `shellBar`
                         )->a( n = `title`               v = `Product Name`
                         )->a( n = `homeIcon`            v = `https://sdk.openui5.org/resources/sap/ui/documentation/sdk/images/logo_sap.png`
@@ -64,22 +64,22 @@ CLASS z2ui5_cl_smpc_app_301 IMPLEMENTATION.
                         )->a( n = `menuButtonPressed`   v = client->_event( val   = `TOGGLE_SIDE_NAV`
                                                                             t_arg = VALUE #( ( `${$parameters>/button}.getId()` ) ) )
 
-                        )->open( n = `profile` ns = `f`
-                            )->leaf( `Avatar`
+                        )->ele( n = `profile` ns = `f`
+                            )->tag( `Avatar`
                                 )->a( n = `initials` v = `SN`
 
-                        )->shut(
-                    )->shut(
-                )->shut(
+                        )->end(
+                    )->end(
+                )->end(
 
-                )->open( n = `mainContents` ns = `tnt`
-                    )->open( `NavContainer`
+                )->ele( n = `mainContents` ns = `tnt`
+                    )->ele( `NavContainer`
                         )->a( n = `id`          v = `pageContainer`
                         )->a( n = `initialPage` v = `home`
                         )->a( n = `height`      v = `100%`
 
-                        )->open( `pages`
-                            )->open( `ScrollContainer`
+                        )->ele( `pages`
+                            )->ele( `ScrollContainer`
                                 )->a( n = `id`         v = `home`
                                 )->a( n = `horizontal` v = `false`
                                 )->a( n = `vertical`   v = `true`
@@ -87,20 +87,20 @@ CLASS z2ui5_cl_smpc_app_301 IMPLEMENTATION.
                                 )->a( n = `width`      v = `100%`
                                 )->a( n = `class`      v = `sapUiContentPadding SCROLLCONT`
 
-                                )->open( `VBox`
+                                )->ele( `VBox`
                                     )->a( n = `justifyContent` v = `Center`
                                     )->a( n = `alignItems`     v = `Center`
                                     )->a( n = `height`         v = `100%`
 
                                     " onItemSelect overwrites this page's Text imperatively
                                     " (setText); here the Text is two-way bound instead
-                                    )->leaf( `Text`
+                                    )->tag( `Text`
                                         )->a( n = `text` v = client->_bind( home_text )
 
-                                )->shut(
-                            )->shut(
+                                )->end(
+                            )->end(
 
-                            )->open( `ScrollContainer`
+                            )->ele( `ScrollContainer`
                                 )->a( n = `id`         v = `page1`
                                 )->a( n = `horizontal` v = `false`
                                 )->a( n = `vertical`   v = `true`
@@ -108,210 +108,210 @@ CLASS z2ui5_cl_smpc_app_301 IMPLEMENTATION.
                                 )->a( n = `width`      v = `100%`
                                 )->a( n = `class`      v = `sapUiContentPadding SCROLLCONT`
 
-                                )->open( `VBox`
+                                )->ele( `VBox`
                                     )->a( n = `renderType`     v = `Bare`
                                     )->a( n = `justifyContent` v = `Center`
                                     )->a( n = `alignItems`     v = `Center`
 
-                                    )->leaf( `Text`
+                                    )->tag( `Text`
                                         )->a( n = `text` v = client->_bind( page_text )
 
-                                )->shut(
-                            )->shut(
+                                )->end(
+                            )->end(
 
-                            )->open( `ScrollContainer`
+                            )->ele( `ScrollContainer`
                                 )->a( n = `id`         v = `page2`
                                 )->a( n = `horizontal` v = `false`
                                 )->a( n = `vertical`   v = `true`
                                 )->a( n = `height`     v = `100%`
                                 )->a( n = `class`      v = `sapUiContentPadding`
 
-                                )->open( `VBox`
+                                )->ele( `VBox`
                                     )->a( n = `alignItems`     v = `Center`
                                     )->a( n = `renderType`     v = `Bare`
                                     )->a( n = `justifyContent` v = `Center`
 
-                                    )->leaf( `Text`
+                                    )->tag( `Text`
                                         )->a( n = `text` v = client->_bind( page_text )
 
-                                )->shut(
-                            )->shut(
+                                )->end(
+                            )->end(
 
-                            )->open( `ScrollContainer`
+                            )->ele( `ScrollContainer`
                                 )->a( n = `id`         v = `page3`
                                 )->a( n = `horizontal` v = `false`
                                 )->a( n = `vertical`   v = `true`
                                 )->a( n = `height`     v = `100%`
                                 )->a( n = `class`      v = `sapUiContentPadding`
 
-                                )->open( `VBox`
+                                )->ele( `VBox`
                                     )->a( n = `justifyContent` v = `Center`
                                     )->a( n = `alignItems`     v = `Center`
                                     )->a( n = `height`         v = `100%`
 
-                                    )->leaf( `Text`
+                                    )->tag( `Text`
                                         )->a( n = `text` v = client->_bind( page_text )
 
-                                )->shut(
-                            )->shut(
+                                )->end(
+                            )->end(
 
-                            )->open( `ScrollContainer`
+                            )->ele( `ScrollContainer`
                                 )->a( n = `id`         v = `page4`
                                 )->a( n = `horizontal` v = `false`
                                 )->a( n = `vertical`   v = `true`
                                 )->a( n = `height`     v = `100%`
                                 )->a( n = `class`      v = `sapUiContentPadding`
 
-                                )->open( `VBox`
+                                )->ele( `VBox`
                                     )->a( n = `justifyContent` v = `Center`
                                     )->a( n = `alignItems`     v = `Center`
                                     )->a( n = `height`         v = `100%`
 
-                                    )->leaf( `Text`
+                                    )->tag( `Text`
                                         )->a( n = `text` v = client->_bind( page_text )
 
-                                )->shut(
-                            )->shut(
+                                )->end(
+                            )->end(
 
-                            )->open( `ScrollContainer`
+                            )->ele( `ScrollContainer`
                                 )->a( n = `id`         v = `page5`
                                 )->a( n = `horizontal` v = `false`
                                 )->a( n = `vertical`   v = `true`
                                 )->a( n = `height`     v = `100%`
                                 )->a( n = `class`      v = `sapUiContentPadding`
 
-                                )->open( `VBox`
+                                )->ele( `VBox`
                                     )->a( n = `justifyContent` v = `Center`
                                     )->a( n = `alignItems`     v = `Center`
                                     )->a( n = `height`         v = `100%`
 
-                                    )->leaf( `Text`
+                                    )->tag( `Text`
                                         )->a( n = `text` v = client->_bind( page_text )
 
-                                )->shut(
-                            )->shut(
+                                )->end(
+                            )->end(
 
-                            )->open( `ScrollContainer`
+                            )->ele( `ScrollContainer`
                                 )->a( n = `id`         v = `page6`
                                 )->a( n = `horizontal` v = `false`
                                 )->a( n = `vertical`   v = `true`
                                 )->a( n = `height`     v = `100%`
                                 )->a( n = `class`      v = `sapUiContentPadding`
 
-                                )->open( `VBox`
+                                )->ele( `VBox`
                                     )->a( n = `justifyContent` v = `Center`
                                     )->a( n = `alignItems`     v = `Center`
                                     )->a( n = `height`         v = `100%`
 
-                                    )->leaf( `Text`
+                                    )->tag( `Text`
                                         )->a( n = `text` v = client->_bind( page_text )
 
-                                )->shut(
-                            )->shut(
+                                )->end(
+                            )->end(
 
-                            )->open( `ScrollContainer`
+                            )->ele( `ScrollContainer`
                                 )->a( n = `id`         v = `page7`
                                 )->a( n = `horizontal` v = `false`
                                 )->a( n = `vertical`   v = `true`
                                 )->a( n = `height`     v = `100%`
                                 )->a( n = `class`      v = `sapUiContentPadding`
 
-                                )->open( `VBox`
+                                )->ele( `VBox`
                                     )->a( n = `justifyContent` v = `Center`
                                     )->a( n = `alignItems`     v = `Center`
                                     )->a( n = `height`         v = `100%`
 
-                                    )->leaf( `Text`
+                                    )->tag( `Text`
                                         )->a( n = `text` v = client->_bind( page_text )
 
-                                )->shut(
-                            )->shut(
+                                )->end(
+                            )->end(
 
-                            )->open( `ScrollContainer`
+                            )->ele( `ScrollContainer`
                                 )->a( n = `id`         v = `page8`
                                 )->a( n = `horizontal` v = `false`
                                 )->a( n = `vertical`   v = `true`
                                 )->a( n = `height`     v = `100%`
                                 )->a( n = `class`      v = `sapUiContentPadding`
 
-                                )->open( `VBox`
+                                )->ele( `VBox`
                                     )->a( n = `justifyContent` v = `Center`
                                     )->a( n = `alignItems`     v = `Center`
                                     )->a( n = `height`         v = `100%`
 
-                                    )->leaf( `Text`
+                                    )->tag( `Text`
                                         )->a( n = `text` v = client->_bind( page_text )
 
-                                )->shut(
-                            )->shut(
+                                )->end(
+                            )->end(
 
-                            )->open( `ScrollContainer`
+                            )->ele( `ScrollContainer`
                                 )->a( n = `id`         v = `page9`
                                 )->a( n = `horizontal` v = `false`
                                 )->a( n = `vertical`   v = `true`
                                 )->a( n = `height`     v = `100%`
                                 )->a( n = `class`      v = `sapUiContentPadding`
 
-                                )->open( `VBox`
+                                )->ele( `VBox`
                                     )->a( n = `justifyContent` v = `Center`
                                     )->a( n = `alignItems`     v = `Center`
                                     )->a( n = `height`         v = `100%`
 
-                                    )->leaf( `Text`
+                                    )->tag( `Text`
                                         )->a( n = `text` v = client->_bind( page_text )
 
-                                )->shut(
-                            )->shut(
+                                )->end(
+                            )->end(
 
-                            )->open( `ScrollContainer`
+                            )->ele( `ScrollContainer`
                                 )->a( n = `id`         v = `page10`
                                 )->a( n = `horizontal` v = `false`
                                 )->a( n = `vertical`   v = `true`
                                 )->a( n = `height`     v = `100%`
                                 )->a( n = `class`      v = `sapUiContentPadding`
 
-                                )->open( `VBox`
+                                )->ele( `VBox`
                                     )->a( n = `justifyContent` v = `Center`
                                     )->a( n = `alignItems`     v = `Center`
                                     )->a( n = `height`         v = `100%`
 
-                                    )->leaf( `Text`
+                                    )->tag( `Text`
                                         )->a( n = `text` v = client->_bind( page_text )
 
-                                )->shut(
-                            )->shut(
+                                )->end(
+                            )->end(
 
-                            )->open( `ScrollContainer`
+                            )->ele( `ScrollContainer`
                                 )->a( n = `id`         v = `page11`
                                 )->a( n = `horizontal` v = `false`
                                 )->a( n = `vertical`   v = `true`
                                 )->a( n = `height`     v = `100%`
                                 )->a( n = `class`      v = `sapUiContentPadding`
 
-                                )->open( `VBox`
+                                )->ele( `VBox`
                                     )->a( n = `justifyContent` v = `Center`
                                     )->a( n = `alignItems`     v = `Center`
                                     )->a( n = `height`         v = `100%`
 
-                                    )->leaf( `Text`
+                                    )->tag( `Text`
                                         )->a( n = `text` v = client->_bind( page_text )
 
-                                )->shut(
-                            )->shut(
+                                )->end(
+                            )->end(
 
-                            )->open( `ScrollContainer`
+                            )->ele( `ScrollContainer`
                                 )->a( n = `id`         v = `page12`
                                 )->a( n = `horizontal` v = `false`
                                 )->a( n = `vertical`   v = `true`
                                 )->a( n = `height`     v = `100%`
                                 )->a( n = `class`      v = `sapUiContentPadding`
 
-                                )->open( `VBox`
+                                )->ele( `VBox`
                                     )->a( n = `justifyContent` v = `Center`
                                     )->a( n = `alignItems`     v = `Center`
                                     )->a( n = `height`         v = `100%`
 
-                                    )->leaf( `Text`
+                                    )->tag( `Text`
                                         )->a( n = `text` v = client->_bind( page_text ) ).
 
     client->view_display( view->stringify( ) ).
@@ -365,24 +365,24 @@ CLASS z2ui5_cl_smpc_app_301 IMPLEMENTATION.
 
     " Popover.fragment.xml rebuilt 1:1 and shown anchored to the ShellBar menu
     " button - the Fragment.load + openBy equivalent
-    DATA(popover) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(popover) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    popover->open( n = `FragmentDefinition` ns = `core`
+    popover->ele( n = `FragmentDefinition` ns = `core`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns:tnt`  v = `sap.tnt`
 
-        )->open( `ResponsivePopover`
+        )->ele( `ResponsivePopover`
             )->a( n = `id`                v = `respPopover`
             )->a( n = `placement`         v = `Bottom`
             )->a( n = `verticalScrolling` v = `false`
             )->a( n = `ariaLabelledBy`    v = `sn-label`
 
-            )->leaf( n = `InvisibleText` ns = `core`
+            )->tag( n = `InvisibleText` ns = `core`
                 )->a( n = `id`   v = `sn-label`
                 )->a( n = `text` v = `Main navigation`
 
-            )->open( n = `SideNavigation` ns = `tnt`
+            )->ele( n = `SideNavigation` ns = `tnt`
                 )->a( n = `id`          v = `sideNav`
                 )->a( n = `width`       v = `17rem`
                 )->a( n = `itemSelect`  v = client->_event( val   = `ITEM_SELECT`
@@ -390,103 +390,103 @@ CLASS z2ui5_cl_smpc_app_301 IMPLEMENTATION.
                 )->a( n = `selectedKey` v = `home`
                 )->a( n = `design`      v = `Plain`
 
-                )->open( n = `NavigationList` ns = `tnt`
-                    )->leaf( n = `NavigationListItem` ns = `tnt`
+                )->ele( n = `NavigationList` ns = `tnt`
+                    )->tag( n = `NavigationListItem` ns = `tnt`
                         )->a( n = `text` v = `Home`
                         )->a( n = `icon` v = `sap-icon://home`
                         )->a( n = `key`  v = `home`
-                    )->leaf( n = `NavigationListItem` ns = `tnt`
+                    )->tag( n = `NavigationListItem` ns = `tnt`
                         )->a( n = `text` v = `Favorites`
                         )->a( n = `icon` v = `sap-icon://favorite-list`
                         )->a( n = `key`  v = `page1`
-                    )->leaf( n = `NavigationListItem` ns = `tnt`
+                    )->tag( n = `NavigationListItem` ns = `tnt`
                         )->a( n = `text` v = `Recent Applications for user role`
                         )->a( n = `icon` v = `sap-icon://history`
                         )->a( n = `key`  v = `page2`
 
                     " NavigationListGroup is a control @since 1.121 - kept 1:1 (POST_171)
-                    )->open( n = `NavigationListGroup` ns = `tnt`
+                    )->ele( n = `NavigationListGroup` ns = `tnt`
                         )->a( n = `text`     v = `Business Areas for selected user role`
                         )->a( n = `expanded` v = `false`
 
-                        )->open( n = `NavigationListItem` ns = `tnt`
+                        )->ele( n = `NavigationListItem` ns = `tnt`
                             )->a( n = `text`       v = `Manufacturing management`
                             )->a( n = `icon`       v = `sap-icon://wrench`
                             )->a( n = `expanded`   v = `false`
                             )->a( n = `selectable` v = `false`
 
-                            )->leaf( n = `NavigationListItem` ns = `tnt`
+                            )->tag( n = `NavigationListItem` ns = `tnt`
                                 )->a( n = `text` v = `Inventory Management`
                                 )->a( n = `key`  v = `page3`
-                            )->leaf( n = `NavigationListItem` ns = `tnt`
+                            )->tag( n = `NavigationListItem` ns = `tnt`
                                 )->a( n = `text` v = `Quality Control`
                                 )->a( n = `key`  v = `page4`
 
-                        )->shut(
-                        )->open( n = `NavigationListItem` ns = `tnt`
+                        )->end(
+                        )->ele( n = `NavigationListItem` ns = `tnt`
                             )->a( n = `text`     v = `Sales`
                             )->a( n = `icon`     v = `sap-icon://multiple-line-chart`
                             )->a( n = `key`      v = `page5`
                             )->a( n = `expanded` v = `true`
 
-                            )->leaf( n = `NavigationListItem` ns = `tnt`
+                            )->tag( n = `NavigationListItem` ns = `tnt`
                                 )->a( n = `text` v = `Manage Sales Accounts`
                                 )->a( n = `key`  v = `page6`
-                            )->leaf( n = `NavigationListItem` ns = `tnt`
+                            )->tag( n = `NavigationListItem` ns = `tnt`
                                 )->a( n = `text` v = `Sales Order`
                                 )->a( n = `key`  v = `page7`
-                            )->leaf( n = `NavigationListItem` ns = `tnt`
+                            )->tag( n = `NavigationListItem` ns = `tnt`
                                 )->a( n = `text` v = `Sales Overview`
                                 )->a( n = `key`  v = `page8`
 
-                        )->shut(
+                        )->end(
 
-                        )->leaf( n = `NavigationListItem` ns = `tnt`
+                        )->tag( n = `NavigationListItem` ns = `tnt`
                             )->a( n = `text` v = `Customer Service`
                             )->a( n = `icon` v = `sap-icon://customer-and-contacts`
                             )->a( n = `key`  v = `page9`
 
-                        )->open( n = `NavigationListItem` ns = `tnt`
+                        )->ele( n = `NavigationListItem` ns = `tnt`
                             )->a( n = `text`     v = `Finance`
                             )->a( n = `icon`     v = `sap-icon://customer-financial-fact-sheet`
                             )->a( n = `expanded` v = `false`
                             )->a( n = `key`      v = `page10`
 
-                            )->leaf( n = `NavigationListItem` ns = `tnt`
+                            )->tag( n = `NavigationListItem` ns = `tnt`
                                 )->a( n = `text` v = `Payroll Management`
                                 )->a( n = `key`  v = `page11`
-                            )->leaf( n = `NavigationListItem` ns = `tnt`
+                            )->tag( n = `NavigationListItem` ns = `tnt`
                                 )->a( n = `text` v = `Tax Management`
                                 )->a( n = `key`  v = `page12`
 
-                        )->shut(
+                        )->end(
 
-                        )->leaf( n = `NavigationListItem` ns = `tnt`
+                        )->tag( n = `NavigationListItem` ns = `tnt`
                             )->a( n = `text`       v = `Employee Services`
                             )->a( n = `icon`       v = `sap-icon://employee`
                             )->a( n = `selectable` v = `false`
                             )->a( n = `href`       v = `https://www.sap.com`
                             )->a( n = `target`     v = `_blank`
 
-                    )->shut(
-                )->shut(
+                    )->end(
+                )->end(
 
-                )->open( n = `fixedItem` ns = `tnt`
-                    )->open( n = `NavigationList` ns = `tnt`
-                        )->leaf( n = `NavigationListItem` ns = `tnt`
+                )->ele( n = `fixedItem` ns = `tnt`
+                    )->ele( n = `NavigationList` ns = `tnt`
+                        )->tag( n = `NavigationListItem` ns = `tnt`
                             )->a( n = `text`         v = `Create`
                             )->a( n = `icon`         v = `sap-icon://write-new`
                             )->a( n = `selectable`   v = `false`
                             )->a( n = `design`       v = `Action`
                             )->a( n = `ariaHasPopup` v = `Dialog`
                             )->a( n = `press`        v = client->_event( `QUICK_CREATE` )
-                        )->leaf( n = `NavigationListItem` ns = `tnt`
+                        )->tag( n = `NavigationListItem` ns = `tnt`
                             )->a( n = `text`       v = `App Finder`
                             )->a( n = `icon`       v = `sap-icon://widgets`
                             )->a( n = `selectable` v = `false`
                             )->a( n = `href`       v = `https://sdk.openui5.org/demoapps`
                             )->a( n = `target`     v = `_blank`
-                        )->leaf( n = `NavigationListItem` ns = `tnt`
+                        )->tag( n = `NavigationListItem` ns = `tnt`
                             )->a( n = `text`       v = `Legal`
                             )->a( n = `icon`       v = `sap-icon://compare`
                             )->a( n = `selectable` v = `false`
@@ -503,30 +503,30 @@ CLASS z2ui5_cl_smpc_app_301 IMPLEMENTATION.
 
     " original onQuickActionPress builds this Dialog imperatively (new Dialog({...}).open());
     " expressed as a core:FragmentDefinition shown via popup_display (declared deviation)
-    DATA(popup) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(popup) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    popup->open( n = `FragmentDefinition` ns = `core`
+    popup->ele( n = `FragmentDefinition` ns = `core`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns`      v = `sap.m`
 
-        )->open( `Dialog`
+        )->ele( `Dialog`
             )->a( n = `type`  v = `Message`
             )->a( n = `title` v = `Create Item`
 
-            )->open( `content`
-                )->leaf( `Text`
+            )->ele( `content`
+                )->tag( `Text`
                     )->a( n = `text` v = `Create New Navigation List Item`
 
-            )->shut(
-            )->open( `beginButton`
-                )->leaf( `Button`
+            )->end(
+            )->ele( `beginButton`
+                )->tag( `Button`
                     )->a( n = `type`  v = `Emphasized`
                     )->a( n = `text`  v = `Create`
                     )->a( n = `press` v = client->_event( `CREATE_ITEM` )
 
-            )->shut(
-            )->open( `endButton`
-                )->leaf( `Button`
+            )->end(
+            )->ele( `endButton`
+                )->tag( `Button`
                     )->a( n = `text`  v = `Cancel`
                     )->a( n = `press` v = client->follow_up_action( client->cs_event-popup_close ) ).
 

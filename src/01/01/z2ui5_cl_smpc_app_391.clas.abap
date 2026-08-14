@@ -26,28 +26,28 @@ CLASS z2ui5_cl_smpc_app_391 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
 
-        )->open( `List`
+        )->ele( `List`
             )->a( n = `headerText` v = `Input List Item`
 
-            )->open( `InputListItem`
+            )->ele( `InputListItem`
                 )->a( n = `label` v = `Battery Saving`
 
-                )->open( `SegmentedButton`
+                )->ele( `SegmentedButton`
                     )->a( n = `selectedKey` v = `SBYes`
 
-                    )->open( `items`
-                        )->leaf( `SegmentedButtonItem`
+                    )->ele( `items`
+                        )->tag( `SegmentedButtonItem`
                             )->a( n = `text` v = `High`
                             )->a( n = `key`  v = `SBYes`
-                        )->leaf( `SegmentedButtonItem`
+                        )->tag( `SegmentedButtonItem`
                             )->a( n = `text` v = `Low`
-                        )->leaf( `SegmentedButtonItem`
+                        )->tag( `SegmentedButtonItem`
                             )->a( n = `text` v = `Off` ).
 
     client->view_display( view->stringify( ) ).

@@ -62,30 +62,30 @@ CLASS z2ui5_cl_smpc_app_291 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " three levels of bound aggregation: the groups, each group's items and
     " each group's / item's buttons. Every toast the controller composes from
     " the pressed control stays on the client; only the item close needs the
     " backend, because it removes a row
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `class`     v = `sapUiBodyBackground sapContrastPlus`
 
-        )->open( `VBox`
+        )->ele( `VBox`
             )->a( n = `class` v = `sapUiSmallMargin`
 
-            )->open( `NotificationList`
+            )->ele( `NotificationList`
                 )->a( n = `items` v = |\{ path: '{ client->_bind( val = t_groups path = abap_true ) }', templateShareable: true \}|
 
-                )->open( `layoutData`
-                    )->leaf( `FlexItemData`
+                )->ele( `layoutData`
+                    )->tag( `FlexItemData`
                         )->a( n = `maxWidth` v = `600px`
 
-                )->shut(
+                )->end(
 
-                )->open( `NotificationListGroup`
+                )->ele( `NotificationListGroup`
                     )->a( n = `title`           v = `{TITLE}`
                     )->a( n = `showCloseButton` v = `{SHOWCLOSEBUTTON}`
                     )->a( n = `showEmptyGroup`  v = `{SHOWEMPTYGROUP}`
@@ -94,15 +94,15 @@ CLASS z2ui5_cl_smpc_app_291 IMPLEMENTATION.
                     )->a( n = `items`           v = |\{ path: 'GROUPITEMS', templateShareable: true \}|
                     )->a( n = `buttons`         v = |\{ path: 'GROUPBUTTONS', templateShareable: true \}|
 
-                    )->open( `buttons`
-                        )->leaf( `Button`
+                    )->ele( `buttons`
+                        )->tag( `Button`
                             )->a( n = `text`  v = `{TEXT}`
                             )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
                                                                             t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Group Button '{0}' Pressed` ) ( `${$source>/text}` ) ) )
 
-                    )->shut(
+                    )->end(
 
-                    )->open( `NotificationListItem`
+                    )->ele( `NotificationListItem`
                         )->a( n = `title`             v = `{TITLE}`
                         )->a( n = `description`       v = `{DESCRIPTION}`
                         )->a( n = `showCloseButton`   v = `{SHOWCLOSEBUTTON}`
@@ -118,8 +118,8 @@ CLASS z2ui5_cl_smpc_app_291 IMPLEMENTATION.
                         )->a( n = `authorAvatarColor` v = `{AUTHORAVATARCOLOR}`
                         )->a( n = `buttons`           v = |\{ path: 'ITEMBUTTONS', templateShareable: true \}|
 
-                        )->open( `buttons`
-                            )->leaf( `Button`
+                        )->ele( `buttons`
+                            )->tag( `Button`
                                 )->a( n = `text`  v = `{TEXT}`
                                 )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
                                                                                 t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Button '{0}' Pressed` ) ( `${$source>/text}` ) ) ) ).

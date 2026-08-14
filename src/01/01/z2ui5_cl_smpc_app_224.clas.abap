@@ -37,64 +37,64 @@ CLASS z2ui5_cl_smpc_app_224 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:l`    v = `sap.ui.layout`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
 
-        )->open( `List`
+        )->ele( `List`
             )->a( n = `id`                     v = `ProductList`
             )->a( n = `items`                  v = client->_bind( t_products )
             )->a( n = `mode`                   v = client->_bind( mode )
             )->a( n = `includeItemInSelection` v = `true`
 
-            )->open( `headerToolbar`
-                )->open( `OverflowToolbar`
-                    )->open( `content`
-                        )->leaf( `Title`
+            )->ele( `headerToolbar`
+                )->ele( `OverflowToolbar`
+                    )->ele( `content`
+                        )->tag( `Title`
                             )->a( n = `text`  v = `Products`
                             )->a( n = `level` v = `H2`
-                        )->leaf( `ToolbarSpacer`
+                        )->tag( `ToolbarSpacer`
 
-                        )->open( `Select`
+                        )->ele( `Select`
                             )->a( n = `selectedKey` v = client->_bind( mode )
 
-                            )->open( `items`
-                                )->leaf( n = `Item` ns = `core`
+                            )->ele( `items`
+                                )->tag( n = `Item` ns = `core`
                                     )->a( n = `key`  v = `None`
                                     )->a( n = `text` v = `No Selection`
-                                )->leaf( n = `Item` ns = `core`
+                                )->tag( n = `Item` ns = `core`
                                     )->a( n = `key`  v = `SingleSelect`
                                     )->a( n = `text` v = `Single Selection`
-                                )->leaf( n = `Item` ns = `core`
+                                )->tag( n = `Item` ns = `core`
                                     )->a( n = `key`  v = `SingleSelectLeft`
                                     )->a( n = `text` v = `Single Selection Left`
-                                )->leaf( n = `Item` ns = `core`
+                                )->tag( n = `Item` ns = `core`
                                     )->a( n = `key`  v = `SingleSelectMaster`
                                     )->a( n = `text` v = `Single Selection (Master)`
-                                )->leaf( n = `Item` ns = `core`
+                                )->tag( n = `Item` ns = `core`
                                     )->a( n = `key`  v = `MultiSelect`
                                     )->a( n = `text` v = `Multi Selection`
 
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
+                            )->end(
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( `items`
-                )->leaf( `StandardListItem`
+            )->ele( `items`
+                )->tag( `StandardListItem`
                     )->a( n = `title`            v = `{NAME}`
                     )->a( n = `description`      v = `{PRODUCTID}`
                     )->a( n = `icon`             v = `{PRODUCTPICURL}`
                     )->a( n = `iconDensityAware` v = `false`
                     )->a( n = `iconInset`        v = `false`
 
-            )->shut(
-        )->shut( ).
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

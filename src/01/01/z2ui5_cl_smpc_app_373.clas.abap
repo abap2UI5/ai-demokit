@@ -40,27 +40,27 @@ CLASS z2ui5_cl_smpc_app_373 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `height`     v = `100%`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns`      v = `sap.m`
 
-        )->open( `Page`
+        )->ele( `Page`
             )->a( n = `showHeader` v = `false`
 
-            )->open( `content`
-                )->open( `HBox`
+            )->ele( `content`
+                )->ele( `HBox`
                     )->a( n = `class` v = `sapUiMediumMarginBottom`
 
-                    )->leaf( `Label`
+                    )->tag( `Label`
                         )->a( n = `text`     v = `Error state`
                         )->a( n = `labelFor` v = `errorSelect`
                         )->a( n = `class`    v = `sapUiTinyMarginEnd sapUiTinyMarginTop`
 
-                    )->open( `Select`
+                    )->ele( `Select`
                         )->a( n = `id`             v = `errorSelect`
                         )->a( n = `forceSelection` v = `true`
                         )->a( n = `selectedKey`    v = client->_bind( selected_error )
@@ -69,22 +69,22 @@ CLASS z2ui5_cl_smpc_app_373 IMPLEMENTATION.
                         " the four Selects share one product table (see the sidecar NOTE)
                         )->a( n = `items`          v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
 
-                        )->leaf( n = `Item` ns = `core`
+                        )->tag( n = `Item` ns = `core`
                             )->a( n = `key`  v = `{PRODUCT_ID}`
                             )->a( n = `text` v = `{NAME}`
 
-                    )->shut(
-                )->shut(
+                    )->end(
+                )->end(
 
-                )->open( `HBox`
+                )->ele( `HBox`
                     )->a( n = `class` v = `sapUiMediumMarginBottom`
 
-                    )->leaf( `Label`
+                    )->tag( `Label`
                         )->a( n = `text`     v = `Warning state`
                         )->a( n = `labelFor` v = `warningSelect`
                         )->a( n = `class`    v = `sapUiTinyMarginEnd sapUiTinyMarginTop`
 
-                    )->open( `Select`
+                    )->ele( `Select`
                         )->a( n = `id`             v = `warningSelect`
                         )->a( n = `forceSelection` v = `true`
                         )->a( n = `selectedKey`    v = client->_bind( selected_warning )
@@ -92,22 +92,22 @@ CLASS z2ui5_cl_smpc_app_373 IMPLEMENTATION.
                         )->a( n = `valueStateText` v = `This is a Level 1 explanation. The items Lorem and Ipsum are not recommended from the system.`
                         )->a( n = `items`          v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
 
-                        )->leaf( n = `Item` ns = `core`
+                        )->tag( n = `Item` ns = `core`
                             )->a( n = `key`  v = `{PRODUCT_ID}`
                             )->a( n = `text` v = `{NAME}`
 
-                    )->shut(
-                )->shut(
+                    )->end(
+                )->end(
 
-                )->open( `HBox`
+                )->ele( `HBox`
                     )->a( n = `class` v = `sapUiMediumMarginBottom`
 
-                    )->leaf( `Label`
+                    )->tag( `Label`
                         )->a( n = `text`     v = `Success state`
                         )->a( n = `labelFor` v = `successSelect`
                         )->a( n = `class`    v = `sapUiTinyMarginEnd sapUiTinyMarginTop`
 
-                    )->open( `Select`
+                    )->ele( `Select`
                         )->a( n = `id`             v = `successSelect`
                         )->a( n = `forceSelection` v = `true`
                         )->a( n = `selectedKey`    v = client->_bind( selected_success )
@@ -115,22 +115,22 @@ CLASS z2ui5_cl_smpc_app_373 IMPLEMENTATION.
                         )->a( n = `valueStateText` v = `success value state text`
                         )->a( n = `items`          v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
 
-                        )->leaf( n = `Item` ns = `core`
+                        )->tag( n = `Item` ns = `core`
                             )->a( n = `key`  v = `{PRODUCT_ID}`
                             )->a( n = `text` v = `{NAME}`
 
-                    )->shut(
-                )->shut(
+                    )->end(
+                )->end(
 
-                )->open( `HBox`
+                )->ele( `HBox`
                     )->a( n = `class` v = `sapUiMediumMarginBottom`
 
-                    )->leaf( `Label`
+                    )->tag( `Label`
                         )->a( n = `text`     v = `Information state`
                         )->a( n = `labelFor` v = `informationSelect`
                         )->a( n = `class`    v = `sapUiTinyMarginEnd sapUiTinyMarginTop`
 
-                    )->open( `Select`
+                    )->ele( `Select`
                         )->a( n = `id`             v = `informationSelect`
                         )->a( n = `forceSelection` v = `true`
                         )->a( n = `selectedKey`    v = client->_bind( selected_information )
@@ -138,7 +138,7 @@ CLASS z2ui5_cl_smpc_app_373 IMPLEMENTATION.
                         )->a( n = `valueStateText` v = `information value state text`
                         )->a( n = `items`          v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
 
-                        )->leaf( n = `Item` ns = `core`
+                        )->tag( n = `Item` ns = `core`
                             )->a( n = `key`  v = `{PRODUCT_ID}`
                             )->a( n = `text` v = `{NAME}` ).
 

@@ -45,53 +45,53 @@ CLASS z2ui5_cl_smpc_app_133 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns:grid` v = `sap.ui.layout.cssgrid`
         )->a( n = `xmlns:f`    v = `sap.f`
 
-        )->open( `HBox`
+        )->ele( `HBox`
             )->a( n = `justifyContent` v = `End`
 
-            )->open( `SegmentedButton`
+            )->ele( `SegmentedButton`
                 )->a( n = `selectedKey`      v = client->_bind( mode )
                 )->a( n = `class`            v = `sapUiSmallMarginTop sapUiSmallMarginEnd`
                 )->a( n = `selectionChange`  v = client->_event( `MODE_CHANGE` )
 
-                )->open( `items`
-                    )->leaf( `SegmentedButtonItem`
+                )->ele( `items`
+                    )->tag( `SegmentedButtonItem`
                         )->a( n = `width` v = `auto`
                         )->a( n = `text`  v = `MultiSelect`
                         )->a( n = `key`   v = `MultiSelect`
-                    )->leaf( `SegmentedButtonItem`
+                    )->tag( `SegmentedButtonItem`
                         )->a( n = `width` v = `auto`
                         )->a( n = `text`  v = `SingleSelect`
                         )->a( n = `key`   v = `SingleSelect`
-                    )->leaf( `SegmentedButtonItem`
+                    )->tag( `SegmentedButtonItem`
                         )->a( n = `width` v = `auto`
                         )->a( n = `text`  v = `SingleSelectLeft`
                         )->a( n = `key`   v = `SingleSelectLeft`
-                    )->leaf( `SegmentedButtonItem`
+                    )->tag( `SegmentedButtonItem`
                         )->a( n = `width` v = `auto`
                         )->a( n = `text`  v = `SingleSelectMaster`
                         )->a( n = `key`   v = `SingleSelectMaster`
-                    )->leaf( `SegmentedButtonItem`
+                    )->tag( `SegmentedButtonItem`
                         )->a( n = `width` v = `auto`
                         )->a( n = `text`  v = `Delete`
                         )->a( n = `key`   v = `Delete`
-                    )->leaf( `SegmentedButtonItem`
+                    )->tag( `SegmentedButtonItem`
                         )->a( n = `width` v = `auto`
                         )->a( n = `text`  v = `None`
                         )->a( n = `key`   v = `None`
 
-                )->shut(
-            )->shut(
-        )->shut(
+                )->end(
+            )->end(
+        )->end(
 
-        )->open( n = `GridList` ns = `f`
+        )->ele( n = `GridList` ns = `f`
             )->a( n = `id`              v = `gridList`
             )->a( n = `headerText`      v = client->_bind( header_text )
             )->a( n = `mode`            v = client->_bind( mode )
@@ -104,14 +104,14 @@ CLASS z2ui5_cl_smpc_app_133 IMPLEMENTATION.
                                                                                         ( `${$parameters>/listItem}.getId()` ) ) )
             )->a( n = `class`           v = `sapUiResponsiveContentPadding`
 
-            )->open( n = `customLayout` ns = `f`
-                )->leaf( n = `GridBasicLayout` ns = `grid`
+            )->ele( n = `customLayout` ns = `f`
+                )->tag( n = `GridBasicLayout` ns = `grid`
                     )->a( n = `gridTemplateColumns` v = `repeat(auto-fit, minmax(16rem, 1fr))`
                     )->a( n = `gridGap`             v = `0.5rem`
 
-            )->shut(
+            )->end(
 
-            )->open( n = `GridListItem` ns = `f`
+            )->ele( n = `GridListItem` ns = `f`
                 )->a( n = `detailPress` v = client->follow_up_action( val   = client->cs_event-control_global
                                                                       t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Request details for item with ID {0}` )
                                                                                         ( `$event.oSource.sId` ) ) )
@@ -122,29 +122,29 @@ CLASS z2ui5_cl_smpc_app_133 IMPLEMENTATION.
                 )->a( n = `highlight`   v = `{STATUS}`
                 )->a( n = `type`        v = `{TYPE}`
 
-                )->open( `VBox`
+                )->ele( `VBox`
                     )->a( n = `height` v = `100%`
 
-                    )->leaf( `Image`
+                    )->tag( `Image`
                         )->a( n = `src`     v = `{PRODUCTPICURL}`
                         )->a( n = `width`   v = `100%`
                         )->a( n = `visible` v = `{= ${ONLYIMAGE} ? true : false }`
                         )->a( n = `class`   v = `imageDisplayBlock`
-                    )->open( `HBox`
+                    )->ele( `HBox`
                         )->a( n = `height`     v = `100%`
                         )->a( n = `class`      v = `sapUiSmallMargin`
                         )->a( n = `alignItems` v = `Center`
                         )->a( n = `visible`    v = `{= ${ONLYIMAGE} ? false : true }`
 
-                        )->leaf( `Image`
+                        )->tag( `Image`
                             )->a( n = `src`   v = `{PRODUCTPICURL}`
                             )->a( n = `width` v = `3rem`
                             )->a( n = `class` v = `sapUiSmallMarginEnd`
-                        )->open( `VBox`
-                            )->leaf( `Title`
+                        )->ele( `VBox`
+                            )->tag( `Title`
                                 )->a( n = `text`     v = `{NAME}`
                                 )->a( n = `wrapping` v = `true`
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text`     v = `{DESCRIPTION}`
                                 )->a( n = `wrapping` v = `true` ).
 

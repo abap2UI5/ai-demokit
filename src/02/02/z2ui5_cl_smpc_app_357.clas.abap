@@ -53,12 +53,12 @@ CLASS z2ui5_cl_smpc_app_357 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the OData demo. The sample serves its rows from an in-page MockServer;
     " an abap2UI5 app has a real ABAP backend, so the ProductSet is the model
     " and the operation-mode SegmentedButton only re-reads it.
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.ui.table`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns:u`   v = `sap.ui.unified`
@@ -66,13 +66,13 @@ CLASS z2ui5_cl_smpc_app_357 IMPLEMENTATION.
         )->a( n = `xmlns:m`   v = `sap.m`
         )->a( n = `height`    v = `100%`
 
-        )->open( n = `Page` ns = `m`
+        )->ele( n = `Page` ns = `m`
             )->a( n = `showHeader`      v = `false`
             )->a( n = `enableScrolling` v = `false`
             )->a( n = `class`           v = `sapUiContentPadding`
 
-            )->open( n = `content` ns = `m`
-                )->open( `Table`
+            )->ele( n = `content` ns = `m`
+                )->ele( `Table`
                     )->a( n = `id`                  v = `table`
                     )->a( n = `selectionMode`       v = `MultiToggle`
                     )->a( n = `enableSelectAll`     v = `false`
@@ -82,150 +82,150 @@ CLASS z2ui5_cl_smpc_app_357 IMPLEMENTATION.
                     )->a( n = `enableBusyIndicator` v = `true`
                     )->a( n = `ariaLabelledBy`      v = `title`
 
-                    )->open( `noData`
-                        )->leaf( n = `BusyIndicator` ns = `m`
+                    )->ele( `noData`
+                        )->tag( n = `BusyIndicator` ns = `m`
                             )->a( n = `class` v = `sapUiMediumMargin`
 
-                    )->shut(
-                    )->open( `extension`
-                        )->open( n = `OverflowToolbar` ns = `m`
+                    )->end(
+                    )->ele( `extension`
+                        )->ele( n = `OverflowToolbar` ns = `m`
                             )->a( n = `style` v = `Clear`
 
-                            )->leaf( n = `Title` ns = `m`
+                            )->tag( n = `Title` ns = `m`
                                 )->a( n = `id`   v = `title`
                                 )->a( n = `text` v = `Products`
 
-                            )->leaf( n = `ToolbarSpacer` ns = `m`
+                            )->tag( n = `ToolbarSpacer` ns = `m`
 
-                            )->leaf( n = `Button` ns = `m`
+                            )->tag( n = `Button` ns = `m`
                                 )->a( n = `icon`    v = `sap-icon://refresh`
                                 )->a( n = `tooltip` v = `Reinitialize Model`
                                 )->a( n = `press`   v = client->_event( `MODEL_REFRESH` )
 
-                        )->shut(
-                    )->shut(
-                    )->open( `columns`
-                        )->open( `Column`
+                        )->end(
+                    )->end(
+                    )->ele( `columns`
+                        )->ele( `Column`
                             )->a( n = `sortProperty`   v = `NAME`
                             )->a( n = `filterProperty` v = `NAME`
                             )->a( n = `autoResizable`  v = `true`
                             )->a( n = `width`          v = `11rem`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Product Name`
 
-                            )->open( `template`
-                                )->leaf( n = `Text` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text`     v = `{NAME}`
                                     )->a( n = `wrapping` v = `false`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `sortProperty`   v = `PRODUCTID`
                             )->a( n = `filterProperty` v = `PRODUCTID`
                             )->a( n = `autoResizable`  v = `true`
                             )->a( n = `width`          v = `6rem`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Product ID`
 
-                            )->open( `template`
-                                )->leaf( n = `Text` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text`     v = `{PRODUCTID}`
                                     )->a( n = `wrapping` v = `false`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `sortProperty`   v = `CATEGORY`
                             )->a( n = `filterProperty` v = `CATEGORY`
                             )->a( n = `autoResizable`  v = `true`
                             )->a( n = `width`          v = `11rem`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Category`
 
-                            )->open( `template`
-                                )->leaf( n = `Text` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text`     v = `{CATEGORY}`
                                     )->a( n = `wrapping` v = `false`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `sortProperty`   v = `SUPPLIERNAME`
                             )->a( n = `filterProperty` v = `SUPPLIERNAME`
                             )->a( n = `autoResizable`  v = `true`
                             )->a( n = `width`          v = `12rem`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Supplier Company Name`
 
-                            )->open( `template`
-                                )->leaf( n = `Text` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text`     v = `{SUPPLIERNAME}`
                                     )->a( n = `wrapping` v = `false`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `filterProperty` v = `PRICE`
                             )->a( n = `width`          v = `9rem`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Unit Price`
 
-                            )->open( `template`
-                                )->leaf( n = `Currency` ns = `u`
+                            )->ele( `template`
+                                )->tag( n = `Currency` ns = `u`
                                     )->a( n = `value`    v = |\{ path: 'PRICE', type: 'sap.ui.model.type.String' \}|
                                     )->a( n = `currency` v = `{CURRENCYCODE}`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `hAlign`        v = `End`
                             )->a( n = `autoResizable` v = `true`
                             )->a( n = `width`         v = `9rem`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Dimensions`
 
-                            )->open( `template`
-                                )->leaf( n = `Text` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text`     v = `{WIDTH}x{HEIGHT}x{DEPTH} {DIMUNIT}`
                                     )->a( n = `wrapping` v = `false`
 
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                    )->open( `footer`
-                        )->open( n = `OverflowToolbar` ns = `m`
+                            )->end(
+                        )->end(
+                    )->end(
+                    )->ele( `footer`
+                        )->ele( n = `OverflowToolbar` ns = `m`
                             )->a( n = `id` v = `infobar`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text`     v = `OData Model Operation Mode:`
                                 )->a( n = `labelFor` v = `operationMode`
 
-                            )->open( n = `SegmentedButton` ns = `m`
+                            )->ele( n = `SegmentedButton` ns = `m`
                                 )->a( n = `id`              v = `operationMode`
                                 )->a( n = `selectionChange` v = client->_event( `OPERATION_MODE` )
                                 )->a( n = `selectedKey`     v = client->_bind( operation_mode )
                                 )->a( n = `items`           v = client->_bind( t_operationmodes )
 
-                                )->open( n = `items` ns = `m`
-                                    )->leaf( n = `SegmentedButtonItem` ns = `m`
+                                )->ele( n = `items` ns = `m`
+                                    )->tag( n = `SegmentedButtonItem` ns = `m`
                                         )->a( n = `text` v = `{NAME}`
                                         )->a( n = `key`  v = `{NAME}`
 
-                                )->shut(
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
-        )->shut(
-    )->shut( ).
+                                )->end(
+                            )->end(
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
+        )->end(
+    )->end( ).
 
     client->view_display( view->stringify( ) ).
 

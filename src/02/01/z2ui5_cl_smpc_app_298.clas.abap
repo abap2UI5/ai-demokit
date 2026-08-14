@@ -80,9 +80,9 @@ CLASS z2ui5_cl_smpc_app_298 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:core` v = `sap.ui.core`
@@ -91,228 +91,228 @@ CLASS z2ui5_cl_smpc_app_298 IMPLEMENTATION.
 
         " the four controller-loaded fragments (ColumnMenu, Sort, Group,
         " Filter), declared in the view's dependents aggregation
-        )->open( n = `dependents` ns = `mvc`
+        )->ele( n = `dependents` ns = `mvc`
 
-            )->open( n = `Menu` ns = `tcm`
+            )->ele( n = `Menu` ns = `tcm`
                 )->a( n = `id`         v = `columnHeaderMenu`
                 )->a( n = `beforeOpen` v = client->_event( `MENU_BEFORE_OPEN` )
 
-                )->open( n = `QuickSort` ns = `tcm`
+                )->ele( n = `QuickSort` ns = `tcm`
                     )->a( n = `change` v = client->_event( val   = `MENU_SORT`
                                                            t_arg = VALUE #( ( `${$parameters>/key}` )
                                                                            ( `${$parameters>/sortOrder}` ) ) )
 
-                    )->open( n = `items` ns = `tcm`
-                        )->leaf( n = `QuickSortItem` ns = `tcm`
+                    )->ele( n = `items` ns = `tcm`
+                        )->tag( n = `QuickSortItem` ns = `tcm`
                             )->a( n = `key`   v = `Name`
                             )->a( n = `label` v = `Product`
 
-                    )->shut(
-                )->shut(
-                )->open( n = `QuickResize` ns = `tcm`
+                    )->end(
+                )->end(
+                )->ele( n = `QuickResize` ns = `tcm`
                     )->a( n = `id`     v = `quickResize`
                     )->a( n = `change` v = client->_event( `MENU_RESIZE` )
 
-                )->shut(
-                )->open( n = `items` ns = `tcm`
-                    )->leaf( n = `ActionItem` ns = `tcm`
+                )->end(
+                )->ele( n = `items` ns = `tcm`
+                    )->tag( n = `ActionItem` ns = `tcm`
                         )->a( n = `label` v = `Action Item`
                         )->a( n = `press` v = client->_event( `MENU_ACTION` )
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( `ViewSettingsDialog`
+            )->ele( `ViewSettingsDialog`
                 )->a( n = `id`      v = `sortDialog`
                 )->a( n = `confirm` v = client->_event( val   = `SORT_CONFIRM`
                                                         t_arg = VALUE #( ( `${$parameters>/sortItem}` )
                                                                          ( `${$parameters>/sortDescending}` ) ) )
 
-                )->open( `sortItems`
-                    )->leaf( `ViewSettingsItem`
+                )->ele( `sortItems`
+                    )->tag( `ViewSettingsItem`
                         )->a( n = `text`     v = `Product`
                         )->a( n = `key`      v = `Name`
                         )->a( n = `selected` v = `true`
-                    )->leaf( `ViewSettingsItem`
+                    )->tag( `ViewSettingsItem`
                         )->a( n = `text` v = `Supplier`
                         )->a( n = `key`  v = `SupplierName`
-                    )->leaf( `ViewSettingsItem`
+                    )->tag( `ViewSettingsItem`
                         )->a( n = `text` v = `Weight`
                         )->a( n = `key`  v = `WeightMeasure`
-                    )->leaf( `ViewSettingsItem`
+                    )->tag( `ViewSettingsItem`
                         )->a( n = `text` v = `Price`
                         )->a( n = `key`  v = `Price`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( `ViewSettingsDialog`
+            )->ele( `ViewSettingsDialog`
                 )->a( n = `id`      v = `groupDialog`
                 )->a( n = `confirm` v = client->_event( val   = `GROUP_CONFIRM`
                                                         t_arg = VALUE #( ( `${$parameters>/groupItem}` ) ) )
                 )->a( n = `reset`   v = client->_event( `GROUP_RESET` )
 
-                )->open( `groupItems`
-                    )->leaf( `ViewSettingsItem`
+                )->ele( `groupItems`
+                    )->tag( `ViewSettingsItem`
                         )->a( n = `text` v = `Supplier`
                         )->a( n = `key`  v = `SupplierName`
-                    )->leaf( `ViewSettingsItem`
+                    )->tag( `ViewSettingsItem`
                         )->a( n = `text` v = `Price`
                         )->a( n = `key`  v = `Price`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( `ViewSettingsDialog`
+            )->ele( `ViewSettingsDialog`
                 )->a( n = `id`      v = `filterDialog`
                 )->a( n = `confirm` v = client->_event( val   = `FILTER_CONFIRM`
                                                         t_arg = VALUE #( ( `${$parameters>/filterItems}` )
                                                                          ( `${$parameters>/filterString}` ) ) )
 
-                )->open( `filterItems`
-                    )->open( `ViewSettingsFilterItem`
+                )->ele( `filterItems`
+                    )->ele( `ViewSettingsFilterItem`
                         )->a( n = `text`        v = `Weight`
                         )->a( n = `key`         v = `WeightMeasure`
                         )->a( n = `multiSelect` v = `false`
 
-                        )->open( `items`
-                            )->leaf( `ViewSettingsItem`
+                        )->ele( `items`
+                            )->tag( `ViewSettingsItem`
                                 )->a( n = `text` v = `Less than 1000`
                                 )->a( n = `key`  v = `WeightMeasure___LE___1000___X`
-                            )->leaf( `ViewSettingsItem`
+                            )->tag( `ViewSettingsItem`
                                 )->a( n = `text` v = `Between 1000 and 2000`
                                 )->a( n = `key`  v = `WeightMeasure___BT___1000___2000`
-                            )->leaf( `ViewSettingsItem`
+                            )->tag( `ViewSettingsItem`
                                 )->a( n = `text` v = `More Than 2000`
                                 )->a( n = `key`  v = `WeightMeasure___GT___2000___X`
 
-                        )->shut(
-                    )->shut(
-                    )->open( `ViewSettingsFilterItem`
+                        )->end(
+                    )->end(
+                    )->ele( `ViewSettingsFilterItem`
                         )->a( n = `text`        v = `Price`
                         )->a( n = `key`         v = `Price`
                         )->a( n = `multiSelect` v = `false`
 
-                        )->open( `items`
-                            )->leaf( `ViewSettingsItem`
+                        )->ele( `items`
+                            )->tag( `ViewSettingsItem`
                                 )->a( n = `text` v = `Less Than 100`
                                 )->a( n = `key`  v = `Price___LE___100___X`
-                            )->leaf( `ViewSettingsItem`
+                            )->tag( `ViewSettingsItem`
                                 )->a( n = `text` v = `Between 100 and 1000`
                                 )->a( n = `key`  v = `Price___BT___100___1000`
-                            )->leaf( `ViewSettingsItem`
+                            )->tag( `ViewSettingsItem`
                                 )->a( n = `text` v = `More Than 1000`
                                 )->a( n = `key`  v = `Price___GT___1000___X`
 
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
-        )->shut(
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
+        )->end(
 
-        )->open( `Page`
+        )->ele( `Page`
             )->a( n = `showHeader` v = `false`
 
-            )->open( `Table`
+            )->ele( `Table`
                 )->a( n = `id`    v = `idProductsTable`
                 )->a( n = `items` v = client->_bind( t_products )
 
-                )->open( `headerToolbar`
-                    )->open( `OverflowToolbar`
-                        )->leaf( `Title`
+                )->ele( `headerToolbar`
+                    )->ele( `OverflowToolbar`
+                        )->tag( `Title`
                             )->a( n = `text`  v = `Products`
                             )->a( n = `level` v = `H2`
-                        )->leaf( `ToolbarSpacer`
-                        )->leaf( `Button`
+                        )->tag( `ToolbarSpacer`
+                        )->tag( `Button`
                             )->a( n = `tooltip` v = `Sort`
                             )->a( n = `icon`    v = `sap-icon://sort`
                             )->a( n = `press`   v = client->_event( `OPEN_SORT` )
-                        )->leaf( `Button`
+                        )->tag( `Button`
                             )->a( n = `tooltip` v = `Filter`
                             )->a( n = `icon`    v = `sap-icon://filter`
                             )->a( n = `press`   v = client->_event( `OPEN_FILTER` )
-                        )->leaf( `Button`
+                        )->tag( `Button`
                             )->a( n = `tooltip` v = `Group`
                             )->a( n = `icon`    v = `sap-icon://group-2`
                             )->a( n = `press`   v = client->_event( `OPEN_GROUP` )
-                        )->leaf( `ToggleButton`
+                        )->tag( `ToggleButton`
                             )->a( n = `icon`    v = `sap-icon://menu`
                             )->a( n = `tooltip` v = `Enable Custom Context Menu`
                             )->a( n = `press`   v = client->_event( `TOGGLE_CONTEXT_MENU` )
 
-                    )->shut(
-                )->shut(
-                )->open( `infoToolbar`
-                    )->open( `OverflowToolbar`
+                    )->end(
+                )->end(
+                )->ele( `infoToolbar`
+                    )->ele( `OverflowToolbar`
                         )->a( n = `id`      v = `vsdFilterBar`
                         )->a( n = `visible` v = client->_bind( filter_bar_visible )
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `id`   v = `vsdFilterLabel`
                             )->a( n = `text` v = client->_bind( filter_label )
 
-                    )->shut(
-                )->shut(
-                )->open( `columns`
-                    )->open( `Column`
+                    )->end(
+                )->end(
+                )->ele( `columns`
+                    )->ele( `Column`
                         )->a( n = `id`         v = `product`
                         )->a( n = `headerMenu` v = `columnHeaderMenu`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Product`
 
-                    )->shut(
-                    )->open( `Column`
+                    )->end(
+                    )->ele( `Column`
                         )->a( n = `minScreenWidth` v = `Tablet`
                         )->a( n = `demandPopin`    v = `true`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Supplier`
 
-                    )->shut(
-                    )->open( `Column`
+                    )->end(
+                    )->ele( `Column`
                         )->a( n = `minScreenWidth` v = `Tablet`
                         )->a( n = `demandPopin`    v = `true`
                         )->a( n = `hAlign`         v = `End`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Dimensions`
 
-                    )->shut(
-                    )->open( `Column`
+                    )->end(
+                    )->ele( `Column`
                         )->a( n = `minScreenWidth` v = `Tablet`
                         )->a( n = `demandPopin`    v = `true`
                         )->a( n = `hAlign`         v = `Center`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Weight`
 
-                    )->shut(
-                    )->open( `Column`
+                    )->end(
+                    )->ele( `Column`
                         )->a( n = `hAlign` v = `End`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Price`
 
-                    )->shut(
-                )->shut(
-                )->open( `items`
-                    )->open( `ColumnListItem`
+                    )->end(
+                )->end(
+                )->ele( `items`
+                    )->ele( `ColumnListItem`
                         )->a( n = `vAlign` v = `Middle`
 
-                        )->open( `cells`
-                            )->leaf( `ObjectIdentifier`
+                        )->ele( `cells`
+                            )->tag( `ObjectIdentifier`
                                 )->a( n = `title` v = `{NAME}`
                                 )->a( n = `text`  v = `{PRODUCT_ID}`
-                            )->leaf( `Text`
+                            )->tag( `Text`
                                 )->a( n = `text` v = `{SUPPLIER_NAME}`
-                            )->leaf( `Text`
+                            )->tag( `Text`
                                 )->a( n = `text` v = `{WIDTH} x {DEPTH} x {HEIGHT} {DIM_UNIT}`
-                            )->leaf( `ObjectNumber`
+                            )->tag( `ObjectNumber`
                                 )->a( n = `number` v = `{WEIGHT_MEASURE}`
                                 )->a( n = `unit`   v = `{WEIGHT_UNIT}`
                                 )->a( n = `state`  v = `{WEIGHT_STATE}`
-                            )->leaf( `ObjectNumber`
+                            )->tag( `ObjectNumber`
                                 )->a( n = `number` v = |\{ parts:[\{path:'PRICE'\},\{path:'CURRENCY_CODE'\}], type: 'sap.ui.model.type.Currency', formatOptions: \{showMeasure: false\} \}|
                                 )->a( n = `unit`   v = `{CURRENCY_CODE}` ).
 

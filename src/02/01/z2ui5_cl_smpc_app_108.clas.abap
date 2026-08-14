@@ -57,22 +57,22 @@ CLASS z2ui5_cl_smpc_app_108 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " calendar date properties (startDate/endDate) are typed "object" and demand a
     " real JS Date; the model keeps ISO strings and Formatter.DateCreateObject from
     " the curated module converts them at the point of use (needs UI5 >= 1.74)
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc`     v = `sap.ui.core.mvc`
         )->a( n = `xmlns:unified` v = `sap.ui.unified`
         )->a( n = `xmlns:core`    v = `sap.ui.core`
         )->a( n = `xmlns`         v = `sap.m`
         )->a( n = `core:require`  v = `{Formatter: 'z2ui5/model/formatter'}`
 
-        )->open( `VBox`
+        )->ele( `VBox`
             )->a( n = `class` v = `sapUiSmallMargin`
 
-            )->open( `PlanningCalendar`
+            )->ele( `PlanningCalendar`
                 )->a( n = `id`                        v = `PC1`
                 " toggleDayNamesLine flips PC1.showDayNamesLine - a bindable property
                 " (@since 1.50), so the ToggleButton and the calendar share the field
@@ -113,23 +113,23 @@ CLASS z2ui5_cl_smpc_app_108 IMPLEMENTATION.
                             ( `${$parameters>/endDate}.getMinutes()` ) ) )
                 )->a( n = `showEmptyIntervalHeaders`  v = `false`
 
-                )->open( `toolbarContent`
-                    )->leaf( `Title`
+                )->ele( `toolbarContent`
+                    )->tag( `Title`
                         )->a( n = `text`       v = `Title`
                         )->a( n = `titleStyle` v = `H4`
-                    )->leaf( `ToggleButton`
+                    )->tag( `ToggleButton`
                         )->a( n = `icon`    v = `sap-icon://decrease-line-height`
                         )->a( n = `tooltip` v = `Toggle Day Names Line`
                         )->a( n = `pressed` v = client->_bind( show_day_names )
 
-                )->shut(
-                )->open( `rows`
-                    )->open( `PlanningCalendarRow`
+                )->end(
+                )->ele( `rows`
+                    )->ele( `PlanningCalendarRow`
                         )->a( n = `appointments`    v = `{path: 'T_APPOINTMENTS', templateShareable: false}`
                         )->a( n = `intervalHeaders` v = `{path: 'T_HEADERS', templateShareable: false}`
 
-                        )->open( `appointments`
-                            )->leaf( n = `CalendarAppointment` ns = `unified`
+                        )->ele( `appointments`
+                            )->tag( n = `CalendarAppointment` ns = `unified`
                                 )->a( n = `startDate`    v = `{ path: 'START_AT', formatter: 'Formatter.DateCreateObject' }`
                                 )->a( n = `endDate`      v = `{ path: 'END_AT', formatter: 'Formatter.DateCreateObject' }`
                                 )->a( n = `icon`         v = `{PIC}`
@@ -139,19 +139,19 @@ CLASS z2ui5_cl_smpc_app_108 IMPLEMENTATION.
                                 )->a( n = `tentative`    v = `{TENTATIVE}`
                                 )->a( n = `ariaHasPopup` v = `{ARIA}`
 
-                        )->shut(
-                        )->open( `intervalHeaders`
-                            )->leaf( n = `CalendarAppointment` ns = `unified`
+                        )->end(
+                        )->ele( `intervalHeaders`
+                            )->tag( n = `CalendarAppointment` ns = `unified`
                                 )->a( n = `startDate` v = `{ path: 'START_AT', formatter: 'Formatter.DateCreateObject' }`
                                 )->a( n = `endDate`   v = `{ path: 'END_AT', formatter: 'Formatter.DateCreateObject' }`
                                 )->a( n = `title`     v = `{TITLE}`
                                 )->a( n = `type`      v = `{TYPE}`
 
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
-        )->shut( ).
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

@@ -26,22 +26,22 @@ CLASS z2ui5_cl_smpc_app_149 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns:w`   v = `sap.ui.integration.widgets`
         )->a( n = `class`     v = `sapUiContentPadding`
 
-        )->open( `VBox`
-            )->leaf( `Link`
+        )->ele( `VBox`
+            )->tag( `Link`
                 )->a( n = `text`      v = `Visit the Card Explorer`
                 )->a( n = `href`      v = `test-resources/sap/ui/integration/demokit/cardExplorer/index.html`
                 )->a( n = `emphasized` v = `true`
                 )->a( n = `class`     v = `sapUiSmallMargin`
                 )->a( n = `target`    v = `_blank`
-            )->leaf( `Image`
+            )->tag( `Image`
                 )->a( n = `src`   v = `./resources/sap/ui/documentation/sdk/images/tools/CardExplorer.png`
                 )->a( n = `alt`   v = `Card Explorer`
                 )->a( n = `class` v = `sapUiSmallMargin`

@@ -37,25 +37,25 @@ CLASS z2ui5_cl_smpc_app_205 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `height`     v = `100%`
 
-        )->open( `Page`
+        )->ele( `Page`
             )->a( n = `showHeader` v = `false`
             )->a( n = `class`      v = `sapUiContentPadding`
 
-            )->open( `content`
-                )->open( `Select`
+            )->ele( `content`
+                )->ele( `Select`
                     )->a( n = `forceSelection` v = `false`
                     )->a( n = `selectedKey`    v = client->_bind( selectedproduct )
                     )->a( n = `items`          v = |\{ path: '{ client->_bind( val = t_productcollection path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
 
-                    )->leaf( n = `ListItem` ns = `core`
+                    )->tag( n = `ListItem` ns = `core`
                         )->a( n = `key`  v = `{PRODUCTID}`
                         )->a( n = `text` v = `{NAME}`
                         )->a( n = `icon` v = `{ICON}` ).

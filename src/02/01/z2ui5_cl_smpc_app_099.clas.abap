@@ -59,20 +59,20 @@ CLASS z2ui5_cl_smpc_app_099 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `height`     v = `100%`
 
-        )->open( `Page`
+        )->ele( `Page`
             )->a( n = `showHeader`    v = `false`
             )->a( n = `showNavButton` v = `false`
             )->a( n = `class`         v = `sapUiContentPadding`
 
-            )->leaf( `Button`
+            )->tag( `Button`
                 )->a( n = `id`      v = `buttonBack`
                 )->a( n = `enabled` v = client->_bind( back_enabled )
                 )->a( n = `text`    v = `Navigate Back`
@@ -80,18 +80,18 @@ CLASS z2ui5_cl_smpc_app_099 IMPLEMENTATION.
                 )->a( n = `class`   v = `sapUiSmallMarginBottom`
 
             " the QuickViewCard fragment is inlined into the main view (no separate core:Fragment include)
-            )->open( `Panel`
+            )->ele( `Panel`
                 )->a( n = `id`     v = `quickViewCardContainer`
                 )->a( n = `width`  v = `auto`
                 )->a( n = `height` v = `650px`
 
-                )->open( `QuickViewCard`
+                )->ele( `QuickViewCard`
                     )->a( n = `id`            v = `quickViewCard`
                     )->a( n = `pages`         v = client->_bind( t_pages )
                     )->a( n = `navigate`      v = client->_event( `NAVIGATE` )
                     )->a( n = `afterNavigate` v = client->_event( val = `AFTER_NAV` t_arg = VALUE #( ( `${$parameters>/isTopPage}` ) ) )
 
-                    )->open( `QuickViewPage`
+                    )->ele( `QuickViewPage`
                         )->a( n = `pageId`      v = `{PAGEID}`
                         )->a( n = `header`      v = `{HEADER}`
                         )->a( n = `title`       v = `{TITLE}`
@@ -99,17 +99,17 @@ CLASS z2ui5_cl_smpc_app_099 IMPLEMENTATION.
                         )->a( n = `description` v = `{DESCRIPTION}`
                         )->a( n = `groups`      v = `{path: 'GROUPS', templateShareable: true}`
 
-                        )->open( `avatar`
-                            )->leaf( `Avatar`
+                        )->ele( `avatar`
+                            )->tag( `Avatar`
                                 )->a( n = `src`          v = `{ICON}`
                                 )->a( n = `displayShape` v = `{DISPLAYSHAPE}`
 
-                        )->shut(
-                        )->open( `QuickViewGroup`
+                        )->end(
+                        )->ele( `QuickViewGroup`
                             )->a( n = `heading`  v = `{HEADING}`
                             )->a( n = `elements` v = `{path: 'ELEMENTS', templateShareable: true}`
 
-                            )->leaf( `QuickViewGroupElement`
+                            )->tag( `QuickViewGroupElement`
                                 )->a( n = `label`        v = `{LABEL}`
                                 )->a( n = `value`        v = `{VALUE}`
                                 )->a( n = `url`          v = `{URL}`
@@ -118,11 +118,11 @@ CLASS z2ui5_cl_smpc_app_099 IMPLEMENTATION.
                                 )->a( n = `emailSubject` v = `{EMAILSUBJECT}`
                                 )->a( n = `target`       v = `{TARGET}`
 
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
-        )->shut( ).
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

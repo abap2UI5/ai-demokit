@@ -26,13 +26,13 @@ CLASS z2ui5_cl_smpc_app_379 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
 
-        )->open( `IconTabBar`
+        )->ele( `IconTabBar`
             )->a( n = `id`         v = `idIconTabBarInlineMode`
             )->a( n = `headerMode` v = `Inline`
             " device> exposes raw sap.ui.Device, so !phone expresses the
@@ -40,40 +40,40 @@ CLASS z2ui5_cl_smpc_app_379 IMPLEMENTATION.
             )->a( n = `expanded`   v = `{= !${device>/system/phone} }`
             )->a( n = `class`      v = `sapUiResponsiveContentPadding`
 
-            )->open( `items`
-                )->open( `IconTabFilter`
+            )->ele( `items`
+                )->ele( `IconTabFilter`
                     )->a( n = `text`  v = `Info`
                     )->a( n = `key`   v = `info`
                     )->a( n = `count` v = `3`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Info content goes here ...`
 
-                )->shut(
-                )->open( `IconTabFilter`
+                )->end(
+                )->ele( `IconTabFilter`
                     )->a( n = `text`  v = `Attachments`
                     )->a( n = `key`   v = `attachments`
                     )->a( n = `count` v = `4321`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Attachments go here ...`
 
-                )->shut(
-                )->open( `IconTabFilter`
+                )->end(
+                )->ele( `IconTabFilter`
                     )->a( n = `text`  v = `Notes`
                     )->a( n = `key`   v = `notes`
                     )->a( n = `count` v = `333`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Notes go here ...`
 
-                )->shut(
-                )->open( `IconTabFilter`
+                )->end(
+                )->ele( `IconTabFilter`
                     )->a( n = `text`  v = `People`
                     )->a( n = `key`   v = `people`
                     )->a( n = `count` v = `34`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `People content goes here ...` ).
 
     client->view_display( view->stringify( ) ).

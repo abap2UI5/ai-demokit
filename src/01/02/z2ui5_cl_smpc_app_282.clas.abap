@@ -32,20 +32,20 @@ CLASS z2ui5_cl_smpc_app_282 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " sap.ui.model.type.Date over a JSON model (TypeDateAsDate). The original
     " model holds a Date OBJECT, which a JSON round-trip cannot carry, so every
     " binding gains formatOptions.source pattern yyyy-MM-dd - the type then
     " parses the string model value and writes it back in the same form.
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`        v = `sap.m`
         )->a( n = `xmlns:mvc`    v = `sap.ui.core.mvc`
         )->a( n = `xmlns:form`   v = `sap.ui.layout.form`
         )->a( n = `xmlns:core`   v = `sap.ui.core`
         )->a( n = `core:require` v = `{DateType: 'sap/ui/model/type/Date'}`
 
-        )->open( n = `SimpleForm` ns = `form`
+        )->ele( n = `SimpleForm` ns = `form`
             )->a( n = `width`      v = `auto`
             )->a( n = `class`      v = `sapUiResponsiveMargin`
             )->a( n = `layout`     v = `ResponsiveGridLayout`
@@ -58,16 +58,16 @@ CLASS z2ui5_cl_smpc_app_282 IMPLEMENTATION.
             )->a( n = `emptySpanM` v = `4`
             )->a( n = `title`      v = `Date Input`
 
-            )->open( n = `content` ns = `form`
-                )->leaf( `Label`
+            )->ele( n = `content` ns = `form`
+                )->tag( `Label`
                     )->a( n = `text` v = `Date`
-                )->leaf( `DatePicker`
+                )->tag( `DatePicker`
                     )->a( n = `value` v = |\{ path: '{ client->_bind( val = date path = abap_true ) }', type: 'DateType', formatOptions: \{ source: \{ pattern: 'yyyy-MM-dd' \} \} \}|
 
-        )->shut(
-        )->shut(
+        )->end(
+        )->end(
 
-        )->open( n = `SimpleForm` ns = `form`
+        )->ele( n = `SimpleForm` ns = `form`
             )->a( n = `width`      v = `auto`
             )->a( n = `class`      v = `sapUiResponsiveMargin`
             )->a( n = `layout`     v = `ResponsiveGridLayout`
@@ -79,28 +79,28 @@ CLASS z2ui5_cl_smpc_app_282 IMPLEMENTATION.
             )->a( n = `columnsM`   v = `1`
             )->a( n = `title`      v = `Format Options`
 
-            )->open( n = `content` ns = `form`
-                )->leaf( `Label`
+            )->ele( n = `content` ns = `form`
+                )->tag( `Label`
                     )->a( n = `text` v = `Short`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = date path = abap_true ) }', type: 'DateType', formatOptions: \{ style: 'short', source: \{ pattern: 'yyyy-MM-dd' \} \} \}|
-                )->leaf( `Label`
+                )->tag( `Label`
                     )->a( n = `text` v = `Medium`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = date path = abap_true ) }', type: 'DateType', formatOptions: \{ style: 'medium', source: \{ pattern: 'yyyy-MM-dd' \} \} \}|
-                )->leaf( `Label`
+                )->tag( `Label`
                     )->a( n = `text` v = `Long`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = date path = abap_true ) }', type: 'DateType', formatOptions: \{ style: 'long', source: \{ pattern: 'yyyy-MM-dd' \} \} \}|
-                )->leaf( `Label`
+                )->tag( `Label`
                     )->a( n = `text` v = `Full`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = date path = abap_true ) }', type: 'DateType', formatOptions: \{ style: 'full', source: \{ pattern: 'yyyy-MM-dd' \} \} \}|
 
-        )->shut(
-        )->shut(
+        )->end(
+        )->end(
 
-        )->open( n = `SimpleForm` ns = `form`
+        )->ele( n = `SimpleForm` ns = `form`
             )->a( n = `width`      v = `auto`
             )->a( n = `class`      v = `sapUiResponsiveMargin`
             )->a( n = `layout`     v = `ResponsiveGridLayout`
@@ -112,14 +112,14 @@ CLASS z2ui5_cl_smpc_app_282 IMPLEMENTATION.
             )->a( n = `columnsM`   v = `1`
             )->a( n = `title`      v = `Relative Time Format`
 
-            )->open( n = `content` ns = `form`
-                )->leaf( `Label`
+            )->ele( n = `content` ns = `form`
+                )->tag( `Label`
                     )->a( n = `text` v = `Relative Time`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = date path = abap_true ) }', type: 'DateType', formatOptions: \{ relative: true, relativeScale: 'auto', source: \{ pattern: 'yyyy-MM-dd' \} \} \}|
 
-        )->shut(
-        )->shut( ).
+        )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

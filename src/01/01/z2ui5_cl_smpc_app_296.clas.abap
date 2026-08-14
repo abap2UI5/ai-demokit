@@ -36,60 +36,60 @@ CLASS z2ui5_cl_smpc_app_296 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`    v = `sap.ui.layout`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns`      v = `sap.m`
 
         " the controller-loaded Dialog fragment, declared in the view's dependents aggregation
-        )->open( n = `dependents` ns = `mvc`
+        )->ele( n = `dependents` ns = `mvc`
 
-            )->open( `ViewSettingsDialog`
+            )->ele( `ViewSettingsDialog`
                 )->a( n = `id`                   v = `settingsDialog`
                 )->a( n = `filterSearchOperator` v = client->_bind( search_operator )
 
-                )->open( `filterItems`
-                    )->open( `ViewSettingsFilterItem`
+                )->ele( `filterItems`
+                    )->ele( `ViewSettingsFilterItem`
                         )->a( n = `text` v = `Products`
                         )->a( n = `key`  v = `1`
 
-                        )->open( `items`
-                            )->leaf( `ViewSettingsItem`
+                        )->ele( `items`
+                            )->tag( `ViewSettingsItem`
                                 )->a( n = `text` v = `Mouse DX20`
                                 )->a( n = `key`  v = `1a`
-                            )->leaf( `ViewSettingsItem`
+                            )->tag( `ViewSettingsItem`
                                 )->a( n = `text` v = `Optical mouse OX3`
                                 )->a( n = `key`  v = `1b`
-                            )->leaf( `ViewSettingsItem`
+                            )->tag( `ViewSettingsItem`
                                 )->a( n = `text` v = `Monitor`
                                 )->a( n = `key`  v = `1c`
-                            )->leaf( `ViewSettingsItem`
+                            )->tag( `ViewSettingsItem`
                                 )->a( n = `text` v = `Keyboard (ultra flat)`
                                 )->a( n = `key`  v = `1d`
-                            )->leaf( `ViewSettingsItem`
+                            )->tag( `ViewSettingsItem`
                                 )->a( n = `text` v = `Wireless keyboard`
                                 )->a( n = `key`  v = `1e`
 
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
-        )->shut(
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
+        )->end(
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
             )->a( n = `width` v = `100%`
 
-            )->leaf( `Button`
+            )->tag( `Button`
                 )->a( n = `text`  v = `Search Contains`
                 )->a( n = `press` v = client->_event( `OPEN_CONTAINS` )
-            )->leaf( `Button`
+            )->tag( `Button`
                 )->a( n = `text`  v = `Search Any Word Starts With`
                 )->a( n = `press` v = client->_event( `OPEN_ANY_WORD` )
-            )->leaf( `Button`
+            )->tag( `Button`
                 )->a( n = `text`  v = `Search Case Sensitive Contains`
                 )->a( n = `press` v = client->_event( `OPEN_CUSTOM` ) ).
 

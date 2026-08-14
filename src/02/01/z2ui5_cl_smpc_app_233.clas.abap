@@ -69,9 +69,9 @@ CLASS z2ui5_cl_smpc_app_233 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`       v = `sap.m`
         )->a( n = `xmlns:mvc`   v = `sap.ui.core.mvc`
         )->a( n = `xmlns:uxap`  v = `sap.uxap`
@@ -81,8 +81,8 @@ CLASS z2ui5_cl_smpc_app_233 IMPLEMENTATION.
         )->a( n = `height`      v = `100%`
 
         " Dialog.fragment.xml - loaded in the controller via oView.addDependent
-        )->open( n = `dependents` ns = `mvc`
-            )->open( `SelectDialog`
+        )->ele( n = `dependents` ns = `mvc`
+            )->ele( `SelectDialog`
                 )->a( n = `id`      v = `selectDialog`
                 )->a( n = `title`   v = `Purchases`
                 )->a( n = `items`   v = client->_bind( t_purchases )
@@ -95,25 +95,25 @@ CLASS z2ui5_cl_smpc_app_233 IMPLEMENTATION.
                 )->a( n = `confirm` v = client->_event( val   = `VH_CONFIRM`
                                                         t_arg = VALUE #( ( `${$parameters>/selectedItem}.getDescription()` ) ) )
 
-                )->leaf( `StandardListItem`
+                )->tag( `StandardListItem`
                     )->a( n = `title`       v = `{SUPPLIERNAME}`
                     )->a( n = `description` v = `{PURCHASEID}`
 
-            )->shut(
-        )->shut(
+            )->end(
+        )->end(
 
-        )->open( n = `ObjectPageLayout` ns = `uxap`
+        )->ele( n = `ObjectPageLayout` ns = `uxap`
             )->a( n = `id`                     v = `ObjectPageLayout`
             )->a( n = `showHeaderContent`      v = client->_bind( has_selection )
             )->a( n = `toggleHeaderOnTitleClick` v = client->_bind( has_selection )
             )->a( n = `upperCaseAnchorBar`     v = `false`
 
-            )->open( n = `headerTitle` ns = `uxap`
-                )->open( n = `ObjectPageDynamicHeaderTitle` ns = `uxap`
+            )->ele( n = `headerTitle` ns = `uxap`
+                )->ele( n = `ObjectPageDynamicHeaderTitle` ns = `uxap`
 
-                    )->open( n = `heading` ns = `uxap`
+                    )->ele( n = `heading` ns = `uxap`
                         " Input.fragment.xml
-                        )->open( `Input`
+                        )->ele( `Input`
                             )->a( n = `class`           v = `sapUiTinyMarginBottom`
                             )->a( n = `id`              v = `purchaseInput`
                             )->a( n = `value`           v = client->_bind( input_value )
@@ -135,190 +135,190 @@ CLASS z2ui5_cl_smpc_app_233 IMPLEMENTATION.
                             )->a( n = `suggestionItemSelected` v = client->_event( val   = `SUGGEST`
                                                                                    t_arg = VALUE #( ( `${$parameters>/selectedItem}.getKey()` ) ) )
 
-                            )->open( `suggestionItems`
-                                )->leaf( n = `ListItem` ns = `core`
+                            )->ele( `suggestionItems`
+                                )->tag( n = `ListItem` ns = `core`
                                     )->a( n = `key`            v = `{PURCHASEID}`
                                     )->a( n = `text`           v = `{SUPPLIERNAME}`
                                     )->a( n = `additionalText` v = `{PURCHASEID}`
 
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
+                            )->end(
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( n = `headerContent` ns = `uxap`
+            )->ele( n = `headerContent` ns = `uxap`
                 " HeaderContent.fragment.xml
-                )->open( `FlexBox`
+                )->ele( `FlexBox`
                     )->a( n = `wrap`         v = `Wrap`
                     )->a( n = `fitContainer` v = `true`
 
-                    )->open( `VBox`
+                    )->ele( `VBox`
                         )->a( n = `class` v = `sapUiLargeMarginEnd`
 
-                        )->open( `HBox`
-                            )->leaf( `Title`
+                        )->ele( `HBox`
+                            )->tag( `Title`
                                 )->a( n = `text` v = `Receipt Information`
 
-                        )->shut(
-                        )->open( `HBox`
-                            )->leaf( `Label`
+                        )->end(
+                        )->ele( `HBox`
+                            )->tag( `Label`
                                 )->a( n = `class` v = `sapUiTinyMarginEnd`
                                 )->a( n = `text`  v = `Category:`
-                            )->leaf( `Text`
+                            )->tag( `Text`
                                 )->a( n = `text` v = client->_bind( sel_category )
 
-                        )->shut(
-                        )->open( `HBox`
-                            )->leaf( `Label`
+                        )->end(
+                        )->ele( `HBox`
+                            )->tag( `Label`
                                 )->a( n = `class` v = `sapUiTinyMarginEnd`
                                 )->a( n = `text`  v = `Sub-Category:`
-                            )->leaf( `Text`
+                            )->tag( `Text`
                                 )->a( n = `text` v = client->_bind( sel_subcategory )
 
-                        )->shut(
-                        )->open( `HBox`
-                            )->leaf( `Label`
+                        )->end(
+                        )->ele( `HBox`
+                            )->tag( `Label`
                                 )->a( n = `class` v = `sapUiTinyMarginEnd`
                                 )->a( n = `text`  v = `Supplier:`
-                            )->leaf( `Text`
+                            )->tag( `Text`
                                 )->a( n = `text` v = client->_bind( sel_suppliername )
 
-                        )->shut(
-                        )->open( `HBox`
-                            )->leaf( `Label`
+                        )->end(
+                        )->ele( `HBox`
+                            )->tag( `Label`
                                 )->a( n = `class` v = `sapUiTinyMarginEnd`
                                 )->a( n = `text`  v = `Payment Type:`
-                            )->leaf( `Text`
+                            )->tag( `Text`
                                 )->a( n = `text` v = client->_bind( sel_paymenttype )
 
-                        )->shut(
-                    )->shut(
+                        )->end(
+                    )->end(
 
-                    )->open( `VBox`
-                        )->open( `HBox`
-                            )->leaf( `Title`
+                    )->ele( `VBox`
+                        )->ele( `HBox`
+                            )->tag( `Title`
                                 )->a( n = `text` v = `Delivery Status`
 
-                        )->shut(
-                        )->open( `HBox`
-                            )->leaf( `ObjectStatus`
+                        )->end(
+                        )->ele( `HBox`
+                            )->tag( `ObjectStatus`
                                 )->a( n = `class` v = `sapMObjectStatusLarge`
                                 )->a( n = `text`  v = client->_bind( sel_deliverystatus )
                                 )->a( n = `state` v = client->_bind( sel_delivery_state )
 
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( n = `sections` ns = `uxap`
+            )->ele( n = `sections` ns = `uxap`
 
                 " IllustratedMessage.fragment.xml
-                )->open( n = `ObjectPageSection` ns = `uxap`
+                )->ele( n = `ObjectPageSection` ns = `uxap`
                     )->a( n = `showTitle` v = `false`
                     )->a( n = `visible`   v = |\{= !${ client->_bind( has_selection ) } \}|
 
-                    )->open( n = `subSections` ns = `uxap`
-                        )->open( n = `ObjectPageSubSection` ns = `uxap`
+                    )->ele( n = `subSections` ns = `uxap`
+                        )->ele( n = `ObjectPageSubSection` ns = `uxap`
                             )->a( n = `class` v = `sapUxAPObjectPageSubSectionFitContainer`
 
-                            )->leaf( n = `IllustratedMessage` ns = `m`
+                            )->tag( n = `IllustratedMessage` ns = `m`
                                 )->a( n = `illustrationType` v = |\{= ${ client->_bind( inputpopulated ) } ? 'sapIllus-UnableToUpload' : 'sapIllus-NoSearchResults' \}|
                                 )->a( n = `title`            v = |\{= ${ client->_bind( inputpopulated ) } ? 'Purchase not found' : 'Enter purchase ID' \}|
                                 )->a( n = `description`      v = |\{= ${ client->_bind( inputpopulated ) } ? 'No matching items found' : 'Enter the purchase order ID for the goods receipt.' \}|
 
-                        )->shut(
-                    )->shut(
-                )->shut(
+                        )->end(
+                    )->end(
+                )->end(
 
                 " ProductsTable.fragment.xml
-                )->open( n = `ObjectPageSection` ns = `uxap`
+                )->ele( n = `ObjectPageSection` ns = `uxap`
                     )->a( n = `title`   v = `Products`
                     )->a( n = `visible` v = client->_bind( has_selection )
 
-                    )->open( n = `subSections` ns = `uxap`
-                        )->open( n = `ObjectPageSubSection` ns = `uxap`
+                    )->ele( n = `subSections` ns = `uxap`
+                        )->ele( n = `ObjectPageSubSection` ns = `uxap`
 
-                            )->open( `Table`
+                            )->ele( `Table`
                                 )->a( n = `id`    v = `idProductsTable`
                                 )->a( n = `items` v = client->_bind( sel_products )
                                 )->a( n = `class` v = `sapUxAPObjectPageSubSectionAlignContent`
                                 )->a( n = `width` v = `auto`
 
-                                )->open( `headerToolbar`
-                                    )->open( `Toolbar`
-                                        )->leaf( `Title`
+                                )->ele( `headerToolbar`
+                                    )->ele( `Toolbar`
+                                        )->tag( `Title`
                                             )->a( n = `text`  v = `Products`
                                             )->a( n = `level` v = `H2`
 
-                                    )->shut(
-                                )->shut(
+                                    )->end(
+                                )->end(
 
-                                )->open( `columns`
-                                    )->open( `Column`
+                                )->ele( `columns`
+                                    )->ele( `Column`
                                         )->a( n = `width` v = `12rem`
-                                        )->leaf( `Text`
+                                        )->tag( `Text`
                                             )->a( n = `text` v = `Product`
 
-                                    )->shut(
-                                    )->open( `Column`
+                                    )->end(
+                                    )->ele( `Column`
                                         )->a( n = `minScreenWidth` v = `Tablet`
                                         )->a( n = `demandPopin`    v = `true`
                                         )->a( n = `hAlign`         v = `End`
-                                        )->leaf( `Text`
+                                        )->tag( `Text`
                                             )->a( n = `text` v = `Dimensions`
 
-                                    )->shut(
-                                    )->open( `Column`
+                                    )->end(
+                                    )->ele( `Column`
                                         )->a( n = `minScreenWidth` v = `Tablet`
                                         )->a( n = `demandPopin`    v = `true`
                                         )->a( n = `hAlign`         v = `End`
-                                        )->leaf( `Text`
+                                        )->tag( `Text`
                                             )->a( n = `text` v = `Quantity`
 
-                                    )->shut(
-                                    )->open( `Column`
+                                    )->end(
+                                    )->ele( `Column`
                                         )->a( n = `hAlign` v = `End`
-                                        )->leaf( `Text`
+                                        )->tag( `Text`
                                             )->a( n = `text` v = `Price`
 
-                                    )->shut(
-                                )->shut(
+                                    )->end(
+                                )->end(
 
-                                )->open( `items`
-                                    )->open( `ColumnListItem`
-                                        )->open( `cells`
-                                            )->leaf( `ObjectIdentifier`
+                                )->ele( `items`
+                                    )->ele( `ColumnListItem`
+                                        )->ele( `cells`
+                                            )->tag( `ObjectIdentifier`
                                                 )->a( n = `title` v = `{NAME}`
                                                 )->a( n = `text`  v = `{PRODUCTID}`
-                                            )->leaf( `Text`
+                                            )->tag( `Text`
                                                 )->a( n = `text` v = `{WIDTH} x {DEPTH} x {HEIGHT} {DIMUNIT}`
-                                            )->leaf( `Text`
+                                            )->tag( `Text`
                                                 )->a( n = `text` v = `{QUANTITY} each`
-                                            )->leaf( `ObjectNumber`
+                                            )->tag( `ObjectNumber`
                                                 )->a( n = `number` v = |\{ parts: [ \{ path: 'PRICE' \}, \{ path: 'CURRENCYCODE' \} ], type: 'sap.ui.model.type.Currency', formatOptions: \{ showMeasure: false \} \}|
                                                 )->a( n = `unit`   v = `{CURRENCYCODE}`
 
-                                        )->shut(
-                                    )->shut(
-                                )->shut(
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                )->shut(
+                                        )->end(
+                                    )->end(
+                                )->end(
+                            )->end(
+                        )->end(
+                    )->end(
+                )->end(
 
                 " SupplierDetails.fragment.xml
-                )->open( n = `ObjectPageSection` ns = `uxap`
+                )->ele( n = `ObjectPageSection` ns = `uxap`
                     )->a( n = `title`   v = `Supplier details`
                     )->a( n = `visible` v = client->_bind( has_selection )
 
-                    )->open( n = `subSections` ns = `uxap`
-                        )->open( n = `ObjectPageSubSection` ns = `uxap`
+                    )->ele( n = `subSections` ns = `uxap`
+                        )->ele( n = `ObjectPageSubSection` ns = `uxap`
                             )->a( n = `title` v = `Connect`
 
-                            )->open( n = `blocks` ns = `uxap`
-                                )->open( n = `SimpleForm` ns = `forms`
+                            )->ele( n = `blocks` ns = `uxap`
+                                )->ele( n = `SimpleForm` ns = `forms`
                                     )->a( n = `layout`   v = `ColumnLayout`
                                     )->a( n = `width`    v = `100%`
                                     )->a( n = `class`    v = `sapUxAPObjectPageSubSectionAlignContent`
@@ -326,52 +326,52 @@ CLASS z2ui5_cl_smpc_app_233 IMPLEMENTATION.
                                     )->a( n = `columnsL` v = `3`
                                     )->a( n = `columnsXL` v = `4`
 
-                                    )->leaf( n = `Title` ns = `core`
+                                    )->tag( n = `Title` ns = `core`
                                         )->a( n = `text` v = `Phone Numbers`
-                                    )->leaf( `Label`
+                                    )->tag( `Label`
                                         )->a( n = `text` v = `Home`
-                                    )->leaf( `Text`
+                                    )->tag( `Text`
                                         )->a( n = `text` v = `+ 1 415-321-1234`
-                                    )->leaf( `Label`
+                                    )->tag( `Label`
                                         )->a( n = `text` v = `Office phone`
-                                    )->leaf( `Text`
+                                    )->tag( `Text`
                                         )->a( n = `text` v = `+ 1 415-321-5555`
-                                    )->leaf( n = `Title` ns = `core`
+                                    )->tag( n = `Title` ns = `core`
                                         )->a( n = `text` v = `Social Accounts`
-                                    )->leaf( `Label`
+                                    )->tag( `Label`
                                         )->a( n = `text` v = `LinkedIn`
-                                    )->leaf( `Text`
+                                    )->tag( `Text`
                                         )->a( n = `text` v = `/DeniseSmith`
-                                    )->leaf( `Label`
+                                    )->tag( `Label`
                                         )->a( n = `text` v = `Twitter`
-                                    )->leaf( `Text`
+                                    )->tag( `Text`
                                         )->a( n = `text` v = `@DeniseSmith`
-                                    )->leaf( n = `Title` ns = `core`
+                                    )->tag( n = `Title` ns = `core`
                                         )->a( n = `text` v = `Addresses`
-                                    )->leaf( `Label`
+                                    )->tag( `Label`
                                         )->a( n = `text` v = `Home Address`
-                                    )->leaf( `Text`
+                                    )->tag( `Text`
                                         )->a( n = `text` v = `2096 Mission Street`
-                                    )->leaf( `Label`
+                                    )->tag( `Label`
                                         )->a( n = `text` v = `Mailing Address`
-                                    )->leaf( `Text`
+                                    )->tag( `Text`
                                         )->a( n = `text` v = `PO Box 32114`
-                                    )->leaf( n = `Title` ns = `core`
+                                    )->tag( n = `Title` ns = `core`
                                         )->a( n = `text` v = `Mailing Address`
-                                    )->leaf( `Label`
+                                    )->tag( `Label`
                                         )->a( n = `text` v = `Work`
-                                    )->leaf( `Text`
+                                    )->tag( `Text`
                                         )->a( n = `text` v = `DeniseSmith@sap.com`
 
-                                )->shut(
-                            )->shut(
-                        )->shut(
+                                )->end(
+                            )->end(
+                        )->end(
 
-                        )->open( n = `ObjectPageSubSection` ns = `uxap`
+                        )->ele( n = `ObjectPageSubSection` ns = `uxap`
                             )->a( n = `title` v = `Payment information`
 
-                            )->open( n = `blocks` ns = `uxap`
-                                )->open( n = `SimpleForm` ns = `forms`
+                            )->ele( n = `blocks` ns = `uxap`
+                                )->ele( n = `SimpleForm` ns = `forms`
                                     )->a( n = `layout`    v = `ColumnLayout`
                                     )->a( n = `width`     v = `100%`
                                     )->a( n = `class`     v = `sapUxAPObjectPageSubSectionAlignContent`
@@ -379,20 +379,20 @@ CLASS z2ui5_cl_smpc_app_233 IMPLEMENTATION.
                                     )->a( n = `columnsL`  v = `3`
                                     )->a( n = `columnsXL` v = `4`
 
-                                    )->leaf( n = `Title` ns = `core`
+                                    )->tag( n = `Title` ns = `core`
                                         )->a( n = `text` v = `Main Payment Method`
-                                    )->leaf( `Label`
+                                    )->tag( `Label`
                                         )->a( n = `text` v = `Bank Transfer`
-                                    )->leaf( `Text`
+                                    )->tag( `Text`
                                         )->a( n = `text` v = `Sparkasse Heimfeld, Germany`
 
-                                )->shut(
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
-        )->shut( ).
+                                )->end(
+                            )->end(
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

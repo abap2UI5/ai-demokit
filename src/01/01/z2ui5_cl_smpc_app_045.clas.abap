@@ -39,22 +39,22 @@ CLASS z2ui5_cl_smpc_app_045 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
             )->a( n = `width` v = `100%`
 
-            )->leaf( `Text`
+            )->tag( `Text`
                 )->a( n = `text`  v = `RangeSlider with text fields`
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
             " the composite range property ([low, high]) is expressed as the scalar value/value2 pair on every RangeSlider below (see sidecar NOTE)
-            )->leaf( `RangeSlider`
+            )->tag( `RangeSlider`
                 )->a( n = `showAdvancedTooltip` v = `true`
                 )->a( n = `value`               v = client->_bind( rs1_value )
                 )->a( n = `value2`              v = client->_bind( rs1_value2 )
@@ -62,7 +62,7 @@ CLASS z2ui5_cl_smpc_app_045 IMPLEMENTATION.
                 )->a( n = `max`                 v = `100`
                 )->a( n = `width`               v = `80%`
                 )->a( n = `class`               v = `sapUiMediumMarginBottom`
-            )->leaf( `RangeSlider`
+            )->tag( `RangeSlider`
                 )->a( n = `showAdvancedTooltip` v = `true`
                 )->a( n = `value`               v = client->_bind( rs2_value )
                 )->a( n = `value2`              v = client->_bind( rs2_value2 )
@@ -70,7 +70,7 @@ CLASS z2ui5_cl_smpc_app_045 IMPLEMENTATION.
                 )->a( n = `max`                 v = `50`
                 )->a( n = `width`               v = `10rem`
                 )->a( n = `class`               v = `sapUiMediumMarginBottom`
-            )->leaf( `RangeSlider`
+            )->tag( `RangeSlider`
                 )->a( n = `showAdvancedTooltip` v = `true`
                 )->a( n = `value`               v = client->_bind( rs3_value )
                 )->a( n = `value2`              v = client->_bind( rs3_value2 )
@@ -78,7 +78,7 @@ CLASS z2ui5_cl_smpc_app_045 IMPLEMENTATION.
                 )->a( n = `max`                 v = `100`
                 )->a( n = `width`               v = `10rem`
                 )->a( n = `class`               v = `sapUiMediumMarginBottom`
-            )->leaf( `RangeSlider`
+            )->tag( `RangeSlider`
                 )->a( n = `showAdvancedTooltip` v = `true`
                 )->a( n = `value`               v = client->_bind( rs4_value )
                 )->a( n = `value2`              v = client->_bind( rs4_value2 )
@@ -86,7 +86,7 @@ CLASS z2ui5_cl_smpc_app_045 IMPLEMENTATION.
                 )->a( n = `max`                 v = `1000`
                 )->a( n = `width`               v = `100%`
                 )->a( n = `class`               v = `sapUiMediumMarginBottom`
-            )->leaf( `RangeSlider`
+            )->tag( `RangeSlider`
                 )->a( n = `showAdvancedTooltip` v = `true`
                 )->a( n = `value`               v = client->_bind( rs5_value )
                 )->a( n = `value2`              v = client->_bind( rs5_value2 )
@@ -94,10 +94,10 @@ CLASS z2ui5_cl_smpc_app_045 IMPLEMENTATION.
                 )->a( n = `max`                 v = `500`
                 )->a( n = `width`               v = `100%`
                 )->a( n = `class`               v = `sapUiLargeMarginBottom`
-            )->leaf( `Text`
+            )->tag( `Text`
                 )->a( n = `text`  v = `RangeSlider with inputs`
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
-            )->leaf( `RangeSlider`
+            )->tag( `RangeSlider`
                 )->a( n = `showAdvancedTooltip` v = `true`
                 )->a( n = `value`               v = `0`
                 )->a( n = `value2`              v = `100`
@@ -107,10 +107,10 @@ CLASS z2ui5_cl_smpc_app_045 IMPLEMENTATION.
                 )->a( n = `showHandleTooltip`   v = `false`
                 )->a( n = `inputsAsTooltips`    v = `true`
                 )->a( n = `class`               v = `sapUiLargeMarginBottom`
-            )->leaf( `Text`
+            )->tag( `Text`
                 )->a( n = `text`  v = `RangeSlider with tickmarks`
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
-            )->leaf( `RangeSlider`
+            )->tag( `RangeSlider`
                 )->a( n = `showAdvancedTooltip` v = `true`
                 )->a( n = `enableTickmarks`     v = `true`
                 )->a( n = `value`               v = `0`
@@ -118,25 +118,25 @@ CLASS z2ui5_cl_smpc_app_045 IMPLEMENTATION.
                 )->a( n = `min`                 v = `0`
                 )->a( n = `max`                 v = `10`
                 )->a( n = `class`               v = `sapUiMediumMarginBottom`
-            )->leaf( `RangeSlider`
+            )->tag( `RangeSlider`
                 )->a( n = `showAdvancedTooltip` v = `true`
                 )->a( n = `enableTickmarks`     v = `true`
                 )->a( n = `class`               v = `sapUiMediumMarginBottom`
-            )->leaf( `Text`
+            )->tag( `Text`
                 )->a( n = `text`  v = `RangeSlider with tickmarks and step '5'`
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
-            )->leaf( `RangeSlider`
+            )->tag( `RangeSlider`
                 )->a( n = `showAdvancedTooltip` v = `true`
                 )->a( n = `enableTickmarks`     v = `true`
                 )->a( n = `min`                 v = `-100`
                 )->a( n = `max`                 v = `100`
                 )->a( n = `step`                v = `5`
                 )->a( n = `class`               v = `sapUiLargeMarginBottom`
-            )->leaf( `Text`
+            )->tag( `Text`
                 )->a( n = `text`  v = `RangeSlider with tickmarks and labels`
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
 
-            )->open( `RangeSlider`
+            )->ele( `RangeSlider`
                 )->a( n = `showAdvancedTooltip` v = `true`
                 )->a( n = `min`                 v = `0`
                 )->a( n = `max`                 v = `30`
@@ -145,7 +145,7 @@ CLASS z2ui5_cl_smpc_app_045 IMPLEMENTATION.
                 )->a( n = `enableTickmarks`     v = `true`
                 )->a( n = `class`               v = `sapUiSmallMarginBottom`
 
-                )->leaf( `ResponsiveScale`
+                )->tag( `ResponsiveScale`
                     )->a( n = `tickmarksBetweenLabels` v = `3` ).
 
     client->view_display( view->stringify( ) ).

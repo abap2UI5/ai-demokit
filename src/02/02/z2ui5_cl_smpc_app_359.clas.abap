@@ -64,13 +64,13 @@ CLASS z2ui5_cl_smpc_app_359 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the row-action demo. The original builds a different RowAction template
     " per mode in the controller; the port declares the union of its six items
     " once and drives their visible flags plus rowActionCount from the backend,
     " so the Select switches the row actions without any control construction.
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.ui.table`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns:u`   v = `sap.ui.unified`
@@ -78,97 +78,97 @@ CLASS z2ui5_cl_smpc_app_359 IMPLEMENTATION.
         )->a( n = `xmlns:m`   v = `sap.m`
         )->a( n = `height`    v = `100%`
 
-        )->open( n = `Page` ns = `m`
+        )->ele( n = `Page` ns = `m`
             )->a( n = `showHeader`      v = `false`
             )->a( n = `enableScrolling` v = `false`
             )->a( n = `class`           v = `sapUiContentPadding`
 
-            )->open( n = `content` ns = `m`
-                )->open( `Table`
+            )->ele( n = `content` ns = `m`
+                )->ele( `Table`
                     )->a( n = `id`             v = `table`
                     )->a( n = `rows`           v = client->_bind( t_products )
                     )->a( n = `rowActionCount` v = client->_bind( row_action_count )
                     )->a( n = `selectionMode`  v = `MultiToggle`
                     )->a( n = `ariaLabelledBy` v = `title`
 
-                    )->open( `extension`
-                        )->open( n = `OverflowToolbar` ns = `m`
+                    )->ele( `extension`
+                        )->ele( n = `OverflowToolbar` ns = `m`
                             )->a( n = `style` v = `Clear`
 
-                            )->leaf( n = `Title` ns = `m`
+                            )->tag( n = `Title` ns = `m`
                                 )->a( n = `id`   v = `title`
                                 )->a( n = `text` v = `Products`
 
-                            )->leaf( n = `ToolbarSpacer` ns = `m`
+                            )->tag( n = `ToolbarSpacer` ns = `m`
 
-                            )->open( n = `Select` ns = `m`
+                            )->ele( n = `Select` ns = `m`
                                 )->a( n = `id`          v = `select`
                                 )->a( n = `items`       v = client->_bind( t_modes )
                                 )->a( n = `selectedKey` v = client->_bind( mode_key )
                                 )->a( n = `change`      v = client->_event( `MODE_CHANGE` )
 
-                                )->leaf( n = `Item` ns = `c`
+                                )->tag( n = `Item` ns = `c`
                                     )->a( n = `key`  v = `{KEY}`
                                     )->a( n = `text` v = `{TEXT}`
 
-                            )->shut(
-                            )->leaf( n = `ToggleButton` ns = `m`
+                            )->end(
+                            )->tag( n = `ToggleButton` ns = `m`
                                 )->a( n = `text`    v = `Toggle Navigated Indicators`
                                 )->a( n = `pressed` v = client->_bind( show_navigated )
 
-                        )->shut(
-                    )->shut(
-                    )->open( `columns`
-                        )->open( `Column`
-                            )->leaf( n = `Label` ns = `m`
+                        )->end(
+                    )->end(
+                    )->ele( `columns`
+                        )->ele( `Column`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Product Name`
 
-                            )->open( `template`
-                                )->leaf( n = `Text` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text`     v = `{NAME}`
                                     )->a( n = `wrapping` v = `false`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
-                            )->leaf( n = `Label` ns = `m`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Product Id`
 
-                            )->open( `template`
-                                )->leaf( n = `Text` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text`     v = `{PRODUCTID}`
                                     )->a( n = `wrapping` v = `false`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `hAlign` v = `End`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Quantity`
 
-                            )->open( `template`
-                                )->leaf( n = `Text` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text`     v = `{QUANTITY}`
                                     )->a( n = `wrapping` v = `false`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
-                            )->leaf( n = `Label` ns = `m`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Price`
 
-                            )->open( `template`
-                                )->leaf( n = `Currency` ns = `u`
+                            )->ele( `template`
+                                )->tag( n = `Currency` ns = `u`
                                     )->a( n = `value`    v = `{PRICE}`
                                     )->a( n = `currency` v = `{CURRENCYCODE}`
 
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                    )->open( `rowActionTemplate`
-                        )->open( `RowAction`
-                            )->leaf( `RowActionItem`
+                            )->end(
+                        )->end(
+                    )->end(
+                    )->ele( `rowActionTemplate`
+                        )->ele( `RowAction`
+                            )->tag( `RowActionItem`
                                 )->a( n = `type`    v = `Navigation`
                                 )->a( n = `visible` v = |\{= ${ client->_bind( show_navigation ) } && $\{AVAILABLE\} \}|
                                 )->a( n = `press`   v = client->follow_up_action(
@@ -179,7 +179,7 @@ CLASS z2ui5_cl_smpc_app_359 IMPLEMENTATION.
                                                            ( `${$parameters>/item}.getText() || ${$parameters>/item}.getType()` )
                                                            ( `${$parameters>/row}.getBindingContext().getProperty('PRODUCTID')` ) ) )
 
-                            )->leaf( `RowActionItem`
+                            )->tag( `RowActionItem`
                                 )->a( n = `type`    v = `Delete`
                                 )->a( n = `visible` v = client->_bind( show_delete )
                                 )->a( n = `press`   v = client->follow_up_action(
@@ -190,7 +190,7 @@ CLASS z2ui5_cl_smpc_app_359 IMPLEMENTATION.
                                                            ( `${$parameters>/item}.getText() || ${$parameters>/item}.getType()` )
                                                            ( `${$parameters>/row}.getBindingContext().getProperty('PRODUCTID')` ) ) )
 
-                            )->leaf( `RowActionItem`
+                            )->tag( `RowActionItem`
                                 )->a( n = `icon`    v = `sap-icon://attachment`
                                 )->a( n = `text`    v = `Attachment`
                                 )->a( n = `visible` v = client->_bind( show_multi )
@@ -202,7 +202,7 @@ CLASS z2ui5_cl_smpc_app_359 IMPLEMENTATION.
                                                            ( `${$parameters>/item}.getText() || ${$parameters>/item}.getType()` )
                                                            ( `${$parameters>/row}.getBindingContext().getProperty('PRODUCTID')` ) ) )
 
-                            )->leaf( `RowActionItem`
+                            )->tag( `RowActionItem`
                                 )->a( n = `icon`    v = `sap-icon://search`
                                 )->a( n = `text`    v = `Search`
                                 )->a( n = `visible` v = client->_bind( show_multi )
@@ -214,7 +214,7 @@ CLASS z2ui5_cl_smpc_app_359 IMPLEMENTATION.
                                                            ( `${$parameters>/item}.getText() || ${$parameters>/item}.getType()` )
                                                            ( `${$parameters>/row}.getBindingContext().getProperty('PRODUCTID')` ) ) )
 
-                            )->leaf( `RowActionItem`
+                            )->tag( `RowActionItem`
                                 )->a( n = `icon`    v = `sap-icon://edit`
                                 )->a( n = `text`    v = `Edit`
                                 )->a( n = `visible` v = client->_bind( show_edit )
@@ -226,7 +226,7 @@ CLASS z2ui5_cl_smpc_app_359 IMPLEMENTATION.
                                                            ( `${$parameters>/item}.getText() || ${$parameters>/item}.getType()` )
                                                            ( `${$parameters>/row}.getBindingContext().getProperty('PRODUCTID')` ) ) )
 
-                            )->leaf( `RowActionItem`
+                            )->tag( `RowActionItem`
                                 )->a( n = `icon`    v = `sap-icon://line-chart`
                                 )->a( n = `text`    v = `Analyze`
                                 )->a( n = `visible` v = client->_bind( show_multi )
@@ -238,17 +238,17 @@ CLASS z2ui5_cl_smpc_app_359 IMPLEMENTATION.
                                                            ( `${$parameters>/item}.getText() || ${$parameters>/item}.getType()` )
                                                            ( `${$parameters>/row}.getBindingContext().getProperty('PRODUCTID')` ) ) )
 
-                        )->shut(
-                    )->shut(
-                    )->open( `rowSettingsTemplate`
-                        )->leaf( `RowSettings`
+                        )->end(
+                    )->end(
+                    )->ele( `rowSettingsTemplate`
+                        )->tag( `RowSettings`
                             )->a( n = `navigated` v = |\{= ${ client->_bind( show_navigated ) } && $\{NAVIGATEDSTATE\} \}|
 
-                    )->shut(
-                )->shut(
-            )->shut(
-        )->shut(
-    )->shut( ).
+                    )->end(
+                )->end(
+            )->end(
+        )->end(
+    )->end( ).
 
     client->view_display( view->stringify( ) ).
 

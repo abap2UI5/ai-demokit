@@ -96,7 +96,7 @@ function parseAbap(abap) {
   const values = new Map();   // simple control name -> Map(attr -> Set(LITERAL values))
   // one pass over element creations; attributes are associated with the
   // element created last (that is exactly the builder's a() contract)
-  const elemRe = /->\s*(open|leaf)\(\s*(?:n\s*=\s*)?`([\w:.-]+)`(?:\s+ns\s*=\s*`(\w+)`)?/g;
+  const elemRe = /->\s*(ele|tag)\(\s*(?:n\s*=\s*)?`([\w:.-]+)`(?:\s+ns\s*=\s*`(\w+)`)?/g;
   const marks = [];
   let m;
   while ((m = elemRe.exec(abap)) !== null) {
@@ -134,7 +134,7 @@ function parseAbap(abap) {
   // handling must not exempt the whole app from count checks
   let dynamic = false;
   for (const block of abap.matchAll(/\b(?:LOOP AT|DO\b|WHILE\b)[\s\S]*?\b(?:ENDLOOP|ENDDO|ENDWHILE)\b/g)) {
-    if (/->\s*(?:open|leaf)\(/.test(block[0])) { dynamic = true; break; }
+    if (/->\s*(?:ele|tag)\(/.test(block[0])) { dynamic = true; break; }
   }
   return { controls, attrs, values, dynamic };
 }

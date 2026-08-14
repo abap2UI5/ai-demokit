@@ -36,35 +36,35 @@ CLASS z2ui5_cl_smpc_app_185 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " The default model is one array of rows; abap2UI5's single default model is
     " an object, so the sample's root-array bindings ({/}, /9/text) resolve
     " against the T_ITEMS member (last path segment identical). The original's
     " '.whitespace2Char' formatter is applied in model_init - see the sidecar.
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns:f`    v = `sap.ui.layout.form`
 
-        )->open( `MessageStrip`
+        )->ele( `MessageStrip`
             )->a( n = `text`  v = `More information could be found on the following page:`
             )->a( n = `class` v = `sapUiMediumMargin`
 
-            )->open( `link`
-                )->leaf( `Link`
+            )->ele( `link`
+                )->tag( `Link`
                     )->a( n = `text` v = `Whitespaces concept`
                     )->a( n = `href` v = `topic/37deb0bee3e2474887f1521cc583ab69`
 
-            )->shut(
-        )->shut(
+            )->end(
+        )->end(
 
-        )->open( n = `Form` ns = `f`
+        )->ele( n = `Form` ns = `f`
             )->a( n = `editable` v = `true`
 
-            )->open( n = `layout` ns = `f`
-                )->leaf( n = `ResponsiveGridLayout` ns = `f`
+            )->ele( n = `layout` ns = `f`
+                )->tag( n = `ResponsiveGridLayout` ns = `f`
                     )->a( n = `labelSpanXL`             v = `4`
                     )->a( n = `labelSpanL`              v = `3`
                     )->a( n = `labelSpanM`              v = `4`
@@ -79,78 +79,78 @@ CLASS z2ui5_cl_smpc_app_185 IMPLEMENTATION.
                     )->a( n = `columnsM`                v = `1`
                     )->a( n = `singleContainerFullSize` v = `false`
 
-            )->shut(
+            )->end(
 
-            )->open( n = `formContainers` ns = `f`
-                )->open( n = `FormContainer` ns = `f`
-                    )->open( n = `formElements` ns = `f`
-                        )->open( n = `FormElement` ns = `f`
+            )->ele( n = `formContainers` ns = `f`
+                )->ele( n = `FormContainer` ns = `f`
+                    )->ele( n = `formElements` ns = `f`
+                        )->ele( n = `FormElement` ns = `f`
                             )->a( n = `label` v = `sap.m.Input`
 
-                            )->open( n = `fields` ns = `f`
-                                )->open( `Input`
+                            )->ele( n = `fields` ns = `f`
+                                )->ele( `Input`
                                     )->a( n = `placeholder`     v = `Type 'Text'`
                                     )->a( n = `showSuggestion`  v = `true`
                                     )->a( n = `suggestionItems` v = client->_bind( t_items )
 
-                                    )->open( `suggestionItems`
-                                        )->leaf( n = `ListItem` ns = `core`
+                                    )->ele( `suggestionItems`
+                                        )->tag( n = `ListItem` ns = `core`
                                             )->a( n = `key`            v = `{KEY}`
                                             )->a( n = `text`           v = `{TEXT}`
                                             )->a( n = `additionalText` v = `{ADDITIONALTEXT}`
 
-                                    )->shut(
-                                )->shut(
-                            )->shut(
-                        )->shut(
+                                    )->end(
+                                )->end(
+                            )->end(
+                        )->end(
 
-                        )->open( n = `FormElement` ns = `f`
+                        )->ele( n = `FormElement` ns = `f`
                             )->a( n = `label` v = `sap.m.MultiInput`
 
-                            )->open( n = `fields` ns = `f`
-                                )->open( `MultiInput`
+                            )->ele( n = `fields` ns = `f`
+                                )->ele( `MultiInput`
                                     )->a( n = `placeholder`     v = `Type 'Text'`
                                     )->a( n = `showSuggestion`  v = `true`
                                     )->a( n = `suggestionItems` v = client->_bind( t_items )
 
-                                    )->open( `suggestionItems`
-                                        )->leaf( n = `ListItem` ns = `core`
+                                    )->ele( `suggestionItems`
+                                        )->tag( n = `ListItem` ns = `core`
                                             )->a( n = `key`            v = `{KEY}`
                                             )->a( n = `text`           v = `{TEXT}`
                                             )->a( n = `additionalText` v = `{ADDITIONALTEXT}`
 
-                                    )->shut(
-                                )->shut(
-                            )->shut(
-                        )->shut(
+                                    )->end(
+                                )->end(
+                            )->end(
+                        )->end(
 
-                        )->open( n = `FormElement` ns = `f`
+                        )->ele( n = `FormElement` ns = `f`
                             )->a( n = `label` v = `sap.m.MultiComboBox`
 
-                            )->open( n = `fields` ns = `f`
-                                )->open( `MultiComboBox`
+                            )->ele( n = `fields` ns = `f`
+                                )->ele( `MultiComboBox`
                                     )->a( n = `placeholder`          v = `Type 'Text'`
                                     )->a( n = `showSecondaryValues`  v = `true`
                                     )->a( n = `items`                v = client->_bind( t_items )
 
-                                    )->leaf( n = `ListItem` ns = `core`
+                                    )->tag( n = `ListItem` ns = `core`
                                         )->a( n = `key`            v = `{KEY}`
                                         )->a( n = `text`           v = `{TEXT}`
                                         )->a( n = `additionalText` v = `{ADDITIONALTEXT}`
 
-                                )->shut(
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
-        )->shut(
+                                )->end(
+                            )->end(
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
+        )->end(
 
-        )->open( n = `Form` ns = `f`
+        )->ele( n = `Form` ns = `f`
             )->a( n = `editable` v = `false`
 
-            )->open( n = `layout` ns = `f`
-                )->leaf( n = `ResponsiveGridLayout` ns = `f`
+            )->ele( n = `layout` ns = `f`
+                )->tag( n = `ResponsiveGridLayout` ns = `f`
                     )->a( n = `labelSpanXL`             v = `4`
                     )->a( n = `labelSpanL`              v = `3`
                     )->a( n = `labelSpanM`              v = `4`
@@ -165,57 +165,57 @@ CLASS z2ui5_cl_smpc_app_185 IMPLEMENTATION.
                     )->a( n = `columnsM`                v = `1`
                     )->a( n = `singleContainerFullSize` v = `false`
 
-            )->shut(
+            )->end(
 
-            )->open( n = `formContainers` ns = `f`
-                )->open( n = `FormContainer` ns = `f`
-                    )->open( n = `formElements` ns = `f`
-                        )->open( n = `FormElement` ns = `f`
+            )->ele( n = `formContainers` ns = `f`
+                )->ele( n = `FormContainer` ns = `f`
+                    )->ele( n = `formElements` ns = `f`
+                        )->ele( n = `FormElement` ns = `f`
                             )->a( n = `label` v = `sap.m.Token`
 
-                            )->open( n = `fields` ns = `f`
-                                )->leaf( `Token`
+                            )->ele( n = `fields` ns = `f`
+                                )->tag( `Token`
                                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = t_items path = abap_true ) }/9/TEXT' \}|
                                     )->a( n = `key`  v = |\{ path: '{ client->_bind( val = t_items path = abap_true ) }/9/KEY' \}|
 
-                            )->shut(
-                        )->shut(
+                            )->end(
+                        )->end(
 
-                        )->open( n = `FormElement` ns = `f`
+                        )->ele( n = `FormElement` ns = `f`
                             )->a( n = `label` v = `sap.m.Text`
 
-                            )->open( n = `fields` ns = `f`
-                                )->leaf( `ObjectStatus`
+                            )->ele( n = `fields` ns = `f`
+                                )->tag( `ObjectStatus`
                                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = t_items path = abap_true ) }/9/TEXT' \}|
 
-                            )->shut(
-                        )->shut(
+                            )->end(
+                        )->end(
 
-                        )->open( n = `FormElement` ns = `f`
+                        )->ele( n = `FormElement` ns = `f`
                             )->a( n = `label` v = `sap.m.ObjectNumber`
 
-                            )->open( n = `fields` ns = `f`
-                                )->leaf( `ObjectNumber`
+                            )->ele( n = `fields` ns = `f`
+                                )->tag( `ObjectNumber`
                                     )->a( n = `number` v = |\{ path: '{ client->_bind( val = t_items path = abap_true ) }/9/TEXT' \}|
 
-                            )->shut(
-                        )->shut(
+                            )->end(
+                        )->end(
 
-                        )->open( n = `FormElement` ns = `f`
+                        )->ele( n = `FormElement` ns = `f`
                             )->a( n = `label` v = `sap.m.Title`
 
-                            )->open( n = `fields` ns = `f`
-                                )->leaf( `Title`
+                            )->ele( n = `fields` ns = `f`
+                                )->tag( `Title`
                                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = t_items path = abap_true ) }/9/TEXT' \}|
 
-                            )->shut(
-                        )->shut(
+                            )->end(
+                        )->end(
 
-                        )->open( n = `FormElement` ns = `f`
+                        )->ele( n = `FormElement` ns = `f`
                             )->a( n = `label` v = `sap.m.Label`
 
-                            )->open( n = `fields` ns = `f`
-                                )->leaf( `Label`
+                            )->ele( n = `fields` ns = `f`
+                                )->tag( `Label`
                                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = t_items path = abap_true ) }/9/TEXT' \}| ).
 
     client->view_display( view->stringify( ) ).

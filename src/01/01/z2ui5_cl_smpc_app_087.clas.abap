@@ -33,55 +33,55 @@ CLASS z2ui5_cl_smpc_app_087 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `height`    v = `100%`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
 
-        )->leaf( `MessageStrip`
+        )->tag( `MessageStrip`
             )->a( n = `text`  v = `The IconTabBar and other container controls have a content padding by default. You can override default container content paddings by setting the CSS class 'sapUiNoContentPadding' to the container control`
             )->a( n = `class` v = `sapUiTinyMargin`
 
-        )->open( `IconTabBar`
+        )->ele( `IconTabBar`
             )->a( n = `id`    v = `idIconTabBar`
             )->a( n = `class` v = `sapUiNoContentPadding`
 
-            )->open( `content`
-                )->leaf( `Text`
+            )->ele( `content`
+                )->tag( `Text`
                     )->a( n = `text` v = `IconTabBar content without padding`
 
-            )->shut(
+            )->end(
 
-            )->open( `items`
-                )->leaf( `IconTabFilter`
+            )->ele( `items`
+                )->tag( `IconTabFilter`
                     )->a( n = `showAll` v = `true`
                     )->a( n = `count`   v = client->_bind( total )
                     )->a( n = `text`    v = `Products`
                     )->a( n = `key`     v = `All`
-                )->leaf( `IconTabSeparator`
-                )->leaf( `IconTabFilter`
+                )->tag( `IconTabSeparator`
+                )->tag( `IconTabFilter`
                     )->a( n = `icon`      v = `sap-icon://begin`
                     )->a( n = `iconColor` v = `Positive`
                     )->a( n = `count`     v = client->_bind( ok )
                     )->a( n = `text`      v = `Ok`
                     )->a( n = `key`       v = `Ok`
-                )->leaf( `IconTabFilter`
+                )->tag( `IconTabFilter`
                     )->a( n = `icon`      v = `sap-icon://compare`
                     )->a( n = `iconColor` v = `Critical`
                     )->a( n = `count`     v = client->_bind( heavy )
                     )->a( n = `text`      v = `Heavy`
                     )->a( n = `key`       v = `Heavy`
-                )->leaf( `IconTabFilter`
+                )->tag( `IconTabFilter`
                     )->a( n = `icon`      v = `sap-icon://inventory`
                     )->a( n = `iconColor` v = `Negative`
                     )->a( n = `count`     v = client->_bind( overweight )
                     )->a( n = `text`      v = `Overweight`
                     )->a( n = `key`       v = `Overweight`
 
-            )->shut(
-        )->shut( ).
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

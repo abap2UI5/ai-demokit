@@ -26,7 +26,7 @@ CLASS z2ui5_cl_smpc_app_399 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the controller's imageWidth is Device.system.phone ? 5em : 10em - kept a
     " branch over the framework's device> model instead of resolving it at init
@@ -37,31 +37,31 @@ CLASS z2ui5_cl_smpc_app_399 IMPLEMENTATION.
     DATA(pic3)     = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-6100-large.jpg`.
     DATA(svg_logo) = `https://sdk.openui5.org/test-resources/sap/m/sample/Image/images/sap-logo.svg`.
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
 
-        )->open( `VBox`
+        )->ele( `VBox`
             )->a( n = `class` v = `sapUiSmallMarginTopBottom sapUiLargeMarginBeginEnd`
 
-            )->open( `HBox`
+            )->ele( `HBox`
                 )->a( n = `justifyContent` v = `SpaceBetween`
 
-                )->open( `VBox`
-                    )->leaf( `Text`
+                )->ele( `VBox`
+                    )->tag( `Text`
                         )->a( n = `text`  v = `Image:`
                         )->a( n = `class` v = `sapUiSmallMarginBottom`
-                    )->leaf( `Image`
+                    )->tag( `Image`
                         )->a( n = `src`   v = pic1
                         )->a( n = `width` v = image_width
 
-                )->shut(
-                )->open( `VBox`
-                    )->leaf( `Text`
+                )->end(
+                )->ele( `VBox`
+                    )->tag( `Text`
                         )->a( n = `id`    v = `detailsActiveImage`
                         )->a( n = `text`  v = `Active state image:`
                         )->a( n = `class` v = `sapUiSmallMarginBottom`
-                    )->leaf( `Image`
+                    )->tag( `Image`
                         " ariaDetails is newer than the 1.71 floor - kept for the 1:1 port (POST_171)
                         )->a( n = `ariaDetails` v = `detailsActiveImage`
                         )->a( n = `src`         v = pic3
@@ -70,20 +70,20 @@ CLASS z2ui5_cl_smpc_app_399 IMPLEMENTATION.
                         )->a( n = `press`       v = client->follow_up_action( val   = client->cs_event-control_global
                                                                               t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `The image has been pressed` ) ) )
 
-                )->shut(
-                )->open( `VBox`
-                    )->leaf( `Text`
+                )->end(
+                )->ele( `VBox`
+                    )->tag( `Text`
                         )->a( n = `text`  v = `Image using SVG format:`
                         )->a( n = `class` v = `sapUiSmallMarginBottom`
-                    )->leaf( `Image`
+                    )->tag( `Image`
                         )->a( n = `src` v = svg_logo
 
-                )->shut(
-                )->open( `VBox`
-                    )->leaf( `Text`
+                )->end(
+                )->ele( `VBox`
+                    )->tag( `Text`
                         )->a( n = `text`  v = `Image displaying inline SVG:`
                         )->a( n = `class` v = `sapUiSmallMarginBottom`
-                    )->leaf( `Image`
+                    )->tag( `Image`
                         )->a( n = `src`  v = svg_logo
                         )->a( n = `mode` v = `InlineSvg` ).
 

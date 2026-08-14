@@ -69,7 +69,7 @@ CLASS z2ui5_cl_smpc_app_352 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the aggregation demo: a SearchField and a two-list FacetFilter over the
     " same table. Both filters are applied in ABAP and the table binds the
@@ -77,7 +77,7 @@ CLASS z2ui5_cl_smpc_app_352 IMPLEMENTATION.
     " selection; each FacetFilterItem binds its selected flag two-way, so the
     " listClose event only has to tell the backend to read them (the app-022
     " idiom).
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.ui.table`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns:u`   v = `sap.ui.unified`
@@ -85,50 +85,50 @@ CLASS z2ui5_cl_smpc_app_352 IMPLEMENTATION.
         )->a( n = `xmlns:m`   v = `sap.m`
         )->a( n = `height`    v = `100%`
 
-        )->open( n = `Page` ns = `m`
+        )->ele( n = `Page` ns = `m`
             )->a( n = `showHeader`      v = `false`
             )->a( n = `enableScrolling` v = `false`
             )->a( n = `class`           v = `sapUiContentPadding`
 
-            )->open( n = `content` ns = `m`
-                )->open( `Table`
+            )->ele( n = `content` ns = `m`
+                )->ele( `Table`
                     )->a( n = `id`             v = `table`
                     )->a( n = `selectionMode`  v = `MultiToggle`
                     )->a( n = `rows`           v = client->_bind( t_products )
                     )->a( n = `ariaLabelledBy` v = `title`
 
-                    )->open( `extension`
-                        )->open( n = `HBox` ns = `m`
-                            )->open( n = `items` ns = `m`
-                                )->leaf( n = `Icon` ns = `c`
+                    )->ele( `extension`
+                        )->ele( n = `HBox` ns = `m`
+                            )->ele( n = `items` ns = `m`
+                                )->tag( n = `Icon` ns = `c`
                                     )->a( n = `src`  v = `sap-icon://cart`
                                     )->a( n = `alt`  v = `Cart`
                                     )->a( n = `size` v = `1.25rem`
 
-                                )->leaf( n = `Title` ns = `m`
+                                )->tag( n = `Title` ns = `m`
                                     )->a( n = `text`       v = `Shopping Portal`
                                     )->a( n = `titleStyle` v = `H3`
                                     )->a( n = `class`      v = `sapUiTinyMarginBeginEnd`
 
-                            )->shut(
-                        )->shut(
-                        )->open( n = `OverflowToolbar` ns = `m`
+                            )->end(
+                        )->end(
+                        )->ele( n = `OverflowToolbar` ns = `m`
                             )->a( n = `style` v = `Clear`
 
-                            )->leaf( n = `Title` ns = `m`
+                            )->tag( n = `Title` ns = `m`
                                 )->a( n = `id`   v = `title`
                                 )->a( n = `text` v = `Products`
 
-                            )->leaf( n = `ToolbarSpacer` ns = `m`
+                            )->tag( n = `ToolbarSpacer` ns = `m`
 
-                            )->leaf( n = `SearchField` ns = `m`
+                            )->tag( n = `SearchField` ns = `m`
                                 )->a( n = `placeholder` v = `Filter`
                                 )->a( n = `value`       v = client->_bind( filter_value )
                                 )->a( n = `search`      v = client->_event( `SEARCH` )
                                 )->a( n = `width`       v = `15rem`
 
-                        )->shut(
-                        )->open( n = `FacetFilter` ns = `m`
+                        )->end(
+                        )->ele( n = `FacetFilter` ns = `m`
                             )->a( n = `id`                  v = `facetFilter`
                             )->a( n = `type`                v = `Simple`
                             )->a( n = `showReset`           v = `true`
@@ -136,108 +136,108 @@ CLASS z2ui5_cl_smpc_app_352 IMPLEMENTATION.
                             )->a( n = `reset`               v = client->_event( `FACET_RESET` )
                             )->a( n = `lists`               v = client->_bind( t_filters )
 
-                            )->open( n = `lists` ns = `m`
-                                )->open( n = `FacetFilterList` ns = `m`
+                            )->ele( n = `lists` ns = `m`
+                                )->ele( n = `FacetFilterList` ns = `m`
                                     )->a( n = `title`     v = `{TYPE}`
                                     )->a( n = `key`       v = `{TYPE}`
                                     )->a( n = `mode`      v = `MultiSelect`
                                     )->a( n = `listClose` v = client->_event( `LIST_CLOSE` )
                                     )->a( n = `items`     v = |\{ path: 'VALUES', templateShareable: false \}|
 
-                                    )->open( n = `items` ns = `m`
-                                        )->leaf( n = `FacetFilterItem` ns = `m`
+                                    )->ele( n = `items` ns = `m`
+                                        )->tag( n = `FacetFilterItem` ns = `m`
                                             )->a( n = `text`     v = `{TEXT}`
                                             )->a( n = `key`      v = `{TEXT}`
                                             )->a( n = `selected` v = `{SELECTED}`
 
-                                    )->shut(
-                                )->shut(
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                    )->open( `noData`
-                        )->leaf( n = `Link` ns = `m`
+                                    )->end(
+                                )->end(
+                            )->end(
+                        )->end(
+                    )->end(
+                    )->ele( `noData`
+                        )->tag( n = `Link` ns = `m`
                             )->a( n = `class` v = `sapUiMediumMargin`
                             )->a( n = `text`  v = `No Data found. Press here to reset all filters.`
                             )->a( n = `press` v = client->_event( `CLEAR_FILTERS` )
 
-                    )->shut(
-                    )->open( `columns`
-                        )->open( `Column`
+                    )->end(
+                    )->ele( `columns`
+                        )->ele( `Column`
                             )->a( n = `width` v = `11rem`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Product Name`
 
-                            )->open( `template`
-                                )->leaf( n = `Text` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text`     v = `{NAME}`
                                     )->a( n = `wrapping` v = `false`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `width` v = `11rem`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Category`
 
-                            )->open( `template`
-                                )->leaf( n = `Text` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text`     v = `{CATEGORY}`
                                     )->a( n = `wrapping` v = `false`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `width` v = `12rem`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Supplier`
 
-                            )->open( `template`
-                                )->leaf( n = `Text` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text`     v = `{SUPPLIERNAME}`
                                     )->a( n = `wrapping` v = `false`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `width` v = `9rem`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Status`
 
-                            )->open( `template`
-                                )->leaf( n = `ObjectStatus` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `ObjectStatus` ns = `m`
                                     )->a( n = `text`  v = `{STATUS}`
                                     )->a( n = `state` v = `{AVAILABLESTATE}`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `width` v = `9rem`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Price`
 
-                            )->open( `template`
-                                )->leaf( n = `Currency` ns = `u`
+                            )->ele( `template`
+                                )->tag( n = `Currency` ns = `u`
                                     )->a( n = `value`    v = `{PRICE}`
                                     )->a( n = `currency` v = `{CURRENCYCODE}`
 
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                    )->open( `footer`
-                        )->leaf( n = `OverflowToolbar` ns = `m`
+                            )->end(
+                        )->end(
+                    )->end(
+                    )->ele( `footer`
+                        )->tag( n = `OverflowToolbar` ns = `m`
                             )->a( n = `id` v = `infobar`
 
-                    )->shut(
-                )->shut(
-            )->shut(
-        )->shut(
-    )->shut( ).
+                    )->end(
+                )->end(
+            )->end(
+        )->end(
+    )->end( ).
 
     client->view_display( view->stringify( ) ).
 

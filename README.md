@@ -100,7 +100,7 @@ Output: one ABAP class z2ui5_cl_smpc_app_<n> implementing z2ui5_if_app, that
         rebuilds the sample's UI and behaviour 1:1.
 
 Rules:
-- Build the view with the generic builder z2ui5_cl_ai_xml, translating the
+- Build the view with the generic builder z2ui5_cl_ui5_view_builder, translating the
   sample's XML 1:1 (open = descend into a container, leaf = childless
   control/stay, shut = ascend). Attributes are added with
   a( n = `key` v = `value` ) chained right after the control's open/leaf;
@@ -115,8 +115,8 @@ Rules:
   a default-namespace <columns> inside an sap.ui.table.Table is open( `columns` ).
   Braces { } inside a |...| template are ALWAYS escaped \{ \} - an unescaped {
   is read as a binding by the XMLView parser and crashes view creation.
-  Booleans: literal v = `true`/`false`, or v = z2ui5_cl_ai_xml=>as_bool( flag )
-  when fed from an ABAP boolean variable.
+  Booleans: literal v = `true`/`false`, or b = flag (instead of v) when fed
+  from an ABAP boolean variable - the builder renders it as true/false itself.
 - BEFORE declaring any sample feature inexpressible, check CAPABILITIES.md -
   the map of what abap2UI5 can express, each entry backed by a proving port.
   Never improvise around a feature it marks expressible.

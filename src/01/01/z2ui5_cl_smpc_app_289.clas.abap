@@ -41,30 +41,30 @@ CLASS z2ui5_cl_smpc_app_289 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the original builds the MessageStrip in the controller and adds it to the
     " VerticalLayout (destroying the previous one first). Here it is part of the
     " view and its four varying properties are bound; visible keeps it out of
     " the layout until the button was pressed once
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
             )->a( n = `id`    v = `oVerticalContent`
             )->a( n = `width` v = `100%`
 
-            )->open( n = `content` ns = `l`
-                )->leaf( `Button`
+            )->ele( n = `content` ns = `l`
+                )->tag( `Button`
                     )->a( n = `text`  v = `Generate MessageStrip`
                     )->a( n = `class` v = `sapUiSmallMarginBottom`
                     )->a( n = `press` v = client->_event( `GENERATE` )
                     )->a( n = `width` v = `250px`
 
-                )->leaf( `MessageStrip`
+                )->tag( `MessageStrip`
                     )->a( n = `id`              v = `msgStrip`
                     )->a( n = `visible`         v = client->_bind( strip_visible )
                     )->a( n = `text`            v = client->_bind( strip_text )

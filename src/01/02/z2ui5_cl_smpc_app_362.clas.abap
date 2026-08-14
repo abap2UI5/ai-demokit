@@ -57,7 +57,7 @@ CLASS z2ui5_cl_smpc_app_362 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " every sort of this sample happens in ABAP: the three toolbar buttons and
     " the column header menu all fire a backend event, the model comes back
@@ -65,7 +65,7 @@ CLASS z2ui5_cl_smpc_app_362 IMPLEMENTATION.
     " The sort event vetoes the control's own client-side sort, which is what
     " the original does for the delivery-date column (its date strings cannot
     " be compared as text - here the underlying timestamp is sorted instead).
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.ui.table`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns:u`   v = `sap.ui.unified`
@@ -73,13 +73,13 @@ CLASS z2ui5_cl_smpc_app_362 IMPLEMENTATION.
         )->a( n = `xmlns:m`   v = `sap.m`
         )->a( n = `height`    v = `100%`
 
-        )->open( n = `Page` ns = `m`
+        )->ele( n = `Page` ns = `m`
             )->a( n = `showHeader`      v = `false`
             )->a( n = `enableScrolling` v = `false`
             )->a( n = `class`           v = `sapUiContentPadding`
 
-            )->open( n = `content` ns = `m`
-                )->open( `Table`
+            )->ele( n = `content` ns = `m`
+                )->ele( `Table`
                     )->a( n = `id`             v = `table`
                     )->a( n = `selectionMode`  v = `MultiToggle`
                     )->a( n = `rows`           v = client->_bind( t_products )
@@ -90,116 +90,116 @@ CLASS z2ui5_cl_smpc_app_362 IMPLEMENTATION.
                                                 ( `${$parameters>/sortOrder}` ) )
                               s_ctrl = VALUE #( check_prevent_default = abap_true ) )
 
-                    )->open( `extension`
-                        )->open( n = `OverflowToolbar` ns = `m`
+                    )->ele( `extension`
+                        )->ele( n = `OverflowToolbar` ns = `m`
                             )->a( n = `style` v = `Clear`
 
-                            )->leaf( n = `Title` ns = `m`
+                            )->tag( n = `Title` ns = `m`
                                 )->a( n = `id`   v = `title`
                                 )->a( n = `text` v = `Products`
 
-                            )->leaf( n = `ToolbarSpacer` ns = `m`
+                            )->tag( n = `ToolbarSpacer` ns = `m`
 
-                            )->leaf( n = `Button` ns = `m`
+                            )->tag( n = `Button` ns = `m`
                                 )->a( n = `icon`    v = `sap-icon://sorting-ranking`
                                 )->a( n = `tooltip` v = `Sort ascending across Categories and Name`
                                 )->a( n = `press`   v = client->_event( `SORT_CATEGORIES_AND_NAME` )
 
-                            )->leaf( n = `Button` ns = `m`
+                            )->tag( n = `Button` ns = `m`
                                 )->a( n = `icon`    v = `sap-icon://sort`
                                 )->a( n = `tooltip` v = `Sort Categories in addition to current sorting`
                                 )->a( n = `press`   v = client->_event( `SORT_CATEGORIES` )
 
-                            )->leaf( n = `Button` ns = `m`
+                            )->tag( n = `Button` ns = `m`
                                 )->a( n = `icon`    v = `sap-icon://decline`
                                 )->a( n = `tooltip` v = `Clear all sortings`
                                 )->a( n = `press`   v = client->_event( `CLEAR_SORTINGS` )
 
-                        )->shut(
-                    )->shut(
-                    )->open( `columns`
-                        )->open( `Column`
+                        )->end(
+                    )->end(
+                    )->ele( `columns`
+                        )->ele( `Column`
                             )->a( n = `id`           v = `name`
                             )->a( n = `width`        v = `11rem`
                             )->a( n = `sortProperty` v = `NAME`
                             )->a( n = `sortOrder`    v = client->_bind( sort_name )
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Product Name`
 
-                            )->open( `template`
-                                )->leaf( n = `Text` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text`     v = `{NAME}`
                                     )->a( n = `wrapping` v = `false`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `id`                v = `categories`
                             )->a( n = `width`             v = `11rem`
                             )->a( n = `showSortMenuEntry` v = `false`
                             )->a( n = `sortProperty`      v = `CATEGORY`
                             )->a( n = `sortOrder`         v = client->_bind( sort_category )
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Category`
 
-                            )->open( `template`
-                                )->leaf( n = `Text` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text`     v = `{CATEGORY}`
                                     )->a( n = `wrapping` v = `false`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `width` v = `9rem`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Image`
 
-                            )->open( `template`
-                                )->leaf( n = `Link` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Link` ns = `m`
                                     )->a( n = `text`   v = `Show Image`
                                     )->a( n = `href`   v = `{PRODUCTPICURL}`
                                     )->a( n = `target` v = `_blank`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `id`           v = `quantity`
                             )->a( n = `width`        v = `6rem`
                             )->a( n = `hAlign`       v = `End`
                             )->a( n = `sortProperty` v = `QUANTITY`
                             )->a( n = `sortOrder`    v = client->_bind( sort_quantity )
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Quantity`
 
-                            )->open( `template`
-                                )->leaf( n = `Label` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = |\{ path: 'QUANTITY', type: 'sap.ui.model.type.Integer' \}|
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `id`           v = `deliverydate`
                             )->a( n = `width`        v = `9rem`
                             )->a( n = `sortProperty` v = `DELIVERYDATESTR`
                             )->a( n = `sortOrder`    v = client->_bind( sort_deliverydate )
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Delivery Date`
 
-                            )->open( `template`
-                                )->leaf( n = `Text` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text`     v = |\{ path: 'DELIVERYDATESTR', type: 'sap.ui.model.type.Date', formatOptions: \{ source: \{ pattern: 'dd/MM/yyyy' \}, style: 'long' \} \}|
                                     )->a( n = `wrapping` v = `false`
 
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                    )->open( `footer`
-                        )->leaf( n = `OverflowToolbar` ns = `m`
+                            )->end(
+                        )->end(
+                    )->end(
+                    )->ele( `footer`
+                        )->tag( n = `OverflowToolbar` ns = `m`
                             )->a( n = `id` v = `infobar` ).
 
     client->view_display( view->stringify( ) ).

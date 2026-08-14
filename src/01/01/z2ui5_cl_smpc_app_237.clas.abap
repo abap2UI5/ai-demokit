@@ -35,44 +35,44 @@ CLASS z2ui5_cl_smpc_app_237 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
 
-        )->open( `Table`
+        )->ele( `Table`
             )->a( n = `id`    v = `idProductsTable`
             )->a( n = `items` v = client->_bind( t_modeldata )
 
-            )->open( `columns`
-                )->open( `Column`
-                    )->leaf( `Text`
+            )->ele( `columns`
+                )->ele( `Column`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Products`
 
-                )->shut(
-                )->open( `Column`
-                    )->leaf( `Text`
+                )->end(
+                )->ele( `Column`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Status`
 
-                )->shut(
-                )->open( `Column`
-                    )->leaf( `Text`
+                )->end(
+                )->ele( `Column`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Status (active)`
 
-            )->shut(
-            )->shut(
-            )->open( `ColumnListItem`
-                )->leaf( `ObjectIdentifier`
+            )->end(
+            )->end(
+            )->ele( `ColumnListItem`
+                )->tag( `ObjectIdentifier`
                     )->a( n = `text` v = `{PRODUCT}`
 
-                )->leaf( `ObjectMarker`
+                )->tag( `ObjectMarker`
                     )->a( n = `type`           v = `{TYPE}`
                     )->a( n = `additionalInfo` v = `{ADDITIONALINFO}`
 
                 " the original onPress does MessageToast.show( evt.getParameter( "type" ) + " marker pressed!" );
                 " reproduced roundtrip-free as a client-composed toast, {0} filled by the press event's type parameter
-                )->leaf( `ObjectMarker`
+                )->tag( `ObjectMarker`
                     )->a( n = `type`           v = `{TYPE}`
                     )->a( n = `additionalInfo` v = `{ADDITIONALINFO}`
                     )->a( n = `press`          v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} marker pressed!` ) ( `${$parameters>/type}` ) ) ) ).

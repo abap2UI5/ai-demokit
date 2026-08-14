@@ -63,36 +63,36 @@ CLASS z2ui5_cl_smpc_app_015 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`    v = `sap.ui.layout`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns`      v = `sap.m`
 
-        )->open( `Tree`
+        )->ele( `Tree`
             )->a( n = `id`    v = `Tree`
             )->a( n = `items` v = |\{ path: '{ client->_bind( val = t_tree path = abap_true ) }' \}|
             )->a( n = `mode`  v = `MultiSelect`
 
-            )->open( `CustomTreeItem`
-                )->open( `FlexBox`
+            )->ele( `CustomTreeItem`
+                )->ele( `FlexBox`
                     )->a( n = `alignItems` v = `Start`
                     )->a( n = `width`      v = `100%`
 
-                    )->open( `items`
-                        )->leaf( `Button`
+                    )->ele( `items`
+                        )->tag( `Button`
                             )->a( n = `icon`  v = `{REF}`
                             )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
                                                                             t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Button pressed` ) ) )
                             )->a( n = `class` v = `sapUiSmallMarginEnd`
 
-                        )->open( `Input`
+                        )->ele( `Input`
                             )->a( n = `value` v = `{TEXT}`
 
-                            )->open( `layoutData`
-                                )->leaf( `FlexItemData`
+                            )->ele( `layoutData`
+                                )->tag( `FlexItemData`
                                     )->a( n = `growFactor` v = `1` ).
 
     client->view_display( view->stringify( ) ).

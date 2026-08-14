@@ -73,13 +73,13 @@ CLASS z2ui5_cl_smpc_app_365 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the hierarchy-maintenance tree. Collapse all / Expand first level are the
     " TreeTable's own methods and are driven as frontend actions; the cut,
     " paste and drag & drop handlers re-parent nodes, which a typed ABAP
     " nesting cannot express (see the sidecar).
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`      v = `sap.ui.table`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns:m`    v = `sap.m`
@@ -88,98 +88,98 @@ CLASS z2ui5_cl_smpc_app_365 IMPLEMENTATION.
         )->a( n = `xmlns:dnd`  v = `sap.ui.core.dnd`
         )->a( n = `height`     v = `100%`
 
-        )->open( n = `Page` ns = `m`
+        )->ele( n = `Page` ns = `m`
             )->a( n = `showHeader`      v = `false`
             )->a( n = `enableScrolling` v = `false`
 
-            )->open( n = `content` ns = `m`
-                )->open( `TreeTable`
+            )->ele( n = `content` ns = `m`
+                )->ele( `TreeTable`
                     )->a( n = `id`              v = `TreeTable`
                     )->a( n = `rows`            v = |\{ path: '{ client->_bind( val = catalog-clothing path = abap_true ) }', parameters: \{ arrayNames: ['CATEGORIES'] \} \}|
                     )->a( n = `selectionMode`   v = `MultiToggle`
                     )->a( n = `enableSelectAll` v = `false`
                     )->a( n = `ariaLabelledBy`  v = `title`
 
-                    )->open( `extension`
-                        )->open( n = `OverflowToolbar` ns = `m`
+                    )->ele( `extension`
+                        )->ele( n = `OverflowToolbar` ns = `m`
                             )->a( n = `style` v = `Clear`
 
-                            )->leaf( n = `Title` ns = `m`
+                            )->tag( n = `Title` ns = `m`
                                 )->a( n = `id`   v = `title`
                                 )->a( n = `text` v = `Clothing`
 
-                            )->leaf( n = `Button` ns = `m`
+                            )->tag( n = `Button` ns = `m`
                                 )->a( n = `id`   v = `cut`
                                 )->a( n = `text` v = `Cut`
                                 )->a( n = `icon` v = `sap-icon://scissors`
 
-                            )->leaf( n = `Button` ns = `m`
+                            )->tag( n = `Button` ns = `m`
                                 )->a( n = `id`      v = `paste`
                                 )->a( n = `text`    v = `Paste`
                                 )->a( n = `icon`    v = `sap-icon://paste`
                                 )->a( n = `enabled` v = `false`
 
-                            )->leaf( n = `ToolbarSpacer` ns = `m`
+                            )->tag( n = `ToolbarSpacer` ns = `m`
 
-                            )->leaf( n = `Button` ns = `m`
+                            )->tag( n = `Button` ns = `m`
                                 )->a( n = `text`  v = `Collapse all`
                                 )->a( n = `press` v = client->follow_up_action(
                                           val   = client->cs_event-control_by_id
                                           t_arg = VALUE #( ( `TreeTable` ) ( `collapseAll` ) ) )
 
-                            )->leaf( n = `Button` ns = `m`
+                            )->tag( n = `Button` ns = `m`
                                 )->a( n = `text`  v = `Expand first level`
                                 )->a( n = `press` v = client->follow_up_action(
                                           val   = client->cs_event-control_by_id
                                           t_arg = VALUE #( ( `TreeTable` ) ( `expandToLevel` ) ( `1` ) ) )
 
-                        )->shut(
-                    )->shut(
-                    )->open( `dragDropConfig`
-                        )->leaf( n = `DragDropInfo` ns = `dnd`
+                        )->end(
+                    )->end(
+                    )->ele( `dragDropConfig`
+                        )->tag( n = `DragDropInfo` ns = `dnd`
                             )->a( n = `sourceAggregation` v = `rows`
                             )->a( n = `targetAggregation` v = `rows`
 
-                    )->shut(
-                    )->open( `columns`
-                        )->open( `Column`
+                    )->end(
+                    )->ele( `columns`
+                        )->ele( `Column`
                             )->a( n = `width` v = `13rem`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Categories`
 
-                            )->open( `template`
-                                )->leaf( n = `Text` ns = `m`
+                            )->ele( `template`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text`     v = `{NAME}`
                                     )->a( n = `wrapping` v = `false`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `width` v = `9rem`
 
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Price`
 
-                            )->open( `template`
-                                )->leaf( n = `Currency` ns = `u`
+                            )->ele( `template`
+                                )->tag( n = `Currency` ns = `u`
                                     )->a( n = `value`    v = `{AMOUNT}`
                                     )->a( n = `currency` v = `{CURRENCY}`
 
-                            )->shut(
-                        )->shut(
-                        )->open( `Column`
-                            )->leaf( n = `Label` ns = `m`
+                            )->end(
+                        )->end(
+                        )->ele( `Column`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Size`
 
-                            )->open( `template`
-                                )->open( n = `Select` ns = `m`
+                            )->ele( `template`
+                                )->ele( n = `Select` ns = `m`
                                     )->a( n = `items`          v = |\{ path: '{ client->_bind( val = sizes path = abap_true ) }', templateShareable: true \}|
                                     )->a( n = `selectedKey`    v = `{SIZE}`
                                     )->a( n = `visible`        v = `{= !!${SIZE} }`
                                     )->a( n = `forceSelection` v = `false`
 
-                                    )->leaf( n = `Item` ns = `core`
+                                    )->tag( n = `Item` ns = `core`
                                         )->a( n = `key`  v = `{KEY}`
                                         )->a( n = `text` v = `{VALUE}` ).
 

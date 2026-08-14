@@ -34,22 +34,22 @@ CLASS z2ui5_cl_smpc_app_095 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `height`    v = `100%`
 
-        )->open( `Page`
+        )->ele( `Page`
             )->a( n = `showHeader` v = `false`
 
-            )->open( `VBox`
-                )->leaf( `Button`
+            )->ele( `VBox`
+                )->tag( `Button`
                     )->a( n = `press` v = client->_event( `OPEN_DIALOG` )
                     )->a( n = `text`  v = `Open Dialog`
                     )->a( n = `class` v = `sapUiSmallMargin`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `id`    v = `T1`
                     )->a( n = `text`  v = client->_bind( result_text )
                     )->a( n = `class` v = `sapUiSmallMargin` ).
@@ -84,17 +84,17 @@ CLASS z2ui5_cl_smpc_app_095 IMPLEMENTATION.
 
   METHOD popup_display.
 
-    DATA(popup) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(popup) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    popup->open( n = `FragmentDefinition` ns = `core`
+    popup->ele( n = `FragmentDefinition` ns = `core`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:core` v = `sap.ui.core`
 
-        )->open( `Dialog`
+        )->ele( `Dialog`
             )->a( n = `id`    v = `selectTimeDialog`
             )->a( n = `title` v = `Select New Time`
 
-            )->leaf( `TimePickerSliders`
+            )->tag( `TimePickerSliders`
                 )->a( n = `id`            v = `TPS2`
                 )->a( n = `valueFormat`   v = `hh:mm a`
                 )->a( n = `displayFormat` v = `hh:mm a`
@@ -102,12 +102,12 @@ CLASS z2ui5_cl_smpc_app_095 IMPLEMENTATION.
                 " value two-way bound to transport the picked time (original reads oTP.getValue())
                 )->a( n = `value`         v = client->_bind( time_value )
 
-            )->open( `buttons`
-                )->leaf( `Button`
+            )->ele( `buttons`
+                )->tag( `Button`
                     )->a( n = `text`  v = `OK`
                     )->a( n = `press` v = client->_event( `OK_PRESS` )
                     )->a( n = `type`  v = `Emphasized`
-                )->leaf( `Button`
+                )->tag( `Button`
                     )->a( n = `text`  v = `Cancel`
                     )->a( n = `press` v = client->_event( `CANCEL_PRESS` ) ).
 

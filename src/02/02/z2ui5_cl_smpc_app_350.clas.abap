@@ -57,7 +57,7 @@ CLASS z2ui5_cl_smpc_app_350 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the tnt:ToolPage home layout: the four Group fragments are inlined into
     " the one view (abap2UI5 serves one view per round-trip, so a fragmentName
@@ -65,7 +65,7 @@ CLASS z2ui5_cl_smpc_app_350 IMPLEMENTATION.
     " one, and the two grid events (layoutChange / columnsChange) carry their
     " own parameters to the backend, where the column arithmetic the original
     " does in the controller now lives.
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`         v = `sap.m`
         )->a( n = `xmlns:mvc`     v = `sap.ui.core.mvc`
         )->a( n = `xmlns:cssgrid` v = `sap.ui.layout.cssgrid`
@@ -75,506 +75,506 @@ CLASS z2ui5_cl_smpc_app_350 IMPLEMENTATION.
         )->a( n = `xmlns:cards`   v = `sap.f.cards`
         )->a( n = `xmlns:widgets` v = `sap.ui.integration.widgets`
 
-        )->open( n = `ToolPage` ns = `tnt`
-            )->open( n = `header` ns = `tnt`
-                )->open( n = `ToolHeader` ns = `tnt`
-                    )->leaf( `Image`
+        )->ele( n = `ToolPage` ns = `tnt`
+            )->ele( n = `header` ns = `tnt`
+                )->ele( n = `ToolHeader` ns = `tnt`
+                    )->tag( `Image`
                         )->a( n = `src`   v = client->_bind( homeiconsrc )
                         )->a( n = `class` v = `sapUiTinyMarginBegin`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text`     v = `Cloud Platform Product`
                         )->a( n = `wrapping` v = `false`
 
-                    )->leaf( `ToolbarSpacer`
+                    )->tag( `ToolbarSpacer`
 
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `icon` v = `sap-icon://search`
                         )->a( n = `type` v = `Transparent`
 
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `icon` v = `sap-icon://bell`
                         )->a( n = `type` v = `Transparent`
 
-                    )->leaf( `Avatar`
+                    )->tag( `Avatar`
                         )->a( n = `src`         v = client->_bind( user_iconsrc )
                         )->a( n = `displaySize` v = `XS`
                         )->a( n = `class`       v = `avatarSize`
 
-                )->shut(
-            )->shut(
-            )->open( n = `mainContents` ns = `tnt`
-                )->open( `ScrollContainer`
+                )->end(
+            )->end(
+            )->ele( n = `mainContents` ns = `tnt`
+                )->ele( `ScrollContainer`
                     )->a( n = `id`         v = `scrollCont`
                     )->a( n = `horizontal` v = `false`
                     )->a( n = `vertical`   v = `true`
                     )->a( n = `height`     v = `100%`
                     )->a( n = `class`      v = `sapUiResponsiveContentPadding`
 
-                    )->leaf( `ToggleButton`
+                    )->tag( `ToggleButton`
                         )->a( n = `text`  v = `Reveal Main Grid`
                         )->a( n = `class` v = `sapUiSmallMarginBottom sapUiSmallMarginEnd`
 
-                    )->leaf( `ToggleButton`
+                    )->tag( `ToggleButton`
                         )->a( n = `text`  v = `Reveal Grids of Groups`
                         )->a( n = `class` v = `sapUiSmallMarginBottom`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `class` v = `sapUiSmallMarginBottom`
                         )->a( n = `text`  v = |Current breakpoint: { client->_bind( currentbreakpoint ) }|
                         )->a( n = `width` v = `100%`
 
-                    )->open( n = `CSSGrid` ns = `cssgrid`
+                    )->ele( n = `CSSGrid` ns = `cssgrid`
                         )->a( n = `id` v = `mainGrid`
 
-                        )->open( n = `customLayout` ns = `cssgrid`
-                            )->leaf( n = `ResponsiveColumnLayout` ns = `cssgrid`
+                        )->ele( n = `customLayout` ns = `cssgrid`
+                            )->tag( n = `ResponsiveColumnLayout` ns = `cssgrid`
                                 )->a( n = `layoutChange` v = client->_event( val   = `LAYOUT_CHANGE`
                                                                              t_arg = VALUE #( ( `${$parameters>/layout}` ) ) )
 
-                        )->shut(
-                        )->open( `VBox`
+                        )->end(
+                        )->ele( `VBox`
                             )->a( n = `renderType` v = `Bare`
 
-                            )->open( `layoutData`
-                                )->leaf( n = `ResponsiveColumnItemLayoutData` ns = `cssgrid`
+                            )->ele( `layoutData`
+                                )->tag( n = `ResponsiveColumnItemLayoutData` ns = `cssgrid`
                                     )->a( n = `columns` v = client->_bind( group1_columns )
 
-                            )->shut(
-                            )->leaf( `Title`
+                            )->end(
+                            )->tag( `Title`
                                 )->a( n = `text`       v = `Recently Used`
                                 )->a( n = `titleStyle` v = `H4`
                                 )->a( n = `class`      v = `sapUiSmallMarginBottom sapUiLargeMarginTop`
 
-                            )->open( n = `GridContainer` ns = `f`
+                            )->ele( n = `GridContainer` ns = `f`
                                 )->a( n = `id`            v = `group1`
                                 )->a( n = `columnsChange` v = client->_event( val   = `COLUMNS_CHANGE`
                                                                               t_arg = VALUE #( ( `${$parameters>/columns}` ) ) )
 
-                                )->open( n = `layout` ns = `f`
-                                    )->leaf( n = `GridContainerSettings` ns = `f`
+                                )->ele( n = `layout` ns = `f`
+                                    )->tag( n = `GridContainerSettings` ns = `f`
                                         )->a( n = `rowSize`    v = `4rem`
                                         )->a( n = `columnSize` v = `4rem`
 
-                                )->shut(
-                                )->open( n = `Card` ns = `f`
+                                )->end(
+                                )->ele( n = `Card` ns = `f`
                                     )->a( n = `id`     v = `applicationsCard`
                                     )->a( n = `height` v = `100%`
 
-                                    )->open( n = `layoutData` ns = `f`
-                                        )->leaf( n = `GridContainerItemLayoutData` ns = `f`
+                                    )->ele( n = `layoutData` ns = `f`
+                                        )->tag( n = `GridContainerItemLayoutData` ns = `f`
                                             )->a( n = `columns` v = `4`
                                             )->a( n = `minRows` v = `6`
 
-                                    )->shut(
-                                    )->open( n = `header` ns = `f`
-                                        )->leaf( n = `Header` ns = `cards`
+                                    )->end(
+                                    )->ele( n = `header` ns = `f`
+                                        )->tag( n = `Header` ns = `cards`
                                             )->a( n = `title` v = `Applications`
 
-                                    )->shut(
-                                    )->open( n = `content` ns = `f`
-                                        )->open( `List`
+                                    )->end(
+                                    )->ele( n = `content` ns = `f`
+                                        )->ele( `List`
                                             )->a( n = `showSeparators` v = `None`
 
-                                            )->leaf( `StandardListItem`
+                                            )->tag( `StandardListItem`
                                                 )->a( n = `title`       v = `RUUM`
                                                 )->a( n = `description` v = `2 Issues Detected`
                                                 )->a( n = `highlight`   v = `Warning`
 
-                                            )->leaf( `StandardListItem`
+                                            )->tag( `StandardListItem`
                                                 )->a( n = `title`       v = `My Inbox`
                                                 )->a( n = `description` v = `Has 3 new Messages`
 
-                                            )->leaf( `StandardListItem`
+                                            )->tag( `StandardListItem`
                                                 )->a( n = `title`       v = `Guided Buying`
                                                 )->a( n = `description` v = `Last used: Yesterday`
 
-                                            )->leaf( `StandardListItem`
+                                            )->tag( `StandardListItem`
                                                 )->a( n = `title`       v = `Extension App`
                                                 )->a( n = `description` v = `Sample Cloud Platform Application`
 
-                                            )->leaf( `StandardListItem`
+                                            )->tag( `StandardListItem`
                                                 )->a( n = `title`       v = `Demo Kit`
                                                 )->a( n = `description` v = `Demo Instance`
 
-                                        )->shut(
-                                    )->shut(
-                                )->shut(
-                                )->open( n = `Card` ns = `widgets`
+                                        )->end(
+                                    )->end(
+                                )->end(
+                                )->ele( n = `Card` ns = `widgets`
                                     )->a( n = `id`       v = `usersCard`
                                     )->a( n = `manifest` v = client->_bind( manifest_users )
                                     )->a( n = `height`   v = `100%`
 
-                                    )->open( n = `layoutData` ns = `widgets`
+                                    )->ele( n = `layoutData` ns = `widgets`
                                         " onColumnsChange writes iCardColumns onto this card's layoutData
-                                        )->leaf( n = `GridContainerItemLayoutData` ns = `f`
+                                        )->tag( n = `GridContainerItemLayoutData` ns = `f`
                                             )->a( n = `columns` v = client->_bind( card_columns )
                                             )->a( n = `minRows` v = `6`
 
-                                    )->shut(
-                                )->shut(
-                                )->open( n = `Card` ns = `f`
+                                    )->end(
+                                )->end(
+                                )->ele( n = `Card` ns = `f`
                                     )->a( n = `id`     v = `upfCard`
                                     )->a( n = `height` v = `100%`
 
-                                    )->open( n = `layoutData` ns = `f`
+                                    )->ele( n = `layoutData` ns = `f`
                                         " onColumnsChange writes iCardColumns onto this card's layoutData
-                                        )->leaf( n = `GridContainerItemLayoutData` ns = `f`
+                                        )->tag( n = `GridContainerItemLayoutData` ns = `f`
                                             )->a( n = `columns` v = client->_bind( card_columns )
                                             )->a( n = `minRows` v = `6`
 
-                                    )->shut(
-                                    )->open( n = `header` ns = `f`
-                                        )->leaf( n = `Header` ns = `cards`
+                                    )->end(
+                                    )->ele( n = `header` ns = `f`
+                                        )->tag( n = `Header` ns = `cards`
                                             )->a( n = `title` v = `User Provisioning Flows`
 
-                                    )->shut(
-                                    )->open( n = `content` ns = `f`
-                                        )->open( `List`
+                                    )->end(
+                                    )->ele( n = `content` ns = `f`
+                                        )->ele( `List`
                                             )->a( n = `showSeparators` v = `None`
 
-                                            )->leaf( `StandardListItem`
+                                            )->tag( `StandardListItem`
                                                 )->a( n = `title`       v = `Employee Onboarding`
                                                 )->a( n = `description` v = `SAP Success Factors`
 
-                                            )->leaf( `StandardListItem`
+                                            )->tag( `StandardListItem`
                                                 )->a( n = `title`       v = `Cloud Storе Access`
                                                 )->a( n = `description` v = `SAP Success Factors`
 
-                                            )->leaf( `StandardListItem`
+                                            )->tag( `StandardListItem`
                                                 )->a( n = `title`       v = `External JAM Users`
                                                 )->a( n = `description` v = `SAP Audit Log`
 
-                                            )->leaf( `StandardListItem`
+                                            )->tag( `StandardListItem`
                                                 )->a( n = `title`       v = `Active Directory into IAS`
                                                 )->a( n = `description` v = `My Inbox`
 
-                                            )->leaf( `StandardListItem`
+                                            )->tag( `StandardListItem`
                                                 )->a( n = `title`       v = `Flow Name`
                                                 )->a( n = `description` v = `SAP Success Factors`
                                                 )->a( n = `highlight`   v = `Error`
 
-                                        )->shut(
-                                    )->shut(
-                                )->shut(
-                            )->shut(
-                        )->shut(
-                        )->open( `VBox`
+                                        )->end(
+                                    )->end(
+                                )->end(
+                            )->end(
+                        )->end(
+                        )->ele( `VBox`
                             )->a( n = `renderType` v = `Bare`
 
-                            )->open( `layoutData`
-                                )->leaf( n = `ResponsiveColumnItemLayoutData` ns = `cssgrid`
+                            )->ele( `layoutData`
+                                )->tag( n = `ResponsiveColumnItemLayoutData` ns = `cssgrid`
                                     )->a( n = `columns` v = client->_bind( group2_columns )
 
-                            )->shut(
-                            )->leaf( `Title`
+                            )->end(
+                            )->tag( `Title`
                                 )->a( n = `text`       v = `Frequent Operations`
                                 )->a( n = `titleStyle` v = `H4`
                                 )->a( n = `class`      v = `sapUiSmallMarginBottom sapUiLargeMarginTop`
 
-                            )->open( n = `GridContainer` ns = `f`
+                            )->ele( n = `GridContainer` ns = `f`
                                 )->a( n = `id` v = `group2`
 
-                                )->open( n = `layout` ns = `f`
-                                    )->leaf( n = `GridContainerSettings` ns = `f`
+                                )->ele( n = `layout` ns = `f`
+                                    )->tag( n = `GridContainerSettings` ns = `f`
                                         )->a( n = `rowSize`    v = `4rem`
                                         )->a( n = `columnSize` v = `4rem`
 
-                                )->shut(
-                                )->open( n = `Card` ns = `f`
+                                )->end(
+                                )->ele( n = `Card` ns = `f`
                                     )->a( n = `height` v = `100%`
 
-                                    )->open( n = `content` ns = `f`
-                                        )->open( `VBox`
+                                    )->ele( n = `content` ns = `f`
+                                        )->ele( `VBox`
                                             )->a( n = `alignItems`     v = `Center`
                                             )->a( n = `justifyContent` v = `Center`
                                             )->a( n = `width`          v = `100%`
 
-                                            )->leaf( `Avatar`
+                                            )->tag( `Avatar`
                                                 )->a( n = `src` v = `sap-icon://SAP-icons-TNT/application-service`
 
-                                            )->leaf( `Link`
+                                            )->tag( `Link`
                                                 )->a( n = `text` v = `Create Application`
 
-                                        )->shut(
-                                    )->shut(
-                                    )->open( n = `layoutData` ns = `f`
-                                        )->leaf( n = `GridContainerItemLayoutData` ns = `f`
+                                        )->end(
+                                    )->end(
+                                    )->ele( n = `layoutData` ns = `f`
+                                        )->tag( n = `GridContainerItemLayoutData` ns = `f`
                                             )->a( n = `columns` v = `2`
                                             )->a( n = `minRows` v = `2`
 
-                                    )->shut(
-                                )->shut(
-                                )->open( n = `Card` ns = `f`
+                                    )->end(
+                                )->end(
+                                )->ele( n = `Card` ns = `f`
                                     )->a( n = `height` v = `100%`
 
-                                    )->open( n = `content` ns = `f`
-                                        )->open( `VBox`
+                                    )->ele( n = `content` ns = `f`
+                                        )->ele( `VBox`
                                             )->a( n = `alignItems`     v = `Center`
                                             )->a( n = `justifyContent` v = `Center`
                                             )->a( n = `width`          v = `100%`
 
-                                            )->leaf( `Avatar`
+                                            )->tag( `Avatar`
                                                 )->a( n = `src` v = `sap-icon://developer-settings`
 
-                                            )->leaf( `Link`
+                                            )->tag( `Link`
                                                 )->a( n = `text` v = `Configure Tenant`
 
-                                        )->shut(
-                                    )->shut(
-                                    )->open( n = `layoutData` ns = `f`
-                                        )->leaf( n = `GridContainerItemLayoutData` ns = `f`
+                                        )->end(
+                                    )->end(
+                                    )->ele( n = `layoutData` ns = `f`
+                                        )->tag( n = `GridContainerItemLayoutData` ns = `f`
                                             )->a( n = `columns` v = `2`
                                             )->a( n = `minRows` v = `2`
 
-                                    )->shut(
-                                )->shut(
-                                )->open( n = `Card` ns = `f`
+                                    )->end(
+                                )->end(
+                                )->ele( n = `Card` ns = `f`
                                     )->a( n = `height` v = `100%`
 
-                                    )->open( n = `content` ns = `f`
-                                        )->open( `VBox`
+                                    )->ele( n = `content` ns = `f`
+                                        )->ele( `VBox`
                                             )->a( n = `alignItems`     v = `Center`
                                             )->a( n = `justifyContent` v = `Center`
                                             )->a( n = `width`          v = `100%`
 
-                                            )->leaf( `Avatar`
+                                            )->tag( `Avatar`
                                                 )->a( n = `src` v = `sap-icon://customer`
 
-                                            )->leaf( `Link`
+                                            )->tag( `Link`
                                                 )->a( n = `text` v = `Create User`
 
-                                        )->shut(
-                                    )->shut(
-                                    )->open( n = `layoutData` ns = `f`
-                                        )->leaf( n = `GridContainerItemLayoutData` ns = `f`
+                                        )->end(
+                                    )->end(
+                                    )->ele( n = `layoutData` ns = `f`
+                                        )->tag( n = `GridContainerItemLayoutData` ns = `f`
                                             )->a( n = `columns` v = `2`
                                             )->a( n = `minRows` v = `2`
 
-                                    )->shut(
-                                )->shut(
-                                )->open( n = `Card` ns = `f`
+                                    )->end(
+                                )->end(
+                                )->ele( n = `Card` ns = `f`
                                     )->a( n = `height` v = `100%`
 
-                                    )->open( n = `content` ns = `f`
-                                        )->open( `VBox`
+                                    )->ele( n = `content` ns = `f`
+                                        )->ele( `VBox`
                                             )->a( n = `alignItems`     v = `Center`
                                             )->a( n = `justifyContent` v = `Center`
                                             )->a( n = `width`          v = `100%`
 
-                                            )->leaf( `Avatar`
+                                            )->tag( `Avatar`
                                                 )->a( n = `src` v = `sap-icon://feedback`
 
-                                            )->leaf( `Link`
+                                            )->tag( `Link`
                                                 )->a( n = `text` v = `Give Feedback`
 
-                                        )->shut(
-                                    )->shut(
-                                    )->open( n = `layoutData` ns = `f`
-                                        )->leaf( n = `GridContainerItemLayoutData` ns = `f`
+                                        )->end(
+                                    )->end(
+                                    )->ele( n = `layoutData` ns = `f`
+                                        )->tag( n = `GridContainerItemLayoutData` ns = `f`
                                             )->a( n = `columns` v = `2`
                                             )->a( n = `minRows` v = `2`
 
-                                    )->shut(
-                                )->shut(
-                                )->open( n = `Card` ns = `f`
+                                    )->end(
+                                )->end(
+                                )->ele( n = `Card` ns = `f`
                                     )->a( n = `height` v = `100%`
 
-                                    )->open( n = `content` ns = `f`
-                                        )->open( `VBox`
+                                    )->ele( n = `content` ns = `f`
+                                        )->ele( `VBox`
                                             )->a( n = `alignItems`     v = `Center`
                                             )->a( n = `justifyContent` v = `Center`
                                             )->a( n = `width`          v = `100%`
 
-                                            )->leaf( `Avatar`
+                                            )->tag( `Avatar`
                                                 )->a( n = `src` v = `sap-icon://family-care`
 
-                                            )->leaf( `Link`
+                                            )->tag( `Link`
                                                 )->a( n = `text` v = `Create Flow`
 
-                                        )->shut(
-                                    )->shut(
-                                    )->open( n = `layoutData` ns = `f`
-                                        )->leaf( n = `GridContainerItemLayoutData` ns = `f`
+                                        )->end(
+                                    )->end(
+                                    )->ele( n = `layoutData` ns = `f`
+                                        )->tag( n = `GridContainerItemLayoutData` ns = `f`
                                             )->a( n = `columns` v = `2`
                                             )->a( n = `minRows` v = `2`
 
-                                    )->shut(
-                                )->shut(
-                            )->shut(
-                        )->shut(
-                        )->open( `VBox`
+                                    )->end(
+                                )->end(
+                            )->end(
+                        )->end(
+                        )->ele( `VBox`
                             )->a( n = `renderType` v = `Bare`
 
-                            )->open( `layoutData`
-                                )->leaf( n = `ResponsiveColumnItemLayoutData` ns = `cssgrid`
+                            )->ele( `layoutData`
+                                )->tag( n = `ResponsiveColumnItemLayoutData` ns = `cssgrid`
                                     )->a( n = `columns` v = client->_bind( group3_columns )
 
-                            )->shut(
-                            )->leaf( `Title`
+                            )->end(
+                            )->tag( `Title`
                                 )->a( n = `text`       v = `Usage and Logs`
                                 )->a( n = `titleStyle` v = `H4`
                                 )->a( n = `class`      v = `sapUiSmallMarginBottom sapUiLargeMarginTop`
 
-                            )->open( n = `GridContainer` ns = `f`
+                            )->ele( n = `GridContainer` ns = `f`
                                 )->a( n = `id` v = `group3`
 
-                                )->open( n = `layout` ns = `f`
-                                    )->leaf( n = `GridContainerSettings` ns = `f`
+                                )->ele( n = `layout` ns = `f`
+                                    )->tag( n = `GridContainerSettings` ns = `f`
                                         )->a( n = `rowSize`    v = `4rem`
                                         )->a( n = `columnSize` v = `4rem`
 
-                                )->shut(
-                                )->open( n = `Card` ns = `widgets`
+                                )->end(
+                                )->ele( n = `Card` ns = `widgets`
                                     )->a( n = `id`       v = `logonRequestsCard`
                                     )->a( n = `manifest` v = client->_bind( manifest_logonrequests )
                                     )->a( n = `height`   v = `100%`
 
-                                    )->open( n = `layoutData` ns = `widgets`
-                                        )->leaf( n = `GridContainerItemLayoutData` ns = `f`
+                                    )->ele( n = `layoutData` ns = `widgets`
+                                        )->tag( n = `GridContainerItemLayoutData` ns = `f`
                                             )->a( n = `columns` v = `4`
                                             )->a( n = `minRows` v = `3`
 
-                                    )->shut(
-                                )->shut(
-                                )->open( n = `Card` ns = `f`
+                                    )->end(
+                                )->end(
+                                )->ele( n = `Card` ns = `f`
                                     )->a( n = `height` v = `100%`
 
-                                    )->open( n = `header` ns = `f`
-                                        )->leaf( n = `Header` ns = `cards`
+                                    )->ele( n = `header` ns = `f`
+                                        )->tag( n = `Header` ns = `cards`
                                             )->a( n = `title` v = `Audit Logs`
 
-                                    )->shut(
-                                    )->open( n = `content` ns = `f`
-                                        )->open( `HBox`
+                                    )->end(
+                                    )->ele( n = `content` ns = `f`
+                                        )->ele( `HBox`
                                             )->a( n = `alignItems`     v = `Center`
                                             )->a( n = `justifyContent` v = `Center`
                                             )->a( n = `width`          v = `100%`
 
-                                            )->leaf( `Text`
+                                            )->tag( `Text`
                                                 )->a( n = `text` v = `Unable to load the data.`
 
-                                        )->shut(
-                                    )->shut(
-                                    )->open( n = `layoutData` ns = `f`
-                                        )->leaf( n = `GridContainerItemLayoutData` ns = `f`
+                                        )->end(
+                                    )->end(
+                                    )->ele( n = `layoutData` ns = `f`
+                                        )->tag( n = `GridContainerItemLayoutData` ns = `f`
                                             )->a( n = `columns` v = `4`
                                             )->a( n = `minRows` v = `3`
 
-                                    )->shut(
-                                )->shut(
-                            )->shut(
-                        )->shut(
-                        )->open( `VBox`
+                                    )->end(
+                                )->end(
+                            )->end(
+                        )->end(
+                        )->ele( `VBox`
                             )->a( n = `renderType` v = `Bare`
 
-                            )->open( `layoutData`
-                                )->leaf( n = `ResponsiveColumnItemLayoutData` ns = `cssgrid`
+                            )->ele( `layoutData`
+                                )->tag( n = `ResponsiveColumnItemLayoutData` ns = `cssgrid`
                                     )->a( n = `columns` v = client->_bind( group4_columns )
 
-                            )->shut(
-                            )->leaf( `Title`
+                            )->end(
+                            )->tag( `Title`
                                 )->a( n = `text`       v = `Running Tasks`
                                 )->a( n = `titleStyle` v = `H4`
                                 )->a( n = `class`      v = `sapUiSmallMarginBottom sapUiLargeMarginTop`
 
-                            )->open( n = `GridContainer` ns = `f`
+                            )->ele( n = `GridContainer` ns = `f`
                                 )->a( n = `id` v = `group4`
 
-                                )->open( n = `layout` ns = `f`
-                                    )->leaf( n = `GridContainerSettings` ns = `f`
+                                )->ele( n = `layout` ns = `f`
+                                    )->tag( n = `GridContainerSettings` ns = `f`
                                         )->a( n = `rowSize`    v = `4rem`
                                         )->a( n = `columnSize` v = `4rem`
 
-                                )->shut(
-                                )->open( n = `Card` ns = `f`
+                                )->end(
+                                )->ele( n = `Card` ns = `f`
                                     )->a( n = `height` v = `100%`
 
-                                    )->open( n = `content` ns = `f`
-                                        )->open( `VBox`
+                                    )->ele( n = `content` ns = `f`
+                                        )->ele( `VBox`
                                             )->a( n = `justifyContent` v = `Center`
                                             )->a( n = `alignItems`     v = `End`
                                             )->a( n = `width`          v = `100%`
                                             )->a( n = `class`          v = `sapUiSmallMargin`
 
-                                            )->leaf( `NumericContent`
+                                            )->tag( `NumericContent`
                                                 )->a( n = `value`      v = `7`
                                                 )->a( n = `valueColor` v = `Error`
                                                 )->a( n = `width`      v = `100%`
 
-                                            )->leaf( `Text`
+                                            )->tag( `Text`
                                                 )->a( n = `text` v = `Failed Jobs`
 
-                                        )->shut(
-                                    )->shut(
-                                    )->open( n = `layoutData` ns = `f`
-                                        )->leaf( n = `GridContainerItemLayoutData` ns = `f`
+                                        )->end(
+                                    )->end(
+                                    )->ele( n = `layoutData` ns = `f`
+                                        )->tag( n = `GridContainerItemLayoutData` ns = `f`
                                             )->a( n = `columns` v = `2`
                                             )->a( n = `minRows` v = `2`
 
-                                    )->shut(
-                                )->shut(
-                                )->open( n = `Card` ns = `f`
+                                    )->end(
+                                )->end(
+                                )->ele( n = `Card` ns = `f`
                                     )->a( n = `height` v = `100%`
 
-                                    )->open( n = `content` ns = `f`
-                                        )->open( `VBox`
+                                    )->ele( n = `content` ns = `f`
+                                        )->ele( `VBox`
                                             )->a( n = `justifyContent` v = `Center`
                                             )->a( n = `alignItems`     v = `End`
                                             )->a( n = `width`          v = `100%`
                                             )->a( n = `class`          v = `sapUiSmallMargin`
 
-                                            )->leaf( `NumericContent`
+                                            )->tag( `NumericContent`
                                                 )->a( n = `value`      v = `42`
                                                 )->a( n = `valueColor` v = `Neutral`
                                                 )->a( n = `width`      v = `100%`
 
-                                            )->leaf( `Text`
+                                            )->tag( `Text`
                                                 )->a( n = `text` v = `Scheduled Jobs`
 
-                                        )->shut(
-                                    )->shut(
-                                    )->open( n = `layoutData` ns = `f`
-                                        )->leaf( n = `GridContainerItemLayoutData` ns = `f`
+                                        )->end(
+                                    )->end(
+                                    )->ele( n = `layoutData` ns = `f`
+                                        )->tag( n = `GridContainerItemLayoutData` ns = `f`
                                             )->a( n = `columns` v = `2`
                                             )->a( n = `minRows` v = `2`
 
-                                    )->shut(
-                                )->shut(
-                                )->open( n = `Card` ns = `f`
+                                    )->end(
+                                )->end(
+                                )->ele( n = `Card` ns = `f`
                                     )->a( n = `height` v = `100%`
 
-                                    )->open( n = `content` ns = `f`
-                                        )->open( `VBox`
+                                    )->ele( n = `content` ns = `f`
+                                        )->ele( `VBox`
                                             )->a( n = `justifyContent` v = `Center`
                                             )->a( n = `alignItems`     v = `End`
                                             )->a( n = `width`          v = `100%`
                                             )->a( n = `class`          v = `sapUiSmallMargin`
 
-                                            )->leaf( `NumericContent`
+                                            )->tag( `NumericContent`
                                                 )->a( n = `value`      v = `12`
                                                 )->a( n = `valueColor` v = `Good`
                                                 )->a( n = `width`      v = `100%`
 
-                                            )->leaf( `Text`
+                                            )->tag( `Text`
                                                 )->a( n = `text` v = `Running Jobs`
 
-                                        )->shut(
-                                    )->shut(
-                                    )->open( n = `layoutData` ns = `f`
-                                        )->leaf( n = `GridContainerItemLayoutData` ns = `f`
+                                        )->end(
+                                    )->end(
+                                    )->ele( n = `layoutData` ns = `f`
+                                        )->tag( n = `GridContainerItemLayoutData` ns = `f`
                                             )->a( n = `columns` v = `2`
                                             )->a( n = `minRows` v = `2`
 
-                                    )->shut(
-                                )->shut(
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
-        )->shut(
-    )->shut( ).
+                                    )->end(
+                                )->end(
+                            )->end(
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
+        )->end(
+    )->end( ).
 
     client->view_display( view->stringify( ) ).
 

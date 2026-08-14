@@ -18,7 +18,7 @@ overview (`z2ui5_cl_smpc_app_overview`) instead of the framework home page.
 ## How it works
 
 1. **assemble** — clone the abap2UI5 framework into `src/` (which brings the
-   `z2ui5_cl_ai_xml` builder along), then copy this repo's `../src` (every
+   `z2ui5_cl_ui5_view_builder` builder along), then copy this repo's `../src` (every
    `z2ui5_cl_smpc_app_*` port + the overview) into `src/ai-demokit/`.
 2. **downport** — copy `src/` → `downport/` and `abaplint --fix` it to v702
    (the transpiler cannot take modern ABAP directly).

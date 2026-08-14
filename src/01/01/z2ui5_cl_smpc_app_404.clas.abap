@@ -36,22 +36,22 @@ CLASS z2ui5_cl_smpc_app_404 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
 
-        )->open( `FlexBox`
+        )->ele( `FlexBox`
             )->a( n = `items`     v = client->_bind( t_model_data )
             )->a( n = `direction` v = `Column`
 
-            )->open( `VBox`
+            )->ele( `VBox`
                 )->a( n = `class` v = `sapUiTinyMargin`
 
-                )->leaf( `Label`
+                )->tag( `Label`
                     )->a( n = `text` v = `{LABEL}`
-                )->leaf( `TimePicker`
+                )->tag( `TimePicker`
                     )->a( n = `width`          v = `100%`
                     )->a( n = `valueState`     v = `{VALUESTATE}`
                     )->a( n = `valueStateText` v = `{VALUESTATETEXT}` ).

@@ -35,48 +35,48 @@ CLASS z2ui5_cl_smpc_app_079 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `height`    v = `100%`
 
-        )->open( `Page`
+        )->ele( `Page`
             )->a( n = `enableScrolling` v = `true`
             )->a( n = `title`          v = `Page Header Title`
             )->a( n = `titleLevel`     v = `H2`
             )->a( n = `showFooter`     v = `false`
 
-            )->open( `List`
+            )->ele( `List`
                 )->a( n = `items` v = client->_bind( t_products )
 
-                )->open( `headerToolbar`
-                    )->open( `Toolbar`
+                )->ele( `headerToolbar`
+                    )->ele( `Toolbar`
                         " the Link sits in the Title content aggregation (since UI5 1.87) - kept 1:1, needs UI5 >= 1.87
-                        )->open( `Title`
+                        )->ele( `Title`
                             )->a( n = `level` v = `H3`
-                            )->leaf( `Link`
+                            )->tag( `Link`
                                 )->a( n = `text`   v = `Products Link`
                                 )->a( n = `href`   v = `https://sap.com`
                                 )->a( n = `target` v = `_blank`
 
-                        )->shut(
-                        )->leaf( `ToolbarSpacer`
-                        )->leaf( `Button`
+                        )->end(
+                        )->tag( `ToolbarSpacer`
+                        )->tag( `Button`
                             )->a( n = `icon`  v = `sap-icon://settings`
                             )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
                                                                             t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Header toolbar button pressed.` ) ) )
 
-                    )->shut(
-                )->shut(
+                    )->end(
+                )->end(
 
-                )->leaf( `StandardListItem`
+                )->tag( `StandardListItem`
                     )->a( n = `title`       v = `{NAME}`
                     )->a( n = `description` v = `{PRODUCT_ID}`
 
-            )->shut(
-        )->shut( ).
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

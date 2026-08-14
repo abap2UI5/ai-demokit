@@ -57,7 +57,7 @@ CLASS z2ui5_cl_smpc_app_351 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the Splitter with its content areas and the options layout below it are
     " both bound to t_areas - the original declares three areas in the view and
@@ -65,22 +65,22 @@ CLASS z2ui5_cl_smpc_app_351 IMPLEMENTATION.
     " table is what makes Resizable / Size / Min-Size drive the layout data
     " without a single imperative setter. css/splitter.css is injected as a
     " core:HTML style leaf.
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `displayBlock` v = `true`
         )->a( n = `xmlns:l`      v = `sap.ui.layout`
         )->a( n = `xmlns:mvc`    v = `sap.ui.core.mvc`
         )->a( n = `xmlns:core`   v = `sap.ui.core`
         )->a( n = `xmlns`        v = `sap.m`
 
-        )->leaf( n = `HTML` ns = `core`
+        )->tag( n = `HTML` ns = `core`
             )->a( n = `content` v = `<style>.options\{margin:1rem 2rem\}.options .paddingRight\{padding-right:0.5rem\}` &&
                                     `.optionTitle\{font-weight:bold;margin-right:4rem\}</style>`
 
-        )->open( `App`
-            )->open( `Page`
+        )->ele( `App`
+            )->ele( `Page`
                 )->a( n = `showHeader` v = `false`
 
-                )->open( n = `Splitter` ns = `l`
+                )->ele( n = `Splitter` ns = `l`
                     )->a( n = `id`           v = `mainSplitter`
                     )->a( n = `height`       v = `500px`
                     )->a( n = `width`        v = `100%`
@@ -88,74 +88,74 @@ CLASS z2ui5_cl_smpc_app_351 IMPLEMENTATION.
                     )->a( n = `contentAreas` v = client->_bind( t_areas )
                     )->a( n = `resize`       v = client->_event( `RESIZE` )
 
-                    )->open( `Button`
+                    )->ele( `Button`
                         )->a( n = `width` v = `100%`
                         )->a( n = `text`  v = `{TEXT}`
 
-                        )->open( `layoutData`
-                            )->leaf( n = `SplitterLayoutData` ns = `l`
+                        )->ele( `layoutData`
+                            )->tag( n = `SplitterLayoutData` ns = `l`
                                 )->a( n = `size`      v = `{SIZE}`
                                 )->a( n = `minSize`   v = `{MINSIZE}`
                                 )->a( n = `resizable` v = `{RESIZABLE}`
 
-                        )->shut(
-                    )->shut(
-                )->shut(
-                )->open( n = `HorizontalLayout` ns = `l`
+                        )->end(
+                    )->end(
+                )->end(
+                )->ele( n = `HorizontalLayout` ns = `l`
                     )->a( n = `class` v = `sapUiSmallMarginTop sapUiSmallMarginBegin`
 
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text`  v = `Add content area`
                         )->a( n = `press` v = client->_event( `ADD_AREA` )
 
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text`  v = `Remove content area`
                         )->a( n = `press` v = client->_event( `REMOVE_AREA` )
 
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text`  v = `Invalidate Splitter`
                         )->a( n = `press` v = client->_event( `INVALIDATE` )
 
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `text`  v = `Change Orientation`
                         )->a( n = `press` v = client->_event( `CHANGE_ORIENTATION` )
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `id`    v = `eventStatus`
                         )->a( n = `text`  v = client->_bind( eventstatus )
                         )->a( n = `class` v = `sapUiTinyMarginTop sapUiTinyMarginBegin`
 
-                )->shut(
-                )->open( n = `VerticalLayout` ns = `l`
+                )->end(
+                )->ele( n = `VerticalLayout` ns = `l`
                     )->a( n = `id`      v = `mainOptions`
                     )->a( n = `class`   v = `options`
                     )->a( n = `content` v = client->_bind( t_areas )
 
-                    )->open( `HBox`
+                    )->ele( `HBox`
                         )->a( n = `alignItems` v = `Center`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text`  v = `{TITLE}`
                             )->a( n = `class` v = `optionTitle`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Resizable: `
 
-                        )->leaf( `CheckBox`
+                        )->tag( `CheckBox`
                             )->a( n = `selected` v = `{RESIZABLE}`
                             )->a( n = `class`    v = `paddingRight`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Size (CSS): `
 
-                        )->leaf( `Input`
+                        )->tag( `Input`
                             )->a( n = `value` v = `{SIZE}`
                             )->a( n = `class` v = `paddingRight`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Min-Size: (in px)`
 
-                        )->leaf( `Input`
+                        )->tag( `Input`
                             )->a( n = `value`  v = `{MINSIZE_TEXT}`
                             )->a( n = `change` v = client->_event( `MINSIZE_CHANGED` ) ).
 

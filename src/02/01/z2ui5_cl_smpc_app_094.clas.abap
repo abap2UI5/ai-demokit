@@ -45,83 +45,83 @@ CLASS z2ui5_cl_smpc_app_094 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
 
-        )->open( `App`
-            )->open( `pages`
-                )->open( `Page`
+        )->ele( `App`
+            )->ele( `pages`
+                )->ele( `Page`
                     )->a( n = `class` v = `sapUiContentPadding`
                     )->a( n = `title` v = `Header`
-                    )->open( `content`
-                        )->open( `Table`
+                    )->ele( `content`
+                        )->ele( `Table`
                             )->a( n = `id`        v = `idProductsTable`
                             )->a( n = `mode`      v = `MultiSelect`
                             )->a( n = `inset`     v = `false`
                             )->a( n = `items`     v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
                             )->a( n = `itemPress` v = client->_event( `DRILL` )
 
-                            )->open( `headerToolbar`
-                                )->open( `Toolbar`
-                                    )->leaf( `Title`
+                            )->ele( `headerToolbar`
+                                )->ele( `Toolbar`
+                                    )->tag( `Title`
                                         )->a( n = `text`  v = `Table - click events are disabled while a popover is open`
                                         )->a( n = `level` v = `H2`
 
-                                )->shut(
-                            )->shut(
+                                )->end(
+                            )->end(
 
-                            )->open( `columns`
-                                )->open( `Column`
-                                    )->leaf( `Text`
+                            )->ele( `columns`
+                                )->ele( `Column`
+                                    )->tag( `Text`
                                         )->a( n = `text` v = `Product`
 
-                                )->shut(
-                                )->open( `Column`
-                                    )->leaf( `Text`
+                                )->end(
+                                )->ele( `Column`
+                                    )->tag( `Text`
                                         )->a( n = `text` v = `ID (Example feature)`
 
-                                )->shut(
-                                )->open( `Column`
+                                )->end(
+                                )->ele( `Column`
                                     )->a( n = `hAlign`         v = `End`
                                     )->a( n = `width`          v = `12em`
                                     )->a( n = `minScreenWidth` v = `Tablet`
                                     )->a( n = `demandPopin`    v = `true`
-                                    )->leaf( `Text`
+                                    )->tag( `Text`
                                         )->a( n = `text` v = `Quantity`
 
-                                )->shut(
-                                )->open( `Column`
+                                )->end(
+                                )->ele( `Column`
                                     )->a( n = `minScreenWidth` v = `Tablet`
                                     )->a( n = `demandPopin`    v = `true`
                                     )->a( n = `hAlign`         v = `End`
-                                    )->leaf( `Text`
+                                    )->tag( `Text`
                                         )->a( n = `text` v = `Weight`
 
-                                )->shut(
-                                )->open( `Column`
+                                )->end(
+                                )->ele( `Column`
                                     )->a( n = `hAlign` v = `End`
-                                    )->leaf( `Text`
+                                    )->tag( `Text`
                                         )->a( n = `text` v = `Unit Price`
 
-                                )->shut(
-                            )->shut(
+                                )->end(
+                            )->end(
 
-                            )->open( `items`
-                                )->open( `ColumnListItem`
+                            )->ele( `items`
+                                )->ele( `ColumnListItem`
                                     )->a( n = `vAlign` v = `Middle`
                                     )->a( n = `type`   v = `Navigation`
-                                    )->open( `cells`
-                                        )->leaf( `ObjectIdentifier`
+                                    )->ele( `cells`
+                                        )->tag( `ObjectIdentifier`
                                             )->a( n = `title` v = `{NAME}`
-                                        )->leaf( `Link`
+                                        )->tag( `Link`
                                             )->a( n = `text`         v = `{PRODUCT_ID}`
                                             )->a( n = `press`        v = client->_event( val   = `POPOVER`
                                                                                          t_arg = VALUE #( ( `$event.oSource.getBindingContext().getPath().split('/').pop()` ) ( `$event.oSource.sId` ) ) )
                                             )->a( n = `ariaHasPopup` v = `Dialog`
-                                        )->leaf( `Input`
+                                        )->tag( `Input`
                                             )->a( n = `value`       v = `{QUANTITY}`
                                             " the ORIGINAL writes type="{Text}"
                                             " (PopoverControllingCloseBehavior.view.xml): it meant the literal
@@ -131,21 +131,21 @@ CLASS z2ui5_cl_smpc_app_094 IMPLEMENTATION.
                                             )->a( n = `type`        v = `{Text}`
                                             )->a( n = `description` v = `{UOM}`
                                             )->a( n = `fieldWidth`  v = `{60%}`
-                                        )->leaf( `ObjectNumber`
+                                        )->tag( `ObjectNumber`
                                             )->a( n = `number` v = `{WEIGHT_MEASURE}`
                                             )->a( n = `unit`   v = `{WEIGHT_UNIT}`
-                                        )->leaf( `ObjectNumber`
+                                        )->tag( `ObjectNumber`
                                             )->a( n = `number` v = |\{ parts:[\{path:'PRICE'\},\{path:'CURRENCY_CODE'\}], type: 'sap.ui.model.type.Currency', formatOptions: \{showMeasure: false\} \}|
                                             )->a( n = `unit`   v = `{CURRENCY_CODE}`
 
-                                    )->shut(
-                                )->shut(
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
-        )->shut( ).
+                                    )->end(
+                                )->end(
+                            )->end(
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 
@@ -169,36 +169,36 @@ CLASS z2ui5_cl_smpc_app_094 IMPLEMENTATION.
         " popover slot to t_products/<index>; the row index and the Link's control
         " id arrive as the two event args.
         DATA(idx) = client->get_event_arg( ).
-        DATA(popup) = z2ui5_cl_ai_xml=>factory( ).
-        popup->open( n = `FragmentDefinition` ns = `core`
+        DATA(popup) = z2ui5_cl_ui5_view_builder=>factory( ).
+        popup->ele( n = `FragmentDefinition` ns = `core`
             )->a( n = `xmlns`      v = `sap.m`
             )->a( n = `xmlns:core` v = `sap.ui.core`
-            )->open( `Popover`
+            )->ele( `Popover`
                 )->a( n = `id`        v = `myPopover`
                 )->a( n = `title`     v = `{PRODUCT_ID}`
                 )->a( n = `class`     v = `sapUiContentPadding`
                 )->a( n = `placement` v = `Right`
                 )->a( n = `initialFocus` v = `action`
-                )->open( `footer`
-                    )->open( `Toolbar`
-                        )->leaf( `ToolbarSpacer`
-                        )->leaf( `Button`
+                )->ele( `footer`
+                    )->ele( `Toolbar`
+                        )->tag( `ToolbarSpacer`
+                        )->tag( `Button`
                             )->a( n = `id`    v = `action`
                             )->a( n = `text`  v = `Action`
                             )->a( n = `press` v = client->_event( `ACTION` )
 
-                    )->shut(
-                )->shut(
-                )->open( `VBox`
-                    )->leaf( `Title`
+                    )->end(
+                )->end(
+                )->ele( `VBox`
+                    )->tag( `Title`
                         )->a( n = `text` v = `{NAME}`
-                    )->leaf( `Image`
+                    )->tag( `Image`
                         )->a( n = `src`          v = `{PRODUCT_PIC_URL}`
                         )->a( n = `width`        v = `15em`
                         )->a( n = `densityAware` v = `false`
 
-                )->shut(
-            )->shut( ).
+                )->end(
+            )->end( ).
         client->popover_display( xml   = popup->stringify( )
                                  by_id = client->get_event_arg( 2 ) ).
         client->follow_up_action( val   = client->cs_event-bind_element

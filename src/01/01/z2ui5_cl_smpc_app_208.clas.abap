@@ -36,18 +36,18 @@ CLASS z2ui5_cl_smpc_app_208 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
-        )->open( `List`
+        )->ele( `List`
             )->a( n = `headerText` v = `Products`
             )->a( n = `items`      v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
 
-            )->open( `items`
-                )->leaf( `StandardListItem`
+            )->ele( `items`
+                )->tag( `StandardListItem`
                     )->a( n = `title`     v = `{NAME}`
                     )->a( n = `info`      v = `{STATUS}`
                     " infoState is derived from Status in ABAP (thin frontend) - see the sidecar

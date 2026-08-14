@@ -101,7 +101,7 @@ generating or reviewing):
   put `main` last (we: first, call-order), require an ABAP Doc header (we: forbidden —
   sidecar instead), use inline `check_on_event( 'X' )` for few events
   (we: always CASE in `on_event`), and their view builder is the typed
-  `z2ui5_cl_xml_view` (we: generic `z2ui5_cl_ai_xml`) — view-building idiom
+  `z2ui5_cl_xml_view` (we: generic `z2ui5_cl_ui5_view_builder`) — view-building idiom
   does not transfer. Where the two conflict, THIS repo's AGENTS.md wins.
 - **`UI5/openui5`** (upstream, on demand) — the truth about what **UI5**
   does. Do NOT keep a standing full clone; use a sparse, blob-filtered

@@ -50,31 +50,31 @@ CLASS z2ui5_cl_smpc_app_294 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `height`    v = `100%`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
 
-        )->open( `Page`
+        )->ele( `Page`
             )->a( n = `showHeader` v = `false`
 
-            )->open( `content`
+            )->ele( `content`
 
-            )->shut(
+            )->end(
 
-            )->open( `footer`
-                )->open( `OverflowToolbar`
+            )->ele( `footer`
+                )->ele( `OverflowToolbar`
 
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `id`    v = `messageViewBtn`
                         )->a( n = `icon`  v = client->_bind( button_icon )
                         )->a( n = `type`  v = client->_bind( button_type )
                         )->a( n = `text`  v = client->_bind( button_text )
                         )->a( n = `press` v = client->_event( `MESSAGE_VIEW` )
-                    )->leaf( `ToolbarSpacer` ).
+                    )->tag( `ToolbarSpacer` ).
 
     client->view_display( view->stringify( ) ).
 
@@ -110,49 +110,49 @@ CLASS z2ui5_cl_smpc_app_294 IMPLEMENTATION.
 
   METHOD popup_display.
 
-    DATA(popup) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(popup) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    popup->open( n = `FragmentDefinition` ns = `core`
+    popup->ele( n = `FragmentDefinition` ns = `core`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns`      v = `sap.m`
 
-        )->open( `Dialog`
+        )->ele( `Dialog`
             )->a( n = `contentHeight`     v = `50%`
             )->a( n = `contentWidth`      v = `50%`
             )->a( n = `verticalScrolling` v = `false`
 
-            )->open( `customHeader`
+            )->ele( `customHeader`
 
-                )->open( `Bar`
+                )->ele( `Bar`
 
-                    )->open( `contentLeft`
-                        )->leaf( `Button`
+                    )->ele( `contentLeft`
+                        )->tag( `Button`
                             )->a( n = `icon`    v = `sap-icon://nav-back`
                             )->a( n = `visible` v = client->_bind( back_visible )
                             )->a( n = `press`   v = client->_event( `NAV_BACK` )
 
-                    )->shut(
+                    )->end(
 
-                    )->open( `contentMiddle`
-                        )->leaf( `Text`
+                    )->ele( `contentMiddle`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Publish order`
 
-                    )->shut(
-                )->shut(
-            )->shut(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( `content`
+            )->ele( `content`
 
-                )->open( `MessageView`
+                )->ele( `MessageView`
                     )->a( n = `id`                    v = `messageView`
                     )->a( n = `showDetailsPageHeader` v = `false`
                     )->a( n = `groupItems`            v = `true`
                     )->a( n = `items`                 v = client->_bind( t_messages )
                     )->a( n = `itemSelect`            v = client->_event( `ITEM_SELECT` )
 
-                    )->open( `items`
+                    )->ele( `items`
 
-                        )->open( `MessageItem`
+                        )->ele( `MessageItem`
                             )->a( n = `type`        v = `{TYPE}`
                             )->a( n = `title`       v = `{TITLE}`
                             )->a( n = `description` v = `{DESCRIPTION}`
@@ -160,20 +160,20 @@ CLASS z2ui5_cl_smpc_app_294 IMPLEMENTATION.
                             )->a( n = `counter`     v = `{COUNTER}`
                             )->a( n = `groupName`   v = `{GROUP}`
 
-                            )->open( `link`
-                                )->leaf( `Link`
+                            )->ele( `link`
+                                )->tag( `Link`
                                     )->a( n = `text`   v = `Show more information`
                                     )->a( n = `href`   v = `http://sap.com`
                                     )->a( n = `target` v = `_blank`
 
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
+                            )->end(
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( `endButton`
-                )->leaf( `Button`
+            )->ele( `endButton`
+                )->tag( `Button`
                     )->a( n = `text`  v = `Close`
                     )->a( n = `press` v = client->_event( `CLOSE` ) ).
 

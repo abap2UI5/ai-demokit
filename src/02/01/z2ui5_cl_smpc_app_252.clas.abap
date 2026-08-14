@@ -45,9 +45,9 @@ CLASS z2ui5_cl_smpc_app_252 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`       v = `sap.m`
         )->a( n = `xmlns:mvc`   v = `sap.ui.core.mvc`
         )->a( n = `xmlns:f`     v = `sap.f`
@@ -56,152 +56,152 @@ CLASS z2ui5_cl_smpc_app_252 IMPLEMENTATION.
         )->a( n = `xmlns:lf`    v = `sap.ui.layout.form`
         )->a( n = `height`      v = `100%`
 
-        )->open( `Page`
+        )->ele( `Page`
             )->a( n = `title` v = `Carousel With customLayout aggregation Sample`
             )->a( n = `class` v = `sapUiResponsiveContentPadding`
 
-            )->open( n = `SimpleForm` ns = `lf`
+            )->ele( n = `SimpleForm` ns = `lf`
                 )->a( n = `labelSpanL` v = `6`
                 )->a( n = `labelSpanM` v = `6`
                 )->a( n = `editable`   v = `true`
                 )->a( n = `layout`     v = `ResponsiveGridLayout`
-                )->leaf( `Label`
+                )->tag( `Label`
                     )->a( n = `text` v = `Number of pages to display`
                 " liveChange wire dropped (declared): value is two-way bound with
                 " valueLiveUpdate, CarouselLayout.visiblePagesCount binds the same
                 " field - the toggles drive the carousel client-side (007/128)
-                )->leaf( `Input`
+                )->tag( `Input`
                     )->a( n = `type`            v = `Number`
                     )->a( n = `value`           v = client->_bind( pages_count )
                     )->a( n = `valueLiveUpdate` v = `true`
                     )->a( n = `width`           v = `320px`
-                )->leaf( `Label`
+                )->tag( `Label`
                     )->a( n = `text` v = `Scroll mode - visible pages:`
-                )->leaf( `Switch`
+                )->tag( `Switch`
                     )->a( n = `state`   v = client->_bind( scroll_visible )
                     )->a( n = `tooltip` v = `Toggles the scrollMode property of the carousel`
 
-            )->shut(
-            )->leaf( `Title`
+            )->end(
+            )->tag( `Title`
                 )->a( n = `id`    v = `carouselTitle`
                 )->a( n = `class` v = `sapUiMediumMarginTop`
                 )->a( n = `text`  v = `10 Matching Results`
 
-            )->open( `Carousel`
+            )->ele( `Carousel`
                 )->a( n = `id`             v = `carouselSample`
                 )->a( n = `ariaLabelledBy` v = `carouselTitle`
                 )->a( n = `height`         v = `auto`
                 )->a( n = `pages`          v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }' \}|
 
-                )->open( `customLayout`
-                    )->leaf( `CarouselLayout`
+                )->ele( `customLayout`
+                    )->tag( `CarouselLayout`
                         )->a( n = `visiblePagesCount` v = client->_bind( pages_count )
                         " OnScrollModeChange folded into the binding (declared)
                         )->a( n = `scrollMode`        v = |\{= ${ client->_bind( scroll_visible ) } ? 'VisiblePages' : 'SinglePage' \}|
 
-                )->shut(
+                )->end(
 
-                )->open( `ScrollContainer`
+                )->ele( `ScrollContainer`
                     )->a( n = `vertical`   v = `false`
                     )->a( n = `horizontal` v = `false`
                     )->a( n = `class`      v = `sapUiContentPadding`
 
-                    )->open( n = `Card` ns = `f`
-                        )->open( n = `header` ns = `f`
-                            )->leaf( n = `Header` ns = `cards`
+                    )->ele( n = `Card` ns = `f`
+                        )->ele( n = `header` ns = `f`
+                            )->tag( n = `Header` ns = `cards`
                                 )->a( n = `title`            v = `{NAME}`
                                 )->a( n = `subtitle`         v = `{STATUS}`
                                 )->a( n = `iconSrc`          v = `{PRODUCTPICURL}`
                                 )->a( n = `iconDisplayShape` v = `Square`
 
-                        )->shut(
-                        )->open( n = `content` ns = `f`
-                            )->open( n = `VerticalLayout` ns = `l`
+                        )->end(
+                        )->ele( n = `content` ns = `f`
+                            )->ele( n = `VerticalLayout` ns = `l`
                                 )->a( n = `class` v = `sapUiContentPadding`
                                 )->a( n = `width` v = `100%`
 
-                                )->open( n = `BlockLayout` ns = `l`
-                                    )->open( n = `BlockLayoutRow` ns = `l`
+                                )->ele( n = `BlockLayout` ns = `l`
+                                    )->ele( n = `BlockLayoutRow` ns = `l`
 
-                                        )->open( n = `BlockLayoutCell` ns = `l`
+                                        )->ele( n = `BlockLayoutCell` ns = `l`
                                             )->a( n = `title` v = `Main Information`
                                             )->a( n = `width` v = `1`
 
-                                            )->open( `HBox`
+                                            )->ele( `HBox`
                                                 )->a( n = `class` v = `sapUiTinyMarginBottom`
-                                                )->leaf( `Label`
+                                                )->tag( `Label`
                                                     )->a( n = `text` v = `Supplier:`
 
-                                            )->shut(
-                                            )->open( `HBox`
+                                            )->end(
+                                            )->ele( `HBox`
                                                 )->a( n = `class` v = `sapUiSmallMarginBottom`
-                                                )->leaf( `Text`
+                                                )->tag( `Text`
                                                     )->a( n = `text` v = `{SUPPLIERNAME}`
 
-                                            )->shut(
-                                            )->open( `HBox`
+                                            )->end(
+                                            )->ele( `HBox`
                                                 )->a( n = `class` v = `sapUiTinyMarginBottom`
-                                                )->leaf( `Label`
+                                                )->tag( `Label`
                                                     )->a( n = `text` v = `Main Category:`
 
-                                            )->shut(
-                                            )->open( `HBox`
+                                            )->end(
+                                            )->ele( `HBox`
                                                 )->a( n = `class` v = `sapUiSmallMarginBottom`
-                                                )->leaf( `Text`
+                                                )->tag( `Text`
                                                     )->a( n = `text` v = `{MAINCATEGORY}`
 
-                                            )->shut(
-                                            )->open( `HBox`
+                                            )->end(
+                                            )->ele( `HBox`
                                                 )->a( n = `class` v = `sapUiTinyMarginBottom`
-                                                )->leaf( `Label`
+                                                )->tag( `Label`
                                                     )->a( n = `text` v = `Category:`
 
-                                            )->shut(
-                                            )->open( `HBox`
+                                            )->end(
+                                            )->ele( `HBox`
                                                 )->a( n = `class` v = `sapUiSmallMarginBottom`
-                                                )->leaf( `Text`
+                                                )->tag( `Text`
                                                     )->a( n = `text` v = `{CATEGORY}`
 
-                                            )->shut(
-                                        )->shut(
+                                            )->end(
+                                        )->end(
 
-                                        )->open( n = `BlockLayoutCell` ns = `l`
+                                        )->ele( n = `BlockLayoutCell` ns = `l`
                                             )->a( n = `title` v = `Specifications`
                                             )->a( n = `width` v = `1`
 
-                                            )->open( `HBox`
+                                            )->ele( `HBox`
                                                 )->a( n = `class` v = `sapUiTinyMarginBottom`
-                                                )->leaf( `Label`
+                                                )->tag( `Label`
                                                     )->a( n = `text` v = `Width (cm)`
 
-                                            )->shut(
-                                            )->open( `HBox`
+                                            )->end(
+                                            )->ele( `HBox`
                                                 )->a( n = `class` v = `sapUiSmallMarginBottom`
-                                                )->leaf( `Text`
+                                                )->tag( `Text`
                                                     )->a( n = `text` v = `{WIDTH}`
 
-                                            )->shut(
-                                            )->open( `HBox`
+                                            )->end(
+                                            )->ele( `HBox`
                                                 )->a( n = `class` v = `sapUiTinyMarginBottom`
-                                                )->leaf( `Label`
+                                                )->tag( `Label`
                                                     )->a( n = `text` v = `Height (cm)`
 
-                                            )->shut(
-                                            )->open( `HBox`
+                                            )->end(
+                                            )->ele( `HBox`
                                                 )->a( n = `class` v = `sapUiSmallMarginBottom`
-                                                )->leaf( `Text`
+                                                )->tag( `Text`
                                                     )->a( n = `text` v = `{HEIGHT}`
 
-                                            )->shut(
-                                            )->open( `HBox`
+                                            )->end(
+                                            )->ele( `HBox`
                                                 )->a( n = `class` v = `sapUiTinyMarginBottom`
-                                                )->leaf( `Label`
+                                                )->tag( `Label`
                                                     )->a( n = `text` v = `Weight (kg)`
 
-                                            )->shut(
-                                            )->open( `HBox`
+                                            )->end(
+                                            )->ele( `HBox`
                                                 )->a( n = `class` v = `sapUiSmallMarginBottom`
-                                                )->leaf( `Text`
+                                                )->tag( `Text`
                                                     )->a( n = `text` v = `{WEIGHTMEASURE}` ).
 
     client->view_display( view->stringify( ) ).

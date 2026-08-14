@@ -31,21 +31,21 @@ CLASS z2ui5_cl_smpc_app_181 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " sap.ui.model.type.Date data-type binding (TypeDateAsString). The DateType
     " is pulled via core:require and every DatePicker/Text keeps the original
     " { path, type: 'DateType', formatOptions: { style, source: { pattern } } }
     " binding 1:1 (raw binding-info string, braces escaped, path via _bind). The
     " model field is a yyyy-MM-dd string (the binding's source pattern).
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`        v = `sap.m`
         )->a( n = `xmlns:mvc`    v = `sap.ui.core.mvc`
         )->a( n = `xmlns:form`   v = `sap.ui.layout.form`
         )->a( n = `xmlns:core`   v = `sap.ui.core`
         )->a( n = `core:require` v = `{DateType: 'sap/ui/model/type/Date'}`
 
-        )->open( n = `SimpleForm` ns = `form`
+        )->ele( n = `SimpleForm` ns = `form`
             )->a( n = `width`      v = `auto`
             )->a( n = `class`      v = `sapUiResponsiveMargin`
             )->a( n = `layout`     v = `ResponsiveGridLayout`
@@ -58,16 +58,16 @@ CLASS z2ui5_cl_smpc_app_181 IMPLEMENTATION.
             )->a( n = `columnsM`   v = `1`
             )->a( n = `title`      v = `Date Input`
 
-            )->open( n = `content` ns = `form`
-                )->leaf( `Label`
+            )->ele( n = `content` ns = `form`
+                )->tag( `Label`
                     )->a( n = `text` v = `Date`
-                )->leaf( `DatePicker`
+                )->tag( `DatePicker`
                     )->a( n = `value` v = |\{ path: '{ client->_bind( val = date path = abap_true ) }', type: 'DateType', formatOptions: \{ source: \{ pattern: 'yyyy-MM-dd' \} \} \}|
 
-        )->shut(
-        )->shut(
+        )->end(
+        )->end(
 
-        )->open( n = `SimpleForm` ns = `form`
+        )->ele( n = `SimpleForm` ns = `form`
             )->a( n = `width`      v = `auto`
             )->a( n = `class`      v = `sapUiResponsiveMargin`
             )->a( n = `layout`     v = `ResponsiveGridLayout`
@@ -79,26 +79,26 @@ CLASS z2ui5_cl_smpc_app_181 IMPLEMENTATION.
             )->a( n = `columnsM`   v = `1`
             )->a( n = `title`      v = `Format Options`
 
-            )->open( n = `content` ns = `form`
-                )->leaf( `Label`
+            )->ele( n = `content` ns = `form`
+                )->tag( `Label`
                     )->a( n = `text` v = `Short`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = date path = abap_true ) }', type: 'DateType', formatOptions: \{ style: 'short', source: \{ pattern: 'yyyy-MM-dd' \} \} \}|
-                )->leaf( `Label`
+                )->tag( `Label`
                     )->a( n = `text` v = `Medium`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = date path = abap_true ) }', type: 'DateType', formatOptions: \{ style: 'medium', source: \{ pattern: 'yyyy-MM-dd' \} \} \}|
-                )->leaf( `Label`
+                )->tag( `Label`
                     )->a( n = `text` v = `Long`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = date path = abap_true ) }', type: 'DateType', formatOptions: \{ style: 'long', source: \{ pattern: 'yyyy-MM-dd' \} \} \}|
-                )->leaf( `Label`
+                )->tag( `Label`
                     )->a( n = `text` v = `Full`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = date path = abap_true ) }', type: 'DateType', formatOptions: \{ style: 'full', source: \{ pattern: 'yyyy-MM-dd' \} \} \}|
 
-        )->shut(
-        )->shut( ).
+        )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

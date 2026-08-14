@@ -26,151 +26,151 @@ CLASS z2ui5_cl_smpc_app_050 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
-        )->open( `VBox`
+        )->ele( `VBox`
             )->a( n = `class` v = `sapUiSmallMargin`
 
-            )->open( `HBox`
-                )->open( `Switch`
+            )->ele( `HBox`
+                )->ele( `Switch`
                     )->a( n = `state` v = `true`
 
-                    )->open( `layoutData`
-                        )->leaf( `FlexItemData`
+                    )->ele( `layoutData`
+                        )->tag( `FlexItemData`
                             )->a( n = `growFactor` v = `1`
 
-                    )->shut(
-                )->shut(
-                )->open( `Switch`
+                    )->end(
+                )->end(
+                )->ele( `Switch`
                     )->a( n = `state` v = `false`
 
-                    )->open( `layoutData`
-                        )->leaf( `FlexItemData`
+                    )->ele( `layoutData`
+                        )->tag( `FlexItemData`
                             )->a( n = `growFactor` v = `1`
 
-                    )->shut(
-                )->shut(
-                )->open( `Switch`
+                    )->end(
+                )->end(
+                )->ele( `Switch`
                     )->a( n = `state`   v = `true`
                     )->a( n = `enabled` v = `false`
 
-                    )->open( `layoutData`
-                        )->leaf( `FlexItemData`
+                    )->ele( `layoutData`
+                        )->tag( `FlexItemData`
                             )->a( n = `growFactor` v = `1`
 
-                    )->shut(
-                )->shut(
-            )->shut(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( `HBox`
-                )->open( `Switch`
+            )->ele( `HBox`
+                )->ele( `Switch`
                     )->a( n = `state`         v = `true`
                     )->a( n = `customTextOn`  v = `Yes`
                     )->a( n = `customTextOff` v = `No`
 
-                    )->open( `layoutData`
-                        )->leaf( `FlexItemData`
+                    )->ele( `layoutData`
+                        )->tag( `FlexItemData`
                             )->a( n = `growFactor` v = `1`
 
-                    )->shut(
-                )->shut(
-                )->open( `Switch`
+                    )->end(
+                )->end(
+                )->ele( `Switch`
                     )->a( n = `state`         v = `false`
                     )->a( n = `customTextOn`  v = `Yes`
                     )->a( n = `customTextOff` v = `No`
 
-                    )->open( `layoutData`
-                        )->leaf( `FlexItemData`
+                    )->ele( `layoutData`
+                        )->tag( `FlexItemData`
                             )->a( n = `growFactor` v = `1`
 
-                    )->shut(
-                )->shut(
-                )->open( `Switch`
+                    )->end(
+                )->end(
+                )->ele( `Switch`
                     )->a( n = `state`         v = `true`
                     )->a( n = `customTextOn`  v = `Yes`
                     )->a( n = `customTextOff` v = `No`
                     )->a( n = `enabled`       v = `false`
 
-                    )->open( `layoutData`
-                        )->leaf( `FlexItemData`
+                    )->ele( `layoutData`
+                        )->tag( `FlexItemData`
                             )->a( n = `growFactor` v = `1`
 
-                    )->shut(
-                )->shut(
-            )->shut(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( `HBox`
-                )->open( `Switch`
+            )->ele( `HBox`
+                )->ele( `Switch`
                     )->a( n = `state`         v = `true`
                     )->a( n = `customTextOn`  v = ` `
                     )->a( n = `customTextOff` v = ` `
 
-                    )->open( `layoutData`
-                        )->leaf( `FlexItemData`
+                    )->ele( `layoutData`
+                        )->tag( `FlexItemData`
                             )->a( n = `growFactor` v = `1`
 
-                    )->shut(
-                )->shut(
-                )->open( `Switch`
+                    )->end(
+                )->end(
+                )->ele( `Switch`
                     )->a( n = `state`         v = `false`
                     )->a( n = `customTextOn`  v = ` `
                     )->a( n = `customTextOff` v = ` `
 
-                    )->open( `layoutData`
-                        )->leaf( `FlexItemData`
+                    )->ele( `layoutData`
+                        )->tag( `FlexItemData`
                             )->a( n = `growFactor` v = `1`
 
-                    )->shut(
-                )->shut(
-                )->open( `Switch`
+                    )->end(
+                )->end(
+                )->ele( `Switch`
                     )->a( n = `state`         v = `true`
                     )->a( n = `customTextOn`  v = ` `
                     )->a( n = `customTextOff` v = ` `
                     )->a( n = `enabled`       v = `false`
 
-                    )->open( `layoutData`
-                        )->leaf( `FlexItemData`
+                    )->ele( `layoutData`
+                        )->tag( `FlexItemData`
                             )->a( n = `growFactor` v = `1`
 
-                    )->shut(
-                )->shut(
-            )->shut(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( `HBox`
-                )->open( `Switch`
+            )->ele( `HBox`
+                )->ele( `Switch`
                     )->a( n = `type`  v = `AcceptReject`
                     )->a( n = `state` v = `true`
 
-                    )->open( `layoutData`
-                        )->leaf( `FlexItemData`
+                    )->ele( `layoutData`
+                        )->tag( `FlexItemData`
                             )->a( n = `growFactor` v = `1`
 
-                    )->shut(
-                )->shut(
-                )->open( `Switch`
+                    )->end(
+                )->end(
+                )->ele( `Switch`
                     )->a( n = `type`  v = `AcceptReject`
                     )->a( n = `state` v = `false`
 
-                    )->open( `layoutData`
-                        )->leaf( `FlexItemData`
+                    )->ele( `layoutData`
+                        )->tag( `FlexItemData`
                             )->a( n = `growFactor` v = `1`
 
-                    )->shut(
-                )->shut(
-                )->open( `Switch`
+                    )->end(
+                )->end(
+                )->ele( `Switch`
                     )->a( n = `type`    v = `AcceptReject`
                     )->a( n = `state`   v = `true`
                     )->a( n = `enabled` v = `false`
 
-                    )->open( `layoutData`
-                        )->leaf( `FlexItemData`
+                    )->ele( `layoutData`
+                        )->tag( `FlexItemData`
                             )->a( n = `growFactor` v = `1`
 
-                    )->shut( ).
+                    )->end( ).
 
     client->view_display( view->stringify( ) ).
 

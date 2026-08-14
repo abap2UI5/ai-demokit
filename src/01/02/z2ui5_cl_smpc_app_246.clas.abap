@@ -31,18 +31,18 @@ CLASS z2ui5_cl_smpc_app_246 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:u`   v = `sap.ui.unified`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `class`     v = `viewPadding`
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
 
-            )->open( n = `FileUploader` ns = `u`
+            )->ele( n = `FileUploader` ns = `u`
                 )->a( n = `id`             v = `fileUploader`
                 )->a( n = `name`           v = `myFileUpload`
                 " added attr (declared): two-way value so the backend can run the
@@ -60,21 +60,21 @@ CLASS z2ui5_cl_smpc_app_246 IMPLEMENTATION.
                 )->a( n = `fileType`       v = `txt,jpg`
                 )->a( n = `placeholder`    v = `Choose a file for Upload...`
 
-                )->open( n = `parameters` ns = `u`
-                    )->leaf( n = `FileUploaderParameter` ns = `u`
+                )->ele( n = `parameters` ns = `u`
+                    )->tag( n = `FileUploaderParameter` ns = `u`
                         )->a( n = `name`  v = `Accept-CH`
                         )->a( n = `value` v = `Viewport-Width`
-                    )->leaf( n = `FileUploaderParameter` ns = `u`
+                    )->tag( n = `FileUploaderParameter` ns = `u`
                         )->a( n = `name`  v = `Accept-CH`
                         )->a( n = `value` v = `Width`
-                    )->leaf( n = `FileUploaderParameter` ns = `u`
+                    )->tag( n = `FileUploaderParameter` ns = `u`
                         )->a( n = `name`  v = `Accept-CH-Lifetime`
                         )->a( n = `value` v = `86400`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->leaf( `Button`
+            )->tag( `Button`
                 )->a( n = `text`  v = `Upload File`
                 )->a( n = `press` v = client->_event( `UPLOAD` ) ).
 

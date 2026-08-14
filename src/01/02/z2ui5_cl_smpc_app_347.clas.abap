@@ -39,45 +39,45 @@ CLASS z2ui5_cl_smpc_app_347 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the gridGap demo: the Panel width follows the Slider through an
     " expression binding and the three gap Inputs are bound to the same fields
     " the CSSGrid binds, so both controller handlers become plain bindings.
     " css/main.css is injected through a core:HTML style leaf.
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns:grid` v = `sap.ui.layout.cssgrid`
         )->a( n = `xmlns:form` v = `sap.ui.layout.form`
 
-        )->leaf( n = `HTML` ns = `core`
+        )->tag( n = `HTML` ns = `core`
             )->a( n = `content` v = `<style>.sapMFlexBox.demoBox\{border-radius:10px;background-color:#427cac;text-align:center\}` &&
                                     `.demoBox .sapMText\{color:#fff\}.sapMText.infoText\{font-style:italic\}</style>`
 
-        )->leaf( `Slider`
+        )->tag( `Slider`
             )->a( n = `value` v = client->_bind( slider_value )
             )->a( n = `class` v = `sapUiSmallMarginBottom`
 
-        )->open( `Panel`
+        )->ele( `Panel`
             )->a( n = `width` v = |\{= ${ client->_bind( slider_value ) } + '%'\}|
             )->a( n = `id`    v = `panelCSSGrid`
 
-            )->open( `headerToolbar`
-                )->open( `OverflowToolbar`
+            )->ele( `headerToolbar`
+                )->ele( `OverflowToolbar`
                     )->a( n = `height` v = `3rem`
 
-                    )->leaf( `Title`
+                    )->tag( `Title`
                         )->a( n = `text` v = ` Property gridGap example`
 
-                )->shut(
-            )->shut(
-            )->leaf( `Text`
+                )->end(
+            )->end(
+            )->tag( `Text`
                 )->a( n = `class` v = `infoText`
                 )->a( n = `text`  v = `The gridGap property sets both Row and Column gap values. Setting gridRowGap or gridColumnGap will overwrite the corresponding gridGap values.`
 
-            )->open( n = `SimpleForm` ns = `form`
+            )->ele( n = `SimpleForm` ns = `form`
                 )->a( n = `editable`                v = `true`
                 )->a( n = `layout`                  v = `ResponsiveGridLayout`
                 )->a( n = `labelSpanXL`             v = `4`
@@ -94,35 +94,35 @@ CLASS z2ui5_cl_smpc_app_347 IMPLEMENTATION.
                 )->a( n = `columnsM`                v = `1`
                 )->a( n = `singleContainerFullSize` v = `false`
 
-                )->leaf( `Label`
+                )->tag( `Label`
                     )->a( n = `labelFor` v = `gg`
                     )->a( n = `text`     v = `gridGap`
 
-                )->leaf( `Input`
+                )->tag( `Input`
                     )->a( n = `id`    v = `gg`
                     )->a( n = `width` v = `120px`
                     )->a( n = `value` v = client->_bind( gridgap )
 
-                )->leaf( `Label`
+                )->tag( `Label`
                     )->a( n = `labelFor` v = `grg`
                     )->a( n = `text`     v = `gridRowGap`
 
-                )->leaf( `Input`
+                )->tag( `Input`
                     )->a( n = `id`    v = `grg`
                     )->a( n = `width` v = `60px`
                     )->a( n = `value` v = client->_bind( gridrowgap )
 
-                )->leaf( `Label`
+                )->tag( `Label`
                     )->a( n = `labelFor` v = `gcg`
                     )->a( n = `text`     v = `gridColumnGap`
 
-                )->leaf( `Input`
+                )->tag( `Input`
                     )->a( n = `id`    v = `gcg`
                     )->a( n = `width` v = `60px`
                     )->a( n = `value` v = client->_bind( gridcolumngap )
 
-            )->shut(
-            )->open( n = `CSSGrid` ns = `grid`
+            )->end(
+            )->ele( n = `CSSGrid` ns = `grid`
                 )->a( n = `id`                  v = `grid1`
                 )->a( n = `gridAutoFlow`        v = `Column`
                 )->a( n = `gridTemplateColumns` v = `repeat(6, minmax(30px,1fr))`
@@ -132,99 +132,99 @@ CLASS z2ui5_cl_smpc_app_347 IMPLEMENTATION.
                 )->a( n = `gridRowGap`          v = client->_bind( gridrowgap )
                 )->a( n = `gridColumnGap`       v = client->_bind( gridcolumngap )
 
-                )->open( `VBox`
+                )->ele( `VBox`
                     )->a( n = `class` v = `demoBox`
 
-                    )->open( `layoutData`
-                        )->leaf( n = `GridItemLayoutData` ns = `grid`
+                    )->ele( `layoutData`
+                        )->tag( n = `GridItemLayoutData` ns = `grid`
                             )->a( n = `gridRow` v = `1 / 3`
 
-                    )->shut(
-                    )->leaf( `Text`
+                    )->end(
+                    )->tag( `Text`
                         )->a( n = `text`     v = `One (2 rows, 1 column)`
                         )->a( n = `wrapping` v = `true`
 
-                )->shut(
-                )->open( `VBox`
+                )->end(
+                )->ele( `VBox`
                     )->a( n = `class` v = `demoBox`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text`     v = `Two`
                         )->a( n = `wrapping` v = `true`
 
-                )->shut(
-                )->open( `VBox`
+                )->end(
+                )->ele( `VBox`
                     )->a( n = `class` v = `demoBox`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text`     v = `Three`
                         )->a( n = `wrapping` v = `true`
 
-                )->shut(
-                )->open( `VBox`
+                )->end(
+                )->ele( `VBox`
                     )->a( n = `class` v = `demoBox`
 
-                    )->open( `layoutData`
-                        )->leaf( n = `GridItemLayoutData` ns = `grid`
+                    )->ele( `layoutData`
+                        )->tag( n = `GridItemLayoutData` ns = `grid`
                             )->a( n = `gridColumn` v = `3 / 5`
 
-                    )->shut(
-                    )->leaf( `Text`
+                    )->end(
+                    )->tag( `Text`
                         )->a( n = `text`     v = `Four (1 row, 2 columns)`
                         )->a( n = `wrapping` v = `true`
 
-                )->shut(
-                )->open( `VBox`
+                )->end(
+                )->ele( `VBox`
                     )->a( n = `class` v = `demoBox`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text`     v = `Five`
                         )->a( n = `wrapping` v = `true`
 
-                )->shut(
-                )->open( `VBox`
+                )->end(
+                )->ele( `VBox`
                     )->a( n = `class` v = `demoBox`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text`     v = `Six`
                         )->a( n = `wrapping` v = `true`
 
-                )->shut(
-                )->open( `VBox`
+                )->end(
+                )->ele( `VBox`
                     )->a( n = `class` v = `demoBox`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text`     v = `Seven`
                         )->a( n = `wrapping` v = `true`
 
-                )->shut(
-                )->open( `VBox`
+                )->end(
+                )->ele( `VBox`
                     )->a( n = `class` v = `demoBox`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text`     v = `Eight`
                         )->a( n = `wrapping` v = `true`
 
-                )->shut(
-                )->open( `VBox`
+                )->end(
+                )->ele( `VBox`
                     )->a( n = `class` v = `demoBox`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text`     v = `Nine`
                         )->a( n = `wrapping` v = `true`
 
-                )->shut(
-                )->open( `VBox`
+                )->end(
+                )->ele( `VBox`
                     )->a( n = `class` v = `demoBox`
 
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text`     v = `Ten`
                         )->a( n = `wrapping` v = `true`
 
-                )->shut(
-            )->shut(
-        )->shut(
-    )->shut( ).
+                )->end(
+            )->end(
+        )->end(
+    )->end( ).
 
     client->view_display( view->stringify( ) ).
 

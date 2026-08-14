@@ -26,66 +26,66 @@ CLASS z2ui5_cl_smpc_app_397 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " fixed value of the original img JSONModel (img>/products/pic1)
     DATA(pic1) = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-7777-large.jpg`.
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
 
-        )->open( `Panel`
+        )->ele( `Panel`
             )->a( n = `width`          v = `auto`
             )->a( n = `class`          v = `sapUiResponsiveMargin`
             )->a( n = `accessibleRole` v = `Region`
 
-            )->open( `headerToolbar`
-                )->open( `OverflowToolbar`
-                    )->leaf( `Title`
+            )->ele( `headerToolbar`
+                )->ele( `OverflowToolbar`
+                    )->tag( `Title`
                         )->a( n = `text` v = `Panel with picture`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( `content`
-                )->open( n = `HorizontalLayout` ns = `l`
-                    )->leaf( `Image`
+            )->ele( `content`
+                )->ele( n = `HorizontalLayout` ns = `l`
+                    )->tag( `Image`
                         )->a( n = `src`   v = pic1
                         )->a( n = `width` v = `10em`
 
-                )->shut(
+                )->end(
 
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `text`
                              v = `Lorem ipsum dolor st amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam ` &&
                                  `voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. ` &&
                                  `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam ` &&
                                  `voluptua. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat`
 
-            )->shut(
-        )->shut(
+            )->end(
+        )->end(
 
-        )->open( `Panel`
+        )->ele( `Panel`
             )->a( n = `width` v = `auto`
             )->a( n = `class` v = `sapUiResponsiveMargin`
 
-            )->open( `headerToolbar`
-                )->open( `OverflowToolbar`
-                    )->leaf( `Title`
+            )->ele( `headerToolbar`
+                )->ele( `OverflowToolbar`
+                    )->tag( `Title`
                         )->a( n = `text` v = `Header`
-                    )->leaf( `ToolbarSpacer`
-                    )->leaf( `Button`
+                    )->tag( `ToolbarSpacer`
+                    )->tag( `Button`
                         )->a( n = `icon` v = `sap-icon://settings`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `icon` v = `sap-icon://drop-down-list`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( `content`
-                )->leaf( `Text`
+            )->ele( `content`
+                )->tag( `Text`
                     )->a( n = `text`
                              v = `Lorem ipsum dolor st amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam ` &&
                                  `voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. ` &&

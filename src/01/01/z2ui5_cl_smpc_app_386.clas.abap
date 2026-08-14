@@ -26,50 +26,50 @@ CLASS z2ui5_cl_smpc_app_386 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `height`     v = `100%`
         )->a( n = `xmlns:l`    v = `sap.ui.layout`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns`      v = `sap.m`
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
             )->a( n = `width` v = `100%`
 
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `text`     v = `MultiInput with value state 'Warning'`
                 )->a( n = `labelFor` v = `multiInput`
-            )->leaf( `MultiInput`
+            )->tag( `MultiInput`
                 )->a( n = `id`             v = `multiInput`
                 )->a( n = `valueState`     v = `Warning`
                 )->a( n = `showSuggestion` v = `false`
                 )->a( n = `showValueHelp`  v = `false`
                 )->a( n = `width`          v = `70%`
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `text`     v = `MultiInput with value state 'Error'`
                 )->a( n = `labelFor` v = `multiInput1`
-            )->leaf( `MultiInput`
+            )->tag( `MultiInput`
                 )->a( n = `id`             v = `multiInput1`
                 )->a( n = `valueState`     v = `Error`
                 )->a( n = `showSuggestion` v = `false`
                 )->a( n = `showValueHelp`  v = `false`
                 )->a( n = `width`          v = `70%`
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `text`     v = `MultiInput with value state 'Success'`
                 )->a( n = `labelFor` v = `multiInput2`
-            )->leaf( `MultiInput`
+            )->tag( `MultiInput`
                 )->a( n = `id`             v = `multiInput2`
                 )->a( n = `valueState`     v = `Success`
                 )->a( n = `showSuggestion` v = `false`
                 )->a( n = `showValueHelp`  v = `false`
                 )->a( n = `width`          v = `70%`
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `text`     v = `MultiInput with value state 'Information'`
                 )->a( n = `labelFor` v = `multiInput3`
-            )->leaf( `MultiInput`
+            )->tag( `MultiInput`
                 )->a( n = `id`             v = `multiInput3`
                 )->a( n = `valueState`     v = `Information`
                 )->a( n = `showSuggestion` v = `false`

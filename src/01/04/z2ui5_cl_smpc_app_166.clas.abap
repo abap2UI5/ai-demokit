@@ -61,9 +61,9 @@ CLASS z2ui5_cl_smpc_app_166 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `height`          v = `100%`
         )->a( n = `xmlns:mvc`       v = `sap.ui.core.mvc`
         )->a( n = `xmlns`           v = `sap.m`
@@ -71,7 +71,7 @@ CLASS z2ui5_cl_smpc_app_166 IMPLEMENTATION.
         )->a( n = `xmlns:semantic`  v = `sap.f.semantic`
         )->a( n = `xmlns:z2ui5`     v = `z2ui5.cc`
 
-        )->open( n = `SemanticPage` ns = `semantic`
+        )->ele( n = `SemanticPage` ns = `semantic`
             )->a( n = `id`                          v = `mySemanticPage`
             )->a( n = `headerPinnable`              v = `true`
             )->a( n = `toggleHeaderOnTitleClick`    v = `true`
@@ -79,50 +79,50 @@ CLASS z2ui5_cl_smpc_app_166 IMPLEMENTATION.
             )->a( n = `titleAreaShrinkRatio`        v = `1:1.6:1.6`
             )->a( n = `showFooter`                  v = client->_bind( showfooter )
 
-            )->open( n = `titleHeading` ns = `semantic`
-                )->leaf( `Title`
+            )->ele( n = `titleHeading` ns = `semantic`
+                )->tag( `Title`
                     )->a( n = `text` v = client->_bind( title )
 
-            )->shut(
+            )->end(
 
-            )->open( n = `titleSnappedContent` ns = `semantic`
-                )->leaf( `Text`
+            )->ele( n = `titleSnappedContent` ns = `semantic`
+                )->tag( `Text`
                     )->a( n = `text` v = client->_bind( text )
 
-            )->shut(
+            )->end(
 
-            )->open( n = `titleExpandedContent` ns = `semantic`
-                )->leaf( `Text`
+            )->ele( n = `titleExpandedContent` ns = `semantic`
+                )->tag( `Text`
                     )->a( n = `text` v = client->_bind( text )
 
-            )->shut(
+            )->end(
 
-            )->open( n = `headerContent` ns = `semantic`
-                )->open( n = `HorizontalLayout` ns = `layout`
+            )->ele( n = `headerContent` ns = `semantic`
+                )->ele( n = `HorizontalLayout` ns = `layout`
                     )->a( n = `allowWrapping` v = `true`
-                    )->open( n = `VerticalLayout` ns = `layout`
+                    )->ele( n = `VerticalLayout` ns = `layout`
                         )->a( n = `class` v = `sapUiMediumMarginEnd`
-                        )->leaf( `ObjectAttribute`
+                        )->tag( `ObjectAttribute`
                             )->a( n = `title` v = `Functional Area`
                             )->a( n = `text`  v = client->_bind( category )
-                        )->leaf( `ObjectAttribute`
+                        )->tag( `ObjectAttribute`
                             )->a( n = `title` v = `Cost Center`
                             )->a( n = `text`  v = client->_bind( center )
-                        )->leaf( `ObjectAttribute`
+                        )->tag( `ObjectAttribute`
                             )->a( n = `title` v = `Email`
                             )->a( n = `text`  v = client->_bind( email )
 
-                    )->shut(
-                    )->open( n = `VerticalLayout` ns = `layout`
-                        )->leaf( `ObjectAttribute`
+                    )->end(
+                    )->ele( n = `VerticalLayout` ns = `layout`
+                        )->tag( `ObjectAttribute`
                             )->a( n = `title` v = `Availability`
-                        )->leaf( `ObjectStatus`
+                        )->tag( `ObjectStatus`
                             )->a( n = `text`  v = `In Stock`
                             )->a( n = `state` v = client->_bind( status )
 
-                    )->shut(
-                )->shut(
-            )->shut(
+                    )->end(
+                )->end(
+            )->end(
 
             " onInit: Messaging.addMessages( new Message({ message: 'Something wrong
             " happened', type: Error }) ) - the app-authored message goes through the
@@ -130,104 +130,104 @@ CLASS z2ui5_cl_smpc_app_166 IMPLEMENTATION.
             " MessagesIndicator carries its count and the MessagePopover its content.
             " It renders nothing, so it lives in the page's dependents - content
             " takes exactly one child
-            )->open( n = `dependents` ns = `semantic`
-                )->leaf( n = `MessageManager` ns = `z2ui5`
+            )->ele( n = `dependents` ns = `semantic`
+                )->tag( n = `MessageManager` ns = `z2ui5`
                     )->a( n = `items` v = client->_bind( t_messages )
 
-            )->shut(
+            )->end(
 
-            )->open( n = `content` ns = `semantic`
-                )->open( `Table`
+            )->ele( n = `content` ns = `semantic`
+                )->ele( `Table`
                     )->a( n = `id`    v = `idProductsTable`
                     )->a( n = `inset` v = `false`
                     )->a( n = `items` v = client->_bind( productcollection )
                     )->a( n = `class` v = `sapFSemanticPageAlignContent`
                     )->a( n = `width` v = `auto`
-                    )->open( `columns`
-                        )->open( `Column`
-                            )->leaf( `Text` )->a( n = `text` v = `Name`
+                    )->ele( `columns`
+                        )->ele( `Column`
+                            )->tag( `Text` )->a( n = `text` v = `Name`
 
-                        )->shut(
-                        )->open( `Column`
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `minScreenWidth` v = `Tablet`
                             )->a( n = `demandPopin`    v = `true`
-                            )->leaf( `Text` )->a( n = `text` v = `Category`
+                            )->tag( `Text` )->a( n = `text` v = `Category`
 
-                        )->shut(
-                        )->open( `Column`
+                        )->end(
+                        )->ele( `Column`
                             )->a( n = `minScreenWidth` v = `Tablet`
                             )->a( n = `demandPopin`    v = `true`
-                            )->leaf( `Text` )->a( n = `text` v = `SupplierName`
+                            )->tag( `Text` )->a( n = `text` v = `SupplierName`
 
-                        )->shut(
-                    )->shut(
-                    )->open( `items`
-                        )->open( `ColumnListItem`
+                        )->end(
+                    )->end(
+                    )->ele( `items`
+                        )->ele( `ColumnListItem`
                             )->a( n = `vAlign` v = `Middle`
-                            )->open( `cells`
-                                )->leaf( `ObjectIdentifier`
+                            )->ele( `cells`
+                                )->tag( `ObjectIdentifier`
                                     )->a( n = `title` v = `{NAME}`
                                     )->a( n = `text`  v = `{PRODUCTID}`
-                                )->leaf( `Text` )->a( n = `text` v = `{CATEGORY}`
-                                )->leaf( `Text` )->a( n = `text` v = `{SUPPLIERNAME}`
+                                )->tag( `Text` )->a( n = `text` v = `{CATEGORY}`
+                                )->tag( `Text` )->a( n = `text` v = `{SUPPLIERNAME}`
 
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
+                            )->end(
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
 
             " the original controller handlers are reproduced: onEdit/onSave/onCancel
             " drive showFooter and the Edit action's visibility (bound state, so the
             " decision stays in ABAP), and onSave alerts like the original MessageBox
-            )->open( n = `titleMainAction` ns = `semantic`
-                )->leaf( n = `TitleMainAction` ns = `semantic`
+            )->ele( n = `titleMainAction` ns = `semantic`
+                )->tag( n = `TitleMainAction` ns = `semantic`
                     )->a( n = `id`      v = `editAction`
                     )->a( n = `text`    v = `Edit`
                     )->a( n = `visible` v = client->_bind( edit_visible )
                     )->a( n = `press`   v = client->_event( `EDIT` )
 
-            )->shut(
+            )->end(
 
-            )->open( n = `discussInJamAction` ns = `semantic`
-                )->leaf( n = `DiscussInJamAction` ns = `semantic`
+            )->ele( n = `discussInJamAction` ns = `semantic`
+                )->tag( n = `DiscussInJamAction` ns = `semantic`
 
-            )->shut(
+            )->end(
 
-            )->open( n = `saveAsTileAction` ns = `semantic`
-                )->leaf( `Button`
+            )->ele( n = `saveAsTileAction` ns = `semantic`
+                )->tag( `Button`
                     )->a( n = `icon` v = `sap-icon://add-favorite`
                     )->a( n = `text` v = `Save as Tile`
 
-            )->shut(
+            )->end(
 
-            )->open( n = `sendEmailAction` ns = `semantic`
-                )->leaf( n = `SendEmailAction` ns = `semantic`
+            )->ele( n = `sendEmailAction` ns = `semantic`
+                )->tag( n = `SendEmailAction` ns = `semantic`
 
-            )->shut(
+            )->end(
 
-            )->open( n = `sendMessageAction` ns = `semantic`
-                )->leaf( n = `SendMessageAction` ns = `semantic`
+            )->ele( n = `sendMessageAction` ns = `semantic`
+                )->tag( n = `SendMessageAction` ns = `semantic`
 
-            )->shut(
+            )->end(
 
-            )->open( n = `footerMainAction` ns = `semantic`
-                )->leaf( n = `FooterMainAction` ns = `semantic`
+            )->ele( n = `footerMainAction` ns = `semantic`
+                )->tag( n = `FooterMainAction` ns = `semantic`
                     )->a( n = `text`  v = `Save`
                     )->a( n = `press` v = client->_event( `SAVE` )
 
-            )->shut(
+            )->end(
 
-            )->open( n = `footerCustomActions` ns = `semantic`
-                )->leaf( `Button`
+            )->ele( n = `footerCustomActions` ns = `semantic`
+                )->tag( `Button`
                     )->a( n = `id`    v = `cancelAction`
                     )->a( n = `text`  v = `Cancel`
                     )->a( n = `press` v = client->_event( `CANCEL` )
 
-            )->shut(
+            )->end(
 
-            )->open( n = `messagesIndicator` ns = `semantic`
-                )->open( n = `MessagesIndicator` ns = `semantic`
+            )->ele( n = `messagesIndicator` ns = `semantic`
+                )->ele( n = `MessagesIndicator` ns = `semantic`
                     )->a( n = `id`    v = `messagesIndicatorBtn`
                     " onMessagesButtonPress builds a MessagePopover over the message>
                     " model and opens it at the button - declared in dependents and
@@ -237,25 +237,25 @@ CLASS z2ui5_cl_smpc_app_166 IMPLEMENTATION.
                                                                                   ( `toggleBy` )
                                                                                   ( `$event.oSource.sId` ) ) )
 
-                    )->open( n = `dependents` ns = `semantic`
-                        )->open( `MessagePopover`
+                    )->ele( n = `dependents` ns = `semantic`
+                        )->ele( `MessagePopover`
                             )->a( n = `id`    v = `messagePopover`
                             )->a( n = `items` v = `{ path: 'message>/' }`
 
-                            )->open( `items`
-                                )->leaf( `MessageItem`
+                            )->ele( `items`
+                                )->tag( `MessageItem`
                                     )->a( n = `type`        v = `{message>type}`
                                     )->a( n = `title`       v = `{message>message}`
                                     )->a( n = `description` v = `{message>description}`
 
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
+                            )->end(
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( n = `draftIndicator` ns = `semantic`
-                )->leaf( `DraftIndicator`
+            )->ele( n = `draftIndicator` ns = `semantic`
+                )->tag( `DraftIndicator`
                     )->a( n = `state` v = `Saved` ).
 
     client->view_display( view->stringify( ) ).

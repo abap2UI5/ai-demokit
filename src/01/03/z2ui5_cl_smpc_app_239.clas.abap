@@ -26,7 +26,7 @@ CLASS z2ui5_cl_smpc_app_239 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " sap.uxap.ObjectPageLayout showcasing sap.uxap.ObjectPageHeaderActionButton
     " in the ObjectPageDynamicHeaderTitle actions/navigationActions. Each of the
@@ -38,7 +38,7 @@ CLASS z2ui5_cl_smpc_app_239 IMPLEMENTATION.
     " cannot wrap another control via core:HTML); the block's default-sap.m
     " Label/Text carry the m: prefix in this single-default-namespace (sap.uxap)
     " view (namespace-representation difference).
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`       v = `sap.uxap`
         )->a( n = `xmlns:mvc`   v = `sap.ui.core.mvc`
         )->a( n = `xmlns:m`     v = `sap.m`
@@ -46,493 +46,493 @@ CLASS z2ui5_cl_smpc_app_239 IMPLEMENTATION.
         )->a( n = `xmlns:forms` v = `sap.ui.layout.form`
         )->a( n = `height`      v = `100%`
 
-        )->open( `ObjectPageLayout`
+        )->ele( `ObjectPageLayout`
             )->a( n = `id`                     v = `ObjectPageLayout`
             )->a( n = `showTitleInHeaderContent` v = `true`
             )->a( n = `upperCaseAnchorBar`     v = `false`
 
-            )->open( `headerTitle`
-                )->open( `ObjectPageDynamicHeaderTitle`
+            )->ele( `headerTitle`
+                )->ele( `ObjectPageDynamicHeaderTitle`
 
-                    )->open( `breadcrumbs`
-                        )->open( n = `Breadcrumbs` ns = `m`
-                            )->leaf( n = `Link` ns = `m`
+                    )->ele( `breadcrumbs`
+                        )->ele( n = `Breadcrumbs` ns = `m`
+                            )->tag( n = `Link` ns = `m`
                                 )->a( n = `text` v = `Page 1`
-                            )->leaf( n = `Link` ns = `m`
+                            )->tag( n = `Link` ns = `m`
                                 )->a( n = `text` v = `Page 2`
-                            )->leaf( n = `Link` ns = `m`
+                            )->tag( n = `Link` ns = `m`
                                 )->a( n = `text` v = `Page 3`
-                            )->leaf( n = `Link` ns = `m`
+                            )->tag( n = `Link` ns = `m`
                                 )->a( n = `text` v = `Page 4`
-                            )->leaf( n = `Link` ns = `m`
+                            )->tag( n = `Link` ns = `m`
                                 )->a( n = `text` v = `Page 5`
 
-                    )->shut(
-                    )->shut(
+                    )->end(
+                    )->end(
 
-                    )->open( `expandedHeading`
-                        )->leaf( n = `Title` ns = `m`
+                    )->ele( `expandedHeading`
+                        )->tag( n = `Title` ns = `m`
                             )->a( n = `text`     v = `Denise Smith`
                             )->a( n = `wrapping` v = `true`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( `snappedHeading`
-                        )->leaf( n = `Title` ns = `m`
+                    )->ele( `snappedHeading`
+                        )->tag( n = `Title` ns = `m`
                             )->a( n = `text`     v = `Denise Smith`
                             )->a( n = `wrapping` v = `true`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( `expandedContent`
-                        )->leaf( n = `Text` ns = `m`
+                    )->ele( `expandedContent`
+                        )->tag( n = `Text` ns = `m`
                             )->a( n = `text` v = `Senior Developer`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( `snappedContent`
-                        )->leaf( n = `Text` ns = `m`
+                    )->ele( `snappedContent`
+                        )->tag( n = `Text` ns = `m`
                             )->a( n = `text` v = `Senior Developer`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( `actions`
-                        )->leaf( `ObjectPageHeaderActionButton`
+                    )->ele( `actions`
+                        )->tag( `ObjectPageHeaderActionButton`
                             )->a( n = `text`     v = `Edit`
                             )->a( n = `type`     v = `Emphasized`
                             )->a( n = `hideText` v = `false`
-                        )->leaf( `ObjectPageHeaderActionButton`
+                        )->tag( `ObjectPageHeaderActionButton`
                             )->a( n = `type`     v = `Transparent`
                             )->a( n = `text`     v = `Delete`
                             )->a( n = `hideText` v = `false`
                             )->a( n = `hideIcon` v = `true`
-                        )->leaf( `ObjectPageHeaderActionButton`
+                        )->tag( `ObjectPageHeaderActionButton`
                             )->a( n = `type`     v = `Transparent`
                             )->a( n = `text`     v = `Copy`
                             )->a( n = `hideText` v = `false`
                             )->a( n = `hideIcon` v = `true`
-                        )->leaf( `ObjectPageHeaderActionButton`
+                        )->tag( `ObjectPageHeaderActionButton`
                             )->a( n = `type`     v = `Transparent`
                             )->a( n = `text`     v = `Add`
                             )->a( n = `hideText` v = `false`
                             )->a( n = `hideIcon` v = `true`
-                        )->leaf( `ObjectPageHeaderActionButton`
+                        )->tag( `ObjectPageHeaderActionButton`
                             )->a( n = `icon`    v = `sap-icon://action`
                             )->a( n = `type`    v = `Transparent`
                             )->a( n = `text`    v = `Share`
                             )->a( n = `tooltip` v = `action`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( `navigationActions`
-                        )->leaf( `ObjectPageHeaderActionButton`
+                    )->ele( `navigationActions`
+                        )->tag( `ObjectPageHeaderActionButton`
                             )->a( n = `icon`    v = `sap-icon://slim-arrow-up`
                             )->a( n = `type`    v = `Transparent`
                             )->a( n = `tooltip` v = `slim-arrow-up`
-                        )->leaf( `ObjectPageHeaderActionButton`
+                        )->tag( `ObjectPageHeaderActionButton`
                             )->a( n = `icon`    v = `sap-icon://slim-arrow-down`
                             )->a( n = `type`    v = `Transparent`
                             )->a( n = `tooltip` v = `slim-arrow-down`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( `content`
-                        )->leaf( n = `GenericTag` ns = `m`
+                    )->ele( `content`
+                        )->tag( n = `GenericTag` ns = `m`
                             )->a( n = `text`   v = `Material Shortage`
                             )->a( n = `status` v = `Warning`
 
-                    )->shut(
-                )->shut(
-            )->shut(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( `headerContent`
-                )->open( n = `HorizontalLayout` ns = `layout`
+            )->ele( `headerContent`
+                )->ele( n = `HorizontalLayout` ns = `layout`
                     )->a( n = `allowWrapping` v = `true`
 
-                    )->open( n = `VerticalLayout` ns = `layout`
+                    )->ele( n = `VerticalLayout` ns = `layout`
                         )->a( n = `class` v = `sapUiMediumMarginEnd`
-                        )->leaf( n = `ObjectAttribute` ns = `m`
+                        )->tag( n = `ObjectAttribute` ns = `m`
                             )->a( n = `title` v = `Location`
                             )->a( n = `text`  v = `Warehouse A`
-                        )->leaf( n = `ObjectAttribute` ns = `m`
+                        )->tag( n = `ObjectAttribute` ns = `m`
                             )->a( n = `title` v = `Halway`
                             )->a( n = `text`  v = `23L`
-                        )->leaf( n = `ObjectAttribute` ns = `m`
+                        )->tag( n = `ObjectAttribute` ns = `m`
                             )->a( n = `title` v = `Rack`
                             )->a( n = `text`  v = `34`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( n = `VerticalLayout` ns = `layout`
-                        )->leaf( n = `ObjectAttribute` ns = `m`
+                    )->ele( n = `VerticalLayout` ns = `layout`
+                        )->tag( n = `ObjectAttribute` ns = `m`
                             )->a( n = `title` v = `Availability`
-                        )->leaf( n = `ObjectStatus` ns = `m`
+                        )->tag( n = `ObjectStatus` ns = `m`
                             )->a( n = `text`  v = `In Stock`
                             )->a( n = `state` v = `Success`
 
-                    )->shut(
-                    )->shut(
-            )->shut(
+                    )->end(
+                    )->end(
+            )->end(
 
-            )->open( `sections`
+            )->ele( `sections`
 
-                )->open( `ObjectPageSection`
+                )->ele( `ObjectPageSection`
                     )->a( n = `titleUppercase` v = `false`
                     )->a( n = `id`             v = `section1`
                     )->a( n = `title`          v = `Section 1`
-                    )->open( `subSections`
-                        )->open( `ObjectPageSubSection`
+                    )->ele( `subSections`
+                        )->ele( `ObjectPageSubSection`
                             )->a( n = `id`             v = `section1_SS1`
                             )->a( n = `title`          v = `Subsection 1.1`
                             )->a( n = `titleUppercase` v = `false`
-                            )->open( `blocks`
-                                )->open( n = `SimpleForm` ns = `forms`
+                            )->ele( `blocks`
+                                )->ele( n = `SimpleForm` ns = `forms`
                                     )->a( n = `maxContainerCols` v = `2`
                                     )->a( n = `layout`           v = `ResponsiveGridLayout`
                                     )->a( n = `editable`         v = `false`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Content`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `some content goes here...`
 
-                            )->shut(
-                            )->shut(
-                        )->shut(
-                        )->open( `ObjectPageSubSection`
+                            )->end(
+                            )->end(
+                        )->end(
+                        )->ele( `ObjectPageSubSection`
                             )->a( n = `id`             v = `section1_SS2`
                             )->a( n = `title`          v = `Subsection 1.2`
                             )->a( n = `titleUppercase` v = `false`
-                            )->open( `blocks`
-                                )->open( n = `SimpleForm` ns = `forms`
+                            )->ele( `blocks`
+                                )->ele( n = `SimpleForm` ns = `forms`
                                     )->a( n = `maxContainerCols` v = `2`
                                     )->a( n = `layout`           v = `ResponsiveGridLayout`
                                     )->a( n = `editable`         v = `false`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Content`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `some content goes here...`
 
-                            )->shut(
-                            )->shut(
-                    )->shut(
-                    )->shut(
-                )->shut(
+                            )->end(
+                            )->end(
+                    )->end(
+                    )->end(
+                )->end(
 
-                )->open( `ObjectPageSection`
+                )->ele( `ObjectPageSection`
                     )->a( n = `titleUppercase` v = `false`
                     )->a( n = `id`             v = `section2`
                     )->a( n = `title`          v = `Section 2`
 
-                )->shut(
+                )->end(
 
-                )->open( `ObjectPageSection`
+                )->ele( `ObjectPageSection`
                     )->a( n = `titleUppercase` v = `false`
                     )->a( n = `id`             v = `section3`
                     )->a( n = `title`          v = `Section 3`
-                    )->open( `subSections`
-                        )->open( `ObjectPageSubSection`
+                    )->ele( `subSections`
+                        )->ele( `ObjectPageSubSection`
                             )->a( n = `id`             v = `section3_SS1`
                             )->a( n = `title`          v = ` `
                             )->a( n = `titleUppercase` v = `false`
-                            )->open( `blocks`
-                                )->open( n = `SimpleForm` ns = `forms`
+                            )->ele( `blocks`
+                                )->ele( n = `SimpleForm` ns = `forms`
                                     )->a( n = `maxContainerCols` v = `2`
                                     )->a( n = `layout`           v = `ResponsiveGridLayout`
                                     )->a( n = `editable`         v = `false`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Content`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `some content goes here...`
 
-                            )->shut(
-                            )->shut(
-                    )->shut(
-                    )->shut(
-                )->shut(
+                            )->end(
+                            )->end(
+                    )->end(
+                    )->end(
+                )->end(
 
-                )->open( `ObjectPageSection`
+                )->ele( `ObjectPageSection`
                     )->a( n = `titleUppercase` v = `false`
                     )->a( n = `id`             v = `section4`
                     )->a( n = `title`          v = `Section 4`
-                    )->open( `subSections`
-                        )->open( `ObjectPageSubSection`
+                    )->ele( `subSections`
+                        )->ele( `ObjectPageSubSection`
                             )->a( n = `id`             v = `section4_SS1`
                             )->a( n = `title`          v = `Subsection 4.1`
                             )->a( n = `titleUppercase` v = `false`
-                            )->open( `blocks`
-                                )->open( n = `SimpleForm` ns = `forms`
+                            )->ele( `blocks`
+                                )->ele( n = `SimpleForm` ns = `forms`
                                     )->a( n = `maxContainerCols` v = `2`
                                     )->a( n = `layout`           v = `ResponsiveGridLayout`
                                     )->a( n = `editable`         v = `false`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Content`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `some content goes here...`
 
-                            )->shut(
-                            )->shut(
-                    )->shut(
-                    )->shut(
-                )->shut(
+                            )->end(
+                            )->end(
+                    )->end(
+                    )->end(
+                )->end(
 
-                )->open( `ObjectPageSection`
+                )->ele( `ObjectPageSection`
                     )->a( n = `titleUppercase` v = `false`
                     )->a( n = `id`             v = `section5`
                     )->a( n = `title`          v = `Section 5`
-                    )->open( `subSections`
-                        )->open( `ObjectPageSubSection`
+                    )->ele( `subSections`
+                        )->ele( `ObjectPageSubSection`
                             )->a( n = `id`             v = `section5_SS1`
                             )->a( n = `title`          v = ` `
                             )->a( n = `titleUppercase` v = `false`
-                            )->open( `blocks`
-                                )->open( n = `SimpleForm` ns = `forms`
+                            )->ele( `blocks`
+                                )->ele( n = `SimpleForm` ns = `forms`
                                     )->a( n = `maxContainerCols` v = `2`
                                     )->a( n = `layout`           v = `ResponsiveGridLayout`
                                     )->a( n = `editable`         v = `false`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Content`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `some content goes here...`
 
-                            )->shut(
-                            )->shut(
-                    )->shut(
-                    )->shut(
-                )->shut(
+                            )->end(
+                            )->end(
+                    )->end(
+                    )->end(
+                )->end(
 
-                )->open( `ObjectPageSection`
+                )->ele( `ObjectPageSection`
                     )->a( n = `titleUppercase` v = `false`
                     )->a( n = `id`             v = `section6`
                     )->a( n = `title`          v = `Section 6`
-                    )->open( `subSections`
-                        )->open( `ObjectPageSubSection`
+                    )->ele( `subSections`
+                        )->ele( `ObjectPageSubSection`
                             )->a( n = `id`             v = `section6_SS1`
                             )->a( n = `title`          v = ` `
                             )->a( n = `titleUppercase` v = `false`
-                            )->open( `blocks`
-                                )->open( n = `SimpleForm` ns = `forms`
+                            )->ele( `blocks`
+                                )->ele( n = `SimpleForm` ns = `forms`
                                     )->a( n = `maxContainerCols` v = `2`
                                     )->a( n = `layout`           v = `ResponsiveGridLayout`
                                     )->a( n = `editable`         v = `false`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Content`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `some content goes here...`
 
-                            )->shut(
-                            )->shut(
-                    )->shut(
-                    )->shut(
-                )->shut(
+                            )->end(
+                            )->end(
+                    )->end(
+                    )->end(
+                )->end(
 
-                )->open( `ObjectPageSection`
+                )->ele( `ObjectPageSection`
                     )->a( n = `titleUppercase` v = `false`
                     )->a( n = `id`             v = `section7`
                     )->a( n = `title`          v = `Section 7`
-                    )->open( `subSections`
-                        )->open( `ObjectPageSubSection`
+                    )->ele( `subSections`
+                        )->ele( `ObjectPageSubSection`
                             )->a( n = `id`             v = `section7_SS1`
                             )->a( n = `title`          v = ` `
                             )->a( n = `titleUppercase` v = `false`
-                            )->open( `blocks`
-                                )->open( n = `SimpleForm` ns = `forms`
+                            )->ele( `blocks`
+                                )->ele( n = `SimpleForm` ns = `forms`
                                     )->a( n = `maxContainerCols` v = `2`
                                     )->a( n = `layout`           v = `ResponsiveGridLayout`
                                     )->a( n = `editable`         v = `false`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Content`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `some content goes here...`
 
-                            )->shut(
-                            )->shut(
-                    )->shut(
-                    )->shut(
-                )->shut(
+                            )->end(
+                            )->end(
+                    )->end(
+                    )->end(
+                )->end(
 
-                )->open( `ObjectPageSection`
+                )->ele( `ObjectPageSection`
                     )->a( n = `titleUppercase` v = `false`
                     )->a( n = `title`          v = `Section 8`
-                    )->open( `subSections`
-                        )->open( `ObjectPageSubSection`
+                    )->ele( `subSections`
+                        )->ele( `ObjectPageSubSection`
                             )->a( n = `title`          v = ` `
                             )->a( n = `titleUppercase` v = `false`
-                            )->open( `blocks`
-                                )->open( n = `SimpleForm` ns = `forms`
+                            )->ele( `blocks`
+                                )->ele( n = `SimpleForm` ns = `forms`
                                     )->a( n = `maxContainerCols` v = `2`
                                     )->a( n = `layout`           v = `ResponsiveGridLayout`
                                     )->a( n = `editable`         v = `false`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Content`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `some content goes here...`
 
-                            )->shut(
-                            )->shut(
-                    )->shut(
-                    )->shut(
-                )->shut(
+                            )->end(
+                            )->end(
+                    )->end(
+                    )->end(
+                )->end(
 
-                )->open( `ObjectPageSection`
+                )->ele( `ObjectPageSection`
                     )->a( n = `titleUppercase` v = `false`
                     )->a( n = `title`          v = `Section 9`
-                    )->open( `subSections`
-                        )->open( `ObjectPageSubSection`
+                    )->ele( `subSections`
+                        )->ele( `ObjectPageSubSection`
                             )->a( n = `title`          v = ` `
                             )->a( n = `titleUppercase` v = `false`
-                            )->open( `blocks`
-                                )->open( n = `SimpleForm` ns = `forms`
+                            )->ele( `blocks`
+                                )->ele( n = `SimpleForm` ns = `forms`
                                     )->a( n = `maxContainerCols` v = `2`
                                     )->a( n = `layout`           v = `ResponsiveGridLayout`
                                     )->a( n = `editable`         v = `false`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Content`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `some content goes here...`
 
-                            )->shut(
-                            )->shut(
-                    )->shut(
-                    )->shut(
-                )->shut(
+                            )->end(
+                            )->end(
+                    )->end(
+                    )->end(
+                )->end(
 
-                )->open( `ObjectPageSection`
+                )->ele( `ObjectPageSection`
                     )->a( n = `titleUppercase` v = `false`
                     )->a( n = `title`          v = `Section 10`
-                    )->open( `subSections`
-                        )->open( `ObjectPageSubSection`
+                    )->ele( `subSections`
+                        )->ele( `ObjectPageSubSection`
                             )->a( n = `title`          v = ` `
                             )->a( n = `titleUppercase` v = `false`
-                            )->open( `blocks`
-                                )->open( n = `SimpleForm` ns = `forms`
+                            )->ele( `blocks`
+                                )->ele( n = `SimpleForm` ns = `forms`
                                     )->a( n = `maxContainerCols` v = `2`
                                     )->a( n = `layout`           v = `ResponsiveGridLayout`
                                     )->a( n = `editable`         v = `false`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Content`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `some content goes here...`
 
-                            )->shut(
-                            )->shut(
-                    )->shut(
-                    )->shut(
-                )->shut(
+                            )->end(
+                            )->end(
+                    )->end(
+                    )->end(
+                )->end(
 
-                )->open( `ObjectPageSection`
+                )->ele( `ObjectPageSection`
                     )->a( n = `titleUppercase` v = `false`
                     )->a( n = `title`          v = `Section 11`
-                    )->open( `subSections`
-                        )->open( `ObjectPageSubSection`
+                    )->ele( `subSections`
+                        )->ele( `ObjectPageSubSection`
                             )->a( n = `title`          v = ` `
                             )->a( n = `titleUppercase` v = `false`
-                            )->open( `blocks`
-                                )->open( n = `SimpleForm` ns = `forms`
+                            )->ele( `blocks`
+                                )->ele( n = `SimpleForm` ns = `forms`
                                     )->a( n = `maxContainerCols` v = `2`
                                     )->a( n = `layout`           v = `ResponsiveGridLayout`
                                     )->a( n = `editable`         v = `false`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Content`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `some content goes here...`
 
-                            )->shut(
-                            )->shut(
-                    )->shut(
-                    )->shut(
-                )->shut(
+                            )->end(
+                            )->end(
+                    )->end(
+                    )->end(
+                )->end(
 
-                )->open( `ObjectPageSection`
+                )->ele( `ObjectPageSection`
                     )->a( n = `titleUppercase` v = `false`
                     )->a( n = `title`          v = `Section 12`
-                    )->open( `subSections`
-                        )->open( `ObjectPageSubSection`
+                    )->ele( `subSections`
+                        )->ele( `ObjectPageSubSection`
                             )->a( n = `title`          v = ` `
                             )->a( n = `titleUppercase` v = `false`
-                            )->open( `blocks`
-                                )->open( n = `SimpleForm` ns = `forms`
+                            )->ele( `blocks`
+                                )->ele( n = `SimpleForm` ns = `forms`
                                     )->a( n = `maxContainerCols` v = `2`
                                     )->a( n = `layout`           v = `ResponsiveGridLayout`
                                     )->a( n = `editable`         v = `false`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Content`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `some content goes here...`
 
-                            )->shut(
-                            )->shut(
-                    )->shut(
-                    )->shut(
-                )->shut(
+                            )->end(
+                            )->end(
+                    )->end(
+                    )->end(
+                )->end(
 
-                )->open( `ObjectPageSection`
+                )->ele( `ObjectPageSection`
                     )->a( n = `titleUppercase` v = `false`
                     )->a( n = `title`          v = `Section 13`
-                    )->open( `subSections`
-                        )->open( `ObjectPageSubSection`
+                    )->ele( `subSections`
+                        )->ele( `ObjectPageSubSection`
                             )->a( n = `title`          v = ` `
                             )->a( n = `titleUppercase` v = `false`
-                            )->open( `blocks`
-                                )->open( n = `SimpleForm` ns = `forms`
+                            )->ele( `blocks`
+                                )->ele( n = `SimpleForm` ns = `forms`
                                     )->a( n = `maxContainerCols` v = `2`
                                     )->a( n = `layout`           v = `ResponsiveGridLayout`
                                     )->a( n = `editable`         v = `false`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Content`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `some content goes here...`
 
-                            )->shut(
-                            )->shut(
-                    )->shut(
-                    )->shut(
-                )->shut(
+                            )->end(
+                            )->end(
+                    )->end(
+                    )->end(
+                )->end(
 
-                )->open( `ObjectPageSection`
+                )->ele( `ObjectPageSection`
                     )->a( n = `titleUppercase` v = `false`
                     )->a( n = `title`          v = `Section 14`
-                    )->open( `subSections`
-                        )->open( `ObjectPageSubSection`
+                    )->ele( `subSections`
+                        )->ele( `ObjectPageSubSection`
                             )->a( n = `title`          v = ` `
                             )->a( n = `titleUppercase` v = `false`
-                            )->open( `blocks`
-                                )->open( n = `SimpleForm` ns = `forms`
+                            )->ele( `blocks`
+                                )->ele( n = `SimpleForm` ns = `forms`
                                     )->a( n = `maxContainerCols` v = `2`
                                     )->a( n = `layout`           v = `ResponsiveGridLayout`
                                     )->a( n = `editable`         v = `false`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Content`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `some content goes here...`
 
-                            )->shut(
-                            )->shut(
-                    )->shut(
-                    )->shut(
-                )->shut(
+                            )->end(
+                            )->end(
+                    )->end(
+                    )->end(
+                )->end(
 
-                )->open( `ObjectPageSection`
+                )->ele( `ObjectPageSection`
                     )->a( n = `titleUppercase` v = `false`
                     )->a( n = `title`          v = `Section 15`
-                    )->open( `subSections`
-                        )->open( `ObjectPageSubSection`
+                    )->ele( `subSections`
+                        )->ele( `ObjectPageSubSection`
                             )->a( n = `title`          v = ` `
                             )->a( n = `titleUppercase` v = `false`
-                            )->open( `blocks`
-                                )->open( n = `SimpleForm` ns = `forms`
+                            )->ele( `blocks`
+                                )->ele( n = `SimpleForm` ns = `forms`
                                     )->a( n = `maxContainerCols` v = `2`
                                     )->a( n = `layout`           v = `ResponsiveGridLayout`
                                     )->a( n = `editable`         v = `false`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Content`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `some content goes here...`
 
-                            )->shut(
-                            )->shut(
-                    )->shut(
-                    )->shut(
-                )->shut( ).
+                            )->end(
+                            )->end(
+                    )->end(
+                    )->end(
+                )->end( ).
 
     client->view_display( view->stringify( ) ).
 

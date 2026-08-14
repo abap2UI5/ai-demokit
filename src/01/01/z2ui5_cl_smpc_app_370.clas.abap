@@ -26,32 +26,32 @@ CLASS z2ui5_cl_smpc_app_370 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`    v = `sap.ui.layout`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns:form` v = `sap.ui.layout.form`
         )->a( n = `xmlns`      v = `sap.m`
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
             )->a( n = `width` v = `100%`
 
-            )->open( n = `content` ns = `l`
-                )->leaf( `MessageStrip`
+            )->ele( n = `content` ns = `l`
+                )->tag( `MessageStrip`
                     )->a( n = `showIcon` v = `true`
                     )->a( n = `text`     v = `This TextArea shows up to 7 lines, then a scrollbar is presented.`
-                )->leaf( `TextArea`
+                )->tag( `TextArea`
                     )->a( n = `placeholder`     v = `Enter Text`
                     )->a( n = `growing`         v = `true`
                     )->a( n = `growingMaxLines` v = `7`
                     )->a( n = `width`           v = `100%`
-                )->leaf( `MessageStrip`
+                )->tag( `MessageStrip`
                     )->a( n = `showIcon` v = `true`
                     )->a( n = `text`     v = `This TextArea shows up to 7 lines, then a scrollbar is presented.`
                     )->a( n = `class`    v = `sapUiMediumMarginTop`
-                )->leaf( `TextArea`
+                )->tag( `TextArea`
                     )->a( n = `value`
                              v = `Lorem ipsum dolor st amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam ` &&
                                  `voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. ` &&
@@ -64,11 +64,11 @@ CLASS z2ui5_cl_smpc_app_370 IMPLEMENTATION.
                     )->a( n = `growing`         v = `true`
                     )->a( n = `growingMaxLines` v = `7`
                     )->a( n = `width`           v = `100%`
-                )->leaf( `MessageStrip`
+                )->tag( `MessageStrip`
                     )->a( n = `showIcon` v = `true`
                     )->a( n = `text`     v = `This TextArea adjusts its height according to its content.`
                     )->a( n = `class`    v = `sapUiMediumMarginTop`
-                )->leaf( `TextArea`
+                )->tag( `TextArea`
                     )->a( n = `value`
                              v = `Lorem ipsum dolor st amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam ` &&
                                  `voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. ` &&
@@ -80,18 +80,18 @@ CLASS z2ui5_cl_smpc_app_370 IMPLEMENTATION.
                                  `voluptua. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat.`
                     )->a( n = `growing` v = `true`
                     )->a( n = `width`   v = `100%`
-                )->leaf( `MessageStrip`
+                )->tag( `MessageStrip`
                     )->a( n = `showIcon` v = `true`
                     )->a( n = `text`     v = `Growing TextArea in a SimpleForm`
                     )->a( n = `class`    v = `sapUiMediumMarginTop`
 
-                )->open( n = `SimpleForm` ns = `form`
+                )->ele( n = `SimpleForm` ns = `form`
                     )->a( n = `editable` v = `true`
                     )->a( n = `layout`   v = `ResponsiveGridLayout`
 
-                    )->leaf( `Label`
+                    )->tag( `Label`
                         )->a( n = `text` v = `Comment`
-                    )->leaf( `TextArea`
+                    )->tag( `TextArea`
                         )->a( n = `value`
                                  v = `Lorem ipsum dolor st amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam ` &&
                                      `voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. ` &&

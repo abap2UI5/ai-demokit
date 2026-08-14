@@ -42,41 +42,41 @@ CLASS z2ui5_cl_smpc_app_073 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
             )->a( n = `width` v = `100%`
 
-            )->open( n = `content` ns = `l`
-                )->leaf( `Label`
+            )->ele( n = `content` ns = `l`
+                )->tag( `Label`
                     )->a( n = `text`   v = `Not active Object Attribute with title and text`
                     )->a( n = `design` v = `Bold`
                     )->a( n = `class`  v = `sapUiSmallMarginTop`
                 " element binding kept 1:1 - a one-record structure S_PRODUCT instead of ProductCollection record 0 (see sidecar)
-                )->leaf( `ObjectAttribute`
+                )->tag( `ObjectAttribute`
                     )->a( n = `binding` v = client->_bind( s_product )
                     )->a( n = `title`   v = `Weight`
                     )->a( n = `text`    v = `{WEIGHT_MEASURE} {WEIGHT_UNIT}`
 
-                )->leaf( `Label`
+                )->tag( `Label`
                     )->a( n = `text`   v = `Not active Object Attribute only with set text`
                     )->a( n = `design` v = `Bold`
                     )->a( n = `class`  v = `sapUiSmallMarginTop`
-                )->leaf( `ObjectAttribute`
+                )->tag( `ObjectAttribute`
                     )->a( n = `binding` v = client->_bind( s_product )
                     )->a( n = `text`    v = `{WIDTH} x {DEPTH} x {HEIGHT} {DIM_UNIT}`
 
-                )->leaf( `Label`
+                )->tag( `Label`
                     )->a( n = `text`   v = `Active Object Attribute with title and text which opens popup on press`
                     )->a( n = `design` v = `Bold`
                     )->a( n = `class`  v = `sapUiSmallMarginTop`
-                )->leaf( `ObjectAttribute`
+                )->tag( `ObjectAttribute`
                     )->a( n = `title`        v = `Click to`
                     )->a( n = `text`         v = `Provide feedback`
                     )->a( n = `active`       v = `true`
@@ -84,11 +84,11 @@ CLASS z2ui5_cl_smpc_app_073 IMPLEMENTATION.
                     )->a( n = `ariaHasPopup` v = `Dialog`
                     )->a( n = `press`        v = client->_event( `FEEDBACK` )
 
-                )->leaf( `Label`
+                )->tag( `Label`
                     )->a( n = `text`   v = `Active Object Attribute with title and text which opens link on press`
                     )->a( n = `design` v = `Bold`
                     )->a( n = `class`  v = `sapUiSmallMarginTop`
-                )->leaf( `ObjectAttribute`
+                )->tag( `ObjectAttribute`
                     )->a( n = `title`  v = `Visit our site`
                     )->a( n = `text`   v = `www.sap.com`
                     )->a( n = `active` v = `true`
@@ -96,51 +96,51 @@ CLASS z2ui5_cl_smpc_app_073 IMPLEMENTATION.
                     )->a( n = `press`  v = client->follow_up_action( val   = client->cs_event-urlhelper
                                                                      t_arg = VALUE #( ( `REDIRECT` ) ( |\{ URL: 'http://www.sap.com', NEW_WINDOW: true \}| ) ) )
 
-                )->leaf( `Label`
+                )->tag( `Label`
                     )->a( n = `text`   v = `Active Object Attribute which has only title, therefore no link is displayed`
                     )->a( n = `design` v = `Bold`
                     )->a( n = `class`  v = `sapUiSmallMarginTop`
-                )->leaf( `ObjectAttribute`
+                )->tag( `ObjectAttribute`
                     )->a( n = `title`  v = `Created by`
                     )->a( n = `active` v = `true`
                     )->a( n = `press`  v = client->_event( `FEEDBACK` )
 
-                )->leaf( `Label`
+                )->tag( `Label`
                     )->a( n = `text`   v = `Active Object Attribute with long title and long text which will truncate and occupy 50% each`
                     )->a( n = `design` v = `Bold`
                     )->a( n = `class`  v = `sapUiSmallMarginTop`
-                )->leaf( `ObjectAttribute`
+                )->tag( `ObjectAttribute`
                     )->a( n = `title`  v = `Some very long title that will strat to truncate on smaller screen`
                     )->a( n = `text`   v = `Some very long text that will strat to truncate on smaller screen`
                     )->a( n = `active` v = `true`
 
-                )->leaf( `Label`
+                )->tag( `Label`
                     )->a( n = `text`   v = `Object Attribute with customContent aggregation containing sap.m.Link`
                     )->a( n = `design` v = `Bold`
                     )->a( n = `class`  v = `sapUiSmallMarginTop`
-                )->open( `ObjectAttribute`
+                )->ele( `ObjectAttribute`
                     )->a( n = `title` v = `Custom content`
-                    )->open( `customContent`
-                        )->leaf( `Link`
+                    )->ele( `customContent`
+                        )->tag( `Link`
                             )->a( n = `text` v = `this is sap.m.Link`
 
-                    )->shut(
-                )->shut(
+                    )->end(
+                )->end(
 
-                )->leaf( `Label`
+                )->tag( `Label`
                     )->a( n = `text`   v = `Object Attribute with customContent aggregation containing sap.m.Text`
                     )->a( n = `design` v = `Bold`
                     )->a( n = `class`  v = `sapUiSmallMarginTop`
-                )->open( `ObjectAttribute`
+                )->ele( `ObjectAttribute`
                     )->a( n = `title` v = `Custom content`
-                    )->open( `customContent`
-                        )->leaf( `Text`
+                    )->ele( `customContent`
+                        )->tag( `Text`
                             )->a( n = `text` v = `some text set inside sap.m.Text`
 
-                    )->shut(
-                )->shut(
-            )->shut(
-        )->shut( ).
+                    )->end(
+                )->end(
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 
@@ -152,34 +152,34 @@ CLASS z2ui5_cl_smpc_app_073 IMPLEMENTATION.
     CASE client->get( )-event.
       WHEN `FEEDBACK`.
         " the original's handleFeedbacklinkPressed - a Dialog with a RatingIndicator + TextArea and Submit/Cancel
-        DATA(popup) = z2ui5_cl_ai_xml=>factory( ).
-        popup->open( n = `FragmentDefinition` ns = `core`
+        DATA(popup) = z2ui5_cl_ui5_view_builder=>factory( ).
+        popup->ele( n = `FragmentDefinition` ns = `core`
             )->a( n = `xmlns`      v = `sap.m`
             )->a( n = `xmlns:core` v = `sap.ui.core`
-            )->open( `Dialog`
+            )->ele( `Dialog`
                 )->a( n = `title` v = `Provide feedback`
                 )->a( n = `class` v = `sapUiContentPadding`
-                )->leaf( `RatingIndicator`
+                )->tag( `RatingIndicator`
                     )->a( n = `maxValue` v = `5`
-                )->leaf( `TextArea`
+                )->tag( `TextArea`
                     )->a( n = `placeholder` v = `What do you think about this item?`
                     )->a( n = `rows`        v = `5`
                     )->a( n = `cols`        v = `30`
                     )->a( n = `width`       v = `100%`
-                )->open( `beginButton`
-                    )->leaf( `Button`
+                )->ele( `beginButton`
+                    )->tag( `Button`
                         )->a( n = `text`  v = `Submit`
                         )->a( n = `type`  v = `Accept`
                         )->a( n = `press` v = client->_event( `SUBMIT` )
 
-                )->shut(
-                )->open( `endButton`
-                    )->leaf( `Button`
+                )->end(
+                )->ele( `endButton`
+                    )->tag( `Button`
                         )->a( n = `text`  v = `Cancel`
                         )->a( n = `press` v = client->follow_up_action( client->cs_event-popup_close )
 
-                )->shut(
-            )->shut( ).
+                )->end(
+            )->end( ).
         client->popup_display( popup->stringify( ) ).
 
       WHEN `SUBMIT`.

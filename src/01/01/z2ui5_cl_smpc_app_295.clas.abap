@@ -42,50 +42,50 @@ CLASS z2ui5_cl_smpc_app_295 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`    v = `sap.ui.layout`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns`      v = `sap.m`
 
         " the controller-loaded Dialog fragment, declared in the view's dependents aggregation
-        )->open( n = `dependents` ns = `mvc`
+        )->ele( n = `dependents` ns = `mvc`
 
-            )->open( `ViewSettingsDialog`
+            )->ele( `ViewSettingsDialog`
                 )->a( n = `id`           v = `settingsDialog`
                 )->a( n = `confirm`      v = client->_event( val   = `CONFIRM`
                                                              t_arg = VALUE #( ( `${$parameters>/filterString}` ) ) )
                 )->a( n = `cancel`       v = client->_event( `CANCEL` )
                 )->a( n = `resetFilters` v = client->_event( `RESET_FILTERS` )
 
-                )->open( `filterItems`
-                    )->open( `ViewSettingsCustomItem`
+                )->ele( `filterItems`
+                    )->ele( `ViewSettingsCustomItem`
                         )->a( n = `id`          v = `idCustomFilterItem`
                         )->a( n = `text`        v = `Custom Filter`
                         )->a( n = `key`         v = `myFilter`
                         )->a( n = `filterCount` v = client->_bind( filter_count )
                         )->a( n = `selected`    v = client->_bind( filter_selected )
 
-                        )->open( `customControl`
-                            )->leaf( `Slider`
+                        )->ele( `customControl`
+                            )->tag( `Slider`
                                 )->a( n = `step`   v = `10`
                                 )->a( n = `value`  v = client->_bind( slider_value )
                                 )->a( n = `change` v = client->_event( val   = `SLIDER_CHANGE`
                                                                        t_arg = VALUE #( ( `${$parameters>/value}` ) ) )
 
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
-        )->shut(
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
+        )->end(
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
             )->a( n = `width` v = `100%`
 
-            )->leaf( `Button`
+            )->tag( `Button`
                 )->a( n = `text`  v = `Open with Custom Filter`
                 )->a( n = `press` v = client->_event( `OPEN_DIALOG` ) ).
 

@@ -26,16 +26,16 @@ CLASS z2ui5_cl_smpc_app_060 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
 
-        )->open( `VBox`
+        )->ele( `VBox`
             )->a( n = `class` v = `sapUiSmallMargin`
 
-            )->open( `Button`
+            )->ele( `Button`
                 )->a( n = `id`           v = `button`
                 )->a( n = `text`         v = `Open Menu`
                 )->a( n = `ariaHasPopup` v = `Menu`
@@ -44,8 +44,8 @@ CLASS z2ui5_cl_smpc_app_060 IMPLEMENTATION.
                 )->a( n = `press`        v = client->follow_up_action( val   = client->cs_event-control_by_id
                                                                        t_arg = VALUE #( ( `theMenu` ) ( `toggleBy` ) ( `$event.oSource.sId` ) ) )
 
-                )->open( `dependents`
-                    )->open( `Menu`
+                )->ele( `dependents`
+                    )->ele( `Menu`
                         )->a( n = `id`           v = `theMenu`
                         " compose the toast on the frontend (1:1 with the sample's
                         " MessageToast.show("Action triggered on item: " + item.getText())),
@@ -53,34 +53,34 @@ CLASS z2ui5_cl_smpc_app_060 IMPLEMENTATION.
                         )->a( n = `itemSelected` v = client->follow_up_action( val   = client->cs_event-control_global
                                                                                t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Action triggered on item: {0}` ) ( `${$parameters>/item}.getText()` ) ) )
 
-                        )->leaf( `MenuItem`
+                        )->tag( `MenuItem`
                             )->a( n = `text` v = `Hide Existing Sites`
-                        )->leaf( `MenuItem`
+                        )->tag( `MenuItem`
                             )->a( n = `text` v = `Simulate Visitor Traffic`
-                        )->open( `MenuItem`
+                        )->ele( `MenuItem`
                             )->a( n = `text` v = `Create New Site`
 
-                            )->open( `items`
-                                )->leaf( `MenuItem`
+                            )->ele( `items`
+                                )->tag( `MenuItem`
                                     )->a( n = `text` v = `Official Store`
-                                )->leaf( `MenuItem`
+                                )->tag( `MenuItem`
                                     )->a( n = `text` v = `Partner Store`
-                                )->leaf( `MenuItem`
+                                )->tag( `MenuItem`
                                     )->a( n = `text` v = `Franchise Store`
-                                )->leaf( `MenuItem`
+                                )->tag( `MenuItem`
                                     )->a( n = `text` v = `Temporary Store`
-                                )->leaf( `MenuItem`
+                                )->tag( `MenuItem`
                                     )->a( n = `text` v = `Other`
 
-                            )->shut(
-                        )->shut(
-                        )->leaf( `MenuItem`
+                            )->end(
+                        )->end(
+                        )->tag( `MenuItem`
                             )->a( n = `text` v = `Export Map`
 
-                    )->shut(
-                )->shut(
-            )->shut(
-        )->shut( ).
+                    )->end(
+                )->end(
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

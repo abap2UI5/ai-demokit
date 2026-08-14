@@ -26,7 +26,7 @@ CLASS z2ui5_cl_smpc_app_188 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " Block->content inlining (app 178/161 precedent): the original blocks
     " aggregations each hold the custom BlockBase control goals:GoalsBlock
@@ -34,7 +34,7 @@ CLASS z2ui5_cl_smpc_app_188 IMPLEMENTATION.
     " around a view; GoalsBlock's content is a SimpleForm of three Label/Text
     " goal pairs, inlined here as form:SimpleForm in each blocks aggregation -
     " no custom JS control needed, thin frontend preserved (see sidecar).
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `height`        v = `100%`
         )->a( n = `xmlns`         v = `sap.uxap`
         )->a( n = `xmlns:mvc`     v = `sap.ui.core.mvc`
@@ -42,244 +42,244 @@ CLASS z2ui5_cl_smpc_app_188 IMPLEMENTATION.
         )->a( n = `xmlns:m`       v = `sap.m`
         )->a( n = `xmlns:form`    v = `sap.ui.layout.form`
 
-        )->open( `ObjectPageLayout`
+        )->ele( `ObjectPageLayout`
             )->a( n = `id`                       v = `ObjectPageLayout`
             )->a( n = `showTitleInHeaderContent` v = `true`
             )->a( n = `upperCaseAnchorBar`       v = `false`
 
-            )->open( `headerTitle`
-                )->open( `ObjectPageDynamicHeaderTitle`
+            )->ele( `headerTitle`
+                )->ele( `ObjectPageDynamicHeaderTitle`
 
-                    )->open( `expandedHeading`
-                        )->leaf( n = `Title` ns = `m`
+                    )->ele( `expandedHeading`
+                        )->tag( n = `Title` ns = `m`
                             )->a( n = `text`     v = `Denise Smith`
                             )->a( n = `wrapping` v = `true`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( `snappedHeading`
-                        )->open( n = `FlexBox` ns = `m`
+                    )->ele( `snappedHeading`
+                        )->ele( n = `FlexBox` ns = `m`
                             )->a( n = `fitContainer` v = `true`
                             )->a( n = `alignItems`   v = `Center`
 
-                            )->leaf( n = `Avatar` ns = `m`
+                            )->tag( n = `Avatar` ns = `m`
                                 )->a( n = `src`             v = `sap-icon://picture`
                                 )->a( n = `backgroundColor` v = `Random`
                                 )->a( n = `class`           v = `sapUiTinyMarginEnd`
-                            )->leaf( n = `Title` ns = `m`
+                            )->tag( n = `Title` ns = `m`
                                 )->a( n = `text`     v = `Denise Smith`
                                 )->a( n = `wrapping` v = `true`
 
-                        )->shut(
-                    )->shut(
+                        )->end(
+                    )->end(
 
-                    )->open( `expandedContent`
-                        )->leaf( n = `Text` ns = `m`
+                    )->ele( `expandedContent`
+                        )->tag( n = `Text` ns = `m`
                             )->a( n = `text` v = `Senior Developer`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( `snappedContent`
-                        )->leaf( n = `Text` ns = `m`
+                    )->ele( `snappedContent`
+                        )->tag( n = `Text` ns = `m`
                             )->a( n = `text` v = `Senior Developer`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( `snappedTitleOnMobile`
-                        )->leaf( n = `Title` ns = `m`
+                    )->ele( `snappedTitleOnMobile`
+                        )->tag( n = `Title` ns = `m`
                             )->a( n = `text` v = `Senior Developer`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( `actions`
-                        )->leaf( n = `Button` ns = `m`
+                    )->ele( `actions`
+                        )->tag( n = `Button` ns = `m`
                             )->a( n = `text` v = `Edit`
                             )->a( n = `type` v = `Emphasized`
-                        )->leaf( n = `Button` ns = `m`
+                        )->tag( n = `Button` ns = `m`
                             )->a( n = `type` v = `Transparent`
                             )->a( n = `text` v = `Delete`
-                        )->leaf( n = `Button` ns = `m`
+                        )->tag( n = `Button` ns = `m`
                             )->a( n = `type` v = `Transparent`
                             )->a( n = `text` v = `Copy`
-                        )->leaf( n = `OverflowToolbarButton` ns = `m`
+                        )->tag( n = `OverflowToolbarButton` ns = `m`
                             )->a( n = `icon`    v = `sap-icon://action`
                             )->a( n = `type`    v = `Transparent`
                             )->a( n = `text`    v = `Share`
                             )->a( n = `tooltip` v = `action`
 
-                    )->shut(
-                )->shut(
-            )->shut(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( `headerContent`
-                )->open( n = `FlexBox` ns = `m`
+            )->ele( `headerContent`
+                )->ele( n = `FlexBox` ns = `m`
                     )->a( n = `wrap` v = `Wrap`
 
-                    )->leaf( n = `Avatar` ns = `m`
+                    )->tag( n = `Avatar` ns = `m`
                         )->a( n = `src`             v = `sap-icon://picture`
                         )->a( n = `backgroundColor` v = `Random`
                         )->a( n = `displaySize`     v = `L`
                         )->a( n = `class`           v = `sapUiTinyMarginEnd`
 
-                    )->open( n = `VerticalLayout` ns = `layout`
+                    )->ele( n = `VerticalLayout` ns = `layout`
                         )->a( n = `class` v = `sapUiSmallMarginBeginEnd`
 
-                        )->leaf( n = `ObjectStatus` ns = `m`
+                        )->tag( n = `ObjectStatus` ns = `m`
                             )->a( n = `title` v = `User ID`
                             )->a( n = `text`  v = `12345678`
-                        )->leaf( n = `ObjectStatus` ns = `m`
+                        )->tag( n = `ObjectStatus` ns = `m`
                             )->a( n = `title` v = `Language`
                             )->a( n = `text`  v = `English`
-                        )->leaf( n = `ObjectStatus` ns = `m`
+                        )->tag( n = `ObjectStatus` ns = `m`
                             )->a( n = `title` v = `Country`
                             )->a( n = `text`  v = `USA`
-                        )->leaf( n = `ObjectStatus` ns = `m`
+                        )->tag( n = `ObjectStatus` ns = `m`
                             )->a( n = `title` v = `Phone Number`
                             )->a( n = `text`  v = `1-844-726-7733`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( n = `VerticalLayout` ns = `layout`
+                    )->ele( n = `VerticalLayout` ns = `layout`
                         )->a( n = `class` v = `sapUiSmallMarginBeginEnd`
 
-                        )->leaf( n = `ObjectStatus` ns = `m`
+                        )->tag( n = `ObjectStatus` ns = `m`
                             )->a( n = `title` v = `Functional Area`
                             )->a( n = `text`  v = `Developement`
-                        )->leaf( n = `ObjectStatus` ns = `m`
+                        )->tag( n = `ObjectStatus` ns = `m`
                             )->a( n = `title` v = `Cost Center`
                             )->a( n = `text`  v = `PI DFA GD Programs and Product`
-                        )->leaf( n = `ObjectStatus` ns = `m`
+                        )->tag( n = `ObjectStatus` ns = `m`
                             )->a( n = `title` v = `Email`
                             )->a( n = `text`  v = `email@address.com`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( n = `VerticalLayout` ns = `layout`
+                    )->ele( n = `VerticalLayout` ns = `layout`
                         )->a( n = `class` v = `sapUiSmallMarginBeginEnd`
 
-                        )->open( n = `layoutData` ns = `layout`
-                            )->leaf( `ObjectPageHeaderLayoutData`
+                        )->ele( n = `layoutData` ns = `layout`
+                            )->tag( `ObjectPageHeaderLayoutData`
                                 )->a( n = `visibleS` v = `false`
                                 )->a( n = `visibleM` v = `false`
 
-                        )->shut(
+                        )->end(
 
-                        )->leaf( n = `ObjectStatus` ns = `m`
+                        )->tag( n = `ObjectStatus` ns = `m`
                             )->a( n = `text`  v = `Senior UI Developer`
                             )->a( n = `state` v = `Success`
-                        )->leaf( n = `RatingIndicator` ns = `m`
+                        )->tag( n = `RatingIndicator` ns = `m`
                             )->a( n = `maxValue` v = `6`
                             )->a( n = `value`    v = `5`
                             )->a( n = `tooltip`  v = `Rating Tooltip`
 
-                    )->shut(
-                )->shut(
-            )->shut(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( `sections`
-                )->open( `ObjectPageSection`
+            )->ele( `sections`
+                )->ele( `ObjectPageSection`
                     )->a( n = `titleUppercase` v = `false`
                     )->a( n = `title`          v = `2014 Goals Plan`
 
-                    )->open( `subSections`
-                        )->open( `ObjectPageSubSection`
+                    )->ele( `subSections`
+                        )->ele( `ObjectPageSubSection`
                             )->a( n = `title`          v = `Goal summary`
                             )->a( n = `titleUppercase` v = `false`
 
-                            )->open( `blocks`
-                                )->open( n = `SimpleForm` ns = `form`
+                            )->ele( `blocks`
+                                )->ele( n = `SimpleForm` ns = `form`
                                     )->a( n = `editable` v = `false`
                                     )->a( n = `layout`   v = `ColumnLayout`
 
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Evangelize the UI framework across the company`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `4 days overdue Cascaded`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Get trained in development management direction`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `Due Nov 21`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Mentor junior developers`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `Due Dec 31 Cascaded`
 
-                                )->shut(
-                            )->shut(
-                        )->shut(
+                                )->end(
+                            )->end(
+                        )->end(
 
-                        )->open( `ObjectPageSubSection`
+                        )->ele( `ObjectPageSubSection`
                             )->a( n = `title`          v = `Goal summary`
                             )->a( n = `titleUppercase` v = `false`
 
-                            )->open( `blocks`
-                                )->open( n = `SimpleForm` ns = `form`
+                            )->ele( `blocks`
+                                )->ele( n = `SimpleForm` ns = `form`
                                     )->a( n = `editable` v = `false`
                                     )->a( n = `layout`   v = `ColumnLayout`
 
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Evangelize the UI framework across the company`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `4 days overdue Cascaded`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Get trained in development management direction`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `Due Nov 21`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Mentor junior developers`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `Due Dec 31 Cascaded`
 
-                                )->shut(
-                            )->shut(
-                        )->shut(
+                                )->end(
+                            )->end(
+                        )->end(
 
-                        )->open( `ObjectPageSubSection`
+                        )->ele( `ObjectPageSubSection`
                             )->a( n = `title`          v = `Goal summary`
                             )->a( n = `titleUppercase` v = `false`
 
-                            )->open( `blocks`
-                                )->open( n = `SimpleForm` ns = `form`
+                            )->ele( `blocks`
+                                )->ele( n = `SimpleForm` ns = `form`
                                     )->a( n = `editable` v = `false`
                                     )->a( n = `layout`   v = `ColumnLayout`
 
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Evangelize the UI framework across the company`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `4 days overdue Cascaded`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Get trained in development management direction`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `Due Nov 21`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Mentor junior developers`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `Due Dec 31 Cascaded`
 
-                                )->shut(
-                            )->shut(
-                        )->shut(
+                                )->end(
+                            )->end(
+                        )->end(
 
-                        )->open( `ObjectPageSubSection`
+                        )->ele( `ObjectPageSubSection`
                             )->a( n = `title`          v = `Goal summary`
                             )->a( n = `titleUppercase` v = `false`
 
-                            )->open( `blocks`
-                                )->open( n = `SimpleForm` ns = `form`
+                            )->ele( `blocks`
+                                )->ele( n = `SimpleForm` ns = `form`
                                     )->a( n = `editable` v = `false`
                                     )->a( n = `layout`   v = `ColumnLayout`
 
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Evangelize the UI framework across the company`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `4 days overdue Cascaded`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Get trained in development management direction`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `Due Nov 21`
-                                    )->leaf( n = `Label` ns = `m`
+                                    )->tag( n = `Label` ns = `m`
                                         )->a( n = `text` v = `Mentor junior developers`
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `text` v = `Due Dec 31 Cascaded` ).
 
     client->view_display( view->stringify( ) ).

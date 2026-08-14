@@ -62,13 +62,13 @@ CLASS z2ui5_cl_smpc_app_272 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the original controller element-binds the whole model (bindElement('/')),
     " so its {BillingName} & co are relative to the root; the port seeds the
     " same fields at the model root and binds them ABSOLUTELY - a relative
     " path without a binding context resolves against nothing (AGENTS 5)
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns:l`    v = `sap.ui.layout`
@@ -76,13 +76,13 @@ CLASS z2ui5_cl_smpc_app_272 IMPLEMENTATION.
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `height`     v = `100%`
 
-        )->open( `Page`
+        )->ele( `Page`
             )->a( n = `class`      v = `sapUiFioriObjectPage`
             )->a( n = `showHeader` v = `false`
 
-            )->open( `content`
+            )->ele( `content`
 
-                )->open( n = `SimpleForm` ns = `f`
+                )->ele( n = `SimpleForm` ns = `f`
                     )->a( n = `id`               v = `FieldGroupView`
                     )->a( n = `maxContainerCols` v = `2`
                     )->a( n = `editable`         v = `true`
@@ -102,210 +102,210 @@ CLASS z2ui5_cl_smpc_app_272 IMPLEMENTATION.
                     )->a( n = `validateFieldGroup` v = client->_event( val   = `VALIDATE_FIELD_GROUP`
                                                                        t_arg = VALUE #( ( `${$parameters>/fieldGroupIds}[0]` ) ) )
 
-                    )->open( n = `content` ns = `f`
+                    )->ele( n = `content` ns = `f`
 
-                        )->leaf( n = `Title` ns = `core`
+                        )->tag( n = `Title` ns = `core`
                             )->a( n = `text` v = `Billing Information`
-                        )->leaf( `Label`
+                        )->tag( `Label`
                             )->a( n = `text` v = `Name`
-                        )->leaf( `Input`
+                        )->tag( `Input`
                             )->a( n = `fieldGroupIds` v = `Billing Information`
                             )->a( n = `value`         v = client->_bind( billingname )
                             )->a( n = `id`            v = `BillingName`
-                        )->leaf( `Label`
+                        )->tag( `Label`
                             )->a( n = `text` v = `Street/No.`
-                        )->leaf( `Input`
+                        )->tag( `Input`
                             )->a( n = `fieldGroupIds` v = `Billing Information`
                             )->a( n = `value`         v = client->_bind( billingstreet )
                             )->a( n = `id`            v = `BillingStreet`
 
-                        )->open( `Input`
+                        )->ele( `Input`
                             )->a( n = `fieldGroupIds` v = `Billing Information`
                             )->a( n = `value`         v = client->_bind( billingstreetnumber )
                             )->a( n = `id`            v = `BillingStreetNumber`
 
-                            )->open( `layoutData`
-                                )->leaf( n = `GridData` ns = `l`
+                            )->ele( `layoutData`
+                                )->tag( n = `GridData` ns = `l`
                                     )->a( n = `span` v = `L3 M3 S4`
 
-                        )->shut(
-                        )->shut(
+                        )->end(
+                        )->end(
 
-                        )->leaf( `Label`
+                        )->tag( `Label`
                             )->a( n = `text` v = `ZIP Code/City`
 
-                        )->open( `Input`
+                        )->ele( `Input`
                             )->a( n = `fieldGroupIds` v = `Billing Information`
                             )->a( n = `value`         v = client->_bind( billingzipcode )
                             )->a( n = `id`            v = `BillingZipCode`
 
-                            )->open( `layoutData`
-                                )->leaf( n = `GridData` ns = `l`
+                            )->ele( `layoutData`
+                                )->tag( n = `GridData` ns = `l`
                                     )->a( n = `span` v = `L3 M3 S4`
 
-                        )->shut(
-                        )->shut(
+                        )->end(
+                        )->end(
 
-                        )->leaf( `Input`
+                        )->tag( `Input`
                             )->a( n = `fieldGroupIds` v = `Billing Information`
                             )->a( n = `value`         v = client->_bind( billingcity )
                             )->a( n = `id`            v = `BillingCity`
-                        )->leaf( `Label`
+                        )->tag( `Label`
                             )->a( n = `text` v = `Country`
 
-                        )->open( `Select`
+                        )->ele( `Select`
                             )->a( n = `fieldGroupIds` v = `Billing Information`
                             )->a( n = `width`         v = `100%`
                             )->a( n = `selectedKey`   v = client->_bind( billingcountry )
                             )->a( n = `id`            v = `BillingCountry`
 
-                            )->open( `items`
-                                )->leaf( n = `Item` ns = `core`
+                            )->ele( `items`
+                                )->tag( n = `Item` ns = `core`
                                     )->a( n = `text` v = `Germany`
                                     )->a( n = `key`  v = `Germany`
-                                )->leaf( n = `Item` ns = `core`
+                                )->tag( n = `Item` ns = `core`
                                     )->a( n = `text` v = `United States`
                                     )->a( n = `key`  v = `United States`
-                                )->leaf( n = `Item` ns = `core`
+                                )->tag( n = `Item` ns = `core`
                                     )->a( n = `text` v = `Great Britain`
                                     )->a( n = `key`  v = `Great Britain`
 
-                        )->shut(
-                        )->shut(
+                        )->end(
+                        )->end(
 
-                        )->leaf( n = `Title` ns = `core`
+                        )->tag( n = `Title` ns = `core`
                             )->a( n = `text` v = `Discount Code`
-                        )->leaf( `Input`
+                        )->tag( `Input`
                             )->a( n = `fieldGroupIds` v = `Discount Code`
                             )->a( n = `value`         v = client->_bind( discountcode )
                             )->a( n = `placeholder`   v = `Enter your discout code here...`
                             )->a( n = `id`            v = `DiscountCode`
 
-                        )->leaf( n = `Title` ns = `core`
+                        )->tag( n = `Title` ns = `core`
                             )->a( n = `text` v = `Credit Card`
-                        )->leaf( `Label`
+                        )->tag( `Label`
                             )->a( n = `text` v = `Vendor`
 
-                        )->open( `ComboBox`
+                        )->ele( `ComboBox`
                             )->a( n = `fieldGroupIds` v = `Credit Card`
                             )->a( n = `width`         v = `100%`
                             )->a( n = `placeholder`   v = `Choose your card vendor...`
                             )->a( n = `value`         v = client->_bind( creditcardvendor )
                             )->a( n = `id`            v = `CreditCardVendor`
 
-                            )->open( `items`
-                                )->leaf( n = `Item` ns = `core`
+                            )->ele( `items`
+                                )->tag( n = `Item` ns = `core`
                                     )->a( n = `text` v = ``
-                                )->leaf( n = `Item` ns = `core`
+                                )->tag( n = `Item` ns = `core`
                                     )->a( n = `text` v = `Mastercard`
-                                )->leaf( n = `Item` ns = `core`
+                                )->tag( n = `Item` ns = `core`
                                     )->a( n = `text` v = `Visa`
-                                )->leaf( n = `Item` ns = `core`
+                                )->tag( n = `Item` ns = `core`
                                     )->a( n = `text` v = `American Express`
 
-                        )->shut(
-                        )->shut(
+                        )->end(
+                        )->end(
 
-                        )->leaf( `Label`
+                        )->tag( `Label`
                             )->a( n = `text` v = `Credit Card Number`
-                        )->leaf( `Input`
+                        )->tag( `Input`
                             )->a( n = `fieldGroupIds` v = `Credit Card`
                             )->a( n = `value`         v = client->_bind( creditcardnumber )
                             )->a( n = `maxLength`     v = `16`
                             )->a( n = `id`            v = `CreditCardNumber`
-                        )->leaf( `Label`
+                        )->tag( `Label`
                             )->a( n = `text` v = `Expiry Date`
 
-                        )->open( `ComboBox`
+                        )->ele( `ComboBox`
                             )->a( n = `fieldGroupIds` v = `Credit Card`
                             )->a( n = `placeholder`   v = `Month...`
                             )->a( n = `value`         v = client->_bind( creditcardmonth )
                             )->a( n = `id`            v = `CreditCardMonth`
 
-                            )->open( `items`
-                                )->leaf( n = `Item` ns = `core`
+                            )->ele( `items`
+                                )->tag( n = `Item` ns = `core`
                                     )->a( n = `text` v = `01`
-                                )->leaf( n = `Item` ns = `core`
+                                )->tag( n = `Item` ns = `core`
                                     )->a( n = `text` v = `02`
-                                )->leaf( n = `Item` ns = `core`
+                                )->tag( n = `Item` ns = `core`
                                     )->a( n = `text` v = `03`
-                                )->leaf( n = `Item` ns = `core`
+                                )->tag( n = `Item` ns = `core`
                                     )->a( n = `text` v = `04`
-                                )->leaf( n = `Item` ns = `core`
+                                )->tag( n = `Item` ns = `core`
                                     )->a( n = `text` v = `05`
-                                )->leaf( n = `Item` ns = `core`
+                                )->tag( n = `Item` ns = `core`
                                     )->a( n = `text` v = `06`
-                                )->leaf( n = `Item` ns = `core`
+                                )->tag( n = `Item` ns = `core`
                                     )->a( n = `text` v = `06`
-                                )->leaf( n = `Item` ns = `core`
+                                )->tag( n = `Item` ns = `core`
                                     )->a( n = `text` v = `07`
-                                )->leaf( n = `Item` ns = `core`
+                                )->tag( n = `Item` ns = `core`
                                     )->a( n = `text` v = `08`
-                                )->leaf( n = `Item` ns = `core`
+                                )->tag( n = `Item` ns = `core`
                                     )->a( n = `text` v = `09`
-                                )->leaf( n = `Item` ns = `core`
+                                )->tag( n = `Item` ns = `core`
                                     )->a( n = `text` v = `10`
-                                )->leaf( n = `Item` ns = `core`
+                                )->tag( n = `Item` ns = `core`
                                     )->a( n = `text` v = `11`
-                                )->leaf( n = `Item` ns = `core`
+                                )->tag( n = `Item` ns = `core`
                                     )->a( n = `text` v = `12`
 
-                        )->shut(
-                        )->shut(
+                        )->end(
+                        )->end(
 
-                        )->open( `ComboBox`
+                        )->ele( `ComboBox`
                             )->a( n = `fieldGroupIds` v = `Credit Card`
                             )->a( n = `placeholder`   v = `Year...`
                             )->a( n = `value`         v = client->_bind( creditcardyear )
                             )->a( n = `id`            v = `CreditCardYear`
 
-                            )->open( `items`
-                                )->leaf( n = `Item` ns = `core`
+                            )->ele( `items`
+                                )->tag( n = `Item` ns = `core`
                                     )->a( n = `text` v = `2015`
-                                )->leaf( n = `Item` ns = `core`
+                                )->tag( n = `Item` ns = `core`
                                     )->a( n = `text` v = `2016`
-                                )->leaf( n = `Item` ns = `core`
+                                )->tag( n = `Item` ns = `core`
                                     )->a( n = `text` v = `2017`
-                                )->leaf( n = `Item` ns = `core`
+                                )->tag( n = `Item` ns = `core`
                                     )->a( n = `text` v = `2018`
-                                )->leaf( n = `Item` ns = `core`
+                                )->tag( n = `Item` ns = `core`
                                     )->a( n = `text` v = `2019`
-                                )->leaf( n = `Item` ns = `core`
+                                )->tag( n = `Item` ns = `core`
                                     )->a( n = `text` v = `2020`
 
-                        )->shut(
-                        )->shut(
+                        )->end(
+                        )->end(
 
-                        )->leaf( `Label`
+                        )->tag( `Label`
                             )->a( n = `text` v = `Validation Code`
-                        )->leaf( `Input`
+                        )->tag( `Input`
                             )->a( n = `fieldGroupIds` v = `Credit Card`
                             )->a( n = `maxLength`     v = `3`
                             )->a( n = `value`         v = client->_bind( creditcardvalidationcode )
                             )->a( n = `id`            v = `CreditCardValidationCode`
 
-                        )->leaf( n = `Title` ns = `core`
+                        )->tag( n = `Title` ns = `core`
                             )->a( n = `text` v = `Online`
-                        )->leaf( `Label`
+                        )->tag( `Label`
                             )->a( n = `text` v = `E-Mail`
-                        )->leaf( `Input`
+                        )->tag( `Input`
                             )->a( n = `fieldGroupIds` v = `Online`
                             )->a( n = `value`         v = client->_bind( onlinemail )
                             )->a( n = `id`            v = `OnlineMail`
-                        )->leaf( `Label`
+                        )->tag( `Label`
                             )->a( n = `text` v = `Twitter`
-                        )->leaf( `Input`
+                        )->tag( `Input`
                             )->a( n = `fieldGroupIds` v = `Online`
                             )->a( n = `value`         v = client->_bind( onlinetwitter )
                             )->a( n = `id`            v = `OnlineTwitter`
 
-                    )->shut(
-                    )->shut(
+                    )->end(
+                    )->end(
 
                     " the controller's byId(...).setType/setText/setVisible per
                     " strip is a bound triple here; close sets visible = false
                     " server-side, exactly like onMsgStripClose
-                    )->leaf( `MessageStrip`
+                    )->tag( `MessageStrip`
                         )->a( n = `id`              v = `BillingInformationMessage`
                         )->a( n = `visible`         v = client->_bind( billing_visible )
                         )->a( n = `text`            v = client->_bind( billing_text )
@@ -313,7 +313,7 @@ CLASS z2ui5_cl_smpc_app_272 IMPLEMENTATION.
                         )->a( n = `showIcon`        v = `true`
                         )->a( n = `showCloseButton` v = `true`
                         )->a( n = `close`           v = client->_event( `CLOSE_BILLING` )
-                    )->leaf( `MessageStrip`
+                    )->tag( `MessageStrip`
                         )->a( n = `id`              v = `DiscountCodeMessage`
                         )->a( n = `visible`         v = client->_bind( discount_visible )
                         )->a( n = `text`            v = client->_bind( discount_text )
@@ -321,7 +321,7 @@ CLASS z2ui5_cl_smpc_app_272 IMPLEMENTATION.
                         )->a( n = `showIcon`        v = `true`
                         )->a( n = `showCloseButton` v = `true`
                         )->a( n = `close`           v = client->_event( `CLOSE_DISCOUNT` )
-                    )->leaf( `MessageStrip`
+                    )->tag( `MessageStrip`
                         )->a( n = `id`              v = `CreditCardMessage`
                         )->a( n = `visible`         v = client->_bind( credit_visible )
                         )->a( n = `text`            v = client->_bind( credit_text )
@@ -329,7 +329,7 @@ CLASS z2ui5_cl_smpc_app_272 IMPLEMENTATION.
                         )->a( n = `showIcon`        v = `true`
                         )->a( n = `showCloseButton` v = `true`
                         )->a( n = `close`           v = client->_event( `CLOSE_CREDIT` )
-                    )->leaf( `MessageStrip`
+                    )->tag( `MessageStrip`
                         )->a( n = `id`              v = `OnlineMessage`
                         )->a( n = `visible`         v = client->_bind( online_visible )
                         )->a( n = `text`            v = client->_bind( online_text )
@@ -338,24 +338,24 @@ CLASS z2ui5_cl_smpc_app_272 IMPLEMENTATION.
                         )->a( n = `showCloseButton` v = `true`
                         )->a( n = `close`           v = client->_event( `CLOSE_ONLINE` )
 
-                )->shut(
+                )->end(
 
-                )->open( `footer`
-                    )->open( `Toolbar`
-                        )->open( `content`
-                            )->leaf( `Button`
+                )->ele( `footer`
+                    )->ele( `Toolbar`
+                        )->ele( `content`
+                            )->tag( `Button`
                                 )->a( n = `id`    v = `submit`
                                 )->a( n = `text`  v = `Submit`
                                 )->a( n = `press` v = client->_event( `ACCEPT` )
                                 )->a( n = `type`  v = `Accept`
                                 )->a( n = `width` v = `33%`
-                            )->leaf( `Button`
+                            )->tag( `Button`
                                 )->a( n = `id`    v = `reset`
                                 )->a( n = `text`  v = `Reset`
                                 )->a( n = `press` v = client->_event( `RESET` )
                                 )->a( n = `type`  v = `Reject`
                                 )->a( n = `width` v = `33%`
-                            )->leaf( `Button`
+                            )->tag( `Button`
                                 )->a( n = `id`    v = `cancel`
                                 )->a( n = `text`  v = `Cancel`
                                 )->a( n = `press` v = client->_event( `CANCEL` )

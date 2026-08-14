@@ -63,17 +63,17 @@ CLASS z2ui5_cl_smpc_app_022 IMPLEMENTATION.
   METHOD view_display.
 
     " bound lists collection unrolled into two static facet filter lists; the appended demo table of sap.m.sample.Table is rebuilt inline
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns:core` v = `sap.ui.core`
 
-        )->open( `VBox`
+        )->ele( `VBox`
             )->a( n = `id` v = `idVBox`
 
-            )->open( `FacetFilter`
+            )->ele( `FacetFilter`
                 )->a( n = `id`                  v = `idFacetFilter`
                 )->a( n = `type`                v = `Light`
                 )->a( n = `showPersonalization` v = `true`
@@ -81,36 +81,36 @@ CLASS z2ui5_cl_smpc_app_022 IMPLEMENTATION.
                 )->a( n = `reset`               v = client->_event( `RESET` )
 
                 " each item binds selected two-way - listClose only signals the backend to read the flags
-                )->open( `FacetFilterList`
+                )->ele( `FacetFilterList`
                     )->a( n = `title`     v = `Category`
                     )->a( n = `key`       v = `Category`
                     )->a( n = `mode`      v = `MultiSelect`
                     )->a( n = `listClose` v = client->_event( `LIST_CLOSE` )
                     )->a( n = `items`     v = client->_bind( t_categories )
 
-                    )->leaf( `FacetFilterItem`
+                    )->tag( `FacetFilterItem`
                         )->a( n = `text`     v = `{TEXT}`
                         )->a( n = `key`      v = `{TEXT}`
                         )->a( n = `counter`  v = `{COUNT}`
                         )->a( n = `selected` v = `{SELECTED}`
 
-                )->shut(
-                )->open( `FacetFilterList`
+                )->end(
+                )->ele( `FacetFilterList`
                     )->a( n = `title`     v = `SupplierName`
                     )->a( n = `key`       v = `SupplierName`
                     )->a( n = `mode`      v = `MultiSelect`
                     )->a( n = `listClose` v = client->_event( `LIST_CLOSE` )
                     )->a( n = `items`     v = client->_bind( t_suppliers )
 
-                    )->leaf( `FacetFilterItem`
+                    )->tag( `FacetFilterItem`
                         )->a( n = `text`     v = `{TEXT}`
                         )->a( n = `key`      v = `{TEXT}`
                         )->a( n = `counter`  v = `{COUNT}`
                         )->a( n = `selected` v = `{SELECTED}`
 
-                )->shut(
-            )->shut(
-            )->open( `Table`
+                )->end(
+            )->end(
+            )->ele( `Table`
                 )->a( n = `id`          v = `idProductsTable`
                 )->a( n = `sticky`      v = client->_bind( t_sticky )
                 )->a( n = `inset`       v = `false`
@@ -118,124 +118,124 @@ CLASS z2ui5_cl_smpc_app_022 IMPLEMENTATION.
                 )->a( n = `popinLayout` v = |\{= ${ client->_bind( popin_layout ) } \|\| 'Block' \}|
                 )->a( n = `items`       v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME' \} \}|
 
-                )->open( `headerToolbar`
-                    )->open( `OverflowToolbar`
-                        )->leaf( `Title`
+                )->ele( `headerToolbar`
+                    )->ele( `OverflowToolbar`
+                        )->tag( `Title`
                             )->a( n = `text`  v = `Products`
                             )->a( n = `level` v = `H2`
-                        )->leaf( `ToolbarSpacer`
+                        )->tag( `ToolbarSpacer`
 
-                        )->open( `ComboBox`
+                        )->ele( `ComboBox`
                             )->a( n = `id`          v = `idPopinLayout`
                             )->a( n = `placeholder` v = `Popin layout options`
                             " two-way selectedKey replaces the original's change handler (a pure key-to-property pass-through)
                             )->a( n = `selectedKey` v = client->_bind( popin_layout )
 
-                            )->open( `items`
-                                )->leaf( n = `Item` ns = `core`
+                            )->ele( `items`
+                                )->tag( n = `Item` ns = `core`
                                     )->a( n = `text` v = `Block`
                                     )->a( n = `key`  v = `Block`
-                                )->leaf( n = `Item` ns = `core`
+                                )->tag( n = `Item` ns = `core`
                                     )->a( n = `text` v = `Grid Large`
                                     )->a( n = `key`  v = `GridLarge`
-                                )->leaf( n = `Item` ns = `core`
+                                )->tag( n = `Item` ns = `core`
                                     )->a( n = `text` v = `Grid Small`
                                     )->a( n = `key`  v = `GridSmall`
 
-                            )->shut(
-                        )->shut(
+                            )->end(
+                        )->end(
                         " the sticky options: Table.sticky is an ARRAY property, bound here to a
                         " string table and maintained in the backend - the app-009 pattern
-                        )->leaf( `Label`
+                        )->tag( `Label`
                             )->a( n = `text` v = `Sticky options:`
-                        )->leaf( `CheckBox`
+                        )->tag( `CheckBox`
                             )->a( n = `text`   v = `ColumnHeaders`
                             )->a( n = `select` v = client->_event( val   = `STICKY_SELECT`
                                                                    t_arg = VALUE #( ( `${$source>/text}` ) ( `${$parameters>/selected}` ) ) )
-                        )->leaf( `CheckBox`
+                        )->tag( `CheckBox`
                             )->a( n = `text`   v = `HeaderToolbar`
                             )->a( n = `select` v = client->_event( val   = `STICKY_SELECT`
                                                                    t_arg = VALUE #( ( `${$source>/text}` ) ( `${$parameters>/selected}` ) ) )
-                        )->leaf( `CheckBox`
+                        )->tag( `CheckBox`
                             )->a( n = `text`   v = `InfoToolbar`
                             )->a( n = `select` v = client->_event( val   = `STICKY_SELECT`
                                                                    t_arg = VALUE #( ( `${$source>/text}` ) ( `${$parameters>/selected}` ) ) )
-                        )->leaf( `ToggleButton`
+                        )->tag( `ToggleButton`
                             )->a( n = `id`      v = `toggleInfoToolbar`
                             )->a( n = `text`    v = `Hide/Show InfoToolbar`
                             " two-way pressed replaces the original's press handler - the infoToolbar visibility is a pure expression over it
                             )->a( n = `pressed` v = client->_bind( info_toolbar_hidden )
 
-                    )->shut(
-                )->shut(
-                )->open( `infoToolbar`
-                    )->open( `OverflowToolbar`
+                    )->end(
+                )->end(
+                )->ele( `infoToolbar`
+                    )->ele( `OverflowToolbar`
                         )->a( n = `visible` v = |\{= !${ client->_bind( info_toolbar_hidden ) } \}|
 
-                        )->leaf( `Label`
+                        )->tag( `Label`
                             )->a( n = `text` v = `Wide range of available products`
 
-                    )->shut(
-                )->shut(
-                )->open( `columns`
-                    )->open( `Column`
+                    )->end(
+                )->end(
+                )->ele( `columns`
+                    )->ele( `Column`
                         )->a( n = `width` v = `12em`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Product`
 
-                    )->shut(
-                    )->open( `Column`
+                    )->end(
+                    )->ele( `Column`
                         )->a( n = `minScreenWidth` v = `Tablet`
                         )->a( n = `demandPopin`    v = `true`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Supplier`
 
-                    )->shut(
-                    )->open( `Column`
+                    )->end(
+                    )->ele( `Column`
                         )->a( n = `minScreenWidth` v = `Desktop`
                         )->a( n = `demandPopin`    v = `true`
                         )->a( n = `hAlign`         v = `End`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Dimensions`
 
-                    )->shut(
-                    )->open( `Column`
+                    )->end(
+                    )->ele( `Column`
                         )->a( n = `minScreenWidth` v = `Desktop`
                         )->a( n = `demandPopin`    v = `true`
                         )->a( n = `hAlign`         v = `Center`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Weight`
 
-                    )->shut(
-                    )->open( `Column`
+                    )->end(
+                    )->ele( `Column`
                         )->a( n = `hAlign` v = `End`
 
-                        )->leaf( `Text`
+                        )->tag( `Text`
                             )->a( n = `text` v = `Price`
 
-                    )->shut(
-                )->shut(
-                )->open( `items`
-                    )->open( `ColumnListItem`
+                    )->end(
+                )->end(
+                )->ele( `items`
+                    )->ele( `ColumnListItem`
                         )->a( n = `vAlign` v = `Middle`
 
-                        )->open( `cells`
-                            )->leaf( `ObjectIdentifier`
+                        )->ele( `cells`
+                            )->tag( `ObjectIdentifier`
                                 )->a( n = `title` v = `{NAME}`
                                 )->a( n = `text`  v = `{CATEGORY}`
-                            )->leaf( `Text`
+                            )->tag( `Text`
                                 )->a( n = `text` v = `{SUPPLIER_NAME}`
-                            )->leaf( `Text`
+                            )->tag( `Text`
                                 )->a( n = `text` v = `{WIDTH} x {DEPTH} x {HEIGHT} {DIM_UNIT}`
-                            )->leaf( `ObjectNumber`
+                            )->tag( `ObjectNumber`
                                 )->a( n = `number` v = `{WEIGHT_MEASURE}`
                                 )->a( n = `unit`   v = `{WEIGHT_UNIT}`
                                 )->a( n = `state`  v = `{WEIGHT_STATE}`
-                            )->leaf( `ObjectNumber`
+                            )->tag( `ObjectNumber`
                                 )->a( n = `number` v = |\{ parts:[\{path:'PRICE'\},\{path:'CURRENCY_CODE'\}], type:'sap.ui.model.type.Currency', formatOptions:\{showMeasure:false\} \}|
                                 )->a( n = `unit`   v = `{CURRENCY_CODE}` ).
 

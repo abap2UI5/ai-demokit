@@ -37,14 +37,14 @@ CLASS z2ui5_cl_smpc_app_417 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the controller's ObjectPageModel (SharedJSONData employee.json) is never
     " bound by any control in this view, so no model is seeded; the side
     " content and the open button are driven through two-way bound properties
     " instead of the controller's imperative setters. style.css is injected as
     " a core:HTML style leaf.
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `height`     v = `100%`
         )->a( n = `xmlns`      v = `sap.uxap`
         )->a( n = `xmlns:l`    v = `sap.ui.layout`
@@ -52,10 +52,10 @@ CLASS z2ui5_cl_smpc_app_417 IMPLEMENTATION.
         )->a( n = `xmlns:m`    v = `sap.m`
         )->a( n = `xmlns:core` v = `sap.ui.core`
 
-        )->leaf( n = `HTML` ns = `core`
+        )->tag( n = `HTML` ns = `core`
             )->a( n = `content` v = `<style>.sapUiTheme-sap_bluecrystal .sapUiDSC \{ background-color: rgb(242, 248, 252); \}</style>`
 
-        )->open( n = `DynamicSideContent` ns = `l`
+        )->ele( n = `DynamicSideContent` ns = `l`
             )->a( n = `id`                  v = `DynamicSideContent`
             )->a( n = `class`               v = `sapUiDSCExplored`
             )->a( n = `sideContentFallDown` v = `BelowM`
@@ -65,14 +65,14 @@ CLASS z2ui5_cl_smpc_app_417 IMPLEMENTATION.
             )->a( n = `breakpointChanged`   v = client->_event( val   = `BP_CHANGED`
                                                                 t_arg = VALUE #( ( `${$parameters>/currentBreakpoint}` ) ) )
 
-            )->open( n = `mainContent` ns = `l`
-                )->open( `ObjectPageLayout`
+            )->ele( n = `mainContent` ns = `l`
+                )->ele( `ObjectPageLayout`
                     )->a( n = `id`                       v = `ObjectPageLayout`
                     )->a( n = `showTitleInHeaderContent` v = `true`
                     )->a( n = `upperCaseAnchorBar`       v = `false`
 
-                    )->open( `headerTitle`
-                        )->open( `ObjectPageHeader`
+                    )->ele( `headerTitle`
+                        )->ele( `ObjectPageHeader`
                             )->a( n = `id`                            v = `headerForTest`
                             )->a( n = `objectTitle`                   v = `Denise Smith`
                             )->a( n = `showTitleSelector`             v = `true`
@@ -85,10 +85,10 @@ CLASS z2ui5_cl_smpc_app_417 IMPLEMENTATION.
                             )->a( n = `isObjectTitleAlwaysVisible`    v = `false`
                             )->a( n = `isObjectSubtitleAlwaysVisible` v = `false`
 
-                            )->open( `sideContentButton`
+                            )->ele( `sideContentButton`
                                 " the controller hides this button while the side content is open
                                 " (setVisible) - here that state is the bound visible flag
-                                )->leaf( n = `Button` ns = `m`
+                                )->tag( n = `Button` ns = `m`
                                     )->a( n = `id`      v = `openSideContentBtn`
                                     )->a( n = `icon`    v = `sap-icon://detail-view`
                                     )->a( n = `type`    v = `Transparent`
@@ -96,115 +96,115 @@ CLASS z2ui5_cl_smpc_app_417 IMPLEMENTATION.
                                     )->a( n = `tooltip` v = `detail-view`
                                     )->a( n = `visible` v = client->_bind( open_btn_visible )
 
-                            )->shut(
-                            )->open( `actions`
-                                )->leaf( `ObjectPageHeaderActionButton`
+                            )->end(
+                            )->ele( `actions`
+                                )->tag( `ObjectPageHeaderActionButton`
                                     )->a( n = `text`    v = `Public Profile`
                                     )->a( n = `icon`    v = `sap-icon://edit`
                                     )->a( n = `tooltip` v = `edit`
-                                )->leaf( `ObjectPageHeaderActionButton`
+                                )->tag( `ObjectPageHeaderActionButton`
                                     )->a( n = `text`    v = `Take Action`
                                     )->a( n = `icon`    v = `sap-icon://action`
                                     )->a( n = `tooltip` v = `action`
 
-                            )->shut(
-                        )->shut(
-                    )->shut(
+                            )->end(
+                        )->end(
+                    )->end(
 
-                    )->open( `headerContent`
-                        )->open( n = `VerticalLayout` ns = `l`
-                            )->leaf( n = `Link` ns = `m`
+                    )->ele( `headerContent`
+                        )->ele( n = `VerticalLayout` ns = `l`
+                            )->tag( n = `Link` ns = `m`
                                 )->a( n = `text` v = `denise-smith`
-                            )->leaf( n = `Label` ns = `m`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `(321) 123-4567`
-                            )->leaf( n = `Link` ns = `m`
+                            )->tag( n = `Link` ns = `m`
                                 )->a( n = `text` v = `DeniseSmith@sap.com`
-                            )->open( n = `HorizontalLayout` ns = `l`
-                                )->leaf( n = `Image` ns = `m`
+                            )->ele( n = `HorizontalLayout` ns = `l`
+                                )->tag( n = `Image` ns = `m`
                                     )->a( n = `height` v = `24px`
                                     )->a( n = `width`  v = `24px`
                                     )->a( n = `src`    v = `https://sdk.openui5.org/test-resources/sap/uxap/images/twitterIcon.png`
-                                )->leaf( n = `Image` ns = `m`
+                                )->tag( n = `Image` ns = `m`
                                     )->a( n = `height` v = `24px`
                                     )->a( n = `width`  v = `24px`
                                     )->a( n = `src`    v = `https://sdk.openui5.org/test-resources/sap/uxap/images/linkedInIcon.png`
 
-                            )->shut(
-                        )->shut(
+                            )->end(
+                        )->end(
 
-                        )->leaf( n = `Text` ns = `m`
+                        )->tag( n = `Text` ns = `m`
                             )->a( n = `width` v = `200px`
                             )->a( n = `text`  v = `Hi, I'm Denise. I am passionate about what I do and I'll go the extra mile to make the customer win.`
 
-                        )->open( n = `VerticalLayout` ns = `l`
-                            )->leaf( n = `Label` ns = `m`
+                        )->ele( n = `VerticalLayout` ns = `l`
+                            )->tag( n = `Label` ns = `m`
                                 )->a( n = `text` v = `Profile completion`
-                            )->leaf( n = `ProgressIndicator` ns = `m`
+                            )->tag( n = `ProgressIndicator` ns = `m`
                                 )->a( n = `percentValue` v = `30`
                                 )->a( n = `displayValue` v = `30%`
                                 )->a( n = `showValue`    v = `true`
                                 )->a( n = `state`        v = `None`
 
-                        )->shut(
-                    )->shut(
+                        )->end(
+                    )->end(
 
-                    )->open( `sections`
-                        )->open( `ObjectPageSection`
+                    )->ele( `sections`
+                        )->ele( `ObjectPageSection`
                             )->a( n = `titleUppercase` v = `false`
                             )->a( n = `title`          v = `2014 Goals Plan`
 
-                            )->open( `subSections`
-                                )->open( `ObjectPageSubSection`
+                            )->ele( `subSections`
+                                )->ele( `ObjectPageSubSection`
                                     )->a( n = `titleUppercase` v = `false`
 
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `width` v = `200px`
                                         )->a( n = `text`  v = `Hi, I'm Denise. I am passionate about what I do and I'll go the extra mile to make the customer win.`
 
-                                )->shut(
-                            )->shut(
-                        )->shut(
+                                )->end(
+                            )->end(
+                        )->end(
 
-                        )->open( `ObjectPageSection`
+                        )->ele( `ObjectPageSection`
                             )->a( n = `titleUppercase` v = `false`
                             )->a( n = `title`          v = `Personal`
 
-                            )->open( `subSections`
-                                )->open( `ObjectPageSubSection`
+                            )->ele( `subSections`
+                                )->ele( `ObjectPageSubSection`
                                     )->a( n = `title`          v = `Connect`
                                     )->a( n = `titleUppercase` v = `false`
 
-                                    )->leaf( n = `Text` ns = `m`
+                                    )->tag( n = `Text` ns = `m`
                                         )->a( n = `width` v = `200px`
                                         )->a( n = `text`  v = `Hi, I'm Denise. I am passionate about what I do and I'll go the extra mile to make the customer win.`
 
-                                )->shut(
+                                )->end(
                                 " the original's blocks and moreBlocks aggregation tags are empty
                                 " and are not written - aggregations are optional in XML
-                                )->leaf( `ObjectPageSubSection`
+                                )->tag( `ObjectPageSubSection`
                                     )->a( n = `id`             v = `paymentSubSection`
                                     )->a( n = `title`          v = `Payment information`
                                     )->a( n = `titleUppercase` v = `false`
 
-                            )->shut(
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
+                            )->end(
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( n = `sideContent` ns = `l`
-                )->open( n = `Toolbar` ns = `m`
-                    )->leaf( n = `Title` ns = `m`
+            )->ele( n = `sideContent` ns = `l`
+                )->ele( n = `Toolbar` ns = `m`
+                    )->tag( n = `Title` ns = `m`
                         )->a( n = `text` v = `My tasks`
-                    )->leaf( n = `ToolbarSpacer` ns = `m`
-                    )->leaf( n = `Button` ns = `m`
+                    )->tag( n = `ToolbarSpacer` ns = `m`
+                    )->tag( n = `Button` ns = `m`
                         )->a( n = `id`    v = `closeSideContentBtn`
                         )->a( n = `text`  v = `Close`
                         )->a( n = `type`  v = `Transparent`
                         )->a( n = `press` v = client->_event( `CLOSE_SIDE_CONTENT` )
 
-                )->shut(
-                )->leaf( n = `Text` ns = `m`
+                )->end(
+                )->tag( n = `Text` ns = `m`
                 )->a( n = `text` v = ` Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco ` &&
                                      `laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non ` &&
                                      `proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna ` &&

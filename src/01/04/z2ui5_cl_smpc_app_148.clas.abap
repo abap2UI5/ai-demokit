@@ -43,12 +43,12 @@ CLASS z2ui5_cl_smpc_app_148 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the drop carries the two row indices and the insert position as client-side
     " resolved $-args (CAPABILITIES "Drag & drop reorder"); on_event reorders the
     " ABAP table with exactly the original controller's splice arithmetic
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`         v = `sap.m`
         )->a( n = `xmlns:mvc`     v = `sap.ui.core.mvc`
         )->a( n = `xmlns:grid`    v = `sap.ui.layout.cssgrid`
@@ -56,28 +56,28 @@ CLASS z2ui5_cl_smpc_app_148 IMPLEMENTATION.
         )->a( n = `xmlns:dnd`     v = `sap.ui.core.dnd`
         )->a( n = `xmlns:dndgrid` v = `sap.f.dnd`
 
-        )->open( `Panel`
+        )->ele( `Panel`
             )->a( n = `id`               v = `panelForGridList`
             )->a( n = `backgroundDesign` v = `Transparent`
 
-            )->open( `headerToolbar`
-                )->open( `Toolbar`
+            )->ele( `headerToolbar`
+                )->ele( `Toolbar`
                     )->a( n = `height` v = `3rem`
-                    )->leaf( `Title`
+                    )->tag( `Title`
                         )->a( n = `text` v = `Grid List with Drag and Drop`
 
-            )->shut(
-            )->shut(
+            )->end(
+            )->end(
 
-            )->open( n = `GridList` ns = `f`
+            )->ele( n = `GridList` ns = `f`
                 )->a( n = `id`         v = `gridList`
                 )->a( n = `headerText` v = `GridList header`
                 )->a( n = `items`      v = client->_bind( t_items )
 
-                )->open( n = `dragDropConfig` ns = `f`
-                    )->leaf( n = `DragInfo` ns = `dnd`
+                )->ele( n = `dragDropConfig` ns = `f`
+                    )->tag( n = `DragInfo` ns = `dnd`
                         )->a( n = `sourceAggregation` v = `items`
-                    )->leaf( n = `GridDropInfo` ns = `dndgrid`
+                    )->tag( n = `GridDropInfo` ns = `dndgrid`
                         )->a( n = `targetAggregation` v = `items`
                         )->a( n = `dropPosition`      v = `Between`
                         )->a( n = `dropLayout`        v = `Horizontal`
@@ -87,33 +87,33 @@ CLASS z2ui5_cl_smpc_app_148 IMPLEMENTATION.
                                                                             ( `${$parameters>/droppedControl/oParent}.indexOfItem(${$parameters>/droppedControl})` )
                                                                             ( `${$parameters>/dropPosition}` ) ) )
 
-                )->shut(
+                )->end(
 
-                )->open( n = `customLayout` ns = `f`
-                    )->leaf( n = `GridBoxLayout` ns = `grid`
+                )->ele( n = `customLayout` ns = `f`
+                    )->tag( n = `GridBoxLayout` ns = `grid`
                         )->a( n = `boxMinWidth` v = `17rem`
 
-                )->shut(
+                )->end(
 
-                )->open( n = `GridListItem` ns = `f`
+                )->ele( n = `GridListItem` ns = `f`
                     )->a( n = `counter`   v = `{COUNTER}`
                     )->a( n = `highlight` v = `{HIGHLIGHT}`
                     )->a( n = `type`      v = `{TYPE}`
                     )->a( n = `unread`    v = `{UNREAD}`
-                    )->open( `VBox`
+                    )->ele( `VBox`
                         )->a( n = `height` v = `100%`
-                        )->open( `VBox`
+                        )->ele( `VBox`
                             )->a( n = `class` v = `sapUiSmallMargin`
-                            )->open( `layoutData`
-                                )->leaf( `FlexItemData`
+                            )->ele( `layoutData`
+                                )->tag( `FlexItemData`
                                     )->a( n = `growFactor`   v = `1`
                                     )->a( n = `shrinkFactor` v = `0`
 
-                            )->shut(
-                            )->leaf( `Title`
+                            )->end(
+                            )->tag( `Title`
                                 )->a( n = `text`     v = `{TITLE}`
                                 )->a( n = `wrapping` v = `true`
-                            )->leaf( `Label`
+                            )->tag( `Label`
                                 )->a( n = `text`     v = `{SUBTITLE}`
                                 )->a( n = `wrapping` v = `true` ).
 

@@ -29,55 +29,55 @@ CLASS z2ui5_cl_smpc_app_160 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " handleLinkPress opens MessageBox.alert('Link was clicked!'); the framework
     " expresses that 1:1 (client->message_box_display), so both wired Links go
     " through a backend event rather than being reduced to a toast
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
             )->a( n = `width` v = `100%`
 
-            )->open( n = `content` ns = `l`
-                )->leaf( `Link`
+            )->ele( n = `content` ns = `l`
+                )->tag( `Link`
                     )->a( n = `text`  v = `Open message box`
                     )->a( n = `press` v = client->_event( `LINK_PRESSED` )
-                )->leaf( `Link`
+                )->tag( `Link`
                     )->a( n = `text`    v = `Disabled link`
                     )->a( n = `enabled` v = `false`
-                )->leaf( `Link`
+                )->tag( `Link`
                     )->a( n = `text`   v = `Open SAP Homepage`
                     )->a( n = `target` v = `_blank`
                     )->a( n = `href`   v = `http://www.sap.com`
 
-        )->shut(
+        )->end(
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
             )->a( n = `width` v = `100%`
 
-            )->open( n = `content` ns = `l`
-                )->leaf( `Label`
+            )->ele( n = `content` ns = `l`
+                )->tag( `Label`
                     )->a( n = `text`     v = `Links with Icons`
                     )->a( n = `design`   v = `Bold`
                     )->a( n = `wrapping` v = `true`
                     )->a( n = `class`    v = `sapUiSmallMarginTop`
-                )->leaf( `Link`
+                )->tag( `Link`
                     )->a( n = `text`    v = `Show more information`
                     " endIcon is @since 1.128 - kept 1:1 (POST_171)
                     )->a( n = `endIcon` v = `sap-icon://inspect`
                     )->a( n = `press`   v = client->_event( `LINK_PRESSED` )
-                )->leaf( `Link`
+                )->tag( `Link`
                     )->a( n = `text`    v = `Disabled link with icon`
                     " icon is @since 1.128 - kept 1:1 (POST_171)
                     )->a( n = `icon`    v = `sap-icon://cart`
                     )->a( n = `enabled` v = `false`
-                )->leaf( `Link`
+                )->tag( `Link`
                     )->a( n = `text` v = `Open SAP Homepage`
                     )->a( n = `icon` v = `sap-icon://globe`
                     )->a( n = `href` v = `http://www.sap.com` ).

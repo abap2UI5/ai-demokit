@@ -50,7 +50,7 @@ CLASS z2ui5_cl_smpc_app_170 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " sap.f.DynamicPage (freestyle) - title/header/content/footer. headerExpanded,
     " toggleHeaderOnTitleClick, showFooter and the title's areaShrinkRatio are
@@ -58,163 +58,163 @@ CLASS z2ui5_cl_smpc_app_170 IMPLEMENTATION.
     " faithful abap2UI5 form binds them). The Products table keeps the original
     " sorter + Currency composite type bindings 1:1. The controller's Card popover
     " (onPressOpenPopover) is shown via popover_display on both wired presses.
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`        v = `sap.m`
         )->a( n = `xmlns:mvc`    v = `sap.ui.core.mvc`
         )->a( n = `xmlns:f`      v = `sap.f`
         )->a( n = `xmlns:layout` v = `sap.ui.layout`
         )->a( n = `height`       v = `100%`
 
-        )->open( n = `DynamicPage` ns = `f`
+        )->ele( n = `DynamicPage` ns = `f`
             )->a( n = `id`                       v = `dynamicPageId`
             )->a( n = `headerExpanded`           v = client->_bind( headerexpanded )
             )->a( n = `toggleHeaderOnTitleClick` v = client->_bind( titleclickable )
             )->a( n = `showFooter`               v = client->_bind( showfooter )
 
-            )->open( n = `title` ns = `f`
-                )->open( n = `DynamicPageTitle` ns = `f`
+            )->ele( n = `title` ns = `f`
+                )->ele( n = `DynamicPageTitle` ns = `f`
                     " added attr (declared): carries the Edit button's toggle
                     )->a( n = `areaShrinkRatio` v = client->_bind( areashrinkratio )
 
-                    )->open( n = `heading` ns = `f`
-                        )->leaf( `Title`
+                    )->ele( n = `heading` ns = `f`
+                        )->tag( `Title`
                             )->a( n = `text` v = `Header Title`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( n = `breadcrumbs` ns = `f`
-                        )->open( `Breadcrumbs`
-                            )->leaf( `Link`
+                    )->ele( n = `breadcrumbs` ns = `f`
+                        )->ele( `Breadcrumbs`
+                            )->tag( `Link`
                                 )->a( n = `text` v = `Home`
-                            )->leaf( `Link`
+                            )->tag( `Link`
                                 )->a( n = `text` v = `Page 1`
-                            )->leaf( `Link`
+                            )->tag( `Link`
                                 )->a( n = `text` v = `Page 2`
-                            )->leaf( `Link`
+                            )->tag( `Link`
                                 )->a( n = `text` v = `Page 3`
-                            )->leaf( `Link`
+                            )->tag( `Link`
                                 )->a( n = `text` v = `Page 4`
-                            )->leaf( `Link`
+                            )->tag( `Link`
                                 )->a( n = `text` v = `Page 5`
 
-                    )->shut(
-                    )->shut(
+                    )->end(
+                    )->end(
 
-                    )->open( n = `expandedContent` ns = `f`
-                        )->leaf( `Label`
+                    )->ele( n = `expandedContent` ns = `f`
+                        )->tag( `Label`
                             )->a( n = `text` v = `This is a subheading`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( n = `snappedContent` ns = `f`
-                        )->leaf( `Label`
+                    )->ele( n = `snappedContent` ns = `f`
+                        )->tag( `Label`
                             )->a( n = `text` v = `This is a subheading`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( n = `snappedTitleOnMobile` ns = `f`
-                        )->leaf( `Title`
+                    )->ele( n = `snappedTitleOnMobile` ns = `f`
+                        )->tag( `Title`
                             )->a( n = `text` v = `This is a subheading`
 
-                    )->shut(
+                    )->end(
 
-                    )->open( n = `content` ns = `f`
-                        )->open( `OverflowToolbar`
-                            )->open( `GenericTag`
+                    )->ele( n = `content` ns = `f`
+                        )->ele( `OverflowToolbar`
+                            )->ele( `GenericTag`
                                 )->a( n = `text`   v = `SR`
                                 )->a( n = `status` v = `Error`
                                 )->a( n = `design` v = `StatusIconHidden`
                                 )->a( n = `press`  v = client->_event( val   = `OPEN_POPOVER`
                                                                        t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
-                                )->leaf( `ObjectNumber`
+                                )->tag( `ObjectNumber`
                                     )->a( n = `number`     v = `2`
                                     )->a( n = `unit`       v = `M`
                                     )->a( n = `emphasized` v = `false`
                                     )->a( n = `state`      v = `Error`
 
-                    )->shut(
-                    )->shut(
-                    )->shut(
+                    )->end(
+                    )->end(
+                    )->end(
 
-                    )->open( n = `actions` ns = `f`
-                        )->leaf( `Button`
+                    )->ele( n = `actions` ns = `f`
+                        )->tag( `Button`
                             )->a( n = `text`  v = `Edit`
                             )->a( n = `type`  v = `Emphasized`
                             )->a( n = `press` v = client->_event( `TOGGLE_AREA_PRIORITY` )
-                        )->leaf( `Button`
+                        )->tag( `Button`
                             )->a( n = `text` v = `Delete`
                             )->a( n = `type` v = `Transparent`
-                        )->leaf( `Button`
+                        )->tag( `Button`
                             )->a( n = `text` v = `Copy`
                             )->a( n = `type` v = `Transparent`
-                        )->leaf( `Button`
+                        )->tag( `Button`
                             )->a( n = `text`  v = `Toggle Footer`
                             )->a( n = `type`  v = `Transparent`
                             )->a( n = `press` v = client->_event( `TOGGLE_FOOTER` )
-                        )->leaf( `Button`
+                        )->tag( `Button`
                             )->a( n = `icon` v = `sap-icon://action`
                             )->a( n = `type` v = `Transparent`
 
-                        )->open( `Button`
+                        )->ele( `Button`
                             )->a( n = `text`  v = `Button with layoutData`
                             )->a( n = `type`  v = `Transparent`
                             )->a( n = `press` v = client->_event( val   = `OPEN_POPOVER`
                                                                   t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
-                            )->open( `layoutData`
-                                )->leaf( `OverflowToolbarLayoutData`
+                            )->ele( `layoutData`
+                                )->tag( `OverflowToolbarLayoutData`
                                     )->a( n = `priority`                  v = `AlwaysOverflow`
                                     )->a( n = `closeOverflowOnInteraction` v = `false`
 
-                    )->shut(
-                    )->shut(
-                    )->shut(
+                    )->end(
+                    )->end(
+                    )->end(
 
-                    )->open( n = `navigationActions` ns = `f`
-                        )->leaf( `Button`
+                    )->ele( n = `navigationActions` ns = `f`
+                        )->tag( `Button`
                             )->a( n = `icon` v = `sap-icon://full-screen`
                             )->a( n = `type` v = `Transparent`
-                        )->leaf( `Button`
+                        )->tag( `Button`
                             )->a( n = `icon` v = `sap-icon://decline`
                             )->a( n = `type` v = `Transparent`
 
-                    )->shut(
-                    )->shut(
-                )->shut(
+                    )->end(
+                    )->end(
+                )->end(
 
-            )->open( n = `header` ns = `f`
-                )->open( n = `DynamicPageHeader` ns = `f`
+            )->ele( n = `header` ns = `f`
+                )->ele( n = `DynamicPageHeader` ns = `f`
                     )->a( n = `pinnable` v = `true`
-                    )->open( n = `HorizontalLayout` ns = `layout`
+                    )->ele( n = `HorizontalLayout` ns = `layout`
                         )->a( n = `allowWrapping` v = `true`
 
-                        )->open( n = `VerticalLayout` ns = `layout`
+                        )->ele( n = `VerticalLayout` ns = `layout`
                             )->a( n = `class` v = `sapUiMediumMarginEnd`
-                            )->leaf( `ObjectAttribute`
+                            )->tag( `ObjectAttribute`
                                 )->a( n = `title` v = `Location`
                                 )->a( n = `text`  v = `Warehouse A`
-                            )->leaf( `ObjectAttribute`
+                            )->tag( `ObjectAttribute`
                                 )->a( n = `title` v = `Halway`
                                 )->a( n = `text`  v = `23L`
-                            )->leaf( `ObjectAttribute`
+                            )->tag( `ObjectAttribute`
                                 )->a( n = `title` v = `Rack`
                                 )->a( n = `text`  v = `34`
 
-                        )->shut(
+                        )->end(
 
-                        )->open( n = `VerticalLayout` ns = `layout`
-                            )->leaf( `ObjectAttribute`
+                        )->ele( n = `VerticalLayout` ns = `layout`
+                            )->tag( `ObjectAttribute`
                                 )->a( n = `title` v = `Availability`
-                            )->leaf( `ObjectStatus`
+                            )->tag( `ObjectStatus`
                                 )->a( n = `text`  v = `In Stock`
                                 )->a( n = `state` v = `Success`
 
-                    )->shut(
-                    )->shut(
-                    )->shut(
-                )->shut(
+                    )->end(
+                    )->end(
+                    )->end(
+                )->end(
 
-            )->open( n = `content` ns = `f`
-                )->open( `Table`
+            )->ele( n = `content` ns = `f`
+                )->ele( `Table`
                     )->a( n = `id`     v = `idProductsTable`
                     )->a( n = `sticky` v = `HeaderToolbar,ColumnHeaders`
                     )->a( n = `inset`  v = `false`
@@ -222,82 +222,82 @@ CLASS z2ui5_cl_smpc_app_170 IMPLEMENTATION.
                     )->a( n = `class`  v = `sapFDynamicPageAlignContent`
                     )->a( n = `width`  v = `auto`
 
-                    )->open( `headerToolbar`
-                        )->open( `Toolbar`
-                            )->leaf( `Title`
+                    )->ele( `headerToolbar`
+                        )->ele( `Toolbar`
+                            )->tag( `Title`
                                 )->a( n = `text`  v = `Products`
                                 )->a( n = `level` v = `H2`
 
-                    )->shut(
-                    )->shut(
+                    )->end(
+                    )->end(
 
-                    )->open( `columns`
-                        )->open( `Column`
+                    )->ele( `columns`
+                        )->ele( `Column`
                             )->a( n = `width` v = `12em`
-                            )->leaf( `Text`
+                            )->tag( `Text`
                                 )->a( n = `text` v = `Product`
 
-                        )->shut(
+                        )->end(
 
-                        )->open( `Column`
+                        )->ele( `Column`
                             )->a( n = `minScreenWidth` v = `Tablet`
                             )->a( n = `demandPopin`    v = `true`
-                            )->leaf( `Text`
+                            )->tag( `Text`
                                 )->a( n = `text` v = `Supplier`
 
-                        )->shut(
+                        )->end(
 
-                        )->open( `Column`
+                        )->ele( `Column`
                             )->a( n = `minScreenWidth` v = `Tablet`
                             )->a( n = `demandPopin`    v = `true`
                             )->a( n = `hAlign`         v = `End`
-                            )->leaf( `Text`
+                            )->tag( `Text`
                                 )->a( n = `text` v = `Dimensions`
 
-                        )->shut(
+                        )->end(
 
-                        )->open( `Column`
+                        )->ele( `Column`
                             )->a( n = `hAlign` v = `End`
-                            )->leaf( `Text`
+                            )->tag( `Text`
                                 )->a( n = `text` v = `Price`
 
-                    )->shut(
-                    )->shut(
+                    )->end(
+                    )->end(
 
-                    )->open( `items`
-                        )->open( `ColumnListItem`
-                            )->open( `cells`
-                                )->leaf( `ObjectIdentifier`
+                    )->ele( `items`
+                        )->ele( `ColumnListItem`
+                            )->ele( `cells`
+                                )->tag( `ObjectIdentifier`
                                     )->a( n = `title` v = `{NAME}`
                                     )->a( n = `text`  v = `{PRODUCTID}`
-                                )->leaf( `Text`
+                                )->tag( `Text`
                                     )->a( n = `text` v = `{SUPPLIERNAME}`
-                                )->leaf( `Text`
+                                )->tag( `Text`
                                     )->a( n = `text` v = `{WIDTH} x {DEPTH} x {HEIGHT} {DIMUNIT}`
-                                )->leaf( `ObjectNumber`
+                                )->tag( `ObjectNumber`
                                     )->a( n = `number` v = |\{ parts:[\{path:'PRICE'\},\{path:'CURRENCYCODE'\}], type: 'sap.ui.model.type.Currency', formatOptions: \{showMeasure: false\} \}|
                                     )->a( n = `unit`   v = `{CURRENCYCODE}`
 
-                    )->shut(
-                    )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
+                    )->end(
+                    )->end(
+                    )->end(
+                )->end(
+            )->end(
 
-            )->open( n = `footer` ns = `f`
-                )->open( `OverflowToolbar`
-                    )->leaf( `ToolbarSpacer`
-                    )->leaf( `Button`
+            )->ele( n = `footer` ns = `f`
+                )->ele( `OverflowToolbar`
+                    )->tag( `ToolbarSpacer`
+                    )->tag( `Button`
                         )->a( n = `type` v = `Accept`
                         )->a( n = `text` v = `Accept`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `type` v = `Reject`
                         )->a( n = `text` v = `Reject`
 
-            )->shut(
-            )->shut(
-        )->shut(
-        )->shut( ).
+            )->end(
+            )->end(
+        )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 
@@ -322,24 +322,24 @@ CLASS z2ui5_cl_smpc_app_170 IMPLEMENTATION.
         " original onPressOpenPopover: Fragment.load(view/Card.fragment.xml)
         " + openBy(pressed control) - the Card popover rebuilt 1:1, anchored
         " via popover_display by_id
-        DATA(popover) = z2ui5_cl_ai_xml=>factory( ).
+        DATA(popover) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-        popover->open( n = `FragmentDefinition` ns = `core`
+        popover->ele( n = `FragmentDefinition` ns = `core`
             )->a( n = `xmlns`      v = `sap.m`
             )->a( n = `xmlns:core` v = `sap.ui.core`
             )->a( n = `xmlns:f`    v = `sap.f`
             )->a( n = `xmlns:card` v = `sap.f.cards`
 
-            )->open( `Popover`
+            )->ele( `Popover`
                 )->a( n = `placement`    v = `Bottom`
                 )->a( n = `showHeader`   v = `false`
                 )->a( n = `contentWidth` v = `300px`
 
-                )->open( n = `Card` ns = `f`
+                )->ele( n = `Card` ns = `f`
                     )->a( n = `width` v = `100%`
 
-                    )->open( n = `header` ns = `f`
-                        )->open( n = `NumericHeader` ns = `card`
+                    )->ele( n = `header` ns = `f`
+                        )->ele( n = `NumericHeader` ns = `card`
                             )->a( n = `title`             v = `Sales Revenue`
                             )->a( n = `subtitle`          v = `Sales revenue in the current quarter`
                             )->a( n = `unitOfMeasurement` v = `EUR`
@@ -348,12 +348,12 @@ CLASS z2ui5_cl_smpc_app_170 IMPLEMENTATION.
                             )->a( n = `trend`             v = `Down`
                             )->a( n = `state`             v = `Error`
 
-                            )->open( n = `sideIndicators` ns = `card`
-                                )->leaf( n = `NumericSideIndicator` ns = `card`
+                            )->ele( n = `sideIndicators` ns = `card`
+                                )->tag( n = `NumericSideIndicator` ns = `card`
                                     )->a( n = `number` v = `4.74`
                                     )->a( n = `unit`   v = `M`
                                     )->a( n = `title`  v = `Target`
-                                )->leaf( n = `NumericSideIndicator` ns = `card`
+                                )->tag( n = `NumericSideIndicator` ns = `card`
                                     )->a( n = `number` v = `-54.49`
                                     )->a( n = `unit`   v = `%`
                                     )->a( n = `title`  v = `Deviation` ).

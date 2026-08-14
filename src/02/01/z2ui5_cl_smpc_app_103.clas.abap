@@ -70,16 +70,16 @@ CLASS z2ui5_cl_smpc_app_103 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`    v = `sap.ui.layout`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns`      v = `sap.m`
 
-        )->open( n = `dependents` ns = `mvc`
-            )->open( `SelectDialog`
+        )->ele( n = `dependents` ns = `mvc`
+            )->ele( `SelectDialog`
                 )->a( n = `id`         v = `mySelectDialog`
                 )->a( n = `noDataText` v = `No Products Found`
                 )->a( n = `title`      v = `Select Product`
@@ -97,7 +97,7 @@ CLASS z2ui5_cl_smpc_app_103 IMPLEMENTATION.
                 )->a( n = `resizable`          v = client->_bind( resizable )
                 )->a( n = `items` v = client->_bind( t_products )
 
-                )->leaf( `StandardListItem`
+                )->tag( `StandardListItem`
                     )->a( n = `title`            v = `{NAME}`
                     )->a( n = `description`      v = `{PRODUCT_ID}`
                     )->a( n = `icon`             v = `{PRODUCT_PIC_URL}`
@@ -105,8 +105,8 @@ CLASS z2ui5_cl_smpc_app_103 IMPLEMENTATION.
                     )->a( n = `iconInset`        v = `false`
                     )->a( n = `type`             v = `Active`
 
-            )->shut(
-            )->open( `SelectDialog`
+            )->end(
+            )->ele( `SelectDialog`
                 )->a( n = `id`                v = `valueHelpDialog`
                 )->a( n = `noDataText`        v = `No Products Found`
                 )->a( n = `title`             v = `Select Product`
@@ -118,7 +118,7 @@ CLASS z2ui5_cl_smpc_app_103 IMPLEMENTATION.
                 )->a( n = `showClearButton`   v = `true`
                 )->a( n = `items` v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }', sorter: \{ path: 'NAME', descending: false \} \}|
 
-                )->leaf( `StandardListItem`
+                )->tag( `StandardListItem`
                     )->a( n = `selected`         v = `{SELECTED}`
                     )->a( n = `title`            v = `{NAME}`
                     )->a( n = `description`      v = `{PRODUCT_ID}`
@@ -127,152 +127,152 @@ CLASS z2ui5_cl_smpc_app_103 IMPLEMENTATION.
                     )->a( n = `iconInset`        v = `false`
                     )->a( n = `type`             v = `Active`
 
-            )->shut(
-        )->shut(
+            )->end(
+        )->end(
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
             )->a( n = `width` v = `100%`
 
-            )->open( `Button`
+            )->ele( `Button`
                 )->a( n = `text`  v = `Show Select Dialog`
                 )->a( n = `press` v = client->_event( `OPEN_1` )
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
 
-            )->shut(
-            )->open( `Button`
+            )->end(
+            )->ele( `Button`
                 )->a( n = `text`  v = `Show Select Dialog (Remember)`
                 )->a( n = `press` v = client->_event( `OPEN_2` )
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
 
-                )->open( `customData`
-                    )->leaf( n = `CustomData` ns = `core`
+                )->ele( `customData`
+                    )->tag( n = `CustomData` ns = `core`
                         )->a( n = `key`   v = `remember`
                         )->a( n = `value` v = `true`
 
-            )->shut(
-            )->shut(
-            )->open( `Button`
+            )->end(
+            )->end(
+            )->ele( `Button`
                 )->a( n = `text`  v = `Show Select Dialog (Multi)`
                 )->a( n = `press` v = client->_event( `OPEN_3` )
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
 
-                )->open( `customData`
-                    )->leaf( n = `CustomData` ns = `core`
+                )->ele( `customData`
+                    )->tag( n = `CustomData` ns = `core`
                         )->a( n = `key`   v = `multi`
                         )->a( n = `value` v = `true`
 
-            )->shut(
-            )->shut(
-            )->open( `Button`
+            )->end(
+            )->end(
+            )->ele( `Button`
                 )->a( n = `text`  v = `Show Select Dialog (Remember)`
                 )->a( n = `press` v = client->_event( `OPEN_4` )
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
 
-                )->open( `customData`
-                    )->leaf( n = `CustomData` ns = `core`
+                )->ele( `customData`
+                    )->tag( n = `CustomData` ns = `core`
                         )->a( n = `key`   v = `multi`
                         )->a( n = `value` v = `true`
-                    )->leaf( n = `CustomData` ns = `core`
+                    )->tag( n = `CustomData` ns = `core`
                         )->a( n = `key`   v = `remember`
                         )->a( n = `value` v = `true`
-                    )->leaf( n = `CustomData` ns = `core`
+                    )->tag( n = `CustomData` ns = `core`
                         )->a( n = `key`   v = `showClearButton`
                         )->a( n = `value` v = `true`
-                    )->leaf( n = `CustomData` ns = `core`
+                    )->tag( n = `CustomData` ns = `core`
                         )->a( n = `key`   v = `confirmButtonText`
                         )->a( n = `value` v = `Remember Selection`
 
-            )->shut(
-            )->shut(
-            )->open( `Button`
+            )->end(
+            )->end(
+            )->ele( `Button`
                 )->a( n = `text`  v = `Show Select Dialog (growingThreshold=15)`
                 )->a( n = `press` v = client->_event( `OPEN_5` )
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
 
-                )->open( `customData`
-                    )->leaf( n = `CustomData` ns = `core`
+                )->ele( `customData`
+                    )->tag( n = `CustomData` ns = `core`
                         )->a( n = `key`   v = `multi`
                         )->a( n = `value` v = `true`
-                    )->leaf( n = `CustomData` ns = `core`
+                    )->tag( n = `CustomData` ns = `core`
                         )->a( n = `key`   v = `remember`
                         )->a( n = `value` v = `true`
-                    )->leaf( n = `CustomData` ns = `core`
+                    )->tag( n = `CustomData` ns = `core`
                         )->a( n = `key`   v = `growing`
                         )->a( n = `value` v = `true`
-                    )->leaf( n = `CustomData` ns = `core`
+                    )->tag( n = `CustomData` ns = `core`
                         )->a( n = `key`   v = `threshold`
                         )->a( n = `value` v = `15`
 
-            )->shut(
-            )->shut(
-            )->open( `Button`
+            )->end(
+            )->end(
+            )->ele( `Button`
                 )->a( n = `text`  v = `Show Select Dialog (growing=false)`
                 )->a( n = `press` v = client->_event( `OPEN_6` )
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
 
-                )->open( `customData`
-                    )->leaf( n = `CustomData` ns = `core`
+                )->ele( `customData`
+                    )->tag( n = `CustomData` ns = `core`
                         )->a( n = `key`   v = `multi`
                         )->a( n = `value` v = `true`
-                    )->leaf( n = `CustomData` ns = `core`
+                    )->tag( n = `CustomData` ns = `core`
                         )->a( n = `key`   v = `remember`
                         )->a( n = `value` v = `true`
-                    )->leaf( n = `CustomData` ns = `core`
+                    )->tag( n = `CustomData` ns = `core`
                         )->a( n = `key`   v = `growing`
                         )->a( n = `value` v = `false`
 
-            )->shut(
-            )->shut(
-            )->open( `Button`
+            )->end(
+            )->end(
+            )->ele( `Button`
                 )->a( n = `text`  v = `Show Select Dialog (draggable=true)`
                 )->a( n = `press` v = client->_event( `OPEN_7` )
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
 
-                )->open( `customData`
-                    )->leaf( n = `CustomData` ns = `core`
+                )->ele( `customData`
+                    )->tag( n = `CustomData` ns = `core`
                         )->a( n = `key`   v = `multi`
                         )->a( n = `value` v = `true`
-                    )->leaf( n = `CustomData` ns = `core`
+                    )->tag( n = `CustomData` ns = `core`
                         )->a( n = `key`   v = `draggable`
                         )->a( n = `value` v = `true`
 
-            )->shut(
-            )->shut(
-            )->open( `Button`
+            )->end(
+            )->end(
+            )->ele( `Button`
                 )->a( n = `text`  v = `Show Select Dialog (resizable=true)`
                 )->a( n = `press` v = client->_event( `OPEN_8` )
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
 
-                )->open( `customData`
-                    )->leaf( n = `CustomData` ns = `core`
+                )->ele( `customData`
+                    )->tag( n = `CustomData` ns = `core`
                         )->a( n = `key`   v = `multi`
                         )->a( n = `value` v = `true`
-                    )->leaf( n = `CustomData` ns = `core`
+                    )->tag( n = `CustomData` ns = `core`
                         )->a( n = `key`   v = `resizable`
                         )->a( n = `value` v = `true`
 
-            )->shut(
-            )->shut(
-            )->open( `Button`
+            )->end(
+            )->end(
+            )->ele( `Button`
                 )->a( n = `text`  v = `Show Select Dialog with Responsive Padding`
                 )->a( n = `press` v = client->_event( `OPEN_9` )
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
 
-                )->open( `customData`
-                    )->leaf( n = `CustomData` ns = `core`
+                )->ele( `customData`
+                    )->tag( n = `CustomData` ns = `core`
                         )->a( n = `key`   v = `responsivePadding`
                         )->a( n = `value` v = `true`
-                    )->leaf( n = `CustomData` ns = `core`
+                    )->tag( n = `CustomData` ns = `core`
                         )->a( n = `key`   v = `resizable`
                         )->a( n = `value` v = `true`
-                    )->leaf( n = `CustomData` ns = `core`
+                    )->tag( n = `CustomData` ns = `core`
                         )->a( n = `key`   v = `draggable`
                         )->a( n = `value` v = `true`
 
-            )->shut(
-            )->shut(
-            )->leaf( `Input`
+            )->end(
+            )->end(
+            )->tag( `Input`
                 )->a( n = `id`               v = `productInput`
                 )->a( n = `type`             v = `Text`
                 )->a( n = `value`            v = `Astro Phone 6`

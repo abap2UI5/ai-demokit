@@ -36,38 +36,38 @@ CLASS z2ui5_cl_smpc_app_273 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
             )->a( n = `width` v = `100%`
 
-            )->leaf( `Button`
+            )->tag( `Button`
                 )->a( n = `text`  v = `Message Dialog`
                 )->a( n = `width` v = `230px`
                 )->a( n = `press` v = client->_event( `DEFAULT_DIALOG` )
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
-            )->leaf( `Button`
+            )->tag( `Button`
                 )->a( n = `text`  v = `Message Dialog (Success)`
                 )->a( n = `width` v = `230px`
                 )->a( n = `press` v = client->_event( `SUCCESS_DIALOG` )
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
-            )->leaf( `Button`
+            )->tag( `Button`
                 )->a( n = `text`  v = `Message Dialog (Warning)`
                 )->a( n = `width` v = `230px`
                 )->a( n = `press` v = client->_event( `WARNING_DIALOG` )
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
-            )->leaf( `Button`
+            )->tag( `Button`
                 )->a( n = `text`  v = `Message Dialog (Error)`
                 )->a( n = `width` v = `230px`
                 )->a( n = `press` v = client->_event( `ERROR_DIALOG` )
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
-            )->leaf( `Button`
+            )->tag( `Button`
                 )->a( n = `text`  v = `Message Dialog (Information)`
                 )->a( n = `width` v = `230px`
                 )->a( n = `press` v = client->_event( `INFORMATION_DIALOG` )
@@ -119,15 +119,15 @@ CLASS z2ui5_cl_smpc_app_273 IMPLEMENTATION.
 
   METHOD popup_message_display.
 
-    DATA(popup) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(popup) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the OK button closes the dialog roundtrip-free (the original's
     " press handler is a plain this.oDialog.close())
-    DATA(dialog) = popup->open( n = `FragmentDefinition` ns = `core`
+    DATA(dialog) = popup->ele( n = `FragmentDefinition` ns = `core`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns`      v = `sap.m`
 
-        )->open( `Dialog`
+        )->ele( `Dialog`
             )->a( n = `type`  v = `Message`
             )->a( n = `title` v = title ).
 
@@ -136,13 +136,13 @@ CLASS z2ui5_cl_smpc_app_273 IMPLEMENTATION.
       dialog->a( n = `state` v = state ).
     ENDIF.
 
-    dialog->open( `content`
-            )->leaf( `Text`
+    dialog->ele( `content`
+            )->tag( `Text`
                 )->a( n = `text` v = text
 
-        )->shut(
-        )->open( `beginButton`
-            )->leaf( `Button`
+        )->end(
+        )->ele( `beginButton`
+            )->tag( `Button`
                 )->a( n = `type`  v = `Emphasized`
                 )->a( n = `text`  v = `OK`
                 )->a( n = `press` v = client->follow_up_action( client->cs_event-popup_close ) ).

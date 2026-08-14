@@ -26,22 +26,22 @@ CLASS z2ui5_cl_smpc_app_250 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " the controller builds six differently configured ColorPalettePopover
     " instances lazily and openBy()s them; here they are declared once in the
     " view's dependents and opened roundtrip-free (all extra controls declared)
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
 
-        )->open( n = `dependents` ns = `mvc`
-            )->leaf( `ColorPalettePopover`
+        )->ele( n = `dependents` ns = `mvc`
+            )->tag( `ColorPalettePopover`
                 )->a( n = `id`           v = `oColorPalettePopoverFull`
                 )->a( n = `defaultColor` v = `black`
                 )->a( n = `colorSelect`  v = client->follow_up_action( val   = client->cs_event-control_global
                                                                        t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Color Selected: value - {0}, \n defaultAction - {1}` ) ( `${$parameters>/value}` ) ( `${$parameters>/defaultAction}` ) ) )
-            )->leaf( `ColorPalettePopover`
+            )->tag( `ColorPalettePopover`
                 )->a( n = `id`                     v = `oColorPalettePopoverCustom`
                 )->a( n = `defaultColor`           v = `white`
                 )->a( n = `showDefaultColorButton` v = `false`
@@ -51,19 +51,19 @@ CLASS z2ui5_cl_smpc_app_250 IMPLEMENTATION.
                 )->a( n = `colors`                 v = `#292f36,#4ecdc4,#3a506b,#ff6b6b,white,lightcyan,#ffeaea`
                 )->a( n = `colorSelect`            v = client->follow_up_action( val   = client->cs_event-control_global
                                                                                  t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Color Selected: value - {0}, \n defaultAction - {1}` ) ( `${$parameters>/value}` ) ( `${$parameters>/defaultAction}` ) ) )
-            )->leaf( `ColorPalettePopover`
+            )->tag( `ColorPalettePopover`
                 )->a( n = `id`                   v = `oColorPalettePopoverMinDef`
                 )->a( n = `showMoreColorsButton` v = `false`
                 )->a( n = `colors`               v = `red,#ffff00`
                 )->a( n = `colorSelect`          v = client->follow_up_action( val   = client->cs_event-control_global
                                                                                t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Color Selected: value - {0}, \n defaultAction - {1}` ) ( `${$parameters>/value}` ) ( `${$parameters>/defaultAction}` ) ) )
-            )->leaf( `ColorPalettePopover`
+            )->tag( `ColorPalettePopover`
                 )->a( n = `id`                     v = `oColorPalettePopoverMin`
                 )->a( n = `showDefaultColorButton` v = `false`
                 )->a( n = `showMoreColorsButton`   v = `false`
                 )->a( n = `colorSelect`            v = client->follow_up_action( val   = client->cs_event-control_global
                                                                                  t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Color Selected: value - {0}, \n defaultAction - {1}` ) ( `${$parameters>/value}` ) ( `${$parameters>/defaultAction}` ) ) )
-            )->leaf( `ColorPalettePopover`
+            )->tag( `ColorPalettePopover`
                 )->a( n = `id`                     v = `oColorPaletteDisplayMode`
                 )->a( n = `showDefaultColorButton` v = `false`
                 )->a( n = `displayMode`            v = `Simplified`
@@ -83,99 +83,99 @@ CLASS z2ui5_cl_smpc_app_250 IMPLEMENTATION.
                                            ( `color` )
                                            ( `'rgba(' + ${$parameters>/r} + ',' + ${$parameters>/g} + ',' + ` &&
                                              `${$parameters>/b} + ',' + ${$parameters>/alpha} + ')'` ) ) )
-            )->leaf( `ColorPalettePopover`
+            )->tag( `ColorPalettePopover`
                 )->a( n = `id`                      v = `oColorPaletteSelectedColor`
                 )->a( n = `colors`                  v = `lightgray,lightblue,cornflowerblue,darkslateblue`
                 )->a( n = `selectedColor`           v = `lightblue`
                 )->a( n = `showRecentColorsSection` v = `false`
                 )->a( n = `showMoreColorsButton`    v = `false`
 
-        )->shut(
+        )->end(
 
-        )->open( `Table`
+        )->ele( `Table`
             )->a( n = `id`         v = `samplesTable`
             )->a( n = `headerText` v = `Color Palette in a Popover`
             )->a( n = `class`      v = `sapUiLargeMarginBottom`
 
-            )->open( `columns`
-                )->open( `Column`
-                    )->leaf( `Text`
+            )->ele( `columns`
+                )->ele( `Column`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Description`
 
-                )->shut(
-                )->open( `Column`
+                )->end(
+                )->ele( `Column`
                     )->a( n = `width` v = `30%`
-                    )->leaf( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Action`
 
-                )->shut(
-            )->shut(
+                )->end(
+            )->end(
 
-            )->open( `ColumnListItem`
-                )->leaf( `Label`
+            )->ele( `ColumnListItem`
+                )->tag( `Label`
                     )->a( n = `text` v = `Default set of colors with both "Default Color" and "More Colors..." buttons`
-                )->leaf( `Button`
+                )->tag( `Button`
                     )->a( n = `icon`         v = `sap-icon://text-color`
                     )->a( n = `ariaHasPopup` v = `Dialog`
                     )->a( n = `press`        v = client->follow_up_action( val   = client->cs_event-control_by_id
                                                                            t_arg = VALUE #( ( `oColorPalettePopoverFull` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
 
-            )->shut(
-            )->open( `ColumnListItem`
-                )->leaf( `Label`
+            )->end(
+            )->ele( `ColumnListItem`
+                )->tag( `Label`
                     )->a( n = `text` v = `Default set of colors without any additional buttons`
-                )->leaf( `Button`
+                )->tag( `Button`
                     )->a( n = `icon`         v = `sap-icon://color-fill`
                     )->a( n = `ariaHasPopup` v = `Dialog`
                     )->a( n = `press`        v = client->follow_up_action( val   = client->cs_event-control_by_id
                                                                            t_arg = VALUE #( ( `oColorPalettePopoverMin` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
 
-            )->shut(
-            )->open( `ColumnListItem`
-                )->leaf( `Label`
+            )->end(
+            )->ele( `ColumnListItem`
+                )->tag( `Label`
                     )->a( n = `text` v = `Custom set of colors with "More Colors..." button`
-                )->leaf( `Button`
+                )->tag( `Button`
                     )->a( n = `icon`         v = `sap-icon://color-fill`
                     )->a( n = `ariaHasPopup` v = `Dialog`
                     )->a( n = `press`        v = client->follow_up_action( val   = client->cs_event-control_by_id
                                                                            t_arg = VALUE #( ( `oColorPalettePopoverCustom` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
 
-            )->shut(
-            )->open( `ColumnListItem`
-                )->leaf( `Label`
+            )->end(
+            )->ele( `ColumnListItem`
+                )->tag( `Label`
                     )->a( n = `text` v = `Two custom colors with "Default Color" button`
-                )->leaf( `Button`
+                )->tag( `Button`
                     )->a( n = `icon`         v = `sap-icon://palette`
                     )->a( n = `ariaHasPopup` v = `Dialog`
                     )->a( n = `press`        v = client->follow_up_action( val   = client->cs_event-control_by_id
                                                                            t_arg = VALUE #( ( `oColorPalettePopoverMinDef` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
 
-            )->shut(
-            )->open( `ColumnListItem`
-                )->leaf( `Label`
+            )->end(
+            )->ele( `ColumnListItem`
+                )->tag( `Label`
                     )->a( n = `text` v = `Default set of colors with "More Colors..." button and displayMode set to "Simplified"`
-                )->leaf( `Button`
+                )->tag( `Button`
                     )->a( n = `icon`         v = `sap-icon://color-fill`
                     )->a( n = `ariaHasPopup` v = `Dialog`
                     )->a( n = `press`        v = client->follow_up_action( val   = client->cs_event-control_by_id
                                                                            t_arg = VALUE #( ( `oColorPaletteDisplayMode` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
 
-            )->shut(
-            )->open( `ColumnListItem`
-                )->leaf( `Label`
+            )->end(
+            )->ele( `ColumnListItem`
+                )->tag( `Label`
                     )->a( n = `text` v = `liveChange of the Default set of colors with "More Colors..." button and displayMode set to "Simplified"`
-                )->leaf( `Button`
+                )->tag( `Button`
                     )->a( n = `id`           v = `liveChangeButton`
                     )->a( n = `icon`         v = `sap-icon://color-fill`
                     )->a( n = `ariaHasPopup` v = `Dialog`
                     )->a( n = `press`        v = client->follow_up_action( val   = client->cs_event-control_by_id
                                                                            t_arg = VALUE #( ( `oColorPaletteDisplayMode` ) ( `openBy` ) ( `$event.oSource.sId` ) ) )
 
-            )->shut(
-            )->open( `ColumnListItem`
-                )->leaf( `Label`
+            )->end(
+            )->ele( `ColumnListItem`
+                )->tag( `Label`
                     )->a( n = `text` v = `Custom set of colors with a selected color and with no additional buttons`
-                )->leaf( `Button`
+                )->tag( `Button`
                     )->a( n = `icon`         v = `sap-icon://cursor-arrow`
                     )->a( n = `ariaHasPopup` v = `Dialog`
                     )->a( n = `press`        v = client->follow_up_action( val   = client->cs_event-control_by_id

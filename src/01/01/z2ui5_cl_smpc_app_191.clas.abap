@@ -35,39 +35,39 @@ CLASS z2ui5_cl_smpc_app_191 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
-        )->open( `Table`
+        )->ele( `Table`
             )->a( n = `id`    v = `idProductsTable`
             )->a( n = `items` v = client->_bind( t_products )
 
-            )->open( `columns`
-                )->open( `Column`
-                    )->leaf( `Text`
+            )->ele( `columns`
+                )->ele( `Column`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Products`
 
-                )->shut(
-                )->open( `Column`
-                    )->leaf( `Text`
+                )->end(
+                )->ele( `Column`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Supplier`
 
-                )->shut(
-                )->open( `Column`
-                    )->leaf( `Text`
+                )->end(
+                )->ele( `Column`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Supplier (active)`
 
-                )->shut(
-            )->shut(
-            )->open( `ColumnListItem`
-                )->leaf( `ObjectIdentifier`
+                )->end(
+            )->end(
+            )->ele( `ColumnListItem`
+                )->tag( `ObjectIdentifier`
                     )->a( n = `text` v = `{PRODUCT}`
-                )->leaf( `ObjectAttribute`
+                )->tag( `ObjectAttribute`
                     )->a( n = `text` v = `{SUPPLIER}`
-                )->leaf( `ObjectAttribute`
+                )->tag( `ObjectAttribute`
                     )->a( n = `text`   v = `{SUPPLIER}`
                     )->a( n = `active` v = `true` ).
 

@@ -39,20 +39,20 @@ CLASS z2ui5_cl_smpc_app_281 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns:l`    v = `sap.ui.layout`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `height`     v = `100%`
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
             )->a( n = `width` v = `100%`
 
-            )->open( `MultiComboBox`
+            )->ele( `MultiComboBox`
                 )->a( n = `selectionChange` v = client->_event( val = `SELECTION_CHANGE` t_arg = VALUE #( ( `${$parameters>/changedItem}.getText()` ) ( `${$parameters>/selected}` ) ) )
                 )->a( n = `selectionFinish` v = client->_event( `SELECTION_FINISH` )
                 )->a( n = `showSelectAll`   v = `true`
@@ -62,7 +62,7 @@ CLASS z2ui5_cl_smpc_app_281 IMPLEMENTATION.
                 " selectionFinish text (the original reads getSelectedItems in the controller)
                 )->a( n = `selectedKeys`    v = client->_bind( t_selected_keys )
 
-                )->leaf( n = `Item` ns = `core`
+                )->tag( n = `Item` ns = `core`
                     )->a( n = `key`  v = `{PRODUCTID}`
                     )->a( n = `text` v = `{NAME}` ).
 

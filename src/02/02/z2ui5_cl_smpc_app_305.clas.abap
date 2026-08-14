@@ -37,18 +37,18 @@ CLASS z2ui5_cl_smpc_app_305 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:u`   v = `sap.ui.unified`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `class`     v = `viewPadding`
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
 
-            )->leaf( n = `Calendar` ns = `u`
+            )->tag( n = `Calendar` ns = `u`
                 )->a( n = `id`                    v = `calendar`
                 " showCurrentDateButton is @since 1.95 - kept 1:1 (POST_171)
                 )->a( n = `showCurrentDateButton` v = `true`
@@ -62,11 +62,11 @@ CLASS z2ui5_cl_smpc_app_305 IMPLEMENTATION.
                                                                         ( `$event.oSource.getSelectedDates().length > 0 ? $event.oSource.getSelectedDates()[0].getStartDate().getMonth() + 1 : 0` )
                                                                         ( `$event.oSource.getSelectedDates().length > 0 ? $event.oSource.getSelectedDates()[0].getStartDate().getDate() : 0` ) ) )
 
-            )->open( n = `HorizontalLayout` ns = `l`
-                )->leaf( `Label`
+            )->ele( n = `HorizontalLayout` ns = `l`
+                )->tag( `Label`
                     )->a( n = `text`  v = `Selected Date (yyyy-mm-dd):`
                     )->a( n = `class` v = `labelMarginLeft`
-                )->leaf( `Text`
+                )->tag( `Text`
                     )->a( n = `id`    v = `selectedDate`
                     )->a( n = `text`  v = client->_bind( selected_date )
                     )->a( n = `class` v = `labelMarginLeft` ).

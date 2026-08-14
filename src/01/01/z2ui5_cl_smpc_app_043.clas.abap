@@ -41,73 +41,73 @@ CLASS z2ui5_cl_smpc_app_043 IMPLEMENTATION.
       `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. ` &&
       `Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat`.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
-        )->open( `Panel`
+        )->ele( `Panel`
             )->a( n = `expandable` v = `true`
             )->a( n = `headerText` v = `Panel with a header text`
             )->a( n = `width`      v = `auto`
             )->a( n = `class`      v = `sapUiResponsiveMargin`
 
-            )->open( `content`
-                )->leaf( `Text`
+            )->ele( `content`
+                )->tag( `Text`
                     )->a( n = `text` v = lorem
 
-            )->shut(
-        )->shut(
-        )->open( `Panel`
+            )->end(
+        )->end(
+        )->ele( `Panel`
             )->a( n = `expandable` v = `true`
             )->a( n = `width`      v = `auto`
             )->a( n = `class`      v = `sapUiResponsiveMargin`
 
-            )->open( `headerToolbar`
-                )->open( `OverflowToolbar`
+            )->ele( `headerToolbar`
+                )->ele( `OverflowToolbar`
                     )->a( n = `style` v = `Clear`
 
-                    )->leaf( `Title`
+                    )->tag( `Title`
                         )->a( n = `text` v = `Custom Toolbar with a header text`
-                    )->leaf( `ToolbarSpacer`
-                    )->leaf( `Button`
+                    )->tag( `ToolbarSpacer`
+                    )->tag( `Button`
                         )->a( n = `icon` v = `sap-icon://settings`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `icon` v = `sap-icon://drop-down-list`
 
-                )->shut(
-            )->shut(
-            )->open( `content`
-                )->leaf( `Text`
+                )->end(
+            )->end(
+            )->ele( `content`
+                )->tag( `Text`
                     )->a( n = `text` v = lorem
 
-            )->shut(
-        )->shut(
-        )->open( `Panel`
+            )->end(
+        )->end(
+        )->ele( `Panel`
             )->a( n = `id`         v = `expandablePanel`
             )->a( n = `expandable` v = `true`
             )->a( n = `expanded`   v = client->_bind( expanded )
             )->a( n = `width`      v = `auto`
             )->a( n = `class`      v = `sapUiResponsiveMargin`
 
-            )->open( `headerToolbar`
-                )->open( `OverflowToolbar`
+            )->ele( `headerToolbar`
+                )->ele( `OverflowToolbar`
                     )->a( n = `active` v = `true`
                     )->a( n = `press`  v = client->_event( `TOOLBAR_PRESSED` )
 
-                    )->leaf( `Title`
+                    )->tag( `Title`
                         )->a( n = `text` v = `Clickable Custom Toolbar with a header text`
-                    )->leaf( `ToolbarSpacer`
-                    )->leaf( `Button`
+                    )->tag( `ToolbarSpacer`
+                    )->tag( `Button`
                         )->a( n = `icon` v = `sap-icon://settings`
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `icon` v = `sap-icon://drop-down-list`
 
-                )->shut(
-            )->shut(
-            )->open( `content`
-                )->leaf( `Text`
+                )->end(
+            )->end(
+            )->ele( `content`
+                )->tag( `Text`
                     )->a( n = `text` v = lorem ).
 
     client->view_display( view->stringify( ) ).

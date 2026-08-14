@@ -32,27 +32,27 @@ CLASS z2ui5_cl_smpc_app_102 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:core` v = `sap.ui.core`
         )->a( n = `xmlns:f`    v = `sap.ui.layout.form`
 
-        )->open( `App`
-            )->open( `Page`
+        )->ele( `App`
+            )->ele( `Page`
                 )->a( n = `title` v = `Late binding of Input (oData v2)`
 
-                )->open( `VBox`
-                    )->leaf( `Text`
+                )->ele( `VBox`
+                    )->tag( `Text`
                         )->a( n = `class` v = `sapUiSmallMarginBottom`
                         )->a( n = `text`  v = `For more details about this sample code and its intended use case, please refer to the description and comments provided within the code.`
-                    )->leaf( `Input`
+                    )->tag( `Input`
                         )->a( n = `id`         v = `inputArtistName`
                         )->a( n = `value`      v = client->_bind( current_value )
                         )->a( n = `liveChange` v = client->_event( `LIVE_CHANGE` )
-                    )->leaf( `Button`
+                    )->tag( `Button`
                         )->a( n = `press` v = client->_event( `REBIND` )
                         )->a( n = `text`  v = `Bind Input in 3 seconds` ).
 

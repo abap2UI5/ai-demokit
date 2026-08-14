@@ -39,34 +39,34 @@ CLASS z2ui5_cl_smpc_app_020 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
             )->a( n = `width` v = `100%`
 
-            )->open( n = `content` ns = `l`
+            )->ele( n = `content` ns = `l`
                 " element binding to the first supplier record, like the original's binding="{/SupplierCollection/0}"
-                )->open( `List`
+                )->ele( `List`
                     )->a( n = `binding`    v = |\{{ client->_bind( val = t_suppliers path = abap_true ) }/0\}|
                     )->a( n = `headerText` v = `Address`
 
-                    )->leaf( `DisplayListItem`
+                    )->tag( `DisplayListItem`
                         )->a( n = `label` v = `Name`
                         )->a( n = `value` v = `{SUPPLIER_NAME}`
-                    )->leaf( `DisplayListItem`
+                    )->tag( `DisplayListItem`
                         )->a( n = `label` v = `Street`
                         )->a( n = `value` v = `{STREET} {HOUSE_NUMBER}`
-                    )->leaf( `DisplayListItem`
+                    )->tag( `DisplayListItem`
                         )->a( n = `label` v = `City`
                         )->a( n = `value` v = `{ZIP_CODE} {CITY}`
                         )->a( n = `type`  v = `Navigation`
-                    )->leaf( `DisplayListItem`
+                    )->tag( `DisplayListItem`
                         )->a( n = `label` v = `Country`
                         )->a( n = `value` v = `{COUNTRY}`
                         )->a( n = `type`  v = `Navigation` ).

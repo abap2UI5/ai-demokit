@@ -30,110 +30,110 @@ CLASS z2ui5_cl_smpc_app_053 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `height`    v = `100%`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
-        )->open( `Page`
+        )->ele( `Page`
             )->a( n = `showHeader` v = `false`
 
-            )->leaf( `Slider`
+            )->tag( `Slider`
                 )->a( n = `step`  v = `20`
                 )->a( n = `value` v = client->_bind( slider_value )
 
-            )->leaf( `MessageStrip`
+            )->tag( `MessageStrip`
                 )->a( n = `text`  v = `By default, Toolbar items are shrinkable if they have percent-based width (e.g. Input, Slider)` &&
                                         ` or implement the IShrinkable interface (e.g. Text, Label).`
                 )->a( n = `class` v = `sapUiTinyMargin`
 
-            )->open( `Toolbar`
+            )->ele( `Toolbar`
                 )->a( n = `class` v = `sapUiMediumMarginTop`
                 )->a( n = `id`    v = `toolbar1`
                 )->a( n = `width` v = |\{= ${ client->_bind( slider_value ) } + '%' \}|
 
-                )->leaf( `Label`
+                )->tag( `Label`
                     )->a( n = `text` v = `I am a text control, so I will shrink whenever the toolbar overflows.`
-                )->leaf( `ToolbarSpacer`
-                )->leaf( `Button`
+                )->tag( `ToolbarSpacer`
+                )->tag( `Button`
                     )->a( n = `text` v = `Non-shrinkable button`
-                )->leaf( `ToolbarSpacer`
-                )->leaf( `SearchField`
+                )->tag( `ToolbarSpacer`
+                )->tag( `SearchField`
                     )->a( n = `width`       v = `100%`
                     )->a( n = `placeholder` v = `My width is 100%, so I should shrink.`
 
-            )->shut(
+            )->end(
 
-            )->leaf( `MessageStrip`
+            )->tag( `MessageStrip`
                 )->a( n = `text`  v = `You can configure the item's shrinking-related properties by providing ToolbarLayoutData.`
                 )->a( n = `class` v = `sapUiTinyMargin`
 
-            )->open( `Toolbar`
+            )->ele( `Toolbar`
                 )->a( n = `class` v = `sapUiMediumMarginTop`
                 )->a( n = `id`    v = `toolbar2`
                 )->a( n = `width` v = |\{= ${ client->_bind( slider_value ) } + '%' \}|
 
-                )->open( `Label`
+                )->ele( `Label`
                     )->a( n = `text` v = `I am a non-shrinkable text.`
 
-                    )->open( `layoutData`
-                        )->leaf( `ToolbarLayoutData`
+                    )->ele( `layoutData`
+                        )->tag( `ToolbarLayoutData`
                             )->a( n = `shrinkable` v = `false`
 
-                    )->shut(
-                )->shut(
-                )->leaf( `ToolbarSpacer`
-                )->open( `Button`
+                    )->end(
+                )->end(
+                )->tag( `ToolbarSpacer`
+                )->ele( `Button`
                     )->a( n = `text` v = `I am a shrinkable button, so I will shrink whenever the toolbar overflows.`
 
-                    )->open( `layoutData`
-                        )->leaf( `ToolbarLayoutData`
+                    )->ele( `layoutData`
+                        )->tag( `ToolbarLayoutData`
                             )->a( n = `shrinkable` v = `true`
 
-                    )->shut(
-                )->shut(
-                )->leaf( `ToolbarSpacer`
-                )->leaf( `SearchField`
+                    )->end(
+                )->end(
+                )->tag( `ToolbarSpacer`
+                )->tag( `SearchField`
                     )->a( n = `width`       v = `200px`
                     )->a( n = `placeholder` v = `I have a fixed width (200px), so I cannot shrink.`
 
-            )->shut(
+            )->end(
 
-            )->leaf( `MessageStrip`
+            )->tag( `MessageStrip`
                 )->a( n = `text`  v = `You can determine to what extent an item shrinks by setting minWidth/maxWidth via ToolbarLayoutData.` &&
                                         ` By default, minWidth is 48px in the Blue Crystal theme.`
                 )->a( n = `class` v = `sapUiTinyMargin`
 
-            )->open( `Toolbar`
+            )->ele( `Toolbar`
                 )->a( n = `class` v = `sapUiMediumMarginTop`
                 )->a( n = `id`    v = `toolbar3`
                 )->a( n = `width` v = |\{= ${ client->_bind( slider_value ) } + '%' \}|
 
-                )->open( `Label`
+                )->ele( `Label`
                     )->a( n = `text` v = `I should not shrink by more than 200px, because I am an important text.`
 
-                    )->open( `layoutData`
-                        )->leaf( `ToolbarLayoutData`
+                    )->ele( `layoutData`
+                        )->tag( `ToolbarLayoutData`
                             )->a( n = `shrinkable` v = `true`
                             )->a( n = `minWidth`   v = `200px`
 
-                    )->shut(
-                )->shut(
-                )->leaf( `ToolbarSpacer`
-                )->open( `Button`
+                    )->end(
+                )->end(
+                )->tag( `ToolbarSpacer`
+                )->ele( `Button`
                     )->a( n = `text` v = `I cannot be wider than 400px, but I can shrink up to the theme's default minimum width.`
 
-                    )->open( `layoutData`
-                        )->leaf( `ToolbarLayoutData`
+                    )->ele( `layoutData`
+                        )->tag( `ToolbarLayoutData`
                             )->a( n = `shrinkable` v = `true`
                             )->a( n = `maxWidth`   v = `400px`
 
-                    )->shut(
-                )->shut(
-            )->shut(
-        )->shut( ).
+                    )->end(
+                )->end(
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

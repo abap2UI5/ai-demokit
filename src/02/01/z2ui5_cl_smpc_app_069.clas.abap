@@ -26,130 +26,130 @@ CLASS z2ui5_cl_smpc_app_069 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
 
-        )->open( `VBox`
+        )->ele( `VBox`
             )->a( n = `class` v = `sapUiSmallMargin`
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `text`     v = `Default RadioButton use`
                 )->a( n = `labelFor` v = `GroupA`
-            )->open( `RadioButtonGroup`
+            )->ele( `RadioButtonGroup`
                 )->a( n = `id` v = `GroupA`
-                )->leaf( `RadioButton`
+                )->tag( `RadioButton`
                     )->a( n = `text`     v = `Option 1`
                     )->a( n = `selected` v = `true`
-                )->leaf( `RadioButton`
+                )->tag( `RadioButton`
                     )->a( n = `text` v = `Option 2`
-                )->leaf( `RadioButton`
+                )->tag( `RadioButton`
                     )->a( n = `text` v = `Option 3`
-                )->leaf( `RadioButton`
+                )->tag( `RadioButton`
                     )->a( n = `text` v = `Option 4`
-                )->leaf( `RadioButton`
+                )->tag( `RadioButton`
                     )->a( n = `text` v = `Option 5`
 
-            )->shut(
-        )->shut(
+            )->end(
+        )->end(
 
-        )->open( `VBox`
+        )->ele( `VBox`
             )->a( n = `class` v = `sapUiSmallMargin`
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `text` v = `RadioButton in various ValueState variants`
-            )->open( `HBox`
+            )->ele( `HBox`
                 )->a( n = `class` v = `sapUiTinyMarginTopBottom`
 
-                )->open( `VBox`
+                )->ele( `VBox`
                     )->a( n = `class` v = `sapUiMediumMarginEnd`
-                    )->leaf( `Label`
+                    )->tag( `Label`
                         )->a( n = `text`     v = `Success`
                         )->a( n = `labelFor` v = `groupB`
-                    )->open( `RadioButtonGroup`
+                    )->ele( `RadioButtonGroup`
                         )->a( n = `id`         v = `groupB`
                         )->a( n = `valueState` v = `Success`
-                        )->leaf( `RadioButton`
+                        )->tag( `RadioButton`
                             )->a( n = `text`     v = `Option 1`
                             )->a( n = `selected` v = `true`
-                        )->leaf( `RadioButton`
+                        )->tag( `RadioButton`
                             )->a( n = `text` v = `Option 2`
 
-                    )->shut(
-                )->shut(
-                )->open( `VBox`
+                    )->end(
+                )->end(
+                )->ele( `VBox`
                     )->a( n = `class` v = `sapUiMediumMarginEnd`
-                    )->leaf( `Label`
+                    )->tag( `Label`
                         )->a( n = `text`     v = `Error`
                         )->a( n = `labelFor` v = `groupC`
-                    )->open( `RadioButtonGroup`
+                    )->ele( `RadioButtonGroup`
                         )->a( n = `id`         v = `groupC`
                         )->a( n = `valueState` v = `Error`
-                        )->leaf( `RadioButton`
+                        )->tag( `RadioButton`
                             )->a( n = `text`     v = `Option 1`
                             )->a( n = `selected` v = `true`
-                        )->leaf( `RadioButton`
+                        )->tag( `RadioButton`
                             )->a( n = `text` v = `Option 2`
 
-                    )->shut(
-                )->shut(
-                )->open( `VBox`
+                    )->end(
+                )->end(
+                )->ele( `VBox`
                     )->a( n = `class` v = `sapUiMediumMarginEnd`
-                    )->leaf( `Label`
+                    )->tag( `Label`
                         )->a( n = `text`     v = `Warning`
                         )->a( n = `labelFor` v = `groupD`
-                    )->open( `RadioButtonGroup`
+                    )->ele( `RadioButtonGroup`
                         )->a( n = `id`         v = `groupD`
                         )->a( n = `valueState` v = `Warning`
-                        )->leaf( `RadioButton`
+                        )->tag( `RadioButton`
                             )->a( n = `text`     v = `Option 1`
                             )->a( n = `selected` v = `true`
-                        )->leaf( `RadioButton`
+                        )->tag( `RadioButton`
                             )->a( n = `text` v = `Option 2`
 
-                    )->shut(
-                )->shut(
-                )->open( `VBox`
+                    )->end(
+                )->end(
+                )->ele( `VBox`
                     )->a( n = `class` v = `sapUiMediumMarginEnd`
-                    )->leaf( `Label`
+                    )->tag( `Label`
                         )->a( n = `text`     v = `Information`
                         )->a( n = `labelFor` v = `groupE`
-                    )->open( `RadioButtonGroup`
+                    )->ele( `RadioButtonGroup`
                         )->a( n = `id`         v = `groupE`
                         )->a( n = `valueState` v = `Information`
-                        )->leaf( `RadioButton`
+                        )->tag( `RadioButton`
                             )->a( n = `text`     v = `Option 1`
                             )->a( n = `selected` v = `true`
-                        )->leaf( `RadioButton`
+                        )->tag( `RadioButton`
                             )->a( n = `text` v = `Option 2`
 
-                    )->shut(
-                )->shut(
-            )->shut(
-        )->shut(
+                    )->end(
+                )->end(
+            )->end(
+        )->end(
 
-        )->open( `VBox`
+        )->ele( `VBox`
             )->a( n = `class` v = `sapUiSmallMargin`
-            )->leaf( `Label`
+            )->tag( `Label`
                 )->a( n = `text`     v = `RadioButton Wrapping`
                 )->a( n = `labelFor` v = `groupF`
-            )->open( `RadioButtonGroup`
+            )->ele( `RadioButtonGroup`
                 )->a( n = `id` v = `groupF`
                 " POST-1.71: wrapping and wrappingType (since UI5 1.126) kept 1:1
-                )->leaf( `RadioButton`
+                )->tag( `RadioButton`
                     )->a( n = `width`        v = `240px`
                     )->a( n = `wrapping`     v = `true`
                     )->a( n = `wrappingType` v = `Normal`
                     )->a( n = `text`         v = `Long text with "wrapping" set to "true" and "wrappingType" set to "Normal"`
                     )->a( n = `selected`     v = `true`
-                )->leaf( `RadioButton`
+                )->tag( `RadioButton`
                     )->a( n = `width`        v = `120px`
                     )->a( n = `wrapping`     v = `true`
                     )->a( n = `wrappingType` v = `Hyphenated`
                     )->a( n = `text`         v = `Long text with "wrapping" set to "true" and "wrappingType" set to "Hyphenated"`
 
-            )->shut(
-        )->shut( ).
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

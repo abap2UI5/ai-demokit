@@ -26,53 +26,53 @@ CLASS z2ui5_cl_smpc_app_286 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " every Link toasts its own text; the original composes that on the client
     " (MessageToast.show(evt.getSource().getText() + ' has been clicked')), so
     " the port keeps it there - roundtrip-free, the text comes from the source
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc`  v = `sap.ui.core.mvc`
         )->a( n = `xmlns`      v = `sap.m`
         )->a( n = `xmlns:l`    v = `sap.ui.layout`
         )->a( n = `xmlns:core` v = `sap.ui.core`
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
             )->a( n = `width` v = `100%`
 
-            )->leaf( `Title`
+            )->tag( `Title`
                 )->a( n = `text` v = `Breadcrumbs with current page aggregation set`
 
-            )->open( `Breadcrumbs`
+            )->ele( `Breadcrumbs`
 
-                )->leaf( `Link`
+                )->tag( `Link`
                     )->a( n = `text`  v = `Home`
                     )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
                                                                     t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} has been clicked` ) ( `${$source>/text}` ) ) )
-                )->leaf( `Link`
+                )->tag( `Link`
                     )->a( n = `text`  v = `Page 1`
                     )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
                                                                     t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} has been clicked` ) ( `${$source>/text}` ) ) )
-                )->leaf( `Link`
+                )->tag( `Link`
                     )->a( n = `text`  v = `Page 2`
                     )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
                                                                     t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} has been clicked` ) ( `${$source>/text}` ) ) )
-                )->leaf( `Link`
+                )->tag( `Link`
                     )->a( n = `text`  v = `Page 3`
                     )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
                                                                     t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} has been clicked` ) ( `${$source>/text}` ) ) )
-                )->leaf( `Link`
+                )->tag( `Link`
                     )->a( n = `text`  v = `Page 4`
                     )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
                                                                     t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} has been clicked` ) ( `${$source>/text}` ) ) )
-                )->leaf( `Link`
+                )->tag( `Link`
                     )->a( n = `text`  v = `Page 5`
                     )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
                                                                     t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} has been clicked` ) ( `${$source>/text}` ) ) )
 
-                )->open( `currentLocation`
-                    )->leaf( `Link`
+                )->ele( `currentLocation`
+                    )->tag( `Link`
                         )->a( n = `text`  v = `Page 6`
                         )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_global
                                                                         t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `{0} has been clicked` ) ( `${$source>/text}` ) ) ) ).

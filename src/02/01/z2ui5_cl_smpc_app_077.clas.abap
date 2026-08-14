@@ -26,29 +26,29 @@ CLASS z2ui5_cl_smpc_app_077 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     DATA(desc_long) = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent feugiat, turpis vel scelerisque pharetra, tellus odio ` &&
                       `vehicula dolor, nec elementum lectus turpis at nunc. Mauris non elementum orci, ut sollicitudin ligula. Vestibulum in ` &&
                       `ligula imperdiet, posuere tortor id, dictum nunc.`.
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
         )->a( n = `class`     v = `sapUiBodyBackground sapContrastPlus sapContrast`
 
-        )->open( `VBox`
+        )->ele( `VBox`
             )->a( n = `class` v = `sapUiSmallMargin`
-            )->open( `NotificationList`
+            )->ele( `NotificationList`
                 " id added: oList.removeItem( oItem ) needs a target for the wire
                 )->a( n = `id` v = `notificationList`
-                )->open( `layoutData`
-                    )->leaf( `FlexItemData`
+                )->ele( `layoutData`
+                    )->tag( `FlexItemData`
                         )->a( n = `maxWidth` v = `600px`
 
-                )->shut(
+                )->end(
 
-                )->open( `NotificationListGroup`
+                )->ele( `NotificationListGroup`
                     )->a( n = `title`           v = `Orders`
                     )->a( n = `showCloseButton` v = `true`
                     " the original onItemClose also removes the item client-side - static items here, so close only toasts
@@ -61,13 +61,13 @@ CLASS z2ui5_cl_smpc_app_077 IMPLEMENTATION.
                                                                                             ( `show` )
                                                                                             ( `Item Closed: {0}` )
                                                                                             ( `${$source>/title}` ) ) )
-                    )->open( `buttons`
-                        )->leaf( `Button`
+                    )->ele( `buttons`
+                        )->tag( `Button`
                             )->a( n = `text`  v = `Accept All`
                             )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Accept Button Pressed` ) ) )
 
-                    )->shut(
-                    )->leaf( `NotificationListItem`
+                    )->end(
+                    )->tag( `NotificationListItem`
                         )->a( n = `title`           v = `New order (#2525)`
                         )->a( n = `description`     v = desc_long
                         )->a( n = `showCloseButton` v = `true`
@@ -86,7 +86,7 @@ CLASS z2ui5_cl_smpc_app_077 IMPLEMENTATION.
                         )->a( n = `press`           v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                         )->a( n = `authorPicture`   v = `sap-icon://car-rental`
                         )->a( n = `authorAvatarColor` v = `Accent8`
-                    )->open( `NotificationListItem`
+                    )->ele( `NotificationListItem`
                         )->a( n = `title`           v = `New order (#2524)`
                         )->a( n = `description`     v = `Aliquam quis varius ligula. In justo lorem, lacinia ac ex at, vulputate dictum turpis. Praesent feugiat, turpis vel scelerisque pharetra, tellus odio vehicula dolor, ` &&
                                                          `nec elementum lectus turpis at nunc.`
@@ -106,17 +106,17 @@ CLASS z2ui5_cl_smpc_app_077 IMPLEMENTATION.
                         )->a( n = `press`           v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                         )->a( n = `authorInitials`  v = `SF`
                         )->a( n = `authorAvatarColor` v = `Random`
-                        )->open( `buttons`
-                            )->leaf( `Button`
+                        )->ele( `buttons`
+                            )->tag( `Button`
                                 )->a( n = `text`  v = `Accept`
                                 )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Accept Button Pressed` ) ) )
-                            )->leaf( `Button`
+                            )->tag( `Button`
                                 )->a( n = `text`  v = `Reject`
                                 )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Reject Button Pressed` ) ) )
 
-                        )->shut(
-                    )->shut(
-                    )->open( `NotificationListItem`
+                        )->end(
+                    )->end(
+                    )->ele( `NotificationListItem`
                         )->a( n = `title`           v = `New order (#2523)`
                         )->a( n = `description`     v = `Aliquam quis varius ligula.`
                         )->a( n = `showCloseButton` v = `false`
@@ -135,19 +135,19 @@ CLASS z2ui5_cl_smpc_app_077 IMPLEMENTATION.
                         )->a( n = `press`           v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                         )->a( n = `authorInitials`  v = `YR`
                         )->a( n = `authorAvatarColor` v = `Accent7`
-                        )->open( `buttons`
-                            )->leaf( `Button`
+                        )->ele( `buttons`
+                            )->tag( `Button`
                                 )->a( n = `text`  v = `Accept`
                                 )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Accept Button Pressed` ) ) )
-                            )->leaf( `Button`
+                            )->tag( `Button`
                                 )->a( n = `text`  v = `Reject`
                                 )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Reject Button Pressed` ) ) )
 
-                        )->shut(
-                    )->shut(
-                )->shut(
+                        )->end(
+                    )->end(
+                )->end(
 
-                )->open( `NotificationListGroup`
+                )->ele( `NotificationListGroup`
                     )->a( n = `title`           v = `Orders`
                     )->a( n = `showCloseButton` v = `true`
                     )->a( n = `collapsed`       v = `true`
@@ -160,16 +160,16 @@ CLASS z2ui5_cl_smpc_app_077 IMPLEMENTATION.
                                                                                             ( `show` )
                                                                                             ( `Item Closed: {0}` )
                                                                                             ( `${$source>/title}` ) ) )
-                    )->open( `buttons`
-                        )->leaf( `Button`
+                    )->ele( `buttons`
+                        )->tag( `Button`
                             )->a( n = `text`  v = `Accept All`
                             )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Accept Button Pressed` ) ) )
-                        )->leaf( `Button`
+                        )->tag( `Button`
                             )->a( n = `text`  v = `Reject All`
                             )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Reject Button Pressed` ) ) )
 
-                    )->shut(
-                    )->leaf( `NotificationListItem`
+                    )->end(
+                    )->tag( `NotificationListItem`
                         )->a( n = `title`           v = `New order (#2525)`
                         )->a( n = `description`     v = desc_long
                         )->a( n = `showCloseButton` v = `true`
@@ -187,7 +187,7 @@ CLASS z2ui5_cl_smpc_app_077 IMPLEMENTATION.
                                                                                                 ( `${$source>/title}` ) ) )
                         )->a( n = `press`           v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                         )->a( n = `authorInitials`  v = `BN`
-                    )->open( `NotificationListItem`
+                    )->ele( `NotificationListItem`
                         )->a( n = `title`           v = `New order (#2524)`
                         )->a( n = `description`     v = `Aliquam quis varius ligula. In justo lorem, lacinia ac ex at, vulputate dictum turpis.`
                         )->a( n = `showCloseButton` v = `true`
@@ -205,17 +205,17 @@ CLASS z2ui5_cl_smpc_app_077 IMPLEMENTATION.
                                                                                                 ( `${$source>/title}` ) ) )
                         )->a( n = `press`           v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                         )->a( n = `authorPicture`   v = `sap-icon://car-rental`
-                        )->open( `buttons`
-                            )->leaf( `Button`
+                        )->ele( `buttons`
+                            )->tag( `Button`
                                 )->a( n = `text`  v = `Accept`
                                 )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Accept Button Pressed` ) ) )
-                            )->leaf( `Button`
+                            )->tag( `Button`
                                 )->a( n = `text`  v = `Reject`
                                 )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Reject Button Pressed` ) ) )
 
-                        )->shut(
-                    )->shut(
-                    )->open( `NotificationListItem`
+                        )->end(
+                    )->end(
+                    )->ele( `NotificationListItem`
                         )->a( n = `title`           v = `New order (#2523)`
                         )->a( n = `description`     v = `Aliquam quis varius ligula.`
                         " the original writes showCloseButton="falseue" here - corrected to false (UI5 boolean parsing rejects the typo)
@@ -235,19 +235,19 @@ CLASS z2ui5_cl_smpc_app_077 IMPLEMENTATION.
                         )->a( n = `press`           v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                         )->a( n = `authorInitials`  v = `YR`
                         )->a( n = `authorAvatarColor` v = `Accent7`
-                        )->open( `buttons`
-                            )->leaf( `Button`
+                        )->ele( `buttons`
+                            )->tag( `Button`
                                 )->a( n = `text`  v = `Accept`
                                 )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Accept Button Pressed` ) ) )
-                            )->leaf( `Button`
+                            )->tag( `Button`
                                 )->a( n = `text`  v = `Reject`
                                 )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Reject Button Pressed` ) ) )
 
-                        )->shut(
-                    )->shut(
-                )->shut(
+                        )->end(
+                    )->end(
+                )->end(
 
-                )->open( `NotificationListGroup`
+                )->ele( `NotificationListGroup`
                     )->a( n = `title`           v = `When 'Accept All' is pressed some of the notifications will show an error`
                     )->a( n = `showCloseButton` v = `true`
                     )->a( n = `close`           v = client->follow_up_action( val   = client->cs_event-control_by_id
@@ -259,17 +259,17 @@ CLASS z2ui5_cl_smpc_app_077 IMPLEMENTATION.
                                                                                             ( `show` )
                                                                                             ( `Item Closed: {0}` )
                                                                                             ( `${$source>/title}` ) ) )
-                    )->open( `buttons`
+                    )->ele( `buttons`
                         " the original onAcceptErrors puts a random error MessageStrip on one item - simplified to the accept toast
-                        )->leaf( `Button`
+                        )->tag( `Button`
                             )->a( n = `text`  v = `Accept All`
                             )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Accept Button Pressed` ) ) )
-                        )->leaf( `Button`
+                        )->tag( `Button`
                             )->a( n = `text`  v = `Reject All`
                             )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Reject Button Pressed` ) ) )
 
-                    )->shut(
-                    )->leaf( `NotificationListItem`
+                    )->end(
+                    )->tag( `NotificationListItem`
                         )->a( n = `title`           v = `New order (#2525)`
                         )->a( n = `description`     v = desc_long
                         )->a( n = `showCloseButton` v = `true`
@@ -288,7 +288,7 @@ CLASS z2ui5_cl_smpc_app_077 IMPLEMENTATION.
                         )->a( n = `press`           v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                         )->a( n = `authorPicture`   v = `sap-icon://car-rental`
                         )->a( n = `authorAvatarColor` v = `Accent8`
-                    )->open( `NotificationListItem`
+                    )->ele( `NotificationListItem`
                         )->a( n = `title`           v = `New order (#2524)`
                         )->a( n = `description`     v = `Aliquam quis varius ligula. In justo lorem, lacinia ac ex at, vulputate dictum turpis.`
                         )->a( n = `showCloseButton` v = `true`
@@ -307,14 +307,14 @@ CLASS z2ui5_cl_smpc_app_077 IMPLEMENTATION.
                         )->a( n = `press`           v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                         )->a( n = `authorPicture`   v = `sap-icon://car-rental`
                         )->a( n = `authorAvatarColor` v = `Accent8`
-                        )->open( `buttons`
-                            )->leaf( `Button`
+                        )->ele( `buttons`
+                            )->tag( `Button`
                                 )->a( n = `text`  v = `Accept`
                                 )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Accept Button Pressed` ) ) )
 
-                        )->shut(
-                    )->shut(
-                    )->open( `NotificationListItem`
+                        )->end(
+                    )->end(
+                    )->ele( `NotificationListItem`
                         )->a( n = `title`           v = `New order (#2523)`
                         )->a( n = `description`     v = `Aliquam quis varius ligula.`
                         " the original writes showCloseButton="falseue" here - corrected to false (UI5 boolean parsing rejects the typo)
@@ -333,19 +333,19 @@ CLASS z2ui5_cl_smpc_app_077 IMPLEMENTATION.
                                                                                                 ( `${$source>/title}` ) ) )
                         )->a( n = `press`           v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                         )->a( n = `authorInitials`  v = `BN`
-                        )->open( `buttons`
-                            )->leaf( `Button`
+                        )->ele( `buttons`
+                            )->tag( `Button`
                                 )->a( n = `text`  v = `Accept`
                                 )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Accept Button Pressed` ) ) )
-                            )->leaf( `Button`
+                            )->tag( `Button`
                                 )->a( n = `text`  v = `Reject`
                                 )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Reject Button Pressed` ) ) )
 
-                        )->shut(
-                    )->shut(
-                )->shut(
+                        )->end(
+                    )->end(
+                )->end(
 
-                )->open( `NotificationListGroup`
+                )->ele( `NotificationListGroup`
                     )->a( n = `title`           v = `Group with notifications without footer buttons`
                     )->a( n = `showCloseButton` v = `true`
                     )->a( n = `close`           v = client->follow_up_action( val   = client->cs_event-control_by_id
@@ -357,7 +357,7 @@ CLASS z2ui5_cl_smpc_app_077 IMPLEMENTATION.
                                                                                             ( `show` )
                                                                                             ( `Item Closed: {0}` )
                                                                                             ( `${$source>/title}` ) ) )
-                    )->leaf( `NotificationListItem`
+                    )->tag( `NotificationListItem`
                         )->a( n = `title`           v = `New order (#2525)`
                         )->a( n = `description`     v = desc_long
                         )->a( n = `showCloseButton` v = `true`
@@ -376,7 +376,7 @@ CLASS z2ui5_cl_smpc_app_077 IMPLEMENTATION.
                         )->a( n = `press`           v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                         )->a( n = `authorPicture`   v = `sap-icon://car-rental`
                         )->a( n = `authorAvatarColor` v = `Accent8`
-                    )->open( `NotificationListItem`
+                    )->ele( `NotificationListItem`
                         )->a( n = `title`           v = `New order (#2524)`
                         )->a( n = `description`     v = `Aliquam quis varius ligula. In justo lorem, lacinia ac ex at, vulputate dictum turpis.`
                         )->a( n = `showCloseButton` v = `true`
@@ -394,19 +394,19 @@ CLASS z2ui5_cl_smpc_app_077 IMPLEMENTATION.
                                                                                                 ( `${$source>/title}` ) ) )
                         )->a( n = `press`           v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Item Pressed: {0}` ) ( `${$source>/title}` ) ) )
                         )->a( n = `authorInitials`  v = `BN`
-                        )->open( `buttons`
-                            )->leaf( `Button`
+                        )->ele( `buttons`
+                            )->tag( `Button`
                                 )->a( n = `text`  v = `Accept`
                                 )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Accept Button Pressed` ) ) )
-                            )->leaf( `Button`
+                            )->tag( `Button`
                                 )->a( n = `text`  v = `Reject`
                                 )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Reject Button Pressed` ) ) )
 
-                        )->shut(
-                    )->shut(
-                )->shut(
-            )->shut(
-        )->shut( ).
+                        )->end(
+                    )->end(
+                )->end(
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 

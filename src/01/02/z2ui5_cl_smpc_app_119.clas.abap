@@ -16,8 +16,8 @@ CLASS z2ui5_cl_smpc_app_119 IMPLEMENTATION.
   ENDMETHOD.
 
   METHOD view_display.
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
-    view->open( n = `View` ns = `mvc`
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns`     v = `sap.m`
@@ -29,18 +29,18 @@ CLASS z2ui5_cl_smpc_app_119 IMPLEMENTATION.
         " carry a stylesheet into an abap2UI5 view (CAPABILITIES 'Custom CSS',
         " apps 026/028/169). Literal braces are escaped \{ \} or the XMLView
         " binding parser reads them as a binding and the view dies
-        )->leaf( n = `HTML` ns = `core`
+        )->tag( n = `HTML` ns = `core`
             )->a( n = `content` v = `<style>.fixFlexVertical > .sapUiFixFlexFixed \{background: #D7E9FF;\} .fixFlexVertical > .sapUiFixFlexFlexible \{background: #A9CFFF;\}</style>`
-        )->open( n = `FixFlex` ns = `l`
+        )->ele( n = `FixFlex` ns = `l`
             )->a( n = `class` v = `fixFlexVertical`
-            )->open( n = `fixContent` ns = `l`
-                )->leaf( `Image`
+            )->ele( n = `fixContent` ns = `l`
+                )->tag( `Image`
                     )->a( n = `src`          v = `https://sdk.openui5.org/test-resources/sap/ui/documentation/sdk/images/HT-7777-large.jpg`
                     )->a( n = `densityAware` v = `true`
 
-            )->shut(
-            )->open( n = `flexContent` ns = `l`
-                )->leaf( `Text`
+            )->end(
+            )->ele( n = `flexContent` ns = `l`
+                )->tag( `Text`
                     )->a( n = `class` v = `column1`
                     )->a( n = `text`  v = `This container is flexible and it will adapt its size to fill the remaining size in the FixFlex control` ).
     client->view_display( view->stringify( ) ).

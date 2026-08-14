@@ -26,7 +26,7 @@ CLASS z2ui5_cl_smpc_app_116 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
     " The eight blocks are sample:MultiViewBlock instances - a BlockBase is only a
     " lazy-loading wrapper around a view, and ObjectPageSubSection.blocks takes any
@@ -38,252 +38,252 @@ CLASS z2ui5_cl_smpc_app_116 IMPLEMENTATION.
     " default-mode subsection the collapsed one, which is what the sample renders on
     " load. Written out per block rather than through a helper method: the view has
     " to stay statically reconstructable for the structural diff.
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns`       v = `sap.uxap`
         )->a( n = `xmlns:mvc`   v = `sap.ui.core.mvc`
         )->a( n = `xmlns:m`     v = `sap.m`
         )->a( n = `xmlns:forms` v = `sap.ui.layout.form`
         )->a( n = `height`      v = `100%`
 
-        )->open( `ObjectPageLayout`
+        )->ele( `ObjectPageLayout`
             )->a( n = `id`                 v = `ObjectPageLayout`
             )->a( n = `upperCaseAnchorBar` v = `false`
 
-            )->open( `headerTitle`
-                )->leaf( `ObjectPageHeader`
+            )->ele( `headerTitle`
+                )->tag( `ObjectPageHeader`
                     )->a( n = `objectTitle` v = `Expand/Collapse sample`
 
-            )->shut(
-            )->open( `sections`
-                )->open( `ObjectPageSection`
+            )->end(
+            )->ele( `sections`
+                )->ele( `ObjectPageSection`
                     )->a( n = `titleUppercase` v = `false`
                     )->a( n = `title`          v = `All examples`
 
-                    )->open( `subSections`
-                        )->open( `ObjectPageSubSection`
+                    )->ele( `subSections`
+                        )->ele( `ObjectPageSubSection`
                             )->a( n = `title`          v = `No Expand/Collapse`
                             )->a( n = `mode`           v = `Expanded`
                             )->a( n = `titleUppercase` v = `false`
 
-                            )->open( `blocks`
-                            )->open( n = `SimpleForm` ns = `forms`
+                            )->ele( `blocks`
+                            )->ele( n = `SimpleForm` ns = `forms`
                                 )->a( n = `title`    v = `Location`
                                 )->a( n = `editable` v = `false`
                                 )->a( n = `layout`   v = `ColumnLayout`
 
-                                )->leaf( n = `Label` ns = `m`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = `Country`
-                                )->leaf( n = `Text` ns = `m`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text` v = `France`
-                                )->leaf( n = `Label` ns = `m`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = `Subsidiary`
-                                )->leaf( n = `Text` ns = `m`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text` v = `SAP France`
-                                )->leaf( n = `Label` ns = `m`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = `Building`
-                                )->leaf( n = `Text` ns = `m`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text` v = `LVL B`
-                                )->leaf( n = `Label` ns = `m`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = `Room`
-                                )->leaf( n = `Text` ns = `m`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text` v = `AppHaus`
 
-                            )->shut(
-                            )->open( n = `SimpleForm` ns = `forms`
+                            )->end(
+                            )->ele( n = `SimpleForm` ns = `forms`
                                 )->a( n = `title`    v = `Location`
                                 )->a( n = `editable` v = `false`
                                 )->a( n = `layout`   v = `ColumnLayout`
 
-                                )->leaf( n = `Label` ns = `m`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = `Country`
-                                )->leaf( n = `Text` ns = `m`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text` v = `France`
-                                )->leaf( n = `Label` ns = `m`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = `Subsidiary`
-                                )->leaf( n = `Text` ns = `m`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text` v = `SAP France`
-                                )->leaf( n = `Label` ns = `m`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = `Building`
-                                )->leaf( n = `Text` ns = `m`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text` v = `LVL B`
-                                )->leaf( n = `Label` ns = `m`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = `Room`
-                                )->leaf( n = `Text` ns = `m`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text` v = `AppHaus`
 
-                            )->shut(
-                            )->shut(
-                        )->shut(
-                        )->open( `ObjectPageSubSection`
+                            )->end(
+                            )->end(
+                        )->end(
+                        )->ele( `ObjectPageSubSection`
                             )->a( n = `title`          v = `Collapsed by default`
                             )->a( n = `titleUppercase` v = `false`
 
-                            )->open( `blocks`
-                            )->open( n = `SimpleForm` ns = `forms`
+                            )->ele( `blocks`
+                            )->ele( n = `SimpleForm` ns = `forms`
                                 )->a( n = `title`    v = `Location`
                                 )->a( n = `editable` v = `false`
                                 )->a( n = `layout`   v = `ColumnLayout`
 
-                                )->leaf( n = `Label` ns = `m`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = `Country`
-                                )->leaf( n = `Text` ns = `m`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text` v = `France`
-                                )->leaf( n = `Label` ns = `m`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = `Subsidiary`
-                                )->leaf( n = `Text` ns = `m`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text` v = `SAP France`
 
-                            )->shut(
-                            )->open( n = `SimpleForm` ns = `forms`
+                            )->end(
+                            )->ele( n = `SimpleForm` ns = `forms`
                                 )->a( n = `title`    v = `Location`
                                 )->a( n = `editable` v = `false`
                                 )->a( n = `layout`   v = `ColumnLayout`
 
-                                )->leaf( n = `Label` ns = `m`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = `Country`
-                                )->leaf( n = `Text` ns = `m`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text` v = `France`
-                                )->leaf( n = `Label` ns = `m`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = `Subsidiary`
-                                )->leaf( n = `Text` ns = `m`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text` v = `SAP France`
 
-                            )->shut(
-                            )->shut(
-                            )->open( `moreBlocks`
-                            )->open( n = `SimpleForm` ns = `forms`
+                            )->end(
+                            )->end(
+                            )->ele( `moreBlocks`
+                            )->ele( n = `SimpleForm` ns = `forms`
                                 )->a( n = `title`    v = `Location`
                                 )->a( n = `editable` v = `false`
                                 )->a( n = `layout`   v = `ColumnLayout`
 
-                                )->leaf( n = `Label` ns = `m`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = `Country`
-                                )->leaf( n = `Text` ns = `m`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text` v = `France`
-                                )->leaf( n = `Label` ns = `m`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = `Subsidiary`
-                                )->leaf( n = `Text` ns = `m`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text` v = `SAP France`
 
-                            )->shut(
-                            )->open( n = `SimpleForm` ns = `forms`
+                            )->end(
+                            )->ele( n = `SimpleForm` ns = `forms`
                                 )->a( n = `title`    v = `Location`
                                 )->a( n = `editable` v = `false`
                                 )->a( n = `layout`   v = `ColumnLayout`
 
-                                )->leaf( n = `Label` ns = `m`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = `Country`
-                                )->leaf( n = `Text` ns = `m`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text` v = `France`
-                                )->leaf( n = `Label` ns = `m`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = `Subsidiary`
-                                )->leaf( n = `Text` ns = `m`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text` v = `SAP France`
 
-                            )->shut(
-                            )->shut(
-                        )->shut(
-                        )->open( `ObjectPageSubSection`
+                            )->end(
+                            )->end(
+                        )->end(
+                        )->ele( `ObjectPageSubSection`
                             )->a( n = `title`          v = `Expanded by default`
                             )->a( n = `mode`           v = `Expanded`
                             )->a( n = `titleUppercase` v = `false`
 
-                            )->open( `blocks`
-                            )->open( n = `SimpleForm` ns = `forms`
+                            )->ele( `blocks`
+                            )->ele( n = `SimpleForm` ns = `forms`
                                 )->a( n = `title`    v = `Location`
                                 )->a( n = `editable` v = `false`
                                 )->a( n = `layout`   v = `ColumnLayout`
 
-                                )->leaf( n = `Label` ns = `m`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = `Country`
-                                )->leaf( n = `Text` ns = `m`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text` v = `France`
-                                )->leaf( n = `Label` ns = `m`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = `Subsidiary`
-                                )->leaf( n = `Text` ns = `m`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text` v = `SAP France`
-                                )->leaf( n = `Label` ns = `m`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = `Building`
-                                )->leaf( n = `Text` ns = `m`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text` v = `LVL B`
-                                )->leaf( n = `Label` ns = `m`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = `Room`
-                                )->leaf( n = `Text` ns = `m`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text` v = `AppHaus`
 
-                            )->shut(
-                            )->open( n = `SimpleForm` ns = `forms`
+                            )->end(
+                            )->ele( n = `SimpleForm` ns = `forms`
                                 )->a( n = `title`    v = `Location`
                                 )->a( n = `editable` v = `false`
                                 )->a( n = `layout`   v = `ColumnLayout`
 
-                                )->leaf( n = `Label` ns = `m`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = `Country`
-                                )->leaf( n = `Text` ns = `m`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text` v = `France`
-                                )->leaf( n = `Label` ns = `m`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = `Subsidiary`
-                                )->leaf( n = `Text` ns = `m`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text` v = `SAP France`
-                                )->leaf( n = `Label` ns = `m`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = `Building`
-                                )->leaf( n = `Text` ns = `m`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text` v = `LVL B`
-                                )->leaf( n = `Label` ns = `m`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = `Room`
-                                )->leaf( n = `Text` ns = `m`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text` v = `AppHaus`
 
-                            )->shut(
-                            )->shut(
-                            )->open( `moreBlocks`
-                            )->open( n = `SimpleForm` ns = `forms`
+                            )->end(
+                            )->end(
+                            )->ele( `moreBlocks`
+                            )->ele( n = `SimpleForm` ns = `forms`
                                 )->a( n = `title`    v = `Location`
                                 )->a( n = `editable` v = `false`
                                 )->a( n = `layout`   v = `ColumnLayout`
 
-                                )->leaf( n = `Label` ns = `m`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = `Country`
-                                )->leaf( n = `Text` ns = `m`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text` v = `France`
-                                )->leaf( n = `Label` ns = `m`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = `Subsidiary`
-                                )->leaf( n = `Text` ns = `m`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text` v = `SAP France`
-                                )->leaf( n = `Label` ns = `m`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = `Building`
-                                )->leaf( n = `Text` ns = `m`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text` v = `LVL B`
-                                )->leaf( n = `Label` ns = `m`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = `Room`
-                                )->leaf( n = `Text` ns = `m`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text` v = `AppHaus`
 
-                            )->shut(
-                            )->open( n = `SimpleForm` ns = `forms`
+                            )->end(
+                            )->ele( n = `SimpleForm` ns = `forms`
                                 )->a( n = `title`    v = `Location`
                                 )->a( n = `editable` v = `false`
                                 )->a( n = `layout`   v = `ColumnLayout`
 
-                                )->leaf( n = `Label` ns = `m`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = `Country`
-                                )->leaf( n = `Text` ns = `m`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text` v = `France`
-                                )->leaf( n = `Label` ns = `m`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = `Subsidiary`
-                                )->leaf( n = `Text` ns = `m`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text` v = `SAP France`
-                                )->leaf( n = `Label` ns = `m`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = `Building`
-                                )->leaf( n = `Text` ns = `m`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text` v = `LVL B`
-                                )->leaf( n = `Label` ns = `m`
+                                )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = `Room`
-                                )->leaf( n = `Text` ns = `m`
+                                )->tag( n = `Text` ns = `m`
                                     )->a( n = `text` v = `AppHaus`
 
-                            )->shut(
-                            )->shut( ).
+                            )->end(
+                            )->end( ).
 
     client->view_display( view->stringify( ) ).
 

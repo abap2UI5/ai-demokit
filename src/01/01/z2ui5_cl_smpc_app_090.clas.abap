@@ -29,24 +29,24 @@ CLASS z2ui5_cl_smpc_app_090 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_ai_xml=>factory( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    view->open( n = `View` ns = `mvc`
+    view->ele( n = `View` ns = `mvc`
         )->a( n = `xmlns:l`   v = `sap.ui.layout`
         )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
         )->a( n = `xmlns`     v = `sap.m`
 
-        )->open( n = `VerticalLayout` ns = `l`
+        )->ele( n = `VerticalLayout` ns = `l`
             )->a( n = `class` v = `sapUiContentPadding`
             )->a( n = `width` v = `100%`
-            )->open( n = `content` ns = `l`
-                )->leaf( `Button`
+            )->ele( n = `content` ns = `l`
+                )->tag( `Button`
                     )->a( n = `text`  v = `Show Dialog with Search`
                     )->a( n = `press` v = client->_event( `OPEN` )
                     )->a( n = `class` v = `sapUiSmallMarginBottom`
 
-            )->shut(
-        )->shut( ).
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 
@@ -58,34 +58,34 @@ CLASS z2ui5_cl_smpc_app_090 IMPLEMENTATION.
     CASE client->get( )-event.
       WHEN `OPEN`.
         " the original loads Dialog.fragment.xml and opens it - rebuilt 1:1 and shown via popup_display; its bindElement /ProductCollection/0 is a no-op (static content) and dropped
-        DATA(popup) = z2ui5_cl_ai_xml=>factory( ).
-        popup->open( n = `FragmentDefinition` ns = `core`
+        DATA(popup) = z2ui5_cl_ui5_view_builder=>factory( ).
+        popup->ele( n = `FragmentDefinition` ns = `core`
             )->a( n = `xmlns`      v = `sap.m`
             )->a( n = `xmlns:core` v = `sap.ui.core`
-            )->open( `Dialog`
+            )->ele( `Dialog`
                 )->a( n = `title` v = `Dialog with Search`
                 )->a( n = `class` v = `sapUiContentPadding`
-                )->open( `subHeader`
-                    )->open( `Toolbar`
-                        )->leaf( `SearchField`
+                )->ele( `subHeader`
+                    )->ele( `Toolbar`
+                        )->tag( `SearchField`
                             )->a( n = `width` v = `90%`
 
-                    )->shut(
-                )->shut(
-                )->open( `content`
-                    )->leaf( `Text`
+                    )->end(
+                )->end(
+                )->ele( `content`
+                    )->tag( `Text`
                         )->a( n = `width` v = `300px`
                         )->a( n = `text`  v = `Lorem ipsum dolor st amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna ` &&
                                              `aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est`
 
-                )->shut(
-                )->open( `beginButton`
-                    )->leaf( `Button`
+                )->end(
+                )->ele( `beginButton`
+                    )->tag( `Button`
                         )->a( n = `text`  v = `Close`
                         )->a( n = `press` v = client->follow_up_action( client->cs_event-popup_close )
 
-                )->shut(
-            )->shut( ).
+                )->end(
+            )->end( ).
         client->popup_display( popup->stringify( ) ).
     ENDCASE.
 
