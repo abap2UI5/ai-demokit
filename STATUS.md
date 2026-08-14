@@ -55,6 +55,33 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   as `pr/transpiler-returning-is-supplied`. When it is merged upstream: drop
   the patch script, its two call sites (`web/package.json` assemble,
   `scripts/e2e-build.mjs`) and delete the pr/ folder.
+- [ ] **Next linter pin bump: 6 icon findings to decide, nothing else.** The
+  linter grew icon rules (`unknown-icon` / `icon-too-new` / `icon-removed`,
+  from a per-icon `since` scanned across every OpenUI5 minor since 1.71), a
+  layout rule (`toolbar-control-in-bar`) and a severity split
+  (`aggregation-too-new`, the aggregation-TAG half of `member-too-new`, now an
+  error because UI5 resolves an unknown tag as a control class and the 404
+  takes the whole view down). This repo is already prepared for it —
+  `VERSION_TYPES` knows the two new version types and `declares()` now reads a
+  finding's `value`, so an icon can be named in a deviation at all. Measured
+  against the working linter over all 416 ports, the bump surfaces:
+  **24 `aggregation-too-new`** — every one already carrying a `POST_171`
+  deviation, so they pass untouched (without the `VERSION_TYPES` entry they
+  would all have failed at once); **1 `toolbar-control-in-bar`**, in
+  `z2ui5_cl_smpc_app_overview`'s header — a real defect, not a port fidelity
+  question: the separator in the `sap.m.Bar` deletes every icon after it on
+  1.71–1.75, and the file is GENERATED, so the fix belongs in
+  `scripts/generate-overview.mjs`; and **6 `icon-too-new`** — `information`
+  (@1.80) in apps 042, 376 and the overview, `select-appointments` in 109,
+  `people-connected` in 128, `da` in 134. Those six need the deviation-or-fix
+  decision per port: a 1:1 port of a sample that uses a post-1.71 glyph is a
+  legitimate `POST_171` deviation (changing the literal would be a
+  data-fidelity question), while the overview is ours and should just use
+  `message-information`. Such a deviation has to spell the **full
+  `sap-icon://<name>`** — `declares()` matches by substring, and icon names go
+  down to two letters, so the bare name would let a NOTE about "data" excuse a
+  finding about `da` (which is exactly what app 134 did before the match was
+  tightened). **0 `source-line-too-long`.**
 - [ ] **LIVE_TEST debt → e2e interactions.** The open `LIVE_TEST` count (see
   the generated table) is the corpus' unverified-behaviour backlog. The
   systematic close path is the e2e harness: add a per-port interaction module
