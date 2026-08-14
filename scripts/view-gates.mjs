@@ -50,7 +50,16 @@ const MIN_UI5 = '1.71';
 /* Version findings are the ones a deviation may excuse: using a member the
  * original sample uses is fidelity, and the porting policy allows it as long
  * as the sidecar names it. Everything else is a defect, not a choice. */
-const VERSION_TYPES = new Set(['control-too-new', 'member-too-new', 'event-parameter-too-new', 'enum-value-too-new']);
+/* `aggregation-too-new` is the linter's 2026-08 split of `member-too-new`: an
+ * aggregation TAG newer than the floor is an error rather than a warning,
+ * because UI5 resolves the unknown lowercase tag as a control class and the
+ * 404 takes the whole view down instead of dropping one attribute. It is a
+ * version finding like the others, so a POST_171 deviation naming the
+ * aggregation excuses it exactly as before — 24 ports on this corpus depend
+ * on that, and without this entry a linter bump would fail every one of them.
+ * `icon-too-new` joins for the same reason: same floor, same deviation. */
+const VERSION_TYPES = new Set(['control-too-new', 'member-too-new', 'aggregation-too-new',
+  'event-parameter-too-new', 'enum-value-too-new', 'icon-too-new']);
 
 /* Reported, never gating per finding: rules the linter grew after this corpus
  * was built. They are worth seeing on every run - an icon-only button really
@@ -136,7 +145,20 @@ const results = await checkFiles([...byFile.keys()], {
  *  sidecars refer to it ("the NotificationList container control (since UI5
  *  1.90) ... invisible to the member-level property gate"). */
 function declares(meta, finding) {
-  const names = [finding.member, finding.control, String(finding.control || '').split('.').pop()]
+  /* `value` carries the name for the findings that have no control/member of
+   * their own — an icon finding names the glyph there and nothing else, so
+   * without it it could never be excused by a deviation, whatever
+   * VERSION_TYPES says.
+   *
+   * Matched as the full `sap-icon://<name>` and NOT as the bare name, because
+   * the match below is a SUBSTRING match: icon names go down to two letters
+   * (`da`, `e-care`, `ai`), and `da` occurs inside "data", "standard" and
+   * "update". App 134 was excused by a NOTE about verbatim Cyrillic homoglyphs
+   * that happened to contain the letters — a deviation silently covering a
+   * finding it never mentioned is worse than no deviation at all. Spell the
+   * URI in the deviation and it is unambiguous. */
+  const names = [finding.member, finding.control, String(finding.control || '').split('.').pop(),
+    finding.type.startsWith('icon-') ? `sap-icon://${finding.value}` : null]
     .filter(Boolean)
     .map((n) => n.toLowerCase());
   if (!names.length) return false;
