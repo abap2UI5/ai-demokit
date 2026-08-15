@@ -81,8 +81,8 @@ jobs:
       run: |
         GEN=node_modules/@abap2ui5/linter/scripts/generate-metadata.mjs
         test -f "$GEN" || {
-          echo "::error::$GEN is missing — the pinned @abap2ui5/linter predates the"
-          echo "::error::change that publishes the generator. Bump the pin in package.json."
+          echo "::error::$GEN is missing — the installed @abap2ui5/linter predates the"
+          echo "::error::release that publishes the generator. Bump it in package.json."
           exit 1
         }
         node "$GEN" --out ui5/properties.json

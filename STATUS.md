@@ -55,7 +55,13 @@ _Coverage per library (ported / in scope) is generated into the [README](README.
   as `pr/transpiler-returning-is-supplied`. When it is merged upstream: drop
   the patch script, its two call sites (`web/package.json` assemble,
   `scripts/e2e-build.mjs`) and delete the pr/ folder.
-- [ ] **Next linter pin bump: 6 icon findings to decide, nothing else.** The
+- [x] **Linter bump done — the corpus is green on `@abap2ui5/linter` 0.1.0,
+  taken from npm instead of a git SHA.** Everything below was decided before
+  the bump landed: the six icons carry `POST_171` deviations (042, 109, 128,
+  376) or were changed where the file is ours, the `ToolbarSeparator` is out of
+  `scripts/generate-overview.mjs`, and `node scripts/view-gates.mjs --strict`
+  reports **416 ports, 0 failing, 4 skipped, 45 advisory** with the new rules
+  live. Kept for the reasoning, which is the durable part. The
   linter grew icon rules (`unknown-icon` / `icon-too-new` / `icon-removed`,
   from a per-icon `since` scanned across every OpenUI5 minor since 1.71), a
   layout rule (`toolbar-control-in-bar`) and a severity split
