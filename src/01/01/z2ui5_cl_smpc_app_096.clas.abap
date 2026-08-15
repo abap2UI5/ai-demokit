@@ -143,7 +143,7 @@ CLASS z2ui5_cl_smpc_app_096 IMPLEMENTATION.
                             )->a( n = `type`  v = `Navigation`
                             )->a( n = `press` v = client->_event( `GO_TO_MASTER` )
 
-                )->end(
+                    )->end(
                 )->end(
                 )->ele( `Page`
                     )->a( n = `id`               v = `master2`

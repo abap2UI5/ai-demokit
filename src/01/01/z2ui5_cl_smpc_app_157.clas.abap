@@ -103,7 +103,7 @@ CLASS z2ui5_cl_smpc_app_157 IMPLEMENTATION.
                         )->a( n = `indicator`  v = `Down`
                         )->a( n = `press`      v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Fire press` ) ) )
 
-            )->end(
+                )->end(
             )->end(
             )->ele( `TileContent`
                 )->a( n = `footer` v = `Leave Requests`
@@ -112,7 +112,7 @@ CLASS z2ui5_cl_smpc_app_157 IMPLEMENTATION.
                         )->a( n = `value` v = `35`
                         )->a( n = `icon`  v = `sap-icon://travel-expense`
 
-            )->end(
+                )->end(
             )->end(
             )->ele( `TileContent`
                 )->a( n = `footer` v = `Hours since last Activity`
@@ -121,7 +121,7 @@ CLASS z2ui5_cl_smpc_app_157 IMPLEMENTATION.
                         )->a( n = `value` v = `9`
                         )->a( n = `icon`  v = `sap-icon://horizontal-bar-chart`
 
-            )->end(
+                )->end(
             )->end(
             )->ele( `TileContent`
                 )->a( n = `unit`   v = `EUR`
@@ -133,7 +133,7 @@ CLASS z2ui5_cl_smpc_app_157 IMPLEMENTATION.
                         )->a( n = `valueColor` v = `Good`
                         )->a( n = `indicator`  v = `Up`
 
-            )->end(
+                )->end(
             )->end(
             )->ele( `TileContent`
                 )->a( n = `unit`   v = `Unit`

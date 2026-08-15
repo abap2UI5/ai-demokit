@@ -145,19 +145,22 @@ CLASS z2ui5_cl_smpc_app_166 IMPLEMENTATION.
                     )->a( n = `width` v = `auto`
                     )->ele( `columns`
                         )->ele( `Column`
-                            )->tag( `Text` )->a( n = `text` v = `Name`
+                            )->tag( `Text`
+                                )->a( n = `text` v = `Name`
 
                         )->end(
                         )->ele( `Column`
                             )->a( n = `minScreenWidth` v = `Tablet`
                             )->a( n = `demandPopin`    v = `true`
-                            )->tag( `Text` )->a( n = `text` v = `Category`
+                            )->tag( `Text`
+                                )->a( n = `text` v = `Category`
 
                         )->end(
                         )->ele( `Column`
                             )->a( n = `minScreenWidth` v = `Tablet`
                             )->a( n = `demandPopin`    v = `true`
-                            )->tag( `Text` )->a( n = `text` v = `SupplierName`
+                            )->tag( `Text`
+                                )->a( n = `text` v = `SupplierName`
 
                         )->end(
                     )->end(
@@ -168,8 +171,10 @@ CLASS z2ui5_cl_smpc_app_166 IMPLEMENTATION.
                                 )->tag( `ObjectIdentifier`
                                     )->a( n = `title` v = `{NAME}`
                                     )->a( n = `text`  v = `{PRODUCTID}`
-                                )->tag( `Text` )->a( n = `text` v = `{CATEGORY}`
-                                )->tag( `Text` )->a( n = `text` v = `{SUPPLIERNAME}`
+                                )->tag( `Text`
+                                    )->a( n = `text` v = `{CATEGORY}`
+                                )->tag( `Text`
+                                    )->a( n = `text` v = `{SUPPLIERNAME}`
 
                             )->end(
                         )->end(

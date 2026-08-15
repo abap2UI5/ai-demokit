@@ -53,7 +53,7 @@ CLASS z2ui5_cl_smpc_app_110 IMPLEMENTATION.
                         )->a( n = `text` v = `Car rental`
                         )->a( n = `icon` v = `sap-icon://car-rental`
 
-            )->end(
+                )->end(
             )->end(
             )->ele( `profile`
                 )->tag( n = `Avatar` ns = `m`

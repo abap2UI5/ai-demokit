@@ -144,7 +144,7 @@ CLASS z2ui5_cl_smpc_app_018 IMPLEMENTATION.
                 )->a( n = `text`  v = client->_bind( text_result )
                 )->a( n = `class` v = `sapUiSmallMargin`
 
-            )->end(
+        )->end(
         )->ele( `Panel`
             )->a( n = `id`         v = `dataBindingDateTimePanel`
             )->a( n = `headerText` v = `DateTimePicker using data binding`
@@ -180,7 +180,7 @@ CLASS z2ui5_cl_smpc_app_018 IMPLEMENTATION.
                              | \{ path: '{ client->_bind( val = timezone_dtp11 path = abap_true ) }', type: 'sap.ui.model.odata.type.String' \} ], type: 'sap.ui.model.odata.type.DateTimeWithTimezone' \}|
                 )->a( n = `class`                 v = `sapUiSmallMarginBottom`
 
-            )->end(
+        )->end(
         )->ele( n = `SimpleForm` ns = `form`
             )->a( n = `id`         v = `simpleForm`
             )->a( n = `columnsL`   v = `1`

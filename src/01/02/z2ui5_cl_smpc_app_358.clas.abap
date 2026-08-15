@@ -99,7 +99,7 @@ CLASS z2ui5_cl_smpc_app_358 IMPLEMENTATION.
                                 )->a( n = `id`   v = `title`
                                 )->a( n = `text` v = `Products`
 
-                    )->end(
+                        )->end(
                     )->end(
                     )->ele( `noData`
                         )->tag( n = `BusyIndicator` ns = `m`

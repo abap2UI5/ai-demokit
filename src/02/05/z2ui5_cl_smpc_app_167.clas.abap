@@ -89,16 +89,19 @@ CLASS z2ui5_cl_smpc_app_167 IMPLEMENTATION.
                         )->a( n = `tooltip` v = client->_bind( toggle_tooltip )
                         )->a( n = `press`   v = client->_event( `SIDE_TOGGLE` )
                         )->ele( `layoutData`
-                            )->tag( `OverflowToolbarLayoutData` )->a( n = `priority` v = `NeverOverflow`
+                            )->tag( `OverflowToolbarLayoutData`
+                                )->a( n = `priority` v = `NeverOverflow`
 
                         )->end(
                     )->end(
-                    )->tag( `ToolbarSpacer` )->a( n = `width` v = `20px`
+                    )->tag( `ToolbarSpacer`
+                        )->a( n = `width` v = `20px`
                     )->ele( `Button`
                         )->a( n = `text` v = `File`
                         )->a( n = `type` v = `Transparent`
                         )->ele( `layoutData`
-                            )->tag( `OverflowToolbarLayoutData` )->a( n = `priority` v = `Low`
+                            )->tag( `OverflowToolbarLayoutData`
+                                )->a( n = `priority` v = `Low`
 
                         )->end(
                     )->end(
@@ -106,7 +109,8 @@ CLASS z2ui5_cl_smpc_app_167 IMPLEMENTATION.
                         )->a( n = `text` v = `Edit`
                         )->a( n = `type` v = `Transparent`
                         )->ele( `layoutData`
-                            )->tag( `OverflowToolbarLayoutData` )->a( n = `priority` v = `Low`
+                            )->tag( `OverflowToolbarLayoutData`
+                                )->a( n = `priority` v = `Low`
 
                         )->end(
                     )->end(
@@ -114,7 +118,8 @@ CLASS z2ui5_cl_smpc_app_167 IMPLEMENTATION.
                         )->a( n = `text` v = `View`
                         )->a( n = `type` v = `Transparent`
                         )->ele( `layoutData`
-                            )->tag( `OverflowToolbarLayoutData` )->a( n = `priority` v = `Low`
+                            )->tag( `OverflowToolbarLayoutData`
+                                )->a( n = `priority` v = `Low`
 
                         )->end(
                     )->end(
@@ -122,7 +127,8 @@ CLASS z2ui5_cl_smpc_app_167 IMPLEMENTATION.
                         )->a( n = `text` v = `Navigate`
                         )->a( n = `type` v = `Transparent`
                         )->ele( `layoutData`
-                            )->tag( `OverflowToolbarLayoutData` )->a( n = `priority` v = `Low`
+                            )->tag( `OverflowToolbarLayoutData`
+                                )->a( n = `priority` v = `Low`
 
                         )->end(
                     )->end(
@@ -130,7 +136,8 @@ CLASS z2ui5_cl_smpc_app_167 IMPLEMENTATION.
                         )->a( n = `text` v = `Code`
                         )->a( n = `type` v = `Transparent`
                         )->ele( `layoutData`
-                            )->tag( `OverflowToolbarLayoutData` )->a( n = `priority` v = `Low`
+                            )->tag( `OverflowToolbarLayoutData`
+                                )->a( n = `priority` v = `Low`
 
                         )->end(
                     )->end(
@@ -138,7 +145,8 @@ CLASS z2ui5_cl_smpc_app_167 IMPLEMENTATION.
                         )->a( n = `text` v = `Refactor`
                         )->a( n = `type` v = `Transparent`
                         )->ele( `layoutData`
-                            )->tag( `OverflowToolbarLayoutData` )->a( n = `priority` v = `Low`
+                            )->tag( `OverflowToolbarLayoutData`
+                                )->a( n = `priority` v = `Low`
 
                         )->end(
                     )->end(
@@ -146,7 +154,8 @@ CLASS z2ui5_cl_smpc_app_167 IMPLEMENTATION.
                         )->a( n = `text` v = `Run`
                         )->a( n = `type` v = `Transparent`
                         )->ele( `layoutData`
-                            )->tag( `OverflowToolbarLayoutData` )->a( n = `priority` v = `Low`
+                            )->tag( `OverflowToolbarLayoutData`
+                                )->a( n = `priority` v = `Low`
 
                         )->end(
                     )->end(
@@ -154,7 +163,8 @@ CLASS z2ui5_cl_smpc_app_167 IMPLEMENTATION.
                         )->a( n = `text` v = `Tools`
                         )->a( n = `type` v = `Transparent`
                         )->ele( `layoutData`
-                            )->tag( `OverflowToolbarLayoutData` )->a( n = `priority` v = `Low`
+                            )->tag( `OverflowToolbarLayoutData`
+                                )->a( n = `priority` v = `Low`
 
                         )->end(
                     )->end(
@@ -174,7 +184,8 @@ CLASS z2ui5_cl_smpc_app_167 IMPLEMENTATION.
                                                                      t_arg = VALUE #( ( `$event.oSource.sId` ) ) )
                         )->a( n = `ariaHasPopup` v = `Menu`
                         )->ele( `layoutData`
-                            )->tag( `OverflowToolbarLayoutData` )->a( n = `priority` v = `NeverOverflow`
+                            )->tag( `OverflowToolbarLayoutData`
+                                )->a( n = `priority` v = `NeverOverflow`
 
                         )->end(
                     )->end(
@@ -236,7 +247,8 @@ CLASS z2ui5_cl_smpc_app_167 IMPLEMENTATION.
                             )->a( n = `vertical`   v = `true`
                             )->a( n = `height`     v = `100%`
                             )->a( n = `class`      v = `sapUiContentPadding`
-                            )->tag( `Text` )->a( n = `text` v = `This is the root page`
+                            )->tag( `Text`
+                                )->a( n = `text` v = `This is the root page`
 
                         )->end(
                         )->ele( `ScrollContainer`
@@ -245,7 +257,8 @@ CLASS z2ui5_cl_smpc_app_167 IMPLEMENTATION.
                             )->a( n = `vertical`   v = `true`
                             )->a( n = `height`     v = `100%`
                             )->a( n = `class`      v = `sapUiContentPadding`
-                            )->tag( `Text` )->a( n = `text` v = `This is the first page`
+                            )->tag( `Text`
+                                )->a( n = `text` v = `This is the first page`
 
                         )->end(
                         )->ele( `ScrollContainer`
@@ -254,7 +267,8 @@ CLASS z2ui5_cl_smpc_app_167 IMPLEMENTATION.
                             )->a( n = `vertical`   v = `true`
                             )->a( n = `height`     v = `100%`
                             )->a( n = `class`      v = `sapUiContentPadding`
-                            )->tag( `Text` )->a( n = `text` v = `Lorem ipsum dolor sit amet, consectetur adipisicing elit. (content abbreviated from the original filler text)`
+                            )->tag( `Text`
+                                )->a( n = `text` v = `Lorem ipsum dolor sit amet, consectetur adipisicing elit. (content abbreviated from the original filler text)`
 
                         )->end(
                         )->ele( `ScrollContainer`
@@ -263,7 +277,8 @@ CLASS z2ui5_cl_smpc_app_167 IMPLEMENTATION.
                             )->a( n = `vertical`   v = `true`
                             )->a( n = `height`     v = `100%`
                             )->a( n = `class`      v = `sapUiContentPadding`
-                            )->tag( `Text` )->a( n = `text` v = `This is the root page of the second element`
+                            )->tag( `Text`
+                                )->a( n = `text` v = `This is the root page of the second element`
 
                         )->end(
                     )->end(

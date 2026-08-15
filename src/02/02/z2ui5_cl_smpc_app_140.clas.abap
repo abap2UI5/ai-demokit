@@ -94,7 +94,7 @@ CLASS z2ui5_cl_smpc_app_140 IMPLEMENTATION.
                         )->a( n = `backgroundColorSet`   v = client->_bind( colorset )
                         )->a( n = `backgroundColorShade` v = `ShadeA`
 
-                )->end(
+                    )->end(
                 )->end(
 
                 )->ele( n = `BlockLayoutRow` ns = `l`
@@ -103,17 +103,17 @@ CLASS z2ui5_cl_smpc_app_140 IMPLEMENTATION.
                         )->a( n = `titleAlignment` v = `Center`
                         )->a( n = `class`          v = `customCellImageBackground`
                         )->tag( `Text`
-                        )->a( n = `text` v = `Donec bibendum diam nibh, sit amet ornare ante fermentum sed. Ut vulputate justo at orci sollicitudin.`
+                            )->a( n = `text` v = `Donec bibendum diam nibh, sit amet ornare ante fermentum sed. Ut vulputate justo at orci sollicitudin.`
 
-                )->end(
+                    )->end(
                     )->ele( n = `BlockLayoutCell` ns = `l`
                         )->a( n = `title`                v = `An Icon (Shade B)`
                         )->a( n = `backgroundColorSet`   v = client->_bind( colorset )
                         )->a( n = `backgroundColorShade` v = `ShadeB`
-                    )->tag( n = `Icon` ns = `core`
-                        )->a( n = `src` v = `sap-icon://add-activity`
+                        )->tag( n = `Icon` ns = `core`
+                            )->a( n = `src` v = `sap-icon://add-activity`
 
-                )->end(
+                    )->end(
                 )->end(
 
                 )->ele( n = `BlockLayoutRow` ns = `l`
@@ -121,31 +121,31 @@ CLASS z2ui5_cl_smpc_app_140 IMPLEMENTATION.
                         )->a( n = `title`                v = `Simple Form (Shade C)`
                         )->a( n = `backgroundColorSet`   v = client->_bind( colorset )
                         )->a( n = `backgroundColorShade` v = `ShadeC`
-                    )->ele( n = `SimpleForm` ns = `f`
-                        )->a( n = `editable`         v = `true`
-                        )->a( n = `backgroundDesign` v = `Transparent`
-                        )->a( n = `layout`           v = `ResponsiveGridLayout`
-                        )->tag( `Label`
-                            )->a( n = `text` v = `sap.m.Input`
-                        )->tag( `Input`
-                            )->a( n = `type`        v = `Text`
-                            )->a( n = `placeholder` v = `Enter Name ...`
-                        )->tag( `Label`
-                            )->a( n = `text` v = `sap.m.TextArea`
-                        )->tag( `TextArea`
-                            )->a( n = `placeholder` v = `Please add your comment...`
-                            )->a( n = `rows`        v = `6`
-                            )->a( n = `maxLength`   v = `255`
-                            )->a( n = `width`       v = `100%`
-                        )->tag( `Label`
-                            )->a( n = `text` v = `sap.m.Text`
-                        )->tag( `Text`
-                        )->a( n = `text` v = `Donec bibendum diam nibh, sit amet ornare ante fermentum sed. Ut vulputate justo at orci sollicitudin, in gravida lectus aliquam. Vivamus tortor lorem, semper et diam ac, ` &&
+                        )->ele( n = `SimpleForm` ns = `f`
+                            )->a( n = `editable`         v = `true`
+                            )->a( n = `backgroundDesign` v = `Transparent`
+                            )->a( n = `layout`           v = `ResponsiveGridLayout`
+                            )->tag( `Label`
+                                )->a( n = `text` v = `sap.m.Input`
+                            )->tag( `Input`
+                                )->a( n = `type`        v = `Text`
+                                )->a( n = `placeholder` v = `Enter Name ...`
+                            )->tag( `Label`
+                                )->a( n = `text` v = `sap.m.TextArea`
+                            )->tag( `TextArea`
+                                )->a( n = `placeholder` v = `Please add your comment...`
+                                )->a( n = `rows`        v = `6`
+                                )->a( n = `maxLength`   v = `255`
+                                )->a( n = `width`       v = `100%`
+                            )->tag( `Label`
+                                )->a( n = `text` v = `sap.m.Text`
+                            )->tag( `Text`
+                                )->a( n = `text` v = `Donec bibendum diam nibh, sit amet ornare ante fermentum sed. Ut vulputate justo at orci sollicitudin, in gravida lectus aliquam. Vivamus tortor lorem, semper et diam ac, ` &&
                                              `faucibus suscipit metus. Curabitur eget aliquet purus, id vestibulum sapien. Cras vitae imperdiet felis. Fusce placerat velit orci, at tempor nisl aliquam laoreet. ` &&
                                              `Aliquam in sapien sit amet tortor laoreet feugiat id in ligula.`
 
+                        )->end(
                     )->end(
-                )->end(
                 )->end(
 
                 )->ele( n = `BlockLayoutRow` ns = `l`
@@ -155,12 +155,12 @@ CLASS z2ui5_cl_smpc_app_140 IMPLEMENTATION.
                         )->a( n = `backgroundColorSet`   v = client->_bind( colorset )
                         )->a( n = `backgroundColorShade` v = `ShadeD`
                         )->tag( `Text`
-                        )->a( n = `text` v = `Morbi id ullamcorper lorem, vestibulum facilisis velit. Ut elementum aliquam nisl a pretium. Donec auctor mattis convallis. Aenean sodales tortor nec facilisis fringilla. ` &&
+                            )->a( n = `text` v = `Morbi id ullamcorper lorem, vestibulum facilisis velit. Ut elementum aliquam nisl a pretium. Donec auctor mattis convallis. Aenean sodales tortor nec facilisis fringilla. ` &&
                                              `Nam feugiat nulla at diam sollicitudin pretium. Sed at lacus volutpat, finibus arcu ultricies, convallis elit. Aliquam sollicitudin tortor sit amet mi consequat ` &&
                                              `fringilla. Fusce nisl leo, tempor et nulla id, pellentesque suscipit augue. Morbi cursus molestie tellus. Ut volutpat orci interdum, condimentum risus sed, iaculis ` &&
                                              `tellus. Proin nisi eros, tristique nec tortor quis, suscipit sodales dui.`
 
-                )->end(
+                    )->end(
                 )->end(
 
                 )->ele( n = `BlockLayoutRow` ns = `l`
@@ -170,12 +170,12 @@ CLASS z2ui5_cl_smpc_app_140 IMPLEMENTATION.
                         )->a( n = `backgroundColorSet`   v = client->_bind( colorset )
                         )->a( n = `backgroundColorShade` v = `ShadeE`
                         )->tag( `Text`
-                        )->a( n = `text` v = `Morbi id ullamcorper lorem, vestibulum facilisis velit. Ut elementum aliquam nisl a pretium. Donec auctor mattis convallis. Aenean sodales tortor nec facilisis fringilla. ` &&
+                            )->a( n = `text` v = `Morbi id ullamcorper lorem, vestibulum facilisis velit. Ut elementum aliquam nisl a pretium. Donec auctor mattis convallis. Aenean sodales tortor nec facilisis fringilla. ` &&
                                              `Nam feugiat nulla at diam sollicitudin pretium. Sed at lacus volutpat, finibus arcu ultricies, convallis elit. Aliquam sollicitudin tortor sit amet mi consequat ` &&
                                              `fringilla. Fusce nisl leo, tempor et nulla id, pellentesque suscipit augue. Morbi cursus molestie tellus. Ut volutpat orci interdum, condimentum risus sed, iaculis ` &&
                                              `tellus. Proin nisi eros, tristique nec tortor quis, suscipit sodales dui.`
 
-                )->end(
+                    )->end(
                 )->end(
 
                 )->ele( n = `BlockLayoutRow` ns = `l`
@@ -184,7 +184,7 @@ CLASS z2ui5_cl_smpc_app_140 IMPLEMENTATION.
                         )->a( n = `backgroundColorSet`   v = client->_bind( colorset )
                         )->a( n = `backgroundColorShade` v = `ShadeF`
                         )->tag( `Text`
-                        )->a( n = `text` v = `Morbi id ullamcorper lorem, vestibulum facilisis velit. Ut elementum aliquam nisl a pretium. Donec auctor mattis convallis. Aenean sodales tortor nec facilisis fringilla. ` &&
+                            )->a( n = `text` v = `Morbi id ullamcorper lorem, vestibulum facilisis velit. Ut elementum aliquam nisl a pretium. Donec auctor mattis convallis. Aenean sodales tortor nec facilisis fringilla. ` &&
                                              `Nam feugiat nulla at diam sollicitudin pretium. Sed at lacus volutpat, finibus arcu ultricies, convallis elit. Aliquam sollicitudin tortor sit amet mi consequat ` &&
                                              `fringilla. Fusce nisl leo, tempor et nulla id, pellentesque suscipit augue. Morbi cursus molestie tellus. Ut volutpat orci interdum, condimentum risus sed, iaculis ` &&
                                              `tellus. Proin nisi eros, tristique nec tortor quis, suscipit sodales dui.` ).

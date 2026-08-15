@@ -45,7 +45,7 @@ CLASS z2ui5_cl_smpc_app_125 IMPLEMENTATION.
                         )->tag( n = `SplitterLayoutData` ns = `l`
                             )->a( n = `size` v = `300px`
 
-                )->end(
+                    )->end(
                 )->end(
                 )->ele( `Button`
                     )->a( n = `width` v = `100%`

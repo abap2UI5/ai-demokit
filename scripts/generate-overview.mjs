@@ -21,6 +21,7 @@ import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { loadUniverseSnapshot, loadPropertiesControls, enrichFromProperties } from './lib-universe.mjs';
+import { formatSource } from './chain-format.mjs';
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = path.join(ROOT, 'src');
@@ -1462,6 +1463,10 @@ const xml = `﻿<?xml version="1.0" encoding="utf-8"?>
 </abapGit>
 `;
 
-fs.writeFileSync(OUT_ABAP, abap);
+/* The view chains above are emitted from template strings at a fixed indent,
+ * which cannot know the base column of the statement they land in. Run the
+ * result through the same formatter the corpus is checked with, so generated
+ * code carries the layout rule instead of quietly reintroducing the drift. */
+fs.writeFileSync(OUT_ABAP, formatSource(abap));
 fs.writeFileSync(OUT_XML, xml);
 console.log(`${CLASS}: ${apps.length} apps across ${new Set(apps.map((a) => a.control)).size} controls`);

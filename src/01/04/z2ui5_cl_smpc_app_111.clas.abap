@@ -57,7 +57,7 @@ CLASS z2ui5_cl_smpc_app_111 IMPLEMENTATION.
                     )->tag( `Title`
                         )->a( n = `text` v = `GridList with default grid layout`
 
-            )->end(
+                )->end(
             )->end(
             )->ele( n = `GridList` ns = `f`
                 )->a( n = `id`         v = `gridList`

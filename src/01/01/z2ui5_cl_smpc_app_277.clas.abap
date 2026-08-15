@@ -65,147 +65,147 @@ CLASS z2ui5_cl_smpc_app_277 IMPLEMENTATION.
                 )->ele( n = `SplitPane` ns = `l`
                     )->a( n = `requiredParentWidth` v = `500`
 
-                )->ele( `Table`
-                    )->a( n = `id`              v = `idProductsTableleft`
-                    )->a( n = `contextualWidth` v = `Auto`
-                    )->a( n = `popinLayout`     v = `GridSmall`
-                    )->a( n = `headerText`      v = `Products`
-                    )->a( n = `items`           v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }' \}|
+                    )->ele( `Table`
+                        )->a( n = `id`              v = `idProductsTableleft`
+                        )->a( n = `contextualWidth` v = `Auto`
+                        )->a( n = `popinLayout`     v = `GridSmall`
+                        )->a( n = `headerText`      v = `Products`
+                        )->a( n = `items`           v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }' \}|
 
-                    )->ele( `columns`
-                        )->ele( `Column`
-                            )->ele( `header`
-                                )->tag( `Text`
-                                    )->a( n = `text` v = `Product`
+                        )->ele( `columns`
+                            )->ele( `Column`
+                                )->ele( `header`
+                                    )->tag( `Text`
+                                        )->a( n = `text` v = `Product`
 
+                                )->end(
+                            )->end(
+
+                            )->ele( `Column`
+                                )->a( n = `minScreenWidth` v = `phone`
+                                )->a( n = `demandPopin`    v = `true`
+
+                                )->ele( `header`
+                                    )->tag( `Text`
+                                        )->a( n = `text` v = `Supplier`
+
+                                )->end(
+                            )->end(
+
+                            )->ele( `Column`
+                                )->a( n = `minScreenWidth` v = `tablet`
+                                )->a( n = `demandPopin`    v = `true`
+                                )->a( n = `hAlign`         v = `Center`
+
+                                )->ele( `header`
+                                    )->tag( `Text`
+                                        )->a( n = `text` v = `Status`
+
+                                )->end(
+                            )->end(
+
+                            )->ele( `Column`
+                                )->a( n = `minScreenWidth` v = `Phone`
+                                )->a( n = `demandPopin`    v = `true`
+                                )->a( n = `hAlign`         v = `End`
+
+                                )->ele( `header`
+                                    )->tag( `Text`
+                                        )->a( n = `text` v = `Quantity`
+
+                                )->end(
+                            )->end(
                         )->end(
-                        )->end(
 
-                        )->ele( `Column`
-                            )->a( n = `minScreenWidth` v = `phone`
-                            )->a( n = `demandPopin`    v = `true`
+                        )->ele( `items`
+                            )->ele( `ColumnListItem`
+                                )->ele( `cells`
+                                    )->tag( `Label`
+                                        )->a( n = `text` v = `{NAME}`
+                                    )->tag( `Label`
+                                        )->a( n = `text` v = `{SUPPLIERNAME}`
+                                    )->tag( `Label`
+                                        )->a( n = `text` v = `{STATUS}`
+                                    )->tag( `Label`
+                                        )->a( n = `text` v = `{QUANTITY}`
 
-                            )->ele( `header`
-                                )->tag( `Text`
-                                    )->a( n = `text` v = `Supplier`
-
-                        )->end(
-                        )->end(
-
-                        )->ele( `Column`
-                            )->a( n = `minScreenWidth` v = `tablet`
-                            )->a( n = `demandPopin`    v = `true`
-                            )->a( n = `hAlign`         v = `Center`
-
-                            )->ele( `header`
-                                )->tag( `Text`
-                                    )->a( n = `text` v = `Status`
-
-                        )->end(
-                        )->end(
-
-                        )->ele( `Column`
-                            )->a( n = `minScreenWidth` v = `Phone`
-                            )->a( n = `demandPopin`    v = `true`
-                            )->a( n = `hAlign`         v = `End`
-
-                            )->ele( `header`
-                                )->tag( `Text`
-                                    )->a( n = `text` v = `Quantity`
-
-                        )->end(
-                        )->end(
-                    )->end(
-
-                    )->ele( `items`
-                        )->ele( `ColumnListItem`
-                            )->ele( `cells`
-                                )->tag( `Label`
-                                    )->a( n = `text` v = `{NAME}`
-                                )->tag( `Label`
-                                    )->a( n = `text` v = `{SUPPLIERNAME}`
-                                )->tag( `Label`
-                                    )->a( n = `text` v = `{STATUS}`
-                                )->tag( `Label`
-                                    )->a( n = `text` v = `{QUANTITY}`
-
+                                )->end(
                             )->end(
                         )->end(
                     )->end(
-                )->end(
                 )->end(
 
                 )->ele( n = `SplitPane` ns = `l`
                     )->a( n = `requiredParentWidth` v = `400`
 
-                )->ele( `Table`
-                    )->a( n = `id`              v = `idProductsTableright`
-                    )->a( n = `contextualWidth` v = `Auto`
-                    )->a( n = `popinLayout`     v = `GridSmall`
-                    )->a( n = `headerText`      v = `Products`
-                    )->a( n = `items`           v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }' \}|
+                    )->ele( `Table`
+                        )->a( n = `id`              v = `idProductsTableright`
+                        )->a( n = `contextualWidth` v = `Auto`
+                        )->a( n = `popinLayout`     v = `GridSmall`
+                        )->a( n = `headerText`      v = `Products`
+                        )->a( n = `items`           v = |\{ path: '{ client->_bind( val = t_products path = abap_true ) }' \}|
 
-                    )->ele( `columns`
-                        )->ele( `Column`
-                            )->ele( `header`
-                                )->tag( `Text`
-                                    )->a( n = `text` v = `Product`
+                        )->ele( `columns`
+                            )->ele( `Column`
+                                )->ele( `header`
+                                    )->tag( `Text`
+                                        )->a( n = `text` v = `Product`
 
+                                )->end(
+                            )->end(
+
+                            )->ele( `Column`
+                                )->a( n = `minScreenWidth` v = `phone`
+                                )->a( n = `demandPopin`    v = `true`
+
+                                )->ele( `header`
+                                    )->tag( `Text`
+                                        )->a( n = `text` v = `Supplier`
+
+                                )->end(
+                            )->end(
+
+                            )->ele( `Column`
+                                )->a( n = `minScreenWidth` v = `tablet`
+                                )->a( n = `demandPopin`    v = `true`
+                                )->a( n = `hAlign`         v = `Center`
+
+                                )->ele( `header`
+                                    )->tag( `Text`
+                                        )->a( n = `text` v = `Status`
+
+                                )->end(
+                            )->end(
+
+                            )->ele( `Column`
+                                )->a( n = `minScreenWidth` v = `Phone`
+                                )->a( n = `demandPopin`    v = `true`
+                                )->a( n = `hAlign`         v = `End`
+
+                                )->ele( `header`
+                                    )->tag( `Text`
+                                        )->a( n = `text` v = `Quantity`
+
+                                )->end(
+                            )->end(
                         )->end(
-                        )->end(
 
-                        )->ele( `Column`
-                            )->a( n = `minScreenWidth` v = `phone`
-                            )->a( n = `demandPopin`    v = `true`
+                        )->ele( `items`
+                            )->ele( `ColumnListItem`
+                                )->ele( `cells`
+                                    )->tag( `Label`
+                                        )->a( n = `text` v = `{NAME}`
+                                    )->tag( `Label`
+                                        )->a( n = `text` v = `{SUPPLIERNAME}`
+                                    )->tag( `Label`
+                                        )->a( n = `text` v = `{STATUS}`
+                                    )->tag( `Label`
+                                        )->a( n = `text` v = `{QUANTITY}`
 
-                            )->ele( `header`
-                                )->tag( `Text`
-                                    )->a( n = `text` v = `Supplier`
-
-                        )->end(
-                        )->end(
-
-                        )->ele( `Column`
-                            )->a( n = `minScreenWidth` v = `tablet`
-                            )->a( n = `demandPopin`    v = `true`
-                            )->a( n = `hAlign`         v = `Center`
-
-                            )->ele( `header`
-                                )->tag( `Text`
-                                    )->a( n = `text` v = `Status`
-
-                        )->end(
-                        )->end(
-
-                        )->ele( `Column`
-                            )->a( n = `minScreenWidth` v = `Phone`
-                            )->a( n = `demandPopin`    v = `true`
-                            )->a( n = `hAlign`         v = `End`
-
-                            )->ele( `header`
-                                )->tag( `Text`
-                                    )->a( n = `text` v = `Quantity`
-
-                        )->end(
-                        )->end(
-                    )->end(
-
-                    )->ele( `items`
-                        )->ele( `ColumnListItem`
-                            )->ele( `cells`
-                                )->tag( `Label`
-                                    )->a( n = `text` v = `{NAME}`
-                                )->tag( `Label`
-                                    )->a( n = `text` v = `{SUPPLIERNAME}`
-                                )->tag( `Label`
-                                    )->a( n = `text` v = `{STATUS}`
-                                )->tag( `Label`
-                                    )->a( n = `text` v = `{QUANTITY}`
-
+                                )->end(
                             )->end(
                         )->end(
                     )->end(
-                )->end(
                 )->end(
 
                     ).

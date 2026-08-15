@@ -60,7 +60,7 @@ CLASS z2ui5_cl_smpc_app_237 IMPLEMENTATION.
                     )->tag( `Text`
                         )->a( n = `text` v = `Status (active)`
 
-            )->end(
+                )->end(
             )->end(
             )->ele( `ColumnListItem`
                 )->tag( `ObjectIdentifier`

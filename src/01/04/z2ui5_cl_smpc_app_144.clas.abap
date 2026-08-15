@@ -63,7 +63,7 @@ CLASS z2ui5_cl_smpc_app_144 IMPLEMENTATION.
                     )->tag( `Title`
                         )->a( n = `text` v = `Grid List with GridBoxLayout and minWidth 17rem`
 
-            )->end(
+                )->end(
             )->end(
 
             )->ele( n = `GridList` ns = `f`

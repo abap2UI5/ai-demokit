@@ -79,7 +79,7 @@ CLASS z2ui5_cl_smpc_app_164 IMPLEMENTATION.
                                 )->a( n = `id`   v = `title`
                                 )->a( n = `text` v = `Products`
 
-                    )->end(
+                        )->end(
                     )->end(
 
                     )->ele( `columns`
@@ -92,7 +92,7 @@ CLASS z2ui5_cl_smpc_app_164 IMPLEMENTATION.
                                     )->a( n = `text`     v = `{NAME}`
                                     )->a( n = `wrapping` v = `false`
 
-                        )->end(
+                            )->end(
                         )->end(
 
                         )->ele( `Column`
@@ -104,7 +104,7 @@ CLASS z2ui5_cl_smpc_app_164 IMPLEMENTATION.
                                     )->a( n = `text`     v = `{CATEGORY}`
                                     )->a( n = `wrapping` v = `false`
 
-                        )->end(
+                            )->end(
                         )->end(
 
                         )->ele( `Column`
@@ -116,7 +116,7 @@ CLASS z2ui5_cl_smpc_app_164 IMPLEMENTATION.
                                     )->a( n = `href`   v = `{PRODUCTPICURL}`
                                     )->a( n = `target` v = `_blank`
 
-                        )->end(
+                            )->end(
                         )->end(
 
                         )->ele( `Column`
@@ -126,7 +126,7 @@ CLASS z2ui5_cl_smpc_app_164 IMPLEMENTATION.
                                 )->tag( n = `Label` ns = `m`
                                     )->a( n = `text` v = |\{ path: 'QUANTITY', type: 'sap.ui.model.type.Integer' \}|
 
-                        )->end(
+                            )->end(
                         )->end(
 
                         )->ele( `Column`
@@ -137,7 +137,7 @@ CLASS z2ui5_cl_smpc_app_164 IMPLEMENTATION.
                                     )->a( n = `text`     v = |\{ path: 'DELIVERYDATE', type: 'sap.ui.model.type.Date', formatOptions: \{ source: \{ pattern: 'timestamp' \} \} \}|
                                     )->a( n = `wrapping` v = `false`
 
-                        )->end(
+                            )->end(
                         )->end(
                     )->end(
 

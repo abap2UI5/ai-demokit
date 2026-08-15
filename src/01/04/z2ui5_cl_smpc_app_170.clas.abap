@@ -97,7 +97,7 @@ CLASS z2ui5_cl_smpc_app_170 IMPLEMENTATION.
                             )->tag( `Link`
                                 )->a( n = `text` v = `Page 5`
 
-                    )->end(
+                        )->end(
                     )->end(
 
                     )->ele( n = `expandedContent` ns = `f`
@@ -132,8 +132,8 @@ CLASS z2ui5_cl_smpc_app_170 IMPLEMENTATION.
                                     )->a( n = `emphasized` v = `false`
                                     )->a( n = `state`      v = `Error`
 
-                    )->end(
-                    )->end(
+                            )->end(
+                        )->end(
                     )->end(
 
                     )->ele( n = `actions` ns = `f`
@@ -165,8 +165,8 @@ CLASS z2ui5_cl_smpc_app_170 IMPLEMENTATION.
                                     )->a( n = `priority`                  v = `AlwaysOverflow`
                                     )->a( n = `closeOverflowOnInteraction` v = `false`
 
-                    )->end(
-                    )->end(
+                            )->end(
+                        )->end(
                     )->end(
 
                     )->ele( n = `navigationActions` ns = `f`
@@ -178,8 +178,8 @@ CLASS z2ui5_cl_smpc_app_170 IMPLEMENTATION.
                             )->a( n = `type` v = `Transparent`
 
                     )->end(
-                    )->end(
                 )->end(
+            )->end(
 
             )->ele( n = `header` ns = `f`
                 )->ele( n = `DynamicPageHeader` ns = `f`
@@ -208,10 +208,10 @@ CLASS z2ui5_cl_smpc_app_170 IMPLEMENTATION.
                                 )->a( n = `text`  v = `In Stock`
                                 )->a( n = `state` v = `Success`
 
-                    )->end(
-                    )->end(
+                        )->end(
                     )->end(
                 )->end(
+            )->end(
 
             )->ele( n = `content` ns = `f`
                 )->ele( `Table`
@@ -228,7 +228,7 @@ CLASS z2ui5_cl_smpc_app_170 IMPLEMENTATION.
                                 )->a( n = `text`  v = `Products`
                                 )->a( n = `level` v = `H2`
 
-                    )->end(
+                        )->end(
                     )->end(
 
                     )->ele( `columns`
@@ -261,7 +261,7 @@ CLASS z2ui5_cl_smpc_app_170 IMPLEMENTATION.
                             )->tag( `Text`
                                 )->a( n = `text` v = `Price`
 
-                    )->end(
+                        )->end(
                     )->end(
 
                     )->ele( `items`
@@ -278,8 +278,8 @@ CLASS z2ui5_cl_smpc_app_170 IMPLEMENTATION.
                                     )->a( n = `number` v = |\{ parts:[\{path:'PRICE'\},\{path:'CURRENCYCODE'\}], type: 'sap.ui.model.type.Currency', formatOptions: \{showMeasure: false\} \}|
                                     )->a( n = `unit`   v = `{CURRENCYCODE}`
 
-                    )->end(
-                    )->end(
+                            )->end(
+                        )->end(
                     )->end(
                 )->end(
             )->end(
@@ -294,10 +294,10 @@ CLASS z2ui5_cl_smpc_app_170 IMPLEMENTATION.
                         )->a( n = `type` v = `Reject`
                         )->a( n = `text` v = `Reject`
 
-            )->end(
+                )->end(
             )->end(
         )->end(
-        )->end( ).
+    )->end( ).
 
     client->view_display( view->stringify( ) ).
 

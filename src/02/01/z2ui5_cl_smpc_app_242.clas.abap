@@ -71,7 +71,7 @@ CLASS z2ui5_cl_smpc_app_242 IMPLEMENTATION.
                             )->tag( `Button`
                                 )->a( n = `text` v = `Action 1`
 
-                    )->end(
+                        )->end(
                     )->end(
                 )->end(
                 )->ele( `Page`
@@ -83,7 +83,7 @@ CLASS z2ui5_cl_smpc_app_242 IMPLEMENTATION.
                             )->tag( `Button`
                                 )->a( n = `text` v = `Action 2`
 
-                    )->end(
+                        )->end(
                     )->end(
                 )->end(
                 )->ele( `Page`
@@ -95,7 +95,7 @@ CLASS z2ui5_cl_smpc_app_242 IMPLEMENTATION.
                             )->tag( `Button`
                                 )->a( n = `text` v = `Action 3`
 
-                    )->end(
+                        )->end(
                     )->end(
                 )->end(
                 )->ele( `Page`
@@ -107,7 +107,7 @@ CLASS z2ui5_cl_smpc_app_242 IMPLEMENTATION.
                             )->tag( `Button`
                                 )->a( n = `text` v = `Action 4`
 
-                    )->end(
+                        )->end(
                     )->end(
                 )->end(
             )->end(

@@ -150,7 +150,7 @@ CLASS z2ui5_cl_smpc_app_103 IMPLEMENTATION.
                         )->a( n = `key`   v = `remember`
                         )->a( n = `value` v = `true`
 
-            )->end(
+                )->end(
             )->end(
             )->ele( `Button`
                 )->a( n = `text`  v = `Show Select Dialog (Multi)`
@@ -162,7 +162,7 @@ CLASS z2ui5_cl_smpc_app_103 IMPLEMENTATION.
                         )->a( n = `key`   v = `multi`
                         )->a( n = `value` v = `true`
 
-            )->end(
+                )->end(
             )->end(
             )->ele( `Button`
                 )->a( n = `text`  v = `Show Select Dialog (Remember)`
@@ -183,7 +183,7 @@ CLASS z2ui5_cl_smpc_app_103 IMPLEMENTATION.
                         )->a( n = `key`   v = `confirmButtonText`
                         )->a( n = `value` v = `Remember Selection`
 
-            )->end(
+                )->end(
             )->end(
             )->ele( `Button`
                 )->a( n = `text`  v = `Show Select Dialog (growingThreshold=15)`
@@ -204,7 +204,7 @@ CLASS z2ui5_cl_smpc_app_103 IMPLEMENTATION.
                         )->a( n = `key`   v = `threshold`
                         )->a( n = `value` v = `15`
 
-            )->end(
+                )->end(
             )->end(
             )->ele( `Button`
                 )->a( n = `text`  v = `Show Select Dialog (growing=false)`
@@ -222,7 +222,7 @@ CLASS z2ui5_cl_smpc_app_103 IMPLEMENTATION.
                         )->a( n = `key`   v = `growing`
                         )->a( n = `value` v = `false`
 
-            )->end(
+                )->end(
             )->end(
             )->ele( `Button`
                 )->a( n = `text`  v = `Show Select Dialog (draggable=true)`
@@ -237,7 +237,7 @@ CLASS z2ui5_cl_smpc_app_103 IMPLEMENTATION.
                         )->a( n = `key`   v = `draggable`
                         )->a( n = `value` v = `true`
 
-            )->end(
+                )->end(
             )->end(
             )->ele( `Button`
                 )->a( n = `text`  v = `Show Select Dialog (resizable=true)`
@@ -252,7 +252,7 @@ CLASS z2ui5_cl_smpc_app_103 IMPLEMENTATION.
                         )->a( n = `key`   v = `resizable`
                         )->a( n = `value` v = `true`
 
-            )->end(
+                )->end(
             )->end(
             )->ele( `Button`
                 )->a( n = `text`  v = `Show Select Dialog with Responsive Padding`
@@ -270,7 +270,7 @@ CLASS z2ui5_cl_smpc_app_103 IMPLEMENTATION.
                         )->a( n = `key`   v = `draggable`
                         )->a( n = `value` v = `true`
 
-            )->end(
+                )->end(
             )->end(
             )->tag( `Input`
                 )->a( n = `id`               v = `productInput`

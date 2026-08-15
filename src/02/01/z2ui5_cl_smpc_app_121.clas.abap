@@ -97,7 +97,7 @@ CLASS z2ui5_cl_smpc_app_121 IMPLEMENTATION.
                             )->a( n = `press`   v = client->_event( `VERSION` )
                         )->tag( n = `UploadSetToolbarPlaceholder` ns = `upload`
 
-                )->end(
+                    )->end(
                 )->end(
                 )->ele( n = `items` ns = `upload`
                     )->ele( n = `UploadSetItem` ns = `upload`

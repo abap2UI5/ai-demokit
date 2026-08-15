@@ -524,240 +524,240 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
                    title = |abap2UI5 Demo Kit ({ lines( t_app ) })| ).
 
     page->ele( `subHeader`
-                    )->ele( `OverflowToolbar`
-                        " client-side filter over the table: liveChange/search run
-                        " a binding_call Contains filter via follow_up_action (no round-trip)
-                        )->tag( `SearchField`
-                            )->a( n = `placeholder` v = `Search the table - module, control, since, sample, class`
-                            )->a( n = `width`       v = `24rem`
-                            " two-way bound so the typed query is part of the model and
-                            " comes back with the app state (round-trip, draft restore);
-                            " the filtering itself stays client-side (below)
-                            )->a( n = `value`       v = client->_bind( search_query )
-                            )->a( n = `liveChange`  v = client->follow_up_action( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `filter` ) ( `FILTER` ) ( `Contains` ) ( `${$parameters>/newValue}` ) ) )
-                            )->a( n = `search`      v = client->follow_up_action( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `filter` ) ( `FILTER` ) ( `Contains` ) ( `${$parameters>/query}` ) ) )
-                        " default-on filter checkboxes; each is two-way bound and the row
-                        " visible expression reacts live (no round-trip)
-                        )->tag( `CheckBox`
-                            )->a( n = `text`     v = `Hide non-OpenUI5`
-                            )->a( n = `selected` v = client->_bind( hide_non_ui5 )
-                            )->a( n = `tooltip`  v = `Hide samples whose control is not part of OpenUI5`
-                        )->tag( `CheckBox`
-                            )->a( n = `text`     v = `Hide newer than 1.71 (2020)`
-                            )->a( n = `selected` v = client->_bind( hide_post171 )
-                            )->a( n = `tooltip`  v = `Hide samples that need a UI5 release newer than 1.71`
-                        )->tag( `CheckBox`
-                            )->a( n = `text`     v = `Hide deprecated`
-                            )->a( n = `selected` v = client->_bind( hide_deprecated )
-                            )->a( n = `tooltip`  v = `Hide samples whose control is deprecated`
-                        )->tag( `ToolbarSpacer`
-                        )->tag( `Label`
-                            )->a( n = `text` v = `Shell`
-                        " Shell on/off = sap.m.Shell letterboxing (two-way, drives appWidthLimited)
-                        )->tag( `Switch`
-                            )->a( n = `state`   v = client->_bind( shell_on )
-                            )->a( n = `tooltip` v = `Toggle the Shell letterboxing (limited app width)`
+        )->ele( `OverflowToolbar`
+            " client-side filter over the table: liveChange/search run
+            " a binding_call Contains filter via follow_up_action (no round-trip)
+            )->tag( `SearchField`
+                )->a( n = `placeholder` v = `Search the table - module, control, since, sample, class`
+                )->a( n = `width`       v = `24rem`
+                " two-way bound so the typed query is part of the model and
+                " comes back with the app state (round-trip, draft restore);
+                " the filtering itself stays client-side (below)
+                )->a( n = `value`       v = client->_bind( search_query )
+                )->a( n = `liveChange`  v = client->follow_up_action( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `filter` ) ( `FILTER` ) ( `Contains` ) ( `${$parameters>/newValue}` ) ) )
+                )->a( n = `search`      v = client->follow_up_action( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `filter` ) ( `FILTER` ) ( `Contains` ) ( `${$parameters>/query}` ) ) )
+            " default-on filter checkboxes; each is two-way bound and the row
+            " visible expression reacts live (no round-trip)
+            )->tag( `CheckBox`
+                )->a( n = `text`     v = `Hide non-OpenUI5`
+                )->a( n = `selected` v = client->_bind( hide_non_ui5 )
+                )->a( n = `tooltip`  v = `Hide samples whose control is not part of OpenUI5`
+            )->tag( `CheckBox`
+                )->a( n = `text`     v = `Hide newer than 1.71 (2020)`
+                )->a( n = `selected` v = client->_bind( hide_post171 )
+                )->a( n = `tooltip`  v = `Hide samples that need a UI5 release newer than 1.71`
+            )->tag( `CheckBox`
+                )->a( n = `text`     v = `Hide deprecated`
+                )->a( n = `selected` v = client->_bind( hide_deprecated )
+                )->a( n = `tooltip`  v = `Hide samples whose control is deprecated`
+            )->tag( `ToolbarSpacer`
+            )->tag( `Label`
+                )->a( n = `text` v = `Shell`
+            " Shell on/off = sap.m.Shell letterboxing (two-way, drives appWidthLimited)
+            )->tag( `Switch`
+                )->a( n = `state`   v = client->_bind( shell_on )
+                )->a( n = `tooltip` v = `Toggle the Shell letterboxing (limited app width)`
+
+        )->end(
+    )->end(
+
+        )->ele( `Table`
+            )->a( n = `id`      v = `idOverviewTable`
+            )->a( n = `sticky`  v = `ColumnHeaders`
+            )->a( n = `items`   v = client->_bind( t_app )
+
+            )->ele( `columns`
+                )->ele( `Column`
+                    )->ele( `HBox`
+                        )->a( n = `alignItems` v = `Center`
+
+                        )->tag( `Text`
+                            )->a( n = `text` v = `Module`
+                        )->tag( `core:Icon`
+                            )->a( n = `src`     v = `sap-icon://sort-ascending`
+                            )->a( n = `tooltip` v = `Sort by Module ascending`
+                            )->a( n = `class`   v = `sapUiTinyMarginBegin`
+                            )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `sort` ) ( `MODULE` ) ) )
+                        )->tag( `core:Icon`
+                            )->a( n = `src`     v = `sap-icon://sort-descending`
+                            )->a( n = `tooltip` v = `Sort by Module descending`
+                            )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `sort` ) ( `MODULE` ) ( `X` ) ) )
 
                     )->end(
                 )->end(
+                )->ele( `Column`
+                    )->ele( `HBox`
+                        )->a( n = `alignItems` v = `Center`
 
-                )->ele( `Table`
-                    )->a( n = `id`      v = `idOverviewTable`
-                    )->a( n = `sticky`  v = `ColumnHeaders`
-                    )->a( n = `items`   v = client->_bind( t_app )
+                        )->tag( `Text`
+                            )->a( n = `text` v = `Control`
+                        )->tag( `core:Icon`
+                            )->a( n = `src`     v = `sap-icon://sort-ascending`
+                            )->a( n = `tooltip` v = `Sort by Control ascending`
+                            )->a( n = `class`   v = `sapUiTinyMarginBegin`
+                            )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `sort` ) ( `CTRL_NAME` ) ) )
+                        )->tag( `core:Icon`
+                            )->a( n = `src`     v = `sap-icon://sort-descending`
+                            )->a( n = `tooltip` v = `Sort by Control descending`
+                            )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `sort` ) ( `CTRL_NAME` ) ( `X` ) ) )
 
-                    )->ele( `columns`
-                        )->ele( `Column`
-                            )->ele( `HBox`
-                                )->a( n = `alignItems` v = `Center`
+                    )->end(
+                )->end(
+                )->ele( `Column`
+                    )->ele( `HBox`
+                        )->a( n = `alignItems` v = `Center`
 
-                                )->tag( `Text`
-                                    )->a( n = `text` v = `Module`
-                                )->tag( `core:Icon`
-                                    )->a( n = `src`     v = `sap-icon://sort-ascending`
-                                    )->a( n = `tooltip` v = `Sort by Module ascending`
-                                    )->a( n = `class`   v = `sapUiTinyMarginBegin`
-                                    )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `sort` ) ( `MODULE` ) ) )
-                                )->tag( `core:Icon`
-                                    )->a( n = `src`     v = `sap-icon://sort-descending`
-                                    )->a( n = `tooltip` v = `Sort by Module descending`
-                                    )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `sort` ) ( `MODULE` ) ( `X` ) ) )
+                        )->tag( `Text`
+                            )->a( n = `text` v = `Since`
+                        )->tag( `core:Icon`
+                            )->a( n = `src`     v = `sap-icon://sort-ascending`
+                            )->a( n = `tooltip` v = `Sort by Since ascending`
+                            )->a( n = `class`   v = `sapUiTinyMarginBegin`
+                            )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `sort` ) ( `SINCE` ) ) )
+                        )->tag( `core:Icon`
+                            )->a( n = `src`     v = `sap-icon://sort-descending`
+                            )->a( n = `tooltip` v = `Sort by Since descending`
+                            )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `sort` ) ( `SINCE` ) ( `X` ) ) )
 
-                            )->end(
-                        )->end(
-                        )->ele( `Column`
-                            )->ele( `HBox`
-                                )->a( n = `alignItems` v = `Center`
+                    )->end(
+                )->end(
+                )->ele( `Column`
+                    )->ele( `HBox`
+                        )->a( n = `alignItems` v = `Center`
 
-                                )->tag( `Text`
-                                    )->a( n = `text` v = `Control`
-                                )->tag( `core:Icon`
-                                    )->a( n = `src`     v = `sap-icon://sort-ascending`
-                                    )->a( n = `tooltip` v = `Sort by Control ascending`
-                                    )->a( n = `class`   v = `sapUiTinyMarginBegin`
-                                    )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `sort` ) ( `CTRL_NAME` ) ) )
-                                )->tag( `core:Icon`
-                                    )->a( n = `src`     v = `sap-icon://sort-descending`
-                                    )->a( n = `tooltip` v = `Sort by Control descending`
-                                    )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `sort` ) ( `CTRL_NAME` ) ( `X` ) ) )
+                        )->tag( `Text`
+                            )->a( n = `text` v = `Sample`
+                        )->tag( `core:Icon`
+                            )->a( n = `src`     v = `sap-icon://sort-ascending`
+                            )->a( n = `tooltip` v = `Sort by Sample ascending`
+                            )->a( n = `class`   v = `sapUiTinyMarginBegin`
+                            )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `sort` ) ( `NAME` ) ) )
+                        )->tag( `core:Icon`
+                            )->a( n = `src`     v = `sap-icon://sort-descending`
+                            )->a( n = `tooltip` v = `Sort by Sample descending`
+                            )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `sort` ) ( `NAME` ) ( `X` ) ) )
 
-                            )->end(
-                        )->end(
-                        )->ele( `Column`
-                            )->ele( `HBox`
-                                )->a( n = `alignItems` v = `Center`
+                    )->end(
+                )->end(
+                )->ele( `Column`
+                    )->ele( `HBox`
+                        )->a( n = `alignItems` v = `Center`
 
-                                )->tag( `Text`
-                                    )->a( n = `text` v = `Since`
-                                )->tag( `core:Icon`
-                                    )->a( n = `src`     v = `sap-icon://sort-ascending`
-                                    )->a( n = `tooltip` v = `Sort by Since ascending`
-                                    )->a( n = `class`   v = `sapUiTinyMarginBegin`
-                                    )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `sort` ) ( `SINCE` ) ) )
-                                )->tag( `core:Icon`
-                                    )->a( n = `src`     v = `sap-icon://sort-descending`
-                                    )->a( n = `tooltip` v = `Sort by Since descending`
-                                    )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `sort` ) ( `SINCE` ) ( `X` ) ) )
+                        )->tag( `Text`
+                            )->a( n = `text` v = `abap2UI5`
+                        )->tag( `core:Icon`
+                            )->a( n = `src`     v = `sap-icon://sort-ascending`
+                            )->a( n = `tooltip` v = `Sort by abap2UI5 ascending`
+                            )->a( n = `class`   v = `sapUiTinyMarginBegin`
+                            )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `sort` ) ( `CLASS` ) ) )
+                        )->tag( `core:Icon`
+                            )->a( n = `src`     v = `sap-icon://sort-descending`
+                            )->a( n = `tooltip` v = `Sort by abap2UI5 descending`
+                            )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `sort` ) ( `CLASS` ) ( `X` ) ) )
 
-                            )->end(
-                        )->end(
-                        )->ele( `Column`
-                            )->ele( `HBox`
-                                )->a( n = `alignItems` v = `Center`
+                    )->end(
+                )->end(
+                )->ele( `Column`
+                    )->ele( `HBox`
+                        )->a( n = `alignItems` v = `Center`
 
-                                )->tag( `Text`
-                                    )->a( n = `text` v = `Sample`
-                                )->tag( `core:Icon`
-                                    )->a( n = `src`     v = `sap-icon://sort-ascending`
-                                    )->a( n = `tooltip` v = `Sort by Sample ascending`
-                                    )->a( n = `class`   v = `sapUiTinyMarginBegin`
-                                    )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `sort` ) ( `NAME` ) ) )
-                                )->tag( `core:Icon`
-                                    )->a( n = `src`     v = `sap-icon://sort-descending`
-                                    )->a( n = `tooltip` v = `Sort by Sample descending`
-                                    )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `sort` ) ( `NAME` ) ( `X` ) ) )
+                        )->tag( `Text`
+                            )->a( n = `text` v = `Rating`
+                        )->tag( `core:Icon`
+                            )->a( n = `src`     v = `sap-icon://sort-ascending`
+                            )->a( n = `tooltip` v = `Sort by Rating ascending`
+                            )->a( n = `class`   v = `sapUiTinyMarginBegin`
+                            )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `sort` ) ( `SCORE` ) ) )
+                        )->tag( `core:Icon`
+                            )->a( n = `src`     v = `sap-icon://sort-descending`
+                            )->a( n = `tooltip` v = `Sort by Rating descending`
+                            )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `sort` ) ( `SCORE` ) ( `X` ) ) )
 
-                            )->end(
-                        )->end(
-                        )->ele( `Column`
-                            )->ele( `HBox`
-                                )->a( n = `alignItems` v = `Center`
+                    )->end(
+                )->end(
+                )->ele( `Column`
+                    )->a( n = `width` v = `9rem`
+                    )->a( n = `hAlign` v = `Center`
 
-                                )->tag( `Text`
-                                    )->a( n = `text` v = `abap2UI5`
-                                )->tag( `core:Icon`
-                                    )->a( n = `src`     v = `sap-icon://sort-ascending`
-                                    )->a( n = `tooltip` v = `Sort by abap2UI5 ascending`
-                                    )->a( n = `class`   v = `sapUiTinyMarginBegin`
-                                    )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `sort` ) ( `CLASS` ) ) )
-                                )->tag( `core:Icon`
-                                    )->a( n = `src`     v = `sap-icon://sort-descending`
-                                    )->a( n = `tooltip` v = `Sort by abap2UI5 descending`
-                                    )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `sort` ) ( `CLASS` ) ( `X` ) ) )
+                    )->tag( `Text`
+                        )->a( n = `text` v = `Open`
 
-                            )->end(
-                        )->end(
-                        )->ele( `Column`
-                            )->ele( `HBox`
-                                )->a( n = `alignItems` v = `Center`
+                )->end(
+            )->end(
 
-                                )->tag( `Text`
-                                    )->a( n = `text` v = `Rating`
-                                )->tag( `core:Icon`
-                                    )->a( n = `src`     v = `sap-icon://sort-ascending`
-                                    )->a( n = `tooltip` v = `Sort by Rating ascending`
-                                    )->a( n = `class`   v = `sapUiTinyMarginBegin`
-                                    )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `sort` ) ( `SCORE` ) ) )
-                                )->tag( `core:Icon`
-                                    )->a( n = `src`     v = `sap-icon://sort-descending`
-                                    )->a( n = `tooltip` v = `Sort by Rating descending`
-                                    )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-binding_call t_arg = VALUE #( ( `idOverviewTable` ) ( `items` ) ( `sort` ) ( `SCORE` ) ( `X` ) ) )
+            )->ele( `items`
+                )->ele( `ColumnListItem`
+                    " header checkboxes filter the table entirely on the client: a
+                    " row is hidden when a hide-flag (two-way bound model-root) is set
+                    " AND the row carries that trait (UI5_ONLY / IS_POST171 /
+                    " IS_DEPRECATED). Expression binding, re-evaluated live on toggle,
+                    " no round-trip - like the Shell Switch.
+                    )->a( n = `visible` v = |\{= !(${ client->_bind( hide_non_ui5 ) } && $\{UI5_ONLY\}) && !(${ client->_bind( hide_post171 ) } && $\{IS_POST171\}) && !(${ client->_bind( hide_deprecated ) } && $\{IS_DEPRECATED\}) \}|
+                    )->ele( `cells`
+                        )->tag( `Text`
+                            )->a( n = `text` v = `{MODULE}`
+                        " control name, struck through when deprecated (never
+                        " coloured); FormattedText so the strikethrough can vary per row
+                        )->tag( `FormattedText`
+                            )->a( n = `htmlText` v = `{CTRL_HTML}`
+                            )->a( n = `tooltip`  v = `{DEP_TEXT}`
+                        " Since: the release the control appeared in; coloured orange
+                        " (Warning) when it is newer than UI5 1.71
+                        )->tag( `ObjectStatus`
+                            )->a( n = `text`    v = `{SINCE}`
+                            )->a( n = `state`   v = |\{= $\{SINCE_POST171\} ? 'Warning' : 'None' \}|
+                            )->a( n = `tooltip` v = `{DEP_TEXT}`
+                        )->tag( `Text`
+                            )->a( n = `text` v = `{NAME}`
+                        )->tag( `Text`
+                            )->a( n = `text` v = `{CLASS}`
+                        " rating 1-5 (by feel): how much attention the port
+                        " deserves - complexity, rework, review, test-priority
+                        " (not coloured); tooltip lists the drivers
+                        )->tag( `Text`
+                            )->a( n = `text`    v = `{SCORE} / 5`
+                            )->a( n = `tooltip` v = `{SCORE_TIP}`
 
-                            )->end(
-                        )->end(
-                        )->ele( `Column`
-                            )->a( n = `width` v = `9rem`
-                            )->a( n = `hAlign` v = `Center`
-
-                            )->tag( `Text`
-                                )->a( n = `text` v = `Open`
+                        " Open column: three buttons, each anchored to its own runtime
+                        " id ($event.oSource.sId). First opens the links popover (the
+                        " four reference targets); second launches the abap2UI5 app
+                        " directly in a new tab (open_new_tab - the start URL is
+                        " same-origin, so it passes isValidRedirectURL), leaving the
+                        " overview open in its own tab; third opens the
+                        " generation-notes popover - shown only on a row that HAS
+                        " something to say (checked / post-1.71 / notes)
+                        )->ele( `HBox`
+                            )->tag( `Button`
+                                )->a( n = `icon`    v = `sap-icon://chain-link`
+                                )->a( n = `type`    v = `Transparent`
+                                )->a( n = `tooltip` v = `Links: Control API Reference, Sample Link, Sample Source Code, abap2UI5 Source Code`
+                                " only the row KEY travels (the four URLs are rebuilt
+                                " server-side in on_event, so they stay out of the model
+                                " and out of the persisted draft), plus the button's own
+                                " runtime id as the popover anchor
+                                )->a( n = `press`   v = client->_event( val = `LINKS` t_arg = VALUE #(
+                                    ( `${CLASS}` ) ( `$event.oSource.sId` ) ) )
+                            )->tag( `Button`
+                                )->a( n = `icon`    v = `sap-icon://action`
+                                )->a( n = `type`    v = `Transparent`
+                                )->a( n = `tooltip` v = `Start this abap2UI5 app in a new tab`
+                                )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-open_new_tab t_arg = VALUE #( ( `${START_URL}` ) ) )
+                            )->tag( `Button`
+                                )->a( n = `icon`    v = `sap-icon://information`
+                                )->a( n = `type`    v = `Transparent`
+                                )->a( n = `tooltip` v = `Generation notes: how this port was built - live-check status, post-1.71 members, deviations`
+                                " a backtick literal, not a |…| template: ABAP ends a string
+                                " template at the next |, so the expression binding's || would
+                                " close it mid-way. Nothing here needs interpolation anyway.
+                                )->a( n = `visible` v = `{= ${HAS_CHECK} || ${HAS_P171} || ${HAS_NOTES} }`
+                                )->a( n = `press`   v = client->_event( val = `INFO` t_arg = VALUE #(
+                                    ( `${CLASS}` ) ( `$event.oSource.sId` ) ) )
 
                         )->end(
                     )->end(
-
-                    )->ele( `items`
-                        )->ele( `ColumnListItem`
-                            " header checkboxes filter the table entirely on the client: a
-                            " row is hidden when a hide-flag (two-way bound model-root) is set
-                            " AND the row carries that trait (UI5_ONLY / IS_POST171 /
-                            " IS_DEPRECATED). Expression binding, re-evaluated live on toggle,
-                            " no round-trip - like the Shell Switch.
-                            )->a( n = `visible` v = |\{= !(${ client->_bind( hide_non_ui5 ) } && $\{UI5_ONLY\}) && !(${ client->_bind( hide_post171 ) } && $\{IS_POST171\}) && !(${ client->_bind( hide_deprecated ) } && $\{IS_DEPRECATED\}) \}|
-                            )->ele( `cells`
-                                )->tag( `Text`
-                                    )->a( n = `text` v = `{MODULE}`
-                                " control name, struck through when deprecated (never
-                                " coloured); FormattedText so the strikethrough can vary per row
-                                )->tag( `FormattedText`
-                                    )->a( n = `htmlText` v = `{CTRL_HTML}`
-                                    )->a( n = `tooltip`  v = `{DEP_TEXT}`
-                                " Since: the release the control appeared in; coloured orange
-                                " (Warning) when it is newer than UI5 1.71
-                                )->tag( `ObjectStatus`
-                                    )->a( n = `text`    v = `{SINCE}`
-                                    )->a( n = `state`   v = |\{= $\{SINCE_POST171\} ? 'Warning' : 'None' \}|
-                                    )->a( n = `tooltip` v = `{DEP_TEXT}`
-                                )->tag( `Text`
-                                    )->a( n = `text` v = `{NAME}`
-                                )->tag( `Text`
-                                    )->a( n = `text` v = `{CLASS}`
-                                " rating 1-5 (by feel): how much attention the port
-                                " deserves - complexity, rework, review, test-priority
-                                " (not coloured); tooltip lists the drivers
-                                )->tag( `Text`
-                                    )->a( n = `text`    v = `{SCORE} / 5`
-                                    )->a( n = `tooltip` v = `{SCORE_TIP}`
-
-                                " Open column: three buttons, each anchored to its own runtime
-                                " id ($event.oSource.sId). First opens the links popover (the
-                                " four reference targets); second launches the abap2UI5 app
-                                " directly in a new tab (open_new_tab - the start URL is
-                                " same-origin, so it passes isValidRedirectURL), leaving the
-                                " overview open in its own tab; third opens the
-                                " generation-notes popover - shown only on a row that HAS
-                                " something to say (checked / post-1.71 / notes)
-                                )->ele( `HBox`
-                                    )->tag( `Button`
-                                        )->a( n = `icon`    v = `sap-icon://chain-link`
-                                        )->a( n = `type`    v = `Transparent`
-                                        )->a( n = `tooltip` v = `Links: Control API Reference, Sample Link, Sample Source Code, abap2UI5 Source Code`
-                                        " only the row KEY travels (the four URLs are rebuilt
-                                        " server-side in on_event, so they stay out of the model
-                                        " and out of the persisted draft), plus the button's own
-                                        " runtime id as the popover anchor
-                                        )->a( n = `press`   v = client->_event( val = `LINKS` t_arg = VALUE #(
-                                            ( `${CLASS}` ) ( `$event.oSource.sId` ) ) )
-                                    )->tag( `Button`
-                                        )->a( n = `icon`    v = `sap-icon://action`
-                                        )->a( n = `type`    v = `Transparent`
-                                        )->a( n = `tooltip` v = `Start this abap2UI5 app in a new tab`
-                                        )->a( n = `press`   v = client->follow_up_action( val = client->cs_event-open_new_tab t_arg = VALUE #( ( `${START_URL}` ) ) )
-                                    )->tag( `Button`
-                                        )->a( n = `icon`    v = `sap-icon://information`
-                                        )->a( n = `type`    v = `Transparent`
-                                        )->a( n = `tooltip` v = `Generation notes: how this port was built - live-check status, post-1.71 members, deviations`
-                                        " a backtick literal, not a |…| template: ABAP ends a string
-                                        " template at the next |, so the expression binding's || would
-                                        " close it mid-way. Nothing here needs interpolation anyway.
-                                        )->a( n = `visible` v = `{= ${HAS_CHECK} || ${HAS_P171} || ${HAS_NOTES} }`
-                                        )->a( n = `press`   v = client->_event( val = `INFO` t_arg = VALUE #(
-                                            ( `${CLASS}` ) ( `$event.oSource.sId` ) ) )
-
-                                )->end(
-                            )->end(
-                        )->end(
-                    )->end(
-                )->end( ).
+                )->end(
+            )->end(
+        )->end( ).
 
     client->view_display( view->stringify( ) ).
 
@@ -7051,7 +7051,8 @@ CLASS z2ui5_cl_smpc_app_overview IMPLEMENTATION.
     " 3rem. This row used to put a ToolbarSeparator between its two groups and
     " lost the documentation and GitHub icons on 1.71 because of it; the gap
     " now rides on the first icon of the second group (group_start).
-    DATA(bar) = page->ele( `customHeader` )->ele( `Bar` ).
+    DATA(bar) = page->ele( `customHeader`
+        )->ele( `Bar` ).
 
     " left: what the stock page header would render on its own
     DATA(left) = bar->ele( `contentLeft` ).

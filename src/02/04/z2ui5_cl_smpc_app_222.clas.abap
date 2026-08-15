@@ -58,7 +58,7 @@ CLASS z2ui5_cl_smpc_app_222 IMPLEMENTATION.
                     )->tag( `Title`
                         )->a( n = `text` v = `GridList with ResponsiveColumnLayout`
 
-            )->end(
+                )->end(
             )->end(
 
             )->ele( n = `GridList` ns = `f`

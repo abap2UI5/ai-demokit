@@ -56,7 +56,7 @@ CLASS z2ui5_cl_smpc_app_388 IMPLEMENTATION.
                     )->a( n = `subheader`   v = `About 1 minute ago in Computer Market`
                     )->a( n = `value`       v = `352`
 
-        )->end(
+            )->end(
         )->end(
 
         )->ele( `SlideTile`
@@ -77,7 +77,7 @@ CLASS z2ui5_cl_smpc_app_388 IMPLEMENTATION.
                             )->a( n = `contentText` v = `Wind Map: Monitoring Real-Time and Fore-casted Wind Conditions across the Globe`
                             )->a( n = `subheader`   v = `Today, SAP News`
 
-                )->end(
+                    )->end(
                 )->end(
                 )->ele( `GenericTile`
                     )->a( n = `backgroundImage` v = `https://sdk.openui5.org/test-resources/sap/m/demokit/sample/GenericTileAsFeedTile/images/NewsImage2.png`

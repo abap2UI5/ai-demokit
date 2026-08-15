@@ -144,7 +144,7 @@ CLASS z2ui5_cl_smpc_app_343 IMPLEMENTATION.
 
                         )->end(
                     )->end(
-            )->end(
+                )->end(
             )->end(
             )->ele( n = `BlockLayoutRow` ns = `l`
                 )->ele( n = `BlockLayoutCell` ns = `l`
@@ -152,7 +152,7 @@ CLASS z2ui5_cl_smpc_app_343 IMPLEMENTATION.
                     )->a( n = `titleAlignment` v = `Center`
                     )->a( n = `class`          v = `customCellImageBackground`
 
-                        )->tag( `Text`
+                    )->tag( `Text`
                         )->a( n = `text` v = `Donec bibendum diam nibh, sit amet ornare ante fermentum sed. Ut vulputate justo at orci sollicitudin.`
 
                 )->end(

@@ -137,10 +137,10 @@ CLASS z2ui5_cl_smpc_app_273 IMPLEMENTATION.
     ENDIF.
 
     dialog->ele( `content`
-            )->tag( `Text`
-                )->a( n = `text` v = text
+        )->tag( `Text`
+            )->a( n = `text` v = text
 
-        )->end(
+    )->end(
         )->ele( `beginButton`
             )->tag( `Button`
                 )->a( n = `type`  v = `Emphasized`

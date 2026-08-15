@@ -66,7 +66,7 @@ CLASS z2ui5_cl_smpc_app_148 IMPLEMENTATION.
                     )->tag( `Title`
                         )->a( n = `text` v = `Grid List with Drag and Drop`
 
-            )->end(
+                )->end(
             )->end(
 
             )->ele( n = `GridList` ns = `f`

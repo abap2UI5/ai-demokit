@@ -120,7 +120,7 @@ CLASS z2ui5_cl_smpc_app_274 IMPLEMENTATION.
     " only the resizable variants carry the fixed content size
     IF sized = abap_true.
       dialog->a( n = `contentWidth`  v = `550px`
-            )->a( n = `contentHeight` v = `300px` ).
+          )->a( n = `contentHeight` v = `300px` ).
     ENDIF.
     IF resizable = abap_true.
       dialog->a( n = `resizable` v = `true` ).
@@ -130,31 +130,31 @@ CLASS z2ui5_cl_smpc_app_274 IMPLEMENTATION.
     ENDIF.
 
     dialog->ele( `content`
-            )->ele( `List`
-                )->a( n = `items` v = client->_bind( t_products )
+        )->ele( `List`
+            )->a( n = `items` v = client->_bind( t_products )
 
-                )->tag( `StandardListItem`
-                    )->a( n = `title`   v = `{NAME}`
-                    )->a( n = `counter` v = `{QUANTITY}`
+            )->tag( `StandardListItem`
+                )->a( n = `title`   v = `{NAME}`
+                )->a( n = `counter` v = `{QUANTITY}`
 
-            )->end(
-        )->end( ).
+        )->end(
+    )->end( ).
 
     " the first dialog is the only one with a begin button
     IF begin_ok = abap_true.
       dialog->ele( `beginButton`
-                )->tag( `Button`
-                    )->a( n = `type`  v = `Emphasized`
-                    )->a( n = `text`  v = `OK`
-                    )->a( n = `press` v = client->follow_up_action( client->cs_event-popup_close )
+          )->tag( `Button`
+              )->a( n = `type`  v = `Emphasized`
+              )->a( n = `text`  v = `OK`
+              )->a( n = `press` v = client->follow_up_action( client->cs_event-popup_close )
 
-            )->end( ).
+      )->end( ).
     ENDIF.
 
     dialog->ele( `endButton`
-            )->tag( `Button`
-                )->a( n = `text`  v = `Close`
-                )->a( n = `press` v = client->follow_up_action( client->cs_event-popup_close ) ).
+        )->tag( `Button`
+            )->a( n = `text`  v = `Close`
+            )->a( n = `press` v = client->follow_up_action( client->cs_event-popup_close ) ).
 
     client->popup_display( popup->stringify( ) ).
 

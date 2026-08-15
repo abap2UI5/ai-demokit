@@ -79,7 +79,7 @@ CLASS z2ui5_cl_smpc_app_124 IMPLEMENTATION.
                         )->tag( n = `GridItemLayoutData` ns = `grid`
                             )->a( n = `gridColumn` v = `1 / 4`
 
-                )->end(
+                    )->end(
                 )->end(
                 )->tag( n = `HTML` ns = `core`
                     )->a( n = `content` v = `<aside  class="stylePageLayout">Navigation</aside >`

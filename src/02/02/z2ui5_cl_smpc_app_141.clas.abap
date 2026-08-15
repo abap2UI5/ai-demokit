@@ -53,7 +53,7 @@ CLASS z2ui5_cl_smpc_app_141 IMPLEMENTATION.
                             )->tag( `FlexItemData`
                                 )->a( n = `growFactor` v = `1`
 
-                    )->end(
+                        )->end(
                     )->end(
                     )->ele( `Button`
                         )->a( n = `type`  v = `Accept`
@@ -63,7 +63,7 @@ CLASS z2ui5_cl_smpc_app_141 IMPLEMENTATION.
                             )->tag( `FlexItemData`
                                 )->a( n = `growFactor` v = `1`
 
-                    )->end(
+                        )->end(
                     )->end(
                     )->ele( `Button`
                         )->a( n = `type`  v = `Reject`
@@ -73,7 +73,7 @@ CLASS z2ui5_cl_smpc_app_141 IMPLEMENTATION.
                             )->tag( `FlexItemData`
                                 )->a( n = `growFactor` v = `1`
 
-                    )->end(
+                        )->end(
                     )->end(
                     )->tag( `Button`
                         )->a( n = `type`  v = `Emphasized`

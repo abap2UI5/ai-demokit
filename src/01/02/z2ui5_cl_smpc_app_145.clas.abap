@@ -56,7 +56,7 @@ CLASS z2ui5_cl_smpc_app_145 IMPLEMENTATION.
                     )->tag( `Title`
                         )->a( n = `text` v = `gridAutoFlow property example`
 
-            )->end(
+                )->end(
             )->end(
 
             )->ele( `RadioButtonGroup`
@@ -84,94 +84,94 @@ CLASS z2ui5_cl_smpc_app_145 IMPLEMENTATION.
                 )->a( n = `gridAutoColumns`     v = `1fr`
                 )->a( n = `gridGap`             v = `0.5rem`
 
-            )->ele( `VBox`
-                )->a( n = `class` v = `demoBox`
-                )->ele( `layoutData`
-                    )->tag( n = `GridItemLayoutData` ns = `grid`
-                        )->a( n = `gridRow` v = `span 2`
+                )->ele( `VBox`
+                    )->a( n = `class` v = `demoBox`
+                    )->ele( `layoutData`
+                        )->tag( n = `GridItemLayoutData` ns = `grid`
+                            )->a( n = `gridRow` v = `span 2`
+
+                    )->end(
+                    )->tag( `Text`
+                        )->a( n = `text`     v = `One (2 rows)`
+                        )->a( n = `wrapping` v = `true`
 
                 )->end(
-                )->tag( `Text`
-                    )->a( n = `text`     v = `One (2 rows)`
-                    )->a( n = `wrapping` v = `true`
-
-            )->end(
-            )->ele( `VBox`
-                )->a( n = `class` v = `demoBox`
-                )->tag( `Text`
-                    )->a( n = `text`     v = `Two`
-                    )->a( n = `wrapping` v = `true`
-
-            )->end(
-            )->ele( `VBox`
-                )->a( n = `class` v = `demoBox`
-                )->ele( `layoutData`
-                    )->tag( n = `GridItemLayoutData` ns = `grid`
-                        )->a( n = `gridRow` v = `span 2`
+                )->ele( `VBox`
+                    )->a( n = `class` v = `demoBox`
+                    )->tag( `Text`
+                        )->a( n = `text`     v = `Two`
+                        )->a( n = `wrapping` v = `true`
 
                 )->end(
-                )->tag( `Text`
-                    )->a( n = `text`     v = `Three (2 rows)`
-                    )->a( n = `wrapping` v = `true`
+                )->ele( `VBox`
+                    )->a( n = `class` v = `demoBox`
+                    )->ele( `layoutData`
+                        )->tag( n = `GridItemLayoutData` ns = `grid`
+                            )->a( n = `gridRow` v = `span 2`
 
-            )->end(
-            )->ele( `VBox`
-                )->a( n = `class` v = `demoBox`
-                )->ele( `layoutData`
-                    )->tag( n = `GridItemLayoutData` ns = `grid`
-                        )->a( n = `gridColumn` v = `span 2`
-
-                )->end(
-                )->tag( `Text`
-                    )->a( n = `text`     v = `Four (2 columns)`
-                    )->a( n = `wrapping` v = `true`
-
-            )->end(
-            )->ele( `VBox`
-                )->a( n = `class` v = `demoBox`
-                )->tag( `Text`
-                    )->a( n = `text`     v = `Five`
-                    )->a( n = `wrapping` v = `true`
-
-            )->end(
-            )->ele( `VBox`
-                )->a( n = `class` v = `demoBox`
-                )->ele( `layoutData`
-                    )->tag( n = `GridItemLayoutData` ns = `grid`
-                        )->a( n = `gridColumn` v = `span 2`
+                    )->end(
+                    )->tag( `Text`
+                        )->a( n = `text`     v = `Three (2 rows)`
+                        )->a( n = `wrapping` v = `true`
 
                 )->end(
-                )->tag( `Text`
-                    )->a( n = `text`     v = `Six (2 columns)`
-                    )->a( n = `wrapping` v = `true`
+                )->ele( `VBox`
+                    )->a( n = `class` v = `demoBox`
+                    )->ele( `layoutData`
+                        )->tag( n = `GridItemLayoutData` ns = `grid`
+                            )->a( n = `gridColumn` v = `span 2`
 
-            )->end(
-            )->ele( `VBox`
-                )->a( n = `class` v = `demoBox`
-                )->tag( `Text`
-                    )->a( n = `text`     v = `Seven`
-                    )->a( n = `wrapping` v = `true`
+                    )->end(
+                    )->tag( `Text`
+                        )->a( n = `text`     v = `Four (2 columns)`
+                        )->a( n = `wrapping` v = `true`
 
-            )->end(
-            )->ele( `VBox`
-                )->a( n = `class` v = `demoBox`
-                )->tag( `Text`
-                    )->a( n = `text`     v = `Eight`
-                    )->a( n = `wrapping` v = `true`
+                )->end(
+                )->ele( `VBox`
+                    )->a( n = `class` v = `demoBox`
+                    )->tag( `Text`
+                        )->a( n = `text`     v = `Five`
+                        )->a( n = `wrapping` v = `true`
 
-            )->end(
-            )->ele( `VBox`
-                )->a( n = `class` v = `demoBox`
-                )->tag( `Text`
-                    )->a( n = `text`     v = `Nine`
-                    )->a( n = `wrapping` v = `true`
+                )->end(
+                )->ele( `VBox`
+                    )->a( n = `class` v = `demoBox`
+                    )->ele( `layoutData`
+                        )->tag( n = `GridItemLayoutData` ns = `grid`
+                            )->a( n = `gridColumn` v = `span 2`
 
-            )->end(
-            )->ele( `VBox`
-                )->a( n = `class` v = `demoBox`
-                )->tag( `Text`
-                    )->a( n = `text`     v = `Ten`
-                    )->a( n = `wrapping` v = `true` ).
+                    )->end(
+                    )->tag( `Text`
+                        )->a( n = `text`     v = `Six (2 columns)`
+                        )->a( n = `wrapping` v = `true`
+
+                )->end(
+                )->ele( `VBox`
+                    )->a( n = `class` v = `demoBox`
+                    )->tag( `Text`
+                        )->a( n = `text`     v = `Seven`
+                        )->a( n = `wrapping` v = `true`
+
+                )->end(
+                )->ele( `VBox`
+                    )->a( n = `class` v = `demoBox`
+                    )->tag( `Text`
+                        )->a( n = `text`     v = `Eight`
+                        )->a( n = `wrapping` v = `true`
+
+                )->end(
+                )->ele( `VBox`
+                    )->a( n = `class` v = `demoBox`
+                    )->tag( `Text`
+                        )->a( n = `text`     v = `Nine`
+                        )->a( n = `wrapping` v = `true`
+
+                )->end(
+                )->ele( `VBox`
+                    )->a( n = `class` v = `demoBox`
+                    )->tag( `Text`
+                        )->a( n = `text`     v = `Ten`
+                        )->a( n = `wrapping` v = `true` ).
 
     client->view_display( view->stringify( ) ).
 

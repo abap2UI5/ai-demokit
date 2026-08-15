@@ -237,18 +237,35 @@ bare `).` (the still-open View/Panel/… nodes all close in the output). Both
 styles pass every gate — a chain that closes back to the root explicitly, or one
 that stops at the deepest node.
 
-#### Formatting rules (strict — reviewers check these)
+#### Formatting rules (strict — `npm run gates` checks these)
 
+The chain is the only picture of the view's tree there is, so its layout is
+load-bearing rather than cosmetic. The full rule set with a worked example is
+the **`view-chain-layout` skill**, kept byte-identical in `abap2UI5` and
+`abap2UI5/samples`. The first four rules below are **identical in
+`abap2UI5/samples`** — the two corpora were unified in one pass after a survey
+found them following opposite conventions — and `node scripts/chain-format.mjs`
+(first step of `npm run gates`) checks them; `npm run fmt:chains` applies them.
+
+- **One call per line.** Every `ele( )`, `tag( )`, `a( )` and `end( )` opens its
+  own line with `)->`. A control never shares its line with the container it
+  opens, nor with its own attributes.
 - **The closing paren rides with the arrow.** Never leave a `)` alone at a line
   end; carry it to the **start of the next segment** so it always reads `)->`.
   With the `a()` chain there is no nested `VALUE`, so the whole view ends in a
   single `` ).`` (not `) ).`).
 - **Indent after every `ele`.** Each `ele( )` shifts its children's `)->` one
   level (4 spaces) to the right; `end( )` shifts back left. The `)->` of an
-  `end` sits at the same column as the `ele` it closes.
+  `end` sits at the same column as the `ele` it closes. The same step
+  throughout — 77 ports carried a chain uniformly indented by 8, which passes
+  the linter's two layout rules (neither judges the step) while saying the
+  wrong thing about depth; `chain-format` is what catches that.
 - **A control's `a()` lines sit one level (4 spaces) in from the control's
   own `)->` line**; align the `v =` column across them.
-- **Blank lines** (attrs never count — they belong to their control):
+- **Blank lines** — the one rule that is local to this repository, because it
+  belongs to the single-chain shape below; `samples` splits its views into a
+  statement per subtree and has no blank lines inside a chain at all
+  (attrs never count — they belong to their control):
   - **never** between consecutive `tag`s, and **never** after a **one-liner
     `ele`** (an aggregation/container with no attrs) before its first child;
   - a blank **does** separate an `ele` that *has* attrs from its first child,
@@ -453,18 +470,21 @@ these entries.
   written without `ns` in such a view is a different control from the
   original's `m:List` and is reported in both directions (app 293).
 
-- **One builder chain per view — never split it across ABAP statements.** The
-  builder keeps its cursor across statements at runtime, so
-  `popover->ele( \`Popover\` … ).` followed by a separate
-  `popover->ele( \`List\` … ).` *works in a system* — but the linter's
-  reconstructor reads a chain as one statement and re-roots the second one, so
-  the document comes out with two roots and the render gate rejects it
-  ("Using native HTML content in XMLViews is deprecated"). It also removes the
-  temptation behind the split: a popup helper parameterized with id/title
-  (`COND #( … )` in an attribute) is unreconstructable *and* leaves
-  `structural-diff` counting one popup where the original has three. Write one
-  method with one chain per fragment, as the original has one file per
-  fragment (app 285).
+- **One builder chain per view — in this repository.** A port mirrors one
+  original XML file, so it gets one method with one chain per fragment, exactly
+  as the original has one file per fragment (app 285). The reason is fidelity,
+  not capability: a popup helper parameterized with id/title (`COND #( … )` in
+  an attribute) is unreconstructable *and* leaves `structural-diff` counting one
+  popup where the original has three.
+
+  **This rule is local to this repository, and the reason once given for it was
+  wrong.** Splitting a view into a statement per subtree — hold the container in
+  a variable, start a new statement from it — does *not* break reconstruction:
+  it is the normal shape in `abap2UI5/samples`, where the same linter
+  reconstructs all 172 documents from it and renders every one. What broke in
+  app 285 was that one helper, not the split as such. When a port genuinely
+  needs a subtree filled from a loop or a node filled twice, the split is
+  available; it is simply not the default here.
 
 - **A per-keystroke round-trip is LOSSY, not queued.** abap2UI5 serializes
   round-trips: an event fired while one is in flight is **dropped**, so a

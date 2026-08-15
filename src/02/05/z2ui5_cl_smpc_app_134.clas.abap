@@ -50,7 +50,7 @@ CLASS z2ui5_cl_smpc_app_134 IMPLEMENTATION.
                         )->tag( `OverflowToolbarLayoutData`
                             )->a( n = `priority` v = `NeverOverflow`
 
-                )->end(
+                    )->end(
                 )->end(
                 " image assets rewritten to the OpenUI5 host per the runtime asset-URL rule
                 )->ele( `Image`
@@ -64,7 +64,7 @@ CLASS z2ui5_cl_smpc_app_134 IMPLEMENTATION.
                         )->tag( `OverflowToolbarLayoutData`
                             )->a( n = `priority` v = `NeverOverflow`
 
-                )->end(
+                    )->end(
                 )->end(
                 )->ele( `Title`
                     )->a( n = `text`     v = `Prоduct Name`
@@ -74,7 +74,7 @@ CLASS z2ui5_cl_smpc_app_134 IMPLEMENTATION.
                         )->tag( `OverflowToolbarLayoutData`
                             )->a( n = `priority` v = `Disappear`
 
-                )->end(
+                    )->end(
                 )->end(
                 )->ele( `Text`
                     )->a( n = `text`     v = `Second title`
@@ -84,7 +84,7 @@ CLASS z2ui5_cl_smpc_app_134 IMPLEMENTATION.
                         )->tag( `OverflowToolbarLayoutData`
                             )->a( n = `priority` v = `Disappear`
 
-                )->end(
+                    )->end(
                 )->end(
                 )->tag( `ToolbarSpacer`
                 )->ele( `SearchField`
@@ -95,7 +95,7 @@ CLASS z2ui5_cl_smpc_app_134 IMPLEMENTATION.
                             )->a( n = `priority` v = `Low`
                             )->a( n = `group`    v = `1`
 
-                )->end(
+                    )->end(
                 )->end(
                 )->tag( `Button`
                     )->a( n = `visible` v = `false`
@@ -112,7 +112,7 @@ CLASS z2ui5_cl_smpc_app_134 IMPLEMENTATION.
                         )->tag( `OverflowToolbarLayoutData`
                             )->a( n = `group` v = `2`
 
-                )->end(
+                    )->end(
                 )->end(
                 )->ele( `OverflowToolbarButton`
                     )->a( n = `icon`    v = `sap-icon://source-code`
@@ -123,7 +123,7 @@ CLASS z2ui5_cl_smpc_app_134 IMPLEMENTATION.
                         )->tag( `OverflowToolbarLayoutData`
                             )->a( n = `group` v = `2`
 
-                )->end(
+                    )->end(
                 )->end(
                 )->ele( `OverflowToolbarButton`
                     )->a( n = `icon`    v = `sap-icon://card`
@@ -134,7 +134,7 @@ CLASS z2ui5_cl_smpc_app_134 IMPLEMENTATION.
                         )->tag( `OverflowToolbarLayoutData`
                             )->a( n = `group` v = `2`
 
-                )->end(
+                    )->end(
                 )->end(
                 )->tag( `OverflowToolbarButton`
                     )->a( n = `icon` v = `sap-icon://action-settings`
@@ -148,7 +148,7 @@ CLASS z2ui5_cl_smpc_app_134 IMPLEMENTATION.
                         )->tag( `OverflowToolbarLayoutData`
                             )->a( n = `priority` v = `NeverOverflow`
 
-                )->end(
+                    )->end(
                 )->end(
                 )->tag( n = `ToolHeaderUtilitySeparator` ns = `tnt`
                 )->tag( `OverflowToolbarButton`
@@ -166,7 +166,7 @@ CLASS z2ui5_cl_smpc_app_134 IMPLEMENTATION.
                         )->tag( `OverflowToolbarLayoutData`
                             )->a( n = `priority` v = `NeverOverflow`
 
-                )->end(
+                    )->end(
                 )->end(
             )->end(
 
@@ -185,7 +185,7 @@ CLASS z2ui5_cl_smpc_app_134 IMPLEMENTATION.
                         )->tag( `OverflowToolbarLayoutData`
                             )->a( n = `priority` v = `NeverOverflow`
 
-                )->end(
+                    )->end(
                 )->end(
                 )->ele( `Title`
                     )->a( n = `text`     v = `Prоduct Name`
@@ -194,7 +194,7 @@ CLASS z2ui5_cl_smpc_app_134 IMPLEMENTATION.
                         )->tag( `OverflowToolbarLayoutData`
                             )->a( n = `priority` v = `Disappear`
 
-                )->end(
+                    )->end(
                 )->end(
                 )->tag( `ToolbarSpacer`
                 )->ele( `Avatar`

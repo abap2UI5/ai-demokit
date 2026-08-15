@@ -57,7 +57,7 @@ CLASS z2ui5_cl_smpc_app_389 IMPLEMENTATION.
                     )->a( n = `icon`       v = `sap-icon://line-charts`
                     )->a( n = `withMargin` v = `false`
 
-        )->end(
+            )->end(
         )->end(
 
         )->ele( `GenericTile`

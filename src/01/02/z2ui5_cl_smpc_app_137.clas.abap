@@ -66,7 +66,7 @@ CLASS z2ui5_cl_smpc_app_137 IMPLEMENTATION.
                                 )->a( n = `id`   v = `title`
                                 )->a( n = `text` v = `Contacts`
 
-                    )->end(
+                        )->end(
                     )->end(
 
                     )->ele( `columns`
@@ -82,7 +82,7 @@ CLASS z2ui5_cl_smpc_app_137 IMPLEMENTATION.
                                 )->tag( n = `Text` ns = `m`
                                     )->a( n = `text` v = `{SUPPLIER}`
 
-                        )->end(
+                            )->end(
                         )->end(
 
                         )->ele( `Column`
@@ -110,7 +110,7 @@ CLASS z2ui5_cl_smpc_app_137 IMPLEMENTATION.
                                     )->a( n = `text`     v = `{STREET}`
                                     )->a( n = `wrapping` v = `false`
 
-                        )->end(
+                            )->end(
                         )->end(
 
                         )->ele( `Column`
@@ -132,7 +132,7 @@ CLASS z2ui5_cl_smpc_app_137 IMPLEMENTATION.
                                 )->tag( n = `Input` ns = `m`
                                     )->a( n = `value` v = `{CITY}`
 
-                        )->end(
+                            )->end(
                         )->end(
 
                         )->ele( `Column`
@@ -151,7 +151,7 @@ CLASS z2ui5_cl_smpc_app_137 IMPLEMENTATION.
                                 )->tag( n = `Input` ns = `m`
                                     )->a( n = `value` v = `{PHONE}`
 
-                        )->end(
+                            )->end(
                         )->end(
 
                         )->ele( `Column`

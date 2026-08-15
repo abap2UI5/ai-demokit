@@ -106,7 +106,7 @@ CLASS z2ui5_cl_smpc_app_223 IMPLEMENTATION.
                                 )->a( n = `text` v = `This is a title link`
                                 )->a( n = `href` v = `https://sdk.openui5.org/`
 
-                    )->end(
+                        )->end(
                     )->end(
 
                     )->ele( n = `BlockLayoutCell` ns = `l`
@@ -132,7 +132,7 @@ CLASS z2ui5_cl_smpc_app_223 IMPLEMENTATION.
                                 )->a( n = `href`     v = `https://sdk.openui5.org/`
                                 )->a( n = `wrapping` v = `true`
 
-                    )->end(
+                        )->end(
                     )->end(
                 )->end(
 
@@ -160,7 +160,7 @@ CLASS z2ui5_cl_smpc_app_223 IMPLEMENTATION.
                                 )->a( n = `text` v = `This is a title link`
                                 )->a( n = `href` v = `https://sdk.openui5.org/`
 
-                    )->end(
+                        )->end(
                     )->end(
 
                     )->ele( n = `BlockLayoutCell` ns = `l`
@@ -177,7 +177,7 @@ CLASS z2ui5_cl_smpc_app_223 IMPLEMENTATION.
                                 )->a( n = `href`   v = `https://sdk.openui5.org/`
                                 )->a( n = `target` v = `_blank`
 
-                    )->end(
+                        )->end(
                     )->end(
 
                     )->ele( n = `BlockLayoutCell` ns = `l`
@@ -194,7 +194,7 @@ CLASS z2ui5_cl_smpc_app_223 IMPLEMENTATION.
                                 )->a( n = `href`     v = `https://sdk.openui5.org/`
                                 )->a( n = `wrapping` v = `true`
 
-                    )->end(
+                        )->end(
                     )->end(
                 )->end(
             )->end(

@@ -74,7 +74,7 @@ CLASS z2ui5_cl_smpc_app_183 IMPLEMENTATION.
                     )->a( n = `placeholder` v = client->_bind( dtpattern )
                     )->a( n = `value`       v = |\{ path: '{ client->_bind( val = dtvalue path = abap_true ) }', type: 'DateTimeType', formatOptions: \{ source: \{ pattern: 'yyyy-MM-dd HH:mm:ss' \} \} \}|
 
-        )->end(
+            )->end(
         )->end(
 
         )->ele( n = `SimpleForm` ns = `form`
@@ -103,7 +103,7 @@ CLASS z2ui5_cl_smpc_app_183 IMPLEMENTATION.
                 )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = dtvalue path = abap_true ) }', type: 'DateTimeType', formatOptions: \{ style: 'long', source: \{ pattern: 'yyyy-MM-dd HH:mm:ss' \} \} \}|
 
-        )->end(
+            )->end(
         )->end(
 
         )->ele( n = `SimpleForm` ns = `form`
@@ -132,7 +132,7 @@ CLASS z2ui5_cl_smpc_app_183 IMPLEMENTATION.
                 )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = dtvalue path = abap_true ) }', type: 'DateTimeType', formatOptions: \{ pattern: 'HH:mm', source: \{ pattern: 'yyyy-MM-dd HH:mm:ss' \} \} \}|
 
-        )->end(
+            )->end(
         )->end(
 
         )->ele( n = `SimpleForm` ns = `form`
@@ -153,7 +153,7 @@ CLASS z2ui5_cl_smpc_app_183 IMPLEMENTATION.
                 )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = dtvalue path = abap_true ) }', type: 'DateTimeType', formatOptions: \{ pattern: 'yyyy-MM-dd\\'T\\'HH:mm:ss', UTC: true, source: \{ pattern: 'yyyy-MM-dd HH:mm:ss' \} \} \}|
 
-        )->end(
+            )->end(
         )->end(
 
         )->ele( n = `SimpleForm` ns = `form`
@@ -174,7 +174,7 @@ CLASS z2ui5_cl_smpc_app_183 IMPLEMENTATION.
                 )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = dtvalue path = abap_true ) }', type: 'DateTimeType', formatOptions: \{ relative: true, relativeScale: 'auto', source: \{ pattern: 'yyyy-MM-dd HH:mm:ss' \} \} \}|
 
-        )->end(
+            )->end(
         )->end( ).
 
     client->view_display( view->stringify( ) ).
