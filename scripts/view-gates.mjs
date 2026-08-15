@@ -31,6 +31,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import { checkFiles } from '@abap2ui5/linter';
 import { severityOf } from '@abap2ui5/linter/findings';
+import { badgeEndpoint, runStats } from '@abap2ui5/linter/report';
 
 const ROOT = path.join(path.dirname(fileURLToPath(import.meta.url)), '..');
 const META = path.join(ROOT, 'meta');
@@ -265,4 +266,43 @@ console.log(
   `\nview-gates: ${results.length} ports, ${failing} failing, ${skipped} skipped, `
   + `${advisories} advisory (target SAPUI5 ${MIN_UI5}${RENDER ? ', render gate on' : ', render gate off'}).`
 );
+
+/* The two README badges — the same pair abap2UI5/samples and
+ * abap2UI5/samples-stack carry, written from the same linter helper so all
+ * three read alike. They are written HERE rather than by `abap2ui5lint
+ * --badge`, because the CLI has never seen this corpus' policy: it would
+ * count the 24 aggregation-too-new findings a POST_171 deviation excuses and
+ * the declared render skips as problems, and report a red badge over a green
+ * gate. The verdict below is the gate's own.
+ *
+ * Only a FULL run with the render gate on may write them: `--only` sees one
+ * port and `--no-render` sees fewer gates, and either would overwrite the
+ * badges of the real run with a smaller truth. Same reason check-abap2UI5
+ * passes --no-badge to its markdown second pass in the other two repos. */
+if (!ONLY && RENDER) {
+  const stats = runStats(results);
+  /* Shaped like the linter's own summarize(), with the gate verdict in place
+   * of the raw finding counts: a failing port is an error, and an advisory is
+   * deliberately not a problem — the ratchet is what holds those, per type,
+   * and a badge that counted them would move on debt the budget already
+   * pins. `files` drives the "nothing checkable" grey, which is the state
+   * this badge exists to make visible. */
+  const verdict = failing + ratchetExceeded;
+  const summary = {
+    files: results.length,
+    skipped,
+    totals: { error: verdict, warning: 0, hint: 0 },
+    problems: verdict,
+  };
+  for (const badge of [
+    { kind: 'corpus', file: '.github/badges/abap2ui5.json' },
+    { kind: 'checks', file: '.github/badges/check-abap2ui5.json' },
+  ]) {
+    const file = path.join(ROOT, badge.file);
+    fs.mkdirSync(path.dirname(file), { recursive: true });
+    fs.writeFileSync(file, `${JSON.stringify(badgeEndpoint(summary, stats, { kind: badge.kind }), null, 2)}\n`);
+    console.log(`badge: wrote ${badge.file}`);
+  }
+}
+
 if (STRICT && (failing || ratchetExceeded)) process.exit(1);
