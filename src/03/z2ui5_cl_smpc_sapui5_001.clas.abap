@@ -261,6 +261,12 @@ CLASS z2ui5_cl_smpc_sapui5_001 IMPLEMENTATION.
           ( text = `3rd` percent = `15.0` )
           ( text = `4th` percent = `15.0` ) ).
       total_count = lines( counts ).
+
+    ELSEIF client->check_on_event( `DONUT_CHANGED` ).
+      client->message_toast_display( `Donut selection changed` ).
+
+    ELSEIF client->check_on_event( `DONUT_PRESS` ).
+      client->message_toast_display( `Donut pressed` ).
     ENDIF.
 
   ENDMETHOD.

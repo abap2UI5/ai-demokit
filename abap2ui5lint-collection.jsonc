@@ -58,8 +58,12 @@
     //                         is a declaration; the matcher used \w and read it
     //                         as absent, then reported every use of it
     //
-    // Delete these two lines with the pin bump and re-run: what is left is
-    // real. Nothing else in this repo is affected - the ports in src/01 and
+    // VERIFIED 2026-08-15 against the linter's main branch: with both lines
+    // removed the collection reports the same three findings it reports
+    // with them (aggregation-too-new, control-too-new, member-too-new -
+    // all three the SAPUI5-only API this package exists for). So the pin
+    // bump is a delete, not an investigation.
+    // Nothing else in this repo is affected - the ports in src/01 and
     // src/02 are OpenUI5 and fully in the snapshot.
     "unknown-aggregation": false,
     "undeclared-namespace": false

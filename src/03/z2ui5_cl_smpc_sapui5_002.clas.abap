@@ -280,6 +280,9 @@ CLASS z2ui5_cl_smpc_sapui5_002 IMPLEMENTATION.
         ENDIF.
         client->message_toast_display( |selectionChanged - { selected } of 6 selected| ).
 
+      WHEN `LINE_PRESS`.
+        client->message_toast_display( `press - a point of the line chart was clicked` ).
+
     ENDCASE.
 
   ENDMETHOD.
