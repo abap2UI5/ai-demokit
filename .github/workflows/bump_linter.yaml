@@ -28,7 +28,13 @@ jobs:
     - name: Re-pin @abap2ui5/linter to the linter's main
       id: pin
       run: |
-        SHA=$(git ls-remote https://github.com/abap2UI5/linter refs/heads/main | cut -f1)
+        set -euo pipefail
+        # --exit-code under pipefail: `git ls-remote` prints nothing and still
+        # exits 0 for a ref that does not match, so a renamed default branch
+        # upstream would resolve to an EMPTY sha and this step would move the
+        # pin to nothing. Fail here instead. (web-abap2UI5's build stamp had
+        # exactly this hole and went blind for as long as it was there.)
+        SHA=$(git ls-remote --exit-code https://github.com/abap2UI5/linter refs/heads/main | cut -f1)
         echo "sha=$SHA" >> "$GITHUB_OUTPUT"
         npm pkg set "devDependencies.@abap2ui5/linter=github:abap2UI5/linter#$SHA"
         if git diff --quiet package.json; then

@@ -30,6 +30,17 @@
  *    to the original view.xml side — those show up as EXTRA in the port
  *  - ports with LOOP/DO-built view parts are flagged "dynamic": counts of a
  *    control created in a loop cannot match statically
+ *  - a LITERAL attribute value is never compared, only a binding one: the
+ *    value pass bails out where the original attribute carries no simple
+ *    `{path}` binding. So a port that spells a static label differently from
+ *    the sample passes silently — name-level checks see the attribute, not its
+ *    text. Deliberate, and measured before it was written down: comparing
+ *    literals too would report 171 differences across 87 of 320 ports, and the
+ *    sample is almost entirely CORRECT ports — `&lt;hr&gt;` against the same
+ *    `<hr>` unescaped, multi-line complex bindings reformatted onto one line,
+ *    an image src that has to become absolute because the sandbox serves no
+ *    test-resources path. Tightening this needs a matcher that can tell those
+ *    apart first, not a dropped guard.
  */
 
 import fs from 'fs';
