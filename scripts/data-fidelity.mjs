@@ -41,6 +41,19 @@
  *     value is cleared by a deviation whose `what` names it (or the field),
  *     same convention as the asset checks.
  *
+ * KNOWN BLIND SPOT — a block with MORE rows than the matched array is not
+ * checked at all (neither branch takes it). Extending the subset check to it
+ * looks obvious and is wrong today: the matcher scores by field overlap and
+ * only breaks ties on an equal row count, so a block that outgrew its array
+ * tends to get paired with a same-shaped SIBLING instead. Measured over the
+ * corpus, exactly one port lands here — 407 (sap.tnt.sample.
+ * SideNavigationSearch), whose mock holds `navigation` and `fixedNavigation`
+ * with three rows each while the port inlines eight and seven; it is matched
+ * against `fixedNavigation` and a strict membership check would report ~89
+ * invented values in a correct port. The gap is real but closing it needs a
+ * matcher that can say WHICH array a block belongs to, not a third branch
+ * here.
+ *
  * Residual value-level review beyond tables (scalar folds): --report prints,
  * per port, the mock string values that never appear in the ABAP source, as
  * a scannable audit worksheet — informational only.
