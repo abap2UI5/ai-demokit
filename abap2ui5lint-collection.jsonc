@@ -44,7 +44,7 @@
     // commercial host; a documentation hyperlink is not that.
     "commercial-ui5-host": false,
 
-    // TEMPORARY, and only until the @abap2ui5/linter pin moves past 0.1.1.
+    // TEMPORARY, and only until the @abap2ui5/linter pin reaches 0.2.0.
     // Both are linter defects this folder is the first corpus to hit, both are
     // fixed on the linter's main branch, and both produce findings that are
     // simply not true here:
