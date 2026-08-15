@@ -78,7 +78,10 @@ const cell = (v, type) =>
       : abapStr(v);
 
 export function rowsToAbapValue(rows, fields = inferFields(rows), { indent = 6, var: varName } = {}) {
-  const pad = ' '.repeat(indent);
+  // clamped like the closing line below: String.repeat throws on a negative
+  // count, and an importing caller deserves odd indentation rather than a
+  // RangeError out of a formatting helper
+  const pad = ' '.repeat(Math.max(0, indent));
   const body = rows.map((row) => {
     const cells = fields.map((f) => `${f.abap} = ${cell(row?.[f.json], f.type)}`).join(' ');
     return `${pad}( ${cells} )`;
@@ -146,8 +149,15 @@ function parseFieldsSpec(spec, rows) {
 
 function main() {
   const opts = parseArgs(process.argv.slice(2));
-  if (!opts.file || !Number.isFinite(opts.indent) || (opts.limit !== undefined && !Number.isFinite(opts.limit))) {
+  /* Both counts have to be non-negative integers, not merely finite. A
+   * negative --indent reached String.repeat and killed the run with a
+   * RangeError stack trace instead of this usage line; a negative --limit is
+   * worse because it does not fail at all - `rows.slice(0, -1)` silently drops
+   * the LAST row where the flag promises the first n. */
+  const count = (n) => Number.isInteger(n) && n >= 0;
+  if (!opts.file || !count(opts.indent) || (opts.limit !== undefined && !count(opts.limit))) {
     console.error('usage: node scripts/json-to-abap.mjs <file.json> [--path p] [--fields spec] [--var name] [--limit n] [--indent n]');
+    console.error('       --limit and --indent take a non-negative whole number');
     process.exit(2);
   }
   const data = JSON.parse(fs.readFileSync(opts.file, 'utf8'));
@@ -156,7 +166,9 @@ function main() {
     console.error(`error: ${opts.path ? `--path ${opts.path}` : 'the JSON root'} is not an array`);
     process.exit(1);
   }
-  if (opts.limit) rows = rows.slice(0, opts.limit);
+  // `!== undefined`, not truthiness: --limit 0 means zero rows, and reading it
+  // as "no limit given" would hand back the whole file instead
+  if (opts.limit !== undefined) rows = rows.slice(0, opts.limit);
   const fields = parseFieldsSpec(opts.fields, rows);
   process.stdout.write(rowsToAbapValue(rows, fields, { indent: opts.indent, var: opts.var }) + '\n');
 }
