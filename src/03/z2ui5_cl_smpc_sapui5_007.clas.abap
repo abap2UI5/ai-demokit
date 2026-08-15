@@ -73,23 +73,33 @@ CLASS z2ui5_cl_smpc_sapui5_007 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(lo_view) = z2ui5_cl_xml_view=>factory( ).
-    DATA(page) = lo_view->shell( )->page(
-             title          = `Timeline`
-             navbuttonpress = client->_event_nav_app_leave( )
-             shownavbutton  = client->check_app_prev_stack( ) ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    DATA(timeline) = page->timeline(
-          content = client->_bind( mt_feed ) ).
+    view->ele( n = `View` ns = `mvc`
+        )->a( n = `displayBlock`   v = `true`
+        )->a( n = `height`         v = `100%`
+        )->a( n = `xmlns`          v = `sap.m`
+        )->a( n = `xmlns:mvc`      v = `sap.ui.core.mvc`
+        )->a( n = `xmlns:commons`  v = `sap.suite.ui.commons`
 
-    timeline->content( `commons` )->timeline_item(
-        datetime    = `{DATETIME}`
-        title       = `{TITLE}`
-        userpicture = `{AUTHORPIC}`
-        text        = `{TEXT}`
-        username    = `{AUTHOR}` ).
+        )->ele( `Shell`
+            )->ele( `Page`
+                )->a( n = `title`          v = `Timeline`
+                )->a( n = `navButtonPress` v = client->_event_nav_app_leave( )
+                )->a( n = `showNavButton`  b = client->check_app_prev_stack( )
 
-    client->view_display( lo_view->stringify( ) ).
+                )->ele( n = `Timeline` ns = `commons`
+                    )->a( n = `content` v = client->_bind( mt_feed )
+
+                    )->ele( n = `content` ns = `commons`
+                        )->tag( n = `TimelineItem` ns = `commons`
+                            )->a( n = `dateTime`    v = `{DATETIME}`
+                            )->a( n = `title`       v = `{TITLE}`
+                            )->a( n = `userPicture` v = `{AUTHORPIC}`
+                            )->a( n = `text`        v = `{TEXT}`
+                            )->a( n = `userName`    v = `{AUTHOR}` ).
+
+    client->view_display( view->stringify( ) ).
 
   ENDMETHOD.
 

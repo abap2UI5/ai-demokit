@@ -31,151 +31,208 @@ CLASS z2ui5_cl_smpc_sapui5_002 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_xml_view=>factory( ).
-    DATA(container) = view->shell(
-        )->page(
-            title          = `abap2UI5 - Visualization`
-            navbuttonpress = client->_event_nav_app_leave( )
-            shownavbutton  = client->check_app_prev_stack( )
-        )->tab_container( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    DATA(tab) = container->tab(
-            text     = `Line Chart`
-            selected = client->_bind( tab_line_active ) ).
-    DATA(grid) = tab->grid( `XL6 L6 M6 S12` ).
+    view->ele( n = `View` ns = `mvc`
+        )->a( n = `displayBlock`  v = `true`
+        )->a( n = `height`        v = `100%`
+        )->a( n = `xmlns`         v = `sap.m`
+        )->a( n = `xmlns:mvc`     v = `sap.ui.core.mvc`
+        )->a( n = `xmlns:webc`    v = `sap.ui.webc.main`
+        )->a( n = `xmlns:layout`  v = `sap.ui.layout`
+        )->a( n = `xmlns:mchart`  v = `sap.suite.ui.microchart`
 
-    grid->link(
-        text   = `Go to the SAP Demos for Interactive Line Charts here...`
-        target = `_blank`
-        href   = `https://sapui5.hana.ondemand.com/#/entity/sap.suite.ui.microchart.InteractiveLineChart/sample/sap.suite.ui.microchart.sample.InteractiveLineChart` ).
+        )->ele( `Shell`
+            )->ele( `Page`
+                )->a( n = `title`          v = `abap2UI5 - Visualization`
+                )->a( n = `navButtonPress` v = client->_event_nav_app_leave( )
+                )->a( n = `showNavButton`  b = client->check_app_prev_stack( )
 
-    grid->text(
-            text  = `Absolute and Percentage values`
-            class = `sapUiSmallMargin`
-        )->get(
-            )->layout_data(
-                )->grid_data( `XL12 L12 M12 S12` ).
+                )->ele( n = `TabContainer` ns = `webc`
+                    )->ele( n = `Tab` ns = `webc`
+                        )->a( n = `text`     v = `Line Chart`
+                        )->a( n = `selected` v = client->_bind( tab_line_active )
 
-    DATA(point) = grid->flex_box(
-        width      = `22rem`
-        height     = `13rem`
-        alignitems = `Center`
-        class      = `sapUiSmallMargin`
-      )->items( )->interact_line_chart(
-            selectionchanged = client->_event( `LINE_CHANGED` )
-            precedingpoint   = `15`
-            succeedingpoint  = `89`
-        )->points( ).
-    point->interact_line_chart_point(
-        selected       = client->_bind( sel7 )
-        label          = `May`
-        value          = `33.1`
-        secondarylabel = `Q2` ).
-    point->interact_line_chart_point(
-        selected = client->_bind( sel8 )
-        label    = `June`
-        value    = `12` ).
-    point->interact_line_chart_point(
-        selected       = client->_bind( sel9 )
-        label          = `July`
-        value          = `51.4`
-        secondarylabel = `Q3` ).
-    point->interact_line_chart_point(
-        selected = client->_bind( sel10 )
-        label    = `Aug`
-        value    = `52` ).
-    point->interact_line_chart_point(
-        selected = client->_bind( sel11 )
-        label    = `Sep`
-        value    = `69.9` ).
-    point->interact_line_chart_point(
-        selected       = client->_bind( sel12 )
-        label          = `Oct`
-        value          = `0.9`
-        secondarylabel = `Q4` ).
+                        )->ele( n = `Grid` ns = `layout`
+                            )->a( n = `defaultSpan` v = `XL6 L6 M6 S12`
 
-    point = grid->flex_box(
-            width      = `22rem`
-            height     = `13rem`
-            alignitems = `Start`
-            class      = `SpaceBetween`
-        )->items(
-             )->interact_line_chart(
-                    selectionchanged = client->_event( `LINE_CHANGED` )
-                    press            = client->_event( `LINE_PRESS` )
-                    precedingpoint   = `-20`
-             )->points( ).
-    point->interact_line_chart_point(
-        label          = `May`
-        value          = `33.1`
-        displayedvalue = `33.1%`
-        secondarylabel = `2015` ).
-    point->interact_line_chart_point(
-        label          = `June`
-        value          = `2.2`
-        displayedvalue = `2.2%`
-        secondarylabel = `2015` ).
-    point->interact_line_chart_point(
-        label          = `July`
-        value          = `51.4`
-        displayedvalue = `51.4%`
-        secondarylabel = `2015` ).
-    point->interact_line_chart_point(
-        label          = `Aug`
-        value          = `19.9`
-        displayedvalue = `19.9%` ).
-    point->interact_line_chart_point(
-        label          = `Sep`
-        value          = `69.9`
-        displayedvalue = `69.9%` ).
-    point->interact_line_chart_point(
-        label          = `Oct`
-        value          = `0.9`
-        displayedvalue = `9.9%` ).
+                            )->tag( `Link`
+                                )->a( n = `text`   v = `Go to the SAP Demos for Interactive Line Charts here...`
+                                )->a( n = `target` v = `_blank`
+                                )->a( n = `href`   v = `https://ui5.sap.com/#/entity/sap.suite.ui.microchart.InteractiveLineChart/sample/sap.suite.ui.microchart.sample.InteractiveLineChart`
 
-    point = grid->vertical_layout(
-        )->layout_data( `layout`
-            )->grid_data( `XL12 L12 M12 S12`
-        )->get_parent(
-        )->text(
-            text  = `Preselected values`
-            class = `sapUiSmallMargin`
-        )->flex_box(
-            width      = `22rem`
-            height     = `13rem`
-            alignitems = `Start`
-            class      = `sapUiSmallMargin`
-            )->items(
-                )->interact_line_chart(
-                    selectionchanged = client->_event( `LINE_CHANGED` )
-                    press            = client->_event( `LINE_PRESS` )
-                )->points( ).
-    point->interact_line_chart_point(
-        label          = `May`
-        value          = `33.1`
-        displayedvalue = `33.1%`
-        selected       = abap_true ).
-    point->interact_line_chart_point(
-        label          = `June`
-        value          = `2.2`
-        displayedvalue = `2.2%` ).
-    point->interact_line_chart_point(
-        label          = `July`
-        value          = `51.4`
-        displayedvalue = `51.4%` ).
-    point->interact_line_chart_point(
-        label          = `Aug`
-        value          = `19.9`
-        displayedvalue = `19.9%`
-        selected       = abap_true ).
-    point->interact_line_chart_point(
-        label          = `Sep`
-        value          = `69.9`
-        displayedvalue = `69.9%` ).
-    point->interact_line_chart_point(
-        label          = `Oct`
-        value          = `0.9`
-        displayedvalue = `9.9%` ).
+                            )->ele( `Text`
+                                )->a( n = `text`  v = `Absolute and Percentage values`
+                                )->a( n = `class` v = `sapUiSmallMargin`
+
+                                )->ele( `layoutData`
+                                    )->tag( n = `GridData` ns = `layout`
+                                        )->a( n = `span` v = `XL12 L12 M12 S12`
+
+                                )->end(
+                            )->end(
+
+                            )->ele( `FlexBox`
+                                )->a( n = `width`      v = `22rem`
+                                )->a( n = `height`     v = `13rem`
+                                )->a( n = `alignItems` v = `Center`
+                                )->a( n = `class`      v = `sapUiSmallMargin`
+
+                                )->ele( `items`
+                                    )->ele( n = `InteractiveLineChart` ns = `mchart`
+                                        )->a( n = `selectionChanged` v = client->_event( `LINE_CHANGED` )
+                                        )->a( n = `precedingPoint`   v = `15`
+                                        )->a( n = `succeedingPoint`  v = `89`
+
+                                        )->ele( n = `points` ns = `mchart`
+                                            )->tag( n = `InteractiveLineChartPoint` ns = `mchart`
+                                                )->a( n = `selected`       v = client->_bind( sel7 )
+                                                )->a( n = `label`          v = `May`
+                                                )->a( n = `value`          v = `33.1`
+                                                )->a( n = `secondaryLabel` v = `Q2`
+
+                                            )->tag( n = `InteractiveLineChartPoint` ns = `mchart`
+                                                )->a( n = `selected`       v = client->_bind( sel8 )
+                                                )->a( n = `label`          v = `June`
+                                                )->a( n = `value`          v = `12`
+
+                                            )->tag( n = `InteractiveLineChartPoint` ns = `mchart`
+                                                )->a( n = `selected`       v = client->_bind( sel9 )
+                                                )->a( n = `label`          v = `July`
+                                                )->a( n = `value`          v = `51.4`
+                                                )->a( n = `secondaryLabel` v = `Q3`
+
+                                            )->tag( n = `InteractiveLineChartPoint` ns = `mchart`
+                                                )->a( n = `selected`       v = client->_bind( sel10 )
+                                                )->a( n = `label`          v = `Aug`
+                                                )->a( n = `value`          v = `52`
+
+                                            )->tag( n = `InteractiveLineChartPoint` ns = `mchart`
+                                                )->a( n = `selected`       v = client->_bind( sel11 )
+                                                )->a( n = `label`          v = `Sep`
+                                                )->a( n = `value`          v = `69.9`
+
+                                            )->tag( n = `InteractiveLineChartPoint` ns = `mchart`
+                                                )->a( n = `selected`       v = client->_bind( sel12 )
+                                                )->a( n = `label`          v = `Oct`
+                                                )->a( n = `value`          v = `0.9`
+                                                )->a( n = `secondaryLabel` v = `Q4`
+
+                                        )->end(
+                                    )->end(
+                                )->end(
+                            )->end(
+
+                            )->ele( `FlexBox`
+                                )->a( n = `width`      v = `22rem`
+                                )->a( n = `height`     v = `13rem`
+                                )->a( n = `alignItems` v = `Start`
+                                )->a( n = `class`      v = `SpaceBetween`
+
+                                )->ele( `items`
+                                    )->ele( n = `InteractiveLineChart` ns = `mchart`
+                                        )->a( n = `selectionChanged` v = client->_event( `LINE_CHANGED` )
+                                        )->a( n = `press`            v = client->_event( `LINE_PRESS` )
+                                        )->a( n = `precedingPoint`   v = `-20`
+
+                                        )->ele( n = `points` ns = `mchart`
+                                            )->tag( n = `InteractiveLineChartPoint` ns = `mchart`
+                                                )->a( n = `label`          v = `May`
+                                                )->a( n = `value`          v = `33.1`
+                                                )->a( n = `displayedValue` v = `33.1%`
+                                                )->a( n = `secondaryLabel` v = `2015`
+
+                                            )->tag( n = `InteractiveLineChartPoint` ns = `mchart`
+                                                )->a( n = `label`          v = `June`
+                                                )->a( n = `value`          v = `2.2`
+                                                )->a( n = `displayedValue` v = `2.2%`
+                                                )->a( n = `secondaryLabel` v = `2015`
+
+                                            )->tag( n = `InteractiveLineChartPoint` ns = `mchart`
+                                                )->a( n = `label`          v = `July`
+                                                )->a( n = `value`          v = `51.4`
+                                                )->a( n = `displayedValue` v = `51.4%`
+                                                )->a( n = `secondaryLabel` v = `2015`
+
+                                            )->tag( n = `InteractiveLineChartPoint` ns = `mchart`
+                                                )->a( n = `label`          v = `Aug`
+                                                )->a( n = `value`          v = `19.9`
+                                                )->a( n = `displayedValue` v = `19.9%`
+
+                                            )->tag( n = `InteractiveLineChartPoint` ns = `mchart`
+                                                )->a( n = `label`          v = `Sep`
+                                                )->a( n = `value`          v = `69.9`
+                                                )->a( n = `displayedValue` v = `69.9%`
+
+                                            )->tag( n = `InteractiveLineChartPoint` ns = `mchart`
+                                                )->a( n = `label`          v = `Oct`
+                                                )->a( n = `value`          v = `0.9`
+                                                )->a( n = `displayedValue` v = `9.9%`
+
+                                        )->end(
+                                    )->end(
+                                )->end(
+                            )->end(
+
+                            )->ele( n = `VerticalLayout` ns = `layout`
+                                )->ele( n = `layoutData` ns = `layout`
+                                    )->tag( n = `GridData` ns = `layout`
+                                        )->a( n = `span` v = `XL12 L12 M12 S12`
+
+                                )->end(
+
+                                )->tag( `Text`
+                                    )->a( n = `text`  v = `Preselected values`
+                                    )->a( n = `class` v = `sapUiSmallMargin`
+
+                                )->ele( `FlexBox`
+                                    )->a( n = `width`      v = `22rem`
+                                    )->a( n = `height`     v = `13rem`
+                                    )->a( n = `alignItems` v = `Start`
+                                    )->a( n = `class`      v = `sapUiSmallMargin`
+
+                                    )->ele( `items`
+                                        )->ele( n = `InteractiveLineChart` ns = `mchart`
+                                            )->a( n = `selectionChanged` v = client->_event( `LINE_CHANGED` )
+                                            )->a( n = `press`            v = client->_event( `LINE_PRESS` )
+
+                                            )->ele( n = `points` ns = `mchart`
+                                                )->tag( n = `InteractiveLineChartPoint` ns = `mchart`
+                                                    )->a( n = `label`          v = `May`
+                                                    )->a( n = `value`          v = `33.1`
+                                                    )->a( n = `displayedValue` v = `33.1%`
+                                                    )->a( n = `selected`       b = abap_true
+
+                                                )->tag( n = `InteractiveLineChartPoint` ns = `mchart`
+                                                    )->a( n = `label`          v = `June`
+                                                    )->a( n = `value`          v = `2.2`
+                                                    )->a( n = `displayedValue` v = `2.2%`
+
+                                                )->tag( n = `InteractiveLineChartPoint` ns = `mchart`
+                                                    )->a( n = `label`          v = `July`
+                                                    )->a( n = `value`          v = `51.4`
+                                                    )->a( n = `displayedValue` v = `51.4%`
+
+                                                )->tag( n = `InteractiveLineChartPoint` ns = `mchart`
+                                                    )->a( n = `label`          v = `Aug`
+                                                    )->a( n = `value`          v = `19.9`
+                                                    )->a( n = `displayedValue` v = `19.9%`
+                                                    )->a( n = `selected`       b = abap_true
+
+                                                )->tag( n = `InteractiveLineChartPoint` ns = `mchart`
+                                                    )->a( n = `label`          v = `Sep`
+                                                    )->a( n = `value`          v = `69.9`
+                                                    )->a( n = `displayedValue` v = `69.9%`
+
+                                                )->tag( n = `InteractiveLineChartPoint` ns = `mchart`
+                                                    )->a( n = `label`          v = `Oct`
+                                                    )->a( n = `value`          v = `0.9`
+                                                    )->a( n = `displayedValue` v = `9.9%`
+
+                                            )->end(
+                                        )->end(
+                                    )->end(
+                                )->end( ).
 
     client->view_display( view->stringify( ) ).
 

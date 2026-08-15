@@ -56,30 +56,52 @@ CLASS z2ui5_cl_smpc_sapui5_008 IMPLEMENTATION.
 
   METHOD detail_popover.
 
-    DATA(view) = z2ui5_cl_xml_view=>factory_popup( ).
-    DATA(qv) = view->quick_view( placement = `Left`
-              )->quick_view_page(
-                                  header      = `Employee`
-                                  title       = node-title
-                                  description = node-position
-                )->get( )->quick_view_page_avatar( )->avatar( src          = node-src
-                                                              displayshape = `Square` )->get_parent(
-                )->quick_view_group( heading = `Contact Detail`
-                  )->quick_view_group_element( label = `Location`
-                                               value = node-location )->get_parent(
-                  )->quick_view_group_element( label = `Mobile`
-                                               value = node-phone
-                                               type  = `phone` )->get_parent(
-                  )->quick_view_group_element( label        = `Email`
-                                               value        = node-email
-                                               type         = `email`
-                                               emailsubject = |Contact{ node-id }| ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+
+    DATA(group) = view->ele( n = `FragmentDefinition` ns = `core`
+        )->a( n = `xmlns`      v = `sap.m`
+        )->a( n = `xmlns:core` v = `sap.ui.core`
+
+        )->ele( `QuickView`
+            )->a( n = `placement` v = `Left`
+
+            )->ele( `QuickViewPage`
+                )->a( n = `header`      v = `Employee`
+                )->a( n = `title`       v = node-title
+                )->a( n = `description` v = node-position
+
+                )->ele( `avatar`
+                    )->tag( `Avatar`
+                        )->a( n = `src`          v = node-src
+                        )->a( n = `displayShape` v = `Square`
+
+                )->end(
+
+                )->ele( `QuickViewGroup`
+                    )->a( n = `heading` v = `Contact Detail`
+
+                    )->tag( `QuickViewGroupElement`
+                        )->a( n = `label` v = `Location`
+                        )->a( n = `value` v = node-location
+                    )->tag( `QuickViewGroupElement`
+                        )->a( n = `label` v = `Mobile`
+                        )->a( n = `value` v = node-phone
+                        )->a( n = `type`  v = `phone`
+                    )->tag( `QuickViewGroupElement`
+                        )->a( n = `label`        v = `Email`
+                        )->a( n = `value`        v = node-email
+                        )->a( n = `type`         v = `email`
+                        )->a( n = `emailSubject` v = |Contact{ node-id }|
+
+                )->end( ).
 
     IF node-team IS NOT INITIAL.
-      qv = qv->get_parent( )->get_parent(
-        )->quick_view_group( heading = `Team`
-           )->quick_view_group_element( label = `Size`
-                                        value = CONV string( node-team ) ).
+      group->ele( `QuickViewGroup`
+          )->a( n = `heading` v = `Team`
+
+          )->tag( `QuickViewGroupElement`
+              )->a( n = `label` v = `Size`
+              )->a( n = `value` v = CONV string( node-team ) ).
     ENDIF.
 
     client->popover_display(
@@ -107,66 +129,89 @@ CLASS z2ui5_cl_smpc_sapui5_008 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_xml_view=>factory( ).
-    DATA(page) = view->page(
-                    title          = `abap2UI5 - Network Graph - Org Tree`
-                    navbuttonpress = client->_event_nav_app_leave( )
-                    shownavbutton  = client->check_app_prev_stack( ) ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    page->network_graph( enablewheelzoom = abap_false
-                                       orientation     = `TopBottom`
-                                       nodes           = client->_bind( mt_data-nodes )
-                                       lines           = client->_bind( mt_data-lines )
-                                       layout          = `Layered`
-                                       searchsuggest   = `suggest`
-                                       search          = `search`
-                                       id              = `graph`
-                                     )->get( )->layout_algorithm( )->layered_layout( mergeedges    = abap_true
-                                                                                     nodeplacement = `Simple`
-                                                                                     nodespacing   = `40`
-                                     )->get_parent(
-                                     )->get_parent(
-                                  )->nodes( `networkgraph`
-                                    )->node( icon                  = `sap-icon://action-settings`
-                                             key                   = `{ID}`
-                                             description           = `{TITLE}`
-                                             title                 = `{TITLE}`
-                                             width                 = `90`
-                                             collapsed             = `{COLLAPSED}`
-                                             attributes            = `{ATTRIBUTES}`
-                                             showactionlinksbutton = abap_false
-                                             showdetailbutton      = abap_false
-                                             descriptionlinesize   = `0`
-                                             shape                 = `Box`
-                                           )->get( )->attributes( `networkgraph`
-                                            )->element_attribute( label = `{LABEL}`
-                                                                  value = `{VALUE}`
-                                           )->get_parent(
-                                           )->get_parent(
-                                           )->get( )->get_parent( )->get_parent( )->action_buttons(
-                                            )->action_button( "id = `{ID}`
-                                                              position = `Left`
-                                                              title    = `Detail`
-                                                              icon     = `sap-icon://employee`
-                                                              press    = client->_event( val = `DETAIL_POPOVER` t_arg = VALUE #( ( `${$source>/id}` )
-                                                                                                                              ( `${ID}` )
-                                                                                                                             ) )
-                                           )->get_parent(
-                                           )->get_parent(
-                                           )->get( )->get_parent( )->get_parent( )->_generic( ns   = `networkgraph`
-                                                                                              name = `image`
-                                            )->node_image( src    = `{SRC}`
-                                                           width  = `80`
-                                                           height = `100`
-                                                          )->get_parent(
-                                                       )->get_parent(
-                                                )->get_parent(
-                                          )->get_parent(
-                                          )->lines(
-                                            )->line( from             = `{FROM}`
-                                                     to               = `{TO}`
-                                                     arroworientation = `None`
-                                                     press            = client->_event( `LINE_PRESS` ) ).
+    view->ele( n = `View` ns = `mvc`
+        )->a( n = `displayBlock`      v = `true`
+        )->a( n = `height`            v = `100%`
+        )->a( n = `xmlns`             v = `sap.m`
+        )->a( n = `xmlns:mvc`         v = `sap.ui.core.mvc`
+        )->a( n = `xmlns:networkgraph` v = `sap.suite.ui.commons.networkgraph`
+        )->a( n = `xmlns:nglayout`    v = `sap.suite.ui.commons.networkgraph.layout`
+
+        )->ele( `Page`
+            )->a( n = `title`          v = `abap2UI5 - Network Graph - Org Tree`
+            )->a( n = `navButtonPress` v = client->_event_nav_app_leave( )
+            )->a( n = `showNavButton`  b = client->check_app_prev_stack( )
+
+            )->ele( n = `Graph` ns = `networkgraph`
+                )->a( n = `id`              v = `graph`
+                )->a( n = `orientation`     v = `TopBottom`
+                )->a( n = `nodes`           v = client->_bind( mt_data-nodes )
+                )->a( n = `lines`           v = client->_bind( mt_data-lines )
+                )->a( n = `layout`          v = `Layered`
+                )->a( n = `searchSuggest`   v = `suggest`
+                )->a( n = `search`          v = `search`
+                )->a( n = `enableWheelZoom` b = abap_false
+
+                )->ele( n = `layoutAlgorithm` ns = `networkgraph`
+                    )->tag( n = `LayeredLayout` ns = `nglayout`
+                        )->a( n = `nodePlacement` v = `Simple`
+                        )->a( n = `nodeSpacing`   v = `40`
+                        )->a( n = `mergeEdges`    b = abap_true
+
+                )->end(
+
+                )->ele( n = `nodes` ns = `networkgraph`
+                    )->ele( n = `Node` ns = `networkgraph`
+                        )->a( n = `icon`                  v = `sap-icon://action-settings`
+                        )->a( n = `key`                   v = `{ID}`
+                        )->a( n = `description`           v = `{TITLE}`
+                        )->a( n = `title`                 v = `{TITLE}`
+                        )->a( n = `width`                 v = `90`
+                        )->a( n = `collapsed`             v = `{COLLAPSED}`
+                        )->a( n = `attributes`            v = `{ATTRIBUTES}`
+                        )->a( n = `descriptionLineSize`   v = `0`
+                        )->a( n = `shape`                 v = `Box`
+                        )->a( n = `showActionLinksButton` b = abap_false
+                        )->a( n = `showDetailButton`      b = abap_false
+
+                        )->ele( n = `attributes` ns = `networkgraph`
+                            )->tag( n = `ElementAttribute` ns = `networkgraph`
+                                )->a( n = `label` v = `{LABEL}`
+                                )->a( n = `value` v = `{VALUE}`
+
+                        )->end(
+
+                        )->ele( `actionButtons`
+                            )->tag( n = `ActionButton` ns = `networkgraph`
+                                " the id is deliberately not set: the graph assigns one, and the
+                                " press handler reads it back through ${$source>/id}
+                                )->a( n = `position` v = `Left`
+                                )->a( n = `title`    v = `Detail`
+                                )->a( n = `icon`     v = `sap-icon://employee`
+                                )->a( n = `press`    v = client->_event( val   = `DETAIL_POPOVER`
+                                                                        t_arg = VALUE #( ( `${$source>/id}` )
+                                                                                         ( `${ID}` ) ) )
+
+                        )->end(
+
+                        )->ele( n = `image` ns = `networkgraph`
+                            )->tag( n = `NodeImage` ns = `networkgraph`
+                                )->a( n = `src`    v = `{SRC}`
+                                )->a( n = `width`  v = `80`
+                                )->a( n = `height` v = `100`
+
+                        )->end(
+                    )->end(
+                )->end(
+
+                )->ele( `lines`
+                    )->tag( n = `Line` ns = `networkgraph`
+                        )->a( n = `from`             v = `{FROM}`
+                        )->a( n = `to`               v = `{TO}`
+                        )->a( n = `arrowOrientation` v = `None`
+                        )->a( n = `press`            v = client->_event( `LINE_PRESS` ) ).
 
     client->view_display( view->stringify( ) ).
 

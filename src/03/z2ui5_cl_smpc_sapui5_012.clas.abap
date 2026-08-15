@@ -145,98 +145,120 @@ CLASS z2ui5_cl_smpc_sapui5_012 IMPLEMENTATION.
 
   METHOD on_rendering.
 
-    DATA(lr_view) = z2ui5_cl_xml_view=>factory( )->shell( ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    " ---------- Set dynamic page ---------------------------------------------------------------------
-    DATA(lr_dyn_page) = lr_view->dynamic_page( showfooter = abap_false ).
+    view->ele( n = `View` ns = `mvc`
+        )->a( n = `displayBlock`     v = `true`
+        )->a( n = `height`           v = `100%`
+        )->a( n = `xmlns`            v = `sap.m`
+        )->a( n = `xmlns:mvc`        v = `sap.ui.core.mvc`
+        )->a( n = `xmlns:core`       v = `sap.ui.core`
+        )->a( n = `xmlns:f`          v = `sap.f`
+        )->a( n = `xmlns:fb`         v = `sap.ui.comp.filterbar`
+        )->a( n = `xmlns:viz`        v = `sap.viz.ui5.controls`
+        )->a( n = `xmlns:viz.data`   v = `sap.viz.ui5.data`
+        )->a( n = `xmlns:viz.feeds`  v = `sap.viz.ui5.controls.common.feeds`
 
-    " ---------- Get header title ---------------------------------------------------------------------
-    DATA(lr_header_title) = lr_dyn_page->title( ns = `f` )->get( )->dynamic_page_title( ).
+        )->ele( `Shell`
+            )->ele( n = `DynamicPage` ns = `f`
+                )->a( n = `showFooter` b = abap_false
 
-    " ---------- Set header title text ----------------------------------------------------------------
-    lr_header_title->heading( `f` )->title( `abap2UI5 - VizFrame Charts` ).
+                )->ele( n = `title` ns = `f`
+                    )->ele( n = `DynamicPageTitle` ns = `f`
+                        )->ele( n = `heading` ns = `f`
+                            )->tag( `Title`
+                                )->a( n = `text` v = `abap2UI5 - VizFrame Charts`
 
-    " ---------- Get page header area ----------------------------------------------------------------
-    DATA(lr_header) = lr_dyn_page->header( `f` )->dynamic_page_header( abap_true )->content( `f` ).
+                        )->end(
+                    )->end(
+                )->end(
 
-    lr_header->button( text    = `back`
-                       press   = client->_event_nav_app_leave( )
-                       visible = client->check_app_prev_stack( ) ).
+                )->ele( n = `header` ns = `f`
+                    )->ele( n = `DynamicPageHeader` ns = `f`
+                        )->a( n = `pinnable` b = abap_true
 
-    " ---------- Set Filter bar -----------------------------------------------------------------------
-    DATA(lr_filter_bar) = lr_header->filter_bar( usetoolbar = `false` )->filter_group_items( ).
+                        )->ele( n = `content` ns = `f`
+                            )->tag( `Button`
+                                )->a( n = `text`    v = `back`
+                                )->a( n = `press`   v = client->_event_nav_app_leave( )
+                                )->a( n = `visible` b = client->check_app_prev_stack( )
 
-    " ---------- Set filter ---------------------------------------------------------------------------
-    DATA(lr_filter) = lr_filter_bar->filter_group_item( name               = `VizFrameType`
-                                                        label              = `VizFrame type`
-                                                        groupname          = |GroupVizFrameType|
-                                                        visibleinfilterbar = `true`
-                                                         )->filter_control( ).
+                            )->ele( n = `FilterBar` ns = `fb`
+                                )->a( n = `useToolbar` v = `false`
 
-    " ---------- Set combo box input field ------------------------------------------------------------
-    lr_filter->combobox( selectedkey   = client->_bind( ms_screen-viztypesel )
-                         change        = client->_event( `EVT_VIZTYPE_CHANGE` )
-                         showclearicon = abap_true
-                         items         = client->_bind( mt_viztypes )
-                              )->item( key  = `{N}`
-                                       text = `{V}` ).
+                                )->ele( n = `filterGroupItems` ns = `fb`
+                                    )->ele( n = `FilterGroupItem` ns = `fb`
+                                        )->a( n = `name`               v = `VizFrameType`
+                                        )->a( n = `label`              v = `VizFrame type`
+                                        )->a( n = `groupName`          v = |GroupVizFrameType|
+                                        )->a( n = `visibleInFilterBar` v = `true`
 
-    " ---------- Get page content area ----------------------------------------------------------------
-    DATA(lr_content) = lr_dyn_page->content( `f` ).
+                                        )->ele( n = `control` ns = `fb`
+                                            )->ele( `ComboBox`
+                                                )->a( n = `selectedKey`   v = client->_bind( ms_screen-viztypesel )
+                                                )->a( n = `change`        v = client->_event( `EVT_VIZTYPE_CHANGE` )
+                                                )->a( n = `items`         v = client->_bind( mt_viztypes )
+                                                )->a( n = `showClearIcon` b = abap_true
 
-    " ---------- Set vizframe chart -------------------------------------------------------------------
-    DATA(lr_vizframe) = lr_content->viz_frame(
-                            id            = `idVizFrame`
-                            vizproperties = mv_prop
-                            viztype       = client->_bind( ms_screen-viztype )
-                            height        = `500px`
-                            width         = `100%`
-                            selectdata    = client->_event( val   = `EVT_DATA_SELECT`
-                                                            t_arg = VALUE #( ( `${$parameters>/data/0/data/}` ) ) ) ).
+                                                )->tag( n = `Item` ns = `core`
+                                                    )->a( n = `key`  v = `{N}`
+                                                    )->a( n = `text` v = `{V}`
 
-    " ---------- Set vizframe dataset -----------------------------------------------------------------
-    DATA(lr_dataset) = lr_vizframe->viz_dataset( ).
+                                            )->end(
+                                        )->end(
+                                    )->end(
+                                )->end(
+                            )->end(
+                        )->end(
+                    )->end(
+                )->end(
 
-    " ---------- Set vizframe flattened dataset --------------------------------------------------------
-    DATA(lr_flatteneddataset) = lr_dataset->viz_flattened_dataset( client->_bind( mt_data_chart ) ).
+                )->ele( n = `content` ns = `f`
+                    )->ele( n = `VizFrame` ns = `viz`
+                        )->a( n = `id`            v = `idVizFrame`
+                        )->a( n = `vizProperties` v = mv_prop
+                        )->a( n = `vizType`       v = client->_bind( ms_screen-viztype )
+                        )->a( n = `height`        v = `500px`
+                        )->a( n = `width`         v = `100%`
+                        )->a( n = `selectData`    v = client->_event( val   = `EVT_DATA_SELECT`
+                                                                      t_arg = VALUE #( ( `${$parameters>/data/0/data/}` ) ) )
 
-    " ---------- Set vizframe dimensions ---------------------------------------------------------------
-    DATA(lr_dimensions) = lr_flatteneddataset->viz_dimensions( ).
+                        )->ele( n = `dataset` ns = `viz`
+                            )->ele( n = `FlattenedDataset` ns = `viz.data`
+                                )->a( n = `data` v = client->_bind( mt_data_chart )
 
-    " ---------- Set vizframe dimension ----------------------------------------------------------------
-    lr_dimensions->viz_dimension_definition(
-                                                                       name  = `Week`
-                                                                       value = `{WEEK}` ).
+                                )->ele( n = `dimensions` ns = `viz.data`
+                                    )->tag( n = `DimensionDefinition` ns = `viz.data`
+                                        )->a( n = `name`  v = `Week`
+                                        )->a( n = `value` v = `{WEEK}`
 
-    " ---------- Set vizframe measures ----------------------------------------------------------------
-    DATA(lr_measures) = lr_flatteneddataset->viz_measures( ).
+                                )->end(
 
-    " ---------- Set vizframe measure definition 1 ----------------------------------------------------
-    lr_measures->viz_measure_definition(
-                                                                  name  = `Revenue`
-                                                                  value = `{REVENUE}` ).
+                                )->ele( n = `measures` ns = `viz.data`
+                                    )->tag( n = `MeasureDefinition` ns = `viz.data`
+                                        )->a( n = `name`  v = `Revenue`
+                                        )->a( n = `value` v = `{REVENUE}`
+                                    )->tag( n = `MeasureDefinition` ns = `viz.data`
+                                        )->a( n = `name`  v = `Cost`
+                                        )->a( n = `value` v = `{COST}`
 
-    " ---------- Set vizframe measure definition 2 ----------------------------------------------------
-    lr_measures->viz_measure_definition(
-                                                                  name  = `Cost`
-                                                                  value = `{COST}` ).
+                                )->end(
+                            )->end(
+                        )->end(
 
-    " ---------- Set vizframe feeds -------------------------------------------------------------------
-    DATA(lr_feeds) = lr_vizframe->viz_feeds( ).
+                        )->ele( n = `feeds` ns = `viz`
+                            )->tag( n = `FeedItem` ns = `viz.feeds`
+                                )->a( n = `id`     v = `valueAxisFeed`
+                                )->a( n = `uid`    v = `valueAxis`
+                                )->a( n = `type`   v = `Measure`
+                                )->a( n = `values` v = client->_bind( mt_feed_values )
+                            )->tag( n = `FeedItem` ns = `viz.feeds`
+                                )->a( n = `id`     v = `categoryAxisFeed`
+                                )->a( n = `uid`    v = `categoryAxis`
+                                )->a( n = `type`   v = `Dimension`
+                                )->a( n = `values` v = `Week` ).
 
-    " ---------- Set vizframe feed for value axis -----------------------------------------------------
-    lr_feeds->viz_feed_item( id     = `valueAxisFeed`
-                                                      uid    = `valueAxis`
-                                                      type   = `Measure`
-                                                      values = client->_bind( mt_feed_values ) ).
-
-    " ---------- Set vizframe feed for category axis --------------------------------------------------
-    lr_feeds->viz_feed_item( id     = `categoryAxisFeed`
-                                                      uid    = `categoryAxis`
-                                                      type   = `Dimension`
-                                                      values = `Week` ).
-
-    client->view_display( lr_view->stringify( ) ).
+    client->view_display( view->stringify( ) ).
 
   ENDMETHOD.
 

@@ -33,24 +33,45 @@ CLASS z2ui5_cl_smpc_sapui5_011 IMPLEMENTATION.
         RETURN.
     ENDCASE.
 
-    client->view_display( z2ui5_cl_xml_view=>factory( )->shell(
-          )->page(
-                 showheader      = xsdbool( abap_false = client->get( )-check_launchpad_active )
-                  title          = `abap2UI5`
-                  navbuttonpress = client->_event_nav_app_leave( )
-                  shownavbutton  = client->check_app_prev_stack( )
-              )->simple_form( title    = `Information`
-                              editable = abap_true
-                  )->content( `form`
-                      )->label( `mv_scan_input`
-                      )->input( client->_bind( mv_scan_input )
-                      )->label( `mv_scan_type`
-                      )->input( client->_bind( mv_scan_type )
-                      )->label( `scanner`
-                      )->barcode_scanner_button(
-                        scansuccess = client->_event( val = `ON_SCAN_SUCCESS` t_arg = VALUE #( ( `${$parameters>/text}` ) ( `${$parameters>/format}` ) ) )
-                        dialogtitle = `Barcode Scanner`
-           )->stringify( ) ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
+
+    view->ele( n = `View` ns = `mvc`
+        )->a( n = `displayBlock` v = `true`
+        )->a( n = `height`       v = `100%`
+        )->a( n = `xmlns`        v = `sap.m`
+        )->a( n = `xmlns:mvc`    v = `sap.ui.core.mvc`
+        )->a( n = `xmlns:form`   v = `sap.ui.layout.form`
+        )->a( n = `xmlns:ndc`    v = `sap.ndc`
+
+        )->ele( `Shell`
+            )->ele( `Page`
+                )->a( n = `title`          v = `abap2UI5`
+                )->a( n = `navButtonPress` v = client->_event_nav_app_leave( )
+                )->a( n = `showNavButton`  b = client->check_app_prev_stack( )
+                )->a( n = `showHeader`     b = xsdbool( abap_false = client->get( )-check_launchpad_active )
+
+                )->ele( n = `SimpleForm` ns = `form`
+                    )->a( n = `title`    v = `Information`
+                    )->a( n = `editable` b = abap_true
+
+                    )->ele( n = `content` ns = `form`
+                        )->tag( `Label`
+                            )->a( n = `text` v = `mv_scan_input`
+                        )->tag( `Input`
+                            )->a( n = `value` v = client->_bind( mv_scan_input )
+                        )->tag( `Label`
+                            )->a( n = `text` v = `mv_scan_type`
+                        )->tag( `Input`
+                            )->a( n = `value` v = client->_bind( mv_scan_type )
+                        )->tag( `Label`
+                            )->a( n = `text` v = `scanner`
+                        )->tag( n = `BarcodeScannerButton` ns = `ndc`
+                            )->a( n = `dialogTitle` v = `Barcode Scanner`
+                            )->a( n = `scanSuccess` v = client->_event( val   = `ON_SCAN_SUCCESS`
+                                                                       t_arg = VALUE #( ( `${$parameters>/text}` )
+                                                                                        ( `${$parameters>/format}` ) ) ) ).
+
+    client->view_display( view->stringify( ) ).
 
   ENDMETHOD.
 

@@ -14,6 +14,11 @@ CLASS z2ui5_cl_smpc_sapui5_014 DEFINITION PUBLIC.
   PUBLIC SECTION.
     INTERFACES z2ui5_if_app.
 
+    " The column's export configuration. Bound rather than written into the
+    " attribute: UI5 reads a leading `{` as a BINDING, so a raw JSON literal in
+    " an attribute never reaches the control at all.
+    DATA mv_export_config TYPE string.
+
     TYPES:
       BEGIN OF ty_s_relation,
         relationid  TYPE string,
@@ -61,6 +66,10 @@ CLASS z2ui5_cl_smpc_sapui5_014 IMPLEMENTATION.
     me->client = client.
     IF client->check_on_init( ).
 
+      mv_export_config = `{"columnKey": "OBJECTNAME", `      &&
+                         `"leadingProperty": "OBJECTNAME", ` &&
+                         `"dataType": "string", `            &&
+                         `"wrap": true}`.
       data_read( ).
       view_display( ).
 
@@ -72,86 +81,126 @@ CLASS z2ui5_cl_smpc_sapui5_014 IMPLEMENTATION.
 
   METHOD view_display.
 
-    DATA(view) = z2ui5_cl_xml_view=>factory( ).
-    view->_generic_property( VALUE #( n = `core:require`
-                                      v = `{Formatter:'z2ui5/model/formatter'}` ) ).
+    DATA(view) = z2ui5_cl_ui5_view_builder=>factory( ).
 
-    DATA(page) = view->shell( )->page(
-        id             = `page_main`
-        title          = `abap2UI5 - Gantt Chart with Relationships`
-        navbuttonpress = client->_event_nav_app_leave( )
-        shownavbutton  = client->check_app_prev_stack( )
-        class          = `sapUiContentPadding` ).
+    view->ele( n = `View` ns = `mvc`
+        )->a( n = `displayBlock`   v = `true`
+        )->a( n = `height`         v = `100%`
+        )->a( n = `xmlns`          v = `sap.m`
+        )->a( n = `xmlns:mvc`      v = `sap.ui.core.mvc`
+        )->a( n = `xmlns:core`     v = `sap.ui.core`
+        )->a( n = `xmlns:gantt`    v = `sap.gantt.simple`
+        )->a( n = `xmlns:axistime` v = `sap.gantt.axistime`
+        )->a( n = `xmlns:config`   v = `sap.gantt.config`
+        )->a( n = `xmlns:table`    v = `sap.ui.table`
+        )->a( n = `core:require`   v = `{Formatter:'z2ui5/model/formatter'}`
 
-    page->message_strip(
-        text     = `A sap.gantt chart whose shapes are connected by relationships: ` &&
-                   `every row carries a nested RELATIONSHIPS table, and each entry ` &&
-                   `draws a connector of its own type (FinishToStart, StartToStart, ...) ` &&
-                   `from a predecessor to a successor shape. Use the container toolbar ` &&
-                   `to zoom, search and switch the display type.`
-        type     = `Information`
-        showicon = abap_true
-        class    = `sapUiSmallMargin` ).
+        )->ele( `Shell`
+            )->ele( `Page`
+                )->a( n = `id`             v = `page_main`
+                )->a( n = `title`          v = `abap2UI5 - Gantt Chart with Relationships`
+                )->a( n = `navButtonPress` v = client->_event_nav_app_leave( )
+                )->a( n = `showNavButton`  b = client->check_app_prev_stack( )
+                )->a( n = `class`          v = `sapUiContentPadding`
 
-    DATA(container) = page->scroll_container( horizontal = abap_true
-      )->gantt_chart_container( ).
+                )->tag( `MessageStrip`
+                    )->a( n = `text`     v = `A sap.gantt chart whose shapes are connected by relationships: ` &&
+                                             `every row carries a nested RELATIONSHIPS table, and each entry ` &&
+                                             `draws a connector of its own type (FinishToStart, StartToStart, ...) ` &&
+                                             `from a predecessor to a successor shape. Use the container toolbar ` &&
+                                             `to zoom, search and switch the display type.`
+                    )->a( n = `type`     v = `Information`
+                    )->a( n = `class`    v = `sapUiSmallMargin`
+                    )->a( n = `showIcon` b = abap_true
 
-    container->gantt_toolbar(
-      )->container_toolbar( showsearchbutton      = abap_true
-                            showdisplaytypebutton = abap_true
-                            showlegendbutton      = abap_true
-                            showsettingbutton     = abap_true
-                            showtimezoomcontrol   = abap_true ).
+                )->ele( `ScrollContainer`
+                    )->a( n = `horizontal` b = abap_true
 
-    DATA(gantt) = container->gantt_chart_with_table(
-        id                        = `gantt`
-        shapeselectionmode        = `Single`
-        isconnectordetailsvisible = abap_true ).
+                    )->ele( n = `GanttChartContainer` ns = `gantt`
+                        )->ele( n = `toolbar` ns = `gantt`
+                            )->tag( n = `ContainerToolbar` ns = `gantt`
+                                )->a( n = `showSearchButton`      b = abap_true
+                                )->a( n = `showDisplayTypeButton` b = abap_true
+                                )->a( n = `showLegendButton`      b = abap_true
+                                )->a( n = `showSettingButton`     b = abap_true
+                                )->a( n = `showTimeZoomControl`   b = abap_true
 
-    gantt->axis_time_strategy(
-      )->proportion_zoom_strategy(
-        )->total_horizon(
-          )->time_horizon( starttime = `20181101000000`
-                           endtime   = `20181130000000` )->get_parent( )->get_parent(
-        )->visible_horizon(
-          )->time_horizon( starttime = `20181101000000`
-                           endtime   = `20181130000000` ).
+                        )->end(
 
-    DATA(tree) = gantt->gantt_table(
-      )->tree_table( rows = |\{ path: '{ client->_bind( val  = s_root
-                                                        path = abap_true ) }', | &&
-                            |parameters: \{ arrayNames: ['CHILDREN'], numberOfExpandedLevels: 2 \} \}| ).
+                        )->ele( n = `GanttChartWithTable` ns = `gantt`
+                            )->a( n = `id`                        v = `gantt`
+                            )->a( n = `shapeSelectionMode`        v = `Single`
+                            )->a( n = `isConnectorDetailsVisible` b = abap_true
 
-    DATA(column) = tree->ui_columns( )->ui_column( id = `col_objectname` ).
+                            )->ele( n = `axisTimeStrategy` ns = `gantt`
+                                )->ele( n = `ProportionZoomStrategy` ns = `axistime`
+                                    )->ele( n = `totalHorizon` ns = `axistime`
+                                        )->tag( n = `TimeHorizon` ns = `config`
+                                            )->a( n = `startTime` v = `20181101000000`
+                                            )->a( n = `endTime`   v = `20181130000000`
 
-    column->ui_custom_data(
-      )->core_custom_data( key   = `exportTableColumnConfig`
-                           value = `{"columnKey": "OBJECTNAME", ` &&
-                                   `"leadingProperty": "OBJECTNAME", ` &&
-                                   `"dataType": "string", ` &&
-                                   `"wrap": true}` ).
+                                    )->end(
 
-    column->text( `Object Name` ).
-    column->tree_template( )->label( `{OBJECTNAME}` ).
+                                    )->ele( n = `visibleHorizon` ns = `axistime`
+                                        )->tag( n = `TimeHorizon` ns = `config`
+                                            )->a( n = `startTime` v = `20181101000000`
+                                            )->a( n = `endTime`   v = `20181130000000`
 
-    DATA(row_settings) = tree->row_settings_template(
-      )->gantt_row_settings( rowid         = `{OBJECTID}`
-                             relationships = `{path: 'RELATIONSHIPS', templateShareable: false}` ).
+                                    )->end(
+                                )->end(
+                            )->end(
 
-    row_settings->shapes1(
-      )->base_rectangle( shapeid                 = `{OBJECTID}`
-                         time                    = `{= Formatter.DateCreateObject(${STARTTIME}) }`
-                         endtime                 = `{= Formatter.DateCreateObject(${ENDTIME}) }`
-                         height                  = `19`
-                         title                   = `{OBJECTNAME}`
-                         connectable             = abap_true
-                         horizontaltextalignment = `Start` ).
+                            )->ele( n = `table` ns = `gantt`
+                                )->ele( n = `TreeTable` ns = `table`
+                                    )->a( n = `rows` v = |\{ path: '{ client->_bind( val  = s_root
+                                                                                    path = abap_true ) }', | &&
+                                                          |parameters: \{ arrayNames: ['CHILDREN'], numberOfExpandedLevels: 2 \} \}|
 
-    row_settings->relationships(
-      )->relationship( shapeid     = `{RELATIONID}`
-                       type        = `{TYPE}`
-                       predecessor = `{PREDECESSOR}`
-                       successor   = `{SUCCESSOR}` ).
+                                    )->ele( n = `columns` ns = `table`
+                                        )->ele( n = `Column` ns = `table`
+                                            )->a( n = `id` v = `col_objectname`
+
+                                            )->ele( n = `customData` ns = `table`
+                                                )->tag( n = `CustomData` ns = `core`
+                                                    )->a( n = `key`   v = `exportTableColumnConfig`
+                                                    )->a( n = `value` v = client->_bind( mv_export_config )
+
+                                            )->end(
+
+                                            )->tag( `Text`
+                                                )->a( n = `text` v = `Object Name`
+
+                                            )->ele( n = `template` ns = `table`
+                                                )->tag( `Label`
+                                                    )->a( n = `text` v = `{OBJECTNAME}`
+
+                                            )->end(
+                                        )->end(
+                                    )->end(
+
+                                    )->ele( n = `rowSettingsTemplate` ns = `table`
+                                        )->ele( n = `GanttRowSettings` ns = `gantt`
+                                            )->a( n = `rowId`         v = `{OBJECTID}`
+                                            )->a( n = `relationships` v = `{path: 'RELATIONSHIPS', templateShareable: false}`
+
+                                            )->ele( n = `shapes1` ns = `gantt`
+                                                )->tag( n = `BaseRectangle` ns = `gantt`
+                                                    )->a( n = `shapeId`                 v = `{OBJECTID}`
+                                                    )->a( n = `time`                    v = `{= Formatter.DateCreateObject(${STARTTIME}) }`
+                                                    )->a( n = `endTime`                 v = `{= Formatter.DateCreateObject(${ENDTIME}) }`
+                                                    )->a( n = `height`                  v = `19`
+                                                    )->a( n = `title`                   v = `{OBJECTNAME}`
+                                                    )->a( n = `horizontalTextAlignment` v = `Start`
+                                                    )->a( n = `connectable`             b = abap_true
+
+                                            )->end(
+
+                                            )->ele( n = `relationships` ns = `gantt`
+                                                )->tag( n = `Relationship` ns = `gantt`
+                                                    )->a( n = `shapeId`     v = `{RELATIONID}`
+                                                    )->a( n = `type`        v = `{TYPE}`
+                                                    )->a( n = `predecessor` v = `{PREDECESSOR}`
+                                                    )->a( n = `successor`   v = `{SUCCESSOR}` ).
 
     client->view_display( view->stringify( ) ).
 

@@ -89,6 +89,13 @@ jobs:
     - run: npx playwright install --with-deps chromium
     - run: node scripts/view-gates.mjs --strict
 
+    # The SAPUI5-only collection (src/03) has no sidecars, so view-gates cannot
+    # see it - by construction, which is right for the port machinery and wrong
+    # for the view check. This is the view check for it: property gate only,
+    # because the render gate serves OpenUI5 and these controls ship with
+    # SAPUI5 alone. Settings and the reasoning: abap2ui5lint-collection.jsonc
+    - run: npm run check:collection
+
     # view-gates rewrote .github/badges/ with what the corpus now is. The
     # default branch is protected and github-actions[bot] can never be added
     # to a bypass list, so they are committed onto the PULL REQUEST branch -
