@@ -1,0 +1,37 @@
+# Weekly dependency updates, opened as pull requests so the gates decide
+# whether they are safe.
+#
+# @abap2ui5/linter is deliberately NOT here. bump_linter.yaml already owns it
+# and does more than Dependabot can: it moves the lock to the latest published
+# version and runs the full strict view gates over all 416 ports BEFORE the
+# pull request exists, so a rule regression fails the workflow instead of
+# arriving as a green-looking lockfile diff. abap2UI5 itself is pinned by
+# commit in A2UI5_PIN, which is not a package manifest at all - bump_a2ui5.yaml
+# owns that one, and check-pins.mjs holds the policy.
+version: 2
+
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: tuesday
+      # Tuesday, clear of Monday's 06:23 bump_linter run.
+      time: "06:30"
+    open-pull-requests-limit: 5
+    ignore:
+      - dependency-name: "@abap2ui5/linter"
+    groups:
+      toolchain:
+        patterns: ["*"]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+      day: tuesday
+      time: "06:30"
+    open-pull-requests-limit: 5
+    groups:
+      actions:
+        patterns: ["*"]
