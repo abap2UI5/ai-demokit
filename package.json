@@ -7,6 +7,7 @@
     "prepare": "git config core.hooksPath .githooks || true",
     "overview": "node scripts/generate-overview.mjs",
     "coverage": "node scripts/generate-coverage.mjs",
+    "check:chains": "node scripts/chain-format.mjs",
     "fmt:chains": "node scripts/chain-format.mjs --write",
     "gates": "node scripts/chain-format.mjs && node scripts/pattern-lint.mjs && node scripts/check-pins.mjs && node scripts/validate-meta.mjs && node scripts/structural-diff.mjs --strict && node scripts/data-fidelity.mjs && node scripts/check-mcp-contract.mjs && node scripts/generate-overview.mjs && node scripts/generate-coverage.mjs && node scripts/generate-status.mjs && git diff --exit-code -- src README.md api.md STATUS.md",
     "gates:full": "npm run gates && npx abaplint ./abaplint.jsonc && node scripts/view-gates.mjs --strict",

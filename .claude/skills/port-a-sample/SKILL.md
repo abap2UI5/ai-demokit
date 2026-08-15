@@ -240,7 +240,9 @@ that stops at the deepest node.
 #### Formatting rules (strict — `npm run gates` checks these)
 
 The chain is the only picture of the view's tree there is, so its layout is
-load-bearing rather than cosmetic. The first four rules below are **identical in
+load-bearing rather than cosmetic. The full rule set with a worked example is
+the **`view-chain-layout` skill**, kept byte-identical in `abap2UI5` and
+`abap2UI5/samples`. The first four rules below are **identical in
 `abap2UI5/samples`** — the two corpora were unified in one pass after a survey
 found them following opposite conventions — and `node scripts/chain-format.mjs`
 (first step of `npm run gates`) checks them; `npm run fmt:chains` applies them.
