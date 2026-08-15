@@ -13,7 +13,7 @@
 //
 // So an app data field holding a `<` (the overview app's generation notes:
 // "... are <= 1.71", "<strong>", the deprecated-control `<del>` markup) lands
-// unescaped in the draft XML that Z2UI5_CL_CORE_APP=>DB_SAVE persists. On the
+// unescaped in the draft XML that Z2UI5_CL_UI5_APP_CONT=>DB_SAVE persists. On the
 // next request DB_LOAD parses that XML back with the transpiled CL_IXML, whose
 // parser sees the stray `<` as the start of a tag, fails its tag regex and
 // dies in `ASSERT ls_match-offset = 0` — an ASSERT is not catchable in the JS

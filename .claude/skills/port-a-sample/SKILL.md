@@ -326,7 +326,7 @@ that stops at the deepest node.
   (`X` / space), **not** the string `` `true` `` — assign it straight into an
   `abap_bool` field (`flag = client->get_event_arg( ).`); never test `… = \`true\``.
 - **Passing a value *into* an event uses the `$`-prefixed form — never a bare
-  `{…}`.** The runtime (`z2ui5_cl_core_srv_event=>get_t_arg`) sends every
+  `{…}`.** The runtime (`z2ui5_cl_ui5_srv_event=>get_t_arg`) sends every
   `t_arg` entry that starts with `$` or `{` to the frontend **verbatim** and
   wraps everything else in quotes as a string literal. Only a **`$`-prefixed**
   arg is then resolved by UI5 (against the row's binding context / the event
