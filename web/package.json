@@ -12,8 +12,7 @@
     "unit": "node output/index.mjs",
     "smoke": "node ci/smoke_backend.mjs",
     "webpack:build": "webpack --mode development --env development",
-    "deploy:docs": "node ci/copy_to_docs.mjs",
-    "all": "npm run build && npm run smoke && npm run webpack:build && npm run deploy:docs",
+    "all": "npm run build && npm run smoke && npm run webpack:build",
     "express": "node srv/express.mjs",
     "serve:build": "node srv/serve_build.mjs"
   },

@@ -203,7 +203,7 @@ Ports are filed by the sample's UI5 library — `src/01` (`sap.m`), `src/02`
 — one flat ABAP package per library; see AGENTS §3 for the folder table. The
 generation/review batch a port came from is recorded in its
 `meta/<class>.json`, not in the tree. The browser demo is built from
-[`web/`](web) into [`docs/`](docs); see [`web/README.md`](web/README.md).
+[`web/`](web) and published by `deploy_web`; see [`web/README.md`](web/README.md).
 
 #### Repo map
 

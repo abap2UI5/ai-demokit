@@ -4,10 +4,12 @@ name: deploy_web
 # this repo's GitHub Pages. A thin adaptation of abap2UI5/web-abap2UI5's
 # build_web workflow, pointed at this repo's ports.
 #
-# To use this instead of the committed docs/ folder, set
-#   Settings -> Pages -> Source: "GitHub Actions".
-# The committed docs/ (Source: "Deploy from a branch", /docs) keeps working as
-# a zero-CI fallback if you leave Pages on branch source.
+# This is the ONLY way the demo is published: Settings -> Pages -> Source
+# must be "GitHub Actions". There used to be a second one - a committed
+# docs/ folder serving as a zero-CI fallback on branch source - and it cost
+# 28 MB of the repository per rebuild while being, at the moment it was
+# removed, twelve hours behind src/. A fallback nobody can tell is stale is
+# not a fallback.
 
 on:
   workflow_dispatch:
