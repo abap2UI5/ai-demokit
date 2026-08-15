@@ -1,9 +1,16 @@
-# The linter is a git dependency pinned by SHA in package.json (deliberately
-# the same SHA the VS Code extension pins, so the two consumers judge by one
-# linter state — see STATUS.md). New rules and metadata reach the view gates
-# only when the pin moves; this workflow moves it weekly, runs the gate that
-# consumes the linter, and opens a PR. Mirrors the extension's bump-linter
-# workflow so the two pins advance in the same rhythm.
+# The linter comes from npm as `@abap2ui5/linter`, and package-lock.json is
+# what actually decides which version the view gates run: `npm ci` reads the
+# lock, so a new release reaches this corpus only when the lock moves. This
+# workflow moves it weekly to the latest published version, runs the gate that
+# consumes the linter, and opens a PR.
+#
+# It tracks `latest` rather than staying inside the declared range, because the
+# range is the thing being maintained here: the previous version of this
+# workflow tracked the linter's main branch unconditionally, so following every
+# published release — major ones included — is the same policy expressed
+# against a registry instead of a branch. The full strict view gates run before
+# the PR exists, which is what makes that safe: a rule regression over the 416
+# ports fails this workflow instead of landing on main.
 name: bump_linter
 
 on:
@@ -25,28 +32,33 @@ jobs:
       with:
         node-version: '22'
 
-    - name: Re-pin @abap2ui5/linter to the linter's main
+    - name: Move @abap2ui5/linter to the latest published version
       id: pin
       run: |
         set -euo pipefail
-        # --exit-code under pipefail: `git ls-remote` prints nothing and still
-        # exits 0 for a ref that does not match, so a renamed default branch
-        # upstream would resolve to an EMPTY sha and this step would move the
-        # pin to nothing. Fail here instead. (web-abap2UI5's build stamp had
-        # exactly this hole and went blind for as long as it was there.)
-        SHA=$(git ls-remote --exit-code https://github.com/abap2UI5/linter refs/heads/main | cut -f1)
-        echo "sha=$SHA" >> "$GITHUB_OUTPUT"
-        npm pkg set "devDependencies.@abap2ui5/linter=github:abap2UI5/linter#$SHA"
-        if git diff --quiet package.json; then
+        # Resolved first and checked, because `npm view` prints nothing and
+        # still exits 0 when a package has no `latest` dist-tag - installing
+        # `@abap2ui5/linter@` would then resolve to whatever npm felt like.
+        # Fail here instead. (web-abap2UI5's build stamp had exactly this hole
+        # with `git ls-remote` and went blind for as long as it was there.)
+        VERSION=$(npm view @abap2ui5/linter version)
+        test -n "$VERSION"
+        echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+        # Writes the range in package.json AND the exact version in the lock.
+        # Both matter: the range is what a fresh install reads, the lock is
+        # what `npm ci` reads, and the gates below run on the lock.
+        npm install --save-dev "@abap2ui5/linter@$VERSION"
+        # package.json alone is not the signal it used to be: a release inside
+        # the declared range moves only package-lock.json, and that is exactly
+        # the bump this corpus needs to see.
+        if git diff --quiet package.json package-lock.json; then
           echo "changed=false" >> "$GITHUB_OUTPUT"
         else
           echo "changed=true" >> "$GITHUB_OUTPUT"
         fi
-    - if: steps.pin.outputs.changed == 'true'
-      run: npm install
 
     # the corpus gate that consumes the linter — a rule regression over the
-    # 290+ ports surfaces here, in the PR run, not on main
+    # 416 ports surfaces here, in the PR run, not on main
     - if: steps.pin.outputs.changed == 'true'
       run: npx playwright install --with-deps chromium
     - if: steps.pin.outputs.changed == 'true'
@@ -56,15 +68,14 @@ jobs:
       uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
       with:
         branch: bump-linter
-        title: 'chore: bump the pinned abap2UI5-linter commit'
-        commit-message: 'chore: bump the pinned abap2UI5-linter commit to ${{ steps.pin.outputs.sha }}'
+        title: 'chore: bump @abap2ui5/linter'
+        commit-message: 'chore: bump @abap2ui5/linter to ${{ steps.pin.outputs.version }}'
         body: |
-          Weekly re-resolve of the `@abap2ui5/linter` git dependency against
-          the linter's main. The strict view gates over the full corpus ran on
-          the updated pin in the workflow that opened this PR.
+          Weekly move of `@abap2ui5/linter` to the latest version on npm
+          (${{ steps.pin.outputs.version }}). The strict view gates over the
+          full corpus ran on it in the workflow that opened this PR.
 
-          Note: the VS Code extension pins the same dependency (its own
-          bump-linter workflow runs minutes before this one) — merge both
+          Note: the VS Code extension consumes the same linter — merge both
           bumps in the same week to keep the two consumers on one linter
           state.
         add-paths: |

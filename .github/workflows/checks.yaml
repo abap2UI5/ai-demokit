@@ -69,16 +69,57 @@ jobs:
     # shut too many, a duplicate attribute) and rendered in a real headless
     # XMLView.create. scripts/view-gates.mjs adds the corpus policy on top:
     # POST_171 deviations, declared render_smoke skips.
+    #
+    # It also writes the two README badges, which is why this job - alone in
+    # this workflow - needs contents: write.
     runs-on: ubuntu-latest
     timeout-minutes: 15
+    permissions:
+      contents: write
     steps:
     - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        # check out the branch, not the merge commit, so the badge can go back
+        ref: ${{ github.event.pull_request.head.ref || github.ref }}
+        repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
     - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
       with:
         node-version: '22'
     - run: npm ci
     - run: npx playwright install --with-deps chromium
     - run: node scripts/view-gates.mjs --strict
+
+    # view-gates rewrote .github/badges/ with what the corpus now is. The
+    # default branch is protected and github-actions[bot] can never be added
+    # to a bypass list, so they are committed onto the PULL REQUEST branch -
+    # the pull request that changes the corpus is what changes the badges, and
+    # main picks them up when that pull request merges. On a ref that cannot
+    # be pushed to the stale badge is REPORTED, never silently accepted. Only
+    # after a green gate: a red pull request cannot merge, so its badges would
+    # never reach main anyway - and a badge commit on top of a failing run
+    # reads as if something had been fixed
+    - name: Publish the badges
+      if: success()
+      env:
+        # only a same-repository pull request can be pushed to with
+        # GITHUB_TOKEN; on main and from a fork the badge is only reported
+        PUSHABLE: ${{ github.event_name == 'pull_request'
+                      && github.event.pull_request.head.repo.full_name == github.repository }}
+      run: |
+        if git diff --quiet -- .github/badges; then
+          echo "The linter badges are up to date."
+          exit 0
+        fi
+        git diff -- .github/badges
+        if [ "$PUSHABLE" != "true" ]; then
+          echo "::warning::The linter badges are out of date and this ref cannot be pushed to. Run 'npm run view-gates' and commit .github/badges/."
+          exit 0
+        fi
+        git config user.name 'github-actions[bot]'
+        git config user.email 'github-actions[bot]@users.noreply.github.com'
+        git commit -qm 'Refresh the abap2UI5-linter badges' -- .github/badges
+        git push
+        echo "Badges refreshed and pushed onto the pull request branch."
 
   tooling_tests:
     # fixture tests for the gate/generator tooling itself (scripts/test/):

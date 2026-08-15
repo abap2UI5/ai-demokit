@@ -524,7 +524,8 @@ change** — that is what makes a lesson unrepeatable rather than advisory.
 Where it lives depends on what it is about (split enforced 2026-08-04):
 a lesson about **abap2UI5 views/apps in general** becomes a rule in
 [abap2UI5-linter](https://github.com/abap2UI5/linter) (every consumer sees it;
-`view_gates` gates it here after a pin bump); only a **corpus-policy** lesson
+`view_gates` gates it here once a release carrying it reaches
+`package-lock.json`); only a **corpus-policy** lesson
 (method order, formatting, sidecar conventions) stays a pattern-lint rule.
 Never both — one rule set, two enforcement points is how the editor and CI
 drifted apart before. `view_gates` also carries the **advisory ratchet**
