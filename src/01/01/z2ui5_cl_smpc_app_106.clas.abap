@@ -71,7 +71,7 @@ CLASS z2ui5_cl_smpc_app_106 IMPLEMENTATION.
                                 )->a( n = `key`  v = `{TYPE}`
                                 )->a( n = `text` v = `{TYPE}`
 
-                    )->end(
+                        )->end(
                     )->end(
                     )->ele( n = `filter` ns = `semantic`
                         )->tag( n = `FilterAction` ns = `semantic`

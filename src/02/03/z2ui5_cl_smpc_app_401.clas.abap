@@ -282,81 +282,81 @@ CLASS z2ui5_cl_smpc_app_401 IMPLEMENTATION.
                             )->ele( `blocks`
 
                             " personal:BlockPhoneNumber inlined
-                            )->ele( n = `SimpleForm` ns = `forms`
-                                )->a( n = `layout` v = `ColumnLayout`
-                                )->a( n = `width`  v = `100%`
+                                )->ele( n = `SimpleForm` ns = `forms`
+                                    )->a( n = `layout` v = `ColumnLayout`
+                                    )->a( n = `width`  v = `100%`
 
-                                )->tag( n = `Title` ns = `core`
-                                    )->a( n = `text` v = `Phone Numbers`
-                                )->tag( n = `Label` ns = `m`
-                                    )->a( n = `text` v = `Home`
-                                )->tag( n = `Text` ns = `m`
-                                    )->a( n = `text` v = `+ 1 415-321-1234`
-                                )->tag( n = `Label` ns = `m`
-                                    )->a( n = `text` v = `Office phone`
-                                )->tag( n = `Text` ns = `m`
-                                    )->a( n = `text` v = `+ 1 415-321-5555`
+                                    )->tag( n = `Title` ns = `core`
+                                        )->a( n = `text` v = `Phone Numbers`
+                                    )->tag( n = `Label` ns = `m`
+                                        )->a( n = `text` v = `Home`
+                                    )->tag( n = `Text` ns = `m`
+                                        )->a( n = `text` v = `+ 1 415-321-1234`
+                                    )->tag( n = `Label` ns = `m`
+                                        )->a( n = `text` v = `Office phone`
+                                    )->tag( n = `Text` ns = `m`
+                                        )->a( n = `text` v = `+ 1 415-321-5555`
 
+                                )->end(
+
+                                " personal:BlockSocial inlined
+                                )->ele( n = `SimpleForm` ns = `forms`
+                                    )->a( n = `editable`         v = `false`
+                                    )->a( n = `labelSpanL`       v = `4`
+                                    )->a( n = `labelSpanM`       v = `4`
+                                    )->a( n = `labelSpanS`       v = `4`
+                                    )->a( n = `emptySpanL`       v = `0`
+                                    )->a( n = `emptySpanM`       v = `0`
+                                    )->a( n = `emptySpanS`       v = `0`
+                                    )->a( n = `maxContainerCols` v = `2`
+                                    )->a( n = `width`            v = `100%`
+
+                                    )->tag( n = `Title` ns = `core`
+                                        )->a( n = `text` v = `Social Accounts`
+                                    )->tag( n = `Label` ns = `m`
+                                        )->a( n = `text` v = `LinkedIn`
+                                    )->tag( n = `Text` ns = `m`
+                                        )->a( n = `text` v = `/DeniseSmith`
+                                    )->tag( n = `Label` ns = `m`
+                                        )->a( n = `text` v = `Twitter`
+                                    )->tag( n = `Text` ns = `m`
+                                        )->a( n = `text` v = `@DeniseSmith`
+
+                                )->end(
+
+                                " personal:BlockAdresses inlined
+                                )->ele( n = `SimpleForm` ns = `forms`
+                                    )->a( n = `layout`   v = `ColumnLayout`
+                                    )->a( n = `editable` v = `false`
+                                    )->a( n = `width`    v = `100%`
+
+                                    )->tag( n = `Title` ns = `core`
+                                        )->a( n = `text` v = `Addresses`
+                                    )->tag( n = `Label` ns = `m`
+                                        )->a( n = `text` v = `Home Address`
+                                    )->tag( n = `Text` ns = `m`
+                                        )->a( n = `text` v = `2096 Mission Street`
+                                    )->tag( n = `Label` ns = `m`
+                                        )->a( n = `text` v = `Mailing Address`
+                                    )->tag( n = `Text` ns = `m`
+                                        )->a( n = `text` v = `PO Box 32114`
+
+                                )->end(
+
+                                " personal:BlockMailing (columnLayout="1") inlined
+                                )->ele( n = `SimpleForm` ns = `forms`
+                                    )->a( n = `layout` v = `ColumnLayout`
+                                    )->a( n = `width`  v = `100%`
+
+                                    )->tag( n = `Title` ns = `core`
+                                        )->a( n = `text` v = `Mailing Address`
+                                    )->tag( n = `Label` ns = `m`
+                                        )->a( n = `text` v = `Work`
+                                    )->tag( n = `Text` ns = `m`
+                                        )->a( n = `text` v = `DeniseSmith@sap.com`
+
+                                )->end(
                             )->end(
-
-                            " personal:BlockSocial inlined
-                            )->ele( n = `SimpleForm` ns = `forms`
-                                )->a( n = `editable`         v = `false`
-                                )->a( n = `labelSpanL`       v = `4`
-                                )->a( n = `labelSpanM`       v = `4`
-                                )->a( n = `labelSpanS`       v = `4`
-                                )->a( n = `emptySpanL`       v = `0`
-                                )->a( n = `emptySpanM`       v = `0`
-                                )->a( n = `emptySpanS`       v = `0`
-                                )->a( n = `maxContainerCols` v = `2`
-                                )->a( n = `width`            v = `100%`
-
-                                )->tag( n = `Title` ns = `core`
-                                    )->a( n = `text` v = `Social Accounts`
-                                )->tag( n = `Label` ns = `m`
-                                    )->a( n = `text` v = `LinkedIn`
-                                )->tag( n = `Text` ns = `m`
-                                    )->a( n = `text` v = `/DeniseSmith`
-                                )->tag( n = `Label` ns = `m`
-                                    )->a( n = `text` v = `Twitter`
-                                )->tag( n = `Text` ns = `m`
-                                    )->a( n = `text` v = `@DeniseSmith`
-
-                            )->end(
-
-                            " personal:BlockAdresses inlined
-                            )->ele( n = `SimpleForm` ns = `forms`
-                                )->a( n = `layout`   v = `ColumnLayout`
-                                )->a( n = `editable` v = `false`
-                                )->a( n = `width`    v = `100%`
-
-                                )->tag( n = `Title` ns = `core`
-                                    )->a( n = `text` v = `Addresses`
-                                )->tag( n = `Label` ns = `m`
-                                    )->a( n = `text` v = `Home Address`
-                                )->tag( n = `Text` ns = `m`
-                                    )->a( n = `text` v = `2096 Mission Street`
-                                )->tag( n = `Label` ns = `m`
-                                    )->a( n = `text` v = `Mailing Address`
-                                )->tag( n = `Text` ns = `m`
-                                    )->a( n = `text` v = `PO Box 32114`
-
-                            )->end(
-
-                            " personal:BlockMailing (columnLayout="1") inlined
-                            )->ele( n = `SimpleForm` ns = `forms`
-                                )->a( n = `layout` v = `ColumnLayout`
-                                )->a( n = `width`  v = `100%`
-
-                                )->tag( n = `Title` ns = `core`
-                                    )->a( n = `text` v = `Mailing Address`
-                                )->tag( n = `Label` ns = `m`
-                                    )->a( n = `text` v = `Work`
-                                )->tag( n = `Text` ns = `m`
-                                    )->a( n = `text` v = `DeniseSmith@sap.com`
-
-                            )->end(
-                        )->end(
                         )->end(
 
                         )->ele( `ObjectPageSubSection`

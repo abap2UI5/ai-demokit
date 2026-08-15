@@ -59,7 +59,7 @@ CLASS z2ui5_cl_smpc_app_176 IMPLEMENTATION.
                     )->tag( `Title`
                         )->a( n = `text` v = `GridList with GridBoxLayout`
 
-            )->end(
+                )->end(
             )->end(
 
             )->ele( n = `GridList` ns = `f`
@@ -76,7 +76,7 @@ CLASS z2ui5_cl_smpc_app_176 IMPLEMENTATION.
                         )->tag( `SearchField`
                             )->a( n = `width` v = `15rem`
 
-                )->end(
+                    )->end(
                 )->end(
 
                 )->ele( n = `customLayout` ns = `f`

@@ -95,7 +95,7 @@ CLASS z2ui5_cl_smpc_app_245 IMPLEMENTATION.
                                     )->tag( `Text`
                                         )->a( n = `text` v = `SAP France`
 
-                            )->end(
+                                )->end(
                             )->end(
                         )->end(
 
@@ -126,7 +126,7 @@ CLASS z2ui5_cl_smpc_app_245 IMPLEMENTATION.
                                     )->tag( `Text`
                                         )->a( n = `text` v = `AppHaus`
 
-                            )->end(
+                                )->end(
                             )->end(
                         )->end(
                     )->end(
@@ -166,7 +166,7 @@ CLASS z2ui5_cl_smpc_app_245 IMPLEMENTATION.
                                                         )->a( n = `text` v = `Grid Small`
                                                         )->a( n = `key`  v = `GridSmall`
 
-                                            )->end(
+                                                )->end(
                                             )->end(
                                             )->tag( `Label`
                                                 )->a( n = `text` v = `Sticky options:`
@@ -180,8 +180,8 @@ CLASS z2ui5_cl_smpc_app_245 IMPLEMENTATION.
                                                 )->a( n = `id`   v = `toggleInfoToolbar`
                                                 )->a( n = `text` v = `Hide/Show InfoToolbar`
 
-                                )->end(
-                                )->end(
+                                        )->end(
+                                    )->end(
                                 )->end(
 
                                 )->ele( `infoToolbar`
@@ -189,7 +189,7 @@ CLASS z2ui5_cl_smpc_app_245 IMPLEMENTATION.
                                         )->tag( `Label`
                                             )->a( n = `text` v = `Wide range of available products`
 
-                                )->end(
+                                    )->end(
                                 )->end(
 
                                 )->ele( `columns`
@@ -199,7 +199,7 @@ CLASS z2ui5_cl_smpc_app_245 IMPLEMENTATION.
                                             )->tag( `Text`
                                                 )->a( n = `text` v = `Supplier`
 
-                                    )->end(
+                                        )->end(
                                     )->end(
                                     )->ele( `Column`
                                         )->a( n = `mergeDuplicates` v = `true`
@@ -207,7 +207,7 @@ CLASS z2ui5_cl_smpc_app_245 IMPLEMENTATION.
                                             )->tag( `Text`
                                                 )->a( n = `text` v = `Product`
 
-                                    )->end(
+                                        )->end(
                                     )->end(
                                     )->ele( `Column`
                                         )->a( n = `minScreenWidth` v = `Tablet`
@@ -217,7 +217,7 @@ CLASS z2ui5_cl_smpc_app_245 IMPLEMENTATION.
                                             )->tag( `Text`
                                                 )->a( n = `text` v = `Dimensions`
 
-                                    )->end(
+                                        )->end(
                                     )->end(
                                     )->ele( `Column`
                                         )->a( n = `minScreenWidth` v = `Tablet`
@@ -227,7 +227,7 @@ CLASS z2ui5_cl_smpc_app_245 IMPLEMENTATION.
                                             )->tag( `Text`
                                                 )->a( n = `text` v = `Weight`
 
-                                    )->end(
+                                        )->end(
                                     )->end(
                                     )->ele( `Column`
                                         )->a( n = `hAlign` v = `End`
@@ -235,8 +235,8 @@ CLASS z2ui5_cl_smpc_app_245 IMPLEMENTATION.
                                             )->tag( `Text`
                                                 )->a( n = `text` v = `Price`
 
-                                )->end(
-                                )->end(
+                                        )->end(
+                                    )->end(
                                 )->end(
 
                                 )->ele( `ColumnListItem`
@@ -255,7 +255,7 @@ CLASS z2ui5_cl_smpc_app_245 IMPLEMENTATION.
                                         )->a( n = `number` v = |\{ parts:[\{path:'PRICE'\},\{path:'CURRENCYCODE'\}], type: 'sap.ui.model.type.Currency', formatOptions: \{showMeasure: false\} \}|
                                         )->a( n = `unit`   v = `{CURRENCYCODE}`
 
-                            )->end(
+                                )->end(
                             )->end(
                         )->end(
                     )->end(

@@ -65,7 +65,7 @@ CLASS z2ui5_cl_smpc_app_182 IMPLEMENTATION.
                 )->tag( `TimePicker`
                     )->a( n = `value` v = |\{ path: '{ client->_bind( val = time path = abap_true ) }', type: 'TimeType', formatOptions: \{ source: \{ pattern: 'HH:mm:ss' \} \} \}|
 
-        )->end(
+            )->end(
         )->end(
 
         )->ele( n = `SimpleForm` ns = `form`
@@ -94,7 +94,7 @@ CLASS z2ui5_cl_smpc_app_182 IMPLEMENTATION.
                 )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = time path = abap_true ) }', type: 'TimeType', formatOptions: \{ style: 'long', source: \{ pattern: 'HH:mm:ss' \} \} \}|
 
-        )->end(
+            )->end(
         )->end( ).
 
     client->view_display( view->stringify( ) ).

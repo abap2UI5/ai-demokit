@@ -108,7 +108,7 @@ CLASS z2ui5_cl_smpc_app_155 IMPLEMENTATION.
                             )->a( n = `indentL`   v = `4`
                             )->a( n = `indentM`   v = `4`
 
-                )->end(
+                    )->end(
                 )->end(
                 )->ele( `CheckBox`
                     )->a( n = `id`   v = `focusMe`
@@ -119,7 +119,7 @@ CLASS z2ui5_cl_smpc_app_155 IMPLEMENTATION.
                             )->a( n = `indentL`   v = `4`
                             )->a( n = `indentM`   v = `4`
 
-                )->end(
+                    )->end(
                 )->end(
                 )->ele( `CheckBox`
                     )->a( n = `text`     v = `Checkbox with wrapping='true' and long text placed in a form`

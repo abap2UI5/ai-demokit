@@ -70,7 +70,7 @@ CLASS z2ui5_cl_smpc_app_244 IMPLEMENTATION.
                                 )->a( n = `text`  v = `Examples`
                                 )->a( n = `press` v = client->follow_up_action( val = client->cs_event-control_global t_arg = VALUE #( ( `MESSAGE_TOAST` ) ( `show` ) ( `Examples pressed` ) ) )
 
-                    )->end(
+                        )->end(
                     )->end(
 
                     )->ele( n = `heading` ns = `f`
@@ -82,7 +82,7 @@ CLASS z2ui5_cl_smpc_app_244 IMPLEMENTATION.
                                 )->a( n = `type`  v = `Favorite`
                                 )->a( n = `class` v = `sapUiTinyMarginBegin`
 
-                    )->end(
+                        )->end(
                     )->end(
 
                     )->ele( n = `expandedContent` ns = `f`
@@ -103,7 +103,7 @@ CLASS z2ui5_cl_smpc_app_244 IMPLEMENTATION.
                             )->tag( `Text`
                                 )->a( n = `text` v = `Senior UI Developer`
 
-                    )->end(
+                        )->end(
                     )->end(
 
                     )->ele( n = `actions` ns = `f`
@@ -116,15 +116,15 @@ CLASS z2ui5_cl_smpc_app_244 IMPLEMENTATION.
                                 )->tag( `OverflowToolbarLayoutData`
                                     )->a( n = `priority` v = `NeverOverflow`
 
-                        )->end(
+                            )->end(
                         )->end(
                         )->tag( `Button`
                             )->a( n = `text`  v = `Toggle Footer`
                             )->a( n = `press` v = client->_event( `TOGGLE_FOOTER` )
 
                     )->end(
-                    )->end(
                 )->end(
+            )->end(
 
             )->ele( n = `header` ns = `f`
                 )->ele( n = `DynamicPageHeader` ns = `f`
@@ -157,7 +157,7 @@ CLASS z2ui5_cl_smpc_app_244 IMPLEMENTATION.
                             )->tag( `Label`
                                 )->a( n = `text` v = `Resize the browser to see the Avatar adapt`
 
-                    )->end(
+                        )->end(
                     )->end(
 
                     )->tag( `MessageStrip`
@@ -167,7 +167,7 @@ CLASS z2ui5_cl_smpc_app_244 IMPLEMENTATION.
                         )->a( n = `class`    v = `sapUiTinyMarginTopBottom`
 
                 )->end(
-                )->end(
+            )->end(
 
             )->ele( n = `content` ns = `f`
                 )->ele( `VBox`
@@ -250,8 +250,8 @@ CLASS z2ui5_cl_smpc_app_244 IMPLEMENTATION.
                             )->a( n = `text` v = `- Works seamlessly with FlexibleColumnLayout and other container controls`
 
                     )->end(
-                    )->end(
                 )->end(
+            )->end(
 
             )->ele( n = `footer` ns = `f`
                 )->ele( `OverflowToolbar`
@@ -263,10 +263,10 @@ CLASS z2ui5_cl_smpc_app_244 IMPLEMENTATION.
                         )->a( n = `type` v = `Reject`
                         )->a( n = `text` v = `Reject`
 
-            )->end(
+                )->end(
             )->end(
         )->end(
-        )->end( ).
+    )->end( ).
 
     client->view_display( view->stringify( ) ).
 

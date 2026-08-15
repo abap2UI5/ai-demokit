@@ -114,7 +114,7 @@ CLASS z2ui5_cl_smpc_app_104 IMPLEMENTATION.
                             )->tag( `Text`
                                 )->a( n = `text` v = `Product`
 
-                    )->end(
+                        )->end(
                     )->end(
                     )->ele( `Column`
                         )->a( n = `minScreenWidth` v = `Tablet`
@@ -123,7 +123,7 @@ CLASS z2ui5_cl_smpc_app_104 IMPLEMENTATION.
                             )->tag( `Text`
                                 )->a( n = `text` v = `Supplier`
 
-                    )->end(
+                        )->end(
                     )->end(
                     )->ele( `Column`
                         )->a( n = `minScreenWidth` v = `Desktop`
@@ -133,7 +133,7 @@ CLASS z2ui5_cl_smpc_app_104 IMPLEMENTATION.
                             )->tag( `Text`
                                 )->a( n = `text` v = `Dimensions`
 
-                    )->end(
+                        )->end(
                     )->end(
                     )->ele( `Column`
                         )->a( n = `minScreenWidth` v = `Desktop`
@@ -143,7 +143,7 @@ CLASS z2ui5_cl_smpc_app_104 IMPLEMENTATION.
                             )->tag( `Text`
                                 )->a( n = `text` v = `Weight`
 
-                    )->end(
+                        )->end(
                     )->end(
                     )->ele( `Column`
                         )->a( n = `hAlign` v = `End`
@@ -151,7 +151,7 @@ CLASS z2ui5_cl_smpc_app_104 IMPLEMENTATION.
                             )->tag( `Text`
                                 )->a( n = `text` v = `Product`
 
-                    )->end(
+                        )->end(
                     )->end(
                 )->end(
             )->end(
@@ -195,7 +195,7 @@ CLASS z2ui5_cl_smpc_app_104 IMPLEMENTATION.
                             )->tag( `Text`
                                 )->a( n = `text` v = `Product`
 
-                    )->end(
+                        )->end(
                     )->end(
                     )->ele( `Column`
                         )->a( n = `minScreenWidth` v = `Tablet`
@@ -204,7 +204,7 @@ CLASS z2ui5_cl_smpc_app_104 IMPLEMENTATION.
                             )->tag( `Text`
                                 )->a( n = `text` v = `Supplier`
 
-                    )->end(
+                        )->end(
                     )->end(
                     )->ele( `Column`
                         )->a( n = `minScreenWidth` v = `Desktop`
@@ -214,7 +214,7 @@ CLASS z2ui5_cl_smpc_app_104 IMPLEMENTATION.
                             )->tag( `Text`
                                 )->a( n = `text` v = `Dimensions`
 
-                    )->end(
+                        )->end(
                     )->end(
                     )->ele( `Column`
                         )->a( n = `minScreenWidth` v = `Desktop`
@@ -224,7 +224,7 @@ CLASS z2ui5_cl_smpc_app_104 IMPLEMENTATION.
                             )->tag( `Text`
                                 )->a( n = `text` v = `Weight`
 
-                    )->end(
+                        )->end(
                     )->end(
                     )->ele( `Column`
                         )->a( n = `hAlign` v = `End`
@@ -232,7 +232,7 @@ CLASS z2ui5_cl_smpc_app_104 IMPLEMENTATION.
                             )->tag( `Text`
                                 )->a( n = `text` v = `Product`
 
-                    )->end(
+                        )->end(
                     )->end(
                 )->end(
             )->end(
@@ -267,7 +267,7 @@ CLASS z2ui5_cl_smpc_app_104 IMPLEMENTATION.
                         )->a( n = `key`   v = `multi`
                         )->a( n = `value` v = `true`
 
-            )->end(
+                )->end(
             )->end(
             )->ele( `Button`
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
@@ -281,7 +281,7 @@ CLASS z2ui5_cl_smpc_app_104 IMPLEMENTATION.
                         )->a( n = `key`   v = `draggable`
                         )->a( n = `value` v = `true`
 
-            )->end(
+                )->end(
             )->end(
             )->ele( `Button`
                 )->a( n = `text`  v = `Show Table Select Dialog (resizable=true)`
@@ -295,7 +295,7 @@ CLASS z2ui5_cl_smpc_app_104 IMPLEMENTATION.
                         )->a( n = `key`   v = `resizable`
                         )->a( n = `value` v = `true`
 
-            )->end(
+                )->end(
             )->end(
             )->ele( `Button`
                 )->a( n = `class` v = `sapUiSmallMarginBottom`
@@ -309,7 +309,7 @@ CLASS z2ui5_cl_smpc_app_104 IMPLEMENTATION.
                         )->a( n = `key`   v = `remember`
                         )->a( n = `value` v = `true`
 
-            )->end(
+                )->end(
             )->end(
             )->ele( `Button`
                 )->a( n = `text`  v = `Show Table Select Dialog (Custom confirmation button text)`
@@ -323,7 +323,7 @@ CLASS z2ui5_cl_smpc_app_104 IMPLEMENTATION.
                         )->a( n = `key`   v = `confirmButtonText`
                         )->a( n = `value` v = `Save`
 
-            )->end(
+                )->end(
             )->end(
             )->ele( `Button`
                 )->a( n = `text`  v = `Show Table Select Dialog with Responsive Padding`
@@ -340,7 +340,7 @@ CLASS z2ui5_cl_smpc_app_104 IMPLEMENTATION.
                         )->a( n = `key`   v = `responsivePadding`
                         )->a( n = `value` v = `true`
 
-            )->end(
+                )->end(
             )->end(
         )->end( ).
 

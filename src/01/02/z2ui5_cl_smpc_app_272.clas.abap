@@ -128,7 +128,7 @@ CLASS z2ui5_cl_smpc_app_272 IMPLEMENTATION.
                                 )->tag( n = `GridData` ns = `l`
                                     )->a( n = `span` v = `L3 M3 S4`
 
-                        )->end(
+                            )->end(
                         )->end(
 
                         )->tag( `Label`
@@ -143,7 +143,7 @@ CLASS z2ui5_cl_smpc_app_272 IMPLEMENTATION.
                                 )->tag( n = `GridData` ns = `l`
                                     )->a( n = `span` v = `L3 M3 S4`
 
-                        )->end(
+                            )->end(
                         )->end(
 
                         )->tag( `Input`
@@ -170,7 +170,7 @@ CLASS z2ui5_cl_smpc_app_272 IMPLEMENTATION.
                                     )->a( n = `text` v = `Great Britain`
                                     )->a( n = `key`  v = `Great Britain`
 
-                        )->end(
+                            )->end(
                         )->end(
 
                         )->tag( n = `Title` ns = `core`
@@ -203,7 +203,7 @@ CLASS z2ui5_cl_smpc_app_272 IMPLEMENTATION.
                                 )->tag( n = `Item` ns = `core`
                                     )->a( n = `text` v = `American Express`
 
-                        )->end(
+                            )->end(
                         )->end(
 
                         )->tag( `Label`
@@ -250,7 +250,7 @@ CLASS z2ui5_cl_smpc_app_272 IMPLEMENTATION.
                                 )->tag( n = `Item` ns = `core`
                                     )->a( n = `text` v = `12`
 
-                        )->end(
+                            )->end(
                         )->end(
 
                         )->ele( `ComboBox`
@@ -273,7 +273,7 @@ CLASS z2ui5_cl_smpc_app_272 IMPLEMENTATION.
                                 )->tag( n = `Item` ns = `core`
                                     )->a( n = `text` v = `2020`
 
-                        )->end(
+                            )->end(
                         )->end(
 
                         )->tag( `Label`
@@ -300,11 +300,11 @@ CLASS z2ui5_cl_smpc_app_272 IMPLEMENTATION.
                             )->a( n = `id`            v = `OnlineTwitter`
 
                     )->end(
-                    )->end(
+                )->end(
 
-                " the controller's byId(...).setType/setText/setVisible per
-                " strip is a bound triple here; close sets visible = false
-                " server-side, exactly like onMsgStripClose
+            " the controller's byId(...).setType/setText/setVisible per
+            " strip is a bound triple here; close sets visible = false
+            " server-side, exactly like onMsgStripClose
                 )->tag( `MessageStrip`
                     )->a( n = `id`              v = `BillingInformationMessage`
                     )->a( n = `visible`         v = client->_bind( billing_visible )

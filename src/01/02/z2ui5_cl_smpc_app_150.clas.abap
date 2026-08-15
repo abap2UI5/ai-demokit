@@ -56,7 +56,7 @@ CLASS z2ui5_cl_smpc_app_150 IMPLEMENTATION.
                     )->a( n = `text` v = `B`
                     )->a( n = `key`  v = `B`
 
-        )->end(
+            )->end(
         )->end(
 
         )->tag( n = `CodeEditor` ns = `ce`

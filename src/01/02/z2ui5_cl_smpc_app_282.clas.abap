@@ -64,7 +64,7 @@ CLASS z2ui5_cl_smpc_app_282 IMPLEMENTATION.
                 )->tag( `DatePicker`
                     )->a( n = `value` v = |\{ path: '{ client->_bind( val = date path = abap_true ) }', type: 'DateType', formatOptions: \{ source: \{ pattern: 'yyyy-MM-dd' \} \} \}|
 
-        )->end(
+            )->end(
         )->end(
 
         )->ele( n = `SimpleForm` ns = `form`
@@ -97,7 +97,7 @@ CLASS z2ui5_cl_smpc_app_282 IMPLEMENTATION.
                 )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = date path = abap_true ) }', type: 'DateType', formatOptions: \{ style: 'full', source: \{ pattern: 'yyyy-MM-dd' \} \} \}|
 
-        )->end(
+            )->end(
         )->end(
 
         )->ele( n = `SimpleForm` ns = `form`
@@ -118,7 +118,7 @@ CLASS z2ui5_cl_smpc_app_282 IMPLEMENTATION.
                 )->tag( `Text`
                     )->a( n = `text` v = |\{ path: '{ client->_bind( val = date path = abap_true ) }', type: 'DateType', formatOptions: \{ relative: true, relativeScale: 'auto', source: \{ pattern: 'yyyy-MM-dd' \} \} \}|
 
-        )->end(
+            )->end(
         )->end( ).
 
     client->view_display( view->stringify( ) ).

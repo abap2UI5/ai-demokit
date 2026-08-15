@@ -124,7 +124,7 @@ CLASS z2ui5_cl_smpc_app_248 IMPLEMENTATION.
                                 )->a( n = `press` v = client->follow_up_action( val   = client->cs_event-control_by_id
                                                                                 t_arg = VALUE #( ( `TreeTableBasic` ) ( `expand` ) ( `$event.oSource.getParent().getParent().getSelectedIndices()` ) ) )
 
-                    )->end(
+                        )->end(
                     )->end(
 
                     )->ele( `columns`

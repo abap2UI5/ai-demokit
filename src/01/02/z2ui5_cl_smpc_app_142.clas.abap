@@ -100,7 +100,7 @@ CLASS z2ui5_cl_smpc_app_142 IMPLEMENTATION.
                                 )->tag( `Button`
                                     )->a( n = `icon` v = `sap-icon://settings`
 
-                        )->end(
+                            )->end(
                         )->end(
 
                         )->ele( n = `formElements` ns = `f`
@@ -111,7 +111,7 @@ CLASS z2ui5_cl_smpc_app_142 IMPLEMENTATION.
                                         )->a( n = `value` v = client->_bind( suppliername )
                                         )->a( n = `id`    v = `name`
 
-                            )->end(
+                                )->end(
                             )->end(
                             )->ele( n = `FormElement` ns = `f`
                                 )->a( n = `label` v = `Street`
@@ -124,9 +124,9 @@ CLASS z2ui5_cl_smpc_app_142 IMPLEMENTATION.
                                             )->tag( n = `GridData` ns = `l`
                                                 )->a( n = `span` v = `XL2 L1 M3 S4`
 
+                                        )->end(
                                     )->end(
-                                    )->end(
-                            )->end(
+                                )->end(
                             )->end(
                             )->ele( n = `FormElement` ns = `f`
                                 )->a( n = `label` v = `ZIP Code/City`
@@ -137,12 +137,12 @@ CLASS z2ui5_cl_smpc_app_142 IMPLEMENTATION.
                                             )->tag( n = `GridData` ns = `l`
                                                 )->a( n = `span` v = `XL2 L1 M3 S4`
 
-                                    )->end(
+                                        )->end(
                                     )->end(
                                     )->tag( `Input`
                                         )->a( n = `value` v = client->_bind( city )
 
-                            )->end(
+                                )->end(
                             )->end(
                             )->ele( n = `FormElement` ns = `f`
                                 )->a( n = `label` v = `Country`
@@ -161,8 +161,8 @@ CLASS z2ui5_cl_smpc_app_142 IMPLEMENTATION.
                                             )->a( n = `text` v = `England`
                                             )->a( n = `key`  v = `England`
 
-                            )->end(
-                            )->end(
+                                    )->end(
+                                )->end(
                             )->end(
                         )->end(
                     )->end(
@@ -178,7 +178,7 @@ CLASS z2ui5_cl_smpc_app_142 IMPLEMENTATION.
                                 )->tag( `Button`
                                     )->a( n = `icon` v = `sap-icon://settings`
 
-                        )->end(
+                            )->end(
                         )->end(
 
                         )->ele( n = `formElements` ns = `f`
@@ -190,7 +190,7 @@ CLASS z2ui5_cl_smpc_app_142 IMPLEMENTATION.
                                         )->a( n = `type`  v = `Url`
                                         )->a( n = `id`    v = `url`
 
-                            )->end(
+                                )->end(
                             )->end(
                             )->ele( n = `FormElement` ns = `f`
                                 )->a( n = `label` v = `Twitter`

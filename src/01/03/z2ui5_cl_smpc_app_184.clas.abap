@@ -141,10 +141,10 @@ CLASS z2ui5_cl_smpc_app_184 IMPLEMENTATION.
                                 )->tag( n = `HTML` ns = `core`
                                     )->a( n = `content` v = `<div style="height:auto;min-height:4em; background-color: #A9EAFF ;line-height: 4em;">Single Subsections are promoted to section. When they do not have a name, the section name is used.</div>`
 
-        )->end(
-        )->end(
-        )->end(
-        )->end( ).
+                            )->end(
+                        )->end(
+                    )->end(
+                )->end( ).
 
     client->view_display( view->stringify( ) ).
 

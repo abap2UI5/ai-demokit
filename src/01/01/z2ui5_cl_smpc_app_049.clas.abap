@@ -58,68 +58,68 @@ CLASS z2ui5_cl_smpc_app_049 IMPLEMENTATION.
     " (an enum-typed property rejects it outright). The omission is SCOPED to
     " those columns, because the two booleans must send their explicit false
     view->ele( n = `View` ns = `mvc`
-            )->a( n = `xmlns`     v = `sap.m`
-            )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
+        )->a( n = `xmlns`     v = `sap.m`
+        )->a( n = `xmlns:mvc` v = `sap.ui.core.mvc`
 
-            )->ele( `List`
-                )->a( n = `id`    v = `idTable`
-                )->a( n = `items` v = client->_bind(
-                                          val                = modeldata
-                                          " scoped to the columns that may vanish: an
-                                          " abap_false MUST reach the client (the disabled
-                                          " and the read-only row), and false is itself
-                                          " initial - the blanket flag would drop it
-                                          omit_initial_paths = VALUE #( ( `VALUE` )
-                                                                        ( `MIN` )
-                                                                        ( `MAX` )
-                                                                        ( `STEP` )
-                                                                        ( `LARGERSTEP` )
-                                                                        ( `DISPLAYVALUEPRECISION` )
-                                                                        ( `WIDTH` )
-                                                                        ( `FIELDWIDTH` )
-                                                                        ( `DESCRIPTION` )
-                                                                        ( `TEXTALIGN` )
-                                                                        ( `STEPMODE` )
-                                                                        ( `VALIDATIONMODE` )
-                                                                        ( `VALUESTATE` ) ) )
+        )->ele( `List`
+            )->a( n = `id`    v = `idTable`
+            )->a( n = `items` v = client->_bind(
+                                      val                = modeldata
+                                      " scoped to the columns that may vanish: an
+                                      " abap_false MUST reach the client (the disabled
+                                      " and the read-only row), and false is itself
+                                      " initial - the blanket flag would drop it
+                                      omit_initial_paths = VALUE #( ( `VALUE` )
+                                                                    ( `MIN` )
+                                                                    ( `MAX` )
+                                                                    ( `STEP` )
+                                                                    ( `LARGERSTEP` )
+                                                                    ( `DISPLAYVALUEPRECISION` )
+                                                                    ( `WIDTH` )
+                                                                    ( `FIELDWIDTH` )
+                                                                    ( `DESCRIPTION` )
+                                                                    ( `TEXTALIGN` )
+                                                                    ( `STEPMODE` )
+                                                                    ( `VALIDATIONMODE` )
+                                                                    ( `VALUESTATE` ) ) )
 
-                )->ele( `CustomListItem`
-                    )->ele( `HBox`
-                        )->a( n = `class`          v = `sapUiTinyMargin`
-                        )->a( n = `justifyContent` v = `SpaceBetween`
-                        )->a( n = `alignItems`     v = `Center`
+            )->ele( `CustomListItem`
+                )->ele( `HBox`
+                    )->a( n = `class`          v = `sapUiTinyMargin`
+                    )->a( n = `justifyContent` v = `SpaceBetween`
+                    )->a( n = `alignItems`     v = `Center`
 
-                        )->ele( `VBox`
-                            )->a( n = `class` v = `sapUiSmallMarginEnd`
+                    )->ele( `VBox`
+                        )->a( n = `class` v = `sapUiSmallMarginEnd`
 
-                            )->tag( `Label`
-                                )->a( n = `text`     v = `{LABEL}`
-                                )->a( n = `wrapping` v = `true`
+                        )->tag( `Label`
+                            )->a( n = `text`     v = `{LABEL}`
+                            )->a( n = `wrapping` v = `true`
 
-                        )->end(
-                        )->ele( `VBox`
+                    )->end(
+                    )->ele( `VBox`
 
-                            )->tag( `StepInput`
-                                )->a( n = `value`                 v = `{VALUE}`
-                                )->a( n = `displayValuePrecision` v = `{DISPLAYVALUEPRECISION}`
-                                )->a( n = `min`                   v = `{MIN}`
-                                )->a( n = `max`                   v = `{MAX}`
-                                )->a( n = `width`                 v = `{WIDTH}`
-                                )->a( n = `step`                  v = `{STEP}`
-                                )->a( n = `largerStep`            v = `{LARGERSTEP}`
-                                )->a( n = `stepMode`              v = `{STEPMODE}`
-                                )->a( n = `valueState`            v = `{VALUESTATE}`
-                                )->a( n = `enabled`               v = `{ENABLED}`
-                                )->a( n = `editable`              v = `{EDITABLE}`
-                                )->a( n = `description`           v = `{DESCRIPTION}`
-                                )->a( n = `fieldWidth`            v = `{FIELDWIDTH}`
-                                )->a( n = `textAlign`             v = `{TEXTALIGN}`
-                                )->a( n = `validationMode`        v = `{VALIDATIONMODE}`
-                                )->a( n = `change`                v = client->follow_up_action( val   = client->cs_event-control_global
-                                                                                                t_arg = VALUE #( ( `MESSAGE_TOAST` )
-                                                                                                              ( `show` )
-                                                                                                              ( `Value changed to '{0}'` )
-                                                                                                              ( `${$parameters>/value}` ) ) ) ).
+                        )->tag( `StepInput`
+                            )->a( n = `value`                 v = `{VALUE}`
+                            )->a( n = `displayValuePrecision` v = `{DISPLAYVALUEPRECISION}`
+                            )->a( n = `min`                   v = `{MIN}`
+                            )->a( n = `max`                   v = `{MAX}`
+                            )->a( n = `width`                 v = `{WIDTH}`
+                            )->a( n = `step`                  v = `{STEP}`
+                            )->a( n = `largerStep`            v = `{LARGERSTEP}`
+                            )->a( n = `stepMode`              v = `{STEPMODE}`
+                            )->a( n = `valueState`            v = `{VALUESTATE}`
+                            )->a( n = `enabled`               v = `{ENABLED}`
+                            )->a( n = `editable`              v = `{EDITABLE}`
+                            )->a( n = `description`           v = `{DESCRIPTION}`
+                            )->a( n = `fieldWidth`            v = `{FIELDWIDTH}`
+                            )->a( n = `textAlign`             v = `{TEXTALIGN}`
+                            )->a( n = `validationMode`        v = `{VALIDATIONMODE}`
+                            )->a( n = `change`                v = client->follow_up_action( val   = client->cs_event-control_global
+                                                                                            t_arg = VALUE #( ( `MESSAGE_TOAST` )
+                                                                                                          ( `show` )
+                                                                                                          ( `Value changed to '{0}'` )
+                                                                                                          ( `${$parameters>/value}` ) ) ) ).
 
     client->view_display( view->stringify( ) ).
 

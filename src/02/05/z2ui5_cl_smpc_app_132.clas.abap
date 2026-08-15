@@ -86,7 +86,7 @@ CLASS z2ui5_cl_smpc_app_132 IMPLEMENTATION.
                                     )->a( n = `state`    v = `Indication20`
                                     )->a( n = `inverted` v = `true`
 
-                        )->end(
+                            )->end(
                         )->end(
                         )->tag( n = `NavigationListItem` ns = `tnt`
                             )->a( n = `text` v = `My Reports`
@@ -105,7 +105,7 @@ CLASS z2ui5_cl_smpc_app_132 IMPLEMENTATION.
                                     )->a( n = `state`    v = `Indication18`
                                     )->a( n = `inverted` v = `true`
 
-                        )->end(
+                            )->end(
                         )->end(
                         )->tag( n = `NavigationListItem` ns = `tnt`
                             )->a( n = `text` v = `Analytics`
@@ -122,7 +122,7 @@ CLASS z2ui5_cl_smpc_app_132 IMPLEMENTATION.
                                 )->a( n = `state`    v = `Indication15`
                                 )->a( n = `inverted` v = `true`
 
-                    )->end(
+                        )->end(
                     )->end(
 
                     )->ele( n = `NavigationListItem` ns = `tnt`
@@ -146,7 +146,7 @@ CLASS z2ui5_cl_smpc_app_132 IMPLEMENTATION.
                                     )->a( n = `state`    v = `Indication19`
                                     )->a( n = `inverted` v = `true`
 
-                        )->end(
+                            )->end(
                         )->end(
                     )->end(
                     )->tag( n = `NavigationListItem` ns = `tnt`
@@ -164,7 +164,7 @@ CLASS z2ui5_cl_smpc_app_132 IMPLEMENTATION.
                                 )->a( n = `state`    v = `Indication18`
                                 )->a( n = `inverted` v = `true`
 
-                    )->end(
+                        )->end(
                     )->end(
                 )->end(
 
@@ -179,7 +179,7 @@ CLASS z2ui5_cl_smpc_app_132 IMPLEMENTATION.
                                     )->a( n = `state`    v = `Indication16`
                                     )->a( n = `inverted` v = `true`
 
-                        )->end(
+                            )->end(
                         )->end(
                         )->tag( n = `NavigationListItem` ns = `tnt`
                             )->a( n = `text` v = `Settings`

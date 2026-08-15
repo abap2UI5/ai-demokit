@@ -99,7 +99,7 @@ CLASS z2ui5_cl_smpc_app_174 IMPLEMENTATION.
                                         )->a( n = `key`  v = `None`
                                         )->a( n = `text` v = `None`
 
-                            )->end(
+                                )->end(
                             )->end(
                             )->tag( n = `ToggleButton` ns = `m`
                                 )->a( n = `text`    v = `Toggle Highlights`
@@ -108,7 +108,7 @@ CLASS z2ui5_cl_smpc_app_174 IMPLEMENTATION.
                                 )->a( n = `text`    v = `Toggle Alternate Row Colors`
                                 )->a( n = `pressed` v = client->_bind( alternate_row_colors )
 
-                    )->end(
+                        )->end(
                     )->end(
 
                     )->ele( `rowSettingsTemplate`
@@ -129,7 +129,7 @@ CLASS z2ui5_cl_smpc_app_174 IMPLEMENTATION.
                                     )->a( n = `text`     v = `{STATUS}`
                                     )->a( n = `wrapping` v = `false`
 
-                        )->end(
+                            )->end(
                         )->end(
 
                         )->ele( `Column`
@@ -140,7 +140,7 @@ CLASS z2ui5_cl_smpc_app_174 IMPLEMENTATION.
                                     )->a( n = `text`     v = `{NAME}`
                                     )->a( n = `wrapping` v = `false`
 
-                        )->end(
+                            )->end(
                         )->end(
 
                         )->ele( `Column`
@@ -151,7 +151,7 @@ CLASS z2ui5_cl_smpc_app_174 IMPLEMENTATION.
                                     )->a( n = `text`     v = `{PRODUCTID}`
                                     )->a( n = `wrapping` v = `false`
 
-                        )->end(
+                            )->end(
                         )->end(
 
                         )->ele( `Column`
@@ -163,7 +163,7 @@ CLASS z2ui5_cl_smpc_app_174 IMPLEMENTATION.
                                     )->a( n = `text`     v = `{QUANTITY}`
                                     )->a( n = `wrapping` v = `false`
 
-                        )->end(
+                            )->end(
                         )->end(
 
                         )->ele( `Column`
@@ -174,7 +174,7 @@ CLASS z2ui5_cl_smpc_app_174 IMPLEMENTATION.
                                     )->a( n = `value`    v = `{PRICE}`
                                     )->a( n = `currency` v = `{CURRENCYCODE}`
 
-                        )->end(
+                            )->end(
                         )->end(
                     )->end(
                 )->end(

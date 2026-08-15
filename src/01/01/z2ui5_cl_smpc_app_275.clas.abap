@@ -55,7 +55,7 @@ CLASS z2ui5_cl_smpc_app_275 IMPLEMENTATION.
                 )->tag( `ImageContent`
                     )->a( n = `src` v = `sap-icon://line-charts`
 
-        )->end(
+            )->end(
         )->end(
 
         )->ele( `GenericTile`
@@ -72,7 +72,7 @@ CLASS z2ui5_cl_smpc_app_275 IMPLEMENTATION.
                 )->tag( `ImageContent`
                     )->a( n = `src` v = `sap-icon://home-share`
 
-        )->end(
+            )->end(
         )->end(
 
         )->ele( `GenericTile`
@@ -92,7 +92,7 @@ CLASS z2ui5_cl_smpc_app_275 IMPLEMENTATION.
                     )->a( n = `indicator`  v = `Up`
                     )->a( n = `withMargin` v = `false`
 
-        )->end(
+            )->end(
         )->end(
 
         )->ele( `GenericTile`
@@ -114,7 +114,7 @@ CLASS z2ui5_cl_smpc_app_275 IMPLEMENTATION.
                     )->a( n = `indicator`  v = `Down`
                     )->a( n = `withMargin` v = `false`
 
-        )->end(
+            )->end(
         )->end(
 
         )->ele( `GenericTile`
@@ -134,7 +134,7 @@ CLASS z2ui5_cl_smpc_app_275 IMPLEMENTATION.
                     )->a( n = `subheader`   v = `Subheader`
                     )->a( n = `value`       v = `9`
 
-        )->end(
+            )->end(
         )->end(
 
         )->ele( `GenericTile`
@@ -156,7 +156,7 @@ CLASS z2ui5_cl_smpc_app_275 IMPLEMENTATION.
                     )->a( n = `subheader`   v = `Subheader`
                     )->a( n = `value`       v = `9`
 
-        )->end(
+            )->end(
         )->end(
 
         )->ele( `SlideTile`
@@ -175,7 +175,7 @@ CLASS z2ui5_cl_smpc_app_275 IMPLEMENTATION.
                         )->a( n = `contentText` v = `Status Loading - no press event`
                         )->a( n = `subheader`   v = `Subheader`
 
-            )->end(
+                )->end(
             )->end(
 
             )->ele( `GenericTile`
@@ -193,7 +193,7 @@ CLASS z2ui5_cl_smpc_app_275 IMPLEMENTATION.
                         )->a( n = `contentText` v = `Status Loaded - with press event`
                         )->a( n = `subheader`   v = `Subheader`
 
-            )->end(
+                )->end(
             )->end(
         )->end(
 
@@ -212,7 +212,7 @@ CLASS z2ui5_cl_smpc_app_275 IMPLEMENTATION.
                     )->a( n = `icon`       v = `sap-icon://travel-expense`
                     )->a( n = `withMargin` v = `false`
 
-        )->end(
+            )->end(
         )->end(
 
         )->ele( `GenericTile`

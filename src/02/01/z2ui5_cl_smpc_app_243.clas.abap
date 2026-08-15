@@ -109,7 +109,7 @@ CLASS z2ui5_cl_smpc_app_243 IMPLEMENTATION.
                         )->a( n = `src`   v = client->_bind( productpicurl )
                         )->a( n = `width` v = `15em`
 
-            )->end(
+                )->end(
             )->end( ).
         client->popover_display( xml   = popover->stringify( )
                                  by_id = client->get_event_arg( ) ).
@@ -147,9 +147,9 @@ CLASS z2ui5_cl_smpc_app_243 IMPLEMENTATION.
                                 )->a( n = `text`  v = `Cancel`
                                 )->a( n = `press` v = client->_event( `CLOSE` )
 
+                        )->end(
                     )->end(
-                    )->end(
-            )->end(
+                )->end(
             )->end( ).
         client->popover_display( xml   = footer->stringify( )
                                  by_id = client->get_event_arg( ) ).

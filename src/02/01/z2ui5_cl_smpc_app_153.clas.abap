@@ -59,7 +59,7 @@ CLASS z2ui5_cl_smpc_app_153 IMPLEMENTATION.
                                 )->a( n = `maskFormatSymbol` v = `~`
                                 )->a( n = `regex`            v = `[^_]`
 
-                    )->end(
+                        )->end(
                     )->end(
                     )->tag( `Label`
                         )->a( n = `text` v = `Promo code`
@@ -70,7 +70,7 @@ CLASS z2ui5_cl_smpc_app_153 IMPLEMENTATION.
                         )->ele( `rules`
                             )->tag( `MaskInputRule`
 
-                    )->end(
+                        )->end(
                     )->end(
                     )->tag( `Label`
                         )->a( n = `text` v = `Phone number`
@@ -100,7 +100,7 @@ CLASS z2ui5_cl_smpc_app_153 IMPLEMENTATION.
                                 )->a( n = `maskFormatSymbol` v = `C`
                                 )->a( n = `regex`            v = `[A-Z0-9]`
 
-                    )->end(
+                        )->end(
                     )->end(
                     )->tag( `Label`
                         )->a( n = `text` v = `Product activation key`
@@ -114,7 +114,7 @@ CLASS z2ui5_cl_smpc_app_153 IMPLEMENTATION.
                                 )->a( n = `maskFormatSymbol` v = `C`
                                 )->a( n = `regex`            v = `[A-Z0-9]`
 
-                    )->end(
+                        )->end(
                     )->end(
                     )->tag( `Label`
                         )->a( n = `text` v = `ISBN`

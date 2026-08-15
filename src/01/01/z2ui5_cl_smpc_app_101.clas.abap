@@ -350,7 +350,7 @@ CLASS z2ui5_cl_smpc_app_101 IMPLEMENTATION.
                                     )->a( n = `press` v = client->_event( `EDIT_STEP_1` )
                                     )->a( n = `text`  v = `Edit`
 
-                        )->end(
+                            )->end(
                         )->end(
                         )->ele( n = `SimpleForm` ns = `form`
                             )->a( n = `title`    v = `2. Product Information`
@@ -382,7 +382,7 @@ CLASS z2ui5_cl_smpc_app_101 IMPLEMENTATION.
                                     )->a( n = `press` v = client->_event( `EDIT_STEP_2` )
                                     )->a( n = `text`  v = `Edit`
 
-                        )->end(
+                            )->end(
                         )->end(
                         )->ele( n = `SimpleForm` ns = `form`
                             )->a( n = `title`    v = `3. Optional Information`
@@ -422,7 +422,7 @@ CLASS z2ui5_cl_smpc_app_101 IMPLEMENTATION.
                                     )->a( n = `press` v = client->_event( `EDIT_STEP_3` )
                                     )->a( n = `text`  v = `Edit`
 
-                        )->end(
+                            )->end(
                         )->end(
                         )->ele( n = `SimpleForm` ns = `form`
                             )->a( n = `title`    v = `4. Pricing`
@@ -449,7 +449,7 @@ CLASS z2ui5_cl_smpc_app_101 IMPLEMENTATION.
                                     )->a( n = `press` v = client->_event( `EDIT_STEP_4` )
                                     )->a( n = `text`  v = `Edit`
 
-                        )->end(
+                            )->end(
                         )->end(
                     )->end(
                     )->ele( `footer`
@@ -462,7 +462,7 @@ CLASS z2ui5_cl_smpc_app_101 IMPLEMENTATION.
                                     )->a( n = `text`  v = `Cancel`
                                     )->a( n = `press` v = client->_event( `WIZARD_CANCEL` )
 
-                        )->end(
+                            )->end(
                         )->end(
                     )->end(
                 )->end(
