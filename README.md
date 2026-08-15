@@ -103,18 +103,29 @@ Output: one ABAP class z2ui5_cl_smpc_app_<n> implementing z2ui5_if_app, that
 
 Rules:
 - Build the view with the generic builder z2ui5_cl_ui5_view_builder, translating the
-  sample's XML 1:1 (open = descend into a container, leaf = childless
-  control/stay, shut = ascend). Attributes are added with
-  a( n = `key` v = `value` ) chained right after the control's open/leaf;
-  a targets that control, and v is any string expression (literal, a
-  client->_bind/_event result, a |...| string template). factory( )
-  returns an empty root: open the mvc:View and declare its xmlns namespaces
-  yourself. Blank line between controls whose verb differs (open<->leaf,
-  before shut); none between same-verb controls, none right after a shut,
-  none between a control and its attrs; the whole view ends in a single ).
+  sample's XML 1:1. Four verbs, and they are what the corpus is written in:
+    ele( )  add a child element and DESCEND into it - a container
+    tag( )  add a child element and STAY here - a leaf
+    a( )    set ONE attribute on the element the chain points at
+    end( )  ascend to the parent
+  a( ) applies to the element the chain is POINTING AT - the child just added
+  by ele( )/tag( ), or the node itself while it has no children yet - so an
+  a( ) always follows the control it belongs to, and an element gets its
+  attributes BEFORE its first child (once it has one, a( ) can no longer
+  reach it). v is any string expression (literal, a client->_bind/_event
+  result, a |...| string template). factory( ) returns an empty root: open
+  the mvc:View with ele( n = `View` ns = `mvc` ) and declare its xmlns
+  namespaces yourself. A trailing end( ) may be omitted - stringify( )
+  renders from the root wherever the chain stopped - and the whole view ends
+  in a single ).
+  Blank lines carry the structure: one after a control's last a( ) before its
+  first child, one before a run of tag( )s and none between them, one before
+  every end( ). None between a control and its own a( )s, none after a bare
+  ele( ) whose first child is another ele( ), none after an end( ) or between
+  two of them.
   An aggregation carries the same namespace as its XML tag (its parent
-  control's): <m:content> under a Page is open( n = `content` ns = `m` ),
-  a default-namespace <columns> inside an sap.ui.table.Table is open( `columns` ).
+  control's): <m:content> under a Page is ele( n = `content` ns = `m` ),
+  a default-namespace <columns> inside an sap.ui.table.Table is ele( `columns` ).
   Braces { } inside a |...| template are ALWAYS escaped \{ \} - an unescaped {
   is read as a binding by the XMLView parser and crashes view creation.
   Booleans: literal v = `true`/`false`, or b = flag (instead of v) when fed
