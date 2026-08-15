@@ -31,7 +31,13 @@ jobs:
     - name: Resolve abap2UI5 main and move the pin
       id: pin
       run: |
-        SHA=$(git ls-remote https://github.com/abap2UI5/abap2UI5 refs/heads/main | cut -f1)
+        set -euo pipefail
+        # --exit-code under pipefail: `git ls-remote` prints nothing and still
+        # exits 0 for a ref that does not match, so a renamed default branch
+        # upstream would resolve to an EMPTY sha and this step would move the
+        # pin to nothing. Fail here instead. (web-abap2UI5's build stamp had
+        # exactly this hole and went blind for as long as it was there.)
+        SHA=$(git ls-remote --exit-code https://github.com/abap2UI5/abap2UI5 refs/heads/main | cut -f1)
         echo "sha=$SHA" >> "$GITHUB_OUTPUT"
         if [ "$SHA" = "$(cat A2UI5_PIN)" ]; then
           echo "changed=false" >> "$GITHUB_OUTPUT"
